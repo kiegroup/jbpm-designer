@@ -85,6 +85,7 @@ import org.eclipse.bpmn2.ServiceTask;
 import org.eclipse.bpmn2.StartEvent;
 import org.eclipse.bpmn2.Task;
 import org.eclipse.bpmn2.TextAnnotation;
+import org.eclipse.bpmn2.ThrowEvent;
 import org.eclipse.bpmn2.UserTask;
 import org.eclipse.bpmn2.di.BPMNDiagram;
 import org.eclipse.bpmn2.di.BPMNEdge;
@@ -647,6 +648,9 @@ public class Bpmn2JsonUnmarshaller {
         if (baseElement instanceof CatchEvent) {
             applyCatchEventProperties((CatchEvent) baseElement, properties);
         }
+        if (baseElement instanceof ThrowEvent) {
+            applyThrowEventProperties((ThrowEvent) baseElement, properties);
+        }
         if (baseElement instanceof TextAnnotation) {
             applyTextAnnotationProperties((TextAnnotation) baseElement, properties);
         }
@@ -715,7 +719,6 @@ public class Bpmn2JsonUnmarshaller {
     }
     
     private void applyCatchEventProperties(CatchEvent event, Map<String, String> properties) {
-        // catch events are events so "name" has already been set
         if (properties.get("dataoutput") != null && !"".equals(properties.get("dataoutput"))) {
             String[] allDataOutputs = properties.get("dataoutput").split( ",\\s*" );
             OutputSet outSet = Bpmn2Factory.eINSTANCE.createOutputSet();
@@ -765,6 +768,62 @@ public class Bpmn2JsonUnmarshaller {
             }
         }
         
+    }
+    
+    private void applyThrowEventProperties(ThrowEvent event, Map<String, String> properties) {
+        if (properties.get("datainput") != null && !"".equals(properties.get("datainput"))) {
+            String[] allDataInputs = properties.get("datainput").split( ",\\s*" );
+            InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
+            for(String dataInput : allDataInputs) {
+                DataInput datain = Bpmn2Factory.eINSTANCE.createDataInput();
+                // we follow jbpm here to set the id
+                datain.setId(event.getId() + "_" + dataInput);
+                datain.setName(dataInput);
+                event.getDataInputs().add(datain);
+                // add to input set as well
+                inset.getDataInputRefs().add(datain);
+                
+            }
+            event.setInputSet(inset);
+        }
+        
+        
+        
+       // data input associations
+        if (properties.get("datainputassociations") != null && !"".equals(properties.get("datainputassociations"))) {
+            String[] allAssociations = properties.get("datainputassociations").split( ",\\s*" );
+            for(String association : allAssociations) {
+                // data inputs are uni-directional
+                String[] associationParts = association.split( "->\\s*" );
+                DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
+                
+                // since we dont have the process vars defined yet..need to improvise
+                ItemAwareElement e = Bpmn2Factory.eINSTANCE.createItemAwareElement();
+                e.setId(associationParts[0]);
+                dia.getSourceRef().add(e);
+                
+                // for target ref we loop through already defined data inputs
+                List<DataInput> dataInputs = event.getDataInputs();
+                if(dataInputs != null) {
+                    for(DataInput di : dataInputs) {
+                        if(di.getId().equals(event.getId() + "_" + associationParts[1])) {
+                            dia.setTargetRef(di);
+                            break;
+                        }
+                    }
+                }
+                
+                event.getDataInputAssociation().add(dia);
+            }
+        }
+        // now event definitions
+        // eventdefinitions
+        // TODO
+        if (properties.get("eventdefinitions") != null && !"".equals(properties.get("eventdefinitions"))) {
+            List<EventDefinition> eventDefinitions = event.getEventDefinitions();
+                if(eventDefinitions != null) {
+            }
+        }
     }
 
     private void applyGlobalTaskProperties(GlobalTask globalTask, Map<String, String> properties) {

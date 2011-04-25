@@ -40,6 +40,7 @@ import org.eclipse.bpmn2.BoundaryEvent;
 import org.eclipse.bpmn2.BusinessRuleTask;
 import org.eclipse.bpmn2.CallActivity;
 import org.eclipse.bpmn2.CallableElement;
+import org.eclipse.bpmn2.CatchEvent;
 import org.eclipse.bpmn2.Choreography;
 import org.eclipse.bpmn2.CompensateEventDefinition;
 import org.eclipse.bpmn2.ComplexGateway;
@@ -97,6 +98,7 @@ import org.eclipse.bpmn2.StartEvent;
 import org.eclipse.bpmn2.SubProcess;
 import org.eclipse.bpmn2.Task;
 import org.eclipse.bpmn2.TerminateEventDefinition;
+import org.eclipse.bpmn2.ThrowEvent;
 import org.eclipse.bpmn2.TimerEventDefinition;
 import org.eclipse.bpmn2.UserTask;
 import org.eclipse.bpmn2.di.BPMNDiagram;
@@ -339,17 +341,88 @@ public class Bpmn2JsonMarshaller {
         generator.writeEndArray();
     }
     
+    private void setCatchEventProperties(CatchEvent event, Map<String, Object> properties) {
+        if(event.getOutputSet() != null) {
+            List<DataOutput> dataOutputs = event.getOutputSet().getDataOutputRefs();
+            StringBuffer doutbuff = new StringBuffer();
+            for(DataOutput dout : dataOutputs) {
+                doutbuff.append(dout.getName());
+                doutbuff.append(",");
+            }
+            if(doutbuff.length() > 0) {
+                doutbuff.setLength(doutbuff.length() - 1);
+            }
+            properties.put("dataoutput", doutbuff.toString());
+        
+            List<DataOutputAssociation> outputAssociations = event.getDataOutputAssociation();
+            StringBuffer doutassociationbuff = new StringBuffer();
+            for(DataOutputAssociation doa : outputAssociations) {
+                doutassociationbuff.append(((DataOutput)doa.getSourceRef().get(0)).getName());
+                doutassociationbuff.append("->");
+                doutassociationbuff.append(doa.getTargetRef().getId());
+                doutassociationbuff.append(",");
+            }
+            if(doutassociationbuff.length() > 0) {
+                doutassociationbuff.setLength(doutassociationbuff.length() - 1);
+            }
+            properties.put("dataoutputassociations", doutassociationbuff.toString());
+        }
+        // event definitions
+        // TODO
+        
+    }
+    
+    private void setThrowEventProperties(ThrowEvent event, Map<String, Object> properties) {
+        if(event.getInputSet() != null) {
+            List<DataInput> dataInputs = event.getInputSet().getDataInputRefs();
+            StringBuffer dinbuff = new StringBuffer();
+            for(DataInput din : dataInputs) {
+                dinbuff.append(din.getName());
+                dinbuff.append(",");
+            }
+            if(dinbuff.length() > 0) {
+                dinbuff.setLength(dinbuff.length() - 1);
+            }
+            properties.put("datainput", dinbuff.toString());
+            
+            List<DataInputAssociation> inputAssociations = event.getDataInputAssociation();
+            StringBuffer dinassociationbuff = new StringBuffer();
+            for(DataInputAssociation din : inputAssociations) {
+                dinassociationbuff.append(din.getSourceRef().get(0).getId());
+                dinassociationbuff.append("->");
+                dinassociationbuff.append( ((DataInput)din.getTargetRef()).getName());
+                dinassociationbuff.append(",");
+            }
+            if(dinassociationbuff.length() > 0) {
+                dinassociationbuff.setLength(dinassociationbuff.length() - 1);
+            }
+            properties.put("datainputassociations", dinassociationbuff.toString());
+        }
+        // event definitions
+        // TODO
+    }
+    
     private void marshallFlowElement(FlowElement flowElement, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset) throws JsonGenerationException, IOException {
     	generator.writeStartObject();
     	generator.writeObjectField("resourceId", flowElement.getId());
+    	
+    	Map<String, Object> catchEventProperties = new LinkedHashMap<String, Object>();
+    	Map<String, Object> throwEventProperties = new LinkedHashMap<String, Object>();
+    	if(flowElement instanceof CatchEvent) {
+    	    setCatchEventProperties((CatchEvent) flowElement, catchEventProperties);
+    	}
+    	if(flowElement instanceof ThrowEvent) {
+    	    setThrowEventProperties((ThrowEvent) flowElement, throwEventProperties);
+    	}
+    	
     	if (flowElement instanceof StartEvent) {
-    		marshallStartEvent((StartEvent) flowElement, plane, generator, xOffset, yOffset);
+    		marshallStartEvent((StartEvent) flowElement, plane, generator, xOffset, yOffset, catchEventProperties);
     	} else if (flowElement instanceof EndEvent) {
-    		marshallEndEvent((EndEvent) flowElement, plane, generator, xOffset, yOffset);
+    		marshallEndEvent((EndEvent) flowElement, plane, generator, xOffset, yOffset, throwEventProperties);
     	} else if (flowElement instanceof IntermediateThrowEvent) {
-    		marshallIntermediateThrowEvent((IntermediateThrowEvent) flowElement, plane, generator, xOffset, yOffset);
+    		marshallIntermediateThrowEvent((IntermediateThrowEvent) flowElement, plane, generator, xOffset, yOffset, throwEventProperties);
     	} else if (flowElement instanceof IntermediateCatchEvent) {
-    		marshallIntermediateCatchEvent((IntermediateCatchEvent) flowElement, plane, generator, xOffset, yOffset);
+    		marshallIntermediateCatchEvent((IntermediateCatchEvent) flowElement, plane, generator, xOffset, yOffset, catchEventProperties);
     	} else if (flowElement instanceof BoundaryEvent) {
     		marshallBoundaryEvent((BoundaryEvent) flowElement, plane, generator, xOffset, yOffset);
     	} else if (flowElement instanceof Task) {
@@ -378,20 +451,20 @@ public class Bpmn2JsonMarshaller {
     	generator.writeEndObject();
     }
     
-    private void marshallStartEvent(StartEvent startEvent, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset) throws JsonGenerationException, IOException {
-    	List<EventDefinition> eventDefinitions = startEvent.getEventDefinitions();
+    private void marshallStartEvent(StartEvent startEvent, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> properties) throws JsonGenerationException, IOException {
+        List<EventDefinition> eventDefinitions = startEvent.getEventDefinitions();
     	if (eventDefinitions == null || eventDefinitions.size() == 0) {
-    		marshallNode(startEvent, "StartNoneEvent", plane, generator, xOffset, yOffset);
+    		marshallNode(startEvent, properties, "StartNoneEvent", plane, generator, xOffset, yOffset);
     	} else if (eventDefinitions.size() == 1) {
     		EventDefinition eventDefinition = eventDefinitions.get(0);
     		if (eventDefinition instanceof ConditionalEventDefinition) {
-    			marshallNode(startEvent, "StartConditionalEvent", plane, generator, xOffset, yOffset);
+    			marshallNode(startEvent, properties, "StartConditionalEvent", plane, generator, xOffset, yOffset);
     		} else if (eventDefinition instanceof SignalEventDefinition) {
-    			marshallNode(startEvent, "StartSignalEvent", plane, generator, xOffset, yOffset);
+    			marshallNode(startEvent, properties, "StartSignalEvent", plane, generator, xOffset, yOffset);
     		} else if (eventDefinition instanceof MessageEventDefinition) {
-    			marshallNode(startEvent, "StartMessageEvent", plane, generator, xOffset, yOffset);
+    			marshallNode(startEvent, properties, "StartMessageEvent", plane, generator, xOffset, yOffset);
     		} else if (eventDefinition instanceof TimerEventDefinition) {
-    			marshallNode(startEvent, "StartTimerEvent", plane, generator, xOffset, yOffset);
+    			marshallNode(startEvent, properties, "StartTimerEvent", plane, generator, xOffset, yOffset);
     		} else {
     			throw new UnsupportedOperationException("Event definition not supported: " + eventDefinition);
     		}
@@ -400,24 +473,24 @@ public class Bpmn2JsonMarshaller {
     	}
     }
     
-    private void marshallEndEvent(EndEvent endEvent, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset) throws JsonGenerationException, IOException {
+    private void marshallEndEvent(EndEvent endEvent, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> properties) throws JsonGenerationException, IOException {
     	List<EventDefinition> eventDefinitions = endEvent.getEventDefinitions();
     	if (eventDefinitions == null || eventDefinitions.size() == 0) {
-    		marshallNode(endEvent, "EndNoneEvent", plane, generator, xOffset, yOffset);
+    		marshallNode(endEvent, properties, "EndNoneEvent", plane, generator, xOffset, yOffset);
     	} else if (eventDefinitions.size() == 1) {
     		EventDefinition eventDefinition = eventDefinitions.get(0);
     		if (eventDefinition instanceof TerminateEventDefinition) {
-    			marshallNode(endEvent, "EndTerminateEvent", plane, generator, xOffset, yOffset);
+    			marshallNode(endEvent, properties, "EndTerminateEvent", plane, generator, xOffset, yOffset);
     		} else if (eventDefinition instanceof SignalEventDefinition) {
-    			marshallNode(endEvent, "EndSignalEvent", plane, generator, xOffset, yOffset);
+    			marshallNode(endEvent, properties, "EndSignalEvent", plane, generator, xOffset, yOffset);
     		} else if (eventDefinition instanceof MessageEventDefinition) {
-    			marshallNode(endEvent, "EndMessageEvent", plane, generator, xOffset, yOffset);
+    			marshallNode(endEvent, properties, "EndMessageEvent", plane, generator, xOffset, yOffset);
     		} else if (eventDefinition instanceof ErrorEventDefinition) {
-    			marshallNode(endEvent, "EndErrorEvent", plane, generator, xOffset, yOffset);
+    			marshallNode(endEvent, properties, "EndErrorEvent", plane, generator, xOffset, yOffset);
     		} else if (eventDefinition instanceof EscalationEventDefinition) {
-    			marshallNode(endEvent, "EndEscalationEvent", plane, generator, xOffset, yOffset);
+    			marshallNode(endEvent, properties, "EndEscalationEvent", plane, generator, xOffset, yOffset);
     		} else if (eventDefinition instanceof CompensateEventDefinition) {
-    			marshallNode(endEvent, "EndCompensationEvent", plane, generator, xOffset, yOffset);
+    			marshallNode(endEvent, properties, "EndCompensationEvent", plane, generator, xOffset, yOffset);
     		} else {
     			throw new UnsupportedOperationException("Event definition not supported: " + eventDefinition);
     		}
@@ -426,18 +499,18 @@ public class Bpmn2JsonMarshaller {
     	}
     }
     
-    private void marshallIntermediateCatchEvent(IntermediateCatchEvent catchEvent, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset) throws JsonGenerationException, IOException {
+    private void marshallIntermediateCatchEvent(IntermediateCatchEvent catchEvent, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> properties) throws JsonGenerationException, IOException {
     	List<EventDefinition> eventDefinitions = catchEvent.getEventDefinitions();
     	if (eventDefinitions.size() == 1) {
     		EventDefinition eventDefinition = eventDefinitions.get(0);
     		if (eventDefinition instanceof SignalEventDefinition) {
-    			marshallNode(catchEvent, "IntermediateSignalEventCatching", plane, generator, xOffset, yOffset);
+    			marshallNode(catchEvent, properties, "IntermediateSignalEventCatching", plane, generator, xOffset, yOffset);
     		} else if (eventDefinition instanceof MessageEventDefinition) {
-    			marshallNode(catchEvent, "IntermediateMessageEventCatching", plane, generator, xOffset, yOffset);
+    			marshallNode(catchEvent, properties, "IntermediateMessageEventCatching", plane, generator, xOffset, yOffset);
     		} else if (eventDefinition instanceof TimerEventDefinition) {
-    			marshallNode(catchEvent, "IntermediateTimerEvent", plane, generator, xOffset, yOffset);
+    			marshallNode(catchEvent, properties, "IntermediateTimerEvent", plane, generator, xOffset, yOffset);
     		} else if (eventDefinition instanceof ConditionalEventDefinition) {
-    			marshallNode(catchEvent, "IntermediateConditionalEvent", plane, generator, xOffset, yOffset);
+    			marshallNode(catchEvent, properties, "IntermediateConditionalEvent", plane, generator, xOffset, yOffset);
     		} else {
     			throw new UnsupportedOperationException("Event definition not supported: " + eventDefinition);
     		}
@@ -466,10 +539,10 @@ public class Bpmn2JsonMarshaller {
     	}
     }
     
-    private void marshallIntermediateThrowEvent(IntermediateThrowEvent throwEvent, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset) throws JsonGenerationException, IOException {
+    private void marshallIntermediateThrowEvent(IntermediateThrowEvent throwEvent, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> properties) throws JsonGenerationException, IOException {
     	List<EventDefinition> eventDefinitions = throwEvent.getEventDefinitions();
     	if (eventDefinitions.size() == 0) {
-			marshallNode(throwEvent, "IntermediateEventThrowing", plane, generator, xOffset, yOffset);
+			marshallNode(throwEvent, properties, "IntermediateEventThrowing", plane, generator, xOffset, yOffset);
     	} else if (eventDefinitions.size() == 1) {
     		EventDefinition eventDefinition = eventDefinitions.get(0);
     		if (eventDefinition instanceof SignalEventDefinition) {
@@ -543,42 +616,41 @@ public class Bpmn2JsonMarshaller {
         }
         
         // data inputs
-        List<InputSet> inputSetList = task.getIoSpecification().getInputSets();
-        StringBuilder dataInBuffer = new StringBuilder();
-        for(InputSet inset : inputSetList) {
-            List<DataInput> dataInputList =  inset.getDataInputRefs();
-            for(DataInput dataIn : dataInputList) {
-                // dont add "TaskName" as that is added manually
-               if(dataIn.getName() != null && !dataIn.getName().equals("TaskName")) {
-                   dataInBuffer.append(dataIn.getName());
-                   dataInBuffer.append(",");
-               }
+        if(task.getIoSpecification() != null) {
+            List<InputSet> inputSetList = task.getIoSpecification().getInputSets();
+            StringBuilder dataInBuffer = new StringBuilder();
+            for(InputSet inset : inputSetList) {
+                List<DataInput> dataInputList =  inset.getDataInputRefs();
+                for(DataInput dataIn : dataInputList) {
+                    // dont add "TaskName" as that is added manually
+                    if(dataIn.getName() != null && !dataIn.getName().equals("TaskName")) {
+                        dataInBuffer.append(dataIn.getName());
+                        dataInBuffer.append(",");
+                    }
+                }
             }
+            if(dataInBuffer.length() > 0) {
+                dataInBuffer.setLength(dataInBuffer.length() - 1);
+            }
+            properties.put("datainputset", dataInBuffer.toString());
         }
-        if(dataInBuffer.length() > 0) {
-            //get rid of annoying last comma
-            dataInBuffer.setLength(dataInBuffer.length() - 1);
-        }
-        
-        properties.put("datainputset", dataInBuffer.toString());
         
         // data outputs
-        List<OutputSet> outputSetList = task.getIoSpecification().getOutputSets();
-        StringBuilder dataOutBuffer = new StringBuilder();
-        for(OutputSet outset : outputSetList) {
-            List<DataOutput> dataOutputList =  outset.getDataOutputRefs();
-            for(DataOutput dataOut : dataOutputList) {
-                dataOutBuffer.append(dataOut.getName());
-                dataOutBuffer.append(",");
+        if(task.getIoSpecification() != null) {
+            List<OutputSet> outputSetList = task.getIoSpecification().getOutputSets();
+            StringBuilder dataOutBuffer = new StringBuilder();
+            for(OutputSet outset : outputSetList) {
+                List<DataOutput> dataOutputList =  outset.getDataOutputRefs();
+                for(DataOutput dataOut : dataOutputList) {
+                    dataOutBuffer.append(dataOut.getName());
+                    dataOutBuffer.append(",");
+                }
             }
+            if(dataOutBuffer.length() > 0) {
+                dataOutBuffer.setLength(dataOutBuffer.length() - 1);
+            }
+            properties.put("dataoutputset", dataOutBuffer.toString());
         }
-        if(dataOutBuffer.length() > 0) {
-            //get rid of annoying last comma
-            dataOutBuffer.setLength(dataOutBuffer.length() - 1);
-        }
-        
-        properties.put("dataoutputset", dataOutBuffer.toString());
-        
         
         // assignments
         StringBuilder associationBuff = new StringBuilder();
