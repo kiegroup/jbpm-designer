@@ -3535,7 +3535,7 @@
 				"DataObjectMorph"
 			]
 		},
-		{
+		/** {
 			"type" :			"node",
 			"id" :				"Message",
 			"title" :			"Message",
@@ -3595,7 +3595,7 @@
 				"fromtoall",
 				"DataObjectMorph"
 			]
-		},
+		}, **/
 		
 		// Start Events
 		

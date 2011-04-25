@@ -184,6 +184,7 @@ public class Bpmn2JsonUnmarshaller {
             reconnectFlows();
             createDiagram(def);
             revisitGateways(def);
+            revisitMessages(def);
             return def;
         } finally {
             parser.close();
@@ -225,7 +226,28 @@ public class Bpmn2JsonUnmarshaller {
             }
         }
     }
-
+    
+    /**
+     * Revisit message to set their item ref to a item definition
+     * @param def Definitions
+     */
+    private void revisitMessages(Definitions def) {
+        List<RootElement> rootElements =  def.getRootElements();
+        List<ItemDefinition> toAddDefinitions = new ArrayList<ItemDefinition>();
+        for(RootElement root : rootElements) {
+            if(root instanceof Message) {
+                // add item definition for messages
+                ItemDefinition itemdef =  Bpmn2Factory.eINSTANCE.createItemDefinition();
+                itemdef.setId(root.getId() + "Type");
+                toAddDefinitions.add(itemdef);
+                ((Message) root).setItemRef(itemdef);
+            }
+        }
+        for(ItemDefinition id : toAddDefinitions) {
+            def.getRootElements().add(id);
+        }
+    }
+        
     /**
      * Reconnect the sequence flows and the flow nodes.
      * Done after the initial pass so that we have all the target information.
@@ -554,6 +576,8 @@ public class Bpmn2JsonUnmarshaller {
                     throw new IllegalArgumentException("Don't know what to do of " + child);
                 }
             }
+        } else if (baseElt instanceof Message) {
+            // we do not support base-element messages from the json. They are created dynamically for events that use them.
         } else {
             if (!childElements.isEmpty()) {
                 throw new IllegalArgumentException("Don't know what to do of " + childElements + " with " + baseElt);
@@ -660,6 +684,7 @@ public class Bpmn2JsonUnmarshaller {
     
     private void applyMessageProperties(Message msg, Map<String, String> properties) {
         msg.setName(properties.get("name"));
+        msg.setId(properties.get("name") + "Message");
     }
 
     private void applyDataStoreProperties(DataStore da, Map<String, String> properties) {
@@ -737,7 +762,6 @@ public class Bpmn2JsonUnmarshaller {
         if (properties.get("eventdefinitions") != null && !"".equals(properties.get("eventdefinitions"))) {
             List<EventDefinition> eventDefinitions = event.getEventDefinitions();
             if(eventDefinitions != null) {
-                
             }
         }
         
@@ -944,21 +968,47 @@ public class Bpmn2JsonUnmarshaller {
                     task.getDataOutputAssociations().add(doa);
                 } else if(assignment.contains("->")) {
                     String[] assignmentParts = assignment.split( "->\\s*" );
-                    DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
-                    // association from process var to dataInput var
-                    ItemAwareElement ie = Bpmn2Factory.eINSTANCE.createItemAwareElement();
-                    ie.setId(assignmentParts[0]);
-                    dia.getSourceRef().add(ie);
-
-                    List<DataInput> dataInputs = task.getIoSpecification().getDataInputs();
-                    for(DataInput di : dataInputs) {
-                        if(di.getId().equals(task.getId() + "_" + assignmentParts[1] + "Input")) {
-                            dia.setTargetRef(di);
+                    
+                    // we need to check if this is an data input or data output assignment
+                    boolean leftHandAssignMentIsDO = false;
+                    List<DataOutput> dataOutputs = task.getIoSpecification().getDataOutputs();
+                    for(DataOutput dout : dataOutputs) {
+                        if(dout.getId().equals(task.getId() + "_" + assignmentParts[0] + "Output")) {
+                            leftHandAssignMentIsDO = true;
                             break;
                         }
                     }
-                
-                    task.getDataInputAssociations().add(dia);
+                    if(leftHandAssignMentIsDO) {
+                        // doing data output
+                        DataOutputAssociation doa = Bpmn2Factory.eINSTANCE.createDataOutputAssociation();
+                        for(DataOutput dout : dataOutputs) {
+                            if(dout.getId().equals(task.getId() + "_" + assignmentParts[0] + "Output")) {
+                                doa.getSourceRef().add(dout);
+                                break;
+                            }
+                        }
+                        
+                        ItemAwareElement ie = Bpmn2Factory.eINSTANCE.createItemAwareElement();
+                        ie.setId(assignmentParts[1]);
+                        doa.setTargetRef(ie);
+                        task.getDataOutputAssociations().add(doa);
+                    } else {
+                        // doing data input
+                        DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
+                        // association from process var to dataInput var
+                        ItemAwareElement ie = Bpmn2Factory.eINSTANCE.createItemAwareElement();
+                        ie.setId(assignmentParts[0]);
+                        dia.getSourceRef().add(ie);
+
+                        List<DataInput> dataInputs = task.getIoSpecification().getDataInputs();
+                        for(DataInput di : dataInputs) {
+                            if(di.getId().equals(task.getId() + "_" + assignmentParts[1] + "Input")) {
+                                dia.setTargetRef(di);
+                                break;
+                            }
+                        }
+                        task.getDataInputAssociations().add(dia);
+                    }
                 } else {
                     // TODO throw exception here?
                 }

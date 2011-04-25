@@ -404,7 +404,7 @@ public class Bpmn2UnmarshallingTestCase {
     public void testMessageUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("message.json"));
-        assertTrue(definitions.getRootElements().size() == 1);
+        assertTrue(definitions.getRootElements().size() == 2);
         assertTrue(definitions.getRootElements().iterator().next() instanceof Message);
         Message msg = (Message) definitions.getRootElements().iterator().next();
         assertEquals("message", msg.getName());

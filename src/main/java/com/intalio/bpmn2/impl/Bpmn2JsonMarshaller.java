@@ -23,7 +23,7 @@ package com.intalio.bpmn2.impl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -45,7 +45,11 @@ import org.eclipse.bpmn2.CompensateEventDefinition;
 import org.eclipse.bpmn2.ComplexGateway;
 import org.eclipse.bpmn2.ConditionalEventDefinition;
 import org.eclipse.bpmn2.Conversation;
+import org.eclipse.bpmn2.DataInput;
+import org.eclipse.bpmn2.DataInputAssociation;
 import org.eclipse.bpmn2.DataObject;
+import org.eclipse.bpmn2.DataOutput;
+import org.eclipse.bpmn2.DataOutputAssociation;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.EndEvent;
 import org.eclipse.bpmn2.Error;
@@ -67,6 +71,7 @@ import org.eclipse.bpmn2.GlobalScriptTask;
 import org.eclipse.bpmn2.GlobalTask;
 import org.eclipse.bpmn2.GlobalUserTask;
 import org.eclipse.bpmn2.InclusiveGateway;
+import org.eclipse.bpmn2.InputSet;
 import org.eclipse.bpmn2.Interface;
 import org.eclipse.bpmn2.IntermediateCatchEvent;
 import org.eclipse.bpmn2.IntermediateThrowEvent;
@@ -74,6 +79,7 @@ import org.eclipse.bpmn2.ItemDefinition;
 import org.eclipse.bpmn2.ManualTask;
 import org.eclipse.bpmn2.Message;
 import org.eclipse.bpmn2.MessageEventDefinition;
+import org.eclipse.bpmn2.OutputSet;
 import org.eclipse.bpmn2.ParallelGateway;
 import org.eclipse.bpmn2.PotentialOwner;
 import org.eclipse.bpmn2.Process;
@@ -100,13 +106,9 @@ import org.eclipse.bpmn2.di.BPMNShape;
 import org.eclipse.dd.dc.Bounds;
 import org.eclipse.dd.dc.Point;
 import org.eclipse.dd.di.DiagramElement;
-import org.eclipse.emf.ecore.impl.EStructuralFeatureImpl;
 import org.eclipse.emf.ecore.util.FeatureMap;
 
 import com.intalio.web.profile.IDiagramProfile;
-
-import de.hpi.bpmn.sese.Join;
-import de.hpi.bpmn.sese.Split;
 
 /**
  * @author Antoine Toulme
@@ -131,6 +133,7 @@ public class Bpmn2JsonMarshaller {
         JsonGenerator generator = f.createJsonGenerator(baos, JsonEncoding.UTF8);
         marshallDefinitions(def, generator);
         generator.close();
+        
         return baos.toString("UTF-8");
     }
     
@@ -243,8 +246,8 @@ public class Bpmn2JsonMarshaller {
 	            } else if (rootElement instanceof Interface) {
 	                // TODO
 	            } else if (rootElement instanceof ItemDefinition) {
-	                // TODO
-	            } else if (rootElement instanceof Resource) {
+                    // TODO
+                } else if (rootElement instanceof Resource) {
 	                // TODO
 	            } else if (rootElement instanceof Error) {
 	                // TODO
@@ -268,6 +271,30 @@ public class Bpmn2JsonMarshaller {
         	_diagramElements.clear();
         }
     }
+    
+    
+    /** private void marshallMessage(Message message, Definitions def, JsonGenerator generator) throws JsonGenerationException, IOException {
+        Map<String, Object> properties = new LinkedHashMap<String, Object>();
+        
+        generator.writeStartObject();
+        generator.writeObjectField("resourceId", message.getId());
+        
+        properties.put("name", message.getName());
+        if(message.getDocumentation() != null && message.getDocumentation().size() > 0) {
+            properties.put("documentation", message.getDocumentation().get(0).getText());
+        }
+        
+        marshallProperties(properties, generator);
+        generator.writeObjectFieldStart("stencil");
+        generator.writeObjectField("id", "Message");
+        generator.writeEndObject();
+        generator.writeArrayFieldStart("childShapes");
+        generator.writeEndArray();
+        generator.writeArrayFieldStart("outgoing");
+        generator.writeEndArray();
+        
+        generator.writeEndObject();
+    } **/
 
     private void marshallCallableElement(CallableElement callableElement, Definitions def, JsonGenerator generator) throws JsonGenerationException, IOException {
         generator.writeStartObject();
@@ -466,6 +493,13 @@ public class Bpmn2JsonMarshaller {
     	String taskType = "None";
     	if (task instanceof BusinessRuleTask) {
     		taskType = "Business Rule";
+    		Iterator<FeatureMap.Entry> iter = task.getAnyAttribute().iterator();
+            while(iter.hasNext()) {
+                FeatureMap.Entry entry = iter.next();
+                if(entry.getEStructuralFeature().getName().equals("ruleFlowGroup")) {
+                    properties.put("ruleflowgroup", entry.getValue());
+                }
+            }
     	} else if (task instanceof ScriptTask) {
     		ScriptTask scriptTask = (ScriptTask) task;
     		properties.put("script", scriptTask.getScript());
@@ -503,14 +537,109 @@ public class Bpmn2JsonMarshaller {
     	Iterator<FeatureMap.Entry> iter = task.getAnyAttribute().iterator();
         while(iter.hasNext()) {
             FeatureMap.Entry entry = iter.next();
-            if(entry.getEStructuralFeature().getName().equals("ruleFlowGroup")) {
-                properties.put("ruleflowgroup", entry.getValue());
-            }
             if(entry.getEStructuralFeature().getName().equals("taskName")) {
                 properties.put("taskname", entry.getValue());
             }
         }
         
+        // data inputs
+        List<InputSet> inputSetList = task.getIoSpecification().getInputSets();
+        StringBuilder dataInBuffer = new StringBuilder();
+        for(InputSet inset : inputSetList) {
+            List<DataInput> dataInputList =  inset.getDataInputRefs();
+            for(DataInput dataIn : dataInputList) {
+                // dont add "TaskName" as that is added manually
+               if(dataIn.getName() != null && !dataIn.getName().equals("TaskName")) {
+                   dataInBuffer.append(dataIn.getName());
+                   dataInBuffer.append(",");
+               }
+            }
+        }
+        if(dataInBuffer.length() > 0) {
+            //get rid of annoying last comma
+            dataInBuffer.setLength(dataInBuffer.length() - 1);
+        }
+        
+        properties.put("datainputset", dataInBuffer.toString());
+        
+        // data outputs
+        List<OutputSet> outputSetList = task.getIoSpecification().getOutputSets();
+        StringBuilder dataOutBuffer = new StringBuilder();
+        for(OutputSet outset : outputSetList) {
+            List<DataOutput> dataOutputList =  outset.getDataOutputRefs();
+            for(DataOutput dataOut : dataOutputList) {
+                dataOutBuffer.append(dataOut.getName());
+                dataOutBuffer.append(",");
+            }
+        }
+        if(dataOutBuffer.length() > 0) {
+            //get rid of annoying last comma
+            dataOutBuffer.setLength(dataOutBuffer.length() - 1);
+        }
+        
+        properties.put("dataoutputset", dataOutBuffer.toString());
+        
+        
+        // assignments
+        StringBuilder associationBuff = new StringBuilder();
+        List<DataInputAssociation> inputAssociations = task.getDataInputAssociations();
+        List<DataOutputAssociation> outputAssociations = task.getDataOutputAssociations();
+        List<String> uniDirectionalAssociations = new ArrayList<String>();
+        List<String> biDirectionalAssociations = new ArrayList<String>();
+        
+        for(DataInputAssociation datain : inputAssociations) {
+            String lhsAssociation = datain.getSourceRef().get(0).getId();
+            String rhsAssociation = ((DataInput) datain.getTargetRef()).getName();
+            
+            boolean isBiDirectional = false;
+            // check if this is a bi-directional association
+            for(DataOutputAssociation dataout : outputAssociations) {
+                if(dataout.getTargetRef().getId().equals(lhsAssociation) && 
+                   ((DataOutput) dataout.getSourceRef().get(0)).getName().equals(rhsAssociation)) {
+                    isBiDirectional = true;
+                    break;
+                }
+            }
+            
+            if(isBiDirectional) {
+                associationBuff.append(lhsAssociation).append("<->").append(rhsAssociation);
+                associationBuff.append(",");
+                biDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
+            } else {
+                associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
+                associationBuff.append(",");
+                uniDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
+            }
+            
+        }
+        
+        for(DataOutputAssociation dataout : outputAssociations) {
+            String lhsAssociation = ((DataOutput) dataout.getSourceRef().get(0)).getName();
+            String rhsAssociation = dataout.getTargetRef().getId();
+            
+            boolean wasBiDirectional = false;
+            // check if we already addressed this association as bidirectional
+            for(String bda : biDirectionalAssociations) {
+                String[] dbaparts = bda.split( ",\\s*" );
+                if(dbaparts[0].equals(rhsAssociation) && dbaparts[1].equals(lhsAssociation)) {
+                    wasBiDirectional = true;
+                    break;
+                }
+            }
+            
+            if(!wasBiDirectional) {
+                associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
+            }
+        }
+        
+        if(associationBuff.length() > 0) {
+            //get rid of annoying last comma
+            associationBuff.setLength(associationBuff.length() - 1);
+        }
+        properties.put("assignments", associationBuff.toString());
+        
+        
+        // marshall the node out
     	marshallNode(task, properties, "Task", plane, generator, xOffset, yOffset);
     }
     
