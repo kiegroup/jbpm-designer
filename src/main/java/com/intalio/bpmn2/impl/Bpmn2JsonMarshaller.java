@@ -368,8 +368,15 @@ public class Bpmn2JsonMarshaller {
             properties.put("dataoutputassociations", doutassociationbuff.toString());
         }
         // event definitions
-        // TODO
-        
+        List<EventDefinition> eventdefs = event.getEventDefinitions();
+        for(EventDefinition ed : eventdefs) {
+            if(ed instanceof TimerEventDefinition) {
+                TimerEventDefinition ted = (TimerEventDefinition) ed;
+                properties.put("timedate", ((FormalExpression) ted.getTimeDate()).getBody());
+                properties.put("timeduration", ((FormalExpression) ted.getTimeDuration()).getBody());
+                properties.put("timecycle", ((FormalExpression) ted.getTimeCycle()).getBody());
+            }
+        }
     }
     
     private void setThrowEventProperties(ThrowEvent event, Map<String, Object> properties) {

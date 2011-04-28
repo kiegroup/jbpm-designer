@@ -4091,6 +4091,42 @@
 					"optional":false,
 					"refToView":"",
 					"length":""
+				},
+				{
+					"id":"timedate",
+					"type":"String",
+					"title":"Time Date",
+					"title_de":"Time Date",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"timeduration",
+					"type":"Text",
+					"title":"Time Duration",
+					"title_de":"Time Duration",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"timecycle",
+					"type":"Text",
+					"title":"Time Cycle",
+					"title_de":"Time Cycle",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
 				}
 			]
 		},

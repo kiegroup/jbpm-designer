@@ -86,6 +86,7 @@ import org.eclipse.bpmn2.StartEvent;
 import org.eclipse.bpmn2.Task;
 import org.eclipse.bpmn2.TextAnnotation;
 import org.eclipse.bpmn2.ThrowEvent;
+import org.eclipse.bpmn2.TimerEventDefinition;
 import org.eclipse.bpmn2.UserTask;
 import org.eclipse.bpmn2.di.BPMNDiagram;
 import org.eclipse.bpmn2.di.BPMNEdge;
@@ -759,14 +760,23 @@ public class Bpmn2JsonUnmarshaller {
             }
         }
         
-        // now event definitions
-        // eventdefinitions
-        // TODO
-        if (properties.get("eventdefinitions") != null && !"".equals(properties.get("eventdefinitions"))) {
-            List<EventDefinition> eventDefinitions = event.getEventDefinitions();
-            if(eventDefinitions != null) {
-            }
-        }
+        // timer-specific definitions
+        if( (properties.get("timedate") != null && !"".equals(properties.get("timedate"))) ||
+            (properties.get("timeduration") != null && !"".equals(properties.get("timeduration"))) ||
+            (properties.get("timecycle") != null && !"".equals(properties.get("timecycle")))) {
+
+            FormalExpression timeDateExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+            timeDateExpression.setBody(properties.get("timedate"));
+            ((TimerEventDefinition) event.getEventDefinitions().get(0)).setTimeDate(timeDateExpression);
+            
+            FormalExpression timeDurationExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+            timeDurationExpression.setBody(properties.get("timeduration"));
+            ((TimerEventDefinition) event.getEventDefinitions().get(0)).setTimeDuration(timeDurationExpression);
+            
+            FormalExpression timeCycleExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+            timeCycleExpression.setBody(properties.get("timecycle"));
+            ((TimerEventDefinition) event.getEventDefinitions().get(0)).setTimeCycle(timeCycleExpression);
+        }        
         
     }
     
