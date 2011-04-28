@@ -672,47 +672,50 @@ public class Bpmn2JsonMarshaller {
         List<String> biDirectionalAssociations = new ArrayList<String>();
         
         for(DataInputAssociation datain : inputAssociations) {
-            String lhsAssociation = datain.getSourceRef().get(0).getId();
-            String rhsAssociation = ((DataInput) datain.getTargetRef()).getName();
-            
-            boolean isBiDirectional = false;
-            // check if this is a bi-directional association
-            for(DataOutputAssociation dataout : outputAssociations) {
-                if(dataout.getTargetRef().getId().equals(lhsAssociation) && 
-                   ((DataOutput) dataout.getSourceRef().get(0)).getName().equals(rhsAssociation)) {
-                    isBiDirectional = true;
-                    break;
+            if(datain.getSourceRef().size() > 0) {
+                String lhsAssociation = datain.getSourceRef().get(0).getId();
+                String rhsAssociation = ((DataInput) datain.getTargetRef()).getName();
+                
+                boolean isBiDirectional = false;
+                // check if this is a bi-directional association
+                for(DataOutputAssociation dataout : outputAssociations) {
+                    if(dataout.getTargetRef().getId().equals(lhsAssociation) && 
+                       ((DataOutput) dataout.getSourceRef().get(0)).getName().equals(rhsAssociation)) {
+                        isBiDirectional = true;
+                        break;
+                    }
+                }
+                
+                if(isBiDirectional) {
+                    associationBuff.append(lhsAssociation).append("<->").append(rhsAssociation);
+                    associationBuff.append(",");
+                    biDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
+                } else {
+                    associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
+                    associationBuff.append(",");
+                    uniDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
                 }
             }
-            
-            if(isBiDirectional) {
-                associationBuff.append(lhsAssociation).append("<->").append(rhsAssociation);
-                associationBuff.append(",");
-                biDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
-            } else {
-                associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
-                associationBuff.append(",");
-                uniDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
-            }
-            
         }
         
         for(DataOutputAssociation dataout : outputAssociations) {
-            String lhsAssociation = ((DataOutput) dataout.getSourceRef().get(0)).getName();
-            String rhsAssociation = dataout.getTargetRef().getId();
-            
-            boolean wasBiDirectional = false;
-            // check if we already addressed this association as bidirectional
-            for(String bda : biDirectionalAssociations) {
-                String[] dbaparts = bda.split( ",\\s*" );
-                if(dbaparts[0].equals(rhsAssociation) && dbaparts[1].equals(lhsAssociation)) {
-                    wasBiDirectional = true;
-                    break;
+            if(dataout.getSourceRef().size() > 0) { 
+                String lhsAssociation = ((DataOutput) dataout.getSourceRef().get(0)).getName();
+                String rhsAssociation = dataout.getTargetRef().getId();
+                
+                boolean wasBiDirectional = false;
+                // check if we already addressed this association as bidirectional
+                for(String bda : biDirectionalAssociations) {
+                    String[] dbaparts = bda.split( ",\\s*" );
+                    if(dbaparts[0].equals(rhsAssociation) && dbaparts[1].equals(lhsAssociation)) {
+                        wasBiDirectional = true;
+                        break;
+                    }
                 }
-            }
-            
-            if(!wasBiDirectional) {
-                associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
+                
+                if(!wasBiDirectional) {
+                    associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
+                }
             }
         }
         
