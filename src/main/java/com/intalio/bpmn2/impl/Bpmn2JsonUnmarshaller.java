@@ -486,35 +486,35 @@ public class Bpmn2JsonUnmarshaller {
                 // global tasks.
                 // if a task has sequence edges it is considered a task,
                 // otherwise it is considered a global task.
-                if (child instanceof Task && _outgoingFlows.get(child).isEmpty() && !_sequenceFlowTargets.contains(_objMap.get(child))) {
-                    // no edges on a task at the top level! We replace it with a
-                    // global task.
-                    GlobalTask task = null;
-                    if (child instanceof ScriptTask) {
-                        task = Bpmn2Factory.eINSTANCE.createGlobalScriptTask();
-                        ((GlobalScriptTask) task).setScript(((ScriptTask) child).getScript());
-                        ((GlobalScriptTask) task).setScriptLanguage(((ScriptTask) child).getScriptFormat()); 
-                        // TODO scriptLanguage missing on scriptTask
-                    } else if (child instanceof UserTask) {
-                        task = Bpmn2Factory.eINSTANCE.createGlobalUserTask();
-                    } else if (child instanceof ServiceTask) {
-                        // we don't have a global service task! Fallback on a
-                        // normal global task
-                        task = Bpmn2Factory.eINSTANCE.createGlobalTask();
-                    } else if (child instanceof BusinessRuleTask) {
-                        task = Bpmn2Factory.eINSTANCE.createGlobalBusinessRuleTask();
-                    } else if (child instanceof ManualTask) {
-                        task = Bpmn2Factory.eINSTANCE.createGlobalManualTask();
-                    } else {
-                        task = Bpmn2Factory.eINSTANCE.createGlobalTask();
-                    }
-
-                    task.setName(((Task) child).getName());
-                    task.setIoSpecification(((Task) child).getIoSpecification());
-                    task.getDocumentation().addAll(((Task) child).getDocumentation());
-                    ((Definitions) baseElt).getRootElements().add(task);
-                    continue;
-                } else {
+//                if (child instanceof Task && _outgoingFlows.get(child).isEmpty() && !_sequenceFlowTargets.contains(_objMap.get(child))) {
+//                    // no edges on a task at the top level! We replace it with a
+//                    // global task.
+//                    GlobalTask task = null;
+//                    if (child instanceof ScriptTask) {
+//                        task = Bpmn2Factory.eINSTANCE.createGlobalScriptTask();
+//                        ((GlobalScriptTask) task).setScript(((ScriptTask) child).getScript());
+//                        ((GlobalScriptTask) task).setScriptLanguage(((ScriptTask) child).getScriptFormat()); 
+//                        // TODO scriptLanguage missing on scriptTask
+//                    } else if (child instanceof UserTask) {
+//                        task = Bpmn2Factory.eINSTANCE.createGlobalUserTask();
+//                    } else if (child instanceof ServiceTask) {
+//                        // we don't have a global service task! Fallback on a
+//                        // normal global task
+//                        task = Bpmn2Factory.eINSTANCE.createGlobalTask();
+//                    } else if (child instanceof BusinessRuleTask) {
+//                        task = Bpmn2Factory.eINSTANCE.createGlobalBusinessRuleTask();
+//                    } else if (child instanceof ManualTask) {
+//                        task = Bpmn2Factory.eINSTANCE.createGlobalManualTask();
+//                    } else {
+//                        task = Bpmn2Factory.eINSTANCE.createGlobalTask();
+//                    }
+//
+//                    task.setName(((Task) child).getName());
+//                    task.setIoSpecification(((Task) child).getIoSpecification());
+//                    task.getDocumentation().addAll(((Task) child).getDocumentation());
+//                    ((Definitions) baseElt).getRootElements().add(task);
+//                    continue;
+//                } else {
                     if (child instanceof SequenceFlow) {
                         // for some reason sequence flows are placed as root elements.
                         // find if the target has a container, and if we can use it:
@@ -591,7 +591,7 @@ public class Bpmn2JsonUnmarshaller {
                     } else {
                         throw new IllegalArgumentException("Don't know what to do of " + child);
                     }
-                }
+               // }
             }
         } else if (baseElt instanceof Process) {
             for (BaseElement child : childElements) {
