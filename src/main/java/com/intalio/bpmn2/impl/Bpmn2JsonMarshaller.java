@@ -375,11 +375,19 @@ public class Bpmn2JsonMarshaller {
         for(EventDefinition ed : eventdefs) {
             if(ed instanceof TimerEventDefinition) {
                 TimerEventDefinition ted = (TimerEventDefinition) ed;
-                properties.put("timedate", ((FormalExpression) ted.getTimeDate()).getBody());
-                properties.put("timeduration", ((FormalExpression) ted.getTimeDuration()).getBody());
-                properties.put("timecycle", ((FormalExpression) ted.getTimeCycle()).getBody());
+                if(ted.getTimeDate() != null) {
+                    properties.put("timedate", ((FormalExpression) ted.getTimeDate()).getBody());
+                }
+                if(ted.getTimeDuration() != null) {
+                    properties.put("timeduration", ((FormalExpression) ted.getTimeDuration()).getBody());
+                }
+                if(ted.getTimeCycle() != null) {
+                    properties.put("timecycle", ((FormalExpression) ted.getTimeCycle()).getBody());
+                }
             } else if( ed instanceof SignalEventDefinition) {
-                properties.put("signalref", ((SignalEventDefinition) ed).getSignalRef().getName());
+                if(((SignalEventDefinition) ed).getSignalRef() != null) {
+                    properties.put("signalref", ((SignalEventDefinition) ed).getSignalRef().getName());
+                }
             }
         }
     }
