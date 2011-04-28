@@ -77,6 +77,7 @@ public enum Bpmn20Stencil {
     EndMultipleEvent(Bpmn2Package.eINSTANCE.getEndEvent()),
     EndCompensationEvent(Bpmn2Package.eINSTANCE.getEndEvent(), Bpmn2Package.eINSTANCE.getCompensateEventDefinition()),
     IntermediateMessageEventCatching(Bpmn2Package.eINSTANCE.getIntermediateCatchEvent(), Bpmn2Package.eINSTANCE.getMessageEventDefinition()),
+    IntermediateSignalEventCatching(Bpmn2Package.eINSTANCE.getIntermediateCatchEvent(), Bpmn2Package.eINSTANCE.getSignalEventDefinition()),
     IntermediateTimerEvent(Bpmn2Package.eINSTANCE.getIntermediateCatchEvent(), Bpmn2Package.eINSTANCE.getTimerEventDefinition()),
     IntermediateEscalationEvent(Bpmn2Package.eINSTANCE.getIntermediateCatchEvent(), Bpmn2Package.eINSTANCE.getEscalationEventDefinition()),
     IntermediateConditionalEvent(Bpmn2Package.eINSTANCE.getIntermediateCatchEvent(), Bpmn2Package.eINSTANCE.getConditionalEventDefinition()),

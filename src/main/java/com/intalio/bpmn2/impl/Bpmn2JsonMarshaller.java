@@ -93,6 +93,7 @@ import org.eclipse.bpmn2.ScriptTask;
 import org.eclipse.bpmn2.SendTask;
 import org.eclipse.bpmn2.SequenceFlow;
 import org.eclipse.bpmn2.ServiceTask;
+import org.eclipse.bpmn2.Signal;
 import org.eclipse.bpmn2.SignalEventDefinition;
 import org.eclipse.bpmn2.StartEvent;
 import org.eclipse.bpmn2.SubProcess;
@@ -255,7 +256,9 @@ public class Bpmn2JsonMarshaller {
 	                // TODO
 	            } else if (rootElement instanceof Message) {
 	                // TODO
-	            } else {
+	            } else if (rootElement instanceof Signal) {
+                    // TODO
+                } else {
 	                throw new UnsupportedOperationException("Unknown root element " + rootElement); //TODO!
 	            }
 	        }
@@ -375,6 +378,8 @@ public class Bpmn2JsonMarshaller {
                 properties.put("timedate", ((FormalExpression) ted.getTimeDate()).getBody());
                 properties.put("timeduration", ((FormalExpression) ted.getTimeDuration()).getBody());
                 properties.put("timecycle", ((FormalExpression) ted.getTimeCycle()).getBody());
+            } else if( ed instanceof SignalEventDefinition) {
+                properties.put("signalref", ((SignalEventDefinition) ed).getSignalRef().getName());
             }
         }
     }

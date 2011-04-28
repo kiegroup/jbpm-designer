@@ -4444,6 +4444,18 @@
 					"optional":false,
 					"refToView":"",
 					"length":""
+				},
+				{
+					"id":"signalref",
+					"type":"Text",
+					"title":"SignalRef",
+					"title_de":"SignalRef",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
 				}
 			]
 		},

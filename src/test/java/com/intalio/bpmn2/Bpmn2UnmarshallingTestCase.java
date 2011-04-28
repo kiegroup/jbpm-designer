@@ -333,7 +333,8 @@ public class Bpmn2UnmarshallingTestCase {
     public void testStartSignalEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("startSignalEvent.json"));
-        assertTrue(definitions.getRootElements().size() == 1);
+        // we now add signal as the root element so there are more than 1
+        assertTrue(definitions.getRootElements().size() == 2);
         Process process = getRootProcess(definitions);
         StartEvent g = (StartEvent) process.getFlowElements().get(0);
         assertEquals("start signal event", g.getName());
