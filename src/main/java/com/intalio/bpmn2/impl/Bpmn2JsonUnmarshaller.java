@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -82,6 +83,8 @@ import org.eclipse.bpmn2.RootElement;
 import org.eclipse.bpmn2.ScriptTask;
 import org.eclipse.bpmn2.SequenceFlow;
 import org.eclipse.bpmn2.ServiceTask;
+import org.eclipse.bpmn2.Signal;
+import org.eclipse.bpmn2.SignalEventDefinition;
 import org.eclipse.bpmn2.StartEvent;
 import org.eclipse.bpmn2.Task;
 import org.eclipse.bpmn2.TextAnnotation;
@@ -105,6 +108,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
+import org.eclipse.emf.ecore.util.FeatureMap;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.InvalidSyntaxException;
@@ -187,6 +191,7 @@ public class Bpmn2JsonUnmarshaller {
             createDiagram(def);
             revisitGateways(def);
             revisitMessages(def);
+            revisitCatchEvents(def);
             return def;
         } finally {
             parser.close();
@@ -196,6 +201,43 @@ public class Bpmn2JsonUnmarshaller {
             _sequenceFlowTargets.clear();
             _bounds.clear();
             _currentResource = null;
+        }
+    }
+    
+    /**
+     * Updates the signal definitions for all catch events.
+     * @param def
+     */
+    public void revisitCatchEvents(Definitions def) {
+        List<RootElement> rootElements =  def.getRootElements();
+        List<Signal> toAddSignals = new ArrayList<Signal>();
+        for(RootElement root : rootElements) {
+            if(root instanceof Process) {
+                Process process = (Process) root;
+                List<FlowElement> flowElements =  process.getFlowElements();
+                for(FlowElement fe : flowElements) {
+                    if(fe instanceof CatchEvent) {
+                        if(((CatchEvent)fe).getEventDefinitions().size() > 0) {
+                            EventDefinition ed = ((CatchEvent)fe).getEventDefinitions().get(0);
+                            if (ed instanceof SignalEventDefinition) {
+                                Signal signal = Bpmn2Factory.eINSTANCE.createSignal();
+                                Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute().iterator();
+                                while(iter.hasNext()) {
+                                    FeatureMap.Entry entry = iter.next();
+                                    if(entry.getEStructuralFeature().getName().equals("signalrefname")) {
+                                        signal.setName((String) entry.getValue());
+                                    }
+                                }
+                                toAddSignals.add(signal);
+                                ((SignalEventDefinition) ed).setSignalRef(signal);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for(Signal s : toAddSignals) {
+            def.getRootElements().add(s);
         }
     }
     
@@ -760,24 +802,40 @@ public class Bpmn2JsonUnmarshaller {
             }
         }
         
-        // timer-specific definitions
-        if( (properties.get("timedate") != null && !"".equals(properties.get("timedate"))) ||
-            (properties.get("timeduration") != null && !"".equals(properties.get("timeduration"))) ||
-            (properties.get("timecycle") != null && !"".equals(properties.get("timecycle")))) {
-
-            FormalExpression timeDateExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
-            timeDateExpression.setBody(properties.get("timedate"));
-            ((TimerEventDefinition) event.getEventDefinitions().get(0)).setTimeDate(timeDateExpression);
-            
-            FormalExpression timeDurationExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
-            timeDurationExpression.setBody(properties.get("timeduration"));
-            ((TimerEventDefinition) event.getEventDefinitions().get(0)).setTimeDuration(timeDurationExpression);
-            
-            FormalExpression timeCycleExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
-            timeCycleExpression.setBody(properties.get("timecycle"));
-            ((TimerEventDefinition) event.getEventDefinitions().get(0)).setTimeCycle(timeCycleExpression);
-        }        
-        
+        try {
+            EventDefinition ed = event.getEventDefinitions().get(0);
+            if(ed instanceof TimerEventDefinition) {
+                if(properties.get("timedate") != null && !"".equals(properties.get("timedate"))) {
+                    FormalExpression timeDateExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                    timeDateExpression.setBody(properties.get("timedate"));
+                    ((TimerEventDefinition) event.getEventDefinitions().get(0)).setTimeDate(timeDateExpression);
+                }
+                
+                if(properties.get("timeduration") != null && !"".equals(properties.get("timedate"))) {
+                    FormalExpression timeDurationExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                    timeDurationExpression.setBody(properties.get("timeduration"));
+                    ((TimerEventDefinition) event.getEventDefinitions().get(0)).setTimeDuration(timeDurationExpression);
+                }
+                
+                if(properties.get("timecycle") != null && !"".equals(properties.get("timedate"))) {
+                    FormalExpression timeCycleExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                    timeCycleExpression.setBody(properties.get("timecycle"));
+                    ((TimerEventDefinition) event.getEventDefinitions().get(0)).setTimeCycle(timeCycleExpression);
+                }
+            } else if (ed instanceof SignalEventDefinition) {
+                if(properties.get("signalref") != null && !"".equals(properties.get("signalref"))) {
+                    ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                    EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                                "http://www.jboss.org/drools", "signalrefname", false, false);
+                    EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                        properties.get("signalref"));
+                    ((SignalEventDefinition) event.getEventDefinitions().get(0)).getAnyAttribute().add(extensionEntry);
+                }
+            }
+        } catch (IndexOutOfBoundsException e) {
+            // TODO we dont want to barf here as test for example do not define event definitions in the bpmn2....
+        }
+                
     }
     
     private void applyThrowEventProperties(ThrowEvent event, Map<String, String> properties) {
