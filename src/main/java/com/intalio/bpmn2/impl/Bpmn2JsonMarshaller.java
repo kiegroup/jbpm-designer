@@ -728,11 +728,11 @@ public class Bpmn2JsonMarshaller {
             }
         }
         
-        if(associationBuff.length() > 0) {
-            //get rid of annoying last comma
-            associationBuff.setLength(associationBuff.length() - 1);
+        String assignmentString = associationBuff.toString();
+        if(assignmentString.endsWith(",")) {
+            assignmentString = assignmentString.substring(0, assignmentString.length() - 1);
         }
-        properties.put("assignments", associationBuff.toString());
+        properties.put("assignments", assignmentString);
         
         
         // marshall the node out
