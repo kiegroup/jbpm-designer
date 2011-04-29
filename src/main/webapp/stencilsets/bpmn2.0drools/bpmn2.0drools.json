@@ -307,7 +307,7 @@
 				},
 				{
 					"id":"vardefs",
-					"type":"String",
+					"type":"Text",
 					"title":"Variable Definitions",
 					"title_de":"Variable Definitions",
 					"value":"",
