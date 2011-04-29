@@ -1042,7 +1042,12 @@ public class Bpmn2JsonUnmarshaller {
                 inset.getDataInputRefs().add(taskNameDataInput);
             }
             task.getIoSpecification().getInputSets().add(inset);
+        } else {
+            if(task.getIoSpecification() != null) {
+                task.getIoSpecification().getInputSets().add(Bpmn2Factory.eINSTANCE.createInputSet());
+            }
         }
+        
         //process data output set
         if(properties.get("dataoutputset") != null && properties.get("dataoutputset").length() > 0) {
             String[] allDataOutputs = properties.get("dataoutputset").split( ",\\s*" );
@@ -1061,12 +1066,59 @@ public class Bpmn2JsonUnmarshaller {
                 outset.getDataOutputRefs().add(nextOut);
             }
             task.getIoSpecification().getOutputSets().add(outset);
+        } else {
+            if(task.getIoSpecification() != null) {
+                task.getIoSpecification().getOutputSets().add(Bpmn2Factory.eINSTANCE.createOutputSet());
+            }
         }
+        
         //process assignments
         if(properties.get("assignments") != null && properties.get("assignments").length() > 0) {
             String[] allAssignments = properties.get("assignments").split( ",\\s*" );
             for(String assignment : allAssignments) {
-                if(assignment.contains("<->")) {
+                if(assignment.contains("=")) {
+                    String[] assignmentParts = assignment.split( "=\\s*" );
+                    DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
+
+                    boolean foundTaskName = false;
+                    List<DataInput> dataInputs = task.getIoSpecification().getDataInputs();
+                    for(DataInput di : dataInputs) {
+                        if(di.getId().equals(task.getId() + "_" + assignmentParts[0] + "Input")) {
+                            dia.setTargetRef(di);
+                            if(di.getName().equals("TaskName")) {
+                                foundTaskName = true;
+                            }
+                            break;
+                        }
+                    }
+                    // if we are dealing with TaskName and none has been defined, add it
+                    if(assignmentParts[0].equals("TaskName") && !foundTaskName) {
+                        DataInput assignmentTaskNameDataInput = Bpmn2Factory.eINSTANCE.createDataInput();
+                        assignmentTaskNameDataInput.setId(task.getId() + "_TaskNameInput");
+                        assignmentTaskNameDataInput.setName("TaskName");
+                        if(task.getIoSpecification() == null) {
+                            InputOutputSpecification iospec = Bpmn2Factory.eINSTANCE.createInputOutputSpecification();
+                            task.setIoSpecification(iospec);
+                        }
+                        task.getIoSpecification().getDataInputs().add(assignmentTaskNameDataInput);
+                        dia.setTargetRef(assignmentTaskNameDataInput);
+                        InputSet inset = task.getIoSpecification().getInputSets().get(0);
+                        inset.getDataInputRefs().add(assignmentTaskNameDataInput);
+                    }
+                    
+                    Assignment a = Bpmn2Factory.eINSTANCE.createAssignment();
+                    FormalExpression fromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                    fromExpression.setBody(assignmentParts[1]);
+                    FormalExpression toExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                    toExpression.setBody(dia.getTargetRef().getId());
+                    
+                    a.setFrom(fromExpression);
+                    a.setTo(toExpression);
+                    
+                    dia.getAssignment().add(a);
+                    task.getDataInputAssociations().add(dia);
+                    
+                } else if(assignment.contains("<->")) {
                     String[] assignmentParts = assignment.split( "<->\\s*" );
                     DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
                     DataOutputAssociation doa = Bpmn2Factory.eINSTANCE.createDataOutputAssociation();
@@ -1095,7 +1147,6 @@ public class Bpmn2JsonUnmarshaller {
                     task.getDataOutputAssociations().add(doa);
                 } else if(assignment.contains("->")) {
                     String[] assignmentParts = assignment.split( "->\\s*" );
-                    
                     // we need to check if this is an data input or data output assignment
                     boolean leftHandAssignMentIsDO = false;
                     List<DataOutput> dataOutputs = task.getIoSpecification().getDataOutputs();
