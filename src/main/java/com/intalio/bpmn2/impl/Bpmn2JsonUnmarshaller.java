@@ -909,7 +909,8 @@ public class Bpmn2JsonUnmarshaller {
 
     private void applyDefinitionProperties(Definitions def, Map<String, String> properties) {
         def.setTypeLanguage(properties.get("typelanguage"));
-        def.setTargetNamespace(properties.get("targetnamespace"));
+        //def.setTargetNamespace(properties.get("targetnamespace"));
+        def.setTargetNamespace("http://www.omg.org/bpmn20");
         def.setExpressionLanguage(properties.get("expressionlanguage"));
         def.setName(properties.get("name"));
         

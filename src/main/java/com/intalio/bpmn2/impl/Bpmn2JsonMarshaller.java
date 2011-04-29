@@ -201,7 +201,8 @@ public class Bpmn2JsonMarshaller {
 	         */
 	        Map<String, Object> props = new LinkedHashMap<String, Object>();
 	        props.put("namespaces", "");
-	        props.put("targetnamespace", def.getTargetNamespace());
+	        //props.put("targetnamespace", def.getTargetNamespace());
+	        props.put("targetnamespace", "http://www.omg.org/bpmn20");
 	        props.put("typelanguage", def.getTypeLanguage());
 	        props.put("name",def.getName());
 	        props.put("id", def.getId());
