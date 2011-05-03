@@ -588,7 +588,7 @@ public class Bpmn2UnmarshallingTestCase {
     public void testIntermediateCatchErrorEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("intermediateCatchErrorEvent.json"));
-        assertTrue(definitions.getRootElements().size() == 1);
+        assertTrue(definitions.getRootElements().size() == 2);
         Process process = getRootProcess(definitions);
         CatchEvent g = (CatchEvent) process.getFlowElements().get(0);
         assertEquals("catch error event", g.getName());

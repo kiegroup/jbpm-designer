@@ -3834,6 +3834,18 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
+				},
+				{
+					"id":"errorref",
+					"type":"Text",
+					"title":"ErrorRef",
+					"title_de":"ErrorRef",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
 				}
 			]
 		},
@@ -4311,6 +4323,18 @@
 					"description":"",
 					"readonly":true,
 					"optional":false,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"errorref",
+					"type":"Text",
+					"title":"ErrorRef",
+					"title_de":"ErrorRef",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
 					"refToView":"",
 					"length":""
 				}

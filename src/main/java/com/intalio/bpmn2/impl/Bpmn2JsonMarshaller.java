@@ -387,8 +387,16 @@ public class Bpmn2JsonMarshaller {
                     properties.put("timecycle", ((FormalExpression) ted.getTimeCycle()).getBody());
                 }
             } else if( ed instanceof SignalEventDefinition) {
-                if(((SignalEventDefinition) ed).getSignalRef() != null) {
+                if(((SignalEventDefinition) ed).getSignalRef() != null && ((SignalEventDefinition) ed).getSignalRef().getName() != null) {
                     properties.put("signalref", ((SignalEventDefinition) ed).getSignalRef().getName());
+                } else {
+                    properties.put("signalref", "");
+                }
+            } else if( ed instanceof ErrorEventDefinition) {
+                if(((ErrorEventDefinition) ed).getErrorRef() != null && ((ErrorEventDefinition) ed).getErrorRef().getErrorCode() != null) {
+                    properties.put("errorref", ((ErrorEventDefinition) ed).getErrorRef().getErrorCode());
+                } else {
+                    properties.put("errorref", "");
                 }
             }
         }
@@ -487,6 +495,8 @@ public class Bpmn2JsonMarshaller {
     			marshallNode(startEvent, properties, "StartMessageEvent", plane, generator, xOffset, yOffset);
     		} else if (eventDefinition instanceof TimerEventDefinition) {
     			marshallNode(startEvent, properties, "StartTimerEvent", plane, generator, xOffset, yOffset);
+    		} else if (eventDefinition instanceof ErrorEventDefinition) {
+    		    marshallNode(startEvent, properties, "StartErrorEvent", plane, generator, xOffset, yOffset);
     		} else {
     			throw new UnsupportedOperationException("Event definition not supported: " + eventDefinition);
     		}
@@ -533,6 +543,8 @@ public class Bpmn2JsonMarshaller {
     			marshallNode(catchEvent, properties, "IntermediateTimerEvent", plane, generator, xOffset, yOffset);
     		} else if (eventDefinition instanceof ConditionalEventDefinition) {
     			marshallNode(catchEvent, properties, "IntermediateConditionalEvent", plane, generator, xOffset, yOffset);
+    		} else if(eventDefinition instanceof ErrorEventDefinition) {
+    		    marshallNode(catchEvent, properties, "IntermediateErrorEvent", plane, generator, xOffset, yOffset);
     		} else {
     			throw new UnsupportedOperationException("Event definition not supported: " + eventDefinition);
     		}

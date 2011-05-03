@@ -54,6 +54,8 @@ import org.eclipse.bpmn2.DataStore;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.Documentation;
 import org.eclipse.bpmn2.EndEvent;
+import org.eclipse.bpmn2.Error;
+import org.eclipse.bpmn2.ErrorEventDefinition;
 import org.eclipse.bpmn2.Event;
 import org.eclipse.bpmn2.EventDefinition;
 import org.eclipse.bpmn2.FlowElement;
@@ -211,6 +213,7 @@ public class Bpmn2JsonUnmarshaller {
     public void revisitCatchEvents(Definitions def) {
         List<RootElement> rootElements =  def.getRootElements();
         List<Signal> toAddSignals = new ArrayList<Signal>();
+        List<Error> toAddErrors = new ArrayList<Error>();
         for(RootElement root : rootElements) {
             if(root instanceof Process) {
                 Process process = (Process) root;
@@ -230,6 +233,20 @@ public class Bpmn2JsonUnmarshaller {
                                 }
                                 toAddSignals.add(signal);
                                 ((SignalEventDefinition) ed).setSignalRef(signal);
+                            } else if(ed instanceof ErrorEventDefinition) {
+                                Error err = Bpmn2Factory.eINSTANCE.createError();
+                                Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute().iterator();
+                                while(iter.hasNext()) {
+                                    FeatureMap.Entry entry = iter.next();
+                                    if(entry.getEStructuralFeature().getName().equals("erefname")) {
+                                        err.setId((String) entry.getValue());
+                                        err.setErrorCode((String) entry.getValue());
+                                    }
+                                }
+                                
+                                toAddErrors.add(err);
+                                ((ErrorEventDefinition) ed).setErrorRef(err);
+                                
                             }
                         }
                     }
@@ -238,6 +255,9 @@ public class Bpmn2JsonUnmarshaller {
         }
         for(Signal s : toAddSignals) {
             def.getRootElements().add(s);
+        }
+        for(Error er : toAddErrors) {
+            def.getRootElements().add(er);
         }
     }
     
@@ -830,6 +850,15 @@ public class Bpmn2JsonUnmarshaller {
                     EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
                         properties.get("signalref"));
                     ((SignalEventDefinition) event.getEventDefinitions().get(0)).getAnyAttribute().add(extensionEntry);
+                }
+            } else if(ed instanceof ErrorEventDefinition) {
+                if(properties.get("errorref") != null && !"".equals(properties.get("errorref"))) {
+                    ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                    EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                                "http://www.jboss.org/drools", "erefname", false, false);
+                    EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                        properties.get("errorref"));
+                    ((ErrorEventDefinition) event.getEventDefinitions().get(0)).getAnyAttribute().add(extensionEntry);
                 }
             }
         } catch (IndexOutOfBoundsException e) {
