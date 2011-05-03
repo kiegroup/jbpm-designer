@@ -1233,7 +1233,10 @@ public class Bpmn2JsonUnmarshaller {
     }
 
     private void applySequenceFlowProperties(SequenceFlow sequenceFlow, Map<String, String> properties) {
-        sequenceFlow.setName(properties.get("name"));
+        // sequence flow name is options
+        if(properties.get("name") != null && !"".equals(properties.get("name"))) {
+            sequenceFlow.setName(properties.get("name"));
+        }
         if (properties.get("auditing") != null && !"".equals(properties.get("auditing"))) {
             Auditing audit = Bpmn2Factory.eINSTANCE.createAuditing();
             audit.getDocumentation().add(createDocumentation(properties.get("auditing")));

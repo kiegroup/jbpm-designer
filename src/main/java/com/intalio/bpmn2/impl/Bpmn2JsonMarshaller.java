@@ -918,7 +918,12 @@ public class Bpmn2JsonMarshaller {
     
     private void marshallSequenceFlow(SequenceFlow sequenceFlow, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset) throws JsonGenerationException, IOException {
     	Map<String, Object> properties = new LinkedHashMap<String, Object>();
-    	properties.put("name", sequenceFlow.getName());
+    	// check null for sequence flow name
+    	if(sequenceFlow.getName() != null && !"".equals(sequenceFlow.getName())) {
+    	    properties.put("name", sequenceFlow.getName());
+    	} else {
+    	    properties.put("name", "");
+    	}
     	Expression conditionExpression = sequenceFlow.getConditionExpression();
     	if (conditionExpression instanceof FormalExpression) {
     		properties.put("conditionexpression", ((FormalExpression) conditionExpression).getBody());
