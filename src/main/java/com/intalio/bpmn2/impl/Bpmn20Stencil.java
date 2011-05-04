@@ -64,6 +64,7 @@ public enum Bpmn20Stencil {
     StartParallelMultipleEvent(Bpmn2Package.eINSTANCE.getStartEvent()),
     StartTimerEvent(Bpmn2Package.eINSTANCE.getStartEvent(), Bpmn2Package.eINSTANCE.getTimerEventDefinition()),
     StartErrorEvent(Bpmn2Package.eINSTANCE.getStartEvent(), Bpmn2Package.eINSTANCE.getErrorEventDefinition()),
+    StartConditionalEvent(Bpmn2Package.eINSTANCE.getStartEvent(), Bpmn2Package.eINSTANCE.getConditionalEventDefinition()),
     TextAnnotation(Bpmn2Package.eINSTANCE.getTextAnnotation()),
     Group(Bpmn2Package.eINSTANCE.getGroup()),
     DataObject(Bpmn2Package.eINSTANCE.getDataObject()),

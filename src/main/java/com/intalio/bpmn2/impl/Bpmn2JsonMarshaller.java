@@ -398,6 +398,22 @@ public class Bpmn2JsonMarshaller {
                 } else {
                     properties.put("errorref", "");
                 }
+            } else if( ed instanceof ConditionalEventDefinition ) {
+                FormalExpression conditionalExp = (FormalExpression) ((ConditionalEventDefinition) ed).getCondition();
+                if(conditionalExp.getBody() != null) {
+                    properties.put("conditionexpression", conditionalExp.getBody());
+                }
+                if(conditionalExp.getLanguage() != null) {
+                    String languageVal = conditionalExp.getLanguage();
+                    if(languageVal.equals("http://www.jboss.org/drools/rule")) {
+                        properties.put("conditionlanguage", "drools");
+                    } else if(languageVal.equals("http://www.mvel.org/2.0")) {
+                        properties.put("conditionlanguage", "mvel");
+                    } else {
+                        // default to drools
+                        properties.put("conditionlanguage", "drools");
+                    }
+                }
             }
         }
     }
@@ -497,6 +513,8 @@ public class Bpmn2JsonMarshaller {
     			marshallNode(startEvent, properties, "StartTimerEvent", plane, generator, xOffset, yOffset);
     		} else if (eventDefinition instanceof ErrorEventDefinition) {
     		    marshallNode(startEvent, properties, "StartErrorEvent", plane, generator, xOffset, yOffset);
+    		} else if(eventDefinition instanceof ConditionalEventDefinition) {
+    		    marshallNode(startEvent, properties, "StartConditionalEvent", plane, generator, xOffset, yOffset);
     		} else {
     			throw new UnsupportedOperationException("Event definition not supported: " + eventDefinition);
     		}
@@ -565,6 +583,8 @@ public class Bpmn2JsonMarshaller {
     			marshallNode(boundaryEvent, "IntermediateTimerEvent", plane, generator, xOffset, yOffset);
     		} else if (eventDefinition instanceof CompensateEventDefinition) {
     			marshallNode(boundaryEvent, "IntermediateCompensationEventCatching", plane, generator, xOffset, yOffset);
+    		} else if(eventDefinition instanceof ConditionalEventDefinition) {
+    		    marshallNode(boundaryEvent, "IntermediateConditionalEvent", plane, generator, xOffset, yOffset);
     		} else {
     			throw new UnsupportedOperationException("Event definition not supported: " + eventDefinition);
     		}

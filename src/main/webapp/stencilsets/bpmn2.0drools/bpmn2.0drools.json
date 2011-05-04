@@ -3796,6 +3796,26 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
+				},
+				{
+					"id":"conditionlanguage",
+					"type":"String",
+					"title":"Language",
+					"title_de":"Sprache",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"conditionexpression",
+					"type":"Text",
+					"title":"Expression",
+					"title_de":"Expression",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true
 				}
 			]
 		},
@@ -4232,6 +4252,26 @@
 					"optional":false,
 					"refToView":"",
 					"length":""
+				},
+				{
+					"id":"conditionlanguage",
+					"type":"String",
+					"title":"Language",
+					"title_de":"Sprache",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"conditionexpression",
+					"type":"Text",
+					"title":"Expression",
+					"title_de":"Expression",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true
 				}
 			]
 		},

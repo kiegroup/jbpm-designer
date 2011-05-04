@@ -45,6 +45,7 @@ import org.eclipse.bpmn2.BaseElement;
 import org.eclipse.bpmn2.Bpmn2Factory;
 import org.eclipse.bpmn2.BusinessRuleTask;
 import org.eclipse.bpmn2.CatchEvent;
+import org.eclipse.bpmn2.ConditionalEventDefinition;
 import org.eclipse.bpmn2.DataInput;
 import org.eclipse.bpmn2.DataInputAssociation;
 import org.eclipse.bpmn2.DataObject;
@@ -860,6 +861,25 @@ public class Bpmn2JsonUnmarshaller {
                         properties.get("errorref"));
                     ((ErrorEventDefinition) event.getEventDefinitions().get(0)).getAnyAttribute().add(extensionEntry);
                 }
+            } else if(ed instanceof ConditionalEventDefinition) {
+                FormalExpression  conditionExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                if(properties.get("conditionlanguage") != null && !"".equals(properties.get("conditionlanguage"))) {
+                    // currently supporting drools and mvel
+                    String languageStr;
+                    if(properties.get("conditionlanguage").equals("drools")) {
+                        languageStr = "http://www.jboss.org/drools/rule";
+                    } else if(properties.get("conditionlanguage").equals("mvel")) {
+                        languageStr = "http://www.mvel.org/2.0";
+                    } else {
+                        // default to drools
+                        languageStr = "http://www.jboss.org/drools/rule";
+                    }
+                    conditionExpression.setLanguage(languageStr);
+                }
+                if(properties.get("conditionexpression") != null && !"".equals(properties.get("conditionexpression"))) {
+                    conditionExpression.setBody(properties.get("conditionexpression"));
+                }
+                ((ConditionalEventDefinition) event.getEventDefinitions().get(0)).setCondition(conditionExpression);
             }
         } catch (IndexOutOfBoundsException e) {
             // TODO we dont want to barf here as test for example do not define event definitions in the bpmn2....
