@@ -3755,6 +3755,16 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
+				},
+				{
+					"id":"escalationcode",
+					"type":"String",
+					"title":"EscalationCode",
+					"title_de":"EscalationCode",
+					"value":"",
+					"description":"Escalation code",
+					"readonly":false,
+					"optional":true
 				}
 			]
 		},
@@ -4203,6 +4213,16 @@
 					"optional":false,
 					"refToView":"",
 					"length":""
+				},
+				{
+					"id":"escalationcode",
+					"type":"String",
+					"title":"EscalationCode",
+					"title_de":"EscalationCode",
+					"value":"",
+					"description":"Escalation code",
+					"readonly":false,
+					"optional":true
 				}
 			]
 		},

@@ -57,6 +57,8 @@ import org.eclipse.bpmn2.Documentation;
 import org.eclipse.bpmn2.EndEvent;
 import org.eclipse.bpmn2.Error;
 import org.eclipse.bpmn2.ErrorEventDefinition;
+import org.eclipse.bpmn2.Escalation;
+import org.eclipse.bpmn2.EscalationEventDefinition;
 import org.eclipse.bpmn2.Event;
 import org.eclipse.bpmn2.EventDefinition;
 import org.eclipse.bpmn2.FlowElement;
@@ -215,6 +217,7 @@ public class Bpmn2JsonUnmarshaller {
         List<RootElement> rootElements =  def.getRootElements();
         List<Signal> toAddSignals = new ArrayList<Signal>();
         List<Error> toAddErrors = new ArrayList<Error>();
+        List<Escalation> toAddEscalations = new ArrayList<Escalation>();
         for(RootElement root : rootElements) {
             if(root instanceof Process) {
                 Process process = (Process) root;
@@ -248,6 +251,17 @@ public class Bpmn2JsonUnmarshaller {
                                 toAddErrors.add(err);
                                 ((ErrorEventDefinition) ed).setErrorRef(err);
                                 
+                            } else if(ed instanceof EscalationEventDefinition) {
+                                Escalation escalation = Bpmn2Factory.eINSTANCE.createEscalation();
+                                Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute().iterator();
+                                while(iter.hasNext()) {
+                                    FeatureMap.Entry entry = iter.next();
+                                    if(entry.getEStructuralFeature().getName().equals("esccode")) {
+                                        escalation.setEscalationCode((String) entry.getValue());
+                                    }
+                                }
+                                toAddEscalations.add(escalation);
+                                ((EscalationEventDefinition) ed).setEscalationRef(escalation);
                             }
                         }
                     }
@@ -259,6 +273,9 @@ public class Bpmn2JsonUnmarshaller {
         }
         for(Error er : toAddErrors) {
             def.getRootElements().add(er);
+        }
+        for(Escalation es : toAddEscalations) {
+            def.getRootElements().add(es);
         }
     }
     
@@ -880,6 +897,15 @@ public class Bpmn2JsonUnmarshaller {
                     conditionExpression.setBody(properties.get("conditionexpression"));
                 }
                 ((ConditionalEventDefinition) event.getEventDefinitions().get(0)).setCondition(conditionExpression);
+            } else if(ed instanceof EscalationEventDefinition) {
+                if(properties.get("escalationcode") != null && !"".equals(properties.get("escalationcode"))) {
+                    ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                    EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                                "http://www.jboss.org/drools", "esccode", false, false);
+                    EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                        properties.get("escalationcode"));
+                    ((EscalationEventDefinition) event.getEventDefinitions().get(0)).getAnyAttribute().add(extensionEntry);
+                }
             }
         } catch (IndexOutOfBoundsException e) {
             // TODO we dont want to barf here as test for example do not define event definitions in the bpmn2....

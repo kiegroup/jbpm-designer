@@ -289,7 +289,7 @@ public class Bpmn2UnmarshallingTestCase {
     public void testStartEscalationEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("startEscalationEvent.json"));
-        assertTrue(definitions.getRootElements().size() == 1);
+        assertTrue(definitions.getRootElements().size() == 2);
         Process process = getRootProcess(definitions);
         StartEvent g = (StartEvent) process.getFlowElements().get(0);
         assertEquals("start escalation event", g.getName());
@@ -552,7 +552,7 @@ public class Bpmn2UnmarshallingTestCase {
     public void testIntermediateCatchEscalationEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("intermediateCatchEscalationEvent.json"));
-        assertTrue(definitions.getRootElements().size() == 1);
+        assertTrue(definitions.getRootElements().size() == 2);
         Process process = getRootProcess(definitions);
         CatchEvent g = (CatchEvent) process.getFlowElements().get(0);
         assertEquals("catch escalation event", g.getName());

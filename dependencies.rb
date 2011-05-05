@@ -17,7 +17,7 @@ ORBIT_BINARIES	= ["com.intalio.cloud.orbit-prefetched:javax.servlet:jar:2.5.0.v2
    "com.intalio.cloud.orbit-prefetched:org.apache.xalan:jar:2.7.1.v200905122109",
    "com.intalio.cloud.orbit-prefetched:org.apache.xerces:jar:2.9.0.v200909240008"]
    
-BPMN2_LIBS = ["org.eclipse:org.eclipse.bpmn2:jar:0.7.0.000-JBOSS-SNAPSHOT",
+BPMN2_LIBS = ["org.eclipse:org.eclipse.bpmn2:jar:0.7.0.001-JBOSS-SNAPSHOT",
               "org.eclipse:org.eclipse.emf.common:jar:2.6.0.v20100427-1455",
               "org.eclipse:org.eclipse.emf.ecore.xmi:jar:2.5.0.v20100317-1336",
               "org.eclipse:org.eclipse.emf.ecore:jar:2.6.0.v20100427-1455"]

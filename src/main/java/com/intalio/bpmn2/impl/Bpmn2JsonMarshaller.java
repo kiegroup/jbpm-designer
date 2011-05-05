@@ -55,6 +55,7 @@ import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.EndEvent;
 import org.eclipse.bpmn2.Error;
 import org.eclipse.bpmn2.ErrorEventDefinition;
+import org.eclipse.bpmn2.Escalation;
 import org.eclipse.bpmn2.EscalationEventDefinition;
 import org.eclipse.bpmn2.Event;
 import org.eclipse.bpmn2.EventBasedGateway;
@@ -260,6 +261,8 @@ public class Bpmn2JsonMarshaller {
 	                // TODO
 	            } else if (rootElement instanceof Signal) {
                     // TODO
+                } else if (rootElement instanceof Escalation) {
+                    // TODO
                 } else {
 	                throw new UnsupportedOperationException("Unknown root element " + rootElement); //TODO!
 	            }
@@ -414,6 +417,15 @@ public class Bpmn2JsonMarshaller {
                         properties.put("conditionlanguage", "drools");
                     }
                 }
+            } else if( ed instanceof EscalationEventDefinition ) {
+                if(((EscalationEventDefinition) ed).getEscalationRef() != null) {
+                    Escalation esc = ((EscalationEventDefinition) ed).getEscalationRef();
+                    if(esc.getEscalationCode() != null && esc.getEscalationCode().length() > 0) {
+                        properties.put("escalationcode", esc.getEscalationCode());
+                    } else {
+                        properties.put("escalationcode", "");
+                    }
+                }
             }
         }
     }
@@ -515,7 +527,9 @@ public class Bpmn2JsonMarshaller {
     		    marshallNode(startEvent, properties, "StartErrorEvent", plane, generator, xOffset, yOffset);
     		} else if(eventDefinition instanceof ConditionalEventDefinition) {
     		    marshallNode(startEvent, properties, "StartConditionalEvent", plane, generator, xOffset, yOffset);
-    		} else {
+    		} else if(eventDefinition instanceof EscalationEventDefinition) {
+                marshallNode(startEvent, properties, "StartEscalationEvent", plane, generator, xOffset, yOffset);
+            } else {
     			throw new UnsupportedOperationException("Event definition not supported: " + eventDefinition);
     		}
     	} else {
@@ -563,7 +577,9 @@ public class Bpmn2JsonMarshaller {
     			marshallNode(catchEvent, properties, "IntermediateConditionalEvent", plane, generator, xOffset, yOffset);
     		} else if(eventDefinition instanceof ErrorEventDefinition) {
     		    marshallNode(catchEvent, properties, "IntermediateErrorEvent", plane, generator, xOffset, yOffset);
-    		} else {
+    		} else if(eventDefinition instanceof EscalationEventDefinition) {
+                marshallNode(catchEvent, properties, "IntermediateEscalationEvent", plane, generator, xOffset, yOffset);
+            } else {
     			throw new UnsupportedOperationException("Event definition not supported: " + eventDefinition);
     		}
     	} else {
