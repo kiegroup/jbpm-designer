@@ -67,7 +67,6 @@ import org.eclipse.bpmn2.FlowNode;
 import org.eclipse.bpmn2.FormalExpression;
 import org.eclipse.bpmn2.Gateway;
 import org.eclipse.bpmn2.GatewayDirection;
-import org.eclipse.bpmn2.GlobalScriptTask;
 import org.eclipse.bpmn2.GlobalTask;
 import org.eclipse.bpmn2.Import;
 import org.eclipse.bpmn2.InputOutputSpecification;
@@ -75,8 +74,8 @@ import org.eclipse.bpmn2.InputSet;
 import org.eclipse.bpmn2.ItemAwareElement;
 import org.eclipse.bpmn2.ItemDefinition;
 import org.eclipse.bpmn2.Lane;
-import org.eclipse.bpmn2.ManualTask;
 import org.eclipse.bpmn2.Message;
+import org.eclipse.bpmn2.MessageEventDefinition;
 import org.eclipse.bpmn2.Monitoring;
 import org.eclipse.bpmn2.OutputSet;
 import org.eclipse.bpmn2.PotentialOwner;
@@ -87,7 +86,6 @@ import org.eclipse.bpmn2.ResourceAssignmentExpression;
 import org.eclipse.bpmn2.RootElement;
 import org.eclipse.bpmn2.ScriptTask;
 import org.eclipse.bpmn2.SequenceFlow;
-import org.eclipse.bpmn2.ServiceTask;
 import org.eclipse.bpmn2.Signal;
 import org.eclipse.bpmn2.SignalEventDefinition;
 import org.eclipse.bpmn2.StartEvent;
@@ -210,14 +208,16 @@ public class Bpmn2JsonUnmarshaller {
     }
     
     /**
-     * Updates the signal definitions for all catch events.
-     * @param def
+     * Updates event definitions for all catch events.
+     * @param def Definitions
      */
     public void revisitCatchEvents(Definitions def) {
         List<RootElement> rootElements =  def.getRootElements();
         List<Signal> toAddSignals = new ArrayList<Signal>();
         List<Error> toAddErrors = new ArrayList<Error>();
         List<Escalation> toAddEscalations = new ArrayList<Escalation>();
+        List<Message> toAddMessages = new ArrayList<Message>();
+        List<ItemDefinition> toAddItemDefinitions = new ArrayList<ItemDefinition>();
         for(RootElement root : rootElements) {
             if(root instanceof Process) {
                 Process process = (Process) root;
@@ -262,6 +262,21 @@ public class Bpmn2JsonUnmarshaller {
                                 }
                                 toAddEscalations.add(escalation);
                                 ((EscalationEventDefinition) ed).setEscalationRef(escalation);
+                            } else if(ed instanceof MessageEventDefinition) {
+                                ItemDefinition idef = Bpmn2Factory.eINSTANCE.createItemDefinition();
+                                Message msg = Bpmn2Factory.eINSTANCE.createMessage();
+                                Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute().iterator();
+                                while(iter.hasNext()) {
+                                    FeatureMap.Entry entry = iter.next();
+                                    if(entry.getEStructuralFeature().getName().equals("msgref")) {
+                                        msg.setId((String) entry.getValue());
+                                        idef.setId((String) entry.getValue() + "Type");
+                                    }
+                                }
+                                msg.setItemRef(idef);
+                                ((MessageEventDefinition) ed).setMessageRef(msg);
+                                toAddMessages.add(msg);
+                                toAddItemDefinitions.add(idef);
                             }
                         }
                     }
@@ -276,6 +291,12 @@ public class Bpmn2JsonUnmarshaller {
         }
         for(Escalation es : toAddEscalations) {
             def.getRootElements().add(es);
+        }
+        for(ItemDefinition idef : toAddItemDefinitions) {
+            def.getRootElements().add(idef);
+        }
+        for(Message msg : toAddMessages) {
+            def.getRootElements().add(msg);
         }
     }
     
@@ -905,6 +926,15 @@ public class Bpmn2JsonUnmarshaller {
                     EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
                         properties.get("escalationcode"));
                     ((EscalationEventDefinition) event.getEventDefinitions().get(0)).getAnyAttribute().add(extensionEntry);
+                }
+            } else if(ed instanceof MessageEventDefinition) {
+                if(properties.get("messageref") != null && !"".equals(properties.get("messageref"))) {
+                    ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                    EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                                "http://www.jboss.org/drools", "msgref", false, false);
+                    EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                        properties.get("messageref"));
+                    ((MessageEventDefinition) event.getEventDefinitions().get(0)).getAnyAttribute().add(extensionEntry);
                 }
             }
         } catch (IndexOutOfBoundsException e) {

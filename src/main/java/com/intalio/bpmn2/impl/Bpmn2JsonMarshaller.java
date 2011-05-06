@@ -426,6 +426,11 @@ public class Bpmn2JsonMarshaller {
                         properties.put("escalationcode", "");
                     }
                 }
+            } else if( ed instanceof MessageEventDefinition) {
+                if(((MessageEventDefinition) ed).getMessageRef() != null) {
+                    Message msg = ((MessageEventDefinition) ed).getMessageRef();
+                    properties.put("messageref", msg.getId());
+                }
             }
         }
     }

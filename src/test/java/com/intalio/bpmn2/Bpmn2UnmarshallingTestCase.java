@@ -276,7 +276,7 @@ public class Bpmn2UnmarshallingTestCase {
     public void testStartMessageEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("startMessageEvent.json"));
-        assertTrue(definitions.getRootElements().size() == 1);
+        assertTrue(definitions.getRootElements().size() == 3);
         Process process = getRootProcess(definitions);
         StartEvent g = (StartEvent) process.getFlowElements().get(0);
         assertEquals("start message event", g.getName());
@@ -528,7 +528,7 @@ public class Bpmn2UnmarshallingTestCase {
     public void testIntermediateCatchMessageEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("intermediateCatchMessageEvent.json"));
-        assertTrue(definitions.getRootElements().size() == 1);
+        assertTrue(definitions.getRootElements().size() == 3);
         Process process = getRootProcess(definitions);
         CatchEvent g = (CatchEvent) process.getFlowElements().get(0);
         assertEquals("catch message event", g.getName());

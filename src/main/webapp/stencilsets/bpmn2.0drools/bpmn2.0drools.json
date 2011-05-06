@@ -3675,6 +3675,16 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
+				},
+				{
+					"id":"messageref",
+					"type":"String",
+					"title":"MessageRef",
+					"title_de":"MessageRef",
+					"value":"",
+					"description":"Message Ref",
+					"readonly":false,
+					"optional":true
 				}
 			]
 		},
@@ -4086,6 +4096,16 @@
 					"optional":false,
 					"refToView":"",
 					"length":""
+				},
+				{
+					"id":"messageref",
+					"type":"String",
+					"title":"MessageRef",
+					"title_de":"MessageRef",
+					"value":"",
+					"description":"Message Ref",
+					"readonly":false,
+					"optional":true
 				}
 			]
 		},
