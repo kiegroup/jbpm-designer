@@ -674,6 +674,29 @@ public class Bpmn2JsonMarshaller {
     		    sb.setLength(sb.length() - 1);
     		}
     		properties.put("actors", sb.toString());
+    		
+    		Iterator<FeatureMap.Entry> iter = task.getAnyAttribute().iterator();
+            while(iter.hasNext()) {
+                FeatureMap.Entry entry = iter.next();
+                if(entry.getEStructuralFeature().getName().equals("onEntry-script")) {
+                    properties.put("onentryactions", entry.getValue());
+                } else if(entry.getEStructuralFeature().getName().equals("onExit-script")) {
+                    properties.put("onexitactions", entry.getValue());
+                } else if(entry.getEStructuralFeature().getName().equals("scriptFormat")) {
+                    String format = (String) entry.getValue();
+                    String formatToWrite = "";
+                    if(format.equals("http://www.java.com/java")) {
+                        formatToWrite = "java";
+                    } else if(format.equals("http://www.mvel.org/2.0")) {
+                        formatToWrite = "mvel";
+                    } else {
+                        formatToWrite = "java";
+                    }
+                    properties.put("script_language", formatToWrite);
+                } else if(entry.getEStructuralFeature().getName().equals("import")) {
+                    properties.put("imports", entry.getValue());
+                }
+            }
     	} else if (task instanceof SendTask) {
     		taskType = "Send";
     	} else if (task instanceof ReceiveTask) {

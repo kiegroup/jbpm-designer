@@ -1331,6 +1331,34 @@ public class Bpmn2JsonUnmarshaller {
                     properties.get("onexitactions"));
             task.getAnyAttribute().add(extensionEntry);
         }
+        
+        if(properties.get("script_language") != null && properties.get("script_language").length() > 0) {
+            String scriptLanguage = "";
+            if(properties.get("script_language").equals("java")) {
+                scriptLanguage = "http://www.java.com/java";
+            } else if(properties.get("script_language").equals("mvel")) {
+                scriptLanguage = "http://www.mvel.org/2.0";
+            } else {
+                // default to java
+                scriptLanguage = "http://www.java.com/java";
+            }
+            
+            ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+            EAttributeImpl scriptLanguageElement = (EAttributeImpl) metadata.demandFeature(
+                    "http://www.jboss.org/drools", "scriptFormat", false   , false);
+            EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(scriptLanguageElement,
+                    scriptLanguage);
+            task.getAnyAttribute().add(extensionEntry);
+        }
+        
+        if(properties.get("imports") != null && properties.get("imports").length() > 0) {
+            ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+            EAttributeImpl importsElement = (EAttributeImpl) metadata.demandFeature(
+                    "http://www.jboss.org/drools", "import", false   , false);
+            EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(importsElement,
+                    properties.get("imports"));
+            task.getAnyAttribute().add(extensionEntry);
+        }
     }
     
     private void applyGatewayProperties(Gateway gateway, Map<String, String> properties) {
