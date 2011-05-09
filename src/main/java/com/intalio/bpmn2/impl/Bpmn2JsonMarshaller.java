@@ -243,6 +243,10 @@ public class Bpmn2JsonMarshaller {
 	                    if(entry.getEStructuralFeature().getName().equals("version")) {
                             props.put("version", entry.getValue());
                         }
+	                    
+	                    if(entry.getEStructuralFeature().getName().equals("import")) {
+                            props.put("imports", entry.getValue());
+                        }
 	                }
 	                
 	                marshallProperties(props, generator);
@@ -693,9 +697,7 @@ public class Bpmn2JsonMarshaller {
                         formatToWrite = "java";
                     }
                     properties.put("script_language", formatToWrite);
-                } else if(entry.getEStructuralFeature().getName().equals("import")) {
-                    properties.put("imports", entry.getValue());
-                }
+                } 
             }
     	} else if (task instanceof SendTask) {
     		taskType = "Send";

@@ -317,6 +317,16 @@
 					"optional":true
 				},
 				{
+					"id":"imports",
+					"type":"Text",
+					"title":"Imports",
+					"title_de":"Imports",
+					"value":"",
+					"description":"Comma-separated imports",
+					"readonly":false,
+					"optional":true
+				},
+				{
 					"id":"id",
 					"type":"String",
 					"title":"id",
@@ -1552,16 +1562,6 @@
 					"title_de":"Skript Sprache",
 					"value":"",
 					"description":"Defines the script language. The script language MUST be provided if a script is provided.",
-					"readonly":false,
-					"optional":true
-				},
-				{
-					"id":"imports",
-					"type":"Text",
-					"title":"Imports",
-					"title_de":"Imports",
-					"value":"",
-					"description":"Comma-separated imports",
 					"readonly":false,
 					"optional":true
 				},

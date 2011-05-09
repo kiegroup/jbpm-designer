@@ -93,6 +93,13 @@ private static final Logger _logger = LoggerFactory.getLogger(StencilSetServiceS
                 path = path.substring("bpmn2.0drools.json".length(), path.length());
             }
             input = stencilset.getResourceContents(path);
+            if(requestURI.endsWith(".svg")) {
+                resp.setContentType("text/xml");
+            } else if(requestURI.endsWith(".png")) {
+                resp.setContentType("image/png");
+            } else {
+                //default to not setting
+            }
         } else {
             input = stencilset.getContents();
             resp.setContentType("application/json");

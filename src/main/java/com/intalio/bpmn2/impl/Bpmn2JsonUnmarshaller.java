@@ -1064,6 +1064,15 @@ public class Bpmn2JsonUnmarshaller {
             monitoring.getDocumentation().add(createDocumentation(properties.get("monitoring")));
             process.setMonitoring(monitoring);
         }
+        
+        if(properties.get("imports") != null && properties.get("imports").length() > 0) {
+            ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+            EAttributeImpl importsElement = (EAttributeImpl) metadata.demandFeature(
+                    "http://www.jboss.org/drools", "import", false   , false);
+            EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(importsElement,
+                    properties.get("imports"));
+            process.getAnyAttribute().add(extensionEntry);
+        }
     }
 
     private void applyBusinessRuleTaskProperties(BusinessRuleTask task, Map<String, String> properties) {
@@ -1348,15 +1357,6 @@ public class Bpmn2JsonUnmarshaller {
                     "http://www.jboss.org/drools", "scriptFormat", false   , false);
             EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(scriptLanguageElement,
                     scriptLanguage);
-            task.getAnyAttribute().add(extensionEntry);
-        }
-        
-        if(properties.get("imports") != null && properties.get("imports").length() > 0) {
-            ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
-            EAttributeImpl importsElement = (EAttributeImpl) metadata.demandFeature(
-                    "http://www.jboss.org/drools", "import", false   , false);
-            EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(importsElement,
-                    properties.get("imports"));
             task.getAnyAttribute().add(extensionEntry);
         }
     }
