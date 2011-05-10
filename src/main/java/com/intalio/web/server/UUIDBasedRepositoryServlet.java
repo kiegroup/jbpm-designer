@@ -49,7 +49,7 @@ import com.intalio.web.profile.impl.ProfileServiceImpl;
 import com.intalio.web.repository.IUUIDBasedRepository;
 import com.intalio.web.repository.IUUIDBasedRepositoryService;
 import com.intalio.web.repository.UUIDBasedEpnRepository;
-import com.intalio.web.repository.impl.UUIDBasedDroolsRepository;
+import com.intalio.web.repository.impl.UUIDBasedJbpmRepository;
 import com.intalio.web.repository.impl.UUIDBasedFileRepository;
 
 
@@ -71,7 +71,7 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
         
         public void init() {
             factories.put("default", new UUIDBasedFileRepository());
-            factories.put("drools", new UUIDBasedDroolsRepository());
+            factories.put("jbpm", new UUIDBasedJbpmRepository());
             factories.put("epn", new UUIDBasedEpnRepository());
             _init = true;
         }

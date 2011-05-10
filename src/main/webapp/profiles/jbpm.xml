@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <profiles>
-  <profile name="drools" stencilset="bpmn2.0drools">
+  <profile name="jbpm" stencilset="bpmn2.0jbpm">
     <plugin name="ORYX.Plugins.Toolbar" />
     <plugin name="ORYX.Plugins.UUIDRepositoryDummySave" />
     <plugin name="ORYX.Plugins.ShapeMenuPlugin" />

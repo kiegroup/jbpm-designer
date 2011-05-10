@@ -221,7 +221,7 @@
     <servlet-class>com.intalio.web.server.UUIDBasedRepositoryServlet</servlet-class>
     <init-param>
       <param-name>factoryName</param-name>
-      <param-value>drools</param-value>
+      <param-value>jbpm</param-value>
     </init-param>
   </servlet>
   <servlet>
@@ -235,7 +235,7 @@
     <servlet-class>com.intalio.web.plugin.impl.PluginServiceServlet</servlet-class>
     <init-param>
       <param-name>factoryName</param-name>
-      <param-value>drools</param-value>
+      <param-value>jbpm</param-value>
     </init-param>
   </servlet>
   <servlet>
@@ -244,7 +244,7 @@
     <servlet-class>com.intalio.web.stencilset.impl.StencilSetServiceServlet</servlet-class>
     <init-param>
       <param-name>defaultName</param-name>
-      <param-value>bpmn2.0drools</param-value>
+      <param-value>bpmn2.0jbpm</param-value>
     </init-param>
   </servlet>
   <servlet-mapping>

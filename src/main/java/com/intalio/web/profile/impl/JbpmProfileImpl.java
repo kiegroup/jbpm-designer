@@ -39,12 +39,12 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 
 
 /**
- * The implementation of the drools profile for Process Designer.
+ * The implementation of the jBPM profile for Process Designer.
  * @author Tihomir Surdilovic
  */
-public class DroolsProfileImpl implements IDiagramProfile {
+public class JbpmProfileImpl implements IDiagramProfile {
     
-    private static Logger _logger = LoggerFactory.getLogger(DroolsProfileImpl.class);
+    private static Logger _logger = LoggerFactory.getLogger(JbpmProfileImpl.class);
     
     private Map<String, IDiagramPlugin> _plugins = new LinkedHashMap<String, IDiagramPlugin>();
 
@@ -55,18 +55,18 @@ public class DroolsProfileImpl implements IDiagramProfile {
     private String _usr;
     private String _pwd;
     
-    public DroolsProfileImpl(ServletContext servletContext) {
+    public JbpmProfileImpl(ServletContext servletContext) {
         this(servletContext, true);
     }
     
-    public DroolsProfileImpl(ServletContext servletContext, boolean initializeLocalPlugins) {
+    public JbpmProfileImpl(ServletContext servletContext, boolean initializeLocalPlugins) {
         if (initializeLocalPlugins) {
             initializeLocalPlugins(servletContext);
         }
     }
 
     public String getTitle() {
-        return "Drools Process Designer";
+        return "jBPM Process Designer";
     }
 
     public String getStencilSet() {
@@ -88,7 +88,7 @@ public class DroolsProfileImpl implements IDiagramProfile {
         try {
             try {
                 fileStream = new FileInputStream(new StringBuilder(context.getRealPath("/")).append("/").
-                        append("/").append("profiles").append("/").append("drools.xml").toString());
+                        append("/").append("profiles").append("/").append("jbpm.xml").toString());
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
@@ -140,7 +140,7 @@ public class DroolsProfileImpl implements IDiagramProfile {
     }
 
     public String getName() {
-        return "drools";
+        return "jbpm";
     }
 
     public String getSerializedModelExtension() {
@@ -224,7 +224,7 @@ public class DroolsProfileImpl implements IDiagramProfile {
     }
 
     public String getStencilSetURL() {
-        return "/designer/stencilsets/bpmn2.0drools/bpmn2.0drools.json";
+        return "/designer/stencilsets/bpmn2.0jbpm/bpmn2.0jbpm.json";
     }
 
     public String getStencilSetNamespaceURL() {

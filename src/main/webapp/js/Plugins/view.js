@@ -127,7 +127,7 @@ ORYX.Plugins.View = {
 		        regexa = new RegExp( regexSa );
 		        profileParams = regexa.exec( window.location.href );
 		        profileParamValue = profileParams[1]; 
-				return profileParamValue == "drools";
+				return profileParamValue == "jbpm";
 			}.bind(this)
 		});
 		
@@ -148,7 +148,7 @@ ORYX.Plugins.View = {
 		        regexa = new RegExp( regexSa );
 		        profileParams = regexa.exec( window.location.href );
 		        profileParamValue = profileParams[1]; 
-				return profileParamValue == "drools";
+				return profileParamValue == "jbpm";
 			}.bind(this)
 		});
 		
@@ -169,7 +169,7 @@ ORYX.Plugins.View = {
 		        regexa = new RegExp( regexSa );
 		        profileParams = regexa.exec( window.location.href );
 		        profileParamValue = profileParams[1]; 
-				return profileParamValue == "drools";
+				return profileParamValue == "jbpm";
 			}.bind(this)
 		});
 	},

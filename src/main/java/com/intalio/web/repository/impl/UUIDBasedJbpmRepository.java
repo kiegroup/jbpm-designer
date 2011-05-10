@@ -14,9 +14,9 @@ import org.apache.log4j.Logger;
 import com.intalio.web.profile.IDiagramProfile;
 import com.intalio.web.repository.IUUIDBasedRepository;
 
-public class UUIDBasedDroolsRepository implements IUUIDBasedRepository {
+public class UUIDBasedJbpmRepository implements IUUIDBasedRepository {
 
-    private static final Logger _logger = Logger.getLogger(UUIDBasedDroolsRepository.class);
+    private static final Logger _logger = Logger.getLogger(UUIDBasedJbpmRepository.class);
     private static final String EXTERNAL_PROTOCOL = "oryx.external.protocol";
     private static final String EXTERNAL_HOST = "oryx.external.host";
     
