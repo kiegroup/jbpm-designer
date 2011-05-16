@@ -3735,6 +3735,42 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
+				},
+				{
+					"id":"timedate",
+					"type":"String",
+					"title":"Time Date",
+					"title_de":"Time Date",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"timeduration",
+					"type":"Text",
+					"title":"Time Duration",
+					"title_de":"Time Duration",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
+				},
+				{
+					"id":"timecycle",
+					"type":"Text",
+					"title":"Time Cycle",
+					"title_de":"Time Cycle",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
 				}
 			]
 		},
@@ -3935,7 +3971,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				}
+				},
 			]
 		},
 		{
@@ -3975,6 +4011,18 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
+				},
+				{
+					"id":"signalref",
+					"type":"Text",
+					"title":"SignalRef",
+					"title_de":"SignalRef",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
 				}
 			]
 		},
@@ -4749,6 +4797,16 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
+				},
+				{
+					"id":"messageref",
+					"type":"String",
+					"title":"MessageRef",
+					"title_de":"MessageRef",
+					"value":"",
+					"description":"Message Ref",
+					"readonly":false,
+					"optional":true
 				}
 			]
 		},
@@ -4788,6 +4846,16 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
+				},
+				{
+					"id":"escalationcode",
+					"type":"String",
+					"title":"EscalationCode",
+					"title_de":"EscalationCode",
+					"value":"",
+					"description":"Escalation code",
+					"readonly":false,
+					"optional":true
 				}
 			]
 		},
@@ -4915,6 +4983,18 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
+				},
+				{
+					"id":"signalref",
+					"type":"Text",
+					"title":"SignalRef",
+					"title_de":"SignalRef",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
 				}
 			]
 		},
@@ -5035,6 +5115,16 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
+				},
+				{
+					"id":"messageref",
+					"type":"String",
+					"title":"MessageRef",
+					"title_de":"MessageRef",
+					"value":"",
+					"description":"Message Ref",
+					"readonly":false,
+					"optional":true
 				}
 			]
 		},
@@ -5071,6 +5161,16 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
+				},
+				{
+					"id":"escalationcode",
+					"type":"String",
+					"title":"EscalationCode",
+					"title_de":"EscalationCode",
+					"value":"",
+					"description":"Escalation code",
+					"readonly":false,
+					"optional":true
 				}
 			]
 		},
@@ -5109,6 +5209,18 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
+				},
+				{
+					"id":"errorref",
+					"type":"Text",
+					"title":"ErrorRef",
+					"title_de":"ErrorRef",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
 				}
 			]
 		},
@@ -5225,6 +5337,18 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
+				},
+				{
+					"id":"signalref",
+					"type":"Text",
+					"title":"SignalRef",
+					"title_de":"SignalRef",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
 				}
 			]
 		},

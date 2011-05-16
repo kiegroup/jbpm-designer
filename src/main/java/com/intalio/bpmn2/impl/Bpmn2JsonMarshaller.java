@@ -35,6 +35,7 @@ import org.codehaus.jackson.JsonEncoding;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonGenerator;
+import org.eclipse.bpmn2.Activity;
 import org.eclipse.bpmn2.BaseElement;
 import org.eclipse.bpmn2.BoundaryEvent;
 import org.eclipse.bpmn2.BusinessRuleTask;
@@ -435,7 +436,12 @@ public class Bpmn2JsonMarshaller {
                     Message msg = ((MessageEventDefinition) ed).getMessageRef();
                     properties.put("messageref", msg.getId());
                 }
-            }
+            }  else if( ed instanceof CompensateEventDefinition) {
+                if(((CompensateEventDefinition) ed).getActivityRef() != null) {
+                    Activity act = ((CompensateEventDefinition) ed).getActivityRef();
+                    properties.put("activityref", act.getName());
+                }
+            }  
         }
     }
     
@@ -466,7 +472,68 @@ public class Bpmn2JsonMarshaller {
             properties.put("datainputassociations", dinassociationbuff.toString());
         }
         // event definitions
-        // TODO
+        List<EventDefinition> eventdefs = event.getEventDefinitions();
+        for(EventDefinition ed : eventdefs) {
+            if(ed instanceof TimerEventDefinition) {
+                TimerEventDefinition ted = (TimerEventDefinition) ed;
+                if(ted.getTimeDate() != null) {
+                    properties.put("timedate", ((FormalExpression) ted.getTimeDate()).getBody());
+                }
+                if(ted.getTimeDuration() != null) {
+                    properties.put("timeduration", ((FormalExpression) ted.getTimeDuration()).getBody());
+                }
+                if(ted.getTimeCycle() != null) {
+                    properties.put("timecycle", ((FormalExpression) ted.getTimeCycle()).getBody());
+                }
+            } else if( ed instanceof SignalEventDefinition) {
+                if(((SignalEventDefinition) ed).getSignalRef() != null && ((SignalEventDefinition) ed).getSignalRef().getName() != null) {
+                    properties.put("signalref", ((SignalEventDefinition) ed).getSignalRef().getName());
+                } else {
+                    properties.put("signalref", "");
+                }
+            } else if( ed instanceof ErrorEventDefinition) {
+                if(((ErrorEventDefinition) ed).getErrorRef() != null && ((ErrorEventDefinition) ed).getErrorRef().getErrorCode() != null) {
+                    properties.put("errorref", ((ErrorEventDefinition) ed).getErrorRef().getErrorCode());
+                } else {
+                    properties.put("errorref", "");
+                }
+            } else if( ed instanceof ConditionalEventDefinition ) {
+                FormalExpression conditionalExp = (FormalExpression) ((ConditionalEventDefinition) ed).getCondition();
+                if(conditionalExp.getBody() != null) {
+                    properties.put("conditionexpression", conditionalExp.getBody());
+                }
+                if(conditionalExp.getLanguage() != null) {
+                    String languageVal = conditionalExp.getLanguage();
+                    if(languageVal.equals("http://www.jboss.org/drools/rule")) {
+                        properties.put("conditionlanguage", "drools");
+                    } else if(languageVal.equals("http://www.mvel.org/2.0")) {
+                        properties.put("conditionlanguage", "mvel");
+                    } else {
+                        // default to drools
+                        properties.put("conditionlanguage", "drools");
+                    }
+                }
+            } else if( ed instanceof EscalationEventDefinition ) {
+                if(((EscalationEventDefinition) ed).getEscalationRef() != null) {
+                    Escalation esc = ((EscalationEventDefinition) ed).getEscalationRef();
+                    if(esc.getEscalationCode() != null && esc.getEscalationCode().length() > 0) {
+                        properties.put("escalationcode", esc.getEscalationCode());
+                    } else {
+                        properties.put("escalationcode", "");
+                    }
+                }
+            } else if( ed instanceof MessageEventDefinition) {
+                if(((MessageEventDefinition) ed).getMessageRef() != null) {
+                    Message msg = ((MessageEventDefinition) ed).getMessageRef();
+                    properties.put("messageref", msg.getId());
+                }
+            }  else if( ed instanceof CompensateEventDefinition) {
+                if(((CompensateEventDefinition) ed).getActivityRef() != null) {
+                    Activity act = ((CompensateEventDefinition) ed).getActivityRef();
+                    properties.put("activityref", act.getName());
+                }
+            }  
+        }
     }
     
     private void marshallFlowElement(FlowElement flowElement, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset) throws JsonGenerationException, IOException {
@@ -481,7 +548,6 @@ public class Bpmn2JsonMarshaller {
     	if(flowElement instanceof ThrowEvent) {
     	    setThrowEventProperties((ThrowEvent) flowElement, throwEventProperties);
     	}
-    	
     	if (flowElement instanceof StartEvent) {
     		marshallStartEvent((StartEvent) flowElement, plane, generator, xOffset, yOffset, catchEventProperties);
     	} else if (flowElement instanceof EndEvent) {
@@ -538,7 +604,10 @@ public class Bpmn2JsonMarshaller {
     		    marshallNode(startEvent, properties, "StartConditionalEvent", plane, generator, xOffset, yOffset);
     		} else if(eventDefinition instanceof EscalationEventDefinition) {
                 marshallNode(startEvent, properties, "StartEscalationEvent", plane, generator, xOffset, yOffset);
-            } else {
+            } else if(eventDefinition instanceof CompensateEventDefinition) {
+                marshallNode(startEvent, properties, "StartCompensationEvent", plane, generator, xOffset, yOffset);
+            }
+    		else {
     			throw new UnsupportedOperationException("Event definition not supported: " + eventDefinition);
     		}
     	} else {
@@ -588,7 +657,10 @@ public class Bpmn2JsonMarshaller {
     		    marshallNode(catchEvent, properties, "IntermediateErrorEvent", plane, generator, xOffset, yOffset);
     		} else if(eventDefinition instanceof EscalationEventDefinition) {
                 marshallNode(catchEvent, properties, "IntermediateEscalationEvent", plane, generator, xOffset, yOffset);
-            } else {
+            } else if(eventDefinition instanceof CompensateEventDefinition) {
+                marshallNode(catchEvent, properties, "IntermediateCompensationEventCatching", plane, generator, xOffset, yOffset);
+            } 
+    		else {
     			throw new UnsupportedOperationException("Event definition not supported: " + eventDefinition);
     		}
     	} else {
@@ -625,13 +697,13 @@ public class Bpmn2JsonMarshaller {
     	} else if (eventDefinitions.size() == 1) {
     		EventDefinition eventDefinition = eventDefinitions.get(0);
     		if (eventDefinition instanceof SignalEventDefinition) {
-    			marshallNode(throwEvent, "IntermediateSignalEventThrowing", plane, generator, xOffset, yOffset);
+    			marshallNode(throwEvent, properties, "IntermediateSignalEventThrowing", plane, generator, xOffset, yOffset);
     		} else if (eventDefinition instanceof MessageEventDefinition) {
-    			marshallNode(throwEvent, "IntermediateMessageEventThrowing", plane, generator, xOffset, yOffset);
+    			marshallNode(throwEvent, properties, "IntermediateMessageEventThrowing", plane, generator, xOffset, yOffset);
     		} else if (eventDefinition instanceof EscalationEventDefinition) {
-    			marshallNode(throwEvent, "IntermediateEscalationEventThrowing", plane, generator, xOffset, yOffset);
+    			marshallNode(throwEvent, properties, "IntermediateEscalationEventThrowing", plane, generator, xOffset, yOffset);
     		} else if (eventDefinition instanceof CompensateEventDefinition) {
-    			marshallNode(throwEvent, "IntermediateCompensationEventThrowing", plane, generator, xOffset, yOffset);
+    			marshallNode(throwEvent, properties, "IntermediateCompensationEventThrowing", plane, generator, xOffset, yOffset);
     		} else {
     			throw new UnsupportedOperationException("Event definition not supported: " + eventDefinition);
     		}

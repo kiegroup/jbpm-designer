@@ -433,7 +433,7 @@ public class Bpmn2UnmarshallingTestCase {
     public void testEndMessageEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("endMessageEvent.json"));
-        assertTrue(definitions.getRootElements().size() == 1);
+        assertTrue(definitions.getRootElements().size() == 3);
         Process process = getRootProcess(definitions);
         EndEvent g = (EndEvent) process.getFlowElements().get(0);
         assertEquals("end message event", g.getName());
@@ -445,7 +445,7 @@ public class Bpmn2UnmarshallingTestCase {
     public void testEndEscalationEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("endEscalationEvent.json"));
-        assertTrue(definitions.getRootElements().size() == 1);
+        assertTrue(definitions.getRootElements().size() == 2);
         Process process = getRootProcess(definitions);
         EndEvent g = (EndEvent) process.getFlowElements().get(0);
         assertEquals("end escalation event", g.getName());
@@ -457,7 +457,7 @@ public class Bpmn2UnmarshallingTestCase {
     public void testEndErrorEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("endErrorEvent.json"));
-        assertTrue(definitions.getRootElements().size() == 1);
+        assertTrue(definitions.getRootElements().size() == 2);
         Process process = getRootProcess(definitions);
         EndEvent g = (EndEvent) process.getFlowElements().get(0);
         assertEquals("end error event", g.getName());
@@ -469,7 +469,7 @@ public class Bpmn2UnmarshallingTestCase {
     public void testEndSignalEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("endSignalEvent.json"));
-        assertTrue(definitions.getRootElements().size() == 1);
+        assertTrue(definitions.getRootElements().size() == 2);
         Process process = getRootProcess(definitions);
         EndEvent g = (EndEvent) process.getFlowElements().get(0);
         assertEquals("end signal event", g.getName());
@@ -657,7 +657,7 @@ public class Bpmn2UnmarshallingTestCase {
     public void testIntermediateThrowMessageEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("intermediateThrowMessageEvent.json"));
-        assertTrue(definitions.getRootElements().size() == 1);
+        assertTrue(definitions.getRootElements().size() == 3);
         Process process = getRootProcess(definitions);
         ThrowEvent g = (ThrowEvent) process.getFlowElements().get(0);
         assertEquals("throw message event", g.getName());
@@ -669,7 +669,7 @@ public class Bpmn2UnmarshallingTestCase {
     public void testIntermediateThrowEscalationEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("intermediateThrowEscalationEvent.json"));
-        assertTrue(definitions.getRootElements().size() == 1);
+        assertTrue(definitions.getRootElements().size() == 2);
         Process process = getRootProcess(definitions);
         ThrowEvent g = (ThrowEvent) process.getFlowElements().get(0);
         assertEquals("throw escalation event", g.getName());
@@ -705,7 +705,7 @@ public class Bpmn2UnmarshallingTestCase {
     public void testIntermediateThrowSignalUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("intermediateThrowSignalEvent.json"));
-        assertTrue(definitions.getRootElements().size() == 1);
+        assertTrue(definitions.getRootElements().size() == 2);
         Process process = getRootProcess(definitions);
         ThrowEvent g = (ThrowEvent) process.getFlowElements().get(0);
         assertEquals("throw signal event", g.getName());
