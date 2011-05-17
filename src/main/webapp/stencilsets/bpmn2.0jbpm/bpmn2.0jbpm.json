@@ -5092,7 +5092,7 @@
 			"icon":"endevent/message.png",
 			"propertyPackages":[
 				"baseAttributes",
-				"throwingEventAttributes",
+				"throwEventAttributes",
 				"bgColor"
 			],
 			"roles": [
@@ -5141,7 +5141,7 @@
 			"icon":"endevent/escalation.png",
 			"propertyPackages":[
 				"baseAttributes",
-				"throwingEventAttributes",
+				"throwEventAttributes",
 				"bgColor"
 			],
 			"roles": [
@@ -5187,7 +5187,7 @@
 			"icon":"endevent/error.png",
 			"propertyPackages":[
 				"baseAttributes",
-				"catchEventAttributes",
+				"throwEventAttributes",
 				"bgColor"
 			],
 			"roles": [
@@ -5237,7 +5237,7 @@
 			"icon":"endevent/cancel.png",
 			"propertyPackages":[
 				"baseAttributes",
-				"catchEventAttributes",
+				"throwEventAttributes",
 				"bgColor"
 			],
 			"roles":[
@@ -5275,7 +5275,7 @@
 			"icon":"endevent/compensation.png",
 			"propertyPackages":[
 				"baseAttributes",
-				"throwingEventAttributes",
+				"throwEventAttributes",
 				"bgColor",
 				"compensationThrowing",
 				"compensation"
@@ -5315,7 +5315,7 @@
 			"icon":"endevent/signal.png",
 			"propertyPackages":[
 				"baseAttributes",
-				"catchEventAttributes",
+				"throwEventAttributes",
 				"bgColor"
 			],
 			"roles": [
