@@ -40,6 +40,7 @@ import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -54,6 +55,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
 import org.antlr.stringtemplate.StringTemplate;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.drools.process.core.ParameterDefinition;
@@ -80,10 +82,15 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     private String origStencilFilePath;
     private String stencilFilePath;
     private String outData = "";
+    private String workitemSVGFilePath;
+    private String origWorkitemSVGFile;
+    
     public JbpmPreprocessingUnit(ServletContext servletContext) {
         stencilPath = servletContext.getRealPath("/" + STENCILSET_PATH);
         origStencilFilePath = stencilPath + "/bpmn2.0jbpm/stencildata/" + "bpmn2.0jbpm.orig";
         stencilFilePath = stencilPath + "/bpmn2.0jbpm/" + "bpmn2.0jbpm.json";
+        workitemSVGFilePath = stencilPath  + "/bpmn2.0jbpm/view/activity/workitems/";
+        origWorkitemSVGFile = workitemSVGFilePath + "workitem.orig";
     }
     
     public String getOutData() {
@@ -130,6 +137,28 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         } catch( Exception e ) {
             _logger.error("Failed to setup workitems : " + e.getMessage());
         }
+        // create and parse the view svg to include config data
+        createAndParseViewSVG(workDefinitions);
+    }
+    
+    private void createAndParseViewSVG(Map<String, WorkDefinitionImpl> workDefinitions) {
+        // first delete all existing workitem svgs
+        Collection<File> workitemsvgs = FileUtils.listFiles(new File(workitemSVGFilePath), new String[] { "svg" }, true);
+        if(workitemsvgs != null) {
+            for(File wisvg : workitemsvgs) {
+                deletefile(wisvg);
+            }
+        }
+        try {
+            for(Map.Entry<String, WorkDefinitionImpl> definition : workDefinitions.entrySet()) {
+                StringTemplate workItemTemplate = new StringTemplate(readFile(origWorkitemSVGFile));
+                workItemTemplate.setAttribute("workitemDef", definition.getValue());
+                String fileToWrite = workitemSVGFilePath + definition.getValue().getName() + ".svg";
+                createAndWriteToFile(fileToWrite, workItemTemplate.toString());
+            }
+        } catch (Exception e) {
+            _logger.error("Failed to setup workitem svg images : " + e.getMessage());
+        } 
     }
     
     private void evaluateWorkDefinitions(Map<String, WorkDefinitionImpl> workDefinitions, String content) {
@@ -357,8 +386,8 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     }
     
     private void deletefile(String file) {
-        File f1 = new File(file);
-        boolean success = f1.delete();
+        File f = new File(file);
+        boolean success = f.delete();
         if (!success){
             _logger.info("Unable to delete file :" + file);
         } else {
@@ -366,11 +395,21 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         }
     }
     
+    private void deletefile(File f) {
+        String fname = f.getAbsolutePath();
+        boolean success = f.delete();
+        if (!success){
+            _logger.info("Unable to delete file :" + fname);
+        } else {
+            _logger.info("Successfully deleted file :" + fname);
+        }
+    }
+    
     private void createAndWriteToFile(String file, String content) throws Exception {
         Writer output = null;
-        File f = new File(file);
         output = new BufferedWriter(new FileWriter(file));
         output.write(content);
         output.close();
+        _logger.info("Created file:" + file);
     }
 }

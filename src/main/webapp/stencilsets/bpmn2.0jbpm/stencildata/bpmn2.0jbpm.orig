@@ -1801,7 +1801,7 @@
 					"type":"Color",
 					"title":"BackgroundColor",
 					"title_de":"Hintergrundfarbe",
-					"value":"#FFCC99",
+					"value":"#b1c2d6",
 					"gradient":true,
 					"description":"",
 					"readonly":false,
@@ -2551,7 +2551,7 @@
 			"groups_de" :		["Service Tasks"],
 			"description" : 	"$workitemDefs.(k).explanationText$",
 			"description_de" : 	"$workitemDefs.(k).explanationText$.",
-			"view" : 			"activity/task.svg",
+			"view" : 			"activity/workitems/$workitemDefs.(k).name$.svg",
 			"icon" : 			"$workitemDefs.(k).icon$",
 			"propertyPackages" :[
 				"customtask",
