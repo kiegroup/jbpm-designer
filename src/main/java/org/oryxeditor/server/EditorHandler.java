@@ -68,6 +68,9 @@ import com.intalio.web.profile.IDiagramProfileService;
 import com.intalio.web.profile.impl.ProfileServiceImpl;
 import com.intalio.web.preference.IDiagramPreference;
 import com.intalio.web.preference.IDiagramPreferenceService;
+import com.intalio.web.preprocessing.IDiagramPreprocessingService;
+import com.intalio.web.preprocessing.IDiagramPreprocessingUnit;
+import com.intalio.web.preprocessing.impl.PreprocessingServiceImpl;
 import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
 
 /**
@@ -112,15 +115,31 @@ public class EditorHandler extends HttpServlet {
     public static final String DEV = "designer.dev";
     
     /**
+     * The designer PREPROCESS flag looked up from system properties.
+     */
+    public static final String PREPROCESS = "designer.preprocess";
+    
+    /**
      * The designer dev mode setting.
      */
     private boolean _devMode;
+    
+    /**
+     * The designer preprocess mode setting.
+     */
+    private boolean _preProcess;
     
     /**
      * The profile service, a global registry to get the
      * profiles.
      */
     private IDiagramProfileService _profileService = null;
+    
+    /**
+     * The pre-processing service, a global registry to get
+     * the pre-processing units.
+     */
+    private IDiagramPreprocessingService _preProcessingService = null;
     
     /**
      * The plugin service, a global registry for all plugins.
@@ -146,8 +165,11 @@ public class EditorHandler extends HttpServlet {
         _profileService.init(config.getServletContext());
         _pluginService = PluginServiceImpl.getInstance(
                 config.getServletContext());
+        _preProcessingService = PreprocessingServiceImpl.INSTANCE;
+        _preProcessingService.init(config.getServletContext());
         
         _devMode = Boolean.parseBoolean( System.getProperty(DEV) == null ? config.getInitParameter(DEV) : System.getProperty(DEV) );
+        _preProcess = Boolean.parseBoolean( System.getProperty(PREPROCESS) == null ? config.getInitParameter(PREPROCESS) : System.getProperty(PREPROCESS) );
         String editor_file = config.
             getServletContext().getRealPath("/editor.html");
         try {
@@ -252,6 +274,16 @@ public class EditorHandler extends HttpServlet {
                     "No profile with the name " + profileName + 
                         " was registered");
         }
+        
+        IDiagramPreprocessingUnit preprocessingUnit = null;
+        if(_preProcess) {
+            if (_logger.isInfoEnabled()) {
+                _logger.info(
+                    "Performing diagram information pre-processing steps. ");
+            }
+            preprocessingUnit = _preProcessingService.findPreprocessingUnit(request, profile);
+            preprocessingUnit.preprocess(request, response, profile);
+        }
 
         //output env javascript files
         if (_devMode) {
@@ -354,6 +386,9 @@ public class EditorHandler extends HttpServlet {
             } else if ("autosavedefault".equals(elt)) {
                 resultHtml.append(autoSaveOn);
                 replacementMade = true;    
+            } else if ("preprocessing".equals(elt)) {
+                resultHtml.append(preprocessingUnit == null ? "" : preprocessingUnit.getOutData());
+                replacementMade = true;    
             } else if ("profileplugins".equals(elt)) {
                 StringBuilder plugins = new StringBuilder();
                 boolean commaNeeded = false;
@@ -395,7 +430,7 @@ public class EditorHandler extends HttpServlet {
                 resultHtml.append(elt);
             }
         }
-
+        
         response.getWriter().write(resultHtml.toString());
     }
     

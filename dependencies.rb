@@ -36,7 +36,7 @@ BATIK_LIBS = ["batik:batik-parser:jar:1.6-1",
               "batik:batik-script:jar:1.6-1",
               "batik:batik-gvt:jar:1.6-1",
               "batik:batik-awt-util:jar:1.6-1",
-	      "commons-io:commons-io:jar:1.4",
+	          "commons-io:commons-io:jar:1.4",
               "org.apache.xmlgraphics:xmlgraphics-commons:jar:1.4"]
    
 WAR_LIBS = ["org.json:json:jar:20090211", "jbpt:jbpt:jar:0.1.0", "commons-collections:commons-collections:jar:3.2.1",
@@ -49,6 +49,8 @@ WAR_LIBS = ["org.json:json:jar:20090211", "jbpt:jbpt:jar:0.1.0", "commons-collec
   "org.slf4j:log4j-over-slf4j:jar:1.6.0", "rhino:js:jar:1.7R2", "javax.mail:mail:jar:1.4.1",
   "batik:batik-transcoder:jar:1.6", "xalan:xalan:jar:2.7.1", "xerces:xercesImpl:jar:2.9.1",
   "org.codehaus.jackson:jackson-core-asl:jar:1.7.4", "org.codehaus.jackson:jackson-mapper-asl:jar:1.7.4",
+  "org.mvel:mvel2:jar:2.1-SNAPSHOT", "org.jbpm:jbpm-flow-builder:jar:5.2.0-SNAPSHOT",  "org.drools:drools-core:jar:5.2.0-SNAPSHOT",
+  "org.antlr:stringtemplate:jar:3.2.1",
   "org.eclipse:osgi:jar:3.5.0.v20090520", "avalon-framework:avalon-framework:jar:4.1.4", YUICOMPRESSOR] | BPMN2_LIBS | BATIK_LIBS
 
 WAR_LIBS_JBOSS = ["org.json:json:jar:20090211", "jbpt:jbpt:jar:0.1.0", "commons-collections:commons-collections:jar:3.2.1",
@@ -59,8 +61,9 @@ WAR_LIBS_JBOSS = ["org.json:json:jar:20090211", "jbpt:jbpt:jar:0.1.0", "commons-
   "commons-httpclient:commons-httpclient:jar:3.1",
   "commons-fileupload:commons-fileupload:jar:1.2.1", "commons-lang:commons-lang:jar:2.5",
   "rhino:js:jar:1.7R2", "javax.mail:mail:jar:1.4.1",
-  "batik:batik-transcoder:jar:1.6",
   "org.codehaus.jackson:jackson-core-asl:jar:1.7.4", "org.codehaus.jackson:jackson-mapper-asl:jar:1.7.4",
+  "org.mvel:mvel2:jar:2.1-SNAPSHOT", "org.jbpm:jbpm-flow-builder:jar:5.2.0-SNAPSHOT", "org.drools:drools-core:jar:5.2.0-SNAPSHOT",
+  "org.antlr:stringtemplate:jar:3.2.1",
   "org.eclipse:osgi:jar:3.5.0.v20090520", "avalon-framework:avalon-framework:jar:4.1.4", YUICOMPRESSOR] | BPMN2_LIBS | BATIK_LIBS
   
 WAR_LIBS_EPN = ["org.json:json:jar:20090211", "jbpt:jbpt:jar:0.1.0", "commons-collections:commons-collections:jar:3.2.1",
@@ -71,7 +74,8 @@ WAR_LIBS_EPN = ["org.json:json:jar:20090211", "jbpt:jbpt:jar:0.1.0", "commons-co
   "commons-httpclient:commons-httpclient:jar:3.1",
   "commons-fileupload:commons-fileupload:jar:1.2.1", "commons-lang:commons-lang:jar:2.5",
   "rhino:js:jar:1.7R2", "javax.mail:mail:jar:1.4.1",
-  "batik:batik-transcoder:jar:1.6",
   "org.codehaus.jackson:jackson-core-asl:jar:1.7.4", "org.codehaus.jackson:jackson-mapper-asl:jar:1.7.4",
+  "org.mvel:mvel2:jar:2.1-SNAPSHOT", "org.jbpm:jbpm-flow-builder:jar:5.2.0-SNAPSHOT", "org.drools:drools-core:jar:5.2.0-SNAPSHOT",
+  "org.antlr:stringtemplate:jar:3.2.1",
   "org.eclipse:osgi:jar:3.5.0.v20090520", "avalon-framework:avalon-framework:jar:4.1.4", YUICOMPRESSOR] | BPMN2_LIBS | BATIK_LIBS 
 

@@ -94,10 +94,11 @@ public class UUIDBasedFileRepository implements IUUIDBasedRepository {
 
     public void save(HttpServletRequest req, String uuid, String json, String svg, IDiagramProfile profile, Boolean autosave) {
         String ext = profile.getSerializedModelExtension();
+        String preProcessingParam = req.getParameter("pp");
         String model = "";
         try {
             IDiagramMarshaller marshaller = profile.createMarshaller();
-            model = marshaller.parseModel(json);
+            model = marshaller.parseModel(json, preProcessingParam);
         } catch(Exception e) {
             _logger.error(e.getMessage(), e);
         }
@@ -120,8 +121,8 @@ public class UUIDBasedFileRepository implements IUUIDBasedRepository {
         }
     }
 
-    public String toXML(String json, IDiagramProfile profile) {
-        return profile.createMarshaller().parseModel(json);
+    public String toXML(String json, IDiagramProfile profile, String preProcessingData) {
+        return profile.createMarshaller().parseModel(json, preProcessingData);
     }
     
     

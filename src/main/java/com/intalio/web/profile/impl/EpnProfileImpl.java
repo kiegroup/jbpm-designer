@@ -146,7 +146,7 @@ public class EpnProfileImpl implements IDiagramProfile {
 
     public IDiagramMarshaller createMarshaller() {
         return new IDiagramMarshaller() {
-            public String parseModel(String jsonModel) {
+            public String parseModel(String jsonModel, String preProcessingData) {
                 EpnJsonUnmarshaller unmarshaller = new EpnJsonUnmarshaller();
                 Object def; //TODO will be replaced with the epn ecore model class (definitions)
                 try {
@@ -167,7 +167,7 @@ public class EpnProfileImpl implements IDiagramProfile {
 
     public IDiagramUnmarshaller createUnmarshaller() {
         return new IDiagramUnmarshaller() {
-            public String parseModel(String xmlModel, IDiagramProfile profile) {
+            public String parseModel(String xmlModel, IDiagramProfile profile, String preProcessingData) {
                 EpnJsonMarshaller marshaller = new EpnJsonMarshaller();
                 marshaller.setProfile(profile);
                 try {

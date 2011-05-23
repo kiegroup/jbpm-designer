@@ -40,10 +40,13 @@
       if (ORYX.CONFIG.DEV) {
         ORYX_LOGLEVEL = 4;
       }
+      
+      ORYX.PREPROCESSING = "@preprocessing@";
+	      
       params = window.location.search.toQueryParams();
 
       if (params['profile'] === undefined) {
-        params['profile'] = 'default';
+        params['profile'] = 'jbpm';
       }
 
       ORYX.UUID = params['uuid'];

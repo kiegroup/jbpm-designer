@@ -115,6 +115,7 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("application/json");
         String uuid = req.getParameter("uuid");
+        String preProcessingParam = req.getParameter("pp");
         if (uuid == null) {
             throw new ServletException("uuid parameter required");
         }
@@ -127,10 +128,11 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String actionParam = req.getParameter("action");
+        String preProcessingParam = req.getParameter("pp");
         if(actionParam != null && actionParam.equals("toXML")) {
             IDiagramProfile profile = getProfile(req, req.getParameter("profile"));
             String json = req.getParameter("data");
-            String xml = _repository.toXML(json, profile);
+            String xml = _repository.toXML(json, profile, preProcessingParam);
             StringWriter output = new StringWriter();
             output.write(xml);
             resp.setContentType("application/xml");

@@ -30,12 +30,12 @@ public class UUIDBasedJbpmRepository implements IUUIDBasedRepository {
 
     public byte[] load(HttpServletRequest req, String uuid, IDiagramProfile profile) {
         String processjson = "";
-        
+        String preProcessingParam = req.getParameter("pp");
         try {
             // check with Guvnor to see what it has for this uuid for us
             String processxml = doHttpUrlConnectionAction(buildExternalLoadURL(profile, uuid));
             if(processxml != null && processxml.length() > 0) {
-                processjson = profile.createUnmarshaller().parseModel(processxml, profile);
+                processjson = profile.createUnmarshaller().parseModel(processxml, profile, preProcessingParam);
                 return processjson.getBytes("UTF-8");
             } else {
                 //return displayDefaultProcess();
@@ -85,8 +85,8 @@ public class UUIDBasedJbpmRepository implements IUUIDBasedRepository {
         return buff.toString();
     }
     
-    public String toXML(String json, IDiagramProfile profile) {
-        return profile.createMarshaller().parseModel(json);
+    public String toXML(String json, IDiagramProfile profile, String preProcessingData) {
+        return profile.createMarshaller().parseModel(json, preProcessingData);
     }
 
     private String doHttpUrlConnectionAction(String desiredUrl) throws Exception {

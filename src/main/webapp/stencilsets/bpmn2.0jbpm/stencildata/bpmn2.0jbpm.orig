@@ -773,6 +773,36 @@
 				}
 			]
 		},
+		// start custom activity properties
+		{
+			"name" : "customactivity",
+			"properties": [
+				{
+					"id":"isforcompensation",
+					"type":"Boolean",
+					"title":"Is for Compensation",
+					"title_de":"ist für Kompensation",
+					"value":false,
+					"description":"A flag that identifies whether this activity is intended for the purposes of compensation.",
+					"description_de":"Ein Flag, das angibt ob diese Aktivität für Kompensierungszwecke vorgesehen ist.",
+					"readonly":true,
+					"optional":true,
+					"refToView":"compensation"
+				},
+				{
+					"id":"callacitivity",
+					"type":"Boolean",
+					"title":"is a Call Activity",
+					"title_de":"ist eine Call Activity",
+					"value":false,
+					"description":"a Call Activity is a wrapper for a globally defined Sub-Process that is reused in the current process.",
+					"readonly":true,
+					"optional":"true",
+					"refToView":"callActivity"
+				}
+			]
+		},
+		// end custom activity properties
 		{
 			"name":"operation",
 			"properties": [
@@ -1312,6 +1342,66 @@
 		        }
 			]
 		},
+		// start custom loop characteristics
+		{
+			"name" : "customloopcharacteristics",
+			"properties" : [
+				{
+					"id":"looptype",
+					"type":"Choice",
+					"title":"LoopType",
+					"title_de":"Schleifentyp",
+					"value":"None",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{
+							"id":"c1",
+							"title":"None",
+							"title_de":"Keine Schleife",
+							"value":"None",
+							"refToView":"none"
+						},
+						{
+							"id":"c2",
+							"title":"Standard",
+							"title_de":"Standard",
+							"value":"Standard",
+							"icon" : "activity/list/looptype.standard.png",
+							"refToView":"loop"
+						},
+						{
+							"id":"c3",
+							"title":"MI Parallel",
+							"title_de":"MI parallel",
+							"value":"Parallel",
+							"icon" : "activity/list/mi.parallel.png",
+							"refToView":"parallel"
+						},
+						{
+							"id":"c4",
+							"title":"MI Sequential",
+							"title_de":"MI sequentialisiert",
+							"value":"Sequential",
+							"icon" : "activity/list/mi.sequential.png",
+							"refToView":"sequential"
+						}	
+					]
+				},
+				{
+					"id":"completioncondition",
+					"type":"String",
+					"title":"CompletionCondition:",
+					"title_de":"Beendigungsbedingung",
+					"description":"This attribute defines a Boolean Expression that when evaluated to true, cancels the remaining Activity instances and produces a token.",
+					"description_de":"Alle verbleibenden Aktivitätsinstanzen werden abgebrochen, falls die hier definierte Bedingung wahr wird.",
+					"value":""
+				}
+			]
+		},
+		// end custom loop characteristics
 		{
 			"name" : "task",
 			"properties" : [
@@ -1659,6 +1749,70 @@
 				}		
 			]
 		},
+		// start custom task properties
+		{
+			"name" : "customtask",
+			"properties" : [
+				{
+					"id":"implementation",
+					"type":"Choice",
+					"title":"Implementation",
+					"title_de":"Implementierung",
+					"value":"other",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{
+							"id":"c1",
+							"title":"HumanTaskWebService",
+							"value":"humanTaskWebService",
+							"refToView":""
+						},
+						{
+							"id":"c2",
+							"title":"BuisnessRuleWebService",
+							"value":"BuisnessRuleWebService",
+							"refToView":""
+						},
+						{
+							"id":"c1",
+							"title":"WebService",
+							"value":"webService",
+							"refToView":""
+						},
+						{
+							"id":"c2",
+							"title":"Other",
+							"value":"other",
+							"refToView":""
+						},
+						{
+							"id":"c2",
+							"title":"Unspecified",
+							"value":"unspecified",
+							"refToView":""
+						}
+					]
+				},
+				{
+					"id":"bgcolor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"title_de":"Hintergrundfarbe",
+					"value":"#FFCC99",
+					"gradient":true,
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"fill_el",
+					"fill":true,
+					"stroke":false
+				}		
+			]
+		},		
+		// end custom task properties
 		{
 			"name" : "subprocess",
 			"properties" : [
@@ -2386,6 +2540,186 @@
 				}
 			]
 		},
+		// start custom workitems
+		$workitemDefs.keys:{k| 
+		\{
+			"type" : 			"node",
+			"id": 				"$workitemDefs.(k).name$",
+			"title" : 			"$workitemDefs.(k).displayName$",
+			"title_de" : 		"$workitemDefs.(k).displayName$",
+			"groups" : 			["Services"],
+			"groups_de" :		["Services"],
+			"description" : 	"$workitemDefs.(k).explanationText$",
+			"description_de" : 	"$workitemDefs.(k).explanationText$.",
+			"view" : 			"activity/task.svg",
+			"icon" : 			"$workitemDefs.(k).icon$",
+			"propertyPackages" :[
+				"customtask",
+				"customactivity",
+                "customloopcharacteristics"
+			],
+			"roles" : 			[
+				"all",
+				"sequence_start",
+				"sequence_end",
+				"from_task_event",
+				"to_task_event",
+				"FromEventbasedGateway",
+				"messageflow_start",
+				"messageflow_end",
+				"fromtoall",
+				"ActivitiesMorph"
+			],
+			"properties": [
+			 \{
+					"id":"tasktype",
+					"type":"Choice",
+					"title":"TaskType",
+					"title_de":"Tasktyp",
+					"value":"$workitemDefs.(k).name$",
+					"description":"",
+					"readonly":true,
+					"optional":false,
+					"refToView":"",
+					"items":[
+						\{
+							"id":"c1",
+							"title":"None",
+							"title_de":"Kein Typ",
+							"value":"None",
+							"refToView":"none"
+						\},
+						\{
+							"id":"c2",
+							"title":"Send",
+							"title_de":"Sendend",
+							"value":"Send",
+							"icon" : "activity/list/type.send.png",
+							"refToView":"sendTask"
+						\},
+						\{
+							"id":"c3",
+							"title":"Receive",
+							"title_de":"Empfangend",
+							"value":"Receive",
+							"icon" : "activity/list/type.receive.png",
+							"refToView":"receiveTask"
+						\},
+						\{
+							"id":"c4",
+							"title":"User",
+							"title_de":"Benutzer",
+							"value":"User",
+							"icon" : "activity/list/type.user.png",
+							"refToView":"userTask"
+						\},
+						\{
+							"id":"c5",
+							"title":"Manual",
+							"title_de":"Manuell",
+							"value":"Manual",
+							"icon" : "activity/list/type.manual.png",
+							"refToView":"manualTask"	
+						\},
+						\{
+							"id":"c6",
+							"title":"Service",
+							"title_de":"Service",
+							"value":"Service",
+							"icon" : "activity/list/type.service.png",
+							"refToView":"serviceTask"
+						\},
+						\{
+							"id":"c7",
+							"title":"Business Rule",
+							"title_de":"Geschäftsregel",
+							"value":"Business Rule",
+							"icon" : "activity/list/type.business.rule.png",
+							"refToView":"businessRuleTask"
+						\},
+						\{
+							"id":"c8",
+							"title":"Script",
+							"title_de":"Skript",
+							"value":"Script",
+							"icon" : "activity/list/type.script.png",
+							"refToView":"scriptTask"
+						\}
+					]
+				\},
+				\{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"$workitemDefs.(k).displayName$",
+					"description":"The descriptive name of the BPMN element.",
+					"description_de":"Bezeichnung des BPMN-Elementes.",
+					"readonly":true,
+					"optional":true,
+					"length":"",
+					"wrapLines" : true,
+					"refToView":"text_name"	
+				\},
+				\{
+					"id":"documentation",
+					"type":"Text",
+					"title":"Documentation",
+					"title_de":"Dokumentation",
+					"value":"$workitemDefs.(k).explanationText$", 
+					"description":"This attribute is used to annotate the BPMN element, such as descriptions and other documentation.",
+					"description_de":"Der Modellierer kann weiteren Text zur Dokumentation des BPMN-Elementes einfügen.",
+					"readonly":true,
+					"optional":true,
+					"length":"",
+					"wrapLines":true,
+					"popular" : true
+				\},
+				\{
+					"id":"taskName",
+					"type":"String",
+					"title":"Task Name",
+					"title_de":"Task Name",
+					"value":"$workitemDefs.(k).name$",
+					"description":"Task Name",
+					"readonly":true,
+					"optional":true
+				\},
+				\{
+					"id":"datainputset",
+					"type":"Text",
+					"title":"DataInputSet",
+					"title_de":"Dateneingabesatz",
+					"value":"$workitemDefs.(k).parameters:{k1| $k1.name$}; separator=","$",
+					"description":"An InputSet is a collection of DataInput elements that together define a valid set of data inputs.",
+					"description_de":"Ein Eingabesatz ist eine Zusammenstellung von Eingabe-Datenobjekten, die zusammen einen gültigen Satz von Dataeingaben definieren.",
+					"readonly":false,
+					"optional":true,
+				\},  
+				\{
+					"id":"dataoutputset",
+					"type":"Text",
+					"title":"DataOutputSet",
+					"title_de":"Datenausgabesatz",
+					"value":"",
+					"description":"An OutputSet is a collection of DataOutputs elements that together may be produced as output from an Activity or Event.",
+					"description_de":"Ein Ausgabesatz ist eine Zusammenstellung von Ausgabe-Datenobjekten, die zusammen als Ausgabe einer Aktivität oder eines Ereignisses produziert werden.",
+					"readonly":false,
+					"optional":true,
+				\},
+				\{
+					"id":"assignments",
+					"type":"Text",
+					"title":"Assignments",
+					"title_de":"Zuweisungen",
+					"value":"$workitemDefs.(k).parameters:{k1| $k1.name$}; separator="= ,"$=",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+				\}
+			]
+		\},
+		}$
+		// end custom workitems 
 		{
 			"type" : 			"node",
 			"id" :				"CollapsedSubprocess",

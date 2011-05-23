@@ -120,7 +120,7 @@ public interface IDiagramProfile {
          * @param jsonModel the model
          * @return the string representation of the serialized model.
          */
-        public String parseModel(String jsonModel);
+        public String parseModel(String jsonModel, String preProcessingData);
     }
     
     /**
@@ -135,6 +135,6 @@ public interface IDiagramProfile {
          * @param profile process profile.
          * @return the json model
          */
-        public String parseModel(String xmlModel, IDiagramProfile profile);
+        public String parseModel(String xmlModel, IDiagramProfile profile, String preProcessingData);
     }
 }

@@ -62,8 +62,10 @@ public interface IUUIDBasedRepository {
     /**
      * Transforms given json to bpmn2 xml
      * @param json
+     * @param profile
+     * @param preProcessingData
      * @return bpmn2 xml
      */
-    public String toXML(String json, IDiagramProfile profile);
+    public String toXML(String json, IDiagramProfile profile, String preProcessingData);
 
 }

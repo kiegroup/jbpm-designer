@@ -43,7 +43,7 @@ ORYX.CONFIG.UUID_URL = function(uuid, profile) {
   if (profile === undefined) {
     profile = ORYX.PROFILE;
   }
-  return ORYX.PATH + "uuidRepository?uuid="+ uuid + "&profile=" + profile;
+  return ORYX.PATH + "uuidRepository?uuid="+ uuid + "&profile=" + profile + "&pp=" + ORYX.PREPROCESSING;
 };
 
 ORYX.CONFIG.TRANSFORMER_URL = function(uuid, profile) {

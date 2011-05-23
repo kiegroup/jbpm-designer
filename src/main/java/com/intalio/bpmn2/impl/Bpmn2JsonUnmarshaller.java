@@ -166,12 +166,12 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
 
-    public Definitions unmarshall(String json) throws JsonParseException, IOException {
-        return unmarshall(new JsonFactory().createJsonParser(json));
+    public Definitions unmarshall(String json, String preProcessingData) throws JsonParseException, IOException {
+        return unmarshall(new JsonFactory().createJsonParser(json), preProcessingData);
     }
 
-    public Definitions unmarshall(File file) throws JsonParseException, IOException {
-        return unmarshall(new JsonFactory().createJsonParser(file));
+    public Definitions unmarshall(File file, String preProcessingData) throws JsonParseException, IOException {
+        return unmarshall(new JsonFactory().createJsonParser(file), preProcessingData);
     }
 
     /**
@@ -181,7 +181,7 @@ public class Bpmn2JsonUnmarshaller {
      * @throws JsonParseException
      * @throws IOException
      */
-    private Definitions unmarshall(JsonParser parser) throws JsonParseException, IOException {
+    private Definitions unmarshall(JsonParser parser, String preProcessingData) throws JsonParseException, IOException {
         try {
             parser.nextToken(); // open the object
             ResourceSet rSet = new ResourceSetImpl();
@@ -191,7 +191,7 @@ public class Bpmn2JsonUnmarshaller {
             rSet.getResources().add(bpmn2);
             _currentResource = bpmn2;
             // do the unmarshalling now:
-            Definitions def = (Definitions) unmarshallItem(parser);
+            Definitions def = (Definitions) unmarshallItem(parser, preProcessingData);
             reconnectFlows();
             createDiagram(def);
             revisitGateways(def);
@@ -563,7 +563,7 @@ public class Bpmn2JsonUnmarshaller {
     	}
     }
 
-    private BaseElement unmarshallItem(JsonParser parser) throws JsonParseException, IOException {
+    private BaseElement unmarshallItem(JsonParser parser, String preProcessingData) throws JsonParseException, IOException {
         String resourceId = null;
         Map<String, String> properties = null;
         String stencil = null;
@@ -587,7 +587,7 @@ public class Bpmn2JsonUnmarshaller {
                                                                     // object
                     // the childShapes element is a json array. We opened the
                     // array.
-                    childElements.add(unmarshallItem(parser));
+                    childElements.add(unmarshallItem(parser, preProcessingData));
                 }
             } else if ("bounds".equals(fieldname)) {
                 // bounds: {"lowerRight":{"x":484.0,"y":198.0},"upperLeft":{"x":454.0,"y":168.0}}
@@ -661,7 +661,8 @@ public class Bpmn2JsonUnmarshaller {
             }
         }
         properties.put("resourceId", resourceId);
-        BaseElement baseElt = Bpmn20Stencil.createElement(stencil, properties.get("tasktype"));
+        boolean customElement = isCustomElement(properties.get("tasktype"), preProcessingData);
+        BaseElement baseElt = Bpmn20Stencil.createElement(stencil, properties.get("tasktype"), customElement);
 
         // register the sequence flow targets.
         if (baseElt instanceof SequenceFlow) {
@@ -1449,7 +1450,11 @@ public class Bpmn2JsonUnmarshaller {
                     
                     Assignment a = Bpmn2Factory.eINSTANCE.createAssignment();
                     FormalExpression fromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
-                    fromExpression.setBody(assignmentParts[1]);
+                    if(assignmentParts.length > 1) {
+                        fromExpression.setBody(assignmentParts[1]);
+                    } else {
+                        fromExpression.setBody("");
+                    }
                     FormalExpression toExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
                     toExpression.setBody(dia.getTargetRef().getId());
                     
@@ -1624,12 +1629,22 @@ public class Bpmn2JsonUnmarshaller {
         return properties;
     }
 
-
-
     private Documentation createDocumentation(String text) {
         Documentation doc = Bpmn2Factory.eINSTANCE.createDocumentation();
         doc.setText(text);
         return doc;
+    }
+    
+    private boolean isCustomElement(String taskType, String preProcessingData) {
+        if(taskType != null && taskType.length() > 0 && preProcessingData != null && preProcessingData.length() > 0) {
+            String[] preProcessingDataElements = preProcessingData.split( ",\\s*" );
+            for(String preProcessingDataElement : preProcessingDataElements) {
+                if(taskType.equals(preProcessingDataElement)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
 

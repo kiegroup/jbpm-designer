@@ -169,11 +169,11 @@ public class JbpmProfileImpl implements IDiagramProfile {
     
     public IDiagramMarshaller createMarshaller() {
         return new IDiagramMarshaller() {
-            public String parseModel(String jsonModel) {
+            public String parseModel(String jsonModel, String preProcessingData) {
                 Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
                 Definitions def;
                 try {
-                    def = unmarshaller.unmarshall(jsonModel);
+                    def = unmarshaller.unmarshall(jsonModel, preProcessingData);
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                     def.eResource().save(outputStream, Collections.singletonMap(XMLResource.OPTION_ENCODING, "UTF-8"));
                     return outputStream.toString();
@@ -190,11 +190,11 @@ public class JbpmProfileImpl implements IDiagramProfile {
 
     public IDiagramUnmarshaller createUnmarshaller() {
         return new IDiagramUnmarshaller() {
-            public String parseModel(String xmlModel, IDiagramProfile profile) {
+            public String parseModel(String xmlModel, IDiagramProfile profile, String preProcessingData) {
                 Bpmn2JsonMarshaller marshaller = new Bpmn2JsonMarshaller();
                 marshaller.setProfile(profile);
                 try {
-                    return marshaller.marshall(getDefinitions(xmlModel));
+                    return marshaller.marshall(getDefinitions(xmlModel), preProcessingData);
                 } catch (Exception e) {
                     _logger.error(e.getMessage(), e);
                 }

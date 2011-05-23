@@ -36,6 +36,8 @@ import org.eclipse.emf.ecore.EClass;
  * the mapping to stencil ids to BPMN 2.0 metamodel classes
  *
  */
+
+
 public enum Bpmn20Stencil {
 
     Task(Bpmn2Package.eINSTANCE.getTask()), 
@@ -44,6 +46,7 @@ public enum Bpmn20Stencil {
     Lane(Bpmn2Package.eINSTANCE.getLane()),
     SequenceFlow(Bpmn2Package.eINSTANCE.getSequenceFlow()),
     Task_None(Bpmn2Package.eINSTANCE.getTask()), 
+    Task_Custom(Bpmn2Package.eINSTANCE.getTask()), 
     Task_Script(Bpmn2Package.eINSTANCE.getScriptTask()),
     Task_User(Bpmn2Package.eINSTANCE.getUserTask()),
     Task_Business_Rule(Bpmn2Package.eINSTANCE.getBusinessRuleTask()),
@@ -124,7 +127,11 @@ public enum Bpmn20Stencil {
     }
     
     
-    public static BaseElement createElement(String stencilId, String taskType ) {
+    public static BaseElement createElement(String stencilId, String taskType, boolean customElement ) {
+        if(customElement) {
+            stencilId = "Task";
+            taskType = "Custom";
+        }
         Bpmn20Stencil stencil = Bpmn20Stencil.valueOf(taskType == null ? stencilId : stencilId + "_" + taskType.replaceAll(" ", "_"));
         if (stencil == null) {
             throw new IllegalArgumentException("unregistered stencil id: " + stencilId);

@@ -131,12 +131,11 @@ public class Bpmn2JsonMarshaller {
 	    this.profile = profile;
 	}
 
-    public String marshall(Definitions def) throws IOException {
-        //StringWriter writer = new StringWriter();
+    public String marshall(Definitions def, String preProcessingData) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         JsonFactory f = new JsonFactory();
         JsonGenerator generator = f.createJsonGenerator(baos, JsonEncoding.UTF8);
-        marshallDefinitions(def, generator);
+        marshallDefinitions(def, generator, preProcessingData);
         generator.close();
         
         return baos.toString("UTF-8");
@@ -177,7 +176,7 @@ public class Bpmn2JsonMarshaller {
     	}
     }
 
-    private void marshallDefinitions(Definitions def, JsonGenerator generator) throws JsonGenerationException, IOException {
+    private void marshallDefinitions(Definitions def, JsonGenerator generator, String preProcessingData) throws JsonGenerationException, IOException {
         try{
         	generator.writeStartObject();
 	        generator.writeObjectField("resourceId", def.getId());
@@ -253,7 +252,7 @@ public class Bpmn2JsonMarshaller {
 	                marshallProperties(props, generator);
 	                marshallStencil("BPMNDiagram", generator);
 	            	linkSequenceFlows(((Process) rootElement).getFlowElements());
-	                marshallProcess((Process) rootElement, def, generator);
+	                marshallProcess((Process) rootElement, def, generator, preProcessingData);
 	            } else if (rootElement instanceof Interface) {
 	                // TODO
 	            } else if (rootElement instanceof ItemDefinition) {
@@ -324,14 +323,14 @@ public class Bpmn2JsonMarshaller {
         } else if (callableElement instanceof GlobalTask) {
             marshallGlobalTask((GlobalTask) callableElement, generator);
         } else if (callableElement instanceof Process) {
-            marshallProcess((Process) callableElement, def, generator);
+            marshallProcess((Process) callableElement, def, generator, "");
         } else {
             throw new UnsupportedOperationException("TODO"); //TODO!
         }
         generator.writeEndObject();
     }
 
-    private void marshallProcess(Process process, Definitions def, JsonGenerator generator) throws JsonGenerationException, IOException {
+    private void marshallProcess(Process process, Definitions def, JsonGenerator generator, String preProcessingData) throws JsonGenerationException, IOException {
     	BPMNPlane plane = null;
     	for (BPMNDiagram d: def.getDiagrams()) {
     		if (d != null) {
@@ -349,7 +348,7 @@ public class Bpmn2JsonMarshaller {
     	}
         generator.writeArrayFieldStart("childShapes");
         for (FlowElement flowElement: process.getFlowElements()) {
-        	marshallFlowElement(flowElement, plane, generator, 0, 0);
+        	marshallFlowElement(flowElement, plane, generator, 0, 0, preProcessingData);
         }
         generator.writeEndArray();
     }
@@ -536,7 +535,7 @@ public class Bpmn2JsonMarshaller {
         }
     }
     
-    private void marshallFlowElement(FlowElement flowElement, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset) throws JsonGenerationException, IOException {
+    private void marshallFlowElement(FlowElement flowElement, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData) throws JsonGenerationException, IOException {
     	generator.writeStartObject();
     	generator.writeObjectField("resourceId", flowElement.getId());
     	
@@ -559,7 +558,7 @@ public class Bpmn2JsonMarshaller {
     	} else if (flowElement instanceof BoundaryEvent) {
     		marshallBoundaryEvent((BoundaryEvent) flowElement, plane, generator, xOffset, yOffset);
     	} else if (flowElement instanceof Task) {
-    		marshallTask((Task) flowElement, plane, generator, xOffset, yOffset);
+    		marshallTask((Task) flowElement, plane, generator, xOffset, yOffset, preProcessingData);
     	} else if (flowElement instanceof SequenceFlow) {
     		marshallSequenceFlow((SequenceFlow) flowElement, plane, generator, xOffset, yOffset);
     	} else if (flowElement instanceof ParallelGateway) {
@@ -575,7 +574,7 @@ public class Bpmn2JsonMarshaller {
     	} else if (flowElement instanceof CallActivity) {
     		marshallCallActivity((CallActivity) flowElement, plane, generator, xOffset, yOffset);
     	} else if (flowElement instanceof SubProcess) {
-    		marshallSubProcess((SubProcess) flowElement, plane, generator, xOffset, yOffset);
+    		marshallSubProcess((SubProcess) flowElement, plane, generator, xOffset, yOffset, preProcessingData);
     	} else if (flowElement instanceof DataObject) {
     		marshallDataObject((DataObject) flowElement, plane, generator, xOffset, yOffset);
     	} else {
@@ -712,8 +711,8 @@ public class Bpmn2JsonMarshaller {
     	}
     }
     
-    private void marshallTask(Task task, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset) throws JsonGenerationException, IOException {
-    	Map<String, Object> properties = new LinkedHashMap<String, Object>();
+    private void marshallTask(Task task, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData) throws JsonGenerationException, IOException {
+        Map<String, Object> properties = new LinkedHashMap<String, Object>();
     	String taskType = "None";
     	if (task instanceof BusinessRuleTask) {
     		taskType = "Business Rule";
@@ -777,7 +776,6 @@ public class Bpmn2JsonMarshaller {
     		taskType = "Receive";
     	}
     	
-    	properties.put("tasktype", taskType);
     	// get out the droolsjbpm-specific attributes "ruleflowGroup" and "taskName"
     	Iterator<FeatureMap.Entry> iter = task.getAnyAttribute().iterator();
         while(iter.hasNext()) {
@@ -785,6 +783,13 @@ public class Bpmn2JsonMarshaller {
             if(entry.getEStructuralFeature().getName().equals("taskName")) {
                 properties.put("taskname", entry.getValue());
             }
+        }
+        
+        // check if we are dealing with a custom task
+        if(isCustomElement((String) properties.get("taskname"), preProcessingData)) {
+            properties.put("tasktype", properties.get("taskname"));
+        } else {
+            properties.put("tasktype", taskType);
         }
         
         // data inputs
@@ -902,7 +907,11 @@ public class Bpmn2JsonMarshaller {
         
         
         // marshall the node out
-    	marshallNode(task, properties, "Task", plane, generator, xOffset, yOffset);
+        if(isCustomElement((String) properties.get("taskname"), preProcessingData)) {
+            marshallNode(task, properties, (String) properties.get("taskname"), plane, generator, xOffset, yOffset);
+        } else {
+            marshallNode(task, properties, "Task", plane, generator, xOffset, yOffset);
+        }
     }
     
     private void marshallParallelGateway(ParallelGateway gateway, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset) throws JsonGenerationException, IOException {
@@ -1028,7 +1037,7 @@ public class Bpmn2JsonMarshaller {
 	    generator.writeEndObject();
 	}
     
-    private void marshallSubProcess(SubProcess subProcess, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset) throws JsonGenerationException, IOException {
+    private void marshallSubProcess(SubProcess subProcess, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData) throws JsonGenerationException, IOException {
     	Map<String, Object> properties = new LinkedHashMap<String, Object>();
 		properties.put("name", subProcess.getName());
 	    marshallProperties(properties, generator);
@@ -1038,7 +1047,7 @@ public class Bpmn2JsonMarshaller {
 	    generator.writeArrayFieldStart("childShapes");
 	    Bounds bounds = ((BPMNShape) findDiagramElement(plane, subProcess)).getBounds();
 	    for (FlowElement flowElement: subProcess.getFlowElements()) {
-	    	marshallFlowElement(flowElement, plane, generator, (int) (xOffset + bounds.getX()), (int) (yOffset + bounds.getY()));
+	    	marshallFlowElement(flowElement, plane, generator, (int) (xOffset + bounds.getX()), (int) (yOffset + bounds.getY()), preProcessingData);
 	    }
 	    generator.writeEndArray();
 	    generator.writeArrayFieldStart("outgoing");
@@ -1167,6 +1176,18 @@ public class Bpmn2JsonMarshaller {
         generator.writeObjectFieldStart("stencil");
         generator.writeObjectField("id", stencilId);
         generator.writeEndObject();
+    }
+    
+    private boolean isCustomElement(String taskType, String preProcessingData) {
+        if(taskType != null && taskType.length() > 0 && preProcessingData != null && preProcessingData.length() > 0) {
+            String[] preProcessingDataElements = preProcessingData.split( ",\\s*" );
+            for(String preProcessingDataElement : preProcessingDataElements) {
+                if(taskType.equals(preProcessingDataElement)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
     
 }
