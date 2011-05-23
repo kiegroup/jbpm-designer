@@ -196,8 +196,8 @@ ORYX.Core.StencilSet.Stencil = {
 				// then do nothing
 			} else if (this._jsonStencil.icon.indexOf("://") === -1) {
 				this._jsonStencil.icon = this._source + "icons/" + this._jsonStencil.icon;
-			} else {//secure against xss otherwise ? not sure.
-				this._jsonStencil.icon = "";
+			} else {
+				// leave as is
 			}
 		} else {
 			this._jsonStencil.icon = "";
