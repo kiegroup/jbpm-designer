@@ -865,6 +865,9 @@ public class Bpmn2JsonMarshaller {
             
             if(isAssignment) {
                 String associationValue = ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody();
+                if(associationValue == null) {
+                    associationValue = "";
+                }
                 associationBuff.append(rhsAssociation).append("=").append(associationValue);
                 associationBuff.append(",");
             } else if(isBiDirectional) {

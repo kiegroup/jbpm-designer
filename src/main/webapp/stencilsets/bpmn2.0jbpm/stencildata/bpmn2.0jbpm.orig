@@ -2711,7 +2711,7 @@
 					"type":"Text",
 					"title":"Assignments",
 					"title_de":"Zuweisungen",
-					"value":"$workitemDefs.(k).parameters:{k1| $k1.name$}; separator="= ,"$=",
+					"value":"$workitemDefs.(k).parameters:{k1| $k1.name$}; separator="=,"$=",
 					"description":"",
 					"readonly":false,
 					"optional":true,
