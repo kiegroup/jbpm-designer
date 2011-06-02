@@ -24,12 +24,9 @@ package com.intalio.web.preprocessing.impl;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -63,6 +60,8 @@ import org.drools.process.core.impl.ParameterDefinitionImpl;
 import org.jbpm.process.workitem.WorkDefinitionImpl;
 import org.drools.process.core.datatype.DataType;
 import org.mvel2.MVEL;
+
+import sun.misc.BASE64Encoder;
 
 import com.intalio.web.preprocessing.IDiagramPreprocessingUnit;
 import com.intalio.web.profile.IDiagramProfile;
@@ -216,7 +215,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                         "/rest/packages/" + packageName + "/assets/" + configName + "/source/";
                 
                         try {
-                            InputStream in = getInputStreamForURL(configURL);
+                            InputStream in = getInputStreamForURL(configURL, profile);
                             StringWriter writer = new StringWriter();
                             IOUtils.copy(in, writer, "UTF-8");
                             resultsMap.put(configName, writer.toString());
@@ -231,8 +230,8 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         return resultsMap;
     }
     
-    private InputStream getInputStreamForURL(String urlLocation) throws Exception{
-     // pretend we are mozilla
+    private InputStream getInputStreamForURL(String urlLocation, IDiagramProfile profile) throws Exception{
+        // pretend we are mozilla
         URL url = new URL(urlLocation);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
@@ -248,6 +247,14 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         connection.setRequestProperty("Accept-Encoding", "gzip,deflate");
         connection.setRequestProperty("charset", "UTF-8");
         connection.setReadTimeout(5 * 1000);
+        
+        if(profile.getUsr() != null && profile.getUsr().trim().length() > 0 && profile.getPwd() != null && profile.getPwd().trim().length() > 0) {
+            BASE64Encoder enc = new sun.misc.BASE64Encoder();
+            String userpassword = profile.getUsr() + ":" + profile.getPwd();
+            String encodedAuthorization = enc.encode( userpassword.getBytes() );
+            connection.setRequestProperty("Authorization", "Basic "+ encodedAuthorization);
+        }
+        
         connection.connect();
         
         BufferedReader sreader = new BufferedReader(new InputStreamReader(
@@ -275,7 +282,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             
             try {
                 XMLInputFactory factory = XMLInputFactory.newInstance();
-                XMLStreamReader reader = factory.createXMLStreamReader(getInputStreamForURL(packageAssetURL));
+                XMLStreamReader reader = factory.createXMLStreamReader(getInputStreamForURL(packageAssetURL, profile));
 
                 String format = "";
                 String title = "";  
@@ -329,7 +336,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         "/rest/packages/";
         try {
             XMLInputFactory factory = XMLInputFactory.newInstance();
-            XMLStreamReader reader = factory.createXMLStreamReader(getInputStreamForURL(packagesURL));
+            XMLStreamReader reader = factory.createXMLStreamReader(getInputStreamForURL(packagesURL, profile));
             while (reader.hasNext()) {
                 if (reader.next() == XMLStreamReader.START_ELEMENT) {
                     if ("title".equals(reader.getLocalName())) {
