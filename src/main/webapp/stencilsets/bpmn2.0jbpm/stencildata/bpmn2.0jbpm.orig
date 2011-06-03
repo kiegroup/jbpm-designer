@@ -2009,6 +2009,201 @@
 			]
 		},
 		{
+			"name" : "adhocsubprocess",
+			"properties" : [
+				{
+					"id": "subprocesstype",
+					"type": "Choice",
+					"title": "subProcessType",
+					"title_de":"Subprozesstyp",
+					"value": "AdHoc",
+					"description": "SubProcessType is an attribute that defines whether the Sub-Process details are embedded within the higher level Process or refers to another, re-usable Process. The default is Embedded.",
+					"description_de":"Der Subprozesstyp gibt an, ob die Subprozessdetails in einen übergeordneten Prozess eingebettet sind oder auf einen anderen wiederverwendbaren Prozess verweisen.",
+					"optional": false,
+					"refToView": "",
+					"items": [
+						{
+							"id": "choice1",
+							"title":"Embedded",
+							"value":"Embedded"
+						},
+						{
+							"id": "choice2",
+							"title": "Independent",
+							"value": "Independent"
+						},
+						{
+							"id": "choice3",
+							"title": "Reference",
+							"value": "Reference"
+						}
+					]
+				},
+				{
+					"id":"isatransaction",
+					"type":"Boolean",
+					"title":"is a Transaction",
+					"title_de":"ist eine Transaktion",
+					"value":false,
+					"description":"A Transaction is a set of activities that logically belongs together; it might follow a specified transaction protocol.",
+					"readonly":false,
+					"optional":false,
+					"refToView":"border"
+				},
+				{
+					"id":"transaction",
+					"type":"String",
+					"title":"TransactionRef",
+					"title_de":"Transaktions-Referenz",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":"50"
+				},
+				{
+					"id":"transactionmethod",
+					"type":"Choice",
+					"title":"TransactionMethod",
+					"title_de":"Transaktions-Methode",
+					"value":"compensate",
+					"description":"The technique that will be used to undo a transaction that has been cancelled.",
+					"readonly":false,
+					"optional":true,
+					"items": [
+						{
+							"id":"c1",
+							"title":"Compensate",
+							"value":"compensate"
+						},
+						{
+							"id":"c2",
+							"title":"Store",
+							"value":"store"
+						},
+						{
+							"id":"c3",
+							"title":"Image",
+							"value":"image"
+						}
+					]
+				},
+				{
+					"id":"isadhoc",
+					"type":"Boolean",
+					"title":"isAdHoc",
+					"title_de":"ist Ad-hoc",
+					"value":true,
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"adhoc"
+				},
+				{
+					"id":"adhocordering",
+					"type":"Choice",
+					"title":"AdHocOrdering",
+					"title_de":"Ad-hoc Anordnung",
+					"value":"Sequential",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"items": [
+						{
+							"id":"c1",
+							"title":"Sequential",
+							"title_de":"sequentiell",
+							"value":"sequential"
+						},
+						{
+							"id":"c2",
+							"title":"Parallel",
+							"title_de":"parallel",
+							"value":"parallel"
+						}
+					]
+				},
+				{
+					"id":"adhoccompletioncondition",
+					"type":"String",
+					"title":"AdHocCompletionCondition",
+					"title_de":"Ad-hoc Fertigstellungsbedingung",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":""
+				},
+				{
+					"id":"adhoccancelremaininginstances",
+					"type":"Boolean",
+					"title":"AdhocCancelRemainingInstances",
+					"title_de":"Ad-hoc Abbruch laufender Instanzen",
+					"value":true,
+					"description":"This attribute is used only if ordering is parallel. It determines whether running instances are cancelled when the completionCondition becomes true.",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"entry",
+					"type":"DiagramLink",
+					"title":"SubProcessRef",
+					"title_de":"Subprozess-Referenz",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"u"
+				},
+				{
+					"id":"diagramref",
+					"type":"String",
+					"title":"DiagramRef",
+					"title_de":"Diagramm-Referenz",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":""
+				},
+				{
+					"id":"processref",
+					"type":"String",
+					"title":"ProcessRef",
+					"title_de":"Prozess-Referenz",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":""
+				},
+				{
+					"id":"inputmaps",
+					"type":"String",
+					"title":"InputMaps",
+					"title_de":"Eingabe-Mengen",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":""
+				},
+				{
+					"id":"outputmaps",
+					"type":"String",
+					"title":"OutputMaps",
+					"title_de":"Ausgabe-Mengen",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":""
+				}
+			]
+		},
+		{
 			"name" : "gateway",
 			"properties" : [
 				{
@@ -2781,12 +2976,12 @@
 				"fromtoall",
 				"ActivitiesMorph"
 			]
-		},
+		}, 
 		{
 			"type" : 			"node",
 			"id" :				"Subprocess",
-			"title" :			"Expanded Subprocess",
-			"title_de" :		"Aufgeklappter Unterprozess",
+			"title" :			"Embedded Subprocess",
+			"title_de" :		"Embedded Subprocess",
 			"groups" :			["Activities"],
 			"groups_de" :		["Aktivitäten"],
 			"description" :		"A subprocess is a decomposable activity. An expanded subprocess contains a valid BPMN diagram.",
@@ -2858,6 +3053,81 @@
 			]
 		},
 		{
+			"type" : 			"node",
+			"id" :				"AdHocSubprocess",
+			"title" :			"AdHoc Subprocess",
+			"title_de" :		"AdHoc Subprocess",
+			"groups" :			["Activities"],
+			"groups_de" :		["Aktivitäten"],
+			"description" :		"A subprocess is a decomposable activity. An expanded subprocess contains a valid BPMN diagram.",
+			"description_de" :	"Ein Unterprozess ist eine verfeinerte Aktivität. Ein aufgeklappter Unterprozess enthält in sich ein eigenes BPMN Diagramm, welches direkt innerhalb modelliert wird.",
+			"view" :			"activity/subprocess.expanded.svg",
+			"icon" :			"activity/expanded.subprocess.png",
+ 			"layout" : 			[
+ 									{"type" : "layout.bpmn2_0.subprocess"},
+ 									{"type" : "layout.container.dockers"},
+ 									{
+ 										"type" : "layout.container.minBounds",
+ 										"options" : {
+ 											"fixedX" : true,
+ 											"ignoreChildsWithId" : [
+ 												"http://b3mn.org/stencilset/bpmn2.0#Lane",
+ 												"http://b3mn.org/stencilset/bpmn2.0#StartNoneEvent"
+ 											]
+ 										}
+ 									}
+ 								],
+			"propertyPackages" :[
+				"baseAttributes",
+				"flowElement",
+				"activity",
+				"adhocsubprocess",
+				"loopcharacteristics",
+				"properties",
+				"iospecification"
+			],
+			"properties" :		[
+				{
+					"id":"activitytype",
+					"type":"String",
+					"title":"ActivityType",
+					"title_de":"Aktivitätstyp",
+					"value":"Sub-Process",
+					"value_de":"Unterprozess",
+					"description":"The Type of Activity.",
+					"description_de":"Typ der Aktivität",
+					"readonly":true,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"bgcolor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"title_de":"Hintergrundfarbe",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"fill_el",
+					"fill":true,
+					"stroke":false
+				}	
+			],
+			"roles"	:			[
+				"all",
+				"sequence_start",
+				"sequence_end",
+				"messageflow_start",
+				"messageflow_end",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"canContainArtifacts",
+				"ActivitiesMorph"
+			]
+		},
+		/** {
 			"type" : 			"node",
 			"id" :				"CollapsedEventSubprocess",
 			"title" : 			"Collapsed Event-Subprocess",
@@ -2996,8 +3266,8 @@
 				"canContainArtifacts",
 				"EventActivitiesMorph"
 			]
-		},
-		{
+		}, 
+		/** {
 			"type" : 			"node",
 			"id" :				"EventSubprocess",
 			"title" :			"Event-Subprocess",
@@ -3072,7 +3342,7 @@
 				"canContainArtifacts",
 				"EventActivitiesMorph"
 			]
-		},
+		}, **/
 		
 		// Gateways
 		
@@ -6259,6 +6529,19 @@
 			},
 			{
 				"role" : "Subprocess",
+				"contains" : [
+					"sequence_start",
+					"sequence_end",
+					"from_task_event",
+					"to_task_event",
+					"EventSubprocess",
+					"CollapsedEventSubprocess",
+					"TextAnnotation",
+					"from_participant"
+				]
+			},
+			{
+				"role" : "AdHocSubprocess",
 				"contains" : [
 					"sequence_start",
 					"sequence_end",

@@ -103,7 +103,9 @@ public enum Bpmn20Stencil {
     IntermediateMultipleEventThrowing(Bpmn2Package.eINSTANCE.getIntermediateThrowEvent()),
     Association_Undirected(Bpmn2Package.eINSTANCE.getAssociation(), AssociationDirection.NONE),
     Association_Unidirectional(Bpmn2Package.eINSTANCE.getAssociation(), AssociationDirection.ONE),
-    Association_Bidirectional(Bpmn2Package.eINSTANCE.getAssociation(), AssociationDirection.BOTH);
+    Association_Bidirectional(Bpmn2Package.eINSTANCE.getAssociation(), AssociationDirection.BOTH),
+    Subprocess(Bpmn2Package.eINSTANCE.getSubProcess()),
+    AdHocSubprocess(Bpmn2Package.eINSTANCE.getAdHocSubProcess());
     
     
     
@@ -136,6 +138,7 @@ public enum Bpmn20Stencil {
         if (stencil == null) {
             throw new IllegalArgumentException("unregistered stencil id: " + stencilId);
         }
+        System.out.println("*** creating : " + stencil.className);
         BaseElement elt = (BaseElement) Bpmn2Factory.eINSTANCE.create(stencil.className);
         if (stencil.eventType != null) {
             if (elt instanceof CatchEvent) {

@@ -584,7 +584,6 @@ public class EditorHandler extends HttpServlet {
             }
             inputStream.close();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             _logger.error(e.getMessage(), e);
         }
         return retStr;

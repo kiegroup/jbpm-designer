@@ -36,6 +36,7 @@ import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonGenerator;
 import org.eclipse.bpmn2.Activity;
+import org.eclipse.bpmn2.AdHocSubProcess;
 import org.eclipse.bpmn2.BaseElement;
 import org.eclipse.bpmn2.BoundaryEvent;
 import org.eclipse.bpmn2.BusinessRuleTask;
@@ -225,6 +226,10 @@ public class Bpmn2JsonMarshaller {
 	                    for(int i=0; i<processProperties.size(); i++) {
 	                        Property p = processProperties.get(i);
 	                        propVal += p.getId();
+	                        // check the structureRef value
+	                        if(p.getItemSubjectRef() != null && p.getItemSubjectRef().getStructureRef() != null) {
+	                            propVal += ":" + p.getItemSubjectRef().getStructureRef();
+	                        }
 	                        if(i != processProperties.size()-1) {
 	                            propVal += ",";
 	                        }
@@ -348,6 +353,7 @@ public class Bpmn2JsonMarshaller {
     	}
         generator.writeArrayFieldStart("childShapes");
         for (FlowElement flowElement: process.getFlowElements()) {
+            System.out.println("**** process flow element marshalling: " + flowElement.getId());
         	marshallFlowElement(flowElement, plane, generator, 0, 0, preProcessingData);
         }
         generator.writeEndArray();
@@ -574,7 +580,11 @@ public class Bpmn2JsonMarshaller {
     	} else if (flowElement instanceof CallActivity) {
     		marshallCallActivity((CallActivity) flowElement, plane, generator, xOffset, yOffset);
     	} else if (flowElement instanceof SubProcess) {
-    		marshallSubProcess((SubProcess) flowElement, plane, generator, xOffset, yOffset, preProcessingData);
+    	    if(flowElement instanceof AdHocSubProcess) {
+    	        marshallSubProcess((AdHocSubProcess) flowElement, plane, generator, xOffset, yOffset, preProcessingData);
+    	    } else {
+    	        marshallSubProcess((SubProcess) flowElement, plane, generator, xOffset, yOffset, preProcessingData);
+    	    }
     	} else if (flowElement instanceof DataObject) {
     		marshallDataObject((DataObject) flowElement, plane, generator, xOffset, yOffset);
     	} else {
@@ -1041,20 +1051,27 @@ public class Bpmn2JsonMarshaller {
 	}
     
     private void marshallSubProcess(SubProcess subProcess, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData) throws JsonGenerationException, IOException {
-    	Map<String, Object> properties = new LinkedHashMap<String, Object>();
+    	System.out.println("**** marshalling sub process: " + subProcess.getId());
+        Map<String, Object> properties = new LinkedHashMap<String, Object>();
 		properties.put("name", subProcess.getName());
 	    marshallProperties(properties, generator);
 	    generator.writeObjectFieldStart("stencil");
-	    generator.writeObjectField("id", "Subprocess");
+	    if(subProcess instanceof AdHocSubProcess) {
+	        generator.writeObjectField("id", "AdHocSubprocess");
+	    } else {
+	        generator.writeObjectField("id", "Subprocess");
+	    }
 	    generator.writeEndObject();
 	    generator.writeArrayFieldStart("childShapes");
 	    Bounds bounds = ((BPMNShape) findDiagramElement(plane, subProcess)).getBounds();
 	    for (FlowElement flowElement: subProcess.getFlowElements()) {
+	        System.out.println("subprocess flow element: " + flowElement.getId());
 	    	marshallFlowElement(flowElement, plane, generator, (int) (xOffset + bounds.getX()), (int) (yOffset + bounds.getY()), preProcessingData);
 	    }
 	    generator.writeEndArray();
 	    generator.writeArrayFieldStart("outgoing");
 	    for (BoundaryEvent boundaryEvent: subProcess.getBoundaryEventRefs()) {
+	        System.out.println("***** subprocess boundary event refs: " + boundaryEvent.getId());
         	generator.writeStartObject();
         	generator.writeObjectField("resourceId", boundaryEvent.getId());
         	generator.writeEndObject();
