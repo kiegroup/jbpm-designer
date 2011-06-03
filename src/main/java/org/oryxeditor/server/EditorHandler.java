@@ -24,6 +24,7 @@
 
 package org.oryxeditor.server;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -120,6 +121,11 @@ public class EditorHandler extends HttpServlet {
     public static final String PREPROCESS = "designer.preprocess";
     
     /**
+     * The designer bundle version looked up from the manifest.
+     */
+    public static final String BUNDLE_VERSION = "Bundle-Version";
+    
+    /**
      * The designer dev mode setting.
      */
     private boolean _devMode;
@@ -128,6 +134,11 @@ public class EditorHandler extends HttpServlet {
      * The designer preprocess mode setting.
      */
     private boolean _preProcess;
+    
+    /**
+     * The designer version setting.
+     */
+    private String _designerVersion;
     
     /**
      * The profile service, a global registry to get the
@@ -170,6 +181,8 @@ public class EditorHandler extends HttpServlet {
         
         _devMode = Boolean.parseBoolean( System.getProperty(DEV) == null ? config.getInitParameter(DEV) : System.getProperty(DEV) );
         _preProcess = Boolean.parseBoolean( System.getProperty(PREPROCESS) == null ? config.getInitParameter(PREPROCESS) : System.getProperty(PREPROCESS) );
+        _designerVersion = readDesignerVersion(config.getServletContext());
+        
         String editor_file = config.
             getServletContext().getRealPath("/editor.html");
         try {
@@ -389,6 +402,9 @@ public class EditorHandler extends HttpServlet {
             } else if ("preprocessing".equals(elt)) {
                 resultHtml.append(preprocessingUnit == null ? "" : preprocessingUnit.getOutData());
                 replacementMade = true;    
+            } else if ("designerversion".equals(elt)) { 
+                resultHtml.append(_designerVersion);
+                replacementMade = true;    
             } else if ("profileplugins".equals(elt)) {
                 StringBuilder plugins = new StringBuilder();
                 boolean commaNeeded = false;
@@ -547,5 +563,30 @@ public class EditorHandler extends HttpServlet {
     private static boolean isIE(HttpServletRequest request){
         return request.getHeader("USER-AGENT").
             toLowerCase().indexOf("msie") > 0;
+    }
+    
+    /**
+     * Returns the designer version from the manifest.
+     * @param context 
+     * @return version
+     */
+    private static String readDesignerVersion(ServletContext context) {
+        String retStr = "";
+        try {
+            InputStream inputStream = context.getResourceAsStream("/META-INF/MANIFEST.MF");
+            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+            String line;
+            while ((line = br.readLine()) != null)   {
+                if(line.startsWith(BUNDLE_VERSION)) {
+                    retStr = line.substring(BUNDLE_VERSION.length() + 1);
+                    retStr = retStr.trim();
+                }
+            }
+            inputStream.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            _logger.error(e.getMessage(), e);
+        }
+        return retStr;
     }
 }

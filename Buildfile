@@ -52,19 +52,24 @@ define "designer" do
   package(:bundle).include(_("src/main/webapp"), :as => webContent).exclude('WEB-INF/tomcat_web.xml').exclude('WEB-INF/epn_web.xml')
   package(:war).include(_("src/main/webapp"), :as => '.').exclude('WEB-INF/tomcat_web.xml').exclude('WEB-INF/epn_web.xml')
   package(:war, :classifier => "jboss").include(_("src/main/webapp"), :as => '.').exclude('WEB-INF/tomcat_web.xml').exclude('WEB-INF/epn_web.xml')
-  package(:war, :classifier => "epn").include(_("src/main/webapp"), :as => '.').exclude('WEB-INF/tomcat_web.xml').exclude('WEB-INF/epn_web.xml')
+  #package(:war, :classifier => "epn").include(_("src/main/webapp"), :as => '.').exclude('WEB-INF/tomcat_web.xml').exclude('WEB-INF/epn_web.xml')
 
   package(:war).libs = WAR_LIBS
   package(:war, :classifier => "jboss").libs = WAR_LIBS_JBOSS
-  package(:war, :classifier => "epn").libs = WAR_LIBS_EPN
+  #package(:war, :classifier => "epn").libs = WAR_LIBS_EPN
   
   package(:war, :classifier => "jboss").include(_('src/main/webapp/WEB-INF/tomcat_web.xml'), :as=>'WEB-INF/web.xml')
-  package(:war, :classifier => "epn").include(_('src/main/webapp/WEB-INF/epn_web.xml'), :as=>'WEB-INF/web.xml')
+  #package(:war, :classifier => "epn").include(_('src/main/webapp/WEB-INF/epn_web.xml'), :as=>'WEB-INF/web.xml')
 
   read_m = ::Buildr::Packaging::Java::Manifest.parse(File.read(_("META-INF/MANIFEST.MF"))).main
   read_m["Jetty-WarFolderPath"] = webContent
   read_m["Bundle-Version"] = project.version
   package(:bundle).with :manifest => read_m
+  
+  
+  read_j = ::Buildr::Packaging::Java::Manifest.parse(File.read(_("META-INF/MANIFEST-JBOSS.MF"))).main
+  read_j["Bundle-Version"] = project.version
+  package(:war, :classifier => "jboss").with :manifest => read_j
   
   package(:sources)
 end

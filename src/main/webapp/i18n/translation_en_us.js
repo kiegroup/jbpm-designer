@@ -444,6 +444,8 @@ ORYX.I18N.View.convertToPDF = "PDF";
 ORYX.I18N.View.convertToPDFDesc = "Convert to PDF";
 ORYX.I18N.View.convertToPNG = "PNG";
 ORYX.I18N.View.convertToPNGDesc = "Convert to PNG";
+ORYX.I18N.View.showInfo = "Info";
+ORYX.I18N.View.showInfoDesc = "Info";
 
 
 if(!ORYX.I18N.XFormsSerialization) ORYX.I18N.XFormsSerialization = {};
