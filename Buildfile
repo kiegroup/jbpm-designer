@@ -1,6 +1,5 @@
 
 require "buildr4osgi"
-
 require "repositories.rb"
 require "dependencies.rb"
 
@@ -72,4 +71,9 @@ define "designer" do
   package(:war, :classifier => "jboss").with :manifest => read_j
   
   package(:sources)
+  
+  task :jboss do
+	p 'deploying to jboss...'
+   	Java.org.apache.tools.ant.Main.main( ['-file', 'jbossdeploy.xml', 'deploy', '-DdesignerVersion='+VERSION_NUMBER] )
+  end
 end

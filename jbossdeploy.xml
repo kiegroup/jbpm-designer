@@ -1,0 +1,19 @@
+<project name="deployDesigner" basedir=".">
+  <description>
+    Deploys the designer war to jboss. This task is called by the designer build.
+  </description>
+  
+  <property file="jbossdeploy.properties" />
+  
+  <target name="deploy">
+    <delete dir="${jbossDeployDir}/designer.war/" quiet="true"/>
+    <!-- give jboss time to undeploy -->
+    <sleep seconds="5"/>
+    <mkdir dir="${jbossDeployDir}/designer.tmp/"/>
+    <exec dir="${jbossDeployDir}/designer.tmp/" executable="jar" failonerror="true">
+      <arg line="xf ${buildHomeDir}/target/designer-${designerVersion}-jboss.war" ></arg>
+    </exec> 
+    <move file="${jbossDeployDir}/designer.tmp/" tofile="${jbossDeployDir}/designer.war/"/>
+    
+  </target>
+</project>
