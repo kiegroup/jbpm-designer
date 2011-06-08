@@ -25,13 +25,10 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.net.HttpURLConnection;
@@ -65,6 +62,7 @@ import sun.misc.BASE64Encoder;
 
 import com.intalio.web.preprocessing.IDiagramPreprocessingUnit;
 import com.intalio.web.profile.IDiagramProfile;
+import com.intalio.web.profile.impl.ExternalInfo;
 
 /**
  * JbpmPreprocessingUnit - preprocessing unit for the jbpm profile
@@ -92,6 +90,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         origWorkitemSVGFile = workitemSVGFilePath + "workitem.orig";
     }
     
+    @Override
     public String getOutData() {
         if(outData != null && outData.length() > 0) {
             if(outData.endsWith(",")) {
@@ -101,6 +100,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         return outData;
     }
     
+    @Override
     public void preprocess(HttpServletRequest req, HttpServletResponse res, IDiagramProfile profile) {
         String uuid = req.getParameter("uuid");
         outData = "";
@@ -140,6 +140,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         createAndParseViewSVG(workDefinitions);
     }
     
+    @SuppressWarnings("unchecked")
     private void createAndParseViewSVG(Map<String, WorkDefinitionImpl> workDefinitions) {
         // first delete all existing workitem svgs
         Collection<File> workitemsvgs = FileUtils.listFiles(new File(workitemSVGFilePath), new String[] { "svg" }, true);
@@ -160,6 +161,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         } 
     }
     
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private void evaluateWorkDefinitions(Map<String, WorkDefinitionImpl> workDefinitions, String content) {
         List<Map<String, Object>> workDefinitionsMaps = (List<Map<String, Object>>) MVEL.eval(content, new HashMap());
         
@@ -210,7 +212,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 List<String> configNames = entry.getValue();
                 if(configNames != null) {
                     for(String configName : configNames) {
-                        String configURL = profile.getExternalLoadURLProtocol() + "://" + profile.getExternalLoadURLHostname() +
+                        String configURL = ExternalInfo.getExternalProtocol(profile) + "://" + ExternalInfo.getExternalHost(profile) +
                         "/" + profile.getExternalLoadURLSubdomain().substring(0, profile.getExternalLoadURLSubdomain().indexOf("/")) +
                         "/rest/packages/" + packageName + "/assets/" + configName + "/source/";
                 
@@ -275,7 +277,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         String pkg = "";
         Map<String, List<String>> packageConfigs = new HashMap<String, List<String>>();
         for(String nextPackage : packageNames) {
-            String packageAssetURL = profile.getExternalLoadURLProtocol() + "://" + profile.getExternalLoadURLHostname() +
+            String packageAssetURL = ExternalInfo.getExternalProtocol(profile) + "://" + ExternalInfo.getExternalHost(profile) +
             "/" + profile.getExternalLoadURLSubdomain().substring(0, profile.getExternalLoadURLSubdomain().indexOf("/")) +
             "/rest/packages/" + nextPackage + "/assets/";
             packageConfigs.put(nextPackage, new ArrayList<String>());
@@ -331,7 +333,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     
     private List<String> findPackages(String uuid, IDiagramProfile profile) {
         List<String> packages = new ArrayList<String>();
-        String packagesURL = profile.getExternalLoadURLProtocol() + "://" + profile.getExternalLoadURLHostname() +
+        String packagesURL = ExternalInfo.getExternalProtocol(profile) + "://" + ExternalInfo.getExternalHost(profile) +
         "/" + profile.getExternalLoadURLSubdomain().substring(0, profile.getExternalLoadURLSubdomain().indexOf("/")) +
         "/rest/packages/";
         try {
@@ -351,18 +353,6 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         return packages;
     }
     
-    private void writeFile(String contents, String filename) {
-        BufferedWriter writer = null;
-        try {
-            writer = new BufferedWriter(new FileWriter(filename));
-            writer.write(contents);
-        } catch (IOException e) {
-            _logger.error(e.getMessage(), e);
-        } finally {
-            if (writer != null) { try { writer.close();} catch(Exception e) {} }
-        }
-    }
-    
     private String readFile(String pathname) throws IOException {
         StringBuilder fileContents = new StringBuilder();
         Scanner scanner = new Scanner(new File(pathname));
@@ -375,21 +365,6 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         } finally {
             scanner.close();
         }
-    }
-    
-    private void copyfile(String srFile, String dtFile) throws Exception {
-        File f1 = new File(srFile);
-        File f2 = new File(dtFile);
-        InputStream in = new FileInputStream(f1);
-        OutputStream out = new FileOutputStream(f2);
-        byte[] buf = new byte[1024];
-        int len;
-        while ((len = in.read(buf)) > 0){
-            out.write(buf, 0, len);
-        }
-        in.close();
-        out.close();
-        _logger.info("original stencil data copied");
     }
     
     private void deletefile(String file) {

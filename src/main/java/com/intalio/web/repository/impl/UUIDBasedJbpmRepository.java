@@ -12,14 +12,12 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 
 import com.intalio.web.profile.IDiagramProfile;
+import com.intalio.web.profile.impl.ExternalInfo;
 import com.intalio.web.repository.IUUIDBasedRepository;
 
 public class UUIDBasedJbpmRepository implements IUUIDBasedRepository {
 
     private static final Logger _logger = Logger.getLogger(UUIDBasedJbpmRepository.class);
-    private static final String EXTERNAL_PROTOCOL = "oryx.external.protocol";
-    private static final String EXTERNAL_HOST = "oryx.external.host";
-    
     private final static String DEFAULTS_PATH = "defaults";
     
     private String _defaultsPath;
@@ -54,28 +52,10 @@ public class UUIDBasedJbpmRepository implements IUUIDBasedRepository {
     
     private String buildExternalLoadURL(IDiagramProfile profile, String uuid) {
         StringBuffer buff = new StringBuffer();
-        //check override system prop
-        if(!isEmpty(System.getProperty(EXTERNAL_PROTOCOL))) {
-            buff.append(System.getProperty(EXTERNAL_PROTOCOL));
-        } else {
-            buff.append(profile.getExternalLoadURLProtocol());
-        }
+        buff.append(ExternalInfo.getExternalProtocol(profile));
         
         buff.append("://");
-        
-        String externalHostSysProp = System.getProperty(EXTERNAL_HOST);
-        if(!isEmpty(externalHostSysProp)) {
-            if(externalHostSysProp.startsWith("/")){
-                externalHostSysProp = externalHostSysProp.substring(1);
-            }
-            if(externalHostSysProp.endsWith("/")) {
-                externalHostSysProp = externalHostSysProp.substring(0,externalHostSysProp.length() - 1);
-            }
-            buff.append(externalHostSysProp);
-        } else {
-            buff.append(profile.getExternalLoadURLHostname());
-        }
-        
+        buff.append(ExternalInfo.getExternalHost(profile));
         buff.append("/");
         buff.append(profile.getExternalLoadURLSubdomain());
         buff.append("?uuid=").append(uuid);
@@ -127,37 +107,5 @@ public class UUIDBasedJbpmRepository implements IUUIDBasedRepository {
           }
         }
       }
-    }
-
-    /**
-     * <p>Checks if a String is empty ("") or null.</p>
-     *
-     * <pre>
-     * StringUtils.isEmpty(null)      = true
-     * StringUtils.isEmpty("")        = true
-     * StringUtils.isEmpty(" ")       = false
-     * StringUtils.isEmpty("bob")     = false
-     * StringUtils.isEmpty("  bob  ") = false
-     * </pre>
-     *
-     * <p>NOTE: This method changed in Lang version 2.0.
-     * It no longer trims the String.
-     * That functionality is available in isBlank().</p>
-     *
-     * @param str  the String to check, may be null
-     * @return <code>true</code> if the String is empty or null
-     */
-    private boolean isEmpty(final CharSequence str) {
-        if ( str == null || str.length() == 0 ) {
-            return true;
-        }
-        
-        for ( int i = 0, length = str.length(); i < length; i++ ){
-            if ( str.charAt( i ) != ' ' )  {
-                return false;
-            }
-        }
-        
-        return true;
     }
 }
