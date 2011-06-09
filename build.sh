@@ -5,4 +5,4 @@
 ##                                                                          ##
 ### ====================================================================== ###
 
-buildr clean compile package designer:jboss --offline
+buildr clean compile package designer:jboss
