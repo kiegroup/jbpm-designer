@@ -56,6 +56,7 @@ public class ProfileServiceImpl implements IDiagramProfileService {
     public void init(ServletContext context) {
         _registry.put("default", new DefaultProfileImpl(context));
         _registry.put("jbpm", new JbpmProfileImpl(context));
+        _registry.put("drools", new JbpmProfileImpl(context));
         _registry.put("epn", new EpnProfileImpl(context));
         
     }
