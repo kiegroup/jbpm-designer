@@ -18,17 +18,14 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
-****************************************/
+ ****************************************/
 package com.intalio.web.server;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.HttpURLConnection;
@@ -51,13 +48,6 @@ import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.ImageTranscoder;
 import org.apache.batik.transcoder.image.PNGTranscoder;
-import org.apache.commons.httpclient.Credentials;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
-import org.apache.commons.httpclient.auth.AuthScope;
-import org.apache.commons.httpclient.methods.DeleteMethod;
-import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.io.IOUtils;
 import org.apache.fop.svg.PDFTranscoder;
 import org.apache.log4j.Logger;
@@ -81,74 +71,92 @@ import com.intalio.web.profile.impl.ExternalInfo;
 import com.intalio.web.profile.impl.ProfileServiceImpl;
 
 /**
- * @author Tihomir Surdilovic
- * transformer for svg process representation to various formats.
- *
+ * @author Tihomir Surdilovic transformer for svg process representation to
+ *         various formats.
+ * 
  */
 public class TransformerServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private static final Logger _logger = Logger.getLogger(TransformerServlet.class);
+    private static final Logger _logger = Logger
+            .getLogger(TransformerServlet.class);
     private static final String TO_PDF = "pdf";
     private static final String TO_PNG = "png";
-    
+
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
     }
-    
+
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         String svg = req.getParameter("svg");
         String uuid = req.getParameter("uuid");
         String profileName = req.getParameter("profile");
         String transformto = req.getParameter("transformto");
-        
+
         IDiagramProfile profile = getProfile(req, profileName);
-        
-        if(transformto != null && transformto.equals(TO_PDF)) {
-            resp.setContentType("application/pdf");
-            resp.setHeader("Content-Disposition", "attachment; filename=\"" +uuid + ".pdf\"");
+
+        if (transformto != null && transformto.equals(TO_PDF)) {
             try {
+                resp.setContentType("application/pdf");
+                resp.setHeader("Content-Disposition", "attachment; filename=\""
+                        + uuid + ".pdf\"");
                 PDFTranscoder t = new PDFTranscoder();
-                TranscoderInput input = new TranscoderInput(new StringReader(svg));
-                TranscoderOutput output = new TranscoderOutput(resp.getOutputStream());
+                TranscoderInput input = new TranscoderInput(new StringReader(
+                        svg));
+                TranscoderOutput output = new TranscoderOutput(
+                        resp.getOutputStream());
                 t.transcode(input, output);
             } catch (TranscoderException e) {
                 resp.sendError(500, e.getMessage());
             }
             resp.getOutputStream().flush();
-        } else if(transformto != null && transformto.equals(TO_PNG)) {
-            resp.setContentType("image/png");
-            resp.setHeader("Content-Disposition", "attachment; filename=\"" +uuid + ".png\"");
+        } else if (transformto != null && transformto.equals(TO_PNG)) {
             try {
+                String processName = storeToGuvnor(uuid, profile, svg,
+                        transformto);
+
+                resp.setContentType("image/png");
+                if (processName != null) {
+                    resp.setHeader("Content-Disposition",
+                            "attachment; filename=\"" + processName + ".png\"");
+                } else {
+                    resp.setHeader("Content-Disposition",
+                            "attachment; filename=\"" + uuid + ".png\"");
+                }
+
                 PNGTranscoder t = new PNGTranscoder();
                 t.addTranscodingHint(ImageTranscoder.KEY_MEDIA, "screen");
-                TranscoderInput input = new TranscoderInput(new StringReader(svg));
-                TranscoderOutput output = new TranscoderOutput(resp.getOutputStream());
+                TranscoderInput input = new TranscoderInput(new StringReader(
+                        svg));
+                TranscoderOutput output = new TranscoderOutput(
+                        resp.getOutputStream());
                 t.transcode(input, output);
-                
-                storeToGuvnor(uuid, profile, svg);
-                
+
             } catch (TranscoderException e) {
                 resp.sendError(500, e.getMessage());
             }
         }
     }
-    
-    
-    
-    private void storeToGuvnor(String uuid, IDiagramProfile profile, String svg) {
-        String[] packageAssetName = findPackageAndAssetNameForUUID(uuid, profile);
-        String processContent = getProcessContent(packageAssetName[0], packageAssetName[1], uuid, profile);
-        
-        if(processContent.length() > 0) {
+
+    private String storeToGuvnor(String uuid, IDiagramProfile profile,
+            String svg, String transformto) {
+        String[] packageAssetName = findPackageAndAssetNameForUUID(uuid,
+                profile);
+        String processContent = getProcessContent(packageAssetName[0],
+                packageAssetName[1], uuid, profile);
+        String processName = null;
+
+        if (processContent.length() > 0) {
             Definitions def = getDefinitions(processContent);
             // we need the process name
             for (RootElement rootElement : def.getRootElements()) {
                 if (rootElement instanceof Process) {
-                    String processName = rootElement.getId();
-                    if(processName != null && processName.length() > 0) {
-                        guvnorStore(packageAssetName[0], packageAssetName[1], profile, svg);
+                    processName = rootElement.getId();
+                    if (processName != null && processName.length() > 0) {
+                        guvnorStore(packageAssetName[0], packageAssetName[1],
+                                profile, svg, transformto);
                     } else {
                         _logger.error("Cannot store to guvnor because process does not have it's name set");
                     }
@@ -156,54 +164,118 @@ public class TransformerServlet extends HttpServlet {
                 }
             }
         }
+        return processName;
     }
-    
-    private void guvnorStore(String packageName, String assetName, IDiagramProfile profile, String svg) {
-        try {
-            HttpClient client = new HttpClient();
-            String pngURL = ExternalInfo.getExternalProtocol(profile) + "://" + ExternalInfo.getExternalHost(profile) +
-            "/" + profile.getExternalLoadURLSubdomain().substring(0, profile.getExternalLoadURLSubdomain().indexOf("/")) +
-            "/org.drools.guvnor.Guvnor/api/packages/" + packageName + "/" + assetName + "-image.png";
-          
-            if(profile.getUsr() != null && profile.getUsr().trim().length() > 0 && profile.getPwd() != null && profile.getPwd().trim().length() > 0) {
-                Credentials defaultcreds = new UsernamePasswordCredentials(profile.getUsr(), profile.getPwd());
-                String[] hostParts = profile.getExternalLoadURLHostname().split( ":\\s*" );
-                client.getState().setCredentials(new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT, AuthScope.ANY_REALM, AuthScope.ANY_SCHEME), defaultcreds);
-            }
-            
-            // delete old image
-            DeleteMethod deleteMethod = new DeleteMethod(pngURL);
-            client.executeMethod(deleteMethod);
-            deleteMethod.releaseConnection();
 
-            // post new image
-            PostMethod postMethod = new PostMethod(pngURL);
-            
-            PNGTranscoder t = new PNGTranscoder();
-            TranscoderInput input = new TranscoderInput(new StringReader(svg));
-            ByteArrayOutputStream out =  new ByteArrayOutputStream();
-            TranscoderOutput output = new TranscoderOutput(out);
-            t.transcode(input, output);
-            
-            postMethod.setRequestBody(new ByteArrayInputStream(out.toByteArray()));
-            postMethod.setRequestHeader("Content-type","image/png; charset=UTF-8");
-            client.executeMethod(postMethod);
-            postMethod.releaseConnection();
+    private void guvnorStore(String packageName, String assetName,
+            IDiagramProfile profile, String svg, String transformto) {
+        try {
+            String assetExt = "";
+            if (transformto.equals(TO_PDF)) {
+                assetExt = "-pdf";
+            }
+            if (transformto.equals(TO_PNG)) {
+                assetExt = "-image";
+            }
+
+            String pngURL = ExternalInfo.getExternalProtocol(profile)
+                    + "://"
+                    + ExternalInfo.getExternalHost(profile)
+                    + "/"
+                    + profile.getExternalLoadURLSubdomain().substring(0,
+                            profile.getExternalLoadURLSubdomain().indexOf("/"))
+                    + "/rest/packages/" + packageName + "/assets/" + assetName
+                    + assetExt;
+
+            String packageAssetsURL = ExternalInfo.getExternalProtocol(profile)
+                    + "://"
+                    + ExternalInfo.getExternalHost(profile)
+                    + "/"
+                    + profile.getExternalLoadURLSubdomain().substring(0,
+                            profile.getExternalLoadURLSubdomain().indexOf("/"))
+                    + "/rest/packages/" + packageName + "/assets/";
+
+            String deleteURL = ExternalInfo.getExternalProtocol(profile)
+                    + "://"
+                    + ExternalInfo.getExternalHost(profile)
+                    + "/"
+                    + profile.getExternalLoadURLSubdomain().substring(0,
+                            profile.getExternalLoadURLSubdomain().indexOf("/"))
+                    + "/rest/packages/" + packageName + "/assets/" + assetName
+                    + assetExt;
+
+            // check if the image already exists
+            URL checkURL = new URL(pngURL);
+            HttpURLConnection checkConnection = (HttpURLConnection) checkURL
+                    .openConnection();
+            applyAuth(profile, checkConnection);
+            checkConnection.setRequestMethod("GET");
+            checkConnection
+                    .setRequestProperty("Accept", "application/atom+xml");
+            checkConnection.connect();
+            if (checkConnection.getResponseCode() == 200) {
+
+                URL deleteAssetURL = new URL(deleteURL);
+                HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL
+                        .openConnection();
+                applyAuth(profile, deleteConnection);
+                deleteConnection.setRequestMethod("DELETE");
+                deleteConnection.connect();
+
+            }
+            // create new
+            URL createURL = new URL(packageAssetsURL);
+            HttpURLConnection createConnection = (HttpURLConnection) createURL
+                    .openConnection();
+            applyAuth(profile, createConnection);
+            createConnection.setRequestMethod("POST");
+            createConnection.setRequestProperty("Content-Type",
+                    "application/octet-stream");
+            createConnection.setRequestProperty("Accept",
+                    "application/atom+xml");
+            createConnection.setRequestProperty("Slug", assetName + assetExt);
+            createConnection.setDoOutput(true);
+
+            if (transformto.equals(TO_PDF)) {
+                PDFTranscoder t = new PDFTranscoder();
+                TranscoderInput input = new TranscoderInput(new StringReader(
+                        svg));
+                TranscoderOutput output = new TranscoderOutput(
+                        createConnection.getOutputStream());
+                t.transcode(input, output);
+            }
+
+            if (transformto.equals(TO_PNG)) {
+                PNGTranscoder t = new PNGTranscoder();
+                TranscoderInput input = new TranscoderInput(new StringReader(
+                        svg));
+                TranscoderOutput output = new TranscoderOutput(
+                        createConnection.getOutputStream());
+                t.transcode(input, output);
+            }
+
         } catch (Exception e) {
             // we dont want to barf..just log that error happened
             _logger.error(e.getMessage());
-        } 
+        }
     }
-    
-    private String getProcessContent(String packageName, String assetName, String uuid, IDiagramProfile profile) {
-        String assetSourceURL = ExternalInfo.getExternalProtocol(profile) + "://" + ExternalInfo.getExternalHost(profile) +
-        "/" + profile.getExternalLoadURLSubdomain().substring(0, profile.getExternalLoadURLSubdomain().indexOf("/")) +
-        "/rest/packages/" + packageName + "/assets/" + assetName + "/source/";
-       
+
+    private String getProcessContent(String packageName, String assetName,
+            String uuid, IDiagramProfile profile) {
+        String assetSourceURL = ExternalInfo.getExternalProtocol(profile)
+                + "://"
+                + ExternalInfo.getExternalHost(profile)
+                + "/"
+                + profile.getExternalLoadURLSubdomain().substring(0,
+                        profile.getExternalLoadURLSubdomain().indexOf("/"))
+                + "/rest/packages/" + packageName + "/assets/" + assetName
+                + "/source/";
+
         try {
-            InputStream in = getInputStreamForURL(assetSourceURL, profile);
+            InputStream in = getInputStreamForURL(assetSourceURL, "GET",
+                    profile);
             StringWriter writer = new StringWriter();
-            IOUtils.copy(in, writer, "UTF-8");
+            IOUtils.copy(in, writer);
             return writer.toString();
         } catch (Exception e) {
             // we dont want to barf..just log that error happened
@@ -211,15 +283,22 @@ public class TransformerServlet extends HttpServlet {
             return "";
         }
     }
-    
-    private String[] findPackageAndAssetNameForUUID(String uuid, IDiagramProfile profile) {
+
+    private String[] findPackageAndAssetNameForUUID(String uuid,
+            IDiagramProfile profile) {
         List<String> packages = new ArrayList<String>();
-        String packagesURL = ExternalInfo.getExternalProtocol(profile) + "://" + ExternalInfo.getExternalHost(profile) +
-        "/" + profile.getExternalLoadURLSubdomain().substring(0, profile.getExternalLoadURLSubdomain().indexOf("/")) +
-        "/rest/packages/";
+        String packagesURL = ExternalInfo.getExternalProtocol(profile)
+                + "://"
+                + ExternalInfo.getExternalHost(profile)
+                + "/"
+                + profile.getExternalLoadURLSubdomain().substring(0,
+                        profile.getExternalLoadURLSubdomain().indexOf("/"))
+                + "/rest/packages/";
         try {
             XMLInputFactory factory = XMLInputFactory.newInstance();
-            XMLStreamReader reader = factory.createXMLStreamReader(getInputStreamForURL(packagesURL, profile));
+            XMLStreamReader reader = factory
+                    .createXMLStreamReader(getInputStreamForURL(packagesURL,
+                            "GET", profile));
             while (reader.hasNext()) {
                 if (reader.next() == XMLStreamReader.START_ELEMENT) {
                     if ("title".equals(reader.getLocalName())) {
@@ -230,17 +309,23 @@ public class TransformerServlet extends HttpServlet {
         } catch (Exception e) {
             // we dont want to barf..just log that error happened
             _logger.error(e.getMessage());
-        } 
-        
+        }
+
         boolean gotPackage = false;
         String[] pkgassetnames = new String[2];
-        for(String nextPackage : packages) {
-            String packageAssetURL = ExternalInfo.getExternalProtocol(profile) + "://" + ExternalInfo.getExternalHost(profile) +
-            "/" + profile.getExternalLoadURLSubdomain().substring(0, profile.getExternalLoadURLSubdomain().indexOf("/")) +
-            "/rest/packages/" + nextPackage + "/assets/";
+        for (String nextPackage : packages) {
+            String packageAssetURL = ExternalInfo.getExternalProtocol(profile)
+                    + "://"
+                    + ExternalInfo.getExternalHost(profile)
+                    + "/"
+                    + profile.getExternalLoadURLSubdomain().substring(0,
+                            profile.getExternalLoadURLSubdomain().indexOf("/"))
+                    + "/rest/packages/" + nextPackage + "/assets/";
             try {
                 XMLInputFactory factory = XMLInputFactory.newInstance();
-                XMLStreamReader reader = factory.createXMLStreamReader(getInputStreamForURL(packageAssetURL, profile));
+                XMLStreamReader reader = factory
+                        .createXMLStreamReader(getInputStreamForURL(
+                                packageAssetURL, "GET", profile));
                 String title = "";
                 while (reader.hasNext()) {
                     int next = reader.next();
@@ -250,7 +335,7 @@ public class TransformerServlet extends HttpServlet {
                         }
                         if ("uuid".equals(reader.getLocalName())) {
                             String eleText = reader.getElementText();
-                            if(uuid.equals(eleText)) {
+                            if (uuid.equals(eleText)) {
                                 pkgassetnames[0] = nextPackage;
                                 pkgassetnames[1] = title;
                                 gotPackage = true;
@@ -261,21 +346,21 @@ public class TransformerServlet extends HttpServlet {
             } catch (Exception e) {
                 // we dont want to barf..just log that error happened
                 _logger.error(e.getMessage());
-            } 
-            if(gotPackage) {
+            }
+            if (gotPackage) {
                 // noo need to loop through rest of packages
                 break;
             }
         }
         return pkgassetnames;
     }
-    
-    private InputStream getInputStreamForURL(String urlLocation, IDiagramProfile profile) throws Exception{
-        // pretend we are mozilla
+
+    private InputStream getInputStreamForURL(String urlLocation,
+            String requestMethod, IDiagramProfile profile) throws Exception {
         URL url = new URL(urlLocation);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-        connection.setRequestMethod("GET");
+        connection.setRequestMethod(requestMethod);
         connection
                 .setRequestProperty(
                         "User-Agent",
@@ -287,16 +372,11 @@ public class TransformerServlet extends HttpServlet {
         connection.setRequestProperty("Accept-Encoding", "gzip,deflate");
         connection.setRequestProperty("charset", "UTF-8");
         connection.setReadTimeout(5 * 1000);
-        
-        if(profile.getUsr() != null && profile.getUsr().trim().length() > 0 && profile.getPwd() != null && profile.getPwd().trim().length() > 0) {
-            BASE64Encoder enc = new sun.misc.BASE64Encoder();
-            String userpassword = profile.getUsr() + ":" + profile.getPwd();
-            String encodedAuthorization = enc.encode( userpassword.getBytes() );
-            connection.setRequestProperty("Authorization", "Basic "+ encodedAuthorization);
-        }
-        
+
+        applyAuth(profile, connection);
+
         connection.connect();
-        
+
         BufferedReader sreader = new BufferedReader(new InputStreamReader(
                 connection.getInputStream(), "UTF-8"));
         StringBuilder stringBuilder = new StringBuilder();
@@ -305,37 +385,59 @@ public class TransformerServlet extends HttpServlet {
         while ((line = sreader.readLine()) != null) {
             stringBuilder.append(line + "\n");
         }
-        
-        return new ByteArrayInputStream(stringBuilder.toString()
-                .getBytes("UTF-8"));
+
+        return new ByteArrayInputStream(stringBuilder.toString().getBytes(
+                "UTF-8"));
     }
-    
-    private IDiagramProfile getProfile(HttpServletRequest req, String profileName) {
+
+    private void applyAuth(IDiagramProfile profile, HttpURLConnection connection) {
+        if (profile.getUsr() != null && profile.getUsr().trim().length() > 0
+                && profile.getPwd() != null
+                && profile.getPwd().trim().length() > 0) {
+            BASE64Encoder enc = new sun.misc.BASE64Encoder();
+            String userpassword = profile.getUsr() + ":" + profile.getPwd();
+            String encodedAuthorization = enc.encode(userpassword.getBytes());
+            connection.setRequestProperty("Authorization", "Basic "
+                    + encodedAuthorization);
+        }
+    }
+
+    private IDiagramProfile getProfile(HttpServletRequest req,
+            String profileName) {
         IDiagramProfile profile = null;
-        
+
         IDiagramProfileService service = new ProfileServiceImpl();
         service.init(getServletContext());
         profile = service.findProfile(req, profileName);
-        if(profile == null) {
-            throw new IllegalArgumentException("Cannot determine the profile to use for interpreting models");
+        if (profile == null) {
+            throw new IllegalArgumentException(
+                    "Cannot determine the profile to use for interpreting models");
         }
         return profile;
     }
-    
+
     private Definitions getDefinitions(String xml) {
         try {
             ResourceSet resourceSet = new ResourceSetImpl();
-            resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
-                .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new Bpmn2ResourceFactoryImpl());
-            resourceSet.getPackageRegistry().put("http://www.omg.org/spec/BPMN/20100524/MODEL", Bpmn2Package.eINSTANCE);
-            XMLResource resource = (XMLResource) resourceSet.createResource(URI.createURI("inputStream://dummyUriWithValidSuffix.xml"));
-            resource.getDefaultLoadOptions().put(XMLResource.OPTION_ENCODING, "UTF-8");
+            resourceSet
+                    .getResourceFactoryRegistry()
+                    .getExtensionToFactoryMap()
+                    .put(Resource.Factory.Registry.DEFAULT_EXTENSION,
+                            new Bpmn2ResourceFactoryImpl());
+            resourceSet.getPackageRegistry().put(
+                    "http://www.omg.org/spec/BPMN/20100524/MODEL",
+                    Bpmn2Package.eINSTANCE);
+            XMLResource resource = (XMLResource) resourceSet.createResource(URI
+                    .createURI("inputStream://dummyUriWithValidSuffix.xml"));
+            resource.getDefaultLoadOptions().put(XMLResource.OPTION_ENCODING,
+                    "UTF-8");
             resource.setEncoding("UTF-8");
             Map<String, Object> options = new HashMap<String, Object>();
-            options.put( XMLResource.OPTION_ENCODING, "UTF-8" );
+            options.put(XMLResource.OPTION_ENCODING, "UTF-8");
             InputStream is = new ByteArrayInputStream(xml.getBytes("UTF-8"));
             resource.load(is, options);
-            return ((DocumentRoot) resource.getContents().get(0)).getDefinitions();
+            return ((DocumentRoot) resource.getContents().get(0))
+                    .getDefinitions();
         } catch (Throwable t) {
             t.printStackTrace();
             return null;
