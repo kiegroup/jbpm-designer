@@ -70,10 +70,12 @@ import com.intalio.web.profile.IDiagramProfileService;
 import com.intalio.web.profile.impl.ExternalInfo;
 import com.intalio.web.profile.impl.ProfileServiceImpl;
 
-/**
- * @author Tihomir Surdilovic transformer for svg process representation to
- *         various formats.
+/** 
  * 
+ * Transformer for svg process representation to
+ * various formats.
+ * 
+ * @author Tihomir Surdilovic
  */
 public class TransformerServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -99,9 +101,18 @@ public class TransformerServlet extends HttpServlet {
 
         if (transformto != null && transformto.equals(TO_PDF)) {
             try {
+                String processName = storeToGuvnor(uuid, profile, svg,
+                        transformto);
+                
                 resp.setContentType("application/pdf");
-                resp.setHeader("Content-Disposition", "attachment; filename=\""
-                        + uuid + ".pdf\"");
+                if (processName != null) {
+                    resp.setHeader("Content-Disposition",
+                            "attachment; filename=\"" + processName + ".pdf\"");
+                } else {
+                    resp.setHeader("Content-Disposition",
+                            "attachment; filename=\"" + uuid + ".pdf\"");
+                }
+                
                 PDFTranscoder t = new PDFTranscoder();
                 TranscoderInput input = new TranscoderInput(new StringReader(
                         svg));
@@ -171,11 +182,14 @@ public class TransformerServlet extends HttpServlet {
             IDiagramProfile profile, String svg, String transformto) {
         try {
             String assetExt = "";
+            String assetFileExt = "";
             if (transformto.equals(TO_PDF)) {
                 assetExt = "-pdf";
+                assetFileExt = ".pdf";
             }
             if (transformto.equals(TO_PNG)) {
                 assetExt = "-image";
+                assetFileExt = ".png";
             }
 
             String pngURL = ExternalInfo.getExternalProtocol(profile)
@@ -213,15 +227,15 @@ public class TransformerServlet extends HttpServlet {
             checkConnection
                     .setRequestProperty("Accept", "application/atom+xml");
             checkConnection.connect();
+            _logger.info("check connection response code: " + checkConnection.getResponseCode());
             if (checkConnection.getResponseCode() == 200) {
-
                 URL deleteAssetURL = new URL(deleteURL);
                 HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL
                         .openConnection();
                 applyAuth(profile, deleteConnection);
                 deleteConnection.setRequestMethod("DELETE");
                 deleteConnection.connect();
-
+                _logger.info("delete connection response code: " + deleteConnection.getResponseCode());
             }
             // create new
             URL createURL = new URL(packageAssetsURL);
@@ -233,7 +247,7 @@ public class TransformerServlet extends HttpServlet {
                     "application/octet-stream");
             createConnection.setRequestProperty("Accept",
                     "application/atom+xml");
-            createConnection.setRequestProperty("Slug", assetName + assetExt);
+            createConnection.setRequestProperty("Slug", assetName + assetExt + assetFileExt);
             createConnection.setDoOutput(true);
 
             if (transformto.equals(TO_PDF)) {
@@ -253,7 +267,8 @@ public class TransformerServlet extends HttpServlet {
                         createConnection.getOutputStream());
                 t.transcode(input, output);
             }
-
+            createConnection.connect();
+            _logger.info("create connection response code: " + createConnection.getResponseCode());
         } catch (Exception e) {
             // we dont want to barf..just log that error happened
             _logger.error(e.getMessage());
