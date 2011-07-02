@@ -173,6 +173,27 @@ ORYX.Plugins.View = {
 			}.bind(this)
 		});
 		
+		/* Register task form generation to model */
+		this.facade.offer({
+			'name':ORYX.I18N.View.generateTaskForms,
+			'functionality': this.generateTaskForms.bind(this),
+			'group': ORYX.I18N.View.group,
+			'icon': ORYX.PATH + "images/human_task.gif",
+			'description': ORYX.I18N.View.generateTaskFormsDesc,
+			'index': 8,
+			'minShape': 0,
+			'maxShape': 0,
+			'isEnabled': function(){
+				profileParamName = "profile";
+				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+		        regexa = new RegExp( regexSa );
+		        profileParams = regexa.exec( window.location.href );
+		        profileParamValue = profileParams[1]; 
+				return profileParamValue == "jbpm";
+			}.bind(this)
+		});
+		
 		/* Register information view to model */
 		this.facade.offer({
 			'name':ORYX.I18N.View.showInfo,
@@ -180,7 +201,7 @@ ORYX.Plugins.View = {
 			'group': ORYX.I18N.View.group,
 			'icon': ORYX.PATH + "images/information.png",
 			'description': ORYX.I18N.View.showInfoDesc,
-			'index': 8,
+			'index': 9,
 			'minShape': 0,
 			'maxShape': 0,
 			'isEnabled': function(){
@@ -314,6 +335,39 @@ ORYX.Plugins.View = {
         
         document.body.appendChild(form);
         form.submit();	 
+	},
+	
+	generateTaskForms : function() {
+		
+		var processJSON = ORYX.EDITOR.getSerializedJSON();
+		
+		var method ="post";
+		var form = document.createElement("form");
+		form.setAttribute("name", "taskformsform");
+		form.setAttribute("method", method);
+		form.setAttribute("action", ORYX.CONFIG.TASKFORMS_URL());
+		form.setAttribute("target", "_blank");
+		
+		var hfSVG = document.createElement("input");
+		hfSVG.setAttribute("type", "hidden");
+		hfSVG.setAttribute("name", "json");
+		hfSVG.setAttribute("value", processJSON);
+        form.appendChild(hfSVG);
+        
+        var hfUUID = document.createElement("input");
+        hfUUID.setAttribute("type", "hidden");
+        hfUUID.setAttribute("name", "uuid");
+        hfUUID.setAttribute("value", ORYX.UUID);
+        form.appendChild(hfUUID);
+        
+        var hfPROFILE = document.createElement("input");
+        hfPROFILE.setAttribute("type", "hidden");
+        hfPROFILE.setAttribute("name", "profile");
+        hfPROFILE.setAttribute("value", ORYX.PROFILE);
+        form.appendChild(hfPROFILE);
+        
+        document.body.appendChild(form);
+        form.submit();
 	},
 	
 	/**

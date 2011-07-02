@@ -233,6 +233,11 @@
   <servlet-class>com.intalio.web.server.TransformerServlet</servlet-class>
  </servlet>
  <servlet>
+  <display-name>Taskforms</display-name>
+  <servlet-name>TaskformsServlet</servlet-name>
+  <servlet-class>com.intalio.web.server.TaskFormsServlet</servlet-class>
+ </servlet>
+ <servlet>
   <display-name>Plugin Service Servlet</display-name>
   <servlet-name>PluginServiceServlet</servlet-name>
   <servlet-class>com.intalio.web.plugin.impl.PluginServiceServlet</servlet-class>
@@ -409,6 +414,10 @@
  <servlet-mapping>
   <servlet-name>TransformerServlet</servlet-name>
   <url-pattern>/transformer</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>TaskformsServlet</servlet-name>
+  <url-pattern>/taskforms</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
   <servlet-name>PluginServiceServlet</servlet-name>

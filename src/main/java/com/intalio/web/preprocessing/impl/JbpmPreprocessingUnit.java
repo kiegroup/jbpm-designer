@@ -90,7 +90,6 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         origWorkitemSVGFile = workitemSVGFilePath + "workitem.orig";
     }
     
-    @Override
     public String getOutData() {
         if(outData != null && outData.length() > 0) {
             if(outData.endsWith(",")) {
@@ -100,7 +99,6 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         return outData;
     }
     
-    @Override
     public void preprocess(HttpServletRequest req, HttpServletResponse res, IDiagramProfile profile) {
         String uuid = req.getParameter("uuid");
         outData = "";

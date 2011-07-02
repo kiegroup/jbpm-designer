@@ -101,13 +101,13 @@ public class TransformerServlet extends HttpServlet {
 
         if (transformto != null && transformto.equals(TO_PDF)) {
             try {
-                String processName = storeToGuvnor(uuid, profile, svg,
+                String processId = storeToGuvnor(uuid, profile, svg,
                         transformto);
                 
                 resp.setContentType("application/pdf");
-                if (processName != null) {
+                if (processId != null) {
                     resp.setHeader("Content-Disposition",
-                            "attachment; filename=\"" + processName + ".pdf\"");
+                            "attachment; filename=\"" + processId + ".pdf\"");
                 } else {
                     resp.setHeader("Content-Disposition",
                             "attachment; filename=\"" + uuid + ".pdf\"");
@@ -157,25 +157,25 @@ public class TransformerServlet extends HttpServlet {
                 profile);
         String processContent = getProcessContent(packageAssetName[0],
                 packageAssetName[1], uuid, profile);
-        String processName = null;
+        String processId = null;
 
         if (processContent.length() > 0) {
             Definitions def = getDefinitions(processContent);
-            // we need the process name
+            // we need the process id
             for (RootElement rootElement : def.getRootElements()) {
                 if (rootElement instanceof Process) {
-                    processName = rootElement.getId();
-                    if (processName != null && processName.length() > 0) {
-                        guvnorStore(packageAssetName[0], packageAssetName[1],
+                    processId = rootElement.getId();
+                    if (processId != null && processId.length() > 0) {
+                        guvnorStore(packageAssetName[0], processId,
                                 profile, svg, transformto);
                     } else {
-                        _logger.error("Cannot store to guvnor because process does not have it's name set");
+                        _logger.error("Cannot store to guvnor because process does not have it's id set");
                     }
                     break;
                 }
             }
         }
-        return processName;
+        return processId;
     }
 
     private void guvnorStore(String packageName, String assetName,

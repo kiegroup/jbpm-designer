@@ -317,6 +317,17 @@
 					"optional":true
 				},
 				{
+					"id":"lanes",
+					"type":"Text",
+					"title":"Lanes",
+					"title_de":"Lanes",
+					"value":"",
+					"description":"Comma-separated lane names",
+					"description_de":"Durch Komma getrennte Lanes",
+					"readonly":false,
+					"optional":true
+				},
+				{
 					"id":"imports",
 					"type":"Text",
 					"title":"Imports",
@@ -2724,6 +2735,16 @@
 					"optional":true
 				},
 				{
+					"id":"lanes",
+					"type":"String",
+					"title":"Lanes",
+					"title_de":"Lanes",
+					"value":"",
+					"description":"Comma-separated lane names",
+					"readonly":false,
+					"optional":true
+				},
+				{
 					"id":"actors",
 					"type":"String",
 					"title":"Actors",
@@ -2877,6 +2898,16 @@
 					"value":"$workitemDefs.(k).name$",
 					"description":"Task Name",
 					"readonly":true,
+					"optional":true
+				\},
+				\{
+					"id":"lanes",
+					"type":"String",
+					"title":"Lanes",
+					"title_de":"Lanes",
+					"value":"",
+					"description":"Comma-separated lane names",
+					"readonly":false,
 					"optional":true
 				\},
 				\{

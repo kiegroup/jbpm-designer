@@ -56,6 +56,16 @@ ORYX.CONFIG.TRANSFORMER_URL = function(uuid, profile) {
    return ORYX.PATH + "transformer?uuid="+ uuid + "&profile=" + profile;
 };
 
+ORYX.CONFIG.TASKFORMS_URL = function(uuid, profile) {
+	if (uuid === undefined) {
+		uuid = ORYX.UUID;
+	}
+	if (profile === undefined) {
+	   profile = ORYX.PROFILE;
+	}
+	return ORYX.PATH + "taskforms?uuid="+ uuid + "&profile=" + profile;
+};
+
 ORYX.CONFIG.UUID_AUTOSAVE_INTERVAL = 120000;
 ORYX.CONFIG.UUID_AUTOSAVE_DEFAULT = false;
 	

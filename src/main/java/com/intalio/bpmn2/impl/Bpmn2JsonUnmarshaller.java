@@ -77,6 +77,7 @@ import org.eclipse.bpmn2.InputSet;
 import org.eclipse.bpmn2.ItemAwareElement;
 import org.eclipse.bpmn2.ItemDefinition;
 import org.eclipse.bpmn2.Lane;
+import org.eclipse.bpmn2.LaneSet;
 import org.eclipse.bpmn2.Message;
 import org.eclipse.bpmn2.MessageEventDefinition;
 import org.eclipse.bpmn2.Monitoring;
@@ -193,7 +194,6 @@ public class Bpmn2JsonUnmarshaller {
             rSet.getResources().add(bpmn2);
             _currentResource = bpmn2;
             // do the unmarshalling now:
-            System.out.println("####### unmarshalling definitions!");
             Definitions def = (Definitions) unmarshallItem(parser, preProcessingData);
             reconnectFlows();
             createDiagram(def);
@@ -201,6 +201,7 @@ public class Bpmn2JsonUnmarshaller {
             revisitMessages(def);
             revisitCatchEvents(def);
             revisitThrowEvents(def);
+            revisitLanesets(def);
             return def;
         } finally {
             parser.close();
@@ -210,6 +211,41 @@ public class Bpmn2JsonUnmarshaller {
             _sequenceFlowTargets.clear();
             _bounds.clear();
             _currentResource = null;
+        }
+    }
+    
+    public void revisitLanesets(Definitions def) {
+        List<RootElement> rootElements =  def.getRootElements();
+        for(RootElement root : rootElements) {
+            if(root instanceof Process) {
+                Process process = (Process) root;
+                if(process.getLaneSets() != null && process.getLaneSets().size() > 0) {
+                    LaneSet ls = process.getLaneSets().get(0);
+                    if(ls.getLanes() != null && ls.getLanes().size() > 0) {
+                        List<Lane> lanes = ls.getLanes();
+                        for(Lane lane : lanes) {
+                            List<FlowElement> flowElements =  process.getFlowElements(); 
+                            for(FlowElement fe : flowElements) {
+                                if(fe instanceof Task) {
+                                    Task tsk = (Task) fe;
+                                    Iterator<FeatureMap.Entry> iter = tsk.getAnyAttribute().iterator();
+                                    while(iter.hasNext()) {
+                                        FeatureMap.Entry entry = iter.next();
+                                        if(entry.getEStructuralFeature().getName().equals("lanes")) {
+                                            String[] taskLanes = ((String) entry.getValue()).split( ",\\s*" );
+                                            for(String taskLane : taskLanes) {
+                                                if(lane.getName().equals(taskLane)) {
+                                                    lane.getFlowNodeRefs().add(tsk);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
     
@@ -588,7 +624,6 @@ public class Bpmn2JsonUnmarshaller {
                     // the childShapes element is a json array. We opened the
                     // array.
                     childElements.add(unmarshallItem(parser, preProcessingData));
-                    System.out.println("##### added child elements: " + childElements);
                 }
             } else if ("bounds".equals(fieldname)) {
                 // bounds: {"lowerRight":{"x":484.0,"y":198.0},"upperLeft":{"x":454.0,"y":168.0}}
@@ -760,6 +795,18 @@ public class Bpmn2JsonUnmarshaller {
                                     ((Definitions) baseElt).getRootElements().add(itemdef);
                                 }
                             }
+                            // now laneset
+                            if(properties.get("lanes") != null && properties.get("lanes").length() > 0) {
+                                //current support for a single laneset
+                                LaneSet laneset = Bpmn2Factory.eINSTANCE.createLaneSet();
+                                String[] lanes = properties.get("lanes").split( ",\\s*" );
+                                for(String laneName : lanes) {
+                                    Lane lane = Bpmn2Factory.eINSTANCE.createLane();
+                                    lane.setName(laneName);
+                                    laneset.getLanes().add(lane);
+                                }
+                                rootLevelProcess.getLaneSets().add(laneset);
+                            }
                             rootLevelProcess.setName(((Definitions) baseElt).getName());
                             rootLevelProcess.setId(properties.get("id"));
                             applyProcessProperties(rootLevelProcess, properties);
@@ -826,11 +873,8 @@ public class Bpmn2JsonUnmarshaller {
                 }
             }
         } else if (baseElt instanceof SubProcess) {
-            System.out.println("****** its a subprocess!!");
-            System.out.println("****** subprocess child elements: " + childElements);
             for (BaseElement child : childElements) {
                 if (child instanceof FlowElement) {
-                    System.out.println("*****!! adding flow element to subprocess: " + child);
                     ((SubProcess) baseElt).getFlowElements().add((FlowElement) child);
                 } else {
                     throw new IllegalArgumentException("Subprocess - don't know what to do of " + child);
@@ -950,7 +994,6 @@ public class Bpmn2JsonUnmarshaller {
     }
     
     private void applyAdHocSubProcessProperties(AdHocSubProcess ahsp, Map<String, String> properties) {
-        System.out.println("*** adhoc subprocess specifics");
     }
 
     private void applyEndEventProperties(EndEvent ee, Map<String, String> properties) {
@@ -1073,13 +1116,13 @@ public class Bpmn2JsonUnmarshaller {
                     ((TimerEventDefinition) event.getEventDefinitions().get(0)).setTimeDate(timeDateExpression);
                 }
                 
-                if(properties.get("timeduration") != null && !"".equals(properties.get("timedate"))) {
+                if(properties.get("timeduration") != null && !"".equals(properties.get("timeduration"))) {
                     FormalExpression timeDurationExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
                     timeDurationExpression.setBody(properties.get("timeduration"));
                     ((TimerEventDefinition) event.getEventDefinitions().get(0)).setTimeDuration(timeDurationExpression);
                 }
                 
-                if(properties.get("timecycle") != null && !"".equals(properties.get("timedate"))) {
+                if(properties.get("timecycle") != null && !"".equals(properties.get("timecycle"))) {
                     FormalExpression timeCycleExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
                     timeCycleExpression.setBody(properties.get("timecycle"));
                     ((TimerEventDefinition) event.getEventDefinitions().get(0)).setTimeCycle(timeCycleExpression);
@@ -1209,13 +1252,13 @@ public class Bpmn2JsonUnmarshaller {
                     ((TimerEventDefinition) event.getEventDefinitions().get(0)).setTimeDate(timeDateExpression);
                 }
                 
-                if(properties.get("timeduration") != null && !"".equals(properties.get("timedate"))) {
+                if(properties.get("timeduration") != null && !"".equals(properties.get("timeduration"))) {
                     FormalExpression timeDurationExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
                     timeDurationExpression.setBody(properties.get("timeduration"));
                     ((TimerEventDefinition) event.getEventDefinitions().get(0)).setTimeDuration(timeDurationExpression);
                 }
                 
-                if(properties.get("timecycle") != null && !"".equals(properties.get("timedate"))) {
+                if(properties.get("timecycle") != null && !"".equals(properties.get("timecycle"))) {
                     FormalExpression timeCycleExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
                     timeCycleExpression.setBody(properties.get("timecycle"));
                     ((TimerEventDefinition) event.getEventDefinitions().get(0)).setTimeCycle(timeCycleExpression);
@@ -1453,6 +1496,16 @@ public class Bpmn2JsonUnmarshaller {
             taskNameDataInputAssociation.getAssignment().add(taskNameAssignment);
         
             task.getDataInputAssociations().add(taskNameDataInputAssociation);
+        }
+        
+        //process lanes
+        if(properties.get("lanes") != null && properties.get("lanes").length() > 0) {
+            ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+            EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                    "http://www.jboss.org/drools", "lanes", false, false);
+            EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                    properties.get("lanes"));
+            task.getAnyAttribute().add(extensionEntry);
         }
         
         //process data input set
