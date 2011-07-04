@@ -340,6 +340,7 @@ ORYX.Plugins.View = {
 	generateTaskForms : function() {
 		
 		var processJSON = ORYX.EDITOR.getSerializedJSON();
+		var preprocessingData = ORYX.PREPROCESSING;
 		
 		var method ="post";
 		var form = document.createElement("form");
@@ -352,6 +353,12 @@ ORYX.Plugins.View = {
 		hfSVG.setAttribute("type", "hidden");
 		hfSVG.setAttribute("name", "json");
 		hfSVG.setAttribute("value", processJSON);
+        form.appendChild(hfSVG);
+        
+        var hfSVG = document.createElement("input");
+		hfSVG.setAttribute("type", "hidden");
+		hfSVG.setAttribute("name", "ppdata");
+		hfSVG.setAttribute("value", preprocessingData);
         form.appendChild(hfSVG);
         
         var hfUUID = document.createElement("input");

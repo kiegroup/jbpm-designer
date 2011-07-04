@@ -59,6 +59,7 @@ public class TaskFormsServlet extends HttpServlet {
         String json = req.getParameter("json");
         String uuid = req.getParameter("uuid");
         String profileName = req.getParameter("profile");
+        String preprocessingData = req.getParameter("ppdata");
         
         IDiagramProfile profile = getProfile(req, profileName);
         
@@ -68,7 +69,7 @@ public class TaskFormsServlet extends HttpServlet {
         String assetName = packageAssetInfo[1];
 
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
-        Definitions def = unmarshaller.unmarshall(json, null);
+        Definitions def = unmarshaller.unmarshall(json, preprocessingData);
         
         TaskFormTemplateManager templateManager = new TaskFormTemplateManager( profile, packageName, assetName, getServletContext().getRealPath("/" + TASKFORMS_PATH), def );
         
