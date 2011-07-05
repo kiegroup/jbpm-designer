@@ -2870,7 +2870,7 @@
 					"value":"$workitemDefs.(k).displayName$",
 					"description":"The descriptive name of the BPMN element.",
 					"description_de":"Bezeichnung des BPMN-Elementes.",
-					"readonly":true,
+					"readonly":false,
 					"optional":true,
 					"length":"",
 					"wrapLines" : true,
