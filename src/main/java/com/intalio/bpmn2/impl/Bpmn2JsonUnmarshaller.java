@@ -1574,8 +1574,8 @@ public class Bpmn2JsonUnmarshaller {
                             dia.setTargetRef(di);
                             if(di.getName().equals("TaskName")) {
                                 foundTaskName = true;
+                                break;
                             }
-                            break;
                         }
                     }
                     // if we are dealing with TaskName and none has been defined, add it
@@ -1682,6 +1682,27 @@ public class Bpmn2JsonUnmarshaller {
                     // TODO throw exception here?
                 }
             }
+            
+            // check if multiple taskname datainput associations exist and remove them
+            List<DataInputAssociation> dataInputAssociations = task.getDataInputAssociations();
+            boolean haveTaskNameInput = false;
+            for(Iterator<DataInputAssociation> itr = dataInputAssociations.iterator(); itr.hasNext();)  
+            {  
+                DataInputAssociation da = itr.next();
+                if(da.getAssignment() != null && da.getAssignment().size() > 0) {
+                    Assignment a = da.getAssignment().get(0);
+                    if(((FormalExpression) a.getTo()).getBody().equals(task.getId() + "_TaskNameInput")) {
+                        if(!haveTaskNameInput) {
+                            haveTaskNameInput = true;
+                            System.out.println("************ FIRST ONE, SETTING TO TRUE!!");
+                        } else {
+                            System.out.println("********** REMOVING!!!");
+                            itr.remove();
+                        }
+                    }
+                }
+            }  
+          
         }
     }
     
