@@ -145,11 +145,15 @@ public class TaskFormTemplateManager {
                                             } else {
                                                 // mapping to process var
                                                 if(inputAssociation.getTargetRef().getId().equals(dinput.getId())) {
-                                                    input.setValue("${"+ inputAssociation.getSourceRef().get(0).getId() + "}");
                                                     for(Property prop : processProperties) {
                                                         if(prop.getId().equals(inputAssociation.getSourceRef().get(0).getId())) {
                                                             input.setRefType( prop.getItemSubjectRef().getStructureRef() ); 
                                                         }
+                                                    }
+                                                    if(input.getRefType() != null && input.getRefType().equals("Date")) {
+                                                        input.setValue("${"+ inputAssociation.getSourceRef().get(0).getId() + "?date} ${"+ inputAssociation.getSourceRef().get(0).getId() + "?time}");
+                                                    } else {
+                                                        input.setValue("${"+ inputAssociation.getSourceRef().get(0).getId() + "}");
                                                     }
                                                 }
                                             }

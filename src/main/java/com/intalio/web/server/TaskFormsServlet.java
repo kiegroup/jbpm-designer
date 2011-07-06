@@ -5,7 +5,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -14,6 +13,7 @@ import java.util.List;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -220,8 +220,11 @@ public class TaskFormsServlet extends HttpServlet {
         try {
             StringTemplate resultsForm = new StringTemplate(templateManager.readFile(templateManager.getTemplatesPath() + "/resultsform.st"));
             resultsForm.setAttribute("manager", templateManager);
-            PrintWriter out = resp.getWriter();
-            out.println(resultsForm.toString());
+            ServletOutputStream outstr = resp.getOutputStream();
+            resp.setContentType("text/html");
+            outstr.write(resultsForm.toString().getBytes("ASCII"));
+            outstr.flush();
+            outstr.close();
         } catch (IOException e) {
            _logger.error(e.getMessage());
         }
@@ -229,8 +232,11 @@ public class TaskFormsServlet extends HttpServlet {
     
     public void displayErrorResponse(HttpServletResponse resp, String exceptionStr) {
         try {
-            PrintWriter out = resp.getWriter();
-            out.println(exceptionStr);
+            ServletOutputStream outstr = resp.getOutputStream();
+            resp.setContentType("text/html");
+            outstr.write(exceptionStr.getBytes("ASCII"));
+            outstr.flush();
+            outstr.close();
         } catch (IOException e) {
            _logger.error(e.getMessage());
         }

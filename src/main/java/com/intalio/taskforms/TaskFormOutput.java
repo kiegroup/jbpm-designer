@@ -10,6 +10,9 @@ public class TaskFormOutput {
     private String value;
     private String refType;
     private boolean booleanRefType;
+    private boolean integerRefType;
+    private boolean dateRefType;
+    private boolean floatRefType;
 
     public String getRefType() {
         return refType;
@@ -19,6 +22,9 @@ public class TaskFormOutput {
         this.refType = refType;
         if(refType != null) {
             this.booleanRefType = this.refType.equals("Boolean");
+            this.integerRefType = this.refType.equals("Integer");
+            this.dateRefType = this.refType.equals("Date");
+            this.dateRefType = this.refType.equals("Float");
         }
     }
 
@@ -36,6 +42,30 @@ public class TaskFormOutput {
 
     public void setBooleanRefType(boolean booleanRefType) {
         this.booleanRefType = booleanRefType;
+    }
+    
+    public boolean isIntegerRefType() {
+        return integerRefType;
+    }
+
+    public void setIntegerRefType(boolean integerRefType) {
+        this.integerRefType = integerRefType;
+    }
+
+    public boolean isDateRefType() {
+        return dateRefType;
+    }
+
+    public void setDateRefType(boolean dateRefType) {
+        this.dateRefType = dateRefType;
+    }
+    
+    public boolean isFloatRefType() {
+        return floatRefType;
+    }
+
+    public void setFloatRefType(boolean floatRefType) {
+        this.floatRefType = floatRefType;
     }
 
     public String getValue() {
