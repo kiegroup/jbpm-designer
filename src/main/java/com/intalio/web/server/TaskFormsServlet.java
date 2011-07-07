@@ -250,7 +250,6 @@ public class TaskFormsServlet extends HttpServlet {
     }
     
     public void storeTaskForm(TaskFormInfo taskForm, IDiagramProfile profile) throws Exception {
-        System.out.println("***** storing task form: " + taskForm.getId() + " - urlencoded: " + URLEncoder.encode(taskForm.getId(), "UTF-8"));
         String formURL = ExternalInfo.getExternalProtocol(profile)
         + "://"
         + ExternalInfo.getExternalHost(profile)

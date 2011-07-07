@@ -208,13 +208,11 @@ public class TaskFormTemplateManager {
     }
     
     private void mergetUserTaskForms(TaskFormInfo sourceForm, TaskFormInfo targetForm) {
-        System.out.println("********************* merging forms: " + sourceForm.getId() + " to form: " + targetForm.getId());
         List<TaskFormInput> toMergeTaskInputs = new ArrayList<TaskFormInput>();
         List<TaskFormOutput> toMergeTaskOutputs = new ArrayList<TaskFormOutput>();
         
         for(String sourceOwner : sourceForm.getTaskOwners()) {
             if(!targetForm.getTaskOwners().contains(sourceOwner)) {
-                System.out.println("**** merging owner: " + sourceOwner);
                 targetForm.getTaskOwners().add(sourceOwner);
             }
         }
@@ -227,7 +225,6 @@ public class TaskFormTemplateManager {
                 }
             }
             if(!foundInput) {
-                System.out.println("***** merging input: " + sourceInput.getName());
                 toMergeTaskInputs.add(sourceInput);
             }
         }
@@ -240,7 +237,6 @@ public class TaskFormTemplateManager {
                 }
             }
             if(!foundOutput) {
-                System.out.println("***** merging output: " + sourceOutput.getName());
                 toMergeTaskOutputs.add(sourceOutput);
             }
         }
@@ -266,7 +262,6 @@ public class TaskFormTemplateManager {
     
     public void generateTemplates() {
         for(TaskFormInfo tfi : taskFormInformationList) {
-            System.out.println("****** next tfi: " + tfi);
             if(tfi.isProcessForm()) {
                 generateProcessTemplate(tfi);
             } else {

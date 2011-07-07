@@ -1694,9 +1694,7 @@ public class Bpmn2JsonUnmarshaller {
                     if(((FormalExpression) a.getTo()).getBody().equals(task.getId() + "_TaskNameInput")) {
                         if(!haveTaskNameInput) {
                             haveTaskNameInput = true;
-                            System.out.println("************ FIRST ONE, SETTING TO TRUE!!");
                         } else {
-                            System.out.println("********** REMOVING!!!");
                             itr.remove();
                         }
                     }

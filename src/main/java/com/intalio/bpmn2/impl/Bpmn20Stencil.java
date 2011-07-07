@@ -138,7 +138,6 @@ public enum Bpmn20Stencil {
         if (stencil == null) {
             throw new IllegalArgumentException("unregistered stencil id: " + stencilId);
         }
-        System.out.println("*** creating : " + stencil.className);
         BaseElement elt = (BaseElement) Bpmn2Factory.eINSTANCE.create(stencil.className);
         if (stencil.eventType != null) {
             if (elt instanceof CatchEvent) {
