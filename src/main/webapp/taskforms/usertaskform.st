@@ -1,3 +1,5 @@
+<html>
+<body>
 <script type='text/javascript'>
 	function notEmpty(elem){
 		if(elem.value.length == 0){
@@ -250,7 +252,7 @@
           
           <fieldset>
             <legend>Task Outputs</legend>
-            <form action="complete" method="POST" enctype="multipart/form-data" onsubmit="return taskFormValidator();">
+            <form action="complete" method="POST" enctype="multipart/form-data" onsubmit="return taskFormValidator()">
               $tfi.taskOutputs:{ output | 
               	$if(output.booleanRefType)$
               		<label for="name">$output.name$</label>
@@ -274,3 +276,5 @@
 	<div id="footer">
 	</div>
 </div>
+</body>
+</html>

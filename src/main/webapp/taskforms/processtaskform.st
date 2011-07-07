@@ -1,3 +1,5 @@
+<html>
+<body>
 <script type='text/javascript'>
 	function notEmpty(elem){
 		if(elem.value.length == 0){
@@ -231,7 +233,7 @@
 	<div id="content">
 		<fieldset>
             <legend>Process inputs</legend>
-            <form action="complete" method="POST" enctype="multipart/form-data" onsubmit="return taskFormValidator();">
+            <form action="complete" method="POST" enctype="multipart/form-data" onsubmit="return taskFormValidator()">
               $tfi.taskInputs:{ input | 
               	$if(input.booleanRefType)$
               		<label for="name">$input.name$</label>
@@ -255,3 +257,5 @@
 	<div id="footer">
 	</div>
 </div>
+</body>
+</html>
