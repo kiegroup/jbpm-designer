@@ -63,7 +63,7 @@
 		padding:0;
 	}
 	label {
-		width:140px;
+		width:380px;
 		height:32px;
 		margin-top:3px;
 		margin-right:2px;
@@ -80,7 +80,7 @@
 		color:#666;
 	}
 	.div_texbox {
-		width:347px;
+		width:107px;
 		float:right;
 		background-color:#E6E6E6;
 		height:35px;
@@ -88,6 +88,10 @@
 		padding-top:5px;
 		padding-bottom:3px;
 		padding-left:5px;
+		font-family:Arial, Helvetica, sans-serif;
+		letter-spacing: -1px;
+		font-weight: normal;
+		line-height: 1.1;
 	}
 	.div_checkbox {
 		width:347px;
@@ -143,53 +147,3 @@
 		font-weight:bold;
 	}
 </style>
-<div id="container">
-	<div id="header">
-		Task Form Generation Results
-	</div>
-	<div id="content">
-		<fieldset>
-            <legend>Task Owners</legend>
-              $tfi.taskOwners:{ owner | 
-				<label for="name">$owner$</label><br/>
-              }$
-            <div class="clear"></div>
-          </fieldset>
-	
-		<fieldset>
-            <legend>Task Inputs</legend>
-              $tfi.taskInputs:{ input | 
-              		<label for="name">$input.name$</label>
-              		<div class="div_checkbox">
-                		$input.value$
-              		</div>
-              }$
-            <div class="clear"></div>
-          </fieldset>
-          
-          <fieldset>
-            <legend>Task Outputs</legend>
-            <form action="complete" method="POST" enctype="multipart/form-data">
-              $tfi.taskOutputs:{ output | 
-              	$if(output.booleanRefType)$
-              		<label for="name">$output.name$</label>
-              		<div class="div_checkbox">
-                		<input name="$output.name$" type="checkbox" class="checkbox" id="$output.name$" value="$output.value$" />
-              		</div>
-              	$else$
-              		<label for="name">$output.name$</label>
-              		<div class="div_texbox">
-                		<input name="$output.name$" type="text" class="textbox" id="$output.name$" value="$output.value$" />
-              		</div>
-              	$endif$	
-              }$
-              <div class="button_div">
-                <input name="Submit" type="submit" value="Submit" class="buttons" />
-              </div>
-            </form>
-            <div class="clear"></div>
-          </fieldset>
-	</div>
-	<div id="footer">
-	</div>
-</div>

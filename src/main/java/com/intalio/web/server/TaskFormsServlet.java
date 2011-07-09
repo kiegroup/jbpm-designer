@@ -21,6 +21,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
 import org.antlr.stringtemplate.StringTemplate;
+import org.antlr.stringtemplate.StringTemplateGroup;
 import org.apache.log4j.Logger;
 import org.eclipse.bpmn2.Definitions;
 
@@ -218,7 +219,8 @@ public class TaskFormsServlet extends HttpServlet {
     
     public void displayResponse(TaskFormTemplateManager templateManager, HttpServletResponse resp) {
         try {
-            StringTemplate resultsForm = new StringTemplate(templateManager.readFile(templateManager.getTemplatesPath() + "/resultsform.st"));
+            StringTemplateGroup templates = new StringTemplateGroup("resultsgroup", templateManager.getTemplatesPath());
+            StringTemplate resultsForm = templates.getInstanceOf("resultsform");
             resultsForm.setAttribute("manager", templateManager);
             ServletOutputStream outstr = resp.getOutputStream();
             resp.setContentType("text/html");

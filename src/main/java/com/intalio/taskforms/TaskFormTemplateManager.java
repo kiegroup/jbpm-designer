@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import org.antlr.stringtemplate.StringTemplate;
+import org.antlr.stringtemplate.StringTemplateGroup;
 import org.apache.log4j.Logger;
 import org.eclipse.bpmn2.Assignment;
 import org.eclipse.bpmn2.DataInput;
@@ -113,6 +114,71 @@ public class TaskFormTemplateManager {
                                         }
                                     }
                                 }
+                                if(din.getName().equals("ActorId")) {
+                                    for(DataInputAssociation inputAssociation : dataInputAssociations) {
+                                        List<Assignment> assignments = inputAssociation.getAssignment();
+                                        for(Assignment assignment : assignments) {
+                                            if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
+                                                String actorid = ((FormalExpression)assignment.getFrom()).getBody();
+                                                if(actorid != null && actorid.length() > 0) {
+                                                    usertfi.setActorId(actorid);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if(din.getName().equals("GroupId")) {
+                                    for(DataInputAssociation inputAssociation : dataInputAssociations) {
+                                        List<Assignment> assignments = inputAssociation.getAssignment();
+                                        for(Assignment assignment : assignments) {
+                                            if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
+                                                String groupid = ((FormalExpression)assignment.getFrom()).getBody();
+                                                if(groupid != null && groupid.length() > 0) {
+                                                    usertfi.setGroupId(groupid);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if(din.getName().equals("Skippable")) {
+                                    for(DataInputAssociation inputAssociation : dataInputAssociations) {
+                                        List<Assignment> assignments = inputAssociation.getAssignment();
+                                        for(Assignment assignment : assignments) {
+                                            if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
+                                                String skippable = ((FormalExpression)assignment.getFrom()).getBody();
+                                                if(skippable != null && skippable.length() > 0) {
+                                                    usertfi.setSkippable(skippable);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if(din.getName().equals("Priority")) {
+                                    for(DataInputAssociation inputAssociation : dataInputAssociations) {
+                                        List<Assignment> assignments = inputAssociation.getAssignment();
+                                        for(Assignment assignment : assignments) {
+                                            if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
+                                                String priority = ((FormalExpression)assignment.getFrom()).getBody();
+                                                if(priority != null && priority.length() > 0) {
+                                                    usertfi.setPriority(priority);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if(din.getName().equals("Comment")) {
+                                    for(DataInputAssociation inputAssociation : dataInputAssociations) {
+                                        List<Assignment> assignments = inputAssociation.getAssignment();
+                                        for(Assignment assignment : assignments) {
+                                            if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
+                                                String comment = ((FormalExpression)assignment.getFrom()).getBody();
+                                                if(comment != null && comment.length() > 0) {
+                                                    usertfi.setComment(comment);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
                             if(validTaskName) {
                                 // get list of potential owners
@@ -127,8 +193,9 @@ public class TaskFormTemplateManager {
                                 }
                                 // get all inputs and outputs of the user task
                                 for(DataInput dinput : dataInputs) {
-                                    // we already handled TaskName
-                                    if(!dinput.getName().equals("TaskName")) {
+                                    // we already handled TaskName, ActorId , GroupId, Skippable, Priority, Comment 
+                                    if(!(dinput.getName().equals("TaskName") || dinput.getName().equals("ActorId") || dinput.getName().equals("GroupId")
+                                            || dinput.getName().equals("Skippable") || dinput.getName().equals("Priority") || dinput.getName().equals("Comment"))) {
                                         TaskFormInput input = new TaskFormInput();
                                         input.setName(dinput.getName());
                                         // we need to see if the value of the input references a process var
@@ -185,7 +252,7 @@ public class TaskFormTemplateManager {
                                 boolean merged = false;
                                 for(TaskFormInfo existingForm : taskFormInformationList) {
                                     if(existingForm.getId().equals(usertfi.getId())) {
-                                        mergetUserTaskForms(usertfi, existingForm);
+                                        mergeUserTaskForms(usertfi, existingForm);
                                         merged = true;
                                         break;
                                     }
@@ -207,7 +274,7 @@ public class TaskFormTemplateManager {
         
     }
     
-    private void mergetUserTaskForms(TaskFormInfo sourceForm, TaskFormInfo targetForm) {
+    private void mergeUserTaskForms(TaskFormInfo sourceForm, TaskFormInfo targetForm) {
         List<TaskFormInput> toMergeTaskInputs = new ArrayList<TaskFormInput>();
         List<TaskFormOutput> toMergeTaskOutputs = new ArrayList<TaskFormOutput>();
         
@@ -271,23 +338,17 @@ public class TaskFormTemplateManager {
     }
     
     private void generateProcessTemplate(TaskFormInfo tfi) {
-        try {
-            StringTemplate processFormTemplate = new StringTemplate(readFile(templatesPath + "/processtaskform.st"));
-            processFormTemplate.setAttribute("tfi", tfi);
-            tfi.setOutput(processFormTemplate.toString());
-        } catch (IOException e) {
-            _logger.error(e.getMessage());
-        }
+        StringTemplateGroup templates = new StringTemplateGroup("processtaskgroup", templatesPath);
+        StringTemplate processFormTemplate = templates.getInstanceOf("processtaskform");
+        processFormTemplate.setAttribute("tfi", tfi);
+        tfi.setOutput(processFormTemplate.toString());
     }
     
     private void generateUserTaskTemplate(TaskFormInfo tfi) {
-        try {
-            StringTemplate usertaskFormTemplate = new StringTemplate(readFile(templatesPath + "/usertaskform.st"));
-            usertaskFormTemplate.setAttribute("tfi", tfi);
-            tfi.setOutput(usertaskFormTemplate.toString());
-        } catch (IOException e) {
-            _logger.error(e.getMessage());
-        }
+        StringTemplateGroup templates = new StringTemplateGroup("usertaskgroup", templatesPath);
+        StringTemplate usertaskFormTemplate = templates.getInstanceOf("usertaskform");
+        usertaskFormTemplate.setAttribute("tfi", tfi);
+        tfi.setOutput(usertaskFormTemplate.toString());
     }
     
     public String readFile(String pathname) throws IOException {
