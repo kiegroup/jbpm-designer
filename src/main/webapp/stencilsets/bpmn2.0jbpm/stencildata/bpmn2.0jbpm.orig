@@ -6134,6 +6134,18 @@
 					"wrapLines":true
 				},
 				{
+					"id":"conditionexpressionlanguage",
+					"type":"String",
+					"title":"Condition Expression Language",
+					"title_de":"Bedingungsausdruck Sprache",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true
+				},
+				{
 					"id":"isimmediate",
 					"type":"Boolean",
 					"title":"isImmediate",

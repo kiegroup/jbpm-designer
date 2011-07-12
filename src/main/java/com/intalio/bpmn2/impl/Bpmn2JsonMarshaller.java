@@ -1151,7 +1151,7 @@ public class Bpmn2JsonMarshaller {
     	Expression conditionExpression = sequenceFlow.getConditionExpression();
     	if (conditionExpression instanceof FormalExpression) {
     		properties.put("conditionexpression", ((FormalExpression) conditionExpression).getBody());
-    		properties.put("conditionexpression_language", ((FormalExpression) conditionExpression).getLanguage());
+    		properties.put("conditionexpressionlanguage", ((FormalExpression) conditionExpression).getLanguage());
     	}
         marshallProperties(properties, generator);
         generator.writeObjectFieldStart("stencil");

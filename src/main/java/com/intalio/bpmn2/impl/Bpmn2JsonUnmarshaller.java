@@ -1780,6 +1780,19 @@ public class Bpmn2JsonUnmarshaller {
         if (properties.get("conditionexpression") != null && !"".equals(properties.get("conditionexpression"))) {
             FormalExpression expr = Bpmn2Factory.eINSTANCE.createFormalExpression();
             expr.setBody(properties.get("conditionexpression"));
+            // check if language was specified 
+            if (properties.get("conditionexpressionlanguage") != null && !"".equals(properties.get("conditionexpressionlanguage"))) {
+                String languageStr;
+                if(properties.get("conditionexpressionlanguage").equals("drools")) {
+                    languageStr = "http://www.jboss.org/drools/rule";
+                } else if(properties.get("conditionexpressionlanguage").equals("mvel")) {
+                    languageStr = "http://www.mvel.org/2.0";
+                } else {
+                    // default to drools
+                    languageStr = "http://www.jboss.org/drools/rule";
+                }
+                expr.setLanguage(languageStr);
+            }
             sequenceFlow.setConditionExpression(expr);
         }
         if (properties.get("monitoring") != null && !"".equals(properties.get("monitoring"))) {
