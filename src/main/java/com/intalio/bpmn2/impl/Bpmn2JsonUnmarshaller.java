@@ -500,6 +500,9 @@ public class Bpmn2JsonUnmarshaller {
                             gateway.setGatewayDirection(GatewayDirection.CONVERGING);
                         } else if (incoming > 1 && outgoing > 1) {
                             gateway.setGatewayDirection(GatewayDirection.MIXED);
+                        } else if (incoming == 1 && outgoing == 1) { 
+                            // this handles the 1:1 case of the diverging gateways
+                            gateway.setGatewayDirection(GatewayDirection.DIVERGING);
                         } else {
                             gateway.setGatewayDirection(GatewayDirection.UNSPECIFIED);
                         }
