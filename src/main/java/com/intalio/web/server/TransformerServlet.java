@@ -48,6 +48,7 @@ import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.ImageTranscoder;
 import org.apache.batik.transcoder.image.PNGTranscoder;
+import org.apache.batik.util.ParsedURL;
 import org.apache.commons.io.IOUtils;
 import org.apache.fop.svg.PDFTranscoder;
 import org.apache.log4j.Logger;
@@ -65,6 +66,7 @@ import org.eclipse.emf.ecore.xmi.XMLResource;
 
 import sun.misc.BASE64Encoder;
 
+import com.intalio.web.batikprotocolhandler.GuvnorParsedURLProtocolHandler;
 import com.intalio.web.profile.IDiagramProfile;
 import com.intalio.web.profile.IDiagramProfileService;
 import com.intalio.web.profile.impl.ExternalInfo;
@@ -125,6 +127,7 @@ public class TransformerServlet extends HttpServlet {
             resp.getOutputStream().flush();
         } else if (transformto != null && transformto.equals(TO_PNG)) {
             try {
+                ParsedURL.registerHandler(new GuvnorParsedURLProtocolHandler(profile));
                 String processName = storeToGuvnor(uuid, profile, svg,
                         transformto);
 
@@ -136,7 +139,7 @@ public class TransformerServlet extends HttpServlet {
                     resp.setHeader("Content-Disposition",
                             "attachment; filename=\"" + uuid + ".png\"");
                 }
-
+                
                 PNGTranscoder t = new PNGTranscoder();
                 t.addTranscodingHint(ImageTranscoder.KEY_MEDIA, "screen");
                 TranscoderInput input = new TranscoderInput(new StringReader(
