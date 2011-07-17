@@ -66,6 +66,20 @@ WAR_LIBS_JBOSS = ["org.json:json:jar:20090211", "jbpt:jbpt:jar:0.1.0", "commons-
   "org.antlr:stringtemplate:jar:3.2.1",
   "org.eclipse:osgi:jar:3.5.0.v20090520", "avalon-framework:avalon-framework:jar:4.1.4", YUICOMPRESSOR] | BPMN2_LIBS | BATIK_LIBS
   
+
+WAR_LIBS_JBOSS7 = ["org.json:json:jar:20090211", "jbpt:jbpt:jar:0.1.0", "commons-collections:commons-collections:jar:3.2.1",
+  "commons-configuration:commons-configuration:jar:1.6", "org.jdom:jdom:jar:1.1", "org.apache.velocity:velocity:jar:1.6.4",
+  "org.supercsv:SuperCSV:jar:1.52", "org.apache.xmlgraphics:fop:jar:0.95", "com.sun.xml.bind:jaxb-impl:jar:2.2",
+  "com.sun.xml.bind:jaxb1-impl:jar:2.2", "de.hpi:atlas:jar:1.0.0", "com.thoughtworks.xstream:xstream:jar:1.3.1",
+  "org.xmappr:xmappr:jar:0.9.3", "org.slf4j:slf4j-api:jar:1.5.8", "org.slf4j:slf4j-jdk14:jar:1.5.6",
+  "commons-httpclient:commons-httpclient:jar:3.1",
+  "commons-fileupload:commons-fileupload:jar:1.2.1", "commons-lang:commons-lang:jar:2.5",
+  "rhino:js:jar:1.7R2", "javax.mail:mail:jar:1.4.1",
+  "org.codehaus.jackson:jackson-core-asl:jar:1.7.4", "org.codehaus.jackson:jackson-mapper-asl:jar:1.7.4",
+  "org.mvel:mvel2:jar:2.1-SNAPSHOT", "org.jbpm:jbpm-flow-builder:jar:5.1.0.Final", "org.drools:drools-core:jar:5.2.0.Final",
+  "org.antlr:stringtemplate:jar:3.2.1", "antlr:antlr:jar:2.7.7",
+  "org.eclipse:osgi:jar:3.5.0.v20090520", "org.slf4j:log4j-over-slf4j:jar:1.5.8", "avalon-framework:avalon-framework:jar:4.1.4", YUICOMPRESSOR] | BPMN2_LIBS | BATIK_LIBS
+
 WAR_LIBS_EPN = ["org.json:json:jar:20090211", "jbpt:jbpt:jar:0.1.0", "commons-collections:commons-collections:jar:3.2.1",
   "commons-configuration:commons-configuration:jar:1.6", "org.jdom:jdom:jar:1.1", "org.apache.velocity:velocity:jar:1.6.4",
   "org.supercsv:SuperCSV:jar:1.52", "org.apache.xmlgraphics:fop:jar:0.95", "com.sun.xml.bind:jaxb-impl:jar:2.2",
