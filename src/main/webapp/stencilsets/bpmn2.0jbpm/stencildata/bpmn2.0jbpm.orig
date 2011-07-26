@@ -6122,7 +6122,7 @@
 				},
 				{
 					"id":"conditionexpression",
-					"type":"String",
+					"type":"Text",
 					"title":"Condition Expression",
 					"title_de":"Bedingungsausdruck",
 					"value":"",
@@ -6130,7 +6130,6 @@
 					"readonly":false,
 					"optional":true,
 					"length":"",
-					"refToView":"condition",
 					"wrapLines":true
 				},
 				{
