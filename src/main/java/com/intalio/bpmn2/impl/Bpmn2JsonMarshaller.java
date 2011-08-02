@@ -64,6 +64,7 @@ import org.eclipse.bpmn2.EventBasedGateway;
 import org.eclipse.bpmn2.EventDefinition;
 import org.eclipse.bpmn2.ExclusiveGateway;
 import org.eclipse.bpmn2.Expression;
+import org.eclipse.bpmn2.ExtensionAttributeValue;
 import org.eclipse.bpmn2.FlowElement;
 import org.eclipse.bpmn2.FlowNode;
 import org.eclipse.bpmn2.FormalExpression;
@@ -115,6 +116,9 @@ import org.eclipse.dd.dc.Bounds;
 import org.eclipse.dd.dc.Point;
 import org.eclipse.dd.di.DiagramElement;
 import org.eclipse.emf.ecore.util.FeatureMap;
+import org.jbpm.bpmn2.emfextmodel.EmfextmodelPackage;
+import org.jbpm.bpmn2.emfextmodel.OnEntryScriptType;
+import org.jbpm.bpmn2.emfextmodel.OnExitScriptType;
 
 import com.intalio.web.profile.IDiagramProfile;
 
@@ -966,6 +970,74 @@ public class Bpmn2JsonMarshaller {
         }
         properties.put("assignments", assignmentString);
         
+        // on-entry and on-exit actions
+        if(task.getExtensionValues() != null && task.getExtensionValues().size() > 0) {
+            
+            String onEntryStr = "";
+            String onExitStr = "";
+            for(ExtensionAttributeValue extattrval : task.getExtensionValues()) {
+            
+                FeatureMap extensionElements = extattrval.getValue();
+        
+                @SuppressWarnings("unchecked")
+                List<OnEntryScriptType> onEntryExtensions = (List<OnEntryScriptType>) extensionElements
+                                                     .get(EmfextmodelPackage.Literals.DOCUMENT_ROOT__ON_ENTRY_SCRIPT, true);
+        
+                @SuppressWarnings("unchecked")
+                List<OnExitScriptType> onExitExtensions = (List<OnExitScriptType>) extensionElements
+                                                  .get(EmfextmodelPackage.Literals.DOCUMENT_ROOT__ON_EXIT_SCRIPT, true);
+            
+                for(OnEntryScriptType onEntryScript : onEntryExtensions) {
+                    onEntryStr += onEntryScript.getScript();
+                    onEntryStr += ",";
+                
+                    if(onEntryScript.getScriptFormat() != null) {
+                        String format = onEntryScript.getScriptFormat();
+                        String formatToWrite = "";
+                        if(format.equals("http://www.java.com/java")) {
+                            formatToWrite = "java";
+                        } else if(format.equals("http://www.mvel.org/2.0")) {
+                            formatToWrite = "mvel";
+                        } else {
+                            formatToWrite = "java";
+                        }
+                        properties.put("script_language", formatToWrite);
+                    }
+                }
+                
+                for(OnExitScriptType onExitScript : onExitExtensions) {
+                    onExitStr += onExitScript.getScript();
+                    onExitStr += ",";
+                    
+                    if(onExitScript.getScriptFormat() != null) {
+                        String format = onExitScript.getScriptFormat();
+                        String formatToWrite = "";
+                        if(format.equals("http://www.java.com/java")) {
+                            formatToWrite = "java";
+                        } else if(format.equals("http://www.mvel.org/2.0")) {
+                            formatToWrite = "mvel";
+                        } else {
+                            formatToWrite = "java";
+                        }
+                        if(properties.get("script_language") != null) {
+                            properties.put("script_language", formatToWrite);
+                        }
+                    }
+                }
+            }
+            if(onEntryStr.length() > 0) {
+                if(onEntryStr.endsWith(",")) {
+                    onEntryStr = onEntryStr.substring(0, onEntryStr.length() - 1);
+                }
+                properties.put("onentryactions", onEntryStr);
+            }
+            if(onExitStr.length() > 0) {
+                if(onExitStr.endsWith(",")) {
+                    onExitStr = onExitStr.substring(0, onExitStr.length() - 1);
+                }
+                properties.put("onexitactions", onExitStr);
+            }
+        }
         
         // marshall the node out
         if(isCustomElement((String) properties.get("taskname"), preProcessingData)) {

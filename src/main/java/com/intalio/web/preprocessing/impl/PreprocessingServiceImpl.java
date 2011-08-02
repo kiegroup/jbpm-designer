@@ -43,21 +43,18 @@ public class PreprocessingServiceImpl implements IDiagramPreprocessingService {
     private Map<String, IDiagramPreprocessingUnit> _registry = new HashMap<String, IDiagramPreprocessingUnit>();
     
     
-    @Override
     public Collection<IDiagramPreprocessingUnit> getRegisteredPreprocessingUnits(
             HttpServletRequest request) {
         Map<String, IDiagramPreprocessingUnit> preprocessingUnits = new HashMap<String, IDiagramPreprocessingUnit>(_registry);
         return new ArrayList<IDiagramPreprocessingUnit>(preprocessingUnits.values());
     }
     
-    @Override
     public IDiagramPreprocessingUnit findPreprocessingUnit(
             HttpServletRequest request, IDiagramProfile profile) {
         Map<String, IDiagramPreprocessingUnit> preprocessingUnits = new HashMap<String, IDiagramPreprocessingUnit>(_registry);
         return preprocessingUnits.get(profile.getName());
     }
     
-    @Override
     public void init(ServletContext context) {
         _registry.put("default", new DefaultPreprocessingUnit(context));
         _registry.put("jbpm", new JbpmPreprocessingUnit(context));

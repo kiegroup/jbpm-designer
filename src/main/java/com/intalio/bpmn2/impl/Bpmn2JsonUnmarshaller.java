@@ -64,6 +64,7 @@ import org.eclipse.bpmn2.Escalation;
 import org.eclipse.bpmn2.EscalationEventDefinition;
 import org.eclipse.bpmn2.Event;
 import org.eclipse.bpmn2.EventDefinition;
+import org.eclipse.bpmn2.ExtensionAttributeValue;
 import org.eclipse.bpmn2.FlowElement;
 import org.eclipse.bpmn2.FlowElementsContainer;
 import org.eclipse.bpmn2.FlowNode;
@@ -110,13 +111,20 @@ import org.eclipse.dd.dc.DcFactory;
 import org.eclipse.dd.dc.Point;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature.Internal;
 import org.eclipse.emf.ecore.impl.EAttributeImpl;
 import org.eclipse.emf.ecore.impl.EStructuralFeatureImpl;
+import org.eclipse.emf.ecore.impl.EStructuralFeatureImpl.SimpleFeatureMapEntry;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.util.FeatureMap;
+import org.jbpm.bpmn2.emfextmodel.EmfextmodelFactory;
+import org.jbpm.bpmn2.emfextmodel.EmfextmodelPackage;
+import org.jbpm.bpmn2.emfextmodel.OnEntryScriptType;
+import org.jbpm.bpmn2.emfextmodel.OnExitScriptType;
+import org.jbpm.bpmn2.emfextmodel.impl.EmfextmodelPackageImpl;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.InvalidSyntaxException;
@@ -152,6 +160,7 @@ public class Bpmn2JsonUnmarshaller {
     
     public Bpmn2JsonUnmarshaller() {
         _helpers = new ArrayList<BpmnMarshallerHelper>();
+        EmfextmodelPackageImpl.init();
         // load the helpers to place them in field
         if (getClass().getClassLoader() instanceof BundleReference) {
             BundleContext context = ((BundleReference) getClass().getClassLoader()).
@@ -1703,7 +1712,57 @@ public class Bpmn2JsonUnmarshaller {
                     }
                 }
             }  
-          
+        }
+        
+        // process on-entry and on-exit actions as custom elements
+        if(properties.get("onentryactions") != null && properties.get("onentryactions").length() > 0) {
+            String[] allActions = properties.get("onentryactions").split( ",\\s*" );
+            for(String action : allActions) {
+                OnEntryScriptType onEntryScript = EmfextmodelFactory.eINSTANCE.createOnEntryScriptType();
+                onEntryScript.setScript(action);
+                
+                String scriptLanguage = "";
+                if(properties.get("script_language").equals("java")) {
+                    scriptLanguage = "http://www.java.com/java";
+                } else if(properties.get("script_language").equals("mvel")) {
+                    scriptLanguage = "http://www.mvel.org/2.0";
+                } else {
+                    // default to java
+                    scriptLanguage = "http://www.java.com/java";
+                }
+                onEntryScript.setScriptFormat(scriptLanguage); // TODO get from properties!!! 
+                
+                ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                task.getExtensionValues().add(extensionElement);
+                FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                        (Internal) EmfextmodelPackage.Literals.DOCUMENT_ROOT__ON_ENTRY_SCRIPT, onEntryScript);
+                extensionElement.getValue().add(extensionElementEntry);
+            }
+        }
+        
+        if(properties.get("onexitactions") != null && properties.get("onexitactions").length() > 0) {
+            String[] allActions = properties.get("onexitactions").split( ",\\s*" );
+            for(String action : allActions) {
+                OnExitScriptType onExitScript = EmfextmodelFactory.eINSTANCE.createOnExitScriptType();
+                onExitScript.setScript(action);
+                
+                String scriptLanguage = "";
+                if(properties.get("script_language").equals("java")) {
+                    scriptLanguage = "http://www.java.com/java";
+                } else if(properties.get("script_language").equals("mvel")) {
+                    scriptLanguage = "http://www.mvel.org/2.0";
+                } else {
+                    // default to java
+                    scriptLanguage = "http://www.java.com/java";
+                }
+                onExitScript.setScriptFormat(scriptLanguage); // TODO get from properties!!! 
+                
+                ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                task.getExtensionValues().add(extensionElement);
+                FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                        (Internal) EmfextmodelPackage.Literals.DOCUMENT_ROOT__ON_EXIT_SCRIPT, onExitScript);
+                extensionElement.getValue().add(extensionElementEntry);
+            }
         }
     }
     
@@ -1720,25 +1779,6 @@ public class Bpmn2JsonUnmarshaller {
                 task.getResources().add(po);
             }
         }
-        
-        if(properties.get("onentryactions") != null && properties.get("onentryactions").length() > 0) {
-            ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
-            EAttributeImpl onEntryElement = (EAttributeImpl) metadata.demandFeature(
-                    "http://www.jboss.org/drools", "onEntry-script", false, false);
-            EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(onEntryElement,
-                    properties.get("onentryactions"));
-            task.getAnyAttribute().add(extensionEntry);
-        }
-        
-        if(properties.get("onexitactions") != null && properties.get("onexitactions").length() > 0) {
-            ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
-            EAttributeImpl onExitElement = (EAttributeImpl) metadata.demandFeature(
-                    "http://www.jboss.org/drools", "onExit-script", false   , false);
-            EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(onExitElement,
-                    properties.get("onexitactions"));
-            task.getAnyAttribute().add(extensionEntry);
-        }
-        
         if(properties.get("script_language") != null && properties.get("script_language").length() > 0) {
             String scriptLanguage = "";
             if(properties.get("script_language").equals("java")) {
