@@ -10,3 +10,8 @@ src/main/webapp/repository
 src/main/webapp/jsc/*.js
 .project
 .classpath
+nbactions.xml
+
+#I think that this is where MANIFEST.MF should go according to maven specs. 
+#For now, I will ignore it. Esteban
+src/main/webapp/META-INF/MANIFEST.MF
