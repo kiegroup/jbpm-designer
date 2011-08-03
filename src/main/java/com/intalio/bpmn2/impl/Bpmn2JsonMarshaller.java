@@ -117,6 +117,8 @@ import org.eclipse.dd.dc.Point;
 import org.eclipse.dd.di.DiagramElement;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.jbpm.bpmn2.emfextmodel.EmfextmodelPackage;
+import org.jbpm.bpmn2.emfextmodel.GlobalType;
+import org.jbpm.bpmn2.emfextmodel.ImportType;
 import org.jbpm.bpmn2.emfextmodel.OnEntryScriptType;
 import org.jbpm.bpmn2.emfextmodel.OnExitScriptType;
 
@@ -279,10 +281,45 @@ public class Bpmn2JsonMarshaller {
 	                    if(entry.getEStructuralFeature().getName().equals("version")) {
                             props.put("version", entry.getValue());
                         }
+	                }
+	                
+	                // process imports and globals extension elements
+	                if(((Process) rootElement).getExtensionValues() != null && ((Process) rootElement).getExtensionValues().size() > 0) {
+	                    String importsStr = "";
+	                    String globalsStr = "";
+	                    for(ExtensionAttributeValue extattrval : ((Process) rootElement).getExtensionValues()) {
+	                        FeatureMap extensionElements = extattrval.getValue();
+	                
+	                        @SuppressWarnings("unchecked")
+	                        List<ImportType> importExtensions = (List<ImportType>) extensionElements
+	                                                             .get(EmfextmodelPackage.Literals.DOCUMENT_ROOT__IMPORT, true);
+	                
+	                        @SuppressWarnings("unchecked")
+	                        List<GlobalType> globalExtensions = (List<GlobalType>) extensionElements
+	                                                          .get(EmfextmodelPackage.Literals.DOCUMENT_ROOT__GLOBAL, true);
 	                    
-	                    if(entry.getEStructuralFeature().getName().equals("import")) {
-                            props.put("imports", entry.getValue());
-                        }
+	                        for(ImportType importType : importExtensions) {
+	                            importsStr += importType.getName();
+	                            importsStr += ",";
+	                        }
+	                        
+	                        for(GlobalType globalType : globalExtensions) {
+	                            globalsStr += (globalType.getIdentifier() + ":" + globalType.getType());
+	                            globalsStr += ",";
+	                        }
+	                    }
+	                    if(importsStr.length() > 0) {
+	                        if(importsStr.endsWith(",")) {
+	                            importsStr = importsStr.substring(0, importsStr.length() - 1);
+	                        }
+	                        props.put("imports", importsStr);
+	                    }
+	                    if(globalsStr.length() > 0) {
+	                        if(globalsStr.endsWith(",")) {
+	                            globalsStr = globalsStr.substring(0, globalsStr.length() - 1);
+	                        }
+	                        props.put("globals", globalsStr);
+	                    }
 	                }
 	                
 	                marshallProperties(props, generator);

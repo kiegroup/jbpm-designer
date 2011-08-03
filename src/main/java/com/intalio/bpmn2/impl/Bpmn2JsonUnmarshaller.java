@@ -122,6 +122,8 @@ import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.jbpm.bpmn2.emfextmodel.EmfextmodelFactory;
 import org.jbpm.bpmn2.emfextmodel.EmfextmodelPackage;
+import org.jbpm.bpmn2.emfextmodel.GlobalType;
+import org.jbpm.bpmn2.emfextmodel.ImportType;
 import org.jbpm.bpmn2.emfextmodel.OnEntryScriptType;
 import org.jbpm.bpmn2.emfextmodel.OnExitScriptType;
 import org.jbpm.bpmn2.emfextmodel.impl.EmfextmodelPackageImpl;
@@ -1423,13 +1425,38 @@ public class Bpmn2JsonUnmarshaller {
             process.setMonitoring(monitoring);
         }
         
+        // import extension elements
         if(properties.get("imports") != null && properties.get("imports").length() > 0) {
-            ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
-            EAttributeImpl importsElement = (EAttributeImpl) metadata.demandFeature(
-                    "http://www.jboss.org/drools", "import", false   , false);
-            EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(importsElement,
-                    properties.get("imports"));
-            process.getAnyAttribute().add(extensionEntry);
+            String[] allImports = properties.get("imports").split( ",\\s*" );
+            for(String importStr : allImports) {
+                ImportType importType = EmfextmodelFactory.eINSTANCE.createImportType();
+                importType.setName(importStr);
+                
+                ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                process.getExtensionValues().add(extensionElement);
+                FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                        (Internal) EmfextmodelPackage.Literals.DOCUMENT_ROOT__IMPORT, importType);
+                extensionElement.getValue().add(extensionElementEntry);
+            }
+        }
+        
+        // globals extension elements
+        if(properties.get("globals") != null && properties.get("globals").length() > 0) {
+            String[] allGlobals = properties.get("globals").split( ",\\s*" );
+            for(String globalStr : allGlobals) {
+                String[] globalParts = globalStr.split( ":\\s*" ); // identifier:type
+                if(globalParts.length == 2) {
+                    GlobalType globalType = EmfextmodelFactory.eINSTANCE.createGlobalType();
+                    globalType.setIdentifier(globalParts[0]);
+                    globalType.setType(globalParts[1]);
+                
+                    ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                    process.getExtensionValues().add(extensionElement);
+                    FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                            (Internal) EmfextmodelPackage.Literals.DOCUMENT_ROOT__GLOBAL, globalType);
+                    extensionElement.getValue().add(extensionElementEntry);
+                }
+            }
         }
     }
 
@@ -1730,7 +1757,7 @@ public class Bpmn2JsonUnmarshaller {
                     // default to java
                     scriptLanguage = "http://www.java.com/java";
                 }
-                onEntryScript.setScriptFormat(scriptLanguage); // TODO get from properties!!! 
+                onEntryScript.setScriptFormat(scriptLanguage); 
                 
                 ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
                 task.getExtensionValues().add(extensionElement);
@@ -1755,7 +1782,7 @@ public class Bpmn2JsonUnmarshaller {
                     // default to java
                     scriptLanguage = "http://www.java.com/java";
                 }
-                onExitScript.setScriptFormat(scriptLanguage); // TODO get from properties!!! 
+                onExitScript.setScriptFormat(scriptLanguage); 
                 
                 ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
                 task.getExtensionValues().add(extensionElement);
