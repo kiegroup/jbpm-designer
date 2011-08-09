@@ -1281,8 +1281,24 @@ public class Bpmn2JsonMarshaller {
     	}
     	Expression conditionExpression = sequenceFlow.getConditionExpression();
     	if (conditionExpression instanceof FormalExpression) {
-    		properties.put("conditionexpression", ((FormalExpression) conditionExpression).getBody());
-    		properties.put("conditionexpressionlanguage", ((FormalExpression) conditionExpression).getLanguage());
+    	    if(((FormalExpression) conditionExpression).getBody() != null) {
+    	        properties.put("conditionexpression", ((FormalExpression) conditionExpression).getBody());
+    	    }
+    	    if(((FormalExpression) conditionExpression).getLanguage() != null) {
+    	        String cd = ((FormalExpression) conditionExpression).getLanguage();
+    	        String cdStr = "";
+    	        if(cd.equalsIgnoreCase("http://www.java.com/java")) {
+    	            cdStr = "java";
+    	        } else if(cd.equalsIgnoreCase("http://www.jboss.org/drools/rule")) {
+    	            cdStr = "drools";
+    	        } else if(cd.equalsIgnoreCase("http://www.mvel.org/2.0")) {
+    	            cdStr = "mvel";
+    	        } else {
+    	            // default to mvel
+    	            cdStr = "mvel";
+    	        }
+    	        properties.put("conditionexpressionlanguage", cdStr);
+    	    } 
     	}
         marshallProperties(properties, generator);
         generator.writeObjectFieldStart("stencil");

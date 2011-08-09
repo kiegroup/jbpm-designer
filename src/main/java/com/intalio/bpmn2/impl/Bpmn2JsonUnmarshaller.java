@@ -1934,9 +1934,11 @@ public class Bpmn2JsonUnmarshaller {
                     languageStr = "http://www.jboss.org/drools/rule";
                 } else if(properties.get("conditionexpressionlanguage").equals("mvel")) {
                     languageStr = "http://www.mvel.org/2.0";
+                } else if(properties.get("conditionexpressionlanguage").equals("java")) {
+                    languageStr = "http://www.java.com/java";
                 } else {
-                    // default to drools
-                    languageStr = "http://www.jboss.org/drools/rule";
+                    // default to mvel
+                    languageStr = "http://www.mvel.org/2.0";
                 }
                 expr.setLanguage(languageStr);
             }
