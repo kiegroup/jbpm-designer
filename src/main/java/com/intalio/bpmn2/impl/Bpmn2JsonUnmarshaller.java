@@ -75,6 +75,7 @@ import org.eclipse.bpmn2.GlobalTask;
 import org.eclipse.bpmn2.Import;
 import org.eclipse.bpmn2.InputOutputSpecification;
 import org.eclipse.bpmn2.InputSet;
+import org.eclipse.bpmn2.Interface;
 import org.eclipse.bpmn2.ItemAwareElement;
 import org.eclipse.bpmn2.ItemDefinition;
 import org.eclipse.bpmn2.Lane;
@@ -82,6 +83,7 @@ import org.eclipse.bpmn2.LaneSet;
 import org.eclipse.bpmn2.Message;
 import org.eclipse.bpmn2.MessageEventDefinition;
 import org.eclipse.bpmn2.Monitoring;
+import org.eclipse.bpmn2.Operation;
 import org.eclipse.bpmn2.OutputSet;
 import org.eclipse.bpmn2.PotentialOwner;
 import org.eclipse.bpmn2.Process;
@@ -91,6 +93,7 @@ import org.eclipse.bpmn2.ResourceAssignmentExpression;
 import org.eclipse.bpmn2.RootElement;
 import org.eclipse.bpmn2.ScriptTask;
 import org.eclipse.bpmn2.SequenceFlow;
+import org.eclipse.bpmn2.ServiceTask;
 import org.eclipse.bpmn2.Signal;
 import org.eclipse.bpmn2.SignalEventDefinition;
 import org.eclipse.bpmn2.StartEvent;
@@ -209,6 +212,7 @@ public class Bpmn2JsonUnmarshaller {
             reconnectFlows();
             createDiagram(def);
             revisitGateways(def);
+            revisitServiceTasks(def);
             revisitMessages(def);
             revisitCatchEvents(def);
             revisitThrowEvents(def);
@@ -520,6 +524,59 @@ public class Bpmn2JsonUnmarshaller {
                     }
                 }
             }
+        }
+    }
+    
+    private void revisitServiceTasks(Definitions def) {
+        List<RootElement> rootElements =  def.getRootElements();
+        List<Interface> toAddInterfaces = new ArrayList<Interface>();
+        List<Message> toAddMessages = new ArrayList<Message>();
+        for(RootElement root : rootElements) {
+            if(root instanceof Process) {
+                Process process = (Process) root;
+                List<FlowElement> flowElements =  process.getFlowElements();
+                for(FlowElement fe : flowElements) {
+                    if(fe instanceof ServiceTask) {
+                        Iterator<FeatureMap.Entry> iter = fe.getAnyAttribute().iterator();
+                        String serviceInterface = null;
+                        String serviceOperation = null;
+                        while(iter.hasNext()) {
+                            FeatureMap.Entry entry = iter.next();
+                            if(entry.getEStructuralFeature().getName().equals("servicetaskinterface")) {
+                                serviceInterface = (String) entry.getValue();
+                            }
+                            if(entry.getEStructuralFeature().getName().equals("servicetaskoperation")) {
+                                serviceOperation = (String) entry.getValue();
+                            }
+                        }
+                        Interface newInterface = Bpmn2Factory.eINSTANCE.createInterface();
+                        if(serviceInterface != null) {
+                            newInterface.setName(serviceInterface);
+                            newInterface.setId(fe.getId() + "_ServiceInterface");
+                        }
+                        if(serviceOperation != null) {
+                            Operation oper = Bpmn2Factory.eINSTANCE.createOperation();
+                            oper.setId(fe.getId() + "_ServiceOperation");
+                            oper.setName(serviceOperation);
+                            
+                            Message message = Bpmn2Factory.eINSTANCE.createMessage();
+                            message.setId(fe.getId() + "_InMessage");
+                            toAddMessages.add(message);
+                            
+                            oper.setInMessageRef(message);
+                            newInterface.getOperations().add(oper);
+                            ((ServiceTask) fe).setOperationRef(oper);
+                        }
+                        toAddInterfaces.add(newInterface);
+                    }
+                }
+            }
+        }
+        for(Interface i : toAddInterfaces) {
+            def.getRootElements().add(i);
+        }
+        for(Message m : toAddMessages) {
+            def.getRootElements().add(m);
         }
     }
     
@@ -961,6 +1018,9 @@ public class Bpmn2JsonUnmarshaller {
         }
         if (baseElement instanceof ScriptTask) {
             applyScriptTaskProperties((ScriptTask) baseElement, properties);
+        }
+        if (baseElement instanceof ServiceTask) {
+            applyServiceTaskProperties((ServiceTask) baseElement, properties);
         }
         if (baseElement instanceof Gateway) {
             applyGatewayProperties((Gateway) baseElement, properties);
@@ -1485,6 +1545,26 @@ public class Bpmn2JsonUnmarshaller {
         }
         scriptTask.setScript(properties.get("script"));
         scriptTask.setScriptFormat(properties.get("script_language"));
+    }
+    
+    public void applyServiceTaskProperties(ServiceTask serviceTask,  Map<String, String> properties) {
+        if(properties.get("interface") != null) {
+            serviceTask.setImplementation("Other");
+            ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+            EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                    "http://www.jboss.org/drools", "servicetaskinterface", false, false);
+            EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                    properties.get("interface"));
+            serviceTask.getAnyAttribute().add(extensionEntry); 
+        }
+        if(properties.get("operation") != null) {
+            ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+            EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                    "http://www.jboss.org/drools", "servicetaskoperation", false, false);
+            EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                    properties.get("operation"));
+            serviceTask.getAnyAttribute().add(extensionEntry);
+        }
     }
 
     private void applyLaneProperties(Lane lane, Map<String, String> properties) {

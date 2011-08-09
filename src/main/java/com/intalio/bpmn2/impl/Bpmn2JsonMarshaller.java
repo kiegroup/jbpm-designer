@@ -86,6 +86,7 @@ import org.eclipse.bpmn2.LaneSet;
 import org.eclipse.bpmn2.ManualTask;
 import org.eclipse.bpmn2.Message;
 import org.eclipse.bpmn2.MessageEventDefinition;
+import org.eclipse.bpmn2.Operation;
 import org.eclipse.bpmn2.OutputSet;
 import org.eclipse.bpmn2.ParallelGateway;
 import org.eclipse.bpmn2.PotentialOwner;
@@ -421,7 +422,7 @@ public class Bpmn2JsonMarshaller {
     	}
         generator.writeArrayFieldStart("childShapes");
         for (FlowElement flowElement: process.getFlowElements()) {
-        	marshallFlowElement(flowElement, plane, generator, 0, 0, preProcessingData, lanesetInfo);
+        	marshallFlowElement(flowElement, plane, generator, 0, 0, preProcessingData, lanesetInfo, def);
         }
         generator.writeEndArray();
     }
@@ -608,7 +609,7 @@ public class Bpmn2JsonMarshaller {
         }
     }
     
-    private void marshallFlowElement(FlowElement flowElement, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Map<String, List<String>> lanesetInfo) throws JsonGenerationException, IOException {
+    private void marshallFlowElement(FlowElement flowElement, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Map<String, List<String>> lanesetInfo, Definitions def) throws JsonGenerationException, IOException {
     	generator.writeStartObject();
     	generator.writeObjectField("resourceId", flowElement.getId());
     	
@@ -631,7 +632,7 @@ public class Bpmn2JsonMarshaller {
     	} else if (flowElement instanceof BoundaryEvent) {
     		marshallBoundaryEvent((BoundaryEvent) flowElement, plane, generator, xOffset, yOffset);
     	} else if (flowElement instanceof Task) {
-    		marshallTask((Task) flowElement, plane, generator, xOffset, yOffset, preProcessingData, lanesetInfo);
+    		marshallTask((Task) flowElement, plane, generator, xOffset, yOffset, preProcessingData, lanesetInfo, def);
     	} else if (flowElement instanceof SequenceFlow) {
     		marshallSequenceFlow((SequenceFlow) flowElement, plane, generator, xOffset, yOffset);
     	} else if (flowElement instanceof ParallelGateway) {
@@ -648,9 +649,9 @@ public class Bpmn2JsonMarshaller {
     		marshallCallActivity((CallActivity) flowElement, plane, generator, xOffset, yOffset);
     	} else if (flowElement instanceof SubProcess) {
     	    if(flowElement instanceof AdHocSubProcess) {
-    	        marshallSubProcess((AdHocSubProcess) flowElement, plane, generator, xOffset, yOffset, preProcessingData, lanesetInfo);
+    	        marshallSubProcess((AdHocSubProcess) flowElement, plane, generator, xOffset, yOffset, preProcessingData, lanesetInfo, def);
     	    } else {
-    	        marshallSubProcess((SubProcess) flowElement, plane, generator, xOffset, yOffset, preProcessingData, lanesetInfo);
+    	        marshallSubProcess((SubProcess) flowElement, plane, generator, xOffset, yOffset, preProcessingData, lanesetInfo, def);
     	    }
     	} else if (flowElement instanceof DataObject) {
     		marshallDataObject((DataObject) flowElement, plane, generator, xOffset, yOffset);
@@ -788,7 +789,7 @@ public class Bpmn2JsonMarshaller {
     	}
     }
     
-    private void marshallTask(Task task, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Map<String, List<String>> lanesetInfo) throws JsonGenerationException, IOException {
+    private void marshallTask(Task task, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Map<String, List<String>> lanesetInfo, Definitions def) throws JsonGenerationException, IOException {
         Map<String, Object> properties = new LinkedHashMap<String, Object>();
     	String taskType = "None";
     	if (task instanceof BusinessRuleTask) {
@@ -807,6 +808,27 @@ public class Bpmn2JsonMarshaller {
     		taskType = "Script";
     	} else if (task instanceof ServiceTask) {
     		taskType = "Service";
+    		ServiceTask serviceTask = (ServiceTask) task;
+    		if(serviceTask.getOperationRef() != null) {
+    		    Operation oper = serviceTask.getOperationRef();
+    		    if(oper.getName() != null) {
+    		        properties.put("operation", oper.getName());
+    		    }
+    		    if(def != null) {
+    		        List<RootElement> roots = def.getRootElements();
+    		        for(RootElement root : roots) {
+    		            if(root instanceof Interface) {
+    		                Interface inter = (Interface) root;
+    		                List<Operation> interOperations = inter.getOperations();
+    		                for(Operation interOper : interOperations) {
+    		                    if(interOper.getId().equals(oper.getId())) {
+    		                        properties.put("interface", inter.getName());
+    		                    }
+    		                }
+    		            }
+    		        }
+    		    }
+    		}
     	} else if (task instanceof ManualTask) {
     		taskType = "Manual";
     	} else if (task instanceof UserTask) {
@@ -1207,7 +1229,7 @@ public class Bpmn2JsonMarshaller {
 	    generator.writeEndObject();
 	}
     
-    private void marshallSubProcess(SubProcess subProcess, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Map<String, List<String>> lanesetInfo) throws JsonGenerationException, IOException {
+    private void marshallSubProcess(SubProcess subProcess, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Map<String, List<String>> lanesetInfo, Definitions def) throws JsonGenerationException, IOException {
         Map<String, Object> properties = new LinkedHashMap<String, Object>();
 		properties.put("name", subProcess.getName());
 	    marshallProperties(properties, generator);
@@ -1221,7 +1243,7 @@ public class Bpmn2JsonMarshaller {
 	    generator.writeArrayFieldStart("childShapes");
 	    Bounds bounds = ((BPMNShape) findDiagramElement(plane, subProcess)).getBounds();
 	    for (FlowElement flowElement: subProcess.getFlowElements()) {
-	    	marshallFlowElement(flowElement, plane, generator, (int) (xOffset + bounds.getX()), (int) (yOffset + bounds.getY()), preProcessingData, lanesetInfo);
+	    	marshallFlowElement(flowElement, plane, generator, (int) (xOffset + bounds.getX()), (int) (yOffset + bounds.getY()), preProcessingData, lanesetInfo, def);
 	    }
 	    generator.writeEndArray();
 	    generator.writeArrayFieldStart("outgoing");

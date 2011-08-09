@@ -2745,6 +2745,26 @@
 					"optional":true
 				},
 				{
+					"id":"interface",
+					"type":"String",
+					"title":"Interface",
+					"title_de":"Interface",
+					"value":"",
+					"description":"Interface",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"operation",
+					"type":"String",
+					"title":"Operation",
+					"title_de":"Operation",
+					"value":"",
+					"description":"Operation",
+					"readonly":false,
+					"optional":true
+				},
+				{
 					"id":"lanes",
 					"type":"String",
 					"title":"Lanes",
