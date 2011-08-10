@@ -1300,6 +1300,27 @@ public class Bpmn2JsonMarshaller {
     	        properties.put("conditionexpressionlanguage", cdStr);
     	    } 
     	}
+    	// priority value
+    	Iterator<FeatureMap.Entry> iter = sequenceFlow.getAnyAttribute().iterator();
+        while(iter.hasNext()) {
+            FeatureMap.Entry entry = iter.next();
+            if(entry.getEStructuralFeature().getName().equals("priority")) {
+                String priorityStr = (String) entry.getValue();
+                if(priorityStr != null) {
+                    try {
+                        Integer priorityInt = Integer.parseInt(priorityStr);
+                        if(priorityInt >= 1) {
+                            properties.put("priority", entry.getValue());
+                        } else {
+                            System.out.println("Priority must be equal or greater than 1.");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Priority must be a number.");
+                    }
+                }
+            }
+        }
+    	
         marshallProperties(properties, generator);
         generator.writeObjectFieldStart("stencil");
         generator.writeObjectField("id", "SequenceFlow");

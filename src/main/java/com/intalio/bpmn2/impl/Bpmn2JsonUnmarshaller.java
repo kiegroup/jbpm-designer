@@ -1944,6 +1944,16 @@ public class Bpmn2JsonUnmarshaller {
             }
             sequenceFlow.setConditionExpression(expr);
         }
+        
+        if (properties.get("priority") != null && !"".equals(properties.get("priority"))) {
+            ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+            EAttributeImpl priorityElement = (EAttributeImpl) metadata.demandFeature(
+                    "http://www.jboss.org/drools", "priority", false   , false);
+            EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(priorityElement,
+                    properties.get("priority"));
+            sequenceFlow.getAnyAttribute().add(extensionEntry);
+        }
+        
         if (properties.get("monitoring") != null && !"".equals(properties.get("monitoring"))) {
             Monitoring monitoring = Bpmn2Factory.eINSTANCE.createMonitoring();
             monitoring.getDocumentation().add(createDocumentation(properties.get("monitoring")));

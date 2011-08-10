@@ -6175,6 +6175,17 @@
 					"wrapLines":true
 				},
 				{
+					"id":"priority",
+					"type":"Integer",
+					"title":"Priority",
+					"title_de":"Priority",
+					"value":"",
+					"description":"priority",
+					"readonly":false,
+					"optional":true,
+					"min":"1"
+				},
+				{
 					"id":"isimmediate",
 					"type":"Boolean",
 					"title":"isImmediate",
