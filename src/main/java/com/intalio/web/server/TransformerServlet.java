@@ -94,7 +94,8 @@ public class TransformerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        String svg = req.getParameter("svg");
+        String formattedSvg = req.getParameter("fsvg");
+        String rawSvg = req.getParameter("rsvg");
         String uuid = req.getParameter("uuid");
         String profileName = req.getParameter("profile");
         String transformto = req.getParameter("transformto");
@@ -103,7 +104,7 @@ public class TransformerServlet extends HttpServlet {
 
         if (transformto != null && transformto.equals(TO_PDF)) {
             try {
-                String processId = storeToGuvnor(uuid, profile, svg,
+                String processId = storeToGuvnor(uuid, profile, formattedSvg, rawSvg,
                         transformto);
                 
                 resp.setContentType("application/pdf");
@@ -117,7 +118,7 @@ public class TransformerServlet extends HttpServlet {
                 
                 PDFTranscoder t = new PDFTranscoder();
                 TranscoderInput input = new TranscoderInput(new StringReader(
-                        svg));
+                        formattedSvg));
                 TranscoderOutput output = new TranscoderOutput(
                         resp.getOutputStream());
                 t.transcode(input, output);
@@ -128,7 +129,7 @@ public class TransformerServlet extends HttpServlet {
         } else if (transformto != null && transformto.equals(TO_PNG)) {
             try {
                 ParsedURL.registerHandler(new GuvnorParsedURLProtocolHandler(profile));
-                String processName = storeToGuvnor(uuid, profile, svg,
+                String processName = storeToGuvnor(uuid, profile, formattedSvg, rawSvg,
                         transformto);
 
                 resp.setContentType("image/png");
@@ -143,7 +144,7 @@ public class TransformerServlet extends HttpServlet {
                 PNGTranscoder t = new PNGTranscoder();
                 t.addTranscodingHint(ImageTranscoder.KEY_MEDIA, "screen");
                 TranscoderInput input = new TranscoderInput(new StringReader(
-                        svg));
+                        formattedSvg));
                 TranscoderOutput output = new TranscoderOutput(
                         resp.getOutputStream());
                 t.transcode(input, output);
@@ -155,7 +156,7 @@ public class TransformerServlet extends HttpServlet {
     }
 
     private String storeToGuvnor(String uuid, IDiagramProfile profile,
-            String svg, String transformto) {
+            String formattedSvg, String rawSvg, String transformto) {
         String[] packageAssetName = findPackageAndAssetNameForUUID(uuid,
                 profile);
         String processContent = getProcessContent(packageAssetName[0],
@@ -170,7 +171,7 @@ public class TransformerServlet extends HttpServlet {
                     processId = rootElement.getId();
                     if (processId != null && processId.length() > 0) {
                         guvnorStore(packageAssetName[0], processId,
-                                profile, svg, transformto);
+                                profile, formattedSvg, rawSvg, transformto);
                     } else {
                         _logger.error("Cannot store to guvnor because process does not have it's id set");
                     }
@@ -182,7 +183,7 @@ public class TransformerServlet extends HttpServlet {
     }
 
     private void guvnorStore(String packageName, String assetName,
-            IDiagramProfile profile, String svg, String transformto) {
+            IDiagramProfile profile, String formattedSvg, String rawSvg, String transformto) {
         try {
             String assetExt = "";
             String assetFileExt = "";
@@ -256,7 +257,7 @@ public class TransformerServlet extends HttpServlet {
             if (transformto.equals(TO_PDF)) {
                 PDFTranscoder t = new PDFTranscoder();
                 TranscoderInput input = new TranscoderInput(new StringReader(
-                        svg));
+                        rawSvg));
                 TranscoderOutput output = new TranscoderOutput(
                         createConnection.getOutputStream());
                 t.transcode(input, output);
@@ -264,8 +265,9 @@ public class TransformerServlet extends HttpServlet {
 
             if (transformto.equals(TO_PNG)) {
                 PNGTranscoder t = new PNGTranscoder();
+                t.addTranscodingHint(ImageTranscoder.KEY_MEDIA, "screen");
                 TranscoderInput input = new TranscoderInput(new StringReader(
-                        svg));
+                        rawSvg));
                 TranscoderOutput output = new TranscoderOutput(
                         createConnection.getOutputStream());
                 t.transcode(input, output);

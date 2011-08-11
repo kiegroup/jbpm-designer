@@ -300,8 +300,8 @@ ORYX.Plugins.View = {
 	 */
 	showAsPNG : function() {
 		var transformval = 'png';
-		var svgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(true));
-		
+		var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false));
+		var rawSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getRootNode().cloneNode(true))
 		var method ="post";
 		var form = document.createElement("form");
 		form.setAttribute("name", "transformerform");
@@ -309,11 +309,17 @@ ORYX.Plugins.View = {
 		form.setAttribute("action", ORYX.CONFIG.TRANSFORMER_URL());
 		form.setAttribute("target", "_blank");
 		
-		var hfSVG = document.createElement("input");
-		hfSVG.setAttribute("type", "hidden");
-		hfSVG.setAttribute("name", "svg");
-		hfSVG.setAttribute("value", svgDOM);
-        form.appendChild(hfSVG);
+		var hfFSVG = document.createElement("input");
+		hfFSVG.setAttribute("type", "hidden");
+		hfFSVG.setAttribute("name", "fsvg");
+		hfFSVG.setAttribute("value", formattedSvgDOM);
+        form.appendChild(hfFSVG);
+        
+        var hfRSVG = document.createElement("input");
+        hfRSVG.setAttribute("type", "hidden");
+        hfRSVG.setAttribute("name", "rsvg");
+        hfRSVG.setAttribute("value", rawSvgDOM);
+        form.appendChild(hfRSVG);
         
         var hfUUID = document.createElement("input");
         hfUUID.setAttribute("type", "hidden");
