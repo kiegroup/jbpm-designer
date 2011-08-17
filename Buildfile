@@ -48,11 +48,11 @@ define "designer" do
   
   webContent = "WebContent/"
 
-  package(:bundle).include(_("src/main/webapp"), :as => webContent).exclude('WEB-INF/tomcat_web.xml').exclude('WEB-INF/epn_web.xml')
-  package(:war).include(_("src/main/webapp"), :as => '.').exclude('WEB-INF/tomcat_web.xml').exclude('WEB-INF/epn_web.xml')
+  package(:bundle).include(_("src/main/webapp"), :as => webContent).exclude('WEB-INF/tomcat_web.xml').exclude('WEB-INF/epn_web.xml').exclude('WEB-INF/jboss-web.xml')
+  package(:war).include(_("src/main/webapp"), :as => '.').exclude('WEB-INF/tomcat_web.xml').exclude('WEB-INF/epn_web.xml').exclude('WEB-INF/jboss-web.xml')
   package(:war, :classifier => "jboss").include(_("src/main/webapp"), :as => '.').exclude('WEB-INF/tomcat_web.xml').exclude('WEB-INF/epn_web.xml')
   package(:war, :classifier => "jboss7").include(_("src/main/webapp"), :as => '.').exclude('WEB-INF/tomcat_web.xml').exclude('WEB-INF/epn_web.xml')
-  #package(:war, :classifier => "epn").include(_("src/main/webapp"), :as => '.').exclude('WEB-INF/tomcat_web.xml').exclude('WEB-INF/epn_web.xml')
+  #package(:war, :classifier => "epn").include(_("src/main/webapp"), :as => '.').exclude('WEB-INF/tomcat_web.xml').exclude('WEB-INF/epn_web.xml').exclude('WEB-INF/jboss-web.xml')
 
   package(:war).libs = WAR_LIBS
   package(:war, :classifier => "jboss").libs = WAR_LIBS_JBOSS
