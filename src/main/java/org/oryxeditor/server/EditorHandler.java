@@ -66,6 +66,7 @@ import com.intalio.web.plugin.IDiagramPluginService;
 import com.intalio.web.plugin.impl.PluginServiceImpl;
 import com.intalio.web.profile.IDiagramProfile;
 import com.intalio.web.profile.IDiagramProfileService;
+import com.intalio.web.profile.impl.ExternalInfo;
 import com.intalio.web.profile.impl.ProfileServiceImpl;
 import com.intalio.web.preference.IDiagramPreference;
 import com.intalio.web.preference.IDiagramPreferenceService;
@@ -401,6 +402,16 @@ public class EditorHandler extends HttpServlet {
                 replacementMade = true;    
             } else if ("preprocessing".equals(elt)) {
                 resultHtml.append(preprocessingUnit == null ? "" : preprocessingUnit.getOutData());
+                replacementMade = true;    
+            } else if ("guvnorprotocol".equals(elt)) {
+                resultHtml.append(ExternalInfo.getExternalProtocol(profile));
+                replacementMade = true;    
+            } else if ("guvnorhost".equals(elt)) {
+                resultHtml.append(ExternalInfo.getExternalHost(profile));
+                replacementMade = true;    
+            } else if ("guvnorsubdomain".equals(elt)) {
+                resultHtml.append(profile.getExternalLoadURLSubdomain().substring(0,
+                        profile.getExternalLoadURLSubdomain().indexOf("/")));
                 replacementMade = true;    
             } else if ("designerversion".equals(elt)) { 
                 resultHtml.append(_designerVersion);
