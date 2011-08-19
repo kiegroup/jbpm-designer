@@ -9,7 +9,7 @@ $genericstyle()$
               $manager.taskFormInformationList:{ info | 
             	<label for="name">$info.id$</label>
             	<div class="div_texbox">
-            		<a href="http://localhost:8080/drools-guvnor/rest/packages/defaultPackage/assets/$info.id$/source” target=”_self">View Source</A>
+            		<a href="$profile$://$host$/$subdomain$/rest/packages/$info.pkgName$/assets/$info.id$/source” target=”_self">View Source</A>
               	</div>
               }$
               <div class="button_div">

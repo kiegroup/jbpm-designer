@@ -78,7 +78,7 @@ public class TaskFormsServlet extends HttpServlet {
         
         try {
             storeToGuvnor( templateManager, profile );
-            displayResponse( templateManager, resp );
+            displayResponse( templateManager, resp, profile );
         } catch (Exception e) {
             _logger.error(e.getMessage());
             displayErrorResponse(resp, e.getMessage());
@@ -217,11 +217,15 @@ public class TaskFormsServlet extends HttpServlet {
         }
     }
     
-    public void displayResponse(TaskFormTemplateManager templateManager, HttpServletResponse resp) {
+    public void displayResponse(TaskFormTemplateManager templateManager, HttpServletResponse resp, IDiagramProfile profile) {
         try {
             StringTemplateGroup templates = new StringTemplateGroup("resultsgroup", templateManager.getTemplatesPath());
             StringTemplate resultsForm = templates.getInstanceOf("resultsform");
             resultsForm.setAttribute("manager", templateManager);
+            resultsForm.setAttribute("profile", ExternalInfo.getExternalProtocol(profile));
+            resultsForm.setAttribute("host", ExternalInfo.getExternalHost(profile));
+            resultsForm.setAttribute("subdomain", profile.getExternalLoadURLSubdomain().substring(0,
+                profile.getExternalLoadURLSubdomain().indexOf("/")));
             ServletOutputStream outstr = resp.getOutputStream();
             resp.setContentType("text/html");
             outstr.write(resultsForm.toString().getBytes("ASCII"));
