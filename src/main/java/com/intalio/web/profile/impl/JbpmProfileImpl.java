@@ -83,7 +83,6 @@ public class JbpmProfileImpl implements IDiagramProfile {
     
     private void initializeLocalPlugins(ServletContext context) {
         Map<String, IDiagramPlugin> registry = PluginServiceImpl.getLocalPluginsRegistry(context);
-        //we read the default.xml file and make sense of it.
         FileInputStream fileStream = null;
         try {
             try {
@@ -113,18 +112,46 @@ public class JbpmProfileImpl implements IDiagramProfile {
                     } else if ("externalloadurl".equals(reader.getLocalName())) {
                         for (int i = 0 ; i < reader.getAttributeCount() ; i++) {
                             if ("protocol".equals(reader.getAttributeLocalName(i))) {
+                                String extProtocol = reader.getAttributeValue(i);
+                                if(!isEmpty(extProtocol)) {
+                                    _externalLoadProtocol = extProtocol;
+                                } else {
+                                    _logger.info("Invalid protocol specified");
+                                }
                                 _externalLoadProtocol = reader.getAttributeValue(i);
                             }
                             if ("host".equals(reader.getAttributeLocalName(i))) {
-                                _externalLoadHost = reader.getAttributeValue(i);
+                                String exthost = reader.getAttributeValue(i);
+                                if(!isEmpty(exthost)) {
+                                    _externalLoadHost = exthost;
+                                } else {
+                                   _logger.info("Invalid host specified");
+                                }
                             }
                             if ("subdomain".equals(reader.getAttributeLocalName(i))) {
-                                _externalLoadSubdomain = reader.getAttributeValue(i);
+                                String extsub = reader.getAttributeValue(i);
+                                if(!isEmpty(extsub)) {
+                                    if(extsub.startsWith("/")) {
+                                        extsub = extsub.substring(1);
+                                    } 
+                                    if(extsub.endsWith("/")) {
+                                        extsub = extsub.substring(0,extsub.length() - 1);
+                                    }
+                                    _externalLoadSubdomain = extsub;
+                                } else {
+                                    _logger.info("Invalid subdomain specified");
+                                }
                             }
                             if ("usr".equals(reader.getAttributeLocalName(i))) {
-                                _usr = reader.getAttributeValue(i);
+                                String extUsr = reader.getAttributeValue(i);
+                                if(!isEmpty(extUsr)) {
+                                    _usr = extUsr;
+                                } else {
+                                    _logger.info("Invalid usr specified");
+                                }
                             }
                             if ("pwd".equals(reader.getAttributeLocalName(i))) {
+                                // allow any value for pwd
                                 _pwd = reader.getAttributeValue(i);
                             }
                         }
@@ -233,6 +260,18 @@ public class JbpmProfileImpl implements IDiagramProfile {
 
     public String getStencilSetExtensionURL() {
         return "http://oryx-editor.org/stencilsets/extensions/bpmncosts-2.0#";
+    }
+    
+    private boolean isEmpty(final CharSequence str) {
+        if ( str == null || str.length() == 0 ) {
+            return true;
+        }
+        for ( int i = 0, length = str.length(); i < length; i++ ){
+            if ( str.charAt( i ) != ' ' ) {
+                return false;
+            }
+        }
+        return true;
     }
 }
 
