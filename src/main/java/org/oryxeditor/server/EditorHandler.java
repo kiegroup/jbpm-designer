@@ -403,13 +403,13 @@ public class EditorHandler extends HttpServlet {
             } else if ("preprocessing".equals(elt)) {
                 resultHtml.append(preprocessingUnit == null ? "" : preprocessingUnit.getOutData());
                 replacementMade = true;    
-            } else if ("guvnorprotocol".equals(elt)) {
+            } else if ("externalprotocol".equals(elt)) {
                 resultHtml.append(ExternalInfo.getExternalProtocol(profile));
                 replacementMade = true;    
-            } else if ("guvnorhost".equals(elt)) {
+            } else if ("externalhost".equals(elt)) {
                 resultHtml.append(ExternalInfo.getExternalHost(profile));
                 replacementMade = true;    
-            } else if ("guvnorsubdomain".equals(elt)) {
+            } else if ("externalsubdomain".equals(elt)) {
                 resultHtml.append(profile.getExternalLoadURLSubdomain().substring(0,
                         profile.getExternalLoadURLSubdomain().indexOf("/")));
                 replacementMade = true;    
