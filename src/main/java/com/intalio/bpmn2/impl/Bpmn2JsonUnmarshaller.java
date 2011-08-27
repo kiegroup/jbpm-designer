@@ -183,11 +183,11 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
 
-    public Definitions unmarshall(String json, String preProcessingData) throws JsonParseException, IOException {
+    public Resource unmarshall(String json, String preProcessingData) throws JsonParseException, IOException {
         return unmarshall(new JsonFactory().createJsonParser(json), preProcessingData);
     }
 
-    public Definitions unmarshall(File file, String preProcessingData) throws JsonParseException, IOException {
+    public Resource unmarshall(File file, String preProcessingData) throws JsonParseException, IOException {
         return unmarshall(new JsonFactory().createJsonParser(file), preProcessingData);
     }
 
@@ -198,7 +198,7 @@ public class Bpmn2JsonUnmarshaller {
      * @throws JsonParseException
      * @throws IOException
      */
-    private Definitions unmarshall(JsonParser parser, String preProcessingData) throws JsonParseException, IOException {
+    private Resource unmarshall(JsonParser parser, String preProcessingData) throws JsonParseException, IOException {
         try {
             parser.nextToken(); // open the object
             ResourceSet rSet = new ResourceSetImpl();
@@ -217,7 +217,9 @@ public class Bpmn2JsonUnmarshaller {
             revisitCatchEvents(def);
             revisitThrowEvents(def);
             revisitLanesets(def);
-            return def;
+            // return def;
+            _currentResource.getContents().add(def);
+            return _currentResource;
         } finally {
             parser.close();
             _objMap.clear();
@@ -878,7 +880,6 @@ public class Bpmn2JsonUnmarshaller {
                                 }
                                 rootLevelProcess.getLaneSets().add(laneset);
                             }
-                            rootLevelProcess.setName(((Definitions) baseElt).getName());
                             rootLevelProcess.setId(properties.get("id"));
                             applyProcessProperties(rootLevelProcess, properties);
                             ((Definitions) baseElt).getRootElements().add(rootLevelProcess);
@@ -1429,11 +1430,8 @@ public class Bpmn2JsonUnmarshaller {
         //def.setTargetNamespace(properties.get("targetnamespace"));
         def.setTargetNamespace("http://www.omg.org/bpmn20");
         def.setExpressionLanguage(properties.get("expressionlanguage"));
-        if(properties.get("name") != null) {
-            def.setName(properties.get("name"));
-        } else {
-            def.setName("");
-        }
+
+        def.setId("Definition");
         
         ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
         EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
@@ -1442,7 +1440,7 @@ public class Bpmn2JsonUnmarshaller {
             "http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd");
         def.getAnyAttribute().add(extensionEntry);
         
-        _currentResource.getContents().add(def);// hook the definitions object to the resource early.
+        //_currentResource.getContents().add(def);// hook the definitions object to the resource early.
     }
 
     private void applyProcessProperties(Process process, Map<String, String> properties) {

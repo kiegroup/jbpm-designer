@@ -176,11 +176,12 @@ public class DefaultProfileImpl implements IDiagramProfile {
         return new IDiagramMarshaller() {
             public String parseModel(String jsonModel, String preProcessingData) {
                 Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
-                Definitions def;
+                //Definitions def;
+                Resource res;
                 try {
-                    def = unmarshaller.unmarshall(jsonModel, preProcessingData);
+                    res = unmarshaller.unmarshall(jsonModel, preProcessingData);
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                    def.eResource().save(outputStream, Collections.singletonMap(XMLResource.OPTION_ENCODING, "UTF-8"));
+                    res.save(outputStream, Collections.singletonMap(XMLResource.OPTION_ENCODING, "UTF-8"));
                     return outputStream.toString();
                 } catch (JsonParseException e) {
                     _logger.error(e.getMessage(), e);

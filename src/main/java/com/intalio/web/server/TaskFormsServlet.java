@@ -24,6 +24,7 @@ import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 import org.apache.log4j.Logger;
 import org.eclipse.bpmn2.Definitions;
+import org.eclipse.bpmn2.DocumentRoot;
 
 import sun.misc.BASE64Encoder;
 
@@ -70,7 +71,7 @@ public class TaskFormsServlet extends HttpServlet {
         String assetName = packageAssetInfo[1];
 
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
-        Definitions def = unmarshaller.unmarshall(json, preprocessingData);
+        Definitions def = ((Definitions) unmarshaller.unmarshall(json, preprocessingData).getContents().get(0));
         
         TaskFormTemplateManager templateManager = new TaskFormTemplateManager( profile, packageName, assetName, getServletContext().getRealPath("/" + TASKFORMS_PATH), def );
         
