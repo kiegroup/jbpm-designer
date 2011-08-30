@@ -35,7 +35,7 @@ OSGi::GroupMatcher.instance.group_matchers << Proc.new {|id|
 }
 
 # Keep this structure to allow the build system to update version numbers.
-VERSION_NUMBER = "1.0.0.054"
+VERSION_NUMBER = "1.0.0.055"
 
 desc "Process Designer"
 define "designer" do
