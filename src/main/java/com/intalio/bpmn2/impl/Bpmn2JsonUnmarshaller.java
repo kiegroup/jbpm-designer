@@ -108,6 +108,7 @@ import org.eclipse.bpmn2.di.BPMNEdge;
 import org.eclipse.bpmn2.di.BPMNPlane;
 import org.eclipse.bpmn2.di.BPMNShape;
 import org.eclipse.bpmn2.di.BpmnDiFactory;
+import org.eclipse.bpmn2.util.Bpmn2Resource;
 import org.eclipse.bpmn2.util.Bpmn2ResourceFactoryImpl;
 import org.eclipse.dd.dc.Bounds;
 import org.eclipse.dd.dc.DcFactory;
@@ -161,7 +162,7 @@ public class Bpmn2JsonUnmarshaller {
 
     private List<BpmnMarshallerHelper> _helpers;
 
-    private Resource _currentResource;
+    private Bpmn2Resource _currentResource;
     
     public Bpmn2JsonUnmarshaller() {
         _helpers = new ArrayList<BpmnMarshallerHelper>();
@@ -183,11 +184,11 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
 
-    public Resource unmarshall(String json, String preProcessingData) throws JsonParseException, IOException {
+    public Bpmn2Resource unmarshall(String json, String preProcessingData) throws JsonParseException, IOException {
         return unmarshall(new JsonFactory().createJsonParser(json), preProcessingData);
     }
 
-    public Resource unmarshall(File file, String preProcessingData) throws JsonParseException, IOException {
+    public Bpmn2Resource unmarshall(File file, String preProcessingData) throws JsonParseException, IOException {
         return unmarshall(new JsonFactory().createJsonParser(file), preProcessingData);
     }
 
@@ -198,13 +199,13 @@ public class Bpmn2JsonUnmarshaller {
      * @throws JsonParseException
      * @throws IOException
      */
-    private Resource unmarshall(JsonParser parser, String preProcessingData) throws JsonParseException, IOException {
+    private Bpmn2Resource unmarshall(JsonParser parser, String preProcessingData) throws JsonParseException, IOException {
         try {
             parser.nextToken(); // open the object
             ResourceSet rSet = new ResourceSetImpl();
             rSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("bpmn2",
                     new Bpmn2ResourceFactoryImpl());
-            Resource bpmn2 = rSet.createResource(URI.createURI("virtual.bpmn2"));
+            Bpmn2Resource bpmn2 = (Bpmn2Resource) rSet.createResource(URI.createURI("virtual.bpmn2"));
             rSet.getResources().add(bpmn2);
             _currentResource = bpmn2;
             // do the unmarshalling now:
@@ -1431,8 +1432,6 @@ public class Bpmn2JsonUnmarshaller {
         def.setTargetNamespace("http://www.omg.org/bpmn20");
         def.setExpressionLanguage(properties.get("expressionlanguage"));
 
-        def.setId("Definition");
-        
         ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
         EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
                     "xsi", "schemaLocation", false, false);

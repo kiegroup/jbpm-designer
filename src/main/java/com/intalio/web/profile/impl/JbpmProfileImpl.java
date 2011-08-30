@@ -32,6 +32,7 @@ import com.intalio.web.profile.IDiagramProfile;
 
 import org.eclipse.bpmn2.DocumentRoot;
 import org.eclipse.bpmn2.Bpmn2Package;
+import org.eclipse.bpmn2.util.Bpmn2Resource;
 import org.eclipse.bpmn2.util.Bpmn2ResourceFactoryImpl;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -199,9 +200,9 @@ public class JbpmProfileImpl implements IDiagramProfile {
             public String parseModel(String jsonModel, String preProcessingData) {
                 Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
                 //Definitions def;
-                Resource res;
+                Bpmn2Resource res;
                 try {
-                    res = unmarshaller.unmarshall(jsonModel, preProcessingData);
+                    res = (Bpmn2Resource) unmarshaller.unmarshall(jsonModel, preProcessingData);
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                     Map<Object, Object> saveOptions = new HashMap<Object, Object>();
                     saveOptions.put(XMLResource.OPTION_ENCODING, "UTF-8");
