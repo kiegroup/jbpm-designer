@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonEncoding;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerationException;
@@ -44,6 +45,7 @@ import org.eclipse.bpmn2.CallActivity;
 import org.eclipse.bpmn2.CallableElement;
 import org.eclipse.bpmn2.CatchEvent;
 import org.eclipse.bpmn2.Choreography;
+import org.eclipse.bpmn2.Collaboration;
 import org.eclipse.bpmn2.CompensateEventDefinition;
 import org.eclipse.bpmn2.ComplexGateway;
 import org.eclipse.bpmn2.ConditionalEventDefinition;
@@ -134,7 +136,7 @@ import com.intalio.web.profile.IDiagramProfile;
 public class Bpmn2JsonMarshaller {
 	
 	private Map<String, DiagramElement> _diagramElements = new HashMap<String, DiagramElement>();
-	
+	private static final Logger _logger = Logger.getLogger(Bpmn2JsonMarshaller.class);
 	private IDiagramProfile profile;
 	
 	public void setProfile(IDiagramProfile profile) {
@@ -341,8 +343,10 @@ public class Bpmn2JsonMarshaller {
                     // TODO
                 } else if (rootElement instanceof Escalation) {
                     // TODO
+                } else if (rootElement instanceof Collaboration) { 
+                	
                 } else {
-	                throw new UnsupportedOperationException("Unknown root element " + rootElement); //TODO!
+                	_logger.warn("Unknown root element " + rootElement + ". This element will not be parsed.");
 	            }
 	        }
 	        
@@ -353,7 +357,6 @@ public class Bpmn2JsonMarshaller {
 	        generator.writeArrayFieldStart("ssextensions");
 	        generator.writeObject(this.profile.getStencilSetExtensionURL());
 	        generator.writeEndArray();
-	        
 	        generator.writeEndObject();
         } finally {
         	_diagramElements.clear();
