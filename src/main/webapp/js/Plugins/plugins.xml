@@ -361,6 +361,7 @@
 			
                         
                 <plugin source="regexTextEditor.js" name="ORYX.Plugins.RegexTextEditor" />        
+                <plugin source="constraintExpressionEditor.js" name="ORYX.Plugins.ConstraintExpressionEditor" />        
 	</plugins>
 	
 	
