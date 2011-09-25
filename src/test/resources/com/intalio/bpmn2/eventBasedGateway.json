@@ -41,7 +41,7 @@
             "gate_assignments": ""
         },
         "stencil": {
-            "id": "EventBasedGateway"
+            "id": "EventbasedGateway"
         },
         "childShapes": [],
         "outgoing": [],
