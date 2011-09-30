@@ -1668,15 +1668,13 @@
 				},
 				{
 					"id":"script_language",
-					"type":"Regex",
+					"type":"String",
 					"title":"ScriptLanguage",
 					"title_de":"Skript Sprache",
 					"value":"",
 					"description":"Defines the script language. The script language MUST be provided if a script is provided.",
 					"readonly":false,
-					"optional":true,
-                                        "regex": /[a-zA-Z].*/,
-                                        "invalidText": "The value must start with a letter"
+					"optional":true                                        
 				},
 				{
 					"id":"inmessagetype",
@@ -4541,17 +4539,13 @@
 				},
 				{
 					"id":"conditionexpression",
-					"type":"simpleConstraintExpressionEditor",
+					"type":"Text",
 					"title":"Expression",
 					"title_de":"Expression",
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":true,
-                                        "showConstraintEditorWhen": {
-                                            "property": "conditionlanguage",
-                                            "value": "Rule",
-                                         }
+					"optional":true                                        
 				}
 			]
 		},
