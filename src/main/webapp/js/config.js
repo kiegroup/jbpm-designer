@@ -299,16 +299,3 @@ ORYX.CONFIG.KEY_ACTION_UP = 			"up";
 
 ORYX.CONFIG.PANEL_RIGHT_COLLAPSED = true;
 ORYX.CONFIG.PANEL_LEFT_COLLAPSED = true;
-
-/* Guvnor Popup Editor */
-ORYX.CONFIG.GUVNOR_EDITOR_URL           =   "/drools-guvnor/org.drools.guvnor.Guvnor/standaloneEditorServlet";
-
-/**
- * If true, the rules are going to be edited under ORYX.CONFIG.GUVNOR_FIXED_PACKAGE package
- * If false, the package is taken from process' package attribute
- */
-ORYX.CONFIG.GUVNOR_USE_FIXED_PACKAGE    =   true;  
-ORYX.CONFIG.GUVNOR_FIXED_PACKAGE        =   "mortgages";
-ORYX.CONFIG.GUVNOR_CATEGORY             =   "Home Mortgage";
-ORYX.CONFIG.GUVNOR_HIDE_RHS             =   true;
-ORYX.CONFIG.GUVNOR_HIDE_ATTRIBUTES      =   true;
