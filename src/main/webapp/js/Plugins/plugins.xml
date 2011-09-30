@@ -359,6 +359,15 @@
 		<plugin source="dragTracker/laneDragTracker.js" name="ORYX.Plugins.DragTracker.LaneDragTracker" />
 		<plugin source="dragTracker/poolDragTracker.js" name="ORYX.Plugins.DragTracker.PoolDragTracker" />
 			
+                        
+                <plugin source="regexTextEditor.js" name="ORYX.Plugins.RegexTextEditor" />        
+                <plugin source="constraintExpressionEditor.js" name="ORYX.Plugins.ConstraintExpressionEditor">
+                    <property name="useFixedPackage" value="false"/>
+                    <!--property name="fixedPackage" value="mortgages" /-->
+                    <property name="category" value="Home Mortgage" />
+                    <property name="hideRHS" value="true"/>
+                    <property name="hideAttributes" value="true"/>
+                </plugin>        
 	</plugins>
 	
 	
