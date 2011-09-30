@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import com.intalio.bpmn2.impl.Bpmn2JsonMarshaller;
 import com.intalio.bpmn2.impl.Bpmn2JsonUnmarshaller;
+import com.intalio.bpmn2.resource.JBPMBpmn2ResourceImpl;
 import com.intalio.web.plugin.IDiagramPlugin;
 import com.intalio.web.plugin.impl.PluginServiceImpl;
 import com.intalio.web.profile.IDiagramProfile;
@@ -200,14 +201,11 @@ public class JbpmProfileImpl implements IDiagramProfile {
             public String parseModel(String jsonModel, String preProcessingData) {
                 Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
                 //Definitions def;
-                Bpmn2Resource res;
+                JBPMBpmn2ResourceImpl res;
                 try {
-                    res = (Bpmn2Resource) unmarshaller.unmarshall(jsonModel, preProcessingData);
+                    res = (JBPMBpmn2ResourceImpl) unmarshaller.unmarshall(jsonModel, preProcessingData);
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                    Map<Object, Object> saveOptions = new HashMap<Object, Object>();
-                    saveOptions.put(XMLResource.OPTION_ENCODING, "UTF-8");
-                    
-                    res.save(outputStream, saveOptions);
+                    res.save(outputStream, new HashMap<Object, Object>());
                     return outputStream.toString();
                 } catch (JsonParseException e) {
                     _logger.error(e.getMessage(), e);

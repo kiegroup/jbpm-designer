@@ -109,7 +109,6 @@ import org.eclipse.bpmn2.di.BPMNPlane;
 import org.eclipse.bpmn2.di.BPMNShape;
 import org.eclipse.bpmn2.di.BpmnDiFactory;
 import org.eclipse.bpmn2.util.Bpmn2Resource;
-import org.eclipse.bpmn2.util.Bpmn2ResourceFactoryImpl;
 import org.eclipse.dd.dc.Bounds;
 import org.eclipse.dd.dc.DcFactory;
 import org.eclipse.dd.dc.Point;
@@ -136,6 +135,7 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
 import com.intalio.bpmn2.BpmnMarshallerHelper;
+import com.intalio.bpmn2.resource.JBPMBpmn2ResourceFactoryImpl;
 
 /**
  * @author Antoine Toulme
@@ -203,7 +203,7 @@ public class Bpmn2JsonUnmarshaller {
             parser.nextToken(); // open the object
             ResourceSet rSet = new ResourceSetImpl();
             rSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("bpmn2",
-                    new Bpmn2ResourceFactoryImpl());
+                    new JBPMBpmn2ResourceFactoryImpl());
             Bpmn2Resource bpmn2 = (Bpmn2Resource) rSet.createResource(URI.createURI("virtual.bpmn2"));
             rSet.getResources().add(bpmn2);
             _currentResource = bpmn2;
