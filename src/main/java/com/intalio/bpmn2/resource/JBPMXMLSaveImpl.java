@@ -1,11 +1,13 @@
 package com.intalio.bpmn2.resource;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.bpmn2.Definitions;
+import org.eclipse.bpmn2.Process;
+import org.eclipse.bpmn2.RootElement;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.xmi.XMLHelper;
@@ -26,11 +28,31 @@ public class JBPMXMLSaveImpl extends XMLSaveImpl {
 		featureTable = new JBPMXMLSaveImpl.JBPMLookup(map, extendedMetaData, elementHandler);
 	}
 	
+	@Override
+	public void traverse(List<? extends EObject> contents) {
+		for(EObject e : contents) {
+			if(e instanceof Definitions) {
+				List<RootElement> roots = ((Definitions) e).getRootElements();
+				Process p = null;
+				for(RootElement root : roots) {
+					if(root instanceof Process) {
+						p = (Process) root;
+					}
+				}
+				if(p != null) {
+					((Definitions) e).getRootElements().remove(p);
+					((Definitions) e).getRootElements().add(p);
+				}
+			}
+		}
+		super.traverse(contents);
+	}
+	
 	public static class JBPMLookup extends XMLSaveImpl.Lookup {
 		public JBPMLookup(XMLMap map, ExtendedMetaData extendedMetaData, ElementHandler elementHandler) {
 			super(map, extendedMetaData, elementHandler);
 		}
-
+		
 		@Override
 		public EStructuralFeature[] getFeatures(EClass cls) {
 			int index = getIndex(cls);
