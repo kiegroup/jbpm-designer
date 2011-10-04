@@ -36,7 +36,6 @@ public class UUIDBasedJbpmRepository implements IUUIDBasedRepository {
                 processjson = profile.createUnmarshaller().parseModel(processxml, profile, preProcessingParam);
                 return processjson.getBytes("UTF-8");
             } else {
-                //return displayDefaultProcess();
                 return new byte[0];
             }
         } catch (Exception e) {

@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import com.intalio.bpmn2.impl.Bpmn2JsonMarshaller;
 import com.intalio.bpmn2.impl.Bpmn2JsonUnmarshaller;
+import com.intalio.bpmn2.resource.JBPMBpmn2ResourceFactoryImpl;
 import com.intalio.bpmn2.resource.JBPMBpmn2ResourceImpl;
 import com.intalio.web.plugin.IDiagramPlugin;
 import com.intalio.web.plugin.impl.PluginServiceImpl;
@@ -33,8 +34,6 @@ import com.intalio.web.profile.IDiagramProfile;
 
 import org.eclipse.bpmn2.DocumentRoot;
 import org.eclipse.bpmn2.Bpmn2Package;
-import org.eclipse.bpmn2.util.Bpmn2Resource;
-import org.eclipse.bpmn2.util.Bpmn2ResourceFactoryImpl;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -212,7 +211,6 @@ public class JbpmProfileImpl implements IDiagramProfile {
                 } catch (IOException e) {
                     _logger.error(e.getMessage(), e);
                 }
-
                 return "";
             }
         };
@@ -237,7 +235,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
         try {
             ResourceSet resourceSet = new ResourceSetImpl();
             resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
-                .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new Bpmn2ResourceFactoryImpl());
+                .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new JBPMBpmn2ResourceFactoryImpl());
             resourceSet.getPackageRegistry().put("http://www.omg.org/spec/BPMN/20100524/MODEL", Bpmn2Package.eINSTANCE);
             XMLResource resource = (XMLResource) resourceSet.createResource(URI.createURI("inputStream://dummyUriWithValidSuffix.xml"));
             resource.getDefaultLoadOptions().put(XMLResource.OPTION_ENCODING, "UTF-8");

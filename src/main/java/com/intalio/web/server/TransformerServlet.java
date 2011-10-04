@@ -57,7 +57,6 @@ import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.DocumentRoot;
 import org.eclipse.bpmn2.Process;
 import org.eclipse.bpmn2.RootElement;
-import org.eclipse.bpmn2.util.Bpmn2ResourceFactoryImpl;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -66,6 +65,7 @@ import org.eclipse.emf.ecore.xmi.XMLResource;
 
 import sun.misc.BASE64Encoder;
 
+import com.intalio.bpmn2.resource.JBPMBpmn2ResourceFactoryImpl;
 import com.intalio.web.batikprotocolhandler.GuvnorParsedURLProtocolHandler;
 import com.intalio.web.profile.IDiagramProfile;
 import com.intalio.web.profile.IDiagramProfileService;
@@ -443,7 +443,7 @@ public class TransformerServlet extends HttpServlet {
                     .getResourceFactoryRegistry()
                     .getExtensionToFactoryMap()
                     .put(Resource.Factory.Registry.DEFAULT_EXTENSION,
-                            new Bpmn2ResourceFactoryImpl());
+                            new JBPMBpmn2ResourceFactoryImpl());
             resourceSet.getPackageRegistry().put(
                     "http://www.omg.org/spec/BPMN/20100524/MODEL",
                     Bpmn2Package.eINSTANCE);

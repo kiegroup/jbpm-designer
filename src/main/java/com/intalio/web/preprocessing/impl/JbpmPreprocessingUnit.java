@@ -25,6 +25,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -81,6 +83,9 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     private String outData = "";
     private String workitemSVGFilePath;
     private String origWorkitemSVGFile;
+    private String default_emailicon;
+    private String default_logicon;
+    private String default_widconfigtemplate;
     
     public JbpmPreprocessingUnit(ServletContext servletContext) {
         stencilPath = servletContext.getRealPath("/" + STENCILSET_PATH);
@@ -88,6 +93,9 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         stencilFilePath = stencilPath + "/bpmn2.0jbpm/" + "bpmn2.0jbpm.json";
         workitemSVGFilePath = stencilPath  + "/bpmn2.0jbpm/view/activity/workitems/";
         origWorkitemSVGFile = workitemSVGFilePath + "workitem.orig";
+        default_emailicon = servletContext.getRealPath("/defaults/defaultemailicon.gif");
+        default_logicon = servletContext.getRealPath("/defaults/defaultlogicon.gif");
+        default_widconfigtemplate = servletContext.getRealPath("/defaults/WorkDefinitions.wid.st");
     }
     
     public String getOutData() {
@@ -107,7 +115,21 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         
         // figure out which package our uuid belongs in and get back the list of configs
         Map<String, List<String>> workitemConfigInfo = findWorkitemInfoForUUID(uuid, packageNames, profile);
-        
+        if(workitemConfigInfo != null) {
+        	boolean gotConfigs = false;
+        	Iterator<String> pkgIter = workitemConfigInfo.keySet().iterator();
+        	while(pkgIter.hasNext()) {
+        		String pkgName = pkgIter.next();
+        		if(workitemConfigInfo.get(pkgName) != null && workitemConfigInfo.get(pkgName).size() > 0) {
+        			gotConfigs = true;
+        		}
+        	}
+        	if(!gotConfigs) {
+        		setupDefaultWorkitemConfigs(uuid, packageNames, profile);
+        		// re-load the workitem config info
+        		workitemConfigInfo = findWorkitemInfoForUUID(uuid, packageNames, profile);
+        	}
+        }
         // get the contents of each of the configs
         Map<String, String> workItemsContent = getWorkitemConfigContent(workitemConfigInfo, profile);
         
@@ -270,6 +292,165 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 .getBytes("UTF-8"));
     }
     
+    private void setupDefaultWorkitemConfigs(String uuid, List<String> packageNames, IDiagramProfile profile) {
+    	boolean gotPackage = false;
+    	String pkg = "";
+    	for(String nextPackage : packageNames) {
+            String packageAssetURL = ExternalInfo.getExternalProtocol(profile) + "://" + ExternalInfo.getExternalHost(profile) +
+            "/" + profile.getExternalLoadURLSubdomain().substring(0, profile.getExternalLoadURLSubdomain().indexOf("/")) +
+            "/rest/packages/" + nextPackage + "/assets/";
+            
+            try {
+                XMLInputFactory factory = XMLInputFactory.newInstance();
+                XMLStreamReader reader = factory.createXMLStreamReader(getInputStreamForURL(packageAssetURL, profile));
+                while (reader.hasNext()) {
+                    int next = reader.next();
+                    if (next == XMLStreamReader.START_ELEMENT) {
+                        if ("uuid".equals(reader.getLocalName())) {
+                            String eleText = reader.getElementText();
+                            if(uuid.equals(eleText)) {
+                                pkg = nextPackage;
+                                gotPackage = true;
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                // we dont want to barf..just log that error happened
+                _logger.error(e.getMessage());
+            } 
+            if(gotPackage) {
+                // no need to loop through rest of packages really
+                break;
+            }
+        }
+    	
+    	if(gotPackage) {
+    		// push the default workitem config and icons to guvnor
+    		String emailIconURL = ExternalInfo.getExternalProtocol(profile)
+                    + "://"
+                    + ExternalInfo.getExternalHost(profile)
+                    + "/"
+                    + profile.getExternalLoadURLSubdomain().substring(0,
+                            profile.getExternalLoadURLSubdomain().indexOf("/"))
+                    + "/rest/packages/" + pkg + "/assets/" + "defaultemailicon"
+                    + ".gif";
+    		String logIconURL = ExternalInfo.getExternalProtocol(profile)
+                    + "://"
+                    + ExternalInfo.getExternalHost(profile)
+                    + "/"
+                    + profile.getExternalLoadURLSubdomain().substring(0,
+                            profile.getExternalLoadURLSubdomain().indexOf("/"))
+                    + "/rest/packages/" + pkg + "/assets/" + "defaultlogicon"
+                    + ".gif";
+    		
+    		String packageAssetsURL = ExternalInfo.getExternalProtocol(profile)
+                    + "://"
+                    + ExternalInfo.getExternalHost(profile)
+                    + "/"
+                    + profile.getExternalLoadURLSubdomain().substring(0,
+                            profile.getExternalLoadURLSubdomain().indexOf("/"))
+                    + "/rest/packages/" + pkg + "/assets/";
+    		try {
+				// check if the images already exists
+				URL checkEmailIconURL = new URL(emailIconURL);
+				HttpURLConnection checkEmailIconConnection = (HttpURLConnection) checkEmailIconURL
+				        .openConnection();
+				applyAuth(profile, checkEmailIconConnection);
+				checkEmailIconConnection.setRequestMethod("GET");
+				checkEmailIconConnection
+				        .setRequestProperty("Accept", "application/atom+xml");
+				checkEmailIconConnection.connect();
+				_logger.info("check email icon connection response code: " + checkEmailIconConnection.getResponseCode());
+				if (checkEmailIconConnection.getResponseCode() == 200) {
+				    URL deleteAssetURL = new URL(emailIconURL);
+				    HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL
+				            .openConnection();
+				    applyAuth(profile, deleteConnection);
+				    deleteConnection.setRequestMethod("DELETE");
+				    deleteConnection.connect();
+				    _logger.info("delete email icon response code: " + deleteConnection.getResponseCode());
+				}
+				
+				URL checkLogIconURL = new URL(logIconURL);
+				HttpURLConnection checkLogIconConnection = (HttpURLConnection) checkLogIconURL
+				        .openConnection();
+				applyAuth(profile, checkLogIconConnection);
+				checkLogIconConnection.setRequestMethod("GET");
+				checkLogIconConnection
+				        .setRequestProperty("Accept", "application/atom+xml");
+				checkLogIconConnection.connect();
+				_logger.info("check log icon connection response code: " + checkLogIconConnection.getResponseCode());
+				if (checkLogIconConnection.getResponseCode() == 200) {
+				    URL deleteAssetURL = new URL(logIconURL);
+				    HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL
+				            .openConnection();
+				    applyAuth(profile, deleteConnection);
+				    deleteConnection.setRequestMethod("DELETE");
+				    deleteConnection.connect();
+				    _logger.info("delete log icon response code: " + deleteConnection.getResponseCode());
+				}
+				
+				// now push all defaults 
+				// email icon
+				URL createEmailIconURL = new URL(packageAssetsURL);
+	            HttpURLConnection createEmailIconConnection = (HttpURLConnection) createEmailIconURL
+	                    .openConnection();
+	            applyAuth(profile, createEmailIconConnection);
+	            createEmailIconConnection.setRequestMethod("POST");
+	            createEmailIconConnection.setRequestProperty("Content-Type",
+	                    "application/octet-stream");
+	            createEmailIconConnection.setRequestProperty("Accept",
+	                    "application/atom+xml");
+	            createEmailIconConnection.setRequestProperty("Slug", "defaultemailicon.gif");
+	            createEmailIconConnection.setDoOutput(true);
+	            createEmailIconConnection.getOutputStream().write(getBytesFromFile(new File(default_emailicon)));
+	            createEmailIconConnection.connect();
+				
+	            // log icon
+	            URL createLogIconURL = new URL(packageAssetsURL);
+	            HttpURLConnection createLogIconConnection = (HttpURLConnection) createLogIconURL
+	                    .openConnection();
+	            applyAuth(profile, createLogIconConnection);
+	            createLogIconConnection.setRequestMethod("POST");
+	            createLogIconConnection.setRequestProperty("Content-Type",
+	                    "application/octet-stream");
+	            createLogIconConnection.setRequestProperty("Accept",
+	                    "application/atom+xml");
+	            createLogIconConnection.setRequestProperty("Slug", "defaultlogicon.gif");
+	            createLogIconConnection.setDoOutput(true);
+	            createLogIconConnection.getOutputStream().write(getBytesFromFile(new File(default_logicon)));
+	            createLogIconConnection.connect();
+	            
+				// default configuration wid
+	            StringTemplate widConfigTemplate = new StringTemplate(readFile(default_widconfigtemplate));
+	            widConfigTemplate.setAttribute("protocol", ExternalInfo.getExternalProtocol(profile));
+	            widConfigTemplate.setAttribute("host", ExternalInfo.getExternalHost(profile));
+	            widConfigTemplate.setAttribute("subdomain", profile.getExternalLoadURLSubdomain().substring(0,
+                        profile.getExternalLoadURLSubdomain().indexOf("/")));
+	            widConfigTemplate.setAttribute("pkgName", pkg);
+	            
+	            URL createWidURL = new URL(packageAssetsURL);
+	            HttpURLConnection createWidConnection = (HttpURLConnection) createWidURL
+	                    .openConnection();
+	            applyAuth(profile, createWidConnection);
+	            createWidConnection.setRequestMethod("POST");
+	            createWidConnection.setRequestProperty("Content-Type",
+	                    "application/octet-stream");
+	            createWidConnection.setRequestProperty("Accept",
+	                    "application/atom+xml");
+	            createWidConnection.setRequestProperty("Slug", "WorkDefinitions.wid");
+	            createWidConnection.setDoOutput(true);
+	            createWidConnection.getOutputStream().write(widConfigTemplate.toString().getBytes("UTF-8"));
+	            createWidConnection.connect();
+			} catch (Exception e) {
+				// we dont want to barf..just log that error happened
+                _logger.error(e.getMessage());
+			}
+    		
+    	}
+    }
+    
     private Map<String, List<String>> findWorkitemInfoForUUID(String uuid, List<String> packageNames, IDiagramProfile profile) {
         boolean gotPackage = false;
         String pkg = "";
@@ -391,5 +572,41 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         output.write(content);
         output.close();
         _logger.info("Created file:" + file);
+    }
+    
+    private void applyAuth(IDiagramProfile profile, HttpURLConnection connection) {
+        if (profile.getUsr() != null && profile.getUsr().trim().length() > 0
+                && profile.getPwd() != null
+                && profile.getPwd().trim().length() > 0) {
+            BASE64Encoder enc = new sun.misc.BASE64Encoder();
+            String userpassword = profile.getUsr() + ":" + profile.getPwd();
+            String encodedAuthorization = enc.encode(userpassword.getBytes());
+            connection.setRequestProperty("Authorization", "Basic "
+                    + encodedAuthorization);
+        }
+    }
+    public static byte[] getBytesFromFile(File file) throws IOException {
+    	InputStream is = null;
+    	is = new FileInputStream(file);
+    	long length = file.length();
+
+    	if (length > Integer.MAX_VALUE) {
+    		return null; // File is too large
+    	}
+
+    	byte[] bytes = new byte[(int) length];
+
+    	int offset = 0;
+    	int numRead = 0;
+    	while (offset < bytes.length
+    	&& (numRead = is.read(bytes, offset, bytes.length - offset)) >= 0) {
+    		offset += numRead;
+    	}
+
+    	if (offset < bytes.length) {
+    		throw new IOException("Could not completely read file " + file.getName());
+    	}
+    	is.close();
+    	return bytes;
     }
 }
