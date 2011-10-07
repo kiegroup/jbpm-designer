@@ -3,6 +3,7 @@
 <profiles>
   <profile name="jbpm" stencilset="bpmn2.0jbpm">
     <plugin name="ORYX.Plugins.Toolbar" />
+    <plugin name="ORYX.Plugins.Footer" />
     <plugin name="ORYX.Plugins.UUIDRepositoryDummySave" />
     <plugin name="ORYX.Plugins.ShapeMenuPlugin" />
     <plugin name="ORYX.Plugins.ShapeRepository" />

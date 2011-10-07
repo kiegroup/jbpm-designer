@@ -132,46 +132,46 @@ ORYX.Plugins.View = {
 		});
 		
 		/* Register pdfview to model */
-		this.facade.offer({
-			'name':ORYX.I18N.View.convertToPDF,
-			'functionality': this.showAsPDF.bind(this),
-			'group': ORYX.I18N.View.group,
-			'icon': ORYX.PATH + "images/pdf.gif",
-			'description': ORYX.I18N.View.convertToPDFDesc,
-			'index': 6,
-			'minShape': 0,
-			'maxShape': 0,
-			'isEnabled': function(){
-				profileParamName = "profile";
-				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-		        regexa = new RegExp( regexSa );
-		        profileParams = regexa.exec( window.location.href );
-		        profileParamValue = profileParams[1]; 
-				return profileParamValue == "jbpm";
-			}.bind(this)
-		});
+//		this.facade.offer({
+//			'name':ORYX.I18N.View.convertToPDF,
+//			'functionality': this.showAsPDF.bind(this),
+//			'group': ORYX.I18N.View.group,
+//			'icon': ORYX.PATH + "images/pdf.gif",
+//			'description': ORYX.I18N.View.convertToPDFDesc,
+//			'index': 6,
+//			'minShape': 0,
+//			'maxShape': 0,
+//			'isEnabled': function(){
+//				profileParamName = "profile";
+//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//		        regexa = new RegExp( regexSa );
+//		        profileParams = regexa.exec( window.location.href );
+//		        profileParamValue = profileParams[1]; 
+//				return profileParamValue == "jbpm";
+//			}.bind(this)
+//		});
 		
 		/* Register pngview to model */
-		this.facade.offer({
-			'name':ORYX.I18N.View.convertToPNG,
-			'functionality': this.showAsPNG.bind(this),
-			'group': ORYX.I18N.View.group,
-			'icon': ORYX.PATH + "images/png.gif",
-			'description': ORYX.I18N.View.convertToPNGDesc,
-			'index': 7,
-			'minShape': 0,
-			'maxShape': 0,
-			'isEnabled': function(){
-				profileParamName = "profile";
-				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-		        regexa = new RegExp( regexSa );
-		        profileParams = regexa.exec( window.location.href );
-		        profileParamValue = profileParams[1]; 
-				return profileParamValue == "jbpm";
-			}.bind(this)
-		});
+//		this.facade.offer({
+//			'name':ORYX.I18N.View.convertToPNG,
+//			'functionality': this.showAsPNG.bind(this),
+//			'group': ORYX.I18N.View.group,
+//			'icon': ORYX.PATH + "images/png.gif",
+//			'description': ORYX.I18N.View.convertToPNGDesc,
+//			'index': 7,
+//			'minShape': 0,
+//			'maxShape': 0,
+//			'isEnabled': function(){
+//				profileParamName = "profile";
+//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//		        regexa = new RegExp( regexSa );
+//		        profileParams = regexa.exec( window.location.href );
+//		        profileParamValue = profileParams[1]; 
+//				return profileParamValue == "jbpm";
+//			}.bind(this)
+//		});
 		
 		/* Register task form generation to model */
 		this.facade.offer({
@@ -180,7 +180,7 @@ ORYX.Plugins.View = {
 			'group': ORYX.I18N.View.group,
 			'icon': ORYX.PATH + "images/human_task.gif",
 			'description': ORYX.I18N.View.generateTaskFormsDesc,
-			'index': 8,
+			'index': 6,
 			'minShape': 0,
 			'maxShape': 0,
 			'isEnabled': function(){
@@ -201,7 +201,134 @@ ORYX.Plugins.View = {
 			'group': ORYX.I18N.View.group,
 			'icon': ORYX.PATH + "images/information.png",
 			'description': ORYX.I18N.View.showInfoDesc,
-			'index': 9,
+			'index': 7,
+			'minShape': 0,
+			'maxShape': 0,
+			'isEnabled': function(){
+				profileParamName = "profile";
+				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+		        regexa = new RegExp( regexSa );
+		        profileParams = regexa.exec( window.location.href );
+		        profileParamValue = profileParams[1]; 
+				return profileParamValue == "jbpm";
+			}.bind(this)
+		});
+		
+		// Footer items
+		/* Register information view to model */
+		this.facade.offer({
+			'name':'ViewBPMN2Button',
+			'functionality': this.showProcessBPMN.bind(this),
+			'group': 'footerViewSourceButton',
+			'text': 'BPMN2',
+			'description': 'View BPMN2 Source',
+			'index': 1,
+			'minShape': 0,
+			'maxShape': 0,
+			'isEnabled': function(){
+				profileParamName = "profile";
+				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+		        regexa = new RegExp( regexSa );
+		        profileParams = regexa.exec( window.location.href );
+		        profileParamValue = profileParams[1]; 
+				return profileParamValue == "jbpm";
+			}.bind(this)
+		});
+		
+		/* Register information view to model */
+		this.facade.offer({
+			'name':'ViewJSONButton',
+			'functionality': this.showProcessJSON.bind(this),
+			'group': 'footerViewJSONButton',
+			'text': 'JSON',
+			'description': 'View JSON Source',
+			'index': 2,
+			'minShape': 0,
+			'maxShape': 0,
+			'isEnabled': function(){
+				profileParamName = "profile";
+				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+		        regexa = new RegExp( regexSa );
+		        profileParams = regexa.exec( window.location.href );
+		        profileParamValue = profileParams[1]; 
+				return profileParamValue == "jbpm";
+			}.bind(this)
+		});
+		
+		/* Register information view to model */
+		this.facade.offer({
+			'name':'ViewSVGButton',
+			'functionality': this.showProcessSVG.bind(this),
+			'group': 'footerViewSVGButton',
+			'text': 'SVG',
+			'description': 'View SVG Source',
+			'index': 3,
+			'minShape': 0,
+			'maxShape': 0,
+			'isEnabled': function(){
+				profileParamName = "profile";
+				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+		        regexa = new RegExp( regexSa );
+		        profileParams = regexa.exec( window.location.href );
+		        profileParamValue = profileParams[1]; 
+				return profileParamValue == "jbpm";
+			}.bind(this)
+		});
+		
+		/* Register information view to model */
+		this.facade.offer({
+			'name':'ViewERDFButton',
+			'functionality': this.showProcessERDF.bind(this),
+			'group': 'footerViewERDFButton',
+			'text': 'ERDF',
+			'description': 'View ERDF Source',
+			'index': 4,
+			'minShape': 0,
+			'maxShape': 0,
+			'isEnabled': function(){
+				profileParamName = "profile";
+				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+		        regexa = new RegExp( regexSa );
+		        profileParams = regexa.exec( window.location.href );
+		        profileParamValue = profileParams[1]; 
+				return profileParamValue == "jbpm";
+			}.bind(this)
+		});
+		
+		/* Register information view to model */
+		this.facade.offer({
+			'name':'ViewPDFButton',
+			'functionality': this.showAsPDF.bind(this),
+			'group': 'footerViewPDFButton',
+			'text': 'PDF',
+			'description': 'View PDF',
+			'index': 5,
+			'minShape': 0,
+			'maxShape': 0,
+			'isEnabled': function(){
+				profileParamName = "profile";
+				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+		        regexa = new RegExp( regexSa );
+		        profileParams = regexa.exec( window.location.href );
+		        profileParamValue = profileParams[1]; 
+				return profileParamValue == "jbpm";
+			}.bind(this)
+		});
+		
+		/* Register information view to model */
+		this.facade.offer({
+			'name':'ViewPNGButton',
+			'functionality': this.showAsPNG.bind(this),
+			'group': 'footerViewPNGButton',
+			'text': 'PNG',
+			'description': 'View PNG',
+			'index': 6,
 			'minShape': 0,
 			'maxShape': 0,
 			'isEnabled': function(){
@@ -249,8 +376,8 @@ ORYX.Plugins.View = {
 	 */
 	showAsPDF : function() {
 		var transformval = 'pdf';
-		var svgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(true));
-		
+		var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false));
+		var rawSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getRootNode().cloneNode(true))
 		var method ="post";
 		var form = document.createElement("form");
 		form.setAttribute("name", "transformerform");
@@ -258,11 +385,17 @@ ORYX.Plugins.View = {
 		form.setAttribute("action", ORYX.CONFIG.TRANSFORMER_URL());
 		form.setAttribute("target", "_blank");
 		
-		var hfSVG = document.createElement("input");
-		hfSVG.setAttribute("type", "hidden");
-		hfSVG.setAttribute("name", "svg");
-		hfSVG.setAttribute("value", svgDOM);
-        form.appendChild(hfSVG);
+		var hfFSVG = document.createElement("input");
+		hfFSVG.setAttribute("type", "hidden");
+		hfFSVG.setAttribute("name", "fsvg");
+		hfFSVG.setAttribute("value", formattedSvgDOM);
+        form.appendChild(hfFSVG);
+        
+        var hfRSVG = document.createElement("input");
+        hfRSVG.setAttribute("type", "hidden");
+        hfRSVG.setAttribute("name", "rsvg");
+        hfRSVG.setAttribute("value", rawSvgDOM);
+        form.appendChild(hfRSVG);
         
         var hfUUID = document.createElement("input");
         hfUUID.setAttribute("type", "hidden");
@@ -292,6 +425,113 @@ ORYX.Plugins.View = {
 	 */
 	showInfo : function() {
 		window.alert("Version: " + ORYX.VERSION);
+	},
+	
+	/**
+	 * Displays the process SVG sources (formatted)
+	 */
+	showProcessSVG : function() {
+		var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false));
+		var cf = new Ext.form.TextArea({
+            id:"svgSourceTextArea",
+            fieldLabel:"SVG Source",
+            width:400,
+            height:450,
+            value:formattedSvgDOM
+            });
+
+		var win = new Ext.Window({
+			width:400,
+			id:'processSVGSource',
+			height:450,
+			autoScroll:true,
+			title:'Process SVG Source',
+			items: [cf]
+			});
+		win.show();
+	},
+	
+	showProcessERDF : function() {
+		var processERDF = ORYX.EDITOR.getERDF();
+		var cf = new Ext.form.TextArea({
+            id:"erdfSourceTextArea",
+            fieldLabel:"ERDF Source",
+            width:400,
+            height:450,
+            value:processERDF
+            });
+
+		var win = new Ext.Window({
+			width:400,
+			id:'processERDFSource',
+			height:450,
+			autoScroll:true,
+			title:'ERDF Source',
+			items: [cf]
+			});
+		win.show();
+	},
+	
+	showProcessJSON : function() {
+		var processJSON = ORYX.EDITOR.getSerializedJSON();
+		var cf = new Ext.form.TextArea({
+            id:"jsonSourceTextArea",
+            fieldLabel:"JSON Source",
+            width:400,
+            height:450,
+            value:processJSON
+            });
+
+		var win = new Ext.Window({
+			width:400,
+			id:'processJSONSource',
+			height:450,
+			autoScroll:true,
+			title:'JSON Source',
+			items: [cf]
+			});
+		win.show();
+	},
+	
+	showProcessBPMN : function() {
+		var processJSON = ORYX.EDITOR.getSerializedJSON();
+		Ext.Ajax.request({
+            url: ORYX.PATH + "uuidRepository",
+            method: 'POST',
+            success: function(request){
+    	   		try{
+    	   			var cf = new Ext.form.TextArea({
+    	   	            id:"bpmnSourceTextArea",
+    	   	            fieldLabel:"BPMN2 Source",
+    	   	            width:400,
+    	   	            height:450,
+    	   	            value:request.responseText
+    	   	            });
+
+    	   			var win = new Ext.Window({
+    	   				width:400,
+    	   				id:'processBPMNSource',
+    	   				height:450,
+    	   				autoScroll:true,
+    	   				title:'BPMN2 Source',
+    	   				items: [cf]
+    	   				});
+    	   			win.show();
+    	   		}catch(e){
+    	   			Ext.Msg.alert("Converting to BPMN2 Failed :\n"+e);
+    	   		}
+                Ext.Msg.hide();
+            }.createDelegate(this),
+            failure: function(){
+            	Ext.Msg.alert("Converting to BPMN2 Failed");
+            },
+            params: {
+            	action: 'toXML',
+            	pp: ORYX.PREPROCESSING,
+            	profile: ORYX.PROFILE,
+            	data: processJSON
+            }
+        });
 	},
 	
 	/**

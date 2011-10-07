@@ -65,7 +65,6 @@ ORYX.CONFIG.TASKFORMS_URL = function(uuid, profile) {
 	}
 	return ORYX.PATH + "taskforms?uuid="+ uuid + "&profile=" + profile;
 };
-
 ORYX.CONFIG.UUID_AUTOSAVE_INTERVAL = 120000;
 ORYX.CONFIG.UUID_AUTOSAVE_DEFAULT = false;
 	

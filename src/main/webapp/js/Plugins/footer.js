@@ -1,32 +1,8 @@
-/**
- * Copyright (c) 2006
- * Martin Czuchra, Nicolas Peters, Daniel Polak, Willi Tscheschner
- *
- * Permission is hereby granted, free of charge, to any person obtaining a
- * copy of this software and associated documentation files (the "Software"),
- * to deal in the Software without restriction, including without limitation
- * the rights to use, copy, modify, merge, publish, distribute, sublicense,
- * and/or sell copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
- * DEALINGS IN THE SOFTWARE.
- **/
-
-
 if(!ORYX.Plugins) {
 	ORYX.Plugins = new Object();
 }
 
-ORYX.Plugins.Toolbar = Clazz.extend({
+ORYX.Plugins.Footer = Clazz.extend({
 
 	facade: undefined,
 	plugs:	[],
@@ -35,7 +11,6 @@ ORYX.Plugins.Toolbar = Clazz.extend({
 		this.facade = facade;
 		
 		this.groupIndex = new Hash();
-		
 		
 		if (ORYX.CONFIG.MENU_INDEX) {
 		  this.groupIndex = ORYX.CONFIG.MENU_INDEX;
@@ -81,22 +56,19 @@ ORYX.Plugins.Toolbar = Clazz.extend({
 		}).bind(this));
 		
 		var plugs = $A(newPlugs).findAll(function(value){
-										if(value.group && value.group.indexOf("footer") === 0) {
-											return false;
-										}
-										return !this.plugs.include( value )
+										return !this.plugs.include( value ) && ( value.group && value.group.indexOf("footer") === 0)
 									}.bind(this));
 		if(plugs.length<1)
 			return;
 
 		this.buttons = [];
 
-		ORYX.Log.trace("Creating a toolbar.")
-		if(!this.toolbar){
-			this.toolbar = new Ext.ux.SlicedToolbar({
+		ORYX.Log.trace("Creating a footer.")
+		if(!this.footer){
+			this.footer = new Ext.ux.SlicedToolbar({
 			height: 24
 		});
-				var region = this.facade.addToRegion("north", this.toolbar, "Toolbar");
+				var region = this.facade.addToRegion("south", this.footer, "Footer");
 		}
 		
 		
@@ -111,7 +83,7 @@ ORYX.Plugins.Toolbar = Clazz.extend({
 			this.plugs.push(value);
             // Add seperator if new group begins
 			if(currentGroupsName != value.group) {
-			    this.toolbar.add('-');
+			    this.footer.add('-');
 				currentGroupsName = value.group;
                 currentGroupsDropDownButton = {};
 			}
@@ -120,7 +92,7 @@ ORYX.Plugins.Toolbar = Clazz.extend({
 			value.functionality = function(){
 				 if ("undefined" != typeof(pageTracker) && "function" == typeof(pageTracker._trackEvent) )
 				 {
-					pageTracker._trackEvent("ToolbarButton",value.name)
+					pageTracker._trackEvent("FooterButton",value.name)
 				}
 				return tmp.apply(this, arguments);
 
@@ -149,7 +121,7 @@ ORYX.Plugins.Toolbar = Clazz.extend({
                         }
                     });
                     
-                    this.toolbar.add(splitButton);
+                    this.footer.add(splitButton);
                 }
                 
                 // General config button which will be used either to create a normal button
@@ -185,7 +157,8 @@ ORYX.Plugins.Toolbar = Clazz.extend({
             } else { // create normal, simple button
                 var button = new Ext.Toolbar.Button({
                     icon:           value.icon,         // icons can also be specified inline
-                    cls:            'x-btn-icon',       // Class who shows only the icon
+                    cls:            'x-btn-text',       // Class who shows only the icon
+                	text:           value.text,
                     itemId:         value.id,
 					tooltip:        value.description,  // Set the tooltip
                     tooltipType:    'title',            // Tooltip will be shown as in the html-title attribute
@@ -194,7 +167,7 @@ ORYX.Plugins.Toolbar = Clazz.extend({
                     toggleHandler:  value.toggle ? value.functionality : null // Handler for toggle (Parameters: button, active)
                 }); 
                 
-                this.toolbar.add(button);
+                this.footer.add(button);
 
                 button.getEl().onclick = function() {this.blur()}
             }
@@ -205,9 +178,9 @@ ORYX.Plugins.Toolbar = Clazz.extend({
 		}).bind(this));
 
 		this.enableButtons([]);
-        this.toolbar.calcSlices();
-		window.addEventListener("resize", function(event){this.toolbar.calcSlices()}.bind(this), false);
-		window.addEventListener("onresize", function(event){this.toolbar.calcSlices()}.bind(this), false);
+        this.footer.calcSlices();
+		window.addEventListener("resize", function(event){this.footer.calcSlices()}.bind(this), false);
+		window.addEventListener("onresize", function(event){this.footer.calcSlices()}.bind(this), false);
 
 	},
 	
