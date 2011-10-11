@@ -962,7 +962,11 @@ public class Bpmn2JsonMarshaller {
         for(DataInputAssociation datain : inputAssociations) {
             String lhsAssociation = "";
             if(datain.getSourceRef() != null && datain.getSourceRef().size() > 0) {
-                lhsAssociation = datain.getSourceRef().get(0).getId();
+            	if(datain.getTransformation() != null && datain.getTransformation().getBody() != null) {
+            		lhsAssociation = datain.getTransformation().getBody();
+            	} else {
+            		lhsAssociation = datain.getSourceRef().get(0).getId();
+            	}
             }
             
             String rhsAssociation = "";
@@ -1017,6 +1021,10 @@ public class Bpmn2JsonMarshaller {
                         wasBiDirectional = true;
                         break;
                     }
+                }
+                
+                if(dataout.getTransformation() != null && dataout.getTransformation().getBody() != null) {
+                	rhsAssociation = dataout.getTransformation().getBody();
                 }
                 
                 if(!wasBiDirectional) {

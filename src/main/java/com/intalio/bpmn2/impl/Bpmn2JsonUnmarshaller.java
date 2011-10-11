@@ -217,6 +217,7 @@ public class Bpmn2JsonUnmarshaller {
             revisitCatchEvents(def);
             revisitThrowEvents(def);
             revisitLanesets(def);
+            reviseTaskAssociations(def);
             // return def;
             _currentResource.getContents().add(def);
             return _currentResource;
@@ -228,6 +229,58 @@ public class Bpmn2JsonUnmarshaller {
             _sequenceFlowTargets.clear();
             _bounds.clear();
             _currentResource = null;
+        }
+    }
+    
+    public void reviseTaskAssociations(Definitions def) {
+    	System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Revising associations!");
+    	List<RootElement> rootElements =  def.getRootElements();
+        for(RootElement root : rootElements) {
+            if(root instanceof Process) {
+                Process process = (Process) root;
+                List<FlowElement> flowElements = process.getFlowElements();
+                for(FlowElement fe : flowElements) {
+                	if(fe instanceof Task) {
+                		Task t = (Task) fe;
+                		if(t.getDataInputAssociations() != null) {
+                			List<DataInputAssociation> inputList = t.getDataInputAssociations();
+                			if(inputList != null) {
+                				for(DataInputAssociation input : inputList) {
+                					List<ItemAwareElement> sourceRef = input.getSourceRef();
+                					if(sourceRef != null) {
+                						for(ItemAwareElement iae : sourceRef) {
+                							String[] iaeParts = iae.getId().split( "\\.\\s*" );
+                							if(iaeParts.length > 0) {
+                								FormalExpression dataInputTransformationExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                								dataInputTransformationExpression.setBody(iae.getId());
+                								input.setTransformation(dataInputTransformationExpression);
+                    		                    iae.setId(iaeParts[0]);
+                							}
+                						}
+                					}
+                				}
+                			}
+                		}
+                		if(t.getDataOutputAssociations() != null) {
+                			List<DataOutputAssociation> outputList = t.getDataOutputAssociations();
+                			if(outputList != null) {
+                				for(DataOutputAssociation output : outputList) {
+                					ItemAwareElement targetEle = output.getTargetRef();
+                					if(targetEle != null) {
+                						String[] targetEleParts = targetEle.getId().split( "\\.\\s*" );
+                						if(targetEleParts.length > 0) {
+                							FormalExpression dataOutputTransformationExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                							dataOutputTransformationExpression.setBody(targetEle.getId());
+            								output.setTransformation(dataOutputTransformationExpression);
+                		                    targetEle.setId(targetEleParts[0]);
+            							}
+                					}
+                				}
+                			}
+                		}
+                	}
+                }
+            }
         }
     }
     
@@ -1683,15 +1736,17 @@ public class Bpmn2JsonUnmarshaller {
                     DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
 
                     boolean foundTaskName = false;
-                    List<DataInput> dataInputs = task.getIoSpecification().getDataInputs();
-                    for(DataInput di : dataInputs) {
-                        if(di.getId().equals(task.getId() + "_" + assignmentParts[0] + "Input")) {
-                            dia.setTargetRef(di);
-                            if(di.getName().equals("TaskName")) {
-                                foundTaskName = true;
-                                break;
-                            }
-                        }
+                    if(task.getIoSpecification() != null && task.getIoSpecification().getDataOutputs() != null) {
+                    	List<DataInput> dataInputs = task.getIoSpecification().getDataInputs();
+                    	for(DataInput di : dataInputs) {
+                    		if(di.getId().equals(task.getId() + "_" + assignmentParts[0] + "Input")) {
+                    			dia.setTargetRef(di);
+                    			if(di.getName().equals("TaskName")) {
+                    				foundTaskName = true;
+                    				break;
+                    			}
+                    		}
+                    	}
                     }
                     // if we are dealing with TaskName and none has been defined, add it
                     if(assignmentParts[0].equals("TaskName") && !foundTaskName) {
