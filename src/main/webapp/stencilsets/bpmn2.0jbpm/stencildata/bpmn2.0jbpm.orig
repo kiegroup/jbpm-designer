@@ -2798,7 +2798,11 @@
 			"description" : 	"$workitemDefs.(k).explanationText$",
 			"description_de" : 	"$workitemDefs.(k).explanationText$.",
 			"view" : 			"activity/workitems/$workitemDefs.(k).name$.svg",
-			"icon" : 			"$workitemDefs.(k).icon$",
+			$if(workitemDefs.(k).icon)$
+				"icon" : 			"$workitemDefs.(k).icon$",
+			$else$
+				"icon" : 			"blank.gif",			
+			$endif$
 			"propertyPackages" :[
 				"customtask",
 				"customactivity",
