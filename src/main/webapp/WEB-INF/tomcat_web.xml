@@ -115,14 +115,6 @@
    <param-value>true</param-value>
   </init-param>
  </servlet>
- <!--servlet> <display-name> Oryx syntax checker </display-name> <servlet-name>SyntaxChecker</servlet-name> 
-    <servlet-class> org.oryxeditor.server.SyntaxCheckerServlet </servlet-class> 
-    </servlet Added by Ahmed Awad Removed by Antoine: we don't have the sources 
-    of the dependencies for this servlet <servlet> <display-name> Oryx query 
-    evaluator servlet </display-name> <servlet-name>QueryEvaluator</servlet-name> 
-    <servlet-class> org.oryxeditor.server.QueryEvalServlet </servlet-class> </servlet> 
-    <servlet-mapping> <servlet-name>QueryEvaluator</servlet-name> <url-pattern>/query</url-pattern> 
-    </servlet-mapping> End of Added by Ahmed Awad -->
  <servlet>
   <display-name>Oryx Validator</display-name>
   <servlet-name>Validator</servlet-name>
@@ -236,6 +228,11 @@
   <display-name>Taskforms</display-name>
   <servlet-name>TaskformsServlet</servlet-name>
   <servlet-class>com.intalio.web.server.TaskFormsServlet</servlet-class>
+ </servlet>
+ <servlet>
+  <display-name>SyntaxChecker</display-name>
+  <servlet-name>SyntaxCheckerServlet</servlet-name>
+  <servlet-class>com.intalio.web.server.SyntaxCheckerServlet</servlet-class>
  </servlet>
  <servlet>
   <display-name>Plugin Service Servlet</display-name>
@@ -401,12 +398,6 @@
   <servlet-name>EPCLayouterServlet</servlet-name>
   <url-pattern>/epclayouter</url-pattern>
  </servlet-mapping>
- <!-- <servlet-mapping> <servlet-name>Bpmn2_0Servlet</servlet-name> <url-pattern>/bpmn2_0serialization</url-pattern> 
-    </servlet-mapping> <servlet-mapping> <servlet-name>Bpmn2_0ToXpdlServlet</servlet-name> 
-    <url-pattern>/bpmn2xpdlserialization</url-pattern> </servlet-mapping> <servlet-mapping> 
-    <servlet-name>Bpmn2_0Importer</servlet-name> <url-pattern>/bpmn2_0deserialization</url-pattern> 
-    </servlet-mapping> <servlet-mapping> <servlet-name>BPMN2MigrationServlet</servlet-name> 
-    <url-pattern>/bpmn2migration</url-pattern> </servlet-mapping> -->
  <servlet-mapping>
   <servlet-name>UUIDBasedRepositoryServlet</servlet-name>
   <url-pattern>/uuidRepository</url-pattern>
@@ -418,6 +409,10 @@
  <servlet-mapping>
   <servlet-name>TaskformsServlet</servlet-name>
   <url-pattern>/taskforms</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>SyntaxCheckerServlet</servlet-name>
+  <url-pattern>/syntaxcheck</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
   <servlet-name>PluginServiceServlet</servlet-name>

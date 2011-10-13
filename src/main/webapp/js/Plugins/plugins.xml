@@ -3,6 +3,7 @@
 	<plugins>
 		<plugin source="toolbar.js" name="ORYX.Plugins.Toolbar" core="true" />
 		<plugin source="footer.js" name="ORYX.Plugins.Footer" core="true" />
+		<plugin source="syntaxchecker.js" name="ORYX.Plugins.SyntaxChecker" core="true"/>
 		<!-- <plugin source="toolbar2.js" name="ORYX.Plugins.Toolbar2" />-->
 		
 		<plugin source="shapemenu.js" name="ORYX.Plugins.ShapeMenuPlugin" core="true" />
@@ -115,7 +116,7 @@
 		<plugin source="ibpmn2bpmn.js" name="ORYX.Plugins.IBPMN2BPMN">
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>	
 		</plugin>
-		<plugin source="syntaxchecker.js" name="ORYX.Plugins.SyntaxChecker">
+		<!-- <plugin source="syntaxchecker.js" name="ORYX.Plugins.SyntaxChecker">
 			<requires namespace="http://b3mn.org/stencilset/bpmnexec#"/>
 			<requires namespace="http://b3mn.org/stencilset/bpmn#"/>
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>
@@ -127,7 +128,7 @@
 		</plugin>
         <plugin source="syntaxchecker.js" name="ORYX.Plugins.PetrinetSyntaxChecker">
             <requires namespace="http://b3mn.org/stencilset/petrinet#"/>
-        </plugin>
+        </plugin> -->
 		<plugin source="validator.js" name="ORYX.Plugins.BPMNValidator">
 			<requires namespace="http://b3mn.org/stencilset/bpmn#"/>
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#"/>

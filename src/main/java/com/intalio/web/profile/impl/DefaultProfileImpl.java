@@ -53,6 +53,7 @@ import org.eclipse.bpmn2.util.Bpmn2ResourceFactoryImpl;
 
 import com.intalio.bpmn2.impl.Bpmn2JsonMarshaller;
 import com.intalio.bpmn2.impl.Bpmn2JsonUnmarshaller;
+import com.intalio.bpmn2.resource.JBPMBpmn2ResourceImpl;
 import com.intalio.web.plugin.IDiagramPlugin;
 import com.intalio.web.plugin.impl.PluginServiceImpl;
 import com.intalio.web.profile.IDiagramProfile;
@@ -191,6 +192,20 @@ public class DefaultProfileImpl implements IDiagramProfile {
 
                 return "";
             }
+            
+            public Definitions getDefinitions(String jsonModel,
+					String preProcessingData) {
+				try {
+					Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+					JBPMBpmn2ResourceImpl res = (JBPMBpmn2ResourceImpl) unmarshaller.unmarshall(jsonModel, preProcessingData);
+					return (Definitions) res.getContents().get(0);
+				} catch (JsonParseException e) {
+					_logger.error(e.getMessage(), e);
+				} catch (IOException e) {
+					_logger.error(e.getMessage(), e);
+				}
+				return null;
+			}
         };
     }
     

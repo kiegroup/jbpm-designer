@@ -23,6 +23,8 @@ package com.intalio.web.profile;
 
 import java.util.Collection;
 
+import org.eclipse.bpmn2.Definitions;
+
 /**
  * A profile for the editor to choose which stencilset 
  * and which plugins should be loaded.
@@ -121,6 +123,7 @@ public interface IDiagramProfile {
          * @return the string representation of the serialized model.
          */
         public String parseModel(String jsonModel, String preProcessingData);
+        public Definitions getDefinitions(String jsonModel, String preProcessingData); 
     }
     
     /**

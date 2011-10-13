@@ -410,11 +410,11 @@ ORYX.I18N.StepThroughPlugin.executing = "Executing";
 if(!ORYX.I18N.SyntaxChecker) ORYX.I18N.SyntaxChecker = {};
 
 ORYX.I18N.SyntaxChecker.group = "Verification";
-ORYX.I18N.SyntaxChecker.name = "Syntax Checker";
-ORYX.I18N.SyntaxChecker.desc = "Check Syntax";
-ORYX.I18N.SyntaxChecker.noErrors = "There are no syntax errors.";
+ORYX.I18N.SyntaxChecker.name = "Validate Process";
+ORYX.I18N.SyntaxChecker.desc = "Validate Process";
+ORYX.I18N.SyntaxChecker.noErrors = "There are no validation errors.";
 ORYX.I18N.SyntaxChecker.invalid = "Invalid answer from server.";
-ORYX.I18N.SyntaxChecker.checkingMessage = "Checking ...";
+ORYX.I18N.SyntaxChecker.checkingMessage = "Validating ...";
 
 if(!ORYX.I18N.Undo) ORYX.I18N.Undo = {};
 

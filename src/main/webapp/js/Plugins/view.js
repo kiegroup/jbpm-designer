@@ -131,47 +131,6 @@ ORYX.Plugins.View = {
 			}.bind(this)
 		});
 		
-		/* Register pdfview to model */
-//		this.facade.offer({
-//			'name':ORYX.I18N.View.convertToPDF,
-//			'functionality': this.showAsPDF.bind(this),
-//			'group': ORYX.I18N.View.group,
-//			'icon': ORYX.PATH + "images/pdf.gif",
-//			'description': ORYX.I18N.View.convertToPDFDesc,
-//			'index': 6,
-//			'minShape': 0,
-//			'maxShape': 0,
-//			'isEnabled': function(){
-//				profileParamName = "profile";
-//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//		        regexa = new RegExp( regexSa );
-//		        profileParams = regexa.exec( window.location.href );
-//		        profileParamValue = profileParams[1]; 
-//				return profileParamValue == "jbpm";
-//			}.bind(this)
-//		});
-		
-		/* Register pngview to model */
-//		this.facade.offer({
-//			'name':ORYX.I18N.View.convertToPNG,
-//			'functionality': this.showAsPNG.bind(this),
-//			'group': ORYX.I18N.View.group,
-//			'icon': ORYX.PATH + "images/png.gif",
-//			'description': ORYX.I18N.View.convertToPNGDesc,
-//			'index': 7,
-//			'minShape': 0,
-//			'maxShape': 0,
-//			'isEnabled': function(){
-//				profileParamName = "profile";
-//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//		        regexa = new RegExp( regexSa );
-//		        profileParams = regexa.exec( window.location.href );
-//		        profileParamValue = profileParams[1]; 
-//				return profileParamValue == "jbpm";
-//			}.bind(this)
-//		});
 		
 		/* Register task form generation to model */
 		this.facade.offer({

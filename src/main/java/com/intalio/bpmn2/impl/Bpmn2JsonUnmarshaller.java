@@ -233,7 +233,6 @@ public class Bpmn2JsonUnmarshaller {
     }
     
     public void reviseTaskAssociations(Definitions def) {
-    	System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Revising associations!");
     	List<RootElement> rootElements =  def.getRootElements();
         for(RootElement root : rootElements) {
             if(root instanceof Process) {
@@ -704,18 +703,22 @@ public class Bpmn2JsonUnmarshaller {
     					edge.setBpmnElement(flowElement);
     					DcFactory dcFactory = DcFactory.eINSTANCE;
     					Point point = dcFactory.createPoint();
-    					Bounds sourceBounds = _bounds.get(sequenceFlow.getSourceRef().getId());
-    					point.setX(sourceBounds.getX() + (sourceBounds.getWidth()/2));
-    					point.setY(sourceBounds.getY() + (sourceBounds.getHeight()/2));
+    					if(sequenceFlow.getSourceRef() != null) {
+    						Bounds sourceBounds = _bounds.get(sequenceFlow.getSourceRef().getId());
+    						point.setX(sourceBounds.getX() + (sourceBounds.getWidth()/2));
+    						point.setY(sourceBounds.getY() + (sourceBounds.getHeight()/2));
+    					}
     					edge.getWaypoint().add(point);
     					List<Point> dockers = _dockers.get(sequenceFlow.getId());
     					for (int i = 1; i < dockers.size() - 1; i++) {
     						edge.getWaypoint().add(dockers.get(i));
     					}
     					point = dcFactory.createPoint();
-    					Bounds targetBounds = _bounds.get(sequenceFlow.getTargetRef().getId());
-    					point.setX(targetBounds.getX() + (targetBounds.getWidth()/2));
-    					point.setY(targetBounds.getY() + (targetBounds.getHeight()/2));
+    					if(sequenceFlow.getTargetRef() != null) {
+    						Bounds targetBounds = _bounds.get(sequenceFlow.getTargetRef().getId());
+    						point.setX(targetBounds.getX() + (targetBounds.getWidth()/2));
+    						point.setY(targetBounds.getY() + (targetBounds.getHeight()/2));
+    					}
     					edge.getWaypoint().add(point);
     					plane.getPlaneElement().add(edge);
         			}

@@ -66,7 +66,7 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
             			text:ORYX.I18N.SyntaxChecker.noErrors,
             			timeout:10000
             		});
-                    //Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.SyntaxChecker.noErrors);
+                    Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.SyntaxChecker.noErrors);
                 }.bind(this),
                 onErrors: function(){
                     this.enableDeactivationHandler(button);
@@ -128,26 +128,18 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
         Ext.Msg.wait(ORYX.I18N.SyntaxChecker.checkingMessage);
 
 		var ss = this.facade.getStencilSets();
-		var data = null;
-		var includesJson = false;
+		var data = ORYX.EDITOR.getSerializedJSON();; 
+		var includesJson = true;	
 		
-		if(ss.keys().include("http://b3mn.org/stencilset/bpmn2.0#") ||
-				ss.keys().include("http://b3mn.org/stencilset/bpmn2.0conversation#")) {
-			data = this.facade.getSerializedJSON();
-			includesJson = true;
-		} else {
-			data = this.getRDFFromDOM();
-		}
-        
         // Send the request to the server.
-        new Ajax.Request(ORYX.CONFIG.SYNTAXCHECKER_URL, {
+        new Ajax.Request(ORYX.PATH + "syntaxcheck", {
             method: 'POST',
             asynchronous: false,
             parameters: {
-                resource: location.href,
-                data: data,
-                context: options.context,
-				isJson: includesJson
+            	data: data,
+            	profile: ORYX.PROFILE,
+            	pp: ORYX.PREPROCESSING,
+            	uuid: ORYX.UUID
             },
             onSuccess: function(request){
                 var resp = (request&&request.responseText?request.responseText:"{}").evalJSON();
@@ -202,10 +194,14 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
         }
         
         // Get all Valid ResourceIDs and collect all shapes
-        errors.keys().each(function(value){
+        errors.keys().each(function(value) {
             var sh = this.facade.getCanvas().getChildShapeByResourceId(value);
             if (sh) {
                 this.raiseOverlay(sh, this.parseCodeToMsg(errors[value]));
+            } else {
+            	// this is a hack to show the process validation errors overlayed
+            	// onto the first element of the canvas, as the process node is not visible
+            	this.raiseOverlay(this.facade.getCanvas().nodes[0], this.parseCodeToMsg(errors[value]));
             }
         }.bind(this));
         this.active = !this.active;
@@ -218,16 +214,10 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
 		});
     },
     parseCodeToMsg: function(code){
-    	var msg = code.replace(/: /g, "<br />").replace(/, /g, "<br />");
-    	var codes = msg.split("<br />");
-    	for (var i=0; i < codes.length; i++) {
-    		var singleCode = codes[i];
-    		var replacement = this.parseSingleCodeToMsg(singleCode);
-    		if (singleCode != replacement) {
-    			msg = msg.replace(singleCode, replacement);
-    		}
+    	var msg = "";
+    	for (var i = 0; i < code.length; i++){
+    		msg += "   * " + code[i] + "<br />";
     	}
-		
 		return msg;
 	},
 	
@@ -250,7 +240,7 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
         this.active = false;
     },
     
-    raiseOverlay: function(shape, errorMsg){
+    raiseOverlay: function(shape, errorMsg) {
         var id = "syntaxchecker." + this.raisedEventIds.length;
         var crossId = ORYX.Editor.provideId();
         var cross = ORYX.Editor.graft("http://www.w3.org/2000/svg", null, ['path', {
@@ -271,6 +261,7 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
         });
         
         var tooltip = new Ext.ToolTip({
+        	title:"Validation Results:",
         	showDelay:50,
         	html:errorMsg,
         	target:crossId

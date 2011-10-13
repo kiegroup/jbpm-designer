@@ -78,7 +78,6 @@ ORYX.Plugins.Overlay = Clazz.extend({
 	 * 
 	 */
 	show: function( options ){
-		
 		// Checks if all arguments are available
 		if( 	!options || 
 				!options.shapes || !options.shapes instanceof Array ||
@@ -98,7 +97,6 @@ ORYX.Plugins.Overlay = Clazz.extend({
 			
 			// FOR EACH - Shape
 			options.shapes.each(function(el){
-				
 				// Checks if the node is a Shape
 				if( !el instanceof ORYX.Core.Shape){ return }
 				

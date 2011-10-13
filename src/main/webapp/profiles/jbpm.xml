@@ -25,11 +25,13 @@
     <plugin name="ORYX.Plugins.Layouter.EdgeLayouter" />
     <!-- to have a better container layout ? -->
     <plugin name="ORYX.Plugins.ContainerLayouter" />
+    <plugin name="ORYX.Plugins.SyntaxChecker" />
     <!-- lane layouter -->
     <plugin name="ORYX.Plugins.DragTracker.LaneDragTracker" />
     <plugin name="ORYX.Plugins.DragTracker.PoolDragTracker" />
     <plugin name="ORYX.Plugins.RegexTextEditor" />
     <plugin name="ORYX.Plugins.ConstraintExpressionEditor"/>
+    <plugin name="ORYX.Plugins.Overlay"/>
     <stencilsetextension
       namespace="http://oryx-editor.org/stencilsets/extensions/bpmncosts-2.0#" />
     <externalloadurl protocol="http" host="localhost:8080" subdomain="drools-guvnor/org.drools.guvnor.Guvnor/oryxeditor" usr="admin" pwd="admin"/>
