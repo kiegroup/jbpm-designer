@@ -332,6 +332,11 @@ ORYX.Plugins.JPDLSupport = ORYX.Plugins.AbstractPlugin.extend({
 				var text = evt.target.files[0].getAsText('UTF-8');
 				form.items.items[2].setValue( text );
 			}, true)
+			
+			form.items.items[3].getEl().dom.addEventListener('change',function(evt){
+				var text = evt.target.files[0].getAsText('UTF-8');
+				form.items.items[4].setValue( text );
+			}, true)
 
 	},
 	

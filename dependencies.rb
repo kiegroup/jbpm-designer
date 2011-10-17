@@ -51,7 +51,7 @@ WAR_LIBS = ["org.json:json:jar:20090211", "jbpt:jbpt:jar:0.1.0", "commons-collec
   "org.codehaus.jackson:jackson-core-asl:jar:1.7.4", "org.codehaus.jackson:jackson-mapper-asl:jar:1.7.4",
   "org.mvel:mvel2:jar:2.1-SNAPSHOT", "org.jbpm:jbpm-flow-builder:jar:5.2.0-SNAPSHOT", "org.jbpm:jbpm-bpmn2-emfextmodel:jar:5.2.0-SNAPSHOT", 
   "org.drools:drools-core:jar:5.2.0-SNAPSHOT",
-  "org.antlr:stringtemplate:jar:3.2.1",
+  "org.antlr:stringtemplate:jar:3.2.1", "org.jbpm.jbpm5:jbpmmigration:jar:0.10-SNAPSHOT",
   "org.eclipse:osgi:jar:3.5.0.v20090520", "avalon-framework:avalon-framework:jar:4.1.4", YUICOMPRESSOR] | BPMN2_LIBS | BATIK_LIBS
 
 WAR_LIBS_JBOSS = ["org.json:json:jar:20090211", "jbpt:jbpt:jar:0.1.0", "commons-collections:commons-collections:jar:3.2.1",
@@ -65,7 +65,7 @@ WAR_LIBS_JBOSS = ["org.json:json:jar:20090211", "jbpt:jbpt:jar:0.1.0", "commons-
   "org.codehaus.jackson:jackson-core-asl:jar:1.7.4", "org.codehaus.jackson:jackson-mapper-asl:jar:1.7.4",
   "org.mvel:mvel2:jar:2.1-SNAPSHOT", "org.jbpm:jbpm-flow-builder:jar:5.2.0-SNAPSHOT", "org.jbpm:jbpm-bpmn2-emfextmodel:jar:5.2.0-SNAPSHOT", 
   "org.drools:drools-core:jar:5.2.0-SNAPSHOT",
-  "org.antlr:stringtemplate:jar:3.2.1",
+  "org.antlr:stringtemplate:jar:3.2.1", "org.jbpm.jbpm5:jbpmmigration:jar:0.10-SNAPSHOT",
   "org.eclipse:osgi:jar:3.5.0.v20090520", "avalon-framework:avalon-framework:jar:4.1.4", YUICOMPRESSOR] | BPMN2_LIBS | BATIK_LIBS
   
 
@@ -80,7 +80,7 @@ WAR_LIBS_JBOSS7 = ["org.json:json:jar:20090211", "jbpt:jbpt:jar:0.1.0", "commons
   "org.codehaus.jackson:jackson-core-asl:jar:1.7.4", "org.codehaus.jackson:jackson-mapper-asl:jar:1.7.4",
   "org.mvel:mvel2:jar:2.1-SNAPSHOT", "org.jbpm:jbpm-flow-builder:jar:5.2.0-SNAPSHOT", "org.jbpm:jbpm-bpmn2-emfextmodel:jar:5.2.0-SNAPSHOT", 
   "org.drools:drools-core:jar:5.2.0-SNAPSHOT",
-  "org.antlr:stringtemplate:jar:3.2.1", "antlr:antlr:jar:2.7.7",
+  "org.antlr:stringtemplate:jar:3.2.1", "antlr:antlr:jar:2.7.7", "org.jbpm.jbpm5:jbpmmigration:jar:0.10-SNAPSHOT",
   "org.eclipse:osgi:jar:3.5.0.v20090520", "org.slf4j:log4j-over-slf4j:jar:1.5.8", "avalon-framework:avalon-framework:jar:4.1.4", YUICOMPRESSOR] | BPMN2_LIBS | BATIK_LIBS
 
 WAR_LIBS_EPN = ["org.json:json:jar:20090211", "jbpt:jbpt:jar:0.1.0", "commons-collections:commons-collections:jar:3.2.1",
@@ -94,6 +94,6 @@ WAR_LIBS_EPN = ["org.json:json:jar:20090211", "jbpt:jbpt:jar:0.1.0", "commons-co
   "org.codehaus.jackson:jackson-core-asl:jar:1.7.4", "org.codehaus.jackson:jackson-mapper-asl:jar:1.7.4",
   "org.mvel:mvel2:jar:2.1-SNAPSHOT", "org.jbpm:jbpm-flow-builder:jar:5.2.0-SNAPSHOT", "org.jbpm:jbpm-bpmn2-emfextmodel:jar:5.2.0-SNAPSHOT",
   "org.drools:drools-core:jar:5.2.0-SNAPSHOT",
-  "org.antlr:stringtemplate:jar:3.2.1",
+  "org.antlr:stringtemplate:jar:3.2.1", "org.jbpm.jbpm5:jbpmmigration:jar:0.10-SNAPSHOT",
   "org.eclipse:osgi:jar:3.5.0.v20090520", "avalon-framework:avalon-framework:jar:4.1.4", YUICOMPRESSOR] | BPMN2_LIBS | BATIK_LIBS 
 

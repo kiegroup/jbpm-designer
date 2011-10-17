@@ -243,7 +243,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
         };
     }
     
-    private Definitions getDefinitions(String xml) {
+    public Definitions getDefinitions(String xml) {
         try {
             ResourceSet resourceSet = new ResourceSetImpl();
             resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()

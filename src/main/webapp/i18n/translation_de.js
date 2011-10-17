@@ -441,6 +441,8 @@ ORYX.I18N.View.generateTaskForms = "Generate Task Form Templates";
 ORYX.I18N.View.generateTaskFormsDesc = "Generate Task Form Templates";
 ORYX.I18N.View.showInfo = "Info";
 ORYX.I18N.View.showInfoDesc = "Info";
+ORYX.I18N.View.migratejPDL = "Migrate jPDL to BPMN2";
+ORYX.I18N.View.migratejPDLDesc = "Migrate jPDL to BPMN2";
 
 
 if(!ORYX.I18N.XFormsSerialization) ORYX.I18N.XFormsSerialization = {};

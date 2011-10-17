@@ -23,6 +23,7 @@ package com.intalio.web.server;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -40,6 +41,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
@@ -55,21 +57,35 @@ import org.apache.log4j.Logger;
 import org.eclipse.bpmn2.Bpmn2Package;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.DocumentRoot;
+import org.eclipse.bpmn2.FlowElement;
+import org.eclipse.bpmn2.FlowNode;
 import org.eclipse.bpmn2.Process;
 import org.eclipse.bpmn2.RootElement;
+import org.eclipse.bpmn2.SequenceFlow;
+import org.eclipse.bpmn2.di.BPMNDiagram;
+import org.eclipse.bpmn2.di.BPMNEdge;
+import org.eclipse.bpmn2.di.BPMNPlane;
+import org.eclipse.bpmn2.di.BPMNShape;
+import org.eclipse.bpmn2.di.BpmnDiFactory;
+import org.eclipse.dd.dc.Bounds;
+import org.eclipse.dd.dc.DcFactory;
+import org.eclipse.dd.dc.Point;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.jbpm.migration.xsl.JbpmMigration;
 
 import sun.misc.BASE64Encoder;
 
 import com.intalio.bpmn2.resource.JBPMBpmn2ResourceFactoryImpl;
+import com.intalio.bpmn2.resource.JBPMBpmn2ResourceImpl;
 import com.intalio.web.batikprotocolhandler.GuvnorParsedURLProtocolHandler;
 import com.intalio.web.profile.IDiagramProfile;
 import com.intalio.web.profile.IDiagramProfileService;
 import com.intalio.web.profile.impl.ExternalInfo;
+import com.intalio.web.profile.impl.JbpmProfileImpl;
 import com.intalio.web.profile.impl.ProfileServiceImpl;
 
 /** 
@@ -85,6 +101,7 @@ public class TransformerServlet extends HttpServlet {
             .getLogger(TransformerServlet.class);
     private static final String TO_PDF = "pdf";
     private static final String TO_PNG = "png";
+    private static final String JPDL_TO_BPMN2 = "jpdl2bpmn2";
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -99,6 +116,8 @@ public class TransformerServlet extends HttpServlet {
         String uuid = req.getParameter("uuid");
         String profileName = req.getParameter("profile");
         String transformto = req.getParameter("transformto");
+        String jpdl = req.getParameter("jpdl");
+        String gpd = req.getParameter("gpd");
 
         IDiagramProfile profile = getProfile(req, profileName);
 
@@ -152,9 +171,125 @@ public class TransformerServlet extends HttpServlet {
             } catch (TranscoderException e) {
                 resp.sendError(500, e.getMessage());
             }
+        } else if (transformto != null && transformto.equals(JPDL_TO_BPMN2)) { 
+        	String bpmn2 = JbpmMigration.transform(jpdl);
+        	
+        	// for testing:
+        	//bpmn2 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<bpmn2:definitions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.omg.org/bpmn20\" xmlns:bpmn2=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\" xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\" xmlns:di=\"http://www.omg.org/spec/DD/20100524/DI\" xmlns:drools=\"http://www.jboss.org/drools\" id=\"_OnIfUPevEeC_Oon7tMUNPw\" xsi:schemaLocation=\"http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd\" targetNamespace=\"http://www.omg.org/bpmn20\">\n  <bpmn2:process id=\"abc\" drools:packageName=\"defaultPackage\" name=\"\" isExecutable=\"true\">\n    <bpmn2:startEvent id=\"_3F9F4C27-547A-4422-96CE-0C7CC4D27590\" name=\"start\">\n      <bpmn2:outgoing>_855031B0-7571-4B32-B076-9CEF6310AE0D</bpmn2:outgoing>\n    </bpmn2:startEvent>\n    <bpmn2:task id=\"_AE7CD52F-C3AD-4158-9F97-7E6BD3ABE15B\" name=\"abc\">\n      <bpmn2:incoming>_855031B0-7571-4B32-B076-9CEF6310AE0D</bpmn2:incoming>\n      <bpmn2:outgoing>_6CC69554-591A-4D91-A886-E91E6425EA7D</bpmn2:outgoing>\n    </bpmn2:task>\n    <bpmn2:sequenceFlow id=\"_855031B0-7571-4B32-B076-9CEF6310AE0D\" sourceRef=\"_3F9F4C27-547A-4422-96CE-0C7CC4D27590\" targetRef=\"_AE7CD52F-C3AD-4158-9F97-7E6BD3ABE15B\"/>\n    <bpmn2:endEvent id=\"_5E18D68A-543C-40E2-B921-A8C2A5288BB8\" name=\"end\">\n      <bpmn2:incoming>_6CC69554-591A-4D91-A886-E91E6425EA7D</bpmn2:incoming>\n    </bpmn2:endEvent>\n    <bpmn2:sequenceFlow id=\"_6CC69554-591A-4D91-A886-E91E6425EA7D\" sourceRef=\"_AE7CD52F-C3AD-4158-9F97-7E6BD3ABE15B\" targetRef=\"_5E18D68A-543C-40E2-B921-A8C2A5288BB8\"/>\n  </bpmn2:process>\n  <bpmndi:BPMNDiagram id=\"_OnKUgPevEeC_Oon7tMUNPw\">\n    <bpmndi:BPMNPlane id=\"_OnKUgfevEeC_Oon7tMUNPw\" bpmnElement=\"abc\">\n      <bpmndi:BPMNShape id=\"_OnKUgvevEeC_Oon7tMUNPw\" bpmnElement=\"_3F9F4C27-547A-4422-96CE-0C7CC4D27590\">\n        <dc:Bounds height=\"30.0\" width=\"30.0\" x=\"203.0\" y=\"187.0\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"_OnKUg_evEeC_Oon7tMUNPw\" bpmnElement=\"_AE7CD52F-C3AD-4158-9F97-7E6BD3ABE15B\">\n        <dc:Bounds height=\"80.0\" width=\"100.0\" x=\"278.0\" y=\"162.0\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNEdge id=\"_OnKUhPevEeC_Oon7tMUNPw\" bpmnElement=\"_855031B0-7571-4B32-B076-9CEF6310AE0D\">\n        <di:waypoint xsi:type=\"dc:Point\" x=\"218.0\" y=\"202.0\"/>\n        <di:waypoint xsi:type=\"dc:Point\" x=\"328.0\" y=\"202.0\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNShape id=\"_OnK7kPevEeC_Oon7tMUNPw\" bpmnElement=\"_5E18D68A-543C-40E2-B921-A8C2A5288BB8\">\n        <dc:Bounds height=\"28.0\" width=\"28.0\" x=\"423.0\" y=\"188.0\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNEdge id=\"_OnK7kfevEeC_Oon7tMUNPw\" bpmnElement=\"_6CC69554-591A-4D91-A886-E91E6425EA7D\">\n        <di:waypoint xsi:type=\"dc:Point\" x=\"328.0\" y=\"202.0\"/>\n        <di:waypoint xsi:type=\"dc:Point\" x=\"437.0\" y=\"202.0\"/>\n      </bpmndi:BPMNEdge>\n    </bpmndi:BPMNPlane>\n  </bpmndi:BPMNDiagram>\n</bpmn2:definitions>\n";
+        	//bpmn2 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<definitions xmlns=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:jpdl=\"urn:jbpm.org:jpdl-3.2\" xmlns:drools=\"http://www.jboss.org/drools\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:di=\"http://www.omg.org/spec/DD/20100524/DI\" xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\" xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\" targetNamespace=\"http://www.jbpm.org/\" id=\"SingleNode\" name=\"SingleNode\">\n<process id=\"_SingleNode_Process\" name=\"SingleNode\">\n<startEvent name=\"start-state\" id=\"_start-state\">\n\t<outgoing>_node</outgoing>\n</startEvent>\n<scriptTask id=\"_node\" name=\"node\" scriptFormat=\"\">\n\t<incoming>_start-state</incoming>\n\t<outgoing>_end-state</outgoing>\n\t<script></script>\n</scriptTask>\n<sequenceFlow id=\"_flow_start-state1\" sourceRef=\"_start-state\" targetRef=\"_node\"/>\n<endEvent name=\"end-state\" id=\"_end-state\">\n\t<incoming>_node</incoming>\n</endEvent>\n<sequenceFlow id=\"_flow_node1\" sourceRef=\"_node\" targetRef=\"_end-state\"/>\n</process>\n</definitions>"; 
+        	//System.out.println("************************ TRANSFORMED BPMN2 STRING: \n");
+        	//System.out.println(bpmn2);
+
+        	Definitions def = ((JbpmProfileImpl) profile).getDefinitions(bpmn2);
+        	// add bpmndi info to Definitions with help of gpd
+        	addBpmnDiInfo(def, gpd);
+        	
+        	// get the xml from Definitions
+        	ResourceSet rSet = new ResourceSetImpl();
+            rSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("bpmn2", new JBPMBpmn2ResourceFactoryImpl());
+            JBPMBpmn2ResourceImpl bpmn2resource = (JBPMBpmn2ResourceImpl) rSet.createResource(URI.createURI("virtual.bpmn2"));
+            rSet.getResources().add(bpmn2resource);
+            bpmn2resource.getContents().add(def);
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            bpmn2resource.save(outputStream, new HashMap<Object, Object>());
+            String fullXmlModel =  outputStream.toString();
+        	// convert to json and write response
+        	String json = profile.createUnmarshaller().parseModel(fullXmlModel, profile, "");
+        	resp.setContentType("application/json");
+        	resp.getWriter().print(json);
         }
     }
 
+    private void addBpmnDiInfo(Definitions def, String gpd) {
+    	try {
+    		Map<String, Bounds> _bounds = new HashMap<String, Bounds>();
+			XMLInputFactory factory = XMLInputFactory.newInstance();
+			XMLStreamReader reader = factory.createXMLStreamReader(new StringReader(gpd));
+			while(reader.hasNext()) {
+				if (reader.next() == XMLStreamReader.START_ELEMENT) {
+					if ("node".equals(reader.getLocalName())) {
+						Bounds b = DcFactory.eINSTANCE.createBounds();
+						String nodeName = null;
+						String nodeX = null;
+						String nodeY = null;
+						String nodeWidth = null;
+						String nodeHeight = null;
+                        for (int i = 0 ; i < reader.getAttributeCount() ; i++) {
+                            if ("name".equals(reader.getAttributeLocalName(i))) {
+                            	nodeName = reader.getAttributeValue(i);
+                            } else if("x".equals(reader.getAttributeLocalName(i))) {
+                            	nodeX = reader.getAttributeValue(i);
+                            } else if("y".equals(reader.getAttributeLocalName(i))) {
+                            	nodeY = reader.getAttributeValue(i);
+                            } else if("width".equals(reader.getAttributeLocalName(i))) {
+                            	nodeWidth = reader.getAttributeValue(i);
+                            } else if("height".equals(reader.getAttributeLocalName(i))) {
+                            	nodeHeight = reader.getAttributeValue(i);
+                            }
+                        }
+                        b.setX(new Float(nodeX).floatValue());
+                        b.setY(new Float(nodeY).floatValue());
+                        b.setWidth(new Float(nodeWidth).floatValue());
+                        b.setHeight(new Float(nodeHeight).floatValue());
+                        _bounds.put(nodeName, b);
+                    }
+				}
+			}
+			
+			for (RootElement rootElement: def.getRootElements()) {
+	    		if (rootElement instanceof Process) {
+	    			Process process = (Process) rootElement;
+	    			BpmnDiFactory diFactory = BpmnDiFactory.eINSTANCE;
+	        		BPMNDiagram diagram = diFactory.createBPMNDiagram();
+	        		BPMNPlane plane = diFactory.createBPMNPlane();
+	        		plane.setBpmnElement(process);
+	        		diagram.setPlane(plane);
+	        		for (FlowElement flowElement: process.getFlowElements()) {
+	        			if (flowElement instanceof FlowNode) {
+	        				Bounds b = _bounds.get(flowElement.getId());
+	        				if (b != null) {
+	        					BPMNShape shape = diFactory.createBPMNShape();
+	        					shape.setBpmnElement(flowElement);
+	        					shape.setBounds(b);
+	        					plane.getPlaneElement().add(shape);
+	        				}
+	        			} else if (flowElement instanceof SequenceFlow) {
+	        				SequenceFlow sequenceFlow = (SequenceFlow) flowElement;
+	        				BPMNEdge edge = diFactory.createBPMNEdge();
+	    					edge.setBpmnElement(flowElement);
+	    					DcFactory dcFactory = DcFactory.eINSTANCE;
+	    					Point point = dcFactory.createPoint();
+	    					if(sequenceFlow.getSourceRef() != null) {
+	    						Bounds sourceBounds = _bounds.get(sequenceFlow.getSourceRef().getId());
+	    						point.setX(sourceBounds.getX() + (sourceBounds.getWidth()/2));
+	    						point.setY(sourceBounds.getY() + (sourceBounds.getHeight()/2));
+	    					}
+	    					edge.getWaypoint().add(point);
+//	    					List<Point> dockers = _dockers.get(sequenceFlow.getId());
+//	    					for (int i = 1; i < dockers.size() - 1; i++) {
+//	    						edge.getWaypoint().add(dockers.get(i));
+//	    					}
+	    					point = dcFactory.createPoint();
+	    					if(sequenceFlow.getTargetRef() != null) {
+	    						Bounds targetBounds = _bounds.get(sequenceFlow.getTargetRef().getId());
+	    						point.setX(targetBounds.getX() + (targetBounds.getWidth()/2));
+	    						point.setY(targetBounds.getY() + (targetBounds.getHeight()/2));
+	    					}
+	    					edge.getWaypoint().add(point);
+	    					plane.getPlaneElement().add(edge);
+	        			}
+	        		}
+
+	        		def.getDiagrams().add(diagram);
+	    		}
+			} 
+		} catch (FactoryConfigurationError e) {
+			_logger.error("Exception adding bpmndi info: " + e.getMessage());
+		} catch (Exception e) {
+			_logger.error("Exception adding bpmndi info: " + e.getMessage());
+		}
+    }
+    
     private String storeToGuvnor(String uuid, IDiagramProfile profile,
             String formattedSvg, String rawSvg, String transformto) {
         String[] packageAssetName = findPackageAndAssetNameForUUID(uuid,

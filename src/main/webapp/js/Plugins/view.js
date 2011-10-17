@@ -153,6 +153,27 @@ ORYX.Plugins.View = {
 			}.bind(this)
 		});
 		
+		/* Register jpdl transformation to model */
+		this.facade.offer({
+			'name':ORYX.I18N.View.migratejPDL,
+			'functionality': this.migrateJPDL.bind(this),
+			'group': ORYX.I18N.View.group,
+			'icon': ORYX.PATH + "images/jpdl_import_icon.png",
+			'description': ORYX.I18N.View.migratejPDLDesc,
+			'index': 7,
+			'minShape': 0,
+			'maxShape': 0,
+			'isEnabled': function(){
+				profileParamName = "profile";
+				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+		        regexa = new RegExp( regexSa );
+		        profileParams = regexa.exec( window.location.href );
+		        profileParamValue = profileParams[1]; 
+				return profileParamValue == "jbpm";
+			}.bind(this)
+		});
+		
 		/* Register information view to model */
 		this.facade.offer({
 			'name':ORYX.I18N.View.showInfo,
@@ -160,7 +181,7 @@ ORYX.Plugins.View = {
 			'group': ORYX.I18N.View.group,
 			'icon': ORYX.PATH + "images/information.png",
 			'description': ORYX.I18N.View.showInfoDesc,
-			'index': 7,
+			'index': 8,
 			'minShape': 0,
 			'maxShape': 0,
 			'isEnabled': function(){
@@ -327,6 +348,203 @@ ORYX.Plugins.View = {
 
         uuidParamValue = uuidParams[1]; 
         window.open (ORYX.EXTERNAL_PROTOCOL + "://" + ORYX.EXTERNAL_HOST + "/" + ORYX.EXTERNAL_SUBDOMAIN  + "/org.drools.guvnor.Guvnor/standaloneEditorServlet?assetsUUIDs=" + uuidParamValue + "&client=oryx" , "Process Editor","status=0,toolbar=0,menubar=0,resizable=0,location=no,width=1400,height=1000");
+	},
+	
+	/**
+	 * Migrates a jPDL based process to BPMN2
+	 */
+	migrateJPDL : function() {
+		this._showImportDialog();
+	},
+	
+	/**
+	 * Opens a upload dialog.
+	 */
+	_showImportDialog: function( successCallback ){
+	
+	    var form = new Ext.form.FormPanel({
+		baseCls: 		'x-plain',
+	        labelWidth: 	50,
+	        defaultType: 	'textfield',
+	        items: [
+	        {
+	            text : 		ORYX.I18N.jPDLSupport.selectFile, 
+				style : 	'font-size:12px;margin-bottom:10px;display:block;',
+	            //anchor:		'100%',
+				xtype : 	'label' 
+	        },
+	        {
+	            fieldLabel: ORYX.I18N.jPDLSupport.file,
+	            name: 		'subject',
+				inputType : 'file',
+				style : 	'margin-bottom:10px;display:block;',
+				itemCls :	'ext_specific_window_overflow'
+	        }, 
+	        {
+	            xtype: 'textarea',
+	            hideLabel: true,
+	            name: 'msg',
+		        grow: false,
+				width: 450,
+				height: 200
+	        }
+	        ]
+	    });
+	    
+	    var form2 = new Ext.form.FormPanel({
+			baseCls: 		'x-plain',
+	        labelWidth: 	50,
+	        defaultType: 	'textfield',
+	        items: [
+	        {
+	            text : 		ORYX.I18N.jPDLSupport.selectGpdFile, 
+				style : 	'font-size:12px;margin-bottom:10px;display:block;',
+	            //anchor:		'100%',
+				xtype : 	'label' 
+	        },
+	        {
+	            fieldLabel: ORYX.I18N.jPDLSupport.gpdfile,
+	            name: 		'subject',
+				inputType : 'file',
+				style : 	'margin-bottom:10px;display:block;',
+				itemCls :	'ext_specific_window_overflow'
+	        }, 
+	        {
+	            xtype: 'textarea',
+	            hideLabel: true,
+	            name: 'msg',
+		        grow: false,
+                width: 450,
+                height: 200
+	        }
+	        ]
+	    });
+
+		// Create the panel
+		var dialog = new Ext.Window({ 
+			autoCreate: true,
+			autoScroll:true, 
+			//layout: 	'fit',
+			plain:		true,
+			bodyStyle: 	'padding:5px;',
+			title: 		ORYX.I18N.jPDLSupport.impJPDL, 
+			height: 	450, 
+			width:		500,
+			modal:		true,
+			fixedcenter:true, 
+			shadow:		true, 
+			proxyDrag: 	true,
+			resizable:	true,
+			items: 		[form,form2],
+			buttons:[
+				{
+					text:ORYX.I18N.jPDLSupport.impBtn,
+					handler:function(){
+						
+						var loadMask = new Ext.LoadMask(Ext.getBody(), {msg:ORYX.I18N.jPDLSupport.impProgress});
+						loadMask.show();
+						
+						window.setTimeout(function(){
+					
+							var jpdlString =  form.items.items[2].getValue();
+							var gpdString =  form2.items.items[2].getValue();
+							
+							this._sendRequest(
+									ORYX.CONFIG.TRANSFORMER_URL(),
+									'POST',
+									{ 'jpdl' : jpdlString,
+									  'gpd'  : gpdString,
+									  'transformto' : 'jpdl2bpmn2',
+									  'profile' : ORYX.PROFILE,
+									  'uuid' : ORYX.UUID
+									},
+									function( arg ) { this._loadJSON( arg );  loadMask.hide();  dialog.hide(); }.bind(this),
+									function() { loadMask.hide();  dialog.hide(); }.bind(this)
+								);
+
+						}.bind(this), 100);
+			
+					}.bind(this)
+				},{
+					text:ORYX.I18N.jPDLSupport.close,
+					handler:function(){
+						
+						dialog.hide();
+					
+					}.bind(this)
+				}
+			]
+		});
+		
+		// Destroy the panel when hiding
+		dialog.on('hide', function(){
+			dialog.destroy(true);
+			delete dialog;
+		});
+
+		// Show the panel
+		dialog.show();
+				
+		// Adds the change event handler to 
+		form.items.items[1].getEl().dom.addEventListener('change',function(evt){
+				var text = evt.target.files[0].getAsText('UTF-8');
+				form.items.items[2].setValue( text );
+			}, true);
+		form2.items.items[1].getEl().dom.addEventListener('change',function(evt){
+                var text = evt.target.files[0].getAsText('UTF-8');
+                form2.items.items[2].setValue( text );
+            }, true);
+	},
+	
+	/**
+	 * Loads JSON into the editor
+	 * 
+	 */
+	_loadJSON: function( jsonString ){
+		if (jsonString) {
+			var jsonObj = jsonString.evalJSON();
+			this.facade.importJSON(jsonString);
+		} else {
+			this._showErrorMessageBox(ORYX.I18N.Oryx.title, ORYX.I18N.jPDLSupport.impFailedJson);
+		}
+	},
+	
+	/**
+	 * Sends request to a given URL.
+	 */
+	_sendRequest: function( url, method, params, successcallback, failedcallback ){
+
+		var suc = false;
+
+		new Ajax.Request(url, {
+           method			: method,
+           asynchronous	: false,
+           parameters		: params,
+		   onSuccess		: function(transport) {
+				
+				suc = true;
+				
+				if(successcallback){
+					successcallback( transport.responseText )	
+				}
+				
+			}.bind(this),
+			
+			onFailure		: function(transport) {
+
+				if(failedcallback){
+					
+					failedcallback();
+					
+				} else {
+					this._showErrorMessageBox(ORYX.I18N.Oryx.title, ORYX.I18N.jPDLSupport.impFailedReq);
+					ORYX.log.warn("jPDL migration failed: " + transport.responseText);	
+				}
+				
+			}.bind(this)		
+		});
+		
+		return suc;		
 	},
 	
 	/**
