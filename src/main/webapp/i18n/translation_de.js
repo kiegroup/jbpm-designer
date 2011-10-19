@@ -443,7 +443,10 @@ ORYX.I18N.View.showInfo = "Info";
 ORYX.I18N.View.showInfoDesc = "Info";
 ORYX.I18N.View.migratejPDL = "Migrate jPDL to BPMN2";
 ORYX.I18N.View.migratejPDLDesc = "Migrate jPDL to BPMN2";
-
+ORYX.I18N.View.connectServiceRepo = "Connect to jBPM service repository";
+ORYX.I18N.View.connectServiceRepoDesc = "Connect to jBPM service repository";
+ORYX.I18N.View.connectServiceRepoDataTitle = "jBPM Service Repository Data";
+ORYX.I18N.View.connectServiceRepoConnecting = "Connecting to jBPM Service Repository...";
 
 if(!ORYX.I18N.XFormsSerialization) ORYX.I18N.XFormsSerialization = {};
 

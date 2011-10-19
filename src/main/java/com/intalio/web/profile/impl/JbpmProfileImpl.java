@@ -54,6 +54,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
     private String _externalLoadSubdomain;
     private String _usr;
     private String _pwd;
+    private String _serviceRepositoryLocation;
     
     public JbpmProfileImpl(ServletContext servletContext) {
         this(servletContext, true);
@@ -155,6 +156,17 @@ public class JbpmProfileImpl implements IDiagramProfile {
                                 _pwd = reader.getAttributeValue(i);
                             }
                         }
+                    } else if("servicerepository".equals(reader.getLocalName())) {
+                    	for (int i = 0 ; i < reader.getAttributeCount() ; i++) {
+                    		if ("location".equals(reader.getAttributeLocalName(i))) {
+                    			String location = reader.getAttributeValue(i);
+                    			if(!isEmpty(location)) {
+                                    _serviceRepositoryLocation = location;
+                                } else {
+                                    _logger.info("Invalid service repo location specified");
+                                }
+                    		}
+                    	}
                     }
                 }
             }
@@ -192,6 +204,10 @@ public class JbpmProfileImpl implements IDiagramProfile {
 
     public String getPwd() {
         return _pwd;
+    }
+    
+    public String getServiceRepositoryLocation() {
+    	return _serviceRepositoryLocation;
     }
     
     public IDiagramMarshaller createMarshaller() {

@@ -94,7 +94,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         workitemSVGFilePath = stencilPath  + "/bpmn2.0jbpm/view/activity/workitems/";
         origWorkitemSVGFile = workitemSVGFilePath + "workitem.orig";
         default_emailicon = servletContext.getRealPath("/defaults/defaultemailicon.gif");
-        default_logicon = servletContext.getRealPath("/defaults/defaultlogicon.gif");
+        default_logicon = servletContext.getRealPath(  "/defaults/defaultlogicon.gif");
         default_widconfigtemplate = servletContext.getRealPath("/defaults/WorkDefinitions.wid.st");
     }
     
@@ -125,7 +125,9 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         		}
         	}
         	if(!gotConfigs) {
+        		System.out.println("Setting up default workitem configuration");
         		setupDefaultWorkitemConfigs(uuid, packageNames, profile);
+        		System.out.println("End setting up default workitem configuration");
         		// re-load the workitem config info
         		workitemConfigInfo = findWorkitemInfoForUUID(uuid, packageNames, profile);
         	}
@@ -406,6 +408,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 	            createEmailIconConnection.setDoOutput(true);
 	            createEmailIconConnection.getOutputStream().write(getBytesFromFile(new File(default_emailicon)));
 	            createEmailIconConnection.connect();
+	            System.out.println("created email icon: " + createEmailIconConnection.getResponseCode());
 				
 	            // log icon
 	            URL createLogIconURL = new URL(packageAssetsURL);
@@ -421,6 +424,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 	            createLogIconConnection.setDoOutput(true);
 	            createLogIconConnection.getOutputStream().write(getBytesFromFile(new File(default_logicon)));
 	            createLogIconConnection.connect();
+	            System.out.println("created log icon" + createLogIconConnection.getResponseCode());
 	            
 				// default configuration wid
 	            StringTemplate widConfigTemplate = new StringTemplate(readFile(default_widconfigtemplate));
@@ -443,6 +447,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 	            createWidConnection.setDoOutput(true);
 	            createWidConnection.getOutputStream().write(widConfigTemplate.toString().getBytes("UTF-8"));
 	            createWidConnection.connect();
+	            System.out.println("created default wid" + createWidConnection.getResponseCode());
 			} catch (Exception e) {
 				// we dont want to barf..just log that error happened
                 _logger.error(e.getMessage());

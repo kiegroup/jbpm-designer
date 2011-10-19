@@ -112,6 +112,11 @@ public interface IDiagramProfile {
     public String getPwd();
     
     /**
+     * @return location of service repository.
+     */
+    public String getServiceRepositoryLocation();
+    
+    /**
      * Parser to produce the final model to be saved.
      * @author Antoine Toulme
      *
