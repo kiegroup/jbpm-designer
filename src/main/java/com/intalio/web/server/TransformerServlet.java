@@ -173,14 +173,13 @@ public class TransformerServlet extends HttpServlet {
             }
         } else if (transformto != null && transformto.equals(JPDL_TO_BPMN2)) { 
         	String bpmn2 = JbpmMigration.transform(jpdl);
-        	System.out.println("************************ TRANSFORMED BPMN2 STRING: \n");
-        	System.out.println(bpmn2);
-
         	Definitions def = ((JbpmProfileImpl) profile).getDefinitions(bpmn2);
         	// add bpmndi info to Definitions with help of gpd
         	addBpmnDiInfo(def, gpd);
         	// hack for now
         	revisitSequenceFlows(def, bpmn2);
+        	// another hack if id == name
+        	revisitNodeNames(def);
         	
         	// get the xml from Definitions
         	ResourceSet rSet = new ResourceSetImpl();
@@ -191,15 +190,27 @@ public class TransformerServlet extends HttpServlet {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             bpmn2resource.save(outputStream, new HashMap<Object, Object>());
             String fullXmlModel =  outputStream.toString();
-            System.out.println("************************ BPMN2 FROM ECLIPSE.BPMN2 API *********\n");
-            System.out.println(fullXmlModel);
         	// convert to json and write response
         	String json = profile.createUnmarshaller().parseModel(fullXmlModel, profile, "");
-        	System.out.println("************************ RETURNING JSON *********\n");
-            System.out.println(json);
         	resp.setContentType("application/json");
         	resp.getWriter().print(json);
         }
+    }
+    
+    private void revisitNodeNames(Definitions def) {
+    	List<RootElement> rootElements =  def.getRootElements();
+		for(RootElement root : rootElements) {
+			if(root instanceof Process) {
+				Process process = (Process) root;
+		        List<FlowElement> flowElements = process.getFlowElements();
+		        for(FlowElement fe : flowElements) {
+		        	if(fe.getName() != null && fe.getId().equals(fe.getName())) {
+		        		// change the name so they are not the same
+		        		fe.setName("_" + fe.getName());
+		        	}
+		        }
+			}
+		}
     }
     
     private void revisitSequenceFlows(Definitions def, String orig) {

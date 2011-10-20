@@ -816,18 +816,17 @@ ORYX.Editor = {
 	* @throws {SyntaxError} If the serialized json object contains syntax errors
 	*/
 	importJSON: function(jsonObject, noSelectionAfterImport) {
-		
-        try {
-            jsonObject = this.renewResourceIds(jsonObject);
-        } catch(error){
-            throw error;
-        }     
+		try {
+			jsonObject = this.renewResourceIds(jsonObject);
+		} catch(error){
+			throw error;
+		}     
 		//check, if the imported json model can be loaded in this editor
 		// (stencil set has to fit)
-        if (!jsonObject.stencilset) {
-        	Ext.Msg.alert(ORYX.I18N.JSONImport.title, ORYX.I18N.JSONImport.invalidJSON);
-        	return null;
-        }
+		if (!jsonObject.stencilset) {
+			Ext.Msg.alert(ORYX.I18N.JSONImport.title, ORYX.I18N.JSONImport.invalidJSON);
+			return null;
+		}
 		if(jsonObject.stencilset.namespace && jsonObject.stencilset.namespace !== this.getCanvas().getStencil().stencilSet().namespace()) {
 			Ext.Msg.alert(ORYX.I18N.JSONImport.title, String.format(ORYX.I18N.JSONImport.wrongSS, jsonObject.stencilset.namespace, this.getCanvas().getStencil().stencilSet().namespace()));
 			return null;
@@ -951,7 +950,7 @@ ORYX.Editor = {
         var resourceIds = collectResourceIds(jsonObject.childShapes);
         
         // Replace each resource id by a new one
-        resourceIds.each(function(oldResourceId){
+        resourceIds.each(function(oldResourceId) {
             var newResourceId = ORYX.Editor.provideId();
             serJsonObject = serJsonObject.gsub('"'+oldResourceId+'"', '"'+newResourceId+'"')
         });
