@@ -173,16 +173,14 @@ public class TransformerServlet extends HttpServlet {
             }
         } else if (transformto != null && transformto.equals(JPDL_TO_BPMN2)) { 
         	String bpmn2 = JbpmMigration.transform(jpdl);
-        	
-        	// for testing:
-        	//bpmn2 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<bpmn2:definitions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.omg.org/bpmn20\" xmlns:bpmn2=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\" xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\" xmlns:di=\"http://www.omg.org/spec/DD/20100524/DI\" xmlns:drools=\"http://www.jboss.org/drools\" id=\"_OnIfUPevEeC_Oon7tMUNPw\" xsi:schemaLocation=\"http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd\" targetNamespace=\"http://www.omg.org/bpmn20\">\n  <bpmn2:process id=\"abc\" drools:packageName=\"defaultPackage\" name=\"\" isExecutable=\"true\">\n    <bpmn2:startEvent id=\"_3F9F4C27-547A-4422-96CE-0C7CC4D27590\" name=\"start\">\n      <bpmn2:outgoing>_855031B0-7571-4B32-B076-9CEF6310AE0D</bpmn2:outgoing>\n    </bpmn2:startEvent>\n    <bpmn2:task id=\"_AE7CD52F-C3AD-4158-9F97-7E6BD3ABE15B\" name=\"abc\">\n      <bpmn2:incoming>_855031B0-7571-4B32-B076-9CEF6310AE0D</bpmn2:incoming>\n      <bpmn2:outgoing>_6CC69554-591A-4D91-A886-E91E6425EA7D</bpmn2:outgoing>\n    </bpmn2:task>\n    <bpmn2:sequenceFlow id=\"_855031B0-7571-4B32-B076-9CEF6310AE0D\" sourceRef=\"_3F9F4C27-547A-4422-96CE-0C7CC4D27590\" targetRef=\"_AE7CD52F-C3AD-4158-9F97-7E6BD3ABE15B\"/>\n    <bpmn2:endEvent id=\"_5E18D68A-543C-40E2-B921-A8C2A5288BB8\" name=\"end\">\n      <bpmn2:incoming>_6CC69554-591A-4D91-A886-E91E6425EA7D</bpmn2:incoming>\n    </bpmn2:endEvent>\n    <bpmn2:sequenceFlow id=\"_6CC69554-591A-4D91-A886-E91E6425EA7D\" sourceRef=\"_AE7CD52F-C3AD-4158-9F97-7E6BD3ABE15B\" targetRef=\"_5E18D68A-543C-40E2-B921-A8C2A5288BB8\"/>\n  </bpmn2:process>\n  <bpmndi:BPMNDiagram id=\"_OnKUgPevEeC_Oon7tMUNPw\">\n    <bpmndi:BPMNPlane id=\"_OnKUgfevEeC_Oon7tMUNPw\" bpmnElement=\"abc\">\n      <bpmndi:BPMNShape id=\"_OnKUgvevEeC_Oon7tMUNPw\" bpmnElement=\"_3F9F4C27-547A-4422-96CE-0C7CC4D27590\">\n        <dc:Bounds height=\"30.0\" width=\"30.0\" x=\"203.0\" y=\"187.0\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"_OnKUg_evEeC_Oon7tMUNPw\" bpmnElement=\"_AE7CD52F-C3AD-4158-9F97-7E6BD3ABE15B\">\n        <dc:Bounds height=\"80.0\" width=\"100.0\" x=\"278.0\" y=\"162.0\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNEdge id=\"_OnKUhPevEeC_Oon7tMUNPw\" bpmnElement=\"_855031B0-7571-4B32-B076-9CEF6310AE0D\">\n        <di:waypoint xsi:type=\"dc:Point\" x=\"218.0\" y=\"202.0\"/>\n        <di:waypoint xsi:type=\"dc:Point\" x=\"328.0\" y=\"202.0\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNShape id=\"_OnK7kPevEeC_Oon7tMUNPw\" bpmnElement=\"_5E18D68A-543C-40E2-B921-A8C2A5288BB8\">\n        <dc:Bounds height=\"28.0\" width=\"28.0\" x=\"423.0\" y=\"188.0\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNEdge id=\"_OnK7kfevEeC_Oon7tMUNPw\" bpmnElement=\"_6CC69554-591A-4D91-A886-E91E6425EA7D\">\n        <di:waypoint xsi:type=\"dc:Point\" x=\"328.0\" y=\"202.0\"/>\n        <di:waypoint xsi:type=\"dc:Point\" x=\"437.0\" y=\"202.0\"/>\n      </bpmndi:BPMNEdge>\n    </bpmndi:BPMNPlane>\n  </bpmndi:BPMNDiagram>\n</bpmn2:definitions>\n";
-        	//bpmn2 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<definitions xmlns=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:jpdl=\"urn:jbpm.org:jpdl-3.2\" xmlns:drools=\"http://www.jboss.org/drools\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:di=\"http://www.omg.org/spec/DD/20100524/DI\" xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\" xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\" targetNamespace=\"http://www.jbpm.org/\" id=\"SingleNode\" name=\"SingleNode\">\n<process id=\"_SingleNode_Process\" name=\"SingleNode\">\n<startEvent name=\"start-state\" id=\"_start-state\">\n\t<outgoing>_node</outgoing>\n</startEvent>\n<scriptTask id=\"_node\" name=\"node\" scriptFormat=\"\">\n\t<incoming>_start-state</incoming>\n\t<outgoing>_end-state</outgoing>\n\t<script></script>\n</scriptTask>\n<sequenceFlow id=\"_flow_start-state1\" sourceRef=\"_start-state\" targetRef=\"_node\"/>\n<endEvent name=\"end-state\" id=\"_end-state\">\n\t<incoming>_node</incoming>\n</endEvent>\n<sequenceFlow id=\"_flow_node1\" sourceRef=\"_node\" targetRef=\"_end-state\"/>\n</process>\n</definitions>"; 
-        	//System.out.println("************************ TRANSFORMED BPMN2 STRING: \n");
-        	//System.out.println(bpmn2);
+        	System.out.println("************************ TRANSFORMED BPMN2 STRING: \n");
+        	System.out.println(bpmn2);
 
         	Definitions def = ((JbpmProfileImpl) profile).getDefinitions(bpmn2);
         	// add bpmndi info to Definitions with help of gpd
         	addBpmnDiInfo(def, gpd);
+        	// hack for now
+        	revisitSequenceFlows(def, bpmn2);
         	
         	// get the xml from Definitions
         	ResourceSet rSet = new ResourceSetImpl();
@@ -193,13 +191,91 @@ public class TransformerServlet extends HttpServlet {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             bpmn2resource.save(outputStream, new HashMap<Object, Object>());
             String fullXmlModel =  outputStream.toString();
+            System.out.println("************************ BPMN2 FROM ECLIPSE.BPMN2 API *********\n");
+            System.out.println(fullXmlModel);
         	// convert to json and write response
         	String json = profile.createUnmarshaller().parseModel(fullXmlModel, profile, "");
+        	System.out.println("************************ RETURNING JSON *********\n");
+            System.out.println(json);
         	resp.setContentType("application/json");
         	resp.getWriter().print(json);
         }
     }
-
+    
+    private void revisitSequenceFlows(Definitions def, String orig) {
+    	try {
+			Map<String, Map<String, String>> sequenceFlowMapping = new HashMap<String, Map<String,String>>();
+			XMLInputFactory factory = XMLInputFactory.newInstance();
+			XMLStreamReader reader = factory.createXMLStreamReader(new StringReader(orig));
+			while(reader.hasNext()) {
+				if (reader.next() == XMLStreamReader.START_ELEMENT) {
+					if ("sequenceFlow".equals(reader.getLocalName())) {
+						String id = "";
+						String source = "";
+						String target = "";
+						for (int i = 0 ; i < reader.getAttributeCount() ; i++) {
+							if ("id".equals(reader.getAttributeLocalName(i))) {
+								id = reader.getAttributeValue(i);
+							}
+							if ("sourceRef".equals(reader.getAttributeLocalName(i))) {
+								source = reader.getAttributeValue(i);
+							}
+							if ("targetRef".equals(reader.getAttributeLocalName(i))) {
+								target = reader.getAttributeValue(i);
+							}
+						}
+						Map<String, String> valueMap = new HashMap<String, String>();
+						valueMap.put("sourceRef", source);
+						valueMap.put("targetRef", target);
+						sequenceFlowMapping.put(id, valueMap);
+					}
+				}
+			}
+			List<RootElement> rootElements =  def.getRootElements();
+			for(RootElement root : rootElements) {
+				if(root instanceof Process) {
+					Process process = (Process) root;
+			        List<FlowElement> flowElements = process.getFlowElements();
+			        for(FlowElement fe : flowElements) {
+			        	if(fe instanceof SequenceFlow) {
+			        		SequenceFlow sf = (SequenceFlow) fe;
+			        		if(sequenceFlowMapping.containsKey(sf.getId())) {
+			        			sf.setSourceRef(getFlowNode(def, sequenceFlowMapping.get(sf.getId()).get("sourceRef")));
+			        			sf.setTargetRef(getFlowNode(def, sequenceFlowMapping.get(sf.getId()).get("targetRef")));
+			        		} else {
+			        			_logger.error("Could not find mapping for sequenceFlow: " + sf.getId());
+			        		}
+			        	}
+			        }
+				}
+			}
+		} catch (FactoryConfigurationError e) {
+			_logger.error(e.getMessage());
+			e.printStackTrace();
+		} catch (Exception e) {
+			_logger.error(e.getMessage());
+			e.printStackTrace();
+		}
+    }
+    
+    private FlowNode getFlowNode(Definitions def, String nodeId) {
+    	List<RootElement> rootElements =  def.getRootElements();
+    	for(RootElement root : rootElements) {
+        	if(root instanceof Process) {
+        		Process process = (Process) root;
+                List<FlowElement> flowElements = process.getFlowElements();
+                for(FlowElement fe : flowElements) {
+                	if(fe instanceof FlowNode) {
+                		if(fe.getId().equals(nodeId)) {
+                    		return (FlowNode) fe;
+                    	}
+                	}
+                }
+        	}
+    	}
+    	return null;
+    }
+    
     private void addBpmnDiInfo(Definitions def, String gpd) {
     	try {
     		Map<String, Bounds> _bounds = new HashMap<String, Bounds>();

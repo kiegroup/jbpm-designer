@@ -103,7 +103,6 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 						e.printStackTrace();
 					}
 				}
-				System.out.println("********** RETURNING JSON: " + jsonObject.toString());
 				resp.setCharacterEncoding("UTF-8");
 				resp.setContentType("application/json");
 				resp.getWriter().write(jsonObject.toString());
@@ -157,7 +156,6 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 								_logger.error(e.getMessage());
 							} 
 							if(gotPackage) {
-								System.out.println("******** Package to install into: " + pkg);
 								String widURL = ExternalInfo.getExternalProtocol(profile)
 						                + "://"
 						                + ExternalInfo.getExternalHost(profile)
@@ -165,7 +163,6 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 						                + profile.getExternalLoadURLSubdomain().substring(0,
 						                        profile.getExternalLoadURLSubdomain().indexOf("/"))
 						                + "/rest/packages/" + pkg + "/assets/" + widName + ".wid";
-								System.out.println("************* wid url : " + widURL);
 								String iconURL = ExternalInfo.getExternalProtocol(profile)
 						                + "://"
 						                + ExternalInfo.getExternalHost(profile)
@@ -173,7 +170,6 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 						                + profile.getExternalLoadURLSubdomain().substring(0,
 						                        profile.getExternalLoadURLSubdomain().indexOf("/"))
 						                + "/rest/packages/" + pkg + "/assets/" + iconName;
-								System.out.println("******** icon url : " + iconURL);
 								
 								String packageAssetsURL = ExternalInfo.getExternalProtocol(profile)
 					                    + "://"

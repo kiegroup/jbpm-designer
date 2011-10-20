@@ -991,12 +991,15 @@ public class Bpmn2JsonMarshaller {
             }
             
             if(isAssignment) {
-                String associationValue = ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody();
-                if(associationValue == null) {
-                    associationValue = "";
-                }
-                associationBuff.append(rhsAssociation).append("=").append(associationValue);
-                associationBuff.append(",");
+            	// only know how to deal with formal expressions
+            	if( datain.getAssignment().get(0).getFrom() instanceof FormalExpression) {
+            		String associationValue = ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody();
+            		if(associationValue == null) {
+            			associationValue = "";
+            		}
+            		associationBuff.append(rhsAssociation).append("=").append(associationValue);
+            		associationBuff.append(",");
+            	}
             } else if(isBiDirectional) {
                 associationBuff.append(lhsAssociation).append("<->").append(rhsAssociation);
                 associationBuff.append(",");
@@ -1323,10 +1326,10 @@ public class Bpmn2JsonMarshaller {
                         if(priorityInt >= 1) {
                             properties.put("priority", entry.getValue());
                         } else {
-                            System.out.println("Priority must be equal or greater than 1.");
+                            _logger.error("Priority must be equal or greater than 1.");
                         }
                     } catch (NumberFormatException e) {
-                        System.out.println("Priority must be a number.");
+                        _logger.error("Priority must be a number.");
                     }
                 }
             }
