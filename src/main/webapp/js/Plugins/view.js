@@ -114,10 +114,10 @@ ORYX.Plugins.View = {
 		this.facade.offer({
 			'name':ORYX.I18N.View.showInPopout,
 			'functionality': this.showInPopout.bind(this),
-			'group': ORYX.I18N.View.group,
+			'group': ORYX.I18N.View.jbpmgroup,
 			'icon': ORYX.PATH + "images/popup.gif",
 			'description': ORYX.I18N.View.showInPopoutDesc,
-			'index': 5,
+			'index': 1,
 			'minShape': 0,
 			'maxShape': 0,
 			'isEnabled': function(){
@@ -136,10 +136,10 @@ ORYX.Plugins.View = {
 		this.facade.offer({
 			'name':ORYX.I18N.View.generateTaskForms,
 			'functionality': this.generateTaskForms.bind(this),
-			'group': ORYX.I18N.View.group,
+			'group': ORYX.I18N.View.jbpmgroup,
 			'icon': ORYX.PATH + "images/human_task.gif",
 			'description': ORYX.I18N.View.generateTaskFormsDesc,
-			'index': 6,
+			'index': 2,
 			'minShape': 0,
 			'maxShape': 0,
 			'isEnabled': function(){
@@ -157,10 +157,10 @@ ORYX.Plugins.View = {
 		this.facade.offer({
 			'name':ORYX.I18N.View.migratejPDL,
 			'functionality': this.migrateJPDL.bind(this),
-			'group': ORYX.I18N.View.group,
+			'group': ORYX.I18N.View.jbpmgroup,
 			'icon': ORYX.PATH + "images/jpdl_import_icon.png",
 			'description': ORYX.I18N.View.migratejPDLDesc,
-			'index': 7,
+			'index': 3,
 			'minShape': 0,
 			'maxShape': 0,
 			'isEnabled': function(){
@@ -178,10 +178,76 @@ ORYX.Plugins.View = {
 		this.facade.offer({
 			'name':ORYX.I18N.View.connectServiceRepo,
 			'functionality': this.jbpmServiceRepoConnect.bind(this),
-			'group': ORYX.I18N.View.group,
+			'group': ORYX.I18N.View.jbpmgroup,
 			'icon': ORYX.PATH + "images/repository_rep.gif",
 			'description': ORYX.I18N.View.connectServiceRepoDesc,
-			'index': 8,
+			'index': 4,
+			'minShape': 0,
+			'maxShape': 0,
+			'isEnabled': function(){
+				profileParamName = "profile";
+				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+		        regexa = new RegExp( regexSa );
+		        profileParams = regexa.exec( window.location.href );
+		        profileParamValue = profileParams[1]; 
+				return profileParamValue == "jbpm";
+			}.bind(this)
+		});
+		
+		/* Register sharing to model 1*/
+		this.facade.offer({
+			'name': "Share Process Image",
+			'functionality': this.shareProcessImage.bind(this),
+			'group': ORYX.I18N.View.jbpmgroup,
+			//'icon': ORYX.PATH + "images/share.gif",
+			dropDownGroupIcon : ORYX.PATH + "images/share.gif",
+			'description': "Share Process Image",
+			'index': 1,
+			'minShape': 0,
+			'maxShape': 0,
+			'isEnabled': function(){
+				profileParamName = "profile";
+				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+		        regexa = new RegExp( regexSa );
+		        profileParams = regexa.exec( window.location.href );
+		        profileParamValue = profileParams[1]; 
+				return profileParamValue == "jbpm";
+			}.bind(this)
+		});
+		
+		/* Register sharing to model 2*/
+		this.facade.offer({
+			'name': "Share Process PDF",
+			'functionality': this.shareProcessPdf.bind(this),
+			'group': ORYX.I18N.View.jbpmgroup,
+			//'icon': ORYX.PATH + "images/share.gif",
+			dropDownGroupIcon : ORYX.PATH + "images/share.gif",
+			'description': "Share Process PDF",
+			'index': 2,
+			'minShape': 0,
+			'maxShape': 0,
+			'isEnabled': function(){
+				profileParamName = "profile";
+				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+		        regexa = new RegExp( regexSa );
+		        profileParams = regexa.exec( window.location.href );
+		        profileParamValue = profileParams[1]; 
+				return profileParamValue == "jbpm";
+			}.bind(this)
+		});
+		
+		/* Register sharing to model 3*/
+		this.facade.offer({
+			'name': "Share Embeddable Process",
+			'functionality': this.shareEmbeddableProcess.bind(this),
+			'group': ORYX.I18N.View.jbpmgroup,
+			//'icon': ORYX.PATH + "images/share.gif",
+			dropDownGroupIcon : ORYX.PATH + "images/share.gif",
+			'description': "Share Embeddable Process",
+			'index': 3,
 			'minShape': 0,
 			'maxShape': 0,
 			'isEnabled': function(){
@@ -199,10 +265,10 @@ ORYX.Plugins.View = {
 		this.facade.offer({
 			'name':ORYX.I18N.View.showInfo,
 			'functionality': this.showInfo.bind(this),
-			'group': ORYX.I18N.View.group,
+			'group': ORYX.I18N.View.infogroup,
 			'icon': ORYX.PATH + "images/information.png",
 			'description': ORYX.I18N.View.showInfoDesc,
-			'index': 9,
+			'index': 1,
 			'minShape': 0,
 			'maxShape': 0,
 			'isEnabled': function(){
@@ -372,6 +438,161 @@ ORYX.Plugins.View = {
 	},
 	
 	/**
+	 * Share the embeddable process
+	 */
+	shareEmbeddableProcess : function() {
+		Ext.Ajax.request({
+            url: ORYX.PATH + "transformer",
+            method: 'POST',
+            success: function(request){
+    	   		try {
+    	   			var cf = new Ext.form.TextArea({
+    	   	            id:"sharedEmbeddableArea",
+    	   	            fieldLabel:"Embeddable Process",
+    	   	            width:400,
+    	   	            height:250,
+    	   	            value:request.responseText
+    	   	            });
+
+    	   			var win = new Ext.Window({
+    	   				width:400,
+    	   				id:'sharedEmbeddableURL',
+    	   				height:250,
+    	   				autoScroll:true,
+    	   				title:'Embeddable Process',
+    	   				items: [cf]
+    	   				});
+    	   			win.show();
+    	   		} catch(e) {
+    	   			Ext.Msg.alert("Failed to create embeddable process code :\n" + e);
+    	   		}
+                Ext.Msg.hide();
+            }.createDelegate(this),
+            failure: function(){
+            	Ext.Msg.alert("Failed to create embeddable process code.");
+            },
+            params: {
+            	profile: ORYX.PROFILE,
+            	uuid : ORYX.UUID,
+            	respaction : "showembeddable"
+            }
+        });
+	},
+	
+	/**
+	 * Share the process PDF URL.
+	 */
+	shareProcessPdf : function() {
+		var createStorePDFMask = new Ext.LoadMask(Ext.getBody(), {msg:"Creating the process PDF..."});
+		createStorePDFMask.show();
+		var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false));
+		var rawSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getRootNode().cloneNode(true));
+		
+		Ext.Ajax.request({
+            url: ORYX.PATH + "transformer",
+            method: 'POST',
+            success: function(request){
+    	   		try {
+    	   			createStorePDFMask.hide();
+    	   			var cf = new Ext.form.TextArea({
+    	   	            id:"sharedPDFArea",
+    	   	            fieldLabel:"Process Image PDF",
+    	   	            width:400,
+    	   	            height:250,
+    	   	            value:request.responseText
+    	   	            });
+
+    	   			var win = new Ext.Window({
+    	   				width:400,
+    	   				id:'sharedPDFURL',
+    	   				height:250,
+    	   				autoScroll:true,
+    	   				title:'Process PDF URL',
+    	   				items: [cf]
+    	   				});
+    	   			win.show();
+    	   		} catch(e) {
+    	   			createStorePDFMask.hide();
+    	   			Ext.Msg.alert("Failed to create the process PDF :\n" + e);
+    	   		}
+                Ext.Msg.hide();
+            }.createDelegate(this),
+            failure: function(){
+            	createStorePDFMask.hide();
+            	Ext.Msg.alert("Failed to create the process PDF.");
+            },
+            params: {
+            	profile: ORYX.PROFILE,
+            	uuid : ORYX.UUID,
+            	fsvg : formattedSvgDOM,
+            	rsvg : rawSvgDOM,
+            	transformto : "pdf",
+            	respaction : "showurl"
+            }
+        });
+	},
+	
+	/**
+	 * Share the process image URL.
+	 */
+	shareProcessImage : function() {
+		var createStoreImageMask = new Ext.LoadMask(Ext.getBody(), {msg:"Creating the process image..."});
+		createStoreImageMask.show();
+		var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false));
+		var rawSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getRootNode().cloneNode(true));
+		
+		Ext.Ajax.request({
+            url: ORYX.PATH + "transformer",
+            method: 'POST',
+            success: function(request){
+    	   		try {
+    	   			createStoreImageMask.hide();
+    	   			var cf = new Ext.form.TextArea({
+    	   	            id:"sharedImageArea",
+    	   	            fieldLabel:"Process Image URL",
+    	   	            width:400,
+    	   	            height:250,
+    	   	            value:request.responseText
+    	   	            });
+
+    	   			var win = new Ext.Window({
+    	   				width:400,
+    	   				id:'sharedImageURL',
+    	   				height:250,
+    	   				autoScroll:true,
+    	   				title:'Process Image URL',
+    	   				items: [cf]
+    	   				});
+    	   			win.show();
+    	   		} catch(e) {
+    	   			createStoreImageMask.hide();
+    	   			Ext.Msg.alert("Failed to create the process image :\n" + e);
+    	   		}
+                Ext.Msg.hide();
+            }.createDelegate(this),
+            failure: function(){
+            	createStoreImageMask.hide();
+            	Ext.Msg.alert("Failed to create the process image.");
+            },
+            params: {
+            	profile: ORYX.PROFILE,
+            	uuid : ORYX.UUID,
+            	fsvg : formattedSvgDOM,
+            	rsvg : rawSvgDOM,
+            	transformto : "png",
+            	respaction : "showurl"
+            }
+        });
+	},
+	
+	/**
+	 * Created and displays code for sharing the process.
+	 */
+	shareProcess : function() {
+		alert('sharing process');
+	},
+	
+	/**
 	 * Connects to the jbpm service repository
 	 * and displays it's assets.
 	 */
@@ -387,11 +608,13 @@ ORYX.Plugins.View = {
     	   			repoLoadMask.hide();
     	   			this._showJbpmServiceDialog(request.responseText);
     	   		} catch(e) {
+    	   			repoLoadMask.hide();
     	   			Ext.Msg.alert("Connecting the jBPM Service Repository failed :\n" + e);
     	   		}
                 Ext.Msg.hide();
             }.createDelegate(this),
             failure: function(){
+            	repoLoadMask.hide();
             	Ext.Msg.alert("Failed to connect to jBPM Service Repository");
             },
             params: {
@@ -460,6 +683,8 @@ ORYX.Plugins.View = {
 			// g is the grid
 			// i is the index
 			// e is the event
+			var installLoadMask = new Ext.LoadMask(Ext.getBody(), {msg:ORYX.I18N.View.installingRepoItem});
+			installLoadMask.show();
 			var aname = g.getStore().getAt(i).get('name');
 			var acategory = g.getStore().getAt(i).get('category');
 			// send request to server to install the selected service node
@@ -468,6 +693,7 @@ ORYX.Plugins.View = {
 	            method: 'POST',
 	            success: function(request) {
 	    	   		try {
+	    	   			installLoadMask.hide();
 	    	   			Ext.Msg.alert('Installation was successful. Please save your process and reopen it in the editor to see the installed assets.');
 	    	   		} catch(e) {
 	    	   			Ext.Msg.alert('Installing the repository assets failed :\n' + e);
@@ -744,7 +970,7 @@ ORYX.Plugins.View = {
 	showAsPDF : function() {
 		var transformval = 'pdf';
 		var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false));
-		var rawSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getRootNode().cloneNode(true))
+		var rawSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getRootNode().cloneNode(true));
 		var method ="post";
 		var form = document.createElement("form");
 		form.setAttribute("name", "transformerform");
@@ -908,7 +1134,7 @@ ORYX.Plugins.View = {
 	showAsPNG : function() {
 		var transformval = 'png';
 		var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false));
-		var rawSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getRootNode().cloneNode(true))
+		var rawSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getRootNode().cloneNode(true));
 		var method ="post";
 		var form = document.createElement("form");
 		form.setAttribute("name", "transformerform");

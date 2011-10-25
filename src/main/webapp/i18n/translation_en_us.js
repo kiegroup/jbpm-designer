@@ -450,12 +450,17 @@ ORYX.I18N.View.generateTaskForms = "Generate Task Form Templates";
 ORYX.I18N.View.generateTaskFormsDesc = "Generate Task Form Templates";
 ORYX.I18N.View.showInfo = "Info";
 ORYX.I18N.View.showInfoDesc = "Info";
-ORYX.I18N.View.migratejPDL = "Migrate jPDL to BPMN2";
-ORYX.I18N.View.migratejPDLDesc = "Migrate jPDL to BPMN2";
+ORYX.I18N.View.jbpmgroup = "jBPM";
+ORYX.I18N.View.migratejPDL = "Migrate jPDL 3.2 to BPMN2";
+ORYX.I18N.View.migratejPDLDesc = "Migrate jPDL 3.2 to BPMN2";
 ORYX.I18N.View.connectServiceRepo = "Connect to jBPM service repository";
 ORYX.I18N.View.connectServiceRepoDesc = "Connect to jBPM service repository";
 ORYX.I18N.View.connectServiceRepoDataTitle = "jBPM Service Repository Data";
 ORYX.I18N.View.connectServiceRepoConnecting = "Connecting to jBPM Service Repository...";
+ORYX.I18N.View.installingRepoItem = "Instaling items from repository...";
+ORYX.I18N.View.shareProcess = "Share your process";
+ORYX.I18N.View.shareProcessDesc = "Share your process";
+ORYX.I18N.View.infogroup = "info";
 
 
 

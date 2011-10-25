@@ -102,6 +102,8 @@ public class TransformerServlet extends HttpServlet {
     private static final String TO_PDF = "pdf";
     private static final String TO_PNG = "png";
     private static final String JPDL_TO_BPMN2 = "jpdl2bpmn2";
+    private static final String RESPACTION_SHOWURL = "showurl";
+    private static final String RESPACTION_SHOWEMBEDDABLE = "showembeddable";
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -118,56 +120,79 @@ public class TransformerServlet extends HttpServlet {
         String transformto = req.getParameter("transformto");
         String jpdl = req.getParameter("jpdl");
         String gpd = req.getParameter("gpd");
+        String respaction = req.getParameter("respaction");
 
         IDiagramProfile profile = getProfile(req, profileName);
 
         if (transformto != null && transformto.equals(TO_PDF)) {
             try {
-                String processId = storeToGuvnor(uuid, profile, formattedSvg, rawSvg,
-                        transformto);
-                
-                resp.setContentType("application/pdf");
-                if (processId != null) {
-                    resp.setHeader("Content-Disposition",
-                            "attachment; filename=\"" + processId + ".pdf\"");
-                } else {
-                    resp.setHeader("Content-Disposition",
-                            "attachment; filename=\"" + uuid + ".pdf\"");
-                }
-                
-                PDFTranscoder t = new PDFTranscoder();
-                TranscoderInput input = new TranscoderInput(new StringReader(
-                        formattedSvg));
-                TranscoderOutput output = new TranscoderOutput(
-                        resp.getOutputStream());
-                t.transcode(input, output);
+            	if(respaction != null && respaction.equals(RESPACTION_SHOWURL)) {
+            		ByteArrayOutputStream bout = new ByteArrayOutputStream();
+            		PDFTranscoder t = new PDFTranscoder();
+	                TranscoderInput input = new TranscoderInput(new StringReader(formattedSvg));
+	                TranscoderOutput output = new TranscoderOutput(bout);
+	                t.transcode(input, output);
+	                resp.setCharacterEncoding("UTF-8");
+                	resp.setContentType("text/plain");
+                	BASE64Encoder enc = new sun.misc.BASE64Encoder();
+                	resp.getWriter().write("<object data=\"data:application/pdf;base64," + enc.encode(bout.toByteArray()) +  "\" type=\"application/pdf\"></object>");
+            	} else {
+	                String processId = storeToGuvnor(uuid, profile, formattedSvg, rawSvg,
+	                        transformto);
+	                
+	                resp.setContentType("application/pdf");
+	                if (processId != null) {
+	                    resp.setHeader("Content-Disposition",
+	                            "attachment; filename=\"" + processId + ".pdf\"");
+	                } else {
+	                    resp.setHeader("Content-Disposition",
+	                            "attachment; filename=\"" + uuid + ".pdf\"");
+	                }
+	                
+	                PDFTranscoder t = new PDFTranscoder();
+	                TranscoderInput input = new TranscoderInput(new StringReader(
+	                        formattedSvg));
+	                TranscoderOutput output = new TranscoderOutput(
+	                        resp.getOutputStream());
+	                t.transcode(input, output);
+            	}
             } catch (TranscoderException e) {
                 resp.sendError(500, e.getMessage());
             }
-            resp.getOutputStream().flush();
         } else if (transformto != null && transformto.equals(TO_PNG)) {
             try {
-                ParsedURL.registerHandler(new GuvnorParsedURLProtocolHandler(profile));
-                String processName = storeToGuvnor(uuid, profile, formattedSvg, rawSvg,
-                        transformto);
-
-                resp.setContentType("image/png");
-                if (processName != null) {
-                    resp.setHeader("Content-Disposition",
-                            "attachment; filename=\"" + processName + ".png\"");
+                if(respaction != null && respaction.equals(RESPACTION_SHOWURL)) {
+                	ByteArrayOutputStream bout = new ByteArrayOutputStream();
+                	PNGTranscoder t = new PNGTranscoder();
+                	t.addTranscodingHint(ImageTranscoder.KEY_MEDIA, "screen");
+                	TranscoderInput input = new TranscoderInput(new StringReader(formattedSvg));
+                	TranscoderOutput output = new TranscoderOutput(bout);
+                	t.transcode(input, output);
+                	resp.setCharacterEncoding("UTF-8");
+                	resp.setContentType("text/plain");
+                	BASE64Encoder enc = new sun.misc.BASE64Encoder();
+                	resp.getWriter().write("<img src=\"data:image/png;base64," + enc.encode(bout.toByteArray()) + "\">");
                 } else {
-                    resp.setHeader("Content-Disposition",
-                            "attachment; filename=\"" + uuid + ".png\"");
-                }
+                	ParsedURL.registerHandler(new GuvnorParsedURLProtocolHandler(profile));
+                    String processName = storeToGuvnor(uuid, profile, formattedSvg, rawSvg,
+                            transformto);
+                	resp.setContentType("image/png");
+                	if (processName != null) {
+                		resp.setHeader("Content-Disposition",
+                				"attachment; filename=\"" + processName + ".png\"");
+                	} else {
+                		resp.setHeader("Content-Disposition",
+                				"attachment; filename=\"" + uuid + ".png\"");
+                	}
                 
-                PNGTranscoder t = new PNGTranscoder();
-                t.addTranscodingHint(ImageTranscoder.KEY_MEDIA, "screen");
-                TranscoderInput input = new TranscoderInput(new StringReader(
-                        formattedSvg));
-                TranscoderOutput output = new TranscoderOutput(
-                        resp.getOutputStream());
-                t.transcode(input, output);
-
+                	PNGTranscoder t = new PNGTranscoder();
+                	t.addTranscodingHint(ImageTranscoder.KEY_MEDIA, "screen");
+                	TranscoderInput input = new TranscoderInput(new StringReader(
+                			formattedSvg));
+                	TranscoderOutput output = new TranscoderOutput(
+                			resp.getOutputStream());
+                	t.transcode(input, output);
+                }
             } catch (TranscoderException e) {
                 resp.sendError(500, e.getMessage());
             }
@@ -194,6 +219,19 @@ public class TransformerServlet extends HttpServlet {
         	String json = profile.createUnmarshaller().parseModel(fullXmlModel, profile, "");
         	resp.setContentType("application/json");
         	resp.getWriter().print(json);
+        } else if(transformto == null && respaction != null && respaction.equals(RESPACTION_SHOWEMBEDDABLE)) {
+        	resp.setCharacterEncoding("UTF-8");
+        	resp.setContentType("text/plain");
+        	String editorURL = ExternalInfo.getExternalProtocol(profile)
+                    + "://"
+                    + ExternalInfo.getExternalHost(profile)
+                    + "/"
+                    + profile.getExternalLoadURLSubdomain().substring(0,
+                            profile.getExternalLoadURLSubdomain().indexOf("/"))
+                    + "/org.drools.guvnor.Guvnor/standaloneEditorServlet?assetsUUIDs="
+                    + uuid
+                    + "&client=oryx";
+        	resp.getWriter().write("<iframe id=\"processFrame\" src=\"" + editorURL + "\" width=\"650\" height=\"580\"/>");
         }
     }
     
