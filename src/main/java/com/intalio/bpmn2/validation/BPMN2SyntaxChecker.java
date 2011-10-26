@@ -83,13 +83,14 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
         			addError(defaultResourceId, "Process has no id.");
         		}
         		
+        		String pname = null;
         		Iterator<FeatureMap.Entry> iter = process.getAnyAttribute().iterator();
         		boolean foundPackageName = false;
                 while(iter.hasNext()) {
                     FeatureMap.Entry entry = iter.next();
                     if(entry.getEStructuralFeature().getName().equals("packageName")) {
                     	foundPackageName = true;
-                        String pname = (String) entry.getValue();
+                        pname = (String) entry.getValue();
                         if(isEmpty(pname)) {
                         	addError(defaultResourceId, "Process has no package name.");
                         }
@@ -97,6 +98,14 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
                 }
                 if(!foundPackageName) {
                 	addError(defaultResourceId, "Process has no package name.");
+                } else {
+                	if(!isEmpty(pname)) {
+                		String[] packageAssetInfo = findPackageAndAssetInfo(uuid, profile);
+                		String guvnorPackageName = packageAssetInfo[0];
+                		if(!guvnorPackageName.equals(pname)) {
+                			addError(defaultResourceId, "Process package name is not valid.");
+                		}
+                	}
                 }
                 
                 boolean foundStartEvent = false;
@@ -197,17 +206,15 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
         		        if(!foundTaskName) {
         		        	addError(ut, "User Task has no task name.");
         		        } else {
-        		        	if(process.getId() != null) {
+        		        	if(taskName != null) {
         		        		String[] packageAssetInfo = findPackageAndAssetInfo(uuid, profile);
         		        		String packageName = packageAssetInfo[0];
         		        		String assetName = packageAssetInfo[1];
-        		        		String taskFormName = process.getId() + "-taskform";
+        		        		String taskFormName = taskName + "-taskform";
         		        		if(!taskFormExistsInGuvnor(packageName, assetName, taskFormName, profile)) {
         		        			addError(ut, "User Task has no task form defined.");
         		        		}
-        		        		
         		        	} 
-        		            
         		        }
         			}
         			
