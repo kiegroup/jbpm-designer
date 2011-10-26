@@ -248,8 +248,8 @@ public class Bpmn2JsonUnmarshaller {
                 					List<ItemAwareElement> sourceRef = input.getSourceRef();
                 					if(sourceRef != null) {
                 						for(ItemAwareElement iae : sourceRef) {
-                							String[] iaeParts = iae.getId().split( "\\.\\s*" );
-                							if(iaeParts.length > 0) {
+                							String[] iaeParts = iae.getId().split( "\\." );
+                							if(iaeParts.length > 1) {
                 								FormalExpression dataInputTransformationExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
                 								dataInputTransformationExpression.setBody(iae.getId());
                 								input.setTransformation(dataInputTransformationExpression);
@@ -266,8 +266,8 @@ public class Bpmn2JsonUnmarshaller {
                 				for(DataOutputAssociation output : outputList) {
                 					ItemAwareElement targetEle = output.getTargetRef();
                 					if(targetEle != null) {
-                						String[] targetEleParts = targetEle.getId().split( "\\.\\s*" );
-                						if(targetEleParts.length > 0) {
+                						String[] targetEleParts = targetEle.getId().split( "\\." );
+                						if(targetEleParts.length > 1) {
                 							FormalExpression dataOutputTransformationExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
                 							dataOutputTransformationExpression.setBody(targetEle.getId());
             								output.setTransformation(dataOutputTransformationExpression);
