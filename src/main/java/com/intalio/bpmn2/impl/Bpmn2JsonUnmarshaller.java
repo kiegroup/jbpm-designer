@@ -1479,6 +1479,14 @@ public class Bpmn2JsonUnmarshaller {
         if(baseElement.getId() == null || baseElement.getId().length() < 1) {
             baseElement.setId(properties.get("resourceId"));
         }
+        if(properties.get("bgcolor") != null && properties.get("bgcolor").length() > 0) {
+            ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+            EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                        "http://www.jboss.org/drools", "bgcolor", false, false);
+            EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                properties.get("bgcolor"));
+            baseElement.getAnyAttribute().add(extensionEntry);
+        }
     }
 
     private void applyDefinitionProperties(Definitions def, Map<String, String> properties) {

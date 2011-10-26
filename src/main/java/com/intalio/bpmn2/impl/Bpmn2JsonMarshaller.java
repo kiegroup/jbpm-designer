@@ -616,8 +616,17 @@ public class Bpmn2JsonMarshaller {
     	generator.writeStartObject();
     	generator.writeObjectField("resourceId", flowElement.getId());
     	
-    	Map<String, Object> catchEventProperties = new LinkedHashMap<String, Object>();
-    	Map<String, Object> throwEventProperties = new LinkedHashMap<String, Object>();
+    	Map<String, Object> flowElementProperties = new LinkedHashMap<String, Object>();
+    	Iterator<FeatureMap.Entry> iter = flowElement.getAnyAttribute().iterator();
+        while(iter.hasNext()) {
+            FeatureMap.Entry entry = iter.next();
+            if(entry.getEStructuralFeature().getName().equals("bgcolor")) {
+            	flowElementProperties.put("bgcolor", entry.getValue());
+            }
+        }
+
+        Map<String, Object> catchEventProperties = new LinkedHashMap<String, Object>(flowElementProperties);
+    	Map<String, Object> throwEventProperties = new LinkedHashMap<String, Object>(flowElementProperties);
     	if(flowElement instanceof CatchEvent) {
     	    setCatchEventProperties((CatchEvent) flowElement, catchEventProperties);
     	}
@@ -633,31 +642,31 @@ public class Bpmn2JsonMarshaller {
     	} else if (flowElement instanceof IntermediateCatchEvent) {
     		marshallIntermediateCatchEvent((IntermediateCatchEvent) flowElement, plane, generator, xOffset, yOffset, catchEventProperties);
     	} else if (flowElement instanceof BoundaryEvent) {
-    		marshallBoundaryEvent((BoundaryEvent) flowElement, plane, generator, xOffset, yOffset);
+    		marshallBoundaryEvent((BoundaryEvent) flowElement, plane, generator, xOffset, yOffset, flowElementProperties);
     	} else if (flowElement instanceof Task) {
-    		marshallTask((Task) flowElement, plane, generator, xOffset, yOffset, preProcessingData, lanesetInfo, def);
+    		marshallTask((Task) flowElement, plane, generator, xOffset, yOffset, preProcessingData, lanesetInfo, def, flowElementProperties);
     	} else if (flowElement instanceof SequenceFlow) {
     		marshallSequenceFlow((SequenceFlow) flowElement, plane, generator, xOffset, yOffset);
     	} else if (flowElement instanceof ParallelGateway) {
-    		marshallParallelGateway((ParallelGateway) flowElement, plane, generator, xOffset, yOffset);
+    		marshallParallelGateway((ParallelGateway) flowElement, plane, generator, xOffset, yOffset, flowElementProperties);
     	} else if (flowElement instanceof ExclusiveGateway) {
-    		marshallExclusiveGateway((ExclusiveGateway) flowElement, plane, generator, xOffset, yOffset);
+    		marshallExclusiveGateway((ExclusiveGateway) flowElement, plane, generator, xOffset, yOffset, flowElementProperties);
     	} else if (flowElement instanceof InclusiveGateway) {
-    		marshallInclusiveGateway((InclusiveGateway) flowElement, plane, generator, xOffset, yOffset);
+    		marshallInclusiveGateway((InclusiveGateway) flowElement, plane, generator, xOffset, yOffset, flowElementProperties);
     	} else if (flowElement instanceof EventBasedGateway) {
-    		marshallEventBasedGateway((EventBasedGateway) flowElement, plane, generator, xOffset, yOffset);
+    		marshallEventBasedGateway((EventBasedGateway) flowElement, plane, generator, xOffset, yOffset, flowElementProperties);
     	} else if (flowElement instanceof ComplexGateway) {
-    		marshallComplexGateway((ComplexGateway) flowElement, plane, generator, xOffset, yOffset);
+    		marshallComplexGateway((ComplexGateway) flowElement, plane, generator, xOffset, yOffset, flowElementProperties);
     	} else if (flowElement instanceof CallActivity) {
-    		marshallCallActivity((CallActivity) flowElement, plane, generator, xOffset, yOffset);
+    		marshallCallActivity((CallActivity) flowElement, plane, generator, xOffset, yOffset, flowElementProperties);
     	} else if (flowElement instanceof SubProcess) {
     	    if(flowElement instanceof AdHocSubProcess) {
-    	        marshallSubProcess((AdHocSubProcess) flowElement, plane, generator, xOffset, yOffset, preProcessingData, lanesetInfo, def);
+    	        marshallSubProcess((AdHocSubProcess) flowElement, plane, generator, xOffset, yOffset, preProcessingData, lanesetInfo, def, flowElementProperties);
     	    } else {
-    	        marshallSubProcess((SubProcess) flowElement, plane, generator, xOffset, yOffset, preProcessingData, lanesetInfo, def);
+    	        marshallSubProcess((SubProcess) flowElement, plane, generator, xOffset, yOffset, preProcessingData, lanesetInfo, def, flowElementProperties);
     	    }
     	} else if (flowElement instanceof DataObject) {
-    		marshallDataObject((DataObject) flowElement, plane, generator, xOffset, yOffset);
+    		marshallDataObject((DataObject) flowElement, plane, generator, xOffset, yOffset, flowElementProperties);
     	} else {
     		throw new UnsupportedOperationException("Unknown flow element " + flowElement);
     	}
@@ -748,20 +757,20 @@ public class Bpmn2JsonMarshaller {
     	}
     }
     
-    private void marshallBoundaryEvent(BoundaryEvent boundaryEvent, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset) throws JsonGenerationException, IOException {
+    private void marshallBoundaryEvent(BoundaryEvent boundaryEvent, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
     	List<EventDefinition> eventDefinitions = boundaryEvent.getEventDefinitions();
     	if (eventDefinitions.size() == 1) {
     		EventDefinition eventDefinition = eventDefinitions.get(0);
     		if (eventDefinition instanceof EscalationEventDefinition) {
-    			marshallNode(boundaryEvent, "IntermediateEscalationEvent", plane, generator, xOffset, yOffset);
+    			marshallNode(boundaryEvent, flowElementProperties, "IntermediateEscalationEvent", plane, generator, xOffset, yOffset);
     		} else if (eventDefinition instanceof ErrorEventDefinition) {
-    			marshallNode(boundaryEvent, "IntermediateErrorEvent", plane, generator, xOffset, yOffset);
+    			marshallNode(boundaryEvent, flowElementProperties, "IntermediateErrorEvent", plane, generator, xOffset, yOffset);
     		} else if (eventDefinition instanceof TimerEventDefinition) {
-    			marshallNode(boundaryEvent, "IntermediateTimerEvent", plane, generator, xOffset, yOffset);
+    			marshallNode(boundaryEvent, flowElementProperties, "IntermediateTimerEvent", plane, generator, xOffset, yOffset);
     		} else if (eventDefinition instanceof CompensateEventDefinition) {
-    			marshallNode(boundaryEvent, "IntermediateCompensationEventCatching", plane, generator, xOffset, yOffset);
+    			marshallNode(boundaryEvent, flowElementProperties, "IntermediateCompensationEventCatching", plane, generator, xOffset, yOffset);
     		} else if(eventDefinition instanceof ConditionalEventDefinition) {
-    		    marshallNode(boundaryEvent, "IntermediateConditionalEvent", plane, generator, xOffset, yOffset);
+    		    marshallNode(boundaryEvent, flowElementProperties, "IntermediateConditionalEvent", plane, generator, xOffset, yOffset);
     		} else {
     			throw new UnsupportedOperationException("Event definition not supported: " + eventDefinition);
     		}
@@ -792,8 +801,8 @@ public class Bpmn2JsonMarshaller {
     	}
     }
     
-    private void marshallTask(Task task, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Map<String, List<String>> lanesetInfo, Definitions def) throws JsonGenerationException, IOException {
-        Map<String, Object> properties = new LinkedHashMap<String, Object>();
+    private void marshallTask(Task task, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Map<String, List<String>> lanesetInfo, Definitions def, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
+        Map<String, Object> properties = new LinkedHashMap<String, Object>(flowElementProperties);
     	String taskType = "None";
     	if (task instanceof BusinessRuleTask) {
     		taskType = "Business Rule";
@@ -1120,32 +1129,28 @@ public class Bpmn2JsonMarshaller {
         }
     }
     
-    private void marshallParallelGateway(ParallelGateway gateway, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset) throws JsonGenerationException, IOException {
-    	marshallNode(gateway, "ParallelGateway", plane, generator, xOffset, yOffset);
+    private void marshallParallelGateway(ParallelGateway gateway, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
+    	marshallNode(gateway, flowElementProperties, "ParallelGateway", plane, generator, xOffset, yOffset);
     }
     
-    private void marshallExclusiveGateway(ExclusiveGateway gateway, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset) throws JsonGenerationException, IOException {
-    	marshallNode(gateway, "Exclusive_Databased_Gateway", plane, generator, xOffset, yOffset);
+    private void marshallExclusiveGateway(ExclusiveGateway gateway, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
+    	marshallNode(gateway, flowElementProperties, "Exclusive_Databased_Gateway", plane, generator, xOffset, yOffset);
     }
     
-    private void marshallInclusiveGateway(InclusiveGateway gateway, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset) throws JsonGenerationException, IOException {
-    	marshallNode(gateway, "InclusiveGateway", plane, generator, xOffset, yOffset);
+    private void marshallInclusiveGateway(InclusiveGateway gateway, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
+    	marshallNode(gateway, flowElementProperties, "InclusiveGateway", plane, generator, xOffset, yOffset);
     }
     
-    private void marshallEventBasedGateway(EventBasedGateway gateway, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset) throws JsonGenerationException, IOException {
-    	marshallNode(gateway, "EventbasedGateway", plane, generator, xOffset, yOffset);
+    private void marshallEventBasedGateway(EventBasedGateway gateway, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
+    	marshallNode(gateway, flowElementProperties, "EventbasedGateway", plane, generator, xOffset, yOffset);
     }
     
-    private void marshallComplexGateway(ComplexGateway gateway, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset) throws JsonGenerationException, IOException {
-    	marshallNode(gateway, "ComplexGateway", plane, generator, xOffset, yOffset);
+    private void marshallComplexGateway(ComplexGateway gateway, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
+    	marshallNode(gateway, flowElementProperties, "ComplexGateway", plane, generator, xOffset, yOffset);
     }
     
-    private void marshallCallActivity(CallActivity callActivity, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset) throws JsonGenerationException, IOException {
-    	marshallNode(callActivity, "CollapsedSubprocess", plane, generator, xOffset, yOffset);
-    }
-    
-    private void marshallNode(FlowNode node, String stencil, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset) throws JsonGenerationException, IOException {
-    	marshallNode(node, null, stencil, plane, generator, xOffset, yOffset);
+    private void marshallCallActivity(CallActivity callActivity, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
+    	marshallNode(callActivity, flowElementProperties, "CollapsedSubprocess", plane, generator, xOffset, yOffset);
     }
     
     private void marshallNode(FlowNode node, Map<String, Object> properties, String stencil, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset) throws JsonGenerationException, IOException {
@@ -1218,8 +1223,8 @@ public class Bpmn2JsonMarshaller {
     	}
     }
     
-    private void marshallDataObject(DataObject dataObject, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset) throws JsonGenerationException, IOException {
-    	Map<String, Object> properties = new LinkedHashMap<String, Object>();
+    private void marshallDataObject(DataObject dataObject, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
+    	Map<String, Object> properties = new LinkedHashMap<String, Object>(flowElementProperties);
 		properties.put("name", dataObject.getName());
 	    marshallProperties(properties, generator);
 	    generator.writeObjectFieldStart("stencil");
@@ -1243,8 +1248,8 @@ public class Bpmn2JsonMarshaller {
 	    generator.writeEndObject();
 	}
     
-    private void marshallSubProcess(SubProcess subProcess, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Map<String, List<String>> lanesetInfo, Definitions def) throws JsonGenerationException, IOException {
-        Map<String, Object> properties = new LinkedHashMap<String, Object>();
+    private void marshallSubProcess(SubProcess subProcess, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Map<String, List<String>> lanesetInfo, Definitions def, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
+        Map<String, Object> properties = new LinkedHashMap<String, Object>(flowElementProperties);
 		properties.put("name", subProcess.getName());
 	    marshallProperties(properties, generator);
 	    generator.writeObjectFieldStart("stencil");
