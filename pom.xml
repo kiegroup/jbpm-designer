@@ -1,26 +1,46 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.jboss.drools</groupId>
   <artifactId>process-designer</artifactId>
   <version>1.0.0.049-SNAPSHOT</version>
   <packaging>war</packaging>
+
   <dependencies>
-    <!-- These dependencies make Wapama work -->
-    <!--
-    This version is used in Wapama
+    <!-- jBPM/Drools dependencies -->
     <dependency>
-      <groupId>org.eclipse</groupId>
-      <artifactId>org.eclipse.bpmn2</artifactId>
-      <version>0.7.0.20100826221953</version>
+      <groupId>org.mvel</groupId>
+      <artifactId>mvel2</artifactId>
+      <version>2.1-SNAPSHOT</version>
     </dependency>
-    This version is patched and used by the process-designer. TODO: build and deploy the changes to a repository
-    so others can build easily.
-    -->
+    <dependency>
+      <groupId>org.jbpm</groupId>
+      <artifactId>jbpm-flow-builder</artifactId>
+      <version>5.2.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jbpm</groupId>
+      <artifactId>jbpm-bpmn2-emfextmodel</artifactId>
+      <version>5.2.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.drools</groupId>
+      <artifactId>drools-core</artifactId>
+      <version>5.2.0-SNAPSHOT</version>
+    </dependency>
+
+    <!-- yui compressor -->
+    <dependency>
+      <groupId>com.yahoo.platform.yui</groupId>
+      <artifactId>yuicompressor</artifactId>
+      <version>2.3.6</version>
+    </dependency>
+
+    <!-- bpmn2 libs -->
     <dependency>
       <groupId>org.eclipse</groupId>
       <artifactId>org.eclipse.bpmn2</artifactId>
-      <version>0.7.0.000-JBOSS-SNAPSHOT</version>
+      <version>0.7.0.007</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse</groupId>
@@ -37,30 +57,157 @@
       <artifactId>org.eclipse.emf.ecore</artifactId>
       <version>2.6.0.v20100427-1455</version>
     </dependency>
+
+    <!-- batik libraries -->
     <dependency>
-      <groupId>org.codehaus.jackson</groupId>
-      <artifactId>jackson-core-asl</artifactId>
-      <version>1.5.6</version>
+      <groupId>batik</groupId>
+      <artifactId>batik-parser</artifactId>
+      <version>1.6-1</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse</groupId>
-      <artifactId>osgi</artifactId>
-      <version>3.5.0.v20090520</version>
-    </dependency>    
-    <dependency>
-      <groupId>org.codehaus.jackson</groupId>
-      <artifactId>jackson-mapper-asl</artifactId>
-      <version>1.5.6</version>
+      <groupId>batik</groupId>
+      <artifactId>batik-transcoder</artifactId>
+      <version>1.6</version>
     </dependency>
+    <dependency>
+      <groupId>batik</groupId>
+      <artifactId>batik-extension</artifactId>
+      <version>1.6-1</version>
+    </dependency>
+    <dependency>
+      <groupId>batik</groupId>
+      <artifactId>batik-dom</artifactId>
+      <version>1.6-1</version>
+    </dependency>
+    <dependency>
+      <groupId>batik</groupId>
+      <artifactId>batik-xml</artifactId>
+      <version>1.6-1</version>
+    </dependency>
+    <dependency>
+      <groupId>batik</groupId>
+      <artifactId>batik-bridge</artifactId>
+      <version>1.6-1</version>
+    </dependency>
+    <dependency>
+      <groupId>batik</groupId>
+      <artifactId>batik-css</artifactId>
+      <version>1.6-1</version>
+    </dependency>
+    <dependency>
+      <groupId>batik</groupId>
+      <artifactId>batik-svg-dom</artifactId>
+      <version>1.6-1</version>
+    </dependency>
+    <dependency>
+      <groupId>batik</groupId>
+      <artifactId>batik-svggen</artifactId>
+      <version>1.6-1</version>
+    </dependency>
+    <dependency>
+      <groupId>batik</groupId>
+      <artifactId>batik-util</artifactId>
+      <version>1.6-1</version>
+    </dependency>
+    <dependency>
+      <groupId>batik</groupId>
+      <artifactId>batik-ext</artifactId>
+      <version>1.6-1</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>xmlParserAPIs</artifactId>
+          <groupId>xml-apis</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>batik</groupId>
+      <artifactId>batik-script</artifactId>
+      <version>1.6-1</version>
+    </dependency>
+    <dependency>
+      <groupId>batik</groupId>
+      <artifactId>batik-gvt</artifactId>
+      <version>1.6-1</version>
+    </dependency>
+    <dependency>
+      <groupId>batik</groupId>
+      <artifactId>batik-awt-util</artifactId>
+      <version>1.6-1</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>1.4</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.xmlgraphics</groupId>
+      <artifactId>xmlgraphics-commons</artifactId>
+      <version>1.4</version>
+    </dependency>
+
+    <!-- war libs -->
     <dependency>
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
       <version>20090211</version>
     </dependency>
     <dependency>
+      <groupId>jbpt</groupId>
+      <artifactId>jbpt</artifactId>
+      <version>0.1.0</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.jdom</groupId>
       <artifactId>jdom</artifactId>
       <version>1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.velocity</groupId>
+      <artifactId>velocity</artifactId>
+      <version>1.6.4</version>
+    </dependency>
+    <dependency>
+      <groupId>org.supercsv</groupId>
+      <artifactId>SuperCSV</artifactId>
+      <version>1.52</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.xmlgraphics</groupId>
+      <artifactId>fop</artifactId>
+      <version>0.95</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-impl</artifactId>
+      <version>2.2</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb1-impl</artifactId>
+      <version>2.2</version>
+    </dependency>
+    <dependency>
+      <groupId>de.hpi</groupId>
+      <artifactId>atlas</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.thoughtworks.xstream</groupId>
+      <artifactId>xstream</artifactId>
+      <version>1.3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.xmappr</groupId>
+      <artifactId>xmappr</artifactId>
+      <version>0.9.3</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>woodstox-core-asl</artifactId>
+          <groupId>org.codehaus.woodstox</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -69,76 +216,18 @@
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-simple</artifactId>
+      <artifactId>slf4j-jdk14</artifactId>
+      <version>1.5.6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>log4j-over-slf4j</artifactId>
       <version>1.5.8</version>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
       <version>2.5</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>rhino</groupId>
-      <artifactId>js</artifactId>
-      <version>1.7R2</version>
-    </dependency>
-    <dependency>
-      <groupId>com.yahoo.platform.yui</groupId>
-      <artifactId>yuicompressor</artifactId>
-      <version>2.3.6</version>
-    </dependency>   
-    <!-- End Wapama dependencies-->
-    <!-- Drools Process Designer dependencies -->
-    <dependency>
-      <groupId>commons-collections</groupId>
-      <artifactId>commons-collections</artifactId>
-      <version>3.2.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.xmappr</groupId>
-      <artifactId>xmappr</artifactId>
-      <version>0.9.3</version>
-    </dependency>
-    <dependency>
-      <groupId>com.thoughtworks.xstream</groupId>
-      <artifactId>xstream</artifactId>
-      <version>1.3.1</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-configuration</groupId>
-      <artifactId>commons-configuration</artifactId>
-      <version>1.6</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-fileupload</groupId>
-      <artifactId>commons-fileupload</artifactId>
-      <version>1.2.1</version>
-    </dependency>
-    <dependency>
-      <groupId>jbpt</groupId>
-      <artifactId>jbpt</artifactId>
-      <version>0.1.0</version>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.8.2</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-httpclient</groupId>
-      <artifactId>commons-httpclient</artifactId>
-      <version>3.1</version>
-    </dependency>
-    <dependency>
-      <groupId>batik</groupId>
-      <artifactId>batik-transcoder</artifactId>
-      <version>1.6-1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.velocity</groupId>
-      <artifactId>velocity</artifactId>
-      <version>1.6.4</version>
     </dependency>
     <dependency>
       <groupId>javax.mail</groupId>
@@ -146,41 +235,119 @@
       <version>1.4.1</version>
     </dependency>
     <dependency>
-      <groupId>org.supercsv</groupId>
-      <artifactId>SuperCSV</artifactId>
-      <version>1.52</version>
-    </dependency>
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.16</version>
-    </dependency>    
-    <dependency>
-      <groupId>de.hpi</groupId>
-      <artifactId>atlas</artifactId>
-      <version>1.0.0</version>
+      <groupId>rhino</groupId>
+      <artifactId>js</artifactId>
+      <version>1.7R2</version>
     </dependency>
     <dependency>
       <groupId>xalan</groupId>
       <artifactId>xalan</artifactId>
       <version>2.7.1</version>
-    </dependency>            
-  </dependencies>  
+    </dependency>
+    <dependency>
+      <groupId>xerces</groupId>
+      <artifactId>xercesImpl</artifactId>
+      <version>2.9.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-core-asl</artifactId>
+      <version>1.7.4</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-mapper-asl</artifactId>
+      <version>1.7.4</version>
+    </dependency>
+    <dependency>
+      <groupId>org.antlr</groupId>
+      <artifactId>stringtemplate</artifactId>
+      <version>3.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>antlr</groupId>
+      <artifactId>antlr</artifactId>
+      <version>2.7.7</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse</groupId>
+      <artifactId>osgi</artifactId>
+      <version>3.5.0.v20090520</version>
+    </dependency>
+    <dependency>
+      <groupId>avalon-framework</groupId>
+      <artifactId>avalon-framework</artifactId>
+      <version>4.1.4</version>
+    </dependency>
+
+    <!-- commons -->
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>3.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-configuration</groupId>
+      <artifactId>commons-configuration</artifactId>
+      <version>1.6</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-httpclient</groupId>
+      <artifactId>commons-httpclient</artifactId>
+      <version>3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-fileupload</groupId>
+      <artifactId>commons-fileupload</artifactId>
+      <version>1.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.5</version>
+    </dependency>
+
+    <!-- test -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.9</version>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
 
   <build>
-    <!-- wapama uses this
-    <sourceDirectory>designer/src/main/java</sourceDirectory>
-    -->
+    <resources>
+      <resource>
+        <directory>src/main/webapp</directory>
+      </resource>
+    </resources>
+    <testResources>
+        <testResource>
+            <directory>src/test/client</directory>
+        </testResource>
+        <testResource>
+            <directory>src/test/examples</directory>
+        </testResource>
+        <testResource>
+            <directory>src/test/server</directory>
+        </testResource>
+    </testResources>
+
+    <!-- wapama uses this <sourceDirectory>designer/src/main/java</sourceDirectory> -->
     <finalName>designer</finalName>
+    
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
+          <source>1.6</source>
+          <target>1.6</target>
         </configuration>
-      </plugin>    
+      </plugin>
+      
       <plugin>
         <groupId>org.mortbay.jetty</groupId>
         <artifactId>jetty-maven-plugin</artifactId>
@@ -189,18 +356,19 @@
           <webAppConfig>
             <contextPath>/designer</contextPath>
           </webAppConfig>
-          <webAppSourceDirectory>${basedir}/designer/src/main/webapp</webAppSourceDirectory>        
+          <webAppSourceDirectory>${basedir}/designer/src/main/webapp</webAppSourceDirectory>
           <connectors>
-            <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
+            <connector
+              implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
               <port>8082</port>
               <maxIdleTime>60000</maxIdleTime>
             </connector>
           </connectors>
         </configuration>
       </plugin>
-    </plugins>    
+    </plugins>
   </build>
-  
+
   <repositories>
     <repository>
       <id>jboss-public-repository-group</id>
@@ -228,7 +396,7 @@
         <enabled>true</enabled>
         <updatePolicy>never</updatePolicy>
       </snapshots>
-    </repository>    
-  </repositories>  
+    </repository>
+  </repositories>
 </project>
 
