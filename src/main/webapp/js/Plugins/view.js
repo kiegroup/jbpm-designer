@@ -239,6 +239,50 @@ ORYX.Plugins.View = {
 			}.bind(this)
 		});
 		
+		/* Register import from BPMN2*/
+		this.facade.offer({
+			'name': "Import from BPMN2",
+			'functionality': this.importFromBPMN2.bind(this),
+			'group': ORYX.I18N.View.jbpmgroup,
+			//'icon': ORYX.PATH + "images/share.gif",
+			dropDownGroupIcon : ORYX.PATH + "images/import.png",
+			'description': "Import from existing BPMN2",
+			'index': 1,
+			'minShape': 0,
+			'maxShape': 0,
+			'isEnabled': function(){
+				profileParamName = "profile";
+				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+		        regexa = new RegExp( regexSa );
+		        profileParams = regexa.exec( window.location.href );
+		        profileParamValue = profileParams[1]; 
+				return profileParamValue == "jbpm";
+			}.bind(this)
+		});
+		
+		/* Register import from JSON*/
+		this.facade.offer({
+			'name': "Import from JSON",
+			'functionality': this.importFromJSON.bind(this),
+			'group': ORYX.I18N.View.jbpmgroup,
+			//'icon': ORYX.PATH + "images/share.gif",
+			dropDownGroupIcon : ORYX.PATH + "images/import.png",
+			'description': "Import from existing JSON",
+			'index': 2,
+			'minShape': 0,
+			'maxShape': 0,
+			'isEnabled': function(){
+				profileParamName = "profile";
+				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+		        regexa = new RegExp( regexSa );
+		        profileParams = regexa.exec( window.location.href );
+		        profileParamValue = profileParams[1]; 
+				return profileParamValue == "jbpm";
+			}.bind(this)
+		});
+		
 		/* Register sharing to model 3*/
 		this.facade.offer({
 			'name': "Share Embeddable Process",
@@ -435,6 +479,181 @@ ORYX.Plugins.View = {
 
         uuidParamValue = uuidParams[1]; 
         window.open (ORYX.EXTERNAL_PROTOCOL + "://" + ORYX.EXTERNAL_HOST + "/" + ORYX.EXTERNAL_SUBDOMAIN  + "/org.drools.guvnor.Guvnor/standaloneEditorServlet?assetsUUIDs=" + uuidParamValue + "&client=oryx" , "Process Editor","status=0,toolbar=0,menubar=0,resizable=0,location=no,width=1400,height=1000");
+	},
+	
+	/**
+	 * Import from existing BPMN2
+	 */
+	importFromBPMN2 : function(successCallback) {
+		var form = new Ext.form.FormPanel({
+			baseCls: 		'x-plain',
+	        labelWidth: 	50,
+	        defaultType: 	'textfield',
+	        items: [{
+	            text : 		ORYX.I18N.FromBPMN2Support.selectFile, 
+				style : 	'font-size:12px;margin-bottom:10px;display:block;',
+	            anchor:		'100%',
+				xtype : 	'label' 
+	        },{
+	            fieldLabel: ORYX.I18N.FromBPMN2Support.file,
+	            name: 		'subject',
+				inputType : 'file',
+				style : 	'margin-bottom:10px;display:block;',
+				itemCls :	'ext_specific_window_overflow'
+	        }, {
+	            xtype: 'textarea',
+	            hideLabel: true,
+	            name: 'msg',
+	            anchor: '100% -63'  
+	        }]
+	    });
+		// Create the panel
+		var dialog = new Ext.Window({ 
+			autoCreate: true, 
+			layout: 	'fit',
+			plain:		true,
+			bodyStyle: 	'padding:5px;',
+			title: 		ORYX.I18N.FromBPMN2Support.impBPMN2, 
+			height: 	350, 
+			width:		500,
+			modal:		true,
+			fixedcenter:true, 
+			shadow:		true, 
+			proxyDrag: 	true,
+			resizable:	true,
+			items: 		[form],
+			buttons:[
+				{
+					text:ORYX.I18N.FromBPMN2Support.impBtn,
+					handler:function(){
+						
+						var loadMask = new Ext.LoadMask(Ext.getBody(), {msg:ORYX.I18N.FromBPMN2Support.impProgress});
+						loadMask.show();
+						var bpmn2string =  form.items.items[2].getValue();
+						Ext.Ajax.request({
+				            url: ORYX.PATH + "transformer",
+				            method: 'POST',
+				            success: function(request) {
+				    	   		try {
+				    	   			this._loadJSON( request.responseText );
+				    	   		} catch(e) {
+				    	   			Ext.Msg.alert("Failed to import BPMN2 :\n" + e);
+				    	   		}
+				    	   		loadMask.hide();
+				    	   		dialog.hide();
+				            }.createDelegate(this),
+				            failure: function(){
+				            	Ext.Msg.alert("Failed to import BPMN2.");
+				            },
+				            params: {
+				            	profile: ORYX.PROFILE,
+				            	uuid : ORYX.UUID,
+				            	bpmn2 : bpmn2string,
+				            	transformto : "bpmn2json"
+				            }
+				        });
+					}.bind(this)
+				},{
+					text:ORYX.I18N.FromBPMN2Support.close,
+					handler:function(){
+						
+						dialog.hide();
+					
+					}.bind(this)
+				}
+			]
+		});
+		// Destroy the panel when hiding
+		dialog.on('hide', function(){
+			dialog.destroy(true);
+			delete dialog;
+		});
+		// Show the panel
+		dialog.show();
+		// Adds the change event handler to 
+		form.items.items[1].getEl().dom.addEventListener('change',function(evt){
+				var text = evt.target.files[0].getAsText('UTF-8');
+				form.items.items[2].setValue( text );
+			}, true)
+	},
+	
+	/**
+	 * Import from existing JSON
+	 */
+	importFromJSON : function(successCallback) {
+		var form = new Ext.form.FormPanel({
+			baseCls: 		'x-plain',
+	        labelWidth: 	50,
+	        defaultType: 	'textfield',
+	        items: [{
+	            text : 		ORYX.I18N.FromJSONSupport.selectFile, 
+				style : 	'font-size:12px;margin-bottom:10px;display:block;',
+	            anchor:		'100%',
+				xtype : 	'label' 
+	        },{
+	            fieldLabel: ORYX.I18N.FromJSONSupport.file,
+	            name: 		'subject',
+				inputType : 'file',
+				style : 	'margin-bottom:10px;display:block;',
+				itemCls :	'ext_specific_window_overflow'
+	        }, {
+	            xtype: 'textarea',
+	            hideLabel: true,
+	            name: 'msg',
+	            anchor: '100% -63'  
+	        }]
+	    });
+		// Create the panel
+		var dialog = new Ext.Window({ 
+			autoCreate: true, 
+			layout: 	'fit',
+			plain:		true,
+			bodyStyle: 	'padding:5px;',
+			title: 		ORYX.I18N.FromJSONSupport.impBPMN2, 
+			height: 	350, 
+			width:		500,
+			modal:		true,
+			fixedcenter:true, 
+			shadow:		true, 
+			proxyDrag: 	true,
+			resizable:	true,
+			items: 		[form],
+			buttons:[
+				{
+					text:ORYX.I18N.FromJSONSupport.impBtn,
+					handler:function(){
+						var loadMask = new Ext.LoadMask(Ext.getBody(), {msg:ORYX.I18N.FromJSONSupport.impProgress});
+						loadMask.show();
+						var jsonString =  form.items.items[2].getValue();
+						try {
+		    	   			this._loadJSON( jsonString );
+		    	   		} catch(e) {
+		    	   			Ext.Msg.alert("Failed to import JSON :\n" + e);
+		    	   		}
+		    	   		loadMask.hide();
+		    	   		dialog.hide();
+					}.bind(this)
+				},{
+					text:ORYX.I18N.FromJSONSupport.close,
+					handler:function(){
+						dialog.hide();
+					}.bind(this)
+				}
+			]
+		});
+		
+		// Destroy the panel when hiding
+		dialog.on('hide', function(){
+			dialog.destroy(true);
+			delete dialog;
+		});
+		// Show the panel
+		dialog.show();
+		// Adds the change event handler to 
+		form.items.items[1].getEl().dom.addEventListener('change',function(evt){
+				var text = evt.target.files[0].getAsText('UTF-8');
+				form.items.items[2].setValue( text );
+			}, true)
 	},
 	
 	/**
@@ -923,6 +1142,15 @@ ORYX.Plugins.View = {
 		} else {
 			this._showErrorMessageBox(ORYX.I18N.Oryx.title, ORYX.I18N.jPDLSupport.impFailedJson);
 		}
+	},
+	
+	_showErrorMessageBox: function(title, msg){
+        Ext.MessageBox.show({
+           title: title,
+           msg: msg,
+           buttons: Ext.MessageBox.OK,
+           icon: Ext.MessageBox.ERROR
+       });
 	},
 	
 	/**

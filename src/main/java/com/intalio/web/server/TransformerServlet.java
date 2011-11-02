@@ -102,6 +102,7 @@ public class TransformerServlet extends HttpServlet {
     private static final String TO_PDF = "pdf";
     private static final String TO_PNG = "png";
     private static final String JPDL_TO_BPMN2 = "jpdl2bpmn2";
+    private static final String BPMN2_TO_JSON = "bpmn2json";
     private static final String RESPACTION_SHOWURL = "showurl";
     private static final String RESPACTION_SHOWEMBEDDABLE = "showembeddable";
 
@@ -120,6 +121,7 @@ public class TransformerServlet extends HttpServlet {
         String transformto = req.getParameter("transformto");
         String jpdl = req.getParameter("jpdl");
         String gpd = req.getParameter("gpd");
+        String bpmn2in = req.getParameter("bpmn2");
         String respaction = req.getParameter("respaction");
 
         IDiagramProfile profile = getProfile(req, profileName);
@@ -217,6 +219,10 @@ public class TransformerServlet extends HttpServlet {
             String fullXmlModel =  outputStream.toString();
         	// convert to json and write response
         	String json = profile.createUnmarshaller().parseModel(fullXmlModel, profile, "");
+        	resp.setContentType("application/json");
+        	resp.getWriter().print(json);
+        }  else if (transformto != null && transformto.equals(BPMN2_TO_JSON)) { 
+        	String json = profile.createUnmarshaller().parseModel(bpmn2in, profile, "");
         	resp.setContentType("application/json");
         	resp.getWriter().print(json);
         } else if(transformto == null && respaction != null && respaction.equals(RESPACTION_SHOWEMBEDDABLE)) {

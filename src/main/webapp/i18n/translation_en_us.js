@@ -296,6 +296,22 @@ ORYX.I18N.jPDLSupport.impBtn = "Migrate";
 ORYX.I18N.jPDLSupport.impProgress = "Migrating...";
 ORYX.I18N.jPDLSupport.close = "Close";
 
+if(!ORYX.I18N.FromBPMN2Support) ORYX.I18N.FromBPMN2Support = {};
+ORYX.I18N.FromBPMN2Support.selectFile = "Select an BPMN2 file or type in the BPMN2 to import it!";
+ORYX.I18N.FromBPMN2Support.file = "File";
+ORYX.I18N.FromBPMN2Support.impBPMN2 = "Import BPMN2";
+ORYX.I18N.FromBPMN2Support.impBtn = "Import";
+ORYX.I18N.FromBPMN2Support.impProgress = "Importing...";
+ORYX.I18N.FromBPMN2Support.close = "Close";
+
+if(!ORYX.I18N.FromJSONSupport) ORYX.I18N.FromJSONSupport = {};
+ORYX.I18N.FromJSONSupport.selectFile = "Select an JSON file or type in the JSON to import it!";
+ORYX.I18N.FromJSONSupport.file = "File";
+ORYX.I18N.FromJSONSupport.impBPMN2 = "Import JSON";
+ORYX.I18N.FromJSONSupport.impBtn = "Import";
+ORYX.I18N.FromJSONSupport.impProgress = "Importing...";
+ORYX.I18N.FromJSONSupport.close = "Close";
+
 if(!ORYX.I18N.Bpmn2Bpel) ORYX.I18N.Bpmn2Bpel = {};
 
 ORYX.I18N.Bpmn2Bpel.group = "ExecBPMN";
