@@ -1,17 +1,25 @@
-build
-dist
+# build directories
+/target
+/build
+/dist
+
+# Macintosh files
 **/**/.DS_Store
-reports
 .DS_Store
-target
-src/main/webapp/repository
-.settings
-.externalToolBuilders
-src/main/webapp/jsc/*.js
-.project
-.classpath
+
+# Other
 nbactions.xml
+/reports
+/src/main/webapp/jsc/*.js
+/src/main/webapp/repository
+
+# IDE/Eclipse settings
+/.project
+/.classpath
+/.settings
+/.externalToolBuilders
+
 
 #I think that this is where MANIFEST.MF should go according to maven specs. 
 #For now, I will ignore it. Esteban
-src/main/webapp/META-INF/MANIFEST.MF
+/src/main/webapp/META-INF/MANIFEST.MF
