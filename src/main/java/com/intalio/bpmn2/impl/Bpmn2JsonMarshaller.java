@@ -129,6 +129,7 @@ import com.intalio.web.profile.IDiagramProfile;
 
 /**
  * @author Antoine Toulme
+ * @author Tihomir Surdilovic
  * 
  * a marshaller to transform BPMN 2.0 elements into JSON format.
  *
@@ -249,30 +250,6 @@ public class Bpmn2JsonMarshaller {
 	                    props.put("vardefs", propVal);
 	                }
 	                
-	                Map<String, List<String>> lanesetInfo = new HashMap<String, List<String>>();
-	                List<LaneSet> processLanesets = ((Process) rootElement).getLaneSets();
-	                if(processLanesets != null && processLanesets.size() > 0) {
-	                    // we support currently only a single laneset
-	                    LaneSet ls = processLanesets.get(0);
-	                    List<Lane> processLanes =  ls.getLanes();
-	                    String lanesVal = "";
-	                    if(processLanes != null && processLanes.size() > 0) {
-	                        for(int i=0; i < processLanes.size(); i++) {
-	                            Lane lane = processLanes.get(i);
-	                            lanesVal += lane.getName();
-	                            lanesetInfo.put(lane.getName(), new ArrayList<String>());
-	                            if(i != processLanes.size() - 1) {
-	                                lanesVal += ",";
-	                            }
-	                            List<FlowNode> laneFlowNodes = lane.getFlowNodeRefs();
-	                            for(FlowNode fl : laneFlowNodes) {
-	                                lanesetInfo.get(lane.getName()).add(fl.getId());
-	                            }
-	                        }
-	                    }
-	                    props.put("lanes", lanesVal);
-	                }
-	                
 	                // packageName and version are jbpm-specific extension attribute
 	                Iterator<FeatureMap.Entry> iter = ((Process) rootElement).getAnyAttribute().iterator();
 	                while(iter.hasNext()) {
@@ -328,7 +305,7 @@ public class Bpmn2JsonMarshaller {
 	                marshallProperties(props, generator);
 	                marshallStencil("BPMNDiagram", generator);
 	            	linkSequenceFlows(((Process) rootElement).getFlowElements());
-	                marshallProcess((Process) rootElement, def, generator, preProcessingData, lanesetInfo);
+	                marshallProcess((Process) rootElement, def, generator, preProcessingData);
 	            } else if (rootElement instanceof Interface) {
 	                // TODO
 	            } else if (rootElement instanceof ItemDefinition) {
@@ -400,14 +377,14 @@ public class Bpmn2JsonMarshaller {
         } else if (callableElement instanceof GlobalTask) {
             marshallGlobalTask((GlobalTask) callableElement, generator);
         } else if (callableElement instanceof Process) {
-            marshallProcess((Process) callableElement, def, generator, "", null);
+            marshallProcess((Process) callableElement, def, generator, "");
         } else {
             throw new UnsupportedOperationException("TODO"); //TODO!
         }
         generator.writeEndObject();
     }
 
-    private void marshallProcess(Process process, Definitions def, JsonGenerator generator, String preProcessingData, Map<String, List<String>> lanesetInfo) throws JsonGenerationException, IOException {
+    private void marshallProcess(Process process, Definitions def, JsonGenerator generator, String preProcessingData) throws JsonGenerationException, IOException {
     	BPMNPlane plane = null;
     	for (BPMNDiagram d: def.getDiagrams()) {
     		if (d != null) {
@@ -424,8 +401,20 @@ public class Bpmn2JsonMarshaller {
     		throw new IllegalArgumentException("Could not find BPMNDI information");
     	}
         generator.writeArrayFieldStart("childShapes");
+        
+        List<String> laneFlowElementsIds = new ArrayList<String>();
+        for(LaneSet laneSet : process.getLaneSets()) {
+        	for(Lane lane : laneSet.getLanes()) {
+        		// we only want to marshall lanes if we have the bpmndi info for them!
+        		if(findDiagramElementForLane(plane, lane) != null) {
+        			laneFlowElementsIds.addAll( marshallLanes(lane, plane, generator, 0, 0, preProcessingData, def) );
+        		}
+        	}
+        }
         for (FlowElement flowElement: process.getFlowElements()) {
-        	marshallFlowElement(flowElement, plane, generator, 0, 0, preProcessingData, lanesetInfo, def);
+        	if( !laneFlowElementsIds.contains(flowElement.getId()) ) {
+        		marshallFlowElement(flowElement, plane, generator, 0, 0, preProcessingData, def);
+        	}
         }
         generator.writeEndArray();
     }
@@ -612,7 +601,42 @@ public class Bpmn2JsonMarshaller {
         }
     }
     
-    private void marshallFlowElement(FlowElement flowElement, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Map<String, List<String>> lanesetInfo, Definitions def) throws JsonGenerationException, IOException {
+    private List<String> marshallLanes(Lane lane, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Definitions def) throws JsonGenerationException, IOException {
+    	List<String> nodeRefIds = new ArrayList<String>();
+    	generator.writeStartObject();
+    	generator.writeObjectField("resourceId", lane.getId());
+    	Map<String, Object> laneProperties = new LinkedHashMap<String, Object>();
+    	laneProperties.put("name", lane.getName());
+    	marshallProperties(laneProperties, generator);
+    	generator.writeObjectFieldStart("stencil");
+    	generator.writeObjectField("id", "Lane");
+	    generator.writeEndObject();
+	    generator.writeArrayFieldStart("childShapes");
+	    Bounds bounds = ((BPMNShape) findDiagramElementForLane(plane, lane)).getBounds();
+	    for (FlowElement flowElement: lane.getFlowNodeRefs()) {
+	    	nodeRefIds.add(flowElement.getId());
+	    	// we dont want an offset here!
+	    	marshallFlowElement(flowElement, plane, generator, 0, 0, preProcessingData, def);
+	    }
+	    generator.writeEndArray();
+	    generator.writeArrayFieldStart("outgoing");
+	    generator.writeEndArray();
+	    generator.writeObjectFieldStart("bounds");
+	    generator.writeObjectFieldStart("lowerRight");
+	    generator.writeObjectField("x", bounds.getX() + bounds.getWidth() - xOffset);
+	    generator.writeObjectField("y", bounds.getY() + bounds.getHeight() - yOffset);
+	    generator.writeEndObject();
+	    generator.writeObjectFieldStart("upperLeft");
+	    generator.writeObjectField("x", bounds.getX() - xOffset);
+	    generator.writeObjectField("y", bounds.getY() - yOffset);
+	    generator.writeEndObject();
+	    generator.writeEndObject();
+    	generator.writeEndObject();
+    	
+    	return nodeRefIds;
+    }
+    
+    private void marshallFlowElement(FlowElement flowElement, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Definitions def) throws JsonGenerationException, IOException {
     	generator.writeStartObject();
     	generator.writeObjectField("resourceId", flowElement.getId());
     	
@@ -644,7 +668,7 @@ public class Bpmn2JsonMarshaller {
     	} else if (flowElement instanceof BoundaryEvent) {
     		marshallBoundaryEvent((BoundaryEvent) flowElement, plane, generator, xOffset, yOffset, flowElementProperties);
     	} else if (flowElement instanceof Task) {
-    		marshallTask((Task) flowElement, plane, generator, xOffset, yOffset, preProcessingData, lanesetInfo, def, flowElementProperties);
+    		marshallTask((Task) flowElement, plane, generator, xOffset, yOffset, preProcessingData, def, flowElementProperties);
     	} else if (flowElement instanceof SequenceFlow) {
     		marshallSequenceFlow((SequenceFlow) flowElement, plane, generator, xOffset, yOffset);
     	} else if (flowElement instanceof ParallelGateway) {
@@ -661,9 +685,9 @@ public class Bpmn2JsonMarshaller {
     		marshallCallActivity((CallActivity) flowElement, plane, generator, xOffset, yOffset, flowElementProperties);
     	} else if (flowElement instanceof SubProcess) {
     	    if(flowElement instanceof AdHocSubProcess) {
-    	        marshallSubProcess((AdHocSubProcess) flowElement, plane, generator, xOffset, yOffset, preProcessingData, lanesetInfo, def, flowElementProperties);
+    	        marshallSubProcess((AdHocSubProcess) flowElement, plane, generator, xOffset, yOffset, preProcessingData, def, flowElementProperties);
     	    } else {
-    	        marshallSubProcess((SubProcess) flowElement, plane, generator, xOffset, yOffset, preProcessingData, lanesetInfo, def, flowElementProperties);
+    	        marshallSubProcess((SubProcess) flowElement, plane, generator, xOffset, yOffset, preProcessingData, def, flowElementProperties);
     	    }
     	} else if (flowElement instanceof DataObject) {
     		marshallDataObject((DataObject) flowElement, plane, generator, xOffset, yOffset, flowElementProperties);
@@ -801,7 +825,7 @@ public class Bpmn2JsonMarshaller {
     	}
     }
     
-    private void marshallTask(Task task, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Map<String, List<String>> lanesetInfo, Definitions def, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
+    private void marshallTask(Task task, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Definitions def, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
         Map<String, Object> properties = new LinkedHashMap<String, Object>(flowElementProperties);
     	String taskType = "None";
     	if (task instanceof BusinessRuleTask) {
@@ -902,26 +926,6 @@ public class Bpmn2JsonMarshaller {
             properties.put("tasktype", properties.get("taskname"));
         } else {
             properties.put("tasktype", taskType);
-        }
-        
-        // check if the task belongs to a laneset
-        String taskLanes = "";
-        if(lanesetInfo != null) {
-            Iterator<String> lanesetIterator = lanesetInfo.keySet().iterator();
-            while(lanesetIterator.hasNext()) {
-                String laneSetName = lanesetIterator.next();
-                List<String> laneNodeRefs = lanesetInfo.get(laneSetName);
-                for(String nodeRef : laneNodeRefs) {
-                    if(task.getId().equals(nodeRef)) {
-                        taskLanes += laneSetName;
-                        taskLanes += ",";
-                    }
-                }
-            }
-            if(taskLanes.endsWith(",")) {
-                taskLanes = taskLanes.substring(0, taskLanes.length() - 1);
-            }
-            properties.put("lanes", taskLanes);
         }
         
         // data inputs
@@ -1248,8 +1252,8 @@ public class Bpmn2JsonMarshaller {
 	    generator.writeEndObject();
 	}
     
-    private void marshallSubProcess(SubProcess subProcess, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Map<String, List<String>> lanesetInfo, Definitions def, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
-        Map<String, Object> properties = new LinkedHashMap<String, Object>(flowElementProperties);
+    private void marshallSubProcess(SubProcess subProcess, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Definitions def, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
+    	Map<String, Object> properties = new LinkedHashMap<String, Object>(flowElementProperties);
 		properties.put("name", subProcess.getName());
 	    marshallProperties(properties, generator);
 	    generator.writeObjectFieldStart("stencil");
@@ -1262,7 +1266,7 @@ public class Bpmn2JsonMarshaller {
 	    generator.writeArrayFieldStart("childShapes");
 	    Bounds bounds = ((BPMNShape) findDiagramElement(plane, subProcess)).getBounds();
 	    for (FlowElement flowElement: subProcess.getFlowElements()) {
-	    	marshallFlowElement(flowElement, plane, generator, (int) (xOffset + bounds.getX()), (int) (yOffset + bounds.getY()), preProcessingData, lanesetInfo, def);
+	    	marshallFlowElement(flowElement, plane, generator, (int) (xOffset + bounds.getX()), (int) (yOffset + bounds.getY()), preProcessingData, def);
 	    }
 	    generator.writeEndArray();
 	    generator.writeArrayFieldStart("outgoing");
@@ -1388,6 +1392,15 @@ public class Bpmn2JsonMarshaller {
         }
 		throw new IllegalArgumentException(
 			"Could not find BPMNDI information for " + flowElement.getId());
+    }
+    
+    private DiagramElement findDiagramElementForLane(BPMNPlane plane, Lane lane) {
+    	for (DiagramElement element: plane.getPlaneElement()) {
+    		if( (element instanceof BPMNShape && ((BPMNShape) element).getBpmnElement() == lane) ) {
+    			return element;
+    		}
+    	}
+    	return null;
     }
 
     private void marshallGlobalTask(GlobalTask globalTask, JsonGenerator generator) {

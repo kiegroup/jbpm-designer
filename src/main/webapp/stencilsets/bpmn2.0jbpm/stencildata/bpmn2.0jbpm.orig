@@ -317,17 +317,6 @@
 					"optional":true
 				},
 				{
-					"id":"lanes",
-					"type":"Text",
-					"title":"Lanes",
-					"title_de":"Lanes",
-					"value":"",
-					"description":"Comma-separated lane names",
-					"description_de":"Durch Komma getrennte Lanes",
-					"readonly":false,
-					"optional":true
-				},
-				{
 					"id":"imports",
 					"type":"Text",
 					"title":"Imports",
@@ -2293,16 +2282,6 @@
 					"length":""
 				},
 				{
-					"id":"lanes",
-					"type":"String",
-					"title":"Lanes",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
 					"id":"gates",
 					"type":"String",
 					"title":"Gates",
@@ -2345,26 +2324,6 @@
 		{
 			"name" : "artifact",
 			"properties" : [
-				{
-					"id":"pool",
-					"type":"String",
-					"title":"Pool",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				},
-				{
-					"id":"lanes",
-					"type":"String",
-					"title":"Lanes",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"length":""
-				}
 			]
 		},
 		{
@@ -2765,16 +2724,6 @@
 					"optional":true
 				},
 				{
-					"id":"lanes",
-					"type":"String",
-					"title":"Lanes",
-					"title_de":"Lanes",
-					"value":"",
-					"description":"Comma-separated lane names",
-					"readonly":false,
-					"optional":true
-				},
-				{
 					"id":"actors",
 					"type":"String",
 					"title":"Actors",
@@ -2932,16 +2881,6 @@
 					"value":"$workitemDefs.(k).name$",
 					"description":"Task Name",
 					"readonly":true,
-					"optional":true
-				\},
-				\{
-					"id":"lanes",
-					"type":"String",
-					"title":"Lanes",
-					"title_de":"Lanes",
-					"value":"",
-					"description":"Comma-separated lane names",
-					"readonly":false,
 					"optional":true
 				\},
 				\{
@@ -3767,8 +3706,7 @@
 		},
 		
 		// Swimlanes
-		
-		{
+		/** {
 			"type" : 			"node",
 			"id" :				"Pool",
 			"title" :			"Pool",
@@ -3792,8 +3730,8 @@
 				"canContainArtifacts"				
 			],
 			"layout" : [{"type" : "layout.bpmn2_0.pool"}]
-		},
-		{
+		},**/
+		/**{
 			"type" : 			"node",
 			"id" :				"CollapsedPool",
 			"title" :			"Collapsed Pool",
@@ -3831,7 +3769,7 @@
 				"messageflow_end",
 				"fromtoall"				
 			]
-		},
+		},**/
 		{
 			"type" : 			"node",
 			"id" :				"Lane",
@@ -3846,30 +3784,6 @@
 				"baseAttributes"
 			],
 			"properties" : 		[
-				{
-					"id":"parentpool",
-					"type":"String",
-					"title":"ParentPool",
-					"title_de":"Elternpool",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"length":"30"
-				},
-				{
-					"id":"parentlane",
-					"type":"String",
-					"title":"ParentLane",
-					"title_de":"Elternlane",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"30"
-				},
 				{
 					"id":"showcaption",
 					"type":"Boolean",
@@ -3886,7 +3800,8 @@
 					"hidden":true
 				}
 			],
-			"roles": 			[
+			"roles": [
+			    "all", 
 				"PoolChild",
 				"fromtoall",
 				"canContainArtifacts"				
@@ -3903,7 +3818,7 @@
 						}
 			]
 		},
-        {
+        /**{
             "type" :            "node",
             "id" :              "processparticipant",
             "title" :           "Additional Participant",
@@ -3928,7 +3843,7 @@
                 "fromtoall",
                 "eventSubprocessElement"
             ]
-        },
+        },**/
 		
 		// Artifacts
 		
@@ -6605,14 +6520,7 @@
 			},
 			{
 				"role" : "Lane",
-				"contains" : [
-					"Lane",
-					"sequence_start",
-					"sequence_end",
-					"DataObjectMorph",
-					"TextAnnotationMorph",
-					"from_participant"
-				]
+				"contains" : ["all"]
 			},
 			{
 				"role" : "Subprocess",
