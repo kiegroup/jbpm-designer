@@ -38,6 +38,7 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonToken;
 import org.eclipse.bpmn2.Activity;
+import org.eclipse.bpmn2.AdHocOrdering;
 import org.eclipse.bpmn2.AdHocSubProcess;
 import org.eclipse.bpmn2.Artifact;
 import org.eclipse.bpmn2.Assignment;
@@ -684,6 +685,46 @@ public class Bpmn2JsonUnmarshaller {
         					shape.setBounds(b);
         					plane.getPlaneElement().add(shape);
         				}
+        				// check if its a subprocess
+        				if(flowElement instanceof SubProcess) {
+        					SubProcess sp = (SubProcess) flowElement;
+        					for(FlowElement subProcessFlowElement : sp.getFlowElements()) {
+        						if (subProcessFlowElement instanceof FlowNode) {
+        							Bounds spb = _bounds.get(subProcessFlowElement.getId());
+        							System.out.println("####### subprocess flow node bounds: " + spb);
+        	        				if (spb != null) {
+        	        					BPMNShape shape = factory.createBPMNShape();
+        	        					shape.setBpmnElement(subProcessFlowElement);
+        	        					shape.setBounds(spb);
+        	        					plane.getPlaneElement().add(shape);
+        	        				}
+        						} else if (subProcessFlowElement instanceof SequenceFlow) {
+        	        				SequenceFlow sequenceFlow = (SequenceFlow) subProcessFlowElement;
+        	        				BPMNEdge edge = factory.createBPMNEdge();
+        	    					edge.setBpmnElement(subProcessFlowElement);
+        	    					DcFactory dcFactory = DcFactory.eINSTANCE;
+        	    					Point point = dcFactory.createPoint();
+        	    					if(sequenceFlow.getSourceRef() != null) {
+        	    						Bounds sourceBounds = _bounds.get(sequenceFlow.getSourceRef().getId());
+        	    						point.setX(sourceBounds.getX() + (sourceBounds.getWidth()/2));
+        	    						point.setY(sourceBounds.getY() + (sourceBounds.getHeight()/2));
+        	    					}
+        	    					edge.getWaypoint().add(point);
+        	    					List<Point> dockers = _dockers.get(sequenceFlow.getId());
+        	    					for (int i = 1; i < dockers.size() - 1; i++) {
+        	    						edge.getWaypoint().add(dockers.get(i));
+        	    					}
+        	    					point = dcFactory.createPoint();
+        	    					if(sequenceFlow.getTargetRef() != null) {
+        	    						Bounds targetBounds = _bounds.get(sequenceFlow.getTargetRef().getId());
+        	    						point.setX(targetBounds.getX() + (targetBounds.getWidth()/2));
+        	    						point.setY(targetBounds.getY() + (targetBounds.getHeight()/2));
+        	    					}
+        	    					edge.getWaypoint().add(point);
+        	    					plane.getPlaneElement().add(edge);
+        	        			}
+        					}
+        				}
         			} else if (flowElement instanceof SequenceFlow) {
         				SequenceFlow sequenceFlow = (SequenceFlow) flowElement;
         				BPMNEdge edge = factory.createBPMNEdge();
@@ -1121,6 +1162,14 @@ public class Bpmn2JsonUnmarshaller {
     }
     
     private void applyAdHocSubProcessProperties(AdHocSubProcess ahsp, Map<String, String> properties) {
+    	if(properties.get("adhocordering") != null) {
+    		if(properties.get("adhocordering") == null || properties.get("adhocordering").equals("parallel")) {
+    			ahsp.setOrdering(AdHocOrdering.PARALLEL);
+    		} else {
+    			ahsp.setOrdering(AdHocOrdering.SEQUENTIAL);
+    		}
+   
+    	}
     }
 
     private void applyEndEventProperties(EndEvent ee, Map<String, String> properties) {

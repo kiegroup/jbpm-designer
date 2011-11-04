@@ -2919,7 +2919,7 @@
 		\},
 		}$
 		// end custom workitems 
-		{
+		/** {
 			"type" : 			"node",
 			"id" :				"CollapsedSubprocess",
 			"title" : 			"Collapsed Subprocess",
@@ -2980,7 +2980,7 @@
 				"fromtoall",
 				"ActivitiesMorph"
 			]
-		}, 
+		},**/ 
 		{
 			"type" : 			"node",
 			"id" :				"Subprocess",

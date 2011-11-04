@@ -37,6 +37,7 @@ import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonGenerator;
 import org.eclipse.bpmn2.Activity;
+import org.eclipse.bpmn2.AdHocOrdering;
 import org.eclipse.bpmn2.AdHocSubProcess;
 import org.eclipse.bpmn2.BaseElement;
 import org.eclipse.bpmn2.BoundaryEvent;
@@ -1255,6 +1256,17 @@ public class Bpmn2JsonMarshaller {
     private void marshallSubProcess(SubProcess subProcess, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Definitions def, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
     	Map<String, Object> properties = new LinkedHashMap<String, Object>(flowElementProperties);
 		properties.put("name", subProcess.getName());
+		if(subProcess instanceof AdHocSubProcess) {
+			AdHocSubProcess ahsp = (AdHocSubProcess) subProcess;
+			if(ahsp.getOrdering().equals(AdHocOrdering.PARALLEL)) {
+				properties.put("adhocordering", "parallel");
+			} else if(ahsp.getOrdering().equals(AdHocOrdering.SEQUENTIAL)) {
+				properties.put("adhocordering", "Sequential");
+			} else {
+				// default to parallel
+				properties.put("adhocordering", "Parallel");
+			}
+		}
 	    marshallProperties(properties, generator);
 	    generator.writeObjectFieldStart("stencil");
 	    if(subProcess instanceof AdHocSubProcess) {
@@ -1266,7 +1278,8 @@ public class Bpmn2JsonMarshaller {
 	    generator.writeArrayFieldStart("childShapes");
 	    Bounds bounds = ((BPMNShape) findDiagramElement(plane, subProcess)).getBounds();
 	    for (FlowElement flowElement: subProcess.getFlowElements()) {
-	    	marshallFlowElement(flowElement, plane, generator, (int) (xOffset + bounds.getX()), (int) (yOffset + bounds.getY()), preProcessingData, def);
+	    	// dont want to set the offset
+	    	marshallFlowElement(flowElement, plane, generator, 0, 0, preProcessingData, def);
 	    }
 	    generator.writeEndArray();
 	    generator.writeArrayFieldStart("outgoing");
