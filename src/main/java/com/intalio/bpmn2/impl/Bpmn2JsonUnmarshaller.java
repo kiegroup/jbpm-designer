@@ -43,6 +43,7 @@ import org.eclipse.bpmn2.AdHocSubProcess;
 import org.eclipse.bpmn2.Artifact;
 import org.eclipse.bpmn2.Assignment;
 import org.eclipse.bpmn2.Association;
+import org.eclipse.bpmn2.AssociationDirection;
 import org.eclipse.bpmn2.Auditing;
 import org.eclipse.bpmn2.BaseElement;
 import org.eclipse.bpmn2.Bpmn2Factory;
@@ -161,6 +162,7 @@ public class Bpmn2JsonUnmarshaller {
     private Map<String, Bounds> _bounds = new HashMap<String, Bounds>();
     private Map<String, List<Point>> _dockers = new HashMap<String, List<Point>>();
     private List<Lane> _lanes = new ArrayList<Lane>();
+    private List<Artifact> _artifacts = new ArrayList<Artifact>();
 
     private List<BpmnMarshallerHelper> _helpers;
 
@@ -218,6 +220,7 @@ public class Bpmn2JsonUnmarshaller {
             revisitCatchEvents(def);
             revisitThrowEvents(def);
             revisitLanes(def);
+            revisitArtifacts(def);
             reviseTaskAssociations(def);
             reconnectFlows();
             createDiagram(def);
@@ -301,6 +304,18 @@ public class Bpmn2JsonUnmarshaller {
                 		}
                 	}
                 	process.getLaneSets().add(ls);
+                }
+            }
+        }
+    }
+    
+    public void revisitArtifacts(Definitions def) {
+    	List<RootElement> rootElements =  def.getRootElements();
+        for(RootElement root : rootElements) {
+            if(root instanceof Process) {
+                Process process = (Process) root;
+                for(Artifact a : _artifacts) {
+                	process.getArtifacts().add(a);
                 }
             }
         }
@@ -691,7 +706,6 @@ public class Bpmn2JsonUnmarshaller {
         					for(FlowElement subProcessFlowElement : sp.getFlowElements()) {
         						if (subProcessFlowElement instanceof FlowNode) {
         							Bounds spb = _bounds.get(subProcessFlowElement.getId());
-        							System.out.println("####### subprocess flow node bounds: " + spb);
         	        				if (spb != null) {
         	        					BPMNShape shape = factory.createBPMNShape();
         	        					shape.setBpmnElement(subProcessFlowElement);
@@ -724,6 +738,38 @@ public class Bpmn2JsonUnmarshaller {
         	    					plane.getPlaneElement().add(edge);
         	        			}
         					}
+        					for (Artifact artifact : sp.getArtifacts()) {
+                                if (artifact instanceof TextAnnotation) {
+                                	Bounds ba = _bounds.get(artifact.getId());
+                                	if (ba != null) {
+                                		BPMNShape shape = factory.createBPMNShape();
+                                		shape.setBpmnElement(artifact);
+                                		shape.setBounds(ba);
+                                		plane.getPlaneElement().add(shape);
+                                	}
+                                }
+                                if (artifact instanceof Association){
+                                    Association association = (Association)artifact;
+                                    BPMNEdge edge = factory.createBPMNEdge();
+                                    edge.setBpmnElement(association);
+                                    DcFactory dcFactory = DcFactory.eINSTANCE;
+                                    Point point = dcFactory.createPoint();
+                                    Bounds sourceBounds = _bounds.get(association.getSourceRef().getId());
+                                    point.setX(sourceBounds.getX() + (sourceBounds.getWidth()/2));
+                                    point.setY(sourceBounds.getY() + (sourceBounds.getHeight()/2));
+                                    edge.getWaypoint().add(point);
+                                    List<Point> dockers = _dockers.get(association.getId());
+                                    for (int i = 1; i < dockers.size() - 1; i++) {
+                                            edge.getWaypoint().add(dockers.get(i));
+                                    }
+                                    point = dcFactory.createPoint();
+                                    Bounds targetBounds = _bounds.get(association.getTargetRef().getId());
+                                    point.setX(targetBounds.getX() + (targetBounds.getWidth()/2));
+                                    point.setY(targetBounds.getY() + (targetBounds.getHeight()/2));
+                                    edge.getWaypoint().add(point);
+                                    plane.getPlaneElement().add(edge);
+                                }
+                            }
         				}
         			} else if (flowElement instanceof SequenceFlow) {
         				SequenceFlow sequenceFlow = (SequenceFlow) flowElement;
@@ -751,7 +797,42 @@ public class Bpmn2JsonUnmarshaller {
     					plane.getPlaneElement().add(edge);
         			}
         		}
-        		// now lanes
+        		// artifacts
+                if (process.getArtifacts() != null){
+                    for (Artifact artifact : process.getArtifacts()) {
+                        if (artifact instanceof TextAnnotation) {
+                        	Bounds b = _bounds.get(artifact.getId());
+                        	if (b != null) {
+                        		BPMNShape shape = factory.createBPMNShape();
+                        		shape.setBpmnElement(artifact);
+                        		shape.setBounds(b);
+                        		plane.getPlaneElement().add(shape);
+                        	}
+                        }
+                        if (artifact instanceof Association){
+                            Association association = (Association)artifact;
+                            BPMNEdge edge = factory.createBPMNEdge();
+                            edge.setBpmnElement(association);
+                            DcFactory dcFactory = DcFactory.eINSTANCE;
+                            Point point = dcFactory.createPoint();
+                            Bounds sourceBounds = _bounds.get(association.getSourceRef().getId());
+                            point.setX(sourceBounds.getX() + (sourceBounds.getWidth()/2));
+                            point.setY(sourceBounds.getY() + (sourceBounds.getHeight()/2));
+                            edge.getWaypoint().add(point);
+                            List<Point> dockers = _dockers.get(association.getId());
+                            for (int i = 1; i < dockers.size() - 1; i++) {
+                                    edge.getWaypoint().add(dockers.get(i));
+                            }
+                            point = dcFactory.createPoint();
+                            Bounds targetBounds = _bounds.get(association.getTargetRef().getId());
+                            point.setX(targetBounds.getX() + (targetBounds.getWidth()/2));
+                            point.setY(targetBounds.getY() + (targetBounds.getHeight()/2));
+                            edge.getWaypoint().add(point);
+                            plane.getPlaneElement().add(edge);
+                        }
+                    }
+                }
+        		// lanes
         		if(process.getLaneSets() != null && process.getLaneSets().size() > 0) {
         			for(LaneSet ls : process.getLaneSets()) {
         				for(Lane lane : ls.getLanes()) {
@@ -1023,6 +1104,8 @@ public class Bpmn2JsonUnmarshaller {
             for (BaseElement child : childElements) {
                 if (child instanceof FlowElement) {
                     ((SubProcess) baseElt).getFlowElements().add((FlowElement) child);
+                } else if(child instanceof Artifact) { 
+                	((SubProcess) baseElt).getArtifacts().add((Artifact) child);
                 } else {
                     throw new IllegalArgumentException("Subprocess - don't know what to do of " + child);
                 }
@@ -1042,8 +1125,10 @@ public class Bpmn2JsonUnmarshaller {
 //        			}
 //        			((Lane) baseElt).getChildLaneSet().getLanes().add((Lane) child);
 //        		} 
-        		else {
-        			throw new IllegalArgumentException("Don't know what to do of " + child);
+        		else if(child instanceof Artifact){
+        			_artifacts.add((Artifact) child);
+        		} else {
+        			throw new IllegalArgumentException("Don't know what to do of " + childElements);
         		}
         	}
         	_lanes.add((Lane) baseElt);
@@ -1146,6 +1231,9 @@ public class Bpmn2JsonUnmarshaller {
         if (baseElement instanceof EndEvent) {
             applyEndEventProperties((EndEvent) baseElement, properties);
         }
+        if(baseElement instanceof Association) {
+        	applyAssociationProperties((Association) baseElement, properties);
+        }
         // finally, apply properties from helpers:
         for (BpmnMarshallerHelper helper : _helpers) {
             helper.applyProperties(baseElement, properties);
@@ -1179,6 +1267,17 @@ public class Bpmn2JsonUnmarshaller {
         } else {
             ee.setName("");
         }
+    }
+    
+    private void applyAssociationProperties(Association association, Map<String, String> properties) {
+    	if(properties.get("type") != null) {
+    		ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+            EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                        "http://www.jboss.org/drools", "type", false, false);
+            EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                properties.get("type"));
+            association.getAnyAttribute().add(extensionEntry);
+    	}
     }
     
     private void applyStartEventProperties(StartEvent se, Map<String, String> properties) {
@@ -1221,6 +1320,8 @@ public class Bpmn2JsonUnmarshaller {
         } else {
             ta.setText("");
         }
+        // default
+        ta.setTextFormat("text/plain");
     }
 
     private void applyEventProperties(Event event, Map<String, String> properties) {

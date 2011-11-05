@@ -39,6 +39,8 @@ import org.codehaus.jackson.JsonGenerator;
 import org.eclipse.bpmn2.Activity;
 import org.eclipse.bpmn2.AdHocOrdering;
 import org.eclipse.bpmn2.AdHocSubProcess;
+import org.eclipse.bpmn2.Artifact;
+import org.eclipse.bpmn2.Association;
 import org.eclipse.bpmn2.BaseElement;
 import org.eclipse.bpmn2.BoundaryEvent;
 import org.eclipse.bpmn2.BusinessRuleTask;
@@ -109,6 +111,7 @@ import org.eclipse.bpmn2.StartEvent;
 import org.eclipse.bpmn2.SubProcess;
 import org.eclipse.bpmn2.Task;
 import org.eclipse.bpmn2.TerminateEventDefinition;
+import org.eclipse.bpmn2.TextAnnotation;
 import org.eclipse.bpmn2.ThrowEvent;
 import org.eclipse.bpmn2.TimerEventDefinition;
 import org.eclipse.bpmn2.UserTask;
@@ -138,6 +141,7 @@ import com.intalio.web.profile.IDiagramProfile;
 public class Bpmn2JsonMarshaller {
 	
 	private Map<String, DiagramElement> _diagramElements = new HashMap<String, DiagramElement>();
+	private Map<String,Association> _diagramAssociations = new HashMap<String, Association>();
 	private static final Logger _logger = Logger.getLogger(Bpmn2JsonMarshaller.class);
 	private IDiagramProfile profile;
 	
@@ -407,7 +411,7 @@ public class Bpmn2JsonMarshaller {
         for(LaneSet laneSet : process.getLaneSets()) {
         	for(Lane lane : laneSet.getLanes()) {
         		// we only want to marshall lanes if we have the bpmndi info for them!
-        		if(findDiagramElementForLane(plane, lane) != null) {
+        		if(findDiagramElement(plane, lane) != null) {
         			laneFlowElementsIds.addAll( marshallLanes(lane, plane, generator, 0, 0, preProcessingData, def) );
         		}
         	}
@@ -417,6 +421,11 @@ public class Bpmn2JsonMarshaller {
         		marshallFlowElement(flowElement, plane, generator, 0, 0, preProcessingData, def);
         	}
         }
+        
+        for (Artifact artifact: process.getArtifacts()) {
+        	marshallArtifact(artifact, plane, generator, 0, 0, preProcessingData, def);
+        }
+        
         generator.writeEndArray();
     }
     
@@ -613,7 +622,7 @@ public class Bpmn2JsonMarshaller {
     	generator.writeObjectField("id", "Lane");
 	    generator.writeEndObject();
 	    generator.writeArrayFieldStart("childShapes");
-	    Bounds bounds = ((BPMNShape) findDiagramElementForLane(plane, lane)).getBounds();
+	    Bounds bounds = ((BPMNShape) findDiagramElement(plane, lane)).getBounds();
 	    for (FlowElement flowElement: lane.getFlowNodeRefs()) {
 	    	nodeRefIds.add(flowElement.getId());
 	    	// we dont want an offset here!
@@ -1178,6 +1187,18 @@ public class Bpmn2JsonMarshaller {
         	generator.writeObjectField("resourceId", outgoing.getId());
         	generator.writeEndObject();
         }
+        // we need to also add associations as outgoing elements
+        org.eclipse.bpmn2.Process process = (org.eclipse.bpmn2.Process) plane.getBpmnElement();
+        for (Artifact artifact : process.getArtifacts()) {
+        	if (artifact instanceof Association){
+                Association association = (Association) artifact;
+                if (association.getSourceRef().getId().equals(node.getId())) {
+                	generator.writeStartObject();
+                	generator.writeObjectField("resourceId", association.getId());
+                	generator.writeEndObject();
+                }
+        	}
+        }
         generator.writeEndArray();
         
         BPMNShape shape = (BPMNShape) findDiagramElement(plane, node);
@@ -1280,6 +1301,9 @@ public class Bpmn2JsonMarshaller {
 	    for (FlowElement flowElement: subProcess.getFlowElements()) {
 	    	// dont want to set the offset
 	    	marshallFlowElement(flowElement, plane, generator, 0, 0, preProcessingData, def);
+	    }
+	    for (Artifact artifact: subProcess.getArtifacts()) {
+	    	marshallArtifact(artifact, plane, generator, 0, 0, preProcessingData, def);
 	    }
 	    generator.writeEndArray();
 	    generator.writeArrayFieldStart("outgoing");
@@ -1391,31 +1415,22 @@ public class Bpmn2JsonMarshaller {
         generator.writeEndArray();
     }
     
-    private DiagramElement findDiagramElement(BPMNPlane plane, FlowElement flowElement) {
-    	DiagramElement result = _diagramElements.get(flowElement.getId());
+    private DiagramElement findDiagramElement(BPMNPlane plane, BaseElement baseElement) {
+    	DiagramElement result = _diagramElements.get(baseElement.getId());
     	if (result != null) {
     		return result;
     	}
     	for (DiagramElement element: plane.getPlaneElement()) {
-        	if ((element instanceof BPMNEdge && ((BPMNEdge) element).getBpmnElement() == flowElement) ||
-    			(element instanceof BPMNShape && ((BPMNShape) element).getBpmnElement() == flowElement)) {
-        		_diagramElements.put(flowElement.getId(), element);
+        	if ((element instanceof BPMNEdge && ((BPMNEdge) element).getBpmnElement() == baseElement) ||
+    			(element instanceof BPMNShape && ((BPMNShape) element).getBpmnElement() == baseElement)) {
+        		_diagramElements.put(baseElement.getId(), element);
         		return element;
         	}
         }
 		throw new IllegalArgumentException(
-			"Could not find BPMNDI information for " + flowElement.getId());
+			"Could not find BPMNDI information for " + baseElement.getId());
     }
     
-    private DiagramElement findDiagramElementForLane(BPMNPlane plane, Lane lane) {
-    	for (DiagramElement element: plane.getPlaneElement()) {
-    		if( (element instanceof BPMNShape && ((BPMNShape) element).getBpmnElement() == lane) ) {
-    			return element;
-    		}
-    	}
-    	return null;
-    }
-
     private void marshallGlobalTask(GlobalTask globalTask, JsonGenerator generator) {
         if (globalTask instanceof GlobalBusinessRuleTask) {
             
@@ -1448,6 +1463,117 @@ public class Bpmn2JsonMarshaller {
             generator.writeObjectField(entry.getKey(), String.valueOf(entry.getValue()));
         }
         generator.writeEndObject();
+    }
+    
+    private void marshallArtifact(Artifact artifact, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Definitions def) throws IOException {
+    	generator.writeStartObject();
+    	generator.writeObjectField("resourceId", artifact.getId());
+    	if (artifact instanceof Association){
+    		marshallAssociation((Association)artifact, plane, generator, xOffset, yOffset, preProcessingData, def);
+    	} else if (artifact instanceof TextAnnotation){
+    		marshallTextAnnotation((TextAnnotation)artifact, plane, generator, xOffset, yOffset, preProcessingData, def);
+    	}
+    	generator.writeEndObject();
+    }
+    
+    private void marshallAssociation(Association association, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Definitions def) throws JsonGenerationException, IOException {
+    	Map<String, Object> properties = new LinkedHashMap<String, Object>();
+        Iterator<FeatureMap.Entry> iter = association.getAnyAttribute().iterator();
+        while(iter.hasNext()) {
+            FeatureMap.Entry entry = iter.next();
+            if(entry.getEStructuralFeature().getName().equals("type")) {
+            	properties.put("type", entry.getValue());
+            }
+        }
+        
+        marshallProperties(properties, generator);
+        generator.writeObjectFieldStart("stencil");
+        generator.writeObjectField("id", "Association_Undirected");
+        generator.writeEndObject();
+        generator.writeArrayFieldStart("childShapes");
+        generator.writeEndArray();
+        generator.writeArrayFieldStart("outgoing");
+        generator.writeStartObject();
+        generator.writeObjectField("resourceId", association.getTargetRef().getId());
+        generator.writeEndObject();
+        generator.writeEndArray();
+        
+        Bounds sourceBounds = ((BPMNShape) findDiagramElement(plane, association.getSourceRef())).getBounds();
+        Bounds targetBounds = ((BPMNShape) findDiagramElement(plane, association.getTargetRef())).getBounds();
+        generator.writeArrayFieldStart("dockers");
+        generator.writeStartObject();
+        generator.writeObjectField("x", sourceBounds.getWidth() / 2);
+        generator.writeObjectField("y", sourceBounds.getHeight() / 2);
+        generator.writeEndObject();
+        List<Point> waypoints = ((BPMNEdge) findDiagramElement(plane, association)).getWaypoint();
+        for (int i = 1; i < waypoints.size() - 1; i++) {
+        	Point waypoint = waypoints.get(i);
+            generator.writeStartObject();
+            generator.writeObjectField("x", waypoint.getX());
+            generator.writeObjectField("y", waypoint.getY());
+            generator.writeEndObject();
+        }
+        generator.writeStartObject();
+        generator.writeObjectField("x", targetBounds.getWidth() / 2);
+        generator.writeObjectField("y", targetBounds.getHeight() / 2);
+        generator.writeEndObject();
+        generator.writeEndArray();
+    }
+
+    protected void marshallTextAnnotation(TextAnnotation textAnnotation, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Definitions def)  throws JsonGenerationException, IOException{
+    	Map<String, Object> properties = new LinkedHashMap<String, Object>();
+    	properties.put("text", textAnnotation.getText());
+    	properties.put("artifacttype", "Annotation");
+    	
+	    marshallProperties(properties, generator);
+        
+        generator.writeObjectFieldStart("stencil");
+        generator.writeObjectField("id", "TextAnnotation");
+        generator.writeEndObject();
+        generator.writeArrayFieldStart("childShapes");
+        generator.writeEndArray();
+    
+    	generator.writeArrayFieldStart("outgoing");
+    	if(findOutgoingAssociation(plane, textAnnotation) != null) {
+    		generator.writeStartObject();
+    		generator.writeObjectField("resourceId", findOutgoingAssociation(plane, textAnnotation).getId());
+    		generator.writeEndObject();
+    	}
+    	generator.writeEndArray();
+    
+    	Bounds bounds = ((BPMNShape) findDiagramElement(plane, textAnnotation)).getBounds();
+    	generator.writeObjectFieldStart("bounds");
+    	generator.writeObjectFieldStart("lowerRight");
+    	generator.writeObjectField("x", bounds.getX() + bounds.getWidth() - xOffset);
+    	generator.writeObjectField("y", bounds.getY() + bounds.getHeight() - yOffset);
+    	generator.writeEndObject();
+    	generator.writeObjectFieldStart("upperLeft");
+    	generator.writeObjectField("x", bounds.getX() - xOffset);
+    	generator.writeObjectField("y", bounds.getY() - yOffset);
+    	generator.writeEndObject();
+    	generator.writeEndObject();
+    }
+    
+    protected Association findOutgoingAssociation(BPMNPlane plane, BaseElement baseElement) {
+    	Association result = _diagramAssociations.get(baseElement.getId());
+    	if (result != null) {
+    		return result;
+    	}
+        if (!(plane.getBpmnElement() instanceof org.eclipse.bpmn2.Process)){
+            throw new IllegalArgumentException("Don't know how to get associations from a non-Process Diagram");
+        }
+        
+        org.eclipse.bpmn2.Process process = (org.eclipse.bpmn2.Process) plane.getBpmnElement();
+        for (Artifact artifact : process.getArtifacts()) {
+            if (artifact instanceof Association){
+                Association association = (Association) artifact;
+                if (association.getSourceRef() == baseElement){
+                    _diagramAssociations.put(baseElement.getId(), association);
+                    return association;
+                }
+            }
+        }
+        return null;
     }
     
     private void marshallStencil(String stencilId, JsonGenerator generator) throws JsonGenerationException, IOException {
