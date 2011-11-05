@@ -33,7 +33,9 @@ import com.intalio.web.profile.IDiagramProfile;
 
 import org.eclipse.bpmn2.DocumentRoot;
 import org.eclipse.bpmn2.Bpmn2Package;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 
@@ -272,6 +274,23 @@ public class JbpmProfileImpl implements IDiagramProfile {
             options.put( JBPMBpmn2ResourceImpl.OPTION_ENCODING, "UTF-8" );
             InputStream is = new ByteArrayInputStream(xml.getBytes("UTF-8"));
             resource.load(is, options);
+            
+            EList<Diagnostic> warnings = resource.getWarnings();
+            
+            if (warnings != null && !warnings.isEmpty()){
+                for (Diagnostic diagnostic : warnings) {
+                    System.out.println("Warning: "+diagnostic.getMessage());
+                }
+            }
+            
+            EList<Diagnostic> errors = resource.getErrors();
+            if (errors != null && !errors.isEmpty()){
+                for (Diagnostic diagnostic : errors) {
+                    System.out.println("Error: "+diagnostic.getMessage());
+                }
+                throw new IllegalStateException("Error parsing process definition");
+            }
+            
             return ((DocumentRoot) resource.getContents().get(0)).getDefinitions();
         } catch (Throwable t) {
             t.printStackTrace();
