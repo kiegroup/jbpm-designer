@@ -75,7 +75,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.jbpm.migration.xsl.JbpmMigration;
+import org.jbpm.migration.JbpmMigration;
 
 import sun.misc.BASE64Encoder;
 

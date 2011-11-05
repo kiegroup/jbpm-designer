@@ -38,6 +38,7 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonToken;
 import org.eclipse.bpmn2.Activity;
+import org.eclipse.bpmn2.AdHocOrdering;
 import org.eclipse.bpmn2.AdHocSubProcess;
 import org.eclipse.bpmn2.Artifact;
 import org.eclipse.bpmn2.Assignment;
@@ -139,6 +140,7 @@ import com.intalio.bpmn2.resource.JBPMBpmn2ResourceFactoryImpl;
 
 /**
  * @author Antoine Toulme
+ * @author Tihomir Surdilovic
  * 
  *         an unmarshaller to transform JSON into BPMN 2.0 elements.
  * 
@@ -158,6 +160,7 @@ public class Bpmn2JsonUnmarshaller {
     private Set<String> _sequenceFlowTargets = new HashSet<String>();
     private Map<String, Bounds> _bounds = new HashMap<String, Bounds>();
     private Map<String, List<Point>> _dockers = new HashMap<String, List<Point>>();
+    private List<Lane> _lanes = new ArrayList<Lane>();
 
     private List<BpmnMarshallerHelper> _helpers;
 
@@ -209,15 +212,15 @@ public class Bpmn2JsonUnmarshaller {
             _currentResource = bpmn2;
             // do the unmarshalling now:
             Definitions def = (Definitions) unmarshallItem(parser, preProcessingData);
-            reconnectFlows();
-            createDiagram(def);
             revisitGateways(def);
             revisitServiceTasks(def);
             revisitMessages(def);
             revisitCatchEvents(def);
             revisitThrowEvents(def);
-            revisitLanesets(def);
+            revisitLanes(def);
             reviseTaskAssociations(def);
+            reconnectFlows();
+            createDiagram(def);
             // return def;
             _currentResource.getContents().add(def);
             return _currentResource;
@@ -283,36 +286,21 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
     
-    public void revisitLanesets(Definitions def) {
+    public void revisitLanes(Definitions def) {
         List<RootElement> rootElements =  def.getRootElements();
         for(RootElement root : rootElements) {
             if(root instanceof Process) {
                 Process process = (Process) root;
-                if(process.getLaneSets() != null && process.getLaneSets().size() > 0) {
-                    LaneSet ls = process.getLaneSets().get(0);
-                    if(ls.getLanes() != null && ls.getLanes().size() > 0) {
-                        List<Lane> lanes = ls.getLanes();
-                        for(Lane lane : lanes) {
-                            List<FlowElement> flowElements =  process.getFlowElements(); 
-                            for(FlowElement fe : flowElements) {
-                                if(fe instanceof Task) {
-                                    Task tsk = (Task) fe;
-                                    Iterator<FeatureMap.Entry> iter = tsk.getAnyAttribute().iterator();
-                                    while(iter.hasNext()) {
-                                        FeatureMap.Entry entry = iter.next();
-                                        if(entry.getEStructuralFeature().getName().equals("lanes")) {
-                                            String[] taskLanes = ((String) entry.getValue()).split( ",\\s*" );
-                                            for(String taskLane : taskLanes) {
-                                                if(lane.getName().equals(taskLane)) {
-                                                    lane.getFlowNodeRefs().add(tsk);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                if((process.getLaneSets() == null || process.getLaneSets().size() < 1) && _lanes.size() > 0) {
+                	LaneSet ls = Bpmn2Factory.eINSTANCE.createLaneSet();
+                	for(Lane lane : _lanes) {
+                		ls.getLanes().add(lane);
+                		List<FlowNode> laneFlowNodes = lane.getFlowNodeRefs();
+                		for(FlowNode fl : laneFlowNodes) {
+                			process.getFlowElements().add(fl);
+                		}
+                	}
+                	process.getLaneSets().add(ls);
                 }
             }
         }
@@ -697,6 +685,46 @@ public class Bpmn2JsonUnmarshaller {
         					shape.setBounds(b);
         					plane.getPlaneElement().add(shape);
         				}
+        				// check if its a subprocess
+        				if(flowElement instanceof SubProcess) {
+        					SubProcess sp = (SubProcess) flowElement;
+        					for(FlowElement subProcessFlowElement : sp.getFlowElements()) {
+        						if (subProcessFlowElement instanceof FlowNode) {
+        							Bounds spb = _bounds.get(subProcessFlowElement.getId());
+        							System.out.println("####### subprocess flow node bounds: " + spb);
+        	        				if (spb != null) {
+        	        					BPMNShape shape = factory.createBPMNShape();
+        	        					shape.setBpmnElement(subProcessFlowElement);
+        	        					shape.setBounds(spb);
+        	        					plane.getPlaneElement().add(shape);
+        	        				}
+        						} else if (subProcessFlowElement instanceof SequenceFlow) {
+        	        				SequenceFlow sequenceFlow = (SequenceFlow) subProcessFlowElement;
+        	        				BPMNEdge edge = factory.createBPMNEdge();
+        	    					edge.setBpmnElement(subProcessFlowElement);
+        	    					DcFactory dcFactory = DcFactory.eINSTANCE;
+        	    					Point point = dcFactory.createPoint();
+        	    					if(sequenceFlow.getSourceRef() != null) {
+        	    						Bounds sourceBounds = _bounds.get(sequenceFlow.getSourceRef().getId());
+        	    						point.setX(sourceBounds.getX() + (sourceBounds.getWidth()/2));
+        	    						point.setY(sourceBounds.getY() + (sourceBounds.getHeight()/2));
+        	    					}
+        	    					edge.getWaypoint().add(point);
+        	    					List<Point> dockers = _dockers.get(sequenceFlow.getId());
+        	    					for (int i = 1; i < dockers.size() - 1; i++) {
+        	    						edge.getWaypoint().add(dockers.get(i));
+        	    					}
+        	    					point = dcFactory.createPoint();
+        	    					if(sequenceFlow.getTargetRef() != null) {
+        	    						Bounds targetBounds = _bounds.get(sequenceFlow.getTargetRef().getId());
+        	    						point.setX(targetBounds.getX() + (targetBounds.getWidth()/2));
+        	    						point.setY(targetBounds.getY() + (targetBounds.getHeight()/2));
+        	    					}
+        	    					edge.getWaypoint().add(point);
+        	    					plane.getPlaneElement().add(edge);
+        	        			}
+        					}
+        				}
         			} else if (flowElement instanceof SequenceFlow) {
         				SequenceFlow sequenceFlow = (SequenceFlow) flowElement;
         				BPMNEdge edge = factory.createBPMNEdge();
@@ -721,6 +749,20 @@ public class Bpmn2JsonUnmarshaller {
     					}
     					edge.getWaypoint().add(point);
     					plane.getPlaneElement().add(edge);
+        			}
+        		}
+        		// now lanes
+        		if(process.getLaneSets() != null && process.getLaneSets().size() > 0) {
+        			for(LaneSet ls : process.getLaneSets()) {
+        				for(Lane lane : ls.getLanes()) {
+        					Bounds b = _bounds.get(lane.getId());
+            				if (b != null) {
+            					BPMNShape shape = factory.createBPMNShape();
+            					shape.setBpmnElement(lane);
+            					shape.setBounds(b);
+            					plane.getPlaneElement().add(shape);
+            				}
+        				}
         			}
         		}
         		def.getDiagrams().add(diagram);
@@ -840,9 +882,8 @@ public class Bpmn2JsonUnmarshaller {
         // duplicate ids right now.
         applyProperties(baseElt, properties);
         if (baseElt instanceof Definitions) {
-            Process rootLevelProcess = null;
-            for (BaseElement child : childElements) {
-
+        	Process rootLevelProcess = null;
+        	for (BaseElement child : childElements) {
                 // tasks are only permitted under processes.
                 // a process should be created implicitly for tasks at the root
                 // level.
@@ -900,7 +941,8 @@ public class Bpmn2JsonUnmarshaller {
                     }
                     if (child instanceof Task || child instanceof SequenceFlow 
                             || child instanceof Gateway || child instanceof Event 
-                            || child instanceof Artifact || child instanceof DataObject || child instanceof SubProcess) {
+                            || child instanceof Artifact || child instanceof DataObject || child instanceof SubProcess
+                            || child instanceof Lane) {
                         if (rootLevelProcess == null) {
                             rootLevelProcess = Bpmn2Factory.eINSTANCE.createProcess();
                             // set the properties and item definitions first
@@ -923,18 +965,6 @@ public class Bpmn2JsonUnmarshaller {
                                     rootLevelProcess.getProperties().add(prop);
                                     ((Definitions) baseElt).getRootElements().add(itemdef);
                                 }
-                            }
-                            // now laneset
-                            if(properties.get("lanes") != null && properties.get("lanes").length() > 0) {
-                                //current support for a single laneset
-                                LaneSet laneset = Bpmn2Factory.eINSTANCE.createLaneSet();
-                                String[] lanes = properties.get("lanes").split( ",\\s*" );
-                                for(String laneName : lanes) {
-                                    Lane lane = Bpmn2Factory.eINSTANCE.createLane();
-                                    lane.setName(laneName);
-                                    laneset.getLanes().add(lane);
-                                }
-                                rootLevelProcess.getLaneSets().add(laneset);
                             }
                             rootLevelProcess.setId(properties.get("id"));
                             applyProcessProperties(rootLevelProcess, properties);
@@ -968,6 +998,8 @@ public class Bpmn2JsonUnmarshaller {
                         
                     } else if(child instanceof SubProcess) {
                         rootLevelProcess.getFlowElements().add((SubProcess) child);
+                    } else if(child instanceof Lane) {
+                    	// lanes handled later
                     } else {
                         throw new IllegalArgumentException("Don't know what to do of " + child);
                     }
@@ -987,19 +1019,6 @@ public class Bpmn2JsonUnmarshaller {
                     throw new IllegalArgumentException("Don't know what to do of " + child);
                 }
             }
-        } else if (baseElt instanceof Lane) {
-            for (BaseElement child : childElements) {
-                if (child instanceof FlowNode) {
-                    ((Lane) baseElt).getFlowNodeRefs().add((FlowNode) child);
-                } else if (child instanceof Lane) {
-                    if (((Lane) baseElt).getChildLaneSet() == null) {
-                        ((Lane) baseElt).setChildLaneSet(Bpmn2Factory.eINSTANCE.createLaneSet());
-                    }
-                    ((Lane) baseElt).getChildLaneSet().getLanes().add((Lane) child);
-                } else {
-                    throw new IllegalArgumentException("Don't know what to do of " + child);
-                }
-            }
         } else if (baseElt instanceof SubProcess) {
             for (BaseElement child : childElements) {
                 if (child instanceof FlowElement) {
@@ -1010,7 +1029,25 @@ public class Bpmn2JsonUnmarshaller {
             }
         } else if (baseElt instanceof Message) {
             // we do not support base-element messages from the json. They are created dynamically for events that use them.
-        } else {
+        } else if (baseElt instanceof Lane) {
+        	((Lane) baseElt).setName(properties.get("name"));
+        	for (BaseElement child : childElements) {
+        		if (child instanceof FlowNode) {
+        			((Lane) baseElt).getFlowNodeRefs().add((FlowNode) child);
+        		}
+        		// no support for child-lanes at this point
+//        		else if (child instanceof Lane) {
+//        			if (((Lane) baseElt).getChildLaneSet() == null) {
+//        				((Lane) baseElt).setChildLaneSet(Bpmn2Factory.eINSTANCE.createLaneSet());
+//        			}
+//        			((Lane) baseElt).getChildLaneSet().getLanes().add((Lane) child);
+//        		} 
+        		else {
+        			throw new IllegalArgumentException("Don't know what to do of " + child);
+        		}
+        	}
+        	_lanes.add((Lane) baseElt);
+      } else {
             if (!childElements.isEmpty()) {
                 throw new IllegalArgumentException("Don't know what to do of " + childElements + " with " + baseElt);
             }
@@ -1125,6 +1162,14 @@ public class Bpmn2JsonUnmarshaller {
     }
     
     private void applyAdHocSubProcessProperties(AdHocSubProcess ahsp, Map<String, String> properties) {
+    	if(properties.get("adhocordering") != null) {
+    		if(properties.get("adhocordering") == null || properties.get("adhocordering").equals("parallel")) {
+    			ahsp.setOrdering(AdHocOrdering.PARALLEL);
+    		} else {
+    			ahsp.setOrdering(AdHocOrdering.SEQUENTIAL);
+    		}
+   
+    	}
     }
 
     private void applyEndEventProperties(EndEvent ee, Map<String, String> properties) {

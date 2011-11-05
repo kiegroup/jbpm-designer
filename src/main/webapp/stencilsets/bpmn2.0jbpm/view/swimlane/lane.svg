@@ -29,8 +29,8 @@
 		height="248"
 		stroke="black"
 		stroke-width="0"
-		fill="white"
-		visibility="hidden"
+		fill="#b1c2d6"
+		visibility="visible"
 		class="stripable-element-force"
 	/>
 	

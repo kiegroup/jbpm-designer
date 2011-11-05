@@ -24,7 +24,7 @@
     <!-- to have edges with orthogonal layout -->
     <plugin name="ORYX.Plugins.Layouter.EdgeLayouter" />
     <!-- to have a better container layout ? -->
-    <plugin name="ORYX.Plugins.ContainerLayouter" />
+    <!--  <plugin name="ORYX.Plugins.ContainerLayouter" /> -->
     <plugin name="ORYX.Plugins.SyntaxChecker" />
     <!-- lane layouter -->
     <plugin name="ORYX.Plugins.DragTracker.LaneDragTracker" />
