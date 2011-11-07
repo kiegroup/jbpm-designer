@@ -80,6 +80,7 @@ import org.eclipse.bpmn2.GlobalManualTask;
 import org.eclipse.bpmn2.GlobalScriptTask;
 import org.eclipse.bpmn2.GlobalTask;
 import org.eclipse.bpmn2.GlobalUserTask;
+import org.eclipse.bpmn2.Group;
 import org.eclipse.bpmn2.InclusiveGateway;
 import org.eclipse.bpmn2.InputSet;
 import org.eclipse.bpmn2.Interface;
@@ -1468,10 +1469,12 @@ public class Bpmn2JsonMarshaller {
     private void marshallArtifact(Artifact artifact, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Definitions def) throws IOException {
     	generator.writeStartObject();
     	generator.writeObjectField("resourceId", artifact.getId());
-    	if (artifact instanceof Association){
+    	if (artifact instanceof Association) {
     		marshallAssociation((Association)artifact, plane, generator, xOffset, yOffset, preProcessingData, def);
-    	} else if (artifact instanceof TextAnnotation){
-    		marshallTextAnnotation((TextAnnotation)artifact, plane, generator, xOffset, yOffset, preProcessingData, def);
+    	} else if (artifact instanceof TextAnnotation) {
+    		marshallTextAnnotation((TextAnnotation) artifact, plane, generator, xOffset, yOffset, preProcessingData, def);
+    	} else if (artifact instanceof Group) {
+    		marshallGroup((Group) artifact, plane, generator, xOffset, yOffset, preProcessingData, def);
     	}
     	generator.writeEndObject();
     }
@@ -1542,6 +1545,41 @@ public class Bpmn2JsonMarshaller {
     	generator.writeEndArray();
     
     	Bounds bounds = ((BPMNShape) findDiagramElement(plane, textAnnotation)).getBounds();
+    	generator.writeObjectFieldStart("bounds");
+    	generator.writeObjectFieldStart("lowerRight");
+    	generator.writeObjectField("x", bounds.getX() + bounds.getWidth() - xOffset);
+    	generator.writeObjectField("y", bounds.getY() + bounds.getHeight() - yOffset);
+    	generator.writeEndObject();
+    	generator.writeObjectFieldStart("upperLeft");
+    	generator.writeObjectField("x", bounds.getX() - xOffset);
+    	generator.writeObjectField("y", bounds.getY() - yOffset);
+    	generator.writeEndObject();
+    	generator.writeEndObject();
+    }
+    
+    protected void marshallGroup(Group group, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Definitions def)  throws JsonGenerationException, IOException{
+    	Map<String, Object> properties = new LinkedHashMap<String, Object>();
+    	if(group.getCategoryValueRef() != null && group.getCategoryValueRef().getValue() != null) {
+    		properties.put("name", group.getCategoryValueRef().getValue());
+    	}
+    	
+	    marshallProperties(properties, generator);
+        
+        generator.writeObjectFieldStart("stencil");
+        generator.writeObjectField("id", "Group");
+        generator.writeEndObject();
+        generator.writeArrayFieldStart("childShapes");
+        generator.writeEndArray();
+    
+    	generator.writeArrayFieldStart("outgoing");
+    	if(findOutgoingAssociation(plane, group) != null) {
+    		generator.writeStartObject();
+    		generator.writeObjectField("resourceId", findOutgoingAssociation(plane, group).getId());
+    		generator.writeEndObject();
+    	}
+    	generator.writeEndArray();
+    
+    	Bounds bounds = ((BPMNShape) findDiagramElement(plane, group)).getBounds();
     	generator.writeObjectFieldStart("bounds");
     	generator.writeObjectFieldStart("lowerRight");
     	generator.writeObjectField("x", bounds.getX() + bounds.getWidth() - xOffset);

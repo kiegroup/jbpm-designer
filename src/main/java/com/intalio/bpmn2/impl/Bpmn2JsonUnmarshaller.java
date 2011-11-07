@@ -49,6 +49,8 @@ import org.eclipse.bpmn2.BaseElement;
 import org.eclipse.bpmn2.Bpmn2Factory;
 import org.eclipse.bpmn2.BusinessRuleTask;
 import org.eclipse.bpmn2.CatchEvent;
+import org.eclipse.bpmn2.Category;
+import org.eclipse.bpmn2.CategoryValue;
 import org.eclipse.bpmn2.CompensateEventDefinition;
 import org.eclipse.bpmn2.ConditionalEventDefinition;
 import org.eclipse.bpmn2.DataInput;
@@ -74,6 +76,7 @@ import org.eclipse.bpmn2.FormalExpression;
 import org.eclipse.bpmn2.Gateway;
 import org.eclipse.bpmn2.GatewayDirection;
 import org.eclipse.bpmn2.GlobalTask;
+import org.eclipse.bpmn2.Group;
 import org.eclipse.bpmn2.Import;
 import org.eclipse.bpmn2.InputOutputSpecification;
 import org.eclipse.bpmn2.InputSet;
@@ -221,6 +224,7 @@ public class Bpmn2JsonUnmarshaller {
             revisitThrowEvents(def);
             revisitLanes(def);
             revisitArtifacts(def);
+            revisitGroups(def);
             reviseTaskAssociations(def);
             reconnectFlows();
             createDiagram(def);
@@ -318,6 +322,39 @@ public class Bpmn2JsonUnmarshaller {
                 	process.getArtifacts().add(a);
                 }
             }
+        }
+    }
+    
+    public void revisitGroups(Definitions def) {
+    	List<RootElement> rootElements =  def.getRootElements();
+    	Category defaultCat = Bpmn2Factory.eINSTANCE.createCategory();
+    	defaultCat.setName("default");
+        for(RootElement root : rootElements) {
+        	 if(root instanceof Process) {
+        		 Process process = (Process) root;
+        		 List<Artifact> processArtifacts = process.getArtifacts();
+        		 if(processArtifacts != null) {
+        			 for(Artifact ar : processArtifacts) {
+        				 if(ar instanceof Group) {
+        					 Group group = (Group) ar;
+        					 Iterator<FeatureMap.Entry> iter = group.getAnyAttribute().iterator();
+                             while(iter.hasNext()) {
+                                 FeatureMap.Entry entry = iter.next();
+                                 if(entry.getEStructuralFeature().getName().equals("categoryval")) {
+                                	 CategoryValue catval = Bpmn2Factory.eINSTANCE.createCategoryValue();
+                                	 catval.setValue((String) entry.getValue());
+                                	 defaultCat.getCategoryValue().add(catval);
+                                	 group.setCategoryValueRef(catval);
+                                 }
+                             }
+        				 }
+        			 }
+        		 }
+        	 }
+        }
+        // only add category if it includes at least one categoryvalue
+        if(defaultCat.getCategoryValue() != null && defaultCat.getCategoryValue().size() > 0) {
+        	rootElements.add(defaultCat);
         }
     }
     
@@ -739,7 +776,7 @@ public class Bpmn2JsonUnmarshaller {
         	        			}
         					}
         					for (Artifact artifact : sp.getArtifacts()) {
-                                if (artifact instanceof TextAnnotation) {
+                                if (artifact instanceof TextAnnotation || artifact instanceof Group) {
                                 	Bounds ba = _bounds.get(artifact.getId());
                                 	if (ba != null) {
                                 		BPMNShape shape = factory.createBPMNShape();
@@ -800,7 +837,7 @@ public class Bpmn2JsonUnmarshaller {
         		// artifacts
                 if (process.getArtifacts() != null){
                     for (Artifact artifact : process.getArtifacts()) {
-                        if (artifact instanceof TextAnnotation) {
+                        if (artifact instanceof TextAnnotation || artifact instanceof Group) {
                         	Bounds b = _bounds.get(artifact.getId());
                         	if (b != null) {
                         		BPMNShape shape = factory.createBPMNShape();
@@ -1216,6 +1253,9 @@ public class Bpmn2JsonUnmarshaller {
         if (baseElement instanceof TextAnnotation) {
             applyTextAnnotationProperties((TextAnnotation) baseElement, properties);
         }
+        if (baseElement instanceof Group) {
+            applyGroupProperties((Group) baseElement, properties);
+        }
         if (baseElement instanceof DataObject) {
             applyDataObjectProperties((DataObject) baseElement, properties);
         }
@@ -1322,6 +1362,17 @@ public class Bpmn2JsonUnmarshaller {
         }
         // default
         ta.setTextFormat("text/plain");
+    }
+    
+    private void applyGroupProperties(Group group, Map<String, String> properties) {
+    	if(properties.get("name") != null) {
+    		ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+            EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                        "http://www.jboss.org/drools", "categoryval", false, false);
+            EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                properties.get("name"));
+            group.getAnyAttribute().add(extensionEntry);
+    	}
     }
 
     private void applyEventProperties(Event event, Map<String, String> properties) {

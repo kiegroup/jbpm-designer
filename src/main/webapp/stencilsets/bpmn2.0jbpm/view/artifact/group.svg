@@ -18,5 +18,14 @@
 		oryx:anchors="top left"
 		stroke="black">
 	</text>
+	<text 
+			font-size="12" 
+			id="text_name" 
+			x="60" 
+			y="10" 
+			oryx:align="top middle center"
+			oryx:fittoelem="c"
+			stroke="black">
+	</text>
   </g>
 </svg>

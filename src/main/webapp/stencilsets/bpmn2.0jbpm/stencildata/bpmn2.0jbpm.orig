@@ -476,7 +476,7 @@
 		{
 			"name": "flowElement",
 			"properties" : [
-				{
+				/**{
 					"id":"categories",
 					"type":"String",
 					"title":"Categories",
@@ -488,7 +488,7 @@
 					"refToView":"",
 					"length":"50",
 					"wrapLines":true
-				}
+				}**/
 			]
 		},
 		{
