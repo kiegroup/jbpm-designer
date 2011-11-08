@@ -88,7 +88,7 @@
  		{
  			"name":"catchEventAttributes",
  			"properties":[
- 				{
+ 				/**{
 					"id":"eventdefinitionref",
 					"type":"String",
 					"title":"EventDefinitionRef",
@@ -100,7 +100,7 @@
 					"optional":true,
 					"length":"",
 					"wrapLines":true
-				},
+				},**/
 				{
 					"id":"eventdefinitions",
 					"type":"String",
@@ -158,7 +158,7 @@
  		{
  			"name":"throwEventAttributes",
  			"properties":[
- 				{
+ 				/**{
 					"id":"eventdefinitionref",
 					"type":"String",
 					"title":"EventDefinitionRef",
@@ -170,7 +170,7 @@
 					"optional":true,
 					"length":"",
 					"wrapLines":true
-				},
+				},**/
 				{
 					"id":"eventdefinitions",
 					"type":"String",
@@ -326,7 +326,7 @@
 					"readonly":false,
 					"optional":true
 				},
-				{
+				/**{
 					"id":"globals",
 					"type":"Text",
 					"title":"Globals",
@@ -335,7 +335,7 @@
 					"description":"Comma-separated globals",
 					"readonly":false,
 					"optional":true
-				},
+				},**/
 				{
 					"id":"id",
 					"type":"String",
@@ -358,7 +358,7 @@
 					"optional":true,
 					"length":"50"
 				},
-				{
+				/**{
 					"id":"author",
 					"type":"String",
 					"title":"Author",
@@ -369,7 +369,7 @@
 					"readonly":false,
 					"optional":true,
 					"length":"50"
-				},
+				},**/
 				{
 					"id":"language",
 					"type":"String",
@@ -383,7 +383,7 @@
 					"optional":true,
 					"length":"50"
 				},
-				{	
+				/**{	
 					"id":"namespaces",
 					"type":"Complex",
 					"title":"Namespaces",
@@ -410,7 +410,7 @@
 							"optional":false 
 						}
 					]
-				},
+				},**/
 				{
 					"id":"targetnamespace",
 					"type":"String",
@@ -419,11 +419,11 @@
 					"value":"http://www.omg.org/bpmn20",
 					"description":"Defines the XML namespace of the elements inside the document.",
 					"description_de":"Definiert den XML-Namensraum, der für die Elemente im Dokument verwendet wird.",
-					"readonly":false,
+					"readonly":true,
 					"optional":true,
 					"length":"50"
 				},
-				{
+				/**{
 					"id":"expressionlanguage",
 					"type":"String",
 					"title":"ExpressionLanguage",
@@ -434,7 +434,7 @@
 					"readonly":false,
 					"optional":true,
 					"length":"50"
-				},
+				},**/
 				{
 					"id":"typelanguage",
 					"type":"String",
@@ -443,11 +443,11 @@
 					"value":"http://www.w3.org/2001/XMLSchema",
 					"description":"This attribute identifies the type system used by the elements of this Definition.",
 					"description_de":"Definiert das Typsystem der Elemente dieses Diagramms.",
-					"readonly":false,
+					"readonly":true,
 					"optional":true,
 					"length":"50"
 				},
-				{
+				/**{
 					"id":"creationdate",
 					"type":"Date",
 					"title":"CreationDate",
@@ -458,8 +458,8 @@
 					"readonly":false,
 					"optional":true,
 					"dateFormat":"j/m/y"
-				},
-				{
+				},**/
+				/**{
 					"id":"modificationdate",
 					"type":"Date",
 					"title":"ModificationDate",
@@ -470,7 +470,7 @@
 					"readonly":false,
 					"optional":true,
 					"dateFormat":"j/m/y"
-				}
+				}**/
 			]
 		},
 		{
@@ -520,7 +520,7 @@
 				}
 			]
 		},
-		{
+		/**{
 			"name":"properties",
 			"properties": [
 				{
@@ -594,7 +594,7 @@
 					]
 				}
 			]
-		},
+		},**/
 		{
 			"name" : "iospecification",
 			"properties" : [
@@ -679,7 +679,7 @@
 		{
 			"name" : "activity",
 			"properties": [
-				{
+				/**{
 					"id":"startquantity",
 					"type":"Integer",
 					"title":"StartQuantity",
@@ -690,8 +690,8 @@
 					"optional":false,
 					"refToView":"",
 					"min":"1"
-				},
-				{
+				},**/
+				/**{
 					"id":"completionquantity",
 					"type":"Integer",
 					"title":"CompletionQuantity",
@@ -703,7 +703,7 @@
 					"optional":false,
 					"refToView":"",
 					"min":"1"
-				},
+				},**/
 				{
 					"id":"isforcompensation",
 					"type":"Boolean",
@@ -1140,7 +1140,7 @@
 					"readonly":false,
 					"optional":true
 				},
-				{
+				/**{
 					"id":"behavior",
 					"type":"Choice",
 					"title":"Behavior",
@@ -1170,7 +1170,7 @@
 				        	"title":"Complex"
 				        }
 					]
-				},
+				},**/
 				{
 					"id":"complexbehaviordefinition",
 					"type":"Complex",
@@ -1242,7 +1242,7 @@
 				        }
 					]
 				},
-				{
+				/**{
 					"id":"completioncondition",
 					"type":"String",
 					"title":"CompletionCondition:",
@@ -1250,7 +1250,7 @@
 					"description":"This attribute defines a Boolean Expression that when evaluated to true, cancels the remaining Activity instances and produces a token.",
 					"description_de":"Alle verbleibenden Aktivitätsinstanzen werden abgebrochen, falls die hier definierte Bedingung wahr wird.",
 					"value":""
-				},
+				},**/
 				{
 		        	"id":"onebehavioreventref",
 		        	"type":"Choice",
@@ -1491,7 +1491,7 @@
 						}
 					]
 				},
-				{
+				/**{
 					"id":"implementation",
 					"type":"Choice",
 					"title":"Implementation",
@@ -1533,8 +1533,8 @@
 							"refToView":""
 						}
 					]
-				},
-				{
+				},**/
+				/**{
 					"id":"resources",
 					"type":"Complex",
 					"title":"Resources",
@@ -1610,7 +1610,7 @@
 							"optional":true
 						}
 					]
-				},
+				},**/
 				{
 					"id":"messageref",
 					"type":"String",
@@ -1687,7 +1687,7 @@
 					"readonly":false,
 					"optional":true
 				},
-				{
+				/**{
 					"id":"servicename",
 					"type":"String",
 					"title":"servicename",
@@ -1697,7 +1697,7 @@
 					"description_de":"name of service",
 					"readonly":false,
 					"optional":true
-				},
+				},**/
 				{
 					"id":"namespace",
 					"type":"String",
@@ -1721,7 +1721,7 @@
 					"readonly":false,
 					"optional":true
 				},
-				{
+				/**{
 					"id":"porttype",
 					"type":"String",
 					"title":"porttype",
@@ -1731,8 +1731,8 @@
 					"description_de":"porttype",
 					"readonly":false,
 					"optional":true
-				},
-				{
+				},**/
+				/**{
 					"id":"wsdlUrl",
 					"type":"String",
 					"title":"wsdlUrl",
@@ -1742,7 +1742,7 @@
 					"description_de":"wsdlUrl",
 					"readonly":false,
 					"optional":true
-				},
+				},**/
 				{
 					"id":"bgcolor",
 					"type":"Color",
@@ -1763,7 +1763,7 @@
 		{
 			"name" : "customtask",
 			"properties" : [
-				{
+				/**{
 					"id":"implementation",
 					"type":"Choice",
 					"title":"Implementation",
@@ -1805,7 +1805,7 @@
 							"refToView":""
 						}
 					]
-				},
+				},**/
 				{
 					"id":"bgcolor",
 					"type":"Color",
@@ -1865,7 +1865,7 @@
 					"optional":false,
 					"refToView":"border"
 				},
-				{
+				/**{
 					"id":"transaction",
 					"type":"String",
 					"title":"TransactionRef",
@@ -1876,8 +1876,8 @@
 					"optional":true,
 					"refToView":"",
 					"length":"50"
-				},
-				{
+				},**/
+				/**{
 					"id":"transactionmethod",
 					"type":"Choice",
 					"title":"TransactionMethod",
@@ -1903,7 +1903,7 @@
 							"value":"image"
 						}
 					]
-				},
+				},**/
 				{
 					"id":"isadhoc",
 					"type":"Boolean",
@@ -1993,8 +1993,9 @@
 					"readonly":false,
 					"optional":false,
 					"refToView":""
-				},
-				{
+				}
+				/**,**/
+				/**{
 					"id":"inputmaps",
 					"type":"String",
 					"title":"InputMaps",
@@ -2004,8 +2005,8 @@
 					"readonly":false,
 					"optional":false,
 					"refToView":""
-				},
-				{
+				},**/
+				/**{
 					"id":"outputmaps",
 					"type":"String",
 					"title":"OutputMaps",
@@ -2015,7 +2016,7 @@
 					"readonly":false,
 					"optional":false,
 					"refToView":""
-				}
+				}**/
 			]
 		},
 		{
@@ -2060,7 +2061,7 @@
 					"optional":false,
 					"refToView":"border"
 				},
-				{
+				/**{
 					"id":"transaction",
 					"type":"String",
 					"title":"TransactionRef",
@@ -2071,8 +2072,8 @@
 					"optional":true,
 					"refToView":"",
 					"length":"50"
-				},
-				{
+				},**/
+				/**{
 					"id":"transactionmethod",
 					"type":"Choice",
 					"title":"TransactionMethod",
@@ -2098,7 +2099,7 @@
 							"value":"image"
 						}
 					]
-				},
+				},**/
 				{
 					"id":"isadhoc",
 					"type":"Boolean",
@@ -2188,8 +2189,9 @@
 					"readonly":false,
 					"optional":false,
 					"refToView":""
-				},
-				{
+				}
+				/**,**/
+				/**{
 					"id":"inputmaps",
 					"type":"String",
 					"title":"InputMaps",
@@ -2199,8 +2201,8 @@
 					"readonly":false,
 					"optional":false,
 					"refToView":""
-				},
-				{
+				},**/
+				/**{
 					"id":"outputmaps",
 					"type":"String",
 					"title":"OutputMaps",
@@ -2210,7 +2212,7 @@
 					"readonly":false,
 					"optional":false,
 					"refToView":""
-				}
+				}**/
 			]
 		},
 		{
@@ -3933,8 +3935,7 @@
 		},
 		
 		// Data Objects
-		
-		{
+		/**{
 			"type" : 			"node",
 			"id" :				"DataObject",
 			"title" :			"Data Object",
@@ -4018,7 +4019,7 @@
 				"fromtoall",
 				"DataObjectMorph"
 			]
-		},
+		}, **/
 //		{
 //			"type" : 			"node",
 //			"id" :				"ITSystem",
@@ -4057,7 +4058,7 @@
 //			    "DataObjectMorph"
 //			]
 //		},
-		{
+		/**{
 			"type" : 			"node",
 			"id" :				"DataStore",
 			"title" :			"Data Store",
@@ -4127,7 +4128,7 @@
 				"from_task_event",
 				"DataObjectMorph"
 			]
-		},
+		},**/
 		/** {
 			"type" :			"node",
 			"id" :				"Message",
@@ -4219,7 +4220,7 @@
 				"StartEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -4228,7 +4229,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				}
+				}**/
 			]
 		},
 		{
@@ -4259,7 +4260,7 @@
 				"StartEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -4268,7 +4269,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				},
+				},**/
 				{
 					"id":"messageref",
 					"type":"String",
@@ -4309,7 +4310,7 @@
 				"StartEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -4318,7 +4319,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				},
+				},**/
 				{
 					"id":"timedate",
 					"type":"String",
@@ -4385,7 +4386,7 @@
 				"StartEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -4394,7 +4395,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				},
+				},**/
 				{
 					"id":"escalationcode",
 					"type":"String",
@@ -4436,7 +4437,7 @@
 				"StartEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -4445,7 +4446,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				},
+				},**/
 				{
 					"id":"conditionlanguage",
 					"type":"String",
@@ -4494,7 +4495,7 @@
 				"StartEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -4503,7 +4504,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				},
+				},**/
 				{
 					"id":"errorref",
 					"type":"Text",
@@ -4545,7 +4546,7 @@
 				"StartEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -4554,7 +4555,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				},
+				}**/
 			]
 		},
 		{
@@ -4585,7 +4586,7 @@
 				"StartEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -4594,7 +4595,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				},
+				},**/
 				{
 					"id":"signalref",
 					"type":"Text",
@@ -4638,7 +4639,7 @@
 				"StartEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -4647,7 +4648,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				}
+				}**/
 			]
 		},
 		{
@@ -4679,7 +4680,7 @@
 				"StartEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -4688,7 +4689,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				}
+				}**/
 			]
 		},
 		
@@ -4726,7 +4727,7 @@
 				"IntermediateEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -4737,7 +4738,7 @@
 					"optional":false,
 					"refToView":"",
 					"length":""
-				},
+				},**/
 				{
 					"id":"messageref",
 					"type":"String",
@@ -4783,7 +4784,7 @@
 				"IntermediateEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -4794,7 +4795,7 @@
 					"optional":false,
 					"refToView":"",
 					"length":""
-				},
+				},**/
 				{
 					"id":"timedate",
 					"type":"String",
@@ -4863,7 +4864,7 @@
 				"IntermediateEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -4874,7 +4875,7 @@
 					"optional":false,
 					"refToView":"",
 					"length":""
-				},
+				},**/
 				{
 					"id":"escalationcode",
 					"type":"String",
@@ -4922,7 +4923,7 @@
 				"IntermediateEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -4933,7 +4934,7 @@
 					"optional":false,
 					"refToView":"",
 					"length":""
-				},
+				},**/
 				{
 					"id":"conditionlanguage",
 					"type":"String",
@@ -4992,7 +4993,8 @@
                     "readonly":false,
 					"refToView" : "diagramLink",
                     "optional":false
-                },
+                }
+                /**,
 				{
 					"id":"trigger",
 					"type":"String",
@@ -5004,7 +5006,7 @@
 					"optional":false,
 					"refToView":"",
 					"length":""
-				}
+				}**/
 			]
 		},
 		{
@@ -5035,7 +5037,7 @@
 				"IntermediateEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -5046,7 +5048,7 @@
 					"optional":false,
 					"refToView":"",
 					"length":""
-				},
+				},**/
 				{
 					"id":"errorref",
 					"type":"Text",
@@ -5089,7 +5091,7 @@
 				"IntermediateEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -5100,7 +5102,7 @@
 					"optional":false,
 					"refToView":"",
 					"length":""
-				}
+				}**/
 			]
 		},
 		{
@@ -5131,7 +5133,7 @@
 				"IntermediateEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -5142,7 +5144,7 @@
 					"optional":false,
 					"refToView":"",
 					"length":""
-				}
+				}**/
 			]
 		},
 		{
@@ -5178,7 +5180,7 @@
 				"IntermediateEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -5189,7 +5191,7 @@
 					"optional":false,
 					"refToView":"",
 					"length":""
-				},
+				},**/
 				{
 					"id":"signalref",
 					"type":"Text",
@@ -5238,7 +5240,7 @@
 				"IntermediateEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -5249,7 +5251,7 @@
 					"optional":false,
 					"refToView":"",
 					"length":""
-				}
+				}**/
 			]
 		},
 		{
@@ -5285,7 +5287,7 @@
 				"IntermediateEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -5296,7 +5298,7 @@
 					"optional":false,
 					"refToView":"",
 					"length":""
-				}
+				}**/
 			]
 		},
 		
@@ -5330,7 +5332,7 @@
 				"IntermediateEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -5341,7 +5343,7 @@
 					"optional":false,
 					"refToView":"",
 					"length":""
-				}
+				}**/
 			]
 		},
 		{
@@ -5371,7 +5373,7 @@
 				"IntermediateEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -5380,7 +5382,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				},
+				},**/
 				{
 					"id":"messageref",
 					"type":"String",
@@ -5420,7 +5422,7 @@
 				"IntermediateEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -5429,7 +5431,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				},
+				},**/
 				{
 					"id":"escalationcode",
 					"type":"String",
@@ -5478,7 +5480,8 @@
 					"refToView": "diagramLink",
                     "readonly":false,
                     "optional":false
-                },
+                }
+                /**,
 				{
 					"id":"trigger",
 					"type":"String",
@@ -5488,7 +5491,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				}
+				}**/
 			]
 		},
 		{
@@ -5519,7 +5522,7 @@
 				"IntermediateEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -5528,7 +5531,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				}
+				}**/
 			]
 		},
 		{
@@ -5557,7 +5560,7 @@
 				"IntermediateEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -5566,7 +5569,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				},
+				},**/
 				{
 					"id":"signalref",
 					"type":"Text",
@@ -5608,7 +5611,7 @@
 				"IntermediateEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -5617,7 +5620,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				}
+				}**/
 			]
 		},
 		
@@ -5650,7 +5653,7 @@
 				"EndEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -5659,7 +5662,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				}
+				}**/
 			]
 		},
 		{
@@ -5689,7 +5692,7 @@
 				"EndEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -5698,7 +5701,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				},
+				},**/
 				{
 					"id":"messageref",
 					"type":"String",
@@ -5735,7 +5738,7 @@
 				"sequence_end"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -5744,7 +5747,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				},
+				},**/
 				{
 					"id":"escalationcode",
 					"type":"String",
@@ -5783,7 +5786,7 @@
 				"EndEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -5792,7 +5795,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				},
+				},**/
 				{
 					"id":"errorref",
 					"type":"Text",
@@ -5833,7 +5836,7 @@
 				"EndEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -5842,7 +5845,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				}
+				}**/
 			]
 		},
 		{
@@ -5873,7 +5876,7 @@
 				"EndEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -5882,7 +5885,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				}
+				}**/
 			]
 		},
 		{
@@ -5911,7 +5914,7 @@
 				"EndEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -5920,7 +5923,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				},
+				},**/
 				{
 					"id":"signalref",
 					"type":"Text",
@@ -5962,7 +5965,7 @@
 				"EndEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -5971,7 +5974,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				}
+				}**/
 			]
 		},
 		{
@@ -6000,7 +6003,7 @@
 				"EndEventsMorph"
 			],
 			"properties": [
-				{
+				/**{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -6009,7 +6012,7 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				}
+				}**/
 			]
 		},
 		
@@ -6193,7 +6196,7 @@
 				}
            ]
 		},
-		{
+		/**{
 			"type": "edge",
 			"id":"Association_Unidirectional",
 			"title":"Association (unidirectional)",
@@ -6228,8 +6231,8 @@
 					"popular":true
                 }
            ]
-		},
-		{
+		},**/
+		/**{
 			"type": "edge",
 			"id":"Association_Bidirectional",
 			"title":"Association (bidirectional)",
@@ -6264,8 +6267,8 @@
 					"popular":true
                 }
            ]
-		},
-		{
+		},**/
+		/**{
 			"type": "edge",
 			"id":"MessageFlow",
 			"title":"Message Flow",
@@ -6283,7 +6286,7 @@
 				"ConnectingObjectsMorph",
 				"MessageContainer"
 			]
-		}
+		}**/
 	],
 	
 	"rules" : {
