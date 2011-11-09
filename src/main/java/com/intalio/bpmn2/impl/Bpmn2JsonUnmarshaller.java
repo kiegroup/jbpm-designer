@@ -46,6 +46,7 @@ import org.eclipse.bpmn2.Association;
 import org.eclipse.bpmn2.AssociationDirection;
 import org.eclipse.bpmn2.Auditing;
 import org.eclipse.bpmn2.BaseElement;
+import org.eclipse.bpmn2.BoundaryEvent;
 import org.eclipse.bpmn2.Bpmn2Factory;
 import org.eclipse.bpmn2.BusinessRuleTask;
 import org.eclipse.bpmn2.CatchEvent;
@@ -227,6 +228,7 @@ public class Bpmn2JsonUnmarshaller {
             revisitGroups(def);
             reviseTaskAssociations(def);
             reconnectFlows();
+            revisitCatchEventsConvertToBoundary(def);
             createDiagram(def);
             // return def;
             _currentResource.getContents().add(def);
@@ -471,6 +473,79 @@ public class Bpmn2JsonUnmarshaller {
         for(Message msg : toAddMessages) {
             def.getRootElements().add(msg);
         }
+    }
+    
+    private void revisitCatchEventsConvertToBoundary(Definitions def) {
+    	List<CatchEvent> catchEventsToRemove = new ArrayList<CatchEvent>();
+    	List<BoundaryEvent> boundaryEventsToAdd = new ArrayList<BoundaryEvent>();
+    	List<RootElement> rootElements =  def.getRootElements();
+    	for(RootElement root : rootElements) {
+    		if(root instanceof Process) {
+    			Process process = (Process) root;
+                List<FlowElement> flowElements =  process.getFlowElements();
+                for(FlowElement fe : flowElements) {
+                	if(fe instanceof CatchEvent) {
+                		CatchEvent ce = (CatchEvent) fe;
+                		// check if we have an outgoing connection to this catch event from an activity
+                		 for (Entry<Object, List<String>> entry : _outgoingFlows.entrySet()) {
+                			 for (String flowId : entry.getValue()) {
+                				 if (entry.getKey() instanceof Activity && flowId.equals(ce.getId())) {
+                					 BoundaryEvent be = Bpmn2Factory.eINSTANCE.createBoundaryEvent();
+                					 if(ce.getDataOutputs() != null) {
+                						 be.getDataOutputs().addAll(ce.getDataOutputs());
+                					 }
+                					 if(ce.getDataOutputAssociation() != null) {
+                						 be.getDataOutputAssociation().addAll(ce.getDataOutputAssociation());
+                					 }
+                					 if(ce.getOutputSet() != null) {
+                						 be.setOutputSet(ce.getOutputSet());
+                					 }
+                					 if(ce.getEventDefinitions() != null) {
+                						 be.getEventDefinitions().addAll(ce.getEventDefinitions());
+                					 }
+                					 if(ce.getEventDefinitionRefs() != null) {
+                						 be.getEventDefinitionRefs().addAll(ce.getEventDefinitionRefs());
+                					 }
+                					 if(ce.getProperties() != null) {
+                						 be.getProperties().addAll(ce.getProperties());
+                					 }
+                					 if(ce.getAnyAttribute() != null) {
+                						 be.getAnyAttribute().addAll(ce.getAnyAttribute());
+                					 }
+                					 if(ce.getOutgoing() != null) {
+                						 be.getOutgoing().addAll(ce.getOutgoing());
+                					 }
+                					 if(ce.getIncoming() != null) {
+                						 be.getIncoming().addAll(ce.getIncoming());
+                					 }
+                					 if(ce.getProperties() != null) {
+                						 be.getProperties().addAll(ce.getProperties());
+                					 }
+                					 
+                					 be.setName(ce.getName());
+                					 be.setId(ce.getId());
+                					 
+                					 be.setAttachedToRef(((Activity)entry.getKey()));
+                					 ((Activity)entry.getKey()).getBoundaryEventRefs().add(be);
+                					 catchEventsToRemove.add(ce);
+                					 boundaryEventsToAdd.add(be);
+                				 }
+                			 }
+                		 }
+                	}
+                }
+                if(boundaryEventsToAdd.size() > 0) {
+            		for(BoundaryEvent be : boundaryEventsToAdd) {
+            			process.getFlowElements().add(be);
+            		}
+            	}
+                if(catchEventsToRemove.size() > 0) {
+                	for(CatchEvent ce : catchEventsToRemove) {
+                		process.getFlowElements().remove(ce);
+                	}
+                }
+    		}
+    	}
     }
     
     /**
@@ -736,6 +811,15 @@ public class Bpmn2JsonUnmarshaller {
         					shape.setBpmnElement(flowElement);
         					shape.setBounds(b);
         					plane.getPlaneElement().add(shape);
+        					if(flowElement instanceof BoundaryEvent) {
+        						BPMNEdge edge = factory.createBPMNEdge();
+        						edge.setBpmnElement(flowElement);
+        						List<Point> dockers = _dockers.get(flowElement.getId());
+    	    					for (int i = 0; i < dockers.size(); i++) {
+    	    						edge.getWaypoint().add(dockers.get(i));
+    	    					}
+    	    					plane.getPlaneElement().add(edge);
+        					}
         				}
         				// check if its a subprocess
         				if(flowElement instanceof SubProcess) {

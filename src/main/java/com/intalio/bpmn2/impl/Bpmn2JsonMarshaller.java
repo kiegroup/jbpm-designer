@@ -677,7 +677,7 @@ public class Bpmn2JsonMarshaller {
     	} else if (flowElement instanceof IntermediateCatchEvent) {
     		marshallIntermediateCatchEvent((IntermediateCatchEvent) flowElement, plane, generator, xOffset, yOffset, catchEventProperties);
     	} else if (flowElement instanceof BoundaryEvent) {
-    		marshallBoundaryEvent((BoundaryEvent) flowElement, plane, generator, xOffset, yOffset, flowElementProperties);
+    		marshallBoundaryEvent((BoundaryEvent) flowElement, plane, generator, xOffset, yOffset, catchEventProperties);
     	} else if (flowElement instanceof Task) {
     		marshallTask((Task) flowElement, plane, generator, xOffset, yOffset, preProcessingData, def, flowElementProperties);
     	} else if (flowElement instanceof SequenceFlow) {
@@ -792,21 +792,23 @@ public class Bpmn2JsonMarshaller {
     	}
     }
     
-    private void marshallBoundaryEvent(BoundaryEvent boundaryEvent, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
+    private void marshallBoundaryEvent(BoundaryEvent boundaryEvent, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> catchEventProperties) throws JsonGenerationException, IOException {
     	List<EventDefinition> eventDefinitions = boundaryEvent.getEventDefinitions();
     	if (eventDefinitions.size() == 1) {
     		EventDefinition eventDefinition = eventDefinitions.get(0);
     		if (eventDefinition instanceof EscalationEventDefinition) {
-    			marshallNode(boundaryEvent, flowElementProperties, "IntermediateEscalationEvent", plane, generator, xOffset, yOffset);
+    			marshallNode(boundaryEvent, catchEventProperties, "IntermediateEscalationEvent", plane, generator, xOffset, yOffset);
     		} else if (eventDefinition instanceof ErrorEventDefinition) {
-    			marshallNode(boundaryEvent, flowElementProperties, "IntermediateErrorEvent", plane, generator, xOffset, yOffset);
+    			marshallNode(boundaryEvent, catchEventProperties, "IntermediateErrorEvent", plane, generator, xOffset, yOffset);
     		} else if (eventDefinition instanceof TimerEventDefinition) {
-    			marshallNode(boundaryEvent, flowElementProperties, "IntermediateTimerEvent", plane, generator, xOffset, yOffset);
+    			marshallNode(boundaryEvent, catchEventProperties, "IntermediateTimerEvent", plane, generator, xOffset, yOffset);
     		} else if (eventDefinition instanceof CompensateEventDefinition) {
-    			marshallNode(boundaryEvent, flowElementProperties, "IntermediateCompensationEventCatching", plane, generator, xOffset, yOffset);
+    			marshallNode(boundaryEvent, catchEventProperties, "IntermediateCompensationEventCatching", plane, generator, xOffset, yOffset);
     		} else if(eventDefinition instanceof ConditionalEventDefinition) {
-    		    marshallNode(boundaryEvent, flowElementProperties, "IntermediateConditionalEvent", plane, generator, xOffset, yOffset);
-    		} else {
+    		    marshallNode(boundaryEvent, catchEventProperties, "IntermediateConditionalEvent", plane, generator, xOffset, yOffset);
+    		} else if(eventDefinition instanceof MessageEventDefinition) {
+    		    marshallNode(boundaryEvent, catchEventProperties, "IntermediateMessageEventCatching", plane, generator, xOffset, yOffset);
+    		}else {
     			throw new UnsupportedOperationException("Event definition not supported: " + eventDefinition);
     		}
     	} else {
@@ -1189,7 +1191,7 @@ public class Bpmn2JsonMarshaller {
         	generator.writeEndObject();
         }
         // we need to also add associations as outgoing elements
-        org.eclipse.bpmn2.Process process = (org.eclipse.bpmn2.Process) plane.getBpmnElement();
+        Process process = (Process) plane.getBpmnElement();
         for (Artifact artifact : process.getArtifacts()) {
         	if (artifact instanceof Association){
                 Association association = (Association) artifact;
@@ -1200,7 +1202,39 @@ public class Bpmn2JsonMarshaller {
                 }
         	}
         }
+        // and boundary events for activities
+        for(FlowElement fe : process.getFlowElements()) {
+        	if(fe instanceof BoundaryEvent) {
+        		if(((BoundaryEvent) fe).getAttachedToRef().getId().equals(node.getId())) {
+        			generator.writeStartObject();
+                    generator.writeObjectField("resourceId", fe.getId());
+                    generator.writeEndObject();
+        		}
+        	}
+        }
         generator.writeEndArray();
+        
+        // boundary events have a docker
+        if(node instanceof BoundaryEvent) {
+        	// find the edge associated with this boundary event
+        	for (DiagramElement element: plane.getPlaneElement()) {
+        		if(element instanceof BPMNEdge && ((BPMNEdge) element).getBpmnElement() == node) {
+        			List<Point> waypoints = ((BPMNEdge) element).getWaypoint();
+        			if(waypoints != null && waypoints.size() > 0) {
+                		// one per boundary event
+                		Point p = waypoints.get(0);
+                		if(p != null) {
+                			generator.writeArrayFieldStart("dockers");
+                            generator.writeStartObject();
+                            generator.writeObjectField("x", p.getX());
+                            generator.writeObjectField("y", p.getY());
+                            generator.writeEndObject();
+                            generator.writeEndArray();
+                		}
+                	}
+        		}
+        	}
+        }
         
         BPMNShape shape = (BPMNShape) findDiagramElement(plane, node);
         Bounds bounds = shape.getBounds();
@@ -1317,6 +1351,17 @@ public class Bpmn2JsonMarshaller {
         	generator.writeStartObject();
         	generator.writeObjectField("resourceId", outgoing.getId());
         	generator.writeEndObject();
+        }
+	    // subprocess boundary events
+	    Process process = (Process) plane.getBpmnElement();
+        for(FlowElement fe : process.getFlowElements()) {
+        	if(fe instanceof BoundaryEvent) {
+        		if(((BoundaryEvent) fe).getAttachedToRef().getId().equals(subProcess.getId())) {
+        			generator.writeStartObject();
+                    generator.writeObjectField("resourceId", fe.getId());
+                    generator.writeEndObject();
+        		}
+        	}
         }
 	    generator.writeEndArray();
 	    
@@ -1597,7 +1642,7 @@ public class Bpmn2JsonMarshaller {
     	if (result != null) {
     		return result;
     	}
-        if (!(plane.getBpmnElement() instanceof org.eclipse.bpmn2.Process)){
+        if (!(plane.getBpmnElement() instanceof Process)){
             throw new IllegalArgumentException("Don't know how to get associations from a non-Process Diagram");
         }
         
