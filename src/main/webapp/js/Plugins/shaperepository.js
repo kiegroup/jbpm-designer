@@ -50,7 +50,34 @@ ORYX.Plugins.ShapeRepository = {
 			anchors: '0, -30'
 		})
 		var region = this.facade.addToRegion("west", panel, ORYX.I18N.ShapeRepository.title);
-	
+		
+		Ext.Ajax.request({
+            url: ORYX.PATH + "processinfo",
+            method: 'POST',
+            success: function(request) {
+    	   		try {
+    	   			var infopanel = new Ext.Panel({
+    	   				bodyStyle:'background:#eee;font-size:9px;font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;',
+    	   				autoScroll:true,
+    	   				lines: false,
+    	   				html: request.responseText,
+    	   				title: 'Process Information'
+    	   			});
+    	   			this.facade.addToRegion("west", infopanel);
+    	   		} catch(e) {
+    	   			Ext.Msg.alert("Failed to retrieve Process Info :\n" + e);
+    	   		}
+    	   		loadMask.hide();
+    	   		dialog.hide();
+            }.createDelegate(this),
+            failure: function(){
+            	Ext.Msg.alert("Failed to retrieve Process Info.");
+            },
+            params: {
+            	profile: ORYX.PROFILE,
+            	uuid : ORYX.UUID
+            }
+        });
 		
 		// Create a Drag-Zone for Drag'n'Drop
 		var DragZone = new Ext.dd.DragZone(this.shapeList.getUI().getEl(), {shadow: !Ext.isMac});
@@ -420,7 +447,7 @@ ORYX.Plugins.ShapeRepository = {
 		
 		
 		return false
-	}	
+	}
 }
 
 ORYX.Plugins.ShapeRepository = Clazz.extend(ORYX.Plugins.ShapeRepository);
