@@ -79,6 +79,7 @@ import org.eclipse.bpmn2.GatewayDirection;
 import org.eclipse.bpmn2.GlobalTask;
 import org.eclipse.bpmn2.Group;
 import org.eclipse.bpmn2.Import;
+import org.eclipse.bpmn2.InclusiveGateway;
 import org.eclipse.bpmn2.InputOutputSpecification;
 import org.eclipse.bpmn2.InputSet;
 import org.eclipse.bpmn2.Interface;
@@ -689,6 +690,19 @@ public class Bpmn2JsonUnmarshaller {
                             gateway.setGatewayDirection(GatewayDirection.DIVERGING);
                         } else {
                             gateway.setGatewayDirection(GatewayDirection.UNSPECIFIED);
+                        }
+                    }
+                    if(fe instanceof InclusiveGateway) {
+                    	Iterator<FeatureMap.Entry> iter = fe.getAnyAttribute().iterator();
+                    	while(iter.hasNext()) {
+                            FeatureMap.Entry entry = iter.next();
+                            if(entry.getEStructuralFeature().getName().equals("dg")) {
+                            	for(FlowElement feg : flowElements) {
+                            		if(feg instanceof SequenceFlow && feg.getId().equals((String) entry.getValue())) {
+                            			((InclusiveGateway) fe).setDefault((SequenceFlow) feg);
+                            		}
+                            	}
+                            }
                         }
                     }
                 }
@@ -2254,6 +2268,14 @@ public class Bpmn2JsonUnmarshaller {
             gateway.setName(properties.get("name"));
         } else {
             gateway.setName("");
+        }
+        if(properties.get("defaultgate") != null && gateway instanceof InclusiveGateway) {
+        	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+            EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                        "http://www.jboss.org/drools", "dg", false, false);
+            EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                properties.get("defaultgate"));
+            gateway.getAnyAttribute().add(extensionEntry);
         }
     }
 

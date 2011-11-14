@@ -30,7 +30,7 @@ if(!ORYX) var ORYX = {};
 
 if(!ORYX.CONFIG) ORYX.CONFIG = {};
 
-ORYX.CONFIG.WEB_URL = "http://localhost";
+ORYX.CONFIG.WEB_URL = "designer";
 
 
 

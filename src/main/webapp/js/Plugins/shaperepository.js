@@ -67,8 +67,6 @@ ORYX.Plugins.ShapeRepository = {
     	   		} catch(e) {
     	   			Ext.Msg.alert("Failed to retrieve Process Info :\n" + e);
     	   		}
-    	   		loadMask.hide();
-    	   		dialog.hide();
             }.createDelegate(this),
             failure: function(){
             	Ext.Msg.alert("Failed to retrieve Process Info.");

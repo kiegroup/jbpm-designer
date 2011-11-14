@@ -57,6 +57,7 @@ public enum Bpmn20Stencil {
     Exclusive_Databased_Gateway(Bpmn2Package.eINSTANCE.getExclusiveGateway()),
     ParallelGateway(Bpmn2Package.eINSTANCE.getParallelGateway()),
     EventbasedGateway(Bpmn2Package.eINSTANCE.getEventBasedGateway()),
+    ComplexGateway(Bpmn2Package.eINSTANCE.getComplexGateway()),
     InclusiveGateway(Bpmn2Package.eINSTANCE.getInclusiveGateway()),
     StartNoneEvent(Bpmn2Package.eINSTANCE.getStartEvent()),
     StartMessageEvent(Bpmn2Package.eINSTANCE.getStartEvent(), Bpmn2Package.eINSTANCE.getMessageEventDefinition()),

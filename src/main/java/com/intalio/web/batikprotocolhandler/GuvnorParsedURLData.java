@@ -27,7 +27,6 @@ public class GuvnorParsedURLData extends ParsedURLData {
         try {
             return getInputStreamForURL(urlStr, "GET");
         } catch (Exception e) {
-            System.out.println("****** exception: " + e.getMessage());
             return null;
         } 
     }
