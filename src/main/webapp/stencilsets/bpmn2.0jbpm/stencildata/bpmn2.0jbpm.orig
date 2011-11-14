@@ -2272,17 +2272,8 @@
 							]
 						}
 					]
-				},
-				{
-					"id":"pool",
-					"type":"String",
-					"title":"Pool",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"length":""
-				},
+				}
+				/**,
 				{
 					"id":"gates",
 					"type":"String",
@@ -2294,7 +2285,8 @@
 					"refToView":"",
 					"length":"50",
 					"wrapLines":true
-				},
+				}**/
+				/**,
 				{
 					"id":"gates_outgoingsequenceflow",
 					"type":"String",
@@ -2320,7 +2312,7 @@
 					"refToView":"",
 					"length":"50",
 					"wrapLines":true
-				}
+				}**/
 			]
 		},
 		{
@@ -3414,8 +3406,9 @@
 					"refToView":"",
 					"length":"50",
 					"wrapLines":true
-				},
-				{
+				}
+				//,
+				/**{
 					"id":"gate_outgoingsequenceflow",
 					"type":"String",
 					"title":"[Gate] OutgoingSequenceFlow",
@@ -3426,8 +3419,8 @@
 					"optional":true,
 					"refToView":"",
 					"length":"50"
-				},
-				{
+				},**/
+				/**{
 					"id":"gate_assignments",
 					"type":"String",
 					"title":"[Gate] Assignments",
@@ -3439,7 +3432,7 @@
 					"refToView":"",
 					"length":"50",
 					"wrapLines":true
-				}	
+				}**/	
 			],
 			"roles": 			[
 				"all",
@@ -3595,7 +3588,8 @@
 					"refToView":"",
 					"length":"50",
 					"wrapLines":true
-				},
+				}
+				/**,
 				{
 					"id":"gate_outgoingsequenceflow",
 					"type":"String",
@@ -3612,7 +3606,7 @@
 					"id":"gate_assignments",
 					"type":"String",
 					"title":"[Gate] Assignments",
-					"title":"[Gates] Zuweisungen",
+					"title_de":"[Gates] Zuweisungen",
 					"value":"",
 					"description":"",
 					"readonly":false,
@@ -3620,7 +3614,7 @@
 					"refToView":"",
 					"length":"50",
 					"wrapLines":true
-				}
+				}**/
 			],
 			"roles": 			[
 				"all",

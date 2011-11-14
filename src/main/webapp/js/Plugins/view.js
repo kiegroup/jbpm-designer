@@ -537,7 +537,7 @@ ORYX.Plugins.View = {
 				    	   		try {
 				    	   			this._loadJSON( request.responseText );
 				    	   		} catch(e) {
-				    	   			Ext.Msg.alert("Failed to import BPMN2 :\n" + e);
+				    	   			Ext.Msg.alert("Failed to import BPMN2: " + e);
 				    	   		}
 				    	   		loadMask.hide();
 				    	   		dialog.hide();
