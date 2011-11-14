@@ -132,34 +132,34 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         		workitemConfigInfo = findWorkitemInfoForUUID(uuid, packageNames, profile);
         	}
         }
-        // get the contents of each of the configs
-        Map<String, String> workItemsContent = getWorkitemConfigContent(workitemConfigInfo, profile);
-        
-        // evaluate all configs
-        Map<String, WorkDefinitionImpl> workDefinitions = new HashMap<String, WorkDefinitionImpl>();
-        for(Map.Entry<String, String> entry : workItemsContent.entrySet()) {
-            if(entry.getValue().trim().length() > 0) {
-                evaluateWorkDefinitions(workDefinitions, entry.getValue());
-            }
-        }
-        // set the out parameter
-        for(Map.Entry<String, WorkDefinitionImpl> definition : workDefinitions.entrySet()) {
-            outData += definition.getValue().getName() + ",";
-        }
-        // parse the profile json to include config data
         try {
-            // parse the orig stencil data with workitem definitions
-            StringTemplate workItemTemplate = new StringTemplate(readFile(origStencilFilePath));
-            workItemTemplate.setAttribute("workitemDefs", workDefinitions);
-            // delete stencil data json if exists
-            deletefile(stencilFilePath);
-            // copy our results as the stencil json data
-            createAndWriteToFile(stencilFilePath, workItemTemplate.toString());
+        	// get the contents of each of the configs
+        	Map<String, String> workItemsContent = getWorkitemConfigContent(workitemConfigInfo, profile);
+        
+        	// evaluate all configs
+        	Map<String, WorkDefinitionImpl> workDefinitions = new HashMap<String, WorkDefinitionImpl>();
+        	for(Map.Entry<String, String> entry : workItemsContent.entrySet()) {
+        		if(entry.getValue().trim().length() > 0) {
+        			evaluateWorkDefinitions(workDefinitions, entry.getValue());
+        		}
+        	}
+        	// set the out parameter
+        	for(Map.Entry<String, WorkDefinitionImpl> definition : workDefinitions.entrySet()) {
+        		outData += definition.getValue().getName() + ",";
+        	}
+        	// parse the profile json to include config data
+        		// parse the orig stencil data with workitem definitions
+        		StringTemplate workItemTemplate = new StringTemplate(readFile(origStencilFilePath));
+        		workItemTemplate.setAttribute("workitemDefs", workDefinitions);
+        		// delete stencil data json if exists
+        		deletefile(stencilFilePath);
+        		// copy our results as the stencil json data
+        		createAndWriteToFile(stencilFilePath, workItemTemplate.toString());
+        		// create and parse the view svg to include config data
+                createAndParseViewSVG(workDefinitions);
         } catch( Exception e ) {
             _logger.error("Failed to setup workitems : " + e.getMessage());
         }
-        // create and parse the view svg to include config data
-        createAndParseViewSVG(workDefinitions);
     }
     
     @SuppressWarnings("unchecked")
@@ -184,7 +184,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     }
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    private void evaluateWorkDefinitions(Map<String, WorkDefinitionImpl> workDefinitions, String content) {
+    private void evaluateWorkDefinitions(Map<String, WorkDefinitionImpl> workDefinitions, String content) throws Exception {
         List<Map<String, Object>> workDefinitionsMaps = (List<Map<String, Object>>) MVEL.eval(content, new HashMap());
         
         for (Map<String, Object> workDefinitionMap : workDefinitionsMaps) {
