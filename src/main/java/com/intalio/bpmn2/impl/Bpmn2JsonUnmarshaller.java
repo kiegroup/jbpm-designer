@@ -219,7 +219,6 @@ public class Bpmn2JsonUnmarshaller {
             _currentResource = bpmn2;
             // do the unmarshalling now:
             Definitions def = (Definitions) unmarshallItem(parser, preProcessingData);
-            revisitGateways(def);
             revisitServiceTasks(def);
             revisitMessages(def);
             revisitCatchEvents(def);
@@ -229,6 +228,7 @@ public class Bpmn2JsonUnmarshaller {
             revisitGroups(def);
             reviseTaskAssociations(def);
             reconnectFlows();
+            revisitGateways(def);
             revisitCatchEventsConvertToBoundary(def);
             createDiagram(def);
             // return def;
