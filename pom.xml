@@ -2,9 +2,9 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.jboss.drools</groupId>
-  <artifactId>process-designer-parent</artifactId>
+  <artifactId>process-designer</artifactId>
   <version>2.0.0-SNAPSHOT</version>
-  <packaging>war</packaging>
+  <packaging>pom</packaging>
   
   <properties>
     <mvel.version>2.1-SNAPSHOT</mvel.version>
@@ -13,7 +13,6 @@
     <batik.version>1.6-1</batik.version>
   </properties>
 
-  <!--dependencyManagement-->
     <dependencies>
       <!-- jBPM/Drools dependencies -->
       <dependency>
@@ -345,35 +344,13 @@
       </dependency>
 
     </dependencies>
-  <!--/dependencyManagement-->
 
   <build>
-    <!--resources>
-      <resource>
-        <directory>src/main/webapp</directory>
-      </resource>
-    </resources-->
-    <testResources>
-        <testResource>
-            <directory>src/test/client</directory>
-        </testResource>
-        <testResource>
-            <directory>src/test/examples</directory>
-        </testResource>
-        <testResource>
-            <directory>src/test/server</directory>
-        </testResource>
-    </testResources>
-
-    <!-- wapama uses this <sourceDirectory>designer/src/main/java</sourceDirectory> -->
-    <finalName>designer</finalName>
-    
     <plugins>
       <plugin>
         <artifactId>maven-war-plugin</artifactId>
         <version>2.1.1</version>
         <configuration>
-          <packagingExcludes>WEB-INF/epn_web.xml, WEB-INF/tomcat_web.xml</packagingExcludes>
           <archive>
             <manifestEntries>
               <bundle-Name>Process Designer</bundle-Name>
@@ -382,26 +359,32 @@
             </manifestEntries>
           </archive>
         </configuration>
+
+        <executions>
+          <execution>
+            <id>jboss7</id>
+            <goals>
+              <goal>war</goal>
+            </goals>
+            <phase>package</phase>
+            <configuration>
+              <classifier>jboss7</classifier>
+            </configuration>
+          </execution>
+          <execution>
+            <id>jboss</id>
+            <goals>
+              <goal>war</goal>
+            </goals>
+            <phase>package</phase>
+            <configuration>
+              <classifier>jboss</classifier>
+              <packagingExcludes>WEB-INF/lib/antlr-2.7.7.jar, WEB-INF/lib/log4j-over-slf4j-1.5.8.jar</packagingExcludes>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       
-      <plugin>
-        <groupId>org.mortbay.jetty</groupId>
-        <artifactId>jetty-maven-plugin</artifactId>
-        <version>7.3.1.v20110307</version>
-        <configuration>
-          <webAppConfig>
-            <contextPath>/designer</contextPath>
-          </webAppConfig>
-          <webAppSourceDirectory>${basedir}/designer/src/main/webapp</webAppSourceDirectory>
-          <connectors>
-            <connector
-              implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
-              <port>8082</port>
-              <maxIdleTime>60000</maxIdleTime>
-            </connector>
-          </connectors>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
 
