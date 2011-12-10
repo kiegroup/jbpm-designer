@@ -65,11 +65,11 @@ ORYX.Plugins.ShapeRepository = {
     	   			});
     	   			this.facade.addToRegion("west", infopanel);
     	   		} catch(e) {
-    	   			Ext.Msg.alert("Failed to retrieve Process Info :\n" + e);
+    	   			ORYX.Log.error("Failed to retrieve Process Info :\n" + e);
     	   		}
             }.createDelegate(this),
             failure: function(){
-            	Ext.Msg.alert("Failed to retrieve Process Info.");
+            	ORYX.Log.error("Failed to retrieve Process Info");
             },
             params: {
             	profile: ORYX.PROFILE,
