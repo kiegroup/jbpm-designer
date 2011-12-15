@@ -131,9 +131,9 @@ public class TransformerServlet extends HttpServlet {
             	if(respaction != null && respaction.equals(RESPACTION_SHOWURL)) {
             		ByteArrayOutputStream bout = new ByteArrayOutputStream();
             		PDFTranscoder t = new PDFTranscoder();
-	                TranscoderInput input = new TranscoderInput(new StringReader(formattedSvg));
-	                TranscoderOutput output = new TranscoderOutput(bout);
-	                t.transcode(input, output);
+            		TranscoderInput input = new TranscoderInput(new StringReader(formattedSvg));
+            		TranscoderOutput output = new TranscoderOutput(bout);
+            		t.transcode(input, output);
 	                resp.setCharacterEncoding("UTF-8");
                 	resp.setContentType("text/plain");
                 	BASE64Encoder enc = new sun.misc.BASE64Encoder();
@@ -153,9 +153,9 @@ public class TransformerServlet extends HttpServlet {
 	                
 	                PDFTranscoder t = new PDFTranscoder();
 	                TranscoderInput input = new TranscoderInput(new StringReader(
-	                        formattedSvg));
+	                		formattedSvg));
 	                TranscoderOutput output = new TranscoderOutput(
-	                        resp.getOutputStream());
+	                		resp.getOutputStream());
 	                t.transcode(input, output);
             	}
             } catch (TranscoderException e) {
@@ -521,22 +521,27 @@ public class TransformerServlet extends HttpServlet {
             createConnection.setDoOutput(true);
 
             if (transformto.equals(TO_PDF)) {
-                PDFTranscoder t = new PDFTranscoder();
-                TranscoderInput input = new TranscoderInput(new StringReader(
-                        rawSvg));
-                TranscoderOutput output = new TranscoderOutput(
-                        createConnection.getOutputStream());
-                t.transcode(input, output);
+            	PDFTranscoder t = new PDFTranscoder();
+            	TranscoderInput input = new TranscoderInput(new StringReader(
+            			rawSvg));
+            	TranscoderOutput output = new TranscoderOutput(
+            			createConnection.getOutputStream());
+            	t.transcode(input, output);
             }
 
             if (transformto.equals(TO_PNG)) {
-                PNGTranscoder t = new PNGTranscoder();
-                t.addTranscodingHint(ImageTranscoder.KEY_MEDIA, "screen");
-                TranscoderInput input = new TranscoderInput(new StringReader(
-                        rawSvg));
-                TranscoderOutput output = new TranscoderOutput(
-                        createConnection.getOutputStream());
-                t.transcode(input, output);
+            	PNGTranscoder t = new PNGTranscoder();
+            	t.addTranscodingHint(ImageTranscoder.KEY_MEDIA, "screen");
+            	TranscoderInput input = new TranscoderInput(new StringReader(
+            			rawSvg));
+            	TranscoderOutput output = new TranscoderOutput(
+            			createConnection.getOutputStream());
+            	try {
+					t.transcode(input, output);
+				} catch (Exception e) {
+					// issue with batik here..do not make a big deal
+					_logger.debug(e.getMessage());
+				}
             }
             createConnection.connect();
             _logger.info("create connection response code: " + createConnection.getResponseCode());
