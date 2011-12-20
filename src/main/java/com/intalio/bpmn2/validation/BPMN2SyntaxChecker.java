@@ -108,6 +108,10 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
                 	}
                 }
                 
+                if(isEmpty(process.getName())) {
+        			addError(defaultResourceId, "Process has no name.");
+        		}
+                
                 boolean foundStartEvent = false;
                 boolean foundEndEvent = false;
         		List<FlowElement> flowElements =  process.getFlowElements();
