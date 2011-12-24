@@ -49,6 +49,7 @@ import org.eclipse.bpmn2.BaseElement;
 import org.eclipse.bpmn2.BoundaryEvent;
 import org.eclipse.bpmn2.Bpmn2Factory;
 import org.eclipse.bpmn2.BusinessRuleTask;
+import org.eclipse.bpmn2.CallActivity;
 import org.eclipse.bpmn2.CatchEvent;
 import org.eclipse.bpmn2.Category;
 import org.eclipse.bpmn2.CategoryValue;
@@ -1158,7 +1159,7 @@ public class Bpmn2JsonUnmarshaller {
                     if (child instanceof Task || child instanceof SequenceFlow 
                             || child instanceof Gateway || child instanceof Event 
                             || child instanceof Artifact || child instanceof DataObject || child instanceof SubProcess
-                            || child instanceof Lane) {
+                            || child instanceof Lane || child instanceof CallActivity) {
                         if (rootLevelProcess == null) {
                             rootLevelProcess = Bpmn2Factory.eINSTANCE.createProcess();
                             // set the properties and item definitions first
@@ -1189,6 +1190,8 @@ public class Bpmn2JsonUnmarshaller {
                     }
                     if (child instanceof Task) {
                         rootLevelProcess.getFlowElements().add((Task) child);
+                    } else if (child instanceof CallActivity) {
+                    	rootLevelProcess.getFlowElements().add((CallActivity) child);
                     } else if (child instanceof RootElement) {
                         ((Definitions) baseElt).getRootElements().add((RootElement) child);
                     } else if (child instanceof SequenceFlow) {
@@ -1305,6 +1308,9 @@ public class Bpmn2JsonUnmarshaller {
         }
         if (baseElement instanceof AdHocSubProcess) {
             applyAdHocSubProcessProperties((AdHocSubProcess) baseElement, properties);
+        }
+        if (baseElement instanceof CallActivity) {
+        	applyCallActivityProperties((CallActivity) baseElement, properties);
         }
         if (baseElement instanceof GlobalTask) {
             applyGlobalTaskProperties((GlobalTask) baseElement, properties);
@@ -1928,6 +1934,249 @@ public class Bpmn2JsonUnmarshaller {
         } else {
             lane.setName("");
         }
+    }
+    
+    private void applyCallActivityProperties(CallActivity callActivity, Map<String, String> properties) {
+    	if(properties.get("name") != null) {
+    		callActivity.setName(properties.get("name"));
+        } else {
+        	callActivity.setName("");
+        }
+    	
+    	if(properties.get("independent") != null && properties.get("independent").length() > 0) {
+    		ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+            EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                    "http://www.jboss.org/drools", "independent", false, false);
+            EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                    properties.get("independent"));
+            callActivity.getAnyAttribute().add(extensionEntry);
+    	}
+    	
+    	if(properties.get("waitforcompletion") != null && properties.get("waitforcompletion").length() > 0) {
+    		ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+            EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                    "http://www.jboss.org/drools", "waitForCompletion", false, false);
+            EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                    properties.get("waitforcompletion"));
+            callActivity.getAnyAttribute().add(extensionEntry);
+    	}
+    	
+    	if(properties.get("calledelement") != null && properties.get("calledelement").length() > 0) {
+    		callActivity.setCalledElement(properties.get("calledelement"));
+    	}
+    	
+    	//callActivity data input set
+        if(properties.get("datainputset") != null && properties.get("datainputset").length() > 0) {
+            String[] allDataInputs = properties.get("datainputset").split( ",\\s*" );
+            if(callActivity.getIoSpecification() == null) {
+                InputOutputSpecification iospec = Bpmn2Factory.eINSTANCE.createInputOutputSpecification();
+                callActivity.setIoSpecification(iospec);
+            }
+            InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
+            for(String dataInput : allDataInputs) {
+                DataInput nextInput = Bpmn2Factory.eINSTANCE.createDataInput();
+                nextInput.setId(callActivity.getId() + "_" + dataInput + "Input");
+                nextInput.setName(dataInput);
+                callActivity.getIoSpecification().getDataInputs().add(nextInput);
+                
+                inset.getDataInputRefs().add(nextInput);
+            }
+            callActivity.getIoSpecification().getInputSets().add(inset);
+        } else {
+            if(callActivity.getIoSpecification() != null) {
+            	callActivity.getIoSpecification().getInputSets().add(Bpmn2Factory.eINSTANCE.createInputSet());
+            }
+        }
+        
+        //callActivity data output set
+        if(properties.get("dataoutputset") != null && properties.get("dataoutputset").length() > 0) {
+            String[] allDataOutputs = properties.get("dataoutputset").split( ",\\s*" );
+            if(callActivity.getIoSpecification() == null) {
+                InputOutputSpecification iospec = Bpmn2Factory.eINSTANCE.createInputOutputSpecification();
+                callActivity.setIoSpecification(iospec);
+            }
+            
+            OutputSet outset = Bpmn2Factory.eINSTANCE.createOutputSet();
+            for(String dataOutput : allDataOutputs) {
+                DataOutput nextOut = Bpmn2Factory.eINSTANCE.createDataOutput();
+                nextOut.setId(callActivity.getId() + "_" + dataOutput + "Output");
+                nextOut.setName(dataOutput);
+                callActivity.getIoSpecification().getDataOutputs().add(nextOut);
+                
+                outset.getDataOutputRefs().add(nextOut);
+            }
+            callActivity.getIoSpecification().getOutputSets().add(outset);
+        } else {
+            if(callActivity.getIoSpecification() != null) {
+            	callActivity.getIoSpecification().getOutputSets().add(Bpmn2Factory.eINSTANCE.createOutputSet());
+            }
+        }
+        
+        //callActivity assignments
+        if(properties.get("assignments") != null && properties.get("assignments").length() > 0) {
+            String[] allAssignments = properties.get("assignments").split( ",\\s*" );
+            for(String assignment : allAssignments) {
+                if(assignment.contains("=")) {
+                    String[] assignmentParts = assignment.split( "=\\s*" );
+                    DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
+
+                    boolean foundTaskName = false;
+                    if(callActivity.getIoSpecification() != null && callActivity.getIoSpecification().getDataOutputs() != null) {
+                    	List<DataInput> dataInputs = callActivity.getIoSpecification().getDataInputs();
+                    	for(DataInput di : dataInputs) {
+                    		if(di.getId().equals(callActivity.getId() + "_" + assignmentParts[0] + "Input")) {
+                    			dia.setTargetRef(di);
+                    			if(di.getName().equals("TaskName")) {
+                    				foundTaskName = true;
+                    				break;
+                    			}
+                    		}
+                    	}
+                    }
+                    
+                    Assignment a = Bpmn2Factory.eINSTANCE.createAssignment();
+                    FormalExpression fromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                    if(assignmentParts.length > 1) {
+                        fromExpression.setBody(assignmentParts[1]);
+                    } else {
+                        fromExpression.setBody("");
+                    }
+                    FormalExpression toExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                    toExpression.setBody(dia.getTargetRef().getId());
+                    
+                    a.setFrom(fromExpression);
+                    a.setTo(toExpression);
+                    
+                    dia.getAssignment().add(a);
+                    callActivity.getDataInputAssociations().add(dia);
+                    
+                } else if(assignment.contains("<->")) {
+                    String[] assignmentParts = assignment.split( "<->\\s*" );
+                    DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
+                    DataOutputAssociation doa = Bpmn2Factory.eINSTANCE.createDataOutputAssociation();
+                    
+                    ItemAwareElement ie = Bpmn2Factory.eINSTANCE.createItemAwareElement();
+                    ie.setId(assignmentParts[0]);
+                    dia.getSourceRef().add(ie);
+                    doa.setTargetRef(ie);
+                    
+                    List<DataInput> dataInputs = callActivity.getIoSpecification().getDataInputs();
+                    for(DataInput di : dataInputs) {
+                        if(di.getId().equals(callActivity.getId() + "_" + assignmentParts[1] + "Input")) {
+                            dia.setTargetRef(di);
+                            break;
+                        }
+                    }
+                    List<DataOutput> dataOutputs = callActivity.getIoSpecification().getDataOutputs();
+                    for(DataOutput dout : dataOutputs) {
+                        if(dout.getId().equals(callActivity.getId() + "_" + assignmentParts[1] + "Output")) {
+                            doa.getSourceRef().add(dout);
+                            break;
+                        }
+                    }
+                    
+                    callActivity.getDataInputAssociations().add(dia);
+                    callActivity.getDataOutputAssociations().add(doa);
+                } else if(assignment.contains("->")) {
+                    String[] assignmentParts = assignment.split( "->\\s*" );
+                    // we need to check if this is an data input or data output assignment
+                    boolean leftHandAssignMentIsDO = false;
+                    List<DataOutput> dataOutputs = callActivity.getIoSpecification().getDataOutputs();
+                    for(DataOutput dout : dataOutputs) {
+                        if(dout.getId().equals(callActivity.getId() + "_" + assignmentParts[0] + "Output")) {
+                            leftHandAssignMentIsDO = true;
+                            break;
+                        }
+                    }
+                    if(leftHandAssignMentIsDO) {
+                        // doing data output
+                        DataOutputAssociation doa = Bpmn2Factory.eINSTANCE.createDataOutputAssociation();
+                        for(DataOutput dout : dataOutputs) {
+                            if(dout.getId().equals(callActivity.getId() + "_" + assignmentParts[0] + "Output")) {
+                                doa.getSourceRef().add(dout);
+                                break;
+                            }
+                        }
+                        
+                        ItemAwareElement ie = Bpmn2Factory.eINSTANCE.createItemAwareElement();
+                        ie.setId(assignmentParts[1]);
+                        doa.setTargetRef(ie);
+                        callActivity.getDataOutputAssociations().add(doa);
+                    } else {
+                        // doing data input
+                        DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
+                        // association from process var to dataInput var
+                        ItemAwareElement ie = Bpmn2Factory.eINSTANCE.createItemAwareElement();
+                        ie.setId(assignmentParts[0]);
+                        dia.getSourceRef().add(ie);
+
+                        List<DataInput> dataInputs = callActivity.getIoSpecification().getDataInputs();
+                        for(DataInput di : dataInputs) {
+                            if(di.getId().equals(callActivity.getId() + "_" + assignmentParts[1] + "Input")) {
+                                dia.setTargetRef(di);
+                                break;
+                            }
+                        }
+                        callActivity.getDataInputAssociations().add(dia);
+                    }
+                } else {
+                    // TODO throw exception here?
+                }
+            }
+        }
+        
+        // process on-entry and on-exit actions as custom elements
+        if(properties.get("onentryactions") != null && properties.get("onentryactions").length() > 0) {
+            String[] allActions = properties.get("onentryactions").split( ",\\s*" );
+            for(String action : allActions) {
+                OnEntryScriptType onEntryScript = EmfextmodelFactory.eINSTANCE.createOnEntryScriptType();
+                onEntryScript.setScript(action);
+                
+                String scriptLanguage = "";
+                if(properties.get("script_language").equals("java")) {
+                    scriptLanguage = "http://www.java.com/java";
+                } else if(properties.get("script_language").equals("mvel")) {
+                    scriptLanguage = "http://www.mvel.org/2.0";
+                } else {
+                    // default to java
+                    scriptLanguage = "http://www.java.com/java";
+                }
+                onEntryScript.setScriptFormat(scriptLanguage); 
+                
+                ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                callActivity.getExtensionValues().add(extensionElement);
+                FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                        (Internal) EmfextmodelPackage.Literals.DOCUMENT_ROOT__ON_ENTRY_SCRIPT, onEntryScript);
+                extensionElement.getValue().add(extensionElementEntry);
+            }
+        }
+        
+        if(properties.get("onexitactions") != null && properties.get("onexitactions").length() > 0) {
+            String[] allActions = properties.get("onexitactions").split( ",\\s*" );
+            for(String action : allActions) {
+                OnExitScriptType onExitScript = EmfextmodelFactory.eINSTANCE.createOnExitScriptType();
+                onExitScript.setScript(action);
+                
+                String scriptLanguage = "";
+                if(properties.get("script_language").equals("java")) {
+                    scriptLanguage = "http://www.java.com/java";
+                } else if(properties.get("script_language").equals("mvel")) {
+                    scriptLanguage = "http://www.mvel.org/2.0";
+                } else {
+                    // default to java
+                    scriptLanguage = "http://www.java.com/java";
+                }
+                onExitScript.setScriptFormat(scriptLanguage); 
+                
+                ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                callActivity.getExtensionValues().add(extensionElement);
+                FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                        (Internal) EmfextmodelPackage.Literals.DOCUMENT_ROOT__ON_EXIT_SCRIPT, onExitScript);
+                extensionElement.getValue().add(extensionElementEntry);
+            }
+        }
+    	
+    	
     }
 
     private void applyTaskProperties(Task task, Map<String, String> properties) {

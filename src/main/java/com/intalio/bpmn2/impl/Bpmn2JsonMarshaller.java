@@ -838,6 +838,224 @@ public class Bpmn2JsonMarshaller {
     	}
     }
     
+    private void marshallCallActivity(CallActivity callActivity, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
+    	Map<String, Object> properties = new LinkedHashMap<String, Object>(flowElementProperties);
+    	
+    	Iterator<FeatureMap.Entry> iter = callActivity.getAnyAttribute().iterator();
+        while(iter.hasNext()) {
+            FeatureMap.Entry entry = iter.next();
+            if(entry.getEStructuralFeature().getName().equals("independent")) {
+                properties.put("independent", entry.getValue());
+            }
+            
+            if(entry.getEStructuralFeature().getName().equals("waitForCompletion")) {
+                properties.put("waitforcompletion", entry.getValue());
+            }
+        }
+        
+        if(callActivity.getCalledElement() != null && callActivity.getCalledElement().length() > 0) {
+        	properties.put("calledelement", callActivity.getCalledElement());
+        }
+        
+        // data inputs
+        if(callActivity.getIoSpecification() != null) {
+            List<InputSet> inputSetList = callActivity.getIoSpecification().getInputSets();
+            StringBuilder dataInBuffer = new StringBuilder();
+            for(InputSet inset : inputSetList) {
+                List<DataInput> dataInputList =  inset.getDataInputRefs();
+                for(DataInput dataIn : dataInputList) {
+                    if(dataIn.getName() != null) {
+                        dataInBuffer.append(dataIn.getName());
+                        dataInBuffer.append(",");
+                    }
+                }
+            }
+            if(dataInBuffer.length() > 0) {
+                dataInBuffer.setLength(dataInBuffer.length() - 1);
+            }
+            properties.put("datainputset", dataInBuffer.toString());
+        }
+        
+        // data outputs
+        if(callActivity.getIoSpecification() != null) {
+            List<OutputSet> outputSetList = callActivity.getIoSpecification().getOutputSets();
+            StringBuilder dataOutBuffer = new StringBuilder();
+            for(OutputSet outset : outputSetList) {
+                List<DataOutput> dataOutputList =  outset.getDataOutputRefs();
+                for(DataOutput dataOut : dataOutputList) {
+                    dataOutBuffer.append(dataOut.getName());
+                    dataOutBuffer.append(",");
+                }
+            }
+            if(dataOutBuffer.length() > 0) {
+                dataOutBuffer.setLength(dataOutBuffer.length() - 1);
+            }
+            properties.put("dataoutputset", dataOutBuffer.toString());
+        }
+        
+        // assignments
+        StringBuilder associationBuff = new StringBuilder();
+        List<DataInputAssociation> inputAssociations = callActivity.getDataInputAssociations();
+        List<DataOutputAssociation> outputAssociations = callActivity.getDataOutputAssociations();
+        List<String> uniDirectionalAssociations = new ArrayList<String>();
+        List<String> biDirectionalAssociations = new ArrayList<String>();
+        
+        for(DataInputAssociation datain : inputAssociations) {
+            String lhsAssociation = "";
+            if(datain.getSourceRef() != null && datain.getSourceRef().size() > 0) {
+            	if(datain.getTransformation() != null && datain.getTransformation().getBody() != null) {
+            		lhsAssociation = datain.getTransformation().getBody();
+            	} else {
+            		lhsAssociation = datain.getSourceRef().get(0).getId();
+            	}
+            }
+            
+            String rhsAssociation = "";
+            if(datain.getTargetRef() != null) {
+                rhsAssociation = ((DataInput) datain.getTargetRef()).getName();
+            }
+            
+            boolean isBiDirectional = false;
+            boolean isAssignment = false;
+            
+            if(datain.getAssignment() != null && datain.getAssignment().size() > 0) {
+                isAssignment = true;
+            } else {
+                // check if this is a bi-directional association
+                for(DataOutputAssociation dataout : outputAssociations) {
+                    if(dataout.getTargetRef().getId().equals(lhsAssociation) && 
+                       ((DataOutput) dataout.getSourceRef().get(0)).getName().equals(rhsAssociation)) {
+                        isBiDirectional = true;
+                        break;
+                    }
+                }
+            }
+            
+            if(isAssignment) {
+            	// only know how to deal with formal expressions
+            	if( datain.getAssignment().get(0).getFrom() instanceof FormalExpression) {
+            		String associationValue = ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody();
+            		if(associationValue == null) {
+            			associationValue = "";
+            		}
+            		associationBuff.append(rhsAssociation).append("=").append(associationValue);
+            		associationBuff.append(",");
+            	}
+            } else if(isBiDirectional) {
+                associationBuff.append(lhsAssociation).append("<->").append(rhsAssociation);
+                associationBuff.append(",");
+                biDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
+            } else {
+                associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
+                associationBuff.append(",");
+                uniDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
+            }
+        }
+        
+        for(DataOutputAssociation dataout : outputAssociations) {
+            if(dataout.getSourceRef().size() > 0) { 
+                String lhsAssociation = ((DataOutput) dataout.getSourceRef().get(0)).getName();
+                String rhsAssociation = dataout.getTargetRef().getId();
+                
+                boolean wasBiDirectional = false;
+                // check if we already addressed this association as bidirectional
+                for(String bda : biDirectionalAssociations) {
+                    String[] dbaparts = bda.split( ",\\s*" );
+                    if(dbaparts[0].equals(rhsAssociation) && dbaparts[1].equals(lhsAssociation)) {
+                        wasBiDirectional = true;
+                        break;
+                    }
+                }
+                
+                if(dataout.getTransformation() != null && dataout.getTransformation().getBody() != null) {
+                	rhsAssociation = dataout.getTransformation().getBody();
+                }
+                
+                if(!wasBiDirectional) {
+                    associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
+                    associationBuff.append(",");
+                }
+            }
+        }
+        
+        String assignmentString = associationBuff.toString();
+        if(assignmentString.endsWith(",")) {
+            assignmentString = assignmentString.substring(0, assignmentString.length() - 1);
+        }
+        properties.put("assignments", assignmentString);
+        
+        // on-entry and on-exit actions
+        if(callActivity.getExtensionValues() != null && callActivity.getExtensionValues().size() > 0) {
+            
+            String onEntryStr = "";
+            String onExitStr = "";
+            for(ExtensionAttributeValue extattrval : callActivity.getExtensionValues()) {
+            
+                FeatureMap extensionElements = extattrval.getValue();
+        
+                @SuppressWarnings("unchecked")
+                List<OnEntryScriptType> onEntryExtensions = (List<OnEntryScriptType>) extensionElements
+                                                     .get(EmfextmodelPackage.Literals.DOCUMENT_ROOT__ON_ENTRY_SCRIPT, true);
+        
+                @SuppressWarnings("unchecked")
+                List<OnExitScriptType> onExitExtensions = (List<OnExitScriptType>) extensionElements
+                                                  .get(EmfextmodelPackage.Literals.DOCUMENT_ROOT__ON_EXIT_SCRIPT, true);
+            
+                for(OnEntryScriptType onEntryScript : onEntryExtensions) {
+                    onEntryStr += onEntryScript.getScript();
+                    onEntryStr += ",";
+                
+                    if(onEntryScript.getScriptFormat() != null) {
+                        String format = onEntryScript.getScriptFormat();
+                        String formatToWrite = "";
+                        if(format.equals("http://www.java.com/java")) {
+                            formatToWrite = "java";
+                        } else if(format.equals("http://www.mvel.org/2.0")) {
+                            formatToWrite = "mvel";
+                        } else {
+                            formatToWrite = "java";
+                        }
+                        properties.put("script_language", formatToWrite);
+                    }
+                }
+                
+                for(OnExitScriptType onExitScript : onExitExtensions) {
+                    onExitStr += onExitScript.getScript();
+                    onExitStr += ",";
+                    
+                    if(onExitScript.getScriptFormat() != null) {
+                        String format = onExitScript.getScriptFormat();
+                        String formatToWrite = "";
+                        if(format.equals("http://www.java.com/java")) {
+                            formatToWrite = "java";
+                        } else if(format.equals("http://www.mvel.org/2.0")) {
+                            formatToWrite = "mvel";
+                        } else {
+                            formatToWrite = "java";
+                        }
+                        if(properties.get("script_language") != null) {
+                            properties.put("script_language", formatToWrite);
+                        }
+                    }
+                }
+            }
+            if(onEntryStr.length() > 0) {
+                if(onEntryStr.endsWith(",")) {
+                    onEntryStr = onEntryStr.substring(0, onEntryStr.length() - 1);
+                }
+                properties.put("onentryactions", onEntryStr);
+            }
+            if(onExitStr.length() > 0) {
+                if(onExitStr.endsWith(",")) {
+                    onExitStr = onExitStr.substring(0, onExitStr.length() - 1);
+                }
+                properties.put("onexitactions", onExitStr);
+            }
+        }
+    	
+        marshallNode(callActivity, properties, "ReusableSubprocess", plane, generator, xOffset, yOffset);
+    }
+    
     private void marshallTask(Task task, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Definitions def, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
         Map<String, Object> properties = new LinkedHashMap<String, Object>(flowElementProperties);
     	String taskType = "None";
@@ -1167,10 +1385,6 @@ public class Bpmn2JsonMarshaller {
     
     private void marshallComplexGateway(ComplexGateway gateway, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
     	marshallNode(gateway, flowElementProperties, "ComplexGateway", plane, generator, xOffset, yOffset);
-    }
-    
-    private void marshallCallActivity(CallActivity callActivity, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
-    	marshallNode(callActivity, flowElementProperties, "CollapsedSubprocess", plane, generator, xOffset, yOffset);
     }
     
     private void marshallNode(FlowNode node, Map<String, Object> properties, String stencil, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset) throws JsonGenerationException, IOException {

@@ -106,7 +106,8 @@ public enum Bpmn20Stencil {
     Association_Unidirectional(Bpmn2Package.eINSTANCE.getAssociation(), AssociationDirection.ONE),
     Association_Bidirectional(Bpmn2Package.eINSTANCE.getAssociation(), AssociationDirection.BOTH),
     Subprocess(Bpmn2Package.eINSTANCE.getSubProcess()),
-    AdHocSubprocess(Bpmn2Package.eINSTANCE.getAdHocSubProcess());
+    AdHocSubprocess(Bpmn2Package.eINSTANCE.getAdHocSubProcess()),
+    ReusableSubprocess(Bpmn2Package.eINSTANCE.getCallActivity());
     
     
     

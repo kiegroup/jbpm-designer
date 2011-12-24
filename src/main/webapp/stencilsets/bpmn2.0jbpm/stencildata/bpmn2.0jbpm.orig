@@ -769,7 +769,7 @@
 							]
 						}
 					] **/
-				},
+				}/**,
 				{
 					"id":"callacitivity",
 					"type":"Boolean",
@@ -780,7 +780,7 @@
 					"readonly":false,
 					"optional":"true",
 					"refToView":"callActivity"
-				}
+				}**/
 			]
 		},
 		// start custom activity properties
@@ -798,7 +798,7 @@
 					"readonly":true,
 					"optional":true,
 					"refToView":"compensation"
-				},
+				}/**,
 				{
 					"id":"callacitivity",
 					"type":"Boolean",
@@ -809,7 +809,7 @@
 					"readonly":true,
 					"optional":"true",
 					"refToView":"callActivity"
-				}
+				}**/
 			]
 		},
 		// end custom activity properties
@@ -1826,7 +1826,7 @@
 		{
 			"name" : "subprocess",
 			"properties" : [
-				{
+				/**{
 					"id": "subprocesstype",
 					"type": "Choice",
 					"title": "subProcessType",
@@ -1849,12 +1849,12 @@
 						},
 						{
 							"id": "choice3",
-							"title": "Reference",
-							"value": "Reference"
+							"title": "Reusable",
+							"value": "Reusable"
 						}
 					]
-				},
-				{
+				},**/
+				/**{
 					"id":"isatransaction",
 					"type":"Boolean",
 					"title":"is a Transaction",
@@ -1864,7 +1864,7 @@
 					"readonly":false,
 					"optional":false,
 					"refToView":"border"
-				},
+				},**/
 				/**{
 					"id":"transaction",
 					"type":"String",
@@ -1960,7 +1960,8 @@
 					"description":"This attribute is used only if ordering is parallel. It determines whether running instances are cancelled when the completionCondition becomes true.",
 					"readonly":false,
 					"optional":true
-				},
+				}
+				/**,
 				{
 					"id":"entry",
 					"type":"DiagramLink",
@@ -1971,7 +1972,8 @@
 					"readonly":false,
 					"optional":false,
 					"refToView":"u"
-				},
+				}**/
+				/**,
 				{
 					"id":"diagramref",
 					"type":"String",
@@ -1993,7 +1995,7 @@
 					"readonly":false,
 					"optional":false,
 					"refToView":""
-				}
+				} **/
 				/**,**/
 				/**{
 					"id":"inputmaps",
@@ -2022,7 +2024,7 @@
 		{
 			"name" : "adhocsubprocess",
 			"properties" : [
-				{
+				/** {
 					"id": "subprocesstype",
 					"type": "Choice",
 					"title": "subProcessType",
@@ -2045,12 +2047,12 @@
 						},
 						{
 							"id": "choice3",
-							"title": "Reference",
-							"value": "Reference"
+							"title": "Reusable",
+							"value": "Reusable"
 						}
 					]
-				},
-				{
+				},**/
+				/**{
 					"id":"isatransaction",
 					"type":"Boolean",
 					"title":"is a Transaction",
@@ -2060,7 +2062,7 @@
 					"readonly":false,
 					"optional":false,
 					"refToView":"border"
-				},
+				},**/
 				/**{
 					"id":"transaction",
 					"type":"String",
@@ -2157,7 +2159,7 @@
 					"readonly":false,
 					"optional":true
 				},
-				{
+				/**{
 					"id":"entry",
 					"type":"DiagramLink",
 					"title":"SubProcessRef",
@@ -2167,8 +2169,8 @@
 					"readonly":false,
 					"optional":false,
 					"refToView":"u"
-				},
-				{
+				},**/
+				/**{
 					"id":"diagramref",
 					"type":"String",
 					"title":"DiagramRef",
@@ -2178,8 +2180,8 @@
 					"readonly":false,
 					"optional":false,
 					"refToView":""
-				},
-				{
+				},**/
+				/**{
 					"id":"processref",
 					"type":"String",
 					"title":"ProcessRef",
@@ -2640,7 +2642,7 @@
 				"flowElement",
 				"activity",
 				"task",
-				"loopcharacteristics",
+				/** "loopcharacteristics", **/
 				"properties",
 				"iospecification"
 			],
@@ -2748,8 +2750,7 @@
 			$endif$
 			"propertyPackages" :[
 				"customtask",
-				"customactivity",
-                "customloopcharacteristics"
+				"customactivity"
 			],
 			"roles" : 			[
 				"all",
@@ -2913,15 +2914,15 @@
 		\},
 		}$
 		// end custom workitems 
-		/** {
+		{
 			"type" : 			"node",
-			"id" :				"CollapsedSubprocess",
-			"title" : 			"Collapsed Subprocess",
-			"title_de" :		"Zugeklappter Unterprozess",
+			"id" :				"ReusableSubprocess",
+			"title" : 			"Reusable Subprocess",
+			"title_de" :		"Wiederverwendbares Unterprozess",
 			"groups" :			["Activities"],
-			"groups_de" :		["Aktivitäten"],
-			"description" :		"A subprocess is a decomposable activity. It can be linked to another process diagram.",
-			"description_de" :	"Ein Unterprozess ist eine verfeinerbare Aktivität. Er kann mit einem anderen Prozessdiagramm verlinkt werden.",
+			"groups_de" :		["Activities"],
+			"description" :		"A reusable subprocess. It can be used to invoke another process.",
+			"description_de" :	"A reusable subprocess. It can be used to invoke another process.",
 			"view" :			"activity/subprocess.collapsed.svg",
 			"icon" :			"activity/subprocess.png",
 			"propertyPackages" :[
@@ -2929,7 +2930,7 @@
 				"flowElement",
 				"activity",
 				"subprocess",
-				"loopcharacteristics",
+				/** "loopcharacteristics", **/
 				"bgColor",
 				"properties",
 				"iospecification"
@@ -2961,7 +2962,106 @@
 					"refToView":"fill_el",
 					"fill":true,
 					"stroke":false
-				}	
+				},
+				{
+					"id":"calledelement",
+					"type":"Text",
+					"title":"Called Element",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"",
+					"length":""
+				},	
+				{
+					"id":"onEntryActions",
+					"type":"Text",
+					"title":"On Entry Actions",
+					"title_de":"On Entry Actions",
+					"value":"",
+					"description":"on entry actions",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"onExitActions",
+					"type":"Text",
+					"title":"On Exit Actions",
+					"title_de":"On Exit Actions",
+					"value":"",
+					"description":"on exit actions",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"independent",
+					"type":"Choice",
+					"title":"Independent",
+					"title_de":"Independent",
+					"value":"true",
+					"description":"If set to true the child process is started as an independent process.",
+					"readonly":false,
+					"optional":true,
+					"items": [
+						{
+							"id": "c1",
+							"title":"true",
+							"value":"true"
+						},
+						{
+							"id": "c2",
+							"title": "false",
+							"value": "false"
+						}
+					]
+				},
+				{
+ 					"id":"waitforcompletion",
+					"type":"Choice",
+					"title":"Wait for completion",
+					"title_de":"Auf Fertigstellung warten",
+					"value":"true",
+					"description":"If true this sub-process node will only continue if the child process that was started has terminated its execution (completed or aborted)",
+					"description_de":"If true this sub-process node will only continue if the child process that was started has terminated its execution (completed or aborted)",
+					"readonly":false,
+					"optional":true,
+					"items": [
+						{
+							"id": "c1",
+							"title":"true",
+							"value":"true"
+						},
+						{
+							"id": "c2",
+							"title": "false",
+							"value": "false"
+						}
+					]
+ 				},
+ 				{
+					"id":"script_language",
+					"type":"Choice",
+					"title":"ScriptLanguage",
+					"title_de":"Skript Sprache",
+					"value":"java",
+					"description":"Defines the script language.",
+					"readonly":false,
+					"optional":true,
+					"items": [
+						{
+							"id": "c1",
+							"title":"java",
+							"value":"java"
+						},
+						{
+							"id": "c2",
+							"title": "mvel",
+							"value": "mvel"
+						}
+					]                                        
+				}
+				
 			],
 			"roles": 			[
 				"all",
@@ -2974,7 +3074,7 @@
 				"fromtoall",
 				"ActivitiesMorph"
 			]
-		},**/ 
+		}, 
 		{
 			"type" : 			"node",
 			"id" :				"Subprocess",
@@ -3005,7 +3105,7 @@
 				"flowElement",
 				"activity",
 				"subprocess",
-				"loopcharacteristics",
+				/** "loopcharacteristics", **/
 				"properties",
 				"iospecification"
 			],
@@ -3035,7 +3135,27 @@
 					"refToView":"fill_el",
 					"fill":true,
 					"stroke":false
-				}	
+				},	
+				{
+					"id":"onEntryActions",
+					"type":"Text",
+					"title":"On Entry Actions",
+					"title_de":"On Entry Actions",
+					"value":"",
+					"description":"on entry actions",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"onExitActions",
+					"type":"Text",
+					"title":"On Exit Actions",
+					"title_de":"On Exit Actions",
+					"value":"",
+					"description":"on exit actions",
+					"readonly":false,
+					"optional":true
+				}
 			],
 			"roles"	:			[
 				"all",
@@ -3080,7 +3200,7 @@
 				"flowElement",
 				"activity",
 				"adhocsubprocess",
-				"loopcharacteristics",
+				/** "loopcharacteristics", **/
 				"properties",
 				"iospecification"
 			],
@@ -3110,7 +3230,27 @@
 					"refToView":"fill_el",
 					"fill":true,
 					"stroke":false
-				}	
+				},	
+				{
+					"id":"onEntryActions",
+					"type":"Text",
+					"title":"On Entry Actions",
+					"title_de":"On Entry Actions",
+					"value":"",
+					"description":"on entry actions",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"onExitActions",
+					"type":"Text",
+					"title":"On Exit Actions",
+					"title_de":"On Exit Actions",
+					"value":"",
+					"description":"on exit actions",
+					"readonly":false,
+					"optional":true
+				}
 			],
 			"roles"	:			[
 				"all",

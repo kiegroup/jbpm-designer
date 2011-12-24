@@ -90,7 +90,7 @@
       <dependency>
         <groupId>org.eclipse</groupId>
         <artifactId>org.eclipse.bpmn2</artifactId>
-        <version>0.7.0.007</version>
+        <version>0.7.0.009</version>
       </dependency>
 
       <!-- war libs -->
