@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -13,13 +14,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.eclipse.bpmn2.BaseElement;
 import org.eclipse.bpmn2.BusinessRuleTask;
+import org.eclipse.bpmn2.CallActivity;
 import org.eclipse.bpmn2.CatchEvent;
 import org.eclipse.bpmn2.CompensateEventDefinition;
 import org.eclipse.bpmn2.ConditionalEventDefinition;
@@ -52,6 +57,9 @@ import com.intalio.web.profile.IDiagramProfile;
 import com.intalio.web.profile.impl.ExternalInfo;
 
 public class BPMN2SyntaxChecker implements SyntaxChecker {
+	public static final String EXT_BPMN = "bpmn";
+    public static final String EXT_BPMN2 = "bpmn2";
+    
 	protected Map<String, List<String>> errors = new HashMap<String, List<String>>();
 	private String json;
 	private String preprocessingData;
@@ -326,6 +334,30 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
         					addError((Gateway) fe, "Gateway has no direction.");
         				}
         			}
+        			
+        			if(fe instanceof CallActivity) {
+        				CallActivity ca = (CallActivity) fe;
+        				if(ca.getCalledElement() == null || ca.getCalledElement().length() < 1) {
+        					addError((CallActivity) fe, "Reusable Subprocess has no called element specified.");
+        				} else {
+        					String[] packageAssetInfo = findPackageAndAssetInfo(uuid, profile);
+    		        		String packageName = packageAssetInfo[0];
+    		        		List<String> allProcessesInPackage = getAllProcessesInPackage(packageName, profile);
+    		        		boolean foundCalledElementProcess = false;
+    		        		for(String p : allProcessesInPackage) {
+    		        			String processContent = getProcessSourceContent(packageName, p, profile);
+    		        			Pattern pattern = Pattern.compile("<\\S*process[\\s\\S]*id=\"" + ca.getCalledElement() + "\"", Pattern.MULTILINE);
+    		                    Matcher m = pattern.matcher(processContent);
+    		                    if(m.find()) {
+    		                    	foundCalledElementProcess = true;
+    		                    	break;
+    		                    }
+    		        		}
+    		        		if(!foundCalledElementProcess) {
+    		        			addError((CallActivity) fe, "No existing process with id=" + ca.getCalledElement() + " could be found.");
+    		        		}
+        				}
+        			}
         		}
         	}
         }
@@ -526,5 +558,72 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 			_logger.error(e.getMessage());
 		}
         return false;
+    }
+    
+    public List<String> getAllProcessesInPackage(String pkgName, IDiagramProfile profile) {
+        List<String> processes = new ArrayList<String>();
+        String assetsURL = ExternalInfo.getExternalProtocol(profile)
+                + "://"
+                + ExternalInfo.getExternalHost(profile)
+                + "/"
+                + profile.getExternalLoadURLSubdomain().substring(0,
+    	                profile.getExternalLoadURLSubdomain().indexOf("/"))
+                + "/rest/packages/"
+                + pkgName
+                + "/assets/";
+        
+        try {
+            XMLInputFactory factory = XMLInputFactory.newInstance();
+            XMLStreamReader reader = factory.createXMLStreamReader(getInputStreamForURL(assetsURL, "GET", profile));
+
+            String format = "";
+            String title = ""; 
+            while (reader.hasNext()) {
+                int next = reader.next();
+                if (next == XMLStreamReader.START_ELEMENT) {
+                    if ("format".equals(reader.getLocalName())) {
+                        format = reader.getElementText();
+                    } 
+                    if ("title".equals(reader.getLocalName())) {
+                        title = reader.getElementText();
+                    }
+                    if ("asset".equals(reader.getLocalName())) {
+                        if(format.equals(EXT_BPMN) || format.equals(EXT_BPMN2)) {
+                            processes.add(title);
+                            title = "";
+                            format = "";
+                        }
+                    }
+                }
+            }
+            // last one
+            if(format.equals(EXT_BPMN) || format.equals(EXT_BPMN2)) {
+                processes.add(title);
+            }
+        } catch (Exception e) {
+        	_logger.error("Error finding processes in package: " + e.getMessage());
+        } 
+        return processes;
+    }
+    
+    private String getProcessSourceContent(String packageName, String assetName, IDiagramProfile profile) {
+        String assetSourceURL = ExternalInfo.getExternalProtocol(profile)
+                + "://"
+                + ExternalInfo.getExternalHost(profile)
+                + "/"
+                + profile.getExternalLoadURLSubdomain().substring(0,
+    	                profile.getExternalLoadURLSubdomain().indexOf("/"))
+                + "/rest/packages/" + packageName + "/assets/" + assetName
+                + "/source/";
+
+        try {
+            InputStream in = getInputStreamForURL(assetSourceURL, "GET", profile);
+            StringWriter writer = new StringWriter();
+            IOUtils.copy(in, writer);
+            return writer.toString();
+        } catch (Exception e) {
+        	_logger.error("Error retrieving asset content: " + e.getMessage());
+            return "";
+        }
     }
 }
