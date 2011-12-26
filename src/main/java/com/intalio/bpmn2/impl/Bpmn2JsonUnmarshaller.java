@@ -808,6 +808,86 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
     
+    private void createSubProcessDiagram(BPMNPlane plane, FlowElement flowElement, BpmnDiFactory factory) {
+		SubProcess sp = (SubProcess) flowElement;
+		for(FlowElement subProcessFlowElement : sp.getFlowElements()) {
+			if(subProcessFlowElement instanceof SubProcess) {
+				Bounds spb = _bounds.get(subProcessFlowElement.getId());
+				if (spb != null) {
+					BPMNShape shape = factory.createBPMNShape();
+					shape.setBpmnElement(subProcessFlowElement);
+					shape.setBounds(spb);
+					plane.getPlaneElement().add(shape);
+				}
+				createSubProcessDiagram(plane, subProcessFlowElement, factory);
+			} else if (subProcessFlowElement instanceof FlowNode) {
+				Bounds spb = _bounds.get(subProcessFlowElement.getId());
+				if (spb != null) {
+					BPMNShape shape = factory.createBPMNShape();
+					shape.setBpmnElement(subProcessFlowElement);
+					shape.setBounds(spb);
+					plane.getPlaneElement().add(shape);
+				}
+			} else if (subProcessFlowElement instanceof SequenceFlow) {
+				SequenceFlow sequenceFlow = (SequenceFlow) subProcessFlowElement;
+				BPMNEdge edge = factory.createBPMNEdge();
+				edge.setBpmnElement(subProcessFlowElement);
+				DcFactory dcFactory = DcFactory.eINSTANCE;
+				Point point = dcFactory.createPoint();
+				if(sequenceFlow.getSourceRef() != null) {
+					Bounds sourceBounds = _bounds.get(sequenceFlow.getSourceRef().getId());
+					point.setX(sourceBounds.getX() + (sourceBounds.getWidth()/2));
+					point.setY(sourceBounds.getY() + (sourceBounds.getHeight()/2));
+				}
+				edge.getWaypoint().add(point);
+				List<Point> dockers = _dockers.get(sequenceFlow.getId());
+				for (int i = 1; i < dockers.size() - 1; i++) {
+					edge.getWaypoint().add(dockers.get(i));
+				}
+				point = dcFactory.createPoint();
+				if(sequenceFlow.getTargetRef() != null) {
+					Bounds targetBounds = _bounds.get(sequenceFlow.getTargetRef().getId());
+					point.setX(targetBounds.getX() + (targetBounds.getWidth()/2));
+					point.setY(targetBounds.getY() + (targetBounds.getHeight()/2));
+				}
+				edge.getWaypoint().add(point);
+				plane.getPlaneElement().add(edge);
+			}
+		}
+		for (Artifact artifact : sp.getArtifacts()) {
+            if (artifact instanceof TextAnnotation || artifact instanceof Group) {
+            	Bounds ba = _bounds.get(artifact.getId());
+            	if (ba != null) {
+            		BPMNShape shape = factory.createBPMNShape();
+            		shape.setBpmnElement(artifact);
+            		shape.setBounds(ba);
+            		plane.getPlaneElement().add(shape);
+            	}
+            }
+            if (artifact instanceof Association){
+                Association association = (Association)artifact;
+                BPMNEdge edge = factory.createBPMNEdge();
+                edge.setBpmnElement(association);
+                DcFactory dcFactory = DcFactory.eINSTANCE;
+                Point point = dcFactory.createPoint();
+                Bounds sourceBounds = _bounds.get(association.getSourceRef().getId());
+                point.setX(sourceBounds.getX() + (sourceBounds.getWidth()/2));
+                point.setY(sourceBounds.getY() + (sourceBounds.getHeight()/2));
+                edge.getWaypoint().add(point);
+                List<Point> dockers = _dockers.get(association.getId());
+                for (int i = 1; i < dockers.size() - 1; i++) {
+                        edge.getWaypoint().add(dockers.get(i));
+                }
+                point = dcFactory.createPoint();
+                Bounds targetBounds = _bounds.get(association.getTargetRef().getId());
+                point.setX(targetBounds.getX() + (targetBounds.getWidth()/2));
+                point.setY(targetBounds.getY() + (targetBounds.getHeight()/2));
+                edge.getWaypoint().add(point);
+                plane.getPlaneElement().add(edge);
+            }
+        }
+    }
+    
     private void createDiagram(Definitions def) {
     	for (RootElement rootElement: def.getRootElements()) {
     		if (rootElement instanceof Process) {
@@ -838,74 +918,7 @@ public class Bpmn2JsonUnmarshaller {
         				}
         				// check if its a subprocess
         				if(flowElement instanceof SubProcess) {
-        					SubProcess sp = (SubProcess) flowElement;
-        					for(FlowElement subProcessFlowElement : sp.getFlowElements()) {
-        						if (subProcessFlowElement instanceof FlowNode) {
-        							Bounds spb = _bounds.get(subProcessFlowElement.getId());
-        	        				if (spb != null) {
-        	        					BPMNShape shape = factory.createBPMNShape();
-        	        					shape.setBpmnElement(subProcessFlowElement);
-        	        					shape.setBounds(spb);
-        	        					plane.getPlaneElement().add(shape);
-        	        				}
-        						} else if (subProcessFlowElement instanceof SequenceFlow) {
-        	        				SequenceFlow sequenceFlow = (SequenceFlow) subProcessFlowElement;
-        	        				BPMNEdge edge = factory.createBPMNEdge();
-        	    					edge.setBpmnElement(subProcessFlowElement);
-        	    					DcFactory dcFactory = DcFactory.eINSTANCE;
-        	    					Point point = dcFactory.createPoint();
-        	    					if(sequenceFlow.getSourceRef() != null) {
-        	    						Bounds sourceBounds = _bounds.get(sequenceFlow.getSourceRef().getId());
-        	    						point.setX(sourceBounds.getX() + (sourceBounds.getWidth()/2));
-        	    						point.setY(sourceBounds.getY() + (sourceBounds.getHeight()/2));
-        	    					}
-        	    					edge.getWaypoint().add(point);
-        	    					List<Point> dockers = _dockers.get(sequenceFlow.getId());
-        	    					for (int i = 1; i < dockers.size() - 1; i++) {
-        	    						edge.getWaypoint().add(dockers.get(i));
-        	    					}
-        	    					point = dcFactory.createPoint();
-        	    					if(sequenceFlow.getTargetRef() != null) {
-        	    						Bounds targetBounds = _bounds.get(sequenceFlow.getTargetRef().getId());
-        	    						point.setX(targetBounds.getX() + (targetBounds.getWidth()/2));
-        	    						point.setY(targetBounds.getY() + (targetBounds.getHeight()/2));
-        	    					}
-        	    					edge.getWaypoint().add(point);
-        	    					plane.getPlaneElement().add(edge);
-        	        			}
-        					}
-        					for (Artifact artifact : sp.getArtifacts()) {
-                                if (artifact instanceof TextAnnotation || artifact instanceof Group) {
-                                	Bounds ba = _bounds.get(artifact.getId());
-                                	if (ba != null) {
-                                		BPMNShape shape = factory.createBPMNShape();
-                                		shape.setBpmnElement(artifact);
-                                		shape.setBounds(ba);
-                                		plane.getPlaneElement().add(shape);
-                                	}
-                                }
-                                if (artifact instanceof Association){
-                                    Association association = (Association)artifact;
-                                    BPMNEdge edge = factory.createBPMNEdge();
-                                    edge.setBpmnElement(association);
-                                    DcFactory dcFactory = DcFactory.eINSTANCE;
-                                    Point point = dcFactory.createPoint();
-                                    Bounds sourceBounds = _bounds.get(association.getSourceRef().getId());
-                                    point.setX(sourceBounds.getX() + (sourceBounds.getWidth()/2));
-                                    point.setY(sourceBounds.getY() + (sourceBounds.getHeight()/2));
-                                    edge.getWaypoint().add(point);
-                                    List<Point> dockers = _dockers.get(association.getId());
-                                    for (int i = 1; i < dockers.size() - 1; i++) {
-                                            edge.getWaypoint().add(dockers.get(i));
-                                    }
-                                    point = dcFactory.createPoint();
-                                    Bounds targetBounds = _bounds.get(association.getTargetRef().getId());
-                                    point.setX(targetBounds.getX() + (targetBounds.getWidth()/2));
-                                    point.setY(targetBounds.getY() + (targetBounds.getHeight()/2));
-                                    edge.getWaypoint().add(point);
-                                    plane.getPlaneElement().add(edge);
-                                }
-                            }
+        					createSubProcessDiagram(plane, flowElement, factory);
         				}
         			} else if (flowElement instanceof SequenceFlow) {
         				SequenceFlow sequenceFlow = (SequenceFlow) flowElement;
