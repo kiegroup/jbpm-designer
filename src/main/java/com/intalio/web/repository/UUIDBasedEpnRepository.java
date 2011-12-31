@@ -19,7 +19,7 @@ public class UUIDBasedEpnRepository implements IUUIDBasedRepository {
     }
 
     public byte[] load(HttpServletRequest req, String uuid,
-            IDiagramProfile profile) {
+            IDiagramProfile profile) throws Exception {
         // TODO hook up with Guvnor
         return new byte[0];
     }

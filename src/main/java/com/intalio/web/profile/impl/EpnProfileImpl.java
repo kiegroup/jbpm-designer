@@ -16,6 +16,7 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.codehaus.jackson.JsonParseException;
 import org.eclipse.bpmn2.Definitions;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -173,6 +174,18 @@ public class EpnProfileImpl implements IDiagramProfile {
 					Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
 					JBPMBpmn2ResourceImpl res = (JBPMBpmn2ResourceImpl) unmarshaller.unmarshall(jsonModel, preProcessingData);
 					return (Definitions) res.getContents().get(0);
+				} catch (JsonParseException e) {
+					_logger.error(e.getMessage(), e);
+				} catch (IOException e) {
+					_logger.error(e.getMessage(), e);
+				}
+				return null;
+			}
+            
+            public Resource getResource(String jsonModel, String preProcessingData) {
+				try {
+					Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+					return (JBPMBpmn2ResourceImpl) unmarshaller.unmarshall(jsonModel, preProcessingData);
 				} catch (JsonParseException e) {
 					_logger.error(e.getMessage(), e);
 				} catch (IOException e) {

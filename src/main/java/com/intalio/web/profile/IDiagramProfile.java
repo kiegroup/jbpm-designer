@@ -24,6 +24,7 @@ package com.intalio.web.profile;
 import java.util.Collection;
 
 import org.eclipse.bpmn2.Definitions;
+import org.eclipse.emf.ecore.resource.Resource;
 
 /**
  * A profile for the editor to choose which stencilset 
@@ -129,6 +130,7 @@ public interface IDiagramProfile {
          */
         public String parseModel(String jsonModel, String preProcessingData);
         public Definitions getDefinitions(String jsonModel, String preProcessingData); 
+        public Resource getResource(String jsonModel, String preProcessingData);
     }
     
     /**

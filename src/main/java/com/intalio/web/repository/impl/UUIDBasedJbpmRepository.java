@@ -26,21 +26,16 @@ public class UUIDBasedJbpmRepository implements IUUIDBasedRepository {
         _defaultsPath = servlet.getServletContext().getRealPath("/" + DEFAULTS_PATH);
     }
 
-    public byte[] load(HttpServletRequest req, String uuid, IDiagramProfile profile) {
+    public byte[] load(HttpServletRequest req, String uuid, IDiagramProfile profile) throws Exception {
         String processjson = "";
         String preProcessingParam = req.getParameter("pp");
-        try {
-            // check with Guvnor to see what it has for this uuid for us
-            String processxml = doHttpUrlConnectionAction(buildExternalLoadURL(profile, uuid));
-            if(processxml != null && processxml.length() > 0) {
-                processjson = profile.createUnmarshaller().parseModel(processxml, profile, preProcessingParam);
-                return processjson.getBytes("UTF-8");
-            } else {
-                return new byte[0];
-            }
-        } catch (Exception e) {
-            _logger.error(e.getMessage(), e);
-            throw new RuntimeException(e);
+        // check with Guvnor to see what it has for this uuid for us
+        String processxml = doHttpUrlConnectionAction(buildExternalLoadURL(profile, uuid));
+        if(processxml != null && processxml.length() > 0) {
+            processjson = profile.createUnmarshaller().parseModel(processxml, profile, preProcessingParam);
+            return processjson.getBytes("UTF-8");
+        } else {
+            return new byte[0];
         }
     }
 

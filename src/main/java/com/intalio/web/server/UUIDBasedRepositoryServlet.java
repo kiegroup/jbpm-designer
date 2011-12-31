@@ -36,6 +36,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.eclipse.bpmn2.Definitions;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.osgi.framework.BundleContext;
@@ -120,9 +124,12 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
             throw new ServletException("uuid parameter required");
         }
         IDiagramProfile profile = getProfile(req, req.getParameter("profile"));
-        String response = new String(_repository.load(req, uuid, profile), Charset.forName("UTF-8"));
-        
-        resp.getWriter().write(response);
+		try {
+			String response =  new String(_repository.load(req, uuid, profile), Charset.forName("UTF-8"));
+			resp.getWriter().write(response);
+		} catch (Exception e) {
+			throw new ServletException("Exception loading process: " + e.getMessage());
+		}
     }
 
     @Override
@@ -135,6 +142,27 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
             String xml = _repository.toXML(json, profile, preProcessingParam);
             StringWriter output = new StringWriter();
             output.write(xml);
+            resp.setContentType("application/xml");
+            resp.setCharacterEncoding("UTF-8");
+            resp.setStatus(200);
+            resp.getWriter().print(output.toString());
+        } else if(actionParam != null && actionParam.equals("checkErrors")) { 
+        	String retValue = "false";
+        	IDiagramProfile profile = getProfile(req, req.getParameter("profile"));
+            String json = req.getParameter("data");
+            try {
+				String xmlOut = profile.createMarshaller().parseModel(json, preProcessingParam);
+				String jsonIn = profile.createUnmarshaller().parseModel(xmlOut, profile, preProcessingParam);
+				if(jsonIn == null || jsonIn.length() < 1) {
+					retValue = "true";
+				}
+			} catch (Throwable t) {
+				_logger.error("Exception validating process: " + t.getMessage());
+				retValue = "true";
+			}
+            
+            StringWriter output = new StringWriter();
+            output.write(retValue);
             resp.setContentType("application/xml");
             resp.setCharacterEncoding("UTF-8");
             resp.setStatus(200);

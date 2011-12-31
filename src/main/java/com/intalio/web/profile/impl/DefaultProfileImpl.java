@@ -211,6 +211,18 @@ public class DefaultProfileImpl implements IDiagramProfile {
 				}
 				return null;
 			}
+            
+            public Resource getResource(String jsonModel, String preProcessingData) {
+				try {
+					Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+					return (JBPMBpmn2ResourceImpl) unmarshaller.unmarshall(jsonModel, preProcessingData);
+				} catch (JsonParseException e) {
+					_logger.error(e.getMessage(), e);
+				} catch (IOException e) {
+					_logger.error(e.getMessage(), e);
+				}
+				return null;
+			}
         };
     }
     

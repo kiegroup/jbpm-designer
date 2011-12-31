@@ -47,7 +47,7 @@ public interface IUUIDBasedRepository {
      * @param loadExt the external url to load from
      * @return the model as a set of bytes.
      */
-    public byte[] load(HttpServletRequest req, String uuid, IDiagramProfile profile);
+    public byte[] load(HttpServletRequest req, String uuid, IDiagramProfile profile) throws Exception;
     
     /**
      * Saves the model inside the repository.

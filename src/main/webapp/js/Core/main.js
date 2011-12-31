@@ -712,6 +712,9 @@ ORYX.Editor = {
 				getERDF:				this.getERDF.bind(this),
                 getJSON:                this.getJSON.bind(this),
                 getSerializedJSON:      this.getSerializedJSON.bind(this),
+                
+                checkParsingErrors:     this.checkParsingErrors.bind(this),
+                showParsingErrors:      this.showParsingErrors.bind(this),
 				
 				executeCommands:		this.executeCommands.bind(this),
 				
@@ -775,6 +778,26 @@ ORYX.Editor = {
      */
     getSerializedJSON: function() {
         return Ext.encode(this.getJSON());
+    },
+    
+    checkParsingErrors : function() {
+    	var processJSON = ORYX.EDITOR.getSerializedJSON();
+		
+		var req = new XMLHttpRequest;
+		req.open("POST", ORYX.PATH + "uuidRepository?action=checkErrors&pp=" + ORYX.PREPROCESSING + "&profile=" + ORYX.PROFILE +
+			   "&data=" + encodeURIComponent(processJSON) + ";charset=utf-8,", false);
+		req.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
+		req.send(null);
+		if (req.status == 200) {
+			return req.responseText == "true";
+		} else {
+			return "true";
+		}
+    },
+    
+    showParsingErrors : function() {
+    	Ext.Msg.minWidth = 360;
+    	Ext.MessageBox.alert( "Unable to perform action", "Unable to perform user action due to error(s).<br/>View your server logs to see error details." );
     },
 	
     /**
