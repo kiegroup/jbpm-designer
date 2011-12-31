@@ -299,7 +299,7 @@
 					"type":"String",
 					"title":"Package",
 					"title_de":"Package",
-					"value":"",
+					"value":"$packageName$",
 					"description":"Package",
 					"description_de":"Package",
 					"readonly":false,

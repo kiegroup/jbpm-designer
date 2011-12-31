@@ -148,15 +148,23 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         		outData += definition.getValue().getName() + ",";
         	}
         	// parse the profile json to include config data
-        		// parse the orig stencil data with workitem definitions
-        		StringTemplate workItemTemplate = new StringTemplate(readFile(origStencilFilePath));
-        		workItemTemplate.setAttribute("workitemDefs", workDefinitions);
-        		// delete stencil data json if exists
-        		deletefile(stencilFilePath);
-        		// copy our results as the stencil json data
-        		createAndWriteToFile(stencilFilePath, workItemTemplate.toString());
-        		// create and parse the view svg to include config data
-                createAndParseViewSVG(workDefinitions);
+        	// parse the orig stencil data with workitem definitions
+        	StringTemplate workItemTemplate = new StringTemplate(readFile(origStencilFilePath));
+        	workItemTemplate.setAttribute("workitemDefs", workDefinitions);
+        	if(workitemConfigInfo != null && workitemConfigInfo.keySet() != null && workitemConfigInfo.keySet().size() > 0) {
+        		for(String key: workitemConfigInfo.keySet()) {
+        			System.out.println("Setting process pacakge name to: " + key);
+        			workItemTemplate.setAttribute("packageName", key);
+        		}
+        	} else {
+        		workItemTemplate.setAttribute("packageName", "");
+        	}
+        	// delete stencil data json if exists
+        	deletefile(stencilFilePath);
+        	// copy our results as the stencil json data
+        	createAndWriteToFile(stencilFilePath, workItemTemplate.toString());
+        	// create and parse the view svg to include config data
+            createAndParseViewSVG(workDefinitions);
         } catch( Exception e ) {
             _logger.error("Failed to setup workitems : " + e.getMessage());
         }
