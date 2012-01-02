@@ -783,16 +783,19 @@ ORYX.Editor = {
     checkParsingErrors : function() {
     	var processJSON = ORYX.EDITOR.getSerializedJSON();
 		
-		var req = new XMLHttpRequest;
-		req.open("POST", ORYX.PATH + "uuidRepository?action=checkErrors&pp=" + ORYX.PREPROCESSING + "&profile=" + ORYX.PROFILE +
-			   "&data=" + encodeURIComponent(processJSON) + ";charset=utf-8,", false);
-		req.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
-		req.send(null);
-		if (req.status == 200) {
-			return req.responseText == "true";
+		var ajaxObj = new XMLHttpRequest;
+		var url = ORYX.PATH + "uuidRepository";
+	    var params  = "action=checkErrors&pp=" + ORYX.PREPROCESSING + "&profile=" + ORYX.PROFILE + "&data=" + encodeURIComponent(processJSON);
+	    ajaxObj.open("POST",url,false);
+	    ajaxObj.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	    ajaxObj.send(params);
+	    
+	    if (ajaxObj.status == 200) {
+			return ajaxObj.responseText == "true";
 		} else {
 			return "true";
 		}
+	    
     },
     
     showParsingErrors : function() {

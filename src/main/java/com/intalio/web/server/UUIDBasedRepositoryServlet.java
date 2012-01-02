@@ -157,10 +157,9 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
 					retValue = "true";
 				}
 			} catch (Throwable t) {
-				_logger.error("Exception validating process: " + t.getMessage());
+				System.out.println("Exception parsing process: " + t.getMessage());
 				retValue = "true";
 			}
-            
             StringWriter output = new StringWriter();
             output.write(retValue);
             resp.setContentType("application/xml");
