@@ -29,7 +29,7 @@
 		height="248"
 		stroke="black"
 		stroke-width="0"
-		fill="#b1c2d6"
+		fill="url(#background) white"
 		visibility="visible"
 		class="stripable-element-force"
 	/>
