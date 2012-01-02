@@ -341,7 +341,7 @@
 					"type":"String",
 					"title":"ID",
 					"title_de":"ID",
-					"value":"",
+					"value":"$processid$",
 					"description":"ID",
 					"description_de":"ID",
 					"readonly":false,
