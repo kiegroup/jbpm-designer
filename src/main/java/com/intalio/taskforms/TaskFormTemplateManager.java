@@ -218,9 +218,11 @@ public class TaskFormTemplateManager {
                                                         }
                                                     }
                                                     if(input.getRefType() != null && input.getRefType().equals("Date")) {
-                                                        input.setValue("${"+ inputAssociation.getSourceRef().get(0).getId() + "?date} ${"+ inputAssociation.getSourceRef().get(0).getId() + "?time}");
+                                                        //input.setValue("${"+ inputAssociation.getSourceRef().get(0).getId() + "?date} ${"+ inputAssociation.getSourceRef().get(0).getId() + "?time}");
+                                                        input.setValue("${"+ ((DataInput)inputAssociation.getTargetRef()).getName() + "?date} ${"+ ((DataInput)inputAssociation.getTargetRef()).getName() + "?time}");
                                                     } else {
-                                                        input.setValue("${"+ inputAssociation.getSourceRef().get(0).getId() + "}");
+                                                        //input.setValue("${"+ inputAssociation.getSourceRef().get(0).getId() + "}");
+                                                        input.setValue("${"+ ((DataInput)inputAssociation.getTargetRef()).getName() + "}");
                                                     }
                                                 }
                                             }
