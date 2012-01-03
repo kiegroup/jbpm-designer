@@ -326,7 +326,7 @@
 					"readonly":false,
 					"optional":true
 				},
-				/**{
+				{
 					"id":"globals",
 					"type":"Text",
 					"title":"Globals",
@@ -335,7 +335,7 @@
 					"description":"Comma-separated globals",
 					"readonly":false,
 					"optional":true
-				},**/
+				},
 				{
 					"id":"id",
 					"type":"String",
@@ -1657,13 +1657,25 @@
 				},
 				{
 					"id":"script_language",
-					"type":"String",
+					"type":"Choice",
 					"title":"ScriptLanguage",
 					"title_de":"Skript Sprache",
-					"value":"",
+					"value":"java",
 					"description":"Defines the script language. The script language MUST be provided if a script is provided.",
 					"readonly":false,
-					"optional":true                                        
+					"optional":true,
+					"items": [
+						{
+							"id": "c1",
+							"title":"java",
+							"value":"java"
+						},
+						{
+							"id": "c2",
+							"title": "mvel",
+							"value": "mvel"
+						}
+					]                                               
 				},
 				{
 					"id":"inmessagetype",

@@ -1860,13 +1860,14 @@ public class Bpmn2JsonUnmarshaller {
         }
         
         // import extension elements
+        ExtensionAttributeValue extensionElement = null;
         if(properties.get("imports") != null && properties.get("imports").length() > 0) {
             String[] allImports = properties.get("imports").split( ",\\s*" );
             for(String importStr : allImports) {
                 ImportType importType = EmfextmodelFactory.eINSTANCE.createImportType();
                 importType.setName(importStr);
                 
-                ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
                 process.getExtensionValues().add(extensionElement);
                 FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
                         (Internal) EmfextmodelPackage.Literals.DOCUMENT_ROOT__IMPORT, importType);
@@ -1883,9 +1884,10 @@ public class Bpmn2JsonUnmarshaller {
                     GlobalType globalType = EmfextmodelFactory.eINSTANCE.createGlobalType();
                     globalType.setIdentifier(globalParts[0]);
                     globalType.setType(globalParts[1]);
-                
-                    ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
-                    process.getExtensionValues().add(extensionElement);
+                    if(extensionElement == null) {
+                    	extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                    	process.getExtensionValues().add(extensionElement);
+                    } 
                     FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
                             (Internal) EmfextmodelPackage.Literals.DOCUMENT_ROOT__GLOBAL, globalType);
                     extensionElement.getValue().add(extensionElementEntry);
@@ -1917,8 +1919,23 @@ public class Bpmn2JsonUnmarshaller {
         } else {
             scriptTask.setName("");
         }
-        scriptTask.setScript(properties.get("script"));
-        scriptTask.setScriptFormat(properties.get("script_language"));
+        
+        if(properties.get("script") != null && properties.get("script").length() > 0) {
+        	scriptTask.setScript(properties.get("script"));
+        }
+        
+        if(properties.get("script_language") != null && properties.get("script_language").length() > 0) {
+            String scriptLanguage = "";
+            if(properties.get("script_language").equals("java")) {
+                scriptLanguage = "http://www.java.com/java";
+            } else if(properties.get("script_language").equals("mvel")) {
+                scriptLanguage = "http://www.mvel.org/2.0";
+            } else {
+                // default to java
+                scriptLanguage = "http://www.java.com/java";
+            }
+            scriptTask.setScriptFormat(scriptLanguage);
+        }
     }
     
     public void applyServiceTaskProperties(ServiceTask serviceTask,  Map<String, String> properties) {

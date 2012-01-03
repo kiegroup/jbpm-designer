@@ -1070,8 +1070,20 @@ public class Bpmn2JsonMarshaller {
             }
     	} else if (task instanceof ScriptTask) {
     		ScriptTask scriptTask = (ScriptTask) task;
-    		properties.put("script", scriptTask.getScript());
-    		properties.put("script_language", scriptTask.getScriptFormat());
+    		properties.put("script", scriptTask.getScript() != null ? scriptTask.getScript() : "");
+    		String format = scriptTask.getScriptFormat();
+    		if(format != null && format.length() > 0) {
+    			String formatToWrite = "";
+                if(format.equals("http://www.java.com/java")) {
+                    formatToWrite = "java";
+                } else if(format.equals("http://www.mvel.org/2.0")) {
+                    formatToWrite = "mvel";
+                } else {
+                	// default to java
+                    formatToWrite = "java";
+                }
+                properties.put("script_language", formatToWrite);
+    		}
     		taskType = "Script";
     	} else if (task instanceof ServiceTask) {
     		taskType = "Service";
