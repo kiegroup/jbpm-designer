@@ -551,8 +551,11 @@
         <enabled>false</enabled>
       </snapshots>
     </repository>
-    
-    
+    <repository>
+      <id>jboss-thirdparty-uploads</id>
+      <name>JBoss ThirdParty Uploads</name>
+      <url>https://repository.jboss.org/nexus/content/repositories/thirdparty-uploads/</url>
+    </repository>
     <repository>
       <id>intalio</id>
       <url>http://www.intalio.org/public/maven2/</url>
