@@ -800,7 +800,7 @@ ORYX.Editor = {
     
     showParsingErrors : function() {
     	Ext.Msg.minWidth = 360;
-    	Ext.MessageBox.alert( "Unable to perform action", "Unable to perform user action due to error(s).<br/>View your server logs to see error details." );
+    	Ext.MessageBox.alert( "Unable to perform action", "Unable to perform user action due to error(s).<br/>Validate your process before saving, and view server logs to see error details." );
     },
 	
     /**

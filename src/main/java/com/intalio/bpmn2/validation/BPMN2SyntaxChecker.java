@@ -89,6 +89,10 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
         		
         		if(isEmpty(process.getId())) {
         			addError(defaultResourceId, "Process has no id.");
+        		} else {
+        			if(!SyntaxCheckerUtils.isNCName(process.getId())) {
+        				addError(defaultResourceId, "Invalid process id. See http://www.w3.org/TR/REC-xml-names/#NT-NCName for more info.");
+        			}
         		}
         		
         		String pname = null;
