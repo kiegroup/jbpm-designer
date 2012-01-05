@@ -613,36 +613,45 @@ public class Bpmn2JsonMarshaller {
     }
     
     private List<String> marshallLanes(Lane lane, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Definitions def) throws JsonGenerationException, IOException {
+    	Bounds bounds = ((BPMNShape) findDiagramElement(plane, lane)).getBounds();
     	List<String> nodeRefIds = new ArrayList<String>();
-    	generator.writeStartObject();
-    	generator.writeObjectField("resourceId", lane.getId());
-    	Map<String, Object> laneProperties = new LinkedHashMap<String, Object>();
-    	laneProperties.put("name", lane.getName());
-    	marshallProperties(laneProperties, generator);
-    	generator.writeObjectFieldStart("stencil");
-    	generator.writeObjectField("id", "Lane");
-	    generator.writeEndObject();
-	    generator.writeArrayFieldStart("childShapes");
-	    Bounds bounds = ((BPMNShape) findDiagramElement(plane, lane)).getBounds();
-	    for (FlowElement flowElement: lane.getFlowNodeRefs()) {
-	    	nodeRefIds.add(flowElement.getId());
-	    	// we dont want an offset here!
-	    	marshallFlowElement(flowElement, plane, generator, 0, 0, preProcessingData, def);
-	    }
-	    generator.writeEndArray();
-	    generator.writeArrayFieldStart("outgoing");
-	    generator.writeEndArray();
-	    generator.writeObjectFieldStart("bounds");
-	    generator.writeObjectFieldStart("lowerRight");
-	    generator.writeObjectField("x", bounds.getX() + bounds.getWidth() - xOffset);
-	    generator.writeObjectField("y", bounds.getY() + bounds.getHeight() - yOffset);
-	    generator.writeEndObject();
-	    generator.writeObjectFieldStart("upperLeft");
-	    generator.writeObjectField("x", bounds.getX() - xOffset);
-	    generator.writeObjectField("y", bounds.getY() - yOffset);
-	    generator.writeEndObject();
-	    generator.writeEndObject();
-    	generator.writeEndObject();
+    	if(bounds != null) {
+	    	generator.writeStartObject();
+	    	generator.writeObjectField("resourceId", lane.getId());
+	    	Map<String, Object> laneProperties = new LinkedHashMap<String, Object>();
+	    	laneProperties.put("name", lane.getName());
+	    	marshallProperties(laneProperties, generator);
+	    	generator.writeObjectFieldStart("stencil");
+	    	generator.writeObjectField("id", "Lane");
+		    generator.writeEndObject();
+		    generator.writeArrayFieldStart("childShapes");
+		    for (FlowElement flowElement: lane.getFlowNodeRefs()) {
+		    	nodeRefIds.add(flowElement.getId());
+		    	// we dont want an offset here!
+		    	marshallFlowElement(flowElement, plane, generator, 0, 0, preProcessingData, def);
+		    }
+		    generator.writeEndArray();
+		    generator.writeArrayFieldStart("outgoing");
+		    generator.writeEndArray();
+		    generator.writeObjectFieldStart("bounds");
+		    generator.writeObjectFieldStart("lowerRight");
+		    generator.writeObjectField("x", bounds.getX() + bounds.getWidth() - xOffset);
+		    generator.writeObjectField("y", bounds.getY() + bounds.getHeight() - yOffset);
+		    generator.writeEndObject();
+		    generator.writeObjectFieldStart("upperLeft");
+		    generator.writeObjectField("x", bounds.getX() - xOffset);
+		    generator.writeObjectField("y", bounds.getY() - yOffset);
+		    generator.writeEndObject();
+		    generator.writeEndObject();
+	    	generator.writeEndObject();
+    	} else {
+    		// dont marshall the lane unless it has BPMNDI info (eclipse editor does not generate it for lanes currently.
+    		for (FlowElement flowElement: lane.getFlowNodeRefs()) {
+		    	nodeRefIds.add(flowElement.getId());
+		    	// we dont want an offset here!
+		    	marshallFlowElement(flowElement, plane, generator, 0, 0, preProcessingData, def);
+		    }
+    	}
     	
     	return nodeRefIds;
     }
@@ -1702,8 +1711,8 @@ public class Bpmn2JsonMarshaller {
         		return element;
         	}
         }
-		throw new IllegalArgumentException(
-			"Could not find BPMNDI information for " + baseElement.getId());
+    	_logger.info("Could not find BPMNDI information for " + baseElement);
+    	return null;
     }
     
     private void marshallGlobalTask(GlobalTask globalTask, JsonGenerator generator) {
