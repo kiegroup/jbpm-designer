@@ -2633,8 +2633,38 @@
 			"icon":				"diagram.png",
 			"mayBeRoot":		true,
 			"hide":				true,
-			"propertyPackages" : ["baseAttributes","diagram"],
-			"roles":			["canContainArtifacts"]
+			"propertyPackages" : ["diagram"],
+			"roles":			["canContainArtifacts"],
+			"properties": [
+				{
+					"id":"name",
+					"type":"String",
+					"title":"Name",
+					"value":"$processName$",
+					"description":"The descriptive name of the BPMN element.",
+					"description_de":"Bezeichnung des BPMN-Elementes.",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines" : true,
+					"refToView":"text_name",
+					"popular" : true	
+				},
+				{
+					"id":"documentation",
+					"type":"Text",
+					"title":"Documentation",
+					"title_de":"Dokumentation",
+					"value":"",
+					"description":"This attribute is used to annotate the BPMN element, such as descriptions and other documentation.",
+					"description_de":"Der Modellierer kann weiteren Text zur Dokumentation des BPMN-Elementes einfügen.",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true,
+					"popular" : true
+				}
+			]
 		},
 		
 		// Acitvities

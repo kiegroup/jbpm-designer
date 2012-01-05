@@ -153,12 +153,18 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         	workItemTemplate.setAttribute("workitemDefs", workDefinitions);
         	if(workitemConfigInfo != null && workitemConfigInfo.keySet() != null && workitemConfigInfo.keySet().size() > 0) {
         		for(String key: workitemConfigInfo.keySet()) {
-        			System.out.println("Setting process pacakge name to: " + key);
         			workItemTemplate.setAttribute("packageName", key);
         		}
         	} else {
         		workItemTemplate.setAttribute("packageName", "");
         	}
+        	String[] info = findPackageAndAssetInfo(uuid, profile);
+        	if(info != null && info.length == 2 && info[1] != null) {
+        		workItemTemplate.setAttribute("processName", info[1]);
+        	} else {
+        		workItemTemplate.setAttribute("processName", "");
+        	}
+        	
         	// default the process id
         	workItemTemplate.setAttribute("processid", "com.sample.bpmm2");
         	// delete stencil data json if exists
@@ -545,6 +551,65 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             _logger.error(e.getMessage());
         } 
         return packages;
+    }
+    
+    private String[] findPackageAndAssetInfo(String uuid,
+            IDiagramProfile profile) throws Exception {
+        List<String> packages = new ArrayList<String>();
+        String packagesURL = ExternalInfo.getExternalProtocol(profile)
+                + "://"
+                + ExternalInfo.getExternalHost(profile)
+                + "/"
+                + profile.getExternalLoadURLSubdomain().substring(0,
+                        profile.getExternalLoadURLSubdomain().indexOf("/"))
+                + "/rest/packages/";
+         XMLInputFactory factory = XMLInputFactory.newInstance();
+         XMLStreamReader reader = factory
+                .createXMLStreamReader(getInputStreamForURL(packagesURL, profile));
+        while (reader.hasNext()) {
+            if (reader.next() == XMLStreamReader.START_ELEMENT) {
+                if ("title".equals(reader.getLocalName())) {
+                    packages.add(reader.getElementText());
+                }
+            }
+        }
+        boolean gotPackage = false;
+        String[] pkgassetinfo = new String[2];
+        for (String nextPackage : packages) {
+            String packageAssetURL = ExternalInfo.getExternalProtocol(profile)
+                    + "://"
+                    + ExternalInfo.getExternalHost(profile)
+                    + "/"
+                    + profile.getExternalLoadURLSubdomain().substring(0,
+                            profile.getExternalLoadURLSubdomain().indexOf("/"))
+                    + "/rest/packages/" + nextPackage + "/assets/";
+            XMLInputFactory pfactory = XMLInputFactory.newInstance();
+            XMLStreamReader preader = pfactory
+                   .createXMLStreamReader(getInputStreamForURL(
+                            packageAssetURL, profile));
+            String title = "";
+            while (preader.hasNext()) {
+                int next = preader.next();
+                if (next == XMLStreamReader.START_ELEMENT) {
+                    if ("title".equals(preader.getLocalName())) {
+                        title = preader.getElementText();
+                    }
+                    if ("uuid".equals(preader.getLocalName())) {
+                        String eleText = preader.getElementText();
+                        if (uuid.equals(eleText)) {
+                            pkgassetinfo[0] = nextPackage;
+                            pkgassetinfo[1] = title;
+                            gotPackage = true;
+                        }
+                    }
+                }
+            }
+            if (gotPackage) {
+                // noo need to loop through rest of packages
+                break;
+            }
+        }
+        return pkgassetinfo;
     }
     
     private String readFile(String pathname) throws IOException {
