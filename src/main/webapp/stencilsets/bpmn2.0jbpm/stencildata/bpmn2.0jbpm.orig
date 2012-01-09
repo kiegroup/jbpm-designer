@@ -1930,7 +1930,7 @@
 				{
 					"id":"adhocordering",
 					"type":"Choice",
-					"title":"AdHocOrdering",
+					"title":"",
 					"title_de":"Ad-hoc Anordnung",
 					"value":"Sequential",
 					"description":"",
@@ -1941,14 +1941,18 @@
 						{
 							"id":"c1",
 							"title":"Sequential",
-							"title_de":"sequentiell",
-							"value":"sequential"
+							"title_de":"Sequentiell",
+							"value":"Sequential",
+							"icon" : "activity/list/mi.sequential.png",
+							"refToView":"sequential"
 						},
 						{
 							"id":"c2",
 							"title":"Parallel",
-							"title_de":"parallel",
-							"value":"parallel"
+							"title_de":"Parallel",
+							"value":"Parallel",
+							"icon" : "activity/list/mi.parallel.png",
+							"refToView":"parallel"
 						}
 					]
 				},
@@ -2134,19 +2138,23 @@
 					"description":"",
 					"readonly":false,
 					"optional":false,
-					"refToView":"",
+					"refToView":"none",
 					"items": [
 						{
 							"id":"c1",
 							"title":"Sequential",
-							"title_de":"sequentiell",
-							"value":"sequential"
+							"title_de":"Sequentiell",
+							"value":"Sequential",
+							"icon" : "activity/list/mi.sequential.png",
+							"refToView":"misequential"
 						},
 						{
 							"id":"c2",
 							"title":"Parallel",
-							"title_de":"parallel",
-							"value":"parallel"
+							"title_de":"Parallel",
+							"value":"Parallel",
+							"icon" : "activity/list/mi.parallel.png",
+							"refToView":"miparallel"
 						}
 					]
 				},
@@ -2492,20 +2500,22 @@
 					"value":"Parallel",
 					"description":"",
 					"readonly":false,
-					"optional":true,
-					"refToView":"",
+					"optional":false,
+					"refToView":"none",
 					"items": [
 						{
 							"id":"c1",
 							"title":"Sequential",
 							"value":"Sequential",
-							"refToView":""
+							"icon" : "activity/list/mi.sequential.png",
+							"refToView":"misequential"
 						},
 						{
 							"id":"c2",
 							"title":"Parallel",
 							"value":"Parallel",
-							"refToView":""
+							"icon" : "activity/list/mi.parallel.png",
+							"refToView":"miparallel"
 						}
 					]
 				},
@@ -2971,7 +2981,7 @@
 				"baseAttributes",
 				"flowElement",
 				"activity",
-				"subprocess",
+				/** "subprocess", **/
 				/** "loopcharacteristics", **/
 				"bgColor",
 				"properties",
@@ -3103,7 +3113,6 @@
 						}
 					]                                        
 				}
-				
 			],
 			"roles": 			[
 				"all",
@@ -3119,6 +3128,130 @@
 		}, 
 		{
 			"type" : 			"node",
+			"id" :				"MultipleInstanceSubprocess",
+			"title" : 			"Multiple instances",
+			"title_de" :		"Multiple instances",
+			"groups" :			["Activities"],
+			"groups_de" :		["Activities"],
+			"description" :		"A multiple instances subprocess. Allows to execute the contained process segment multiple times.",
+			"description_de" :	"A multiple instances subprocess. Allows to execute the contained process segment multiple times.",
+			"view" :			"activity/subprocess.multiple.svg",
+			"icon" :			"activity/subprocess.png",
+			"propertyPackages" :[
+				"baseAttributes",
+				"flowElement",
+				/** "activity", **/
+				/** "subprocess", **/
+				/** "loopcharacteristics", **/
+				"bgColor",
+				"properties" /**,**/
+				/** "iospecification" **/
+			],
+			"properties" :		[
+				{
+					"id":"activitytype",
+					"type":"String",
+					"title":"ActivityType",
+					"title_de":"Aktivitätstyp",
+					"value":"Sub-Process",
+					"value_de":"Unterprozess",
+					"description":"The Type of Activity.",
+					"description_de":"Typ der Aktivität",
+					"readonly":true,
+					"optional":false,
+					"length":""
+				},
+				{
+					"id":"bgcolor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"title_de":"Hintergrundfarbe",
+					"value":"#ffffff",
+					"gradient":true,
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"fill_el",
+					"fill":true,
+					"stroke":false
+				},
+ 				{
+					"id":"collectionexpression",
+					"type":"String",
+					"title":"CollectionExpression",
+					"title_de":"CollectionExpression",
+					"value":"",
+					"description":"Name of a variable that represents the collection of elements that should be iterated over.",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"variablename",
+					"type":"String",
+					"title":"Variable Name",
+					"title_de":"Variable Name",
+					"value":"",
+					"description":"Name of the variable to contain the current element from the collection.",
+					"readonly":false,
+					"optional":false
+				},
+				{
+					"id":"onEntryActions",
+					"type":"Text",
+					"title":"On Entry Actions",
+					"title_de":"On Entry Actions",
+					"value":"",
+					"description":"on entry actions",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"onExitActions",
+					"type":"Text",
+					"title":"On Exit Actions",
+					"title_de":"On Exit Actions",
+					"value":"",
+					"description":"on exit actions",
+					"readonly":false,
+					"optional":true
+				},
+				{
+					"id":"script_language",
+					"type":"Choice",
+					"title":"ScriptLanguage",
+					"title_de":"Skript Sprache",
+					"value":"java",
+					"description":"Defines the script language.",
+					"readonly":false,
+					"optional":true,
+					"items": [
+						{
+							"id": "c1",
+							"title":"java",
+							"value":"java"
+						},
+						{
+							"id": "c2",
+							"title": "mvel",
+							"value": "mvel"
+						}
+					]                                        
+				}
+			],
+			"roles": [
+				"all",
+				"sequence_start",
+				"sequence_end",
+				"messageflow_start",
+				"messageflow_end",
+				"to_task_event",
+				"from_task_event",
+				"fromtoall",
+				"ActivitiesMorph"
+			]
+		},
+		{
+			"type" : 			"node",
 			"id" :				"Subprocess",
 			"title" :			"Embedded Subprocess",
 			"title_de" :		"Embedded Subprocess",
@@ -3126,7 +3259,7 @@
 			"groups_de" :		["Aktivitäten"],
 			"description" :		"A subprocess is a decomposable activity. An expanded subprocess contains a valid BPMN diagram.",
 			"description_de" :	"Ein Unterprozess ist eine verfeinerte Aktivität. Ein aufgeklappter Unterprozess enthält in sich ein eigenes BPMN Diagramm, welches direkt innerhalb modelliert wird.",
-			"view" :			"activity/subprocess.expanded.svg",
+			"view" :			"activity/subprocess.embedded.svg",
 			"icon" :			"activity/expanded.subprocess.png",
  			"layout" : 			[
  									{"type" : "layout.bpmn2_0.subprocess"},
@@ -3146,7 +3279,7 @@
 				"baseAttributes",
 				"flowElement",
 				"activity",
-				"subprocess",
+				/** "subprocess", **/
 				/** "loopcharacteristics", **/
 				"properties",
 				"iospecification"
@@ -3197,6 +3330,28 @@
 					"description":"on exit actions",
 					"readonly":false,
 					"optional":true
+				},
+				{
+					"id":"script_language",
+					"type":"Choice",
+					"title":"ScriptLanguage",
+					"title_de":"Skript Sprache",
+					"value":"java",
+					"description":"Defines the script language.",
+					"readonly":false,
+					"optional":true,
+					"items": [
+						{
+							"id": "c1",
+							"title":"java",
+							"value":"java"
+						},
+						{
+							"id": "c2",
+							"title": "mvel",
+							"value": "mvel"
+						}
+					]                                        
 				}
 			],
 			"roles"	:			[
@@ -3221,7 +3376,7 @@
 			"groups_de" :		["Aktivitäten"],
 			"description" :		"A subprocess is a decomposable activity. An expanded subprocess contains a valid BPMN diagram.",
 			"description_de" :	"Ein Unterprozess ist eine verfeinerte Aktivität. Ein aufgeklappter Unterprozess enthält in sich ein eigenes BPMN Diagramm, welches direkt innerhalb modelliert wird.",
-			"view" :			"activity/subprocess.expanded.svg",
+			"view" :			"activity/subprocess.adhoc.svg",
 			"icon" :			"activity/expanded.subprocess.png",
  			"layout" : 			[
  									{"type" : "layout.bpmn2_0.subprocess"},
@@ -3292,6 +3447,28 @@
 					"description":"on exit actions",
 					"readonly":false,
 					"optional":true
+				},
+				{
+					"id":"script_language",
+					"type":"Choice",
+					"title":"ScriptLanguage",
+					"title_de":"Skript Sprache",
+					"value":"java",
+					"description":"Defines the script language.",
+					"readonly":false,
+					"optional":true,
+					"items": [
+						{
+							"id": "c1",
+							"title":"java",
+							"value":"java"
+						},
+						{
+							"id": "c2",
+							"title": "mvel",
+							"value": "mvel"
+						}
+					]                                        
 				}
 			],
 			"roles"	:			[
@@ -6716,6 +6893,19 @@
 			},
 			{
 				"role" : "AdHocSubprocess",
+				"contains" : [
+					"sequence_start",
+					"sequence_end",
+					"from_task_event",
+					"to_task_event",
+					"EventSubprocess",
+					"CollapsedEventSubprocess",
+					"TextAnnotation",
+					"from_participant"
+				]
+			},
+			{
+				"role" : "MultipleInstanceSubprocess",
 				"contains" : [
 					"sequence_start",
 					"sequence_end",
