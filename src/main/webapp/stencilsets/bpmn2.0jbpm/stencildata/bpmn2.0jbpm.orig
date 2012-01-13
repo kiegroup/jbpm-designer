@@ -210,7 +210,8 @@
 					"optional":true,
 					"length":"",
 					"wrapLines":true
-				},
+				}
+				/**,
 				{
 					"id":"inputset",
 					"type":"String",
@@ -223,7 +224,7 @@
 					"optional":true,
 					"length":"",
 					"wrapLines":true
-				}
+				}**/
  			]
  		},
  		{
@@ -5018,7 +5019,7 @@
 				}
 			]
 		},
-		{
+		/**{
 			"type" :		 	"node",
 			"id" :				"StartMultipleEvent",
 			"title" :			"Start Multiple Event",
@@ -5047,7 +5048,7 @@
 				"StartEventsMorph"
 			],
 			"properties": [
-				/**{
+				{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -5056,10 +5057,10 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				}**/
+				}
 			]
-		},
-		{
+		},**/
+		/**{
 			"type": "node",
 			"id":"StartParallelMultipleEvent",
 			"title":"Start Parallel Multiple Event",
@@ -5088,7 +5089,7 @@
 				"StartEventsMorph"
 			],
 			"properties": [
-				/**{
+				{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -5097,12 +5098,11 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				}**/
+				}
 			]
-		},
+		},**/
 		
 		// Intermediate Events Catching
-		
 		{
 			"type": "node",
 			"id":"IntermediateMessageEventCatching",
@@ -5365,7 +5365,7 @@
 				}
 			]
 		},
-		{
+		/**{
 			"type": "node",
 			"id":"IntermediateLinkEventCatching",
 			"title":"Link Intermediate Event",
@@ -5401,8 +5401,7 @@
                     "readonly":false,
 					"refToView" : "diagramLink",
                     "optional":false
-                }
-                /**,
+                },
 				{
 					"id":"trigger",
 					"type":"String",
@@ -5414,9 +5413,9 @@
 					"optional":false,
 					"refToView":"",
 					"length":""
-				}**/
+				}
 			]
-		},
+		},**/
 		{
 			"type": "node",
 			"id":"IntermediateErrorEvent",
@@ -5471,7 +5470,7 @@
 				}
 			]
 		},
-		{
+		/**{
 			"type": "node",
 			"id":"IntermediateCancelEvent",
 			"title":"Cancel Intermediate Event",
@@ -5499,7 +5498,7 @@
 				"IntermediateEventsMorph"
 			],
 			"properties": [
-				/**{
+				{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -5510,9 +5509,9 @@
 					"optional":false,
 					"refToView":"",
 					"length":""
-				}**/
+				}
 			]
-		},
+		},**/
 		{
 			"type": "node",
 			"id":"IntermediateCompensationEventCatching",
@@ -5614,7 +5613,7 @@
 				}
 			]
 		},
-		{
+		/**{
 			"type": "node",
 			"id":"IntermediateMultipleEventCatching",
 			"title":"Multiple Intermediate Event",
@@ -5648,7 +5647,7 @@
 				"IntermediateEventsMorph"
 			],
 			"properties": [
-				/**{
+				{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -5659,10 +5658,10 @@
 					"optional":false,
 					"refToView":"",
 					"length":""
-				}**/
+				}
 			]
-		},
-		{
+		},**/
+		/**{
 			"type": "node",
 			"id":"IntermediateParallelMultipleEventCatching",
 			"title":"Parallel Multiple Intermediate Event",
@@ -5695,7 +5694,7 @@
 				"IntermediateEventsMorph"
 			],
 			"properties": [
-				/**{
+				{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -5706,12 +5705,11 @@
 					"optional":false,
 					"refToView":"",
 					"length":""
-				}**/
+				}
 			]
-		},
+		},**/
 		
 		// Intermediate Events Throwing
-		
 		{
 			"type": "node",
 			"id":"IntermediateEvent",
@@ -5852,7 +5850,7 @@
 				}
 			]
 		},
-		{
+		/** {
 			"type": "node",
 			"id":"IntermediateLinkEventThrowing",
 			"title":"Link Intermediate Event",
@@ -5888,8 +5886,7 @@
 					"refToView": "diagramLink",
                     "readonly":false,
                     "optional":false
-                }
-                /**,
+                },
 				{
 					"id":"trigger",
 					"type":"String",
@@ -5899,9 +5896,9 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				}**/
+				}
 			]
-		},
+		},**/
 		{
 			"type": "node",
 			"id":"IntermediateCompensationEventThrowing",
@@ -5992,7 +5989,7 @@
 				}
 			]
 		},
-		{
+		/**{
 			"type": "node",
 			"id":"IntermediateMultipleEventThrowing",
 			"title":"Multiple Intermediate Event",
@@ -6019,7 +6016,7 @@
 				"IntermediateEventsMorph"
 			],
 			"properties": [
-				/**{
+				{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -6028,9 +6025,9 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				}**/
+				}
 			]
-		},
+		},**/
 		
 		// End Events
 		
