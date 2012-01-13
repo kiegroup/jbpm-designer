@@ -41,6 +41,7 @@ import org.eclipse.bpmn2.AdHocOrdering;
 import org.eclipse.bpmn2.AdHocSubProcess;
 import org.eclipse.bpmn2.Artifact;
 import org.eclipse.bpmn2.Association;
+import org.eclipse.bpmn2.AssociationDirection;
 import org.eclipse.bpmn2.BaseElement;
 import org.eclipse.bpmn2.BoundaryEvent;
 import org.eclipse.bpmn2.BusinessRuleTask;
@@ -1183,6 +1184,7 @@ public class Bpmn2JsonMarshaller {
         }
         
         // data inputs
+        DataInput groupDataInput = null;
         if(task.getIoSpecification() != null) {
             List<InputSet> inputSetList = task.getIoSpecification().getInputSets();
             StringBuilder dataInBuffer = new StringBuilder();
@@ -1193,6 +1195,9 @@ public class Bpmn2JsonMarshaller {
                     if(dataIn.getName() != null && !dataIn.getName().equals("TaskName")) {
                         dataInBuffer.append(dataIn.getName());
                         dataInBuffer.append(",");
+                    }
+                    if(dataIn.getName() != null && dataIn.getName().equals("GroupId")) {
+                    	groupDataInput = dataIn;
                     }
                 }
             }
@@ -1266,6 +1271,12 @@ public class Bpmn2JsonMarshaller {
             		}
             		associationBuff.append(rhsAssociation).append("=").append(associationValue);
             		associationBuff.append(",");
+            		
+            		if (groupDataInput != null && datain.getAssignment().get(0).getTo() != null &&
+            				((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
+            						((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(groupDataInput.getId())) {
+            			properties.put("groupid", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
+            		}
             	}
             } else if(isBiDirectional) {
                 associationBuff.append(lhsAssociation).append("<->").append(rhsAssociation);
@@ -1527,13 +1538,29 @@ public class Bpmn2JsonMarshaller {
     private void marshallDataObject(DataObject dataObject, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
     	Map<String, Object> properties = new LinkedHashMap<String, Object>(flowElementProperties);
 		properties.put("name", dataObject.getName());
-	    marshallProperties(properties, generator);
-	    generator.writeObjectFieldStart("stencil");
+		if(dataObject.getItemSubjectRef().getStructureRef() != null && dataObject.getItemSubjectRef().getStructureRef().length() > 0) {
+			properties.put("type", dataObject.getItemSubjectRef().getStructureRef());
+		}
+		
+		if(findOutgoingAssociation(plane, dataObject) != null) {
+			properties.put("input_output", "Input");
+		} else {
+			properties.put("input_output", "Output");
+		}
+	    
+		marshallProperties(properties, generator);
+	    
+		generator.writeObjectFieldStart("stencil");
 	    generator.writeObjectField("id", "DataObject");
 	    generator.writeEndObject();
 	    generator.writeArrayFieldStart("childShapes");
 	    generator.writeEndArray();
 	    generator.writeArrayFieldStart("outgoing");
+    	if(findOutgoingAssociation(plane, dataObject) != null) {
+    		generator.writeStartObject();
+    		generator.writeObjectField("resourceId", findOutgoingAssociation(plane, dataObject).getId());
+    		generator.writeEndObject();
+    	}
 	    generator.writeEndArray();
 	    
 	    Bounds bounds = ((BPMNShape) findDiagramElement(plane, dataObject)).getBounds();
@@ -1994,7 +2021,13 @@ public class Bpmn2JsonMarshaller {
         
         marshallProperties(properties, generator);
         generator.writeObjectFieldStart("stencil");
-        generator.writeObjectField("id", "Association_Undirected");
+        if(association.getAssociationDirection().equals(AssociationDirection.ONE)) {
+        	generator.writeObjectField("id", "Association_Unidirectional");
+        } else if(association.getAssociationDirection().equals(AssociationDirection.BOTH)) {
+        	generator.writeObjectField("id", "Association_Bidirectional");
+        } else {
+        	generator.writeObjectField("id", "Association_Undirected");
+        }
         generator.writeEndObject();
         generator.writeArrayFieldStart("childShapes");
         generator.writeEndArray();
@@ -2104,7 +2137,7 @@ public class Bpmn2JsonMarshaller {
             throw new IllegalArgumentException("Don't know how to get associations from a non-Process Diagram");
         }
         
-        org.eclipse.bpmn2.Process process = (org.eclipse.bpmn2.Process) plane.getBpmnElement();
+        Process process = (Process) plane.getBpmnElement();
         for (Artifact artifact : process.getArtifacts()) {
             if (artifact instanceof Association){
                 Association association = (Association) artifact;

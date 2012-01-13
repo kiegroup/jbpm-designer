@@ -101,19 +101,19 @@
 					"length":"",
 					"wrapLines":true
 				},**/
-				{
-					"id":"eventdefinitions",
+				/**{
+					"id":"eventdefinition",
 					"type":"String",
-					"title":"EventDefinitions",
-					"title_de":"EreignisDefinitionen",
+					"title":"EventDefinition",
+					"title_de":"EreignisDefinitione",
 					"value":"",
-					"description":"EventDefinitions (EventDefinition) is an attribute that defines the type of contained triggers expected for a catch Event.",
-					"description_de":"Das Attribut EreignisDefinitions (EreignisDefinition) definiert die beinhaltenten Auslöser für ein eintretendes Ereignis.",
+					"description":"EventDefinition is an attribute that defines the type of contained triggers expected for a catch Event.",
+					"description_de":"Das Attribut EreignisDefinition definiert die beinhaltenten Auslöser für ein eintretendes Ereignis.",
 					"readonly":false,
 					"optional":true,
 					"length":"",
 					"wrapLines":true
-				},
+				},**/
 				{
 					"id":"dataoutputassociations",
 					"type":"Text",
@@ -139,7 +139,8 @@
 					"optional":true,
 					"length":"",
 					"wrapLines":true
-				},
+				}
+				/**,
 				{
 					"id":"outputset",
 					"type":"Text",
@@ -152,7 +153,7 @@
 					"optional":true,
 					"length":"",
 					"wrapLines":true
-				}
+				}**/
  			]
  		},
  		{
@@ -2780,7 +2781,18 @@
 					"description":"Comma-separated list of actors",
 					"readonly":false,
 					"optional":true
+				},
+				{
+					"id":"groupid",
+					"type":"String",
+					"title":"GroupID",
+					"title_de":"GroupID",
+					"value":"",
+					"description":"Group id value.",
+					"readonly":false,
+					"optional":true
 				}
+				
 			]
 		},
 		// start custom workitems
@@ -4288,7 +4300,7 @@
 		},
 		
 		// Data Objects
-		/**{
+		{
 			"type" : 			"node",
 			"id" :				"DataObject",
 			"title" :			"Data Object",
@@ -4307,7 +4319,7 @@
 				"bgColor"
 			],
 			"properties" :		[
-				{
+				/**{
 					"id":"state",
 					"type":"String",
 					"title":"State",
@@ -4318,7 +4330,7 @@
 					"readonly":false,
 					"optional":true,
 					"directlyEditable":false
-				},
+				},**/
 				{
 					"id":"input_output",
 					"type":"Choice",
@@ -4351,7 +4363,50 @@
 							"refToView":"output"
 						}
 					]
-				},		
+				},
+				{
+					"id":"type",
+					"type":"Choice",
+					"title":"Type",
+					"title_de":"Type",
+					"value":"None",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"items":[
+						{
+							"id":"c1",
+							"title":"Object",
+							"value":"Object"
+						},
+						{
+							"id":"c2",
+							"title":"Boolean",
+							"value":"Boolean"
+						},
+						{
+							"id":"c3",
+							"title":"Float",
+							"value":"Float"
+						},
+						{
+							"id":"c3",
+							"title":"Integer",
+							"value":"Integer"
+						},
+						{
+							"id":"c3",
+							"title":"List",
+							"value":"List"
+						},
+						{
+							"id":"c3",
+							"title":"String",
+							"value":"String"
+						}
+					]
+				}
+				/**,		
 				{
 					"id" : "iscollection",
 					"type" : "Boolean",
@@ -4363,7 +4418,7 @@
 					"readonly" : false,
 					"optional" : true,
 					"refToView" : "collection"
-				}
+				}**/
 			],
 			"roles" : 			[
 				"all",
@@ -4372,7 +4427,7 @@
 				"fromtoall",
 				"DataObjectMorph"
 			]
-		}, **/
+		},
 //		{
 //			"type" : 			"node",
 //			"id" :				"ITSystem",
@@ -6549,7 +6604,7 @@
 				}
            ]
 		},
-		/**{
+		{
 			"type": "edge",
 			"id":"Association_Unidirectional",
 			"title":"Association (unidirectional)",
@@ -6584,7 +6639,7 @@
 					"popular":true
                 }
            ]
-		},**/
+		},
 		/**{
 			"type": "edge",
 			"id":"Association_Bidirectional",

@@ -389,7 +389,7 @@ public class Bpmn2UnmarshallingTestCase {
     public void testDataObjectUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("dataObject.json"), "").getContents().get(0));
-        assertTrue(definitions.getRootElements().size() == 1);
+        assertTrue(definitions.getRootElements().size() == 2);
         Process process = getRootProcess(definitions);
         assertTrue(process.getFlowElements().iterator().next() instanceof DataObject);
         DataObject da = (DataObject) process.getFlowElements().iterator().next();
@@ -808,14 +808,12 @@ public class Bpmn2UnmarshallingTestCase {
     }*/
     
     private Process getRootProcess(Definitions def) {
-        List<RootElement> rootElements = def.getRootElements();
-        Process process = null;
-        for(RootElement nextRootElement : rootElements) {
+        for(RootElement nextRootElement : def.getRootElements()) {
             if(nextRootElement instanceof Process) {
-                process = (Process) nextRootElement;
+                return (Process) nextRootElement;
             }
         }
-        return process;
+        return null;
     }
     
 }

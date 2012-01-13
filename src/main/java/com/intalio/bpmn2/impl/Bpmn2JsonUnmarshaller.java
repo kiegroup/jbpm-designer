@@ -232,7 +232,9 @@ public class Bpmn2JsonUnmarshaller {
             reconnectFlows();
             revisitGateways(def);
             revisitCatchEventsConvertToBoundary(def);
+            revisitDataObjects(def);
             createDiagram(def);
+            updateIDs(def);
             // return def;
             _currentResource.getContents().add(def);
             return _currentResource;
@@ -254,6 +256,193 @@ public class Bpmn2JsonUnmarshaller {
     		def.getRootElements().add(_subprocessItemDefs.get(key));
     	}
     	_subprocessItemDefs.clear();
+    }
+    
+    public void updateIDs(Definitions def) {
+    	// data object id update
+    	List<RootElement> rootElements =  def.getRootElements();
+        for(RootElement root : rootElements) {
+        	if(root instanceof Process) {
+        		Process process = (Process) root;
+        		List<FlowElement> flowElements = process.getFlowElements();
+	            for(FlowElement fe : flowElements) {
+	            	if(fe instanceof DataObject) {
+	            		DataObject da = (DataObject) fe;
+	            		if(da.getName() != null) {
+	                    	da.setId(da.getName());
+	                    }
+	            	}
+	            }
+        	}
+        }
+    }
+    
+    public void revisitDataObjects(Definitions def) {
+    	List<RootElement> rootElements =  def.getRootElements();
+    	List<ItemDefinition> itemDefinitionsToAdd = new ArrayList<ItemDefinition>();
+        for(RootElement root : rootElements) {
+        	if(root instanceof Process) {
+        		Process process = (Process) root;
+        		List<FlowElement> flowElements = process.getFlowElements();
+	            for(FlowElement fe : flowElements) {
+	            	if(fe instanceof DataObject) {
+	            		DataObject da = (DataObject) fe;
+	            		ItemDefinition itemdef =  Bpmn2Factory.eINSTANCE.createItemDefinition();
+	            		itemdef.setId("_" + da.getId() + "Item");
+	            		Iterator<FeatureMap.Entry> iter = da.getAnyAttribute().iterator();
+	                    while(iter.hasNext()) {
+	                        FeatureMap.Entry entry = iter.next();
+	                        if(entry.getEStructuralFeature().getName().equals("datype")) {
+	                        	itemdef.setStructureRef((String) entry.getValue());
+	                        }
+	                    }
+	                    da.setItemSubjectRef(itemdef);
+	                    itemDefinitionsToAdd.add(itemdef);
+	            	}
+	            }
+        	}
+        }
+        
+        for(ItemDefinition itemDef : itemDefinitionsToAdd) {
+        	def.getRootElements().add(itemDef);
+        }
+        
+        for(RootElement root : rootElements) {
+        	if(root instanceof Process) {
+	        	Process process = (Process) root;
+	            List<Artifact> artifactElements = process.getArtifacts();
+	            for(Artifact af : artifactElements) {
+	            	if(af instanceof Association) {
+	            		Association as = (Association) af;
+	            		if(as.getSourceRef() != null && as.getSourceRef() instanceof DataObject 
+	            				&& as.getTargetRef() != null && (as.getTargetRef() instanceof Task || as.getTargetRef() instanceof ThrowEvent)) {
+	            			DataObject da = (DataObject) as.getSourceRef();
+	            			if(as.getTargetRef() instanceof Task) {
+	            				Task task = (Task) as.getTargetRef();
+	            				if(task.getIoSpecification() == null) {
+	            	                InputOutputSpecification iospec = Bpmn2Factory.eINSTANCE.createInputOutputSpecification();
+	            	                task.setIoSpecification(iospec);
+	            	            }
+	            				if(task.getIoSpecification().getInputSets() == null || task.getIoSpecification().getInputSets().size() < 1) {
+	            	            	InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
+	            	                task.getIoSpecification().getInputSets().add(inset);
+	            	            }
+	            				InputSet inSet = task.getIoSpecification().getInputSets().get(0);
+	            				boolean foundDataInput = false;
+	            				for(DataInput dataInput : inSet.getDataInputRefs()) {
+	            					if(dataInput.getId().equals(task.getId() + "_" + da.getId() + "Input")) {
+	            						foundDataInput = true;
+	            					}
+	            				}
+	            				if(!foundDataInput) {
+		            	        	DataInput d = Bpmn2Factory.eINSTANCE.createDataInput();
+		            	            d.setId(task.getId() + "_" + da.getId() + "Input");
+		            	            d.setName(da.getId() + "Input");
+		            	            task.getIoSpecification().getDataInputs().add(d);
+		            	            task.getIoSpecification().getInputSets().get(0).getDataInputRefs().add(d);
+		            	        	
+		            	        	DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
+		            	        	dia.setTargetRef(d);
+		            	        	dia.getSourceRef().add(da);
+		            	            task.getDataInputAssociations().add(dia);
+	            				}
+	            			} else if(as.getTargetRef() instanceof ThrowEvent) {
+	            				ThrowEvent te = (ThrowEvent) as.getTargetRef();
+	            				// update throw event data input and add data input association
+	            				boolean foundDataInput = false;
+	            				List<DataInput> dataInputs = te.getDataInputs();
+	            				for(DataInput din : dataInputs) {
+	            					if(din.getId().equals(te.getId() + "_" + da.getId() + "Input")) {
+	            						foundDataInput = true;
+	            					}
+	            				}
+	            				if(!foundDataInput) {
+	            					DataInput datain = Bpmn2Factory.eINSTANCE.createDataInput();
+	            					datain.setId(te.getId() + "_" + da.getId() + "Input");
+	            					datain.setName(da.getId() + "Input");
+	            					te.getDataInputs().add(datain);
+	            					
+	            					if(te.getInputSet() == null) {
+		            	            	InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
+		            	            	te.setInputSet(inset);
+		            	            }
+	            					te.getInputSet().getDataInputRefs().add(datain);
+	            					
+	            					DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
+	            					dia.setTargetRef(datain);
+	            					dia.getSourceRef().add(da);
+	            					te.getDataInputAssociation().add(dia);
+	            				}
+	            			}
+	            		} 
+	            		if(as.getTargetRef() != null && as.getTargetRef() instanceof DataObject 
+	            				&& as.getSourceRef() != null && (as.getSourceRef() instanceof Task || as.getSourceRef() instanceof CatchEvent)) {
+	            			DataObject da = (DataObject) as.getTargetRef();
+	            			if(as.getSourceRef() instanceof Task) {
+	            				Task task = (Task) as.getSourceRef();
+	            				if(task.getIoSpecification() == null) {
+	            	                InputOutputSpecification iospec = Bpmn2Factory.eINSTANCE.createInputOutputSpecification();
+	            	                task.setIoSpecification(iospec);
+	            	            }
+	            				
+	            				if(task.getIoSpecification().getOutputSets() == null || task.getIoSpecification().getOutputSets().size() < 1) {
+	            	            	OutputSet outSet = Bpmn2Factory.eINSTANCE.createOutputSet();
+	            	                task.getIoSpecification().getOutputSets().add(outSet);
+	            	            }
+	            				
+	            				boolean foundDataOutput = false;
+	            				OutputSet outSet = task.getIoSpecification().getOutputSets().get(0);
+	            				for(DataOutput dataOut : outSet.getDataOutputRefs()) {
+	            					if(dataOut.getId().equals(task.getId() + "_" + da.getId() + "Output")) {
+	            						foundDataOutput = true;
+	            					}
+	            				}
+	            				
+	            				if(!foundDataOutput) {
+		            	        	DataOutput d = Bpmn2Factory.eINSTANCE.createDataOutput();
+		            	            d.setId(task.getId() + "_" + da.getId() + "Output");
+		            	            d.setName(da.getId());
+		            	            task.getIoSpecification().getDataOutputs().add(d);
+		            	            task.getIoSpecification().getOutputSets().get(0).getDataOutputRefs().add(d);
+		            	        	
+		            	        	DataOutputAssociation dia = Bpmn2Factory.eINSTANCE.createDataOutputAssociation();
+		            	        	dia.setTargetRef(da);
+		            	        	dia.getSourceRef().add(d);
+		            	            task.getDataOutputAssociations().add(dia);
+	            				}
+	            			} else if(as.getSourceRef() instanceof CatchEvent) {
+	            				CatchEvent ce = (CatchEvent) as.getSourceRef();
+	            				// update catch event data output and add data output association
+	            				boolean foundDataOutput = false;
+	            				List<DataOutput> dataOutputs = ce.getDataOutputs();
+	            				for(DataOutput dout : dataOutputs) {
+	            					if(dout.getId().equals(ce.getId() + "_" + da.getId() + "Output")) {
+	            						foundDataOutput = true;
+	            					}
+	            				}
+	            				if(!foundDataOutput) {
+	            					DataOutput dataout = Bpmn2Factory.eINSTANCE.createDataOutput();
+	            					dataout.setId(ce.getId() + "_" + da.getId() + "Output");
+	            					dataout.setName(da.getId() + "Output");
+	            					ce.getDataOutputs().add(dataout);
+	            					
+	            					if(ce.getOutputSet() == null) {
+		            	            	OutputSet outset = Bpmn2Factory.eINSTANCE.createOutputSet();
+		            	            	ce.setOutputSet(outset);
+		            	            }
+	            					ce.getOutputSet().getDataOutputRefs().add(dataout);
+	            					
+	            					DataOutputAssociation dia = Bpmn2Factory.eINSTANCE.createDataOutputAssociation();
+	            					dia.setTargetRef(da);
+	            					dia.getSourceRef().add(dataout);
+	            					ce.getDataOutputAssociation().add(dia);
+	            				}
+	            			}
+	            		} 
+	            	}
+	            }
+	        }
+        }
     }
     
     public void reviseTaskAssociations(Definitions def) {
@@ -930,7 +1119,16 @@ public class Bpmn2JsonUnmarshaller {
         				if(flowElement instanceof SubProcess) {
         					createSubProcessDiagram(plane, flowElement, factory);
         				}
-        			} else if (flowElement instanceof SequenceFlow) {
+        			} else if(flowElement instanceof DataObject) {
+        				Bounds b = _bounds.get(flowElement.getId());
+        				if (b != null) {
+        					BPMNShape shape = factory.createBPMNShape();
+        					shape.setBpmnElement(flowElement);
+        					shape.setBounds(b);
+        					plane.getPlaneElement().add(shape);
+        				}
+        			}
+        			else if (flowElement instanceof SequenceFlow) {
         				SequenceFlow sequenceFlow = (SequenceFlow) flowElement;
         				BPMNEdge edge = factory.createBPMNEdge();
     					edge.setBpmnElement(flowElement);
@@ -1110,9 +1308,9 @@ public class Bpmn2JsonUnmarshaller {
         properties.put("resourceId", resourceId);
         boolean customElement = isCustomElement(properties.get("tasktype"), preProcessingData);
         BaseElement baseElt = Bpmn20Stencil.createElement(stencil, properties.get("tasktype"), customElement);
-
+        
         // register the sequence flow targets.
-        if (baseElt instanceof SequenceFlow) {
+        if(baseElt instanceof SequenceFlow) {
             _sequenceFlowTargets.addAll(outgoing);
         }
         _outgoingFlows.put(baseElt, outgoing);
@@ -1227,17 +1425,16 @@ public class Bpmn2JsonUnmarshaller {
                         rootLevelProcess.getArtifacts().add((Artifact) child);
                     } else if (child instanceof DataObject) {
                         rootLevelProcess.getFlowElements().add((DataObject) child);
-                        ItemDefinition def = ((DataObject) child).getItemSubjectRef();
-                        if (def != null) {
-                            if (def.eResource() == null) {
-                                ((Definitions) rootLevelProcess.eContainer()).getRootElements().add(0, def);
-                            }
-                            Import imported = def.getImport();
-                            if (imported != null && imported.eResource() == null) {
-                                ((Definitions) rootLevelProcess.eContainer()).getImports().add(0, imported);
-                            }
-                        }
-                        
+//                        ItemDefinition def = ((DataObject) child).getItemSubjectRef();
+//                        if (def != null) {
+//                            if (def.eResource() == null) {
+//                                ((Definitions) rootLevelProcess.eContainer()).getRootElements().add(0, def);
+//                            }
+//                            Import imported = def.getImport();
+//                            if (imported != null && imported.eResource() == null) {
+//                                ((Definitions) rootLevelProcess.eContainer()).getImports().add(0, imported);
+//                            }
+//                        }
                     } else if(child instanceof SubProcess) {
                         rootLevelProcess.getFlowElements().add((SubProcess) child);
                     } else if(child instanceof Lane) {
@@ -1303,20 +1500,20 @@ public class Bpmn2JsonUnmarshaller {
 
     private void addLaneFlowNodes(Process process, Lane lane) {
         process.getFlowElements().addAll(lane.getFlowNodeRefs());
-        for (FlowNode node : lane.getFlowNodeRefs()) {
-            if (node instanceof DataObject) {
-                ItemDefinition def = ((DataObject) node).getItemSubjectRef();
-                if (def != null) {
-                    if (def.eResource() == null) {
-                        ((Definitions) process.eContainer()).getRootElements().add(0, ((DataObject) node).getItemSubjectRef());
-                    }
-                    Import imported = def.getImport();
-                    if (imported != null && imported.eResource() == null) {
-                        ((Definitions) process.eContainer()).getImports().add(0, ((DataObject) node).getItemSubjectRef().getImport());
-                    }
-                }
-            }
-        }
+//        for (FlowNode node : lane.getFlowNodeRefs()) {
+//            if (node instanceof DataObject) {
+//                ItemDefinition def = ((DataObject) node).getItemSubjectRef();
+//                if (def != null) {
+//                    if (def.eResource() == null) {
+//                        ((Definitions) process.eContainer()).getRootElements().add(0, ((DataObject) node).getItemSubjectRef());
+//                    }
+//                    Import imported = def.getImport();
+//                    if (imported != null && imported.eResource() == null) {
+//                        ((Definitions) process.eContainer()).getImports().add(0, ((DataObject) node).getItemSubjectRef().getImport());
+//                    }
+//                }
+//            }
+//        }
         if (lane.getChildLaneSet() != null) {
             for (Lane l : lane.getChildLaneSet().getLanes()) {
                 addLaneFlowNodes(process, l);
@@ -1729,6 +1926,15 @@ public class Bpmn2JsonUnmarshaller {
         } else {
             da.setName("");
         }
+        
+        if(properties.get("type") != null && properties.get("type").length() > 0) {
+        	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+            EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                        "http://www.jboss.org/drools", "datype", false, false);
+            EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                properties.get("type"));
+            da.getAnyAttribute().add(extensionEntry);
+        }
     }
 
     private void applyTextAnnotationProperties(TextAnnotation ta, Map<String, String> properties) {
@@ -1787,7 +1993,7 @@ public class Bpmn2JsonUnmarshaller {
             }
             event.setOutputSet(outSet);
         }
-        
+
         // data output associations
         if (properties.get("dataoutputassociations") != null && !"".equals(properties.get("dataoutputassociations"))) {
             String[] allAssociations = properties.get("dataoutputassociations").split( ",\\s*" );
@@ -2797,6 +3003,64 @@ public class Bpmn2JsonUnmarshaller {
             EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(scriptLanguageElement,
                     scriptLanguage);
             task.getAnyAttribute().add(extensionEntry);
+        }
+        
+        if(properties.get("groupid") != null && properties.get("groupid").length() > 0) {
+        	if(task.getIoSpecification() == null) {
+                InputOutputSpecification iospec = Bpmn2Factory.eINSTANCE.createInputOutputSpecification();
+                task.setIoSpecification(iospec);
+            }
+        	List<DataInput> dataInputs = task.getIoSpecification().getDataInputs();
+        	boolean foundGroupIdInput = false;
+        	DataInput foundInput = null;
+        	for(DataInput din : dataInputs) {
+        		if(din.getName().equals("GroupId")) {
+        			foundGroupIdInput = true;
+        			foundInput = din;
+        			break;
+        		}
+        	}
+        	
+        	if(!foundGroupIdInput) {
+        		DataInput d = Bpmn2Factory.eINSTANCE.createDataInput();
+                d.setId(task.getId() + "_" + "GroupId" + "Input");
+                d.setName("GroupId");
+                task.getIoSpecification().getDataInputs().add(d);
+                foundInput = d;
+                
+                if(task.getIoSpecification().getInputSets() == null || task.getIoSpecification().getInputSets().size() < 1) {
+                	InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
+                	task.getIoSpecification().getInputSets().add(inset);
+                }
+                task.getIoSpecification().getInputSets().get(0).getDataInputRefs().add(d);
+        	}
+        	
+        	boolean foundGroupIdAssociation = false;
+        	List<DataInputAssociation> inputAssociations = task.getDataInputAssociations();
+        	for(DataInputAssociation da : inputAssociations) {
+        		if(da.getTargetRef().getId().equals(foundInput.getId())) {
+        			foundGroupIdAssociation = true;
+        			((FormalExpression) da.getAssignment().get(0).getFrom()).setBody(properties.get("groupid"));
+        		}
+        	}
+        	
+        	if(!foundGroupIdAssociation) {
+        		DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
+        		dia.setTargetRef(foundInput);
+        		
+        		Assignment a = Bpmn2Factory.eINSTANCE.createAssignment();
+                FormalExpression groupFromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                groupFromExpression.setBody(properties.get("groupid"));
+                
+                FormalExpression groupToExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                groupToExpression.setBody(foundInput.getId());
+                
+                a.setFrom(groupFromExpression);
+                a.setTo(groupToExpression);
+                
+                dia.getAssignment().add(a);
+                task.getDataInputAssociations().add(dia);
+        	}
         }
     }
     

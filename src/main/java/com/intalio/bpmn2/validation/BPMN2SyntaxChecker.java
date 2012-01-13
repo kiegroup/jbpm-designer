@@ -22,12 +22,14 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.eclipse.bpmn2.Artifact;
 import org.eclipse.bpmn2.BaseElement;
 import org.eclipse.bpmn2.BusinessRuleTask;
 import org.eclipse.bpmn2.CallActivity;
 import org.eclipse.bpmn2.CatchEvent;
 import org.eclipse.bpmn2.CompensateEventDefinition;
 import org.eclipse.bpmn2.ConditionalEventDefinition;
+import org.eclipse.bpmn2.DataObject;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.EndEvent;
 import org.eclipse.bpmn2.ErrorEventDefinition;
@@ -360,6 +362,13 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
     		        		if(!foundCalledElementProcess) {
     		        			addError((CallActivity) fe, "No existing process with id=" + ca.getCalledElement() + " could be found.");
     		        		}
+        				}
+        			}
+        			
+        			if(fe instanceof DataObject) {
+        				DataObject dao = (DataObject) fe;
+        				if(dao.getName() == null || dao.getName().length() < 1) {
+        					addError((DataObject) fe, "Data Object has no name defined.");
         				}
         			}
         		}
