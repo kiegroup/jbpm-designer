@@ -326,6 +326,27 @@ ORYX.Plugins.View = {
 			}.bind(this)
 		});
 		
+		/* Register diff to model */
+		this.facade.offer({
+			'name':ORYX.I18N.View.viewDiff,
+			'functionality': this.diffprocess.bind(this),
+			'group': ORYX.I18N.View.jbpmgroup,
+			'icon': ORYX.PATH + "images/diff.gif",
+			'description': ORYX.I18N.View.viewDiffDesc,
+			'index': 5,
+			'minShape': 0,
+			'maxShape': 0,
+			'isEnabled': function(){
+				profileParamName = "profile";
+				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+		        regexa = new RegExp( regexSa );
+		        profileParams = regexa.exec( window.location.href );
+		        profileParamValue = profileParams[1]; 
+				return profileParamValue == "jbpm";
+			}.bind(this)
+		});
+		
 		// Footer items
 		/* Register information view to model */
 		this.facade.offer({
@@ -818,6 +839,38 @@ ORYX.Plugins.View = {
 	},
 	
 	/**
+	 * Displays a diff (visual and text based) between two versions of the process.
+	 */
+	diffprocess : function() {
+		var diffLoadMask = new Ext.LoadMask(Ext.getBody(), {msg:ORYX.I18N.View.viewDiffLoadingVersions});
+		diffLoadMask.show();
+		
+		Ext.Ajax.request({
+            url: ORYX.PATH + "processdiff",
+            method: 'POST',
+            success: function(request){
+    	   		try {
+    	   			diffLoadMask.hide();
+    	   			this._showProcessDiffDialog(request.responseText);
+    	   		} catch(e) {
+    	   			diffLoadMask.hide();
+    	   			Ext.Msg.alert("Failed to retrieve process version information:\n" + e);
+    	   		}
+                Ext.Msg.hide();
+            }.createDelegate(this),
+            failure: function(){
+            	diffLoadMask.hide();
+            	Ext.Msg.alert("Failed to retrieve process version information.");
+            },
+            params: {
+            	action: 'versions',
+            	profile: ORYX.PROFILE,
+            	uuid : ORYX.UUID
+            }
+        });
+	},
+	
+	/**
 	 * Connects to the jbpm service repository
 	 * and displays it's assets.
 	 */
@@ -864,8 +917,169 @@ ORYX.Plugins.View = {
 	_renderDocs: function(val) {
 		return '<a href="' + val + '" target="_blank">link</a>';
 	},
+	
+	_showProcessDiffDialog : function( jsonString ) {
+		var jsonObj = jsonString.evalJSON();
+		var versionKeys = [];
+		var count = 0;
+	    for (var key in jsonObj) {
+	      if (jsonObj.hasOwnProperty(key)) {
+	    	  versionKeys.push(parseInt(key));
+	    	  count++;
+	      }
+	    }
+	    if(count == 0) {
+	    	alert("No versions of the process were found.");
+	    } else {
+		    versionKeys.sort(function(a,b){return a - b});
+		    var displayVersionKeys = [];
+		    for (var i = 0; i < versionKeys.length; i++) {
+		    	displayVersionKeys[i] = [versionKeys[i] + ""];
+		    }
+		    var versionStore = new Ext.data.SimpleStore({
+				fields: ["name"],
+				data : displayVersionKeys 
+			});
+		    
+		    var combo = new Ext.form.ComboBox({
+		    	fieldLabel: 'Select process version',
+	            labelStyle: 'width:180px',
+	            hiddenName: 'version_name',
+	            emptyText: 'Select a version...',
+	            store: versionStore,
+	            displayField: 'name',
+	            valueField: 'name',
+	            mode: 'local',
+	            typeAhead: true,
+	            width: 168,
+	            triggerAction: 'all',
+	            listeners: 
+	              { 
+	            	select: { 
+	            		fn:function(combo, value) {
+	                    var processJSON = ORYX.EDITOR.getSerializedJSON();
+	              		Ext.Ajax.request({
+	                          url: ORYX.PATH + "uuidRepository",
+	                          method: 'POST',
+	                          success: function(request){
+	                  	   		try {
+	                  	   			var canvasBPMN2 = request.responseText;
+	                  	   			Ext.Ajax.request({
+	                  	              url: ORYX.PATH + "processdiff",
+	                  	              method: 'POST',
+	                  	              success: function(request){
+	                  	      	   		try {
+	                  	      	   			var diffCreateMask = new Ext.LoadMask(Ext.getBody(), {msg:'Creating diff...'});
+	                  	      	   			diffCreateMask.show();
+	                  	      	   			var versionBPMN2 = request.responseText;
+	                  	      	   			var dmp = new diff_match_patch();
+	                  	      	   			dmp.Diff_Timeout = 0;
+	                  	      	   			var d = dmp.diff_main(versionBPMN2, canvasBPMN2);
+	                  	      	   			dmp.diff_cleanupSemantic(d);
+	                  	      	   			var ds = dmp.diff_prettyHtml(d);
+	                  	      	   			
+	                  	      	   			var w = 800;
+	                  	      	   			var h = 400;
+	                  	      	   			var left = (screen.width/2)-(w/2);
+	                  	      	   			var top = (screen.height/2)-(h/2);
+	                  	      	   			var myWindow=window.open('','diffwindow','toolbar=no,location=no,scrollbars=yes,resizable=yes,directories=no,status=no,menubar=no,width=' + w + ',height=' + h + ',top=' + top + ', left=' + left);
+	                  	      	   			myWindow.document.write("<style type=\"text/css\">");
+	                  	      	   			myWindow.document.write("<!--");
+	                  	      	   	    	myWindow.document.write("fieldset{");
+	                  	      	   	    	myWindow.document.write("display:block;");
+	                  	      	   	    	myWindow.document.write("float:left;");
+	                  	      	   	    	myWindow.document.write("width:"+w+"!important;");
+	                  	      	   	    	myWindow.document.write("width:"+w+"px;");
+	                  	      	   	    	myWindow.document.write("font-family:Verdana, Arial, Helvetica, sans-serif;");
+	                  	      	   	    	myWindow.document.write("font-size:12px;");
+	                  	      	   	    	myWindow.document.write("margin-top:20px;");
+	                  	      	   	    	myWindow.document.write("margin-left:20px;");
+	                  	      	   	    	myWindow.document.write("border:1px solid #CCCCCC;");
+	                  	      	   	    	myWindow.document.write("}");
+	                  	      	   	    	myWindow.document.write("legend{");
+	                  	      	   	    	myWindow.document.write("padding:2px 5px;");
+	                  	      	   	    	myWindow.document.write("border:1px solid #CCCCCC;");
+	                  	      	   	    	myWindow.document.write("}");
+	                  	      	   	    	myWindow.document.write("#content{");
+	                  	      	   	    	myWindow.document.write("display:block;");
+	                  	      	   	    	myWindow.document.write("float:left;");
+	                  	      	   	    	myWindow.document.write("padding:10px;");
+	                  	      	   	    	myWindow.document.write("}");
+	                  	      	   	    	myWindow.document.write("-->");
+	                  	      	   	    	myWindow.document.write("</style>");
+	                  	      	   	    	myWindow.document.write("<fieldset>");
+	                  	      	   	    	myWindow.document.write("<legend>BPMN2 diff against process version " + combo.getValue() + "</legend>");
+	                  	      	   	    	myWindow.document.write("<div id=\"content\">"+ds+"</div>");
+	                  	      	   	    	myWindow.document.write("</fieldset>");
+	                  	      	   	    	diffCreateMask.hide();
+	                  	      	   			myWindow.focus();
+	                  	      	   		} catch(e) {
+	                  	      	   			Ext.Msg.alert("Failed to retrieve process version source:\n" + e);
+	                  	      	   		}
+	                  	              }.createDelegate(this),
+	                  	              failure: function(){
+	                  	              	Ext.Msg.alert("Failed to retrieve process version source.");
+	                  	              },
+	                  	              params: {
+	                  	              	action: 'getversion',
+	                  	              	version: combo.getValue(),
+	                  	              	profile: ORYX.PROFILE,
+	                  	              	uuid : ORYX.UUID
+	                  	              }
+	                  	          });
+	                  	   		} catch(e){
+	                  	   			Ext.Msg.alert("Converting to BPMN2 Failed :\n"+e);
+	                  	   		}
+	                          }.createDelegate(this),
+	                          failure: function(){
+	                          	Ext.Msg.alert("Converting to BPMN2 Failed");
+	                          },
+	                          params: {
+	                          	action: 'toXML',
+	                          	pp: ORYX.PREPROCESSING,
+	                          	profile: ORYX.PROFILE,
+	                          	data: processJSON
+	                          }
+	                      });
+	                    }
+	                }  
+	             }
+		    });
+			
+			var dialog = new Ext.Window({ 
+				autoCreate: true,
+				autoScroll:true, 
+				//layout: 	'fit',
+				plain:		true,
+				bodyStyle: 	'padding:5px;',
+				title: 		'Compare process BPMN2 with previous version (diff will be shown in a popup window)', 
+				height: 	100, 
+				width:		500,
+				modal:		true,
+				fixedcenter:true, 
+				shadow:		true, 
+				proxyDrag: 	true,
+				resizable:	false,
+				items: 		[combo],
+				buttons:[
+							{
+								text : 'Close',
+								handler:function(){
+									dialog.hide();
+								}.bind(this)
+							}
+						]
+			});
+			
+			
+			
+			dialog.show();
+			dialog.doLayout();
+			
+	    }
+	},
 
-	_showJbpmServiceDialog: function( jsonString ) {
+	_showJbpmServiceDialog : function( jsonString ) {
 		var jsonObj = jsonString.evalJSON();
 		
 		var myData = [];
