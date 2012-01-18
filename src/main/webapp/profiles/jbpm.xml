@@ -21,12 +21,8 @@
     <plugin name="ORYX.Plugins.ShapeHighlighting" />
     <plugin name="ORYX.Plugins.Edit" />
     <plugin name="ORYX.Plugins.KeysMove" />
-    <!-- to have edges with orthogonal layout -->
     <plugin name="ORYX.Plugins.Layouter.EdgeLayouter" />
-    <!-- to have a better container layout ? -->
-    <!--  <plugin name="ORYX.Plugins.ContainerLayouter" /> -->
     <plugin name="ORYX.Plugins.SyntaxChecker" />
-    <!-- lane layouter -->
     <plugin name="ORYX.Plugins.DragTracker.LaneDragTracker" />
     <plugin name="ORYX.Plugins.DragTracker.PoolDragTracker" />
     <plugin name="ORYX.Plugins.RegexTextEditor" />

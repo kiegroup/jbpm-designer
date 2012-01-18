@@ -844,7 +844,6 @@ ORYX.Plugins.View = {
 	diffprocess : function() {
 		var diffLoadMask = new Ext.LoadMask(Ext.getBody(), {msg:ORYX.I18N.View.viewDiffLoadingVersions});
 		diffLoadMask.show();
-		
 		Ext.Ajax.request({
             url: ORYX.PATH + "processdiff",
             method: 'POST',
@@ -856,7 +855,6 @@ ORYX.Plugins.View = {
     	   			diffLoadMask.hide();
     	   			Ext.Msg.alert("Failed to retrieve process version information:\n" + e);
     	   		}
-                Ext.Msg.hide();
             }.createDelegate(this),
             failure: function(){
             	diffLoadMask.hide();
@@ -929,7 +927,8 @@ ORYX.Plugins.View = {
 	      }
 	    }
 	    if(count == 0) {
-	    	alert("No versions of the process were found.");
+	    	Ext.Msg.minWidth=300;
+	    	Ext.Msg.alert("Diff", "Unable to find proces versions.");
 	    } else {
 		    versionKeys.sort(function(a,b){return a - b});
 		    var displayVersionKeys = [];
@@ -1048,18 +1047,17 @@ ORYX.Plugins.View = {
 			
 			var dialog = new Ext.Window({ 
 				autoCreate: true,
-				autoScroll:true, 
-				//layout: 	'fit',
+				autoScroll: false,
 				plain:		true,
 				bodyStyle: 	'padding:5px;',
 				title: 		'Compare process BPMN2 with previous version (diff will be shown in a popup window)', 
-				height: 	100, 
-				width:		500,
+				height: 	120, 
+				width:		520,
 				modal:		true,
 				fixedcenter:true, 
 				shadow:		true, 
 				proxyDrag: 	true,
-				resizable:	false,
+				resizable:	true,
 				items: 		[combo],
 				buttons:[
 							{
@@ -1070,12 +1068,8 @@ ORYX.Plugins.View = {
 							}
 						]
 			});
-			
-			
-			
 			dialog.show();
 			dialog.doLayout();
-			
 	    }
 	},
 
