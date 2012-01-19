@@ -209,6 +209,26 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
 		this.addExtensionDirectly(extension); 
 	},
 	
+	addExtensionFromDefinition: function(extensionDefinition) {
+		new Ajax.Request(extensionDefinition, {
+			method: 'GET',
+			asynchronous: false,
+			onSuccess: (function(transport) {
+				try {
+					var responseStr = transport.responseText;
+					var jsonObject = responseStr.evalJSON();
+					this.addExtensionDirectly(jsonObject);
+				} catch (e) {
+					ORYX.Log.debug("Unable to load extension definition: " + e);
+					Ext.Msg.alert("Oryx", "Unable to load extension definition: " + e);
+				}
+			}).bind(this),
+			onFailure: (function(transport){
+				Ext.Msg.alert("Oryx", "Unable to create extension definition.");
+			}).bind(this)
+		});  
+	},
+	
 	addExtensionDirectly: function(jsonExtension){
 		try {
 			if(!(jsonExtension["extends"].endsWith("#")))
@@ -274,6 +294,10 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
 		} catch (e) {
 			ORYX.Log.debug("StencilSet.addExtension: Something went wrong when initialising the stencil set extension. " + e);
 		}	
+	},
+	
+	changeTitle: function(title) {
+		this._jsonObject.title = title;
 	},
 	
 	removeExtension: function(namespace) {

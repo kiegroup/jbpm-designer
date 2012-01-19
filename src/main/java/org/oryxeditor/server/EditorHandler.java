@@ -279,6 +279,10 @@ public class EditorHandler extends HttpServlet {
             throws ServletException, IOException {
         Document doc = (Document) _doc.clone();
         String profileName = request.getParameter("profile");
+        if(profileName == null || profileName.length() < 1) {
+        	// default to jbpm
+        	profileName = "jbpm";
+        }
         IDiagramProfile profile = _profileService.findProfile(
                 request, profileName);
         if (profile == null) {

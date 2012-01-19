@@ -1,6 +1,6 @@
 {
-	"title":"jBPM BPMN2",
-	"namespace":"http://b3mn.org/stencilset/bpmn2.0#",
+	"title":"jBPM BPMN2 (Complete)",
+	"namespace":"http://jboss.org/stencilset/bpmn2.0#",
 	"description":"This is the jBPM BPMN 2.0 stencil set specification.",
  	"propertyPackages": [
  		{
@@ -6343,7 +6343,7 @@
 				}
 			]
 		},
-		{
+		/**{
 			"type": "node",
 			"id":"EndMultipleEvent",
 			"title":"Multiple End Event",
@@ -6370,7 +6370,7 @@
 				"EndEventsMorph"
 			],
 			"properties": [
-				/**{
+				{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -6379,9 +6379,9 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				}**/
+				}
 			]
-		},
+		},**/
 		{
 			"type": "node",
 			"id":"EndTerminateEvent",

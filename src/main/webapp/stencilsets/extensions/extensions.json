@@ -1,174 +1,32 @@
 {
 	"extensions": [
 		{
-			"title":"Extended Petrinet Extension",
-			"namespace":"http://oryx-editor.org/stencilsets/extensions/extendedpetrinets#",
-			"description":"Extended Petrinets contain Reset and Inhibitor Arcs",
-			"definition":"extendedpetrinets/extendedpetrinets.json",
-			"extends":"http://b3mn.org/stencilset/petrinet#"
-		},
-		{
-			"title":"BPMN Cost Extension",
-			"namespace":"http://oryx-editor.org/stencilsets/extensions/bpmncosts#",
-			"description":"BPMN 1.1 extension for adding a cost attribute to activities",
-			"definition":"bpmncosts/bpmncosts.json",
-			"extends":"http://b3mn.org/stencilset/bpmn1.1#"
-		},
-		{
-			"title":"BPMN Cost Extension",
-			"namespace":"http://oryx-editor.org/stencilsets/extensions/bpmncosts-2.0#",
-			"description":"BPMN 2.0 extension for adding a cost attribute to activities",
-			"definition":"bpmncosts/bpmncosts-2.0.json",
-			"extends":"http://b3mn.org/stencilset/bpmn2.0#"
-		},
-		{
-			"title":"BPMN WikiRef Extension",
-			"namespace":"http://oryx-editor.org/stencilsets/extensions/bpmnwikirefs#",
-			"description":"BPMN 1.1 extension for adding a WikiRef attribute to all nodes.",
-			"definition":"bpmnwikirefs/bpmnwikirefs.json",
-			"extends":"http://b3mn.org/stencilset/bpmn1.1#"
-		},
-		{
-			"title":"BPMN Sub Set Extension",
-			"namespace":"http://oryx-editor.org/stencilsets/extensions/bpmnsubset#",
-			"description":"BPMN extension that reduces the available stencils.",
-			"definition":"bpmnsubset/bpmnsubset.json",
-			"extends":"http://b3mn.org/stencilset/bpmn#"
-		},
-		{
-			"title":"BPMN 1.1 Basic Subset",
-			"namespace":"http://oryx-editor.org/stencilsets/extensions/bpmn1.1basicsubset#",
-			"description":"A basic subset of BPMN 1.1 containing only task, sequence flow, start event, end event, parallel gateway and data-based XOR.",
-			"definition":"bpmn1.1basicsubset/bpmn1.1basicsubset.json",
-			"extends":"http://b3mn.org/stencilset/bpmn1.1#"
-		},
-		{
-			"title" : "BPMN 2.0 Basic Subset",
-			"namespace" : "http://oryx-editor.org/stencilsets/extensions/bpmn2.0basicsubset#",
-			"description":"A basic subset of BPMN 2.0 containing only task, sequence flow, start event, end event, parallel gateway and data-based XOR.",
-			"definition":"bpmn2.0basicsubset/bpmn2.0basicsubset.json",
-			"extends":"http://b3mn.org/stencilset/bpmn2.0#"
-		},
-        {
-            "title":"BPMN Subset for Service Composition",
-            "namespace":"http://oryx-editor.org/stencilsets/extensions/bpmnservicecompositionsubset#",
-            "description":"A basic subset of BPMN that can be used in the Service Composer.",
-            "definition":"bpmnservicecompositionsubset/bpmnservicecompositionsubset.json",
-            "extends":"http://b3mn.org/stencilset/bpmn1.1#"
-		},
-		{
-            "title":"BPMN Subset for Service Composition in GoldenEye",
-            "namespace":"http://oryx-editor.org/stencilsets/extensions/bpmnservicecompositionsubset-goldeneye#",
-            "description":"A basic subset of BPMN that can be used in the Service Composer.",
-            "definition":"bpmnservicecompositionsubset/bpmnservicecompositionsubset_goldeneye.json",
-            "extends":"http://b3mn.org/stencilset/bpmn1.1#"
-		},
-        {
-            "title":"BPMN Extension for XForms User Interfaces",
-            "namespace":"http://oryx-editor.org/stencilsets/extensions/bpmn-xforms-user-interfaces#",
-            "description":"Extension for adding XForms user interface attributes to BPMN Tasks.",
-            "definition":"bpmn-xforms-user-interfaces/bpmn-xforms-user-interfaces.json",
-            "extends":"http://b3mn.org/stencilset/bpmn1.1#"
-		},
-        {
-            "title":"BPMN Subset for Design Thinking User Research",
-            "namespace":"http://oryx-editor.org/stencilsets/extensions/bpmn-design-thinking-subset#",
-            "description":"A basic subset of BPMN that can be used for user research.",
-            "definition":"bpmn-design-thinking-subset/bpmn-design-thinking-subset.json",
-            "extends":"http://b3mn.org/stencilset/bpmn1.1#"
-		},
-		{
-			"title":"BPEL4Chor Extension",
-			"namespace":"http://oryx-editor.org/stencilsets/extensions/bpel4chor#",
-			"description":"BPEL4Chor extension for adding a messageLink edge and several BPEL4Chor rules.",
-			"definition":"bpel4chor/bpel4chor.json",
-			"extends":"http://b3mn.org/stencilset/bpel#"
-		},
-		{
-			"title":"jBPM Stencils",
-			"namespace":"http://oryx-editor.org/stencilsets/extensions/jbpm#",
-			"description":"A subset of BPMN 1.2 for execution with jBPM",
-			"definition":"jbpm/jbpm.json",
-			"extends":"http://b3mn.org/stencilset/bpmn1.1#"
-		},
-		{
-			"title":"BPEL4Chor Grounding Extension",
-			"namespace":"http://oryx-editor.org/stencilsets/extensions/bpel4chor#",
-			"description":"BPEL4Chor Grounding extension for adding grounding properties .",
-			"definition":"bpel4chor_grounding/bpel4chor_grounding.json",
-			"extends":"http://b3mn.org/stencilset/bpel4chor#"
-		},
-		{
-            "title":"BPMN Subset for YAWL execution",
-            "namespace":"http://oryx-editor.org/stencilsets/extensions/bpmn4yawlSubset#",
-            "description":"A subset of BPMN that can be mapped to YAWL for execution.",
-            "definition":"bpmn4yawl/bpmn4yawlSubset.json",
-            "extends":"http://b3mn.org/stencilset/bpmn1.1#"
-		},
-		{
-			"title":"iBPMN Fault Handling Extension",
-			"namespace":"http://oryx-editor.org/stencilsets/extensions/ibpmn-FH#",
-			"description":"A basic extension of iBPMN containing fault handling capabilities (i.e. silent/no actions, scopes, FCT handling, non-cancellation behavior using non-interrupting events).",
-			"definition":"ibpmn-FH/ibpmn-FH.json",
-			"extends":"http://b3mn.org/stencilset/ibpmn#"
-		},
-		{
-			"title":"BPMN 2.0 Choreographies",
-			"namespace":"http://oryx-editor.org/stencilsets/extensions/bpmn2.0choreography#",
-			"description":"Adds support for Choreography-Diagrams to BPMN 2.0.",
-			"definition":"bpmn2.0choreography/bpmn2.0choreography.json",
-			"extends":"http://b3mn.org/stencilset/bpmn2.0#"
-		},
-		{
-			"title":"BPMN 2.0 Basic Subset for Choreographies",
-			"namespace":"http://oryx-editor.org/stencilsets/extensions/bpmn2.0basicsubset/choreography#",
-			"description":"Adds support for a basic subset of Choreography-Diagrams to BPMN 2.0.",
-			"definition":"bpmn2.0basicsubset/bpmn2.0basicsubset.choreography.json",
-			"extends":"http://b3mn.org/stencilset/bpmn2.0#"
+			"title" : "jBPM BPMN2 Minimal Subset",
+			"namespace" : "http://jboss.org/stencilset/bpmn2.0minimal#",
+			"description":"A subset of JBPM BPMN2",
+			"definition":"bpmn2.0jbpmminimal/bpmn2.0jbpmminimalsubset.json",
+			"extends":"http://jboss.org/stencilset/bpmn2.0#"
 		}
 	],
 	"perspectives": [
 		{
-			"title":"Academic BPMN",
-			"namespace":"http://oryx-editor.org/stencilsets/perspectives/academicbpmn#",
-			"description":"Academic perspective on BPMN. Features the complete standard.",
-			"stencilset":"http://b3mn.org/stencilset/bpmn1.1#",
-			"removeExtensions":[
-				"http://oryx-editor.org/stencilsets/extensions/bpmn1.1basicsubset#"
-			]
-		},
-		{
-			"title":"Beginner BPMN",
-			"namespace":"http://oryx-editor.org/stencilsets/perspectives/beginnerbpmn#",
-			"description":"BPMN for beginners. Features a basic subset of the standard.",
-			"stencilset":"http://b3mn.org/stencilset/bpmn1.1#",
-			"addExtensions": [
-				"http://oryx-editor.org/stencilsets/extensions/bpmn1.1basicsubset#"
-			]
-		},
-		{
-			"title":"Academic BPMN 2.0",
-			"namespace":"http://oryx-editor.org/stencilsets/perspectives/academicbpmn2#",
-			"description":"Academic perspective on BPMN 2.0. Features the complete standard.",
-			"stencilset":"http://b3mn.org/stencilset/bpmn2.0#",
+			"title":"jBPM BPMN2 (Complete)",
+			"namespace":"http://jboss.org/stencilset/bpmn2.0#",
+			"description":"jBPM Full BPMN2 Features",
+			"stencilset":"http://jboss.org/stencilset/bpmn2.0#",
 			"removeExtensions" : [
-				"http://oryx-editor.org/stencilsets/extensions/bpmn2.0basicsubset#",
-				"http://oryx-editor.org/stencilsets/extensions/bpmn2.0basicsubset/choreography#"
+				"http://jboss.org/stencilset/bpmn2.0minimal#"
 			],
 			"addExtensions" : []
 		},
 		{
-			"title" : "Beginner BPMN 2.0",
-			"namespace" : "http://oryx-editor.org/stencilsets/perspectives/beginnerbpmn2#",
-			"description" : "BPMN 2.0 for beginners. Features a basic subset of the standard.",
-			"stencilset" : "http://b3mn.org/stencilset/bpmn2.0#",
+			"title":"jBPM BPMN2 (Minimal)",
+			"namespace":"http://jboss.org/stencilset/bpmn2.0minimal#",
+			"description":"jBPM Minimal BPMN2 Features",
+			"stencilset":"http://jboss.org/stencilset/bpmn2.0#",
 			"removeExtensions" : [],
 			"addExtensions" : [
-				{
-					"ifIsLoaded" : "http://oryx-editor.org/stencilsets/extensions/bpmn2.0choreography#",
-					"add" : "http://oryx-editor.org/stencilsets/extensions/bpmn2.0basicsubset/choreography#",
-					"default" : "http://oryx-editor.org/stencilsets/extensions/bpmn2.0basicsubset#"
-				}
+				"http://jboss.org/stencilset/bpmn2.0minimal#"
 			]
 		}
 	]
