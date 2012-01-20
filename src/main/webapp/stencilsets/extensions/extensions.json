@@ -2,31 +2,31 @@
 	"extensions": [
 		{
 			"title" : "jBPM BPMN2 Minimal Subset",
-			"namespace" : "http://jboss.org/stencilset/bpmn2.0minimal#",
+			"namespace" : "http://b3mn.org/stencilset/bpmn2.0minimal#",
 			"description":"A subset of JBPM BPMN2",
 			"definition":"bpmn2.0jbpmminimal/bpmn2.0jbpmminimalsubset.json",
-			"extends":"http://jboss.org/stencilset/bpmn2.0#"
+			"extends":"http://b3mn.org/stencilset/bpmn2.0#"
 		}
 	],
 	"perspectives": [
 		{
 			"title":"jBPM BPMN2 (Complete)",
-			"namespace":"http://jboss.org/stencilset/bpmn2.0#",
+			"namespace":"http://b3mn.org/stencilset/bpmn2.0#",
 			"description":"jBPM Full BPMN2 Features",
-			"stencilset":"http://jboss.org/stencilset/bpmn2.0#",
+			"stencilset":"http://b3mn.org/stencilset/bpmn2.0#",
 			"removeExtensions" : [
-				"http://jboss.org/stencilset/bpmn2.0minimal#"
+				"http://b3mn.org/stencilset/bpmn2.0minimal#"
 			],
 			"addExtensions" : []
 		},
 		{
 			"title":"jBPM BPMN2 (Minimal)",
-			"namespace":"http://jboss.org/stencilset/bpmn2.0minimal#",
+			"namespace":"http://b3mn.org/stencilset/bpmn2.0minimal#",
 			"description":"jBPM Minimal BPMN2 Features",
-			"stencilset":"http://jboss.org/stencilset/bpmn2.0#",
+			"stencilset":"http://b3mn.org/stencilset/bpmn2.0#",
 			"removeExtensions" : [],
 			"addExtensions" : [
-				"http://jboss.org/stencilset/bpmn2.0minimal#"
+				"http://b3mn.org/stencilset/bpmn2.0minimal#"
 			]
 		}
 	]
