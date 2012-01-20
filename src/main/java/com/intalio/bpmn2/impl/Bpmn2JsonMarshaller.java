@@ -1803,6 +1803,24 @@ public class Bpmn2JsonMarshaller {
         		}
         	}
         }
+        
+        // properties
+        List<Property> processProperties = subProcess.getProperties();
+        if(processProperties != null && processProperties.size() > 0) {
+            String propVal = "";
+            for(int i=0; i<processProperties.size(); i++) {
+                Property p = processProperties.get(i);
+                propVal += p.getId();
+                // check the structureRef value
+                if(p.getItemSubjectRef() != null && p.getItemSubjectRef().getStructureRef() != null) {
+                    propVal += ":" + p.getItemSubjectRef().getStructureRef();
+                }
+                if(i != processProperties.size()-1) {
+                    propVal += ",";
+                }
+            }
+            properties.put("vardefs", propVal);
+        }
 		
 	    marshallProperties(properties, generator);
 	    generator.writeObjectFieldStart("stencil");

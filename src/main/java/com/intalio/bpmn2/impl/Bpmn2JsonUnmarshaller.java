@@ -1610,7 +1610,6 @@ public class Bpmn2JsonUnmarshaller {
         } else {
             sp.setName("");
         }
-        
         // process on-entry and on-exit actions as custom elements
         if(properties.get("onentryactions") != null && properties.get("onentryactions").length() > 0) {
             String[] allActions = properties.get("onentryactions").split( "\\|\\s*" );
@@ -1860,6 +1859,28 @@ public class Bpmn2JsonUnmarshaller {
             _subprocessItemDefs.put(itemDef.getId(), itemDef);
             loopCharacteristics.setInputDataItem(din);
             sp.setLoopCharacteristics(loopCharacteristics);
+        }
+        
+        // properties
+        if(properties.get("vardefs") != null && properties.get("vardefs").length() > 0) {
+            String[] vardefs = properties.get("vardefs").split( ",\\s*" );
+            for(String vardef : vardefs) {
+                Property prop = Bpmn2Factory.eINSTANCE.createProperty();
+                ItemDefinition itemdef =  Bpmn2Factory.eINSTANCE.createItemDefinition();
+                // check if we define a structure ref in the definition
+                if(vardef.contains(":")) {
+                    String[] vardefParts = vardef.split( ":\\s*" );
+                    prop.setId(vardefParts[0]);
+                    itemdef.setId("_" + prop.getId() + "Item");
+                    itemdef.setStructureRef(vardefParts[1]);
+                } else {
+                    prop.setId(vardef);
+                    itemdef.setId("_" + prop.getId() + "Item");
+                }
+                prop.setItemSubjectRef(itemdef);
+                sp.getProperties().add(prop);
+                _subprocessItemDefs.put(itemdef.getId(), itemdef);
+            }
         }
     }
     
