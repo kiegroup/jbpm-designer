@@ -1,5 +1,5 @@
 {
-	"title":"jBPM BPMN2 (Complete)",
+	"title":"jBPM BPMN2 (Full)",
 	"namespace":"http://b3mn.org/stencilset/bpmn2.0#",
 	"description":"This is the jBPM BPMN 2.0 stencil set specification.",
  	"propertyPackages": [
@@ -3249,6 +3249,17 @@
 							"value": "mvel"
 						}
 					]                                        
+				},
+				{
+					"id":"vardefs",
+					"type":"Text",
+					"title":"Variable Definitions",
+					"title_de":"Variable Definitions",
+					"value":"",
+					"description":"Comma-separated variable definitions",
+					"description_de":"Durch Komma getrennte Variablendeklarationen",
+					"readonly":false,
+					"optional":true
 				}
 			],
 			"roles": [
@@ -3365,6 +3376,17 @@
 							"value": "mvel"
 						}
 					]                                        
+				},
+				{
+					"id":"vardefs",
+					"type":"Text",
+					"title":"Variable Definitions",
+					"title_de":"Variable Definitions",
+					"value":"",
+					"description":"Comma-separated variable definitions",
+					"description_de":"Durch Komma getrennte Variablendeklarationen",
+					"readonly":false,
+					"optional":true
 				}
 			],
 			"roles"	:			[
@@ -3482,6 +3504,17 @@
 							"value": "mvel"
 						}
 					]                                        
+				},
+				{
+					"id":"vardefs",
+					"type":"Text",
+					"title":"Variable Definitions",
+					"title_de":"Variable Definitions",
+					"value":"",
+					"description":"Comma-separated variable definitions",
+					"description_de":"Durch Komma getrennte Variablendeklarationen",
+					"readonly":false,
+					"optional":true
 				}
 			],
 			"roles"	:			[
