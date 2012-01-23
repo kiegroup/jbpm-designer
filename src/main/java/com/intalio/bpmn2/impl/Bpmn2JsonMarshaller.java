@@ -127,11 +127,11 @@ import org.eclipse.dd.dc.Bounds;
 import org.eclipse.dd.dc.Point;
 import org.eclipse.dd.di.DiagramElement;
 import org.eclipse.emf.ecore.util.FeatureMap;
-import org.jbpm.bpmn2.emfextmodel.EmfextmodelPackage;
-import org.jbpm.bpmn2.emfextmodel.GlobalType;
-import org.jbpm.bpmn2.emfextmodel.ImportType;
-import org.jbpm.bpmn2.emfextmodel.OnEntryScriptType;
-import org.jbpm.bpmn2.emfextmodel.OnExitScriptType;
+import org.jboss.drools.DroolsPackage;
+import org.jboss.drools.GlobalType;
+import org.jboss.drools.ImportType;
+import org.jboss.drools.OnEntryScriptType;
+import org.jboss.drools.OnExitScriptType;
 
 import com.intalio.web.profile.IDiagramProfile;
 
@@ -281,11 +281,11 @@ public class Bpmn2JsonMarshaller {
 	                
 	                        @SuppressWarnings("unchecked")
 	                        List<ImportType> importExtensions = (List<ImportType>) extensionElements
-	                                                             .get(EmfextmodelPackage.Literals.DOCUMENT_ROOT__IMPORT, true);
+	                                                             .get(DroolsPackage.Literals.DOCUMENT_ROOT__IMPORT, true);
 	                
 	                        @SuppressWarnings("unchecked")
 	                        List<GlobalType> globalExtensions = (List<GlobalType>) extensionElements
-	                                                          .get(EmfextmodelPackage.Literals.DOCUMENT_ROOT__GLOBAL, true);
+	                                                          .get(DroolsPackage.Literals.DOCUMENT_ROOT__GLOBAL, true);
 	                    
 	                        for(ImportType importType : importExtensions) {
 	                            importsStr += importType.getName();
@@ -1007,11 +1007,11 @@ public class Bpmn2JsonMarshaller {
         
                 @SuppressWarnings("unchecked")
                 List<OnEntryScriptType> onEntryExtensions = (List<OnEntryScriptType>) extensionElements
-                                                     .get(EmfextmodelPackage.Literals.DOCUMENT_ROOT__ON_ENTRY_SCRIPT, true);
+                                                     .get(DroolsPackage.Literals.DOCUMENT_ROOT__ON_ENTRY_SCRIPT, true);
         
                 @SuppressWarnings("unchecked")
                 List<OnExitScriptType> onExitExtensions = (List<OnExitScriptType>) extensionElements
-                                                  .get(EmfextmodelPackage.Literals.DOCUMENT_ROOT__ON_EXIT_SCRIPT, true);
+                                                  .get(DroolsPackage.Literals.DOCUMENT_ROOT__ON_EXIT_SCRIPT, true);
             
                 for(OnEntryScriptType onEntryScript : onEntryExtensions) {
                     onEntryStr += onEntryScript.getScript();
@@ -1332,11 +1332,11 @@ public class Bpmn2JsonMarshaller {
         
                 @SuppressWarnings("unchecked")
                 List<OnEntryScriptType> onEntryExtensions = (List<OnEntryScriptType>) extensionElements
-                                                     .get(EmfextmodelPackage.Literals.DOCUMENT_ROOT__ON_ENTRY_SCRIPT, true);
+                                                     .get(DroolsPackage.Literals.DOCUMENT_ROOT__ON_ENTRY_SCRIPT, true);
         
                 @SuppressWarnings("unchecked")
                 List<OnExitScriptType> onExitExtensions = (List<OnExitScriptType>) extensionElements
-                                                  .get(EmfextmodelPackage.Literals.DOCUMENT_ROOT__ON_EXIT_SCRIPT, true);
+                                                  .get(DroolsPackage.Literals.DOCUMENT_ROOT__ON_EXIT_SCRIPT, true);
             
                 for(OnEntryScriptType onEntryScript : onEntryExtensions) {
                     onEntryStr += onEntryScript.getScript();
@@ -1729,11 +1729,11 @@ public class Bpmn2JsonMarshaller {
         
                 @SuppressWarnings("unchecked")
                 List<OnEntryScriptType> onEntryExtensions = (List<OnEntryScriptType>) extensionElements
-                                                     .get(EmfextmodelPackage.Literals.DOCUMENT_ROOT__ON_ENTRY_SCRIPT, true);
+                                                     .get(DroolsPackage.Literals.DOCUMENT_ROOT__ON_ENTRY_SCRIPT, true);
         
                 @SuppressWarnings("unchecked")
                 List<OnExitScriptType> onExitExtensions = (List<OnExitScriptType>) extensionElements
-                                                  .get(EmfextmodelPackage.Literals.DOCUMENT_ROOT__ON_EXIT_SCRIPT, true);
+                                                  .get(DroolsPackage.Literals.DOCUMENT_ROOT__ON_EXIT_SCRIPT, true);
             
                 for(OnEntryScriptType onEntryScript : onEntryExtensions) {
                     onEntryStr += onEntryScript.getScript();
