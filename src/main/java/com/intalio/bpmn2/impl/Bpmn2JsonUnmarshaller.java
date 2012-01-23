@@ -154,6 +154,7 @@ import com.intalio.bpmn2.resource.JBPMBpmn2ResourceFactoryImpl;
  */
 public class Bpmn2JsonUnmarshaller {
 
+	public static final String defaultBgColor = "#b1c2d6";
     // a list of the objects created, kept in memory with their original id for
     // fast lookup.
     private Map<Object, String> _objMap = new HashMap<Object, String>();
@@ -2285,12 +2286,14 @@ public class Bpmn2JsonUnmarshaller {
             baseElement.setId(properties.get("resourceId"));
         }
         if(properties.get("bgcolor") != null && properties.get("bgcolor").length() > 0) {
-            ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
-            EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
-                        "http://www.jboss.org/drools", "bgcolor", false, false);
-            EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
-                properties.get("bgcolor"));
-            baseElement.getAnyAttribute().add(extensionEntry);
+        	if(!properties.get("bgcolor").equals(defaultBgColor)) {
+        		ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+        		EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                        	"http://www.jboss.org/drools", "bgcolor", false, false);
+        		EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+        				properties.get("bgcolor"));
+        		baseElement.getAnyAttribute().add(extensionEntry);
+        	}
         }
     }
 
