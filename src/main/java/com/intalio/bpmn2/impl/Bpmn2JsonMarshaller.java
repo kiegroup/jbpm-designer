@@ -1920,7 +1920,7 @@ public class Bpmn2JsonMarshaller {
         while(iter.hasNext()) {
             FeatureMap.Entry entry = iter.next();
             if(entry.getEStructuralFeature().getName().equals("priority")) {
-                String priorityStr = (String) entry.getValue();
+                String priorityStr = String.valueOf(entry.getValue());
                 if(priorityStr != null) {
                     try {
                         Integer priorityInt = Integer.parseInt(priorityStr);
