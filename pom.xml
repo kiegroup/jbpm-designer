@@ -14,7 +14,7 @@
   </properties>
 
     <dependencies>
-      <!-- jBPM/Drools dependencies -->
+      <!-- jBPM -->
       <dependency>
         <groupId>org.mvel</groupId>
         <artifactId>mvel2</artifactId>
@@ -22,24 +22,41 @@
       </dependency>
       <dependency>
         <groupId>org.jbpm</groupId>
+        <artifactId>jbpm-bpmn2</artifactId>
+        <version>${jbpm.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jbpm</groupId>
+        <artifactId>jbpm-flow</artifactId>
+        <version>${jbpm.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jbpm</groupId>
         <artifactId>jbpm-flow-builder</artifactId>
         <version>${jbpm.version}</version>
-        <exclusions>
-          <exclusion>
-            <groupId>org.jbpm</groupId>
-            <artifactId>jbpm-flow</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>org.drools</groupId>
-            <artifactId>drools-compiler</artifactId>
-          </exclusion>
-        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.jbpm</groupId>
+        <artifactId>jbpm-human-task</artifactId>
+        <version>${jbpm.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jbpm</groupId>
+        <artifactId>jbpm-persistence-jpa</artifactId>
+        <version>${jbpm.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jbpm</groupId>
+        <artifactId>jbpm-workitems</artifactId>
+        <version>${jbpm.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jbpm</groupId>
         <artifactId>jbpm-bpmn2-emfextmodel</artifactId>
         <version>${jbpm.version}</version>
       </dependency>
+      
+      <!-- jBPM Migration -->
       <dependency>
         <groupId>org.jbpm.jbpm5</groupId>
         <artifactId>jbpmmigration</artifactId>
@@ -67,16 +84,22 @@
           </exclusion>
         </exclusions>
       </dependency>
+      
+      <!--  Drools -->
       <dependency>
         <groupId>org.drools</groupId>
         <artifactId>drools-core</artifactId>
         <version>${drools.version}</version>
-        <exclusions>
-          <exclusion>
-            <groupId>org.drools</groupId>
-            <artifactId>knowledge-api</artifactId>
-          </exclusion>
-        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.drools</groupId>
+        <artifactId>drools-compiler</artifactId>
+        <version>${drools.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.drools</groupId>
+        <artifactId>drools-persistence-jpa</artifactId>
+        <version>${drools.version}</version>
       </dependency>
       
       <!-- yui compressor -->
