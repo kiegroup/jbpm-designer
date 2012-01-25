@@ -17,6 +17,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.codehaus.jackson.JsonParseException;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.emf.common.util.URI;
@@ -221,7 +222,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
                     res = (JBPMBpmn2ResourceImpl) unmarshaller.unmarshall(jsonModel, preProcessingData);
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                     res.save(outputStream, new HashMap<Object, Object>());
-                    return outputStream.toString();
+                    return StringEscapeUtils.unescapeHtml(outputStream.toString());
                 } catch (JsonParseException e) {
                     _logger.error(e.getMessage(), e);
                 } catch (IOException e) {
