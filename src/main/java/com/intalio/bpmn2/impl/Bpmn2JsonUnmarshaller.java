@@ -1369,7 +1369,7 @@ public class Bpmn2JsonUnmarshaller {
         }
         properties.put("resourceId", resourceId);
         boolean customElement = isCustomElement(properties.get("tasktype"), preProcessingData);
-        BaseElement baseElt = Bpmn20Stencil.createElement(stencil, properties.get("tasktype"), customElement);
+        BaseElement baseElt = this.createBaseElement(stencil, properties.get("tasktype"), customElement);
         
         // register the sequence flow targets.
         if(baseElt instanceof SequenceFlow) {
@@ -1583,7 +1583,7 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
 
-    private void applyProperties(BaseElement baseElement, Map<String, String> properties) {
+    protected void applyProperties(BaseElement baseElement, Map<String, String> properties) {
         applyBaseElementProperties((BaseElement) baseElement, properties);
         if (baseElement instanceof SubProcess) {
             applySubProcessProperties((SubProcess) baseElement, properties);
@@ -1669,7 +1669,7 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
     
-    private void applySubProcessProperties(SubProcess sp, Map<String, String> properties) {
+    protected void applySubProcessProperties(SubProcess sp, Map<String, String> properties) {
         if(properties.get("name") != null) {
             sp.setName(properties.get("name"));
         } else {
@@ -1953,7 +1953,7 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
     
-    private void applyAdHocSubProcessProperties(AdHocSubProcess ahsp, Map<String, String> properties) {
+    protected void applyAdHocSubProcessProperties(AdHocSubProcess ahsp, Map<String, String> properties) {
     	if(properties.get("adhocordering") != null) {
     		if(properties.get("adhocordering") == null || properties.get("adhocordering").equals("Parallel")) {
     			ahsp.setOrdering(AdHocOrdering.PARALLEL);
@@ -1964,7 +1964,7 @@ public class Bpmn2JsonUnmarshaller {
     	}
     }
 
-    private void applyEndEventProperties(EndEvent ee, Map<String, String> properties) {
+    protected void applyEndEventProperties(EndEvent ee, Map<String, String> properties) {
         ee.setId(properties.get("resourceId"));
         if(properties.get("name") != null) {
             ee.setName(properties.get("name"));
@@ -1973,7 +1973,7 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
     
-    private void applyAssociationProperties(Association association, Map<String, String> properties) {
+    protected void applyAssociationProperties(Association association, Map<String, String> properties) {
     	if(properties.get("type") != null) {
     		ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
             EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
@@ -1984,7 +1984,7 @@ public class Bpmn2JsonUnmarshaller {
     	}
     }
     
-    private void applyStartEventProperties(StartEvent se, Map<String, String> properties) {
+    protected void applyStartEventProperties(StartEvent se, Map<String, String> properties) {
         if(properties.get("name") != null) {
             se.setName(properties.get("name"));
         } else {
@@ -1992,7 +1992,7 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
     
-    private void applyMessageProperties(Message msg, Map<String, String> properties) {
+    protected void applyMessageProperties(Message msg, Map<String, String> properties) {
         if(properties.get("name") != null) {
             msg.setName(properties.get("name"));
             msg.setId(properties.get("name") + "Message");
@@ -2002,7 +2002,7 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
 
-    private void applyDataStoreProperties(DataStore da, Map<String, String> properties) {
+    protected void applyDataStoreProperties(DataStore da, Map<String, String> properties) {
         if(properties.get("name") != null) {
             da.setName(properties.get("name"));
         } else {
@@ -2010,7 +2010,7 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
 
-    private void applyDataObjectProperties(DataObject da, Map<String, String> properties) {
+    protected void applyDataObjectProperties(DataObject da, Map<String, String> properties) {
         if(properties.get("name") != null) {
             da.setName(properties.get("name"));
         } else {
@@ -2027,7 +2027,7 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
 
-    private void applyTextAnnotationProperties(TextAnnotation ta, Map<String, String> properties) {
+    protected void applyTextAnnotationProperties(TextAnnotation ta, Map<String, String> properties) {
         if(properties.get("text") != null) {
             ta.setText(properties.get("text"));
         } else {
@@ -2037,7 +2037,7 @@ public class Bpmn2JsonUnmarshaller {
         ta.setTextFormat("text/plain");
     }
     
-    private void applyGroupProperties(Group group, Map<String, String> properties) {
+    protected void applyGroupProperties(Group group, Map<String, String> properties) {
     	if(properties.get("name") != null) {
     		ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
             EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
@@ -2048,7 +2048,7 @@ public class Bpmn2JsonUnmarshaller {
     	}
     }
 
-    private void applyEventProperties(Event event, Map<String, String> properties) {
+    protected void applyEventProperties(Event event, Map<String, String> properties) {
         if(properties.get("name") != null) {
             event.setName(properties.get("name"));
         } else {
@@ -2067,7 +2067,7 @@ public class Bpmn2JsonUnmarshaller {
         
     }
     
-    private void applyCatchEventProperties(CatchEvent event, Map<String, String> properties) {
+    protected void applyCatchEventProperties(CatchEvent event, Map<String, String> properties) {
         if (properties.get("dataoutput") != null && !"".equals(properties.get("dataoutput"))) {
             String[] allDataOutputs = properties.get("dataoutput").split( ",\\s*" );
             OutputSet outSet = Bpmn2Factory.eINSTANCE.createOutputSet();
@@ -2202,7 +2202,7 @@ public class Bpmn2JsonUnmarshaller {
                 
     }
     
-    private void applyThrowEventProperties(ThrowEvent event, Map<String, String> properties) {
+    protected void applyThrowEventProperties(ThrowEvent event, Map<String, String> properties) {
         if (properties.get("datainput") != null && !"".equals(properties.get("datainput"))) {
             String[] allDataInputs = properties.get("datainput").split( ",\\s*" );
             InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
@@ -2340,7 +2340,7 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
 
-    private void applyGlobalTaskProperties(GlobalTask globalTask, Map<String, String> properties) {
+    protected void applyGlobalTaskProperties(GlobalTask globalTask, Map<String, String> properties) {
         if(properties.get("name") != null) {
             globalTask.setName(properties.get("name"));
         } else {
@@ -2348,7 +2348,7 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
 
-    private void applyBaseElementProperties(BaseElement baseElement, Map<String, String> properties) {
+    protected void applyBaseElementProperties(BaseElement baseElement, Map<String, String> properties) {
         if (properties.get("documentation") != null && !"".equals(properties.get("documentation"))) {
             baseElement.getDocumentation().add(createDocumentation(properties.get("documentation")));
         }
@@ -2367,7 +2367,7 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
 
-    private void applyDefinitionProperties(Definitions def, Map<String, String> properties) {
+    protected void applyDefinitionProperties(Definitions def, Map<String, String> properties) {
         def.setTypeLanguage(properties.get("typelanguage"));
         //def.setTargetNamespace(properties.get("targetnamespace"));
         def.setTargetNamespace("http://www.omg.org/bpmn20");
@@ -2383,7 +2383,7 @@ public class Bpmn2JsonUnmarshaller {
         //_currentResource.getContents().add(def);// hook the definitions object to the resource early.
     }
 
-    private void applyProcessProperties(Process process, Map<String, String> properties) {
+    protected void applyProcessProperties(Process process, Map<String, String> properties) {
         if(properties.get("name") != null) {
             process.setName(properties.get("name"));
         } else {
@@ -2461,7 +2461,7 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
 
-    private void applyBusinessRuleTaskProperties(BusinessRuleTask task, Map<String, String> properties) {
+    protected void applyBusinessRuleTaskProperties(BusinessRuleTask task, Map<String, String> properties) {
         if(properties.get("name") != null) {
             task.setName(properties.get("name"));
         } else {
@@ -2478,7 +2478,7 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
     
-    private void applyScriptTaskProperties(ScriptTask scriptTask, Map<String, String> properties) {
+    protected void applyScriptTaskProperties(ScriptTask scriptTask, Map<String, String> properties) {
         if(properties.get("name") != null) {
             scriptTask.setName(properties.get("name"));
         } else {
@@ -2535,7 +2535,7 @@ public class Bpmn2JsonUnmarshaller {
     	receiveTask.setImplementation("Other");
     }
 
-    private void applyLaneProperties(Lane lane, Map<String, String> properties) {
+    protected void applyLaneProperties(Lane lane, Map<String, String> properties) {
         if(properties.get("name") != null) {
             lane.setName(properties.get("name"));
         } else {
@@ -2543,7 +2543,7 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
     
-    private void applyCallActivityProperties(CallActivity callActivity, Map<String, String> properties) {
+    protected void applyCallActivityProperties(CallActivity callActivity, Map<String, String> properties) {
     	if(properties.get("name") != null) {
     		callActivity.setName(properties.get("name"));
         } else {
@@ -2788,7 +2788,7 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
 
-    private void applyTaskProperties(Task task, Map<String, String> properties) {
+    protected void applyTaskProperties(Task task, Map<String, String> properties) {
         if(properties.get("name") != null) {
             task.setName(properties.get("name"));
         } else {
@@ -3092,7 +3092,7 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
     
-    private void applyUserTaskProperties(UserTask task, Map<String, String> properties) {
+    protected void applyUserTaskProperties(UserTask task, Map<String, String> properties) {
         if(properties.get("actors") != null && properties.get("actors").length() > 0) {
             String[] allActors = properties.get("actors").split( ",\\s*" );
             for(String actor : allActors) {
@@ -3183,7 +3183,7 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
     
-    private void applyGatewayProperties(Gateway gateway, Map<String, String> properties) {
+    protected void applyGatewayProperties(Gateway gateway, Map<String, String> properties) {
         if(properties.get("name") != null && properties.get("name").length() > 0) {
             gateway.setName(properties.get("name"));
         } else {
@@ -3199,7 +3199,7 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
 
-    private void applySequenceFlowProperties(SequenceFlow sequenceFlow, Map<String, String> properties) {
+    protected void applySequenceFlowProperties(SequenceFlow sequenceFlow, Map<String, String> properties) {
         // sequence flow name is options
         if(properties.get("name") != null && !"".equals(properties.get("name"))) {
             sequenceFlow.setName(properties.get("name"));
@@ -3273,6 +3273,10 @@ public class Bpmn2JsonUnmarshaller {
             }
         }
         return false;
+    }
+    
+    protected BaseElement createBaseElement(String stencil, String taskType, boolean customElement){
+        return Bpmn20Stencil.createElement(stencil, taskType, customElement);
     }
 }
 
