@@ -1179,6 +1179,10 @@ public class Bpmn2JsonMarshaller {
             }
     	} else if (task instanceof SendTask) {
     		taskType = "Send";
+    		SendTask st = (SendTask) task;
+    		if(st.getMessageRef() != null) {
+    			properties.put("messageref", st.getMessageRef().getId());
+    		}
     	} else if (task instanceof ReceiveTask) {
     		taskType = "Receive";
     		ReceiveTask rt = (ReceiveTask) task;
