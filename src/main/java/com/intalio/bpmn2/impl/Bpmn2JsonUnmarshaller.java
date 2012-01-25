@@ -297,7 +297,10 @@ public class Bpmn2JsonUnmarshaller {
 	                    while(iter.hasNext()) {
 	                        FeatureMap.Entry entry = iter.next();
 	                        if(entry.getEStructuralFeature().getName().equals("datype")) {
-	                        	itemdef.setStructureRef((String) entry.getValue());
+	                        	String typeValue = (String) entry.getValue();
+	                        	if(typeValue != null && !typeValue.equals("None")) {
+	                        		itemdef.setStructureRef((String) entry.getValue());
+	                        	}
 	                        }
 	                    }
 	                    da.setItemSubjectRef(itemdef);
