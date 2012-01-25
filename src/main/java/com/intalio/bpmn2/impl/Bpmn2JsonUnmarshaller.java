@@ -3102,7 +3102,7 @@ public class Bpmn2JsonUnmarshaller {
     }
     
     private void applyGatewayProperties(Gateway gateway, Map<String, String> properties) {
-        if(properties.get("name") != null) {
+        if(properties.get("name") != null && properties.get("name").length() > 0) {
             gateway.setName(properties.get("name"));
         } else {
             gateway.setName("");

@@ -623,7 +623,11 @@ public class Bpmn2JsonMarshaller {
 	    	generator.writeStartObject();
 	    	generator.writeObjectField("resourceId", lane.getId());
 	    	Map<String, Object> laneProperties = new LinkedHashMap<String, Object>();
-	    	laneProperties.put("name", lane.getName());
+	    	if(lane.getName() != null) {
+	    		laneProperties.put("name", lane.getName());
+	    	} else {
+	    		laneProperties.put("name", "");
+	    	}
 	    	marshallProperties(laneProperties, generator);
 	    	generator.writeObjectFieldStart("stencil");
 	    	generator.writeObjectField("id", "Lane");
@@ -1434,7 +1438,11 @@ public class Bpmn2JsonMarshaller {
         if(node.getDocumentation() != null && node.getDocumentation().size() > 0) {
             properties.put("documentation", node.getDocumentation().get(0).getText());
         }
-    	properties.put("name", node.getName());
+        if(node.getName() != null) {
+        	properties.put("name", node.getName());
+        } else {
+        	properties.put("name", "");
+        }
         marshallProperties(properties, generator);
         generator.writeObjectFieldStart("stencil");
         generator.writeObjectField("id", stencil);
@@ -1543,7 +1551,11 @@ public class Bpmn2JsonMarshaller {
     
     private void marshallDataObject(DataObject dataObject, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
     	Map<String, Object> properties = new LinkedHashMap<String, Object>(flowElementProperties);
-		properties.put("name", dataObject.getName());
+    	if(dataObject.getName() != null) {
+    		properties.put("name", dataObject.getName());
+    	} else {
+    		properties.put("name", "");
+    	}
 		if(dataObject.getItemSubjectRef().getStructureRef() != null && dataObject.getItemSubjectRef().getStructureRef().length() > 0) {
 			properties.put("type", dataObject.getItemSubjectRef().getStructureRef());
 		}
@@ -1584,7 +1596,11 @@ public class Bpmn2JsonMarshaller {
     
     private void marshallSubProcess(SubProcess subProcess, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Definitions def, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
     	Map<String, Object> properties = new LinkedHashMap<String, Object>(flowElementProperties);
-		properties.put("name", subProcess.getName());
+		if(subProcess.getName() != null) {
+			properties.put("name", subProcess.getName());
+		} else {
+			properties.put("name", "");
+		}
 		if(subProcess instanceof AdHocSubProcess) {
 			AdHocSubProcess ahsp = (AdHocSubProcess) subProcess;
 			if(ahsp.getOrdering().equals(AdHocOrdering.PARALLEL)) {
