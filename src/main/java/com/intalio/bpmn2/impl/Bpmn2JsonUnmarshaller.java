@@ -230,7 +230,7 @@ public class Bpmn2JsonUnmarshaller {
             revisitSubProcessItemDefs(def);
             revisitArtifacts(def);
             revisitGroups(def);
-            reviseTaskAssociations(def);
+            revisitTaskAssociations(def);
             reviseReceiveTasks(def);
             reconnectFlows();
             revisitGateways(def);
@@ -448,7 +448,7 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
     
-    public void reviseTaskAssociations(Definitions def) {
+    public void revisitTaskAssociations(Definitions def) {
     	List<RootElement> rootElements =  def.getRootElements();
         for(RootElement root : rootElements) {
             if(root instanceof Process) {
@@ -928,40 +928,46 @@ public class Bpmn2JsonUnmarshaller {
         List<RootElement> rootElements =  def.getRootElements();
         for(RootElement root : rootElements) {
             if(root instanceof Process) {
-                Process process = (Process) root;
-                List<FlowElement> flowElements =  process.getFlowElements();
-                for(FlowElement fe : flowElements) {
-                    if(fe instanceof Gateway) {
-                        Gateway gateway = (Gateway) fe;
-                        int incoming = gateway.getIncoming() == null ? 0 : gateway.getIncoming().size();
-                        int outgoing = gateway.getOutgoing() == null ? 0 : gateway.getOutgoing().size();
-                        if (incoming <= 1 && outgoing > 1) {
-                            gateway.setGatewayDirection(GatewayDirection.DIVERGING);
-                        } else if (incoming > 1 && outgoing <= 1) {
-                            gateway.setGatewayDirection(GatewayDirection.CONVERGING);
-                        } else if (incoming > 1 && outgoing > 1) {
-                            gateway.setGatewayDirection(GatewayDirection.MIXED);
-                        } else if (incoming == 1 && outgoing == 1) { 
-                            // this handles the 1:1 case of the diverging gateways
-                            gateway.setGatewayDirection(GatewayDirection.DIVERGING);
-                        } else {
-                            gateway.setGatewayDirection(GatewayDirection.UNSPECIFIED);
-                        }
-                    }
-                    if(fe instanceof InclusiveGateway) {
-                    	Iterator<FeatureMap.Entry> iter = fe.getAnyAttribute().iterator();
-                    	while(iter.hasNext()) {
-                            FeatureMap.Entry entry = iter.next();
-                            if(entry.getEStructuralFeature().getName().equals("dg")) {
-                            	for(FlowElement feg : flowElements) {
-                            		if(feg instanceof SequenceFlow && feg.getId().equals((String) entry.getValue())) {
-                            			((InclusiveGateway) fe).setDefault((SequenceFlow) feg);
-                            		}
-                            	}
-                            }
-                        }
+                setGatewayDirection((Process) root);
+            }
+        }
+    }
+    
+    private void setGatewayDirection(FlowElementsContainer container) {
+    	List<FlowElement> flowElements =  container.getFlowElements();
+        for(FlowElement fe : flowElements) {
+            if(fe instanceof Gateway) {
+                Gateway gateway = (Gateway) fe;
+                int incoming = gateway.getIncoming() == null ? 0 : gateway.getIncoming().size();
+                int outgoing = gateway.getOutgoing() == null ? 0 : gateway.getOutgoing().size();
+                if (incoming <= 1 && outgoing > 1) {
+                    gateway.setGatewayDirection(GatewayDirection.DIVERGING);
+                } else if (incoming > 1 && outgoing <= 1) {
+                    gateway.setGatewayDirection(GatewayDirection.CONVERGING);
+                } else if (incoming > 1 && outgoing > 1) {
+                    gateway.setGatewayDirection(GatewayDirection.MIXED);
+                } else if (incoming == 1 && outgoing == 1) { 
+                    // this handles the 1:1 case of the diverging gateways
+                    gateway.setGatewayDirection(GatewayDirection.DIVERGING);
+                } else {
+                    gateway.setGatewayDirection(GatewayDirection.UNSPECIFIED);
+                }
+            }
+            if(fe instanceof InclusiveGateway) {
+            	Iterator<FeatureMap.Entry> iter = fe.getAnyAttribute().iterator();
+            	while(iter.hasNext()) {
+                    FeatureMap.Entry entry = iter.next();
+                    if(entry.getEStructuralFeature().getName().equals("dg")) {
+                    	for(FlowElement feg : flowElements) {
+                    		if(feg instanceof SequenceFlow && feg.getId().equals((String) entry.getValue())) {
+                    			((InclusiveGateway) fe).setDefault((SequenceFlow) feg);
+                    		}
+                    	}
                     }
                 }
+            }
+            if(fe instanceof FlowElementsContainer) {
+            	setGatewayDirection((FlowElementsContainer) fe);
             }
         }
     }
