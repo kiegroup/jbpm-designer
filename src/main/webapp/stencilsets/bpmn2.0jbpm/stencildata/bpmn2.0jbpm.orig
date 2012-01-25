@@ -4797,6 +4797,31 @@
 					"optional":true,
 					"refToView":"",
 					"length":""
+				},
+				{
+					"id":"timecyclelanguage",
+					"type":"Choice",
+					"title":"Time Cycle Language",
+					"title_de":"Time Cycle Language",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"none",
+							"title":"None",
+							"title_de":"None",
+							"value":"none"
+						},
+						{
+							"id":"cron",
+							"title":"Cron",
+							"title_de":"Cron",
+							"value":"cron"
+						}
+					]
 				}
 			]
 		},
@@ -5272,6 +5297,31 @@
 					"optional":true,
 					"refToView":"",
 					"length":""
+				},
+				{
+					"id":"timecyclelanguage",
+					"type":"Choice",
+					"title":"Time Cycle Language",
+					"title_de":"Time Cycle Language",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"items": [
+						{
+							"id":"none",
+							"title":"None",
+							"title_de":"None",
+							"value":""
+						},
+						{
+							"id":"cron",
+							"title":"Cron",
+							"title_de":"Cron",
+							"value":"cron"
+						}
+					]
 				}
 			]
 		},

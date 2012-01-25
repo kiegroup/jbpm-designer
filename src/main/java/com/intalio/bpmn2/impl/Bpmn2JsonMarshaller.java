@@ -473,6 +473,9 @@ public class Bpmn2JsonMarshaller {
                 }
                 if(ted.getTimeCycle() != null) {
                     properties.put("timecycle", ((FormalExpression) ted.getTimeCycle()).getBody());
+                    if(((FormalExpression) ted.getTimeCycle()).getLanguage() != null) {
+                    	properties.put("timecyclelanguage", ((FormalExpression) ted.getTimeCycle()).getLanguage());
+                    }
                 }
             } else if( ed instanceof SignalEventDefinition) {
                 if(((SignalEventDefinition) ed).getSignalRef() != null && ((SignalEventDefinition) ed).getSignalRef().getName() != null) {
@@ -564,6 +567,9 @@ public class Bpmn2JsonMarshaller {
                 }
                 if(ted.getTimeCycle() != null) {
                     properties.put("timecycle", ((FormalExpression) ted.getTimeCycle()).getBody());
+                    if(((FormalExpression) ted.getTimeCycle()).getLanguage() != null) {
+                    	properties.put("timecyclelanguage", ((FormalExpression) ted.getTimeCycle()).getLanguage());
+                    }
                 }
             } else if( ed instanceof SignalEventDefinition) {
                 if(((SignalEventDefinition) ed).getSignalRef() != null && ((SignalEventDefinition) ed).getSignalRef().getName() != null) {

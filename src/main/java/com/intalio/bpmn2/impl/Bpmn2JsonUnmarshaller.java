@@ -2062,6 +2062,9 @@ public class Bpmn2JsonUnmarshaller {
                 if(properties.get("timecycle") != null && !"".equals(properties.get("timecycle"))) {
                     FormalExpression timeCycleExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
                     timeCycleExpression.setBody(properties.get("timecycle"));
+                    if(properties.get("timecyclelanguage") != null && properties.get("timecyclelanguage").length() > 0) {
+                    	timeCycleExpression.setLanguage(properties.get("timecyclelanguage"));
+                    }
                     ((TimerEventDefinition) event.getEventDefinitions().get(0)).setTimeCycle(timeCycleExpression);
                 }
             } else if (ed instanceof SignalEventDefinition) {
@@ -2198,6 +2201,9 @@ public class Bpmn2JsonUnmarshaller {
                 if(properties.get("timecycle") != null && !"".equals(properties.get("timecycle"))) {
                     FormalExpression timeCycleExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
                     timeCycleExpression.setBody(properties.get("timecycle"));
+                    if(properties.get("timecyclelanguage") != null && properties.get("timecyclelanguage").length() > 0) {
+                    	timeCycleExpression.setLanguage(properties.get("timecyclelanguage"));
+                    }
                     ((TimerEventDefinition) event.getEventDefinitions().get(0)).setTimeCycle(timeCycleExpression);
                 }
             } else if (ed instanceof SignalEventDefinition) {
