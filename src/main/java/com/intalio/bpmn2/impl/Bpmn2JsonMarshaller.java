@@ -1181,6 +1181,10 @@ public class Bpmn2JsonMarshaller {
     		taskType = "Send";
     	} else if (task instanceof ReceiveTask) {
     		taskType = "Receive";
+    		ReceiveTask rt = (ReceiveTask) task;
+    		if(rt.getMessageRef() != null) {
+    			properties.put("messageref", rt.getMessageRef().getId());
+    		}
     	}
     	
     	// get out the droolsjbpm-specific attributes "ruleflowGroup" and "taskName"

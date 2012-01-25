@@ -97,6 +97,7 @@ import org.eclipse.bpmn2.PotentialOwner;
 import org.eclipse.bpmn2.Process;
 import org.eclipse.bpmn2.ProcessType;
 import org.eclipse.bpmn2.Property;
+import org.eclipse.bpmn2.ReceiveTask;
 import org.eclipse.bpmn2.ResourceAssignmentExpression;
 import org.eclipse.bpmn2.RootElement;
 import org.eclipse.bpmn2.ScriptTask;
@@ -230,6 +231,7 @@ public class Bpmn2JsonUnmarshaller {
             revisitArtifacts(def);
             revisitGroups(def);
             reviseTaskAssociations(def);
+            reviseReceiveTasks(def);
             reconnectFlows();
             revisitGateways(def);
             revisitCatchEventsConvertToBoundary(def);
@@ -512,6 +514,44 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
     
+    public void reviseReceiveTasks(Definitions def) {
+    	List<Message> toAddMessages = new ArrayList<Message>();
+        List<ItemDefinition> toAddItemDefinitions = new ArrayList<ItemDefinition>();
+    	List<RootElement> rootElements =  def.getRootElements();
+        for(RootElement root : rootElements) {
+            if(root instanceof Process) {
+                Process process = (Process) root;
+                List<FlowElement> flowElements = process.getFlowElements();
+                for(FlowElement fe : flowElements) {
+                	if(fe instanceof ReceiveTask) {
+                		ReceiveTask rt = (ReceiveTask) fe;
+                		ItemDefinition idef = Bpmn2Factory.eINSTANCE.createItemDefinition();
+                        Message msg = Bpmn2Factory.eINSTANCE.createMessage();
+                		Iterator<FeatureMap.Entry> iter = rt.getAnyAttribute().iterator();
+                        while(iter.hasNext()) {
+                            FeatureMap.Entry entry = iter.next();
+                            if(entry.getEStructuralFeature().getName().equals("msgref")) {
+                                msg.setId((String) entry.getValue());
+                                idef.setId((String) entry.getValue() + "Type");
+                            }
+                        }
+                        msg.setItemRef(idef);
+                        rt.setMessageRef(msg);
+                        toAddMessages.add(msg);
+                        toAddItemDefinitions.add(idef);
+                	}
+                }
+            }
+        }
+        
+        for(ItemDefinition idef : toAddItemDefinitions) {
+            def.getRootElements().add(idef);
+        }
+        for(Message msg : toAddMessages) { 
+            def.getRootElements().add(msg);
+        }
+    }
+    
     public void revisitLanes(Definitions def) {
         List<RootElement> rootElements =  def.getRootElements();
         for(RootElement root : rootElements) {
@@ -687,7 +727,7 @@ public class Bpmn2JsonUnmarshaller {
         for(ItemDefinition idef : toAddItemDefinitions) {
             def.getRootElements().add(idef);
         }
-        for(Message msg : toAddMessages) {
+        for(Message msg : toAddMessages) { 
             def.getRootElements().add(msg);
         }
     }
@@ -1577,6 +1617,9 @@ public class Bpmn2JsonUnmarshaller {
         }
         if (baseElement instanceof ServiceTask) {
             applyServiceTaskProperties((ServiceTask) baseElement, properties);
+        }
+        if(baseElement instanceof ReceiveTask) {
+        	applyReceiveTaskProperties((ReceiveTask) baseElement, properties);
         }
         if (baseElement instanceof Gateway) {
             applyGatewayProperties((Gateway) baseElement, properties);
@@ -2472,6 +2515,18 @@ public class Bpmn2JsonUnmarshaller {
                     properties.get("operation"));
             serviceTask.getAnyAttribute().add(extensionEntry);
         }
+    }
+    
+    public void applyReceiveTaskProperties(ReceiveTask receiveTask, Map<String, String> properties) {
+    	if(properties.get("messageref") != null && properties.get("messageref").length() > 0) {
+    		ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+            EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                        "http://www.jboss.org/drools", "msgref", false, false);
+            EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                properties.get("messageref"));
+            receiveTask.getAnyAttribute().add(extensionEntry);
+    	}
+    	receiveTask.setImplementation("Other");
     }
 
     private void applyLaneProperties(Lane lane, Map<String, String> properties) {
