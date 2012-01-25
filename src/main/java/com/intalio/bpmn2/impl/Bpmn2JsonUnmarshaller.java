@@ -69,6 +69,7 @@ import org.eclipse.bpmn2.Escalation;
 import org.eclipse.bpmn2.EscalationEventDefinition;
 import org.eclipse.bpmn2.Event;
 import org.eclipse.bpmn2.EventDefinition;
+import org.eclipse.bpmn2.ExclusiveGateway;
 import org.eclipse.bpmn2.ExtensionAttributeValue;
 import org.eclipse.bpmn2.FlowElement;
 import org.eclipse.bpmn2.FlowElementsContainer;
@@ -968,7 +969,6 @@ public class Bpmn2JsonUnmarshaller {
                     gateway.setGatewayDirection(GatewayDirection.MIXED);
                 } else if (incoming == 1 && outgoing == 1) { 
                     // this handles the 1:1 case of the diverging gateways
-                    gateway.setGatewayDirection(GatewayDirection.DIVERGING);
                 } else {
                     gateway.setGatewayDirection(GatewayDirection.UNSPECIFIED);
                 }
@@ -981,6 +981,19 @@ public class Bpmn2JsonUnmarshaller {
                     	for(FlowElement feg : flowElements) {
                     		if(feg instanceof SequenceFlow && feg.getId().equals((String) entry.getValue())) {
                     			((InclusiveGateway) fe).setDefault((SequenceFlow) feg);
+                    		}
+                    	}
+                    }
+                }
+            }
+            if(fe instanceof ExclusiveGateway) {
+            	Iterator<FeatureMap.Entry> iter = fe.getAnyAttribute().iterator();
+            	while(iter.hasNext()) {
+                    FeatureMap.Entry entry = iter.next();
+                    if(entry.getEStructuralFeature().getName().equals("dg")) {
+                    	for(FlowElement feg : flowElements) {
+                    		if(feg instanceof SequenceFlow && feg.getId().equals((String) entry.getValue())) {
+                    			((ExclusiveGateway) fe).setDefault((SequenceFlow) feg);
                     		}
                     	}
                     }
@@ -3245,7 +3258,7 @@ public class Bpmn2JsonUnmarshaller {
         } else {
             gateway.setName("");
         }
-        if(properties.get("defaultgate") != null && gateway instanceof InclusiveGateway) {
+        if(properties.get("defaultgate") != null && (gateway instanceof InclusiveGateway || gateway instanceof ExclusiveGateway) ) {
         	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
             EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
                         "http://www.jboss.org/drools", "dg", false, false);

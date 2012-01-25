@@ -1427,6 +1427,9 @@ public class Bpmn2JsonMarshaller {
     }
     
     private void marshallExclusiveGateway(ExclusiveGateway gateway, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
+    	if(gateway.getDefault() != null) {
+    		flowElementProperties.put("defaultgate", gateway.getDefault().getId());
+    	}
     	marshallNode(gateway, flowElementProperties, "Exclusive_Databased_Gateway", plane, generator, xOffset, yOffset);
     }
     
