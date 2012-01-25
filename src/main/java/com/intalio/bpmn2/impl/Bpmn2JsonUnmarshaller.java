@@ -491,6 +491,21 @@ public class Bpmn2JsonUnmarshaller {
                 				}
                 			}
                 		}
+                		
+                		if(t.getIoSpecification() != null) {
+                			InputOutputSpecification ios = t.getIoSpecification();
+                			if(ios.getInputSets() == null || ios.getInputSets().size() < 1) {
+                				InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
+                				ios.getInputSets().add(inset);
+                			}
+                			
+                			if(ios.getOutputSets() == null) {
+                				if(ios.getOutputSets() == null || ios.getOutputSets().size() < 1) {
+                					OutputSet outset = Bpmn2Factory.eINSTANCE.createOutputSet();
+                					ios.getOutputSets().add(outset);
+                				}
+                			}
+                		}
                 	}
                 }
             }
