@@ -478,8 +478,8 @@ public class Bpmn2JsonMarshaller {
                     }
                 }
             } else if( ed instanceof SignalEventDefinition) {
-                if(((SignalEventDefinition) ed).getSignalRef() != null && ((SignalEventDefinition) ed).getSignalRef().getName() != null) {
-                    properties.put("signalref", ((SignalEventDefinition) ed).getSignalRef().getName());
+                if(((SignalEventDefinition) ed).getSignalRef() != null) {
+                    properties.put("signalref", ((SignalEventDefinition) ed).getSignalRef());
                 } else {
                     properties.put("signalref", "");
                 }
@@ -572,8 +572,8 @@ public class Bpmn2JsonMarshaller {
                     }
                 }
             } else if( ed instanceof SignalEventDefinition) {
-                if(((SignalEventDefinition) ed).getSignalRef() != null && ((SignalEventDefinition) ed).getSignalRef().getName() != null) {
-                    properties.put("signalref", ((SignalEventDefinition) ed).getSignalRef().getName());
+                if(((SignalEventDefinition) ed).getSignalRef() != null) {
+                    properties.put("signalref", ((SignalEventDefinition) ed).getSignalRef());
                 } else {
                     properties.put("signalref", "");
                 }

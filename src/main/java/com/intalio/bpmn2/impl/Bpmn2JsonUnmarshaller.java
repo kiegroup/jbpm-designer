@@ -658,16 +658,16 @@ public class Bpmn2JsonUnmarshaller {
                         if(((ThrowEvent)fe).getEventDefinitions().size() > 0) {
                             EventDefinition ed = ((ThrowEvent)fe).getEventDefinitions().get(0);
                             if (ed instanceof SignalEventDefinition) {
-                                Signal signal = Bpmn2Factory.eINSTANCE.createSignal();
-                                Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute().iterator();
-                                while(iter.hasNext()) {
-                                    FeatureMap.Entry entry = iter.next();
-                                    if(entry.getEStructuralFeature().getName().equals("signalrefname")) {
-                                        signal.setName((String) entry.getValue());
-                                    }
-                                }
-                                toAddSignals.add(signal);
-                                ((SignalEventDefinition) ed).setSignalRef(signal);
+//                                Signal signal = Bpmn2Factory.eINSTANCE.createSignal();
+//                                Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute().iterator();
+//                                while(iter.hasNext()) {
+//                                    FeatureMap.Entry entry = iter.next();
+//                                    if(entry.getEStructuralFeature().getName().equals("signalrefname")) {
+//                                        signal.setName((String) entry.getValue());
+//                                    }
+//                                }
+//                                toAddSignals.add(signal);
+//                                ((SignalEventDefinition) ed).setSignalRef(signal);
                             } else if(ed instanceof ErrorEventDefinition) {
                                 Error err = Bpmn2Factory.eINSTANCE.createError();
                                 Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute().iterator();
@@ -846,16 +846,16 @@ public class Bpmn2JsonUnmarshaller {
                         if(((CatchEvent)fe).getEventDefinitions().size() > 0) {
                             EventDefinition ed = ((CatchEvent)fe).getEventDefinitions().get(0);
                             if (ed instanceof SignalEventDefinition) {
-                                Signal signal = Bpmn2Factory.eINSTANCE.createSignal();
-                                Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute().iterator();
-                                while(iter.hasNext()) {
-                                    FeatureMap.Entry entry = iter.next();
-                                    if(entry.getEStructuralFeature().getName().equals("signalrefname")) {
-                                        signal.setName((String) entry.getValue());
-                                    }
-                                }
-                                toAddSignals.add(signal);
-                                ((SignalEventDefinition) ed).setSignalRef(signal);
+//                                Signal signal = Bpmn2Factory.eINSTANCE.createSignal();
+//                                Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute().iterator();
+//                                while(iter.hasNext()) {
+//                                    FeatureMap.Entry entry = iter.next();
+//                                    if(entry.getEStructuralFeature().getName().equals("signalrefname")) {
+//                                        signal.setName((String) entry.getValue());
+//                                    }
+//                                }
+//                                toAddSignals.add(signal);
+//                                ((SignalEventDefinition) ed).setSignalRef(signal);
                             } else if(ed instanceof ErrorEventDefinition) {
                                 Error err = Bpmn2Factory.eINSTANCE.createError();
                                 Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute().iterator();
@@ -949,12 +949,12 @@ public class Bpmn2JsonUnmarshaller {
         List<RootElement> rootElements =  def.getRootElements();
         for(RootElement root : rootElements) {
             if(root instanceof Process) {
-                setGatewayDirection((Process) root);
+                setGatewayInfo((Process) root);
             }
         }
     }
     
-    private void setGatewayDirection(FlowElementsContainer container) {
+    private void setGatewayInfo(FlowElementsContainer container) {
     	List<FlowElement> flowElements =  container.getFlowElements();
         for(FlowElement fe : flowElements) {
             if(fe instanceof Gateway) {
@@ -980,7 +980,13 @@ public class Bpmn2JsonUnmarshaller {
                     if(entry.getEStructuralFeature().getName().equals("dg")) {
                     	for(FlowElement feg : flowElements) {
                     		if(feg instanceof SequenceFlow && feg.getId().equals((String) entry.getValue())) {
-                    			((InclusiveGateway) fe).setDefault((SequenceFlow) feg);
+                    			SequenceFlow sf = (SequenceFlow) feg;
+                    			((InclusiveGateway) fe).setDefault(sf);
+                    			if(sf.getConditionExpression() == null) {
+                    				FormalExpression  expr = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                    				expr.setBody("");
+                    				sf.setConditionExpression(expr);
+                    			}
                     		}
                     	}
                     }
@@ -993,14 +999,20 @@ public class Bpmn2JsonUnmarshaller {
                     if(entry.getEStructuralFeature().getName().equals("dg")) {
                     	for(FlowElement feg : flowElements) {
                     		if(feg instanceof SequenceFlow && feg.getId().equals((String) entry.getValue())) {
-                    			((ExclusiveGateway) fe).setDefault((SequenceFlow) feg);
+                    			SequenceFlow sf = (SequenceFlow) feg;
+                    			((ExclusiveGateway) fe).setDefault(sf);
+                    			if(sf.getConditionExpression() == null) {
+                    				FormalExpression  expr = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                    				expr.setBody("");
+                    				sf.setConditionExpression(expr);
+                    			}
                     		}
                     	}
                     }
                 }
             }
             if(fe instanceof FlowElementsContainer) {
-            	setGatewayDirection((FlowElementsContainer) fe);
+            	setGatewayInfo((FlowElementsContainer) fe);
             }
         }
     }
@@ -2190,12 +2202,13 @@ public class Bpmn2JsonUnmarshaller {
                 }
             } else if (ed instanceof SignalEventDefinition) {
                 if(properties.get("signalref") != null && !"".equals(properties.get("signalref"))) {
-                    ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
-                    EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
-                                "http://www.jboss.org/drools", "signalrefname", false, false);
-                    EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
-                        properties.get("signalref"));
-                    ((SignalEventDefinition) event.getEventDefinitions().get(0)).getAnyAttribute().add(extensionEntry);
+                	((SignalEventDefinition) ed).setSignalRef(properties.get("signalref"));
+//                    ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+//                    EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+//                                "http://www.jboss.org/drools", "signalrefname", false, false);
+//                    EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+//                        properties.get("signalref"));
+//                    ((SignalEventDefinition) event.getEventDefinitions().get(0)).getAnyAttribute().add(extensionEntry);
                 }
             } else if(ed instanceof ErrorEventDefinition) {
                 if(properties.get("errorref") != null && !"".equals(properties.get("errorref"))) {
@@ -2329,12 +2342,14 @@ public class Bpmn2JsonUnmarshaller {
                 }
             } else if (ed instanceof SignalEventDefinition) {
                 if(properties.get("signalref") != null && !"".equals(properties.get("signalref"))) {
-                    ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
-                    EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
-                                "http://www.jboss.org/drools", "signalrefname", false, false);
-                    EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
-                        properties.get("signalref"));
-                    ((SignalEventDefinition) event.getEventDefinitions().get(0)).getAnyAttribute().add(extensionEntry);
+                	  ((SignalEventDefinition) ed).setSignalRef(properties.get("signalref"));
+                	
+//                    ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+//                    EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+//                                "http://www.jboss.org/drools", "signalrefname", false, false);
+//                    EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+//                        properties.get("signalref"));
+//                    ((SignalEventDefinition) event.getEventDefinitions().get(0)).getAnyAttribute().add(extensionEntry);
                 }
             } else if(ed instanceof ErrorEventDefinition) {
                 if(properties.get("errorref") != null && !"".equals(properties.get("errorref"))) {

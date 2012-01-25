@@ -252,7 +252,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 	        	                	addError(ted, "Catch Event has no timecycle.");
 	        	                }
 	        	            } else if( ed instanceof SignalEventDefinition) {
-	        	                if(((SignalEventDefinition) ed).getSignalRef() == null || ((SignalEventDefinition) ed).getSignalRef().getName() == null) {
+	        	                if(((SignalEventDefinition) ed).getSignalRef() == null) {
 	        	                	addError((SignalEventDefinition) ed, "Catch Event has no signalref.");
 	        	                }
 	        	            } else if( ed instanceof ErrorEventDefinition) {
@@ -296,7 +296,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
         		                	addError((TimerEventDefinition) ed, "Throw Event has no timecycle.");
         		                }
         		            } else if( ed instanceof SignalEventDefinition) {
-        		                if(((SignalEventDefinition) ed).getSignalRef() == null || ((SignalEventDefinition) ed).getSignalRef().getName() == null) {
+        		                if(((SignalEventDefinition) ed).getSignalRef() == null) {
         		                	addError((SignalEventDefinition) ed, "Throw Event has no signalref.");
         		                }
         		            } else if( ed instanceof ErrorEventDefinition) {

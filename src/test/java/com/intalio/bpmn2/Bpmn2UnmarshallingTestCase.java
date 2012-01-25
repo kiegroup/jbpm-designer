@@ -339,8 +339,7 @@ public class Bpmn2UnmarshallingTestCase {
     public void testStartSignalEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("startSignalEvent.json"), "").getContents().get(0));
-        // we now add signal as the root element so there are more than 1
-        assertTrue(definitions.getRootElements().size() == 2);
+        assertTrue(definitions.getRootElements().size() == 1);
         Process process = getRootProcess(definitions);
         StartEvent g = (StartEvent) process.getFlowElements().get(0);
         assertEquals("start signal event", g.getName());
@@ -470,7 +469,7 @@ public class Bpmn2UnmarshallingTestCase {
     public void testEndSignalEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("endSignalEvent.json"), "").getContents().get(0));
-        assertTrue(definitions.getRootElements().size() == 2);
+        assertTrue(definitions.getRootElements().size() == 1);
         Process process = getRootProcess(definitions);
         EndEvent g = (EndEvent) process.getFlowElements().get(0);
         assertEquals("end signal event", g.getName());
@@ -706,7 +705,7 @@ public class Bpmn2UnmarshallingTestCase {
     public void testIntermediateThrowSignalUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("intermediateThrowSignalEvent.json"), "").getContents().get(0));
-        assertTrue(definitions.getRootElements().size() == 2);
+        assertTrue(definitions.getRootElements().size() == 1);
         Process process = getRootProcess(definitions);
         ThrowEvent g = (ThrowEvent) process.getFlowElements().get(0);
         assertEquals("throw signal event", g.getName());
