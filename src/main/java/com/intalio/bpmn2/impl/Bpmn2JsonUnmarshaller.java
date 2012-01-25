@@ -976,6 +976,7 @@ public class Bpmn2JsonUnmarshaller {
         List<RootElement> rootElements =  def.getRootElements();
         List<Interface> toAddInterfaces = new ArrayList<Interface>();
         List<Message> toAddMessages = new ArrayList<Message>();
+        List<ItemDefinition> toAddDefinitions = new ArrayList<ItemDefinition>();
         for(RootElement root : rootElements) {
             if(root instanceof Process) {
                 Process process = (Process) root;
@@ -1006,6 +1007,12 @@ public class Bpmn2JsonUnmarshaller {
                             
                             Message message = Bpmn2Factory.eINSTANCE.createMessage();
                             message.setId(fe.getId() + "_InMessage");
+                            
+                            ItemDefinition itemdef =  Bpmn2Factory.eINSTANCE.createItemDefinition();
+                            itemdef.setId(message.getId() + "Type");
+                            message.setItemRef(itemdef);
+                            toAddDefinitions.add(itemdef);
+                            
                             toAddMessages.add(message);
                             
                             oper.setInMessageRef(message);
@@ -1017,11 +1024,15 @@ public class Bpmn2JsonUnmarshaller {
                 }
             }
         }
-        for(Interface i : toAddInterfaces) {
-            def.getRootElements().add(i);
+        
+        for(ItemDefinition id : toAddDefinitions) {
+            def.getRootElements().add(id);
         }
         for(Message m : toAddMessages) {
             def.getRootElements().add(m);
+        }
+        for(Interface i : toAddInterfaces) {
+            def.getRootElements().add(i);
         }
     }
     
@@ -1034,16 +1045,26 @@ public class Bpmn2JsonUnmarshaller {
         List<ItemDefinition> toAddDefinitions = new ArrayList<ItemDefinition>();
         for(RootElement root : rootElements) {
             if(root instanceof Message) {
-                // add item definition for messages
-                ItemDefinition itemdef =  Bpmn2Factory.eINSTANCE.createItemDefinition();
-                itemdef.setId(root.getId() + "Type");
-                toAddDefinitions.add(itemdef);
-                ((Message) root).setItemRef(itemdef);
+            	if(!existsMessageItemDefinition(rootElements, root.getId())) {
+            		ItemDefinition itemdef =  Bpmn2Factory.eINSTANCE.createItemDefinition();
+            		itemdef.setId(root.getId() + "Type");
+            		toAddDefinitions.add(itemdef);
+            		((Message) root).setItemRef(itemdef);
+            	}
             }
         }
         for(ItemDefinition id : toAddDefinitions) {
             def.getRootElements().add(id);
         }
+    }
+    
+    private boolean existsMessageItemDefinition(List<RootElement> rootElements, String id) {
+    	for(RootElement root : rootElements) {
+    		if(root instanceof ItemDefinition && root.getId().equals(id + "Type")) {
+    			return true;
+    		}
+    	}
+    	return false;
     }
         
     /**
