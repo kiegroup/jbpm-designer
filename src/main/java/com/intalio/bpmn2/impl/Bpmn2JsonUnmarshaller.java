@@ -1541,6 +1541,14 @@ public class Bpmn2JsonUnmarshaller {
                                     ((Definitions) baseElt).getRootElements().add(itemdef);
                                 }
                             }
+                            if(properties.get("adhocprocess") != null && properties.get("adhocprocess").equals("true")) {
+                            	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                                EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                                            "http://www.jboss.org/drools", "adHoc", false, false);
+                                EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                                    properties.get("adhocprocess"));
+                                rootLevelProcess.getAnyAttribute().add(extensionEntry);
+                            }
                             rootLevelProcess.setId(properties.get("id"));
                             applyProcessProperties(rootLevelProcess, properties);
                             ((Definitions) baseElt).getRootElements().add(rootLevelProcess);

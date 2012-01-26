@@ -260,7 +260,9 @@ public class Bpmn2JsonMarshaller {
 	                    props.put("vardefs", propVal);
 	                }
 	                
-	                // packageName and version are jbpm-specific extension attribute
+	                
+	                
+	                // packageName and version and adHoc are jbpm-specific extension attribute
 	                Iterator<FeatureMap.Entry> iter = ((Process) rootElement).getAnyAttribute().iterator();
 	                while(iter.hasNext()) {
 	                    FeatureMap.Entry entry = iter.next();
@@ -271,6 +273,10 @@ public class Bpmn2JsonMarshaller {
 	                    if(entry.getEStructuralFeature().getName().equals("version")) {
                             props.put("version", entry.getValue());
                         }
+	                    
+	                    if(entry.getEStructuralFeature().getName().equals("adHoc")) {
+	                    	props.put("adhocprocess", entry.getValue());
+	                    }
 	                }
 	                
 	                // process imports and globals extension elements

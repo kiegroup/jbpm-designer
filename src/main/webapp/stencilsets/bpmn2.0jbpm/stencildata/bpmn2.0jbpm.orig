@@ -319,6 +319,28 @@
 					"optional":true
 				},
 				{
+					"id":"adhocprocess",
+					"type":"Choice",
+					"title":"AdHoc",
+					"title_de":"AdHoc",
+					"value":"false",
+					"description":"Defines an AdHoc process",
+					"readonly":false,
+					"optional":true,
+					"items": [
+						{
+							"id": "c1",
+							"title":"false",
+							"value":"false"
+						},
+						{
+							"id": "c2",
+							"title": "true",
+							"value": "true"
+						}
+					]                                               
+				},
+				{
 					"id":"imports",
 					"type":"Text",
 					"title":"Imports",
