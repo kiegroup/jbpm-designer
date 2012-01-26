@@ -1237,8 +1237,17 @@ public class Bpmn2JsonUnmarshaller {
         						BPMNEdge edge = factory.createBPMNEdge();
         						edge.setBpmnElement(flowElement);
         						List<Point> dockers = _dockers.get(flowElement.getId());
+        						DcFactory dcFactory = DcFactory.eINSTANCE;
+        						Point addedDocker = dcFactory.createPoint();
     	    					for (int i = 0; i < dockers.size(); i++) {
     	    						edge.getWaypoint().add(dockers.get(i));
+    	    						if(i == 0) {
+    	    							addedDocker.setX(dockers.get(i).getX());
+    	    							addedDocker.setY(dockers.get(i).getY());
+    	    						}
+    	    					}
+    	    					if(dockers.size() == 1) {
+    	    						edge.getWaypoint().add(addedDocker);
     	    					}
     	    					plane.getPlaneElement().add(edge);
         					}

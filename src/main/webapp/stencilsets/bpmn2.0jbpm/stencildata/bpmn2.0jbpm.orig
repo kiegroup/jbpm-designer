@@ -4807,10 +4807,9 @@
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
 					"items": [
 						{
-							"id":"none",
+							"id":"nolang",
 							"title":"None",
 							"title_de":"None",
 							"value":"none"
@@ -5307,13 +5306,12 @@
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"refToView":"",
 					"items": [
 						{
-							"id":"none",
+							"id":"nolang",
 							"title":"None",
 							"title_de":"None",
-							"value":""
+							"value":"none"
 						},
 						{
 							"id":"cron",
