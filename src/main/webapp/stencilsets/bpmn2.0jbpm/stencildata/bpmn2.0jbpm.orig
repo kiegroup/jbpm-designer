@@ -74,14 +74,25 @@
 			"properties":[
 				{
 					"id":"boundarycancelactivity",
-					"type":"Boolean",
+					"type":"Choice",
 					"title":"CancelActivity",
-					"title_de":"Aktivität abbrechen",
-					"value":"",
+					"title_de":"CancelActivity",
+					"value":"false",
 					"description":"Denotes whether the activity should be cancelled or not, i.e., whether the boundary catch event acts as an error or an escalation. If the activity is not cancelled, multiple instances of that handler can run concurrently.",
-					"description_de":"Kennzeichnet ob eine Aktivität abgebrochen werden soll.",
 					"readonly":false,
-					"optional":true
+					"optional":true,
+					"items": [
+						{
+							"id": "c1",
+							"title":"false",
+							"value":"false"
+						},
+						{
+							"id": "c2",
+							"title": "true",
+							"value": "true"
+						}
+					]                                               
 				}
 			]
 		},

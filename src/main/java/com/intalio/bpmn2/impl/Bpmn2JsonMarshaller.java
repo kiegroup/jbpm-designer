@@ -260,8 +260,6 @@ public class Bpmn2JsonMarshaller {
 	                    props.put("vardefs", propVal);
 	                }
 	                
-	                
-	                
 	                // packageName and version and adHoc are jbpm-specific extension attribute
 	                Iterator<FeatureMap.Entry> iter = ((Process) rootElement).getAnyAttribute().iterator();
 	                while(iter.hasNext()) {
@@ -828,6 +826,11 @@ public class Bpmn2JsonMarshaller {
     
     private void marshallBoundaryEvent(BoundaryEvent boundaryEvent, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> catchEventProperties) throws JsonGenerationException, IOException {
     	List<EventDefinition> eventDefinitions = boundaryEvent.getEventDefinitions();
+    	if(boundaryEvent.isCancelActivity()) {
+    		catchEventProperties.put("boundarycancelactivity", "true");
+    	} else {
+    		catchEventProperties.put("boundarycancelactivity", "false");
+    	}
     	if (eventDefinitions.size() == 1) {
     		EventDefinition eventDefinition = eventDefinitions.get(0);
     		if (eventDefinition instanceof EscalationEventDefinition) {
@@ -1633,6 +1636,9 @@ public class Bpmn2JsonMarshaller {
 			} else {
 				// default to parallel
 				properties.put("adhocordering", "Parallel");
+			}
+			if(ahsp.getCompletionCondition() != null) {
+				properties.put("adhoccompletioncondition", ((FormalExpression) ahsp.getCompletionCondition()).getBody());
 			}
 		}
 		

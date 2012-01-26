@@ -800,6 +800,15 @@ public class Bpmn2JsonUnmarshaller {
                 						 be.getProperties().addAll(ce.getProperties());
                 					 }
                 					 
+                					 Iterator<FeatureMap.Entry> iter = ce.getAnyAttribute().iterator();
+                                     while(iter.hasNext()) {
+                                         FeatureMap.Entry entry2 = iter.next();
+                                         if(entry2.getEStructuralFeature().getName().equals("boundaryca")) {
+                                        	 String boundaryceVal = (String) entry2.getValue();
+                                             be.setCancelActivity(Boolean.getBoolean(boundaryceVal));
+                                         }
+                                     }
+                					 
                 					 be.setName(ce.getName());
                 					 be.setId(ce.getId());
                 					 
@@ -2041,12 +2050,16 @@ public class Bpmn2JsonUnmarshaller {
     
     private void applyAdHocSubProcessProperties(AdHocSubProcess ahsp, Map<String, String> properties) {
     	if(properties.get("adhocordering") != null) {
-    		if(properties.get("adhocordering") == null || properties.get("adhocordering").equals("Parallel")) {
+    		if(properties.get("adhocordering").equals("Parallel")) {
     			ahsp.setOrdering(AdHocOrdering.PARALLEL);
     		} else {
     			ahsp.setOrdering(AdHocOrdering.SEQUENTIAL);
     		}
-   
+    	}
+    	if(properties.get("adhoccompletioncondition") != null) {
+    		FormalExpression completionConditionExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+    		completionConditionExpression.setBody(properties.get("adhoccompletioncondition"));
+    		ahsp.setCompletionCondition(completionConditionExpression);
     	}
     }
 
@@ -2168,6 +2181,15 @@ public class Bpmn2JsonUnmarshaller {
                 
             }
             event.setOutputSet(outSet);
+        }
+        
+        if(properties.get("boundarycancelactivity") != null) {
+        	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+            EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                        "http://www.jboss.org/drools", "boundaryca", false, false);
+            EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                properties.get("boundarycancelactivity"));
+            event.getAnyAttribute().add(extensionEntry);
         }
 
         // data output associations
