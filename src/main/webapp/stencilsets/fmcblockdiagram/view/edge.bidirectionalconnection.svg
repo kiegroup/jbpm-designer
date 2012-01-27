@@ -1,9 +1,0 @@
-<svg
-	xmlns="http://www.w3.org/2000/svg"
-	xmlns:oryx="http://www.b3mn.org/oryx"
-	version="1.0"
-	oryx:edge="edge" >
-	<g>
-	    <path id="edge" d="M10 50 L210 50" stroke="black" fill="none" stroke-width="1.5" stroke-linecap="butt" stroke-linejoin="round" />
-	</g>
-</svg>

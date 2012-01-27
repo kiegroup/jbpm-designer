@@ -128,11 +128,6 @@
         <version>0.1.0</version>
       </dependency>
 
-	  <dependency>
-        <groupId>commons-lang</groupId>
-        <artifactId>commons-lang</artifactId>
-        <version>2.4</version>
-      </dependency>
       <dependency>
         <groupId>org.jdom</groupId>
         <artifactId>jdom</artifactId>

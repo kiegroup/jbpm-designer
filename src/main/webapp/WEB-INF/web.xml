@@ -34,16 +34,6 @@
   <servlet-class>org.oryxeditor.server.ResourceList</servlet-class>
  </servlet>
  <servlet>
-  <display-name>Oryx Desynchronizability Checker</display-name>
-  <servlet-name>DesynchronizabilityServlet</servlet-name>
-  <servlet-class>org.oryxeditor.server.DesynchronizabilityServlet</servlet-class>
- </servlet>
- <servlet>
-  <display-name>Oryx IBPMN 2 BPMN Converter</display-name>
-  <servlet-name>IBPMN2BPMNServlet</servlet-name>
-  <servlet-class>org.oryxeditor.server.IBPMN2BPMNServlet</servlet-class>
- </servlet>
- <servlet>
   <display-name>Oryx Editor Handler</display-name>
   <servlet-name>EditorHandler</servlet-name>
   <servlet-class>org.oryxeditor.server.EditorHandler</servlet-class>
@@ -55,16 +45,6 @@
    <param-name>designer.preprocess</param-name>
    <param-value>true</param-value>
   </init-param>
- </servlet>
- <servlet>
-  <display-name>Oryx Validator</display-name>
-  <servlet-name>Validator</servlet-name>
-  <servlet-class>org.oryxeditor.server.ValidatorServlet</servlet-class>
- </servlet>
- <servlet>
-  <display-name>Alternatives Renderer</display-name>
-  <servlet-name>AlternativesRenderer</servlet-name>
-  <servlet-class>org.oryxeditor.server.AlternativesRenderer</servlet-class>
  </servlet>
  <servlet>
   <display-name>UUID Based Repository</display-name>
@@ -126,26 +106,6 @@
  <servlet-mapping>
   <servlet-name>ResourceList</servlet-name>
   <url-pattern>/resourceList</url-pattern>
- </servlet-mapping>
- <servlet-mapping>
-  <servlet-name>DesynchronizabilityServlet</servlet-name>
-  <url-pattern>/desynchronizability</url-pattern>
- </servlet-mapping>
- <servlet-mapping>
-  <servlet-name>IBPMN2BPMNServlet</servlet-name>
-  <url-pattern>/ibpmn2bpmn</url-pattern>
- </servlet-mapping>
- <!--<servlet-mapping> <servlet-name>SyntaxChecker</servlet-name> <url-pattern>/syntaxchecker</url-pattern> 
-    </servlet-mapping> -->
- <servlet-mapping>
-  <servlet-name>Validator</servlet-name>
-  <url-pattern>/validator</url-pattern>
- </servlet-mapping>
- <!--<servlet-mapping> <servlet-name>SimpleStorageServlet</servlet-name> 
-    <url-pattern>/server</url-pattern> </servlet-mapping> -->
- <servlet-mapping>
-  <servlet-name>AlternativesRenderer</servlet-name>
-  <url-pattern>/pdf</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
   <servlet-name>EditorHandler</servlet-name>
