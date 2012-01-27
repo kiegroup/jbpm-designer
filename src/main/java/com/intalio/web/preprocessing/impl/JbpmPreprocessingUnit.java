@@ -1,24 +1,3 @@
-/***************************************
- * Copyright (c) Intalio, Inc 2010
- *
- * Permission is hereby granted, free of charge, to any person obtaining a
- * copy of this software and associated documentation files (the "Software"),
- * to deal in the Software without restriction, including without limitation
- * the rights to use, copy, modify, merge, publish, distribute, sublicense,
- * and/or sell copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
- * DEALINGS IN THE SOFTWARE.
-****************************************/
 package com.intalio.web.preprocessing.impl;
 
 import java.io.BufferedReader;
@@ -379,7 +358,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 				checkEmailIconConnection
 				        .setRequestProperty("Accept", "application/atom+xml");
 				checkEmailIconConnection.connect();
-				_logger.info("check email icon connection response code: " + checkEmailIconConnection.getResponseCode());
+				System.out.println("check email icon connection response code: " + checkEmailIconConnection.getResponseCode());
 				if (checkEmailIconConnection.getResponseCode() == 200) {
 				    URL deleteAssetURL = new URL(emailIconURL);
 				    HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL
@@ -387,7 +366,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 				    applyAuth(profile, deleteConnection);
 				    deleteConnection.setRequestMethod("DELETE");
 				    deleteConnection.connect();
-				    _logger.info("delete email icon response code: " + deleteConnection.getResponseCode());
+				    System.out.println("delete email icon response code: " + deleteConnection.getResponseCode());
 				}
 				
 				URL checkLogIconURL = new URL(logIconURL);
@@ -398,7 +377,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 				checkLogIconConnection
 				        .setRequestProperty("Accept", "application/atom+xml");
 				checkLogIconConnection.connect();
-				_logger.info("check log icon connection response code: " + checkLogIconConnection.getResponseCode());
+				System.out.println("check log icon connection response code: " + checkLogIconConnection.getResponseCode());
 				if (checkLogIconConnection.getResponseCode() == 200) {
 				    URL deleteAssetURL = new URL(logIconURL);
 				    HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL
@@ -406,7 +385,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 				    applyAuth(profile, deleteConnection);
 				    deleteConnection.setRequestMethod("DELETE");
 				    deleteConnection.connect();
-				    _logger.info("delete log icon response code: " + deleteConnection.getResponseCode());
+				    System.out.println("delete log icon response code: " + deleteConnection.getResponseCode());
 				}
 				
 				// now push all defaults 
@@ -440,7 +419,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 	            createLogIconConnection.setDoOutput(true);
 	            createLogIconConnection.getOutputStream().write(getBytesFromFile(new File(default_logicon)));
 	            createLogIconConnection.connect();
-	            System.out.println("created log icon" + createLogIconConnection.getResponseCode());
+	            System.out.println("created log icon: " + createLogIconConnection.getResponseCode());
 	            
 				// default configuration wid
 	            StringTemplate widConfigTemplate = new StringTemplate(readFile(default_widconfigtemplate));
@@ -463,10 +442,9 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 	            createWidConnection.setDoOutput(true);
 	            createWidConnection.getOutputStream().write(widConfigTemplate.toString().getBytes("UTF-8"));
 	            createWidConnection.connect();
-	            System.out.println("created default wid" + createWidConnection.getResponseCode());
+	            System.out.println("created default wid: " + createWidConnection.getResponseCode());
 			} catch (Exception e) {
-				// we dont want to barf..just log that error happened
-                _logger.error(e.getMessage());
+                e.printStackTrace();
 			}
     		
     	}
