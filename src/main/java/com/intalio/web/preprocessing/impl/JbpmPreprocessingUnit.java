@@ -166,7 +166,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         	}
         	
         	// default the process id
-        	workItemTemplate.setAttribute("processid", "com.sample.bpmm2");
+        	workItemTemplate.setAttribute("processid", workItemTemplate.getAttribute("packageName") + "." + workItemTemplate.getAttribute("processName"));
         	// delete stencil data json if exists
         	deletefile(stencilFilePath);
         	// copy our results as the stencil json data
