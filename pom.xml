@@ -493,9 +493,9 @@
         <configuration>
           <archive>
             <manifestEntries>
-              <bundle-Name>Process Designer</bundle-Name>
-              <bundle-Version>${project.version}</bundle-Version>
-              <bundle-SymbolicName>designer</bundle-SymbolicName>
+              <Bundle-Name>Process Designer</Bundle-Name>
+              <Bundle-Version>${project.version}</Bundle-Version>
+              <Bundle-SymbolicName>designer</Bundle-SymbolicName>
             </manifestEntries>
           </archive>
         </configuration>
