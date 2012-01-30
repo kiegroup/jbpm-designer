@@ -2,6 +2,7 @@
 
 <profiles>
   <profile name="jbpm" stencilset="bpmn2.0jbpm">
+  	<plugin name="ORYX.Plugins.SelectStencilSetPerspective"/>
     <plugin name="ORYX.Plugins.Toolbar" />
     <plugin name="ORYX.Plugins.Footer" />
     <plugin name="ORYX.Plugins.UUIDRepositoryDummySave" />
@@ -28,7 +29,6 @@
     <plugin name="ORYX.Plugins.RegexTextEditor" />
     <plugin name="ORYX.Plugins.ConstraintExpressionEditor"/>
     <plugin name="ORYX.Plugins.Overlay"/>
-    <plugin name="ORYX.Plugins.SelectStencilSetPerspective"/>
     <externalloadurl protocol="http" host="localhost:8080" subdomain="drools-guvnor/org.drools.guvnor.Guvnor/oryxeditor" usr="admin" pwd="admin"/>
     <servicerepository location="http://people.redhat.com/kverlaen/repository"/> 
   </profile>
