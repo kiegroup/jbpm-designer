@@ -243,38 +243,38 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 	        				if(ed instanceof TimerEventDefinition) {
 	        	                TimerEventDefinition ted = (TimerEventDefinition) ed;
 	        	                if(ted.getTimeDate() == null) {
-	        	                	addError(ted, "Catch Event has no timedate.");
+	        	                	addError(event, "Catch Event has no timedate.");
 	        	                }
 	        	                if(ted.getTimeDuration() == null) {
-	        	                	addError(ted, "Catch Event has no timeduration.");
+	        	                	addError(event, "Catch Event has no timeduration.");
 	        	                }
 	        	                if(ted.getTimeCycle() == null) {
-	        	                	addError(ted, "Catch Event has no timecycle.");
+	        	                	addError(event, "Catch Event has no timecycle.");
 	        	                }
 	        	            } else if( ed instanceof SignalEventDefinition) {
 	        	                if(((SignalEventDefinition) ed).getSignalRef() == null) {
-	        	                	addError((SignalEventDefinition) ed, "Catch Event has no signalref.");
+	        	                	addError(event, "Catch Event has no signalref.");
 	        	                }
 	        	            } else if( ed instanceof ErrorEventDefinition) {
 	        	                if(((ErrorEventDefinition) ed).getErrorRef() == null || ((ErrorEventDefinition) ed).getErrorRef().getErrorCode() == null) {
-	        	                	addError((ErrorEventDefinition) ed, "Catch Event has no errorref.");
+	        	                	addError(event, "Catch Event has no errorref.");
 	        	                }
 	        	            } else if( ed instanceof ConditionalEventDefinition ) {
 	        	                FormalExpression conditionalExp = (FormalExpression) ((ConditionalEventDefinition) ed).getCondition();
 	        	                if(conditionalExp.getBody() == null) {
-	        	                	addError((ErrorEventDefinition) ed, "Catch Event has no conditionexpression.");
+	        	                	addError(event, "Catch Event has no conditionexpression.");
 	        	                }
 	        	            } else if( ed instanceof EscalationEventDefinition ) {
 	        	                if(((EscalationEventDefinition) ed).getEscalationRef() == null) {
-	        	                	addError((EscalationEventDefinition) ed, "Catch Event has no escalationref.");
+	        	                	addError(event, "Catch Event has no escalationref.");
 	        	                }
 	        	            } else if( ed instanceof MessageEventDefinition) {
 	        	                if(((MessageEventDefinition) ed).getMessageRef() == null) {
-	        	                    addError((MessageEventDefinition) ed, "Catch Event has no messageref.");
+	        	                    addError(event, "Catch Event has no messageref.");
 	        	                }
 	        	            }  else if( ed instanceof CompensateEventDefinition) {
 	        	                if(((CompensateEventDefinition) ed).getActivityRef() == null) {
-	        	                	addError((CompensateEventDefinition) ed, "Catch Event has no activityref.");
+	        	                	addError(event, "Catch Event has no activityref.");
 	        	                }
 	        	            } 
         				}
@@ -287,38 +287,38 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
         		            if(ed instanceof TimerEventDefinition) {
         		                TimerEventDefinition ted = (TimerEventDefinition) ed;
         		                if(ted.getTimeDate() == null) {
-        		                	addError((TimerEventDefinition) ed, "Throw Event has no timedate.");
+        		                	addError(event, "Throw Event has no timedate.");
         		                }
         		                if(ted.getTimeDuration() == null) {
-        		                	addError((TimerEventDefinition) ed, "Throw Event has no timeduration.");
+        		                	addError(event, "Throw Event has no timeduration.");
         		                }
         		                if(ted.getTimeCycle() != null) {
-        		                	addError((TimerEventDefinition) ed, "Throw Event has no timecycle.");
+        		                	addError(event, "Throw Event has no timecycle.");
         		                }
         		            } else if( ed instanceof SignalEventDefinition) {
         		                if(((SignalEventDefinition) ed).getSignalRef() == null) {
-        		                	addError((SignalEventDefinition) ed, "Throw Event has no signalref.");
+        		                	addError(event, "Throw Event has no signalref.");
         		                }
         		            } else if( ed instanceof ErrorEventDefinition) {
         		                if(((ErrorEventDefinition) ed).getErrorRef() == null || ((ErrorEventDefinition) ed).getErrorRef().getErrorCode() == null) {
-        		                	addError((ErrorEventDefinition) ed, "Throw Event has no errorref.");
+        		                	addError(event, "Throw Event has no errorref.");
         		                }
         		            } else if( ed instanceof ConditionalEventDefinition ) {
         		                FormalExpression conditionalExp = (FormalExpression) ((ConditionalEventDefinition) ed).getCondition();
         		                if(conditionalExp.getBody() == null) {
-        		                	addError((ConditionalEventDefinition) ed, "Throw Event has no conditional expression.");
+        		                	addError(event, "Throw Event has no conditional expression.");
         		                }
         		            } else if( ed instanceof EscalationEventDefinition ) {
         		                if(((EscalationEventDefinition) ed).getEscalationRef() == null) {
-        		                	addError((EscalationEventDefinition) ed, "Throw Event has no conditional escalationref.");
+        		                	addError(event, "Throw Event has no conditional escalationref.");
         		                }
         		            } else if( ed instanceof MessageEventDefinition) {
         		                if(((MessageEventDefinition) ed).getMessageRef() == null) {
-        		                	addError((MessageEventDefinition) ed, "Throw Event has no conditional messageref.");
+        		                	addError(event, "Throw Event has no conditional messageref.");
         		                }
         		            }  else if( ed instanceof CompensateEventDefinition) {
         		                if(((CompensateEventDefinition) ed).getActivityRef() == null) {
-        		                	addError((CompensateEventDefinition) ed, "Throw Event has no conditional activityref.");
+        		                	addError(event, "Throw Event has no conditional activityref.");
         		                }
         		            }  
         		        }
