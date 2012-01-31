@@ -1775,7 +1775,7 @@ public class Bpmn2JsonUnmarshaller {
             String[] allActions = properties.get("onentryactions").split( "\\|\\s*" );
             for(String action : allActions) {
                 OnEntryScriptType onEntryScript = DroolsFactory.eINSTANCE.createOnEntryScriptType();
-                onEntryScript.setScript(action);
+                onEntryScript.setScript(wrapInCDATABlock(action));
                 
                 String scriptLanguage = "";
                 if(properties.get("script_language").equals("java")) {
@@ -1802,7 +1802,7 @@ public class Bpmn2JsonUnmarshaller {
             String[] allActions = properties.get("onexitactions").split( "\\|\\s*" );
             for(String action : allActions) {
                 OnExitScriptType onExitScript = DroolsFactory.eINSTANCE.createOnExitScriptType();
-                onExitScript.setScript(action);
+                onExitScript.setScript(wrapInCDATABlock(action));
                 
                 String scriptLanguage = "";
                 if(properties.get("script_language").equals("java")) {
@@ -2058,7 +2058,7 @@ public class Bpmn2JsonUnmarshaller {
     	}
     	if(properties.get("adhoccompletioncondition") != null) {
     		FormalExpression completionConditionExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
-    		completionConditionExpression.setBody(properties.get("adhoccompletioncondition"));
+    		completionConditionExpression.setBody(wrapInCDATABlock(properties.get("adhoccompletioncondition")));
     		ahsp.setCompletionCondition(completionConditionExpression);
     	}
     }
@@ -2274,7 +2274,7 @@ public class Bpmn2JsonUnmarshaller {
                     conditionExpression.setLanguage(languageStr);
                 }
                 if(properties.get("conditionexpression") != null && !"".equals(properties.get("conditionexpression"))) {
-                    conditionExpression.setBody(properties.get("conditionexpression"));
+                    conditionExpression.setBody(wrapInCDATABlock(properties.get("conditionexpression")));
                 }
                 ((ConditionalEventDefinition) event.getEventDefinitions().get(0)).setCondition(conditionExpression);
             } else if(ed instanceof EscalationEventDefinition) {
@@ -2415,7 +2415,7 @@ public class Bpmn2JsonUnmarshaller {
                     conditionExpression.setLanguage(languageStr);
                 }
                 if(properties.get("conditionexpression") != null && !"".equals(properties.get("conditionexpression"))) {
-                    conditionExpression.setBody(properties.get("conditionexpression"));
+                    conditionExpression.setBody(wrapInCDATABlock(properties.get("conditionexpression")));
                 }
                 ((ConditionalEventDefinition) event.getEventDefinitions().get(0)).setCondition(conditionExpression);
             } else if(ed instanceof EscalationEventDefinition) {
@@ -2597,7 +2597,7 @@ public class Bpmn2JsonUnmarshaller {
         }
         
         if(properties.get("script") != null && properties.get("script").length() > 0) {
-        	scriptTask.setScript(properties.get("script"));
+        	scriptTask.setScript(wrapInCDATABlock(properties.get("script")));
         }
         
         if(properties.get("script_language") != null && properties.get("script_language").length() > 0) {
@@ -2860,7 +2860,7 @@ public class Bpmn2JsonUnmarshaller {
             String[] allActions = properties.get("onentryactions").split( "\\|\\s*" );
             for(String action : allActions) {
                 OnEntryScriptType onEntryScript = DroolsFactory.eINSTANCE.createOnEntryScriptType();
-                onEntryScript.setScript(action);
+                onEntryScript.setScript(wrapInCDATABlock(action));
                 
                 String scriptLanguage = "";
                 if(properties.get("script_language").equals("java")) {
@@ -2887,7 +2887,7 @@ public class Bpmn2JsonUnmarshaller {
             String[] allActions = properties.get("onexitactions").split( "\\|\\s*" );
             for(String action : allActions) {
                 OnExitScriptType onExitScript = DroolsFactory.eINSTANCE.createOnExitScriptType();
-                onExitScript.setScript(action);
+                onExitScript.setScript(wrapInCDATABlock(action));
                 
                 String scriptLanguage = "";
                 if(properties.get("script_language").equals("java")) {
@@ -3164,7 +3164,7 @@ public class Bpmn2JsonUnmarshaller {
             String[] allActions = properties.get("onentryactions").split( "\\|\\s*" );
             for(String action : allActions) {
                 OnEntryScriptType onEntryScript = DroolsFactory.eINSTANCE.createOnEntryScriptType();
-                onEntryScript.setScript(action);
+                onEntryScript.setScript(wrapInCDATABlock(action));
                 
                 String scriptLanguage = "";
                 if(properties.get("script_language").equals("java")) {
@@ -3191,7 +3191,7 @@ public class Bpmn2JsonUnmarshaller {
             String[] allActions = properties.get("onexitactions").split( "\\|\\s*" );
             for(String action : allActions) {
                 OnExitScriptType onExitScript = DroolsFactory.eINSTANCE.createOnExitScriptType();
-                onExitScript.setScript(action);
+                onExitScript.setScript(wrapInCDATABlock(action));
                 
                 String scriptLanguage = "";
                 if(properties.get("script_language").equals("java")) {
@@ -3334,7 +3334,7 @@ public class Bpmn2JsonUnmarshaller {
         }
         if (properties.get("conditionexpression") != null && !"".equals(properties.get("conditionexpression"))) {
             FormalExpression expr = Bpmn2Factory.eINSTANCE.createFormalExpression();
-            expr.setBody(properties.get("conditionexpression"));
+            expr.setBody(wrapInCDATABlock(properties.get("conditionexpression")));
             // check if language was specified 
             if (properties.get("conditionexpressionlanguage") != null && !"".equals(properties.get("conditionexpressionlanguage"))) {
                 String languageStr;
@@ -3400,6 +3400,10 @@ public class Bpmn2JsonUnmarshaller {
     
     protected BaseElement createBaseElement(String stencil, String taskType, boolean customElement){
         return Bpmn20Stencil.createElement(stencil, taskType, customElement);
+    }
+    
+    protected String wrapInCDATABlock(String value) {
+    	return "<![CDATA[" + value + "]]>";
     }
 }
 
