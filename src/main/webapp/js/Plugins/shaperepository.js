@@ -132,8 +132,25 @@ ORYX.Plugins.ShapeRepository = {
 			stencils = stencils.sortBy(function(value) { return value.position(); } );
 			stencils.each((function(value) {
 				
-				// Show stencils in no group if there is less than 10 shapes
+				// Show stencils in no group if there is less than 15 shapes
 				if(stencils.length <= ORYX.CONFIG.MAX_NUM_SHAPES_NO_GROUP) {
+					var stencilOrder = ORYX.CONFIG.STENCIL_GROUP_ORDER();
+					if(stencilOrder[sset.namespace()]) {
+						stencilSetNode.sort(function(a, b) {
+							if(!stencilOrder[sset.namespace()][a.text]) {
+								stencilOrder[sset.namespace()][a.text] = ORYX.CONFIG.STENCIL_MAX_ORDER;
+							}
+							if(!stencilOrder[sset.namespace()][b.text]) {
+								stencilOrder[sset.namespace()][b.text] = ORYX.CONFIG.STENCIL_MAX_ORDER;
+							}
+							return stencilOrder[sset.namespace()][a.text] - stencilOrder[sset.namespace()][b.text];
+						});
+					} else {
+						stencilSetNode.sort(function(a, b) {
+							return a.text > b.text ? 1 : a.text < b.text ? -1 : 0;
+						});
+					}
+					
 					this.createStencilTreeNode(stencilSetNode, value);	
 					return;					
 				}
@@ -174,16 +191,23 @@ ORYX.Plugins.ShapeRepository = {
 				}
 
 				// sort the groups
-				stencilSetNode.sort(function(a, b) {
-					return a.text > b.text ? 1 : a.text < b.text ? -1 : 0;
-				});
+				var stencilOrder = ORYX.CONFIG.STENCIL_GROUP_ORDER();
+				if(stencilOrder[sset.namespace()]) {
+					stencilSetNode.sort(function(a, b) {
+						return stencilOrder[sset.namespace()][a.text] - stencilOrder[sset.namespace()][b.text];
+					});
+				} else {
+					stencilSetNode.sort(function(a, b) {
+						return a.text > b.text ? 1 : a.text < b.text ? -1 : 0;
+					});
+				}
 	
 			}).bind(this));
 		}).bind(this));
 			
-		if (this.shapeList.firstChild.firstChild) {
-			this.shapeList.firstChild.firstChild.expand(false, true);
-		}	
+		//if (this.shapeList.firstChild.firstChild) {
+		//	this.shapeList.firstChild.firstChild.expand(false, true);
+		//}	
 	},
 
 	createStencilTreeNode: function(parentTreeNode, stencil) {
