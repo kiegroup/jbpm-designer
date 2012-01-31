@@ -25,7 +25,6 @@
 		"IntermediateConditionalEvent",
 		"IntermediateErrorEvent",
 		"IntermediateCompensationEventCatching",
-		"IntermediateSignalEventCatching",
 		"DataObject",
 		"EndMessageEvent",
 		"EndEscalationEvent",
@@ -45,7 +44,8 @@
 		"IntermediateCompensationEventThrowing",
 		"AdHocSubprocess",
 		"Association_Undirected",
-		"Association_Unidirectional"
+		"Association_Unidirectional",
+		"StartSignalEvent"
 	],
 	"removeproperties": []
 }
