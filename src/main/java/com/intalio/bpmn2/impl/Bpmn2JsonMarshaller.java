@@ -143,7 +143,8 @@ import com.intalio.web.profile.IDiagramProfile;
  *
  */
 public class Bpmn2JsonMarshaller {
-	public static final String defaultBgColor = "#b1c2d6";
+	public static final String defaultBgColor_Activities = "#b1c2d6";
+	public static final String defaultBgColor_Events = "#ffffff";
 	
 	private Map<String, DiagramElement> _diagramElements = new HashMap<String, DiagramElement>();
 	private Map<String,Association> _diagramAssociations = new HashMap<String, Association>();
@@ -689,7 +690,11 @@ public class Bpmn2JsonMarshaller {
             }
         }
         if(!foundBgColor) {
-        	flowElementProperties.put("bgcolor", defaultBgColor);
+        	if(flowElement instanceof Activity && !(flowElement instanceof SubProcess) ) {
+        		flowElementProperties.put("bgcolor", defaultBgColor_Activities);
+        	} else {
+        		flowElementProperties.put("bgcolor", defaultBgColor_Events);
+        	}
         }
 
         Map<String, Object> catchEventProperties = new LinkedHashMap<String, Object>(flowElementProperties);
