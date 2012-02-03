@@ -4,6 +4,6 @@
 "js/Core/StencilSet/complexpropertyitem.js", "js/Core/StencilSet/rules.js", "js/Core/StencilSet/stencilset.js", "js/Core/StencilSet/stencilsets.js", 
 "js/Core/command.js", "js/Core/bounds.js", "js/Core/uiobject.js", "js/Core/abstractshape.js", "js/Core/canvas.js", "js/Core/svgDrag.js", 
 "js/Core/shape.js", "js/Core/Controls/control.js", "js/Core/Controls/magnet.js", "js/Core/Controls/docker.js", "js/Core/node.js", "js/Core/edge.js", 
-"js/Core/abstractPlugin.js", "js/Core/abstractLayouter.js", "js/Core/abstractDragTracker.js", "js/diff_match_patch.js"]
+"js/Core/abstractPlugin.js", "js/Core/abstractLayouter.js", "js/Core/abstractDragTracker.js", "js/diff_match_patch.js", "js/itemdeleter.js"]
 
 }

@@ -320,7 +320,7 @@
 				},
 				{
 					"id":"vardefs",
-					"type":"Text",
+					"type":"Vardef",
 					"title":"Variable Definitions",
 					"title_de":"Variable Definitions",
 					"value":"",
@@ -3286,7 +3286,7 @@
 				},
 				{
 					"id":"vardefs",
-					"type":"Text",
+					"type":"Vardef",
 					"title":"Variable Definitions",
 					"title_de":"Variable Definitions",
 					"value":"",
@@ -3413,7 +3413,7 @@
 				},
 				{
 					"id":"vardefs",
-					"type":"Text",
+					"type":"Vardef",
 					"title":"Variable Definitions",
 					"title_de":"Variable Definitions",
 					"value":"",
@@ -3541,7 +3541,7 @@
 				},
 				{
 					"id":"vardefs",
-					"type":"Text",
+					"type":"Vardef",
 					"title":"Variable Definitions",
 					"title_de":"Variable Definitions",
 					"value":"",

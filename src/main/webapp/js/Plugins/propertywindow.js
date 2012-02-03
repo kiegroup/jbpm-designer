@@ -668,6 +668,19 @@ ORYX.Plugins.PropertyWindow = {
 							editorGrid = new Ext.Editor(cf);
 							break;
 
+						case ORYX.CONFIG.TYPE_VARDEF:
+
+							var cf = new Ext.form.ComplexVardefField({
+								allowBlank: pair.optional(),
+								dataSource:this.dataSource,
+								grid:this.grid,
+								row:index,
+								facade:this.facade
+							});
+							cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1,field:cf});							
+							editorGrid = new Ext.Editor(cf);
+							break;
+							
 							// extended by Kerstin (start)
 						case ORYX.CONFIG.TYPE_COMPLEX:
 
@@ -1210,9 +1223,6 @@ Ext.extend(Ext.form.ComplexListField, Ext.form.TriggerField,  {
 });
 
 
-
-
-
 Ext.form.ComplexTextField = Ext.extend(Ext.form.TriggerField,  {
 
 	defaultAutoCreate : {tag: "textarea", rows:1, style:"height:16px;overflow:hidden;" },
@@ -1272,6 +1282,161 @@ Ext.form.ComplexTextField = Ext.extend(Ext.form.TriggerField,  {
 					this.setValue(value);
 					
 					this.dataSource.getAt(this.row).set('value', value)
+					this.dataSource.commitChanges()
+
+					dialog.hide()
+                }.bind(this)
+            }, {
+                text: ORYX.I18N.PropertyWindow.cancel,
+                handler: function(){
+					this.setValue(this.value);
+                	dialog.hide()
+                }.bind(this)
+            }]
+		});		
+				
+		dialog.show();		
+		grid.render();
+
+		this.grid.stopEditing();
+		grid.focus( false, 100 );
+		
+	}
+});
+
+Ext.form.ComplexVardefField = Ext.extend(Ext.form.TriggerField,  {
+
+    /**
+     * If the trigger was clicked a dialog has to be opened
+     * to enter the values for the complex property.
+     */
+    onTriggerClick : function(){
+		
+        if(this.disabled){
+            return;
+        }
+        
+    	var VarDef = Ext.data.Record.create([{
+            name: 'name'
+        }, {
+            name: 'type'
+        }]);
+    	
+    	var vardefsProxy = new Ext.data.MemoryProxy({
+            root: []
+        });
+    	
+    	var vardefs = new Ext.data.Store({
+    		autoDestroy: true,
+            reader: new Ext.data.JsonReader({
+                root: "root"
+            }, VarDef),
+            proxy: vardefsProxy,
+            sorters: [{
+                property: 'name',
+                direction:'ASC'
+            }]
+        });
+    	vardefs.load();
+    	
+    	if(this.value.length > 0) {
+    		var valueParts = this.value.split(",");
+    		for(var i=0; i < valueParts.length; i++) {
+    			var nextPart = valueParts[i];
+    			if(nextPart.indexOf(":") > 0) {
+    				var innerParts = nextPart.split(":");
+    				vardefs.add(new VarDef({
+                        name: innerParts[0],
+                        type: innerParts[1]
+                    }));
+    			} else {
+    				vardefs.add(new VarDef({
+                        name: nextPart,
+                        type: ''
+                    }));
+    			}
+    		}
+
+    	}
+    	
+    	var itemDeleter = new Extensive.grid.ItemDeleter();
+    	
+    	var gridId = Ext.id();
+    	var grid = new Ext.grid.EditorGridPanel({
+            store: vardefs,
+            id: gridId,
+            cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
+            	id: 'name',
+                header: 'Name',
+                width: 100,
+                dataIndex: 'name',
+                editor: new Ext.form.TextField({ allowBlank: false })
+            }, {
+            	id: 'type',
+                header: 'Type',
+                width: 200,
+                dataIndex: 'type',
+                editor: new Ext.form.TextField({ allowBlank: true })
+            }, itemDeleter]),
+    		selModel: itemDeleter,
+            autoHeight: true,
+            tbar: [{
+                text: 'Add Variable',
+                handler : function(){
+                	vardefs.add(new VarDef({
+                        name: '',
+                        type: ''
+                    }));
+                }
+            }],
+            clicksToEdit: 1
+        });
+    	
+		var dialog = new Ext.Window({ 
+			layout		: 'anchor',
+			autoCreate	: true, 
+			title		: 'Editor for Variable Definitions', 
+			height		: 300, 
+			width		: 400, 
+			modal		: true,
+			collapsible	: false,
+			fixedcenter	: true, 
+			shadow		: true, 
+			resizable   : true,
+			proxyDrag	: true,
+			autoScroll  : true,
+			keys:[{
+				key	: 27,
+				fn	: function(){
+						dialog.hide()
+				}.bind(this)
+			}],
+			items		:[grid],
+			listeners	:{
+				hide: function(){
+					this.fireEvent('dialogClosed', this.value);
+					//this.focus.defer(10, this);
+					dialog.destroy();
+				}.bind(this)				
+			},
+			buttons		: [{
+                text: ORYX.I18N.PropertyWindow.ok,
+                handler: function(){	 
+                	var outValue = "";
+                	vardefs.data.each(function() {
+                		if(this.data['name'].length > 0) {
+                			if(this.data['type'].length > 0) {
+                				outValue += this.data['name'] + ":" + this.data['type'] + ",";
+                			} else {
+                				outValue += this.data['name'] + ",";
+                			}
+                		}
+                    });
+                	if(outValue.length > 0) {
+                		outValue = outValue.slice(0, -1)
+                	}
+					this.setValue(outValue);
+					this.dataSource.getAt(this.row).set('value', outValue)
 					this.dataSource.commitChanges()
 
 					dialog.hide()
