@@ -180,6 +180,8 @@ ORYX.CONFIG.TYPE_COMPLEX =				"complex";
 ORYX.CONFIG.TYPE_TEXT =					"text";
 ORYX.CONFIG.TYPE_VARDEF =               "vardef";
 ORYX.CONFIG.TYPE_ACTION =               "action";
+ORYX.CONFIG.TYPE_GLOBAL =               "global";
+ORYX.CONFIG.TYPE_IMPORT =               "import";
 	
 	/* Vertical line distance of multiline labels */
 ORYX.CONFIG.LABEL_LINE_DISTANCE =		2;

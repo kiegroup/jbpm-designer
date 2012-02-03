@@ -353,7 +353,7 @@
 				},
 				{
 					"id":"imports",
-					"type":"Text",
+					"type":"Import",
 					"title":"Imports",
 					"title_de":"Imports",
 					"value":"",
@@ -363,7 +363,7 @@
 				},
 				{
 					"id":"globals",
-					"type":"Text",
+					"type":"Global",
 					"title":"Globals",
 					"title_de":"Globals",
 					"value":"",

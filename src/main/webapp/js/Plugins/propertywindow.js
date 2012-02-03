@@ -692,6 +692,30 @@ ORYX.Plugins.PropertyWindow = {
 							cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1,field:cf});							
 							editorGrid = new Ext.Editor(cf);
 							break;
+						
+						case ORYX.CONFIG.TYPE_GLOBAL:
+							var cf = new Ext.form.ComplexGlobalsField({
+								allowBlank: pair.optional(),
+								dataSource:this.dataSource,
+								grid:this.grid,
+								row:index,
+								facade:this.facade
+							});
+							cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1,field:cf});							
+							editorGrid = new Ext.Editor(cf);
+							break;
+							
+						case ORYX.CONFIG.TYPE_IMPORT:
+							var cf = new Ext.form.ComplexImportsField({
+								allowBlank: pair.optional(),
+								dataSource:this.dataSource,
+								grid:this.grid,
+								row:index,
+								facade:this.facade
+							});
+							cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1,field:cf});							
+							editorGrid = new Ext.Editor(cf);
+							break;
 							
 							// extended by Kerstin (start)
 						case ORYX.CONFIG.TYPE_COMPLEX:
@@ -1317,6 +1341,136 @@ Ext.form.ComplexTextField = Ext.extend(Ext.form.TriggerField,  {
 });
 
 
+Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
+	/**
+     * If the trigger was clicked a dialog has to be opened
+     * to enter the values for the complex property.
+     */
+    onTriggerClick : function() {
+    	if(this.disabled){
+            return;
+        }
+    	
+    	var ImportDef = Ext.data.Record.create([{
+            name: 'import'
+        }]);
+    	
+    	var importsProxy = new Ext.data.MemoryProxy({
+            root: []
+        });
+    	
+    	var imports = new Ext.data.Store({
+    		autoDestroy: true,
+            reader: new Ext.data.JsonReader({
+                root: "root"
+            }, ImportDef),
+            proxy: importsProxy,
+            sorters: [{
+                property: 'import',
+                direction:'ASC'
+            }]
+        });
+    	imports.load();
+    	
+    	if(this.value.length > 0) {
+    		var valueParts = this.value.split(",");
+    		for(var i=0; i < valueParts.length; i++) {
+    			var nextPart = valueParts[i];
+    			imports.add(new ImportDef({
+                    import: nextPart
+                }));
+    		}
+    	}
+    	
+    	var itemDeleter = new Extensive.grid.ItemDeleter();
+    	
+    	var gridId = Ext.id();
+    	var grid = new Ext.grid.EditorGridPanel({
+            store: imports,
+            id: gridId,
+            cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
+            	id: 'import',
+                header: 'Import',
+                width: 360,
+                dataIndex: 'import',
+                editor: new Ext.form.TextField({ allowBlank: false })
+            },itemDeleter]),
+    		selModel: itemDeleter,
+            autoHeight: true,
+            tbar: [{
+                text: 'Add Import',
+                handler : function(){
+                	imports.add(new ImportDef({
+                        import: ''
+                    }));
+                }
+            }],
+            clicksToEdit: 1
+        });
+    	
+    	var dialog = new Ext.Window({ 
+			layout		: 'anchor',
+			autoCreate	: true, 
+			title		: 'Editor for Imports', 
+			height		: 300, 
+			width		: 450, 
+			modal		: true,
+			collapsible	: false,
+			fixedcenter	: true, 
+			shadow		: true, 
+			resizable   : true,
+			proxyDrag	: true,
+			autoScroll  : true,
+			keys:[{
+				key	: 27,
+				fn	: function(){
+						dialog.hide()
+				}.bind(this)
+			}],
+			items		:[grid],
+			listeners	:{
+				hide: function(){
+					this.fireEvent('dialogClosed', this.value);
+					//this.focus.defer(10, this);
+					dialog.destroy();
+				}.bind(this)				
+			},
+			buttons		: [{
+                text: ORYX.I18N.PropertyWindow.ok,
+                handler: function(){	 
+                	var outValue = "";
+                	imports.data.each(function() {
+                		if(this.data['import'].length > 0) {
+                			outValue += this.data['import'] + ",";
+                		}
+                    });
+                	if(outValue.length > 0) {
+                		outValue = outValue.slice(0, -1)
+                	}
+					this.setValue(outValue);
+					this.dataSource.getAt(this.row).set('value', outValue)
+					this.dataSource.commitChanges()
+
+					dialog.hide()
+                }.bind(this)
+            }, {
+                text: ORYX.I18N.PropertyWindow.cancel,
+                handler: function(){
+					this.setValue(this.value);
+                	dialog.hide()
+                }.bind(this)
+            }]
+		});		
+				
+		dialog.show();		
+		grid.render();
+
+		this.grid.stopEditing();
+		grid.focus( false, 100 );
+    	
+    }
+});
+
 Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
 	/**
      * If the trigger was clicked a dialog has to be opened
@@ -1567,6 +1721,161 @@ Ext.form.ComplexVardefField = Ext.extend(Ext.form.TriggerField,  {
                 handler: function(){	 
                 	var outValue = "";
                 	vardefs.data.each(function() {
+                		if(this.data['name'].length > 0) {
+                			if(this.data['type'].length > 0) {
+                				outValue += this.data['name'] + ":" + this.data['type'] + ",";
+                			} else {
+                				outValue += this.data['name'] + ",";
+                			}
+                		}
+                    });
+                	if(outValue.length > 0) {
+                		outValue = outValue.slice(0, -1)
+                	}
+					this.setValue(outValue);
+					this.dataSource.getAt(this.row).set('value', outValue)
+					this.dataSource.commitChanges()
+
+					dialog.hide()
+                }.bind(this)
+            }, {
+                text: ORYX.I18N.PropertyWindow.cancel,
+                handler: function(){
+					this.setValue(this.value);
+                	dialog.hide()
+                }.bind(this)
+            }]
+		});		
+				
+		dialog.show();		
+		grid.render();
+
+		this.grid.stopEditing();
+		grid.focus( false, 100 );
+		
+	}
+});
+
+Ext.form.ComplexGlobalsField = Ext.extend(Ext.form.TriggerField,  {
+
+    /**
+     * If the trigger was clicked a dialog has to be opened
+     * to enter the values for the complex property.
+     */
+    onTriggerClick : function(){
+		
+        if(this.disabled){
+            return;
+        }
+        
+    	var GlobalDef = Ext.data.Record.create([{
+            name: 'name'
+        }, {
+            name: 'type'
+        }]);
+    	
+    	var globalsProxy = new Ext.data.MemoryProxy({
+            root: []
+        });
+    	
+    	var globals = new Ext.data.Store({
+    		autoDestroy: true,
+            reader: new Ext.data.JsonReader({
+                root: "root"
+            }, GlobalDef),
+            proxy: globalsProxy, 
+            sorters: [{
+                property: 'name',
+                direction:'ASC'
+            }]
+        });
+    	globals.load();
+    	
+    	if(this.value.length > 0) {
+    		var valueParts = this.value.split(",");
+    		for(var i=0; i < valueParts.length; i++) {
+    			var nextPart = valueParts[i];
+    			if(nextPart.indexOf(":") > 0) {
+    				var innerParts = nextPart.split(":");
+    				globals.add(new GlobalDef({
+                        name: innerParts[0],
+                        type: innerParts[1]
+                    }));
+    			} else {
+    				globals.add(new GlobalDef({
+                        name: nextPart,
+                        type: ''
+                    }));
+    			}
+    		}
+
+    	}
+    	
+    	var itemDeleter = new Extensive.grid.ItemDeleter();
+    	
+    	var gridId = Ext.id();
+    	var grid = new Ext.grid.EditorGridPanel({
+            store: globals,
+            id: gridId,
+            cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
+            	id: 'name',
+                header: 'Name',
+                width: 100,
+                dataIndex: 'name',
+                editor: new Ext.form.TextField({ allowBlank: false })
+            }, {
+            	id: 'type',
+                header: 'Type',
+                width: 200,
+                dataIndex: 'type',
+                editor: new Ext.form.TextField({ allowBlank: true })
+            }, itemDeleter]),
+    		selModel: itemDeleter,
+            autoHeight: true,
+            tbar: [{
+                text: 'Add Global',
+                handler : function(){
+                	globals.add(new GlobalDef({
+                        name: '',
+                        type: ''
+                    }));
+                }
+            }],
+            clicksToEdit: 1
+        });
+    	
+		var dialog = new Ext.Window({ 
+			layout		: 'anchor',
+			autoCreate	: true, 
+			title		: 'Editor for Globals', 
+			height		: 300, 
+			width		: 400, 
+			modal		: true,
+			collapsible	: false,
+			fixedcenter	: true, 
+			shadow		: true, 
+			resizable   : true,
+			proxyDrag	: true,
+			autoScroll  : true,
+			keys:[{
+				key	: 27,
+				fn	: function(){
+						dialog.hide()
+				}.bind(this)
+			}],
+			items		:[grid],
+			listeners	:{
+				hide: function(){
+					this.fireEvent('dialogClosed', this.value);
+					//this.focus.defer(10, this);
+					dialog.destroy();
+				}.bind(this)				
+			},
+			buttons		: [{
+                text: ORYX.I18N.PropertyWindow.ok,
+                handler: function(){	 
+                	var outValue = "";
+                	globals.data.each(function() {
                 		if(this.data['name'].length > 0) {
                 			if(this.data['type'].length > 0) {
                 				outValue += this.data['name'] + ":" + this.data['type'] + ",";
