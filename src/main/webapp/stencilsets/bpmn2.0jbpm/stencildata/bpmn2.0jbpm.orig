@@ -2759,7 +2759,7 @@
 				},
 				{
 					"id":"onEntryActions",
-					"type":"Text",
+					"type":"Action",
 					"title":"On Entry Actions",
 					"title_de":"On Entry Actions",
 					"value":"",
@@ -2769,7 +2769,7 @@
 				},
 				{
 					"id":"onExitActions",
-					"type":"Text",
+					"type":"Action",
 					"title":"On Exit Actions",
 					"title_de":"On Exit Actions",
 					"value":"",
@@ -3075,7 +3075,7 @@
 				},	
 				{
 					"id":"onEntryActions",
-					"type":"Text",
+					"type":"Action",
 					"title":"On Entry Actions",
 					"title_de":"On Entry Actions",
 					"value":"",
@@ -3085,7 +3085,7 @@
 				},
 				{
 					"id":"onExitActions",
-					"type":"Text",
+					"type":"Action",
 					"title":"On Exit Actions",
 					"title_de":"On Exit Actions",
 					"value":"",
@@ -3244,7 +3244,7 @@
 				},
 				{
 					"id":"onEntryActions",
-					"type":"Text",
+					"type":"Action",
 					"title":"On Entry Actions",
 					"title_de":"On Entry Actions",
 					"value":"",
@@ -3254,7 +3254,7 @@
 				},
 				{
 					"id":"onExitActions",
-					"type":"Text",
+					"type":"Action",
 					"title":"On Exit Actions",
 					"title_de":"On Exit Actions",
 					"value":"",
@@ -3371,7 +3371,7 @@
 				},	
 				{
 					"id":"onEntryActions",
-					"type":"Text",
+					"type":"Action",
 					"title":"On Entry Actions",
 					"title_de":"On Entry Actions",
 					"value":"",
@@ -3381,7 +3381,7 @@
 				},
 				{
 					"id":"onExitActions",
-					"type":"Text",
+					"type":"Action",
 					"title":"On Exit Actions",
 					"title_de":"On Exit Actions",
 					"value":"",
@@ -3499,7 +3499,7 @@
 				},	
 				{
 					"id":"onEntryActions",
-					"type":"Text",
+					"type":"Action",
 					"title":"On Entry Actions",
 					"title_de":"On Entry Actions",
 					"value":"",
@@ -3509,7 +3509,7 @@
 				},
 				{
 					"id":"onExitActions",
-					"type":"Text",
+					"type":"Action",
 					"title":"On Exit Actions",
 					"title_de":"On Exit Actions",
 					"value":"",
