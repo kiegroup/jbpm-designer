@@ -6,6 +6,29 @@
   <version>2.1.0-SNAPSHOT</version>
   <packaging>war</packaging>
   
+  <description>Reporting</description>
+  <url>https://github.com/tsurdilo/process-designer</url>
+  <developers>
+    <developer>
+      <id>tsurdilo</id>
+      <name>Tihomir Surdilovic</name>
+      <email>tsurdilo@redhat.com</email>
+    </developer>
+  </developers>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  
+  <scm>
+  	<connection>scm:git:git@github.com:tsurdilo/process-designer.git</connection>
+    <developerConnection>scm:git:git@github.com:tsurdilo/process-designer.git</developerConnection>
+    <url>https://github.com/tsurdilo/process-designer</url>
+  </scm>
+  
   <properties>
     <mvel.version>2.1.0.drools4</mvel.version>
     <drools.version>5.3.1.Final</drools.version>
@@ -579,19 +602,19 @@
       <name>JBoss ThirdParty Uploads</name>
       <url>https://repository.jboss.org/nexus/content/repositories/thirdparty-uploads/</url>
     </repository>
-    <repository>
-      <id>intalio</id>
-      <url>http://www.intalio.org/public/maven2/</url>
-      <layout>default</layout>
-      <releases>
-        <enabled>true</enabled>
-        <updatePolicy>never</updatePolicy>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-        <updatePolicy>never</updatePolicy>
-      </snapshots>
-    </repository>
   </repositories>
+  
+  <distributionManagement>
+	<repository>
+    	<id>jboss-releases-repository</id>
+        <name>JBoss Releases Repository</name>
+        <url>https://repository.jboss.org/nexus/service/local/staging/deploy/maven2/</url>
+    </repository>
+    <snapshotRepository>
+    	<id>jboss-snapshots-repository</id>
+       	<name>JBoss Snapshots Repository</name>
+       	<url>https://repository.jboss.org/nexus/content/repositories/snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
 </project>
 
