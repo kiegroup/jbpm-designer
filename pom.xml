@@ -6,7 +6,7 @@
   <version>2.1.0-SNAPSHOT</version>
   <packaging>war</packaging>
   
-  <description>Reporting</description>
+  <description>Designer</description>
   <url>https://github.com/tsurdilo/process-designer</url>
   <developers>
     <developer>
