@@ -3340,13 +3340,13 @@ public class Bpmn2JsonUnmarshaller {
                 String languageStr;
                 if(properties.get("conditionexpressionlanguage").equals("drools")) {
                     languageStr = "http://www.jboss.org/drools/rule";
-                } else if(properties.get("conditionexpressionlanguage").equals("mvel")) {
-                    languageStr = "http://www.mvel.org/2.0";
                 } else if(properties.get("conditionexpressionlanguage").equals("java")) {
                     languageStr = "http://www.java.com/java";
+                } else if(properties.get("conditionexpressionlanguage").equals("XPath")) {
+                    languageStr = "http://www.w3.org/1999/XPath";
                 } else {
-                    // default to mvel
-                    languageStr = "http://www.mvel.org/2.0";
+                    // default to java
+                    languageStr = "http://www.java.com/java";
                 }
                 expr.setLanguage(languageStr);
             }

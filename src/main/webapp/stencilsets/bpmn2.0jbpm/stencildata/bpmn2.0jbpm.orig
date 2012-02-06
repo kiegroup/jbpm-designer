@@ -6633,7 +6633,7 @@
 					"type":"Choice",
 					"title":"Condition Expression Language",
 					"title_de":"Bedingungsausdruck Sprache",
-					"value":"",
+					"value":"java",
 					"description":"",
 					"readonly":false,
 					"optional":true,
@@ -6642,11 +6642,6 @@
 					"items": [
 						{
 							"id": "c1",
-							"title":"mvel",
-							"value":"mvel"
-						},
-						{
-							"id": "c2",
 							"title": "java",
 							"value": "java"
 						},
@@ -6654,7 +6649,12 @@
 							"id": "c2",
 							"title": "drools",
 							"value": "drools"
-						}
+						},
+                                                {
+							"id": "c3",
+							"title": "XPath",
+							"value": "XPath"
+						}    
 					]  
 				},
 				{
