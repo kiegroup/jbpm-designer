@@ -1956,11 +1956,11 @@ public class Bpmn2JsonMarshaller {
     	            cdStr = "java";
     	        } else if(cd.equalsIgnoreCase("http://www.jboss.org/drools/rule")) {
     	            cdStr = "drools";
-    	        } else if(cd.equalsIgnoreCase("http://www.mvel.org/2.0")) {
-    	            cdStr = "mvel";
+    	        } else if(cd.equalsIgnoreCase("http://www.w3.org/1999/XPath")) {
+    	            cdStr = "XPath";
     	        } else {
     	            // default to mvel
-    	            cdStr = "mvel";
+    	            cdStr = "java";
     	        }
     	        properties.put("conditionexpressionlanguage", cdStr);
     	    } 
