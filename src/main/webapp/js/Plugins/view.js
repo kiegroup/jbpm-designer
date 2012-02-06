@@ -1476,8 +1476,6 @@ ORYX.Plugins.View = {
 		var cf = new Ext.form.TextArea({
             id:"svgSourceTextArea",
             fieldLabel:"SVG Source",
-            width:400,
-            height:450,
             value:formattedSvgDOM
             });
 
@@ -1485,7 +1483,7 @@ ORYX.Plugins.View = {
 			width:400,
 			id:'processSVGSource',
 			height:450,
-			autoScroll:true,
+			layout: 'fit',
 			title:'Process SVG Source',
 			items: [cf]
 			});
@@ -1497,8 +1495,6 @@ ORYX.Plugins.View = {
 		var cf = new Ext.form.TextArea({
             id:"erdfSourceTextArea",
             fieldLabel:"ERDF Source",
-            width:400,
-            height:450,
             value:processERDF
             });
 
@@ -1506,7 +1502,7 @@ ORYX.Plugins.View = {
 			width:400,
 			id:'processERDFSource',
 			height:450,
-			autoScroll:true,
+			layout: 'fit',
 			title:'ERDF Source',
 			items: [cf]
 			});
@@ -1518,8 +1514,6 @@ ORYX.Plugins.View = {
 		var cf = new Ext.form.TextArea({
             id:"jsonSourceTextArea",
             fieldLabel:"JSON Source",
-            width:400,
-            height:450,
             value:processJSON
             });
 
@@ -1527,7 +1521,7 @@ ORYX.Plugins.View = {
 			width:400,
 			id:'processJSONSource',
 			height:450,
-			autoScroll:true,
+			layout: 'fit',
 			title:'JSON Source',
 			items: [cf]
 			});
@@ -1544,8 +1538,6 @@ ORYX.Plugins.View = {
     	   			var cf = new Ext.form.TextArea({
     	   	            id:"bpmnSourceTextArea",
     	   	            fieldLabel:"BPMN2 Source",
-    	   	            width:400,
-    	   	            height:450,
     	   	            value:request.responseText
     	   	            });
 
@@ -1553,7 +1545,7 @@ ORYX.Plugins.View = {
     	   				width:400,
     	   				id:'processBPMNSource',
     	   				height:450,
-    	   				autoScroll:true,
+    	   				layout: 'fit',
     	   				title:'BPMN2 Source',
     	   				items: [cf]
     	   				});
