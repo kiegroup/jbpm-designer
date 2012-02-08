@@ -198,7 +198,7 @@
 				},
 				{
 					"id":"datainputassociations",
-					"type":"String",
+					"type":"Dataassignment",
 					"title":"DataInputAssociations",
 					"title_de":"Daten Ausgangs-Assoziationen",
 					"value":"",
@@ -635,7 +635,7 @@
 			"properties" : [
 				{
 					"id":"datainputset",
-					"type":"Text",
+					"type":"Datainput",
 					"title":"DataInputSet",
 					"title_de":"Dateneingabesatz",
 					"value":"",
@@ -673,7 +673,7 @@
 				},            
 				{
 					"id":"dataoutputset",
-					"type":"Text",
+					"type":"Dataoutput",
 					"title":"DataOutputSet",
 					"title_de":"Datenausgabesatz",
 					"value":"",
@@ -753,7 +753,7 @@
 				},
 				{
 					"id":"assignments",
-					"type":"Text",
+					"type":"Dataassignment",
 					"title":"Assignments",
 					"title_de":"Zuweisungen",
 					"value":"",
@@ -2275,9 +2275,9 @@
 		{
 			"name" : "gateway",
 			"properties" : [
-				{
+				/**{
 					"id":"assignments",
-					"type":"Complex",
+					"type":"Dataassignment",
 					"title":"Assignments",
 					"title_de":"Zuweisungen",
 					"value":"",
@@ -2329,7 +2329,7 @@
 							]
 						}
 					]
-				}
+				}**/
 				/**,
 				{
 					"id":"gates",
@@ -2616,7 +2616,7 @@
 			"properties" : [
 			    {
 					"id":"assignments",
-					"type":"Complex",
+					"type":"Dataassignment",
 					"title":"Assignments",
 					"title_de":"Zuweisungen",
 					"value":"",
@@ -2979,7 +2979,7 @@
 				\},
 				\{
 					"id":"datainputset",
-					"type":"Text",
+					"type":"Datainput",
 					"title":"DataInputSet",
 					"title_de":"Dateneingabesatz",
 					"value":"$workitemDefs.(k).parameters:{k1| $k1.name$}; separator=","$",
@@ -2990,7 +2990,7 @@
 				\},  
 				\{
 					"id":"dataoutputset",
-					"type":"Text",
+					"type":"Dataoutput",
 					"title":"DataOutputSet",
 					"title_de":"Datenausgabesatz",
 					"value":"$workitemDefs.(k).results:{k1| $k1.name$}; separator=","$",
@@ -3001,7 +3001,7 @@
 				\},
 				\{
 					"id":"assignments",
-					"type":"Text",
+					"type":"Dataassignment",
 					"title":"Assignments",
 					"title_de":"Zuweisungen",
 					"value":"$workitemDefs.(k).parameters:{k1| $k1.name$}; separator="=,"$=",

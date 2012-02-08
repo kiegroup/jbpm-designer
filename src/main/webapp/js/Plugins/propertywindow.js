@@ -180,7 +180,7 @@ ORYX.Plugins.PropertyWindow = {
 		this.identifyCommonProperties();
 		this.createProperties();
 	},
-
+	
 	specialKeyDown: function(field, event) {
 		// If there is a TextArea and the Key is an Enter
 		if(field instanceof Ext.form.TextArea && event.button == ORYX.CONFIG.KEY_Code_enter) {
@@ -712,6 +712,45 @@ ORYX.Plugins.PropertyWindow = {
 								grid:this.grid,
 								row:index,
 								facade:this.facade
+							});
+							cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1,field:cf});							
+							editorGrid = new Ext.Editor(cf);
+							break;
+						
+						case ORYX.CONFIG.TYPE_DATAINPUT:
+							var cf = new Ext.form.ComplexDataInOutField({
+								allowBlank: pair.optional(),
+								dataSource:this.dataSource,
+								grid:this.grid,
+								row:index,
+								facade:this.facade,
+								dtype: 'Data Input'
+							});
+							cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1,field:cf});							
+							editorGrid = new Ext.Editor(cf);
+							break;
+							
+						case ORYX.CONFIG.TYPE_DATAOUTPUT:
+							var cf = new Ext.form.ComplexDataInOutField({
+								allowBlank: pair.optional(),
+								dataSource:this.dataSource,
+								grid:this.grid,
+								row:index,
+								facade:this.facade,
+								dtype: 'Data Output'
+							});
+							cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1,field:cf});							
+							editorGrid = new Ext.Editor(cf);
+							break;
+							
+						case ORYX.CONFIG.TYPE_DATAASSIGNMENT:
+							var cf = new Ext.form.ComplexDataAssignmenField({
+								allowBlank: pair.optional(),
+								dataSource:this.dataSource,
+								grid:this.grid,
+								row:index,
+								facade:this.facade,
+								shapes:this.shapeSelection.shapes
 							});
 							cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1,field:cf});							
 							editorGrid = new Ext.Editor(cf);
@@ -1340,6 +1379,136 @@ Ext.form.ComplexTextField = Ext.extend(Ext.form.TriggerField,  {
 	}
 });
 
+Ext.form.ComplexDataInOutField = Ext.extend(Ext.form.TriggerField,  {
+	/**
+     * If the trigger was clicked a dialog has to be opened
+     * to enter the values for the complex property.
+     */
+    onTriggerClick : function() {
+    	if(this.disabled){
+            return;
+        }
+    	
+    	var DataInOutDef = Ext.data.Record.create([{
+            name: 'data'
+        }]);
+    	
+    	var datainoutProxy = new Ext.data.MemoryProxy({
+            root: []
+        });
+    	
+    	var datainouts = new Ext.data.Store({
+    		autoDestroy: true,
+            reader: new Ext.data.JsonReader({
+                root: "root"
+            }, DataInOutDef),
+            proxy: datainoutProxy,
+            sorters: [{
+                property: 'data',
+                direction:'ASC'
+            }]
+        });
+    	datainouts.load();
+    	
+    	if(this.value.length > 0) {
+    		var valueParts = this.value.split(",");
+    		for(var i=0; i < valueParts.length; i++) {
+    			var nextPart = valueParts[i];
+    			datainouts.add(new DataInOutDef({
+                    data: nextPart
+                }));
+    		}
+    	}
+    	
+    	var itemDeleter = new Extensive.grid.ItemDeleter();
+    	
+    	var gridId = Ext.id();
+    	var grid = new Ext.grid.EditorGridPanel({
+            store: datainouts,
+            id: gridId,
+            stripeRows: true,
+            cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
+            	id: 'data',
+                header: this.dtype, 
+                width: 250,
+                dataIndex: 'data',
+                editor: new Ext.form.TextField({ allowBlank: false })
+            },itemDeleter]),
+    		selModel: itemDeleter,
+            autoHeight: true,
+            tbar: [{
+                text: 'Add ' + this.dtype,
+                handler : function(){
+                	datainouts.add(new DataInOutDef({
+                        data: ''
+                    }));
+                }
+            }],
+            clicksToEdit: 1
+        });
+    	
+    	var dialog = new Ext.Window({ 
+			layout		: 'anchor',
+			autoCreate	: true, 
+			title		: 'Editor for ' + this.dtype + "s", 
+			height		: 300, 
+			width		: 360, 
+			modal		: true,
+			collapsible	: false,
+			fixedcenter	: true, 
+			shadow		: true, 
+			resizable   : true,
+			proxyDrag	: true,
+			autoScroll  : true,
+			keys:[{
+				key	: 27,
+				fn	: function(){
+						dialog.hide()
+				}.bind(this)
+			}],
+			items		:[grid],
+			listeners	:{
+				hide: function(){
+					this.fireEvent('dialogClosed', this.value);
+					//this.focus.defer(10, this);
+					dialog.destroy();
+				}.bind(this)				
+			},
+			buttons		: [{
+                text: ORYX.I18N.PropertyWindow.ok,
+                handler: function(){	 
+                	var outValue = "";
+                	datainouts.data.each(function() {
+                		if(this.data['data'].length > 0) {
+                			outValue += this.data['data'] + ",";
+                		}
+                    });
+                	if(outValue.length > 0) {
+                		outValue = outValue.slice(0, -1)
+                	}
+					this.setValue(outValue);
+					this.dataSource.getAt(this.row).set('value', outValue)
+					this.dataSource.commitChanges()
+
+					dialog.hide()
+                }.bind(this)
+            }, {
+                text: ORYX.I18N.PropertyWindow.cancel,
+                handler: function(){
+					this.setValue(this.value);
+                	dialog.hide()
+                }.bind(this)
+            }]
+		});		
+				
+		dialog.show();		
+		grid.render();
+
+		this.grid.stopEditing();
+		grid.focus( false, 100 );
+    	
+    }
+});
 
 Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
 	/**
@@ -1388,6 +1557,7 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
     	var grid = new Ext.grid.EditorGridPanel({
             store: imports,
             id: gridId,
+            stripeRows: true,
             cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
             	id: 'import',
                 header: 'Import',
@@ -1518,6 +1688,7 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
     	var grid = new Ext.grid.EditorGridPanel({
             store: actions,
             id: gridId,
+            stripeRows: true,
             cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
             	id: 'action',
                 header: 'Action',
@@ -1601,6 +1772,291 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
     }
 });
 
+// start ComplexDataAssignmenField tihomir
+Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
+    /**
+     * If the trigger was clicked a dialog has to be opened
+     * to enter the values for the complex property.
+     */
+    onTriggerClick : function(){
+		
+        if(this.disabled){
+            return;
+        }
+        
+        var processJSON = ORYX.EDITOR.getSerializedJSON();
+        var processVars = jsonPath(processJSON.evalJSON(), "*..['vardefs']");
+        var varData = new Array();
+        var varDataTitle = new Array();
+        varDataTitle.push("");
+        varDataTitle.push("** Variable Definitions **");
+        varData.push(varDataTitle);
+        if(processVars) {
+        	processVars.forEach(function(item){
+            	if(item.length > 0) {
+	        		var valueParts = item.split(",");
+	        		for(var i=0; i < valueParts.length; i++) {
+	        			var innerVal = new Array();
+	        			var nextPart = valueParts[i];
+	        			if(nextPart.indexOf(":") > 0) {
+	        				var innerParts = nextPart.split(":");
+	        				innerVal.push(innerParts[0]);
+	        				innerVal.push(innerParts[0]);
+	        			} else {
+	        				innerVal.push(nextPart);
+	        				innerVal.push(nextPart);
+	        			}
+	        			varData.push(innerVal);
+	        		}
+        	    }
+        	});
+        }
+        
+        var dataInputsTitle = new Array();
+        dataInputsTitle.push("");
+        dataInputsTitle.push("** Data Inputs **");
+        varData.push(dataInputsTitle);
+        Ext.each(this.dataSource.data.items, function(item){
+        	if(item.data['name'] == "DataInputSet") {
+        		var valueParts = item.data['value'].split(",");
+        		for(var di=0; di < valueParts.length; di++) {
+        			var nextPart = valueParts[di];
+        			var innerVal = new Array();
+        			innerVal.push(nextPart);
+    				innerVal.push(nextPart);
+    				varData.push(innerVal);
+        		}
+        	} 
+        });
+        
+        var dataOutputsTitle = new Array();
+        dataOutputsTitle.push("");
+        dataOutputsTitle.push("** Data Outputs **");
+        varData.push(dataOutputsTitle);
+        Ext.each(this.dataSource.data.items, function(item){
+        	if(item.data['name'] == "DataOutputSet") {
+        		var valueParts = item.data['value'].split(",");
+        		for(var dou=0; dou < valueParts.length; dou++) {
+        			var nextPart = valueParts[dou];
+        			var innerVal = new Array();
+        			innerVal.push(nextPart);
+    				innerVal.push(nextPart);
+    				varData.push(innerVal);
+        		}
+        	} 
+        });
+        
+    	var DataAssignment = Ext.data.Record.create([{
+            name: 'from'
+        }, {
+            name: 'type'
+        }, {
+        	name: 'to'
+        }]);
+    	
+    	var dataassignmentProxy = new Ext.data.MemoryProxy({
+            root: []
+        });
+    	
+    	var dataassignments = new Ext.data.Store({
+    		autoDestroy: true,
+            reader: new Ext.data.JsonReader({
+                root: "root"
+            }, DataAssignment),
+            proxy: dataassignmentProxy,
+            sorters: [{
+                property: 'from',
+                direction:'ASC'
+            }, {
+            	property: 'to',
+            	direction: 'ASC'
+            }]
+        });
+    	dataassignments.load();
+    	
+    	if(this.value.length > 0) {
+    		var valueParts = this.value.split(",");
+    		for(var i=0; i < valueParts.length; i++) {
+    			var nextPart = valueParts[i];
+    			if(nextPart.indexOf("=") > 0) {
+    				var innerParts = nextPart.split("=");
+    				dataassignments.add(new DataAssignment({
+                        from: innerParts[0],
+                        type: "is equal to",
+                        to: innerParts[1]
+                    }));
+    			} else if(nextPart.indexOf("->") > 0) {
+    				var innerParts = nextPart.split("->");
+    				var found = false;
+    				for (var j = 0; j < varData.length; j++) {
+    				    if (varData[j][0] === innerParts[0]) {
+    				    	found = true;
+    				    	dataassignments.add(new DataAssignment({
+                                from: innerParts[0],
+                                type: "is mapped to",
+                                to: innerParts[1]
+                            }));
+    				    }
+    				}
+    				if(!found) {
+	    				dataassignments.add(new DataAssignment({
+	                        from: innerParts[1],
+	                        type: "is mapped from",
+	                        to: innerParts[0]
+	                    }));
+    				}
+    			} 
+    		}
+    	}
+    	
+    	
+    	var itemDeleter = new Extensive.grid.ItemDeleter();
+    	
+    	var gridId = Ext.id();
+    	var grid = new Ext.grid.EditorGridPanel({
+            store: dataassignments,
+            id: gridId,
+            stripeRows: true,
+            cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
+            	id: 'from',
+	            header: 'From',
+	            width: 150,
+	            dataIndex: 'from',
+	            editor: new Ext.form.ComboBox({
+	            	id: 'fromCombo',
+	            	valueField:'name',
+	            	displayField:'value',
+	            	typeAhead: true,
+					mode: 'local',
+					triggerAction: 'all',
+					selectOnFocus:true,
+					store: new Ext.data.SimpleStore({
+				        fields: [
+				                  'name',
+				                  'value'
+				                ],
+				        data: varData
+				    })
+	            })
+            }, {
+            	id: 'type',
+                header: 'Assignment Type',
+                width: 150,
+                dataIndex: 'type',
+                editor: new Ext.form.ComboBox({
+                	id: 'typeCombo',
+                	valueField:'name',
+                	displayField:'value',
+                	typeAhead: true,
+					mode: 'local',
+					triggerAction: 'all',
+					selectOnFocus:true,
+					store: new Ext.data.SimpleStore({
+				        fields: [
+				                  'name',
+				                  'value'
+				                ],
+				        data: [
+	                	        ['is mapped to','is mapped to'],
+	                	        ['is mapped from','is mapped from'],
+	                	        ['is equal to','is equal to']
+	                	       ]
+				    })
+                })
+            }, {
+            	id: 'to',
+                header: 'To',
+                width: 150,
+                dataIndex: 'to',
+                editor: new Ext.form.TextField({ allowBlank: true })
+    		}, itemDeleter]),
+    		selModel: itemDeleter,
+            autoHeight: true,
+            tbar: [{
+                text: 'Add Assignment',
+                handler : function(){
+                	dataassignments.add(new DataAssignment({
+                        from: '',
+                        type: '',
+                        to: ''
+                    }));
+                }
+            }],
+            clicksToEdit: 1
+        });
+    	
+		var dialog = new Ext.Window({ 
+			layout		: 'anchor',
+			autoCreate	: true, 
+			title		: 'Editor for Data Assignments', 
+			height		: 250, 
+			width		: 550, 
+			modal		: true,
+			collapsible	: false,
+			fixedcenter	: true, 
+			shadow		: true, 
+			resizable   : true,
+			proxyDrag	: true,
+			autoScroll  : true,
+			keys:[{
+				key	: 27,
+				fn	: function(){
+						dialog.hide()
+				}.bind(this)
+			}],
+			items		:[grid],
+			listeners	:{
+				hide: function(){
+					this.fireEvent('dialogClosed', this.value);
+					//this.focus.defer(10, this);
+					dialog.destroy();
+				}.bind(this)				
+			},
+			buttons		: [{
+                text: ORYX.I18N.PropertyWindow.ok,
+                handler: function(){	 
+                	var outValue = "";
+                	dataassignments.data.each(function() {
+                		if(this.data['from'].length > 0 && this.data["type"].length > 0 && this.data["to"].length > 0) {
+                			if(this.data["type"] == "is mapped to") {
+                				outValue += this.data['from'] + "->" + this.data['to'] + ",";
+                			} else if(this.data["type"] == "is equal to") {
+                				outValue += this.data['from'] + "=" + this.data['to'] + ",";
+                			} else if(this.data["type"] == "is mapped from") {
+                				outValue += this.data['to'] + "->" + this.data['from'] + ",";
+                			}
+                		}
+                    });
+                	if(outValue.length > 0) {
+                		outValue = outValue.slice(0, -1)
+                	}
+					this.setValue(outValue);
+					this.dataSource.getAt(this.row).set('value', outValue)
+					this.dataSource.commitChanges()
+
+					dialog.hide()
+                }.bind(this)
+            }, {
+                text: ORYX.I18N.PropertyWindow.cancel,
+                handler: function(){
+					this.setValue(this.value);
+                	dialog.hide()
+                }.bind(this)
+            }]
+		});		
+				
+		dialog.show();		
+		grid.render();
+
+		this.grid.stopEditing();
+		grid.focus( false, 100 );
+		
+	}
+});
+
+// end ComplexDataAssignmenField
+
+
 Ext.form.ComplexVardefField = Ext.extend(Ext.form.TriggerField,  {
 
     /**
@@ -1662,6 +2118,7 @@ Ext.form.ComplexVardefField = Ext.extend(Ext.form.TriggerField,  {
     	var grid = new Ext.grid.EditorGridPanel({
             store: vardefs,
             id: gridId,
+            stripeRows: true,
             cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
             	id: 'name',
                 header: 'Name',
@@ -1817,6 +2274,7 @@ Ext.form.ComplexGlobalsField = Ext.extend(Ext.form.TriggerField,  {
     	var grid = new Ext.grid.EditorGridPanel({
             store: globals,
             id: gridId,
+            stripeRows: true,
             cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
             	id: 'name',
                 header: 'Name',
