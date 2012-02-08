@@ -1772,7 +1772,6 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
     }
 });
 
-// start ComplexDataAssignmenField tihomir
 Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
     /**
      * If the trigger was clicked a dialog has to be opened
@@ -1852,7 +1851,10 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
             name: 'type'
         }, {
         	name: 'to'
-        }]);
+        }, {
+        	name: 'tostr'
+        }
+        ]);
     	
     	var dataassignmentProxy = new Ext.data.MemoryProxy({
             root: []
@@ -1870,7 +1872,11 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
             }, {
             	property: 'to',
             	direction: 'ASC'
-            }]
+            }, {
+            	property: 'tostr',
+            	direction: 'ASC'
+            }
+            ]
         });
     	dataassignments.load();
     	
@@ -1883,35 +1889,22 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
     				dataassignments.add(new DataAssignment({
                         from: innerParts[0],
                         type: "is equal to",
-                        to: innerParts[1]
+                        to: "",
+                        tostr: innerParts[1]
                     }));
     			} else if(nextPart.indexOf("->") > 0) {
     				var innerParts = nextPart.split("->");
-    				var found = false;
-    				for (var j = 0; j < varData.length; j++) {
-    				    if (varData[j][0] === innerParts[0]) {
-    				    	found = true;
-    				    	dataassignments.add(new DataAssignment({
-                                from: innerParts[0],
-                                type: "is mapped to",
-                                to: innerParts[1]
-                            }));
-    				    }
-    				}
-    				if(!found) {
-	    				dataassignments.add(new DataAssignment({
-	                        from: innerParts[1],
-	                        type: "is mapped from",
-	                        to: innerParts[0]
-	                    }));
-    				}
+    				dataassignments.add(new DataAssignment({
+                        from: innerParts[0],
+                        type: "is mapped to",
+                        to: innerParts[1],
+                        tostr: ""
+                    }));
     			} 
     		}
     	}
     	
-    	
     	var itemDeleter = new Extensive.grid.ItemDeleter();
-    	
     	var gridId = Ext.id();
     	var grid = new Ext.grid.EditorGridPanel({
             store: dataassignments,
@@ -1919,8 +1912,8 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
             stripeRows: true,
             cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
             	id: 'from',
-	            header: 'From',
-	            width: 150,
+	            header: 'From Object',
+	            width: 180,
 	            dataIndex: 'from',
 	            editor: new Ext.form.ComboBox({
 	            	id: 'fromCombo',
@@ -1941,7 +1934,7 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
             }, {
             	id: 'type',
                 header: 'Assignment Type',
-                width: 150,
+                width: 100,
                 dataIndex: 'type',
                 editor: new Ext.form.ComboBox({
                 	id: 'typeCombo',
@@ -1958,16 +1951,36 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
 				                ],
 				        data: [
 	                	        ['is mapped to','is mapped to'],
-	                	        ['is mapped from','is mapped from'],
 	                	        ['is equal to','is equal to']
 	                	       ]
 				    })
                 })
             }, {
             	id: 'to',
-                header: 'To',
-                width: 150,
+                header: 'To Object',
+                width: 180,
                 dataIndex: 'to',
+                editor: new Ext.form.ComboBox({
+                	id: 'toCombo',
+                	valueField:'name',
+                	displayField:'value',
+                	typeAhead: true,
+					mode: 'local',
+					triggerAction: 'all',
+					selectOnFocus:true,
+					store: new Ext.data.SimpleStore({
+				        fields: [
+				                  'name',
+				                  'value'
+				                ],
+				        data: varData
+				    })
+                })
+            }, {
+            	id: 'tostr',
+                header: 'To Value',
+                width: 180,
+                dataIndex: 'tostr',
                 editor: new Ext.form.TextField({ allowBlank: true })
     		}, itemDeleter]),
     		selModel: itemDeleter,
@@ -1978,7 +1991,8 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                 	dataassignments.add(new DataAssignment({
                         from: '',
                         type: '',
-                        to: ''
+                        to: '',
+                        tostr: ''
                     }));
                 }
             }],
@@ -1989,8 +2003,8 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
 			layout		: 'anchor',
 			autoCreate	: true, 
 			title		: 'Editor for Data Assignments', 
-			height		: 250, 
-			width		: 550, 
+			height		: 350, 
+			width		: 730, 
 			modal		: true,
 			collapsible	: false,
 			fixedcenter	: true, 
@@ -2008,7 +2022,6 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
 			listeners	:{
 				hide: function(){
 					this.fireEvent('dialogClosed', this.value);
-					//this.focus.defer(10, this);
 					dialog.destroy();
 				}.bind(this)				
 			},
@@ -2017,13 +2030,11 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                 handler: function(){	 
                 	var outValue = "";
                 	dataassignments.data.each(function() {
-                		if(this.data['from'].length > 0 && this.data["type"].length > 0 && this.data["to"].length > 0) {
+                		if(this.data['from'].length > 0 && this.data["type"].length > 0) {
                 			if(this.data["type"] == "is mapped to") {
                 				outValue += this.data['from'] + "->" + this.data['to'] + ",";
                 			} else if(this.data["type"] == "is equal to") {
-                				outValue += this.data['from'] + "=" + this.data['to'] + ",";
-                			} else if(this.data["type"] == "is mapped from") {
-                				outValue += this.data['to'] + "->" + this.data['from'] + ",";
+                				outValue += this.data['from'] + "=" + this.data['tostr'] + ",";
                 			}
                 		}
                     });
@@ -2053,8 +2064,6 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
 		
 	}
 });
-
-// end ComplexDataAssignmenField
 
 
 Ext.form.ComplexVardefField = Ext.extend(Ext.form.TriggerField,  {
