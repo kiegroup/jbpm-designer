@@ -182,6 +182,9 @@ ORYX.CONFIG.TYPE_VARDEF =               "vardef";
 ORYX.CONFIG.TYPE_ACTION =               "action";
 ORYX.CONFIG.TYPE_GLOBAL =               "global";
 ORYX.CONFIG.TYPE_IMPORT =               "import";
+ORYX.CONFIG.TYPE_DATAINPUT =            "datainput";
+ORYX.CONFIG.TYPE_DATAOUTPUT =           "dataoutput";
+ORYX.CONFIG.TYPE_DATAASSIGNMENT =       "dataassignment";
 	
 	/* Vertical line distance of multiline labels */
 ORYX.CONFIG.LABEL_LINE_DISTANCE =		2;
