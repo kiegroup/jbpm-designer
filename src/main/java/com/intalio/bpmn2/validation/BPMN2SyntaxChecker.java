@@ -137,10 +137,10 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
         				foundEndEvent = true;
         			}
         		}
-        		if(!foundStartEvent) {
+        		if(!foundStartEvent && !isAdHocProcess(process)) {
         			addError(defaultResourceId, "Process has no start node.");
         		}
-        		if(!foundEndEvent) {
+        		if(!foundEndEvent && !isAdHocProcess(process)) {
         			addError(defaultResourceId, "Process has no end node.");
         		}
         		
@@ -638,5 +638,16 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
         	_logger.error("Error retrieving asset content: " + e.getMessage());
             return "";
         }
+    }
+    
+    private boolean isAdHocProcess(Process process) {
+        Iterator<FeatureMap.Entry> iter = process.getAnyAttribute().iterator();
+        while(iter.hasNext()) {
+            FeatureMap.Entry entry = iter.next();
+            if(entry.getEStructuralFeature().getName().equals("adHoc")) {
+            	return Boolean.parseBoolean(((String)entry.getValue()).trim());
+            }
+        }
+        return false;
     }
 }
