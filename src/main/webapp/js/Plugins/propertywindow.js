@@ -45,12 +45,11 @@ ORYX.Plugins.PropertyWindow = {
 		this.facade = facade;
 
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_SHOW_PROPERTYWINDOW, this.init.bind(this));
-		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LOADED, this.selectDiagram.bind(this));
+		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LOADED, this.onSelectionChanged.bind(this));
 		this.init();
 	},
 	
 	init: function(){
-
 		// The parent div-node of the grid
 		this.node = ORYX.Editor.graft("http://www.w3.org/1999/xhtml",
 			null,
@@ -195,7 +194,6 @@ ORYX.Plugins.PropertyWindow = {
 	},
 	
 	renderer: function(value, p, record) {
-		
 		this.tooltipRenderer(value, p, record);
 		
 		if (record.data.gridProperties.labelProvider) {
@@ -231,7 +229,6 @@ ORYX.Plugins.PropertyWindow = {
 	},
 
 	beforeEdit: function(option) {
-
 		var editorGrid 		= this.dataSource.getAt(option.row).data.gridProperties.editor;
 		var editorRenderer 	= this.dataSource.getAt(option.row).data.gridProperties.renderer;
 
@@ -321,7 +318,6 @@ ORYX.Plugins.PropertyWindow = {
 	
 	// Changes made in the property window will be shown directly
 	editDirectly:function(key, value){
-		
 		this.shapeSelection.shapes.each(function(shape){
 			if(!shape.getStencil().property(key).readonly()) {
 				shape.setProperty(key, value);
@@ -474,13 +470,19 @@ ORYX.Plugins.PropertyWindow = {
 		this.shapeSelection.shapes = event.elements;
 		
 		/* Case: nothing selected */
-		if(event.elements.length == 0) {
+		if(event.elements) {
+			if(event.elements.length == 0) {
+				this.shapeSelection.shapes = [this.facade.getCanvas()];
+			}
+		} else {
 			this.shapeSelection.shapes = [this.facade.getCanvas()];
 		}
 		
 		/* subselection available */
 		if(event.subSelection){
-			this.shapeSelection.shapes = [event.subSelection];
+			if(event.subSelection){
+				this.shapeSelection.shapes = [event.subSelection];
+			}
 		}
 		
 		this.setPropertyWindowTitle();
@@ -488,7 +490,6 @@ ORYX.Plugins.PropertyWindow = {
 		this.setCommonPropertiesValues();
 		
 		// Create the Properties
-		
 		this.createProperties();
 	},
 	
