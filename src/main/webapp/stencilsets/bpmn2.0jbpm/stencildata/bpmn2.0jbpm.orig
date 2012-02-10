@@ -127,7 +127,7 @@
 				},**/
 				{
 					"id":"dataoutputassociations",
-					"type":"Text",
+					"type":"Dataassignment",
 					"title":"DataOutputAssociations",
 					"title_de":"Daten Ausgangs-Assoziation",
 					"value":"",
@@ -140,7 +140,7 @@
 				},
 				{
 					"id":"dataoutput",
-					"type":"Text",
+					"type":"Dataoutput",
 					"title":"DataOutput",
 					"title_de":"Daten-Ausgang",
 					"value":"",
