@@ -480,9 +480,7 @@ ORYX.Plugins.PropertyWindow = {
 		
 		/* subselection available */
 		if(event.subSelection){
-			if(event.subSelection){
-				this.shapeSelection.shapes = [event.subSelection];
-			}
+			this.shapeSelection.shapes = [event.subSelection];
 		}
 		
 		this.setPropertyWindowTitle();
