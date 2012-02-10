@@ -5,7 +5,7 @@
  <!-- Pluggable filter -->
  <filter>
   <filter-name>Pluggable Filter</filter-name>
-  <filter-class>com.intalio.web.filter.impl.PluggableFilter</filter-class>
+  <filter-class>org.jbpm.designer.web.filter.impl.PluggableFilter</filter-class>
  </filter>
  <filter-mapping>
   <filter-name>Pluggable Filter</filter-name>
@@ -31,12 +31,12 @@
  <servlet>
   <display-name>Resource List</display-name>
   <servlet-name>ResourceList</servlet-name>
-  <servlet-class>org.oryxeditor.server.ResourceList</servlet-class>
+  <servlet-class>org.jbpm.designer.server.ResourceList</servlet-class>
  </servlet>
  <servlet>
   <display-name>Oryx Editor Handler</display-name>
   <servlet-name>EditorHandler</servlet-name>
-  <servlet-class>org.oryxeditor.server.EditorHandler</servlet-class>
+  <servlet-class>org.jbpm.designer.server.EditorHandler</servlet-class>
   <init-param>
    <param-name>designer.dev</param-name>
    <param-value>true</param-value>
@@ -49,7 +49,7 @@
  <servlet>
   <display-name>UUID Based Repository</display-name>
   <servlet-name>UUIDBasedRepositoryServlet</servlet-name>
-  <servlet-class>com.intalio.web.server.UUIDBasedRepositoryServlet</servlet-class>
+  <servlet-class>org.jbpm.designer.web.server.UUIDBasedRepositoryServlet</servlet-class>
   <init-param>
    <param-name>factoryName</param-name>
    <param-value>jbpm</param-value>
@@ -58,37 +58,37 @@
  <servlet>
   <display-name>Transformer</display-name>
   <servlet-name>TransformerServlet</servlet-name>
-  <servlet-class>com.intalio.web.server.TransformerServlet</servlet-class>
+  <servlet-class>org.jbpm.designer.web.server.TransformerServlet</servlet-class>
  </servlet>
  <servlet>
   <display-name>JbpmServiceRepository</display-name>
   <servlet-name>JbpmServiceRepositoryServlet</servlet-name>
-  <servlet-class>com.intalio.web.server.JbpmServiceRepositoryServlet</servlet-class>
+  <servlet-class>org.jbpm.designer.web.server.JbpmServiceRepositoryServlet</servlet-class>
  </servlet>
  <servlet>
   <display-name>ProcessDiffService</display-name>
   <servlet-name>ProcessDiffServiceServlet</servlet-name>
-  <servlet-class>com.intalio.web.server.ProcessDiffServiceServlet</servlet-class>
+  <servlet-class>org.jbpm.designer.web.server.ProcessDiffServiceServlet</servlet-class>
  </servlet>
  <servlet>
   <display-name>Taskforms</display-name>
   <servlet-name>TaskformsServlet</servlet-name>
-  <servlet-class>com.intalio.web.server.TaskFormsServlet</servlet-class>
+  <servlet-class>org.jbpm.designer.web.server.TaskFormsServlet</servlet-class>
  </servlet>
  <servlet>
   <display-name>ProcessInfo</display-name>
   <servlet-name>ProcessInfoServlet</servlet-name>
-  <servlet-class>com.intalio.web.server.ProcessInfoServlet</servlet-class>
+  <servlet-class>org.jbpm.designer.web.server.ProcessInfoServlet</servlet-class>
  </servlet>
  <servlet>
   <display-name>SyntaxChecker</display-name>
   <servlet-name>SyntaxCheckerServlet</servlet-name>
-  <servlet-class>com.intalio.web.server.SyntaxCheckerServlet</servlet-class>
+  <servlet-class>org.jbpm.designer.web.server.SyntaxCheckerServlet</servlet-class>
  </servlet>
  <servlet>
   <display-name>Plugin Service Servlet</display-name>
   <servlet-name>PluginServiceServlet</servlet-name>
-  <servlet-class>com.intalio.web.plugin.impl.PluginServiceServlet</servlet-class>
+  <servlet-class>org.jbpm.designer.web.plugin.impl.PluginServiceServlet</servlet-class>
   <init-param>
    <param-name>factoryName</param-name>
    <param-value>jbpm</param-value>
@@ -97,7 +97,7 @@
  <servlet>
   <display-name>StencilSet Service Servlet</display-name>
   <servlet-name>StencilSetServiceServlet</servlet-name>
-  <servlet-class>com.intalio.web.stencilset.impl.StencilSetServiceServlet</servlet-class>
+  <servlet-class>org.jbpm.designer.web.stencilset.impl.StencilSetServiceServlet</servlet-class>
   <init-param>
    <param-name>defaultName</param-name>
    <param-value>bpmn2.0jbpm</param-value>
