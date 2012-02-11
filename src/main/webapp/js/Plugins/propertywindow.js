@@ -1441,6 +1441,7 @@ Ext.form.ComplexDataInOutField = Ext.extend(Ext.form.TriggerField,  {
                 	datainouts.add(new DataInOutDef({
                         data: ''
                     }));
+                	grid.fireEvent('cellclick', grid, datainouts.getCount()-1, 1, null);
                 }
             }],
             clicksToEdit: 1
