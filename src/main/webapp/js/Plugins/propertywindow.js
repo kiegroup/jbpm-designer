@@ -1545,7 +1545,7 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
     		for(var i=0; i < valueParts.length; i++) {
     			var nextPart = valueParts[i];
     			imports.add(new ImportDef({
-                    import: nextPart
+                    'import': nextPart
                 }));
     		}
     	}
@@ -1570,8 +1570,9 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
                 text: 'Add Import',
                 handler : function(){
                 	imports.add(new ImportDef({
-                        import: ''
+                        'import': ''
                     }));
+                    grid.fireEvent('cellclick', grid, imports.getCount()-1, 1, null);
                 }
             }],
             clicksToEdit: 1
@@ -1703,6 +1704,7 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
                 	actions.add(new ActionDef({
                         action: ''
                     }));
+                    grid.fireEvent('cellclick', grid, actions.getCount()-1, 1, null);
                 }
             }],
             clicksToEdit: 1
@@ -1993,6 +1995,7 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                         to: '',
                         tostr: ''
                     }));
+                    grid.fireEvent('cellclick', grid, dataassignments.getCount()-1, 1, null);
                 }
             }],
             clicksToEdit: 1
@@ -2149,6 +2152,7 @@ Ext.form.ComplexVardefField = Ext.extend(Ext.form.TriggerField,  {
                         name: '',
                         type: ''
                     }));
+                    grid.fireEvent('cellclick', grid, vardefs.getCount()-1, 1, null);
                 }
             }],
             clicksToEdit: 1
@@ -2305,6 +2309,7 @@ Ext.form.ComplexGlobalsField = Ext.extend(Ext.form.TriggerField,  {
                         name: '',
                         type: ''
                     }));
+                    grid.fireEvent('cellclick', grid, globals.getCount()-1, 1, null);
                 }
             }],
             clicksToEdit: 1
