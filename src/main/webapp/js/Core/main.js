@@ -1448,8 +1448,18 @@ ORYX.Editor = {
 		return newShapeObject;
 	},
 	
-	deleteShape: function(shape) {
+	deleteShape: function(shape, alsoDeleteConnectedShapes) {
 		
+                //By default, delete connected shapes
+                if (alsoDeleteConnectedShapes == undefined){
+                    if (shape._stencil._jsonStencil.type == "edge"){
+                        alsoDeleteConnectedShapes = ORYX.CONFIG.EDIT_DELETE_EDGE_CONNECTIONS_ON_DELETE;
+                    }else{
+                        alsoDeleteConnectedShapes = ORYX.CONFIG.EDIT_DELETE_NODE_CONNECTIONS_ON_DELETE;
+                    }
+                    
+                }
+                
 		if (!shape || !shape.parent){ return }
 		
 		//remove shape from parent
@@ -1462,7 +1472,10 @@ ORYX.Editor = {
 			if(docker && docker.getDockedShape() == shape) {
 				docker.setDockedShape(undefined);
 			}
-		});
+                        if (alsoDeleteConnectedShapes){
+                            this.deleteShape(os, false);
+                        }
+		}.bind(this));
 		
 		//delete references to incoming edges
 		shape.getIncomingShapes().each(function(is) {
@@ -1470,12 +1483,20 @@ ORYX.Editor = {
 			if(docker && docker.getDockedShape() == shape) {
 				docker.setDockedShape(undefined);
 			}
-		});
+                        if (alsoDeleteConnectedShapes){
+                            this.deleteShape(is, false);
+                        }
+		}.bind(this));
 		
 		//delete references of the shape's dockers
 		shape.getDockers().each(function(docker) {
 			docker.setDockedShape(undefined);
 		});
+                
+                this._getPluginFacade().raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_SHAPE_DELETED, 
+                    value		: shape
+                });
 	},
 	
 	/**

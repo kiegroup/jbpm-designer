@@ -240,6 +240,8 @@ ORYX.CONFIG.EVENT_SHOW_PROPERTYWINDOW =		"propertywindow.show";
 ORYX.CONFIG.EVENT_DRAG_TRACKER_DRAG =       "dragTracker.drag";
 ORYX.CONFIG.EVENT_DRAG_TRACKER_RESIZE =     "dragTracker.resize";
 ORYX.CONFIG.EVENT_DROP_SHAPE =				"drop.shape";
+ORYX.CONFIG.EVENT_SHAPE_DELETED =				"shape.deleted";
+ORYX.CONFIG.EVENT_FACADE_SELECTION_DELETION_REQUEST =				"facade_selection.deletion.request";
 	
 	/* Selection Shapes Highlights */
 ORYX.CONFIG.SELECTION_HIGHLIGHT_SIZE =				5;
@@ -259,6 +261,11 @@ ORYX.CONFIG.DOCKER_SNAP_OFFSET =		10;
 		
 	/* Copy & Paste */
 ORYX.CONFIG.EDIT_OFFSET_PASTE =			10;
+
+        /* Node Deletion Default Behaviour*/
+ORYX.CONFIG.EDIT_DELETE_EDGE_CONNECTIONS_ON_DELETE = false;
+ORYX.CONFIG.EDIT_DELETE_NODE_CONNECTIONS_ON_DELETE = true;
+
 
 	/* Key-Codes */
 ORYX.CONFIG.KEY_CODE_X = 				88;
