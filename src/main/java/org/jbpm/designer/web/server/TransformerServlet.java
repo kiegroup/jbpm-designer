@@ -117,6 +117,7 @@ public class TransformerServlet extends HttpServlet {
         String gpd = req.getParameter("gpd");
         String bpmn2in = req.getParameter("bpmn2");
         String respaction = req.getParameter("respaction");
+	String pp = req.getParameter("pp");
 
         IDiagramProfile profile = getProfile(req, profileName);
 
@@ -212,11 +213,11 @@ public class TransformerServlet extends HttpServlet {
             bpmn2resource.save(outputStream, new HashMap<Object, Object>());
             String fullXmlModel =  outputStream.toString();
         	// convert to json and write response
-        	String json = profile.createUnmarshaller().parseModel(fullXmlModel, profile, "");
+        	String json = profile.createUnmarshaller().parseModel(fullXmlModel, profile, pp);
         	resp.setContentType("application/json");
         	resp.getWriter().print(json);
         }  else if (transformto != null && transformto.equals(BPMN2_TO_JSON)) { 
-        	String json = profile.createUnmarshaller().parseModel(bpmn2in, profile, "");
+        	String json = profile.createUnmarshaller().parseModel(bpmn2in, profile, pp);
         	resp.setContentType("application/json");
         	resp.getWriter().print(json);
         } else if(transformto == null && respaction != null && respaction.equals(RESPACTION_SHOWEMBEDDABLE)) {
