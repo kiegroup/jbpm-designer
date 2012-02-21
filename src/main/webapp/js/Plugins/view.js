@@ -569,6 +569,7 @@ ORYX.Plugins.View = {
 				            params: {
 				            	profile: ORYX.PROFILE,
 				            	uuid : ORYX.UUID,
+				            	pp: ORYX.PREPROCESSING,
 				            	bpmn2 : bpmn2string,
 				            	transformto : "bpmn2json"
 				            }
