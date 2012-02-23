@@ -100,9 +100,13 @@ ORYX.Plugins.AbstractLayouter = ORYX.Plugins.AbstractPlugin.extend({
 	 * Returns the direct child shapes that are not on the ignore list.
 	 */
 	getChildShapesWithout: function(shape, ignoreList) {
-		var childs = shape.getChildShapes(false);
-		return childs.findAll(function(child) {
-			return !ignoreList.member(child.getStencil().id());				
-		});
+		if(typeof shape.getChildShapes == 'function') {
+			var childs = shape.getChildShapes(false);
+			return childs.findAll(function(child) {
+				return !ignoreList.member(child.getStencil().id());				
+			});
+    	} else {
+    		return [];
+    	}
 	}
 });

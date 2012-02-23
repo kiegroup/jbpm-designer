@@ -30,7 +30,6 @@
 		"EndEscalationEvent",
 		"EndCompensationEvent",
 		"EndCancelEvent",
-		"EndTerminateEvent",
 		"EndSignalEvent",
 		"EventbasedGateway",
 		"ParallelGateway",

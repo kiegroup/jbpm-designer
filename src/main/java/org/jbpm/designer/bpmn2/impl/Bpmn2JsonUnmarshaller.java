@@ -140,7 +140,6 @@ import org.osgi.framework.BundleReference;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
-
 /**
  * @author Antoine Toulme
  * @author Tihomir Surdilovic
@@ -2582,7 +2581,7 @@ public class Bpmn2JsonUnmarshaller {
 
     protected void applyBaseElementProperties(BaseElement baseElement, Map<String, String> properties) {
         if (properties.get("documentation") != null && !"".equals(properties.get("documentation"))) {
-            baseElement.getDocumentation().add(createDocumentation(properties.get("documentation")));
+            baseElement.getDocumentation().add(createDocumentation(wrapInCDATABlock(properties.get("documentation"))));
         }
         if(baseElement.getId() == null || baseElement.getId().length() < 1) {
             baseElement.setId(properties.get("resourceId"));
@@ -3461,13 +3460,13 @@ public class Bpmn2JsonUnmarshaller {
                 String languageStr;
                 if(properties.get("conditionexpressionlanguage").equals("drools")) {
                     languageStr = "http://www.jboss.org/drools/rule";
+                } else if(properties.get("conditionexpressionlanguage").equals("mvel")) {
+                    languageStr = "http://www.mvel.org/2.0";
                 } else if(properties.get("conditionexpressionlanguage").equals("java")) {
                     languageStr = "http://www.java.com/java";
-                } else if(properties.get("conditionexpressionlanguage").equals("XPath")) {
-                    languageStr = "http://www.w3.org/1999/XPath";
                 } else {
-                    // default to java
-                    languageStr = "http://www.java.com/java";
+                    // default to mvel
+                    languageStr = "http://www.mvel.org/2.0";
                 }
                 expr.setLanguage(languageStr);
             }

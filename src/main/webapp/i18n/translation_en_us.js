@@ -227,13 +227,13 @@ if(!ORYX.I18N.Edit) ORYX.I18N.Edit = {};
 
 ORYX.I18N.Edit.group = "Edit";
 ORYX.I18N.Edit.cut = "Cut";
-ORYX.I18N.Edit.cutDesc = "Cuts the selection into an Oryx clipboard";
+ORYX.I18N.Edit.cutDesc = "Cut the selection into an Oryx clipboard";
 ORYX.I18N.Edit.copy = "Copy";
-ORYX.I18N.Edit.copyDesc = "Copies the selection into an Oryx clipboard";
+ORYX.I18N.Edit.copyDesc = "Copy the selection into an Oryx clipboard";
 ORYX.I18N.Edit.paste = "Paste";
-ORYX.I18N.Edit.pasteDesc = "Pastes the Oryx clipboard to the canvas";
+ORYX.I18N.Edit.pasteDesc = "Paste the Oryx clipboard to the canvas";
 ORYX.I18N.Edit.del = "Delete";
-ORYX.I18N.Edit.delDesc = "Deletes all selected shapes";
+ORYX.I18N.Edit.delDesc = "Delete all selected shapes";
 
 if(!ORYX.I18N.EPCSupport) ORYX.I18N.EPCSupport = {};
 

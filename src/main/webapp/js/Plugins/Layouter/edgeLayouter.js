@@ -55,7 +55,11 @@ new function(){
 	    },
 	    
 	    isIncludedInEdgeIds: function(shape){
-	    	return shape.getStencil().type() == "edge";
+	    	if(typeof shape.getStencil == 'function') {
+	    		return shape.getStencil().type() == "edge";
+	    	} else {
+	    		return false;
+	    	}
 		},
 						
 		/**

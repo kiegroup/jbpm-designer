@@ -325,12 +325,13 @@
 		<plugin source="pluginLoader.js" name="ORYX.Plugins.PluginLoader" />
 		<plugin source="bpmn.js" name="ORYX.Plugins.BPMN" />
 
-
-
 		<plugin source="feedback.js" name="ORYX.Plugins.Feedback">
 			<property name="cssfile" value="/oryx/css/feedback.css" />
 			<!-- configure subjects and info in localization: /editor/data/I18N#ORYX.I18N.Feedback.subjects -->
 		</plugin>
+		
+		<plugin source="dictionary.js" name="ORYX.Plugins.Dictionary"/>
+		<plugin source="canvastitle.js" name="ORYX.Plugins.CanvasTitle"/>
 
 		<!-- <plugin source="stencilsetmanipulator.js" name="ORYX.Plugins.StencilSetManipulator" 
 			/> -->

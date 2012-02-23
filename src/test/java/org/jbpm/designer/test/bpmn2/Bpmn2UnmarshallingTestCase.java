@@ -81,7 +81,7 @@ public class Bpmn2UnmarshallingTestCase {
     public void testSimpleDefinitionsUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("empty.json"), "").getContents().get(0));
-        assertEquals("my doc", definitions.getDocumentation().iterator().next().getText());
+        assertEquals("<![CDATA[my doc]]>", definitions.getDocumentation().iterator().next().getText());
         assertEquals("http://www.w3.org/1999/XPath", definitions.getExpressionLanguage());
         assertEquals("http://www.omg.org/bpmn20", definitions.getTargetNamespace());
         assertEquals("http://www.w3.org/2001/XMLSchema", definitions.getTypeLanguage());
