@@ -128,7 +128,6 @@ import org.jboss.drools.OnEntryScriptType;
 import org.jboss.drools.OnExitScriptType;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 
-
 /**
  * @author Antoine Toulme
  * @author Tihomir Surdilovic
@@ -832,7 +831,9 @@ public class Bpmn2JsonMarshaller {
     	}
     	if (eventDefinitions.size() == 1) {
     		EventDefinition eventDefinition = eventDefinitions.get(0);
-    		if (eventDefinition instanceof EscalationEventDefinition) {
+    		if (eventDefinition instanceof SignalEventDefinition) {
+    			marshallNode(boundaryEvent, catchEventProperties, "IntermediateSignalEventCatching", plane, generator, xOffset, yOffset);
+    		} else if (eventDefinition instanceof EscalationEventDefinition) {
     			marshallNode(boundaryEvent, catchEventProperties, "IntermediateEscalationEvent", plane, generator, xOffset, yOffset);
     		} else if (eventDefinition instanceof ErrorEventDefinition) {
     			marshallNode(boundaryEvent, catchEventProperties, "IntermediateErrorEvent", plane, generator, xOffset, yOffset);
@@ -1950,11 +1951,11 @@ public class Bpmn2JsonMarshaller {
     	            cdStr = "java";
     	        } else if(cd.equalsIgnoreCase("http://www.jboss.org/drools/rule")) {
     	            cdStr = "drools";
-    	        } else if(cd.equalsIgnoreCase("http://www.w3.org/1999/XPath")) {
-    	            cdStr = "XPath";
+    	        } else if(cd.equalsIgnoreCase("http://www.mvel.org/2.0")) {
+    	            cdStr = "mvel";
     	        } else {
     	            // default to mvel
-    	            cdStr = "java";
+    	            cdStr = "mvel";
     	        }
     	        properties.put("conditionexpressionlanguage", cdStr);
     	    } 

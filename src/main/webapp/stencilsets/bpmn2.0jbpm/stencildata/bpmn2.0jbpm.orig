@@ -3008,6 +3008,48 @@
 					"description":"",
 					"readonly":false,
 					"optional":true,
+				\},
+				\{
+					"id":"onEntryActions",
+					"type":"Action",
+					"title":"On Entry Actions",
+					"title_de":"On Entry Actions",
+					"value":"",
+					"description":"on entry actions",
+					"readonly":false,
+					"optional":true
+				\},
+				\{
+					"id":"onExitActions",
+					"type":"Action",
+					"title":"On Exit Actions",
+					"title_de":"On Exit Actions",
+					"value":"",
+					"description":"on exit actions",
+					"readonly":false,
+					"optional":true
+				\},
+				\{
+					"id":"script_language",
+					"type":"Choice",
+					"title":"ScriptLanguage",
+					"title_de":"Skript Sprache",
+					"value":"java",
+					"description":"Defines the script language.",
+					"readonly":false,
+					"optional":true,
+					"items": [
+						\{
+							"id": "c1",
+							"title":"java",
+							"value":"java"
+						\},
+						\{
+							"id": "c2",
+							"title": "mvel",
+							"value": "mvel"
+						\}
+					]                                        
 				\}
 			]
 		\},
@@ -6633,7 +6675,7 @@
 					"type":"Choice",
 					"title":"Condition Expression Language",
 					"title_de":"Bedingungsausdruck Sprache",
-					"value":"java",
+					"value":"mvel",
 					"description":"",
 					"readonly":false,
 					"optional":true,
@@ -6652,8 +6694,8 @@
 						},
                                                 {
 							"id": "c3",
-							"title": "XPath",
-							"value": "XPath"
+							"title": "mvel",
+							"value": "mvel"
 						}    
 					]  
 				},

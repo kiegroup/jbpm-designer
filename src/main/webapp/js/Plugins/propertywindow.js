@@ -1264,6 +1264,7 @@ Ext.extend(Ext.form.ComplexListField, Ext.form.TriggerField,  {
 				buttons: [{
 	                text: ORYX.I18N.PropertyWindow.ok,
 	                handler: function(){
+	                	this.grid.getView().refresh();
 	                    this.grid.stopEditing();	
 						// store dialog input
 						this.data = this.buildValue();
@@ -1351,7 +1352,7 @@ Ext.form.ComplexTextField = Ext.extend(Ext.form.TriggerField,  {
 			buttons		: [{
                 text: ORYX.I18N.PropertyWindow.ok,
                 handler: function(){	 
-					// store dialog input
+                	// store dialog input
 					var value = grid.getValue();
 					this.setValue(value);
 					
@@ -1477,6 +1478,8 @@ Ext.form.ComplexDataInOutField = Ext.extend(Ext.form.TriggerField,  {
 			buttons		: [{
                 text: ORYX.I18N.PropertyWindow.ok,
                 handler: function(){	 
+                	grid.getView().refresh();
+                	grid.stopEditing();
                 	var outValue = "";
                 	datainouts.data.each(function() {
                 		if(this.data['data'].length > 0) {
@@ -1610,6 +1613,8 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
                 text: ORYX.I18N.PropertyWindow.ok,
                 handler: function(){	 
                 	var outValue = "";
+                	grid.getView().refresh();
+                	grid.stopEditing();
                 	imports.data.each(function() {
                 		if(this.data['import'].length > 0) {
                 			outValue += this.data['import'] + ",";
@@ -1742,6 +1747,8 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
                 text: ORYX.I18N.PropertyWindow.ok,
                 handler: function(){	 
                 	var outValue = "";
+                	grid.getView().refresh();
+                	grid.stopEditing();
                 	actions.data.each(function() {
                 		if(this.data['action'].length > 0) {
                 			outValue += this.data['action'] + "|";
@@ -2032,6 +2039,8 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                 text: ORYX.I18N.PropertyWindow.ok,
                 handler: function(){	 
                 	var outValue = "";
+                	grid.getView().refresh();
+                	grid.stopEditing();
                 	dataassignments.data.each(function() {
                 		if(this.data['from'].length > 0 && this.data["type"].length > 0) {
                 			if(this.data["type"] == "is mapped to") {
@@ -2190,6 +2199,8 @@ Ext.form.ComplexVardefField = Ext.extend(Ext.form.TriggerField,  {
                 text: ORYX.I18N.PropertyWindow.ok,
                 handler: function(){	 
                 	var outValue = "";
+                	grid.stopEditing();
+                	grid.getView().refresh();
                 	vardefs.data.each(function() {
                 		if(this.data['name'].length > 0) {
                 			if(this.data['type'].length > 0) {
@@ -2346,6 +2357,8 @@ Ext.form.ComplexGlobalsField = Ext.extend(Ext.form.TriggerField,  {
 			buttons		: [{
                 text: ORYX.I18N.PropertyWindow.ok,
                 handler: function(){	 
+                	grid.stopEditing();
+                	grid.getView().refresh();
                 	var outValue = "";
                 	globals.data.each(function() {
                 		if(this.data['name'].length > 0) {

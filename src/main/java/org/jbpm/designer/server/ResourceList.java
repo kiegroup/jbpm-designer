@@ -29,7 +29,6 @@ public class ResourceList extends HttpServlet {
 		String value = req.getParameter("allocation");
 		
 		PrintWriter pw = res.getWriter();
-		//set attributes for response
 		res.setContentType("text/json");
 		res.setCharacterEncoding("UTF-8");
 		try{
