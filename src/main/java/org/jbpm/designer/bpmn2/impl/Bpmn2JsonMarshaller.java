@@ -935,7 +935,7 @@ public class Bpmn2JsonMarshaller {
         List<DataInputAssociation> inputAssociations = callActivity.getDataInputAssociations();
         List<DataOutputAssociation> outputAssociations = callActivity.getDataOutputAssociations();
         List<String> uniDirectionalAssociations = new ArrayList<String>();
-        List<String> biDirectionalAssociations = new ArrayList<String>();
+        //List<String> biDirectionalAssociations = new ArrayList<String>();
         
         for(DataInputAssociation datain : inputAssociations) {
             String lhsAssociation = "";
@@ -952,21 +952,22 @@ public class Bpmn2JsonMarshaller {
                 rhsAssociation = ((DataInput) datain.getTargetRef()).getName();
             }
             
-            boolean isBiDirectional = false;
+            //boolean isBiDirectional = false;
             boolean isAssignment = false;
             
             if(datain.getAssignment() != null && datain.getAssignment().size() > 0) {
                 isAssignment = true;
-            } else {
-                // check if this is a bi-directional association
-                for(DataOutputAssociation dataout : outputAssociations) {
-                    if(dataout.getTargetRef().getId().equals(lhsAssociation) && 
-                       ((DataOutput) dataout.getSourceRef().get(0)).getName().equals(rhsAssociation)) {
-                        isBiDirectional = true;
-                        break;
-                    }
-                }
-            }
+            } 
+//            else {
+//                // check if this is a bi-directional association
+//                for(DataOutputAssociation dataout : outputAssociations) {
+//                    if(dataout.getTargetRef().getId().equals(lhsAssociation) && 
+//                       ((DataOutput) dataout.getSourceRef().get(0)).getName().equals(rhsAssociation)) {
+//                        isBiDirectional = true;
+//                        break;
+//                    }
+//                }
+//            }
             
             if(isAssignment) {
             	// only know how to deal with formal expressions
@@ -978,11 +979,13 @@ public class Bpmn2JsonMarshaller {
             		associationBuff.append(rhsAssociation).append("=").append(associationValue);
             		associationBuff.append(",");
             	}
-            } else if(isBiDirectional) {
-                associationBuff.append(lhsAssociation).append("<->").append(rhsAssociation);
-                associationBuff.append(",");
-                biDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
-            } else {
+            } 
+//            else if(isBiDirectional) {
+//                associationBuff.append(lhsAssociation).append("<->").append(rhsAssociation);
+//                associationBuff.append(",");
+//                biDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
+//            } 
+            else {
                 associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
                 associationBuff.append(",");
                 uniDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
@@ -996,13 +999,13 @@ public class Bpmn2JsonMarshaller {
                 
                 boolean wasBiDirectional = false;
                 // check if we already addressed this association as bidirectional
-                for(String bda : biDirectionalAssociations) {
-                    String[] dbaparts = bda.split( ",\\s*" );
-                    if(dbaparts[0].equals(rhsAssociation) && dbaparts[1].equals(lhsAssociation)) {
-                        wasBiDirectional = true;
-                        break;
-                    }
-                }
+//                for(String bda : biDirectionalAssociations) {
+//                    String[] dbaparts = bda.split( ",\\s*" );
+//                    if(dbaparts[0].equals(rhsAssociation) && dbaparts[1].equals(lhsAssociation)) {
+//                        wasBiDirectional = true;
+//                        break;
+//                    }
+//                }
                 
                 if(dataout.getTransformation() != null && dataout.getTransformation().getBody() != null) {
                 	rhsAssociation = dataout.getTransformation().getBody();
@@ -1262,7 +1265,7 @@ public class Bpmn2JsonMarshaller {
         List<DataInputAssociation> inputAssociations = task.getDataInputAssociations();
         List<DataOutputAssociation> outputAssociations = task.getDataOutputAssociations();
         List<String> uniDirectionalAssociations = new ArrayList<String>();
-        List<String> biDirectionalAssociations = new ArrayList<String>();
+        //List<String> biDirectionalAssociations = new ArrayList<String>();
         
         for(DataInputAssociation datain : inputAssociations) {
             String lhsAssociation = "";
@@ -1279,21 +1282,22 @@ public class Bpmn2JsonMarshaller {
                 rhsAssociation = ((DataInput) datain.getTargetRef()).getName();
             }
             
-            boolean isBiDirectional = false;
+            //boolean isBiDirectional = false;
             boolean isAssignment = false;
             
             if(datain.getAssignment() != null && datain.getAssignment().size() > 0) {
                 isAssignment = true;
-            } else {
-                // check if this is a bi-directional association
-                for(DataOutputAssociation dataout : outputAssociations) {
-                    if(dataout.getTargetRef().getId().equals(lhsAssociation) && 
-                       ((DataOutput) dataout.getSourceRef().get(0)).getName().equals(rhsAssociation)) {
-                        isBiDirectional = true;
-                        break;
-                    }
-                }
-            }
+            } 
+//            else {
+//                // check if this is a bi-directional association
+//                for(DataOutputAssociation dataout : outputAssociations) {
+//                    if(dataout.getTargetRef().getId().equals(lhsAssociation) && 
+//                       ((DataOutput) dataout.getSourceRef().get(0)).getName().equals(rhsAssociation)) {
+//                        isBiDirectional = true;
+//                        break;
+//                    }
+//                }
+//            }
             
             if(isAssignment) {
             	// only know how to deal with formal expressions
@@ -1311,11 +1315,13 @@ public class Bpmn2JsonMarshaller {
             			properties.put("groupid", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
             		}
             	}
-            } else if(isBiDirectional) {
-                associationBuff.append(lhsAssociation).append("<->").append(rhsAssociation);
-                associationBuff.append(",");
-                biDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
-            } else {
+            } 
+//            else if(isBiDirectional) {
+//                associationBuff.append(lhsAssociation).append("<->").append(rhsAssociation);
+//                associationBuff.append(",");
+//                biDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
+//            } 
+            else {
                 associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
                 associationBuff.append(",");
                 uniDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
@@ -1329,13 +1335,13 @@ public class Bpmn2JsonMarshaller {
                 
                 boolean wasBiDirectional = false;
                 // check if we already addressed this association as bidirectional
-                for(String bda : biDirectionalAssociations) {
-                    String[] dbaparts = bda.split( ",\\s*" );
-                    if(dbaparts[0].equals(rhsAssociation) && dbaparts[1].equals(lhsAssociation)) {
-                        wasBiDirectional = true;
-                        break;
-                    }
-                }
+//                for(String bda : biDirectionalAssociations) {
+//                    String[] dbaparts = bda.split( ",\\s*" );
+//                    if(dbaparts[0].equals(rhsAssociation) && dbaparts[1].equals(lhsAssociation)) {
+//                        wasBiDirectional = true;
+//                        break;
+//                    }
+//                }
                 
                 if(dataout.getTransformation() != null && dataout.getTransformation().getBody() != null) {
                 	rhsAssociation = dataout.getTransformation().getBody();
@@ -1683,7 +1689,7 @@ public class Bpmn2JsonMarshaller {
         List<DataInputAssociation> inputAssociations = subProcess.getDataInputAssociations();
         List<DataOutputAssociation> outputAssociations = subProcess.getDataOutputAssociations();
         List<String> uniDirectionalAssociations = new ArrayList<String>();
-        List<String> biDirectionalAssociations = new ArrayList<String>();
+        //List<String> biDirectionalAssociations = new ArrayList<String>();
         
         for(DataInputAssociation datain : inputAssociations) {
             String lhsAssociation = "";
@@ -1700,21 +1706,22 @@ public class Bpmn2JsonMarshaller {
                 rhsAssociation = ((DataInput) datain.getTargetRef()).getName();
             }
             
-            boolean isBiDirectional = false;
+            //boolean isBiDirectional = false;
             boolean isAssignment = false;
             
             if(datain.getAssignment() != null && datain.getAssignment().size() > 0) {
                 isAssignment = true;
-            } else {
-                // check if this is a bi-directional association
-                for(DataOutputAssociation dataout : outputAssociations) {
-                    if(dataout.getTargetRef().getId().equals(lhsAssociation) && 
-                       ((DataOutput) dataout.getSourceRef().get(0)).getName().equals(rhsAssociation)) {
-                        isBiDirectional = true;
-                        break;
-                    }
-                }
-            }
+            } 
+//            else {
+//                // check if this is a bi-directional association
+//                for(DataOutputAssociation dataout : outputAssociations) {
+//                    if(dataout.getTargetRef().getId().equals(lhsAssociation) && 
+//                       ((DataOutput) dataout.getSourceRef().get(0)).getName().equals(rhsAssociation)) {
+//                        isBiDirectional = true;
+//                        break;
+//                    }
+//                }
+//            }
             
             if(isAssignment) {
             	// only know how to deal with formal expressions
@@ -1726,11 +1733,13 @@ public class Bpmn2JsonMarshaller {
             		associationBuff.append(rhsAssociation).append("=").append(associationValue);
             		associationBuff.append(",");
             	}
-            } else if(isBiDirectional) {
-                associationBuff.append(lhsAssociation).append("<->").append(rhsAssociation);
-                associationBuff.append(",");
-                biDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
-            } else {
+            } 
+//            else if(isBiDirectional) {
+//                associationBuff.append(lhsAssociation).append("<->").append(rhsAssociation);
+//                associationBuff.append(",");
+//                biDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
+//            } 
+            else {
                 associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
                 associationBuff.append(",");
                 uniDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
@@ -1744,13 +1753,13 @@ public class Bpmn2JsonMarshaller {
                 
                 boolean wasBiDirectional = false;
                 // check if we already addressed this association as bidirectional
-                for(String bda : biDirectionalAssociations) {
-                    String[] dbaparts = bda.split( ",\\s*" );
-                    if(dbaparts[0].equals(rhsAssociation) && dbaparts[1].equals(lhsAssociation)) {
-                        wasBiDirectional = true;
-                        break;
-                    }
-                }
+//                for(String bda : biDirectionalAssociations) {
+//                    String[] dbaparts = bda.split( ",\\s*" );
+//                    if(dbaparts[0].equals(rhsAssociation) && dbaparts[1].equals(lhsAssociation)) {
+//                        wasBiDirectional = true;
+//                        break;
+//                    }
+//                }
                 
                 if(dataout.getTransformation() != null && dataout.getTransformation().getBody() != null) {
                 	rhsAssociation = dataout.getTransformation().getBody();
