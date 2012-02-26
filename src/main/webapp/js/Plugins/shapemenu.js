@@ -81,6 +81,9 @@ ORYX.Plugins.ShapeMenuPlugin = {
 				// Show the Morph Button
 				this.showMorphButton(this.currentShapes);
 				
+				// Show the dictionary Button
+				this.showDictionaryButton();
+				
 				// Show the Stencil Buttons
 				this.showStencilButtons(this.currentShapes);	
 				
@@ -203,14 +206,26 @@ ORYX.Plugins.ShapeMenuPlugin = {
 			callback:		(ORYX.CONFIG.ENABLE_MORPHMENU_BY_HOVER ? undefined : this.toggleMorphMenu.bind(this)), 
 			icon: 			ORYX.PATH + 'images/wrench_orange.png',
 			align: 			ORYX.CONFIG.SHAPEMENU_BOTTOM,
-			group:			0,
+			group:			1,
 			msg:			ORYX.I18N.ShapeMenuPlugin.morphMsg
-		});				
+		});	
 		
-		this.shapeMenu.setNumberOfButtonsPerLevel(ORYX.CONFIG.SHAPEMENU_BOTTOM, 1)
+		var dbutton = new ORYX.Plugins.ShapeMenuButton({
+			//hovercallback: 	(ORYX.CONFIG.ENABLE_MORPHMENU_BY_HOVER ? this.showMorphMenu.bind(this) : undefined), 
+			//resetcallback: 	(ORYX.CONFIG.ENABLE_MORPHMENU_BY_HOVER ? this.hideMorphMenu.bind(this) : undefined), 
+			callback:		this.addDictionaryItem.bind(this), 
+			icon: 			ORYX.PATH + 'images/dictionary.png',
+			align: 			ORYX.CONFIG.SHAPEMENU_BOTTOM,
+			group:			0,
+			msg:			'Add to Process Dictionary'
+		});	
+		
+		this.shapeMenu.setNumberOfButtonsPerLevel(ORYX.CONFIG.SHAPEMENU_BOTTOM, 2)
+		this.shapeMenu.addButton(dbutton);
 		this.shapeMenu.addButton(button);
 		this.morphMenu.getEl().appendTo(button.node);
 		this.morphButton = button;
+		this.dictionaryButton = dbutton;
 	},
 	
 	showMorphMenu: function() {
@@ -230,6 +245,19 @@ ORYX.Plugins.ShapeMenuPlugin = {
 			this.showMorphMenu();
 	},
 	
+	addDictionaryItem: function() {
+		var labelText = "";
+		labelText = this.currentShapes[0].getLabels()[0].text();
+		if(labelText) {
+			this.facade.raiseEvent({
+	            type: ORYX.CONFIG.EVENT_DICTIONARY_ADD,
+	            entry: labelText
+	        });
+		} else {
+			Ext.Msg.alert('Element name not specified.');
+		}
+	},
+	
 	onSelectionChanged: function(event) {
 		var elements = event.elements;
 
@@ -245,6 +273,10 @@ ORYX.Plugins.ShapeMenuPlugin = {
 			this.showShapeMenu(true)
 		}
 		
+	},
+	
+	showDictionaryButton: function() {
+		this.dictionaryButton.prepareToShow();
 	},
 	
 	/**

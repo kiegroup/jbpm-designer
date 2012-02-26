@@ -39,6 +39,8 @@ ORYX.Plugins.Dictionary = Clazz.extend({
 	construct: function(facade){
 		this.facade = facade;
 		
+		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DICTIONARY_ADD, this.initDictionary.bind(this));
+		
 		/* Register dictionary to model */
 		this.facade.offer({
 			'name': 'Dictionary',
@@ -60,7 +62,7 @@ ORYX.Plugins.Dictionary = Clazz.extend({
 			}.bind(this)
 		});
 	},
-	initDictionary: function() {
+	initDictionary: function(options) {
 		Ext.Ajax.request({
             url: ORYX.PATH + 'dictionary',
             method: 'POST',
@@ -100,6 +102,15 @@ ORYX.Plugins.Dictionary = Clazz.extend({
                             }));
     		            }
     		        }
+    	   			if(options && options.entry) {
+    	   				if(options.entry.length > 0) {
+	    	   				ORYX.Dictionary.Dictionaryitems.add(new ORYX.Dictionary.DictionaryDef({
+	                            name: options.entry,
+	                            aliases: '',
+	                            description: ''
+	                        }));
+    	   				}
+    	   			}
     	   			ORYX.Dictionary.Dictionaryitems.commitChanges();
     	   			this.showDictionary();
     	   		} catch(e) {
