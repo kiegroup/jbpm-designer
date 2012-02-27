@@ -214,13 +214,19 @@ ORYX.Plugins.Edit = Clazz.extend({
             
             
             if (considerConnections && !(shape instanceof ORYX.Core.Edge)){
-                shape.getIncomingShapes().each(function(is) {
-                    shapesToConsider.push(is);
+                //concat all incoming and outgoing shapes
+                var connections = shape.getIncomingShapes().concat(shape.getOutgoingShapes());
+                
+                connections.each(function(s) {
+                    //we don't want to delete sequence flows with
+                    //an existing 'conditionexpression'
+                    //console.log(s);
+                    if (s instanceof ORYX.Core.Edge && s.properties["oryx-conditionexpression"] && s.properties["oryx-conditionexpression"] != ""){
+                        return;
+                    }
+                    shapesToConsider.push(s);
 		}.bind(this));
                 
-                shape.getOutgoingShapes().each(function(os) {
-                    shapesToConsider.push(os);
-		}.bind(this));
             }
             
         }.bind(this));
