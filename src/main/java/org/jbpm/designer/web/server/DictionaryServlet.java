@@ -107,6 +107,7 @@ public class DictionaryServlet extends HttpServlet {
 	        checkConnection.setRequestMethod("GET");
 	        checkConnection
 	                .setRequestProperty("Accept", "application/atom+xml");
+	        checkConnection.setConnectTimeout(3000);
 	        checkConnection.connect();
 	        _logger.info("check connection response code: " + checkConnection.getResponseCode());
 	        if (checkConnection.getResponseCode() == 200) {

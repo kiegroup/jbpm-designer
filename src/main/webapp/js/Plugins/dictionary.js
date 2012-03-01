@@ -39,12 +39,14 @@ ORYX.Plugins.Dictionary = Clazz.extend({
 	construct: function(facade){
 		this.facade = facade;
 		
-		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DICTIONARY_ADD, this.initDictionary.bind(this));
+		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DICTIONARY_ADD, this.initAndShowDictionary.bind(this));
+		
+		this.initDictionary();
 		
 		/* Register dictionary to model */
 		this.facade.offer({
 			'name': 'Dictionary',
-			'functionality': this.initDictionary.bind(this),
+			'functionality': this.initAndShowDictionary.bind(this),
 			'group': ORYX.I18N.View.jbpmgroup,
 			'icon': ORYX.PATH + "images/dictionary.png",
 			'description': 'Process dictionary',
@@ -62,7 +64,10 @@ ORYX.Plugins.Dictionary = Clazz.extend({
 			}.bind(this)
 		});
 	},
-	initDictionary: function(options) {
+	initAndShowDictionary : function(options) {
+		this.initDictionary(this.showDictionary, options);
+	},
+	initDictionary: function(callback,options) {
 		Ext.Ajax.request({
             url: ORYX.PATH + 'dictionary',
             method: 'POST',
@@ -112,7 +117,9 @@ ORYX.Plugins.Dictionary = Clazz.extend({
     	   				}
     	   			}
     	   			ORYX.Dictionary.Dictionaryitems.commitChanges();
-    	   			this.showDictionary();
+    	   			if(callback) {
+    	   				callback();
+    	   			}
     	   		} catch(e) {
     	   			Ext.Msg.alert('Error loading Process Dictionary :\n' + e);
     	   		}
