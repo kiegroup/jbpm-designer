@@ -1404,7 +1404,6 @@ public class Bpmn2JsonMarshaller {
                 if(onExitStr.endsWith("|")) {
                     onExitStr = onExitStr.substring(0, onExitStr.length() - 1);
                 }
-                System.out.println("********** SETTING TO : " + onExitStr);
                 properties.put("onexitactions", onExitStr);
             }
         }
