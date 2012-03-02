@@ -37,7 +37,7 @@ public class SyntaxCheckerServlet extends HttpServlet {
         String profileName = req.getParameter("profile");
         String preprocessingData = req.getParameter("pp");
         String uuid = req.getParameter("uuid");
-        IDiagramProfile profile = getProfile(req, profileName);
+        IDiagramProfile profile = ServletUtil.getProfile(req, profileName, getServletContext());
 
         BPMN2SyntaxChecker checker = new BPMN2SyntaxChecker(json, preprocessingData, profile, uuid);
 		checker.checkSyntax();
@@ -48,18 +48,4 @@ public class SyntaxCheckerServlet extends HttpServlet {
 			resp.getWriter().write(checker.getErrorsAsJson().toString());
 		}
 	}
-	
-	private IDiagramProfile getProfile(HttpServletRequest req,
-            String profileName) {
-        IDiagramProfile profile = null;
-
-        IDiagramProfileService service = new ProfileServiceImpl();
-        service.init(getServletContext());
-        profile = service.findProfile(req, profileName);
-        if (profile == null) {
-            throw new IllegalArgumentException(
-                    "Cannot determine the profile to use for interpreting models");
-        }
-        return profile;
-    }
 }

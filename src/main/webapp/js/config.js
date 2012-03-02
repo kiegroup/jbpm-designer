@@ -219,6 +219,7 @@ ORYX.CONFIG.EVENT_LOADING_STATUS =			"loading.status";
 ORYX.CONFIG.EVENT_OVERLAY_SHOW =			"overlay.show";
 ORYX.CONFIG.EVENT_OVERLAY_HIDE =			"overlay.hide";
 ORYX.CONFIG.EVENT_DICTIONARY_ADD =          "dictionary.add";
+ORYX.CONFIG.EVENT_TASKFORM_EDIT =           "taskform.edit";
 ORYX.CONFIG.EVENT_ARRANGEMENT_TOP =			"arrangement.setToTop";
 ORYX.CONFIG.EVENT_ARRANGEMENT_BACK =		"arrangement.setToBack";
 ORYX.CONFIG.EVENT_ARRANGEMENT_FORWARD =		"arrangement.setForward";

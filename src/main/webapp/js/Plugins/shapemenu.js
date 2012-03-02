@@ -84,6 +84,9 @@ ORYX.Plugins.ShapeMenuPlugin = {
 				// Show the dictionary Button
 				this.showDictionaryButton();
 				
+				// Show the forms Button
+				this.showTaskFormButton();
+				
 				// Show the Stencil Buttons
 				this.showStencilButtons(this.currentShapes);	
 				
@@ -185,7 +188,6 @@ ORYX.Plugins.ShapeMenuPlugin = {
 	},
 	
 	createMorphMenu: function() {
-		
 		this.morphMenu = new Ext.menu.Menu({
 			id: 'Oryx_morph_menu',
 			items: []
@@ -206,26 +208,35 @@ ORYX.Plugins.ShapeMenuPlugin = {
 			callback:		(ORYX.CONFIG.ENABLE_MORPHMENU_BY_HOVER ? undefined : this.toggleMorphMenu.bind(this)), 
 			icon: 			ORYX.PATH + 'images/wrench_orange.png',
 			align: 			ORYX.CONFIG.SHAPEMENU_BOTTOM,
-			group:			1,
+			group:			0,
 			msg:			ORYX.I18N.ShapeMenuPlugin.morphMsg
 		});	
 		
 		var dbutton = new ORYX.Plugins.ShapeMenuButton({
-			//hovercallback: 	(ORYX.CONFIG.ENABLE_MORPHMENU_BY_HOVER ? this.showMorphMenu.bind(this) : undefined), 
-			//resetcallback: 	(ORYX.CONFIG.ENABLE_MORPHMENU_BY_HOVER ? this.hideMorphMenu.bind(this) : undefined), 
 			callback:		this.addDictionaryItem.bind(this), 
 			icon: 			ORYX.PATH + 'images/dictionary.png',
-			align: 			ORYX.CONFIG.SHAPEMENU_BOTTOM,
+			align: 			ORYX.CONFIG.SHAPEMENU_TOP,
 			group:			0,
 			msg:			'Add to Process Dictionary'
 		});	
 		
-		this.shapeMenu.setNumberOfButtonsPerLevel(ORYX.CONFIG.SHAPEMENU_BOTTOM, 2)
-		this.shapeMenu.addButton(dbutton);
+		var utfbutton = new ORYX.Plugins.ShapeMenuButton({
+			callback:		this.editTaskForm.bind(this), 
+			icon: 			ORYX.PATH + 'images/human_task_form.png',
+			align: 			ORYX.CONFIG.SHAPEMENU_TOP,
+			group:			1,
+			msg:			'Edit Task Form'
+		});	
+		
+		this.shapeMenu.setNumberOfButtonsPerLevel(ORYX.CONFIG.SHAPEMENU_BOTTOM, 2);
+		//this.shapeMenu.setNumberOfButtonsPerLevel(ORYX.CONFIG.SHAPEMENU_TOP, 2)
 		this.shapeMenu.addButton(button);
+		this.shapeMenu.addButton(dbutton);
+		this.shapeMenu.addButton(utfbutton);
 		this.morphMenu.getEl().appendTo(button.node);
 		this.morphButton = button;
 		this.dictionaryButton = dbutton;
+		this.taskFormButton = utfbutton;
 	},
 	
 	showMorphMenu: function() {
@@ -254,7 +265,19 @@ ORYX.Plugins.ShapeMenuPlugin = {
 	            entry: labelText
 	        });
 		} else {
-			Ext.Msg.alert('Element name not specified.');
+			Ext.Msg.alert('Name not specified.');
+		}
+	},
+	
+	editTaskForm: function() {
+		var taskname = this.currentShapes[0].properties['oryx-taskname'];
+		if(taskname && taskname.length > 0) {
+			this.facade.raiseEvent({
+	            type: ORYX.CONFIG.EVENT_TASKFORM_EDIT,
+	            tn: taskname 
+	        });
+		} else {
+			Ext.Msg.alert('Task Name not specified.');
 		}
 	},
 	
@@ -277,6 +300,13 @@ ORYX.Plugins.ShapeMenuPlugin = {
 	
 	showDictionaryButton: function() {
 		this.dictionaryButton.prepareToShow();
+	},
+	
+	showTaskFormButton : function() {
+		if(this.currentShapes && this.currentShapes[0] && this.currentShapes[0].properties && this.currentShapes[0].properties['oryx-tasktype'] && 
+				this.currentShapes[0].properties['oryx-tasktype'] == "User") {
+			this.taskFormButton.prepareToShow();
+		}
 	},
 	
 	/**

@@ -81,6 +81,11 @@
   <servlet-class>org.jbpm.designer.web.server.TaskFormsServlet</servlet-class>
  </servlet>
  <servlet>
+  <display-name>TaskformsEditor</display-name>
+  <servlet-name>TaskFormsEditorServlet</servlet-name>
+  <servlet-class>org.jbpm.designer.web.server.TaskFormsEditorServlet</servlet-class>
+ </servlet>
+ <servlet>
   <display-name>ProcessInfo</display-name>
   <servlet-name>ProcessInfoServlet</servlet-name>
   <servlet-class>org.jbpm.designer.web.server.ProcessInfoServlet</servlet-class>
@@ -147,6 +152,10 @@
  <servlet-mapping>
   <servlet-name>TaskformsServlet</servlet-name>
   <url-pattern>/taskforms</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>TaskFormsEditorServlet</servlet-name>
+  <url-pattern>/taskformseditor</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
   <servlet-name>ProcessInfoServlet</servlet-name>

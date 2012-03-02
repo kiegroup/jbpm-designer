@@ -60,7 +60,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 		String assetsToInstall = req.getParameter("asset");
 		String categoryToInstall = req.getParameter("category");
 
-		IDiagramProfile profile = getProfile(req, profileName);
+		IDiagramProfile profile = ServletUtil.getProfile(req, profileName, getServletContext());
 
 		Map<String, WorkDefinitionImpl> workitemsFromRepo = WorkItemRepository.getWorkDefinitions(profile.getServiceRepositoryLocation());
 		if(action != null && action.equalsIgnoreCase(displayRepoContent)) {
@@ -137,7 +137,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 									"/rest/packages/" + nextPackage + "/assets/";
 							try {
 								XMLInputFactory factory = XMLInputFactory.newInstance();
-								XMLStreamReader reader = factory.createXMLStreamReader(getInputStreamForURL(packageAssetURL, profile));
+								XMLStreamReader reader = factory.createXMLStreamReader(ServletUtil.getInputStreamForURL(packageAssetURL, "GET", profile));
 
 								while (reader.hasNext()) {
 									int next = reader.next();
@@ -184,7 +184,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 								URL checkWidURL = new URL(widURL);
 								HttpURLConnection checkWidConnection = (HttpURLConnection) checkWidURL
 								        .openConnection();
-								applyAuth(profile, checkWidConnection);
+								ServletUtil.applyAuth(profile, checkWidConnection);
 								checkWidConnection.setRequestMethod("GET");
 								checkWidConnection
 								        .setRequestProperty("Accept", "application/atom+xml");
@@ -194,7 +194,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 									URL deleteAssetURL = new URL(widURL);
 								    HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL
 								            .openConnection();
-								    applyAuth(profile, deleteConnection);
+								    ServletUtil.applyAuth(profile, deleteConnection);
 								    deleteConnection.setRequestMethod("DELETE");
 								    deleteConnection.connect();
 								    _logger.info("delete wid response code: " + deleteConnection.getResponseCode());
@@ -204,7 +204,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 								URL checkIconURL = new URL(iconURL);
 								HttpURLConnection checkIconConnection = (HttpURLConnection) checkIconURL
 								        .openConnection();
-								applyAuth(profile, checkIconConnection);
+								ServletUtil.applyAuth(profile, checkIconConnection);
 								checkIconConnection.setRequestMethod("GET");
 								checkIconConnection
 								        .setRequestProperty("Accept", "application/atom+xml");
@@ -214,7 +214,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 								    URL deleteAssetURL = new URL(iconURL);
 								    HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL
 								            .openConnection();
-								    applyAuth(profile, deleteConnection);
+								    ServletUtil.applyAuth(profile, deleteConnection);
 								    deleteConnection.setRequestMethod("DELETE");
 								    deleteConnection.connect();
 								    _logger.info("delete icon response code: " + deleteConnection.getResponseCode());
@@ -226,7 +226,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 								URL createWidURL = new URL(packageAssetsURL);
 					            HttpURLConnection createWidConnection = (HttpURLConnection) createWidURL
 					                    .openConnection();
-					            applyAuth(profile, createWidConnection);
+					            ServletUtil.applyAuth(profile, createWidConnection);
 					            createWidConnection.setRequestMethod("POST");
 					            createWidConnection.setRequestProperty("Content-Type",
 					                    "application/octet-stream");
@@ -241,7 +241,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 					            URL createIconURL = new URL(packageAssetsURL);
 					            HttpURLConnection createIconConnection = (HttpURLConnection) createIconURL
 					                    .openConnection();
-					            applyAuth(profile, createIconConnection);
+					            ServletUtil.applyAuth(profile, createIconConnection);
 					            createIconConnection.setRequestMethod("POST");
 					            createIconConnection.setRequestProperty("Content-Type",
 					                    "application/octet-stream");
@@ -269,21 +269,6 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 		} 
 	}
 
-
-	private IDiagramProfile getProfile(HttpServletRequest req,
-			String profileName) {
-		IDiagramProfile profile = null;
-
-		IDiagramProfileService service = new ProfileServiceImpl();
-		service.init(getServletContext());
-		profile = service.findProfile(req, profileName);
-		if (profile == null) {
-			throw new IllegalArgumentException(
-					"Cannot determine the profile to use for interpreting models");
-		}
-		return profile;
-	}
-
 	private byte[] getImageBytes(InputStream is) throws Exception {
 		try {
 			return IOUtils.toByteArray(is);
@@ -303,7 +288,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 				"/rest/packages/";
 		try {
 			XMLInputFactory factory = XMLInputFactory.newInstance();
-			XMLStreamReader reader = factory.createXMLStreamReader(getInputStreamForURL(packagesURL, profile));
+			XMLStreamReader reader = factory.createXMLStreamReader(ServletUtil.getInputStreamForURL(packagesURL, "GET", profile));
 			while (reader.hasNext()) {
 				if (reader.next() == XMLStreamReader.START_ELEMENT) {
 					if ("title".equals(reader.getLocalName())) {
@@ -317,57 +302,4 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 		} 
 		return packages;
 	}
-
-	private void applyAuth(IDiagramProfile profile, HttpURLConnection connection) {
-		if (profile.getUsr() != null && profile.getUsr().trim().length() > 0
-				&& profile.getPwd() != null
-				&& profile.getPwd().trim().length() > 0) {
-			BASE64Encoder enc = new sun.misc.BASE64Encoder();
-			String userpassword = profile.getUsr() + ":" + profile.getPwd();
-			String encodedAuthorization = enc.encode(userpassword.getBytes());
-			connection.setRequestProperty("Authorization", "Basic "
-					+ encodedAuthorization);
-		}
-	}
-
-	private InputStream getInputStreamForURL(String urlLocation, IDiagramProfile profile) throws Exception{
-		// pretend we are mozilla
-		URL url = new URL(urlLocation);
-		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-		connection.setRequestMethod("GET");
-		connection
-		.setRequestProperty(
-				"User-Agent",
-				"Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2.16) Gecko/20110319 Firefox/3.6.16");
-		connection
-		.setRequestProperty("Accept",
-				"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-		connection.setRequestProperty("Accept-Language", "en-us,en;q=0.5");
-		connection.setRequestProperty("Accept-Encoding", "gzip,deflate");
-		connection.setRequestProperty("charset", "UTF-8");
-		connection.setReadTimeout(5 * 1000);
-
-		if(profile.getUsr() != null && profile.getUsr().trim().length() > 0 && profile.getPwd() != null && profile.getPwd().trim().length() > 0) {
-			BASE64Encoder enc = new sun.misc.BASE64Encoder();
-			String userpassword = profile.getUsr() + ":" + profile.getPwd();
-			String encodedAuthorization = enc.encode( userpassword.getBytes() );
-			connection.setRequestProperty("Authorization", "Basic "+ encodedAuthorization);
-		}
-
-		connection.connect();
-
-		BufferedReader sreader = new BufferedReader(new InputStreamReader(
-				connection.getInputStream(), "UTF-8"));
-		StringBuilder stringBuilder = new StringBuilder();
-
-		String line = null;
-		while ((line = sreader.readLine()) != null) {
-			stringBuilder.append(line + "\n");
-		}
-
-		return new ByteArrayInputStream(stringBuilder.toString()
-				.getBytes("UTF-8"));
-	}
-
 }
