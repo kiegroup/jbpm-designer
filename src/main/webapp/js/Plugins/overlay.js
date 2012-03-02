@@ -179,7 +179,7 @@ ORYX.Plugins.Overlay = Clazz.extend({
 							y = 20;
 						} else if(p == "CANVAS_TITLE") {
 							x = 40;
-							y = 35;
+							y = 43;
 						}						
 						else {
 							return
