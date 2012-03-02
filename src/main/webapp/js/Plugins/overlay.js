@@ -174,9 +174,12 @@ ORYX.Plugins.Overlay = Clazz.extend({
 							y = b.height() / 2;
 						} else if( p == "START" || p == "END") {
 							x = b.width() / 2; y = b.height() / 2;
-						} else if(p == "CANVAS_TITLE") {
+						} else if(p == "CANVAS_TITLE_FORM") {
 							x = 10;
-							y = 30;
+							y = 20;
+						} else if(p == "CANVAS_TITLE") {
+							x = 40;
+							y = 35;
 						}						
 						else {
 							return

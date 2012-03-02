@@ -119,7 +119,7 @@ public class TransformerServlet extends HttpServlet {
         String respaction = req.getParameter("respaction");
 	String pp = req.getParameter("pp");
 
-        IDiagramProfile profile = getProfile(req, profileName);
+        IDiagramProfile profile = ServletUtil.getProfile(req, profileName, getServletContext());
 
         if (transformto != null && transformto.equals(TO_PDF)) {
             try {
@@ -487,7 +487,7 @@ public class TransformerServlet extends HttpServlet {
             URL checkURL = new URL(pngURL);
             HttpURLConnection checkConnection = (HttpURLConnection) checkURL
                     .openConnection();
-            applyAuth(profile, checkConnection);
+            ServletUtil.applyAuth(profile, checkConnection);
             checkConnection.setRequestMethod("GET");
             checkConnection
                     .setRequestProperty("Accept", "application/atom+xml");
@@ -497,7 +497,7 @@ public class TransformerServlet extends HttpServlet {
                 URL deleteAssetURL = new URL(deleteURL);
                 HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL
                         .openConnection();
-                applyAuth(profile, deleteConnection);
+                ServletUtil.applyAuth(profile, deleteConnection);
                 deleteConnection.setRequestMethod("DELETE");
                 deleteConnection.connect();
                 _logger.info("delete connection response code: " + deleteConnection.getResponseCode());
@@ -506,7 +506,7 @@ public class TransformerServlet extends HttpServlet {
             URL createURL = new URL(packageAssetsURL);
             HttpURLConnection createConnection = (HttpURLConnection) createURL
                     .openConnection();
-            applyAuth(profile, createConnection);
+            ServletUtil.applyAuth(profile, createConnection);
             createConnection.setRequestMethod("POST");
             createConnection.setRequestProperty("Content-Type",
                     "application/octet-stream");
@@ -558,7 +558,7 @@ public class TransformerServlet extends HttpServlet {
                 + "/source/";
 
         try {
-            InputStream in = getInputStreamForURL(assetSourceURL, "GET",
+            InputStream in = ServletUtil.getInputStreamForURL(assetSourceURL, "GET",
                     profile);
             StringWriter writer = new StringWriter();
             IOUtils.copy(in, writer);
@@ -583,7 +583,7 @@ public class TransformerServlet extends HttpServlet {
         try {
             XMLInputFactory factory = XMLInputFactory.newInstance();
             XMLStreamReader reader = factory
-                    .createXMLStreamReader(getInputStreamForURL(packagesURL,
+                    .createXMLStreamReader(ServletUtil.getInputStreamForURL(packagesURL,
                             "GET", profile));
             while (reader.hasNext()) {
                 if (reader.next() == XMLStreamReader.START_ELEMENT) {
@@ -610,7 +610,7 @@ public class TransformerServlet extends HttpServlet {
             try {
                 XMLInputFactory factory = XMLInputFactory.newInstance();
                 XMLStreamReader reader = factory
-                        .createXMLStreamReader(getInputStreamForURL(
+                        .createXMLStreamReader(ServletUtil.getInputStreamForURL(
                                 packageAssetURL, "GET", profile));
                 String title = "";
                 while (reader.hasNext()) {
@@ -640,68 +640,7 @@ public class TransformerServlet extends HttpServlet {
         }
         return pkgassetnames;
     }
-
-    private InputStream getInputStreamForURL(String urlLocation,
-            String requestMethod, IDiagramProfile profile) throws Exception {
-        URL url = new URL(urlLocation);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-        connection.setRequestMethod(requestMethod);
-        connection
-                .setRequestProperty(
-                        "User-Agent",
-                        "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2.16) Gecko/20110319 Firefox/3.6.16");
-        connection
-                .setRequestProperty("Accept",
-                        "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-        connection.setRequestProperty("Accept-Language", "en-us,en;q=0.5");
-        connection.setRequestProperty("Accept-Encoding", "gzip,deflate");
-        connection.setRequestProperty("charset", "UTF-8");
-        connection.setReadTimeout(5 * 1000);
-
-        applyAuth(profile, connection);
-
-        connection.connect();
-
-        BufferedReader sreader = new BufferedReader(new InputStreamReader(
-                connection.getInputStream(), "UTF-8"));
-        StringBuilder stringBuilder = new StringBuilder();
-
-        String line = null;
-        while ((line = sreader.readLine()) != null) {
-            stringBuilder.append(line + "\n");
-        }
-
-        return new ByteArrayInputStream(stringBuilder.toString().getBytes(
-                "UTF-8"));
-    }
-
-    private void applyAuth(IDiagramProfile profile, HttpURLConnection connection) {
-        if (profile.getUsr() != null && profile.getUsr().trim().length() > 0
-                && profile.getPwd() != null
-                && profile.getPwd().trim().length() > 0) {
-            BASE64Encoder enc = new sun.misc.BASE64Encoder();
-            String userpassword = profile.getUsr() + ":" + profile.getPwd();
-            String encodedAuthorization = enc.encode(userpassword.getBytes());
-            connection.setRequestProperty("Authorization", "Basic "
-                    + encodedAuthorization);
-        }
-    }
-
-    private IDiagramProfile getProfile(HttpServletRequest req,
-            String profileName) {
-        IDiagramProfile profile = null;
-
-        IDiagramProfileService service = new ProfileServiceImpl();
-        service.init(getServletContext());
-        profile = service.findProfile(req, profileName);
-        if (profile == null) {
-            throw new IllegalArgumentException(
-                    "Cannot determine the profile to use for interpreting models");
-        }
-        return profile;
-    }
-
+    
     private Definitions getDefinitions(String xml) {
         try {
             ResourceSet resourceSet = new ResourceSetImpl();
