@@ -36,6 +36,7 @@ import org.eclipse.bpmn2.ErrorEventDefinition;
 import org.eclipse.bpmn2.EscalationEventDefinition;
 import org.eclipse.bpmn2.EventDefinition;
 import org.eclipse.bpmn2.FlowElement;
+import org.eclipse.bpmn2.FlowElementsContainer;
 import org.eclipse.bpmn2.FlowNode;
 import org.eclipse.bpmn2.FormalExpression;
 import org.eclipse.bpmn2.Gateway;
@@ -47,6 +48,7 @@ import org.eclipse.bpmn2.SendTask;
 import org.eclipse.bpmn2.SequenceFlow;
 import org.eclipse.bpmn2.SignalEventDefinition;
 import org.eclipse.bpmn2.StartEvent;
+import org.eclipse.bpmn2.SubProcess;
 import org.eclipse.bpmn2.ThrowEvent;
 import org.eclipse.bpmn2.TimerEventDefinition;
 import org.eclipse.bpmn2.UserTask;
@@ -144,236 +146,245 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
         			addError(defaultResourceId, "Process has no end node.");
         		}
         		
-        		for(FlowElement fe : flowElements) {
-        			if(fe instanceof StartEvent) {
-        				StartEvent se = (StartEvent) fe;
-        				if(se.getOutgoing() == null && se.getOutgoing().size() < 1) {
-        					addError(se, "Start node has no outgoing connections");
-        				}
-        			} else if (fe instanceof EndEvent) {
-        				EndEvent ee = (EndEvent) fe;
-        				if(ee.getIncoming() == null && ee.getIncoming().size() < 1) {
-        					addError(ee, "End node has no outgoing connections");
-        				}
-        			} else {
-        				if(fe instanceof FlowNode) {
-        					FlowNode fn = (FlowNode) fe;
-        					if(fn.getOutgoing() == null && fn.getOutgoing().size() < 1) {
-            					addError(fn, "Node has no outgoing connections");
-            				}
-        					if(fn.getIncoming() == null && fn.getIncoming().size() < 1) {
-            					addError(fn, "Node has no outgoing connections");
-            				}
-        				}
-        			}
-        			
-        			if(fe instanceof BusinessRuleTask) {
-        				BusinessRuleTask bt = (BusinessRuleTask) fe;
-        				Iterator<FeatureMap.Entry> biter = bt.getAnyAttribute().iterator();
-        				boolean foundRuleflowGroup = false;
-        	            while(biter.hasNext()) {
-        	                FeatureMap.Entry entry = biter.next();
-        	                if(entry.getEStructuralFeature().getName().equals("ruleFlowGroup")) {
-        	                	foundRuleflowGroup = true;
-        	                	String ruleflowGroup = (String) entry.getValue();
-        	                	if(isEmpty(ruleflowGroup)) {
-        	                		addError(bt, "Business Rule Task has no ruleflow-group.");
-        	                	}
-        	                }
-        	            }
-        	            if(!foundRuleflowGroup) {
-        	            	addError(bt, "Business Rule Task has no ruleflow-group.");
-        	            }
-        			}
-        			
-        			if(fe instanceof ScriptTask) {
-        				ScriptTask st = (ScriptTask) fe;
-        				if(isEmpty(st.getScript())) {
-        					addError(st, "Script Task has no script.");
-        				}
-        				if(isEmpty(st.getScriptFormat())) {
-        					addError(st, "Script Task has no script format.");
-        				}
-        			}
-        			
-        			if(fe instanceof SendTask) {
-        				SendTask st = (SendTask) fe;
-        				if(st.getOperationRef() == null) {
-        					addError(st, "Send Task has no operation.");
-        				}
-        				if(st.getMessageRef() == null) {
-        					addError(st, "Send Task has no message.");
-        				}
-        			}
-        			
-        			if(fe instanceof UserTask) {
-        				UserTask ut = (UserTask) fe;
-        				String taskName = null;
-        				Iterator<FeatureMap.Entry> utiter = ut.getAnyAttribute().iterator();
-        				boolean foundTaskName = false;
-        		        while(utiter.hasNext()) {
-        		            FeatureMap.Entry entry = utiter.next();
-        		            if(entry.getEStructuralFeature().getName().equals("taskName")) {
-        		            	foundTaskName = true;
-        		            	taskName = (String) entry.getValue();
-        		            	if(isEmpty(taskName)) {
-        		            		addError(ut, "User Task has no task name.");
-        		            	}
-        		            }
-        		        }
-        		        if(!foundTaskName) {
-        		        	addError(ut, "User Task has no task name.");
-        		        } else {
-        		        	if(taskName != null) {
-        		        		String[] packageAssetInfo = findPackageAndAssetInfo(uuid, profile);
-        		        		String packageName = packageAssetInfo[0];
-        		        		String assetName = packageAssetInfo[1];
-        		        		String taskFormName = taskName + "-taskform";
-        		        		if(!taskFormExistsInGuvnor(packageName, assetName, taskFormName, profile)) {
-        		        			addError(ut, "User Task has no task form defined.");
-        		        		}
-        		        	} 
-        		        }
-        			}
-        			
-        			if(fe instanceof CatchEvent) {
-        				CatchEvent event = (CatchEvent) fe;
-        				List<EventDefinition> eventdefs = event.getEventDefinitions();
-        				for(EventDefinition ed : eventdefs) {
-	        				if(ed instanceof TimerEventDefinition) {
-	        	                TimerEventDefinition ted = (TimerEventDefinition) ed;
-	        	                if(ted.getTimeDate() == null) {
-	        	                	addError(event, "Catch Event has no timedate.");
-	        	                }
-	        	                if(ted.getTimeDuration() == null) {
-	        	                	addError(event, "Catch Event has no timeduration.");
-	        	                }
-	        	                if(ted.getTimeCycle() == null) {
-	        	                	addError(event, "Catch Event has no timecycle.");
-	        	                }
-	        	            } else if( ed instanceof SignalEventDefinition) {
-	        	                if(((SignalEventDefinition) ed).getSignalRef() == null) {
-	        	                	addError(event, "Catch Event has no signalref.");
-	        	                }
-	        	            } else if( ed instanceof ErrorEventDefinition) {
-	        	                if(((ErrorEventDefinition) ed).getErrorRef() == null || ((ErrorEventDefinition) ed).getErrorRef().getErrorCode() == null) {
-	        	                	addError(event, "Catch Event has no errorref.");
-	        	                }
-	        	            } else if( ed instanceof ConditionalEventDefinition ) {
-	        	                FormalExpression conditionalExp = (FormalExpression) ((ConditionalEventDefinition) ed).getCondition();
-	        	                if(conditionalExp.getBody() == null) {
-	        	                	addError(event, "Catch Event has no conditionexpression.");
-	        	                }
-	        	            } else if( ed instanceof EscalationEventDefinition ) {
-	        	                if(((EscalationEventDefinition) ed).getEscalationRef() == null) {
-	        	                	addError(event, "Catch Event has no escalationref.");
-	        	                }
-	        	            } else if( ed instanceof MessageEventDefinition) {
-	        	                if(((MessageEventDefinition) ed).getMessageRef() == null) {
-	        	                    addError(event, "Catch Event has no messageref.");
-	        	                }
-	        	            }  else if( ed instanceof CompensateEventDefinition) {
-	        	                if(((CompensateEventDefinition) ed).getActivityRef() == null) {
-	        	                	addError(event, "Catch Event has no activityref.");
-	        	                }
-	        	            } 
-        				}
-        			}
-        			
-        			if(fe instanceof ThrowEvent) {
-        				ThrowEvent event = (ThrowEvent) fe;
-        				List<EventDefinition> eventdefs = event.getEventDefinitions();
-        		        for(EventDefinition ed : eventdefs) {
-        		            if(ed instanceof TimerEventDefinition) {
-        		                TimerEventDefinition ted = (TimerEventDefinition) ed;
-        		                if(ted.getTimeDate() == null) {
-        		                	addError(event, "Throw Event has no timedate.");
-        		                }
-        		                if(ted.getTimeDuration() == null) {
-        		                	addError(event, "Throw Event has no timeduration.");
-        		                }
-        		                if(ted.getTimeCycle() != null) {
-        		                	addError(event, "Throw Event has no timecycle.");
-        		                }
-        		            } else if( ed instanceof SignalEventDefinition) {
-        		                if(((SignalEventDefinition) ed).getSignalRef() == null) {
-        		                	addError(event, "Throw Event has no signalref.");
-        		                }
-        		            } else if( ed instanceof ErrorEventDefinition) {
-        		                if(((ErrorEventDefinition) ed).getErrorRef() == null || ((ErrorEventDefinition) ed).getErrorRef().getErrorCode() == null) {
-        		                	addError(event, "Throw Event has no errorref.");
-        		                }
-        		            } else if( ed instanceof ConditionalEventDefinition ) {
-        		                FormalExpression conditionalExp = (FormalExpression) ((ConditionalEventDefinition) ed).getCondition();
-        		                if(conditionalExp.getBody() == null) {
-        		                	addError(event, "Throw Event has no conditional expression.");
-        		                }
-        		            } else if( ed instanceof EscalationEventDefinition ) {
-        		                if(((EscalationEventDefinition) ed).getEscalationRef() == null) {
-        		                	addError(event, "Throw Event has no conditional escalationref.");
-        		                }
-        		            } else if( ed instanceof MessageEventDefinition) {
-        		                if(((MessageEventDefinition) ed).getMessageRef() == null) {
-        		                	addError(event, "Throw Event has no conditional messageref.");
-        		                }
-        		            }  else if( ed instanceof CompensateEventDefinition) {
-        		                if(((CompensateEventDefinition) ed).getActivityRef() == null) {
-        		                	addError(event, "Throw Event has no conditional activityref.");
-        		                }
-        		            }  
-        		        }
-        			}
-        			
-        			if(fe instanceof SequenceFlow) {
-        				SequenceFlow sf = (SequenceFlow) fe;
-        				if(sf.getSourceRef() == null) {
-        					addError((SequenceFlow) fe, "An Edge must have a source node.");
-        				}
-        				if(sf.getTargetRef() == null) {
-        					addError((SequenceFlow) fe, "An Edge must have a target node.");
-        				}
-        			}
-        			
-        			if(fe instanceof Gateway) {
-        				Gateway gw = (Gateway) fe;
-        				if(gw.getGatewayDirection() == null) {
-        					addError((Gateway) fe, "Gateway has no direction.");
-        				}
-        			}
-        			
-        			if(fe instanceof CallActivity) {
-        				CallActivity ca = (CallActivity) fe;
-        				if(ca.getCalledElement() == null || ca.getCalledElement().length() < 1) {
-        					addError((CallActivity) fe, "Reusable Subprocess has no called element specified.");
-        				} else {
-        					String[] packageAssetInfo = findPackageAndAssetInfo(uuid, profile);
-    		        		String packageName = packageAssetInfo[0];
-    		        		List<String> allProcessesInPackage = getAllProcessesInPackage(packageName, profile);
-    		        		boolean foundCalledElementProcess = false;
-    		        		for(String p : allProcessesInPackage) {
-    		        			String processContent = getProcessSourceContent(packageName, p, profile);
-    		        			Pattern pattern = Pattern.compile("<\\S*process[\\s\\S]*id=\"" + ca.getCalledElement() + "\"", Pattern.MULTILINE);
-    		                    Matcher m = pattern.matcher(processContent);
-    		                    if(m.find()) {
-    		                    	foundCalledElementProcess = true;
-    		                    	break;
-    		                    }
-    		        		}
-    		        		if(!foundCalledElementProcess) {
-    		        			addError((CallActivity) fe, "No existing process with id=" + ca.getCalledElement() + " could be found.");
-    		        		}
-        				}
-        			}
-        			
-        			if(fe instanceof DataObject) {
-        				DataObject dao = (DataObject) fe;
-        				if(dao.getName() == null || dao.getName().length() < 1) {
-        					addError((DataObject) fe, "Data Object has no name defined.");
-        				}
-        			}
-        		}
+        		checkFlowElements(process);
         	}
         }
+	}
+	
+	private void checkFlowElements(FlowElementsContainer container) {
+		
+		for(FlowElement fe : container.getFlowElements()) {
+			if(fe instanceof StartEvent) {
+				StartEvent se = (StartEvent) fe;
+				if(se.getOutgoing() == null && se.getOutgoing().size() < 1) {
+					addError(se, "Start node has no outgoing connections");
+				}
+			} else if (fe instanceof EndEvent) {
+				EndEvent ee = (EndEvent) fe;
+				if(ee.getIncoming() == null && ee.getIncoming().size() < 1) {
+					addError(ee, "End node has no outgoing connections");
+				}
+			} else {
+				if(fe instanceof FlowNode) {
+					FlowNode fn = (FlowNode) fe;
+					if(fn.getOutgoing() == null && fn.getOutgoing().size() < 1) {
+    					addError(fn, "Node has no outgoing connections");
+    				}
+					if(fn.getIncoming() == null && fn.getIncoming().size() < 1) {
+    					addError(fn, "Node has no outgoing connections");
+    				}
+				}
+			}
+			
+			if(fe instanceof BusinessRuleTask) {
+				BusinessRuleTask bt = (BusinessRuleTask) fe;
+				Iterator<FeatureMap.Entry> biter = bt.getAnyAttribute().iterator();
+				boolean foundRuleflowGroup = false;
+	            while(biter.hasNext()) {
+	                FeatureMap.Entry entry = biter.next();
+	                if(entry.getEStructuralFeature().getName().equals("ruleFlowGroup")) {
+	                	foundRuleflowGroup = true;
+	                	String ruleflowGroup = (String) entry.getValue();
+	                	if(isEmpty(ruleflowGroup)) {
+	                		addError(bt, "Business Rule Task has no ruleflow-group.");
+	                	}
+	                }
+	            }
+	            if(!foundRuleflowGroup) {
+	            	addError(bt, "Business Rule Task has no ruleflow-group.");
+	            }
+			}
+			
+			if(fe instanceof ScriptTask) {
+				ScriptTask st = (ScriptTask) fe;
+				if(isEmpty(st.getScript())) {
+					addError(st, "Script Task has no script.");
+				}
+				if(isEmpty(st.getScriptFormat())) {
+					addError(st, "Script Task has no script format.");
+				}
+			}
+			
+			if(fe instanceof SendTask) {
+				SendTask st = (SendTask) fe;
+				if(st.getOperationRef() == null) {
+					addError(st, "Send Task has no operation.");
+				}
+				if(st.getMessageRef() == null) {
+					addError(st, "Send Task has no message.");
+				}
+			}
+			
+			if(fe instanceof UserTask) {
+				UserTask ut = (UserTask) fe;
+				String taskName = null;
+				Iterator<FeatureMap.Entry> utiter = ut.getAnyAttribute().iterator();
+				boolean foundTaskName = false;
+		        while(utiter.hasNext()) {
+		            FeatureMap.Entry entry = utiter.next();
+		            if(entry.getEStructuralFeature().getName().equals("taskName")) {
+		            	foundTaskName = true;
+		            	taskName = (String) entry.getValue();
+		            	if(isEmpty(taskName)) {
+		            		addError(ut, "User Task has no task name.");
+		            	}
+		            }
+		        }
+		        if(!foundTaskName) {
+		        	addError(ut, "User Task has no task name.");
+		        } else {
+		        	if(taskName != null) {
+		        		String[] packageAssetInfo = findPackageAndAssetInfo(uuid, profile);
+		        		String packageName = packageAssetInfo[0];
+		        		String assetName = packageAssetInfo[1];
+		        		String taskFormName = taskName + "-taskform";
+		        		if(!taskFormExistsInGuvnor(packageName, assetName, taskFormName, profile)) {
+		        			addError(ut, "User Task has no task form defined.");
+		        		}
+		        	} 
+		        }
+			}
+			
+			if(fe instanceof CatchEvent) {
+				CatchEvent event = (CatchEvent) fe;
+				List<EventDefinition> eventdefs = event.getEventDefinitions();
+				for(EventDefinition ed : eventdefs) {
+    				if(ed instanceof TimerEventDefinition) {
+    	                TimerEventDefinition ted = (TimerEventDefinition) ed;
+    	                if(ted.getTimeDate() == null) {
+    	                	addError(event, "Catch Event has no timedate.");
+    	                }
+    	                if(ted.getTimeDuration() == null) {
+    	                	addError(event, "Catch Event has no timeduration.");
+    	                }
+    	                if(ted.getTimeCycle() == null) {
+    	                	addError(event, "Catch Event has no timecycle.");
+    	                }
+    	            } else if( ed instanceof SignalEventDefinition) {
+    	                if(((SignalEventDefinition) ed).getSignalRef() == null) {
+    	                	addError(event, "Catch Event has no signalref.");
+    	                }
+    	            } else if( ed instanceof ErrorEventDefinition) {
+    	                if(((ErrorEventDefinition) ed).getErrorRef() == null || ((ErrorEventDefinition) ed).getErrorRef().getErrorCode() == null) {
+    	                	addError(event, "Catch Event has no errorref.");
+    	                }
+    	            } else if( ed instanceof ConditionalEventDefinition ) {
+    	                FormalExpression conditionalExp = (FormalExpression) ((ConditionalEventDefinition) ed).getCondition();
+    	                if(conditionalExp.getBody() == null) {
+    	                	addError(event, "Catch Event has no conditionexpression.");
+    	                }
+    	            } else if( ed instanceof EscalationEventDefinition ) {
+    	                if(((EscalationEventDefinition) ed).getEscalationRef() == null) {
+    	                	addError(event, "Catch Event has no escalationref.");
+    	                }
+    	            } else if( ed instanceof MessageEventDefinition) {
+    	                if(((MessageEventDefinition) ed).getMessageRef() == null) {
+    	                    addError(event, "Catch Event has no messageref.");
+    	                }
+    	            }  else if( ed instanceof CompensateEventDefinition) {
+    	                if(((CompensateEventDefinition) ed).getActivityRef() == null) {
+    	                	addError(event, "Catch Event has no activityref.");
+    	                }
+    	            } 
+				}
+			}
+			
+			if(fe instanceof ThrowEvent) {
+				ThrowEvent event = (ThrowEvent) fe;
+				List<EventDefinition> eventdefs = event.getEventDefinitions();
+		        for(EventDefinition ed : eventdefs) {
+		            if(ed instanceof TimerEventDefinition) {
+		                TimerEventDefinition ted = (TimerEventDefinition) ed;
+		                if(ted.getTimeDate() == null) {
+		                	addError(event, "Throw Event has no timedate.");
+		                }
+		                if(ted.getTimeDuration() == null) {
+		                	addError(event, "Throw Event has no timeduration.");
+		                }
+		                if(ted.getTimeCycle() != null) {
+		                	addError(event, "Throw Event has no timecycle.");
+		                }
+		            } else if( ed instanceof SignalEventDefinition) {
+		                if(((SignalEventDefinition) ed).getSignalRef() == null) {
+		                	addError(event, "Throw Event has no signalref.");
+		                }
+		            } else if( ed instanceof ErrorEventDefinition) {
+		                if(((ErrorEventDefinition) ed).getErrorRef() == null || ((ErrorEventDefinition) ed).getErrorRef().getErrorCode() == null) {
+		                	addError(event, "Throw Event has no errorref.");
+		                }
+		            } else if( ed instanceof ConditionalEventDefinition ) {
+		                FormalExpression conditionalExp = (FormalExpression) ((ConditionalEventDefinition) ed).getCondition();
+		                if(conditionalExp.getBody() == null) {
+		                	addError(event, "Throw Event has no conditional expression.");
+		                }
+		            } else if( ed instanceof EscalationEventDefinition ) {
+		                if(((EscalationEventDefinition) ed).getEscalationRef() == null) {
+		                	addError(event, "Throw Event has no conditional escalationref.");
+		                }
+		            } else if( ed instanceof MessageEventDefinition) {
+		                if(((MessageEventDefinition) ed).getMessageRef() == null) {
+		                	addError(event, "Throw Event has no conditional messageref.");
+		                }
+		            }  else if( ed instanceof CompensateEventDefinition) {
+		                if(((CompensateEventDefinition) ed).getActivityRef() == null) {
+		                	addError(event, "Throw Event has no conditional activityref.");
+		                }
+		            }  
+		        }
+			}
+			
+			if(fe instanceof SequenceFlow) {
+				SequenceFlow sf = (SequenceFlow) fe;
+				if(sf.getSourceRef() == null) {
+					addError((SequenceFlow) fe, "An Edge must have a source node.");
+				}
+				if(sf.getTargetRef() == null) {
+					addError((SequenceFlow) fe, "An Edge must have a target node.");
+				}
+			}
+			
+			if(fe instanceof Gateway) {
+				Gateway gw = (Gateway) fe;
+				if(gw.getGatewayDirection() == null) {
+					addError((Gateway) fe, "Gateway has no direction.");
+				}
+			}
+			
+			if(fe instanceof CallActivity) {
+				CallActivity ca = (CallActivity) fe;
+				if(ca.getCalledElement() == null || ca.getCalledElement().length() < 1) {
+					addError((CallActivity) fe, "Reusable Subprocess has no called element specified.");
+				} else {
+					String[] packageAssetInfo = findPackageAndAssetInfo(uuid, profile);
+	        		String packageName = packageAssetInfo[0];
+	        		List<String> allProcessesInPackage = getAllProcessesInPackage(packageName, profile);
+	        		boolean foundCalledElementProcess = false;
+	        		for(String p : allProcessesInPackage) {
+	        			String processContent = getProcessSourceContent(packageName, p, profile);
+	        			Pattern pattern = Pattern.compile("<\\S*process[\\s\\S]*id=\"" + ca.getCalledElement() + "\"", Pattern.MULTILINE);
+	                    Matcher m = pattern.matcher(processContent);
+	                    if(m.find()) {
+	                    	foundCalledElementProcess = true;
+	                    	break;
+	                    }
+	        		}
+	        		if(!foundCalledElementProcess) {
+	        			addError((CallActivity) fe, "No existing process with id=" + ca.getCalledElement() + " could be found.");
+	        		}
+				}
+			}
+			
+			if(fe instanceof DataObject) {
+				DataObject dao = (DataObject) fe;
+				if(dao.getName() == null || dao.getName().length() < 1) {
+					addError((DataObject) fe, "Data Object has no name defined.");
+				}
+			}
+			
+			if(fe instanceof SubProcess) {
+				checkFlowElements((SubProcess) fe);
+			}
+		}
 	}
 
 	public Map<String, List<String>> getErrors() {
