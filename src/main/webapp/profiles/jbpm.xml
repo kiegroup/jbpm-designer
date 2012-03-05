@@ -32,6 +32,8 @@
     <plugin name="ORYX.Plugins.Dictionary"/>
     <plugin name="ORYX.Plugins.CanvasTitle"/>
     <plugin name="ORYX.Plugins.InlineTaskFormEditor"/>
+    <plugin name="ORYX.Plugins.ExtendedDataAssignmentEditor"/>
+    <plugin name="ORYX.Plugins.FieldDataAssignmentEditors"/>
     <externalloadurl protocol="http" host="localhost:8080" subdomain="drools-guvnor/org.drools.guvnor.Guvnor/oryxeditor" usr="admin" pwd="admin"/>
     <servicerepository location="http://people.redhat.com/kverlaen/repository"/> 
   </profile>
