@@ -357,6 +357,8 @@
 			<property name="hideRHS" value="true" />
 			<property name="hideAttributes" value="true" />
 		</plugin>
+                <plugin source="DataAssignment/extendedDataAssignmentEditor.js" name="ORYX.Plugins.ExtendedDataAssignmentEditor" />        
+                <plugin source="DataAssignment/FieldDataAssignmentEditors.js" name="ORYX.Plugins.FieldDataAssignmentEditors" />        
 	</plugins>
 
 

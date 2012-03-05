@@ -3092,6 +3092,12 @@ public class Bpmn2JsonUnmarshaller {
             }
             InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
             for(String dataInput : allDataInputs) {
+                //sometimes, data input could come with the type of the input.
+                //We still don't have a way to deal with types, so they are 
+                //just discarded
+                if (dataInput.contains(":")){
+                    dataInput = dataInput.split(":")[0];
+                }
                 DataInput nextInput = Bpmn2Factory.eINSTANCE.createDataInput();
                 nextInput.setId(task.getId() + "_" + dataInput + "Input");
                 nextInput.setName(dataInput);
@@ -3120,6 +3126,13 @@ public class Bpmn2JsonUnmarshaller {
             
             OutputSet outset = Bpmn2Factory.eINSTANCE.createOutputSet();
             for(String dataOutput : allDataOutputs) {
+                //sometimes, data output could come with the type of the output.
+                //We still don't have a way to deal with types, so they are 
+                //just discarded
+                if (dataOutput.contains(":")){
+                    dataOutput = dataOutput.split(":")[0];
+                }
+                
                 DataOutput nextOut = Bpmn2Factory.eINSTANCE.createDataOutput();
                 nextOut.setId(task.getId() + "_" + dataOutput + "Output");
                 nextOut.setName(dataOutput);
