@@ -927,6 +927,7 @@ public class Bpmn2JsonUnmarshaller {
                                	 		itemdef.setId("_" + din.getId() + "Item");
                                	 		itemdef.setStructureRef(dinType);
                                	 		toAddItemDefinitions.add(itemdef);
+                               	 		din.setItemSubjectRef(itemdef);
                                	 	}
                                 }
                             }
@@ -946,6 +947,7 @@ public class Bpmn2JsonUnmarshaller {
                                	 		itemdef.setId("_" + dout.getId() + "Item");
                                	 		itemdef.setStructureRef(doutType);
                                	 		toAddItemDefinitions.add(itemdef);
+                               	 		dout.setItemSubjectRef(itemdef);
                                	 	}
                                 }
                             }
