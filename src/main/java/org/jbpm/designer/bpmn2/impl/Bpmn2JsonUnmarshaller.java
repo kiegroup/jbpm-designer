@@ -235,6 +235,7 @@ public class Bpmn2JsonUnmarshaller {
             revisitGateways(def);
             revisitCatchEventsConvertToBoundary(def);
             revisitDataObjects(def);
+            revisitAssociationsIoSpec(def);
             createDiagram(def);
             updateIDs(def);
             // return def;
@@ -891,6 +892,69 @@ public class Bpmn2JsonUnmarshaller {
                 	}
                 }
     		}
+    	}
+    }
+    
+    public void revisitAssociationsIoSpec(Definitions def) {
+    	List<RootElement> rootElements =  def.getRootElements();
+    	List<ItemDefinition> toAddItemDefinitions = new ArrayList<ItemDefinition>();
+    	for(RootElement root : rootElements) {
+            if(root instanceof Process) {
+            	setItemDefinitionsForActivitiesIoSpec((Process) root, def, toAddItemDefinitions);
+            }
+        }
+    	for(ItemDefinition itemDef : toAddItemDefinitions) {
+        	def.getRootElements().add(itemDef);
+        }
+    }
+    
+    public void setItemDefinitionsForActivitiesIoSpec(FlowElementsContainer container, Definitions def, List<ItemDefinition> toAddItemDefinitions) {
+    	List<FlowElement> flowElements =  container.getFlowElements();
+    	for(FlowElement fe : flowElements) {
+    		if(fe instanceof Activity) {
+    			Activity ac = (Activity) fe;
+    			if(ac.getIoSpecification() != null) {
+    				if(ac.getIoSpecification().getDataInputs() != null) {
+    					List<DataInput> dataInputs = ac.getIoSpecification().getDataInputs();
+    					for(DataInput din: dataInputs) {
+    						Iterator<FeatureMap.Entry> iter = din.getAnyAttribute().iterator();
+                            while(iter.hasNext()) {
+                                FeatureMap.Entry entry = iter.next();
+                                if(entry.getEStructuralFeature().getName().equals("dtype")) {
+                                	String dinType = (String) entry.getValue();
+                               	 	if(dinType != null && dinType.length() > 0) {
+                               	 		ItemDefinition itemdef =  Bpmn2Factory.eINSTANCE.createItemDefinition();
+                               	 		itemdef.setId("_" + din.getId() + "Item");
+                               	 		itemdef.setStructureRef(dinType);
+                               	 		toAddItemDefinitions.add(itemdef);
+                               	 	}
+                                }
+                            }
+    					}
+    				}
+    				
+    				if(ac.getIoSpecification().getDataOutputs() != null) {
+    					List<DataOutput> dataOutputs = ac.getIoSpecification().getDataOutputs();
+    					for(DataOutput dout: dataOutputs) {
+    						Iterator<FeatureMap.Entry> iter = dout.getAnyAttribute().iterator();
+                            while(iter.hasNext()) {
+                                FeatureMap.Entry entry = iter.next();
+                                if(entry.getEStructuralFeature().getName().equals("dtype")) {
+                                	String doutType = (String) entry.getValue();
+                               	 	if(doutType != null && doutType.length() > 0) {
+                               	 		ItemDefinition itemdef =  Bpmn2Factory.eINSTANCE.createItemDefinition();
+                               	 		itemdef.setId("_" + dout.getId() + "Item");
+                               	 		itemdef.setStructureRef(doutType);
+                               	 		toAddItemDefinitions.add(itemdef);
+                               	 	}
+                                }
+                            }
+    					}
+    				}
+    			}
+    		} else if(fe instanceof FlowElementsContainer) {
+    			setItemDefinitionsForActivitiesIoSpec((FlowElementsContainer) fe, def, toAddItemDefinitions);
+            }
     	}
     }
     
@@ -1939,10 +2003,24 @@ public class Bpmn2JsonUnmarshaller {
             InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
             for(String dataInput : allDataInputs) {
                 DataInput nextInput = Bpmn2Factory.eINSTANCE.createDataInput();
-                nextInput.setId(sp.getId() + "_" + dataInput + "Input");
-                nextInput.setName(dataInput);
-                sp.getIoSpecification().getDataInputs().add(nextInput);
                 
+                String[] dataInputParts = dataInput.split( ":\\s*" );
+                if(dataInputParts.length == 2) {
+                	nextInput.setId(sp.getId() + "_" + dataInputParts[0] + "Input");
+                	nextInput.setName(dataInputParts[0]);
+                	
+                	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                    EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                            "http://www.jboss.org/drools", "dtype", false, false);
+                    EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                    		dataInputParts[1]);
+                    nextInput.getAnyAttribute().add(extensionEntry);
+                } else {
+                	nextInput.setId(sp.getId() + "_" + dataInput + "Input");
+                	nextInput.setName(dataInput);
+                }
+                
+                sp.getIoSpecification().getDataInputs().add(nextInput);
                 inset.getDataInputRefs().add(nextInput);
             }
             sp.getIoSpecification().getInputSets().add(inset);
@@ -1963,10 +2041,24 @@ public class Bpmn2JsonUnmarshaller {
             OutputSet outset = Bpmn2Factory.eINSTANCE.createOutputSet();
             for(String dataOutput : allDataOutputs) {
                 DataOutput nextOut = Bpmn2Factory.eINSTANCE.createDataOutput();
-                nextOut.setId(sp.getId() + "_" + dataOutput + "Output");
-                nextOut.setName(dataOutput);
-                sp.getIoSpecification().getDataOutputs().add(nextOut);
+
+                String[] dataOutputParts = dataOutput.split( ":\\s*" );
+                if(dataOutputParts.length == 2) {
+                	nextOut.setId(sp.getId() + "_" + dataOutputParts[0] + "Output");
+                	nextOut.setName(dataOutputParts[0]);
+                	
+                	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                    EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                            "http://www.jboss.org/drools", "dtype", false, false);
+                    EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                    		dataOutputParts[1]);
+                    nextOut.getAnyAttribute().add(extensionEntry);
+                } else {
+                	nextOut.setId(sp.getId() + "_" + dataOutput + "Output");
+                	nextOut.setName(dataOutput);
+                }
                 
+                sp.getIoSpecification().getDataOutputs().add(nextOut);
                 outset.getDataOutputRefs().add(nextOut);
             }
             sp.getIoSpecification().getOutputSets().add(outset);
@@ -2825,10 +2917,22 @@ public class Bpmn2JsonUnmarshaller {
             InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
             for(String dataInput : allDataInputs) {
                 DataInput nextInput = Bpmn2Factory.eINSTANCE.createDataInput();
-                nextInput.setId(callActivity.getId() + "_" + dataInput + "Input");
-                nextInput.setName(dataInput);
+                String[] dataInputParts = dataInput.split( ":\\s*" );
+                if(dataInputParts.length == 2) {
+                	nextInput.setId(callActivity.getId() + "_" + dataInputParts[0] + "Input");
+                	nextInput.setName(dataInputParts[0]);
+                	
+                	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                    EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                            "http://www.jboss.org/drools", "dtype", false, false);
+                    EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                    		dataInputParts[1]);
+                    nextInput.getAnyAttribute().add(extensionEntry);
+                } else {
+                	nextInput.setId(callActivity.getId() + "_" + dataInput + "Input");
+                	nextInput.setName(dataInput);
+                }
                 callActivity.getIoSpecification().getDataInputs().add(nextInput);
-                
                 inset.getDataInputRefs().add(nextInput);
             }
             callActivity.getIoSpecification().getInputSets().add(inset);
@@ -2849,10 +2953,24 @@ public class Bpmn2JsonUnmarshaller {
             OutputSet outset = Bpmn2Factory.eINSTANCE.createOutputSet();
             for(String dataOutput : allDataOutputs) {
                 DataOutput nextOut = Bpmn2Factory.eINSTANCE.createDataOutput();
-                nextOut.setId(callActivity.getId() + "_" + dataOutput + "Output");
-                nextOut.setName(dataOutput);
-                callActivity.getIoSpecification().getDataOutputs().add(nextOut);
                 
+                String[] dataOutputParts = dataOutput.split( ":\\s*" );
+                if(dataOutputParts.length == 2) {
+                	nextOut.setId(callActivity.getId() + "_" + dataOutputParts[0] + "Output");
+                	nextOut.setName(dataOutputParts[0]);
+                	
+                	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                    EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                            "http://www.jboss.org/drools", "dtype", false, false);
+                    EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                    		dataOutputParts[1]);
+                    nextOut.getAnyAttribute().add(extensionEntry);
+                } else {
+                	nextOut.setId(callActivity.getId() + "_" + dataOutput + "Output");
+                	nextOut.setName(dataOutput);
+                }
+                
+                callActivity.getIoSpecification().getDataOutputs().add(nextOut);
                 outset.getDataOutputRefs().add(nextOut);
             }
             callActivity.getIoSpecification().getOutputSets().add(outset);
@@ -3092,17 +3210,24 @@ public class Bpmn2JsonUnmarshaller {
             }
             InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
             for(String dataInput : allDataInputs) {
-                //sometimes, data input could come with the type of the input.
-                //We still don't have a way to deal with types, so they are 
-                //just discarded
-                if (dataInput.contains(":")){
-                    dataInput = dataInput.split(":")[0];
-                }
                 DataInput nextInput = Bpmn2Factory.eINSTANCE.createDataInput();
-                nextInput.setId(task.getId() + "_" + dataInput + "Input");
-                nextInput.setName(dataInput);
-                task.getIoSpecification().getDataInputs().add(nextInput);
+                String[] dataInputParts = dataInput.split( ":\\s*" );
+                if(dataInputParts.length == 2) {
+                	nextInput.setId(task.getId() + "_" + dataInputParts[0] + "Input");
+                	nextInput.setName(dataInputParts[0]);
+                	
+                	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                    EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                            "http://www.jboss.org/drools", "dtype", false, false);
+                    EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                    		dataInputParts[1]);
+                    nextInput.getAnyAttribute().add(extensionEntry);
+                } else {
+                	nextInput.setId(task.getId() + "_" + dataInput + "Input");
+                	nextInput.setName(dataInput);
+                }
                 
+                task.getIoSpecification().getDataInputs().add(nextInput);
                 inset.getDataInputRefs().add(nextInput);
             }
             // add the taskName as well if it was defined
@@ -3126,18 +3251,24 @@ public class Bpmn2JsonUnmarshaller {
             
             OutputSet outset = Bpmn2Factory.eINSTANCE.createOutputSet();
             for(String dataOutput : allDataOutputs) {
-                //sometimes, data output could come with the type of the output.
-                //We still don't have a way to deal with types, so they are 
-                //just discarded
-                if (dataOutput.contains(":")){
-                    dataOutput = dataOutput.split(":")[0];
+                DataOutput nextOut = Bpmn2Factory.eINSTANCE.createDataOutput();
+                String[] dataOutputParts = dataOutput.split( ":\\s*" );
+                if(dataOutputParts.length == 2) {
+                	nextOut.setId(task.getId() + "_" + dataOutputParts[0] + "Output");
+                	nextOut.setName(dataOutputParts[0]);
+                	
+                	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                    EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                            "http://www.jboss.org/drools", "dtype", false, false);
+                    EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                    		dataOutputParts[1]);
+                    nextOut.getAnyAttribute().add(extensionEntry);
+                } else {
+                	nextOut.setId(task.getId() + "_" + dataOutput + "Output");
+                	nextOut.setName(dataOutput);
                 }
                 
-                DataOutput nextOut = Bpmn2Factory.eINSTANCE.createDataOutput();
-                nextOut.setId(task.getId() + "_" + dataOutput + "Output");
-                nextOut.setName(dataOutput);
                 task.getIoSpecification().getDataOutputs().add(nextOut);
-                
                 outset.getDataOutputRefs().add(nextOut);
             }
             task.getIoSpecification().getOutputSets().add(outset);
