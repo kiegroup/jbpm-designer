@@ -2230,7 +2230,8 @@ Ext.form.ComplexVardefField = Ext.extend(Ext.form.TriggerField,  {
                 handler : function(){
                 	vardefs.add(new VarDef({
                         name: '',
-                        type: ''
+                        stype: '',
+                        ctype: ''
                     }));
                     grid.fireEvent('cellclick', grid, vardefs.getCount()-1, 1, null);
                 }
