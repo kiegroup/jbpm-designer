@@ -624,7 +624,7 @@ ORYX.Plugins.PropertyWindow = {
 								fields: [{name: 'icon'},
 								         {name: 'title'},
 								         {name: 'value'}	],
-								         data : options // from states.js
+								         data : options
 							});
 
 							// Set the grid Editor
@@ -2093,7 +2093,9 @@ Ext.form.ComplexVardefField = Ext.extend(Ext.form.TriggerField,  {
     	var VarDef = Ext.data.Record.create([{
             name: 'name'
         }, {
-            name: 'type'
+            name: 'stype'
+        }, {
+            name: 'ctype'
         }]);
     	
     	var vardefsProxy = new Ext.data.MemoryProxy({
@@ -2119,14 +2121,32 @@ Ext.form.ComplexVardefField = Ext.extend(Ext.form.TriggerField,  {
     			var nextPart = valueParts[i];
     			if(nextPart.indexOf(":") > 0) {
     				var innerParts = nextPart.split(":");
-    				vardefs.add(new VarDef({
-                        name: innerParts[0],
-                        type: innerParts[1]
-                    }));
+    				if(innerParts[1] == "String" || innerParts[1] == "Integer" || innerParts[1] == "Boolean" || innerParts[1] == "Float") {
+    					vardefs.add(new VarDef({
+                            name: innerParts[0],
+                            stype: innerParts[1],
+                            ctype: ''
+                        }));
+    				} else {
+    					if(innerParts[1] != "Object") {
+    						vardefs.add(new VarDef({
+                                name: innerParts[0],
+                                stype: 'Object',
+                                ctype: innerParts[1]
+                            }));
+    					} else {
+    						vardefs.add(new VarDef({
+                                name: innerParts[0],
+                                stype: innerParts[1],
+                                ctype: ''
+                            }));
+    					}
+    				}
     			} else {
     				vardefs.add(new VarDef({
                         name: nextPart,
-                        type: ''
+                        stype: '',
+                        ctype: ''
                     }));
     			}
     		}
@@ -2134,6 +2154,28 @@ Ext.form.ComplexVardefField = Ext.extend(Ext.form.TriggerField,  {
     	}
     	
     	var itemDeleter = new Extensive.grid.ItemDeleter();
+    	
+    	var typeData = new Array();
+    	var stringType = new Array();
+    	stringType.push("String");
+    	stringType.push("String");
+    	typeData.push(stringType);
+    	var integerType = new Array();
+    	integerType.push("Integer");
+    	integerType.push("Integer");
+    	typeData.push(integerType);
+    	var booleanType = new Array();
+    	booleanType.push("Boolean");
+    	booleanType.push("Boolean");
+    	typeData.push(booleanType);
+    	var floatType = new Array();
+    	floatType.push("Float");
+    	floatType.push("Float");
+    	typeData.push(floatType);
+    	var objectType = new Array();
+    	objectType.push("Object");
+    	objectType.push("Object");
+    	typeData.push(objectType);
     	
     	var gridId = Ext.id();
     	var grid = new Ext.grid.EditorGridPanel({
@@ -2147,11 +2189,39 @@ Ext.form.ComplexVardefField = Ext.extend(Ext.form.TriggerField,  {
                 dataIndex: 'name',
                 editor: new Ext.form.TextField({ allowBlank: false })
             }, {
-            	id: 'type',
-                header: 'Type',
+            	id: 'stype',
+                header: 'Standard Type',
+                width: 100,
+                dataIndex: 'stype',
+                editor: new Ext.form.ComboBox({
+                	id: 'typeCombo',
+                	valueField:'name',
+                	displayField:'value',
+                	labelStyle:'display:none',
+                	submitValue : true,
+                	typeAhead: false,
+                	queryMode: 'local',
+                	mode: 'local',
+					triggerAction: 'all',
+					selectOnFocus:true,
+					hideTrigger: false,
+					forceSelection: false,
+					selectOnFocus:true,
+					autoSelect:false,
+					store: new Ext.data.SimpleStore({
+				        fields: [
+				                  'name',
+				                  'value'
+				                ],
+				        data: typeData
+				    })
+                })
+            },{
+            	id: 'ctype',
+                header: 'Custom Type',
                 width: 200,
-                dataIndex: 'type',
-                editor: new Ext.form.TextField({ allowBlank: true })
+                dataIndex: 'ctype',
+                editor: new Ext.form.TextField({ allowBlank: false })
             }, itemDeleter]),
     		selModel: itemDeleter,
             autoHeight: true,
@@ -2173,7 +2243,7 @@ Ext.form.ComplexVardefField = Ext.extend(Ext.form.TriggerField,  {
 			autoCreate	: true, 
 			title		: 'Editor for Variable Definitions', 
 			height		: 300, 
-			width		: 400, 
+			width		: 500, 
 			modal		: true,
 			collapsible	: false,
 			fixedcenter	: true, 
@@ -2203,8 +2273,14 @@ Ext.form.ComplexVardefField = Ext.extend(Ext.form.TriggerField,  {
                 	grid.getView().refresh();
                 	vardefs.data.each(function() {
                 		if(this.data['name'].length > 0) {
-                			if(this.data['type'].length > 0) {
-                				outValue += this.data['name'] + ":" + this.data['type'] + ",";
+                			if(this.data['stype'].length > 0) {
+                				if(this.data['stype'] == "Object" && this.data['ctype'].length > 0) {
+                					outValue += this.data['name'] + ":" + this.data['ctype'] + ",";
+                				} else {
+                					outValue += this.data['name'] + ":" + this.data['stype'] + ",";
+                				}
+                			} else if(this.data['ctype'].length > 0) { 
+                				outValue += this.data['name'] + ":" + this.data['ctype'] + ",";
                 			} else {
                 				outValue += this.data['name'] + ",";
                 			}
