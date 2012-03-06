@@ -378,6 +378,10 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 				DataObject dao = (DataObject) fe;
 				if(dao.getName() == null || dao.getName().length() < 1) {
 					addError((DataObject) fe, "Data Object has no name defined.");
+				} else {
+					if(containsWhiteSpace(dao.getName())) {
+						addError((DataObject) fe, "Data Object name contains white spaces.");
+					}
 				}
 			}
 			
@@ -657,6 +661,17 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
             FeatureMap.Entry entry = iter.next();
             if(entry.getEStructuralFeature().getName().equals("adHoc")) {
             	return Boolean.parseBoolean(((String)entry.getValue()).trim());
+            }
+        }
+        return false;
+    }
+    
+    private boolean containsWhiteSpace(String testString){
+        if(testString != null){
+            for(int i = 0; i < testString.length(); i++){
+                if(Character.isWhitespace(testString.charAt(i))){
+                    return true;
+                }
             }
         }
         return false;
