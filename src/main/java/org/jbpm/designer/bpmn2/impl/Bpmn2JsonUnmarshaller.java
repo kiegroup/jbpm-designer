@@ -272,7 +272,9 @@ public class Bpmn2JsonUnmarshaller {
 	            	if(fe instanceof DataObject) {
 	            		DataObject da = (DataObject) fe;
 	            		if(da.getName() != null) {
-	                    	da.setId(da.getName());
+	            			String daId = da.getName().trim();
+	            			daId = daId.replaceAll("\\W","");
+	                    	da.setId(daId);
 	                    }
 	            	}
 	            }
