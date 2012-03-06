@@ -117,7 +117,7 @@ public class TransformerServlet extends HttpServlet {
         String gpd = req.getParameter("gpd");
         String bpmn2in = req.getParameter("bpmn2");
         String respaction = req.getParameter("respaction");
-	String pp = req.getParameter("pp");
+        String pp = req.getParameter("pp");
 
         IDiagramProfile profile = ServletUtil.getProfile(req, profileName, getServletContext());
 

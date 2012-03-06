@@ -1548,7 +1548,62 @@ ORYX.Plugins.View = {
     	   				height:450,
     	   				layout: 'fit',
     	   				title:'BPMN2 Source',
-    	   				items: [cf]
+    	   				items: [cf],
+    	   				buttons		: [{
+    	   	                text: 'Save to file',
+    	   	                handler: function(){
+    	   	                	var processJSON = ORYX.EDITOR.getSerializedJSON();
+    	   	                	var processName = jsonPath(processJSON.evalJSON(), "$.properties.name");
+    	   	                	var processPackage = jsonPath(processJSON.evalJSON(), "$.properties.package");
+    	   	                	var processVersion = jsonPath(processJSON.evalJSON(), "$.properties.version");
+    	   	                	var fileName = "";
+    	   	                	if(processPackage && processPackage != "") {
+    	   	                		fileName += processPackage;
+    	   	                	}
+    	   	                	if(processName && processName != "") {
+    	   	                		if(fileName != "") {
+    	   	                			fileName += ".";
+    	   	                		}
+    	   	                		fileName += processName;
+    	   	                	}
+    	   	                	if(processVersion && processVersion != "") {
+    	   	                		if(fileName != "") {
+    	   	                			fileName += ".";
+    	   	                		}
+    	   	                		fileName += "v" + processVersion;
+    	   	                	}
+    	   	                	if(fileName == "") {
+    	   	                		fileName = "processbpmn2";
+    	   	                	}
+    	   	                	var toStoreValue = cf.getValue();
+    	   	         			var method ="post";
+    	   	         			var form = document.createElement("form");
+    	   	         			form.setAttribute("name", "storetofileform");
+    	   	         			form.setAttribute("method", method);
+    	   	         			form.setAttribute("action", ORYX.PATH + "filestore");
+    	   	         			form.setAttribute("target", "_blank");
+    	   	         		
+    	   	         			var fnameInput = document.createElement("input");
+    	   	         			fnameInput.setAttribute("type", "hidden");
+    	   	         			fnameInput.setAttribute("name", "fname");
+    	   	         			fnameInput.setAttribute("value", fileName);
+    	   	                 	form.appendChild(fnameInput);
+    	   	                 
+    	   	                 	var fextInput = document.createElement("input");
+    	   	                 	fextInput.setAttribute("type", "hidden");
+    	   	              		fextInput.setAttribute("name", "fext");
+    	   	           			fextInput.setAttribute("value", "bpmn2");
+    	   	                 	form.appendChild(fextInput);
+    	   	                 
+    	   	                 	var fdataInput = document.createElement("input");
+    	   	                 	fdataInput.setAttribute("type", "hidden");
+    	   	              		fdataInput.setAttribute("name", "data");
+    	   	           			fdataInput.setAttribute("value", toStoreValue);
+    	   	                 	form.appendChild(fdataInput);
+    	   	                 	document.body.appendChild(form);
+    	   	                 	form.submit();	 
+    	   	                }
+    	   	            }]
     	   				});
     	   			win.show();
     	   		}catch(e){

@@ -61,6 +61,11 @@
   <servlet-class>org.jbpm.designer.web.server.TransformerServlet</servlet-class>
  </servlet>
  <servlet>
+  <display-name>FileStore</display-name>
+  <servlet-name>FileStoreServlet</servlet-name>
+  <servlet-class>org.jbpm.designer.web.server.FileStoreServlet</servlet-class>
+ </servlet>
+ <servlet>
   <display-name>Dictionary</display-name>
   <servlet-name>DictionaryServlet</servlet-name>
   <servlet-class>org.jbpm.designer.web.server.DictionaryServlet</servlet-class>
@@ -136,6 +141,10 @@
  <servlet-mapping>
   <servlet-name>TransformerServlet</servlet-name>
   <url-pattern>/transformer</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>FileStoreServlet</servlet-name>
+  <url-pattern>/filestore</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
   <servlet-name>DictionaryServlet</servlet-name>
