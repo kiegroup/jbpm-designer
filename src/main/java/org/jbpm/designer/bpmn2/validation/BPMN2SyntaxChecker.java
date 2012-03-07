@@ -251,14 +251,11 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 				for(EventDefinition ed : eventdefs) {
     				if(ed instanceof TimerEventDefinition) {
     	                TimerEventDefinition ted = (TimerEventDefinition) ed;
-    	                if(ted.getTimeDate() == null) {
+    	                boolean gotTimerDef = (ted.getTimeDate() != null || ted.getTimeDuration() != null || ted.getTimeCycle() != null);
+    	                if(!gotTimerDef) {
     	                	addError(event, "Catch Event has no timedate.");
-    	                }
-    	                if(ted.getTimeDuration() == null) {
-    	                	addError(event, "Catch Event has no timeduration.");
-    	                }
-    	                if(ted.getTimeCycle() == null) {
-    	                	addError(event, "Catch Event has no timecycle.");
+	    	                addError(event, "Catch Event has no timeduration.");
+	    	                addError(event, "Catch Event has no timecycle.");
     	                }
     	            } else if( ed instanceof SignalEventDefinition) {
     	                if(((SignalEventDefinition) ed).getSignalRef() == null) {
