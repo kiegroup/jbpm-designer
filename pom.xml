@@ -30,7 +30,7 @@
   </scm>
   
   <properties>
-    <mvel.version>2.1.0.drools4</mvel.version>
+    <mvel.version>2.1.0.drools8</mvel.version>
     <drools.version>5.3.1.Final</drools.version>
     <jbpm.version>5.2.1-SNAPSHOT</jbpm.version>
     <batik.version>1.6-1</batik.version>
