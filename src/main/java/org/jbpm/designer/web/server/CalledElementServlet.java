@@ -45,19 +45,25 @@ public class CalledElementServlet extends HttpServlet {
         IDiagramProfile profile = ServletUtil.getProfile(req, profileName, getServletContext());
         if(action != null && action.equals("imageview")) {
         	String retValue = "";
-        	List<String> allProcessesInPackage = ServletUtil.getAllProcessesInPackage(processPackage, profile);
-        	if(allProcessesInPackage != null && allProcessesInPackage.size() > 0) {
-        		for(String p : allProcessesInPackage) {
-        			String processContent = ServletUtil.getProcessSourceContent(processPackage, p, profile);
-        			Pattern idPattern = Pattern.compile("<\\S*process[^\"]+id=\"([^_\"]+)\"", Pattern.MULTILINE);
-		            Matcher idMatcher = idPattern.matcher(processContent);
-		            if(idMatcher.find()) {
-		            	String pid = idMatcher.group(1);
-		            	String pidpath = ServletUtil.getProcessImagePath(processPackage, pid, profile);
-		            	if(pid != null && pid.equals(processId)) {
-		            		retValue = ServletUtil.existsProcessImageInGuvnor(pidpath, profile) ? pidpath : "";
-		            	}
-		            }
+        	List<String> allPackageNames = ServletUtil.getPackageNamesFromGuvnor(profile);
+        	if(allPackageNames != null && allPackageNames.size() > 0) {
+        		for(String packageName : allPackageNames) {
+        			List<String> allProcessesInPackage = ServletUtil.getAllProcessesInPackage(packageName, profile);
+        			if(allProcessesInPackage != null && allProcessesInPackage.size() > 0) {
+        				for(String p : allProcessesInPackage) {
+                			String processContent = ServletUtil.getProcessSourceContent(packageName, p, profile);
+                			Pattern idPattern = Pattern.compile("<\\S*process[^\"]+id=\"([^_\"]+)\"", Pattern.MULTILINE);
+        		            Matcher idMatcher = idPattern.matcher(processContent);
+        		            if(idMatcher.find()) {
+        		            	String pid = idMatcher.group(1);
+        		            	String pidpath = ServletUtil.getProcessImagePath(packageName, pid, profile);
+        		            	if(pid != null && pid.equals(processId)) {
+        		            		retValue = ServletUtil.existsProcessImageInGuvnor(pidpath, profile) ? pidpath : "";
+        		            		break;
+        		            	}
+        		            }
+                		}
+        			}
         		}
         	}
         	resp.setCharacterEncoding("UTF-8");
@@ -65,24 +71,28 @@ public class CalledElementServlet extends HttpServlet {
 	        resp.getWriter().write(retValue);
         } else {
 	        String retValue = "false";
-			List<String> allProcessesInPackage = ServletUtil.getAllProcessesInPackage(processPackage, profile);
-			if(allProcessesInPackage != null && allProcessesInPackage.size() > 0) {
-				Map<String, String> processInfo = new HashMap<String, String>();
-				for(String p : allProcessesInPackage) {
-					String processContent = ServletUtil.getProcessSourceContent(processPackage, p, profile);
-					Pattern idPattern = Pattern.compile("<\\S*process[^\"]+id=\"([^_\"]+)\"", Pattern.MULTILINE);
-		            Matcher idMatcher = idPattern.matcher(processContent);
-		            if(idMatcher.find()) {
-		            	String pid = idMatcher.group(1);
-		            	String pidpath = ServletUtil.getProcessImagePath(processPackage, pid, profile);
-		            	if(pid != null && !(pid.equals(processId))) {
-		            		processInfo.put(pid, ServletUtil.existsProcessImageInGuvnor(pidpath, profile) ? pidpath : "");
-		            	}
-		            }
-				}
-				retValue = getProcessInfoAsJSON(processInfo).toString();
-			} 
-			
+	        List<String> allPackageNames = ServletUtil.getPackageNamesFromGuvnor(profile);
+	        Map<String, String> processInfo = new HashMap<String, String>();
+	        if(allPackageNames != null && allPackageNames.size() > 0) {
+	        	for(String packageName : allPackageNames) {
+	        		List<String> allProcessesInPackage = ServletUtil.getAllProcessesInPackage(packageName, profile);
+	        		if(allProcessesInPackage != null && allProcessesInPackage.size() > 0) {
+	    				for(String p : allProcessesInPackage) {
+	    					String processContent = ServletUtil.getProcessSourceContent(packageName, p, profile);
+	    					Pattern idPattern = Pattern.compile("<\\S*process[^\"]+id=\"([^_\"]+)\"", Pattern.MULTILINE);
+	    		            Matcher idMatcher = idPattern.matcher(processContent);
+	    		            if(idMatcher.find()) {
+	    		            	String pid = idMatcher.group(1);
+	    		            	String pidpath = ServletUtil.getProcessImagePath(packageName, pid, profile);
+	    		            	if(pid != null && !(packageName.equals(processPackage) && pid.equals(processId))) {
+	    		            		processInfo.put(pid+"|"+packageName, ServletUtil.existsProcessImageInGuvnor(pidpath, profile) ? pidpath : "");
+	    		            	}
+	    		            }
+	    				}
+	    				retValue = getProcessInfoAsJSON(processInfo).toString();
+	    			}
+	        	}
+	        }
 			resp.setCharacterEncoding("UTF-8");
 	        resp.setContentType("application/json");
 	        resp.getWriter().write(retValue);
