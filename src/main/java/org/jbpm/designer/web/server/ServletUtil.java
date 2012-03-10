@@ -4,8 +4,10 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
@@ -30,6 +33,8 @@ import sun.misc.BASE64Encoder;
  */
 public class ServletUtil {
 	private static final Logger _logger = Logger.getLogger(ServletUtil.class);
+	public static final String EXT_BPMN = "bpmn";
+    public static final String EXT_BPMN2 = "bpmn2";
 	private ServletUtil(){}
 	
 	public static IDiagramProfile getProfile(HttpServletRequest req,
@@ -164,5 +169,142 @@ public class ServletUtil {
 					+ encodedAuthorization);
 		}
 	}
+	
+	public static boolean taskFormExistsInGuvnor(String packageName, String assetName, String taskFormName, IDiagramProfile profile) {
+    	try {	
+    		String formURL = ExternalInfo.getExternalProtocol(profile)
+    	        + "://"
+    	        + ExternalInfo.getExternalHost(profile)
+    	        + "/"
+    	        + profile.getExternalLoadURLSubdomain().substring(0,
+    	                profile.getExternalLoadURLSubdomain().indexOf("/"))
+    	        + "/rest/packages/" + packageName + "/assets/" + URLEncoder.encode(taskFormName, "UTF-8");
+    	
+    	
+			URL checkURL = new URL(formURL);
+			HttpURLConnection checkConnection = (HttpURLConnection) checkURL
+			        .openConnection();
+			ServletUtil.applyAuth(profile, checkConnection);
+			checkConnection.setRequestMethod("GET");
+			checkConnection
+			        .setRequestProperty("Accept", "application/atom+xml");
+			checkConnection.connect();
+			_logger.info("check connection response code: " + checkConnection.getResponseCode());
+			if (checkConnection.getResponseCode() == 200) {
+				return true;
+			}
+		} catch (Exception e) {
+			_logger.error(e.getMessage());
+		}
+        return false;
+    }
+	
+	public static boolean existsProcessImageInGuvnor(String assetURL, IDiagramProfile profile) {
+		try {	
+			URL checkURL = new URL(assetURL);
+			HttpURLConnection checkConnection = (HttpURLConnection) checkURL
+			        .openConnection();
+			ServletUtil.applyAuth(profile, checkConnection);
+			checkConnection.setRequestMethod("GET");
+			//checkConnection
+			//        .setRequestProperty("Accept", "application/binary");
+			checkConnection.connect();
+			_logger.info("check connection response code: " + checkConnection.getResponseCode());
+			if (checkConnection.getResponseCode() == 200) {
+				return true;
+			}
+		} catch (Exception e) {
+			_logger.error(e.getMessage());
+		}
+        return false;
+	}
+	
+	public static List<String> getAllProcessesInPackage(String pkgName, IDiagramProfile profile) {
+        List<String> processes = new ArrayList<String>();
+        String assetsURL = ExternalInfo.getExternalProtocol(profile)
+                + "://"
+                + ExternalInfo.getExternalHost(profile)
+                + "/"
+                + profile.getExternalLoadURLSubdomain().substring(0,
+    	                profile.getExternalLoadURLSubdomain().indexOf("/"))
+                + "/rest/packages/"
+                + pkgName
+                + "/assets/";
+        
+        try {
+            XMLInputFactory factory = XMLInputFactory.newInstance();
+            XMLStreamReader reader = factory.createXMLStreamReader(ServletUtil.getInputStreamForURL(assetsURL, "GET", profile));
 
+            String format = "";
+            String title = ""; 
+            while (reader.hasNext()) {
+                int next = reader.next();
+                if (next == XMLStreamReader.START_ELEMENT) {
+                    if ("format".equals(reader.getLocalName())) {
+                        format = reader.getElementText();
+                    } 
+                    if ("title".equals(reader.getLocalName())) {
+                        title = reader.getElementText();
+                    }
+                    if ("asset".equals(reader.getLocalName())) {
+                        if(format.equals(EXT_BPMN) || format.equals(EXT_BPMN2)) {
+                            processes.add(title);
+                            title = "";
+                            format = "";
+                        }
+                    }
+                }
+            }
+            // last one
+            if(format.equals(EXT_BPMN) || format.equals(EXT_BPMN2)) {
+                processes.add(title);
+            }
+        } catch (Exception e) {
+        	_logger.error("Error finding processes in package: " + e.getMessage());
+        } 
+        return processes;
+    }
+	
+	public static String getProcessImagePath(String packageName, String processid, IDiagramProfile profile) {
+		return ExternalInfo.getExternalProtocol(profile)
+                + "://"
+                + ExternalInfo.getExternalHost(profile)
+                + "/"
+                + profile.getExternalLoadURLSubdomain().substring(0,
+    	                profile.getExternalLoadURLSubdomain().indexOf("/"))
+                + "/rest/packages/" + packageName + "/assets/" + processid + "-image"
+                + "/binary/";
+	}
+	
+	public static String getProcessImageSourcePath(String packageName, String processid, IDiagramProfile profile) {
+		return ExternalInfo.getExternalProtocol(profile)
+                + "://"
+                + ExternalInfo.getExternalHost(profile)
+                + "/"
+                + profile.getExternalLoadURLSubdomain().substring(0,
+    	                profile.getExternalLoadURLSubdomain().indexOf("/"))
+                + "/rest/packages/" + packageName + "/assets/" + processid + "-image"
+                + "/source/";
+	}
+	
+	public static String getProcessSourceContent(String packageName, String assetName, IDiagramProfile profile) {
+        String assetSourceURL = ExternalInfo.getExternalProtocol(profile)
+                + "://"
+                + ExternalInfo.getExternalHost(profile)
+                + "/"
+                + profile.getExternalLoadURLSubdomain().substring(0,
+    	                profile.getExternalLoadURLSubdomain().indexOf("/"))
+                + "/rest/packages/" + packageName + "/assets/" + assetName
+                + "/source/";
+
+        try {
+            InputStream in = ServletUtil.getInputStreamForURL(assetSourceURL, "GET", profile);
+            StringWriter writer = new StringWriter();
+            IOUtils.copy(in, writer);
+            return writer.toString();
+        } catch (Exception e) {
+        	_logger.error("Error retrieving asset content: " + e.getMessage());
+            return "";
+        }
+    }
 }

@@ -71,6 +71,11 @@
   <servlet-class>org.jbpm.designer.web.server.DictionaryServlet</servlet-class>
  </servlet>
  <servlet>
+  <display-name>CalledElement</display-name>
+  <servlet-name>CalledElementServlet</servlet-name>
+  <servlet-class>org.jbpm.designer.web.server.CalledElementServlet</servlet-class>
+ </servlet>
+ <servlet>
   <display-name>JbpmServiceRepository</display-name>
   <servlet-name>JbpmServiceRepositoryServlet</servlet-name>
   <servlet-class>org.jbpm.designer.web.server.JbpmServiceRepositoryServlet</servlet-class>
@@ -149,6 +154,10 @@
  <servlet-mapping>
   <servlet-name>DictionaryServlet</servlet-name>
   <url-pattern>/dictionary</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>CalledElementServlet</servlet-name>
+  <url-pattern>/calledelement</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
   <servlet-name>JbpmServiceRepositoryServlet</servlet-name>

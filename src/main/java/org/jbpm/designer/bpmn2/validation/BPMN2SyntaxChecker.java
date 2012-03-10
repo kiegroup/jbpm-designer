@@ -55,15 +55,13 @@ import org.eclipse.bpmn2.UserTask;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.impl.ExternalInfo;
+import org.jbpm.designer.web.server.ServletUtil;
 import org.json.JSONObject;
 
 import sun.misc.BASE64Encoder;
 
 
 public class BPMN2SyntaxChecker implements SyntaxChecker {
-	public static final String EXT_BPMN = "bpmn";
-    public static final String EXT_BPMN2 = "bpmn2";
-    
 	protected Map<String, List<String>> errors = new HashMap<String, List<String>>();
 	private String json;
 	private String preprocessingData;
@@ -116,7 +114,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
                 	addError(defaultResourceId, "Process has no package name.");
                 } else {
                 	if(!isEmpty(pname)) {
-                		String[] packageAssetInfo = findPackageAndAssetInfo(uuid, profile);
+                		String[] packageAssetInfo = ServletUtil.findPackageAndAssetInfo(uuid, profile);
                 		String guvnorPackageName = packageAssetInfo[0];
                 		if(!guvnorPackageName.equals(pname)) {
                 			addError(defaultResourceId, "Process package name is not valid.");
@@ -234,11 +232,11 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 		        	addError(ut, "User Task has no task name.");
 		        } else {
 		        	if(taskName != null) {
-		        		String[] packageAssetInfo = findPackageAndAssetInfo(uuid, profile);
+		        		String[] packageAssetInfo = ServletUtil.findPackageAndAssetInfo(uuid, profile);
 		        		String packageName = packageAssetInfo[0];
 		        		String assetName = packageAssetInfo[1];
 		        		String taskFormName = taskName + "-taskform";
-		        		if(!taskFormExistsInGuvnor(packageName, assetName, taskFormName, profile)) {
+		        		if(!ServletUtil.taskFormExistsInGuvnor(packageName, assetName, taskFormName, profile)) {
 		        			addError(ut, "User Task has no task form defined.");
 		        		}
 		        	} 
@@ -352,12 +350,12 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 				if(ca.getCalledElement() == null || ca.getCalledElement().length() < 1) {
 					addError((CallActivity) fe, "Reusable Subprocess has no called element specified.");
 				} else {
-					String[] packageAssetInfo = findPackageAndAssetInfo(uuid, profile);
+					String[] packageAssetInfo = ServletUtil.findPackageAndAssetInfo(uuid, profile);
 	        		String packageName = packageAssetInfo[0];
-	        		List<String> allProcessesInPackage = getAllProcessesInPackage(packageName, profile);
+	        		List<String> allProcessesInPackage = ServletUtil.getAllProcessesInPackage(packageName, profile);
 	        		boolean foundCalledElementProcess = false;
 	        		for(String p : allProcessesInPackage) {
-	        			String processContent = getProcessSourceContent(packageName, p, profile);
+	        			String processContent = ServletUtil.getProcessSourceContent(packageName, p, profile);
 	        			Pattern pattern = Pattern.compile("<\\S*process[\\s\\S]*id=\"" + ca.getCalledElement() + "\"", Pattern.MULTILINE);
 	                    Matcher m = pattern.matcher(processContent);
 	                    if(m.find()) {
@@ -438,219 +436,6 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 	    return true;
 	}
 	
-	private String[] findPackageAndAssetInfo(String uuid,
-            IDiagramProfile profile) {
-        List<String> packages = new ArrayList<String>();
-        String packagesURL = ExternalInfo.getExternalProtocol(profile)
-                + "://"
-                + ExternalInfo.getExternalHost(profile)
-                + "/"
-                + profile.getExternalLoadURLSubdomain().substring(0,
-                        profile.getExternalLoadURLSubdomain().indexOf("/"))
-                + "/rest/packages/";
-        try {
-            XMLInputFactory factory = XMLInputFactory.newInstance();
-            XMLStreamReader reader = factory
-                    .createXMLStreamReader(getInputStreamForURL(packagesURL,
-                            "GET", profile));
-            while (reader.hasNext()) {
-                if (reader.next() == XMLStreamReader.START_ELEMENT) {
-                    if ("title".equals(reader.getLocalName())) {
-                        packages.add(reader.getElementText());
-                    }
-                }
-            }
-        } catch (Exception e) {
-            // we dont want to barf..just log that error happened
-            _logger.error(e.getMessage());
-        }
-
-        boolean gotPackage = false;
-        String[] pkgassetinfo = new String[2];
-        for (String nextPackage : packages) {
-            String packageAssetURL = ExternalInfo.getExternalProtocol(profile)
-                    + "://"
-                    + ExternalInfo.getExternalHost(profile)
-                    + "/"
-                    + profile.getExternalLoadURLSubdomain().substring(0,
-                            profile.getExternalLoadURLSubdomain().indexOf("/"))
-                    + "/rest/packages/" + nextPackage + "/assets/";
-            try {
-                XMLInputFactory factory = XMLInputFactory.newInstance();
-                XMLStreamReader reader = factory
-                        .createXMLStreamReader(getInputStreamForURL(
-                                packageAssetURL, "GET", profile));
-                String title = "";
-                while (reader.hasNext()) {
-                    int next = reader.next();
-                    if (next == XMLStreamReader.START_ELEMENT) {
-                        if ("title".equals(reader.getLocalName())) {
-                            title = reader.getElementText();
-                        }
-                        if ("uuid".equals(reader.getLocalName())) {
-                            String eleText = reader.getElementText();
-                            if (uuid.equals(eleText)) {
-                                pkgassetinfo[0] = nextPackage;
-                                pkgassetinfo[1] = title;
-                                gotPackage = true;
-                            }
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                // we dont want to barf..just log that error happened
-                _logger.error(e.getMessage());
-            }
-            if (gotPackage) {
-                // noo need to loop through rest of packages
-                break;
-            }
-        }
-        return pkgassetinfo;
-    }
-	
-	private InputStream getInputStreamForURL(String urlLocation,
-            String requestMethod, IDiagramProfile profile) throws Exception {
-        URL url = new URL(urlLocation);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-        connection.setRequestMethod(requestMethod);
-        connection
-                .setRequestProperty(
-                        "User-Agent",
-                        "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2.16) Gecko/20110319 Firefox/3.6.16");
-        connection
-                .setRequestProperty("Accept",
-                        "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-        connection.setRequestProperty("Accept-Language", "en-us,en;q=0.5");
-        connection.setRequestProperty("Accept-Encoding", "gzip,deflate");
-        connection.setRequestProperty("charset", "UTF-8");
-        connection.setReadTimeout(5 * 1000);
-
-        applyAuth(profile, connection);
-
-        connection.connect();
-
-        BufferedReader sreader = new BufferedReader(new InputStreamReader(
-                connection.getInputStream(), "UTF-8"));
-        StringBuilder stringBuilder = new StringBuilder();
-
-        String line = null;
-        while ((line = sreader.readLine()) != null) {
-            stringBuilder.append(line + "\n");
-        }
-
-        return new ByteArrayInputStream(stringBuilder.toString().getBytes(
-                "UTF-8"));
-    }
-    
-    private void applyAuth(IDiagramProfile profile, HttpURLConnection connection) {
-        if (profile.getUsr() != null && profile.getUsr().trim().length() > 0
-                && profile.getPwd() != null
-                && profile.getPwd().trim().length() > 0) {
-            BASE64Encoder enc = new sun.misc.BASE64Encoder();
-            String userpassword = profile.getUsr() + ":" + profile.getPwd();
-            String encodedAuthorization = enc.encode(userpassword.getBytes());
-            connection.setRequestProperty("Authorization", "Basic "
-                    + encodedAuthorization);
-        }
-    }
-    
-    private boolean taskFormExistsInGuvnor(String packageName, String assetName, String taskFormName, IDiagramProfile profile) {
-    	try {	
-    		String formURL = ExternalInfo.getExternalProtocol(profile)
-    	        + "://"
-    	        + ExternalInfo.getExternalHost(profile)
-    	        + "/"
-    	        + profile.getExternalLoadURLSubdomain().substring(0,
-    	                profile.getExternalLoadURLSubdomain().indexOf("/"))
-    	        + "/rest/packages/" + packageName + "/assets/" + URLEncoder.encode(taskFormName, "UTF-8");
-    	
-    	
-			URL checkURL = new URL(formURL);
-			HttpURLConnection checkConnection = (HttpURLConnection) checkURL
-			        .openConnection();
-			applyAuth(profile, checkConnection);
-			checkConnection.setRequestMethod("GET");
-			checkConnection
-			        .setRequestProperty("Accept", "application/atom+xml");
-			checkConnection.connect();
-			_logger.info("check connection response code: " + checkConnection.getResponseCode());
-			if (checkConnection.getResponseCode() == 200) {
-				return true;
-			}
-		} catch (Exception e) {
-			_logger.error(e.getMessage());
-		}
-        return false;
-    }
-    
-    public List<String> getAllProcessesInPackage(String pkgName, IDiagramProfile profile) {
-        List<String> processes = new ArrayList<String>();
-        String assetsURL = ExternalInfo.getExternalProtocol(profile)
-                + "://"
-                + ExternalInfo.getExternalHost(profile)
-                + "/"
-                + profile.getExternalLoadURLSubdomain().substring(0,
-    	                profile.getExternalLoadURLSubdomain().indexOf("/"))
-                + "/rest/packages/"
-                + pkgName
-                + "/assets/";
-        
-        try {
-            XMLInputFactory factory = XMLInputFactory.newInstance();
-            XMLStreamReader reader = factory.createXMLStreamReader(getInputStreamForURL(assetsURL, "GET", profile));
-
-            String format = "";
-            String title = ""; 
-            while (reader.hasNext()) {
-                int next = reader.next();
-                if (next == XMLStreamReader.START_ELEMENT) {
-                    if ("format".equals(reader.getLocalName())) {
-                        format = reader.getElementText();
-                    } 
-                    if ("title".equals(reader.getLocalName())) {
-                        title = reader.getElementText();
-                    }
-                    if ("asset".equals(reader.getLocalName())) {
-                        if(format.equals(EXT_BPMN) || format.equals(EXT_BPMN2)) {
-                            processes.add(title);
-                            title = "";
-                            format = "";
-                        }
-                    }
-                }
-            }
-            // last one
-            if(format.equals(EXT_BPMN) || format.equals(EXT_BPMN2)) {
-                processes.add(title);
-            }
-        } catch (Exception e) {
-        	_logger.error("Error finding processes in package: " + e.getMessage());
-        } 
-        return processes;
-    }
-    
-    private String getProcessSourceContent(String packageName, String assetName, IDiagramProfile profile) {
-        String assetSourceURL = ExternalInfo.getExternalProtocol(profile)
-                + "://"
-                + ExternalInfo.getExternalHost(profile)
-                + "/"
-                + profile.getExternalLoadURLSubdomain().substring(0,
-    	                profile.getExternalLoadURLSubdomain().indexOf("/"))
-                + "/rest/packages/" + packageName + "/assets/" + assetName
-                + "/source/";
-
-        try {
-            InputStream in = getInputStreamForURL(assetSourceURL, "GET", profile);
-            StringWriter writer = new StringWriter();
-            IOUtils.copy(in, writer);
-            return writer.toString();
-        } catch (Exception e) {
-        	_logger.error("Error retrieving asset content: " + e.getMessage());
-            return "";
-        }
-    }
     
     private boolean isAdHocProcess(Process process) {
         Iterator<FeatureMap.Entry> iter = process.getAnyAttribute().iterator();

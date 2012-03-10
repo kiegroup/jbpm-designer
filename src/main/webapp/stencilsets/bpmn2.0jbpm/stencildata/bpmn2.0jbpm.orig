@@ -2817,13 +2817,13 @@
 				},
 				{
 					"id":"calledelement",
-					"type":"Text",
+					"type":"CalledElement",
 					"title":"Called Element",
 					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":false,
-					"refToView":"",
+					"refToView":"pimg",
 					"length":""
 				},	
 				{
