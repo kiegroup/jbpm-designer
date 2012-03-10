@@ -333,7 +333,8 @@
 		<plugin source="dictionary.js" name="ORYX.Plugins.Dictionary"/>
 		<plugin source="canvastitle.js" name="ORYX.Plugins.CanvasTitle"/>
 		<plugin source="inlinetaskformeditor.js" name="ORYX.Plugins.InlineTaskFormEditor"/>
-
+		<plugin source="servicenodeeditor.js" name="ORYX.Plugins.ServiceNodeEditor"/>
+		
 		<!-- <plugin source="stencilsetmanipulator.js" name="ORYX.Plugins.StencilSetManipulator" 
 			/> -->
 

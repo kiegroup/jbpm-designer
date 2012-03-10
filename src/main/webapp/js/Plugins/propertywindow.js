@@ -133,6 +133,7 @@ ORYX.Plugins.PropertyWindow = {
 		
 		this.grid = new Ext.grid.EditorGridPanel({
 			clicksToEdit: 1,
+			autoEncode: true,
 			stripeRows: true,
 			autoExpandColumn: "propertywindow_column_value",
 			width:'auto',
@@ -672,8 +673,19 @@ ORYX.Plugins.PropertyWindow = {
 							break;
 
 						case ORYX.CONFIG.TYPE_VARDEF:
-
 							var cf = new Ext.form.ComplexVardefField({
+								allowBlank: pair.optional(),
+								dataSource:this.dataSource,
+								grid:this.grid,
+								row:index,
+								facade:this.facade
+							});
+							cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1,field:cf});							
+							editorGrid = new Ext.Editor(cf);
+							break;
+							
+						case ORYX.CONFIG.TYPE_CALLEDELEMENT:
+							var cf = new Ext.form.ComplexCalledElementField({
 								allowBlank: pair.optional(),
 								dataSource:this.dataSource,
 								grid:this.grid,
@@ -1208,6 +1220,7 @@ Ext.extend(Ext.form.ComplexListField, Ext.form.TriggerField,  {
 				store:		ds,
 		        cm:			cm,
 				stripeRows: true,
+				autoEncode: true,
 				clicksToEdit : 1,
 				autoHeight:true,
 		        selModel: 	new Ext.grid.CellSelectionModel()
@@ -1427,6 +1440,7 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
     	var gridId = Ext.id();
     	var grid = new Ext.grid.EditorGridPanel({
             store: imports,
+            autoEncode: true,
             id: gridId,
             stripeRows: true,
             cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
@@ -1561,6 +1575,7 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
     	var gridId = Ext.id();
     	var grid = new Ext.grid.EditorGridPanel({
             store: actions,
+            autoEncode: true,
             id: gridId,
             stripeRows: true,
             cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
@@ -1829,6 +1844,7 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
     	var gridId = Ext.id();
     	var grid = new Ext.grid.EditorGridPanel({
             store: dataassignments,
+            autoEncode: true,
             id: gridId,
             stripeRows: true,
             cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
@@ -2102,6 +2118,7 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
     	var grid = new Ext.grid.EditorGridPanel({
             store: vardefs,
             id: gridId,
+            autoEncode: true,
             stripeRows: true,
             cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
             	id: 'name',
@@ -2250,6 +2267,190 @@ Ext.form.ComplexDataOutputField = Ext.extend(Ext.form.NameTypeEditor,  {
     addButtonLabel : 'Add Data Output'
 });
 
+Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField,  {
+	onTriggerClick : function(){
+        if(this.disabled){
+            return;
+        }
+        
+        var CallElementDef = Ext.data.Record.create([{
+            name: 'name'
+        }, {
+            name: 'imgsrc'
+        }]);
+    	
+    	var calldefsProxy = new Ext.data.MemoryProxy({
+            root: []
+        });
+    	
+    	var calldefs = new Ext.data.Store({
+    		autoDestroy: true,
+            reader: new Ext.data.JsonReader({
+                root: "root"
+            }, CallElementDef),
+            proxy: calldefsProxy,
+            sorters: [{
+                property: 'name',
+                direction:'ASC'
+            }]
+        });
+    	calldefs.load();
+        
+        var processJSON = ORYX.EDITOR.getSerializedJSON();
+        var processPackage = jsonPath(processJSON.evalJSON(), "$.properties.package");
+        var processId = jsonPath(processJSON.evalJSON(), "$.properties.id");
+        var loadProcessesMask = new Ext.LoadMask(Ext.getBody(), {msg:'Loading Process Information'});
+        loadProcessesMask.show();
+        Ext.Ajax.request({
+            url: ORYX.PATH + 'calledelement',
+            method: 'POST',
+            success: function(response) {
+    	   		try {
+    	   			loadProcessesMask.hide();
+    	   			if(response.responseText.length > 0 && response.responseText != "false") {
+    	   				var responseJson = Ext.decode(response.responseText);
+    		            for(var key in responseJson){
+    		            	calldefs.add(new CallElementDef({
+                                name: key,
+                                imgsrc: responseJson[key]
+                            }));
+    		            }
+    		            calldefs.commitChanges();
+    		            
+    		            var gridId = Ext.id();
+    		        	var grid = new Ext.grid.EditorGridPanel({
+    		                store: calldefs,
+    		                id: gridId,
+    		                autoEncode: true,
+    		                stripeRows: true,
+    		                cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
+    		                	id: 'pid',
+    		                    header: 'Process Id',
+    		                    width: 200,
+    		                    dataIndex: 'name',
+    		                    editor: new Ext.form.TextField({ allowBlank: false, disabled: true })
+    		                }, {
+    		                	id: 'pim',
+    		                    header: 'Process Image',
+    		                    width: 250,
+    		                    dataIndex: 'imgsrc',
+    		                    renderer: function(val) {
+    		                    	if(val && val.length > 0) { 
+    		                    		return '<center><img src="'+ORYX.PATH+'images/page_white_picture.png" onclick="new ImageViewer({title: \'Process Image\', width: \'650\', height: \'450\', autoScroll: true, fixedcenter: true, src: \''+val+'\',hideAction: \'close\'}).show();" alt="Click to view Process Image"/></center>';
+    		                    	} else {
+    		                    		return "<center>Process image not available.</center>";
+    		                    	}
+    		                    }
+    		                }]),
+    		                autoHeight: true
+    		            });
+    		        	
+    		        	grid.on('afterrender', function(e) {
+    		        		if(this.value.length > 0) {
+	    		        		var index = 0;
+	    		        		var val = this.value;
+	    		        		var mygrid = grid;
+	    		        		calldefs.data.each(function() {
+	    	                		if(this.data['name'] == val) {
+	    	                			mygrid.getSelectionModel().select(index, 1);
+	    	                		}
+	    	                		index++;
+	    	                    });
+	    		        	}
+    		        		}.bind(this));
+    		        	
+    		        	var calledElementsPanel = new Ext.Panel({
+    		        		id: 'calledElementsPanel',
+    		        		title: '<center>Select Process Id and click "Save" to select.</center>',
+    		        		layout:'column',
+    		        		items:[
+    		        		       grid
+    		                      ],
+    		        		layoutConfig: {
+    		        			columns: 1
+    		        		},
+    		        		defaults: {
+    		        	        columnWidth: 1.0
+    		        	    },
+    		        	});
+    		        	
+    		        	var dialog = new Ext.Window({ 
+    		    			layout		: 'anchor',
+    		    			autoCreate	: true, 
+    		    			title		: 'Editor for Called Elements', 
+    		    			height		: 350, 
+    		    			width		: 480, 
+    		    			modal		: true,
+    		    			collapsible	: false,
+    		    			fixedcenter	: true, 
+    		    			shadow		: true, 
+    		    			resizable   : true,
+    		    			proxyDrag	: true,
+    		    			autoScroll  : true,
+    		    			keys:[{
+    		    				key	: 27,
+    		    				fn	: function(){
+    		    						dialog.hide()
+    		    				}.bind(this)
+    		    			}],
+    		    			items		:[calledElementsPanel],
+    		    			listeners	:{
+    		    				hide: function(){
+    		    					this.fireEvent('dialogClosed', this.value);
+    		    					dialog.destroy();
+    		    				}.bind(this)				
+    		    			},
+    		    			buttons		: [{
+    		                    text: 'Save',
+    		                    handler: function(){
+    		                    	if(grid.getSelectionModel().getSelectedCell() != null) {
+    		                    		var selectedIndex = grid.getSelectionModel().getSelectedCell()[0];
+    		                    		var outValue = calldefs.getAt(selectedIndex).data['name'];
+    		                    		grid.stopEditing();
+    		                        	grid.getView().refresh();
+    		        					this.setValue(outValue);
+    		        					this.dataSource.getAt(this.row).set('value', outValue)
+    		        					this.dataSource.commitChanges()
+    		        					dialog.hide()
+    		                    	} else {
+    		                    		Ext.Msg.alert('Plese select a process id.');
+    		                    	}
+    		                    }.bind(this)
+    		                }, {
+    		                    text: ORYX.I18N.PropertyWindow.cancel,
+    		                    handler: function(){
+    		    					this.setValue(this.value);
+    		                    	dialog.hide()
+    		                    }.bind(this)
+    		                }]
+    		    		});		
+    		    				
+    		    		dialog.show();		
+    		    		grid.render();
+    		    		grid.fireEvent('afterrender');
+    		    		this.grid.stopEditing();
+    		    		grid.focus( false, 100 );
+    		        } else {
+    		        	Ext.Msg.alert('Unable to find other processes in pacakge.');
+    		        }
+    	   		} catch(e) {
+    	   			Ext.Msg.alert('Error resolving other process info :\n' + e);
+    	   		}
+            }.bind(this),
+            failure: function(){
+            	loadProcessesMask.hide();
+            	Ext.Msg.alert('Error resolving other process info.');
+            },
+            params: {
+            	profile: ORYX.PROFILE,
+            	uuid : ORYX.UUID,
+            	ppackage: processPackage,
+            	pid: processId
+            }
+        });
+	}
+});
+
 
 Ext.form.ComplexGlobalsField = Ext.extend(Ext.form.TriggerField,  {
 
@@ -2312,6 +2513,7 @@ Ext.form.ComplexGlobalsField = Ext.extend(Ext.form.TriggerField,  {
     	var grid = new Ext.grid.EditorGridPanel({
             store: globals,
             id: gridId,
+            autoEncode: true,
             stripeRows: true,
             cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
             	id: 'name',
@@ -2406,6 +2608,5 @@ Ext.form.ComplexGlobalsField = Ext.extend(Ext.form.TriggerField,  {
 
 		this.grid.stopEditing();
 		grid.focus( false, 100 );
-		
 	}
 });
