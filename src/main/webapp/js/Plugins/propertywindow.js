@@ -2276,6 +2276,8 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField,  {
         var CallElementDef = Ext.data.Record.create([{
             name: 'name'
         }, {
+        	name: 'pkgname'
+        }, {
             name: 'imgsrc'
         }]);
     	
@@ -2310,8 +2312,10 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField,  {
     	   			if(response.responseText.length > 0 && response.responseText != "false") {
     	   				var responseJson = Ext.decode(response.responseText);
     		            for(var key in responseJson){
+    		            	var keyParts = key.split("|");
     		            	calldefs.add(new CallElementDef({
-                                name: key,
+                                name: keyParts[0],
+                                pkgname: keyParts[1],
                                 imgsrc: responseJson[key]
                             }));
     		            }
@@ -2330,6 +2334,12 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField,  {
     		                    dataIndex: 'name',
     		                    editor: new Ext.form.TextField({ allowBlank: false, disabled: true })
     		                }, {
+    		                	id: 'pkgn',
+    		                    header: 'Package Name',
+    		                    width: 200,
+    		                    dataIndex: 'pkgname',
+    		                    editor: new Ext.form.TextField({ allowBlank: false, disabled: true })
+    		                },{
     		                	id: 'pim',
     		                    header: 'Process Image',
     		                    width: 250,
@@ -2379,7 +2389,7 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField,  {
     		    			autoCreate	: true, 
     		    			title		: 'Editor for Called Elements', 
     		    			height		: 350, 
-    		    			width		: 480, 
+    		    			width		: 680, 
     		    			modal		: true,
     		    			collapsible	: false,
     		    			fixedcenter	: true, 

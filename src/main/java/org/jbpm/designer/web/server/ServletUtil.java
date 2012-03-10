@@ -219,6 +219,35 @@ public class ServletUtil {
         return false;
 	}
 	
+	public static List<String> getPackageNamesFromGuvnor(IDiagramProfile profile) {
+        List<String> packages = new ArrayList<String>();
+        String packagesURL = ExternalInfo.getExternalProtocol(profile)
+                + "://"
+                + ExternalInfo.getExternalHost(profile)
+                + "/"
+                + profile.getExternalLoadURLSubdomain().substring(0,
+    	                profile.getExternalLoadURLSubdomain().indexOf("/"))
+                + "/rest/packages/";
+        try {
+            XMLInputFactory factory = XMLInputFactory.newInstance();
+            XMLStreamReader reader = factory
+                    .createXMLStreamReader(ServletUtil.getInputStreamForURL(packagesURL, "GET", profile));
+            while (reader.hasNext()) {
+                if (reader.next() == XMLStreamReader.START_ELEMENT) {
+                    if ("title".equals(reader.getLocalName())) {
+                    	String pname = reader.getElementText();
+                    	if(!pname.equalsIgnoreCase("Packages")) {
+                    		 packages.add(pname);
+                    	}
+                    }
+                }
+            }
+        } catch (Exception e) {
+            _logger.error("Error retriving packages from guvnor: " + e.getMessage());
+        }
+        return packages;
+    }
+	
 	public static List<String> getAllProcessesInPackage(String pkgName, IDiagramProfile profile) {
         List<String> processes = new ArrayList<String>();
         String assetsURL = ExternalInfo.getExternalProtocol(profile)
