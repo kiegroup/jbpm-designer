@@ -1013,7 +1013,7 @@
 					"type":"String",
 					"title":"LoopDataInput",
 					"value":"",
-					"description":"A reference to a DataInput which is part of the Activityâ InputOutputSpecification. This DataInput is used to determine the number of Activity instances, one Activity instance per item in the collection of data stored in that DataInput element.",
+					"description":"A reference to a DataInput which is part of the Activity InputOutputSpecification. This DataInput is used to determine the number of Activity instances, one Activity instance per item in the collection of data stored in that DataInput element.",
 					"readonly":false,
 					"optional":true
 				},
@@ -1022,7 +1022,7 @@
 					"type":"String",
 					"title":"LoopDataInput",
 					"value":"",
-					"description":"A reference to a DataOutput which is part of the Activityâ InputOutputSpecification.",
+					"description":"A reference to a DataOutput which is part of the Activity InputOutputSpecification.",
 					"readonly":false,
 					"optional":true
 				},
