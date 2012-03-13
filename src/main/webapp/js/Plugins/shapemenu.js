@@ -706,11 +706,14 @@ ORYX.Plugins.ShapeMenuPlugin = {
 				stencil.properties().each((function(prop) {
 					if(prop.readonly()) {
 						serialized = serialized.reject(function(serProp) {
+							if(serProp.prefix === "oryx" && ( serProp.name === "type" || serProp.name === "tasktype")) {
+								return true;
+							}
 							return serProp.name==prop.id();
 						});
 					}
 				}).bind(this));
-		
+				
 				// Get shape if already created, otherwise create a new shape
 				if (this.newShape){
 					newShape = this.newShape;
@@ -814,7 +817,8 @@ ORYX.Plugins.ShapeMenuPlugin = {
 						if(newShape.getStencil().property("oryx-bgcolor")){
 							newShape.setProperty("oryx-bgcolor", newShape.getStencil().property("oryx-bgcolor").value());
 						}
-				}	
+				}
+				
 				if(changedBounds !== null) {
 					newShape.bounds.set(changedBounds);
 				}
