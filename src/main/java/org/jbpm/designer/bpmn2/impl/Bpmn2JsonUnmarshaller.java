@@ -2003,7 +2003,7 @@ public class Bpmn2JsonUnmarshaller {
                     Assignment a = Bpmn2Factory.eINSTANCE.createAssignment();
                     FormalExpression fromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
                     if(assignmentParts.length > 1) {
-                        fromExpression.setBody(wrapInCDATABlock(assignmentParts[1]));
+                        fromExpression.setBody(assignmentParts[1]);
                     } else {
                         fromExpression.setBody("");
                     }
@@ -2889,7 +2889,7 @@ public class Bpmn2JsonUnmarshaller {
                     Assignment a = Bpmn2Factory.eINSTANCE.createAssignment();
                     FormalExpression fromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
                     if(assignmentParts.length > 1) {
-                        fromExpression.setBody(wrapInCDATABlock(assignmentParts[1]));
+                        fromExpression.setBody(assignmentParts[1]);
                     } else {
                         fromExpression.setBody("");
                     }
@@ -3175,7 +3175,7 @@ public class Bpmn2JsonUnmarshaller {
                     Assignment a = Bpmn2Factory.eINSTANCE.createAssignment();
                     FormalExpression fromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
                     if(assignmentParts.length > 1) {
-                        fromExpression.setBody(wrapInCDATABlock(assignmentParts[1]));
+                        fromExpression.setBody(assignmentParts[1]);
                     } else {
                         fromExpression.setBody("");
                     }
