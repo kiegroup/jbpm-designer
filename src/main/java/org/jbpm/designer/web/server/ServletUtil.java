@@ -94,6 +94,7 @@ public class ServletUtil {
                         .createXMLStreamReader(ServletUtil.getInputStreamForURL(
                                 packageAssetURL, "GET", profile));
                 String title = "";
+                String readuuid = "";
                 while (reader.hasNext()) {
                     int next = reader.next();
                     if (next == XMLStreamReader.START_ELEMENT) {
@@ -101,13 +102,17 @@ public class ServletUtil {
                             title = reader.getElementText();
                         }
                         if ("uuid".equals(reader.getLocalName())) {
-                            String eleText = reader.getElementText();
-                            if (uuid.equals(eleText)) {
-                                pkgassetinfo[0] = nextPackage;
+                        	readuuid = reader.getElementText();
+                        }
+                    }
+                    if (next == XMLStreamReader.END_ELEMENT) {
+                    	if ("asset".equals(reader.getLocalName())) {
+                    		if(title.length() > 0 && readuuid.length() > 0 && uuid.equals(readuuid)) {
+                    			pkgassetinfo[0] = nextPackage;
                                 pkgassetinfo[1] = title;
                                 gotPackage = true;
-                            }
-                        }
+                    		}
+                    	}
                     }
                 }
             } catch (Exception e) {

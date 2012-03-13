@@ -418,8 +418,7 @@ public class TransformerServlet extends HttpServlet {
     
     private String storeToGuvnor(String uuid, IDiagramProfile profile,
             String formattedSvg, String rawSvg, String transformto) {
-        String[] packageAssetName = findPackageAndAssetNameForUUID(uuid,
-                profile);
+        String[] packageAssetName =  ServletUtil.findPackageAndAssetInfo(uuid, profile);
         String processContent = getProcessContent(packageAssetName[0],
                 packageAssetName[1], uuid, profile);
         String processId = null;
@@ -570,77 +569,6 @@ public class TransformerServlet extends HttpServlet {
         }
     }
 
-    private String[] findPackageAndAssetNameForUUID(String uuid,
-            IDiagramProfile profile) {
-        List<String> packages = new ArrayList<String>();
-        String packagesURL = ExternalInfo.getExternalProtocol(profile)
-                + "://"
-                + ExternalInfo.getExternalHost(profile)
-                + "/"
-                + profile.getExternalLoadURLSubdomain().substring(0,
-                        profile.getExternalLoadURLSubdomain().indexOf("/"))
-                + "/rest/packages/";
-        try {
-            XMLInputFactory factory = XMLInputFactory.newInstance();
-            XMLStreamReader reader = factory
-                    .createXMLStreamReader(ServletUtil.getInputStreamForURL(packagesURL,
-                            "GET", profile));
-            while (reader.hasNext()) {
-                if (reader.next() == XMLStreamReader.START_ELEMENT) {
-                    if ("title".equals(reader.getLocalName())) {
-                        packages.add(reader.getElementText());
-                    }
-                }
-            }
-        } catch (Exception e) {
-            // we dont want to barf..just log that error happened
-            _logger.error(e.getMessage());
-        }
-
-        boolean gotPackage = false;
-        String[] pkgassetnames = new String[2];
-        for (String nextPackage : packages) {
-            String packageAssetURL = ExternalInfo.getExternalProtocol(profile)
-                    + "://"
-                    + ExternalInfo.getExternalHost(profile)
-                    + "/"
-                    + profile.getExternalLoadURLSubdomain().substring(0,
-                            profile.getExternalLoadURLSubdomain().indexOf("/"))
-                    + "/rest/packages/" + nextPackage + "/assets/";
-            try {
-                XMLInputFactory factory = XMLInputFactory.newInstance();
-                XMLStreamReader reader = factory
-                        .createXMLStreamReader(ServletUtil.getInputStreamForURL(
-                                packageAssetURL, "GET", profile));
-                String title = "";
-                while (reader.hasNext()) {
-                    int next = reader.next();
-                    if (next == XMLStreamReader.START_ELEMENT) {
-                        if ("title".equals(reader.getLocalName())) {
-                            title = reader.getElementText();
-                        }
-                        if ("uuid".equals(reader.getLocalName())) {
-                            String eleText = reader.getElementText();
-                            if (uuid.equals(eleText)) {
-                                pkgassetnames[0] = nextPackage;
-                                pkgassetnames[1] = title;
-                                gotPackage = true;
-                            }
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                // we dont want to barf..just log that error happened
-                _logger.error(e.getMessage());
-            }
-            if (gotPackage) {
-                // noo need to loop through rest of packages
-                break;
-            }
-        }
-        return pkgassetnames;
-    }
-    
     private Definitions getDefinitions(String xml) {
         try {
             ResourceSet resourceSet = new ResourceSetImpl();
