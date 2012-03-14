@@ -219,7 +219,7 @@ public class TransformerServlet extends HttpServlet {
         }  else if (transformto != null && transformto.equals(BPMN2_TO_JSON)) { 
         	String json = profile.createUnmarshaller().parseModel(bpmn2in, profile, pp);
         	resp.setContentType("application/json");
-        	resp.getWriter().print(json);
+			resp.getWriter().print(json);
         } else if(transformto == null && respaction != null && respaction.equals(RESPACTION_SHOWEMBEDDABLE)) {
         	resp.setCharacterEncoding("UTF-8");
         	resp.setContentType("text/plain");

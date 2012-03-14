@@ -555,13 +555,20 @@ ORYX.Plugins.View = {
 				            url: ORYX.PATH + "transformer",
 				            method: 'POST',
 				            success: function(request) {
-				    	   		try {
-				    	   			this._loadJSON( request.responseText );
-				    	   		} catch(e) {
-				    	   			Ext.Msg.alert("Failed to import BPMN2: " + e);
-				    	   		}
-				    	   		loadMask.hide();
-				    	   		dialog.hide();
+				            	if(request.responseText.length < 1) {
+				            		loadMask.hide();
+				            		dialog.hide();
+				            		Ext.Msg.minWidth = 400;
+				            		Ext.Msg.alert("Failed to import BPMN2. Check server logs for more details."); 
+				            	} else {
+					    	   		try {
+					    	   			this._loadJSON( request.responseText );
+					    	   		} catch(e) {
+					    	   			Ext.Msg.alert("Failed to import BPMN2: " + e);
+					    	   		}
+					    	   		loadMask.hide();
+					    	   		dialog.hide();
+				            	}
 				            }.createDelegate(this),
 				            failure: function(){
 				            	Ext.Msg.alert("Failed to import BPMN2.");
