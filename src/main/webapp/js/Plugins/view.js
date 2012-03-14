@@ -564,6 +564,7 @@ ORYX.Plugins.View = {
 					    	   		try {
 					    	   			this._loadJSON( request.responseText );
 					    	   		} catch(e) {
+					    	   			Ext.Msg.minWidth = 400;
 					    	   			Ext.Msg.alert("Failed to import BPMN2: " + e);
 					    	   		}
 					    	   		loadMask.hide();
@@ -571,6 +572,7 @@ ORYX.Plugins.View = {
 				            	}
 				            }.createDelegate(this),
 				            failure: function(){
+				            	Ext.Msg.minWidth = 400;
 				            	Ext.Msg.alert("Failed to import BPMN2.");
 				            },
 				            params: {

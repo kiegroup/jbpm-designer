@@ -731,7 +731,12 @@ public class Bpmn2JsonMarshaller {
     	        marshallSubProcess((SubProcess) flowElement, plane, generator, xOffset, yOffset, preProcessingData, def, flowElementProperties);
     	    }
     	} else if (flowElement instanceof DataObject) {
-    		marshallDataObject((DataObject) flowElement, plane, generator, xOffset, yOffset, flowElementProperties);
+    		// only marshall if we can find DI info for it - BZ 800346
+    		if(findDiagramElement(plane, (DataObject) flowElement) != null) {
+    			marshallDataObject((DataObject) flowElement, plane, generator, xOffset, yOffset, flowElementProperties);
+    		} else {
+    			_logger.info("Could not marshall Data Object " + (DataObject) flowElement + " because no DI information could be found.");
+    		}
     	} else {
     		throw new UnsupportedOperationException("Unknown flow element " + flowElement);
     	}
