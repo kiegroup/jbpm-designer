@@ -968,7 +968,6 @@ ORYX.Editor = {
         // collect all resourceIds recursively
         var collectResourceIds = function(shapes){
             if(!shapes) return [];
-            
             return shapes.map(function(shape){
                 return collectResourceIds(shape.childShapes).concat(shape.resourceId);
             }).flatten();

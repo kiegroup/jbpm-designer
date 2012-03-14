@@ -386,16 +386,18 @@ ORYX.Core.Canvas = ORYX.Core.AbstractShape.extend({
         var addChildShapesRecursively = function(shape){
             var addedShapes = [];
             
-            shape.childShapes.each(function(childShape){
-  			  /*
-  			   *  workaround for Chrome, for some reason an undefined shape is given
-  			   */
-            	var xy=addShape(childShape, shape);
-  			  if(!(typeof xy ==="undefined")){
-  					addedShapes.push(xy);
-  			  }
-              addedShapes = addedShapes.concat(addChildShapesRecursively(childShape));
-            });
+            if(shape.childShapes) {
+	            shape.childShapes.each(function(childShape){
+	  			  /*
+	  			   *  workaround for Chrome, for some reason an undefined shape is given
+	  			   */
+	            	var xy=addShape(childShape, shape);
+	  			  if(!(typeof xy ==="undefined")){
+	  					addedShapes.push(xy);
+	  			  }
+	              addedShapes = addedShapes.concat(addChildShapesRecursively(childShape));
+	            });
+            }
             
             return addedShapes;
         }.bind(this);
