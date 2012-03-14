@@ -64,6 +64,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     private String origWorkitemSVGFile;
     private String default_emailicon;
     private String default_logicon;
+    private String default_servicenodeicon;
     private String default_widconfigtemplate;
     
     public JbpmPreprocessingUnit(ServletContext servletContext) {
@@ -74,6 +75,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         origWorkitemSVGFile = workitemSVGFilePath + "workitem.orig";
         default_emailicon = servletContext.getRealPath("/defaults/defaultemailicon.gif");
         default_logicon = servletContext.getRealPath(  "/defaults/defaultlogicon.gif");
+        default_servicenodeicon = servletContext.getRealPath(  "/defaults/defaultservicenodeicon.png");
         default_widconfigtemplate = servletContext.getRealPath("/defaults/WorkDefinitions.wid.st");
     }
     
@@ -119,7 +121,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         	Map<String, WorkDefinitionImpl> workDefinitions = new HashMap<String, WorkDefinitionImpl>();
         	for(Map.Entry<String, String> entry : workItemsContent.entrySet()) {
         		if(entry.getValue().trim().length() > 0) {
-        			evaluateWorkDefinitions(workDefinitions, entry.getValue());
+        			evaluateWorkDefinitions(workDefinitions, workitemConfigInfo, entry.getValue(), profile);
         		}
         	}
         	// set the out parameter
@@ -179,15 +181,25 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     }
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    private void evaluateWorkDefinitions(Map<String, WorkDefinitionImpl> workDefinitions, String content) throws Exception {
-        List<Map<String, Object>> workDefinitionsMaps = (List<Map<String, Object>>) MVEL.eval(content, new HashMap());
+    private void evaluateWorkDefinitions(Map<String, WorkDefinitionImpl> workDefinitions, Map<String, List<String>> configInfo, String content, IDiagramProfile profile) throws Exception {
+    	List<Map<String, Object>> workDefinitionsMaps = (List<Map<String, Object>>) MVEL.eval(content, new HashMap());
         
         for (Map<String, Object> workDefinitionMap : workDefinitionsMaps) {
             if (workDefinitionMap != null) {
                 WorkDefinitionImpl workDefinition = new WorkDefinitionImpl();
-                workDefinition.setName((String) workDefinitionMap.get("name"));
+                workDefinition.setName(((String) workDefinitionMap.get("name")).replaceAll("\\s",""));
                 workDefinition.setDisplayName((String) workDefinitionMap.get("displayName"));
-                workDefinition.setIcon((String) workDefinitionMap.get("icon"));
+                String icon = (String) workDefinitionMap.get("icon");
+                if(icon.length() < 1) {
+                	String packageName = "";
+                	for(Map.Entry<String, List<String>> entry : configInfo.entrySet()) {
+                        packageName = entry.getKey();
+                	}
+                	icon = ExternalInfo.getExternalProtocol(profile) + "://" + ExternalInfo.getExternalHost(profile) +
+                            "/" + profile.getExternalLoadURLSubdomain().substring(0, profile.getExternalLoadURLSubdomain().indexOf("/")) +
+                            "/rest/packages/" + packageName + "/assets/defaultservicenodeicon/binary/";
+                }
+                workDefinition.setIcon(icon);
                 workDefinition.setCustomEditor((String) workDefinitionMap.get("customEditor"));
                 Set<ParameterDefinition> parameters = new HashSet<ParameterDefinition>();
                 if(workDefinitionMap.get("parameters") != null) {
@@ -341,6 +353,15 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                     + "/rest/packages/" + pkg + "/assets/" + "defaultlogicon"
                     + ".gif";
     		
+    		String serviceNodeIconURL = ExternalInfo.getExternalProtocol(profile)
+                    + "://"
+                    + ExternalInfo.getExternalHost(profile)
+                    + "/"
+                    + profile.getExternalLoadURLSubdomain().substring(0,
+                            profile.getExternalLoadURLSubdomain().indexOf("/"))
+                    + "/rest/packages/" + pkg + "/assets/" + "defaultservicenodeicon"
+                    + ".png";
+    		
     		String packageAssetsURL = ExternalInfo.getExternalProtocol(profile)
                     + "://"
                     + ExternalInfo.getExternalHost(profile)
@@ -388,6 +409,25 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 				    System.out.println("delete log icon response code: " + deleteConnection.getResponseCode());
 				}
 				
+				URL checkServiceNodeIconURL = new URL(serviceNodeIconURL);
+				HttpURLConnection checkServiceNodeIconConnection = (HttpURLConnection) checkServiceNodeIconURL
+				        .openConnection();
+				applyAuth(profile, checkServiceNodeIconConnection);
+				checkServiceNodeIconConnection.setRequestMethod("GET");
+				checkServiceNodeIconConnection
+				        .setRequestProperty("Accept", "application/atom+xml");
+				checkServiceNodeIconConnection.connect();
+				System.out.println("check service node icon connection response code: " + checkServiceNodeIconConnection.getResponseCode());
+				if (checkServiceNodeIconConnection.getResponseCode() == 200) {
+				    URL deleteAssetURL = new URL(serviceNodeIconURL);
+				    HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL
+				            .openConnection();
+				    applyAuth(profile, deleteConnection);
+				    deleteConnection.setRequestMethod("DELETE");
+				    deleteConnection.connect();
+				    System.out.println("delete service node icon response code: " + deleteConnection.getResponseCode());
+				}
+				
 				// now push all defaults 
 				// email icon
 				URL createEmailIconURL = new URL(packageAssetsURL);
@@ -420,6 +460,22 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 	            createLogIconConnection.getOutputStream().write(getBytesFromFile(new File(default_logicon)));
 	            createLogIconConnection.connect();
 	            System.out.println("created log icon: " + createLogIconConnection.getResponseCode());
+	            
+	            // service node icon
+	            URL createServiceNodeIconURL = new URL(packageAssetsURL);
+	            HttpURLConnection createServiceNodeIconConnection = (HttpURLConnection) createServiceNodeIconURL
+	                    .openConnection();
+	            applyAuth(profile, createServiceNodeIconConnection);
+	            createServiceNodeIconConnection.setRequestMethod("POST");
+	            createServiceNodeIconConnection.setRequestProperty("Content-Type",
+	                    "application/octet-stream");
+	            createServiceNodeIconConnection.setRequestProperty("Accept",
+	                    "application/atom+xml");
+	            createServiceNodeIconConnection.setRequestProperty("Slug", "defaultservicenodeicon.png");
+	            createServiceNodeIconConnection.setDoOutput(true);
+	            createServiceNodeIconConnection.getOutputStream().write(getBytesFromFile(new File(default_servicenodeicon)));
+	            createServiceNodeIconConnection.connect();
+	            System.out.println("created service node icon: " + createServiceNodeIconConnection.getResponseCode());
 	            
 				// default configuration wid
 	            StringTemplate widConfigTemplate = new StringTemplate(readFile(default_widconfigtemplate));
