@@ -39,6 +39,8 @@ if(!ORYX.Plugins)
 ORYX.Plugins.View = {
 	/** @lends ORYX.Plugins.View.prototype */
 	facade: undefined,
+	diffEditor: undefined,
+	diffDialog: undefined,
 
 	construct: function(facade, ownPluginData) {
 		this.facade = facade;
@@ -936,6 +938,7 @@ ORYX.Plugins.View = {
 	    	  count++;
 	      }
 	    }
+	    
 	    if(count == 0) {
 	    	Ext.Msg.minWidth=300;
 	    	Ext.Msg.alert("Diff", "Unable to find proces versions.");
@@ -950,17 +953,17 @@ ORYX.Plugins.View = {
 				data : displayVersionKeys 
 			});
 		    
-		    var combo = new Ext.form.ComboBox({
+		    var versionCombo = new Ext.form.ComboBox({
 		    	fieldLabel: 'Select process version',
 	            labelStyle: 'width:180px',
 	            hiddenName: 'version_name',
-	            emptyText: 'Select a version...',
+	            emptyText: 'Select process version...',
 	            store: versionStore,
 	            displayField: 'name',
 	            valueField: 'name',
 	            mode: 'local',
 	            typeAhead: true,
-	            width: 168,
+	            //width: 168,
 	            triggerAction: 'all',
 	            listeners: 
 	              { 
@@ -986,49 +989,33 @@ ORYX.Plugins.View = {
 	                  	      	   			var d = dmp.diff_main(versionBPMN2, canvasBPMN2);
 	                  	      	   			dmp.diff_cleanupSemantic(d);
 	                  	      	   			var ds = dmp.diff_prettyHtml(d);
+	                  	      	   			diffCreateMask.hide();
+	                  	      	   			this.diffDialog.remove(this.diffEditor, true);
+	                  	      	   			this.diffEditor = new Ext.form.HtmlEditor({
+	                  	      	   				id: 'diffeditor',
+	                  	      	   				value:     ds,
+	                  	      	   				enableSourceEdit: false,
+	                  	      	   				enableAlignments:false,
+	                  	      	   				enableColors: false,
+	                  	      	   				enableFont: false,
+	                  	      	   				enableFontSize:false,
+	                  	      	   				enableFormat: false,
+	                  	      	   				enableLinks: false,
+	                  	      	   				enableLists:false,
+	                  	      	   				autoScroll: true,
+	                  	      	   				width:  520,
+	                  	      	   				height: 310
+	                  	      	   			});
 	                  	      	   			
-	                  	      	   			var w = 800;
-	                  	      	   			var h = 400;
-	                  	      	   			var left = (screen.width/2)-(w/2);
-	                  	      	   			var top = (screen.height/2)-(h/2);
-	                  	      	   			var myWindow=window.open('','diffwindow','toolbar=no,location=no,scrollbars=yes,resizable=yes,directories=no,status=no,menubar=no,width=' + w + ',height=' + h + ',top=' + top + ', left=' + left);
-	                  	      	   			myWindow.document.write("<style type=\"text/css\">");
-	                  	      	   			myWindow.document.write("<!--");
-	                  	      	   	    	myWindow.document.write("fieldset{");
-	                  	      	   	    	myWindow.document.write("display:block;");
-	                  	      	   	    	myWindow.document.write("float:left;");
-	                  	      	   	    	myWindow.document.write("width:"+w+"!important;");
-	                  	      	   	    	myWindow.document.write("width:"+w+"px;");
-	                  	      	   	    	myWindow.document.write("font-family:Verdana, Arial, Helvetica, sans-serif;");
-	                  	      	   	    	myWindow.document.write("font-size:12px;");
-	                  	      	   	    	myWindow.document.write("margin-top:20px;");
-	                  	      	   	    	myWindow.document.write("margin-left:20px;");
-	                  	      	   	    	myWindow.document.write("border:1px solid #CCCCCC;");
-	                  	      	   	    	myWindow.document.write("}");
-	                  	      	   	    	myWindow.document.write("legend{");
-	                  	      	   	    	myWindow.document.write("padding:2px 5px;");
-	                  	      	   	    	myWindow.document.write("border:1px solid #CCCCCC;");
-	                  	      	   	    	myWindow.document.write("}");
-	                  	      	   	    	myWindow.document.write("#content{");
-	                  	      	   	    	myWindow.document.write("display:block;");
-	                  	      	   	    	myWindow.document.write("float:left;");
-	                  	      	   	    	myWindow.document.write("padding:10px;");
-	                  	      	   	    	myWindow.document.write("}");
-	                  	      	   	    	myWindow.document.write("-->");
-	                  	      	   	    	myWindow.document.write("</style>");
-	                  	      	   	    	myWindow.document.write("<fieldset>");
-	                  	      	   	    	myWindow.document.write("<legend>BPMN2 diff against process version " + combo.getValue() + "</legend>");
-	                  	      	   	    	myWindow.document.write("<div id=\"content\">"+ds+"</div>");
-	                  	      	   	    	myWindow.document.write("</fieldset>");
-	                  	      	   	    	diffCreateMask.hide();
-	                  	      	   			myWindow.focus();
+	                  	      	   			this.diffDialog.add(this.diffEditor);
+	                  	      	   			this.diffDialog.doLayout();
 	                  	      	   		} catch(e) {
 	                  	      	   			Ext.Msg.alert("Failed to retrieve process version source:\n" + e);
 	                  	      	   		}
-	                  	              }.createDelegate(this),
+	                  	              }.bind(this),
 	                  	              failure: function(){
 	                  	              	Ext.Msg.alert("Failed to retrieve process version source.");
-	                  	              },
+	                  	              }.bind(this),
 	                  	              params: {
 	                  	              	action: 'getversion',
 	                  	              	version: combo.getValue(),
@@ -1039,7 +1026,7 @@ ORYX.Plugins.View = {
 	                  	   		} catch(e){
 	                  	   			Ext.Msg.alert("Converting to BPMN2 Failed :\n"+e);
 	                  	   		}
-	                          }.createDelegate(this),
+	                          }.bind(this),
 	                          failure: function(){
 	                          	Ext.Msg.alert("Converting to BPMN2 Failed");
 	                          },
@@ -1050,39 +1037,56 @@ ORYX.Plugins.View = {
 	                          	data: processJSON
 	                          }
 	                      });
-	                    }
+	                    }.bind(this)
 	                }  
 	             }
 		    });
-			
-			var dialog = new Ext.Window({ 
+		    
+		    this.diffEditor = new Ext.form.HtmlEditor({
+				 id: 'diffeditor',
+		         value:     '',
+		     	 enableSourceEdit: false,
+		     	 enableAlignments:false,
+	   			 enableColors: false,
+	   			 enableFont: false,
+	   			 enableFontSize:false,
+	   			 enableFormat: false,
+	   			 enableLinks: false,
+	   			 enableLists:false,
+		         autoScroll: true,
+		         width: 520,
+		         height: 310
+		       });
+		    
+		    this.diffDialog = new Ext.Window({ 
 				autoCreate: true,
 				autoScroll: false,
 				plain:		true,
 				bodyStyle: 	'padding:5px;',
-				title: 		'Compare process BPMN2 with previous version (diff will be shown in a popup window)', 
-				height: 	120, 
-				width:		520,
+				title: 		'Compare process BPMN2 with previous versions', 
+				height: 	410, 
+				width:		550,
 				modal:		true,
 				fixedcenter:true, 
 				shadow:		true, 
 				proxyDrag: 	true,
 				resizable:	true,
-				items: 		[combo],
+				items: 		[this.diffEditor],
+				tbar: [versionCombo],
 				buttons:[
 							{
 								text : 'Close',
 								handler:function(){
-									dialog.hide();
+									this.diffDialog.hide();
 								}.bind(this)
 							}
 						]
 			});
-			dialog.show();
-			dialog.doLayout();
+		    this.diffDialog.show();
+		    this.diffDialog.doLayout();
 	    }
 	},
-
+	
 	_showJbpmServiceDialog : function( jsonString ) {
 		var jsonObj = jsonString.evalJSON();
 		
