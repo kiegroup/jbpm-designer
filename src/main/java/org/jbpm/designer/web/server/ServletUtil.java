@@ -175,7 +175,7 @@ public class ServletUtil {
 		}
 	}
 	
-	public static boolean taskFormExistsInGuvnor(String packageName, String assetName, String taskFormName, IDiagramProfile profile) {
+	public static boolean assetExistsInGuvnor(String packageName, String assetName, IDiagramProfile profile) {
     	try {	
     		String formURL = ExternalInfo.getExternalProtocol(profile)
     	        + "://"
@@ -183,7 +183,7 @@ public class ServletUtil {
     	        + "/"
     	        + profile.getExternalLoadURLSubdomain().substring(0,
     	                profile.getExternalLoadURLSubdomain().indexOf("/"))
-    	        + "/rest/packages/" + packageName + "/assets/" + URLEncoder.encode(taskFormName, "UTF-8");
+    	        + "/rest/packages/" + packageName + "/assets/" + URLEncoder.encode(assetName, "UTF-8");
     	
     	
 			URL checkURL = new URL(formURL);

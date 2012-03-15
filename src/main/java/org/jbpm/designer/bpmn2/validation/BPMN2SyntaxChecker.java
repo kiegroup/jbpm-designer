@@ -94,6 +94,12 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
         		} else {
         			if(!SyntaxCheckerUtils.isNCName(process.getId())) {
         				addError(defaultResourceId, "Invalid process id. See http://www.w3.org/TR/REC-xml-names/#NT-NCName for more info.");
+        			} else {
+        				String[] packageAssetInfo = ServletUtil.findPackageAndAssetInfo(uuid, profile);
+		        		String processImageName = process.getId() + "-image";
+		        		if(!ServletUtil.assetExistsInGuvnor(packageAssetInfo[0], processImageName, profile)) {
+		        			addError(defaultResourceId, "Could not find process image.");
+		        		}
         			}
         		}
         		
@@ -233,10 +239,8 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 		        } else {
 		        	if(taskName != null) {
 		        		String[] packageAssetInfo = ServletUtil.findPackageAndAssetInfo(uuid, profile);
-		        		String packageName = packageAssetInfo[0];
-		        		String assetName = packageAssetInfo[1];
 		        		String taskFormName = taskName + "-taskform";
-		        		if(!ServletUtil.taskFormExistsInGuvnor(packageName, assetName, taskFormName, profile)) {
+		        		if(!ServletUtil.assetExistsInGuvnor(packageAssetInfo[0], taskFormName, profile)) {
 		        			addError(ut, "User Task has no task form defined.");
 		        		}
 		        	} 
