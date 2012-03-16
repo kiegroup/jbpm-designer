@@ -176,7 +176,7 @@ ORYX.Plugins.CanvasTitle.openTextualAnalysis = function() {
 ORYX.Plugins.CanvasTitle.editProcessForm = function() {
 	var processJSON = ORYX.EDITOR.getSerializedJSON();
 	var processId = jsonPath(processJSON.evalJSON(), "$.properties.id");
-	if(processId && processId.length > 0) {
+	if(processId && processId != "") {
 		ORYX.Config.FACADE.raiseEvent({
             type: ORYX.CONFIG.EVENT_TASKFORM_EDIT,
             tn: processId 
