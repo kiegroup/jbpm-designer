@@ -133,7 +133,6 @@ ORYX.Plugins.PropertyWindow = {
 		
 		this.grid = new Ext.grid.EditorGridPanel({
 			clicksToEdit: 1,
-			autoEncode: true,
 			stripeRows: true,
 			autoExpandColumn: "propertywindow_column_value",
 			width:'auto',
@@ -1220,7 +1219,6 @@ Ext.extend(Ext.form.ComplexListField, Ext.form.TriggerField,  {
 				store:		ds,
 		        cm:			cm,
 				stripeRows: true,
-				autoEncode: true,
 				clicksToEdit : 1,
 				autoHeight:true,
 		        selModel: 	new Ext.grid.CellSelectionModel()
@@ -1440,7 +1438,6 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
     	var gridId = Ext.id();
     	var grid = new Ext.grid.EditorGridPanel({
             store: imports,
-            autoEncode: true,
             id: gridId,
             stripeRows: true,
             cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
@@ -1575,7 +1572,6 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
     	var gridId = Ext.id();
     	var grid = new Ext.grid.EditorGridPanel({
             store: actions,
-            autoEncode: true,
             id: gridId,
             stripeRows: true,
             cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
@@ -1844,7 +1840,6 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
     	var gridId = Ext.id();
     	var grid = new Ext.grid.EditorGridPanel({
             store: dataassignments,
-            autoEncode: true,
             id: gridId,
             stripeRows: true,
             cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
@@ -2118,7 +2113,6 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
     	var grid = new Ext.grid.EditorGridPanel({
             store: vardefs,
             id: gridId,
-            autoEncode: true,
             stripeRows: true,
             cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
             	id: 'name',
@@ -2325,7 +2319,6 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField,  {
     		        	var grid = new Ext.grid.EditorGridPanel({
     		                store: calldefs,
     		                id: gridId,
-    		                autoEncode: true,
     		                stripeRows: true,
     		                cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
     		                	id: 'pid',
@@ -2523,7 +2516,6 @@ Ext.form.ComplexGlobalsField = Ext.extend(Ext.form.TriggerField,  {
     	var grid = new Ext.grid.EditorGridPanel({
             store: globals,
             id: gridId,
-            autoEncode: true,
             stripeRows: true,
             cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
             	id: 'name',
