@@ -1490,18 +1490,30 @@ ORYX.Plugins.View = {
 		var cf = new Ext.form.TextArea({
             id:"svgSourceTextArea",
             fieldLabel:"SVG Source",
-            value:formattedSvgDOM
+            value:formattedSvgDOM,
+            autoScroll:true
             });
 
 		var win = new Ext.Window({
-			width:400,
+			width:600,
 			id:'processSVGSource',
-			height:450,
+			height:550,
 			layout: 'fit',
 			title:'Process SVG Source',
-			items: [cf]
+			items: [cf],
+			buttons:[{
+							text : 'Close',
+							handler:function(){
+								win.hide();
+							}.bind(this)
+						}]
 			});
 		win.show();
+		var sourceEditor = CodeMirror.fromTextArea(document.getElementById("svgSourceTextArea"), {
+			  mode: "application/xml",
+			  lineNumbers: true,
+			  lineWrapping: true
+			});
 	},
 	
 	showProcessERDF : function() {
@@ -1509,18 +1521,31 @@ ORYX.Plugins.View = {
 		var cf = new Ext.form.TextArea({
             id:"erdfSourceTextArea",
             fieldLabel:"ERDF Source",
-            value:processERDF
+            value:processERDF,
+            autoScroll:true,
+            height:'80%'
             });
 
 		var win = new Ext.Window({
-			width:400,
+			width:600,
 			id:'processERDFSource',
-			height:450,
+			height:550,
 			layout: 'fit',
 			title:'ERDF Source',
-			items: [cf]
+			items: [cf],
+			buttons:[{
+							text : 'Close',
+							handler:function(){
+								win.hide();
+							}.bind(this)
+						}]
 			});
 		win.show();
+		var sourceEditor = CodeMirror.fromTextArea(document.getElementById("erdfSourceTextArea"), {
+ 			  mode: "application/xml",
+ 			  lineNumbers: true,
+ 			  lineWrapping: true
+ 			});
 	},
 	
 	showProcessJSON : function() {
@@ -1528,18 +1553,30 @@ ORYX.Plugins.View = {
 		var cf = new Ext.form.TextArea({
             id:"jsonSourceTextArea",
             fieldLabel:"JSON Source",
-            value:processJSON
+            value:processJSON,
+            autoScroll:true
             });
 
 		var win = new Ext.Window({
-			width:400,
+			width:600,
 			id:'processJSONSource',
-			height:450,
+			height:550,
 			layout: 'fit',
 			title:'JSON Source',
-			items: [cf]
+			items: [cf],
+			buttons:[{
+				text : 'Close',
+				handler:function(){
+					win.hide();
+				}.bind(this)
+			}]
 			});
 		win.show();
+		var sourceEditor = CodeMirror.fromTextArea(document.getElementById("jsonSourceTextArea"), {
+ 			  mode: "application/json",
+ 			  lineNumbers: true,
+ 			  lineWrapping: true
+ 			});
 	},
 	
 	showProcessBPMN : function() {
@@ -1552,13 +1589,14 @@ ORYX.Plugins.View = {
     	   			var cf = new Ext.form.TextArea({
     	   	            id:"bpmnSourceTextArea",
     	   	            fieldLabel:"BPMN2 Source",
-    	   	            value:request.responseText
+    	   	            value:request.responseText,
+    	   	            autoScroll:true
     	   	            });
 
     	   			var win = new Ext.Window({
-    	   				width:400,
+    	   				width:600,
     	   				id:'processBPMNSource',
-    	   				height:450,
+    	   				height:550,
     	   				layout: 'fit',
     	   				title:'BPMN2 Source',
     	   				items: [cf],
@@ -1616,9 +1654,19 @@ ORYX.Plugins.View = {
     	   	                 	document.body.appendChild(form);
     	   	                 	form.submit();	 
     	   	                }
-    	   	            }]
+    	   	            },{
+							text : 'Close',
+							handler:function(){
+								win.hide();
+							}.bind(this)
+						}]
     	   				});
     	   			win.show();
+    	   			var sourceEditor = CodeMirror.fromTextArea(document.getElementById("bpmnSourceTextArea"), {
+    	   			  mode: "application/xml",
+    	   			  lineNumbers: true,
+    	   			  lineWrapping: true
+    	   			});
     	   		}catch(e){
     	   			Ext.Msg.alert("Converting to BPMN2 Failed :\n"+e);
     	   		}
