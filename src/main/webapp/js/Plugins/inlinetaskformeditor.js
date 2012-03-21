@@ -8,6 +8,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
 	sourceMode: undefined,
 	taskformeditor: undefined,
 	taskformsourceeditor: undefined,
+	taskformcolorsourceeditor: undefined,
 	dialog: undefined,
 	
 	construct: function(facade){
@@ -68,7 +69,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
 			layout		: 'fit',
 			autoCreate	: true, 
 			title		: 'Editing Task Form: ' + tn , 
-			height		: 530, 
+			height		: 570, 
 			width		: 700, 
 			modal		: true,
 			collapsible	: false,
@@ -95,7 +96,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                     saveLoadMask.show();
                     var tosaveValue = "";
                     if(this.sourceMode) {
-                    	tosaveValue = this.taskformsourceeditor.getValue();
+                    	tosaveValue = this.taskformcolorsourceeditor.getValue();
                     } else {
                     	tosaveValue = this.taskformeditor.getValue();
                     }
@@ -136,13 +137,12 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                 	      if(this.sourceMode) {
                 	    	  this.taskformeditor = new Ext.form.HtmlEditor({
                 	 			 id: 'viewEditor',
-                	 	         value:     this.taskformsourceeditor.getValue(),
+                	 	         value:     this.taskformcolorsourceeditor.getValue(),
                 	 	     	 enableSourceEdit: false,
                 	 	         autoScroll: true
                 	 	       });
                 	    	  this.dialog.remove(this.taskformsourceeditor, true);
                 	    	  this.dialog.add(this.taskformeditor);
-                	    	  //this.taskformeditor.doLayout();
                 	    	  this.dialog.doLayout();
                 	    	  this.sourceMode = !this.sourceMode;
                 	      } else {
@@ -151,6 +151,11 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                 	    	  this.dialog.add(this.taskformsourceeditor);
                 	    	  this.dialog.doLayout();
                 	    	  this.sourceMode = !this.sourceMode;
+                	    	  this.taskformcolorsourceeditor = CodeMirror.fromTextArea(document.getElementById("sourceEditor"), {
+                	 			  mode: "application/xml",
+                	 			  lineNumbers: true,
+                	 			  lineWrapping: true
+                	 			});
                 	      }
                 	   }.bind(this)
                      }
