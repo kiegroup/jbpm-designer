@@ -87,6 +87,9 @@ ORYX.Plugins.ShapeMenuPlugin = {
 				// Show the forms Button
 				this.showTaskFormButton();
 				
+				// Show the source view button
+				this.showSourceViewButton();
+				
 				// Show the Stencil Buttons
 				this.showStencilButtons(this.currentShapes);	
 				
@@ -226,17 +229,27 @@ ORYX.Plugins.ShapeMenuPlugin = {
 			align: 			ORYX.CONFIG.SHAPEMENU_TOP,
 			group:			1,
 			msg:			'Edit Task Form'
-		});	
+		});
+		
+		var swbutton = new ORYX.Plugins.ShapeMenuButton({
+			callback:		this.viewNodeSource.bind(this), 
+			icon: 			ORYX.PATH + 'images/view.png',
+			align: 			ORYX.CONFIG.SHAPEMENU_TOP,
+			group:			2,
+			msg:			'View Node Source'
+		});
 		
 		this.shapeMenu.setNumberOfButtonsPerLevel(ORYX.CONFIG.SHAPEMENU_BOTTOM, 2);
 		//this.shapeMenu.setNumberOfButtonsPerLevel(ORYX.CONFIG.SHAPEMENU_TOP, 2)
 		this.shapeMenu.addButton(button);
 		this.shapeMenu.addButton(dbutton);
 		this.shapeMenu.addButton(utfbutton);
+		this.shapeMenu.addButton(swbutton);
 		this.morphMenu.getEl().appendTo(button.node);
 		this.morphButton = button;
 		this.dictionaryButton = dbutton;
 		this.taskFormButton = utfbutton;
+		this.sourceViewButton = swbutton;
 	},
 	
 	showMorphMenu: function() {
@@ -281,6 +294,39 @@ ORYX.Plugins.ShapeMenuPlugin = {
 		}
 	},
 	
+	viewNodeSource: function() {
+		alert("currently selected: " + this.currentShapes[0]);
+		alert("id: " + this.currentShapes[0].id);
+		alert("rid: " + this.currentShapes[0].resourceId);
+		alert(this.currentShapes[0].properties.toArray());
+		
+		var processJSON = ORYX.EDITOR.getSerializedJSON();
+		Ext.Ajax.request({
+            url: ORYX.PATH + "uuidRepository",
+            method: 'POST',
+            success: function(request){
+    	   		try{
+    	   			var parser = new DOMParser();
+                    var xmlDoc = parser.parseFromString (request.responseText, "text/xml");
+                    
+                    alert("doc: " + xmlDoc);
+    	   		}catch(e){
+    	   			Ext.Msg.alert("Converting to BPMN2 Failed :\n"+e);
+    	   		}
+                Ext.Msg.hide();
+            }.bind(this),
+            failure: function(){
+            	Ext.Msg.alert("Converting to BPMN2 Failed");
+            }.bind(this),
+            params: {
+            	action: 'toXML',
+            	pp: ORYX.PREPROCESSING,
+            	profile: ORYX.PROFILE,
+            	data: processJSON
+            }
+        });
+	},
+	
 	onSelectionChanged: function(event) {
 		var elements = event.elements;
 
@@ -306,6 +352,18 @@ ORYX.Plugins.ShapeMenuPlugin = {
 		if(this.currentShapes && this.currentShapes[0] && this.currentShapes[0].properties && this.currentShapes[0].properties['oryx-tasktype'] && 
 				this.currentShapes[0].properties['oryx-tasktype'] == "User") {
 			this.taskFormButton.prepareToShow();
+		}
+	},
+	
+	showSourceViewButton : function() {
+		// reset group number
+		this.sourceViewButton.group = 2;
+		if(this.currentShapes && this.currentShapes[0] && this.currentShapes[0].properties && this.currentShapes[0].properties['oryx-tasktype'] && 
+				this.currentShapes[0].properties['oryx-tasktype'] == "User") {
+			this.sourceViewButton.prepareToShow();
+		} else {
+			this.sourceViewButton.group = this.sourceViewButton.group - 1;
+			this.sourceViewButton.prepareToShow();
 		}
 	},
 	
