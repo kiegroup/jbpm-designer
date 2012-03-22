@@ -152,9 +152,13 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                 	    	  this.dialog.doLayout();
                 	    	  this.sourceMode = !this.sourceMode;
                 	    	  this.taskformcolorsourceeditor = CodeMirror.fromTextArea(document.getElementById("sourceEditor"), {
-                	 			  mode: "application/xml",
+                	 			  mode: "text/html",
                 	 			  lineNumbers: true,
-                	 			  lineWrapping: true
+                	 			  lineWrapping: true,
+                	 			  extraKeys: {
+                	 				"'>'": function(cm) { cm.closeTag(cm, '>'); },
+                	 				"'/'": function(cm) { cm.closeTag(cm, '/'); }
+                	 			  }
                 	 			});
                 	      }
                 	   }.bind(this)
