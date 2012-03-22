@@ -295,11 +295,6 @@ ORYX.Plugins.ShapeMenuPlugin = {
 	},
 	
 	viewNodeSource: function() {
-		alert("currently selected: " + this.currentShapes[0]);
-		alert("id: " + this.currentShapes[0].id);
-		alert("rid: " + this.currentShapes[0].resourceId);
-		alert(this.currentShapes[0].properties.toArray());
-		
 		var processJSON = ORYX.EDITOR.getSerializedJSON();
 		Ext.Ajax.request({
             url: ORYX.PATH + "uuidRepository",
@@ -307,9 +302,21 @@ ORYX.Plugins.ShapeMenuPlugin = {
             success: function(request){
     	   		try{
     	   			var parser = new DOMParser();
-                    var xmlDoc = parser.parseFromString (request.responseText, "text/xml");
-                    
-                    alert("doc: " + xmlDoc);
+                    var xmlDoc = parser.parseFromString(request.responseText, "text/xml");
+                    var intermediateNode = xmlDoc.querySelector("[id=" + this.currentShapes[0].resourceId + "]");
+                    if(!intermediateNode) {
+                    	intermediateNode = xmlDoc.querySelector("[id=" + this.currentShapes[0].properties['oryx-name']  + "]");
+                    }
+                    if(intermediateNode) {
+	                    var serializer = new XMLSerializer ();
+	                    var serializedNodeXML = serializer.serializeToString(intermediateNode);
+	                    this.facade.raiseEvent({
+	        	            type: ORYX.CONFIG.EVENT_NODEXML_SHOW,
+	        	            nodesource: serializedNodeXML
+	        	        });
+                    } else {
+                    	Ext.Msg.alert("Unable to find node source.");
+                    }
     	   		}catch(e){
     	   			Ext.Msg.alert("Converting to BPMN2 Failed :\n"+e);
     	   		}
