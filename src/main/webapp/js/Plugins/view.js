@@ -1470,6 +1470,14 @@ ORYX.Plugins.View = {
         hfTRANSFORMTO.setAttribute("value", transformval);
         form.appendChild(hfTRANSFORMTO);
         
+        var processJSON = ORYX.EDITOR.getSerializedJSON();
+        var processId = jsonPath(processJSON.evalJSON(), "$.properties.id");
+        var hfPROCESSID = document.createElement("input");
+        hfPROCESSID.setAttribute("type", "hidden");
+        hfPROCESSID.setAttribute("name", "processid");
+        hfPROCESSID.setAttribute("value", processId);
+        form.appendChild(hfPROCESSID);
+        
         document.body.appendChild(form);
         form.submit();	 
 	},
@@ -1728,6 +1736,14 @@ ORYX.Plugins.View = {
         hfTRANSFORMTO.setAttribute("name", "transformto");
         hfTRANSFORMTO.setAttribute("value", transformval);
         form.appendChild(hfTRANSFORMTO);
+        
+        var processJSON = ORYX.EDITOR.getSerializedJSON();
+        var processId = jsonPath(processJSON.evalJSON(), "$.properties.id");
+        var hfPROCESSID = document.createElement("input");
+        hfPROCESSID.setAttribute("type", "hidden");
+        hfPROCESSID.setAttribute("name", "processid");
+        hfPROCESSID.setAttribute("value", processId);
+        form.appendChild(hfPROCESSID);
         
         document.body.appendChild(form);
         form.submit();	 

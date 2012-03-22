@@ -118,7 +118,8 @@ public class TransformerServlet extends HttpServlet {
         String bpmn2in = req.getParameter("bpmn2");
         String respaction = req.getParameter("respaction");
         String pp = req.getParameter("pp");
-
+        String processid = req.getParameter("processid");
+        
         IDiagramProfile profile = ServletUtil.getProfile(req, profileName, getServletContext());
 
         if (transformto != null && transformto.equals(TO_PDF)) {
@@ -134,13 +135,13 @@ public class TransformerServlet extends HttpServlet {
                 	BASE64Encoder enc = new sun.misc.BASE64Encoder();
                 	resp.getWriter().write("<object data=\"data:application/pdf;base64," + enc.encode(bout.toByteArray()) +  "\" type=\"application/pdf\"></object>");
             	} else {
-	                String processId = storeToGuvnor(uuid, profile, formattedSvg, rawSvg,
-	                        transformto);
+	                storeToGuvnor(uuid, profile, formattedSvg, rawSvg,
+	                        transformto, processid);
 	                
 	                resp.setContentType("application/pdf");
-	                if (processId != null) {
+	                if (processid != null) {
 	                    resp.setHeader("Content-Disposition",
-	                            "attachment; filename=\"" + processId + ".pdf\"");
+	                            "attachment; filename=\"" + processid + ".pdf\"");
 	                } else {
 	                    resp.setHeader("Content-Disposition",
 	                            "attachment; filename=\"" + uuid + ".pdf\"");
@@ -171,12 +172,12 @@ public class TransformerServlet extends HttpServlet {
                 	resp.getWriter().write("<img src=\"data:image/png;base64," + enc.encode(bout.toByteArray()) + "\">");
                 } else {
                 	ParsedURL.registerHandler(new GuvnorParsedURLProtocolHandler(profile));
-                    String processName = storeToGuvnor(uuid, profile, formattedSvg, rawSvg,
-                            transformto);
+                    storeToGuvnor(uuid, profile, formattedSvg, rawSvg,
+                            transformto, processid);
                 	resp.setContentType("image/png");
-                	if (processName != null) {
+                	if (processid != null) {
                 		resp.setHeader("Content-Disposition",
-                				"attachment; filename=\"" + processName + ".png\"");
+                				"attachment; filename=\"" + processid + ".png\"");
                 	} else {
                 		resp.setHeader("Content-Disposition",
                 				"attachment; filename=\"" + uuid + ".png\"");
@@ -416,30 +417,15 @@ public class TransformerServlet extends HttpServlet {
 		}
     }
     
-    private String storeToGuvnor(String uuid, IDiagramProfile profile,
-            String formattedSvg, String rawSvg, String transformto) {
+    private void storeToGuvnor(String uuid, IDiagramProfile profile,
+            String formattedSvg, String rawSvg, String transformto, String processid) {
         String[] packageAssetName =  ServletUtil.findPackageAndAssetInfo(uuid, profile);
         String processContent = getProcessContent(packageAssetName[0],
                 packageAssetName[1], uuid, profile);
-        String processId = null;
-
-        if (processContent.length() > 0) {
-            Definitions def = getDefinitions(processContent);
-            // we need the process id
-            for (RootElement rootElement : def.getRootElements()) {
-                if (rootElement instanceof Process) {
-                    processId = rootElement.getId();
-                    if (processId != null && processId.length() > 0) {
-                        guvnorStore(packageAssetName[0], processId,
-                                profile, formattedSvg, rawSvg, transformto);
-                    } else {
-                        _logger.error("Cannot store to guvnor because process does not have it's id set");
-                    }
-                    break;
-                }
-            }
+        if(processid != null) {
+        	guvnorStore(packageAssetName[0], processid,
+                    profile, formattedSvg, rawSvg, transformto);
         }
-        return processId;
     }
 
     private void guvnorStore(String packageName, String assetName,
@@ -555,7 +541,6 @@ public class TransformerServlet extends HttpServlet {
                         profile.getExternalLoadURLSubdomain().indexOf("/"))
                 + "/rest/packages/" + packageName + "/assets/" + assetName
                 + "/source/";
-
         try {
             InputStream in = ServletUtil.getInputStreamForURL(assetSourceURL, "GET",
                     profile);
