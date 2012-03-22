@@ -350,6 +350,8 @@
 		<plugin source="dragTracker/laneDragTracker.js" name="ORYX.Plugins.DragTracker.LaneDragTracker" />
 		<plugin source="dragTracker/poolDragTracker.js" name="ORYX.Plugins.DragTracker.PoolDragTracker" />
 
+	    <plugin source="nodeXMLViewer.js" name="ORYX.Plugins.NodeXMLViewer" />
+
 		<plugin source="regexTextEditor.js" name="ORYX.Plugins.RegexTextEditor" />
 		<plugin source="constraintExpressionEditor.js" name="ORYX.Plugins.ConstraintExpressionEditor">
 			<property name="useFixedPackage" value="false" />
