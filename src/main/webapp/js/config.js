@@ -166,6 +166,7 @@ ORYX.CONFIG.TYPE_DIAGRAM_LINK =			"diagramlink";
 ORYX.CONFIG.TYPE_COMPLEX =				"complex";
 ORYX.CONFIG.TYPE_TEXT =					"text";
 ORYX.CONFIG.TYPE_VARDEF =               "vardef";
+ORYX.CONFIG.TYPE_EXPRESSION =           "expression";
 ORYX.CONFIG.TYPE_ACTION =               "action";
 ORYX.CONFIG.TYPE_GLOBAL =               "global";
 ORYX.CONFIG.TYPE_IMPORT =               "import";
