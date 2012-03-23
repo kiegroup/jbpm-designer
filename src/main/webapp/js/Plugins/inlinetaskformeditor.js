@@ -51,18 +51,11 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
 		this.sourceMode = false;
 		
 		this.taskformeditor = new Ext.form.HtmlEditor({
-			 id: 'viewEditor',
+			 id: Ext.id(),
 	         value:     formvalue,
 	     	 enableSourceEdit: false,
 	         autoScroll: true
 	       });
-		
-		this.taskformsourceeditor = new Ext.form.TextArea({
-			id: 'sourceEditor',
-			anchor: '100%',
-	        autoScroll: true,
-	        value:formvalue
-	    });
 		
 		this.dialog = new Ext.Window({
 			id          : 'maineditorwindow',
@@ -135,9 +128,15 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                 	   text: 'Switch Mode',
                 	   handler : function() {
                 	      if(this.sourceMode) {
+                	    	  var editorValue = "";
+                	    	  if(this.taskformcolorsourceeditor) {
+                	    		  editorValue = this.taskformcolorsourceeditor.getValue();
+                	    	  } else {
+                	    		  this.taskformsourceeditor.getValue();
+                	    	  }
                 	    	  this.taskformeditor = new Ext.form.HtmlEditor({
-                	 			 id: 'viewEditor',
-                	 	         value:     this.taskformcolorsourceeditor.getValue(),
+                	 			 id: Ext.id(),
+                	 	         value: editorValue,
                 	 	     	 enableSourceEdit: false,
                 	 	         autoScroll: true
                 	 	       });
@@ -146,12 +145,18 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                 	    	  this.dialog.doLayout();
                 	    	  this.sourceMode = !this.sourceMode;
                 	      } else {
-                	    	  this.taskformsourceeditor.setValue(this.taskformeditor.getValue());
+                	    	  var sourceeditorid = Ext.id();
+                	    	  this.taskformsourceeditor = new Ext.form.TextArea({
+                	  			id: sourceeditorid,
+                	  			anchor: '100%',
+                	  	        autoScroll: true,
+                	  	        value:this.taskformeditor.getValue()
+                	  	      });
                 	    	  this.dialog.remove(this.taskformeditor, true);
                 	    	  this.dialog.add(this.taskformsourceeditor);
                 	    	  this.dialog.doLayout();
                 	    	  this.sourceMode = !this.sourceMode;
-                	    	  this.taskformcolorsourceeditor = CodeMirror.fromTextArea(document.getElementById("sourceEditor"), {
+                	    	  this.taskformcolorsourceeditor = CodeMirror.fromTextArea(document.getElementById(sourceeditorid), {
                 	 			  mode: "text/html",
                 	 			  lineNumbers: true,
                 	 			  lineWrapping: true,
