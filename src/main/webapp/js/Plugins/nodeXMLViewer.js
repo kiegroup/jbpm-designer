@@ -4,7 +4,7 @@ if (!ORYX.Plugins)
 if (!ORYX.Config)
 	ORYX.Config = {};
 
-ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
+ORYX.Plugins.NodeXMLViewer = Clazz.extend({
 	sourceEditor: undefined,
 	
 	construct: function(facade){
