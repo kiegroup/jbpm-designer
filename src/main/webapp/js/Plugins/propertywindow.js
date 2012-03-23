@@ -683,6 +683,18 @@ ORYX.Plugins.PropertyWindow = {
 							editorGrid = new Ext.Editor(cf);
 							break;
 							
+						case ORYX.CONFIG.TYPE_EXPRESSION:
+							var cf = new Ext.form.ComplexExpressionField({
+								allowBlank: pair.optional(),
+								dataSource:this.dataSource,
+								grid:this.grid,
+								row:index,
+								facade:this.facade
+							});
+							cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1,field:cf});							
+							editorGrid = new Ext.Editor(cf);
+							break;
+							
 						case ORYX.CONFIG.TYPE_CALLEDELEMENT:
 							var cf = new Ext.form.ComplexCalledElementField({
 								allowBlank: pair.optional(),
@@ -2248,19 +2260,86 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
 
 Ext.form.ComplexVardefField = Ext.extend(Ext.form.NameTypeEditor,  {
      windowTitle : 'Editor for Variable Definitions',
-    addButtonLabel : 'Add Variable'
+     addButtonLabel : 'Add Variable'
 });
 
 Ext.form.ComplexDataInputField = Ext.extend(Ext.form.NameTypeEditor,  {
      windowTitle : 'Editor for Data Input',
-    addButtonLabel : 'Add Data Input'
+     addButtonLabel : 'Add Data Input'
 });
 
 Ext.form.ComplexDataOutputField = Ext.extend(Ext.form.NameTypeEditor,  {
      windowTitle : 'Editor for Data Output',
-    addButtonLabel : 'Add Data Output'
+     addButtonLabel : 'Add Data Output'
 });
 
+
+Ext.form.ComplexExpressionField = Ext.extend(Ext.form.TriggerField,  {
+	onTriggerClick : function(){
+		if(this.disabled){
+            return;
+        }
+		var ceta = new Ext.form.TextArea({
+            id: Ext.id(),
+            fieldLabel: "Expression Editor",
+            value: this.value,
+            autoScroll: true
+            });
+		
+		var sourceEditor;
+		
+		var dialog = new Ext.Window({ 
+			layout		: 'anchor',
+			autoCreate	: true, 
+			title		: 'Expression Editor', 
+			height		: 430, 
+			width		: 550, 
+			modal		: true,
+			collapsible	: false,
+			fixedcenter	: true, 
+			shadow		: true, 
+			resizable   : true,
+			proxyDrag	: true,
+			autoScroll  : true,
+			keys:[{
+				key	: 27,
+				fn	: function(){
+						dialog.hide()
+				}.bind(this)
+			}],
+			items		:[ceta],
+			listeners	:{
+				hide: function(){
+					this.fireEvent('dialogClosed', this.value);
+					dialog.destroy();
+				}.bind(this)				
+			},
+			buttons		: [{
+                text: ORYX.I18N.PropertyWindow.ok,
+                handler: function(){	 
+					this.setValue(sourceEditor.getValue());
+					this.dataSource.getAt(this.row).set('value', sourceEditor.getValue());
+					this.dataSource.commitChanges();
+					dialog.hide()
+                }.bind(this)
+            }, {
+                text: ORYX.I18N.PropertyWindow.cancel,
+                handler: function(){
+					this.setValue(this.value);
+                	dialog.hide()
+                }.bind(this)
+            }]
+		});	
+		dialog.show();		
+		sourceEditor = CodeMirror.fromTextArea(document.getElementById(ceta.getId()), {
+			  mode: "text/x-java",
+			  lineNumbers: true,
+			  lineWrapping: true,
+			  matchBrackets: true
+			});
+		this.grid.stopEditing();
+	}
+});
 Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField,  {
 	onTriggerClick : function(){
         if(this.disabled){

@@ -1514,7 +1514,7 @@
 				},
 				{
 					"id":"script",
-					"type":"Text",
+					"type":"Expression",
 					"title":"Script",
 					"value":"",
 					"description":"Script that can be run when the Task is performed. Related to the Script TaskType, if a script is not included, then the Task will act equivalent to a TaskType of None.",
@@ -6039,7 +6039,7 @@
 				},
 				{
 					"id":"conditionexpression",
-					"type":"Text",
+					"type":"Expression",
 					"title":"Condition Expression",
 					"value":"",
 					"description":"",

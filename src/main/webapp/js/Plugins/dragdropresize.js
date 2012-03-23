@@ -1356,11 +1356,11 @@ ORYX.Plugins.Resizer = Clazz.extend({
 		upL.y *= a.d;
 		
 		if(this.orientation==="northwest") {
-			upL.x -= 13;
-			upL.y -= 26;
+			upL.x -= 19;
+			upL.y -= 45;
 		} else { // defaults to southeast
-			upL.x +=  (a.a * this.bounds.width()) + 3 ;
-			upL.y +=  (a.d * this.bounds.height())  + 3;
+			upL.x +=  (a.a * this.bounds.width()) + 8;
+			upL.y +=  (a.d * this.bounds.height()) - 9;
 		}
 		
 		this.position = upL;
