@@ -5169,7 +5169,7 @@
 				}
 			]
 		},**/
-		{
+		/**{
 			"type": "node",
 			"id":"IntermediateCompensationEventCatching",
 			"title":"Compensation Intermediate Event",
@@ -5194,7 +5194,7 @@
 				"IntermediateEventsMorph"
 			],
 			"properties": [
-				/**{
+				{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -5204,9 +5204,9 @@
 					"optional":false,
 					"refToView":"",
 					"length":""
-				}**/
+				}
 			]
-		},
+		},**/
 		{
 			"type": "node",
 			"id":"IntermediateSignalEventCatching",
@@ -5520,7 +5520,7 @@
 				}
 			]
 		},**/
-		{
+		/**{
 			"type": "node",
 			"id":"IntermediateCompensationEventThrowing",
 			"title":"Compensation Intermediate Event",
@@ -5545,7 +5545,7 @@
 				"IntermediateEventsMorph"
 			],
 			"properties": [
-				/**{
+				{
 					"id":"trigger",
 					"type":"String",
 					"title":"Trigger",
@@ -5553,9 +5553,9 @@
 					"description":"",
 					"readonly":true,
 					"optional":false
-				}**/
+				}
 			]
-		},
+		},**/
 		{
 			"type": "node",
 			"id":"IntermediateSignalEventThrowing",
