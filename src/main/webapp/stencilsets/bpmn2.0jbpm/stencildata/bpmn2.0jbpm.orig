@@ -2568,8 +2568,28 @@
 					"description":"Group id value.",
 					"readonly":false,
 					"optional":true
+				},
+				{
+					"id":"skippable",
+					"type":"Choice",
+					"title":"Skippable",
+					"value":"",
+					"description":"Skippable",
+					"readonly":false,
+					"optional":true,
+					"items": [
+						{
+							"id": "c1",
+							"title":"true",
+							"value":"true"
+						},
+						{
+							"id": "c2",
+							"title": "false",
+							"value": "false"
+						}
+					]
 				}
-				
 			]
 		},
 		// start custom workitems
