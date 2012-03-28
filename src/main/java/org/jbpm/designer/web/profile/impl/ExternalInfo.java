@@ -3,10 +3,10 @@ package org.jbpm.designer.web.profile.impl;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 
 public class ExternalInfo {
-    private static final String EXTERNAL_PROTOCOL = "oryx.external.protocol";
-    private static final String EXTERNAL_HOST = "oryx.external.host";
-    private static final String EXTERNAL_USR = "oryx.external.usr";
-    private static final String EXTERNAL_PWD = "oryx.external.pwd";
+    private static final String EXTERNAL_PROTOCOL = "designer.external.protocol";
+    private static final String EXTERNAL_HOST = "designer.external.host";
+    private static final String EXTERNAL_USR = "designer.external.usr";
+    private static final String EXTERNAL_PWD = "designer.external.pwd";
     
     public static String getExternalProtocol(IDiagramProfile profile) {
         return isEmpty(System.getProperty(EXTERNAL_PROTOCOL)) ? profile.getExternalLoadURLProtocol() : System.getProperty(EXTERNAL_PROTOCOL);
