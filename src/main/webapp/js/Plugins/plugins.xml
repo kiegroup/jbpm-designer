@@ -32,6 +32,8 @@
 			<requires namespace="http://b3mn.org/stencilset/bpmn1.1#" />
 			<!-- plugin loads dynamically the needed extension <requires namespace="http://oryx-editor.org/stencilsets/extensions/jbpm#"/> -->
 		</plugin>
+		
+		<plugin source="jpdlmigration.js" name="ORYX.Plugins.JPDLMigration"/>
 
 		<!-- User Interface Aggregation -->
 		<plugin source="bpmn2xforms.js" name="ORYX.Plugins.BPMN2XForms">
