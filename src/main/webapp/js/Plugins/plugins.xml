@@ -34,6 +34,7 @@
 		</plugin>
 		
 		<plugin source="jpdlmigration.js" name="ORYX.Plugins.JPDLMigration"/>
+		<plugin source="servicerepo.js"   name="ORYX.Plugins.ServiceRepoIntegration"/>
 
 		<!-- User Interface Aggregation -->
 		<plugin source="bpmn2xforms.js" name="ORYX.Plugins.BPMN2XForms">
