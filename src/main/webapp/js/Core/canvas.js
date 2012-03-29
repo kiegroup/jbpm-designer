@@ -553,7 +553,20 @@ ORYX.Core.Canvas = ORYX.Core.AbstractShape.extend({
 	},
 
 	setSize: function(size, dontSetBounds) {
-		//size is dynamic, so never set. It is set as 100% on both axis.
+		if(!size || !size.width || !size.height){return}
+		
+		if(this.rootNode.parentNode){
+			this.rootNode.parentNode.style.width = size.width + 'px';
+			this.rootNode.parentNode.style.height = size.height + 'px';
+		}
+		
+		this.rootNode.setAttributeNS(null, 'width', size.width);
+		this.rootNode.setAttributeNS(null, 'height', size.height);
+
+		//this._htmlContainer.style.top = "-" + (size.height + 4) + 'px';		
+		if( !dontSetBounds ){
+			this.bounds.set({a:{x:0,y:0},b:{x:size.width/this.zoomLevel,y:size.height/this.zoomLevel}})		
+		}
 	},
 	
 	/**
