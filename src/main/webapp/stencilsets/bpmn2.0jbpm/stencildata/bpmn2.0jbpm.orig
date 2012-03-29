@@ -3899,6 +3899,18 @@
 					"visible":false,
 					"stroke":false,
 					"hidden":true
+				},
+				{
+					"id":"bgcolor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"#ffffff",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView":"fill_el",
+					"fill":true,
+					"stroke":false
 				}
 			],
 			"roles": [
