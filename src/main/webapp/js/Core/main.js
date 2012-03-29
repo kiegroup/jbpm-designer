@@ -326,11 +326,10 @@ ORYX.Editor = {
 		// Set the editor to the center, and refresh the size
 	 	canvasParent.parentNode.setAttributeNS(null, 'align', 'center');
 	 	canvasParent.setAttributeNS(null, 'align', 'left');
-		this.getCanvas().setSize({
-			width	: "100%",
-			height	: "100%"
-		});		
-						
+	 	this.getCanvas().setSize({
+			width	: ORYX.CONFIG.CANVAS_WIDTH,
+			height	: ORYX.CONFIG.CANVAS_HEIGHT
+		});
 	},
 	
 	_generateHeader: function(){
@@ -339,7 +338,7 @@ ORYX.Editor = {
 			height		: 0,
 			autoHeight	: false,
 			border		: false,
-			html		: ""//"<div id='oryx_editor_header'><a href=\""+ORYX.CONFIG.WEB_URL+"\" target=\"_blank\"><img src='"+ORYX.PATH+"images/oryx.small.gif' border=\"0\" /></a><div style='clear: both;'></div></div>" 
+			html		: "" 
 		});
 
 		var maActive 	= ORYX.MashupAPI && ORYX.MashupAPI.isUsed;
