@@ -243,7 +243,8 @@ ORYX.Editor = {
 					animate: true,
 					collapsible : true,
 					titleCollapse: true,
-					title: "Properties"
+					title: "Properties",
+					plugins: new Ext.ux.PanelCollapsedTitlePlugin()
 				}),
 				
 				
@@ -268,7 +269,8 @@ ORYX.Editor = {
 					animate: true,
 					collapsible : true,
 					titleCollapse: true,
-					title: "Shape Repository"
+					title: "Shape Repository",
+					plugins: new Ext.ux.PanelCollapsedTitlePlugin()
 				}),
 				
 				
