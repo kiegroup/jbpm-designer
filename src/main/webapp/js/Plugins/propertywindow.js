@@ -2291,7 +2291,7 @@ Ext.form.ComplexExpressionField = Ext.extend(Ext.form.TriggerField,  {
 		var dialog = new Ext.Window({ 
 			layout		: 'anchor',
 			autoCreate	: true, 
-			title		: 'Expression Editor', 
+			title		: 'Expression Editor - Press [Ctrl-Z] to activate auto-completion', 
 			height		: 430, 
 			width		: 550, 
 			modal		: true,
@@ -2335,7 +2335,8 @@ Ext.form.ComplexExpressionField = Ext.extend(Ext.form.TriggerField,  {
 			  mode: "text/x-java",
 			  lineNumbers: true,
 			  lineWrapping: true,
-			  matchBrackets: true
+			  matchBrackets: true,
+			  extraKeys: {"Ctrl-Z": function(cm) {CodeMirror.hint(cm, CodeMirror.jbpmHint, dialog);}}
 			});
 		this.grid.stopEditing();
 	}
