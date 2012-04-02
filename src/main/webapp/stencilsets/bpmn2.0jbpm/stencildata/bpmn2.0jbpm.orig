@@ -1797,7 +1797,7 @@
 				},
 				{
 					"id":"adhoccompletioncondition",
-					"type":"String",
+					"type":"Expression",
 					"title":"AdHocCompletionCondition",
 					"value":"",
 					"description":"",
@@ -1983,7 +1983,7 @@
 				},
 				{
 					"id":"adhoccompletioncondition",
-					"type":"String",
+					"type":"Expression",
 					"title":"AdHocCompletionCondition",
 					"value":"",
 					"description":"",
@@ -2320,7 +2320,7 @@
 				},
 				{
 					"id":"adhoccompletioncondition",
-					"type":"String",
+					"type":"Expression",
 					"title":"AdHocCompletionCondition",
 					"value":"",
 					"description":"",
