@@ -257,7 +257,7 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
             id: id,
             shapes: [shape],
             node: cross,
-            nodePosition: shape instanceof ORYX.Core.Edge ? "START" : "NW"
+            nodePosition: shape instanceof ORYX.Core.Edge ? "START" : "SYNTAX_CHECKS"
         });
         
         var tooltip = new Ext.ToolTip({
