@@ -64,7 +64,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.mozilla.javascript.EvaluatorException;
 
-import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
+import com.google.javascript.jscomp.CompilationLevel;
+import com.google.javascript.jscomp.CompilerOptions;
+import com.google.javascript.jscomp.JSSourceFile;
+import com.google.javascript.jscomp.Result;
 
 /**
  * Servlet to load plugin and Oryx stencilset
@@ -230,24 +233,34 @@ public class EditorHandler extends HttpServlet {
         // generate script to setup the languages
         _envFiles.add("i18n/translation_en_us.js");
         if (!_devMode) {
-            StringWriter sw = new StringWriter();
-            for (String file : _envFiles) {
-                sw.append("/* ").append(file).append(" */\n");
-                InputStream input = new FileInputStream(new File(getServletContext().getRealPath(file)));
-                try {
-                    JavaScriptCompressor compressor = new JavaScriptCompressor(
-                            new InputStreamReader(input), null);
-                    compressor.compress(sw, -1, false, false, false, false);
-                } catch (EvaluatorException e) {
-                    _logger.error(e.getMessage(), e);
-                } catch (IOException e) {
-                    _logger.error(e.getMessage(), e);
-                } finally {
-                    try { input.close(); } catch (IOException e) {}
-                }
-
-                sw.append("\n");
+        	if (_logger.isInfoEnabled()) {
+                _logger.info(
+                    "The diagram editor is running in production mode. " +
+                    "Javascript will be served compressed");
             }
+            StringWriter sw = new StringWriter();
+            List<InputStream> codes = new ArrayList<InputStream>();
+            for (String file : _envFiles) {
+                codes.add(new FileInputStream(new File(getServletContext().getRealPath(file))));
+            }
+            
+            try {
+                sw.append(compileJS(_envFiles, codes));
+                sw.append("\n");
+            } catch (EvaluatorException e) {
+                _logger.error(e.getMessage(), e);
+            } catch (IOException e) {
+                _logger.error(e.getMessage(), e);
+            } finally {
+                try { 
+                    for (InputStream inputStream : codes) {
+                        inputStream.close();
+                    }
+                } catch (IOException e) {}
+            }
+
+                
+            
             try {
                 FileWriter w = new FileWriter(
                         context.getRealPath("jsc/env_combined.js"));
@@ -544,9 +557,7 @@ public class EditorHandler extends HttpServlet {
             sw.append("/* ").append(plugin.getName()).append(" */\n");
             InputStream input = plugin.getContents();
             try {
-                JavaScriptCompressor compressor = new JavaScriptCompressor(
-                        new InputStreamReader(input), null);
-                compressor.compress(sw, -1, false, false, false, false);
+                sw.append(compileJS(plugin.getName(), input));
             } catch (EvaluatorException e) {
                 _logger.error(e.getMessage(), e);
             } catch (IOException e) {
@@ -594,4 +605,41 @@ public class EditorHandler extends HttpServlet {
         }
         return retStr;
     }
+    
+    public static String compileJS(String filename, InputStream code) throws IOException {
+        List<String> filenames = new ArrayList<String>();
+        List<InputStream> codes = new ArrayList<InputStream>();
+        
+        filenames.add(filename);
+        codes.add(code);
+        
+        return compileJS(filenames, codes);
+    }
+    
+    public static String compileJS(List<String> filenames, List<InputStream> codes) throws IOException {
+        com.google.javascript.jscomp.Compiler compiler = new com.google.javascript.jscomp.Compiler();
+
+        CompilerOptions options = new CompilerOptions();
+        CompilationLevel.SIMPLE_OPTIMIZATIONS.setOptionsForCompilationLevel(
+            options);
+
+        // To get the complete set of externs, the logic in
+        // CompilerRunner.getDefaultExterns() should be used here.
+        JSSourceFile extern = JSSourceFile.fromCode("externs.js",
+            "function alert(x) {}");
+
+        // The dummy input name "input.js" is used here so that any warnings or
+        // errors will cite line numbers in terms of input.js.
+        List<JSSourceFile> inputs = new ArrayList<JSSourceFile>();
+        for (int i = 0; i < filenames.size(); i++) {
+            inputs.add(JSSourceFile.fromInputStream(filenames.get(i), codes.get(i)));
+        }
+        
+        // compile() returns a Result, but it is not needed here.
+        Result results = compiler.compile(extern, inputs.toArray(new JSSourceFile[inputs.size()]), options);
+        
+        // The compiler is responsible for generating the compiled code; it is not
+        // accessible via the Result.
+        return compiler.toSource();
+  }
 }
