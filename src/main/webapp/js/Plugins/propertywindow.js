@@ -2454,7 +2454,7 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField,  {
     		        		},
     		        		defaults: {
     		        	        columnWidth: 1.0
-    		        	    },
+    		        	    }
     		        	});
     		        	
     		        	var dialog = new Ext.Window({ 

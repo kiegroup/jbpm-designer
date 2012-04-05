@@ -168,7 +168,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                 	      }
                 	   }.bind(this)
                      }
-            ],
+            ]
 		});		
 		this.dialog.show();
 	}

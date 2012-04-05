@@ -689,19 +689,19 @@ ORYX.I18N.Feedback.subjects = [
     	id: "question",   // ansi-compatible name
     	name: "Question", // natural name
     	description: "Ask your question here! \nPlease give us as much information as possible, so we don't have to bother you with more questions, before we can give an answer.", // default text for the description text input field
-    	info: "", // optional field to give more info
+    	info: "" // optional field to give more info
     },
     {
     	id: "problem",   // ansi-compatible name
     	name: "Problem", // natural name
     	description: "We're sorry for the inconvenience. Give us feedback on the problem, and we'll try to solve it for you. Describe it as detailed as possible, please.", // default text for the description text input field
-    	info: "", // optional field to give more info
+    	info: "" // optional field to give more info
     },
     {
     	id: "idea",   // ansi-compatible name
     	name: "Idea", // natural name
     	description: "Share your ideas and thoughts here!", // default text for the description text input field
-    	info: "", // optional field to give more info
+    	info: "" // optional field to give more info
     }
 ];
 

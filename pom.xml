@@ -125,13 +125,13 @@
         <version>${drools.version}</version>
       </dependency>
       
-      <!-- yui compressor -->
+      <!-- Google's closure-compiler -->
       <dependency>
-        <groupId>com.yahoo.platform.yui</groupId>
-        <artifactId>yuicompressor</artifactId>
-        <version>2.3.6</version>
+        <groupId>com.google.javascript</groupId>
+        <artifactId>closure-compiler</artifactId>
+        <version>r1741</version>
       </dependency>
-
+      
       <!-- bpmn2 libs -->
       <dependency>
         <groupId>org.eclipse</groupId>

@@ -297,7 +297,7 @@ ORYX.Plugins.Dictionary = Clazz.extend({
                         }));
                 	}
                   }
-                  }],
+                  }]
     	});
     	
     	var extractionPanel = new Ext.Panel({
@@ -312,7 +312,7 @@ ORYX.Plugins.Dictionary = Clazz.extend({
     		},
     		defaults: {
     	        columnWidth: 1.0
-    	    },
+    	    }
     	});
     	
     	var dictionaryOutterPanel = new Ext.Panel({
