@@ -1397,8 +1397,10 @@ ORYX.Core.Command.Move = ORYX.Core.Command.extend({
 		this.addShapeToParent( this.newParents ); 
 		// Set the selection to the current selection
 		this.selectCurrentShapes();
-		this.plugin.facade.getCanvas().update();
-		this.plugin.facade.updateSelection();
+		if(this.plugin) {
+			this.plugin.facade.getCanvas().update();
+			this.plugin.facade.updateSelection();
+		}
 	},
 	rollback: function(){
 		// Moves by the inverted offset
@@ -1410,12 +1412,14 @@ ORYX.Core.Command.Move = ORYX.Core.Command.extend({
 		
 		// Set the selection to the current selection
 		this.selectCurrentShapes();
-		this.plugin.facade.getCanvas().update();
-		this.plugin.facade.updateSelection();
+		if(this.plugin) {
+			this.plugin.facade.getCanvas().update();
+			this.plugin.facade.updateSelection();
+		}
 		
 	},
 	move:function(offset, newLocation, doLayout){
-		
+		if(!this.plugin) { return; }
 		// Move all Shapes by these offset
 		for(var i=0; i<this.moveShapes.length ;i++){
 			var value = this.moveShapes[i];		
@@ -1515,30 +1519,31 @@ ORYX.Core.Command.Move = ORYX.Core.Command.extend({
 			var currentShape = this.moveShapes[i];
 			if(currentShape instanceof ORYX.Core.Node &&
 			   currentShape.parent !== parents[i]) {
-				
-				// Calc the new position
-				var unul = parents[i].absoluteXY();
-				var csul = currentShape.absoluteXY();
-				var x = csul.x - unul.x;
-				var y = csul.y - unul.y;
-
-				// Add the shape to the new contained shape
-				parents[i].add(currentShape);
-				// Add all attached shapes as well
-				currentShape.getOutgoingShapes((function(shape) {
-					if(shape instanceof ORYX.Core.Node && !this.moveShapes.member(shape)) {
-						parents[i].add(shape);
+				try {
+					// Calc the new position
+					var unul = parents[i].absoluteXY();
+					var csul = currentShape.absoluteXY();
+					var x = csul.x - unul.x;
+					var y = csul.y - unul.y;
+	
+					// Add the shape to the new contained shape
+					parents[i].add(currentShape);
+					// Add all attached shapes as well
+					currentShape.getOutgoingShapes((function(shape) {
+						if(shape instanceof ORYX.Core.Node && !this.moveShapes.member(shape)) {
+							parents[i].add(shape);
+						}
+					}).bind(this));
+	
+					// Set the new position
+					if(currentShape instanceof ORYX.Core.Node && currentShape.dockers.length == 1){
+						var b = currentShape.bounds;
+						x += b.width()/2;y += b.height()/2
+						currentShape.dockers.first().bounds.centerMoveTo(x, y);
+					} else {
+						currentShape.bounds.moveTo(x, y);
 					}
-				}).bind(this));
-
-				// Set the new position
-				if(currentShape instanceof ORYX.Core.Node && currentShape.dockers.length == 1){
-					var b = currentShape.bounds;
-					x += b.width()/2;y += b.height()/2
-					currentShape.dockers.first().bounds.centerMoveTo(x, y);
-				} else {
-					currentShape.bounds.moveTo(x, y);
-				}
+				}catch(e) {}
 				
 			} 
 			
@@ -1548,6 +1553,7 @@ ORYX.Core.Command.Move = ORYX.Core.Command.extend({
 		}
 	},
 	selectCurrentShapes:function(){
-		this.plugin.facade.setSelection( this.selectedShapes );
+		if(this.plugin)
+			this.plugin.facade.setSelection( this.selectedShapes );
 	}
 });
