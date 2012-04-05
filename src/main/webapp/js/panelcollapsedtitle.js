@@ -20,9 +20,15 @@ Ext.ux.PanelCollapsedTitlePlugin = function() {
       svg.setAttribute('width', '100%');
       svg.setAttribute('height', '100%');
       var textContainer = document.createElementNS(SVGNS, 'text');
-      textContainer.setAttribute('x', 6);
-      textContainer.setAttribute('y', 1);
-      textContainer.setAttribute('transform', 'rotate(90 6 1)');
+      if(this.region == 'west') {
+    	  textContainer.setAttribute('x', 12);
+          textContainer.setAttribute('y', 100);
+    	  textContainer.setAttribute('transform', 'rotate(270 12 100)');
+      } else {
+    	  textContainer.setAttribute('x', 6);
+          textContainer.setAttribute('y', 1);
+    	  textContainer.setAttribute('transform', 'rotate(90 6 1)');
+      }
       textContainer.setAttribute('class', 'x-panel-header ' + rotatedCls);
       svg.appendChild(textContainer);
       this.collapsedHeaderText = document.createTextNode(this.title);
