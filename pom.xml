@@ -60,16 +60,6 @@
       </dependency>
       <dependency>
         <groupId>org.jbpm</groupId>
-        <artifactId>jbpm-human-task</artifactId>
-        <version>${jbpm.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jbpm</groupId>
-        <artifactId>jbpm-persistence-jpa</artifactId>
-        <version>${jbpm.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jbpm</groupId>
         <artifactId>jbpm-workitems</artifactId>
         <version>${jbpm.version}</version>
       </dependency>
@@ -97,10 +87,6 @@
             <groupId>xalan</groupId>
             <artifactId>xalan</artifactId>
           </exclusion>
-          <!-- <exclusion>
-            <groupId>xerces</groupId>
-            <artifactId>xerces</artifactId>
-          </exclusion> -->
           <exclusion>
             <groupId>xerces</groupId>
             <artifactId>xercesImpl</artifactId>
@@ -117,11 +103,6 @@
       <dependency>
         <groupId>org.drools</groupId>
         <artifactId>drools-compiler</artifactId>
-        <version>${drools.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.drools</groupId>
-        <artifactId>drools-persistence-jpa</artifactId>
         <version>${drools.version}</version>
       </dependency>
       
