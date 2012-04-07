@@ -30,7 +30,7 @@
     	style="stroke-dasharray: 5.5, 3" />
     	
     <circle 
-    	id="frame2_non_interrupting" 
+    	id="frame" 
     	cx="16" 
     	cy="16" 
     	r="12" 
@@ -39,10 +39,10 @@
     	stroke-width="1"
     	style="stroke-dasharray: 4.5, 3" />
     
-    <circle id="frame" cx="16" cy="16" r="15" stroke="black" fill="none" stroke-width="1"/>
-    <circle id="frame2" cx="16" cy="16" r="12" stroke="black" fill="none" stroke-width="1"/>
+    <circle id="frame2" cx="16" cy="16" r="15" stroke="black" fill="none" stroke-width="1"/>
+    <circle id="frame3" cx="16" cy="16" r="12" stroke="black" fill="none" stroke-width="1"/>
 
-    <path 
+    <path id="frame4"
 		style="fill:none;
 		fill-opacity:1;
 		stroke:#000000;
@@ -50,7 +50,7 @@
 		stroke-linejoin:bevel;
 		stroke-opacity:1"
        	d="M 20.834856,22.874369 L 10.762008,22.873529 L 7.650126,13.293421 L 15.799725,7.3734296 L 23.948336,13.294781 L 20.834856,22.874369 z"
-       id="middlePolygonCatching" />
+        />
 	<text font-size="11" 
 		id="text_name" 
 		x="16" y="33" 

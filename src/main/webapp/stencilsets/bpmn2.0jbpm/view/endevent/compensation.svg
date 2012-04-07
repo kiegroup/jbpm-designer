@@ -16,12 +16,16 @@
 			<stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
 			<stop id="fill_el" offset="100%" stop-color="#ffffff" stop-opacity="1"/>
 		</radialGradient>
+		<radialGradient id="borderbackground" cx="10%" cy="10%" r="100%" fx="10%" fy="10%">
+			<stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+			<stop id="fill_border" offset="100%" stop-color="#ffffff" stop-opacity="1"/>
+		</radialGradient>
 	</defs>
 	
     <circle id="bg_frame" cx="16" cy="16" r="14" stroke="black" fill="url(#background) white" stroke-width="3"/>
     
-    <polygon stroke="black" fill="black" stroke-width="1" points="15,9 15,23 8,16" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" />
-    <polygon stroke="black" fill="black" stroke-width="1" points="22,9 22,23 15,16" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" />
+    <polygon id="frame" stroke="url(#borderbackground)" fill="url(#borderbackground)" stroke-width="1" points="15,9 15,23 8,16" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" />
+    <polygon id="frame2" stroke="url(#borderbackground)" fill="url(#borderbackground)" stroke-width="1" points="22,9 22,23 15,16" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" />
 	<text font-size="11" 
 		id="text_name" 
 		x="16" y="32" 

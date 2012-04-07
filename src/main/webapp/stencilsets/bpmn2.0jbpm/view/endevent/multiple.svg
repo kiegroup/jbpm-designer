@@ -20,7 +20,7 @@
 	
     <circle id="bg_frame" cx="16" cy="16" r="14" stroke="black" fill="url(#background) white" stroke-width="3"/>
 
-    <path 
+    <path id="frame"
 		style="fill:#000000;
 		fill-opacity:1;
 		stroke:#000000;
@@ -28,7 +28,7 @@
 		stroke-linejoin:bevel;
 		stroke-opacity:1"
        	d="M 20.834856,22.874369 L 10.762008,22.873529 L 7.650126,13.293421 L 15.799725,7.3734296 L 23.948336,13.294781 L 20.834856,22.874369 z"
-       id="middlepolygon" />
+        />
 	
 	<text font-size="11" 
 		id="text_name" 

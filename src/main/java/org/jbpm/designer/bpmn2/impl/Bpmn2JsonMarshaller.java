@@ -138,6 +138,7 @@ import org.jbpm.designer.web.profile.IDiagramProfile;
 public class Bpmn2JsonMarshaller {
 	public static final String defaultBgColor_Activities = "#b1c2d6";
 	public static final String defaultBgColor_Events = "#ffffff";
+	public static final String defaultBrColor = "#000000";
 	
 	private Map<String, DiagramElement> _diagramElements = new HashMap<String, DiagramElement>();
 	private Map<String,Association> _diagramAssociations = new HashMap<String, Association>();
@@ -675,11 +676,16 @@ public class Bpmn2JsonMarshaller {
     	Map<String, Object> flowElementProperties = new LinkedHashMap<String, Object>();
     	Iterator<FeatureMap.Entry> iter = flowElement.getAnyAttribute().iterator();
     	boolean foundBgColor = false;
+    	boolean foundBrColor = false;
         while(iter.hasNext()) {
             FeatureMap.Entry entry = iter.next();
             if(entry.getEStructuralFeature().getName().equals("bgcolor")) {
             	flowElementProperties.put("bgcolor", entry.getValue());
             	foundBgColor = true;
+            }
+            if(entry.getEStructuralFeature().getName().equals("bordercolor")) {
+            	flowElementProperties.put("bordercolor", entry.getValue());
+            	foundBrColor = true;
             }
         }
         if(!foundBgColor) {
@@ -688,6 +694,10 @@ public class Bpmn2JsonMarshaller {
         	} else {
         		flowElementProperties.put("bgcolor", defaultBgColor_Events);
         	}
+        }
+        
+        if(!foundBrColor) {
+        	flowElementProperties.put("bordercolor", defaultBrColor);
         }
 
         Map<String, Object> catchEventProperties = new LinkedHashMap<String, Object>(flowElementProperties);

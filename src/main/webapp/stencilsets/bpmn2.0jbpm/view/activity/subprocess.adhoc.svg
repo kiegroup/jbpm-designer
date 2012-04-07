@@ -33,6 +33,10 @@
 			<stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
 			<stop id="fill_el" offset="100%" stop-color="#ffffff" stop-opacity="1"/>
 		</radialGradient>
+		<radialGradient id="borderbackground" cx="10%" cy="10%" r="100%" fx="10%" fy="10%">
+			<stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+			<stop id="fill_border" offset="100%" stop-color="#ffffff" stop-opacity="1"/>
+		</radialGradient>
 	</defs>
 	
     <rect id="text_frame" oryx:anchors="bottom top right left" x="0" y="0" width="190" height="160" rx="10" ry="10" stroke="none" stroke-width="0" fill="none" />
@@ -60,20 +64,21 @@
 	
 	
 	<g id="miparallel">
-		<path oryx:anchors="bottom" fill="none" stroke="black" d="M97 145 v10 M101 145 v10 M105 145 v10" stroke-width="2" />
+		<path id="frame2" oryx:anchors="bottom" fill="none" stroke="black" d="M97 145 v10 M101 145 v10 M105 145 v10" stroke-width="2" />
 	</g>
 	<g id="misequential">
-		<path oryx:anchors="bottom" fill="none" stroke="#000000" stroke-width="2" d="M96,154h10 M96,150h10 M96,146h10"/>
+		<path id="frame3" oryx:anchors="bottom" fill="none" stroke="black" stroke-width="2" d="M96,154h10 M96,150h10 M96,146h10"/>
 	</g>
 	
 	
 	<g id="adhoc">
-		<text 
+		<text id="frame4"
 			oryx:anchors="bottom"
 			x="111"
 			y="157"
 			font-size="20"
 			transform="translate(8,0)"
+			fill="url(#borderbackground)"
 		>~</text>
 	</g>
 	<!-- <g id="compensation">

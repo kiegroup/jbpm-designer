@@ -46,6 +46,18 @@
 					"refToView": "fill_el",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"bordercolor",
+					"type":"Color",
+					"title":"BorderColor",
+					"value":"#000000",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
+					"fill":false,
+					"stroke":true
 				}
 			]
 		},
@@ -1618,6 +1630,18 @@
 					"refToView":"fill_el",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"bordercolor",
+					"type":"Color",
+					"title":"BorderColor",
+					"value":"#000000",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
+					"fill":false,
+					"stroke":true
 				}		
 			]
 		},
@@ -1679,6 +1703,18 @@
 					"refToView":"fill_el",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"bordercolor",
+					"type":"Color",
+					"title":"BorderColor",
+					"value":"#000000",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
+					"fill":false,
+					"stroke":true
 				}		
 			]
 		},		
@@ -2836,6 +2872,18 @@
 					"stroke":false
 				},
 				{
+					"id":"bordercolor",
+					"type":"Color",
+					"title":"BorderColor",
+					"value":"#000000",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
+					"fill":false,
+					"stroke":true
+				},
+				{
 					"id":"calledelement",
 					"type":"CalledElement",
 					"title":"Called Element",
@@ -2982,6 +3030,18 @@
 					"fill":true,
 					"stroke":false
 				},
+				{
+					"id":"bordercolor",
+					"type":"Color",
+					"title":"BorderColor",
+					"value":"#000000",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
+					"fill":false,
+					"stroke":true
+				},
  				{
 					"id":"collectionexpression",
 					"type":"String",
@@ -3114,6 +3174,18 @@
 					"refToView":"fill_el",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"bordercolor",
+					"type":"Color",
+					"title":"BorderColor",
+					"value":"#000000",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
+					"fill":false,
+					"stroke":true
 				},	
 				{
 					"id":"onEntryActions",
@@ -3231,6 +3303,18 @@
 					"fill":true,
 					"stroke":false
 				},	
+				{
+					"id":"bordercolor",
+					"type":"Color",
+					"title":"BorderColor",
+					"value":"#000000",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
+					"fill":false,
+					"stroke":true
+				},
 				{
 					"id":"onEntryActions",
 					"type":"Action",
@@ -3407,6 +3491,18 @@
 					"refToView":"fill_el",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"bordercolor",
+					"type":"Color",
+					"title":"BorderColor",
+					"value":"#000000",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
+					"fill":false,
+					"stroke":true
 				}	
 			],
 			"roles": 			[
@@ -3456,6 +3552,18 @@
 					"refToView":"fill_el",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"bordercolor",
+					"type":"Color",
+					"title":"BorderColor",
+					"value":"#000000",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
+					"fill":false,
+					"stroke":true
 				},	
 				{
 					"id":"isatransaction",
@@ -3865,6 +3973,18 @@
 					"refToView":"fill_el",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"bordercolor",
+					"type":"Color",
+					"title":"BorderColor",
+					"value":"#000000",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
+					"fill":false,
+					"stroke":true
 				}
 			],
 			"roles" :		 	[
@@ -3911,6 +4031,18 @@
 					"refToView":"fill_el",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"bordercolor",
+					"type":"Color",
+					"title":"BorderColor",
+					"value":"#000000",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
+					"fill":false,
+					"stroke":true
 				}
 			],
 			"roles": [
@@ -3972,6 +4104,18 @@
 			],
 			"properties" : [
 				{
+					"id":"bordercolor",
+					"type":"Color",
+					"title":"BorderColor",
+					"value":"#000000",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
+					"fill":false,
+					"stroke":true
+				},
+				{
 					"id":"artifacttype",
 					"type":"String",
 					"title":"ArtifactType",
@@ -4014,6 +4158,18 @@
 					"refToView":"text",
 					"length":"",
 					"wrapLines":true
+				},
+				{
+					"id":"bordercolor",
+					"type":"Color",
+					"title":"BorderColor",
+					"value":"#000000",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
+					"fill":false,
+					"stroke":true
 				},
 				{
 					"id":"artifacttype",
@@ -4243,6 +4399,18 @@
 					"refToView":"fill_el",
 					"fill":true,
 					"stroke":false
+				},
+				{
+					"id":"bordercolor",
+					"type":"Color",
+					"title":"BorderColor",
+					"value":"#000000",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
+					"fill":false,
+					"stroke":true
 				}
 			],
 			"roles" :			[
@@ -4300,6 +4468,18 @@
 					"fill":true,
 					"stroke":false,
 					"hidden":true
+				},
+				{
+					"id":"bordercolor",
+					"type":"Color",
+					"title":"BorderColor",
+					"value":"#000000",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
+					"fill":false,
+					"stroke":true
 				}
 			],
 			"roles" :			[
@@ -6187,6 +6367,18 @@
 							"value":"isNotified"
 						}
 					]
+				},
+				{
+					"id":"bordercolor",
+					"type":"Color",
+					"title":"BorderColor",
+					"value":"#000000",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
+					"fill":false,
+					"stroke":true
 				}
            ]
 		},
@@ -6219,7 +6411,19 @@
                     "refToView":"name",
                     "wrapLines":true,
 					"popular":true
-                }
+                },
+                {
+					"id":"bordercolor",
+					"type":"Color",
+					"title":"BorderColor",
+					"value":"#000000",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
+					"fill":false,
+					"stroke":true
+				}
            ]
 		},
 		/**{

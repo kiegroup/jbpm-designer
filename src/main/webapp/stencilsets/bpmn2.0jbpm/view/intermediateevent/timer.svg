@@ -30,7 +30,7 @@
     	style="stroke-dasharray: 5.5, 3" />
     	
     <circle 
-    	id="frame2_non_interrupting" 
+    	id="frame" 
     	cx="16" 
     	cy="16" 
     	r="12" 
@@ -39,11 +39,11 @@
     	stroke-width="1"
     	style="stroke-dasharray: 4.5, 3" />
     
-    <circle id="frame" cx="16" cy="16" r="15" stroke="black" fill="none" stroke-width="1"/>
-    <circle id="frame2" cx="16" cy="16" r="12" stroke="black" fill="none" stroke-width="1"/>
+    <circle id="frame2" cx="16" cy="16" r="15" stroke="black" fill="none" stroke-width="1"/>
+    <circle id="frame3" cx="16" cy="16" r="12" stroke="black" fill="none" stroke-width="1"/>
     
-    <circle cx="16" cy="16" r="10" stroke="black" fill="none" stroke-width="1"/>
-    <path d="	M 16 6 L 16 9
+    <circle id="frame4" cx="16" cy="16" r="10" stroke="black" fill="none" stroke-width="1"/>
+    <path id="frame5" d="	M 16 6 L 16 9
     		M 21 7 L 19.5 10
     		M 25 11 L 22 12.5
     		M 26 16 L 23 16

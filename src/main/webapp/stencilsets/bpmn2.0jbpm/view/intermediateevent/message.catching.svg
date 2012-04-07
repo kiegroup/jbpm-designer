@@ -30,7 +30,7 @@
     	style="stroke-dasharray: 5.5, 3" />
     	
     <circle 
-    	id="frame2_non_interrupting" 
+    	id="frame" 
     	cx="16" 
     	cy="16" 
     	r="12" 
@@ -39,11 +39,11 @@
     	stroke-width="1"
     	style="stroke-dasharray: 4.5, 3" />
     	
-    <circle id="frame" cx="16" cy="16" r="15" stroke="black" fill="none" stroke-width="1"/>
-    <circle id="frame2" cx="16" cy="16" r="12" stroke="black" fill="none" stroke-width="1"/>
+    <circle id="frame2" cx="16" cy="16" r="15" stroke="black" fill="none" stroke-width="1"/>
+    <circle id="frame3" cx="16" cy="16" r="12" stroke="black" fill="none" stroke-width="1"/>
     
 	<g id="messageCatching">
-		<path stroke="black" fill="none" stroke-width="1" d="M8,11 L8,21 L24,21 L24,11z M8,11 L16,17 L24,11" />
+		<path id="frame4" stroke="black" fill="none" stroke-width="1" d="M8,11 L8,21 L24,21 L24,11z M8,11 L16,17 L24,11" />
 	</g>
 	<text font-size="11" 
 		id="text_name" 
