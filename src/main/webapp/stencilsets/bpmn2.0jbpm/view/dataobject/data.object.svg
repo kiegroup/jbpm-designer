@@ -23,11 +23,11 @@
 			</radialGradient>
 		</defs>
 		
-		<polyline oryx:resize="vertical horizontal" oryx:anchors="left right" id="frame" stroke="black" fill="#ffffff" stroke-width="1" points="78,97 0,97 0,0 78,0"/>
+		<polyline id="frame" oryx:resize="vertical horizontal" oryx:anchors="left right" stroke="black" fill="#ffffff" stroke-width="1" points="78,97 0,97 0,0 78,0"/>
 		
-		<polyline oryx:anchors="right top bottom" id="celem2" stroke="black" fill="#ffffff" stroke-width="1" points="78,97 88,97 88,10 78,10"/>
+		<polyline id="frame2" oryx:anchors="right top bottom" stroke="black" fill="#ffffff" stroke-width="1" points="78,97 88,97 88,10 78,10"/>
 		
-		<polyline oryx:anchors="right top" id="celem3" stroke="black" fill="url(#background) white" stroke-width="1" points="88,10 78,0 78,10 88,10"/>
+		<polyline id="frame3" oryx:anchors="right top" stroke="black" fill="url(#background) white" stroke-width="1" points="88,10 78,0 78,10 88,10"/>
 		
 		<rect id="unvisibleBorder" x="0" y="0" height="97" width="88" stroke="none" fill="none" oryx:resize="horizontal vertical"/>
 		

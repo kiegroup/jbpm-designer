@@ -150,6 +150,7 @@ import org.osgi.framework.ServiceReference;
 public class Bpmn2JsonUnmarshaller {
 
 	public static final String defaultBgColor = "#b1c2d6";
+	public static final String defaultBrColor = "#000000";
     // a list of the objects created, kept in memory with their original id for
     // fast lookup.
     private Map<Object, String> _objMap = new HashMap<Object, String>();
@@ -2691,6 +2692,16 @@ public class Bpmn2JsonUnmarshaller {
                         	"http://www.jboss.org/drools", "bgcolor", false, false);
         		EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
         				properties.get("bgcolor"));
+        		baseElement.getAnyAttribute().add(extensionEntry);
+        	}
+        }
+        if(properties.get("bordercolor") != null && properties.get("bordercolor").length() > 0) {
+        	if(!properties.get("bordercolor").equals(defaultBrColor)) {
+        		ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+        		EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                        	"http://www.jboss.org/drools", "bordercolor", false, false);
+        		EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+        				properties.get("bordercolor"));
         		baseElement.getAnyAttribute().add(extensionEntry);
         	}
         }

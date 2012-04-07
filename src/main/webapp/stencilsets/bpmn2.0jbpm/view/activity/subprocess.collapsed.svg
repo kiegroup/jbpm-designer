@@ -34,11 +34,10 @@
 			<stop id="fill_el" offset="100%" stop-color="#ffffcc" stop-opacity="1"/>
 		</radialGradient>
 	</defs>
-	
 	<rect id="text_frame" oryx:anchors="bottom top right left" x="1" y="1" width="94" height="79" rx="10" ry="10" stroke="none" stroke-width="0" fill="none" />
 	<rect id="bg_frame" oryx:anchors="bottom top right left" x="0" y="0" width="100" height="80" rx="10" ry="10" stroke="black" stroke-width="1" fill="url(#background) #ffffcc" />
-	<rect id="fill" oryx:resize="vertical horizontal" oryx:anchors="bottom top right left" x="0" y="0" width="100" height="80" rx="10" ry="10" stroke="black" stroke-width="4" fill="none" />
-	<rect id="border" oryx:anchors="top bottom left right" oryx:resize="vertical horizontal" x="2.5" y="2.5" width="95" height="75" rx="8" ry="8" stroke="black" stroke-width="1" fill="none" />
+	<rect id="frame" oryx:resize="vertical horizontal" oryx:anchors="bottom top right left" x="0" y="0" width="100" height="80" rx="10" ry="10" stroke="black" stroke-width="4" fill="none" />
+	<rect id="frame2" oryx:anchors="top bottom left right" oryx:resize="vertical horizontal" x="2.5" y="2.5" width="95" height="75" rx="8" ry="8" stroke="black" stroke-width="1" fill="none" />
     	<text 
 			font-size="12"
 			id="text_name" 
@@ -51,8 +50,8 @@
     
     <a id="pimg" onclick="">	
 	<g id="b" oryx:anchors="bottom">
-		<rect oryx:anchors="bottom" x="44" y="66" width="14" height="14" fill="none" stroke="black" stroke-width="1" />
-		<path oryx:anchors="bottom" fill="none" stroke="black" d="M51 68 v10 M 46 73 h10" stroke-width="1"/>
+		<rect id="frame3" oryx:anchors="bottom" x="44" y="66" width="14" height="14" fill="none" stroke="black" stroke-width="1" />
+		<path id="frame4" oryx:anchors="bottom" fill="none" stroke="black" d="M51 68 v10 M 46 73 h10" stroke-width="1"/>
 	</g>
 	</a>
 	<g id="none"></g>
