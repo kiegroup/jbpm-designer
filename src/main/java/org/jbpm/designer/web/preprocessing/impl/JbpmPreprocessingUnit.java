@@ -38,6 +38,7 @@ import org.drools.process.core.impl.ParameterDefinitionImpl;
 import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingUnit;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.impl.ExternalInfo;
+import org.jbpm.designer.web.server.ServletUtil;
 import org.jbpm.process.workitem.WorkDefinitionImpl;
 import org.drools.process.core.datatype.DataType;
 import org.mvel2.MVEL;
@@ -139,7 +140,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         	} else {
         		workItemTemplate.setAttribute("packageName", "");
         	}
-        	String[] info = findPackageAndAssetInfo(uuid, profile);
+        	String[] info = ServletUtil.findPackageAndAssetInfo(uuid, profile);
         	if(info != null && info.length == 2 && info[1] != null) {
         		workItemTemplate.setAttribute("processName", info[1]);
         	} else {
@@ -538,14 +539,15 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                                 gotPackage = true;
                             }
                         }
-                        
-                        if ("asset".equals(reader.getLocalName())) {
-                            if(format.equals(WORKITEM_DEFINITION_EXT)) {
-                                packageConfigs.get(nextPackage).add(title);
-                                title = "";
-                                format = "";
-                            }
-                        }
+                    }
+                    if (next == XMLStreamReader.END_ELEMENT) {
+                      if ("asset".equals(reader.getLocalName())) {
+                    	  if(format.equals(WORKITEM_DEFINITION_EXT)) {
+                    		  packageConfigs.get(nextPackage).add(title);
+                    		  title = "";
+                    		  format = "";
+                    	  }
+                      }
                     }
                 }
                 if(format.equals("wid")) {
@@ -585,65 +587,6 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             _logger.error(e.getMessage());
         } 
         return packages;
-    }
-    
-    private String[] findPackageAndAssetInfo(String uuid,
-            IDiagramProfile profile) throws Exception {
-        List<String> packages = new ArrayList<String>();
-        String packagesURL = ExternalInfo.getExternalProtocol(profile)
-                + "://"
-                + ExternalInfo.getExternalHost(profile)
-                + "/"
-                + profile.getExternalLoadURLSubdomain().substring(0,
-                        profile.getExternalLoadURLSubdomain().indexOf("/"))
-                + "/rest/packages/";
-         XMLInputFactory factory = XMLInputFactory.newInstance();
-         XMLStreamReader reader = factory
-                .createXMLStreamReader(getInputStreamForURL(packagesURL, profile));
-        while (reader.hasNext()) {
-            if (reader.next() == XMLStreamReader.START_ELEMENT) {
-                if ("title".equals(reader.getLocalName())) {
-                    packages.add(reader.getElementText());
-                }
-            }
-        }
-        boolean gotPackage = false;
-        String[] pkgassetinfo = new String[2];
-        for (String nextPackage : packages) {
-            String packageAssetURL = ExternalInfo.getExternalProtocol(profile)
-                    + "://"
-                    + ExternalInfo.getExternalHost(profile)
-                    + "/"
-                    + profile.getExternalLoadURLSubdomain().substring(0,
-                            profile.getExternalLoadURLSubdomain().indexOf("/"))
-                    + "/rest/packages/" + nextPackage + "/assets/";
-            XMLInputFactory pfactory = XMLInputFactory.newInstance();
-            XMLStreamReader preader = pfactory
-                   .createXMLStreamReader(getInputStreamForURL(
-                            packageAssetURL, profile));
-            String title = "";
-            while (preader.hasNext()) {
-                int next = preader.next();
-                if (next == XMLStreamReader.START_ELEMENT) {
-                    if ("title".equals(preader.getLocalName())) {
-                        title = preader.getElementText();
-                    }
-                    if ("uuid".equals(preader.getLocalName())) {
-                        String eleText = preader.getElementText();
-                        if (uuid.equals(eleText)) {
-                            pkgassetinfo[0] = nextPackage;
-                            pkgassetinfo[1] = title;
-                            gotPackage = true;
-                        }
-                    }
-                }
-            }
-            if (gotPackage) {
-                // noo need to loop through rest of packages
-                break;
-            }
-        }
-        return pkgassetinfo;
     }
     
     private String readFile(String pathname) throws IOException {
