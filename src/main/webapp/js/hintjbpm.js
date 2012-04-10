@@ -58,13 +58,19 @@
   }
 
   var kcontextMethods = ("getProcessInstance() getNodeInstance() getVariable(variableName) setVariable(variableName,value) getKnowledgeRuntime()").split(" ");
+  var genericProps = ("return kcontext").split(" ");
   
   function getCompletions(token, context, keywords) {
     var found = [], start = token.string;
     
     function maybeAdd(str) {
         if (str.indexOf(start) == 0 && !arrayContains(found, str)) {
-        	found.push(str);
+        	if(str.indexOf(":") > 0) {
+        		var valueParts = str.split(":");
+        		found.push(valueParts[0]);
+        	} else {
+        		found.push(str);
+        	}
         }
     }
     
@@ -74,6 +80,7 @@
     		forEach(kcontextMethods, maybeAdd);
     	}
     } else {
+    	  forEach(genericProps, maybeAdd);
     	  var processJSON = ORYX.EDITOR.getSerializedJSON();
     	  var processVars = jsonPath(processJSON.evalJSON(), "$.properties.vardefs");
     	  if(processVars) {
