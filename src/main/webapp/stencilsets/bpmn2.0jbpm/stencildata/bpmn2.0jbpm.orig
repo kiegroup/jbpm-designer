@@ -4605,7 +4605,7 @@
 					"readonly":true,
 					"optional":false
 				},**/
-				{
+				/**{
 					"id":"timedate",
 					"type":"String",
 					"title":"Time Date",
@@ -4615,7 +4615,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":""
-				},
+				},**/
 				{
 					"id":"timeduration",
 					"type":"Text",
@@ -5068,7 +5068,7 @@
 					"refToView":"",
 					"length":""
 				},**/
-				{
+				/**{
 					"id":"timedate",
 					"type":"String",
 					"title":"Time Date",
@@ -5078,7 +5078,7 @@
 					"optional":true,
 					"refToView":"",
 					"length":""
-				},
+				},**/
 				{
 					"id":"timeduration",
 					"type":"Text",
