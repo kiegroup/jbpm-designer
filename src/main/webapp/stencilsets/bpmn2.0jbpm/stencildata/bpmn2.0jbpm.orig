@@ -60,6 +60,18 @@
 					"stroke":true
 				},
 				{
+					"id":"fontcolor",
+					"type":"Color",
+					"title":"Font Color",
+					"value":"#000000",
+					"description":"Font color",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["text_name"],
+					"fill":true,
+					"stroke":false
+				},
+				{
 					"id":"fontsize",
 					"type":"Choice",
 					"title":"Font Size",
@@ -1716,6 +1728,18 @@
 					"stroke":true
 				},
 				{
+					"id":"fontcolor",
+					"type":"Color",
+					"title":"Font Color",
+					"value":"#000000",
+					"description":"Font color",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["text_name"],
+					"fill":true,
+					"stroke":false
+				},
+				{
 					"id":"fontsize",
 					"type":"Choice",
 					"title":"Font Size",
@@ -1859,6 +1883,18 @@
 					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
 					"fill":false,
 					"stroke":true
+				},
+				{
+					"id":"fontcolor",
+					"type":"Color",
+					"title":"Font Color",
+					"value":"#000000",
+					"description":"Font color",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["text_name"],
+					"fill":true,
+					"stroke":false
 				},
 				{
 					"id":"fontsize",
@@ -3109,6 +3145,18 @@
 					"stroke":true
 				},
 				{
+					"id":"fontcolor",
+					"type":"Color",
+					"title":"Font Color",
+					"value":"#000000",
+					"description":"Font color",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["text_name"],
+					"fill":true,
+					"stroke":false
+				},
+				{
 					"id":"fontsize",
 					"type":"Choice",
 					"title":"Font Size",
@@ -3340,6 +3388,18 @@
 					"stroke":true
 				},
 				{
+					"id":"fontcolor",
+					"type":"Color",
+					"title":"Font Color",
+					"value":"#000000",
+					"description":"Font color",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["text_name"],
+					"fill":true,
+					"stroke":false
+				},
+				{
 					"id":"fontsize",
 					"type":"Choice",
 					"title":"Font Size",
@@ -3557,6 +3617,18 @@
 					"stroke":true
 				},	
 				{
+					"id":"fontcolor",
+					"type":"Color",
+					"title":"Font Color",
+					"value":"#000000",
+					"description":"Font color",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["text_name"],
+					"fill":true,
+					"stroke":false
+				},
+				{
 					"id":"fontsize",
 					"type":"Choice",
 					"title":"Font Size",
@@ -3755,6 +3827,18 @@
 					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
 					"fill":false,
 					"stroke":true
+				},
+				{
+					"id":"fontcolor",
+					"type":"Color",
+					"title":"Font Color",
+					"value":"#000000",
+					"description":"Font color",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["text_name"],
+					"fill":true,
+					"stroke":false
 				},
 				{
 					"id":"fontsize",
@@ -4018,6 +4102,18 @@
 					"stroke":true
 				},
 				{
+					"id":"fontcolor",
+					"type":"Color",
+					"title":"Font Color",
+					"value":"#000000",
+					"description":"Font color",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["text_name"],
+					"fill":true,
+					"stroke":false
+				},
+				{
 					"id":"fontsize",
 					"type":"Choice",
 					"title":"Font Size",
@@ -4149,6 +4245,18 @@
 					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
 					"fill":false,
 					"stroke":true
+				},
+				{
+					"id":"fontcolor",
+					"type":"Color",
+					"title":"Font Color",
+					"value":"#000000",
+					"description":"Font color",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["text_name"],
+					"fill":true,
+					"stroke":false
 				},
 				{
 					"id":"fontsize",
@@ -4644,6 +4752,18 @@
 					"stroke":true
 				},
 				{
+					"id":"fontcolor",
+					"type":"Color",
+					"title":"Font Color",
+					"value":"#000000",
+					"description":"Font color",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["text_name"],
+					"fill":true,
+					"stroke":false
+				},
+				{
 					"id":"fontsize",
 					"type":"Choice",
 					"title":"Font Size",
@@ -4772,6 +4892,18 @@
 					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
 					"fill":false,
 					"stroke":true
+				},
+				{
+					"id":"fontcolor",
+					"type":"Color",
+					"title":"Font Color",
+					"value":"#000000",
+					"description":"Font color",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["text_name"],
+					"fill":true,
+					"stroke":false
 				},
 				{
 					"id":"fontsize",
@@ -4917,6 +5049,18 @@
 					"stroke":true
 				},
 				{
+					"id":"fontcolor",
+					"type":"Color",
+					"title":"Font Color",
+					"value":"#000000",
+					"description":"Font color",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["text_name"],
+					"fill":true,
+					"stroke":false
+				},
+				{
 					"id":"fontsize",
 					"type":"Choice",
 					"title":"Font Size",
@@ -5043,6 +5187,18 @@
 					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
 					"fill":false,
 					"stroke":true
+				},
+				{
+					"id":"fontcolor",
+					"type":"Color",
+					"title":"Font Color",
+					"value":"#000000",
+					"description":"Font color",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["text_name"],
+					"fill":true,
+					"stroke":false
 				},
 				{
 					"id":"fontsize",
@@ -5358,6 +5514,18 @@
 					"stroke":true
 				},
 				{
+					"id":"fontcolor",
+					"type":"Color",
+					"title":"Font Color",
+					"value":"#000000",
+					"description":"Font color",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["text_name"],
+					"fill":true,
+					"stroke":false
+				},
+				{
 					"id":"fontsize",
 					"type":"Choice",
 					"title":"Font Size",
@@ -5497,6 +5665,18 @@
 					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
 					"fill":false,
 					"stroke":true
+				},
+				{
+					"id":"fontcolor",
+					"type":"Color",
+					"title":"Font Color",
+					"value":"#000000",
+					"description":"Font color",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["text_name"],
+					"fill":true,
+					"stroke":false
 				},
 				{
 					"id":"fontsize",
@@ -7470,6 +7650,18 @@
 					"stroke":true
 				},
 				{
+					"id":"fontcolor",
+					"type":"Color",
+					"title":"Font Color",
+					"value":"#000000",
+					"description":"Font color",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["text_name"],
+					"fill":true,
+					"stroke":false
+				},
+				{
 					"id":"fontsize",
 					"type":"Choice",
 					"title":"Font Size",
@@ -7584,6 +7776,18 @@
 					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
 					"fill":false,
 					"stroke":true
+				},
+				{
+					"id":"fontcolor",
+					"type":"Color",
+					"title":"Font Color",
+					"value":"#000000",
+					"description":"Font color",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["text_name"],
+					"fill":true,
+					"stroke":false
 				},
 				{
 					"id":"fontsize",

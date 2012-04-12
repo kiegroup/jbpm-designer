@@ -139,6 +139,7 @@ public class Bpmn2JsonMarshaller {
 	public static final String defaultBgColor_Activities = "#b1c2d6";
 	public static final String defaultBgColor_Events = "#ffffff";
 	public static final String defaultBrColor = "#000000";
+	public static final String defaultFontColor = "#000000";
 	
 	private Map<String, DiagramElement> _diagramElements = new HashMap<String, DiagramElement>();
 	private Map<String,Association> _diagramAssociations = new HashMap<String, Association>();
@@ -637,6 +638,7 @@ public class Bpmn2JsonMarshaller {
 	    	Iterator<FeatureMap.Entry> iter = lane.getAnyAttribute().iterator();
 	    	boolean foundBgColor = false;
 	    	boolean foundBrColor = false;
+	    	boolean foundFontColor = false;
 	        while(iter.hasNext()) {
 	            FeatureMap.Entry entry = iter.next();
 	            if(entry.getEStructuralFeature().getName().equals("bgcolor")) {
@@ -651,6 +653,10 @@ public class Bpmn2JsonMarshaller {
 	            	laneProperties.put("fontsize", entry.getValue());
 	            	foundBrColor = true;
 	            }
+	            if(entry.getEStructuralFeature().getName().equals("fontcolor")) {
+	            	laneProperties.put("fontcolor", entry.getValue());
+	            	foundFontColor = true;
+	            }
 	        }
 	        if(!foundBgColor) {
 	        	laneProperties.put("bgcolor", defaultBgColor_Events);
@@ -658,6 +664,10 @@ public class Bpmn2JsonMarshaller {
 	        
 	        if(!foundBrColor) {
 	        	laneProperties.put("bordercolor", defaultBrColor);
+	        }
+	        
+	        if(!foundFontColor) {
+	        	laneProperties.put("fontcolor", defaultFontColor);
 	        }
 	    	
 	    	marshallProperties(laneProperties, generator);
@@ -704,6 +714,7 @@ public class Bpmn2JsonMarshaller {
     	Iterator<FeatureMap.Entry> iter = flowElement.getAnyAttribute().iterator();
     	boolean foundBgColor = false;
     	boolean foundBrColor = false;
+    	boolean foundFontColor = false;
         while(iter.hasNext()) {
             FeatureMap.Entry entry = iter.next();
             if(entry.getEStructuralFeature().getName().equals("bgcolor")) {
@@ -718,6 +729,10 @@ public class Bpmn2JsonMarshaller {
             	flowElementProperties.put("fontsize", entry.getValue());
             	foundBrColor = true;
             }
+            if(entry.getEStructuralFeature().getName().equals("fontcolor")) {
+            	flowElementProperties.put("fontcolor", entry.getValue());
+            	foundFontColor = true;
+            }
         }
         if(!foundBgColor) {
         	if(flowElement instanceof Activity && !(flowElement instanceof SubProcess) ) {
@@ -729,6 +744,10 @@ public class Bpmn2JsonMarshaller {
         
         if(!foundBrColor) {
         	flowElementProperties.put("bordercolor", defaultBrColor);
+        }
+        
+        if(!foundFontColor) {
+        	flowElementProperties.put("fontcolor", defaultFontColor);
         }
 
         Map<String, Object> catchEventProperties = new LinkedHashMap<String, Object>(flowElementProperties);
