@@ -1222,6 +1222,7 @@ public class Bpmn2JsonMarshaller {
         // data inputs
         DataInput groupDataInput = null;
         DataInput skippableDataInput = null;
+        DataInput commentDataInput = null;
         if(task.getIoSpecification() != null) {
             List<InputSet> inputSetList = task.getIoSpecification().getInputSets();
             StringBuilder dataInBuffer = new StringBuilder();
@@ -1241,6 +1242,9 @@ public class Bpmn2JsonMarshaller {
                     }
                     if(dataIn.getName() != null && dataIn.getName().equals("Skippable")) {
                     	skippableDataInput = dataIn;
+                    }
+                    if(dataIn.getName() != null && dataIn.getName().equals("Comment")) {
+                    	commentDataInput = dataIn;
                     }
                 }
             }
@@ -1328,6 +1332,11 @@ public class Bpmn2JsonMarshaller {
             				((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
             						((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(skippableDataInput.getId())) {
             			properties.put("skippable", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
+            		}
+            		if (commentDataInput != null && datain.getAssignment().get(0).getTo() != null &&
+            				((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
+            						((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(commentDataInput.getId())) {
+            			properties.put("comment", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
             		}
             	}
             } 
