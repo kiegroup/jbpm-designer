@@ -2705,6 +2705,15 @@ public class Bpmn2JsonUnmarshaller {
         		baseElement.getAnyAttribute().add(extensionEntry);
         	}
         }
+        
+        if(properties.get("fontsize") != null && properties.get("fontsize").length() > 0) {
+        	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+        	EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+        			"http://www.jboss.org/drools", "fontsize", false, false);
+        	EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+        			properties.get("fontsize"));
+        	baseElement.getAnyAttribute().add(extensionEntry);
+        }
     }
 
     protected void applyDefinitionProperties(Definitions def, Map<String, String> properties) {

@@ -687,6 +687,10 @@ public class Bpmn2JsonMarshaller {
             	flowElementProperties.put("bordercolor", entry.getValue());
             	foundBrColor = true;
             }
+            if(entry.getEStructuralFeature().getName().equals("fontsize")) {
+            	flowElementProperties.put("fontsize", entry.getValue());
+            	foundBrColor = true;
+            }
         }
         if(!foundBgColor) {
         	if(flowElement instanceof Activity && !(flowElement instanceof SubProcess) ) {

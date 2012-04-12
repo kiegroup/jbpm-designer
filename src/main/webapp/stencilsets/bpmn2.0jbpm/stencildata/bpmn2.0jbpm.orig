@@ -58,6 +58,78 @@
 					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
 					"fill":false,
 					"stroke":true
+				},
+				{
+					"id":"fontsize",
+					"type":"Choice",
+					"title":"Font Size",
+					"value":"",
+					"description":"The Font Size",
+					"readonly":false,
+					"optional":false,
+					"refToView":"text_name",
+					"items":[
+						{
+							"id":"c1",
+							"title":"8",
+							"value":"8"
+						},
+						{
+							"id":"c2",
+							"title":"9",
+							"value":"9"
+						},
+						{
+							"id":"c3",
+							"title":"10",
+							"value":"10"
+						},
+						{
+							"id":"c4",
+							"title":"11",
+							"value":"11"
+						},
+						{
+							"id":"c5",
+							"title":"12",
+							"value":"12"
+						},
+						{
+							"id":"c6",
+							"title":"14",
+							"value":"14"
+						},
+						{
+							"id":"c7",
+							"title":"18",
+							"value":"18"
+						},
+						{
+							"id":"c8",
+							"title":"20",
+							"value":"20"
+						},
+						{
+							"id":"c9",
+							"title":"24",
+							"value":"24"
+						},
+						{
+							"id":"c10",
+							"title":"36",
+							"value":"36"
+						},
+						{
+							"id":"c11",
+							"title":"48",
+							"value":"48"
+						},
+						{
+							"id":"c12",
+							"title":"72",
+							"value":"72"
+						}
+					]
 				}
 			]
 		},
@@ -1642,6 +1714,78 @@
 					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
 					"fill":false,
 					"stroke":true
+				},
+				{
+					"id":"fontsize",
+					"type":"Choice",
+					"title":"Font Size",
+					"value":"",
+					"description":"The Font Size",
+					"readonly":false,
+					"optional":false,
+					"refToView":"text_name",
+					"items":[
+						{
+							"id":"c1",
+							"title":"8",
+							"value":"8"
+						},
+						{
+							"id":"c2",
+							"title":"9",
+							"value":"9"
+						},
+						{
+							"id":"c3",
+							"title":"10",
+							"value":"10"
+						},
+						{
+							"id":"c4",
+							"title":"11",
+							"value":"11"
+						},
+						{
+							"id":"c5",
+							"title":"12",
+							"value":"12"
+						},
+						{
+							"id":"c6",
+							"title":"14",
+							"value":"14"
+						},
+						{
+							"id":"c7",
+							"title":"18",
+							"value":"18"
+						},
+						{
+							"id":"c8",
+							"title":"20",
+							"value":"20"
+						},
+						{
+							"id":"c9",
+							"title":"24",
+							"value":"24"
+						},
+						{
+							"id":"c10",
+							"title":"36",
+							"value":"36"
+						},
+						{
+							"id":"c11",
+							"title":"48",
+							"value":"48"
+						},
+						{
+							"id":"c12",
+							"title":"72",
+							"value":"72"
+						}
+					]
 				}		
 			]
 		},
@@ -1715,6 +1859,78 @@
 					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
 					"fill":false,
 					"stroke":true
+				},
+				{
+					"id":"fontsize",
+					"type":"Choice",
+					"title":"Font Size",
+					"value":"",
+					"description":"The Font Size",
+					"readonly":false,
+					"optional":false,
+					"refToView":"text_name",
+					"items":[
+						{
+							"id":"c1",
+							"title":"8",
+							"value":"8"
+						},
+						{
+							"id":"c2",
+							"title":"9",
+							"value":"9"
+						},
+						{
+							"id":"c3",
+							"title":"10",
+							"value":"10"
+						},
+						{
+							"id":"c4",
+							"title":"11",
+							"value":"11"
+						},
+						{
+							"id":"c5",
+							"title":"12",
+							"value":"12"
+						},
+						{
+							"id":"c6",
+							"title":"14",
+							"value":"14"
+						},
+						{
+							"id":"c7",
+							"title":"18",
+							"value":"18"
+						},
+						{
+							"id":"c8",
+							"title":"20",
+							"value":"20"
+						},
+						{
+							"id":"c9",
+							"title":"24",
+							"value":"24"
+						},
+						{
+							"id":"c10",
+							"title":"36",
+							"value":"36"
+						},
+						{
+							"id":"c11",
+							"title":"48",
+							"value":"48"
+						},
+						{
+							"id":"c12",
+							"title":"72",
+							"value":"72"
+						}
+					]
 				}		
 			]
 		},		
@@ -2893,6 +3109,78 @@
 					"stroke":true
 				},
 				{
+					"id":"fontsize",
+					"type":"Choice",
+					"title":"Font Size",
+					"value":"",
+					"description":"The Font Size",
+					"readonly":false,
+					"optional":false,
+					"refToView":"text_name",
+					"items":[
+						{
+							"id":"c1",
+							"title":"8",
+							"value":"8"
+						},
+						{
+							"id":"c2",
+							"title":"9",
+							"value":"9"
+						},
+						{
+							"id":"c3",
+							"title":"10",
+							"value":"10"
+						},
+						{
+							"id":"c4",
+							"title":"11",
+							"value":"11"
+						},
+						{
+							"id":"c5",
+							"title":"12",
+							"value":"12"
+						},
+						{
+							"id":"c6",
+							"title":"14",
+							"value":"14"
+						},
+						{
+							"id":"c7",
+							"title":"18",
+							"value":"18"
+						},
+						{
+							"id":"c8",
+							"title":"20",
+							"value":"20"
+						},
+						{
+							"id":"c9",
+							"title":"24",
+							"value":"24"
+						},
+						{
+							"id":"c10",
+							"title":"36",
+							"value":"36"
+						},
+						{
+							"id":"c11",
+							"title":"48",
+							"value":"48"
+						},
+						{
+							"id":"c12",
+							"title":"72",
+							"value":"72"
+						}
+					]
+				},
+				{
 					"id":"calledelement",
 					"type":"CalledElement",
 					"title":"Called Element",
@@ -3051,6 +3339,78 @@
 					"fill":false,
 					"stroke":true
 				},
+				{
+					"id":"fontsize",
+					"type":"Choice",
+					"title":"Font Size",
+					"value":"",
+					"description":"The Font Size",
+					"readonly":false,
+					"optional":false,
+					"refToView":"text_name",
+					"items":[
+						{
+							"id":"c1",
+							"title":"8",
+							"value":"8"
+						},
+						{
+							"id":"c2",
+							"title":"9",
+							"value":"9"
+						},
+						{
+							"id":"c3",
+							"title":"10",
+							"value":"10"
+						},
+						{
+							"id":"c4",
+							"title":"11",
+							"value":"11"
+						},
+						{
+							"id":"c5",
+							"title":"12",
+							"value":"12"
+						},
+						{
+							"id":"c6",
+							"title":"14",
+							"value":"14"
+						},
+						{
+							"id":"c7",
+							"title":"18",
+							"value":"18"
+						},
+						{
+							"id":"c8",
+							"title":"20",
+							"value":"20"
+						},
+						{
+							"id":"c9",
+							"title":"24",
+							"value":"24"
+						},
+						{
+							"id":"c10",
+							"title":"36",
+							"value":"36"
+						},
+						{
+							"id":"c11",
+							"title":"48",
+							"value":"48"
+						},
+						{
+							"id":"c12",
+							"title":"72",
+							"value":"72"
+						}
+					]
+				},
  				{
 					"id":"collectionexpression",
 					"type":"String",
@@ -3197,6 +3557,78 @@
 					"stroke":true
 				},	
 				{
+					"id":"fontsize",
+					"type":"Choice",
+					"title":"Font Size",
+					"value":"",
+					"description":"The Font Size",
+					"readonly":false,
+					"optional":false,
+					"refToView":"text_name",
+					"items":[
+						{
+							"id":"c1",
+							"title":"8",
+							"value":"8"
+						},
+						{
+							"id":"c2",
+							"title":"9",
+							"value":"9"
+						},
+						{
+							"id":"c3",
+							"title":"10",
+							"value":"10"
+						},
+						{
+							"id":"c4",
+							"title":"11",
+							"value":"11"
+						},
+						{
+							"id":"c5",
+							"title":"12",
+							"value":"12"
+						},
+						{
+							"id":"c6",
+							"title":"14",
+							"value":"14"
+						},
+						{
+							"id":"c7",
+							"title":"18",
+							"value":"18"
+						},
+						{
+							"id":"c8",
+							"title":"20",
+							"value":"20"
+						},
+						{
+							"id":"c9",
+							"title":"24",
+							"value":"24"
+						},
+						{
+							"id":"c10",
+							"title":"36",
+							"value":"36"
+						},
+						{
+							"id":"c11",
+							"title":"48",
+							"value":"48"
+						},
+						{
+							"id":"c12",
+							"title":"72",
+							"value":"72"
+						}
+					]
+				},
+				{
 					"id":"onEntryActions",
 					"type":"Action",
 					"title":"On Entry Actions",
@@ -3323,6 +3755,78 @@
 					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
 					"fill":false,
 					"stroke":true
+				},
+				{
+					"id":"fontsize",
+					"type":"Choice",
+					"title":"Font Size",
+					"value":"",
+					"description":"The Font Size",
+					"readonly":false,
+					"optional":false,
+					"refToView":"text_name",
+					"items":[
+						{
+							"id":"c1",
+							"title":"8",
+							"value":"8"
+						},
+						{
+							"id":"c2",
+							"title":"9",
+							"value":"9"
+						},
+						{
+							"id":"c3",
+							"title":"10",
+							"value":"10"
+						},
+						{
+							"id":"c4",
+							"title":"11",
+							"value":"11"
+						},
+						{
+							"id":"c5",
+							"title":"12",
+							"value":"12"
+						},
+						{
+							"id":"c6",
+							"title":"14",
+							"value":"14"
+						},
+						{
+							"id":"c7",
+							"title":"18",
+							"value":"18"
+						},
+						{
+							"id":"c8",
+							"title":"20",
+							"value":"20"
+						},
+						{
+							"id":"c9",
+							"title":"24",
+							"value":"24"
+						},
+						{
+							"id":"c10",
+							"title":"36",
+							"value":"36"
+						},
+						{
+							"id":"c11",
+							"title":"48",
+							"value":"48"
+						},
+						{
+							"id":"c12",
+							"title":"72",
+							"value":"72"
+						}
+					]
 				},
 				{
 					"id":"onEntryActions",
@@ -3512,6 +4016,78 @@
 					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
 					"fill":false,
 					"stroke":true
+				},
+				{
+					"id":"fontsize",
+					"type":"Choice",
+					"title":"Font Size",
+					"value":"",
+					"description":"The Font Size",
+					"readonly":false,
+					"optional":false,
+					"refToView":"text_name",
+					"items":[
+						{
+							"id":"c1",
+							"title":"8",
+							"value":"8"
+						},
+						{
+							"id":"c2",
+							"title":"9",
+							"value":"9"
+						},
+						{
+							"id":"c3",
+							"title":"10",
+							"value":"10"
+						},
+						{
+							"id":"c4",
+							"title":"11",
+							"value":"11"
+						},
+						{
+							"id":"c5",
+							"title":"12",
+							"value":"12"
+						},
+						{
+							"id":"c6",
+							"title":"14",
+							"value":"14"
+						},
+						{
+							"id":"c7",
+							"title":"18",
+							"value":"18"
+						},
+						{
+							"id":"c8",
+							"title":"20",
+							"value":"20"
+						},
+						{
+							"id":"c9",
+							"title":"24",
+							"value":"24"
+						},
+						{
+							"id":"c10",
+							"title":"36",
+							"value":"36"
+						},
+						{
+							"id":"c11",
+							"title":"48",
+							"value":"48"
+						},
+						{
+							"id":"c12",
+							"title":"72",
+							"value":"72"
+						}
+					]
 				}	
 			],
 			"roles": 			[
@@ -3573,6 +4149,78 @@
 					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
 					"fill":false,
 					"stroke":true
+				},
+				{
+					"id":"fontsize",
+					"type":"Choice",
+					"title":"Font Size",
+					"value":"",
+					"description":"The Font Size",
+					"readonly":false,
+					"optional":false,
+					"refToView":"text_name",
+					"items":[
+						{
+							"id":"c1",
+							"title":"8",
+							"value":"8"
+						},
+						{
+							"id":"c2",
+							"title":"9",
+							"value":"9"
+						},
+						{
+							"id":"c3",
+							"title":"10",
+							"value":"10"
+						},
+						{
+							"id":"c4",
+							"title":"11",
+							"value":"11"
+						},
+						{
+							"id":"c5",
+							"title":"12",
+							"value":"12"
+						},
+						{
+							"id":"c6",
+							"title":"14",
+							"value":"14"
+						},
+						{
+							"id":"c7",
+							"title":"18",
+							"value":"18"
+						},
+						{
+							"id":"c8",
+							"title":"20",
+							"value":"20"
+						},
+						{
+							"id":"c9",
+							"title":"24",
+							"value":"24"
+						},
+						{
+							"id":"c10",
+							"title":"36",
+							"value":"36"
+						},
+						{
+							"id":"c11",
+							"title":"48",
+							"value":"48"
+						},
+						{
+							"id":"c12",
+							"title":"72",
+							"value":"72"
+						}
+					]
 				},	
 				{
 					"id":"isatransaction",
@@ -3994,6 +4642,78 @@
 					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
 					"fill":false,
 					"stroke":true
+				},
+				{
+					"id":"fontsize",
+					"type":"Choice",
+					"title":"Font Size",
+					"value":"",
+					"description":"The Font Size",
+					"readonly":false,
+					"optional":false,
+					"refToView":"text_name",
+					"items":[
+						{
+							"id":"c1",
+							"title":"8",
+							"value":"8"
+						},
+						{
+							"id":"c2",
+							"title":"9",
+							"value":"9"
+						},
+						{
+							"id":"c3",
+							"title":"10",
+							"value":"10"
+						},
+						{
+							"id":"c4",
+							"title":"11",
+							"value":"11"
+						},
+						{
+							"id":"c5",
+							"title":"12",
+							"value":"12"
+						},
+						{
+							"id":"c6",
+							"title":"14",
+							"value":"14"
+						},
+						{
+							"id":"c7",
+							"title":"18",
+							"value":"18"
+						},
+						{
+							"id":"c8",
+							"title":"20",
+							"value":"20"
+						},
+						{
+							"id":"c9",
+							"title":"24",
+							"value":"24"
+						},
+						{
+							"id":"c10",
+							"title":"36",
+							"value":"36"
+						},
+						{
+							"id":"c11",
+							"title":"48",
+							"value":"48"
+						},
+						{
+							"id":"c12",
+							"title":"72",
+							"value":"72"
+						}
+					]
 				}
 			],
 			"roles" :		 	[
@@ -4052,6 +4772,78 @@
 					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
 					"fill":false,
 					"stroke":true
+				},
+				{
+					"id":"fontsize",
+					"type":"Choice",
+					"title":"Font Size",
+					"value":"",
+					"description":"The Font Size",
+					"readonly":false,
+					"optional":false,
+					"refToView":"text_name",
+					"items":[
+						{
+							"id":"c1",
+							"title":"8",
+							"value":"8"
+						},
+						{
+							"id":"c2",
+							"title":"9",
+							"value":"9"
+						},
+						{
+							"id":"c3",
+							"title":"10",
+							"value":"10"
+						},
+						{
+							"id":"c4",
+							"title":"11",
+							"value":"11"
+						},
+						{
+							"id":"c5",
+							"title":"12",
+							"value":"12"
+						},
+						{
+							"id":"c6",
+							"title":"14",
+							"value":"14"
+						},
+						{
+							"id":"c7",
+							"title":"18",
+							"value":"18"
+						},
+						{
+							"id":"c8",
+							"title":"20",
+							"value":"20"
+						},
+						{
+							"id":"c9",
+							"title":"24",
+							"value":"24"
+						},
+						{
+							"id":"c10",
+							"title":"36",
+							"value":"36"
+						},
+						{
+							"id":"c11",
+							"title":"48",
+							"value":"48"
+						},
+						{
+							"id":"c12",
+							"title":"72",
+							"value":"72"
+						}
+					]
 				}
 			],
 			"roles": [
@@ -4125,6 +4917,78 @@
 					"stroke":true
 				},
 				{
+					"id":"fontsize",
+					"type":"Choice",
+					"title":"Font Size",
+					"value":"",
+					"description":"The Font Size",
+					"readonly":false,
+					"optional":false,
+					"refToView":"text_name",
+					"items":[
+						{
+							"id":"c1",
+							"title":"8",
+							"value":"8"
+						},
+						{
+							"id":"c2",
+							"title":"9",
+							"value":"9"
+						},
+						{
+							"id":"c3",
+							"title":"10",
+							"value":"10"
+						},
+						{
+							"id":"c4",
+							"title":"11",
+							"value":"11"
+						},
+						{
+							"id":"c5",
+							"title":"12",
+							"value":"12"
+						},
+						{
+							"id":"c6",
+							"title":"14",
+							"value":"14"
+						},
+						{
+							"id":"c7",
+							"title":"18",
+							"value":"18"
+						},
+						{
+							"id":"c8",
+							"title":"20",
+							"value":"20"
+						},
+						{
+							"id":"c9",
+							"title":"24",
+							"value":"24"
+						},
+						{
+							"id":"c10",
+							"title":"36",
+							"value":"36"
+						},
+						{
+							"id":"c11",
+							"title":"48",
+							"value":"48"
+						},
+						{
+							"id":"c12",
+							"title":"72",
+							"value":"72"
+						}
+					]
+				},
+				{
 					"id":"artifacttype",
 					"type":"String",
 					"title":"ArtifactType",
@@ -4179,6 +5043,78 @@
 					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
 					"fill":false,
 					"stroke":true
+				},
+				{
+					"id":"fontsize",
+					"type":"Choice",
+					"title":"Font Size",
+					"value":"",
+					"description":"The Font Size",
+					"readonly":false,
+					"optional":false,
+					"refToView":"text_name",
+					"items":[
+						{
+							"id":"c1",
+							"title":"8",
+							"value":"8"
+						},
+						{
+							"id":"c2",
+							"title":"9",
+							"value":"9"
+						},
+						{
+							"id":"c3",
+							"title":"10",
+							"value":"10"
+						},
+						{
+							"id":"c4",
+							"title":"11",
+							"value":"11"
+						},
+						{
+							"id":"c5",
+							"title":"12",
+							"value":"12"
+						},
+						{
+							"id":"c6",
+							"title":"14",
+							"value":"14"
+						},
+						{
+							"id":"c7",
+							"title":"18",
+							"value":"18"
+						},
+						{
+							"id":"c8",
+							"title":"20",
+							"value":"20"
+						},
+						{
+							"id":"c9",
+							"title":"24",
+							"value":"24"
+						},
+						{
+							"id":"c10",
+							"title":"36",
+							"value":"36"
+						},
+						{
+							"id":"c11",
+							"title":"48",
+							"value":"48"
+						},
+						{
+							"id":"c12",
+							"title":"72",
+							"value":"72"
+						}
+					]
 				},
 				{
 					"id":"artifacttype",
@@ -4420,6 +5356,78 @@
 					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
 					"fill":false,
 					"stroke":true
+				},
+				{
+					"id":"fontsize",
+					"type":"Choice",
+					"title":"Font Size",
+					"value":"",
+					"description":"The Font Size",
+					"readonly":false,
+					"optional":false,
+					"refToView":"text_name",
+					"items":[
+						{
+							"id":"c1",
+							"title":"8",
+							"value":"8"
+						},
+						{
+							"id":"c2",
+							"title":"9",
+							"value":"9"
+						},
+						{
+							"id":"c3",
+							"title":"10",
+							"value":"10"
+						},
+						{
+							"id":"c4",
+							"title":"11",
+							"value":"11"
+						},
+						{
+							"id":"c5",
+							"title":"12",
+							"value":"12"
+						},
+						{
+							"id":"c6",
+							"title":"14",
+							"value":"14"
+						},
+						{
+							"id":"c7",
+							"title":"18",
+							"value":"18"
+						},
+						{
+							"id":"c8",
+							"title":"20",
+							"value":"20"
+						},
+						{
+							"id":"c9",
+							"title":"24",
+							"value":"24"
+						},
+						{
+							"id":"c10",
+							"title":"36",
+							"value":"36"
+						},
+						{
+							"id":"c11",
+							"title":"48",
+							"value":"48"
+						},
+						{
+							"id":"c12",
+							"title":"72",
+							"value":"72"
+						}
+					]
 				}
 			],
 			"roles" :			[
@@ -4489,6 +5497,78 @@
 					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
 					"fill":false,
 					"stroke":true
+				},
+				{
+					"id":"fontsize",
+					"type":"Choice",
+					"title":"Font Size",
+					"value":"",
+					"description":"The Font Size",
+					"readonly":false,
+					"optional":false,
+					"refToView":"text_name",
+					"items":[
+						{
+							"id":"c1",
+							"title":"8",
+							"value":"8"
+						},
+						{
+							"id":"c2",
+							"title":"9",
+							"value":"9"
+						},
+						{
+							"id":"c3",
+							"title":"10",
+							"value":"10"
+						},
+						{
+							"id":"c4",
+							"title":"11",
+							"value":"11"
+						},
+						{
+							"id":"c5",
+							"title":"12",
+							"value":"12"
+						},
+						{
+							"id":"c6",
+							"title":"14",
+							"value":"14"
+						},
+						{
+							"id":"c7",
+							"title":"18",
+							"value":"18"
+						},
+						{
+							"id":"c8",
+							"title":"20",
+							"value":"20"
+						},
+						{
+							"id":"c9",
+							"title":"24",
+							"value":"24"
+						},
+						{
+							"id":"c10",
+							"title":"36",
+							"value":"36"
+						},
+						{
+							"id":"c11",
+							"title":"48",
+							"value":"48"
+						},
+						{
+							"id":"c12",
+							"title":"72",
+							"value":"72"
+						}
+					]
 				}
 			],
 			"roles" :			[
@@ -6388,6 +7468,78 @@
 					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
 					"fill":false,
 					"stroke":true
+				},
+				{
+					"id":"fontsize",
+					"type":"Choice",
+					"title":"Font Size",
+					"value":"",
+					"description":"The Font Size",
+					"readonly":false,
+					"optional":false,
+					"refToView":"text_name",
+					"items":[
+						{
+							"id":"c1",
+							"title":"8",
+							"value":"8"
+						},
+						{
+							"id":"c2",
+							"title":"9",
+							"value":"9"
+						},
+						{
+							"id":"c3",
+							"title":"10",
+							"value":"10"
+						},
+						{
+							"id":"c4",
+							"title":"11",
+							"value":"11"
+						},
+						{
+							"id":"c5",
+							"title":"12",
+							"value":"12"
+						},
+						{
+							"id":"c6",
+							"title":"14",
+							"value":"14"
+						},
+						{
+							"id":"c7",
+							"title":"18",
+							"value":"18"
+						},
+						{
+							"id":"c8",
+							"title":"20",
+							"value":"20"
+						},
+						{
+							"id":"c9",
+							"title":"24",
+							"value":"24"
+						},
+						{
+							"id":"c10",
+							"title":"36",
+							"value":"36"
+						},
+						{
+							"id":"c11",
+							"title":"48",
+							"value":"48"
+						},
+						{
+							"id":"c12",
+							"title":"72",
+							"value":"72"
+						}
+					]
 				}
            ]
 		},
@@ -6432,6 +7584,78 @@
 					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
 					"fill":false,
 					"stroke":true
+				},
+				{
+					"id":"fontsize",
+					"type":"Choice",
+					"title":"Font Size",
+					"value":"",
+					"description":"The Font Size",
+					"readonly":false,
+					"optional":false,
+					"refToView":"text_name",
+					"items":[
+						{
+							"id":"c1",
+							"title":"8",
+							"value":"8"
+						},
+						{
+							"id":"c2",
+							"title":"9",
+							"value":"9"
+						},
+						{
+							"id":"c3",
+							"title":"10",
+							"value":"10"
+						},
+						{
+							"id":"c4",
+							"title":"11",
+							"value":"11"
+						},
+						{
+							"id":"c5",
+							"title":"12",
+							"value":"12"
+						},
+						{
+							"id":"c6",
+							"title":"14",
+							"value":"14"
+						},
+						{
+							"id":"c7",
+							"title":"18",
+							"value":"18"
+						},
+						{
+							"id":"c8",
+							"title":"20",
+							"value":"20"
+						},
+						{
+							"id":"c9",
+							"title":"24",
+							"value":"24"
+						},
+						{
+							"id":"c10",
+							"title":"36",
+							"value":"36"
+						},
+						{
+							"id":"c11",
+							"title":"48",
+							"value":"48"
+						},
+						{
+							"id":"c12",
+							"title":"72",
+							"value":"72"
+						}
+					]
 				}
            ]
 		},
