@@ -151,6 +151,7 @@ public class Bpmn2JsonUnmarshaller {
 
 	public static final String defaultBgColor = "#b1c2d6";
 	public static final String defaultBrColor = "#000000";
+	public static final String defaultFontColor = "#000000";
     // a list of the objects created, kept in memory with their original id for
     // fast lookup.
     private Map<Object, String> _objMap = new HashMap<Object, String>();
@@ -2713,6 +2714,17 @@ public class Bpmn2JsonUnmarshaller {
         	EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
         			properties.get("fontsize"));
         	baseElement.getAnyAttribute().add(extensionEntry);
+        }
+        
+        if(properties.get("fontcolor") != null && properties.get("fontcolor").length() > 0) {
+        	if(!properties.get("fontcolor").equals(defaultFontColor)) {
+        		ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+        		EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                        	"http://www.jboss.org/drools", "fontcolor", false, false);
+        		EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+        				properties.get("fontcolor"));
+        		baseElement.getAnyAttribute().add(extensionEntry);
+        	}
         }
     }
 
