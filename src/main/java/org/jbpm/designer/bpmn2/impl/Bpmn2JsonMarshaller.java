@@ -633,6 +633,33 @@ public class Bpmn2JsonMarshaller {
 	    	} else {
 	    		laneProperties.put("name", "");
 	    	}
+	    	
+	    	Iterator<FeatureMap.Entry> iter = lane.getAnyAttribute().iterator();
+	    	boolean foundBgColor = false;
+	    	boolean foundBrColor = false;
+	        while(iter.hasNext()) {
+	            FeatureMap.Entry entry = iter.next();
+	            if(entry.getEStructuralFeature().getName().equals("bgcolor")) {
+	            	laneProperties.put("bgcolor", entry.getValue());
+	            	foundBgColor = true;
+	            }
+	            if(entry.getEStructuralFeature().getName().equals("bordercolor")) {
+	            	laneProperties.put("bordercolor", entry.getValue());
+	            	foundBrColor = true;
+	            }
+	            if(entry.getEStructuralFeature().getName().equals("fontsize")) {
+	            	laneProperties.put("fontsize", entry.getValue());
+	            	foundBrColor = true;
+	            }
+	        }
+	        if(!foundBgColor) {
+	        	laneProperties.put("bgcolor", defaultBgColor_Events);
+	        }
+	        
+	        if(!foundBrColor) {
+	        	laneProperties.put("bordercolor", defaultBrColor);
+	        }
+	    	
 	    	marshallProperties(laneProperties, generator);
 	    	generator.writeObjectFieldStart("stencil");
 	    	generator.writeObjectField("id", "Lane");
