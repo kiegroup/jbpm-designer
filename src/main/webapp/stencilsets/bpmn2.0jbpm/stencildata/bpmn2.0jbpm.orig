@@ -2606,6 +2606,15 @@
 					"optional":true
 				},
 				{
+					"id":"comment",
+					"type":"String",
+					"title":"Comment",
+					"value":"",
+					"description":"Comment",
+					"readonly":false,
+					"optional":true
+				},
+				{
 					"id":"skippable",
 					"type":"Choice",
 					"title":"Skippable",

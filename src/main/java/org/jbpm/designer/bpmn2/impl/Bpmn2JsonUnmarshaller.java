@@ -3650,6 +3650,64 @@ public class Bpmn2JsonUnmarshaller {
                 task.getDataInputAssociations().add(dia);
         	}
         }
+        
+        if(properties.get("comment") != null && properties.get("comment").length() > 0) {
+        	if(task.getIoSpecification() == null) {
+                InputOutputSpecification iospec = Bpmn2Factory.eINSTANCE.createInputOutputSpecification();
+                task.setIoSpecification(iospec);
+            }
+        	List<DataInput> dataInputs = task.getIoSpecification().getDataInputs();
+        	boolean foundCommentInput = false;
+        	DataInput foundInput = null;
+        	for(DataInput din : dataInputs) {
+        		if(din.getName().equals("Comment")) {
+        			foundCommentInput = true;
+        			foundInput = din;
+        			break;
+        		}
+        	}
+        	
+        	if(!foundCommentInput) {
+        		DataInput d = Bpmn2Factory.eINSTANCE.createDataInput();
+                d.setId(task.getId() + "_" + "Comment" + "Input");
+                d.setName("Comment");
+                task.getIoSpecification().getDataInputs().add(d);
+                foundInput = d;
+                
+                if(task.getIoSpecification().getInputSets() == null || task.getIoSpecification().getInputSets().size() < 1) {
+                	InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
+                	task.getIoSpecification().getInputSets().add(inset);
+                }
+                task.getIoSpecification().getInputSets().get(0).getDataInputRefs().add(d);
+        	}
+        	
+        	boolean foundCommentAssociation = false;
+        	List<DataInputAssociation> inputAssociations = task.getDataInputAssociations();
+        	for(DataInputAssociation da : inputAssociations) {
+        		if(da.getTargetRef().getId().equals(foundInput.getId())) {
+        			foundCommentAssociation = true;
+        			((FormalExpression) da.getAssignment().get(0).getFrom()).setBody(properties.get("comment"));
+        		}
+        	}
+        	
+        	if(!foundCommentAssociation) {
+        		DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
+        		dia.setTargetRef(foundInput);
+        		
+        		Assignment a = Bpmn2Factory.eINSTANCE.createAssignment();
+                FormalExpression commentFromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                commentFromExpression.setBody(properties.get("comment"));
+                
+                FormalExpression commentToExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                commentToExpression.setBody(foundInput.getId());
+                
+                a.setFrom(commentFromExpression);
+                a.setTo(commentToExpression);
+                
+                dia.getAssignment().add(a);
+                task.getDataInputAssociations().add(dia);
+        	}
+        }
     }
     
     protected void applyGatewayProperties(Gateway gateway, Map<String, String> properties) {
