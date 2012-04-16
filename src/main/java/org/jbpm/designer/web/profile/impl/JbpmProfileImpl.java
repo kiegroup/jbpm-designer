@@ -222,7 +222,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
                     res = (JBPMBpmn2ResourceImpl) unmarshaller.unmarshall(jsonModel, preProcessingData);
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                     res.save(outputStream, new HashMap<Object, Object>());
-                    return StringEscapeUtils.unescapeHtml(outputStream.toString());
+                    return StringEscapeUtils.unescapeHtml(outputStream.toString("UTF-8"));
                 } catch (JsonParseException e) {
                     _logger.error(e.getMessage(), e);
                 } catch (IOException e) {
