@@ -265,27 +265,6 @@ ORYX.Plugins.View = {
 			}.bind(this)
 		});
 		
-		/* Register information view to model */
-		this.facade.offer({
-			'name':ORYX.I18N.View.showInfo,
-			'functionality': this.showInfo.bind(this),
-			'group': ORYX.I18N.View.infogroup,
-			'icon': ORYX.PATH + "images/information.png",
-			'description': ORYX.I18N.View.showInfoDesc,
-			'index': 1,
-			'minShape': 0,
-			'maxShape': 0,
-			'isEnabled': function(){
-				profileParamName = "profile";
-				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-		        regexa = new RegExp( regexSa );
-		        profileParams = regexa.exec( window.location.href );
-		        profileParamValue = profileParams[1]; 
-				return profileParamValue == "jbpm";
-			}.bind(this)
-		});
-		
 		/* Register diff to model */
 		this.facade.offer({
 			'name':ORYX.I18N.View.viewDiff,
@@ -1074,14 +1053,6 @@ ORYX.Plugins.View = {
         
         document.body.appendChild(form);
         form.submit();	 
-	},
-	
-	/**
-	 * Shows designer version info.
-	 * 
-	 */
-	showInfo : function() {
-		window.alert("Version: " + ORYX.VERSION);
 	},
 	
 	/**
