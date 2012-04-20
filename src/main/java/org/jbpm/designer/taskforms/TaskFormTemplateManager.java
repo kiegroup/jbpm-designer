@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -93,87 +94,93 @@ public class TaskFormTemplateManager {
                             usertfi.setPkgName(packageName);
                             // make sure we have a valid task name
                             boolean validTaskName = false;
-                            List<DataInput> dataInputs = utask.getIoSpecification().getDataInputs();
-                            List<DataOutput> dataOutputs = utask.getIoSpecification().getDataOutputs();
-                            List<DataInputAssociation> dataInputAssociations = utask.getDataInputAssociations();
-                            List<DataOutputAssociation> dataOutputAssociations = utask.getDataOutputAssociations();
-                            for(DataInput din : dataInputs) {
-                                if(din.getName().equals("TaskName")) {
-                                    // make sure we have a data input association to the task name value
-                                    for(DataInputAssociation inputAssociation : dataInputAssociations) {
-                                        List<Assignment> assignments = inputAssociation.getAssignment();
-                                        for(Assignment assignment : assignments) {
-                                            if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
-                                                String taskName = ((FormalExpression)assignment.getFrom()).getBody();
-                                                if(taskName != null && taskName.length() > 0) {
-                                                    usertfi.setId(taskName + "-taskform");
-                                                    usertfi.setTaskName(taskName);
-                                                    validTaskName = true;
+                            List<DataInput> dataInputs = Collections.emptyList();
+                            List<DataOutput> dataOutputs = Collections.emptyList();
+                            List<DataInputAssociation> dataInputAssociations = Collections.emptyList();
+                            List<DataOutputAssociation> dataOutputAssociations = Collections.emptyList();
+                            if (utask.getIoSpecification() != null) {
+                                dataInputs = utask.getIoSpecification().getDataInputs();
+                                dataOutputs = utask.getIoSpecification().getDataOutputs();
+                                dataInputAssociations = utask.getDataInputAssociations();
+                                dataOutputAssociations = utask.getDataOutputAssociations();
+                                for(DataInput din : dataInputs) {
+                                    if(din.getName().equals("TaskName")) {
+                                        // make sure we have a data input association to the task name value
+                                        for(DataInputAssociation inputAssociation : dataInputAssociations) {
+                                            List<Assignment> assignments = inputAssociation.getAssignment();
+                                            for(Assignment assignment : assignments) {
+                                                if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
+                                                    String taskName = ((FormalExpression)assignment.getFrom()).getBody();
+                                                    if(taskName != null && taskName.length() > 0) {
+                                                        usertfi.setId(taskName + "-taskform");
+                                                        usertfi.setTaskName(taskName);
+                                                        validTaskName = true;
+                                                    }
                                                 }
                                             }
                                         }
                                     }
-                                }
-                                if(din.getName().equals("ActorId")) {
-                                    for(DataInputAssociation inputAssociation : dataInputAssociations) {
-                                        List<Assignment> assignments = inputAssociation.getAssignment();
-                                        for(Assignment assignment : assignments) {
-                                            if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
-                                                String actorid = ((FormalExpression)assignment.getFrom()).getBody();
-                                                if(actorid != null && actorid.length() > 0) {
-                                                    usertfi.setActorId(actorid);
+                                    if(din.getName().equals("ActorId")) {
+                                        for(DataInputAssociation inputAssociation : dataInputAssociations) {
+                                            List<Assignment> assignments = inputAssociation.getAssignment();
+                                            for(Assignment assignment : assignments) {
+                                                if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
+                                                    String actorid = ((FormalExpression)assignment.getFrom()).getBody();
+                                                    if(actorid != null && actorid.length() > 0) {
+                                                        usertfi.setActorId(actorid);
+                                                    }
                                                 }
                                             }
                                         }
                                     }
-                                }
-                                if(din.getName().equals("GroupId")) {
-                                    for(DataInputAssociation inputAssociation : dataInputAssociations) {
-                                        List<Assignment> assignments = inputAssociation.getAssignment();
-                                        for(Assignment assignment : assignments) {
-                                            if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
-                                                String groupid = ((FormalExpression)assignment.getFrom()).getBody();
-                                                if(groupid != null && groupid.length() > 0) {
-                                                    usertfi.setGroupId(groupid);
+                                    if(din.getName().equals("GroupId")) {
+                                        for(DataInputAssociation inputAssociation : dataInputAssociations) {
+                                            List<Assignment> assignments = inputAssociation.getAssignment();
+                                            for(Assignment assignment : assignments) {
+                                                if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
+                                                    String groupid = ((FormalExpression)assignment.getFrom()).getBody();
+                                                    if(groupid != null && groupid.length() > 0) {
+                                                        usertfi.setGroupId(groupid);
+                                                    }
                                                 }
                                             }
                                         }
                                     }
-                                }
-                                if(din.getName().equals("Skippable")) {
-                                    for(DataInputAssociation inputAssociation : dataInputAssociations) {
-                                        List<Assignment> assignments = inputAssociation.getAssignment();
-                                        for(Assignment assignment : assignments) {
-                                            if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
-                                                String skippable = ((FormalExpression)assignment.getFrom()).getBody();
-                                                if(skippable != null && skippable.length() > 0) {
-                                                    usertfi.setSkippable(skippable);
+                                    if(din.getName().equals("Skippable")) {
+                                        for(DataInputAssociation inputAssociation : dataInputAssociations) {
+                                            List<Assignment> assignments = inputAssociation.getAssignment();
+                                            for(Assignment assignment : assignments) {
+                                                if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
+                                                    String skippable = ((FormalExpression)assignment.getFrom()).getBody();
+                                                    if(skippable != null && skippable.length() > 0) {
+                                                        usertfi.setSkippable(skippable);
+                                                    }
                                                 }
                                             }
                                         }
                                     }
-                                }
-                                if(din.getName().equals("Priority")) {
-                                    for(DataInputAssociation inputAssociation : dataInputAssociations) {
-                                        List<Assignment> assignments = inputAssociation.getAssignment();
-                                        for(Assignment assignment : assignments) {
-                                            if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
-                                                String priority = ((FormalExpression)assignment.getFrom()).getBody();
-                                                if(priority != null && priority.length() > 0) {
-                                                    usertfi.setPriority(priority);
+                                    if(din.getName().equals("Priority")) {
+                                        for(DataInputAssociation inputAssociation : dataInputAssociations) {
+                                            List<Assignment> assignments = inputAssociation.getAssignment();
+                                            for(Assignment assignment : assignments) {
+                                                if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
+                                                    String priority = ((FormalExpression)assignment.getFrom()).getBody();
+                                                    if(priority != null && priority.length() > 0) {
+                                                        usertfi.setPriority(priority);
+                                                    }
                                                 }
                                             }
                                         }
                                     }
-                                }
-                                if(din.getName().equals("Comment")) {
-                                    for(DataInputAssociation inputAssociation : dataInputAssociations) {
-                                        List<Assignment> assignments = inputAssociation.getAssignment();
-                                        for(Assignment assignment : assignments) {
-                                            if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
-                                                String comment = ((FormalExpression)assignment.getFrom()).getBody();
-                                                if(comment != null && comment.length() > 0) {
-                                                    usertfi.setComment(comment);
+                                    if(din.getName().equals("Comment")) {
+                                        for(DataInputAssociation inputAssociation : dataInputAssociations) {
+                                            List<Assignment> assignments = inputAssociation.getAssignment();
+                                            for(Assignment assignment : assignments) {
+                                                if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
+                                                    String comment = ((FormalExpression)assignment.getFrom()).getBody();
+                                                    if(comment != null && comment.length() > 0) {
+                                                        usertfi.setComment(comment);
+                                                    }
                                                 }
                                             }
                                         }
