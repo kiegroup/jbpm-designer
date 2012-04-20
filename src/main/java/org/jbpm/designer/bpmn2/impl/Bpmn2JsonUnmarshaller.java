@@ -3729,6 +3729,116 @@ public class Bpmn2JsonUnmarshaller {
                 task.getDataInputAssociations().add(dia);
         	}
         }
+        
+        if(properties.get("priority") != null && properties.get("priority").length() > 0) {
+        	if(task.getIoSpecification() == null) {
+                InputOutputSpecification iospec = Bpmn2Factory.eINSTANCE.createInputOutputSpecification();
+                task.setIoSpecification(iospec);
+            }
+        	List<DataInput> dataInputs = task.getIoSpecification().getDataInputs();
+        	boolean foundPriorityInput = false;
+        	DataInput foundInput = null;
+        	for(DataInput din : dataInputs) {
+        		if(din.getName().equals("Priority")) {
+        			foundPriorityInput = true;
+        			foundInput = din;
+        			break;
+        		}
+        	}
+        	
+        	if(!foundPriorityInput) {
+        		DataInput d = Bpmn2Factory.eINSTANCE.createDataInput();
+                d.setId(task.getId() + "_" + "Priority" + "Input");
+                d.setName("Priority");
+                task.getIoSpecification().getDataInputs().add(d);
+                foundInput = d;
+                
+                if(task.getIoSpecification().getInputSets() == null || task.getIoSpecification().getInputSets().size() < 1) {
+                	InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
+                	task.getIoSpecification().getInputSets().add(inset);
+                }
+                task.getIoSpecification().getInputSets().get(0).getDataInputRefs().add(d);
+        	}
+        	
+        	boolean foundPriorityAssociation = false;
+        	List<DataInputAssociation> inputAssociations = task.getDataInputAssociations();
+        	for(DataInputAssociation da : inputAssociations) {
+        		if(da.getTargetRef().getId().equals(foundInput.getId())) {
+        			foundPriorityAssociation = true;
+        			((FormalExpression) da.getAssignment().get(0).getFrom()).setBody(properties.get("priority"));
+        		}
+        	}
+        	
+        	if(!foundPriorityAssociation) {
+        		DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
+        		dia.setTargetRef(foundInput);
+        		
+        		Assignment a = Bpmn2Factory.eINSTANCE.createAssignment();
+                FormalExpression priorityFromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                priorityFromExpression.setBody(properties.get("priority"));
+                
+                FormalExpression priorityToExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                priorityToExpression.setBody(foundInput.getId());
+                
+                a.setFrom(priorityFromExpression);
+                a.setTo(priorityToExpression);
+                
+                dia.getAssignment().add(a);
+                task.getDataInputAssociations().add(dia);
+        	}
+        }
+        
+        if(properties.get("content") != null && properties.get("content").length() > 0) {
+        	if(task.getIoSpecification() == null) {
+                InputOutputSpecification iospec = Bpmn2Factory.eINSTANCE.createInputOutputSpecification();
+                task.setIoSpecification(iospec);
+            }
+        	List<DataInput> dataInputs = task.getIoSpecification().getDataInputs();
+        	boolean foundContentInput = false;
+        	DataInput foundInput = null;
+        	for(DataInput din : dataInputs) {
+        		if(din.getName().equals("Content")) {
+        			foundContentInput = true;
+        			foundInput = din;
+        			break;
+        		}
+        	}
+        	
+        	if(!foundContentInput) {
+        		DataInput d = Bpmn2Factory.eINSTANCE.createDataInput();
+                d.setId(task.getId() + "_" + "Content" + "Input");
+                d.setName("Content");
+                task.getIoSpecification().getDataInputs().add(d);
+                foundInput = d;
+                
+                if(task.getIoSpecification().getInputSets() == null || task.getIoSpecification().getInputSets().size() < 1) {
+                	InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
+                	task.getIoSpecification().getInputSets().add(inset);
+                }
+                task.getIoSpecification().getInputSets().get(0).getDataInputRefs().add(d);
+        	}
+        	
+        	boolean foundContentAssociation = false;
+        	List<DataInputAssociation> inputAssociations = task.getDataInputAssociations();
+        	for(DataInputAssociation da : inputAssociations) {
+        		if(da.getTargetRef().getId().equals(foundInput.getId())) {
+        			foundContentAssociation = true;
+        			da.getSourceRef().clear();
+        			ItemAwareElement e = Bpmn2Factory.eINSTANCE.createItemAwareElement();
+                    e.setId(properties.get("content"));
+        			da.getSourceRef().add(e);
+        		}
+        	}
+        	
+        	if(!foundContentAssociation) {
+        		DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
+        		dia.setTargetRef(foundInput);
+        		ItemAwareElement e = Bpmn2Factory.eINSTANCE.createItemAwareElement();
+                e.setId(properties.get("content"));
+        		dia.getSourceRef().add(e);
+        		task.getDataInputAssociations().add(dia);
+        	}
+        }
     }
     
     protected void applyGatewayProperties(Gateway gateway, Map<String, String> properties) {
