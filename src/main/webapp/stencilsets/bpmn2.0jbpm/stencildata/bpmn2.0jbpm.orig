@@ -2853,7 +2853,7 @@
 					"type":"String",
 					"title":"GroupID",
 					"value":"",
-					"description":"Group id value.",
+					"description":"he group id that is responsible for executing the human task",
 					"readonly":false,
 					"optional":true
 				},
@@ -2867,11 +2867,20 @@
 					"optional":true
 				},
 				{
+					"id":"content",
+					"type":"String",
+					"title":"Content",
+					"value":"",
+					"description":"The data associated with this task",
+					"readonly":false,
+					"optional":true
+				},
+				{
 					"id":"skippable",
 					"type":"Choice",
 					"title":"Skippable",
 					"value":"",
-					"description":"Skippable",
+					"description":"Specifies whether the human task can be skipped",
 					"readonly":false,
 					"optional":true,
 					"items": [
@@ -2886,6 +2895,15 @@
 							"value": "false"
 						}
 					]
+				},
+				{
+					"id":"priority",
+					"type":"String",
+					"title":"Priority",
+					"value":"",
+					"description":"An integer indicating the priority of the human task",
+					"readonly":false,
+					"optional":true
 				}
 			]
 		},

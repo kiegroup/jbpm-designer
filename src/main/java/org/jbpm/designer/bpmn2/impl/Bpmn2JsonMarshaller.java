@@ -1273,6 +1273,8 @@ public class Bpmn2JsonMarshaller {
         DataInput groupDataInput = null;
         DataInput skippableDataInput = null;
         DataInput commentDataInput = null;
+        DataInput contentDataInput = null;
+        DataInput priorityDataInput = null;
         if(task.getIoSpecification() != null) {
             List<InputSet> inputSetList = task.getIoSpecification().getInputSets();
             StringBuilder dataInBuffer = new StringBuilder();
@@ -1295,6 +1297,12 @@ public class Bpmn2JsonMarshaller {
                     }
                     if(dataIn.getName() != null && dataIn.getName().equals("Comment")) {
                     	commentDataInput = dataIn;
+                    }
+                    if(dataIn.getName() != null && dataIn.getName().equals("Content")) {
+                    	contentDataInput = dataIn;
+                    }
+                    if(dataIn.getName() != null && dataIn.getName().equals("Priority")) {
+                    	priorityDataInput = dataIn;
                     }
                 }
             }
@@ -1388,6 +1396,11 @@ public class Bpmn2JsonMarshaller {
             						((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(commentDataInput.getId())) {
             			properties.put("comment", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
             		}
+            		if (priorityDataInput != null && datain.getAssignment().get(0).getTo() != null &&
+            				((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
+            						((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(priorityDataInput.getId())) {
+            			properties.put("priority", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
+            		}
             	}
             } 
 //            else if(isBiDirectional) {
@@ -1399,6 +1412,12 @@ public class Bpmn2JsonMarshaller {
                 associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
                 associationBuff.append(",");
                 uniDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
+                
+                if(contentDataInput != null) {
+                	if(rhsAssociation.equals(contentDataInput.getName())) {
+                		properties.put("content", lhsAssociation);
+                	}
+                }
             }
         }
         
