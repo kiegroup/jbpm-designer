@@ -62,6 +62,12 @@
         <groupId>org.jbpm</groupId>
         <artifactId>jbpm-workitems</artifactId>
         <version>${jbpm.version}</version>
+        <exclusions>
+        	<exclusion>
+        		<groupId>jdom</groupId>
+        		<artifactId>jdom</artifactId>
+        	</exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>org.jbpm</groupId>
