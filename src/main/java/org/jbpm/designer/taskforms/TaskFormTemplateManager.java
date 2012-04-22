@@ -127,7 +127,7 @@ public class TaskFormTemplateManager {
                                                 if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
                                                     String actorid = ((FormalExpression)assignment.getFrom()).getBody();
                                                     if(actorid != null && actorid.length() > 0) {
-                                                        usertfi.setActorId(actorid);
+                                                        usertfi.setActorId(replaceInterpolations(actorid));
                                                     }
                                                 }
                                             }
@@ -140,7 +140,7 @@ public class TaskFormTemplateManager {
                                                 if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
                                                     String groupid = ((FormalExpression)assignment.getFrom()).getBody();
                                                     if(groupid != null && groupid.length() > 0) {
-                                                        usertfi.setGroupId(groupid);
+                                                        usertfi.setGroupId(replaceInterpolations(groupid));
                                                     }
                                                 }
                                             }
@@ -153,7 +153,7 @@ public class TaskFormTemplateManager {
                                                 if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
                                                     String skippable = ((FormalExpression)assignment.getFrom()).getBody();
                                                     if(skippable != null && skippable.length() > 0) {
-                                                        usertfi.setSkippable(skippable);
+                                                        usertfi.setSkippable(replaceInterpolations(skippable));
                                                     }
                                                 }
                                             }
@@ -166,7 +166,7 @@ public class TaskFormTemplateManager {
                                                 if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
                                                     String priority = ((FormalExpression)assignment.getFrom()).getBody();
                                                     if(priority != null && priority.length() > 0) {
-                                                        usertfi.setPriority(priority);
+                                                        usertfi.setPriority(replaceInterpolations(priority));
                                                     }
                                                 }
                                             }
@@ -179,7 +179,7 @@ public class TaskFormTemplateManager {
                                                 if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
                                                     String comment = ((FormalExpression)assignment.getFrom()).getBody();
                                                     if(comment != null && comment.length() > 0) {
-                                                        usertfi.setComment(comment);
+                                                        usertfi.setComment(replaceInterpolations(comment));
                                                     }
                                                 }
                                             }
@@ -194,7 +194,7 @@ public class TaskFormTemplateManager {
                                     if(role instanceof PotentialOwner) {
                                         FormalExpression ownerexp = (FormalExpression) ( (PotentialOwner)role).getResourceAssignmentExpression().getExpression();
                                         if(ownerexp.getBody() != null && ownerexp.getBody().length() > 0) {
-                                            usertfi.getTaskOwners().add(ownerexp.getBody());
+                                            usertfi.getTaskOwners().add(replaceInterpolations(ownerexp.getBody()));
                                         }
                                     }
                                 }
@@ -372,6 +372,10 @@ public class TaskFormTemplateManager {
         } finally {
             scanner.close();
         }
+    }
+    
+    private String replaceInterpolations(String base) {
+    	return base.replaceAll("\\#\\{", "\\$\\{");
     }
 
     public List<TaskFormInfo> getTaskFormInformationList() {
