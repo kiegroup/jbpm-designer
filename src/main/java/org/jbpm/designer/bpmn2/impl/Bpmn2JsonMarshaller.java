@@ -225,7 +225,7 @@ public class Bpmn2JsonMarshaller {
 	        //props.put("targetnamespace", def.getTargetNamespace());
 	        props.put("targetnamespace", "http://www.omg.org/bpmn20");
 	        props.put("typelanguage", def.getTypeLanguage());
-	        props.put("name",def.getName());
+	        props.put("name",unescapeXML(def.getName()));
 	        props.put("id", def.getId());
 	        props.put("expressionlanguage", def.getExpressionLanguage());
 	        if( def.getDocumentation() != null && def.getDocumentation().size() > 0 ) {
@@ -237,7 +237,7 @@ public class Bpmn2JsonMarshaller {
 	                // have to wait for process node to finish properties and stencil marshalling
 	                props.put("executable", ((Process) rootElement).isIsExecutable() + "");
 	                props.put("id", ((Process) rootElement).getId());
-	                props.put("name", ((Process) rootElement).getName());
+	                props.put("name", unescapeXML(((Process) rootElement).getName()));
 	                
 	                List<Property> processProperties = ((Process) rootElement).getProperties();
 	                if(processProperties != null && processProperties.size() > 0) {
@@ -630,7 +630,7 @@ public class Bpmn2JsonMarshaller {
 	    	generator.writeObjectField("resourceId", lane.getId());
 	    	Map<String, Object> laneProperties = new LinkedHashMap<String, Object>();
 	    	if(lane.getName() != null) {
-	    		laneProperties.put("name", lane.getName());
+	    		laneProperties.put("name", unescapeXML(lane.getName()));
 	    	} else {
 	    		laneProperties.put("name", "");
 	    	}
@@ -1564,7 +1564,7 @@ public class Bpmn2JsonMarshaller {
             properties.put("documentation", node.getDocumentation().get(0).getText());
         }
         if(node.getName() != null) {
-        	properties.put("name", node.getName());
+        	properties.put("name", unescapeXML(node.getName()));
         } else {
         	properties.put("name", "");
         }
@@ -1677,7 +1677,7 @@ public class Bpmn2JsonMarshaller {
     protected void marshallDataObject(DataObject dataObject, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
     	Map<String, Object> properties = new LinkedHashMap<String, Object>(flowElementProperties);
     	if(dataObject.getName() != null) {
-    		properties.put("name", dataObject.getName());
+    		properties.put("name", unescapeXML(dataObject.getName()));
     	} else {
     		properties.put("name", "");
     	}
@@ -1722,7 +1722,7 @@ public class Bpmn2JsonMarshaller {
     protected void marshallSubProcess(SubProcess subProcess, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Definitions def, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
     	Map<String, Object> properties = new LinkedHashMap<String, Object>(flowElementProperties);
 		if(subProcess.getName() != null) {
-			properties.put("name", subProcess.getName());
+			properties.put("name", unescapeXML(subProcess.getName()));
 		} else {
 			properties.put("name", "");
 		}
@@ -2043,7 +2043,7 @@ public class Bpmn2JsonMarshaller {
     	Map<String, Object> properties = new LinkedHashMap<String, Object>();
     	// check null for sequence flow name
     	if(sequenceFlow.getName() != null && !"".equals(sequenceFlow.getName())) {
-    	    properties.put("name", sequenceFlow.getName());
+    	    properties.put("name", unescapeXML(sequenceFlow.getName()));
     	} else {
     	    properties.put("name", "");
     	}
@@ -2273,7 +2273,7 @@ public class Bpmn2JsonMarshaller {
     protected void marshallGroup(Group group, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Definitions def)  throws JsonGenerationException, IOException{
     	Map<String, Object> properties = new LinkedHashMap<String, Object>();
     	if(group.getCategoryValueRef() != null && group.getCategoryValueRef().getValue() != null) {
-    		properties.put("name", group.getCategoryValueRef().getValue());
+    		properties.put("name", unescapeXML(group.getCategoryValueRef().getValue()));
     	}
     	
 	    marshallProperties(properties, generator);
@@ -2345,4 +2345,43 @@ public class Bpmn2JsonMarshaller {
         return false;
     }
     
+	private static String unescapeXML(String str) {
+		if (str == null || str.length() == 0)
+			return "";
+
+		StringBuffer buf = new StringBuffer();
+		int len = str.length();
+		for (int i = 0; i < len; ++i) {
+			char c = str.charAt(i);
+			if (c == '&') {
+				int pos = str.indexOf(";", i);
+				if (pos == -1) { // Really evil
+					buf.append('&');
+				} else if (str.charAt(i + 1) == '#') {
+					int val = Integer.parseInt(str.substring(i + 2, pos), 16);
+					buf.append((char) val);
+					i = pos;
+				} else {
+					String substr = str.substring(i, pos + 1);
+					if (substr.equals("&amp;"))
+						buf.append('&');
+					else if (substr.equals("&lt;"))
+						buf.append('<');
+					else if (substr.equals("&gt;"))
+						buf.append('>');
+					else if (substr.equals("&quot;"))
+						buf.append('"');
+					else if (substr.equals("&apos;"))
+						buf.append('\'');
+					else
+						// ????
+						buf.append(substr);
+					i = pos;
+				}
+			} else {
+				buf.append(c);
+			}
+		}
+		return buf.toString();
+	}
 }

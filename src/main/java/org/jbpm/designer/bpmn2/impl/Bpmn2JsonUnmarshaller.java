@@ -1799,7 +1799,7 @@ public class Bpmn2JsonUnmarshaller {
         } else if (baseElt instanceof Message) {
             // we do not support base-element messages from the json. They are created dynamically for events that use them.
         } else if (baseElt instanceof Lane) {
-        	((Lane) baseElt).setName(properties.get("name"));
+        	((Lane) baseElt).setName(escapeXmlString(properties.get("name")));
         	for (BaseElement child : childElements) {
         		if (child instanceof FlowNode) {
         			((Lane) baseElt).getFlowNodeRefs().add((FlowNode) child);
@@ -1940,7 +1940,7 @@ public class Bpmn2JsonUnmarshaller {
     
     protected void applySubProcessProperties(SubProcess sp, Map<String, String> properties) {
         if(properties.get("name") != null) {
-            sp.setName(properties.get("name"));
+            sp.setName(escapeXmlString(properties.get("name")));
         } else {
             sp.setName("");
         }
@@ -2270,7 +2270,7 @@ public class Bpmn2JsonUnmarshaller {
     protected void applyEndEventProperties(EndEvent ee, Map<String, String> properties) {
         ee.setId(properties.get("resourceId"));
         if(properties.get("name") != null) {
-            ee.setName(properties.get("name"));
+            ee.setName(escapeXmlString(properties.get("name")));
         } else {
             ee.setName("");
         }
@@ -2305,7 +2305,7 @@ public class Bpmn2JsonUnmarshaller {
     
     protected void applyStartEventProperties(StartEvent se, Map<String, String> properties) {
         if(properties.get("name") != null) {
-            se.setName(properties.get("name"));
+            se.setName(escapeXmlString(properties.get("name")));
         } else {
             se.setName("");
         }
@@ -2313,7 +2313,7 @@ public class Bpmn2JsonUnmarshaller {
     
     protected void applyMessageProperties(Message msg, Map<String, String> properties) {
         if(properties.get("name") != null) {
-            msg.setName(properties.get("name"));
+            msg.setName(escapeXmlString(properties.get("name")));
             msg.setId(properties.get("name") + "Message");
         } else {
             msg.setName("");
@@ -2323,7 +2323,7 @@ public class Bpmn2JsonUnmarshaller {
 
     protected void applyDataStoreProperties(DataStore da, Map<String, String> properties) {
         if(properties.get("name") != null) {
-            da.setName(properties.get("name"));
+            da.setName(escapeXmlString(properties.get("name")));
         } else {
             da.setName("");
         }
@@ -2331,7 +2331,7 @@ public class Bpmn2JsonUnmarshaller {
 
     protected void applyDataObjectProperties(DataObject da, Map<String, String> properties) {
         if(properties.get("name") != null) {
-            da.setName(properties.get("name"));
+            da.setName(escapeXmlString(properties.get("name")));
         } else {
             da.setName("");
         }
@@ -2369,7 +2369,7 @@ public class Bpmn2JsonUnmarshaller {
 
     protected void applyEventProperties(Event event, Map<String, String> properties) {
         if(properties.get("name") != null) {
-            event.setName(properties.get("name"));
+            event.setName(escapeXmlString(properties.get("name")));
         } else {
             event.setName("");
         }
@@ -2673,7 +2673,7 @@ public class Bpmn2JsonUnmarshaller {
 
     protected void applyGlobalTaskProperties(GlobalTask globalTask, Map<String, String> properties) {
         if(properties.get("name") != null) {
-            globalTask.setName(properties.get("name"));
+            globalTask.setName(escapeXmlString(properties.get("name")));
         } else {
             globalTask.setName("");
         }
@@ -2746,7 +2746,7 @@ public class Bpmn2JsonUnmarshaller {
 
     protected void applyProcessProperties(Process process, Map<String, String> properties) {
         if(properties.get("name") != null) {
-            process.setName(properties.get("name"));
+            process.setName(escapeXmlString(properties.get("name")));
         } else {
             process.setName("");
         }
@@ -2824,7 +2824,7 @@ public class Bpmn2JsonUnmarshaller {
 
     protected void applyBusinessRuleTaskProperties(BusinessRuleTask task, Map<String, String> properties) {
         if(properties.get("name") != null) {
-            task.setName(properties.get("name"));
+            task.setName(escapeXmlString(properties.get("name")));
         } else {
             task.setName("");
         }
@@ -2841,7 +2841,7 @@ public class Bpmn2JsonUnmarshaller {
     
     protected void applyScriptTaskProperties(ScriptTask scriptTask, Map<String, String> properties) {
         if(properties.get("name") != null) {
-            scriptTask.setName(properties.get("name"));
+            scriptTask.setName(escapeXmlString(properties.get("name")));
         } else {
             scriptTask.setName("");
         }
@@ -2910,7 +2910,7 @@ public class Bpmn2JsonUnmarshaller {
 
     protected void applyLaneProperties(Lane lane, Map<String, String> properties) {
         if(properties.get("name") != null) {
-            lane.setName(properties.get("name"));
+            lane.setName(escapeXmlString(properties.get("name")));
         } else {
             lane.setName("");
         }
@@ -2918,7 +2918,7 @@ public class Bpmn2JsonUnmarshaller {
     
     protected void applyCallActivityProperties(CallActivity callActivity, Map<String, String> properties) {
     	if(properties.get("name") != null) {
-    		callActivity.setName(properties.get("name"));
+    		callActivity.setName(escapeXmlString(properties.get("name")));
         } else {
         	callActivity.setName("");
         }
@@ -3192,7 +3192,7 @@ public class Bpmn2JsonUnmarshaller {
 
     protected void applyTaskProperties(Task task, Map<String, String> properties) {
         if(properties.get("name") != null) {
-            task.setName(properties.get("name"));
+            task.setName(escapeXmlString(properties.get("name")));
         } else {
             task.setName("");
         }
@@ -3843,7 +3843,7 @@ public class Bpmn2JsonUnmarshaller {
     
     protected void applyGatewayProperties(Gateway gateway, Map<String, String> properties) {
         if(properties.get("name") != null && properties.get("name").length() > 0) {
-            gateway.setName(properties.get("name"));
+            gateway.setName(escapeXmlString(properties.get("name")));
         } else {
             gateway.setName("");
         }
@@ -3860,7 +3860,7 @@ public class Bpmn2JsonUnmarshaller {
     protected void applySequenceFlowProperties(SequenceFlow sequenceFlow, Map<String, String> properties) {
         // sequence flow name is options
         if(properties.get("name") != null && !"".equals(properties.get("name"))) {
-            sequenceFlow.setName(properties.get("name"));
+            sequenceFlow.setName(escapeXmlString(properties.get("name")));
         }
         if (properties.get("auditing") != null && !"".equals(properties.get("auditing"))) {
             Auditing audit = Bpmn2Factory.eINSTANCE.createAuditing();
@@ -3940,5 +3940,45 @@ public class Bpmn2JsonUnmarshaller {
     protected String wrapInCDATABlock(String value) {
     	return "<![CDATA[" + value + "]]>";
     }
+    
+    private static String escapeXmlString(String string) {
+		StringBuffer sb = new StringBuffer(string.length());
+		// true if last char was blank
+		boolean lastWasBlankChar = false;
+		int len = string.length();
+		char c;
+
+		for (int i = 0; i < len; i++) {
+			c = string.charAt(i);
+			if (c == ' ') {
+				sb.append(' ');
+			} else {
+				lastWasBlankChar = false;
+				//
+				// HTML Special Chars
+				if (c == '"')
+					sb.append("&quot;");
+				else if (c == '&')
+					sb.append("&amp;");
+				else if (c == '<')
+					sb.append("&lt;");
+				else if (c == '>')
+					sb.append("&gt;");
+				else {
+					int ci = 0xffff & c;
+					if (ci < 160)
+						// nothing special only 7 Bit
+						sb.append(c);
+					else {
+						// Not 7 Bit use the unicode system
+						sb.append("&#");
+						sb.append(new Integer(ci).toString());
+						sb.append(';');
+					}
+				}
+			}
+		}
+		return sb.toString();
+	}
 }
 
