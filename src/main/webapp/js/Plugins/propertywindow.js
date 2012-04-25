@@ -1833,7 +1833,20 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                                 tostr: "",
                                 dataType: dataType
                             }));
-    			} 
+    			} else {
+    				// default to equality
+    				var dataType = dataTypeMap[nextPart];
+                    if (!dataType){
+                        dataType = "java.lang.String";
+                    }
+                    dataassignments.add(new DataAssignment({
+                        from: nextPart,
+                        type: "is equal to",
+                        to: "",
+                        tostr: "",
+                        dataType: dataType
+                    }));
+    			}
     		}
     	}
         
