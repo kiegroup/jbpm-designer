@@ -85,7 +85,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("http://www.w3.org/1999/XPath", definitions.getExpressionLanguage());
         assertEquals("http://www.omg.org/bpmn20", definitions.getTargetNamespace());
         assertEquals("http://www.w3.org/2001/XMLSchema", definitions.getTypeLanguage());
-        assertTrue(definitions.getRootElements().isEmpty());
+        assertTrue(definitions.getRootElements().size() == 1);
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
     

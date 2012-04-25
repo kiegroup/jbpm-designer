@@ -1628,7 +1628,6 @@ public class Bpmn2JsonUnmarshaller {
         properties.put("resourceId", resourceId);
         boolean customElement = isCustomElement(properties.get("tasktype"), preProcessingData);
         BaseElement baseElt = this.createBaseElement(stencil, properties.get("tasktype"), customElement);
-        
         // register the sequence flow targets.
         if(baseElt instanceof SequenceFlow) {
             _sequenceFlowTargets.addAll(outgoing);
@@ -1641,137 +1640,175 @@ public class Bpmn2JsonUnmarshaller {
         applyProperties(baseElt, properties);
         if (baseElt instanceof Definitions) {
         	Process rootLevelProcess = null;
-        	for (BaseElement child : childElements) {
-                // tasks are only permitted under processes.
-                // a process should be created implicitly for tasks at the root
-                // level.
-
-                // process designer doesn't make a difference between tasks and
-                // global tasks.
-                // if a task has sequence edges it is considered a task,
-                // otherwise it is considered a global task.
-//                if (child instanceof Task && _outgoingFlows.get(child).isEmpty() && !_sequenceFlowTargets.contains(_objMap.get(child))) {
-//                    // no edges on a task at the top level! We replace it with a
-//                    // global task.
-//                    GlobalTask task = null;
-//                    if (child instanceof ScriptTask) {
-//                        task = Bpmn2Factory.eINSTANCE.createGlobalScriptTask();
-//                        ((GlobalScriptTask) task).setScript(((ScriptTask) child).getScript());
-//                        ((GlobalScriptTask) task).setScriptLanguage(((ScriptTask) child).getScriptFormat()); 
-//                        // TODO scriptLanguage missing on scriptTask
-//                    } else if (child instanceof UserTask) {
-//                        task = Bpmn2Factory.eINSTANCE.createGlobalUserTask();
-//                    } else if (child instanceof ServiceTask) {
-//                        // we don't have a global service task! Fallback on a
-//                        // normal global task
-//                        task = Bpmn2Factory.eINSTANCE.createGlobalTask();
-//                    } else if (child instanceof BusinessRuleTask) {
-//                        task = Bpmn2Factory.eINSTANCE.createGlobalBusinessRuleTask();
-//                    } else if (child instanceof ManualTask) {
-//                        task = Bpmn2Factory.eINSTANCE.createGlobalManualTask();
-//                    } else {
-//                        task = Bpmn2Factory.eINSTANCE.createGlobalTask();
-//                    }
-//
-//                    task.setName(((Task) child).getName());
-//                    task.setIoSpecification(((Task) child).getIoSpecification());
-//                    task.getDocumentation().addAll(((Task) child).getDocumentation());
-//                    ((Definitions) baseElt).getRootElements().add(task);
-//                    continue;
-//                } else {
-                    if (child instanceof SequenceFlow) {
-                        // for some reason sequence flows are placed as root elements.
-                        // find if the target has a container, and if we can use it:
-                        List<String> ids = _outgoingFlows.get(child);
-                        FlowElementsContainer container = null;
-                        for (String id : ids) { // yes, we iterate, but we'll take the first in the list that will work.
-                            Object obj = _idMap.get(id);
-                            if (obj instanceof EObject && ((EObject) obj).eContainer() instanceof FlowElementsContainer) {
-                                container = (FlowElementsContainer) ((EObject) obj).eContainer();
-                                break;
+        	if(childElements == null || childElements.size() < 1) {
+        		if (rootLevelProcess == null) {
+                    rootLevelProcess = Bpmn2Factory.eINSTANCE.createProcess();
+                    // set the properties and item definitions first
+                    if(properties.get("vardefs") != null && properties.get("vardefs").length() > 0) {
+                        String[] vardefs = properties.get("vardefs").split( ",\\s*" );
+                        for(String vardef : vardefs) {
+                            Property prop = Bpmn2Factory.eINSTANCE.createProperty();
+                            ItemDefinition itemdef =  Bpmn2Factory.eINSTANCE.createItemDefinition();
+                            // check if we define a structure ref in the definition
+                            if(vardef.contains(":")) {
+                                String[] vardefParts = vardef.split( ":\\s*" );
+                                prop.setId(vardefParts[0]);
+                                itemdef.setId("_" + prop.getId() + "Item");
+                                itemdef.setStructureRef(vardefParts[1]);
+                            } else {
+                                prop.setId(vardef);
+                                itemdef.setId("_" + prop.getId() + "Item");
                             }
-                        }
-                        if (container != null) {
-                            container.getFlowElements().add((SequenceFlow) child);
-                            continue;
-                        }
-                        
-                    }
-                    if (child instanceof Task || child instanceof SequenceFlow 
-                            || child instanceof Gateway || child instanceof Event 
-                            || child instanceof Artifact || child instanceof DataObject || child instanceof SubProcess
-                            || child instanceof Lane || child instanceof CallActivity) {
-                        if (rootLevelProcess == null) {
-                            rootLevelProcess = Bpmn2Factory.eINSTANCE.createProcess();
-                            // set the properties and item definitions first
-                            if(properties.get("vardefs") != null && properties.get("vardefs").length() > 0) {
-                                String[] vardefs = properties.get("vardefs").split( ",\\s*" );
-                                for(String vardef : vardefs) {
-                                    Property prop = Bpmn2Factory.eINSTANCE.createProperty();
-                                    ItemDefinition itemdef =  Bpmn2Factory.eINSTANCE.createItemDefinition();
-                                    // check if we define a structure ref in the definition
-                                    if(vardef.contains(":")) {
-                                        String[] vardefParts = vardef.split( ":\\s*" );
-                                        prop.setId(vardefParts[0]);
-                                        itemdef.setId("_" + prop.getId() + "Item");
-                                        itemdef.setStructureRef(vardefParts[1]);
-                                    } else {
-                                        prop.setId(vardef);
-                                        itemdef.setId("_" + prop.getId() + "Item");
-                                    }
-                                    prop.setItemSubjectRef(itemdef);
-                                    rootLevelProcess.getProperties().add(prop);
-                                    ((Definitions) baseElt).getRootElements().add(itemdef);
-                                }
-                            }
-                            if(properties.get("adhocprocess") != null && properties.get("adhocprocess").equals("true")) {
-                            	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
-                                EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
-                                            "http://www.jboss.org/drools", "adHoc", false, false);
-                                EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
-                                    properties.get("adhocprocess"));
-                                rootLevelProcess.getAnyAttribute().add(extensionEntry);
-                            }
-                            rootLevelProcess.setId(properties.get("id"));
-                            applyProcessProperties(rootLevelProcess, properties);
-                            ((Definitions) baseElt).getRootElements().add(rootLevelProcess);
+                            prop.setItemSubjectRef(itemdef);
+                            rootLevelProcess.getProperties().add(prop);
+                            ((Definitions) baseElt).getRootElements().add(itemdef);
                         }
                     }
-                    if (child instanceof Task) {
-                        rootLevelProcess.getFlowElements().add((Task) child);
-                    } else if (child instanceof CallActivity) {
-                    	rootLevelProcess.getFlowElements().add((CallActivity) child);
-                    } else if (child instanceof RootElement) {
-                        ((Definitions) baseElt).getRootElements().add((RootElement) child);
-                    } else if (child instanceof SequenceFlow) {
-                        rootLevelProcess.getFlowElements().add((SequenceFlow) child);
-                    } else if (child instanceof Gateway) {
-                        rootLevelProcess.getFlowElements().add((Gateway) child);
-                    } else if (child instanceof Event) {
-                        rootLevelProcess.getFlowElements().add((Event) child);
-                    } else if (child instanceof Artifact) {
-                        rootLevelProcess.getArtifacts().add((Artifact) child);
-                    } else if (child instanceof DataObject) {
-                        rootLevelProcess.getFlowElements().add((DataObject) child);
-//                        ItemDefinition def = ((DataObject) child).getItemSubjectRef();
-//                        if (def != null) {
-//                            if (def.eResource() == null) {
-//                                ((Definitions) rootLevelProcess.eContainer()).getRootElements().add(0, def);
-//                            }
-//                            Import imported = def.getImport();
-//                            if (imported != null && imported.eResource() == null) {
-//                                ((Definitions) rootLevelProcess.eContainer()).getImports().add(0, imported);
-//                            }
-//                        }
-                    } else if(child instanceof SubProcess) {
-                        rootLevelProcess.getFlowElements().add((SubProcess) child);
-                    } else if(child instanceof Lane) {
-                    	// lanes handled later
-                    } else {
-                        throw new IllegalArgumentException("Don't know what to do of " + child);
+                    if(properties.get("adhocprocess") != null && properties.get("adhocprocess").equals("true")) {
+                    	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                        EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                                    "http://www.jboss.org/drools", "adHoc", false, false);
+                        EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                            properties.get("adhocprocess"));
+                        rootLevelProcess.getAnyAttribute().add(extensionEntry);
                     }
-               // }
-            }
+                    rootLevelProcess.setId(properties.get("id"));
+                    applyProcessProperties(rootLevelProcess, properties);
+                    ((Definitions) baseElt).getRootElements().add(rootLevelProcess);
+                }
+        	} else {
+	        	for (BaseElement child : childElements) {
+	                // tasks are only permitted under processes.
+	                // a process should be created implicitly for tasks at the root
+	                // level.
+	
+	                // process designer doesn't make a difference between tasks and
+	                // global tasks.
+	                // if a task has sequence edges it is considered a task,
+	                // otherwise it is considered a global task.
+	//                if (child instanceof Task && _outgoingFlows.get(child).isEmpty() && !_sequenceFlowTargets.contains(_objMap.get(child))) {
+	//                    // no edges on a task at the top level! We replace it with a
+	//                    // global task.
+	//                    GlobalTask task = null;
+	//                    if (child instanceof ScriptTask) {
+	//                        task = Bpmn2Factory.eINSTANCE.createGlobalScriptTask();
+	//                        ((GlobalScriptTask) task).setScript(((ScriptTask) child).getScript());
+	//                        ((GlobalScriptTask) task).setScriptLanguage(((ScriptTask) child).getScriptFormat()); 
+	//                        // TODO scriptLanguage missing on scriptTask
+	//                    } else if (child instanceof UserTask) {
+	//                        task = Bpmn2Factory.eINSTANCE.createGlobalUserTask();
+	//                    } else if (child instanceof ServiceTask) {
+	//                        // we don't have a global service task! Fallback on a
+	//                        // normal global task
+	//                        task = Bpmn2Factory.eINSTANCE.createGlobalTask();
+	//                    } else if (child instanceof BusinessRuleTask) {
+	//                        task = Bpmn2Factory.eINSTANCE.createGlobalBusinessRuleTask();
+	//                    } else if (child instanceof ManualTask) {
+	//                        task = Bpmn2Factory.eINSTANCE.createGlobalManualTask();
+	//                    } else {
+	//                        task = Bpmn2Factory.eINSTANCE.createGlobalTask();
+	//                    }
+	//
+	//                    task.setName(((Task) child).getName());
+	//                    task.setIoSpecification(((Task) child).getIoSpecification());
+	//                    task.getDocumentation().addAll(((Task) child).getDocumentation());
+	//                    ((Definitions) baseElt).getRootElements().add(task);
+	//                    continue;
+	//                } else {
+	                    if (child instanceof SequenceFlow) {
+	                        // for some reason sequence flows are placed as root elements.
+	                        // find if the target has a container, and if we can use it:
+	                        List<String> ids = _outgoingFlows.get(child);
+	                        FlowElementsContainer container = null;
+	                        for (String id : ids) { // yes, we iterate, but we'll take the first in the list that will work.
+	                            Object obj = _idMap.get(id);
+	                            if (obj instanceof EObject && ((EObject) obj).eContainer() instanceof FlowElementsContainer) {
+	                                container = (FlowElementsContainer) ((EObject) obj).eContainer();
+	                                break;
+	                            }
+	                        }
+	                        if (container != null) {
+	                            container.getFlowElements().add((SequenceFlow) child);
+	                            continue;
+	                        }
+	                        
+	                    }
+	                    if (child instanceof Task || child instanceof SequenceFlow 
+	                            || child instanceof Gateway || child instanceof Event 
+	                            || child instanceof Artifact || child instanceof DataObject || child instanceof SubProcess
+	                            || child instanceof Lane || child instanceof CallActivity) {
+	                        if (rootLevelProcess == null) {
+	                            rootLevelProcess = Bpmn2Factory.eINSTANCE.createProcess();
+	                            // set the properties and item definitions first
+	                            if(properties.get("vardefs") != null && properties.get("vardefs").length() > 0) {
+	                                String[] vardefs = properties.get("vardefs").split( ",\\s*" );
+	                                for(String vardef : vardefs) {
+	                                    Property prop = Bpmn2Factory.eINSTANCE.createProperty();
+	                                    ItemDefinition itemdef =  Bpmn2Factory.eINSTANCE.createItemDefinition();
+	                                    // check if we define a structure ref in the definition
+	                                    if(vardef.contains(":")) {
+	                                        String[] vardefParts = vardef.split( ":\\s*" );
+	                                        prop.setId(vardefParts[0]);
+	                                        itemdef.setId("_" + prop.getId() + "Item");
+	                                        itemdef.setStructureRef(vardefParts[1]);
+	                                    } else {
+	                                        prop.setId(vardef);
+	                                        itemdef.setId("_" + prop.getId() + "Item");
+	                                    }
+	                                    prop.setItemSubjectRef(itemdef);
+	                                    rootLevelProcess.getProperties().add(prop);
+	                                    ((Definitions) baseElt).getRootElements().add(itemdef);
+	                                }
+	                            }
+	                            if(properties.get("adhocprocess") != null && properties.get("adhocprocess").equals("true")) {
+	                            	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+	                                EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+	                                            "http://www.jboss.org/drools", "adHoc", false, false);
+	                                EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+	                                    properties.get("adhocprocess"));
+	                                rootLevelProcess.getAnyAttribute().add(extensionEntry);
+	                            }
+	                            rootLevelProcess.setId(properties.get("id"));
+	                            applyProcessProperties(rootLevelProcess, properties);
+	                            ((Definitions) baseElt).getRootElements().add(rootLevelProcess);
+	                        }
+	                    }
+	                    if (child instanceof Task) {
+	                        rootLevelProcess.getFlowElements().add((Task) child);
+	                    } else if (child instanceof CallActivity) {
+	                    	rootLevelProcess.getFlowElements().add((CallActivity) child);
+	                    } else if (child instanceof RootElement) {
+	                        ((Definitions) baseElt).getRootElements().add((RootElement) child);
+	                    } else if (child instanceof SequenceFlow) {
+	                        rootLevelProcess.getFlowElements().add((SequenceFlow) child);
+	                    } else if (child instanceof Gateway) {
+	                        rootLevelProcess.getFlowElements().add((Gateway) child);
+	                    } else if (child instanceof Event) {
+	                        rootLevelProcess.getFlowElements().add((Event) child);
+	                    } else if (child instanceof Artifact) {
+	                        rootLevelProcess.getArtifacts().add((Artifact) child);
+	                    } else if (child instanceof DataObject) {
+	                        rootLevelProcess.getFlowElements().add((DataObject) child);
+	//                        ItemDefinition def = ((DataObject) child).getItemSubjectRef();
+	//                        if (def != null) {
+	//                            if (def.eResource() == null) {
+	//                                ((Definitions) rootLevelProcess.eContainer()).getRootElements().add(0, def);
+	//                            }
+	//                            Import imported = def.getImport();
+	//                            if (imported != null && imported.eResource() == null) {
+	//                                ((Definitions) rootLevelProcess.eContainer()).getImports().add(0, imported);
+	//                            }
+	//                        }
+	                    } else if(child instanceof SubProcess) {
+	                        rootLevelProcess.getFlowElements().add((SubProcess) child);
+	                    } else if(child instanceof Lane) {
+	                    	// lanes handled later
+	                    } else {
+	                        throw new IllegalArgumentException("Don't know what to do of " + child);
+	                    }
+	               // }
+	            }
+        	}
         } else if (baseElt instanceof Process) {
             for (BaseElement child : childElements) {
                 if (child instanceof Lane) {
