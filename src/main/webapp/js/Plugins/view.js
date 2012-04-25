@@ -1077,7 +1077,10 @@ ORYX.Plugins.View = {
 			buttons:[{
 							text : 'Close',
 							handler:function(){
-								win.hide();
+								win.close();
+								win = null;
+								cf = null;
+								sourceEditor = null;
 							}.bind(this)
 						}]
 			});
@@ -1109,7 +1112,10 @@ ORYX.Plugins.View = {
 			buttons:[{
 							text : 'Close',
 							handler:function(){
-								win.hide();
+								win.close();
+								win = null;
+								cf = null;
+								sourceEditor = null;
 							}.bind(this)
 						}]
 			});
@@ -1140,7 +1146,10 @@ ORYX.Plugins.View = {
 			buttons:[{
 				text : 'Close',
 				handler:function(){
-					win.hide();
+					win.close();
+					win = null;
+					cf = null;
+					sourceEditor = null;
 				}.bind(this)
 			}]
 			});
@@ -1230,7 +1239,10 @@ ORYX.Plugins.View = {
     	   	            },{
 							text : 'Close',
 							handler:function(){
-								win.hide();
+								win.close();
+								win = null;
+								cf = null;
+								sourceEditor = null;
 							}.bind(this)
 						}]
     	   				});
