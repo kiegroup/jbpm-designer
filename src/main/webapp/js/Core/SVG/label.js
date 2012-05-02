@@ -233,7 +233,9 @@ ORYX.Core.SVG.Label = Clazz.extend({
 				this.node.setAttributeNS(null, 'x', this.x);
 				this.node.setAttributeNS(null, 'y', this.y);
 				
-				this.node.setAttributeNS(null, 'font-size', this._fontSize);
+				if(this._fontSize) {
+					this.node.setAttributeNS(null, 'font-size', this._fontSize);
+				}
 				//this.node.setAttributeNS(ORYX.CONFIG.NAMESPACE_ORYX, 'align', this._horizontalAlign + " " + this._verticalAlign);
 				
 				//set horizontal alignment
