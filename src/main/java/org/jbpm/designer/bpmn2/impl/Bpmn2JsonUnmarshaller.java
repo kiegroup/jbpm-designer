@@ -3876,6 +3876,59 @@ public class Bpmn2JsonUnmarshaller {
         		task.getDataInputAssociations().add(dia);
         	}
         }
+        
+        // revisit data assignments
+        if(task.getDataInputAssociations() != null) {
+        	List<DataInputAssociation> dataInputAssociations = task.getDataInputAssociations();
+        	List<DataInputAssociation> toRemoveAssociations = new ArrayList<DataInputAssociation>();
+        	for(DataInputAssociation dia : dataInputAssociations) {
+        		DataInput targetInput = (DataInput) dia.getTargetRef();
+        		if(targetInput != null && targetInput.getName() != null) {
+        			if(targetInput.getName().equals("GroupId") && (properties.get("groupid") == null  || properties.get("groupid").length() == 0)) {
+        				toRemoveAssociations.add(dia);
+        			} else if(targetInput.getName().equalsIgnoreCase("Skippable") && (properties.get("skippable") == null  || properties.get("skippable").length() == 0)) {
+        				toRemoveAssociations.add(dia);
+        			} else if(targetInput.getName().equalsIgnoreCase("Comment") && (properties.get("comment") == null  || properties.get("comment").length() == 0)) {
+        				toRemoveAssociations.add(dia);
+        			} else if(targetInput.getName().equalsIgnoreCase("Priority") && (properties.get("priority") == null  || properties.get("priority").length() == 0)) {
+        				toRemoveAssociations.add(dia);
+        			} else if(targetInput.getName().equalsIgnoreCase("Content") && (properties.get("content") == null  || properties.get("content").length() == 0)) {
+        				toRemoveAssociations.add(dia);
+        			}
+        		}
+        	}
+        	
+        	for(DataInputAssociation tr : toRemoveAssociations) {
+        		if(task.getDataInputAssociations() != null) 
+        			task.getDataInputAssociations().remove(tr);
+        	}
+        }
+
+        List<DataInput> toRemoveDataInputs = new ArrayList<DataInput>();
+        if(task.getIoSpecification() != null && task.getIoSpecification().getDataInputs() != null) {
+        	List<DataInput> taskDataInputs = task.getIoSpecification().getDataInputs();
+        	for(DataInput din : taskDataInputs) {
+        		if(din.getName().equals("GroupId") && (properties.get("groupid") == null  || properties.get("groupid").length() == 0)) {
+        			toRemoveDataInputs.add(din);
+    			} else if(din.getName().equalsIgnoreCase("Skippable") && (properties.get("skippable") == null  || properties.get("skippable").length() == 0)) {
+    				toRemoveDataInputs.add(din);
+    			} else if(din.getName().equalsIgnoreCase("Comment") && (properties.get("comment") == null  || properties.get("comment").length() == 0)) {
+    				toRemoveDataInputs.add(din);
+    			} else if(din.getName().equalsIgnoreCase("Priority") && (properties.get("priority") == null  || properties.get("priority").length() == 0)) {
+    				toRemoveDataInputs.add(din);
+    			} else if(din.getName().equalsIgnoreCase("Content") && (properties.get("content") == null  || properties.get("content").length() == 0)) {
+    				toRemoveDataInputs.add(din);
+    			}
+        	}
+        }
+        
+        for(DataInput trdin : toRemoveDataInputs) {
+        	if(task.getIoSpecification() != null && task.getIoSpecification().getDataInputs() != null)
+        		if(task.getIoSpecification().getInputSets().size() > 0) {
+        			task.getIoSpecification().getInputSets().get(0).getDataInputRefs().remove(trdin);
+        		}
+        		task.getIoSpecification().getDataInputs().remove(trdin);
+        }
     }
     
     protected void applyGatewayProperties(Gateway gateway, Map<String, String> properties) {
