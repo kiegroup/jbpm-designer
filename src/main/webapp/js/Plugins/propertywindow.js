@@ -634,6 +634,7 @@ ORYX.Plugins.PropertyWindow = {
 							// Set the grid Editor
 
 							var editorCombo = new Ext.form.ComboBox({
+								editable: false,
 								tpl: '<tpl for="."><div class="x-combo-list-item">{[(values.icon) ? "<img src=\'" + values.icon + "\' />" : ""]} {title}</div></tpl>',
 								store: store,
 								displayField:'title',
@@ -1102,7 +1103,7 @@ Ext.extend(Ext.form.ComplexListField, Ext.form.TriggerField,  {
 				});				
 				
 				editor = new Ext.form.ComboBox(
-					{ typeAhead: true, triggerAction: 'all', transform:select, lazyRender:true,  msgTarget:'title', width : width});			
+					{ editable: false, typeAhead: true, triggerAction: 'all', transform:select, lazyRender:true,  msgTarget:'title', width : width});			
 			} else if (type == ORYX.CONFIG.TYPE_BOOLEAN) {
 				editor = new Ext.form.Checkbox( { width : width } );
 			} else if (type == "xpath") {
