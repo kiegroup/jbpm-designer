@@ -28,19 +28,25 @@ import org.eclipse.bpmn2.BusinessRuleTask;
 import org.eclipse.bpmn2.CallActivity;
 import org.eclipse.bpmn2.CatchEvent;
 import org.eclipse.bpmn2.CompensateEventDefinition;
+import org.eclipse.bpmn2.ComplexGateway;
 import org.eclipse.bpmn2.ConditionalEventDefinition;
 import org.eclipse.bpmn2.DataObject;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.EndEvent;
 import org.eclipse.bpmn2.ErrorEventDefinition;
 import org.eclipse.bpmn2.EscalationEventDefinition;
+import org.eclipse.bpmn2.EventBasedGateway;
 import org.eclipse.bpmn2.EventDefinition;
+import org.eclipse.bpmn2.ExclusiveGateway;
 import org.eclipse.bpmn2.FlowElement;
 import org.eclipse.bpmn2.FlowElementsContainer;
 import org.eclipse.bpmn2.FlowNode;
 import org.eclipse.bpmn2.FormalExpression;
 import org.eclipse.bpmn2.Gateway;
+import org.eclipse.bpmn2.GatewayDirection;
+import org.eclipse.bpmn2.InclusiveGateway;
 import org.eclipse.bpmn2.MessageEventDefinition;
+import org.eclipse.bpmn2.ParallelGateway;
 import org.eclipse.bpmn2.Process;
 import org.eclipse.bpmn2.RootElement;
 import org.eclipse.bpmn2.ScriptTask;
@@ -344,8 +350,33 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 			
 			if(fe instanceof Gateway) {
 				Gateway gw = (Gateway) fe;
-				if(gw.getGatewayDirection() == null) {
-					addError((Gateway) fe, "Gateway has no direction.");
+				if(gw.getGatewayDirection() == null || gw.getGatewayDirection().equals(GatewayDirection.UNSPECIFIED)) {
+					addError((Gateway) fe, "Gateway does not specify a valid direction.");
+				}
+				if(gw instanceof ExclusiveGateway) {
+					if(!gw.getGatewayDirection().equals(GatewayDirection.DIVERGING) || !gw.getGatewayDirection().equals(GatewayDirection.CONVERGING)) {
+						addError((Gateway) fe, "Invalid Gateway direction for Exclusing Gateway. It should be 'Converging' or 'Diverging'.");
+					}
+				}
+				if(gw instanceof EventBasedGateway) {
+					if(!gw.getGatewayDirection().equals(GatewayDirection.DIVERGING)) {
+						addError((Gateway) fe, "Invalid Gateway direction for EventBased Gateway. It should be 'Diverging'.");
+					}
+				}
+				if(gw instanceof ParallelGateway) {
+					if(!gw.getGatewayDirection().equals(GatewayDirection.DIVERGING) || !gw.getGatewayDirection().equals(GatewayDirection.CONVERGING)) {
+						addError((Gateway) fe, "Invalid Gateway direction for Parallel Gateway. It should be 'Converging' or 'Diverging'.");
+					}
+				}
+				if(gw instanceof InclusiveGateway) {
+					if(!gw.getGatewayDirection().equals(GatewayDirection.DIVERGING)) {
+						addError((Gateway) fe, "Invalid Gateway direction for Inclusive Gateway. It should be 'Diverging'.");
+					}
+				}
+				if(gw instanceof ComplexGateway) {
+					if(!gw.getGatewayDirection().equals(GatewayDirection.DIVERGING) || !gw.getGatewayDirection().equals(GatewayDirection.CONVERGING)) {
+						addError((Gateway) fe, "Invalid Gateway direction for Complex Gateway. It should be 'Converging' or 'Diverging'.");
+					}
 				}
 			}
 			
