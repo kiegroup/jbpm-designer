@@ -1144,15 +1144,20 @@ public class Bpmn2JsonUnmarshaller {
                 Gateway gateway = (Gateway) fe;
                 int incoming = gateway.getIncoming() == null ? 0 : gateway.getIncoming().size();
                 int outgoing = gateway.getOutgoing() == null ? 0 : gateway.getOutgoing().size();
+                
                 if (incoming <= 1 && outgoing > 1) {
                     gateway.setGatewayDirection(GatewayDirection.DIVERGING);
                 } else if (incoming > 1 && outgoing <= 1) {
                     gateway.setGatewayDirection(GatewayDirection.CONVERGING);
-                } else if (incoming > 1 && outgoing > 1) {
-                    gateway.setGatewayDirection(GatewayDirection.MIXED);
-                } else if (incoming == 1 && outgoing == 1) { 
-                    // this handles the 1:1 case of the diverging gateways
-                } else {
+                } 
+                // temp. removing support for mixed gateway direction (not supported by runtime yet)
+//                else if (incoming > 1 && outgoing > 1) {
+//                    gateway.setGatewayDirection(GatewayDirection.MIXED);
+//                } 
+//                else if (incoming == 1 && outgoing == 1) { 
+//                    // this handles the 1:1 case of the diverging gateways
+//                } 
+                else {
                     gateway.setGatewayDirection(GatewayDirection.UNSPECIFIED);
                 }
             }
