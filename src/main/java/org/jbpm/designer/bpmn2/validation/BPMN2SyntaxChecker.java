@@ -1,13 +1,5 @@
 package org.jbpm.designer.bpmn2.validation;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -17,12 +9,6 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamReader;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
-import org.eclipse.bpmn2.Artifact;
 import org.eclipse.bpmn2.BaseElement;
 import org.eclipse.bpmn2.BusinessRuleTask;
 import org.eclipse.bpmn2.CallActivity;
@@ -45,26 +31,27 @@ import org.eclipse.bpmn2.FormalExpression;
 import org.eclipse.bpmn2.Gateway;
 import org.eclipse.bpmn2.GatewayDirection;
 import org.eclipse.bpmn2.InclusiveGateway;
+import org.eclipse.bpmn2.ManualTask;
 import org.eclipse.bpmn2.MessageEventDefinition;
 import org.eclipse.bpmn2.ParallelGateway;
 import org.eclipse.bpmn2.Process;
+import org.eclipse.bpmn2.ReceiveTask;
 import org.eclipse.bpmn2.RootElement;
 import org.eclipse.bpmn2.ScriptTask;
 import org.eclipse.bpmn2.SendTask;
 import org.eclipse.bpmn2.SequenceFlow;
+import org.eclipse.bpmn2.ServiceTask;
 import org.eclipse.bpmn2.SignalEventDefinition;
 import org.eclipse.bpmn2.StartEvent;
 import org.eclipse.bpmn2.SubProcess;
+import org.eclipse.bpmn2.Task;
 import org.eclipse.bpmn2.ThrowEvent;
 import org.eclipse.bpmn2.TimerEventDefinition;
 import org.eclipse.bpmn2.UserTask;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.designer.web.profile.impl.ExternalInfo;
 import org.jbpm.designer.web.server.ServletUtil;
 import org.json.JSONObject;
-
-import sun.misc.BASE64Encoder;
 
 
 public class BPMN2SyntaxChecker implements SyntaxChecker {
@@ -74,8 +61,6 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 	private IDiagramProfile profile;
 	private String defaultResourceId = "";
 	private String uuid;
-	
-    private static final Logger _logger = Logger.getLogger(BPMN2SyntaxChecker.class);
 	
 	public BPMN2SyntaxChecker(String json, String preprocessingData, IDiagramProfile profile, String uuid) {
 		this.json = json;
@@ -203,6 +188,10 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 	            if(!foundRuleflowGroup) {
 	            	addError(bt, "Business Rule Task has no ruleflow-group.");
 	            }
+			}
+			
+			if(fe instanceof Task && !(fe instanceof SendTask || fe instanceof ReceiveTask || fe instanceof UserTask || fe instanceof ManualTask || fe instanceof ServiceTask || fe instanceof BusinessRuleTask || fe instanceof ScriptTask)) {
+				addError(fe, "Task has no task type defined.");
 			}
 			
 			if(fe instanceof ScriptTask) {
