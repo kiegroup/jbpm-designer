@@ -45,6 +45,10 @@
    <param-name>designer.preprocess</param-name>
    <param-value>true</param-value>
   </init-param>
+  <init-param>
+   <param-name>designer.locale</param-name>
+   <param-value>en_us</param-value>
+  </init-param>
  </servlet>
  <servlet>
   <display-name>UUID Based Repository</display-name>
