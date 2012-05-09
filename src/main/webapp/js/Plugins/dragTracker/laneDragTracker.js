@@ -13,10 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-if(!ORYX.Plugins) { ORYX.Plugins = {} }
-if(!ORYX.Plugins.DragTracker) { ORYX.Plugins.DragTracker = {} }
+if(!ORYX.Plugins) { 
+	ORYX.Plugins = {}; 
+};
 
-new function(){
+if(!ORYX.Plugins.DragTracker) { 
+	ORYX.Plugins.DragTracker = {};
+};
+
+ORYX.Plugins.DragTracker = (function(){
 	
 	/**
 	 * Lane drag tracker is an implementation to help drag lanes inside pools.
@@ -122,4 +127,4 @@ new function(){
 	});
 	
 	
-}()
+})();
