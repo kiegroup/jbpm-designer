@@ -21,15 +21,10 @@
  * DEALINGS IN THE SOFTWARE.
  **/
 
-if(!ORYX.Plugins) { 
-	ORYX.Plugins = {}; 
-};
+if(!ORYX.Plugins) { ORYX.Plugins = {} }
+if(!ORYX.Plugins.Layouter) { ORYX.Plugins.Layouter = {} }
 
-if(!ORYX.Plugins.Layouter) { 
-	ORYX.Plugins.Layouter = {}; 
-};
-
-ORYX.Plugins.Layouter = (new function(){
+new function(){
 	
 	/**
 	 * Edge layouter is an implementation to layout an edge
@@ -89,7 +84,7 @@ ORYX.Plugins.Layouter = (new function(){
 			var to 		= edge.getOutgoingNodes()[0];
 			
 			// Return if one is null
-			if (!from || !to) { return; }
+			if (!from || !to) { return }
 			
 			var positions = this.getPositions(from, to, edge);
 		
@@ -131,12 +126,12 @@ ORYX.Plugins.Layouter = (new function(){
 			//     V
 			// Do nothing
 			if (Math.abs(aFirst.x-aLast.x) < 1 || Math.abs(aFirst.y-aLast.y) < 1) {
-				return [];
+				return []
 			}
 			
 			// Calc center position, between a and b
 			// depending on there weight
-			var m = {};
+			var m = {}
 			m.x = a.x < b.x ? 
 					(((b.x - bb.width()/2) - (a.x + ab.width()/2))/2) + (a.x + ab.width()/2): 
 					(((a.x - ab.width()/2) - (b.x + bb.width()/2))/2) + (b.x + bb.width()/2);
@@ -322,4 +317,4 @@ ORYX.Plugins.Layouter = (new function(){
 	});
 	
 	
-})();
+}()
