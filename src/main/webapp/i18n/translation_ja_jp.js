@@ -1,9 +1,3 @@
-/**
- * @author nicolas.peters
- * 
- * Contains all strings for the default language (en-us).
- * Version 1 - 08/29/08
- */
 if(!ORYX) var ORYX = {};
 
 if(!ORYX.I18N) ORYX.I18N = {};
