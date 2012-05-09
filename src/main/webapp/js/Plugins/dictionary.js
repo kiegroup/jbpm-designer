@@ -4,8 +4,7 @@ if (!ORYX.Plugins)
 if (!ORYX.Config)
 	ORYX.Config = {};
 
-ORYX.Config.Dictionary = {
-}
+ORYX.Config.Dictionary = {};
 
 if(!ORYX.Dictionary) ORYX.Dictionary = {};
 
