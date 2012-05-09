@@ -71,6 +71,11 @@
   <servlet-class>org.jbpm.designer.web.server.DictionaryServlet</servlet-class>
  </servlet>
  <servlet>
+  <display-name>Themes</display-name>
+  <servlet-name>ThemesServlet</servlet-name>
+  <servlet-class>org.jbpm.designer.web.server.ThemeServlet</servlet-class>
+ </servlet>
+ <servlet>
   <display-name>CalledElement</display-name>
   <servlet-name>CalledElementServlet</servlet-name>
   <servlet-class>org.jbpm.designer.web.server.CalledElementServlet</servlet-class>
@@ -154,6 +159,10 @@
  <servlet-mapping>
   <servlet-name>DictionaryServlet</servlet-name>
   <url-pattern>/dictionary</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>ThemesServlet</servlet-name>
+  <url-pattern>/themes</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
   <servlet-name>CalledElementServlet</servlet-name>

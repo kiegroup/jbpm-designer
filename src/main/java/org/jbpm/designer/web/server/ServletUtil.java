@@ -341,4 +341,22 @@ public class ServletUtil {
             return "";
         }
     }
+	
+	public static String streamToString(InputStream is) {
+		try {
+			BufferedReader reader = new BufferedReader(
+					new InputStreamReader(is, "UTF-8"));
+			StringBuilder sb = new StringBuilder();
+			String line = null;
+			while ((line = reader.readLine()) != null) {
+				sb.append(line + "\n");
+			}
+			is.close();
+			return sb.toString();
+		} catch (Exception e) {
+			_logger.error("Error converting input stream to string: "
+					+ e.getMessage());
+			return "";
+		}
+	}
 }
