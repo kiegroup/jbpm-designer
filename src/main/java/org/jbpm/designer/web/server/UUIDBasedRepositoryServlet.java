@@ -149,15 +149,14 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
 					retValue = "true";
 				}
 			} catch (Throwable t) {
-				System.out.println("Exception parsing process: " + t.getMessage());
 				retValue = "true";
+				System.out.println("Exception parsing process: " + t.getMessage());
 			}
-            StringWriter output = new StringWriter();
-            output.write(retValue);
-            resp.setContentType("application/xml");
+            System.out.println("******************************* CHECK RET VALUE: " + retValue);
+            resp.setContentType("text/plain");
             resp.setCharacterEncoding("UTF-8");
             resp.setStatus(200);
-            resp.getWriter().print(output.toString());
+            resp.getWriter().print(retValue);
         } else {
             BufferedReader reader = req.getReader();
             StringWriter reqWriter = new StringWriter();

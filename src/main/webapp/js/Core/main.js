@@ -783,20 +783,17 @@ ORYX.Editor = {
     
     checkParsingErrors : function() {
     	var processJSON = ORYX.EDITOR.getSerializedJSON();
-		
 		var ajaxObj = new XMLHttpRequest;
 		var url = ORYX.PATH + "uuidRepository";
 	    var params  = "action=checkErrors&pp=" + ORYX.PREPROCESSING + "&profile=" + ORYX.PROFILE + "&data=" + encodeURIComponent(processJSON);
 	    ajaxObj.open("POST",url,false);
 	    ajaxObj.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	    ajaxObj.send(params);
-	    
 	    if (ajaxObj.status == 200) {
 			return ajaxObj.responseText == "true";
 		} else {
 			return "true";
 		}
-	    
     },
     
     showParsingErrors : function() {
