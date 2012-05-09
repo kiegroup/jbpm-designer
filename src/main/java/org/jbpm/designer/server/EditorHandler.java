@@ -76,9 +76,6 @@ public class EditorHandler extends HttpServlet {
 
     private static final long serialVersionUID = -7439613152623067053L;
 
-    /**
-     * da logger
-     */
     private static final Logger _logger = 
         Logger.getLogger(EditorHandler.class);
     
@@ -116,6 +113,11 @@ public class EditorHandler extends HttpServlet {
     public static final String PREPROCESS = "designer.preprocess";
     
     /**
+     * The designer locale param.
+     */
+    public static final String LOCALE = "designer.locale";
+    
+    /**
      * The designer bundle version looked up from the manifest.
      */
     public static final String BUNDLE_VERSION = "Bundle-Version";
@@ -129,6 +131,11 @@ public class EditorHandler extends HttpServlet {
      * The designer preprocess mode setting.
      */
     private boolean _preProcess;
+    
+    /**
+     * The designer locale setting.
+     */
+    private String _locale;
     
     /**
      * The designer version setting.
@@ -176,6 +183,7 @@ public class EditorHandler extends HttpServlet {
         
         _devMode = Boolean.parseBoolean( System.getProperty(DEV) == null ? config.getInitParameter(DEV) : System.getProperty(DEV) );
         _preProcess = Boolean.parseBoolean( System.getProperty(PREPROCESS) == null ? config.getInitParameter(PREPROCESS) : System.getProperty(PREPROCESS) );
+        _locale = System.getProperty(LOCALE) == null ? config.getInitParameter(LOCALE) : System.getProperty(LOCALE);
         _designerVersion = readDesignerVersion(config.getServletContext());
         
         String editor_file = config.
@@ -231,7 +239,7 @@ public class EditorHandler extends HttpServlet {
         }
     
         // generate script to setup the languages
-        _envFiles.add("i18n/translation_en_us.js");
+        _envFiles.add("i18n/translation_" + _locale + ".js");
         if (!_devMode) {
         	if (_logger.isInfoEnabled()) {
                 _logger.info(
@@ -465,7 +473,7 @@ public class EditorHandler extends HttpServlet {
                 resultHtml.append(elt);
             }
         }
-        
+        response.setCharacterEncoding("UTF-8");
         response.getWriter().write(resultHtml.toString());
     }
     
