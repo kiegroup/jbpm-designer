@@ -21,7 +21,7 @@ if(!ORYX.Plugins.DragTracker) {
 	ORYX.Plugins.DragTracker = {};
 };
 
-ORYX.Plugins.DragTracker = (function(){
+new function(){
 	
 	/**
 	 * Lane drag tracker is an implementation to help drag lanes inside pools.
@@ -127,4 +127,4 @@ ORYX.Plugins.DragTracker = (function(){
 	});
 	
 	
-})();
+}();
