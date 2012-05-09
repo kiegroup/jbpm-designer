@@ -24,6 +24,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.stream.XMLInputFactory;
@@ -40,6 +41,8 @@ import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.impl.ExternalInfo;
 import org.jbpm.designer.web.server.ServletUtil;
 import org.jbpm.process.workitem.WorkDefinitionImpl;
+import org.json.JSONObject;
+import org.junit.runner.Request;
 import org.drools.process.core.datatype.DataType;
 import org.mvel2.MVEL;
 
@@ -54,8 +57,12 @@ import sun.misc.BASE64Encoder;
 public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     private static final Logger _logger = 
         Logger.getLogger(JbpmPreprocessingUnit.class);
-    public final static String STENCILSET_PATH = "stencilsets";
+    public static final String STENCILSET_PATH = "stencilsets";
     public static final String WORKITEM_DEFINITION_EXT = "wid";
+    public static final String THEME_NAME = "themes";
+    public static final String THEME_EXT = ".json";
+    public static final String DEFAULT_THEME_NAME = "jBPM";
+    public static final String THEME_COOKIE_NAME = "designercolortheme";
     
     private String stencilPath;
     private String origStencilFilePath;
@@ -67,6 +74,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     private String default_logicon;
     private String default_servicenodeicon;
     private String default_widconfigtemplate;
+    private String themeInfo;
     
     public JbpmPreprocessingUnit(ServletContext servletContext) {
         stencilPath = servletContext.getRealPath("/" + STENCILSET_PATH);
@@ -78,6 +86,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         default_logicon = servletContext.getRealPath(  "/defaults/defaultlogicon.gif");
         default_servicenodeicon = servletContext.getRealPath(  "/defaults/defaultservicenodeicon.png");
         default_widconfigtemplate = servletContext.getRealPath("/defaults/WorkDefinitions.wid.st");
+        themeInfo = servletContext.getRealPath("/defaults/themes.json");
     }
     
     public String getOutData() {
@@ -94,6 +103,9 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         outData = "";
         // check with guvnor to see what packages exist
         List<String> packageNames = findPackages(uuid, profile);
+        
+        // set up color theme info
+        Map<String, ThemeInfo> themeData = setupThemes(profile, req);
         
         // figure out which package our uuid belongs in and get back the list of configs
         Map<String, List<String>> workitemConfigInfo = findWorkitemInfoForUUID(uuid, packageNames, profile);
@@ -149,6 +161,9 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         	
         	// default the process id to packagename.processName
         	workItemTemplate.setAttribute("processid", workItemTemplate.getAttribute("packageName") + "." + workItemTemplate.getAttribute("processName")); 
+        	// color theme attribute
+        	workItemTemplate.setAttribute("colortheme", themeData);
+        	
         	// delete stencil data json if exists
         	deletefile(stencilFilePath);
         	// copy our results as the stencil json data
@@ -247,7 +262,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                         "/rest/packages/" + packageName + "/assets/" + configName + "/source/";
                 
                         try {
-                            InputStream in = getInputStreamForURL(configURL, profile);
+                            InputStream in =  ServletUtil.getInputStreamForURL(configURL, "GET", profile);
                             StringWriter writer = new StringWriter();
                             IOUtils.copy(in, writer, "UTF-8");
                             resultsMap.put(configName, writer.toString());
@@ -262,44 +277,91 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         return resultsMap;
     }
     
-    private InputStream getInputStreamForURL(String urlLocation, IDiagramProfile profile) throws Exception{
-        // pretend we are mozilla
-        URL url = new URL(urlLocation);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-        connection.setRequestMethod("GET");
-        connection
-                .setRequestProperty(
-                        "User-Agent",
-                        "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2.16) Gecko/20110319 Firefox/3.6.16");
-        connection
-                .setRequestProperty("Accept",
-                        "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-        connection.setRequestProperty("Accept-Language", "en-us,en;q=0.5");
-        connection.setRequestProperty("Accept-Encoding", "gzip,deflate");
-        connection.setRequestProperty("charset", "UTF-8");
-        connection.setReadTimeout(5 * 1000);
-        
-        if(profile.getUsr() != null && profile.getUsr().trim().length() > 0 && profile.getPwd() != null && profile.getPwd().trim().length() > 0) {
-            BASE64Encoder enc = new sun.misc.BASE64Encoder();
-            String userpassword = profile.getUsr() + ":" + profile.getPwd();
-            String encodedAuthorization = enc.encode( userpassword.getBytes() );
-            connection.setRequestProperty("Authorization", "Basic "+ encodedAuthorization);
+    private Map<String, ThemeInfo> setupThemes(IDiagramProfile profile, HttpServletRequest req) {
+    	Map<String, ThemeInfo> themeData = new HashMap<String, JbpmPreprocessingUnit.ThemeInfo>();
+    	String themesURL = ExternalInfo.getExternalProtocol(profile)
+                + "://"
+                + ExternalInfo.getExternalHost(profile)
+                + "/"
+                + profile.getExternalLoadURLSubdomain().substring(0,
+                        profile.getExternalLoadURLSubdomain().indexOf("/"))
+                + "/rest/packages/globalArea/assets/" + THEME_NAME;
+    	
+    	String themesSourceURL = ExternalInfo.getExternalProtocol(profile)
+                + "://"
+                + ExternalInfo.getExternalHost(profile)
+                + "/"
+                + profile.getExternalLoadURLSubdomain().substring(0,
+                        profile.getExternalLoadURLSubdomain().indexOf("/"))
+                + "/rest/packages/globalArea/assets/" + THEME_NAME + "/source";
+		
+		String themesAssetsURL = ExternalInfo.getExternalProtocol(profile)
+                + "://"
+                + ExternalInfo.getExternalHost(profile)
+                + "/"
+                + profile.getExternalLoadURLSubdomain().substring(0,
+                        profile.getExternalLoadURLSubdomain().indexOf("/"))
+                + "/rest/packages/globalArea/assets/";
+		try {
+	        URL checkURL = new URL(themesURL);
+	        HttpURLConnection checkConnection = (HttpURLConnection) checkURL
+	                .openConnection();
+	        ServletUtil.applyAuth(profile, checkConnection);
+	        checkConnection.setRequestMethod("GET");
+	        checkConnection
+	                .setRequestProperty("Accept", "application/atom+xml");
+	        checkConnection.connect();
+	        _logger.info("check connection response code: " + checkConnection.getResponseCode());
+	        if (checkConnection.getResponseCode() != 200) {
+	        	URL createURL = new URL(themesAssetsURL);
+	            HttpURLConnection createConnection = (HttpURLConnection) createURL
+	                    .openConnection();
+	            ServletUtil.applyAuth(profile, createConnection);
+	            createConnection.setRequestMethod("POST");
+	            createConnection.setRequestProperty("Content-Type",
+	                    "application/octet-stream");
+	            createConnection.setRequestProperty("Accept",
+	                    "application/atom+xml");
+	            createConnection.setRequestProperty("Slug", THEME_NAME + THEME_EXT);
+	            createConnection.setDoOutput(true);
+	            createConnection.getOutputStream().write(getBytesFromFile(new File(themeInfo)));
+	            createConnection.connect();
+	            _logger.info("create themes connection response code: " + createConnection.getResponseCode());
+	        }
+	        
+	        JSONObject themesObject =  new JSONObject(ServletUtil.streamToString(ServletUtil.getInputStreamForURL(themesSourceURL, "GET", profile)));
+	        
+	        // get the theme name from cookie if exists or default
+	        String themeName = DEFAULT_THEME_NAME;
+	        Cookie[] cookies = req.getCookies();
+	        if(cookies != null) {
+		        for(Cookie ck : cookies) {
+		        	if(ck.getName().equals(THEME_COOKIE_NAME)) {
+		        		themeName = ck.getValue();
+		        	}
+		        }
+	        }
+	        
+	        // extract theme info from json
+	        JSONObject themes = (JSONObject) themesObject.get("themes");
+	        JSONObject selectedTheme = (JSONObject) themes.get(themeName);
+	        for(String key : JSONObject.getNames(selectedTheme)) {
+	        	String val = (String) selectedTheme.get(key);
+	        	String[] valParts = val.split( "\\|\\s*" );
+	        	ThemeInfo ti;
+	        	if(valParts.length == 3) {
+	        		ti = new ThemeInfo(valParts[0], valParts[1], valParts[2]);
+	        	} else {
+	        		ti = new ThemeInfo("#000000", "#000000", "#000000");
+	        	}
+	        	themeData.put(key, ti);
+	        }
+	        return themeData;
+		} catch (Exception e) {
+            // we dont want to barf..just log that error happened
+            _logger.error(e.getMessage());
+            return themeData;
         }
-        
-        connection.connect();
-        
-        BufferedReader sreader = new BufferedReader(new InputStreamReader(
-                connection.getInputStream(), "UTF-8"));
-        StringBuilder stringBuilder = new StringBuilder();
-
-        String line = null;
-        while ((line = sreader.readLine()) != null) {
-            stringBuilder.append(line + "\n");
-        }
-        
-        return new ByteArrayInputStream(stringBuilder.toString()
-                .getBytes("UTF-8"));
     }
     
     private void setupDefaultWorkitemConfigs(String uuid, List<String> packageNames, IDiagramProfile profile) {
@@ -312,7 +374,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             
             try {
                 XMLInputFactory factory = XMLInputFactory.newInstance();
-                XMLStreamReader reader = factory.createXMLStreamReader(getInputStreamForURL(packageAssetURL, profile));
+                XMLStreamReader reader = factory.createXMLStreamReader(ServletUtil.getInputStreamForURL(packageAssetURL, "GET", profile));
                 while (reader.hasNext()) {
                     int next = reader.next();
                     if (next == XMLStreamReader.START_ELEMENT) {
@@ -519,7 +581,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             
             try {
                 XMLInputFactory factory = XMLInputFactory.newInstance();
-                XMLStreamReader reader = factory.createXMLStreamReader(getInputStreamForURL(packageAssetURL, profile));
+                XMLStreamReader reader = factory.createXMLStreamReader(ServletUtil.getInputStreamForURL(packageAssetURL, "GET", profile));
 
                 String format = "";
                 String title = "";  
@@ -574,7 +636,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         "/rest/packages/";
         try {
             XMLInputFactory factory = XMLInputFactory.newInstance();
-            XMLStreamReader reader = factory.createXMLStreamReader(getInputStreamForURL(packagesURL, profile));
+            XMLStreamReader reader = factory.createXMLStreamReader(ServletUtil.getInputStreamForURL(packagesURL, "GET", profile));
             while (reader.hasNext()) {
                 if (reader.next() == XMLStreamReader.START_ELEMENT) {
                     if ("title".equals(reader.getLocalName())) {
@@ -665,5 +727,41 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     	}
     	is.close();
     	return bytes;
+    }
+    
+    private class ThemeInfo {
+    	private String bgColor;
+    	private String borderColor;
+    	private String fontColor;
+    	
+    	public ThemeInfo(String bgColor, String borderColor, String fontColor) {
+    		this.bgColor = bgColor;
+    		this.borderColor = borderColor;
+    		this.fontColor = fontColor;
+    	}
+
+		public String getBgColor() {
+			return bgColor;
+		}
+
+		public void setBgColor(String bgColor) {
+			this.bgColor = bgColor;
+		}
+
+		public String getBorderColor() {
+			return borderColor;
+		}
+
+		public void setBorderColor(String borderColor) {
+			this.borderColor = borderColor;
+		}
+
+		public String getFontColor() {
+			return fontColor;
+		}
+
+		public void setFontColor(String fontColor) {
+			this.fontColor = fontColor;
+		}
     }
 }
