@@ -152,7 +152,6 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
 				retValue = "true";
 				System.out.println("Exception parsing process: " + t.getMessage());
 			}
-            System.out.println("******************************* CHECK RET VALUE: " + retValue);
             resp.setContentType("text/plain");
             resp.setCharacterEncoding("UTF-8");
             resp.setStatus(200);
