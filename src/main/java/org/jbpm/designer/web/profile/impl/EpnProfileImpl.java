@@ -43,7 +43,6 @@ public class EpnProfileImpl implements IDiagramProfile {
     private String _externalLoadSubdomain;
     private String _usr;
     private String _pwd;
-    private String _serviceRepositoryLocation;
     
     public EpnProfileImpl(ServletContext servletContext) {
         this(servletContext, true);
@@ -230,9 +229,4 @@ public class EpnProfileImpl implements IDiagramProfile {
     public String getPwd() {
         return _pwd;
     }
-    
-    public String getServiceRepositoryLocation() {
-    	return _serviceRepositoryLocation;
-    }
-
 }

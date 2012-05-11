@@ -5,6 +5,9 @@ if (!ORYX.Config)
 	ORYX.Config = {};
 
 ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
+	repoDialog: undefined,
+	repoContent: undefined,
+	
 	construct: function(facade){
 		this.facade = facade;
 		this.facade.offer({
@@ -28,34 +31,121 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
 		});
 	},
 	jbpmServiceRepoConnect : function() {
+		this._showInitialRepoScreen();
+	},
+	_showInitialRepoScreen : function() {
+		this.repoContent = new Ext.Panel({
+			layout:'table',
+		    html: '<br/><br/><br/><br/><center>No Service Repository specified.</center>'
+		});
+		
+		var connectToRepo = new Ext.Button({
+    		text: 'Connect',
+    	    handler: function(){ 
+    	    	this._updateRepoDialog(Ext.getCmp('serviceurlfield').getValue());
+    	    }.bind(this)
+    	});
+		
+		this.repoDialog = new Ext.Window({ 
+			autoCreate: true,
+			autoScroll:true, 
+			layout: 	'fit',
+			plain:		true,
+			bodyStyle: 	'padding:5px;',
+			title: 		ORYX.I18N.View.connectServiceRepoDataTitle, 
+			height: 	440, 
+			width:		600,
+			modal:		true,
+			fixedcenter:true, 
+			shadow:		true, 
+			proxyDrag: 	true,
+			resizable:	true,
+			items: 		[this.repoContent],
+			tbar: [
+				{
+					id: 'serviceurlfield',
+				    xtype: 'textfield',
+				    fieldLabel: 'URL',
+				    name: 'repourl',
+				    width: '300',
+				    value: 'Enter Service Repository URL',
+				    handleMouseEvents: true,
+				    listeners: {
+		                render: function() {
+		                    this.getEl().on('mousedown', function(e, t, eOpts) {Ext.getCmp('serviceurlfield').setValue("");});
+		                }
+		            }
+				},
+				connectToRepo
+			],
+			buttons:[
+				{
+					text:ORYX.I18N.jPDLSupport.close,
+					handler:function(){
+						this.repoDialog.hide();
+					}.bind(this)
+				}
+			]
+		});
+		this.repoDialog.on('hide', function(){
+			this.repoDialog.destroy(true);
+			delete this.repoDialog;
+		});
+		this.repoDialog.show();
+	},
+	_updateRepoDialog : function(serviceRepoURL) {
 		var repoLoadMask = new Ext.LoadMask(Ext.getBody(), {msg:ORYX.I18N.View.connectServiceRepoConnecting});
 		repoLoadMask.show();
-		
 		Ext.Ajax.request({
-            url: ORYX.PATH + "jbpmservicerepo",
-            method: 'POST',
-            success: function(request){
-    	   		try {
-    	   			repoLoadMask.hide();
-    	   			this._showJbpmServiceDialog(request.responseText);
-    	   		} catch(e) {
-    	   			repoLoadMask.hide();
-    	   			Ext.Msg.alert("Connecting the jBPM Service Repository failed :\n" + e);
-    	   		}
-                Ext.Msg.hide();
-            }.createDelegate(this),
-            failure: function(){
-            	repoLoadMask.hide();
-            	Ext.Msg.alert("Failed to connect to jBPM Service Repository");
-            },
-            params: {
-            	action: 'display',
-            	profile: ORYX.PROFILE,
-            	uuid : ORYX.UUID
-            }
-        });
+	      url: ORYX.PATH + "jbpmservicerepo",
+	      method: 'POST',
+	      success: function(request){
+		   		try {
+		   			repoLoadMask.hide();
+		   			if(request.responseText == "false") {
+		   				this.repoDialog.remove(this.repoContent, true);
+		   				this.repoContent = new Ext.Panel({
+		   					layout:'table',
+		   				    html: '<br/><br/><br/><br/><center>No Service Repository specified.</center>'
+		   				});
+		   				this.repoDialog.add(this.repoContent);
+		   				this.repoDialog.doLayout();
+		   				Ext.Msg.alert("Failed to connect to the Service Repository");
+		   			} else {
+		   				this._showJbpmServiceInfo(request.responseText, serviceRepoURL);
+		   			}
+		   		} catch(e) {
+		   			repoLoadMask.hide();
+		   			this.repoDialog.remove(this.repoContent, true);
+		   			this.repoContent = new Ext.Panel({
+		   				layout:'table',
+		   			    html: '<br/><br/><br/><br/><center>No Service Repository specified.</center>'
+		   			});
+		   			this.repoDialog.add(this.repoContent);
+		   			this.repoDialog.doLayout();
+		   			Ext.Msg.alert("Connecting the the Service Repository failed :\n" + e);
+		   		}
+	      }.createDelegate(this),
+	      failure: function(){
+	      	repoLoadMask.hide();
+	      	this.repoDialog.remove(this.repoContent, true);
+	      	this.repoContent = new Ext.Panel({
+				layout:'table',
+			    html: '<br/><br/><br/><br/><center>No Service Repository specified.</center>'
+			});
+	      	this.repoDialog.add(this.repoContent);
+			this.repoDialog.doLayout();
+			Ext.Msg.alert("Failed to connect to the Service Repository");
+	      },
+	      params: {
+	      	action: 'display',
+	      	profile: ORYX.PROFILE,
+	      	uuid : ORYX.UUID,
+	      	repourl : serviceRepoURL
+	      }
+		});
 	},
-	_showJbpmServiceDialog : function( jsonString ) {
+	_showJbpmServiceInfo : function(jsonString, serviceRepoURL) {
 		var jsonObj = jsonString.evalJSON();
 		
 		var myData = [];
@@ -109,7 +199,12 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
 	            success: function(request) {
 	    	   		try {
 	    	   			installLoadMask.hide();
-	    	   			Ext.Msg.alert('Installation was successful. Please save your process and reopen it in the editor to see the installed assets.');
+	    	   			if(request.responseText == "false") {
+			   				Ext.Msg.alert("Failed to install the repository assets");
+			   			} else {
+			   				Ext.Msg.minWidth = 400;
+			   				Ext.Msg.alert('Installation was successful. Please save your process to see the installed assets.');
+			   			}
 	    	   		} catch(e) {
 	    	   			Ext.Msg.alert('Installing the repository assets failed :\n' + e);
 	    	   		}
@@ -122,13 +217,15 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
 	            	profile: ORYX.PROFILE,
 	            	uuid : ORYX.UUID,
 	            	asset : aname,
-	            	category : acategory
+	            	category : acategory,
+	            	repourl : serviceRepoURL
 	            }
 	        });
 			
 		});
 		
-		var tabs = new Ext.TabPanel({
+		this.repoDialog.remove(this.repoContent, true);
+		this.repoContent = new Ext.TabPanel({
 	        activeTab: 0,
 	        border: false,
 	        width:'100%',
@@ -150,41 +247,8 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
 	            }}
 	        }]
 	    });
-
-		// Create the panel
-		var dialog = new Ext.Window({ 
-			autoCreate: true,
-			autoScroll:true, 
-			layout: 	'fit',
-			plain:		true,
-			bodyStyle: 	'padding:5px;',
-			title: 		ORYX.I18N.View.connectServiceRepoDataTitle, 
-			height: 	440, 
-			width:		600,
-			modal:		true,
-			fixedcenter:true, 
-			shadow:		true, 
-			proxyDrag: 	true,
-			resizable:	true,
-			items: 		[tabs],
-			buttons:[
-				{
-					text:ORYX.I18N.jPDLSupport.close,
-					handler:function(){
-						dialog.hide();
-					}.bind(this)
-				}
-			]
-		});
-		
-		// Destroy the panel when hiding
-		dialog.on('hide', function(){
-			dialog.destroy(true);
-			delete dialog;
-		});
-
-		// Show the panel
-		dialog.show();
+		this.repoDialog.add(this.repoContent);
+		this.repoDialog.doLayout();
 	},
 	_renderIcon: function(val) {
 		return '<img src="' + val + '"/>';
