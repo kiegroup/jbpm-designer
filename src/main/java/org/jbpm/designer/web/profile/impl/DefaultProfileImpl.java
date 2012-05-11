@@ -72,7 +72,6 @@ public class DefaultProfileImpl implements IDiagramProfile {
     private String _externalLoadSubdomain;
     private String _usr;
     private String _pwd;
-    private String _serviceRepositoryLocation;
     
     public DefaultProfileImpl(ServletContext servletContext) {
         this(servletContext, true);
@@ -168,10 +167,6 @@ public class DefaultProfileImpl implements IDiagramProfile {
         return _pwd;
     }
     
-    public String getServiceRepositoryLocation() {
-    	return _serviceRepositoryLocation;
-    }
-
     public IDiagramMarshaller createMarshaller() {
         return new IDiagramMarshaller() {
             public String parseModel(String jsonModel, String preProcessingData) {

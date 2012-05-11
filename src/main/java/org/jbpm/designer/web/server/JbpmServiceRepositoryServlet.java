@@ -1,10 +1,7 @@
 package org.jbpm.designer.web.server;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -25,9 +22,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.drools.core.util.ConfFileUtils;
 import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.designer.web.profile.impl.ExternalInfo;
-import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
 import org.jbpm.process.workitem.WorkDefinitionImpl;
 import org.jbpm.process.workitem.WorkItemRepository;
 import org.json.JSONObject;
@@ -59,10 +54,41 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 		String action = req.getParameter("action");
 		String assetsToInstall = req.getParameter("asset");
 		String categoryToInstall = req.getParameter("category");
+		String repoURL = req.getParameter("repourl");
+		
+		
+		if(repoURL == null || repoURL.length() < 1) {
+			resp.setCharacterEncoding("UTF-8");
+			resp.setContentType("application/json");
+			resp.getWriter().write("false");
+			return;
+		}
+		
+		try {
+		    URL url = new URL(repoURL);
+		    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		    conn.setReadTimeout(5 * 1000);
+		    conn.setConnectTimeout(5 * 1000);
+		    conn.connect();
+		    if(conn.getResponseCode() != 200) {
+		    	resp.setCharacterEncoding("UTF-8");
+				resp.setContentType("application/json");
+				resp.getWriter().write("false");
+				return;
+		    }
+		} catch (Exception e) {
+			resp.setCharacterEncoding("UTF-8");
+			resp.setContentType("application/json");
+			resp.getWriter().write("false");
+			return;
+		}
+		
+		if(repoURL.endsWith("/")) {
+			repoURL = repoURL.substring(0, repoURL.length() - 1);
+		}
 
 		IDiagramProfile profile = ServletUtil.getProfile(req, profileName, getServletContext());
-
-		Map<String, WorkDefinitionImpl> workitemsFromRepo = WorkItemRepository.getWorkDefinitions(profile.getServiceRepositoryLocation());
+		Map<String, WorkDefinitionImpl> workitemsFromRepo = WorkItemRepository.getWorkDefinitions(repoURL);
 		if(action != null && action.equalsIgnoreCase(displayRepoContent)) {
 			if(workitemsFromRepo != null && workitemsFromRepo.size() > 0) {
 				Map<String, List<String>> retMap = new HashMap<String, List<String>>();
@@ -71,10 +97,10 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 					List<String> keyList = new ArrayList<String>();
 					keyList.add(wd.getName() == null ? "" : wd.getName());
 					keyList.add(wd.getDisplayName() == null ? "" : wd.getDisplayName());
-					keyList.add(profile.getServiceRepositoryLocation() + "/" + wd.getName() + "/" + wd.getIcon());
+					keyList.add(repoURL + "/" + wd.getName() + "/" + wd.getIcon());
 					keyList.add(wd.getCategory() == null ? "" : wd.getCategory());
 					keyList.add(wd.getExplanationText() == null ? "" : wd.getExplanationText());
-					keyList.add(profile.getServiceRepositoryLocation() + "/" + wd.getName() + "/" + wd.getDocumentation());
+					keyList.add(repoURL + "/" + wd.getName() + "/" + wd.getDocumentation());
 					StringBuffer bn = new StringBuffer();
 					if(wd.getParameterNames() != null) {
 						String delim = "";
@@ -107,7 +133,10 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 				resp.setContentType("application/json");
 				resp.getWriter().write(jsonObject.toString());
 			} else {
-				_logger.error("Invalid or empty service repository.");
+				resp.setCharacterEncoding("UTF-8");
+				resp.setContentType("application/json");
+				resp.getWriter().write("false");
+				return;
 			}
 		} else if(action != null && action.equalsIgnoreCase(installRepoContent)) {
 			resp.setCharacterEncoding("UTF-8");
@@ -117,8 +146,8 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 				String pkg = "";
 				for(String key : workitemsFromRepo.keySet()) {
 					if(key.equals(assetsToInstall) && categoryToInstall.equals(workitemsFromRepo.get(key).getCategory())) {
-						String workitemDefinitionURL = profile.getServiceRepositoryLocation() + "/" + workitemsFromRepo.get(key).getName() + "/" + workitemsFromRepo.get(key).getName() + ".wid";
-						String iconFileURL = profile.getServiceRepositoryLocation() + "/" + workitemsFromRepo.get(key).getName() + "/" + workitemsFromRepo.get(key).getIcon();
+						String workitemDefinitionURL = repoURL + "/" + workitemsFromRepo.get(key).getName() + "/" + workitemsFromRepo.get(key).getName() + ".wid";
+						String iconFileURL = repoURL + "/" + workitemsFromRepo.get(key).getName() + "/" + workitemsFromRepo.get(key).getIcon();
 						String workItemDefinitionContent = ConfFileUtils.URLContentsToString(new URL(workitemDefinitionURL));
 						String iconName = workitemsFromRepo.get(key).getIcon();
 						String widName = workitemsFromRepo.get(key).getName();
@@ -257,14 +286,20 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 								break;
 							} else {
 								_logger.error("Could not find the package for uuid: " + uuid);
-								resp.getWriter().write("ERROR: Could not find the package associated with asset uuid.");
+								resp.setCharacterEncoding("UTF-8");
+								resp.setContentType("application/json");
+								resp.getWriter().write("false");
+								return;
 							}
 						}
 					}
 				}
 			} else {
 				_logger.error("Invalid or empty service repository.");
-				resp.getWriter().write("ERROR: Invalid or empty service repository.");
+				resp.setCharacterEncoding("UTF-8");
+				resp.setContentType("application/json");
+				resp.getWriter().write("false");
+				return;
 			}
 		} 
 	}
