@@ -103,9 +103,13 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         outData = "";
         // check with guvnor to see what packages exist
         List<String> packageNames = findPackages(uuid, profile);
+        String[] info = ServletUtil.findPackageAndAssetInfo(uuid, profile);
         
         // set up color theme info
         Map<String, ThemeInfo> themeData = setupThemes(profile, req);
+        System.out.println("Setting up default icons");
+        setupDefaultIcons(info, profile);
+        System.out.println("End setting up default icons");
         
         // figure out which package our uuid belongs in and get back the list of configs
         Map<String, List<String>> workitemConfigInfo = findWorkitemInfoForUUID(uuid, packageNames, profile);
@@ -152,7 +156,6 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         	} else {
         		workItemTemplate.setAttribute("packageName", "");
         	}
-        	String[] info = ServletUtil.findPackageAndAssetInfo(uuid, profile);
         	if(info != null && info.length == 2 && info[1] != null) {
         		workItemTemplate.setAttribute("processName", info[1]);
         	} else {
@@ -364,41 +367,10 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         }
     }
     
-    private void setupDefaultWorkitemConfigs(String uuid, List<String> packageNames, IDiagramProfile profile) {
-    	boolean gotPackage = false;
-    	String pkg = "";
-    	for(String nextPackage : packageNames) {
-            String packageAssetURL = ExternalInfo.getExternalProtocol(profile) + "://" + ExternalInfo.getExternalHost(profile) +
-            "/" + profile.getExternalLoadURLSubdomain().substring(0, profile.getExternalLoadURLSubdomain().indexOf("/")) +
-            "/rest/packages/" + nextPackage + "/assets/";
-            
-            try {
-                XMLInputFactory factory = XMLInputFactory.newInstance();
-                XMLStreamReader reader = factory.createXMLStreamReader(ServletUtil.getInputStreamForURL(packageAssetURL, "GET", profile));
-                while (reader.hasNext()) {
-                    int next = reader.next();
-                    if (next == XMLStreamReader.START_ELEMENT) {
-                        if ("uuid".equals(reader.getLocalName())) {
-                            String eleText = reader.getElementText();
-                            if(uuid.equals(eleText)) {
-                                pkg = nextPackage;
-                                gotPackage = true;
-                            }
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                // we dont want to barf..just log that error happened
-                _logger.error(e.getMessage());
-            } 
-            if(gotPackage) {
-                // no need to loop through rest of packages really
-                break;
-            }
-        }
-    	
-    	if(gotPackage) {
-    		// push the default workitem config and icons to guvnor
+    private void setupDefaultIcons(String[] info, IDiagramProfile profile) {
+    	if(info != null && info.length == 2) {
+    		String pkg = info[0];
+    		
     		String emailIconURL = ExternalInfo.getExternalProtocol(profile)
                     + "://"
                     + ExternalInfo.getExternalHost(profile)
@@ -443,14 +415,21 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 				        .setRequestProperty("Accept", "application/atom+xml");
 				checkEmailIconConnection.connect();
 				System.out.println("check email icon connection response code: " + checkEmailIconConnection.getResponseCode());
-				if (checkEmailIconConnection.getResponseCode() == 200) {
-				    URL deleteAssetURL = new URL(emailIconURL);
-				    HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL
-				            .openConnection();
-				    applyAuth(profile, deleteConnection);
-				    deleteConnection.setRequestMethod("DELETE");
-				    deleteConnection.connect();
-				    System.out.println("delete email icon response code: " + deleteConnection.getResponseCode());
+				if (checkEmailIconConnection.getResponseCode() != 200) {
+					URL createEmailIconURL = new URL(packageAssetsURL);
+		            HttpURLConnection createEmailIconConnection = (HttpURLConnection) createEmailIconURL
+		                    .openConnection();
+		            applyAuth(profile, createEmailIconConnection);
+		            createEmailIconConnection.setRequestMethod("POST");
+		            createEmailIconConnection.setRequestProperty("Content-Type",
+		                    "application/octet-stream");
+		            createEmailIconConnection.setRequestProperty("Accept",
+		                    "application/atom+xml");
+		            createEmailIconConnection.setRequestProperty("Slug", "defaultemailicon.gif");
+		            createEmailIconConnection.setDoOutput(true);
+		            createEmailIconConnection.getOutputStream().write(getBytesFromFile(new File(default_emailicon)));
+		            createEmailIconConnection.connect();
+		            System.out.println("created email icon: " + createEmailIconConnection.getResponseCode());
 				}
 				
 				URL checkLogIconURL = new URL(logIconURL);
@@ -462,14 +441,21 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 				        .setRequestProperty("Accept", "application/atom+xml");
 				checkLogIconConnection.connect();
 				System.out.println("check log icon connection response code: " + checkLogIconConnection.getResponseCode());
-				if (checkLogIconConnection.getResponseCode() == 200) {
-				    URL deleteAssetURL = new URL(logIconURL);
-				    HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL
-				            .openConnection();
-				    applyAuth(profile, deleteConnection);
-				    deleteConnection.setRequestMethod("DELETE");
-				    deleteConnection.connect();
-				    System.out.println("delete log icon response code: " + deleteConnection.getResponseCode());
+				if (checkLogIconConnection.getResponseCode() != 200) {
+		            URL createLogIconURL = new URL(packageAssetsURL);
+		            HttpURLConnection createLogIconConnection = (HttpURLConnection) createLogIconURL
+		                    .openConnection();
+		            applyAuth(profile, createLogIconConnection);
+		            createLogIconConnection.setRequestMethod("POST");
+		            createLogIconConnection.setRequestProperty("Content-Type",
+		                    "application/octet-stream");
+		            createLogIconConnection.setRequestProperty("Accept",
+		                    "application/atom+xml");
+		            createLogIconConnection.setRequestProperty("Slug", "defaultlogicon.gif");
+		            createLogIconConnection.setDoOutput(true);
+		            createLogIconConnection.getOutputStream().write(getBytesFromFile(new File(default_logicon)));
+		            createLogIconConnection.connect();
+		            System.out.println("created log icon: " + createLogIconConnection.getResponseCode());
 				}
 				
 				URL checkServiceNodeIconURL = new URL(serviceNodeIconURL);
@@ -481,66 +467,74 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 				        .setRequestProperty("Accept", "application/atom+xml");
 				checkServiceNodeIconConnection.connect();
 				System.out.println("check service node icon connection response code: " + checkServiceNodeIconConnection.getResponseCode());
-				if (checkServiceNodeIconConnection.getResponseCode() == 200) {
-				    URL deleteAssetURL = new URL(serviceNodeIconURL);
-				    HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL
-				            .openConnection();
-				    applyAuth(profile, deleteConnection);
-				    deleteConnection.setRequestMethod("DELETE");
-				    deleteConnection.connect();
-				    System.out.println("delete service node icon response code: " + deleteConnection.getResponseCode());
+				if (checkServiceNodeIconConnection.getResponseCode() != 200) {
+		            URL createServiceNodeIconURL = new URL(packageAssetsURL);
+		            HttpURLConnection createServiceNodeIconConnection = (HttpURLConnection) createServiceNodeIconURL
+		                    .openConnection();
+		            applyAuth(profile, createServiceNodeIconConnection);
+		            createServiceNodeIconConnection.setRequestMethod("POST");
+		            createServiceNodeIconConnection.setRequestProperty("Content-Type",
+		                    "application/octet-stream");
+		            createServiceNodeIconConnection.setRequestProperty("Accept",
+		                    "application/atom+xml");
+		            createServiceNodeIconConnection.setRequestProperty("Slug", "defaultservicenodeicon.png");
+		            createServiceNodeIconConnection.setDoOutput(true);
+		            createServiceNodeIconConnection.getOutputStream().write(getBytesFromFile(new File(default_servicenodeicon)));
+		            createServiceNodeIconConnection.connect();
+		            System.out.println("created service node icon: " + createServiceNodeIconConnection.getResponseCode());
 				}
-				
-				// now push all defaults 
-				// email icon
-				URL createEmailIconURL = new URL(packageAssetsURL);
-	            HttpURLConnection createEmailIconConnection = (HttpURLConnection) createEmailIconURL
-	                    .openConnection();
-	            applyAuth(profile, createEmailIconConnection);
-	            createEmailIconConnection.setRequestMethod("POST");
-	            createEmailIconConnection.setRequestProperty("Content-Type",
-	                    "application/octet-stream");
-	            createEmailIconConnection.setRequestProperty("Accept",
-	                    "application/atom+xml");
-	            createEmailIconConnection.setRequestProperty("Slug", "defaultemailicon.gif");
-	            createEmailIconConnection.setDoOutput(true);
-	            createEmailIconConnection.getOutputStream().write(getBytesFromFile(new File(default_emailicon)));
-	            createEmailIconConnection.connect();
-	            System.out.println("created email icon: " + createEmailIconConnection.getResponseCode());
-				
-	            // log icon
-	            URL createLogIconURL = new URL(packageAssetsURL);
-	            HttpURLConnection createLogIconConnection = (HttpURLConnection) createLogIconURL
-	                    .openConnection();
-	            applyAuth(profile, createLogIconConnection);
-	            createLogIconConnection.setRequestMethod("POST");
-	            createLogIconConnection.setRequestProperty("Content-Type",
-	                    "application/octet-stream");
-	            createLogIconConnection.setRequestProperty("Accept",
-	                    "application/atom+xml");
-	            createLogIconConnection.setRequestProperty("Slug", "defaultlogicon.gif");
-	            createLogIconConnection.setDoOutput(true);
-	            createLogIconConnection.getOutputStream().write(getBytesFromFile(new File(default_logicon)));
-	            createLogIconConnection.connect();
-	            System.out.println("created log icon: " + createLogIconConnection.getResponseCode());
-	            
-	            // service node icon
-	            URL createServiceNodeIconURL = new URL(packageAssetsURL);
-	            HttpURLConnection createServiceNodeIconConnection = (HttpURLConnection) createServiceNodeIconURL
-	                    .openConnection();
-	            applyAuth(profile, createServiceNodeIconConnection);
-	            createServiceNodeIconConnection.setRequestMethod("POST");
-	            createServiceNodeIconConnection.setRequestProperty("Content-Type",
-	                    "application/octet-stream");
-	            createServiceNodeIconConnection.setRequestProperty("Accept",
-	                    "application/atom+xml");
-	            createServiceNodeIconConnection.setRequestProperty("Slug", "defaultservicenodeicon.png");
-	            createServiceNodeIconConnection.setDoOutput(true);
-	            createServiceNodeIconConnection.getOutputStream().write(getBytesFromFile(new File(default_servicenodeicon)));
-	            createServiceNodeIconConnection.connect();
-	            System.out.println("created service node icon: " + createServiceNodeIconConnection.getResponseCode());
-	            
-				// default configuration wid
+			} catch (Exception e) {
+                e.printStackTrace();
+			}
+    	} else {
+    		System.out.println("Unable to set up default icons.");
+    	}
+    }
+    
+    private void setupDefaultWorkitemConfigs(String uuid, List<String> packageNames, IDiagramProfile profile) {
+    	boolean gotPackage = false;
+    	String pkg = "";
+    	for(String nextPackage : packageNames) {
+            String packageAssetURL = ExternalInfo.getExternalProtocol(profile) + "://" + ExternalInfo.getExternalHost(profile) +
+            "/" + profile.getExternalLoadURLSubdomain().substring(0, profile.getExternalLoadURLSubdomain().indexOf("/")) +
+            "/rest/packages/" + nextPackage + "/assets/";
+            
+            try {
+                XMLInputFactory factory = XMLInputFactory.newInstance();
+                XMLStreamReader reader = factory.createXMLStreamReader(ServletUtil.getInputStreamForURL(packageAssetURL, "GET", profile));
+                while (reader.hasNext()) {
+                    int next = reader.next();
+                    if (next == XMLStreamReader.START_ELEMENT) {
+                        if ("uuid".equals(reader.getLocalName())) {
+                            String eleText = reader.getElementText();
+                            if(uuid.equals(eleText)) {
+                                pkg = nextPackage;
+                                gotPackage = true;
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                // we dont want to barf..just log that error happened
+                _logger.error(e.getMessage());
+            } 
+            if(gotPackage) {
+                // no need to loop through rest of packages really
+                break;
+            }
+        }
+    	
+    	if(gotPackage) {
+    		// push the default workitem config
+    		String packageAssetsURL = ExternalInfo.getExternalProtocol(profile)
+                    + "://"
+                    + ExternalInfo.getExternalHost(profile)
+                    + "/"
+                    + profile.getExternalLoadURLSubdomain().substring(0,
+                            profile.getExternalLoadURLSubdomain().indexOf("/"))
+                    + "/rest/packages/" + pkg + "/assets/";
+    		try {
+				// push default configuration wid
 	            StringTemplate widConfigTemplate = new StringTemplate(readFile(default_widconfigtemplate));
 	            widConfigTemplate.setAttribute("protocol", ExternalInfo.getExternalProtocol(profile));
 	            widConfigTemplate.setAttribute("host", ExternalInfo.getExternalHost(profile));
