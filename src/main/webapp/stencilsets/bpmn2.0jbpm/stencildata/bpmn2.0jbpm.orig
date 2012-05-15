@@ -2850,7 +2850,7 @@
 					"optional":true
 				},
 				{
-					"id":"taskName",
+					"id":"taskname",
 					"type":"String",
 					"title":"Task Name",
 					"value":"",

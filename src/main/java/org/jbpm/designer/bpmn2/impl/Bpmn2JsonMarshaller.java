@@ -1381,6 +1381,10 @@ public class Bpmn2JsonMarshaller {
             		associationBuff.append(rhsAssociation).append("=").append(associationValue);
             		associationBuff.append(",");
             		
+            		if(rhsAssociation.equalsIgnoreCase("TaskName")) {
+            			properties.put("taskname", associationValue);
+            		}
+            		
             		if (groupDataInput != null && datain.getAssignment().get(0).getTo() != null &&
             				((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
             						((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(groupDataInput.getId())) {
