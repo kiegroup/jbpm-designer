@@ -190,10 +190,6 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 	            }
 			}
 			
-			if(fe instanceof Task && !(fe instanceof SendTask || fe instanceof ReceiveTask || fe instanceof UserTask || fe instanceof ManualTask || fe instanceof ServiceTask || fe instanceof BusinessRuleTask || fe instanceof ScriptTask)) {
-				addError(fe, "Task has no task type defined.");
-			}
-			
 			if(fe instanceof ScriptTask) {
 				ScriptTask st = (ScriptTask) fe;
 				if(isEmpty(st.getScript())) {
@@ -339,31 +335,31 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 			
 			if(fe instanceof Gateway) {
 				Gateway gw = (Gateway) fe;
-				if(gw.getGatewayDirection() == null || gw.getGatewayDirection().equals(GatewayDirection.UNSPECIFIED)) {
+				if(gw.getGatewayDirection() == null || gw.getGatewayDirection().getValue() == GatewayDirection.UNSPECIFIED.getValue()) {
 					addError((Gateway) fe, "Gateway does not specify a valid direction.");
 				}
 				if(gw instanceof ExclusiveGateway) {
-					if(!gw.getGatewayDirection().equals(GatewayDirection.DIVERGING) || !gw.getGatewayDirection().equals(GatewayDirection.CONVERGING)) {
+					if(gw.getGatewayDirection().getValue() != GatewayDirection.DIVERGING.getValue() && gw.getGatewayDirection().getValue() != GatewayDirection.CONVERGING.getValue()) {
 						addError((Gateway) fe, "Invalid Gateway direction for Exclusing Gateway. It should be 'Converging' or 'Diverging'.");
 					}
 				}
 				if(gw instanceof EventBasedGateway) {
-					if(!gw.getGatewayDirection().equals(GatewayDirection.DIVERGING)) {
+					if(gw.getGatewayDirection().getValue() != GatewayDirection.DIVERGING.getValue()) {
 						addError((Gateway) fe, "Invalid Gateway direction for EventBased Gateway. It should be 'Diverging'.");
 					}
 				}
 				if(gw instanceof ParallelGateway) {
-					if(!gw.getGatewayDirection().equals(GatewayDirection.DIVERGING) || !gw.getGatewayDirection().equals(GatewayDirection.CONVERGING)) {
+					if(gw.getGatewayDirection().getValue() != GatewayDirection.DIVERGING.getValue() && !gw.getGatewayDirection().equals(GatewayDirection.CONVERGING.getValue())) {
 						addError((Gateway) fe, "Invalid Gateway direction for Parallel Gateway. It should be 'Converging' or 'Diverging'.");
 					}
 				}
 				if(gw instanceof InclusiveGateway) {
-					if(!gw.getGatewayDirection().equals(GatewayDirection.DIVERGING)) {
+					if(gw.getGatewayDirection().getValue() != GatewayDirection.DIVERGING.getValue()) {
 						addError((Gateway) fe, "Invalid Gateway direction for Inclusive Gateway. It should be 'Diverging'.");
 					}
 				}
 				if(gw instanceof ComplexGateway) {
-					if(!gw.getGatewayDirection().equals(GatewayDirection.DIVERGING) || !gw.getGatewayDirection().equals(GatewayDirection.CONVERGING)) {
+					if(gw.getGatewayDirection().getValue() != GatewayDirection.DIVERGING.getValue() && gw.getGatewayDirection().getValue() != GatewayDirection.CONVERGING.getValue()) {
 						addError((Gateway) fe, "Invalid Gateway direction for Complex Gateway. It should be 'Converging' or 'Diverging'.");
 					}
 				}
