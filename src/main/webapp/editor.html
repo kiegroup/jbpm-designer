@@ -40,15 +40,16 @@
     <script type="text/javascript" src="/designer/js/CFInstall.min.js"></script>
     <!-- process designer -->
     
+    <!-- skins -->
+    @defaultSkin@
+    @overlaySkin@
     <!-- erdf schemas -->
-    <link rel="Stylesheet" media="screen" href="/designer/css/theme_norm.css" type="text/css" />
     <link rel="schema.dc" href="http://purl.org/dc/elements/1.1/" />
     <link rel="schema.dcTerms" href="http://purl.org/dc/terms/" />
     <link rel="schema.b3mn" href="http://b3mn.org" />
     <link rel="schema.oryx" href="http://oryx-editor.org/" />
     <link rel="schema.raziel" href="http://raziel.org/" />
     <script type="text/javascript">
-      
       ORYX.VERSION = "@designerversion@";
       
       ORYX.CONFIG.SSET = "@stencilset@";
@@ -127,12 +128,12 @@
     });
     
     checkChromeFrame = function() {
+        alert("checking chrome frame!");
         CFInstall.check({mode: "popup",node: "prompt"});
     };
     </script>    
   </head>
-  <body style="overflow:hidden;" onLoad="checkChromeFrame()">
-	
+  <body style="overflow:hidden;" onLoad="checkChromeFrame();">
 	<div id="prompt"></div>
     <div class='processdata' style='display:none'>
     </div>

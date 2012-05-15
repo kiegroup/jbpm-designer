@@ -118,6 +118,11 @@ public class EditorHandler extends HttpServlet {
     public static final String LOCALE = "designer.locale";
     
     /**
+     * The designer skin param.
+     */
+    public static final String SKIN = "designer.skin";
+    
+    /**
      * The designer bundle version looked up from the manifest.
      */
     public static final String BUNDLE_VERSION = "Bundle-Version";
@@ -136,6 +141,11 @@ public class EditorHandler extends HttpServlet {
      * The designer locale setting.
      */
     private String _locale;
+    
+    /**
+     * The designer skin setting.
+     */
+    private String _skin;
     
     /**
      * The designer version setting.
@@ -184,6 +194,7 @@ public class EditorHandler extends HttpServlet {
         _devMode = Boolean.parseBoolean( System.getProperty(DEV) == null ? config.getInitParameter(DEV) : System.getProperty(DEV) );
         _preProcess = Boolean.parseBoolean( System.getProperty(PREPROCESS) == null ? config.getInitParameter(PREPROCESS) : System.getProperty(PREPROCESS) );
         _locale = System.getProperty(LOCALE) == null ? config.getInitParameter(LOCALE) : System.getProperty(LOCALE);
+        _skin = System.getProperty(SKIN) == null ? config.getInitParameter(SKIN) : System.getProperty(SKIN);
         _designerVersion = readDesignerVersion(config.getServletContext());
         
         String editor_file = config.
@@ -431,7 +442,17 @@ public class EditorHandler extends HttpServlet {
                 replacementMade = true;    
             } else if ("designerversion".equals(elt)) { 
                 resultHtml.append(_designerVersion);
-                replacementMade = true;    
+                replacementMade = true;
+            } else if ("defaultSkin".equals(elt)) { 
+                resultHtml.append("<link rel=\"Stylesheet\" media=\"screen\" href=\"/designer/css/theme-default.css\" type=\"text/css\"/>");
+                replacementMade = true;
+            } else if("overlaySkin".equals(elt)) {
+            	if(_skin != null && !_skin.equals("default")) {
+            		resultHtml.append("<link rel=\"Stylesheet\" media=\"screen\" href=\"/designer/css/theme-" + _skin + ".css\" type=\"text/css\"/>");
+            	} else {
+            		resultHtml.append("");
+            	}
+                replacementMade = true;
             } else if ("profileplugins".equals(elt)) {
                 StringBuilder plugins = new StringBuilder();
                 boolean commaNeeded = false;
