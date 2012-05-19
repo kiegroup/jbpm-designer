@@ -3219,6 +3219,30 @@
 					]
 				\},
 				\{
+					"id":"isselectable",
+					"type":"Choice",
+					"title":"Selectable",
+					"value":"true",
+					"default": "true",
+					"description":"This attribute is used to set selectable properties for every node and edges.",
+					"readonly":false,
+					"optional":true,
+					"hidden":true,
+					"popular" : true,
+					"items":[
+						\{
+							"id":"c1",
+							"title":"true",
+							"value":"true"
+						\},
+						\{
+							"id":"c2",
+							"title":"false",
+							"value":"false"
+						\}
+					]
+				\},
+				\{
 					"id":"name",
 					"type":"String",
 					"title":"Name",
