@@ -149,7 +149,7 @@ import org.osgi.framework.ServiceReference;
  */
 public class Bpmn2JsonUnmarshaller {
 
-	public static final String defaultBgColor = "#b1c2d6";
+	public static final String defaultBgColor = "#fafad2";
 	public static final String defaultBrColor = "#000000";
 	public static final String defaultFontColor = "#000000";
     // a list of the objects created, kept in memory with their original id for
@@ -2738,6 +2738,16 @@ public class Bpmn2JsonUnmarshaller {
         		baseElement.getAnyAttribute().add(extensionEntry);
         	}
         }
+        
+        if(properties.get("isselectable") != null && properties.get("isselectable").length() > 0) {
+        	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+        	EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                       	"http://www.jboss.org/drools", "selectable", false, false);
+        	EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+        			properties.get("isselectable"));
+        	baseElement.getAnyAttribute().add(extensionEntry);
+        }
+        
         if(properties.get("bordercolor") != null && properties.get("bordercolor").length() > 0) {
         	if(!properties.get("bordercolor").equals(defaultBrColor)) {
         		ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;

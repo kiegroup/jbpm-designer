@@ -77,7 +77,7 @@ ORYX.Plugins.Theme = Clazz.extend({
 	applyThemeToNodes: function(child, themeObj) {
 		var childgroup = child.getStencil().groups()[0];
 		var childthemestr = themeObj[childgroup];
-		if(childthemestr) { 
+		if(childthemestr && child.properties["oryx-isselectable"] != "false") { 
 			var themestrparts = childthemestr.split("|");
 			child.setProperty("oryx-bgcolor", themestrparts[0]);
 			child.setProperty("oryx-bordercolor", themestrparts[1]);

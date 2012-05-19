@@ -829,7 +829,7 @@ ORYX.Plugins.PropertyWindow = {
 				}
 				
 				// Push to the properties-array
-				if(pair.visible()) {
+				if(pair.visible() && (pair.id() != "origbordercolor" && pair.id() != "origbgcolor" && pair.id() != "isselectable")) {
 					// Popular Properties are those with a refToView set or those which are set to be popular
 					if (pair.refToView()[0] || refToViewFlag || pair.popular()) {
 						pair.setPopular();

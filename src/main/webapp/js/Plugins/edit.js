@@ -451,11 +451,10 @@ ORYX.Plugins.Edit.ClipBoard = Clazz.extend({
         this.parents = {};
         this.targets = {};
         this.useOffset = useNoOffset !== true;
-        
         this.shapesAsJson = shapes.map(function(shape){
             var s = shape.toJSON();
             s.parent = {resourceId : shape.getParentShape().resourceId};
-            s.parentIndex = shape.getParentShape().getChildShapes().indexOf(shape)
+            s.parentIndex = shape.getParentShape().getChildShapes().indexOf(shape);
             return s;
         });
     }

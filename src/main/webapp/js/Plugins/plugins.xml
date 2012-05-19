@@ -339,6 +339,7 @@
 		<plugin source="processinfo.js" name="ORYX.Plugins.ProcessInfo"/>
 		<plugin source="servicenodeeditor.js" name="ORYX.Plugins.ServiceNodeEditor"/>
 		<plugin source="theme.js" name="ORYX.Plugins.Theme"/>
+		<plugin source="locknode.js" name="ORYX.Plugins.LockNode"/>
 		
 		<!-- <plugin source="stencilsetmanipulator.js" name="ORYX.Plugins.StencilSetManipulator" 
 			/> -->

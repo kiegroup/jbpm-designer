@@ -136,8 +136,8 @@ import org.jbpm.designer.web.profile.IDiagramProfile;
  *
  */
 public class Bpmn2JsonMarshaller {
-	public static final String defaultBgColor_Activities = "#b1c2d6";
-	public static final String defaultBgColor_Events = "#ffffff";
+	public static final String defaultBgColor_Activities = "#fafad2";
+	public static final String defaultBgColor_Events = "#f5deb3";
 	public static final String defaultBrColor = "#000000";
 	public static final String defaultFontColor = "#000000";
 	
@@ -639,6 +639,7 @@ public class Bpmn2JsonMarshaller {
 	    	boolean foundBgColor = false;
 	    	boolean foundBrColor = false;
 	    	boolean foundFontColor = false;
+	    	boolean foundSelectable = false;
 	        while(iter.hasNext()) {
 	            FeatureMap.Entry entry = iter.next();
 	            if(entry.getEStructuralFeature().getName().equals("bgcolor")) {
@@ -657,6 +658,10 @@ public class Bpmn2JsonMarshaller {
 	            	laneProperties.put("fontcolor", entry.getValue());
 	            	foundFontColor = true;
 	            }
+	            if(entry.getEStructuralFeature().getName().equals("selectable")) {
+	            	laneProperties.put("isselectable", entry.getValue());
+	            	foundSelectable = true;
+	            }
 	        }
 	        if(!foundBgColor) {
 	        	laneProperties.put("bgcolor", defaultBgColor_Events);
@@ -668,6 +673,10 @@ public class Bpmn2JsonMarshaller {
 	        
 	        if(!foundFontColor) {
 	        	laneProperties.put("fontcolor", defaultFontColor);
+	        }
+	        
+	        if(!foundSelectable) {
+	        	laneProperties.put("isselectable", "true");
 	        }
 	    	
 	    	marshallProperties(laneProperties, generator);
@@ -715,6 +724,7 @@ public class Bpmn2JsonMarshaller {
     	boolean foundBgColor = false;
     	boolean foundBrColor = false;
     	boolean foundFontColor = false;
+    	boolean foundSelectable = false;
         while(iter.hasNext()) {
             FeatureMap.Entry entry = iter.next();
             if(entry.getEStructuralFeature().getName().equals("bgcolor")) {
@@ -733,9 +743,13 @@ public class Bpmn2JsonMarshaller {
             	flowElementProperties.put("fontcolor", entry.getValue());
             	foundFontColor = true;
             }
+            if(entry.getEStructuralFeature().getName().equals("selectable")) {
+            	flowElementProperties.put("isselectable", entry.getValue());
+            	foundSelectable = true;
+            }
         }
         if(!foundBgColor) {
-        	if(flowElement instanceof Activity && !(flowElement instanceof SubProcess) ) {
+        	if(flowElement instanceof Activity || flowElement instanceof SubProcess ) {
         		flowElementProperties.put("bgcolor", defaultBgColor_Activities);
         	} else {
         		flowElementProperties.put("bgcolor", defaultBgColor_Events);
@@ -748,6 +762,10 @@ public class Bpmn2JsonMarshaller {
         
         if(!foundFontColor) {
         	flowElementProperties.put("fontcolor", defaultFontColor);
+        }
+        
+        if(!foundSelectable) {
+        	flowElementProperties.put("isselectable", "true");
         }
 
         Map<String, Object> catchEventProperties = new LinkedHashMap<String, Object>(flowElementProperties);

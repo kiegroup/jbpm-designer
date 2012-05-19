@@ -127,7 +127,7 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
         	jsonProp.directlyEditable = true;
         }
 		
-		if(jsonProp.visible !== false) {
+		if(!jsonProp.visible) {
 			jsonProp.visible = true;
 		}
 		
