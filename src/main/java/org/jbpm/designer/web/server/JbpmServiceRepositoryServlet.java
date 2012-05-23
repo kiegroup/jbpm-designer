@@ -160,6 +160,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 						}
 						// install wid and icon to guvnor
 						List<String> packageNames = findPackages(uuid, profile);
+						
 						for(String nextPackage : packageNames) {
 							String packageAssetURL = ExternalInfo.getExternalProtocol(profile) + "://" + ExternalInfo.getExternalHost(profile) +
 									"/" + profile.getExternalLoadURLSubdomain().substring(0, profile.getExternalLoadURLSubdomain().indexOf("/")) +
@@ -176,6 +177,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 											if(uuid.equals(eleText)) {
 												pkg = nextPackage;
 												gotPackage = true;
+												break;
 											}
 										}
 									}
@@ -184,113 +186,115 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 								// we dont want to barf..just log that error happened
 								_logger.error(e.getMessage());
 							} 
-							if(gotPackage) {
-								String widURL = ExternalInfo.getExternalProtocol(profile)
-						                + "://"
-						                + ExternalInfo.getExternalHost(profile)
-						                + "/"
-						                + profile.getExternalLoadURLSubdomain().substring(0,
-						                        profile.getExternalLoadURLSubdomain().indexOf("/"))
-						                + "/rest/packages/" + pkg + "/assets/" + widName + ".wid";
-								String iconURL = ExternalInfo.getExternalProtocol(profile)
-						                + "://"
-						                + ExternalInfo.getExternalHost(profile)
-						                + "/"
-						                + profile.getExternalLoadURLSubdomain().substring(0,
-						                        profile.getExternalLoadURLSubdomain().indexOf("/"))
-						                + "/rest/packages/" + pkg + "/assets/" + iconName;
-								
-								String packageAssetsURL = ExternalInfo.getExternalProtocol(profile)
-					                    + "://"
-					                    + ExternalInfo.getExternalHost(profile)
-					                    + "/"
-					                    + profile.getExternalLoadURLSubdomain().substring(0,
-					                            profile.getExternalLoadURLSubdomain().indexOf("/"))
-					                    + "/rest/packages/" + pkg + "/assets/";
+						}
+						if(gotPackage) {
+							String widURL = ExternalInfo.getExternalProtocol(profile)
+						               + "://"
+						               + ExternalInfo.getExternalHost(profile)
+						               + "/"
+						               + profile.getExternalLoadURLSubdomain().substring(0,
+						                       profile.getExternalLoadURLSubdomain().indexOf("/"))
+						               + "/rest/packages/" + pkg + "/assets/" + widName + ".wid";
+							String iconURL = ExternalInfo.getExternalProtocol(profile)
+						               + "://"
+						               + ExternalInfo.getExternalHost(profile)
+						               + "/"
+						               + profile.getExternalLoadURLSubdomain().substring(0,
+						                       profile.getExternalLoadURLSubdomain().indexOf("/"))
+						               + "/rest/packages/" + pkg + "/assets/" + iconName;
+							
+							String packageAssetsURL = ExternalInfo.getExternalProtocol(profile)
+					                   + "://"
+					                   + ExternalInfo.getExternalHost(profile)
+					                   + "/"
+					                   + profile.getExternalLoadURLSubdomain().substring(0,
+					                           profile.getExternalLoadURLSubdomain().indexOf("/"))
+					                   + "/rest/packages/" + pkg + "/assets/";
 								
 								
 								// check if the wid already exists
-								URL checkWidURL = new URL(widURL);
-								HttpURLConnection checkWidConnection = (HttpURLConnection) checkWidURL
-								        .openConnection();
-								ServletUtil.applyAuth(profile, checkWidConnection);
-								checkWidConnection.setRequestMethod("GET");
-								checkWidConnection
-								        .setRequestProperty("Accept", "application/atom+xml");
-								checkWidConnection.connect();
-								_logger.info("check wid connection response code: " + checkWidConnection.getResponseCode());
-								if (checkWidConnection.getResponseCode() == 200) {
-									URL deleteAssetURL = new URL(widURL);
-								    HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL
-								            .openConnection();
-								    ServletUtil.applyAuth(profile, deleteConnection);
-								    deleteConnection.setRequestMethod("DELETE");
-								    deleteConnection.connect();
-								    _logger.info("delete wid response code: " + deleteConnection.getResponseCode());
-								}
-								
-								// check if icon already exists
-								URL checkIconURL = new URL(iconURL);
-								HttpURLConnection checkIconConnection = (HttpURLConnection) checkIconURL
-								        .openConnection();
-								ServletUtil.applyAuth(profile, checkIconConnection);
-								checkIconConnection.setRequestMethod("GET");
-								checkIconConnection
-								        .setRequestProperty("Accept", "application/atom+xml");
-								checkIconConnection.connect();
-								_logger.info("check icon connection response code: " + checkIconConnection.getResponseCode());
-								if (checkIconConnection.getResponseCode() == 200) {
-								    URL deleteAssetURL = new URL(iconURL);
-								    HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL
-								            .openConnection();
-								    ServletUtil.applyAuth(profile, deleteConnection);
-								    deleteConnection.setRequestMethod("DELETE");
-								    deleteConnection.connect();
-								    _logger.info("delete icon response code: " + deleteConnection.getResponseCode());
-								}
-								
-								// replace the icon value of the workitem config to include the guvnor rest url 
-								workItemDefinitionContent = workItemDefinitionContent.replaceAll( "(\"icon\"\\s*\\:\\s*\")(.*?)(\")", "$1"+ ( packageAssetsURL + iconName.substring(0, iconName.indexOf("."))  +"/binary" ) + "$3" );
-								// write to guvnor
-								URL createWidURL = new URL(packageAssetsURL);
-					            HttpURLConnection createWidConnection = (HttpURLConnection) createWidURL
-					                    .openConnection();
-					            ServletUtil.applyAuth(profile, createWidConnection);
-					            createWidConnection.setRequestMethod("POST");
-					            createWidConnection.setRequestProperty("Content-Type",
-					                    "application/octet-stream");
-					            createWidConnection.setRequestProperty("Accept",
-					                    "application/atom+xml");
-					            createWidConnection.setRequestProperty("Slug", widName + ".wid");
-					            createWidConnection.setDoOutput(true);
-					            createWidConnection.getOutputStream().write(workItemDefinitionContent.getBytes("UTF-8"));
-					            createWidConnection.connect();
-					            System.out.println("created wid configuration:" + createWidConnection.getResponseCode());
-
-					            URL createIconURL = new URL(packageAssetsURL);
-					            HttpURLConnection createIconConnection = (HttpURLConnection) createIconURL
-					                    .openConnection();
-					            ServletUtil.applyAuth(profile, createIconConnection);
-					            createIconConnection.setRequestMethod("POST");
-					            createIconConnection.setRequestProperty("Content-Type",
-					                    "application/octet-stream");
-					            createIconConnection.setRequestProperty("Accept",
-					                    "application/atom+xml");
-					            createIconConnection.setRequestProperty("Slug", iconName);
-					            createIconConnection.setDoOutput(true);
-					            createIconConnection.getOutputStream().write(iconContent);
-					            createIconConnection.connect();
-					            _logger.info("icon creation response code: " + createIconConnection.getResponseCode());
-					            System.out.println("created icon:" + createIconConnection.getResponseCode());
-								
-								break;
-							} else {
-								_logger.error("Could not find the package for uuid: " + uuid);
-								resp.setCharacterEncoding("UTF-8");
-								resp.setContentType("application/json");
-								resp.getWriter().write("false");
-								return;
+							URL checkWidURL = new URL(widURL);
+							HttpURLConnection checkWidConnection = (HttpURLConnection) checkWidURL
+							        .openConnection();
+							ServletUtil.applyAuth(profile, checkWidConnection);
+							checkWidConnection.setRequestMethod("GET");
+							checkWidConnection
+						        .setRequestProperty("Accept", "application/atom+xml");
+							checkWidConnection.connect();
+							_logger.info("check wid connection response code: " + checkWidConnection.getResponseCode());
+							if (checkWidConnection.getResponseCode() == 200) {
+								URL deleteAssetURL = new URL(widURL);
+							    HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL
+							            .openConnection();
+							    ServletUtil.applyAuth(profile, deleteConnection);
+							    deleteConnection.setRequestMethod("DELETE");
+							    deleteConnection.connect();
+							    _logger.info("delete wid response code: " + deleteConnection.getResponseCode());
 							}
+								
+							// check if icon already exists
+							URL checkIconURL = new URL(iconURL);
+							HttpURLConnection checkIconConnection = (HttpURLConnection) checkIconURL
+							        .openConnection();
+							ServletUtil.applyAuth(profile, checkIconConnection);
+							checkIconConnection.setRequestMethod("GET");
+							checkIconConnection
+							        .setRequestProperty("Accept", "application/atom+xml");
+							checkIconConnection.connect();
+							_logger.info("check icon connection response code: " + checkIconConnection.getResponseCode());
+							if (checkIconConnection.getResponseCode() == 200) {
+							    URL deleteAssetURL = new URL(iconURL);
+							    HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL
+							            .openConnection();
+							    ServletUtil.applyAuth(profile, deleteConnection);
+							    deleteConnection.setRequestMethod("DELETE");
+							    deleteConnection.connect();
+							    _logger.info("delete icon response code: " + deleteConnection.getResponseCode());
+							}
+								
+							// replace the icon value of the workitem config to include the guvnor rest url 
+							workItemDefinitionContent = workItemDefinitionContent.replaceAll( "(\"icon\"\\s*\\:\\s*\")(.*?)(\")", "$1"+ ( packageAssetsURL + iconName.substring(0, iconName.indexOf("."))  +"/binary" ) + "$3" );
+							// write to guvnor
+							URL createWidURL = new URL(packageAssetsURL);
+					        HttpURLConnection createWidConnection = (HttpURLConnection) createWidURL
+					                 .openConnection();
+					        ServletUtil.applyAuth(profile, createWidConnection);
+					        createWidConnection.setRequestMethod("POST");
+					        createWidConnection.setRequestProperty("Content-Type",
+					               "application/octet-stream");
+					        createWidConnection.setRequestProperty("Accept",
+					               "application/atom+xml");
+					        createWidConnection.setRequestProperty("Slug", widName + ".wid");
+					        createWidConnection.setDoOutput(true);
+					        createWidConnection.getOutputStream().write(workItemDefinitionContent.getBytes("UTF-8"));
+					        createWidConnection.connect();
+					        System.out.println("created wid configuration:" + createWidConnection.getResponseCode());
+
+					        URL createIconURL = new URL(packageAssetsURL);
+					        HttpURLConnection createIconConnection = (HttpURLConnection) createIconURL
+					                .openConnection();
+					        ServletUtil.applyAuth(profile, createIconConnection);
+					        createIconConnection.setRequestMethod("POST");
+					        createIconConnection.setRequestProperty("Content-Type",
+					                "application/octet-stream");
+					        createIconConnection.setRequestProperty("Accept",
+					                "application/atom+xml");
+					        createIconConnection.setRequestProperty("Slug", iconName);
+					        createIconConnection.setDoOutput(true);
+					        createIconConnection.getOutputStream().write(iconContent);
+					        createIconConnection.connect();
+					        _logger.info("icon creation response code: " + createIconConnection.getResponseCode());
+					        System.out.println("created icon:" + createIconConnection.getResponseCode());
+					        resp.setCharacterEncoding("UTF-8");
+							resp.setContentType("application/json");
+							resp.getWriter().write("true");
+							return;
+						} else {
+							_logger.error("Could not find the package for uuid: " + uuid);
+							resp.setCharacterEncoding("UTF-8");
+							resp.setContentType("application/json");
+							resp.getWriter().write("false");
+							return;
 						}
 					}
 				}
