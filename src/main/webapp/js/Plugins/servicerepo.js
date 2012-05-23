@@ -202,14 +202,16 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
 	    	   			if(request.responseText == "false") {
 			   				Ext.Msg.alert("Failed to install the repository assets");
 			   			} else {
-			   				Ext.Msg.minWidth = 400;
+			   				Ext.Msg.minWidth = 600;
 			   				Ext.Msg.alert('Installation was successful. Please save your process to see the installed assets.');
 			   			}
 	    	   		} catch(e) {
+	    	   			Ext.Msg.minWidth = 600;
 	    	   			Ext.Msg.alert('Installing the repository assets failed :\n' + e);
 	    	   		}
 	            }.createDelegate(this),
 	            failure: function(){
+	            	Ext.Msg.minWidth = 600;
 	            	Ext.Msg.alert('Failed to install the repository assets');
 	            },
 	            params: {
