@@ -9822,6 +9822,136 @@
 					"optional":false,
 					"visible":false,
 					"refToView":"conditional"
+				},
+				{
+					"id":"bgcolor",
+					"type":"Color",
+					"title":"BackgroundColor",
+					"value":"$colortheme.("Connecting Objects").bgColor$", 
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["start", "end", "frame2"],
+					"fill":true,
+					"stroke":false
+				},
+				{
+					"id":"origbgcolor",
+					"type":"Color",
+					"title":"Original Background Color",
+					"value":"$colortheme.("Connecting Objects").bgColor$",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"hidden":true,
+					"visible":false
+				},
+				{
+					"id":"bordercolor",
+					"type":"Color",
+					"title":"BorderColor",
+					"value":"$colortheme.("Connecting Objects").borderColor$",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["_1", "_2", "_3", "_4", "_5", "_6", "_7", "_8", "_9", "_10", "start", "conditional", "default", "end", "frame2"],
+					"fill":false,
+					"stroke":true
+				},
+				{
+					"id":"origbordercolor",
+					"type":"Color",
+					"title":"Original Border Color",
+					"value":"$colortheme.("Connecting Objects").borderColor$",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"hidden":true,
+					"visible":false
+				},
+				{
+					"id":"fontcolor",
+					"type":"Color",
+					"title":"Font Color",
+					"value":"$colortheme.("Connecting Objects").fontColor$",
+					"description":"Font color",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["text_name"],
+					"fill":true,
+					"stroke":false
+				},
+				{
+					"id":"fontsize",
+					"type":"Choice",
+					"title":"Font Size",
+					"value":"",
+					"description":"The Font Size",
+					"readonly":false,
+					"optional":false,
+					"refToView":"text_name",
+					"items":[
+						{
+							"id":"c1",
+							"title":"8",
+							"value":"8"
+						},
+						{
+							"id":"c2",
+							"title":"9",
+							"value":"9"
+						},
+						{
+							"id":"c3",
+							"title":"10",
+							"value":"10"
+						},
+						{
+							"id":"c4",
+							"title":"11",
+							"value":"11"
+						},
+						{
+							"id":"c5",
+							"title":"12",
+							"value":"12"
+						},
+						{
+							"id":"c6",
+							"title":"14",
+							"value":"14"
+						},
+						{
+							"id":"c7",
+							"title":"18",
+							"value":"18"
+						},
+						{
+							"id":"c8",
+							"title":"20",
+							"value":"20"
+						},
+						{
+							"id":"c9",
+							"title":"24",
+							"value":"24"
+						},
+						{
+							"id":"c10",
+							"title":"36",
+							"value":"36"
+						},
+						{
+							"id":"c11",
+							"title":"48",
+							"value":"48"
+						},
+						{
+							"id":"c12",
+							"title":"72",
+							"value":"72"
+						}
+					]
 				}
 			]
 		},
@@ -9879,100 +10009,27 @@
 					]
 				},
 				{
-					"id":"bordercolor",
+					"id":"bgcolor",
 					"type":"Color",
-					"title":"BorderColor",
-					"value":"#000000",
+					"title":"BackgroundColor",
+					"value":"$colortheme.("Connecting Objects").bgColor$", 
 					"description":"",
 					"readonly":false,
 					"optional":false,
-					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
-					"fill":false,
-					"stroke":true
-				},
-				{
-					"id":"fontcolor",
-					"type":"Color",
-					"title":"Font Color",
-					"value":"#000000",
-					"description":"Font color",
-					"readonly":false,
-					"optional":false,
-					"refToView": ["text_name"],
+					"refToView": ["start", "end", "frame2"],
 					"fill":true,
 					"stroke":false
 				},
 				{
-					"id":"fontsize",
-					"type":"Choice",
-					"title":"Font Size",
-					"value":"",
-					"description":"The Font Size",
+					"id":"origbgcolor",
+					"type":"Color",
+					"title":"Original Background Color",
+					"value":"$colortheme.("Connecting Objects").bgColor$",
+					"description":"",
 					"readonly":false,
-					"optional":false,
-					"refToView":"text_name",
-					"items":[
-						{
-							"id":"c1",
-							"title":"8",
-							"value":"8"
-						},
-						{
-							"id":"c2",
-							"title":"9",
-							"value":"9"
-						},
-						{
-							"id":"c3",
-							"title":"10",
-							"value":"10"
-						},
-						{
-							"id":"c4",
-							"title":"11",
-							"value":"11"
-						},
-						{
-							"id":"c5",
-							"title":"12",
-							"value":"12"
-						},
-						{
-							"id":"c6",
-							"title":"14",
-							"value":"14"
-						},
-						{
-							"id":"c7",
-							"title":"18",
-							"value":"18"
-						},
-						{
-							"id":"c8",
-							"title":"20",
-							"value":"20"
-						},
-						{
-							"id":"c9",
-							"title":"24",
-							"value":"24"
-						},
-						{
-							"id":"c10",
-							"title":"36",
-							"value":"36"
-						},
-						{
-							"id":"c11",
-							"title":"48",
-							"value":"48"
-						},
-						{
-							"id":"c12",
-							"title":"72",
-							"value":"72"
-						}
-					]
+					"optional":true,
+					"hidden":true,
+					"visible":false
 				}
            ]
 		},
@@ -10006,101 +10063,28 @@
                     "wrapLines":true,
 					"popular":true
                 },
-                {
+				{
 					"id":"bordercolor",
 					"type":"Color",
 					"title":"BorderColor",
-					"value":"#000000",
+					"value":"$colortheme.("Connecting Objects").borderColor$",
 					"description":"",
 					"readonly":false,
 					"optional":false,
-					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
+					"refToView": ["_1", "_2", "_3", "_4", "_5", "_6", "_7", "_8", "_9", "_10", "start", "conditional", "default", "end", "frame2"],
 					"fill":false,
 					"stroke":true
 				},
 				{
-					"id":"fontcolor",
+					"id":"origbordercolor",
 					"type":"Color",
-					"title":"Font Color",
-					"value":"#000000",
-					"description":"Font color",
+					"title":"Original Border Color",
+					"value":"$colortheme.("Connecting Objects").borderColor$",
+					"description":"",
 					"readonly":false,
-					"optional":false,
-					"refToView": ["text_name"],
-					"fill":true,
-					"stroke":false
-				},
-				{
-					"id":"fontsize",
-					"type":"Choice",
-					"title":"Font Size",
-					"value":"",
-					"description":"The Font Size",
-					"readonly":false,
-					"optional":false,
-					"refToView":"text_name",
-					"items":[
-						{
-							"id":"c1",
-							"title":"8",
-							"value":"8"
-						},
-						{
-							"id":"c2",
-							"title":"9",
-							"value":"9"
-						},
-						{
-							"id":"c3",
-							"title":"10",
-							"value":"10"
-						},
-						{
-							"id":"c4",
-							"title":"11",
-							"value":"11"
-						},
-						{
-							"id":"c5",
-							"title":"12",
-							"value":"12"
-						},
-						{
-							"id":"c6",
-							"title":"14",
-							"value":"14"
-						},
-						{
-							"id":"c7",
-							"title":"18",
-							"value":"18"
-						},
-						{
-							"id":"c8",
-							"title":"20",
-							"value":"20"
-						},
-						{
-							"id":"c9",
-							"title":"24",
-							"value":"24"
-						},
-						{
-							"id":"c10",
-							"title":"36",
-							"value":"36"
-						},
-						{
-							"id":"c11",
-							"title":"48",
-							"value":"48"
-						},
-						{
-							"id":"c12",
-							"title":"72",
-							"value":"72"
-						}
-					]
+					"optional":true,
+					"hidden":true,
+					"visible":false
 				}
            ]
 		},

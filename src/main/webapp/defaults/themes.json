@@ -9,7 +9,8 @@
            "Service Tasks" : "#fafad2|#000000|#000000",
            "Data Objects" : "#d3d3d3|#778899|#000000",
            "Swimlanes" : "#ffffff|#000000|#000000",
-           "Artifacts" : "#ffffff|#000000|#000000"
+           "Artifacts" : "#ffffff|#000000|#000000",
+           "Connecting Objects" : "#000000|#000000|#000000"
         },
         "HighContrast":{
            "Start Events" : "#d2b29f|#000000|#000000",
@@ -21,7 +22,8 @@
            "Service Tasks" : "#f3df8c|#000000|#000000",
            "Data Objects" : "#d3d3d3|#778899|#000000",
            "Swimlanes" : "#ffffff|#000000|#000000",
-           "Artifacts" : "#ffffff|#000000|#000000"
+           "Artifacts" : "#ffffff|#000000|#000000",
+           "Connecting Objects" : "#000000|#000000|#000000"
         }
    }
 }

@@ -152,6 +152,7 @@ public class Bpmn2JsonUnmarshaller {
 	public static final String defaultBgColor = "#fafad2";
 	public static final String defaultBrColor = "#000000";
 	public static final String defaultFontColor = "#000000";
+	public static final String defaultSequenceflowColor = "#000000";
     // a list of the objects created, kept in memory with their original id for
     // fast lookup.
     private Map<Object, String> _objMap = new HashMap<Object, String>();
@@ -3966,6 +3967,52 @@ public class Bpmn2JsonUnmarshaller {
         // sequence flow name is options
         if(properties.get("name") != null && !"".equals(properties.get("name"))) {
             sequenceFlow.setName(escapeXmlString(properties.get("name")));
+        }
+        if(properties.get("bgcolor") != null && properties.get("bgcolor").length() > 0) {
+        	if(!properties.get("bgcolor").equals(defaultSequenceflowColor)) {
+        		ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+        		EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                        	"http://www.jboss.org/drools", "bgcolor", false, false);
+        		EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+        				properties.get("bgcolor"));
+        		sequenceFlow.getAnyAttribute().add(extensionEntry);
+        	}
+        }
+        if(properties.get("bordercolor") != null && properties.get("bordercolor").length() > 0) {
+        	if(!properties.get("bordercolor").equals(defaultSequenceflowColor)) {
+        		ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+        		EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                        	"http://www.jboss.org/drools", "bordercolor", false, false);
+        		EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+        				properties.get("bordercolor"));
+        		sequenceFlow.getAnyAttribute().add(extensionEntry);
+        	}
+        } 
+        if(properties.get("fontsize") != null && properties.get("fontsize").length() > 0) {
+        	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+        	EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+        			"http://www.jboss.org/drools", "fontsize", false, false);
+        	EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+        			properties.get("fontsize"));
+        	sequenceFlow.getAnyAttribute().add(extensionEntry);
+        }
+        if(properties.get("fontcolor") != null && properties.get("fontcolor").length() > 0) {
+        	if(!properties.get("fontcolor").equals(defaultSequenceflowColor)) {
+        		ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+        		EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                        	"http://www.jboss.org/drools", "fontcolor", false, false);
+        		EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+        				properties.get("fontcolor"));
+        		sequenceFlow.getAnyAttribute().add(extensionEntry);
+        	}
+        }
+        if(properties.get("isselectable") != null && properties.get("isselectable").length() > 0) {
+        	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+        	EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                       	"http://www.jboss.org/drools", "selectable", false, false);
+        	EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+        			properties.get("isselectable"));
+        	sequenceFlow.getAnyAttribute().add(extensionEntry);
         }
         if (properties.get("auditing") != null && !"".equals(properties.get("auditing"))) {
             Auditing audit = Bpmn2Factory.eINSTANCE.createAuditing();

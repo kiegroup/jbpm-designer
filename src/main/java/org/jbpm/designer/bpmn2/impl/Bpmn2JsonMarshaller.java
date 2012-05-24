@@ -140,6 +140,7 @@ public class Bpmn2JsonMarshaller {
 	public static final String defaultBgColor_Events = "#f5deb3";
 	public static final String defaultBrColor = "#000000";
 	public static final String defaultFontColor = "#000000";
+	public static final String defaultSequenceflowColor = "#000000";
 	
 	private Map<String, DiagramElement> _diagramElements = new HashMap<String, DiagramElement>();
 	private Map<String,Association> _diagramAssociations = new HashMap<String, Association>();
@@ -2090,7 +2091,11 @@ public class Bpmn2JsonMarshaller {
     	        properties.put("conditionexpressionlanguage", cdStr);
     	    } 
     	}
-    	// priority value
+
+        boolean foundBgColor = false;
+    	boolean foundBrColor = false;
+    	boolean foundFontColor = false;
+    	boolean foundSelectable = false;
     	Iterator<FeatureMap.Entry> iter = sequenceFlow.getAnyAttribute().iterator();
         while(iter.hasNext()) {
             FeatureMap.Entry entry = iter.next();
@@ -2109,6 +2114,41 @@ public class Bpmn2JsonMarshaller {
                     }
                 }
             }
+            if(entry.getEStructuralFeature().getName().equals("bgcolor")) {
+            	properties.put("bgcolor", entry.getValue());
+            	foundBgColor = true;
+            }
+            if(entry.getEStructuralFeature().getName().equals("bordercolor")) {
+            	properties.put("bordercolor", entry.getValue());
+            	foundBrColor = true;
+            }
+            if(entry.getEStructuralFeature().getName().equals("fontsize")) {
+            	properties.put("fontsize", entry.getValue());
+            	foundBrColor = true;
+            }
+            if(entry.getEStructuralFeature().getName().equals("fontcolor")) {
+            	properties.put("fontcolor", entry.getValue());
+            	foundFontColor = true;
+            }
+            if(entry.getEStructuralFeature().getName().equals("selectable")) {
+            	properties.put("isselectable", entry.getValue());
+            	foundSelectable = true;
+            }
+        }
+        if(!foundBgColor) {
+        	properties.put("bgcolor", defaultSequenceflowColor);
+        }
+        
+        if(!foundBrColor) {
+        	properties.put("bordercolor", defaultSequenceflowColor);
+        }
+        
+        if(!foundFontColor) {
+        	properties.put("fontcolor", defaultSequenceflowColor);
+        }
+        
+        if(!foundSelectable) {
+        	properties.put("isselectable", "true");
         }
     	
         marshallProperties(properties, generator);

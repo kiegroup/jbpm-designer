@@ -30,7 +30,7 @@
     
     <text 
 		font-size="12" 
-		id="text" 
+		id="text_name" 
 		x="5" 
 		y="25" 
 		oryx:align="middle left"

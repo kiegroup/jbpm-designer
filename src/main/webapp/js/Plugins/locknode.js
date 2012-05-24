@@ -81,7 +81,7 @@ ORYX.Plugins.LockNode = Clazz.extend({
     	if(shape) {
 	    	shape.setSelectable(true);
 	    	shape.setMovable(true);
-	    	if(shape instanceof ORYX.Core.Node) {
+	    	if(shape instanceof ORYX.Core.Node || shape instanceof ORYX.Core.Edge) {
 	    		shape.setProperty("oryx-bordercolor", shape.properties["oryx-origbordercolor"]);
 	    		shape.setProperty("oryx-bgcolor", shape.properties["oryx-origbgcolor"]);
 	    	}
@@ -100,7 +100,7 @@ ORYX.Plugins.LockNode = Clazz.extend({
     	if(shape) {
     		shape.setSelectable(false);
     		shape.setMovable(false);
-    		if(shape instanceof ORYX.Core.Node) {
+    		if(shape instanceof ORYX.Core.Node || shape instanceof ORYX.Core.Edge) {
     			shape.setProperty("oryx-bordercolor", "#888888");
     			shape.setProperty("oryx-bgcolor", "#CCEEFF");
     		}

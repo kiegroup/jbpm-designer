@@ -10,11 +10,11 @@
 			<path id="default" d="M 5 0 L 11 10" fill="white" stroke="black" stroke-width="1" />
 	  	</marker>
 	  	<marker id="end" refX="15" refY="6" markerUnits="userSpaceOnUse" markerWidth="15" markerHeight="12" orient="auto">
-	  		<path d="M 0 1 L 15 6 L 0 11z" fill="black" stroke="black" stroke-linejoin="round" stroke-width="2" />
+	  		<path id="frame2" d="M 0 1 L 15 6 L 0 11z" fill="black" stroke="black" stroke-linejoin="round" stroke-width="2" />
 	  	</marker>
 	</defs>
 	<g id="edge">
-		<path d="M10 50 L210 50" stroke="black" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-start="url(#start)" marker-end="url(#end)" />
+		<path id="fill_border" d="M10 50 L210 50" stroke="black" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-start="url(#start)" marker-end="url(#end)" />
 		<text id="text_name" font-size="12" x="0" y="0" oryx:edgePosition="startTop"/>
 	</g>
 </svg>
