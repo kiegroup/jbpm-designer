@@ -349,7 +349,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 					}
 				}
 				if(gw instanceof ParallelGateway) {
-					if(gw.getGatewayDirection().getValue() != GatewayDirection.DIVERGING.getValue() && !gw.getGatewayDirection().equals(GatewayDirection.CONVERGING.getValue())) {
+					if(gw.getGatewayDirection().getValue() != GatewayDirection.DIVERGING.getValue() && gw.getGatewayDirection().getValue() != GatewayDirection.CONVERGING.getValue()) {
 						addError((Gateway) fe, "Invalid Gateway direction for Parallel Gateway. It should be 'Converging' or 'Diverging'.");
 					}
 				}
