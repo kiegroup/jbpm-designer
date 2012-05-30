@@ -2,6 +2,7 @@
 	"title":"jBPM BPMN2 (Full)",
 	"namespace":"http://b3mn.org/stencilset/bpmn2.0#",
 	"description":"This is the jBPM BPMN 2.0 stencil set specification.",
+	"description_ja":"これはjBPM BPMN 2.0ステンシルセット仕様です。",
  	"propertyPackages": [
  		{
  			"name":"baseAttributes",
@@ -12,6 +13,7 @@
 					"title":"Name",
 					"value":"",
 					"description":"The descriptive name of the BPMN element.",
+					"description_ja":"BPMN要素のわかりやすい名前。",
 					"readonly":false,
 					"optional":true,
 					"length":"",
@@ -24,6 +26,7 @@
 					"title":"Documentation",
 					"value":"",
 					"description":"This attribute is used to annotate the BPMN element, such as descriptions and other documentation.",
+					"description_ja":"この属性は、説明やドキュメントなど、BPMN要素の注釈に使用されます。",
 					"readonly":false,
 					"optional":true,
 					"length":"",
@@ -89,6 +92,7 @@
 					"title":"Font Color",
 					"value":"#000000",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -101,6 +105,7 @@
 					"title":"Font Size",
 					"value":"",
 					"description":"The Font Size",
+					"description_ja":"フォントのサイズ",
 					"readonly":false,
 					"optional":false,
 					"refToView":"text_name",
@@ -193,6 +198,7 @@
 					"title":"CancelActivity",
 					"value":"false",
 					"description":"Denotes whether the activity should be cancelled or not, i.e., whether the boundary catch event acts as an error or an escalation. If the activity is not cancelled, multiple instances of that handler can run concurrently.",
+					"description_ja":"アクティビティをキャンセルするかどうか、つまり、Boundaryキャッチイベントがエラーになるかエスカレーションになるかを示します。 アクティビティがキャンセルされない場合、そのハンドラの複数のインスタンスを同時に実行できます。",
 					"readonly":false,
 					"optional":true,
 					"items": [
@@ -219,6 +225,7 @@
 					"title":"EventDefinitionRef",
 					"value":"",
 					"description":"EventDefinitionRefs (EventDefinition) is an attribute that defines the type of reusable triggers expected for a catch Event.",
+					"description_ja":"EventDefinitionRefs（EventDefinition）は、キャッチイベントとして想定される再利用可能なトリガーのタイプを定義する属性です。",
 					"readonly":false,
 					"optional":true,
 					"length":"",
@@ -230,6 +237,7 @@
 					"title":"EventDefinition",
 					"value":"",
 					"description":"EventDefinition is an attribute that defines the type of contained triggers expected for a catch Event.",
+					"description_ja":"EventDefinitionは、キャッチイベントとして想定される、中に含まれるトリガーのタイプを定義する属性です。",
 					"readonly":false,
 					"optional":true,
 					"length":"",
@@ -241,6 +249,7 @@
 					"title":"DataOutputAssociations",
 					"value":"",
 					"description":"The Data Associations of the catch Event.",
+					"description_ja":"キャッチイベントのデータ関連。",
 					"readonly":false,
 					"optional":true,
 					"length":"",
@@ -252,6 +261,7 @@
 					"title":"DataOutput",
 					"value":"",
 					"description":"The Data Associations of the catch Event.",
+					"description_ja":"キャッチイベントのデータ関連。",
 					"readonly":false,
 					"optional":true,
 					"length":"",
@@ -264,6 +274,7 @@
 					"title":"OutputSet",
 					"value":"",
 					"description":"The OutputSet for the catch Event.",
+					"description_ja":"キャッチイベントのOutputSet。",
 					"readonly":false,
 					"optional":true,
 					"length":"",
@@ -280,6 +291,7 @@
 					"title":"EventDefinitionRef",
 					"value":"",
 					"description":"EventDefinitionRefs (EventDefinition) is an attribute that defines the type of reusable triggers expected for a catch Event.",
+					"description_ja":"EventDefinitionRefs（EventDefinition）は、キャッチイベントとして想定される再利用可能なトリガーのタイプを定義する属性です。",
 					"readonly":false,
 					"optional":true,
 					"length":"",
@@ -291,6 +303,7 @@
 					"title":"EventDefinitions",
 					"value":"",
 					"description":"EventDefinitions (EventDefinition) is an attribute that defines the type of contained triggers expected for a catch Event.",
+					"description_ja":"EventDefinitions（EventDefinition） は、キャッチイベントとして想定される、中に含まれるトリガーのタイプを定義する属性です。",
 					"readonly":false,
 					"optional":true,
 					"length":"",
@@ -302,6 +315,7 @@
 					"title":"DataInputAssociations",
 					"value":"",
 					"description":"The Data Associations of the throw Event.",
+					"description_ja":"スローイベントのデータ関連。",
 					"readonly":false,
 					"optional":true,
 					"length":"",
@@ -313,6 +327,7 @@
 					"title":"Data Input",
 					"value":"",
 					"description":"The Data Associations of the throw Event.",
+					"description_ja":"スローイベントのデータ関連。",
 					"readonly":false,
 					"optional":true,
 					"length":"",
@@ -325,6 +340,7 @@
 					"title":"InputSet",
 					"value":"",
 					"description":"The InputSet for the throw Event.",
+					"description_ja":"スローイベントのInputSet。",
 					"readonly":false,
 					"optional":true,
 					"length":"",
@@ -342,6 +358,7 @@
 					"value":true,
 					"popular":true,
 					"description":"Determine whether a throw compensation is performed synchronously or asynchronously.",
+					"description_ja":"スローCompensationが同期して実行されるか、非同期に実行されるかを決定します。",
 					"readonly":false,
 					"optional":true
  				}
@@ -357,6 +374,7 @@
 					"value":"",
 					"popular":true,
 					"description":"The activity related to the compensation event",
+					"description_ja":"Compensationイベントに関連するアクティビティ",
 					"readonly":false,
 					"optional":true
  				}
@@ -371,6 +389,7 @@
 					"title":"Is Interrupting",
 					"value":true,
 					"description":"This attribute denotes whether the Sub-Process encompassing the Event Sub-Process should be cancelled or not.",
+					"description_ja":"この属性は、イベントサブプロセスを包含するサブプロセスをキャンセルするかどうかを示します。",
 					"inverseBoolean":false,
 					"readonly":false,
 					"optional":true,
@@ -390,6 +409,7 @@
 					"title":"Executable",
 					"value":true,
 					"description":"Executable",
+					"description_ja":"実行可能",
 					"readonly":false,
 					"optional":true
 				},
@@ -399,6 +419,7 @@
 					"title":"Package",
 					"value":"$packageName$",
 					"description":"Package",
+					"description_ja":"パッケージ",
 					"readonly":false,
 					"optional":true
 				},
@@ -408,6 +429,7 @@
 					"title":"Variable Definitions",
 					"value":"",
 					"description":"Variable Definitions",
+					"description_ja":"変数定義",
 					"readonly":false,
 					"optional":true
 				},
@@ -417,6 +439,7 @@
 					"title":"AdHoc",
 					"value":"false",
 					"description":"Defines an AdHoc process",
+					"description_ja":"アドホックプロセスとして定義",
 					"readonly":false,
 					"optional":true,
 					"items": [
@@ -438,6 +461,7 @@
 					"title":"Imports",
 					"value":"",
 					"description":"Comma-separated imports",
+					"description_ja":"カンマ区切りインポート",
 					"readonly":false,
 					"optional":true
 				},
@@ -447,6 +471,7 @@
 					"title":"Globals",
 					"value":"",
 					"description":"Comma-separated globals",
+					"description_ja":"カンマ区切りグローバル",
 					"readonly":false,
 					"optional":true
 				},
@@ -456,6 +481,7 @@
 					"title":"ID",
 					"value":"$processid$",
 					"description":"ID",
+					"description_ja":"ID",
 					"readonly":false,
 					"optional":true
 				},
@@ -465,6 +491,7 @@
 					"title":"Version",
 					"value":"",
 					"description":"This defines the Version number of the Diagram.",
+					"description_ja":"ダイアグラムのバージョン番号を定義します。",
 					"readonly":false,
 					"optional":true,
 					"length":"50"
@@ -475,6 +502,7 @@
 					"title":"Author",
 					"value":"",
 					"description":"This holds the name of the author of the Diagram.",
+					"description_ja":"ダイアグラムの作成者を保持します。",
 					"readonly":false,
 					"optional":true,
 					"length":"50"
@@ -485,6 +513,7 @@
 					"title":"Language",
 					"value":"English",
 					"description":"This holds the name of the language in which text is written.",
+					"description_ja":"テキストに使用された言語を保持します。",
 					"readonly":false,
 					"optional":true,
 					"length":"50"
@@ -495,6 +524,7 @@
 					"title":"Namespaces",
 					"value":"",
 					"description":"Additional namespaces and theire prefixes used in the diagram., ",
+					"description_ja":"ダイアグラムで使用された追加の名前空間とそのプレフィックス。",
 					"readonly":false,
 					"optional":true,
 					"complexItems": [
@@ -522,6 +552,7 @@
 					"title":"Target Namespace",
 					"value":"http://www.omg.org/bpmn20",
 					"description":"Defines the XML namespace of the elements inside the document.",
+					"description_ja":"ドキュメント内の要素のXML名前空間を定義します。",
 					"readonly":true,
 					"optional":true,
 					"length":"50"
@@ -532,6 +563,7 @@
 					"title":"ExpressionLanguage",
 					"value":"http://www.w3.org/1999/XPath",
 					"description":"A Language may be provided so that the syntax of expressions used in the Diagram can be understood.",
+					"description_ja":"ダイアグラムで使用される式の構文を理解できるように言語が提供されることがあります。",
 					"readonly":false,
 					"optional":true,
 					"length":"50"
@@ -542,6 +574,7 @@
 					"title":"TypeLanguage",
 					"value":"http://www.w3.org/2001/XMLSchema",
 					"description":"This attribute identifies the type system used by the elements of this Definition.",
+					"description_ja":"この属性は、この定義の要素で使用されるタイプシステムを識別します。",
 					"readonly":true,
 					"optional":true,
 					"length":"50"
@@ -552,6 +585,7 @@
 					"title":"CreationDate",
 					"value":"",
 					"description":"This defines the date on which the Diagram was created.",
+					"description_ja":"ダイアグラムが作成された日付を定義します。",
 					"readonly":false,
 					"optional":true,
 					"dateFormat":"j/m/y"
@@ -562,6 +596,7 @@
 					"title":"ModificationDate",
 					"value":"",
 					"description":"This defines the date on which the Diagram was last modified.",
+					"description_ja":"ダイアグラムが最後に変更された日付を定義します。",
 					"readonly":false,
 					"optional":true,
 					"dateFormat":"j/m/y"
@@ -593,6 +628,7 @@
 					"type" : "String",
 					"title" : "ItemSubjectRef",
 					"description" : "Specification of the items that are stored or conveyed by the ItemAwareElement",
+					"description_ja" : "ItemAwareElementによって格納または搬送されるアイテムの指定",
 					"readonly" : false,
 					"optional" : true,
 					"length" : 50,
@@ -603,6 +639,7 @@
 					"type" : "String",
 					"title" : "DataState",
 					"description" : "A reference to the DataState, which defines certain states for the data contained in the item.",
+					"description_ja" : "アイテムに含まれるデータの特定の状態を定義するDataStateへの参照。",
 					"readonly" : false,
 					"optional" : true,
 					"length" : 50,
@@ -619,6 +656,7 @@
 					"title":"Properties",
 					"value":"",
 					"description":"Modeler-defined properties MAY be added to an Activity. These properties are local to the Activity. (e.g., Add Customer.Customer Name).",
+					"description_ja":"モデラー定義のプロパティをアクティビティに追加することができます。これらのプロパティはアクティビティにローカルです（Customer.Customer Nameの追加など）。",
 					"readonly": 	false,
 					"optional": 	false,
 					"complexItems": [
@@ -688,6 +726,7 @@
 					"title":"DataInputSet",
 					"value":"",
 					"description":"An InputSet is a collection of DataInput elements that together define a valid set of data inputs.",
+					"description_ja":"InputSetは、データ入力の有効なセットを合わせて定義するDataInputエレメントのコレクションです。",
 					"readonly":false,
 					"optional":true,
 					/** "complexItems": [
@@ -723,6 +762,7 @@
 					"title":"DataOutputSet",
 					"value":"",
 					"description":"An OutputSet is a collection of DataOutputs elements that together may be produced as output from an Activity or Event.",
+					"description_ja":"OutputSet は、アクティビティまたはイベントの出力としてまとめて生成されるDataOutputs要素のコレクションです。",
 					"readonly":false,
 					"optional":true,
 					/** "complexItems": [
@@ -774,6 +814,7 @@
 					"title":"CompletionQuantity",
 					"value":1,
 					"description":"Defines the number of tokens that must be generated from the activity",
+					"description_ja":"アクティビティから生成する必要のあるトークンの数を定義します。",
 					"readonly":false,
 					"optional":false,
 					"refToView":"",
@@ -785,6 +826,7 @@
 					"title":"Is for Compensation",
 					"value":false,
 					"description":"A flag that identifies whether this activity is intended for the purposes of compensation.",
+					"description_ja":"このアクティビティCompensationの目的を意図しているかどうかを識別するフラグ。",
 					"readonly":false,
 					"optional":true,
 					"refToView":"compensation"
@@ -844,6 +886,7 @@
 					"title":"is a Call Activity",
 					"value":false,
 					"description":"a Call Activity is a wrapper for a globally defined Sub-Process that is reused in the current process.",
+                                        "description_ja":"コールアクティビティは、現在のプロセスで再利用されているグローバル定義サブプロセスのラッパーです。",
 					"readonly":false,
 					"optional":"true",
 					"refToView":"callActivity"
@@ -860,6 +903,7 @@
 					"title":"Is for Compensation",
 					"value":false,
 					"description":"A flag that identifies whether this activity is intended for the purposes of compensation.",
+					"description_ja":"このアクティビティCompensationの目的を意図しているかどうかを識別するフラグ。",
 					"readonly":true,
 					"optional":true,
 					"refToView":"compensation"
@@ -870,6 +914,7 @@
 					"title":"is a Call Activity",
 					"value":false,
 					"description":"a Call Activity is a wrapper for a globally defined Sub-Process that is reused in the current process.",
+                                        "description_ja":"コールアクティビティは、現在のプロセスで再利用されているグローバル定義サブプロセスのラッパーです。",
 					"readonly":true,
 					"optional":"true",
 					"refToView":"callActivity"
@@ -886,6 +931,7 @@
 					"title":"OperationName",
 					"value":"",
 					"description":"The descriptive name for the operation element.",
+					"description_ja":"オペレーション要素のわかりやすい名前。",
 					"readonly":false,
 					"optional":"true"
 				},
@@ -895,6 +941,7 @@
 					"title":"InMessageName",
 					"value":"",
 					"description":"The descriptive name for the InMessage element",
+					"description_ja":"InMessage要素のわかりやすい名前。",
 					"readonly":false,
 					"optional":"true"
 				},
@@ -904,6 +951,7 @@
 					"title":"InMessageItemKind",
 					"value":"Information",
 					"description":"This defines the nature of the Item. Possible values are Physical or Information. The default value is Information.",
+					"description_ja":"アイテムの性質を定義します。有効な値はPhysicalまたはInformationです。デフォルト値はInformationです。",
 					"readonly":false,
 					"optional":true,
 					"items": [
@@ -925,6 +973,7 @@
 					"title":"InMessageStructure",
 					"value":"",
 					"description":"This defines the nature of the Item. Possible values are Physical or Information. The default value is Information.",
+					"description_ja":"アイテムの性質を定義します。有効な値はPhysicalまたはInformationです。デフォルト値はInformationです。",
 					"readonly":false,
 					"optional":true
 				},
@@ -934,6 +983,7 @@
 					"title":"InMessageImport",
 					"value":"",
 					"description":"Identifies the location of the data structure and its format. If the importType attribute is left unspecified, the typeLanguage specified in the Definitions is assumed.",
+					"description_ja":"データ構造体の場所とそのフォーマットを識別します。importType属性が未指定のままの場合、定義に指定されたtypeLanguageを使用するものと見なされます。",
 					"readonly":false,
 					"optional":true,
 					"complexItems": [
@@ -966,6 +1016,7 @@
 					"title":"InMessageIsCollection",
 					"value":false,
 					"description":"Setting this flag to true indicates that the actual data type is a collection.",
+					"description_ja":"実際のデータタイプがコレクションであることを示すには、このフラグをTrueに設定します。",
 					"readonly":false,
 					"optional":true
 				},
@@ -975,6 +1026,7 @@
 					"title":"OutMessageName",
 					"value":"",
 					"description":"The descriptive name for the OutMessage element",
+					"description_ja":"OutMessage要素のわかりやすい名前。",
 					"readonly":false,
 					"optional":"true"
 				},
@@ -984,6 +1036,7 @@
 					"title":"OutMessageItemKind",
 					"value":"Information",
 					"description":"This defines the nature of the Item. Possible values are Physical or Information. The default value is Information.",
+					"description_ja":"アイテムの性質を定義します。有効な値はPhysicalまたはInformationです。デフォルト値はInformationです。",
 					"readonly":false,
 					"optional":true,
 					"items": [
@@ -1005,6 +1058,7 @@
 					"title":"OutMessageStructure",
 					"value":"",
 					"description":"This defines the nature of the Item. Possible values are Physical or Information. The default value is Information.",
+					"description_ja":"アイテムの性質を定義します。有効な値はPhysicalまたはInformationです。デフォルト値はInformationです。",
 					"readonly":false,
 					"optional":true
 				},
@@ -1014,6 +1068,7 @@
 					"title":"OutMessageImport",
 					"value":"",
 					"description":"Identifies the location of the data structure and its format. If the importType attribute is left unspecified, the typeLanguage specified in the Definitions is assumed.",
+					"description_ja":"データ構造体の場所とそのフォーマットを識別します。importType属性が未指定のままの場合、定義に指定されたtypeLanguageを使用するものと見なされます。",
 					"readonly":false,
 					"optional":true,
 					"complexItems": [
@@ -1046,6 +1101,7 @@
 					"title":"OutMessageIsCollection",
 					"value":false,
 					"description":"Setting this flag to true indicates that the actual data type is a collection.",
+					"description_ja":"実際のデータタイプがコレクションであることを示すには、このフラグをTrueに設定します。",
 					"readonly":false,
 					"optional":true
 				}
@@ -1099,6 +1155,7 @@
 					"title":"TestBefore",
 					"value":false,
 					"description":"Flag that controls whether the loop condition is evaluated at the beginning (testBefore = true) or at the end (testBefore = false)of the loop iteration.",
+					"description_ja":"ループ条件をループの先頭（testBefore = true）で評価するか、末尾で評価するか（testBefore = false）を制御するフラグ。",
 				},
 				{
 					"id":"loopcondition",
@@ -1125,6 +1182,7 @@
 					"title":"LoopCardinality",
 					"value":"",
 					"description":"A numeric Expression that controls the number of Activity instances that will be created. This Expression MUST evaluate to an integer.",
+					"description_ja":"作成するアクティビティインスタンスの数を制御する数式。この式は整数に評価される必要があります。",
 					"readonly":false,
 					"optional":true
 				},
@@ -1134,6 +1192,7 @@
 					"title":"LoopDataInput",
 					"value":"",
 					"description":"A reference to a DataInput which is part of the Activity InputOutputSpecification. This DataInput is used to determine the number of Activity instances, one Activity instance per item in the collection of data stored in that DataInput element.",
+					"description_ja":"アクティビティのInputOutputSpecificationの一部であるDataInputへの参照。このDataInputは、アクティビティの数を特定するために使用されます。データのコレクション内のアイテムあたり1アクティビティインスタンスがそのDataInput要素に格納されます。",
 					"readonly":false,
 					"optional":true
 				},
@@ -1143,6 +1202,7 @@
 					"title":"LoopDataInput",
 					"value":"",
 					"description":"A reference to a DataOutput which is part of the Activity InputOutputSpecification.",
+					"description_ja":"アクティビティのInputOutputSpecificationの一部であるDataOutputへの参照。",
 					"readonly":false,
 					"optional":true
 				},
@@ -1152,6 +1212,7 @@
 					"title":"InputDataItem",
 					"value":"",
 					"description":"A Property, representing for every Activity instance the single item of the collection stored in the loopDataInput.",
+					"description_ja":"すべてのアクティビティインスタンスに対して、loopDataInputに格納されているコレクションの単一のアイテムを表すプロパティ。",
 					"readonly":false,
 					"optional":true
 				},
@@ -1161,6 +1222,7 @@
 					"title":"OutputDataItem",
 					"value":"",
 					"description":"A Property, representing for every Activity instance the single item of the collection stored in the loopDataOutput.",
+					"description_ja":"すべてのアクティビティインスタンスに対して、loopDataOutputに格納されているコレクションの単一のアイテムを表すプロパティ。",
 					"readonly":false,
 					"optional":true
 				},
@@ -1169,6 +1231,7 @@
 					"type":"Choice",
 					"title":"Behavior",
 					"description":"The attribute behavior acts as a shortcut for specifying when events shall be thrown from an Activity instance that is about to complete. It can assume values of none, one, all, and complex.",
+					"description_ja":"属性は、完了直前のアクティビティインスタンスからイベントがいつスローされるかを指定するためのショートカットとして動作します。有効な値は、none、one、all、およびcomplexです。",
 					"value":"all",
 					"items": [
 				        {
@@ -1198,6 +1261,7 @@
 					"type":"Complex",
 					"title":"ComplexBehaviorDefinition:",
 					"description":"Controls when and which Events are thrown in case behavior is set to complex.",
+					"description_ja":"動作がcomplexに設定されているときに、どのイベントをいつスローするかを制御します。",
 					"value":"",
 					"optional":true,
 					"readonly":false,
@@ -1265,6 +1329,7 @@
 					"type":"String",
 					"title":"CompletionCondition:",
 					"description":"This attribute defines a Boolean Expression that when evaluated to true, cancels the remaining Activity instances and produces a token.",
+					"description_ja":"この属性は、trueに評価されたときに残りのアクティビティインスタンスをキャンセルし、トークンを生成するブール式を定義します。",
 					"value":""
 				},**/
 				{
@@ -1273,6 +1338,7 @@
 		        	"value":"signal",
 		        	"title":"OneBehaviorEventRef",
 		        	"description":"The EventDefinition which is thrown when behavior is set to one and the first internal Activity instance has completed.",
+				"description_ja":"動作が 1 つに設定され、最初の内部アクティビティインスタンスが完了したときにスローされるEventDefinition。",
 		        	"items":[
 	        	        {
 	        	        	"id":"cnone",
@@ -1414,6 +1480,7 @@
 					"type":"String",
 					"title":"CompletionCondition:",
 					"description":"This attribute defines a Boolean Expression that when evaluated to true, cancels the remaining Activity instances and produces a token.",
+					"description_ja":"この属性は、trueに評価されたときに残りのアクティビティインスタンスをキャンセルし、トークンを生成するブール式を定義します。",
 					"value":""
 				}
 			]
@@ -1620,6 +1687,7 @@
 					"title":"OperationRef",
 					"value":"",
 					"description":"ID-Reference to an operation definition.",
+					"description_ja":"オペレーションの定義へのID参照。",
 					"readonly":false,
 					"optional":true
 				},
@@ -1639,6 +1707,7 @@
 					"title":"Script",
 					"value":"",
 					"description":"Script that can be run when the Task is performed. Related to the Script TaskType, if a script is not included, then the Task will act equivalent to a TaskType of None.",
+					"description_ja":"タスクを実行するときに実行可能なスクリプト。スクリプトのTaskTypeに関連して、スクリプトが含まれない場合は、タスクはTaskTypeがNoneである場合と同じように動作します。",
 					"readonly":false,
 					"optional":true
 				},
@@ -1648,6 +1717,7 @@
 					"title":"ScriptLanguage",
 					"value":"java",
 					"description":"Defines the script language. The script language MUST be provided if a script is provided.",
+					"description_ja":"スクリプト言語を定義します。スクリプトを使用する場合は、スクリプト言語を指定する必要があります。",
 					"readonly":false,
 					"optional":true,
 					"items": [
@@ -1669,6 +1739,7 @@
 					"title":"In Message",
 					"value":"",
 					"description":"Type of input message",
+					"description_ja":"入力メッセージのタイプ",
 					"readonly":false,
 					"optional":true
 				},
@@ -1678,6 +1749,7 @@
 					"title":"Out Message",
 					"value":"",
 					"description":"Type of output message",
+					"description_ja":"出力メッセージのタイプ",
 					"readonly":false,
 					"optional":true
 				},
@@ -1687,6 +1759,7 @@
 					"title":"servicename",
 					"value":"",
 					"description":"name of service",
+					"description_ja":"サービスの名前",
 					"readonly":false,
 					"optional":true
 				},**/
@@ -1696,6 +1769,7 @@
 					"title":"Namespace",
 					"value":"",
 					"description":"Defines the XML namespace of the elements inside the document.",
+					"description_ja":"ドキュメント内の要素のXML名前空間を定義します。",
 					"readonly":false,
 					"optional":true,
 					"length":"50"
@@ -1706,6 +1780,7 @@
 					"title":"operation",
 					"value":"",
 					"description":"operation",
+					"description_ja":"オペレーション",
 					"readonly":false,
 					"optional":true
 				},
@@ -1715,6 +1790,7 @@
 					"title":"porttype",
 					"value":"",
 					"description":"porttype",
+					"description_ja":"ポートタイプ",
 					"readonly":false,
 					"optional":true
 				},**/
@@ -1724,6 +1800,7 @@
 					"title":"wsdlUrl",
 					"value":"",
 					"description":"wsdlUrl",
+					"description_ja":"WSDLURL",
 					"readonly":false,
 					"optional":true
 				},**/
@@ -1758,6 +1835,7 @@
 					"title":"Font Color",
 					"value":"#000000",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -1770,6 +1848,7 @@
 					"title":"Font Size",
 					"value":"",
 					"description":"The Font Size",
+					"description_ja":"フォントのサイズ",
 					"readonly":false,
 					"optional":false,
 					"refToView":"text_name",
@@ -1915,6 +1994,7 @@
 					"title":"Font Color",
 					"value":"#000000",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -1927,6 +2007,7 @@
 					"title":"Font Size",
 					"value":"",
 					"description":"The Font Size",
+					"description_ja":"フォントのサイズ",
 					"readonly":false,
 					"optional":false,
 					"refToView":"text_name",
@@ -2005,6 +2086,7 @@
 					"title": "subProcessType",
 					"value": "Embedded",
 					"description": "SubProcessType is an attribute that defines whether the Sub-Process details are embedded within the higher level Process or refers to another, re-usable Process. The default is Embedded.",
+					"description_ja": "SubProcessTypeは、サブプロセスの詳細を上位レベルのプロセスに埋め込むか、別の再利用可能なプロセスを参照するかを定義する属性です。デフォルトはEmbeddedです。",
 					"optional": false,
 					"refToView": "",
 					"items": [
@@ -2031,6 +2113,7 @@
 					"title":"is a Transaction",
 					"value":false,
 					"description":"A Transaction is a set of activities that logically belongs together; it might follow a specified transaction protocol.",
+					"description_ja":"トランザクションは、論理的にまとめられているアクティビティのセットです。指定されたトランザクションプロトコルに従います。",
 					"readonly":false,
 					"optional":false,
 					"refToView":"border"
@@ -2052,6 +2135,7 @@
 					"title":"TransactionMethod",
 					"value":"compensate",
 					"description":"The technique that will be used to undo a transaction that has been cancelled.",
+					"description_ja":"キャンセルされたトランザクションを元に戻すために使用される技術。",
 					"readonly":false,
 					"optional":true,
 					"items": [
@@ -2124,6 +2208,7 @@
 					"title":"AdhocCancelRemainingInstances",
 					"value":true,
 					"description":"This attribute is used only if ordering is parallel. It determines whether running instances are cancelled when the completionCondition becomes true.",
+					"description_ja":"この属性は、順序が並列の場合のみ使用されます。completionConditionがtrueになったときに、実行中のインスタンスをキャンセルするかどうかを決定します。",
 					"readonly":false,
 					"optional":true
 				}
@@ -2191,6 +2276,7 @@
 					"title": "subProcessType",
 					"value": "AdHoc",
 					"description": "SubProcessType is an attribute that defines whether the Sub-Process details are embedded within the higher level Process or refers to another, re-usable Process. The default is Embedded.",
+					"description_ja": "SubProcessTypeは、サブプロセスの詳細を上位レベルのプロセスに埋め込むか、別の再利用可能なプロセスを参照するかを定義する属性です。デフォルトはEmbeddedです。",
 					"optional": false,
 					"refToView": "",
 					"items": [
@@ -2217,6 +2303,7 @@
 					"title":"is a Transaction",
 					"value":false,
 					"description":"A Transaction is a set of activities that logically belongs together; it might follow a specified transaction protocol.",
+					"description_ja":"トランザクションは、論理的にまとめられているアクティビティのセットです。指定されたトランザクションプロトコルに従います。",
 					"readonly":false,
 					"optional":false,
 					"refToView":"border"
@@ -2238,6 +2325,7 @@
 					"title":"TransactionMethod",
 					"value":"compensate",
 					"description":"The technique that will be used to undo a transaction that has been cancelled.",
+					"description_ja":"キャンセルされたトランザクションを元に戻すために使用される技術。",
 					"readonly":false,
 					"optional":true,
 					"items": [
@@ -2310,6 +2398,7 @@
 					"title":"AdhocCancelRemainingInstances",
 					"value":true,
 					"description":"This attribute is used only if ordering is parallel. It determines whether running instances are cancelled when the completionCondition becomes true.",
+					"description_ja":"この属性は、順序が並列の場合のみ使用されます。completionConditionがtrueになったときに、実行中のインスタンスをキャンセルするかどうかを決定します。",
 					"readonly":false,
 					"optional":true
 				},
@@ -2472,6 +2561,7 @@
 					"title":"ProcessType",
 					"value":"None",
 					"description":"The processType attribute Provides additional information about the level of abstraction modeled by this Process.",
+					"description_ja":"processType属性は、このプロセスによってモデル化される抽象化のレベルについての情報を提供します。",
 					"readonly":false,
 					"optional":false,
 					"popular" : true,
@@ -2504,6 +2594,7 @@
 					"title":"isClosed",
 					"value":false,
 					"description":"A Boolean value specifying whether interactions, such as sending and receiving Messages and Events, not modeled in the Process can occur when the Process is executed or performed. If the value is true, they MAY NOT occur. If the value is false, they MAY occur.",
+					"description_ja":"メッセージやイベントの送受信などプロセス内でモデル化されていないやりとりの発生を、プロセスが実行されたときに許可するかどうかを指定するブール値。値がtrueの場合、これらは発生しません。値がfalseの場合、これらは発生します。",
 					"readonly":false,
 					"optional":false
 				}
@@ -2528,6 +2619,7 @@
 					"title":"BoundaryVisible",
 					"value":true,
 					"description":"Defines if the rectangular boundary for the Pool is visible.",
+					"description_ja":"プールの長方形のBoundaryが可視かどうかを定義します。",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["border", "c", "caption", "captionDisableAntialiasing"],
@@ -2744,6 +2836,7 @@
 			"title":			"BPMN-Diagram",
 			"groups":			["Diagram"],
 			"description":		"A BPMN 2.0 Diagram.",
+			"description_ja":"BPMN 2.0ダイアグラム。",
 			"view":				"diagram.svg",
 			"icon":				"diagram.png",
 			"mayBeRoot":		true,
@@ -2757,6 +2850,7 @@
 					"title":"Name",
 					"value":"$processName$",
 					"description":"The descriptive name of the BPMN element.",
+					"description_ja":"BPMN要素のわかりやすい名前。",
 					"readonly":false,
 					"optional":true,
 					"length":"",
@@ -2770,6 +2864,7 @@
 					"title":"Documentation",
 					"value":"",
 					"description":"This attribute is used to annotate the BPMN element, such as descriptions and other documentation.",
+					"description_ja":"この属性は、説明やドキュメントなど、BPMN要素の注釈に使用されます。",
 					"readonly":false,
 					"optional":true,
 					"length":"",
@@ -2786,6 +2881,7 @@
 			"title" : 			"Task",
 			"groups" : 			["Activities"],
 			"description" : 	"A task is a unit of work - the job to be performed.",
+			"description_ja" : "タスクとは作業（実行すべきジョブ）の単位です。",
 			"view" : 			"activity/task.svg",
 			"icon" : 			"activity/task.png",
 			"propertyPackages" :[
@@ -2862,6 +2958,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Activities").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -2874,6 +2971,7 @@
 					"title":"Ruleflow Group",
 					"value":"",
 					"description":"ruleFlowGroup",
+					"description_ja":"ruleFlowGroup",
 					"readonly":false,
 					"optional":true
 				},
@@ -2883,6 +2981,7 @@
 					"title":"On Entry Actions",
 					"value":"",
 					"description":"on entry actions",
+					"description_ja":"アクション開始時",
 					"readonly":false,
 					"optional":true
 				},
@@ -2892,6 +2991,7 @@
 					"title":"On Exit Actions",
 					"value":"",
 					"description":"on exit actions",
+					"description_ja":"アクション終了時",
 					"readonly":false,
 					"optional":true
 				},
@@ -2901,6 +3001,7 @@
 					"title":"Task Name",
 					"value":"",
 					"description":"Task Name",
+					"description_ja":"タスク名",
 					"readonly":false,
 					"optional":true
 				},
@@ -2910,6 +3011,7 @@
 					"title":"Interface",
 					"value":"",
 					"description":"Interface",
+					"description_ja":"インターフェイス",
 					"readonly":false,
 					"optional":true
 				},
@@ -2919,6 +3021,7 @@
 					"title":"Operation",
 					"value":"",
 					"description":"Operation",
+					"description_ja":"オペレーション",
 					"readonly":false,
 					"optional":true
 				},
@@ -2928,6 +3031,7 @@
 					"title":"Actors",
 					"value":"",
 					"description":"Comma-separated list of actors",
+					"description_ja":"アクターのカンマ区切りのリスト",
 					"readonly":false,
 					"optional":true
 				},
@@ -2937,6 +3041,7 @@
 					"title":"GroupID",
 					"value":"",
 					"description":"he group id that is responsible for executing the human task",
+					"description_ja":"ヒューマンタスクを担当するグループID",
 					"readonly":false,
 					"optional":true
 				},
@@ -2946,6 +3051,7 @@
 					"title":"Comment",
 					"value":"",
 					"description":"Comment",
+					"description_ja":"コメント",
 					"readonly":false,
 					"optional":true
 				},
@@ -2955,6 +3061,7 @@
 					"title":"Content",
 					"value":"",
 					"description":"The data associated with this task",
+					"description_ja":"このタスクに関連付けられているデータ",
 					"readonly":false,
 					"optional":true
 				},
@@ -2964,6 +3071,7 @@
 					"title":"Skippable",
 					"value":"",
 					"description":"Specifies whether the human task can be skipped",
+					"description_ja":"ヒューマンタスクをスキップできるかどうかを指定します",
 					"readonly":false,
 					"optional":true,
 					"items": [
@@ -2985,6 +3093,7 @@
 					"title":"Priority",
 					"value":"",
 					"description":"An integer indicating the priority of the human task",
+					"description_ja":"ヒューマンタスクの優先度を示す整数",
 					"readonly":false,
 					"optional":true
 				}
@@ -2998,6 +3107,7 @@
 			"title" : 			"$workitemDefs.(k).displayName$",
 			"groups" : 			["Service Tasks"],
 			"description" : 	"$workitemDefs.(k).explanationText$",
+			"description_ja" : "$workitemDefs.(k).explanationText$",
 			"view" : 			"activity/workitems/$workitemDefs.(k).name$.svg",
 			$if(workitemDefs.(k).icon)$
 				"icon" : 			"$workitemDefs.(k).icon$",
@@ -3073,6 +3183,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Service Tasks").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -3085,6 +3196,7 @@
 					"title":"Font Size",
 					"value":"",
 					"description":"The Font Size",
+					"description_ja":"フォントのサイズ",
 					"readonly":false,
 					"optional":false,
 					"refToView":"text_name",
@@ -3248,6 +3360,7 @@
 					"title":"Name",
 					"value":"$workitemDefs.(k).displayName$",
 					"description":"The descriptive name of the BPMN element.",
+					"description_ja":"BPMN要素のわかりやすい名前。",
 					"readonly":false,
 					"optional":true,
 					"length":"",
@@ -3260,6 +3373,7 @@
 					"title":"Documentation",
 					"value":"$workitemDefs.(k).explanationText$", 
 					"description":"This attribute is used to annotate the BPMN element, such as descriptions and other documentation.",
+					"description_ja":"この属性は、説明やドキュメントなど、BPMN要素の注釈に使用されます。",
 					"readonly":true,
 					"optional":true,
 					"length":"",
@@ -3272,6 +3386,7 @@
 					"title":"Task Name",
 					"value":"$workitemDefs.(k).name$",
 					"description":"Task Name",
+					"description_ja":"タスク名",
 					"readonly":true,
 					"optional":true
 				\},
@@ -3281,6 +3396,7 @@
 					"title":"DataInputSet",
 					"value":"$workitemDefs.(k).parameters:{k1| $k1.name$:$k1.type.stringType$}; separator=","$",
 					"description":"An InputSet is a collection of DataInput elements that together define a valid set of data inputs.",
+					"description_ja":"InputSetは、データ入力の有効なセットを合わせて定義するDataInputエレメントのコレクションです。",
 					"readonly":false,
 					"optional":true,
 				\},  
@@ -3290,6 +3406,7 @@
 					"title":"DataOutputSet",
 					"value":"$workitemDefs.(k).results:{k1| $k1.name$:$k1.type.stringType$}; separator=","$",
 					"description":"An OutputSet is a collection of DataOutputs elements that together may be produced as output from an Activity or Event.",
+					"description_ja":"OutputSet は、アクティビティまたはイベントの出力としてまとめて生成されるDataOutputs要素のコレクションです。",
 					"readonly":false,
 					"optional":true,
 				\},
@@ -3308,6 +3425,7 @@
 					"title":"On Entry Actions",
 					"value":"",
 					"description":"on entry actions",
+					"description_ja":"アクション開始時",
 					"readonly":false,
 					"optional":true
 				\},
@@ -3317,6 +3435,7 @@
 					"title":"On Exit Actions",
 					"value":"",
 					"description":"on exit actions",
+					"description_ja":"アクション終了時",
 					"readonly":false,
 					"optional":true
 				\},
@@ -3326,6 +3445,7 @@
 					"title":"ScriptLanguage",
 					"value":"java",
 					"description":"Defines the script language.",
+					"description_ja":"スクリプト言語を定義します。",
 					"readonly":false,
 					"optional":true,
 					"items": [
@@ -3351,6 +3471,7 @@
 			"title" : 			"Reusable Subprocess",
 			"groups" :			["Activities"],
 			"description" :		"A reusable subprocess. It can be used to invoke another process.",
+			"description_ja" :"再利用可能なサブプロセス。別のプロセスの起動に使用できます。",
 			"view" :			"activity/subprocess.collapsed.svg",
 			"icon" :			"activity/subprocess.png",
 			"propertyPackages" :[
@@ -3370,6 +3491,7 @@
 					"title":"ActivityType",
 					"value":"Sub-Process",
 					"description":"The Type of Activity.",
+					"description_ja":"アクティビティのタイプ。",
 					"readonly":true,
 					"optional":false,
 					"length":""
@@ -3426,6 +3548,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Activities").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -3438,6 +3561,7 @@
 					"title":"Font Size",
 					"value":"",
 					"description":"The Font Size",
+					"description_ja":"フォントのサイズ",
 					"readonly":false,
 					"optional":false,
 					"refToView":"text_name",
@@ -3521,6 +3645,7 @@
 					"title":"On Entry Actions",
 					"value":"",
 					"description":"on entry actions",
+					"description_ja":"アクション開始時",
 					"readonly":false,
 					"optional":true
 				},
@@ -3530,6 +3655,7 @@
 					"title":"On Exit Actions",
 					"value":"",
 					"description":"on exit actions",
+					"description_ja":"アクション終了時",
 					"readonly":false,
 					"optional":true
 				},
@@ -3539,6 +3665,7 @@
 					"title":"Independent",
 					"value":"true",
 					"description":"If set to true the child process is started as an independent process.",
+					"description_ja":"trueに設定した場合、子プロセスは独立したプロセスとして開始されます。",
 					"readonly":false,
 					"optional":true,
 					"items": [
@@ -3560,6 +3687,7 @@
 					"title":"Wait for completion",
 					"value":"true",
 					"description":"If true this sub-process node will only continue if the child process that was started has terminated its execution (completed or aborted)",
+					"description_ja":"trueの場合、このサブプロセスノードは、開始した子プロセスが実行を終了した（完了または中止）場合のみ続行します",
 					"readonly":false,
 					"optional":true,
 					"items": [
@@ -3581,6 +3709,7 @@
 					"title":"ScriptLanguage",
 					"value":"java",
 					"description":"Defines the script language.",
+					"description_ja":"スクリプト言語を定義します。",
 					"readonly":false,
 					"optional":true,
 					"items": [
@@ -3615,6 +3744,7 @@
 			"title" : 			"Multiple instances",
 			"groups" :			["Activities"],
 			"description" :		"A multiple instances subprocess. Allows to execute the contained process segment multiple times.",
+			"description_ja" :"複数のインスタンスを持つサブプロセス。含まれるプロセスセグメントを複数回実行できます。",
 			"view" :			"activity/subprocess.multiple.svg",
 			"icon" :			"activity/subprocess.png",
 			"propertyPackages" :[
@@ -3634,6 +3764,7 @@
 					"title":"ActivityType",
 					"value":"Sub-Process",
 					"description":"The Type of Activity.",
+					"description_ja":"アクティビティのタイプ。",
 					"readonly":true,
 					"optional":false,
 					"length":""
@@ -3690,6 +3821,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Activities").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -3702,6 +3834,7 @@
 					"title":"Font Size",
 					"value":"",
 					"description":"The Font Size",
+					"description_ja":"フォントのサイズ",
 					"readonly":false,
 					"optional":false,
 					"refToView":"text_name",
@@ -3774,6 +3907,7 @@
 					"title":"CollectionExpression",
 					"value":"",
 					"description":"Name of a variable that represents the collection of elements that should be iterated over.",
+					"description_ja":"繰り返しを実行させる要素のコレクションを表す変数の名前。",
 					"readonly":false,
 					"optional":false
 				},
@@ -3783,6 +3917,7 @@
 					"title":"Variable Name",
 					"value":"",
 					"description":"Name of the variable to contain the current element from the collection.",
+					"description_ja":"コレクションの現在の要素を含む変数の名前。",
 					"readonly":false,
 					"optional":false
 				},
@@ -3792,6 +3927,7 @@
 					"title":"On Entry Actions",
 					"value":"",
 					"description":"on entry actions",
+					"description_ja":"アクション開始時",
 					"readonly":false,
 					"optional":true
 				},
@@ -3801,6 +3937,7 @@
 					"title":"On Exit Actions",
 					"value":"",
 					"description":"on exit actions",
+					"description_ja":"アクション終了時",
 					"readonly":false,
 					"optional":true
 				},
@@ -3810,6 +3947,7 @@
 					"title":"ScriptLanguage",
 					"value":"java",
 					"description":"Defines the script language.",
+					"description_ja":"スクリプト言語を定義します。",
 					"readonly":false,
 					"optional":true,
 					"items": [
@@ -3831,6 +3969,7 @@
 					"title":"Variable Definitions",
 					"value":"",
 					"description":"Comma-separated variable definitions",
+					"description_ja":"カンマ区切りの変数定義",
 					"readonly":false,
 					"optional":true
 				}
@@ -3853,6 +3992,7 @@
 			"title" :			"Embedded Subprocess",
 			"groups" :			["Activities"],
 			"description" :		"A subprocess is a decomposable activity. An expanded subprocess contains a valid BPMN diagram.",
+			"description_ja" :"サブプロセスは分解不可のアクティビティです。拡張サブプロセスには、有効なBPMNダイアグラムが含まれています。",
 			"view" :			"activity/subprocess.embedded.svg",
 			"icon" :			"activity/expanded.subprocess.png",
  			"layout" : 			[
@@ -3885,6 +4025,7 @@
 					"title":"ActivityType",
 					"value":"Sub-Process",
 					"description":"The Type of Activity.",
+					"description_ja":"アクティビティのタイプ。",
 					"readonly":true,
 					"optional":false,
 					"length":""
@@ -3941,6 +4082,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Activities").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -3953,6 +4095,7 @@
 					"title":"Font Size",
 					"value":"",
 					"description":"The Font Size",
+					"description_ja":"フォントのサイズ",
 					"readonly":false,
 					"optional":false,
 					"refToView":"text_name",
@@ -4025,6 +4168,7 @@
 					"title":"On Entry Actions",
 					"value":"",
 					"description":"on entry actions",
+					"description_ja":"アクション開始時",
 					"readonly":false,
 					"optional":true
 				},
@@ -4034,6 +4178,7 @@
 					"title":"On Exit Actions",
 					"value":"",
 					"description":"on exit actions",
+					"description_ja":"アクション終了時",
 					"readonly":false,
 					"optional":true
 				},
@@ -4043,6 +4188,7 @@
 					"title":"ScriptLanguage",
 					"value":"java",
 					"description":"Defines the script language.",
+					"description_ja":"スクリプト言語を定義します。",
 					"readonly":false,
 					"optional":true,
 					"items": [
@@ -4064,6 +4210,7 @@
 					"title":"Variable Definitions",
 					"value":"",
 					"description":"Comma-separated variable definitions",
+					"description_ja":"カンマ区切りの変数定義",
 					"readonly":false,
 					"optional":true
 				}
@@ -4087,6 +4234,7 @@
 			"title" :			"AdHoc Subprocess",
 			"groups" :			["Activities"],
 			"description" :		"A subprocess is a decomposable activity. An expanded subprocess contains a valid BPMN diagram.",
+			"description_ja" :"サブプロセスは分解不可のアクティビティです。拡張サブプロセスには、有効なBPMNダイアグラムが含まれています。",
 			"view" :			"activity/subprocess.adhoc.svg",
 			"icon" :			"activity/expanded.subprocess.png",
  			"layout" : 			[
@@ -4119,6 +4267,7 @@
 					"title":"ActivityType",
 					"value":"Sub-Process",
 					"description":"The Type of Activity.",
+					"description_ja":"アクティビティのタイプ。",
 					"readonly":true,
 					"optional":false,
 					"length":""
@@ -4175,6 +4324,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Activities").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -4187,6 +4337,7 @@
 					"title":"Font Size",
 					"value":"",
 					"description":"The Font Size",
+					"description_ja":"フォントのサイズ",
 					"readonly":false,
 					"optional":false,
 					"refToView":"text_name",
@@ -4259,6 +4410,7 @@
 					"title":"On Entry Actions",
 					"value":"",
 					"description":"on entry actions",
+					"description_ja":"アクション開始時",
 					"readonly":false,
 					"optional":true
 				},
@@ -4268,6 +4420,7 @@
 					"title":"On Exit Actions",
 					"value":"",
 					"description":"on exit actions",
+					"description_ja":"アクション終了時",
 					"readonly":false,
 					"optional":true
 				},
@@ -4277,6 +4430,7 @@
 					"title":"ScriptLanguage",
 					"value":"java",
 					"description":"Defines the script language.",
+					"description_ja":"スクリプト言語を定義します。",
 					"readonly":false,
 					"optional":true,
 					"items": [
@@ -4298,6 +4452,7 @@
 					"title":"Variable Definitions",
 					"value":"",
 					"description":"Comma-separated variable definitions",
+					"description_ja":"カンマ区切りの変数定義",
 					"readonly":false,
 					"optional":true
 				}
@@ -4321,6 +4476,7 @@
 			"title" : 			"Collapsed Event-Subprocess",
 			"groups" :			["Activities"],
 			"description" :		"An Event-Subprocess is placed within another subprocess. It becomes active when its start event gets triggered and can interrupt the Subprocess context or run in parallel (non-interrupting). It can be linked to another diagram.",
+			"description_ja" :"イベントサブプロセスは、別のサブプロセスの中に配置されます。開始イベントがトリガーされるとアクティブになり、サブプロセスコンテキストの割り込みや並列実行（割り込みなし）が可能になります。別のダイアグラムにリンクできます。",
 			"view" :			"activity/event.subprocess.collapsed.svg",
 			"icon" :			"activity/event.subprocess.collapsed.png",
 			"propertyPackages" :[
@@ -4340,6 +4496,7 @@
 					"title":"ActivityType",
 					"value":"Event-Sub-Process",
 					"description":"The Type of Activity.",
+					"description_ja":"アクティビティのタイプ。",
 					"readonly":true,
 					"optional":false,
 					"length":""
@@ -4448,6 +4605,7 @@
 					"title":"Font Color",
 					"value":"#000000",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -4460,6 +4618,7 @@
 					"title":"Font Size",
 					"value":"",
 					"description":"The Font Size",
+					"description_ja":"フォントのサイズ",
 					"readonly":false,
 					"optional":false,
 					"refToView":"text_name",
@@ -4540,6 +4699,7 @@
 			"title" :			"Event-Subprocess",
 			"groups" :			["Activities"],
 			"description" :		"An Event-Subprocess is placed within another Subprocess. It becomes active when its start event gets triggered and can interrupt the Subprocess context or run in parallel (non-interrupting).",
+			"description_ja" :"イベントサブプロセスは、別のサブプロセスの中に配置されます。開始イベントがトリガーされるとアクティブになり、サブプロセスコンテキストの割り込みや並列実行（割り込みなし）が可能になります。",
 			"view" :			"activity/event.subprocess.svg",
 			"icon" :			"activity/event.subprocess.png",
  			"layout" : 			[{"type" : "layout.bpmn2_0.subprocess"}],
@@ -4559,6 +4719,7 @@
 					"title":"ActivityType",
 					"value":"Event-Sub-Process",
 					"description":"The Type of Activity.",
+					"description_ja":"アクティビティのタイプ。",
 					"readonly":true,
 					"optional":false,
 					"length":""
@@ -4593,6 +4754,7 @@
 					"title":"Font Color",
 					"value":"#000000",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -4605,6 +4767,7 @@
 					"title":"Font Size",
 					"value":"",
 					"description":"The Font Size",
+					"description_ja":"フォントのサイズ",
 					"readonly":false,
 					"optional":false,
 					"refToView":"text_name",
@@ -4677,6 +4840,7 @@
 					"title":"is a Transaction",
 					"value":false,
 					"description":"A Transaction is a set of activities that logically belongs together; it might follow a specified transaction protocol.",
+					"description_ja":"トランザクションは、論理的にまとめられているアクティビティのセットです。指定されたトランザクションプロトコルに従います。",
 					"readonly":true,
 					"optional":false
 				},
@@ -4686,6 +4850,7 @@
 					"title":"is a Call Activity",
 					"value":false,
 					"description":"a Call Activity is a wrapper for a globally defined Sub-Process that is reused in the current process.",
+                                        "description_ja":"コールアクティビティは、現在のプロセスで再利用されているグローバル定義サブプロセスのラッパーです。",
 					"readonly":true,
 					"optional":"true"
 				}
@@ -4705,6 +4870,7 @@
 			"id" :				"Exclusive_Databased_Gateway",
 			"title" :			"Data-based Exclusive (XOR) Gateway",
 			"description" :		"When splitting, it routes the sequence flow to exactly one of the outgoing branches based on conditions. When merging, it awaits one incoming branch to complete before triggering the outgoing flow.",
+			"description_ja" :"分岐する際は、条件に基づいて必ず出力分岐の1つにシーケンスフローの経路を取ります。合流する際は、入力分岐の1つが完了するまで待ってから出力フローをトリガーします。",
 			"groups" : 			["Gateways"],
 			"view" : 			"gateway/exclusive.databased.svg",
 			"icon" : 			"gateway/exclusive.databased.png",
@@ -4767,6 +4933,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Gateways").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -4857,6 +5024,7 @@
 			"title" :			"Event-based Gateway",
 			"groups" :			["Gateways"],
 			"description" :		"Is always followed by catching events or receive tasks. Sequence flow is routed to the subsequent event/task which happens first.",
+			"description_ja" :"常にキャッチイベントまたは受信タスクが続きます。シーケンスフローは、後続のイベント/タスクのうち最初に発生したものを経路に取ります。",
 			"view" :			"gateway/eventbased.svg",
 			"icon" :			"gateway/eventbased.png",
 			"propertyPackages" :[
@@ -4918,6 +5086,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Gateways").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -4974,6 +5143,7 @@
 			"title" :			"Parallel Gateway",
 			"groups" :			["Gateways"],
 			"description" :		"When used to split the sequence flow, all outgoing branches are activated simultaneously. When merging parallel branches it waits for all incoming branches to complete before triggering the outgoing flow.",
+			"description_ja" :"シーケンスフローの分岐に使用されると、すべての出力分岐が同時にアクティブ化されます。並列分岐が合流するときは、すべての入力分岐が完了するまで待ってから、出力フローをトリガーします。",
 			"view" :			"gateway/parallel.svg",
 			"icon" :			"gateway/parallel.png",
 			"propertyPackages" :[
@@ -5035,6 +5205,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Gateways").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -5068,6 +5239,7 @@
 			"title" :			"Inclusive Gateway",
 			"groups" :			["Gateways"],
 			"description" :		"When splitting, one or more branches are activated based on branching conditions. When merging, it awaits all active incoming branches to complete.",
+			"description_ja" :"分岐する際は、分岐条件に基づいて1つまたは複数の分岐がアクティブ化されます。合流する際は、アクティブなすべての入力分岐が完了するまで待ちます。",
 			"view" :			"gateway/inclusive.svg",
 			"icon" :			"gateway/inclusive.png",
 			"propertyPackages" :[
@@ -5129,6 +5301,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Gateways").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -5198,6 +5371,7 @@
 			"title":"Complex Gateway",
 			"groups":["Gateways"],
 			"description":"It triggers one or more branches based on complex conditions or verbal descriptions. Use it sparingly as the semantics might not be clear.",
+			"description_ja":"複合条件または口頭の説明に基づいて、1つまたは複数の分岐をトリガーします。セマンティクスが明瞭でなくなるので使用は控えめにしてください。",
 			"view":"gateway/complex.svg",
 			"icon":"gateway/complex.png",
 			"propertyPackages" : [
@@ -5259,6 +5433,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Gateways").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -5282,6 +5457,7 @@
 					"value":"",
 					"popular":true,
 					"description":"Determines which combination of incoming tokens will be synchronized for activation of the Gateway.",
+					"description_ja":"ゲートウェイのアクティブ化のために同期する入力トークンの組み合わせを決定します。",
 					"readonly":false,
 					"optional":true
 				},
@@ -5326,6 +5502,7 @@
 			"title" :			"Pool",
 			"groups" :			["Swimlanes"],
 			"description" :		"Pools and Lanes represent responsibilities for activities in a process. A pool or a lane can be an organization, a role, or a system.",
+			"description_ja" :"プールとレーンは、プロセス内のアクティビティの責任を表します。プールまたはレーンには、組織、ロール、またはシステムを割り当てることができます。",
 			"view" :			"swimlane/pool.svg",
 			"icon" :			"swimlane/pool.png",
 			"propertyPackages": [
@@ -5349,6 +5526,7 @@
 			"title" :			"Collapsed Pool",
 			"groups" :			["Swimlanes"],
 			"description" :		"Collapsed Pools hide all internals of the contained processes.",
+			"description_ja" :"折りたたまれたプールは、中に含まれるプロセスの内部すべてを隠蔽します。",
 			"view" :			"swimlane/collapsed.pool.svg",
 			"icon" :			"swimlane/lane.png",
 			"propertyPackages": [
@@ -5388,6 +5566,7 @@
 					"title":"Font Color",
 					"value":"#000000",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -5400,6 +5579,7 @@
 					"title":"Font Size",
 					"value":"",
 					"description":"The Font Size",
+					"description_ja":"フォントのサイズ",
 					"readonly":false,
 					"optional":false,
 					"refToView":"text_name",
@@ -5480,6 +5660,7 @@
 			"title" :			"Lane",
 			"groups" :			["Swimlanes"],
 			"description" :		"Pools and Lanes represent responsibilities for activities in a process. A pool or a lane can be an organization, a role, or a system. Lanes sub-divide pools or other lanes hierarchically.",
+			"description_ja" :"プールとレーンは、プロセス内のアクティビティの責任を表します。プールまたはレーンには、組織、ロール、またはシステムを割り当てることができます。レーンはプールまたは他のレーンを階層的に分割します。",
 			"view" :			"swimlane/lane.svg",
 			"icon" :			"swimlane/lane.png",
 			"propertyPackages": [
@@ -5552,6 +5733,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Swimlanes").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -5564,6 +5746,7 @@
 					"title":"Font Size",
 					"value":"",
 					"description":"The Font Size",
+					"description_ja":"フォントのサイズ",
 					"readonly":false,
 					"optional":false,
 					"refToView":"text_name",
@@ -5655,6 +5838,7 @@
             "title" :           "Additional Participant",
             "groups" :          ["Swimlanes"],
             "description" :     "he additional participant can be connected to a task or sub process. It is used to visualize additional associations of roles or individuals to the respective activity (e.g. responsibility, informed persons, etc.).",
+		    "description_ja" :"追加の参加者はタスクまたはサブプロセスに接続できます。ロールまたは個人の追加の関連を対応する各アクティビティ（責任、通知された人物など）に対して可視化するために使用されます。",
             "view" :            "swimlane/process.participant.svg",
             "icon" :            "swimlane/process.participant.png",
             "defaultAlign" :    "northeast",
@@ -5681,6 +5865,7 @@
 			"title" :			"Group",
 			"groups" :			["Artifacts"],
 			"description" :		"An arbitrary set of objects can be defined as a Group to show that they logically belong together.",
+			"description_ja" :"任意のオブジェクトのセットをグループとして定義し、論理的なまとまりを表すことができます。",
 			"view" :			"artifact/group.svg",
 			"icon":				"artifact/group.png",
 			"propertyPackages" : [
@@ -5718,6 +5903,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Artifacts").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -5730,6 +5916,7 @@
 					"title":"Font Size",
 					"value":"",
 					"description":"The Font Size",
+					"description_ja":"フォントのサイズ",
 					"readonly":false,
 					"optional":false,
 					"refToView":"text_name",
@@ -5819,6 +6006,7 @@
 			"title" :			"Text Annotation",
 			"groups" :			["Artifacts"],
 			"description" :		"Any object can be associated with a Text Annotation to provide additional documentation.",
+			"description_ja" :"任意のオブジェクトをテキスト注釈に関連付け、追加のドキュメントとして提供することができます。",
 			"view" :			"artifact/text.annotation.svg",
 			"icon" :			"artifact/text.annotation.png",
 			"defaultAlign" :	"northeast",
@@ -5869,6 +6057,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Artifacts").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -5881,6 +6070,7 @@
 					"title":"Font Size",
 					"value":"",
 					"description":"The Font Size",
+					"description_ja":"フォントのサイズ",
 					"readonly":false,
 					"optional":false,
 					"refToView":"text_name",
@@ -5972,6 +6162,7 @@
 			"id" :				"DataObject",
 			"title" :			"Data Object",
 			"description" :		"A Data Object represents information flowing through the process, such as business documents, e-mails or letters.",
+			"description_ja" :"データオブジェクトは、ビジネスドキュメント、電子メール、手紙など、プロセスを流れる情報を表します。",
 			"groups" :			["Data Objects"],
 			"view" :			"dataobject/data.object.svg",
 			"icon" :			"dataobject/data.object.png",
@@ -6046,6 +6237,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Data Objects").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -6132,6 +6324,7 @@
 					"title" : "is Collection",
 					"value" : false,
 					"description" : "A Collection Data Object represents a collection of information, e.g. a list of order items.",
+					"description_ja" : "コレクションデータオブジェクトは、発注品目のリストなど、情報のコレクションを表します。",
 					"readonly" : false,
 					"optional" : true,
 					"refToView" : "collection"
@@ -6151,6 +6344,7 @@
 //			"title" :			"IT System",
 //			"groups" :			["Artifacts"],
 //			"description" : 	"An IT System can be associated with an activity. It is a system or application used while fulfilling the activity.",
+//			"description_ja" :"ITシステムはアクティビティに関連付けることができます。アクティビティを実行する際に使用されるシステムまたはアプリケーションです。",
 //			"view" :			"dataobject/it.system.svg",
 //			"icon" : 			"dataobject/it.system.png",
 //			"propertyPackages" : [
@@ -6185,6 +6379,7 @@
 			"title" :			"Data Store",
 			"groups" :			["Data Objects"],
 			"description" :		"A Data Store is a place where the process can read or wirte date, e.g. a database or a filling cabinet. It persists beyond the lifetime of the process instance.",
+			"description_ja" :"データストアは、データベースやファイリングキャビネットなど、プロセスがデータを読み書きできる場所です。プロセスインスタンスの寿命を超えて存続します。",
 			"view" :			"dataobject/data.store.svg",
 			"icon" :			"dataobject/data.store.png",
 			"propertyPackages": [
@@ -6252,6 +6447,7 @@
 					"title":"Font Color",
 					"value":"#000000",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -6264,6 +6460,7 @@
 					"title":"Font Size",
 					"value":"",
 					"description":"The Font Size",
+					"description_ja":"フォントのサイズ",
 					"readonly":false,
 					"optional":false,
 					"refToView":"text_name",
@@ -6345,6 +6542,7 @@
 			"title" :			"Message",
 			"groups" :			["Data Objects"],
 			"description" :		"A Message is used to depict the contents of a communication between two Participants.",
+			"description_ja" :"メッセージは、2人の参加者の間のコミュニケーションを表現するために使用されます。",
 			"view" :			"dataobject/message.svg",
 			"icon" :			"dataobject/message.png",
 			"propertyPackages":	[
@@ -6405,6 +6603,7 @@
 					"title":"Font Color",
 					"value":"#000000",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -6417,6 +6616,7 @@
 					"title":"Font Size",
 					"value":"",
 					"description":"The Font Size",
+					"description_ja":"フォントのサイズ",
 					"readonly":false,
 					"optional":false,
 					"refToView":"text_name",
@@ -6499,6 +6699,7 @@
 			"title": 			"Start Event",
 			"groups" : 			["Start Events"],
 			"description" : 	"Untyped start event.",
+			"description_ja" :"タイプのない開始イベント。",
 			"view" : 			"startevent/none.svg",
 			"icon" : 			"startevent/none.png",
 			"propertyPackages":	[
@@ -6569,6 +6770,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Start Events").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -6592,6 +6794,7 @@
 			"title" : 			"Start Message Event",
 			"groups" :			["Start Events"],
 			"description" :		"A process instance is started on receive of a message.",
+			"description_ja" :"プロセスインスタンスは、メッセージを受信したときに開始します。",
 			"view" :			"startevent/message.svg",
 			"icon" :			"startevent/message.png",
 			"propertyPackages":[
@@ -6663,6 +6866,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Start Events").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -6684,6 +6888,7 @@
 					"title":"MessageRef",
 					"value":"",
 					"description":"Message Ref",
+					"description_ja":"メッセージ参照",
 					"readonly":false,
 					"optional":true
 				}
@@ -6695,6 +6900,7 @@
 			"title" :			"Start Timer Event",
 			"groups" :			["Start Events"],
 			"description" :		"A process instance is started on cyclic timer events, points in time, after time spans or timeouts.",
+			"description_ja" :"プロセスインスタンスは、周期タイマイベントの発生時、特定の時刻、特定の時間経過後、またはタイムアウト後に開始します。",
 			"view" :			"startevent/timer.svg",
 			"icon" :			"startevent/timer.png",
 			"propertyPackages":[
@@ -6786,6 +6992,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Start Events").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -6843,6 +7050,7 @@
 			"title":"Start Escalation Event",
 			"groups":["Start Events"],
 			"description":"Reacts on an escalation to another role in the organization. This event is only used inside of a event subprocess.",
+			"description_ja":"組織の別のロールへのエスカレーションが発生したときに反応します。このイベントは、イベントサブプロセス内部でのみ使用されます。",
 			"view":"startevent/escalation.svg",
 			"icon":"startevent/escalation.png",
 			"propertyPackages":[
@@ -6914,6 +7122,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Start Events").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -6935,6 +7144,7 @@
 					"title":"EscalationCode",
 					"value":"",
 					"description":"Escalation code",
+					"description_ja":"エスカレーションコード",
 					"readonly":false,
 					"optional":true
 				}
@@ -6946,6 +7156,7 @@
 			"title" :			"Start Conditional Event",
 			"groups" :			["Start Events"],
 			"description" :		"A process instance is started based on changed business conditions or matching business rules.",
+			"description_ja" :"プロセスインスタンスは、ビジネス条件の変化またはビジネスルールの一致に基づいて開始します。",
 			"view" :			"startevent/conditional.svg",
 			"icon" 	:			"startevent/conditional.png",
 			"propertyPackages": [
@@ -7027,6 +7238,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Start Events").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -7039,6 +7251,7 @@
 					"title":"Language",
 					"value":"drools",
 					"description":"Defines the condition language.",
+					"description_ja":"条件言語を定義します。",
 					"readonly":false,
 					"optional":true,
 					"items": [
@@ -7071,6 +7284,7 @@
 			"title":"Start Error Event",
 			"groups":["Start Events"],
 			"description":"Catches named errors. This event is only used inside of a event subprocess.",
+			"description_ja":"名前付きエラーをキャッチします。このイベントは、イベントサブプロセス内部でのみ使用されます。",
 			"view":"startevent/error.svg",
 			"icon":"startevent/error.png",
 			"propertyPackages":[
@@ -7149,6 +7363,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Start Events").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -7174,6 +7389,7 @@
 			"title":"Start Compensation Event",
 			"groups":["Start Events"],
 			"description":"Compensation handling. This event is only used inside of a event subprocess.",
+			"description_ja":"Compensation処理。このイベントは、イベントサブプロセス内部でのみ使用されます。",
 			"view":"startevent/compensation.svg",
 			"icon":"startevent/compensation.png",
 			"propertyPackages":[
@@ -7244,6 +7460,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Start Events").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -7267,6 +7484,7 @@
 			"title" :			"Start Signal Event",
 			"groups" :			["Start Events"],
 			"description" :		"A process instance is started based on signalling across different processes. (One signal thrown can be caught multiple times)",
+			"description_ja" :"プロセスインスタンスは、複数のプロセスに渡るシグナリングに基づいて開始します（スローされた1つのシグナルが複数回キャッチされます）。",
 			"view" :			"startevent/signal.svg",
 			"icon" :			"startevent/signal.png",
 			"propertyPackages": [
@@ -7347,6 +7565,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Start Events").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -7372,6 +7591,7 @@
 			"title" :			"Start Multiple Event",
 			"groups" :			["Start Events"],
 			"description" :		"A process instance is started upon occurence of one out of a set of possible events.",
+			"description_ja" :"プロセスインスタンスは、可能性のあるイベントのセットのうちいずれか1つが発生したときに開始します。",
 			"view" :			"startevent/multiple.svg",
 			"icon" :			"startevent/multiple.png",
 			"propertyPackages":[
@@ -7409,6 +7629,7 @@
 			"title":"Start Parallel Multiple Event",
 			"groups":["Start Events"],
 			"description":"A process instance is started upon occurence of all possible events.",
+			"description_ja":"プロセスインスタンスは、可能性のあるすべてのイベントが発生したときに開始します。",
 			"view":"startevent/multiple.parallel.svg",
 			"icon":"startevent/multiple.parallel.png",
 			"propertyPackages":[
@@ -7448,6 +7669,7 @@
 			"title":"Message Intermediate Event",
 			"groups":["Catching Intermediate Events"],
 			"description":"This event reacts on the arrival of a message.",
+			"description_ja":"このイベントは、メッセージの到着に反応します。",
 			"view":"intermediateevent/message.catching.svg",
 			"icon":"catching/message.png",
 			"propertyPackages":[
@@ -7523,6 +7745,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Catching Intermediate Events").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -7546,6 +7769,7 @@
 					"title":"MessageRef",
 					"value":"",
 					"description":"Message Ref",
+					"description_ja":"メッセージ参照",
 					"readonly":false,
 					"optional":true
 				}
@@ -7557,6 +7781,7 @@
 			"title":"Timer Intermediate Event",
 			"groups":["Catching Intermediate Events"],
 			"description":"Process execution is delayed until a certain point in time is reached or a particular duration is over.",
+			"description_ja":"プロセスの実行は、特定の時刻に達するか、一定の時間が経過するまで遅延します。",
 			"view":"intermediateevent/timer.svg",
 			"icon":"catching/timer.png",
 			"propertyPackages":[
@@ -7633,6 +7858,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Catching Intermediate Events").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -7712,6 +7938,7 @@
 			"title":"Escalation Intermediate Event",
 			"groups":["Catching Intermediate Events"],
 			"description":"This event reacts on the escalation of a case. It needs to be attached to the boundary of an activity.",
+			"description_ja":"このイベントは、ケースのエスカレーションに反応します。アクティビティのBoundaryにアタッチする必要があります。",
 			"view":"intermediateevent/escalation.catching.svg",
 			"icon":"catching/escalation.png",
 			"propertyPackages":[
@@ -7785,6 +8012,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Catching Intermediate Events").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -7808,6 +8036,7 @@
 					"title":"EscalationCode",
 					"value":"",
 					"description":"Escalation code",
+					"description_ja":"エスカレーションコード",
 					"readonly":false,
 					"optional":true
 				}
@@ -7819,6 +8048,7 @@
 			"title":"Conditional Intermediate Event",
 			"groups":["Catching Intermediate Events"],
 			"description":"Process execution is delayed until a changed business condition or business rule matches.",
+			"description_ja":"プロセスの実行は、ビジネス条件が変化するか、ビジネスルールが一致するまで遅延します。",
 			"view":"intermediateevent/conditional.svg",
 			"icon":"catching/conditional.png",
 			"propertyPackages":[
@@ -7897,6 +8127,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Catching Intermediate Events").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -7920,6 +8151,7 @@
 					"title":"Language",
 					"value":"drools",
 					"description":"Defines the condition language.",
+					"description_ja":"条件言語を定義します。",
 					"readonly":false,
 					"optional":true,
 					"items": [
@@ -7952,6 +8184,7 @@
 			"title":"Link Intermediate Event",
 			"groups":["Catching Intermediate Events"],
 			"description":"Off-page connectors. Two corresponding link events correspond to a sequence flow.",
+			"description_ja":"オフページコネクタ。2つの対応するリンクイベントがシーケンスフローに対応します。
 			"view":"intermediateevent/link.catching.svg",
 			"icon":"catching/link.png",
 			"propertyPackages":[
@@ -7998,6 +8231,7 @@
 			"title":"Error Intermediate Event",
 			"groups":["Catching Intermediate Events"],
 			"description":"Catches a named error, which was thrown be an inner scope (e.g. subprocess). This event needs to be attached to the boundary of an activity.",
+			"description_ja":"内側のスコープ（サブプロセスなど）でスローされた名前付きエラーをキャッチします。このイベントは、アクティビティのBoundaryにアタッチする必要があります。",
 			"view":"intermediateevent/error.svg",
 			"icon":"catching/error.png",
 			"propertyPackages":[
@@ -8069,6 +8303,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Catching Intermediate Events").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -8105,6 +8340,7 @@
 			"title":"Cancel Intermediate Event",
 			"groups":["Catching Intermediate Events"],
 			"description":"Reacts on a transaction, which was cancelled inside an inner scope (e.g. subprocess). This event needs to be attached to the boundary of an activity.",
+			"description_ja":"内側のスコープ（サブプロセスなど）内でキャンセルされたトランザクションに反応します。このイベントは、アクティビティのBoundaryにアタッチする必要があります。",
 			"view":"intermediateevent/cancel.svg",
 			"icon":"catching/cancel.png",
 			"propertyPackages":[
@@ -8143,6 +8379,7 @@
 			"title":"Compensation Intermediate Event",
 			"groups":["Catching Intermediate Events"],
 			"description":"Compensation handling in case of partially failed operations. This event needs to be attached to the boundary of an activity.",
+			"description_ja":"オペレーションが部分的に失敗した場合のCompensation処理。このイベントは、アクティビティのBoundaryにアタッチする必要があります。",
 			"view":"intermediateevent/compensation.catching.svg",
 			"icon":"catching/compensation.png",
 			"propertyPackages":[
@@ -8181,6 +8418,7 @@
 			"title":"Signal Intermediate Event",
 			"groups":["Catching Intermediate Events"],
 			"description":"Process execution is delayed until a particular signal is catched. Signalling can happen across different processes.",
+			"description_ja":"プロセスの実行は、特定のシグナルがキャッチされるまで遅延します。シグナリングは異なるプロセス間でも発生可能です。",
 			"view":"intermediateevent/signal.catching.svg",
 			"icon":"catching/signal.png",
 			"propertyPackages":[
@@ -8257,6 +8495,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Catching Intermediate Events").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -8293,6 +8532,7 @@
 			"title":"Multiple Intermediate Event",
 			"groups":["Catching Intermediate Events"],
 			"description":"Process execution is delayed until one out of a set of possible events is triggered.",
+			"description_ja":"プロセスの実行は、可能性のあるイベントのセットのうちのいずれか1つがトリガーされるまで遅延します。",
 			"view":"intermediateevent/multiple.catching.svg",
 			"icon":"catching/multiple.png",
 			"propertyPackages":[
@@ -8337,6 +8577,7 @@
 			"title":"Parallel Multiple Intermediate Event",
 			"groups":["Catching Intermediate Events"],
 			"description":"Process execution is delayed until all possible events have been triggered.",
+			"description_ja":"プロセスの実行は、可能性のあるすべてのイベントがトリガーされるまで遅延します。",
 			"view":"intermediateevent/multiple.parallel.svg",
 			"icon":"catching/multiple.parallel.png",
 			"propertyPackages":[
@@ -8382,6 +8623,7 @@
 			"title":"Intermediate Event",
 			"groups":["Throwing Intermediate Events"],
 			"description":"This event marks the occurrence of a particular business event. Process execution is not delayed.",
+			"description_ja":"このイベントは、特定のビジネスイベントの発生をマークします。プロセスの実行は遅延しません。",
 			"view":"intermediateevent/none.svg",
 			"icon":"throwing/none.png",
 			"propertyPackages":[
@@ -8453,6 +8695,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Throwing Intermediate Events").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -8478,6 +8721,7 @@
 			"title":"Message Intermediate Event",
 			"groups":["Throwing Intermediate Events"],
 			"description":"The throwing message event sends a message to a communication partner and afterwards continues process execution.",
+			"description_ja":"メッセージスローイベントは、コミュニケーション相手にメッセージを送信し、その後にプロセスの実行を続行します。",
 			"view":"intermediateevent/message.throwing.svg",
 			"icon":"throwing/message.png",
 			"propertyPackages":[
@@ -8548,6 +8792,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Throwing Intermediate Events").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -8569,6 +8814,7 @@
 					"title":"MessageRef",
 					"value":"",
 					"description":"Message Ref",
+					"description_ja":"メッセージ参照",
 					"readonly":false,
 					"optional":true
 				}
@@ -8580,6 +8826,7 @@
 			"title":"Escalation Intermediate Event",
 			"groups":["Throwing Intermediate Events"],
 			"description":"This event triggers the escalation of the case to another role in the organisation. After this, process execution is resumed.",
+			"description_ja":"このイベントは、組織内の別のロールへのケースのエスカレーションをトリガーします。その後、プロセスの実行は再開されます。",
 			"view":"intermediateevent/escalation.throwing.svg",
 			"icon":"throwing/escalation.png",
 			"propertyPackages":[
@@ -8650,6 +8897,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Throwing Intermediate Events").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -8671,6 +8919,7 @@
 					"title":"EscalationCode",
 					"value":"",
 					"description":"Escalation code",
+					"description_ja":"エスカレーションコード",
 					"readonly":false,
 					"optional":true
 				}
@@ -8682,6 +8931,7 @@
 			"title":"Link Intermediate Event",
 			"groups":["Throwing Intermediate Events"],
 			"description":"Off-page connectors. Two corresponding link events correspond to a sequence flow.",
+			"description_ja":"オフページコネクタ。2つの対応するリンクイベントがシーケンスフローに対応します。
 			"view":"intermediateevent/link.throwing.svg",
 			"icon":"throwing/link.png",
 			"propertyPackages":[
@@ -8726,6 +8976,7 @@
 			"title":"Compensation Intermediate Event",
 			"groups":["Throwing Intermediate Events"],
 			"description":"Triggers a compensation.",
+			"description_ja":"Compensationをトリガーします。",
 			"view":"intermediateevent/compensation.throwing.svg",
 			"icon":"throwing/compensation.png",
 			"propertyPackages":[
@@ -8762,6 +9013,7 @@
 			"title":"Signal Intermediate Event",
 			"groups":["Throwing Intermediate Events"],
 			"description":"The throwing signal event fires up a signal. Afterwards it continues process execution. One signal thrown can be caught multiple times by different catching signal events.",
+			"description_ja":"シグナルスローイベントは、シグナルを発信します。その後、プロセスの実行を続行します。スローされた1つのシグナルは、異なるシグナルキャッチイベントによって複数回キャッチされることがあります。",
 			"view":"intermediateevent/signal.throwing.svg",
 			"icon":"throwing/signal.png",
 			"propertyPackages":[
@@ -8831,6 +9083,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Throwing Intermediate Events").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -8865,6 +9118,7 @@
 			"title":"Multiple Intermediate Event",
 			"groups":["Throwing Intermediate Events"],
 			"description":"The throwing multiple event throws one out of a set of possible events. Afterwards it continues process execution.",
+			"description_ja":"マルチスローイベントは、可能性のあるイベントのセットのうちいずれか1つをスローします。その後、プロセスの実行を続行します。",
 			"view":"intermediateevent/multiple.throwing.svg",
 			"icon":"throwing/multiple.png",
 			"propertyPackages":[
@@ -8903,6 +9157,7 @@
 			"title": "End Event",
 			"groups" : ["End Events"],
 			"description" : "The untyped end event typically marks the standard end of a process.",
+			"description_ja" : "タイプなし終了イベントは、通常、プロセスの標準的な終了をマークします。",
 			"view" : "endevent/none.svg",
 			"icon" : "endevent/none.png",
 			"propertyPackages":[
@@ -8973,6 +9228,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("End Events").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -8996,6 +9252,7 @@
 			"title":"Message End Event",
 			"groups":["End Events"],
 			"description":"At the end of the process, a message is sent.",
+			"description_ja":"プロセスの終了時にメッセージが送信されます。",
 			"view":"endevent/message.svg",
 			"icon":"endevent/message.png",
 			"propertyPackages":[
@@ -9066,6 +9323,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("End Events").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -9087,6 +9345,7 @@
 					"title":"MessageRef",
 					"value":"",
 					"description":"Message Ref",
+					"description_ja":"メッセージ参照",
 					"readonly":false,
 					"optional":true
 				}
@@ -9098,6 +9357,7 @@
 			"title":"Escalation End Event",
 			"groups":["End Events"],
 			"description":"The case is escalated with the end of the process.",
+			"description_ja":"ケースはプロセス終了時にエスカレーションされます。",
 			"view":"endevent/escalation.svg",
 			"icon":"endevent/escalation.png",
 			"propertyPackages":[
@@ -9165,6 +9425,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("End Events").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -9186,6 +9447,7 @@
 					"title":"EscalationCode",
 					"value":"",
 					"description":"Escalation code",
+					"description_ja":"エスカレーションコード",
 					"readonly":false,
 					"optional":true
 				}
@@ -9197,6 +9459,7 @@
 			"title":"Error End Event",
 			"groups":["End Events"],
 			"description":"The process ends in an error state. As result a named error is thrown.",
+			"description_ja":"プロセスはエラー状態で終了します。結果として名前付きエラーがスローされます。",
 			"view":"endevent/error.svg",
 			"icon":"endevent/error.png",
 			"propertyPackages":[
@@ -9266,6 +9529,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("End Events").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -9300,6 +9564,7 @@
 			"title":"Cancel End Event",
 			"groups":["End Events"],
 			"description":"Triggering cancellation of a transaction.",
+			"description_ja":"トランザクションのキャンセルのトリガー。",
 			"view":"endevent/cancel.svg",
 			"icon":"endevent/cancel.png",
 			"propertyPackages":[
@@ -9369,6 +9634,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("End Events").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -9392,6 +9658,7 @@
 			"title":"Compensation End Event",
 			"groups":["End Events"],
 			"description":"Triggering compensation as final process step.",
+			"description_ja":"最終プロセスステップとしてのCompensationのトリガー。",
 			"view":"endevent/compensation.svg",
 			"icon":"endevent/compensation.png",
 			"propertyPackages":[
@@ -9463,6 +9730,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("End Events").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -9486,6 +9754,7 @@
 			"title":"Signal End Event",
 			"groups":["End Events"],
 			"description":"At the end of the process, a signal is thrown. (One signal thrown can be caught multiple times)",
+			"description_ja":"プロセスの終了時にシグナルがスローされます（スローされた1つのシグナルが複数回キャッチされます）。",
 			"view":"endevent/signal.svg",
 			"icon":"endevent/signal.png",
 			"propertyPackages":[
@@ -9555,6 +9824,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("End Events").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -9589,6 +9859,7 @@
 			"title":"Multiple End Event",
 			"groups":["End Events"],
 			"description":"At the end of the process, one out of a set of possible events is triggered.",
+			"description_ja":"プロセスの終了時に、可能性のあるイベントのセットのうちいずれか1つがトリガーされます。",
 			"view":"endevent/multiple.svg",
 			"icon":"endevent/multiple.png",
 			"propertyPackages":[
@@ -9624,6 +9895,7 @@
 			"title":"Terminate End Event",
 			"groups":["End Events"],
 			"description":"Triggering the immediate termination of a process instance. All steps still in execution in parallel branches are terminated.",
+			"description_ja":"プロセスインスタンスの即時終了のトリガー。並列分岐でまだ実行中のすべてのステップが終了させられます。",
 			"view":"endevent/terminate.svg",
 			"icon":"endevent/terminate.png",
 			"propertyPackages":[
@@ -9693,6 +9965,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("End Events").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -9718,6 +9991,7 @@
 			"id":"SequenceFlow",
 			"title":"Sequence Flow",
 			"description":"Sequence Flow defines the execution order of activities.",
+			"description_ja":"シーケンスフローは、アクティビティの実行順序を定義します。",
 			"groups":["Connecting Objects"],
 			"view":"connector/sequenceflow.svg",
 			"icon":"connector/sequenceflow.png",
@@ -9735,6 +10009,7 @@
 					"title":"ConditionType",
 					"value":"None",
 					"description":"Determine the typ of the flow object.",
+					"description_ja":"フローオブジェクトのタイプを定義します。",
 					"readonly":false,
 					"optional":false,
 					"items": [
@@ -9799,6 +10074,7 @@
 					"title":"Priority",
 					"value":"",
 					"description":"priority",
+					"description_ja":"優先度",
 					"readonly":false,
 					"optional":true,
 					"min":"1"
@@ -9809,6 +10085,7 @@
 					"title":"isImmediate",
 					"value":"",
 					"description":"An optional Boolean value specifying whether Activities or Choreography Activities not in the model containing the Sequence Flow can occur between the elements connected by the Sequence Flow. If the value is true, they MAY NOT occur. If the value is false, they MAY occur. Also see the isClosed attribute on Process, Choreography, and Collaboration.",
+					"description_ja":"モデル内になく、シーケンスフローを含むアクティビティまたはChoreographyアクティビティがシーケンスフローによって接続された要素の間で発生可能かどうかを指定するオプションのブール値。値がtrueの場合、これらは発生しません。値がfalseの場合、これらは発生可能です。プロセス、Choreography、およびコラボレーションのisClosed属性も参照してください。",
 					"readonly":false,
 					"optional":false
 				},
@@ -9818,6 +10095,7 @@
 					"title":"is conditional flow",
 					"value":false,
 					"description":"System intern variable to set the Diamond invisible, if sourceShape is a gateway and ConditionType is set to Expression",
+					"description_ja":"sourceShapeがゲートウェイでConditionTypeがExpressionに設定されている場合に、ダイヤを不可視に設定するシステムインターン変数。",
 					"readonly":true,
 					"optional":false,
 					"visible":false,
@@ -9875,6 +10153,7 @@
 					"title":"Font Color",
 					"value":"$colortheme.("Connecting Objects").fontColor$",
 					"description":"Font color",
+					"description_ja":"フォントの色",
 					"readonly":false,
 					"optional":false,
 					"refToView": ["text_name"],
@@ -9887,6 +10166,7 @@
 					"title":"Font Size",
 					"value":"",
 					"description":"The Font Size",
+					"description_ja":"フォントのサイズ",
 					"readonly":false,
 					"optional":false,
 					"refToView":"text_name",
@@ -9960,6 +10240,7 @@
 			"id":"Association_Undirected",
 			"title":"Association (undirected)",
 			"description":"Attaching a data object with an Undirected Association to a sequence flow indicates hand-over of information between the activities involved.",
+			"description_ja":"データオブジェクトが無方向関連でシーケンスフローにアタッチされている場合、関与するアクティビティ間で情報の受け渡しがあることを表します。",
 			"groups":["Connecting Objects"],
 			"view":"connector/association.undirected.svg",
 			"icon":"connector/association.undirected.png",
@@ -9977,6 +10258,7 @@
 					"title":"Responsibilities",
 					"value":"none",
 					"description":"Describes the type of the responsibility according to RACI.",
+					"description_ja":"RACIに従って責任のタイプを記述します。",
 					"readonly":false,
 					"optional":true,
 					"refToView":"name",
@@ -10038,6 +10320,7 @@
 			"id":"Association_Unidirectional",
 			"title":"Association (unidirectional)",
 			"description":"A Directed Association indicates information flow. A data object can be read at the start of an activity or written upon completion.",
+			"description_ja":"有方向関連は、情報の流れを表します。データオブジェクトは、アクティビティの開始時に読み取り、完了時に書き込めます。",
 			"groups":["Connecting Objects"],
 			"view":"connector/association.unidirectional.svg",
 			"icon":"connector/association.unidirectional.png",
@@ -10093,6 +10376,7 @@
 			"id":"Association_Bidirectional",
 			"title":"Association (bidirectional)",
 			"description":"A Bidirected Association indicates that the data object is modified, i.e. read and written during the execution of an actvity.",
+			"description_ja":"双方向関連は、データオブジェクトの改変を表します。つまり、アクティビティの実行中に読み書きが発生したことを表します。",
 			"groups":["Connecting Objects"],
 			"view":"connector/association.bidirectional.svg",
 			"icon":"connector/association.bidirectional.png",
@@ -10125,6 +10409,7 @@
 			"id":"MessageFlow",
 			"title":"Message Flow",
 			"description":"Message Flow symbolizes information flow across organizational boundaries. Message flow can be attached to pools, activities, or message events. The order of message exchanges can be specified by combining message flow and sequence flow.",
+			"description_ja":"メッセージフローは、組織のBoundaryを越えた情報フローを記号化します。メッセージフローは、プール、アクティビティ、またはメッセージイベントにアタッチできます。メッセージ交換の順序は、メッセージフローとシーケンスフローを組み合わせることで指定できます。",
 			"groups":["Connecting Objects"],
 			"view":"connector/messageflow.svg",
 			"icon":"connector/messageflow.png",
