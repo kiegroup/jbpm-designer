@@ -432,6 +432,9 @@ public class EditorHandler extends HttpServlet {
             } else if ("designerversion".equals(elt)) { 
                 resultHtml.append(_designerVersion);
                 replacementMade = true;    
+            } else if("designerlocale".equals(elt)) {
+            	resultHtml.append(_locale);
+            	replacementMade = true;
             } else if ("profileplugins".equals(elt)) {
                 StringBuilder plugins = new StringBuilder();
                 boolean commaNeeded = false;
