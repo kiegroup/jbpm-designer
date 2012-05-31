@@ -47,7 +47,7 @@
   </init-param>
   <init-param>
    <param-name>designer.locale</param-name>
-   <param-value>en_us</param-value>
+   <param-value>en</param-value>
   </init-param>
   <init-param>
    <param-name>designer.skin</param-name>
