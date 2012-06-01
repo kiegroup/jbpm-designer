@@ -151,13 +151,13 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         	workItemTemplate.setAttribute("workitemDefs", workDefinitions);
         	if(workitemConfigInfo != null && workitemConfigInfo.keySet() != null && workitemConfigInfo.keySet().size() > 0) {
         		for(String key: workitemConfigInfo.keySet()) {
-        			workItemTemplate.setAttribute("packageName", key);
+        			workItemTemplate.setAttribute("packageName", key.replaceAll("\\s",""));
         		}
         	} else {
         		workItemTemplate.setAttribute("packageName", "");
         	}
         	if(info != null && info.length == 2 && info[1] != null) {
-        		workItemTemplate.setAttribute("processName", info[1]);
+        		workItemTemplate.setAttribute("processName", info[1].replaceAll("\\s",""));
         	} else {
         		workItemTemplate.setAttribute("processName", "");
         	}
