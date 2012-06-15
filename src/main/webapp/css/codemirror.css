@@ -4,6 +4,10 @@
   border: 0px solid #eee;
 }
 
+.activeline {
+	background: #ffffff !important;
+}
+
 .CodeMirror-scroll {
   outline: none;
   height: 480px;

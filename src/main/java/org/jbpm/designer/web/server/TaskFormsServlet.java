@@ -46,7 +46,7 @@ public class TaskFormsServlet extends HttpServlet {
     private static final Logger _logger = Logger
             .getLogger(TaskFormsServlet.class);
     private static final String TASKFORMS_PATH = "taskforms";
-    private static final String FORMTEMPLATE_FILE_EXTENSION = ".ftl";
+    private static final String FORMTEMPLATE_FILE_EXTENSION = ".flt";
     
     @Override
     public void init(ServletConfig config) throws ServletException {

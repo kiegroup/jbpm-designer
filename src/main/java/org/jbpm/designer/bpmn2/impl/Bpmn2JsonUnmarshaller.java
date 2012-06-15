@@ -1508,7 +1508,7 @@ public class Bpmn2JsonUnmarshaller {
                             }
                             point = dcFactory.createPoint();
                             Bounds targetBounds = _bounds.get(association.getTargetRef().getId());
-                            point.setX(targetBounds.getX() + (targetBounds.getWidth()/2));
+                            point.setX(targetBounds.getX()); // TODO check
                             point.setY(targetBounds.getY() + (targetBounds.getHeight()/2));
                             edge.getWaypoint().add(point);
                             plane.getPlaneElement().add(edge);
@@ -2344,6 +2344,16 @@ public class Bpmn2JsonUnmarshaller {
                 properties.get("type"));
             association.getAnyAttribute().add(extensionEntry);
     	}
+    	if(properties.get("bordercolor") != null && properties.get("bordercolor").length() > 0) {
+        	if(!properties.get("bordercolor").equals(defaultBrColor)) {
+        		ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+        		EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                        	"http://www.jboss.org/drools", "bordercolor", false, false);
+        		EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+        				properties.get("bordercolor"));
+        		association.getAnyAttribute().add(extensionEntry);
+        	}
+        }
     }
     
     protected void applyStartEventProperties(StartEvent se, Map<String, String> properties) {
@@ -2390,13 +2400,45 @@ public class Bpmn2JsonUnmarshaller {
     }
 
     protected void applyTextAnnotationProperties(TextAnnotation ta, Map<String, String> properties) {
-        if(properties.get("text") != null) {
-            ta.setText(properties.get("text"));
+        if(properties.get("name") != null) {
+            ta.setText(properties.get("name"));
         } else {
             ta.setText("");
         }
         // default
         ta.setTextFormat("text/plain");
+        
+        if(properties.get("bordercolor") != null && properties.get("bordercolor").length() > 0) {
+        	if(!properties.get("bordercolor").equals(defaultBrColor)) {
+        		ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+        		EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                        	"http://www.jboss.org/drools", "bordercolor", false, false);
+        		EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+        				properties.get("bordercolor"));
+        		ta.getAnyAttribute().add(extensionEntry);
+        	}
+        }
+        
+        if(properties.get("fontsize") != null && properties.get("fontsize").length() > 0) {
+        	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+        	EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+        			"http://www.jboss.org/drools", "fontsize", false, false);
+        	EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+        			properties.get("fontsize"));
+        	ta.getAnyAttribute().add(extensionEntry);
+        }
+        
+        if(properties.get("fontcolor") != null && properties.get("fontcolor").length() > 0) {
+        	if(!properties.get("fontcolor").equals(defaultFontColor)) {
+        		ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+        		EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                        	"http://www.jboss.org/drools", "fontcolor", false, false);
+        		EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+        				properties.get("fontcolor"));
+        		ta.getAnyAttribute().add(extensionEntry);
+        	}
+        }
+        
     }
     
     protected void applyGroupProperties(Group group, Map<String, String> properties) {

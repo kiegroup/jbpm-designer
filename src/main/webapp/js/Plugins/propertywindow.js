@@ -2301,6 +2301,7 @@ Ext.form.ComplexExpressionField = Ext.extend(Ext.form.TriggerField,  {
             });
 		
 		var sourceEditor;
+		var hlLine;
 		
 		var dialog = new Ext.Window({ 
 			layout		: 'anchor',
@@ -2350,8 +2351,13 @@ Ext.form.ComplexExpressionField = Ext.extend(Ext.form.TriggerField,  {
 			  lineNumbers: true,
 			  lineWrapping: true,
 			  matchBrackets: true,
-			  extraKeys: {"Ctrl-Z": function(cm) {CodeMirror.hint(cm, CodeMirror.jbpmHint, dialog);}}
+			  extraKeys: {"Ctrl-Z": function(cm) {CodeMirror.hint(cm, CodeMirror.jbpmHint, dialog);}},
+			  onCursorActivity: function() {
+				  sourceEditor.setLineClass(hlLine, null, null);
+	 			     hlLine = sourceEditor.setLineClass(sourceEditor.getCursor().line, null, "activeline");
+	 		  }.bind(this)
 			});
+		hlLine = sourceEditor.setLineClass(0, "activeline");
 		this.grid.stopEditing();
 	}
 });

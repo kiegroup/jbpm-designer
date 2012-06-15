@@ -51,6 +51,49 @@ public class ServletUtil {
         return profile;
     }
 	
+	public static List<String> getFormWidgetList(IDiagramProfile profile) {
+		List<String> widgets = new ArrayList<String>();
+		String globalAreaURL = ExternalInfo.getExternalProtocol(profile)
+                + "://"
+                + ExternalInfo.getExternalHost(profile)
+                + "/"
+                + profile.getExternalLoadURLSubdomain().substring(0,
+                        profile.getExternalLoadURLSubdomain().indexOf("/"))
+                + "/rest/packages/globalArea/assets";
+		try {
+            XMLInputFactory factory = XMLInputFactory.newInstance();
+            XMLStreamReader reader = factory
+                    .createXMLStreamReader(ServletUtil.getInputStreamForURL(
+                    		globalAreaURL, "GET", profile));
+            String title = "";
+            String format = "";
+            while (reader.hasNext()) {
+                int next = reader.next();
+                if (next == XMLStreamReader.START_ELEMENT) {
+                    if ("title".equals(reader.getLocalName())) {
+                        title = reader.getElementText();
+                    }
+                    if ("format".equals(reader.getLocalName())) {
+                    	format = reader.getElementText();
+                    }
+                }
+                if (next == XMLStreamReader.END_ELEMENT) {
+                	if ("asset".equals(reader.getLocalName())) {
+                		if(title.length() > 0 && format.length() > 0 && format.equals("fw")) {
+                			widgets.add(title);
+                			title = "";
+                			format = "";
+                		}
+                	}
+                }
+            }
+        } catch (Exception e) {
+            // we dont want to barf..just log that error happened
+            _logger.error(e.getMessage());
+        }
+		return widgets;
+	}
+	
 	public static String[] findPackageAndAssetInfo(String uuid,
             IDiagramProfile profile) {
         List<String> packages = new ArrayList<String>();

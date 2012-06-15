@@ -1,0 +1,31 @@
+								<div id="categorydiv">
+								<label for="name">Video Category</label>
+                            		<script type='text/javascript'>
+                            			google.load('visualization', '1', {packages:['orgchart']});
+                            			google.setOnLoadCallback(drawVideoCategories);
+                            			function drawVideoCategories() {
+	                            			var data = new google.visualization.DataTable();
+									        data.addColumn('string', 'Technology');
+									        data.addColumn('string', 'Parent');
+									        data.addColumn('string', 'ToolTip');
+									        data.addRows([
+									          ['Drools/jBPM', '', 'Drools/jBPM'],
+									          ['Drools', 'Drools/jBPM', 'Drools'],
+									          ['jBPM', 'Drools/jBPM', 'jBPM'],
+									          ['BPMN2', 'jBPM', 'BPMN2'],
+									          ['Designer', 'jBPM', 'Designer'],
+									          ['Human Task', 'jBPM', 'Human Task'],
+									          ['Guvnor', 'Drools', 'Guvnor'],
+									          ['CEP', 'Drools', 'CEP']
+									        ]);
+									        var chart = new google.visualization.OrgChart(document.getElementById('videocategorydiv'));
+									        chart.draw(data, {allowHtml:true});
+									        
+									        google.visualization.events.addListener(chart, 'select', function() {
+									        	document.getElementById('category').value = data.getValue(chart.getSelection()[0].row, 0);
+											});
+										}
+                            		</script>
+                            		<div id='videocategorydiv'></div>
+                            		<input type="hidden" name="category" id="category" value="">
+                            		</div>

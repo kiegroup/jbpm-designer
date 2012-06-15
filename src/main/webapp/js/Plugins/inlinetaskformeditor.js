@@ -10,6 +10,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
 	taskformsourceeditor: undefined,
 	taskformcolorsourceeditor: undefined,
 	dialog: undefined,
+	hlLine: undefined,
 	
 	construct: function(facade){
 		this.facade = facade;
@@ -18,31 +19,51 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
 	},
 	showTaskFormEditor: function(options) {
 		if(options && options.tn) {
+			// load form widgets first
 			Ext.Ajax.request({
-	            url: ORYX.PATH + 'taskformseditor',
+	            url: ORYX.PATH + 'formwidget',
 	            method: 'POST',
 	            success: function(response) {
 	    	   		try {
-	    	   			this._buildandshow(options.tn, response.responseText);
+	    	   			var widgetJson = response.responseText.evalJSON();
+	    	   			// now the form editor
+	    	   			Ext.Ajax.request({
+	    		            url: ORYX.PATH + 'taskformseditor',
+	    		            method: 'POST',
+	    		            success: function(response) {
+	    		    	   		try {
+	    		    	   			this._buildandshow(options.tn, response.responseText, widgetJson);
+	    		    	   		} catch(e) {
+	    		    	   			Ext.Msg.alert('Error initiating Form Editor :\n' + e);
+	    		    	   		}
+	    		            }.bind(this),
+	    		            failure: function(){
+	    		            	Ext.Msg.alert('Error initiating Form Editor.');
+	    		            },
+	    		            params: {
+	    		            	action: 'load',
+	    		            	taskname: options.tn,
+	    		            	profile: ORYX.PROFILE,
+	    		            	uuid : ORYX.UUID
+	    		            }
+	    		        });
 	    	   		} catch(e) {
-	    	   			Ext.Msg.alert('Error initiating Form Editor :\n' + e);
+	    	   			Ext.Msg.alert('Error initiating Form Widgets :\n' + e);
 	    	   		}
 	            }.bind(this),
 	            failure: function(){
-	            	Ext.Msg.alert('Error initiating Form Editor.');
+	            	Ext.Msg.alert('Error initiating Form Widgets.');
 	            },
 	            params: {
-	            	action: 'load',
-	            	taskname: options.tn,
-	            	profile: ORYX.PROFILE,
-	            	uuid : ORYX.UUID
+	            	action: 'getwidgets',
+	            	profile: ORYX.PROFILE
 	            }
 	        });
 		} else {
 			Ext.Msg.alert('Task Name not specified.');
 		}
 	},
-	_buildandshow: function(tn, defaultsrc) {
+	_buildandshow: function(tn, defaultsrc, widgetJson) {
 		var formvalue = "";
 		if(defaultsrc && defaultsrc != "false") {
 			formvalue = defaultsrc;
@@ -56,6 +77,65 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
 	     	 enableSourceEdit: false,
 	         autoScroll: true
 	       });
+		
+		var widgetKeys = [];
+	    for (var key in widgetJson) {
+	      if (widgetJson.hasOwnProperty(key)) {
+	    	  widgetKeys.push(key);
+	      }
+	    }
+	    var displayWidgetKeys = [];
+	    for (var i = 0; i < widgetKeys.length; i++) {
+	    	displayWidgetKeys[i] = [widgetKeys[i] + ""];
+	    }
+	    
+	    var widgetStore = new Ext.data.SimpleStore({
+			fields: ["name"],
+			data : displayWidgetKeys 
+		});
+	    
+	    var widgetCombo = new Ext.form.ComboBox({
+	    	fieldLabel: 'Insert form widget',
+            labelStyle: 'width:240px',
+            hiddenName: 'widget_name',
+            emptyText: 'Insert form widget...',
+            store: widgetStore,
+            displayField: 'name',
+            valueField: 'name',
+            mode: 'local',
+            typeAhead: true,
+            triggerAction: 'all',
+            listeners: 
+              { 
+            	select: { 
+            		fn:function(combo, value) {
+            			if(this.taskformcolorsourceeditor && this.sourceMode) {
+            				Ext.Ajax.request({
+    	    		            url: ORYX.PATH + 'formwidget',
+    	    		            method: 'POST',
+    	    		            success: function(response) {
+    	    		    	   		try {
+    	    		    	   			this.taskformcolorsourceeditor.replaceSelection(response.responseText, "end");
+    	    		    	   		} catch(e) {
+    	    		    	   			Ext.Msg.alert('Error inserting Form Widget :\n' + e);
+    	    		    	   		}
+    	    		            }.bind(this),
+    	    		            failure: function(){
+    	    		            	Ext.Msg.alert('Error inserting Form Widget.');
+    	    		            },
+    	    		            params: {
+    	    		            	action: 'getwidgetsource',
+    	    		            	profile: ORYX.PROFILE,
+    	    		            	widgetname: combo.getValue()
+    	    		            }
+    	    		        });
+            			} else {
+            				Ext.Msg.alert('Widget insertion is only possible in Source Mode');
+            			}
+                    }.bind(this)
+                }  
+             }
+	    });
 		
 		this.dialog = new Ext.Window({
 			id          : 'maineditorwindow',
@@ -163,11 +243,16 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                 	 			  extraKeys: {
                 	 				"'>'": function(cm) { cm.closeTag(cm, '>'); },
                 	 				"'/'": function(cm) { cm.closeTag(cm, '/'); }
-                	 			  }
+                	 			  },
+                	 			  onCursorActivity: function() {
+                	 				 this.taskformcolorsourceeditor.setLineClass(this.hlLine, null, null);
+                	 			     this.hlLine = this.taskformcolorsourceeditor.setLineClass(this.taskformcolorsourceeditor.getCursor().line, null, "activeline");
+                	 			  }.bind(this)
                 	 			});
+                	    	    this.hlLine = this.taskformcolorsourceeditor.setLineClass(0, "activeline");
                 	      }
                 	   }.bind(this)
-                     }
+                     },widgetCombo
             ]
 		});		
 		this.dialog.show();

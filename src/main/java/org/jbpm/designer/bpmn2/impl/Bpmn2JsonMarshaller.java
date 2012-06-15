@@ -2251,11 +2251,19 @@ public class Bpmn2JsonMarshaller {
     protected void marshallAssociation(Association association, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Definitions def) throws JsonGenerationException, IOException {
     	Map<String, Object> properties = new LinkedHashMap<String, Object>();
         Iterator<FeatureMap.Entry> iter = association.getAnyAttribute().iterator();
+        boolean foundBrColor = false;
         while(iter.hasNext()) {
             FeatureMap.Entry entry = iter.next();
             if(entry.getEStructuralFeature().getName().equals("type")) {
             	properties.put("type", entry.getValue());
             }
+            if(entry.getEStructuralFeature().getName().equals("bordercolor")) {
+            	properties.put("bordercolor", entry.getValue());
+            	foundBrColor = true;
+            }
+        }
+        if(!foundBrColor) {
+        	properties.put("bordercolor", defaultSequenceflowColor);
         }
         
         marshallProperties(properties, generator);
@@ -2292,16 +2300,47 @@ public class Bpmn2JsonMarshaller {
             generator.writeEndObject();
         }
         generator.writeStartObject();
-        generator.writeObjectField("x", targetBounds.getWidth() / 2);
-        generator.writeObjectField("y", targetBounds.getHeight() / 2);
+        generator.writeObjectField("x", 0); 
+        if(sourceBounds.getY() < targetBounds.getY()) {
+        	generator.writeObjectField("y", 0);
+        } else {
+        	generator.writeObjectField("y", targetBounds.getHeight());
+        }
         generator.writeEndObject();
         generator.writeEndArray();
     }
 
     protected void marshallTextAnnotation(TextAnnotation textAnnotation, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Definitions def)  throws JsonGenerationException, IOException{
     	Map<String, Object> properties = new LinkedHashMap<String, Object>();
-    	properties.put("text", textAnnotation.getText());
+    	properties.put("name", textAnnotation.getText());
     	properties.put("artifacttype", "Annotation");
+    	
+    	Iterator<FeatureMap.Entry> iter = textAnnotation.getAnyAttribute().iterator();
+    	boolean foundBrColor = false;
+    	boolean foundFontColor = false;
+        while(iter.hasNext()) {
+            FeatureMap.Entry entry = iter.next();
+            if(entry.getEStructuralFeature().getName().equals("bordercolor")) {
+            	properties.put("bordercolor", entry.getValue());
+            	foundBrColor = true;
+            }
+            if(entry.getEStructuralFeature().getName().equals("fontsize")) {
+            	properties.put("fontsize", entry.getValue());
+            	foundBrColor = true;
+            }
+            if(entry.getEStructuralFeature().getName().equals("fontcolor")) {
+            	properties.put("fontcolor", entry.getValue());
+            	foundFontColor = true;
+            }
+        }
+        
+        if(!foundBrColor) {
+        	properties.put("bordercolor", defaultBrColor);
+        }
+        
+        if(!foundFontColor) {
+        	properties.put("fontcolor", defaultFontColor);
+        }
     	
 	    marshallProperties(properties, generator);
         

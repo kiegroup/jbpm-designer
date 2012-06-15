@@ -75,6 +75,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     private String default_servicenodeicon;
     private String default_widconfigtemplate;
     private String themeInfo;
+    private String formWidgetsDir;
     
     public JbpmPreprocessingUnit(ServletContext servletContext) {
         stencilPath = servletContext.getRealPath("/" + STENCILSET_PATH);
@@ -87,6 +88,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         default_servicenodeicon = servletContext.getRealPath(  "/defaults/defaultservicenodeicon.png");
         default_widconfigtemplate = servletContext.getRealPath("/defaults/WorkDefinitions.wid.st");
         themeInfo = servletContext.getRealPath("/defaults/themes.json");
+        formWidgetsDir = servletContext.getRealPath("/defaults/formwidgets");
     }
     
     public String getOutData() {
@@ -107,9 +109,10 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         
         // set up color theme info
         Map<String, ThemeInfo> themeData = setupThemes(profile, req);
-        System.out.println("Setting up default icons");
+        // set up form widgets
+        setupFormWidgets(profile, req);
+        // set up default icons
         setupDefaultIcons(info, profile);
-        System.out.println("End setting up default icons");
         
         // figure out which package our uuid belongs in and get back the list of configs
         Map<String, List<String>> workitemConfigInfo = findWorkitemInfoForUUID(uuid, packageNames, profile);
@@ -278,6 +281,55 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             }
         }
         return resultsMap;
+    }
+    
+    private void setupFormWidgets(IDiagramProfile profile, HttpServletRequest req) {
+    	String formWidgetsPackageURL = ExternalInfo.getExternalProtocol(profile)
+                + "://"
+                + ExternalInfo.getExternalHost(profile)
+                + "/"
+                + profile.getExternalLoadURLSubdomain().substring(0,
+                        profile.getExternalLoadURLSubdomain().indexOf("/"))
+                + "/rest/packages/globalArea/assets/";
+    	File[] allFormWidgets = new File(formWidgetsDir).listFiles();
+    	for(File formWidget : allFormWidgets) {
+    		int extPosition = formWidget.getName().lastIndexOf(".");
+    		String widgetNameOnly = formWidget.getName().substring(0,extPosition);
+    		String widgetURL = ExternalInfo.getExternalProtocol(profile)
+                    + "://"
+                    + ExternalInfo.getExternalHost(profile)
+                    + "/"
+                    + profile.getExternalLoadURLSubdomain().substring(0,
+                            profile.getExternalLoadURLSubdomain().indexOf("/"))
+                    + "/rest/packages/globalArea/assets/" + widgetNameOnly;
+    		try {
+	    		URL checkURL = new URL(widgetURL);
+		        HttpURLConnection checkConnection = (HttpURLConnection) checkURL.openConnection();
+		        ServletUtil.applyAuth(profile, checkConnection);
+		        checkConnection.setRequestMethod("GET");
+		        checkConnection.connect();
+		        _logger.info("check connection response code: " + checkConnection.getResponseCode());
+		        if (checkConnection.getResponseCode() != 200) {
+		        	URL createURL = new URL(formWidgetsPackageURL);
+		            HttpURLConnection createConnection = (HttpURLConnection) createURL
+		                    .openConnection();
+		            ServletUtil.applyAuth(profile, createConnection);
+		            createConnection.setRequestMethod("POST");
+		            createConnection.setRequestProperty("Content-Type",
+		                    "application/octet-stream");
+		            createConnection.setRequestProperty("Accept",
+		                    "application/atom+xml");
+		            createConnection.setRequestProperty("Slug", formWidget.getName());
+		            createConnection.setDoOutput(true);
+		            createConnection.getOutputStream().write(getBytesFromFile(formWidget));
+		            createConnection.connect();
+		            _logger.info("create form widget connection response code: " + createConnection.getResponseCode());
+		        }
+    		} catch (Exception e) {
+                // we dont want to barf..just log that error happened
+                _logger.error("Error setting up form widgets: " + e.getMessage());
+            } 
+    	}
     }
     
     private Map<String, ThemeInfo> setupThemes(IDiagramProfile profile, HttpServletRequest req) {

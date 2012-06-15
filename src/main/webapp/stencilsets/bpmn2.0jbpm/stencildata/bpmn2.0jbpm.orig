@@ -6017,18 +6017,6 @@
 			],
 			"properties" : 		[
 				{
-					"id":"text",
-					"type":"String",
-					"title":"Text",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"text",
-					"length":"",
-					"wrapLines":true
-				},
-				{
 					"id":"bordercolor",
 					"type":"Color",
 					"title":"BorderColor",
@@ -10291,22 +10279,22 @@
 					]
 				},
 				{
-					"id":"bgcolor",
+					"id":"bordercolor",
 					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"$colortheme.("Connecting Objects").bgColor$", 
+					"title":"BorderColor",
+					"value":"$colortheme.("Connecting Objects").borderColor$",
 					"description":"",
 					"readonly":false,
 					"optional":false,
-					"refToView": ["start", "end", "frame2"],
-					"fill":true,
-					"stroke":false
+					"refToView": ["_1", "_2", "_3", "_4", "_5", "_6", "_7", "_8", "_9", "_10", "start", "conditional", "default", "end", "frame2"],
+					"fill":false,
+					"stroke":true
 				},
 				{
-					"id":"origbgcolor",
+					"id":"origbordercolor",
 					"type":"Color",
-					"title":"Original Background Color",
-					"value":"$colortheme.("Connecting Objects").bgColor$",
+					"title":"Original Border Color",
+					"value":"$colortheme.("Connecting Objects").borderColor$",
 					"description":"",
 					"readonly":false,
 					"optional":true,

@@ -1,0 +1,265 @@
+<html>
+<body>
+<div id="scont"></div>
+<style type="text/css">
+	#container
+	{
+		margin: 0 auto;
+		width: 600px;
+		background:#fff;
+	}
+
+	#header
+	{
+		background: #ccc;
+		padding: 20px;
+		font-family:Arial, Helvetica, sans-serif;
+		font-size: 125%;
+		letter-spacing: -1px;
+		font-weight: bold;
+		line-height: 1.1;
+		color:#666;
+	}
+
+	#header h1 { margin: 0; }
+
+	#content
+	{
+		clear: left;
+		padding: 20px;
+	}
+
+	#content h2
+	{
+		color: #000;
+		font-size: 160%;
+		margin: 0 0 .5em;
+	}
+
+	#footer
+	{
+		background: #ccc;
+		text-align: right;
+		padding: 20px;
+		height: 1%;
+	}
+	
+	fieldset {
+		border:1px dashed #CCC;
+		padding:10px;
+		margin-top:20px;
+		margin-bottom:20px;
+	}
+	legend {
+		font-family:Arial, Helvetica, sans-serif;
+		font-size: 90%;
+		letter-spacing: -1px;
+		font-weight: bold;
+		line-height: 1.1;
+		color:#fff;
+		background: #666;
+		border: 1px solid #333;
+		padding: 2px 6px;
+	}
+	.form {
+		margin:0;
+		padding:0;
+	}
+	label {
+		width:140px;
+		height:32px;
+		margin-top:3px;
+		margin-right:2px;
+		padding-top:11px;
+		padding-left:6px;
+		background-color:#CCCCCC;
+		float:left;
+		display: block;
+		font-family:Arial, Helvetica, sans-serif;
+		font-size: 115%;
+		letter-spacing: -1px;
+		font-weight: normal;
+		line-height: 1.1;
+		color:#666;
+	}
+	.div_texbox {
+		width:347px;
+		float:right;
+		background-color:#E6E6E6;
+		height:35px;
+		margin-top:3px;
+		padding-top:5px;
+		padding-bottom:3px;
+		padding-left:5px;
+	}
+	.div_checkbox {
+		width:347px;
+		float:right;
+		background-color:#E6E6E6;
+		height:35px;
+		margin-top:3px;
+		padding-top:5px;
+		padding-bottom:3px;
+		padding-left:5px;
+	}
+	.textbox {
+		background-color:#FFFFFF;
+		background-repeat: no-repeat;
+		background-position:left;
+		width:285px;
+		font:normal 18px Arial;
+		color: #999999;
+		padding:3px 5px 3px 19px;
+	}
+	.checkbox {
+		background-color:#FFFFFF;
+		background-repeat: no-repeat;
+		background-position:left;
+		width:285px;
+		font:normal 18px Arial;
+		color: #999999;
+		padding:3px 5px 3px 19px;
+	}
+	.textbox:focus, .textbox:hover {
+		background-color:#F0FFE6;
+	}
+	.button_div {
+		width:287px;
+		float:right;
+		background-color:#fff;
+		border:1px solid #ccc;
+		text-align:right;
+		height:35px;
+		margin-top:3px;
+		padding:5px 32px 3px;
+	}
+	.buttons {
+		background: #e3e3db;
+		font-size:12px; 
+		color: #989070; 
+		padding: 6px 14px;
+		border-width: 2px;
+		border-style: solid;
+		border-color: #fff #d8d8d0 #d8d8d0 #fff;
+		text-decoration: none;
+		text-transform:uppercase;
+		font-weight:bold;
+	}
+</style>
+<script src="http://www.google.com/jsapi" type="text/javascript"></script>
+<script type="text/javascript">
+	function showVideoInfo(feed) {
+      updateVideo();
+      if(feed.entry.title) {updateTitle(feed.entry.title.$t);} else {updateTitle("");}
+	  if(feed.entry.published) {updatePublished(feed.entry.published.$t);} else {updatePublished("");}	
+	  if(feed.entry.updated) {updateLastUpdated(feed.entry.updated.$t);} else {updateLastUpdated("");}
+	  if(feed.entry.author[0]) {updateAuthor(feed.entry.author[0].name.$t);} else {updateAuthor("");}
+	  if(feed.entry.gd$rating) {updateRating(feed.entry.gd$rating.average);} else {updateRating("");}
+	  if(feed.entry.yt$statistics) {updateViewCount(feed.entry.yt$statistics.viewCount);} else {updateViewCount("");}
+	  if(feed.entry.yt$rating) {updateLikes(feed.entry.yt$rating.numLikes);} else {updateLikes("");}
+	  if(feed.entry.yt$rating) {updateDislikes(feed.entry.yt$rating.numDislikes);} else {updateDislikes("");}
+	 }         
+    
+    function updateVideo() {
+    	var ifrm = document.createElement("embed"); 
+   			  ifrm.setAttribute("src", "${videoIn}"); 
+              ifrm.setAttribute("type", "application/x-shockwave-flash");
+              ifrm.setAttribute("wmode", "transparent"); 
+              ifrm.setAttribute("autoplay", "0");
+              ifrm.style.width = 560+"px"; 
+              ifrm.style.height = 315+"px";
+              document.getElementById("previewplayer").appendChild(ifrm);
+    }
+    function updateTitle(title) {
+    	document.getElementById("title").innerHTML = title;
+    	document.getElementById('titleOut').value= title;
+    }
+    function updatePublished(p) {
+    	document.getElementById("published").innerHTML = p;
+    }
+    function updateLastUpdated(lu) {
+    	document.getElementById("lastupdated").innerHTML = lu;
+    }
+    function updateAuthor(a) {
+    	document.getElementById("author").innerHTML = a;
+    }
+    function updateRating(r) {
+    	document.getElementById("rating").innerHTML = r;
+    }
+    function updateViewCount(vc) {
+    	document.getElementById("viewcount").innerHTML = vc;
+    }
+    function updateLikes(l) {
+    	document.getElementById("likes").innerHTML = l;
+    }
+    function updateDislikes(dl) {
+    	document.getElementById("dislikes").innerHTML = dl;
+    }
+
+
+	var videourl = "${videoIn}";
+	var videoid = videourl.slice(0,videourl.indexOf("?"));
+	videoid = videoid.slice(videoid.lastIndexOf("/")+1,videoid.length);
+	var dataURL = "https://gdata.youtube.com/feeds/api/videos/" + videoid + "?v=2&alt=json&format=5&callback=showVideoInfo";
+	
+	var s_tag = document.createElement('script');
+	s_tag.src = dataURL;
+    document.getElementById("scont").appendChild(s_tag);
+	
+</script>
+<div id="container">
+	<div id="header">
+		<img src="http://i.imgur.com/H2Sgr.png"/>&nbsp; Video Approval
+	</div>
+	<div id="content">
+		<fieldset>
+            <legend>Video</legend>
+            <div id="previewplayer"></div>
+        </fieldset>
+	    <fieldset>
+            <legend>Video Info</legend>
+            	<label for="name">Title</label>
+            	<div class="div_checkbox" id="title"></div>
+            	<label for="name">Category</label>
+            	<div class="div_checkbox">${categoryIn}</div>
+            	<label for="name">Published</label>
+            	<div class="div_checkbox" id="published"></div>
+            	<label for="name">Last Updated</label>
+            	<div class="div_checkbox" id="lastupdated"></div>
+            	<label for="name">Author</label>
+            	<div class="div_checkbox" id="author"></div>
+            	<label for="name">Rating</label>
+            	<div class="div_checkbox" id="rating"></div>
+            	<label for="name">Views</label>
+            	<div class="div_checkbox" id="viewcount"></div>
+            	<label for="name">Likes</label>
+            	<div class="div_checkbox" id="likes"></div>
+            	<label for="name">Dislikes</label>
+            	<div class="div_checkbox" id="dislikes"></div>
+            <div class="clear"></div>
+          </fieldset>
+          <fieldset>
+            <legend>Actions</legend>
+            <form action="complete" method="POST" enctype="multipart/form-data">
+              <input type="hidden" name="titleOut" id="titleOut" value="">
+              <label for="name">Comment</label>
+              <div class="div_texbox">
+              	<input name="commentOut" type="text" class="textbox" id="commentOut" value="" />
+              </div>
+              <div class="button_div">
+                <input name="outcomeOut" type="submit" value="Approve" class="buttons">
+                <input name="outcomeOut" type="submit" value="Deny" class="buttons">
+              </div>
+            </form>
+            <div class="clear"></div>
+          </fieldset>
+          
+		
+	</div>
+	<div id="footer">
+	</div>
+</div>
+</body>
+</html>
+  
+

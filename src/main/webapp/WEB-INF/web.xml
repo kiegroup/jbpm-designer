@@ -84,6 +84,11 @@
   <servlet-class>org.jbpm.designer.web.server.ThemeServlet</servlet-class>
  </servlet>
  <servlet>
+  <display-name>FormWidget</display-name>
+  <servlet-name>FormWidgetServlet</servlet-name>
+  <servlet-class>org.jbpm.designer.web.server.FormWidgetServlet</servlet-class>
+ </servlet>
+ <servlet>
   <display-name>CalledElement</display-name>
   <servlet-name>CalledElementServlet</servlet-name>
   <servlet-class>org.jbpm.designer.web.server.CalledElementServlet</servlet-class>
@@ -171,6 +176,10 @@
  <servlet-mapping>
   <servlet-name>ThemesServlet</servlet-name>
   <url-pattern>/themes</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>FormWidgetServlet</servlet-name>
+  <url-pattern>/formwidget</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
   <servlet-name>CalledElementServlet</servlet-name>
