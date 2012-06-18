@@ -699,7 +699,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     
     private String readFile(String pathname) throws IOException {
         StringBuilder fileContents = new StringBuilder();
-        Scanner scanner = new Scanner(new File(pathname));
+        Scanner scanner = new Scanner(new File(pathname), "UTF-8");
         String lineSeparator = System.getProperty("line.separator");
         try {
             while(scanner.hasNextLine()) {        
