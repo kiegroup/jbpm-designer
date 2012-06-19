@@ -5,10 +5,12 @@ import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.net.HttpURLConnection;
@@ -681,7 +683,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     
     private void createAndWriteToFile(String file, String content) throws Exception {
         Writer output = null;
-        output = new BufferedWriter(new FileWriter(file));
+        output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
         output.write(content);
         output.close();
         _logger.info("Created file:" + file);
