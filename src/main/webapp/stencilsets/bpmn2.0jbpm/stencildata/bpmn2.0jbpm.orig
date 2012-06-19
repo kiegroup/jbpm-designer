@@ -10237,7 +10237,7 @@
 				"ConnectingObjectsMorph"
 			],			
 			"propertyPackages" : [
-			    "dataAssociation"
+			    "baseAttributes"
 			],
 			"properties" : [
 				{
@@ -10318,7 +10318,7 @@
 				"Directed_Association"
 			],
 			"propertyPackages" : [
-			    "dataAssociation"
+			    "baseAttributes"
 			],
 			"properties" : [
                 {

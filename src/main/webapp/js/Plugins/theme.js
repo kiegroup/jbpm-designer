@@ -79,9 +79,15 @@ ORYX.Plugins.Theme = Clazz.extend({
 		var childthemestr = themeObj[childgroup];
 		if(childthemestr && child.properties["oryx-isselectable"] != "false") { 
 			var themestrparts = childthemestr.split("|");
-			child.setProperty("oryx-bgcolor", themestrparts[0]);
-			child.setProperty("oryx-bordercolor", themestrparts[1]);
-			child.setProperty("oryx-fontcolor", themestrparts[2]);
+			if(child.properties["oryx-bgcolor"] != undefined) {
+				child.setProperty("oryx-bgcolor", themestrparts[0]);
+			}
+			if(child.properties["oryx-bordercolor"] != undefined) {
+				child.setProperty("oryx-bordercolor", themestrparts[1]);
+			}
+			if(child.properties["oryx-fontcolor"] != undefined) {
+				child.setProperty("oryx-fontcolor", themestrparts[2]);
+			}
 			child.refresh();
 		}
 		if(child.getChildNodes().size() > 0) {
