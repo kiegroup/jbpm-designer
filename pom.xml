@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.jboss.drools</groupId>
   <artifactId>process-designer</artifactId>
-  <version>2.2.0-SNAPSHOT</version>
+  <version>2.2.1.Final-SNAPSHOT</version>
   <packaging>war</packaging>
   
   <description>Designer</description>
@@ -25,14 +25,14 @@
   
   <scm>
   	<connection>scm:git:git@github.com:tsurdilo/process-designer.git</connection>
-    <developerConnection>scm:git:git@github.com:tsurdilo/process-designer.git</developerConnection>
     <url>https://github.com/tsurdilo/process-designer</url>
+    <developerConnection>scm:git:git@github.com:tsurdilo/process-designer.git</developerConnection>
   </scm>
   
   <properties>
     <mvel.version>2.1.0.drools8</mvel.version>
-    <drools.version>5.3.2-SNAPSHOT</drools.version>
-    <jbpm.version>5.2.1-SNAPSHOT</jbpm.version>
+    <drools.version>5.3.2.Final</drools.version>
+    <jbpm.version>5.2.1.Final</jbpm.version>
     <batik.version>1.6-1</batik.version>
   </properties>
 
@@ -533,6 +533,11 @@
             </configuration>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.3.1</version>
       </plugin>
     </plugins>
   </build>
