@@ -31,7 +31,6 @@
 		"EndCancelEvent",
 		"EndSignalEvent",
 		"EventbasedGateway",
-		"ComplexGateway",
 		"Lane",
 		"IntermediateEvent",
 		"IntermediateEscalationEventThrowing",
