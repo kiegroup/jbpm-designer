@@ -5365,7 +5365,7 @@
 				"GatewaysMorph"
 			]
 		},
-		{
+		/** {
 			"type": "node",
 			"id":"ComplexGateway",
 			"title":"Complex Gateway",
@@ -5493,7 +5493,7 @@
 				"fromtoall",
 				"GatewaysMorph"
 			]
-		},
+		}, **/
 		
 		// Swimlanes
 		/** {
