@@ -141,32 +141,32 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
         			addError(defaultResourceId, "Process has no end node.");
         		}
         		
-        		checkFlowElements(process);
+        		checkFlowElements(process, process);
         	}
         }
 	}
 	
-	private void checkFlowElements(FlowElementsContainer container) {
+	private void checkFlowElements(FlowElementsContainer container, Process process) {
 		
 		for(FlowElement fe : container.getFlowElements()) {
 			if(fe instanceof StartEvent) {
 				StartEvent se = (StartEvent) fe;
-				if(se.getOutgoing() == null && se.getOutgoing().size() < 1) {
+				if(se.getOutgoing() == null || se.getOutgoing().size() < 1) {
 					addError(se, "Start node has no outgoing connections");
 				}
 			} else if (fe instanceof EndEvent) {
 				EndEvent ee = (EndEvent) fe;
-				if(ee.getIncoming() == null && ee.getIncoming().size() < 1) {
-					addError(ee, "End node has no outgoing connections");
+				if(ee.getIncoming() == null || ee.getIncoming().size() < 1) {
+					addError(ee, "End node has no incoming connections");
 				}
 			} else {
 				if(fe instanceof FlowNode) {
 					FlowNode fn = (FlowNode) fe;
-					if(fn.getOutgoing() == null && fn.getOutgoing().size() < 1) {
+					if((fn.getOutgoing() == null || fn.getOutgoing().size() < 1) && !isAdHocProcess(process)) {
     					addError(fn, "Node has no outgoing connections");
     				}
-					if(fn.getIncoming() == null && fn.getIncoming().size() < 1) {
-    					addError(fn, "Node has no outgoing connections");
+					if((fn.getIncoming() == null || fn.getIncoming().size() < 1) && !isAdHocProcess(process)) {
+    					addError(fn, "Node has no incoming connections");
     				}
 				}
 			}
@@ -401,7 +401,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 			}
 			
 			if(fe instanceof SubProcess) {
-				checkFlowElements((SubProcess) fe);
+				checkFlowElements((SubProcess) fe, process);
 			}
 		}
 	}
