@@ -93,7 +93,7 @@ public class ThemeServlet extends HttpServlet {
 			} 
 		} catch (Exception e) {
 			_logger.error("Error retriving color theme info: " + e.getMessage());
-		} 
+		}
         return retStr;
 	}
 	
