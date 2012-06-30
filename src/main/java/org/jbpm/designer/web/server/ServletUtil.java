@@ -176,15 +176,7 @@ public class ServletUtil {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
         connection.setRequestMethod(requestMethod);
-//        connection
-//                .setRequestProperty(
-//                        "User-Agent",
-//                        "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2.16) Gecko/20110319 Firefox/3.6.16");
-//        connection
-//                .setRequestProperty("Accept",
-//                        "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-        // connection.setRequestProperty("Accept-Language", "en-us,en;q=0.5");
-        // connection.setRequestProperty("Accept-Encoding", "gzip,deflate");
+        connection.setRequestProperty("Accept","text/html,application/xhtml+xml,application/xml");
         connection.setRequestProperty("charset", "UTF-8");
         connection.setReadTimeout(5 * 1000);
 
