@@ -22,8 +22,7 @@ import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.designer.web.profile.impl.ExternalInfo;
 import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
-
-import sun.misc.BASE64Encoder;
+import org.apache.commons.codec.binary.Base64;
 
 /**
  * Utility class for web servlets.
@@ -176,7 +175,8 @@ public class ServletUtil {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
         connection.setRequestMethod(requestMethod);
-        connection.setRequestProperty("Accept","text/html,application/xhtml+xml,application/xml");
+        connection.setRequestProperty("Accept","text/html,application/xhtml+xml,application/xml,application/json,text/json,text/plain;q=0.9,*/*;q=0.8");
+
         connection.setRequestProperty("charset", "UTF-8");
         connection.setReadTimeout(5 * 1000);
 
@@ -197,18 +197,15 @@ public class ServletUtil {
                 "UTF-8"));
     }
 	
-	public static void applyAuth(IDiagramProfile profile,
-			HttpURLConnection connection) {
+	public static void applyAuth(IDiagramProfile profile, HttpURLConnection connection) {
 		if (profile.getUsr() != null && profile.getUsr().trim().length() > 0
 				&& profile.getPwd() != null
 				&& profile.getPwd().trim().length() > 0) {
-			BASE64Encoder enc = new sun.misc.BASE64Encoder();
-			String userpassword = profile.getUsr() + ":" + profile.getPwd();
-			String encodedAuthorization = enc.encode(userpassword.getBytes());
-			connection.setRequestProperty("Authorization", "Basic "
-					+ encodedAuthorization);
+			String auth = profile.getUsr() + ":" + profile.getPwd();
+	        connection.setRequestProperty("Authorization", "Basic "
+	                + Base64.encodeBase64String(auth.getBytes()));
 		}
-	}
+    }
 	
 	public static boolean assetExistsInGuvnor(String packageName, String assetName, IDiagramProfile profile) {
     	try {	
