@@ -1,11 +1,14 @@
 package org.jbpm.designer.web.server;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Scanner;
 
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +32,7 @@ public class ThemeServlet extends HttpServlet {
 	private static final String DEFAULT_THEME = "jBPM";
 	private static final Logger _logger = Logger.getLogger(ThemeServlet.class);
 	private ServletConfig config;
+	private String themeInfo;
 	
 	@Override
     public void init(ServletConfig config) throws ServletException {
@@ -51,7 +55,7 @@ public class ThemeServlet extends HttpServlet {
 			resp.setCharacterEncoding("UTF-8");
 			pw.write(themeStr);
 		} else if(action != null && action.equals(ACTION_GETTHEMEJSON)) {
-			String themeJSON = getThemeJson(profile);
+			String themeJSON = getThemeJson(profile, getServletContext());
 			PrintWriter pw = resp.getWriter();
 			resp.setContentType("text/plain");
 			resp.setCharacterEncoding("UTF-8");
@@ -59,7 +63,7 @@ public class ThemeServlet extends HttpServlet {
 		}
 	}
 	
-	private String getThemeJson(IDiagramProfile profile) {
+	private String getThemeJson(IDiagramProfile profile, ServletContext servletContext) {
 		String retStr = "";
 		String themesURL = ExternalInfo.getExternalProtocol(profile)
                 + "://"
@@ -90,7 +94,9 @@ public class ThemeServlet extends HttpServlet {
 			_logger.info("check connection response code: " + checkConnection.getResponseCode());
 			if (checkConnection.getResponseCode() == 200) {
 				retStr = ServletUtil.streamToString(ServletUtil.getInputStreamForURL(themesSourceURL, "GET", profile));
-			} 
+			} else {
+				retStr = readFile(servletContext.getRealPath("/defaults/themes.json"));
+			}
 		} catch (Exception e) {
 			_logger.error("Error retriving color theme info: " + e.getMessage());
 		}
@@ -143,4 +149,18 @@ public class ThemeServlet extends HttpServlet {
 		} 
         return themesStr;
 	}
+	
+	private String readFile(String pathname) throws IOException {
+        StringBuilder fileContents = new StringBuilder();
+        Scanner scanner = new Scanner(new File(pathname), "UTF-8");
+        String lineSeparator = System.getProperty("line.separator");
+        try {
+            while(scanner.hasNextLine()) {        
+                fileContents.append(scanner.nextLine() + lineSeparator);
+            }
+            return fileContents.toString();
+        } finally {
+            scanner.close();
+        }
+    }
 }

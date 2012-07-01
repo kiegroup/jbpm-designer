@@ -105,12 +105,11 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     public void preprocess(HttpServletRequest req, HttpServletResponse res, IDiagramProfile profile) {
         String uuid = req.getParameter("uuid");
         outData = "";
+        Map<String, ThemeInfo> themeData = setupThemes(profile, req);
         // check with guvnor to see what packages exist
         List<String> packageNames = findPackages(uuid, profile);
         String[] info = ServletUtil.findPackageAndAssetInfo(uuid, profile);
         
-        // set up color theme info
-        Map<String, ThemeInfo> themeData = setupThemes(profile, req);
         // set up form widgets
         setupFormWidgets(profile, req);
         // set up default icons
@@ -386,7 +385,14 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 	            _logger.info("create themes connection response code: " + createConnection.getResponseCode());
 	        }
 	        
-	        JSONObject themesObject =  new JSONObject(ServletUtil.streamToString(ServletUtil.getInputStreamForURL(themesSourceURL, "GET", profile)));
+	        String themesStr;
+			try {
+				themesStr = ServletUtil.streamToString(ServletUtil.getInputStreamForURL(themesSourceURL, "GET", profile));
+			} catch (Exception e) {
+				themesStr = readFile(themeInfo);
+			}
+	        
+	        JSONObject themesObject =  new JSONObject(themesStr);
 	        
 	        // get the theme name from cookie if exists or default
 	        String themeName = DEFAULT_THEME_NAME;
