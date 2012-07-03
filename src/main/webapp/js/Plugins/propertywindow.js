@@ -502,7 +502,7 @@ ORYX.Plugins.PropertyWindow = {
 	createProperties: function() {
 		this.properties = [];
 		this.popularProperties = [];
-
+		
 		if(this.shapeSelection.commonProperties) {
 			
 			// add new property lines
@@ -703,6 +703,20 @@ ORYX.Plugins.PropertyWindow = {
 								grid:this.grid,
 								row:index,
 								facade:this.facade
+							});
+							cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1,field:cf});							
+							editorGrid = new Ext.Editor(cf);
+							break;
+							
+						case ORYX.CONFIG.TYPE_CUSTOM:
+							var cf = new Ext.form.ComplexCustomField({
+								allowBlank: pair.optional(),
+								dataSource:this.dataSource,
+								grid:this.grid,
+								row:index,
+								facade:this.facade,
+								title:pair.title(),
+								attr:attribute
 							});
 							cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1,field:cf});							
 							editorGrid = new Ext.Editor(cf);
@@ -1402,6 +1416,99 @@ Ext.form.ComplexTextField = Ext.extend(Ext.form.TriggerField,  {
 		this.grid.stopEditing();
 		grid.focus( false, 100 );
 		
+	}
+});
+
+Ext.form.ComplexCustomField = Ext.extend(Ext.form.TriggerField,  {
+	onTriggerClick : function() {
+    	if(this.disabled){
+            return;
+        }
+    	//alert("title: " + this.title);
+    	// Call below code through your any srcUpdate function.
+    	//Ext.getDom('iframe-win').src = "http://www.yahoo.com";
+    	// tihomir
+    	
+    	Ext.Ajax.request({
+            url: ORYX.PATH + 'customeditors',
+            method: 'POST',
+            success: function(response) {
+    	   		try {
+    	   			if(response.responseText && response.responseText.length > 0) {
+    	   				var customEditorsJSON = response.responseText.evalJSON();
+    	   				var customEditorsObj = customEditorsJSON["editors"];
+    	   				if(customEditorsObj[this.title]) {
+    	   					var dialog = new Ext.Window({ 
+    	   						layout		: 'anchor',
+    	   						autoCreate	: true, 
+    	   						title		: 'Custom Editor for ' + this.title, 
+    	   						height		: 300, 
+    	   						width		: 450, 
+    	   						modal		: true,
+    	   						collapsible	: false,
+    	   						fixedcenter	: true, 
+    	   						shadow		: true, 
+    	   						resizable   : true,
+    	   						proxyDrag	: true,
+    	   						autoScroll  : true,
+    	   						keys:[{
+    	   							key	: 27,
+    	   							fn	: function(){
+    	   									dialog.hide()
+    	   							}.bind(this)
+    	   						}],
+    	   						items : [{
+    	   					        xtype : "component",
+    	   					        id    : 'customeditorswindow',
+    	   					        autoEl : {
+    	   					            tag : "iframe",
+    	   					            src : customEditorsObj[this.title],
+    	   					            width: "100%",
+    	   					            height: "100%"
+    	   					        }
+    	   					    }],
+    	   						listeners : {
+    	   							hide: function(){
+    	   								this.fireEvent('dialogClosed', this.value);
+    	   								dialog.destroy();
+    	   							}.bind(this)				
+    	   						},
+    	   						buttons		: [{
+    	   			                text: ORYX.I18N.PropertyWindow.ok,
+    	   			                handler: function(){	 
+    	   			                	var outValue = document.getElementById('customeditorswindow').contentWindow.getEditorValue();
+    	   			                	this.setValue(outValue);
+    	   								this.dataSource.getAt(this.row).set('value', outValue)
+    	   								this.dataSource.commitChanges()
+    	   								dialog.hide();
+    	   			                }.bind(this)
+    	   			            }, {
+    	   			                text: ORYX.I18N.PropertyWindow.cancel,
+    	   			                handler: function(){
+    	   								this.setValue(this.value);
+    	   			                	dialog.hide()
+    	   			                }.bind(this)
+    	   			            }]
+    	   					});		
+    	   					dialog.show();		
+    	   					this.grid.stopEditing();
+    	   				} else {
+    	   					Ext.Msg.alert('Unable to find custom editor info for' + this.title);
+    	   				}
+    	   			} else {
+    	   				Ext.Msg.alert('Invalid Custom Editors data.');
+    	   			}
+    	   		} catch(e) {
+    	   			Ext.Msg.alert('Error applying Custom Editor data:\n' + e);
+    	   		}
+            }.bind(this),
+            failure: function(){
+            	Ext.Msg.alert('Error applying Custom Editor data.');
+            },
+            params: {
+            	profile: ORYX.PROFILE
+            }
+        });
 	}
 });
 

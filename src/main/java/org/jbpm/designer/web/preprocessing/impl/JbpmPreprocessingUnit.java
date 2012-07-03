@@ -64,6 +64,8 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     public static final String THEME_NAME = "themes";
     public static final String THEME_EXT = ".json";
     public static final String DEFAULT_THEME_NAME = "jBPM";
+    public static final String CUSTOMEDITORS_NAME = "customeditors";
+    public static final String CUSTOMEDITORS_EXT = ".json";
     public static final String THEME_COOKIE_NAME = "designercolortheme";
     
     private String stencilPath;
@@ -78,6 +80,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     private String default_widconfigtemplate;
     private String themeInfo;
     private String formWidgetsDir;
+    private String customEditorsInfo;
     
     public JbpmPreprocessingUnit(ServletContext servletContext) {
         stencilPath = servletContext.getRealPath("/" + STENCILSET_PATH);
@@ -91,6 +94,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         default_widconfigtemplate = servletContext.getRealPath("/defaults/WorkDefinitions.wid.st");
         themeInfo = servletContext.getRealPath("/defaults/themes.json");
         formWidgetsDir = servletContext.getRealPath("/defaults/formwidgets");
+        customEditorsInfo = servletContext.getRealPath("/defaults/customeditors.json");
     }
     
     public String getOutData() {
@@ -106,6 +110,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         String uuid = req.getParameter("uuid");
         outData = "";
         Map<String, ThemeInfo> themeData = setupThemes(profile, req);
+        setupCustomEditors(profile, req);
         // check with guvnor to see what packages exist
         List<String> packageNames = findPackages(uuid, profile);
         String[] info = ServletUtil.findPackageAndAssetInfo(uuid, profile);
@@ -331,6 +336,53 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 _logger.error("Error setting up form widgets: " + e.getMessage());
             } 
     	}
+    }
+    
+    private void setupCustomEditors(IDiagramProfile profile, HttpServletRequest req) {
+    	String customEditorsURL = ExternalInfo.getExternalProtocol(profile)
+                + "://"
+                + ExternalInfo.getExternalHost(profile)
+                + "/"
+                + profile.getExternalLoadURLSubdomain().substring(0,
+                        profile.getExternalLoadURLSubdomain().indexOf("/"))
+                + "/rest/packages/globalArea/assets/" + CUSTOMEDITORS_NAME;
+		String customEditorsAssetsURL = ExternalInfo.getExternalProtocol(profile)
+                + "://"
+                + ExternalInfo.getExternalHost(profile)
+                + "/"
+                + profile.getExternalLoadURLSubdomain().substring(0,
+                        profile.getExternalLoadURLSubdomain().indexOf("/"))
+                + "/rest/packages/globalArea/assets/";
+		
+		try {
+	        URL checkURL = new URL(customEditorsURL);
+	        HttpURLConnection checkConnection = (HttpURLConnection) checkURL
+	                .openConnection();
+	        ServletUtil.applyAuth(profile, checkConnection);
+	        checkConnection.setRequestMethod("GET");
+	        checkConnection
+	                .setRequestProperty("Accept", "application/atom+xml");
+	        checkConnection.connect();
+	        _logger.info("check connection response code: " + checkConnection.getResponseCode());
+	        if (checkConnection.getResponseCode() != 200) {
+	        	URL createURL = new URL(customEditorsAssetsURL);
+	            HttpURLConnection createConnection = (HttpURLConnection) createURL
+	                    .openConnection();
+	            ServletUtil.applyAuth(profile, createConnection);
+	            createConnection.setRequestMethod("POST");
+	            createConnection.setRequestProperty("Content-Type",
+	                    "application/octet-stream");
+	            createConnection.setRequestProperty("Accept",
+	                    "application/atom+xml");
+	            createConnection.setRequestProperty("Slug", CUSTOMEDITORS_NAME + CUSTOMEDITORS_EXT);
+	            createConnection.setDoOutput(true);
+	            createConnection.getOutputStream().write(getBytesFromFile(new File(customEditorsInfo)));
+	            createConnection.connect();
+	            _logger.info("create custom editors connection response code: " + createConnection.getResponseCode());
+	        }
+		} catch (Exception e) {
+            _logger.error(e.getMessage());
+        }
     }
     
     private Map<String, ThemeInfo> setupThemes(IDiagramProfile profile, HttpServletRequest req) {

@@ -84,6 +84,11 @@
   <servlet-class>org.jbpm.designer.web.server.ThemeServlet</servlet-class>
  </servlet>
  <servlet>
+  <display-name>CustomEditors</display-name>
+  <servlet-name>CustomEditorsServlet</servlet-name>
+  <servlet-class>org.jbpm.designer.web.server.CustomEditorsServlet</servlet-class>
+ </servlet>
+ <servlet>
   <display-name>FormWidget</display-name>
   <servlet-name>FormWidgetServlet</servlet-name>
   <servlet-class>org.jbpm.designer.web.server.FormWidgetServlet</servlet-class>
@@ -176,6 +181,10 @@
  <servlet-mapping>
   <servlet-name>ThemesServlet</servlet-name>
   <url-pattern>/themes</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>CustomEditorsServlet</servlet-name>
+  <url-pattern>/customeditors</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
   <servlet-name>FormWidgetServlet</servlet-name>
