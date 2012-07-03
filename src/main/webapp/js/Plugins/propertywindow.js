@@ -1424,10 +1424,6 @@ Ext.form.ComplexCustomField = Ext.extend(Ext.form.TriggerField,  {
     	if(this.disabled){
             return;
         }
-    	//alert("title: " + this.title);
-    	// Call below code through your any srcUpdate function.
-    	//Ext.getDom('iframe-win').src = "http://www.yahoo.com";
-    	// tihomir
     	
     	Ext.Ajax.request({
             url: ORYX.PATH + 'customeditors',
