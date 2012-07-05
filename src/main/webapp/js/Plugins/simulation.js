@@ -200,7 +200,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
 		return colors[cindex];
 	},
 	resetNodeColors : function() {
-		ORYX.EDITOR._canvas.getChildNodes().each((function(child) {
+		ORYX.EDITOR._canvas.getChildren().each((function(child) {
 				this.setOriginalValues(child);
 		}).bind(this));
 	},
@@ -220,7 +220,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
 	},
 	setNodeColors : function(pathid, pathcolor, pathelements) {
 		this.resetNodeColors();
-		ORYX.EDITOR._canvas.getChildNodes().each((function(child) {
+		ORYX.EDITOR._canvas.getChildren().each((function(child) {
 				this.applyPathColors(child, pathcolor, pathelements);
 		}).bind(this));
 	},
