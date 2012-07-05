@@ -89,7 +89,7 @@ ORYX.Plugins.LockNode = Clazz.extend({
 	    	shape.refresh();
 	    	if(shape.getChildren().size() > 0) {
 				for (var i = 0; i < shape.getChildren().size(); i++) {
-					if(shape.getChildren()[i] instanceof ORYX.Core.Node || shape.getChildren()[i] instanceof ORYX.Core.Node) {
+					if(shape.getChildren()[i] instanceof ORYX.Core.Node || shape.getChildren()[i] instanceof ORYX.Core.Edge) {
 						this.unlockShape(shape.getChildren()[i]);
 					}
 				}
@@ -108,7 +108,7 @@ ORYX.Plugins.LockNode = Clazz.extend({
     		shape.refresh();
     		if(shape.getChildren().size() > 0) {
 				for (var i = 0; i < shape.getChildren().size(); i++) {
-					if(shape.getChildren()[i] instanceof ORYX.Core.Node || shape.getChildren()[i] instanceof ORYX.Core.Node) {
+					if(shape.getChildren()[i] instanceof ORYX.Core.Node || shape.getChildren()[i] instanceof ORYX.Core.Edge) {
 						this.lockShape(shape.getChildren()[i]);
 					}
 				}
