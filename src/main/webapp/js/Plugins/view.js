@@ -133,6 +133,27 @@ ORYX.Plugins.View = {
 			}.bind(this)
 		});
 		
+		/* Register full screen to model */
+		this.facade.offer({
+			'name':'Show in full screen',
+			'functionality': this.showInFullScreen.bind(this),
+			'group': ORYX.I18N.View.jbpmgroup,
+			'icon': ORYX.PATH + "images/fullscreen.png",
+			'description': 'Show in full screen mode',
+			'index': 2,
+			'minShape': 0,
+			'maxShape': 0,
+			'isEnabled': function(){
+				profileParamName = "profile";
+				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+		        regexa = new RegExp( regexSa );
+		        profileParams = regexa.exec( window.location.href );
+		        profileParamValue = profileParams[1]; 
+				return profileParamValue == "jbpm";
+			}.bind(this)
+		});
+		
 		
 		/* Register task form generation to model */
 		this.facade.offer({
@@ -141,7 +162,7 @@ ORYX.Plugins.View = {
 			'group': ORYX.I18N.View.jbpmgroup,
 			'icon': ORYX.PATH + "images/human_task.gif",
 			'description': ORYX.I18N.View.generateTaskFormsDesc,
-			'index': 2,
+			'index': 3,
 			'minShape': 0,
 			'maxShape': 0,
 			'isEnabled': function(){
@@ -439,6 +460,10 @@ ORYX.Plugins.View = {
 
         uuidParamValue = uuidParams[1]; 
         window.open (ORYX.EXTERNAL_PROTOCOL + "://" + ORYX.EXTERNAL_HOST + "/" + ORYX.EXTERNAL_SUBDOMAIN  + "/org.drools.guvnor.Guvnor/standaloneEditorServlet?assetsUUIDs=" + uuidParamValue + "&client=oryx" , "Process Editor","status=0,toolbar=0,menubar=0,resizable=0,location=no,width=1400,height=1000");
+	},
+	
+	showInFullScreen : function() {
+		this.goFullscreen('jbpmdesigner');
 	},
 	
 	/**
@@ -1483,6 +1508,42 @@ ORYX.Plugins.View = {
 		
 		if(this.zoomLevel > this.maxZoomLevel) {
 			this.zoomLevel = this.maxZoomLevel;			
+		}
+	},
+	goFullscreen : function(id) {
+		if(parent && parent.frames) {
+			if(parent.frames.length < 2) {
+				if(document.getElementById(id).requestFullScreen) {
+					document.getElementById(id).requestFullScreen();
+				} else if(document.getElementById(id).mozRequestFullScreen) {
+					document.getElementById(id).mozRequestFullScreen();
+				} else if(document.getElementById(id).webkitRequestFullScreen) {
+					//document.getElementById(id).webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+					document.documentElement.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+				} else {
+					Ext.Msg.minWidth = 400;
+	        		Ext.Msg.alert("Browser does not support full screen mode.");
+				}
+			} else {
+				for (var i = 0;i < parent.frames.length;i++) {
+					if(parent.frames[i].ORYX) {
+						parent.frames[i].frameElement.setAttribute('allowFullScreen', 'true');
+						parent.frames[i].frameElement.setAttribute('mozallowfullscreen', 'true');
+						parent.frames[i].frameElement.setAttribute('webkitallowfullscreen', 'true');
+						if(parent.frames[i].frameElement.contentDocument.getElementById(id).requestFullScreen) {
+							parent.frames[i].frameElement.contentDocument.getElementById(id).requestFullScreen();
+						} else if(parent.frames[i].frameElement.contentDocument.getElementById(id).mozRequestFullScreen) {
+							parent.frames[i].frameElement.contentDocument.getElementById(id).mozRequestFullScreen();
+						} else if(parent.frames[i].frameElement.contentDocument.getElementById(id).webkitRequestFullScreen) {
+							parent.frames[i].frameElement.webkitRequestFullScreen();
+						} else {
+							Ext.Msg.minWidth = 400;
+			        		Ext.Msg.alert("Browser does not support full screen mode.");
+						}
+					}
+				}
+			}
+			
 		}
 	}
 };

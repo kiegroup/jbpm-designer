@@ -1,0 +1,23 @@
+:-webkit-full-screen #jbpmdesigner {  
+  width: 100%;  
+  height: 100%;  
+} 
+
+html:-moz-full-screen {
+    background: red;
+    width: 100%;  
+    height: 100%;
+}
+
+html:-webkit-full-screen {
+    background: red;
+    width: 100%;  
+    height: 100%;
+}
+
+html:fullscreen {
+    background: red;
+    width: 100%;  
+    height: 100%;
+}
+
