@@ -86,10 +86,10 @@ ORYX.Plugins.Simulation = Clazz.extend({
     		                cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
     		                	id: 'display',
     		                    header: 'Display Color',
-    		                    width: 80,
+    		                    width: 90,
     		                    dataIndex: 'display',
     		                    renderer: function(val) {
-		                    	  if(val && val.length > 0) { 
+		                    	  if(val) { 
 		                    		return '<center><div width="20px" height="8px" style="width:20px;height:8px;background-color:' + val + '"></div></center>';
 		                    	  } else {
 		                    		return "<center>None</center>";
@@ -98,13 +98,15 @@ ORYX.Plugins.Simulation = Clazz.extend({
     		                }, {
     		                	id: 'numele',
     		                    header: 'Number of Elements',
-    		                    width: 80,
-    		                    dataIndex: 'numele'
-    		                },{
-    		                	id: 'pid',
-    		                    header: 'Path Id',
-    		                    width: 100,
-    		                    dataIndex: 'pid'
+    		                    width: 130,
+    		                    dataIndex: 'numele',
+    		                    renderer: function(val) {
+  		                    	  if(val) { 
+  		                    		return '<center>' + val + '</center>';
+  		                    	  } else {
+  		                    		return "<center>0</center>";
+  		                    	  }
+  		                        }
     		                }]),
     		                autoHeight: true
     		            });
@@ -163,7 +165,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
     		                    	}
     		                    }.bind(this)
     		                }, {
-    		                    text: ORYX.I18N.PropertyWindow.cancel,
+    		                    text: 'Close',
     		                    handler: function(){
     		                    	this.resetNodeColors();
     		                    	dialog.hide();
@@ -196,7 +198,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
         });
 	},
 	getDisplayColor : function(cindex) {
-		var colors = ["#990000","#33CC00","#3399FF", "#FFCC33", "#FF99FF", "#6666CC", "#CCCCCC", "#66FF00", "#FFCCFF", "#0099CC", "#CC66FF", "#FFFF00", "#993300", "#0000CC", "#3300FF"];
+		var colors = ["#3399FF", "#FFCC33", "#FF99FF", "#6666CC", "#CCCCCC", "#66FF00", "#FFCCFF", "#0099CC", "#CC66FF", "#FFFF00", "#993300", "#0000CC", "#3300FF","#990000","#33CC00"];
 		return colors[cindex];
 	},
 	resetNodeColors : function() {
