@@ -1,31 +1,11 @@
 package org.jbpm.designer.web.preprocessing.impl;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
@@ -34,7 +14,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.drools.process.core.ParameterDefinition;
+import org.drools.process.core.datatype.DataType;
 import org.drools.process.core.impl.ParameterDefinitionImpl;
+import org.jbpm.designer.Base64EncodingUtil;
 import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingUnit;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.impl.ExternalInfo;
@@ -42,12 +24,7 @@ import org.jbpm.designer.web.server.ServletUtil;
 import org.jbpm.process.workitem.WorkDefinitionImpl;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.drools.process.core.datatype.DataType;
 import org.mvel2.MVEL;
-
-import org.apache.commons.codec.binary.Base64;
-
-import sun.misc.BASE64Encoder;
 
 /**
  * JbpmPreprocessingUnit - preprocessing unit for the jbpm profile
@@ -216,8 +193,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 workItemTemplate.setAttribute("workitemDef", definition.getValue());
                 String widIcon = definition.getValue().getIcon();
                 InputStream iconStream = getImageInstream(widIcon, "GET", profile);
-                BASE64Encoder enc = new sun.misc.BASE64Encoder();
-                String iconEncoded = "data:image/png;base64," + enc.encode(IOUtils.toByteArray(iconStream));
+                String iconEncoded = "data:image/png;base64," + Base64EncodingUtil.encode(IOUtils.toByteArray(iconStream));
                 workItemTemplate.setAttribute("nodeicon", iconEncoded);
                 String fileToWrite = workitemSVGFilePath + definition.getValue().getName() + ".svg";
                 createAndWriteToFile(fileToWrite, workItemTemplate.toString());
@@ -259,8 +235,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 }
                 workDefinition.setIcon(icon);
                 InputStream iconStream = getImageInstream(icon, "GET", profile);
-                BASE64Encoder enc = new sun.misc.BASE64Encoder();
-                String iconEncoded = "data:image/png;base64," + enc.encode(IOUtils.toByteArray(iconStream));
+                String iconEncoded = "data:image/png;base64," + Base64EncodingUtil.encode(IOUtils.toByteArray(iconStream));
                 workDefinition.setIconEncoded(URLEncoder.encode(iconEncoded, "UTF-8"));
                 workDefinition.setCustomEditor((String) workDefinitionMap.get("customEditor"));
                 Set<ParameterDefinition> parameters = new HashSet<ParameterDefinition>();
@@ -851,12 +826,12 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         _logger.info("Created file:" + file);
     }
     
-    private void applyAuth(IDiagramProfile profile, HttpURLConnection connection) {
+    private void applyAuth(IDiagramProfile profile, HttpURLConnection connection) throws IOException {
         if (profile.getUsr() != null && profile.getUsr().trim().length() > 0
                 && profile.getPwd() != null
                 && profile.getPwd().trim().length() > 0) {
             String userpassword = profile.getUsr() + ":" + profile.getPwd();
-            String encodedAuthorization = Base64.encodeBase64String(userpassword.getBytes());
+            String encodedAuthorization = Base64EncodingUtil.encode(userpassword);
             connection.setRequestProperty("Authorization", "Basic "
                     + encodedAuthorization);
         }

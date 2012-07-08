@@ -23,6 +23,9 @@ import org.jbpm.designer.taskforms.TaskFormInfo;
 import org.jbpm.designer.taskforms.TaskFormTemplateManager;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.impl.ExternalInfo;
+import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
+
+import org.apache.abdera.i18n.text.Sanitizer;
 
 /** 
  * 
