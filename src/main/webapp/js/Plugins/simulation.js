@@ -32,6 +32,18 @@ ORYX.Plugins.Simulation = Clazz.extend({
 	findPaths: function() {
 		var loadPathsMask = new Ext.LoadMask(Ext.getBody(), {msg:'Calculating process paths'});
 		loadPathsMask.show();
+		var selection = this.facade.getSelection();
+		var selectedId = "";
+		var wintitle = "Process Paths";
+		if(selection.length == 1) {
+			selection.each(function(shape) {
+				if(shape.getStencil().title() == "Embedded Subprocess") {
+					selectedId = shape.resourceId;
+					wintitle = "Subprocess Paths";
+				}
+			});
+		} 
+		
 		Ext.Ajax.request({
             url: ORYX.PATH + 'simulation',
             method: 'POST',
@@ -113,7 +125,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
     		        	
     	   				var processPathsPanel = new Ext.Panel({
     		        		id: 'processPathsPanel',
-    		        		title: '<center>Select Process Path and click "Show Path" to display it.</center>',
+    		        		title: '<center>Select ' + wintitle + ' and click "Show Path" to display it.</center>',
     		        		layout:'column',
     		        		items:[
     		        		       grid
@@ -130,7 +142,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
     	   				var dialog = new Ext.Window({ 
     		    			layout		: 'anchor',
     		    			autoCreate	: true, 
-    		    			title		: 'Process Paths', 
+    		    			title		: wintitle, 
     		    			height		: 200, 
     		    			width		: 300, 
     		    			modal		: true,
@@ -193,7 +205,8 @@ ORYX.Plugins.Simulation = Clazz.extend({
             	action: 'getpathinfo',
             	profile: ORYX.PROFILE,
             	json: ORYX.EDITOR.getSerializedJSON(),
-            	ppdata: ORYX.PREPROCESSING
+            	ppdata: ORYX.PREPROCESSING,
+            	sel: selectedId
             }
         });
 	},
@@ -241,7 +254,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
 		if(shape.getChildren().size() > 0) {
 			for (var i = 0; i < shape.getChildren().size(); i++) {
 				if(shape.getChildren()[i] instanceof ORYX.Core.Node || shape.getChildren()[i] instanceof ORYX.Core.Edge) {
-					this.applyPathColors(shape.getChildren()[i]);
+					this.applyPathColors(shape.getChildren()[i], color, elements);
 				}
 			}
 		}
