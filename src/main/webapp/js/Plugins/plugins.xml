@@ -333,6 +333,7 @@
 		
 		<plugin source="dictionary.js" name="ORYX.Plugins.Dictionary"/>
 		<plugin source="canvastitle.js" name="ORYX.Plugins.CanvasTitle"/>
+		<plugin source="taskpropertiesupdater.js" name="ORYX.Plugins.TaskPropertiesUpdater"/>
 		<plugin source="inlinetaskformeditor.js" name="ORYX.Plugins.InlineTaskFormEditor"/>
 		<plugin source="processinfo.js" name="ORYX.Plugins.ProcessInfo"/>
 		<plugin source="servicenodeeditor.js" name="ORYX.Plugins.ServiceNodeEditor"/>

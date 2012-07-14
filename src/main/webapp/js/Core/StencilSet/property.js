@@ -131,6 +131,10 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
 			jsonProp.visible = true;
 		}
 		
+		if(!jsonProp.fortasktypes) {
+			jsonProp.fortasktypes = "";
+		}
+		
 		if(!jsonProp.popular) {
 			jsonProp.popular = false;
 		}
@@ -212,6 +216,10 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
 	
 	visible: function() {
 		return this._jsonProp.visible;
+	},
+	
+	fortasktypes: function() {
+		return this._jsonProp.fortasktypes;
 	},
     
     title: function(){

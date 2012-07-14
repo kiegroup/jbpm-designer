@@ -233,32 +233,32 @@ ORYX.Plugins.PropertyWindow = {
 	},
 
 	beforeEdit: function(option) {
-		var editorGrid 		= this.dataSource.getAt(option.row).data.gridProperties.editor;
-		var editorRenderer 	= this.dataSource.getAt(option.row).data.gridProperties.renderer;
-
-		if(editorGrid) {
-			// Disable KeyDown
-			this.facade.disableEvent(ORYX.CONFIG.EVENT_KEYDOWN);
-
-			option.grid.getColumnModel().setEditor(1, editorGrid);
+			var editorGrid 		= this.dataSource.getAt(option.row).data.gridProperties.editor;
+			var editorRenderer 	= this.dataSource.getAt(option.row).data.gridProperties.renderer;
+	
+			if(editorGrid) {
+				// Disable KeyDown
+				this.facade.disableEvent(ORYX.CONFIG.EVENT_KEYDOWN);
+	
+				option.grid.getColumnModel().setEditor(1, editorGrid);
+				
+				editorGrid.field.row = option.row;
+				// Render the editor to the grid, therefore the editor is also available 
+				// for the first and last row
+				editorGrid.render(this.grid);
+				
+				//option.grid.getColumnModel().setRenderer(1, editorRenderer);
+				editorGrid.setSize(option.grid.getColumnModel().getColumnWidth(1), editorGrid.height);
+			} else {
+				return false;
+			}
 			
-			editorGrid.field.row = option.row;
-			// Render the editor to the grid, therefore the editor is also available 
-			// for the first and last row
-			editorGrid.render(this.grid);
+			var key = this.dataSource.getAt(option.row).data.gridProperties.propId;
 			
-			//option.grid.getColumnModel().setRenderer(1, editorRenderer);
-			editorGrid.setSize(option.grid.getColumnModel().getColumnWidth(1), editorGrid.height);
-		} else {
-			return false;
-		}
-		
-		var key = this.dataSource.getAt(option.row).data.gridProperties.propId;
-		
-		this.oldValues = new Hash();
-		this.shapeSelection.shapes.each(function(shape){
-			this.oldValues[shape.getId()] = shape.properties[key];
-		}.bind(this)); 
+			this.oldValues = new Hash();
+			this.shapeSelection.shapes.each(function(shape){
+				this.oldValues[shape.getId()] = shape.properties[key];
+			}.bind(this)); 
 	},
 
 	afterEdit: function(option) {
@@ -844,31 +844,49 @@ ORYX.Plugins.PropertyWindow = {
 				
 				// Push to the properties-array
 				if(pair.visible() && (pair.id() != "origbordercolor" && pair.id() != "origbgcolor" && pair.id() != "isselectable")) {
-					// Popular Properties are those with a refToView set or those which are set to be popular
-					if (pair.refToView()[0] || refToViewFlag || pair.popular()) {
-						pair.setPopular();
-					} 
-					
-					
-					if(pair.popular()) {
-						this.popularProperties.push([pair.popular(), name, attribute, icons, {
-							editor: editorGrid,
-							propId: key,
-							type: pair.type(),
-							tooltip: pair.description(),
-							renderer: editorRenderer,
-							labelProvider: this.getLabelProvider(pair)
-						}]);
+					var proceed = true;
+					if(this.shapeSelection.shapes.length == 1 && this.shapeSelection.shapes.first().getStencil().title() == "Task") {
+						if(pair.fortasktypes() && pair.fortasktypes().length > 0) {
+							var foundtasktype = false;
+							var tts = pair.fortasktypes().split("|");
+							for (i = 0; i < tts.size(); i++) {
+								if(tts[i] == this.shapeSelection.shapes.first().properties["oryx-tasktype"]) {
+									foundtasktype = true;
+								}
+							}
+							if(!foundtasktype) {
+								proceed = false;
+							}
+						}
 					}
-					else {					
-						this.properties.push([pair.popular(), name, attribute, icons, {
-							editor: editorGrid,
-							propId: key,
-							type: pair.type(),
-							tooltip: pair.description(),
-							renderer: editorRenderer,
-							labelProvider: this.getLabelProvider(pair)
-						}]);
+					
+					if(proceed) {
+						// Popular Properties are those with a refToView set or those which are set to be popular
+						if (pair.refToView()[0] || refToViewFlag || pair.popular()) {
+							pair.setPopular();
+						} 
+						
+						
+						if(pair.popular()) {
+							this.popularProperties.push([pair.popular(), name, attribute, icons, {
+								editor: editorGrid,
+								propId: key,
+								type: pair.type(),
+								tooltip: pair.description(),
+								renderer: editorRenderer,
+								labelProvider: this.getLabelProvider(pair)
+							}]);
+						}
+						else {					
+							this.properties.push([pair.popular(), name, attribute, icons, {
+								editor: editorGrid,
+								propId: key,
+								type: pair.type(),
+								tooltip: pair.description(),
+								renderer: editorRenderer,
+								labelProvider: this.getLabelProvider(pair)
+							}]);
+						}
 					}
 				}
 

@@ -129,14 +129,9 @@
           alert("Could not load Process Designer"); //TODO even better logging ?
         }
     });
-    
-    checkChromeFrame = function() {
-        alert("checking chrome frame!");
-        CFInstall.check({mode: "popup",node: "prompt"});
-    };
     </script>    
   </head>
-  <body id="jbpmdesigner" style="overflow:hidden;" onLoad="checkChromeFrame();">
+  <body id="jbpmdesigner" style="overflow:hidden;">
 	<div id="prompt"></div>
     <div class='processdata' style='display:none'>
     </div>

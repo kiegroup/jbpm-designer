@@ -1679,9 +1679,10 @@
 					"readonly":false,
 					"optional":false,
 					"refToView":"",
-					"length":"50"
+					"length":"50",
+					"fortasktypes":"None|Send|Receive"
 				},
-				{
+				/**{
 					"id":"operationref",
 					"type":"String",
 					"title":"OperationRef",
@@ -1690,8 +1691,8 @@
 					"description_ja":"オペレーションの定義へのID参照。",
 					"readonly":false,
 					"optional":true
-				},
-				{
+				},**/
+				/**{
 					"id":"instantiate",
 					"type":"Boolean",
 					"title":"Instantiate",
@@ -1700,7 +1701,7 @@
 					"readonly":false,
 					"optional":false,
 					"refToView":""
-				},
+				},**/
 				{
 					"id":"script",
 					"type":"Expression",
@@ -1709,7 +1710,8 @@
 					"description":"Script that can be run when the Task is performed. Related to the Script TaskType, if a script is not included, then the Task will act equivalent to a TaskType of None.",
 					"description_ja":"タスクを実行するときに実行可能なスクリプト。スクリプトのTaskTypeに関連して、スクリプトが含まれない場合は、タスクはTaskTypeがNoneである場合と同じように動作します。",
 					"readonly":false,
-					"optional":true
+					"optional":true,
+					"fortasktypes":"None|Send|Script"
 				},
 				{
 					"id":"script_language",
@@ -1720,6 +1722,7 @@
 					"description_ja":"スクリプト言語を定義します。スクリプトを使用する場合は、スクリプト言語を指定する必要があります。",
 					"readonly":false,
 					"optional":true,
+					"fortasktypes":"None|Send|Script",
 					"items": [
 						{
 							"id": "c1",
@@ -1733,7 +1736,7 @@
 						}
 					]                                               
 				},
-				{
+				/**{
 					"id":"inmessagetype",
 					"type":"String",
 					"title":"In Message",
@@ -1742,8 +1745,8 @@
 					"description_ja":"入力メッセージのタイプ",
 					"readonly":false,
 					"optional":true
-				},
-				{
+				},**/
+				/**{
 					"id":"outmessagetype",
 					"type":"String",
 					"title":"Out Message",
@@ -1752,7 +1755,7 @@
 					"description_ja":"出力メッセージのタイプ",
 					"readonly":false,
 					"optional":true
-				},
+				},**/
 				/**{
 					"id":"servicename",
 					"type":"String",
@@ -1763,7 +1766,7 @@
 					"readonly":false,
 					"optional":true
 				},**/
-				{
+				/**{
 					"id":"namespace",
 					"type":"String",
 					"title":"Namespace",
@@ -1773,7 +1776,7 @@
 					"readonly":false,
 					"optional":true,
 					"length":"50"
-				},
+				},**/
 				{
 					"id":"operation",
 					"type":"String",
@@ -1782,7 +1785,8 @@
 					"description":"operation",
 					"description_ja":"オペレーション",
 					"readonly":false,
-					"optional":true
+					"optional":true,
+					"fortasktypes":"None|Service"
 				},
 				/**{
 					"id":"porttype",
@@ -2973,7 +2977,8 @@
 					"description":"ruleFlowGroup",
 					"description_ja":"ruleFlowGroup",
 					"readonly":false,
-					"optional":true
+					"optional":true,
+					"fortasktypes":"None|Business Rule"
 				},
 				{
 					"id":"onEntryActions",
@@ -3003,7 +3008,8 @@
 					"description":"Task Name",
 					"description_ja":"タスク名",
 					"readonly":false,
-					"optional":true
+					"optional":true,
+					"fortasktypes":"None|User"
 				},
 				{
 					"id":"interface",
@@ -3013,7 +3019,8 @@
 					"description":"Interface",
 					"description_ja":"インターフェイス",
 					"readonly":false,
-					"optional":true
+					"optional":true,
+					"fortasktypes":"None|Service"
 				},
 				{
 					"id":"operation",
@@ -3023,7 +3030,8 @@
 					"description":"Operation",
 					"description_ja":"オペレーション",
 					"readonly":false,
-					"optional":true
+					"optional":true,
+					"fortasktypes":"None|Service"
 				},
 				{
 					"id":"actors",
@@ -3033,7 +3041,8 @@
 					"description":"Comma-separated list of actors",
 					"description_ja":"アクターのカンマ区切りのリスト",
 					"readonly":false,
-					"optional":true
+					"optional":true,
+					"fortasktypes":"None|User"
 				},
 				{
 					"id":"groupid",
@@ -3043,7 +3052,8 @@
 					"description":"he group id that is responsible for executing the human task",
 					"description_ja":"ヒューマンタスクを担当するグループID",
 					"readonly":false,
-					"optional":true
+					"optional":true,
+					"fortasktypes":"None|User"
 				},
 				{
 					"id":"comment",
@@ -3053,7 +3063,8 @@
 					"description":"Comment",
 					"description_ja":"コメント",
 					"readonly":false,
-					"optional":true
+					"optional":true,
+					"fortasktypes":"None|User"
 				},
 				{
 					"id":"content",
@@ -3063,7 +3074,8 @@
 					"description":"The data associated with this task",
 					"description_ja":"このタスクに関連付けられているデータ",
 					"readonly":false,
-					"optional":true
+					"optional":true,
+					"fortasktypes":"None|User"
 				},
 				{
 					"id":"skippable",
@@ -3074,6 +3086,7 @@
 					"description_ja":"ヒューマンタスクをスキップできるかどうかを指定します",
 					"readonly":false,
 					"optional":true,
+					"fortasktypes":"None|User",
 					"items": [
 						{
 							"id": "c1",
@@ -3095,7 +3108,8 @@
 					"description":"An integer indicating the priority of the human task",
 					"description_ja":"ヒューマンタスクの優先度を示す整数",
 					"readonly":false,
-					"optional":true
+					"optional":true,
+					"fortasktypes":"None|User"
 				}
 			]
 		},
