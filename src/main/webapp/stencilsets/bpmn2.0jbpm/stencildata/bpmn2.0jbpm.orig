@@ -1722,7 +1722,6 @@
 					"description_ja":"スクリプト言語を定義します。スクリプトを使用する場合は、スクリプト言語を指定する必要があります。",
 					"readonly":false,
 					"optional":true,
-					"fortasktypes":"None|Script",
 					"items": [
 						{
 							"id": "c1",
