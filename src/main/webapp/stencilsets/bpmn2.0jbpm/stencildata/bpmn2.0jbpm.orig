@@ -729,6 +729,7 @@
 					"description_ja":"InputSetは、データ入力の有効なセットを合わせて定義するDataInputエレメントのコレクションです。",
 					"readonly":false,
 					"optional":true,
+					"fortasktypes":"None|Send|Receive|User|Manual|Service"
 					/** "complexItems": [
 						{
 							"id":"name",
@@ -765,6 +766,7 @@
 					"description_ja":"OutputSet は、アクティビティまたはイベントの出力としてまとめて生成されるDataOutputs要素のコレクションです。",
 					"readonly":false,
 					"optional":true,
+					"fortasktypes":"None|Send|Receive|User|Manual|Service"
 					/** "complexItems": [
 						{
 							"id":"name",
@@ -839,6 +841,7 @@
 					"description":"",
 					"readonly":false,
 					"optional":true,
+					"fortasktypes":"None|Send|Receive|User|Manual|Service"					
 					/** "complexItems": [
 						{
 							"id":"to",
@@ -1722,6 +1725,7 @@
 					"description_ja":"スクリプト言語を定義します。スクリプトを使用する場合は、スクリプト言語を指定する必要があります。",
 					"readonly":false,
 					"optional":true,
+					"fortasktypes":"None|Send|Receive|User|Manual|Service|Script",
 					"items": [
 						{
 							"id": "c1",
@@ -2987,7 +2991,8 @@
 					"description":"on entry actions",
 					"description_ja":"アクション開始時",
 					"readonly":false,
-					"optional":true
+					"optional":true,
+					"fortasktypes":"None|Send|Receive|User|Manual|Service|Script"
 				},
 				{
 					"id":"onExitActions",
@@ -2997,7 +3002,8 @@
 					"description":"on exit actions",
 					"description_ja":"アクション終了時",
 					"readonly":false,
-					"optional":true
+					"optional":true,
+					"fortasktypes":"None|Send|Receive|User|Manual|Service|Script"
 				},
 				{
 					"id":"taskname",
