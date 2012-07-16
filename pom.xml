@@ -24,9 +24,9 @@
   </licenses>
   
   <scm>
-  	<connection>scm:git:git@github.com:tsurdilo/process-designer.git</connection>
-    <developerConnection>scm:git:git@github.com:tsurdilo/process-designer.git</developerConnection>
-    <url>https://github.com/tsurdilo/process-designer</url>
+    <connection>scm:git:git@github.com:droolsjbpm/jbpm-designer.git</connection>
+    <developerConnection>scm:git:git@github.com:droolsjbpm/jbpm-designer.git</developerConnection>
+    <url>https://github.com/droolsjbpm/jbpm-designer</url>
   </scm>
   
   <properties>
