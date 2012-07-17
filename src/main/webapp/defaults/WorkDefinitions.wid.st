@@ -1,4 +1,6 @@
 import org.drools.process.core.datatype.impl.type.StringDataType;
+import org.drools.process.core.datatype.impl.type.ObjectDataType;
+
 [
   [
     "name" : "Email",
@@ -19,5 +21,17 @@ import org.drools.process.core.datatype.impl.type.StringDataType;
     ],
     "displayName" : "Log",
     "icon" : "$protocol$://$host$/$subdomain$/rest/packages/$pkgName$/assets/defaultlogicon/binary"
+  ],
+  
+  [
+    "name" : "MicrosoftAcademy",
+    "parameters" : [
+      "title" : new StringDataType()
+    ], 
+ 	"results" : [ 
+    	"results" : new ObjectDataType("java.util.Map") 
+  	], 
+    "displayName" : "Microsoft Academy",
+    "icon" : "$protocol$://$host$/$subdomain$/rest/packages/$pkgName$/assets/micadicon/binary"
   ]
 ]

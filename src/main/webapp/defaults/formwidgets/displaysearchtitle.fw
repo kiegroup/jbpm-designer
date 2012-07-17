@@ -1,0 +1,42 @@
+<html>
+<script src="/designer/lib/prototype-1.5.1.js" type="text/javascript">
+</script>
+
+<h2>Results for "${titleIn}" </h2>
+<hr>
+
+<script type="text/javascript"> 
+  var fTitle = '${resultsIn}'.evalJSON();
+  //var ftitle = utitle.evalJSON();unfilterJSON
+      
+var x = 1;
+fTitle.d.Publication.Result.each(function(elt){
+  document.write('<p>' + x++ +': '+ elt.Title +' (citation : ' + elt.CitationCount+', year : '+ elt.Year+ ')</br>');
+	      for(y=0; y<elt.Author.length; y++) {
+		    if(elt.Author[y].HomepageURL){
+		  		document.write('<a href="'+ elt.Author[y].HomepageURL+'" target="_blank">'+ elt.Author[y].FirstName + ' ' + elt.Author[y].LastName +'</a> ');
+			}else {
+			    document.write(elt.Author[y].FirstName + ' ' + elt.Author[y].LastName);		
+			}
+			if(y<elt.Author.length-1){
+				document.write(', ');
+			}
+		  }
+		  document.write('</br>');
+	      for(y=0,z=1; y<elt.FullVersionURL.length; y++) {
+	  		document.write('<a href="'+elt.FullVersionURL[y]+'" target="_blank"> ['+ z++ +']</a> ');
+		  }
+    });
+        
+</script>
+
+                 
+<form action="complete" method="POST" enctype="multipart/form-data">
+    <input type="submit" name="submit" value="Submit">  
+</form>
+
+</html>
+  
+               
+  
+
