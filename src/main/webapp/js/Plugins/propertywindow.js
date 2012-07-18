@@ -65,6 +65,7 @@ ORYX.Plugins.PropertyWindow = {
 
 		// the properties array
 		this.popularProperties = [];
+		this.simulationProperties = [];
 		this.properties = [];
 		
 		/* The currently selected shapes whos properties will shown */
@@ -96,8 +97,8 @@ ORYX.Plugins.PropertyWindow = {
 				renderer: this.renderer.bind(this)
 			},
 			{
-				header: "Pop",
-				dataIndex: 'popular',
+				header: "Desk",
+				dataIndex: 'groupname',
 				hidden: true,
 				sortable: true
 			}
@@ -107,27 +108,14 @@ ORYX.Plugins.PropertyWindow = {
         this.dataSource = new Ext.data.GroupingStore({
 			proxy: new Ext.data.MemoryProxy(this.properties),
 			reader: new Ext.data.ArrayReader({}, [
-				{name: 'popular'},
+				{name: 'groupname'},
 				{name: 'name'},
 				{name: 'value'},
 				{name: 'icons'},
 				{name: 'gridProperties'}
 			]),
-			sortInfo: {field: 'popular', direction: "ASC"},
-			sortData : function(f, direction){
-		        direction = direction || 'ASC';
-		        var st = this.fields.get(f).sortType;
-		        var fn = function(r1, r2){
-		            var v1 = st(r1.data['name']), v2 = st(r2.data['name']);
-					var p1 = r1.data['popular'], p2  = r2.data['popular'];
-		            return p1 && !p2 ? -1 : (!p1 && p2 ? 1 : (v1 > v2 ? 1 : (v1 < v2 ? -1 : 0)));
-		        };
-		        this.data.sort(direction, fn);
-		        if(this.snapshot && this.snapshot != this.data){
-		            this.snapshot.sort(direction, fn);
-				}
-		    },
-			groupField: 'popular'
+			sortInfo: {field: 'name', direction: "ASC"},
+			groupField: 'groupname'
         });
 		this.dataSource.load();
 		
@@ -140,8 +128,8 @@ ORYX.Plugins.PropertyWindow = {
 			colModel: this.columnModel,
 			enableHdMenu: false,
 			view: new Ext.grid.GroupingView({
-				forceFit: true,
-				groupTextTpl: '{[values.rs.first().data.popular ? ORYX.I18N.PropertyWindow.oftenUsed : ORYX.I18N.PropertyWindow.moreProps]}'
+				forceFit: true ,
+				groupTextTpl: '{[values.rs.first().data.groupname]}'
 			}),
 			
 			// the data store
@@ -502,6 +490,7 @@ ORYX.Plugins.PropertyWindow = {
 	createProperties: function() {
 		this.properties = [];
 		this.popularProperties = [];
+		this.simulationProperties = [];
 		
 		if(this.shapeSelection.commonProperties) {
 			
@@ -864,11 +853,15 @@ ORYX.Plugins.PropertyWindow = {
 						// Popular Properties are those with a refToView set or those which are set to be popular
 						if (pair.refToView()[0] || refToViewFlag || pair.popular()) {
 							pair.setPopular();
-						} 
+						}
+						
+						if (pair.simulation()) {
+							pair.setSimulation();
+						}
 						
 						
 						if(pair.popular()) {
-							this.popularProperties.push([pair.popular(), name, attribute, icons, {
+							this.popularProperties.push([ORYX.I18N.PropertyWindow.oftenUsed, name, attribute, icons, {
 								editor: editorGrid,
 								propId: key,
 								type: pair.type(),
@@ -876,9 +869,17 @@ ORYX.Plugins.PropertyWindow = {
 								renderer: editorRenderer,
 								labelProvider: this.getLabelProvider(pair)
 							}]);
-						}
-						else {					
-							this.properties.push([pair.popular(), name, attribute, icons, {
+						} else if(pair.simulation()) {
+							this.simulationProperties.push([ORYX.I18N.PropertyWindow.simulationProps, name, attribute, icons, {
+								editor: editorGrid,
+								propId: key,
+								type: pair.type(),
+								tooltip: pair.description(),
+								renderer: editorRenderer,
+								labelProvider: this.getLabelProvider(pair)
+							}]);
+						} else {	
+							this.properties.push([ORYX.I18N.PropertyWindow.moreProps, name, attribute, icons, {
 								editor: editorGrid,
 								propId: key,
 								type: pair.type(),
@@ -920,14 +921,12 @@ ORYX.Plugins.PropertyWindow = {
 	},
 
 	setProperties: function() {
-		var props = this.popularProperties.concat(this.properties);
-		
+		var partProps = this.popularProperties.concat(this.properties);
+		var props = partProps.concat(this.simulationProperties);
 		this.dataSource.loadData(props);
 	}
 }
 ORYX.Plugins.PropertyWindow = Clazz.extend(ORYX.Plugins.PropertyWindow);
-
-
 
 /**
  * Editor for complex type

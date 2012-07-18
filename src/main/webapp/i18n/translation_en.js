@@ -821,8 +821,9 @@ ORYX.I18N.SyntaxChecker.MULT_ERRORS = "Multiple Errors";
 
 /** New Language Properties: 08.09.2009*/
 if(!ORYX.I18N.PropertyWindow) ORYX.I18N.PropertyWindow = {};
-ORYX.I18N.PropertyWindow.oftenUsed = "Often used";
-ORYX.I18N.PropertyWindow.moreProps = "More Properties";
+ORYX.I18N.PropertyWindow.oftenUsed = "Common";
+ORYX.I18N.PropertyWindow.moreProps = "Extra";
+ORYX.I18N.PropertyWindow.simulationProps = "Simulation";
 
 /** New Language Properties: 17.09.2009*/
 if(!ORYX.I18N.Bpmn2_0Serialization) ORYX.I18N.Bpmn2_0Serialization = {};

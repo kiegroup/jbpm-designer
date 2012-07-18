@@ -138,6 +138,10 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
 		if(!jsonProp.popular) {
 			jsonProp.popular = false;
 		}
+		
+		if(!jsonProp.simulation) {
+			jsonProp.simulation = false;
+		}
         
         if (jsonProp.complexItems && jsonProp.complexItems instanceof Array) {
             jsonProp.complexItems.each((function(jsonComplexItem){
@@ -206,8 +210,16 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
 		return this._jsonProp.popular;
 	},
 	
+	simulation : function() {
+		return this._jsonProp.simulation;
+	},
+	
 	setPopular: function() {
 		this._jsonProp.popular = true;
+	},
+	
+	setSimulation: function() {
+		this._jsonProp.simulation = true;
 	},
 	
 	directlyEditable: function() {
