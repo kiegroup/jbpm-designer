@@ -2,12 +2,12 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.jboss.drools</groupId>
-  <artifactId>process-designer</artifactId>
+  <artifactId>jbpm-designer</artifactId>
   <version>2.3.0-SNAPSHOT</version>
   <packaging>war</packaging>
   
-  <description>Designer</description>
-  <url>https://github.com/tsurdilo/process-designer</url>
+  <description>jBPM Designer</description>
+  <url>https://github.com/droolsjbpm/jbpm-designer</url>
   <developers>
     <developer>
       <id>tsurdilo</id>
