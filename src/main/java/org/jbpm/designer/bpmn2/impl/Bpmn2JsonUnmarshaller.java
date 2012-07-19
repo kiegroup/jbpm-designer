@@ -130,6 +130,8 @@ import org.jboss.drools.DroolsFactory;
 import org.jboss.drools.DroolsPackage;
 import org.jboss.drools.GlobalType;
 import org.jboss.drools.ImportType;
+import org.jboss.drools.MetadataType;
+import org.jboss.drools.MetaentryType;
 import org.jboss.drools.OnEntryScriptType;
 import org.jboss.drools.OnExitScriptType;
 import org.jboss.drools.impl.DroolsPackageImpl;
@@ -3617,6 +3619,153 @@ public class Bpmn2JsonUnmarshaller {
                 task.getExtensionValues().get(0).getValue().add(extensionElementEntry);
             }
         }
+        
+        // simulation properties
+        if(properties.get("duration") != null && properties.get("duration").length() > 0) {
+        	if(task.getExtensionValues() == null || task.getExtensionValues().size() < 1) {
+            	ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+            	task.getExtensionValues().add(extensionElement);
+            }
+        	// see if we already have metadata extension
+        	MetadataType metadataType = null;
+        	for(ExtensionAttributeValue extattrval : task.getExtensionValues()) {
+        		FeatureMap extensionElements = extattrval.getValue();
+        		List<MetadataType> metadataExtensions = (List<MetadataType>) extensionElements
+                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__METADATA, true);
+        		if(metadataExtensions != null && metadataExtensions.size() > 0) {
+        			metadataType = metadataExtensions.get(0);
+        		}
+        	}
+        	MetaentryType durationMetaType =  DroolsFactory.eINSTANCE.createMetaentryType();
+        	durationMetaType.setName("duration");
+        	durationMetaType.setValue(properties.get("duration"));
+        	if(metadataType != null) {
+        		metadataType.getMetaentry().add(durationMetaType);
+        	} else {
+        		metadataType =  DroolsFactory.eINSTANCE.createMetadataType();
+        		metadataType.getMetaentry().add(durationMetaType);
+        		FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                        (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__METADATA, metadataType);
+                task.getExtensionValues().get(0).getValue().add(extensionElementEntry);
+        	}
+        }
+        
+        if(properties.get("timeunit") != null && properties.get("timeunit").length() > 0) {
+        	if(task.getExtensionValues() == null || task.getExtensionValues().size() < 1) {
+            	ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+            	task.getExtensionValues().add(extensionElement);
+            }
+        	// see if we already have metadata extension
+        	MetadataType metadataType = null;
+        	for(ExtensionAttributeValue extattrval : task.getExtensionValues()) {
+        		FeatureMap extensionElements = extattrval.getValue();
+        		List<MetadataType> metadataExtensions = (List<MetadataType>) extensionElements
+                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__METADATA, true);
+        		if(metadataExtensions != null && metadataExtensions.size() > 0) {
+        			metadataType = metadataExtensions.get(0);
+        		}
+        	}
+        	MetaentryType timeunitMetaType =  DroolsFactory.eINSTANCE.createMetaentryType();
+        	timeunitMetaType.setName("timeunit");
+        	timeunitMetaType.setValue(properties.get("timeunit"));
+        	if(metadataType != null) {
+        		metadataType.getMetaentry().add(timeunitMetaType);
+        	} else {
+        		metadataType =  DroolsFactory.eINSTANCE.createMetadataType();
+        		metadataType.getMetaentry().add(timeunitMetaType);
+        		FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                        (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__METADATA, metadataType);
+                task.getExtensionValues().get(0).getValue().add(extensionElementEntry);
+        	}
+        }
+        
+        if(properties.get("range") != null && properties.get("range").length() > 0) {
+        	if(task.getExtensionValues() == null || task.getExtensionValues().size() < 1) {
+            	ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+            	task.getExtensionValues().add(extensionElement);
+            }
+        	// see if we already have metadata extension
+        	MetadataType metadataType = null;
+        	for(ExtensionAttributeValue extattrval : task.getExtensionValues()) {
+        		FeatureMap extensionElements = extattrval.getValue();
+        		List<MetadataType> metadataExtensions = (List<MetadataType>) extensionElements
+                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__METADATA, true);
+        		if(metadataExtensions != null && metadataExtensions.size() > 0) {
+        			metadataType = metadataExtensions.get(0);
+        		}
+        	}
+        	MetaentryType rangeMetaType =  DroolsFactory.eINSTANCE.createMetaentryType();
+        	rangeMetaType.setName("range");
+        	rangeMetaType.setValue(properties.get("range"));
+        	if(metadataType != null) {
+        		metadataType.getMetaentry().add(rangeMetaType);
+        	} else {
+        		metadataType =  DroolsFactory.eINSTANCE.createMetadataType();
+        		metadataType.getMetaentry().add(rangeMetaType);
+        		FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                        (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__METADATA, metadataType);
+                task.getExtensionValues().get(0).getValue().add(extensionElementEntry);
+        	}
+        }
+        
+        if(properties.get("standarddeviation") != null && properties.get("standarddeviation").length() > 0) {
+        	if(task.getExtensionValues() == null || task.getExtensionValues().size() < 1) {
+            	ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+            	task.getExtensionValues().add(extensionElement);
+            }
+        	// see if we already have metadata extension
+        	MetadataType metadataType = null;
+        	for(ExtensionAttributeValue extattrval : task.getExtensionValues()) {
+        		FeatureMap extensionElements = extattrval.getValue();
+        		List<MetadataType> metadataExtensions = (List<MetadataType>) extensionElements
+                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__METADATA, true);
+        		if(metadataExtensions != null && metadataExtensions.size() > 0) {
+        			metadataType = metadataExtensions.get(0);
+        		}
+        	}
+        	MetaentryType standarddeviationMetaType =  DroolsFactory.eINSTANCE.createMetaentryType();
+        	standarddeviationMetaType.setName("standarddeviation");
+        	standarddeviationMetaType.setValue(properties.get("standarddeviation"));
+        	if(metadataType != null) {
+        		metadataType.getMetaentry().add(standarddeviationMetaType);
+        	} else {
+        		metadataType =  DroolsFactory.eINSTANCE.createMetadataType();
+        		metadataType.getMetaentry().add(standarddeviationMetaType);
+        		FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                        (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__METADATA, metadataType);
+                task.getExtensionValues().get(0).getValue().add(extensionElementEntry);
+        	}
+        }
+        
+        if(properties.get("distributiontype") != null && properties.get("distributiontype").length() > 0) {
+        	if(task.getExtensionValues() == null || task.getExtensionValues().size() < 1) {
+            	ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+            	task.getExtensionValues().add(extensionElement);
+            }
+        	// see if we already have metadata extension
+        	MetadataType metadataType = null;
+        	for(ExtensionAttributeValue extattrval : task.getExtensionValues()) {
+        		FeatureMap extensionElements = extattrval.getValue();
+        		List<MetadataType> metadataExtensions = (List<MetadataType>) extensionElements
+                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__METADATA, true);
+        		if(metadataExtensions != null && metadataExtensions.size() > 0) {
+        			metadataType = metadataExtensions.get(0);
+        		}
+        	}
+        	MetaentryType distributiontypeMetaType =  DroolsFactory.eINSTANCE.createMetaentryType();
+        	distributiontypeMetaType.setName("distributiontype");
+        	distributiontypeMetaType.setValue(properties.get("distributiontype"));
+        	if(metadataType != null) {
+        		metadataType.getMetaentry().add(distributiontypeMetaType);
+        	} else {
+        		metadataType =  DroolsFactory.eINSTANCE.createMetadataType();
+        		metadataType.getMetaentry().add(distributiontypeMetaType);
+        		FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                        (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__METADATA, metadataType);
+                task.getExtensionValues().get(0).getValue().add(extensionElementEntry);
+        	}
+        }
+        
     }
     
     protected void applyUserTaskProperties(UserTask task, Map<String, String> properties) {
@@ -3987,6 +4136,95 @@ public class Bpmn2JsonUnmarshaller {
         		}
         		task.getIoSpecification().getDataInputs().remove(trdin);
         }
+        
+        // simulation properties
+        if(properties.get("staffavailability") != null && properties.get("staffavailability").length() > 0) {
+        	if(task.getExtensionValues() == null || task.getExtensionValues().size() < 1) {
+            	ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+            	task.getExtensionValues().add(extensionElement);
+            }
+        	// see if we already have metadata extension
+        	MetadataType metadataType = null;
+        	for(ExtensionAttributeValue extattrval : task.getExtensionValues()) {
+        		FeatureMap extensionElements = extattrval.getValue();
+        		List<MetadataType> metadataExtensions = (List<MetadataType>) extensionElements
+                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__METADATA, true);
+        		if(metadataExtensions != null && metadataExtensions.size() > 0) {
+        			metadataType = metadataExtensions.get(0);
+        		}
+        	}
+        	MetaentryType staffavailabilityMetaType =  DroolsFactory.eINSTANCE.createMetaentryType();
+        	staffavailabilityMetaType.setName("staffavailability");
+        	staffavailabilityMetaType.setValue(properties.get("staffavailability"));
+        	if(metadataType != null) {
+        		metadataType.getMetaentry().add(staffavailabilityMetaType);
+        	} else {
+        		metadataType =  DroolsFactory.eINSTANCE.createMetadataType();
+        		metadataType.getMetaentry().add(staffavailabilityMetaType);
+        		FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                        (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__METADATA, metadataType);
+                task.getExtensionValues().get(0).getValue().add(extensionElementEntry);
+        	}
+        }
+        
+        if(properties.get("workinghours") != null && properties.get("workinghours").length() > 0) {
+        	if(task.getExtensionValues() == null || task.getExtensionValues().size() < 1) {
+            	ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+            	task.getExtensionValues().add(extensionElement);
+            }
+        	// see if we already have metadata extension
+        	MetadataType metadataType = null;
+        	for(ExtensionAttributeValue extattrval : task.getExtensionValues()) {
+        		FeatureMap extensionElements = extattrval.getValue();
+        		List<MetadataType> metadataExtensions = (List<MetadataType>) extensionElements
+                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__METADATA, true);
+        		if(metadataExtensions != null && metadataExtensions.size() > 0) {
+        			metadataType = metadataExtensions.get(0);
+        		}
+        	}
+        	MetaentryType workinghoursMetaType =  DroolsFactory.eINSTANCE.createMetaentryType();
+        	workinghoursMetaType.setName("workinghours");
+        	workinghoursMetaType.setValue(properties.get("workinghours"));
+        	if(metadataType != null) {
+        		metadataType.getMetaentry().add(workinghoursMetaType);
+        	} else {
+        		metadataType =  DroolsFactory.eINSTANCE.createMetadataType();
+        		metadataType.getMetaentry().add(workinghoursMetaType);
+        		FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                        (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__METADATA, metadataType);
+                task.getExtensionValues().get(0).getValue().add(extensionElementEntry);
+        	}
+        }
+        
+        if(properties.get("costpertimeunit") != null && properties.get("costpertimeunit").length() > 0) {
+        	if(task.getExtensionValues() == null || task.getExtensionValues().size() < 1) {
+            	ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+            	task.getExtensionValues().add(extensionElement);
+            }
+        	// see if we already have metadata extension
+        	MetadataType metadataType = null;
+        	for(ExtensionAttributeValue extattrval : task.getExtensionValues()) {
+        		FeatureMap extensionElements = extattrval.getValue();
+        		List<MetadataType> metadataExtensions = (List<MetadataType>) extensionElements
+                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__METADATA, true);
+        		if(metadataExtensions != null && metadataExtensions.size() > 0) {
+        			metadataType = metadataExtensions.get(0);
+        		}
+        	}
+        	MetaentryType costpertimeunitMetaType =  DroolsFactory.eINSTANCE.createMetaentryType();
+        	costpertimeunitMetaType.setName("costpertimeunit");
+        	costpertimeunitMetaType.setValue(properties.get("costpertimeunit"));
+        	if(metadataType != null) {
+        		metadataType.getMetaentry().add(costpertimeunitMetaType);
+        	} else {
+        		metadataType =  DroolsFactory.eINSTANCE.createMetadataType();
+        		metadataType.getMetaentry().add(costpertimeunitMetaType);
+        		FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                        (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__METADATA, metadataType);
+                task.getExtensionValues().get(0).getValue().add(extensionElementEntry);
+        	}
+        }
+        
     }
     
     protected void applyGatewayProperties(Gateway gateway, Map<String, String> properties) {
@@ -4097,6 +4335,36 @@ public class Bpmn2JsonUnmarshaller {
             sequenceFlow.setMonitoring(monitoring);
         }
         sequenceFlow.setIsImmediate(Boolean.parseBoolean(properties.get("isimmediate")));
+        
+        // simulation properties
+        if(properties.get("probability") != null && properties.get("probability").length() > 0) {
+        	if(sequenceFlow.getExtensionValues() == null || sequenceFlow.getExtensionValues().size() < 1) {
+            	ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+            	sequenceFlow.getExtensionValues().add(extensionElement);
+            }
+        	// see if we already have metadata extension
+        	MetadataType metadataType = null;
+        	for(ExtensionAttributeValue extattrval : sequenceFlow.getExtensionValues()) {
+        		FeatureMap extensionElements = extattrval.getValue();
+        		List<MetadataType> metadataExtensions = (List<MetadataType>) extensionElements
+                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__METADATA, true);
+        		if(metadataExtensions != null && metadataExtensions.size() > 0) {
+        			metadataType = metadataExtensions.get(0);
+        		}
+        	}
+        	MetaentryType probabilityMetaType =  DroolsFactory.eINSTANCE.createMetaentryType();
+        	probabilityMetaType.setName("probability");
+        	probabilityMetaType.setValue(properties.get("probability"));
+        	if(metadataType != null) {
+        		metadataType.getMetaentry().add(probabilityMetaType);
+        	} else {
+        		metadataType =  DroolsFactory.eINSTANCE.createMetadataType();
+        		metadataType.getMetaentry().add(probabilityMetaType);
+        		FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                        (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__METADATA, metadataType);
+        		sequenceFlow.getExtensionValues().get(0).getValue().add(extensionElementEntry);
+        	}
+        }
     }
 
     private Map<String, String> unmarshallProperties(JsonParser parser) throws JsonParseException, IOException {

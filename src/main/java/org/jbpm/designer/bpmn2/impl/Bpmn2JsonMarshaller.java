@@ -124,6 +124,8 @@ import org.eclipse.emf.ecore.util.FeatureMap;
 import org.jboss.drools.DroolsPackage;
 import org.jboss.drools.GlobalType;
 import org.jboss.drools.ImportType;
+import org.jboss.drools.MetadataType;
+import org.jboss.drools.MetaentryType;
 import org.jboss.drools.OnEntryScriptType;
 import org.jboss.drools.OnExitScriptType;
 import org.jbpm.designer.web.profile.IDiagramProfile;
@@ -1258,6 +1260,32 @@ public class Bpmn2JsonMarshaller {
     		    sb.setLength(sb.length() - 1);
     		}
     		properties.put("actors", sb.toString());
+    		// simulation properties
+            if(task.getExtensionValues() != null && task.getExtensionValues().size() > 0) {
+    	        for(ExtensionAttributeValue extattrval : task.getExtensionValues()) {
+    	        	FeatureMap extensionElements = extattrval.getValue();
+    	            
+                    @SuppressWarnings("unchecked")
+                    List<MetadataType> metadataTypeExtensions = (List<MetadataType>) extensionElements
+                                                         .get(DroolsPackage.Literals.DOCUMENT_ROOT__METADATA, true);
+                    if(metadataTypeExtensions != null && metadataTypeExtensions.size() > 0) {
+                    	MetadataType metaType = metadataTypeExtensions.get(0);
+                    	for(Object metaEntryObj : metaType.getMetaentry()) {
+                    		MetaentryType entry = (MetaentryType) metaEntryObj;
+                    		if(entry.getName() != null && entry.getName().equals("staffavailability")) {
+                    			properties.put("staffavailability", entry.getValue());
+                    		}
+                    		if(entry.getName() != null && entry.getName().equals("workinghours")) {
+                    			properties.put("workinghours", entry.getValue());
+                    		}
+                    		if(entry.getName() != null && entry.getName().equals("costpertimeunit")) {
+                    			properties.put("costpertimeunit", entry.getValue());
+                    		}
+                    	}
+                    }
+                    
+    	        }
+            }
     	} else if (task instanceof SendTask) {
     		taskType = "Send";
     		SendTask st = (SendTask) task;
@@ -1543,6 +1571,39 @@ public class Bpmn2JsonMarshaller {
                 }
                 properties.put("onexitactions", onExitStr);
             }
+        }
+        
+        // simulation properties
+        if(task.getExtensionValues() != null && task.getExtensionValues().size() > 0) {
+	        for(ExtensionAttributeValue extattrval : task.getExtensionValues()) {
+	        	FeatureMap extensionElements = extattrval.getValue();
+	            
+                @SuppressWarnings("unchecked")
+                List<MetadataType> metadataTypeExtensions = (List<MetadataType>) extensionElements
+                                                     .get(DroolsPackage.Literals.DOCUMENT_ROOT__METADATA, true);
+                if(metadataTypeExtensions != null && metadataTypeExtensions.size() > 0) {
+                	MetadataType metaType = metadataTypeExtensions.get(0);
+                	for(Object metaEntryObj : metaType.getMetaentry()) {
+                		MetaentryType entry = (MetaentryType) metaEntryObj;
+                		if(entry.getName() != null && entry.getName().equals("duration")) {
+                			properties.put("duration", entry.getValue());
+                		}
+                		if(entry.getName() != null && entry.getName().equals("timeunit")) {
+                			properties.put("timeunit", entry.getValue());
+                		}
+                		if(entry.getName() != null && entry.getName().equals("range")) {
+                			properties.put("range", entry.getValue());
+                		}
+                		if(entry.getName() != null && entry.getName().equals("standarddeviation")) {
+                			properties.put("standarddeviation", entry.getValue());
+                		}
+                		if(entry.getName() != null && entry.getName().equals("distributiontype")) {
+                			properties.put("distributiontype", entry.getValue());
+                		}
+                	}
+                }
+                
+	        }
         }
         
         // marshall the node out
@@ -2149,6 +2210,27 @@ public class Bpmn2JsonMarshaller {
         
         if(!foundSelectable) {
         	properties.put("isselectable", "true");
+        }
+        
+        // simulation properties
+        if(sequenceFlow.getExtensionValues() != null && sequenceFlow.getExtensionValues().size() > 0) {
+	        for(ExtensionAttributeValue extattrval : sequenceFlow.getExtensionValues()) {
+	        	FeatureMap extensionElements = extattrval.getValue();
+	            
+                @SuppressWarnings("unchecked")
+                List<MetadataType> metadataTypeExtensions = (List<MetadataType>) extensionElements
+                                                     .get(DroolsPackage.Literals.DOCUMENT_ROOT__METADATA, true);
+                if(metadataTypeExtensions != null && metadataTypeExtensions.size() > 0) {
+                	MetadataType metaType = metadataTypeExtensions.get(0);
+                	for(Object metaEntryObj : metaType.getMetaentry()) {
+                		MetaentryType entry = (MetaentryType) metaEntryObj;
+                		if(entry.getName() != null && entry.getName().equals("probability")) {
+                			properties.put("probability", entry.getValue());
+                		}
+                	}
+                }
+                
+	        }
         }
     	
         marshallProperties(properties, generator);
