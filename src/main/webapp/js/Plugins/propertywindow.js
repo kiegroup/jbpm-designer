@@ -834,7 +834,7 @@ ORYX.Plugins.PropertyWindow = {
 				// Push to the properties-array
 				if(pair.visible() && (pair.id() != "origbordercolor" && pair.id() != "origbgcolor" && pair.id() != "isselectable")) {
 					var proceed = true;
-					if(this.shapeSelection.shapes.length == 1 && this.shapeSelection.shapes.first().getStencil().title() == "Task") {
+					if(this.shapeSelection.shapes.length == 1 && this.shapeSelection.shapes.first().getStencil().idWithoutNs() == "Task") {
 						if(pair.fortasktypes() && pair.fortasktypes().length > 0) {
 							var foundtasktype = false;
 							var tts = pair.fortasktypes().split("|");
@@ -1842,7 +1842,7 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
         dataInputsTitle.push("** Data Inputs **");
         varData.push(dataInputsTitle);
         Ext.each(this.dataSource.data.items, function(item){
-        	if(item.data['name'] == "DataInputSet") {
+        	if(item.data.gridProperties.propId == "oryx-datainputset") {
         		var valueParts = item.data['value'].split(",");
         		for(var di=0; di < valueParts.length; di++) {
         			var nextPart = valueParts[di];
@@ -1867,7 +1867,7 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
         dataOutputsTitle.push("** Data Outputs **");
         varData.push(dataOutputsTitle);
         Ext.each(this.dataSource.data.items, function(item){
-        	if(item.data['name'] == "DataOutputSet") {
+        	if(item.data.gridProperties.propId == "oryx-dataoutputset") {
         		var valueParts = item.data['value'].split(",");
         		for(var dou=0; dou < valueParts.length; dou++) {
         			var nextPart = valueParts[dou];
