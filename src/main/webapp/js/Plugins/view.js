@@ -44,6 +44,12 @@ ORYX.Plugins.View = {
 
 	construct: function(facade, ownPluginData) {
 		this.facade = facade;
+		
+		// registered voice commands
+		this.facade.registerOnEvent(ORYX.CONFIG.VOICE_COMMAND_GENERATE_FORMS, this.generateTaskForms.bind(this));
+		this.facade.registerOnEvent(ORYX.CONFIG.VOICE_COMMAND_GENERATE_IMAGE, this.showAsPNG.bind(this));
+		this.facade.registerOnEvent(ORYX.CONFIG.VOICE_COMMAND_VIEW_SOURCE, this.showProcessBPMN.bind(this));
+		
 		//Standard Values
 		this.zoomLevel = 1.0;
 		this.maxFitToScreenLevel=1.5;

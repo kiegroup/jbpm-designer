@@ -1,0 +1,10 @@
+#micinput {
+    position: relative;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    height: 15px;
+    width: 15px;
+    margin-left: 0px;
+    opacity: 1.0;
+}

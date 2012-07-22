@@ -5054,7 +5054,7 @@
 					"id":"gatewaytype",
 					"type":"String",
 					"title":"Gateway type",
-					"title":"Gateway-Typ",
+					"title":"Gateway-Type",
 					"value":"XOR",
 					"description":"",
 					"readonly":true,

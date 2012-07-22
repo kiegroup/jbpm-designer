@@ -242,7 +242,6 @@ ORYX.Plugins.ShapeRepository = {
 	},
 	
 	drop: function(dragZone, target, event) {
-		
 		this._lastOverElement = undefined;
 		
 		// Hide the highlighting
@@ -305,8 +304,6 @@ ORYX.Plugins.ShapeRepository = {
 					this.parent.add(this.shape);
 				}
 					
-				
-				
 				if( this.canAttach &&  this.currentParent instanceof ORYX.Core.Node && this.shape.dockers.length > 0){
 					
 					var docker = this.shape.dockers[0];
@@ -342,12 +339,9 @@ ORYX.Plugins.ShapeRepository = {
 			}
 		});
 							
-		var position = this.facade.eventCoordinates( event.browserEvent );	
-					
+		var position = this.facade.eventCoordinates( event.browserEvent );
 		var command = new commandClass(option, this._currentParent, this._canAttach, position, this.facade);
-		
 		this.facade.executeCommands([command]);
-		
 		this._currentParent = undefined;
 	},
 

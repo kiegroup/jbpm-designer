@@ -55,11 +55,21 @@ ORYX.Plugins.ShapeMenuPlugin = {
 		this.createdButtons = {};
 		
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_STENCIL_SET_LOADED, (function(){ this.registryChanged() }).bind(this));
+		
+		this.facade.registerOnEvent(ORYX.CONFIG.VOICE_COMMAND_ADD_TASK, this.addNode.bind(this, "Task"));
+		this.facade.registerOnEvent(ORYX.CONFIG.VOICE_COMMAND_ADD_GATEWAY, this.addNode.bind(this, "Exclusive_Databased_Gateway"));
+		this.facade.registerOnEvent(ORYX.CONFIG.VOICE_COMMAND_ADD_END_EVENT, this.addNode.bind(this, "EndNoneEvent"));
+		
 
 		this.timer = null;
 		
 		this.resetElements = true;
 
+	},
+	
+	addNode: function(nodeName) {
+		var option = {type: "http://b3mn.org/stencilset/bpmn2.0#"+nodeName, namespace: "http://b3mn.org/stencilset/bpmn2.0#", connectingType: true};
+		this.newShape(option, undefined);
 	},
 
 	hideShapeMenu: function(event) {
@@ -753,7 +763,6 @@ ORYX.Plugins.ShapeMenuPlugin = {
 	 * @param {Stencil} stencil
 	 */
 	morphShape: function(shape, stencil) {
-		
 		var MorphTo = ORYX.Core.Command.extend({
 			construct: function(shape, stencil, facade){
 				this.shape = shape;

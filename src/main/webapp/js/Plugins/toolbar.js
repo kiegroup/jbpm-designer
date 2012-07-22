@@ -105,6 +105,28 @@ ORYX.Plugins.Toolbar = Clazz.extend({
         // Map used to store all drop down buttons of current group
         var currentGroupsDropDownButton = {};
 
+        if(('webkitSpeech' in document.createElement('input'))) {
+			var micfield = new Ext.form.TextField({
+				id: 'micinput'
+			});
+			this.toolbar.add(micfield);
+			this.toolbar.add('-');
+			
+			var attrib = {'x-webkit-speech':'true'};
+		    Ext.get('micinput').set(attrib);
+		    
+		    var mic = document.getElementById('micinput');
+		    mic.onfocus = mic.blur;
+		    mic.onwebkitspeechchange = function(e) {
+		    	var val = mic.value;
+		    	ORYX.EDITOR._pluginFacade.raiseEvent({
+		            type: ORYX.CONFIG.EVENT_VOICE_COMMAND,
+		            entry: val
+		        });
+		    	mic.blur;
+		    	mic.value = "";
+		    };
+		}
 		
 		plugs.each((function(value) {
 			if(!value.name) {return}

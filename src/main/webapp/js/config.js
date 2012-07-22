@@ -198,6 +198,7 @@ ORYX.CONFIG.EVENT_MOUSEOVER =			"mouseover";
 ORYX.CONFIG.EVENT_MOUSEOUT =			"mouseout";
 ORYX.CONFIG.EVENT_MOUSEMOVE =			"mousemove";
 ORYX.CONFIG.EVENT_DBLCLICK =			"dblclick";
+ORYX.CONFIG.EVENT_CLICK =			    "click";
 ORYX.CONFIG.EVENT_KEYDOWN =				"keydown";
 ORYX.CONFIG.EVENT_KEYUP =				"keyup";
 
@@ -248,6 +249,33 @@ ORYX.CONFIG.EVENT_DROP_SHAPE =				"drop.shape";
 ORYX.CONFIG.EVENT_SHAPE_DELETED =				"shape.deleted";
 ORYX.CONFIG.EVENT_FACADE_SELECTION_DELETION_REQUEST =				"facade_selection.deletion.request";
 ORYX.CONFIG.EVENT_NODEXML_SHOW = "nodexml.show";
+ORYX.CONFIG.EVENT_VOICE_COMMAND = "voice.command";
+
+// voice commands
+ORYX.CONFIG.VOICE_COMMAND_GENERATE_FORMS = "voice.command.generate.forms";
+ORYX.CONFIG.VOICE_COMMAND_VALIDATE = "voice.command.validate";
+ORYX.CONFIG.VOICE_COMMAND_GENERATE_IMAGE = "voice.command.generate.image";
+ORYX.CONFIG.VOICE_COMMAND_VIEW_SOURCE = "voice.command.view.source";
+ORYX.CONFIG.VOICE_COMMAND_ADD_TASK = "voice.command.add.task";
+ORYX.CONFIG.VOICE_COMMAND_ADD_GATEWAY = "voice.command.add.gateway";
+ORYX.CONFIG.VOICE_COMMAND_ADD_START_EVENT = "voice.command.add.start.event";
+ORYX.CONFIG.VOICE_COMMAND_ADD_END_EVENT = "voice.command.add.end.event";
+ORYX.CONFIG.VOICE_COMMAND_TASK_TYPE_USER = "voice.command.task.type.user";
+ORYX.CONFIG.VOICE_COMMAND_TASK_TYPE_SCRIPT = "voice.command.task.type.script";
+ORYX.CONFIG.VOICE_COMMAND_GATEWAY_TYPE_PARALLEL = "voice.command.gateway.type.parallel"; 
+
+// voice entries
+ORYX.CONFIG.VOICE_ENTRY_GENERATE_FORMS = "create forms";
+ORYX.CONFIG.VOICE_ENTRY_VALIDATE = "validate";
+ORYX.CONFIG.VOICE_ENTRY_GENERATE_IMAGE = "create image";
+ORYX.CONFIG.VOICE_ENTRY_VIEW_SOURCE = "show bpmn";
+ORYX.CONFIG.VOICE_ENTRY_ADD_TASK = "task,test,text,that,map,10,chat,pet";
+ORYX.CONFIG.VOICE_ENTRY_ADD_GATEWAY = "gateway";
+ORYX.CONFIG.VOICE_ENTRY_ADD_START_EVENT = "start,bart,dark";
+ORYX.CONFIG.VOICE_ENTRY_ADD_END_EVENT = "end,and";
+ORYX.CONFIG.VOICE_ENTRY_TASK_TYPE_USER = "user,used";
+ORYX.CONFIG.VOICE_ENTRY_TASK_TYPE_SCRIPT = "script,strip,red";
+ORYX.CONFIG.VOICE_ENTRY_GATEWAY_TYPE_PARALLEL = "parallel";
 	
 	/* Selection Shapes Highlights */
 ORYX.CONFIG.SELECTION_HIGHLIGHT_SIZE =				5;
