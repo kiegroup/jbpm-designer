@@ -53,8 +53,8 @@ ORYX.Plugins.View = {
 		//Standard Values
 		this.zoomLevel = 1.0;
 		this.maxFitToScreenLevel=1.5;
-		this.minZoomLevel = 0.1;
-		this.maxZoomLevel = 2.5;
+		this.minZoomLevel = 0.4;
+		this.maxZoomLevel = 2.0;
 		this.diff=5; //difference between canvas and view port, s.th. like toolbar??
 		
 		//Read properties
@@ -1493,7 +1493,7 @@ ORYX.Plugins.View = {
 	_checkSize:function(){
 		var canvasParent=this.facade.getCanvas().getHTMLContainer().parentNode;
 		var minForCanvas= Math.min((canvasParent.parentNode.getWidth()/canvasParent.getWidth()),(canvasParent.parentNode.getHeight()/canvasParent.getHeight()));
-		return 1.05 > minForCanvas;
+		return 0.7 > minForCanvas;
 		
 	},
 	/**
