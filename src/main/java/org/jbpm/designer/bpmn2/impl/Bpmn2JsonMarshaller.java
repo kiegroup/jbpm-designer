@@ -2131,6 +2131,10 @@ public class Bpmn2JsonMarshaller {
     	} else {
     	    properties.put("name", "");
     	}
+    	if(sequenceFlow.getDocumentation() != null && sequenceFlow.getDocumentation().size() > 0) {
+            properties.put("documentation", sequenceFlow.getDocumentation().get(0).getText());
+        }
+    	
     	Expression conditionExpression = sequenceFlow.getConditionExpression();
     	if (conditionExpression instanceof FormalExpression) {
     	    if(((FormalExpression) conditionExpression).getBody() != null) {
