@@ -48,7 +48,16 @@ ORYX.Plugins.ShapeRepository = {
 			rootVisible: false,
 			lines: false,
 			anchors: '0, -30'
-		})
+		});
+		
+		var sorter = new Ext.tree.TreeSorter(panel, {
+		    folderSort: true,
+		    dir: "asc",
+		    sortType: function(node) {
+		        return node.text;
+		    }
+		});
+		
 		var region = this.facade.addToRegion("west", panel, ORYX.I18N.ShapeRepository.title);
 		
 		Ext.Ajax.request({
@@ -183,6 +192,8 @@ ORYX.Plugins.ShapeRepository = {
 					this.createStencilTreeNode(treeGroups[group], value);	
 					
 				}).bind(this));
+				
+				
 				
 				// If there is no group
 				if(groups.length == 0) {
