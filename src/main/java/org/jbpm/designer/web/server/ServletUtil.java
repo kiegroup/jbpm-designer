@@ -175,7 +175,7 @@ public class ServletUtil {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
         connection.setRequestMethod(requestMethod);
-        connection.setRequestProperty("Accept","text/html,application/xhtml+xml,application/xml,application/json,text/json,text/plain;q=0.9,*/*;q=0.8");
+        connection.setRequestProperty("Accept","text/html,application/xhtml+xml,application/xml,application/json,application/octet-stream,text/json,text/plain;q=0.9,*/*;q=0.8");
 
         connection.setRequestProperty("charset", "UTF-8");
         connection.setReadTimeout(5 * 1000);

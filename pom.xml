@@ -240,6 +240,12 @@
         <groupId>batik</groupId>
         <artifactId>batik-ext</artifactId>
         <version>${batik.version}</version>
+        <exclusions>
+        	<exclusion>
+        		<groupId>xml-apis</groupId>
+        		<artifactId>xmlParserAPIs</artifactId>
+        	</exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>batik</groupId>
@@ -280,10 +286,6 @@
         	<exclusion>
         		<groupId>org.apache.xmlgraphics</groupId>
         		<artifactId>batik-parser</artifactId>
-        	</exclusion>
-        	<exclusion>
-        		<groupId>org.apache.xmlgraphics</groupId>
-        		<artifactId>batik-util</artifactId>
         	</exclusion>
         	<exclusion>
         		<groupId>org.apache.xmlgraphics</groupId>

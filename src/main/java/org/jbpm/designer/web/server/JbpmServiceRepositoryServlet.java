@@ -27,8 +27,7 @@ import org.jbpm.process.workitem.WorkDefinitionImpl;
 import org.jbpm.process.workitem.WorkItemRepository;
 import org.json.JSONObject;
 
-import sun.misc.BASE64Encoder;
-
+import org.apache.commons.codec.binary.Base64;
 
 /**
  * Servlet for interaction with the jbpm service repository.

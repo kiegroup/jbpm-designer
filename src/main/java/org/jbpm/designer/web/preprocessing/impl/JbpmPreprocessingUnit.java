@@ -48,8 +48,9 @@ import org.junit.runner.Request;
 import org.drools.process.core.datatype.DataType;
 import org.mvel2.MVEL;
 
-import sun.misc.BASE64Encoder;
+import org.apache.commons.codec.binary.Base64;
 
+import sun.misc.BASE64Encoder;
 
 /**
  * JbpmPreprocessingUnit - preprocessing unit for the jbpm profile
@@ -181,14 +182,14 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         	// copy our results as the stencil json data
         	createAndWriteToFile(stencilFilePath, workItemTemplate.toString());
         	// create and parse the view svg to include config data
-            createAndParseViewSVG(workDefinitions);
+            createAndParseViewSVG(workDefinitions, profile);
         } catch( Exception e ) {
             _logger.error("Failed to setup workitems : " + e.getMessage());
         }
     }
     
     @SuppressWarnings("unchecked")
-    private void createAndParseViewSVG(Map<String, WorkDefinitionImpl> workDefinitions) {
+    private void createAndParseViewSVG(Map<String, WorkDefinitionImpl> workDefinitions, IDiagramProfile profile) {
         // first delete all existing workitem svgs
         Collection<File> workitemsvgs = FileUtils.listFiles(new File(workitemSVGFilePath), new String[] { "svg" }, true);
         if(workitemsvgs != null) {
@@ -200,6 +201,11 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             for(Map.Entry<String, WorkDefinitionImpl> definition : workDefinitions.entrySet()) {
                 StringTemplate workItemTemplate = new StringTemplate(readFile(origWorkitemSVGFile));
                 workItemTemplate.setAttribute("workitemDef", definition.getValue());
+                String widIcon = definition.getValue().getIcon();
+                InputStream iconStream = getImageInstream(widIcon, "GET", profile);
+                BASE64Encoder enc = new sun.misc.BASE64Encoder();
+                String iconEncoded = "data:image/png;base64," + enc.encode(IOUtils.toByteArray(iconStream));
+                workItemTemplate.setAttribute("nodeicon", iconEncoded);
                 String fileToWrite = workitemSVGFilePath + definition.getValue().getName() + ".svg";
                 createAndWriteToFile(fileToWrite, workItemTemplate.toString());
             }
@@ -803,9 +809,8 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         if (profile.getUsr() != null && profile.getUsr().trim().length() > 0
                 && profile.getPwd() != null
                 && profile.getPwd().trim().length() > 0) {
-            BASE64Encoder enc = new sun.misc.BASE64Encoder();
             String userpassword = profile.getUsr() + ":" + profile.getPwd();
-            String encodedAuthorization = enc.encode(userpassword.getBytes());
+            String encodedAuthorization = Base64.encodeBase64String(userpassword.getBytes());
             connection.setRequestProperty("Authorization", "Basic "
                     + encodedAuthorization);
         }
@@ -833,6 +838,22 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     	}
     	is.close();
     	return bytes;
+    }
+    
+    public static InputStream getImageInstream(String urlLocation,
+            String requestMethod, IDiagramProfile profile) throws Exception {
+        URL url = new URL(urlLocation);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+        connection.setRequestMethod(requestMethod);
+        connection.setRequestProperty("Accept","text/html,application/xhtml+xml,application/xml,application/json,application/octet-stream,text/json,text/plain;q=0.9,*/*;q=0.8");
+
+        connection.setRequestProperty("charset", "UTF-8");
+        connection.setReadTimeout(5 * 1000);
+
+        ServletUtil.applyAuth(profile, connection);
+        connection.connect();
+        return connection.getInputStream();
     }
     
     private class ThemeInfo {

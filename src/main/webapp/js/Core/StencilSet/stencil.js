@@ -169,7 +169,7 @@ ORYX.Core.StencilSet.Stencil = {
 		            var imageElems = this._view.getElementsByTagNameNS("http://www.w3.org/2000/svg", "image");
 		            $A(imageElems).each((function(imageElem) {
 		                var link = imageElem.getAttributeNodeNS("http://www.w3.org/1999/xlink", "href");
-		                if(link && link.value.indexOf("://") == -1) {
+		                if(link && (link.value.indexOf("://") == -1 && link.value.indexOf("base64") == -1)) {
 		                    link.textContent = this._source + "view/" + link.value;
 		                }
 		            }).bind(this));
@@ -382,7 +382,7 @@ ORYX.Core.StencilSet.Stencil = {
 			var imageElems = this._view.getElementsByTagNameNS("http://www.w3.org/2000/svg", "image");
 			$A(imageElems).each((function(imageElem) {
 				var link = imageElem.getAttributeNodeNS("http://www.w3.org/1999/xlink", "href");
-				if(link && link.value.indexOf("://") == -1) {
+				if(link && (link.value.indexOf("://") == -1 && link.value.indexOf("base64") == -1)) {
 					link.textContent = this._source + "view/" + link.value;
 				}
 			}).bind(this));

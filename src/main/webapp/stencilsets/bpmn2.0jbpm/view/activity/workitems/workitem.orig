@@ -48,7 +48,7 @@
 			stroke="black">
 		</text>
     <g id="$workitemDef.name$" transform="scale(0.7,0.7) translate(8,8)">
-        <image oryx:anchors="top" x="2" y="2" width="20" height="20" xlink:href="$workitemDef.icon$" />
+        <image oryx:anchors="top" x="2" y="2" width="20" height="20" xlink:href="$nodeicon$" />
     </g>
   </g>
 </svg>

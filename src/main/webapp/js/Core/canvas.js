@@ -652,7 +652,7 @@ ORYX.Core.Canvas = ORYX.Core.AbstractShape.extend({
 		$A(svgClone.getElementsByTagNameNS(ORYX.CONFIG.NAMESPACE_SVG, 'image')).each(function(elem) {
 			var href = elem.getAttributeNS("http://www.w3.org/1999/xlink","href");
 			
-			if(!href.match("^(http|https)://")) {
+			if(!href.match("^(http|https)://") && href.indexOf("base64") == -1) {
 				href = window.location.protocol + "//" + window.location.host + href;
 				elem.setAttributeNS("http://www.w3.org/1999/xlink", "href", href);
 			}

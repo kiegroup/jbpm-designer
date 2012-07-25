@@ -27,8 +27,7 @@ import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import sun.misc.BASE64Encoder;
-
+import org.apache.commons.codec.binary.Base64;
 
 /**
  * 

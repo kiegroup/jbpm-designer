@@ -1018,7 +1018,7 @@ ORYX.Plugins.SelectedRect = Clazz.extend({
 	},
 
 	show: function() {
-		this.node.setAttributeNS(null, 'display', '');
+		this.node.setAttributeNS(null, 'display', 'inherit');
 	},
 
 	resize: function(bounds) {
@@ -1065,7 +1065,7 @@ ORYX.Plugins.GridLine = Clazz.extend({
 	},
 
 	show: function() {
-		this.node.setAttributeNS(null, 'display', '');
+		this.node.setAttributeNS(null, 'display', 'inherit');
 	},
 
 	getScale: function(){

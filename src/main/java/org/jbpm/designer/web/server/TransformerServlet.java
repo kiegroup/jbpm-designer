@@ -79,8 +79,8 @@ import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
 import org.jbpm.migration.JbpmMigration;
 
+import org.apache.commons.codec.binary.Base64;
 import sun.misc.BASE64Encoder;
-
 
 /** 
  * 
@@ -132,8 +132,7 @@ public class TransformerServlet extends HttpServlet {
             		t.transcode(input, output);
 	                resp.setCharacterEncoding("UTF-8");
                 	resp.setContentType("text/plain");
-                	BASE64Encoder enc = new sun.misc.BASE64Encoder();
-                	resp.getWriter().write("<object data=\"data:application/pdf;base64," + enc.encode(bout.toByteArray()) +  "\" type=\"application/pdf\"></object>");
+                	resp.getWriter().write("<object data=\"data:application/pdf;base64," + Base64.encodeBase64(bout.toByteArray()) +  "\" type=\"application/pdf\"></object>");
             	} else {
 	                storeToGuvnor(uuid, profile, formattedSvg, rawSvg,
 	                        transformto, processid);

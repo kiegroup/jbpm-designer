@@ -10,8 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.configuration.Configuration;
-
-import sun.misc.BASE64Decoder;
+import org.apache.commons.codec.binary.Base64;
 
 public class EngineProxy extends HttpServlet {
 	private static final long serialVersionUID = -596209118625017987L;
@@ -27,8 +26,7 @@ public class EngineProxy extends HttpServlet {
 						user);
 				if (st.hasMoreTokens()) {
 					if (st.nextToken().equalsIgnoreCase("Basic")) {
-						BASE64Decoder decoder = new sun.misc.BASE64Decoder();
-						String userPass = new String(decoder.decodeBuffer(st.nextToken()));
+						String userPass = new String(Base64.decodeBase64(st.nextToken()));
 						user = userPass.split(":")[0];
 					}
 				}
@@ -43,7 +41,7 @@ public class EngineProxy extends HttpServlet {
 			URL url_engine = new URL(engineURL);
 			HttpURLConnection connection_engine = (HttpURLConnection) url_engine.openConnection();
 			connection_engine.setRequestMethod("GET");
-			String encoding = new sun.misc.BASE64Encoder().encode((user + ":").getBytes());
+			String encoding = Base64.encodeBase64String((user + ":").getBytes());
 			connection_engine.setRequestProperty("Authorization", "Basic " + encoding);
 			connection_engine.setDoInput(true);
 

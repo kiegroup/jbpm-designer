@@ -9,8 +9,7 @@ import java.util.Iterator;
 import org.apache.batik.util.ParsedURLData;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 
-import sun.misc.BASE64Encoder;
-
+import org.apache.commons.codec.binary.Base64;
 
 public class GuvnorParsedURLData extends ParsedURLData {
     private IDiagramProfile profile;
@@ -58,9 +57,8 @@ public class GuvnorParsedURLData extends ParsedURLData {
         if (profile.getUsr() != null && profile.getUsr().trim().length() > 0
                 && profile.getPwd() != null
                 && profile.getPwd().trim().length() > 0) {
-            BASE64Encoder enc = new sun.misc.BASE64Encoder();
             String userpassword = profile.getUsr() + ":" + profile.getPwd();
-            String encodedAuthorization = enc.encode(userpassword.getBytes());
+            String encodedAuthorization = Base64.encodeBase64String(userpassword.getBytes());
             connection.setRequestProperty("Authorization", "Basic "
                     + encodedAuthorization);
         }
