@@ -2466,11 +2466,13 @@ Ext.form.ComplexExpressionField = Ext.extend(Ext.form.TriggerField,  {
             }]
 		});	
 		dialog.show();		
+		this.foldFunc = CodeMirror.newFoldFunction(CodeMirror.braceRangeFinder);
 		sourceEditor = CodeMirror.fromTextArea(document.getElementById(ceta.getId()), {
 			  mode: "text/x-java",
 			  lineNumbers: true,
 			  lineWrapping: true,
 			  matchBrackets: true,
+			  onGutterClick: this.foldFunc,
 			  extraKeys: {"Ctrl-Z": function(cm) {CodeMirror.hint(cm, CodeMirror.jbpmHint, dialog);}},
 			  onCursorActivity: function() {
 				  sourceEditor.setLineClass(hlLine, null, null);

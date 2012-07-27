@@ -1116,10 +1116,12 @@ ORYX.Plugins.View = {
 						}]
 			});
 		win.show();
+		this.foldFunc = CodeMirror.newFoldFunction(CodeMirror.tagRangeFinder);
 		var sourceEditor = CodeMirror.fromTextArea(document.getElementById("svgSourceTextArea"), {
 			  mode: "application/xml",
 			  lineNumbers: true,
-			  lineWrapping: true
+			  lineWrapping: true,
+			  onGutterClick: this.foldFunc
 			});
 	},
 	
@@ -1151,10 +1153,12 @@ ORYX.Plugins.View = {
 						}]
 			});
 		win.show();
+		this.foldFunc = CodeMirror.newFoldFunction(CodeMirror.tagRangeFinder);
 		var sourceEditor = CodeMirror.fromTextArea(document.getElementById("erdfSourceTextArea"), {
  			  mode: "application/xml",
  			  lineNumbers: true,
- 			  lineWrapping: true
+ 			  lineWrapping: true,
+ 			  onGutterClick: this.foldFunc
  			});
 	},
 	
@@ -1185,10 +1189,12 @@ ORYX.Plugins.View = {
 			}]
 			});
 		win.show();
+		this.foldFunc = CodeMirror.newFoldFunction(CodeMirror.braceRangeFinder);
 		var sourceEditor = CodeMirror.fromTextArea(document.getElementById("jsonSourceTextArea"), {
  			  mode: "application/json",
  			  lineNumbers: true,
- 			  lineWrapping: true
+ 			  lineWrapping: true,
+ 			  onGutterClick: this.foldFunc
  			});
 	},
 	
@@ -1278,10 +1284,12 @@ ORYX.Plugins.View = {
 						}]
     	   				});
     	   			win.show();
+    	   			this.foldFunc = CodeMirror.newFoldFunction(CodeMirror.tagRangeFinder);
     	   			var sourceEditor = CodeMirror.fromTextArea(document.getElementById("bpmnSourceTextArea"), {
     	   			  mode: "application/xml",
     	   			  lineNumbers: true,
-    	   			  lineWrapping: true
+    	   			  lineWrapping: true,
+    	   			  onGutterClick: this.foldFunc
     	   			});
     	   		}catch(e){
     	   			Ext.Msg.alert("Converting to BPMN2 Failed :\n"+e);

@@ -236,10 +236,12 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                 	    	  this.dialog.add(this.taskformsourceeditor);
                 	    	  this.dialog.doLayout();
                 	    	  this.sourceMode = !this.sourceMode;
+                	    	  this.foldFunc = CodeMirror.newFoldFunction(CodeMirror.tagRangeFinder);
                 	    	  this.taskformcolorsourceeditor = CodeMirror.fromTextArea(document.getElementById(sourceeditorid), {
                 	 			  mode: "text/html",
                 	 			  lineNumbers: true,
                 	 			  lineWrapping: true,
+                	 			  onGutterClick: this.foldFunc,
                 	 			  extraKeys: {
                 	 				"'>'": function(cm) { cm.closeTag(cm, '>'); },
                 	 				"'/'": function(cm) { cm.closeTag(cm, '/'); }

@@ -41,10 +41,12 @@ ORYX.Plugins.NodeXMLViewer = Clazz.extend({
 				}]
    				});
 			this.win.show();
+			this.foldFunc = CodeMirror.newFoldFunction(CodeMirror.tagRangeFinder);
    			this.sourceEditor = CodeMirror.fromTextArea(document.getElementById(nextTAID), {
    			  mode: "application/xml",
    			  lineNumbers: true,
-   			  lineWrapping: true
+   			  lineWrapping: true,
+   			  onGutterClick: this.foldFunc
    			});
 		} else {
 			Ext.Msg.alert('Node source was not specified.');
