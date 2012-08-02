@@ -1934,11 +1934,12 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                             if (!dataType){
                                 dataType = "java.lang.String";
                             }
+            				var escapedp = innerParts[1].replace(/\#\#/g , ",");
                             dataassignments.add(new DataAssignment({
                                 from: innerParts[0],
                                 type: "is equal to",
                                 to: "",
-                                tostr: innerParts[1],
+                                tostr: escapedp,
                                 dataType: dataType
                             }));
     			} else if(nextPart.indexOf("->") > 0) {
@@ -2065,7 +2066,8 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                 header: 'To Value',
                 width: 180,
                 dataIndex: 'tostr',
-                editor: new Ext.form.TextField({ allowBlank: true })
+                editor: new Ext.form.TextField({ allowBlank: true }),
+                renderer: Ext.util.Format.htmlEncode
     		}, itemDeleter]),
     		selModel: itemDeleter,
             autoHeight: true,
@@ -2121,24 +2123,24 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                 			if(this.data["type"] == "is mapped to") {
                 				outValue += this.data['from'] + "->" + this.data['to'] + ",";
                 			} else if(this.data["type"] == "is equal to") {
-                				outValue += this.data['from'] + "=" + this.data['tostr'] + ",";
+                				var escapedc = this.data['tostr'].replace(/,/g , "##");
+                				outValue += this.data['from'] + "=" + escapedc + ",";
                 			}
                 		}
                     });
                 	if(outValue.length > 0) {
-                		outValue = outValue.slice(0, -1)
+                		outValue = outValue.slice(0, -1);
                 	}
 					this.setValue(outValue);
-					this.dataSource.getAt(this.row).set('value', outValue)
-					this.dataSource.commitChanges()
-
-					dialog.hide()
+					this.dataSource.getAt(this.row).set('value', outValue);
+					this.dataSource.commitChanges();
+					dialog.hide();
                 }.bind(this)
             }, {
                 text: ORYX.I18N.PropertyWindow.cancel,
                 handler: function(){
 					this.setValue(this.value);
-                	dialog.hide()
+                	dialog.hide();
                 }.bind(this)
             }]
 		});		

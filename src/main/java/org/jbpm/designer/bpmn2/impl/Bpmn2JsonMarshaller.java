@@ -1068,8 +1068,9 @@ public class Bpmn2JsonMarshaller {
             		if(associationValue == null) {
             			associationValue = "";
             		}
-            		associationBuff.append(rhsAssociation).append("=").append(associationValue);
-            		associationBuff.append(",");
+            		String replacer = associationValue.replaceAll(",", "##");
+            		associationBuff.append(rhsAssociation).append("=").append(replacer);
+                	associationBuff.append(",");
             	}
             } 
 //            else if(isBiDirectional) {
@@ -1425,8 +1426,19 @@ public class Bpmn2JsonMarshaller {
             		if(associationValue == null) {
             			associationValue = "";
             		}
-            		associationBuff.append(rhsAssociation).append("=").append(associationValue);
-            		associationBuff.append(",");
+            		
+            		// don't include properties that have their independent input editors:
+            		if(!(rhsAssociation.equals("GroupId") || 
+            		   rhsAssociation.equals("Skippable") ||
+            		   rhsAssociation.equals("Comment") || 
+            		   rhsAssociation.equals("Priority") ||
+            		   rhsAssociation.equals("Content") ||
+            		   rhsAssociation.equals("TaskName")
+            		   )) {
+            			String replacer = associationValue.replaceAll(",", "##");
+            			associationBuff.append(rhsAssociation).append("=").append(replacer);
+            			associationBuff.append(",");
+            		}
             		
             		if(rhsAssociation.equalsIgnoreCase("TaskName")) {
             			properties.put("taskname", associationValue);
@@ -1913,8 +1925,9 @@ public class Bpmn2JsonMarshaller {
             		if(associationValue == null) {
             			associationValue = "";
             		}
-            		associationBuff.append(rhsAssociation).append("=").append(associationValue);
-            		associationBuff.append(",");
+            		String replacer = associationValue.replaceAll(",", "##");
+            		associationBuff.append(rhsAssociation).append("=").append(replacer);
+                	associationBuff.append(",");
             	}
             } 
 //            else if(isBiDirectional) {
