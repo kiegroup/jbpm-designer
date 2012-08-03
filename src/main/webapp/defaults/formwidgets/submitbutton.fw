@@ -1,0 +1,2 @@
+<label for="sb">Label Text</label>
+<input name="Submit" type="submit" value="Submit" id="sb" />

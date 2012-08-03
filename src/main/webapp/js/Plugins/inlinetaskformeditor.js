@@ -84,6 +84,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
 	    	  widgetKeys.push(key);
 	      }
 	    }
+	    widgetKeys.sort();
 	    var displayWidgetKeys = [];
 	    for (var i = 0; i < widgetKeys.length; i++) {
 	    	displayWidgetKeys[i] = [widgetKeys[i] + ""];
