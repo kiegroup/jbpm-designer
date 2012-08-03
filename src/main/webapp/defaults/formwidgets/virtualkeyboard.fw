@@ -1,8 +1,0 @@
-<script type="text/javascript">
-	google.load("elements", "1", {packages: "keyboard"});
-	google.setOnLoadCallback(attachKeyBoard);
-	function attachKeyBoard() {
-		new google.elements.keyboard.Keyboard(
-          [google.elements.keyboard.LayoutCode.ENGLISH], ['_searchvideo']);
-	}
-</script>

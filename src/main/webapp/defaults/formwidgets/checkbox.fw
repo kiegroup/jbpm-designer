@@ -1,0 +1,2 @@
+<label for="cb">Label Text</label>
+<input type="checkbox" name="" value="" id="cb"/>
