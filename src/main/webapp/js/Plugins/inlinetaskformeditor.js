@@ -170,7 +170,9 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
 								    autoEl : {
 								        tag : "iframe",
 								        width: "100%",
-    	   					            height: "570"
+    	   					            height: "570",
+    	   					            frameborder: "0",
+    	   					            scrolling: "auto"
 								    }
 								}]
     	            }
