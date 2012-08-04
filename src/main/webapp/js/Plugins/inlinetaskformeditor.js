@@ -15,7 +15,6 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
 	construct: function(facade){
 		this.facade = facade;
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_TASKFORM_EDIT, this.showTaskFormEditor.bind(this));
-		this.sourceMode = false;
 	},
 	showTaskFormEditor: function(options) {
 		if(options && options.tn) {
@@ -34,10 +33,12 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
 	    		    	   		try {
 	    		    	   			this._buildandshow(options.tn, response.responseText, widgetJson);
 	    		    	   		} catch(e) {
+	    		    	   			Ext.Msg.minWidth = 360;
 	    		    	   			Ext.Msg.alert('Error initiating Form Editor :\n' + e);
 	    		    	   		}
 	    		            }.bind(this),
 	    		            failure: function(){
+	    		            	Ext.Msg.minWidth = 360;
 	    		            	Ext.Msg.alert('Error initiating Form Editor.');
 	    		            },
 	    		            params: {
@@ -48,10 +49,12 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
 	    		            }
 	    		        });
 	    	   		} catch(e) {
+	    	   			Ext.Msg.minWidth = 360;
 	    	   			Ext.Msg.alert('Error initiating Form Widgets :\n' + e);
 	    	   		}
 	            }.bind(this),
 	            failure: function(){
+	            	Ext.Msg.minWidth = 360;
 	            	Ext.Msg.alert('Error initiating Form Widgets.');
 	            },
 	            params: {
@@ -60,6 +63,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
 	            }
 	        });
 		} else {
+			Ext.Msg.minWidth = 360;
 			Ext.Msg.alert('Task Name not specified.');
 		}
 	},
@@ -68,15 +72,6 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
 		if(defaultsrc && defaultsrc != "false") {
 			formvalue = defaultsrc;
 		}
-		
-		this.sourceMode = false;
-		
-		this.taskformeditor = new Ext.form.HtmlEditor({
-			 id: Ext.id(),
-	         value:     formvalue,
-	     	 enableSourceEdit: false,
-	         autoScroll: true
-	       });
 		
 		var widgetKeys = [];
 	    for (var key in widgetJson) {
@@ -110,7 +105,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
               { 
             	select: { 
             		fn:function(combo, value) {
-            			if(this.taskformcolorsourceeditor && this.sourceMode) {
+            			if(this.taskformcolorsourceeditor) {
             				Ext.Ajax.request({
     	    		            url: ORYX.PATH + 'formwidget',
     	    		            method: 'POST',
@@ -118,10 +113,12 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
     	    		    	   		try {
     	    		    	   			this.taskformcolorsourceeditor.replaceSelection(response.responseText, "end");
     	    		    	   		} catch(e) {
+    	    		    	   			Ext.Msg.minWidth = 360;
     	    		    	   			Ext.Msg.alert('Error inserting Form Widget :\n' + e);
     	    		    	   		}
     	    		            }.bind(this),
     	    		            failure: function(){
+    	    		            	Ext.Msg.minWidth = 360;
     	    		            	Ext.Msg.alert('Error inserting Form Widget.');
     	    		            },
     	    		            params: {
@@ -131,20 +128,62 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
     	    		            }
     	    		        });
             			} else {
+            				Ext.Msg.minWidth = 360;
             				Ext.Msg.alert('Widget insertion is only possible in Source Mode');
             			}
                     }.bind(this)
                 }  
              }
 	    });
+	    
+	  var sourceeditorid = Ext.id();
+  	  this.taskformsourceeditor = new Ext.form.TextArea({
+			id: sourceeditorid,
+			anchor: '100%',
+	        autoScroll: true,
+	        value: formvalue
+	      });
+	    
+	    var outterPanel = new Ext.Panel({
+	    	header: false,
+    		anchor: '100%',
+    	    layout:'column',
+    	    autoScroll:true,
+    	    border : false,
+    	    layoutConfig: {
+    			columns: 2,
+    			pack:'center',
+    		    align:'middle'
+    		},
+    	    items: [
+    	            {
+    	              columnWidth: .5,
+    	              items: this.taskformsourceeditor
+    	            },{
+    	              columnWidth: .5,
+    	              items: [
+								{
+								    xtype : "component",
+								    id    : 'livepreviewpanel',
+								    anchor: '100%',
+								    autoScroll: true,
+								    autoEl : {
+								        tag : "iframe",
+								        width: "100%",
+    	   					            height: "570"
+								    }
+								}]
+    	            }
+    	          ]
+    	});
 		
 		this.dialog = new Ext.Window({
 			id          : 'maineditorwindow',
 			layout		: 'fit',
 			autoCreate	: true, 
-			title		: 'Editing Task Form: ' + tn , 
+			title		: 'Editing Form: ' + tn , 
 			height		: 570, 
-			width		: 700, 
+			width		: 930, 
 			modal		: true,
 			collapsible	: false,
 			fixedcenter	: true, 
@@ -154,10 +193,10 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
 			keys:[{
 				key	: 27,
 				fn	: function(){
-						this.dialog.hide()
+						this.dialog.hide();
 				}.bind(this)
 			}],
-			items		:[this.taskformeditor],
+			items		:[outterPanel],
 			listeners	:{
 				hide: function(){
 					this.dialog.destroy();
@@ -169,11 +208,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                     var saveLoadMask = new Ext.LoadMask(Ext.getBody(), {msg:'Storing Task Form'});
                     saveLoadMask.show();
                     var tosaveValue = "";
-                    if(this.sourceMode) {
-                    	tosaveValue = this.taskformcolorsourceeditor.getValue();
-                    } else {
-                    	tosaveValue = this.taskformeditor.getValue();
-                    }
+                    tosaveValue = this.taskformcolorsourceeditor.getValue();
                     
                     Ext.Ajax.request({
         	            url: ORYX.PATH + 'taskformseditor',
@@ -183,10 +218,12 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
         	    	   			saveLoadMask.hide();
         	    	   			this.dialog.hide();
         	    	   		} catch(e) {
+        	    	   			Ext.Msg.minWidth = 360;
         	    	   			Ext.Msg.alert('Error saving Task Form:\n' + e);
         	    	   		}
         	            }.createDelegate(this),
         	            failure: function(){
+        	            	Ext.Msg.minWidth = 360;
         	            	Ext.Msg.alert('Error saving Task Form');
         	            },
         	            params: {
@@ -205,59 +242,39 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                 }.bind(this)
             }],
             tbar: [
-                     {
-                	   text: 'Switch Mode',
-                	   handler : function() {
-                	      if(this.sourceMode) {
-                	    	  var editorValue = "";
-                	    	  if(this.taskformcolorsourceeditor) {
-                	    		  editorValue = this.taskformcolorsourceeditor.getValue();
-                	    	  } else {
-                	    		  this.taskformsourceeditor.getValue();
-                	    	  }
-                	    	  this.taskformeditor = new Ext.form.HtmlEditor({
-                	 			 id: Ext.id(),
-                	 	         value: editorValue,
-                	 	     	 enableSourceEdit: false,
-                	 	         autoScroll: true
-                	 	       });
-                	    	  this.dialog.remove(this.taskformsourceeditor, true);
-                	    	  this.dialog.add(this.taskformeditor);
-                	    	  this.dialog.doLayout();
-                	    	  this.sourceMode = !this.sourceMode;
-                	      } else {
-                	    	  var sourceeditorid = Ext.id();
-                	    	  this.taskformsourceeditor = new Ext.form.TextArea({
-                	  			id: sourceeditorid,
-                	  			anchor: '100%',
-                	  	        autoScroll: true,
-                	  	        value:this.taskformeditor.getValue()
-                	  	      });
-                	    	  this.dialog.remove(this.taskformeditor, true);
-                	    	  this.dialog.add(this.taskformsourceeditor);
-                	    	  this.dialog.doLayout();
-                	    	  this.sourceMode = !this.sourceMode;
-                	    	  this.foldFunc = CodeMirror.newFoldFunction(CodeMirror.tagRangeFinder);
-                	    	  this.taskformcolorsourceeditor = CodeMirror.fromTextArea(document.getElementById(sourceeditorid), {
-                	 			  mode: "text/html",
-                	 			  lineNumbers: true,
-                	 			  lineWrapping: true,
-                	 			  onGutterClick: this.foldFunc,
-                	 			  extraKeys: {
-                	 				"'>'": function(cm) { cm.closeTag(cm, '>'); },
-                	 				"'/'": function(cm) { cm.closeTag(cm, '/'); }
-                	 			  },
-                	 			  onCursorActivity: function() {
-                	 				 this.taskformcolorsourceeditor.setLineClass(this.hlLine, null, null);
-                	 			     this.hlLine = this.taskformcolorsourceeditor.setLineClass(this.taskformcolorsourceeditor.getCursor().line, null, "activeline");
-                	 			  }.bind(this)
-                	 			});
-                	    	    this.hlLine = this.taskformcolorsourceeditor.setLineClass(0, "activeline");
-                	      }
-                	   }.bind(this)
-                     },widgetCombo
-            ]
+                     widgetCombo
+                  ]
 		});		
 		this.dialog.show();
-	}
+		this.foldFunc = CodeMirror.newFoldFunction(CodeMirror.tagRangeFinder);
+		var delay;
+	  	  this.taskformcolorsourceeditor = CodeMirror.fromTextArea(document.getElementById(sourceeditorid), {
+				  mode: "text/html",
+				  lineNumbers: true,
+				  lineWrapping: true,
+				  onGutterClick: this.foldFunc,
+				  extraKeys: {
+					"'>'": function(cm) { cm.closeTag(cm, '>'); },
+					"'/'": function(cm) { cm.closeTag(cm, '/'); }
+				  },
+				  onCursorActivity: function() {
+					 this.taskformcolorsourceeditor.setLineClass(this.hlLine, null, null);
+				     this.hlLine = this.taskformcolorsourceeditor.setLineClass(this.taskformcolorsourceeditor.getCursor().line, null, "activeline");
+				  }.bind(this),
+				  onChange: function() {
+			          clearTimeout(delay);
+			          delay = setTimeout(this.updatePreview.bind(this), 300);
+			        }.bind(this)
+				});
+	  	    this.hlLine = this.taskformcolorsourceeditor.setLineClass(0, "activeline");
+	        setTimeout(this.updatePreview.bind(this), 300);
+	},
+	updatePreview: function() {
+        var previewFrame = document.getElementById('livepreviewpanel');
+        var preview =  previewFrame.contentDocument ||  previewFrame.contentWindow.document;
+        preview.open();
+        preview.write(this.taskformcolorsourceeditor.getValue());
+        preview.close();
+      }
+	
 });
