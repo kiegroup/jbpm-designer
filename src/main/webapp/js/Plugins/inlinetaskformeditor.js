@@ -183,7 +183,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
 			id          : 'maineditorwindow',
 			layout		: 'fit',
 			autoCreate	: true, 
-			title		: 'Editing Form: ' + tn , 
+			title		: 'Editing Form: ' + tn + ' - Press [Ctrl-Z] to activate auto-completion' , 
 			height		: 570, 
 			width		: 930, 
 			modal		: true,
@@ -257,7 +257,8 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
 				  onGutterClick: this.foldFunc,
 				  extraKeys: {
 					"'>'": function(cm) { cm.closeTag(cm, '>'); },
-					"'/'": function(cm) { cm.closeTag(cm, '/'); }
+					"'/'": function(cm) { cm.closeTag(cm, '/'); },
+					"Ctrl-Z": function(cm) {CodeMirror.hint(cm, CodeMirror.formsHint, outterPanel);}
 				  },
 				  onCursorActivity: function() {
 					 this.taskformcolorsourceeditor.setLineClass(this.hlLine, null, null);
