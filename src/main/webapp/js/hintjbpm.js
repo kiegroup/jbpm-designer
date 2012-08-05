@@ -16,7 +16,7 @@
     return arr.indexOf(item) != -1;
   }
 
-  function scriptHint(editor, keywords, getToken) {
+  function scriptHint(editor, keywords, hintType, getToken) {
     // Find the token at the cursor
     var cur = editor.getCursor(), token = getToken(editor, cur), tprop = token;
     // If it's not a 'word-style' token, ignore the token.
@@ -47,15 +47,26 @@
       if (!context) var context = [];
       context.push(tprop);
     }
-    return {list: getCompletions(token, context, keywords),
+    if(hintType && hintType == "form") {
+    	return {list: getCompletionsForForms(token, context, keywords),
             from: {line: cur.line, ch: token.start},
             to: {line: cur.line, ch: token.end}};
+    } else {
+    	return {list: getCompletions(token, context, keywords),
+            from: {line: cur.line, ch: token.start},
+            to: {line: cur.line, ch: token.end}};
+    }
   }
 
   CodeMirror.jbpmHint = function(editor) {
-    return scriptHint(editor, kcontextMethods,
+    return scriptHint(editor, kcontextMethods, "script",
                       function (e, cur) {return e.getTokenAt(cur);});
-  }
+  };
+  
+  CodeMirror.formsHint = function(editor) {
+	    return scriptHint(editor, [], "form",
+	                      function (e, cur) {return e.getTokenAt(cur);});
+  };
 
   var kcontextMethods = ("getProcessInstance() getNodeInstance() getVariable(variableName) setVariable(variableName,value) getKnowledgeRuntime()").split(" ");
   var genericProps = ("return kcontext").split(" ");
@@ -95,4 +106,69 @@
     }
     return found;
   }
+  
+  function getCompletionsForForms(token, context, keywords) {
+	    var found = [], start = token.string;
+	    
+	    function maybeAdd(str) {
+	        if (str.indexOf(start) == 0 && !arrayContains(found, str)) {
+	        	if(str.indexOf(":") > 0) {
+	        		var valueParts = str.split(":");
+	        		found.push(valueParts[0]);
+	        	} else {
+	        		found.push(str);
+	        	}
+	        }
+	    }
+	    
+	    // check if task is selected
+	    var selection = ORYX.EDITOR._pluginFacade.getSelection();
+	    if(selection && selection.length == 1) {
+			var shape = selection.first();
+			var shapeid = shape.resourceId;
+			var processJSON = ORYX.EDITOR.getSerializedJSON();
+			
+			var childshapes = jsonPath(processJSON.evalJSON(), "$.childShapes.*");
+			for(var i=0;i<childshapes.length;i++){
+		        var csobj = childshapes[i];
+		        if(csobj.resourceId == shapeid) {
+		        	var datainputs = csobj.properties.datainputset;
+		        	var dataoutputs = csobj.properties.dataoutputset;
+		        	var datainParts = datainputs.split(",");
+		        	for(var i=0; i < datainParts.length; i++) {
+		        		var nextPart = datainParts[i];
+		        		if(nextPart.indexOf(":") > 0) {
+		        			var innerParts = nextPart.split(":");
+		        			maybeAdd('${'+innerParts[0]+'}');
+		        		} else {
+		        			maybeAdd('${'+nextPart+'}');
+		        		}
+		        	}
+		        	var dataoutParts = dataoutputs.split(",");
+		        	for(var j=0; j < dataoutParts.length; j++) {
+		        		var nextPart = dataoutParts[j];
+		        		if(nextPart.indexOf("=") > 0) {
+		        			var innerParts = nextPart.split("=");
+		        			maybeAdd(innerParts[0]);
+		        		} else {
+		        			maybeAdd(nextPart);
+		        		}
+		        	}
+		        }
+			}
+		} else {
+			var processJSON = ORYX.EDITOR.getSerializedJSON();
+	    	  var processVars = jsonPath(processJSON.evalJSON(), "$.properties.vardefs");
+	    	  if(processVars) {
+	    		  if(processVars.toString().length > 0)
+	    			  forEach(processVars.toString().split(","), maybeAdd);
+	    	  }
+	    	  var processGlobals = jsonPath(processJSON.evalJSON(), "$.properties.globals");
+	    	  if(processGlobals) {
+	    		  if(processGlobals.toString().length > 0)
+	    			  forEach(processGlobals.toString().split(","), maybeAdd);
+	    	  }
+		}
+	    return found;
+	  }
 })();
