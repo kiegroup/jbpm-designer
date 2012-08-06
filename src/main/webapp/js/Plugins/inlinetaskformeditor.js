@@ -237,7 +237,8 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
         	            }
         	        });
                 }.bind(this)
-            }, {
+            },
+            {
                 text: 'Cancel',
                 handler: function(){
                 	this.dialog.hide()
