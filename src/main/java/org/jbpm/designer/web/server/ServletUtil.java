@@ -247,6 +247,10 @@ public class ServletUtil {
 			//        .setRequestProperty("Accept", "application/binary");
 			checkConnection.connect();
 			_logger.info("check connection response code: " + checkConnection.getResponseCode());
+			InputStream is = checkConnection.getInputStream();
+			while(is.read() != -1) {
+				// read all response data
+			}
 			if (checkConnection.getResponseCode() == 200) {
 				return true;
 			}
