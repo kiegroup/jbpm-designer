@@ -1,2 +1,1 @@
-<label for="txt">Label Text</label>
-<input type="text" name="" id="txt/>
+<div class=""><label for="txt">Label Text:</label><input type="text" name="" id="txt"/></div>

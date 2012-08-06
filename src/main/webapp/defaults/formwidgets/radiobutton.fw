@@ -1,2 +1,1 @@
-<label for="rb">Label Text</label>
-<input type="radio" name="" value="" id="rb" />
+<div class=""><label for="rb">Label Text:</label><input type="radio" name="" value="" id="rb" /></div>
