@@ -204,13 +204,13 @@
 					"items": [
 						{
 							"id": "c1",
-							"title":"false",
-							"value":"false"
+							"title":"true",
+							"value":"true"
 						},
 						{
 							"id": "c2",
-							"title": "true",
-							"value": "true"
+							"title": "false",
+							"value": "false"
 						}
 					]                                               
 				}
