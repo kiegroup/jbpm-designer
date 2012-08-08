@@ -872,7 +872,7 @@ public class Bpmn2JsonUnmarshaller {
                                          FeatureMap.Entry entry2 = iter.next();
                                          if(entry2.getEStructuralFeature().getName().equals("boundaryca")) {
                                         	 String boundaryceVal = (String) entry2.getValue();
-                                             be.setCancelActivity(Boolean.getBoolean(boundaryceVal));
+                                             be.setCancelActivity(Boolean.parseBoolean(boundaryceVal));
                                          }
                                      }
                 					 
