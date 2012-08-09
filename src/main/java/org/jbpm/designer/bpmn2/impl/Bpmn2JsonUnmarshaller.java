@@ -2915,6 +2915,17 @@ public class Bpmn2JsonUnmarshaller {
                     FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
                             (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__GLOBAL, globalType);
                     process.getExtensionValues().get(0).getValue().add(extensionElementEntry);
+                } else if(globalParts.length == 1) {
+                	GlobalType globalType = DroolsFactory.eINSTANCE.createGlobalType();
+                    globalType.setIdentifier(globalParts[0]);
+                    globalType.setType("Object");
+                    if(process.getExtensionValues() == null || process.getExtensionValues().size() < 1) {
+                    	ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                    	process.getExtensionValues().add(extensionElement);
+                    } 
+                    FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                            (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__GLOBAL, globalType);
+                    process.getExtensionValues().get(0).getValue().add(extensionElementEntry);
                 }
             }
         }
