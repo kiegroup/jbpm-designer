@@ -135,6 +135,10 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
 			jsonProp.fortasktypes = "";
 		}
 		
+		if(!jsonProp.fordistribution) {
+			jsonProp.fordistribution = "";
+		}
+		
 		if(!jsonProp.popular) {
 			jsonProp.popular = false;
 		}
@@ -233,7 +237,11 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
 	fortasktypes: function() {
 		return this._jsonProp.fortasktypes;
 	},
-    
+
+	fordistribution: function() {
+		return this._jsonProp.fordistribution;
+	},
+	
     title: function(){
         return ORYX.Core.StencilSet.getTranslation(this._jsonProp, "title");
     },
