@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.jboss.drools.impl.DroolsPackageImpl;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.impl.ExternalInfo;
 import org.jbpm.designer.web.repository.IUUIDBasedRepository;
@@ -32,6 +33,7 @@ public class UUIDBasedJbpmRepository implements IUUIDBasedRepository {
         // check with Guvnor to see what it has for this uuid for us
         String processxml = doHttpUrlConnectionAction(buildExternalLoadURL(profile, uuid));
         if(processxml != null && processxml.length() > 0) {
+        	DroolsPackageImpl.init();
             processjson = profile.createUnmarshaller().parseModel(processxml, profile, preProcessingParam);
             return processjson.getBytes("UTF-8");
         } else {

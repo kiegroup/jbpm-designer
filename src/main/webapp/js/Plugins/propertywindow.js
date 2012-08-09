@@ -1806,38 +1806,10 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
         
         var processJSON = ORYX.EDITOR.getSerializedJSON();
         var processVars = jsonPath(processJSON.evalJSON(), "$.properties.vardefs");
-        var globalVars =  jsonPath(processJSON.evalJSON(), "$.properties.globals");
         var varData = new Array();
         var varDataTitle = new Array();
-        var globalTitle = new Array();
         var dataTypeMap = new Hash();
 
-        globalTitle.push("");
-        globalTitle.push("** Globals **");
-        varData.push(globalTitle);
-        if(globalVars) {
-        	globalVars.forEach(function(item){
-            	if(item.length > 0) {
-	        		var valueParts = item.split(",");
-	        		for(var i=0; i < valueParts.length; i++) {
-	        			var innerVal = new Array();
-	        			var nextPart = valueParts[i];
-	        			if(nextPart.indexOf(":") > 0) {
-	        				var innerParts = nextPart.split(":");
-	        				innerVal.push(innerParts[0]);
-	        				innerVal.push(innerParts[0]);
-                            dataTypeMap[innerParts[0]] = innerParts[1];
-	        			} else {
-	        				innerVal.push(nextPart);
-	        				innerVal.push(nextPart);
-                            dataTypeMap[nextPart] = "java.lang.String";
-	        			}
-	        			varData.push(innerVal);
-	        		}
-        	    }
-        	});
-        }
-        
         varDataTitle.push("");
         varDataTitle.push("** Variable Definitions **");
         varData.push(varDataTitle);
