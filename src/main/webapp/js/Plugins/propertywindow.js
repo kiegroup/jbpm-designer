@@ -838,7 +838,7 @@ ORYX.Plugins.PropertyWindow = {
 						if(pair.fortasktypes() && pair.fortasktypes().length > 0) {
 							var foundtasktype = false;
 							var tts = pair.fortasktypes().split("|");
-							for (i = 0; i < tts.size(); i++) {
+							for(var i = 0; i < tts.size(); i++) {
 								if(tts[i] == this.shapeSelection.shapes.first().properties["oryx-tasktype"]) {
 									foundtasktype = true;
 								}
@@ -847,6 +847,20 @@ ORYX.Plugins.PropertyWindow = {
 								proceed = false;
 							}
 						}
+						
+						if(pair.fordistribution() && pair.fordistribution().length > 0) {
+							var founddistribution = false;
+							var tts = pair.fordistribution().split("|");
+							for(var j = 0; j < tts.size(); j++) {
+								if(tts[j] == this.shapeSelection.shapes.first().properties["oryx-distributiontype"]) {
+									founddistribution = true;
+								}
+							}
+							if(!founddistribution) {
+								proceed = false;
+							}
+						}
+						
 					}
 					
 					if(proceed) {

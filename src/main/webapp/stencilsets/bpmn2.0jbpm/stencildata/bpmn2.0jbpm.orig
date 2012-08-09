@@ -3118,7 +3118,7 @@
 				},
 				{
 					"id":"duration",
-					"type":"String",
+					"type":"Integer",
 					"title":"Duration",
 					"value":"",
 					"description":"The Amount of time that the task will take to execute (in time units)",
@@ -3129,51 +3129,102 @@
 				},
 				{
 					"id":"timeunit",
-					"type":"String",
+					"type":"Choice",
 					"title":"Time Unit",
 					"value":"",
 					"description":"Time unit options (seconds, minutes, hours)",
 					"description_ja":"Time unit options (seconds, minutes, hours)",
 					"readonly":false,
 					"optional":true,
-					"simulation" : true
+					"simulation" : true,
+					"items": [
+						{
+							"id": "c1",
+							"title":"milliseconds",
+							"value":"milliseconds"
+						},
+						{
+							"id": "c2",
+							"title": "seconds",
+							"value": "seconds"
+						},
+						{
+							"id": "c3",
+							"title": "minutes",
+							"value": "minutes"
+						},
+						{
+							"id": "c4",
+							"title": "hours",
+							"value": "hours"
+						},
+						{
+							"id": "c5",
+							"title": "days",
+							"value": "days"
+						}
+					]    
 				},
 				{
 					"id":"range",
-					"type":"String",
+					"type":"Integer",
 					"title":"Range",
 					"value":"",
 					"description":"",
 					"description_ja":"",
 					"readonly":false,
 					"optional":true,
-					"simulation" : true
+					"simulation" : true,
+					"fordistribution":"uniform|random"
 				},
 				{
 					"id":"standarddeviation",
-					"type":"String",
+					"type":"Float",
 					"title":"Standard Deviation",
 					"value":"",
 					"description":"",
 					"description_ja":"",
 					"readonly":false,
 					"optional":true,
-					"simulation" : true
+					"simulation" : true,
+					"fordistribution":"normal"
 				},
 				{
 					"id":"distributiontype",
-					"type":"String",
+					"type":"Choice",
 					"title":"Distribution Type",
 					"value":"",
 					"description":"",
 					"description_ja":"",
 					"readonly":false,
 					"optional":true,
-					"simulation" : true
+					"simulation" : true,
+					"items": [
+						{
+							"id": "c1",
+							"title":"normal",
+							"value":"normal"
+						},
+						{
+							"id": "c2",
+							"title": "uniform",
+							"value": "uniform"
+						},
+						{
+							"id": "c3",
+							"title": "random",
+							"value": "random"
+						},
+						{
+							"id": "c4",
+							"title": "exact",
+							"value": "exact"
+						}
+					]    
 				},
 				{
 					"id":"staffavailability",
-					"type":"String",
+					"type":"Integer",
 					"title":"Staff Availability",
 					"value":"",
 					"description":"",
@@ -3185,7 +3236,7 @@
 				},
 				{
 					"id":"workinghours",
-					"type":"String",
+					"type":"Integer",
 					"title":"Working Hours",
 					"value":"",
 					"description":"",
@@ -3197,7 +3248,7 @@
 				},
 				{
 					"id":"costpertimeunit",
-					"type":"String",
+					"type":"Integer",
 					"title":"Cost Per Time Unit",
 					"value":"",
 					"description":"",
@@ -10179,7 +10230,7 @@
 				},
 				{
 					"id":"probability",
-					"type":"String",
+					"type":"Integer",
 					"title":"Probability",
 					"value":"",
 					"description":"Probability",
