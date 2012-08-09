@@ -121,6 +121,7 @@ import org.eclipse.dd.dc.Bounds;
 import org.eclipse.dd.dc.Point;
 import org.eclipse.dd.di.DiagramElement;
 import org.eclipse.emf.ecore.util.FeatureMap;
+import org.jboss.drools.DroolsFactory;
 import org.jboss.drools.DroolsPackage;
 import org.jboss.drools.GlobalType;
 import org.jboss.drools.ImportType;
@@ -128,6 +129,7 @@ import org.jboss.drools.MetadataType;
 import org.jboss.drools.MetaentryType;
 import org.jboss.drools.OnEntryScriptType;
 import org.jboss.drools.OnExitScriptType;
+import org.jboss.drools.impl.DroolsPackageImpl;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 
 /**
@@ -154,6 +156,7 @@ public class Bpmn2JsonMarshaller {
 	}
 
     public String marshall(Definitions def, String preProcessingData) throws IOException {
+    	DroolsPackageImpl.init();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         JsonFactory f = new JsonFactory();
         JsonGenerator generator = f.createJsonGenerator(baos, JsonEncoding.UTF8);
@@ -282,11 +285,10 @@ public class Bpmn2JsonMarshaller {
 	                    String globalsStr = "";
 	                    for(ExtensionAttributeValue extattrval : ((Process) rootElement).getExtensionValues()) {
 	                        FeatureMap extensionElements = extattrval.getValue();
-	                
+	                        
 	                        @SuppressWarnings("unchecked")
 	                        List<ImportType> importExtensions = (List<ImportType>) extensionElements
 	                                                             .get(DroolsPackage.Literals.DOCUMENT_ROOT__IMPORT, true);
-	                
 	                        @SuppressWarnings("unchecked")
 	                        List<GlobalType> globalExtensions = (List<GlobalType>) extensionElements
 	                                                          .get(DroolsPackage.Literals.DOCUMENT_ROOT__GLOBAL, true);
