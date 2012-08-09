@@ -24,6 +24,7 @@ import org.eclipse.bpmn2.EscalationEventDefinition;
 import org.eclipse.bpmn2.EventBasedGateway;
 import org.eclipse.bpmn2.EventDefinition;
 import org.eclipse.bpmn2.ExclusiveGateway;
+import org.eclipse.bpmn2.ExtensionAttributeValue;
 import org.eclipse.bpmn2.FlowElement;
 import org.eclipse.bpmn2.FlowElementsContainer;
 import org.eclipse.bpmn2.FlowNode;
@@ -49,6 +50,10 @@ import org.eclipse.bpmn2.ThrowEvent;
 import org.eclipse.bpmn2.TimerEventDefinition;
 import org.eclipse.bpmn2.UserTask;
 import org.eclipse.emf.ecore.util.FeatureMap;
+import org.jboss.drools.DroolsPackage;
+import org.jboss.drools.MetadataType;
+import org.jboss.drools.MetaentryType;
+import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.server.ServletUtil;
 import org.json.JSONObject;
@@ -70,6 +75,8 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 	}
 	
 	public void checkSyntax() {
+		DroolsFactoryImpl.init();
+		
 		Definitions def = profile.createMarshaller().getDefinitions(json, preprocessingData);
 		
 		List<RootElement> rootElements =  def.getRootElements();
@@ -236,6 +243,113 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 		        		}
 		        	} 
 		        }
+		        
+		        // simulation validation
+		        if(ut.getExtensionValues() != null && fe.getExtensionValues().size() > 0) {
+		        	boolean foundStaffAvailability = false;
+		        	for(ExtensionAttributeValue extattrval : fe.getExtensionValues()) {
+	    	        	FeatureMap extensionElements = extattrval.getValue();
+	                    @SuppressWarnings("unchecked")
+	                    List<MetadataType> metadataTypeExtensions = (List<MetadataType>) extensionElements
+	                                                         .get(DroolsPackage.Literals.DOCUMENT_ROOT__METADATA, true);
+	                    if(metadataTypeExtensions != null && metadataTypeExtensions.size() > 0) {
+	                    	MetadataType metaType = metadataTypeExtensions.get(0);
+	                    	for(Object metaEntryObj : metaType.getMetaentry()) {
+	                    		MetaentryType entry = (MetaentryType) metaEntryObj;
+	                    		if(entry.getName() != null && entry.getName().equals("staffavailability")) {
+	                    			Float f = new Float(entry.getValue());
+	                    			if(f.floatValue() < 0) {
+	                    				addError(ut, "Staff Availability value must be positive.");
+	                    			}
+	                    			foundStaffAvailability = true;
+	                    		}
+	                    	}
+	                    }
+		        	}
+		        	if(!foundStaffAvailability) {
+		        		addError(ut, "User Task has no staff availability defined.");
+		        	}
+		        }
+		    }
+			
+			if(fe instanceof Task) {
+				Task ta = (Task) fe;
+				// simulation validation
+		        if(ta.getExtensionValues() != null && fe.getExtensionValues().size() > 0) {
+		        	boolean foundDistributionType = false;
+		        	String distributionTypeValue = "";
+		        	boolean foundDuration = false;
+		        	boolean foundTimeUnits = false;
+		        	boolean foundRange = false;
+		        	boolean foundStandardDeviation = false;
+		        	for(ExtensionAttributeValue extattrval : fe.getExtensionValues()) {
+	    	        	FeatureMap extensionElements = extattrval.getValue();
+	                    @SuppressWarnings("unchecked")
+	                    List<MetadataType> metadataTypeExtensions = (List<MetadataType>) extensionElements
+	                                                         .get(DroolsPackage.Literals.DOCUMENT_ROOT__METADATA, true);
+	                    
+	                    if(metadataTypeExtensions != null && metadataTypeExtensions.size() > 0) {
+	                    	MetadataType metaType = metadataTypeExtensions.get(0);
+	                    	for(Object metaEntryObj : metaType.getMetaentry()) {
+	                    		MetaentryType entry = (MetaentryType) metaEntryObj;
+	                    		if(entry.getName() != null && entry.getName().equals("costpertimeunit")) {
+	                    			Float f = new Float(entry.getValue());
+	                    			if(f.floatValue() < 0) {
+	                    				addError(ta, "Cost per Time Unit value must be positive.");
+	                    			}
+	                    		}
+	                    		if(entry.getName() != null && entry.getName().equals("distributiontype")) {
+	                    			foundDistributionType = true;
+	                    			distributionTypeValue = entry.getValue();
+	                    		}
+	                    		if(entry.getName() != null && entry.getName().equals("duration")) {
+	                    			Float f = new Float(entry.getValue());
+	                    			if(f.floatValue() < 0) {
+	                    				addError(ta, "Duration value must be positive.");
+	                    			}
+	                    			foundDuration = true;
+	                    		}
+	                    		if(entry.getName() != null && entry.getName().equals("timeunit")) {
+	                    			foundTimeUnits = true;
+	                    		}
+	                    		if(entry.getName() != null && entry.getName().equals("workinghours")) {
+	                    			Float f = new Float(entry.getValue());
+	                    			if(f.floatValue() < 0) {
+	                    				addError(ta, "Working Hours value must be positive.");
+	                    			}
+	                    		}
+	                    		if(entry.getName() != null && entry.getName().equals("range")) {
+	                    			Float f = new Float(entry.getValue());
+	                    			if(f.floatValue() < 0) {
+	                    				addError(ta, "Range value must be positive.");
+	                    			}
+	                    			foundRange = true;
+	                    		}
+	                    		if(entry.getName() != null && entry.getName().equals("standarddeviation")) {
+	                    			foundStandardDeviation = true;
+	                    		}
+	                    	}
+	                    }
+	                    
+	    	        }
+		        	if(!foundDistributionType) {
+		        		addError(ta, "Task has no distribution type defined.");
+		        	}
+		        	if(!foundDuration) {
+		        		addError(ta, "Task has no duration defined.");
+		        	}
+		        	if(!foundTimeUnits) {
+		        		addError(ta, "Task has no Time Units defined.");
+		        	}
+		        	if(foundDistributionType) {
+		        		if((distributionTypeValue.equals("random") || distributionTypeValue.equals("uniform")) && !foundRange) {
+		        			addError(ta, "Task has no Range defined.");
+		        		}
+		        		if(distributionTypeValue.equals("normal") && !foundStandardDeviation) {
+		        			addError(ta, "Task has no Standard Deviation defined.");
+		        		}
+		        	}
+		        }
 			}
 			
 			if(fe instanceof CatchEvent) {
@@ -361,6 +475,46 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 				if(gw instanceof ComplexGateway) {
 					if(gw.getGatewayDirection().getValue() != GatewayDirection.DIVERGING.getValue() && gw.getGatewayDirection().getValue() != GatewayDirection.CONVERGING.getValue()) {
 						addError((Gateway) fe, "Invalid Gateway direction for Complex Gateway. It should be 'Converging' or 'Diverging'.");
+					}
+				}
+				// simulation validation
+				if(!(gw instanceof ParallelGateway)) {
+					List<SequenceFlow> outgoingGwSequenceFlows = gw.getOutgoing();
+					if(outgoingGwSequenceFlows != null && outgoingGwSequenceFlows.size() > 0) {
+						int sum = 0;
+						for(SequenceFlow sf : outgoingGwSequenceFlows) {
+							// simulation validation
+					        if(sf.getExtensionValues() != null && sf.getExtensionValues().size() > 0) {
+					        	boolean foundProbability = false;
+					        	for(ExtensionAttributeValue extattrval : sf.getExtensionValues()) {
+				    	        	FeatureMap extensionElements = extattrval.getValue();
+				                    @SuppressWarnings("unchecked")
+				                    List<MetadataType> metadataTypeExtensions = (List<MetadataType>) extensionElements
+				                                                         .get(DroolsPackage.Literals.DOCUMENT_ROOT__METADATA, true);
+				                    if(metadataTypeExtensions != null && metadataTypeExtensions.size() > 0) {
+				                    	MetadataType metaType = metadataTypeExtensions.get(0);
+				                    	for(Object metaEntryObj : metaType.getMetaentry()) {
+				                    		MetaentryType entry = (MetaentryType) metaEntryObj;
+				                    		if(entry.getName() != null && entry.getName().equals("probability")) {
+				                    			Integer i = new Integer(entry.getValue());
+				                    			if(i < 0) {
+				                    				addError(sf, "Probability value must be positive.");
+				                    			} else {
+				                    				sum += i;
+				                    			}
+				                    			foundProbability = true;
+				                    		}
+				                    	}
+				                    }
+					        	}
+					        	if(!foundProbability) {
+					        		addError(sf, "Sequence Flow has no probability defined.");
+					        	}
+					        }
+						}
+						if(sum != 100) {
+							addError(gw, "The sum of probability values of all outgoing Sequence Flows must be equal 100.");
+						}
 					}
 				}
 			}

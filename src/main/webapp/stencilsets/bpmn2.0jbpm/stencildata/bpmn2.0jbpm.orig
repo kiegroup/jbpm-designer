@@ -3120,12 +3120,13 @@
 					"id":"duration",
 					"type":"Float",
 					"title":"Duration",
-					"value":"",
+					"value":"0",
 					"description":"The Amount of time that the task will take to execute (in time units)",
 					"description_ja":"The Amount of time that the task will take to execute (in time units)",
 					"readonly":false,
 					"optional":true,
-					"simulation" : true
+					"simulation" : true,
+					"min" : "0"
 				},
 				{
 					"id":"timeunit",
@@ -3169,19 +3170,20 @@
 					"id":"range",
 					"type":"Float",
 					"title":"Range",
-					"value":"",
+					"value":"0",
 					"description":"",
 					"description_ja":"",
 					"readonly":false,
 					"optional":true,
 					"simulation" : true,
-					"fordistribution":"uniform|random"
+					"fordistribution":"uniform|random",
+					"min" : "0"
 				},
 				{
 					"id":"standarddeviation",
 					"type":"Float",
 					"title":"Standard Deviation",
-					"value":"",
+					"value":"0",
 					"description":"",
 					"description_ja":"",
 					"readonly":false,
@@ -3226,13 +3228,14 @@
 					"id":"staffavailability",
 					"type":"Float",
 					"title":"Staff Availability",
-					"value":"",
+					"value":"0",
 					"description":"",
 					"description_ja":"",
 					"readonly":false,
 					"optional":true,
 					"simulation" : true,
-					"fortasktypes":"None|User"
+					"fortasktypes":"None|User",
+					"min": "0"
 				},
 				{
 					"id":"workinghours",
@@ -3244,19 +3247,21 @@
 					"readonly":false,
 					"optional":true,
 					"simulation" : true,
-					"fortasktypes":"None|User"
+					"fortasktypes":"None|User",
+					"min": "0"
 				},
 				{
 					"id":"costpertimeunit",
 					"type":"Float",
 					"title":"Cost Per Time Unit",
-					"value":"",
+					"value":"0",
 					"description":"",
 					"description_ja":"",
 					"readonly":false,
 					"optional":true,
 					"simulation" : true,
-					"fortasktypes":"None|User"
+					"fortasktypes":"None|User",
+					"min" : "0"
 				}
 			]
 		},
@@ -10232,12 +10237,14 @@
 					"id":"probability",
 					"type":"Integer",
 					"title":"Probability",
-					"value":"",
+					"value":"100",
 					"description":"Probability",
 					"description_ja":"Probability",
 					"readonly":false,
 					"optional":true,
-					"simulation" : true
+					"simulation" : true,
+					"min" : "0",
+					"max" : "100"
 				},
 				{
 					"id":"isimmediate",
