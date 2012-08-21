@@ -68,7 +68,7 @@ function clearChart() {
 		<thead>
 			<tr>
 				{{#values}}
-				<th scope="col" align="center">{{label}} (sec)</th>
+				<th scope="col" align="center">{{label}} (%)</th>
 				{{/values}}
 			</tr>
 		</thead>
@@ -115,7 +115,7 @@ function clearChart() {
 				chart.yAxis
 					.tickFormat(d3.format(',.2f'));
 				
-				chart.yAxis.axisLabel('Time (sec)')
+				chart.yAxis.axisLabel('Percentage (%)')
 				var dw = [];
 				dw.push(chartData.resourcevalues);
 				d3.select('#chart2')
