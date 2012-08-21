@@ -1,0 +1,122 @@
+div {
+	border: .2em plain #D8D8D8;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	color:#A0A0A0;
+	padding:10px;
+	margin:10px; 
+	font-family: Arial Black; 
+	font-size: 12px; 
+}
+div.outterchart {
+  border-width:2px;
+  border-style:solid;
+  border-color:#D8D8D8;
+}
+ 
+div.outterchart h2 {background:#D8D8D8;color:#9C9C9C;padding:10px;font-family: Arial Black;font-size: 12px;}
+div.outterchart p {color:#black;padding:10px;}
+
+div.innerchart {
+  border-width:2px;
+  border-style:solid;
+  border-color:#D8D8D8;
+  line-height:3px;
+  font-family: Arial Black; 
+  font-size: 8px; 
+}
+ 
+div.innerchart h2 {background:#D8D8D8;color:#9C9C9C;padding:10px;}
+div.innerchart p {color:#black;padding:10px;}
+ 
+.charttitle {
+  margin:0;
+  padding:20;
+  float: left;
+  vertical-align:top;
+  text-align:center;
+  font-family: Arial Black; 
+  font-size: 14px; 
+} 
+.bcharticon { 
+  margin:0;
+  padding:0;
+  float: right;
+  vertical-align:top;
+  text-align:center;
+}
+.bcharticon a, .bcharticon a:link, .bcharticon a:visited {
+  display:block;
+  width: 16px;
+  height: 16px; 
+}
+
+.hbcharticon { 
+  margin:0;
+  padding:0;
+  float: right;
+  vertical-align:top;
+  text-align:center;
+}
+.hbcharticon a, .hbcharticon a:link, .hbcharticon a:visited {
+  display:block;
+  width: 16px;
+  height: 16px; 
+}
+.pcharticon { 
+  margin:0;
+  padding:0;
+  float: right;
+  vertical-align:top;
+  text-align:center;
+}
+.pcharticon a, .pcharticon a:link, .pcharticon a:visited {
+  display:block;
+  width: 16px;
+  height: 16px; 
+}
+
+.tableicon {
+  margin:0;
+  padding:0;
+  float: right;
+  vertical-align:top;
+  text-align:center;
+}
+.tableicon a, .tableicon a:link, .tableicon a:visited {
+  vertical-align:top;
+  width: 16px;
+  height: 16px; 
+}
+#box-table {
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size: 12px;
+	width: 480px;
+	text-align: left;
+	border-collapse: collapse;
+	margin: 20px;
+}
+
+#box-table th {
+	font-size: 13px;
+	font-weight: normal;
+	background: #b9c9fe;
+	border-top: 4px solid #aabcfe;
+	border-bottom: 1px solid #fff;
+	color: #039;
+	padding: 8px;
+}
+
+#box-table td {
+	background: #e8edff;
+	border-bottom: 1px solid #fff;
+	color: #669;
+	border-top: 1px solid transparent;
+	padding: 8px;
+}
+
+#box-table tr:hover td {
+	background: #d0dafd;
+	color: #339;
+}

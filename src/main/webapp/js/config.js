@@ -250,6 +250,8 @@ ORYX.CONFIG.EVENT_SHAPE_DELETED =				"shape.deleted";
 ORYX.CONFIG.EVENT_FACADE_SELECTION_DELETION_REQUEST =				"facade_selection.deletion.request";
 ORYX.CONFIG.EVENT_NODEXML_SHOW = "nodexml.show";
 ORYX.CONFIG.EVENT_VOICE_COMMAND = "voice.command";
+ORYX.CONFIG.EVENT_SIMULATION_SHOW_RESULTS = "simulation.showresults";
+ORYX.CONFIG.EVENT_SIMULATION_DISPLAY_GRAPH = "simulation.displaygraph";
 
 // voice commands
 ORYX.CONFIG.VOICE_COMMAND_GENERATE_FORMS = "voice.command.generate.forms";

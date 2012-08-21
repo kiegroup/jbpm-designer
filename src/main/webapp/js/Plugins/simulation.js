@@ -28,6 +28,27 @@ ORYX.Plugins.Simulation = Clazz.extend({
 				return profileParamValue == "jbpm";
 			}.bind(this)
 		});
+		
+		this.facade.offer({
+			'name': "Run Simulation",
+			'functionality': this.runSimulation.bind(this),
+			'group': "simulation",
+			'icon': ORYX.PATH + "images/control_play.png",
+			dropDownGroupIcon : ORYX.PATH + "images/lightbulb.gif",
+			'description': "Run Process Simulation",
+			'index': 2,
+			'minShape': 0,
+			'maxShape': 0,
+			'isEnabled': function(){
+				profileParamName = "profile";
+				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+		        regexa = new RegExp( regexSa );
+		        profileParams = regexa.exec( window.location.href );
+		        profileParamValue = profileParams[1]; 
+				return profileParamValue == "jbpm";
+			}.bind(this)
+		});
 	},
 	findPaths: function() {
 		var loadPathsMask = new Ext.LoadMask(Ext.getBody(), {msg:'Calculating process paths'});
@@ -258,5 +279,124 @@ ORYX.Plugins.Simulation = Clazz.extend({
 				}
 			}
 		}
+	},
+	runSimulation : function() {
+		var simform = new Ext.form.FormPanel({
+			baseCls: 		'x-plain',
+	        labelWidth: 	150,
+	        defaultType: 	'numberfield',
+	        items: [{
+	        	fieldLabel: 'Number of instances',
+	            name: 'instances',
+	            allowBlank:false,
+	            allowDecimals:false,
+	            minValue:1,
+	            width: 120
+	        },
+	        {
+	        	fieldLabel: 'Inteval',
+	            name: 'interval',
+	            allowBlank:false,
+	            allowDecimals:false,
+	            minValue:1,
+	            width: 120
+	        },
+	        {
+                xtype: 'combo',
+                name: 'intervalunits',
+                store: new Ext.data.SimpleStore({
+                    fields: ['units'],
+                    data: [['millisecond'], ['seconds'], ['minutes'], ['hours'], ['days']]
+                }),
+                allowBlank: false,
+                displayField: 'units',
+                valueField: 'units',
+                mode: 'local',
+                typeAhead: true,
+                value: "seconds",
+                triggerAction: 'all',
+                fieldLabel: 'Interval units',
+                width: 120
+            }
+	        ]
+	    });
+		
+		
+		var dialog = new Ext.Window({ 
+			autoCreate: true, 
+			layout: 	'fit',
+			plain:		true,
+			bodyStyle: 	'padding:5px;',
+			title: 		"Run Process Simulation", 
+			height: 	170, 
+			width:		350,
+			modal:		true,
+			fixedcenter:true, 
+			shadow:		true, 
+			proxyDrag: 	true,
+			resizable:	true,
+			items: 		[simform],
+			buttons:[
+				{
+					text:"Run Simulation",
+					handler:function(){
+						dialog.hide();
+						var loadMask = new Ext.LoadMask(Ext.getBody(), {msg:"Running Process Simulation..."});
+						loadMask.show();
+						var instancesInput = simform.items.items[0].getValue();
+						var intervalInput = simform.items.items[1].getValue();
+						var intervalUnit = simform.items.items[2].getValue();
+						Ext.Ajax.request({
+				            url: ORYX.PATH + 'simulation',
+				            method: 'POST',
+				            success: function(response) {
+				    	   		try {
+				    	   			if(response.responseText && response.responseText.length > 0) {
+				    	   				loadMask.hide();
+				    	   				this.facade.raiseEvent({
+				    	   		            type: ORYX.CONFIG.EVENT_SIMULATION_SHOW_RESULTS,
+				    	   		            results: response.responseText
+				    	   		        });
+				    	   			} else {
+				    	   				loadMask.hide();
+				    	   				Ext.MessageBox.minWidth = 300;
+				    	   				Ext.Msg.alert('Unable to perform simulation.');
+				    	   			}
+				    	   		} catch(e) {
+				    	   			loadMask.hide();
+				    	   			Ext.MessageBox.minWidth = 300;
+				    	   			Ext.Msg.alert('Unable to perform simulation:\n' + e);
+				    	   		}
+				            }.bind(this),
+				            failure: function(){
+				            	loadMask.hide();
+				            	Ext.Msg.alert('Unable to perform simulation.');
+				            },
+				            params: {
+				            	action: 'runsimulation',
+				            	profile: ORYX.PROFILE,
+				            	json: ORYX.EDITOR.getSerializedJSON(),
+				            	ppdata: ORYX.PREPROCESSING,
+				            	numinstances: instancesInput,
+				            	interval: intervalInput,
+				            	intervalunit: intervalUnit
+				            }
+				        });
+					}.bind(this)
+				},{
+					text:ORYX.I18N.FromBPMN2Support.close,
+					handler:function(){
+						dialog.hide();
+					}.bind(this)
+				}
+			]
+		});
+		// Destroy the panel when hiding
+		dialog.on('hide', function(){
+			dialog.destroy(true);
+			delete dialog;
+		});
+		// Show the panel
+		dialog.show();
 	}
 });

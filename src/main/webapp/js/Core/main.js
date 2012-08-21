@@ -79,6 +79,9 @@ ORYX.Editor = {
 		this.loadedPlugins 	= [];
 		this.pluginsData 	= [];
 		
+		this.simulationChartData = "";
+		this.simulationChartTitle = "";
+		this.simulationChartId = "";
 		
 		//meta data about the model for the signavio warehouse
 		//directory, new, name, description, revision, model (the model data)
@@ -198,6 +201,13 @@ ORYX.Editor = {
 				
 	},
 	
+	_chartSelected : function(node,event) {
+		this._getPluginFacade().raiseEvent({
+			type 		: ORYX.CONFIG.EVENT_SIMULATION_DISPLAY_GRAPH, 
+	        value		: node
+	    });
+	},
+	
 	/**
 	 * Generate the whole viewport of the
 	 * Editor and initialized the Ext-Framework
@@ -212,7 +222,134 @@ ORYX.Editor = {
 		var layoutHeight 	= 400;
 	
 		var canvasParent	= this.getCanvas().rootNode.parentNode;
+		
+		
+		this.centerContentPanel = new Ext.Panel({
+			autoScroll: true,
+			cmargins: {left:0, right:0},
+			border: false,
+			items	: {
+				layout	: "fit",
+				autoHeight: true,
+				el		: canvasParent
+			}
+		});
 
+		this.resultsChartPanel = new Ext.Panel({
+			border: false,
+			id: 'simchart',
+		    html: "<svg></svg>"
+		});
+		
+		this.simResultsContentPanel = new Ext.Panel({
+			id: "simresultscontent",
+			autoScroll: true,
+			autoheight: true, 
+			border: false,
+			items	: [{
+			    xtype : "component",
+			    id    : 'simchartframe',
+			    anchor: '100%',
+			    autoScroll: true,
+			    autoEl : {
+			        tag : "iframe",
+			        src : ORYX.PATH + 'simulation/default.html',
+			        width: "100%",
+			            height: "500",
+			            frameborder: "0",
+			            scrolling: "auto"
+			    }
+			}]
+		});
+		
+		this.simResultsTree = new Ext.tree.TreePanel({
+			id: "simresultscharts",
+			title: "Simulation Graphs",
+			autoheight: true, 
+			animate:true,
+			loader: new Ext.tree.TreeLoader(),
+			rootVisible: false,
+			autoScroll:false,
+			lines: true,
+			listeners: {
+		        click: {
+		            fn:this._chartSelected.bind(this)
+		        }
+		    }
+		});
+		var simTreeRoot = new Ext.tree.TreeNode({
+		    draggable: false,
+		    id: 'simcharts'
+		});
+		this.simResultsTree.setRootNode(simTreeRoot);
+
+		this.simResultsContentPanelLayout = new Ext.Panel({
+		    width: "100%",
+		    height: 1000,
+		    autoheight: true,
+		    layout: 'border',
+		    items: [{
+		    	xtype:'panel',
+		        region:'east',
+		        margins: '5 0 0 5',
+		        layout	: 'anchor',
+		        anchor:'100%',
+		        width: 300,
+		        border: false,
+		        collapsible: true,  
+		        autoscroll: true,
+		        split: true,
+		        minSize: 100,
+		        maxSize: 500,
+		        autoheight: true,
+		        cmargins: '5 5 0 5', 
+		        items: [this.simResultsTree]
+		    },{
+		    	xtype:'panel',
+		        region: 'center',  
+		        layout	: 'anchor',
+		        anchor:'100%',
+		        border: false,
+		        autoscroll: true,
+		        autoheight: true,
+		        margins: '5 5 0 0',
+		        items: [this.simResultsContentPanel]
+		    }]
+		});
+		
+		var tabs_config = {
+				id : 'maintabs',
+				region	: 'center',
+				cls		: 'x-panel-editor-center',
+				autoScroll: false,
+				cmargins: {left:0, right:0},
+				activeTab: 0,
+				border: false,
+		        tabPosition: 'top',
+		        anchor: "100%",
+		        deferredRender : false,
+		        listeners: {
+	             	tabchange: function(tabpanel, tab) {
+	            		this.centerContentTabPannel.doLayout();
+	            		this.simResultsContentPanelLayout.doLayout();
+	            		tabpanel.doLayout();
+	             	}.bind(this)
+	            },
+		        items: [{
+		        	layout: "fit",
+		            title: 'Process Modelling',
+	                items	: [this.centerContentPanel]
+		        },
+		        {
+		        	layout: "fit",
+		        	title: 'Simulation Results',
+	                autoScroll   : false,
+	                items	: [this.simResultsContentPanelLayout]
+		        }
+		        ]
+			};
+		this.centerContentTabPannel = new Ext.TabPanel(tabs_config);
+		
 		// DEFINITION OF THE VIEWPORT AREAS
 		this.layout_regions = {
 				
@@ -275,21 +412,8 @@ ORYX.Editor = {
 				
 				
 				// DEFINES CENTER-AREA (FOR THE EDITOR)
-				center	: new Ext.Panel({
-					region	: 'center',
-					cls		: 'x-panel-editor-center',
-					autoScroll: true,
-					cmargins: {left:0, right:0},
-					border: false,
-					width: "auto",
-					height : "auto",
-					items	: {
-						layout	: "fit",
-						autoHeight: true,
-						el		: canvasParent
-					}
-				})
-		}
+				center	: this.centerContentTabPannel
+		};
 		
 		// Hide every region except the center
 		for (region in this.layout_regions) {
@@ -308,17 +432,16 @@ ORYX.Editor = {
 				this.layout_regions.west,
 				this.layout_regions.center
 			]
-		}
-
-		// IF Fullscreen, use a viewport
-		if (this.fullscreen) {
-			this.layout = new Ext.Viewport( layout_config )
+		};
+		this.contentviewport = new Ext.Viewport( layout_config  );
 		
-		// IF NOT, use a panel and render it to the given id
+		if (this.fullscreen) {
+			this.layout = new Ext.Viewport( layout_config );
+		
 		} else {
 			layout_config.renderTo 	= this.id;
 			layout_config.height 	= layoutHeight;
-			this.layout = new Ext.Panel( layout_config )
+			this.layout = new Ext.Panel( layout_config );
 		}
 		
 		//Generates the ORYX-Header
@@ -433,7 +556,7 @@ ORYX.Editor = {
 			}
 						
 			// trigger doLayout() and show the pane
-			current_region.ownerCt.doLayout();
+			current_region.ownerCt.doLayout();			
 			current_region.show();
 
 			if(Ext.isMac)
