@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,15 +89,16 @@ public class ProcessDiffServiceServlet extends HttpServlet {
 	}
 
 	private String getAssetVerionSource(String packageName, String assetName, String versionNum, IDiagramProfile profile) {
-		String versionURL = ExternalInfo.getExternalProtocol(profile)
-				+ "://"
-                + ExternalInfo.getExternalHost(profile)
-                + "/"
-                + profile.getExternalLoadURLSubdomain().substring(0,
-                        profile.getExternalLoadURLSubdomain().indexOf("/"))
-                + "/rest/packages/" + packageName + "/assets/" + assetName 
-                + "/versions/" + versionNum + "/source/";
 		try {
+			String versionURL = ExternalInfo.getExternalProtocol(profile)
+					+ "://"
+	                + ExternalInfo.getExternalHost(profile)
+	                + "/"
+	                + profile.getExternalLoadURLSubdomain().substring(0,
+	                        profile.getExternalLoadURLSubdomain().indexOf("/"))
+	                + "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/" + assetName 
+	                + "/versions/" + versionNum + "/source/";
+			
 			return IOUtils.toString(ServletUtil.getInputStreamForURL(versionURL, "GET", profile), "UTF-8");
 		} catch (Exception e) {
 			return "";
@@ -104,20 +106,21 @@ public class ProcessDiffServiceServlet extends HttpServlet {
 	}
 	
 	private List<String> getAssetVersions(String packageName, String assetName, String uuid, IDiagramProfile profile) {
-		String assetVersionURL = ExternalInfo.getExternalProtocol(profile)
-				+ "://"
-                + ExternalInfo.getExternalHost(profile)
-                + "/"
-                + profile.getExternalLoadURLSubdomain().substring(0,
-                        profile.getExternalLoadURLSubdomain().indexOf("/"))
-                + "/rest/packages/" + packageName + "/assets/" + assetName 
-                + "/versions/";
-		List<String> versionList = new ArrayList<String>();
 		try {
+			String assetVersionURL = ExternalInfo.getExternalProtocol(profile)
+					+ "://"
+	                + ExternalInfo.getExternalHost(profile)
+	                + "/"
+	                + profile.getExternalLoadURLSubdomain().substring(0,
+	                        profile.getExternalLoadURLSubdomain().indexOf("/"))
+	                + "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/" + assetName 
+	                + "/versions/";
+			List<String> versionList = new ArrayList<String>();
+			
 			XMLInputFactory factory = XMLInputFactory.newInstance();
             XMLStreamReader reader = factory
                     .createXMLStreamReader(ServletUtil.getInputStreamForURL(
-                    		assetVersionURL, "GET", profile));
+                    		assetVersionURL, "GET", profile), "UTF-8");
             boolean isFirstTitle = true;
             String title = "";
             while (reader.hasNext()) {
@@ -132,9 +135,10 @@ public class ProcessDiffServiceServlet extends HttpServlet {
                     }
                 }
             }
+            return versionList;
 		} catch (Exception e) {
             _logger.error(e.getMessage());
+            return null;
         }
-		return versionList;
 	}
 }

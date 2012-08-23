@@ -431,7 +431,7 @@ public class SimpleStorageServlet extends HttpServlet {
 	    return;
 	}
 
-	System.out.println(exception);
+	//System.out.println(exception);
 	exception.printStackTrace();
 
 	res.setContentType("text/html");

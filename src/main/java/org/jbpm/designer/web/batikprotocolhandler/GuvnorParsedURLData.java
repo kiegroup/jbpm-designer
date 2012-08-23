@@ -46,6 +46,7 @@ public class GuvnorParsedURLData extends ParsedURLData {
         connection.setRequestProperty("Accept-Language", "en-us,en;q=0.5");
         connection.setRequestProperty("Accept-Encoding", "gzip,deflate");
         connection.setRequestProperty("charset", "UTF-8");
+        connection.setRequestProperty("Accept-Charset", "UTF-8");
         connection.setReadTimeout(5 * 1000);
 
         applyAuth(connection);

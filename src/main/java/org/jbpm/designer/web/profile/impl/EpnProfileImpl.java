@@ -66,7 +66,7 @@ public class EpnProfileImpl implements IDiagramProfile {
                 throw new RuntimeException(e);
             }
             XMLInputFactory factory = XMLInputFactory.newInstance();
-            XMLStreamReader reader = factory.createXMLStreamReader(fileStream);
+            XMLStreamReader reader = factory.createXMLStreamReader(fileStream, "UTF-8");
             while(reader.hasNext()) {
                 if (reader.next() == XMLStreamReader.START_ELEMENT) {
                     if ("profile".equals(reader.getLocalName())) {

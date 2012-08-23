@@ -5,6 +5,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -63,7 +64,7 @@ public class ServletUtil {
             XMLInputFactory factory = XMLInputFactory.newInstance();
             XMLStreamReader reader = factory
                     .createXMLStreamReader(ServletUtil.getInputStreamForURL(
-                    		globalAreaURL, "GET", profile));
+                    		globalAreaURL, "GET", profile), "UTF-8");
             String title = "";
             String format = "";
             while (reader.hasNext()) {
@@ -107,7 +108,7 @@ public class ServletUtil {
             XMLInputFactory factory = XMLInputFactory.newInstance();
             XMLStreamReader reader = factory
                     .createXMLStreamReader(ServletUtil.getInputStreamForURL(packagesURL,
-                            "GET", profile));
+                            "GET", profile), "UTF-8");
             while (reader.hasNext()) {
                 if (reader.next() == XMLStreamReader.START_ELEMENT) {
                     if ("title".equals(reader.getLocalName())) {
@@ -119,22 +120,22 @@ public class ServletUtil {
             // we dont want to barf..just log that error happened
             _logger.error(e.getMessage());
         }
-
+        
         boolean gotPackage = false;
         String[] pkgassetinfo = new String[2];
         for (String nextPackage : packages) {
-            String packageAssetURL = ExternalInfo.getExternalProtocol(profile)
-                    + "://"
-                    + ExternalInfo.getExternalHost(profile)
-                    + "/"
-                    + profile.getExternalLoadURLSubdomain().substring(0,
-                            profile.getExternalLoadURLSubdomain().indexOf("/"))
-                    + "/rest/packages/" + nextPackage + "/assets/";
-            try {
+        	try {
+	        	String packageAssetURL = ExternalInfo.getExternalProtocol(profile)
+	                    + "://"
+	                    + ExternalInfo.getExternalHost(profile)
+	                    + "/"
+	                    + profile.getExternalLoadURLSubdomain().substring(0,
+	                            profile.getExternalLoadURLSubdomain().indexOf("/"))
+	                    + "/rest/packages/" + URLEncoder.encode(nextPackage, "UTF-8") + "/assets/";
                 XMLInputFactory factory = XMLInputFactory.newInstance();
                 XMLStreamReader reader = factory
                         .createXMLStreamReader(ServletUtil.getInputStreamForURL(
-                                packageAssetURL, "GET", profile));
+                                packageAssetURL, "GET", profile), "UTF-8");
                 String title = "";
                 String readuuid = "";
                 while (reader.hasNext()) {
@@ -178,6 +179,7 @@ public class ServletUtil {
         connection.setRequestProperty("Accept","text/html,application/xhtml+xml,application/xml,application/json,application/octet-stream,text/json,text/plain;q=0.9,*/*;q=0.8");
 
         connection.setRequestProperty("charset", "UTF-8");
+        connection.setRequestProperty("Accept-Charset", "UTF-8");
         connection.setReadTimeout(5 * 1000);
 
         ServletUtil.applyAuth(profile, connection);
@@ -215,7 +217,7 @@ public class ServletUtil {
     	        + "/"
     	        + profile.getExternalLoadURLSubdomain().substring(0,
     	                profile.getExternalLoadURLSubdomain().indexOf("/"))
-    	        + "/rest/packages/" + packageName + "/assets/" + URLEncoder.encode(assetName, "UTF-8");
+    	        + "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/" + URLEncoder.encode(assetName, "UTF-8");
     	
     	
 			URL checkURL = new URL(formURL);
@@ -272,7 +274,7 @@ public class ServletUtil {
         try {
             XMLInputFactory factory = XMLInputFactory.newInstance();
             XMLStreamReader reader = factory
-                    .createXMLStreamReader(ServletUtil.getInputStreamForURL(packagesURL, "GET", profile));
+                    .createXMLStreamReader(ServletUtil.getInputStreamForURL(packagesURL, "GET", profile), "UTF-8");
             while (reader.hasNext()) {
                 if (reader.next() == XMLStreamReader.START_ELEMENT) {
                     if ("title".equals(reader.getLocalName())) {
@@ -291,19 +293,19 @@ public class ServletUtil {
 	
 	public static List<String> getAllProcessesInPackage(String pkgName, IDiagramProfile profile) {
         List<String> processes = new ArrayList<String>();
-        String assetsURL = ExternalInfo.getExternalProtocol(profile)
-                + "://"
-                + ExternalInfo.getExternalHost(profile)
-                + "/"
-                + profile.getExternalLoadURLSubdomain().substring(0,
-    	                profile.getExternalLoadURLSubdomain().indexOf("/"))
-                + "/rest/packages/"
-                + pkgName
-                + "/assets/";
-        
         try {
+	        String assetsURL = ExternalInfo.getExternalProtocol(profile)
+	                + "://"
+	                + ExternalInfo.getExternalHost(profile)
+	                + "/"
+	                + profile.getExternalLoadURLSubdomain().substring(0,
+	    	                profile.getExternalLoadURLSubdomain().indexOf("/"))
+	                + "/rest/packages/"
+	                + URLEncoder.encode(pkgName, "UTF-8")
+	                + "/assets/";
+	        
             XMLInputFactory factory = XMLInputFactory.newInstance();
-            XMLStreamReader reader = factory.createXMLStreamReader(ServletUtil.getInputStreamForURL(assetsURL, "GET", profile));
+            XMLStreamReader reader = factory.createXMLStreamReader(ServletUtil.getInputStreamForURL(assetsURL, "GET", profile), "UTF-8");
 
             String format = "";
             String title = ""; 
@@ -336,14 +338,19 @@ public class ServletUtil {
     }
 	
 	public static String getProcessImagePath(String packageName, String processid, IDiagramProfile profile) {
-		return ExternalInfo.getExternalProtocol(profile)
-                + "://"
-                + ExternalInfo.getExternalHost(profile)
-                + "/"
-                + profile.getExternalLoadURLSubdomain().substring(0,
-    	                profile.getExternalLoadURLSubdomain().indexOf("/"))
-                + "/rest/packages/" + packageName + "/assets/" + processid + "-image"
-                + "/binary/";
+		try {
+			return ExternalInfo.getExternalProtocol(profile)
+			        + "://"
+			        + ExternalInfo.getExternalHost(profile)
+			        + "/"
+			        + profile.getExternalLoadURLSubdomain().substring(0,
+			                profile.getExternalLoadURLSubdomain().indexOf("/"))
+			        + "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/" + processid + "-image"
+			        + "/binary/";
+		} catch (UnsupportedEncodingException e) {
+			_logger.error(e.getMessage());
+			return "";
+		}
 	}
 	
 	public static String getProcessImageSourcePath(String packageName, String processid, IDiagramProfile profile) {
@@ -358,16 +365,17 @@ public class ServletUtil {
 	}
 	
 	public static String getProcessSourceContent(String packageName, String assetName, IDiagramProfile profile) {
-        String assetSourceURL = ExternalInfo.getExternalProtocol(profile)
-                + "://"
-                + ExternalInfo.getExternalHost(profile)
-                + "/"
-                + profile.getExternalLoadURLSubdomain().substring(0,
-    	                profile.getExternalLoadURLSubdomain().indexOf("/"))
-                + "/rest/packages/" + packageName + "/assets/" + assetName
-                + "/source/";
+		try {	
+			String assetSourceURL = ExternalInfo.getExternalProtocol(profile)
+	                + "://"
+	                + ExternalInfo.getExternalHost(profile)
+	                + "/"
+	                + profile.getExternalLoadURLSubdomain().substring(0,
+	    	                profile.getExternalLoadURLSubdomain().indexOf("/"))
+	                + "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/" + assetName
+	                + "/source/";
 
-        try {
+        
             InputStream in = ServletUtil.getInputStreamForURL(assetSourceURL, "GET", profile);
             StringWriter writer = new StringWriter();
             IOUtils.copy(in, writer);

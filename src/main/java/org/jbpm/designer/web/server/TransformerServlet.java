@@ -25,6 +25,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,6 +40,7 @@ import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
+import org.apache.abdera.i18n.text.Sanitizer;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
@@ -447,7 +449,7 @@ public class TransformerServlet extends HttpServlet {
                     + "/"
                     + profile.getExternalLoadURLSubdomain().substring(0,
                             profile.getExternalLoadURLSubdomain().indexOf("/"))
-                    + "/rest/packages/" + packageName + "/assets/" + assetName
+                    + "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/" + assetName
                     + assetExt;
 
             String packageAssetsURL = ExternalInfo.getExternalProtocol(profile)
@@ -456,7 +458,7 @@ public class TransformerServlet extends HttpServlet {
                     + "/"
                     + profile.getExternalLoadURLSubdomain().substring(0,
                             profile.getExternalLoadURLSubdomain().indexOf("/"))
-                    + "/rest/packages/" + packageName + "/assets/";
+                    + "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/";
 
             String deleteURL = ExternalInfo.getExternalProtocol(profile)
                     + "://"
@@ -464,7 +466,7 @@ public class TransformerServlet extends HttpServlet {
                     + "/"
                     + profile.getExternalLoadURLSubdomain().substring(0,
                             profile.getExternalLoadURLSubdomain().indexOf("/"))
-                    + "/rest/packages/" + packageName + "/assets/" + assetName
+                    + "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/" + assetName
                     + assetExt;
 
             // check if the image already exists
@@ -496,7 +498,7 @@ public class TransformerServlet extends HttpServlet {
                     "application/octet-stream");
             createConnection.setRequestProperty("Accept",
                     "application/atom+xml");
-            createConnection.setRequestProperty("Slug", assetName + assetExt + assetFileExt);
+            createConnection.setRequestProperty("Slug", Sanitizer.sanitize(assetName) + assetExt + assetFileExt);
             createConnection.setDoOutput(true);
 
             if (transformto.equals(TO_PDF)) {
@@ -532,15 +534,16 @@ public class TransformerServlet extends HttpServlet {
 
     private String getProcessContent(String packageName, String assetName,
             String uuid, IDiagramProfile profile) {
-        String assetSourceURL = ExternalInfo.getExternalProtocol(profile)
-                + "://"
-                + ExternalInfo.getExternalHost(profile)
-                + "/"
-                + profile.getExternalLoadURLSubdomain().substring(0,
-                        profile.getExternalLoadURLSubdomain().indexOf("/"))
-                + "/rest/packages/" + packageName + "/assets/" + assetName
-                + "/source/";
-        try {
+    	try {
+	    	String assetSourceURL = ExternalInfo.getExternalProtocol(profile)
+	                + "://"
+	                + ExternalInfo.getExternalHost(profile)
+	                + "/"
+	                + profile.getExternalLoadURLSubdomain().substring(0,
+	                        profile.getExternalLoadURLSubdomain().indexOf("/"))
+	                + "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/" + assetName
+	                + "/source/";
+	        
             InputStream in = ServletUtil.getInputStreamForURL(assetSourceURL, "GET",
                     profile);
             StringWriter writer = new StringWriter();

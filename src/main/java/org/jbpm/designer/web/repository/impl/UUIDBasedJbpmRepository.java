@@ -77,6 +77,7 @@ public class UUIDBasedJbpmRepository implements IUUIDBasedRepository {
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Content-Type", "application/xml"); 
         connection.setRequestProperty("charset", "UTF-8");
+        connection.setRequestProperty("Accept-Charset", "UTF-8");
         connection.setReadTimeout(5*1000);
         connection.connect();
 

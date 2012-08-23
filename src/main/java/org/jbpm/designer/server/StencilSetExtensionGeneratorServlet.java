@@ -142,7 +142,7 @@ public class StencilSetExtensionGeneratorServlet extends HttpServlet {
 				        // Process the input stream
 				        if (name.equals("csvFile")) {
 				        	CsvMapReader csvFileReader = new CsvMapReader(
-					        		new InputStreamReader(stream),
+					        		new InputStreamReader(stream, "UTF-8"),
 					        		CsvPreference.EXCEL_PREFERENCE
 					        		);
 					        csvHeader = csvFileReader.getCSVHeader(true);
