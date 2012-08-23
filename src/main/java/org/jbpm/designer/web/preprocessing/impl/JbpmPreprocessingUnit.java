@@ -15,6 +15,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -33,6 +34,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
 import org.antlr.stringtemplate.StringTemplate;
+import org.apache.abdera.i18n.text.Sanitizer;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
@@ -231,7 +233,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 	}
                 	icon = ExternalInfo.getExternalProtocol(profile) + "://" + ExternalInfo.getExternalHost(profile) +
                             "/" + profile.getExternalLoadURLSubdomain().substring(0, profile.getExternalLoadURLSubdomain().indexOf("/")) +
-                            "/rest/packages/" + packageName + "/assets/defaultservicenodeicon/binary/";
+                            "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/defaultservicenodeicon/binary/";
                 }
                 workDefinition.setIcon(icon);
                 workDefinition.setCustomEditor((String) workDefinitionMap.get("customEditor"));
@@ -275,11 +277,11 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 List<String> configNames = entry.getValue();
                 if(configNames != null) {
                     for(String configName : configNames) {
-                        String configURL = ExternalInfo.getExternalProtocol(profile) + "://" + ExternalInfo.getExternalHost(profile) +
-                        "/" + profile.getExternalLoadURLSubdomain().substring(0, profile.getExternalLoadURLSubdomain().indexOf("/")) +
-                        "/rest/packages/" + packageName + "/assets/" + configName + "/source/";
+                    	try {
+	                    	String configURL = ExternalInfo.getExternalProtocol(profile) + "://" + ExternalInfo.getExternalHost(profile) +
+	                        "/" + profile.getExternalLoadURLSubdomain().substring(0, profile.getExternalLoadURLSubdomain().indexOf("/")) +
+	                        "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/" + configName + "/source/";
                 
-                        try {
                             InputStream in =  ServletUtil.getInputStreamForURL(configURL, "GET", profile);
                             StringWriter writer = new StringWriter();
                             IOUtils.copy(in, writer, "UTF-8");
@@ -319,6 +321,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 		        HttpURLConnection checkConnection = (HttpURLConnection) checkURL.openConnection();
 		        ServletUtil.applyAuth(profile, checkConnection);
 		        checkConnection.setRequestMethod("GET");
+		        checkConnection.setRequestProperty("charset", "UTF-8");
 		        checkConnection.connect();
 		        _logger.info("check connection response code: " + checkConnection.getResponseCode());
 		        if (checkConnection.getResponseCode() != 200) {
@@ -331,7 +334,8 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 		                    "application/octet-stream");
 		            createConnection.setRequestProperty("Accept",
 		                    "application/atom+xml");
-		            createConnection.setRequestProperty("Slug", formWidget.getName());
+		            createConnection.setRequestProperty("charset", "UTF-8");
+		            createConnection.setRequestProperty("Slug", Sanitizer.sanitize(formWidget.getName()));
 		            createConnection.setDoOutput(true);
 		            createConnection.getOutputStream().write(getBytesFromFile(formWidget));
 		            createConnection.connect();
@@ -366,6 +370,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 	                .openConnection();
 	        ServletUtil.applyAuth(profile, checkConnection);
 	        checkConnection.setRequestMethod("GET");
+	        checkConnection.setRequestProperty("charset", "UTF-8");
 	        checkConnection
 	                .setRequestProperty("Accept", "application/atom+xml");
 	        checkConnection.connect();
@@ -380,7 +385,8 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 	                    "application/octet-stream");
 	            createConnection.setRequestProperty("Accept",
 	                    "application/atom+xml");
-	            createConnection.setRequestProperty("Slug", CUSTOMEDITORS_NAME + CUSTOMEDITORS_EXT);
+	            createConnection.setRequestProperty("charset", "UTF-8");
+	            createConnection.setRequestProperty("Slug", Sanitizer.sanitize(CUSTOMEDITORS_NAME)  + CUSTOMEDITORS_EXT);
 	            createConnection.setDoOutput(true);
 	            createConnection.getOutputStream().write(getBytesFromFile(new File(customEditorsInfo)));
 	            createConnection.connect();
@@ -424,6 +430,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 	        checkConnection.setRequestMethod("GET");
 	        checkConnection
 	                .setRequestProperty("Accept", "application/atom+xml");
+	        checkConnection.setRequestProperty("charset", "UTF-8");
 	        checkConnection.connect();
 	        _logger.info("check connection response code: " + checkConnection.getResponseCode());
 	        if (checkConnection.getResponseCode() != 200) {
@@ -436,7 +443,8 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 	                    "application/octet-stream");
 	            createConnection.setRequestProperty("Accept",
 	                    "application/atom+xml");
-	            createConnection.setRequestProperty("Slug", THEME_NAME + THEME_EXT);
+	            createConnection.setRequestProperty("Slug", Sanitizer.sanitize(THEME_NAME) + THEME_EXT);
+	            checkConnection.setRequestProperty("charset", "UTF-8");
 	            createConnection.setDoOutput(true);
 	            createConnection.getOutputStream().write(getBytesFromFile(new File(themeInfo)));
 	            createConnection.connect();
@@ -487,48 +495,50 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     
     private void setupDefaultIcons(String[] info, IDiagramProfile profile) {
     	if(info != null && info.length == 2) {
-    		String pkg = info[0];
-    		
-    		String emailIconURL = ExternalInfo.getExternalProtocol(profile)
-                    + "://"
-                    + ExternalInfo.getExternalHost(profile)
-                    + "/"
-                    + profile.getExternalLoadURLSubdomain().substring(0,
-                            profile.getExternalLoadURLSubdomain().indexOf("/"))
-                    + "/rest/packages/" + pkg + "/assets/" + "defaultemailicon"
-                    + ".gif";
-    		String logIconURL = ExternalInfo.getExternalProtocol(profile)
-                    + "://"
-                    + ExternalInfo.getExternalHost(profile)
-                    + "/"
-                    + profile.getExternalLoadURLSubdomain().substring(0,
-                            profile.getExternalLoadURLSubdomain().indexOf("/"))
-                    + "/rest/packages/" + pkg + "/assets/" + "defaultlogicon"
-                    + ".gif";
-    		
-    		String serviceNodeIconURL = ExternalInfo.getExternalProtocol(profile)
-                    + "://"
-                    + ExternalInfo.getExternalHost(profile)
-                    + "/"
-                    + profile.getExternalLoadURLSubdomain().substring(0,
-                            profile.getExternalLoadURLSubdomain().indexOf("/"))
-                    + "/rest/packages/" + pkg + "/assets/" + "defaultservicenodeicon"
-                    + ".png";
-    		
-    		String packageAssetsURL = ExternalInfo.getExternalProtocol(profile)
-                    + "://"
-                    + ExternalInfo.getExternalHost(profile)
-                    + "/"
-                    + profile.getExternalLoadURLSubdomain().substring(0,
-                            profile.getExternalLoadURLSubdomain().indexOf("/"))
-                    + "/rest/packages/" + pkg + "/assets/";
     		try {
+	    		String pkg = URLEncoder.encode(info[0], "UTF-8");
+	    		
+	    		String emailIconURL = ExternalInfo.getExternalProtocol(profile)
+	                    + "://"
+	                    + ExternalInfo.getExternalHost(profile)
+	                    + "/"
+	                    + profile.getExternalLoadURLSubdomain().substring(0,
+	                            profile.getExternalLoadURLSubdomain().indexOf("/"))
+	                    + "/rest/packages/" + pkg + "/assets/" + "defaultemailicon"
+	                    + ".gif";
+	    		String logIconURL = ExternalInfo.getExternalProtocol(profile)
+	                    + "://"
+	                    + ExternalInfo.getExternalHost(profile)
+	                    + "/"
+	                    + profile.getExternalLoadURLSubdomain().substring(0,
+	                            profile.getExternalLoadURLSubdomain().indexOf("/"))
+	                    + "/rest/packages/" + pkg + "/assets/" + "defaultlogicon"
+	                    + ".gif";
+	    		
+	    		String serviceNodeIconURL = ExternalInfo.getExternalProtocol(profile)
+	                    + "://"
+	                    + ExternalInfo.getExternalHost(profile)
+	                    + "/"
+	                    + profile.getExternalLoadURLSubdomain().substring(0,
+	                            profile.getExternalLoadURLSubdomain().indexOf("/"))
+	                    + "/rest/packages/" + pkg + "/assets/" + "defaultservicenodeicon"
+	                    + ".png";
+	    		
+	    		String packageAssetsURL = ExternalInfo.getExternalProtocol(profile)
+	                    + "://"
+	                    + ExternalInfo.getExternalHost(profile)
+	                    + "/"
+	                    + profile.getExternalLoadURLSubdomain().substring(0,
+	                            profile.getExternalLoadURLSubdomain().indexOf("/"))
+	                    + "/rest/packages/" + pkg + "/assets/";
+	    		
 				// check if the images already exists
 				URL checkEmailIconURL = new URL(emailIconURL);
 				HttpURLConnection checkEmailIconConnection = (HttpURLConnection) checkEmailIconURL
 				        .openConnection();
 				applyAuth(profile, checkEmailIconConnection);
 				checkEmailIconConnection.setRequestMethod("GET");
+				checkEmailIconConnection.setRequestProperty("charset", "UTF-8");
 				checkEmailIconConnection
 				        .setRequestProperty("Accept", "application/atom+xml");
 				checkEmailIconConnection.connect();
@@ -544,6 +554,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 		            createEmailIconConnection.setRequestProperty("Accept",
 		                    "application/atom+xml");
 		            createEmailIconConnection.setRequestProperty("Slug", "defaultemailicon.gif");
+		            createEmailIconConnection.setRequestProperty("charset", "UTF-8");
 		            createEmailIconConnection.setDoOutput(true);
 		            createEmailIconConnection.getOutputStream().write(getBytesFromFile(new File(default_emailicon)));
 		            createEmailIconConnection.connect();
@@ -570,6 +581,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 		            createLogIconConnection.setRequestProperty("Accept",
 		                    "application/atom+xml");
 		            createLogIconConnection.setRequestProperty("Slug", "defaultlogicon.gif");
+		            createLogIconConnection.setRequestProperty("charset", "UTF-8");
 		            createLogIconConnection.setDoOutput(true);
 		            createLogIconConnection.getOutputStream().write(getBytesFromFile(new File(default_logicon)));
 		            createLogIconConnection.connect();
@@ -596,6 +608,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 		            createServiceNodeIconConnection.setRequestProperty("Accept",
 		                    "application/atom+xml");
 		            createServiceNodeIconConnection.setRequestProperty("Slug", "defaultservicenodeicon.png");
+		            createServiceNodeIconConnection.setRequestProperty("charset", "UTF-8");
 		            createServiceNodeIconConnection.setDoOutput(true);
 		            createServiceNodeIconConnection.getOutputStream().write(getBytesFromFile(new File(default_servicenodeicon)));
 		            createServiceNodeIconConnection.connect();
@@ -613,13 +626,13 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     	boolean gotPackage = false;
     	String pkg = "";
     	for(String nextPackage : packageNames) {
-            String packageAssetURL = ExternalInfo.getExternalProtocol(profile) + "://" + ExternalInfo.getExternalHost(profile) +
-            "/" + profile.getExternalLoadURLSubdomain().substring(0, profile.getExternalLoadURLSubdomain().indexOf("/")) +
-            "/rest/packages/" + nextPackage + "/assets/";
+    		try {	
+	    		String packageAssetURL = ExternalInfo.getExternalProtocol(profile) + "://" + ExternalInfo.getExternalHost(profile) +
+	            "/" + profile.getExternalLoadURLSubdomain().substring(0, profile.getExternalLoadURLSubdomain().indexOf("/")) +
+	            "/rest/packages/" + URLEncoder.encode(nextPackage, "UTF-8") + "/assets/";
             
-            try {
                 XMLInputFactory factory = XMLInputFactory.newInstance();
-                XMLStreamReader reader = factory.createXMLStreamReader(ServletUtil.getInputStreamForURL(packageAssetURL, "GET", profile));
+                XMLStreamReader reader = factory.createXMLStreamReader(ServletUtil.getInputStreamForURL(packageAssetURL, "GET", profile), "UTF-8");
                 while (reader.hasNext()) {
                     int next = reader.next();
                     if (next == XMLStreamReader.START_ELEMENT) {
@@ -670,6 +683,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 	            createWidConnection.setRequestProperty("Accept",
 	                    "application/atom+xml");
 	            createWidConnection.setRequestProperty("Slug", "WorkDefinitions.wid");
+	            createWidConnection.setRequestProperty("charset", "UTF-8");
 	            createWidConnection.setDoOutput(true);
 	            createWidConnection.getOutputStream().write(widConfigTemplate.toString().getBytes("UTF-8"));
 	            createWidConnection.connect();
@@ -686,14 +700,15 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         String pkg = "";
         Map<String, List<String>> packageConfigs = new HashMap<String, List<String>>();
         for(String nextPackage : packageNames) {
-            String packageAssetURL = ExternalInfo.getExternalProtocol(profile) + "://" + ExternalInfo.getExternalHost(profile) +
-            "/" + profile.getExternalLoadURLSubdomain().substring(0, profile.getExternalLoadURLSubdomain().indexOf("/")) +
-            "/rest/packages/" + nextPackage + "/assets/";
-            packageConfigs.put(nextPackage, new ArrayList<String>());
+        	try {
+	        	String packageAssetURL = ExternalInfo.getExternalProtocol(profile) + "://" + ExternalInfo.getExternalHost(profile) +
+	            "/" + profile.getExternalLoadURLSubdomain().substring(0, profile.getExternalLoadURLSubdomain().indexOf("/")) +
+	            "/rest/packages/" + URLEncoder.encode(nextPackage, "UTF-8") + "/assets/";
+	            packageConfigs.put(nextPackage, new ArrayList<String>());
+	            
             
-            try {
                 XMLInputFactory factory = XMLInputFactory.newInstance();
-                XMLStreamReader reader = factory.createXMLStreamReader(ServletUtil.getInputStreamForURL(packageAssetURL, "GET", profile));
+                XMLStreamReader reader = factory.createXMLStreamReader(ServletUtil.getInputStreamForURL(packageAssetURL, "GET", profile), "UTF-8");
 
                 String format = "";
                 String title = "";  
@@ -748,7 +763,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         "/rest/packages/";
         try {
             XMLInputFactory factory = XMLInputFactory.newInstance();
-            XMLStreamReader reader = factory.createXMLStreamReader(ServletUtil.getInputStreamForURL(packagesURL, "GET", profile));
+            XMLStreamReader reader = factory.createXMLStreamReader(ServletUtil.getInputStreamForURL(packagesURL, "GET", profile), "UTF-8");
             while (reader.hasNext()) {
                 if (reader.next() == XMLStreamReader.START_ELEMENT) {
                     if ("title".equals(reader.getLocalName())) {
@@ -760,6 +775,8 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             // we dont want to barf..just log that error happened
             _logger.error(e.getMessage());
         } 
+        
+        
         return packages;
     }
     

@@ -24,6 +24,7 @@ import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 import org.apache.log4j.Logger;
 import org.eclipse.bpmn2.Definitions;
+import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.designer.bpmn2.impl.Bpmn2JsonUnmarshaller;
 import org.jbpm.designer.taskforms.TaskFormInfo;
 import org.jbpm.designer.taskforms.TaskFormTemplateManager;
@@ -32,6 +33,7 @@ import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.designer.web.profile.impl.ExternalInfo;
 import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
 
+import org.apache.abdera.i18n.text.Sanitizer;
 import org.apache.commons.codec.binary.Base64;
 
 /** 
@@ -67,7 +69,10 @@ public class TaskFormsServlet extends HttpServlet {
         String[] packageAssetInfo = ServletUtil.findPackageAndAssetInfo(uuid, profile);
         String packageName = packageAssetInfo[0];
         String assetName = packageAssetInfo[1];
-
+        
+        System.out.println("************* PACKAGE NAME: "+ packageName);
+        
+        DroolsFactoryImpl.init();
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions def = ((Definitions) unmarshaller.unmarshall(json, preprocessingData).getContents().get(0));
         
@@ -128,7 +133,7 @@ public class TaskFormsServlet extends HttpServlet {
         + "/"
         + profile.getExternalLoadURLSubdomain().substring(0,
                 profile.getExternalLoadURLSubdomain().indexOf("/"))
-        + "/rest/packages/" + taskForm.getPkgName() + "/assets/" + URLEncoder.encode(taskForm.getId(), "UTF-8");
+        + "/rest/packages/" + URLEncoder.encode(taskForm.getPkgName(), "UTF-8") + "/assets/" + URLEncoder.encode(taskForm.getId(), "UTF-8");
         
         String createNewURL = ExternalInfo.getExternalProtocol(profile)
         + "://"
@@ -136,7 +141,7 @@ public class TaskFormsServlet extends HttpServlet {
         + "/"
         + profile.getExternalLoadURLSubdomain().substring(0,
                 profile.getExternalLoadURLSubdomain().indexOf("/"))
-        + "/rest/packages/" + taskForm.getPkgName() + "/assets/";
+        + "/rest/packages/" + URLEncoder.encode(taskForm.getPkgName(), "UTF-8") + "/assets/";
         
         
         // check if the task form already exists
@@ -169,7 +174,7 @@ public class TaskFormsServlet extends HttpServlet {
                 "application/octet-stream");
         createConnection.setRequestProperty("Accept",
                 "application/atom+xml");
-        createConnection.setRequestProperty("Slug", URLEncoder.encode(taskForm.getId(), "UTF-8") + FORMTEMPLATE_FILE_EXTENSION);
+        createConnection.setRequestProperty("Slug", Sanitizer.sanitize(taskForm.getId()) + FORMTEMPLATE_FILE_EXTENSION);
         createConnection.setDoOutput(true);
         
         createConnection.getOutputStream ().write(taskForm.getOutput().getBytes("UTF-8"));

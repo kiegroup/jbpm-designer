@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -100,11 +101,11 @@ public class ProcessInfoServlet extends HttpServlet {
                 + "/"
                 + profile.getExternalLoadURLSubdomain().substring(0,
                         profile.getExternalLoadURLSubdomain().indexOf("/"))
-                + "/rest/packages/" + packageName + "/assets/" + assetName;
+                + "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/" + assetName;
 		XMLInputFactory factory = XMLInputFactory.newInstance();
         XMLStreamReader reader = factory
                .createXMLStreamReader(ServletUtil.getInputStreamForURL(assetInfoURL,
-                       "GET", profile));
+                       "GET", profile), "UTF-8");
         while (reader.hasNext()) {
             if (reader.next() == XMLStreamReader.START_ELEMENT) {
                 if ("format".equals(reader.getLocalName())) {

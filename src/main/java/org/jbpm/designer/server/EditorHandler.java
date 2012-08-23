@@ -623,7 +623,7 @@ public class EditorHandler extends HttpServlet {
         String retStr = "";
         try {
             InputStream inputStream = context.getResourceAsStream("/META-INF/MANIFEST.MF");
-            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
             String line;
             while ((line = br.readLine()) != null)   {
                 if(line.startsWith(BUNDLE_VERSION)) {

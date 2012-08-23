@@ -105,7 +105,7 @@ public class AutoLayouterServlet extends HttpServlet {
 
 		// get the output in a buffered reader.
 		BufferedReader whichIn = new BufferedReader(
-			new InputStreamReader(which.getInputStream()));
+			new InputStreamReader(which.getInputStream(), "UTf-8"));
 
 		// output the debug information.
 		System.out.print("ruby location: ");
@@ -147,7 +147,7 @@ public class AutoLayouterServlet extends HttpServlet {
 
 		// get the output in a buffered reader.
 		BufferedReader lsIn = new BufferedReader(new InputStreamReader(
-			ls.getInputStream()));
+			ls.getInputStream(), "UTF-8"));
 
 		// output the debug information.
 		System.out.print("ls on layouter: ");

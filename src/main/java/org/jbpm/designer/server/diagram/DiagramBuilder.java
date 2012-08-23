@@ -165,9 +165,6 @@ public class DiagramBuilder {
                 String key = keys.next();
                 String value = propsObject.getString(key);
 
-                // System.out.println(value);
-                // System.out.println(keepGlossaryLink);
-
                 if (!keepGlossaryLink) {
                     Matcher matcher = pattern.matcher(value);
                     while (matcher.find()) {

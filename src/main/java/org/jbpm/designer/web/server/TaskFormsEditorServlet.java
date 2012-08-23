@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.abdera.i18n.text.Sanitizer;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.jbpm.designer.web.profile.IDiagramProfile;
@@ -75,7 +76,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
 	                + "/"
 	                + profile.getExternalLoadURLSubdomain().substring(0,
 	                        profile.getExternalLoadURLSubdomain().indexOf("/"))
-	                + "/rest/packages/" + packageName + "/assets/" + taskName + TASKFORM_NAME_EXTENSION;
+	                + "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/" + taskName + TASKFORM_NAME_EXTENSION;
 
 		String createNewURL = ExternalInfo.getExternalProtocol(profile)
 				+ "://"
@@ -83,7 +84,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
 				+ "/"
 				+ profile.getExternalLoadURLSubdomain().substring(0,
 						profile.getExternalLoadURLSubdomain().indexOf("/"))
-				+ "/rest/packages/" + packageName + "/assets/";
+				+ "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/";
 		
         URL checkURL = new URL(taskFormURL);
         HttpURLConnection checkConnection = (HttpURLConnection) checkURL
@@ -113,7 +114,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
                 "application/octet-stream");
         createConnection.setRequestProperty("Accept",
                 "application/atom+xml");
-        createConnection.setRequestProperty("Slug", URLEncoder.encode(taskName, "UTF-8") + TASKFORM_NAME_EXTENSION + TASKFORM_FILE_EXTENSION);
+        createConnection.setRequestProperty("Slug", Sanitizer.sanitize(taskName) + TASKFORM_NAME_EXTENSION + TASKFORM_FILE_EXTENSION);
         createConnection.setDoOutput(true);
         
         createConnection.getOutputStream ().write(formValue.getBytes("UTF-8"));
@@ -124,24 +125,25 @@ public class TaskFormsEditorServlet extends HttpServlet {
 	 }
 	 
 	 private String getTaskFormFromGuvnor(String taskName, String packageName, IDiagramProfile profile) {
-		 String taskFormURL = ExternalInfo.getExternalProtocol(profile)
-	                + "://"
-	                + ExternalInfo.getExternalHost(profile)
-	                + "/"
-	                + profile.getExternalLoadURLSubdomain().substring(0,
-	                        profile.getExternalLoadURLSubdomain().indexOf("/"))
-	                + "/rest/packages/" + packageName + "/assets/" + taskName + TASKFORM_NAME_EXTENSION;
+		 try {
+			 	String taskFormURL = ExternalInfo.getExternalProtocol(profile)
+		                + "://"
+		                + ExternalInfo.getExternalHost(profile)
+		                + "/"
+		                + profile.getExternalLoadURLSubdomain().substring(0,
+		                        profile.getExternalLoadURLSubdomain().indexOf("/"))
+		                + "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/" + taskName + TASKFORM_NAME_EXTENSION;
+				
+				String taskFormSourceURL = ExternalInfo.getExternalProtocol(profile)
+		                + "://"
+		                + ExternalInfo.getExternalHost(profile)
+		                + "/"
+		                + profile.getExternalLoadURLSubdomain().substring(0,
+		                        profile.getExternalLoadURLSubdomain().indexOf("/"))
+		                + "/rest/packages/"+ URLEncoder.encode(packageName, "UTF-8") + "/assets/" + taskName + TASKFORM_NAME_EXTENSION
+		                + "/source/";
+				
 			
-			String taskFormSourceURL = ExternalInfo.getExternalProtocol(profile)
-	                + "://"
-	                + ExternalInfo.getExternalHost(profile)
-	                + "/"
-	                + profile.getExternalLoadURLSubdomain().substring(0,
-	                        profile.getExternalLoadURLSubdomain().indexOf("/"))
-	                + "/rest/packages/"+ packageName + "/assets/" + taskName + TASKFORM_NAME_EXTENSION
-	                + "/source/";
-			
-			try {
 				URL checkURL = new URL(taskFormURL);
 		        HttpURLConnection checkConnection = (HttpURLConnection) checkURL
 		                .openConnection();

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
+import org.apache.abdera.i18n.text.Sanitizer;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.drools.core.util.ConfFileUtils;
@@ -163,10 +165,10 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 						for(String nextPackage : packageNames) {
 							String packageAssetURL = ExternalInfo.getExternalProtocol(profile) + "://" + ExternalInfo.getExternalHost(profile) +
 									"/" + profile.getExternalLoadURLSubdomain().substring(0, profile.getExternalLoadURLSubdomain().indexOf("/")) +
-									"/rest/packages/" + nextPackage + "/assets/";
+									"/rest/packages/" + URLEncoder.encode(nextPackage, "UTF-8") + "/assets/";
 							try {
 								XMLInputFactory factory = XMLInputFactory.newInstance();
-								XMLStreamReader reader = factory.createXMLStreamReader(ServletUtil.getInputStreamForURL(packageAssetURL, "GET", profile));
+								XMLStreamReader reader = factory.createXMLStreamReader(ServletUtil.getInputStreamForURL(packageAssetURL, "GET", profile), "UTF-8");
 
 								while (reader.hasNext()) {
 									int next = reader.next();
@@ -174,7 +176,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 										if ("uuid".equals(reader.getLocalName())) {
 											String eleText = reader.getElementText();
 											if(uuid.equals(eleText)) {
-												pkg = nextPackage;
+												pkg = URLEncoder.encode(nextPackage, "UTF-8");
 												gotPackage = true;
 												break;
 											}
@@ -193,14 +195,14 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 						               + "/"
 						               + profile.getExternalLoadURLSubdomain().substring(0,
 						                       profile.getExternalLoadURLSubdomain().indexOf("/"))
-						               + "/rest/packages/" + pkg + "/assets/" + widName + ".wid";
+						               + "/rest/packages/" + URLEncoder.encode(pkg, "UTF-8") + "/assets/" + widName + ".wid";
 							String iconURL = ExternalInfo.getExternalProtocol(profile)
 						               + "://"
 						               + ExternalInfo.getExternalHost(profile)
 						               + "/"
 						               + profile.getExternalLoadURLSubdomain().substring(0,
 						                       profile.getExternalLoadURLSubdomain().indexOf("/"))
-						               + "/rest/packages/" + pkg + "/assets/" + iconName;
+						               + "/rest/packages/" + URLEncoder.encode(pkg, "UTF-8") + "/assets/" + iconName;
 							
 							String packageAssetsURL = ExternalInfo.getExternalProtocol(profile)
 					                   + "://"
@@ -208,7 +210,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 					                   + "/"
 					                   + profile.getExternalLoadURLSubdomain().substring(0,
 					                           profile.getExternalLoadURLSubdomain().indexOf("/"))
-					                   + "/rest/packages/" + pkg + "/assets/";
+					                   + "/rest/packages/" + URLEncoder.encode(pkg, "UTF-8") + "/assets/";
 								
 								
 								// check if the wid already exists
@@ -263,7 +265,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 					               "application/octet-stream");
 					        createWidConnection.setRequestProperty("Accept",
 					               "application/atom+xml");
-					        createWidConnection.setRequestProperty("Slug", widName + ".wid");
+					        createWidConnection.setRequestProperty("Slug", Sanitizer.sanitize(widName) + ".wid");
 					        createWidConnection.setDoOutput(true);
 					        createWidConnection.getOutputStream().write(workItemDefinitionContent.getBytes("UTF-8"));
 					        createWidConnection.connect();
@@ -278,7 +280,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 					                "application/octet-stream");
 					        createIconConnection.setRequestProperty("Accept",
 					                "application/atom+xml");
-					        createIconConnection.setRequestProperty("Slug", iconName);
+					        createIconConnection.setRequestProperty("Slug", URLEncoder.encode(iconName));
 					        createIconConnection.setDoOutput(true);
 					        createIconConnection.getOutputStream().write(iconContent);
 					        createIconConnection.connect();
@@ -326,7 +328,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 				"/rest/packages/";
 		try {
 			XMLInputFactory factory = XMLInputFactory.newInstance();
-			XMLStreamReader reader = factory.createXMLStreamReader(ServletUtil.getInputStreamForURL(packagesURL, "GET", profile));
+			XMLStreamReader reader = factory.createXMLStreamReader(ServletUtil.getInputStreamForURL(packagesURL, "GET", profile), "UTF-8");
 			while (reader.hasNext()) {
 				if (reader.next() == XMLStreamReader.START_ELEMENT) {
 					if ("title".equals(reader.getLocalName())) {
