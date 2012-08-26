@@ -179,7 +179,7 @@ public class DictionaryServlet extends HttpServlet {
                     "application/octet-stream");
             createConnection.setRequestProperty("Accept",
                     "application/atom+xml");
-            createConnection.setRequestProperty("Slug", Sanitizer.sanitize(DICTIONARY_FNAME) + DICTIONARY_FEXT);
+            createConnection.setRequestProperty("Slug", DICTIONARY_FNAME + DICTIONARY_FEXT);
             createConnection.setDoOutput(true);
             createConnection.getOutputStream().write(dvalue.getBytes("UTF-8"));
             createConnection.connect();

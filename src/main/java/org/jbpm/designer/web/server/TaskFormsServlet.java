@@ -174,7 +174,7 @@ public class TaskFormsServlet extends HttpServlet {
                 "application/octet-stream");
         createConnection.setRequestProperty("Accept",
                 "application/atom+xml");
-        createConnection.setRequestProperty("Slug", Sanitizer.sanitize(taskForm.getId()) + FORMTEMPLATE_FILE_EXTENSION);
+        createConnection.setRequestProperty("Slug", taskForm.getId() + FORMTEMPLATE_FILE_EXTENSION);
         createConnection.setDoOutput(true);
         
         createConnection.getOutputStream ().write(taskForm.getOutput().getBytes("UTF-8"));

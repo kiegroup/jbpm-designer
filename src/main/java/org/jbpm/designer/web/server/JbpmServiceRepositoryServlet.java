@@ -265,7 +265,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 					               "application/octet-stream");
 					        createWidConnection.setRequestProperty("Accept",
 					               "application/atom+xml");
-					        createWidConnection.setRequestProperty("Slug", Sanitizer.sanitize(widName) + ".wid");
+					        createWidConnection.setRequestProperty("Slug", widName + ".wid");
 					        createWidConnection.setDoOutput(true);
 					        createWidConnection.getOutputStream().write(workItemDefinitionContent.getBytes("UTF-8"));
 					        createWidConnection.connect();
