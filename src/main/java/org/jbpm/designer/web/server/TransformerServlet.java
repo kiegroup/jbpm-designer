@@ -498,7 +498,7 @@ public class TransformerServlet extends HttpServlet {
                     "application/octet-stream");
             createConnection.setRequestProperty("Accept",
                     "application/atom+xml");
-            createConnection.setRequestProperty("Slug", Sanitizer.sanitize(assetName) + assetExt + assetFileExt);
+            createConnection.setRequestProperty("Slug", assetName + assetExt + assetFileExt);
             createConnection.setDoOutput(true);
 
             if (transformto.equals(TO_PDF)) {

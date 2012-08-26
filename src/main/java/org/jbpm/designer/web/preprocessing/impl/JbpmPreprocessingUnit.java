@@ -335,7 +335,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 		            createConnection.setRequestProperty("Accept",
 		                    "application/atom+xml");
 		            createConnection.setRequestProperty("charset", "UTF-8");
-		            createConnection.setRequestProperty("Slug", Sanitizer.sanitize(formWidget.getName()));
+		            createConnection.setRequestProperty("Slug", formWidget.getName());
 		            createConnection.setDoOutput(true);
 		            createConnection.getOutputStream().write(getBytesFromFile(formWidget));
 		            createConnection.connect();
@@ -386,7 +386,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 	            createConnection.setRequestProperty("Accept",
 	                    "application/atom+xml");
 	            createConnection.setRequestProperty("charset", "UTF-8");
-	            createConnection.setRequestProperty("Slug", Sanitizer.sanitize(CUSTOMEDITORS_NAME)  + CUSTOMEDITORS_EXT);
+	            createConnection.setRequestProperty("Slug", CUSTOMEDITORS_NAME  + CUSTOMEDITORS_EXT);
 	            createConnection.setDoOutput(true);
 	            createConnection.getOutputStream().write(getBytesFromFile(new File(customEditorsInfo)));
 	            createConnection.connect();
@@ -432,7 +432,10 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 	                .setRequestProperty("Accept", "application/atom+xml");
 	        checkConnection.setRequestProperty("charset", "UTF-8");
 	        checkConnection.connect();
-	        _logger.info("check connection response code: " + checkConnection.getResponseCode());
+	        System.out.println("check connection response code: " + checkConnection.getResponseCode());
+	        if(checkConnection.getResponseCode() == 404) {
+	        	checkConnection.disconnect();
+	        } 	
 	        if (checkConnection.getResponseCode() != 200) {
 	        	URL createURL = new URL(themesAssetsURL);
 	            HttpURLConnection createConnection = (HttpURLConnection) createURL
@@ -443,12 +446,12 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 	                    "application/octet-stream");
 	            createConnection.setRequestProperty("Accept",
 	                    "application/atom+xml");
-	            createConnection.setRequestProperty("Slug", Sanitizer.sanitize(THEME_NAME) + THEME_EXT);
+	            createConnection.setRequestProperty("Slug", THEME_NAME + THEME_EXT);
 	            checkConnection.setRequestProperty("charset", "UTF-8");
 	            createConnection.setDoOutput(true);
 	            createConnection.getOutputStream().write(getBytesFromFile(new File(themeInfo)));
 	            createConnection.connect();
-	            _logger.info("create themes connection response code: " + createConnection.getResponseCode());
+	            System.out.println("create themes connection response code: " + createConnection.getResponseCode());
 	        }
 	        
 	        String themesStr;
@@ -459,7 +462,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 			}
 	        
 	        JSONObject themesObject =  new JSONObject(themesStr);
-	        
+
 	        // get the theme name from cookie if exists or default
 	        String themeName = DEFAULT_THEME_NAME;
 	        Cookie[] cookies = req.getCookies();
