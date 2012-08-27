@@ -7828,6 +7828,7 @@
 			"icon":"catching/message.png",
 			"propertyPackages":[
 				"baseAttributes",
+				"catchEventAttributes",
 				"interrupting",
 				"boundaryevent",
 				"bgColor"
