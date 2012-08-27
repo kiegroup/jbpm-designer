@@ -257,7 +257,7 @@
 				},
 				{
 					"id":"dataoutput",
-					"type":"Dataoutput",
+					"type":"Dataoutputsingle",
 					"title":"DataOutput",
 					"value":"",
 					"description":"The Data Associations of the catch Event.",
@@ -323,7 +323,7 @@
 				},
 				{
 					"id":"datainput",
-					"type":"String",
+					"type":"Datainputsingle",
 					"title":"Data Input",
 					"value":"",
 					"description":"The Data Associations of the throw Event.",

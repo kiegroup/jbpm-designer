@@ -748,7 +748,7 @@ ORYX.Plugins.PropertyWindow = {
 							break;
 						
 						case ORYX.CONFIG.TYPE_DATAINPUT:
-                                                        var cf = new Ext.form.ComplexDataInputField({
+                            var cf = new Ext.form.ComplexDataInputField({
 								allowBlank: pair.optional(),
 								dataSource:this.dataSource,
 								grid:this.grid,
@@ -759,8 +759,32 @@ ORYX.Plugins.PropertyWindow = {
 							editorGrid = new Ext.Editor(cf);
 							break;
 							
+						case ORYX.CONFIG.TYPE_DATAINPUT_SINGLE:
+                            var cf = new Ext.form.ComplexDataInputFieldSingle({
+                            	allowBlank: pair.optional(),
+                            	dataSource:this.dataSource,
+                            	grid:this.grid,
+                            	row:index,
+                            	facade:this.facade
+                            });
+                            cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1,field:cf});							
+                            editorGrid = new Ext.Editor(cf);
+                            break;
+							
 						case ORYX.CONFIG.TYPE_DATAOUTPUT:
-                                                        var cf = new Ext.form.ComplexDataOutputField({
+                            var cf = new Ext.form.ComplexDataOutputField({
+								allowBlank: pair.optional(),
+								dataSource:this.dataSource,
+								grid:this.grid,
+								row:index,
+								facade:this.facade
+							});
+							cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1,field:cf});							
+							editorGrid = new Ext.Editor(cf);
+							break;
+							
+						case ORYX.CONFIG.TYPE_DATAOUTPUT_SINGLE:
+                            var cf = new Ext.form.ComplexDataOutputFieldSingle({
 								allowBlank: pair.optional(),
 								dataSource:this.dataSource,
 								grid:this.grid,
@@ -1855,7 +1879,7 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
         dataInputsTitle.push("** Data Inputs **");
         varData.push(dataInputsTitle);
         Ext.each(this.dataSource.data.items, function(item){
-        	if(item.data.gridProperties.propId == "oryx-datainputset") {
+        	if((item.data.gridProperties.propId == "oryx-datainputset") || (item.data.gridProperties.propId == "oryx-datainput")) {
         		var valueParts = item.data['value'].split(",");
         		for(var di=0; di < valueParts.length; di++) {
         			var nextPart = valueParts[di];
@@ -1880,7 +1904,7 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
         dataOutputsTitle.push("** Data Outputs **");
         varData.push(dataOutputsTitle);
         Ext.each(this.dataSource.data.items, function(item){
-        	if(item.data.gridProperties.propId == "oryx-dataoutputset") {
+        	if((item.data.gridProperties.propId == "oryx-dataoutputset") || (item.data.gridProperties.propId == "oryx-dataoutput")) {
         		var valueParts = item.data['value'].split(",");
         		for(var dou=0; dou < valueParts.length; dou++) {
         			var nextPart = valueParts[dou];
@@ -2173,6 +2197,8 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
 
     windowTitle : "",
     addButtonLabel : "",
+    single : false,
+    
     /**
      * If the trigger was clicked a dialog has to be opened
      * to enter the values for the complex property.
@@ -2321,13 +2347,17 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
             tbar: [{
                 text: this.addButtonLabel,
                 handler : function(){
-                	vardefs.add(new VarDef({
-                        name: '',
-                        stype: '',
-                        ctype: ''
-                    }));
-                    grid.fireEvent('cellclick', grid, vardefs.getCount()-1, 1, null);
-                }
+                	if(this.single && vardefs.getCount() > 0) {
+                		Ext.Msg.alert('Only single entry allowed.');
+                	} else {
+                		vardefs.add(new VarDef({
+                            name: '',
+                            stype: '',
+                            ctype: ''
+                        }));
+                        grid.fireEvent('cellclick', grid, vardefs.getCount()-1, 1, null);
+                	}
+                }.bind(this)
             }],
             clicksToEdit: 1
         });
@@ -2420,6 +2450,18 @@ Ext.form.ComplexDataInputField = Ext.extend(Ext.form.NameTypeEditor,  {
 Ext.form.ComplexDataOutputField = Ext.extend(Ext.form.NameTypeEditor,  {
      windowTitle : 'Editor for Data Output',
      addButtonLabel : 'Add Data Output'
+});
+
+Ext.form.ComplexDataInputFieldSingle = Ext.extend(Ext.form.NameTypeEditor,  {
+    windowTitle : 'Editor for Data Input',
+    addButtonLabel : 'Add Data Input',
+    single : true
+});
+
+Ext.form.ComplexDataOutputFieldSingle = Ext.extend(Ext.form.NameTypeEditor,  {
+    windowTitle : 'Editor for Data Output',
+    addButtonLabel : 'Add Data Output',
+    single : true
 });
 
 Ext.form.ComplexGlobalsField = Ext.extend(Ext.form.NameTypeEditor,  {
