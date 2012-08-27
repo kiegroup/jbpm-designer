@@ -2479,10 +2479,11 @@ public class Bpmn2JsonUnmarshaller {
             String[] allDataOutputs = properties.get("dataoutput").split( ",\\s*" );
             OutputSet outSet = Bpmn2Factory.eINSTANCE.createOutputSet();
             for(String dataOutput : allDataOutputs) {
+            	String[] doutputParts = dataOutput.split( ":\\s*" );
                 DataOutput dataout = Bpmn2Factory.eINSTANCE.createDataOutput();
                 // we follow jbpm here to set the id
-                dataout.setId(event.getId() + "_" + dataOutput);
-                dataout.setName(dataOutput);
+                dataout.setId(event.getId() + "_" + doutputParts[0]);
+                dataout.setName(doutputParts[0]);
                 event.getDataOutputs().add(dataout);
                 // add to output set as well
                 outSet.getDataOutputRefs().add(dataout);
@@ -2624,10 +2625,11 @@ public class Bpmn2JsonUnmarshaller {
             String[] allDataInputs = properties.get("datainput").split( ",\\s*" );
             InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
             for(String dataInput : allDataInputs) {
+                String[] dinputParts = dataInput.split( ":\\s*" );
                 DataInput datain = Bpmn2Factory.eINSTANCE.createDataInput();
                 // we follow jbpm here to set the id
-                datain.setId(event.getId() + "_" + dataInput);
-                datain.setName(dataInput);
+                datain.setId(event.getId() + "_" + dinputParts[0]);
+                datain.setName(dinputParts[0]);
                 event.getDataInputs().add(datain);
                 // add to input set as well
                 inset.getDataInputRefs().add(datain);
