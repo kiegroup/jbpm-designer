@@ -2297,6 +2297,11 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
     	typeData.push(objectType);
     	
     	var gridId = Ext.id();
+    	Ext.form.VTypes["inputNameVal"] = /^[a-z0-9 \-\.]*$/i;  
+        Ext.form.VTypes["inputNameText"] = 'Invalid name';
+        Ext.form.VTypes["inputName"] = function(v){
+        	return Ext.form.VTypes["inputNameVal"].test(v);
+        };
     	var grid = new Ext.grid.EditorGridPanel({
             store: vardefs,
             id: gridId,
@@ -2306,7 +2311,8 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                 header: 'Name',
                 width: 100,
                 dataIndex: 'name',
-                editor: new Ext.form.TextField({ allowBlank: false })
+                editor: new Ext.form.TextField({ allowBlank: false, vtype: 'inputName', regex: /^[a-z0-9 \-\.]*$/i }),
+                renderer: Ext.util.Format.htmlEncode
             }, {
             	id: 'stype',
                 header: 'Standard Type',
@@ -2340,7 +2346,8 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                 header: 'Custom Type',
                 width: 200,
                 dataIndex: 'ctype',
-                editor: new Ext.form.TextField({ allowBlank: false })
+                editor: new Ext.form.TextField({ allowBlank: false }),
+                renderer: Ext.util.Format.htmlEncode
             }, itemDeleter]),
     		selModel: itemDeleter,
             autoHeight: true,
