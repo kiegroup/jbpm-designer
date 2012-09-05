@@ -3268,7 +3268,7 @@
 					"id":"distributiontype",
 					"type":"Choice",
 					"title":"Distribution Type",
-					"value":"normal",
+					"value":"random",
 					"description":"",
 					"description_ja":"",
 					"readonly":false,
