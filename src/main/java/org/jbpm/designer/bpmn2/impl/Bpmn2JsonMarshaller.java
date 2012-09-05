@@ -1307,6 +1307,7 @@ public class Bpmn2JsonMarshaller {
             			CostParameters costParams = eleType.getCostParameters();
             			DecimalParameterType unitCostVal = (DecimalParameterType) costParams.getUnitCost().getParameterValue().get(0);
             			properties.put("unitcost", unitCostVal.getValue().toString()); 
+            			properties.put("currency", costParams.getCurrencyUnit() == null ? "" : costParams.getCurrencyUnit());
             			ResourceParameters resourceParams = eleType.getResourceParameters();
             			FloatingParameterType quantityVal = (FloatingParameterType) resourceParams.getQuantity().getParameterValue().get(0);
             			properties.put("quantity", quantityVal.getValue()); 
@@ -1635,6 +1636,9 @@ public class Bpmn2JsonMarshaller {
         				properties.put("min", rdt.getMin());
         				properties.put("max", rdt.getMax());
         				properties.put("distributiontype", "random");
+        			}
+        			if(timeParams.getTimeUnit() != null) {
+        				properties.put("timeunit", timeParams.getTimeUnit().getName());
         			}
         		}
         	}

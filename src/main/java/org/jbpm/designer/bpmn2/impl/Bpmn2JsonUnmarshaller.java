@@ -3738,6 +3738,9 @@ public class Bpmn2JsonUnmarshaller {
         		randomDistributionType.setMin(Double.valueOf(properties.get("min")));
         		processingTimeParam.getParameterValue().add(randomDistributionType);
         	}
+        	if(properties.get("timeunit") != null) {
+        		timeParams.setTimeUnit(TimeUnit.getByName(properties.get("timeunit")));
+        	}
         	timeParams.setProcessingTime(processingTimeParam);
         	if(_simulationElementParameters.containsKey(task.getId())) {
             	_simulationElementParameters.get(task.getId()).add(timeParams);
@@ -4153,6 +4156,9 @@ public class Bpmn2JsonUnmarshaller {
         	unitCostParameterValue.setValue(new BigDecimal(properties.get("unitcost")));
         	unitcostParam.getParameterValue().add(unitCostParameterValue);
         	costParameters.setUnitCost(unitcostParam);
+        }
+        if(properties.get("currency") != null && properties.get("currency").length() > 0) {
+        	costParameters.setCurrencyUnit(properties.get("currency"));
         }
         if(_simulationElementParameters.containsKey(task.getId())) {
         	_simulationElementParameters.get(task.getId()).add(costParameters);

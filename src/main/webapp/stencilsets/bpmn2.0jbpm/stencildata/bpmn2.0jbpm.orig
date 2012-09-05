@@ -3222,6 +3222,49 @@
 					"min" : "0"
 				},
 				{
+					"id":"timeunit",
+					"type":"Choice",
+					"title":"Time Unit",
+					"value":"",
+					"description":"Time unit options (seconds, minutes, hours)",
+					"description_ja":"Time unit options (seconds, minutes, hours)",
+					"readonly":false,
+					"optional":true,
+					"simulation" : true,
+					"items": [
+						{
+							"id": "c1",
+							"title":"ms",
+							"value":"ms"
+						},
+						{
+							"id": "c2",
+							"title": "s",
+							"value": "s"
+						},
+						{
+							"id": "c3",
+							"title": "min",
+							"value": "min"
+						},
+						{
+							"id": "c4",
+							"title": "hour",
+							"value": "hour"
+						},
+						{
+							"id": "c5",
+							"title": "day",
+							"value": "day"
+						},
+						{
+							"id": "c6",
+							"title": "year",
+							"value": "year"
+						}
+					]    
+				},
+				{
 					"id":"distributiontype",
 					"type":"Choice",
 					"title":"Distribution Type",
@@ -3282,6 +3325,18 @@
 					"value":"0",
 					"description":"",
 					"description_ja":"",
+					"readonly":false,
+					"optional":true,
+					"simulation" : true,
+					"fortasktypes":"None|User",
+					"min" : "0"
+				},
+				{
+					"id":"currency",
+					"type":"String",
+					"title":"Currency",
+					"value":"",
+					"description":"Base currency (ISO 4217)",
 					"readonly":false,
 					"optional":true,
 					"simulation" : true,
