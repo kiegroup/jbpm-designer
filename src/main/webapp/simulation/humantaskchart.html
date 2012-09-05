@@ -18,9 +18,10 @@ function clearChart() {
 <body onload="showBarCharts();">
 <center>
 <div style="margin:20;padding:0;">
+	<div class="timelineicon"><a href="#" onclick="clearChart(); showTimeline(); return false;"><img src="/designer/images/simulation/timelineicon.png" title="Timeline"/></a></div>
 	<div class="tableicon"><a href="#" onclick="clearChart(); showTables(); return false;"><img src="/designer/images/simulation/tableicon.png" title="Tables"/></a></div>
     <div class="bcharticon"><a href="#" onclick="clearChart(); showBarCharts(); return false;"><img src="/designer/images/simulation/barcharticon.png" title="Bar Charts"/></a></div>
-    <div class="charttitle"><script>document.write(parent.ORYX.EDITOR.simulationChartTitle +  " (" + parent.ORYX.EDITOR.simulationChartId + ")");</script></div>
+    <div class="charttitle"><script>document.write(parent.ORYX.EDITOR.simulationChartTitle +  " (" + parent.ORYX.EDITOR.simulationChartNodeName + ")");</script></div>
 </div><br/>
 <div class="outterchart">
     <h2>Execution Times</h2>
@@ -83,6 +84,9 @@ function clearChart() {
         </center>
 </script>
 <script>
+		function getEventData() {
+			return parent.ORYX.EDITOR.simulationEventData;
+		}
 		function showBarCharts() {
 			var chartData = parent.ORYX.EDITOR.simulationChartData;
 			nv.addGraph(function() {
@@ -141,6 +145,10 @@ function clearChart() {
 			var resourceTableSource = $("#tabletemplateresource").html();
 	    	var resourceTableTemplate = Handlebars.compile(resourceTableSource);
 	    	$("#chartcontent2").html(resourceTableTemplate(chartData.resourcevalues));
+		}
+		
+		function showTimeline() {
+			alert("showing timeline!");
 		}
 </script>
 </body>

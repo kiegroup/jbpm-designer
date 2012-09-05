@@ -841,6 +841,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     	long length = file.length();
 
     	if (length > Integer.MAX_VALUE) {
+    		is.close();
     		return null; // File is too large
     	}
 
@@ -854,6 +855,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     	}
 
     	if (offset < bytes.length) {
+    		is.close();
     		throw new IOException("Could not completely read file " + file.getName());
     	}
     	is.close();

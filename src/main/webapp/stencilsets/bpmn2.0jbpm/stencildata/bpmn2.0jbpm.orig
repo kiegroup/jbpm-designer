@@ -496,6 +496,60 @@
 					"optional":true,
 					"length":"50"
 				},
+				{
+					"id":"timeunit",
+					"type":"Choice",
+					"title":"Time Unit",
+					"value":"s",
+					"description":"Time unit options (seconds, minutes, hours)",
+					"description_ja":"Time unit options (seconds, minutes, hours)",
+					"readonly":false,
+					"optional":true,
+					"simulation" : true,
+					"items": [
+						{
+							"id": "c1",
+							"title":"ms",
+							"value":"ms"
+						},
+						{
+							"id": "c2",
+							"title": "s",
+							"value": "s"
+						},
+						{
+							"id": "c3",
+							"title": "min",
+							"value": "min"
+						},
+						{
+							"id": "c4",
+							"title": "hour",
+							"value": "hour"
+						},
+						{
+							"id": "c5",
+							"title": "day",
+							"value": "day"
+						},
+						{
+							"id": "c6",
+							"title": "year",
+							"value": "year"
+						}
+					]    
+				},
+				{
+					"id":"currency",
+					"type":"String",
+					"title":"Currency",
+					"value":"",
+					"description":"Base currency (ISO 4217)",
+					"readonly":false,
+					"optional":true,
+					"simulation" : true,
+					"length":"50"
+				},
 				/**{
 					"id":"author",
 					"type":"String",
@@ -3117,59 +3171,22 @@
 					"fortasktypes":"None|User"
 				},
 				{
-					"id":"duration",
+					"id":"min",
 					"type":"Float",
-					"title":"Duration",
+					"title":"Min",
 					"value":"0",
-					"description":"The Amount of time that the task will take to execute (in time units)",
-					"description_ja":"The Amount of time that the task will take to execute (in time units)",
+					"description":"",
+					"description_ja":"",
 					"readonly":false,
 					"optional":true,
 					"simulation" : true,
+					"fordistribution":"uniform|random",
 					"min" : "0"
 				},
 				{
-					"id":"timeunit",
-					"type":"Choice",
-					"title":"Time Unit",
-					"value":"seconds",
-					"description":"Time unit options (seconds, minutes, hours)",
-					"description_ja":"Time unit options (seconds, minutes, hours)",
-					"readonly":false,
-					"optional":true,
-					"simulation" : true,
-					"items": [
-						{
-							"id": "c1",
-							"title":"milliseconds",
-							"value":"milliseconds"
-						},
-						{
-							"id": "c2",
-							"title": "seconds",
-							"value": "seconds"
-						},
-						{
-							"id": "c3",
-							"title": "minutes",
-							"value": "minutes"
-						},
-						{
-							"id": "c4",
-							"title": "hours",
-							"value": "hours"
-						},
-						{
-							"id": "c5",
-							"title": "days",
-							"value": "days"
-						}
-					]    
-				},
-				{
-					"id":"range",
+					"id":"max",
 					"type":"Float",
-					"title":"Range",
+					"title":"Max",
 					"value":"0",
 					"description":"",
 					"description_ja":"",
@@ -3192,10 +3209,23 @@
 					"fordistribution":"normal"
 				},
 				{
+					"id":"mean",
+					"type":"Float",
+					"title":"Mean",
+					"value":"0",
+					"description":"",
+					"description_ja":"",
+					"readonly":false,
+					"optional":true,
+					"simulation" : true,
+					"fordistribution":"normal",
+					"min" : "0"
+				},
+				{
 					"id":"distributiontype",
 					"type":"Choice",
 					"title":"Distribution Type",
-					"value":"exact",
+					"value":"normal",
 					"description":"",
 					"description_ja":"",
 					"readonly":false,
@@ -3216,18 +3246,13 @@
 							"id": "c3",
 							"title": "random",
 							"value": "random"
-						},
-						{
-							"id": "c4",
-							"title": "exact",
-							"value": "exact"
 						}
 					]    
 				},
 				{
-					"id":"staffavailability",
+					"id":"quantity",
 					"type":"Float",
-					"title":"Staff Availability",
+					"title":"Quantity",
 					"value":"0",
 					"description":"",
 					"description_ja":"",
@@ -3251,9 +3276,9 @@
 					"min": "0"
 				},
 				{
-					"id":"costpertimeunit",
+					"id":"unitcost",
 					"type":"Float",
-					"title":"Cost Per Time Unit",
+					"title":"Unit Cost",
 					"value":"0",
 					"description":"",
 					"description_ja":"",

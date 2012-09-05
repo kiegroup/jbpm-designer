@@ -141,9 +141,15 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 	},
 	showProcessAveragesGraph : function(nodeid, jsonstr) {
 		var jsonObj = jsonPath(jsonstr.evalJSON(), "$.processsim.*");
+		var jsonSimObj = jsonPath(jsonstr.evalJSON(), "$.timeline");
+		var jsonSimObjWrapper = {
+			"timeline": jsonSimObj[0]
+		};
 		ORYX.EDITOR.simulationChartData = jsonObj;
+		ORYX.EDITOR.simulationEventData = jsonSimObjWrapper;
 		ORYX.EDITOR.simulationChartTitle = "Process Simulation Results";
 		ORYX.EDITOR.simulationChartId = jsonObj[0].id;
+		ORYX.EDITOR.simulationChartNodeName = jsonObj[0].name;
 		Ext.getDom('simchartframe').src = ORYX.PATH + "simulation/processchart.html";
 
 	},
@@ -155,8 +161,10 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 				var innerWrapper = [];
 				innerWrapper[0] = inner;
 				ORYX.EDITOR.simulationChartData = innerWrapper;
+				ORYX.EDITOR.simulationEventData = innerWrapper[0].timeline;
 				ORYX.EDITOR.simulationChartTitle = "Task Simulation Results";
 				ORYX.EDITOR.simulationChartId = innerWrapper[0].id;
+				ORYX.EDITOR.simulationChartNodeName = innerWrapper[0].name;
 				Ext.getDom('simchartframe').src = ORYX.PATH + "simulation/taskchart.html";
 			}
 		}
@@ -167,8 +175,10 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 			var inner = htobj[i];
 			if(inner.id == nodeid) {
 				ORYX.EDITOR.simulationChartData = inner;
+				ORYX.EDITOR.simulationEventData = inner.timeline;
 				ORYX.EDITOR.simulationChartTitle = "Human Task Simulation Results";
 				ORYX.EDITOR.simulationChartId = inner.id;
+				ORYX.EDITOR.simulationChartNodeName = inner.name;
 				Ext.getDom('simchartframe').src = ORYX.PATH + "simulation/humantaskchart.html";
 			}
 		}

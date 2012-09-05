@@ -17,11 +17,12 @@ function clearChart() {
 <body onload="showBarChart();">
 <center>
 <div style="margin:20;padding:0;">
+	<div class="timelineicon"><a href="#" onclick="clearChart(); showTimeline(); return false;"><img src="/designer/images/simulation/timelineicon.png" title="Timeline"/></a></div>
 	<div class="tableicon"><a href="#" onclick="clearChart(); showTable(); return false;"><img src="/designer/images/simulation/tableicon.png" title="Table"/></a></div>
     <div class="pcharticon"><a href="#" onclick="clearChart(); showPieChart(); return false;"><img src="/designer/images/simulation/piecharticon.png" title="Pie Chart"/></a></div>
     <div class="hbcharticon"><a href="#" onclick="clearChart(); showHBarChart(); return false;"><img src="/designer/images/simulation/hbarcharticon.png" title="Horizontal Bar Chart"/></a></div>
     <div class="bcharticon"><a href="#" onclick="clearChart(); showBarChart(); return false;"><img src="/designer/images/simulation/barcharticon.png" title="Bar Chart"/></a></div>
-    <div class="charttitle"><script>document.write(parent.ORYX.EDITOR.simulationChartTitle +  " (" + parent.ORYX.EDITOR.simulationChartId + ")");</script></div>
+    <div class="charttitle"><script>document.write(parent.ORYX.EDITOR.simulationChartTitle +  " (" + parent.ORYX.EDITOR.simulationChartNodeName + ")");</script></div>
 </div><br/>
 <div class="outterchart">
     <h2>Execution Times</h2>
@@ -51,6 +52,9 @@ function clearChart() {
         </center>
 </script>
 <script>
+		function getEventData() {
+			return parent.ORYX.EDITOR.simulationEventData;
+		}
 		function showBarChart() {
 			var chartData = parent.ORYX.EDITOR.simulationChartData;
 			nv.addGraph(function() {
@@ -128,6 +132,10 @@ function clearChart() {
 			var tableSource = $("#tabletemplate").html();
 	    	var tableTempplate = Handlebars.compile(tableSource);
 	    	$("#chartcontent").html(tableTempplate(tableData[0]));
+		}
+		
+		function showTimeline() {
+			alert("showing timeline!");
 		}
 </script>
 </body>

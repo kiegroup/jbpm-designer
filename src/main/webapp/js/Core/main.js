@@ -80,8 +80,10 @@ ORYX.Editor = {
 		this.pluginsData 	= [];
 		
 		this.simulationChartData = "";
+		this.simulationEventData = "";
 		this.simulationChartTitle = "";
 		this.simulationChartId = "";
+		this.simulationChartNodeName = "";
 		
 		//meta data about the model for the signavio warehouse
 		//directory, new, name, description, revision, model (the model data)
@@ -375,7 +377,7 @@ ORYX.Editor = {
 	                },*/
 					autoEl	: 'div',
 					border	:false,
-					width	: ORYX.CONFIG.PANEL_RIGHT_WIDTH || 200,
+					width	: ORYX.CONFIG.PANEL_RIGHT_WIDTH || 400,
 					split	: true,
 					animate: true,
 					collapsible : true,

@@ -32,6 +32,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.designer.bpmn2.impl.Bpmn2JsonMarshaller;
 import org.jbpm.designer.bpmn2.impl.Bpmn2JsonUnmarshaller;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceFactoryImpl;
@@ -260,6 +261,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
     
     public Definitions getDefinitions(String xml) {
         try {
+        	DroolsFactoryImpl.init();
             ResourceSet resourceSet = new ResourceSetImpl();
             resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
                 .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new JBPMBpmn2ResourceFactoryImpl());

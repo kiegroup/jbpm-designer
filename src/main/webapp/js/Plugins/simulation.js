@@ -313,7 +313,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
                 valueField: 'units',
                 mode: 'local',
                 typeAhead: true,
-                value: "seconds",
+                value: "minutes",
                 triggerAction: 'all',
                 fieldLabel: 'Interval units',
                 width: 120

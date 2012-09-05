@@ -96,6 +96,7 @@ import org.eclipse.bpmn2.PotentialOwner;
 import org.eclipse.bpmn2.Process;
 import org.eclipse.bpmn2.Property;
 import org.eclipse.bpmn2.ReceiveTask;
+import org.eclipse.bpmn2.Relationship;
 import org.eclipse.bpmn2.Resource;
 import org.eclipse.bpmn2.ResourceRole;
 import org.eclipse.bpmn2.RootElement;
@@ -121,14 +122,28 @@ import org.eclipse.dd.dc.Bounds;
 import org.eclipse.dd.dc.Point;
 import org.eclipse.dd.di.DiagramElement;
 import org.eclipse.emf.ecore.util.FeatureMap;
+import org.jboss.drools.CostParameters;
+import org.jboss.drools.DecimalParameterType;
 import org.jboss.drools.DroolsFactory;
 import org.jboss.drools.DroolsPackage;
+import org.jboss.drools.ElementParameters;
+import org.jboss.drools.ElementParametersType;
+import org.jboss.drools.FloatingParameterType;
 import org.jboss.drools.GlobalType;
 import org.jboss.drools.ImportType;
 import org.jboss.drools.MetadataType;
 import org.jboss.drools.MetaentryType;
+import org.jboss.drools.NormalDistributionType;
 import org.jboss.drools.OnEntryScriptType;
 import org.jboss.drools.OnExitScriptType;
+import org.jboss.drools.Parameter;
+import org.jboss.drools.ParameterValue;
+import org.jboss.drools.ProcessAnalysisDataType;
+import org.jboss.drools.RandomDistributionType;
+import org.jboss.drools.ResourceParameters;
+import org.jboss.drools.Scenario;
+import org.jboss.drools.TimeParameters;
+import org.jboss.drools.UniformDistributionType;
 import org.jboss.drools.impl.DroolsPackageImpl;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 
@@ -148,6 +163,7 @@ public class Bpmn2JsonMarshaller {
 	
 	private Map<String, DiagramElement> _diagramElements = new HashMap<String, DiagramElement>();
 	private Map<String,Association> _diagramAssociations = new HashMap<String, Association>();
+	private Scenario _simulationScenario = null;
 	private static final Logger _logger = Logger.getLogger(Bpmn2JsonMarshaller.class);
 	private IDiagramProfile profile;
 	
@@ -160,6 +176,22 @@ public class Bpmn2JsonMarshaller {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         JsonFactory f = new JsonFactory();
         JsonGenerator generator = f.createJsonGenerator(baos, JsonEncoding.UTF8);
+        if(def.getRelationships() != null && def.getRelationships().size() > 0) {
+        	// current support for single relationship
+        	Relationship relationship = def.getRelationships().get(0);
+        	for(ExtensionAttributeValue extattrval : relationship.getExtensionValues()) {
+                FeatureMap extensionElements = extattrval.getValue();
+                @SuppressWarnings("unchecked")
+                List<ProcessAnalysisDataType> processAnalysisExtensions = (List<ProcessAnalysisDataType>) extensionElements.get(DroolsPackage.Literals.DOCUMENT_ROOT__PROCESS_ANALYSIS_DATA, true);
+                if(processAnalysisExtensions != null && processAnalysisExtensions.size() > 0) {
+                	ProcessAnalysisDataType processAnalysis = processAnalysisExtensions.get(0);
+                	if(processAnalysis.getScenario() != null && processAnalysis.getScenario().size() > 0) {
+                		_simulationScenario = processAnalysis.getScenario().get(0);
+                	}
+                }
+        	}
+        	
+        }
         marshallDefinitions(def, generator, preProcessingData);
         generator.close();
         
@@ -200,7 +232,7 @@ public class Bpmn2JsonMarshaller {
     		}
     	}
     }
-
+    
     protected void marshallDefinitions(Definitions def, JsonGenerator generator, String preProcessingData) throws JsonGenerationException, IOException {
         try{
         	generator.writeStartObject();
@@ -316,7 +348,11 @@ public class Bpmn2JsonMarshaller {
 	                        props.put("globals", globalsStr);
 	                    }
 	                }
-	                
+	                // simulation
+	                if(_simulationScenario != null && _simulationScenario.getScenarioParameters() != null) {
+	                	props.put("currency", _simulationScenario.getScenarioParameters().getBaseCurrencyUnit());
+	                	props.put("timeunit", _simulationScenario.getScenarioParameters().getBaseTimeUnit().getName());
+	                }
 	                marshallProperties(props, generator);
 	                marshallStencil("BPMNDiagram", generator);
 	            	linkSequenceFlows(((Process) rootElement).getFlowElements());
@@ -1263,32 +1299,22 @@ public class Bpmn2JsonMarshaller {
     		    sb.setLength(sb.length() - 1);
     		}
     		properties.put("actors", sb.toString());
+
     		// simulation properties
-            if(task.getExtensionValues() != null && task.getExtensionValues().size() > 0) {
-    	        for(ExtensionAttributeValue extattrval : task.getExtensionValues()) {
-    	        	FeatureMap extensionElements = extattrval.getValue();
-    	            
-                    @SuppressWarnings("unchecked")
-                    List<MetadataType> metadataTypeExtensions = (List<MetadataType>) extensionElements
-                                                         .get(DroolsPackage.Literals.DOCUMENT_ROOT__METADATA, true);
-                    if(metadataTypeExtensions != null && metadataTypeExtensions.size() > 0) {
-                    	MetadataType metaType = metadataTypeExtensions.get(0);
-                    	for(Object metaEntryObj : metaType.getMetaentry()) {
-                    		MetaentryType entry = (MetaentryType) metaEntryObj;
-                    		if(entry.getName() != null && entry.getName().equals("staffavailability")) {
-                    			properties.put("staffavailability", entry.getValue());
-                    		}
-                    		if(entry.getName() != null && entry.getName().equals("workinghours")) {
-                    			properties.put("workinghours", entry.getValue());
-                    		}
-                    		if(entry.getName() != null && entry.getName().equals("costpertimeunit")) {
-                    			properties.put("costpertimeunit", entry.getValue());
-                    		}
-                    	}
-                    }
-                    
-    	        }
-            }
+    		if(_simulationScenario != null) {
+    			for(ElementParametersType eleType : _simulationScenario.getElementParameters()) {
+            		if(eleType.getElementId().equals(task.getId())) {
+            			CostParameters costParams = eleType.getCostParameters();
+            			DecimalParameterType unitCostVal = (DecimalParameterType) costParams.getUnitCost().getParameterValue().get(0);
+            			properties.put("unitcost", unitCostVal.getValue().toString()); 
+            			ResourceParameters resourceParams = eleType.getResourceParameters();
+            			FloatingParameterType quantityVal = (FloatingParameterType) resourceParams.getQuantity().getParameterValue().get(0);
+            			properties.put("quantity", quantityVal.getValue()); 
+            			FloatingParameterType workingHoursVal = (FloatingParameterType) resourceParams.getWorkinghours().getParameterValue().get(0);
+            			properties.put("workinghours", workingHoursVal.getValue()); 
+            		}
+    			}
+    		}
     	} else if (task instanceof SendTask) {
     		taskType = "Send";
     		SendTask st = (SendTask) task;
@@ -1588,36 +1614,30 @@ public class Bpmn2JsonMarshaller {
         }
         
         // simulation properties
-        if(task.getExtensionValues() != null && task.getExtensionValues().size() > 0) {
-	        for(ExtensionAttributeValue extattrval : task.getExtensionValues()) {
-	        	FeatureMap extensionElements = extattrval.getValue();
-	            
-                @SuppressWarnings("unchecked")
-                List<MetadataType> metadataTypeExtensions = (List<MetadataType>) extensionElements
-                                                     .get(DroolsPackage.Literals.DOCUMENT_ROOT__METADATA, true);
-                if(metadataTypeExtensions != null && metadataTypeExtensions.size() > 0) {
-                	MetadataType metaType = metadataTypeExtensions.get(0);
-                	for(Object metaEntryObj : metaType.getMetaentry()) {
-                		MetaentryType entry = (MetaentryType) metaEntryObj;
-                		if(entry.getName() != null && entry.getName().equals("duration")) {
-                			properties.put("duration", entry.getValue());
-                		}
-                		if(entry.getName() != null && entry.getName().equals("timeunit")) {
-                			properties.put("timeunit", entry.getValue());
-                		}
-                		if(entry.getName() != null && entry.getName().equals("range")) {
-                			properties.put("range", entry.getValue());
-                		}
-                		if(entry.getName() != null && entry.getName().equals("standarddeviation")) {
-                			properties.put("standarddeviation", entry.getValue());
-                		}
-                		if(entry.getName() != null && entry.getName().equals("distributiontype")) {
-                			properties.put("distributiontype", entry.getValue());
-                		}
-                	}
-                }
-                
-	        }
+        if(_simulationScenario != null) {
+        	for(ElementParametersType eleType : _simulationScenario.getElementParameters()) {
+        		if(eleType.getElementId().equals(task.getId())) {
+        			TimeParameters timeParams = eleType.getTimeParameters();
+        			Parameter processingTime = timeParams.getProcessingTime();
+        			ParameterValue paramValue =  processingTime.getParameterValue().get(0);
+        			if(paramValue instanceof NormalDistributionType) {
+        				NormalDistributionType ndt = (NormalDistributionType) paramValue;
+        				properties.put("mean", ndt.getMean());
+        				properties.put("standarddeviation", ndt.getStandardDeviation());
+        				properties.put("distributiontype", "normal");
+        			} else if(paramValue instanceof UniformDistributionType) {
+        				UniformDistributionType udt = (UniformDistributionType) paramValue;
+        				properties.put("min", udt.getMin());
+        				properties.put("max", udt.getMax());
+        				properties.put("distributiontype", "uniform");
+        			} else if(paramValue instanceof RandomDistributionType) {
+        				RandomDistributionType rdt = (RandomDistributionType) paramValue;
+        				properties.put("min", rdt.getMin());
+        				properties.put("max", rdt.getMax());
+        				properties.put("distributiontype", "random");
+        			}
+        		}
+        	}
         }
         
         // marshall the node out
@@ -2232,24 +2252,14 @@ public class Bpmn2JsonMarshaller {
         }
         
         // simulation properties
-        if(sequenceFlow.getExtensionValues() != null && sequenceFlow.getExtensionValues().size() > 0) {
-	        for(ExtensionAttributeValue extattrval : sequenceFlow.getExtensionValues()) {
-	        	FeatureMap extensionElements = extattrval.getValue();
-	            
-                @SuppressWarnings("unchecked")
-                List<MetadataType> metadataTypeExtensions = (List<MetadataType>) extensionElements
-                                                     .get(DroolsPackage.Literals.DOCUMENT_ROOT__METADATA, true);
-                if(metadataTypeExtensions != null && metadataTypeExtensions.size() > 0) {
-                	MetadataType metaType = metadataTypeExtensions.get(0);
-                	for(Object metaEntryObj : metaType.getMetaentry()) {
-                		MetaentryType entry = (MetaentryType) metaEntryObj;
-                		if(entry.getName() != null && entry.getName().equals("probability")) {
-                			properties.put("probability", entry.getValue());
-                		}
-                	}
-                }
-                
-	        }
+        if(_simulationScenario != null) {
+        	List<ElementParametersType> elementParams = _simulationScenario.getElementParameters();
+        	for(ElementParametersType eleType : elementParams) {
+        		if(eleType.getElementId().equals(sequenceFlow.getId())) {
+        			FloatingParameterType valType = (FloatingParameterType) eleType.getControlParameters().getProbability().getParameterValue().get(0);
+        			properties.put("probability", valType.getValue());
+        		}
+        	}
         }
     	
         marshallProperties(properties, generator);
@@ -2546,6 +2556,8 @@ public class Bpmn2JsonMarshaller {
         }
         return false;
     }
+    
+    
     
 	private static String unescapeXML(String str) {
 		if (str == null || str.length() == 0)

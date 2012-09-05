@@ -3,6 +3,7 @@ package org.jbpm.designer.web.server;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletConfig;
@@ -29,10 +30,18 @@ import org.jbpm.simulation.SimulationRepository;
 import org.jbpm.simulation.SimulationRunner;
 import org.jbpm.simulation.converter.JSONPathFormatConverter;
 import org.jbpm.simulation.impl.WorkingMemorySimulationRepository;
+import org.jbpm.simulation.impl.events.ActivitySimulationEvent;
 import org.jbpm.simulation.impl.events.AggregatedActivitySimulationEvent;
 import org.jbpm.simulation.impl.events.AggregatedProcessSimulationEvent;
+import org.jbpm.simulation.impl.events.EndSimulationEvent;
+import org.jbpm.simulation.impl.events.GatewaySimulationEvent;
 import org.jbpm.simulation.impl.events.HTAggregatedSimulationEvent;
+import org.jbpm.simulation.impl.events.HumanTaskActivitySimulationEvent;
+import org.jbpm.simulation.impl.events.StartSimulationEvent;
+import org.joda.time.DateTime;
+import org.joda.time.Period;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -106,11 +115,9 @@ public class SimulationServlet extends HttpServlet {
 				// find the process id
 				List<RootElement> rootElements =  def.getRootElements();
 				String processId = "";
-				String processName = "";
 				for(RootElement root : rootElements) {
 					if(root instanceof Process) {
 						processId = ((Process) root).getId();
-						processName = ((Process) root).getName();
 					}
 				}
 				
@@ -142,7 +149,7 @@ public class SimulationServlet extends HttpServlet {
 				// start evaluating all the simulation events generated
 				wmRepo.fireAllRules();
 				List<AggregatedSimulationEvent> aggEvents = wmRepo.getAggregatedEvents();
-				List<SimulationEvent> allEvents = wmRepo.getEvents(); 
+				List<SimulationEvent> allEvents = new ArrayList<SimulationEvent>(wmRepo.getEvents());
 				wmRepo.close();
 				
 				JSONObject parentJSON = new JSONObject();
@@ -154,8 +161,8 @@ public class SimulationServlet extends HttpServlet {
 						AggregatedProcessSimulationEvent event = (AggregatedProcessSimulationEvent) aggEvent;
 						JSONObject processSimKeys = new JSONObject();
 						processSimKeys.put("key", "Process Avarages");
-						processSimKeys.put("id", processId);
-						processSimKeys.put("name", processName);
+						processSimKeys.put("id", event.getProcessId());
+						processSimKeys.put("name", event.getProcessName());
 						JSONArray processSimValues = new JSONArray();
 						JSONObject obj1 = new JSONObject();
 						obj1.put("label", "Max Execution Time");
@@ -170,6 +177,10 @@ public class SimulationServlet extends HttpServlet {
 						processSimValues.put(obj2);
 						processSimValues.put(obj3);
 						processSimKeys.put("values", processSimValues);
+						
+						// TODO add specific process events from all events
+						// when that gets added!
+						
 						aggProcessSimulationJSONArray.put(processSimKeys);
 						
 					} else if(aggEvent instanceof HTAggregatedSimulationEvent) {
@@ -243,6 +254,12 @@ public class SimulationServlet extends HttpServlet {
 						resourceValues.put("values", htSimValues2);
 						allValues.put("resourcevalues", resourceValues);
 						
+						// single events
+						JSONObject taskEvents = getTaskEventsFromAllEvents(event, allEvents);
+						if(taskEvents != null) {
+							allValues.put("timeline", taskEvents);
+						}
+						
 						aggHTSimulationJSONArray.put(allValues);
 					} else if(aggEvent instanceof AggregatedActivitySimulationEvent) {
 						AggregatedActivitySimulationEvent event = (AggregatedActivitySimulationEvent) aggEvent;
@@ -264,6 +281,11 @@ public class SimulationServlet extends HttpServlet {
 						taskSimValues.put(obj2);
 						taskSimValues.put(obj3);
 						taskSimKeys.put("values", taskSimValues);
+						// single events
+						JSONObject taskEvents = getTaskEventsFromAllEvents(event, allEvents);
+						if(taskEvents != null) {
+							taskSimKeys.put("timeline", taskEvents);
+						}
 						aggTaskSimulationJSONArray.put(taskSimKeys);
 					}
 				}
@@ -271,8 +293,8 @@ public class SimulationServlet extends HttpServlet {
 				parentJSON.put("processsim", aggProcessSimulationJSONArray);
 				parentJSON.put("htsim", aggHTSimulationJSONArray);
 				parentJSON.put("tasksim", aggTaskSimulationJSONArray);
-				
-				System.out.println("*********** JSON: " + parentJSON.toString());
+				parentJSON.put("timeline", getTaskEventsFromAllEvents(null, allEvents));
+				System.out.println("******* JSON: " + parentJSON.toString());
 				
 				PrintWriter pw = resp.getWriter();
 	    		resp.setContentType("text/json");
@@ -317,4 +339,130 @@ public class SimulationServlet extends HttpServlet {
 		}
 		return null;
 	}
+	
+	private String getEventName(SimulationEvent se) {
+		if(se != null) {
+			if(se instanceof ActivitySimulationEvent) {
+				return "Activity";
+			} else if(se instanceof EndSimulationEvent) {
+				return "End Event";
+			} else if(se instanceof GatewaySimulationEvent) {
+				return "Gateway";
+			} else if(se instanceof HumanTaskActivitySimulationEvent) {
+				return "Human Task";
+			} else if(se instanceof StartSimulationEvent) {
+				return "Start Event";
+			} else {
+				return "Event";
+			}
+		} else {
+			return "Event";
+		}
+	}
+	
+	private String getDateString(long seDate) {
+		DateTime dt = new DateTime(seDate);
+		StringBuffer retBuf = new StringBuffer();
+		retBuf.append(dt.getYear()).append(",");
+		retBuf.append(dt.getMonthOfYear()).append(",");
+		retBuf.append(dt.getDayOfMonth()).append(",");
+		retBuf.append(dt.getMonthOfYear()).append(",");
+		retBuf.append(dt.getHourOfDay()).append(",");
+		retBuf.append(dt.getMinuteOfHour()).append(",");
+		retBuf.append(dt.getSecondOfMinute());
+		return retBuf.toString();
+	}
+	
+	private String getIcon(SimulationEvent se) {
+		if(se != null) {
+			if(se instanceof ActivitySimulationEvent) {
+				return "/designer/images/simulation/timeline/activity.png";
+			} else if(se instanceof EndSimulationEvent) {
+				return "/designer/images/simulation/timeline/endevent.png";
+			} else if(se instanceof GatewaySimulationEvent) {
+				return "/designer/images/simulation/timeline/gateway.png";
+			} else if(se instanceof HumanTaskActivitySimulationEvent) {
+				return "/designer/images/simulation/timeline/humantask.png";
+			} else if(se instanceof StartSimulationEvent) {
+				return "/designer/images/simulation/timeline/startevent.png";
+			} else {
+				return "";
+			}
+		} else {
+			return "";
+		}
+	}
+	
+	private JSONObject getTaskEventsFromAllEvents(AggregatedSimulationEvent event, List<SimulationEvent> allEvents) throws Exception {
+		JSONObject allEventsObject = new JSONObject();
+		allEventsObject.put("headline", "Simulation Events");
+		allEventsObject.put("type","default");
+		allEventsObject.put("text","Simulation Events");
+		JSONArray allEventsDateArray = new JSONArray();
+		for(SimulationEvent se : allEvents) {
+			if(event != null) {
+				String seActivityId = getSingleEventActivityId(se);
+				String eventActivitytId = getAggregatedEventActivityId(event);
+				if(eventActivitytId.equals(seActivityId)) {
+					allEventsDateArray.put(getTimelineEventObject(se));
+				}
+			} else {
+				// add all
+				allEventsDateArray.put(getTimelineEventObject(se));
+			}
+		}
+		allEventsObject.put("date", allEventsDateArray);
+		return allEventsObject;
+	}
+	
+	private JSONObject getTimelineEventObject(SimulationEvent se) throws Exception{
+		JSONObject seObject = new JSONObject();
+		seObject.put("id", se.getUUID().toString());
+		seObject.put("startDate", getDateString(se.getStartTime()));
+		seObject.put("endDate", getDateString(se.getEndTime()));
+		seObject.put("headline", getEventName(se));
+		seObject.put("text", "");
+		seObject.put("tag", "");
+		JSONObject seAsset = new JSONObject();
+		seAsset.put("media", "");
+		seAsset.put("thumbnail", getIcon(se));
+		seAsset.put("credit", "");
+		seAsset.put("caption", "");
+		seObject.put("asset", seAsset);
+		
+		return seObject;
+	}
+	
+	private String getSingleEventActivityId(SimulationEvent event) {
+		if(event != null) {
+			if(event instanceof ActivitySimulationEvent) {
+				return ((ActivitySimulationEvent)event).getActivityId();
+			} else if(event instanceof EndSimulationEvent) {
+				return ((EndSimulationEvent)event).getActivityId();
+			} else if(event instanceof GatewaySimulationEvent) {
+				return((GatewaySimulationEvent)event).getActivityId();
+			} else if(event instanceof HumanTaskActivitySimulationEvent) {
+				return((HumanTaskActivitySimulationEvent)event).getActivityId();
+			} else if(event instanceof StartSimulationEvent) {
+				return((StartSimulationEvent)event).getActivityId();
+			} else {
+				return "";
+			}
+		} else {
+			return "";
+		}
+	}
+	
+	private String getAggregatedEventActivityId(AggregatedSimulationEvent event) {
+		if(event instanceof AggregatedProcessSimulationEvent) {
+			return ((AggregatedProcessSimulationEvent)event).getProcessId();
+		} else if(event instanceof HTAggregatedSimulationEvent) {
+			return ((HTAggregatedSimulationEvent)event).getActivityId();
+		} else if(event instanceof AggregatedActivitySimulationEvent) {
+			return ((AggregatedActivitySimulationEvent)event).getActivityId();
+		} else {
+			return "";
+		}
+	}
 }
+
