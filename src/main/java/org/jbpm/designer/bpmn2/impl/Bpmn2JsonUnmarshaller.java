@@ -149,6 +149,7 @@ import org.jboss.drools.OnEntryScriptType;
 import org.jboss.drools.OnExitScriptType;
 import org.jboss.drools.Parameter;
 import org.jboss.drools.ParameterValue;
+import org.jboss.drools.PoissonDistributionType;
 import org.jboss.drools.PriorityParameters;
 import org.jboss.drools.ProcessAnalysisDataType;
 import org.jboss.drools.RandomDistributionType;
@@ -3737,6 +3738,10 @@ public class Bpmn2JsonUnmarshaller {
         		randomDistributionType.setMax(Double.valueOf(properties.get("max")));
         		randomDistributionType.setMin(Double.valueOf(properties.get("min")));
         		processingTimeParam.getParameterValue().add(randomDistributionType);
+        	} else if(properties.get("distributiontype").equals("poisson")) {
+        		PoissonDistributionType poissonDistributionType = DroolsFactory.eINSTANCE.createPoissonDistributionType();
+        		poissonDistributionType.setMean(Double.valueOf(properties.get("mean")));
+        		processingTimeParam.getParameterValue().add(poissonDistributionType);
         	}
         	if(properties.get("timeunit") != null) {
         		timeParams.setTimeUnit(TimeUnit.getByName(properties.get("timeunit")));

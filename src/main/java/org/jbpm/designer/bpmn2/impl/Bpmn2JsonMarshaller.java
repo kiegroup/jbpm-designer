@@ -138,6 +138,7 @@ import org.jboss.drools.OnEntryScriptType;
 import org.jboss.drools.OnExitScriptType;
 import org.jboss.drools.Parameter;
 import org.jboss.drools.ParameterValue;
+import org.jboss.drools.PoissonDistributionType;
 import org.jboss.drools.ProcessAnalysisDataType;
 import org.jboss.drools.RandomDistributionType;
 import org.jboss.drools.ResourceParameters;
@@ -1636,6 +1637,10 @@ public class Bpmn2JsonMarshaller {
         				properties.put("min", rdt.getMin());
         				properties.put("max", rdt.getMax());
         				properties.put("distributiontype", "random");
+        			} else if(paramValue instanceof PoissonDistributionType) {
+        				PoissonDistributionType pdt = (PoissonDistributionType) paramValue;
+        				properties.put("mean", pdt.getMean());
+        				properties.put("distributiontype", "poisson");
         			}
         			if(timeParams.getTimeUnit() != null) {
         				properties.put("timeunit", timeParams.getTimeUnit().getName());

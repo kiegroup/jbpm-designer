@@ -3218,7 +3218,7 @@
 					"readonly":false,
 					"optional":true,
 					"simulation" : true,
-					"fordistribution":"normal",
+					"fordistribution":"normal|poisson",
 					"min" : "0"
 				},
 				{
@@ -3289,6 +3289,11 @@
 							"id": "c3",
 							"title": "random",
 							"value": "random"
+						},
+						{
+							"id": "c4",
+							"title": "poisson",
+							"value": "poisson"
 						}
 					]    
 				},
