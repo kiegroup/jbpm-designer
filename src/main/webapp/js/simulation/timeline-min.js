@@ -3321,11 +3321,11 @@ if(typeof VMM != 'undefined' && typeof VMM.ExternalAPI == 'undefined') {
 				trace("CREATE THUMB");
 				trace(d);
 				trace(vid);
-				if (typeof d.data != 'undefined') {
+				//if (typeof d.data != 'undefined') {
 					var thumb_id = "#" + vid.id + "_thumb";
 					VMM.attachElement(thumb_id, "<img src='" + d.data.thumbnail.sqDefault + "'>");
 					
-				}
+				//}
 			},
 			
 			pushQue: function() {
@@ -4380,12 +4380,12 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 		/* NAVIGATION
 		================================================== */
 		function onNextClick(e) {
-			alert("CALLED!");
 			if (current_slide == slides.length - 1) {
 				//VMM.Lib.animate($slider_container, config.duration, config.ease, {"left": -(slides[current_slide].leftpos()) } );
 			} else {
 				goToSlide(current_slide+1);
 				upDate();
+				displyChartForEvent(current_slide);
 			}
 		}
 		
@@ -4395,6 +4395,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 			} else {
 				goToSlide(current_slide-1);
 				upDate();
+				displyChartForEvent(current_slide);
 			}
 		}
 
@@ -4828,9 +4829,9 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 			$slider = VMM.getElement("div.slider");
 			$slider_mask = VMM.appendAndGetElement($slider, "<div>", "slider-container-mask");
 			var ccontent = "<center><div class='outterchart'> \
-						    <h2>Event Execution Times</h2> \
+						    <h6>Process Execution Averages</h6> \
 							<p id='chartcontent'> \
-					        <svg id='chart' style='height:400px;width:400px'></svg> \
+					        <svg id='chart' style='height:290px;width:400px'></svg> \
 							</p> \
 							</div></center>";	
 			
@@ -7874,8 +7875,6 @@ if(typeof VMM.Timeline != 'undefined' && typeof VMM.Timeline.TimeNav == 'undefin
 //				
 //			}
 			
-			$play	    = VMM.appendAndGetElement($toolbar, "<div id='playbutton'>", "play", "<div class='icon'></div>");
-			$pause	    = VMM.appendAndGetElement($toolbar, "<div id='pausebutton'>", "pause", "<div class='icon'></div>");
 			$zoomin		= VMM.appendAndGetElement($toolbar, "<div>", "zoom-in", "<div class='icon'></div>");
 			$zoomout	= VMM.appendAndGetElement($toolbar, "<div>", "zoom-out", "<div class='icon'></div>");
 			
@@ -7885,8 +7884,6 @@ if(typeof VMM.Timeline != 'undefined' && typeof VMM.Timeline.TimeNav == 'undefin
 			
 			
 			// ZOOM EVENTS
-			VMM.bindEvent($play, onPlay, "click");
-			VMM.bindEvent($pause, onPause, "click");
 			VMM.bindEvent($zoomin, onZoomIn, "click");
 			VMM.bindEvent($zoomout, onZoomOut, "click");
 			

@@ -142,11 +142,15 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 	showProcessAveragesGraph : function(nodeid, jsonstr) {
 		var jsonObj = jsonPath(jsonstr.evalJSON(), "$.processsim.*");
 		var jsonSimObj = jsonPath(jsonstr.evalJSON(), "$.timeline");
+		var jsonInstancesObj = jsonPath(jsonstr.evalJSON(), "$.activityinstances.*");
+		var jsonEventAggregationsObj = jsonPath(jsonstr.evalJSON(), "$.eventaggregations.*");
 		var jsonSimObjWrapper = {
 			"timeline": jsonSimObj[0]
 		};
 		ORYX.EDITOR.simulationChartData = jsonObj;
 		ORYX.EDITOR.simulationEventData = jsonSimObjWrapper;
+		ORYX.EDITOR.simulationEventAggregationData = jsonEventAggregationsObj;
+		ORYX.EDITOR.simulationInstancesData = jsonInstancesObj;
 		ORYX.EDITOR.simulationChartTitle = "Process Simulation Results";
 		ORYX.EDITOR.simulationChartId = jsonObj[0].id;
 		ORYX.EDITOR.simulationChartNodeName = jsonObj[0].name;

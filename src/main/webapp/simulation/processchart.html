@@ -11,9 +11,14 @@
 <script>
 function clearChart() {
 	var cnt = "<h2>Execution Times</h2> \
-  	<p id='chartcontent'> \
-  	<svg id='chart' style='height:400px;width:400px'></svg> \
+  	<p id='chartcontent1'> \
+  	<svg id='chart1' style='height:400px;width:400px'></svg> \
+	</p> \
+	<h2>Activity Instances</h2> \
+  	<p id='chartcontent2'> \
+  	<svg id='chart2' style='height:400px;width:400px'></svg> \
 	</p>";
+	
 	document.getElementById('outterchart').innerHTML = cnt;
 }
 </script>
@@ -29,9 +34,13 @@ function clearChart() {
     <div class="charttitle"><script>document.write(parent.ORYX.EDITOR.simulationChartTitle +  " (" + parent.ORYX.EDITOR.simulationChartNodeName + ")");</script></div>
 </div><br/>
 <div id="outterchart" class="outterchart">
-    <h2>Execution Times</h2>
-  	<p id="chartcontent">
-  	<svg id="chart" style='height:400px;width:400px'></svg>
+	<h2>Execution Times</h2>
+  	<p id="chartcontent1">
+  	<svg id="chart1" style='height:400px;width:400px'></svg>
+	</p>
+	<h2>Activity Instances</h2>
+  	<p id="chartcontent2">
+  	<svg id="chart2" style='height:400px;width:400px'></svg>
 	</p>
 </div>
 </center>
@@ -41,7 +50,27 @@ function clearChart() {
 		<thead>
 			<tr>
 				{{#values}}
-				<th scope="col" align="center">{{label}} (sec)</th>
+				<th scope="col" align="center">{{label}} (min)</th>
+				{{/values}}
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+			{{#values}}
+				<td align="center">{{value}}</td>
+			{{/values}}
+            </tr>
+		</tbody>
+	    </table>
+        </center>
+</script>
+<script id="tableinstancestemplate" type="text/x-handlebars-template">
+		<center>
+		<table id="box-table" summary="Activity Instances">
+		<thead>
+			<tr>
+				{{#values}}
+				<th scope="col" align="center">{{label}} (#)</th>
 				{{/values}}
 			</tr>
 		</thead>
@@ -59,30 +88,50 @@ function clearChart() {
 		function getEventData() {
 			return parent.ORYX.EDITOR.simulationEventData;
 		}
+		function getEventAggregationData() {
+			return parent.ORYX.EDITOR.simulationEventAggregationData;
+		}
 		function showBarChart() {
 			var chartData = parent.ORYX.EDITOR.simulationChartData;
+			var instanceData = parent.ORYX.EDITOR.simulationInstancesData;
 			nv.addGraph(function() {
 				var chart = nv.models.discreteBarChart().x(function(d) {
 					return d.label
 				}).y(function(d) {
 					return d.value
 				}).staggerLabels(true)
-				//.staggerLabels(historicalBarChart[0].values.length > 8)
 				.tooltips(true).showValues(true);
-				
-				chart.yAxis.axisLabel('Time (sec)')
+				chart.yAxis.axisLabel('Time (min)')
 	
-				d3.select('#chart').datum(chartData).transition().duration(500)
+				d3.select('#chart1').datum(chartData).transition().duration(500)
 						.call(chart);
 	
 				nv.utils.windowResize(chart.update);
 	
 				return chart;
 			}); 
+			
+			nv.addGraph(function() {
+				var chart2 = nv.models.discreteBarChart().x(function(d) {
+					return d.label
+				}).y(function(d) {
+					return d.value
+				}).staggerLabels(true)
+				.tooltips(true).showValues(true);
+				chart2.yAxis.axisLabel('Intances (#)')
+	
+				d3.select('#chart2').datum(instanceData).transition().duration(500)
+						.call(chart2);
+	
+				nv.utils.windowResize(chart2.update);
+	
+				return chart2;
+			}); 
 		}
 		
 		function showHBarChart() {
 			var chartData = parent.ORYX.EDITOR.simulationChartData;
+			var instanceData = parent.ORYX.EDITOR.simulationInstancesData;
 			 nv.addGraph(function() {
 				 var chart = nv.models.multiBarHorizontalChart()
 				 	.x(function(d) { return d.label })
@@ -92,12 +141,12 @@ function clearChart() {
 				 	.tooltips(true)
 				 	.showControls(false);
 	
-				chart.yAxis
-					.tickFormat(d3.format(',.2f'));
+				//chart.yAxis
+				//		.tickFormat(d3.format(',.2f'));
 				
-				chart.yAxis.axisLabel('Time (sec)')
+				chart.yAxis.axisLabel('Time (min)')
 				
-				d3.select('#chart')
+				d3.select('#chart1')
 					.datum(chartData)
 					.transition().duration(500)
 					.call(chart);
@@ -106,10 +155,35 @@ function clearChart() {
 			
 				return chart;
 			}); 
+			 
+			 nv.addGraph(function() {
+				 var chart2 = nv.models.multiBarHorizontalChart()
+				 	.x(function(d) { return d.label })
+				 	.y(function(d) { return d.value })
+				 	.margin({top: 30, right: 20, bottom: 50, left: 175})
+				 	.showValues(true)
+				 	.tooltips(true)
+				 	.showControls(false);
+	
+				//chart2.yAxis
+				//	.tickFormat(d3.format(',.2f'));
+				
+				chart2.yAxis.axisLabel('Instances (#)')
+				
+				d3.select('#chart2')
+					.datum(instanceData)
+					.transition().duration(500)
+					.call(chart2);
+
+				nv.utils.windowResize(chart2.update);
+			
+				return chart2;
+			}); 
 		}
 		
 		function showPieChart() {
 			var chartData = parent.ORYX.EDITOR.simulationChartData;
+			var instanceData = parent.ORYX.EDITOR.simulationInstancesData;
 			nv.addGraph(function() {
 				var width = 400,
 		            height = 400;
@@ -121,8 +195,29 @@ function clearChart() {
 			        .width(width)
         			.height(height);
 
-			      d3.select("#chart")
+			      d3.select("#chart1")
 			          .datum(chartData)
+			        .transition().duration(500)
+			        .attr('width', width)
+          			.attr('height', height)
+			          .call(chart);
+
+			    return chart;
+			});
+			
+			nv.addGraph(function() {
+				var width = 400,
+		            height = 400;
+			    var chart = nv.models.pieChart()
+			        .x(function(d) { return d.label })
+			        .y(function(d) { return d.value })
+			        .showLabels(false)
+			        .color(d3.scale.category10().range())
+			        .width(width)
+        			.height(height);
+
+			      d3.select("#chart2")
+			          .datum(instanceData)
 			        .transition().duration(500)
 			        .attr('width', width)
           			.attr('height', height)
@@ -134,9 +229,13 @@ function clearChart() {
 		
 		function showTable() {
 			var tableData = parent.ORYX.EDITOR.simulationChartData;
+			var tableInstanceData = parent.ORYX.EDITOR.simulationInstancesData;
 			var tableSource = $("#tabletemplate").html();
+			var tableInstanceSource = $("#tableinstancestemplate").html();
 	    	var tableTempplate = Handlebars.compile(tableSource);
-	    	$("#chartcontent").html(tableTempplate(tableData[0]));
+	    	var tableInstanceTemplate = Handlebars.compile(tableInstanceSource);
+	    	$("#chartcontent1").html(tableTempplate(tableData[0]));
+	    	$("#chartcontent2").html(tableInstanceTemplate(tableInstanceData[0]));
 		}
 		
 		function showTimeline() {

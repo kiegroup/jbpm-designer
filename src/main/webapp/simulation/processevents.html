@@ -4,6 +4,9 @@
 	<meta charset="utf-8">
 	<link href="/designer/css/simulation/timeline.css" rel="stylesheet" type="text/css">
 	<link href="/designer/css/simulation/timeline-ext.css" rel="stylesheet" type="text/css">
+	<link href="/designer/css/simulation/nv-core.css" rel="stylesheet" type="text/css">
+	<script src="/designer/js/simulation/d3.v2.min.js"></script>
+	<script src="/designer/js/simulation/nv.min.js"></script>
 	<script src="/designer/lib/jquery-1.7.2.min.js" type="text/javascript"></script>
 	<script src="/designer/js/simulation/timeline-min.js" type="text/javascript"></script>
 </head>
@@ -14,6 +17,31 @@
 </div>
 <script>
 	var data = parent.getEventData();
+	var aggregatedData = parent.getEventAggregationData();
+	function clearChart() {
+		var cnt = "<svg id='chart' style='height:290px;width:400px'></svg>";
+		document.getElementById('chartcontent').innerHTML = cnt;
+	}
+	function displyChartForEvent(eventNum) {
+		clearChart();
+		var datawrapper = [aggregatedData[eventNum-1]];
+		nv.addGraph(function() {
+			var chart = nv.models.discreteBarChart().x(function(d) {
+				return d.label
+			}).y(function(d) {
+				return d.value
+			}).staggerLabels(true)
+			.tooltips(true).showValues(true);
+			chart.yAxis.axisLabel('Time (min)')
+
+			d3.select('#chart').datum(datawrapper).transition().duration(500)
+					.call(chart);
+
+			nv.utils.windowResize(chart.update);
+
+			return chart;
+		}); 
+	}
 	var timeline = new VMM.Timeline;
 	timeline.init(data);
 </script>

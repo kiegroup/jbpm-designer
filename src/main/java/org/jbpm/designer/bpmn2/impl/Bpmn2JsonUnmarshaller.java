@@ -140,7 +140,6 @@ import org.jboss.drools.ElementParametersType;
 import org.jboss.drools.FloatingParameterType;
 import org.jboss.drools.GlobalType;
 import org.jboss.drools.ImportType;
-import org.jboss.drools.InstanceParameters;
 import org.jboss.drools.MetadataType;
 import org.jboss.drools.MetaentryType;
 import org.jboss.drools.NormalDistributionType;
@@ -340,8 +339,6 @@ public class Bpmn2JsonUnmarshaller {
     					etype.setControlParameters((ControlParameters) np);
     				} else if(np instanceof CostParameters) {
     					etype.setCostParameters((CostParameters) np);
-    				} else if(np instanceof InstanceParameters) {
-    					etype.setInstanceParameters((InstanceParameters) np);
     				} else if(np instanceof PriorityParameters) {
     					etype.setPriorityParameters((PriorityParameters) np);
     				} else if(np instanceof ResourceParameters) {

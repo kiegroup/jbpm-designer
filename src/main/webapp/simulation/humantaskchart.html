@@ -12,6 +12,7 @@
 function clearChart() {
 	document.getElementById('chartcontent1').innerHTML = "<svg id='chart1' style='height:400px;width:400px'></svg>";
 	document.getElementById('chartcontent2').innerHTML = "<svg id='chart2' style='height:400px;width:400px'></svg>";
+	document.getElementById('chartcontent3').innerHTML = "<svg id='chart3' style='height:400px;width:400px'></svg>";
 }
 </script>
 </head>
@@ -26,11 +27,15 @@ function clearChart() {
 <div class="outterchart">
     <h2>Execution Times</h2>
   	<p id="chartcontent1">
-  	<svg id="chart1" style='height:400px;width:400px'></svg>
+  	<svg id="chart1" style='height:300px;width:450px'></svg>
 	</p>
 	<h2>Resource Utilization</h2>
   	<p id="chartcontent2">
-  	<svg id="chart2" style='height:400px;width:400px'></svg>
+  	<svg id="chart2" style='height:300px;width:450px'></svg>
+	</p>
+	<h2>Resource Cost</h2>
+  	<p id="chartcontent3">
+  	<svg id="chart3" style='height:300px;width:450px'></svg>
 	</p>
 </div>
 </center>
@@ -40,7 +45,7 @@ function clearChart() {
 		<thead>
             <tr>
 				{{#each elements}}
-				<th colspan="3" align="center">{{key}} (sec)</th>
+				<th colspan="3" align="center">{{key}} (min)</th>
 				{{/each}}
 			</tr>
 			<tr>
@@ -83,6 +88,26 @@ function clearChart() {
 	    </table>
         </center>
 </script>
+<script id="tabletemplatecost" type="text/x-handlebars-template">
+		<center>
+		<table id="box-table" summary="Resource Cost">
+		<thead>
+			<tr>
+				{{#values}}
+				<th scope="col" align="center">{{label}} ($)</th>
+				{{/values}}
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+			{{#values}}
+				<td align="center">{{value}}</td>
+			{{/values}}
+            </tr>
+		</tbody>
+	    </table>
+        </center>
+</script>
 <script>
 		function getEventData() {
 			return parent.ORYX.EDITOR.simulationEventData;
@@ -99,7 +124,7 @@ function clearChart() {
 				 	 .showControls(false);
 				chart.yAxis
 				.tickFormat(d3.format(',.2f'));
-				chart.yAxis.axisLabel('Time (sec)')
+				chart.yAxis.axisLabel('Time (min)')
 				d3.select('#chart1')
 				.datum(chartData.timevalues)
 				.transition().duration(500)
@@ -131,6 +156,30 @@ function clearChart() {
 			
 				return chart;
 			}); 
+			 
+			 nv.addGraph(function() {
+				 var chart = nv.models.multiBarHorizontalChart()
+				 	.x(function(d) { return d.label })
+				 	.y(function(d) { return d.value })
+				 	.showValues(true)
+				 	.tooltips(true)
+				 	.showControls(false);
+	
+				chart.yAxis
+					.tickFormat(d3.format(',.2f'));
+				
+				chart.yAxis.axisLabel('Cost ($)')
+				var dw = [];
+				dw.push(chartData.costvalues);
+				d3.select('#chart3')
+					.datum(dw)
+					.transition().duration(500)
+					.call(chart);
+
+				nv.utils.windowResize(chart.update);
+			
+				return chart;
+			}); 
 		}
 		
 		function showTables() {
@@ -145,6 +194,10 @@ function clearChart() {
 			var resourceTableSource = $("#tabletemplateresource").html();
 	    	var resourceTableTemplate = Handlebars.compile(resourceTableSource);
 	    	$("#chartcontent2").html(resourceTableTemplate(chartData.resourcevalues));
+	    	
+	    	var costTableSource = $("#tabletemplatecost").html();
+	    	var costTableTemplate = Handlebars.compile(costTableSource);
+	    	$("#chartcontent3").html(costTableTemplate(chartData.costvalues));
 		}
 		
 		function showTimeline() {
