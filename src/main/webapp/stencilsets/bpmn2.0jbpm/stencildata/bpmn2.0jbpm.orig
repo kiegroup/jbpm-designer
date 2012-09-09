@@ -499,7 +499,7 @@
 				{
 					"id":"timeunit",
 					"type":"Choice",
-					"title":"Time Unit",
+					"title":"Base time unit",
 					"value":"s",
 					"description":"Time unit options (seconds, minutes, hours)",
 					"description_ja":"Time unit options (seconds, minutes, hours)",
@@ -509,32 +509,32 @@
 					"items": [
 						{
 							"id": "c1",
-							"title":"ms",
+							"title":"milliseconds",
 							"value":"ms"
 						},
 						{
 							"id": "c2",
-							"title": "s",
+							"title": "seconds",
 							"value": "s"
 						},
 						{
 							"id": "c3",
-							"title": "min",
+							"title": "minutes",
 							"value": "min"
 						},
 						{
 							"id": "c4",
-							"title": "hour",
+							"title": "hours",
 							"value": "hour"
 						},
 						{
 							"id": "c5",
-							"title": "day",
+							"title": "days",
 							"value": "day"
 						},
 						{
 							"id": "c6",
-							"title": "year",
+							"title": "years",
 							"value": "year"
 						}
 					]    
@@ -542,7 +542,7 @@
 				{
 					"id":"currency",
 					"type":"String",
-					"title":"Currency",
+					"title":"Base Currency",
 					"value":"",
 					"description":"Base currency (ISO 4217)",
 					"readonly":false,
@@ -3173,7 +3173,7 @@
 				{
 					"id":"min",
 					"type":"Float",
-					"title":"Min",
+					"title":"Processing time (min)",
 					"value":"0",
 					"description":"",
 					"description_ja":"",
@@ -3186,7 +3186,7 @@
 				{
 					"id":"max",
 					"type":"Float",
-					"title":"Max",
+					"title":"Processing time (max)",
 					"value":"0",
 					"description":"",
 					"description_ja":"",
@@ -3211,7 +3211,7 @@
 				{
 					"id":"mean",
 					"type":"Float",
-					"title":"Mean",
+					"title":"Processing time (mean)",
 					"value":"0",
 					"description":"",
 					"description_ja":"",
@@ -3234,32 +3234,32 @@
 					"items": [
 						{
 							"id": "c1",
-							"title":"ms",
+							"title":"milliseconds",
 							"value":"ms"
 						},
 						{
 							"id": "c2",
-							"title": "s",
+							"title": "seconds",
 							"value": "s"
 						},
 						{
 							"id": "c3",
-							"title": "min",
+							"title": "minutes",
 							"value": "min"
 						},
 						{
 							"id": "c4",
-							"title": "hour",
+							"title": "hours",
 							"value": "hour"
 						},
 						{
 							"id": "c5",
-							"title": "day",
+							"title": "days",
 							"value": "day"
 						},
 						{
 							"id": "c6",
-							"title": "year",
+							"title": "years",
 							"value": "year"
 						}
 					]    
@@ -3300,7 +3300,7 @@
 				{
 					"id":"quantity",
 					"type":"Float",
-					"title":"Quantity",
+					"title":"Staff availability",
 					"value":"0",
 					"description":"",
 					"description_ja":"",
@@ -3326,7 +3326,7 @@
 				{
 					"id":"unitcost",
 					"type":"Float",
-					"title":"Unit Cost",
+					"title":"Cost per time unit",
 					"value":"0",
 					"description":"",
 					"description_ja":"",
