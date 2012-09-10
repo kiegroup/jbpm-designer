@@ -89,11 +89,6 @@
   <servlet-class>org.jbpm.designer.web.server.CustomEditorsServlet</servlet-class>
  </servlet>
  <servlet>
-  <display-name>Simulation</display-name>
-  <servlet-name>SimulationServlet</servlet-name>
-  <servlet-class>org.jbpm.designer.web.server.SimulationServlet</servlet-class>
- </servlet>
- <servlet>
   <display-name>FormWidget</display-name>
   <servlet-name>FormWidgetServlet</servlet-name>
   <servlet-class>org.jbpm.designer.web.server.FormWidgetServlet</servlet-class>
@@ -190,10 +185,6 @@
  <servlet-mapping>
   <servlet-name>CustomEditorsServlet</servlet-name>
   <url-pattern>/customeditors</url-pattern>
- </servlet-mapping>
- <servlet-mapping>
-  <servlet-name>SimulationServlet</servlet-name>
-  <url-pattern>/simulation</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
   <servlet-name>FormWidgetServlet</servlet-name>

@@ -39,7 +39,6 @@
     <plugin name="ORYX.Plugins.NodeXMLViewer"/>
     <plugin name="ORYX.Plugins.Theme"/>
     <plugin name="ORYX.Plugins.LockNode"/>
-    <plugin name="ORYX.Plugins.Simulation"/>
     <plugin name="ORYX.Plugins.DockerCreation"/>
     <plugin name="ORYX.Plugins.TaskPropertiesUpdater"/>
     <plugin name="ORYX.Plugins.VoiceCommand"/>

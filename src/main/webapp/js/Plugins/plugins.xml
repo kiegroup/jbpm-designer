@@ -338,7 +338,6 @@
 		<plugin source="processinfo.js" name="ORYX.Plugins.ProcessInfo"/>
 		<plugin source="servicenodeeditor.js" name="ORYX.Plugins.ServiceNodeEditor"/>
 		<plugin source="theme.js" name="ORYX.Plugins.Theme"/>
-		<plugin source="simulation.js" name="ORYX.Plugins.Simulation"/>
 		<plugin source="locknode.js" name="ORYX.Plugins.LockNode"/>
 		<plugin source="voicecommand.js" name="ORYX.Plugins.VoiceCommand"/>
 		

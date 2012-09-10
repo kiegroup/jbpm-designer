@@ -512,13 +512,6 @@
         <version>2.5</version>
       </dependency>
 
-	  <!-- simulation -->
-	  <dependency>
-        <groupId>org.jbpm</groupId>
-        <artifactId>jbpm-simulation</artifactId>
-        <version>1.0.0.Final</version>
-      </dependency>
-      
       <!-- test -->
       <dependency>
         <groupId>junit</groupId>
