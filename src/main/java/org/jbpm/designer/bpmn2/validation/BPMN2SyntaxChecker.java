@@ -1,5 +1,6 @@
 package org.jbpm.designer.bpmn2.validation;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -32,16 +33,14 @@ import org.eclipse.bpmn2.FormalExpression;
 import org.eclipse.bpmn2.Gateway;
 import org.eclipse.bpmn2.GatewayDirection;
 import org.eclipse.bpmn2.InclusiveGateway;
-import org.eclipse.bpmn2.ManualTask;
 import org.eclipse.bpmn2.MessageEventDefinition;
 import org.eclipse.bpmn2.ParallelGateway;
 import org.eclipse.bpmn2.Process;
-import org.eclipse.bpmn2.ReceiveTask;
+import org.eclipse.bpmn2.Relationship;
 import org.eclipse.bpmn2.RootElement;
 import org.eclipse.bpmn2.ScriptTask;
 import org.eclipse.bpmn2.SendTask;
 import org.eclipse.bpmn2.SequenceFlow;
-import org.eclipse.bpmn2.ServiceTask;
 import org.eclipse.bpmn2.SignalEventDefinition;
 import org.eclipse.bpmn2.StartEvent;
 import org.eclipse.bpmn2.SubProcess;
@@ -50,9 +49,14 @@ import org.eclipse.bpmn2.ThrowEvent;
 import org.eclipse.bpmn2.TimerEventDefinition;
 import org.eclipse.bpmn2.UserTask;
 import org.eclipse.emf.ecore.util.FeatureMap;
+import org.jboss.drools.CostParameters;
+import org.jboss.drools.DecimalParameterType;
 import org.jboss.drools.DroolsPackage;
-import org.jboss.drools.MetadataType;
-import org.jboss.drools.MetaentryType;
+import org.jboss.drools.ElementParametersType;
+import org.jboss.drools.FloatingParameterType;
+import org.jboss.drools.ProcessAnalysisDataType;
+import org.jboss.drools.ResourceParameters;
+import org.jboss.drools.Scenario;
 import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.server.ServletUtil;
@@ -78,8 +82,9 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 		DroolsFactoryImpl.init();
 		
 		Definitions def = profile.createMarshaller().getDefinitions(json, preprocessingData);
-		
 		List<RootElement> rootElements =  def.getRootElements();
+		Scenario defaultScenario = getDefaultScenario(def);
+		
         for(RootElement root : rootElements) {
         	if(root instanceof Process) {
         		Process process = (Process) root;
@@ -148,12 +153,12 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
         			addError(defaultResourceId, "Process has no end node.");
         		}
         		
-        		checkFlowElements(process, process);
+        		checkFlowElements(process, process, defaultScenario);
         	}
         }
 	}
 	
-	private void checkFlowElements(FlowElementsContainer container, Process process) {
+	private void checkFlowElements(FlowElementsContainer container, Process process, Scenario defaultScenario) {
 		
 		for(FlowElement fe : container.getFlowElements()) {
 			if(fe instanceof StartEvent) {
@@ -245,111 +250,53 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 		        }
 		        
 		        // simulation validation
-		        if(ut.getExtensionValues() != null && fe.getExtensionValues().size() > 0) {
-		        	boolean foundStaffAvailability = false;
-		        	for(ExtensionAttributeValue extattrval : fe.getExtensionValues()) {
-	    	        	FeatureMap extensionElements = extattrval.getValue();
-	                    @SuppressWarnings("unchecked")
-	                    List<MetadataType> metadataTypeExtensions = (List<MetadataType>) extensionElements
-	                                                         .get(DroolsPackage.Literals.DOCUMENT_ROOT__METADATA, true);
-	                    if(metadataTypeExtensions != null && metadataTypeExtensions.size() > 0) {
-	                    	MetadataType metaType = metadataTypeExtensions.get(0);
-	                    	for(Object metaEntryObj : metaType.getMetaentry()) {
-	                    		MetaentryType entry = (MetaentryType) metaEntryObj;
-	                    		if(entry.getName() != null && entry.getName().equals("staffavailability")) {
-	                    			Float f = new Float(entry.getValue());
-	                    			if(f.floatValue() < 0) {
-	                    				addError(ut, "Staff Availability value must be positive.");
-	                    			}
-	                    			foundStaffAvailability = true;
-	                    		}
-	                    	}
-	                    }
-		        	}
-		        	if(!foundStaffAvailability) {
-		        		addError(ut, "User Task has no staff availability defined.");
+		        if(defaultScenario != null && defaultScenario.getElementParameters() != null) {
+		        	for(ElementParametersType eleType : defaultScenario.getElementParameters()) {
+		        		if(eleType.getElementId().equals(ut.getId())) {
+		        			if(eleType.getResourceParameters() != null) {
+	        					ResourceParameters resourceParams = eleType.getResourceParameters();
+	        					if(resourceParams.getQuantity() != null) {
+	        						FloatingParameterType quantityVal = (FloatingParameterType) resourceParams.getQuantity().getParameterValue().get(0);
+	        						double val = quantityVal.getValue();
+	        						if(val < 0) {
+	        							addError(ut, "Staff Availability value must be positive.");
+	        						}
+	        					}
+	        				}
+		        		}
 		        	}
 		        }
 		    }
 			
 			if(fe instanceof Task) {
 				Task ta = (Task) fe;
+				
 				// simulation validation
-		        if(ta.getExtensionValues() != null && fe.getExtensionValues().size() > 0) {
-		        	boolean foundDistributionType = false;
-		        	String distributionTypeValue = "";
-		        	boolean foundDuration = false;
-		        	boolean foundTimeUnits = false;
-		        	boolean foundRange = false;
-		        	boolean foundStandardDeviation = false;
-		        	for(ExtensionAttributeValue extattrval : fe.getExtensionValues()) {
-	    	        	FeatureMap extensionElements = extattrval.getValue();
-	                    @SuppressWarnings("unchecked")
-	                    List<MetadataType> metadataTypeExtensions = (List<MetadataType>) extensionElements
-	                                                         .get(DroolsPackage.Literals.DOCUMENT_ROOT__METADATA, true);
-	                    
-	                    if(metadataTypeExtensions != null && metadataTypeExtensions.size() > 0) {
-	                    	MetadataType metaType = metadataTypeExtensions.get(0);
-	                    	for(Object metaEntryObj : metaType.getMetaentry()) {
-	                    		MetaentryType entry = (MetaentryType) metaEntryObj;
-	                    		if(entry.getName() != null && entry.getName().equals("costpertimeunit")) {
-	                    			Float f = new Float(entry.getValue());
-	                    			if(f.floatValue() < 0) {
-	                    				addError(ta, "Cost per Time Unit value must be positive.");
-	                    			}
-	                    		}
-	                    		if(entry.getName() != null && entry.getName().equals("distributiontype")) {
-	                    			foundDistributionType = true;
-	                    			distributionTypeValue = entry.getValue();
-	                    		}
-	                    		if(entry.getName() != null && entry.getName().equals("duration")) {
-	                    			Float f = new Float(entry.getValue());
-	                    			if(f.floatValue() < 0) {
-	                    				addError(ta, "Duration value must be positive.");
-	                    			}
-	                    			foundDuration = true;
-	                    		}
-	                    		if(entry.getName() != null && entry.getName().equals("timeunit")) {
-	                    			foundTimeUnits = true;
-	                    		}
-	                    		if(entry.getName() != null && entry.getName().equals("workinghours")) {
-	                    			Float f = new Float(entry.getValue());
-	                    			if(f.floatValue() < 0) {
-	                    				addError(ta, "Working Hours value must be positive.");
-	                    			}
-	                    		}
-	                    		if(entry.getName() != null && entry.getName().equals("range")) {
-	                    			Float f = new Float(entry.getValue());
-	                    			if(f.floatValue() < 0) {
-	                    				addError(ta, "Range value must be positive.");
-	                    			}
-	                    			foundRange = true;
-	                    		}
-	                    		if(entry.getName() != null && entry.getName().equals("standarddeviation")) {
-	                    			foundStandardDeviation = true;
-	                    		}
-	                    	}
-	                    }
-	                    
-	    	        }
-		        	if(!foundDistributionType) {
-		        		addError(ta, "Task has no distribution type defined.");
-		        	}
-		        	if(!foundDuration) {
-		        		addError(ta, "Task has no duration defined.");
-		        	}
-		        	if(!foundTimeUnits) {
-		        		addError(ta, "Task has no Time Units defined.");
-		        	}
-		        	if(foundDistributionType) {
-		        		if((distributionTypeValue.equals("random") || distributionTypeValue.equals("uniform")) && !foundRange) {
-		        			addError(ta, "Task has no Range defined.");
-		        		}
-		        		if(distributionTypeValue.equals("normal") && !foundStandardDeviation) {
-		        			addError(ta, "Task has no Standard Deviation defined.");
-		        		}
-		        	}
-		        }
+				if(defaultScenario != null && defaultScenario.getElementParameters() != null) {
+					for(ElementParametersType eleType : defaultScenario.getElementParameters()) {
+						if(eleType.getElementId().equals(ta.getId())) {
+	        				if(eleType.getCostParameters() != null) {
+	        					CostParameters costParams = eleType.getCostParameters();
+	        					if(costParams.getUnitCost() != null) {
+	        						DecimalParameterType unitCostVal = (DecimalParameterType) costParams.getUnitCost().getParameterValue().get(0);
+	        						BigDecimal val = unitCostVal.getValue();
+	        						if(val.doubleValue() < 0) {
+	        							addError(ta, "Cost per Time Unit value must be positive.");
+	        						}
+	        					}
+	        				}
+	        				if(eleType.getResourceParameters() != null) {
+	        					ResourceParameters resourceParams = eleType.getResourceParameters();
+	        					if(resourceParams.getWorkinghours() != null) {
+	        						FloatingParameterType workingHoursVal = (FloatingParameterType) resourceParams.getWorkinghours().getParameterValue().get(0);
+	        						if(workingHoursVal.getValue() < 0) {
+	        							addError(ta, "Working Hours value must be positive.");
+	        						}
+	        					}
+	        				}
+	        			}
+					}
+				}
 			}
 			
 			if(fe instanceof CatchEvent) {
@@ -481,36 +428,24 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 				if(!(gw instanceof ParallelGateway)) {
 					List<SequenceFlow> outgoingGwSequenceFlows = gw.getOutgoing();
 					if(outgoingGwSequenceFlows != null && outgoingGwSequenceFlows.size() > 0) {
-						int sum = 0;
+						double sum = 0;
 						for(SequenceFlow sf : outgoingGwSequenceFlows) {
-							// simulation validation
-					        if(sf.getExtensionValues() != null && sf.getExtensionValues().size() > 0) {
-					        	boolean foundProbability = false;
-					        	for(ExtensionAttributeValue extattrval : sf.getExtensionValues()) {
-				    	        	FeatureMap extensionElements = extattrval.getValue();
-				                    @SuppressWarnings("unchecked")
-				                    List<MetadataType> metadataTypeExtensions = (List<MetadataType>) extensionElements
-				                                                         .get(DroolsPackage.Literals.DOCUMENT_ROOT__METADATA, true);
-				                    if(metadataTypeExtensions != null && metadataTypeExtensions.size() > 0) {
-				                    	MetadataType metaType = metadataTypeExtensions.get(0);
-				                    	for(Object metaEntryObj : metaType.getMetaentry()) {
-				                    		MetaentryType entry = (MetaentryType) metaEntryObj;
-				                    		if(entry.getName() != null && entry.getName().equals("probability")) {
-				                    			Integer i = new Integer(entry.getValue());
-				                    			if(i < 0) {
+					        	if(defaultScenario.getElementParameters() != null) {
+					        		for(ElementParametersType eleType : defaultScenario.getElementParameters()) {
+					        			if(eleType.getElementId().equals(sf.getId())) {
+					        				if(eleType.getControlParameters() != null && eleType.getControlParameters().getProbability() != null) {
+					        					FloatingParameterType valType = (FloatingParameterType) eleType.getControlParameters().getProbability().getParameterValue().get(0);
+				                    			if(valType.getValue() < 0) {
 				                    				addError(sf, "Probability value must be positive.");
 				                    			} else {
-				                    				sum += i;
+				                    				sum += valType.getValue();
 				                    			}
-				                    			foundProbability = true;
-				                    		}
-				                    	}
-				                    }
+					        				} else {
+					        					addError(sf, "Sequence Flow has no probability defined.");
+					        				}
+					        			}
+					        		}
 					        	}
-					        	if(!foundProbability) {
-					        		addError(sf, "Sequence Flow has no probability defined.");
-					        	}
-					        }
 						}
 						if(sum != 100) {
 							addError(gw, "The sum of probability values of all outgoing Sequence Flows must be equal 100.");
@@ -555,7 +490,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 			}
 			
 			if(fe instanceof SubProcess) {
-				checkFlowElements((SubProcess) fe, process);
+				checkFlowElements((SubProcess) fe, process, defaultScenario);
 			}
 		}
 	}
@@ -631,5 +566,24 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
             }
         }
         return false;
+    }
+    
+    private Scenario getDefaultScenario(Definitions def) {
+    	if(def.getRelationships() != null && def.getRelationships().size() > 0) {
+        	// current support for single relationship
+        	Relationship relationship = def.getRelationships().get(0);
+        	for(ExtensionAttributeValue extattrval : relationship.getExtensionValues()) {
+                FeatureMap extensionElements = extattrval.getValue();
+                @SuppressWarnings("unchecked")
+                List<ProcessAnalysisDataType> processAnalysisExtensions = (List<ProcessAnalysisDataType>) extensionElements.get(DroolsPackage.Literals.DOCUMENT_ROOT__PROCESS_ANALYSIS_DATA, true);
+                if(processAnalysisExtensions != null && processAnalysisExtensions.size() > 0) {
+                	ProcessAnalysisDataType processAnalysis = processAnalysisExtensions.get(0);
+                	if(processAnalysis.getScenario() != null && processAnalysis.getScenario().size() > 0) {
+                		return processAnalysis.getScenario().get(0);
+                	}
+                }
+        	}
+        }
+    	return null;
     }
 }
