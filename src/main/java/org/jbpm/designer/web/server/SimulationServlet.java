@@ -285,11 +285,11 @@ public class SimulationServlet extends HttpServlet {
 						allValues.put("costvalues", costValues);
 						
 						// single events
-						JSONObject taskEvents = getTaskEventsFromAllEvents(event, allEvents);
-						if(taskEvents != null) {
-							allValues.put("timeline", taskEvents);
-						}
-						
+//						JSONObject taskEvents = getTaskEventsFromAllEvents(event, allEvents);
+//						if(taskEvents != null) {
+//							allValues.put("timeline", taskEvents);
+//							aggHTSimulationJSONArray.put(allValues);
+//						}
 						aggHTSimulationJSONArray.put(allValues);
 					} else if(aggEvent instanceof AggregatedActivitySimulationEvent) {
 						AggregatedActivitySimulationEvent event = (AggregatedActivitySimulationEvent) aggEvent;
@@ -314,10 +314,10 @@ public class SimulationServlet extends HttpServlet {
 						taskSimValues.put(obj3);
 						taskSimKeys.put("values", taskSimValues);
 						// single events
-						JSONObject taskEvents = getTaskEventsFromAllEvents(event, allEvents);
-						if(taskEvents != null) {
-							taskSimKeys.put("timeline", taskEvents);
-						}
+//						JSONObject taskEvents = getTaskEventsFromAllEvents(event, allEvents);
+//						if(taskEvents != null) {
+//							taskSimKeys.put("timeline", taskEvents);
+//						}
 						aggTaskSimulationJSONArray.put(taskSimKeys);
 					}
 				}
@@ -339,7 +339,11 @@ public class SimulationServlet extends HttpServlet {
 				numInstancesSimKeys.put("values", numInstancesValues);
 				aggNumActivityInstancesJSONArray.put(numInstancesSimKeys);
 				
-				
+				parentJSON.put("processsim", aggProcessSimulationJSONArray);
+				parentJSON.put("activityinstances", aggNumActivityInstancesJSONArray);
+				parentJSON.put("htsim", aggHTSimulationJSONArray);
+				parentJSON.put("tasksim", aggTaskSimulationJSONArray);
+				parentJSON.put("timeline", getTaskEventsFromAllEvents(null, allEvents));
 				// event aggregations
 				JSONArray aggEventProcessSimulationJSONArray = new JSONArray();
 				for(AggregatedProcessSimulationEvent aggProcessEve : this.eventAggregations) {
@@ -363,12 +367,6 @@ public class SimulationServlet extends HttpServlet {
 					eventProcessSimKeys.put("values", eventProcessSimValues);
 					aggEventProcessSimulationJSONArray.put(eventProcessSimKeys);
 				}
-				
-				parentJSON.put("processsim", aggProcessSimulationJSONArray);
-				parentJSON.put("activityinstances", aggNumActivityInstancesJSONArray);
-				parentJSON.put("htsim", aggHTSimulationJSONArray);
-				parentJSON.put("tasksim", aggTaskSimulationJSONArray);
-				parentJSON.put("timeline", getTaskEventsFromAllEvents(null, allEvents));
 				parentJSON.put("eventaggregations", aggEventProcessSimulationJSONArray);
 				System.out.println("******* JSON: " + parentJSON.toString());
 				
@@ -482,7 +480,7 @@ public class SimulationServlet extends HttpServlet {
 		allEventsObject.put("headline", "Simulation Events");
 		allEventsObject.put("type","default");
 		allEventsObject.put("text","Simulation Events");
-		JSONArray allEventsDateArray = new JSONArray();
+		JSONArray allEventsDataArray = new JSONArray();
 		for(SimulationEvent se : allEvents) {
 			// for now only include end and activity events
 			if ((se instanceof EndSimulationEvent) || (se instanceof ActivitySimulationEvent) || (se instanceof HumanTaskActivitySimulationEvent)) {
@@ -490,15 +488,14 @@ public class SimulationServlet extends HttpServlet {
 					String seActivityId = getSingleEventActivityId(se);
 					String eventActivitytId = getAggregatedEventActivityId(event);
 					if(eventActivitytId.equals(seActivityId)) {
-						allEventsDateArray.put(getTimelineEventObject(se));
+						allEventsDataArray.put(getTimelineEventObject(se));
 					}
 				} else {
-					// add all
-					allEventsDateArray.put(getTimelineEventObject(se));
+					allEventsDataArray.put(getTimelineEventObject(se));
 				}
 			}
 		}
-		allEventsObject.put("date", allEventsDateArray);
+		allEventsObject.put("date", allEventsDataArray);
 		return allEventsObject;
 	}
 	

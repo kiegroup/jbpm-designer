@@ -24,6 +24,7 @@
 	}
 	function displyChartForEvent(eventNum) {
 		clearChart();
+		if(eventNum) {
 		var datawrapper = [aggregatedData[eventNum-1]];
 		nv.addGraph(function() {
 			var chart = nv.models.discreteBarChart().x(function(d) {
@@ -41,6 +42,7 @@
 
 			return chart;
 		}); 
+	}
 	}
 	var timeline = new VMM.Timeline;
 	timeline.init(data);

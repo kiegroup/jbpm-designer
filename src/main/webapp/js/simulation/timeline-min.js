@@ -3447,76 +3447,9 @@ if(typeof VMM != 'undefined' && typeof VMM.MediaElement == 'undefined') {
 			if (h != null && h != "") {_h = h};
 			if (uid != null && uid != "") {_uid = uid};
 			
-			if (data.media != null && data.media != "") {
-				var _valid		= true,
-					mediaElem	= "",
-					m			= VMM.MediaType(data.media); //returns an object with .type and .id
-					
-				// DETERMINE THUMBNAIL OR ICON
-				if (data.thumbnail != null && data.thumbnail != "") {
-					trace("CUSTOM THUMB");
-					mediaElem		=	"<div class='thumbnail thumb-custom' id='" + uid + "_custom_thumb'><img src='" + data.thumbnail + "'></div>";
-					return mediaElem;
-				} else if (m.type == "image") {
-					mediaElem		=	"<div class='thumbnail thumb-photo'></div>";
-					return mediaElem;
-				} else if (m.type	==	"flickr") {
-					mediaElem		=	"<div class='thumbnail thumb-photo' id='" + uid + "_thumb'></div>";
-					return mediaElem;
-				} else if (m.type	==	"instagram") {
-					mediaElem		=	"<div class='thumbnail thumb-instagram' id='" + uid + "_thumb'><img src='" + VMM.ExternalAPI.instagram.get(m.id, true) + "'></div>";
-					return mediaElem;
-				} else if (m.type	==	"youtube") {
-					mediaElem		=	"<div class='thumbnail thumb-youtube' id='" + uid + "_thumb'></div>";
-					return mediaElem;
-				} else if (m.type	==	"googledoc") {
-					mediaElem		=	"<div class='thumbnail thumb-document'></div>";
-					return mediaElem;
-				} else if (m.type	==	"vimeo") {
-					mediaElem		=	"<div class='thumbnail thumb-vimeo' id='" + uid + "_thumb'></div>";
-					return mediaElem;
-				} else if (m.type  ==  "dailymotion") {
-					mediaElem		=  "<div class='thumbnail thumb-video'></div>";
-					return mediaElem;
-				} else if (m.type	==	"twitter"){
-					mediaElem		=	"<div class='thumbnail thumb-twitter'></div>";
-					return mediaElem;
-				} else if (m.type	==	"twitter-ready") {
-					mediaElem		=	"<div class='thumbnail thumb-twitter'></div>";
-					return mediaElem;
-				} else if (m.type	==	"soundcloud") {
-					mediaElem		=	"<div class='thumbnail thumb-audio'></div>";
-					return mediaElem;
-				} else if (m.type	==	"google-map") {
-					mediaElem		=	"<div class='thumbnail thumb-map'></div>";
-					return mediaElem;
-				} else if (m.type		==	"googleplus") {
-					mediaElem		=	"<div class='thumbnail thumb-googleplus'></div>";
-					return mediaElem;
-				} else if (m.type	==	"wikipedia") {
-					mediaElem		=	"<div class='thumbnail thumb-wikipedia'></div>";
-					return mediaElem;
-				} else if (m.type	==	"storify") {
-					mediaElem		=	"<div class='thumbnail thumb-storify'></div>";
-					return mediaElem;
-				} else if (m.type	==	"quote") {
-					mediaElem		=	"<div class='thumbnail thumb-quote'></div>";
-					return mediaElem;
-				} else if (m.type	==	"unknown") {
-					if (m.id.match("blockquote")) {
-						mediaElem	=	"<div class='thumbnail thumb-quote'></div>";
-					} else {
-						mediaElem	=	"<div class='thumbnail thumb-plaintext'></div>";
-					}
-					return mediaElem;
-				} else if (m.type	==	"website") {
-					mediaElem		=	"<div class='thumbnail thumb-website'></div>";
-					return mediaElem;
-				} else {
-					mediaElem = "<div class='thumbnail thumb-plaintext'></div>";
-					return mediaElem;
-				}
-			} 
+			if (data.thumbnail != null && data.thumbnail != "") {
+				return "<div class='thumbnail thumb-custom' id='" + uid + "_custom_thumb'><img src='" + data.thumbnail + "'></div>";
+			}
 		},
 		
 		create: function(data, uid) {
@@ -4197,7 +4130,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 		var data = [], slides = [], slide_positions = [];
 		
 		var slides_content		=	"";
-		var current_slide		=	0;
+		var current_slide		=	1;
 		var current_width		=	960;
 		var touch				=	{move: false, x: 10, y:0, off: 0, dampen: 48};
 		var content				=	"";
@@ -4212,7 +4145,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 		} else {
 			config = {
 				preload: 4,
-				current_slide: 0,
+				current_slide: 1,
 				interval: 10, 
 				something: 0, 
 				width: 720, 
@@ -4371,7 +4304,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 				goToSlide(current_slide, "linear", 1);
 			};
 			
-			if (current_slide == 0) {
+			if (current_slide == 1) {
 				VMM.Lib.visible(navigation.prevBtn, false);
 			}
 			
@@ -4717,7 +4650,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 			var _pos = slides[current_slide].leftpos();
 			var _title = "";
 			
-			if (current_slide == 0) {is_first = true};
+			if (current_slide == 1) {is_first = true};
 			if (current_slide +1 >= slides.length) {is_last = true};
 			if (ease != null && ease != "") {_ease = ease};
 			if (duration != null && duration != "") {_duration = duration};
@@ -4815,7 +4748,6 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 			VMM.bindEvent(window, onKeypressNav, 'keydown');
 			$tmpnext = VMM.appendAndGetElement($slider, "<div>", "tmpnext");
 			VMM.bindEvent($tmpnext, onNextClick, "PLAY"); 
-			
 		}
 		
 		/* BUILD
@@ -4864,7 +4796,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 			reSize(false, true);
 			VMM.Lib.visible(navigation.prevBtn, false);
 			goToSlide(config.current_slide, "easeOutExpo", __duration, true, true);
-			
+			displyChartForEvent(config.current_slide);
 			_active = true;
 		};
 		
@@ -6028,7 +5960,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 			touch:					false,
 			maptype: 				"toner",
 			preload:				4,
-			current_slide:			0,
+			current_slide:			1,
 			hash_bookmark:			false,
 			start_at_end: 			false,
 			start_at_slide:			0,
@@ -6348,11 +6280,11 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 		var build = function() {
 			
 			// START AT SLIDE
-			if (parseInt(config.start_at_slide) > 0 && config.current_slide == 0) {
+			if (parseInt(config.start_at_slide) > 0 && config.current_slide == 1) {
 				config.current_slide = parseInt(config.start_at_slide); 
 			}
 			// START AT END
-			if (config.start_at_end && config.current_slide == 0) {
+			if (config.start_at_end && config.current_slide == 1) {
 				config.current_slide = _dates.length - 1;
 			}
 			
@@ -6578,7 +6510,7 @@ if(typeof VMM.Timeline != 'undefined' && typeof VMM.Timeline.TimeNav == 'undefin
 			interval_array			= [],
 			interval_major_array	= [],
 			tags					= [],
-			current_marker			= 0,
+			current_marker			= 1,
 			_active					= false,
 			eras,
 			content,
@@ -6699,7 +6631,7 @@ if(typeof VMM.Timeline != 'undefined' && typeof VMM.Timeline.TimeNav == 'undefin
 		}
 		
 		function onPlay() {
-			alert("on play - raising event");
+			//alert("on play - raising event");
 			VMM.fireEvent(layout, "PLAY");
 		}
 		
@@ -6837,7 +6769,7 @@ if(typeof VMM.Timeline != 'undefined' && typeof VMM.Timeline.TimeNav == 'undefin
 			timenav_pos.visible.left	= Math.abs(timenav_pos.left) - 100;
 			timenav_pos.visible.right	= Math.abs(timenav_pos.left) + config.width + 100;
 			
-			if (current_marker == 0) {
+			if (current_marker == 1) {
 				is_first = true;
 			}
 			if (current_marker +1 == markers.length) {
