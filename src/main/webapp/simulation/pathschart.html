@@ -30,7 +30,7 @@ function clearChart() {
     <div class="pcharticon"><a href="#" onclick="clearChart(); showPieChart(); return false;"><img src="/designer/images/simulation/piecharticon.png" title="Pie Chart"/></a></div>
     <div class="charttitle"><script>document.write(parent.ORYX.EDITOR.simulationChartTitle);</script></div>
 </div><br/>
-<div class="outterchart">
+<div id="outterchart" class="outterchart">
     <h2>Path Image</h2>
   	<p id="chartcontent1">
 	</p>
@@ -46,7 +46,7 @@ function clearChart() {
 		<thead>
 			<tr>
 				{{#values}}
-				<th scope="col" align="center">{{label}} (min)</th>
+				<th scope="col" align="center">{{label}}</th>
 				{{/values}}
 			</tr>
 		</thead>
@@ -124,7 +124,8 @@ function clearChart() {
 		function showTable() {
 			var tableSource = $("#tabletemplate").html();
 	    	var tableTempplate = Handlebars.compile(tableSource);
-	    	$("#chartcontent2").html(tableTempplate(getToShowData()));
+	    	var data = getToShowData();
+	    	$("#chartcontent2").html(tableTempplate(data[0]));
 		}
 </script>
 </body>
