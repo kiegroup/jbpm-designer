@@ -35,8 +35,15 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 				var valueParts = selectedNode.id.split(":");
         		var nodeid = valueParts[1];
         		this.showTaskAveragesGraph(nodeid, this.resultsjson);
+			} else if(selectedNode.id.startsWith("pathgraph:")) {
+				var valueParts = selectedNode.id.split(":");
+        		var pathid = valueParts[1];
+        		this.showPathGraph(pathid, this.resultsjson);
 			}
 		}
+	},
+	_showProcessGraphs: function(nodeid) {
+		this.showProcessAveragesGraph(nodeid, this.resultsjson);
 	},
 	updateSimView: function(options) {
 		this.createGraphsTree(options);
@@ -53,7 +60,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 				allowDrag:false,
 	    		allowDrop:false,           
 	            expanded: true,
-	            isLoaf: false,
+	            isLeaf: false,
 				singleClickExpand:true});
 			graphTypeChild = new Ext.tree.TreeNode({
 				id:"pgraph:processaverages",
@@ -61,24 +68,22 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 				allowDrag:false,
 	    		allowDrop:false,           
 	            expanded: true,
-	            isLoaf: true,
+	            isLeaf: true,
 	            iconCls: 'xnd-icon',
 	            icon: ORYX.PATH + 'images/simulation/diagram.png',
 				singleClickExpand:true});
 			graphType.appendChild(graphTypeChild);
 			graphList.appendChild(graphType);
 		}
-		
 		var htSimInfo = jsonPath(options.results.evalJSON(), "$.htsim.*");
 		var taskSimInfo = jsonPath(options.results.evalJSON(), "$.tasksim.*");
-
 		if(htSimInfo || taskSimInfo) {
 			graphType = new Ext.tree.TreeNode({
 				text:"Activities", 			
 				allowDrag:false,
 	    		allowDrop:false,           
 	            expanded: true,
-	            isLoaf: false,
+	            isLeaf: false,
 				singleClickExpand:true});
 			for (var i = 0; i < htSimInfo.length; i++) {
 				var nextHt = htSimInfo[i];
@@ -88,7 +93,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 						allowDrag:false,
 			    		allowDrop:false,           
 			            expanded: true,
-			            isLoaf: true,
+			            isLeaf: true,
 			            iconCls: 'xnd-icon',
 			            icon: ORYX.PATH + 'images/simulation/activities/User.png',
 						singleClickExpand:true});
@@ -106,7 +111,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 					allowDrag:false,
 		    		allowDrop:false,           
 		            expanded: true,
-		            isLoaf: true,
+		            isLeaf: true,
 		            iconCls: 'xnd-icon',
 		            icon: ORYX.PATH + 'images/simulation/activities/' + this.taskType + '.png',
 					singleClickExpand:true});
@@ -115,10 +120,41 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 			}
 			graphList.appendChild(graphType);
 		}
+		var pathSimInfo = jsonPath(options.results.evalJSON(), "$.pathsim.*");
+		if(pathSimInfo) {
+			graphType = new Ext.tree.TreeNode({
+				text:"Paths", 			
+				allowDrag:false,
+	    		allowDrop:false,           
+	            expanded: true,
+	            isLeaf: false,
+				singleClickExpand:true});
+			for (var i = 0; i < pathSimInfo.length; i++) {
+				var nextPath = pathSimInfo[i];
+					graphTypeChild = new Ext.tree.TreeNode({
+						id:"pathgraph:" + nextPath.id,
+						text:"Path " + (i+1) + " (" + nextPath.id + ")", 			
+						allowDrag:false,
+			    		allowDrop:false,           
+			            expanded: true,
+			            isLeaf: true,
+			            iconCls: 'xnd-icon',
+			            icon: ORYX.PATH + 'images/simulation/pathicon.png',
+						singleClickExpand:true});
+				    graphType.appendChild(graphTypeChild);
+			}
+			graphList.appendChild(graphType);
+		}
 		
 		Ext.getCmp('simresultscharts').setRootNode(graphList);
 		Ext.getCmp('simresultscharts').getRootNode().render();
 		Ext.getCmp('simresultscharts').render();
+		
+		// select process graph and show its chart
+		var tp = Ext.getCmp('simresultscharts');
+		var node = tp.getNodeById("pgraph:processaverages");
+	    node.select();
+	    this._showProcessGraphs("processaverages");
 	},
 	findTaskType: function(taskid) {
 		ORYX.EDITOR._canvas.getChildren().each((function(child) {
@@ -186,6 +222,14 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 				Ext.getDom('simchartframe').src = ORYX.PATH + "simulation/humantaskchart.html";
 			}
 		}
+	},
+	showPathGraph : function(pathid, jsonstr) {
+		var pathobj = jsonPath(jsonstr.evalJSON(), "$.pathsim.*");
+		ORYX.EDITOR.simulationChartTitle = "Path Execution Info (" + pathid + ")";
+		ORYX.EDITOR.simulationPathData = pathobj;
+		ORYX.EDITOR.simulationPathId = pathid;
+		Ext.getDom('simchartframe').src = ORYX.PATH + "simulation/pathschart.html";
 	}
+	
 	
 });

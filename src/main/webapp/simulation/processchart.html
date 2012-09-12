@@ -21,11 +21,22 @@ function clearChart() {
 	
 	document.getElementById('outterchart').innerHTML = cnt;
 }
+
+function clearChartForLine() {
+	var cnt = "<h2>Process execution times during Simulation</h2> \
+	  	<p id='chartcontent1'> \
+	  	<svg id='chart1' style='height:400px;width:400px'></svg> \
+		</p>";
+		
+		document.getElementById('outterchart').innerHTML = cnt;
+}
+
 </script>
 </head>
 <body onload="showBarChart();">
 <center>
 <div style="margin:20;padding:0;">
+	<div class="lcharticon"><a href="#" onclick="clearChartForLine(); showLineChart(); return false;"><img src="/designer/images/simulation/linecharticon.png" title="Line Chart"/></a></div>
 	<div class="timelineicon"><a href="#" onclick="clearChart(); showTimeline(); return false;"><img src="/designer/images/simulation/timelineicon.png" title="Timeline"/></a></div>
 	<div class="tableicon"><a href="#" onclick="clearChart(); showTable(); return false;"><img src="/designer/images/simulation/tableicon.png" title="Table"/></a></div>
     <div class="pcharticon"><a href="#" onclick="clearChart(); showPieChart(); return false;"><img src="/designer/images/simulation/piecharticon.png" title="Pie Chart"/></a></div>
@@ -34,11 +45,11 @@ function clearChart() {
     <div class="charttitle"><script>document.write(parent.ORYX.EDITOR.simulationChartTitle +  " (" + parent.ORYX.EDITOR.simulationChartNodeName + ")");</script></div>
 </div><br/>
 <div id="outterchart" class="outterchart">
-	<h2>Execution Times</h2>
+	<h2 id="chart1label">Execution Times</h2>
   	<p id="chartcontent1">
   	<svg id="chart1" style='height:400px;width:400px'></svg>
 	</p>
-	<h2>Activity Instances</h2>
+	<h2 id="chart2label">Activity Instances</h2>
   	<p id="chartcontent2">
   	<svg id="chart2" style='height:400px;width:400px'></svg>
 	</p>
@@ -236,6 +247,57 @@ function clearChart() {
 	    	var tableInstanceTemplate = Handlebars.compile(tableInstanceSource);
 	    	$("#chartcontent1").html(tableTempplate(tableData[0]));
 	    	$("#chartcontent2").html(tableInstanceTemplate(tableInstanceData[0]));
+		}
+		
+		function showLineChart() {
+			var aggregationData = parent.ORYX.EDITOR.simulationEventAggregationData;
+			var minArray = [],
+			    maxArray = [],
+			    avgArray = [];
+			for (var i = 0; i < aggregationData.length; i++) {
+				var nextData = aggregationData[i];
+				var dataTimeSinceStart = nextData.timesincestart;
+				var dataValues = nextData.values;
+				
+				maxArray.push({x: dataTimeSinceStart, y: dataValues[0].value});
+				minArray.push({x: dataTimeSinceStart, y: dataValues[1].value});
+				avgArray.push({x: dataTimeSinceStart, y: dataValues[2].value});
+			}
+			
+			var chartData = [
+			                 {
+			                	 values: maxArray,
+			                	 key: 'Max',
+			                	 color: '#ff7f0e'
+			                 },
+			                 {
+			                	 values: minArray,
+			                	 key: 'Min',
+			                	 color: '#4876FF'
+			                 },
+			                 {
+			                	 values: avgArray,
+			                	 key: 'Avgerage',
+			                	 color: '#2ca02c'
+			                 }
+			                 ];
+			
+			nv.addGraph(function() {  
+				 var chart = nv.models.lineChart();
+				 chart.xAxis
+				        .axisLabel('Simulation Time (s)')
+				        .tickFormat(d3.format(',r'));
+				 chart.yAxis
+				        .axisLabel('Execution Times (min)')
+				        .tickFormat(d3.format('.02f'));
+				d3.select('#chart1')
+				       .datum(chartData)
+				     .transition().duration(500)
+				       .call(chart);
+				nv.utils.windowResize(function() { d3.select('#chart1').call(chart) });
+				return chart;
+			});
+
 		}
 		
 		function showTimeline() {

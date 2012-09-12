@@ -103,6 +103,19 @@ div.innerchart p {color:#black;padding:10px;}
   height: 16px; 
 }
 
+.lcharticon {
+  margin:0;
+  padding:0;
+  float: right;
+  vertical-align:top;
+  text-align:center;
+}
+.lcharticon a, .lcharticon a:link, .lcharticon a:visited {
+  vertical-align:top;
+  width: 16px;
+  height: 16px; 
+}
+
 #box-table {
 	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
 	font-size: 12px;

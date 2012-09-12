@@ -4761,7 +4761,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 			$slider = VMM.getElement("div.slider");
 			$slider_mask = VMM.appendAndGetElement($slider, "<div>", "slider-container-mask");
 			var ccontent = "<center><div class='outterchart'> \
-						    <h6>Process Execution Averages</h6> \
+						    <h6>Process Execution Times</h6> \
 							<p id='chartcontent'> \
 					        <svg id='chart' style='height:290px;width:400px'></svg> \
 							</p> \

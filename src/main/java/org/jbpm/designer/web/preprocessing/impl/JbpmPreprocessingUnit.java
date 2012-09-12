@@ -1,15 +1,11 @@
 package org.jbpm.designer.web.preprocessing.impl;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -34,7 +30,6 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
 import org.antlr.stringtemplate.StringTemplate;
-import org.apache.abdera.i18n.text.Sanitizer;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
@@ -46,7 +41,6 @@ import org.jbpm.designer.web.profile.impl.ExternalInfo;
 import org.jbpm.designer.web.server.ServletUtil;
 import org.jbpm.process.workitem.WorkDefinitionImpl;
 import org.json.JSONObject;
-import org.junit.runner.Request;
 import org.drools.process.core.datatype.DataType;
 import org.mvel2.MVEL;
 
@@ -118,9 +112,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         List<String> packageNames = findPackages(uuid, profile);
         String[] info = ServletUtil.findPackageAndAssetInfo(uuid, profile);
         
-        // set up form widgets
         setupFormWidgets(profile, req);
-        // set up default icons
         setupDefaultIcons(info, profile);
         
         // figure out which package our uuid belongs in and get back the list of configs

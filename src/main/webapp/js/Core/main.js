@@ -86,6 +86,8 @@ ORYX.Editor = {
 		this.simulationChartTitle = "";
 		this.simulationChartId = "";
 		this.simulationChartNodeName = "";
+		this.simulationPathData = "";
+		this.simulationPathId = "";
 		
 		//meta data about the model for the signavio warehouse
 		//directory, new, name, description, revision, model (the model data)
