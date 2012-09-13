@@ -49,6 +49,59 @@ ORYX.Plugins.Simulation = Clazz.extend({
 				return profileParamValue == "jbpm";
 			}.bind(this)
 		});
+		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_SIMULATION_BUILD_PATH_SVG, this.autoDisplayPath.bind(this));
+		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_SIMULATION_CLEAR_PATH_SVG, this.resetNodeColors.bind(this));
+	},
+	autoDisplayPath : function(options) {
+		if(options && options.pid) {
+			var pathid = options.pid;
+			var loadPathsMask = new Ext.LoadMask(Ext.getBody(), {msg:'Creating path image'});
+			loadPathsMask.show();
+			
+			Ext.Ajax.request({
+	            url: ORYX.PATH + 'simulation',
+	            method: 'POST',
+	            success: function(response) {
+	    	   		try {
+	    	   			if(response.responseText && response.responseText.length > 0) {
+	    	   				var pathjson = response.responseText.evalJSON();
+	    	   				var pathobj = pathjson["paths"];
+	    	   				for(var key in pathobj) {
+	    	   					if(key == pathid) {
+	    	   						var color = this.getDisplayColor(0);
+	    	   						var val = pathobj[key];
+		    	   		    		this.setNodeColors(key, color, val);
+	    	   					}
+	    	   				}
+	    	   				this.facade.raiseEvent({
+	    	   		            type: ORYX.CONFIG.EVENT_SIMULATION_PATH_SVG_GENERATED
+	    	   				});
+	    	   			} else {
+	    	   				Ext.MessageBox.minWidth = 200;
+	    	   				Ext.Msg.alert('Invalid Path data.');
+	    	   			}
+	    	   		} catch(e) {
+	    	   			Ext.MessageBox.minWidth = 200;
+	    	   			Ext.Msg.alert('Error finding Paths:\n' + e);
+	    	   		}
+	            }.bind(this),
+	            failure: function(){
+	            	Ext.Msg.alert('Error finding Paths.');
+	            },
+	            params: {
+	            	action: 'getpathinfo',
+	            	profile: ORYX.PROFILE,
+	            	json: ORYX.EDITOR.getSerializedJSON(),
+	            	ppdata: ORYX.PREPROCESSING,
+	            	sel: ""
+	            }
+	        });
+			
+			loadPathsMask.hide();
+		} else {
+			Ext.MessageBox.minWidth = 200;
+			Ext.Msg.alert('Unknown path id.');
+		}
 	},
 	findPaths: function() {
 		var loadPathsMask = new Ext.LoadMask(Ext.getBody(), {msg:'Calculating process paths'});

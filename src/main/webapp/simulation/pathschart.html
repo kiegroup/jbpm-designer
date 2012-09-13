@@ -69,6 +69,10 @@ function clearChart() {
 			return parent.ORYX.EDITOR.simulationPathId;
 		}
 		
+		function getPathSVG() {
+			return parent.ORYX.EDITOR.simulationPathSVG;
+		}
+		
 		function getToShowData() {
 			var pathData = parent.ORYX.EDITOR.simulationPathData;
 			var pathid = parent.ORYX.EDITOR.simulationPathId;
@@ -99,6 +103,7 @@ function clearChart() {
 		}
 		
 		function showPieChart() {
+			displayPathImage();
 			nv.addGraph(function() {
 				var width = 350,
 		            height = 300;
@@ -122,10 +127,15 @@ function clearChart() {
 		}
 		
 		function showTable() {
+			displayPathImage();
 			var tableSource = $("#tabletemplate").html();
 	    	var tableTempplate = Handlebars.compile(tableSource);
 	    	var data = getToShowData();
 	    	$("#chartcontent2").html(tableTempplate(data[0]));
+		}
+		
+		function displayPathImage() {
+			document.getElementById('chartcontent1').innerHTML = "<iframe id='processimageframe' src='/designer/simulation/pathimage.html' width='100%' height='300' scrolling='auto' frameBorder='0'></iframe>";
 		}
 </script>
 </body>

@@ -254,6 +254,7 @@ function clearChartForLine() {
 			var minArray = [],
 			    maxArray = [],
 			    avgArray = [];
+			var timeunit = "";
 			for (var i = 0; i < aggregationData.length; i++) {
 				var nextData = aggregationData[i];
 				var dataTimeSinceStart = nextData.timesincestart;
@@ -262,6 +263,7 @@ function clearChartForLine() {
 				maxArray.push({x: dataTimeSinceStart, y: dataValues[0].value});
 				minArray.push({x: dataTimeSinceStart, y: dataValues[1].value});
 				avgArray.push({x: dataTimeSinceStart, y: dataValues[2].value});
+				timeunit = nextData.timeunit;
 			}
 			
 			var chartData = [
@@ -285,10 +287,10 @@ function clearChartForLine() {
 			nv.addGraph(function() {  
 				 var chart = nv.models.lineChart();
 				 chart.xAxis
-				        .axisLabel('Simulation Time (s)')
+				        .axisLabel('Simulation Time (' + timeunit + ')')
 				        .tickFormat(d3.format(',r'));
 				 chart.yAxis
-				        .axisLabel('Execution Times (min)')
+				        .axisLabel('Execution Times (' + timeunit + ')')
 				        .tickFormat(d3.format('.02f'));
 				d3.select('#chart1')
 				       .datum(chartData)

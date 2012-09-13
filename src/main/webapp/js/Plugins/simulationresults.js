@@ -9,6 +9,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 		this.facade = facade;
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_SIMULATION_SHOW_RESULTS, this.showSimulationResults.bind(this));
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_SIMULATION_DISPLAY_GRAPH, this.showGraph.bind(this));
+		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_SIMULATION_PATH_SVG_GENERATED, this.pathSvgGenerated.bind(this));
 		this.resultsjson = "";
 	},
 	showSimulationResults: function(options) {
@@ -228,8 +229,18 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 		ORYX.EDITOR.simulationChartTitle = "Path Execution Info (" + pathid + ")";
 		ORYX.EDITOR.simulationPathData = pathobj;
 		ORYX.EDITOR.simulationPathId = pathid;
+		
+		this.facade.raiseEvent({
+	            type: ORYX.CONFIG.EVENT_SIMULATION_BUILD_PATH_SVG,
+	            pid: pathid
+	    });
+	},
+	pathSvgGenerated : function() {
+		ORYX.EDITOR.simulationPathSVG = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false));
 		Ext.getDom('simchartframe').src = ORYX.PATH + "simulation/pathschart.html";
+		this.facade.raiseEvent({
+            type: ORYX.CONFIG.EVENT_SIMULATION_CLEAR_PATH_SVG
+		});
 	}
-	
 	
 });

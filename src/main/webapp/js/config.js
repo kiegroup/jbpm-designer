@@ -254,6 +254,9 @@ ORYX.CONFIG.EVENT_NODEXML_SHOW = "nodexml.show";
 ORYX.CONFIG.EVENT_VOICE_COMMAND = "voice.command";
 ORYX.CONFIG.EVENT_SIMULATION_SHOW_RESULTS = "simulation.showresults";
 ORYX.CONFIG.EVENT_SIMULATION_DISPLAY_GRAPH = "simulation.displaygraph";
+ORYX.CONFIG.EVENT_SIMULATION_BUILD_PATH_SVG = "simulation.buildpathsvg";
+ORYX.CONFIG.EVENT_SIMULATION_CLEAR_PATH_SVG = "simulation.clearpathsvg";
+ORYX.CONFIG.EVENT_SIMULATION_PATH_SVG_GENERATED = "simulation.pathsvggenerated";
 
 // voice commands
 ORYX.CONFIG.VOICE_COMMAND_GENERATE_FORMS = "voice.command.generate.forms";

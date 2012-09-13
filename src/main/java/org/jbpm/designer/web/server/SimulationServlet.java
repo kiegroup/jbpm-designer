@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -348,7 +349,7 @@ public class SimulationServlet extends HttpServlet {
 				parentJSON.put("activityinstances", aggNumActivityInstancesJSONArray);
 				parentJSON.put("htsim", aggHTSimulationJSONArray);
 				parentJSON.put("tasksim", aggTaskSimulationJSONArray);
-				parentJSON.put("timeline", getTaskEventsFromAllEvents(null, allEvents));
+				parentJSON.put("timeline", getTaskEventsFromAllEvents(null, allEvents, intervalUnit));
 				// event aggregations
 				JSONArray aggEventProcessSimulationJSONArray = new JSONArray();
 				int c = 0;
@@ -358,6 +359,7 @@ public class SimulationServlet extends HttpServlet {
 					eventProcessSimKeys.put("id", aggProcessEve.getProcessId());
 					eventProcessSimKeys.put("name", aggProcessEve.getProcessName());
 					eventProcessSimKeys.put("timesincestart", this.eventAggregationsTimes.get(c));
+					eventProcessSimKeys.put("timeunit", intervalUnit);
 					JSONArray eventProcessSimValues = new JSONArray();
 					JSONObject obj1 = new JSONObject();
 					obj1.put("label", "Max Execution Time");
@@ -500,7 +502,7 @@ public class SimulationServlet extends HttpServlet {
 		}
 	}
 	
-	private JSONObject getTaskEventsFromAllEvents(AggregatedSimulationEvent event, List<SimulationEvent> allEvents) throws Exception {
+	private JSONObject getTaskEventsFromAllEvents(AggregatedSimulationEvent event, List<SimulationEvent> allEvents, String intervalUnit) throws Exception {
 		JSONObject allEventsObject = new JSONObject();
 		allEventsObject.put("headline", "Simulation Events");
 		allEventsObject.put("type","default");
@@ -513,18 +515,20 @@ public class SimulationServlet extends HttpServlet {
 					String seActivityId = getSingleEventActivityId(se);
 					String eventActivitytId = getAggregatedEventActivityId(event);
 					if(eventActivitytId.equals(seActivityId)) {
-						allEventsDataArray.put(getTimelineEventObject(se));
+						allEventsDataArray.put(getTimelineEventObject(se, intervalUnit));
 					}
 				} else {
-					allEventsDataArray.put(getTimelineEventObject(se));
+					allEventsDataArray.put(getTimelineEventObject(se, intervalUnit));
 				}
 			}
 		}
 		allEventsObject.put("date", allEventsDataArray);
+		// sort the time values
+		Collections.sort(this.eventAggregationsTimes);
 		return allEventsObject;
 	}
 	
-	private JSONObject getTimelineEventObject(SimulationEvent se) throws Exception{
+	private JSONObject getTimelineEventObject(SimulationEvent se, String intervalUnit) throws Exception{
 		JSONObject seObject = new JSONObject();
 		seObject.put("id", se.getUUID().toString());
 		seObject.put("startDate", getDateString(se.getStartTime()));
@@ -547,9 +551,22 @@ public class SimulationServlet extends HttpServlet {
 		
 		// add aggregated events as well
 		this.eventAggregations.add((AggregatedProcessSimulationEvent) (((GenericSimulationEvent) se).getAggregatedEvent()));
-		Interval interval = new Interval(this.simTime.getMillis(), se.getEndTime());
-		this.eventAggregationsTimes.add(interval.toDurationMillis() / 1000);
-			
+		Interval eventinterval = new Interval(this.simTime.getMillis(), se.getEndTime());
+		
+		long durationvalue = eventinterval.toDurationMillis();
+		if(intervalUnit.equals("seconds")) {
+			durationvalue = durationvalue / 1000;
+		} else if(intervalUnit.equals("minutes")) {
+			durationvalue = durationvalue / (1000*60);
+		} else if(intervalUnit.equals("hours")) {
+			durationvalue = durationvalue / (1000*60*60);
+		} else if(intervalUnit.equals("days")) {
+			durationvalue = durationvalue / (1000*60*60*24);
+		} else {
+			// default to milliseconds
+		}
+		
+		this.eventAggregationsTimes.add(durationvalue);
 		return seObject;
 	}
 	
