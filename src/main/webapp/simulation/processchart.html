@@ -285,7 +285,7 @@ function clearChartForLine() {
 			                 ];
 			
 			nv.addGraph(function() {  
-				 var chart = nv.models.lineChart();
+				 var chart = nv.models.lineWithFocusChart();
 				 chart.xAxis
 				        .axisLabel('Simulation Time (' + timeunit + ')')
 				        .tickFormat(d3.format(',r'));
