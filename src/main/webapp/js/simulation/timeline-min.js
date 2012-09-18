@@ -1,39 +1,3 @@
-/*!
-	TimelineJS
-	Version 1.65
-	Designed and built by Zach Wise at VéritéCo
-
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	http://www.gnu.org/licenses/
-	
-*/
-
-/*********************************************** 
-     Begin VMM.js 
-***********************************************/ 
-
-/*	VéritéCo JS Master
-	Version: 0.6
-	Date: June 19, 2012
-	Copyright 2012 VéritéCo unless part of TimelineJS, 
-	if part of TimelineJS then it inherits TimelineJS's license.
-	Designed and built by Zach Wise digitalartwork.net
-================================================== */
-
-
-/*	Simple JavaScript Inheritance
-	By John Resig http://ejohn.org/
-	MIT Licensed.
-================================================== */
 (function() {
 	var initializing = false,
 	fnTest = /xyz/.test(function() {
@@ -4254,6 +4218,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 		
 		this.setSlide = function(n) {
 			goToSlide(n);
+			displyChartForEvent(n);
 		};
 		
 		/* ON EVENT
