@@ -10016,7 +10016,7 @@
 					"type":"Choice",
 					"title":"ConditionType",
 					"value":"None",
-					"description":"Determine the typ of the flow object.",
+					"description":"Determine the type of the flow object.",
 					"description_ja":"フローオブジェクトのタイプを定義します。",
 					"readonly":true,
 					"optional":false,
