@@ -62,7 +62,7 @@ public class SimulationServlet extends HttpServlet {
 	private static final String ACTION_GETPATHINFO = "getpathinfo";
 	private static final String ACTION_RUNSIMULATION = "runsimulation";
 	private ServletConfig config;
-	private List<AggregatedProcessSimulationEvent> eventAggregations = new ArrayList<AggregatedProcessSimulationEvent>();
+	private List<SimulationEvent> eventAggregations = new ArrayList<SimulationEvent>();
 	private List<Long> eventAggregationsTimes = new ArrayList<Long>();
 	private Map<String, Integer> pathInfoMap = null;
 	private DateTime simTime = null;
@@ -156,7 +156,7 @@ public class SimulationServlet extends HttpServlet {
 					// default to milliseconds
 				}
 
-				this.eventAggregations = new ArrayList<AggregatedProcessSimulationEvent>();
+				this.eventAggregations = new ArrayList<SimulationEvent>();
 				this.simTime = new DateTime();
 				SimulationRepository repo = SimulationRunner.runSimulation(processId, processXML, Integer.parseInt(numInstances), intervalInt, true, "onevent.simulation.rules.drl");
 				WorkingMemorySimulationRepository wmRepo = (WorkingMemorySimulationRepository) repo;
@@ -353,7 +353,8 @@ public class SimulationServlet extends HttpServlet {
 				// event aggregations
 				JSONArray aggEventProcessSimulationJSONArray = new JSONArray();
 				int c = 0;
-				for(AggregatedProcessSimulationEvent aggProcessEve : this.eventAggregations) {
+				for(SimulationEvent simEve : this.eventAggregations) {
+					AggregatedProcessSimulationEvent aggProcessEve = (AggregatedProcessSimulationEvent) (((GenericSimulationEvent) simEve).getAggregatedEvent());
 					JSONObject eventProcessSimKeys = new JSONObject();
 					eventProcessSimKeys.put("key", "Process Avarages");
 					eventProcessSimKeys.put("id", aggProcessEve.getProcessId());
@@ -393,8 +394,6 @@ public class SimulationServlet extends HttpServlet {
 					}
 					parentJSON.put("pathsim", processPathsJSONArray);
 				}
-				
-				System.out.println("******* JSON: " + parentJSON.toString());
 				
 				PrintWriter pw = resp.getWriter();
 	    		resp.setContentType("text/json");
@@ -535,10 +534,13 @@ public class SimulationServlet extends HttpServlet {
 		seObject.put("endDate", getDateString(se.getEndTime()));
 		if(se instanceof EndSimulationEvent) {
 			seObject.put("headline", ((EndSimulationEvent) se).getActivityName());
+			seObject.put("activityid", ((EndSimulationEvent) se).getActivityId());
 		} else if(se instanceof ActivitySimulationEvent) {
 			seObject.put("headline", ((ActivitySimulationEvent) se).getActivityName());
+			seObject.put("activityid", ((ActivitySimulationEvent) se).getActivityId());
 		} else if(se instanceof HumanTaskActivitySimulationEvent) {
 			seObject.put("headline", ((HumanTaskActivitySimulationEvent) se).getActivityName());
+			seObject.put("activityid", ((HumanTaskActivitySimulationEvent) se).getActivityId());
 		}
 		seObject.put("text", "");
 		seObject.put("tag", "");
@@ -550,7 +552,7 @@ public class SimulationServlet extends HttpServlet {
 		seObject.put("asset", seAsset);
 		
 		// add aggregated events as well
-		this.eventAggregations.add((AggregatedProcessSimulationEvent) (((GenericSimulationEvent) se).getAggregatedEvent()));
+		this.eventAggregations.add(se);
 		Interval eventinterval = new Interval(this.simTime.getMillis(), se.getEndTime());
 		
 		long durationvalue = eventinterval.toDurationMillis();

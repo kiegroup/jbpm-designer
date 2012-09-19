@@ -4218,7 +4218,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 		
 		this.setSlide = function(n) {
 			goToSlide(n);
-			displyChartForEvent(n);
+			displayDataForEvent(n);
 		};
 		
 		/* ON EVENT
@@ -4283,7 +4283,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 			} else {
 				goToSlide(current_slide+1);
 				upDate();
-				displyChartForEvent(current_slide);
+				displayDataForEvent(current_slide);
 			}
 		}
 		
@@ -4293,7 +4293,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 			} else {
 				goToSlide(current_slide-1);
 				upDate();
-				displyChartForEvent(current_slide);
+				displayDataForEvent(current_slide);
 			}
 		}
 
@@ -4761,7 +4761,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 			reSize(false, true);
 			VMM.Lib.visible(navigation.prevBtn, false);
 			goToSlide(config.current_slide, "easeOutExpo", __duration, true, true);
-			displyChartForEvent(config.current_slide);
+			displayDataForEvent(config.current_slide);
 			_active = true;
 		};
 		

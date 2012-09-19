@@ -303,9 +303,16 @@ function clearChartForLine() {
 		}
 		
 		function showTimeline() {
-			document.getElementById('outterchart').innerHTML = "<iframe id='processevents' src='/designer/simulation/processevents.html' width='100%' height='500' scrolling='no' frameBorder='0'></iframe>";
-
+			var cont = "<div style='margin:0;padding:0;'> \
+				<div class='tlineswitch'><a href='#' onclick='document.getElementById(\"processevents\").contentWindow.switchDisplay(\"chart\"); return false;'>Chart</a> | <a href='#' onclick='document.getElementById(\"processevents\").contentWindow.switchDisplay(\"model\"); return false;'>Model</a></div> \
+				</div> \
+				<iframe id='processevents' name='' src='/designer/simulation/processevents.html' width='100%' height='500' scrolling='no' frameBorder='0'></iframe> \
+				";
+			
+			document.getElementById('outterchart').innerHTML = cont;
 		}
+		
+		// document.getElementById('iframeid').contentWindow.myFunc();
 </script>
 </body>
 </html>

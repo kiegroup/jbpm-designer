@@ -18,31 +18,73 @@
 <script>
 	var data = parent.getEventData();
 	var aggregatedData = parent.getEventAggregationData();
-	function clearChart() {
-		var cnt = "<svg id='chart' style='height:290px;width:400px'></svg>";
-		document.getElementById('chartcontent').innerHTML = cnt;
+	var currentEventNum = 0;
+	var displayType = "chart";
+	
+	parent.parent.ORYX.EDITOR._pluginFacade.registerOnEvent('simulation.showannotatedprocess', showModelData);
+	
+	function clearDisplay() {
+		if(displayType == "chart") {
+			var cnt = "<svg id='chart' style='height:290px;width:400px'></svg>";
+			document.getElementById('chartcontent').innerHTML = cnt;
+		} else if(displayType == "model") {
+			
+		}
 	}
-	function displyChartForEvent(eventNum) {
-		clearChart();
+	function displayChartForEvent(eventNum) {
+		clearDisplay();
 		if(eventNum) {
-		var datawrapper = [aggregatedData[eventNum-1]];
-		nv.addGraph(function() {
-			var chart = nv.models.discreteBarChart().x(function(d) {
-				return d.label
-			}).y(function(d) {
-				return d.value
-			}).staggerLabels(true)
-			.tooltips(true).showValues(true);
-			chart.yAxis.axisLabel('Time (min)')
-
-			d3.select('#chart').datum(datawrapper).transition().duration(500)
-					.call(chart);
-
-			nv.utils.windowResize(chart.update);
-
-			return chart;
-		}); 
+			currentEventNum = eventNum;
+			var datawrapper = [aggregatedData[eventNum-1]];
+			nv.addGraph(function() {
+				var chart = nv.models.discreteBarChart().x(function(d) {
+					return d.label
+				}).y(function(d) {
+					return d.value
+				}).staggerLabels(true)
+				.tooltips(true).showValues(true);
+				chart.yAxis.axisLabel('Time (min)')
+	
+				d3.select('#chart').datum(datawrapper).transition().duration(500)
+						.call(chart);
+	
+				nv.utils.windowResize(chart.update);
+	
+				return chart;
+			}); 
+		}
 	}
+	
+	function displayModelForEvent(eventNum) {
+		clearDisplay();
+		if(eventNum) {
+			currentEventNum = eventNum;
+			
+			
+			// TODO - HAVE TO GET THE EVENT ID FROM THE TIMELINE!!!!!!!!!!!!!!!!!!!
+			
+			
+			parent.parent.ORYX.EDITOR._pluginFacade.raiseEvent({
+	            type: 'simulation.annotateprocess',
+	            en: dataRaw[0].date[eventNum-1].activityid
+	    	});
+		}
+	}
+	
+	function showModelData() {
+	}
+	
+	function displayDataForEvent(eventNum) {
+		if(displayType == "chart") {
+			displayChartForEvent(eventNum);
+		} else if(displayType == "model") {
+			displayModelForEvent(eventNum)
+		}
+	}
+	
+	function switchDisplay(disp) {
+		displayType = disp;
+		displayDataForEvent(currentEventNum);
 	}
 	var timeline = new VMM.Timeline;
 	timeline.init(data);

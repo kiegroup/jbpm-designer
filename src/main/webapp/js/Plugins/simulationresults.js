@@ -10,6 +10,8 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_SIMULATION_SHOW_RESULTS, this.showSimulationResults.bind(this));
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_SIMULATION_DISPLAY_GRAPH, this.showGraph.bind(this));
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_SIMULATION_PATH_SVG_GENERATED, this.pathSvgGenerated.bind(this));
+		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_SIMULATION_ANNOTATE_PROCESS, this.annotateProcess.bind(this));
+		
 		this.resultsjson = "";
 	},
 	showSimulationResults: function(options) {
@@ -241,6 +243,14 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 		this.facade.raiseEvent({
             type: ORYX.CONFIG.EVENT_SIMULATION_CLEAR_PATH_SVG
 		});
+	},
+	annotateProcess : function(options) {
+		alert("annotating process: " + options.en);
+		ORYX.EDITOR.simulationModelSVG = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false)); // TODO FIX!
+		this.facade.raiseEvent({
+            type: ORYX.CONFIG.EVENT_SIMULATION_SHOW_ANNOTATED_PROCESS
+		});
+		
 	}
 	
 });

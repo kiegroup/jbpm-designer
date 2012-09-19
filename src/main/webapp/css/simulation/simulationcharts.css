@@ -147,3 +147,19 @@ div.innerchart p {color:#black;padding:10px;}
 	background: #d0dafd;
 	color: #339;
 }
+
+.tlineswitch {
+  margin:0;
+  padding:0;
+  float: right;
+  vertical-align:top;
+  text-align:center;
+  color:#A0A0A0;
+  font-family: Arial Black; 
+  font-size: 10px; 
+}
+
+.tlineswitch a, .tlineswitch a:link, .tlineswitch a:visited {
+	color: #A0A0A0;
+	text-decoration: none;
+}
