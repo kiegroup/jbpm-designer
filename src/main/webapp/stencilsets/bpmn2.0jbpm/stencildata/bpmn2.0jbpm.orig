@@ -10018,7 +10018,7 @@
 					"value":"None",
 					"description":"Determine the typ of the flow object.",
 					"description_ja":"フローオブジェクトのタイプを定義します。",
-					"readonly":false,
+					"readonly":true,
 					"optional":false,
 					"items": [
 						{
