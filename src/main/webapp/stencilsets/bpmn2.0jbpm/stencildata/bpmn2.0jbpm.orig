@@ -3361,7 +3361,7 @@
 			"description_ja" : "$workitemDefs.(k).explanationText$",
 			"view" : 			"activity/workitems/$workitemDefs.(k).name$.svg",
 			$if(workitemDefs.(k).icon)$
-				"icon" : 			"$workitemDefs.(k).icon$",
+				"icon" : 			"$workitemDefs.(k).iconEncoded$",
 			$else$
 				"icon" : 			"blank.gif",			
 			$endif$

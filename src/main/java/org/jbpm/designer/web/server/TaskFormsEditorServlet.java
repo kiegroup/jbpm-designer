@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.abdera.i18n.text.Sanitizer;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.jbpm.designer.web.profile.IDiagramProfile;
@@ -143,7 +142,6 @@ public class TaskFormsEditorServlet extends HttpServlet {
 		                + "/rest/packages/"+ URLEncoder.encode(packageName, "UTF-8") + "/assets/" + taskName + TASKFORM_NAME_EXTENSION
 		                + "/source/";
 				
-			
 				URL checkURL = new URL(taskFormURL);
 		        HttpURLConnection checkConnection = (HttpURLConnection) checkURL
 		                .openConnection();

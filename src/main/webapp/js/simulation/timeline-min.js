@@ -4218,7 +4218,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 		
 		this.setSlide = function(n) {
 			goToSlide(n);
-			displayDataForEvent(n);
+			displayDataForEvent(n, data[current_slide].activityid);
 		};
 		
 		/* ON EVENT
@@ -4283,7 +4283,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 			} else {
 				goToSlide(current_slide+1);
 				upDate();
-				displayDataForEvent(current_slide);
+				displayDataForEvent(current_slide, data[current_slide].activityid);
 			}
 		}
 		
@@ -4293,7 +4293,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 			} else {
 				goToSlide(current_slide-1);
 				upDate();
-				displayDataForEvent(current_slide);
+				displayDataForEvent(current_slide, data[current_slide].activityid);
 			}
 		}
 
@@ -4761,7 +4761,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 			reSize(false, true);
 			VMM.Lib.visible(navigation.prevBtn, false);
 			goToSlide(config.current_slide, "easeOutExpo", __duration, true, true);
-			displayDataForEvent(config.current_slide);
+			displayDataForEvent(config.current_slide, data[config.current_slide].activityid);
 			_active = true;
 		};
 		
@@ -6361,8 +6361,10 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 								_date.needs_slug = true;
 							}
 						}
-					
+						
+						//add new fields here
 						_date.id                = data.date[i].id;
+						_date.activityid        = data.date[i].activityid;
 						_date.title				= data.date[i].headline;
 						_date.headline			= data.date[i].headline;
 						_date.type				= data.date[i].type;
@@ -6374,6 +6376,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 						_date.tag				= data.date[i].tag;
 						_date.slug				= data.date[i].slug;
 						_date.uniqueid			= VMM.Util.unique_ID(7);
+					    
 						
 						_dates.push(_date);
 					} 

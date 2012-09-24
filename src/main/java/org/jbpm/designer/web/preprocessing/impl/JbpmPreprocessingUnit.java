@@ -112,6 +112,11 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         List<String> packageNames = findPackages(uuid, profile);
         String[] info = ServletUtil.findPackageAndAssetInfo(uuid, profile);
         
+        System.out.println("****************************************** INFO: " + info);
+        if(info != null) {
+        	System.out.println("*************** INFO SIZE: " + info.length);
+        }
+        
         setupFormWidgets(profile, req);
         setupDefaultIcons(info, profile);
         
@@ -228,6 +233,10 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                             "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/defaultservicenodeicon/binary/";
                 }
                 workDefinition.setIcon(icon);
+                InputStream iconStream = getImageInstream(icon, "GET", profile);
+                BASE64Encoder enc = new sun.misc.BASE64Encoder();
+                String iconEncoded = "data:image/png;base64," + enc.encode(IOUtils.toByteArray(iconStream));
+                workDefinition.setIconEncoded(URLEncoder.encode(iconEncoded, "UTF-8"));
                 workDefinition.setCustomEditor((String) workDefinitionMap.get("customEditor"));
                 Set<ParameterDefinition> parameters = new HashSet<ParameterDefinition>();
                 if(workDefinitionMap.get("parameters") != null) {
@@ -610,7 +619,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 		            System.out.println("created service node icon: " + createServiceNodeIconConnection.getResponseCode());
 				}
 			} catch (Exception e) {
-                e.printStackTrace();
+                _logger.error(e.getMessage());
 			}
     	} else {
     		System.out.println("Unable to set up default icons.");

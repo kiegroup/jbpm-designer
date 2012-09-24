@@ -167,36 +167,37 @@ public class ServletUtil {
                 break;
             }
         }
+        
         return pkgassetinfo;
     }
 	
 	public static InputStream getInputStreamForURL(String urlLocation,
             String requestMethod, IDiagramProfile profile) throws Exception {
-        URL url = new URL(urlLocation);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			URL url = new URL(urlLocation);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-        connection.setRequestMethod(requestMethod);
-        connection.setRequestProperty("Accept","text/html,application/xhtml+xml,application/xml,application/json,application/octet-stream,text/json,text/plain;q=0.9,*/*;q=0.8");
+			connection.setRequestMethod(requestMethod);
+			connection.setRequestProperty("Accept","text/html,application/xhtml+xml,application/xml,application/json,application/octet-stream,text/json,text/plain;q=0.9,*/*;q=0.8");
 
-        connection.setRequestProperty("charset", "UTF-8");
-        connection.setRequestProperty("Accept-Charset", "UTF-8");
-        connection.setReadTimeout(5 * 1000);
+			connection.setRequestProperty("charset", "UTF-8");
+			connection.setRequestProperty("Accept-Charset", "UTF-8");
+			connection.setReadTimeout(5 * 1000);
 
-        ServletUtil.applyAuth(profile, connection);
+			ServletUtil.applyAuth(profile, connection);
 
-        connection.connect();
+			connection.connect();
 
-        BufferedReader sreader = new BufferedReader(new InputStreamReader(
-                connection.getInputStream(), "UTF-8"));
-        StringBuilder stringBuilder = new StringBuilder();
+			BufferedReader sreader = new BufferedReader(new InputStreamReader(
+			        connection.getInputStream(), "UTF-8"));
+			StringBuilder stringBuilder = new StringBuilder();
 
-        String line = null;
-        while ((line = sreader.readLine()) != null) {
-            stringBuilder.append(line + "\n");
-        }
-
-        return new ByteArrayInputStream(stringBuilder.toString().getBytes(
-                "UTF-8"));
+			String line = null;
+			while ((line = sreader.readLine()) != null) {
+			    stringBuilder.append(line + "\n");
+			}
+			
+			return new ByteArrayInputStream(stringBuilder.toString().getBytes(
+			        "UTF-8"));
     }
 	
 	public static void applyAuth(IDiagramProfile profile, HttpURLConnection connection) {

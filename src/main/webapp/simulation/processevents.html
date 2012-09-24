@@ -19,6 +19,7 @@
 	var data = parent.getEventData();
 	var aggregatedData = parent.getEventAggregationData();
 	var currentEventNum = 0;
+	var currentEventId = "";
 	var displayType = "chart";
 	
 	parent.parent.ORYX.EDITOR._pluginFacade.registerOnEvent('simulation.showannotatedprocess', showModelData);
@@ -31,10 +32,11 @@
 			
 		}
 	}
-	function displayChartForEvent(eventNum) {
+	function displayChartForEvent(eventNum, eventId) {
 		clearDisplay();
 		if(eventNum) {
 			currentEventNum = eventNum;
+			currentEventId = eventId;
 			var datawrapper = [aggregatedData[eventNum-1]];
 			nv.addGraph(function() {
 				var chart = nv.models.discreteBarChart().x(function(d) {
@@ -55,18 +57,15 @@
 		}
 	}
 	
-	function displayModelForEvent(eventNum) {
+	function displayModelForEvent(eventNum,eventId) {
 		clearDisplay();
-		if(eventNum) {
+		if(eventNum && eventId) {
 			currentEventNum = eventNum;
-			
-			
-			// TODO - HAVE TO GET THE EVENT ID FROM THE TIMELINE!!!!!!!!!!!!!!!!!!!
-			
+			currentEventId = eventId;
 			
 			parent.parent.ORYX.EDITOR._pluginFacade.raiseEvent({
 	            type: 'simulation.annotateprocess',
-	            en: dataRaw[0].date[eventNum-1].activityid
+	            en: eventId
 	    	});
 		}
 	}
@@ -74,17 +73,17 @@
 	function showModelData() {
 	}
 	
-	function displayDataForEvent(eventNum) {
+	function displayDataForEvent(eventNum, eventId) {
 		if(displayType == "chart") {
-			displayChartForEvent(eventNum);
+			displayChartForEvent(eventNum,eventId);
 		} else if(displayType == "model") {
-			displayModelForEvent(eventNum)
+			displayModelForEvent(eventNum,eventId)
 		}
 	}
 	
 	function switchDisplay(disp) {
 		displayType = disp;
-		displayDataForEvent(currentEventNum);
+		displayDataForEvent(currentEventNum, currentEventId);
 	}
 	var timeline = new VMM.Timeline;
 	timeline.init(data);

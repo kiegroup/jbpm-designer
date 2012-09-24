@@ -194,7 +194,7 @@ ORYX.Core.StencilSet.Stencil = {
 
 			if (this._jsonStencil.icon.charAt(0) === '/') { 
 				// then do nothing
-			} else if (this._jsonStencil.icon.indexOf("://") === -1) {
+			} else if ( (this._jsonStencil.icon.indexOf("://") === -1) && ( this._jsonStencil.icon.indexOf("base64") === -1 )) {
 				this._jsonStencil.icon = this._source + "icons/" + this._jsonStencil.icon;
 			} else {
 				// leave as is
