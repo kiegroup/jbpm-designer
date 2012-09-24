@@ -112,11 +112,6 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         List<String> packageNames = findPackages(uuid, profile);
         String[] info = ServletUtil.findPackageAndAssetInfo(uuid, profile);
         
-        System.out.println("****************************************** INFO: " + info);
-        if(info != null) {
-        	System.out.println("*************** INFO SIZE: " + info.length);
-        }
-        
         setupFormWidgets(profile, req);
         setupDefaultIcons(info, profile);
         
