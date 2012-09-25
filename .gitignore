@@ -1,25 +1,11 @@
-# build directories
-/target
-/build
-/dist
+ipse, Netbeans and IntelliJ files
+/.*
+!.gitignore
+/nbproject
+/*.ipr
+/*.iws
+/*.iml
 
-# Macintosh files
-**/**/.DS_Store
+# Repository wide ignore mac DS_Store files
 .DS_Store
 
-# Other
-nbactions.xml
-/reports
-/src/main/webapp/jsc/*.js
-/src/main/webapp/repository
-
-# IDE/Eclipse settings
-/.project
-/.classpath
-/.settings
-/.externalToolBuilders
-
-
-#I think that this is where MANIFEST.MF should go according to maven specs. 
-#For now, I will ignore it. Esteban
-/src/main/webapp/META-INF/MANIFEST.MF
