@@ -126,6 +126,7 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
         String actionParam = req.getParameter("action");
         String preProcessingParam = req.getParameter("pp");
         if(actionParam != null && actionParam.equals("toXML")) {

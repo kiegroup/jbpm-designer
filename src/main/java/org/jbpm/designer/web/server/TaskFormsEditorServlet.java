@@ -52,14 +52,14 @@ public class TaskFormsEditorServlet extends HttpServlet {
 	     //String assetName = packageAssetInfo[1];
 	     
 	     if(action != null && action.equals(ACTION_LOAD)) {
-	    	 PrintWriter pw = resp.getWriter();
 	    	 resp.setContentType("text/html");
 	    	 resp.setCharacterEncoding("UTF-8");
+	    	 PrintWriter pw = resp.getWriter();
 	    	 pw.write(getTaskFormFromGuvnor(taskName, packageName, profile));
 	     } else if(action != null && action.equals(ACTION_SAVE)) {
-	    	 PrintWriter pw = resp.getWriter();
 	    	 resp.setContentType("text/plain");
 	    	 resp.setCharacterEncoding("UTF-8");
+	    	 PrintWriter pw = resp.getWriter();
 	    	 try {
 				pw.write(storeTaskFormToGuvnor(taskName, packageName, profile, taskFormValue));
 			} catch (Exception e) {
