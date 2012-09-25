@@ -110,6 +110,7 @@ public class TransformerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
         String formattedSvg = req.getParameter("fsvg");
         String rawSvg = req.getParameter("rsvg");
         String uuid = req.getParameter("uuid");

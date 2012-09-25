@@ -25,6 +25,7 @@ public class FileStoreServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
     	String fname = req.getParameter("fname");
     	String fext = req.getParameter("fext");
     	String data = req.getParameter("data");

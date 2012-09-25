@@ -45,7 +45,7 @@ public class TaskFormsServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        
+        req.setCharacterEncoding("UTF-8");
         String json = req.getParameter("json");
         String uuid = req.getParameter("uuid");
         String profileName = req.getParameter("profile");
@@ -85,7 +85,7 @@ public class TaskFormsServlet extends HttpServlet {
                 profile.getExternalLoadURLSubdomain().indexOf("/")));
             ServletOutputStream outstr = resp.getOutputStream();
             resp.setContentType("text/html");
-            outstr.write(resultsForm.toString().getBytes("ASCII"));
+            outstr.write(resultsForm.toString().getBytes("UTF-8"));
             outstr.flush();
             outstr.close();
         } catch (IOException e) {
@@ -160,7 +160,7 @@ public class TaskFormsServlet extends HttpServlet {
 			        "application/octet-stream");
 			createConnection.setRequestProperty("Accept",
 			        "application/atom+xml");
-			createConnection.setRequestProperty("Slug", taskForm.getId() + FORMTEMPLATE_FILE_EXTENSION);
+			createConnection.setRequestProperty("Slug", URLEncoder.encode(taskForm.getId() + FORMTEMPLATE_FILE_EXTENSION, "UTF-8"));
 			createConnection.setDoOutput(true);
 			
 			createConnection.getOutputStream ().write(taskForm.getOutput().getBytes("UTF-8"));
