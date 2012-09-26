@@ -550,7 +550,8 @@ ORYX.Plugins.View = {
 				            	uuid : ORYX.UUID,
 				            	pp: ORYX.PREPROCESSING,
 				            	bpmn2 : bpmn2string,
-				            	transformto : "bpmn2json"
+				            	transformto : "bpmn2json",
+                                uuid : ORYX.UUID
 				            }
 				        });
 					}.bind(this)
