@@ -26,10 +26,7 @@ import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -67,9 +64,14 @@ import org.eclipse.dd.dc.Bounds;
 import org.eclipse.dd.dc.DcFactory;
 import org.eclipse.dd.dc.Point;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.impl.EAttributeImpl;
+import org.eclipse.emf.ecore.impl.EStructuralFeatureImpl;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.ExtendedMetaData;
+import org.eclipse.emf.ecore.util.FeatureMap;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceFactoryImpl;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceImpl;
@@ -219,8 +221,50 @@ public class TransformerServlet extends HttpServlet {
         	String json = profile.createUnmarshaller().parseModel(fullXmlModel, profile, pp);
         	resp.setContentType("application/json");
         	resp.getWriter().print(json);
-        }  else if (transformto != null && transformto.equals(BPMN2_TO_JSON)) { 
-        	String json = profile.createUnmarshaller().parseModel(bpmn2in, profile, pp);
+        }  else if (transformto != null && transformto.equals(BPMN2_TO_JSON)) {
+            // fix package name if needed
+            String[] packageAssetName =  ServletUtil.findPackageAndAssetInfo(uuid, profile);
+            String packageName = packageAssetName[0];
+
+            Definitions def = ((JbpmProfileImpl) profile).getDefinitions(bpmn2in);
+            List<RootElement> rootElements =  def.getRootElements();
+            for(RootElement root : rootElements) {
+                if(root instanceof Process) {
+                    Process process = (Process) root;
+                    Iterator<FeatureMap.Entry> iter = process.getAnyAttribute().iterator();
+                    FeatureMap.Entry toDeleteFeature = null;
+                    while(iter.hasNext()) {
+                        FeatureMap.Entry entry = iter.next();
+                        if(entry.getEStructuralFeature().getName().equals("packageName")) {
+                            String pname = (String) entry.getValue();
+                            if(pname == null || !pname.equals(packageName)) {
+                                toDeleteFeature = entry;
+                            }
+                        }
+                    }
+                    if(toDeleteFeature != null) {
+                        process.getAnyAttribute().remove(toDeleteFeature);
+                        ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                        EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                                "http://www.jboss.org/drools", "packageName", false, false);
+                        EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                                packageName);
+                        process.getAnyAttribute().add(extensionEntry);
+                    }
+                }
+            }
+
+            // get the xml from Definitions
+            ResourceSet rSet = new ResourceSetImpl();
+            rSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("bpmn2", new JBPMBpmn2ResourceFactoryImpl());
+            JBPMBpmn2ResourceImpl bpmn2resource = (JBPMBpmn2ResourceImpl) rSet.createResource(URI.createURI("virtual.bpmn2"));
+            rSet.getResources().add(bpmn2resource);
+            bpmn2resource.getContents().add(def);
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            bpmn2resource.save(outputStream, new HashMap<Object, Object>());
+            String revisedXmlModel =  outputStream.toString();
+
+        	String json = profile.createUnmarshaller().parseModel(revisedXmlModel, profile, pp);
         	resp.setContentType("application/json");
 			resp.getWriter().print(json);
         } else if(transformto == null && respaction != null && respaction.equals(RESPACTION_SHOWEMBEDDABLE)) {
