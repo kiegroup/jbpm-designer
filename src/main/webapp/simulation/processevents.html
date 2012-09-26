@@ -78,10 +78,10 @@
 	
 	function showModelData(options) {
         if(document.getElementById('processeventmodelframe')) {
-           options.wind.setTimeout(function() {document.getElementById('processeventmodelframe').contentWindow.showModelImage(options.data);},1000);
+           options.wind.setTimeout(function() {document.getElementById('processeventmodelframe').contentWindow.showModelImage(options.data);},500);
         } else {
            clearDisplay();
-           options.wind.setTimeout(function() {document.getElementById('processeventmodelframe').contentWindow.showModelImage(options.data);},1000);
+           options.wind.setTimeout(function() {document.getElementById('processeventmodelframe').contentWindow.showModelImage(options.data);},500);
         }
 	}
 
