@@ -173,7 +173,7 @@ public class Bpmn2JsonMarshaller {
 	}
 
     public String marshall(Definitions def, String preProcessingData) throws IOException {
-    	//DroolsPackageImpl.init();
+    	DroolsPackageImpl.init();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         JsonFactory f = new JsonFactory();
         JsonGenerator generator = f.createJsonGenerator(baos, JsonEncoding.UTF8);

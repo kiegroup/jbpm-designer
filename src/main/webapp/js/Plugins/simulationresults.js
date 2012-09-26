@@ -245,12 +245,60 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 		});
 	},
 	annotateProcess : function(options) {
-		alert("annotating process: " + options.en);
-		ORYX.EDITOR.simulationModelSVG = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false)); // TODO FIX!
+        this.resetNodeColors();
+        this.annotateNode(options.en);
 		this.facade.raiseEvent({
-            type: ORYX.CONFIG.EVENT_SIMULATION_SHOW_ANNOTATED_PROCESS
+            type: ORYX.CONFIG.EVENT_SIMULATION_SHOW_ANNOTATED_PROCESS,
+            data: DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false)),
+            wind : window,
+            docu : document
 		});
-		
-	}
+        this.resetNodeColors();
+    },
+    resetNodeColors : function() {
+        ORYX.EDITOR._canvas.getChildren().each((function(child) {
+            this.setOriginalValues(child);
+        }).bind(this));
+    },
+    setOriginalValues : function(shape) {
+        if(shape instanceof ORYX.Core.Node || shape instanceof ORYX.Core.Edge) {
+            shape.setProperty("oryx-bordercolor", shape.properties["oryx-origbordercolor"]);
+            shape.setProperty("oryx-bgcolor", shape.properties["oryx-origbgcolor"]);
+        }
+        shape.refresh();
+        if(shape.getChildren().size() > 0) {
+            for (var i = 0; i < shape.getChildren().size(); i++) {
+                if(shape.getChildren()[i] instanceof ORYX.Core.Node || shape.getChildren()[i] instanceof ORYX.Core.Edge) {
+                    this.setOriginalValues(shape.getChildren()[i]);
+                }
+            }
+        }
+    },
+    annotateNode : function(nodeid) {
+        ORYX.EDITOR._canvas.getChildren().each((function(child) {
+            this.setNodeAnnotation(child, nodeid);
+        }).bind(this));
+    },
+    setNodeAnnotation : function(shape, nodeid) {
+        if(shape instanceof ORYX.Core.Node || shape instanceof ORYX.Core.Edge) {
+            if(shape.resourceId == nodeid) {
+                var color = this.getDisplayColor(1);
+                shape.setProperty("oryx-bordercolor", color);
+                shape.setProperty("oryx-bgcolor", color);
+            }
+        }
+        shape.refresh();
+        if(shape.getChildren().size() > 0) {
+            for (var i = 0; i < shape.getChildren().size(); i++) {
+                if(shape.getChildren()[i] instanceof ORYX.Core.Node || shape.getChildren()[i] instanceof ORYX.Core.Edge) {
+                    this.setNodeAnnotation(shape.getChildren()[i], nodeid);
+                }
+            }
+        }
+    },
+    getDisplayColor : function(cindex) {
+        var colors = ["#3399FF", "#FFCC33", "#FF99FF", "#6666CC", "#CCCCCC", "#66FF00", "#FFCCFF", "#0099CC", "#CC66FF", "#FFFF00", "#993300", "#0000CC", "#3300FF","#990000","#33CC00"];
+        return colors[cindex];
+    }
 	
 });

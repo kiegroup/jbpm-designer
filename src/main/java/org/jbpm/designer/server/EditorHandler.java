@@ -40,6 +40,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.designer.web.plugin.IDiagramPlugin;
 import org.jbpm.designer.web.plugin.IDiagramPluginService;
 import org.jbpm.designer.web.plugin.impl.PluginServiceImpl;
@@ -184,6 +185,7 @@ public class EditorHandler extends HttpServlet {
     
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
+        DroolsFactoryImpl.init();
         _profileService = ProfileServiceImpl.INSTANCE;
         _profileService.init(config.getServletContext());
         _pluginService = PluginServiceImpl.getInstance(

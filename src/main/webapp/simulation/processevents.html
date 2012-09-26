@@ -21,16 +21,22 @@
 	var currentEventNum = 0;
 	var currentEventId = "";
 	var displayType = "chart";
-	
+
 	parent.parent.ORYX.EDITOR._pluginFacade.registerOnEvent('simulation.showannotatedprocess', showModelData);
-	
+
+    function getModelSVG() {
+        return modelSVG;
+    }
+
 	function clearDisplay() {
+        var cnt = "";
 		if(displayType == "chart") {
-			var cnt = "<svg id='chart' style='height:290px;width:400px'></svg>";
+			cnt = "<svg id='chart' style='height:290px;width:400px'></svg>";
 			document.getElementById('chartcontent').innerHTML = cnt;
 		} else if(displayType == "model") {
-			
-		}
+            cnt = "<iframe id='processeventmodelframe' name='processeventmodelframe' src='/designer/simulation/modelimage.html' width='100%' height='300' scrolling='auto' frameBorder='0'></iframe>";
+            document.getElementById('chartcontent').innerHTML = cnt;
+        }
 	}
 	function displayChartForEvent(eventNum, eventId) {
 		clearDisplay();
@@ -70,9 +76,15 @@
 		}
 	}
 	
-	function showModelData() {
+	function showModelData(options) {
+        if(document.getElementById('processeventmodelframe')) {
+           options.wind.setTimeout(function() {document.getElementById('processeventmodelframe').contentWindow.showModelImage(options.data);},1000);
+        } else {
+           clearDisplay();
+           options.wind.setTimeout(function() {document.getElementById('processeventmodelframe').contentWindow.showModelImage(options.data);},1000);
+        }
 	}
-	
+
 	function displayDataForEvent(eventNum, eventId) {
 		if(displayType == "chart") {
 			displayChartForEvent(eventNum,eventId);
