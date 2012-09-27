@@ -79,11 +79,11 @@ ORYX.Plugins.Overlay = Clazz.extend({
 	 */
 	show: function( options ){
 		// Checks if all arguments are available
-		if( 	!options || 
+		if( 	!options ||
 				!options.shapes || !options.shapes instanceof Array ||
 				!options.id	|| !options.id instanceof String || options.id.length == 0) { 
-				
-					return
+
+            return
 					
 		}
 		
@@ -183,7 +183,16 @@ ORYX.Plugins.Overlay = Clazz.extend({
 						} else if(p == "SYNTAX_CHECKS") {
 							x = -25;
 							y = (b.height() + 15 / 2) - 15;
-						}
+						} else if( p == "SIMMODELMAX" ) {
+                            x = (b.width() / 2) - 10;
+                            y = b.height();
+                        } else if( p == "SIMMODELMIN" ) {
+                            x = (b.width() / 2) - 10;
+                            y = b.height() - 10;
+                        } else if( p == "SIMMODELAVG" ) {
+                            x = (b.width() / 2) - 10;
+                            y = b.height() - 20;
+                        }
 						else {
 							return
 						}

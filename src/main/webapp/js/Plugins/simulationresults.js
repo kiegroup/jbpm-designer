@@ -246,14 +246,32 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 	},
 	annotateProcess : function(options) {
         this.resetNodeColors();
-        this.annotateNode(options.en);
-		this.facade.raiseEvent({
-            type: ORYX.CONFIG.EVENT_SIMULATION_SHOW_ANNOTATED_PROCESS,
-            data: DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false)),
-            wind : window,
-            docu : document
-		});
-        this.resetNodeColors();
+        this.resetNodeOverlays();
+        this.annotateNode(options.nodeid, options.eventnum, options.data);
+        setTimeout(function() {
+            this.facade.raiseEvent({
+                type: ORYX.CONFIG.EVENT_SIMULATION_SHOW_ANNOTATED_PROCESS,
+                data: DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false)),
+                wind : window,
+                docu : document
+            });
+            this.resetNodeColors();
+            this.resetNodeOverlays();
+        }.bind(this), 500);
+    },
+    resetNodeOverlays : function() {
+        this.facade.raiseEvent({
+            type: ORYX.CONFIG.EVENT_OVERLAY_HIDE,
+            id: "simmodelmax"
+        });
+        this.facade.raiseEvent({
+            type: ORYX.CONFIG.EVENT_OVERLAY_HIDE,
+            id: "simmodelmin"
+        });
+        this.facade.raiseEvent({
+            type: ORYX.CONFIG.EVENT_OVERLAY_HIDE,
+            id: "simmodelavg"
+        });
     },
     resetNodeColors : function() {
         ORYX.EDITOR._canvas.getChildren().each((function(child) {
@@ -274,24 +292,71 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
             }
         }
     },
-    annotateNode : function(nodeid) {
+    annotateNode : function(nodeid, eventnum, data) {
         ORYX.EDITOR._canvas.getChildren().each((function(child) {
-            this.setNodeAnnotation(child, nodeid);
+            this.setNodeAnnotation(child, nodeid, eventnum, data);
         }).bind(this));
     },
-    setNodeAnnotation : function(shape, nodeid) {
+    setNodeAnnotation : function(shape, nodeid, eventnum, data) {
         if(shape instanceof ORYX.Core.Node || shape instanceof ORYX.Core.Edge) {
             if(shape.resourceId == nodeid) {
                 var color = this.getDisplayColor(1);
                 shape.setProperty("oryx-bordercolor", color);
                 shape.setProperty("oryx-bgcolor", color);
+                shape.refresh();
+
+                var dataMax = ORYX.Editor.graft("http://www.w3.org/2000/svg", null,
+                    ['text', {"id" : "modelmax",
+                        "style": "stroke-width:1;fill:red;font-family:arial;font-weight:bold",
+                        "font-size": 10}]
+                );
+                dataMax.textContent = "Max: " + data.values[0].value;
+
+                var dataMin = ORYX.Editor.graft("http://www.w3.org/2000/svg", null,
+                    ['text', {"id" : "modelmin",
+                        "style": "stroke-width:1;fill:blue;font-family:arial;font-weight:bold",
+                        "font-size": 10}]
+                );
+                dataMin.textContent = "Min: " + data.values[1].value;
+
+                var dataAvg = ORYX.Editor.graft("http://www.w3.org/2000/svg", null,
+                    ['text', {"id" : "modelavg",
+                        "style": "stroke-width:1;fill:green;font-family:arial;font-weight:bold",
+                        "font-size": 10}]
+                );
+                dataAvg.textContent = "Avg: " + data.values[2].value;
+
+                // overlays
+                this.facade.raiseEvent({
+                    type: ORYX.CONFIG.EVENT_OVERLAY_SHOW,
+                    id: "simmodelmax",
+                    shapes: [shape],
+                    node: dataMax,
+                    nodePosition: "SIMMODELMAX"
+                });
+
+                this.facade.raiseEvent({
+                    type: ORYX.CONFIG.EVENT_OVERLAY_SHOW,
+                    id: "simmodelmin",
+                    shapes: [shape],
+                    node: dataMin,
+                    nodePosition: "SIMMODELMIN"
+                });
+
+                this.facade.raiseEvent({
+                    type: ORYX.CONFIG.EVENT_OVERLAY_SHOW,
+                    id: "simmodelavg",
+                    shapes: [shape],
+                    node: dataAvg,
+                    nodePosition: "SIMMODELAVG"
+                });
+
             }
         }
-        shape.refresh();
         if(shape.getChildren().size() > 0) {
             for (var i = 0; i < shape.getChildren().size(); i++) {
                 if(shape.getChildren()[i] instanceof ORYX.Core.Node || shape.getChildren()[i] instanceof ORYX.Core.Edge) {
-                    this.setNodeAnnotation(shape.getChildren()[i], nodeid);
+                    this.setNodeAnnotation(shape.getChildren()[i], nodeid, eventnum, data);
                 }
             }
         }

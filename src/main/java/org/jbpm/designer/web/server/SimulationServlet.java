@@ -394,7 +394,7 @@ public class SimulationServlet extends HttpServlet {
 					}
 					parentJSON.put("pathsim", processPathsJSONArray);
 				}
-				
+
 				PrintWriter pw = resp.getWriter();
 	    		resp.setContentType("text/json");
 	    		resp.setCharacterEncoding("UTF-8");

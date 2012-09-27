@@ -68,10 +68,11 @@
 		if(eventNum && eventId) {
 			currentEventNum = eventNum;
 			currentEventId = eventId;
-			
 			parent.parent.ORYX.EDITOR._pluginFacade.raiseEvent({
 	            type: 'simulation.annotateprocess',
-	            en: eventId
+                nodeid: eventId,
+                eventnum: eventNum,
+                data: aggregatedData[eventNum-1]
 	    	});
 		}
 	}
