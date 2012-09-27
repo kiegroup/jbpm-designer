@@ -4069,7 +4069,65 @@ public class Bpmn2JsonUnmarshaller {
         		task.getDataInputAssociations().add(dia);
         	}
         }
-        
+
+        if(properties.get("locale") != null && properties.get("locale").length() > 0) {
+            if(task.getIoSpecification() == null) {
+                InputOutputSpecification iospec = Bpmn2Factory.eINSTANCE.createInputOutputSpecification();
+                task.setIoSpecification(iospec);
+            }
+            List<DataInput> dataInputs = task.getIoSpecification().getDataInputs();
+            boolean foundLocaleInput = false;
+            DataInput foundInput = null;
+            for(DataInput din : dataInputs) {
+                if(din.getName().equals("Locale")) {
+                    foundLocaleInput = true;
+                    foundInput = din;
+                    break;
+                }
+            }
+
+            if(!foundLocaleInput) {
+                DataInput d = Bpmn2Factory.eINSTANCE.createDataInput();
+                d.setId(task.getId() + "_" + "Locale" + "Input");
+                d.setName("Locale");
+                task.getIoSpecification().getDataInputs().add(d);
+                foundInput = d;
+
+                if(task.getIoSpecification().getInputSets() == null || task.getIoSpecification().getInputSets().size() < 1) {
+                    InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
+                    task.getIoSpecification().getInputSets().add(inset);
+                }
+                task.getIoSpecification().getInputSets().get(0).getDataInputRefs().add(d);
+            }
+
+            boolean foundLocaleAssociation = false;
+            List<DataInputAssociation> inputAssociations = task.getDataInputAssociations();
+            for(DataInputAssociation da : inputAssociations) {
+                if(da.getTargetRef().getId().equals(foundInput.getId())) {
+                    foundLocaleAssociation = true;
+                    ((FormalExpression) da.getAssignment().get(0).getFrom()).setBody(wrapInCDATABlock(properties.get("locale")));
+                }
+            }
+
+            if(!foundLocaleAssociation) {
+                DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
+                dia.setTargetRef(foundInput);
+
+                Assignment a = Bpmn2Factory.eINSTANCE.createAssignment();
+                FormalExpression localeFromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                localeFromExpression.setBody(wrapInCDATABlock(properties.get("locale")));
+
+                FormalExpression localeToExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                localeToExpression.setBody(foundInput.getId());
+
+                a.setFrom(localeFromExpression);
+                a.setTo(localeToExpression);
+
+                dia.getAssignment().add(a);
+                task.getDataInputAssociations().add(dia);
+            }
+        }
+
         // revisit data assignments
         if(task.getDataInputAssociations() != null) {
         	List<DataInputAssociation> dataInputAssociations = task.getDataInputAssociations();
@@ -4087,7 +4145,9 @@ public class Bpmn2JsonUnmarshaller {
         				toRemoveAssociations.add(dia);
         			} else if(targetInput.getName().equalsIgnoreCase("Content") && (properties.get("content") == null  || properties.get("content").length() == 0)) {
         				toRemoveAssociations.add(dia);
-        			}
+        			} else if(targetInput.getName().equalsIgnoreCase("Locale") && (properties.get("locale") == null  || properties.get("locale").length() == 0)) {
+                        toRemoveAssociations.add(dia);
+                    }
         		}
         	}
         	
@@ -4111,7 +4171,9 @@ public class Bpmn2JsonUnmarshaller {
     				toRemoveDataInputs.add(din);
     			} else if(din.getName().equalsIgnoreCase("Content") && (properties.get("content") == null  || properties.get("content").length() == 0)) {
     				toRemoveDataInputs.add(din);
-    			}
+    			}  else if(din.getName().equalsIgnoreCase("Locale") && (properties.get("locale") == null  || properties.get("locale").length() == 0)) {
+                    toRemoveDataInputs.add(din);
+                }
         	}
         }
         

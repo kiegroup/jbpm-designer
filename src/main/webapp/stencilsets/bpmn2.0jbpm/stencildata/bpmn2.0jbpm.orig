@@ -3136,6 +3136,16 @@
 					"optional":true,
 					"fortasktypes":"None|User"
 				},
+	            {
+    			    "id":"locale",
+    				"type":"String",
+    				"title":"Locale",
+    				"value":"",
+    				"description":"The task i18n locale",
+    				"readonly":false,
+    				"optional":true,
+    				"fortasktypes":"None|User"
+    			},
 				{
 					"id":"skippable",
 					"type":"Choice",
