@@ -1297,6 +1297,7 @@ public class Bpmn2JsonMarshaller {
         DataInput commentDataInput = null;
         DataInput contentDataInput = null;
         DataInput priorityDataInput = null;
+        DataInput localeDataInput = null;
         if(task.getIoSpecification() != null) {
             List<InputSet> inputSetList = task.getIoSpecification().getInputSets();
             StringBuilder dataInBuffer = new StringBuilder();
@@ -1325,6 +1326,9 @@ public class Bpmn2JsonMarshaller {
                     }
                     if(dataIn.getName() != null && dataIn.getName().equals("Priority")) {
                     	priorityDataInput = dataIn;
+                    }
+                    if(dataIn.getName() != null && dataIn.getName().equals("Locale")) {
+                        localeDataInput = dataIn;
                     }
                 }
             }
@@ -1407,7 +1411,8 @@ public class Bpmn2JsonMarshaller {
             		   rhsAssociation.equals("Comment") || 
             		   rhsAssociation.equals("Priority") ||
             		   rhsAssociation.equals("Content") ||
-            		   rhsAssociation.equals("TaskName")
+            		   rhsAssociation.equals("TaskName")  ||
+                       rhsAssociation.equals("Locale")
             		   )) {
             			String replacer = associationValue.replaceAll(",", "##");
             			associationBuff.append(rhsAssociation).append("=").append(replacer);
@@ -1438,6 +1443,11 @@ public class Bpmn2JsonMarshaller {
             						((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(priorityDataInput.getId())) {
             			properties.put("priority", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
             		}
+                    if (localeDataInput != null && datain.getAssignment().get(0).getTo() != null &&
+                            ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
+                            ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(localeDataInput.getId())) {
+                        properties.put("locale", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
+                    }
             	}
             } 
 //            else if(isBiDirectional) {
