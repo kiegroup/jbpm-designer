@@ -2971,7 +2971,7 @@
 					"id":"bgcolor",
 					"type":"Color",
 					"title":"BackgroundColor",
-					"value":"$colortheme.("Activities").bgColor$", 
+					"value":"$colortheme.("Activities").bgColor$",
 					"description":"",
 					"readonly":false,
 					"optional":false,
@@ -3272,7 +3272,7 @@
 							"title": "years",
 							"value": "year"
 						}
-					]    
+					]
 				},
 				{
 					"id":"distributiontype",
@@ -3305,7 +3305,7 @@
 							"title": "poisson",
 							"value": "poisson"
 						}
-					]    
+					]
 				},
 				{
 					"id":"quantity",
@@ -3725,7 +3725,99 @@
 			]
 		\},
 		}$
-		// end custom workitems 
+		// end custom workitems
+		// start patterns
+		/**
+         {
+            "type" : 			"node",
+            "id": 				"wp-parallelsplit",
+            "title" : 			"Parallel Split",
+            "groups" : 			["Patterns"],
+            "description" : 	"Parallel Split Pattern",
+            "description_ja" : "",
+            "view" : 			"activity/task.svg",
+            "icon" : 			"activity/task.png",
+            "propertyPackages" :[
+            ],
+            "roles" : 			[
+            ],
+            "properties": [
+            ]
+         },
+         {
+             "type" : 			"node",
+             "id": 				"wp-synchronization",
+             "title" : 			"Synchronization",
+             "groups" : 			["Patterns"],
+             "description" : 	"Synchronization Pattern",
+             "description_ja" : "",
+             "view" : 			"activity/task.svg",
+             "icon" : 			"activity/task.png",
+             "propertyPackages" :[
+             ],
+             "roles" : 			[
+                "all",
+                "fromtoall"
+             ],
+             "properties": [
+             ]
+          },
+          {
+             "type" : 			"node",
+             "id": 				"wp-exclusivechoice",
+             "title" : 			"Exclusive Choice",
+             "groups" : 			["Patterns"],
+             "description" : 	"Exclusive Choice Pattern",
+             "description_ja" : "",
+             "view" : 			"activity/task.svg",
+             "icon" : 			"activity/task.png",
+             "propertyPackages" :[
+             ],
+             "roles" : 			[
+                 "all",
+                 "fromtoall"
+             ],
+             "properties": [
+             ]
+          },
+          {
+             "type" : 			"node",
+             "id": 				"wp-simplemerge",
+             "title" : 			"Simple Merge",
+             "groups" : 			["Patterns"],
+             "description" : 	"Simple Merge",
+             "description_ja" : "",
+             "view" : 			"activity/task.svg",
+             "icon" : 			"activity/task.png",
+             "propertyPackages" :[
+             ],
+             "roles" : 			[
+                "all",
+                "fromtoall"
+             ],
+             "properties": [
+             ]
+          },
+          {
+             "type" : 			"node",
+             "id": 				"wp-implicittermination",
+             "title" : 			"Implicit Termination",
+             "groups" : 			["Patterns"],
+             "description" : 	"Implicit Termination Pattern",
+             "description_ja" : "",
+             "view" : 			"activity/task.svg",
+             "icon" : 			"activity/task.png",
+             "propertyPackages" :[
+             ],
+             "roles" : 			[
+                "all",
+                "fromtoall"
+             ],
+             "properties": [
+             ]
+          },
+        **/
+		// end patterns
 		{
 			"type" : 			"node",
 			"id" :				"ReusableSubprocess",
@@ -10777,11 +10869,12 @@
 					{
 						"from":"Subprocess",
 						"to":["IntermediateEventOnSubprocessBoundary"]
-					},
+					}
+					/** ,
 					{
 						"from":"ReusableSubprocess",
 						"to":["IntermediateEventOnSubprocessBoundary"]
-					}
+					}**/
 				]
 			},
 			{

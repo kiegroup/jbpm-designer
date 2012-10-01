@@ -222,6 +222,7 @@ public class Bpmn2JsonUnmarshaller {
                     _helpers.add(helper);
                 }
             } catch (InvalidSyntaxException e) {
+
             }
             
         }
@@ -238,6 +239,7 @@ public class Bpmn2JsonUnmarshaller {
     /**
      * Start unmarshalling using the parser.
      * @param parser
+     * @param preProcessingData
      * @return the root element of a bpmn2 document.
      * @throws JsonParseException
      * @throws IOException
@@ -1967,7 +1969,7 @@ public class Bpmn2JsonUnmarshaller {
     }
 
     protected void applyProperties(BaseElement baseElement, Map<String, String> properties) {
-        applyBaseElementProperties((BaseElement) baseElement, properties);
+        applyBaseElementProperties(baseElement, properties);
         if (baseElement instanceof SubProcess) {
             applySubProcessProperties((SubProcess) baseElement, properties);
         }
@@ -2068,7 +2070,7 @@ public class Bpmn2JsonUnmarshaller {
                 OnEntryScriptType onEntryScript = DroolsFactory.eINSTANCE.createOnEntryScriptType();
                 onEntryScript.setScript(wrapInCDATABlock(action));
                 
-                String scriptLanguage = "";
+                String scriptLanguage;
                 if(properties.get("script_language").equals("java")) {
                     scriptLanguage = "http://www.java.com/java";
                 } else if(properties.get("script_language").equals("mvel")) {
@@ -2095,7 +2097,7 @@ public class Bpmn2JsonUnmarshaller {
                 OnExitScriptType onExitScript = DroolsFactory.eINSTANCE.createOnExitScriptType();
                 onExitScript.setScript(wrapInCDATABlock(action));
                 
-                String scriptLanguage = "";
+                String scriptLanguage;
                 if(properties.get("script_language").equals("java")) {
                     scriptLanguage = "http://www.java.com/java";
                 } else if(properties.get("script_language").equals("mvel")) {
@@ -3042,7 +3044,7 @@ public class Bpmn2JsonUnmarshaller {
         }
         
         if(properties.get("script_language") != null && properties.get("script_language").length() > 0) {
-            String scriptLanguage = "";
+            String scriptLanguage;
             if(properties.get("script_language").equals("java")) {
                 scriptLanguage = "http://www.java.com/java";
             } else if(properties.get("script_language").equals("mvel")) {
@@ -3695,7 +3697,7 @@ public class Bpmn2JsonUnmarshaller {
                 OnExitScriptType onExitScript = DroolsFactory.eINSTANCE.createOnExitScriptType();
                 onExitScript.setScript(wrapInCDATABlock(action));
                 
-                String scriptLanguage = "";
+                String scriptLanguage;
                 if(properties.get("script_language").equals("java")) {
                     scriptLanguage = "http://www.java.com/java";
                 } else if(properties.get("script_language").equals("mvel")) {
@@ -3768,7 +3770,7 @@ public class Bpmn2JsonUnmarshaller {
             }
         }
         if(properties.get("script_language") != null && properties.get("script_language").length() > 0) {
-            String scriptLanguage = "";
+            String scriptLanguage;
             if(properties.get("script_language").equals("java")) {
                 scriptLanguage = "http://www.java.com/java";
             } else if(properties.get("script_language").equals("mvel")) {
@@ -4429,7 +4431,7 @@ public class Bpmn2JsonUnmarshaller {
 					else {
 						// Not 7 Bit use the unicode system
 						sb.append("&#");
-						sb.append(new Integer(ci).toString());
+						sb.append(Integer.toString(ci));
 						sb.append(';');
 					}
 				}

@@ -104,6 +104,11 @@
   <servlet-class>org.jbpm.designer.web.server.CalledElementServlet</servlet-class>
  </servlet>
  <servlet>
+  <display-name>StencilPatterns</display-name>
+  <servlet-name>StencilPatternsServlet</servlet-name>
+  <servlet-class>org.jbpm.designer.web.server.StencilPatternsServlet</servlet-class>
+</servlet>
+ <servlet>
   <display-name>JbpmServiceRepository</display-name>
   <servlet-name>JbpmServiceRepositoryServlet</servlet-name>
   <servlet-class>org.jbpm.designer.web.server.JbpmServiceRepositoryServlet</servlet-class>
@@ -202,6 +207,10 @@
  <servlet-mapping>
   <servlet-name>CalledElementServlet</servlet-name>
   <url-pattern>/calledelement</url-pattern>
+ </servlet-mapping>
+  <servlet-mapping>
+  <servlet-name>StencilPatternsServlet</servlet-name>
+  <url-pattern>/stencilpatterns</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
   <servlet-name>JbpmServiceRepositoryServlet</servlet-name>

@@ -35,6 +35,7 @@ ORYX.Plugins.ShapeRepository = {
 		this._currentParent;
 		this._canContain = undefined;
 		this._canAttach  = undefined;
+        this._patternData;
 
 		this.shapeList = new Ext.tree.TreeNode({
 			
@@ -85,7 +86,26 @@ ORYX.Plugins.ShapeRepository = {
             	uuid : ORYX.UUID
             }
         });
-		
+
+        Ext.Ajax.request({
+            url: ORYX.PATH + "stencilpatterns",
+            method: 'POST',
+            success: function(response) {
+                try {
+                    this._patternData = Ext.decode(response.responseText);
+                } catch(e) {
+                    ORYX.Log.error("Failed to retrieve Stencil Patterns Data :\n" + e);
+                }
+            }.createDelegate(this),
+            failure: function(){
+                ORYX.Log.error("Failed to retrieve Stencil Patterns Data");
+            },
+            params: {
+                profile: ORYX.PROFILE,
+                uuid : ORYX.UUID
+            }
+        });
+
 		// Create a Drag-Zone for Drag'n'Drop
 		var DragZone = new Ext.dd.DragZone(this.shapeList.getUI().getEl(), {shadow: !Ext.isMac});
 		DragZone.afterDragDrop = this.drop.bind(this, DragZone);
@@ -94,9 +114,7 @@ ORYX.Plugins.ShapeRepository = {
 		
 		// Load all Stencilssets
 		this.setStencilSets();
-		
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_STENCIL_SET_LOADED, this.setStencilSets.bind(this));
-
 	},
 	
 	
@@ -348,10 +366,35 @@ ORYX.Plugins.ShapeRepository = {
 				
 			}
 		});
-							
+
+        var patternsCommandClass = ORYX.Core.Command.extend({
+            construct: function(option, currentParent, canAttach, position, facade, patternId){
+                this.option = option;
+                this.currentParent = currentParent;
+                this.canAttach = canAttach;
+                this.position = position;
+                this.facade = facade;
+                this.selection = this.facade.getSelection();
+                this.patternId = patternId;
+                this.shapes;
+                this.parent;
+            },
+            execute: function(){
+
+            },
+            rollback: function(){
+            }
+        });
+
 		var position = this.facade.eventCoordinates( event.browserEvent );
-		var command = new commandClass(option, this._currentParent, this._canAttach, position, this.facade);
-		this.facade.executeCommands([command]);
+        var typeParts = option.type.split("#");
+        if(typeParts[1].startsWith("wp-")) {
+            var command = new patternsCommandClass(option, this._currentParent, this._canAttach, position, this.facade, typeParts[1]);
+            this.facade.executeCommands([command]);
+        } else {
+            var command = new commandClass(option, this._currentParent, this._canAttach, position, this.facade);
+            this.facade.executeCommands([command]);
+        }
 		this._currentParent = undefined;
 	},
 

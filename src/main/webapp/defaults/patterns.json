@@ -1,0 +1,22 @@
+[
+    {
+        "id": "wp-parallelsplit",
+        "name" : "b"
+    },
+    {
+        "id": "wp-synchronization",
+        "name" : "b"
+    },
+    {
+        "id": "wp-exclusivechoice",
+        "name" : "b"
+    },
+    {
+        "id": "wp-simplemerge",
+        "name" : "b"
+    },
+    {
+        "id": "wp-implicittermination",
+        "name" : "b"
+    }
+]    
