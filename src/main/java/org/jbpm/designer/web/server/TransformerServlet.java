@@ -471,6 +471,7 @@ public class TransformerServlet extends HttpServlet {
 
     private void guvnorStore(String packageName, String assetName,
             IDiagramProfile profile, String formattedSvg, String rawSvg, String transformto) {
+        // GUVNOR TransformerServlet
         try {
             String assetExt = "";
             String assetFileExt = "";

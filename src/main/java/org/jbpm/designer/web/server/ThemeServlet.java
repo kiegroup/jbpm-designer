@@ -64,6 +64,7 @@ public class ThemeServlet extends HttpServlet {
 	}
 	
 	private String getThemeJson(IDiagramProfile profile, ServletContext servletContext) {
+        // GUVNOR ThemeServlet
 		String retStr = "";
 		String themesURL = ExternalInfo.getExternalProtocol(profile)
                 + "://"

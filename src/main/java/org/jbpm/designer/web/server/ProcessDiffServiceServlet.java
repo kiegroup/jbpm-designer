@@ -82,6 +82,7 @@ public class ProcessDiffServiceServlet extends HttpServlet {
 	}
 
 	private String getAssetVerionSource(String packageName, String assetName, String versionNum, IDiagramProfile profile) {
+        // GUVNOR ProcessDiffServiceServlet
 		try {
 			String versionURL = ExternalInfo.getExternalProtocol(profile)
 					+ "://"

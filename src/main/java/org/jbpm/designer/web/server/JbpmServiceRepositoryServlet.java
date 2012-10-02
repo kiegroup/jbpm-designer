@@ -161,6 +161,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 						// install wid and icon to guvnor
 						List<String> packageNames = findPackages(uuid, profile);
 						
+				          // GUVNOR JbpmServiceRepositoryServlet
 						for(String nextPackage : packageNames) {
 							String packageAssetURL = ExternalInfo.getExternalProtocol(profile) + "://" + ExternalInfo.getExternalHost(profile) +
 									"/" + profile.getExternalLoadURLSubdomain().substring(0, profile.getExternalLoadURLSubdomain().indexOf("/")) +
@@ -187,6 +188,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 								_logger.error(e.getMessage());
 							} 
 						}
+                        // GUVNOR JbpmServiceRepositoryServlet
 						if(gotPackage) {
 							String widURL = ExternalInfo.getExternalProtocol(profile)
 						               + "://"
@@ -321,6 +323,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 	}
 
 	private List<String> findPackages(String uuid, IDiagramProfile profile) {
+        // GUVNOR JbpmServiceRepositoryServlet
 		List<String> packages = new ArrayList<String>();
 		String packagesURL = ExternalInfo.getExternalProtocol(profile) + "://" + ExternalInfo.getExternalHost(profile) +
 				"/" + profile.getExternalLoadURLSubdomain().substring(0, profile.getExternalLoadURLSubdomain().indexOf("/")) +

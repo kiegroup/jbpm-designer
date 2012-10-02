@@ -79,6 +79,7 @@ public class DictionaryServlet extends HttpServlet {
 	}
 	
 	private String getFromGuvnor(String uuid, IDiagramProfile profile) {
+        // GUVNOR DictionaryServlet
 		String dictionaryURL = ExternalInfo.getExternalProtocol(profile)
                 + "://"
                 + ExternalInfo.getExternalHost(profile)

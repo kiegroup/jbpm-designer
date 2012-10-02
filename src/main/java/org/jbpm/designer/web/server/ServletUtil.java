@@ -52,6 +52,7 @@ public class ServletUtil {
     }
 	
 	public static List<String> getFormWidgetList(IDiagramProfile profile) {
+        // GUVNOR ServletUtil
 		List<String> widgets = new ArrayList<String>();
 		String globalAreaURL = ExternalInfo.getExternalProtocol(profile)
                 + "://"
@@ -96,6 +97,7 @@ public class ServletUtil {
 	
 	public static String[] findPackageAndAssetInfo(String uuid,
             IDiagramProfile profile) {
+        // GUVNOR ServletUtil
         List<String> packages = new ArrayList<String>();
         String packagesURL = ExternalInfo.getExternalProtocol(profile)
                 + "://"
@@ -212,6 +214,7 @@ public class ServletUtil {
 	
 	public static boolean assetExistsInGuvnor(String packageName, String assetName, IDiagramProfile profile) {
     	try {	
+            // GUVNOR ServletUtil
     		String formURL = ExternalInfo.getExternalProtocol(profile)
     	        + "://"
     	        + ExternalInfo.getExternalHost(profile)
@@ -264,6 +267,7 @@ public class ServletUtil {
 	}
 	
 	public static List<String> getPackageNamesFromGuvnor(IDiagramProfile profile) {
+        // GUVNOR ServletUtil
         List<String> packages = new ArrayList<String>();
         String packagesURL = ExternalInfo.getExternalProtocol(profile)
                 + "://"
@@ -294,6 +298,7 @@ public class ServletUtil {
 	
 	public static List<String> getAllProcessesInPackage(String pkgName, IDiagramProfile profile) {
         List<String> processes = new ArrayList<String>();
+        // GUVNOR ServletUtil
         try {
 	        String assetsURL = ExternalInfo.getExternalProtocol(profile)
 	                + "://"
@@ -339,6 +344,7 @@ public class ServletUtil {
     }
 	
 	public static String getProcessImagePath(String packageName, String processid, IDiagramProfile profile) {
+        // GUVNOR ServletUtil
 		try {
 			return ExternalInfo.getExternalProtocol(profile)
 			        + "://"
@@ -355,6 +361,7 @@ public class ServletUtil {
 	}
 	
 	public static String getProcessImageSourcePath(String packageName, String processid, IDiagramProfile profile) {
+        // GUVNOR ServletUtil
 		return ExternalInfo.getExternalProtocol(profile)
                 + "://"
                 + ExternalInfo.getExternalHost(profile)
@@ -366,6 +373,7 @@ public class ServletUtil {
 	}
 	
 	public static String getProcessSourceContent(String packageName, String assetName, IDiagramProfile profile) {
+        // GUVNOR ServletUtil
 		try {	
 			String assetSourceURL = ExternalInfo.getExternalProtocol(profile)
 	                + "://"

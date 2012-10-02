@@ -89,6 +89,7 @@ public class ProcessInfoServlet extends HttpServlet {
 		infoMap.put("Comment", "");
 		infoMap.put("Version", "");
 		
+        // GUVNOR ProcessInfoServlet
 		String assetInfoURL = ExternalInfo.getExternalProtocol(profile)
                 + "://"
                 + ExternalInfo.getExternalHost(profile)

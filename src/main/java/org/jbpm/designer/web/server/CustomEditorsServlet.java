@@ -47,6 +47,7 @@ public class CustomEditorsServlet extends HttpServlet {
 	}
 	
 	private String getCustomEditorsJSON(IDiagramProfile profile, ServletContext servletContext) {
+        // GUVNOR CustomEditorsServlet
 		String retStr = "";
 		String customEditorsURL = ExternalInfo.getExternalProtocol(profile)
                 + "://"

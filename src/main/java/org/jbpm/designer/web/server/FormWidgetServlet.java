@@ -56,6 +56,7 @@ public class FormWidgetServlet extends HttpServlet {
 			resp.setContentType("application/json");
 			resp.getWriter().write(jsonObject.toString());
 		} else if(action != null && action.equals("getwidgetsource")) {
+	        // GUVNOR FormWidgetServlet
 			String widgetSourceURL = ExternalInfo.getExternalProtocol(profile)
 					+ "://"
 	                + ExternalInfo.getExternalHost(profile)
