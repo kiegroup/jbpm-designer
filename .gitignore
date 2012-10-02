@@ -1,4 +1,4 @@
-Eclipse, Netbeans and IntelliJ files
+# Eclipse, Netbeans and IntelliJ files
 /.*
 !.gitignore
 /nbproject
@@ -9,3 +9,11 @@ Eclipse, Netbeans and IntelliJ files
 # Repository wide ignore mac DS_Store files
 .DS_Store
 
+# IDE generated files
+/target/
+/bin/
+
+# Arquillian tests
+/derby.log
+/repository.xml
+/repository
