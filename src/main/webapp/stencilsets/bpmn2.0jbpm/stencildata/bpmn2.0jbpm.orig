@@ -3736,7 +3736,7 @@
                "description" : 	    "$patternData.(k).description$",
                "description_ja" : "",
                "view" : 			"activity/task.svg",
-               "icon" : 			"activity/task.png",
+               "icon" : 			"patterns/pattern.png",
                "propertyPackages" :[
                ],
                "roles" : [
