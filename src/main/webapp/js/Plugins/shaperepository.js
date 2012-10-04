@@ -367,30 +367,15 @@ ORYX.Plugins.ShapeRepository = {
 			}
 		});
 
-        var patternsCommandClass = ORYX.Core.Command.extend({
-            construct: function(option, currentParent, canAttach, position, facade, patternId){
-                this.option = option;
-                this.currentParent = currentParent;
-                this.canAttach = canAttach;
-                this.position = position;
-                this.facade = facade;
-                this.selection = this.facade.getSelection();
-                this.patternId = patternId;
-                this.shapes;
-                this.parent;
-            },
-            execute: function(){
-
-            },
-            rollback: function(){
-            }
-        });
-
 		var position = this.facade.eventCoordinates( event.browserEvent );
         var typeParts = option.type.split("#");
         if(typeParts[1].startsWith("wp-")) {
-            var command = new patternsCommandClass(option, this._currentParent, this._canAttach, position, this.facade, typeParts[1]);
-            this.facade.executeCommands([command]);
+            this.facade.raiseEvent({
+                type: ORYX.CONFIG.CREATE_PATTERN,
+                pid: typeParts[1],
+                pdata: this._patternData,
+                pos: position
+            });
         } else {
             var command = new commandClass(option, this._currentParent, this._canAttach, position, this.facade);
             this.facade.executeCommands([command]);

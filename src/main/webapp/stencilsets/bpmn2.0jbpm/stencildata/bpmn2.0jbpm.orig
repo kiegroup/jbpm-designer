@@ -3727,7 +3727,6 @@
 		}$
 		// end custom workitems
 		// start patterns
-		/**
          {
             "type" : 			"node",
             "id": 				"wp-parallelsplit",
@@ -3739,11 +3738,31 @@
             "icon" : 			"activity/task.png",
             "propertyPackages" :[
             ],
-            "roles" : 			[
+            "roles" : [
+              "all",
+              "fromtoall"
             ],
             "properties": [
             ]
          },
+         {
+             "type" : 			"node",
+             "id": 				"wp-synchronizingmerge",
+             "title" : 			"Synchronizing Merge",
+             "groups" : 			["Patterns"],
+             "description" : 	"Synchronizing Merge Pattern",
+             "description_ja" : "",
+             "view" : 			"activity/task.svg",
+             "icon" : 			"activity/task.png",
+             "propertyPackages" :[
+             ],
+             "roles" : [
+               "all",
+               "fromtoall"
+             ],
+             "properties": [
+             ]
+          },
          {
              "type" : 			"node",
              "id": 				"wp-synchronization",
@@ -3816,7 +3835,6 @@
              "properties": [
              ]
           },
-        **/
 		// end patterns
 		{
 			"type" : 			"node",

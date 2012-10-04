@@ -884,12 +884,13 @@ ORYX.Editor = {
 				type		: ORYX.CONFIG.EVENT_EXECUTE_COMMANDS,
 				commands	: commands
 			});
-			
+
+            var ret;
 			// Execute every command
 			commands.each(function(command){
-				command.execute();
+				ret = command.execute();
 			})
-			
+		    return ret;
 		}
 	},
 	
@@ -1479,6 +1480,7 @@ ORYX.Editor = {
 		var sset = ORYX.Core.StencilSet.stencilSet(option.namespace);
 
 		// Create an New Shape, dependents on an Edge or a Node
+
 		if(sset.stencil(shapetype).type() == "node") {
 			newShapeObject = new ORYX.Core.Node({'eventHandlerCallback':this.handleEvents.bind(this)}, sset.stencil(shapetype))
 		} else {
@@ -1507,24 +1509,19 @@ ORYX.Editor = {
 		var con;
 		// If there is create a shape and in the argument there is given an ConnectingType and is instance of an edge
 		if(option.connectingType && option.connectedShape && !(newShapeObject instanceof ORYX.Core.Edge)) {
-
 			// there will be create a new Edge
 			con = new ORYX.Core.Edge({'eventHandlerCallback':this.handleEvents.bind(this)}, sset.stencil(option.connectingType));
-			
 			// And both endings dockers will be referenced to the both shapes
 			con.dockers.first().setDockedShape(option.connectedShape);
-			
-			var magnet = option.connectedShape.getDefaultMagnet()
+			var magnet = option.connectedShape.getDefaultMagnet();
 			var cPoint = magnet ? magnet.bounds.center() : option.connectedShape.bounds.midPoint();
 			con.dockers.first().setReferencePoint( cPoint );
 			con.dockers.last().setDockedShape(newShapeObject);
-			con.dockers.last().setReferencePoint(newShapeObject.getDefaultMagnet().bounds.center());		
-			
+			con.dockers.last().setReferencePoint(newShapeObject.getDefaultMagnet().bounds.center());
 			// The Edge will be added to the canvas and be updated
 			canvas.add(con);	
 			//con.update();
-			
-		} 
+		}
 		
 		// Move the new Shape to the position
 		if(newShapeObject instanceof ORYX.Core.Edge && option.connectedShape) {
