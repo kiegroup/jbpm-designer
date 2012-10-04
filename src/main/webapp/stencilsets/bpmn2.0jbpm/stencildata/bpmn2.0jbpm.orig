@@ -3727,114 +3727,26 @@
 		}$
 		// end custom workitems
 		// start patterns
-         {
-            "type" : 			"node",
-            "id": 				"wp-parallelsplit",
-            "title" : 			"Parallel Split",
-            "groups" : 			["Patterns"],
-            "description" : 	"Parallel Split Pattern",
-            "description_ja" : "",
-            "view" : 			"activity/task.svg",
-            "icon" : 			"activity/task.png",
-            "propertyPackages" :[
-            ],
-            "roles" : [
-              "all",
-              "fromtoall"
-            ],
-            "properties": [
-            ]
-         },
-         {
-             "type" : 			"node",
-             "id": 				"wp-synchronizingmerge",
-             "title" : 			"Synchronizing Merge",
-             "groups" : 			["Patterns"],
-             "description" : 	"Synchronizing Merge Pattern",
-             "description_ja" : "",
-             "view" : 			"activity/task.svg",
-             "icon" : 			"activity/task.png",
-             "propertyPackages" :[
-             ],
-             "roles" : [
-               "all",
-               "fromtoall"
-             ],
-             "properties": [
-             ]
-          },
-         {
-             "type" : 			"node",
-             "id": 				"wp-synchronization",
-             "title" : 			"Synchronization",
-             "groups" : 			["Patterns"],
-             "description" : 	"Synchronization Pattern",
-             "description_ja" : "",
-             "view" : 			"activity/task.svg",
-             "icon" : 			"activity/task.png",
-             "propertyPackages" :[
-             ],
-             "roles" : 			[
-                "all",
-                "fromtoall"
-             ],
-             "properties": [
-             ]
-          },
-          {
-             "type" : 			"node",
-             "id": 				"wp-exclusivechoice",
-             "title" : 			"Exclusive Choice",
-             "groups" : 			["Patterns"],
-             "description" : 	"Exclusive Choice Pattern",
-             "description_ja" : "",
-             "view" : 			"activity/task.svg",
-             "icon" : 			"activity/task.png",
-             "propertyPackages" :[
-             ],
-             "roles" : 			[
+		$patternData.keys:{k|
+           \{
+               "type" : 			"node",
+               "id": 				"$patternData.(k).id$",
+               "title" : 			"$patternData.(k).name$",
+               "groups" : 			["Patterns"],
+               "description" : 	    "$patternData.(k).description$",
+               "description_ja" : "",
+               "view" : 			"activity/task.svg",
+               "icon" : 			"activity/task.png",
+               "propertyPackages" :[
+               ],
+               "roles" : [
                  "all",
                  "fromtoall"
-             ],
-             "properties": [
-             ]
-          },
-          {
-             "type" : 			"node",
-             "id": 				"wp-simplemerge",
-             "title" : 			"Simple Merge",
-             "groups" : 			["Patterns"],
-             "description" : 	"Simple Merge",
-             "description_ja" : "",
-             "view" : 			"activity/task.svg",
-             "icon" : 			"activity/task.png",
-             "propertyPackages" :[
-             ],
-             "roles" : 			[
-                "all",
-                "fromtoall"
-             ],
-             "properties": [
-             ]
-          },
-          {
-             "type" : 			"node",
-             "id": 				"wp-implicittermination",
-             "title" : 			"Implicit Termination",
-             "groups" : 			["Patterns"],
-             "description" : 	"Implicit Termination Pattern",
-             "description_ja" : "",
-             "view" : 			"activity/task.svg",
-             "icon" : 			"activity/task.png",
-             "propertyPackages" :[
-             ],
-             "roles" : 			[
-                "all",
-                "fromtoall"
-             ],
-             "properties": [
-             ]
-          },
+               ],
+               "properties": [
+               ]
+            \},
+		}$
 		// end patterns
 		{
 			"type" : 			"node",

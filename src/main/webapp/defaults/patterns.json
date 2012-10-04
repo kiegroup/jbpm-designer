@@ -2,6 +2,7 @@
     {
         "id": "wp-parallelsplit",
         "name": "Parallel Split",
+        "description" : "Parallel Split Pattern",
         "elements" : [
             {
                 "id": "1",
@@ -48,6 +49,7 @@
     {
         "id": "wp-exclusivechoice",
         "name": "Exclusive Choice",
+        "description" : "Exclusive Choice Pattern",
         "elements" : [
             {
                 "id": "1",
@@ -104,6 +106,7 @@
     {
         "id": "wp-synchronization",
         "name": "Synchronization",
+        "description" : "Synchronization Pattern",
         "elements" : [
             {
                 "id": "1",
@@ -150,6 +153,7 @@
     {
         "id": "wp-implicittermination",
         "name": "Implicit Termination",
+        "description" : "Implicit Termination Pattern",
         "elements" : [
             {
                 "id": "1",
@@ -226,6 +230,7 @@
     {
         "id": "wp-simplemerge",
         "name": "Simple Merge",
+        "description" : "Simple Merge Pattern",
         "elements" : [
             {
                 "id": "1",
@@ -282,6 +287,7 @@
     {
         "id": "wp-synchronizingmerge",
         "name": "Synchronizing Merge",
+        "description" : "Synchronizing Merge Pattern",
         "elements" : [
             {
                 "id": "1",

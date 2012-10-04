@@ -40,6 +40,7 @@ import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.impl.ExternalInfo;
 import org.jbpm.designer.web.server.ServletUtil;
 import org.jbpm.process.workitem.WorkDefinitionImpl;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.drools.process.core.datatype.DataType;
 import org.mvel2.MVEL;
@@ -78,6 +79,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     private String themeInfo;
     private String formWidgetsDir;
     private String customEditorsInfo;
+    private String patternsData;
     
     public JbpmPreprocessingUnit(ServletContext servletContext) {
         stencilPath = servletContext.getRealPath("/" + STENCILSET_PATH);
@@ -92,6 +94,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         themeInfo = servletContext.getRealPath("/defaults/themes.json");
         formWidgetsDir = servletContext.getRealPath("/defaults/formwidgets");
         customEditorsInfo = servletContext.getRealPath("/defaults/customeditors.json");
+        patternsData = servletContext.getRealPath("/defaults/patterns.json");
     }
     
     public String getOutData() {
@@ -150,9 +153,19 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         		outData += definition.getValue().getName() + ",";
         	}
         	// parse the profile json to include config data
-        	// parse the orig stencil data with workitem definitions
+            // parse patterns data
+            JSONArray patternsArray = new JSONArray(readFile(patternsData));
+            Map<String, PatternInfo> patternInfoMap = new HashMap<String, PatternInfo>();
+            for(int i=0; i < patternsArray.length(); i++) {
+                JSONObject patternObj = patternsArray.getJSONObject(i);
+                PatternInfo pi = new PatternInfo(patternObj.getString("id"), patternObj.getString("name"), patternObj.getString("description"));
+                patternInfoMap.put(patternObj.getString("id"), pi);
+            }
+
+            // parse the orig stencil data with workitem definitions
         	StringTemplate workItemTemplate = new StringTemplate(readFile(origStencilFilePath));
         	workItemTemplate.setAttribute("workitemDefs", workDefinitions);
+            workItemTemplate.setAttribute("patternData", patternInfoMap);
         	if(workitemConfigInfo != null && workitemConfigInfo.keySet() != null && workitemConfigInfo.keySet().size() > 0) {
         		for(String key: workitemConfigInfo.keySet()) {
         			workItemTemplate.setAttribute("packageName", key.replaceAll("\\s",""));
@@ -908,5 +921,36 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 		public void setFontColor(String fontColor) {
 			this.fontColor = fontColor;
 		}
+    }
+
+    private class PatternInfo {
+        private String id;
+        private String name;
+        private String description;
+
+        public String getName() {
+            return name;
+        }
+        public void setName(String name) {
+            this.name = name;
+        }
+        public String getId() {
+            return id;
+        }
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public PatternInfo(String id, String name, String description) {
+            this.id = id;
+            this.name = name;
+            this.description = description;
+        }
+        public String getDescription() {
+            return description;
+        }
+        public void setDescription(String description) {
+            this.description = description;
+        }
     }
 }
