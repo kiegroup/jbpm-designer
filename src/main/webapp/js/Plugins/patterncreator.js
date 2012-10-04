@@ -10,15 +10,34 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
         this.facade.registerOnEvent(ORYX.CONFIG.CREATE_PATTERN, this.handleCreatePattern.bind(this));
         this.patternShapes = {};
         this.patternPositions = {};
+        this.selectedRoots = [];
+        this.selectedRootsCount;
+        this.createdElementCount;
     },
     handleCreatePattern : function(options) {
         if(options && options.pid && options.pdata && options.pos) {
             this.patternShapes = {};
             this.patternPositions = {};
+            this.selectedRoots = [];
+            this.selectedRootsCount = 0;
+            this.createdElementCount = 0;
             for(var i=0; i<options.pdata.length; i++) {
                 var pattern = options.pdata[i];
                 if(pattern.id == options.pid) {
                     var patternElements = pattern.elements;
+                    var selectedElements = this.facade.getSelection();
+                    selectedElements.each(function(shape) {
+                        if(shape instanceof ORYX.Core.Node) {
+                            this.selectedRoots[this.selectedRootsCount] = shape;
+                            this.selectedRootsCount++;
+                        }
+                    }.bind(this));
+                    var patternRoots = this.getPatternRoots(patternElements);
+                    if(this.selectedRoots.length > 0 && (this.selectedRoots.length != patternRoots.length)) {
+                        Ext.Msg.minWidth = 400;
+                        Ext.Msg.alert("Cannot attach Pattern to selected node(s).");
+                        return;
+                    }
                     for(var j=0; j<patternElements.length; j++) {
                         var element = patternElements[j];
                         if(this.patternShapes[element.id] === undefined) {
@@ -35,6 +54,18 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
             Ext.Msg.alert("Invalid pattern data.");
         }
     },
+    getPatternRoots : function(patternElements) {
+        var roots = [];
+        var i = 0;
+        for(var j=0; j<patternElements.length; j++) {
+            var element = patternElements[j];
+            if(element.parent.length == 0) {
+                roots[i] = element;
+                i++;
+            }
+        }
+        return roots;
+    },
     findChildObject : function(elementChild, patternElements) {
         for(var i=0; i<patternElements.length; i++) {
             var ele = patternElements[i];
@@ -45,6 +76,16 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
         return undefined;
     },
     createElement : function(element, options) {
+        // shape.absoluteXY
+        // shape.absoluteCenterXY
+        if(element.parent.length == 0 && this.selectedRoots.length > 0) {
+            // substitute root element
+
+            this.patternShapes[element.id] = this.selectedRoots[this.createdElementCount];
+            this.patternPositions[element.id] = this.selectedRoots[this.createdElementCount].absoluteCenterXY();
+            this.createdElementCount++;
+            return;
+        }
         var elementPosition = {x:0, y:0};
         if(this.patternPositions[element.id] === undefined) {
             elementPosition.x = options.pos.x;
