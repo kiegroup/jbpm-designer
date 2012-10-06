@@ -1,26 +1,18 @@
 package org.jbpm.designer.web.server;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.designer.web.profile.impl.ExternalInfo;
+import org.jbpm.designer.web.server.ServletUtil.UrlType;
 import org.json.JSONObject;
 
 /**
@@ -30,8 +22,10 @@ import org.json.JSONObject;
  * @author Tihomir Surdilovic
  */
 public class ProcessDiffServiceServlet extends HttpServlet {
-	private static final Logger _logger = Logger
-			.getLogger(ProcessDiffServiceServlet.class);
+
+    private static final Logger _logger = Logger.getLogger(ProcessDiffServiceServlet.class);
+    
+    private static final String GET_VERSION_ACTION = "getversion";
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
@@ -50,7 +44,7 @@ public class ProcessDiffServiceServlet extends HttpServlet {
 		String[] packageAssetInfo = ServletUtil.findPackageAndAssetInfo(uuid, profile);
         String packageName = packageAssetInfo[0];
         String assetName = packageAssetInfo[1];
-        if(action != null && action.equals("getversion") && versionNum != null) {
+        if(action != null && action.equals(GET_VERSION_ACTION) && versionNum != null) {
         	resp.setCharacterEncoding("UTF-8");
 			resp.setContentType("text/xml");
 			try {
@@ -81,42 +75,25 @@ public class ProcessDiffServiceServlet extends HttpServlet {
         }
 	}
 
-	private String getAssetVerionSource(String packageName, String assetName, String versionNum, IDiagramProfile profile) {
+	private static String getAssetVerionSource(String packageName, String assetName, String versionNum, IDiagramProfile profile) {
         // GUVNOR ProcessDiffServiceServlet
 		try {
-			String versionURL = ExternalInfo.getExternalProtocol(profile)
-					+ "://"
-	                + ExternalInfo.getExternalHost(profile)
-	                + "/"
-	                + profile.getExternalLoadURLSubdomain().substring(0,
-	                        profile.getExternalLoadURLSubdomain().indexOf("/"))
-	                + "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/" + assetName 
-	                + "/versions/" + versionNum + "/source/";
-			
-			return IOUtils.toString(ServletUtil.getInputStreamForURL(versionURL, "GET", profile), "UTF-8");
+			String versionURL = ServletUtil.getUrl(profile, packageName, assetName, versionNum, UrlType.Source);
+			return ServletUtil.getStringContentFromUrl(versionURL, "GET", profile);
 		} catch (Exception e) {
 			return "";
 		}
 	}
 	
-	private List<String> getAssetVersions(String packageName, String assetName, String uuid, IDiagramProfile profile) {
+	private static List<String> getAssetVersions(String packageName, String assetName, String uuid, IDiagramProfile profile) {
+        // GUVNOR ProcessDiffServiceServlet
 		try {
-			String assetVersionURL = ExternalInfo.getExternalProtocol(profile)
-					+ "://"
-	                + ExternalInfo.getExternalHost(profile)
-	                + "/"
-	                + profile.getExternalLoadURLSubdomain().substring(0,
-	                        profile.getExternalLoadURLSubdomain().indexOf("/"))
-	                + "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/" + assetName 
-	                + "/versions/";
+			String assetVersionURL = ServletUtil.getUrl(profile, packageName, assetName, "", UrlType.Normal);
 			List<String> versionList = new ArrayList<String>();
 			
 			XMLInputFactory factory = XMLInputFactory.newInstance();
-            XMLStreamReader reader = factory
-                    .createXMLStreamReader(ServletUtil.getInputStreamForURL(
-                    		assetVersionURL, "GET", profile), "UTF-8");
+            XMLStreamReader reader = factory.createXMLStreamReader(ServletUtil.getOutputReaderFromUrl(assetVersionURL, "GET", profile));
             boolean isFirstTitle = true;
-            String title = "";
             while (reader.hasNext()) {
                 int next = reader.next();
                 if (next == XMLStreamReader.START_ELEMENT) {

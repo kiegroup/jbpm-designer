@@ -17,6 +17,7 @@ import org.jbpm.designer.taskforms.TaskFormInfo;
 import org.jbpm.designer.taskforms.TaskFormTemplateManager;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.impl.ExternalInfo;
+import org.jbpm.designer.web.server.ServletUtil.UrlType;
 
 /** 
  * 
@@ -56,7 +57,7 @@ public class TaskFormsServlet extends HttpServlet {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions def = ((Definitions) unmarshaller.unmarshall(json, preprocessingData).getContents().get(0));
         
-        TaskFormTemplateManager templateManager = new TaskFormTemplateManager( profile, packageName, assetName, getServletContext().getRealPath("/" + TASKFORMS_PATH), def );
+        TaskFormTemplateManager templateManager = new TaskFormTemplateManager(packageName, assetName, getServletContext().getRealPath("/" + TASKFORMS_PATH), def );
         templateManager.processTemplates();
         
         try {
@@ -109,37 +110,21 @@ public class TaskFormsServlet extends HttpServlet {
     public void storeTaskForm(TaskFormInfo taskForm, IDiagramProfile profile) throws Exception {
         // GUVNOR TaskFormsServlet
         try {
-			String formURL = ExternalInfo.getExternalProtocol(profile)
-			+ "://"
-			+ ExternalInfo.getExternalHost(profile)
-			+ "/"
-			+ profile.getExternalLoadURLSubdomain().substring(0,
-			        profile.getExternalLoadURLSubdomain().indexOf("/"))
-			+ "/rest/packages/" + URLEncoder.encode(taskForm.getPkgName(), "UTF-8") + "/assets/" + URLEncoder.encode(taskForm.getId(), "UTF-8");
-			
-			String createNewURL = ExternalInfo.getExternalProtocol(profile)
-			+ "://"
-			+ ExternalInfo.getExternalHost(profile)
-			+ "/"
-			+ profile.getExternalLoadURLSubdomain().substring(0,
-			        profile.getExternalLoadURLSubdomain().indexOf("/"))
-			+ "/rest/packages/" + URLEncoder.encode(taskForm.getPkgName(), "UTF-8") + "/assets/";
+			String formURL = ServletUtil.getUrl(profile, taskForm.getPkgName(), taskForm.getId(), UrlType.Normal);
+			String createNewURL = ServletUtil.getUrl(profile, taskForm.getPkgName(), "", UrlType.Normal);
 			
 			// check if the task form already exists
 			URL checkURL = new URL(formURL);
-			HttpURLConnection checkConnection = (HttpURLConnection) checkURL
-			        .openConnection();
+			HttpURLConnection checkConnection = (HttpURLConnection) checkURL.openConnection();
 			ServletUtil.applyAuth(profile, checkConnection);
 			checkConnection.setRequestMethod("GET");
-			checkConnection
-			        .setRequestProperty("Accept", "application/atom+xml");
+			checkConnection.setRequestProperty("Accept", "application/atom+xml");
 			checkConnection.connect();
 			_logger.info("check connection response code: " + checkConnection.getResponseCode());
 			if (checkConnection.getResponseCode() == 200) {
 			    // delete the asset
 			    URL deleteAssetURL = new URL(formURL);
-			    HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL
-			            .openConnection();
+			    HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL.openConnection();
 			    ServletUtil.applyAuth(profile, deleteConnection);
 			    deleteConnection.setRequestMethod("DELETE");
 			    deleteConnection.connect();
@@ -147,14 +132,11 @@ public class TaskFormsServlet extends HttpServlet {
 			}
 			// create new 
 			URL createURL = new URL(createNewURL);
-			HttpURLConnection createConnection = (HttpURLConnection) createURL
-			        .openConnection();
+			HttpURLConnection createConnection = (HttpURLConnection) createURL.openConnection();
 			ServletUtil.applyAuth(profile, createConnection);
 			createConnection.setRequestMethod("POST");
-			createConnection.setRequestProperty("Content-Type",
-			        "application/octet-stream");
-			createConnection.setRequestProperty("Accept",
-			        "application/atom+xml");
+			createConnection.setRequestProperty("Content-Type", "application/octet-stream");
+			createConnection.setRequestProperty("Accept", "application/atom+xml");
 			createConnection.setRequestProperty("Slug", URLEncoder.encode(taskForm.getId() + FORMTEMPLATE_FILE_EXTENSION, "UTF-8"));
 			createConnection.setDoOutput(true);
 			

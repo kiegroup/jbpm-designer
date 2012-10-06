@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.impl.ExternalInfo;
+import org.jbpm.designer.web.server.ServletUtil.UrlType;
 
 /**
  * Sevlet for custom editors.
@@ -49,33 +50,19 @@ public class CustomEditorsServlet extends HttpServlet {
 	private String getCustomEditorsJSON(IDiagramProfile profile, ServletContext servletContext) {
         // GUVNOR CustomEditorsServlet
 		String retStr = "";
-		String customEditorsURL = ExternalInfo.getExternalProtocol(profile)
-                + "://"
-                + ExternalInfo.getExternalHost(profile)
-                + "/"
-                + profile.getExternalLoadURLSubdomain().substring(0,
-                        profile.getExternalLoadURLSubdomain().indexOf("/"))
-                + "/rest/packages/globalArea/assets/" + CUSTOMEDITORS_NAME;
-    	
-    	String customEditorsSourceURL = ExternalInfo.getExternalProtocol(profile)
-                + "://"
-                + ExternalInfo.getExternalHost(profile)
-                + "/"
-                + profile.getExternalLoadURLSubdomain().substring(0,
-                        profile.getExternalLoadURLSubdomain().indexOf("/"))
-                + "/rest/packages/globalArea/assets/" + CUSTOMEDITORS_NAME + "/source";
+		String customEditorsURL = ServletUtil.getUrl(profile, "globalArea", CUSTOMEDITORS_NAME, UrlType.Normal);
+    	String customEditorsSourceURL = ServletUtil.getUrl(profile, "globalArea", CUSTOMEDITORS_NAME, UrlType.Source);
+
     	try {
 			URL checkURL = new URL(customEditorsURL);
-			HttpURLConnection checkConnection = (HttpURLConnection) checkURL
-			        .openConnection();
+			HttpURLConnection checkConnection = (HttpURLConnection) checkURL.openConnection();
 			ServletUtil.applyAuth(profile, checkConnection);
 			checkConnection.setRequestMethod("GET");
-			checkConnection
-			        .setRequestProperty("Accept", "application/atom+xml");
+			checkConnection.setRequestProperty("Accept", "application/atom+xml");
 			checkConnection.connect();
 			_logger.info("check connection response code: " + checkConnection.getResponseCode());
 			if (checkConnection.getResponseCode() == 200) {
-				retStr = ServletUtil.streamToString(ServletUtil.getInputStreamForURL(customEditorsSourceURL, "GET", profile));
+				retStr = ServletUtil.getStringContentFromUrl(customEditorsSourceURL, "GET", profile);
 			} else {
 				retStr = readFile(servletContext.getRealPath("/defaults/customeditors.json"));
 			}

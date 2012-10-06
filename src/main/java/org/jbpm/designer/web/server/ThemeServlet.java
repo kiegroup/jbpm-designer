@@ -1,18 +1,12 @@
 package org.jbpm.designer.web.server;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.*;
+import javax.servlet.http.*;
 
 import org.apache.log4j.Logger;
 import org.jbpm.designer.web.profile.IDiagramProfile;
@@ -25,19 +19,19 @@ import org.json.JSONObject;
  * @author Tihomir Surdilovic
  */
 public class ThemeServlet extends HttpServlet {
+    
+	private static final Logger _logger = Logger.getLogger(ThemeServlet.class);
 	private static final long serialVersionUID = 1L;
+	
 	private static final String ACTION_GETTHEMENAMES = "getThemeNames";
 	private static final String ACTION_GETTHEMEJSON = "getThemeJSON";
 	private static final String THEME_NAME = "themes";
 	private static final String DEFAULT_THEME = "jBPM";
-	private static final Logger _logger = Logger.getLogger(ThemeServlet.class);
-	private ServletConfig config;
-	private String themeInfo;
+	
 	
 	@Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        this.config = config;
     }
 	
 	@Override
@@ -94,7 +88,7 @@ public class ThemeServlet extends HttpServlet {
 			checkConnection.connect();
 			_logger.info("check connection response code: " + checkConnection.getResponseCode());
 			if (checkConnection.getResponseCode() == 200) {
-				retStr = ServletUtil.streamToString(ServletUtil.getInputStreamForURL(themesSourceURL, "GET", profile));
+				retStr = ServletUtil.getStringContentFromUrl(themesSourceURL, "GET", profile);
 			} else {
 				retStr = readFile(servletContext.getRealPath("/defaults/themes.json"));
 			}
@@ -135,7 +129,7 @@ public class ThemeServlet extends HttpServlet {
 			if (checkConnection.getResponseCode() != 200) {
 				themesStr = DEFAULT_THEME;
 			} else {
-				JSONObject themesObject =  new JSONObject(ServletUtil.streamToString(ServletUtil.getInputStreamForURL(themesSourceURL, "GET", profile)));
+				JSONObject themesObject =  new JSONObject(ServletUtil.getStringContentFromUrl(themesSourceURL, "GET", profile));
 				JSONObject themes = (JSONObject) themesObject.get("themes");
 				for (int i = 0; i < themes.names().length(); i++) {
 					themesStr += themes.names().getString(i) + ",";

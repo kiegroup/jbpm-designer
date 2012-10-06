@@ -430,7 +430,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 					addError((CallActivity) fe, "Reusable Subprocess has no called element specified.");
 				} else {
 				    boolean foundCalledElementProcess = false;
-				    List<String> allPackageNames = ServletUtil.getPackageNamesFromGuvnor(profile);
+				    List<String> allPackageNames = ServletUtil.getPackageNames(profile);
 				    for (String packageName : allPackageNames) {
 				        List<String> allProcessesInPackage = ServletUtil.getAllProcessesInPackage(packageName, profile);
 				        for(String p : allProcessesInPackage) {

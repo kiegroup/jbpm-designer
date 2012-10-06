@@ -28,23 +28,19 @@ import org.apache.batik.transcoder.*;
 import org.apache.batik.transcoder.image.ImageTranscoder;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.batik.util.ParsedURL;
-import org.apache.commons.io.IOUtils;
 import org.apache.fop.svg.PDFTranscoder;
 import org.apache.log4j.Logger;
 import org.eclipse.bpmn2.*;
-import org.eclipse.bpmn2.DocumentRoot;
 import org.eclipse.bpmn2.Process;
 import org.eclipse.bpmn2.di.*;
 import org.eclipse.dd.dc.*;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.impl.EAttributeImpl;
 import org.eclipse.emf.ecore.impl.EStructuralFeatureImpl;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.util.FeatureMap;
-import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.designer.Base64EncodingUtil;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceFactoryImpl;
@@ -53,6 +49,7 @@ import org.jbpm.designer.web.batikprotocolhandler.GuvnorParsedURLProtocolHandler
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.impl.ExternalInfo;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
+import org.jbpm.designer.web.server.ServletUtil.UrlType;
 import org.jbpm.migration.JbpmMigration;
 
 /** 
@@ -109,8 +106,7 @@ public class TransformerServlet extends HttpServlet {
                 	resp.setContentType("text/plain");
                 	resp.getWriter().write("<object data=\"data:application/pdf;base64," + Base64EncodingUtil.encode(bout.toByteArray()) +  "\" type=\"application/pdf\"></object>");
             	} else {
-	                storeToGuvnor(uuid, profile, formattedSvg, rawSvg,
-	                        transformto, processid);
+	                storeToGuvnor(uuid, profile, rawSvg, transformto, processid);
 	                
 	                resp.setContentType("application/pdf");
 	                if (processid != null) {
@@ -145,8 +141,7 @@ public class TransformerServlet extends HttpServlet {
                 	resp.getWriter().write("<img src=\"data:image/png;base64," + Base64EncodingUtil.encode(bout.toByteArray()) + "\">");
                 } else {
                 	ParsedURL.registerHandler(new GuvnorParsedURLProtocolHandler(profile));
-                    storeToGuvnor(uuid, profile, formattedSvg, rawSvg,
-                            transformto, processid);
+                    storeToGuvnor(uuid, profile, rawSvg, transformto, processid);
                 	resp.setContentType("image/png");
                 	if (processid != null) {
                 		resp.setHeader("Content-Disposition",
@@ -158,10 +153,8 @@ public class TransformerServlet extends HttpServlet {
                 
                 	PNGTranscoder t = new PNGTranscoder();
                 	t.addTranscodingHint(ImageTranscoder.KEY_MEDIA, "screen");
-                	TranscoderInput input = new TranscoderInput(new StringReader(
-                			formattedSvg));
-                	TranscoderOutput output = new TranscoderOutput(
-                			resp.getOutputStream());
+                	TranscoderInput input = new TranscoderInput(new StringReader(formattedSvg));
+                	TranscoderOutput output = new TranscoderOutput(resp.getOutputStream());
                 	t.transcode(input, output);
                 }
             } catch (TranscoderException e) {
@@ -430,19 +423,15 @@ public class TransformerServlet extends HttpServlet {
 		}
     }
     
-    private void storeToGuvnor(String uuid, IDiagramProfile profile,
-            String formattedSvg, String rawSvg, String transformto, String processid) {
+    private void storeToGuvnor(String uuid, IDiagramProfile profile, String rawSvg, String transformto, String processid) {
         String[] packageAssetName =  ServletUtil.findPackageAndAssetInfo(uuid, profile);
-        String processContent = getProcessContent(packageAssetName[0],
-                packageAssetName[1], uuid, profile);
         if(processid != null) {
-        	guvnorStore(packageAssetName[0], processid,
-                    profile, formattedSvg, rawSvg, transformto);
+        	guvnorStore(packageAssetName[0], processid, profile, rawSvg, transformto);
         }
     }
 
-    private void guvnorStore(String packageName, String assetName,
-            IDiagramProfile profile, String formattedSvg, String rawSvg, String transformto) {
+    public static void guvnorStore(String packageName, String assetName,
+            IDiagramProfile profile, String rawSvg, String transformto) {
         // GUVNOR TransformerServlet
         try {
             String assetExt = "";
@@ -456,80 +445,50 @@ public class TransformerServlet extends HttpServlet {
                 assetFileExt = ".png";
             }
 
-            String pngURL = ExternalInfo.getExternalProtocol(profile)
-                    + "://"
-                    + ExternalInfo.getExternalHost(profile)
-                    + "/"
-                    + profile.getExternalLoadURLSubdomain().substring(0,
-                            profile.getExternalLoadURLSubdomain().indexOf("/"))
-                    + "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/" + assetName
-                    + assetExt;
-
-            String packageAssetsURL = ExternalInfo.getExternalProtocol(profile)
-                    + "://"
-                    + ExternalInfo.getExternalHost(profile)
-                    + "/"
-                    + profile.getExternalLoadURLSubdomain().substring(0,
-                            profile.getExternalLoadURLSubdomain().indexOf("/"))
-                    + "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/";
-
-            String deleteURL = ExternalInfo.getExternalProtocol(profile)
-                    + "://"
-                    + ExternalInfo.getExternalHost(profile)
-                    + "/"
-                    + profile.getExternalLoadURLSubdomain().substring(0,
-                            profile.getExternalLoadURLSubdomain().indexOf("/"))
-                    + "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/" + assetName
-                    + assetExt;
+            String pngURL = ServletUtil.getUrl(profile, packageName, assetName + assetExt, UrlType.Normal);
+            String packageAssetsURL = ServletUtil.getUrl(profile, packageName, "", UrlType.Normal);
+            String deleteURL = ServletUtil.getUrl(profile, packageName, assetName + assetExt, UrlType.Normal);
 
             // check if the image already exists
             URL checkURL = new URL(pngURL);
-            HttpURLConnection checkConnection = (HttpURLConnection) checkURL
-                    .openConnection();
+            HttpURLConnection checkConnection = (HttpURLConnection) checkURL.openConnection();
             ServletUtil.applyAuth(profile, checkConnection);
             checkConnection.setRequestMethod("GET");
-            checkConnection
-                    .setRequestProperty("Accept", "application/atom+xml");
+            checkConnection.setRequestProperty("Accept", "application/atom+xml");
             checkConnection.connect();
             _logger.info("check connection response code: " + checkConnection.getResponseCode());
             if (checkConnection.getResponseCode() == 200) {
+                // if the image exists, delete the image
                 URL deleteAssetURL = new URL(deleteURL);
-                HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL
-                        .openConnection();
+                HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL.openConnection();
                 ServletUtil.applyAuth(profile, deleteConnection);
                 deleteConnection.setRequestMethod("DELETE");
                 deleteConnection.connect();
                 _logger.info("delete connection response code: " + deleteConnection.getResponseCode());
             }
+            
             // create new
             URL createURL = new URL(packageAssetsURL);
-            HttpURLConnection createConnection = (HttpURLConnection) createURL
-                    .openConnection();
+            HttpURLConnection createConnection = (HttpURLConnection) createURL.openConnection();
             ServletUtil.applyAuth(profile, createConnection);
             createConnection.setRequestMethod("POST");
-            createConnection.setRequestProperty("Content-Type",
-                    "application/octet-stream");
-            createConnection.setRequestProperty("Accept",
-                    "application/atom+xml");
+            createConnection.setRequestProperty("Content-Type", "application/octet-stream");
+            createConnection.setRequestProperty("Accept", "application/atom+xml");
             createConnection.setRequestProperty("Slug", assetName + assetExt + assetFileExt);
             createConnection.setDoOutput(true);
 
             if (transformto.equals(TO_PDF)) {
             	PDFTranscoder t = new PDFTranscoder();
-            	TranscoderInput input = new TranscoderInput(new StringReader(
-            			rawSvg));
-            	TranscoderOutput output = new TranscoderOutput(
-            			createConnection.getOutputStream());
+            	TranscoderInput input = new TranscoderInput(new StringReader(rawSvg));
+            	TranscoderOutput output = new TranscoderOutput(createConnection.getOutputStream());
             	t.transcode(input, output);
             }
 
             if (transformto.equals(TO_PNG)) {
             	PNGTranscoder t = new PNGTranscoder();
             	t.addTranscodingHint(ImageTranscoder.KEY_MEDIA, "screen");
-            	TranscoderInput input = new TranscoderInput(new StringReader(
-            			rawSvg));
-            	TranscoderOutput output = new TranscoderOutput(
-            			createConnection.getOutputStream());
+            	TranscoderInput input = new TranscoderInput(new StringReader(rawSvg));
+            	TranscoderOutput output = new TranscoderOutput(createConnection.getOutputStream());
             	try {
 					t.transcode(input, output);
 				} catch (Exception e) {
@@ -545,27 +504,4 @@ public class TransformerServlet extends HttpServlet {
         }
     }
 
-    private String getProcessContent(String packageName, String assetName,
-            String uuid, IDiagramProfile profile) {
-    	try {
-	    	String assetSourceURL = ExternalInfo.getExternalProtocol(profile)
-	                + "://"
-	                + ExternalInfo.getExternalHost(profile)
-	                + "/"
-	                + profile.getExternalLoadURLSubdomain().substring(0,
-	                        profile.getExternalLoadURLSubdomain().indexOf("/"))
-	                + "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/" + assetName
-	                + "/source/";
-	        
-            InputStream in = ServletUtil.getInputStreamForURL(assetSourceURL, "GET",
-                    profile);
-            StringWriter writer = new StringWriter();
-            IOUtils.copy(in, writer);
-            return writer.toString();
-        } catch (Exception e) {
-            // we dont want to barf..just log that error happened
-            _logger.error(e.getMessage());
-            return "";
-        }
-    }
 }

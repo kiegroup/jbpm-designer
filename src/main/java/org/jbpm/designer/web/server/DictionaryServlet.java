@@ -27,6 +27,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.impl.ExternalInfo;
+import org.jbpm.designer.web.server.ServletUtil.UrlType;
 
 /** 
  * Dictionary Servlet.
@@ -39,25 +40,23 @@ public class DictionaryServlet extends HttpServlet {
 	private static final String DICTIONARY_FNAME = "processdictionary";
 	private static final String DICTIONARY_FEXT = ".json";
 	private static final Logger _logger = Logger.getLogger(DictionaryServlet.class);
-	private ServletConfig config;
+
 
 	@Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        this.config = config;
     }
 	
 	@Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         String action = req.getParameter("action");
-        String uuid = req.getParameter("uuid");
         String profileName = req.getParameter("profile");
         String dvalue = req.getParameter("dvalue");
         
         IDiagramProfile profile = ServletUtil.getProfile(req, profileName, getServletContext());
         if(action != null && action.equals(ACTION_SAVE)) {
-        	storeToGuvnor(uuid, profile, dvalue);
+        	storeToGuvnor(profile, dvalue);
         	PrintWriter pw = resp.getWriter();
     		resp.setContentType("text/plain");
     		resp.setCharacterEncoding("UTF-8");
@@ -66,44 +65,26 @@ public class DictionaryServlet extends HttpServlet {
         	PrintWriter pw = resp.getWriter();
     		resp.setContentType("text/json");
     		resp.setCharacterEncoding("UTF-8");
-    		pw.write(getFromGuvnor(uuid, profile));
+    		pw.write(getFromGuvnor(profile));
         }
 	}
 	
-	private String getFromGuvnor(String uuid, IDiagramProfile profile) {
+	private String getFromGuvnor(IDiagramProfile profile) {
         // GUVNOR DictionaryServlet
-		String dictionaryURL = ExternalInfo.getExternalProtocol(profile)
-                + "://"
-                + ExternalInfo.getExternalHost(profile)
-                + "/"
-                + profile.getExternalLoadURLSubdomain().substring(0,
-                        profile.getExternalLoadURLSubdomain().indexOf("/"))
-                + "/rest/packages/globalArea/assets/" + DICTIONARY_FNAME;
-		
-		String dictionarySourceURL = ExternalInfo.getExternalProtocol(profile)
-                + "://"
-                + ExternalInfo.getExternalHost(profile)
-                + "/"
-                + profile.getExternalLoadURLSubdomain().substring(0,
-                        profile.getExternalLoadURLSubdomain().indexOf("/"))
-                + "/rest/packages/globalArea/assets/" + DICTIONARY_FNAME
-                + "/source/";
+		String dictionaryURL = ServletUtil.getUrl(profile, "globalArea", DICTIONARY_FNAME, UrlType.Normal);
+		String dictionarySourceURL = ServletUtil.getUrl(profile, "globalArea", DICTIONARY_FNAME, UrlType.Source);
+
 		try {
 			URL checkURL = new URL(dictionaryURL);
-	        HttpURLConnection checkConnection = (HttpURLConnection) checkURL
-	                .openConnection();
+	        HttpURLConnection checkConnection = (HttpURLConnection) checkURL.openConnection();
 	        ServletUtil.applyAuth(profile, checkConnection);
 	        checkConnection.setRequestMethod("GET");
-	        checkConnection
-	                .setRequestProperty("Accept", "application/atom+xml");
+	        checkConnection.setRequestProperty("Accept", "application/atom+xml");
 	        checkConnection.setConnectTimeout(3000);
 	        checkConnection.connect();
 	        _logger.info("check connection response code: " + checkConnection.getResponseCode());
 	        if (checkConnection.getResponseCode() == 200) {
-	        	InputStream in = ServletUtil.getInputStreamForURL(dictionarySourceURL, "GET", profile);
-	            StringWriter writer = new StringWriter();
-	            IOUtils.copy(in, writer);
-	            return writer.toString();
+	            return ServletUtil.getStringContentFromUrl(dictionarySourceURL, "GET", profile);
 	        }
 		} catch (Exception e) {
             // we dont want to barf..just log that error happened
@@ -112,45 +93,23 @@ public class DictionaryServlet extends HttpServlet {
 		return "false";
 	}
 	
-	private void storeToGuvnor(String uuid, IDiagramProfile profile, String dvalue) {
-		String dictionaryURL = ExternalInfo.getExternalProtocol(profile)
-                + "://"
-                + ExternalInfo.getExternalHost(profile)
-                + "/"
-                + profile.getExternalLoadURLSubdomain().substring(0,
-                        profile.getExternalLoadURLSubdomain().indexOf("/"))
-                + "/rest/packages/globalArea/assets/" + DICTIONARY_FNAME;
-		
-		String dictionaryDeleteURL = ExternalInfo.getExternalProtocol(profile)
-                + "://"
-                + ExternalInfo.getExternalHost(profile)
-                + "/"
-                + profile.getExternalLoadURLSubdomain().substring(0,
-                        profile.getExternalLoadURLSubdomain().indexOf("/"))
-                + "/rest/packages/globalArea/assets/" + DICTIONARY_FNAME;
-		
-		String dictionaryAssetsURL = ExternalInfo.getExternalProtocol(profile)
-                + "://"
-                + ExternalInfo.getExternalHost(profile)
-                + "/"
-                + profile.getExternalLoadURLSubdomain().substring(0,
-                        profile.getExternalLoadURLSubdomain().indexOf("/"))
-                + "/rest/packages/globalArea/assets/";
+	private void storeToGuvnor(IDiagramProfile profile, String dvalue) {
+		String dictionaryURL = ServletUtil.getUrl(profile, "globalArea", DICTIONARY_FNAME, UrlType.Normal);
+		String dictionaryDeleteURL = dictionaryURL;
+		String dictionaryAssetsURL = ServletUtil.getUrl(profile, "globalArea", "", UrlType.Normal);
+
 		try {
 			// check if the dictionary already exists
 	        URL checkURL = new URL(dictionaryURL);
-	        HttpURLConnection checkConnection = (HttpURLConnection) checkURL
-	                .openConnection();
+	        HttpURLConnection checkConnection = (HttpURLConnection) checkURL.openConnection();
 	        ServletUtil.applyAuth(profile, checkConnection);
 	        checkConnection.setRequestMethod("GET");
-	        checkConnection
-	                .setRequestProperty("Accept", "application/atom+xml");
+	        checkConnection.setRequestProperty("Accept", "application/atom+xml");
 	        checkConnection.connect();
 	        _logger.info("check connection response code: " + checkConnection.getResponseCode());
 	        if (checkConnection.getResponseCode() == 200) {
 	            URL deleteAssetURL = new URL(dictionaryDeleteURL);
-	            HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL
-	                    .openConnection();
+	            HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL.openConnection();
 	            ServletUtil.applyAuth(profile, deleteConnection);
 	            deleteConnection.setRequestMethod("DELETE");
 	            deleteConnection.connect();
@@ -158,14 +117,11 @@ public class DictionaryServlet extends HttpServlet {
 	        }
 	        
 	        URL createURL = new URL(dictionaryAssetsURL);
-            HttpURLConnection createConnection = (HttpURLConnection) createURL
-                    .openConnection();
+            HttpURLConnection createConnection = (HttpURLConnection) createURL.openConnection();
             ServletUtil.applyAuth(profile, createConnection);
             createConnection.setRequestMethod("POST");
-            createConnection.setRequestProperty("Content-Type",
-                    "application/octet-stream");
-            createConnection.setRequestProperty("Accept",
-                    "application/atom+xml");
+            createConnection.setRequestProperty("Content-Type", "application/octet-stream");
+            createConnection.setRequestProperty("Accept", "application/atom+xml");
             createConnection.setRequestProperty("Slug", DICTIONARY_FNAME + DICTIONARY_FEXT);
             createConnection.setDoOutput(true);
             createConnection.getOutputStream().write(dvalue.getBytes("UTF-8"));
