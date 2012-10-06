@@ -175,14 +175,14 @@ public class SimulationServlet extends HttpServlet {
 				JSONArray aggTaskSimulationJSONArray = new JSONArray();
 
                 JSONObject simInfoKeys = new JSONObject();
-                simInfoKeys.put("id", simInfo.getProcessId());
-                simInfoKeys.put("name", simInfo.getProcessName());
+                simInfoKeys.put("id", simInfo.getProcessId() == null ? "" : simInfo.getProcessId());
+                simInfoKeys.put("name", simInfo.getProcessName() == null? "" : simInfo.getProcessName());
                 SimpleDateFormat infoDateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
                 String simStartStr = infoDateFormat.format(new Date(simInfo.getStartTime()));
                 String simEndStr = infoDateFormat.format(new Date(simInfo.getEndTime()));
                 simInfoKeys.put("starttime", simStartStr);
                 simInfoKeys.put("endtime", simEndStr);
-                simInfoKeys.put("version", simInfo.getProcessVersion());
+                simInfoKeys.put("version", simInfo.getProcessVersion() == null? "" : simInfo.getProcessVersion());
                 simInfoJSONArray.put(simInfoKeys);
 
 				for(AggregatedSimulationEvent aggEvent : aggEvents) {
