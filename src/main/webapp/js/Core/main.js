@@ -268,7 +268,17 @@ ORYX.Editor = {
 			    }
 			}]
 		});
-		
+
+        this.simInfoPanel = new Ext.Panel({
+            bodyStyle:'background:#ffff;font-size:9px;font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;padding-left:5px;',
+            id: "siminfopanel",
+            title: "Simulation Info",
+            autoScroll: true,
+            autoheight: true,
+            border: false,
+            html: ""
+        });
+
 		this.simResultsTree = new Ext.tree.TreePanel({
 			id: "simresultscharts",
 			title: "Simulation Graphs",
@@ -310,7 +320,7 @@ ORYX.Editor = {
 		        maxSize: 500,
 		        autoheight: true,
 		        cmargins: '5 5 0 5', 
-		        items: [this.simResultsTree]
+		        items: [this.simInfoPanel, this.simResultsTree]
 		    },{
 		    	xtype:'panel',
 		        region: 'center',  

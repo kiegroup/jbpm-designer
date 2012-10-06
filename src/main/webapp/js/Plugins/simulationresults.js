@@ -49,8 +49,37 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 		this.showProcessAveragesGraph(nodeid, this.resultsjson);
 	},
 	updateSimView: function(options) {
+        this.createProcessInfo(options);
 		this.createGraphsTree(options);
 	},
+    createProcessInfo: function(options) {
+        var simInfo = jsonPath(options.results.evalJSON(), "$.siminfo.*");
+        var infomarkup = '<table border="0" width="100%"> \
+                          <tr>\
+                          <td><b>Process id: </b></td> \
+                          <td>' + simInfo[0].id  + '</td> \
+                          </tr> \
+                          <tr> \
+                          <td><b>Process name: </b></td> \
+                          <td>' + simInfo[0].name  + '</td> \
+                          </tr> \
+                          <tr> \
+                          <td><b>Process version: </b></td> \
+                          <td>' + simInfo[0].version  + '</td> \
+                          </tr> \
+                          <tr> \
+                          <td><b>Simulation start: </b></td> \
+                          <td>' + simInfo[0].starttime  + '</td> \
+                          </tr> \
+                          <tr> \
+                          <td><b>Simulation end: </b></td> \
+                          <td>' + simInfo[0].endtime  + '</td> \
+                          </tr> \
+                          </table>';
+        if(simInfo) {
+            Ext.getCmp('siminfopanel').body.update(infomarkup);
+        }
+    },
 	createGraphsTree: function(options) {
 		var graphList = new Ext.tree.TreeNode({});
 		var graphType;

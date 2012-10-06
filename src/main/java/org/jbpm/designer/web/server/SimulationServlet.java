@@ -2,7 +2,9 @@ package org.jbpm.designer.web.server;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -29,12 +31,7 @@ import org.eclipse.bpmn2.SubProcess;
 import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.designer.bpmn2.impl.Bpmn2JsonUnmarshaller;
 import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.simulation.AggregatedSimulationEvent;
-import org.jbpm.simulation.PathFinder;
-import org.jbpm.simulation.PathFinderFactory;
-import org.jbpm.simulation.SimulationEvent;
-import org.jbpm.simulation.SimulationRepository;
-import org.jbpm.simulation.SimulationRunner;
+import org.jbpm.simulation.*;
 import org.jbpm.simulation.converter.JSONPathFormatConverter;
 import org.jbpm.simulation.impl.WorkingMemorySimulationRepository;
 import org.jbpm.simulation.impl.events.ActivitySimulationEvent;
@@ -166,14 +163,28 @@ public class SimulationServlet extends HttpServlet {
 				wmRepo.getSession().execute(new InsertElementsCommand((Collection)wmRepo.getAggregatedEvents()));
 		        wmRepo.fireAllRules();
 		        List<AggregatedSimulationEvent> aggEvents = (List<AggregatedSimulationEvent>) wmRepo.getGlobal("summary");
+                SimulationInfo simInfo = wmRepo.getSimulationInfo(); // TODO add siminfo to json
 				wmRepo.close();
 				
 				Map<String, Double> numInstanceData = new HashMap<String, Double>();
 				JSONObject parentJSON = new JSONObject();
+                JSONArray simInfoJSONArray = new JSONArray();
 				JSONArray aggProcessSimulationJSONArray = new JSONArray();
 				JSONArray aggNumActivityInstancesJSONArray = new JSONArray();
 				JSONArray aggHTSimulationJSONArray = new JSONArray();
 				JSONArray aggTaskSimulationJSONArray = new JSONArray();
+
+                JSONObject simInfoKeys = new JSONObject();
+                simInfoKeys.put("id", simInfo.getProcessId());
+                simInfoKeys.put("name", simInfo.getProcessName());
+                SimpleDateFormat infoDateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
+                String simStartStr = infoDateFormat.format(new Date(simInfo.getStartTime()));
+                String simEndStr = infoDateFormat.format(new Date(simInfo.getEndTime()));
+                simInfoKeys.put("starttime", simStartStr);
+                simInfoKeys.put("endtime", simEndStr);
+                simInfoKeys.put("version", simInfo.getProcessVersion());
+                simInfoJSONArray.put(simInfoKeys);
+
 				for(AggregatedSimulationEvent aggEvent : aggEvents) {
 					if(aggEvent instanceof AggregatedProcessSimulationEvent) {
 						AggregatedProcessSimulationEvent event = (AggregatedProcessSimulationEvent) aggEvent;
@@ -344,7 +355,8 @@ public class SimulationServlet extends HttpServlet {
 				}
 				numInstancesSimKeys.put("values", numInstancesValues);
 				aggNumActivityInstancesJSONArray.put(numInstancesSimKeys);
-				
+
+                parentJSON.put("siminfo", simInfoJSONArray);
 				parentJSON.put("processsim", aggProcessSimulationJSONArray);
 				parentJSON.put("activityinstances", aggNumActivityInstancesJSONArray);
 				parentJSON.put("htsim", aggHTSimulationJSONArray);
