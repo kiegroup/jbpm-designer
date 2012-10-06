@@ -2691,7 +2691,23 @@ public class Bpmn2JsonUnmarshaller {
         } catch (IndexOutOfBoundsException e) {
             // TODO we dont want to barf here as test for example do not define event definitions in the bpmn2....
         }
-                
+        // simulation
+        if(properties.get("waittime") != null && properties.get("waittime").length() > 0) {
+            TimeParameters timeParams = DroolsFactory.eINSTANCE.createTimeParameters();
+            Parameter waittimeParam = DroolsFactory.eINSTANCE.createParameter();
+            FloatingParameterType waittimeParamValue = DroolsFactory.eINSTANCE.createFloatingParameterType();
+            DecimalFormat twoDForm = new DecimalFormat("#.##");
+            waittimeParamValue.setValue(Double.valueOf(twoDForm.format(Double.valueOf(properties.get("waittime")))));
+            waittimeParam.getParameterValue().add(waittimeParamValue);
+            timeParams.setWaitTime(waittimeParam);
+            if(_simulationElementParameters.containsKey(event.getId())) {
+                _simulationElementParameters.get(event.getId()).add(timeParams);
+            } else {
+                List<EObject> values = new ArrayList<EObject>();
+                values.add(timeParams);
+                _simulationElementParameters.put(event.getId(), values);
+            }
+        }
     }
     
     protected void applyThrowEventProperties(ThrowEvent event, Map<String, String> properties) {
@@ -3745,6 +3761,14 @@ public class Bpmn2JsonUnmarshaller {
         	if(properties.get("timeunit") != null) {
         		timeParams.setTimeUnit(TimeUnit.getByName(properties.get("timeunit")));
         	}
+            if(properties.get("waittime") != null) {
+                Parameter waittimeParam = DroolsFactory.eINSTANCE.createParameter();
+                FloatingParameterType waittimeParamValue = DroolsFactory.eINSTANCE.createFloatingParameterType();
+                DecimalFormat twoDForm = new DecimalFormat("#.##");
+                waittimeParamValue.setValue(Double.valueOf(twoDForm.format(Double.valueOf(properties.get("waittime")))));
+                waittimeParam.getParameterValue().add(waittimeParamValue);
+                timeParams.setWaitTime(waittimeParam);
+            }
         	timeParams.setProcessingTime(processingTimeParam);
         	if(_simulationElementParameters.containsKey(task.getId())) {
             	_simulationElementParameters.get(task.getId()).add(timeParams);

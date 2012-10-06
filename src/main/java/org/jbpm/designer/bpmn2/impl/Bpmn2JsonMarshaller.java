@@ -351,7 +351,7 @@ public class Bpmn2JsonMarshaller {
 	                }
 	                // simulation
 	                if(_simulationScenario != null && _simulationScenario.getScenarioParameters() != null) {
-	                	props.put("currency", _simulationScenario.getScenarioParameters().getBaseCurrencyUnit());
+	                	props.put("currency", _simulationScenario.getScenarioParameters().getBaseCurrencyUnit() == null ? "" : _simulationScenario.getScenarioParameters().getBaseCurrencyUnit());
 	                	props.put("timeunit", _simulationScenario.getScenarioParameters().getBaseTimeUnit().getName());
 	                }
 	                marshallProperties(props, generator);
@@ -922,6 +922,18 @@ public class Bpmn2JsonMarshaller {
     
     protected void marshallIntermediateCatchEvent(IntermediateCatchEvent catchEvent, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> properties) throws JsonGenerationException, IOException {
     	List<EventDefinition> eventDefinitions = catchEvent.getEventDefinitions();
+        // simulation properties
+        if(_simulationScenario != null) {
+            for(ElementParametersType eleType : _simulationScenario.getElementParameters()) {
+                if(eleType.getElementId().equals(catchEvent.getId())) {
+                    TimeParameters timeParams = eleType.getTimeParameters();
+                    if(timeParams.getWaitTime() != null) {
+                        FloatingParameterType waittimeType = (FloatingParameterType) timeParams.getWaitTime().getParameterValue().get(0);
+                        properties.put("waittime", waittimeType.getValue());
+                    }
+                }
+            }
+        }
     	if (eventDefinitions.size() == 1) {
     		EventDefinition eventDefinition = eventDefinitions.get(0);
     		if (eventDefinition instanceof SignalEventDefinition) {
@@ -954,6 +966,18 @@ public class Bpmn2JsonMarshaller {
     	} else {
     		catchEventProperties.put("boundarycancelactivity", "false");
     	}
+        // simulation properties
+        if(_simulationScenario != null) {
+            for(ElementParametersType eleType : _simulationScenario.getElementParameters()) {
+                if(eleType.getElementId().equals(boundaryEvent.getId())) {
+                    TimeParameters timeParams = eleType.getTimeParameters();
+                    if(timeParams.getWaitTime() != null) {
+                        FloatingParameterType waittimeType = (FloatingParameterType) timeParams.getWaitTime().getParameterValue().get(0);
+                        catchEventProperties.put("waittime", waittimeType.getValue());
+                    }
+                }
+            }
+        }
     	if (eventDefinitions.size() == 1) {
     		EventDefinition eventDefinition = eventDefinitions.get(0);
     		if (eventDefinition instanceof SignalEventDefinition) {
@@ -1655,6 +1679,10 @@ public class Bpmn2JsonMarshaller {
         			if(timeParams.getTimeUnit() != null) {
         				properties.put("timeunit", timeParams.getTimeUnit().getName());
         			}
+                    if(timeParams.getWaitTime() != null) {
+                        FloatingParameterType waittimeType = (FloatingParameterType) timeParams.getWaitTime().getParameterValue().get(0);
+                        properties.put("waittime", waittimeType.getValue());
+                    }
         		}
         	}
         }
