@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<profiles>
+  <!-- name default is reserved for the standard profile -->
+  <profile name="default" stencilset="bpmn2.0">
+    <plugin name="ORYX.Plugins.Toolbar" />
+    <plugin name="ORYX.Plugins.UUIDRepositorySave" />
+    <plugin name="ORYX.Plugins.ShapeMenuPlugin" />
+    <plugin name="ORYX.Plugins.ShapeRepository" />
+    <plugin name="ORYX.Plugins.PropertyWindow" />
+    <plugin name="ORYX.Plugins.CanvasResize" />
+    <plugin name="ORYX.Plugins.View" />
+    <plugin name="ORYX.Plugins.DragDropResize" />
+    <plugin name="ORYX.Plugins.RenameShapes" />
+    <plugin name="ORYX.Plugins.Undo" />
+    <plugin name="ORYX.Plugins.Arrangement" />
+    <plugin name="ORYX.Plugins.Grouping" />
+    <plugin name="ORYX.Plugins.DragDocker" />
+    <plugin name="ORYX.Plugins.AddDocker" />
+    <plugin name="ORYX.Plugins.SelectionFrame" />
+    <plugin name="ORYX.Plugins.ShapeHighlighting" />
+    <plugin name="ORYX.Plugins.Edit" />
+    <plugin name="ORYX.Plugins.KeysMove" />
+    <!-- to have edges with orthogonal layout -->
+    <plugin name="ORYX.Plugins.Layouter.EdgeLayouter" />
+    <!-- to have a better container layout ? -->
+    <plugin name="ORYX.Plugins.ContainerLayouter" />
+    <!-- lane layouter -->
+    <plugin name="ORYX.Plugins.DragTracker.LaneDragTracker" />
+    <plugin name="ORYX.Plugins.DragTracker.PoolDragTracker" />
+    <stencilsetextension
+      namespace="http://oryx-editor.org/stencilsets/extensions/bpmncosts-2.0#" />
+  </profile>
+</profiles>
