@@ -3355,7 +3355,6 @@
 					"readonly":false,
 					"optional":true,
 					"simulation" : true,
-					"fortasktypes":"None|User",
 					"min" : "0"
 				},
 				{
