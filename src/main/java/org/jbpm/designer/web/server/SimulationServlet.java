@@ -177,6 +177,7 @@ public class SimulationServlet extends HttpServlet {
                 JSONObject simInfoKeys = new JSONObject();
                 simInfoKeys.put("id", simInfo.getProcessId() == null ? "" : simInfo.getProcessId());
                 simInfoKeys.put("name", simInfo.getProcessName() == null? "" : simInfo.getProcessName());
+                simInfoKeys.put("executions", simInfo.getNumberOfExecutions());
                 SimpleDateFormat infoDateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
                 String simStartStr = infoDateFormat.format(new Date(simInfo.getStartTime()));
                 String simEndStr = infoDateFormat.format(new Date(simInfo.getEndTime()));
