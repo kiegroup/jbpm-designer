@@ -3244,18 +3244,6 @@
 					"min" : "0"
 				},
 				{
-                    "id":"waittime",
-                    "type":"Float",
-                    "title":"Wait Time",
-                    "value":"0",
-                    "description":"",
-                    "description_ja":"",
-                    "readonly":false,
-                    "optional":true,
-                    "simulation" : true,
-                    "min" : "0"
-                },
-				{
 					"id":"timeunit",
 					"type":"Choice",
 					"title":"Time Unit",
