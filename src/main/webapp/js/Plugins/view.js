@@ -542,6 +542,7 @@ ORYX.Plugins.View = {
 				            	}
 				            }.createDelegate(this),
 				            failure: function(){
+                                loadMask.hide();
 				            	Ext.Msg.minWidth = 400;
 				            	Ext.Msg.alert("Failed to import BPMN2.");
 				            },
