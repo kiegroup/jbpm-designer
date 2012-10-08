@@ -21,6 +21,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.codehaus.jackson.JsonParseException;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.emf.common.util.URI;
+import org.jboss.drools.DroolsPackage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -201,6 +202,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
     public IDiagramMarshaller createMarshaller() {
         return new IDiagramMarshaller() {
             public String parseModel(String jsonModel, String preProcessingData) {
+                DroolsFactoryImpl.init();
                 Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
                 JBPMBpmn2ResourceImpl res;
                 try {
@@ -247,6 +249,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
     public IDiagramUnmarshaller createUnmarshaller() {
         return new IDiagramUnmarshaller() {
             public String parseModel(String xmlModel, IDiagramProfile profile, String preProcessingData) {
+                DroolsFactoryImpl.init();
                 Bpmn2JsonMarshaller marshaller = new Bpmn2JsonMarshaller();
                 marshaller.setProfile(profile);
                 try {
@@ -266,14 +269,16 @@ public class JbpmProfileImpl implements IDiagramProfile {
             resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
                 .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new JBPMBpmn2ResourceFactoryImpl());
             resourceSet.getPackageRegistry().put("http://www.omg.org/spec/BPMN/20100524/MODEL", Bpmn2Package.eINSTANCE);
-            JBPMBpmn2ResourceImpl resource = (JBPMBpmn2ResourceImpl) resourceSet.createResource(URI.createURI("inputStream://dummyUriWithValidSuffix.xml"));
+            resourceSet.getPackageRegistry().put("http://www.jboss.org/drools", DroolsPackage.eINSTANCE);
+
+            JBPMBpmn2ResourceImpl resource = (JBPMBpmn2ResourceImpl) resourceSet.createResource(URI.createURI("dummyUriWithValidSuffix.xml"));
             resource.getDefaultLoadOptions().put(JBPMBpmn2ResourceImpl.OPTION_ENCODING, "UTF-8");
             resource.setEncoding("UTF-8");
             Map<String, Object> options = new HashMap<String, Object>();
             options.put( JBPMBpmn2ResourceImpl.OPTION_ENCODING, "UTF-8" );
             InputStream is = new ByteArrayInputStream(xml.getBytes("UTF-8"));
             resource.load(is, options);
-            
+
             EList<Diagnostic> warnings = resource.getWarnings();
             
             if (warnings != null && !warnings.isEmpty()){
@@ -289,8 +294,11 @@ public class JbpmProfileImpl implements IDiagramProfile {
                 }
                 throw new IllegalStateException("Error parsing process definition");
             }
-            
+
             return ((DocumentRoot) resource.getContents().get(0)).getDefinitions();
+        } catch(IOException e) {
+            e.printStackTrace();
+            return null;
         } catch (Throwable t) {
             t.printStackTrace();
             return null;

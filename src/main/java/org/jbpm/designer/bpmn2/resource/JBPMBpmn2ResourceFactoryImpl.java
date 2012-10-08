@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.ElementHandlerImpl;
+import org.jboss.drools.impl.DroolsFactoryImpl;
 
 public class JBPMBpmn2ResourceFactoryImpl extends ResourceFactoryImpl {
 	/**
@@ -33,6 +34,7 @@ public class JBPMBpmn2ResourceFactoryImpl extends ResourceFactoryImpl {
      */
     @Override
     public Resource createResource(URI uri) {
+        DroolsFactoryImpl.init();
         JBPMBpmn2ResourceImpl result = new JBPMBpmn2ResourceImpl(uri);
         ExtendedMetaData extendedMetadata = new XmlExtendedMetadata();
         result.getDefaultSaveOptions().put(XMLResource.OPTION_EXTENDED_META_DATA, extendedMetadata);
@@ -66,6 +68,7 @@ public class JBPMBpmn2ResourceFactoryImpl extends ResourceFactoryImpl {
      */
 
     public Definitions createAndInitResource(URI uri) {
+        DroolsFactoryImpl.init();
         Resource resource = createResource(uri);
         Bpmn2Factory factory = Bpmn2Factory.eINSTANCE;
         Definitions definitions = factory.createDefinitions();

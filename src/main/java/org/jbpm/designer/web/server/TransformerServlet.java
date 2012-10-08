@@ -73,6 +73,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceFactoryImpl;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceImpl;
 import org.jbpm.designer.web.batikprotocolhandler.GuvnorParsedURLProtocolHandler;
@@ -126,6 +127,7 @@ public class TransformerServlet extends HttpServlet {
         String processid = req.getParameter("processid");
         
         IDiagramProfile profile = ServletUtil.getProfile(req, profileName, getServletContext());
+        DroolsFactoryImpl.init();
 
         if (transformto != null && transformto.equals(TO_PDF)) {
             try {
@@ -253,7 +255,6 @@ public class TransformerServlet extends HttpServlet {
                     }
                 }
             }
-
             // get the xml from Definitions
             ResourceSet rSet = new ResourceSetImpl();
             rSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("bpmn2", new JBPMBpmn2ResourceFactoryImpl());
@@ -263,7 +264,6 @@ public class TransformerServlet extends HttpServlet {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             bpmn2resource.save(outputStream, new HashMap<Object, Object>());
             String revisedXmlModel =  outputStream.toString();
-
         	String json = profile.createUnmarshaller().parseModel(revisedXmlModel, profile, pp);
         	resp.setContentType("application/json");
 			resp.getWriter().print(json);
@@ -598,34 +598,6 @@ public class TransformerServlet extends HttpServlet {
             // we dont want to barf..just log that error happened
             _logger.error(e.getMessage());
             return "";
-        }
-    }
-
-    private Definitions getDefinitions(String xml) {
-        try {
-            ResourceSet resourceSet = new ResourceSetImpl();
-            resourceSet
-                    .getResourceFactoryRegistry()
-                    .getExtensionToFactoryMap()
-                    .put(Resource.Factory.Registry.DEFAULT_EXTENSION,
-                            new JBPMBpmn2ResourceFactoryImpl());
-            resourceSet.getPackageRegistry().put(
-                    "http://www.omg.org/spec/BPMN/20100524/MODEL",
-                    Bpmn2Package.eINSTANCE);
-            XMLResource resource = (XMLResource) resourceSet.createResource(URI
-                    .createURI("inputStream://dummyUriWithValidSuffix.xml"));
-            resource.getDefaultLoadOptions().put(XMLResource.OPTION_ENCODING,
-                    "UTF-8");
-            resource.setEncoding("UTF-8");
-            Map<String, Object> options = new HashMap<String, Object>();
-            options.put(XMLResource.OPTION_ENCODING, "UTF-8");
-            InputStream is = new ByteArrayInputStream(xml.getBytes("UTF-8"));
-            resource.load(is, options);
-            return ((DocumentRoot) resource.getContents().get(0))
-                    .getDefinitions();
-        } catch (Throwable t) {
-            t.printStackTrace();
-            return null;
         }
     }
 }
