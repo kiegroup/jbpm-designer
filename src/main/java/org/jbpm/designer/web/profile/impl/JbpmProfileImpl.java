@@ -201,7 +201,6 @@ public class JbpmProfileImpl implements IDiagramProfile {
     public IDiagramMarshaller createMarshaller() {
         return new IDiagramMarshaller() {
             public String parseModel(String jsonModel, String preProcessingData) {
-                DroolsFactoryImpl.init();
                 Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
                 JBPMBpmn2ResourceImpl res;
                 try {
@@ -248,7 +247,6 @@ public class JbpmProfileImpl implements IDiagramProfile {
     public IDiagramUnmarshaller createUnmarshaller() {
         return new IDiagramUnmarshaller() {
             public String parseModel(String xmlModel, IDiagramProfile profile, String preProcessingData) {
-                DroolsFactoryImpl.init();
                 Bpmn2JsonMarshaller marshaller = new Bpmn2JsonMarshaller();
                 marshaller.setProfile(profile);
                 try {
