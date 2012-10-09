@@ -3785,7 +3785,7 @@
                "type" : 			"node",
                "id": 				"$patternData.(k).id$",
                "title" : 			"$patternData.(k).name$",
-               "groups" : 			["Patterns"],
+               "groups" : 			["Workflow Patterns"],
                "description" : 	    "$patternData.(k).description$",
                "description_ja" : "",
                "view" : 			"activity/task.svg",
