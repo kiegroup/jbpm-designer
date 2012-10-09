@@ -350,5 +350,132 @@
                 "xyOffset" : [120,0]
             }
         ]
+    },
+    {
+        "id": "wp-arbitrarycycles",
+        "name": "Arbitrary Cycles",
+        "description" : "Arbitrary Cycles Pattern",
+        "elements" : [
+            {
+                "id": "1",
+                "name": "A",
+                "nodetype" : "http://b3mn.org/stencilset/bpmn2.0#Task",
+                "namespace" : "http://b3mn.org/stencilset/bpmn2.0#",
+                "connectingType" : "http://b3mn.org/stencilset/bpmn2.0#SequenceFlow",
+                "parent" : [],
+                "children" : ["2"],
+                "xyOffset" : [0,0]
+            },
+            {
+                "id" : "2",
+                "name": "",
+                "nodetype" : "http://b3mn.org/stencilset/bpmn2.0#Exclusive_Databased_Gateway",
+                "namespace" : "http://b3mn.org/stencilset/bpmn2.0#",
+                "connectingType": "http://b3mn.org/stencilset/bpmn2.0#SequenceFlow",
+                "parent" : ["1"],
+                "children" : ["3","4"],
+                "xyOffset" : [120,0]
+            },
+            {
+                "id" : "3",
+                "name": "",
+                "nodetype" : "http://b3mn.org/stencilset/bpmn2.0#Exclusive_Databased_Gateway",
+                "namespace" : "http://b3mn.org/stencilset/bpmn2.0#",
+                "connectingType": "http://b3mn.org/stencilset/bpmn2.0#SequenceFlow",
+                "parent" : ["2"],
+                "children" : ["5"],
+                "xyOffset" : [0,180]
+            },
+            {
+                "id" : "4",
+                "name": "B",
+                "nodetype" : "http://b3mn.org/stencilset/bpmn2.0#Task",
+                "namespace" : "http://b3mn.org/stencilset/bpmn2.0#",
+                "connectingType": "http://b3mn.org/stencilset/bpmn2.0#SequenceFlow",
+                "parent" : ["2"],
+                "children" : ["6"],
+                "xyOffset" : [120,0]
+            },
+            {
+                "id" : "5",
+                "name": "C",
+                "nodetype" : "http://b3mn.org/stencilset/bpmn2.0#Task",
+                "namespace" : "http://b3mn.org/stencilset/bpmn2.0#",
+                "connectingType": "http://b3mn.org/stencilset/bpmn2.0#SequenceFlow",
+                "parent" : ["3"],
+                "children" : ["6"],
+                "xyOffset" : [120,-90]
+            },
+            {
+                "id" : "6",
+                "name": "",
+                "nodetype" : "http://b3mn.org/stencilset/bpmn2.0#Exclusive_Databased_Gateway",
+                "namespace" : "http://b3mn.org/stencilset/bpmn2.0#",
+                "connectingType": "http://b3mn.org/stencilset/bpmn2.0#SequenceFlow",
+                "parent" : ["5"],
+                "children" : ["7"],
+                "xyOffset" : [120,45]
+            },
+            {
+                "id" : "7",
+                "name": "D",
+                "nodetype" : "http://b3mn.org/stencilset/bpmn2.0#Task",
+                "namespace" : "http://b3mn.org/stencilset/bpmn2.0#",
+                "connectingType": "http://b3mn.org/stencilset/bpmn2.0#SequenceFlow",
+                "parent" : ["6"],
+                "children" : ["8"],
+                "xyOffset" : [120,0]
+            },
+            {
+                "id" : "8",
+                "name": "",
+                "nodetype" : "http://b3mn.org/stencilset/bpmn2.0#Exclusive_Databased_Gateway",
+                "namespace" : "http://b3mn.org/stencilset/bpmn2.0#",
+                "connectingType": "http://b3mn.org/stencilset/bpmn2.0#SequenceFlow",
+                "parent" : ["7"],
+                "children" : ["9","10"],
+                "xyOffset" : [120,0]
+            },
+            {
+                "id" : "9",
+                "name": "E",
+                "nodetype" : "http://b3mn.org/stencilset/bpmn2.0#Task",
+                "namespace" : "http://b3mn.org/stencilset/bpmn2.0#",
+                "connectingType": "http://b3mn.org/stencilset/bpmn2.0#SequenceFlow",
+                "parent" : ["8"],
+                "children" : [],
+                "xyOffset" : [120,-45]
+            },
+            {
+                "id" : "10",
+                "name": "F",
+                "nodetype" : "http://b3mn.org/stencilset/bpmn2.0#Task",
+                "namespace" : "http://b3mn.org/stencilset/bpmn2.0#",
+                "connectingType": "http://b3mn.org/stencilset/bpmn2.0#SequenceFlow",
+                "parent" : ["8"],
+                "children" : ["11"],
+                "xyOffset" : [120,45]
+            },
+            {
+                "id" : "11",
+                "name": "",
+                "nodetype" : "http://b3mn.org/stencilset/bpmn2.0#Exclusive_Databased_Gateway",
+                "namespace" : "http://b3mn.org/stencilset/bpmn2.0#",
+                "connectingType": "http://b3mn.org/stencilset/bpmn2.0#SequenceFlow",
+                "parent" : ["10"],
+                "children" : ["3","12"],
+                "xyOffset" : [0,90]
+            },
+            {
+                "id" : "12",
+                "name": "G",
+                "nodetype" : "http://b3mn.org/stencilset/bpmn2.0#Task",
+                "namespace" : "http://b3mn.org/stencilset/bpmn2.0#",
+                "connectingType": "http://b3mn.org/stencilset/bpmn2.0#SequenceFlow",
+                "parent" : ["11"],
+                "children" : [],
+                "xyOffset" : [120,0]
+            }
+        ]
     }
 ]
