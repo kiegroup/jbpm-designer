@@ -117,7 +117,8 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
         }
         IDiagramProfile profile = ServletUtil.getProfile(req, req.getParameter("profile"), getServletContext());
 		try {
-			String response =  new String(_repository.load(req, uuid, profile), Charset.forName("UTF-8"));
+		    
+			String response =  new String(_repository.load(req, uuid, profile), "UTF-8");
 			resp.getWriter().write(response);
 		} catch (Exception e) {
 			throw new ServletException("Exception loading process: " + e.getMessage());
