@@ -1841,7 +1841,10 @@ public class Bpmn2JsonMarshaller {
     
     protected void marshallDataObject(DataObject dataObject, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
     	Map<String, Object> properties = new LinkedHashMap<String, Object>(flowElementProperties);
-    	if(dataObject.getName() != null) {
+        if(dataObject.getDocumentation() != null && dataObject.getDocumentation().size() > 0) {
+            properties.put("documentation", dataObject.getDocumentation().get(0).getText());
+        }
+        if(dataObject.getName() != null) {
     		properties.put("name", unescapeXML(dataObject.getName()));
     	} else {
     		properties.put("name", "");
@@ -2423,6 +2426,9 @@ public class Bpmn2JsonMarshaller {
         if(!foundBrColor) {
         	properties.put("bordercolor", defaultSequenceflowColor);
         }
+        if(association.getDocumentation() != null && association.getDocumentation().size() > 0) {
+            properties.put("documentation", association.getDocumentation().get(0).getText());
+        }
         
         marshallProperties(properties, generator);
         generator.writeObjectFieldStart("stencil");
@@ -2471,6 +2477,9 @@ public class Bpmn2JsonMarshaller {
     protected void marshallTextAnnotation(TextAnnotation textAnnotation, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Definitions def)  throws JsonGenerationException, IOException{
     	Map<String, Object> properties = new LinkedHashMap<String, Object>();
     	properties.put("name", textAnnotation.getText());
+        if(textAnnotation.getDocumentation() != null && textAnnotation.getDocumentation().size() > 0) {
+            properties.put("documentation", textAnnotation.getDocumentation().get(0).getText());
+        }
     	properties.put("artifacttype", "Annotation");
     	
     	Iterator<FeatureMap.Entry> iter = textAnnotation.getAnyAttribute().iterator();
