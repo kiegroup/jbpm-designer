@@ -90,7 +90,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         Map<String, ThemeInfo> themeData = setupThemes(profile, req);
         setupCustomEditors(profile, req);
         // check with guvnor to see what packages exist
-        List<String> packageNames = findPackages(uuid, profile);
+        List<String> packageNames = findPackages(profile);
         String[] info = ServletUtil.findPackageAndAssetInfo(uuid, profile);
         
         setupFormWidgets(profile, req);
@@ -767,7 +767,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         return returnData;
     }
     
-    private List<String> findPackages(String uuid, IDiagramProfile profile) {
+    private List<String> findPackages(IDiagramProfile profile) {
         // GUVNOR JbpmPreprocessingUnit
         List<String> packages = new ArrayList<String>();
         String packagesURL = ExternalInfo.getExternalProtocol(profile) + "://" + ExternalInfo.getExternalHost(profile) +
