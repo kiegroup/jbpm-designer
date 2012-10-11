@@ -295,9 +295,11 @@ ORYX.Plugins.ShapeMenuPlugin = {
 	editTaskForm: function() {
 		var taskname = this.currentShapes[0].properties['oryx-taskname'];
 		if(taskname && taskname.length > 0) {
+            taskname =  taskname.replace(/\&/g, "");
+            taskname = taskname.replace(/\s/g, "");
 			this.facade.raiseEvent({
 	            type: ORYX.CONFIG.EVENT_TASKFORM_EDIT,
-	            tn: taskname.replace(/\s/g, "")
+	            tn: taskname
 	        });
 		} else {
 			Ext.Msg.alert('Task Name not specified.');
