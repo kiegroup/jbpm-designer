@@ -180,13 +180,17 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 			
 			if(fe instanceof SendTask) {
 				SendTask st = (SendTask) fe;
-				if(st.getOperationRef() == null) {
-					addError(st, "Send Task has no operation.");
-				}
 				if(st.getMessageRef() == null) {
 					addError(st, "Send Task has no message.");
 				}
 			}
+
+            if(fe instanceof ServiceTask) {
+                ServiceTask st = (ServiceTask) fe;
+                if(st.getOperationRef() == null) {
+                    addError(st, "Service Task has no operation.");
+                }
+            }
 			
 			if(fe instanceof UserTask) {
 				UserTask ut = (UserTask) fe;
