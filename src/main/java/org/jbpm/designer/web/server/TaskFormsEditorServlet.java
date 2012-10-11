@@ -75,7 +75,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
 	                + "/"
 	                + profile.getExternalLoadURLSubdomain().substring(0,
 	                        profile.getExternalLoadURLSubdomain().indexOf("/"))
-	                + "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/" + taskName + TASKFORM_NAME_EXTENSION;
+	                + "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/" + URLEncoder.encode(taskName, "UTF-8") + TASKFORM_NAME_EXTENSION;
 
 		String createNewURL = ExternalInfo.getExternalProtocol(profile)
 				+ "://"
@@ -113,7 +113,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
                 "application/octet-stream");
         createConnection.setRequestProperty("Accept",
                 "application/atom+xml");
-        createConnection.setRequestProperty("Slug", taskName + TASKFORM_NAME_EXTENSION + TASKFORM_FILE_EXTENSION);
+        createConnection.setRequestProperty("Slug", URLEncoder.encode(taskName, "UTF-8") + TASKFORM_NAME_EXTENSION + TASKFORM_FILE_EXTENSION);
         createConnection.setDoOutput(true);
         
         createConnection.getOutputStream ().write(formValue.getBytes("UTF-8"));
@@ -131,7 +131,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
 		                + "/"
 		                + profile.getExternalLoadURLSubdomain().substring(0,
 		                        profile.getExternalLoadURLSubdomain().indexOf("/"))
-		                + "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/" + taskName + TASKFORM_NAME_EXTENSION;
+		                + "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/" + URLEncoder.encode(taskName, "UTF-8") + TASKFORM_NAME_EXTENSION;
 				
 				String taskFormSourceURL = ExternalInfo.getExternalProtocol(profile)
 		                + "://"
@@ -139,7 +139,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
 		                + "/"
 		                + profile.getExternalLoadURLSubdomain().substring(0,
 		                        profile.getExternalLoadURLSubdomain().indexOf("/"))
-		                + "/rest/packages/"+ URLEncoder.encode(packageName, "UTF-8") + "/assets/" + taskName + TASKFORM_NAME_EXTENSION
+		                + "/rest/packages/"+ URLEncoder.encode(packageName, "UTF-8") + "/assets/" + URLEncoder.encode(taskName, "UTF-8") + TASKFORM_NAME_EXTENSION
 		                + "/source/";
 				
 				URL checkURL = new URL(taskFormURL);
