@@ -297,7 +297,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
 		if(taskname && taskname.length > 0) {
 			this.facade.raiseEvent({
 	            type: ORYX.CONFIG.EVENT_TASKFORM_EDIT,
-	            tn: taskname 
+	            tn: taskname.replace(/\s/g, "")
 	        });
 		} else {
 			Ext.Msg.alert('Task Name not specified.');
