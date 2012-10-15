@@ -16,22 +16,22 @@
 	}
 	
 	function isAlphabet(elem){
-		var alphaExp = /^[a-zA-Z0-9\_ .-@]+\$/;
-		if(elem.value.match(alphaExp)){
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	function isAlphanumeric(elem){
-		var alphaExp = /^[a-zA-Z0-9\_ .-@]+\$/;
-		if(elem.value.match(alphaExp)){
-			return true;
-		} else {
-			return false;
-		}
-	}
+        var alphaExp = /^[a-zA-Z0-9\u00A1-\uFFFF\_ .-@]+\$/;
+        if(elem.value.match(alphaExp)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function isAlphanumeric(elem){
+        var alphaExp = /^[a-zA-Z0-9\u00A1-\uFFFF\_ .-@]+\$/;
+        if(elem.value.match(alphaExp) && !isNumeric(elem)){
+            return true;
+        } else {
+            return false;
+        }
+    }
 	
 	function isFloat(elem){
    		if(elem.value.indexOf(".") < 0){
