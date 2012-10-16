@@ -2851,6 +2851,43 @@ public class Bpmn2JsonUnmarshaller {
         } catch (IndexOutOfBoundsException e) {
             // TODO we dont want to barf here as test for example do not define event definitions in the bpmn2....
         }
+
+        // simulation
+        if(properties.get("distributiontype") != null && properties.get("distributiontype").length() > 0) {
+            TimeParameters timeParams = DroolsFactory.eINSTANCE.createTimeParameters();
+            Parameter processingTimeParam = DroolsFactory.eINSTANCE.createParameter();
+            if(properties.get("distributiontype").equals("normal")) {
+                NormalDistributionType normalDistributionType = DroolsFactory.eINSTANCE.createNormalDistributionType();
+                normalDistributionType.setStandardDeviation(Double.valueOf(properties.get("standarddeviation")));
+                normalDistributionType.setMean(Double.valueOf(properties.get("mean")));
+                processingTimeParam.getParameterValue().add(normalDistributionType);
+            } else if(properties.get("distributiontype").equals("uniform")) {
+                UniformDistributionType uniformDistributionType = DroolsFactory.eINSTANCE.createUniformDistributionType();
+                uniformDistributionType.setMax(Double.valueOf(properties.get("max")));
+                uniformDistributionType.setMin(Double.valueOf(properties.get("min")));
+                processingTimeParam.getParameterValue().add(uniformDistributionType);
+            } else if(properties.get("distributiontype").equals("random")) {
+                RandomDistributionType randomDistributionType = DroolsFactory.eINSTANCE.createRandomDistributionType();
+                randomDistributionType.setMax(Double.valueOf(properties.get("max")));
+                randomDistributionType.setMin(Double.valueOf(properties.get("min")));
+                processingTimeParam.getParameterValue().add(randomDistributionType);
+            } else if(properties.get("distributiontype").equals("poisson")) {
+                PoissonDistributionType poissonDistributionType = DroolsFactory.eINSTANCE.createPoissonDistributionType();
+                poissonDistributionType.setMean(Double.valueOf(properties.get("mean")));
+                processingTimeParam.getParameterValue().add(poissonDistributionType);
+            }
+            if(properties.get("timeunit") != null) {
+                timeParams.setTimeUnit(TimeUnit.getByName(properties.get("timeunit")));
+            }
+            timeParams.setProcessingTime(processingTimeParam);
+            if(_simulationElementParameters.containsKey(event.getId())) {
+                _simulationElementParameters.get(event.getId()).add(timeParams);
+            } else {
+                List<EObject> values = new ArrayList<EObject>();
+                values.add(timeParams);
+                _simulationElementParameters.put(event.getId(), values);
+            }
+        }
     }
 
     protected void applyGlobalTaskProperties(GlobalTask globalTask, Map<String, String> properties) {

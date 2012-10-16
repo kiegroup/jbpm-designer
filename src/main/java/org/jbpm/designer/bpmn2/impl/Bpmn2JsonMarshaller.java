@@ -1004,7 +1004,42 @@ public class Bpmn2JsonMarshaller {
     
     protected void marshallIntermediateThrowEvent(IntermediateThrowEvent throwEvent, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> properties) throws JsonGenerationException, IOException {
     	List<EventDefinition> eventDefinitions = throwEvent.getEventDefinitions();
-    	if (eventDefinitions.size() == 0) {
+
+        // simulation properties
+        if(_simulationScenario != null) {
+            for(ElementParametersType eleType : _simulationScenario.getElementParameters()) {
+                if(eleType.getElementId().equals(throwEvent.getId())) {
+                    TimeParameters timeParams = eleType.getTimeParameters();
+                    Parameter processingTime = timeParams.getProcessingTime();
+                    ParameterValue paramValue =  processingTime.getParameterValue().get(0);
+                    if(paramValue instanceof NormalDistributionType) {
+                        NormalDistributionType ndt = (NormalDistributionType) paramValue;
+                        properties.put("mean", ndt.getMean());
+                        properties.put("standarddeviation", ndt.getStandardDeviation());
+                        properties.put("distributiontype", "normal");
+                    } else if(paramValue instanceof UniformDistributionType) {
+                        UniformDistributionType udt = (UniformDistributionType) paramValue;
+                        properties.put("min", udt.getMin());
+                        properties.put("max", udt.getMax());
+                        properties.put("distributiontype", "uniform");
+                    } else if(paramValue instanceof RandomDistributionType) {
+                        RandomDistributionType rdt = (RandomDistributionType) paramValue;
+                        properties.put("min", rdt.getMin());
+                        properties.put("max", rdt.getMax());
+                        properties.put("distributiontype", "random");
+                    } else if(paramValue instanceof PoissonDistributionType) {
+                        PoissonDistributionType pdt = (PoissonDistributionType) paramValue;
+                        properties.put("mean", pdt.getMean());
+                        properties.put("distributiontype", "poisson");
+                    }
+                    if(timeParams.getTimeUnit() != null) {
+                        properties.put("timeunit", timeParams.getTimeUnit().getName());
+                    }
+                }
+            }
+        }
+
+        if (eventDefinitions.size() == 0) {
 			marshallNode(throwEvent, properties, "IntermediateEvent", plane, generator, xOffset, yOffset);
     	} else if (eventDefinitions.size() == 1) {
     		EventDefinition eventDefinition = eventDefinitions.get(0);
