@@ -184,6 +184,7 @@ public class SimulationServlet extends HttpServlet {
                 simInfoKeys.put("starttime", simStartStr);
                 simInfoKeys.put("endtime", simEndStr);
                 simInfoKeys.put("version", simInfo.getProcessVersion() == null? "" : simInfo.getProcessVersion());
+                simInfoKeys.put("interval", presentInterval((int) simInfo.getInterval(), intervalUnit));
                 simInfoJSONArray.put(simInfoKeys);
 
 				for(AggregatedSimulationEvent aggEvent : aggEvents) {
@@ -616,5 +617,25 @@ public class SimulationServlet extends HttpServlet {
 			return "";
 		}
 	}
+
+    private String presentInterval(int interval, String intervalUnit) {
+        String retVal;
+        if(intervalUnit.equals("seconds")) {
+            interval = interval / 1000;
+            retVal = interval + " seconds";
+        } else if(intervalUnit.equals("minutes")) {
+            interval = interval / (1000*60);
+            retVal = interval + " minutess";
+        } else if(intervalUnit.equals("hours")) {
+            interval = interval / (1000*60*60);
+            retVal = interval + " hours";
+        } else if(intervalUnit.equals("days")) {
+            interval = interval / (1000*60*60*24);
+            retVal = interval + " days";
+        } else {
+            retVal = interval + " milliseconds";
+        }
+        return retVal;
+    }
 }
 

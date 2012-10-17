@@ -79,6 +79,10 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
                           <td><b>Num. of Executions: </b></td> \
                           <td>' + simInfo[0].executions  + '</td> \
                           </tr> \
+                          <tr> \
+                          <td><b>Interval </b></td> \
+                          <td>' + simInfo[0].interval  + '</td> \
+                          </tr> \
                           </table>';
         if(simInfo) {
             Ext.getCmp('siminfopanel').body.update(infomarkup);
