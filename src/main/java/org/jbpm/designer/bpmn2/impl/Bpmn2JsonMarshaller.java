@@ -931,6 +931,9 @@ public class Bpmn2JsonMarshaller {
                         FloatingParameterType waittimeType = (FloatingParameterType) timeParams.getWaitTime().getParameterValue().get(0);
                         properties.put("waittime", waittimeType.getValue());
                     }
+                    if(timeParams.getTimeUnit() != null) {
+                        properties.put("timeunit", timeParams.getTimeUnit().getName());
+                    }
                 }
             }
         }
@@ -974,6 +977,9 @@ public class Bpmn2JsonMarshaller {
                     if(timeParams.getWaitTime() != null) {
                         FloatingParameterType waittimeType = (FloatingParameterType) timeParams.getWaitTime().getParameterValue().get(0);
                         catchEventProperties.put("waittime", waittimeType.getValue());
+                    }
+                    if(timeParams.getTimeUnit() != null) {
+                        catchEventProperties.put("timeunit", timeParams.getTimeUnit().getName());
                     }
                 }
             }

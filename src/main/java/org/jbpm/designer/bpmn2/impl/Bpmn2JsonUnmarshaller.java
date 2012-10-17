@@ -2702,6 +2702,9 @@ public class Bpmn2JsonUnmarshaller {
             waittimeParamValue.setValue(Double.valueOf(twoDForm.format(Double.valueOf(properties.get("waittime")))));
             waittimeParam.getParameterValue().add(waittimeParamValue);
             timeParams.setWaitTime(waittimeParam);
+            if(properties.get("timeunit") != null) {
+                timeParams.setTimeUnit(TimeUnit.getByName(properties.get("timeunit")));
+            }
             if(_simulationElementParameters.containsKey(event.getId())) {
                 _simulationElementParameters.get(event.getId()).add(timeParams);
             } else {
@@ -2710,6 +2713,7 @@ public class Bpmn2JsonUnmarshaller {
                 _simulationElementParameters.put(event.getId(), values);
             }
         }
+
     }
     
     protected void applyThrowEventProperties(ThrowEvent event, Map<String, String> properties) {
