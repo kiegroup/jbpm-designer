@@ -429,18 +429,22 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 				if(ca.getCalledElement() == null || ca.getCalledElement().length() < 1) {
 					addError((CallActivity) fe, "Reusable Subprocess has no called element specified.");
 				} else {
-					String[] packageAssetInfo = ServletUtil.findPackageAndAssetInfo(uuid, profile);
-	        		String packageName = packageAssetInfo[0];
-	        		List<String> allProcessesInPackage = ServletUtil.getAllProcessesInPackage(packageName, profile);
-	        		boolean foundCalledElementProcess = false;
-	        		for(String p : allProcessesInPackage) {
-	        			String processContent = ServletUtil.getProcessSourceContent(packageName, p, profile);
-	        			Pattern pattern = Pattern.compile("<\\S*process[\\s\\S]*id=\"" + ca.getCalledElement() + "\"", Pattern.MULTILINE);
-	                    Matcher m = pattern.matcher(processContent);
-	                    if(m.find()) {
-	                    	foundCalledElementProcess = true;
-	                    	break;
-	                    }
+				    boolean foundCalledElementProcess = false;
+				    List<String> allPackageNames = ServletUtil.getPackageNamesFromGuvnor(profile);
+				    for (String packageName : allPackageNames) {
+				        List<String> allProcessesInPackage = ServletUtil.getAllProcessesInPackage(packageName, profile);
+				        for(String p : allProcessesInPackage) {
+				            String processContent = ServletUtil.getProcessSourceContent(packageName, p, profile);
+				            Pattern pattern = Pattern.compile("<\\S*process[\\s\\S]*id=\"" + ca.getCalledElement() + "\"", Pattern.MULTILINE);
+				            Matcher m = pattern.matcher(processContent);
+				            if(m.find()) {
+				                foundCalledElementProcess = true;
+				                break;
+				            }
+				        }
+				        if (foundCalledElementProcess) {
+				            break;
+				        }
 	        		}
 	        		if(!foundCalledElementProcess) {
 	        			addError((CallActivity) fe, "No existing process with id=" + ca.getCalledElement() + " could be found.");
