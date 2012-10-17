@@ -13,6 +13,26 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
         this.selectedRoots = [];
         this.selectedRootsCount;
         this.createdElementCount;
+
+        this.facade.offer({
+            'name': "Create Pattern",
+            'functionality': this.createPatternFromSelection.bind(this),
+            'group': "pattern",
+            'icon': ORYX.PATH + "images/pattern.png",
+            'description': "Create a Workflow pattern from selection",
+            'index': 1,
+            'minShape': 0,
+            'maxShape': 0,
+            'isEnabled': function(){
+                profileParamName = "profile";
+                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+                regexa = new RegExp( regexSa );
+                profileParams = regexa.exec( window.location.href );
+                profileParamValue = profileParams[1];
+                return profileParamValue == "jbpm";
+            }.bind(this)
+        });
     },
     handleCreatePattern : function(options) {
         if(options && options.pid && options.pdata && options.pos) {
@@ -151,5 +171,103 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
                 this.facade.getCanvas().update();
             }
         }
+    },
+    createPatternFromSelection : function() {
+        var selection = this.facade.getSelection();
+        if(selection && selection.size() > 0) {
+            var parentShapes = this.findParentShapes(selection);
+            if(parentShapes && parentShapes.size() > 0) {
+                var patternNameField = new Ext.form.TextField({ fieldLabel: 'Pattern Name', allowBlank: false, id: 'patternName', regex: /^[a-z0-9 \-\.\_]*$/i });
+                var patternForm = new Ext.form.FormPanel({
+                    baseCls: 		'x-plain',
+                    labelWidth: 	150,
+                    labelAlign: 'right',
+                    bodyStyle:'padding:15x 15px 15px 15px',
+                    defaultType: 	'textfield',
+                    items: [
+                        patternNameField
+                    ]
+                });
+                var dialog = new Ext.Window({
+                    layout		: 'anchor',
+                    autoCreate	: true,
+                    title		: "Create a new Workflow Pattern",
+                    height		: 150,
+                    width		: 400,
+                    modal		: true,
+                    collapsible	: false,
+                    fixedcenter	: true,
+                    shadow		: true,
+                    resizable   : true,
+                    proxyDrag	: true,
+                    autoScroll  : true,
+                    keys:[{
+                        key	: 27,
+                        fn	: function(){
+                            dialog.hide()
+                        }.bind(this)
+                    }],
+                    items		:[patternForm],
+                    listeners	:{
+                        hide: function(){
+                            dialog.destroy();
+                        }.bind(this)
+                    },
+                    buttons		: [{
+                        text: ORYX.I18N.PropertyWindow.ok,
+                        handler: function(){
+
+                            // todo finish
+                            //alert(patternNameField.getValue());
+
+                            dialog.hide()
+                        }.bind(this)
+                    }, {
+                        text: ORYX.I18N.PropertyWindow.cancel,
+                        handler: function(){
+                            dialog.hide()
+                        }.bind(this)
+                    }]
+                });
+
+                dialog.show();
+            } else {
+                Ext.Msg.alert('Invalid selection');
+            }
+        } else {
+            Ext.Msg.alert('No nodes selected');
+        }
+    },
+    findParentShapes : function(selection) {
+        var parents = [];
+        var i = 0;
+        selection.each(function(shape) {
+            if(shape.getIncomingShapes() && shape.getIncomingShapes().size() > 0) {
+                if(!this.isInSelection(selection, shape.getIncomingShapes())) {
+                    if(shape instanceof ORYX.Core.Node) {
+                        parents[i] = shape;
+                        i++;
+                    }
+                }
+            } else {
+                parents[i] = shape;
+                i++;
+            }
+        }.bind(this));
+        return parents;
+    },
+    isInSelection : function(selection, shapes) {
+        var ret = false;
+        if(!shapes || shapes.size() == 0) {
+            return false;
+        }
+        for(var i=0; i < shapes.length; i++) {
+            selection.each(function(shape) {
+                if(shape.resourceId == shapes[i].resourceId) {
+                    ret = true;
+                }
+            }.bind(this));
+        }
+        return ret;
     }
 });
