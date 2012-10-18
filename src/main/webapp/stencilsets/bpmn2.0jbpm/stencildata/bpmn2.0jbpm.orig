@@ -10531,10 +10531,6 @@
 					{
 						"from":"Subprocess",
 						"to":["IntermediateEventOnSubprocessBoundary"]
-					},
-					{
-						"from":"ReusableSubprocess",
-						"to":["IntermediateEventOnSubprocessBoundary"]
 					}
 				]
 			},
