@@ -273,6 +273,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
     	   		}
             }.bind(this),
             failure: function(){
+                loadPathsMask.hide();
             	Ext.Msg.alert('Error finding Paths.');
             },
             params: {
