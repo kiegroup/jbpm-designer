@@ -3588,7 +3588,7 @@
 			"type" : 			"node",
 			"id": 				"$workitemDefs.(k).name$",
 			"title" : 			"$workitemDefs.(k).displayName$",
-			"groups" : 			["Service Tasks"],
+			"groups" : 			["$workitemDefs.(k).category$"],
 			"description" : 	"$workitemDefs.(k).explanationText$",
 			"description_ja" : "$workitemDefs.(k).explanationText$",
 			"view" : 			"activity/workitems/$workitemDefs.(k).name$.svg",

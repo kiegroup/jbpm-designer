@@ -65,6 +65,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     public static final String CUSTOMEDITORS_NAME = "customeditors";
     public static final String CUSTOMEDITORS_EXT = ".json";
     public static final String THEME_COOKIE_NAME = "designercolortheme";
+    public static final String DEFAULT_CATEGORY_NAME = "Service Tasks";
     
     private String stencilPath;
     private String origStencilFilePath;
@@ -230,6 +231,11 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 WorkDefinitionImpl workDefinition = new WorkDefinitionImpl();
                 workDefinition.setName(((String) workDefinitionMap.get("name")).replaceAll("\\s",""));
                 workDefinition.setDisplayName((String) workDefinitionMap.get("displayName"));
+                String category = (String) workDefinitionMap.get("category");
+                if(category == null || category.length() < 1) {
+                    category = DEFAULT_CATEGORY_NAME;
+                }
+                workDefinition.setCategory(category);
                 String icon = (String) workDefinitionMap.get("icon");
                 if(icon.length() < 1) {
                 	String packageName = "";
