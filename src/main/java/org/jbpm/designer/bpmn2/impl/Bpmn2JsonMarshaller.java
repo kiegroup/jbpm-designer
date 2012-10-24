@@ -1372,7 +1372,7 @@ public class Bpmn2JsonMarshaller {
             		if(eleType.getElementId().equals(task.getId())) {
             			CostParameters costParams = eleType.getCostParameters();
             			DecimalParameterType unitCostVal = (DecimalParameterType) costParams.getUnitCost().getParameterValue().get(0);
-            			properties.put("unitcost", unitCostVal.getValue().toString()); 
+            			properties.put("unitcost", unitCostVal.getValue().toString());
             			properties.put("currency", costParams.getCurrencyUnit() == null ? "" : costParams.getCurrencyUnit());
             			ResourceParameters resourceParams = eleType.getResourceParameters();
             			FloatingParameterType quantityVal = (FloatingParameterType) resourceParams.getQuantity().getParameterValue().get(0);
@@ -1724,6 +1724,11 @@ public class Bpmn2JsonMarshaller {
                         FloatingParameterType waittimeType = (FloatingParameterType) timeParams.getWaitTime().getParameterValue().get(0);
                         properties.put("waittime", waittimeType.getValue());
                     }
+
+                    CostParameters costParams = eleType.getCostParameters();
+                    DecimalParameterType unitCostVal = (DecimalParameterType) costParams.getUnitCost().getParameterValue().get(0);
+                    properties.put("unitcost", unitCostVal.getValue().toString());
+                    properties.put("currency", costParams.getCurrencyUnit() == null ? "" : costParams.getCurrencyUnit());
         		}
         	}
         }

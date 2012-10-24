@@ -3821,6 +3821,25 @@ public class Bpmn2JsonUnmarshaller {
             	_simulationElementParameters.put(task.getId(), values);
             }
         }
+
+        CostParameters costParameters = DroolsFactory.eINSTANCE.createCostParameters();
+        if(properties.get("unitcost") != null && properties.get("unitcost").length() > 0) {
+            Parameter unitcostParam = DroolsFactory.eINSTANCE.createParameter();
+            DecimalParameterType unitCostParameterValue = DroolsFactory.eINSTANCE.createDecimalParameterType();
+            unitCostParameterValue.setValue(new BigDecimal(properties.get("unitcost")));
+            unitcostParam.getParameterValue().add(unitCostParameterValue);
+            costParameters.setUnitCost(unitcostParam);
+        }
+        if(properties.get("currency") != null && properties.get("currency").length() > 0) {
+            costParameters.setCurrencyUnit(properties.get("currency"));
+        }
+        if(_simulationElementParameters.containsKey(task.getId())) {
+            _simulationElementParameters.get(task.getId()).add(costParameters);
+        } else {
+            List<EObject> values = new ArrayList<EObject>();
+            values.add(costParameters);
+            _simulationElementParameters.put(task.getId(), values);
+        }
     }
     
     protected void applyUserTaskProperties(UserTask task, Map<String, String> properties) {
@@ -4279,25 +4298,6 @@ public class Bpmn2JsonUnmarshaller {
         } else {
         	List<EObject> values = new ArrayList<EObject>();
         	values.add(resourceParameters);
-        	_simulationElementParameters.put(task.getId(), values);
-        }
-        
-        CostParameters costParameters = DroolsFactory.eINSTANCE.createCostParameters();
-        if(properties.get("unitcost") != null && properties.get("unitcost").length() > 0) {
-        	Parameter unitcostParam = DroolsFactory.eINSTANCE.createParameter();
-        	DecimalParameterType unitCostParameterValue = DroolsFactory.eINSTANCE.createDecimalParameterType();
-        	unitCostParameterValue.setValue(new BigDecimal(properties.get("unitcost")));
-        	unitcostParam.getParameterValue().add(unitCostParameterValue);
-        	costParameters.setUnitCost(unitcostParam);
-        }
-        if(properties.get("currency") != null && properties.get("currency").length() > 0) {
-        	costParameters.setCurrencyUnit(properties.get("currency"));
-        }
-        if(_simulationElementParameters.containsKey(task.getId())) {
-        	_simulationElementParameters.get(task.getId()).add(costParameters);
-        } else {
-        	List<EObject> values = new ArrayList<EObject>();
-        	values.add(costParameters);
         	_simulationElementParameters.put(task.getId(), values);
         }
     }

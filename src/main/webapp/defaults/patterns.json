@@ -84,6 +84,53 @@
         ]
     },
     {
+        "id": "wp-xorsplit",
+        "name": "XOR Split",
+        "description" : "XOR Split Pattern",
+        "elements" : [
+            {
+                "id": "1",
+                "name": "A",
+                "nodetype" : "http://b3mn.org/stencilset/bpmn2.0#Task",
+                "namespace" : "http://b3mn.org/stencilset/bpmn2.0#",
+                "connectingType" : "http://b3mn.org/stencilset/bpmn2.0#SequenceFlow",
+                "parent" : [],
+                "children" : ["2"],
+                "xyOffset" : [0,0]
+            },
+            {
+                "id" : "2",
+                "name": "",
+                "nodetype" : "http://b3mn.org/stencilset/bpmn2.0#Exclusive_Databased_Gateway",
+                "namespace" : "http://b3mn.org/stencilset/bpmn2.0#",
+                "connectingType": "http://b3mn.org/stencilset/bpmn2.0#SequenceFlow",
+                "parent" : ["1"],
+                "children" : ["3", "4"],
+                "xyOffset" : [120,0]
+            },
+            {
+                "id" : "3",
+                "name": "B1",
+                "nodetype" : "http://b3mn.org/stencilset/bpmn2.0#Task",
+                "namespace" : "http://b3mn.org/stencilset/bpmn2.0#",
+                "connectingType": "http://b3mn.org/stencilset/bpmn2.0#SequenceFlow",
+                "parent" : ["2"],
+                "children" : [],
+                "xyOffset" : [120,-60]
+            },
+            {
+                "id" : "4",
+                "name": "B2",
+                "nodetype" : "http://b3mn.org/stencilset/bpmn2.0#Task",
+                "namespace" : "http://b3mn.org/stencilset/bpmn2.0#",
+                "connectingType": "http://b3mn.org/stencilset/bpmn2.0#SequenceFlow",
+                "parent" : ["2"],
+                "children" : [],
+                "xyOffset" : [120,60]
+            }
+        ]
+    },
+    {
         "id": "wp-exclusivechoice",
         "name": "Exclusive Choice",
         "description" : "Exclusive Choice Pattern",
@@ -277,7 +324,7 @@
                 "connectingType" : "http://b3mn.org/stencilset/bpmn2.0#SequenceFlow",
                 "parent" : [],
                 "children" : ["4"],
-                "xyOffset" : [0,-90]
+                "xyOffset" : [0,-60]
             },
             {
                 "id" : "2",
@@ -287,17 +334,7 @@
                 "connectingType": "http://b3mn.org/stencilset/bpmn2.0#SequenceFlow",
                 "parent" : [],
                 "children" : ["4"],
-                "xyOffset" : [0,0]
-            },
-            {
-                "id" : "3",
-                "name": "D",
-                "nodetype" : "http://b3mn.org/stencilset/bpmn2.0#Task",
-                "namespace" : "http://b3mn.org/stencilset/bpmn2.0#",
-                "connectingType": "http://b3mn.org/stencilset/bpmn2.0#SequenceFlow",
-                "parent" : [],
-                "children" : ["4"],
-                "xyOffset" : [0,90]
+                "xyOffset" : [0,60]
             },
             {
                 "id" : "4",
@@ -307,11 +344,11 @@
                 "connectingType": "http://b3mn.org/stencilset/bpmn2.0#SequenceFlow",
                 "parent" : ["1","2","3"],
                 "children" : ["5"],
-                "xyOffset" : [120,90]
+                "xyOffset" : [120,60]
             },
             {
                 "id" : "5",
-                "name": "E",
+                "name": "D",
                 "nodetype" : "http://b3mn.org/stencilset/bpmn2.0#Task",
                 "namespace" : "http://b3mn.org/stencilset/bpmn2.0#",
                 "connectingType": "http://b3mn.org/stencilset/bpmn2.0#SequenceFlow",

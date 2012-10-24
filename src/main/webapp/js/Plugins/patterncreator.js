@@ -160,7 +160,7 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
                 var con;
                 var elementChildObject = this.findChildObject(elementChild, patternElements);
                 var stencil = ORYX.Core.StencilSet.stencil(elementChildObject.connectingType);
-                con = new ORYX.Core.Edge({}, stencil);
+                con = new ORYX.Core.Edge({'eventHandlerCallback':this.facade.raiseEvent }, stencil);
                 con.dockers.first().setDockedShape(this.patternShapes[element.id]);
                 var magnet = this.patternShapes[element.id].getDefaultMagnet();
                 var cPoint = magnet ? magnet.bounds.center() : this.patternShapes[element.id].bounds.midPoint();

@@ -3578,7 +3578,6 @@
 					"readonly":false,
 					"optional":true,
 					"simulation" : true,
-					"fortasktypes":"None|User",
 					"min" : "0"
 				}
 			]
@@ -3944,7 +3943,157 @@
 							"value": "mvel"
 						\}
 					]                                        
-				\}
+				\},
+				\{
+                    "id":"min",
+                    "type":"Float",
+                    "title":"Processing time (min)",
+                    "value":"0",
+                    "description":"",
+                    "description_ja":"",
+                    "readonly":false,
+                    "optional":true,
+                    "simulation" : true,
+                    "fordistribution":"uniform|random",
+                    "min" : "0"
+                \},
+                \{
+                    "id":"max",
+                    "type":"Float",
+                    "title":"Processing time (max)",
+                    "value":"0",
+                    "description":"",
+                    "description_ja":"",
+                    "readonly":false,
+                    "optional":true,
+                    "simulation" : true,
+                    "fordistribution":"uniform|random",
+                    "min" : "0"
+                \},
+                \{
+                    "id":"standarddeviation",
+                    "type":"Float",
+                    "title":"Standard Deviation",
+                    "value":"0",
+                    "description":"",
+                    "description_ja":"",
+                    "readonly":false,
+                    "optional":true,
+                    "simulation" : true,
+                    "fordistribution":"normal"
+                \},
+                \{
+                    "id":"mean",
+                    "type":"Float",
+                    "title":"Processing time (mean)",
+                    "value":"0",
+                    "description":"",
+                    "description_ja":"",
+                    "readonly":false,
+                    "optional":true,
+                    "simulation" : true,
+                    "fordistribution":"normal|poisson",
+                    "min" : "0"
+                \},
+                \{
+                    "id":"timeunit",
+                    "type":"Choice",
+                    "title":"Time Unit",
+                    "value":"",
+                    "description":"Time unit options (seconds, minutes, hours)",
+                    "description_ja":"Time unit options (seconds, minutes, hours)",
+                    "readonly":false,
+                    "optional":true,
+                    "simulation" : true,
+                    "items": [
+                        \{
+                            "id": "c1",
+                            "title":"milliseconds",
+                            "value":"ms"
+                        \},
+                        \{
+                            "id": "c2",
+                            "title": "seconds",
+                            "value": "s"
+                        \},
+                        \{
+                            "id": "c3",
+                            "title": "minutes",
+                            "value": "min"
+                        \},
+                        \{
+                            "id": "c4",
+                            "title": "hours",
+                            "value": "hour"
+                        \},
+                        \{
+                            "id": "c5",
+                            "title": "days",
+                            "value": "day"
+                        \},
+                        \{
+                            "id": "c6",
+                            "title": "years",
+                            "value": "year"
+                        \}
+                    ]
+                \},
+                \{
+                    "id":"distributiontype",
+                    "type":"Choice",
+                    "title":"Distribution Type",
+                    "value":"random",
+                    "description":"",
+                    "description_ja":"",
+                    "readonly":false,
+                    "optional":true,
+                    "simulation" : true,
+                    "items": [
+                        \{
+                            "id": "c1",
+                            "title":"normal",
+                            "value":"normal"
+                        \},
+                        \{
+                            "id": "c2",
+                            "title": "uniform",
+                            "value": "uniform"
+                        \},
+                        \{
+                            "id": "c3",
+                            "title": "random",
+                            "value": "random"
+                        \},
+                        \{
+                            "id": "c4",
+                            "title": "poisson",
+                            "value": "poisson"
+                        \}
+                    ]
+                \},
+                \{
+                    "id":"unitcost",
+                    "type":"Float",
+                    "title":"Cost per time unit",
+                    "value":"0",
+                    "description":"",
+                    "description_ja":"",
+                    "readonly":false,
+                    "optional":true,
+                    "simulation" : true,
+                    "min" : "0"
+                \},
+                \{
+                    "id":"currency",
+                    "type":"String",
+                    "title":"Currency",
+                    "value":"",
+                    "description":"Base currency (ISO 4217)",
+                    "readonly":false,
+                    "optional":true,
+                    "simulation" : true,
+                    "min" : "0"
+                \}
 			]
 		\},
 		}$

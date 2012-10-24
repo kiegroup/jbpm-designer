@@ -144,7 +144,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 				// find the task type
 				this.taskType = "";
 				this.findTaskType(nextTask.id);
-				this.taskType.replace(/\s/g, "");
+				this.taskType = this.taskType.replace(/\s/g, "");
 			    graphTypeChild = new Ext.tree.TreeNode({
 					id:"tgraph:" + nextTask.id,
 					text:nextTask.name + " (" + nextTask.id + ")", 				
