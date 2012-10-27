@@ -177,6 +177,8 @@ ORYX.CONFIG.TYPE_DATAOUTPUT_SINGLE =    "dataoutputsingle";
 ORYX.CONFIG.TYPE_DATAASSIGNMENT =       "dataassignment";
 ORYX.CONFIG.TYPE_CALLEDELEMENT  =       "calledelement";
 ORYX.CONFIG.TYPE_CUSTOM =               "custom";
+ORYX.CONFIG.TYPE_REASSIGNMENT =         "reassignment";
+ORYX.CONFIG.TYPE_NOTIFICATIONS =        "notifications";
 	
 /* Vertical line distance of multiline labels */
 ORYX.CONFIG.LABEL_LINE_DISTANCE =		2;

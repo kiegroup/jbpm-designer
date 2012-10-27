@@ -4216,6 +4216,113 @@ public class Bpmn2JsonUnmarshaller {
             }
         }
 
+        // reassignments
+        if(properties.get("reassignment") != null && properties.get("reassignment").length() > 0) {
+            if(task.getIoSpecification() == null) {
+                InputOutputSpecification iospec = Bpmn2Factory.eINSTANCE.createInputOutputSpecification();
+                task.setIoSpecification(iospec);
+            }
+            List<DataInput> dataInputs = task.getIoSpecification().getDataInputs();
+            boolean foundNotCompletedReassignmentsInput = false;
+            boolean foundNotStartedReassignmentsInput = false;
+            DataInput foundNotCompletedInput = null;
+            DataInput foundNotStartedInput = null;
+            for(DataInput din : dataInputs) {
+                if(din.getName().equals("NotCompletedReassign")) {
+                    foundNotCompletedReassignmentsInput = true;
+                    foundNotCompletedInput = din;
+                    break;
+                }
+
+                if(din.getName().equals("NotStartedReassign")) {
+                    foundNotStartedReassignmentsInput = true;
+                    foundNotStartedInput = din;
+                    break;
+                }
+            }
+
+            if(!foundNotCompletedReassignmentsInput) {
+                DataInput d = Bpmn2Factory.eINSTANCE.createDataInput();
+                d.setId(task.getId() + "_" + "NotCompletedReassign" + "Input");
+                d.setName("NotCompletedReassign");
+                task.getIoSpecification().getDataInputs().add(d);
+                foundNotCompletedInput = d;
+
+                if(task.getIoSpecification().getInputSets() == null || task.getIoSpecification().getInputSets().size() < 1) {
+                    InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
+                    task.getIoSpecification().getInputSets().add(inset);
+                }
+                task.getIoSpecification().getInputSets().get(0).getDataInputRefs().add(d);
+            }
+
+            if(!foundNotStartedReassignmentsInput) {
+                DataInput d = Bpmn2Factory.eINSTANCE.createDataInput();
+                d.setId(task.getId() + "_" + "NotStartedReassign" + "Input");
+                d.setName("NotStartedReassign");
+                task.getIoSpecification().getDataInputs().add(d);
+                foundNotStartedInput = d;
+
+                if(task.getIoSpecification().getInputSets() == null || task.getIoSpecification().getInputSets().size() < 1) {
+                    InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
+                    task.getIoSpecification().getInputSets().add(inset);
+                }
+                task.getIoSpecification().getInputSets().get(0).getDataInputRefs().add(d);
+            }
+
+            boolean foundNotCompletedReassignmentAssociation = false;
+            boolean foundNotStartedReassignmentAssociation = false;
+
+            List<DataInputAssociation> inputAssociations = task.getDataInputAssociations();
+            for(DataInputAssociation da : inputAssociations) {
+                if(da.getTargetRef().getId().equals(foundNotCompletedInput.getId())) {
+                    foundNotCompletedReassignmentAssociation = true;
+                    ((FormalExpression) da.getAssignment().get(0).getFrom()).setBody(getReassignmentsForType(properties.get("reassignment"), "not-completed"));    // TODO Finish
+                }
+                if(da.getTargetRef().getId().equals(foundNotStartedInput.getId())) {
+                    foundNotStartedReassignmentAssociation = true;
+                    ((FormalExpression) da.getAssignment().get(0).getFrom()).setBody(getReassignmentsForType(properties.get("reassignment"), "not-started"));
+                }
+            }
+
+            if(!foundNotCompletedReassignmentAssociation) {
+                DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
+                dia.setTargetRef(foundNotCompletedInput);
+
+                Assignment a = Bpmn2Factory.eINSTANCE.createAssignment();
+                FormalExpression localeFromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                localeFromExpression.setBody(getReassignmentsForType(properties.get("reassignment"), "not-completed"));
+
+                FormalExpression localeToExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                localeToExpression.setBody(foundNotCompletedInput.getId());
+
+                a.setFrom(localeFromExpression);
+                a.setTo(localeToExpression);
+
+                dia.getAssignment().add(a);
+                task.getDataInputAssociations().add(dia);
+            }
+
+            if(!foundNotStartedReassignmentAssociation) {
+                DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
+                dia.setTargetRef(foundNotStartedInput);
+
+                Assignment a = Bpmn2Factory.eINSTANCE.createAssignment();
+                FormalExpression localeFromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                localeFromExpression.setBody(getReassignmentsForType(properties.get("reassignment"), "not-started"));
+
+                FormalExpression localeToExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                localeToExpression.setBody(foundNotStartedInput.getId());
+
+                a.setFrom(localeFromExpression);
+                a.setTo(localeToExpression);
+
+                dia.getAssignment().add(a);
+                task.getDataInputAssociations().add(dia);
+            }
+        }
+        // end reassignments
+
+
         // revisit data assignments
         if(task.getDataInputAssociations() != null) {
         	List<DataInputAssociation> dataInputAssociations = task.getDataInputAssociations();
@@ -4234,6 +4341,10 @@ public class Bpmn2JsonUnmarshaller {
         			} else if(targetInput.getName().equalsIgnoreCase("Content") && (properties.get("content") == null  || properties.get("content").length() == 0)) {
         				toRemoveAssociations.add(dia);
         			} else if(targetInput.getName().equalsIgnoreCase("Locale") && (properties.get("locale") == null  || properties.get("locale").length() == 0)) {
+                        toRemoveAssociations.add(dia);
+                    } else if(targetInput.getName().equalsIgnoreCase("NotCompletedReassign") && (properties.get("reassignment") == null  || properties.get("reassignment").length() == 0)) {
+                        toRemoveAssociations.add(dia);
+                    } else if(targetInput.getName().equalsIgnoreCase("NotStartedReassign") && (properties.get("reassignment") == null  || properties.get("reassignment").length() == 0)) {
                         toRemoveAssociations.add(dia);
                     }
         		}
@@ -4259,7 +4370,11 @@ public class Bpmn2JsonUnmarshaller {
     				toRemoveDataInputs.add(din);
     			} else if(din.getName().equalsIgnoreCase("Content") && (properties.get("content") == null  || properties.get("content").length() == 0)) {
     				toRemoveDataInputs.add(din);
-    			}  else if(din.getName().equalsIgnoreCase("Locale") && (properties.get("locale") == null  || properties.get("locale").length() == 0)) {
+    			} else if(din.getName().equalsIgnoreCase("Locale") && (properties.get("locale") == null  || properties.get("locale").length() == 0)) {
+                    toRemoveDataInputs.add(din);
+                } else if(din.getName().equalsIgnoreCase("NotCompletedReassign") && (properties.get("reassignment") == null  || properties.get("reassignment").length() == 0)) {
+                    toRemoveDataInputs.add(din);
+                } else if(din.getName().equalsIgnoreCase("NotStartedReassign") && (properties.get("reassignment") == null  || properties.get("reassignment").length() == 0)) {
                     toRemoveDataInputs.add(din);
                 }
         	}
@@ -4506,5 +4621,25 @@ public class Bpmn2JsonUnmarshaller {
 		}
 		return sb.toString();
 	}
+
+    private String getReassignmentsForType(String reassignmentsStr, String type) {
+        // [users:pesa|groups:]@[4d]@not-started^[users:|groups:pederi]@[44y]@not-completed^[users:tosa|groups:macke]@[1s]@not-started^[users:something|groups:somethingelse]@[22d]@not-completed
+        String[] reassignmentParts = reassignmentsStr.split( "\\^\\s*" );
+        String ret = "";
+        for(int i=0;i<reassignmentParts.length;i++) {
+            if(reassignmentParts[i].endsWith("^")) {
+                reassignmentParts[i] = reassignmentParts[i].substring(0,reassignmentParts[i].length()-1);
+            }
+            if(reassignmentParts[i].endsWith("@"+type)) {
+                ret += reassignmentParts[i].substring(0, reassignmentParts[i].length() - ("@"+type).length());
+                ret += "^";
+            }
+        }
+        if(ret.endsWith("^")) {
+            ret = ret.substring(0,ret.length()-1);
+        }
+
+        return ret;
+    }
 }
 

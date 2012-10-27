@@ -746,6 +746,32 @@ ORYX.Plugins.PropertyWindow = {
 							cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1,field:cf});							
 							editorGrid = new Ext.Editor(cf);
 							break;
+
+
+                        case ORYX.CONFIG.TYPE_REASSIGNMENT:
+                            var cf = new Ext.form.ComplexReassignmentField({
+                                allowBlank: pair.optional(),
+                                dataSource:this.dataSource,
+                                grid:this.grid,
+                                row:index,
+                                facade:this.facade
+                            });
+                            cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1,field:cf});
+                            editorGrid = new Ext.Editor(cf);
+                            break;
+
+
+                        case ORYX.CONFIG.TYPE_NOTIFICATIONS:
+                            var cf = new Ext.form.ComplexNotificationsField({
+                                allowBlank: pair.optional(),
+                                dataSource:this.dataSource,
+                                grid:this.grid,
+                                row:index,
+                                facade:this.facade
+                            });
+                            cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1,field:cf});
+                            editorGrid = new Ext.Editor(cf);
+                            break;
 						
 						case ORYX.CONFIG.TYPE_DATAINPUT:
                             var cf = new Ext.form.ComplexDataInputField({
@@ -1567,6 +1593,258 @@ Ext.form.ComplexCustomField = Ext.extend(Ext.form.TriggerField,  {
 	}
 });
 
+Ext.form.ComplexReassignmentField = Ext.extend(Ext.form.TriggerField,  {
+    onTriggerClick : function() {
+        if(this.disabled){
+            return;
+        }
+
+        var ReassignmentDef = Ext.data.Record.create([{
+            name: 'users'
+        }, {
+            name: 'groups'
+        }, {
+            name: 'expires'
+        }, {
+            name: 'type'
+        }]);
+
+        var reassignmentProxy = new Ext.data.MemoryProxy({
+            root: []
+        });
+
+        var reassignments = new Ext.data.Store({
+            autoDestroy: true,
+            reader: new Ext.data.JsonReader({
+                root: "root"
+            }, ReassignmentDef),
+            proxy: reassignmentProxy,
+            sorters: [{
+                property: 'users',
+                direction:'ASC'
+            },
+            {
+                property: 'groups',
+                direction:'ASC'
+            }]
+        });
+        reassignments.load();
+
+        if(this.value.length > 0) {
+            this.value = this.value.replace(/\[/g , "");
+            this.value = this.value.replace(/\]/g , "");
+
+            var valueParts = this.value.split("^");
+            for(var i=0; i < valueParts.length; i++) {
+                var nextPart = valueParts[i];
+                if(nextPart.indexOf("@") > 0) {
+                    var innerParts = nextPart.split("@");
+                    var usergroupsstr = innerParts[0];
+                    var expiresstr = innerParts[1];
+                    var typestr = innerParts[2];
+
+                    var userPartValue = "";
+                    var groupsPartValue = "";
+                    if(usergroupsstr.indexOf("|") > 0) {
+                        var tparts = usergroupsstr.split("|");
+                        var partone = tparts[0];
+                        var parttwo = tparts[1];
+
+                        var epartsone = partone.split(":");
+                        if(epartsone[0] == "users") {
+                            userPartValue = epartsone[1];
+                        } else if(epartsone[0] == "groups") {
+                            groupsPartValue = epartsone[1];
+                        }
+
+                        var epartstwo = parttwo.split(":");
+                        if(epartstwo[0] == "users") {
+                            userPartValue = epartstwo[1];
+                        } else if(epartstwo[0] == "groups") {
+                            groupsPartValue = epartstwo[1];
+                        }
+                    } else {
+                        var eparts = usergroupsstr.split(":");
+                        if(eparts[0] == "users") {
+                            userPartValue = eparts[1];
+                        } else if(eparts[0] == "groups") {
+                            groupsPartValue = eparts[1];
+                        }
+                    }
+
+                    reassignments.add(new ReassignmentDef({
+                        users: userPartValue,
+                        groups: groupsPartValue,
+                        expires: expiresstr,
+                        type: typestr
+                    }));
+                }
+            }
+        }
+
+        var typeData = new Array();
+        var notStartedType = new Array();
+        notStartedType.push("not-started");
+        notStartedType.push("not-started");
+        typeData.push(notStartedType);
+        var notCompletedTYpe = new Array();
+        notCompletedTYpe.push("not-completed");
+        notCompletedTYpe.push("not-completed");
+        typeData.push(notCompletedTYpe);
+
+        var gridId = Ext.id();
+        var itemDeleter = new Extensive.grid.ItemDeleter();
+        var grid = new Ext.grid.EditorGridPanel({
+            store: reassignments,
+            id: gridId,
+            stripeRows: true,
+            cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
+                id: 'users',
+                header: 'Users',
+                width: 150,
+                dataIndex: 'users',
+                editor: new Ext.form.TextField({ allowBlank: false, regex: /^[a-z0-9 \-\.\_\,]*$/i }),
+                renderer: Ext.util.Format.htmlEncode
+            },
+            {
+                id: 'groups',
+                header: 'Groups',
+                width: 150,
+                dataIndex: 'groups',
+                editor: new Ext.form.TextField({ allowBlank: false, regex: /^[a-z0-9 \-\.\_\,]*$/i }),
+                renderer: Ext.util.Format.htmlEncode
+            },
+            {
+                id: 'expires',
+                header: 'Expires At',
+                width: 150,
+                dataIndex: 'expires',
+                editor: new Ext.form.TextField({ allowBlank: false, regex: /^[a-z0-9 \-\.\_]*$/i }),
+                renderer: Ext.util.Format.htmlEncode
+            },
+            {
+                id: 'type',
+                header: 'Type',
+                width: 150,
+                dataIndex: 'type',
+                editor: new Ext.form.ComboBox({
+                    id: 'typeCombo',
+                    valueField:'name',
+                    displayField:'value',
+                    labelStyle:'display:none',
+                    submitValue : true,
+                    typeAhead: false,
+                    queryMode: 'local',
+                    mode: 'local',
+                    triggerAction: 'all',
+                    selectOnFocus:true,
+                    hideTrigger: false,
+                    forceSelection: false,
+                    selectOnFocus:true,
+                    autoSelect:false,
+                    store: new Ext.data.SimpleStore({
+                        fields: [
+                            'name',
+                            'value'
+                        ],
+                        data: typeData
+                    })
+                })
+            }, itemDeleter]),
+            selModel: itemDeleter,
+            autoHeight: true,
+            tbar: [{
+                text: 'Add Reassignment',
+                handler : function(){
+                    reassignments.add(new ReassignmentDef({
+                        users: '',
+                        groups: '',
+                        expires: '',
+                        type: 'not-started'
+                    }));
+                    grid.fireEvent('cellclick', grid, reassignments.getCount()-1, 1, null);
+                }
+            }],
+            clicksToEdit: 1
+        });
+
+        var dialog = new Ext.Window({
+            layout		: 'anchor',
+            autoCreate	: true,
+            title		: 'Editor for Reassignments',
+            height		: 350,
+            width		: 700,
+            modal		: true,
+            collapsible	: false,
+            fixedcenter	: true,
+            shadow		: true,
+            resizable   : true,
+            proxyDrag	: true,
+            autoScroll  : true,
+            keys:[{
+                key	: 27,
+                fn	: function(){
+                    dialog.hide()
+                }.bind(this)
+            }],
+            items		:[grid],
+            listeners	:{
+                hide: function(){
+                    this.fireEvent('dialogClosed', this.value);
+                    //this.focus.defer(10, this);
+                    dialog.destroy();
+                }.bind(this)
+            },
+            buttons		: [{
+                text: ORYX.I18N.PropertyWindow.ok,
+                handler: function(){
+                    var outValue = "";
+                    grid.stopEditing();
+                    grid.getView().refresh();
+                    reassignments.data.each(function() {
+                        if( (this.data['users'].length > 0 || this.data['groups'].length > 0) && this.data['expires'].length > 0 && this.data['type'].length > 0) {
+                            // [users:john|groups:sales]@[4h]@not-completed^[users:john|groups:sales]@[4h]@[5h]@not-started
+                            // users:john|groups:sales@4h@not-completed
+                            // [users:pesa|groups:]@[4d]@not-started^[users:|groups:pederi]@[44y]@not-completed^[users:tosa|groups:macke]@[1s]@not-started^[users:something|groups:somethingelse]@[22d]@not-completed
+                            outValue += "[users:" + this.data['users'] + "|groups:" + this.data['groups'] + "]";
+                            outValue += "@[" + this.data['expires'] + "]";
+                            outValue += "@" + this.data['type'];
+                            outValue += "^";
+                        }
+                    });
+                    if(outValue.length > 0) {
+                        outValue = outValue.slice(0, -1)
+                    }
+                    this.setValue(outValue);
+                    this.dataSource.getAt(this.row).set('value', outValue)
+                    this.dataSource.commitChanges()
+
+                    dialog.hide()
+                }.bind(this)
+            }, {
+                text: ORYX.I18N.PropertyWindow.cancel,
+                handler: function(){
+                    this.setValue(this.value);
+                    dialog.hide()
+                }.bind(this)
+            }]
+        });
+
+        dialog.show();
+        grid.render();
+
+        this.grid.stopEditing();
+        grid.focus( false, 100 );
+    }
+});
+Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
+    onTriggerClick : function() {
+        if(this.disabled){
+            return;
+        }
+    }
+});
+
 Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
 	/**
      * If the trigger was clicked a dialog has to be opened
@@ -2208,11 +2486,11 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
      * to enter the values for the complex property.
      */
     onTriggerClick : function(){
-		
+
         if(this.disabled){
             return;
         }
-        
+
     	var VarDef = Ext.data.Record.create([{
             name: 'name'
         }, {
@@ -2220,11 +2498,11 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
         }, {
             name: 'ctype'
         }]);
-    	
+
     	var vardefsProxy = new Ext.data.MemoryProxy({
             root: []
         });
-    	
+
     	var vardefs = new Ext.data.Store({
     		autoDestroy: true,
             reader: new Ext.data.JsonReader({
@@ -2237,7 +2515,7 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
             }]
         });
     	vardefs.load();
-    	
+
     	if(this.value.length > 0) {
     		var valueParts = this.value.split(",");
     		for(var i=0; i < valueParts.length; i++) {
@@ -2275,9 +2553,9 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
     		}
 
     	}
-    	
+
     	var itemDeleter = new Extensive.grid.ItemDeleter();
-    	
+
     	var typeData = new Array();
     	var stringType = new Array();
     	stringType.push("String");
@@ -2299,9 +2577,9 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
     	objectType.push("Object");
     	objectType.push("Object");
     	typeData.push(objectType);
-    	
+
     	var gridId = Ext.id();
-    	Ext.form.VTypes["inputNameVal"] = /^[a-z0-9 \-\.\_]*$/i;  
+    	Ext.form.VTypes["inputNameVal"] = /^[a-z0-9 \-\.\_]*$/i;
         Ext.form.VTypes["inputNameText"] = 'Invalid name';
         Ext.form.VTypes["inputName"] = function(v){
         	return Ext.form.VTypes["inputNameVal"].test(v);
@@ -2372,17 +2650,17 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
             }],
             clicksToEdit: 1
         });
-    	
-		var dialog = new Ext.Window({ 
+
+		var dialog = new Ext.Window({
 			layout		: 'anchor',
-			autoCreate	: true, 
-			title		: this.windowTitle, 
-			height		: 300, 
-			width		: 500, 
+			autoCreate	: true,
+			title		: this.windowTitle,
+			height		: 300,
+			width		: 500,
 			modal		: true,
 			collapsible	: false,
-			fixedcenter	: true, 
-			shadow		: true, 
+			fixedcenter	: true,
+			shadow		: true,
 			resizable   : true,
 			proxyDrag	: true,
 			autoScroll  : true,
@@ -2398,11 +2676,11 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
 					this.fireEvent('dialogClosed', this.value);
 					//this.focus.defer(10, this);
 					dialog.destroy();
-				}.bind(this)				
+				}.bind(this)
 			},
 			buttons		: [{
                 text: ORYX.I18N.PropertyWindow.ok,
-                handler: function(){	 
+                handler: function(){
                 	var outValue = "";
                 	grid.stopEditing();
                 	grid.getView().refresh();
@@ -2414,7 +2692,7 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                 				} else {
                 					outValue += this.data['name'] + ":" + this.data['stype'] + ",";
                 				}
-                			} else if(this.data['ctype'].length > 0) { 
+                			} else if(this.data['ctype'].length > 0) {
                 				outValue += this.data['name'] + ":" + this.data['ctype'] + ",";
                 			} else {
                 				outValue += this.data['name'] + ",";
@@ -2437,9 +2715,9 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                 	dialog.hide()
                 }.bind(this)
             }]
-		});		
-				
-		dialog.show();		
+		});
+
+		dialog.show();
 		grid.render();
 
 		this.grid.stopEditing();

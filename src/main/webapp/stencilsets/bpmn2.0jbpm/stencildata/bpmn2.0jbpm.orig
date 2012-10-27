@@ -3360,6 +3360,28 @@
 					"optional":true,
 					"fortasktypes":"None|User"
 				},
+				{
+                    "id":"reassignment",
+                    "type":"Reassignment",
+                    "title":"Reassignment",
+                    "value":"",
+                    "description":"Task reassignment data",
+                    "description_ja":"",
+                    "readonly":false,
+                    "optional":true,
+                    "fortasktypes":"None|User"
+                },
+                /** {
+                    "id":"notifications",
+                    "type":"Notifications",
+                    "title":"Notifications",
+                    "value":"",
+                    "description":"Task notifications data",
+                    "description_ja":"",
+                    "readonly":false,
+                    "optional":true,
+                    "fortasktypes":"None|User"
+                }, **/
 	            {
     			    "id":"locale",
     				"type":"String",

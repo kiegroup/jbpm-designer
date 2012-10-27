@@ -1419,6 +1419,8 @@ public class Bpmn2JsonMarshaller {
         DataInput contentDataInput = null;
         DataInput priorityDataInput = null;
         DataInput localeDataInput = null;
+        DataInput notCompletedReassignInput = null;
+        DataInput notStartedReassignInput = null;
         if(task.getIoSpecification() != null) {
             List<InputSet> inputSetList = task.getIoSpecification().getInputSets();
             StringBuilder dataInBuffer = new StringBuilder();
@@ -1450,6 +1452,12 @@ public class Bpmn2JsonMarshaller {
                     }
                     if(dataIn.getName() != null && dataIn.getName().equals("Locale")) {
                         localeDataInput = dataIn;
+                    }
+                    if(dataIn.getName() != null && dataIn.getName().equals("NotCompletedReassign")) {
+                        notCompletedReassignInput = dataIn;
+                    }
+                    if(dataIn.getName() != null && dataIn.getName().equals("NotStartedReassign")) {
+                        notStartedReassignInput = dataIn;
                     }
                 }
             }
@@ -1533,7 +1541,9 @@ public class Bpmn2JsonMarshaller {
             		   rhsAssociation.equals("Priority") ||
             		   rhsAssociation.equals("Content") ||
             		   rhsAssociation.equals("TaskName")  ||
-                       rhsAssociation.equals("Locale")
+                       rhsAssociation.equals("Locale") ||
+                       rhsAssociation.equals("NotCompletedReassign") ||
+                       rhsAssociation.equals("NotStartedReassign")
             		   )) {
             			String replacer = associationValue.replaceAll(",", "##");
             			associationBuff.append(rhsAssociation).append("=").append(replacer);
@@ -1547,7 +1557,7 @@ public class Bpmn2JsonMarshaller {
             		if (groupDataInput != null && datain.getAssignment().get(0).getTo() != null &&
             				((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
             						((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(groupDataInput.getId())) {
-            			properties.put("groupid", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
+            			properties.put("groupid", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody() == null ? "" : ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
             		}
             		if (skippableDataInput != null && datain.getAssignment().get(0).getTo() != null &&
             				((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
@@ -1562,12 +1572,23 @@ public class Bpmn2JsonMarshaller {
             		if (priorityDataInput != null && datain.getAssignment().get(0).getTo() != null &&
             				((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
             						((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(priorityDataInput.getId())) {
-            			properties.put("priority", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
+            			properties.put("priority", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody() == null ? "" : ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
             		}
                     if (localeDataInput != null && datain.getAssignment().get(0).getTo() != null &&
                             ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
                             ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(localeDataInput.getId())) {
                         properties.put("locale", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
+                    }
+
+                    if (notCompletedReassignInput != null && datain.getAssignment().get(0).getTo() != null &&
+                            ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
+                            ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(notCompletedReassignInput.getId())) {
+                        properties.put("tmpreassignmentnotcompleted", updateReassignmentInput( ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody(), "not-completed" ));
+                    }
+                    if (notStartedReassignInput != null && datain.getAssignment().get(0).getTo() != null &&
+                            ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
+                            ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(notStartedReassignInput.getId())) {
+                        properties.put("tmpreassignmentnotstarted", updateReassignmentInput( ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody(), "not-started" ));
                     }
             	}
             } 
@@ -1588,7 +1609,15 @@ public class Bpmn2JsonMarshaller {
                 }
             }
         }
-        
+
+        if(properties.get("tmpreassignmentnotcompleted") != null && ((String)properties.get("tmpreassignmentnotcompleted")).length() > 0 && properties.get("tmpreassignmentnotstarted") != null && ((String) properties.get("tmpreassignmentnotstarted")).length() > 0) {
+            properties.put("reassignment", properties.get("tmpreassignmentnotcompleted") + "^" + properties.get("tmpreassignmentnotstarted"));
+        } else if(properties.get("tmpreassignmentnotcompleted") != null && ((String) properties.get("tmpreassignmentnotcompleted")).length() > 0) {
+            properties.put("reassignment", properties.get("tmpreassignmentnotcompleted"));
+        } else if(properties.get("tmpreassignmentnotstarted") != null && ((String) properties.get("tmpreassignmentnotstarted")).length() > 0) {
+            properties.put("reassignment", properties.get("tmpreassignmentnotstarted"));
+        }
+
         for(DataOutputAssociation dataout : outputAssociations) {
             if(dataout.getSourceRef().size() > 0) { 
                 String lhsAssociation = ((DataOutput) dataout.getSourceRef().get(0)).getName();
@@ -2658,9 +2687,7 @@ public class Bpmn2JsonMarshaller {
         }
         return false;
     }
-    
-    
-    
+
 	private static String unescapeXML(String str) {
 		if (str == null || str.length() == 0)
 			return "";
@@ -2700,4 +2727,20 @@ public class Bpmn2JsonMarshaller {
 		}
 		return buf.toString();
 	}
+
+    private String updateReassignmentInput(String reassignmentStr, String reassignmentType) {
+        if(reassignmentStr != null && reassignmentStr.length() > 0) {
+            String ret = "";
+            String[] reassignmentParts = reassignmentStr.split( "\\^\\s*" );
+            for(String nextPart : reassignmentParts) {
+                ret += nextPart + "@" + reassignmentType + "^";
+            }
+            if(ret.endsWith("^")) {
+                ret = ret.substring(0, ret.length() - 1);
+            }
+            return ret;
+        } else {
+            return "";
+        }
+    }
 }
