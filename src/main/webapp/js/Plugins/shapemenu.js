@@ -410,11 +410,87 @@ ORYX.Plugins.ShapeMenuPlugin = {
 		if(possibleMorphs.size()<=1) return; // if morphing to other stencils is not possible, don't show button
 		
 		this.morphMenu.removeAll();
-		
+
+        // add task types for tasks
+        if(elements[0].getStencil().id().endsWith("#Task")) {
+            // user task
+            if(elements[0].properties["oryx-tasktype"] != "User") {
+                var menuItem = new Ext.menu.Item({
+                    text: 'User Task',
+                    icon: ORYX.CONFIG.ROOT_PATH + 'stencilsets/bpmn2.0jbpm/icons/activity/list/type.user.png',
+                    disabled: false,
+                    disabledClass: ORYX.CONFIG.MORPHITEM_DISABLED,
+                    handler: (function() { this.updateTaskType(elements[0], 'User'); }).bind(this)
+                });
+                this.morphMenu.add(menuItem);
+            }
+            if(elements[0].properties["oryx-tasktype"] != "Send") {
+                var menuItem = new Ext.menu.Item({
+                    text: 'Send Task',
+                    icon: ORYX.CONFIG.ROOT_PATH + 'stencilsets/bpmn2.0jbpm/icons/activity/list/type.send.png',
+                    disabled: false,
+                    disabledClass: ORYX.CONFIG.MORPHITEM_DISABLED,
+                    handler: (function() { this.updateTaskType(elements[0], 'Send'); }).bind(this)
+                });
+                this.morphMenu.add(menuItem);
+            }
+            if(elements[0].properties["oryx-tasktype"] != "Receive") {
+                var menuItem = new Ext.menu.Item({
+                    text: 'Receive Task',
+                    icon: ORYX.CONFIG.ROOT_PATH + 'stencilsets/bpmn2.0jbpm/icons/activity/list/type.receive.png',
+                    disabled: false,
+                    disabledClass: ORYX.CONFIG.MORPHITEM_DISABLED,
+                    handler: (function() { this.updateTaskType(elements[0], 'Receive'); }).bind(this)
+                });
+                this.morphMenu.add(menuItem);
+            }
+            if(elements[0].properties["oryx-tasktype"] != "Manual") {
+                var menuItem = new Ext.menu.Item({
+                    text: 'Manual Task',
+                    icon: ORYX.CONFIG.ROOT_PATH + 'stencilsets/bpmn2.0jbpm/icons/activity/list/type.manual.png',
+                    disabled: false,
+                    disabledClass: ORYX.CONFIG.MORPHITEM_DISABLED,
+                    handler: (function() { this.updateTaskType(elements[0], 'Manual'); }).bind(this)
+                });
+                this.morphMenu.add(menuItem);
+            }
+            if(elements[0].properties["oryx-tasktype"] != "Service") {
+                var menuItem = new Ext.menu.Item({
+                    text: 'Service Task',
+                    icon: ORYX.CONFIG.ROOT_PATH + 'stencilsets/bpmn2.0jbpm/icons/activity/list/type.service.png',
+                    disabled: false,
+                    disabledClass: ORYX.CONFIG.MORPHITEM_DISABLED,
+                    handler: (function() { this.updateTaskType(elements[0], 'Service'); }).bind(this)
+                });
+                this.morphMenu.add(menuItem);
+            }
+            if(elements[0].properties["oryx-tasktype"] != "Business Rule") {
+                var menuItem = new Ext.menu.Item({
+                    text: 'Business Rule Task',
+                    icon: ORYX.CONFIG.ROOT_PATH + 'stencilsets/bpmn2.0jbpm/icons/activity/list/type.business.rule.png',
+                    disabled: false,
+                    disabledClass: ORYX.CONFIG.MORPHITEM_DISABLED,
+                    handler: (function() { this.updateTaskType(elements[0], 'Business Rule'); }).bind(this)
+                });
+                this.morphMenu.add(menuItem);
+            }
+            if(elements[0].properties["oryx-tasktype"] != "Script") {
+                var menuItem = new Ext.menu.Item({
+                    text: 'Script Task',
+                    icon: ORYX.CONFIG.ROOT_PATH + 'stencilsets/bpmn2.0jbpm/icons/activity/list/type.script.png',
+                    disabled: false,
+                    disabledClass: ORYX.CONFIG.MORPHITEM_DISABLED,
+                    handler: (function() { this.updateTaskType(elements[0], 'Script'); }).bind(this)
+                });
+                this.morphMenu.add(menuItem);
+            }
+        }
+
+
 		// populate morph menu with the possible morph stencils ordered by their position
 		possibleMorphs = possibleMorphs.sortBy(function(stencil) { return stencil.position(); });
 		possibleMorphs.each((function(morph) {
-			var menuItem = new Ext.menu.Item({ 
+			var menuItem = new Ext.menu.Item({
 				text: morph.title(), 
 				icon: morph.icon(), 
 				disabled: morph.id()==elements[0].getStencil().id(),
@@ -423,7 +499,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
 			});
 			this.morphMenu.add(menuItem);
 		}).bind(this));
-		
+
 		this.morphButton.prepareToShow();
 		
 	},
@@ -757,6 +833,13 @@ ORYX.Plugins.ShapeMenuPlugin = {
 			this.facade.executeCommands([command]);
 		}
 	},
+
+    updateTaskType: function(shape, shapeTaskType) {
+        if(shape && shapeTaskType) {
+            shape.setProperty("oryx-tasktype", shapeTaskType);
+            shape.refresh();
+        }
+    },
 	
 	/**
 	 * Morph a shape to a new stencil
