@@ -4018,19 +4018,17 @@ public class Bpmn2JsonUnmarshaller {
             List<DataInput> dataInputs = task.getIoSpecification().getDataInputs();
             boolean foundNotCompletedReassignmentsInput = false;
             boolean foundNotStartedReassignmentsInput = false;
-            DataInput foundNotCompletedInput = null;
-            DataInput foundNotStartedInput = null;
+            DataInput foundNotCompletedDataInput = null;
+            DataInput foundNotStartedDataInput = null;
             for(DataInput din : dataInputs) {
                 if(din.getName().equals("NotCompletedReassign")) {
                     foundNotCompletedReassignmentsInput = true;
-                    foundNotCompletedInput = din;
-                    break;
+                    foundNotCompletedDataInput = din;
                 }
 
                 if(din.getName().equals("NotStartedReassign")) {
                     foundNotStartedReassignmentsInput = true;
-                    foundNotStartedInput = din;
-                    break;
+                    foundNotStartedDataInput = din;
                 }
             }
 
@@ -4039,7 +4037,7 @@ public class Bpmn2JsonUnmarshaller {
                 d.setId(task.getId() + "_" + "NotCompletedReassign" + "Input");
                 d.setName("NotCompletedReassign");
                 task.getIoSpecification().getDataInputs().add(d);
-                foundNotCompletedInput = d;
+                foundNotCompletedDataInput = d;
 
                 if(task.getIoSpecification().getInputSets() == null || task.getIoSpecification().getInputSets().size() < 1) {
                     InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
@@ -4053,7 +4051,7 @@ public class Bpmn2JsonUnmarshaller {
                 d.setId(task.getId() + "_" + "NotStartedReassign" + "Input");
                 d.setName("NotStartedReassign");
                 task.getIoSpecification().getDataInputs().add(d);
-                foundNotStartedInput = d;
+                foundNotStartedDataInput = d;
 
                 if(task.getIoSpecification().getInputSets() == null || task.getIoSpecification().getInputSets().size() < 1) {
                     InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
@@ -4067,11 +4065,11 @@ public class Bpmn2JsonUnmarshaller {
 
             List<DataInputAssociation> inputAssociations = task.getDataInputAssociations();
             for(DataInputAssociation da : inputAssociations) {
-                if(da.getTargetRef().getId().equals(foundNotCompletedInput.getId())) {
+                if(da.getTargetRef().getId().equals(foundNotCompletedDataInput.getId())) {
                     foundNotCompletedReassignmentAssociation = true;
                     ((FormalExpression) da.getAssignment().get(0).getFrom()).setBody(getReassignmentsForType(properties.get("reassignment"), "not-completed"));    // TODO Finish
                 }
-                if(da.getTargetRef().getId().equals(foundNotStartedInput.getId())) {
+                if(da.getTargetRef().getId().equals(foundNotStartedDataInput.getId())) {
                     foundNotStartedReassignmentAssociation = true;
                     ((FormalExpression) da.getAssignment().get(0).getFrom()).setBody(getReassignmentsForType(properties.get("reassignment"), "not-started"));
                 }
@@ -4079,14 +4077,14 @@ public class Bpmn2JsonUnmarshaller {
 
             if(!foundNotCompletedReassignmentAssociation) {
                 DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
-                dia.setTargetRef(foundNotCompletedInput);
+                dia.setTargetRef(foundNotCompletedDataInput);
 
                 Assignment a = Bpmn2Factory.eINSTANCE.createAssignment();
                 FormalExpression localeFromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
                 localeFromExpression.setBody(getReassignmentsForType(properties.get("reassignment"), "not-completed"));
 
                 FormalExpression localeToExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
-                localeToExpression.setBody(foundNotCompletedInput.getId());
+                localeToExpression.setBody(foundNotCompletedDataInput.getId());
 
                 a.setFrom(localeFromExpression);
                 a.setTo(localeToExpression);
@@ -4097,14 +4095,14 @@ public class Bpmn2JsonUnmarshaller {
 
             if(!foundNotStartedReassignmentAssociation) {
                 DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
-                dia.setTargetRef(foundNotStartedInput);
+                dia.setTargetRef(foundNotStartedDataInput);
 
                 Assignment a = Bpmn2Factory.eINSTANCE.createAssignment();
                 FormalExpression localeFromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
                 localeFromExpression.setBody(getReassignmentsForType(properties.get("reassignment"), "not-started"));
 
                 FormalExpression localeToExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
-                localeToExpression.setBody(foundNotStartedInput.getId());
+                localeToExpression.setBody(foundNotStartedDataInput.getId());
 
                 a.setFrom(localeFromExpression);
                 a.setTo(localeToExpression);
