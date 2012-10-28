@@ -1,5 +1,6 @@
 package org.jbpm.designer.web.server;
 
+import static org.jbpm.designer.web.server.GuvnorUtil.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.*;
@@ -14,7 +15,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.drools.core.util.ConfFileUtils;
 import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.designer.web.server.ServletUtil.UrlType;
+import org.jbpm.designer.web.server.GuvnorUtil.UrlType;
 import org.jbpm.process.workitem.WorkDefinitionImpl;
 import org.jbpm.process.workitem.WorkItemRepository;
 import org.json.JSONObject;
@@ -180,14 +181,14 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
     public static void installWorkItemDefinitionAndIcon(IDiagramProfile profile, String pkg, String widName, String iconName, String workItemDefinitionContent,
             byte[] iconContent, HttpServletResponse resp) throws IOException {
         // GUVNOR JbpmServiceRepositoryServlet
-        String widURL = ServletUtil.getUrl(profile, pkg, widName + ".wid", UrlType.Normal);
-        String iconURL = ServletUtil.getUrl(profile, pkg, iconName, UrlType.Normal);
-        String packageAssetsURL = ServletUtil.getUrl(profile, pkg, "", UrlType.Normal);
+        String widURL = GuvnorUtil.getUrl(profile, pkg, widName + ".wid", UrlType.Normal);
+        String iconURL = GuvnorUtil.getUrl(profile, pkg, iconName, UrlType.Normal);
+        String packageAssetsURL = GuvnorUtil.getUrl(profile, pkg, "", UrlType.Normal);
 
         // check if the wid already exists
         URL checkWidURL = new URL(widURL);
         HttpURLConnection checkWidConnection = (HttpURLConnection) checkWidURL.openConnection();
-        ServletUtil.applyAuth(profile, checkWidConnection);
+        applyAuth(profile, checkWidConnection);
         checkWidConnection.setRequestMethod("GET");
         checkWidConnection.setRequestProperty("Accept", "application/atom+xml");
         checkWidConnection.connect();
@@ -195,7 +196,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
         if (checkWidConnection.getResponseCode() == 200) {
             URL deleteAssetURL = new URL(widURL);
             HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL.openConnection();
-            ServletUtil.applyAuth(profile, deleteConnection);
+            applyAuth(profile, deleteConnection);
             deleteConnection.setRequestMethod("DELETE");
             deleteConnection.connect();
             _logger.info("delete wid response code: " + deleteConnection.getResponseCode());
@@ -204,7 +205,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
         // check if icon already exists
         URL checkIconURL = new URL(iconURL);
         HttpURLConnection checkIconConnection = (HttpURLConnection) checkIconURL.openConnection();
-        ServletUtil.applyAuth(profile, checkIconConnection);
+        applyAuth(profile, checkIconConnection);
         checkIconConnection.setRequestMethod("GET");
         checkIconConnection.setRequestProperty("Accept", "application/atom+xml");
         checkIconConnection.connect();
@@ -212,7 +213,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
         if (checkIconConnection.getResponseCode() == 200) {
             URL deleteAssetURL = new URL(iconURL);
             HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL.openConnection();
-            ServletUtil.applyAuth(profile, deleteConnection);
+            applyAuth(profile, deleteConnection);
             deleteConnection.setRequestMethod("DELETE");
             deleteConnection.connect();
             _logger.info("delete icon response code: " + deleteConnection.getResponseCode());
@@ -225,7 +226,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
         // write to guvnor
         URL createWidURL = new URL(packageAssetsURL);
         HttpURLConnection createWidConnection = (HttpURLConnection) createWidURL.openConnection();
-        ServletUtil.applyAuth(profile, createWidConnection);
+        applyAuth(profile, createWidConnection);
         createWidConnection.setRequestMethod("POST");
         createWidConnection.setRequestProperty("Content-Type", "application/octet-stream");
         createWidConnection.setRequestProperty("Accept", "application/atom+xml");
@@ -237,7 +238,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 
         URL createIconURL = new URL(packageAssetsURL);
         HttpURLConnection createIconConnection = (HttpURLConnection) createIconURL.openConnection();
-        ServletUtil.applyAuth(profile, createIconConnection);
+        applyAuth(profile, createIconConnection);
         createIconConnection.setRequestMethod("POST");
         createIconConnection.setRequestProperty("Content-Type", "application/octet-stream");
         createIconConnection.setRequestProperty("Accept", "application/atom+xml");

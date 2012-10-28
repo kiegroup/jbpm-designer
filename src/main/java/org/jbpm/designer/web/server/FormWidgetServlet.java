@@ -1,6 +1,7 @@
 package org.jbpm.designer.web.server;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.apache.log4j.Logger;
 import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.designer.web.server.ServletUtil.UrlType;
+import org.jbpm.designer.web.server.GuvnorUtil.UrlType;
 import org.json.JSONObject;
 
 public class FormWidgetServlet extends HttpServlet {
@@ -57,12 +58,12 @@ public class FormWidgetServlet extends HttpServlet {
 			resp.getWriter().write(jsonObject.toString());
 		} else if(action != null && action.equals("getwidgetsource")) {
 	        // GUVNOR FormWidgetServlet
-			String widgetSourceURL = ServletUtil.getUrl(profile, "globalArea", widgetName, UrlType.Source);
+			String widgetSourceURL = GuvnorUtil.getUrl(profile, "globalArea", widgetName, UrlType.Source);
 			
 			resp.setCharacterEncoding("UTF-8");
 			resp.setContentType("text/plain");
 			try {
-				resp.getWriter().write(ServletUtil.getStringContentFromUrl(widgetSourceURL, "GET", profile));
+				resp.getWriter().write(GuvnorUtil.readStringContentFromUrl(widgetSourceURL, "GET", profile));
 			} catch (Exception e) {
 				resp.getWriter().write("");
 			}
@@ -72,11 +73,13 @@ public class FormWidgetServlet extends HttpServlet {
 	public static List<String> getFormWidgetList(IDiagramProfile profile) {
 	    // GUVNOR FormWidgetServlet
 	    List<String> widgets = new ArrayList<String>();
-	    String globalAreaURL = ServletUtil.getUrl(profile, "globalArea", "", UrlType.Normal);
 	    
 	    try {
+	        String globalAreaURL = GuvnorUtil.getUrl(profile, "globalArea", "", UrlType.Normal);
+	        String content = GuvnorUtil.readStringContentFromUrl(globalAreaURL, "GET", profile);
+	        
 	        XMLInputFactory factory = XMLInputFactory.newInstance();
-	        XMLStreamReader reader = factory.createXMLStreamReader(ServletUtil.getOutputReaderFromUrl(globalAreaURL, "GET", profile));
+	        XMLStreamReader reader = factory.createXMLStreamReader(new StringReader(content));
 	        String title = "";
 	        String format = "";
 	        while (reader.hasNext()) {

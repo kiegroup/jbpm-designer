@@ -1,6 +1,7 @@
 package org.jbpm.designer.web.server;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.URLEncoder;
 import java.util.*;
 
@@ -13,6 +14,7 @@ import javax.xml.stream.XMLStreamReader;
 import org.apache.log4j.Logger;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.impl.ExternalInfo;
+import org.jbpm.designer.web.server.GuvnorUtil.UrlType;
 
 /** 
  * 
@@ -79,15 +81,12 @@ public class ProcessInfoServlet extends HttpServlet {
 		}
 		
         // GUVNOR ProcessInfoServlet
-		String assetInfoURL = ExternalInfo.getExternalProtocol(profile)
-                + "://"
-                + ExternalInfo.getExternalHost(profile)
-                + "/"
-                + profile.getExternalLoadURLSubdomain().substring(0,
-                        profile.getExternalLoadURLSubdomain().indexOf("/"))
-                + "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/" + assetName;
+		String assetInfoURL = GuvnorUtil.getUrl(profile, packageName, assetName, UrlType.Normal);
+		String content = GuvnorUtil.readStringContentFromUrl(assetInfoURL, "GET", profile);
+
 		XMLInputFactory factory = XMLInputFactory.newInstance();
-        XMLStreamReader reader = factory.createXMLStreamReader(ServletUtil.getOutputReaderFromUrl(assetInfoURL, "GET", profile));
+        XMLStreamReader reader = factory.createXMLStreamReader(new StringReader(content));
+        
         while (reader.hasNext()) {
             if (reader.next() == XMLStreamReader.START_ELEMENT) {
                 if ("format".equals(reader.getLocalName())) {

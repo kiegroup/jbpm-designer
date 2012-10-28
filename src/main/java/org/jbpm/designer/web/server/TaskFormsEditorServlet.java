@@ -2,7 +2,6 @@ package org.jbpm.designer.web.server;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.*;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -10,7 +9,7 @@ import javax.servlet.http.*;
 
 import org.apache.log4j.Logger;
 import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.designer.web.server.ServletUtil.UrlType;
+import org.jbpm.designer.web.server.GuvnorUtil.UrlType;
 
 /**
  * 
@@ -63,61 +62,28 @@ public class TaskFormsEditorServlet extends HttpServlet {
     private String storeTaskFormToGuvnor(String taskName, String packageName, IDiagramProfile profile, String formValue)
             throws Exception {
         // GUVNOR TaskFormsEditorServlet
-        String taskFormURL = ServletUtil.getUrl(profile, packageName, taskName + TASKFORM_NAME_EXTENSION, UrlType.Normal);
-        String createNewURL = ServletUtil.getUrl(profile, packageName, "", UrlType.Normal);
+        String taskFormURL = GuvnorUtil.getUrl(profile, packageName, taskName + TASKFORM_NAME_EXTENSION, UrlType.Normal);
 
         // Check if task form asset exists
-        URL checkURL = new URL(taskFormURL);
-        HttpURLConnection checkConnection = (HttpURLConnection) checkURL.openConnection();
-        ServletUtil.applyAuth(profile, checkConnection);
-        checkConnection.setRequestMethod("GET");
-        checkConnection.setRequestProperty("Accept", "application/atom+xml");
-        checkConnection.connect();
-        _logger.info("check connection response code: " + checkConnection.getResponseCode());
-        if (checkConnection.getResponseCode() == 200) {
+        if(GuvnorUtil.readCheckAssetExists(taskFormURL, profile)) { 
             // delete the asset
-            URL deleteAssetURL = new URL(taskFormURL);
-            HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL.openConnection();
-            ServletUtil.applyAuth(profile, deleteConnection);
-            deleteConnection.setRequestMethod("DELETE");
-            deleteConnection.connect();
-            _logger.info("delete connection response code: " + deleteConnection.getResponseCode());
+            GuvnorUtil.deleteAsset(taskFormURL, profile);
         }
 
         // Create the asset
-        URL createURL = new URL(createNewURL);
-        HttpURLConnection createConnection = (HttpURLConnection) createURL.openConnection();
-        ServletUtil.applyAuth(profile, createConnection);
-        createConnection.setRequestMethod("POST");
-        createConnection.setRequestProperty("Content-Type", "application/octet-stream");
-        createConnection.setRequestProperty("Accept", "application/atom+xml");
-        createConnection.setRequestProperty("Slug", URLEncoder.encode(taskName, "UTF-8") + TASKFORM_NAME_EXTENSION
-                + TASKFORM_FILE_EXTENSION);
-        createConnection.setDoOutput(true);
+        String createNewURL = GuvnorUtil.getUrl(profile, packageName, "", UrlType.Normal);
+        GuvnorUtil.createAsset(createNewURL, taskName + TASKFORM_NAME_EXTENSION, TASKFORM_FILE_EXTENSION, formValue.getBytes("UTF-8"), profile);
 
-        createConnection.getOutputStream().write(formValue.getBytes("UTF-8"));
-
-        createConnection.connect();
-        _logger.info("create connection response code: " + createConnection.getResponseCode());
         return "ok";
     }
 
     private String getTaskFormFromGuvnor(String taskName, String packageName, IDiagramProfile profile) {
         // GUVNOR TaskFormsEditorServlet
         try {
-            String taskFormURL = ServletUtil.getUrl(profile, packageName, taskName + TASKFORM_NAME_EXTENSION, UrlType.Normal);
-            String taskFormSourceURL = ServletUtil.getUrl(profile, packageName, taskName + TASKFORM_NAME_EXTENSION, UrlType.Source);
-
-            URL checkURL = new URL(taskFormURL);
-            HttpURLConnection checkConnection = (HttpURLConnection) checkURL.openConnection();
-            ServletUtil.applyAuth(profile, checkConnection);
-            checkConnection.setRequestMethod("GET");
-            checkConnection.setRequestProperty("Accept", "application/atom+xml");
-            checkConnection.setConnectTimeout(2000);
-            checkConnection.connect();
-            _logger.info("check connection response code: " + checkConnection.getResponseCode());
-            if (checkConnection.getResponseCode() == 200) {
-                return ServletUtil.getStringContentFromUrl(taskFormSourceURL, "GET", profile);
+            String taskFormURL = GuvnorUtil.getUrl(profile, packageName, taskName + TASKFORM_NAME_EXTENSION, UrlType.Normal);
+            if( GuvnorUtil.readCheckAssetExists(taskFormURL, 2000, profile) ) { 
+                String taskFormSourceURL = GuvnorUtil.getUrl(profile, packageName, taskName + TASKFORM_NAME_EXTENSION, UrlType.Source);
+                return GuvnorUtil.readStringContentFromUrl(taskFormSourceURL, "GET", profile);
             }
         } catch (Exception e) {
             _logger.error(e.getMessage());

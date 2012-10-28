@@ -1,6 +1,7 @@
 package org.jbpm.designer.web.server;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.apache.log4j.Logger;
 import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.designer.web.server.ServletUtil.UrlType;
+import org.jbpm.designer.web.server.GuvnorUtil.UrlType;
 import org.json.JSONObject;
 
 /**
@@ -78,8 +79,8 @@ public class ProcessDiffServiceServlet extends HttpServlet {
 	private static String getAssetVerionSource(String packageName, String assetName, String versionNum, IDiagramProfile profile) {
         // GUVNOR ProcessDiffServiceServlet
 		try {
-			String versionURL = ServletUtil.getUrl(profile, packageName, assetName, versionNum, UrlType.Source);
-			return ServletUtil.getStringContentFromUrl(versionURL, "GET", profile);
+			String versionURL = GuvnorUtil.getUrl(profile, packageName, assetName, versionNum, UrlType.Source);
+			return GuvnorUtil.readStringContentFromUrl(versionURL, "GET", profile);
 		} catch (Exception e) {
 			return "";
 		}
@@ -88,11 +89,13 @@ public class ProcessDiffServiceServlet extends HttpServlet {
 	private static List<String> getAssetVersions(String packageName, String assetName, String uuid, IDiagramProfile profile) {
         // GUVNOR ProcessDiffServiceServlet
 		try {
-			String assetVersionURL = ServletUtil.getUrl(profile, packageName, assetName, "", UrlType.Normal);
+			String assetVersionURL = GuvnorUtil.getUrl(profile, packageName, assetName, "", UrlType.Normal);
+			String content = GuvnorUtil.readStringContentFromUrl(assetVersionURL, "GET", profile);
+			
 			List<String> versionList = new ArrayList<String>();
 			
 			XMLInputFactory factory = XMLInputFactory.newInstance();
-            XMLStreamReader reader = factory.createXMLStreamReader(ServletUtil.getOutputReaderFromUrl(assetVersionURL, "GET", profile));
+            XMLStreamReader reader = factory.createXMLStreamReader(new StringReader(content));
             boolean isFirstTitle = true;
             while (reader.hasNext()) {
                 int next = reader.next();

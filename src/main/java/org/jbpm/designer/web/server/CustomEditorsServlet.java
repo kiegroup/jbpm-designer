@@ -1,23 +1,14 @@
 package org.jbpm.designer.web.server;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.io.*;
 import java.util.Scanner;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.*;
+import javax.servlet.http.*;
 
 import org.apache.log4j.Logger;
 import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.designer.web.profile.impl.ExternalInfo;
-import org.jbpm.designer.web.server.ServletUtil.UrlType;
+import org.jbpm.designer.web.server.GuvnorUtil.UrlType;
 
 /**
  * Sevlet for custom editors.
@@ -50,19 +41,12 @@ public class CustomEditorsServlet extends HttpServlet {
 	private String getCustomEditorsJSON(IDiagramProfile profile, ServletContext servletContext) {
         // GUVNOR CustomEditorsServlet
 		String retStr = "";
-		String customEditorsURL = ServletUtil.getUrl(profile, "globalArea", CUSTOMEDITORS_NAME, UrlType.Normal);
-    	String customEditorsSourceURL = ServletUtil.getUrl(profile, "globalArea", CUSTOMEDITORS_NAME, UrlType.Source);
+		String customEditorsURL = GuvnorUtil.getUrl(profile, "globalArea", CUSTOMEDITORS_NAME, UrlType.Normal);
 
     	try {
-			URL checkURL = new URL(customEditorsURL);
-			HttpURLConnection checkConnection = (HttpURLConnection) checkURL.openConnection();
-			ServletUtil.applyAuth(profile, checkConnection);
-			checkConnection.setRequestMethod("GET");
-			checkConnection.setRequestProperty("Accept", "application/atom+xml");
-			checkConnection.connect();
-			_logger.info("check connection response code: " + checkConnection.getResponseCode());
-			if (checkConnection.getResponseCode() == 200) {
-				retStr = ServletUtil.getStringContentFromUrl(customEditorsSourceURL, "GET", profile);
+			if (GuvnorUtil.readCheckAssetExists(customEditorsURL, profile) ) { 
+			    String customEditorsSourceURL = GuvnorUtil.getUrl(profile, "globalArea", CUSTOMEDITORS_NAME, UrlType.Source);
+				retStr = GuvnorUtil.readStringContentFromUrl(customEditorsSourceURL, "GET", profile);
 			} else {
 				retStr = readFile(servletContext.getRealPath("/defaults/customeditors.json"));
 			}

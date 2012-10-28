@@ -15,26 +15,25 @@
  */
 package org.jbpm.designer.web.server;
 
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.designer.web.profile.impl.ExternalInfo;
-import org.jbpm.designer.web.server.ServletUtil.UrlType;
+import org.jbpm.designer.web.server.GuvnorUtil.UrlType;
 
 /** 
  * Dictionary Servlet.
  * @author Tihomir Surdilovic
  */
 public class DictionaryServlet extends HttpServlet {
+    
 	private static final long serialVersionUID = 1L;
+	
 	private static final String ACTION_LOAD = "load";
 	private static final String ACTION_SAVE = "save";
 	private static final String DICTIONARY_FNAME = "processdictionary";
@@ -71,20 +70,11 @@ public class DictionaryServlet extends HttpServlet {
 	
 	private String getFromGuvnor(IDiagramProfile profile) {
         // GUVNOR DictionaryServlet
-		String dictionaryURL = ServletUtil.getUrl(profile, "globalArea", DICTIONARY_FNAME, UrlType.Normal);
-		String dictionarySourceURL = ServletUtil.getUrl(profile, "globalArea", DICTIONARY_FNAME, UrlType.Source);
-
 		try {
-			URL checkURL = new URL(dictionaryURL);
-	        HttpURLConnection checkConnection = (HttpURLConnection) checkURL.openConnection();
-	        ServletUtil.applyAuth(profile, checkConnection);
-	        checkConnection.setRequestMethod("GET");
-	        checkConnection.setRequestProperty("Accept", "application/atom+xml");
-	        checkConnection.setConnectTimeout(3000);
-	        checkConnection.connect();
-	        _logger.info("check connection response code: " + checkConnection.getResponseCode());
-	        if (checkConnection.getResponseCode() == 200) {
-	            return ServletUtil.getStringContentFromUrl(dictionarySourceURL, "GET", profile);
+		    String dictionaryURL = GuvnorUtil.getUrl(profile, "globalArea", DICTIONARY_FNAME, UrlType.Normal);
+	        if (GuvnorUtil.readCheckAssetExists(dictionaryURL, 3000, profile) ) { 
+	            String dictionarySourceURL = GuvnorUtil.getUrl(profile, "globalArea", DICTIONARY_FNAME, UrlType.Source);
+	            return GuvnorUtil.readStringContentFromUrl(dictionarySourceURL, "GET", profile);
 	        }
 		} catch (Exception e) {
             // we dont want to barf..just log that error happened
@@ -94,39 +84,17 @@ public class DictionaryServlet extends HttpServlet {
 	}
 	
 	private void storeToGuvnor(IDiagramProfile profile, String dvalue) {
-		String dictionaryURL = ServletUtil.getUrl(profile, "globalArea", DICTIONARY_FNAME, UrlType.Normal);
-		String dictionaryDeleteURL = dictionaryURL;
-		String dictionaryAssetsURL = ServletUtil.getUrl(profile, "globalArea", "", UrlType.Normal);
 
 		try {
+		    String dictionaryURL = GuvnorUtil.getUrl(profile, "globalArea", DICTIONARY_FNAME, UrlType.Normal);
+		    
 			// check if the dictionary already exists
-	        URL checkURL = new URL(dictionaryURL);
-	        HttpURLConnection checkConnection = (HttpURLConnection) checkURL.openConnection();
-	        ServletUtil.applyAuth(profile, checkConnection);
-	        checkConnection.setRequestMethod("GET");
-	        checkConnection.setRequestProperty("Accept", "application/atom+xml");
-	        checkConnection.connect();
-	        _logger.info("check connection response code: " + checkConnection.getResponseCode());
-	        if (checkConnection.getResponseCode() == 200) {
-	            URL deleteAssetURL = new URL(dictionaryDeleteURL);
-	            HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL.openConnection();
-	            ServletUtil.applyAuth(profile, deleteConnection);
-	            deleteConnection.setRequestMethod("DELETE");
-	            deleteConnection.connect();
-	            _logger.info("delete connection response code: " + deleteConnection.getResponseCode());
+	        if(GuvnorUtil.readCheckAssetExists(dictionaryURL, profile)) { 
+	            GuvnorUtil.deleteAsset(dictionaryURL, profile);
 	        }
 	        
-	        URL createURL = new URL(dictionaryAssetsURL);
-            HttpURLConnection createConnection = (HttpURLConnection) createURL.openConnection();
-            ServletUtil.applyAuth(profile, createConnection);
-            createConnection.setRequestMethod("POST");
-            createConnection.setRequestProperty("Content-Type", "application/octet-stream");
-            createConnection.setRequestProperty("Accept", "application/atom+xml");
-            createConnection.setRequestProperty("Slug", DICTIONARY_FNAME + DICTIONARY_FEXT);
-            createConnection.setDoOutput(true);
-            createConnection.getOutputStream().write(dvalue.getBytes("UTF-8"));
-            createConnection.connect();
-            _logger.info("create connection response code: " + createConnection.getResponseCode());
+	        String dictionaryAssetsURL = GuvnorUtil.getUrl(profile, "globalArea", "", UrlType.Normal);
+	        GuvnorUtil.createAsset(dictionaryAssetsURL, DICTIONARY_FNAME, DICTIONARY_FEXT, dvalue.getBytes("UTF-8"), profile);
 		} catch (Exception e) {
             // we dont want to barf..just log that error happened
             _logger.error(e.getMessage());

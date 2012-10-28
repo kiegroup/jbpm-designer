@@ -1,7 +1,6 @@
 package org.jbpm.designer.web.server;
 
 import java.io.IOException;
-import java.net.*;
 import java.util.List;
 
 import javax.servlet.*;
@@ -17,7 +16,7 @@ import org.jbpm.designer.taskforms.TaskFormInfo;
 import org.jbpm.designer.taskforms.TaskFormTemplateManager;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.impl.ExternalInfo;
-import org.jbpm.designer.web.server.ServletUtil.UrlType;
+import org.jbpm.designer.web.server.GuvnorUtil.UrlType;
 
 /** 
  * 
@@ -110,40 +109,16 @@ public class TaskFormsServlet extends HttpServlet {
     public void storeTaskForm(TaskFormInfo taskForm, IDiagramProfile profile) throws Exception {
         // GUVNOR TaskFormsServlet
         try {
-			String formURL = ServletUtil.getUrl(profile, taskForm.getPkgName(), taskForm.getId(), UrlType.Normal);
-			String createNewURL = ServletUtil.getUrl(profile, taskForm.getPkgName(), "", UrlType.Normal);
-			
 			// check if the task form already exists
-			URL checkURL = new URL(formURL);
-			HttpURLConnection checkConnection = (HttpURLConnection) checkURL.openConnection();
-			ServletUtil.applyAuth(profile, checkConnection);
-			checkConnection.setRequestMethod("GET");
-			checkConnection.setRequestProperty("Accept", "application/atom+xml");
-			checkConnection.connect();
-			_logger.info("check connection response code: " + checkConnection.getResponseCode());
-			if (checkConnection.getResponseCode() == 200) {
+			String formURL = GuvnorUtil.getUrl(profile, taskForm.getPkgName(), taskForm.getId(), UrlType.Normal);
+			if( GuvnorUtil.readCheckAssetExists(formURL, profile) ) { 
 			    // delete the asset
-			    URL deleteAssetURL = new URL(formURL);
-			    HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL.openConnection();
-			    ServletUtil.applyAuth(profile, deleteConnection);
-			    deleteConnection.setRequestMethod("DELETE");
-			    deleteConnection.connect();
-			    _logger.info("delete connection response code: " + deleteConnection.getResponseCode());
+			    GuvnorUtil.deleteAsset(formURL, profile);
 			}
+			
 			// create new 
-			URL createURL = new URL(createNewURL);
-			HttpURLConnection createConnection = (HttpURLConnection) createURL.openConnection();
-			ServletUtil.applyAuth(profile, createConnection);
-			createConnection.setRequestMethod("POST");
-			createConnection.setRequestProperty("Content-Type", "application/octet-stream");
-			createConnection.setRequestProperty("Accept", "application/atom+xml");
-			createConnection.setRequestProperty("Slug", URLEncoder.encode(taskForm.getId() + FORMTEMPLATE_FILE_EXTENSION, "UTF-8"));
-			createConnection.setDoOutput(true);
-			
-			createConnection.getOutputStream ().write(taskForm.getOutput().getBytes("UTF-8"));
-			
-			createConnection.connect();
-			_logger.info("create connection response code: " + createConnection.getResponseCode());
+			String createNewURL = GuvnorUtil.getUrl(profile, taskForm.getPkgName(), "", UrlType.Normal);
+			GuvnorUtil.createAsset(createNewURL, taskForm.getId(), FORMTEMPLATE_FILE_EXTENSION, taskForm.getOutput().getBytes("UTF-8"), profile);
 		} catch (Exception e) {
 			_logger.error(e.getMessage());
 		}

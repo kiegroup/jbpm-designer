@@ -6,6 +6,7 @@ import java.util.*;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.*;
+import javax.servlet.http.Cookie;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
@@ -13,7 +14,6 @@ import org.antlr.stringtemplate.StringTemplate;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.log4j.Logger;
 import org.drools.process.core.ParameterDefinition;
 import org.drools.process.core.datatype.DataType;
@@ -22,12 +22,10 @@ import org.jbpm.designer.Base64EncodingUtil;
 import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingUnit;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.impl.ExternalInfo;
-import org.jbpm.designer.web.server.ServletUtil;
-import org.jbpm.designer.web.server.ServletUtil.UrlType;
+import org.jbpm.designer.web.server.*;
+import org.jbpm.designer.web.server.GuvnorUtil.UrlType;
 import org.jbpm.process.workitem.WorkDefinitionImpl;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.*;
 import org.mvel2.MVEL;
 
 /**
@@ -94,8 +92,8 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         Map<String, ThemeInfo> themeData = setupThemes(profile, req);
         setupCustomEditors(profile);
         // check with guvnor to see what packages exist
-        List<String> packageNames = findPackages(profile);
-        String[] info = ServletUtil.findPackageAndAssetInfo(uuid, profile);
+        List<String> packageNames = ServletUtil.getPackageNames(profile);
+        String[] info = ServletUtil.findPackageAndAssetInfo(uuid, packageNames, profile);
         
         setupFormWidgets(profile);
         setupDefaultIcons(info, profile);
@@ -197,7 +195,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 StringTemplate workItemTemplate = new StringTemplate(readFile(origWorkitemSVGFile));
                 workItemTemplate.setAttribute("workitemDef", definition.getValue());
                 String widIcon = definition.getValue().getIcon();
-                InputStream iconStream = getImageInstream(widIcon, "GET", profile);
+                InputStream iconStream = GuvnorUtil.readStreamFromUrl(widIcon, "GET", profile);
                 String iconEncoded = "data:image/png;base64," + Base64EncodingUtil.encode(IOUtils.toByteArray(iconStream));
                 workItemTemplate.setAttribute("nodeicon", iconEncoded);
                 String fileToWrite = workitemSVGFilePath + definition.getValue().getName() + ".svg";
@@ -209,7 +207,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     }
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    private void evaluateWorkDefinitions(Map<String, WorkDefinitionImpl> workDefinitions, Map<String, List<String>> configInfo, String content, IDiagramProfile profile) throws Exception {
+    public void evaluateWorkDefinitions(Map<String, WorkDefinitionImpl> workDefinitions, Map<String, List<String>> configInfo, String content, IDiagramProfile profile) throws Exception {
     	List<Map<String, Object>> workDefinitionsMaps;
 
         try {
@@ -228,17 +226,17 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                     category = DEFAULT_CATEGORY_NAME;
                 }
                 workDefinition.setCategory(category);
-                String icon = (String) workDefinitionMap.get("icon");
-                if(icon.length() < 1) {
+                String iconLoc = (String) workDefinitionMap.get("icon");
+                if(iconLoc.length() < 1) {
                 	String packageName = "";
                 	for(Map.Entry<String, List<String>> entry : configInfo.entrySet()) {
                         packageName = entry.getKey();
                 	}
                 	// GUVNOR JbpmPreprocessingUnit
-                	icon = ServletUtil.getUrl(profile, packageName, "defaultservicenodeicon", UrlType.Binary);
+                	iconLoc = GuvnorUtil.getUrl(profile, packageName, "defaultservicenodeicon", GuvnorUtil.UrlType.Binary);
                 }
-                workDefinition.setIcon(icon);
-                InputStream iconStream = getImageInstream(icon, "GET", profile);
+                workDefinition.setIcon(iconLoc);
+                InputStream iconStream = GuvnorUtil.readStreamFromUrl(iconLoc, "GET", profile);
                 String iconEncoded = "data:image/png;base64," + Base64EncodingUtil.encode(IOUtils.toByteArray(iconStream));
                 workDefinition.setIconEncoded(URLEncoder.encode(iconEncoded, "UTF-8"));
                 workDefinition.setCustomEditor((String) workDefinitionMap.get("customEditor"));
@@ -284,8 +282,9 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                     for(String configName : configNames) {
                     	try {
                     	    //GUVNOR JbpmPreprocessingUnit
-	                    	String configURL = ServletUtil.getUrl(profile, packageName, configName, UrlType.Source);
-                            String resultString =  ServletUtil.getStringContentFromUrl(configURL, "GET", profile);
+	                    	String configURL = GuvnorUtil.getUrl(profile, packageName, configName, UrlType.Source);
+                            String resultString =  GuvnorUtil.readStringContentFromUrl(configURL, "GET", profile);
+                            
                             resultsMap.put(configName, resultString);
                         } catch (Exception e) {
                             // we dont want to barf..just log that error happened
@@ -298,37 +297,20 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         return resultsMap;
     }
     
-    void setupFormWidgets(IDiagramProfile profile) {
+    public void setupFormWidgets(IDiagramProfile profile) {
         // GUVNOR JbpmPreprocessingUnit
-    	String formWidgetsPackageURL = ServletUtil.getUrl(profile, "globalArea", "", UrlType.Normal);
+    	String formWidgetsPackageURL = GuvnorUtil.getUrl(profile, "globalArea", "", UrlType.Normal);
 
     	File[] allFormWidgets = new File(formWidgetsDir).listFiles();
     	for(File formWidget : allFormWidgets) {
     		int extPosition = formWidget.getName().lastIndexOf(".");
     		String widgetNameOnly = formWidget.getName().substring(0,extPosition);
-    		String widgetURL = ServletUtil.getUrl(profile, "globalArea", widgetNameOnly, UrlType.Normal);
+    		String widgetURL = GuvnorUtil.getUrl(profile, "globalArea", widgetNameOnly, UrlType.Normal);
 
     		try {
-	    		URL checkURL = new URL(widgetURL);
-		        HttpURLConnection checkConnection = (HttpURLConnection) checkURL.openConnection();
-		        ServletUtil.applyAuth(profile, checkConnection);
-		        checkConnection.setRequestMethod("GET");
-		        checkConnection.setRequestProperty("charset", "UTF-8");
-		        checkConnection.connect();
-		        _logger.info("check connection response code: " + checkConnection.getResponseCode());
-		        if (checkConnection.getResponseCode() != 200) {
-		        	URL createURL = new URL(formWidgetsPackageURL);
-		            HttpURLConnection createConnection = (HttpURLConnection) createURL.openConnection();
-		            ServletUtil.applyAuth(profile, createConnection);
-		            createConnection.setRequestMethod("POST");
-		            createConnection.setRequestProperty("Content-Type", "application/octet-stream");
-		            createConnection.setRequestProperty("Accept", "application/atom+xml");
-		            createConnection.setRequestProperty("charset", "UTF-8");
-		            createConnection.setRequestProperty("Slug", formWidget.getName());
-		            createConnection.setDoOutput(true);
-		            createConnection.getOutputStream().write(getBytesFromFile(formWidget));
-		            createConnection.connect();
-		            _logger.info("create form widget connection response code: " + createConnection.getResponseCode());
+		        if(GuvnorUtil.readCheckAssetExists(widgetURL, profile)) { 
+		            byte [] formWidgetContentBytes = getBytesFromFile(formWidget);
+		            GuvnorUtil.createAsset(formWidgetsPackageURL, formWidget.getName(), "", formWidgetContentBytes, profile);
 		        }
     		} catch (Exception e) {
                 // we dont want to barf..just log that error happened
@@ -339,34 +321,15 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     
     public void setupCustomEditors(IDiagramProfile profile) {
         // GUVNOR JbpmPreprocessingUnit
-    	String customEditorsURL = ServletUtil.getUrl(profile, "globalArea", CUSTOMEDITORS_NAME, UrlType.Normal);
-		String customEditorsAssetsURL = ServletUtil.getUrl(profile, "globalArea", "", UrlType.Normal);
+        String customEditorsURL = GuvnorUtil.getUrl(profile, "globalArea", CUSTOMEDITORS_NAME, UrlType.Normal);
+        String customEditorsAssetsURL = GuvnorUtil.getUrl(profile, "globalArea", "", UrlType.Normal);
 
-		try {
-	        URL checkURL = new URL(customEditorsURL);
-	        HttpURLConnection checkConnection = (HttpURLConnection) checkURL
-	                .openConnection();
-	        ServletUtil.applyAuth(profile, checkConnection);
-	        checkConnection.setRequestMethod("GET");
-	        checkConnection.setRequestProperty("charset", "UTF-8");
-	        checkConnection.setRequestProperty("Accept", "application/atom+xml");
-	        checkConnection.connect();
-	        _logger.info("check connection response code: " + checkConnection.getResponseCode());
-	        if (checkConnection.getResponseCode() != 200) {
-	        	URL createURL = new URL(customEditorsAssetsURL);
-	            HttpURLConnection createConnection = (HttpURLConnection) createURL.openConnection();
-	            ServletUtil.applyAuth(profile, createConnection);
-	            createConnection.setRequestMethod("POST");
-	            createConnection.setRequestProperty("Content-Type", "application/octet-stream");
-	            createConnection.setRequestProperty("Accept", "application/atom+xml");
-	            createConnection.setRequestProperty("charset", "UTF-8");
-	            createConnection.setRequestProperty("Slug", CUSTOMEDITORS_NAME  + CUSTOMEDITORS_EXT);
-	            createConnection.setDoOutput(true);
-	            createConnection.getOutputStream().write(getBytesFromFile(new File(customEditorsInfo)));
-	            createConnection.connect();
-	            _logger.info("create custom editors connection response code: " + createConnection.getResponseCode());
-	        }
-		} catch (Exception e) {
+        try {
+            if(GuvnorUtil.readCheckAssetExists(customEditorsURL, profile)) { 
+                byte [] customEditorsInfoBytes = getBytesFromFile(new File(customEditorsInfo));
+                GuvnorUtil.createAsset(customEditorsAssetsURL, CUSTOMEDITORS_NAME, CUSTOMEDITORS_EXT, customEditorsInfoBytes, profile);
+            }
+        } catch (Exception e) {
             _logger.error(e.getMessage());
         }
     }
@@ -374,46 +337,23 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     public Map<String, ThemeInfo> setupThemes(IDiagramProfile profile, HttpServletRequest req) {
         // GUVNOR JbpmPreprocessingUnit
     	Map<String, ThemeInfo> themeData = null;
-    	String themesURL = ServletUtil.getUrl(profile, "globalArea", THEME_NAME, UrlType.Normal);
-    	String themesSourceURL = ServletUtil.getUrl(profile, "globalArea", THEME_NAME, UrlType.Source);
-		String themesAssetsURL = ServletUtil.getUrl(profile, "globalArea", "", UrlType.Normal);
+    	String themesURL = GuvnorUtil.getUrl(profile, "globalArea", THEME_NAME, UrlType.Normal);
+    	String themesSourceURL = GuvnorUtil.getUrl(profile, "globalArea", THEME_NAME, UrlType.Source);
+		String themesAssetsURL = GuvnorUtil.getUrl(profile, "globalArea", "", UrlType.Normal);
 
 		try {
-	        URL checkURL = new URL(themesURL);
-	        HttpURLConnection checkConnection = (HttpURLConnection) checkURL.openConnection();
-	        ServletUtil.applyAuth(profile, checkConnection);
-	        checkConnection.setRequestMethod("GET");
-	        checkConnection.setRequestProperty("charset", "UTF-8");
-	        checkConnection.setRequestProperty("Accept", "application/atom+xml");
-	        checkConnection.connect();
-	        System.out.println("check connection response code: " + checkConnection.getResponseCode());
-	        if(checkConnection.getResponseCode() == 404) {
-	        	checkConnection.disconnect();
-	        } 	
-	        if (checkConnection.getResponseCode() != 200) {
-	        	URL createURL = new URL(themesAssetsURL);
-	            HttpURLConnection createConnection = (HttpURLConnection) createURL
-	                    .openConnection();
-	            ServletUtil.applyAuth(profile, createConnection);
-	            createConnection.setRequestMethod("POST");
-	            createConnection.setRequestProperty("Content-Type", "application/octet-stream");
-	            createConnection.setRequestProperty("Accept", "application/atom+xml");
-	            createConnection.setRequestProperty("Slug", THEME_NAME + THEME_EXT);
-	            checkConnection.setRequestProperty("charset", "UTF-8");
-	            createConnection.setDoOutput(true);
-	            createConnection.getOutputStream().write(getBytesFromFile(new File(themeInfo)));
-	            createConnection.connect();
-	            System.out.println("create themes connection response code: " + createConnection.getResponseCode());
+	        if (GuvnorUtil.readCheckAssetExists(themesURL, profile)) { 
+	            byte [] themeInfoContentByes = getBytesFromFile(new File(themeInfo));
+	            GuvnorUtil.createAsset(themesAssetsURL, THEME_NAME, THEME_EXT, themeInfoContentByes, profile);
 	        }
 	        
 	        String themesStr;
 			try {
-				themesStr = ServletUtil.getStringContentFromUrl(themesSourceURL, "GET", profile);
+				themesStr = GuvnorUtil.readStringContentFromUrl(themesSourceURL, "GET", profile);
 			} catch (Exception e) {
 				themesStr = readFile(themeInfo);
 			}
 	        
-
 	        // get the theme name from cookie if exists or default
 	        String themeName = DEFAULT_THEME_NAME;
 	        Cookie[] cookies = req.getCookies();
@@ -462,92 +402,25 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     		try {
 	    		String pkg = URLEncoder.encode(info[0], "UTF-8");
 	    		
-	    		String emailIconURL = ServletUtil.getUrl(profile, pkg, "defaultemailicon", UrlType.Normal);
-	    		String logIconURL = ServletUtil.getUrl(profile, pkg, "defaultlogicon", UrlType.Normal);
-	    		String serviceNodeIconURL = ServletUtil.getUrl(profile, pkg, "defaultservicenodeicon", UrlType.Normal);
-	    		String packageAssetsURL = ServletUtil.getUrl(profile, pkg, "", UrlType.Normal);
+	    		String emailIconURL = GuvnorUtil.getUrl(profile, pkg, "defaultemailicon", UrlType.Normal);
+	    		String logIconURL = GuvnorUtil.getUrl(profile, pkg, "defaultlogicon", UrlType.Normal);
+	    		String serviceNodeIconURL = GuvnorUtil.getUrl(profile, pkg, "defaultservicenodeicon", UrlType.Normal);
+	    		String packageAssetsURL = GuvnorUtil.getUrl(profile, pkg, "", UrlType.Normal);
 	    		
 				// check if the images already exists
-				URL checkEmailIconURL = new URL(emailIconURL);
-				HttpURLConnection checkEmailIconConnection = (HttpURLConnection) checkEmailIconURL
-				        .openConnection();
-				applyAuth(profile, checkEmailIconConnection);
-				checkEmailIconConnection.setRequestMethod("GET");
-				checkEmailIconConnection.setRequestProperty("charset", "UTF-8");
-				checkEmailIconConnection
-				        .setRequestProperty("Accept", "application/atom+xml");
-				checkEmailIconConnection.connect();
-				System.out.println("check email icon connection response code: " + checkEmailIconConnection.getResponseCode());
-				if (checkEmailIconConnection.getResponseCode() != 200) {
-					URL createEmailIconURL = new URL(packageAssetsURL);
-		            HttpURLConnection createEmailIconConnection = (HttpURLConnection) createEmailIconURL
-		                    .openConnection();
-		            applyAuth(profile, createEmailIconConnection);
-		            createEmailIconConnection.setRequestMethod("POST");
-		            createEmailIconConnection.setRequestProperty("Content-Type",
-		                    "application/octet-stream");
-		            createEmailIconConnection.setRequestProperty("Accept",
-		                    "application/atom+xml");
-		            createEmailIconConnection.setRequestProperty("Slug", "defaultemailicon.gif");
-		            createEmailIconConnection.setRequestProperty("charset", "UTF-8");
-		            createEmailIconConnection.setDoOutput(true);
-		            createEmailIconConnection.getOutputStream().write(getBytesFromFile(new File(default_emailicon)));
-		            createEmailIconConnection.connect();
-		            System.out.println("created email icon: " + createEmailIconConnection.getResponseCode());
+				if(GuvnorUtil.readCheckAssetExists(emailIconURL, profile)) { 
+				    byte [] defaultEmailIconContentByte = getBytesFromFile(new File(default_emailicon));
+				    GuvnorUtil.createAsset(packageAssetsURL, "defaultemailicon", ".gif", defaultEmailIconContentByte, profile);
 				}
 				
-				URL checkLogIconURL = new URL(logIconURL);
-				HttpURLConnection checkLogIconConnection = (HttpURLConnection) checkLogIconURL
-				        .openConnection();
-				applyAuth(profile, checkLogIconConnection);
-				checkLogIconConnection.setRequestMethod("GET");
-				checkLogIconConnection
-				        .setRequestProperty("Accept", "application/atom+xml");
-				checkLogIconConnection.connect();
-				System.out.println("check log icon connection response code: " + checkLogIconConnection.getResponseCode());
-				if (checkLogIconConnection.getResponseCode() != 200) {
-		            URL createLogIconURL = new URL(packageAssetsURL);
-		            HttpURLConnection createLogIconConnection = (HttpURLConnection) createLogIconURL
-		                    .openConnection();
-		            applyAuth(profile, createLogIconConnection);
-		            createLogIconConnection.setRequestMethod("POST");
-		            createLogIconConnection.setRequestProperty("Content-Type",
-		                    "application/octet-stream");
-		            createLogIconConnection.setRequestProperty("Accept",
-		                    "application/atom+xml");
-		            createLogIconConnection.setRequestProperty("Slug", "defaultlogicon.gif");
-		            createLogIconConnection.setRequestProperty("charset", "UTF-8");
-		            createLogIconConnection.setDoOutput(true);
-		            createLogIconConnection.getOutputStream().write(getBytesFromFile(new File(default_logicon)));
-		            createLogIconConnection.connect();
-		            System.out.println("created log icon: " + createLogIconConnection.getResponseCode());
+				if(GuvnorUtil.readCheckAssetExists(logIconURL, profile)) { 
+				    byte [] defaultLogIconBytes = getBytesFromFile(new File(default_logicon));
+				    GuvnorUtil.createAsset(packageAssetsURL, "defaultlogicon", ".gif", defaultLogIconBytes, profile);
 				}
-				
-				URL checkServiceNodeIconURL = new URL(serviceNodeIconURL);
-				HttpURLConnection checkServiceNodeIconConnection = (HttpURLConnection) checkServiceNodeIconURL
-				        .openConnection();
-				applyAuth(profile, checkServiceNodeIconConnection);
-				checkServiceNodeIconConnection.setRequestMethod("GET");
-				checkServiceNodeIconConnection
-				        .setRequestProperty("Accept", "application/atom+xml");
-				checkServiceNodeIconConnection.connect();
-				System.out.println("check service node icon connection response code: " + checkServiceNodeIconConnection.getResponseCode());
-				if (checkServiceNodeIconConnection.getResponseCode() != 200) {
-		            URL createServiceNodeIconURL = new URL(packageAssetsURL);
-		            HttpURLConnection createServiceNodeIconConnection = (HttpURLConnection) createServiceNodeIconURL
-		                    .openConnection();
-		            applyAuth(profile, createServiceNodeIconConnection);
-		            createServiceNodeIconConnection.setRequestMethod("POST");
-		            createServiceNodeIconConnection.setRequestProperty("Content-Type",
-		                    "application/octet-stream");
-		            createServiceNodeIconConnection.setRequestProperty("Accept",
-		                    "application/atom+xml");
-		            createServiceNodeIconConnection.setRequestProperty("Slug", "defaultservicenodeicon.png");
-		            createServiceNodeIconConnection.setRequestProperty("charset", "UTF-8");
-		            createServiceNodeIconConnection.setDoOutput(true);
-		            createServiceNodeIconConnection.getOutputStream().write(getBytesFromFile(new File(default_servicenodeicon)));
-		            createServiceNodeIconConnection.connect();
-		            System.out.println("created service node icon: " + createServiceNodeIconConnection.getResponseCode());
+
+				if(GuvnorUtil.readCheckAssetExists(serviceNodeIconURL, profile)) { 
+				    byte [] defaultServiceNodeIconContentBytes = getBytesFromFile(new File(default_servicenodeicon));
+				    GuvnorUtil.createAsset(packageAssetsURL, "defaultservicenodeicon", ".png", defaultServiceNodeIconContentBytes, profile);
 				}
 			} catch (Exception e) {
                 _logger.error(e.getMessage());
@@ -563,10 +436,11 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     	String pkg = "";
     	for(String nextPackage : packageNames) {
     		try {	
-	    		String packageAssetURL = ServletUtil.getUrl(profile, nextPackage, "", UrlType.Normal);
+	    		String packageAssetURL = GuvnorUtil.getUrl(profile, nextPackage, "", UrlType.Normal);
+	    		String content = GuvnorUtil.readStringContentFromUrl(packageAssetURL, "GET", profile);
             
                 XMLInputFactory factory = XMLInputFactory.newInstance();
-                XMLStreamReader reader = factory.createXMLStreamReader(ServletUtil.getOutputReaderFromUrl(packageAssetURL, "GET", profile));
+                XMLStreamReader reader = factory.createXMLStreamReader(new StringReader(content));
                 while (reader.hasNext()) {
                     int next = reader.next();
                     if (next == XMLStreamReader.START_ELEMENT) {
@@ -591,7 +465,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     	
     	if(gotPackage) {
     		// push the default workitem config
-    		String packageAssetsURL = ServletUtil.getUrl(profile, pkg, "", UrlType.Normal);
+    		String packageAssetsURL = GuvnorUtil.getUrl(profile, pkg, "", UrlType.Normal);
 
     		try {
 				// push default configuration wid
@@ -602,18 +476,8 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                         profile.getExternalLoadURLSubdomain().indexOf("/")));
 	            widConfigTemplate.setAttribute("pkgName", pkg);
 	            
-	            URL createWidURL = new URL(packageAssetsURL);
-	            HttpURLConnection createWidConnection = (HttpURLConnection) createWidURL.openConnection();
-	            applyAuth(profile, createWidConnection);
-	            createWidConnection.setRequestMethod("POST");
-	            createWidConnection.setRequestProperty("Content-Type", "application/octet-stream");
-	            createWidConnection.setRequestProperty("Accept", "application/atom+xml");
-	            createWidConnection.setRequestProperty("Slug", "WorkDefinitions.wid");
-	            createWidConnection.setRequestProperty("charset", "UTF-8");
-	            createWidConnection.setDoOutput(true);
-	            createWidConnection.getOutputStream().write(widConfigTemplate.toString().getBytes("UTF-8"));
-	            createWidConnection.connect();
-	            System.out.println("created default wid: " + createWidConnection.getResponseCode());
+	            byte [] workDefinitionsContentBytes = widConfigTemplate.toString().getBytes("UTF-8");
+	            GuvnorUtil.createAsset(packageAssetsURL, "WorkDefinitions", ".wid", workDefinitionsContentBytes, profile);
 			} catch (Exception e) {
                 e.printStackTrace();
 			}
@@ -627,12 +491,13 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         Map<String, List<String>> packageConfigs = new HashMap<String, List<String>>();
         for(String nextPackage : packageNames) {
         	try {
-	        	String packageAssetURL = ServletUtil.getUrl(profile, nextPackage, "", UrlType.Normal);
+	        	String packageAssetURL = GuvnorUtil.getUrl(profile, nextPackage, "", UrlType.Normal);
+	        	String content = GuvnorUtil.readStringContentFromUrl(packageAssetURL, "GET", profile);
 
 	            packageConfigs.put(nextPackage, new ArrayList<String>());
             
                 XMLInputFactory factory = XMLInputFactory.newInstance();
-                XMLStreamReader reader = factory.createXMLStreamReader(ServletUtil.getOutputReaderFromUrl(packageAssetURL, "GET", profile));
+                XMLStreamReader reader = factory.createXMLStreamReader(new StringReader(content));
 
                 String format = "";
                 String title = "";  
@@ -680,29 +545,6 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         return returnData;
     }
     
-    public List<String> findPackages(IDiagramProfile profile) {
-        // GUVNOR JbpmPreprocessingUnit
-        List<String> packages = new ArrayList<String>();
-        String packagesURL = ServletUtil.getUrl(profile, "", null, UrlType.Normal);
-
-        try {
-            XMLInputFactory factory = XMLInputFactory.newInstance();
-            XMLStreamReader reader = factory.createXMLStreamReader(ServletUtil.getOutputReaderFromUrl(packagesURL, "GET", profile));
-            while (reader.hasNext()) {
-                if (reader.next() == XMLStreamReader.START_ELEMENT) {
-                    if ("title".equals(reader.getLocalName())) {
-                        packages.add(reader.getElementText());
-                    }
-                }
-            }
-        } catch (Exception e) {
-            // we dont want to barf..just log that error happened
-            _logger.error(e.getMessage());
-        } 
-        
-        return packages;
-    }
-    
     private static String readFile(String pathname) throws IOException {
         StringBuilder fileContents = new StringBuilder();
         Scanner scanner = new Scanner(new File(pathname), "UTF-8");
@@ -745,17 +587,6 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         _logger.info("Created file:" + file);
     }
     
-    private static void applyAuth(IDiagramProfile profile, HttpURLConnection connection) throws IOException {
-        if (profile.getUsr() != null && profile.getUsr().trim().length() > 0
-                && profile.getPwd() != null
-                && profile.getPwd().trim().length() > 0) {
-            String userpassword = profile.getUsr() + ":" + profile.getPwd();
-            String encodedAuthorization = Base64EncodingUtil.encode(userpassword);
-            encodedAuthorization = Base64.encodeBase64String(userpassword.getBytes());
-            connection.setRequestProperty("Authorization", "Basic " + encodedAuthorization);
-        }
-    }
-    
     public static byte[] getBytesFromFile(File file) throws IOException {
     	InputStream is = null;
     	is = new FileInputStream(file);
@@ -781,22 +612,6 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     	}
     	is.close();
     	return bytes;
-    }
-    
-    public static InputStream getImageInstream(String urlLocation,
-            String requestMethod, IDiagramProfile profile) throws Exception {
-        URL url = new URL(urlLocation);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-        connection.setRequestMethod(requestMethod);
-        connection.setRequestProperty("Accept","text/html,application/xhtml+xml,application/xml,application/json,application/octet-stream,text/json,text/plain;q=0.9,*/*;q=0.8");
-
-        connection.setRequestProperty("charset", "UTF-8");
-        connection.setReadTimeout(5 * 1000);
-
-        ServletUtil.applyAuth(profile, connection);
-        connection.connect();
-        return connection.getInputStream();
     }
     
     public class ThemeInfo {
@@ -832,6 +647,10 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
 		public void setFontColor(String fontColor) {
 			this.fontColor = fontColor;
+		}
+		
+		public String toString() { 
+		   return "{ " + bgColor + ", " + borderColor + ", " + fontColor + "}"; 
 		}
     }
 

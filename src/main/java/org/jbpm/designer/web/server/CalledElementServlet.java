@@ -15,7 +15,7 @@ import javax.servlet.http.*;
 
 import org.apache.log4j.Logger;
 import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.designer.web.server.ServletUtil.UrlType;
+import org.jbpm.designer.web.server.GuvnorUtil.UrlType;
 import org.json.JSONObject;
 
 /**
@@ -133,9 +133,8 @@ public class CalledElementServlet extends HttpServlet {
 	private static boolean existsProcessImageInGuvnor(String assetURL, IDiagramProfile profile) {
 	    try {   
 	        URL checkURL = new URL(assetURL);
-	        HttpURLConnection checkConnection = (HttpURLConnection) checkURL
-	                .openConnection();
-	        ServletUtil.applyAuth(profile, checkConnection);
+	        HttpURLConnection checkConnection = (HttpURLConnection) checkURL.openConnection();
+	        GuvnorUtil.applyAuth(profile, checkConnection);
 	        checkConnection.setRequestMethod("GET");
 	        //checkConnection
 	        //        .setRequestProperty("Accept", "application/binary");
@@ -156,6 +155,6 @@ public class CalledElementServlet extends HttpServlet {
 	
 	private static String getProcessImagePath(String packageName, String processid, IDiagramProfile profile) {
 	    // GUVNOR CalledElementServlet
-	    return ServletUtil.getUrl(profile, packageName, processid + "-image", UrlType.Binary);
+	    return GuvnorUtil.getUrl(profile, packageName, processid + "-image", UrlType.Binary);
 	}
 }
