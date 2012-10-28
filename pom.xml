@@ -67,6 +67,12 @@
 
     <!-- test properties -->
     <junit.version>4.9</junit.version>
+    <h2.version>1.3.167</h2.version>
+
+    <!-- integration test properties -->
+    <guvnor.test.version>5.4.0.Final</guvnor.test.version>
+    <as7.version>7.1.1.Final</as7.version>
+    <shrinkwrap.override.version>2.0.0-alpha-4</shrinkwrap.override.version>
   </properties>
 
   <dependencies>
@@ -451,6 +457,81 @@
       <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.apache.abdera</groupId>
+      <artifactId>abdera-core</artifactId>
+      <version>${abdera.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.abdera</groupId>
+      <artifactId>abdera-client</artifactId>
+      <version>${abdera.version}</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- arquillian/shrinkwrap (see dep. mgmt. for versions) shrinkwrap override necessary for 2.0.0 functionality (Maven.resolver()) -->
+    <dependency>
+      <groupId>org.jboss.arquillian.junit</groupId>
+      <artifactId>arquillian-junit-container</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.shrinkwrap.descriptors</groupId>
+      <artifactId>shrinkwrap-descriptors-api-javaee</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.shrinkwrap.resolver</groupId>
+      <artifactId>shrinkwrap-resolver-api</artifactId>
+      <version>${shrinkwrap.override.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.shrinkwrap.resolver</groupId>
+      <artifactId>shrinkwrap-resolver-api-maven</artifactId>
+      <version>${shrinkwrap.override.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.shrinkwrap.resolver</groupId>
+      <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+      <version>${shrinkwrap.override.version}</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- guvnor/arquillian test -->
+    <dependency>
+      <groupId>org.drools</groupId>
+      <artifactId>guvnor-distribution-wars</artifactId>
+      <version>${guvnor.test.version}</version>
+      <type>war</type>
+      <classifier>jboss-as-7.0</classifier>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>3.1.0.RELEASE</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.reflections</groupId>
+      <artifactId>reflections</artifactId>
+      <version>0.9.8</version>
+    </dependency>
 
     <!-- dom4j prevent transitive dom4j deps from including the wrong stax:stax-api -->
     <dependency>
@@ -467,7 +548,39 @@
     </dependency>
   </dependencies>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.jboss.arquillian</groupId>
+        <artifactId>arquillian-bom</artifactId>
+        <version>1.0.2.Final</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
+        <directory>src/main/webapp</directory>
+      </resource>
+    </resources>
+    <testResources>
+      <testResource>
+        <directory>src/test/resources</directory>
+      </testResource>
+      <testResource>
+        <directory>src/test/client</directory>
+      </testResource>
+      <testResource>
+        <directory>src/test/filtered-resources</directory>
+        <filtering>true</filtering>
+      </testResource>
+    </testResources>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -527,8 +640,137 @@
         </executions>
       </plugin>
 
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.12</version>
+        <configuration>
+          <excludes>
+            <exclude>**/test/web/**/*Test.java</exclude>
+          </excludes>
+          <argLine>-Xms512m -Xmx1024m -XX:MaxPermSize=512m</argLine>
+        </configuration>
+        <executions>
+          <execution>
+            <id>integration-tests</id>
+            <phase>integration-test</phase>
+            <goals>
+              <goal>test</goal>
+            </goals>
+            <configuration>
+              <skip>false</skip>
+              <excludes>
+                <exclude>none</exclude>
+              </excludes>
+              <includes>
+                <include>**/test/web/GuvnorIntegrationTest.java</include>
+              </includes>
+              <argLine>-Xms512m -Xmx1024m -XX:MaxPermSize=512m</argLine>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <!-- testing with jboss AS 7 -->
+    <profile>
+      <id>arquillian-jboss7-managed</id>
+      <activation>
+        <property>
+          <name>profile</name>
+          <value>integration-test-jboss7</value>
+        </property>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <arquillian.launch>jbossas-7</arquillian.launch>
+      </properties>
+      <build>
+        <testResources>
+          <testResource>
+            <directory>src/test/resources</directory>
+          </testResource>
+          <testResource>
+            <directory>src/test/filtered-resources</directory>
+          </testResource>
+          <testResource>
+            <directory>src/test/resources-jbossas-7</directory>
+          </testResource>
+        </testResources>
+        <plugins>
+          <!-- integration testing (w/ jBoss AS 7 & Arquillian) -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <!-- Download JBoss AS and unpack it to have it available during tests -->
+                <!-- You can specify path to JBoss AS 7 in arquillian.xml -->
+                <id>arquillian-server-unpack</id>
+                <phase>pre-integration-test</phase>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>org.jboss.as</groupId>
+                      <artifactId>jboss-as-dist</artifactId>
+                      <version>${as7.version}</version>
+                      <type>zip</type>
+                      <overWrite>false</overWrite>
+                      <outputDirectory>${basedir}/target</outputDirectory>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-clean-plugin</artifactId>
+            <version>2.4.1</version>
+            <configuration>
+              <filesets>
+                <fileset>
+                  <directory>${basedir}</directory>
+                  <includes>
+                    <!-- guvnor integration test leftovers -->
+                    <include>repository/</include>
+                    <include>repository.xml</include>
+                    <include>derby.log</include>
+                  </includes>
+                </fileset>
+              </filesets>
+            </configuration>
+          </plugin>
         </plugins>
       </build>
+
+      <dependencies>
+        <dependency>
+          <groupId>org.jboss.as</groupId>
+          <artifactId>jboss-as-arquillian-container-managed</artifactId>
+          <version>7.1.1.Final</version>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.jboss.spec</groupId>
+          <artifactId>jboss-javaee-web-6.0</artifactId>
+          <version>3.0.0.Final</version>
+          <type>pom</type>
+          <scope>test</scope>
+          <exclusions>
+            <exclusion>
+              <groupId>xalan</groupId>
+              <artifactId>xalan</artifactId>
+            </exclusion>
+          </exclusions>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
 
   <repositories>
     <repository>
