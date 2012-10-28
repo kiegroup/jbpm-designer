@@ -35,7 +35,6 @@
     <drools.version>5.5.0-SNAPSHOT</drools.version>
     <jbpm.version>5.4.0-SNAPSHOT</jbpm.version>
     <batik.version>1.6-1</batik.version>
-
     <log4j.version>1.6.2</log4j.version>
     <jbpm.migration.version>0.11</jbpm.migration.version>
     <closure.compiler.version>r1741</closure.compiler.version>
@@ -188,11 +187,6 @@
     </dependency>
     <dependency>
       <groupId>batik</groupId>
-      <artifactId>batik-parser</artifactId>
-      <version>${batik.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>batik</groupId>
       <artifactId>batik-transcoder</artifactId>
       <version>${batik.version}</version>
       <exclusions>
@@ -215,31 +209,6 @@
     </dependency>
     <dependency>
       <groupId>batik</groupId>
-      <artifactId>batik-dom</artifactId>
-      <version>${batik.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>batik</groupId>
-      <artifactId>batik-xml</artifactId>
-      <version>${batik.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>batik</groupId>
-      <artifactId>batik-bridge</artifactId>
-      <version>${batik.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>batik</groupId>
-      <artifactId>batik-css</artifactId>
-      <version>${batik.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>batik</groupId>
-      <artifactId>batik-svg-dom</artifactId>
-      <version>${batik.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>batik</groupId>
       <artifactId>batik-svggen</artifactId>
       <version>${batik.version}</version>
     </dependency>
@@ -247,32 +216,12 @@
       <groupId>batik</groupId>
       <artifactId>batik-util</artifactId>
       <version>${batik.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>batik</groupId>
-      <artifactId>batik-ext</artifactId>
-      <version>${batik.version}</version>
       <exclusions>
         <exclusion>
           <groupId>xml-apis</groupId>
           <artifactId>xmlParserAPIs</artifactId>
         </exclusion>
       </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>batik</groupId>
-      <artifactId>batik-script</artifactId>
-      <version>${batik.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>batik</groupId>
-      <artifactId>batik-gvt</artifactId>
-      <version>${batik.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>batik</groupId>
-      <artifactId>batik-awt-util</artifactId>
-      <version>${batik.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.xmlgraphics</groupId>
@@ -370,12 +319,12 @@
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-jdk14</artifactId>
+      <artifactId>slf4j-ext</artifactId>
       <version>${log4j.version}</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
-      <artifactId>log4j-over-slf4j</artifactId>
+      <artifactId>slf4j-log4j12</artifactId>
       <version>${log4j.version}</version>
     </dependency>
     <dependency>
@@ -502,10 +451,34 @@
       <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
+
+    <!-- dom4j prevent transitive dom4j deps from including the wrong stax:stax-api -->
+    <dependency>
+      <groupId>dom4j</groupId>
+      <artifactId>dom4j</artifactId>
+      <version>1.6.1</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>stax</groupId>
+          <artifactId>stax-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
   </dependencies>
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
+
       <plugin>
         <artifactId>maven-war-plugin</artifactId>
         <version>2.1.1</version>
@@ -553,8 +526,9 @@
           </execution>
         </executions>
       </plugin>
-    </plugins>
-  </build>
+
+        </plugins>
+      </build>
 
   <repositories>
     <repository>
