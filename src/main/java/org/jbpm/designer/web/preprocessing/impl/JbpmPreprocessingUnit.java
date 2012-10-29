@@ -146,7 +146,12 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         	Map<String, WorkDefinitionImpl> workDefinitions = new HashMap<String, WorkDefinitionImpl>();
         	for(Map.Entry<String, String> entry : workItemsContent.entrySet()) {
         		if(entry.getValue().trim().length() > 0) {
-        			evaluateWorkDefinitions(workDefinitions, workitemConfigInfo, entry.getValue(), profile);
+        			try {
+                        evaluateWorkDefinitions(workDefinitions, workitemConfigInfo, entry.getValue(), profile);
+                    } catch(Exception e) {
+                        // log and continue
+                        _logger.error("Unable to parse a workitem definition: " + e.getMessage());
+                    }
         		}
         	}
         	// set the out parameter
@@ -224,7 +229,13 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private void evaluateWorkDefinitions(Map<String, WorkDefinitionImpl> workDefinitions, Map<String, List<String>> configInfo, String content, IDiagramProfile profile) throws Exception {
-    	List<Map<String, Object>> workDefinitionsMaps = (List<Map<String, Object>>) MVEL.eval(content, new HashMap());
+    	List<Map<String, Object>> workDefinitionsMaps;
+
+        try {
+            workDefinitionsMaps = (List<Map<String, Object>>) MVEL.eval(content, new HashMap());
+        } catch(Exception e) {
+            throw new Exception(e.getMessage());
+        }
         
         for (Map<String, Object> workDefinitionMap : workDefinitionsMaps) {
             if (workDefinitionMap != null) {
