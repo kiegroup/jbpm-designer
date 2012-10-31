@@ -302,8 +302,7 @@ ORYX.Editor = {
 
 		this.simResultsContentPanelLayout = new Ext.Panel({
 		    width: "100%",
-		    height: 1000,
-		    autoheight: true,
+            height: 1000,
 		    layout: 'border',
 		    items: [{
 		    	xtype:'panel',
@@ -380,28 +379,21 @@ ORYX.Editor = {
 				
 				// DEFINES RIGHT-AREA
 				east	: new Ext.Panel({
-					region	: 'east',
-					layout	: 'fit',
-					cls		: 'x-panel-editor-east',
-					/*layout: 'accordion',
-					layoutConfig: {
-		               // layout-specific configs go here
-						titleCollapse: true,
-						animate: true,
-						activeOnTop: true
-	                },*/
-					autoEl	: 'div',
-					border	:false,
-					width	: ORYX.CONFIG.PANEL_RIGHT_WIDTH || 400,
-					split	: true,
-					animate: true,
-					collapsible : true,
-					titleCollapse: true,
-					title: "Properties",
-					plugins: new Ext.ux.PanelCollapsedTitlePlugin()
+                    region	: 'east',
+                    layout	: 'anchor',
+                    autoEl	: 'div',
+                    border: false,
+                    cls		: 'x-panel-editor-east',
+                    width	: ORYX.CONFIG.PANEL_LEFT_WIDTH || 400,
+                    autoScroll:true,
+                    split	: true,
+                    animate: true,
+                    collapsible : true,
+                    titleCollapse: true,
+                    title: "Properties",
+                    plugins: new Ext.ux.PanelCollapsedTitlePlugin()
 				}),
-				
-				
+
 				// DEFINES BOTTOM-AREA
 				south	: new Ext.Panel({
 					region	: 'south',
@@ -416,6 +408,7 @@ ORYX.Editor = {
 					region	: 'west',
 					layout	: 'anchor',
 					autoEl	: 'div',
+                    border: false,
 					cls		: 'x-panel-editor-west',
 					width	: ORYX.CONFIG.PANEL_LEFT_WIDTH || 200,
 					autoScroll:true,
