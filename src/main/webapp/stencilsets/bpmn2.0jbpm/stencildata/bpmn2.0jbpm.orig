@@ -3365,23 +3365,23 @@
                     "type":"Reassignment",
                     "title":"Reassignment",
                     "value":"",
-                    "description":"Task reassignment data",
+                    "description":"Task reassignments",
                     "description_ja":"",
                     "readonly":false,
                     "optional":true,
                     "fortasktypes":"None|User"
                 },
-                /** {
+                {
                     "id":"notifications",
                     "type":"Notifications",
                     "title":"Notifications",
                     "value":"",
-                    "description":"Task notifications data",
+                    "description":"Task notifications",
                     "description_ja":"",
                     "readonly":false,
                     "optional":true,
                     "fortasktypes":"None|User"
-                }, **/
+                },
 	            {
     			    "id":"locale",
     				"type":"String",

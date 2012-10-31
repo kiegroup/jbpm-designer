@@ -120,6 +120,8 @@ ORYX.Plugins.PropertyWindow = {
 		this.dataSource.load();
 		
 		this.grid = new Ext.grid.EditorGridPanel({
+            autoScroll: true,
+            autoHeight: true,
 			clicksToEdit: 1,
 			stripeRows: true,
 			autoExpandColumn: "propertywindow_column_value",
@@ -138,14 +140,18 @@ ORYX.Plugins.PropertyWindow = {
 		});
 
 		region = this.facade.addToRegion('east', new Ext.Panel({
-			width: 220,
-			layout: "fit",
+			width: 400,
+			layout: "anchor",
+            autoScroll: true,
+            autoHeight: true,
 			border: false,
 			//title: 'Properties',
 			items: [
 				this.grid 
-			]
-		}), ORYX.I18N.PropertyWindow.title)
+			],
+            anchors: '0, -30',
+		}), ORYX.I18N.PropertyWindow.title);
+
 
 		// Register on Events
 		this.grid.on('beforeedit', this.beforeEdit, this, true);
@@ -1328,11 +1334,12 @@ Ext.extend(Ext.form.ComplexListField, Ext.form.TriggerField,  {
 			var cm = this.buildColumnModel();
 			
 			this.grid = new Ext.grid.EditorGridPanel({
+                autoScroll: true,
+                autoHeight: true,
 				store:		ds,
 		        cm:			cm,
 				stripeRows: true,
 				clicksToEdit : 1,
-				autoHeight:true,
 		        selModel: 	new Ext.grid.CellSelectionModel()
 		    });	
 			
@@ -1593,6 +1600,364 @@ Ext.form.ComplexCustomField = Ext.extend(Ext.form.TriggerField,  {
 	}
 });
 
+Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
+    onTriggerClick : function() {
+        if(this.disabled){
+            return;
+        }
+
+        var NotificationsDef = Ext.data.Record.create([{
+            name: 'type'
+        }, {
+            name: 'expires'
+        }, {
+            name: 'from'
+        }, {
+            name: 'tousers'
+        }, {
+            name: 'togroups'
+        }, {
+            name: 'replyto'
+        }, {
+            name: 'subject'
+        }, {
+            name: 'body'
+        }]);
+
+        var notificationsProxy = new Ext.data.MemoryProxy({
+            root: []
+        });
+
+        var notifications = new Ext.data.Store({
+            autoDestroy: true,
+            reader: new Ext.data.JsonReader({
+                root: "root"
+            }, NotificationsDef),
+            proxy: notificationsProxy,
+            sorters: [{
+                property: 'subject',
+                direction:'ASC'
+            }, {
+                property: 'from',
+                direction:'ASC'
+            }, {
+                property: 'tousers',
+                direction:'ASC'
+            }, {
+                property: 'togroups',
+                direction:'ASC'
+            }]
+        });
+        notifications.load();
+
+        if(this.value.length > 0) {
+            //[from:fromStr|tousers:someusers|togroups:groupStr|replyTo:replyStr|subject:subject|body:this <br/>is<br/>test]@[expStr]@not-started^[from:from2|togroups:group2|replyTo:reply2|subject:subject2|body:this is some <br/>other body text]@[ext2]@not-completed
+            this.value = this.value.replace(/\[/g , "");
+            this.value = this.value.replace(/\]/g , "");
+
+            var valueParts = this.value.split("^");
+            for(var i=0; i < valueParts.length; i++) {
+                var nextPart = valueParts[i];
+                if(nextPart.indexOf("@") > 0) {
+                    var innerParts = nextPart.split("@");
+                    var usergroupsstr = innerParts[0];
+                    var expiresstr = innerParts[1];
+                    var typestr = innerParts[2];
+
+                    var fromstr = "";
+                    var tousersstr = "";
+                    var togroupsstr = "";
+                    var replytostr = "";
+                    var subjectstr = "";
+                    var bodystr = "";
+
+                    if(usergroupsstr.indexOf("|") > 0) {
+                        var tparts = usergroupsstr.split("|");
+                        for(var j=0; j< tparts.length; j++) {
+                            var eparts = tparts[j].split(":");
+                            if(eparts[0] == "from") {
+                                fromstr = eparts[1];
+                            } else if(eparts[0] == "tousers") {
+                                tousersstr = eparts[1];
+                            } else if(eparts[0] == "togroups") {
+                                togroupsstr = eparts[1];
+                            } else if(eparts[0] == "replyTo") {
+                                replytostr = eparts[1];
+                            } else if(eparts[0] == "subject") {
+                                subjectstr = eparts[1];
+                            } else if(eparts[0] == "body") {
+                                bodystr = eparts[1].replace(/<br\s?\/?>/g,"\n");;
+                            }
+                        }
+                    } else {
+                        var eparts2 = usergroupsstr.split(":");
+                        if(eparts2[0] == "from") {
+                            fromstr = eparts2[1];
+                        } else if(eparts2[0] == "tousers") {
+                            tousersstr = eparts2[1];
+                        } else if(eparts2[0] == "togroups") {
+                            togroupsstr = eparts[1];
+                        } else if(eparts2[0] == "replyTo") {
+                            replytostr = eparts2[1];
+                        } else if(eparts2[0] == "subject") {
+                            subjectstr = eparts2[1];
+                        } else if(eparts2[0] == "body") {
+                            bodystr = eparts2[1].replace(/<br\s?\/?>/g,"\n");;
+                        }
+                    }
+
+                    notifications.add(new NotificationsDef({
+                        type: typestr,
+                        expires: expiresstr,
+                        from: fromstr,
+                        tousers: tousersstr,
+                        togroups: togroupsstr,
+                        replyto: replytostr,
+                        subject: subjectstr,
+                        body: bodystr
+                    }));
+                }
+            }
+        }
+
+        var typeData = new Array();
+        var notStartedType = new Array();
+        notStartedType.push("not-started");
+        notStartedType.push("not-started");
+        typeData.push(notStartedType);
+        var notCompletedTYpe = new Array();
+        notCompletedTYpe.push("not-completed");
+        notCompletedTYpe.push("not-completed");
+        typeData.push(notCompletedTYpe);
+
+        var gridId = Ext.id();
+        var itemDeleter = new Extensive.grid.ItemDeleter();
+        var grid = new Ext.grid.EditorGridPanel({
+            autoScroll: true,
+            autoHeight: true,
+            store: notifications,
+            id: gridId,
+            stripeRows: true,
+            cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(),
+            {
+                id: 'type',
+                header: 'Type',
+                width: 100,
+                dataIndex: 'type',
+                editor: new Ext.form.ComboBox({
+                    id: 'typeCombo',
+                    valueField:'name',
+                    displayField:'value',
+                    labelStyle:'display:none',
+                    submitValue : true,
+                    typeAhead: false,
+                    queryMode: 'local',
+                    mode: 'local',
+                    triggerAction: 'all',
+                    selectOnFocus:true,
+                    hideTrigger: false,
+                    forceSelection: false,
+                    selectOnFocus:true,
+                    autoSelect:false,
+                    store: new Ext.data.SimpleStore({
+                        fields: [
+                            'name',
+                            'value'
+                        ],
+                        data: typeData
+                    })
+                })
+            },
+            {
+                id: 'expires',
+                header: 'Expires At',
+                width: 100,
+                dataIndex: 'expires',
+                editor: new Ext.form.TextField({ allowBlank: false, regex: /^[a-z0-9 \-\.\_]*$/i }),
+                renderer: Ext.util.Format.htmlEncode
+            },
+            {
+                id: 'from',
+                header: 'From',
+                width: 100,
+                dataIndex: 'from',
+                editor: new Ext.form.TextField({ allowBlank: false, regex: /^[a-z0-9 \-\.\_\,]*$/i }),
+                renderer: Ext.util.Format.htmlEncode
+            },
+            {
+                id: 'tousers',
+                header: 'To Users',
+                width: 100,
+                dataIndex: 'tousers',
+                editor: new Ext.form.TextField({ allowBlank: false, regex: /^[a-z0-9 \-\.\_\,]*$/i }),
+                renderer: Ext.util.Format.htmlEncode
+            },
+            {
+                id: 'togroups',
+                header: 'To Groups',
+                width: 100,
+                dataIndex: 'togroups',
+                editor: new Ext.form.TextField({ allowBlank: false, regex: /^[a-z0-9 \-\.\_\,]*$/i }),
+                renderer: Ext.util.Format.htmlEncode
+            },
+            {
+                id: 'replyto',
+                header: 'Reply To',
+                width: 100,
+                dataIndex: 'replyto',
+                editor: new Ext.form.TextField({ allowBlank: false, regex: /^[a-z0-9 \-\.\_\,]*$/i }),
+                renderer: Ext.util.Format.htmlEncode
+            },
+            {
+                id: 'subject',
+                header: 'Subject',
+                width: 100,
+                dataIndex: 'subject',
+                editor: new Ext.form.TextField({ allowBlank: false, regex: /^[a-z0-9 \-\.\_\,]*$/i }),
+                renderer: Ext.util.Format.htmlEncode
+            },
+            {
+                id: 'body',
+                header: 'Body',
+                width: 100,
+                height: 650,
+                dataIndex: 'body',
+                //editor: new Ext.grid.GridEditor(new Ext.form.TextArea(), {autoSize: 'full', })},
+                editor: new Ext.form.TextArea({ width: 150, height: 650, allowBlank: false, disableKeyFilter:true, grow: true}),
+                renderer: Ext.util.Format.htmlEncode
+            }, itemDeleter]),
+            selModel: itemDeleter,
+            autoHeight: true,
+            tbar: [{
+                text: 'Add Notification',
+                handler : function(){
+                    notifications.add(new NotificationsDef({
+                        expires: '',
+                        from: '',
+                        tousers: '',
+                        type: 'not-started',
+                        togroups: '',
+                        replyto: '',
+                        subject: '',
+                        body: ''
+                    }));
+
+                    grid.fireEvent('cellclick', grid, notifications.getCount()-1, 1, null);
+                }
+            }],
+            clicksToEdit: 1,
+            listeners:
+            {
+                beforeedit: function(evt)
+                {
+                    if(evt.column != 8)
+                        return true;
+
+                    var win = new Ext.Window
+                        ({
+                            autoWidth:  true,
+                            autoHeight: true,
+                            bodyBorder: false,
+                            closable:   true,
+                            resizable:  false,
+                            items:
+                                [{
+                                    xtype:      'panel',
+                                    html:       "<p class='instructions'>Enter Notification body message.</p>"
+                                },
+                                {
+                                    xtype:      'textarea',
+                                    id:         'body_input',
+                                    width:      350,
+                                    height:     300,
+                                    modal:      true,
+                                    value:      evt.value
+                                }],
+                            bbar:
+                                [{
+                                    text: 'OK',
+                                    handler: function()
+                                    {
+                                        evt.record.set('body', Ext.get('body_input').getValue());
+                                        win.close();
+                                    }
+                                }]
+                        });
+                    win.show();
+                    return false;
+                }
+            }
+        });
+
+        var dialog = new Ext.Window({
+            layout		: 'anchor',
+            autoCreate	: true,
+            title		: 'Editor for Notifications',
+            height		: 350,
+            width		: 900,
+            modal		: true,
+            collapsible	: false,
+            fixedcenter	: true,
+            shadow		: true,
+            resizable   : true,
+            proxyDrag	: true,
+            autoScroll  : true,
+            keys:[{
+                key	: 27,
+                fn	: function(){
+                    dialog.hide()
+                }.bind(this)
+            }],
+            items		:[grid],
+            listeners	:{
+                hide: function(){
+                    this.fireEvent('dialogClosed', this.value);
+                    //this.focus.defer(10, this);
+                    dialog.destroy();
+                }.bind(this)
+            },
+            buttons		: [{
+                text: ORYX.I18N.PropertyWindow.ok,
+                handler: function(){
+                    var outValue = "";
+                    grid.stopEditing();
+                    grid.getView().refresh();
+                    notifications.data.each(function() {
+                        // [from:jbpm|tousers:maciej,tihomir|togroups:groups|replyTo:reploTo|subject:test|body:hello]@[6h]^[from:jbpm|tousers:kris,john|togroups:dev|replyTo:reployTo|subject:Next notification|body:again]@[5d]
+                        if( (this.data['tousers'].length > 0 || this.data['togroups'].length > 0) && this.data['subject'].length > 0 && this.data['body'].length > 0) {
+                            outValue += "[from:" + this.data['from'] + "|tousers:" + this.data['tousers'] + "|togroups:" + this.data['togroups'] + "|replyTo:" + this.data['replyto']  + "|subject:" + this.data['subject'] + "|body:" + this.data['body'].replace(/\r\n|\r|\n/g,"<br />") + "]";
+                            outValue += "@[" + this.data['expires'] + "]";
+                            outValue += "@" + this.data['type'];
+                            outValue += "^";
+                        }
+                    });
+                    if(outValue.length > 0) {
+                        outValue = outValue.slice(0, -1)
+                    }
+                    this.setValue(outValue);
+                    this.dataSource.getAt(this.row).set('value', outValue)
+                    this.dataSource.commitChanges()
+
+                    dialog.hide();
+                }.bind(this)
+            }, {
+                text: ORYX.I18N.PropertyWindow.cancel,
+                handler: function(){
+                    this.setValue(this.value);
+                    dialog.hide()
+                }.bind(this)
+            }]
+        });
+
+        dialog.show();
+        grid.render();
+
+        this.grid.stopEditing();
+        grid.focus( false, 100 );
+    }
+});
+
+
 Ext.form.ComplexReassignmentField = Ext.extend(Ext.form.TriggerField,  {
     onTriggerClick : function() {
         if(this.disabled){
@@ -1695,6 +2060,8 @@ Ext.form.ComplexReassignmentField = Ext.extend(Ext.form.TriggerField,  {
         var gridId = Ext.id();
         var itemDeleter = new Extensive.grid.ItemDeleter();
         var grid = new Ext.grid.EditorGridPanel({
+            autoScroll: true,
+            autoHeight: true,
             store: reassignments,
             id: gridId,
             stripeRows: true,
@@ -1819,7 +2186,7 @@ Ext.form.ComplexReassignmentField = Ext.extend(Ext.form.TriggerField,  {
                     this.dataSource.getAt(this.row).set('value', outValue)
                     this.dataSource.commitChanges()
 
-                    dialog.hide()
+                    dialog.hide();
                 }.bind(this)
             }, {
                 text: ORYX.I18N.PropertyWindow.cancel,
@@ -1835,13 +2202,6 @@ Ext.form.ComplexReassignmentField = Ext.extend(Ext.form.TriggerField,  {
 
         this.grid.stopEditing();
         grid.focus( false, 100 );
-    }
-});
-Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
-    onTriggerClick : function() {
-        if(this.disabled){
-            return;
-        }
     }
 });
 
@@ -1890,6 +2250,8 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
     	
     	var gridId = Ext.id();
     	var grid = new Ext.grid.EditorGridPanel({
+            autoScroll: true,
+            autoHeight: true,
             store: imports,
             id: gridId,
             stripeRows: true,
@@ -2024,6 +2386,8 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
     	
     	var gridId = Ext.id();
     	var grid = new Ext.grid.EditorGridPanel({
+            autoScroll: true,
+            autoHeight: true,
             store: actions,
             id: gridId,
             stripeRows: true,
@@ -2305,6 +2669,8 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
     	var itemDeleter = new Extensive.grid.ItemDeleter();
     	var gridId = Ext.id();
     	var grid = new Ext.grid.EditorGridPanel({
+            autoScroll: true,
+            autoHeight: true,
             store: dataassignments,
             id: gridId,
             stripeRows: true,
@@ -2585,6 +2951,8 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
         	return Ext.form.VTypes["inputNameVal"].test(v);
         };
     	var grid = new Ext.grid.EditorGridPanel({
+            autoScroll: true,
+            autoHeight: true,
             store: vardefs,
             id: gridId,
             stripeRows: true,
@@ -2890,6 +3258,8 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField,  {
     		            
     		            var gridId = Ext.id();
     		        	var grid = new Ext.grid.EditorGridPanel({
+                            autoScroll: true,
+                            autoHeight: true,
     		                store: calldefs,
     		                id: gridId,
     		                stripeRows: true,

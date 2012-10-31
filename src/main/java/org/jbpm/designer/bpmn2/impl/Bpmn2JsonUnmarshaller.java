@@ -4274,11 +4274,11 @@ public class Bpmn2JsonUnmarshaller {
             for(DataInputAssociation da : inputAssociations) {
                 if(da.getTargetRef().getId().equals(foundNotCompletedDataInput.getId())) {
                     foundNotCompletedReassignmentAssociation = true;
-                    ((FormalExpression) da.getAssignment().get(0).getFrom()).setBody(getReassignmentsForType(properties.get("reassignment"), "not-completed"));    // TODO Finish
+                    ((FormalExpression) da.getAssignment().get(0).getFrom()).setBody(getReassignmentsAndNotificationsForType(properties.get("reassignment"), "not-completed"));
                 }
                 if(da.getTargetRef().getId().equals(foundNotStartedDataInput.getId())) {
                     foundNotStartedReassignmentAssociation = true;
-                    ((FormalExpression) da.getAssignment().get(0).getFrom()).setBody(getReassignmentsForType(properties.get("reassignment"), "not-started"));
+                    ((FormalExpression) da.getAssignment().get(0).getFrom()).setBody(getReassignmentsAndNotificationsForType(properties.get("reassignment"), "not-started"));
                 }
             }
 
@@ -4288,7 +4288,7 @@ public class Bpmn2JsonUnmarshaller {
 
                 Assignment a = Bpmn2Factory.eINSTANCE.createAssignment();
                 FormalExpression localeFromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
-                localeFromExpression.setBody(getReassignmentsForType(properties.get("reassignment"), "not-completed"));
+                localeFromExpression.setBody(getReassignmentsAndNotificationsForType(properties.get("reassignment"), "not-completed"));
 
                 FormalExpression localeToExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
                 localeToExpression.setBody(foundNotCompletedDataInput.getId());
@@ -4306,7 +4306,7 @@ public class Bpmn2JsonUnmarshaller {
 
                 Assignment a = Bpmn2Factory.eINSTANCE.createAssignment();
                 FormalExpression localeFromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
-                localeFromExpression.setBody(getReassignmentsForType(properties.get("reassignment"), "not-started"));
+                localeFromExpression.setBody(getReassignmentsAndNotificationsForType(properties.get("reassignment"), "not-started"));
 
                 FormalExpression localeToExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
                 localeToExpression.setBody(foundNotStartedDataInput.getId());
@@ -4320,6 +4320,109 @@ public class Bpmn2JsonUnmarshaller {
         }
         // end reassignments
 
+        // start notifications
+        if(properties.get("notifications") != null && properties.get("notifications").length() > 0) {
+            if(task.getIoSpecification() == null) {
+                InputOutputSpecification iospec = Bpmn2Factory.eINSTANCE.createInputOutputSpecification();
+                task.setIoSpecification(iospec);
+            }
+            List<DataInput> dataInputs = task.getIoSpecification().getDataInputs();
+            boolean foundNotCompletedNotificationsInput = false;
+            boolean foundNotStartedNotificationsInput = false;
+            DataInput foundNotCompletedDataInput = null;
+            DataInput foundNotStartedDataInput = null;
+            for(DataInput din : dataInputs) {
+                if(din.getName().equals("NotCompletedNotify")) {
+                    foundNotCompletedNotificationsInput = true;
+                    foundNotCompletedDataInput = din;
+                }
+
+                if(din.getName().equals("NotStartedNotify")) {
+                    foundNotStartedNotificationsInput = true;
+                    foundNotStartedDataInput = din;
+                }
+            }
+
+            if(!foundNotCompletedNotificationsInput) {
+                DataInput d = Bpmn2Factory.eINSTANCE.createDataInput();
+                d.setId(task.getId() + "_" + "NotCompletedNotify" + "Input");
+                d.setName("NotCompletedNotify");
+                task.getIoSpecification().getDataInputs().add(d);
+                foundNotCompletedDataInput = d;
+
+                if(task.getIoSpecification().getInputSets() == null || task.getIoSpecification().getInputSets().size() < 1) {
+                    InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
+                    task.getIoSpecification().getInputSets().add(inset);
+                }
+                task.getIoSpecification().getInputSets().get(0).getDataInputRefs().add(d);
+            }
+
+            if(!foundNotStartedNotificationsInput) {
+                DataInput d = Bpmn2Factory.eINSTANCE.createDataInput();
+                d.setId(task.getId() + "_" + "NotStartedNotify" + "Input");
+                d.setName("NotStartedNotify");
+                task.getIoSpecification().getDataInputs().add(d);
+                foundNotStartedDataInput = d;
+
+                if(task.getIoSpecification().getInputSets() == null || task.getIoSpecification().getInputSets().size() < 1) {
+                    InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
+                    task.getIoSpecification().getInputSets().add(inset);
+                }
+                task.getIoSpecification().getInputSets().get(0).getDataInputRefs().add(d);
+            }
+
+            boolean foundNotCompletedNotificationAssociation = false;
+            boolean foundNotStartedNotificationAssociation = false;
+
+            List<DataInputAssociation> inputAssociations = task.getDataInputAssociations();
+            for(DataInputAssociation da : inputAssociations) {
+                if(da.getTargetRef().getId().equals(foundNotCompletedDataInput.getId())) {
+                    foundNotCompletedNotificationAssociation = true;
+                    ((FormalExpression) da.getAssignment().get(0).getFrom()).setBody(getReassignmentsAndNotificationsForType(properties.get("notifications"), "not-completed"));
+                }
+                if(da.getTargetRef().getId().equals(foundNotStartedDataInput.getId())) {
+                    foundNotStartedNotificationAssociation = true;
+                    ((FormalExpression) da.getAssignment().get(0).getFrom()).setBody(getReassignmentsAndNotificationsForType(properties.get("notifications"), "not-started"));
+                }
+            }
+
+            if(!foundNotCompletedNotificationAssociation) {
+                DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
+                dia.setTargetRef(foundNotCompletedDataInput);
+
+                Assignment a = Bpmn2Factory.eINSTANCE.createAssignment();
+                FormalExpression localeFromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                localeFromExpression.setBody(getReassignmentsAndNotificationsForType(properties.get("notifications"), "not-completed"));
+
+                FormalExpression localeToExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                localeToExpression.setBody(foundNotCompletedDataInput.getId());
+
+                a.setFrom(localeFromExpression);
+                a.setTo(localeToExpression);
+
+                dia.getAssignment().add(a);
+                task.getDataInputAssociations().add(dia);
+            }
+
+            if(!foundNotStartedNotificationAssociation) {
+                DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
+                dia.setTargetRef(foundNotStartedDataInput);
+
+                Assignment a = Bpmn2Factory.eINSTANCE.createAssignment();
+                FormalExpression localeFromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                localeFromExpression.setBody(getReassignmentsAndNotificationsForType(properties.get("notifications"), "not-started"));
+
+                FormalExpression localeToExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                localeToExpression.setBody(foundNotStartedDataInput.getId());
+
+                a.setFrom(localeFromExpression);
+                a.setTo(localeToExpression);
+
+                dia.getAssignment().add(a);
+                task.getDataInputAssociations().add(dia);
+            }
+        }
+        // end notifications
 
         // revisit data assignments
         if(task.getDataInputAssociations() != null) {
@@ -4343,6 +4446,10 @@ public class Bpmn2JsonUnmarshaller {
                     } else if(targetInput.getName().equalsIgnoreCase("NotCompletedReassign") && (properties.get("reassignment") == null  || properties.get("reassignment").length() == 0)) {
                         toRemoveAssociations.add(dia);
                     } else if(targetInput.getName().equalsIgnoreCase("NotStartedReassign") && (properties.get("reassignment") == null  || properties.get("reassignment").length() == 0)) {
+                        toRemoveAssociations.add(dia);
+                    } else if(targetInput.getName().equalsIgnoreCase("NotCompletedNotify") && (properties.get("notifications") == null  || properties.get("notifications").length() == 0)) {
+                        toRemoveAssociations.add(dia);
+                    } else if(targetInput.getName().equalsIgnoreCase("NotStartedNotify") && (properties.get("notifications") == null  || properties.get("notifications").length() == 0)) {
                         toRemoveAssociations.add(dia);
                     }
         		}
@@ -4373,6 +4480,10 @@ public class Bpmn2JsonUnmarshaller {
                 } else if(din.getName().equalsIgnoreCase("NotCompletedReassign") && (properties.get("reassignment") == null  || properties.get("reassignment").length() == 0)) {
                     toRemoveDataInputs.add(din);
                 } else if(din.getName().equalsIgnoreCase("NotStartedReassign") && (properties.get("reassignment") == null  || properties.get("reassignment").length() == 0)) {
+                    toRemoveDataInputs.add(din);
+                } else if(din.getName().equalsIgnoreCase("NotCompletedNotify") && (properties.get("notifications") == null  || properties.get("notifications").length() == 0)) {
+                    toRemoveDataInputs.add(din);
+                } else if(din.getName().equalsIgnoreCase("NotStartedNotify") && (properties.get("notifications") == null  || properties.get("notifications").length() == 0)) {
                     toRemoveDataInputs.add(din);
                 }
         	}
@@ -4620,16 +4731,15 @@ public class Bpmn2JsonUnmarshaller {
 		return sb.toString();
 	}
 
-    private String getReassignmentsForType(String reassignmentsStr, String type) {
-        // [users:pesa|groups:]@[4d]@not-started^[users:|groups:pederi]@[44y]@not-completed^[users:tosa|groups:macke]@[1s]@not-started^[users:something|groups:somethingelse]@[22d]@not-completed
-        String[] reassignmentParts = reassignmentsStr.split( "\\^\\s*" );
+    private String getReassignmentsAndNotificationsForType(String inputStr, String type) {
+        String[] parts = inputStr.split( "\\^\\s*" );
         String ret = "";
-        for(int i=0;i<reassignmentParts.length;i++) {
-            if(reassignmentParts[i].endsWith("^")) {
-                reassignmentParts[i] = reassignmentParts[i].substring(0,reassignmentParts[i].length()-1);
+        for(int i=0;i<parts.length;i++) {
+            if(parts[i].endsWith("^")) {
+                parts[i] = parts[i].substring(0,parts[i].length()-1);
             }
-            if(reassignmentParts[i].endsWith("@"+type)) {
-                ret += reassignmentParts[i].substring(0, reassignmentParts[i].length() - ("@"+type).length());
+            if(parts[i].endsWith("@"+type)) {
+                ret += parts[i].substring(0, parts[i].length() - ("@"+type).length());
                 ret += "^";
             }
         }
@@ -4637,7 +4747,7 @@ public class Bpmn2JsonUnmarshaller {
             ret = ret.substring(0,ret.length()-1);
         }
 
-        return ret;
+        return wrapInCDATABlock(ret);
     }
 }
 
