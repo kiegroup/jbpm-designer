@@ -1300,6 +1300,8 @@ public class Bpmn2JsonMarshaller {
         DataInput localeDataInput = null;
         DataInput notCompletedReassignInput = null;
         DataInput notStartedReassignInput = null;
+        DataInput notCompletedNotificationInput = null;
+        DataInput notStartedNotificationInput = null;
         if(task.getIoSpecification() != null) {
             List<InputSet> inputSetList = task.getIoSpecification().getInputSets();
             StringBuilder dataInBuffer = new StringBuilder();
@@ -1337,6 +1339,12 @@ public class Bpmn2JsonMarshaller {
                     }
                     if(dataIn.getName() != null && dataIn.getName().equals("NotStartedReassign")) {
                         notStartedReassignInput = dataIn;
+                    }
+                    if(dataIn.getName() != null && dataIn.getName().equals("NotCompletedNotify")) {
+                        notCompletedNotificationInput = dataIn;
+                    }
+                    if(dataIn.getName() != null && dataIn.getName().equals("NotStartedNotify")) {
+                        notStartedNotificationInput = dataIn;
                     }
                 }
             }
@@ -1422,7 +1430,9 @@ public class Bpmn2JsonMarshaller {
             		   rhsAssociation.equals("TaskName")  ||
                        rhsAssociation.equals("Locale") ||
                        rhsAssociation.equals("NotCompletedReassign") ||
-                       rhsAssociation.equals("NotStartedReassign")
+                       rhsAssociation.equals("NotStartedReassign") ||
+                       rhsAssociation.equals("NotCompletedNotify") ||
+                       rhsAssociation.equals("NotStartedNotify")
             		   )) {
             			String replacer = associationValue.replaceAll(",", "##");
             			associationBuff.append(rhsAssociation).append("=").append(replacer);
@@ -1462,12 +1472,22 @@ public class Bpmn2JsonMarshaller {
                     if (notCompletedReassignInput != null && datain.getAssignment().get(0).getTo() != null &&
                             ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
                             ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(notCompletedReassignInput.getId())) {
-                        properties.put("tmpreassignmentnotcompleted", updateReassignmentInput( ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody(), "not-completed" ));
+                        properties.put("tmpreassignmentnotcompleted", updateReassignmentAndNotificationInput( ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody(), "not-completed" ));
                     }
                     if (notStartedReassignInput != null && datain.getAssignment().get(0).getTo() != null &&
                             ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
                             ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(notStartedReassignInput.getId())) {
-                        properties.put("tmpreassignmentnotstarted", updateReassignmentInput( ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody(), "not-started" ));
+                        properties.put("tmpreassignmentnotstarted", updateReassignmentAndNotificationInput( ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody(), "not-started" ));
+                    }
+                    if (notCompletedNotificationInput != null && datain.getAssignment().get(0).getTo() != null &&
+                            ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
+                            ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(notCompletedNotificationInput.getId())) {
+                        properties.put("tmpnotificationnotcompleted", updateReassignmentAndNotificationInput( ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody(), "not-completed" ));
+                    }
+                    if (notStartedNotificationInput != null && datain.getAssignment().get(0).getTo() != null &&
+                            ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
+                            ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(notStartedNotificationInput.getId())) {
+                        properties.put("tmpnotificationnotstarted", updateReassignmentAndNotificationInput( ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody(), "not-started" ));
                     }
             	}
             } 
@@ -1495,6 +1515,14 @@ public class Bpmn2JsonMarshaller {
             properties.put("reassignment", properties.get("tmpreassignmentnotcompleted"));
         } else if(properties.get("tmpreassignmentnotstarted") != null && ((String) properties.get("tmpreassignmentnotstarted")).length() > 0) {
             properties.put("reassignment", properties.get("tmpreassignmentnotstarted"));
+        }
+
+        if(properties.get("tmpnotificationnotcompleted") != null && ((String)properties.get("tmpnotificationnotcompleted")).length() > 0 && properties.get("tmpnotificationnotstarted") != null && ((String) properties.get("tmpnotificationnotstarted")).length() > 0) {
+            properties.put("notifications", properties.get("tmpnotificationnotcompleted") + "^" + properties.get("tmpnotificationnotstarted"));
+        } else if(properties.get("tmpnotificationnotcompleted") != null && ((String) properties.get("tmpnotificationnotcompleted")).length() > 0) {
+            properties.put("notifications", properties.get("tmpnotificationnotcompleted"));
+        } else if(properties.get("tmpnotificationnotstarted") != null && ((String) properties.get("tmpnotificationnotstarted")).length() > 0) {
+            properties.put("notifications", properties.get("tmpnotificationnotstarted"));
         }
 
         for(DataOutputAssociation dataout : outputAssociations) {
@@ -2544,12 +2572,12 @@ public class Bpmn2JsonMarshaller {
 		return buf.toString();
 	}
 
-    private String updateReassignmentInput(String reassignmentStr, String reassignmentType) {
-        if(reassignmentStr != null && reassignmentStr.length() > 0) {
+    private String updateReassignmentAndNotificationInput(String inputStr, String type) {
+        if(inputStr != null && inputStr.length() > 0) {
             String ret = "";
-            String[] reassignmentParts = reassignmentStr.split( "\\^\\s*" );
-            for(String nextPart : reassignmentParts) {
-                ret += nextPart + "@" + reassignmentType + "^";
+            String[] parts = inputStr.split( "\\^\\s*" );
+            for(String nextPart : parts) {
+                ret += nextPart + "@" + type + "^";
             }
             if(ret.endsWith("^")) {
                 ret = ret.substring(0, ret.length() - 1);
