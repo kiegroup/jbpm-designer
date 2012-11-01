@@ -92,7 +92,7 @@ ORYX.Plugins.PropertyWindow = {
 				id: 'propertywindow_column_value',
 				width: 110,
 				editor: new Ext.form.TextField({
-					allowBlank: false
+					allowBlank: true
 				}),
 				renderer: this.renderer.bind(this)
 			},
@@ -1670,35 +1670,38 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
                     if(usergroupsstr.indexOf("|") > 0) {
                         var tparts = usergroupsstr.split("|");
                         for(var j=0; j< tparts.length; j++) {
-                            var eparts = tparts[j].split(":");
-                            if(eparts[0] == "from") {
-                                fromstr = eparts[1];
-                            } else if(eparts[0] == "tousers") {
-                                tousersstr = eparts[1];
-                            } else if(eparts[0] == "togroups") {
-                                togroupsstr = eparts[1];
-                            } else if(eparts[0] == "replyTo") {
-                                replytostr = eparts[1];
-                            } else if(eparts[0] == "subject") {
-                                subjectstr = eparts[1];
-                            } else if(eparts[0] == "body") {
-                                bodystr = eparts[1].replace(/<br\s?\/?>/g,"\n");;
+                            var epartsone = tparts[j].split(/:(.+)?/)[0];
+                            var epartstwo = tparts[j].split(/:(.+)?/)[1];
+
+                            if(epartsone == "from") {
+                                fromstr = epartstwo;
+                            } else if(epartsone == "tousers") {
+                                tousersstr = epartstwo;
+                            } else if(epartsone == "togroups") {
+                                togroupsstr = epartstwo;
+                            } else if(epartsone == "replyTo") {
+                                replytostr = epartstwo;
+                            } else if(epartsone == "subject") {
+                                subjectstr = epartstwo;
+                            } else if(epartsone == "body") {
+                                bodystr = epartstwo.replace(/<br\s?\/?>/g,"\n");
                             }
                         }
                     } else {
-                        var eparts2 = usergroupsstr.split(":");
-                        if(eparts2[0] == "from") {
-                            fromstr = eparts2[1];
-                        } else if(eparts2[0] == "tousers") {
-                            tousersstr = eparts2[1];
-                        } else if(eparts2[0] == "togroups") {
-                            togroupsstr = eparts[1];
-                        } else if(eparts2[0] == "replyTo") {
-                            replytostr = eparts2[1];
-                        } else if(eparts2[0] == "subject") {
-                            subjectstr = eparts2[1];
-                        } else if(eparts2[0] == "body") {
-                            bodystr = eparts2[1].replace(/<br\s?\/?>/g,"\n");;
+                        var epartsone = usergroupsstr.split(/:(.+)?/)[0];
+                        var epartstwo = usergroupsstr.split(/:(.+)?/)[1];
+                        if(epartsone == "from") {
+                            fromstr = epartstwo;
+                        } else if(epartsone == "tousers") {
+                            tousersstr = epartstwo;
+                        } else if(epartsone == "togroups") {
+                            togroupsstr = epartstwo;
+                        } else if(epartsone == "replyTo") {
+                            replytostr = epartstwo;
+                        } else if(epartsone == "subject") {
+                            subjectstr = epartstwo;
+                        } else if(epartsone == "body") {
+                            bodystr = epartstwo.replace(/<br\s?\/?>/g,"\n");
                         }
                     }
 
@@ -1769,7 +1772,7 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
                 header: 'Expires At',
                 width: 100,
                 dataIndex: 'expires',
-                editor: new Ext.form.TextField({ allowBlank: false, regex: /^[a-z0-9 \-\.\_]*$/i }),
+                editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \-\.\_]*$/i }),
                 renderer: Ext.util.Format.htmlEncode
             },
             {
@@ -1777,7 +1780,7 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
                 header: 'From',
                 width: 100,
                 dataIndex: 'from',
-                editor: new Ext.form.TextField({ allowBlank: false, regex: /^[a-z0-9 \-\.\_\,]*$/i }),
+                editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \-\.\_\,]*$/i }),
                 renderer: Ext.util.Format.htmlEncode
             },
             {
@@ -1785,7 +1788,7 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
                 header: 'To Users',
                 width: 100,
                 dataIndex: 'tousers',
-                editor: new Ext.form.TextField({ allowBlank: false, regex: /^[a-z0-9 \-\.\_\,]*$/i }),
+                editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \-\.\_\,]*$/i }),
                 renderer: Ext.util.Format.htmlEncode
             },
             {
@@ -1793,7 +1796,7 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
                 header: 'To Groups',
                 width: 100,
                 dataIndex: 'togroups',
-                editor: new Ext.form.TextField({ allowBlank: false, regex: /^[a-z0-9 \-\.\_\,]*$/i }),
+                editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \-\.\_\,]*$/i }),
                 renderer: Ext.util.Format.htmlEncode
             },
             {
@@ -1801,7 +1804,7 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
                 header: 'Reply To',
                 width: 100,
                 dataIndex: 'replyto',
-                editor: new Ext.form.TextField({ allowBlank: false, regex: /^[a-z0-9 \-\.\_\,]*$/i }),
+                editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \-\.\_\,]*$/i }),
                 renderer: Ext.util.Format.htmlEncode
             },
             {
@@ -1809,7 +1812,7 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
                 header: 'Subject',
                 width: 100,
                 dataIndex: 'subject',
-                editor: new Ext.form.TextField({ allowBlank: false, regex: /^[a-z0-9 \-\.\_\,]*$/i }),
+                editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \-\.\_\,]*$/i }),
                 renderer: Ext.util.Format.htmlEncode
             },
             {
@@ -1819,7 +1822,7 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
                 height: 650,
                 dataIndex: 'body',
                 //editor: new Ext.grid.GridEditor(new Ext.form.TextArea(), {autoSize: 'full', })},
-                editor: new Ext.form.TextArea({ width: 150, height: 650, allowBlank: false, disableKeyFilter:true, grow: true}),
+                editor: new Ext.form.TextArea({ width: 150, height: 650, allowBlank: true, disableKeyFilter:true, grow: true}),
                 renderer: Ext.util.Format.htmlEncode
             }, itemDeleter]),
             selModel: itemDeleter,
@@ -2065,7 +2068,7 @@ Ext.form.ComplexReassignmentField = Ext.extend(Ext.form.TriggerField,  {
                 header: 'Users',
                 width: 150,
                 dataIndex: 'users',
-                editor: new Ext.form.TextField({ allowBlank: false, regex: /^[a-z0-9 \-\.\_\,]*$/i }),
+                editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \-\.\_\,]*$/i }),
                 renderer: Ext.util.Format.htmlEncode
             },
             {
@@ -2073,7 +2076,7 @@ Ext.form.ComplexReassignmentField = Ext.extend(Ext.form.TriggerField,  {
                 header: 'Groups',
                 width: 150,
                 dataIndex: 'groups',
-                editor: new Ext.form.TextField({ allowBlank: false, regex: /^[a-z0-9 \-\.\_\,]*$/i }),
+                editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \-\.\_\,]*$/i }),
                 renderer: Ext.util.Format.htmlEncode
             },
             {
@@ -2081,7 +2084,7 @@ Ext.form.ComplexReassignmentField = Ext.extend(Ext.form.TriggerField,  {
                 header: 'Expires At',
                 width: 150,
                 dataIndex: 'expires',
-                editor: new Ext.form.TextField({ allowBlank: false, regex: /^[a-z0-9 \-\.\_]*$/i }),
+                editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \-\.\_]*$/i }),
                 renderer: Ext.util.Format.htmlEncode
             },
             {
@@ -2255,7 +2258,7 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
                 header: 'Import',
                 width: 360,
                 dataIndex: 'import',
-                editor: new Ext.form.TextField({ allowBlank: false })
+                editor: new Ext.form.TextField({ allowBlank: true })
             },itemDeleter]),
     		selModel: itemDeleter,
             autoHeight: true,
@@ -2391,7 +2394,7 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
                 header: 'Action',
                 width: 360,
                 dataIndex: 'action',
-                editor: new Ext.form.TextField({ allowBlank: false })
+                editor: new Ext.form.TextField({ allowBlank: true })
             },itemDeleter]),
     		selModel: itemDeleter,
             autoHeight: true,
@@ -2956,7 +2959,7 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                 header: 'Name',
                 width: 100,
                 dataIndex: 'name',
-                editor: new Ext.form.TextField({ allowBlank: false, vtype: 'inputName', regex: /^[a-z0-9 \-\_\.]*$/i }),
+                editor: new Ext.form.TextField({ allowBlank: true, vtype: 'inputName', regex: /^[a-z0-9 \-\.\_]*$/i }),
                 renderer: Ext.util.Format.htmlEncode
             }, {
             	id: 'stype',
@@ -2991,7 +2994,7 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                 header: 'Custom Type',
                 width: 200,
                 dataIndex: 'ctype',
-                editor: new Ext.form.TextField({ allowBlank: false }),
+                editor: new Ext.form.TextField({ allowBlank: true }),
                 renderer: Ext.util.Format.htmlEncode
             }, itemDeleter]),
     		selModel: itemDeleter,
@@ -3263,13 +3266,13 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField,  {
     		                    header: 'Process Id',
     		                    width: 200,
     		                    dataIndex: 'name',
-    		                    editor: new Ext.form.TextField({ allowBlank: false, disabled: true })
+    		                    editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
     		                }, {
     		                	id: 'pkgn',
     		                    header: 'Package Name',
     		                    width: 200,
     		                    dataIndex: 'pkgname',
-    		                    editor: new Ext.form.TextField({ allowBlank: false, disabled: true })
+    		                    editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
     		                },{
     		                	id: 'pim',
     		                    header: 'Process Image',
