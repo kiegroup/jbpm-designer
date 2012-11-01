@@ -149,7 +149,7 @@ ORYX.Plugins.PropertyWindow = {
 			items: [
 				this.grid 
 			],
-            anchors: '0, -30',
+            anchors: '0, -30'
 		}), ORYX.I18N.PropertyWindow.title);
 
 
