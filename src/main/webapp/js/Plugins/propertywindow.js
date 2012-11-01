@@ -149,7 +149,7 @@ ORYX.Plugins.PropertyWindow = {
 			items: [
 				this.grid 
 			],
-            anchors: '0, -30',
+            anchors: '0, -30'
 		}), ORYX.I18N.PropertyWindow.title);
 
 
@@ -1952,7 +1952,6 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
         grid.focus( false, 100 );
     }
 });
-
 
 Ext.form.ComplexReassignmentField = Ext.extend(Ext.form.TriggerField,  {
     onTriggerClick : function() {
