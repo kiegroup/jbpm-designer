@@ -129,7 +129,6 @@ import org.jboss.drools.OnEntryScriptType;
 import org.jboss.drools.OnExitScriptType;
 import org.jboss.drools.impl.DroolsPackageImpl;
 import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.process.core.context.swimlane.Swimlane;
 
 /**
  * @author Antoine Toulme
@@ -779,7 +778,7 @@ public class Bpmn2JsonMarshaller {
                 flowElementProperties.put("bgcolor", defaultBgColor_ThrowingEvents);
             } else if(flowElement instanceof Gateway) {
                 flowElementProperties.put("bgcolor", defaultBgColor_Gateways);
-            } else if(flowElement instanceof Swimlane) {
+            } else if(flowElement instanceof Lane) {
                 flowElementProperties.put("bgcolor", defaultBgColor_Swimlanes);
             } else {
         		flowElementProperties.put("bgcolor", defaultBgColor_Events);
