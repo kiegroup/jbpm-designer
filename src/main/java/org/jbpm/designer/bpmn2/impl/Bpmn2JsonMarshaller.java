@@ -147,6 +147,7 @@ import org.jboss.drools.TimeParameters;
 import org.jboss.drools.UniformDistributionType;
 import org.jboss.drools.impl.DroolsPackageImpl;
 import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.jbpm.process.core.context.swimlane.Swimlane;
 
 /**
  * @author Antoine Toulme
@@ -158,7 +159,19 @@ import org.jbpm.designer.web.profile.IDiagramProfile;
 public class Bpmn2JsonMarshaller {
 	public static final String defaultBgColor_Activities = "#fafad2";
 	public static final String defaultBgColor_Events = "#f5deb3";
+    public static final String defaultBgColor_StartEvents = "#9acd32";
+    public static final String defaultBgColor_EndEvents = "#ff6347";
+    public static final String defaultBgColor_DataObjects = "#C0C0C0";
+    public static final String defaultBgColor_CatchingEvents = "#f5deb3";
+    public static final String defaultBgColor_ThrowingEvents = "#8cabff";
+    public static final String defaultBgColor_Gateways = "#f0e68c";
+    public static final String defaultBgColor_Swimlanes = "#ffffff";
+
 	public static final String defaultBrColor = "#000000";
+    public static final String defaultBrColor_CatchingEvents = "#a0522d";
+    public static final String defaultBrColor_ThrowingEvents = "#008cec";
+    public static final String defaultBrColor_Gateways = "#a67f00";
+
 	public static final String defaultFontColor = "#000000";
 	public static final String defaultSequenceflowColor = "#000000";
 	
@@ -706,7 +719,7 @@ public class Bpmn2JsonMarshaller {
 	            }
 	        }
 	        if(!foundBgColor) {
-	        	laneProperties.put("bgcolor", defaultBgColor_Events);
+	        	laneProperties.put("bgcolor", defaultBgColor_Swimlanes);
 	        }
 	        
 	        if(!foundBrColor) {
@@ -793,15 +806,37 @@ public class Bpmn2JsonMarshaller {
         if(!foundBgColor) {
         	if(flowElement instanceof Activity || flowElement instanceof SubProcess ) {
         		flowElementProperties.put("bgcolor", defaultBgColor_Activities);
-        	} else {
+        	} else if(flowElement instanceof StartEvent) {
+                flowElementProperties.put("bgcolor", defaultBgColor_StartEvents);
+            } else if(flowElement instanceof EndEvent) {
+                flowElementProperties.put("bgcolor", defaultBgColor_EndEvents);
+            }  else if(flowElement instanceof DataObject) {
+                flowElementProperties.put("bgcolor", defaultBgColor_DataObjects);
+            } else if(flowElement instanceof CatchEvent) {
+                flowElementProperties.put("bgcolor", defaultBgColor_CatchingEvents);
+            } else if(flowElement instanceof ThrowEvent) {
+                flowElementProperties.put("bgcolor", defaultBgColor_ThrowingEvents);
+            } else if(flowElement instanceof Gateway) {
+                flowElementProperties.put("bgcolor", defaultBgColor_Gateways);
+            } else if(flowElement instanceof Swimlane) {
+                flowElementProperties.put("bgcolor", defaultBgColor_Swimlanes);
+            } else {
         		flowElementProperties.put("bgcolor", defaultBgColor_Events);
         	}
         }
-        
+
         if(!foundBrColor) {
-        	flowElementProperties.put("bordercolor", defaultBrColor);
+            if(flowElement instanceof CatchEvent && !(flowElement instanceof StartEvent)) {
+                flowElementProperties.put("bordercolor", defaultBrColor_CatchingEvents);
+            } else if(flowElement instanceof ThrowEvent && !(flowElement instanceof EndEvent)) {
+                flowElementProperties.put("bordercolor", defaultBrColor_ThrowingEvents);
+            } else if(flowElement instanceof Gateway) {
+                flowElementProperties.put("bordercolor", defaultBrColor_Gateways);
+            } else {
+                flowElementProperties.put("bordercolor", defaultBrColor);
+            }
         }
-        
+
         if(!foundFontColor) {
         	flowElementProperties.put("fontcolor", defaultFontColor);
         }
