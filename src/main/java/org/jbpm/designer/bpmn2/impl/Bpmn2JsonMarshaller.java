@@ -2008,11 +2008,16 @@ public class Bpmn2JsonMarshaller {
 	    generator.writeArrayFieldStart("childShapes");
 	    generator.writeEndArray();
 	    generator.writeArrayFieldStart("outgoing");
-    	if(findOutgoingAssociation(plane, dataObject) != null) {
-    		generator.writeStartObject();
-    		generator.writeObjectField("resourceId", findOutgoingAssociation(plane, dataObject).getId());
-    		generator.writeEndObject();
-    	}
+
+        List<Association> associations = findOutgoingAssociations(plane, dataObject);
+        if(associations != null) {
+            for(Association as : associations) {
+                generator.writeStartObject();
+                generator.writeObjectField("resourceId", as.getId());
+                generator.writeEndObject();
+            }
+        }
+
 	    generator.writeEndArray();
 	    
 	    Bounds bounds = ((BPMNShape) findDiagramElement(plane, dataObject)).getBounds();
@@ -2734,6 +2739,24 @@ public class Bpmn2JsonMarshaller {
             }
         }
         return null;
+    }
+
+    protected List<Association> findOutgoingAssociations(BPMNPlane plane, BaseElement baseElement) {
+        List<Association> retList = new ArrayList<Association>();
+        if (!(plane.getBpmnElement() instanceof Process)){
+            throw new IllegalArgumentException("Don't know how to get associations from a non-Process Diagram");
+        }
+
+        Process process = (Process) plane.getBpmnElement();
+        for (Artifact artifact : process.getArtifacts()) {
+            if (artifact instanceof Association){
+                Association association = (Association) artifact;
+                if (association.getSourceRef() == baseElement){
+                    retList.add(association);
+                }
+            }
+        }
+        return retList;
     }
     
     protected void marshallStencil(String stencilId, JsonGenerator generator) throws JsonGenerationException, IOException {
