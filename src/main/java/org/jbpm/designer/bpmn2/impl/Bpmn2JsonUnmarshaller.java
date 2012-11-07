@@ -17,12 +17,9 @@ package org.jbpm.designer.bpmn2.impl;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -77,7 +74,6 @@ import org.eclipse.bpmn2.Gateway;
 import org.eclipse.bpmn2.GatewayDirection;
 import org.eclipse.bpmn2.GlobalTask;
 import org.eclipse.bpmn2.Group;
-import org.eclipse.bpmn2.Import;
 import org.eclipse.bpmn2.InclusiveGateway;
 import org.eclipse.bpmn2.InputOutputSpecification;
 import org.eclipse.bpmn2.InputSet;
@@ -135,28 +131,22 @@ import org.eclipse.emf.ecore.util.FeatureMap;
 import org.jboss.drools.ControlParameters;
 import org.jboss.drools.CostParameters;
 import org.jboss.drools.DecimalParameterType;
-import org.jboss.drools.DistributionParameter;
 import org.jboss.drools.DroolsFactory;
 import org.jboss.drools.DroolsPackage;
 import org.jboss.drools.ElementParametersType;
 import org.jboss.drools.FloatingParameterType;
 import org.jboss.drools.GlobalType;
 import org.jboss.drools.ImportType;
-import org.jboss.drools.MetadataType;
-import org.jboss.drools.MetaentryType;
 import org.jboss.drools.NormalDistributionType;
-import org.jboss.drools.NumericParameterType;
 import org.jboss.drools.OnEntryScriptType;
 import org.jboss.drools.OnExitScriptType;
 import org.jboss.drools.Parameter;
-import org.jboss.drools.ParameterValue;
 import org.jboss.drools.PoissonDistributionType;
 import org.jboss.drools.PriorityParameters;
 import org.jboss.drools.ProcessAnalysisDataType;
 import org.jboss.drools.RandomDistributionType;
 import org.jboss.drools.ResourceParameters;
 import org.jboss.drools.Scenario;
-import org.jboss.drools.ScenarioParameters;
 import org.jboss.drools.ScenarioParametersType;
 import org.jboss.drools.TimeParameters;
 import org.jboss.drools.TimeUnit;
@@ -270,10 +260,10 @@ public class Bpmn2JsonUnmarshaller {
             reconnectFlows();
             revisitGateways(def);
             revisitCatchEventsConvertToBoundary(def);
-            revisitDataObjects(def);
-            revisitAssociationsIoSpec(def);
             createDiagram(def);
             updateIDs(def);
+            revisitDataObjects(def);
+            revisitAssociationsIoSpec(def);
             addSimulation(def);
             
             // return def;
@@ -365,7 +355,8 @@ public class Bpmn2JsonUnmarshaller {
     
     public void revisitDataObjects(Definitions def) {
     	List<RootElement> rootElements =  def.getRootElements();
-    	List<ItemDefinition> itemDefinitionsToAdd = new ArrayList<ItemDefinition>();
+    	List<ItemDefinition> itemDefinitionsToAddUnfiltered = new ArrayList<ItemDefinition>();
+        List<ItemDefinition> itemDefinitionsToAddFiltered = new ArrayList<ItemDefinition>();
         for(RootElement root : rootElements) {
         	if(root instanceof Process) {
         		Process process = (Process) root;
@@ -386,14 +377,29 @@ public class Bpmn2JsonUnmarshaller {
 	                        }
 	                    }
 	                    da.setItemSubjectRef(itemdef);
-	                    itemDefinitionsToAdd.add(itemdef);
+                        itemDefinitionsToAddUnfiltered.add(itemdef);
 	            	}
 	            }
         	}
         }
-        
-        for(ItemDefinition itemDef : itemDefinitionsToAdd) {
-        	def.getRootElements().add(itemDef);
+        for(ItemDefinition itemDef : itemDefinitionsToAddUnfiltered) {
+            boolean foundItemDef = false;
+            for(RootElement ele : rootElements) {
+                if(ele instanceof ItemDefinition) {
+                    ItemDefinition idef = (ItemDefinition) ele;
+                    if(idef.getId().equals(itemDef.getId())) {
+                        foundItemDef = true;
+                        break;
+                    }
+                }
+            }
+            if(!foundItemDef) {
+                itemDefinitionsToAddFiltered.add(itemDef);
+            }
+        }
+
+        for(ItemDefinition itemDefFil : itemDefinitionsToAddFiltered) {
+            def.getRootElements().add(itemDefFil);
         }
         
         for(RootElement root : rootElements) {
@@ -429,7 +435,7 @@ public class Bpmn2JsonUnmarshaller {
 		            	            d.setName(da.getId() + "Input");
 		            	            task.getIoSpecification().getDataInputs().add(d);
 		            	            task.getIoSpecification().getInputSets().get(0).getDataInputRefs().add(d);
-		            	        	
+
 		            	        	DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
 		            	        	dia.setTargetRef(d);
 		            	        	dia.getSourceRef().add(da);
@@ -3481,7 +3487,7 @@ public class Bpmn2JsonUnmarshaller {
             toExp.setBody(task.getId() + "_TaskNameInput");
             taskNameAssignment.setTo(toExp);
             taskNameDataInputAssociation.getAssignment().add(taskNameAssignment);
-        
+
             task.getDataInputAssociations().add(taskNameDataInputAssociation);
         }
         
@@ -3508,7 +3514,7 @@ public class Bpmn2JsonUnmarshaller {
 	                DataInput nextInput = Bpmn2Factory.eINSTANCE.createDataInput();
 	                String[] dataInputParts = dataInput.split( ":\\s*" );
 	                if(dataInputParts.length == 2) {
-	                	nextInput.setId(task.getId() + "_" + dataInputParts[0] + "Input");
+	                	nextInput.setId(task.getId() + "_" + dataInputParts[0] + (dataInputParts[0].endsWith("Input") ? "" : "Input"));
 	                	nextInput.setName(dataInputParts[0]);
 	                	
 	                	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
@@ -3518,7 +3524,7 @@ public class Bpmn2JsonUnmarshaller {
 	                    		dataInputParts[1]);
 	                    nextInput.getAnyAttribute().add(extensionEntry);
 	                } else {
-	                	nextInput.setId(task.getId() + "_" + dataInput + "Input");
+	                	nextInput.setId(task.getId() + "_" + dataInput + (dataInput.endsWith("Input") ? "" : "Input"));
 	                	nextInput.setName(dataInput);
 	                }
 	                
@@ -3653,7 +3659,6 @@ public class Bpmn2JsonUnmarshaller {
                             break;
                         }
                     }
-                    
                     task.getDataInputAssociations().add(dia);
                     task.getDataOutputAssociations().add(doa);
                 } else if(assignment.contains("->")) {
@@ -3691,7 +3696,7 @@ public class Bpmn2JsonUnmarshaller {
 
                         List<DataInput> dataInputs = task.getIoSpecification().getDataInputs();
                         for(DataInput di : dataInputs) {
-                            if(di.getId().equals(task.getId() + "_" + assignmentParts[1] + "Input")) {
+                            if(di.getId().equals(task.getId() + "_" + assignmentParts[1])) {
                                 dia.setTargetRef(di);
                                 break;
                             }
@@ -4154,7 +4159,7 @@ public class Bpmn2JsonUnmarshaller {
         		ItemAwareElement e = Bpmn2Factory.eINSTANCE.createItemAwareElement();
                 e.setId(properties.get("content"));
         		dia.getSourceRef().add(e);
-        		task.getDataInputAssociations().add(dia);
+                task.getDataInputAssociations().add(dia);
         	}
         }
 
