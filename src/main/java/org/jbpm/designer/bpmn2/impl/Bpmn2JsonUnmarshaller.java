@@ -492,18 +492,18 @@ public class Bpmn2JsonUnmarshaller {
 	            						foundDataOutput = true;
 	            					}
 	            				}
-	            				
+
 	            				if(!foundDataOutput) {
 		            	        	DataOutput d = Bpmn2Factory.eINSTANCE.createDataOutput();
 		            	            d.setId(task.getId() + "_" + da.getId() + "Output");
-		            	            d.setName(da.getId());
+		            	            d.setName(da.getId() + "Output");
 		            	            task.getIoSpecification().getDataOutputs().add(d);
 		            	            task.getIoSpecification().getOutputSets().get(0).getDataOutputRefs().add(d);
-		            	        	
-		            	        	DataOutputAssociation dia = Bpmn2Factory.eINSTANCE.createDataOutputAssociation();
-		            	        	dia.setTargetRef(da);
-		            	        	dia.getSourceRef().add(d);
-		            	            task.getDataOutputAssociations().add(dia);
+
+                                    DataOutputAssociation doa = Bpmn2Factory.eINSTANCE.createDataOutputAssociation();
+                                    doa.getSourceRef().add(d);
+                                    doa.setTargetRef(da);
+                                    task.getDataOutputAssociations().add(doa);
 	            				}
 	            			} else if(as.getSourceRef() instanceof CatchEvent) {
 	            				CatchEvent ce = (CatchEvent) as.getSourceRef();
@@ -1878,7 +1878,8 @@ public class Bpmn2JsonUnmarshaller {
 	                    } else if (child instanceof Artifact) {
 	                        rootLevelProcess.getArtifacts().add((Artifact) child);
 	                    } else if (child instanceof DataObject) {
-	                        rootLevelProcess.getFlowElements().add((DataObject) child);
+                            // bubble up data objects
+	                        rootLevelProcess.getFlowElements().add(0, (DataObject) child);
 	//                        ItemDefinition def = ((DataObject) child).getItemSubjectRef();
 	//                        if (def != null) {
 	//                            if (def.eResource() == null) {
@@ -3557,7 +3558,7 @@ public class Bpmn2JsonUnmarshaller {
 	                DataOutput nextOut = Bpmn2Factory.eINSTANCE.createDataOutput();
 	                String[] dataOutputParts = dataOutput.split( ":\\s*" );
 	                if(dataOutputParts.length == 2) {
-	                	nextOut.setId(task.getId() + "_" + dataOutputParts[0] + "Output");
+	                	nextOut.setId(task.getId() + "_" + dataOutputParts[0] + (dataOutputParts[0].endsWith("Output") ? "" : "Output"));
 	                	nextOut.setName(dataOutputParts[0]);
 	                	
 	                	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
@@ -3567,7 +3568,7 @@ public class Bpmn2JsonUnmarshaller {
 	                    		dataOutputParts[1]);
 	                    nextOut.getAnyAttribute().add(extensionEntry);
 	                } else {
-	                	nextOut.setId(task.getId() + "_" + dataOutput + "Output");
+	                	nextOut.setId(task.getId() + "_" + dataOutput + (dataOutput.endsWith("Output") ? "" : "Output"));
 	                	nextOut.setName(dataOutput);
 	                }
 	                
@@ -3594,7 +3595,7 @@ public class Bpmn2JsonUnmarshaller {
                     if(task.getIoSpecification() != null && task.getIoSpecification().getDataOutputs() != null) {
                     	List<DataInput> dataInputs = task.getIoSpecification().getDataInputs();
                     	for(DataInput di : dataInputs) {
-                    		if(di.getId().equals(task.getId() + "_" + assignmentParts[0] + "Input")) {
+                    		if(di.getId().equals(task.getId() + "_" + assignmentParts[0] + (assignmentParts[0].endsWith("Input") ? "" : "Input"))) {
                     			dia.setTargetRef(di);
                     			if(di.getName().equals("TaskName")) {
                     				foundTaskName = true;
@@ -3647,14 +3648,14 @@ public class Bpmn2JsonUnmarshaller {
                     
                     List<DataInput> dataInputs = task.getIoSpecification().getDataInputs();
                     for(DataInput di : dataInputs) {
-                        if(di.getId().equals(task.getId() + "_" + assignmentParts[1] + "Input")) {
+                        if(di.getId().equals(task.getId() + "_" + assignmentParts[1] + (assignmentParts[1].endsWith("Input") ? "" : "Input"))) {
                             dia.setTargetRef(di);
                             break;
                         }
                     }
                     List<DataOutput> dataOutputs = task.getIoSpecification().getDataOutputs();
                     for(DataOutput dout : dataOutputs) {
-                        if(dout.getId().equals(task.getId() + "_" + assignmentParts[1] + "Output")) {
+                        if(dout.getId().equals(task.getId() + "_" + assignmentParts[1] + (assignmentParts[1].endsWith("Output") ? "" : "Output"))) {
                             doa.getSourceRef().add(dout);
                             break;
                         }
@@ -3667,7 +3668,7 @@ public class Bpmn2JsonUnmarshaller {
                     boolean leftHandAssignMentIsDO = false;
                     List<DataOutput> dataOutputs = task.getIoSpecification().getDataOutputs();
                     for(DataOutput dout : dataOutputs) {
-                        if(dout.getId().equals(task.getId() + "_" + assignmentParts[0] + "Output")) {
+                        if(dout.getId().equals(task.getId() + "_" + assignmentParts[0] + (assignmentParts[0].endsWith("Output") ? "" : "Output"))) {
                             leftHandAssignMentIsDO = true;
                             break;
                         }
@@ -3676,7 +3677,7 @@ public class Bpmn2JsonUnmarshaller {
                         // doing data output
                         DataOutputAssociation doa = Bpmn2Factory.eINSTANCE.createDataOutputAssociation();
                         for(DataOutput dout : dataOutputs) {
-                            if(dout.getId().equals(task.getId() + "_" + assignmentParts[0] + "Output")) {
+                            if(dout.getId().equals(task.getId() + "_" + assignmentParts[0] + (assignmentParts[0].endsWith("Output") ? "" : "Output"))) {
                                 doa.getSourceRef().add(dout);
                                 break;
                             }
@@ -3696,7 +3697,7 @@ public class Bpmn2JsonUnmarshaller {
 
                         List<DataInput> dataInputs = task.getIoSpecification().getDataInputs();
                         for(DataInput di : dataInputs) {
-                            if(di.getId().equals(task.getId() + "_" + assignmentParts[1])) {
+                            if(di.getId().equals(task.getId() + "_" + assignmentParts[1] + (assignmentParts[1].endsWith("Input") ? "" : "Input"))) {
                                 dia.setTargetRef(di);
                                 break;
                             }
