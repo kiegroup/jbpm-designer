@@ -2610,12 +2610,8 @@ public class Bpmn2JsonMarshaller {
             generator.writeEndObject();
         }
         generator.writeStartObject();
-        generator.writeObjectField("x", 0); 
-        if(sourceBounds.getY() < targetBounds.getY()) {
-        	generator.writeObjectField("y", 0);
-        } else {
-        	generator.writeObjectField("y", targetBounds.getHeight());
-        }
+        generator.writeObjectField("x", targetBounds.getWidth() / 2);
+        generator.writeObjectField("y", targetBounds.getHeight() / 2);
         generator.writeEndObject();
         generator.writeEndArray();
     }
