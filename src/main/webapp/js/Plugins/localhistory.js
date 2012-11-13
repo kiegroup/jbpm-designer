@@ -73,7 +73,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
             'icon': ORYX.PATH + "images/enable.png",
             dropDownGroupIcon : ORYX.PATH + "images/localhistory.png",
             'description': "Enable Local History",
-            'index': 2,
+            'index': 3,
             'minShape': 0,
             'maxShape': 0,
             'isEnabled': function(){
@@ -94,7 +94,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
             'icon': ORYX.PATH + "images/disable.png",
             dropDownGroupIcon : ORYX.PATH + "images/localhistory.png",
             'description': "Disable Local History",
-            'index': 2,
+            'index': 4,
             'minShape': 0,
             'maxShape': 0,
             'isEnabled': function(){
