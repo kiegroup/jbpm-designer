@@ -41,7 +41,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
                 regexa = new RegExp( regexSa );
                 profileParams = regexa.exec( window.location.href );
                 profileParamValue = profileParams[1];
-                return profileParamValue == "jbpm";
+                return profileParamValue == "jbpm" && ORYX.LOCAL_HISTORY_ENABLED;
             }.bind(this)
         });
 
@@ -62,7 +62,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
                 regexa = new RegExp( regexSa );
                 profileParams = regexa.exec( window.location.href );
                 profileParamValue = profileParams[1];
-                return profileParamValue == "jbpm";
+                return profileParamValue == "jbpm" && ORYX.LOCAL_HISTORY_ENABLED;
             }.bind(this)
         });
 

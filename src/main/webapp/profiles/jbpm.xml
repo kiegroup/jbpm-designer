@@ -48,6 +48,6 @@
         <plugin name="ORYX.Plugins.LocalHistory"/>
         <externalloadurl protocol="http" host="localhost:8080"
                          subdomain="drools-guvnor/org.drools.guvnor.Guvnor/oryxeditor" usr="admin" pwd="admin"/>
-        <localhostory enabled="true" timeout="180000"/>
+        <localhostory enabled="true" timeout="60000"/>
     </profile>
 </profiles>
