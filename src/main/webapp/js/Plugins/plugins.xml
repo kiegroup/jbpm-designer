@@ -343,6 +343,7 @@
 		<plugin source="locknode.js" name="ORYX.Plugins.LockNode"/>
 		<plugin source="voicecommand.js" name="ORYX.Plugins.VoiceCommand"/>
         <plugin source="patterncreator.js" name="ORYX.Plugins.PatternCreator"/>
+        <plugin source="localhistory.js" name="ORYX.Plugins.LocalHistory"/>
 		
 		<!-- <plugin source="stencilsetmanipulator.js" name="ORYX.Plugins.StencilSetManipulator" 
 			/> -->

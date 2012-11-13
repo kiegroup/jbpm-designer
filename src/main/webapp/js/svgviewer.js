@@ -1,6 +1,13 @@
 SVGViewer = Ext.extend(Ext.Window, {
     initComponent: function() {
         this.bodyCfg = {
+            id: 'svgviewerid',
+            layout: 'anchor',
+            autoCreate: true,
+            title: 'SVG Viewer',
+            modal: true,
+            collapsible: false,
+            shadow: true,
             tag: 'div',
             src: this.src,
             width: 400,
@@ -25,7 +32,7 @@ SVGViewer = Ext.extend(Ext.Window, {
     setSrc: function(src) {
         this.body.on('load', this.onSVGLoad, this, {single: true});
         //this.body.dom.style.width = this.body.dom.style.width = 'auto';
-        this.body.dom.src = ORYX.EDITOR.localStorageSVG;
+        this.body.dom.src = src;
     },
 
     initEvents: function() {

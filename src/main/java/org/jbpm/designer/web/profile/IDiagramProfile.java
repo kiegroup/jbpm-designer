@@ -105,6 +105,16 @@ public interface IDiagramProfile {
      * @return the pwd for external resource.
      */
     public String getPwd();
+
+    /**
+     * @return the local history enabled.
+     */
+    public String getLocalHistoryEnabled();
+
+    /**
+     * @return the local history timeout.
+     */
+    public String getLocalHistoryTimeout();
     
     /**
      * Parser to produce the final model to be saved.

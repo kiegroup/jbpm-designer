@@ -442,7 +442,13 @@ public class EditorHandler extends HttpServlet {
                 resultHtml.append(profile.getExternalLoadURLSubdomain().substring(0,
                         profile.getExternalLoadURLSubdomain().indexOf("/")));
                 replacementMade = true;    
-            } else if ("designerversion".equals(elt)) { 
+            } else if ("localhistoryenabled".equals(elt)) {
+                resultHtml.append(profile.getLocalHistoryEnabled());
+                replacementMade = true;
+            } else if ("localhistorytimeout".equals(elt)) {
+                resultHtml.append(profile.getLocalHistoryTimeout());
+                replacementMade = true;
+            } else if ("designerversion".equals(elt)) {
                 resultHtml.append(_designerVersion);
                 replacementMade = true;
             } else if("designerlocale".equals(elt)) {

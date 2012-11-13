@@ -73,6 +73,8 @@ public class DefaultProfileImpl implements IDiagramProfile {
     private String _externalLoadSubdomain;
     private String _usr;
     private String _pwd;
+    private String _localHistoryEnabled;
+    private String _localHistoryTimeout;
     
     public DefaultProfileImpl(ServletContext servletContext) {
         this(servletContext, true);
@@ -166,6 +168,14 @@ public class DefaultProfileImpl implements IDiagramProfile {
 
     public String getPwd() {
         return _pwd;
+    }
+
+    public String getLocalHistoryEnabled() {
+        return _localHistoryEnabled;
+    }
+
+    public String getLocalHistoryTimeout() {
+        return _localHistoryTimeout;
     }
     
     public IDiagramMarshaller createMarshaller() {

@@ -80,6 +80,9 @@
       ORYX.UUID = params['uuid'];
       ORYX.PROFILE = params['profile'];
 
+      ORYX.LOCAL_HISTORY_ENABLED = @localhistoryenabled@;
+      ORYX.LOCAL_HISTORY_TIMEOUT = @localhistorytimeout@;
+
       var segments = window.location.pathname.split("/").without("");
 
       ORYX.CONFIG.ROOT_PATH = "/" + segments.first() + "/";

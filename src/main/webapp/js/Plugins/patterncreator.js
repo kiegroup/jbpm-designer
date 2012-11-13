@@ -14,25 +14,26 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
         this.selectedRootsCount;
         this.createdElementCount;
 
-        this.facade.offer({
-            'name': "Create Pattern",
-            'functionality': this.createPatternFromSelection.bind(this),
-            'group': "pattern",
-            'icon': ORYX.PATH + "images/pattern.png",
-            'description': "Create a Workflow pattern from selection",
-            'index': 1,
-            'minShape': 0,
-            'maxShape': 0,
-            'isEnabled': function(){
-                profileParamName = "profile";
-                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-                regexa = new RegExp( regexSa );
-                profileParams = regexa.exec( window.location.href );
-                profileParamValue = profileParams[1];
-                return profileParamValue == "jbpm";
-            }.bind(this)
-        });
+        // TODO - finish pattern creation from selected nodes
+//        this.facade.offer({
+//            'name': "Create Pattern",
+//            'functionality': this.createPatternFromSelection.bind(this),
+//            'group': "pattern",
+//            'icon': ORYX.PATH + "images/pattern.png",
+//            'description': "Create a Workflow pattern from selection",
+//            'index': 1,
+//            'minShape': 0,
+//            'maxShape': 0,
+//            'isEnabled': function(){
+//                profileParamName = "profile";
+//                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//                regexa = new RegExp( regexSa );
+//                profileParams = regexa.exec( window.location.href );
+//                profileParamValue = profileParams[1];
+//                return profileParamValue == "jbpm";
+//            }.bind(this)
+//        });
     },
     handleCreatePattern : function(options) {
         if(options && options.pid && options.pdata && options.pos) {

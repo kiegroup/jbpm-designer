@@ -89,6 +89,7 @@ ORYX.Editor = {
 		this.simulationPathData = "";
 		this.simulationPathId = "";
 		this.simulationPathSVG = "";
+        this.localStorageSVG = "";
 
 		//meta data about the model for the signavio warehouse
 		//directory, new, name, description, revision, model (the model data)

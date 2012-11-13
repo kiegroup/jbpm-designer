@@ -59,6 +59,8 @@ public class JbpmProfileImpl implements IDiagramProfile {
     private String _externalLoadSubdomain;
     private String _usr;
     private String _pwd;
+    private String _localHistoryEnabled;
+    private String _localHistoryTimeout;
     
     public JbpmProfileImpl(ServletContext servletContext) {
         this(servletContext, true);
@@ -160,6 +162,25 @@ public class JbpmProfileImpl implements IDiagramProfile {
                                 _pwd = reader.getAttributeValue(i);
                             }
                         }
+                    } else if ("localhostory".equals(reader.getLocalName())) {
+                        for (int i = 0 ; i < reader.getAttributeCount() ; i++) {
+                            if ("enabled".equals(reader.getAttributeLocalName(i))) {
+                                String localhistoryenabled = reader.getAttributeValue(i);
+                                if(!isEmpty(localhistoryenabled)) {
+                                    _localHistoryEnabled = localhistoryenabled;
+                                } else {
+                                    _logger.info("Invalid local history enabled");
+                                }
+                            }
+                            if ("timeout".equals(reader.getAttributeLocalName(i))) {
+                                String localhistorytimeout = reader.getAttributeValue(i);
+                                if(!isEmpty(localhistorytimeout)) {
+                                    _localHistoryTimeout = localhistorytimeout;
+                                } else {
+                                    _logger.info("Invalid local history timeout");
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -197,6 +218,14 @@ public class JbpmProfileImpl implements IDiagramProfile {
 
     public String getPwd() {
         return _pwd;
+    }
+
+    public String getLocalHistoryEnabled() {
+        return _localHistoryEnabled;
+    }
+
+    public String getLocalHistoryTimeout() {
+        return _localHistoryTimeout;
     }
     
     public IDiagramMarshaller createMarshaller() {
