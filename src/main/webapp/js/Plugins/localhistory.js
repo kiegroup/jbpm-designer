@@ -21,7 +21,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
 
         if(this.haveSupportForLocalHistory()) {
             this.setupAndLoadHistoryData();
-            this.historyInterval = setInterval(this.addToHistory.bind(this), ORYX.LOCAL_HISTORY_TIMEOUT);
+            this.startStoring();
         }
 
         this.facade.offer({
@@ -66,9 +66,50 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
             }.bind(this)
         });
 
+        this.facade.offer({
+            'name': "Enable Local History",
+            'functionality': this.enableLocalHistory.bind(this),
+            'group': "localstorage",
+            'icon': ORYX.PATH + "images/enable.png",
+            dropDownGroupIcon : ORYX.PATH + "images/localhistory.png",
+            'description': "Enable Local History",
+            'index': 2,
+            'minShape': 0,
+            'maxShape': 0,
+            'isEnabled': function(){
+                profileParamName = "profile";
+                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+                regexa = new RegExp( regexSa );
+                profileParams = regexa.exec( window.location.href );
+                profileParamValue = profileParams[1];
+                return profileParamValue == "jbpm" && !ORYX.LOCAL_HISTORY_ENABLED;
+            }.bind(this)
+        });
+
+        this.facade.offer({
+            'name': "Disable Local History",
+            'functionality': this.disableLocalHistory.bind(this),
+            'group': "localstorage",
+            'icon': ORYX.PATH + "images/disable.png",
+            dropDownGroupIcon : ORYX.PATH + "images/localhistory.png",
+            'description': "Disable Local History",
+            'index': 2,
+            'minShape': 0,
+            'maxShape': 0,
+            'isEnabled': function(){
+                profileParamName = "profile";
+                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+                regexa = new RegExp( regexSa );
+                profileParams = regexa.exec( window.location.href );
+                profileParamValue = profileParams[1];
+                return profileParamValue == "jbpm" && ORYX.LOCAL_HISTORY_ENABLED;
+            }.bind(this)
+        });
+
         window.onbeforeunload = function(){
-            //this.addToHistory();
-            clearInterval(this.historyInterval);
+            this.stopStoring();
         }.bind(this);
     },
     displayLocalHistory : function() {
@@ -322,5 +363,23 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
         ORYX.EDITOR.getCanvas().edges.each(function(edge) {
             ORYX.EDITOR.deleteShape(edge);
         }.bind(this));
+    },
+    disableLocalHistory: function() {
+        ORYX.LOCAL_HISTORY_ENABLED = false;
+        this.stopStoring();
+        this.facade.raiseEvent({type: ORYX.CONFIG.EVENT_STENCIL_SET_LOADED});
+    },
+    enableLocalHistory: function() {
+        ORYX.LOCAL_HISTORY_ENABLED = true;
+        this.setupAndLoadHistoryData();
+        this.startStoring();
+        this.facade.raiseEvent({type: ORYX.CONFIG.EVENT_STENCIL_SET_LOADED});
+    },
+    startStoring: function() {
+        this.historyInterval = setInterval(this.addToHistory.bind(this), ORYX.LOCAL_HISTORY_TIMEOUT);
+    },
+    stopStoring: function() {
+        clearInterval(this.historyInterval);
     }
+
 });
