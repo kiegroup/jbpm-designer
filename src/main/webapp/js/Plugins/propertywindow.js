@@ -1870,7 +1870,7 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
                                 },
                                 {
                                     xtype:      'textarea',
-                                    id:         'body_input',
+                                    id:         'notificationbodyinput',
                                     width:      350,
                                     height:     300,
                                     modal:      true,
@@ -1881,7 +1881,7 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
                                     text: 'OK',
                                     handler: function()
                                     {
-                                        evt.record.set('body', Ext.get('body_input').getValue());
+                                        evt.record.set('body', Ext.get('notificationbodyinput').getValue());
                                         win.close();
                                     }
                                 }]
