@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script>
+        function showSVG() {
+            document.getElementById('displaysvgdiv').innerHTML = parent.ORYX.EDITOR.localStorageSVG;
+        }
+    </script>
+</head>
+<body onload="showSVG();">
+<center>
+    <div id="displaysvgdiv" style="margin:20;padding:0;">
+    </div>
+</center>
+</body>
+</html>
