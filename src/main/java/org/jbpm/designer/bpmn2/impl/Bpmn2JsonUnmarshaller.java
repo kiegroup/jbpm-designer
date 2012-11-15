@@ -1879,7 +1879,8 @@ public class Bpmn2JsonUnmarshaller {
 	                        rootLevelProcess.getArtifacts().add((Artifact) child);
 	                    } else if (child instanceof DataObject) {
                             // bubble up data objects
-	                        rootLevelProcess.getFlowElements().add(0, (DataObject) child);
+	                        //rootLevelProcess.getFlowElements().add(0, (DataObject) child);
+	                    	rootLevelProcess.getFlowElements().add((DataObject) child);
 	//                        ItemDefinition def = ((DataObject) child).getItemSubjectRef();
 	//                        if (def != null) {
 	//                            if (def.eResource() == null) {
