@@ -291,7 +291,8 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
         this.historyStore.commitChanges();
         var processJSON = ORYX.EDITOR.getSerializedJSON();
         var processId = jsonPath(processJSON.evalJSON(), "$.properties.id");
-        this.storage.removeItem(processId);
+        var processPackage = jsonPath(processJSON.evalJSON(), "$.properties.package");
+        this.storage.removeItem(processPackage + "_" + processId);
         Ext.Msg.minWidth = 400;
         Ext.Msg.alert("Local History has been cleared.");
     },
