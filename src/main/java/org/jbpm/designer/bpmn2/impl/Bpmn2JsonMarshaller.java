@@ -17,12 +17,7 @@ package org.jbpm.designer.bpmn2.impl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
@@ -173,6 +168,8 @@ public class Bpmn2JsonMarshaller {
 
 	public static final String defaultFontColor = "#000000";
 	public static final String defaultSequenceflowColor = "#000000";
+
+    private static final List<String> defaultTypesList = Arrays.asList("Object", "Boolean", "Float", "Integer", "List", "String");
 	
 	private Map<String, DiagramElement> _diagramElements = new HashMap<String, DiagramElement>();
 	private Map<String,Association> _diagramAssociations = new HashMap<String, Association>();
@@ -1991,7 +1988,11 @@ public class Bpmn2JsonMarshaller {
     		properties.put("name", "");
     	}
 		if(dataObject.getItemSubjectRef().getStructureRef() != null && dataObject.getItemSubjectRef().getStructureRef().length() > 0) {
-			properties.put("type", dataObject.getItemSubjectRef().getStructureRef());
+            if(defaultTypesList.contains(dataObject.getItemSubjectRef().getStructureRef())) {
+			    properties.put("standardtype", dataObject.getItemSubjectRef().getStructureRef());
+            } else {
+                properties.put("customtype", dataObject.getItemSubjectRef().getStructureRef());
+            }
 		}
 		
 		if(findOutgoingAssociation(plane, dataObject) != null) {

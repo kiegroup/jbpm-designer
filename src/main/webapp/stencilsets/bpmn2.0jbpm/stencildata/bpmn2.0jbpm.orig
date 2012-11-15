@@ -6942,11 +6942,11 @@
 					]
 				},
 				{
-					"id":"type",
+					"id":"standardtype",
 					"type":"Choice",
-					"title":"Type",
+					"title":"Standard Type",
 					"value":"None",
-					"description":"",
+					"description":"Standard Type",
 					"readonly":false,
 					"optional":true,
 					"items":[
@@ -6981,7 +6981,18 @@
 							"value":"String"
 						}
 					]
-				}
+				},
+				{
+                    "id":"customtype",
+                    "type":"Text",
+                    "title":"Custom Type",
+                    "value":"",
+                    "description":"Custom Type",
+                    "readonly":false,
+                    "optional":true,
+                    "refToView":"",
+                    "length":""
+                }
 				/**,		
 				{
 					"id" : "iscollection",

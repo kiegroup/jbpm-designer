@@ -2475,13 +2475,25 @@ public class Bpmn2JsonUnmarshaller {
         } else {
             da.setName("");
         }
-        
-        if(properties.get("type") != null && properties.get("type").length() > 0) {
+
+        boolean haveCustomType = false;
+
+        if(properties.get("customtype") != null && properties.get("customtype").length() > 0) {
+            ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+            EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                    "http://www.jboss.org/drools", "datype", false, false);
+            EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                    properties.get("customtype"));
+            da.getAnyAttribute().add(extensionEntry);
+            haveCustomType = true;
+        }
+
+        if(properties.get("standardtype") != null && properties.get("standardtype").length() > 0 && !haveCustomType) {
         	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
             EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
                         "http://www.jboss.org/drools", "datype", false, false);
             EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
-                properties.get("type"));
+                properties.get("standardtype"));
             da.getAnyAttribute().add(extensionEntry);
         }
     }
