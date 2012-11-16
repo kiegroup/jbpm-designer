@@ -103,6 +103,18 @@
     		  if(processGlobals.toString().length > 0)
     			  forEach(processGlobals.toString().split(","), maybeAdd);
     	  }
+          var processdataobjectstr = "";
+          var childShapes = jsonPath(processJSON.evalJSON(), "$..childShapes.*");
+          for(var i = 0; i < childShapes.length;i++) {
+              if(childShapes[i].stencil.id == 'DataObject') {
+                  processdataobjectstr += childShapes[i].properties.name;
+                  processdataobjectstr += ",";
+              }
+          }
+          if (processdataobjectstr.endsWith(",")) {
+              processdataobjectstr = processdataobjectstr.substr(0, processdataobjectstr.length - 1);
+          }
+          forEach(processdataobjectstr.toString().split(","), maybeAdd);
     }
     return found;
   }
@@ -168,6 +180,18 @@
 	    		  if(processGlobals.toString().length > 0)
 	    			  forEach(processGlobals.toString().split(","), maybeAdd);
 	    	  }
+              var processdataobjectstr = "";
+              var childShapes = jsonPath(processJSON.evalJSON(), "$..childShapes.*");
+              for(var i = 0; i < childShapes.length;i++) {
+                  if(childShapes[i].stencil.id == 'DataObject') {
+                      processdataobjectstr += childShapes[i].properties.name;
+                      processdataobjectstr += ",";
+                  }
+              }
+              if (processdataobjectstr.endsWith(",")) {
+                  processdataobjectstr = processdataobjectstr.substr(0, processdataobjectstr.length - 1);
+              }
+              forEach(processdataobjectstr.toString().split(","), maybeAdd);
 		}
 	    return found;
 	  }
