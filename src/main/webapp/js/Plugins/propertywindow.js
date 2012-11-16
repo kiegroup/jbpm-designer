@@ -1710,14 +1710,14 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
                     }
 
                     notifications.add(new NotificationsDef({
-                        type: typestr,
-                        expires: expiresstr,
-                        from: fromstr,
-                        tousers: tousersstr,
-                        togroups: togroupsstr,
-                        replyto: replytostr,
-                        subject: subjectstr,
-                        body: bodystr
+                        type: typestr == undefined ? "" : typestr,
+                        expires: expiresstr == undefined ? "" : expiresstr,
+                        from: fromstr == undefined ? "" : fromstr,
+                        tousers: tousersstr == undefined ? "" : tousersstr,
+                        togroups: togroupsstr == undefined ? "" : togroupsstr,
+                        replyto: replytostr == undefined ? "" : replytostr,
+                        subject: subjectstr == undefined ? "" : subjectstr,
+                        body: bodystr == undefined ? "" : bodystr
                     }));
                 }
             }
