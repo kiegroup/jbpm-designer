@@ -147,8 +147,8 @@
 		        	var datainputs = csobj.properties.datainputset;
 		        	var dataoutputs = csobj.properties.dataoutputset;
 		        	var datainParts = datainputs.split(",");
-		        	for(var i=0; i < datainParts.length; i++) {
-		        		var nextPart = datainParts[i];
+		        	for(var j=0; j < datainParts.length; j++) {
+		        		var nextPart = datainParts[j];
 		        		if(nextPart.indexOf(":") > 0) {
 		        			var innerParts = nextPart.split(":");
 		        			maybeAdd('${'+innerParts[0]+'}');
@@ -157,8 +157,8 @@
 		        		}
 		        	}
 		        	var dataoutParts = dataoutputs.split(",");
-		        	for(var j=0; j < dataoutParts.length; j++) {
-		        		var nextPart = dataoutParts[j];
+		        	for(var k=0; k < dataoutParts.length; k++) {
+		        		var nextPart = dataoutParts[k];
 		        		if(nextPart.indexOf("=") > 0) {
 		        			var innerParts = nextPart.split("=");
 		        			maybeAdd(innerParts[0]);
