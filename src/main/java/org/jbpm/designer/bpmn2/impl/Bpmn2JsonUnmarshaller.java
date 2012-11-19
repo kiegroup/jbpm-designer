@@ -172,6 +172,8 @@ public class Bpmn2JsonUnmarshaller {
 	public static final String defaultBrColor = "#000000";
 	public static final String defaultFontColor = "#000000";
 	public static final String defaultSequenceflowColor = "#000000";
+
+    public static final String defaultRelationshipType = "jBPMProcessSimulation";
     // a list of the objects created, kept in memory with their original id for
     // fast lookup.
     private Map<Object, String> _objMap = new HashMap<Object, String>();
@@ -314,6 +316,7 @@ public class Bpmn2JsonUnmarshaller {
 		Relationship relationship = Bpmn2Factory.eINSTANCE.createRelationship();
 		relationship.getSources().add(def);
 		relationship.getTargets().add(def);
+        relationship.setType(defaultRelationshipType);
 		ProcessAnalysisDataType processAnalysisData = DroolsFactory.eINSTANCE.createProcessAnalysisDataType();
 		// currently support single scenario
 		Scenario defaultScenario = DroolsFactory.eINSTANCE.createScenario();
