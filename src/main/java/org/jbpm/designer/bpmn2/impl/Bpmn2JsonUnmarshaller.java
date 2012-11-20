@@ -2994,7 +2994,7 @@ public class Bpmn2JsonUnmarshaller {
         EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
                     "xsi", "schemaLocation", false, false);
         EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
-            "http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd");
+            "http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd http://www.jboss.org/drools drools.xsd");
         def.getAnyAttribute().add(extensionEntry);
         
         //_currentResource.getContents().add(def);// hook the definitions object to the resource early.
