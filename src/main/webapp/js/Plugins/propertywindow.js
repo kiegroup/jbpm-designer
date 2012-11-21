@@ -1852,38 +1852,50 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
                     if(evt.column != 8)
                         return true;
 
-                    var win = new Ext.Window
-                        ({
-                            autoWidth:  true,
-                            autoHeight: true,
-                            bodyBorder: false,
-                            closable:   true,
-                            resizable:  false,
-                            items:
-                                [{
-                                    xtype:      'panel',
-                                    html:       "<p class='instructions'>Enter Notification body message.</p>"
-                                },
-                                {
-                                    xtype:      'textarea',
-                                    id:         'body_input',
-                                    width:      350,
-                                    height:     300,
-                                    modal:      true,
-                                    value:      evt.value
-                                }],
-                            bbar:
-                                [{
-                                    text: 'OK',
-                                    handler: function()
-                                    {
-                                        evt.record.set('body', Ext.get('body_input').getValue());
-                                        win.close();
-                                    }
-                                }]
-                        });
-                    win.show();
-                    return false;
+                    var existingWindow = Ext.get("notificationsBodyEditorWindow");
+                    if(!existingWindow) {
+                        var win = new Ext.Window
+                            ({
+                                id: 'notificationsBodyEditorWindow',
+                                modal		: true,
+                                collapsible	: false,
+                                fixedcenter	: true,
+                                shadow		: true,
+                                proxyDrag	: true,
+                                autoScroll  : true,
+                                autoWidth   :  true,
+                                autoHeight  : true,
+                                bodyBorder  : false,
+                                closable    :   true,
+                                resizable   :  true,
+                                items:
+                                    [{
+                                        xtype:      'panel',
+                                        html:       "<p class='instructions'>Enter Notification body message.</p>"
+                                    },
+                                        {
+                                            xtype:      'textarea',
+                                            id:         'notificationbodyinput',
+                                            width:      350,
+                                            height:     300,
+                                            modal:      true,
+                                            value:      evt.value
+                                        }],
+                                bbar:
+                                    [{
+                                        text: 'OK',
+                                        handler: function()
+                                        {
+                                            evt.record.set('body', Ext.get('notificationbodyinput').getValue());
+                                            win.close();
+                                        }
+                                    }]
+                            });
+                        win.show();
+                        return false;
+                    } else {
+                        return false;
+                    }
                 }
             }
         });
