@@ -571,7 +571,7 @@ public class TransformerServlet extends HttpServlet {
             if(transformto.equals(TO_SVG)) {
                 OutputStreamWriter outStreamWriter = new OutputStreamWriter(createConnection
                         .getOutputStream());
-                outStreamWriter.write(formattedSvg);
+                outStreamWriter.write(rawSvg);
                 outStreamWriter.close();
             }
             createConnection.connect();
