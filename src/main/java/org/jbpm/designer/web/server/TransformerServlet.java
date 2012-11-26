@@ -15,14 +15,7 @@
  */
 package org.jbpm.designer.web.server;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -100,6 +93,7 @@ public class TransformerServlet extends HttpServlet {
             .getLogger(TransformerServlet.class);
     private static final String TO_PDF = "pdf";
     private static final String TO_PNG = "png";
+    private static final String TO_SVG = "svg";
     private static final String JPDL_TO_BPMN2 = "jpdl2bpmn2";
     private static final String BPMN2_TO_JSON = "bpmn2json";
     private static final String RESPACTION_SHOWURL = "showurl";
@@ -200,7 +194,9 @@ public class TransformerServlet extends HttpServlet {
             } catch (TranscoderException e) {
                 resp.sendError(500, e.getMessage());
             }
-        } else if (transformto != null && transformto.equals(JPDL_TO_BPMN2)) { 
+        } else if (transformto != null && transformto.equals(TO_SVG)) {
+            storeToGuvnor(uuid, profile, formattedSvg, rawSvg, transformto, processid);
+        } else if (transformto != null && transformto.equals(JPDL_TO_BPMN2)) {
         	String bpmn2 = JbpmMigration.transform(jpdl);
         	Definitions def = ((JbpmProfileImpl) profile).getDefinitions(bpmn2);
         	// add bpmndi info to Definitions with help of gpd
@@ -466,8 +462,8 @@ public class TransformerServlet extends HttpServlet {
     private void storeToGuvnor(String uuid, IDiagramProfile profile,
             String formattedSvg, String rawSvg, String transformto, String processid) {
         String[] packageAssetName =  ServletUtil.findPackageAndAssetInfo(uuid, profile);
-        String processContent = getProcessContent(packageAssetName[0],
-                packageAssetName[1], uuid, profile);
+//        String processContent = getProcessContent(packageAssetName[0],
+//                packageAssetName[1], uuid, profile);
         if(processid != null) {
         	guvnorStore(packageAssetName[0], processid,
                     profile, formattedSvg, rawSvg, transformto);
@@ -479,13 +475,17 @@ public class TransformerServlet extends HttpServlet {
         try {
             String assetExt = "";
             String assetFileExt = "";
-            if (transformto.equals(TO_PDF)) {
+            if(transformto.equals(TO_PDF)) {
                 assetExt = "-pdf";
                 assetFileExt = ".pdf";
             }
-            if (transformto.equals(TO_PNG)) {
+            if(transformto.equals(TO_PNG)) {
                 assetExt = "-image";
                 assetFileExt = ".png";
+            }
+            if(transformto.equals(TO_SVG)) {
+                assetExt = "-svg";
+                assetFileExt = ".svg";
             }
 
             String pngURL = ExternalInfo.getExternalProtocol(profile)
@@ -554,7 +554,6 @@ public class TransformerServlet extends HttpServlet {
             			createConnection.getOutputStream());
             	t.transcode(input, output);
             }
-
             if (transformto.equals(TO_PNG)) {
             	PNGTranscoder t = new PNGTranscoder();
             	t.addTranscodingHint(ImageTranscoder.KEY_MEDIA, "screen");
@@ -568,6 +567,12 @@ public class TransformerServlet extends HttpServlet {
 					// issue with batik here..do not make a big deal
 					_logger.debug(e.getMessage());
 				}
+            }
+            if(transformto.equals(TO_SVG)) {
+                OutputStreamWriter outStreamWriter = new OutputStreamWriter(createConnection
+                        .getOutputStream());
+                outStreamWriter.write(formattedSvg);
+                outStreamWriter.close();
             }
             createConnection.connect();
             _logger.info("create connection response code: " + createConnection.getResponseCode());

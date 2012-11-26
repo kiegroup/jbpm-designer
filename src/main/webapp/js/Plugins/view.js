@@ -521,38 +521,38 @@ ORYX.Plugins.View = {
 						var loadMask = new Ext.LoadMask(Ext.getBody(), {msg:ORYX.I18N.FromBPMN2Support.impProgress});
 						loadMask.show();
 						var bpmn2string =  form.items.items[2].getValue();
-						Ext.Ajax.request({
-				            url: ORYX.PATH + "transformer",
-				            method: 'POST',
-				            success: function(request) {
-				            	if(request.responseText.length < 1) {
-				            		loadMask.hide();
-				            		dialog.hide();
-				            		Ext.Msg.minWidth = 400;
-				            		Ext.Msg.alert("Failed to import BPMN2. Check server logs for more details."); 
-				            	} else {
-					    	   		try {
-					    	   			this._loadJSON( request.responseText );
-					    	   		} catch(e) {
-					    	   			Ext.Msg.minWidth = 400;
-					    	   			Ext.Msg.alert("Failed to import BPMN2: " + e);
-					    	   		}
-					    	   		loadMask.hide();
-					    	   		dialog.hide();
-				            	}
-				            }.createDelegate(this),
-				            failure: function(){
-                                loadMask.hide();
-				            	Ext.Msg.minWidth = 400;
-				            	Ext.Msg.alert("Failed to import BPMN2.");
-				            },
-				            params: {
-				            	profile: ORYX.PROFILE,
-				            	uuid : ORYX.UUID,
-				            	pp: ORYX.PREPROCESSING,
-				            	bpmn2 : bpmn2string,
-				            	transformto : "bpmn2json",
-                                uuid : ORYX.UUID
+						   Ext.Ajax.request({
+                                    url: ORYX.PATH + "transformer",
+                                    method: 'POST',
+                                    success: function(request) {
+                                        if(request.responseText.length < 1) {
+                                            loadMask.hide();
+                                            dialog.hide();
+                                            Ext.Msg.minWidth = 400;
+                                            Ext.Msg.alert("Failed to import BPMN2. Check server logs for more details.");
+                                        } else {
+                                            try {
+                                                this._loadJSON( request.responseText );
+                                            } catch(e) {
+                                                Ext.Msg.minWidth = 400;
+                                                Ext.Msg.alert("Failed to import BPMN2: " + e);
+                                            }
+                                            loadMask.hide();
+                                            dialog.hide();
+                                        }
+                                    }.createDelegate(this),
+                                    failure: function(){
+                                        loadMask.hide();
+                                        Ext.Msg.minWidth = 400;
+                                        Ext.Msg.alert("Failed to import BPMN2.");
+                                    },
+                                    params: {
+                                        profile: ORYX.PROFILE,
+                                        uuid : ORYX.UUID,
+                                        pp: ORYX.PREPROCESSING,
+                                        bpmn2 : bpmn2string,
+                                        transformto : "bpmn2json",
+                                        uuid : ORYX.UUID
 				            }
 				        });
 					}.bind(this)

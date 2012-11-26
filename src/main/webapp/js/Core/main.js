@@ -925,7 +925,34 @@ ORYX.Editor = {
 	    ajaxObj.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	    ajaxObj.send(params);
 	    if (ajaxObj.status == 200) {
-			return ajaxObj.responseText == "true";
+            if(ajaxObj.responseText == "true") {
+                return "true";
+            } else {
+                var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false));
+                var rawSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getRootNode().cloneNode(true));
+                var processJSON = ORYX.EDITOR.getSerializedJSON();
+                var processId = jsonPath(processJSON.evalJSON(), "$.properties.id");
+                Ext.Ajax.request({
+                    url: ORYX.PATH + "transformer",
+                    method: 'POST',
+                    success: function(request) {
+                        // be quiet
+                    },
+                    failure: function(){
+                        Ext.Msg.minWidth = 400;
+                        Ext.Msg.alert("Failed to save process SVG.");
+                    },
+                    params: {
+                        fsvg: formattedSvgDOM,
+                        rsvg: rawSvgDOM,
+                        uuid: ORYX.UUID,
+                        profile: ORYX.PROFILE,
+                        transformto: 'svg',
+                        processid: processId
+                    }
+                });
+                return "false";
+            }
 		} else {
 			return "true";
 		}
