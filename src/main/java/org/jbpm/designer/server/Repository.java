@@ -63,6 +63,8 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+// TODO: org.jbpm.designer.server.Repository: this class uses org.apache.commons.httpclient when it looks like the normal java.net.url methods (URL, connection, etc) would suffice. 
+// We have too many deps in designer as it is, anything to remove some of them helps. 
 public class Repository {
 
 	public static final String NEW_MODEL_SVG_STRING = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:oryx=\"http://oryx-editor.org\" id=\"oryx_98F1C176-75F8-4C0A-899E-0F5E352A5F58\" width=\"10\" height=\"10\" xlink=\"http://www.w3.org/1999/xlink\" svg=\"http://www.w3.org/2000/svg\"><defs/><g stroke=\"none\" font-family=\"Verdana\" font-size=\"12\"><g class=\"stencils\" transform=\"translate(0)\"><g class=\"me\"/><g class=\"children\"/><g class=\"edge\"/></g></g></svg>";

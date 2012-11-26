@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<arquillian 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://jboss.org/schema/arquillian http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
+    
+    <!-- default -->
+    <container qualifier="jbossas-7" default="true">
+        <configuration>
+            <property name="jbossHome">target/jboss-as-${jboss.version:7.1.1.Final}</property>
+        </configuration>
+    </container>
+        
+    <container qualifier="glassfish-embedded">
+        <configuration>
+            <property name="bindHttpPort">53219</property>
+            <property name="resourcesXml">src/test/resources-glassfish-embedded/glassfish-resources.xml</property>
+        </configuration>
+    </container>
+
+</arquillian>

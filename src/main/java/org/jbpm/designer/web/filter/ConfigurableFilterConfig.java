@@ -109,7 +109,7 @@ public class ConfigurableFilterConfig implements FilterConfig {
             }
 
             public Object nextElement() {
-                return keys.pop();
+                return keys.removeFirst();
             }};
     }
     

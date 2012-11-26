@@ -1,24 +1,25 @@
 package org.jbpm.designer.web.server;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamReader;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.designer.web.profile.impl.ExternalInfo;
+import org.jbpm.designer.web.server.GuvnorUtil.UrlType;
 import org.json.JSONObject;
 
 public class FormWidgetServlet extends HttpServlet {
-	private static final Logger _logger = Logger
-			.getLogger(FormWidgetServlet.class);
+
+    private static final long serialVersionUID = 1L;
+    private static final Logger _logger = Logger.getLogger(FormWidgetServlet.class);
 	
 	@Override
 	public void init(ServletConfig config) throws ServletException {
@@ -38,7 +39,7 @@ public class FormWidgetServlet extends HttpServlet {
 		if(action != null && action.equals("getwidgets")) {
 			List<String> widgetList;
 			try {
-				widgetList = ServletUtil.getFormWidgetList(profile);
+				widgetList = getFormWidgetList(profile);
 			} catch (Throwable t) {
 				widgetList = new ArrayList<String>();
 			}
@@ -56,21 +57,55 @@ public class FormWidgetServlet extends HttpServlet {
 			resp.setContentType("application/json");
 			resp.getWriter().write(jsonObject.toString());
 		} else if(action != null && action.equals("getwidgetsource")) {
-			String widgetSourceURL = ExternalInfo.getExternalProtocol(profile)
-					+ "://"
-	                + ExternalInfo.getExternalHost(profile)
-	                + "/"
-	                + profile.getExternalLoadURLSubdomain().substring(0,
-	                        profile.getExternalLoadURLSubdomain().indexOf("/"))
-	                + "/rest/packages/globalArea/assets/" + widgetName 
-	                + "/source/";
+	        // GUVNOR FormWidgetServlet
+			String widgetSourceURL = GuvnorUtil.getUrl(profile, "globalArea", widgetName, UrlType.Source);
+			
 			resp.setCharacterEncoding("UTF-8");
 			resp.setContentType("text/plain");
 			try {
-				resp.getWriter().write(IOUtils.toString(ServletUtil.getInputStreamForURL(widgetSourceURL, "GET", profile), "UTF-8"));
+				resp.getWriter().write(GuvnorUtil.readStringContentFromUrl(widgetSourceURL, "GET", profile));
 			} catch (Exception e) {
 				resp.getWriter().write("");
 			}
 		}
+	}
+	
+	public static List<String> getFormWidgetList(IDiagramProfile profile) {
+	    // GUVNOR FormWidgetServlet
+	    List<String> widgets = new ArrayList<String>();
+	    
+	    try {
+	        String globalAreaURL = GuvnorUtil.getUrl(profile, "globalArea", "", UrlType.Normal);
+	        String content = GuvnorUtil.readStringContentFromUrl(globalAreaURL, "GET", profile);
+	        
+	        XMLInputFactory factory = XMLInputFactory.newInstance();
+	        XMLStreamReader reader = factory.createXMLStreamReader(new StringReader(content));
+	        String title = "";
+	        String format = "";
+	        while (reader.hasNext()) {
+	            int next = reader.next();
+	            if (next == XMLStreamReader.START_ELEMENT) {
+	                if ("title".equals(reader.getLocalName())) {
+	                    title = reader.getElementText();
+	                }
+	                if ("format".equals(reader.getLocalName())) {
+	                    format = reader.getElementText();
+	                }
+	            }
+	            if (next == XMLStreamReader.END_ELEMENT) {
+	                if ("asset".equals(reader.getLocalName())) {
+	                    if(title.length() > 0 && format.length() > 0 && format.equals("fw")) {
+	                        widgets.add(title);
+	                        title = "";
+	                        format = "";
+	                    }
+	                }
+	            }
+	        }
+	    } catch (Exception e) {
+	        // we dont want to barf..just log that error happened
+	        _logger.error(e.getMessage());
+	    }
+	    return widgets;
 	}
 }

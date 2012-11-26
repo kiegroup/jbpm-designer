@@ -7,9 +7,8 @@ import java.net.URL;
 import java.util.Iterator;
 
 import org.apache.batik.util.ParsedURLData;
+import org.jbpm.designer.Base64EncodingUtil;
 import org.jbpm.designer.web.profile.IDiagramProfile;
-
-import org.apache.commons.codec.binary.Base64;
 
 public class GuvnorParsedURLData extends ParsedURLData {
     private IDiagramProfile profile;
@@ -54,12 +53,12 @@ public class GuvnorParsedURLData extends ParsedURLData {
         return connection.getInputStream();
     }
     
-    private void applyAuth(HttpURLConnection connection) {
+    private void applyAuth(HttpURLConnection connection) throws IOException {
         if (profile.getUsr() != null && profile.getUsr().trim().length() > 0
                 && profile.getPwd() != null
                 && profile.getPwd().trim().length() > 0) {
             String userpassword = profile.getUsr() + ":" + profile.getPwd();
-            String encodedAuthorization = Base64.encodeBase64String(userpassword.getBytes());
+            String encodedAuthorization = Base64EncodingUtil.encode(userpassword);
             connection.setRequestProperty("Authorization", "Basic "
                     + encodedAuthorization);
         }

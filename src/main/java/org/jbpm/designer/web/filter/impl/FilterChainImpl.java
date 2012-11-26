@@ -44,7 +44,7 @@ public class FilterChainImpl implements FilterChain {
     public void doFilter(ServletRequest request, ServletResponse response) throws IOException, ServletException {
         if (!_filters.isEmpty()) {
             // remove the first element from the chain and pass itself to the filter.
-            Filter filter = _filters.pop();
+            Filter filter = _filters.removeFirst();
             FilterChain chain = this;
             //when reaching the last filter, pass the original chain.
             filter.doFilter(request, response, chain);

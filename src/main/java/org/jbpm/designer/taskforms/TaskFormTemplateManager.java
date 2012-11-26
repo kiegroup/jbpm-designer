@@ -2,31 +2,13 @@ package org.jbpm.designer.taskforms;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 import org.apache.log4j.Logger;
-import org.eclipse.bpmn2.Assignment;
-import org.eclipse.bpmn2.DataInput;
-import org.eclipse.bpmn2.DataInputAssociation;
-import org.eclipse.bpmn2.DataOutput;
-import org.eclipse.bpmn2.DataOutputAssociation;
-import org.eclipse.bpmn2.Definitions;
-import org.eclipse.bpmn2.FlowElement;
-import org.eclipse.bpmn2.FormalExpression;
-import org.eclipse.bpmn2.ItemAwareElement;
-import org.eclipse.bpmn2.PotentialOwner;
+import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.Process;
-import org.eclipse.bpmn2.Property;
-import org.eclipse.bpmn2.ResourceRole;
-import org.eclipse.bpmn2.RootElement;
-import org.eclipse.bpmn2.UserTask;
-import org.jbpm.designer.web.profile.IDiagramProfile;
 
 
 /** 
@@ -39,15 +21,13 @@ public class TaskFormTemplateManager {
     private static final String[] validStructureRefs = new String[] {"Float", "Integer", "String", "Object", "Boolean", "Undefined"};
     public final static String TASKFORMS_PATH = "stencilsets";
     
-    private IDiagramProfile profile;
     private String packageName;
     private String assetName;
     private String templatesPath;
     private Definitions def;
     private List<TaskFormInfo> taskFormInformationList = new ArrayList<TaskFormInfo>();
     
-    public TaskFormTemplateManager(IDiagramProfile profile, String packageName, String assetName, String templatesPath, Definitions def) {
-        this.profile = profile;
+    public TaskFormTemplateManager(String packageName, String assetName, String templatesPath, Definitions def) {
         this.packageName = packageName;
         this.assetName = assetName;
         this.templatesPath = templatesPath;

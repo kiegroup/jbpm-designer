@@ -1,17 +1,10 @@
 package org.jbpm.designer.web.server;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.List;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.*;
+import javax.servlet.http.*;
 
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
@@ -23,6 +16,7 @@ import org.jbpm.designer.taskforms.TaskFormInfo;
 import org.jbpm.designer.taskforms.TaskFormTemplateManager;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.impl.ExternalInfo;
+import org.jbpm.designer.web.server.GuvnorUtil.UrlType;
 
 /** 
  * 
@@ -62,7 +56,7 @@ public class TaskFormsServlet extends HttpServlet {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions def = ((Definitions) unmarshaller.unmarshall(json, preprocessingData).getContents().get(0));
         
-        TaskFormTemplateManager templateManager = new TaskFormTemplateManager( profile, packageName, assetName, getServletContext().getRealPath("/" + TASKFORMS_PATH), def );
+        TaskFormTemplateManager templateManager = new TaskFormTemplateManager(packageName, assetName, getServletContext().getRealPath("/" + TASKFORMS_PATH), def );
         templateManager.processTemplates();
         
         try {
@@ -113,60 +107,18 @@ public class TaskFormsServlet extends HttpServlet {
     }
     
     public void storeTaskForm(TaskFormInfo taskForm, IDiagramProfile profile) throws Exception {
+        // GUVNOR TaskFormsServlet
         try {
-			String formURL = ExternalInfo.getExternalProtocol(profile)
-			+ "://"
-			+ ExternalInfo.getExternalHost(profile)
-			+ "/"
-			+ profile.getExternalLoadURLSubdomain().substring(0,
-			        profile.getExternalLoadURLSubdomain().indexOf("/"))
-			+ "/rest/packages/" + URLEncoder.encode(taskForm.getPkgName(), "UTF-8") + "/assets/" + URLEncoder.encode(taskForm.getId(), "UTF-8");
-			
-			String createNewURL = ExternalInfo.getExternalProtocol(profile)
-			+ "://"
-			+ ExternalInfo.getExternalHost(profile)
-			+ "/"
-			+ profile.getExternalLoadURLSubdomain().substring(0,
-			        profile.getExternalLoadURLSubdomain().indexOf("/"))
-			+ "/rest/packages/" + URLEncoder.encode(taskForm.getPkgName(), "UTF-8") + "/assets/";
-			
 			// check if the task form already exists
-			URL checkURL = new URL(formURL);
-			HttpURLConnection checkConnection = (HttpURLConnection) checkURL
-			        .openConnection();
-			ServletUtil.applyAuth(profile, checkConnection);
-			checkConnection.setRequestMethod("GET");
-			checkConnection
-			        .setRequestProperty("Accept", "application/atom+xml");
-			checkConnection.connect();
-			_logger.info("check connection response code: " + checkConnection.getResponseCode());
-			if (checkConnection.getResponseCode() == 200) {
+			String formURL = GuvnorUtil.getUrl(profile, taskForm.getPkgName(), taskForm.getId(), UrlType.Normal);
+			if( GuvnorUtil.readCheckAssetExists(formURL, profile) ) { 
 			    // delete the asset
-			    URL deleteAssetURL = new URL(formURL);
-			    HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL
-			            .openConnection();
-			    ServletUtil.applyAuth(profile, deleteConnection);
-			    deleteConnection.setRequestMethod("DELETE");
-			    deleteConnection.connect();
-			    _logger.info("delete connection response code: " + deleteConnection.getResponseCode());
+			    GuvnorUtil.deleteAsset(formURL, profile);
 			}
+			
 			// create new 
-			URL createURL = new URL(createNewURL);
-			HttpURLConnection createConnection = (HttpURLConnection) createURL
-			        .openConnection();
-			ServletUtil.applyAuth(profile, createConnection);
-			createConnection.setRequestMethod("POST");
-			createConnection.setRequestProperty("Content-Type",
-			        "application/octet-stream");
-			createConnection.setRequestProperty("Accept",
-			        "application/atom+xml");
-			createConnection.setRequestProperty("Slug", URLEncoder.encode(taskForm.getId() + FORMTEMPLATE_FILE_EXTENSION, "UTF-8"));
-			createConnection.setDoOutput(true);
-			
-			createConnection.getOutputStream ().write(taskForm.getOutput().getBytes("UTF-8"));
-			
-			createConnection.connect();
-			_logger.info("create connection response code: " + createConnection.getResponseCode());
+			String createNewURL = GuvnorUtil.getUrl(profile, taskForm.getPkgName(), "", UrlType.Normal);
+			GuvnorUtil.createAsset(createNewURL, taskForm.getId(), FORMTEMPLATE_FILE_EXTENSION, taskForm.getOutput().getBytes("UTF-8"), profile);
 		} catch (Exception e) {
 			_logger.error(e.getMessage());
 		}

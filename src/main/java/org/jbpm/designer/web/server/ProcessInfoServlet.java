@@ -1,34 +1,20 @@
 package org.jbpm.designer.web.server;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.io.StringReader;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
 import org.apache.log4j.Logger;
 import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.designer.web.profile.impl.ExternalInfo;
-import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
-
-import org.apache.commons.codec.binary.Base64;
+import org.jbpm.designer.web.server.GuvnorUtil.UrlType;
 
 /** 
  * 
@@ -37,8 +23,8 @@ import org.apache.commons.codec.binary.Base64;
  * @author Tihomir Surdilovic
  */
 public class ProcessInfoServlet extends HttpServlet {
+    
 	private static final long serialVersionUID = 1L;
-	private static final Logger _logger = Logger.getLogger(ProcessInfoServlet.class);
 	
 	@Override
     public void init(ServletConfig config) throws ServletException {
@@ -84,28 +70,23 @@ public class ProcessInfoServlet extends HttpServlet {
 		return sb.toString();
 	}
 	
-	private Map<String, String> getProcessInfo(String packageName, String assetName, String uuid, IDiagramProfile profile) throws Exception {
+	public static Map<String, String> getProcessInfo(String packageName, String assetName, String uuid, IDiagramProfile profile) throws Exception {
 		Map<String, String> infoMap = new LinkedHashMap<String, String>();
 		infoMap.put("Name", assetName);
-		infoMap.put("Format", "");
 		infoMap.put("Package", packageName);
-		infoMap.put("Created", "");
-		infoMap.put("Created By", "");
-		infoMap.put("Last Modified", "");
-		infoMap.put("Comment", "");
-		infoMap.put("Version", "");
 		
-		String assetInfoURL = ExternalInfo.getExternalProtocol(profile)
-                + "://"
-                + ExternalInfo.getExternalHost(profile)
-                + "/"
-                + profile.getExternalLoadURLSubdomain().substring(0,
-                        profile.getExternalLoadURLSubdomain().indexOf("/"))
-                + "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/" + assetName;
+		String [] params = { "Format", "Created", "Created By", "Last Modified", "Comment", "Version" };
+		for( String param : params ) { 
+		    infoMap.put(param, "");
+		}
+		
+        // GUVNOR ProcessInfoServlet
+		String assetInfoURL = GuvnorUtil.getUrl(profile, packageName, assetName, UrlType.Normal);
+		String content = GuvnorUtil.readStringContentFromUrl(assetInfoURL, "GET", profile);
+
 		XMLInputFactory factory = XMLInputFactory.newInstance();
-        XMLStreamReader reader = factory
-               .createXMLStreamReader(ServletUtil.getInputStreamForURL(assetInfoURL,
-                       "GET", profile), "UTF-8");
+        XMLStreamReader reader = factory.createXMLStreamReader(new StringReader(content));
+        
         while (reader.hasNext()) {
             if (reader.next() == XMLStreamReader.START_ELEMENT) {
                 if ("format".equals(reader.getLocalName())) {

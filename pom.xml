@@ -5,7 +5,7 @@
   <artifactId>jbpm-designer</artifactId>
   <version>2.5.0-SNAPSHOT</version>
   <packaging>war</packaging>
-  
+
   <description>jBPM Designer</description>
   <url>https://github.com/droolsjbpm/jbpm-designer</url>
   <developers>
@@ -22,515 +22,576 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-  
+
   <scm>
     <connection>scm:git:git@github.com:droolsjbpm/jbpm-designer.git</connection>
     <developerConnection>scm:git:git@github.com:droolsjbpm/jbpm-designer.git</developerConnection>
     <url>https://github.com/droolsjbpm/jbpm-designer</url>
   </scm>
-  
+
   <properties>
+    <!-- having the properties defined here helps with integration tests -->
     <mvel.version>2.1.3.Final</mvel.version>
     <drools.version>5.5.0.Final</drools.version>
     <jbpm.version>5.4.0.Final</jbpm.version>
     <batik.version>1.6-1</batik.version>
+    <log4j.version>1.6.2</log4j.version>
+    <jbpm.migration.version>0.11</jbpm.migration.version>
+    <closure.compiler.version>r1741</closure.compiler.version>
+    <eclipse.bpmn2.version>0.7.0.010</eclipse.bpmn2.version>
+    <json.version>20090211</json.version>
+    <jbpt.version>0.1.0</jbpt.version>
+    <jdom.version>1.1</jdom.version>
+    <supercsv.version>1.52</supercsv.version>
+    <xmlgraphics.version>1.4</xmlgraphics.version>
+    <fop.version>0.95</fop.version>
+    <xerces.version>2.9.1</xerces.version>
+    <jaxb.version>2.2</jaxb.version>
+    <atlas.version>1.0.0</atlas.version>
+    <servlet.version>2.5</servlet.version>
+    <mail.version>1.4.1</mail.version>
+    <rhino.js.version>1.7R2</rhino.js.version>
+    <jackson.version>1.7.4</jackson.version>
+    <antlr.stringtemplate.version>3.2.1</antlr.stringtemplate.version>
+    <antlr.version>2.7.7</antlr.version>
+    <eclipse.osgi.version>3.5.0.v20090520</eclipse.osgi.version>
+    <avalon.framework.version>4.1.4</avalon.framework.version>
+    <joda.time.version>1.6</joda.time.version>
+    <abdera.version>1.1.2</abdera.version>
+    <commons.codec.version>1.5</commons.codec.version>
+    <commons.configuration.version>1.6</commons.configuration.version>
+    <commons.httpclient.version>3.1</commons.httpclient.version>
+    <commons.fileupload.version>1.2.1</commons.fileupload.version>
+    <commons.lang.version>2.5</commons.lang.version>
+    <jbpm.simulation.version>1.0.0-SNAPSHOT</jbpm.simulation.version>
+
+    <!-- test properties -->
+    <junit.version>4.9</junit.version>
+    <h2.version>1.3.167</h2.version>
+
+    <!-- integration test properties -->
+    <guvnor.test.version>5.4.0.Final</guvnor.test.version>
+    <as7.version>7.1.1.Final</as7.version>
+    <shrinkwrap.override.version>2.0.0-alpha-4</shrinkwrap.override.version>
   </properties>
 
-    <dependencies>
-      <!-- jBPM -->
-      <dependency>
-        <groupId>org.mvel</groupId>
-        <artifactId>mvel2</artifactId>
-        <version>${mvel.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jbpm</groupId>
-        <artifactId>jbpm-bpmn2</artifactId>
-        <version>${jbpm.version}</version>
-        <exclusions>
-        	<exclusion>
-        		<groupId>org.slf4j</groupId>
-        		<artifactId>slf4j-log4j12</artifactId>
-        	</exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>org.jbpm</groupId>
-        <artifactId>jbpm-flow</artifactId>
-        <version>${jbpm.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jbpm</groupId>
-        <artifactId>jbpm-flow-builder</artifactId>
-        <version>${jbpm.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jbpm</groupId>
-        <artifactId>jbpm-workitems</artifactId>
-        <version>${jbpm.version}</version>
-        <exclusions>
-        	<exclusion>
-        		<groupId>jdom</groupId>
-        		<artifactId>jdom</artifactId>
-        	</exclusion>
-        	<exclusion>
-        		<groupId>org.slf4j</groupId>
-        		<artifactId>slf4j-log4j12</artifactId>
-        	</exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>org.jbpm</groupId>
-        <artifactId>jbpm-bpmn2-emfextmodel</artifactId>
-        <version>${jbpm.version}</version>
-      </dependency>
-      
-      <!-- jBPM Migration -->
-      <dependency>
-        <groupId>org.jbpm.jbpm5</groupId>
-        <artifactId>jbpmmigration</artifactId>
-        <version>0.11</version>
-        <exclusions>
-          <exclusion>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>xml-apis</groupId>
-            <artifactId>xml-apis</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>xalan</groupId>
-            <artifactId>xalan</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>xerces</groupId>
-            <artifactId>xercesImpl</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      
-      <!--  Drools -->
-      <dependency>
-        <groupId>org.drools</groupId>
-        <artifactId>drools-core</artifactId>
-        <version>${drools.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.drools</groupId>
-        <artifactId>drools-compiler</artifactId>
-        <version>${drools.version}</version>
-      </dependency>
-      
-      <!-- Google's closure-compiler -->
-      <dependency>
-        <groupId>com.google.javascript</groupId>
-        <artifactId>closure-compiler</artifactId>
-        <version>r1741</version>
-      </dependency>
-      
-      <!-- bpmn2 libs -->
-      <dependency>
-        <groupId>org.eclipse</groupId>
-        <artifactId>org.eclipse.bpmn2</artifactId>
-        <version>0.7.0.010</version>
-      </dependency>
-
-      <!-- war libs -->
-      <dependency>
-        <groupId>org.json</groupId>
-        <artifactId>json</artifactId>
-        <version>20090211</version>
-      </dependency>
-      <dependency>
-        <groupId>jbpt</groupId>
-        <artifactId>jbpt</artifactId>
-        <version>0.1.0</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.jdom</groupId>
-        <artifactId>jdom</artifactId>
-        <version>1.1</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.velocity</groupId>
-        <artifactId>velocity</artifactId>
-        <version>1.6.4</version>
-        <exclusions>
-          <exclusion>
-            <groupId>oro</groupId>
-            <artifactId>oro</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>org.supercsv</groupId>
-        <artifactId>SuperCSV</artifactId>
-        <version>1.52</version>
-      </dependency>
-      <dependency>
-      	<groupId>org.apache.xmlgraphics</groupId>
-      	<artifactId>xmlgraphics-commons</artifactId>
-      	<version>1.4</version>
-      </dependency>
-      <dependency>
-        <groupId>batik</groupId>
-        <artifactId>batik-parser</artifactId>
-        <version>${batik.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>batik</groupId>
-        <artifactId>batik-transcoder</artifactId>
-        <version>${batik.version}</version>
-        <exclusions>
-        	<exclusion>
-        		<groupId>fop</groupId>
-        		<artifactId>fop</artifactId>
-        	</exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>batik</groupId>
-        <artifactId>batik-extension</artifactId>
-        <version>${batik.version}</version>
-        <exclusions>
-        	<exclusion>
-        		<groupId>xml-apis</groupId>
-        		<artifactId>xmlParserAPIs</artifactId>
-        	</exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>batik</groupId>
-        <artifactId>batik-dom</artifactId>
-        <version>${batik.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>batik</groupId>
-        <artifactId>batik-xml</artifactId>
-        <version>${batik.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>batik</groupId>
-        <artifactId>batik-bridge</artifactId>
-        <version>${batik.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>batik</groupId>
-        <artifactId>batik-css</artifactId>
-        <version>${batik.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>batik</groupId>
-        <artifactId>batik-svg-dom</artifactId>
-        <version>${batik.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>batik</groupId>
-        <artifactId>batik-svggen</artifactId>
-        <version>${batik.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>batik</groupId>
-        <artifactId>batik-util</artifactId>
-        <version>${batik.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>batik</groupId>
-        <artifactId>batik-ext</artifactId>
-        <version>${batik.version}</version>
-        <exclusions>
-        	<exclusion>
-        		<groupId>xml-apis</groupId>
-        		<artifactId>xmlParserAPIs</artifactId>
-        	</exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>batik</groupId>
-        <artifactId>batik-script</artifactId>
-        <version>${batik.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>batik</groupId>
-        <artifactId>batik-gvt</artifactId>
-        <version>${batik.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>batik</groupId>
-        <artifactId>batik-awt-util</artifactId>
-        <version>${batik.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.xmlgraphics</groupId>
-        <artifactId>fop</artifactId>
-        <version>0.95</version>
-        <exclusions>
-        	<exclusion>
-        		<groupId>org.apache.xmlgraphics</groupId>
-        		<artifactId>batik-svg-dom</artifactId>
-        	</exclusion>
-        	<exclusion>
-        		<groupId>org.apache.xmlgraphics</groupId>
-        		<artifactId>batik-anim</artifactId>
-        	</exclusion>
-        	<exclusion>
-        		<groupId>org.apache.xmlgraphics</groupId>
-        		<artifactId>batik-css</artifactId>
-        	</exclusion>
-        	<exclusion>
-        		<groupId>org.apache.xmlgraphics</groupId>
-        		<artifactId>batik-dom</artifactId>
-        	</exclusion>
-        	<exclusion>
-        		<groupId>org.apache.xmlgraphics</groupId>
-        		<artifactId>batik-parser</artifactId>
-        	</exclusion>
-        	<exclusion>
-        		<groupId>org.apache.xmlgraphics</groupId>
-        		<artifactId>batik-bridge</artifactId>
-        	</exclusion>
-        	<exclusion>
-        		<groupId>org.apache.xmlgraphics</groupId>
-        		<artifactId>batik-script</artifactId>
-        	</exclusion>
-        	<exclusion>
-        		<groupId>org.apache.xmlgraphics</groupId>
-        		<artifactId>batik-xml</artifactId>
-        	</exclusion>
-        	<exclusion>
-        		<groupId>org.apache.xmlgraphics</groupId>
-        		<artifactId>batik-awt-util</artifactId>
-        	</exclusion>
-        	<exclusion>
-        		<groupId>org.apache.xmlgraphics</groupId>
-        		<artifactId>batik-gvt</artifactId>
-        	</exclusion>
-        	<exclusion>
-        		<groupId>org.apache.xmlgraphics</groupId>
-        		<artifactId>batik-transcoder</artifactId>
-        	</exclusion>
-        	<exclusion>
-        		<groupId>org.apache.xmlgraphics</groupId>
-        		<artifactId>batik-svggen</artifactId>
-        	</exclusion>
-        	<exclusion>
-        		<groupId>org.apache.xmlgraphics</groupId>
-        		<artifactId>batik-extension</artifactId>
-        	</exclusion>
-        	<exclusion>
-        		<groupId>org.apache.xmlgraphics</groupId>
-        		<artifactId>batik-ext</artifactId>
-        	</exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-      	<groupId>xerces</groupId>
-      	<artifactId>xercesImpl</artifactId>
-      	<version>2.9.1</version>
-      </dependency>
-      <dependency>
-        <groupId>com.sun.xml.bind</groupId>
-        <artifactId>jaxb-impl</artifactId>
-        <version>2.2</version>
-        <exclusions>
-          <exclusion>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>com.sun.xml.bind</groupId>
-        <artifactId>jaxb1-impl</artifactId>
-        <version>2.2</version>
-      </dependency>
-      <dependency>
-        <groupId>de.hpi</groupId>
-        <artifactId>atlas</artifactId>
-        <version>1.0.0</version>
-      </dependency>
-      <dependency>
-        <groupId>com.thoughtworks.xstream</groupId>
-        <artifactId>xstream</artifactId>
-        <version>1.3.1</version>
-        <exclusions>
-          <exclusion>
-            <groupId>xpp3</groupId>
-            <artifactId>xpp3_min</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>org.xmappr</groupId>
-        <artifactId>xmappr</artifactId>
-        <version>0.9.3</version>
-        <exclusions>
-          <exclusion>
-            <groupId>org.codehaus.woodstox</groupId>
-            <artifactId>woodstox-core-asl</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-api</artifactId>
-        <version>1.5.8</version>
-      </dependency>
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-jdk14</artifactId>
-        <version>1.5.6</version>
-      </dependency>
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>log4j-over-slf4j</artifactId>
-        <version>1.5.8</version>
-      </dependency>
-      <dependency>
-        <groupId>javax.servlet</groupId>
-        <artifactId>servlet-api</artifactId>
-        <version>2.5</version>
-        <scope>provided</scope>
-      </dependency>
-      <dependency>
-        <groupId>javax.mail</groupId>
-        <artifactId>mail</artifactId>
-        <version>1.4.1</version>
-        <exclusions>
-          <exclusion>
-            <groupId>javax.activation</groupId>
-            <artifactId>activation</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>rhino</groupId>
-        <artifactId>js</artifactId>
-        <version>1.7R2</version>
-      </dependency>
+  <dependencies>
+    <!-- jBPM -->
     <dependency>
-      <groupId>xalan</groupId>
-      <artifactId>xalan</artifactId>
-      <version>2.7.1</version>
+      <groupId>org.mvel</groupId>
+      <artifactId>mvel2</artifactId>
+      <version>${mvel.version}</version>
     </dependency>
-      <dependency>
-        <groupId>org.codehaus.jackson</groupId>
-        <artifactId>jackson-core-asl</artifactId>
-        <version>1.7.4</version>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.jackson</groupId>
-        <artifactId>jackson-mapper-asl</artifactId>
-        <version>1.7.4</version>
-      </dependency>
-      <dependency>
-        <groupId>org.antlr</groupId>
-        <artifactId>stringtemplate</artifactId>
-        <version>3.2.1</version>
-      </dependency>
-      <dependency>
-        <groupId>antlr</groupId>
-        <artifactId>antlr</artifactId>
-        <version>2.7.7</version>
-      </dependency>
-      <dependency>
-        <groupId>org.eclipse</groupId>
-        <artifactId>osgi</artifactId>
-        <version>3.5.0.v20090520</version>
-      </dependency>
-      <dependency>
-        <groupId>avalon-framework</groupId>
-        <artifactId>avalon-framework</artifactId>
-        <version>4.1.4</version>
-      </dependency>
-      <dependency>
-        <groupId>joda-time</groupId>
-        <artifactId>joda-time</artifactId>
-        <version>1.6</version>
-      </dependency>
-      <dependency>
-  		<groupId>org.apache.abdera</groupId>
-  		<artifactId>abdera-i18n</artifactId>
-  		<version>1.1.2</version>
-	</dependency>
+    <dependency>
+      <groupId>org.jbpm</groupId>
+      <artifactId>jbpm-flow</artifactId>
+      <version>${jbpm.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jbpm</groupId>
+      <artifactId>jbpm-flow-builder</artifactId>
+      <version>${jbpm.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jbpm</groupId>
+      <artifactId>jbpm-workitems</artifactId>
+      <version>${jbpm.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>jdom</groupId>
+          <artifactId>jdom</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.jbpm</groupId>
+      <artifactId>jbpm-bpmn2-emfextmodel</artifactId>
+      <version>${jbpm.version}</version>
+    </dependency>
 
-      <!-- commons -->
-      <dependency>
-        <groupId>commons-collections</groupId>
-        <artifactId>commons-collections</artifactId>
-        <version>3.2.1</version>
-      </dependency>
-      <dependency>
-        <groupId>commons-codec</groupId>
-        <artifactId>commons-codec</artifactId>
-        <version>1.5</version>
-      </dependency>
-      <dependency>
-        <groupId>commons-configuration</groupId>
-        <artifactId>commons-configuration</artifactId>
-        <version>1.6</version>
-        <exclusions>
-          <exclusion>
-            <groupId>commons-digester</groupId>
-            <artifactId>commons-digester</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>commons-beanutils</groupId>
-            <artifactId>commons-beanutils-core</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>commons-httpclient</groupId>
-        <artifactId>commons-httpclient</artifactId>
-        <version>3.1</version>
-        <exclusions>
-          <exclusion>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>commons-fileupload</groupId>
-        <artifactId>commons-fileupload</artifactId>
-        <version>1.2.1</version>
-      </dependency>
-      <dependency>
-        <groupId>commons-lang</groupId>
-        <artifactId>commons-lang</artifactId>
-        <version>2.5</version>
-      </dependency>
+    <!-- jBPM Migration -->
+    <dependency>
+      <groupId>org.jbpm.jbpm5</groupId>
+      <artifactId>jbpmmigration</artifactId>
+      <version>${jbpm.migration.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>xml-apis</groupId>
+          <artifactId>xml-apis</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>xalan</groupId>
+          <artifactId>xalan</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>xerces</groupId>
+          <artifactId>xercesImpl</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
 
-	  <!-- simulation -->
-	  <dependency>
-        <groupId>org.jbpm</groupId>
-        <artifactId>jbpm-simulation</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
-      </dependency>
-      
-      <!-- test -->
-      <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>4.9</version>
-        <scope>provided</scope>
-      </dependency>
+    <!-- Drools -->
+    <dependency>
+      <groupId>org.drools</groupId>
+      <artifactId>drools-core</artifactId>
+      <version>${drools.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.drools</groupId>
+      <artifactId>drools-compiler</artifactId>
+      <version>${drools.version}</version>
+    </dependency>
 
+    <!-- Google's closure-compiler -->
+    <dependency>
+      <groupId>com.google.javascript</groupId>
+      <artifactId>closure-compiler</artifactId>
+      <version>${closure.compiler.version}</version>
+    </dependency>
+
+    <!-- bpmn2 libs -->
+    <dependency>
+      <groupId>org.eclipse</groupId>
+      <artifactId>org.eclipse.bpmn2</artifactId>
+      <version>${eclipse.bpmn2.version}</version>
+    </dependency>
+
+    <!-- war libs -->
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>${json.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>jbpt</groupId>
+      <artifactId>jbpt</artifactId>
+      <version>${jbpt.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jdom</groupId>
+      <artifactId>jdom</artifactId>
+      <version>${jdom.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.supercsv</groupId>
+      <artifactId>SuperCSV</artifactId>
+      <version>${supercsv.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.xmlgraphics</groupId>
+      <artifactId>xmlgraphics-commons</artifactId>
+      <version>${xmlgraphics.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>batik</groupId>
+      <artifactId>batik-transcoder</artifactId>
+      <version>${batik.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>fop</groupId>
+          <artifactId>fop</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>batik</groupId>
+      <artifactId>batik-extension</artifactId>
+      <version>${batik.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>xml-apis</groupId>
+          <artifactId>xmlParserAPIs</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>batik</groupId>
+      <artifactId>batik-svggen</artifactId>
+      <version>${batik.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>batik</groupId>
+      <artifactId>batik-util</artifactId>
+      <version>${batik.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>xml-apis</groupId>
+          <artifactId>xmlParserAPIs</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.xmlgraphics</groupId>
+      <artifactId>fop</artifactId>
+      <version>${fop.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.xmlgraphics</groupId>
+          <artifactId>batik-svg-dom</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.xmlgraphics</groupId>
+          <artifactId>batik-anim</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.xmlgraphics</groupId>
+          <artifactId>batik-css</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.xmlgraphics</groupId>
+          <artifactId>batik-dom</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.xmlgraphics</groupId>
+          <artifactId>batik-parser</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.xmlgraphics</groupId>
+          <artifactId>batik-bridge</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.xmlgraphics</groupId>
+          <artifactId>batik-script</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.xmlgraphics</groupId>
+          <artifactId>batik-xml</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.xmlgraphics</groupId>
+          <artifactId>batik-awt-util</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.xmlgraphics</groupId>
+          <artifactId>batik-gvt</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.xmlgraphics</groupId>
+          <artifactId>batik-transcoder</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.xmlgraphics</groupId>
+          <artifactId>batik-svggen</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.xmlgraphics</groupId>
+          <artifactId>batik-extension</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.xmlgraphics</groupId>
+          <artifactId>batik-ext</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>xerces</groupId>
+      <artifactId>xercesImpl</artifactId>
+      <version>${xerces.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-impl</artifactId>
+      <version>${jaxb.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.xml.bind</groupId>
+          <artifactId>jaxb-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb1-impl</artifactId>
+      <version>${jaxb.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>de.hpi</groupId>
+      <artifactId>atlas</artifactId>
+      <version>${atlas.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${log4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-ext</artifactId>
+      <version>${log4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>${log4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>${servlet.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.mail</groupId>
+      <artifactId>mail</artifactId>
+      <version>${mail.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.activation</groupId>
+          <artifactId>activation</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>rhino</groupId>
+      <artifactId>js</artifactId>
+      <version>${rhino.js.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-core-asl</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-mapper-asl</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.antlr</groupId>
+      <artifactId>stringtemplate</artifactId>
+      <version>${antlr.stringtemplate.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>antlr</groupId>
+      <artifactId>antlr</artifactId>
+      <version>${antlr.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse</groupId>
+      <artifactId>osgi</artifactId>
+      <version>${eclipse.osgi.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>avalon-framework</groupId>
+      <artifactId>avalon-framework</artifactId>
+      <version>${avalon.framework.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>joda-time</groupId>
+      <artifactId>joda-time</artifactId>
+      <version>${joda.time.version}</version>
+    </dependency>
+
+    <!-- commons -->
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>${commons.codec.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-configuration</groupId>
+      <artifactId>commons-configuration</artifactId>
+      <version>${commons.configuration.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-digester</groupId>
+          <artifactId>commons-digester</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>commons-beanutils</groupId>
+          <artifactId>commons-beanutils-core</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>commons-httpclient</groupId>
+      <artifactId>commons-httpclient</artifactId>
+      <version>${commons.httpclient.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-codec</groupId>
+          <artifactId>commons-codec</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>commons-fileupload</groupId>
+      <artifactId>commons-fileupload</artifactId>
+      <version>${commons.fileupload.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>${commons.lang.version}</version>
+    </dependency>
+
+    <!-- simulation -->
+    <dependency>
+      <groupId>org.jbpm</groupId>
+      <artifactId>jbpm-simulation</artifactId>
+      <version>${jbpm.simulation.version}</version>
+    </dependency>
+
+    <!-- test -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.abdera</groupId>
+      <artifactId>abdera-core</artifactId>
+      <version>${abdera.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.abdera</groupId>
+      <artifactId>abdera-client</artifactId>
+      <version>${abdera.version}</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- arquillian/shrinkwrap (see dep. mgmt. for versions) shrinkwrap override necessary for 2.0.0 functionality (Maven.resolver()) -->
+    <dependency>
+      <groupId>org.jboss.arquillian.junit</groupId>
+      <artifactId>arquillian-junit-container</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.shrinkwrap.descriptors</groupId>
+      <artifactId>shrinkwrap-descriptors-api-javaee</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.shrinkwrap.resolver</groupId>
+      <artifactId>shrinkwrap-resolver-api</artifactId>
+      <version>${shrinkwrap.override.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.shrinkwrap.resolver</groupId>
+      <artifactId>shrinkwrap-resolver-api-maven</artifactId>
+      <version>${shrinkwrap.override.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.shrinkwrap.resolver</groupId>
+      <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+      <version>${shrinkwrap.override.version}</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- guvnor/arquillian test -->
+    <dependency>
+      <groupId>org.drools</groupId>
+      <artifactId>guvnor-distribution-wars</artifactId>
+      <version>${guvnor.test.version}</version>
+      <type>war</type>
+      <classifier>jboss-as-7.0</classifier>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>3.1.0.RELEASE</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.reflections</groupId>
+      <artifactId>reflections</artifactId>
+      <version>0.9.8</version>
+    </dependency>
+
+    <!-- dom4j prevent transitive dom4j deps from including the wrong stax:stax-api -->
+    <dependency>
+      <groupId>dom4j</groupId>
+      <artifactId>dom4j</artifactId>
+      <version>1.6.1</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>stax</groupId>
+          <artifactId>stax-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+  </dependencies>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.jboss.arquillian</groupId>
+        <artifactId>arquillian-bom</artifactId>
+        <version>1.0.2.Final</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
     </dependencies>
+  </dependencyManagement>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
+        <directory>src/main/webapp</directory>
+      </resource>
+    </resources>
+    <testResources>
+      <testResource>
+        <directory>src/test/resources</directory>
+      </testResource>
+      <testResource>
+        <directory>src/test/client</directory>
+      </testResource>
+      <testResource>
+        <directory>src/test/filtered-resources</directory>
+        <filtering>true</filtering>
+      </testResource>
+    </testResources>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
+
       <plugin>
         <artifactId>maven-war-plugin</artifactId>
         <version>2.1.1</version>
@@ -563,7 +624,7 @@
             <phase>package</phase>
             <configuration>
               <classifier>jboss</classifier>
-              <packagingExcludes>WEB-INF/lib/antlr-2.7.7.jar,WEB-INF/lib/log4j-over-slf4j-1.5.8.jar,WEB-INF/lib/xercesImpl-2.9.1.jar,WEB-INF/lib/xml-apis-1.3.04.jar,WEB-INF/lib/xmlParserAPIs-2.0.2.jar</packagingExcludes>
+              <packagingExcludes>WEB-INF/lib/antlr-${antlr.version}.jar,WEB-INF/lib/log4j-over-slf4j-${log4j.version}.jar,WEB-INF/lib/xercesImpl-${xerces.version}.jar,WEB-INF/lib/xml-apis-1.3.04.jar,WEB-INF/lib/xmlParserAPIs-2.0.2.jar</packagingExcludes>
             </configuration>
           </execution>
           <execution>
@@ -578,30 +639,160 @@
           </execution>
         </executions>
       </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.12</version>
+        <configuration>
+          <excludes>
+            <exclude>**/test/web/**/*Test.java</exclude>
+          </excludes>
+          <argLine>-Xms512m -Xmx1024m -XX:MaxPermSize=512m</argLine>
+        </configuration>
+        <executions>
+          <execution>
+            <id>integration-tests</id>
+            <phase>integration-test</phase>
+            <goals>
+              <goal>test</goal>
+            </goals>
+            <configuration>
+              <skip>false</skip>
+              <excludes>
+                <exclude>none</exclude>
+              </excludes>
+              <includes>
+                <include>**/test/web/GuvnorIntegrationTest.java</include>
+              </includes>
+              <argLine>-Xms512m -Xmx1024m -XX:MaxPermSize=512m</argLine>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 
+  <profiles>
+    <!-- testing with jboss AS 7 -->
+    <profile>
+      <id>arquillian-jboss7-managed</id>
+      <activation>
+        <property>
+          <name>profile</name>
+          <value>integration-test-jboss7</value>
+        </property>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <arquillian.launch>jbossas-7</arquillian.launch>
+      </properties>
+      <build>
+        <testResources>
+          <testResource>
+            <directory>src/test/resources</directory>
+          </testResource>
+          <testResource>
+            <directory>src/test/filtered-resources</directory>
+          </testResource>
+          <testResource>
+            <directory>src/test/resources-jbossas-7</directory>
+          </testResource>
+        </testResources>
+        <plugins>
+          <!-- integration testing (w/ jBoss AS 7 & Arquillian) -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <!-- Download JBoss AS and unpack it to have it available during tests -->
+                <!-- You can specify path to JBoss AS 7 in arquillian.xml -->
+                <id>arquillian-server-unpack</id>
+                <phase>pre-integration-test</phase>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>org.jboss.as</groupId>
+                      <artifactId>jboss-as-dist</artifactId>
+                      <version>${as7.version}</version>
+                      <type>zip</type>
+                      <overWrite>false</overWrite>
+                      <outputDirectory>${basedir}/target</outputDirectory>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-clean-plugin</artifactId>
+            <version>2.4.1</version>
+            <configuration>
+              <filesets>
+                <fileset>
+                  <directory>${basedir}</directory>
+                  <includes>
+                    <!-- guvnor integration test leftovers -->
+                    <include>repository/</include>
+                    <include>repository.xml</include>
+                    <include>derby.log</include>
+                  </includes>
+                </fileset>
+              </filesets>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+
+      <dependencies>
+        <dependency>
+          <groupId>org.jboss.as</groupId>
+          <artifactId>jboss-as-arquillian-container-managed</artifactId>
+          <version>7.1.1.Final</version>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.jboss.spec</groupId>
+          <artifactId>jboss-javaee-web-6.0</artifactId>
+          <version>3.0.0.Final</version>
+          <type>pom</type>
+          <scope>test</scope>
+          <exclusions>
+            <exclusion>
+              <groupId>xalan</groupId>
+              <artifactId>xalan</artifactId>
+            </exclusion>
+          </exclusions>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
+
   <repositories>
-   <repository>
-   	<id>repo1</id>
-    <url>http://repo1.maven.org/maven2</url>
-   </repository>
-   <repository>
-   	<id>central</id>
-    <url>https://repository.jboss.org/nexus/content/repositories/central</url>
-   </repository>
-   <repository>
-   	<id>snapshots</id>
-    <url>https://repository.jboss.org/nexus/content/repositories/snapshots</url>
-   </repository>
-   <repository>
-   	<id>thirdparty</id>
-    <url>https://repository.jboss.org/nexus/content/repositories/thirdparty-uploads</url>
-   </repository>
-   <repository>
-   	<id>ibiblio</id>
-    <url>http://mirrors.ibiblio.org/pub/mirrors/maven2</url>
-   </repository>
+    <repository>
+      <id>repo1</id>
+      <url>http://repo1.maven.org/maven2</url>
+    </repository>
+    <repository>
+      <id>central</id>
+      <url>https://repository.jboss.org/nexus/content/repositories/central</url>
+    </repository>
+    <repository>
+      <id>snapshots</id>
+      <url>https://repository.jboss.org/nexus/content/repositories/snapshots</url>
+    </repository>
+    <repository>
+      <id>thirdparty</id>
+      <url>https://repository.jboss.org/nexus/content/repositories/thirdparty-uploads</url>
+    </repository>
+    <repository>
+      <id>ibiblio</id>
+      <url>http://mirrors.ibiblio.org/pub/mirrors/maven2</url>
+    </repository>
 
     <repository>
       <id>jboss-public-repository-group</id>
@@ -647,17 +838,17 @@
       </snapshots>
     </repository>
   </repositories>
-  
+
   <distributionManagement>
-	<repository>
-    	<id>jboss-releases-repository</id>
-        <name>JBoss Releases Repository</name>
-        <url>https://repository.jboss.org/nexus/service/local/staging/deploy/maven2/</url>
+    <repository>
+      <id>jboss-releases-repository</id>
+      <name>JBoss Releases Repository</name>
+      <url>https://repository.jboss.org/nexus/service/local/staging/deploy/maven2/</url>
     </repository>
     <snapshotRepository>
-    	<id>jboss-snapshots-repository</id>
-       	<name>JBoss Snapshots Repository</name>
-       	<url>https://repository.jboss.org/nexus/content/repositories/snapshots/</url>
+      <id>jboss-snapshots-repository</id>
+      <name>JBoss Snapshots Repository</name>
+      <url>https://repository.jboss.org/nexus/content/repositories/snapshots/</url>
     </snapshotRepository>
   </distributionManagement>
 </project>

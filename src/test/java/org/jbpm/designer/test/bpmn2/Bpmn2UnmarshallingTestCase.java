@@ -63,6 +63,7 @@ import org.eclipse.bpmn2.TextAnnotation;
 import org.eclipse.bpmn2.ThrowEvent;
 import org.eclipse.bpmn2.TimerEventDefinition;
 import org.jbpm.designer.bpmn2.impl.Bpmn2JsonUnmarshaller;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -86,7 +87,6 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("http://www.omg.org/bpmn20", definitions.getTargetNamespace());
         assertEquals("http://www.w3.org/2001/XMLSchema", definitions.getTypeLanguage());
         assertTrue(definitions.getRootElements().size() == 1);
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     //@Test
@@ -99,7 +99,6 @@ public class Bpmn2UnmarshallingTestCase {
         GlobalTask task = (GlobalTask) definitions.getRootElements().iterator().next();
         assertEquals("oneTask", task.getName());
         assertEquals("my task doc", task.getDocumentation().iterator().next().getText());
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     //@Test
@@ -115,7 +114,6 @@ public class Bpmn2UnmarshallingTestCase {
         GlobalTask task2 = (GlobalTask) definitions.getRootElements().get(1);
         assertEquals("secondTask", task2.getName());
         assertEquals("my task doc too", task2.getDocumentation().iterator().next().getText());
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -128,7 +126,6 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("pool", process.getName());
         assertEquals(ProcessType.PRIVATE, process.getProcessType());
         assertTrue(process.isIsClosed());
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -142,7 +139,6 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(process.getLaneSets().get(0).getLanes().size() == 1);
         Lane l = process.getLaneSets().get(0).getLanes().get(0);
         assertEquals("my first lane", l.getName());
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -160,7 +156,6 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("seqFlow", flow.getName());
         assertEquals(task, flow.getSourceRef());
         assertEquals(task2, flow.getTargetRef());
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     //@Test
@@ -173,7 +168,6 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("my script", task.getName());
         assertEquals("git status | grep modified | awk '{print $3}' | xargs echo | xargs git add", task.getScript());
         assertEquals("bash", task.getScriptLanguage());
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     //@Test
@@ -184,7 +178,6 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(definitions.getRootElements().size() == 1);
         GlobalUserTask task = (GlobalUserTask) definitions.getRootElements().get(0);
         assertEquals("ask user", task.getName());
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     //@Test
@@ -195,7 +188,6 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(definitions.getRootElements().size() == 1);
         GlobalBusinessRuleTask task = (GlobalBusinessRuleTask) definitions.getRootElements().get(0);
         assertEquals("call business rule", task.getName());
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     //@Test
@@ -206,7 +198,6 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(definitions.getRootElements().size() == 1);
         GlobalManualTask task = (GlobalManualTask) definitions.getRootElements().get(0);
         assertEquals("pull a lever", task.getName());
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -217,7 +208,6 @@ public class Bpmn2UnmarshallingTestCase {
         Process process = getRootProcess(definitions);
         ExclusiveGateway g = (ExclusiveGateway) process.getFlowElements().get(0);
         assertEquals("xor gateway", g.getName());
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -228,7 +218,6 @@ public class Bpmn2UnmarshallingTestCase {
         Process process = getRootProcess(definitions);
         ParallelGateway g = (ParallelGateway) process.getFlowElements().get(0);
         assertEquals("parallel gateway", g.getName());
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -239,7 +228,6 @@ public class Bpmn2UnmarshallingTestCase {
         Process process = getRootProcess(definitions);
         EventBasedGateway g = (EventBasedGateway) process.getFlowElements().get(0);
         assertEquals("event-based gateway", g.getName());
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -250,7 +238,6 @@ public class Bpmn2UnmarshallingTestCase {
         Process process = getRootProcess(definitions);
         InclusiveGateway g = (InclusiveGateway) process.getFlowElements().get(0);
         assertEquals("inclusive gateway", g.getName());
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -261,7 +248,6 @@ public class Bpmn2UnmarshallingTestCase {
         Process process = getRootProcess(definitions);
         StartEvent g = (StartEvent) process.getFlowElements().get(0);
         assertEquals("start event", g.getName());
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -274,7 +260,6 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("start message event", g.getName());
         assertTrue(g.getEventDefinitions().size() == 1);
         assertTrue(g.getEventDefinitions().iterator().next() instanceof MessageEventDefinition);
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -287,7 +272,6 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("start escalation event", g.getName());
         assertTrue(g.getEventDefinitions().size() == 1);
         assertTrue(g.getEventDefinitions().iterator().next() instanceof EscalationEventDefinition);
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -300,7 +284,6 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("start compensation event", g.getName());
         assertTrue(g.getEventDefinitions().size() == 1);
         assertTrue(g.getEventDefinitions().iterator().next() instanceof CompensateEventDefinition);
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -312,7 +295,6 @@ public class Bpmn2UnmarshallingTestCase {
         StartEvent g = (StartEvent) process.getFlowElements().get(0);
         assertEquals("start multiple event", g.getName());
         //TODO multiple event definitions ???
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -324,7 +306,6 @@ public class Bpmn2UnmarshallingTestCase {
         StartEvent g = (StartEvent) process.getFlowElements().get(0);
         assertEquals("start parallel multiple event", g.getName());
         //TODO multiple event definitions ???
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -337,7 +318,6 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("start signal event", g.getName());
         assertTrue(g.getEventDefinitions().size() == 1);
         assertTrue(g.getEventDefinitions().iterator().next() instanceof SignalEventDefinition);
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -350,19 +330,18 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("start timer event", g.getName());
         assertTrue(g.getEventDefinitions().size() == 1);
         assertTrue(g.getEventDefinitions().iterator().next() instanceof TimerEventDefinition);
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
-    /**@Test
-     * this test needs to be revised (the json) 
+    @Test
+    // this test needs to be revised (the json) 
+    @Ignore
     public void testGroupUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("group.json"), "").getContents().get(0));
         assertTrue(definitions.getRootElements().size() == 1);
         Process process = getRootProcess(definitions);
         assertTrue(process.getArtifacts().iterator().next() instanceof Group);
-        definitions.eResource().save(System.out, Collections.emptyMap());
-    }**/
+    }
     
     @Test
     public void testTextAnnotationUnmarshalling() throws Exception {
@@ -373,7 +352,6 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(process.getArtifacts().iterator().next() instanceof TextAnnotation);
         TextAnnotation ta = (TextAnnotation) process.getArtifacts().iterator().next();
         assertEquals("text annotation", ta.getText());
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -385,7 +363,6 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(process.getFlowElements().iterator().next() instanceof DataObject);
         DataObject da = (DataObject) process.getFlowElements().iterator().next();
         assertEquals("data object", da.getName());
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -396,7 +373,6 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(definitions.getRootElements().iterator().next() instanceof DataStore);
         DataStore da = (DataStore) definitions.getRootElements().iterator().next();
         assertEquals("data store", da.getName());
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -407,7 +383,6 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(definitions.getRootElements().iterator().next() instanceof Message);
         Message msg = (Message) definitions.getRootElements().iterator().next();
         assertEquals("message", msg.getName());
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -418,7 +393,6 @@ public class Bpmn2UnmarshallingTestCase {
         Process process = getRootProcess(definitions);
         EndEvent g = (EndEvent) process.getFlowElements().get(0);
         assertEquals("end event", g.getName());
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -430,7 +404,6 @@ public class Bpmn2UnmarshallingTestCase {
         EndEvent g = (EndEvent) process.getFlowElements().get(0);
         assertEquals("end message event", g.getName());
         assertTrue(g.getEventDefinitions().iterator().next() instanceof MessageEventDefinition);
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -442,7 +415,6 @@ public class Bpmn2UnmarshallingTestCase {
         EndEvent g = (EndEvent) process.getFlowElements().get(0);
         assertEquals("end escalation event", g.getName());
         assertTrue(g.getEventDefinitions().iterator().next() instanceof EscalationEventDefinition);
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -454,7 +426,6 @@ public class Bpmn2UnmarshallingTestCase {
         EndEvent g = (EndEvent) process.getFlowElements().get(0);
         assertEquals("end error event", g.getName());
         assertTrue(g.getEventDefinitions().iterator().next() instanceof ErrorEventDefinition);
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -466,7 +437,6 @@ public class Bpmn2UnmarshallingTestCase {
         EndEvent g = (EndEvent) process.getFlowElements().get(0);
         assertEquals("end signal event", g.getName());
         assertTrue(g.getEventDefinitions().iterator().next() instanceof SignalEventDefinition);
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -478,7 +448,6 @@ public class Bpmn2UnmarshallingTestCase {
         EndEvent g = (EndEvent) process.getFlowElements().get(0);
         assertEquals("terminate end event", g.getName());
         assertTrue(g.getEventDefinitions().iterator().next() instanceof TerminateEventDefinition);
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -489,7 +458,6 @@ public class Bpmn2UnmarshallingTestCase {
         Process process = getRootProcess(definitions);
         EndEvent g = (EndEvent) process.getFlowElements().get(0);
         assertEquals("end multiple event", g.getName());
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -501,7 +469,6 @@ public class Bpmn2UnmarshallingTestCase {
         EndEvent g = (EndEvent) process.getFlowElements().get(0);
         assertEquals("end compensation event", g.getName());
         assertTrue(g.getEventDefinitions().iterator().next() instanceof CompensateEventDefinition);
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -513,7 +480,6 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(process.getFlowElements().size() == 5);
         assertTrue(process.getLaneSets().size() == 1);
         assertTrue(process.getLaneSets().get(0).getLanes().size() == 1);
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -525,7 +491,6 @@ public class Bpmn2UnmarshallingTestCase {
         CatchEvent g = (CatchEvent) process.getFlowElements().get(0);
         assertEquals("catch message event", g.getName());
         assertTrue(g.getEventDefinitions().iterator().next() instanceof MessageEventDefinition);
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -537,7 +502,6 @@ public class Bpmn2UnmarshallingTestCase {
         CatchEvent g = (CatchEvent) process.getFlowElements().get(0);
         assertEquals("catch timer event", g.getName());
         assertTrue(g.getEventDefinitions().iterator().next() instanceof TimerEventDefinition);
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -549,7 +513,6 @@ public class Bpmn2UnmarshallingTestCase {
         CatchEvent g = (CatchEvent) process.getFlowElements().get(0);
         assertEquals("catch escalation event", g.getName());
         assertTrue(g.getEventDefinitions().iterator().next() instanceof EscalationEventDefinition);
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -561,7 +524,6 @@ public class Bpmn2UnmarshallingTestCase {
         CatchEvent g = (CatchEvent) process.getFlowElements().get(0);
         assertEquals("catch conditional event", g.getName());
         assertTrue(g.getEventDefinitions().iterator().next() instanceof ConditionalEventDefinition);
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -573,7 +535,6 @@ public class Bpmn2UnmarshallingTestCase {
         CatchEvent g = (CatchEvent) process.getFlowElements().get(0);
         assertEquals("catch link event", g.getName());
         assertTrue(g.getEventDefinitions().iterator().next() instanceof LinkEventDefinition);
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -585,7 +546,6 @@ public class Bpmn2UnmarshallingTestCase {
         CatchEvent g = (CatchEvent) process.getFlowElements().get(0);
         assertEquals("catch error event", g.getName());
         assertTrue(g.getEventDefinitions().iterator().next() instanceof ErrorEventDefinition);
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -597,7 +557,6 @@ public class Bpmn2UnmarshallingTestCase {
         CatchEvent g = (CatchEvent) process.getFlowElements().get(0);
         assertEquals("catch cancel event", g.getName());
         assertTrue(g.getEventDefinitions().iterator().next() instanceof CancelEventDefinition);
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -609,7 +568,6 @@ public class Bpmn2UnmarshallingTestCase {
         CatchEvent g = (CatchEvent) process.getFlowElements().get(0);
         assertEquals("catch compensation event", g.getName());
         assertTrue(g.getEventDefinitions().iterator().next() instanceof CompensateEventDefinition);
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -620,7 +578,6 @@ public class Bpmn2UnmarshallingTestCase {
         Process process = getRootProcess(definitions);
         CatchEvent g = (CatchEvent) process.getFlowElements().get(0);
         assertEquals("catch multiple event", g.getName());
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -631,7 +588,6 @@ public class Bpmn2UnmarshallingTestCase {
         Process process = getRootProcess(definitions);
         CatchEvent g = (CatchEvent) process.getFlowElements().get(0);
         assertEquals("catch parallel multiple event", g.getName());
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -642,7 +598,6 @@ public class Bpmn2UnmarshallingTestCase {
         Process process = getRootProcess(definitions);
         ThrowEvent g = (ThrowEvent) process.getFlowElements().get(0);
         assertEquals("throw event", g.getName());
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -654,7 +609,6 @@ public class Bpmn2UnmarshallingTestCase {
         ThrowEvent g = (ThrowEvent) process.getFlowElements().get(0);
         assertEquals("throw message event", g.getName());
         assertTrue(g.getEventDefinitions().iterator().next() instanceof MessageEventDefinition);
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -666,7 +620,6 @@ public class Bpmn2UnmarshallingTestCase {
         ThrowEvent g = (ThrowEvent) process.getFlowElements().get(0);
         assertEquals("throw escalation event", g.getName());
         assertTrue(g.getEventDefinitions().iterator().next() instanceof EscalationEventDefinition);
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -678,7 +631,6 @@ public class Bpmn2UnmarshallingTestCase {
         ThrowEvent g = (ThrowEvent) process.getFlowElements().get(0);
         assertEquals("throw link event", g.getName());
         assertTrue(g.getEventDefinitions().iterator().next() instanceof LinkEventDefinition);
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -690,7 +642,6 @@ public class Bpmn2UnmarshallingTestCase {
         ThrowEvent g = (ThrowEvent) process.getFlowElements().get(0);
         assertEquals("throw compensation event", g.getName());
         assertTrue(g.getEventDefinitions().iterator().next() instanceof CompensateEventDefinition);
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -702,7 +653,6 @@ public class Bpmn2UnmarshallingTestCase {
         ThrowEvent g = (ThrowEvent) process.getFlowElements().get(0);
         assertEquals("throw signal event", g.getName());
         assertTrue(g.getEventDefinitions().iterator().next() instanceof SignalEventDefinition);
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -713,7 +663,6 @@ public class Bpmn2UnmarshallingTestCase {
         Process process = getRootProcess(definitions);
         ThrowEvent g = (ThrowEvent) process.getFlowElements().get(0);
         assertEquals("throw multiple event", g.getName());
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -729,7 +678,6 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals(g, association.getSourceRef());
         assertEquals(textA, association.getTargetRef());
         assertEquals(AssociationDirection.NONE, association.getAssociationDirection());
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -744,7 +692,6 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals(g, association.getSourceRef());
         assertEquals(textA, association.getTargetRef());
         assertEquals(AssociationDirection.ONE, association.getAssociationDirection());
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
     @Test
@@ -759,11 +706,11 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals(g, association.getSourceRef());
         assertEquals(textA, association.getTargetRef());
         assertEquals(AssociationDirection.BOTH, association.getAssociationDirection());
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
     
-    /* Disabling test as no support for child lanes yet
+    // Disabling test as no support for child lanes yet
     @Test
+    @Ignore
     public void testDoubleLaneUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("doubleLane.json"), "").getContents().get(0));
@@ -777,14 +724,16 @@ public class Bpmn2UnmarshallingTestCase {
         Lane secondLane = firstLane.getChildLaneSet().getLanes().get(0);
         assertEquals("Second lane", secondLane.getName());
         assertEquals(g, secondLane.getFlowNodeRefs().get(0));
-        definitions.eResource().save(System.out, Collections.emptyMap());
-    }*/
+    }
     
-    /* Disabling test that doesn't pass.
+    // Disabling test that doesn't pass.
     @Test
+    @Ignore
     public void testUserTaskDataPassing() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
-        Definitions definitions = unmarshaller.unmarshall(getTestJsonFile("userTaskDataPassing.json"));
+        
+        Definitions definitions = null;
+//        definitions = unmarshaller.unmarshall(getTestJsonFile("userTaskDataPassing.json"));
         Process process = getRootProcess(definitions);
         Task g = (Task) process.getFlowElements().get(0);
         assertEquals("task", g.getName());
@@ -795,8 +744,7 @@ public class Bpmn2UnmarshallingTestCase {
         Lane secondLane = firstLane.getChildLaneSet().getLanes().get(0);
         assertEquals("Second lane", secondLane.getName());
         assertEquals(g, secondLane.getFlowNodeRefs().get(0));
-        definitions.eResource().save(System.out, Collections.emptyMap());
-    }*/
+    }
     
     private Process getRootProcess(Definitions def) {
         for(RootElement nextRootElement : def.getRootElements()) {

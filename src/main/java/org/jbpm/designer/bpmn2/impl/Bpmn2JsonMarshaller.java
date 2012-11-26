@@ -368,21 +368,21 @@ public class Bpmn2JsonMarshaller {
 	            	linkSequenceFlows(((Process) rootElement).getFlowElements());
 	                marshallProcess((Process) rootElement, def, generator, preProcessingData);
 	            } else if (rootElement instanceof Interface) {
-	                // TODO
+	                // TODO rootElement instanceof Interface
 	            } else if (rootElement instanceof ItemDefinition) {
-                    // TODO
+                    // TODO rootElement instanceof ItemDefinition
                 } else if (rootElement instanceof Resource) {
-	                // TODO
+	                // TODO rootElement instanceof Resource
 	            } else if (rootElement instanceof Error) {
-	                // TODO
+	                // TODO rootElement instanceof Error
 	            } else if (rootElement instanceof Message) {
-	                // TODO
+	                // TODO rootElement instanceof Message
 	            } else if (rootElement instanceof Signal) {
-                    // TODO
+                    // TODO rootElement instanceof Signal
                 } else if (rootElement instanceof Escalation) {
-                    // TODO
+                    // TODO rootElement instanceof Escalation
                 } else if (rootElement instanceof Collaboration) { 
-                	
+                 // TODO rootElement instanceof Collaboration
                 } else {
                 	_logger.warn("Unknown root element " + rootElement + ". This element will not be parsed.");
 	            }

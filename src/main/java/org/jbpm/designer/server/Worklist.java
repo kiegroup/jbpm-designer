@@ -34,7 +34,7 @@ public class Worklist extends HttpServlet {
 		 java.util.StringTokenizer st = new java.util.StringTokenizer(user);
 		 if (st.hasMoreTokens()) {
 		 if (st.nextToken().equalsIgnoreCase("Basic")) {
-		 BASE64Decoder decoder = new sun.misc.BASE64Decoder();
+		 BASE64Decoder decoder = // use Base64EncodingUtil
 		 String userPass = new String(decoder.decodeBuffer(st.nextToken()));
 
 		 user = userPass.split(":")[0];
@@ -51,7 +51,8 @@ public class Worklist extends HttpServlet {
 		 URL url_engine = new URL(engineURL);
 		 HttpURLConnection connection_engine = (HttpURLConnection) url_engine.openConnection();
 		 connection_engine.setRequestMethod("GET");
-		 String encoding = new sun.misc.BASE64Encoder().encode((user + ":").getBytes());
+		 BASE64Encoder encoder = // use Base64EncodingUtil
+		 String encoding = encoder.encode((user + ":").getBytes());
 		 connection_engine.setRequestProperty("Authorization", "Basic " + encoding);
 		 connection_engine.setDoInput(true);
 

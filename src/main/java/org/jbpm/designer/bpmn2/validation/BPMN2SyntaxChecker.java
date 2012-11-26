@@ -123,6 +123,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 	}
 	
 	private void checkFlowElements(FlowElementsContainer container, Process process, Scenario defaultScenario) {
+		List<String> allPackageNames = ServletUtil.getPackageNames(profile);
 		
 		for(FlowElement fe : container.getFlowElements()) {
 			if(fe instanceof StartEvent) {
@@ -211,7 +212,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 		        	addError(ut, "User Task has no task name.");
 		        } else {
 		        	if(taskName != null) {
-		        		String[] packageAssetInfo = ServletUtil.findPackageAndAssetInfo(uuid, profile);
+		        		String[] packageAssetInfo = ServletUtil.findPackageAndAssetInfo(uuid, allPackageNames, profile);
 		        		String taskFormName = taskName + "-taskform";
 		        		if(!ServletUtil.assetExistsInGuvnor(packageAssetInfo[0], taskFormName, profile)) {
 		        			addError(ut, "User Task has no task form defined.");
@@ -430,7 +431,6 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 					addError((CallActivity) fe, "Reusable Subprocess has no called element specified.");
 				} else {
 				    boolean foundCalledElementProcess = false;
-				    List<String> allPackageNames = ServletUtil.getPackageNamesFromGuvnor(profile);
 				    for (String packageName : allPackageNames) {
 				        List<String> allProcessesInPackage = ServletUtil.getAllProcessesInPackage(packageName, profile);
 				        for(String p : allProcessesInPackage) {

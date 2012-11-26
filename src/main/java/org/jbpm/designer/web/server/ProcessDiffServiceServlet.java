@@ -1,34 +1,20 @@
 package org.jbpm.designer.web.server;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.designer.web.profile.IDiagramProfileService;
-import org.jbpm.designer.web.profile.impl.ExternalInfo;
-import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
-import org.json.JSONArray;
+import org.jbpm.designer.web.server.GuvnorUtil.UrlType;
 import org.json.JSONObject;
-
-import org.apache.commons.codec.binary.Base64;
 
 /**
  * 
@@ -37,8 +23,10 @@ import org.apache.commons.codec.binary.Base64;
  * @author Tihomir Surdilovic
  */
 public class ProcessDiffServiceServlet extends HttpServlet {
-	private static final Logger _logger = Logger
-			.getLogger(ProcessDiffServiceServlet.class);
+
+    private static final Logger _logger = Logger.getLogger(ProcessDiffServiceServlet.class);
+    
+    private static final String GET_VERSION_ACTION = "getversion";
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
@@ -57,7 +45,7 @@ public class ProcessDiffServiceServlet extends HttpServlet {
 		String[] packageAssetInfo = ServletUtil.findPackageAndAssetInfo(uuid, profile);
         String packageName = packageAssetInfo[0];
         String assetName = packageAssetInfo[1];
-        if(action != null && action.equals("getversion") && versionNum != null) {
+        if(action != null && action.equals(GET_VERSION_ACTION) && versionNum != null) {
         	resp.setCharacterEncoding("UTF-8");
 			resp.setContentType("text/xml");
 			try {
@@ -88,41 +76,27 @@ public class ProcessDiffServiceServlet extends HttpServlet {
         }
 	}
 
-	private String getAssetVerionSource(String packageName, String assetName, String versionNum, IDiagramProfile profile) {
+	private static String getAssetVerionSource(String packageName, String assetName, String versionNum, IDiagramProfile profile) {
+        // GUVNOR ProcessDiffServiceServlet
 		try {
-			String versionURL = ExternalInfo.getExternalProtocol(profile)
-					+ "://"
-	                + ExternalInfo.getExternalHost(profile)
-	                + "/"
-	                + profile.getExternalLoadURLSubdomain().substring(0,
-	                        profile.getExternalLoadURLSubdomain().indexOf("/"))
-	                + "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/" + assetName 
-	                + "/versions/" + versionNum + "/source/";
-			
-			return IOUtils.toString(ServletUtil.getInputStreamForURL(versionURL, "GET", profile), "UTF-8");
+			String versionURL = GuvnorUtil.getUrl(profile, packageName, assetName, versionNum, UrlType.Source);
+			return GuvnorUtil.readStringContentFromUrl(versionURL, "GET", profile);
 		} catch (Exception e) {
 			return "";
 		}
 	}
 	
-	private List<String> getAssetVersions(String packageName, String assetName, String uuid, IDiagramProfile profile) {
+	private static List<String> getAssetVersions(String packageName, String assetName, String uuid, IDiagramProfile profile) {
+        // GUVNOR ProcessDiffServiceServlet
 		try {
-			String assetVersionURL = ExternalInfo.getExternalProtocol(profile)
-					+ "://"
-	                + ExternalInfo.getExternalHost(profile)
-	                + "/"
-	                + profile.getExternalLoadURLSubdomain().substring(0,
-	                        profile.getExternalLoadURLSubdomain().indexOf("/"))
-	                + "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/" + assetName 
-	                + "/versions/";
+			String assetVersionURL = GuvnorUtil.getUrl(profile, packageName, assetName, "", UrlType.Normal);
+			String content = GuvnorUtil.readStringContentFromUrl(assetVersionURL, "GET", profile);
+			
 			List<String> versionList = new ArrayList<String>();
 			
 			XMLInputFactory factory = XMLInputFactory.newInstance();
-            XMLStreamReader reader = factory
-                    .createXMLStreamReader(ServletUtil.getInputStreamForURL(
-                    		assetVersionURL, "GET", profile), "UTF-8");
+            XMLStreamReader reader = factory.createXMLStreamReader(new StringReader(content));
             boolean isFirstTitle = true;
-            String title = "";
             while (reader.hasNext()) {
                 int next = reader.next();
                 if (next == XMLStreamReader.START_ELEMENT) {

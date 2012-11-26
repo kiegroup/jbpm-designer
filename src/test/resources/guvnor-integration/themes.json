@@ -1,0 +1,15 @@
+{ "themes":{
+        "jBPM" : {
+           "Start Events" : "#9acd32|#000000|#000000"
+        },
+        "test" : { 
+            "themeInfo":"test me" 
+        } ,
+        "Finn" : { 
+            "themeInfo":"Save the Day and Stop the Ice King!" 
+         } ,
+        "Marceline" : { 
+            "themeInfo":"Sing about it."
+        }
+   }
+}
