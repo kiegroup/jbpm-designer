@@ -79,7 +79,6 @@ ORYX.Plugins.ShapeMenuPlugin = {
 	},
 
 	showShapeMenu: function( dontGenerateNew ) {
-	
 		if( !dontGenerateNew || this.resetElements ){
 			
 			window.clearTimeout(this.timer);
@@ -121,7 +120,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
 	},
 
 	registryChanged: function(pluginsData) {
-		
+
 		if(pluginsData) {
 			pluginsData = pluginsData.each(function(value) {value.group = value.group ? value.group : 'unknown'});
 			this.pluginsData = pluginsData.sortBy( function(value) {

@@ -103,7 +103,8 @@ public enum Bpmn20Stencil {
     AdHocSubprocess(Bpmn2Package.eINSTANCE.getAdHocSubProcess()),
     MultipleInstanceSubprocess(Bpmn2Package.eINSTANCE.getSubProcess()),
     ReusableSubprocess(Bpmn2Package.eINSTANCE.getCallActivity()),
-    Relationship(Bpmn2Package.eINSTANCE.getRelationship());
+    Relationship(Bpmn2Package.eINSTANCE.getRelationship()),
+    Import(Bpmn2Package.eINSTANCE.getImport());
     
     public String id;
     public EClass className;

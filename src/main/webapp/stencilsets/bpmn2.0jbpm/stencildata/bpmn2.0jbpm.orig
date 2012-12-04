@@ -2058,7 +2058,7 @@
 					"optional":true,
 					"length":"50"
 				},**/
-				{
+				/** {
 					"id":"operation",
 					"type":"String",
 					"title":"operation",
@@ -2068,7 +2068,7 @@
 					"readonly":false,
 					"optional":true,
 					"fortasktypes":"None|Service"
-				},
+				}, **/
 				/**{
 					"id":"porttype",
 					"type":"String",
@@ -3295,27 +3295,50 @@
 					"fortasktypes":"None|User"
 				},
 				{
-					"id":"interface",
+					"id":"serviceoperation",
 					"type":"String",
-					"title":"Interface",
+					"title":"Service Operation",
 					"value":"",
-					"description":"Interface",
-					"description_ja":"インターフェイス",
+					"description":"Service Operation",
+					"description_ja":"",
 					"readonly":false,
 					"optional":true,
 					"fortasktypes":"None|Service"
 				},
 				{
-					"id":"operation",
+					"id":"serviceinterface",
 					"type":"String",
-					"title":"Operation",
+					"title":"Service Interface",
 					"value":"",
-					"description":"Operation",
-					"description_ja":"オペレーション",
+					"description":"Service Interface",
+					"description_ja":"",
 					"readonly":false,
 					"optional":true,
 					"fortasktypes":"None|Service"
 				},
+				{
+                    "id":"serviceimplementation",
+                    "type":"Choice",
+                    "title":"Service Implementation",
+                    "value":"Java",
+                    "description":"Specifies the service implementation type",
+                    "description_ja":"",
+                    "readonly":false,
+                    "optional":true,
+                    "fortasktypes":"None|Service",
+                    "items": [
+                        {
+                            "id": "c1",
+                            "title":"Java",
+                            "value":"Java"
+                        },
+                        {
+                            "id": "c2",
+                            "title": "Webservice",
+                            "value": "##WebService"
+                        }
+                    ]
+                },
 				{
 					"id":"actors",
 					"type":"String",

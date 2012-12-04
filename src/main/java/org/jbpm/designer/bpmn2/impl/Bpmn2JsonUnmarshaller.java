@@ -32,83 +32,9 @@ import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonToken;
-import org.eclipse.bpmn2.Activity;
-import org.eclipse.bpmn2.AdHocOrdering;
-import org.eclipse.bpmn2.AdHocSubProcess;
-import org.eclipse.bpmn2.Artifact;
-import org.eclipse.bpmn2.Assignment;
-import org.eclipse.bpmn2.Association;
-import org.eclipse.bpmn2.Auditing;
-import org.eclipse.bpmn2.BaseElement;
-import org.eclipse.bpmn2.BoundaryEvent;
-import org.eclipse.bpmn2.Bpmn2Factory;
-import org.eclipse.bpmn2.BusinessRuleTask;
-import org.eclipse.bpmn2.CallActivity;
-import org.eclipse.bpmn2.CatchEvent;
-import org.eclipse.bpmn2.Category;
-import org.eclipse.bpmn2.CategoryValue;
-import org.eclipse.bpmn2.CompensateEventDefinition;
-import org.eclipse.bpmn2.ConditionalEventDefinition;
-import org.eclipse.bpmn2.DataInput;
-import org.eclipse.bpmn2.DataInputAssociation;
-import org.eclipse.bpmn2.DataObject;
-import org.eclipse.bpmn2.DataOutput;
-import org.eclipse.bpmn2.DataOutputAssociation;
-import org.eclipse.bpmn2.DataStore;
-import org.eclipse.bpmn2.Definitions;
-import org.eclipse.bpmn2.Documentation;
-import org.eclipse.bpmn2.EndEvent;
+import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.Error;
-import org.eclipse.bpmn2.ErrorEventDefinition;
-import org.eclipse.bpmn2.Escalation;
-import org.eclipse.bpmn2.EscalationEventDefinition;
-import org.eclipse.bpmn2.Event;
-import org.eclipse.bpmn2.EventDefinition;
-import org.eclipse.bpmn2.ExclusiveGateway;
-import org.eclipse.bpmn2.ExtensionAttributeValue;
-import org.eclipse.bpmn2.FlowElement;
-import org.eclipse.bpmn2.FlowElementsContainer;
-import org.eclipse.bpmn2.FlowNode;
-import org.eclipse.bpmn2.FormalExpression;
-import org.eclipse.bpmn2.Gateway;
-import org.eclipse.bpmn2.GatewayDirection;
-import org.eclipse.bpmn2.GlobalTask;
-import org.eclipse.bpmn2.Group;
-import org.eclipse.bpmn2.InclusiveGateway;
-import org.eclipse.bpmn2.InputOutputSpecification;
-import org.eclipse.bpmn2.InputSet;
-import org.eclipse.bpmn2.Interface;
-import org.eclipse.bpmn2.ItemAwareElement;
-import org.eclipse.bpmn2.ItemDefinition;
-import org.eclipse.bpmn2.Lane;
-import org.eclipse.bpmn2.LaneSet;
-import org.eclipse.bpmn2.Message;
-import org.eclipse.bpmn2.MessageEventDefinition;
-import org.eclipse.bpmn2.Monitoring;
-import org.eclipse.bpmn2.MultiInstanceLoopCharacteristics;
-import org.eclipse.bpmn2.Operation;
-import org.eclipse.bpmn2.OutputSet;
-import org.eclipse.bpmn2.PotentialOwner;
 import org.eclipse.bpmn2.Process;
-import org.eclipse.bpmn2.ProcessType;
-import org.eclipse.bpmn2.Property;
-import org.eclipse.bpmn2.ReceiveTask;
-import org.eclipse.bpmn2.Relationship;
-import org.eclipse.bpmn2.ResourceAssignmentExpression;
-import org.eclipse.bpmn2.RootElement;
-import org.eclipse.bpmn2.ScriptTask;
-import org.eclipse.bpmn2.SendTask;
-import org.eclipse.bpmn2.SequenceFlow;
-import org.eclipse.bpmn2.ServiceTask;
-import org.eclipse.bpmn2.Signal;
-import org.eclipse.bpmn2.SignalEventDefinition;
-import org.eclipse.bpmn2.StartEvent;
-import org.eclipse.bpmn2.SubProcess;
-import org.eclipse.bpmn2.Task;
-import org.eclipse.bpmn2.TextAnnotation;
-import org.eclipse.bpmn2.ThrowEvent;
-import org.eclipse.bpmn2.TimerEventDefinition;
-import org.eclipse.bpmn2.UserTask;
 import org.eclipse.bpmn2.di.BPMNDiagram;
 import org.eclipse.bpmn2.di.BPMNEdge;
 import org.eclipse.bpmn2.di.BPMNPlane;
@@ -119,8 +45,11 @@ import org.eclipse.dd.dc.Bounds;
 import org.eclipse.dd.dc.DcFactory;
 import org.eclipse.dd.dc.Point;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature.Internal;
+import org.eclipse.emf.ecore.EcoreFactory;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.impl.EAttributeImpl;
 import org.eclipse.emf.ecore.impl.EStructuralFeatureImpl;
 import org.eclipse.emf.ecore.impl.EStructuralFeatureImpl.SimpleFeatureMapEntry;
@@ -190,6 +119,7 @@ public class Bpmn2JsonUnmarshaller {
     private List<Lane> _lanes = new ArrayList<Lane>();
     private List<Artifact> _artifacts = new ArrayList<Artifact>();
     private Map<String, ItemDefinition> _subprocessItemDefs = new HashMap<String, ItemDefinition>();
+    private List<Import> _wsdlImports = new ArrayList<Import>();
     private List<BpmnMarshallerHelper> _helpers;
 
     private Bpmn2Resource _currentResource;
@@ -266,6 +196,7 @@ public class Bpmn2JsonUnmarshaller {
             updateIDs(def);
             revisitDataObjects(def);
             revisitAssociationsIoSpec(def);
+            revisitWsdlImports(def);
             addSimulation(def);
             
             // return def;
@@ -281,7 +212,14 @@ public class Bpmn2JsonUnmarshaller {
             _currentResource = null;
         }
     }
-    
+
+    public void revisitWsdlImports(Definitions def) {
+        for(Import imp : _wsdlImports) {
+            def.getImports().add(imp);
+        }
+        _wsdlImports.clear();
+    }
+
     public void revisitSubProcessItemDefs(Definitions def) {
     	Iterator<String> iter =  _subprocessItemDefs.keySet().iterator();
     	while(iter.hasNext()) {
@@ -1305,42 +1243,102 @@ public class Bpmn2JsonUnmarshaller {
                 for(FlowElement fe : flowElements) {
                     if(fe instanceof ServiceTask) {
                         Iterator<FeatureMap.Entry> iter = fe.getAnyAttribute().iterator();
+                        String  serviceImplementation = null;
                         String serviceInterface = null;
                         String serviceOperation = null;
                         while(iter.hasNext()) {
                             FeatureMap.Entry entry = iter.next();
-                            if(entry.getEStructuralFeature().getName().equals("servicetaskinterface")) {
-                                serviceInterface = (String) entry.getValue();
+                            if(entry.getEStructuralFeature().getName().equals("serviceimplementation")) {
+                                serviceImplementation = (String) entry.getValue();
                             }
-                            if(entry.getEStructuralFeature().getName().equals("servicetaskoperation")) {
+                            if(entry.getEStructuralFeature().getName().equals("serviceoperation")) {
                                 serviceOperation = (String) entry.getValue();
                             }
+                            if(entry.getEStructuralFeature().getName().equals("serviceinterface")) {
+                                serviceInterface = (String) entry.getValue();
+                            }
                         }
-                        Interface newInterface = Bpmn2Factory.eINSTANCE.createInterface();
-                        if(serviceInterface != null) {
-                            newInterface.setName(serviceInterface);
-                            newInterface.setId(fe.getId() + "_ServiceInterface");
+
+                        boolean foundInterface = false;
+                        Interface touseInterface = null;
+                        if(serviceImplementation != null && serviceImplementation.equals("Java")) {
+                            for(RootElement iroot : rootElements) {
+                                if(iroot instanceof Interface && ((Interface)iroot).getName().equals(serviceInterface)) {
+                                    foundInterface = true;
+                                    touseInterface = (Interface) iroot;
+                                    break;
+                                }
+                            }
+                            if(!foundInterface) {
+                                for(Interface toadd : toAddInterfaces) {
+                                    if(toadd.getName() != null && toadd.getName().equals(serviceInterface)) {
+                                        foundInterface = true;
+                                        touseInterface = toadd;
+                                        break;
+                                    }
+                                }
+                            }
+                        } else if(serviceImplementation != null && serviceImplementation.equals("##WebService")) {
+                            for(RootElement iroot : rootElements) {
+                                if(iroot instanceof Interface && ((Interface)iroot).getImplementationRef().equals(serviceInterface)) {
+                                    foundInterface = true;
+                                    touseInterface = (Interface) iroot;
+                                    break;
+                                }
+                            }
+                            if(!foundInterface) {
+                                for(Interface toadd : toAddInterfaces) {
+                                    if(toadd.getImplementationRef().equals(serviceInterface)) {
+                                        foundInterface = true;
+                                        touseInterface = toadd;
+                                        break;
+                                    }
+                                }
+                            }
                         }
+                        if(!foundInterface) {
+                            touseInterface = Bpmn2Factory.eINSTANCE.createInterface();
+                            touseInterface.setName(serviceInterface);
+                            touseInterface.setImplementationRef(serviceInterface);
+                            touseInterface.setId(fe.getId() + "_ServiceInterface");
+                            toAddInterfaces.add(touseInterface);
+                        }
+
                         if(serviceOperation != null) {
-                            Operation oper = Bpmn2Factory.eINSTANCE.createOperation();
-                            oper.setId(fe.getId() + "_ServiceOperation");
-                            oper.setName(serviceOperation);
-                            
-                            Message message = Bpmn2Factory.eINSTANCE.createMessage();
-                            message.setId(fe.getId() + "_InMessage");
-                            
-                            ItemDefinition itemdef =  Bpmn2Factory.eINSTANCE.createItemDefinition();
-                            itemdef.setId(message.getId() + "Type");
-                            message.setItemRef(itemdef);
-                            toAddDefinitions.add(itemdef);
-                            
-                            toAddMessages.add(message);
-                            
-                            oper.setInMessageRef(message);
-                            newInterface.getOperations().add(oper);
-                            ((ServiceTask) fe).setOperationRef(oper);
+                            boolean foundOperation = false;
+                            for(Operation oper : touseInterface.getOperations()) {
+                                if(serviceImplementation != null && serviceImplementation.equals("Java")) {
+                                    if(oper.getName().equals(serviceOperation)) {
+                                        foundOperation = true;
+                                        break;
+                                    }
+                                } else if(serviceImplementation != null && serviceImplementation.equals("##WebService")) {
+                                    if(oper.getImplementationRef().equals(serviceOperation)) {
+                                        foundOperation = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if(!foundOperation) {
+                                Operation touseOperation = Bpmn2Factory.eINSTANCE.createOperation();
+                                touseOperation.setId(fe.getId() + "_ServiceOperation");
+                                touseOperation.setName(serviceOperation);
+                                touseOperation.setImplementationRef(serviceOperation);
+
+                                Message message = Bpmn2Factory.eINSTANCE.createMessage();
+                                message.setId(fe.getId() + "_InMessage");
+
+                                ItemDefinition itemdef =  Bpmn2Factory.eINSTANCE.createItemDefinition();
+                                itemdef.setId(message.getId() + "Type");
+                                message.setItemRef(itemdef);
+                                toAddDefinitions.add(itemdef);
+                                toAddMessages.add(message);
+                                touseOperation.setInMessageRef(message);
+
+                                touseInterface.getOperations().add(touseOperation);
+                                ((ServiceTask) fe).setOperationRef(touseOperation);
+                            }
                         }
-                        toAddInterfaces.add(newInterface);
                     }
                 }
             }
@@ -3044,16 +3042,39 @@ public class Bpmn2JsonUnmarshaller {
         if(properties.get("imports") != null && properties.get("imports").length() > 0) {
             String[] allImports = properties.get("imports").split( ",\\s*" );
             for(String importStr : allImports) {
-                ImportType importType = DroolsFactory.eINSTANCE.createImportType();
-                importType.setName(importStr);
-                
-                if(process.getExtensionValues() == null || process.getExtensionValues().size() < 1) {
-                	ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
-                	process.getExtensionValues().add(extensionElement);
+                String[] importParts = importStr.split( "\\|\\s*" );
+                // sample 'com.sample.Myclass|default,location|namespace|wsdl
+                if(importParts.length == 2 || importParts.length == 3) {
+                    if(importParts[1] != null && importParts[1].equals("default")) {
+                        ImportType importType = DroolsFactory.eINSTANCE.createImportType();
+                        importType.setName(importParts[0]);
+                        if(process.getExtensionValues() == null || process.getExtensionValues().size() < 1) {
+                            ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                            process.getExtensionValues().add(extensionElement);
+                        }
+                        FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                                (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__IMPORT, importType);
+                        process.getExtensionValues().get(0).getValue().add(extensionElementEntry);
+                    } else {
+                        Import imp = Bpmn2Factory.eINSTANCE.createImport();
+                        imp.setImportType("http://schemas.xmlsoap.org/wsdl/");
+                        imp.setLocation(importParts[0]);
+                        imp.setNamespace(importParts[1]);
+                        _wsdlImports.add(imp);
+                    }
+                } else {
+                    // just default (support legacy)
+                    ImportType importType = DroolsFactory.eINSTANCE.createImportType();
+                    importType.setName(importStr);
+
+                    if(process.getExtensionValues() == null || process.getExtensionValues().size() < 1) {
+                        ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                        process.getExtensionValues().add(extensionElement);
+                    }
+                    FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                            (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__IMPORT, importType);
+                    process.getExtensionValues().get(0).getValue().add(extensionElementEntry);
                 }
-                FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
-                        (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__IMPORT, importType);
-                process.getExtensionValues().get(0).getValue().add(extensionElementEntry);
             }
         }
         
@@ -3140,21 +3161,29 @@ public class Bpmn2JsonUnmarshaller {
     }
     
     public void applyServiceTaskProperties(ServiceTask serviceTask,  Map<String, String> properties) {
-        if(properties.get("interface") != null) {
-            serviceTask.setImplementation("Other");
+        if(properties.get("serviceimplementation") != null) {
+            serviceTask.setImplementation(properties.get("serviceimplementation"));
             ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
             EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
-                    "http://www.jboss.org/drools", "servicetaskinterface", false, false);
+                    "http://www.jboss.org/drools", "serviceimplementation", false, false);
             EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
-                    properties.get("interface"));
+                    properties.get("serviceimplementation"));
             serviceTask.getAnyAttribute().add(extensionEntry); 
         }
-        if(properties.get("operation") != null) {
+        if(properties.get("serviceoperation") != null) {
             ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
             EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
-                    "http://www.jboss.org/drools", "servicetaskoperation", false, false);
+                    "http://www.jboss.org/drools", "serviceoperation", false, false);
             EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
-                    properties.get("operation"));
+                    properties.get("serviceoperation"));
+            serviceTask.getAnyAttribute().add(extensionEntry);
+        }
+        if(properties.get("serviceinterface") != null) {
+            ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+            EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                    "http://www.jboss.org/drools", "serviceinterface", false, false);
+            EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                    properties.get("serviceinterface"));
             serviceTask.getAnyAttribute().add(extensionEntry);
         }
     }

@@ -526,26 +526,46 @@ ORYX.Plugins.View = {
                                     method: 'POST',
                                     success: function(request) {
                                         if(request.responseText.length < 1) {
+                                            this.facade.raiseEvent({
+                                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                                ntype		: 'error',
+                                                msg         : '<p>Failed to import BPMN2.</p><p>Check server logs for more details.</p>',
+                                                title       : ''
+                                            });
                                             loadMask.hide();
                                             dialog.hide();
-                                            Ext.Msg.minWidth = 400;
-                                            Ext.Msg.alert("Failed to import BPMN2. Check server logs for more details.");
                                         } else {
                                             try {
                                                 this._loadJSON( request.responseText );
+                                                this.facade.raiseEvent({
+                                                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                                    ntype		: 'success',
+                                                    msg         : 'Successfully imported BPMN2',
+                                                    title       : ''
+
+                                                });
                                             } catch(e) {
-                                                Ext.Msg.minWidth = 400;
-                                                Ext.Msg.alert("Failed to import BPMN2: " + e);
+                                                this.facade.raiseEvent({
+                                                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                                    ntype		: 'error',
+                                                    msg         : '<p>Failed to import BPMN2:</p><p>' + e + '</p>',
+                                                    title       : ''
+                                                });
                                             }
                                             loadMask.hide();
                                             dialog.hide();
                                         }
                                     }.createDelegate(this),
                                     failure: function(){
+                                        this.facade.raiseEvent({
+                                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                            ntype		: 'error',
+                                            msg         : '<p>Failed to import BPMN2.</p><p>Check server logs for more details.</p>',
+                                            title       : ''
+                                        });
                                         loadMask.hide();
-                                        Ext.Msg.minWidth = 400;
-                                        Ext.Msg.alert("Failed to import BPMN2.");
-                                    },
+                                        dialog.hide();
+                                    }.createDelegate(this),
                                     params: {
                                         profile: ORYX.PROFILE,
                                         uuid : ORYX.UUID,

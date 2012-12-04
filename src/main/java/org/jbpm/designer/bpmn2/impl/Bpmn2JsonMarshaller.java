@@ -322,7 +322,8 @@ public class Bpmn2JsonMarshaller {
 	                }
 	                
 	                // process imports and globals extension elements
-	                if(((Process) rootElement).getExtensionValues() != null && ((Process) rootElement).getExtensionValues().size() > 0) {
+                    String allImports = "";
+	                if((rootElement).getExtensionValues() != null && (rootElement).getExtensionValues().size() > 0) {
 	                    String importsStr = "";
 	                    String globalsStr = "";
 	                    for(ExtensionAttributeValue extattrval : ((Process) rootElement).getExtensionValues()) {
@@ -349,7 +350,7 @@ public class Bpmn2JsonMarshaller {
 	                        if(importsStr.endsWith(",")) {
 	                            importsStr = importsStr.substring(0, importsStr.length() - 1);
 	                        }
-	                        props.put("imports", importsStr);
+                            allImports += importsStr + "|default,";
 	                    }
 	                    if(globalsStr.length() > 0) {
 	                        if(globalsStr.endsWith(",")) {
@@ -358,6 +359,18 @@ public class Bpmn2JsonMarshaller {
 	                        props.put("globals", globalsStr);
 	                    }
 	                }
+                    // definitions imports (wsdl)
+                    List<org.eclipse.bpmn2.Import> wsdlImports = def.getImports();
+                    if(wsdlImports != null) {
+                        for(org.eclipse.bpmn2.Import imp : wsdlImports) {
+                            allImports += imp.getLocation() + "|" + imp.getNamespace() + "|wsdl,";
+                        }
+                    }
+                    if(allImports.endsWith(",")) {
+                        allImports = allImports.substring(0, allImports.length() - 1);
+                    }
+                    props.put("imports", allImports);
+
 	                // simulation
 	                if(_simulationScenario != null && _simulationScenario.getScenarioParameters() != null) {
 	                	props.put("currency", _simulationScenario.getScenarioParameters().getBaseCurrencyUnit() == null ? "" : _simulationScenario.getScenarioParameters().getBaseCurrencyUnit());
@@ -1356,11 +1369,9 @@ public class Bpmn2JsonMarshaller {
     	} else if (task instanceof ServiceTask) {
     		taskType = "Service";
     		ServiceTask serviceTask = (ServiceTask) task;
-    		if(serviceTask.getOperationRef() != null) {
-    		    Operation oper = serviceTask.getOperationRef();
-    		    if(oper.getName() != null) {
-    		        properties.put("operation", oper.getName());
-    		    }
+    		if(serviceTask.getOperationRef() != null && serviceTask.getImplementation() != null) {
+                properties.put("serviceimplementation", serviceTask.getImplementation());
+                properties.put("serviceoperation", serviceTask.getOperationRef().getName() == null ? serviceTask.getOperationRef().getImplementationRef() : serviceTask.getOperationRef().getName());
     		    if(def != null) {
     		        List<RootElement> roots = def.getRootElements();
     		        for(RootElement root : roots) {
@@ -1368,8 +1379,8 @@ public class Bpmn2JsonMarshaller {
     		                Interface inter = (Interface) root;
     		                List<Operation> interOperations = inter.getOperations();
     		                for(Operation interOper : interOperations) {
-    		                    if(interOper.getId().equals(oper.getId())) {
-    		                        properties.put("interface", inter.getName());
+    		                    if(interOper.getId().equals(serviceTask.getOperationRef().getId())) {
+    		                        properties.put("serviceinterface", inter.getName() == null ? inter.getImplementationRef() : inter.getName());
     		                    }
     		                }
     		            }

@@ -2230,10 +2230,20 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
     	if(this.disabled){
             return;
         }
-    	
-    	var ImportDef = Ext.data.Record.create([{
-            name: 'import'
-        }]);
+    	var ImportDef = Ext.data.Record.create([
+            {
+                name: 'type'
+            },
+            {
+                name: 'classname'
+            },
+            {
+                name: 'wsdllocation'
+            },
+            {
+                name: 'wsdlnamespace'
+            }
+        ]);
     	
     	var importsProxy = new Ext.data.MemoryProxy({
             root: []
@@ -2246,24 +2256,53 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
             }, ImportDef),
             proxy: importsProxy,
             sorters: [{
-                property: 'import',
+                property: 'type',
                 direction:'ASC'
             }]
         });
     	imports.load();
-    	
+
+        // sample 'com.sample.Myclass|default,location|namespace|wsdl
     	if(this.value.length > 0) {
     		var valueParts = this.value.split(",");
-    		for(var i=0; i < valueParts.length; i++) {
+            for(var i=0; i < valueParts.length; i++) {
+                var type = "";
+                var classname, location, namespace;
     			var nextPart = valueParts[i];
+
+                var innerParts = nextPart.split("|");
+                if(innerParts[1] == "default") {
+                    type = "default";
+                    classname = innerParts[0];
+                    location = "";
+                    namespace = "";
+                } else {
+                    type = "wsdl";
+                    classname = "";
+                    location = innerParts[0];
+                    namespace = innerParts[1];
+                }
     			imports.add(new ImportDef({
-                    'import': nextPart
+                    'type': type,
+                    'classname': classname,
+                    'wsdllocation': location,
+                    'wsdlnamespace': namespace
                 }));
     		}
     	}
     	
     	var itemDeleter = new Extensive.grid.ItemDeleter();
-    	
+        var impordata = new Array();
+        var defaultType = new Array();
+        defaultType.push("default");
+        defaultType.push("default");
+        impordata.push(defaultType);
+
+        var wsdlType = new Array();
+        wsdlType.push("wsdl");
+        wsdlType.push("wsdl");
+        impordata.push(wsdlType);
+
     	var gridId = Ext.id();
     	var grid = new Ext.grid.EditorGridPanel({
             autoScroll: true,
@@ -2271,20 +2310,68 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
             store: imports,
             id: gridId,
             stripeRows: true,
-            cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
-            	id: 'import',
-                header: 'Import',
-                width: 360,
-                dataIndex: 'import',
-                editor: new Ext.form.TextField({ allowBlank: true })
-            },itemDeleter]),
+            cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(),
+                {
+                    id: 'imptype',
+                    header: 'Import Type',
+                    width: 100,
+                    dataIndex: 'type',
+                    editor: new Ext.form.ComboBox({
+                        id: 'importTypeCombo',
+                        valueField:'name',
+                        displayField:'value',
+                        labelStyle:'display:none',
+                        submitValue : true,
+                        typeAhead: false,
+                        queryMode: 'local',
+                        mode: 'local',
+                        triggerAction: 'all',
+                        selectOnFocus:true,
+                        hideTrigger: false,
+                        forceSelection: false,
+                        selectOnFocus:true,
+                        autoSelect:false,
+                        store: new Ext.data.SimpleStore({
+                            fields: [
+                                'name',
+                                'value'
+                            ],
+                            data: impordata
+                        })
+                    })
+                },
+                {
+                    id: 'classname',
+                    header: 'Class Name',
+                    width: 200,
+                    dataIndex: 'classname',
+                    editor: new Ext.form.TextField({ allowBlank: true })
+                },
+                {
+                    id: 'wsdllocation',
+                    header: 'WSDL Location',
+                    width: 200,
+                    dataIndex: 'wsdllocation',
+                    editor: new Ext.form.TextField({ allowBlank: true })
+                },
+                {
+                    id: 'wsdlnamespace',
+                    header: 'WSDL Namespace',
+                    width: 200,
+                    dataIndex: 'wsdlnamespace',
+                    editor: new Ext.form.TextField({ allowBlank: true })
+                },
+                itemDeleter]),
     		selModel: itemDeleter,
             autoHeight: true,
             tbar: [{
                 text: 'Add Import',
                 handler : function(){
                 	imports.add(new ImportDef({
-                        'import': ''
+                        'type': 'default',
+                        'classname': '',
+                        'wsdllocation' : '',
+                        'wsdlnamespace' : ''
                     }));
                     grid.fireEvent('cellclick', grid, imports.getCount()-1, 1, null);
                 }
@@ -2296,8 +2383,8 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
 			layout		: 'anchor',
 			autoCreate	: true, 
 			title		: 'Editor for Imports', 
-			height		: 300, 
-			width		: 450, 
+			height		: 400,
+			width		: 800,
 			modal		: true,
 			collapsible	: false,
 			fixedcenter	: true, 
@@ -2326,9 +2413,13 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
                 	grid.getView().refresh();
                 	grid.stopEditing();
                 	imports.data.each(function() {
-                		if(this.data['import'].length > 0) {
-                			outValue += this.data['import'] + ",";
-                		}
+                        // sample 'com.sample.Myclass|default,location|namespace|wsdl
+                        if(this.data['type'] == "default") {
+                            outValue += this.data['classname'] + "|" + this.data['type'] + ",";
+                        }
+                        if(this.data['type'] == "wsdl") {
+                            outValue += this.data['wsdllocation'] + "|" + this.data['wsdlnamespace'] + "|" + this.data['type'] + ",";
+                        }
                     });
                 	if(outValue.length > 0) {
                 		outValue = outValue.slice(0, -1)
@@ -2980,6 +3071,7 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                 editor: new Ext.form.TextField({ allowBlank: true, vtype: 'inputName', regex: /^[a-z0-9 \-\.\_]*$/i }),
                 renderer: Ext.util.Format.htmlEncode
             }, {
+                // tihomir
             	id: 'stype',
                 header: 'Standard Type',
                 width: 100,

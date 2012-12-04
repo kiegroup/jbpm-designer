@@ -261,6 +261,7 @@ ORYX.CONFIG.EVENT_SIMULATION_CLEAR_PATH_SVG = "simulation.clearpathsvg";
 ORYX.CONFIG.EVENT_SIMULATION_PATH_SVG_GENERATED = "simulation.pathsvggenerated";
 ORYX.CONFIG.EVENT_SIMULATION_ANNOTATE_PROCESS = "simulation.annotateprocess";
 ORYX.CONFIG.EVENT_SIMULATION_SHOW_ANNOTATED_PROCESS = "simulation.showannotatedprocess";
+ORYX.CONFIG.EVENT_NOTIFICATION_SHOW = "notification.show";
 
 // voice commands
 ORYX.CONFIG.VOICE_COMMAND_GENERATE_FORMS = "voice.command.generate.forms";

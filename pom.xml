@@ -133,7 +133,7 @@
       <dependency>
         <groupId>org.eclipse</groupId>
         <artifactId>org.eclipse.bpmn2</artifactId>
-        <version>0.7.0.010</version>
+        <version>0.7.2</version>
       </dependency>
 
       <!-- war libs -->
