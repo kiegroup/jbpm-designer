@@ -10,10 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.jbpm.designer.bpmn2.validation.BPMN2SyntaxChecker;
 import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.designer.web.profile.IDiagramProfileService;
-import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 
 /** 

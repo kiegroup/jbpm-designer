@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
@@ -55,7 +56,7 @@ public class UUIDBasedFileRepository implements IUUIDBasedRepository {
         _repositoryPath = servlet.getServletContext().getRealPath("/" + REPOSITORY_PATH);
     }
     
-    public byte[] load(HttpServletRequest req, String uuid, IDiagramProfile profile) throws Exception {
+    public byte[] load(HttpServletRequest req, String uuid, IDiagramProfile profile, ServletContext servletContext) throws Exception {
         
         String filename = _repositoryPath + "/" + uuid + ".json";
         if (!new File(filename).exists()) {

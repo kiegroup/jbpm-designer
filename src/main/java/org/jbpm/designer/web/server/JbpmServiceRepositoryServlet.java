@@ -1,35 +1,31 @@
 package org.jbpm.designer.web.server;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
+import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
+import org.drools.core.util.ConfFileUtils;
+import org.jbpm.designer.repository.Asset;
+import org.jbpm.designer.repository.AssetBuilderFactory;
+import org.jbpm.designer.repository.Repository;
+import org.jbpm.designer.repository.impl.AssetBuilder;
+import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.jbpm.process.workitem.WorkDefinitionImpl;
+import org.jbpm.process.workitem.WorkItemRepository;
+import org.json.JSONObject;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamReader;
-
-import org.apache.abdera.i18n.text.Sanitizer;
-import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
-import org.drools.core.util.ConfFileUtils;
-import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.designer.web.profile.impl.ExternalInfo;
-import org.jbpm.process.workitem.WorkDefinitionImpl;
-import org.jbpm.process.workitem.WorkItemRepository;
-import org.json.JSONObject;
-
-import org.apache.commons.codec.binary.Base64;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Servlet for interaction with the jbpm service repository.
@@ -41,6 +37,12 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 			.getLogger(JbpmServiceRepositoryServlet.class);
 	private static final String displayRepoContent = "display";
 	private static final String installRepoContent = "install";
+
+    private IDiagramProfile profile;
+    // this is here just for unit testing purpose
+    public void setProfile(IDiagramProfile profile) {
+        this.profile = profile;
+    }
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
@@ -88,7 +90,12 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 			repoURL = repoURL.substring(0, repoURL.length() - 1);
 		}
 
-		IDiagramProfile profile = ServletUtil.getProfile(req, profileName, getServletContext());
+
+        if (profile == null) {
+            profile = ServletUtil.getProfile(req, profileName, getServletContext());
+        }
+        Repository repository = profile.getRepository();
+
 		Map<String, WorkDefinitionImpl> workitemsFromRepo = WorkItemRepository.getWorkDefinitions(repoURL);
 		if(action != null && action.equalsIgnoreCase(displayRepoContent)) {
 			if(workitemsFromRepo != null && workitemsFromRepo.size() > 0) {
@@ -160,143 +167,26 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 							_logger.error("Could not read icon image: " + e1.getMessage());
 						}
 						// install wid and icon to guvnor
-						List<String> packageNames = findPackages(uuid, profile);
-						
-						for(String nextPackage : packageNames) {
-							String packageAssetURL = ExternalInfo.getExternalProtocol(profile) + "://" + ExternalInfo.getExternalHost(profile) +
-									"/" + profile.getExternalLoadURLSubdomain().substring(0, profile.getExternalLoadURLSubdomain().indexOf("/")) +
-									"/rest/packages/" + URLEncoder.encode(nextPackage, "UTF-8") + "/assets/";
-							try {
-								XMLInputFactory factory = XMLInputFactory.newInstance();
-								XMLStreamReader reader = factory.createXMLStreamReader(ServletUtil.getInputStreamForURL(packageAssetURL, "GET", profile), "UTF-8");
 
-								while (reader.hasNext()) {
-									int next = reader.next();
-									if (next == XMLStreamReader.START_ELEMENT) {
-										if ("uuid".equals(reader.getLocalName())) {
-											String eleText = reader.getElementText();
-											if(uuid.equals(eleText)) {
-												pkg = URLEncoder.encode(nextPackage, "UTF-8");
-												gotPackage = true;
-												break;
-											}
-										}
-									}
-								}
-							} catch (Exception e) {
-								// we dont want to barf..just log that error happened
-								_logger.error(e.getMessage());
-							} 
-						}
-						if(gotPackage) {
-							String widURL = ExternalInfo.getExternalProtocol(profile)
-						               + "://"
-						               + ExternalInfo.getExternalHost(profile)
-						               + "/"
-						               + profile.getExternalLoadURLSubdomain().substring(0,
-						                       profile.getExternalLoadURLSubdomain().indexOf("/"))
-						               + "/rest/packages/" + URLEncoder.encode(pkg, "UTF-8") + "/assets/" + widName + ".wid";
-							String iconURL = ExternalInfo.getExternalProtocol(profile)
-						               + "://"
-						               + ExternalInfo.getExternalHost(profile)
-						               + "/"
-						               + profile.getExternalLoadURLSubdomain().substring(0,
-						                       profile.getExternalLoadURLSubdomain().indexOf("/"))
-						               + "/rest/packages/" + URLEncoder.encode(pkg, "UTF-8") + "/assets/" + iconName;
-							
-							String packageAssetsURL = ExternalInfo.getExternalProtocol(profile)
-					                   + "://"
-					                   + ExternalInfo.getExternalHost(profile)
-					                   + "/"
-					                   + profile.getExternalLoadURLSubdomain().substring(0,
-					                           profile.getExternalLoadURLSubdomain().indexOf("/"))
-					                   + "/rest/packages/" + URLEncoder.encode(pkg, "UTF-8") + "/assets/";
-								
-								
-								// check if the wid already exists
-							URL checkWidURL = new URL(widURL);
-							HttpURLConnection checkWidConnection = (HttpURLConnection) checkWidURL
-							        .openConnection();
-							ServletUtil.applyAuth(profile, checkWidConnection);
-							checkWidConnection.setRequestMethod("GET");
-							checkWidConnection
-						        .setRequestProperty("Accept", "application/atom+xml");
-							checkWidConnection.connect();
-							_logger.info("check wid connection response code: " + checkWidConnection.getResponseCode());
-							if (checkWidConnection.getResponseCode() == 200) {
-								URL deleteAssetURL = new URL(widURL);
-							    HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL
-							            .openConnection();
-							    ServletUtil.applyAuth(profile, deleteConnection);
-							    deleteConnection.setRequestMethod("DELETE");
-							    deleteConnection.connect();
-							    _logger.info("delete wid response code: " + deleteConnection.getResponseCode());
-							}
-								
-							// check if icon already exists
-							URL checkIconURL = new URL(iconURL);
-							HttpURLConnection checkIconConnection = (HttpURLConnection) checkIconURL
-							        .openConnection();
-							ServletUtil.applyAuth(profile, checkIconConnection);
-							checkIconConnection.setRequestMethod("GET");
-							checkIconConnection
-							        .setRequestProperty("Accept", "application/atom+xml");
-							checkIconConnection.connect();
-							_logger.info("check icon connection response code: " + checkIconConnection.getResponseCode());
-							if (checkIconConnection.getResponseCode() == 200) {
-							    URL deleteAssetURL = new URL(iconURL);
-							    HttpURLConnection deleteConnection = (HttpURLConnection) deleteAssetURL
-							            .openConnection();
-							    ServletUtil.applyAuth(profile, deleteConnection);
-							    deleteConnection.setRequestMethod("DELETE");
-							    deleteConnection.connect();
-							    _logger.info("delete icon response code: " + deleteConnection.getResponseCode());
-							}
-								
-							// replace the icon value of the workitem config to include the guvnor rest url 
-							workItemDefinitionContent = workItemDefinitionContent.replaceAll( "(\"icon\"\\s*\\:\\s*\")(.*?)(\")", "$1"+ ( packageAssetsURL + iconName.substring(0, iconName.indexOf("."))  +"/binary" ) + "$3" );
-							// write to guvnor
-							URL createWidURL = new URL(packageAssetsURL);
-					        HttpURLConnection createWidConnection = (HttpURLConnection) createWidURL
-					                 .openConnection();
-					        ServletUtil.applyAuth(profile, createWidConnection);
-					        createWidConnection.setRequestMethod("POST");
-					        createWidConnection.setRequestProperty("Content-Type",
-					               "application/octet-stream");
-					        createWidConnection.setRequestProperty("Accept",
-					               "application/atom+xml");
-					        createWidConnection.setRequestProperty("Slug", widName + ".wid");
-					        createWidConnection.setDoOutput(true);
-					        createWidConnection.getOutputStream().write(workItemDefinitionContent.getBytes("UTF-8"));
-					        createWidConnection.connect();
-					        System.out.println("created wid configuration:" + createWidConnection.getResponseCode());
+                        repository.deleteAsset(profile.getRepositoryGlobalDir() + "/" +  widName + ".wid");
 
-					        URL createIconURL = new URL(packageAssetsURL);
-					        HttpURLConnection createIconConnection = (HttpURLConnection) createIconURL
-					                .openConnection();
-					        ServletUtil.applyAuth(profile, createIconConnection);
-					        createIconConnection.setRequestMethod("POST");
-					        createIconConnection.setRequestProperty("Content-Type",
-					                "application/octet-stream");
-					        createIconConnection.setRequestProperty("Accept",
-					                "application/atom+xml");
-					        createIconConnection.setRequestProperty("Slug", URLEncoder.encode(iconName));
-					        createIconConnection.setDoOutput(true);
-					        createIconConnection.getOutputStream().write(iconContent);
-					        createIconConnection.connect();
-					        _logger.info("icon creation response code: " + createIconConnection.getResponseCode());
-					        System.out.println("created icon:" + createIconConnection.getResponseCode());
-					        resp.setCharacterEncoding("UTF-8");
-							resp.setContentType("application/json");
-							resp.getWriter().write("true");
-							return;
-						} else {
-							_logger.error("Could not find the package for uuid: " + uuid);
-							resp.setCharacterEncoding("UTF-8");
-							resp.setContentType("application/json");
-							resp.getWriter().write("false");
-							return;
-						}
+                        AssetBuilder widAssetBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+                        widAssetBuilder.name(widName)
+                                       .location(profile.getRepositoryGlobalDir() + "/")
+                                       .type("wid")
+                                       .content(workItemDefinitionContent);
+
+                        repository.createAsset(widAssetBuilder.getAsset());
+
+                        AssetBuilder iconAssetBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
+                        String iconExtension = iconName.substring(iconName.lastIndexOf(".") + 1);
+                        String iconFileName = iconName.substring(0, iconName.lastIndexOf("."));
+                        iconAssetBuilder.name(iconFileName)
+                                .location(profile.getRepositoryGlobalDir() + "/")
+                                .type(iconExtension)
+                                .content(iconContent);
+
+                        repository.createAsset(iconAssetBuilder.getAsset());
 					}
 				}
 			} else {
@@ -321,25 +211,4 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 		}
 	}
 
-	private List<String> findPackages(String uuid, IDiagramProfile profile) {
-		List<String> packages = new ArrayList<String>();
-		String packagesURL = ExternalInfo.getExternalProtocol(profile) + "://" + ExternalInfo.getExternalHost(profile) +
-				"/" + profile.getExternalLoadURLSubdomain().substring(0, profile.getExternalLoadURLSubdomain().indexOf("/")) +
-				"/rest/packages/";
-		try {
-			XMLInputFactory factory = XMLInputFactory.newInstance();
-			XMLStreamReader reader = factory.createXMLStreamReader(ServletUtil.getInputStreamForURL(packagesURL, "GET", profile), "UTF-8");
-			while (reader.hasNext()) {
-				if (reader.next() == XMLStreamReader.START_ELEMENT) {
-					if ("title".equals(reader.getLocalName())) {
-						packages.add(reader.getElementText());
-					}
-				}
-			}
-		} catch (Exception e) {
-			// we dont want to barf..just log that error happened
-			_logger.error(e.getMessage());
-		} 
-		return packages;
-	}
 }

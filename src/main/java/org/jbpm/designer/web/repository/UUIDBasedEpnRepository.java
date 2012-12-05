@@ -1,5 +1,6 @@
 package org.jbpm.designer.web.repository;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,7 +20,7 @@ public class UUIDBasedEpnRepository implements IUUIDBasedRepository {
     }
 
     public byte[] load(HttpServletRequest req, String uuid,
-            IDiagramProfile profile) throws Exception {
+            IDiagramProfile profile, ServletContext servletContext) throws Exception {
         // TODO hook up with Guvnor
         return new byte[0];
     }

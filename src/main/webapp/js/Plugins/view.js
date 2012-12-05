@@ -293,25 +293,25 @@ ORYX.Plugins.View = {
 		});
 		
 		/* Register diff to model */
-		this.facade.offer({
-			'name':ORYX.I18N.View.viewDiff,
-			'functionality': this.diffprocess.bind(this),
-			'group': ORYX.I18N.View.jbpmgroup,
-			'icon': ORYX.PATH + "images/diff.gif",
-			'description': ORYX.I18N.View.viewDiffDesc,
-			'index': 5,
-			'minShape': 0,
-			'maxShape': 0,
-			'isEnabled': function(){
-				profileParamName = "profile";
-				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-		        regexa = new RegExp( regexSa );
-		        profileParams = regexa.exec( window.location.href );
-		        profileParamValue = profileParams[1]; 
-				return profileParamValue == "jbpm";
-			}.bind(this)
-		});
+//		this.facade.offer({
+//			'name':ORYX.I18N.View.viewDiff,
+//			'functionality': this.diffprocess.bind(this),
+//			'group': ORYX.I18N.View.jbpmgroup,
+//			'icon': ORYX.PATH + "images/diff.gif",
+//			'description': ORYX.I18N.View.viewDiffDesc,
+//			'index': 5,
+//			'minShape': 0,
+//			'maxShape': 0,
+//			'isEnabled': function(){
+//				profileParamName = "profile";
+//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//		        regexa = new RegExp( regexSa );
+//		        profileParams = regexa.exec( window.location.href );
+//		        profileParamValue = profileParams[1];
+//				return profileParamValue == "jbpm";
+//			}.bind(this)
+//		});
 		
 		// Footer items
 		/* Register information view to model */
@@ -469,7 +469,7 @@ ORYX.Plugins.View = {
 	},
 	
 	showInFullScreen : function() {
-		this.goFullscreen('jbpmdesigner');
+		this.goFullscreen();
 	},
 	
 	/**
@@ -1388,43 +1388,49 @@ ORYX.Plugins.View = {
 	},
 	
 	generateTaskForms : function() {
-		
-		var processJSON = ORYX.EDITOR.getSerializedJSON();
-		var preprocessingData = ORYX.PREPROCESSING;
-		
-		var method ="post";
-		var form = document.createElement("form");
-		form.setAttribute("name", "taskformsform");
-		form.setAttribute("method", method);
-		form.setAttribute("action", ORYX.CONFIG.TASKFORMS_URL());
-		form.setAttribute("target", "_blank");
-		
-		var hfSVG = document.createElement("input");
-		hfSVG.setAttribute("type", "hidden");
-		hfSVG.setAttribute("name", "json");
-		hfSVG.setAttribute("value", processJSON);
-        form.appendChild(hfSVG);
-        
-        var hfSVG = document.createElement("input");
-		hfSVG.setAttribute("type", "hidden");
-		hfSVG.setAttribute("name", "ppdata");
-		hfSVG.setAttribute("value", preprocessingData);
-        form.appendChild(hfSVG);
-        
-        var hfUUID = document.createElement("input");
-        hfUUID.setAttribute("type", "hidden");
-        hfUUID.setAttribute("name", "uuid");
-        hfUUID.setAttribute("value", ORYX.UUID);
-        form.appendChild(hfUUID);
-        
-        var hfPROFILE = document.createElement("input");
-        hfPROFILE.setAttribute("type", "hidden");
-        hfPROFILE.setAttribute("name", "profile");
-        hfPROFILE.setAttribute("value", ORYX.PROFILE);
-        form.appendChild(hfPROFILE);
-        
-        document.body.appendChild(form);
-        form.submit();
+
+        Ext.Ajax.request({
+            url: ORYX.PATH + "taskforms",
+            method: 'POST',
+            success: function(request){
+                if(request.responseText.length >= 1 && request.responseText != "fail") {
+                    this.facade.raiseEvent({
+                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                        ntype		: 'success',
+                        msg         : 'Successfully generated process and task form templates.',
+                        title       : ''
+
+                    });
+                } else {
+                    this.facade.raiseEvent({
+                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                        ntype		: 'error',
+                        msg         : '<p>Failed to generate process and task form templates.</p><p>Check server logs for more details.</p>',
+                        title       : ''
+                    });
+                }
+            }.createDelegate(this),
+            failure: function(){
+
+            }.createDelegate(this),
+            params: {
+                profile: ORYX.PROFILE,
+                uuid : ORYX.UUID,
+                json : ORYX.EDITOR.getSerializedJSON(),
+                ppdata: ORYX.PREPROCESSING
+            }
+        });
+
+
+        ORYX.CONFIG.TASKFORMS_URL = function(uuid, profile) {
+            if (uuid === undefined) {
+                uuid = ORYX.UUID;
+            }
+            if (profile === undefined) {
+                profile = ORYX.PROFILE;
+            }
+            return ORYX.PATH + "taskforms?uuid="+ uuid + "&profile=" + profile;
+        };
 	},
 	
 	/**
@@ -1546,40 +1552,23 @@ ORYX.Plugins.View = {
 			this.zoomLevel = this.maxZoomLevel;			
 		}
 	},
-	goFullscreen : function(id) {
-		if(parent && parent.frames) {
-			if(parent.frames.length < 2) {
-				if(document.getElementById(id).requestFullScreen) {
-					document.getElementById(id).requestFullScreen();
-				} else if(document.getElementById(id).mozRequestFullScreen) {
-					document.getElementById(id).mozRequestFullScreen();
-				} else if(document.getElementById(id).webkitRequestFullScreen) {
-					document.documentElement.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
-				} else {
-					Ext.Msg.minWidth = 400;
-	        		Ext.Msg.alert("Browser does not support full screen mode.");
-				}
-			} else {
-				for (var i = 0;i < parent.frames.length;i++) {
-					if(parent.frames[i].ORYX) {
-						parent.frames[i].frameElement.setAttribute('allowFullScreen', 'true');
-						parent.frames[i].frameElement.setAttribute('mozallowfullscreen', 'true');
-						parent.frames[i].frameElement.setAttribute('webkitallowfullscreen', 'true');
-						if(parent.frames[i].frameElement.contentDocument.getElementById(id).requestFullScreen) {
-							parent.frames[i].frameElement.contentDocument.getElementById(id).requestFullScreen();
-						} else if(parent.frames[i].frameElement.contentDocument.getElementById(id).mozRequestFullScreen) {
-							parent.frames[i].frameElement.contentDocument.getElementById(id).mozRequestFullScreen();
-						} else if(parent.frames[i].frameElement.contentDocument.getElementById(id).webkitRequestFullScreen) {
-							parent.frames[i].frameElement.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
-						} else {
-							Ext.Msg.minWidth = 400;
-			        		Ext.Msg.alert("Browser does not support full screen mode.");
-						}
-					}
-				}
-			}
-			
-		}
+	goFullscreen : function() {
+        var docEle = document.documentElement;
+        if(docEle.requestFullScreen) {
+            docEle.requestFullScreen();
+        } else if(docEle.mozRequestFullScreen) {
+            docEle.mozRequestFullScreen();
+        } else if(docEle.webkitRequestFullScreen) {
+            docEle.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+        } else {
+            this.facade.raiseEvent({
+                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                ntype		: 'error',
+                msg         : 'Browser does not support full screen mode.',
+                title       : ''
+
+            });
+        }
 	}
 };
 

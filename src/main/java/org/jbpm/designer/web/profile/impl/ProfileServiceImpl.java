@@ -24,6 +24,7 @@ import java.util.Set;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.jbpm.designer.repository.guvnor.GuvnorRepository;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileFactory;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
@@ -33,6 +34,7 @@ import org.jbpm.designer.web.profile.IDiagramProfileService;
  * a service to register profiles.
  * 
  * @author Antoine Toulme
+ * @author Tihomir Surdilovic
  * 
  */
 public class ProfileServiceImpl implements IDiagramProfileService {
@@ -43,7 +45,8 @@ public class ProfileServiceImpl implements IDiagramProfileService {
         new HashMap<String, IDiagramProfile>();
     private Set<IDiagramProfileFactory> _factories = 
         new HashSet<IDiagramProfileFactory>();
-    
+    private IDiagramProfile userProfile;
+
     /**
      * Initialize the service with a context
      * @param context the servlet context to initialize the profile.
@@ -53,7 +56,6 @@ public class ProfileServiceImpl implements IDiagramProfileService {
         _registry.put("jbpm", new JbpmProfileImpl(context));
         _registry.put("drools", new JbpmProfileImpl(context));
         _registry.put("epn", new EpnProfileImpl(context));
-        
     }
     
     private Map<String, IDiagramProfile> assembleProfiles(HttpServletRequest request) {
@@ -69,7 +71,8 @@ public class ProfileServiceImpl implements IDiagramProfileService {
     }
     
     public IDiagramProfile findProfile(HttpServletRequest request, String name) {
-        return assembleProfiles(request).get(name);
+        userProfile =  assembleProfiles(request).get(name);
+        return userProfile;
     }
 
     public Collection<IDiagramProfile> getProfiles(HttpServletRequest request) {
@@ -80,5 +83,4 @@ public class ProfileServiceImpl implements IDiagramProfileService {
     	return _factories;
     }
 
-    
 }

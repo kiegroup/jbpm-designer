@@ -1,7 +1,6 @@
 package org.jbpm.designer.web.server;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.json.JSONObject;
 
@@ -45,20 +45,20 @@ public class CalledElementServlet extends HttpServlet {
         IDiagramProfile profile = ServletUtil.getProfile(req, profileName, getServletContext());
         if(action != null && action.equals("imageview")) {
         	String retValue = "";
-        	List<String> allPackageNames = ServletUtil.getPackageNamesFromGuvnor(profile);
+        	List<String> allPackageNames = ServletUtil.getPackageNamesFromRepository(profile);
         	if(allPackageNames != null && allPackageNames.size() > 0) {
         		for(String packageName : allPackageNames) {
         			List<String> allProcessesInPackage = ServletUtil.getAllProcessesInPackage(packageName, profile);
         			if(allProcessesInPackage != null && allProcessesInPackage.size() > 0) {
         				for(String p : allProcessesInPackage) {
-                			String processContent = ServletUtil.getProcessSourceContent(packageName, p, profile);
+                			Asset<String> processContent = ServletUtil.getProcessSourceContent(p, profile);
                 			Pattern idPattern = Pattern.compile("<\\S*process[^\"]+id=\"([^_\"]+)\"", Pattern.MULTILINE);
-        		            Matcher idMatcher = idPattern.matcher(processContent);
+        		            Matcher idMatcher = idPattern.matcher(processContent.getAssetContent());
         		            if(idMatcher.find()) {
         		            	String pid = idMatcher.group(1);
-        		            	String pidpath = ServletUtil.getProcessImagePath(packageName, pid, profile);
+        		            	String pidcontent = ServletUtil.getProcessImageContent(packageName, pid, profile);
         		            	if(pid != null && pid.equals(processId)) {
-        		            		retValue = ServletUtil.existsProcessImageInGuvnor(pidpath, profile) ? pidpath : "";
+        		            		retValue = pidcontent != null ? pidcontent : "";
         		            		break;
         		            	}
         		            }
@@ -71,28 +71,29 @@ public class CalledElementServlet extends HttpServlet {
 	        resp.getWriter().write(retValue);
         } else {
 	        String retValue = "false";
-	        List<String> allPackageNames = ServletUtil.getPackageNamesFromGuvnor(profile);
+	        List<String> allPackageNames = ServletUtil.getPackageNamesFromRepository(profile);
 	        Map<String, String> processInfo = new HashMap<String, String>();
 	        if(allPackageNames != null && allPackageNames.size() > 0) {
 	        	for(String packageName : allPackageNames) {
 	        		List<String> allProcessesInPackage = ServletUtil.getAllProcessesInPackage(packageName, profile);
 	        		if(allProcessesInPackage != null && allProcessesInPackage.size() > 0) {
 	    				for(String p : allProcessesInPackage) {
-	    					String processContent = ServletUtil.getProcessSourceContent(packageName, p, profile);
+	    					Asset<String> processContent = ServletUtil.getProcessSourceContent(p, profile);
 	    					Pattern idPattern = Pattern.compile("<\\S*process[^\"]+id=\"([^_\"]+)\"", Pattern.MULTILINE);
-	    		            Matcher idMatcher = idPattern.matcher(processContent);
+	    		            Matcher idMatcher = idPattern.matcher(processContent.getAssetContent());
 	    		            if(idMatcher.find()) {
 	    		            	String pid = idMatcher.group(1);
-	    		            	String pidpath = ServletUtil.getProcessImagePath(packageName, pid, profile);
+	    		            	String pidcontent = ServletUtil.getProcessImageContent(processContent.getAssetLocation(), pid, profile);
 	    		            	if(pid != null && !(packageName.equals(processPackage) && pid.equals(processId))) {
-	    		            		processInfo.put(pid+"|"+packageName, ServletUtil.existsProcessImageInGuvnor(pidpath, profile) ? pidpath : "");
+	    		            		processInfo.put(pid+"|"+processContent.getAssetLocation(), pidcontent != null ? pidcontent : "");
 	    		            	}
 	    		            }
 	    				}
-	    				retValue = getProcessInfoAsJSON(processInfo).toString();
+
 	    			}
 	        	}
 	        }
+            retValue = getProcessInfoAsJSON(processInfo).toString();
 			resp.setCharacterEncoding("UTF-8");
 	        resp.setContentType("application/json");
 	        resp.getWriter().write(retValue);

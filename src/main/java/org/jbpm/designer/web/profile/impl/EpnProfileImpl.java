@@ -21,6 +21,7 @@ import org.jbpm.designer.bpmn2.impl.Bpmn2JsonUnmarshaller;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceImpl;
 import org.jbpm.designer.epn.impl.EpnJsonMarshaller;
 import org.jbpm.designer.epn.impl.EpnJsonUnmarshaller;
+import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.web.plugin.IDiagramPlugin;
 import org.jbpm.designer.web.plugin.impl.PluginServiceImpl;
 import org.jbpm.designer.web.profile.IDiagramProfile;
@@ -36,15 +37,19 @@ public class EpnProfileImpl implements IDiagramProfile {
 
     private static Logger _logger = LoggerFactory.getLogger(EpnProfileImpl.class);
     private Map<String, IDiagramPlugin> _plugins = new LinkedHashMap<String, IDiagramPlugin>();
-    
+
     private String _stencilSet;
-    private String _externalLoadHost;
-    private String _externalLoadProtocol;
-    private String _externalLoadSubdomain;
-    private String _usr;
-    private String _pwd;
     private String _localHistoryEnabled;
     private String _localHistoryTimeout;
+    private String _repositoryId;
+    private String _repositoryRoot;
+    private String _repositoryName;
+    private String _repositoryHost;
+    private String _repositoryProtocol;
+    private String _repositorySubdomain;
+    private String _repositoryUsr;
+    private String _repositoryPwd;
+    private String _repositoryGlobalDir;
     
     public EpnProfileImpl(ServletContext servletContext) {
         this(servletContext, true);
@@ -85,22 +90,69 @@ public class EpnProfileImpl implements IDiagramProfile {
                             }
                         }
                         _plugins.put(name, registry.get(name));
-                    } else if ("externalloadurl".equals(reader.getLocalName())) {
+                    } else if ("repository".equals(reader.getLocalName())) {
                         for (int i = 0 ; i < reader.getAttributeCount() ; i++) {
+                            if ("id".equals(reader.getAttributeLocalName(i))) {
+                                String repositoryId = reader.getAttributeValue(i);
+                                if(!isEmpty(repositoryId)) {
+                                    _repositoryId = repositoryId;
+                                } else {
+                                    _logger.info("Invalid repository id specified");
+                                }
+                            }
+                            if ("globaldir".equals(reader.getAttributeLocalName(i))) {
+                                String repositoryGlobalDir = reader.getAttributeValue(i);
+                                if(!isEmpty(repositoryGlobalDir)) {
+                                    _repositoryGlobalDir = repositoryGlobalDir;
+                                } else {
+                                    _repositoryGlobalDir = "repository";
+                                }
+                            }
+                            if ("root".equals(reader.getAttributeLocalName(i))) {
+                                String repositoryRoot = reader.getAttributeValue(i);
+                                if(!isEmpty(repositoryRoot)) {
+                                    _repositoryRoot = repositoryRoot;
+                                }
+                            }
+                            if ("name".equals(reader.getAttributeLocalName(i))) {
+                                String repositoryName = reader.getAttributeValue(i);
+                                if(!isEmpty(repositoryName)) {
+                                    _repositoryName = repositoryName;
+                                }
+                            }
                             if ("protocol".equals(reader.getAttributeLocalName(i))) {
-                                _externalLoadProtocol = reader.getAttributeValue(i);
+                                String repositoryProtocol = reader.getAttributeValue(i);
+                                if(!isEmpty(repositoryProtocol)) {
+                                    _repositoryProtocol = repositoryProtocol;
+                                }
                             }
                             if ("host".equals(reader.getAttributeLocalName(i))) {
-                                _externalLoadHost = reader.getAttributeValue(i);
+                                String repositoryHost = reader.getAttributeValue(i);
+                                if(!isEmpty(repositoryHost)) {
+                                    _repositoryHost = repositoryHost;
+                                }
                             }
                             if ("subdomain".equals(reader.getAttributeLocalName(i))) {
-                                _externalLoadSubdomain = reader.getAttributeValue(i);
+                                String repositorySubdomain = reader.getAttributeValue(i);
+                                if(!isEmpty(repositorySubdomain)) {
+                                    if(repositorySubdomain.startsWith("/")) {
+                                        repositorySubdomain = repositorySubdomain.substring(1);
+                                    }
+                                    if(repositorySubdomain.endsWith("/")) {
+                                        repositorySubdomain = repositorySubdomain.substring(0, repositorySubdomain.length() - 1);
+                                    }
+                                    _repositorySubdomain = repositorySubdomain;
+                                }
                             }
                             if ("usr".equals(reader.getAttributeLocalName(i))) {
-                                _usr = reader.getAttributeValue(i);
+                                String repositoryUsr = reader.getAttributeValue(i);
+                                if(!isEmpty(repositoryUsr)) {
+                                    _repositoryUsr = repositoryUsr;
+                                }
                             }
                             if ("pwd".equals(reader.getAttributeLocalName(i))) {
-                                _pwd = reader.getAttributeValue(i);
+                                // allow any value for pwd
+                                _repositoryPwd = reader.getAttributeValue(i);
                             }
                         }
                     }
@@ -212,24 +264,52 @@ public class EpnProfileImpl implements IDiagramProfile {
         };
     }
 
-    public String getExternalLoadURLProtocol() {
-        return _externalLoadProtocol;
+    private boolean isEmpty(final CharSequence str) {
+        if ( str == null || str.length() == 0 ) {
+            return true;
+        }
+        for ( int i = 0, length = str.length(); i < length; i++ ){
+            if ( str.charAt( i ) != ' ' ) {
+                return false;
+            }
+        }
+        return true;
     }
 
-    public String getExternalLoadURLHostname() {
-        return _externalLoadHost;
+    public String getRepositoryId() {
+        return _repositoryId;
     }
 
-    public String getExternalLoadURLSubdomain() {
-        return _externalLoadSubdomain;
+    public String getRepositoryRoot() {
+        return _repositoryRoot;
     }
 
-    public String getUsr() {
-        return _usr;
+    public String getRepositoryName() {
+        return _repositoryName;
     }
 
-    public String getPwd() {
-        return _pwd;
+    public String getRepositoryHost() {
+        return _repositoryHost;
+    }
+
+    public String getRepositoryProtocol() {
+        return _repositoryProtocol;
+    }
+
+    public String getRepositorySubdomain() {
+        return _repositorySubdomain;
+    }
+
+    public String getRepositoryUsr() {
+        return _repositoryUsr;
+    }
+
+    public String getRepositoryPwd() {
+        return _repositoryPwd;
+    }
+
+    public String getRepositoryGlobalDir() {
+        return _repositoryGlobalDir;
     }
 
     public String getLocalHistoryEnabled() {
@@ -238,5 +318,9 @@ public class EpnProfileImpl implements IDiagramProfile {
 
     public String getLocalHistoryTimeout() {
         return _localHistoryTimeout;
+    }
+
+    public Repository getRepository() {
+        return null;
     }
 }

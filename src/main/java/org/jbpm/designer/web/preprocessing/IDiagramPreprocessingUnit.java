@@ -15,6 +15,7 @@
  */
 package org.jbpm.designer.web.preprocessing;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,6 +29,6 @@ import org.jbpm.designer.web.profile.IDiagramProfile;
  *
  */
 public interface IDiagramPreprocessingUnit {
-    public void preprocess(HttpServletRequest request, HttpServletResponse response, IDiagramProfile profile);
+    public void preprocess(HttpServletRequest request, HttpServletResponse response, IDiagramProfile profile, ServletContext serlvetContext);
     public String getOutData();
 }

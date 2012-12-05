@@ -1,17 +1,9 @@
 package org.jbpm.designer.web.server;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletConfig;
@@ -24,11 +16,7 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.apache.log4j.Logger;
 import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.designer.web.profile.IDiagramProfileService;
-import org.jbpm.designer.web.profile.impl.ExternalInfo;
-import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
-
-import org.apache.commons.codec.binary.Base64;
+import org.jbpm.designer.web.profile.impl.RepositoryInfo;
 
 /** 
  * 
@@ -95,12 +83,12 @@ public class ProcessInfoServlet extends HttpServlet {
 		infoMap.put("Comment", "");
 		infoMap.put("Version", "");
 		
-		String assetInfoURL = ExternalInfo.getExternalProtocol(profile)
+		String assetInfoURL = RepositoryInfo.getRepositoryProtocol(profile)
                 + "://"
-                + ExternalInfo.getExternalHost(profile)
+                + RepositoryInfo.getRepositoryHost(profile)
                 + "/"
-                + profile.getExternalLoadURLSubdomain().substring(0,
-                        profile.getExternalLoadURLSubdomain().indexOf("/"))
+                + RepositoryInfo.getRepositorySubdomain(profile).substring(0,
+                        RepositoryInfo.getRepositorySubdomain(profile).indexOf("/"))
                 + "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/" + assetName;
 		XMLInputFactory factory = XMLInputFactory.newInstance();
         XMLStreamReader reader = factory

@@ -15,6 +15,7 @@
  */
 package org.jbpm.designer.web.repository;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
@@ -42,7 +43,7 @@ public interface IUUIDBasedRepository {
      * @param loadExt the external url to load from
      * @return the model as a set of bytes.
      */
-    public byte[] load(HttpServletRequest req, String uuid, IDiagramProfile profile) throws Exception;
+    public byte[] load(HttpServletRequest req, String uuid, IDiagramProfile profile, ServletContext servletContext) throws Exception;
     
     /**
      * Saves the model inside the repository.

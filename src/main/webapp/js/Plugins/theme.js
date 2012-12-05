@@ -39,8 +39,6 @@ ORYX.Plugins.Theme = Clazz.extend({
 	   				}.bind(this)
 	   			});
   			}
-		} else {
-			Ext.Msg.alert('Error loading Color Themes.');
 		}
 	},
 	applyTheme: function(tname) {
@@ -59,14 +57,29 @@ ORYX.Plugins.Theme = Clazz.extend({
     	   					this.applyThemeToNodes(child, toapplyobj);
     	   				}).bind(this));
     	   			} else {
-    	   				Ext.Msg.alert('Invalid Color Theme data.');
+                       this.facade.raiseEvent({
+                           type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                           ntype		: 'error',
+                           msg         : 'Invalid Color Theme data.',
+                           title       : ''
+                       });
     	   			}
     	   		} catch(e) {
-    	   			Ext.Msg.alert('Error applying Color Theme:\n' + e);
+                   this.facade.raiseEvent({
+                       type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                       ntype		: 'error',
+                       msg         : 'Error applying Color Theme: ' + e,
+                       title       : ''
+                   });
     	   		}
             }.bind(this),
             failure: function(){
-            	Ext.Msg.alert('Error applying Color Theme.');
+                this.facade.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'error',
+                    msg         : 'Error applying Color Theme.',
+                    title       : ''
+                });
             },
             params: {
             	action: 'getThemeJSON',

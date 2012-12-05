@@ -19,6 +19,9 @@ import java.util.Collection;
 
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.jbpm.designer.repository.Repository;
+
+import javax.servlet.ServletContext;
 
 /**
  * A profile for the editor to choose which stencilset 
@@ -75,36 +78,29 @@ public interface IDiagramProfile {
      * @return a marshaller to transform the json into the final model.
      */
     public IDiagramMarshaller createMarshaller();
-    
+
     /**
-     * @return a unmarshaller to transform the final model into json.
+     * @return an unmarshaller to transform the model into the json.
      */
     public IDiagramUnmarshaller createUnmarshaller();
-    
-    /**
-     * @return the load url protocol for external resource loading.
-     */
-    public String getExternalLoadURLProtocol();
-    
-    /**
-     * @return the load url hostname for external resource loading.
-     */
-    public String getExternalLoadURLHostname();
-    
-    /**
-     * @return the load url subdomain for external resource loading.
-     */
-    public String getExternalLoadURLSubdomain();
-    
-    /**
-     * @return the user for external resource.
-     */
-    public String getUsr();
-    
-    /**
-     * @return the pwd for external resource.
-     */
-    public String getPwd();
+
+    public String getRepositoryId();
+
+    public String getRepositoryRoot();
+
+    public String getRepositoryName();
+
+    public String getRepositoryHost();
+
+    public String getRepositoryProtocol();
+
+    public String getRepositorySubdomain();
+
+    public String getRepositoryUsr();
+
+    public String getRepositoryPwd();
+
+    public String getRepositoryGlobalDir();
 
     /**
      * @return the local history enabled.
@@ -115,6 +111,11 @@ public interface IDiagramProfile {
      * @return the local history timeout.
      */
     public String getLocalHistoryTimeout();
+
+    /**
+     * @return the repository.
+     */
+    public Repository getRepository();
     
     /**
      * Parser to produce the final model to be saved.
@@ -140,7 +141,7 @@ public interface IDiagramProfile {
     public interface IDiagramUnmarshaller {
         
         /**
-         * @param bpmn2 xml model
+         * @param xmlModel xml model
          * @param profile process profile.
          * @return the json model
          */

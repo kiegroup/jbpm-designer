@@ -73,6 +73,7 @@
       ORYX.EXTERNAL_PROTOCOL = "@externalprotocol@";
       ORYX.EXTERNAL_HOST = "@externalhost@";
       ORYX.EXTERNAL_SUBDOMAIN = "@externalsubdomain@";
+      ORYX.REPOSITORY_ID = "@repositoryid@";
 	      
       params = window.location.search.toQueryParams();
 
@@ -142,9 +143,8 @@
     });
     </script>    
   </head>
-  <body id="jbpmdesigner" style="overflow:hidden;">
-	<div id="prompt"></div>
-    <div class='processdata' style='display:none'>
-    </div>
+  <body style="overflow:hidden;">
+    <div id="prompt"></div>
+    <div class='processdata' style='display:none'></div>
   </body>
 </html>

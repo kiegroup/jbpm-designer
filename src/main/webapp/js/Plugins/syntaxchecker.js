@@ -66,14 +66,34 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
             			text:ORYX.I18N.SyntaxChecker.noErrors,
             			timeout:10000
             		});
-                    Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.SyntaxChecker.noErrors);
+
+                    this.facade.raiseEvent({
+                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                        ntype		: 'success',
+                        msg         : ORYX.I18N.SyntaxChecker.noErrors,
+                        title       : ''
+                    });
+
                 }.bind(this),
                 onErrors: function(){
                     this.enableDeactivationHandler(button);
+                    this.facade.raiseEvent({
+                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                        ntype		: 'error',
+                        msg         : ORYX.I18N.SyntaxChecker.hasErrors,
+                        title       : ''
+                    });
                 }.bind(this),
                 onFailure: function(){
                     this.setActivated(button, false);
-                    Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.SyntaxChecker.invalid);
+
+                    this.facade.raiseEvent({
+                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                        ntype		: 'error',
+                        msg         : ORYX.I18N.SyntaxChecker.invalid,
+                        title       : ''
+                    });
+
                 }.bind(this)
             });      
         }
@@ -125,8 +145,6 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
           onFailure: Ext.emptyFn
         });
             
-        Ext.Msg.wait(ORYX.I18N.SyntaxChecker.checkingMessage);
-
 		var ss = this.facade.getStencilSets();
 		var data = ORYX.EDITOR.getSerializedJSON();; 
 		var includesJson = true;	
@@ -144,8 +162,6 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
             onSuccess: function(request){
                 var resp = (request&&request.responseText?request.responseText:"{}").evalJSON();
                 
-                Ext.Msg.hide();
-                
                 if (resp instanceof Object) {
                     resp = $H(resp)
                     if (resp.size() > 0) {
@@ -162,7 +178,6 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
                 }
             }.bind(this),
             onFailure: function(){
-                Ext.Msg.hide();
                 options.onFailure();
             }
         });

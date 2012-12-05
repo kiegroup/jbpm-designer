@@ -26,6 +26,9 @@ import org.eclipse.bpmn2.Property;
 import org.eclipse.bpmn2.ResourceRole;
 import org.eclipse.bpmn2.RootElement;
 import org.eclipse.bpmn2.UserTask;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.impl.EStructuralFeatureImpl;
+import org.eclipse.emf.ecore.util.FeatureMap;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 
 
@@ -67,7 +70,15 @@ public class TaskFormTemplateManager {
                     } else {
                         tfi.setProcessName(process.getId());
                     }
-                    tfi.setPkgName(packageName);
+                    String packageName1 = "";
+                    FeatureMap attrs = process.getAnyAttribute();
+                    for (Object attr : attrs) {
+                        EStructuralFeatureImpl.SimpleFeatureMapEntry a = (EStructuralFeatureImpl.SimpleFeatureMapEntry) attr;
+                        if("packageName".equals(a.getEStructuralFeature().getName())) {
+                            packageName1 = (String)a.getValue();
+                        }
+                    }
+                    tfi.setPkgName(packageName1);
                     // get the list of process properties
                     List<Property> processProperties = process.getProperties();
                     for(Property prop : processProperties) {

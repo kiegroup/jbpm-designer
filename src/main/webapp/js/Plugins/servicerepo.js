@@ -88,8 +88,10 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
 			]
 		});
 		this.repoDialog.on('hide', function(){
-			this.repoDialog.destroy(true);
-			delete this.repoDialog;
+            if(this.repoDialog) {
+			    this.repoDialog.destroy(true);
+			    delete this.repoDialog;
+            }
 		});
 		this.repoDialog.show();
 	},
@@ -110,7 +112,12 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
 		   				});
 		   				this.repoDialog.add(this.repoContent);
 		   				this.repoDialog.doLayout();
-		   				Ext.Msg.alert("Failed to connect to the Service Repository");
+                           ORYX.EDITOR._pluginFacade.raiseEvent({
+                               type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                               ntype		: 'error',
+                               msg         : 'Failed to connect to the Service Repository.',
+                               title       : ''
+                           });
 		   			} else {
 		   				this._showJbpmServiceInfo(request.responseText, serviceRepoURL);
 		   			}
@@ -123,7 +130,12 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
 		   			});
 		   			this.repoDialog.add(this.repoContent);
 		   			this.repoDialog.doLayout();
-		   			Ext.Msg.alert("Connecting the the Service Repository failed :\n" + e);
+                       ORYX.EDITOR._pluginFacade.raiseEvent({
+                           type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                           ntype		: 'error',
+                           msg         : 'Connecting the the Service Repository failed:' + e,
+                           title       : ''
+                       });
 		   		}
 	      }.createDelegate(this),
 	      failure: function(){
@@ -135,7 +147,12 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
 			});
 	      	this.repoDialog.add(this.repoContent);
 			this.repoDialog.doLayout();
-			Ext.Msg.alert("Failed to connect to the Service Repository");
+              ORYX.EDITOR._pluginFacade.raiseEvent({
+                  type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                  ntype		: 'error',
+                  msg         : 'Failed to connect to the Service Repository.',
+                  title       : ''
+              });
 	      },
 	      params: {
 	      	action: 'display',
@@ -200,22 +217,39 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
 	    	   		try {
 	    	   			installLoadMask.hide();
 	    	   			if(request.responseText == "false") {
-			   				Ext.Msg.alert("Failed to install the repository assets");
+                               ORYX.EDITOR._pluginFacade.raiseEvent({
+                                   type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                   ntype		: 'error',
+                                   msg         : 'Failed to install the repository assets.',
+                                   title       : ''
+                               });
 			   			} else {
-			   				Ext.Msg.minWidth = 600;
-			   				Ext.Msg.alert('Installation was successful. Please save your process to see the installed assets.');
+                               ORYX.EDITOR._pluginFacade.raiseEvent({
+                                   type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                   ntype		: 'success',
+                                   msg         : 'Assets successfully installed. Save and re-open your process to start using them.',
+                                   title       : ''
+                               });
 			   			}
 	    	   		} catch(e) {
                         installLoadMask.hide();
-	    	   			Ext.Msg.minWidth = 600;
-	    	   			Ext.Msg.alert('Installing the repository assets failed :\n' + e);
+                           ORYX.EDITOR._pluginFacade.raiseEvent({
+                               type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                               ntype		: 'error',
+                               msg         : 'Installing the repository assets failed: ' + e,
+                               title       : ''
+                           });
 	    	   		}
 	            }.createDelegate(this),
 	            failure: function(){
                     installLoadMask.hide();
-	            	Ext.Msg.minWidth = 600;
-	            	Ext.Msg.alert('Failed to install the repository assets');
-	            },
+                    ORYX.EDITOR._pluginFacade.raiseEvent({
+                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                        ntype		: 'error',
+                        msg         : 'Failed to install the repository assets.',
+                        title       : ''
+                    });
+                }.createDelegate(this),
 	            params: {
 	            	action: 'install',
 	            	profile: ORYX.PROFILE,

@@ -7,8 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.Process;
@@ -22,8 +20,8 @@ import org.jboss.drools.ProcessAnalysisDataType;
 import org.jboss.drools.ResourceParameters;
 import org.jboss.drools.Scenario;
 import org.jboss.drools.impl.DroolsFactoryImpl;
+import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.designer.web.server.ServletUtil;
 import org.json.JSONObject;
 
 
@@ -34,17 +32,19 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 	private IDiagramProfile profile;
 	private String defaultResourceId = "";
 	private String uuid;
+    private Repository repository;
 	
 	public BPMN2SyntaxChecker(String json, String preprocessingData, IDiagramProfile profile, String uuid) {
 		this.json = json;
 		this.preprocessingData = preprocessingData;
 		this.profile = profile;
 		this.uuid = uuid;
+        this.repository = profile.getRepository();
 	}
 	
 	public void checkSyntax() {
 		DroolsFactoryImpl.init();
-		
+
 		Definitions def = profile.createMarshaller().getDefinitions(json, preprocessingData);
 		List<RootElement> rootElements =  def.getRootElements();
 		Scenario defaultScenario = getDefaultScenario(def);
@@ -61,12 +61,6 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
         		} else {
         			if(!SyntaxCheckerUtils.isNCName(process.getId())) {
         				addError(defaultResourceId, "Invalid process id. See http://www.w3.org/TR/REC-xml-names/#NT-NCName for more info.");
-        			} else {
-        				String[] packageAssetInfo = ServletUtil.findPackageAndAssetInfo(uuid, profile);
-		        		String processImageName = process.getId() + "-image";
-		        		if(!ServletUtil.assetExistsInGuvnor(packageAssetInfo[0], processImageName, profile)) {
-		        			addError(defaultResourceId, "Could not find process image.");
-		        		}
         			}
         		}
         		
@@ -85,14 +79,6 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
                 }
                 if(!foundPackageName) {
                 	addError(defaultResourceId, "Process has no package name.");
-                } else {
-                	if(!isEmpty(pname)) {
-                		String[] packageAssetInfo = ServletUtil.findPackageAndAssetInfo(uuid, profile);
-                		String guvnorPackageName = packageAssetInfo[0];
-                		if(!guvnorPackageName.equals(pname)) {
-                			addError(defaultResourceId, "Process package name is not valid.");
-                		}
-                	}
                 }
                 
                 if(isEmpty(process.getName())) {
@@ -209,14 +195,6 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 		        }
 		        if(!foundTaskName) {
 		        	addError(ut, "User Task has no task name.");
-		        } else {
-		        	if(taskName != null) {
-		        		String[] packageAssetInfo = ServletUtil.findPackageAndAssetInfo(uuid, profile);
-		        		String taskFormName = taskName + "-taskform";
-		        		if(!ServletUtil.assetExistsInGuvnor(packageAssetInfo[0], taskFormName, profile)) {
-		        			addError(ut, "User Task has no task form defined.");
-		        		}
-		        	} 
 		        }
 		        
 		        // simulation validation
@@ -428,27 +406,6 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 				CallActivity ca = (CallActivity) fe;
 				if(ca.getCalledElement() == null || ca.getCalledElement().length() < 1) {
 					addError((CallActivity) fe, "Reusable Subprocess has no called element specified.");
-				} else {
-				    boolean foundCalledElementProcess = false;
-				    List<String> allPackageNames = ServletUtil.getPackageNamesFromGuvnor(profile);
-				    for (String packageName : allPackageNames) {
-				        List<String> allProcessesInPackage = ServletUtil.getAllProcessesInPackage(packageName, profile);
-				        for(String p : allProcessesInPackage) {
-				            String processContent = ServletUtil.getProcessSourceContent(packageName, p, profile);
-				            Pattern pattern = Pattern.compile("<\\S*process[\\s\\S]*id=\"" + ca.getCalledElement() + "\"", Pattern.MULTILINE);
-				            Matcher m = pattern.matcher(processContent);
-				            if(m.find()) {
-				                foundCalledElementProcess = true;
-				                break;
-				            }
-				        }
-				        if (foundCalledElementProcess) {
-				            break;
-				        }
-	        		}
-	        		if(!foundCalledElementProcess) {
-	        			addError((CallActivity) fe, "No existing process with id=" + ca.getCalledElement() + " could be found.");
-	        		}
 				}
 			}
 			

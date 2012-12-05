@@ -1,11 +1,22 @@
 ImageViewer = Ext.extend(Ext.Window, {
     initComponent: function() {
+        var uid = Ext.id();
+        ORYX.EDITOR.imagePreviewSVG = this.src;
         this.bodyCfg = {
-            tag: 'img',
-            src: this.src,
+            id: 'imageviewerid',
+            layout: 'anchor',
+            autoCreate: true,
+            closeAction :'close',
+            title: 'Image Viewer',
+            plain: true,
+            modal: true,
+            collapsible: false,
+            resizeable: true,
+            shadow: true,
+            html: '<iframe id="imageViewFrame" name="imageViewFrame" frameborder="0" scrolling="auto" width="100%" height="400" src="' + ORYX.PATH + 'imageview/imageview.html?'+uid+'"></iframe>',
             width: 400,
             height: 400,
-            autoscroll: true,
+            autoScroll: true,
             fixedcenter	: true
         };
         ImageViewer.superclass.initComponent.apply(this, arguments);

@@ -1,24 +1,28 @@
 package org.jbpm.designer.web.server;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import org.apache.log4j.Logger;
+import org.jbpm.designer.repository.Asset;
+import org.jbpm.designer.repository.Repository;
+import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.json.JSONObject;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
-import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.designer.web.profile.impl.ExternalInfo;
-import org.json.JSONObject;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FormWidgetServlet extends HttpServlet {
-	private static final Logger _logger = Logger
-			.getLogger(FormWidgetServlet.class);
+	private static final Logger _logger = Logger.getLogger(FormWidgetServlet.class);
+
+    private IDiagramProfile profile;
+    // this is here just for unit testing purpose
+    public void setProfile(IDiagramProfile profile) {
+        this.profile = profile;
+    }
 	
 	@Override
 	public void init(ServletConfig config) throws ServletException {
@@ -32,13 +36,15 @@ public class FormWidgetServlet extends HttpServlet {
 		String profileName = req.getParameter("profile");
 		String action = req.getParameter("action");
 		String widgetName = req.getParameter("widgetname");
-		
-		IDiagramProfile profile = ServletUtil.getProfile(req, profileName, getServletContext());
-		
+
+        if (profile == null) {
+            profile = ServletUtil.getProfile(req, profileName, getServletContext());
+        }
+        Repository repository = profile.getRepository();
 		if(action != null && action.equals("getwidgets")) {
 			List<String> widgetList;
 			try {
-				widgetList = ServletUtil.getFormWidgetList(profile);
+				widgetList = ServletUtil.getFormWidgetList(profile, repository);
 			} catch (Throwable t) {
 				widgetList = new ArrayList<String>();
 			}
@@ -56,18 +62,13 @@ public class FormWidgetServlet extends HttpServlet {
 			resp.setContentType("application/json");
 			resp.getWriter().write(jsonObject.toString());
 		} else if(action != null && action.equals("getwidgetsource")) {
-			String widgetSourceURL = ExternalInfo.getExternalProtocol(profile)
-					+ "://"
-	                + ExternalInfo.getExternalHost(profile)
-	                + "/"
-	                + profile.getExternalLoadURLSubdomain().substring(0,
-	                        profile.getExternalLoadURLSubdomain().indexOf("/"))
-	                + "/rest/packages/globalArea/assets/" + widgetName 
-	                + "/source/";
-			resp.setCharacterEncoding("UTF-8");
-			resp.setContentType("text/plain");
-			try {
-				resp.getWriter().write(IOUtils.toString(ServletUtil.getInputStreamForURL(widgetSourceURL, "GET", profile), "UTF-8"));
+            try {
+                Asset<String> widgetAsset = repository.loadAssetFromPath(profile.getRepositoryGlobalDir() + "/" + widgetName+".fw");
+
+                resp.setCharacterEncoding("UTF-8");
+                resp.setContentType("text/plain");
+
+				resp.getWriter().write(widgetAsset.getAssetContent());
 			} catch (Exception e) {
 				resp.getWriter().write("");
 			}

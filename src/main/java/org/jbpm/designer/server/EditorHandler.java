@@ -51,8 +51,8 @@ import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingUnit;
 import org.jbpm.designer.web.preprocessing.impl.PreprocessingServiceImpl;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
-import org.jbpm.designer.web.profile.impl.ExternalInfo;
 import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
+import org.jbpm.designer.web.profile.impl.RepositoryInfo;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -317,7 +317,7 @@ public class EditorHandler extends HttpServlet {
                     "No profile with the name " + profileName + 
                         " was registered");
         }
-        
+
         IDiagramPreprocessingUnit preprocessingUnit = null;
         if(_preProcess) {
             if (_logger.isInfoEnabled()) {
@@ -325,7 +325,7 @@ public class EditorHandler extends HttpServlet {
                     "Performing diagram information pre-processing steps. ");
             }
             preprocessingUnit = _preProcessingService.findPreprocessingUnit(request, profile);
-            preprocessingUnit.preprocess(request, response, profile);
+            preprocessingUnit.preprocess(request, response, profile, getServletContext());
         }
 
         //output env javascript files
@@ -433,20 +433,23 @@ public class EditorHandler extends HttpServlet {
                 resultHtml.append(preprocessingUnit == null ? "" : preprocessingUnit.getOutData());
                 replacementMade = true;    
             } else if ("externalprotocol".equals(elt)) {
-                resultHtml.append(ExternalInfo.getExternalProtocol(profile));
+                resultHtml.append(RepositoryInfo.getRepositoryProtocol(profile) == null ? "" : RepositoryInfo.getRepositoryProtocol(profile));
                 replacementMade = true;    
             } else if ("externalhost".equals(elt)) {
-                resultHtml.append(ExternalInfo.getExternalHost(profile));
+                resultHtml.append(RepositoryInfo.getRepositoryHost(profile));
                 replacementMade = true;    
             } else if ("externalsubdomain".equals(elt)) {
-                resultHtml.append(profile.getExternalLoadURLSubdomain().substring(0,
-                        profile.getExternalLoadURLSubdomain().indexOf("/")));
-                replacementMade = true;    
+                resultHtml.append(RepositoryInfo.getRepositorySubdomain(profile) != null ? RepositoryInfo.getRepositorySubdomain(profile).substring(0,
+                    RepositoryInfo.getRepositorySubdomain(profile).indexOf("/")) : "");
+                replacementMade = true;
             } else if ("localhistoryenabled".equals(elt)) {
                 resultHtml.append(profile.getLocalHistoryEnabled());
                 replacementMade = true;
             } else if ("localhistorytimeout".equals(elt)) {
                 resultHtml.append(profile.getLocalHistoryTimeout());
+                replacementMade = true;
+            } else if ("repositoryid".equals(elt)) {
+                resultHtml.append(profile.getRepositoryId());
                 replacementMade = true;
             } else if ("designerversion".equals(elt)) {
                 resultHtml.append(_designerVersion);
@@ -585,7 +588,7 @@ public class EditorHandler extends HttpServlet {
     
     /**
      * Compress a list of js files into one combined string
-     * @param a list of js files
+     * @param plugins list of js files
      * @return a string that contains all the compressed data
      * @throws EvaluatorException
      * @throws IOException
@@ -640,7 +643,7 @@ public class EditorHandler extends HttpServlet {
                 }
             }
             inputStream.close();
-        } catch (IOException e) {
+        } catch (Exception e) {
             _logger.error(e.getMessage(), e);
         }
         return retStr;

@@ -34,7 +34,7 @@ public class DefaultPreprocessingUnit implements IDiagramPreprocessingUnit {
     }
     
     public void preprocess(HttpServletRequest request,
-            HttpServletResponse response, IDiagramProfile profile) {
+            HttpServletResponse response, IDiagramProfile profile, ServletContext servletContext) {
         // nothing to do
     }
 

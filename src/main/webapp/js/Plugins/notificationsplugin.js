@@ -4,7 +4,7 @@ if (!ORYX.Plugins)
 if (!ORYX.Config)
     ORYX.Config = {};
 
-ORYX.Plugins.LocalHistory = Clazz.extend({
+ORYX.Plugins.NotificationsPlugin = Clazz.extend({
     construct: function(facade){
         this.facade = facade;
 

@@ -345,6 +345,8 @@
         <plugin source="patterncreator.js" name="ORYX.Plugins.PatternCreator"/>
         <plugin source="localhistory.js" name="ORYX.Plugins.LocalHistory"/>
         <plugin source="notificationsplugin.js" name="ORYX.Plugins.NotificationsPlugin"/>
+        <plugin source="saveplugin.js" name="ORYX.Plugins.SavePlugin"/>
+
 		
 		<!-- <plugin source="stencilsetmanipulator.js" name="ORYX.Plugins.StencilSetManipulator" 
 			/> -->

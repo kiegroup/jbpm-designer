@@ -54,6 +54,16 @@
    <param-value>default</param-value>
   </init-param>
  </servlet>
+<servlet>
+    <display-name>Menu Connector Servlet</display-name>
+    <servlet-name>MenuConnectorServlet</servlet-name>
+    <servlet-class>org.jbpm.designer.web.server.menu.MenuConnectorServlet</servlet-class>
+</servlet>
+<servlet>
+    <display-name>Menu Servlet</display-name>
+    <servlet-name>MenuServlet</servlet-name>
+    <servlet-class>org.jbpm.designer.web.server.menu.MenuServlet</servlet-class>
+</servlet>
  <servlet>
   <display-name>UUID Based Repository</display-name>
   <servlet-name>UUIDBasedRepositoryServlet</servlet-name>
@@ -67,6 +77,11 @@
   <display-name>Transformer</display-name>
   <servlet-name>TransformerServlet</servlet-name>
   <servlet-class>org.jbpm.designer.web.server.TransformerServlet</servlet-class>
+ </servlet>
+ <servlet>
+  <display-name>AssetService</display-name>
+  <servlet-name>AssetServiceServlet</servlet-name>
+  <servlet-class>org.jbpm.designer.repository.servlet.AssetServiceServlet</servlet-class>
  </servlet>
  <servlet>
   <display-name>FileStore</display-name>
@@ -168,6 +183,14 @@
   <servlet-name>EditorHandler</servlet-name>
   <url-pattern>/editor/*</url-pattern>
  </servlet-mapping>
+<servlet-mapping>
+    <servlet-name>MenuConnectorServlet</servlet-name>
+    <url-pattern>/menuconnector/*</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+    <servlet-name>MenuServlet</servlet-name>
+    <url-pattern>/menu/*</url-pattern>
+</servlet-mapping>
  <servlet-mapping>
   <servlet-name>DirectoryListingServlet</servlet-name>
   <url-pattern>/generated-uis/</url-pattern>
@@ -180,6 +203,10 @@
   <servlet-name>TransformerServlet</servlet-name>
   <url-pattern>/transformer</url-pattern>
  </servlet-mapping>
+<servlet-mapping>
+  <servlet-name>AssetServiceServlet</servlet-name>
+  <url-pattern>/assetservice</url-pattern>
+</servlet-mapping>
  <servlet-mapping>
   <servlet-name>FileStoreServlet</servlet-name>
   <url-pattern>/filestore</url-pattern>

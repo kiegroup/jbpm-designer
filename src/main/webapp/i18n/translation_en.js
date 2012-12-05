@@ -432,6 +432,7 @@ ORYX.I18N.SyntaxChecker.group = "Verification";
 ORYX.I18N.SyntaxChecker.name = "Validate Process";
 ORYX.I18N.SyntaxChecker.desc = "Validate Process";
 ORYX.I18N.SyntaxChecker.noErrors = "There are no validation errors.";
+ORYX.I18N.SyntaxChecker.hasErrors = "Validation error(s) found.";
 ORYX.I18N.SyntaxChecker.invalid = "Invalid answer from server.";
 ORYX.I18N.SyntaxChecker.checkingMessage = "Validating ...";
 

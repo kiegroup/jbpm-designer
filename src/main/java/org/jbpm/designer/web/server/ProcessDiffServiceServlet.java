@@ -1,12 +1,6 @@
 package org.jbpm.designer.web.server;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,13 +16,8 @@ import javax.xml.stream.XMLStreamReader;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.designer.web.profile.IDiagramProfileService;
-import org.jbpm.designer.web.profile.impl.ExternalInfo;
-import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
-import org.json.JSONArray;
+import org.jbpm.designer.web.profile.impl.RepositoryInfo;
 import org.json.JSONObject;
-
-import org.apache.commons.codec.binary.Base64;
 
 /**
  * 
@@ -90,12 +79,12 @@ public class ProcessDiffServiceServlet extends HttpServlet {
 
 	private String getAssetVerionSource(String packageName, String assetName, String versionNum, IDiagramProfile profile) {
 		try {
-			String versionURL = ExternalInfo.getExternalProtocol(profile)
+			String versionURL = RepositoryInfo.getRepositoryProtocol(profile)
 					+ "://"
-	                + ExternalInfo.getExternalHost(profile)
+	                + RepositoryInfo.getRepositoryHost(profile)
 	                + "/"
-	                + profile.getExternalLoadURLSubdomain().substring(0,
-	                        profile.getExternalLoadURLSubdomain().indexOf("/"))
+	                + RepositoryInfo.getRepositorySubdomain(profile).substring(0,
+	                        RepositoryInfo.getRepositorySubdomain(profile).indexOf("/"))
 	                + "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/" + assetName 
 	                + "/versions/" + versionNum + "/source/";
 			
@@ -107,12 +96,12 @@ public class ProcessDiffServiceServlet extends HttpServlet {
 	
 	private List<String> getAssetVersions(String packageName, String assetName, String uuid, IDiagramProfile profile) {
 		try {
-			String assetVersionURL = ExternalInfo.getExternalProtocol(profile)
+			String assetVersionURL = RepositoryInfo.getRepositoryProtocol(profile)
 					+ "://"
-	                + ExternalInfo.getExternalHost(profile)
+	                + RepositoryInfo.getRepositoryHost(profile)
 	                + "/"
-	                + profile.getExternalLoadURLSubdomain().substring(0,
-	                        profile.getExternalLoadURLSubdomain().indexOf("/"))
+	                + RepositoryInfo.getRepositorySubdomain(profile).substring(0,
+	                        RepositoryInfo.getRepositorySubdomain(profile).indexOf("/"))
 	                + "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/" + assetName 
 	                + "/versions/";
 			List<String> versionList = new ArrayList<String>();

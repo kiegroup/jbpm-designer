@@ -61,31 +61,31 @@ ORYX.Plugins.ShapeRepository = {
 		
 		var region = this.facade.addToRegion("west", panel, ORYX.I18N.ShapeRepository.title);
 		
-		Ext.Ajax.request({
-            url: ORYX.PATH + "processinfo",
-            method: 'POST',
-            success: function(request) {
-    	   		try {
-    	   			var infopanel = new Ext.Panel({
-    	   				bodyStyle:'background:#eee;font-size:9px;font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;',
-    	   				autoScroll:true,
-    	   				lines: false,
-    	   				html: request.responseText,
-    	   				title: 'Process Information'
-    	   			});
-    	   			this.facade.addToRegion("west", infopanel);
-    	   		} catch(e) {
-    	   			ORYX.Log.error("Failed to retrieve Process Info :\n" + e);
-    	   		}
-            }.createDelegate(this),
-            failure: function(){
-            	ORYX.Log.error("Failed to retrieve Process Info");
-            },
-            params: {
-            	profile: ORYX.PROFILE,
-            	uuid : ORYX.UUID
-            }
-        });
+//		Ext.Ajax.request({
+//            url: ORYX.PATH + "processinfo",
+//            method: 'POST',
+//            success: function(request) {
+//    	   		try {
+//    	   			var infopanel = new Ext.Panel({
+//    	   				bodyStyle:'background:#eee;font-size:9px;font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;',
+//    	   				autoScroll:true,
+//    	   				lines: false,
+//    	   				html: request.responseText,
+//    	   				title: 'Process Information'
+//    	   			});
+//    	   			this.facade.addToRegion("west", infopanel);
+//    	   		} catch(e) {
+//    	   			ORYX.Log.error("Failed to retrieve Process Info :\n" + e);
+//    	   		}
+//            }.createDelegate(this),
+//            failure: function(){
+//            	ORYX.Log.error("Failed to retrieve Process Info");
+//            },
+//            params: {
+//            	profile: ORYX.PROFILE,
+//            	uuid : ORYX.UUID
+//            }
+//        });
 
         Ext.Ajax.request({
             url: ORYX.PATH + "stencilpatterns",

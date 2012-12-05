@@ -219,12 +219,21 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
                             var outObj = outValue.evalJSON();
                             this.facade.importJSON(outObj);
                         } else {
-                            Ext.Msg.minWidth = 400;
-                            Ext.Msg.alert("Invalid Process info. Unable to restore.");
+                            this.facade.raiseEvent({
+                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                ntype		: 'error',
+                                msg         : 'Invalid Process info. Unable to restore.',
+                                title       : ''
+                            });
                         }
                         dialog.hide()
                     } else {
-                        Ext.Msg.alert('Please select a process id');
+                        this.facade.raiseEvent({
+                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                            ntype		: 'info',
+                            msg         : 'Please select a process id.',
+                            title       : ''
+                        });
                     }
                 }.bind(this)
             }, {
@@ -293,17 +302,15 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
         var processId = jsonPath(processJSON.evalJSON(), "$.properties.id");
         var processPackage = jsonPath(processJSON.evalJSON(), "$.properties.package");
         this.storage.removeItem(processPackage + "_" + processId);
-        Ext.Msg.minWidth = 400;
-        Ext.Msg.alert("Local History has been cleared.");
+        this.facade.raiseEvent({
+            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+            ntype		: 'info',
+            msg         : 'Local History has been cleared.',
+            title       : ''
+        });
     },
     enableLocalHistory : function() {
         this.setupAndLoadHistoryData();
-        Ext.Msg.minWidth = 400;
-        Ext.Msg.alert("Local History has been enabled.");
-    },
-    disableLocalHistory : function() {
-        Ext.Msg.minWidth = 400;
-        Ext.Msg.alert("Local History has been disabled.");
     },
     haveSupportForLocalHistory : function() {
         try {
@@ -346,8 +353,12 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
             }
             this.addToStore(item);
         } catch (e) {
-            Ext.Msg.minWidth = 500;
-            Ext.Msg.alert("Local History quota exceeded. Clearing local history.");
+            this.facade.raiseEvent({
+                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                ntype		: 'info',
+                msg         : 'Local History quota exceeded. Clearing local history.',
+                title       : ''
+            });
             this.clearLocalHistory();
 
         }
@@ -365,12 +376,24 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
         ORYX.LOCAL_HISTORY_ENABLED = false;
         this.stopStoring();
         this.facade.raiseEvent({type: ORYX.CONFIG.EVENT_STENCIL_SET_LOADED});
+        this.facade.raiseEvent({
+            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+            ntype		: 'info',
+            msg         : 'Local History has been disabled.',
+            title       : ''
+        });
     },
     enableLocalHistory: function() {
         ORYX.LOCAL_HISTORY_ENABLED = true;
         this.setupAndLoadHistoryData();
         this.startStoring();
         this.facade.raiseEvent({type: ORYX.CONFIG.EVENT_STENCIL_SET_LOADED});
+        this.facade.raiseEvent({
+            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+            ntype		: 'info',
+            msg         : 'Local History has been enabled.',
+            title       : ''
+        });
     },
     startStoring: function() {
         this.historyInterval = setInterval(this.addToHistory.bind(this), ORYX.LOCAL_HISTORY_TIMEOUT);

@@ -8,7 +8,7 @@
         <plugin name="ORYX.Plugins.JPDLMigration"/>
         <plugin name="ORYX.Plugins.ServiceRepoIntegration"/>
         <plugin name="ORYX.Plugins.Footer"/>
-        <plugin name="ORYX.Plugins.UUIDRepositoryDummySave"/>
+        <plugin name="ORYX.Plugins.SavePlugin"/>
         <plugin name="ORYX.Plugins.ShapeMenuPlugin"/>
         <plugin name="ORYX.Plugins.ShapeRepository"/>
         <plugin name="ORYX.Plugins.PropertyWindow"/>
@@ -47,8 +47,34 @@
         <plugin name="ORYX.Plugins.PatternCreator"/>
         <plugin name="ORYX.Plugins.LocalHistory"/>
         <plugin name="ORYX.Plugins.NotificationsPlugin"/>
-        <externalloadurl protocol="http" host="localhost:8080"
-                         subdomain="drools-guvnor/org.drools.guvnor.Guvnor/oryxeditor" usr="admin" pwd="admin"/>
-        <localhostory enabled="true" timeout="60000"/>
+        <localhistory enabled="true" timeout="60000"/>
+        <repository id="vfs">
+            <!-- acceptable attributes for parameter
+                name - name of the property
+                value - value of the property
+                system-property - (optional) if set tu true property will be set as JVM system property
+            -->
+            <!-- simple file system based vfs configuration -->
+            <parameter name="root" value="default:///tmp/designer-repo" />
+            <parameter name="globaldir" value="/global" />
+            <parameter name="name" value="Designer Repository"/>
+            <!-- git based cfs configuration-->
+            <!--<parameter name="root" value="git://designer-repo" />
+            <parameter name="globaldir" value="/global" />
+            <parameter name="username" value="guvnorngtestuser1" />
+            <parameter name="password" value="test1234" />
+            <parameter name="origin" value="https://github.com/mswiderski/designer-playground.git" />
+            <parameter name="fetch.cmd" value="?fetch" />
+            <parameter name="org.kie.nio.git.dir" value="/tmp/designer-git-repo" system-property="true"/>    -->
+        </repository>
+        <!--
+        <repository id="guvnor">
+            <property name="protocol" value="http" />
+            <property name="host" value="localhost:8080" />
+            <property name="subdomain" value="drools-guvnor/org.drools.guvnor.Guvnor/oryxeditor" />
+            <property name="usr" value="admin" />
+            <property name="pwd" value="admin" />
+        </repository>
+        -->
     </profile>
 </profiles>

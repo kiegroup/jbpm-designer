@@ -10,6 +10,7 @@ import org.apache.batik.util.ParsedURLData;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 
 import org.apache.commons.codec.binary.Base64;
+import org.jbpm.designer.web.profile.impl.RepositoryInfo;
 
 public class GuvnorParsedURLData extends ParsedURLData {
     private IDiagramProfile profile;
@@ -55,10 +56,10 @@ public class GuvnorParsedURLData extends ParsedURLData {
     }
     
     private void applyAuth(HttpURLConnection connection) {
-        if (profile.getUsr() != null && profile.getUsr().trim().length() > 0
-                && profile.getPwd() != null
-                && profile.getPwd().trim().length() > 0) {
-            String userpassword = profile.getUsr() + ":" + profile.getPwd();
+        if (RepositoryInfo.getRepositoryUsr(profile) != null && RepositoryInfo.getRepositoryUsr(profile).trim().length() > 0
+                && RepositoryInfo.getRepositoryPwd(profile) != null
+                && RepositoryInfo.getRepositoryPwd(profile).trim().length() > 0) {
+            String userpassword = RepositoryInfo.getRepositoryUsr(profile) + ":" + RepositoryInfo.getRepositoryPwd(profile);
             String encodedAuthorization = Base64.encodeBase64String(userpassword.getBytes());
             connection.setRequestProperty("Authorization", "Basic "
                     + encodedAuthorization);
