@@ -165,7 +165,7 @@ public class SimulationServlet extends HttpServlet {
 		        List<AggregatedSimulationEvent> aggEvents = (List<AggregatedSimulationEvent>) wmRepo.getGlobal("summary");
                 SimulationInfo simInfo = wmRepo.getSimulationInfo(); // TODO add siminfo to json
 				wmRepo.close();
-				
+
 				Map<String, Double> numInstanceData = new HashMap<String, Double>();
 				JSONObject parentJSON = new JSONObject();
                 JSONArray simInfoJSONArray = new JSONArray();
@@ -310,6 +310,7 @@ public class SimulationServlet extends HttpServlet {
 //							aggHTSimulationJSONArray.put(allValues);
 //						}
 						aggHTSimulationJSONArray.put(allValues);
+
 					} else if(aggEvent instanceof AggregatedActivitySimulationEvent) {
 						AggregatedActivitySimulationEvent event = (AggregatedActivitySimulationEvent) aggEvent;
 						numInstanceData.put(event.getActivityName(), new Long(event.getNumberOfInstances()).doubleValue());
@@ -340,7 +341,7 @@ public class SimulationServlet extends HttpServlet {
 						aggTaskSimulationJSONArray.put(taskSimKeys);
 					}
 				}
-				
+
 				JSONObject numInstancesSimKeys = new JSONObject();
 				numInstancesSimKeys.put("key", "Activity Instances");
 				numInstancesSimKeys.put("id", "Activity Instances");
@@ -369,28 +370,30 @@ public class SimulationServlet extends HttpServlet {
 				int c = 0;
 				for(SimulationEvent simEve : this.eventAggregations) {
 					AggregatedProcessSimulationEvent aggProcessEve = (AggregatedProcessSimulationEvent) (((GenericSimulationEvent) simEve).getAggregatedEvent());
-					JSONObject eventProcessSimKeys = new JSONObject();
-					eventProcessSimKeys.put("key", "Process Avarages");
-					eventProcessSimKeys.put("id", aggProcessEve.getProcessId());
-					eventProcessSimKeys.put("name", aggProcessEve.getProcessName());
-					eventProcessSimKeys.put("timesincestart", this.eventAggregationsTimes.get(c));
-					eventProcessSimKeys.put("timeunit", intervalUnit);
-					JSONArray eventProcessSimValues = new JSONArray();
-					JSONObject obj1 = new JSONObject();
-					obj1.put("label", "Max Execution Time");
-					obj1.put("value", adjustToMins(aggProcessEve.getMaxExecutionTime()));
-					JSONObject obj2 = new JSONObject();
-					obj2.put("label", "Min Execution Time");
-					obj2.put("value", adjustToMins(aggProcessEve.getMinExecutionTime()));
-					JSONObject obj3 = new JSONObject();
-					obj3.put("label", "Avg. Execution Time");
-					obj3.put("value", adjustToMins(aggProcessEve.getAvgExecutionTime()));
-					eventProcessSimValues.put(obj1);
-					eventProcessSimValues.put(obj2);
-					eventProcessSimValues.put(obj3);
-					eventProcessSimKeys.put("values", eventProcessSimValues);
-					aggEventProcessSimulationJSONArray.put(eventProcessSimKeys);
-					c++;
+                    if(aggProcessEve != null) {
+                        JSONObject eventProcessSimKeys = new JSONObject();
+                        eventProcessSimKeys.put("key", "Process Avarages");
+                        eventProcessSimKeys.put("id", aggProcessEve.getProcessId());
+                        eventProcessSimKeys.put("name", aggProcessEve.getProcessName());
+                        eventProcessSimKeys.put("timesincestart", this.eventAggregationsTimes.get(c));
+                        eventProcessSimKeys.put("timeunit", intervalUnit);
+                        JSONArray eventProcessSimValues = new JSONArray();
+                        JSONObject obj1 = new JSONObject();
+                        obj1.put("label", "Max Execution Time");
+                        obj1.put("value", adjustToMins(aggProcessEve.getMaxExecutionTime()));
+                        JSONObject obj2 = new JSONObject();
+                        obj2.put("label", "Min Execution Time");
+                        obj2.put("value", adjustToMins(aggProcessEve.getMinExecutionTime()));
+                        JSONObject obj3 = new JSONObject();
+                        obj3.put("label", "Avg. Execution Time");
+                        obj3.put("value", adjustToMins(aggProcessEve.getAvgExecutionTime()));
+                        eventProcessSimValues.put(obj1);
+                        eventProcessSimValues.put(obj2);
+                        eventProcessSimValues.put(obj3);
+                        eventProcessSimKeys.put("values", eventProcessSimValues);
+                        aggEventProcessSimulationJSONArray.put(eventProcessSimKeys);
+                        c++;
+                    }
 				}
 				parentJSON.put("eventaggregations", aggEventProcessSimulationJSONArray);
 				// process paths
