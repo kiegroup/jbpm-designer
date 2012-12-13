@@ -3508,7 +3508,7 @@ public class Bpmn2JsonUnmarshaller {
             EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
                     "http://www.jboss.org/drools", "taskName", false, false);
             SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
-                    properties.get("taskname").replaceAll("&","").replaceAll(" ", ""));
+                    properties.get("taskname").replaceAll("&",""));
             task.getAnyAttribute().add(extensionEntry);
 
             // map the taskName to iospecification
@@ -3527,7 +3527,7 @@ public class Bpmn2JsonUnmarshaller {
         
             Assignment taskNameAssignment = Bpmn2Factory.eINSTANCE.createAssignment();
             FormalExpression fromExp = Bpmn2Factory.eINSTANCE.createFormalExpression();
-            fromExp.setBody(properties.get("taskname").replaceAll("&","").replaceAll(" ", ""));
+            fromExp.setBody(properties.get("taskname").replaceAll("&",""));
             taskNameAssignment.setFrom(fromExp);
             FormalExpression toExp = Bpmn2Factory.eINSTANCE.createFormalExpression();
             toExp.setBody(task.getId() + "_TaskNameInput");
