@@ -6,6 +6,7 @@ import org.jbpm.designer.helper.TestServletContext;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
+import org.jbpm.designer.repository.RepositoryBaseTest;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.repository.vfs.VFSRepository;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
@@ -19,11 +20,8 @@ import java.util.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class JbpmPreprocessingUnitVFSTest {
+public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
 
-    private static final String REPOSITORY_ROOT = System.getProperty("java.io.tmpdir")+"designer-repo";
-    private static final String VFS_REPOSITORY_ROOT = "default://" + REPOSITORY_ROOT;
-    private JbpmProfileImpl profile;
 
     @Before
     public void setup() {
@@ -32,15 +30,6 @@ public class JbpmPreprocessingUnitVFSTest {
         profile.setRepositoryId("vfs");
         profile.setRepositoryRoot(VFS_REPOSITORY_ROOT);
         profile.setRepositoryGlobalDir("/global");
-    }
-
-    private void deleteFiles(File directory) {
-        for (File file : directory.listFiles()) {
-            if (file.isDirectory()) {
-                deleteFiles(file);
-            }
-            file.delete();
-        }
     }
 
     @After

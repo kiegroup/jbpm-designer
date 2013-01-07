@@ -8,7 +8,8 @@ import org.junit.Before;
 
 public class RepositoryBaseTest {
 
-    protected static final String REPOSITORY_ROOT = System.getProperty("java.io.tmpdir") + "designer-repo";
+    protected static final String REPOSITORY_ROOT = (System.getProperty("java.io.tmpdir").endsWith(File.separator)
+            ?System.getProperty("java.io.tmpdir"):(System.getProperty("java.io.tmpdir") + File.separator)) + "designer-repo";
     protected static final String VFS_REPOSITORY_ROOT = "default://" + REPOSITORY_ROOT;
     
     protected JbpmProfileImpl profile;

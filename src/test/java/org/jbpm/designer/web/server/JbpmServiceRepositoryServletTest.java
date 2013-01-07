@@ -6,6 +6,7 @@ import org.jbpm.designer.helper.TestServletConfig;
 import org.jbpm.designer.helper.TestServletContext;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.Repository;
+import org.jbpm.designer.repository.RepositoryBaseTest;
 import org.jbpm.designer.repository.vfs.VFSRepository;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.junit.After;
@@ -25,10 +26,7 @@ import static org.junit.Assert.assertNotNull;
  * Note this test relies on external service repository: http://people.redhat.com/tsurdilo/repository/
  * so it will fail when service repository is not accessible
  */
-public class JbpmServiceRepositoryServletTest {
-    private static final String REPOSITORY_ROOT = System.getProperty("java.io.tmpdir")+"designer-repo";
-    private static final String VFS_REPOSITORY_ROOT = "default://" + REPOSITORY_ROOT;
-    private JbpmProfileImpl profile;
+public class JbpmServiceRepositoryServletTest  extends RepositoryBaseTest {
 
     @Before
     public void setup() {
@@ -39,14 +37,6 @@ public class JbpmServiceRepositoryServletTest {
         profile.setRepositoryGlobalDir("/global");
     }
 
-    private void deleteFiles(File directory) {
-        for (File file : directory.listFiles()) {
-            if (file.isDirectory()) {
-                deleteFiles(file);
-            }
-            file.delete();
-        }
-    }
 
     @After
     public void teardown() {
