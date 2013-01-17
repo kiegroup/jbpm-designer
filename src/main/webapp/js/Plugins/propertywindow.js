@@ -3243,7 +3243,7 @@ Ext.form.ComplexExpressionField = Ext.extend(Ext.form.TriggerField,  {
 		var ceta = new Ext.form.TextArea({
             id: Ext.id(),
             fieldLabel: "Expression Editor",
-            value: this.value,
+            value: this.value.replace(/\\n/g,"\n"),
             autoScroll: true
             });
 		
@@ -3278,8 +3278,8 @@ Ext.form.ComplexExpressionField = Ext.extend(Ext.form.TriggerField,  {
 			},
 			buttons		: [{
                 text: ORYX.I18N.PropertyWindow.ok,
-                handler: function(){	 
-					this.setValue(sourceEditor.getValue());
+                handler: function(){
+					this.setValue(sourceEditor.getValue().replace(/\r\n|\r|\n/g,"\\n"));
 					this.dataSource.getAt(this.row).set('value', sourceEditor.getValue());
 					this.dataSource.commitChanges();
 					dialog.hide()

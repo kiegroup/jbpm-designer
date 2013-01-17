@@ -2393,7 +2393,7 @@ public class Bpmn2JsonUnmarshaller {
     	}
     	if(properties.get("adhoccompletioncondition") != null) {
     		FormalExpression completionConditionExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
-    		completionConditionExpression.setBody(wrapInCDATABlock(properties.get("adhoccompletioncondition")));
+    		completionConditionExpression.setBody(wrapInCDATABlock(properties.get("adhoccompletioncondition").replaceAll("\\\\n", "\n")));
     		ahsp.setCompletionCondition(completionConditionExpression);
     	}
     }
@@ -2680,7 +2680,7 @@ public class Bpmn2JsonUnmarshaller {
                     conditionExpression.setLanguage(languageStr);
                 }
                 if(properties.get("conditionexpression") != null && !"".equals(properties.get("conditionexpression"))) {
-                    conditionExpression.setBody(wrapInCDATABlock(properties.get("conditionexpression")));
+                    conditionExpression.setBody(wrapInCDATABlock(properties.get("conditionexpression").replaceAll("\\\\n", "\n")));
                 }
                 ((ConditionalEventDefinition) event.getEventDefinitions().get(0)).setCondition(conditionExpression);
             } else if(ed instanceof EscalationEventDefinition) {
@@ -2842,7 +2842,7 @@ public class Bpmn2JsonUnmarshaller {
                     conditionExpression.setLanguage(languageStr);
                 }
                 if(properties.get("conditionexpression") != null && !"".equals(properties.get("conditionexpression"))) {
-                    conditionExpression.setBody(wrapInCDATABlock(properties.get("conditionexpression")));
+                    conditionExpression.setBody(wrapInCDATABlock(properties.get("conditionexpression").replaceAll("\\\\n", "\n")));
                 }
                 ((ConditionalEventDefinition) event.getEventDefinitions().get(0)).setCondition(conditionExpression);
             } else if(ed instanceof EscalationEventDefinition) {
@@ -3143,7 +3143,7 @@ public class Bpmn2JsonUnmarshaller {
         }
         
         if(properties.get("script") != null && properties.get("script").length() > 0) {
-        	scriptTask.setScript(wrapInCDATABlock(properties.get("script")));
+        	scriptTask.setScript(wrapInCDATABlock(properties.get("script").replaceAll("\\\\n", "\n")));
         }
         
         if(properties.get("script_language") != null && properties.get("script_language").length() > 0) {
@@ -4651,7 +4651,7 @@ public class Bpmn2JsonUnmarshaller {
         }
         if (properties.get("conditionexpression") != null && !"".equals(properties.get("conditionexpression"))) {
             FormalExpression expr = Bpmn2Factory.eINSTANCE.createFormalExpression();
-            expr.setBody(wrapInCDATABlock(properties.get("conditionexpression")));
+            expr.setBody(wrapInCDATABlock(properties.get("conditionexpression").replaceAll("\\\\n", "\n")));
             // check if language was specified 
             if (properties.get("conditionexpressionlanguage") != null && !"".equals(properties.get("conditionexpressionlanguage"))) {
                 String languageStr;
