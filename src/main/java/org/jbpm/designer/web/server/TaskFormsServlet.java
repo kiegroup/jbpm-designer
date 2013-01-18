@@ -35,7 +35,7 @@ public class TaskFormsServlet extends HttpServlet {
     private static final Logger _logger = Logger
             .getLogger(TaskFormsServlet.class);
     private static final String TASKFORMS_PATH = "taskforms";
-    private static final String FORMTEMPLATE_FILE_EXTENSION = "flt";
+    private static final String FORMTEMPLATE_FILE_EXTENSION = "ftl";
 
     private IDiagramProfile profile;
     // this is here just for unit testing purpose

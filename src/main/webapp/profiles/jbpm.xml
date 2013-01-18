@@ -67,7 +67,7 @@
             <parameter name="fetch.cmd" value="?fetch" />
             <parameter name="org.kie.nio.git.dir" value="/tmp/designer-git-repo" system-property="true"/>    -->
         </repository>
-        <!--
+	<!--
         <repository id="guvnor">
             <property name="protocol" value="http" />
             <property name="host" value="localhost:8080" />
