@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Oryx Editor Client Core Test Suite</title>
+    <link rel="stylesheet" type="text/css" href="../../jsunit/css/jsUnitStyle.css"/>
+    <script language="JavaScript" type="text/javascript" src="../../jsunit/app/jsUnitCore.js"></script>
+    <script language="JavaScript" type="text/javascript">
+
+    function suite() {
+        var result = new top.jsUnitTestSuite();
+
+        // Math package
+        result.addTestPage("../client/Core/Math/MathTests.xhtml");
+
+        // StencilSet package
+        result.addTestPage("../client/Core/StencilSet/PropertyTests.xhtml");
+        result.addTestPage("../client/Core/StencilSet/PropertyItemTests.xhtml");
+        result.addTestPage("../client/Core/StencilSet/ComplexPropertyItemTests.xhtml");
+
+        // SVG package
+        result.addTestPage("../client/Core/SVG/EditPathHandlerTests.xhtml");
+        result.addTestPage("../client/Core/SVG/MinMaxPathHandlerTests.xhtml");
+        result.addTestPage("../client/Core/SVG/PointsPathHandlerTests.xhtml");
+		result.addTestPage("../client/Core/SVG/SVGShapeTests.xhtml");
+		result.addTestPage("../client/Core/SVG/SVGMarkerTests.xhtml")
+
+		
+        return result;
+    }
+
+    </script>
+</head>
+
+<body>
+<h1>Oryx Editor Client Core Test Suite</h1>
+
+<p>This page contains a suite of tests for testing Oryx' Core classes.</p>
+</body>
+</html>

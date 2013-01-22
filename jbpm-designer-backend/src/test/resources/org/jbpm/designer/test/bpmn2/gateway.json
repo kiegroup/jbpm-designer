@@ -1,0 +1,75 @@
+{
+    "resourceId": "gateway",
+    "properties": {
+        "name": "",
+        "documentation": "",
+        "auditing": "",
+        "monitoring": "",
+        "version": "",
+        "author": "",
+        "language": "English",
+        "namespaces": "",
+        "targetnamespace": "http://www.omg.org/bpmn20",
+        "expressionlanguage": "http://www.w3.org/1999/XPath",
+        "typelanguage": "http://www.w3.org/2001/XMLSchema",
+        "creationdate": "",
+        "modificationdate": ""
+    },
+    "stencil": {
+        "id": "BPMNDiagram"
+    },
+    "childShapes": [{
+        "resourceId": "oryx_F5BE2FF2-0F35-423B-83D7-C5D242775396",
+        "properties": {
+            "name": "xor gateway",
+            "documentation": "",
+            "auditing": "",
+            "monitoring": "",
+            "categories": "",
+            "assignments": "",
+            "pool": "",
+            "lanes": "",
+            "gates": "",
+            "gates_outgoingsequenceflow": "",
+            "gates_assignments": "",
+            "bgcolor": "#ffffff",
+            "gatewaytype": "XOR",
+            "xortype": "Data",
+            "markervisible": true,
+            "defaultgate": "",
+            "gate_outgoingsequenceflow": "",
+            "gate_assignments": ""
+        },
+        "stencil": {
+            "id": "Exclusive_Databased_Gateway"
+        },
+        "childShapes": [],
+        "outgoing": [],
+        "bounds": {
+            "lowerRight": {
+                "x": 444,
+                "y": 316
+            },
+            "upperLeft": {
+                "x": 404,
+                "y": 276
+            }
+        },
+        "dockers": []
+    }],
+    "bounds": {
+        "lowerRight": {
+            "x": 1485,
+            "y": 1050
+        },
+        "upperLeft": {
+            "x": 0,
+            "y": 0
+        }
+    },
+    "stencilset": {
+        "url": "/designer/stencilsets/bpmn2.0/bpmn2.0.json",
+        "namespace": "http://b3mn.org/stencilset/bpmn2.0#"
+    },
+    "ssextensions": ["http://oryx-editor.org/stencilsets/extensions/bpmncosts-2.0#"]
+}

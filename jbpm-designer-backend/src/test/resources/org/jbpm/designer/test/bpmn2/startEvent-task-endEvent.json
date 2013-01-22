@@ -1,0 +1,309 @@
+{
+    "resourceId": "564313740830044992",
+    "properties": {
+        "name": "diagram",
+        "documentation": "",
+        "auditing": "",
+        "monitoring": "",
+        "version": "",
+        "author": "",
+        "language": "English",
+        "namespaces": "",
+        "targetnamespace": "http://www.omg.org/bpmn20",
+        "expressionlanguage": "http://www.w3.org/1999/XPath",
+        "typelanguage": "http://www.w3.org/2001/XMLSchema",
+        "creationdate": "",
+        "modificationdate": ""
+    },
+    "stencil": {
+        "id": "BPMNDiagram"
+    },
+    "childShapes": [{
+        "resourceId": "oryx_194CB311-5E27-40B4-AA45-A1F2300AD693",
+        "properties": {
+            "name": "Pool1",
+            "documentation": "",
+            "auditing": "",
+            "monitoring": "",
+            "multiinstance": "",
+            "boundaryvisible": true,
+            "processname": "",
+            "status": "None",
+            "adhoc": "",
+            "adhocordering": "Parallel",
+            "adhoccompletioncondition": "",
+            "suppressjoinfailure": "",
+            "enableinstancecompensation": "",
+            "processcategories": "",
+            "processdocumentation": "",
+            "processtype": "None",
+            "isclosed": "",
+            "bgcolor": "#ffffff"
+        },
+        "stencil": {
+            "id": "Pool"
+        },
+        "childShapes": [{
+            "resourceId": "oryx_53DB55FD-BB77-43E0-B7CF-FA64C83B1419",
+            "properties": {
+                "name": "",
+                "documentation": "",
+                "auditing": "",
+                "monitoring": "",
+                "parentpool": "",
+                "parentlane": "",
+                "showcaption": false
+            },
+            "stencil": {
+                "id": "Lane"
+            },
+            "childShapes": [{
+                "resourceId": "oryx_842AEF3F-8584-4F28-A001-93886AD79463",
+                "properties": {
+                    "name": "start",
+                    "documentation": "",
+                    "auditing": "",
+                    "monitoring": "",
+                    "eventdefinitionref": "",
+                    "eventdefinitions": "",
+                    "dataoutputassociations": "",
+                    "dataoutput": "",
+                    "outputset": "",
+                    "bgcolor": "#ffffff",
+                    "trigger": "None"
+                },
+                "stencil": {
+                    "id": "StartNoneEvent"
+                },
+                "childShapes": [],
+                "outgoing": [{
+                    "resourceId": "oryx_F3836236-F686-4E7C-977A-C3801FF77DF2"
+                }],
+                "bounds": {
+                    "lowerRight": {
+                        "x": 128,
+                        "y": 119
+                    },
+                    "upperLeft": {
+                        "x": 98,
+                        "y": 89
+                    }
+                },
+                "dockers": []
+            },
+            {
+                "resourceId": "oryx_6B00E69C-6558-422C-B6DF-05BF86AE3EA1",
+                "properties": {
+                    "name": "MyTask",
+                    "documentation": "",
+                    "auditing": "",
+                    "monitoring": "",
+                    "categories": "",
+                    "startquantity": 1,
+                    "completionquantity": 1,
+                    "isforcompensation": "",
+                    "assignments": "",
+                    "callacitivity": "",
+                    "tasktype": "None",
+                    "implementation": "webService",
+                    "resources": "",
+                    "messageref": "",
+                    "operationref": "",
+                    "instantiate": "",
+                    "script": "",
+                    "script_language": "",
+                    "bgcolor": "#b1c2d6",
+                    "looptype": "None",
+                    "testbefore": "",
+                    "loopcondition": "",
+                    "loopmaximum": "",
+                    "loopcardinality": "",
+                    "loopdatainput": "",
+                    "loopdataoutput": "",
+                    "inputdataitem": "",
+                    "outputdataitem": "",
+                    "behavior": "all",
+                    "complexbehaviordefinition": "",
+                    "completioncondition": "",
+                    "onebehavioreventref:": "signal",
+                    "nonebehavioreventref": "signal",
+                    "properties": "",
+                    "datainputset": "",
+                    "dataoutputset": "",
+                    "cost": ""
+                },
+                "stencil": {
+                    "id": "Task"
+                },
+                "childShapes": [],
+                "outgoing": [{
+                    "resourceId": "oryx_9C4B325C-25DF-4C60-8F35-74E22FA1A691"
+                }],
+                "bounds": {
+                    "lowerRight": {
+                        "x": 335,
+                        "y": 144
+                    },
+                    "upperLeft": {
+                        "x": 235,
+                        "y": 64
+                    }
+                },
+                "dockers": []
+            },
+            {
+                "resourceId": "oryx_4027F836-9D8B-4507-BD5A-3262A572D188",
+                "properties": {
+                    "name": "EndTask",
+                    "documentation": "",
+                    "auditing": "",
+                    "monitoring": "",
+                    "eventdefinitionref": "",
+                    "eventdefinitions": "",
+                    "datainputassociations": "",
+                    "datainput": "",
+                    "inputset": "",
+                    "bgcolor": "#ffffff",
+                    "trigger": "None"
+                },
+                "stencil": {
+                    "id": "EndNoneEvent"
+                },
+                "childShapes": [],
+                "outgoing": [],
+                "bounds": {
+                    "lowerRight": {
+                        "x": 463,
+                        "y": 118
+                    },
+                    "upperLeft": {
+                        "x": 435,
+                        "y": 90
+                    }
+                },
+                "dockers": []
+            }],
+            "outgoing": [],
+            "bounds": {
+                "lowerRight": {
+                    "x": 600,
+                    "y": 250
+                },
+                "upperLeft": {
+                    "x": 30,
+                    "y": 0
+                }
+            },
+            "dockers": []
+        }],
+        "outgoing": [],
+        "bounds": {
+            "lowerRight": {
+                "x": 660,
+                "y": 385
+            },
+            "upperLeft": {
+                "x": 60,
+                "y": 135
+            }
+        },
+        "dockers": []
+    },
+    {
+        "resourceId": "oryx_F3836236-F686-4E7C-977A-C3801FF77DF2",
+        "properties": {
+            "name": "",
+            "documentation": "",
+            "auditing": "",
+            "monitoring": "",
+            "conditiontype": "None",
+            "conditionexpression": "",
+            "isimmediate": "",
+            "showdiamondmarker": false
+        },
+        "stencil": {
+            "id": "SequenceFlow"
+        },
+        "childShapes": [],
+        "outgoing": [{
+            "resourceId": "oryx_6B00E69C-6558-422C-B6DF-05BF86AE3EA1"
+        }],
+        "bounds": {
+            "lowerRight": {
+                "x": 324.28125,
+                "y": 240
+            },
+            "upperLeft": {
+                "x": 218.78125,
+                "y": 238
+            }
+        },
+        "dockers": [{
+            "x": 15,
+            "y": 15
+        },
+        {
+            "x": 50,
+            "y": 40
+        }],
+        "target": {
+            "resourceId": "oryx_6B00E69C-6558-422C-B6DF-05BF86AE3EA1"
+        }
+    },
+    {
+        "resourceId": "oryx_9C4B325C-25DF-4C60-8F35-74E22FA1A691",
+        "properties": {
+            "name": "",
+            "documentation": "",
+            "auditing": "",
+            "monitoring": "",
+            "conditiontype": "None",
+            "conditionexpression": "",
+            "isimmediate": "",
+            "showdiamondmarker": false
+        },
+        "stencil": {
+            "id": "SequenceFlow"
+        },
+        "childShapes": [],
+        "outgoing": [{
+            "resourceId": "oryx_4027F836-9D8B-4507-BD5A-3262A572D188"
+        }],
+        "bounds": {
+            "lowerRight": {
+                "x": 524.546875,
+                "y": 240
+            },
+            "upperLeft": {
+                "x": 425.96875,
+                "y": 238
+            }
+        },
+        "dockers": [{
+            "x": 50,
+            "y": 40
+        },
+        {
+            "x": 14,
+            "y": 14
+        }],
+        "target": {
+            "resourceId": "oryx_4027F836-9D8B-4507-BD5A-3262A572D188"
+        }
+    }],
+    "bounds": {
+        "lowerRight": {
+            "x": 1485,
+            "y": 1050
+        },
+        "upperLeft": {
+            "x": 0,
+            "y": 0
+        }
+    },
+    "stencilset": {
+        "url": "/designer/stencilsets/bpmn2.0/bpmn2.0.json",
+        "namespace": "http://b3mn.org/stencilset/bpmn2.0#"
+    },
+    "ssextensions": ["http://oryx-editor.org/stencilsets/extensions/bpmncosts-2.0#"]
+}

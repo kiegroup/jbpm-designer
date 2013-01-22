@@ -1,0 +1,102 @@
+{
+    "resourceId": "pool",
+    "properties": {
+        "name": "",
+        "documentation": "",
+        "auditing": "",
+        "monitoring": "",
+        "version": "",
+        "author": "",
+        "language": "English",
+        "namespaces": "",
+        "targetnamespace": "http://www.omg.org/bpmn20",
+        "expressionlanguage": "http://www.w3.org/1999/XPath",
+        "typelanguage": "http://www.w3.org/2001/XMLSchema",
+        "creationdate": "",
+        "modificationdate": ""
+    },
+    "stencil": {
+        "id": "BPMNDiagram"
+    },
+    "childShapes": [{
+        "resourceId": "oryx_B4F97D75-9CC1-42F7-9CA5-3FC08F8EFF87",
+        "properties": {
+            "name": "pool",
+            "documentation": "",
+            "auditing": "",
+            "monitoring": "",
+            "multiinstance": "",
+            "boundaryvisible": true,
+            "processname": "",
+            "status": "None",
+            "adhoc": "",
+            "adhocordering": "Parallel",
+            "adhoccompletioncondition": "",
+            "suppressjoinfailure": "",
+            "enableinstancecompensation": "",
+            "processcategories": "",
+            "processdocumentation": "",
+            "processtype": "Private",
+            "isclosed": "true",
+            "bgcolor": "#ffffff"
+        },
+        "stencil": {
+            "id": "Pool"
+        },
+        "childShapes": [{
+            "resourceId": "oryx_5169F124-A8E9-4B7B-A260-96397A532761",
+            "properties": {
+                "name": "my first lane",
+                "documentation": "",
+                "auditing": "",
+                "monitoring": "",
+                "parentpool": "",
+                "parentlane": "",
+                "showcaption": false
+            },
+            "stencil": {
+                "id": "Lane"
+            },
+            "childShapes": [],
+            "outgoing": [],
+            "bounds": {
+                "lowerRight": {
+                    "x": 600,
+                    "y": 250
+                },
+                "upperLeft": {
+                    "x": 30,
+                    "y": 0
+                }
+            },
+            "dockers": []
+        }],
+        "outgoing": [],
+        "bounds": {
+            "lowerRight": {
+                "x": 641,
+                "y": 421
+            },
+            "upperLeft": {
+                "x": 41,
+                "y": 171
+            }
+        },
+        "dockers": []
+    }],
+    "bounds": {
+        "lowerRight": {
+            "x": 1485,
+            "y": 1050
+        },
+        "upperLeft": {
+            "x": 0,
+            "y": 0
+        }
+    },
+    "stencilset": {
+        "url": "/designer/stencilsets/bpmn2.0/bpmn2.0.json",
+        "namespace": "http://b3mn.org/stencilset/bpmn2.0#"
+    },
+    "ssextensions": ["http://oryx-editor.org/stencilsets/extensions/bpmncosts-2.0#"]
+}

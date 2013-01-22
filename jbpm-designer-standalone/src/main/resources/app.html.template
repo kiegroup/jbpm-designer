@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:b3mn="http://b3mn.org/2007/b3mn"
+      xmlns:ext="http://b3mn.org/2007/ext"
+      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+      xmlns:atom="http://b3mn.org/2007/atom+xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>jBPM Designer</title>
+</head>
+<body>
+<iframe id="__gwt_historyFrame" style="width: 0; height: 0; border: 0"></iframe>
+<script type="text/javascript">
+  window.designer_current_user = { name:"@{name}", roles:[@{roles}] }
+</script>
+<!-- The GWT js file generated at run time -->
+<script type="text/javascript" src='org.jbpm.designer.jBPMDesigner.nocache.js'></script>
+
+</body>
+</html>

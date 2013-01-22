@@ -1,0 +1,94 @@
+{
+    "resourceId": "businessRuleTask",
+    "properties": {
+        "name": "",
+        "documentation": "",
+        "auditing": "",
+        "monitoring": "",
+        "version": "",
+        "author": "",
+        "language": "English",
+        "namespaces": "",
+        "targetnamespace": "http://www.omg.org/bpmn20",
+        "expressionlanguage": "http://www.w3.org/1999/XPath",
+        "typelanguage": "http://www.w3.org/2001/XMLSchema",
+        "creationdate": "",
+        "modificationdate": ""
+    },
+    "stencil": {
+        "id": "BPMNDiagram"
+    },
+    "childShapes": [{
+        "resourceId": "oryx_950DE923-C875-4201-9091-E85F3B321323",
+        "properties": {
+            "name": "pull a lever",
+            "documentation": "",
+            "auditing": "",
+            "monitoring": "",
+            "categories": "",
+            "startquantity": 1,
+            "completionquantity": 1,
+            "isforcompensation": "",
+            "assignments": "",
+            "callacitivity": "",
+            "tasktype": "Manual",
+            "implementation": "webService",
+            "resources": "",
+            "messageref": "",
+            "operationref": "",
+            "instantiate": "",
+            "script": "",
+            "script_language": "",
+            "bgcolor": "#b1c2d6",
+            "looptype": "None",
+            "testbefore": "",
+            "loopcondition": "",
+            "loopmaximum": "",
+            "loopcardinality": "",
+            "loopdatainput": "",
+            "loopdataoutput": "",
+            "inputdataitem": "",
+            "outputdataitem": "",
+            "behavior": "all",
+            "complexbehaviordefinition": "",
+            "completioncondition": "",
+            "onebehavioreventref:": "signal",
+            "nonebehavioreventref": "signal",
+            "properties": "",
+            "datainputset": "",
+            "dataoutputset": "",
+            "cost": ""
+        },
+        "stencil": {
+            "id": "Task"
+        },
+        "childShapes": [],
+        "outgoing": [],
+        "bounds": {
+            "lowerRight": {
+                "x": 349,
+                "y": 175
+            },
+            "upperLeft": {
+                "x": 249,
+                "y": 95
+            }
+        },
+        "dockers": []
+    }],
+    "bounds": {
+        "lowerRight": {
+            "x": 1485,
+            "y": 1050
+        },
+        "upperLeft": {
+            "x": 0,
+            "y": 0
+        }
+    },
+    "stencilset": {
+        "url": "/designer/stencilsets/bpmn2.0/bpmn2.0.json",
+        "namespace": "http://b3mn.org/stencilset/bpmn2.0#"
+    },
+    "ssextensions": ["http://oryx-editor.org/stencilsets/extensions/bpmncosts-2.0#"]
+}
