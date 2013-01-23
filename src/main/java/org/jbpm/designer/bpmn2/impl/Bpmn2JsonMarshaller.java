@@ -556,7 +556,7 @@ public class Bpmn2JsonMarshaller {
             } else if( ed instanceof ConditionalEventDefinition ) {
                 FormalExpression conditionalExp = (FormalExpression) ((ConditionalEventDefinition) ed).getCondition();
                 if(conditionalExp.getBody() != null) {
-                    properties.put("conditionexpression", conditionalExp.getBody());
+                    properties.put("conditionexpression", conditionalExp.getBody().replaceAll("\n", "\\\\n"));
                 }
                 if(conditionalExp.getLanguage() != null) {
                     String languageVal = conditionalExp.getLanguage();
@@ -1351,7 +1351,7 @@ public class Bpmn2JsonMarshaller {
             }
     	} else if (task instanceof ScriptTask) {
     		ScriptTask scriptTask = (ScriptTask) task;
-    		properties.put("script", scriptTask.getScript() != null ? scriptTask.getScript() : "");
+    		properties.put("script", scriptTask.getScript() != null ? scriptTask.getScript().replaceAll("\n", "\\\\n") : "");
     		String format = scriptTask.getScriptFormat();
     		if(format != null && format.length() > 0) {
     			String formatToWrite = "";
@@ -2063,7 +2063,7 @@ public class Bpmn2JsonMarshaller {
 				properties.put("adhocordering", "Parallel");
 			}
 			if(ahsp.getCompletionCondition() != null) {
-				properties.put("adhoccompletioncondition", ((FormalExpression) ahsp.getCompletionCondition()).getBody());
+				properties.put("adhoccompletioncondition", ((FormalExpression) ahsp.getCompletionCondition()).getBody().replaceAll("\n", "\\\\n"));
 			}
 		}
 		
@@ -2381,7 +2381,7 @@ public class Bpmn2JsonMarshaller {
     	Expression conditionExpression = sequenceFlow.getConditionExpression();
     	if (conditionExpression instanceof FormalExpression) {
     	    if(((FormalExpression) conditionExpression).getBody() != null) {
-    	        properties.put("conditionexpression", ((FormalExpression) conditionExpression).getBody());
+    	        properties.put("conditionexpression", ((FormalExpression) conditionExpression).getBody().replaceAll("\n", "\\\\n"));
     	    }
     	    if(((FormalExpression) conditionExpression).getLanguage() != null) {
     	        String cd = ((FormalExpression) conditionExpression).getLanguage();
