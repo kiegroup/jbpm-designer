@@ -35,7 +35,7 @@ public class TaskFormsServlet extends HttpServlet {
     private static final Logger _logger = Logger
             .getLogger(TaskFormsServlet.class);
     private static final String TASKFORMS_PATH = "taskforms";
-    private static final String FORMTEMPLATE_FILE_EXTENSION = "flt";
+    private static final String FORMTEMPLATE_FILE_EXTENSION = "ftl";
 
     private IDiagramProfile profile;
     // this is here just for unit testing purpose
@@ -85,36 +85,36 @@ public class TaskFormsServlet extends HttpServlet {
         }
     }
     
-    public void displayResponse(TaskFormTemplateManager templateManager, HttpServletResponse resp, IDiagramProfile profile) {
-        try {
-            StringTemplateGroup templates = new StringTemplateGroup("resultsgroup", templateManager.getTemplatesPath());
-            StringTemplate resultsForm = templates.getInstanceOf("resultsform");
-//            resultsForm.setAttribute("manager", templateManager);
-//            resultsForm.setAttribute("profile", RepositoryInfo.getRepositoryProtocol(profile));
-//            resultsForm.setAttribute("host", RepositoryInfo.getRepositoryHost(profile));
-//            resultsForm.setAttribute("subdomain", RepositoryInfo.getRepositorySubdomain(profile).substring(0,
-//                RepositoryInfo.getRepositorySubdomain(profile).indexOf("/")));
-            ServletOutputStream outstr = resp.getOutputStream();
-            resp.setContentType("text/html");
-            outstr.write(resultsForm.toString().getBytes("UTF-8"));
-            outstr.flush();
-            outstr.close();
-        } catch (IOException e) {
-           _logger.error(e.getMessage());
-        }
-    }
+//    public void displayResponse(TaskFormTemplateManager templateManager, HttpServletResponse resp, IDiagramProfile profile) {
+//        try {
+//            StringTemplateGroup templates = new StringTemplateGroup("resultsgroup", templateManager.getTemplatesPath());
+//            StringTemplate resultsForm = templates.getInstanceOf("resultsform");
+////            resultsForm.setAttribute("manager", templateManager);
+////            resultsForm.setAttribute("profile", RepositoryInfo.getRepositoryProtocol(profile));
+////            resultsForm.setAttribute("host", RepositoryInfo.getRepositoryHost(profile));
+////            resultsForm.setAttribute("subdomain", RepositoryInfo.getRepositorySubdomain(profile).substring(0,
+////                RepositoryInfo.getRepositorySubdomain(profile).indexOf("/")));
+//            ServletOutputStream outstr = resp.getOutputStream();
+//            resp.setContentType("text/html");
+//            outstr.write(resultsForm.toString().getBytes("UTF-8"));
+//            outstr.flush();
+//            outstr.close();
+//        } catch (IOException e) {
+//           _logger.error(e.getMessage());
+//        }
+//    }
     
-    public void displayErrorResponse(HttpServletResponse resp, String exceptionStr) {
-        try {
-            ServletOutputStream outstr = resp.getOutputStream();
-            resp.setContentType("text/html");
-            outstr.write(exceptionStr.getBytes("ASCII"));
-            outstr.flush();
-            outstr.close();
-        } catch (IOException e) {
-           _logger.error(e.getMessage());
-        }
-    }
+//    public void displayErrorResponse(HttpServletResponse resp, String exceptionStr) {
+//        try {
+//            ServletOutputStream outstr = resp.getOutputStream();
+//            resp.setContentType("text/html");
+//            outstr.write(exceptionStr.getBytes("ASCII"));
+//            outstr.flush();
+//            outstr.close();
+//        } catch (IOException e) {
+//           _logger.error(e.getMessage());
+//        }
+//    }
     
     public void storeInRepository(TaskFormTemplateManager templateManager, String location, Repository repository) throws Exception {
         List<TaskFormInfo> taskForms =  templateManager.getTaskFormInformationList();

@@ -68,7 +68,7 @@ public class TaskFormsServletTest  extends RepositoryBaseTest {
 
         taskFormsServlet.doPost(new TestHttpServletRequest(params), new TestHttpServletResponse());
 
-        Collection<Asset> forms = repository.listAssets("/defaultPackage", new FilterByExtension("flt"));
+        Collection<Asset> forms = repository.listAssets("/defaultPackage", new FilterByExtension("ftl"));
         assertNotNull(forms);
         assertEquals(1, forms.size());
         assertEquals("hello-taskform", forms.iterator().next().getName());
@@ -103,7 +103,7 @@ public class TaskFormsServletTest  extends RepositoryBaseTest {
 
         taskFormsServlet.doPost(new TestHttpServletRequest(params), new TestHttpServletResponse());
 
-        Collection<Asset> forms = repository.listAssets("/defaultPackage", new FilterByExtension("flt"));
+        Collection<Asset> forms = repository.listAssets("/defaultPackage", new FilterByExtension("ftl"));
         assertNotNull(forms);
         assertEquals(2, forms.size());
         Iterator<Asset> assets = forms.iterator();
