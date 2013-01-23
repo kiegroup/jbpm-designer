@@ -20,7 +20,7 @@ q:before,q:after{content:'';}
 .ext-shim{position:absolute;visibility:hidden;left:0;top:0;overflow:hidden;}
 .ext-ie .ext-shim{filter:alpha(opacity=0);}
 .ext-ie6 .ext-shim{margin-left:5px;margin-top:3px;}
-.x-mask-loading div{padding:5px 10px 5px 25px;background:#fbfbfb url( '../images/default/grid/loading.gif' ) no-repeat 5px 5px;line-height:16px;}
+.x-mask-loading div{padding:5px 10px 5px 25px;background:#fbfbfb url('../images/default/grid/loading.gif') no-repeat 5px 5px;line-height:16px;}
 .x-hidden,.x-hide-offsets{position:absolute;left:-10000px;top:-10000px;visibility:hidden;}
 .x-hide-display{display:none!important;}
 .x-hide-visibility{visibility:hidden!important;}
@@ -47,16 +47,16 @@ q:before,q:after{content:'';}
 .x-shadow .xstl,.x-shadow .xstr,.x-shadow .xsbl,.x-shadow .xsbr{width:6px;height:6px;float:left;}
 .x-shadow .xsc{width:100%;}
 .x-shadow .xsml,.x-shadow .xsmr{width:6px;float:left;height:100%;}
-.x-shadow .xsmc{float:left;height:100%;background:transparent url( ../images/default/shadow-c.png );}
+.x-shadow .xsmc{float:left;height:100%;background:transparent url(../images/default/shadow-c.png);}
 .x-shadow .xst,.x-shadow .xsb{height:6px;overflow:hidden;width:100%;}
-.x-shadow .xsml{background:transparent url( ../images/default/shadow-lr.png ) repeat-y 0 0;}
-.x-shadow .xsmr{background:transparent url( ../images/default/shadow-lr.png ) repeat-y -6px 0;}
-.x-shadow .xstl{background:transparent url( ../images/default/shadow.png ) no-repeat 0 0;}
-.x-shadow .xstc{background:transparent url( ../images/default/shadow.png ) repeat-x 0 -30px;}
-.x-shadow .xstr{background:transparent url( ../images/default/shadow.png ) repeat-x 0 -18px;}
-.x-shadow .xsbl{background:transparent url( ../images/default/shadow.png ) no-repeat 0 -12px;}
-.x-shadow .xsbc{background:transparent url( ../images/default/shadow.png ) repeat-x 0 -36px;}
-.x-shadow .xsbr{background:transparent url( ../images/default/shadow.png ) repeat-x 0 -6px;}
+.x-shadow .xsml{background:transparent url(../images/default/shadow-lr.png) repeat-y 0 0;}
+.x-shadow .xsmr{background:transparent url(../images/default/shadow-lr.png) repeat-y -6px 0;}
+.x-shadow .xstl{background:transparent url(../images/default/shadow.png) no-repeat 0 0;}
+.x-shadow .xstc{background:transparent url(../images/default/shadow.png) repeat-x 0 -30px;}
+.x-shadow .xstr{background:transparent url(../images/default/shadow.png) repeat-x 0 -18px;}
+.x-shadow .xsbl{background:transparent url(../images/default/shadow.png) no-repeat 0 -12px;}
+.x-shadow .xsbc{background:transparent url(../images/default/shadow.png) repeat-x 0 -36px;}
+.x-shadow .xsbr{background:transparent url(../images/default/shadow.png) repeat-x 0 -6px;}
 .loading-indicator{font-size:11px;background-image:url(../images/default/grid/loading.gif);background-repeat:no-repeat;background-position:left;padding-left:20px;line-height:16px;margin:3px;}
 .x-text-resize{position:absolute;left:-1000px;top:-1000px;visibility:hidden;zoom:1;}
 .x-drag-overlay{width:100%;height:100%;display:none;position:absolute;left:0;top:0;background-image:url(../images/default/s.gif);z-index:20000;}
@@ -861,7 +861,7 @@ body.x-body-masked .x-window-plain .x-window-mc{background:#C7D6E9;}
 
 .x-progress-wrap{border:1px solid #6593cf;overflow:hidden;}
 .x-progress-inner{height:18px;background:#e0e8f3 url(../images/default/qtip/bg.gif) repeat-x;position:relative;}
-.x-progress-bar{height:18px;float:left;width:0;background:#9CBFEE url( ../images/default/progress/progress-bg.gif ) repeat-x left center;border-top:1px solid #D1E4FD;border-bottom:1px solid #7FA9E4;border-right:1px solid #7FA9E4;}
+.x-progress-bar{height:18px;float:left;width:0;background:#9CBFEE url(../images/default/progress/progress-bg.gif) repeat-x left center;border-top:1px solid #D1E4FD;border-bottom:1px solid #7FA9E4;border-right:1px solid #7FA9E4;}
 .x-progress-text{font-size:11px;font-weight:bold;color:#fff;padding:1px 5px;overflow:hidden;position:absolute;left:0;text-align:center;}
 .x-progress-text-back{color:#396095;line-height:16px;}
 .ext-ie .x-progress-text-back{line-height:15px;}

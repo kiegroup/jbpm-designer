@@ -89,7 +89,7 @@ public class TestServletContext implements ServletContext {
     }
 
     public String getRealPath(String path) {
-        return "src/test/resources" + path;
+        return "src/test/resources/webapp" + path;
     }
 
     public String getServerInfo() {
