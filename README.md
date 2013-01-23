@@ -1,4 +1,4 @@
 jbpm-designer
 ================
 
-jBPM Designe -r web-based BPMN2 modeller
+jBPM Designer web-based BPMN2 modeller.
