@@ -70,7 +70,7 @@ public class TaskFormsEditorServletTest  extends RepositoryBaseTest {
 
         taskFormsEditorServlet.doPost(new TestHttpServletRequest(params), new TestHttpServletResponse());
 
-        Collection<Asset> forms = repository.listAssets("/defaultPackage", new FilterByExtension("flt"));
+        Collection<Asset> forms = repository.listAssets("/defaultPackage", new FilterByExtension("ftl"));
         assertNotNull(forms);
         assertEquals(1, forms.size());
         Iterator<Asset> assets = forms.iterator();
@@ -98,7 +98,7 @@ public class TaskFormsEditorServletTest  extends RepositoryBaseTest {
 
         AssetBuilder builderForm = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builderForm.content("this is simple task content")
-                .type("flt")
+                .type("ftl")
                 .name("evaluate-taskform")
                 .location("/defaultPackage");
         String uniqueIdForm = repository.createAsset(builderForm.getAsset());
