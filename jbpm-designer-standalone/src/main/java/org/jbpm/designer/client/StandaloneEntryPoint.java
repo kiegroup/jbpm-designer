@@ -114,6 +114,18 @@ public class StandaloneEntryPoint {
                 placesMenuBar );
         Arrays.sort( menuItems );
         for ( final String menuItem : menuItems ) {
+            if (menuItem.equals("jbpm.designer")) {
+                final MenuItemCommand item = new DefaultMenuItemCommand( menuItem,
+                        new Command() {
+
+                            @Override
+                            public void execute() {
+                                placeManager.goTo( new DefaultPlaceRequest( menuItem ) );
+                            }
+
+                        } );
+                placesMenuBar.addItem( item );
+            } else {
             final MenuItemCommand item = new DefaultMenuItemCommand( menuItem,
                     new Command() {
 
@@ -124,6 +136,7 @@ public class StandaloneEntryPoint {
 
                     } );
             placesMenuBar.addItem( item );
+            }
         }
         menubar.addWorkbenchItem( placesMenu );
 

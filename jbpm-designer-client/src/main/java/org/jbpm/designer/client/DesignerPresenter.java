@@ -4,13 +4,11 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.IsWidget;
 import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.jboss.errai.ioc.client.api.Caller;
 import org.jbpm.designer.service.DesignerAssetService;
 import org.uberfire.backend.vfs.Path;
-import org.uberfire.client.annotations.OnSave;
 import org.uberfire.client.annotations.OnStart;
 import org.uberfire.client.annotations.WorkbenchEditor;
 import org.uberfire.client.annotations.WorkbenchPartTitle;
@@ -73,8 +71,8 @@ public class DesignerPresenter {
             public void callback( final Void response ) {
                 //Nothing to do at the moment... error handling would be nice
             }
-        } ).saveJsonModel( this.path,
-                jsonModel );
+        } ).saveJsonModel(this.path,
+                jsonModel);
     }
 
     @WorkbenchPartTitle

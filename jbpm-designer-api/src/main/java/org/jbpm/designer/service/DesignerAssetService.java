@@ -9,9 +9,9 @@ import org.uberfire.backend.vfs.Path;
 @Remote
 public interface DesignerAssetService {
 
-    public String loadJsonModel( final Path path );
+    public String loadJsonModel(final Path path);
 
-    public void saveJsonModel( final Path path,
-                               final String jsonModel );
+    public void saveJsonModel(final Path path,
+                              final String jsonModel);
 
 }

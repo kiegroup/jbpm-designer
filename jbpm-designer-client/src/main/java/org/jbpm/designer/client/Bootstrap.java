@@ -37,92 +37,92 @@ public class Bootstrap {
 
         //Append script tags
         appendScriptUrl( head,
-                "/designer/lib/prototype-1.5.1.js" );
+                "/lib/prototype-1.5.1.js" );
         appendScriptUrl( head,
-                "/designer/lib/path_parser.js" );
+                "/lib/path_parser.js" );
         appendScriptUrl( head,
-                "/designer/lib/ext-2.0.2/adapter/ext/ext-base.js" );
+                "/lib/ext-2.0.2/adapter/ext/ext-base.js" );
         appendScriptUrl( head,
-                "/designer/lib/ext-2.0.2/ext-all.js" );
+                "/lib/ext-2.0.2/ext-all.js" );
         appendScriptUrl( head,
-                "/designer/lib/ext-2.0.2/color-field.js" );
+                "/lib/ext-2.0.2/color-field.js" );
         appendScriptUrl( head,
-                "/designer/lib/jquery-1.7.2.min.js" );
+                "/lib/jquery-1.7.2.min.js" );
         appendScriptUrl( head,
-                "/designer/lib/handlebars-1.0.0.beta.6.js" );
+                "/lib/handlebars-1.0.0.beta.6.js" );
 
         //[manstis] GWT StyleElement is not setting the following CSS. Using unmodified CSS file for now
         //appendStyle( head,
         //             "screen",
         //             "text/css",
-        //             "@import url(\"/designer/lib/ext-2.0.2/resources/css/ext-all.css\");\n" +
+        //             "@import url(\"/lib/ext-2.0.2/resources/css/ext-all.css\");\n" +
         //                     ".extensive-remove {\n" +
-        //                     "background-image: url(/designer/images/remove.gif) ! important;\n" +
+        //                     "background-image: url(/images/remove.gif) ! important;\n" +
         //                     "}\n" );
         appendLink( head,
                 "Stylesheet",
                 "screen",
-                "/designer/lib/ext-2.0.2/resources/css/ext-all.css",
+                "/lib/ext-2.0.2/resources/css/ext-all.css",
                 "text/css" );
 
         appendScriptUrl( head,
-                "/designer/js/cm.js" );
+                "/js/cm.js" );
         appendScriptUrl( head,
-                "/designer/js/cmxml.js" );
+                "/js/cmxml.js" );
         appendScriptUrl( head,
-                "/designer/js/cmjs.js" );
+                "/js/cmjs.js" );
         appendScriptUrl( head,
-                "/designer/js/cmcss.js" );
+                "/js/cmcss.js" );
         appendScriptUrl( head,
-                "/designer/js/cmclike.js" );
+                "/js/cmclike.js" );
         appendScriptUrl( head,
-                "/designer/js/cmhtmlmixed.js" );
+                "/js/cmhtmlmixed.js" );
         appendScriptUrl( head,
-                "/designer/js/closetags.js" );
+                "/js/closetags.js" );
         appendScriptUrl( head,
-                "/designer/js/hint.js" );
+                "/js/hint.js" );
         appendScriptUrl( head,
-                "/designer/js/hintjbpm.js" );
+                "/js/hintjbpm.js" );
         appendScriptUrl( head,
-                "/designer/js/cmsearch.js" );
+                "/js/cmsearch.js" );
         appendScriptUrl( head,
-                "/designer/js/cmsearchcursor.js" );
+                "/js/cmsearchcursor.js" );
         appendScriptUrl( head,
-                "/designer/js/cmdialog.js" );
+                "/js/cmdialog.js" );
         appendScriptUrl( head,
-                "/designer/js/cmfold.js" );
+                "/js/cmfold.js" );
 
         appendLink( head,
                 "Stylesheet",
                 "screen",
-                "/designer/css/codemirror.css",
+                "/css/codemirror.css",
                 "text/css" );
         appendLink( head,
                 "Stylesheet",
                 "screen",
-                "/designer/css/cmdialog.css",
+                "/css/cmdialog.css",
                 "text/css" );
         //Full Screen
         appendLink( head,
                 "Stylesheet",
                 "screen",
-                "/designer/css/fullscreen.css",
+                "/css/fullscreen.css",
                 "text/css" );
         //Mic
         appendLink( head,
                 "Stylesheet",
                 "screen",
-                "/designer/css/mic.css",
+                "/css/mic.css",
                 "text/css" );
         //Chrome Frame
         appendScriptUrl( head,
-                "/designer/js/CFInstall.min.js" );
+                "/js/CFInstall.min.js" );
 
         //Skins
         appendLink( head,
                 "Stylesheet",
                 "screen",
-                "/designer/css/theme-default.css",
+                "/css/theme-default.css",
                 "text/css" );
 
         // erdf schemas
@@ -144,50 +144,50 @@ public class Bootstrap {
 
         //Environment files
         final List<String> envFiles = new ArrayList<String>();
-        envFiles.add( "/designer/i18n/translation_" + getDesignerLocale() + ".js" );
-        envFiles.add( "/designer/js/kickstart.js" );
-        envFiles.add( "/designer/js/config.js" );
-        envFiles.add( "/designer/js/oryx.js" );
-        envFiles.add( "/designer/js/clazz.js" );
-        envFiles.add( "/designer/js/Core/main.js" );
-        envFiles.add( "/designer/js/utils.js" );
-        envFiles.add( "/designer/js/erdfparser.js" );
-        envFiles.add( "/designer/js/datamanager.js" );
-        envFiles.add( "/designer/js/Core/SVG/editpathhandler.js" );
-        envFiles.add( "/designer/js/Core/SVG/minmaxpathhandler.js" );
-        envFiles.add( "/designer/js/Core/SVG/pointspathhandler.js" );
-        envFiles.add( "/designer/js/Core/SVG/svgmarker.js" );
-        envFiles.add( "/designer/js/Core/SVG/svgshape.js" );
-        envFiles.add( "/designer/js/Core/SVG/label.js" );
-        envFiles.add( "/designer/js/Core/Math/math.js" );
-        envFiles.add( "/designer/js/Core/StencilSet/stencil.js" );
-        envFiles.add( "/designer/js/Core/StencilSet/property.js" );
-        envFiles.add( "/designer/js/Core/StencilSet/propertyitem.js" );
-        envFiles.add( "/designer/js/Core/StencilSet/complexpropertyitem.js" );
-        envFiles.add( "/designer/js/Core/StencilSet/rules.js" );
-        envFiles.add( "/designer/js/Core/StencilSet/stencilset.js" );
-        envFiles.add( "/designer/js/Core/StencilSet/stencilsets.js" );
-        envFiles.add( "/designer/js/Core/command.js" );
-        envFiles.add( "/designer/js/Core/bounds.js" );
-        envFiles.add( "/designer/js/Core/uiobject.js" );
-        envFiles.add( "/designer/js/Core/abstractshape.js" );
-        envFiles.add( "/designer/js/Core/canvas.js" );
-        envFiles.add( "/designer/js/Core/svgDrag.js" );
-        envFiles.add( "/designer/js/Core/shape.js" );
-        envFiles.add( "/designer/js/Core/Controls/control.js" );
-        envFiles.add( "/designer/js/Core/Controls/magnet.js" );
-        envFiles.add( "/designer/js/Core/Controls/docker.js" );
-        envFiles.add( "/designer/js/Core/node.js" );
-        envFiles.add( "/designer/js/Core/edge.js" );
-        envFiles.add( "/designer/js/Core/abstractPlugin.js" );
-        envFiles.add( "/designer/js/Core/abstractLayouter.js" );
-        envFiles.add( "/designer/js/Core/abstractDragTracker.js" );
-        envFiles.add( "/designer/js/diff_match_patch.js" );
-        envFiles.add( "/designer/js/itemdeleter.js" );
-        envFiles.add( "/designer/js/jsonpath.js" );
-        envFiles.add( "/designer/js/imageviewer.js" );
-        envFiles.add( "/designer/js/svgviewer.js" );
-        envFiles.add( "/designer/js/panelcollapsedtitle.js" );
+        envFiles.add( "/i18n/translation_" + getDesignerLocale() + ".js" );
+        envFiles.add( "/js/kickstart.js" );
+        envFiles.add( "/js/config.js" );
+        envFiles.add( "/js/oryx.js" );
+        envFiles.add( "/js/clazz.js" );
+        envFiles.add( "/js/Core/main.js" );
+        envFiles.add( "/js/utils.js" );
+        envFiles.add( "/js/erdfparser.js" );
+        envFiles.add( "/js/datamanager.js" );
+        envFiles.add( "/js/Core/SVG/editpathhandler.js" );
+        envFiles.add( "/js/Core/SVG/minmaxpathhandler.js" );
+        envFiles.add( "/js/Core/SVG/pointspathhandler.js" );
+        envFiles.add( "/js/Core/SVG/svgmarker.js" );
+        envFiles.add( "/js/Core/SVG/svgshape.js" );
+        envFiles.add( "/js/Core/SVG/label.js" );
+        envFiles.add( "/js/Core/Math/math.js" );
+        envFiles.add( "/js/Core/StencilSet/stencil.js" );
+        envFiles.add( "/js/Core/StencilSet/property.js" );
+        envFiles.add( "/js/Core/StencilSet/propertyitem.js" );
+        envFiles.add( "/js/Core/StencilSet/complexpropertyitem.js" );
+        envFiles.add( "/js/Core/StencilSet/rules.js" );
+        envFiles.add( "/js/Core/StencilSet/stencilset.js" );
+        envFiles.add( "/js/Core/StencilSet/stencilsets.js" );
+        envFiles.add( "/js/Core/command.js" );
+        envFiles.add( "/js/Core/bounds.js" );
+        envFiles.add( "/js/Core/uiobject.js" );
+        envFiles.add( "/js/Core/abstractshape.js" );
+        envFiles.add( "/js/Core/canvas.js" );
+        envFiles.add( "/js/Core/svgDrag.js" );
+        envFiles.add( "/js/Core/shape.js" );
+        envFiles.add( "/js/Core/Controls/control.js" );
+        envFiles.add( "/js/Core/Controls/magnet.js" );
+        envFiles.add( "/js/Core/Controls/docker.js" );
+        envFiles.add( "/js/Core/node.js" );
+        envFiles.add( "/js/Core/edge.js" );
+        envFiles.add( "/js/Core/abstractPlugin.js" );
+        envFiles.add( "/js/Core/abstractLayouter.js" );
+        envFiles.add( "/js/Core/abstractDragTracker.js" );
+        envFiles.add( "/js/diff_match_patch.js" );
+        envFiles.add( "/js/itemdeleter.js" );
+        envFiles.add( "/js/jsonpath.js" );
+        envFiles.add( "/js/imageviewer.js" );
+        envFiles.add( "/js/svgviewer.js" );
+        envFiles.add( "/js/panelcollapsedtitle.js" );
         for ( String envFile : envFiles ) {
             appendScriptUrl( head,
                     envFile );
@@ -195,28 +195,28 @@ public class Bootstrap {
 
         //Plugin files -- hard coded for now (need a new PluginServiceImpl exposed via errai-rpc)
         final List<String> pluginFiles = new ArrayList<String>();
-        pluginFiles.add( "/designer/js/Plugins/toolbar.js" );
-        pluginFiles.add( "/designer/js/Plugins/uuidRepository.js" );
-        pluginFiles.add( "/designer/js/Plugins/shapemenu.js" );
-        pluginFiles.add( "/designer/js/Plugins/shaperepository.js" );
-        pluginFiles.add( "/designer/js/Plugins/propertywindow.js" );
-        pluginFiles.add( "/designer/js/Plugins/canvasResize.js" );
-        pluginFiles.add( "/designer/js/Plugins/view.js" );
-        pluginFiles.add( "/designer/js/Plugins/dragdropresize.js" );
-        pluginFiles.add( "/designer/js/Plugins/renameShapes.js" );
-        pluginFiles.add( "/designer/js/Plugins/undo.js" );
-        pluginFiles.add( "/designer/js/Plugins/arrangement.js" );
-        pluginFiles.add( "/designer/js/Plugins/grouping.js" );
-        pluginFiles.add( "/designer/js/Plugins/dragDocker.js" );
-        pluginFiles.add( "/designer/js/Plugins/addDocker.js" );
-        pluginFiles.add( "/designer/js/Plugins/selectionframe.js" );
-        pluginFiles.add( "/designer/js/Plugins/shapeHighlighting.js" );
-        pluginFiles.add( "/designer/js/Plugins/edit.js" );
-        pluginFiles.add( "/designer/js/Plugins/keysMove.js" );
-        pluginFiles.add( "/designer/js/Plugins/Layouter/edgeLayouter.js" );
-        pluginFiles.add( "/designer/js/Plugins/Layouter/containerLayouter.js" );
-        pluginFiles.add( "/designer/js/Plugins/dragTracker/laneDragTracker.js" );
-        pluginFiles.add( "/designer/js/Plugins/dragTracker/poolDragTracker.js" );
+        pluginFiles.add( "/js/Plugins/toolbar.js" );
+        pluginFiles.add( "/js/Plugins/uuidRepository.js" );
+        pluginFiles.add( "/js/Plugins/shapemenu.js" );
+        pluginFiles.add( "/js/Plugins/shaperepository.js" );
+        pluginFiles.add( "/js/Plugins/propertywindow.js" );
+        pluginFiles.add( "/js/Plugins/canvasResize.js" );
+        pluginFiles.add( "/js/Plugins/view.js" );
+        pluginFiles.add( "/js/Plugins/dragdropresize.js" );
+        pluginFiles.add( "/js/Plugins/renameShapes.js" );
+        pluginFiles.add( "/js/Plugins/undo.js" );
+        pluginFiles.add( "/js/Plugins/arrangement.js" );
+        pluginFiles.add( "/js/Plugins/grouping.js" );
+        pluginFiles.add( "/js/Plugins/dragDocker.js" );
+        pluginFiles.add( "/js/Plugins/addDocker.js" );
+        pluginFiles.add( "/js/Plugins/selectionframe.js" );
+        pluginFiles.add( "/js/Plugins/shapeHighlighting.js" );
+        pluginFiles.add( "/js/Plugins/edit.js" );
+        pluginFiles.add( "/js/Plugins/keysMove.js" );
+        pluginFiles.add( "/js/Plugins/Layouter/edgeLayouter.js" );
+        pluginFiles.add( "/js/Plugins/Layouter/containerLayouter.js" );
+        pluginFiles.add( "/js/Plugins/dragTracker/laneDragTracker.js" );
+        pluginFiles.add( "/js/Plugins/dragTracker/poolDragTracker.js" );
         for ( String pluginFile : pluginFiles ) {
             appendScriptUrl( head,
                     pluginFile );
@@ -246,7 +246,7 @@ public class Bootstrap {
                         "ORYX.LOCAL_HISTORY_ENABLED = " + getLocalHistoryEnabled() + ";\n" +
                         "ORYX.LOCAL_HISTORY_TIMEOUT = " + getLocalHistoryTimeout() + ";\n" +
                         "var segments = window.location.pathname.split(\"/\").without(\"\");\n" +
-                        "ORYX.CONFIG.ROOT_PATH = \"/designer/\";\n" +
+                        "ORYX.CONFIG.ROOT_PATH = \"/\";\n" +
                         "ORYX.PATH = ORYX.CONFIG.ROOT_PATH;\n" +
                         "if (ORYX.UUID === undefined) {\n" +
                         "    ORYX.UUID = segments.pop();\n" +

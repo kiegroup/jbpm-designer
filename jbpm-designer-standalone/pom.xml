@@ -211,7 +211,7 @@
                         <compileSourcesArtifact>org.jbpm:jbpm-console-shared</compileSourcesArtifact>
                         <compileSourcesArtifact>org.kie.commons:kie-nio2-model</compileSourcesArtifact>
                     </compileSourcesArtifacts>
-                    <runTarget>org.jbpm.designer.jBPMDesignerNGShowcase/Designer.html</runTarget>
+                    <runTarget>org.jbpm.designer.jBPMDesignerStandalone/designer.html</runTarget>
                     <extraJvmArgs>-Xmx1024m -XX:MaxPermSize=256m</extraJvmArgs>
                     <soyc>false</soyc>
                     <server>org.jboss.errai.cdi.server.gwt.JettyLauncher</server>

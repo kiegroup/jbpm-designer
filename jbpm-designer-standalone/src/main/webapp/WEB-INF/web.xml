@@ -21,12 +21,13 @@
     <servlet>
         <servlet-name>UberFireServlet</servlet-name>
         <servlet-class>org.uberfire.server.UberfireServlet</servlet-class>
+
         <load-on-startup>1</load-on-startup>
     </servlet>
 
     <servlet-mapping>
         <servlet-name>UberFireServlet</servlet-name>
-        <url-pattern>/org.jbpm.designer.jBPMDesigner/Designer.html</url-pattern>
+        <url-pattern>/org.jbpm.designer.jBPMDesignerStandalone/designer.html</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -34,14 +35,14 @@
         <servlet-class>org.uberfire.server.UberfireImageServlet</servlet-class>
         <init-param>
             <param-name>org.uberfire.images.paths</param-name>
-            <param-value>/org.jbpm.designer.jBPMDesigner</param-value>
+            <param-value>/org.jbpm.designer.jBPMDesignerStandalone</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
 
     <servlet-mapping>
         <servlet-name>UberFireImageServlet</servlet-name>
-        <url-pattern>/org.jbpm.designer.jBPMDesigner/uberFireImages/*</url-pattern>
+        <url-pattern>/org.jbpm.designer.jBPMDesignerStandalone/uberFireImages/*</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -266,10 +267,6 @@
     <servlet-mapping>
         <servlet-name>MenuServlet</servlet-name>
         <url-pattern>/menu/*</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>DirectoryListingServlet</servlet-name>
-        <url-pattern>/generated-uis/</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>UUIDBasedRepositoryServlet</servlet-name>

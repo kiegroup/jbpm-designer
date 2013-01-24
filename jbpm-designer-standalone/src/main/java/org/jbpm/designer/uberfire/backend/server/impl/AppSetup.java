@@ -48,7 +48,7 @@ public class AppSetup {
         }
 
         activeFileSystems.addBootstrapFileSystem( FileSystemFactory.newFS( new HashMap<String, String>() {{
-            put( "default://uf-playground", "uf-playground" );
+            put( "git://uf-playground", "uf-playground" );
         }}, fs.supportedFileAttributeViews() ) );
     }
 
