@@ -27,7 +27,7 @@
 
     <servlet-mapping>
         <servlet-name>UberFireServlet</servlet-name>
-        <url-pattern>/org.jbpm.designer.jBPMDesignerStandalone/designer.html</url-pattern>
+        <url-pattern>/org.jbpm.designer.jBPMDesigner/designer.html</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -35,14 +35,14 @@
         <servlet-class>org.uberfire.server.UberfireImageServlet</servlet-class>
         <init-param>
             <param-name>org.uberfire.images.paths</param-name>
-            <param-value>/org.jbpm.designer.jBPMDesignerStandalone</param-value>
+            <param-value>/org.jbpm.designer.jBPMDesigner</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
 
     <servlet-mapping>
         <servlet-name>UberFireImageServlet</servlet-name>
-        <url-pattern>/org.jbpm.designer.jBPMDesignerStandalone/uberFireImages/*</url-pattern>
+        <url-pattern>/org.jbpm.designer.jBPMDesigner/uberFireImages/*</url-pattern>
     </servlet-mapping>
 
     <servlet>

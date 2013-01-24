@@ -282,7 +282,7 @@ public class SimpleStorageServlet extends HttpServlet {
     private Map<String, URL> getAvailableStencilsets(URL base) {
 
 	// TODO make stencilsets folder configurable.
-	// TODO make webapp name be found dynamically.
+	// TODO make public name be found dynamically.
 	String webappName = "/oryx";
 	String stencilsetPath = this.getServletContext().getRealPath("/")
 		+ File.separator + "stencilsets" + File.separator;

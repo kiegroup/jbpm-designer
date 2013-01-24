@@ -21,11 +21,6 @@
             <groupId>org.jbpm</groupId>
             <artifactId>jbpm-designer-api</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.jbpm</groupId>
-            <artifactId>jbpm-designer-client</artifactId>
-            <scope>test</scope>
-        </dependency>
 
         <!-- jBPM -->
         <dependency>
@@ -509,7 +504,7 @@
                                     <type>jar</type>
                                     <overWrite>false</overWrite>
                                     <outputDirectory>${project.basedir}/src/test/resources</outputDirectory>
-                                    <includes>**/webapp/**</includes>
+                                    <includes>**/public/**</includes>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
@@ -522,7 +517,7 @@
                 <configuration>
                     <filesets>
                         <fileset>
-                            <directory>${project.basedir}/src/test/resources/webapp</directory>
+                            <directory>${project.basedir}/src/test/resources/org/jbpm/designer/public</directory>
                             <followSymlinks>false</followSymlinks>
                         </fileset>
                     </filesets>

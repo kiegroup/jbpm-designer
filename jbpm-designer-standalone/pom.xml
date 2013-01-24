@@ -185,6 +185,9 @@
             </resource>
         </resources>
 
+        <!-- Generate compiled stuff in the folder used for developing mode -->
+        <!--<outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>-->
+
         <plugins>
 
             <plugin>
@@ -192,7 +195,7 @@
                 <artifactId>gwt-maven-plugin</artifactId>
                 <version>${gwt.maven.version}</version>
                 <configuration>
-                    <module>org.jbpm.designer.jBPMDesignerStandalone</module>
+                    <module>org.jbpm.designer.jBPMDesigner</module>
                     <logLevel>INFO</logLevel>
                     <compileSourcesArtifacts>
                         <compileSourcesArtifact>org.jbpm:jbpm-designer-api</compileSourcesArtifact>
@@ -211,7 +214,7 @@
                         <compileSourcesArtifact>org.jbpm:jbpm-console-shared</compileSourcesArtifact>
                         <compileSourcesArtifact>org.kie.commons:kie-nio2-model</compileSourcesArtifact>
                     </compileSourcesArtifacts>
-                    <runTarget>org.jbpm.designer.jBPMDesignerStandalone/designer.html</runTarget>
+                    <runTarget>org.jbpm.designer.jBPMDesigner/designer.html</runTarget>
                     <extraJvmArgs>-Xmx1024m -XX:MaxPermSize=256m</extraJvmArgs>
                     <soyc>false</soyc>
                     <server>org.jboss.errai.cdi.server.gwt.JettyLauncher</server>
@@ -293,34 +296,6 @@
                         </fileset>
                     </filesets>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.2</version>
-                <executions>
-                    <execution>
-                        <id>unpack</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>unpack</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>org.jbpm</groupId>
-                                    <artifactId>jbpm-designer-client</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>jar</type>
-                                    <overWrite>false</overWrite>
-                                    <outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}</outputDirectory>
-                                    <includes>**/webapp/**</includes>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
 

@@ -66,7 +66,7 @@ public class PluginServiceImpl implements IDiagramPluginService {
     }
     
     /**
-     * The default local plugins, available to the webapp 
+     * The default local plugins, available to the public
      * so that the default profile can provision its plugins. 
      * Consumers through OSGi should use the service tracker
      * to get the plugins they need.

@@ -29,7 +29,7 @@
 </div>
 
 <!-- The GWT js file generated at run time -->
-<script type="text/javascript" src='org.jbpm.designer.jBPMDesignerStandalone.nocache.js'></script>
+<script type="text/javascript" src='org.jbpm.designer.jBPMDesigner.nocache.js'></script>
 
 </body>
 </html>

@@ -16,7 +16,7 @@ import com.google.gwt.dom.client.StyleElement;
  * Bootstrap GWT's host page to support jBPM Designer. This implementation hard-codes all the properties
  * that are normally derived from the IDiagramProfile. Different IDiagramProfile implementations (such as
  * org.kie.drools.designer.web.profile.impl.DefaultProfileImpl) need access to the Servlet Context to load the
- * profile configuration files from the webapp. A fuller implementation of this bootstrap would callback
+ * profile configuration files from the public. A fuller implementation of this bootstrap would callback
  * to the server to get the necessary configuration parameters.
  *
  * This is a hard-coded representation of the jBPM profile.
