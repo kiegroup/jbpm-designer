@@ -383,38 +383,72 @@ ORYX.Plugins.UUIDRepositoryDummySave = ORYX.Plugins.AbstractPlugin.extend({
  * (moved from editor handler)
  */
 window.onOryxResourcesLoaded = function() {
-	var stencilset = ORYX.Utils.getParamFromUrl('stencilset') || ORYX.CONFIG.SSET;
-	var editor_parameters = {
-		id: ORYX.UUID,
-		stencilset: {
-			url: stencilset
-		}
-	};
-	if(!(ORYX.UUID === undefined)) {
-		
- 		//load the model from the repository from its uuid
-		new Ajax.Request(ORYX.CONFIG.UUID_URL(), {
-            asynchronous: false,
-            encoding: 'UTF-8',
-            method: 'get',
-            onSuccess: function(transport) {
-				response = transport.responseText;
-				if (response.length != 0) {
-				    try {
-					    model = response.evalJSON();
-					    editor_parameters.model = model;
-				    } catch(err) {
-				    	ORYX.LOG.error(err);
-				    }
-				}
-				
-			},
-            onFailure: function(transport) {
-            	ORYX.LOG.error("Could not load the model for uuid " + ORYX.UUID);
-			}
-        });
-	}
-	// finally open the editor:
-	var editor = new ORYX.Editor(editor_parameters);
+//	var stencilset = ORYX.Utils.getParamFromUrl('stencilset') || ORYX.CONFIG.SSET;
+//	var editor_parameters = {
+//		id: ORYX.UUID,
+//		stencilset: {
+//			url: stencilset
+//		}
+//	};
+//	if(!(ORYX.UUID === undefined)) {
+//
+// 		//load the model from the repository from its uuid
+//		new Ajax.Request(ORYX.CONFIG.UUID_URL(), {
+//            asynchronous: false,
+//            encoding: 'UTF-8',
+//            method: 'get',
+//            onSuccess: function(transport) {
+//				response = transport.responseText;
+//				if (response.length != 0) {
+//				    try {
+//					    model = response.evalJSON();
+//					    editor_parameters.model = model;
+//				    } catch(err) {
+//				    	ORYX.LOG.error(err);
+//				    }
+//				}
+//
+//			},
+//            onFailure: function(transport) {
+//            	ORYX.LOG.error("Could not load the model for uuid " + ORYX.UUID);
+//			}
+//        });
+//	}
+//	// finally open the editor:
+//	var editor = new ORYX.Editor(editor_parameters);
+//    ORYX.EDITOR = editor;
+};
+//[manstis] - Push an existing process into Oryx
+function loadProcess(containerId, jsonModel) {
+    //Stencil set
+    var stencilset = ORYX.Utils.getParamFromUrl('stencilset') || ORYX.CONFIG.SSET;
+    var editor_parameters = {
+        id:containerId,
+        model:jsonModel.evalJSON(),
+        fullscreen:false,
+        stencilset:{
+            url:stencilset
+        }
+    };
+
+    //Launch Oryx
+    var editor = new ORYX.Editor(editor_parameters);
+    ORYX.EDITOR = editor;
+};
+
+//[manstis] - Initialize Oryx with an empty process
+function newProcess(containerId) {
+    //Stencil set
+    var stencilset = ORYX.CONFIG.SSET;
+    var editor_parameters = {
+        id:containerId,
+        fullscreen:false,
+        stencilset:{
+            url:stencilset
+        }
+    };
+
+    //Launch Oryx
+    var editor = new ORYX.Editor(editor_parameters);
     ORYX.EDITOR = editor;
 };

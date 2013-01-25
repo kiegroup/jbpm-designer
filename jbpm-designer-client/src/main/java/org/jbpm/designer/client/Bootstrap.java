@@ -16,7 +16,7 @@ import com.google.gwt.dom.client.StyleElement;
  * Bootstrap GWT's host page to support jBPM Designer. This implementation hard-codes all the properties
  * that are normally derived from the IDiagramProfile. Different IDiagramProfile implementations (such as
  * org.kie.drools.designer.web.profile.impl.DefaultProfileImpl) need access to the Servlet Context to load the
- * profile configuration files from the public. A fuller implementation of this bootstrap would callback
+ * profile configuration files from the webapp. A fuller implementation of this bootstrap would callback
  * to the server to get the necessary configuration parameters.
  *
  * This is a hard-coded representation of the jBPM profile.
@@ -37,92 +37,92 @@ public class Bootstrap {
 
         //Append script tags
         appendScriptUrl( head,
-                "/lib/prototype-1.5.1.js" );
+                "/org.jbpm.designer.jBPMDesigner/lib/prototype-1.5.1.js" );
         appendScriptUrl( head,
-                "/lib/path_parser.js" );
+                "/org.jbpm.designer.jBPMDesigner/lib/path_parser.js" );
         appendScriptUrl( head,
-                "/lib/ext-2.0.2/adapter/ext/ext-base.js" );
+                "/org.jbpm.designer.jBPMDesigner/lib/ext-2.0.2/adapter/ext/ext-base.js" );
         appendScriptUrl( head,
-                "/lib/ext-2.0.2/ext-all.js" );
+                "/org.jbpm.designer.jBPMDesigner/lib/ext-2.0.2/ext-all.js" );
         appendScriptUrl( head,
-                "/lib/ext-2.0.2/color-field.js" );
+                "/org.jbpm.designer.jBPMDesigner/lib/ext-2.0.2/color-field.js" );
         appendScriptUrl( head,
-                "/lib/jquery-1.7.2.min.js" );
+                "/org.jbpm.designer.jBPMDesigner/lib/jquery-1.7.2.min.js" );
         appendScriptUrl( head,
-                "/lib/handlebars-1.0.0.beta.6.js" );
+                "/org.jbpm.designer.jBPMDesigner/lib/handlebars-1.0.0.beta.6.js" );
 
         //[manstis] GWT StyleElement is not setting the following CSS. Using unmodified CSS file for now
         //appendStyle( head,
         //             "screen",
         //             "text/css",
-        //             "@import url(\"/lib/ext-2.0.2/resources/css/ext-all.css\");\n" +
+        //             "@import url(\"/org.jbpm.designer.jBPMDesigner/lib/ext-2.0.2/resources/css/ext-all.css\");\n" +
         //                     ".extensive-remove {\n" +
-        //                     "background-image: url(/images/remove.gif) ! important;\n" +
+        //                     "background-image: url(/org.jbpm.designer.jBPMDesigner/images/remove.gif) ! important;\n" +
         //                     "}\n" );
         appendLink( head,
                 "Stylesheet",
                 "screen",
-                "/lib/ext-2.0.2/resources/css/ext-all.css",
+                "/org.jbpm.designer.jBPMDesigner/lib/ext-2.0.2/resources/css/ext-all.css",
                 "text/css" );
 
         appendScriptUrl( head,
-                "/js/cm.js" );
+                "/org.jbpm.designer.jBPMDesigner/js/cm.js" );
         appendScriptUrl( head,
-                "/js/cmxml.js" );
+                "/org.jbpm.designer.jBPMDesigner/js/cmxml.js" );
         appendScriptUrl( head,
-                "/js/cmjs.js" );
+                "/org.jbpm.designer.jBPMDesigner/js/cmjs.js" );
         appendScriptUrl( head,
-                "/js/cmcss.js" );
+                "/org.jbpm.designer.jBPMDesigner/js/cmcss.js" );
         appendScriptUrl( head,
-                "/js/cmclike.js" );
+                "/org.jbpm.designer.jBPMDesigner/js/cmclike.js" );
         appendScriptUrl( head,
-                "/js/cmhtmlmixed.js" );
+                "/org.jbpm.designer.jBPMDesigner/js/cmhtmlmixed.js" );
         appendScriptUrl( head,
-                "/js/closetags.js" );
+                "/org.jbpm.designer.jBPMDesigner/js/closetags.js" );
         appendScriptUrl( head,
-                "/js/hint.js" );
+                "/org.jbpm.designer.jBPMDesigner/js/hint.js" );
         appendScriptUrl( head,
-                "/js/hintjbpm.js" );
+                "/org.jbpm.designer.jBPMDesigner/js/hintjbpm.js" );
         appendScriptUrl( head,
-                "/js/cmsearch.js" );
+                "/org.jbpm.designer.jBPMDesigner/js/cmsearch.js" );
         appendScriptUrl( head,
-                "/js/cmsearchcursor.js" );
+                "/org.jbpm.designer.jBPMDesigner/js/cmsearchcursor.js" );
         appendScriptUrl( head,
-                "/js/cmdialog.js" );
+                "/org.jbpm.designer.jBPMDesigner/js/cmdialog.js" );
         appendScriptUrl( head,
-                "/js/cmfold.js" );
+                "/org.jbpm.designer.jBPMDesigner/js/cmfold.js" );
 
         appendLink( head,
                 "Stylesheet",
                 "screen",
-                "/css/codemirror.css",
+                "/org.jbpm.designer.jBPMDesigner/css/codemirror.css",
                 "text/css" );
         appendLink( head,
                 "Stylesheet",
                 "screen",
-                "/css/cmdialog.css",
+                "/org.jbpm.designer.jBPMDesigner/css/cmdialog.css",
                 "text/css" );
         //Full Screen
         appendLink( head,
                 "Stylesheet",
                 "screen",
-                "/css/fullscreen.css",
+                "/org.jbpm.designer.jBPMDesigner/css/fullscreen.css",
                 "text/css" );
         //Mic
         appendLink( head,
                 "Stylesheet",
                 "screen",
-                "/css/mic.css",
+                "/org.jbpm.designer.jBPMDesigner/css/mic.css",
                 "text/css" );
         //Chrome Frame
         appendScriptUrl( head,
-                "/js/CFInstall.min.js" );
+                "/org.jbpm.designer.jBPMDesigner/js/CFInstall.min.js" );
 
         //Skins
         appendLink( head,
                 "Stylesheet",
                 "screen",
-                "/css/theme-default.css",
+                "/org.jbpm.designer.jBPMDesigner/css/theme-default.css",
                 "text/css" );
 
         // erdf schemas
@@ -144,50 +144,50 @@ public class Bootstrap {
 
         //Environment files
         final List<String> envFiles = new ArrayList<String>();
-        envFiles.add( "/i18n/translation_" + getDesignerLocale() + ".js" );
-        envFiles.add( "/js/kickstart.js" );
-        envFiles.add( "/js/config.js" );
-        envFiles.add( "/js/oryx.js" );
-        envFiles.add( "/js/clazz.js" );
-        envFiles.add( "/js/Core/main.js" );
-        envFiles.add( "/js/utils.js" );
-        envFiles.add( "/js/erdfparser.js" );
-        envFiles.add( "/js/datamanager.js" );
-        envFiles.add( "/js/Core/SVG/editpathhandler.js" );
-        envFiles.add( "/js/Core/SVG/minmaxpathhandler.js" );
-        envFiles.add( "/js/Core/SVG/pointspathhandler.js" );
-        envFiles.add( "/js/Core/SVG/svgmarker.js" );
-        envFiles.add( "/js/Core/SVG/svgshape.js" );
-        envFiles.add( "/js/Core/SVG/label.js" );
-        envFiles.add( "/js/Core/Math/math.js" );
-        envFiles.add( "/js/Core/StencilSet/stencil.js" );
-        envFiles.add( "/js/Core/StencilSet/property.js" );
-        envFiles.add( "/js/Core/StencilSet/propertyitem.js" );
-        envFiles.add( "/js/Core/StencilSet/complexpropertyitem.js" );
-        envFiles.add( "/js/Core/StencilSet/rules.js" );
-        envFiles.add( "/js/Core/StencilSet/stencilset.js" );
-        envFiles.add( "/js/Core/StencilSet/stencilsets.js" );
-        envFiles.add( "/js/Core/command.js" );
-        envFiles.add( "/js/Core/bounds.js" );
-        envFiles.add( "/js/Core/uiobject.js" );
-        envFiles.add( "/js/Core/abstractshape.js" );
-        envFiles.add( "/js/Core/canvas.js" );
-        envFiles.add( "/js/Core/svgDrag.js" );
-        envFiles.add( "/js/Core/shape.js" );
-        envFiles.add( "/js/Core/Controls/control.js" );
-        envFiles.add( "/js/Core/Controls/magnet.js" );
-        envFiles.add( "/js/Core/Controls/docker.js" );
-        envFiles.add( "/js/Core/node.js" );
-        envFiles.add( "/js/Core/edge.js" );
-        envFiles.add( "/js/Core/abstractPlugin.js" );
-        envFiles.add( "/js/Core/abstractLayouter.js" );
-        envFiles.add( "/js/Core/abstractDragTracker.js" );
-        envFiles.add( "/js/diff_match_patch.js" );
-        envFiles.add( "/js/itemdeleter.js" );
-        envFiles.add( "/js/jsonpath.js" );
-        envFiles.add( "/js/imageviewer.js" );
-        envFiles.add( "/js/svgviewer.js" );
-        envFiles.add( "/js/panelcollapsedtitle.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/i18n/translation_" + getDesignerLocale() + ".js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/kickstart.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/config.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/oryx.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/clazz.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Core/main.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/utils.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/erdfparser.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/datamanager.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Core/SVG/editpathhandler.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Core/SVG/minmaxpathhandler.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Core/SVG/pointspathhandler.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Core/SVG/svgmarker.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Core/SVG/svgshape.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Core/SVG/label.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Core/Math/math.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Core/StencilSet/stencil.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Core/StencilSet/property.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Core/StencilSet/propertyitem.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Core/StencilSet/complexpropertyitem.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Core/StencilSet/rules.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Core/StencilSet/stencilset.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Core/StencilSet/stencilsets.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Core/command.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Core/bounds.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Core/uiobject.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Core/abstractshape.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Core/canvas.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Core/svgDrag.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Core/shape.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Core/Controls/control.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Core/Controls/magnet.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Core/Controls/docker.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Core/node.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Core/edge.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Core/abstractPlugin.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Core/abstractLayouter.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Core/abstractDragTracker.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/diff_match_patch.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/itemdeleter.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/jsonpath.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/imageviewer.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/svgviewer.js" );
+        envFiles.add( "/org.jbpm.designer.jBPMDesigner/js/panelcollapsedtitle.js" );
         for ( String envFile : envFiles ) {
             appendScriptUrl( head,
                     envFile );
@@ -195,28 +195,28 @@ public class Bootstrap {
 
         //Plugin files -- hard coded for now (need a new PluginServiceImpl exposed via errai-rpc)
         final List<String> pluginFiles = new ArrayList<String>();
-        pluginFiles.add( "/js/Plugins/toolbar.js" );
-        pluginFiles.add( "/js/Plugins/uuidRepository.js" );
-        pluginFiles.add( "/js/Plugins/shapemenu.js" );
-        pluginFiles.add( "/js/Plugins/shaperepository.js" );
-        pluginFiles.add( "/js/Plugins/propertywindow.js" );
-        pluginFiles.add( "/js/Plugins/canvasResize.js" );
-        pluginFiles.add( "/js/Plugins/view.js" );
-        pluginFiles.add( "/js/Plugins/dragdropresize.js" );
-        pluginFiles.add( "/js/Plugins/renameShapes.js" );
-        pluginFiles.add( "/js/Plugins/undo.js" );
-        pluginFiles.add( "/js/Plugins/arrangement.js" );
-        pluginFiles.add( "/js/Plugins/grouping.js" );
-        pluginFiles.add( "/js/Plugins/dragDocker.js" );
-        pluginFiles.add( "/js/Plugins/addDocker.js" );
-        pluginFiles.add( "/js/Plugins/selectionframe.js" );
-        pluginFiles.add( "/js/Plugins/shapeHighlighting.js" );
-        pluginFiles.add( "/js/Plugins/edit.js" );
-        pluginFiles.add( "/js/Plugins/keysMove.js" );
-        pluginFiles.add( "/js/Plugins/Layouter/edgeLayouter.js" );
-        pluginFiles.add( "/js/Plugins/Layouter/containerLayouter.js" );
-        pluginFiles.add( "/js/Plugins/dragTracker/laneDragTracker.js" );
-        pluginFiles.add( "/js/Plugins/dragTracker/poolDragTracker.js" );
+        pluginFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Plugins/toolbar.js" );
+        pluginFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Plugins/uuidRepository.js" );
+        pluginFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Plugins/shapemenu.js" );
+        pluginFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Plugins/shaperepository.js" );
+        pluginFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Plugins/propertywindow.js" );
+        pluginFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Plugins/canvasResize.js" );
+        pluginFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Plugins/view.js" );
+        pluginFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Plugins/dragdropresize.js" );
+        pluginFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Plugins/renameShapes.js" );
+        pluginFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Plugins/undo.js" );
+        pluginFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Plugins/arrangement.js" );
+        pluginFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Plugins/grouping.js" );
+        pluginFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Plugins/dragDocker.js" );
+        pluginFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Plugins/addDocker.js" );
+        pluginFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Plugins/selectionframe.js" );
+        pluginFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Plugins/shapeHighlighting.js" );
+        pluginFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Plugins/edit.js" );
+        pluginFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Plugins/keysMove.js" );
+        pluginFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Plugins/Layouter/edgeLayouter.js" );
+        pluginFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Plugins/Layouter/containerLayouter.js" );
+        pluginFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Plugins/dragTracker/laneDragTracker.js" );
+        pluginFiles.add( "/org.jbpm.designer.jBPMDesigner/js/Plugins/dragTracker/poolDragTracker.js" );
         for ( String pluginFile : pluginFiles ) {
             appendScriptUrl( head,
                     pluginFile );
@@ -246,7 +246,7 @@ public class Bootstrap {
                         "ORYX.LOCAL_HISTORY_ENABLED = " + getLocalHistoryEnabled() + ";\n" +
                         "ORYX.LOCAL_HISTORY_TIMEOUT = " + getLocalHistoryTimeout() + ";\n" +
                         "var segments = window.location.pathname.split(\"/\").without(\"\");\n" +
-                        "ORYX.CONFIG.ROOT_PATH = \"/\";\n" +
+                        "ORYX.CONFIG.ROOT_PATH = \"/org.jbpm.designer.jBPMDesigner/\";\n" +
                         "ORYX.PATH = ORYX.CONFIG.ROOT_PATH;\n" +
                         "if (ORYX.UUID === undefined) {\n" +
                         "    ORYX.UUID = segments.pop();\n" +

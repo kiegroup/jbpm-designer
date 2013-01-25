@@ -1,5 +1,6 @@
 package org.jbpm.designer.server.service;
 
+import java.io.File;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -17,7 +18,8 @@ public class MockServletContext implements ServletContext {
 
     @Override
     public String getRealPath( String s ) {
-        return "";
+        //FIXME just for now so it works in embedded mode-gwt hosted mode
+        return "target/jbpm-designer-standalone-6.0.0-SNAPSHOT/org.jbpm.designer.jBPMDesigner";
     }
 
     @Override
