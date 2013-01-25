@@ -6,6 +6,7 @@ import javax.inject.Inject;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import org.jboss.errai.bus.client.api.RemoteCallback;
+import org.jboss.errai.ioc.client.api.AfterInitialization;
 import org.jboss.errai.ioc.client.api.Caller;
 import org.jbpm.designer.service.DesignerAssetService;
 import org.uberfire.backend.vfs.Path;
@@ -38,7 +39,7 @@ public class DesignerPresenter {
 
     private Path path;
 
-    @PostConstruct
+    @AfterInitialization
     private void bootstrapOryxScripts() {
         bootstrap.init();
         bridgeOnSaveMethod();
