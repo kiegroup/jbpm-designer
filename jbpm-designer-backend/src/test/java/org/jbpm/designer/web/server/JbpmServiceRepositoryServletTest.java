@@ -7,6 +7,7 @@ import org.jbpm.designer.helper.TestServletContext;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.RepositoryBaseTest;
+import org.jbpm.designer.repository.vfs.VFSFileSystemProducer;
 import org.jbpm.designer.repository.vfs.VFSRepository;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.junit.After;
@@ -35,6 +36,8 @@ public class JbpmServiceRepositoryServletTest  extends RepositoryBaseTest {
         profile.setRepositoryId("vfs");
         profile.setRepositoryRoot(VFS_REPOSITORY_ROOT);
         profile.setRepositoryGlobalDir("/global");
+        producer = new VFSFileSystemProducer();
+        fileSystem = producer.produceFileSystem(profile, new HashMap<String, String>());
     }
 
 
@@ -50,8 +53,8 @@ public class JbpmServiceRepositoryServletTest  extends RepositoryBaseTest {
     @Test
     public void testJbpmServiceRepositoryServlet() throws Exception {
 
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
         params.put("repourl", "http://people.redhat.com/tsurdilo/repository/");

@@ -2,6 +2,7 @@ package org.jbpm.designer.repository;
 
 import org.jbpm.designer.repository.filters.FilterByExtension;
 import org.jbpm.designer.repository.impl.AssetBuilder;
+import org.jbpm.designer.repository.vfs.VFSFileSystemProducer;
 import org.jbpm.designer.repository.vfs.VFSRepository;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.junit.After;
@@ -10,6 +11,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.HashMap;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
@@ -23,6 +25,8 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
         profile.setRepositoryId("vfs");
         profile.setRepositoryRoot(VFS_REPOSITORY_ROOT);
         profile.setRepositoryGlobalDir("/global");
+        producer = new VFSFileSystemProducer();
+        fileSystem = producer.produceFileSystem(profile, new HashMap<String, String>());
     }
 
     @After
@@ -38,8 +42,8 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
     public void testCreateDefaultVFSRepository() {
 
 
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         boolean rootFolderExists = repository.directoryExists("/");
         assertTrue(rootFolderExists);
 
@@ -50,8 +54,8 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
     @Test
     public void testCreateDirectory() {
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         boolean rootFolderExists = repository.directoryExists("/test");
         assertFalse(rootFolderExists);
 
@@ -67,8 +71,8 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
     @Test
     public void testDirectoryExists() {
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         boolean rootFolderExists = repository.directoryExists("/test");
         assertFalse(rootFolderExists);
 
@@ -97,8 +101,8 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
     @Test
     public void testListDirectories() {
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         boolean rootFolderExists = repository.directoryExists("/test");
         assertFalse(rootFolderExists);
 
@@ -129,8 +133,8 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
     @Test
     public void testDeleteDirectory() {
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         boolean rootFolderExists = repository.directoryExists("/test");
         assertFalse(rootFolderExists);
 
@@ -150,8 +154,8 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
     @Test
     public void testDeleteNonEmptyDirectory() {
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         boolean rootFolderExists = repository.directoryExists("/test");
         assertFalse(rootFolderExists);
 
@@ -175,8 +179,8 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
     @Test
     public void testListAsset() {
 
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         boolean rootFolderExists = repository.directoryExists("/");
         assertTrue(rootFolderExists);
 
@@ -199,8 +203,8 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
     @Test
     public void testListSingleTextAsset() {
 
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         boolean rootFolderExists = repository.directoryExists("/");
         assertTrue(rootFolderExists);
 
@@ -228,8 +232,8 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
     @Test
     public void testListSingleBinaryAsset() {
 
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         boolean rootFolderExists = repository.directoryExists("/");
         assertTrue(rootFolderExists);
 
@@ -258,8 +262,8 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
     @Test
     public void testListNestedSingleTextAsset() {
 
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         boolean rootFolderExists = repository.directoryExists("/");
         assertTrue(rootFolderExists);
 
@@ -290,8 +294,8 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
     @Test
     public void testStoreSingleBinaryAsset() throws AssetNotFoundException{
 
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         boolean rootFolderExists = repository.directoryExists("/");
         assertTrue(rootFolderExists);
 
@@ -321,8 +325,8 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
     @Test
     public void testStoreSingleTextAsset() throws AssetNotFoundException{
 
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         boolean rootFolderExists = repository.directoryExists("/");
         assertTrue(rootFolderExists);
 
@@ -352,7 +356,8 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
     @Test
     public void testAssetExists() throws AssetNotFoundException{
 
-        Repository repository = new VFSRepository(profile);
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
 
         boolean rootFolderExists = repository.directoryExists("/");
         assertTrue(rootFolderExists);
@@ -377,8 +382,8 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
     @Test
     public void testListAssetsRecursively() {
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("simple content")
                 .type("bpmn2")
@@ -395,8 +400,8 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
     @Test
     public void testUpdateAsset() throws AssetNotFoundException {
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("simple content")
                 .type("bpmn2")
@@ -426,8 +431,8 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
     @Test
     public void testDeleteAsset() throws AssetNotFoundException {
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("simple content")
                 .type("bpmn2")
@@ -454,8 +459,8 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
     @Test
     public void testDeleteAssetFromPath() throws AssetNotFoundException {
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("simple content")
                 .type("bpmn2")
@@ -482,8 +487,8 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
     @Test
     public void testCopyAsset() throws AssetNotFoundException {
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("simple content")
                 .type("bpmn2")
@@ -515,8 +520,8 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
     @Test
     public void testMoveAsset() throws AssetNotFoundException {
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("simple content")
                 .type("bpmn2")
@@ -555,8 +560,8 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
     @Test
     public void testMoveAndRenameAsset() throws AssetNotFoundException {
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("simple content")
                 .type("bpmn2")
@@ -595,8 +600,8 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
     @Test
     public void testRenameAsset() throws AssetNotFoundException {
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("simple content")
                 .type("bpmn2")
@@ -635,8 +640,8 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
     @Test
     public void testCopyDirectory() throws AssetNotFoundException {
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         Directory sourceDir = repository.createDirectory("/source");
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
@@ -673,8 +678,8 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
     @Test
     public void testMoveDirectory() throws AssetNotFoundException {
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         Directory sourceDir = repository.createDirectory("/source");
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
@@ -711,8 +716,8 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
     @Test
     public void testMoveEmptyDirectory() throws AssetNotFoundException {
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         Directory sourceDir = repository.createDirectory("/source");
 
         boolean directoryExists = repository.directoryExists(sourceDir.getLocation()+sourceDir.getName());
@@ -739,8 +744,8 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
     @Test
     public void testCopyEmptyDirectory() throws AssetNotFoundException {
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         Directory sourceDir = repository.createDirectory("/source");
 
         boolean directoryExists = repository.directoryExists(sourceDir.getLocation()+sourceDir.getName());

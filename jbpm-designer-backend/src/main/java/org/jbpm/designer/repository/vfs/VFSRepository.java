@@ -12,7 +12,12 @@ import org.kie.commons.java.nio.IOException;
 import org.kie.commons.java.nio.base.options.CommentedOption;
 import org.kie.commons.java.nio.file.*;
 import org.kie.commons.java.nio.file.attribute.BasicFileAttributes;
+import org.uberfire.backend.vfs.ActiveFileSystems;
 
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.File;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
@@ -22,37 +27,54 @@ import java.util.*;
 
 import static org.kie.commons.io.FileSystemType.Bootstrap.BOOTSTRAP_INSTANCE;
 
+@ApplicationScoped
 public class VFSRepository implements Repository {
 
-    private final IOService ioService = new IOServiceNio2WrapperImpl();
+    private IOService ioService;
 
     private URI repositoryRoot;
     private Path repositoryRootPath;
 
+    private ActiveFileSystems fileSystems;
+
     private FileSystem fileSystem;
 
-    public VFSRepository(IDiagramProfile profile) {
-        // TODO build env from profile params?
-        this(profile, new HashMap<String, String>());
-    }
-
-    public VFSRepository(IDiagramProfile profile, Map<String, String> env) {
-        this.repositoryRoot = URI.create(profile.getRepositoryRoot());
-
-        this.fileSystem = ioService.getFileSystem( this.repositoryRoot );
-
-        if ( fileSystem == null ) {
-
-            this.fileSystem = ioService.newFileSystem( this.repositoryRoot, env, BOOTSTRAP_INSTANCE );
-        }
-
-        // fetch file system changes - mainly for remote based file systems
-        String fetchCommand = (String) env.get("fetch.cmd");
-        if (fetchCommand != null) {
-            this.fileSystem = ioService.getFileSystem(URI.create(profile.getRepositoryRoot() + fetchCommand));
-        }
+    @PostConstruct
+    public void init() {
+        this.repositoryRoot = URI.create(fileSystems.getBootstrapFileSystem().getRootDirectories().get(0).toURI());
         this.repositoryRootPath = fileSystem.provider().getPath(this.repositoryRoot);
     }
+
+    public VFSRepository() {
+
+    }
+
+    @Inject
+    public VFSRepository(@Named("fileSystem")FileSystem fileSystem,
+                         @Named("ioStrategy")IOService ioService,
+                         @Named("fs")ActiveFileSystems fileSystems) {
+        this.fileSystem = fileSystem;
+        this.ioService = ioService;
+        this.fileSystems = fileSystems;
+    }
+
+//    public VFSRepository(IDiagramProfile profile, Map<String, String> env) {
+//        this.repositoryRoot = URI.create(profile.getRepositoryRoot());
+//
+//        this.fileSystem = ioService.getFileSystem( this.repositoryRoot );
+//
+//        if ( fileSystem == null ) {
+//
+//            this.fileSystem = ioService.newFileSystem( this.repositoryRoot, env, BOOTSTRAP_INSTANCE );
+//        }
+//
+//        // fetch file system changes - mainly for remote based file systems
+//        String fetchCommand = (String) env.get("fetch.cmd");
+//        if (fetchCommand != null) {
+//            this.fileSystem = ioService.getFileSystem(URI.create(profile.getRepositoryRoot() + fetchCommand));
+//        }
+//        this.repositoryRootPath = fileSystem.provider().getPath(this.repositoryRoot);
+//    }
     
     public Collection<Directory> listDirectories(String startAt) {
         Path path = fileSystem.provider().getPath(URI.create(getRepositoryRoot() + startAt));

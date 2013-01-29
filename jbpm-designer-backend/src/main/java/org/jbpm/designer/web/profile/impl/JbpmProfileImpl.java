@@ -25,6 +25,7 @@ import org.jboss.drools.DroolsPackage;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.RepositoryManager;
 import org.jbpm.designer.repository.guvnor.GuvnorRepository;
+import org.jbpm.designer.repository.vfs.VFSFileSystemProducer;
 import org.jbpm.designer.repository.vfs.VFSRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -227,7 +228,11 @@ public class JbpmProfileImpl implements IDiagramProfile {
                 _logger.error("Unable to register guvnor repository.");
             }
             try {
-                RepositoryManager.getInstance().registerRepository("repository-vfs", new VFSRepository(this, profileParameters));
+                VFSFileSystemProducer producer = new VFSFileSystemProducer();
+                VFSRepository repository = new VFSRepository(producer.produceFileSystem(this, profileParameters), producer.getIoService(),
+                        producer.getActiveFileSystems());
+                repository.init();
+                RepositoryManager.getInstance().registerRepository("repository-vfs", repository);
             } catch(Exception e) {
                 e.printStackTrace();
                 _logger.error("Unable to register vfs repository.");

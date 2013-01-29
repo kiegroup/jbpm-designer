@@ -10,6 +10,7 @@ import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.RepositoryBaseTest;
 import org.jbpm.designer.repository.filters.FilterByExtension;
 import org.jbpm.designer.repository.impl.AssetBuilder;
+import org.jbpm.designer.repository.vfs.VFSFileSystemProducer;
 import org.jbpm.designer.repository.vfs.VFSRepository;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.junit.After;
@@ -33,6 +34,8 @@ public class DictionaryServletTest  extends RepositoryBaseTest {
         profile.setRepositoryId("vfs");
         profile.setRepositoryRoot(VFS_REPOSITORY_ROOT);
         profile.setRepositoryGlobalDir("/global");
+        producer = new VFSFileSystemProducer();
+        fileSystem = producer.produceFileSystem(profile, new HashMap<String, String>());
     }
 
     @After
@@ -46,7 +49,8 @@ public class DictionaryServletTest  extends RepositoryBaseTest {
 
     @Test
     public void testStoreDictionary() throws Exception {
-        Repository repository = new VFSRepository(profile);
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
 
@@ -77,8 +81,8 @@ public class DictionaryServletTest  extends RepositoryBaseTest {
 
     @Test
     public void testLoadDictionary() throws Exception {
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("test dictionary content")
                 .type("json")

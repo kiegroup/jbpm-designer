@@ -6,6 +6,7 @@ import org.jbpm.designer.helper.TestServletConfig;
 import org.jbpm.designer.helper.TestServletContext;
 import org.jbpm.designer.repository.*;
 import org.jbpm.designer.repository.impl.AssetBuilder;
+import org.jbpm.designer.repository.vfs.VFSFileSystemProducer;
 import org.jbpm.designer.repository.vfs.VFSRepository;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.junit.After;
@@ -27,6 +28,8 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
         profile.setRepositoryId("vfs");
         profile.setRepositoryRoot(VFS_REPOSITORY_ROOT);
         profile.setRepositoryGlobalDir("/global");
+        producer = new VFSFileSystemProducer();
+        fileSystem = producer.produceFileSystem(profile, new HashMap<String, String>());
     }
 
     @After
@@ -41,7 +44,8 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
     @Test
     public void testCreateAsset() throws Exception {
 
-        Repository repository = new VFSRepository(profile);
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
 
@@ -72,8 +76,8 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
     @Test
     public void testUpdateAsset() throws Exception {
 
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("custom editors content")
                 .type("bpmn2")
@@ -113,8 +117,8 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
     @Test
     public void testDeleteAsset() throws Exception {
 
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("custom editors content")
                 .type("bpmn2")
@@ -150,8 +154,8 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
     @Test
     public void testAssetExists() throws Exception {
 
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("custom editors content")
                 .type("bpmn2")
@@ -185,8 +189,8 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
     @Test
     public void testAssetDoesnotExists() throws Exception {
 
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
 
@@ -211,8 +215,8 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
     @Test
     public void testCreateDirectory() throws Exception {
 
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
 
@@ -240,7 +244,8 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
     @Test
     public void testDeleteDirectory() throws Exception {
 
-        Repository repository = new VFSRepository(profile);
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         repository.createDirectory("/defaultPackage");
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
@@ -269,7 +274,8 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
     @Test
     public void testDirectoryExists() throws Exception {
 
-        Repository repository = new VFSRepository(profile);
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         repository.createDirectory("/defaultPackage");
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
@@ -296,8 +302,8 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
     @Test
     public void testDirectoryDoesNotExist() throws Exception {
 
-        Repository repository = new VFSRepository(profile);
-
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
 
@@ -323,7 +329,8 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
     @Test
     public void testListDirectories() throws Exception {
 
-        Repository repository = new VFSRepository(profile);
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         repository.createDirectory("/defaultPackage");
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
@@ -349,7 +356,8 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
     @Test
     public void testListAssets() throws Exception {
 
-        Repository repository = new VFSRepository(profile);
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("custom editors content")
                 .type("bpmn2")
@@ -382,7 +390,8 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
     @Test
     public void testGetAssetSourceById() throws Exception {
 
-        Repository repository = new VFSRepository(profile);
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("custom editors content")
                 .type("bpmn2")
@@ -414,7 +423,8 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
     @Test
     public void testGetAssetSourceByPath() throws Exception {
 
-        Repository repository = new VFSRepository(profile);
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("custom editors content")
                 .type("bpmn2")
@@ -446,7 +456,8 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
     @Test
     public void testGetAssetInfoById() throws Exception {
 
-        Repository repository = new VFSRepository(profile);
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("custom editors content")
                 .type("bpmn2")
@@ -478,7 +489,8 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
     @Test
     public void testGetAssetInfoByPath() throws Exception {
 
-        Repository repository = new VFSRepository(profile);
+        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
+        ((VFSRepository)repository).init();
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("custom editors content")
                 .type("bpmn2")
