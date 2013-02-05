@@ -19,7 +19,7 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
 //            'name': "Create Pattern",
 //            'functionality': this.createPatternFromSelection.bind(this),
 //            'group': "pattern",
-//            'icon': ORYX.PATH + "images/pattern.png",
+//            'icon': ORYX.BASE_FILE_PATH + "images/pattern.png",
 //            'description': "Create a Workflow pattern from selection",
 //            'index': 1,
 //            'minShape': 0,

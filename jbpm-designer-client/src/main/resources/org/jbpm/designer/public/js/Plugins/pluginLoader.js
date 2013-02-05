@@ -14,7 +14,7 @@ ORYX.Plugins.PluginLoader = Clazz.extend({
 			'name': ORYX.I18N.PluginLoad.AddPluginButtonName,
 			'functionality': this.showManageDialog.bind(this),
 			'group': ORYX.I18N.SSExtensionLoader.group,
-			'icon': ORYX.PATH + "images/labs/script_add.png",
+			'icon': ORYX.BASE_FILE_PATH + "images/labs/script_add.png",
 			'description': ORYX.I18N.PluginLoad.AddPluginButtonDesc,
 			'index': 8,
 			'minShape': 0,

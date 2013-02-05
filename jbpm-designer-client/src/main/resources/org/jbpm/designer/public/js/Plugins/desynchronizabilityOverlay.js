@@ -39,7 +39,7 @@ ORYX.Plugins.DesynchronizabilityOverlay = ORYX.Plugins.AbstractPlugin.extend({
             'name': ORYX.I18N.DesynchronizabilityOverlay.name,
             'functionality': this.showOverlay.bind(this),
             'group': ORYX.I18N.DesynchronizabilityOverlay.group,
-            'icon': ORYX.PATH + "images/bpmn2pn.png",
+            'icon': ORYX.BASE_FILE_PATH + "images/bpmn2pn.png",
             'description': ORYX.I18N.DesynchronizabilityOverlay.desc,
             'index': 3,
             'minShape': 0,

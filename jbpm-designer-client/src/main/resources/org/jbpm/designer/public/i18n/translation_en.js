@@ -15,7 +15,7 @@ if(!ORYX.I18N.Oryx) ORYX.I18N.Oryx = {};
 ORYX.I18N.Oryx.title		= ORYX.TITLE;
 ORYX.I18N.Oryx.noBackendDefined	= "Caution! \nNo Backend defined.\n The requested model cannot be loaded. Try to load a configuration with a save plugin.";
 //ORYX.I18N.Oryx.pleaseWait 	= "Please wait while loading...";
-ORYX.I18N.Oryx.pleaseWait  = '<center>  <img src="/designer/images/jbpm_logo.png" align="middle"/>  <b>jBPM Web Designer loading. Please wait...</b></center>';
+ORYX.I18N.Oryx.pleaseWait  = '<center>  <img src="/org.jbpm.designer.jBPMDesigner/images/jbpm_logo.png" align="middle"/>  <b>jBPM Web Designer loading. Please wait...</b></center>';
 ORYX.I18N.Oryx.notLoggedOn = "Not logged on";
 ORYX.I18N.Oryx.editorOpenTimeout = "The editor does not seem to be started yet. Please check, whether you have a popup blocker enabled and disable it or allow popups for this site. We will never display any commercials on this site.";
 

@@ -38,7 +38,7 @@ ORYX.Plugins.SSExtensionLoader = {
             'name': ORYX.I18N.SSExtensionLoader.add,
             'functionality': this.addSSExtension.bind(this),
             'group': ORYX.I18N.SSExtensionLoader.group,
-            'icon': ORYX.PATH + "images/add.png",
+            'icon': ORYX.BASE_FILE_PATH + "images/add.png",
             'description': ORYX.I18N.SSExtensionLoader.addDesc,
             'index': 1,
             'minShape': 0,
@@ -52,8 +52,8 @@ ORYX.Plugins.SSExtensionLoader = {
             text: ORYX.I18N.SSExtensionLoader.loading
         });
         
-        var url = ORYX.CONFIG.SS_EXTENSIONS_CONFIG;
-        //var url = "/oryx/build/stencilsets/extensions/extensions.json";
+        var url = ORYX.BASE_FILE_PATH + "stencilsets/extensions/extensions.json";
+
         new Ajax.Request(url, {
             method: 'GET',
             asynchronous: false,

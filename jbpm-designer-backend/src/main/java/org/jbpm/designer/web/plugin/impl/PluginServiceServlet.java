@@ -65,11 +65,11 @@ public class PluginServiceServlet extends HttpServlet {
             HttpServletResponse resp) 
     throws ServletException, IOException {
         try {
-        if ((EditorHandler.oryx_path +  "plugins").equals(req.getRequestURI())) {
-            listAllPlugins(req, resp);
-        } else {
-            retrievePluginContents(req, resp);
-        }
+            if ("/plugins".equals(req.getRequestURI())) {
+                listAllPlugins(req, resp);
+            } else {
+                retrievePluginContents(req, resp);
+            }
         } catch(JSONException e) {
             throw new ServletException(e);
         }
@@ -88,6 +88,7 @@ public class PluginServiceServlet extends HttpServlet {
         if (name == null) {
             throw new IllegalArgumentException("No name provided");
         }
+
         IDiagramPlugin plugin = _pluginService.findPlugin(req, name);
         if (plugin == null) {
             throw new IllegalArgumentException(

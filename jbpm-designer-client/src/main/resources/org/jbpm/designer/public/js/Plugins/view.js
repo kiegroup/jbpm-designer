@@ -73,7 +73,7 @@ ORYX.Plugins.View = {
 			'name':ORYX.I18N.View.zoomIn,
 			'functionality': this.zoom.bind(this, [1.0 + ORYX.CONFIG.ZOOM_OFFSET]),
 			'group': ORYX.I18N.View.group,
-			'icon': ORYX.PATH + "images/magnifier_zoom_in.png",
+			'icon': ORYX.BASE_FILE_PATH + "images/magnifier_zoom_in.png",
 			'description': ORYX.I18N.View.zoomInDesc,
 			'index': 1,
 			'minShape': 0,
@@ -85,7 +85,7 @@ ORYX.Plugins.View = {
 			'name':ORYX.I18N.View.zoomOut,
 			'functionality': this.zoom.bind(this, [1.0 - ORYX.CONFIG.ZOOM_OFFSET]),
 			'group': ORYX.I18N.View.group,
-			'icon': ORYX.PATH + "images/magnifier_zoom_out.png",
+			'icon': ORYX.BASE_FILE_PATH + "images/magnifier_zoom_out.png",
 			'description': ORYX.I18N.View.zoomOutDesc,
 			'index': 2,
 			'minShape': 0,
@@ -97,7 +97,7 @@ ORYX.Plugins.View = {
 			'name':ORYX.I18N.View.zoomStandard,
 			'functionality': this.setAFixZoomLevel.bind(this, 1),
 			'group': ORYX.I18N.View.group,
-			'icon': ORYX.PATH + "images/zoom_standard.png",
+			'icon': ORYX.BASE_FILE_PATH + "images/zoom_standard.png",
 			'cls' : 'icon-large',
 			'description': ORYX.I18N.View.zoomStandardDesc,
 			'index': 3,
@@ -111,7 +111,7 @@ ORYX.Plugins.View = {
 			'name':ORYX.I18N.View.zoomFitToModel,
 			'functionality': this.zoomFitToModel.bind(this),
 			'group': ORYX.I18N.View.group,
-			'icon': ORYX.PATH + "images/image.png",
+			'icon': ORYX.BASE_FILE_PATH + "images/image.png",
 			'description': ORYX.I18N.View.zoomFitToModelDesc,
 			'index': 4,
 			'minShape': 0,
@@ -123,7 +123,7 @@ ORYX.Plugins.View = {
 //			'name':ORYX.I18N.View.showInPopout,
 //			'functionality': this.showInPopout.bind(this),
 //			'group': ORYX.I18N.View.jbpmgroup,
-//			'icon': ORYX.PATH + "images/popup.gif",
+//			'icon': ORYX.BASE_FILE_PATH + "images/popup.gif",
 //			'description': ORYX.I18N.View.showInPopoutDesc,
 //			'index': 1,
 //			'minShape': 0,
@@ -144,19 +144,20 @@ ORYX.Plugins.View = {
 			'name':'Show in full screen',
 			'functionality': this.showInFullScreen.bind(this),
 			'group': ORYX.I18N.View.jbpmgroup,
-			'icon': ORYX.PATH + "images/fullscreen.png",
+			'icon': ORYX.BASE_FILE_PATH + "images/fullscreen.png",
 			'description': 'Show in full screen mode',
 			'index': 2,
 			'minShape': 0,
 			'maxShape': 0,
 			'isEnabled': function(){
-				profileParamName = "profile";
-				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-		        regexa = new RegExp( regexSa );
-		        profileParams = regexa.exec( window.location.href );
-		        profileParamValue = profileParams[1]; 
-				return profileParamValue == "jbpm";
+                return true;
+//				profileParamName = "profile";
+//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//		        regexa = new RegExp( regexSa );
+//		        profileParams = regexa.exec( window.location.href );
+//		        profileParamValue = profileParams[1];
+//				return profileParamValue == "jbpm";
 			}.bind(this)
 		});
 		
@@ -166,19 +167,20 @@ ORYX.Plugins.View = {
 			'name':ORYX.I18N.View.generateTaskForms,
 			'functionality': this.generateTaskForms.bind(this),
 			'group': ORYX.I18N.View.jbpmgroup,
-			'icon': ORYX.PATH + "images/human_task.gif",
+			'icon': ORYX.BASE_FILE_PATH + "images/human_task.gif",
 			'description': ORYX.I18N.View.generateTaskFormsDesc,
 			'index': 3,
 			'minShape': 0,
 			'maxShape': 0,
 			'isEnabled': function(){
-				profileParamName = "profile";
-				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-		        regexa = new RegExp( regexSa );
-		        profileParams = regexa.exec( window.location.href );
-		        profileParamValue = profileParams[1]; 
-				return profileParamValue == "jbpm";
+                return true;
+//				profileParamName = "profile";
+//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//		        regexa = new RegExp( regexSa );
+//		        profileParams = regexa.exec( window.location.href );
+//		        profileParamValue = profileParams[1];
+//				return profileParamValue == "jbpm";
 			}.bind(this)
 		});
 		
@@ -187,20 +189,21 @@ ORYX.Plugins.View = {
 			'name': "Share Process Image",
 			'functionality': this.shareProcessImage.bind(this),
 			'group': ORYX.I18N.View.jbpmgroup,
-			//'icon': ORYX.PATH + "images/share.gif",
-			dropDownGroupIcon : ORYX.PATH + "images/share.gif",
+			//'icon': ORYX.BASE_FILE_PATH + "images/share.gif",
+			dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.gif",
 			'description': "Share Process Image",
 			'index': 1,
 			'minShape': 0,
 			'maxShape': 0,
 			'isEnabled': function(){
-				profileParamName = "profile";
-				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-		        regexa = new RegExp( regexSa );
-		        profileParams = regexa.exec( window.location.href );
-		        profileParamValue = profileParams[1]; 
-				return profileParamValue == "jbpm";
+                return true;
+//				profileParamName = "profile";
+//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//		        regexa = new RegExp( regexSa );
+//		        profileParams = regexa.exec( window.location.href );
+//		        profileParamValue = profileParams[1];
+//				return profileParamValue == "jbpm";
 			}.bind(this)
 		});
 		
@@ -209,20 +212,21 @@ ORYX.Plugins.View = {
 			'name': "Share Process PDF",
 			'functionality': this.shareProcessPdf.bind(this),
 			'group': ORYX.I18N.View.jbpmgroup,
-			//'icon': ORYX.PATH + "images/share.gif",
-			dropDownGroupIcon : ORYX.PATH + "images/share.gif",
+			//'icon': ORYX.BASE_FILE_PATH + "images/share.gif",
+			dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.gif",
 			'description': "Share Process PDF",
 			'index': 2,
 			'minShape': 0,
 			'maxShape': 0,
 			'isEnabled': function(){
-				profileParamName = "profile";
-				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-		        regexa = new RegExp( regexSa );
-		        profileParams = regexa.exec( window.location.href );
-		        profileParamValue = profileParams[1]; 
-				return profileParamValue == "jbpm";
+                return true;
+//				profileParamName = "profile";
+//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//		        regexa = new RegExp( regexSa );
+//		        profileParams = regexa.exec( window.location.href );
+//		        profileParamValue = profileParams[1];
+//				return profileParamValue == "jbpm";
 			}.bind(this)
 		});
 		
@@ -231,20 +235,21 @@ ORYX.Plugins.View = {
 			'name': "Import from BPMN2",
 			'functionality': this.importFromBPMN2.bind(this),
 			'group': ORYX.I18N.View.jbpmgroup,
-			//'icon': ORYX.PATH + "images/share.gif",
-			dropDownGroupIcon : ORYX.PATH + "images/import.png",
+			//'icon': ORYX.BASE_FILE_PATH + "images/share.gif",
+			dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/import.png",
 			'description': "Import from existing BPMN2",
 			'index': 1,
 			'minShape': 0,
 			'maxShape': 0,
 			'isEnabled': function(){
-				profileParamName = "profile";
-				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-		        regexa = new RegExp( regexSa );
-		        profileParams = regexa.exec( window.location.href );
-		        profileParamValue = profileParams[1]; 
-				return profileParamValue == "jbpm";
+                return true;
+//				profileParamName = "profile";
+//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//		        regexa = new RegExp( regexSa );
+//		        profileParams = regexa.exec( window.location.href );
+//		        profileParamValue = profileParams[1];
+//				return profileParamValue == "jbpm";
 			}.bind(this)
 		});
 		
@@ -253,20 +258,21 @@ ORYX.Plugins.View = {
 			'name': "Import from JSON",
 			'functionality': this.importFromJSON.bind(this),
 			'group': ORYX.I18N.View.jbpmgroup,
-			//'icon': ORYX.PATH + "images/share.gif",
-			dropDownGroupIcon : ORYX.PATH + "images/import.png",
+			//'icon': ORYX.BASE_FILE_PATH + "images/share.gif",
+			dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/import.png",
 			'description': "Import from existing JSON",
 			'index': 2,
 			'minShape': 0,
 			'maxShape': 0,
 			'isEnabled': function(){
-				profileParamName = "profile";
-				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-		        regexa = new RegExp( regexSa );
-		        profileParams = regexa.exec( window.location.href );
-		        profileParamValue = profileParams[1]; 
-				return profileParamValue == "jbpm";
+                return true;
+//				profileParamName = "profile";
+//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//		        regexa = new RegExp( regexSa );
+//		        profileParams = regexa.exec( window.location.href );
+//		        profileParamValue = profileParams[1];
+//				return profileParamValue == "jbpm";
 			}.bind(this)
 		});
 		
@@ -275,20 +281,21 @@ ORYX.Plugins.View = {
 			'name': "Share Embeddable Process",
 			'functionality': this.shareEmbeddableProcess.bind(this),
 			'group': ORYX.I18N.View.jbpmgroup,
-			//'icon': ORYX.PATH + "images/share.gif",
-			dropDownGroupIcon : ORYX.PATH + "images/share.gif",
+			//'icon': ORYX.BASE_FILE_PATH + "images/share.gif",
+			dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.gif",
 			'description': "Share Embeddable Process",
 			'index': 3,
 			'minShape': 0,
 			'maxShape': 0,
 			'isEnabled': function(){
-				profileParamName = "profile";
-				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-		        regexa = new RegExp( regexSa );
-		        profileParams = regexa.exec( window.location.href );
-		        profileParamValue = profileParams[1]; 
-				return profileParamValue == "jbpm";
+                return true;
+//				profileParamName = "profile";
+//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//		        regexa = new RegExp( regexSa );
+//		        profileParams = regexa.exec( window.location.href );
+//		        profileParamValue = profileParams[1];
+//				return profileParamValue == "jbpm";
 			}.bind(this)
 		});
 		
@@ -297,7 +304,7 @@ ORYX.Plugins.View = {
 //			'name':ORYX.I18N.View.viewDiff,
 //			'functionality': this.diffprocess.bind(this),
 //			'group': ORYX.I18N.View.jbpmgroup,
-//			'icon': ORYX.PATH + "images/diff.gif",
+//			'icon': ORYX.BASE_FILE_PATH + "images/diff.gif",
 //			'description': ORYX.I18N.View.viewDiffDesc,
 //			'index': 5,
 //			'minShape': 0,
@@ -325,13 +332,14 @@ ORYX.Plugins.View = {
 			'minShape': 0,
 			'maxShape': 0,
 			'isEnabled': function(){
-				profileParamName = "profile";
-				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-		        regexa = new RegExp( regexSa );
-		        profileParams = regexa.exec( window.location.href );
-		        profileParamValue = profileParams[1]; 
-				return profileParamValue == "jbpm";
+                return true;
+//				profileParamName = "profile";
+//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//		        regexa = new RegExp( regexSa );
+//		        profileParams = regexa.exec( window.location.href );
+//		        profileParamValue = profileParams[1];
+//				return profileParamValue == "jbpm";
 			}.bind(this)
 		});
 		
@@ -346,13 +354,14 @@ ORYX.Plugins.View = {
 			'minShape': 0,
 			'maxShape': 0,
 			'isEnabled': function(){
-				profileParamName = "profile";
-				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-		        regexa = new RegExp( regexSa );
-		        profileParams = regexa.exec( window.location.href );
-		        profileParamValue = profileParams[1]; 
-				return profileParamValue == "jbpm";
+                return true;
+//				profileParamName = "profile";
+//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//		        regexa = new RegExp( regexSa );
+//		        profileParams = regexa.exec( window.location.href );
+//		        profileParamValue = profileParams[1];
+//				return profileParamValue == "jbpm";
 			}.bind(this)
 		});
 		
@@ -367,13 +376,14 @@ ORYX.Plugins.View = {
 			'minShape': 0,
 			'maxShape': 0,
 			'isEnabled': function(){
-				profileParamName = "profile";
-				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-		        regexa = new RegExp( regexSa );
-		        profileParams = regexa.exec( window.location.href );
-		        profileParamValue = profileParams[1]; 
-				return profileParamValue == "jbpm";
+                return true;
+//				profileParamName = "profile";
+//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//		        regexa = new RegExp( regexSa );
+//		        profileParams = regexa.exec( window.location.href );
+//		        profileParamValue = profileParams[1];
+//				return profileParamValue == "jbpm";
 			}.bind(this)
 		});
 		
@@ -388,13 +398,14 @@ ORYX.Plugins.View = {
 			'minShape': 0,
 			'maxShape': 0,
 			'isEnabled': function(){
-				profileParamName = "profile";
-				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-		        regexa = new RegExp( regexSa );
-		        profileParams = regexa.exec( window.location.href );
-		        profileParamValue = profileParams[1]; 
-				return profileParamValue == "jbpm";
+                return true;
+//				profileParamName = "profile";
+//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//		        regexa = new RegExp( regexSa );
+//		        profileParams = regexa.exec( window.location.href );
+//		        profileParamValue = profileParams[1];
+//				return profileParamValue == "jbpm";
 			}.bind(this)
 		});
 		
@@ -409,13 +420,14 @@ ORYX.Plugins.View = {
 			'minShape': 0,
 			'maxShape': 0,
 			'isEnabled': function(){
-				profileParamName = "profile";
-				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-		        regexa = new RegExp( regexSa );
-		        profileParams = regexa.exec( window.location.href );
-		        profileParamValue = profileParams[1]; 
-				return profileParamValue == "jbpm";
+                return true;
+//				profileParamName = "profile";
+//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//		        regexa = new RegExp( regexSa );
+//		        profileParams = regexa.exec( window.location.href );
+//		        profileParamValue = profileParams[1];
+//				return profileParamValue == "jbpm";
 			}.bind(this)
 		});
 		
@@ -430,13 +442,14 @@ ORYX.Plugins.View = {
 			'minShape': 0,
 			'maxShape': 0,
 			'isEnabled': function(){
-				profileParamName = "profile";
-				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-		        regexa = new RegExp( regexSa );
-		        profileParams = regexa.exec( window.location.href );
-		        profileParamValue = profileParams[1]; 
-				return profileParamValue == "jbpm";
+                return true;
+//				profileParamName = "profile";
+//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//		        regexa = new RegExp( regexSa );
+//		        profileParams = regexa.exec( window.location.href );
+//		        profileParamValue = profileParams[1];
+//				return profileParamValue == "jbpm";
 			}.bind(this)
 		});
 	},

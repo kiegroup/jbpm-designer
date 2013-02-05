@@ -42,7 +42,7 @@ ORYX.Plugins.TreeGraphSupport = Clazz.extend({
             'name'				: ORYX.I18N.TreeGraphSupport.syntaxCheckName,
             'functionality'		: this.syntaxCheck.bind(this),
             'group'				: ORYX.I18N.TreeGraphSupport.group,
-            'icon'				: ORYX.PATH + "images/checker_syntax.png",
+            'icon'				: ORYX.BASE_FILE_PATH + "images/checker_syntax.png",
             'description'		: ORYX.I18N.TreeGraphSupport.syntaxCheckDesc,
             'index'				: 1,
             'minShape'			: 0,

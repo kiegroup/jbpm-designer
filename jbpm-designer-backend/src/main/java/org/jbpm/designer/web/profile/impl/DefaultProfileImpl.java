@@ -112,7 +112,7 @@ public class DefaultProfileImpl implements IDiagramProfile {
         try {
             try {
                 fileStream = new FileInputStream(new StringBuilder(context.getRealPath("/")).append("/").
-                        append("/").append("profiles").append("/").append("default.xml").toString());
+                        append("/").append("org.jbpm.designer.jBPMDesigner/").append("profiles").append("/").append("default.xml").toString());
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }

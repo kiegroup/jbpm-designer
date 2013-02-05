@@ -29,19 +29,19 @@ var ID_PREFIX = "resource";
  * of the document, including all scripts, is completed.
  */
 function init() {
-
 	/* When the blank image url is not set programatically to a local
 	 * representation, a spacer gif on the site of ext is loaded from the
 	 * internet. This causes problems when internet or the ext site are not
 	 * available. */
-	Ext.BLANK_IMAGE_URL = ORYX.PATH + 'lib/ext-2.0.2/resources/images/default/s.gif';	
+	Ext.BLANK_IMAGE_URL = ORYX.BASE_FILE_PATH + 'lib/ext-2.0.2/resources/images/default/s.gif';
 	
 	ORYX.Log.debug("Querying editor instances");
 
 	// Hack for WebKit to set the SVGElement-Classes
 	ORYX.Editor.setMissingClasses();
     // use this hook to get initialized through the plugin in charge of loading the model
-	window.onOryxResourcesLoaded();
+    // editor is created from gwt code
+    //window.onOryxResourcesLoaded();
 
 }
 
@@ -112,7 +112,7 @@ ORYX.Editor = {
         
         // Defines if the editor should be fullscreen or not
 		this.fullscreen = model.fullscreen || true;
-		
+
 		// Initialize the eventlistener
 		this._initEventListener();
 
@@ -137,7 +137,7 @@ ORYX.Editor = {
 		this._createCanvas(model.stencil ? model.stencil.id : null, model.properties);
 
 		// GENERATES the whole EXT.VIEWPORT
-		this._generateGUI();
+		this._generateGUI(config);
 
 		// Initializing of a callback to check loading ends
 		var loadPluginFinished 	= false;
@@ -222,13 +222,13 @@ ORYX.Editor = {
 	 * Editor and initialized the Ext-Framework
 	 * 
 	 */
-	_generateGUI: function() {
+	_generateGUI: function(config) {
 
 		//TODO make the height be read from eRDF data from the canvas.
 		// default, a non-fullscreen editor shall define its height by layout.setHeight(int) 
 		
 		// Defines the layout hight if it's NOT fullscreen
-		var layoutHeight 	= 400;
+		var layoutHeight 	= 660;
 	
 		var canvasParent	= this.getCanvas().rootNode.parentNode;
 		
@@ -262,7 +262,7 @@ ORYX.Editor = {
 			    autoScroll: true,
 			    autoEl : {
 			        tag : "iframe",
-			        src : ORYX.PATH + 'simulation/default.html',
+			        src : ORYX.BASE_FILE_PATH + 'simulation/default.html',
 			        width: "100%",
 			            height: "500",
 			            frameborder: "0",
@@ -445,13 +445,16 @@ ORYX.Editor = {
 				this.layout_regions.center
 			]
 		};
-		this.contentviewport = new Ext.Viewport( layout_config  );
-		
+		//this.contentviewport = new Ext.Viewport( layout_config  );
+
+        // TODO fix this .. hardcode for now
+        this.fullscreen = config.fullscreen;
+
 		if (this.fullscreen) {
 			this.layout = new Ext.Viewport( layout_config );
 		
 		} else {
-			layout_config.renderTo 	= this.id;
+			layout_config.renderTo 	= ORYX.EDITORID;
 			layout_config.height 	= layoutHeight;
 			this.layout = new Ext.Panel( layout_config );
 		}
@@ -499,7 +502,7 @@ ORYX.Editor = {
 			
 			var content = 	"<div id='oryx_editor_header'>" +
 								"<a href=\""+ORYX.CONFIG.WEB_URL+"\" target=\"_blank\">" +
-									"<img src='"+ORYX.PATH+"images/oryx.small.gif' border=\"0\" />" + 
+									"<img src='"+ORYX.BASE_FILE_PATH+"images/oryx.small.gif' border=\"0\" />" +
 								"</a>" + 
 								"<span class='openid " + (publicText == user ? "not" : "") + "'>" + 
 									user + 

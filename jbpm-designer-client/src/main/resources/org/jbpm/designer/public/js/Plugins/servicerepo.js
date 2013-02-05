@@ -14,19 +14,20 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
 			'name':ORYX.I18N.View.connectServiceRepo,
 			'functionality': this.jbpmServiceRepoConnect.bind(this),
 			'group': ORYX.I18N.View.jbpmgroup,
-			'icon': ORYX.PATH + "images/repository_rep.gif",
+			'icon': ORYX.BASE_FILE_PATH + "images/repository_rep.gif",
 			'description': ORYX.I18N.View.connectServiceRepoDesc,
 			'index': 4,
 			'minShape': 0,
 			'maxShape': 0,
 			'isEnabled': function(){
-				profileParamName = "profile";
-				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-		        regexa = new RegExp( regexSa );
-		        profileParams = regexa.exec( window.location.href );
-		        profileParamValue = profileParams[1]; 
-				return profileParamValue == "jbpm";
+                return true;
+//				profileParamName = "profile";
+//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//		        regexa = new RegExp( regexSa );
+//		        profileParams = regexa.exec( window.location.href );
+//		        profileParamValue = profileParams[1];
+//				return profileParamValue == "jbpm";
 			}.bind(this)
 		});
 	},

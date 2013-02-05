@@ -105,7 +105,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
         try {
             try {
                 fileStream = new FileInputStream(new StringBuilder(context.getRealPath("/")).append("/").
-                        append("/").append("profiles").append("/").append("jbpm.xml").toString());
+                        append("/").append("org.jbpm.designer.jBPMDesigner/").append("profiles").append("/").append("jbpm.xml").toString());
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
@@ -424,7 +424,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
     }
 
     public String getStencilSetURL() {
-        return "/designer/stencilsets/bpmn2.0jbpm/bpmn2.0jbpm.json";
+        return "/org.jbpm.designer.jBPMDesigner/stencilsets/bpmn2.0jbpm/bpmn2.0jbpm.json";
     }
 
     public String getStencilSetNamespaceURL() {

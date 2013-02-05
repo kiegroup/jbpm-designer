@@ -1,7 +1,6 @@
 package org.jbpm.designer.client;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -26,17 +25,12 @@ import org.uberfire.client.mvp.AbstractWorkbenchPerspectiveActivity;
 import org.uberfire.client.mvp.ActivityManager;
 import org.uberfire.client.mvp.Command;
 import org.uberfire.client.mvp.PlaceManager;
-import org.uberfire.client.workbench.widgets.menu.MenuBar;
 import org.uberfire.client.workbench.widgets.menu.MenuItemCommand;
-import org.uberfire.client.workbench.widgets.menu.MenuItemSubMenu;
 import org.uberfire.client.workbench.widgets.menu.WorkbenchMenuBarPresenter;
-import org.uberfire.client.workbench.widgets.menu.impl.DefaultMenuBar;
 import org.uberfire.client.workbench.widgets.menu.impl.DefaultMenuItemCommand;
-import org.uberfire.client.workbench.widgets.menu.impl.DefaultMenuItemSubMenu;
-import org.uberfire.shared.mvp.impl.DefaultPlaceRequest;
 
 /**
- * GWT's Entry-point for jBPM Designer NG
+ * GWT's Entry-point for jBPM Designer
  */
 @EntryPoint
 public class StandaloneEntryPoint {
@@ -61,6 +55,7 @@ public class StandaloneEntryPoint {
 
     private String[] menuItems = new String[]{ "FileExplorer", "jbpm.designer" };
 
+
     @AfterInitialization
     public void startApp() {
         loadStyles();
@@ -69,76 +64,72 @@ public class StandaloneEntryPoint {
     }
 
     private void loadStyles() {
-        //Ensure CSS has been loaded
         StandaloneResources.INSTANCE.CSS().ensureInjected();
     }
 
     private void setupMenu() {
-
         //Home
-        final AbstractWorkbenchPerspectiveActivity defaultPerspective = getDefaultPerspectiveActivity();
-        if ( defaultPerspective != null ) {
-            menubar.addWorkbenchItem( new DefaultMenuItemCommand( "Home",
-                    new Command() {
-                        @Override
-                        public void execute() {
-                            placeManager.goTo( new DefaultPlaceRequest( defaultPerspective.getIdentifier() ) );
-                        }
-                    } ) );
-        }
-
-        //Perspectives
-        final MenuBar perspectivesMenuBar = new DefaultMenuBar();
-        final MenuItemSubMenu perspectivesMenu = new DefaultMenuItemSubMenu( "Perspectives",
-                perspectivesMenuBar );
-        final List<AbstractWorkbenchPerspectiveActivity> perspectives = getPerspectiveActivities();
-        for ( final AbstractWorkbenchPerspectiveActivity perspective : perspectives ) {
-            final String name = perspective.getPerspective().getName();
-            final Command cmd = new Command() {
-
-                @Override
-                public void execute() {
-                    placeManager.goTo( new DefaultPlaceRequest( perspective.getIdentifier() ) );
-                }
-
-            };
-            final MenuItemCommand item = new DefaultMenuItemCommand( name,
-                    cmd );
-            perspectivesMenuBar.addItem( item );
-        }
-        menubar.addWorkbenchItem( perspectivesMenu );
-
-        //Static places
-        final MenuBar placesMenuBar = new DefaultMenuBar();
-        final MenuItemSubMenu placesMenu = new DefaultMenuItemSubMenu( "Screens",
-                placesMenuBar );
-        Arrays.sort( menuItems );
-        for ( final String menuItem : menuItems ) {
-            if (menuItem.equals("jbpm.designer")) {
-                final MenuItemCommand item = new DefaultMenuItemCommand( menuItem,
-                        new Command() {
-
-                            @Override
-                            public void execute() {
-                                placeManager.goTo( new DefaultPlaceRequest( menuItem ) );
-                            }
-
-                        } );
-                placesMenuBar.addItem( item );
-            } else {
-            final MenuItemCommand item = new DefaultMenuItemCommand( menuItem,
-                    new Command() {
-
-                        @Override
-                        public void execute() {
-                            placeManager.goTo( new DefaultPlaceRequest( menuItem ) );
-                        }
-
-                    } );
-            placesMenuBar.addItem( item );
-            }
-        }
-        menubar.addWorkbenchItem( placesMenu );
+//        final AbstractWorkbenchPerspectiveActivity defaultPerspective = getDefaultPerspectiveActivity();
+//        if ( defaultPerspective != null ) {
+//            menubar.addWorkbenchItem( new DefaultMenuItemCommand( "Home",
+//                    new Command() {
+//                        @Override
+//                        public void execute() {
+//                            placeManager.goTo( new DefaultPlaceRequest( defaultPerspective.getIdentifier() ) );
+//                        }
+//                    } ) );
+//        }
+//      Perspectives
+//        final MenuBar perspectivesMenuBar = new DefaultMenuBar();
+//        final MenuItemSubMenu perspectivesMenu = new DefaultMenuItemSubMenu( "Perspectives",
+//                perspectivesMenuBar );
+//        final List<AbstractWorkbenchPerspectiveActivity> perspectives = getPerspectiveActivities();
+//        for ( final AbstractWorkbenchPerspectiveActivity perspective : perspectives ) {
+//            final String name = perspective.getPerspective().getName();
+//            final Command cmd = new Command() {
+//
+//                @Override
+//                public void execute() {
+//                    placeManager.goTo( new DefaultPlaceRequest( perspective.getIdentifier() ) );
+//                }
+//
+//            };
+//            final MenuItemCommand item = new DefaultMenuItemCommand( name,
+//                    cmd );
+//            perspectivesMenuBar.addItem( item );
+//        }
+//        menubar.addWorkbenchItem( perspectivesMenu );
+//      Static places
+//        final MenuBar placesMenuBar = new DefaultMenuBar();
+//        final MenuItemSubMenu placesMenu = new DefaultMenuItemSubMenu( "Screens",
+//                placesMenuBar );
+//        Arrays.sort( menuItems );
+//        for ( final String menuItem : menuItems ) {
+//            if (menuItem.equals("jbpm.designer")) {
+//                final MenuItemCommand item = new DefaultMenuItemCommand( menuItem,
+//                        new Command() {
+//
+//                            @Override
+//                            public void execute() {
+//                                placeManager.goTo( new DefaultPlaceRequest( menuItem ) );
+//                            }
+//
+//                        } );
+//                placesMenuBar.addItem( item );
+//            } else {
+//            final MenuItemCommand item = new DefaultMenuItemCommand( menuItem,
+//                    new Command() {
+//
+//                        @Override
+//                        public void execute() {
+//                            placeManager.goTo( new DefaultPlaceRequest( menuItem ) );
+//                        }
+//
+//                    } );
+//            placesMenuBar.addItem( item );
+//            }
+//        }
+//        menubar.addWorkbenchItem( placesMenu );
 
         final MenuItemCommand logout = new DefaultMenuItemCommand( "Logout",
                 new Command() {
@@ -147,7 +138,6 @@ public class StandaloneEntryPoint {
                         redirect( GWT.getModuleBaseURL() + "uf_logout" );
                     }
                 } );
-
         menubar.addWorkbenchItem( logout );
     }
 

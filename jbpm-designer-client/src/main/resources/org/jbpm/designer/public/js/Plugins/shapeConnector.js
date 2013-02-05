@@ -40,7 +40,7 @@ ORYX.Plugins.ShapeConnector = Clazz.extend({
 			functionality: 	this.enableConnector.bind(this),
 			group: 			ORYX.I18N.ShapeConnector.group,
             toolbarGroup: 	ORYX.I18N.ShapeConnector.toolbarGroup,
-			icon: 			ORYX.PATH + "images/pencil_go.png",
+			icon: 			ORYX.BASE_FILE_PATH + "images/pencil_go.png",
 			description: 	ORYX.I18N.ShapeConnector.addDesc,
 			index: 			1,
             toggle: 		true,

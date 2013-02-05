@@ -659,6 +659,24 @@
                 <version>${uberfire.version}</version>
             </dependency>
 
+            <!-- Errai -->
+            <dependency>
+                <groupId>org.jboss.errai</groupId>
+                <artifactId>errai-ui</artifactId>
+                <version>${errai.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.errai</groupId>
+                <artifactId>errai-data-binding</artifactId>
+                <version>${errai.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.jboss.errai</groupId>
+                <artifactId>errai-data-binding</artifactId>
+                <version>${errai.version}</version>
+            </dependency>
             <!-- Errai Core -->
             <dependency>
                 <groupId>org.jboss.errai</groupId>

@@ -37,7 +37,7 @@ ORYX.Plugins.QueryEvaluator = ORYX.Plugins.AbstractPlugin.extend({
             'name': ORYX.I18N.QueryEvaluator.name,
             'functionality': this.showOverlay.bind(this),
             'group': ORYX.I18N.QueryEvaluator.group,
-            'icon': ORYX.PATH + "images/xforms_export.png",
+            'icon': ORYX.BASE_FILE_PATH + "images/xforms_export.png",
             'description': ORYX.I18N.QueryEvaluator.desc,
             'index': 0,
 			'toggle': true,

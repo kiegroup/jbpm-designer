@@ -1,9 +1,12 @@
 package org.jbpm.designer.client;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.ScriptInjector;
+import com.google.gwt.dom.client.*;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.IsWidget;
 import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.jboss.errai.ioc.client.api.AfterInitialization;
@@ -17,72 +20,67 @@ import org.uberfire.client.annotations.WorkbenchPartView;
 import org.uberfire.client.mvp.UberView;
 
 @Dependent
-@WorkbenchEditor(identifier = "jbpm.designer", fileTypes = "bpmn2")
+@WorkbenchEditor(identifier = "jbpm.designer", fileTypes = "*.bpmn?")
 public class DesignerPresenter {
 
     public interface View
             extends
             UberView<DesignerPresenter> {
-
-        void setJsonModel( final String jsonModel );
-
+        void setEditorID( final String id );
+        void startDesigneInstancer();
     }
 
     @Inject
-    private View view;
-
-    @Inject
-    private Bootstrap bootstrap;
+    private DesignerView view;
 
     @Inject
     private Caller<DesignerAssetService> assetService;
 
     private Path path;
 
-    @AfterInitialization
-    private void bootstrapOryxScripts() {
-        bootstrap.init();
-        bridgeOnSaveMethod();
-    }
-
     @OnStart
     public void onStart( final Path path ) {
         this.path = path;
+        if(path != null) {
+            assetService.call( new RemoteCallback<String>() {
+                @Override
+                public void callback( String editorID ) {
+                    view.setEditorID(editorID);
+                    assetService.call( new RemoteCallback<String>() {
+                        @Override
+                        public void callback( String editorBody ) {
+                            // remove the open+close script tags before injecting
+                            editorBody = editorBody.replaceAll("<script type=\"text/javascript\">", "");
+                            editorBody = editorBody.replaceAll("</script>", "");
 
-        assetService.call( new RemoteCallback<String>() {
-            @Override
-            public void callback( final String json ) {
-                if ( json != null ) {
-                    view.setJsonModel( json );
+                            final Document doc = Document.get();
+                            final NodeList<Element> nodes = doc.getElementsByTagName( HeadElement.TAG );
+                            final HeadElement head = nodes.getItem( 0 ).cast();
+                            appendScriptSource(head, editorBody);
+
+                            view.startDesigneInstancer();
+                            //ScriptInjector.fromString(editorBody).setRemoveTag(false).inject();
+                        }
+                    } ).loadEditorBody(path, editorID);
                 }
-            }
-        } ).loadJsonModel( path );
-    }
-
-    public native void bridgeOnSaveMethod() /*-{
-        var that = this;
-        $wnd.designerPresenterOnSave = $entry(function (jsonModel) {
-            return that.@org.jbpm.designer.client.DesignerPresenter::onSave(Ljava/lang/String;)(jsonModel);
-        });
-    }-*/;
-
-    public void onSave( final String jsonModel ) {
-        assetService.call( new RemoteCallback<Void>() {
-            @Override
-            public void callback( final Void response ) {
-                //Nothing to do at the moment... error handling would be nice
-            }
-        } ).saveJsonModel(this.path,
-                jsonModel);
+            } ).getEditorID();
+        }
     }
 
     @WorkbenchPartTitle
     public String getName() {
-        return "jBPM Designer";
+        return "jBPM Designer - " + this.path.getFileName();
     }
 
     @WorkbenchPartView
     public IsWidget getView() {
         return view;
+    }
+
+    private void appendScriptSource( final Element element,
+                                     final String source ) {
+        final ScriptElement scriptElement = Document.get().createScriptElement( source );
+        scriptElement.setType( "text/javascript" );
+        element.appendChild( scriptElement );
     }
 }

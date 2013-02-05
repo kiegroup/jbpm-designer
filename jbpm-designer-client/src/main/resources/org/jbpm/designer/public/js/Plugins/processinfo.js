@@ -12,19 +12,20 @@ ORYX.Plugins.ProcessInfo = Clazz.extend({
 			'name':ORYX.I18N.View.showInfo,
 			'functionality': this.showInfo.bind(this),
 			'group': ORYX.I18N.View.infogroup,
-			'icon': ORYX.PATH + "images/information.png",
+			'icon': ORYX.BASE_FILE_PATH + "images/information.png",
 			'description': ORYX.I18N.View.showInfoDesc,
 			'index': 1,
 			'minShape': 0,
 			'maxShape': 0,
 			'isEnabled': function(){
-				profileParamName = "profile";
-				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-		        regexa = new RegExp( regexSa );
-		        profileParams = regexa.exec( window.location.href );
-		        profileParamValue = profileParams[1]; 
-				return profileParamValue == "jbpm";
+                return true;
+//				profileParamName = "profile";
+//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//		        regexa = new RegExp( regexSa );
+//		        profileParams = regexa.exec( window.location.href );
+//		        profileParamValue = profileParams[1];
+//				return profileParamValue == "jbpm";
 			}.bind(this)
 		});
 	},

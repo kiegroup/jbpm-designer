@@ -53,7 +53,7 @@ ORYX.Plugins.UUIDRepositorySave = ORYX.Plugins.AbstractPlugin.extend({
 			'name': ORYX.I18N.Save.save,
 			'functionality': this.save.bind(this),
 			'group': ORYX.I18N.Save.group,
-			'icon': ORYX.PATH + "images/disk.png",
+			'icon': ORYX.BASE_FILE_PATH + "images/disk.png",
 			'description': ORYX.I18N.Save.saveDesc,
 			'index': 1,
 			'minShape': 0,
@@ -64,11 +64,11 @@ ORYX.Plugins.UUIDRepositorySave = ORYX.Plugins.AbstractPlugin.extend({
 		if (ORYX.CONFIG.UUID_AUTOSAVE_DEFAULT === undefined) {
 			ORYX.CONFIG.UUID_AUTOSAVE_DEFAULT = true;
 		}
-		autosaveicon = ORYX.PATH + "images/disk_multiple_disabled.png";
+		autosaveicon = ORYX.BASE_FILE_PATH + "images/disk_multiple_disabled.png";
 		autosavetip = ORYX.I18N.Save.autosaveDesc_off;
 
 		if (ORYX.CONFIG.UUID_AUTOSAVE_DEFAULT) {
-			autosaveicon = ORYX.PATH + "images/disk_multiple.png";
+			autosaveicon = ORYX.BASE_FILE_PATH + "images/disk_multiple.png";
 			autosavetip = ORYX.I18N.Save.autosaveDesc_on;
 		}
 					
@@ -78,10 +78,10 @@ ORYX.Plugins.UUIDRepositorySave = ORYX.Plugins.AbstractPlugin.extend({
 			'functionality': function(context) {
 			   this.setautosave(ORYX.CONFIG.UUID_AUTOSAVE_INTERVAL);
 			   if (this.autosaving) {
-				   context.setIcon(ORYX.PATH + "images/disk_multiple.png"); 
+				   context.setIcon(ORYX.BASE_FILE_PATH + "images/disk_multiple.png");
 				   context.setTooltip(ORYX.I18N.Save.autosaveDesc_on);
 			   } else {
-				   context.setIcon(ORYX.PATH + "images/disk_multiple_disabled.png");
+				   context.setIcon(ORYX.BASE_FILE_PATH + "images/disk_multiple_disabled.png");
 				   context.setTooltip(ORYX.I18N.Save.autosaveDesc_off);
 			   }
 			   context.hide();
@@ -194,7 +194,7 @@ ORYX.Plugins.UUIDRepositorySave = ORYX.Plugins.AbstractPlugin.extend({
 	showSaveStatus: function(savePlugin, asynchronous) {
 		if (asynchronous) {
 			//show an icon and a message in the toolbar
-			autosavecfg.buttonInstance.setIcon(ORYX.PATH + "images/ajax-loader.gif");
+			autosavecfg.buttonInstance.setIcon(ORYX.BASE_FILE_PATH + "images/ajax-loader.gif");
 		}
 	},
 	
@@ -205,7 +205,7 @@ ORYX.Plugins.UUIDRepositorySave = ORYX.Plugins.AbstractPlugin.extend({
 	hideSaveStatus: function(asynchronous) {
 		if (asynchronous) {
 			//show an icon and a message in the toolbar
-			autosavecfg.buttonInstance.setIcon(ORYX.PATH + "images/disk_multiple.png");
+			autosavecfg.buttonInstance.setIcon(ORYX.BASE_FILE_PATH + "images/disk_multiple.png");
 		}
 	}
 });
@@ -221,7 +221,7 @@ ORYX.Plugins.UUIDRepositoryDummySave = ORYX.Plugins.AbstractPlugin.extend({
 		//	'name': ORYX.I18N.Save.save,
 		//	'functionality': this.save.bind(this),
 		//	'group': ORYX.I18N.Save.group,
-		//	'icon': ORYX.PATH + "images/disk.png",
+		//	'icon': ORYX.BASE_FILE_PATH + "images/disk.png",
 		//	'description': ORYX.I18N.Save.saveDesc,
 		//	'index': 1,
 		//	'minShape': 0,
@@ -232,11 +232,11 @@ ORYX.Plugins.UUIDRepositoryDummySave = ORYX.Plugins.AbstractPlugin.extend({
 		//if (ORYX.CONFIG.UUID_AUTOSAVE_DEFAULT === undefined) {
 			ORYX.CONFIG.UUID_AUTOSAVE_DEFAULT = false;
 		//}
-		//autosaveicon = ORYX.PATH + "images/disk_multiple_disabled.png";
+		//autosaveicon = ORYX.BASE_FILE_PATH + "images/disk_multiple_disabled.png";
 		//autosavetip = ORYX.I18N.Save.autosaveDesc_off;
 
 		//if (ORYX.CONFIG.UUID_AUTOSAVE_DEFAULT) {
-		//	autosaveicon = ORYX.PATH + "images/disk_multiple.png";
+		//	autosaveicon = ORYX.BASE_FILE_PATH + "images/disk_multiple.png";
 		//	autosavetip = ORYX.I18N.Save.autosaveDesc_on;
 		//}
 					
@@ -246,10 +246,10 @@ ORYX.Plugins.UUIDRepositoryDummySave = ORYX.Plugins.AbstractPlugin.extend({
 			'functionality': function(context) {
 			   this.setautosave(ORYX.CONFIG.UUID_AUTOSAVE_INTERVAL);
 			   if (this.autosaving) {
-				   context.setIcon(ORYX.PATH + "images/disk_multiple.png"); 
+				   context.setIcon(ORYX.BASE_FILE_PATH + "images/disk_multiple.png");
 				   context.setTooltip(ORYX.I18N.Save.autosaveDesc_on);
 			   } else {
-				   context.setIcon(ORYX.PATH + "images/disk_multiple_disabled.png");
+				   context.setIcon(ORYX.BASE_FILE_PATH + "images/disk_multiple_disabled.png");
 				   context.setTooltip(ORYX.I18N.Save.autosaveDesc_off);
 			   }
 			   context.hide();
@@ -362,7 +362,7 @@ ORYX.Plugins.UUIDRepositoryDummySave = ORYX.Plugins.AbstractPlugin.extend({
 	showSaveStatus: function(savePlugin, asynchronous) {
 		//if (asynchronous) {
 			//show an icon and a message in the toolbar
-			//autosavecfg.buttonInstance.setIcon(ORYX.PATH + "images/ajax-loader.gif");
+			//autosavecfg.buttonInstance.setIcon(ORYX.BASE_FILE_PATH + "images/ajax-loader.gif");
 		//}
 	},
 	
@@ -373,7 +373,7 @@ ORYX.Plugins.UUIDRepositoryDummySave = ORYX.Plugins.AbstractPlugin.extend({
 	hideSaveStatus: function(asynchronous) {
 		//if (asynchronous) {
 			//show an icon and a message in the toolbar
-			//autosavecfg.buttonInstance.setIcon(ORYX.PATH + "images/disk_multiple.png");
+			//autosavecfg.buttonInstance.setIcon(ORYX.BASE_FILE_PATH + "images/disk_multiple.png");
 		//}
 	}
 });
@@ -383,72 +383,38 @@ ORYX.Plugins.UUIDRepositoryDummySave = ORYX.Plugins.AbstractPlugin.extend({
  * (moved from editor handler)
  */
 window.onOryxResourcesLoaded = function() {
-//	var stencilset = ORYX.Utils.getParamFromUrl('stencilset') || ORYX.CONFIG.SSET;
-//	var editor_parameters = {
-//		id: ORYX.UUID,
-//		stencilset: {
-//			url: stencilset
-//		}
-//	};
-//	if(!(ORYX.UUID === undefined)) {
-//
-// 		//load the model from the repository from its uuid
-//		new Ajax.Request(ORYX.CONFIG.UUID_URL(), {
-//            asynchronous: false,
-//            encoding: 'UTF-8',
-//            method: 'get',
-//            onSuccess: function(transport) {
-//				response = transport.responseText;
-//				if (response.length != 0) {
-//				    try {
-//					    model = response.evalJSON();
-//					    editor_parameters.model = model;
-//				    } catch(err) {
-//				    	ORYX.LOG.error(err);
-//				    }
-//				}
-//
-//			},
-//            onFailure: function(transport) {
-//            	ORYX.LOG.error("Could not load the model for uuid " + ORYX.UUID);
-//			}
-//        });
-//	}
-//	// finally open the editor:
-//	var editor = new ORYX.Editor(editor_parameters);
-//    ORYX.EDITOR = editor;
-};
-//[manstis] - Push an existing process into Oryx
-function loadProcess(containerId, jsonModel) {
-    //Stencil set
-    var stencilset = ORYX.Utils.getParamFromUrl('stencilset') || ORYX.CONFIG.SSET;
-    var editor_parameters = {
-        id:containerId,
-        model:jsonModel.evalJSON(),
-        fullscreen:false,
-        stencilset:{
-            url:stencilset
-        }
-    };
-
-    //Launch Oryx
-    var editor = new ORYX.Editor(editor_parameters);
-    ORYX.EDITOR = editor;
-};
-
-//[manstis] - Initialize Oryx with an empty process
-function newProcess(containerId) {
-    //Stencil set
-    var stencilset = ORYX.CONFIG.SSET;
-    var editor_parameters = {
-        id:containerId,
-        fullscreen:false,
-        stencilset:{
-            url:stencilset
-        }
-    };
-
-    //Launch Oryx
-    var editor = new ORYX.Editor(editor_parameters);
+	var stencilset = ORYX.Utils.getParamFromUrl('stencilset') || ORYX.CONFIG.SSET;
+	var editor_parameters = {
+		id: ORYX.UUID,
+		stencilset: {
+			url: stencilset
+		}
+	};
+	if(!(ORYX.UUID === undefined)) {
+		
+ 		//load the model from the repository from its uuid
+		new Ajax.Request(ORYX.CONFIG.UUID_URL(), {
+            asynchronous: false,
+            encoding: 'UTF-8',
+            method: 'get',
+            onSuccess: function(transport) {
+				response = transport.responseText;
+				if (response.length != 0) {
+				    try {
+					    model = response.evalJSON();
+					    editor_parameters.model = model;
+				    } catch(err) {
+				    	ORYX.LOG.error(err);
+				    }
+				}
+				
+			},
+            onFailure: function(transport) {
+            	ORYX.LOG.error("Could not load the model for uuid " + ORYX.UUID);
+			}
+        });
+	}
+	// finally open the editor:
+	var editor = new ORYX.Editor(editor_parameters);
     ORYX.EDITOR = editor;
 };

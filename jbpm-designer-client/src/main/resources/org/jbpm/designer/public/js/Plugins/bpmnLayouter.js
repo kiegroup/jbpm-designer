@@ -35,7 +35,7 @@ ORYX.Plugins.BpmnLayouter = ORYX.Plugins.AbstractPlugin.extend({
 			'description' : "Layout BPMN Model",
 			'functionality' : this.layout.bind(this),
 			'group' : "Layout",
-			'icon' : ORYX.PATH + "images/auto_layout.png",
+			'icon' : ORYX.BASE_FILE_PATH + "images/auto_layout.png",
 			'index' : 1,
 			'minShape' : 0,
 			'maxShape' : 0

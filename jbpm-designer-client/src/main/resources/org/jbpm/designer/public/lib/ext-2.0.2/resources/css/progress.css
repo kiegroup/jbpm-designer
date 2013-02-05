@@ -19,7 +19,7 @@
     height:18px;
     float:left;
     width:0;
-    background:#9CBFEE url(../images/default/progress/progress-bg.gif) repeat-x left center;
+    background:#9CBFEE url( ../images/default/progress/progress-bg.gif ) repeat-x left center;
     border-top:1px solid #D1E4FD;
     border-bottom:1px solid #7FA9E4;
     border-right:1px solid #7FA9E4;

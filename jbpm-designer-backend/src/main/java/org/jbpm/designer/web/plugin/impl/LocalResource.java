@@ -33,7 +33,7 @@ public class LocalResource {
     public LocalResource(String name, String path, ServletContext context) {
         this._name = name;
         StringBuilder localPath = new StringBuilder();
-        localPath.append("js").append("/").append("Plugins").append("/").append(path);
+        localPath.append("org.jbpm.designer.jBPMDesigner").append("/").append("js").append("/").append("Plugins").append("/").append(path);
         this._path = context.getRealPath(localPath.toString());
     }
     

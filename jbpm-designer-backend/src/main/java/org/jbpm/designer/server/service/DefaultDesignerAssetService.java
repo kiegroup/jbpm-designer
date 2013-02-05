@@ -1,28 +1,18 @@
 package org.jbpm.designer.server.service;
 
-import java.io.StringWriter;
+import java.io.IOException;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.servlet.ServletContext;
 
-import com.google.gwt.user.client.Window;
-import org.jboss.drools.impl.DroolsPackageImpl;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.PostMethod;
 import org.jboss.errai.bus.server.annotations.Service;
-import org.jbpm.designer.repository.Asset;
-import org.jbpm.designer.repository.AssetBuilderFactory;
-import org.jbpm.designer.repository.AssetNotFoundException;
 import org.jbpm.designer.repository.Repository;
-import org.jbpm.designer.repository.impl.AssetBuilder;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.kie.commons.validation.Preconditions;
-import org.jbpm.designer.server.service.MockServletContext;
 import org.jbpm.designer.service.DesignerAssetService;
-import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
-import org.jbpm.designer.web.server.ServletUtil;
 import org.uberfire.backend.vfs.Path;
-import org.uberfire.backend.vfs.VFSService;
 
 /**
  * [manstis] Default implementation
@@ -30,71 +20,52 @@ import org.uberfire.backend.vfs.VFSService;
 @Service
 @ApplicationScoped
 public class DefaultDesignerAssetService implements DesignerAssetService {
-
-//    @Inject
-//    private VFSService vfs;
-
     @Inject
     private Repository repository;
 
     @Override
-    public String loadJsonModel( final Path path ) {
-
-        Preconditions.checkNotNull( "path",
-                path );
-        try {
-            //Get the XML
-            final String bpmn2 = (String) repository.loadAsset(path.toURI().toString()).getAssetContent();
-    //        final String bpmn2 = vfs.readAllString( path );
-
-            //Mock a ServletContext (as the profile definitions are now stored on the classpath)
-            final ServletContext context = new MockServletContext();
-
-            //Get the default profile handler (hard coded for now, could be a parameter)
-            final IDiagramProfile profile = new JbpmProfileImpl( context );
-
-            //Convert to JSON
-            DroolsPackageImpl.init();
-            final String json = profile.createUnmarshaller().parseModel( bpmn2,
-                    profile,
-                    "" );
-            return json;
-        } catch (AssetNotFoundException e) {
-            e.printStackTrace();
-            return "";
-        }
+    public String loadEditorBody( final Path path, final String editorID) {
+        // TODO dont hard-code url here
+        String editorURL = "http://localhost:8888/editor/?uuid=" + path.toURI() + "&profile=jbpm&pp=&editorid=" + editorID;
+        return getEditorResponse(editorURL);
     }
 
     @Override
-    public void saveJsonModel( final Path path,
-                               final String jsonModel ) {
-        Preconditions.checkNotNull( "path",
-                path );
-        Preconditions.checkNotNull( "jsonModel",
-                jsonModel );
+    public String getEditorID() {
+        // TODO - fix this so it is not always "Definition"
+        return "Definition";
+        //return UUID.randomUUID().toString().replaceAll("-", "");
+    }
 
-        //Mock a ServletContext (as the profile definitions are now stored on the classpath)
-        final ServletContext context = new MockServletContext();
 
-        //Get the default profile handler (hard coded for now, could be a parameter)
-        final IDiagramProfile profile = new JbpmProfileImpl( context );
+    private String getEditorResponse(String urlpath) {
+        HttpClient httpclient = new HttpClient();
 
-        //Convert to XML
-        final String bpmn2 = profile.createMarshaller().parseModel( jsonModel,
-                "" );
-
-        //Write XML back
-//        vfs.write( path,
-//                bpmn2 );
-
+        PostMethod authMethod = new PostMethod(urlpath);
+        NameValuePair[] data = { new NameValuePair("j_username", "admin"),
+                new NameValuePair("j_password", "admin") };
+        authMethod.setRequestBody(data);
         try {
-            Asset asset = repository.loadAsset(path.toURI().toString());
-            AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(asset);
-            builder.content(bpmn2);
+            httpclient.executeMethod(authMethod);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            authMethod.releaseConnection();
+        }
 
-            repository.updateAsset(builder.getAsset());
+        HttpMethod theMethod = new GetMethod(urlpath);
+        StringBuffer sb = new StringBuffer();
+        try {
+            httpclient.executeMethod(theMethod);
+            sb.append(theMethod.getResponseBodyAsString());
+            return sb.toString();
+
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
+        } finally {
+            theMethod.releaseConnection();
         }
     }
 

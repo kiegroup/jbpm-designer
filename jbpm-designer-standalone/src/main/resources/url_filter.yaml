@@ -6,7 +6,10 @@ filter:
    - pattern: /private/**
 
 exclude:
-   - /*.ico
+   - /**.ico
    - /org.jbpm.designer.jBPMDesigner/images/**
    - /org.jbpm.designer.jBPMDesigner/css/**
    - /css/**
+   - /org.jbpm.designer.jBPMDesigner/js/**
+   - /org.jbpm.designer.jBPMDesigner/lib/**
+   - /org.jbpm.designer.jBPMDesigner/jsc/**

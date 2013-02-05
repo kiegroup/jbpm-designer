@@ -54,7 +54,7 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
             'name': "EPC to BPMN transform",
             'functionality': this.startTransform.bind(this),
             'group': "epc",
-            'icon': ORYX.PATH + "images/epc_export.png",
+            'icon': ORYX.BASE_FILE_PATH + "images/epc_export.png",
             'description': "Import from EPC",
             'index': 1,
             'minShape': 0,

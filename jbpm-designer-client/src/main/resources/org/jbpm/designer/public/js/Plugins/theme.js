@@ -22,20 +22,21 @@ ORYX.Plugins.Theme = Clazz.extend({
 	   				'name': themeNamesArray[i],
 	   				'functionality': this.applyTheme.bind(this, themeNamesArray[i]),
 	   				'group': ORYX.I18N.View.jbpmgroup,
-	   				dropDownGroupIcon : ORYX.PATH + "images/colorpicker.gif",
-	   				'icon': ORYX.PATH + "images/colorize.png",
+	   				dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/colorpicker.gif",
+	   				'icon': ORYX.BASE_FILE_PATH + "images/colorize.png",
 	   				'description': "Apply " + themeNamesArray[i] + " Color Theme",
 	   				'index': 10,
 	   				'minShape': 0,
 	   				'maxShape': 0,
 	   				'isEnabled': function(){
-	   					profileParamName = "profile";
-	   					profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-	   					regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-	   			        regexa = new RegExp( regexSa );
-	   			        profileParams = regexa.exec( window.location.href );
-	   			        profileParamValue = profileParams[1]; 
-	   					return profileParamValue == "jbpm";
+                           return true;
+//	   					profileParamName = "profile";
+//	   					profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//	   					regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//	   			        regexa = new RegExp( regexSa );
+//	   			        profileParams = regexa.exec( window.location.href );
+//	   			        profileParamValue = profileParams[1];
+//	   					return profileParamValue == "jbpm";
 	   				}.bind(this)
 	   			});
   			}

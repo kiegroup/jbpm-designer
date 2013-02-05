@@ -54,16 +54,17 @@
                 value - value of the property
                 system-property - (optional) if set tu true property will be set as JVM system property
             -->
-            <!-- simple file system based vfs configuration -->
+            <!-- simple file system based vfs configuration
             <parameter name="root" value="default:///tmp/designer-repo" />
-            <parameter name="globaldir" value="/global" />
+            <parameter name="globaldir" value="/global" /> -->
             <parameter name="name" value="Designer Repository"/>
+
             <!-- git based cfs configuration-->
-            <!--<parameter name="root" value="git://designer-repo" />
+            <parameter name="root" value="git://uf-playground" />
             <parameter name="globaldir" value="/global" />
             <parameter name="username" value="guvnorngtestuser1" />
             <parameter name="password" value="test1234" />
-            <parameter name="origin" value="https://github.com/mswiderski/designer-playground.git" />
+            <parameter name="origin" value="https://github.com/guvnorngtestuser1/guvnorng-playground.git" />
             <parameter name="fetch.cmd" value="?fetch" />
             <parameter name="org.kie.nio.git.dir" value="/tmp/designer-git-repo" system-property="true"/>    -->
         </repository>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema targetNamespace="http://www.omg.com/di/1.0.0" xmlns:di="http://www.omg.com/di/1.0.0"
-            xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<xsd:schema targetNamespace="http://www.omg.com/di/1.0.0" xmlns:dd="http://www.omg.com/dd/1.0.0" xmlns:di="http://www.omg.com/di/1.0.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
   <xsd:import namespace="http://www.omg.com/dd/1.0.0" schemaLocation="DiagramDefinition.xsd"/>
   

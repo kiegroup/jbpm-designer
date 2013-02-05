@@ -69,11 +69,9 @@ public abstract class AbstractConnectorServlet extends HttpServlet {
         }
         JSONObject returnJson = new JSONObject();
         try {
-            System.out.println("*********************************** COMMAND: " + requestParams.get("cmd"));
             Iterator<String> keys = requestParams.keySet().iterator();
             while(keys.hasNext()) {
                 String key = keys.next();
-                System.out.println("******************************* PARAM: " + key + " -- val: " + requestParams.get(key));
             }
 
             String cmd = (String) requestParams.get("cmd");
@@ -138,7 +136,6 @@ public abstract class AbstractConnectorServlet extends HttpServlet {
         } else {
             response.setContentType("application/json; charset=UTF-8");
         }
-        System.out.println("******************* RESPONSE\n: " + json.toString());
         try {
             json.write(response.getWriter());
         } catch (Exception e) {

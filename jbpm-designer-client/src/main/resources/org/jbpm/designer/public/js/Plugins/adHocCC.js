@@ -44,7 +44,7 @@ ORYX.Plugins.AdHocCC = Clazz.extend({
 			'name':ORYX.I18N.AdHocCC.compl,
 			'functionality': this.editCC.bind(this),
 			'group': ORYX.I18N.AdHocCC.group,
-			'icon': ORYX.PATH + "images/adhoc.gif",
+			'icon': ORYX.BASE_FILE_PATH + "images/adhoc.gif",
 			'description': ORYX.I18N.AdHocCC.complDesc,
 			'index': 0,
 			'minShape': 1,

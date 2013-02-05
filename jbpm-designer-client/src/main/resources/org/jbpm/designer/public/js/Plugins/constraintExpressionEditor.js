@@ -301,7 +301,7 @@ Ext.form.GuvnorPopupEditor = function(_srcShape, _onSave){
                //get working-set definition for the model entities found in path
                var workingSetXML = "";
                
-               new Ajax.Request("/designer/workingSet", {
+               new Ajax.Request("/workingSet", {
 			asynchronous: false,
 			method: 'POST',
                         parameters: {

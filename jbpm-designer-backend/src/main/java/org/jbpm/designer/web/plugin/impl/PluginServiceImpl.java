@@ -96,6 +96,7 @@ public class PluginServiceImpl implements IDiagramPluginService {
         try {
             try {
                 fileStream = new FileInputStream(new StringBuilder(context.getRealPath("/")).append("/").
+                        append("org.jbpm.designer.jBPMDesigner/").
                         append("js").append("/").append("Plugins").append("/").
                         append("plugins.xml").toString());
             } catch (FileNotFoundException e) {

@@ -36,6 +36,7 @@ import java.util.*;
 public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     private static final Logger _logger =
             Logger.getLogger(JbpmPreprocessingUnit.class);
+    public static final String pryx_path = "/org.jbpm.designer.jBPMDesigner";
     public static final String STENCILSET_PATH = "stencilsets";
     public static final String WORKITEM_DEFINITION_EXT = "wid";
     public static final String THEME_NAME = "themes";
@@ -63,20 +64,20 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     private String sampleBpmn2;
 
     public JbpmPreprocessingUnit(ServletContext servletContext) {
-        stencilPath = servletContext.getRealPath("/" + STENCILSET_PATH);
+        stencilPath = servletContext.getRealPath(pryx_path + "/" + STENCILSET_PATH);
         origStencilFilePath = stencilPath + "/bpmn2.0jbpm/stencildata/" + "bpmn2.0jbpm.orig";
         stencilFilePath = stencilPath + "/bpmn2.0jbpm/" + "bpmn2.0jbpm.json";
         workitemSVGFilePath = stencilPath  + "/bpmn2.0jbpm/view/activity/workitems/";
         origWorkitemSVGFile = workitemSVGFilePath + "workitem.orig";
-        default_emailicon = servletContext.getRealPath("/defaults/defaultemailicon.gif");
-        default_logicon = servletContext.getRealPath(  "/defaults/defaultlogicon.gif");
-        default_servicenodeicon = servletContext.getRealPath(  "/defaults/defaultservicenodeicon.png");
-        default_widconfigtemplate = servletContext.getRealPath("/defaults/WorkDefinitions.wid.st");
-        themeInfo = servletContext.getRealPath("/defaults/themes.json");
-        formWidgetsDir = servletContext.getRealPath("/defaults/formwidgets");
-        customEditorsInfo = servletContext.getRealPath("/defaults/customeditors.json");
-        patternsData = servletContext.getRealPath("/defaults/patterns.json");
-        sampleBpmn2 = servletContext.getRealPath("/defaults/SampleProcess.bpmn2");
+        default_emailicon = servletContext.getRealPath(pryx_path + "/defaults/defaultemailicon.gif");
+        default_logicon = servletContext.getRealPath(pryx_path + "/defaults/defaultlogicon.gif");
+        default_servicenodeicon = servletContext.getRealPath(pryx_path + "/defaults/defaultservicenodeicon.png");
+        default_widconfigtemplate = servletContext.getRealPath(pryx_path + "/defaults/WorkDefinitions.wid.st");
+        themeInfo = servletContext.getRealPath(pryx_path + "/defaults/themes.json");
+        formWidgetsDir = servletContext.getRealPath(pryx_path + "/defaults/formwidgets");
+        customEditorsInfo = servletContext.getRealPath(pryx_path + "/defaults/customeditors.json");
+        patternsData = servletContext.getRealPath(pryx_path + "/defaults/patterns.json");
+        sampleBpmn2 = servletContext.getRealPath(pryx_path + "/defaults/SampleProcess.bpmn2");
     }
 
     public String getOutData() {

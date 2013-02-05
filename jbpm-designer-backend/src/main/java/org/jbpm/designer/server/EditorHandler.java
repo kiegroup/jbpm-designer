@@ -101,7 +101,7 @@ public class EditorHandler extends HttpServlet {
      * The base path under which the application will be made available at runtime.
      * This constant should be used throughout the application.
      */
-    public static final String oryx_path = "/designer/";
+    public static final String oryx_path = "/org.jbpm.designer.jBPMDesigner/";
     
     /**
      * The designer DEV flag looked up from system properties.
@@ -214,20 +214,11 @@ public class EditorHandler extends HttpServlet {
                     "could not be read as a document.");
         }
         
-        Element root = _doc.getRootElement();
-        Element head = root.getChild("head", root.getNamespace());
-        if (head == null) {
-            _logger.error("Invalid editor.html. No html or head tag");
-            throw new ServletException("Invalid editor.html. " +
-                    "No html or head tag");
-        }
-        
-        
         try {
             initEnvFiles(getServletContext(), config);
         } catch (IOException e) {
             throw new ServletException(e);
-        }            
+        }
     }
 
     /**
@@ -262,7 +253,7 @@ public class EditorHandler extends HttpServlet {
             StringWriter sw = new StringWriter();
             List<InputStream> codes = new ArrayList<InputStream>();
             for (String file : _envFiles) {
-                codes.add(new FileInputStream(new File(getServletContext().getRealPath(file))));
+                codes.add(new FileInputStream(new File(getServletContext().getRealPath( oryx_path + file))));
             }
             
             try {
@@ -284,7 +275,7 @@ public class EditorHandler extends HttpServlet {
             
             try {
                 FileWriter w = new FileWriter(
-                        context.getRealPath("jsc/env_combined.js"));
+                        context.getRealPath(oryx_path + "jsc/env_combined.js"));
                 w.write(sw.toString());
                 w.close();
             } catch (IOException e) {
@@ -304,6 +295,8 @@ public class EditorHandler extends HttpServlet {
             throws ServletException, IOException {
         Document doc = (Document) _doc.clone();
         String profileName = request.getParameter("profile");
+        String uuid = request.getParameter("uuid");
+        String editorID = request.getParameter("editorid");
         if(profileName == null || profileName.length() < 1) {
         	// default to jbpm
         	profileName = "jbpm";
@@ -329,12 +322,16 @@ public class EditorHandler extends HttpServlet {
         }
 
         //output env javascript files
+        JSONArray scriptsArray;
         if (_devMode) {
-            for (String jsFile : _envFiles) {
-                addScript(doc, oryx_path + jsFile, true);
+            scriptsArray = new JSONArray();
+            for(String nextScript : _envFiles) {
+                scriptsArray.put(oryx_path + nextScript);
             }
+
         } else {
-            addScript(doc, oryx_path + "jsc/env_combined.js", true);
+            scriptsArray = new JSONArray();
+            scriptsArray.put(oryx_path + "jsc/env_combined.js");
         }
         
         // generate script tags for plugins.
@@ -366,7 +363,7 @@ public class EditorHandler extends HttpServlet {
                         getServletContext());
                 try {
                     FileWriter w = new FileWriter(getServletContext().
-                            getRealPath("jsc/plugins_" + profileName 
+                            getRealPath(oryx_path + "jsc/plugins_" + profileName
                                     + ".js"));
                     w.write(rs.toString());
                     w.close();
@@ -375,31 +372,25 @@ public class EditorHandler extends HttpServlet {
                 }
             }
         }
-        
+
+        JSONArray pluginsArray = new JSONArray();
         if (_devMode) {
             for (IDiagramPlugin jsFile : _pluginfiles.get(profileName)) {
-                addScript(doc, oryx_path + "plugin/" + jsFile.getName() 
-                        + ".js", true);
+                pluginsArray.put("/plugin/" + jsFile.getName() + ".js");
             }
         } else {
-            addScript(doc, 
-                    oryx_path + "jsc/plugins_" + profileName + ".js", 
-                    false);
+            pluginsArray.put(oryx_path + "jsc/plugins_" + profileName + ".js");
         }
         
         for (IDiagramPlugin uncompressed : 
                 _uncompressedPlugins.get(profileName)) {
-            addScript(doc, oryx_path + "plugin/" + uncompressed.getName() 
-                    + ".js", false);
+            pluginsArray.put(oryx_path + "plugin/" + uncompressed.getName() + ".js");
         }
         
-        // send the updated editor.html to client 
-        if(!isIE(request)){
-            response.setContentType("application/xhtml+xml");
-        }
         XMLOutputter outputter = new XMLOutputter();
         Format format = Format.getPrettyFormat();
         format.setExpandEmptyElements(true);
+        format.setOmitDeclaration(true);
         outputter.setFormat(format);
         String html = outputter.outputString(doc);
         StringTokenizer tokenizer = new StringTokenizer(
@@ -414,7 +405,22 @@ public class EditorHandler extends HttpServlet {
 
         while(tokenizer.hasMoreTokens()) {
             String elt = tokenizer.nextToken();
-            if ("title".equals(elt)) {
+            if ("editorprofile".equals(elt)) {
+                resultHtml.append(profileName);
+                replacementMade = true;
+            } else if ("editoruuid".equals(elt)) {
+                resultHtml.append(uuid);
+                replacementMade = true;
+            } else if ("editorid".equals(elt)) {
+                resultHtml.append(editorID);
+                replacementMade = true;
+            } else if ("allscripts".equals(elt)) {
+                resultHtml.append(scriptsArray.toString());
+                replacementMade = true;
+            } else if ("allplugins".equals(elt)) {
+                resultHtml.append(pluginsArray.toString());
+                replacementMade = true;
+            } else if ("title".equals(elt)) {
                 resultHtml.append(profile.getTitle());
                 replacementMade = true;
             } else if ("stencilset".equals(elt)) {
@@ -458,11 +464,11 @@ public class EditorHandler extends HttpServlet {
             	resultHtml.append(_locale);
                 replacementMade = true;
             } else if ("defaultSkin".equals(elt)) { 
-                resultHtml.append("<link rel=\"Stylesheet\" media=\"screen\" href=\"/designer/css/theme-default.css\" type=\"text/css\"/>");
+                resultHtml.append("/org.jbpm.designer.jBPMDesigner/css/theme-default.css");
                 replacementMade = true;
             } else if("overlaySkin".equals(elt)) {
             	if(_skin != null && !_skin.equals("default")) {
-            		resultHtml.append("<link rel=\"Stylesheet\" media=\"screen\" href=\"/designer/css/theme-" + _skin + ".css\" type=\"text/css\"/>");
+            		resultHtml.append("org.jbpm.designer.jBPMDesigner/css/theme-" + _skin + ".css");
             	} else {
             		resultHtml.append("");
             	}
@@ -508,6 +514,7 @@ public class EditorHandler extends HttpServlet {
                 resultHtml.append(elt);
             }
         }
+        response.setContentType("text/plain; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(resultHtml.toString());
     }
@@ -567,7 +574,7 @@ public class EditorHandler extends HttpServlet {
      */
     private static String readEnvFiles(ServletContext context) throws IOException {
         FileInputStream core_scripts = new FileInputStream(
-                context.getRealPath("/js/js_files.json"));
+                context.getRealPath(oryx_path + "js/js_files.json"));
         try {
             ByteArrayOutputStream stream = 
                 new ByteArrayOutputStream();

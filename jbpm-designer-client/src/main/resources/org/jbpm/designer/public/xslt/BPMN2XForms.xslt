@@ -48,17 +48,23 @@ Explicitly supported cases are:
 <!-- TODO support event-based exclusive gateway -->
 
 <xsl:stylesheet version="2.0"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 
-                xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-                xmlns:oryx="http://oryx-editor.org/"
-                xmlns:raziel="http://raziel.org/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:oryx="http://oryx-editor.org/"
+    xmlns:raziel="http://raziel.org/"
 
-                xmlns:xhtml="http://www.w3.org/1999/xhtml"
-                xmlns:xforms="http://www.w3.org/2002/xforms"
-                xmlns:events="http://www.w3.org/2001/xml-events"
+    xmlns:xhtml="http://www.w3.org/1999/xhtml"
+    xmlns:xforms="http://www.w3.org/2002/xforms"
+    xmlns:events="http://www.w3.org/2001/xml-events"
 
-        >
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+>
 
     <!-- controls output of debug messages -->
     <xsl:param name="debug" select="true()" />

@@ -9,7 +9,7 @@ if(!ORYX.I18N.Oryx) ORYX.I18N.Oryx = {};
 ORYX.I18N.Oryx.title		= ORYX.TITLE;
 ORYX.I18N.Oryx.noBackendDefined	= "注意! \nバックエンドが定義されていません。\n 要求されたモデルはロードできません。 保存されたプラグイン定義をロードしてください";
 //ORYX.I18N.Oryx.pleaseWait 	= "　ロード中　お待ちください...";
-ORYX.I18N.Oryx.pleaseWait  = '<center>  <img src="/designer/images/jbpm_logo.png" align="middle"/>  <b>jBPM Web Designer ロード中. お待ちください...</b></center>';
+ORYX.I18N.Oryx.pleaseWait  = '<center>  <img src="/org.jbpm.designer.jBPMDesigner/images/jbpm_logo.png" align="middle"/>  <b>jBPM Web Designer ロード中. お待ちください...</b></center>';
 ORYX.I18N.Oryx.notLoggedOn = "ログオンしていません";
 ORYX.I18N.Oryx.editorOpenTimeout = "エディターはまだ開始していません。ポップアップブロッカーが無効もしくはこのサイト内ではポップアップが許可されることを確認してください。このサイト内では広告は表示されません。";
 

@@ -176,7 +176,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
 				var option = {type: stencil.id(), namespace: stencil.namespace()};
 				var button = new ORYX.Plugins.ShapeMenuButton({
 					callback: 	this.newShape.bind(this, option),
-					// icon: 		isMorphing ? ORYX.PATH + "images/edges.png" : stencil.icon(),
+					// icon: 		isMorphing ? ORYX.BASE_FILE_PATH + "images/edges.png" : stencil.icon(),
 					icon: 		stencil.icon(),
 					align: 		ORYX.CONFIG.SHAPEMENU_RIGHT,
 					group:		1,

@@ -46,7 +46,7 @@ ORYX.Plugins.Pnmlexport = ORYX.Plugins.AbstractPlugin.extend({
             'name': ORYX.I18N.Pnmlexport.name,
             'functionality': this.exportIt.bind(this),
             'group': ORYX.I18N.Pnmlexport.group,
-            'icon': ORYX.PATH + "images/bpmn2pn_deploy.png",
+            'icon': ORYX.BASE_FILE_PATH + "images/bpmn2pn_deploy.png",
             'description': ORYX.I18N.Pnmlexport.desc,
             'index': 2,
             'minShape': 0,

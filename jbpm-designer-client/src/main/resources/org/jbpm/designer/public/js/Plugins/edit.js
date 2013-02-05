@@ -36,7 +36,7 @@ ORYX.Plugins.Edit = Clazz.extend({
         this.facade.offer({
          name: ORYX.I18N.Edit.cut,
          description: ORYX.I18N.Edit.cutDesc,
-         icon: ORYX.PATH + "images/cut.png",
+         icon: ORYX.BASE_FILE_PATH + "images/cut.png",
 		 keyCodes: [{
 				metaKeys: [ORYX.CONFIG.META_KEY_META_CTRL],
 				keyCode: 88,
@@ -52,7 +52,7 @@ ORYX.Plugins.Edit = Clazz.extend({
         this.facade.offer({
          name: ORYX.I18N.Edit.copy,
          description: ORYX.I18N.Edit.copyDesc,
-         icon: ORYX.PATH + "images/page_copy.png",
+         icon: ORYX.BASE_FILE_PATH + "images/page_copy.png",
 		 keyCodes: [{
 				metaKeys: [ORYX.CONFIG.META_KEY_META_CTRL],
 				keyCode: 67,
@@ -68,7 +68,7 @@ ORYX.Plugins.Edit = Clazz.extend({
         this.facade.offer({
          name: ORYX.I18N.Edit.paste,
          description: ORYX.I18N.Edit.pasteDesc,
-         icon: ORYX.PATH + "images/page_paste.png",
+         icon: ORYX.BASE_FILE_PATH + "images/page_paste.png",
 		 keyCodes: [{
 				metaKeys: [ORYX.CONFIG.META_KEY_META_CTRL],
 				keyCode: 86,
@@ -86,7 +86,7 @@ ORYX.Plugins.Edit = Clazz.extend({
         this.facade.offer({
             name: ORYX.I18N.Edit.del,
             description: ORYX.I18N.Edit.delDesc,
-            icon: ORYX.PATH + "images/cross.png",
+            icon: ORYX.BASE_FILE_PATH + "images/cross.png",
 			keyCodes: [{
 					metaKeys: [ORYX.CONFIG.META_KEY_META_CTRL],
 					keyCode: 8,

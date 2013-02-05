@@ -39,7 +39,7 @@ ORYX.Plugins.QueryResultHighlighter = ORYX.Plugins.AbstractPlugin.extend({
 			'name': "Query result highlighter",
 			'functionality': this.buttonClick.bind(this),
 			'group': ORYX.I18N.QueryEvaluator.group,
-			'icon': ORYX.PATH + "images/xforms_export.png",
+			'icon': ORYX.BASE_FILE_PATH + "images/xforms_export.png",
 			'description': "This plugin highlights model parts which were matched by a query.",
 			'index': 1,
 			'toggle': true,

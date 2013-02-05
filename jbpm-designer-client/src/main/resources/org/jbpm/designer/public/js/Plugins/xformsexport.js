@@ -35,7 +35,7 @@ ORYX.Plugins.XFormsExport = ORYX.Plugins.AbstractPlugin.extend({
 			'name':ORYX.I18N.XFormsSerialization.exportXForms,
 			'functionality': this.exportXForms.bind(this),
 			'group': ORYX.I18N.XFormsSerialization.group,
-			'icon': ORYX.PATH + "images/xforms_export.png",
+			'icon': ORYX.BASE_FILE_PATH + "images/xforms_export.png",
 			'description': ORYX.I18N.XFormsSerialization.exportXFormsDesc,
 			'index': 2,
 			'minShape': 0,

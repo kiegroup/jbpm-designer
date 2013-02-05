@@ -54,7 +54,7 @@
 
 .x-mask-loading div {
     padding:5px 10px 5px 25px;
-    background: #fbfbfb url('../images/default/grid/loading.gif') no-repeat 5px 5px;
+    background: #fbfbfb url( '../images/default/grid/loading.gif' ) no-repeat 5px 5px;
     line-height: 16px;
 }
 /* class for hiding elements without using display:none */
@@ -220,7 +220,7 @@
 .x-shadow .xsmc {
     float: left;
     height: 100%;
-    background: transparent url(../images/default/shadow-c.png);
+    background: transparent url( ../images/default/shadow-c.png );
 }
 
 .x-shadow .xst, .x-shadow .xsb {
@@ -230,35 +230,35 @@
 }
 
 .x-shadow .xsml {
-    background: transparent url(../images/default/shadow-lr.png) repeat-y 0 0;
+    background: transparent url( ../images/default/shadow-lr.png ) repeat-y 0 0;
 }
 
 .x-shadow .xsmr {
-    background: transparent url(../images/default/shadow-lr.png) repeat-y -6px 0;
+    background: transparent url( ../images/default/shadow-lr.png ) repeat-y -6px 0;
 }
 
 .x-shadow .xstl {
-    background: transparent url(../images/default/shadow.png) no-repeat 0 0;
+    background: transparent url( ../images/default/shadow.png ) no-repeat 0 0;
 }
 
 .x-shadow .xstc {
-    background: transparent url(../images/default/shadow.png) repeat-x 0 -30px;
+    background: transparent url( ../images/default/shadow.png ) repeat-x 0 -30px;
 }
 
 .x-shadow .xstr {
-    background: transparent url(../images/default/shadow.png) repeat-x 0 -18px;
+    background: transparent url( ../images/default/shadow.png ) repeat-x 0 -18px;
 }
 
 .x-shadow .xsbl {
-    background: transparent url(../images/default/shadow.png) no-repeat 0 -12px;
+    background: transparent url( ../images/default/shadow.png ) no-repeat 0 -12px;
 }
 
 .x-shadow .xsbc {
-    background: transparent url(../images/default/shadow.png) repeat-x 0 -36px;
+    background: transparent url( ../images/default/shadow.png ) repeat-x 0 -36px;
 }
 
 .x-shadow .xsbr {
-    background: transparent url(../images/default/shadow.png) repeat-x 0 -6px;
+    background: transparent url( ../images/default/shadow.png ) repeat-x 0 -6px;
 }
 
 .loading-indicator {

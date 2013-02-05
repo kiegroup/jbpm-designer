@@ -34,7 +34,7 @@ ORYX.Plugins.FeedbackPlugin = ORYX.Plugins.AbstractPlugin.extend({
             'functionality': this.showWindow.bind(this),
             'group': "Help",
             'description': ORYX.I18N.Feedback.desc,
-            'icon': ORYX.PATH + "images/feedback.png",
+            'icon': ORYX.BASE_FILE_PATH + "images/feedback.png",
             'index': 0,
             'minShape': 0,
             'maxShape': 0

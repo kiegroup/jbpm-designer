@@ -52,18 +52,26 @@ private static final Logger _logger = LoggerFactory.getLogger(StencilSetServiceS
     
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String requestURI = req.getRequestURI();
-        // urls should be of type: /designer/stencilset/bpmn2.0
-        // /designer/stencilset/{name}/{resource}
+        // urls should be of type: /org.jbpm.designer.jBPMDesigner/stencilset/bpmn2.0
+        // /org.jbpm.designer.jBPMDesigner/stencilset/{name}/{resource}
+
+
         String[] segments = requestURI.split("/");
         if (segments.length < 2) {
             throw new IllegalArgumentException("No name provided");
         }
-        String name = segments[3];
-        String profile = req.getParameter("profile");
+
+        String name = null;
+        try {
+            name = segments[5];
+        } catch (Exception e) {
+            name = segments[segments.length-1];
+        }
+
         if(name.length() < 1) {
             name = defaultName;
         }
-        
+
         IDiagramStencilSet stencilset = _pluginService.findStencilSet(req, name);
         
         if (stencilset == null) {
@@ -74,11 +82,11 @@ private static final Logger _logger = LoggerFactory.getLogger(StencilSetServiceS
             //looking for a resource under the stencilset.
             String path = requestURI.substring(requestURI.indexOf(segments[3]) + segments[3].length() + 1);
             // this is a bad temp hack..but gets stuff working for nows
-            if(path.indexOf("designer/stencilset//designer/stencilsets/bpmn2.0/") >= 0) {
-                path = path.substring("designer/stencilset//designer/stencilsets/bpmn2.0/".length(), path.length());
+            if(path.indexOf("org.jbpm.designer.jBPMDesigner/stencilset//org.jbpm.designer.jBPMDesigner/stencilsets/bpmn2.0/") >= 0) {
+                path = path.substring("org.jbpm.designer.jBPMDesigner/stencilset//org.jbpm.designer.jBPMDesigner/stencilsets/bpmn2.0/".length(), path.length());
             }
-            if(path.indexOf("designer/stencilset//designer/stencilsets/bpmn2.0jbpm/") >= 0) {
-                path = path.substring("designer/stencilset//designer/stencilsets/bpmn2.0jbpm/".length(), path.length());
+            if(path.indexOf("org.jbpm.designer.jBPMDesigner/stencilset//org.jbpm.designer.jBPMDesigner/stencilsets/bpmn2.0jbpm/") >= 0) {
+                path = path.substring("org.jbpm.designer.jBPMDesigner/stencilset//org.jbpm.designer.jBPMDesigner/stencilsets/bpmn2.0jbpm/".length(), path.length());
             }
             if(path.indexOf("bpmn2.0.json/") >= 0) {
                 path = path.substring("bpmn2.0.json".length(), path.length());
@@ -86,6 +94,16 @@ private static final Logger _logger = LoggerFactory.getLogger(StencilSetServiceS
             if(path.indexOf("bpmn2.0jbpm.json/") >= 0) {
                 path = path.substring("bpmn2.0jbpm.json".length(), path.length());
             }
+            if(path.startsWith("/bpmn2.0jbpm/")) {
+                path = path.substring("/bpmn2.0jbpm/".length(), path.length());
+            }
+            if(path.startsWith("stencilsets/bpmn2.0jbpm/")) {
+                path = path.substring("stencilsets/bpmn2.0jbpm/".length(), path.length());
+            }
+            if(path.startsWith("2.0jbpm/bpmn2.0jbpm.json/")) {
+                path = path.substring("2.0jbpm/bpmn2.0jbpm.json/".length(), path.length());
+            }
+
             input = stencilset.getResourceContents(path);
             if(requestURI.endsWith(".svg")) {
                 resp.setContentType("text/xml");

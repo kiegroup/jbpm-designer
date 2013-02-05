@@ -12,20 +12,21 @@ ORYX.Plugins.Simulation = Clazz.extend({
 			'name': "Process Paths",
 			'functionality': this.findPaths.bind(this),
 			'group': "simulation",
-			'icon': ORYX.PATH + "images/path.png",
-			dropDownGroupIcon : ORYX.PATH + "images/lightbulb.gif",
+			'icon': ORYX.BASE_FILE_PATH + "images/path.png",
+			dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/lightbulb.gif",
 			'description': "Display Process Paths",
 			'index': 1,
 			'minShape': 0,
 			'maxShape': 0,
 			'isEnabled': function(){
-				profileParamName = "profile";
-				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-		        regexa = new RegExp( regexSa );
-		        profileParams = regexa.exec( window.location.href );
-		        profileParamValue = profileParams[1]; 
-				return profileParamValue == "jbpm";
+                return true;
+//				profileParamName = "profile";
+//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//		        regexa = new RegExp( regexSa );
+//		        profileParams = regexa.exec( window.location.href );
+//		        profileParamValue = profileParams[1];
+//				return profileParamValue == "jbpm";
 			}.bind(this)
 		});
 		
@@ -33,20 +34,21 @@ ORYX.Plugins.Simulation = Clazz.extend({
 			'name': "Run Simulation",
 			'functionality': this.runSimulation.bind(this),
 			'group': "simulation",
-			'icon': ORYX.PATH + "images/control_play.png",
-			dropDownGroupIcon : ORYX.PATH + "images/lightbulb.gif",
+			'icon': ORYX.BASE_FILE_PATH + "images/control_play.png",
+			dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/lightbulb.gif",
 			'description': "Run Process Simulation",
 			'index': 2,
 			'minShape': 0,
 			'maxShape': 0,
 			'isEnabled': function(){
-				profileParamName = "profile";
-				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-		        regexa = new RegExp( regexSa );
-		        profileParams = regexa.exec( window.location.href );
-		        profileParamValue = profileParams[1]; 
-				return profileParamValue == "jbpm";
+                return true;
+//				profileParamName = "profile";
+//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//		        regexa = new RegExp( regexSa );
+//		        profileParams = regexa.exec( window.location.href );
+//		        profileParamValue = profileParams[1];
+//				return profileParamValue == "jbpm";
 			}.bind(this)
 		});
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_SIMULATION_BUILD_PATH_SVG, this.autoDisplayPath.bind(this));
