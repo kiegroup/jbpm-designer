@@ -101,7 +101,7 @@ public class EditorHandler extends HttpServlet {
      * The base path under which the application will be made available at runtime.
      * This constant should be used throughout the application.
      */
-    public static final String oryx_path = "/org.jbpm.designer.jBPMDesigner/";
+    public static final String designer_path = "/org.jbpm.designer.jBPMDesigner/";
     
     /**
      * The designer DEV flag looked up from system properties.
@@ -253,7 +253,7 @@ public class EditorHandler extends HttpServlet {
             StringWriter sw = new StringWriter();
             List<InputStream> codes = new ArrayList<InputStream>();
             for (String file : _envFiles) {
-                codes.add(new FileInputStream(new File(getServletContext().getRealPath( oryx_path + file))));
+                codes.add(new FileInputStream(new File(getServletContext().getRealPath( designer_path + file))));
             }
             
             try {
@@ -275,7 +275,7 @@ public class EditorHandler extends HttpServlet {
             
             try {
                 FileWriter w = new FileWriter(
-                        context.getRealPath(oryx_path + "jsc/env_combined.js"));
+                        context.getRealPath(designer_path + "jsc/env_combined.js"));
                 w.write(sw.toString());
                 w.close();
             } catch (IOException e) {
@@ -326,12 +326,12 @@ public class EditorHandler extends HttpServlet {
         if (_devMode) {
             scriptsArray = new JSONArray();
             for(String nextScript : _envFiles) {
-                scriptsArray.put(oryx_path + nextScript);
+                scriptsArray.put(designer_path + nextScript);
             }
 
         } else {
             scriptsArray = new JSONArray();
-            scriptsArray.put(oryx_path + "jsc/env_combined.js");
+            scriptsArray.put(designer_path + "jsc/env_combined.js");
         }
         
         // generate script tags for plugins.
@@ -363,7 +363,7 @@ public class EditorHandler extends HttpServlet {
                         getServletContext());
                 try {
                     FileWriter w = new FileWriter(getServletContext().
-                            getRealPath(oryx_path + "jsc/plugins_" + profileName
+                            getRealPath(designer_path + "jsc/plugins_" + profileName
                                     + ".js"));
                     w.write(rs.toString());
                     w.close();
@@ -379,12 +379,12 @@ public class EditorHandler extends HttpServlet {
                 pluginsArray.put("/plugin/" + jsFile.getName() + ".js");
             }
         } else {
-            pluginsArray.put(oryx_path + "jsc/plugins_" + profileName + ".js");
+            pluginsArray.put(designer_path + "jsc/plugins_" + profileName + ".js");
         }
         
         for (IDiagramPlugin uncompressed : 
                 _uncompressedPlugins.get(profileName)) {
-            pluginsArray.put(oryx_path + "plugin/" + uncompressed.getName() + ".js");
+            pluginsArray.put(designer_path + "plugin/" + uncompressed.getName() + ".js");
         }
         
         XMLOutputter outputter = new XMLOutputter();
@@ -574,7 +574,7 @@ public class EditorHandler extends HttpServlet {
      */
     private static String readEnvFiles(ServletContext context) throws IOException {
         FileInputStream core_scripts = new FileInputStream(
-                context.getRealPath(oryx_path + "js/js_files.json"));
+                context.getRealPath(designer_path + "js/js_files.json"));
         try {
             ByteArrayOutputStream stream = 
                 new ByteArrayOutputStream();

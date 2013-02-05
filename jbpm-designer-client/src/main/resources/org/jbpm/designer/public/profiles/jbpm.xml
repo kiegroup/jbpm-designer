@@ -57,7 +57,7 @@
             <!-- simple file system based vfs configuration
             <parameter name="root" value="default:///tmp/designer-repo" />
             <parameter name="globaldir" value="/global" /> -->
-            <parameter name="name" value="Designer Repository"/>
+            <!--<parameter name="name" value="Designer Repository"/>-->
 
             <!-- git based cfs configuration-->
             <parameter name="root" value="git://uf-playground" />

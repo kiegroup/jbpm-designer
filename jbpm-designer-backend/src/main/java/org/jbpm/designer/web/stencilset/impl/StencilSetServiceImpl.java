@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
 public class StencilSetServiceImpl implements IDiagramStencilSetService {
 
     private static Logger _logger = LoggerFactory.getLogger(StencilSetServiceImpl.class);
-    public static final String oryx_path = "/org.jbpm.designer.jBPMDesigner/";
+    public static final String designer_path = "/org.jbpm.designer.jBPMDesigner/";
 
 
     private Map<String, IDiagramStencilSet> _registry = new HashMap<String, IDiagramStencilSet>();
@@ -94,7 +94,7 @@ public class StencilSetServiceImpl implements IDiagramStencilSetService {
     }
 
     private void initializeLocalStencilSets(ServletContext context) {
-        File ssDir = new File(context.getRealPath( oryx_path + "stencilsets"));
+        File ssDir = new File(context.getRealPath( designer_path + "stencilsets"));
         for (File dir : ssDir.listFiles()) {
             if (dir.isDirectory()) {
                 _registry.put(dir.getName(), new LocalStencilSetImpl(dir.getName(), dir.getAbsolutePath()));

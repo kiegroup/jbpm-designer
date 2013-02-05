@@ -21,7 +21,7 @@ import java.util.Scanner;
 public class StencilPatternsServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final Logger _logger = Logger.getLogger(StencilPatternsServlet.class);
-    private static final String oryx_path = "/org.jbpm.designer.jBPMDesigner/";
+    private static final String designer_path = "/org.jbpm.designer.jBPMDesigner/";
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -33,7 +33,7 @@ public class StencilPatternsServlet extends HttpServlet {
             throws ServletException, IOException {
         // for now just return the patterns data json
         try {
-            String patternsDataPath = getServletContext().getRealPath(oryx_path + "defaults/patterns.json");
+            String patternsDataPath = getServletContext().getRealPath(designer_path + "defaults/patterns.json");
 
             PrintWriter pw = resp.getWriter();
             resp.setContentType("text/json");
