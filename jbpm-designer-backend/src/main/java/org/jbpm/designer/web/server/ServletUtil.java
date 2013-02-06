@@ -13,6 +13,7 @@ import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
 import org.jbpm.designer.web.profile.impl.RepositoryInfo;
 
+import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
@@ -33,20 +34,7 @@ public class ServletUtil {
 	public static final String EXT_BPMN = "bpmn";
     public static final String EXT_BPMN2 = "bpmn2";
 	private ServletUtil(){}
-	
-	public static IDiagramProfile getProfile(HttpServletRequest req,
-            String profileName, ServletContext context) {
-        IDiagramProfile profile = null;
 
-        IDiagramProfileService service = new ProfileServiceImpl();
-        service.init(context);
-        profile = service.findProfile(req, profileName);
-        if (profile == null) {
-            throw new IllegalArgumentException(
-                    "Cannot determine the profile to use for interpreting models");
-        }
-        return profile;
-    }
 	
 	public static List<String> getFormWidgetList(IDiagramProfile profile, Repository repository) {
 		List<String> widgets = new ArrayList<String>();

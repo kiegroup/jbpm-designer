@@ -3,7 +3,6 @@ package org.jbpm.designer.repository;
 import org.jbpm.designer.repository.filters.FilterByExtension;
 import org.jbpm.designer.repository.filters.FilterByFileName;
 import org.jbpm.designer.repository.impl.AssetBuilder;
-import org.jbpm.designer.repository.vfs.VFSFileSystemProducer;
 import org.jbpm.designer.repository.vfs.VFSRepository;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.junit.*;
@@ -54,11 +53,10 @@ public class VFSRepositoryGitFileSystemTest {
     @Before
     public void setup() {
         profile = new JbpmProfileImpl();
-        profile.setRepositoryId("vfs");
-        profile.setRepositoryRoot(VFS_REPOSITORY_ROOT + counter);
-        profile.setRepositoryGlobalDir("/global");
         producer = new VFSFileSystemProducer();
-        fileSystem = producer.produceFileSystem(profile, env);
+        env.put("repository.root", VFS_REPOSITORY_ROOT + counter);
+        env.put("repository.globaldir", "/global");
+        fileSystem = producer.produceFileSystem(env);
     }
 
     private void deleteFiles(File directory) {

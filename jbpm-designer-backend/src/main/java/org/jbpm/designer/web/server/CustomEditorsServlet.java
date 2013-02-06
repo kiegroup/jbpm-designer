@@ -4,7 +4,9 @@ import org.apache.log4j.Logger;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.jbpm.designer.web.profile.IDiagramProfileService;
 
+import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -29,6 +31,10 @@ public class CustomEditorsServlet extends HttpServlet {
     public void setProfile(IDiagramProfile profile) {
         this.profile = profile;
     }
+
+    @Inject
+    private IDiagramProfileService _profileService = null;
+
 	@Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -40,7 +46,7 @@ public class CustomEditorsServlet extends HttpServlet {
 		String profileName = req.getParameter("profile");
 
         if (profile == null) {
-            profile = ServletUtil.getProfile(req, profileName, getServletContext());
+            profile = _profileService.findProfile(req, profileName);
         }
 		String customEditorsJSON = getCustomEditorsJSON(profile, getServletContext());
 		PrintWriter pw = resp.getWriter();

@@ -8,10 +8,12 @@ import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.process.workitem.WorkDefinitionImpl;
 import org.jbpm.process.workitem.WorkItemRepository;
 import org.json.JSONObject;
 
+import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -43,6 +45,9 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
     public void setProfile(IDiagramProfile profile) {
         this.profile = profile;
     }
+
+    @Inject
+    private IDiagramProfileService _profileService = null;
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
@@ -92,7 +97,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 
 
         if (profile == null) {
-            profile = ServletUtil.getProfile(req, profileName, getServletContext());
+            profile = _profileService.findProfile(req, profileName);
         }
         Repository repository = profile.getRepository();
 

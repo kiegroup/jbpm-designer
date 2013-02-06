@@ -4,10 +4,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.jbpm.designer.repository.*;
 import org.jbpm.designer.repository.impl.AbstractAsset;
 import org.jbpm.designer.repository.impl.AssetBuilder;
-import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.kie.commons.io.IOService;
-import org.kie.commons.io.impl.IOServiceDotFileImpl;
-import org.kie.commons.io.impl.IOServiceNio2WrapperImpl;
 import org.kie.commons.java.nio.IOException;
 import org.kie.commons.java.nio.base.options.CommentedOption;
 import org.kie.commons.java.nio.file.*;
@@ -18,14 +15,14 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.File;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.nio.charset.Charset;
-import java.util.*;
-
-import static org.kie.commons.io.FileSystemType.Bootstrap.BOOTSTRAP_INSTANCE;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
 
 @ApplicationScoped
 public class VFSRepository implements Repository {
@@ -58,24 +55,12 @@ public class VFSRepository implements Repository {
         this.fileSystems = fileSystems;
     }
 
-//    public VFSRepository(IDiagramProfile profile, Map<String, String> env) {
-//        this.repositoryRoot = URI.create(profile.getRepositoryRoot());
-//
-//        this.fileSystem = ioService.getFileSystem( this.repositoryRoot );
-//
-//        if ( fileSystem == null ) {
-//
-//            this.fileSystem = ioService.newFileSystem( this.repositoryRoot, env, BOOTSTRAP_INSTANCE );
-//        }
-//
-//        // fetch file system changes - mainly for remote based file systems
-//        String fetchCommand = (String) env.get("fetch.cmd");
-//        if (fetchCommand != null) {
-//            this.fileSystem = ioService.getFileSystem(URI.create(profile.getRepositoryRoot() + fetchCommand));
-//        }
-//        this.repositoryRootPath = fileSystem.provider().getPath(this.repositoryRoot);
-//    }
-    
+
+    @Override
+    public String getName() {
+        return "vfs";
+    }
+
     public Collection<Directory> listDirectories(String startAt) {
         Path path = fileSystem.provider().getPath(URI.create(getRepositoryRoot() + startAt));
         DirectoryStream<Path> directories = ioService.newDirectoryStream(path, new DirectoryStream.Filter<Path>() {

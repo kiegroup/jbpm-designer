@@ -15,12 +15,13 @@
  */
 package org.jbpm.designer.web.profile.impl;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
@@ -37,9 +38,10 @@ import org.jbpm.designer.web.profile.IDiagramProfileService;
  * @author Tihomir Surdilovic
  * 
  */
+@ApplicationScoped
 public class ProfileServiceImpl implements IDiagramProfileService {
 	
-	public static ProfileServiceImpl INSTANCE = new ProfileServiceImpl();
+//	public static ProfileServiceImpl INSTANCE = new ProfileServiceImpl();
 
     private Map<String, IDiagramProfile> _registry = 
         new HashMap<String, IDiagramProfile>();
@@ -47,15 +49,36 @@ public class ProfileServiceImpl implements IDiagramProfileService {
         new HashSet<IDiagramProfileFactory>();
     private IDiagramProfile userProfile;
 
+
+
+    private Instance<IDiagramProfile> profiles;
+
+    public ProfileServiceImpl() {
+
+    }
+    @Inject
+    public ProfileServiceImpl(@Any Instance<IDiagramProfile> profiles) {
+        this.profiles = profiles;
+
+    }
+
     /**
      * Initialize the service with a context
      * @param context the servlet context to initialize the profile.
      */
     public void init(ServletContext context) {
-        _registry.put("default", new DefaultProfileImpl(context));
-        _registry.put("jbpm", new JbpmProfileImpl(context));
-        _registry.put("drools", new JbpmProfileImpl(context));
-        _registry.put("epn", new EpnProfileImpl(context));
+//        _registry.put("default", new DefaultProfileImpl(context));
+//        _registry.put("jbpm", new JbpmProfileImpl(context));
+//        _registry.put("drools", new JbpmProfileImpl(context));
+//        _registry.put("epn", new EpnProfileImpl(context));
+        if (profiles != null) {
+            for (IDiagramProfile profile : profiles) {
+                profile.init(context);
+                _registry.put(profile.getName(), profile);
+                System.out.println("Profile " + profile.getName() + " registered");
+            }
+        }
+
     }
     
     private Map<String, IDiagramProfile> assembleProfiles(HttpServletRequest request) {

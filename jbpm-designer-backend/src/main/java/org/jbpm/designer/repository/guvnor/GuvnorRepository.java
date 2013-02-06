@@ -3,16 +3,23 @@ package org.jbpm.designer.repository.guvnor;
 import org.jbpm.designer.repository.*;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 
+import javax.enterprise.inject.Alternative;
 import java.util.Collection;
 import java.util.Map;
 
 /**
  * Repository implementation that is using Guvnor as a storage
  */
+@Alternative
 public class GuvnorRepository implements Repository {
 
-    public GuvnorRepository(IDiagramProfile profile) {
+    public GuvnorRepository() {
 
+    }
+
+    @Override
+    public String getName() {
+        return "guvnor";
     }
 
     public Collection<Directory> listDirectories(String startAt) {

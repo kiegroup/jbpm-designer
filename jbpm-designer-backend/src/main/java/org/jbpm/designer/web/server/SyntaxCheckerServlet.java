@@ -2,6 +2,7 @@ package org.jbpm.designer.web.server;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.jbpm.designer.bpmn2.validation.BPMN2SyntaxChecker;
 import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.jbpm.designer.web.profile.IDiagramProfileService;
 
 
 /** 
@@ -20,7 +22,10 @@ import org.jbpm.designer.web.profile.IDiagramProfile;
  */
 public class SyntaxCheckerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
+
+    @Inject
+    private IDiagramProfileService _profileService = null;
+
 	@Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -33,7 +38,7 @@ public class SyntaxCheckerServlet extends HttpServlet {
         String profileName = req.getParameter("profile");
         String preprocessingData = req.getParameter("pp");
         String uuid = req.getParameter("uuid");
-        IDiagramProfile profile = ServletUtil.getProfile(req, profileName, getServletContext());
+        IDiagramProfile profile = _profileService.findProfile(req, profileName);
 
         BPMN2SyntaxChecker checker = new BPMN2SyntaxChecker(json, preprocessingData, profile, uuid);
 		checker.checkSyntax();

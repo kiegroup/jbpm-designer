@@ -3,6 +3,7 @@ package org.jbpm.designer.web.server;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -14,6 +15,7 @@ import org.apache.log4j.Logger;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.designer.web.profile.impl.RepositoryInfo;
 import org.json.JSONObject;
 
@@ -32,6 +34,9 @@ public class ThemeServlet extends HttpServlet {
 	private static final Logger _logger = Logger.getLogger(ThemeServlet.class);
 	private ServletConfig config;
 	private String themeInfo;
+
+    @Inject
+    private IDiagramProfileService _profileService = null;
 	
 	@Override
     public void init(ServletConfig config) throws ServletException {
@@ -45,7 +50,7 @@ public class ThemeServlet extends HttpServlet {
 		String profileName = req.getParameter("profile");
 		String action = req.getParameter("action");
 		
-		IDiagramProfile profile = ServletUtil.getProfile(req, profileName, getServletContext());
+		IDiagramProfile profile = _profileService.findProfile(req, profileName);
 		
 		if(action != null && action.equals(ACTION_GETTHEMENAMES)) {
 			String themeStr = getThemeNames(profile, getServletContext());

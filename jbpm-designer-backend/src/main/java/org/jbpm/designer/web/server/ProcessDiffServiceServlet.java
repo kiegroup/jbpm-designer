@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,6 +17,7 @@ import javax.xml.stream.XMLStreamReader;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.designer.web.profile.impl.RepositoryInfo;
 import org.json.JSONObject;
 
@@ -29,7 +31,10 @@ public class ProcessDiffServiceServlet extends HttpServlet {
 	private static final Logger _logger = Logger
 			.getLogger(ProcessDiffServiceServlet.class);
 
-	@Override
+    @Inject
+    private IDiagramProfileService _profileService = null;
+
+    @Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 	}
@@ -42,7 +47,7 @@ public class ProcessDiffServiceServlet extends HttpServlet {
 		String action = req.getParameter("action");
 		String versionNum = req.getParameter("version");
 
-		IDiagramProfile profile = ServletUtil.getProfile(req, profileName, getServletContext());
+		IDiagramProfile profile = _profileService.findProfile(req, profileName);
 		String[] packageAssetInfo = ServletUtil.findPackageAndAssetInfo(uuid, profile);
         String packageName = packageAssetInfo[0];
         String assetName = packageAssetInfo[1];

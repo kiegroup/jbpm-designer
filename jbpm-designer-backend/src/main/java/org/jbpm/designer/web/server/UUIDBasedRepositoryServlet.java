@@ -23,6 +23,7 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -59,6 +60,9 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     
     private static final Logger _logger = Logger.getLogger(UUIDBasedRepositoryServlet.class);
+
+    @Inject
+    private IDiagramProfileService _profileService = null;
     
     public static IUUIDBasedRepositoryService _factory = new IUUIDBasedRepositoryService() {
 
@@ -115,7 +119,7 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
         if (uuid == null) {
             throw new ServletException("uuid parameter required");
         }
-        IDiagramProfile profile = ServletUtil.getProfile(req, req.getParameter("profile"), getServletContext());
+        IDiagramProfile profile = _profileService.findProfile(req, req.getParameter("profile"));
 		try {
 			String response =  new String(_repository.load(req, uuid, profile, getServletContext()), Charset.forName("UTF-8"));
 			resp.getWriter().write(response);
@@ -130,7 +134,7 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
         String actionParam = req.getParameter("action");
         String preProcessingParam = req.getParameter("pp");
         if(actionParam != null && actionParam.equals("toXML")) {
-            IDiagramProfile profile = ServletUtil.getProfile(req, req.getParameter("profile"), getServletContext());
+            IDiagramProfile profile = _profileService.findProfile(req, req.getParameter("profile"));
             String json = req.getParameter("data");
             String xml = _repository.toXML(json, profile, preProcessingParam);
             StringWriter output = new StringWriter();
@@ -141,7 +145,7 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
             resp.getWriter().print(output.toString());
         } else if(actionParam != null && actionParam.equals("checkErrors")) { 
         	String retValue = "false";
-        	IDiagramProfile profile = ServletUtil.getProfile(req, req.getParameter("profile"), getServletContext());
+        	IDiagramProfile profile = _profileService.findProfile(req, req.getParameter("profile"));
             String json = req.getParameter("data");
             try {
 				String xmlOut = profile.createMarshaller().parseModel(json, preProcessingParam);
@@ -176,7 +180,7 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
                 String profileName = (String) jsonObject.get("profile");
                 boolean autosave = jsonObject.getBoolean("savetype");
             
-                IDiagramProfile profile = ServletUtil.getProfile(req, profileName, getServletContext());
+                IDiagramProfile profile = _profileService.findProfile(req, req.getParameter("profile"));
             
                 _repository.save(req, uuid, json, svg, profile, autosave);
 

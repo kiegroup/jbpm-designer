@@ -12,11 +12,13 @@ import org.jbpm.designer.repository.AssetNotFoundException;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.designer.web.server.ServletUtil;
 import org.jbpm.designer.web.server.menu.connector.commands.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +33,9 @@ public abstract class AbstractConnectorServlet extends HttpServlet {
     private List<FileItemStream> listFiles;
     private List<ByteArrayOutputStream> listFileStreams;
     private boolean initialized = false;
+
+    @Inject
+    private IDiagramProfileService _profileService = null;
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -57,7 +62,7 @@ public abstract class AbstractConnectorServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
         parseRequest(request, response);
-        IDiagramProfile profile = ServletUtil.getProfile(request, "jbpm", getServletContext());
+        IDiagramProfile profile = _profileService.findProfile(request, "jbpm");
         Repository repository = profile.getRepository();
         if(!initialized) {
             try {

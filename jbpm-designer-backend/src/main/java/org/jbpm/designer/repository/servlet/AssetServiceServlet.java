@@ -4,11 +4,13 @@ import org.apache.log4j.Logger;
 import org.jbpm.designer.repository.*;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.designer.web.server.ServletUtil;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -44,6 +46,9 @@ public class AssetServiceServlet extends HttpServlet {
         this.profile = profile;
     }
 
+    @Inject
+    private IDiagramProfileService _profileService = null;
+
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -68,7 +73,7 @@ public class AssetServiceServlet extends HttpServlet {
         try {
 
             if (profile == null) {
-                profile = ServletUtil.getProfile(req, profileName, getServletContext());
+                profile = _profileService.findProfile(req, profileName);
             }
             Repository repository = profile.getRepository();
             if(action != null && action.equals(ACTION_CREATE_ASSET)) {

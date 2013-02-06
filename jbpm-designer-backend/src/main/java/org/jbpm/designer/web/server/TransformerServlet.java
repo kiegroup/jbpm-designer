@@ -45,11 +45,13 @@ import org.jbpm.designer.repository.AssetNotFoundException;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.jbpm.designer.web.profile.impl.RepositoryInfo;
 import org.jbpm.migration.JbpmMigration;
 import sun.misc.BASE64Encoder;
 
+import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -82,6 +84,9 @@ public class TransformerServlet extends HttpServlet {
     private static final String RESPACTION_SHOWURL = "showurl";
     private static final String RESPACTION_SHOWEMBEDDABLE = "showembeddable";
 
+    @Inject
+    private IDiagramProfileService _profileService = null;
+
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -103,7 +108,7 @@ public class TransformerServlet extends HttpServlet {
         String pp = req.getParameter("pp");
         String processid = req.getParameter("processid");
 
-        IDiagramProfile profile = ServletUtil.getProfile(req, profileName, getServletContext());
+        IDiagramProfile profile = _profileService.findProfile(req, profileName);
         DroolsFactoryImpl.init();
 
         Repository repository = profile.getRepository();

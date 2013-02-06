@@ -3,6 +3,7 @@ package org.jbpm.designer.web.server;
 import java.io.IOException;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -23,6 +24,7 @@ import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.taskforms.TaskFormInfo;
 import org.jbpm.designer.taskforms.TaskFormTemplateManager;
 import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.jbpm.designer.web.profile.IDiagramProfileService;
 
 /** 
  * 
@@ -42,6 +44,9 @@ public class TaskFormsServlet extends HttpServlet {
     public void setProfile(IDiagramProfile profile) {
         this.profile = profile;
     }
+
+    @Inject
+    private IDiagramProfileService _profileService = null;
     
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -57,7 +62,7 @@ public class TaskFormsServlet extends HttpServlet {
         String profileName = req.getParameter("profile");
         String preprocessingData = req.getParameter("ppdata");
         if (profile == null) {
-            profile = ServletUtil.getProfile(req, profileName, getServletContext());
+            profile = _profileService.findProfile(req, profileName);
         }
         Repository repository = profile.getRepository();
 

@@ -7,7 +7,7 @@ import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.impl.AssetBuilder;
-import org.jbpm.designer.repository.vfs.VFSFileSystemProducer;
+import org.jbpm.designer.repository.VFSFileSystemProducer;
 import org.jbpm.designer.repository.vfs.VFSRepository;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.junit.*;
@@ -57,11 +57,10 @@ public class JbpmPreprocessingUnitVFSGitTest {
     @Before
     public void setup() {
         profile = new JbpmProfileImpl();
-        profile.setRepositoryId("vfs");
-        profile.setRepositoryRoot(VFS_REPOSITORY_ROOT + counter);
-        profile.setRepositoryGlobalDir("/global");
-
-        fileSystem = producer.produceFileSystem(profile, env);
+        producer = new VFSFileSystemProducer();
+        env.put("repository.root", VFS_REPOSITORY_ROOT);
+        env.put("repository.globaldir", "/global");
+        fileSystem = producer.produceFileSystem(env);
     }
 
     private void deleteFiles(File directory) {
@@ -91,6 +90,7 @@ public class JbpmPreprocessingUnitVFSGitTest {
     public void testProprocess() {
         Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
         ((VFSRepository)repository).init();
+        profile.setRepository(repository);
         //prepare folders that will be used
         repository.createDirectory("/myprocesses");
         repository.createDirectory("/global");

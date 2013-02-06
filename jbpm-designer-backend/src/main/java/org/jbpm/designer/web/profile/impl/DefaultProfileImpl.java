@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.servlet.ServletContext;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -58,6 +59,7 @@ import org.jbpm.designer.web.profile.IDiagramProfile;
  * The implementation of the default profile for Process Designer.
  * @author Antoine Toulme
  */
+@ApplicationScoped
 public class DefaultProfileImpl implements IDiagramProfile {
     
     private static Logger _logger = LoggerFactory.getLogger(DefaultProfileImpl.class);
@@ -78,6 +80,10 @@ public class DefaultProfileImpl implements IDiagramProfile {
     private String _repositoryUsr;
     private String _repositoryPwd;
     private String _repositoryGlobalDir;
+
+    public DefaultProfileImpl() {
+
+    }
     
     public DefaultProfileImpl(ServletContext servletContext) {
         this(servletContext, true);
@@ -200,7 +206,11 @@ public class DefaultProfileImpl implements IDiagramProfile {
     public Repository getRepository() {
         return null;
     }
-    
+
+    @Override
+    public void init(ServletContext context) {
+    }
+
     public IDiagramMarshaller createMarshaller() {
         return new IDiagramMarshaller() {
             public String parseModel(String jsonModel, String preProcessingData) {

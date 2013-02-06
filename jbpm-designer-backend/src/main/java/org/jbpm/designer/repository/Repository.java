@@ -12,6 +12,12 @@ import java.util.Map;
 public interface Repository {
 
     /**
+     * Returns name used to identify this repository.
+     * @return
+     */
+    public String getName();
+
+    /**
      * Retrieves all directories stored under <code>startAt</code> location.
      * NOTE: Directory should be always relative to the repository root
      * @param startAt - location where directories should be fetched from

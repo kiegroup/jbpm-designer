@@ -6,7 +6,9 @@ import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.jbpm.designer.web.profile.IDiagramProfileService;
 
+import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -35,6 +37,9 @@ public class TaskFormsEditorServlet extends HttpServlet {
         this.profile = profile;
     }
 
+    @Inject
+    private IDiagramProfileService _profileService = null;
+
 	 @Override
 	 public void init(ServletConfig config) throws ServletException {
 		 super.init(config);
@@ -49,7 +54,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
 	     String taskFormValue = req.getParameter("tfvalue");
 
          if (profile == null) {
-	        profile = ServletUtil.getProfile(req, profileName, getServletContext());
+	        profile = _profileService.findProfile(req, profileName);
          }
          Repository repository = profile.getRepository();
 

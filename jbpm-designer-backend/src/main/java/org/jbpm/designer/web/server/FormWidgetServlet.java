@@ -4,8 +4,10 @@ import org.apache.log4j.Logger;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.json.JSONObject;
 
+import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -23,6 +25,9 @@ public class FormWidgetServlet extends HttpServlet {
     public void setProfile(IDiagramProfile profile) {
         this.profile = profile;
     }
+
+    @Inject
+    private IDiagramProfileService _profileService = null;
 	
 	@Override
 	public void init(ServletConfig config) throws ServletException {
@@ -38,7 +43,7 @@ public class FormWidgetServlet extends HttpServlet {
 		String widgetName = req.getParameter("widgetname");
 
         if (profile == null) {
-            profile = ServletUtil.getProfile(req, profileName, getServletContext());
+            profile = _profileService.findProfile(req, profileName);
         }
         Repository repository = profile.getRepository();
 		if(action != null && action.equals("getwidgets")) {

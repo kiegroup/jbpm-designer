@@ -33,6 +33,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
+import javax.inject.Inject;
 
 
 /**
@@ -42,6 +43,9 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  *
  */
 public class Activator implements BundleActivator {
+
+    @Inject
+    private ProfileServiceImpl profile;
 
     @SuppressWarnings("rawtypes")
     public void start(final BundleContext context) throws Exception {
@@ -147,7 +151,7 @@ public class Activator implements BundleActivator {
 	        if (sRefs != null) {
 	            for (ServiceReference sRef : sRefs) {
 	                IDiagramProfileFactory service = (IDiagramProfileFactory) context.getService(sRef);
-	                ProfileServiceImpl.INSTANCE.getFactories().add(service);
+                    profile.getFactories().add(service);
 	            }
 	        }
 	        ServiceTrackerCustomizer cust = new ServiceTrackerCustomizer() {
@@ -160,7 +164,7 @@ public class Activator implements BundleActivator {
 	
 	            public Object addingService(ServiceReference reference) {
 	                IDiagramProfileFactory service = (IDiagramProfileFactory) context.getService(reference);
-	                ProfileServiceImpl.INSTANCE.getFactories().add(service);
+                    profile.getFactories().add(service);
 	                return service;
 	            }
 	        };
@@ -168,7 +172,7 @@ public class Activator implements BundleActivator {
 	                IDiagramProfileFactory.class.getName(), cust);
 	        tracker.open();
 	        // register self to make the default profile available to the world:
-	        context.registerService(IDiagramProfileService.class.getName(), ProfileServiceImpl.INSTANCE, new Hashtable());
+	        context.registerService(IDiagramProfileService.class.getName(), profile, new Hashtable());
         }
     }
 

@@ -84,22 +84,6 @@ public interface IDiagramProfile {
      */
     public IDiagramUnmarshaller createUnmarshaller();
 
-    public String getRepositoryId();
-
-    public String getRepositoryRoot();
-
-    public String getRepositoryName();
-
-    public String getRepositoryHost();
-
-    public String getRepositoryProtocol();
-
-    public String getRepositorySubdomain();
-
-    public String getRepositoryUsr();
-
-    public String getRepositoryPwd();
-
     public String getRepositoryGlobalDir();
 
     /**
@@ -147,4 +131,6 @@ public interface IDiagramProfile {
          */
         public String parseModel(String xmlModel, IDiagramProfile profile, String preProcessingData);
     }
+
+    public void init(ServletContext context);
 }

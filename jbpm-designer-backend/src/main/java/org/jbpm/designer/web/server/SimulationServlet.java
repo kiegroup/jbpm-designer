@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -31,6 +32,7 @@ import org.eclipse.bpmn2.SubProcess;
 import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.designer.bpmn2.impl.Bpmn2JsonUnmarshaller;
 import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.simulation.*;
 import org.jbpm.simulation.converter.JSONPathFormatConverter;
 import org.jbpm.simulation.impl.WorkingMemorySimulationRepository;
@@ -63,7 +65,10 @@ public class SimulationServlet extends HttpServlet {
 	private List<Long> eventAggregationsTimes = new ArrayList<Long>();
 	private Map<String, Integer> pathInfoMap = null;
 	private DateTime simTime = null;
-	
+
+    @Inject
+    private IDiagramProfileService _profileService = null;
+
 	@Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -83,7 +88,7 @@ public class SimulationServlet extends HttpServlet {
 		String interval = req.getParameter("interval");
 		String intervalUnit = req.getParameter("intervalunit");
 		
-		IDiagramProfile profile = ServletUtil.getProfile(req, profileName, getServletContext());
+		IDiagramProfile profile = _profileService.findProfile(req, profileName);
         
         if(action != null && action.equals(ACTION_GETPATHINFO)) {
         	DroolsFactoryImpl.init();

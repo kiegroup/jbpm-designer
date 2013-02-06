@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.WeakHashMap;
 
+import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -157,6 +158,7 @@ public class EditorHandler extends HttpServlet {
      * The profile service, a global registry to get the
      * profiles.
      */
+    @Inject
     private IDiagramProfileService _profileService = null;
     
     /**
@@ -186,7 +188,6 @@ public class EditorHandler extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         DroolsFactoryImpl.init();
-        _profileService = ProfileServiceImpl.INSTANCE;
         _profileService.init(config.getServletContext());
         _pluginService = PluginServiceImpl.getInstance(
                 config.getServletContext());
@@ -453,9 +454,6 @@ public class EditorHandler extends HttpServlet {
                 replacementMade = true;
             } else if ("localhistorytimeout".equals(elt)) {
                 resultHtml.append(profile.getLocalHistoryTimeout());
-                replacementMade = true;
-            } else if ("repositoryid".equals(elt)) {
-                resultHtml.append(profile.getRepositoryId());
                 replacementMade = true;
             } else if ("designerversion".equals(elt)) {
                 resultHtml.append(_designerVersion);

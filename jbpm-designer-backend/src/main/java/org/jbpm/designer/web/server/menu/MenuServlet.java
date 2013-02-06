@@ -11,6 +11,7 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
+import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -22,13 +23,13 @@ import java.util.StringTokenizer;
 
 public class MenuServlet extends HttpServlet {
     private Document _doc = null;
+    @Inject
     private IDiagramProfileService _profileService = null;
     private static final Logger _logger = Logger.getLogger(MenuServlet.class);
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        _profileService = ProfileServiceImpl.INSTANCE;
         _profileService.init(config.getServletContext());
         String menufile = config.getServletContext().getRealPath("/menu.html");
         try {
@@ -70,10 +71,10 @@ public class MenuServlet extends HttpServlet {
         while(tokenizer.hasMoreTokens()) {
             String elt = tokenizer.nextToken();
             if ("rootid".equals(elt)) {
-                resultHtml.append(profile.getRepositoryId());
+                resultHtml.append("vfs");
                 replacementMade = true;
             } else if ("rootname".equals(elt)) {
-                resultHtml.append(profile.getRepositoryName());
+                resultHtml.append("Designer Repository");
                 replacementMade = true;
             } else if ("language".equals(elt)) {
                 resultHtml.append("en");

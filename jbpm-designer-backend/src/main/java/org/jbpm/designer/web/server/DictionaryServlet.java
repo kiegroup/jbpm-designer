@@ -18,6 +18,7 @@ package org.jbpm.designer.web.server;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -30,6 +31,7 @@ import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.jbpm.designer.web.profile.IDiagramProfileService;
 
 /** 
  * Dictionary Servlet.
@@ -50,6 +52,9 @@ public class DictionaryServlet extends HttpServlet {
         this.profile = profile;
     }
 
+    @Inject
+    private IDiagramProfileService _profileService = null;
+
 	@Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -65,7 +70,7 @@ public class DictionaryServlet extends HttpServlet {
         String dvalue = req.getParameter("dvalue");
 
         if (profile == null) {
-            profile = ServletUtil.getProfile(req, profileName, getServletContext());
+            profile = _profileService.findProfile(req, profileName);
         }
         Repository repository = profile.getRepository();
 

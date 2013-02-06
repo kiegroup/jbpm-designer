@@ -3,6 +3,7 @@ package org.jbpm.designer.helper;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 
+import javax.servlet.ServletContext;
 import java.util.Collection;
 
 public class TestIDiagramProfile implements IDiagramProfile {
@@ -103,5 +104,10 @@ public class TestIDiagramProfile implements IDiagramProfile {
 
     public Repository getRepository() {
         return this.repository;
+    }
+
+    @Override
+    public void init(ServletContext context) {
+
     }
 }

@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,6 +17,7 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.apache.log4j.Logger;
 import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.designer.web.profile.impl.RepositoryInfo;
 
 /** 
@@ -27,7 +29,10 @@ import org.jbpm.designer.web.profile.impl.RepositoryInfo;
 public class ProcessInfoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger _logger = Logger.getLogger(ProcessInfoServlet.class);
-	
+
+    @Inject
+    private IDiagramProfileService _profileService = null;
+
 	@Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -39,7 +44,7 @@ public class ProcessInfoServlet extends HttpServlet {
 		String uuid = req.getParameter("uuid");
         String profileName = req.getParameter("profile");
         
-        IDiagramProfile profile = ServletUtil.getProfile(req, profileName, getServletContext());
+        IDiagramProfile profile = _profileService.findProfile(req, profileName);
 
         try {
         	// find out what package the uuid belongs to
