@@ -29,6 +29,7 @@
         <module>jbpm-designer-client</module>
         <module>jbpm-designer-api</module>
         <module>jbpm-designer-standalone</module>
+        <module>jbpm-designer-distribution-wars</module>
     </modules>
 
 
@@ -46,6 +47,7 @@
         <slf4j.version>1.7.2</slf4j.version>
         <kie.commons.version>6.0.0-SNAPSHOT</kie.commons.version>
         <port>8080</port>
+        <tomcat.version>7.0.35</tomcat.version>
     </properties>
 
     <dependencyManagement>
@@ -809,6 +811,194 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.1-SNAPSHOT</version>
+                <configuration>
+                    <path>/</path>
+                    <warFile>jbpm-designer-distribution-wars/target/jbpm-designer-tomcat7.0.war</warFile>
+                    <port>${port}</port>
+                </configuration>
+
+                <dependencies>
+                    <dependency>
+                        <groupId>javax.inject</groupId>
+                        <artifactId>javax.inject-tck</artifactId>
+                        <version>1</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>javax.enterprise</groupId>
+                        <artifactId>cdi-api</artifactId>
+                        <version>1.0-SP4</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jboss.weld.se</groupId>
+                        <artifactId>weld-se-core</artifactId>
+                        <version>${weld.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jboss.weld.servlet</groupId>
+                        <artifactId>weld-servlet-core</artifactId>
+                        <version>${weld.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.tomcat.embed</groupId>
+                        <artifactId>tomcat-embed-core</artifactId>
+                        <version>${tomcat.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.tomcat</groupId>
+                        <artifactId>tomcat-util</artifactId>
+                        <version>${tomcat.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.tomcat</groupId>
+                        <artifactId>tomcat-coyote</artifactId>
+                        <version>${tomcat.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.tomcat</groupId>
+                        <artifactId>tomcat-api</artifactId>
+                        <version>${tomcat.version}</version>
+                    </dependency>
+
+                    <dependency>
+                        <groupId>org.apache.tomcat</groupId>
+                        <artifactId>tomcat-jdbc</artifactId>
+                        <version>${tomcat.version}</version>
+                    </dependency>
+
+                    <dependency>
+                        <groupId>org.apache.tomcat</groupId>
+                        <artifactId>tomcat-dbcp</artifactId>
+                        <version>${tomcat.version}</version>
+                    </dependency>
+
+                    <dependency>
+                        <groupId>org.apache.tomcat</groupId>
+                        <artifactId>tomcat-servlet-api</artifactId>
+                        <version>${tomcat.version}</version>
+                    </dependency>
+
+                    <dependency>
+                        <groupId>org.apache.tomcat</groupId>
+                        <artifactId>tomcat-jsp-api</artifactId>
+                        <version>${tomcat.version}</version>
+                    </dependency>
+
+                    <dependency>
+                        <groupId>org.apache.tomcat</groupId>
+                        <artifactId>tomcat-jasper</artifactId>
+                        <version>${tomcat.version}</version>
+                    </dependency>
+
+                    <dependency>
+                        <groupId>org.apache.tomcat</groupId>
+                        <artifactId>tomcat-jasper-el</artifactId>
+                        <version>${tomcat.version}</version>
+                    </dependency>
+
+                    <dependency>
+                        <groupId>org.apache.tomcat</groupId>
+                        <artifactId>tomcat-el-api</artifactId>
+                        <version>${tomcat.version}</version>
+                    </dependency>
+
+                    <dependency>
+                        <groupId>org.apache.tomcat</groupId>
+                        <artifactId>tomcat-catalina</artifactId>
+                        <version>${tomcat.version}</version>
+                    </dependency>
+
+                    <dependency>
+                        <groupId>org.apache.tomcat</groupId>
+                        <artifactId>tomcat-tribes</artifactId>
+                        <version>${tomcat.version}</version>
+                    </dependency>
+
+                    <dependency>
+                        <groupId>org.apache.tomcat</groupId>
+                        <artifactId>tomcat-catalina-ha</artifactId>
+                        <version>${tomcat.version}</version>
+                    </dependency>
+
+                    <dependency>
+                        <groupId>org.apache.tomcat</groupId>
+                        <artifactId>tomcat-annotations-api</artifactId>
+                        <version>${tomcat.version}</version>
+                    </dependency>
+
+                    <dependency>
+                        <groupId>org.apache.tomcat</groupId>
+                        <artifactId>tomcat-juli</artifactId>
+                        <version>${tomcat.version}</version>
+                    </dependency>
+
+                    <dependency>
+                        <groupId>org.apache.tomcat.embed</groupId>
+                        <artifactId>tomcat-embed-logging-juli</artifactId>
+                        <version>${tomcat.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.tomcat.embed</groupId>
+                        <artifactId>tomcat-embed-logging-log4j</artifactId>
+                        <version>${tomcat.version}</version>
+                    </dependency>
+                </dependencies>
+
+                <!--<dependencies>-->
+                    <!--<dependency>-->
+                        <!--<groupId>javax.enterprise</groupId>-->
+                        <!--<artifactId>cdi-api</artifactId>-->
+                        <!--<version>1.0-SP4</version>-->
+                    <!--</dependency>-->
+                <!--</dependencies>-->
+                <!--<dependencies>-->
+                    <!--<dependency>-->
+                        <!--<groupId>javax.enterprise</groupId>-->
+                        <!--<artifactId>cdi-api</artifactId>-->
+                        <!--<version>1.0-SP4</version>-->
+                    <!--</dependency>-->
+
+                    <!--<dependency>-->
+                        <!--<groupId>org.jboss.weld.servlet</groupId>-->
+                        <!--<artifactId>weld-tomcat-support</artifactId>-->
+                        <!--<version>1.0.1-Final</version>-->
+                    <!--</dependency>-->
+
+                    <!--<dependency>-->
+                        <!--<groupId>org.jboss.weld</groupId>-->
+                        <!--<artifactId>weld-api</artifactId>-->
+                        <!--<version>1.1.Final</version>-->
+                    <!--</dependency>-->
+
+                    <!--<dependency>-->
+                        <!--<groupId>org.jboss.weld</groupId>-->
+                        <!--<artifactId>weld-core</artifactId>-->
+                        <!--<version>${weld.version}</version>-->
+                    <!--</dependency>-->
+
+                    <!--<dependency>-->
+                        <!--<groupId>org.jboss.weld.se</groupId>-->
+                        <!--<artifactId>weld-se-core</artifactId>-->
+                        <!--<version>${weld.version}</version>-->
+                    <!--</dependency>-->
+
+                    <!--<dependency>-->
+                        <!--<groupId>org.jboss.weld.servlet</groupId>-->
+                        <!--<artifactId>weld-servlet-core</artifactId>-->
+                        <!--<version>${weld.version}</version>-->
+                    <!--</dependency>-->
+
+                    <!--<dependency>-->
+                        <!--<groupId>org.jboss.weld</groupId>-->
+                        <!--<artifactId>weld-spi</artifactId>-->
+                        <!--<version>1.1.Final</version>-->
+                    <!--</dependency>-->
+
+                <!--</dependencies>-->
             </plugin>
         </plugins>
     </build>
