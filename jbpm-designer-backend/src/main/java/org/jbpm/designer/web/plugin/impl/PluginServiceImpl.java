@@ -31,6 +31,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.web.plugin.IDiagramPlugin;
 import org.jbpm.designer.web.plugin.IDiagramPluginFactory;
 import org.jbpm.designer.web.plugin.IDiagramPluginService;
@@ -95,8 +96,8 @@ public class PluginServiceImpl implements IDiagramPluginService {
         FileInputStream fileStream = null;
         try {
             try {
-                fileStream = new FileInputStream(new StringBuilder(context.getRealPath("/")).append("/").
-                        append("org.jbpm.designer.jBPMDesigner/").
+                fileStream = new FileInputStream(new StringBuilder(context.getRealPath("/"))
+                        .append(ConfigurationProvider.getInstance().getDesignerContext()).
                         append("js").append("/").append("Plugins").append("/").
                         append("plugins.xml").toString());
             } catch (FileNotFoundException e) {

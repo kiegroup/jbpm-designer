@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.web.stencilset.IDiagramStencilSet;
 import org.jbpm.designer.web.stencilset.IDiagramStencilSetService;
 import org.slf4j.Logger;
@@ -51,7 +52,7 @@ private static final Logger _logger = LoggerFactory.getLogger(StencilSetServiceS
     }
     
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String requestURI = req.getRequestURI();
+        String requestURI = req.getRequestURI().replaceFirst(req.getContextPath(), "");
         // urls should be of type: /org.jbpm.designer.jBPMDesigner/stencilset/bpmn2.0
         // /org.jbpm.designer.jBPMDesigner/stencilset/{name}/{resource}
 
@@ -77,16 +78,17 @@ private static final Logger _logger = LoggerFactory.getLogger(StencilSetServiceS
         if (stencilset == null) {
             throw new IllegalArgumentException("No stencilset by the name of " + name);
         }
+        String applicationContext = ConfigurationProvider.getInstance().getDesignerContext().replaceAll("/", "");
         InputStream input = null;
         if (segments.length > 4) { 
             //looking for a resource under the stencilset.
             String path = requestURI.substring(requestURI.indexOf(segments[3]) + segments[3].length() + 1);
             // this is a bad temp hack..but gets stuff working for nows
-            if(path.indexOf("org.jbpm.designer.jBPMDesigner/stencilset//org.jbpm.designer.jBPMDesigner/stencilsets/bpmn2.0/") >= 0) {
-                path = path.substring("org.jbpm.designer.jBPMDesigner/stencilset//org.jbpm.designer.jBPMDesigner/stencilsets/bpmn2.0/".length(), path.length());
+            if(path.indexOf(applicationContext + "/stencilset/" + applicationContext + "/stencilsets/bpmn2.0/") >= 0) {
+                path = path.substring((applicationContext + "/stencilset/" + applicationContext + "/stencilsets/bpmn2.0/").length(), path.length());
             }
-            if(path.indexOf("org.jbpm.designer.jBPMDesigner/stencilset//org.jbpm.designer.jBPMDesigner/stencilsets/bpmn2.0jbpm/") >= 0) {
-                path = path.substring("org.jbpm.designer.jBPMDesigner/stencilset//org.jbpm.designer.jBPMDesigner/stencilsets/bpmn2.0jbpm/".length(), path.length());
+            if(path.indexOf(applicationContext + "/stencilset/" + applicationContext + "/stencilsets/bpmn2.0jbpm/") >= 0) {
+                path = path.substring((applicationContext + "/stencilset/" +applicationContext + "/stencilsets/bpmn2.0jbpm/").length(), path.length());
             }
             if(path.indexOf("bpmn2.0.json/") >= 0) {
                 path = path.substring("bpmn2.0.json".length(), path.length());

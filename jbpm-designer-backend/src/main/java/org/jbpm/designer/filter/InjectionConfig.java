@@ -11,19 +11,19 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class InjectionConfig {
-    private static final String DEFAULT_INJECTION_CONF_FILE = "/org.jbpm.designer.jBPMDesigner/injection/designerinjection.xml";
+    private static final String DEFAULT_INJECTION_CONF_FILE = "/injection/designerinjection.xml";
     private static ServletContext context;
 
     private InjectionRules rules;
 
     public InjectionConfig(ServletContext sc) {
         context = sc;
-        load();
+        load(sc.getContextPath());
     }
 
-    public synchronized void load() {
+    public synchronized void load(String contextPath) {
         InputStream is = null;
-        is = context.getResourceAsStream(DEFAULT_INJECTION_CONF_FILE);
+        is = this.getClass().getResourceAsStream(DEFAULT_INJECTION_CONF_FILE);
         if (is == null) {
             System.out.println("unable to find designer injection conf file "
                     + DEFAULT_INJECTION_CONF_FILE);
@@ -47,7 +47,7 @@ public class InjectionConfig {
             rules = new InjectionRules();
             for (int i = 0; i < rulesConf.getLength(); i++) {
                 Node ruleNode = rulesConf.item(i);
-                InjectionRule rule = new InjectionRule(ruleNode);
+                InjectionRule rule = new InjectionRule(ruleNode, contextPath);
                 if (rule.isEnabled())
                     rules.add(rule);
             }

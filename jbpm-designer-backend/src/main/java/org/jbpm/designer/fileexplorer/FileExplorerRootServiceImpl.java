@@ -1,4 +1,4 @@
-package org.jbpm.designer.uberfire.backend.server.impl;
+package org.jbpm.designer.fileexplorer;
 
 import java.util.Collection;
 import java.util.HashSet;

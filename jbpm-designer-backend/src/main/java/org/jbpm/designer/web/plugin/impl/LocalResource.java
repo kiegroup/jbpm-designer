@@ -15,6 +15,8 @@
  */
 package org.jbpm.designer.web.plugin.impl;
 
+import org.jbpm.designer.util.ConfigurationProvider;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -33,7 +35,7 @@ public class LocalResource {
     public LocalResource(String name, String path, ServletContext context) {
         this._name = name;
         StringBuilder localPath = new StringBuilder();
-        localPath.append("org.jbpm.designer.jBPMDesigner").append("/").append("js").append("/").append("Plugins").append("/").append(path);
+        localPath.append(ConfigurationProvider.getInstance().getDesignerContext()).append("js").append("/").append("Plugins").append("/").append(path);
         this._path = context.getRealPath(localPath.toString());
     }
     

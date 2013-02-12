@@ -23,6 +23,7 @@ import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceImpl;
 import org.jbpm.designer.epn.impl.EpnJsonMarshaller;
 import org.jbpm.designer.epn.impl.EpnJsonUnmarshaller;
 import org.jbpm.designer.repository.Repository;
+import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.web.plugin.IDiagramPlugin;
 import org.jbpm.designer.web.plugin.impl.PluginServiceImpl;
 import org.jbpm.designer.web.profile.IDiagramProfile;
@@ -73,7 +74,7 @@ public class EpnProfileImpl implements IDiagramProfile {
         try {
             try {
                 fileStream = new FileInputStream(new StringBuilder(context.getRealPath("/")).append("/").
-                        append("/").append("org.jbpm.designer.jBPMDesigner/").append("profiles").append("/").append("epn.xml").toString());
+                        append(ConfigurationProvider.getInstance().getDesignerContext()).append("profiles").append("/").append("epn.xml").toString());
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }

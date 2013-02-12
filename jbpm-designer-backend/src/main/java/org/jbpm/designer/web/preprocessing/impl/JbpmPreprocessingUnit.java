@@ -12,6 +12,7 @@ import org.jbpm.designer.repository.AssetNotFoundException;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.filters.FilterByExtension;
 import org.jbpm.designer.repository.impl.AssetBuilder;
+import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingUnit;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.process.workitem.WorkDefinitionImpl;
@@ -64,11 +65,11 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     private String sampleBpmn2;
 
     public JbpmPreprocessingUnit(ServletContext servletContext) {
-        this(servletContext, "/org.jbpm.designer.jBPMDesigner");
+        this(servletContext, ConfigurationProvider.getInstance().getDesignerContext());
     }
 
     public JbpmPreprocessingUnit(ServletContext servletContext, String designerPath) {
-        this.designer_path = designerPath;
+        this.designer_path = designerPath.substring(0, designerPath.length()-1);
         stencilPath = servletContext.getRealPath(designer_path + "/" + STENCILSET_PATH);
         origStencilFilePath = stencilPath + "/bpmn2.0jbpm/stencildata/" + "bpmn2.0jbpm.orig";
         stencilFilePath = stencilPath + "/bpmn2.0jbpm/" + "bpmn2.0jbpm.json";

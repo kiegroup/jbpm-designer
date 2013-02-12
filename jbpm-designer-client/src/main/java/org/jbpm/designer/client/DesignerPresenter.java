@@ -3,6 +3,7 @@ package org.jbpm.designer.client;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.ScriptInjector;
 import com.google.gwt.dom.client.*;
@@ -18,6 +19,10 @@ import org.uberfire.client.annotations.WorkbenchEditor;
 import org.uberfire.client.annotations.WorkbenchPartTitle;
 import org.uberfire.client.annotations.WorkbenchPartView;
 import org.uberfire.client.mvp.UberView;
+import org.uberfire.shared.mvp.PlaceRequest;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Dependent
 @WorkbenchEditor(identifier = "jbpm.designer", fileTypes = "*.bpmn?")
@@ -37,15 +42,24 @@ public class DesignerPresenter {
     private Caller<DesignerAssetService> assetService;
 
     private Path path;
+    private PlaceRequest place;
+    private List activeNodes;
 
     @OnStart
-    public void onStart( final Path path ) {
+    public void onStart( final Path path, PlaceRequest place) {
         this.path = path;
+        this.place = place;
+        String activeNodesParam = place.getParameter("activeNodes", null);
+        if (activeNodesParam != null) {
+            this.activeNodes = Arrays.asList(activeNodesParam.split(","));
+        }
         if(path != null) {
+
             assetService.call( new RemoteCallback<String>() {
                 @Override
                 public void callback( String editorID ) {
                     view.setEditorID(editorID);
+                    String url =   GWT.getHostPageBaseURL().replaceFirst("/"+GWT.getModuleName()+"/", "");
                     assetService.call( new RemoteCallback<String>() {
                         @Override
                         public void callback( String editorBody ) {
@@ -60,8 +74,10 @@ public class DesignerPresenter {
 
                             view.startDesigneInstancer();
                             //ScriptInjector.fromString(editorBody).setRemoveTag(false).inject();
+
                         }
-                    } ).loadEditorBody(path, editorID);
+
+                    } ).loadEditorBody(path, editorID, url);
                 }
             } ).getEditorID();
         }

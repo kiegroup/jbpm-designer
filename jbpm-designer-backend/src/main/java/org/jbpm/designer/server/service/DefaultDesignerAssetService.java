@@ -24,9 +24,9 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
     private Repository repository;
 
     @Override
-    public String loadEditorBody( final Path path, final String editorID) {
+    public String loadEditorBody( final Path path, final String editorID, String hostInfo) {
         // TODO dont hard-code url here
-        String editorURL = "http://localhost:8888/editor/?uuid=" + path.toURI() + "&profile=jbpm&pp=&editorid=" + editorID;
+        String editorURL = hostInfo + "/editor/?uuid=" + path.toURI() + "&profile=jbpm&pp=&editorid=" + editorID;
         return getEditorResponse(editorURL);
     }
 

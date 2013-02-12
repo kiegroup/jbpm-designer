@@ -26,6 +26,7 @@ import java.util.Set;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.web.stencilset.IDiagramStencilSet;
 import org.jbpm.designer.web.stencilset.IDiagramStencilSetFactory;
 import org.jbpm.designer.web.stencilset.IDiagramStencilSetService;
@@ -48,7 +49,7 @@ import org.slf4j.LoggerFactory;
 public class StencilSetServiceImpl implements IDiagramStencilSetService {
 
     private static Logger _logger = LoggerFactory.getLogger(StencilSetServiceImpl.class);
-    public static final String designer_path = "/org.jbpm.designer.jBPMDesigner/";
+    public static final String designer_path = ConfigurationProvider.getInstance().getDesignerContext();
 
 
     private Map<String, IDiagramStencilSet> _registry = new HashMap<String, IDiagramStencilSet>();

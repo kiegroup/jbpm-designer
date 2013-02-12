@@ -41,6 +41,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.designer.repository.Repository;
+import org.jbpm.designer.util.ConfigurationProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -118,7 +119,7 @@ public class DefaultProfileImpl implements IDiagramProfile {
         try {
             try {
                 fileStream = new FileInputStream(new StringBuilder(context.getRealPath("/")).append("/").
-                        append("/").append("org.jbpm.designer.jBPMDesigner/").append("profiles").append("/").append("default.xml").toString());
+                        append(ConfigurationProvider.getInstance().getDesignerContext()).append("profiles").append("/").append("default.xml").toString());
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }

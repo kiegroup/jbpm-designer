@@ -65,7 +65,7 @@ public class PluginServiceServlet extends HttpServlet {
             HttpServletResponse resp) 
     throws ServletException, IOException {
         try {
-            if ("/plugins".equals(req.getRequestURI())) {
+            if ("/plugins".equals(req.getServletPath())) {
                 listAllPlugins(req, resp);
             } else {
                 retrievePluginContents(req, resp);

@@ -22,9 +22,9 @@
             ORYX.LOCAL_HISTORY_ENABLED = @localhistoryenabled@;
             ORYX.LOCAL_HISTORY_TIMEOUT = @localhistorytimeout@;
 
-            ORYX.CONFIG.ROOT_PATH = "/";
-            ORYX.PATH = ORYX.CONFIG.ROOT_PATH;
-            ORYX.BASE_FILE_PATH = "/org.jbpm.designer.jBPMDesigner/";
+            ORYX.CONFIG.ROOT_PATH = "@contextroot@";
+            ORYX.PATH = ORYX.CONFIG.ROOT_PATH + "/";
+            ORYX.BASE_FILE_PATH = ORYX.CONFIG.ROOT_PATH + "/org.jbpm.designer.jBPMDesigner/";
 
             ORYX.CONFIG.UUID_AUTOSAVE_INTERVAL = @autosaveinterval@;
             ORYX.CONFIG.UUID_AUTOSAVE_DEFAULT = @autosavedefault@;
@@ -33,7 +33,7 @@
             map(function (ssext) {
                 // for each of the extensions, we get the extension file and return its contents.
                 var contents = null;
-                new Ajax.Request("/stencilset/" + ssext, {
+                new Ajax.Request(ORYX.CONFIG.ROOT_PATH + "/stencilset/" + ssext, {
                     asynchronous:false,
                     method:'get',
                     contentType:'application/json',
@@ -47,7 +47,7 @@
                 return contents;
             });
 
-            new Ajax.Request("/plugins", {
+            new Ajax.Request(ORYX.CONFIG.ROOT_PATH + "/plugins", {
                 asynchronous:false,
                 method:'get',
                 contentType:'application/json',

@@ -42,6 +42,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.jboss.drools.impl.DroolsFactoryImpl;
+import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.web.plugin.IDiagramPlugin;
 import org.jbpm.designer.web.plugin.IDiagramPluginService;
 import org.jbpm.designer.web.plugin.impl.PluginServiceImpl;
@@ -97,13 +98,13 @@ public class EditorHandler extends HttpServlet {
             };
         }
     };
-    
+
     /**
      * The base path under which the application will be made available at runtime.
      * This constant should be used throughout the application.
      */
-    public static final String designer_path = "/org.jbpm.designer.jBPMDesigner/";
-    
+    public static final String designer_path = ConfigurationProvider.getInstance().getDesignerContext();
+
     /**
      * The designer DEV flag looked up from system properties.
      */
@@ -201,7 +202,7 @@ public class EditorHandler extends HttpServlet {
         _designerVersion = readDesignerVersion(config.getServletContext());
         
         String editor_file = config.
-            getServletContext().getRealPath("/editor.html");
+            getServletContext().getRealPath(designer_path + "editor.html");
         try {
             _doc = readDocument(editor_file);
         } catch (Exception e) {
@@ -291,6 +292,10 @@ public class EditorHandler extends HttpServlet {
         }
     }
 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)  throws ServletException, IOException {
+        doGet(request, response);
+    }
+
     protected void doGet(HttpServletRequest request, 
             HttpServletResponse response) 
             throws ServletException, IOException {
@@ -327,7 +332,7 @@ public class EditorHandler extends HttpServlet {
         if (_devMode) {
             scriptsArray = new JSONArray();
             for(String nextScript : _envFiles) {
-                scriptsArray.put(designer_path + nextScript);
+                scriptsArray.put( designer_path + nextScript);
             }
 
         } else {
@@ -462,11 +467,11 @@ public class EditorHandler extends HttpServlet {
             	resultHtml.append(_locale);
                 replacementMade = true;
             } else if ("defaultSkin".equals(elt)) { 
-                resultHtml.append("/org.jbpm.designer.jBPMDesigner/css/theme-default.css");
+                resultHtml.append(designer_path + "css/theme-default.css");
                 replacementMade = true;
             } else if("overlaySkin".equals(elt)) {
             	if(_skin != null && !_skin.equals("default")) {
-            		resultHtml.append("org.jbpm.designer.jBPMDesigner/css/theme-" + _skin + ".css");
+            		resultHtml.append(designer_path + "css/theme-" + _skin + ".css");
             	} else {
             		resultHtml.append("");
             	}
@@ -496,6 +501,9 @@ public class EditorHandler extends HttpServlet {
                     ssexts.append("\"").append(ext).append("\"");
                 }
                 resultHtml.append(ssexts.toString());
+                replacementMade = true;
+            } else if ("contextroot".equals(elt)) {
+                resultHtml.append(request.getContextPath());
                 replacementMade = true;
             } else if ("@".equals(elt)) {
                 if (replacementMade) {

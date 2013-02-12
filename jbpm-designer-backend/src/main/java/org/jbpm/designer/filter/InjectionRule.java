@@ -19,7 +19,7 @@ public class InjectionRule {
     private int insertAt;
     private String strInsertAt;
 
-    public InjectionRule(Node ruleNode) throws TransformerFactoryConfigurationError,
+    public InjectionRule(Node ruleNode, String contextPath) throws TransformerFactoryConfigurationError,
             TransformerException {
 
         name = getAttrValue(ruleNode, "name");
@@ -38,6 +38,7 @@ public class InjectionRule {
                 }
             }
 
+            elements = elements.replaceAll("@contextpath@", contextPath);
         }
     }
 

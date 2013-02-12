@@ -10,6 +10,6 @@ import org.uberfire.backend.vfs.Path;
 @Remote
 public interface DesignerAssetService {
 
-    public String loadEditorBody(final Path path, final String editorID);
+    public String loadEditorBody(final Path path, final String editorID, String hostInfo);
     public String getEditorID();
 }
