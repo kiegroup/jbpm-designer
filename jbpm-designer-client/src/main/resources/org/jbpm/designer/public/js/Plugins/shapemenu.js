@@ -218,7 +218,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
 			hovercallback: 	(ORYX.CONFIG.ENABLE_MORPHMENU_BY_HOVER ? this.showMorphMenu.bind(this) : undefined), 
 			resetcallback: 	(ORYX.CONFIG.ENABLE_MORPHMENU_BY_HOVER ? this.hideMorphMenu.bind(this) : undefined), 
 			callback:		(ORYX.CONFIG.ENABLE_MORPHMENU_BY_HOVER ? undefined : this.toggleMorphMenu.bind(this)), 
-			icon: 			ORYX.PATH + 'images/wrench_orange.png',
+			icon: 			ORYX.BASE_FILE_PATH + 'images/wrench_orange.png',
 			align: 			ORYX.CONFIG.SHAPEMENU_BOTTOM,
 			group:			0,
 			msg:			ORYX.I18N.ShapeMenuPlugin.morphMsg
@@ -226,7 +226,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
 		
 		var dbutton = new ORYX.Plugins.ShapeMenuButton({
 			callback:		this.addDictionaryItem.bind(this), 
-			icon: 			ORYX.PATH + 'images/dictionary.png',
+			icon: 			ORYX.BASE_FILE_PATH + 'images/dictionary.png',
 			align: 			ORYX.CONFIG.SHAPEMENU_TOP,
 			group:			0,
 			msg:			'Add to Process Dictionary'
@@ -234,7 +234,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
 		
 		var utfbutton = new ORYX.Plugins.ShapeMenuButton({
 			callback:		this.editTaskForm.bind(this), 
-			icon: 			ORYX.PATH + 'images/human_task_form.png',
+			icon: 			ORYX.BASE_FILE_PATH + 'images/human_task_form.png',
 			align: 			ORYX.CONFIG.SHAPEMENU_TOP,
 			group:			1,
 			msg:			'Edit Task Form'
@@ -242,7 +242,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
 		
 		var swbutton = new ORYX.Plugins.ShapeMenuButton({
 			callback:		this.viewNodeSource.bind(this), 
-			icon: 			ORYX.PATH + 'images/view.png',
+			icon: 			ORYX.BASE_FILE_PATH + 'images/view.png',
 			align: 			ORYX.CONFIG.SHAPEMENU_TOP,
 			group:			2,
 			msg:			'View Node Source'

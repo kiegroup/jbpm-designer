@@ -352,7 +352,7 @@ Ext.ux.SlicedToolbar = Ext.extend(Ext.Toolbar, {
         
         var button = new Ext.Toolbar.Button({
             cls: "x-btn-icon",
-            icon: ORYX.CONFIG.ROOT_PATH + "images/toolbar_"+type+".png",
+            icon: ORYX.BASE_FILE_PATH + "images/toolbar_"+type+".png",
             handler: (type === "next") ? nextHandler : prevHandler
         });
         
