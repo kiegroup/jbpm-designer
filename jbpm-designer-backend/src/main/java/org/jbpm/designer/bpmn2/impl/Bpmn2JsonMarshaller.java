@@ -1461,6 +1461,7 @@ public class Bpmn2JsonMarshaller {
         DataInput contentDataInput = null;
         DataInput priorityDataInput = null;
         DataInput localeDataInput = null;
+        DataInput createdByDataInput = null;
         DataInput notCompletedReassignInput = null;
         DataInput notStartedReassignInput = null;
         DataInput notCompletedNotificationInput = null;
@@ -1496,6 +1497,9 @@ public class Bpmn2JsonMarshaller {
                     }
                     if(dataIn.getName() != null && dataIn.getName().equals("Locale")) {
                         localeDataInput = dataIn;
+                    }
+                    if(dataIn.getName() != null && dataIn.getName().equals("CreatedBy")) {
+                        createdByDataInput = dataIn;
                     }
                     if(dataIn.getName() != null && dataIn.getName().equals("NotCompletedReassign")) {
                         notCompletedReassignInput = dataIn;
@@ -1592,6 +1596,7 @@ public class Bpmn2JsonMarshaller {
             		   rhsAssociation.equals("Content") ||
             		   rhsAssociation.equals("TaskName")  ||
                        rhsAssociation.equals("Locale") ||
+                       rhsAssociation.equals("CreatedBy") ||
                        rhsAssociation.equals("NotCompletedReassign") ||
                        rhsAssociation.equals("NotStartedReassign") ||
                        rhsAssociation.equals("NotCompletedNotify") ||
@@ -1631,7 +1636,11 @@ public class Bpmn2JsonMarshaller {
                             ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(localeDataInput.getId())) {
                         properties.put("locale", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
                     }
-
+                    if (createdByDataInput != null && datain.getAssignment().get(0).getTo() != null &&
+                            ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
+                            ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(createdByDataInput.getId())) {
+                         properties.put("createdby", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
+                    }
                     if (notCompletedReassignInput != null && datain.getAssignment().get(0).getTo() != null &&
                             ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
                             ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(notCompletedReassignInput.getId())) {
