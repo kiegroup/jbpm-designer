@@ -3114,6 +3114,16 @@
     				"optional":true,
     				"fortasktypes":"None|User"
     			},
+    			{
+                    "id":"createdby",
+                    "type":"String",
+                    "title":"CreatedBy",
+                    "value":"",
+                    "description":"User name of Task creator",
+                    "readonly":false,
+                    "optional":true,
+                    "fortasktypes":"None|User"
+                },
 				{
 					"id":"skippable",
 					"type":"Choice",
