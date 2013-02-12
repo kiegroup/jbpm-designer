@@ -40,6 +40,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.designer.util.ConfigurationProvider;
@@ -303,6 +304,10 @@ public class EditorHandler extends HttpServlet {
         String profileName = request.getParameter("profile");
         String uuid = request.getParameter("uuid");
         String editorID = request.getParameter("editorid");
+        String encodedActiveNodes = request.getParameter("activenodes");
+        byte[] activeNodesByteArray = Base64.decodeBase64(encodedActiveNodes);
+        String activeNodes = new String(activeNodesByteArray, "UTF-8");
+
         if(profileName == null || profileName.length() < 1) {
         	// default to jbpm
         	profileName = "jbpm";
@@ -419,6 +424,9 @@ public class EditorHandler extends HttpServlet {
                 replacementMade = true;
             } else if ("editorid".equals(elt)) {
                 resultHtml.append(editorID);
+                replacementMade = true;
+            } else if ("activenodes".equals(elt)) {
+                resultHtml.append(activeNodes);
                 replacementMade = true;
             } else if ("allscripts".equals(elt)) {
                 resultHtml.append(scriptsArray.toString());

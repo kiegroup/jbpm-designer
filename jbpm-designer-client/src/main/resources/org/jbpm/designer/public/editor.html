@@ -18,6 +18,7 @@
             ORYX.UUID = "@editoruuid@";
             ORYX.PROFILE = "@editorprofile@";
             ORYX.EDITORID = "@editorid@";
+            ORYX.ACTIVENODES = @activenodes@;
 
             ORYX.LOCAL_HISTORY_ENABLED = @localhistoryenabled@;
             ORYX.LOCAL_HISTORY_TIMEOUT = @localhistorytimeout@;
@@ -95,8 +96,9 @@
                             try {
                                 model = response.evalJSON();
                                 editor_parameters.model = model;
-                                var editor = new ORYX.Editor(editor_parameters);
-                                ORYX.EDITOR = editor;
+                                //delete ORYX.EDITOR;
+                                ORYX.EDITOR = null;
+                                ORYX.EDITOR = new ORYX.Editor(editor_parameters);
                             } catch(err) {
                                 ORYX.LOG.error(err);
                             }
