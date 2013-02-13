@@ -21,10 +21,6 @@
             <groupId>org.jbpm</groupId>
             <artifactId>jbpm-designer-api</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.jbpm</groupId>
-            <artifactId>jbpm-designer-backend</artifactId>
-        </dependency>
 
         <!-- Errai Core -->
         <dependency>
