@@ -206,6 +206,7 @@
                         <compileSourcesArtifact>org.uberfire:uberfire-widgets-core-client</compileSourcesArtifact>
                         <compileSourcesArtifact>org.uberfire:uberfire-widgets-commons</compileSourcesArtifact>
                         <compileSourcesArtifact>org.uberfire:uberfire-workbench</compileSourcesArtifact>
+                        <compileSourcesArtifact>org.uberfire:uberfire-api</compileSourcesArtifact>
                         <compileSourcesArtifact>org.uberfire:uberfire-backend-api</compileSourcesArtifact>
                         <compileSourcesArtifact>org.uberfire:uberfire-backend-commons</compileSourcesArtifact>
                         <compileSourcesArtifact>org.jbpm:jbpm-console-shared</compileSourcesArtifact>
