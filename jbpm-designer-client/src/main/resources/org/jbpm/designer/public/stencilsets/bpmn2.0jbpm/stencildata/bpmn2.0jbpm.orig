@@ -3270,7 +3270,7 @@
 					"description_ja":"アクション開始時",
 					"readonly":false,
 					"optional":true,
-					"fortasktypes":"None|Send|Receive|User|Manual|Service|Script"
+					"fortasktypes":"None|Send|Receive|User|Manual|Service|Script|Business Rule"
 				},
 				{
 					"id":"onExitActions",
@@ -3281,7 +3281,7 @@
 					"description_ja":"アクション終了時",
 					"readonly":false,
 					"optional":true,
-					"fortasktypes":"None|Send|Receive|User|Manual|Service|Script"
+					"fortasktypes":"None|Send|Receive|User|Manual|Service|Script|Business Rule"
 				},
 				{
 					"id":"taskname",
