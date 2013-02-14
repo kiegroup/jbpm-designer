@@ -87,6 +87,12 @@
             <artifactId>log4j-over-slf4j</artifactId>
         </dependency>
 
+
+        <!-- guvnor dependencies -->
+        <dependency>
+            <groupId>org.kie.guvnor</groupId>
+            <artifactId>guvnor-commons-ui</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

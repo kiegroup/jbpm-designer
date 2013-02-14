@@ -62,7 +62,7 @@ import org.jboss.drools.CostParameters;
 import org.jboss.drools.DecimalParameterType;
 import org.jboss.drools.DroolsFactory;
 import org.jboss.drools.DroolsPackage;
-import org.jboss.drools.ElementParametersType;
+import org.jboss.drools.ElementParameters;
 import org.jboss.drools.FloatingParameterType;
 import org.jboss.drools.GlobalType;
 import org.jboss.drools.ImportType;
@@ -76,7 +76,7 @@ import org.jboss.drools.ProcessAnalysisDataType;
 import org.jboss.drools.RandomDistributionType;
 import org.jboss.drools.ResourceParameters;
 import org.jboss.drools.Scenario;
-import org.jboss.drools.ScenarioParametersType;
+import org.jboss.drools.ScenarioParameters;
 import org.jboss.drools.TimeParameters;
 import org.jboss.drools.TimeUnit;
 import org.jboss.drools.UniformDistributionType;
@@ -129,7 +129,7 @@ public class Bpmn2JsonUnmarshaller {
     private Map<String,Message> _messages = new HashMap<String, Message>();
     private Map<String,ItemDefinition> _itemDefinitions = new HashMap<String, ItemDefinition>();
     private Map<String, List<EObject>> _simulationElementParameters = new HashMap<String, List<EObject>>();
-    private ScenarioParametersType _simulationScenarioParameters = DroolsFactory.eINSTANCE.createScenarioParametersType();
+    private ScenarioParameters _simulationScenarioParameters = DroolsFactory.eINSTANCE.createScenarioParameters();
     
     public Bpmn2JsonUnmarshaller() {
         _helpers = new ArrayList<BpmnMarshallerHelper>();
@@ -266,7 +266,7 @@ public class Bpmn2JsonUnmarshaller {
     		Iterator<String> iter = _simulationElementParameters.keySet().iterator();
     		while(iter.hasNext()) {
     			String key = iter.next();
-    			ElementParametersType etype = DroolsFactory.eINSTANCE.createElementParametersType();
+    			ElementParameters etype = DroolsFactory.eINSTANCE.createElementParameters();
     			etype.setElementId(key);
     			List<EObject> params = _simulationElementParameters.get(key);
     			for(EObject np : params) {

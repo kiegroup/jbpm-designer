@@ -304,7 +304,15 @@ public class VFSRepository implements Repository {
     }
 
     public String createAsset(Asset asset) {
-        Path filePath = fileSystem.provider().getPath(URI.create(getRepositoryRoot() + (asset.getAssetLocation().equals("/")?"":asset.getAssetLocation()) + "/" +asset.getFullName()));
+        URI pathURI = null;
+        if (asset.getAssetLocation().startsWith(fileSystem.provider().getScheme()) ||
+                asset.getAssetLocation().startsWith("default://")) {
+            pathURI = URI.create(asset.getAssetLocation()+ "/" +asset.getFullName()) ;
+        } else {
+            pathURI = URI.create(getRepositoryRoot() + (asset.getAssetLocation().equals("/")?"":asset.getAssetLocation()) + "/" +asset.getFullName());
+        }
+
+        Path filePath = fileSystem.provider().getPath(pathURI);
         createIfNotExists(filePath);
         try {
             CommentedOption commentedOption = new CommentedOption("admin", "Created asset " + asset.getFullName());

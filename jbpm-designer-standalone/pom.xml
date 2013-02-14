@@ -170,6 +170,24 @@
             <artifactId>jbpm-designer-backend</artifactId>
         </dependency>
 
+        <!-- guvnor dependencies -->
+        <dependency>
+            <groupId>org.kie.guvnor</groupId>
+            <artifactId>guvnor-commons-ui</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.guvnor</groupId>
+            <artifactId>guvnor-core-services-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.kie.guvnor</groupId>
+            <artifactId>guvnor-core-services-backend</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.guvnor</groupId>
+            <artifactId>guvnor-project-api</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -209,8 +227,14 @@
                         <compileSourcesArtifact>org.uberfire:uberfire-api</compileSourcesArtifact>
                         <compileSourcesArtifact>org.uberfire:uberfire-backend-api</compileSourcesArtifact>
                         <compileSourcesArtifact>org.uberfire:uberfire-backend-commons</compileSourcesArtifact>
-                        <compileSourcesArtifact>org.jbpm:jbpm-console-shared</compileSourcesArtifact>
+
                         <compileSourcesArtifact>org.kie.commons:kie-nio2-model</compileSourcesArtifact>
+
+                        <compileSourcesArtifact>org.kie.guvnor:guvnor-project-api</compileSourcesArtifact>
+                        <compileSourcesArtifact>org.kie.guvnor:guvnor-commons-ui</compileSourcesArtifact>
+                        <compileSourcesArtifact>org.kie.guvnor:guvnor-core-services-api</compileSourcesArtifact>
+                        <compileSourcesArtifact>org.kie.guvnor:guvnor-commons-data</compileSourcesArtifact>
+
                     </compileSourcesArtifacts>
                     <runTarget>org.jbpm.designer.jBPMDesigner/designer.html</runTarget>
                     <extraJvmArgs>-Xmx1024m -XX:MaxPermSize=256m</extraJvmArgs>

@@ -11,14 +11,7 @@ import java.util.Map.Entry;
 import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.Process;
 import org.eclipse.emf.ecore.util.FeatureMap;
-import org.jboss.drools.CostParameters;
-import org.jboss.drools.DecimalParameterType;
-import org.jboss.drools.DroolsPackage;
-import org.jboss.drools.ElementParametersType;
-import org.jboss.drools.FloatingParameterType;
-import org.jboss.drools.ProcessAnalysisDataType;
-import org.jboss.drools.ResourceParameters;
-import org.jboss.drools.Scenario;
+import org.jboss.drools.*;
 import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.web.profile.IDiagramProfile;
@@ -199,7 +192,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 		        
 		        // simulation validation
 		        if(defaultScenario != null && defaultScenario.getElementParameters() != null) {
-		        	for(ElementParametersType eleType : defaultScenario.getElementParameters()) {
+		        	for(ElementParameters eleType : defaultScenario.getElementParameters()) {
 		        		if(eleType.getElementId().equals(ut.getId())) {
 		        			if(eleType.getResourceParameters() != null) {
 	        					ResourceParameters resourceParams = eleType.getResourceParameters();
@@ -221,7 +214,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 				
 				// simulation validation
 				if(defaultScenario != null && defaultScenario.getElementParameters() != null) {
-					for(ElementParametersType eleType : defaultScenario.getElementParameters()) {
+					for(ElementParameters eleType : defaultScenario.getElementParameters()) {
 						if(eleType.getElementId().equals(ta.getId())) {
 	        				if(eleType.getCostParameters() != null) {
 	        					CostParameters costParams = eleType.getCostParameters();
@@ -379,7 +372,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 						double sum = 0;
 						for(SequenceFlow sf : outgoingGwSequenceFlows) {
 					        	if(defaultScenario.getElementParameters() != null) {
-					        		for(ElementParametersType eleType : defaultScenario.getElementParameters()) {
+					        		for(ElementParameters eleType : defaultScenario.getElementParameters()) {
 					        			if(eleType.getElementId().equals(sf.getId())) {
 					        				if(eleType.getControlParameters() != null && eleType.getControlParameters().getProbability() != null) {
 					        					FloatingParameterType valType = (FloatingParameterType) eleType.getControlParameters().getProbability().getParameterValue().get(0);

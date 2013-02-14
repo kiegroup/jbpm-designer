@@ -122,7 +122,6 @@ import org.jboss.drools.DecimalParameterType;
 import org.jboss.drools.DroolsFactory;
 import org.jboss.drools.DroolsPackage;
 import org.jboss.drools.ElementParameters;
-import org.jboss.drools.ElementParametersType;
 import org.jboss.drools.FloatingParameterType;
 import org.jboss.drools.GlobalType;
 import org.jboss.drools.ImportType;
@@ -968,7 +967,7 @@ public class Bpmn2JsonMarshaller {
     	List<EventDefinition> eventDefinitions = catchEvent.getEventDefinitions();
         // simulation properties
         if(_simulationScenario != null) {
-            for(ElementParametersType eleType : _simulationScenario.getElementParameters()) {
+            for(ElementParameters eleType : _simulationScenario.getElementParameters()) {
                 if(eleType.getElementId().equals(catchEvent.getId())) {
                     TimeParameters timeParams = eleType.getTimeParameters();
                     if(timeParams.getWaitTime() != null) {
@@ -1015,7 +1014,7 @@ public class Bpmn2JsonMarshaller {
     	}
         // simulation properties
         if(_simulationScenario != null) {
-            for(ElementParametersType eleType : _simulationScenario.getElementParameters()) {
+            for(ElementParameters eleType : _simulationScenario.getElementParameters()) {
                 if(eleType.getElementId().equals(boundaryEvent.getId())) {
                     TimeParameters timeParams = eleType.getTimeParameters();
                     if(timeParams.getWaitTime() != null) {
@@ -1057,7 +1056,7 @@ public class Bpmn2JsonMarshaller {
 
         // simulation properties
         if(_simulationScenario != null) {
-            for(ElementParametersType eleType : _simulationScenario.getElementParameters()) {
+            for(ElementParameters eleType : _simulationScenario.getElementParameters()) {
                 if(eleType.getElementId().equals(throwEvent.getId())) {
                     TimeParameters timeParams = eleType.getTimeParameters();
                     Parameter processingTime = timeParams.getProcessingTime();
@@ -1410,7 +1409,7 @@ public class Bpmn2JsonMarshaller {
 
     		// simulation properties
     		if(_simulationScenario != null) {
-    			for(ElementParametersType eleType : _simulationScenario.getElementParameters()) {
+    			for(ElementParameters eleType : _simulationScenario.getElementParameters()) {
             		if(eleType.getElementId().equals(task.getId())) {
             			CostParameters costParams = eleType.getCostParameters();
             			DecimalParameterType unitCostVal = (DecimalParameterType) costParams.getUnitCost().getParameterValue().get(0);
@@ -1800,7 +1799,7 @@ public class Bpmn2JsonMarshaller {
         
         // simulation properties
         if(_simulationScenario != null) {
-        	for(ElementParametersType eleType : _simulationScenario.getElementParameters()) {
+        	for(ElementParameters eleType : _simulationScenario.getElementParameters()) {
         		if(eleType.getElementId().equals(task.getId())) {
         			TimeParameters timeParams = eleType.getTimeParameters();
         			Parameter processingTime = timeParams.getProcessingTime();
@@ -2470,8 +2469,8 @@ public class Bpmn2JsonMarshaller {
         
         // simulation properties
         if(_simulationScenario != null) {
-        	List<ElementParametersType> elementParams = _simulationScenario.getElementParameters();
-        	for(ElementParametersType eleType : elementParams) {
+        	List<ElementParameters> elementParams = _simulationScenario.getElementParameters();
+        	for(ElementParameters eleType : elementParams) {
         		if(eleType.getElementId().equals(sequenceFlow.getId())) {
         			FloatingParameterType valType = (FloatingParameterType) eleType.getControlParameters().getProbability().getParameterValue().get(0);
         			properties.put("probability", valType.getValue());

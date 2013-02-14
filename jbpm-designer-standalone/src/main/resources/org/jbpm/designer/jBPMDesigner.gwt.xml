@@ -14,6 +14,13 @@
     <inherits name="org.jbpm.designer.jBPMDesignerClient"/>
     <inherits name="org.jbpm.designer.jBPMDesignerAPI"/>
 
+    <inherits name="org.kie.guvnor.project.GuvnorProjectAPI"/>
+    <inherits name="org.kie.guvnor.commons.ui.GuvnorCommonsUI"/>
+    <inherits name="org.kie.guvnor.services.GuvnorCoreServicesAPI"/>
+    <inherits name="org.kie.guvnor.commons.data.GuvnorCommonsData"/>
+
+
+
     <!-- Specify the application specific style sheet. -->
     <stylesheet src='css/uberfire-showcase.css'/>
 

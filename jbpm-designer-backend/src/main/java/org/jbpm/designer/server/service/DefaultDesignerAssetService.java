@@ -15,7 +15,10 @@ import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.jboss.errai.bus.server.annotations.Service;
+import org.jbpm.designer.repository.Asset;
+import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
+import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.service.DesignerAssetService;
 import org.json.JSONArray;
 import org.uberfire.backend.vfs.Path;
@@ -26,6 +29,25 @@ import org.uberfire.shared.mvp.PlaceRequest;
 public class DefaultDesignerAssetService implements DesignerAssetService {
     @Inject
     private Repository repository;
+    private static final Object PROCESS_STUB = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \n" +
+            "<definitions id=\"Definition\"\n" +
+            "             targetNamespace=\"http://www.jboss.org/drools\"\n" +
+            "             typeLanguage=\"http://www.java.com/javaTypes\"\n" +
+            "             expressionLanguage=\"http://www.mvel.org/2.0\"\n" +
+            "             xmlns=\"http://www.omg.org/spec/BPMN/20100524/MODEL\"\n" +
+            "             xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" +
+            "             xsi:schemaLocation=\"http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd\"\n" +
+            "             xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\"\n" +
+            "             xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\"\n" +
+            "             xmlns:di=\"http://www.omg.org/spec/DD/20100524/DI\"\n" +
+            "             xmlns:tns=\"http://www.jboss.org/drools\">\n" +
+            "  <process processType=\"Private\" isExecutable=\"true\" id=\"\" name=\"\"  >\n" +
+            "  </process>\n" +
+            "  <bpmndi:BPMNDiagram>\n" +
+            "    <bpmndi:BPMNPlane bpmnElement=\"\" >\n" +
+            "    </bpmndi:BPMNPlane>\n" +
+            "  </bpmndi:BPMNDiagram>" +
+            "</definitions>";
 
     @Override
     public String loadEditorBody( final Path path, final String editorID, String hostInfo, PlaceRequest place) {
@@ -52,6 +74,18 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
         // TODO - fix this so it is not always "Definition"
         return "Definition";
         //return UUID.randomUUID().toString().replaceAll("-", "");
+    }
+
+    @Override
+    public void createProcess(Path path) {
+
+        String fileName = path.getFileName();
+        String location = path.toURI().replaceFirst("/" + fileName, "");
+        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(path.getFileName());
+        builder.location(location).content(PROCESS_STUB);
+        Asset<String> processAsset = builder.getAsset();
+
+        repository.createAsset(processAsset);
     }
 
 
