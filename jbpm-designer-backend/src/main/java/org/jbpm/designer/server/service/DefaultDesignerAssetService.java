@@ -53,6 +53,7 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
     public String loadEditorBody( final Path path, final String editorID, String hostInfo, PlaceRequest place) {
         List<String> activeNodesList = new ArrayList<String>();
         String activeNodesParam = place.getParameter("activeNodes", null);
+        String readOnly = place.getParameter("readOnly", "false");
         if(activeNodesParam != null) {
             activeNodesList = Arrays.asList(activeNodesParam.split(","));
         }
@@ -65,7 +66,7 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
             encodedActiveNodesParam = "";
         }
 
-        String editorURL = hostInfo + "/editor/?uuid=" + path.toURI() + "&profile=jbpm&pp=&editorid=" + editorID + "&activenodes=" + encodedActiveNodesParam;
+        String editorURL = hostInfo + "/editor/?uuid=" + path.toURI() + "&profile=jbpm&pp=&editorid=" + editorID + "&readonly=" + readOnly + "&activenodes=" + encodedActiveNodesParam;
         return getEditorResponse(editorURL);
     }
 

@@ -356,18 +356,24 @@ ORYX.Editor = {
 		        items: [{
 		        	layout: "fit",
 		            title: 'Process Modelling',
+                    id: 'processmodellingtab',
 	                items	: [this.centerContentPanel]
 		        },
 		        {
 		        	layout: "fit",
 		        	title: 'Simulation Results',
+                    id: 'simulationtab',
 	                autoScroll   : false,
 	                items	: [this.simResultsContentPanelLayout]
 		        }
 		        ]
 			};
 		this.centerContentTabPannel = new Ext.TabPanel(tabs_config);
-		
+
+        if(ORYX.READONLY == true) {
+            Ext.getCmp('maintabs').remove("simulationtab");
+        }
+
 		// DEFINITION OF THE VIEWPORT AREAS
 		this.layout_regions = {
 				
@@ -429,8 +435,8 @@ ORYX.Editor = {
 		
 		// Hide every region except the center
 		for (region in this.layout_regions) {
-			if ( region != "center" ) {
-				//this.layout_regions[ region ].hide();
+			if ( region != "center" && ORYX.READONLY == true) {
+                this.layout_regions[ region ].setVisible(false);
 			}
 		}
 		
@@ -571,8 +577,12 @@ ORYX.Editor = {
 			}
 						
 			// trigger doLayout() and show the pane
-			current_region.ownerCt.doLayout();			
-			current_region.show();
+			current_region.ownerCt.doLayout();
+
+            if(ORYX.READONLY == true && current_region.region != "center") {
+            } else {
+                current_region.show();
+            }
 
 			if(Ext.isMac)
 				ORYX.Editor.resizeFix();

@@ -307,9 +307,9 @@ public class EditorHandler extends HttpServlet {
         String encodedActiveNodes = request.getParameter("activenodes");
         byte[] activeNodesByteArray = Base64.decodeBase64(encodedActiveNodes);
         String activeNodes = new String(activeNodesByteArray, "UTF-8");
+        String readOnly = request.getParameter("readonly");
 
         if(profileName == null || profileName.length() < 1) {
-        	// default to jbpm
         	profileName = "jbpm";
         }
         IDiagramProfile profile = _profileService.findProfile(
@@ -427,6 +427,9 @@ public class EditorHandler extends HttpServlet {
                 replacementMade = true;
             } else if ("activenodes".equals(elt)) {
                 resultHtml.append(activeNodes);
+                replacementMade = true;
+            } else if ("readonly".equals(elt)) {
+                resultHtml.append(readOnly);
                 replacementMade = true;
             } else if ("allscripts".equals(elt)) {
                 resultHtml.append(scriptsArray.toString());
