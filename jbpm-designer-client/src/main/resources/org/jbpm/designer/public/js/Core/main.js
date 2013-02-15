@@ -375,6 +375,10 @@ ORYX.Editor = {
         }
 
 		// DEFINITION OF THE VIEWPORT AREAS
+        var eastWidth = ORYX.CONFIG.PANEL_LEFT_WIDTH || 400;
+        if(ORYX.READONLY == true) {
+            eastWidth = 10;
+        }
 		this.layout_regions = {
 				
 				// DEFINES TOP-AREA
@@ -392,7 +396,7 @@ ORYX.Editor = {
                     autoEl	: 'div',
                     border: false,
                     cls		: 'x-panel-editor-east',
-                    width	: ORYX.CONFIG.PANEL_LEFT_WIDTH || 400,
+                    width	: eastWidth,
                     autoScroll:true,
                     split	: true,
                     animate: true,
