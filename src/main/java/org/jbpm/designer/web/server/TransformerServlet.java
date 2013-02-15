@@ -120,7 +120,7 @@ public class TransformerServlet extends HttpServlet {
                     resp.setContentType("text/plain");
                     resp.getWriter().write("<object data=\"data:application/pdf;base64," + Base64.encodeBase64(bout.toByteArray()) +  "\" type=\"application/pdf\"></object>");
                 } else {
-                    storeInRepository(uuid, rawSvg, transformto, processid, repository);
+                    storeInRepository(uuid, formattedSvg, transformto, processid, repository);
 
                     resp.setContentType("application/pdf");
                     if (processid != null) {
@@ -446,7 +446,7 @@ public class TransformerServlet extends HttpServlet {
         }
     }
 
-    private void storeInRepository(String uuid, String rawSvg, String transformto, String processid, Repository repository) {
+    private void storeInRepository(String uuid, String formattedSvg, String transformto, String processid, Repository repository) {
         try {
             if(processid != null) {
                 Asset<byte[]> processAsset = repository.loadAsset(uuid);
@@ -475,14 +475,14 @@ public class TransformerServlet extends HttpServlet {
                 if (transformto.equals(TO_PDF)) {
                     PDFTranscoder t = new PDFTranscoder();
                     TranscoderInput input = new TranscoderInput(new StringReader(
-                            rawSvg));
+                    		formattedSvg));
                     TranscoderOutput output = new TranscoderOutput(outputStream);
                     t.transcode(input, output);
                 } else if (transformto.equals(TO_PNG)) {
                     PNGTranscoder t = new PNGTranscoder();
                     t.addTranscodingHint(ImageTranscoder.KEY_MEDIA, "screen");
                     TranscoderInput input = new TranscoderInput(new StringReader(
-                            rawSvg));
+                    		formattedSvg));
                     TranscoderOutput output = new TranscoderOutput(outputStream);
                     try {
                         t.transcode(input, output);
@@ -492,7 +492,7 @@ public class TransformerServlet extends HttpServlet {
                     }
                 } else if(transformto.equals(TO_SVG)) {
                     OutputStreamWriter outStreamWriter = new OutputStreamWriter(outputStream);
-                    outStreamWriter.write(rawSvg);
+                    outStreamWriter.write(formattedSvg);
                     outStreamWriter.close();
                 }
                 AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
