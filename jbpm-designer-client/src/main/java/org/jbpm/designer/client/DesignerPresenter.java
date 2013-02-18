@@ -8,6 +8,7 @@ import com.google.gwt.dom.client.*;
 import com.google.gwt.user.client.ui.IsWidget;
 import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.jboss.errai.ioc.client.api.Caller;
+import org.jbpm.designer.client.markdown.viewer.Bpmn2Type;
 import org.jbpm.designer.service.DesignerAssetService;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.client.annotations.OnStart;
@@ -18,7 +19,7 @@ import org.uberfire.client.mvp.UberView;
 import org.uberfire.shared.mvp.PlaceRequest;
 
 @Dependent
-@WorkbenchEditor(identifier = "jbpm.designer", fileTypes = "*.bpmn?")
+@WorkbenchEditor(identifier = "jbpm.designer", supportedTypes = { Bpmn2Type.class })
 public class DesignerPresenter {
 
     public interface View

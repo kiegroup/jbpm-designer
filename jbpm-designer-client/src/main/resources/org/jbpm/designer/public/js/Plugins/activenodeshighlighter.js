@@ -18,13 +18,34 @@ ORYX.Plugins.ActiveNodesHighlighter = Clazz.extend({
     applyHighlightingToChild: function(child) {
         if(ORYX.ACTIVENODES) {
             for(var i=0;i<ORYX.ACTIVENODES.length;i++) {
-                if(ORYX.ACTIVENODES[i] == child.resourceId) {
-                    child.setProperty("oryx-bordercolor", "#8A2BE2");
-                    child.setProperty("oryx-bgcolor", "#8A2BE2");
-                    child.refresh();
+                if(child instanceof ORYX.Core.Node || child instanceof ORYX.Core.Edge) {
+                    if(ORYX.ACTIVENODES[i] == child.resourceId) {
+                        child.setProperty("oryx-bordercolor", "#8A2BE2");
+                        child.setProperty("oryx-bgcolor", "#8A2BE2");
+                    }
                 }
             }
         }
+        if(ORYX.COMPLETEDNODES) {
+            for(var i=0;i<ORYX.COMPLETEDNODES.length;i++) {
+                if(child instanceof ORYX.Core.Node || child instanceof ORYX.Core.Edge) {
+                    if(ORYX.COMPLETEDNODES[i] == child.resourceId) {
+                        child.setProperty("oryx-bordercolor", "#e7d4f9");
+                        child.setProperty("oryx-bgcolor", "#e7d4f9");
+                    }
+                }
+            }
+        }
+
+        if(child instanceof ORYX.Core.Node || child instanceof ORYX.Core.Edge) {
+            if(ORYX.READONLY == true) {
+                child.setSelectable(false);
+                child.setMovable(false);
+                child.setProperty("oryx-isselectable", "false");
+            }
+            child.refresh();
+        }
+
         if(child && child.getChildren().size() > 0) {
             for (var i = 0; i < child.getChildren().size(); i++) {
                 this.applyHighlightingToChild(child.getChildren()[i]);

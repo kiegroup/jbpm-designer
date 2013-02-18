@@ -305,8 +305,15 @@ public class EditorHandler extends HttpServlet {
         String uuid = request.getParameter("uuid");
         String editorID = request.getParameter("editorid");
         String encodedActiveNodes = request.getParameter("activenodes");
+
+
         byte[] activeNodesByteArray = Base64.decodeBase64(encodedActiveNodes);
         String activeNodes = new String(activeNodesByteArray, "UTF-8");
+        String encodedCompletedNodes = request.getParameter("completednodes");
+
+
+        byte[] completedNodesByteArray = Base64.decodeBase64(encodedCompletedNodes);
+        String completedNodes = new String(completedNodesByteArray, "UTF-8");
         String readOnly = request.getParameter("readonly");
 
         if(profileName == null || profileName.length() < 1) {
@@ -427,6 +434,9 @@ public class EditorHandler extends HttpServlet {
                 replacementMade = true;
             } else if ("activenodes".equals(elt)) {
                 resultHtml.append(activeNodes);
+                replacementMade = true;
+            } else if ("completednodes".equals(elt)) {
+                resultHtml.append(completedNodes);
                 replacementMade = true;
             } else if ("readonly".equals(elt)) {
                 resultHtml.append(readOnly);

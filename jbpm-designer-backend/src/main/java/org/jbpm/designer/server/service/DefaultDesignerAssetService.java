@@ -53,9 +53,17 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
     public String loadEditorBody( final Path path, final String editorID, String hostInfo, PlaceRequest place) {
         List<String> activeNodesList = new ArrayList<String>();
         String activeNodesParam = place.getParameter("activeNodes", null);
+
         String readOnly = place.getParameter("readOnly", "false");
         if(activeNodesParam != null) {
             activeNodesList = Arrays.asList(activeNodesParam.split(","));
+        }
+
+        List<String> completedNodesList = new ArrayList<String>();
+        String completedNodesParam = place.getParameter("completedNodes", null);
+
+        if(completedNodesParam != null) {
+            completedNodesList = Arrays.asList(completedNodesParam.split(","));
         }
 
         JSONArray activeNodesArray = new JSONArray(activeNodesList);
@@ -66,7 +74,16 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
             encodedActiveNodesParam = "";
         }
 
-        String editorURL = hostInfo + "/editor/?uuid=" + path.toURI() + "&profile=jbpm&pp=&editorid=" + editorID + "&readonly=" + readOnly + "&activenodes=" + encodedActiveNodesParam;
+        JSONArray completedNodesArray = new JSONArray(completedNodesList);
+        String encodedCompletedNodesParam;
+        try {
+            encodedCompletedNodesParam = Base64.encodeBase64URLSafeString(completedNodesArray.toString().getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            encodedCompletedNodesParam = "";
+        }
+
+        String editorURL = hostInfo + "/editor/?uuid=" + path.toURI() + "&profile=jbpm&pp=&editorid=" + editorID + "&readonly=" + readOnly +
+                "&activenodes=" + encodedActiveNodesParam + "&completednodes=" + encodedCompletedNodesParam;
         return getEditorResponse(editorURL);
     }
 
