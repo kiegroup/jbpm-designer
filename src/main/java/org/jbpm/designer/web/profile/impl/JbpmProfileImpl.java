@@ -21,7 +21,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.codehaus.jackson.JsonParseException;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.emf.common.util.URI;
-import org.jasypt.util.password.BasicPasswordEncryptor;
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.jasypt.util.text.BasicTextEncryptor;
 import org.jboss.drools.DroolsPackage;
 import org.slf4j.Logger;
@@ -52,7 +52,7 @@ import org.jbpm.designer.web.profile.IDiagramProfile;
 public class JbpmProfileImpl implements IDiagramProfile {
     
     private static Logger _logger = LoggerFactory.getLogger(JbpmProfileImpl.class);
-    private static final String designerName = "jbpmdesigner";
+    private static final String guvnorName = "droolsGuvnor";
     
     private Map<String, IDiagramPlugin> _plugins = new LinkedHashMap<String, IDiagramPlugin>();
 
@@ -220,9 +220,10 @@ public class JbpmProfileImpl implements IDiagramProfile {
     }
 
     public String getPwd() {
-        BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
-        textEncryptor.setPassword(designerName);
-        return textEncryptor.decrypt(_pwd);
+        StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
+        encryptor.setPassword(guvnorName);
+        encryptor.setAlgorithm("PBEWithMD5AndTripleDES");
+        return encryptor.decrypt(_pwd);
     }
 
     public String getLocalHistoryEnabled() {

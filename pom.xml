@@ -520,12 +520,12 @@
         <version>1.0.0-SNAPSHOT</version>
       </dependency>
 
-        <dependency>
-            <groupId>org.jasypt</groupId>
-            <artifactId>jasypt</artifactId>
-            <version>${jasypt.version}</version>
-            <scope>compile</scope>
-        </dependency>
+      <!-- jasypt -->
+      <dependency>
+        <groupId>org.jasypt</groupId>
+        <artifactId>jasypt</artifactId>
+        <version>${jasypt.version}</version>
+      </dependency>
       
       <!-- test -->
       <dependency>
