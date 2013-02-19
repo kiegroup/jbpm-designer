@@ -29,7 +29,6 @@
         <module>jbpm-designer-client</module>
         <module>jbpm-designer-api</module>
         <module>jbpm-designer-standalone</module>
-        <module>jbpm-designer-distribution-wars</module>
     </modules>
 
 
@@ -843,6 +842,20 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>fullProfile</id>
+            <activation>
+                <property>
+                    <name>full</name>
+                </property>
+            </activation>
+            <modules>
+                <module>jbpm-designer-distribution-wars</module>
+            </modules>
+        </profile>
+    </profiles>
 
     <repositories>
         <repository>
