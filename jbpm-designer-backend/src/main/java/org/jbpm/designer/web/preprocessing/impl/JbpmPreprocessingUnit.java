@@ -115,7 +115,8 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             // figure out which package our uuid belongs in and get back the list of configs
             Collection<Asset> workitemConfigInfo = findWorkitemInfoForUUID(asset.getAssetLocation(), repository);
             // also get all from globals package
-            Collection<Asset> globalWorkitemConfigInfo = findWorkitemInfoForUUID("/global", repository);
+            Collection<Asset> globalWorkitemConfigInfo = findWorkitemInfoForUUID(profile.getRepositoryGlobalDir(), repository);
+
             if(workitemConfigInfo != null) {
                 if(globalWorkitemConfigInfo != null) {
                     workitemConfigInfo.addAll(globalWorkitemConfigInfo);
@@ -123,6 +124,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             } else {
                 workitemConfigInfo = globalWorkitemConfigInfo;
             }
+
             if(workitemConfigInfo != null) {
                 setupDefaultWorkitemConfigs(asset.getAssetLocation(), repository);
 
@@ -240,9 +242,23 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
                 String icon = (String) workDefinitionMap.get("icon");
 
+
                 Asset<byte[]> iconAsset = null;
 
-                if (!repository.assetExists(icon)) {
+                if(!icon.startsWith(profile.getRepositoryGlobalDir())) {
+                    if(icon.startsWith("/")) {
+                        icon = profile.getRepositoryGlobalDir() + icon;
+                    } else {
+                        icon = profile.getRepositoryGlobalDir() + "/" + icon;
+                    }
+                }
+
+                try {
+                    if (!repository.assetExists(icon)) {
+                        icon = profile.getRepositoryGlobalDir() + "/defaultservicenodeicon.png";
+                    }
+                } catch (Exception e) {
+                    _logger.error(e.getMessage());
                     icon = profile.getRepositoryGlobalDir() + "/defaultservicenodeicon.png";
                 }
 

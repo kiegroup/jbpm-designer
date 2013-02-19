@@ -9,7 +9,7 @@ import org.drools.process.core.datatype.impl.type.StringDataType;
       "Body" : new StringDataType()
     ],
     "displayName" : "Email",
-    "icon" : "/global/defaultemailicon.gif"
+    "icon" : "defaultemailicon.gif"
   ],
   
   [
@@ -18,6 +18,6 @@ import org.drools.process.core.datatype.impl.type.StringDataType;
       "Message" : new StringDataType()
     ],
     "displayName" : "Log",
-    "icon" : "/global/defaultlogicon.gif"
+    "icon" : "defaultlogicon.gif"
   ]
 ]
