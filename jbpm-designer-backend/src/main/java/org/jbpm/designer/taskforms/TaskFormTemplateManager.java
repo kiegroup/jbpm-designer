@@ -26,7 +26,6 @@ import org.eclipse.bpmn2.Property;
 import org.eclipse.bpmn2.ResourceRole;
 import org.eclipse.bpmn2.RootElement;
 import org.eclipse.bpmn2.UserTask;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.impl.EStructuralFeatureImpl;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.jbpm.designer.web.profile.IDiagramProfile;
@@ -41,7 +40,7 @@ public class TaskFormTemplateManager {
     private static final Logger _logger = Logger.getLogger(TaskFormTemplateManager.class);
     private static final String[] validStructureRefs = new String[] {"Float", "Integer", "String", "Object", "Boolean", "Undefined"};
     public final static String TASKFORMS_PATH = "stencilsets";
-    
+
     private IDiagramProfile profile;
     private String packageName;
     private String assetName;

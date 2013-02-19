@@ -6,13 +6,10 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.antlr.stringtemplate.StringTemplate;
-import org.antlr.stringtemplate.StringTemplateGroup;
 import org.apache.log4j.Logger;
 import org.eclipse.bpmn2.Definitions;
 import org.jboss.drools.impl.DroolsFactoryImpl;
@@ -23,6 +20,7 @@ import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.taskforms.TaskFormInfo;
 import org.jbpm.designer.taskforms.TaskFormTemplateManager;
+import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 
@@ -38,6 +36,7 @@ public class TaskFormsServlet extends HttpServlet {
             .getLogger(TaskFormsServlet.class);
     private static final String TASKFORMS_PATH = "taskforms";
     private static final String FORMTEMPLATE_FILE_EXTENSION = "ftl";
+    public static final String designer_path = ConfigurationProvider.getInstance().getDesignerContext();
 
     private IDiagramProfile profile;
     // this is here just for unit testing purpose
@@ -74,7 +73,7 @@ public class TaskFormsServlet extends HttpServlet {
             Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
             Definitions def = ((Definitions) unmarshaller.unmarshall(json, preprocessingData).getContents().get(0));
 
-            TaskFormTemplateManager templateManager = new TaskFormTemplateManager( profile, processAsset.getAssetLocation(), processAsset.getName(), getServletContext().getRealPath("/" + TASKFORMS_PATH), def );
+            TaskFormTemplateManager templateManager = new TaskFormTemplateManager( profile, processAsset.getAssetLocation(), processAsset.getName(), getServletContext().getRealPath(designer_path + TASKFORMS_PATH), def );
             templateManager.processTemplates();
         
 
@@ -131,7 +130,7 @@ public class TaskFormsServlet extends HttpServlet {
     public void storeTaskForm(TaskFormInfo taskForm, String location, Repository repository) throws Exception {
         try {
 
-            repository.deleteAssetFromPath(taskForm.getPkgName()+taskForm.getId()+"."+FORMTEMPLATE_FILE_EXTENSION);
+            repository.deleteAssetFromPath("/" + taskForm.getPkgName() + "/" + taskForm.getId()+"."+FORMTEMPLATE_FILE_EXTENSION);
 
             AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
 

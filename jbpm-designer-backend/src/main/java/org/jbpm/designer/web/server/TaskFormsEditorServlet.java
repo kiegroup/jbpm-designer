@@ -26,7 +26,7 @@ import java.io.PrintWriter;
 public class TaskFormsEditorServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger _logger = Logger.getLogger(TaskFormsEditorServlet.class);
-	private static final String TASKFORM_FILE_EXTENSION = "flt";
+	private static final String TASKFORM_FILE_EXTENSION = "ftl";
 	private static final String TASKFORM_NAME_EXTENSION = "-taskform";
 	private static final String ACTION_LOAD = "load";
 	private static final String ACTION_SAVE = "save";
