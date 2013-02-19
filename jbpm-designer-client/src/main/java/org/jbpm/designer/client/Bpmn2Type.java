@@ -1,4 +1,4 @@
-package org.jbpm.designer.client.markdown.viewer;
+package org.jbpm.designer.client;
 
 import javax.enterprise.context.ApplicationScoped;
 
@@ -10,8 +10,13 @@ import org.uberfire.client.workbench.file.ResourceType;
 public class Bpmn2Type implements ResourceType {
 
     @Override
+    public String getShortName() {
+        return "bpmn2";
+    }
+
+    @Override
     public String getDescription() {
-        return "Markdown file";
+        return "BPMN2 file";
     }
 
     @Override
@@ -30,7 +35,12 @@ public class Bpmn2Type implements ResourceType {
     }
 
     @Override
+    public int getPriority() {
+        return 0;
+    }
+
+    @Override
     public boolean accept( final Path path ) {
-        return ( path.getFileName().endsWith( "." + getSuffix() )  || path.getFileName().endsWith( ".bpmn" ) );
+        return ( path.getFileName().endsWith( "." + getSuffix() ) || path.getFileName().endsWith( ".bpmn" ) );
     }
 }

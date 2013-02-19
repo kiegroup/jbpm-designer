@@ -606,7 +606,13 @@
                 <version>${uberfire.version}</version>
             </dependency>
 
-            <!-- UF components -->
+          <dependency>
+            <groupId>org.uberfire</groupId>
+            <artifactId>uberfire-backend-server</artifactId>
+            <version>${uberfire.version}</version>
+          </dependency>
+
+          <!-- UF components -->
             <dependency>
                 <groupId>org.uberfire</groupId>
                 <artifactId>uberfire-server</artifactId>
