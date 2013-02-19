@@ -21,12 +21,15 @@ import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.service.DesignerAssetService;
 import org.json.JSONArray;
+import org.uberfire.backend.server.util.Paths;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.shared.mvp.PlaceRequest;
 
 @Service
 @ApplicationScoped
 public class DefaultDesignerAssetService implements DesignerAssetService {
+    @Inject
+    private Paths paths;
     @Inject
     private Repository repository;
     private static final Object PROCESS_STUB = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \n" +
@@ -50,31 +53,34 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
             "</definitions>";
 
     @Override
-    public String loadEditorBody( final Path path, final String editorID, String hostInfo, PlaceRequest place) {
+    public String loadEditorBody( final Path path,
+                                  final String editorID,
+                                  String hostInfo,
+                                  PlaceRequest place ) {
         List<String> activeNodesList = new ArrayList<String>();
-        String activeNodesParam = place.getParameter("activeNodes", null);
+        String activeNodesParam = place.getParameter( "activeNodes", null );
 
-        String readOnly = place.getParameter("readOnly", "false");
-        if(activeNodesParam != null) {
-            activeNodesList = Arrays.asList(activeNodesParam.split(","));
+        String readOnly = place.getParameter( "readOnly", "false" );
+        if ( activeNodesParam != null ) {
+            activeNodesList = Arrays.asList( activeNodesParam.split( "," ) );
         }
 
         List<String> completedNodesList = new ArrayList<String>();
-        String completedNodesParam = place.getParameter("completedNodes", null);
+        String completedNodesParam = place.getParameter( "completedNodes", null );
 
-        if(completedNodesParam != null) {
-            completedNodesList = Arrays.asList(completedNodesParam.split(","));
+        if ( completedNodesParam != null ) {
+            completedNodesList = Arrays.asList( completedNodesParam.split( "," ) );
         }
 
-        JSONArray activeNodesArray = new JSONArray(activeNodesList);
+        JSONArray activeNodesArray = new JSONArray( activeNodesList );
         String encodedActiveNodesParam;
         try {
-            encodedActiveNodesParam = Base64.encodeBase64URLSafeString(activeNodesArray.toString().getBytes("UTF-8"));
-        } catch (UnsupportedEncodingException e) {
+            encodedActiveNodesParam = Base64.encodeBase64URLSafeString( activeNodesArray.toString().getBytes( "UTF-8" ) );
+        } catch ( UnsupportedEncodingException e ) {
             encodedActiveNodesParam = "";
         }
 
-        JSONArray completedNodesArray = new JSONArray(completedNodesList);
+        JSONArray completedNodesArray = new JSONArray( completedNodesList);
         String encodedCompletedNodesParam;
         try {
             encodedCompletedNodesParam = Base64.encodeBase64URLSafeString(completedNodesArray.toString().getBytes("UTF-8"));
@@ -95,9 +101,10 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
     }
 
     @Override
-    public void createProcess(Path path) {
+    public void createProcess( final Path context, final String fileName ) {
+        final Path path = paths.convert( paths.convert( context ).resolve( fileName ),false);
 
-        String fileName = path.getFileName();
+        //TODO {porcelli} this is a fragile operation - should use nio api to improve it!
         String location = path.toURI().replaceFirst("/" + fileName, "");
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(path.getFileName());
         builder.location(location).content(PROCESS_STUB);
