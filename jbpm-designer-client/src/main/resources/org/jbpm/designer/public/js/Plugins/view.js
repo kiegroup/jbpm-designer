@@ -530,9 +530,15 @@ ORYX.Plugins.View = {
 				{
 					text:ORYX.I18N.FromBPMN2Support.impBtn,
 					handler:function(){
-						
-						var loadMask = new Ext.LoadMask(Ext.getBody(), {msg:ORYX.I18N.FromBPMN2Support.impProgress});
-						loadMask.show();
+
+                        this.facade.raiseEvent({
+                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                            ntype		: 'info',
+                            msg         : ORYX.I18N.FromBPMN2Support.impProgress,
+                            title       : ''
+
+                        });
+
 						var bpmn2string =  form.items.items[2].getValue();
 						   Ext.Ajax.request({
                                     url: ORYX.PATH + "transformer",
@@ -545,7 +551,6 @@ ORYX.Plugins.View = {
                                                 msg         : '<p>Failed to import BPMN2.</p><p>Check server logs for more details.</p>',
                                                 title       : ''
                                             });
-                                            loadMask.hide();
                                             dialog.hide();
                                         } else {
                                             try {
@@ -565,7 +570,6 @@ ORYX.Plugins.View = {
                                                     title       : ''
                                                 });
                                             }
-                                            loadMask.hide();
                                             dialog.hide();
                                         }
                                     }.createDelegate(this),
@@ -576,7 +580,6 @@ ORYX.Plugins.View = {
                                             msg         : '<p>Failed to import BPMN2.</p><p>Check server logs for more details.</p>',
                                             title       : ''
                                         });
-                                        loadMask.hide();
                                         dialog.hide();
                                     }.createDelegate(this),
                                     params: {
@@ -661,8 +664,15 @@ ORYX.Plugins.View = {
 				{
 					text:ORYX.I18N.FromJSONSupport.impBtn,
 					handler:function(){
-						var loadMask = new Ext.LoadMask(Ext.getBody(), {msg:ORYX.I18N.FromJSONSupport.impProgress});
-						loadMask.show();
+
+                        this.facade.raiseEvent({
+                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                            ntype		: 'info',
+                            msg         : ORYX.I18N.FromJSONSupport.impProgress,
+                            title       : ''
+
+                        });
+
 						var jsonString =  form.items.items[2].getValue();
 						try {
 		    	   			this._loadJSON( jsonString );
@@ -675,7 +685,6 @@ ORYX.Plugins.View = {
 
                             });
 		    	   		}
-		    	   		loadMask.hide();
 		    	   		dialog.hide();
 					}.bind(this)
 				},{
@@ -907,17 +916,22 @@ ORYX.Plugins.View = {
 	 * Displays a diff (visual and text based) between two versions of the process.
 	 */
 	diffprocess : function() {
-		var diffLoadMask = new Ext.LoadMask(Ext.getBody(), {msg:ORYX.I18N.View.viewDiffLoadingVersions});
-		diffLoadMask.show();
+
+        this.facade.raiseEvent({
+            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+            ntype		: 'info',
+            msg         : ORYX.I18N.View.viewDiffLoadingVersions,
+            title       : ''
+
+        });
+
 		Ext.Ajax.request({
             url: ORYX.PATH + "processdiff",
             method: 'POST',
             success: function(request){
     	   		try {
-    	   			diffLoadMask.hide();
     	   			this._showProcessDiffDialog(request.responseText);
     	   		} catch(e) {
-    	   			diffLoadMask.hide();
                        this.facade.raiseEvent({
                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                            ntype		: 'error',
@@ -928,7 +942,6 @@ ORYX.Plugins.View = {
     	   		}
             }.createDelegate(this),
             failure: function(){
-            	diffLoadMask.hide();
                 this.facade.raiseEvent({
                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                     ntype		: 'error',
@@ -1003,15 +1016,21 @@ ORYX.Plugins.View = {
 	                  	              method: 'POST',
 	                  	              success: function(request){
 	                  	      	   		try {
-	                  	      	   			var diffCreateMask = new Ext.LoadMask(Ext.getBody(), {msg:'Creating diff...'});
-	                  	      	   			diffCreateMask.show();
+
+                                                   this.facade.raiseEvent({
+                                                       type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                                       ntype		: 'info',
+                                                       msg         : 'Creating diff...',
+                                                       title       : ''
+
+                                                   });
+
 	                  	      	   			var versionBPMN2 = request.responseText;
 	                  	      	   			var dmp = new diff_match_patch();
 	                  	      	   			dmp.Diff_Timeout = 0;
 	                  	      	   			var d = dmp.diff_main(versionBPMN2, canvasBPMN2);
 	                  	      	   			dmp.diff_cleanupSemantic(d);
 	                  	      	   			var ds = dmp.diff_prettyHtml(d);
-	                  	      	   			diffCreateMask.hide();
 	                  	      	   			this.diffDialog.remove(this.diffEditor, true);
 	                  	      	   			this.diffEditor = new Ext.form.HtmlEditor({
 	                  	      	   				id: 'diffeditor',
@@ -1426,7 +1445,6 @@ ORYX.Plugins.View = {
 
                        });
     	   		}
-                Ext.Msg.hide();
             }.createDelegate(this),
             failure: function(){
                 this.facade.raiseEvent({

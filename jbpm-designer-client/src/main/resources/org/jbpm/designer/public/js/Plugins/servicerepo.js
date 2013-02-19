@@ -97,14 +97,18 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
 		this.repoDialog.show();
 	},
 	_updateRepoDialog : function(serviceRepoURL) {
-		var repoLoadMask = new Ext.LoadMask(Ext.getBody(), {msg:ORYX.I18N.View.connectServiceRepoConnecting});
-		repoLoadMask.show();
+        this.facade.raiseEvent({
+            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+            ntype		: 'info',
+            msg         : ORYX.I18N.View.connectServiceRepoConnecting,
+            title       : ''
+
+        });
 		Ext.Ajax.request({
 	      url: ORYX.PATH + "jbpmservicerepo",
 	      method: 'POST',
 	      success: function(request){
 		   		try {
-		   			repoLoadMask.hide();
 		   			if(request.responseText == "false") {
 		   				this.repoDialog.remove(this.repoContent, true);
 		   				this.repoContent = new Ext.Panel({
@@ -123,7 +127,6 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
 		   				this._showJbpmServiceInfo(request.responseText, serviceRepoURL);
 		   			}
 		   		} catch(e) {
-		   			repoLoadMask.hide();
 		   			this.repoDialog.remove(this.repoContent, true);
 		   			this.repoContent = new Ext.Panel({
 		   				layout:'table',
@@ -140,7 +143,6 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
 		   		}
 	      }.createDelegate(this),
 	      failure: function(){
-	      	repoLoadMask.hide();
 	      	this.repoDialog.remove(this.repoContent, true);
 	      	this.repoContent = new Ext.Panel({
 				layout:'table',
@@ -206,8 +208,15 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
 			// g is the grid
 			// i is the index
 			// e is the event
-			var installLoadMask = new Ext.LoadMask(Ext.getBody(), {msg:ORYX.I18N.View.installingRepoItem});
-			installLoadMask.show();
+
+            ORYX.EDITOR._pluginFacade.raiseEvent({
+                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                ntype		: 'info',
+                msg         : ORYX.I18N.View.installingRepoItem,
+                title       : ''
+
+            });
+
 			var aname = g.getStore().getAt(i).get('name');
 			var acategory = g.getStore().getAt(i).get('category');
 			// send request to server to install the selected service node
@@ -216,7 +225,6 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
 	            method: 'POST',
 	            success: function(request) {
 	    	   		try {
-	    	   			installLoadMask.hide();
 	    	   			if(request.responseText == "false") {
                                ORYX.EDITOR._pluginFacade.raiseEvent({
                                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
@@ -233,7 +241,6 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
                                });
 			   			}
 	    	   		} catch(e) {
-                        installLoadMask.hide();
                            ORYX.EDITOR._pluginFacade.raiseEvent({
                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                ntype		: 'error',
@@ -243,7 +250,6 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
 	    	   		}
 	            }.createDelegate(this),
 	            failure: function(){
-                    installLoadMask.hide();
                     ORYX.EDITOR._pluginFacade.raiseEvent({
                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                         ntype		: 'error',

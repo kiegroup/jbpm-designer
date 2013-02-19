@@ -3374,14 +3374,19 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField,  {
         var processJSON = ORYX.EDITOR.getSerializedJSON();
         var processPackage = jsonPath(processJSON.evalJSON(), "$.properties.package");
         var processId = jsonPath(processJSON.evalJSON(), "$.properties.id");
-        var loadProcessesMask = new Ext.LoadMask(Ext.getBody(), {msg:'Loading Process Information'});
-        loadProcessesMask.show();
+
+        this.facade.raiseEvent({
+            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+            ntype		: 'info',
+            msg         : 'Loading Process Information.',
+            title       : ''
+
+        });
         Ext.Ajax.request({
             url: ORYX.PATH + 'calledelement',
             method: 'POST',
             success: function(response) {
     	   		try {
-    	   			loadProcessesMask.hide();
     	   			if(response.responseText.length > 0 && response.responseText != "false") {
     	   				var responseJson = Ext.decode(response.responseText);
     		            for(var key in responseJson){
@@ -3540,7 +3545,6 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField,  {
     	   		}
             }.bind(this),
             failure: function(){
-            	loadProcessesMask.hide();
                 this.facade.raiseEvent({
                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                     ntype		: 'error',

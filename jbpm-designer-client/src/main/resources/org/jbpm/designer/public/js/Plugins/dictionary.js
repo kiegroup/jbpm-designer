@@ -385,14 +385,19 @@ ORYX.Plugins.Dictionary = Clazz.extend({
                         datar.push(records[i].data);
                     }
                     jsonDataEncode = Ext.util.JSON.encode(datar);
-                    var saveLoadMask = new Ext.LoadMask(Ext.getBody(), {msg:'Storing Process Dictionary'});
-                    saveLoadMask.show();
+
+                    this.facade.raiseEvent({
+                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                        ntype		: 'info',
+                        msg         : 'Storing Process Dictionary.',
+                        title       : ''
+
+                    });
                     Ext.Ajax.request({
         	            url: ORYX.PATH + 'dictionary',
         	            method: 'POST',
         	            success: function(request) {
         	    	   		try {
-        	    	   			saveLoadMask.hide();
         	    	   			dialog.hide();
         	    	   		} catch(e) {
                                    this.facade.raiseEvent({

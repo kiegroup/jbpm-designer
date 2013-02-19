@@ -111,10 +111,15 @@ ORYX.Plugins.JPDLMigration = Clazz.extend({
 				{
 					text:ORYX.I18N.jPDLSupport.impBtn,
 					handler:function(){
-						
-						var loadMask = new Ext.LoadMask(Ext.getBody(), {msg:ORYX.I18N.jPDLSupport.impProgress});
-						loadMask.show();
-						
+
+                        this.facade.raiseEvent({
+                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                            ntype		: 'info',
+                            msg         : ORYX.I18N.jPDLSupport.impProgress,
+                            title       : ''
+
+                        });
+
 						window.setTimeout(function(){
 					
 							var jpdlString =  form.items.items[2].getValue();
@@ -129,8 +134,8 @@ ORYX.Plugins.JPDLMigration = Clazz.extend({
 									  'profile' : ORYX.PROFILE,
 									  'uuid' : ORYX.UUID
 									},
-									function( arg ) { this._loadJSON( arg );  loadMask.hide();  dialog.hide(); }.bind(this),
-									function() { loadMask.hide();  dialog.hide(); }.bind(this)
+									function( arg ) { this._loadJSON( arg );  dialog.hide(); }.bind(this),
+									function() { dialog.hide(); }.bind(this)
 								);
 
 						}.bind(this), 100);

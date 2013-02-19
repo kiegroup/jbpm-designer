@@ -57,9 +57,15 @@ ORYX.Plugins.Simulation = Clazz.extend({
 	autoDisplayPath : function(options) {
 		if(options && options.pid) {
 			var pathid = options.pid;
-			var loadPathsMask = new Ext.LoadMask(Ext.getBody(), {msg:'Creating path image'});
-			loadPathsMask.show();
-			
+
+            this.facade.raiseEvent({
+                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                ntype		: 'info',
+                msg         : 'Creating path image.',
+                title       : ''
+
+            });
+
 			Ext.Ajax.request({
 	            url: ORYX.PATH + 'simulation',
 	            method: 'POST',
@@ -114,8 +120,6 @@ ORYX.Plugins.Simulation = Clazz.extend({
 	            	sel: ""
 	            }
 	        });
-			
-			loadPathsMask.hide();
 		} else {
             this.facade.raiseEvent({
                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
@@ -127,8 +131,14 @@ ORYX.Plugins.Simulation = Clazz.extend({
 		}
 	},
 	findPaths: function() {
-		var loadPathsMask = new Ext.LoadMask(Ext.getBody(), {msg:'Calculating process paths'});
-		loadPathsMask.show();
+        this.facade.raiseEvent({
+            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+            ntype		: 'info',
+            msg         : 'Calculating process paths.',
+            title       : ''
+
+        });
+
 		var selection = this.facade.getSelection();
 		var selectedId = "";
 		var wintitle = "Process Paths";
@@ -287,11 +297,9 @@ ORYX.Plugins.Simulation = Clazz.extend({
     		                    }.bind(this)
     		                }]
     		    		});	
-    	   				loadPathsMask.hide();
     		    		dialog.show();
     	   				
     	   			} else {
-    	   				loadPathsMask.hide();
                            this.facade.raiseEvent({
                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                ntype		: 'error',
@@ -301,8 +309,6 @@ ORYX.Plugins.Simulation = Clazz.extend({
                            });
     	   			}
     	   		} catch(e) {
-    	   			loadPathsMask.hide();
-
                        this.facade.raiseEvent({
                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                            ntype		: 'error',
@@ -314,7 +320,6 @@ ORYX.Plugins.Simulation = Clazz.extend({
     	   		}
             }.bind(this),
             failure: function(){
-                loadPathsMask.hide();
                 this.facade.raiseEvent({
                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                     ntype		: 'error',
@@ -442,8 +447,15 @@ ORYX.Plugins.Simulation = Clazz.extend({
 					text:"Run Simulation",
 					handler:function(){
 						dialog.hide();
-						var loadMask = new Ext.LoadMask(Ext.getBody(), {msg:"Running Process Simulation..."});
-						loadMask.show();
+
+                        this.facade.raiseEvent({
+                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                            ntype		: 'info',
+                            msg         : 'Running Process Simulation...',
+                            title       : ''
+
+                        });
+
 						var instancesInput = simform.items.items[0].getValue();
 						var intervalInput = simform.items.items[1].getValue();
 						var intervalUnit = simform.items.items[2].getValue();
@@ -453,13 +465,11 @@ ORYX.Plugins.Simulation = Clazz.extend({
 				            success: function(response) {
 				    	   		try {
 				    	   			if(response.responseText && response.responseText.length > 0 && response.responseText != "{}") {
-				    	   				loadMask.hide();
 				    	   				this.facade.raiseEvent({
 				    	   		            type: ORYX.CONFIG.EVENT_SIMULATION_SHOW_RESULTS,
 				    	   		            results: response.responseText
 				    	   		        });
 				    	   			} else {
-				    	   				loadMask.hide();
                                            this.facade.raiseEvent({
                                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                                ntype		: 'info',
@@ -469,7 +479,6 @@ ORYX.Plugins.Simulation = Clazz.extend({
                                            });
 				    	   			}
 				    	   		} catch(e) {
-				    	   			loadMask.hide();
                                        this.facade.raiseEvent({
                                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                            ntype		: 'error',
@@ -480,7 +489,6 @@ ORYX.Plugins.Simulation = Clazz.extend({
 				    	   		}
 				            }.bind(this),
 				            failure: function(){
-				            	loadMask.hide();
                                 this.facade.raiseEvent({
                                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                     ntype		: 'error',
