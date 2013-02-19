@@ -13,5 +13,5 @@ public interface DesignerAssetService {
 
     public String loadEditorBody(final Path path, final String editorID, String hostInfo, PlaceRequest place);
     public String getEditorID();
-    public void createProcess(final Path context, final String fileName);
+    public Path createProcess(final Path context, final String fileName);
 }

@@ -101,16 +101,17 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
     }
 
     @Override
-    public void createProcess( final Path context, final String fileName ) {
+    public Path createProcess( final Path context, final String fileName ) {
         final Path path = paths.convert( paths.convert( context ).resolve( fileName ),false);
 
-        //TODO {porcelli} this is a fragile operation - should use nio api to improve it!
-        String location = path.toURI().replaceFirst("/" + fileName, "");
+        String location = paths.convert( path ).getParent().toString();
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(path.getFileName());
         builder.location(location).content(PROCESS_STUB);
         Asset<String> processAsset = builder.getAsset();
 
         repository.createAsset(processAsset);
+
+        return path;
     }
 
 
