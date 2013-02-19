@@ -123,7 +123,9 @@ public class TransformerServlet extends HttpServlet {
                     t.transcode(input, output);
                     resp.setCharacterEncoding("UTF-8");
                     resp.setContentType("text/plain");
-                    resp.getWriter().write("<object data=\"data:application/pdf;base64," + Base64.encodeBase64(bout.toByteArray()) +  "\" type=\"application/pdf\"></object>");
+                    BASE64Encoder enc = new BASE64Encoder();
+
+                    resp.getWriter().write("<object data=\"data:application/pdf;base64," + enc.encode(bout.toByteArray()) +  "\" type=\"application/pdf\"></object>");
                 } else {
                     storeInRepository(uuid, rawSvg, transformto, processid, repository);
 

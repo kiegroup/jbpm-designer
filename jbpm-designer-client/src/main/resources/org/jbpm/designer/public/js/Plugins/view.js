@@ -212,7 +212,7 @@ ORYX.Plugins.View = {
 			'name': "Share Process PDF",
 			'functionality': this.shareProcessPdf.bind(this),
 			'group': ORYX.I18N.View.jbpmgroup,
-			//'icon': ORYX.BASE_FILE_PATH + "images/share.gif",
+			'icon': ORYX.BASE_FILE_PATH + "images/share.gif",
 			dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.gif",
 			'description': "Share Process PDF",
 			'index': 2,
@@ -277,27 +277,27 @@ ORYX.Plugins.View = {
 		});
 		
 		/* Register sharing to model 3*/
-		this.facade.offer({
-			'name': "Share Embeddable Process",
-			'functionality': this.shareEmbeddableProcess.bind(this),
-			'group': ORYX.I18N.View.jbpmgroup,
-			//'icon': ORYX.BASE_FILE_PATH + "images/share.gif",
-			dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.gif",
-			'description': "Share Embeddable Process",
-			'index': 3,
-			'minShape': 0,
-			'maxShape': 0,
-			'isEnabled': function(){
-                return true;
-//				profileParamName = "profile";
-//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//		        regexa = new RegExp( regexSa );
-//		        profileParams = regexa.exec( window.location.href );
-//		        profileParamValue = profileParams[1];
-//				return profileParamValue == "jbpm";
-			}.bind(this)
-		});
+//		this.facade.offer({
+//			'name': "Share Embeddable Process",
+//			'functionality': this.shareEmbeddableProcess.bind(this),
+//			'group': ORYX.I18N.View.jbpmgroup,
+//			'icon': ORYX.BASE_FILE_PATH + "images/share.gif",
+//			dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.gif",
+//			'description': "Share Embeddable Process",
+//			'index': 3,
+//			'minShape': 0,
+//			'maxShape': 0,
+//			'isEnabled': function(){
+//                return true;
+////				profileParamName = "profile";
+////				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+////				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+////		        regexa = new RegExp( regexSa );
+////		        profileParams = regexa.exec( window.location.href );
+////		        profileParamValue = profileParams[1];
+////				return profileParamValue == "jbpm";
+//			}.bind(this)
+//		});
 		
 		/* Register diff to model */
 //		this.facade.offer({
@@ -702,6 +702,13 @@ ORYX.Plugins.View = {
 	 * Share the embeddable process
 	 */
 	shareEmbeddableProcess : function() {
+        this.facade.raiseEvent({
+            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+            ntype		: 'info',
+            msg         : 'Creating Embeddable Process...',
+            title       : ''
+
+        });
 		Ext.Ajax.request({
             url: ORYX.PATH + "transformer",
             method: 'POST',
@@ -725,12 +732,23 @@ ORYX.Plugins.View = {
     	   				});
     	   			win.show();
     	   		} catch(e) {
-    	   			Ext.Msg.alert("Failed to create embeddable process code :\n" + e);
+                       this.facade.raiseEvent({
+                           type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                           ntype		: 'error',
+                           msg         : 'Failed to create embeddable process code: ' + e,
+                           title       : ''
+
+                       });
     	   		}
-                Ext.Msg.hide();
             }.createDelegate(this),
             failure: function(){
-            	Ext.Msg.alert("Failed to create embeddable process code.");
+                this.facade.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'error',
+                    msg         : 'Failed to create embeddable process code.',
+                    title       : ''
+
+                });
             },
             params: {
             	profile: ORYX.PROFILE,
@@ -744,8 +762,13 @@ ORYX.Plugins.View = {
 	 * Share the process PDF URL.
 	 */
 	shareProcessPdf : function() {
-		var createStorePDFMask = new Ext.LoadMask(Ext.getBody(), {msg:"Creating the process PDF..."});
-		createStorePDFMask.show();
+        this.facade.raiseEvent({
+            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+            ntype		: 'info',
+            msg         : 'Creating the process PDF...',
+            title       : ''
+
+        });
 		var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false));
 		var rawSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getRootNode().cloneNode(true));
 		
@@ -754,7 +777,6 @@ ORYX.Plugins.View = {
             method: 'POST',
             success: function(request){
     	   		try {
-    	   			createStorePDFMask.hide();
     	   			var cf = new Ext.form.TextArea({
     	   	            id:"sharedPDFArea",
     	   	            fieldLabel:"Process Image PDF",
@@ -773,14 +795,23 @@ ORYX.Plugins.View = {
     	   				});
     	   			win.show();
     	   		} catch(e) {
-    	   			createStorePDFMask.hide();
-    	   			Ext.Msg.alert("Failed to create the process PDF :\n" + e);
+                       this.facade.raiseEvent({
+                           type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                           ntype		: 'error',
+                           msg          : 'Failed to create the process PDF: ' + e,
+                           title        : ''
+
+                       });
     	   		}
-                Ext.Msg.hide();
             }.createDelegate(this),
             failure: function(){
-            	createStorePDFMask.hide();
-            	Ext.Msg.alert("Failed to create the process PDF.");
+                this.facade.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'error',
+                    msg         : 'Failed to create the process PDF.',
+                    title       : ''
+
+                });
             },
             params: {
             	profile: ORYX.PROFILE,
@@ -797,8 +828,13 @@ ORYX.Plugins.View = {
 	 * Share the process image URL.
 	 */
 	shareProcessImage : function() {
-		var createStoreImageMask = new Ext.LoadMask(Ext.getBody(), {msg:"Creating the process image..."});
-		createStoreImageMask.show();
+        this.facade.raiseEvent({
+            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+            ntype		: 'info',
+            msg         : 'Creating the process image...',
+            title       : ''
+
+        });
 		var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false));
 		var rawSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getRootNode().cloneNode(true));
 		
@@ -807,7 +843,6 @@ ORYX.Plugins.View = {
             method: 'POST',
             success: function(request){
     	   		try {
-    	   			createStoreImageMask.hide();
     	   			var cf = new Ext.form.TextArea({
     	   	            id:"sharedImageArea",
     	   	            fieldLabel:"Process Image URL",
@@ -826,14 +861,23 @@ ORYX.Plugins.View = {
     	   				});
     	   			win.show();
     	   		} catch(e) {
-    	   			createStoreImageMask.hide();
-    	   			Ext.Msg.alert("Failed to create the process image :\n" + e);
+                       this.facade.raiseEvent({
+                           type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                           ntype		: 'error',
+                           msg         : 'Failed to create the process image: ' + e,
+                           title       : ''
+
+                       });
     	   		}
-                Ext.Msg.hide();
             }.createDelegate(this),
             failure: function(){
-            	createStoreImageMask.hide();
-            	Ext.Msg.alert("Failed to create the process image.");
+                this.facade.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'error',
+                    msg         : 'Failed to create the process image.',
+                    title       : ''
+
+                });
             },
             params: {
             	profile: ORYX.PROFILE,
