@@ -958,7 +958,13 @@ ORYX.Editor = {
                     },
                     failure: function(){
                         Ext.Msg.minWidth = 400;
-                        Ext.Msg.alert("Failed to save process SVG.");
+                        this.facade.raiseEvent({
+                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                            ntype		: 'error',
+                            msg         : 'Failed to save process SVG.',
+                            title       : ''
+
+                        });
                     },
                     params: {
                         fsvg: formattedSvgDOM,
@@ -1028,11 +1034,23 @@ ORYX.Editor = {
 		//check, if the imported json model can be loaded in this editor
 		// (stencil set has to fit)
 		if (!jsonObject.stencilset) {
-			Ext.Msg.alert(ORYX.I18N.JSONImport.title, ORYX.I18N.JSONImport.invalidJSON);
+            this.facade.raiseEvent({
+                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                ntype		: 'error',
+                msg         : ORYX.I18N.JSONImport.invalidJSON,
+                title       : ORYX.I18N.JSONImport.title
+
+            });
 			return null;
 		}
 		if(jsonObject.stencilset.namespace && jsonObject.stencilset.namespace !== this.getCanvas().getStencil().stencilSet().namespace()) {
-			Ext.Msg.alert(ORYX.I18N.JSONImport.title, String.format(ORYX.I18N.JSONImport.wrongSS, jsonObject.stencilset.namespace, this.getCanvas().getStencil().stencilSet().namespace()));
+            this.facade.raiseEvent({
+                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                ntype		: 'error',
+                msg         : String.format(ORYX.I18N.JSONImport.wrongSS, jsonObject.stencilset.namespace, this.getCanvas().getStencil().stencilSet().namespace()),
+                title       : ORYX.I18N.JSONImport.title
+
+            });
 			return null;
 		} else {
 			var commandClass = ORYX.Core.Command.extend({
@@ -1206,10 +1224,16 @@ ORYX.Editor = {
         
             var new_rdf = xsltProcessor.transformToFragment(xmlObject, document);
             var serialized_rdf = (new XMLSerializer()).serializeToString(new_rdf);
-			}catch(e){
-			Ext.Msg.alert("Oryx", error);
-			var serialized_rdf = "";
-		}
+			} catch(e){
+                this.facade.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'error',
+                    msg         : 'Error: ' + e,
+                    title       : ''
+
+                });
+			    var serialized_rdf = "";
+		    }
             
             // Firefox 2 to 3 problem?!
             serialized_rdf = !serialized_rdf.startsWith("<?xml") ? "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + serialized_rdf : serialized_rdf;

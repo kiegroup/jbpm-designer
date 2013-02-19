@@ -182,7 +182,13 @@ ORYX.Plugins.CanvasTitle.editProcessForm = function() {
             tn: processId 
         });
 	} else {
-		Ext.Msg.alert('Process Id not specified.');
+        this.facade.raiseEvent({
+            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+            ntype		: 'error',
+            msg         : 'Process Id not specified.',
+            title       : ''
+
+        });
 	}
 };
 ORYX.Plugins.CanvasTitle.addToolTip = function(objectid) {

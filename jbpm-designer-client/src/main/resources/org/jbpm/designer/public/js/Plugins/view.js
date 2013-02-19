@@ -667,7 +667,13 @@ ORYX.Plugins.View = {
 						try {
 		    	   			this._loadJSON( jsonString );
 		    	   		} catch(e) {
-		    	   			Ext.Msg.alert("Failed to import JSON :\n" + e);
+                            this.facade.raiseEvent({
+                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                ntype		: 'error',
+                                msg         : 'Failed to import JSON :\n' + e,
+                                title       : ''
+
+                            });
 		    	   		}
 		    	   		loadMask.hide();
 		    	   		dialog.hide();
@@ -912,12 +918,24 @@ ORYX.Plugins.View = {
     	   			this._showProcessDiffDialog(request.responseText);
     	   		} catch(e) {
     	   			diffLoadMask.hide();
-    	   			Ext.Msg.alert("Failed to retrieve process version information:\n" + e);
+                       this.facade.raiseEvent({
+                           type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                           ntype		: 'error',
+                           msg         : 'Failed to retrieve process version information:\n' + e,
+                           title       : ''
+
+                       });
     	   		}
             }.createDelegate(this),
             failure: function(){
             	diffLoadMask.hide();
-            	Ext.Msg.alert("Failed to retrieve process version information.");
+                this.facade.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'error',
+                    msg         : 'Failed to retrieve process version information.',
+                    title       : ''
+
+                });
             },
             params: {
             	action: 'versions',
@@ -939,8 +957,13 @@ ORYX.Plugins.View = {
 	    }
 	    
 	    if(count == 0) {
-	    	Ext.Msg.minWidth=300;
-	    	Ext.Msg.alert("Diff", "Unable to find proces versions.");
+            this.facade.raiseEvent({
+                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                ntype		: 'error',
+                msg         : 'Unable to find proces versions.',
+                title       : 'Diff'
+
+            });
 	    } else {
 		    versionKeys.sort(function(a,b){return a - b});
 		    var displayVersionKeys = [];
@@ -1009,11 +1032,23 @@ ORYX.Plugins.View = {
 	                  	      	   			this.diffDialog.add(this.diffEditor);
 	                  	      	   			this.diffDialog.doLayout();
 	                  	      	   		} catch(e) {
-	                  	      	   			Ext.Msg.alert("Failed to retrieve process version source:\n" + e);
+                                                   this.facade.raiseEvent({
+                                                       type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                                       ntype		: 'error',
+                                                       msg         : 'Failed to retrieve process version source:' + e,
+                                                       title       : ''
+
+                                                   });
 	                  	      	   		}
 	                  	              }.bind(this),
 	                  	              failure: function(){
-	                  	              	Ext.Msg.alert("Failed to retrieve process version source.");
+                                            this.facade.raiseEvent({
+                                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                                ntype		: 'error',
+                                                msg         : 'Failed to retrieve process version source.',
+                                                title       : ''
+
+                                            });
 	                  	              }.bind(this),
 	                  	              params: {
 	                  	              	action: 'getversion',
@@ -1023,11 +1058,23 @@ ORYX.Plugins.View = {
 	                  	              }
 	                  	          });
 	                  	   		} catch(e){
-	                  	   			Ext.Msg.alert("Converting to BPMN2 Failed :\n"+e);
+                                         this.facade.raiseEvent({
+                                             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                             ntype		: 'error',
+                                             msg         : 'Converting to BPMN2 failed:' + e,
+                                             title       : ''
+
+                                         });
 	                  	   		}
 	                          }.bind(this),
 	                          failure: function(){
-	                          	Ext.Msg.alert("Converting to BPMN2 Failed");
+                                  this.facade.raiseEvent({
+                                      type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                      ntype		: 'error',
+                                      msg         : 'Converting to BPMN2 failed.',
+                                      title       : ''
+
+                                  });
 	                          },
 	                          params: {
 	                          	action: 'toXML',
@@ -1371,12 +1418,24 @@ ORYX.Plugins.View = {
     	   			  onGutterClick: this.foldFunc
     	   			});
     	   		}catch(e){
-    	   			Ext.Msg.alert("Converting to BPMN2 Failed :\n"+e);
+                       this.facade.raiseEvent({
+                           type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                           ntype		: 'error',
+                           msg         : 'Converting to BPMN2 failed:' + e,
+                           title       : ''
+
+                       });
     	   		}
                 Ext.Msg.hide();
             }.createDelegate(this),
             failure: function(){
-            	Ext.Msg.alert("Converting to BPMN2 Failed");
+                this.facade.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'error',
+                    msg         : 'Converting to BPMN2 failed.',
+                    title       : ''
+
+                });
             },
             params: {
             	action: 'toXML',

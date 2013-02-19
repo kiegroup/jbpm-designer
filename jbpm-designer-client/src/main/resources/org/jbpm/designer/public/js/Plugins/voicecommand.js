@@ -49,16 +49,31 @@ ORYX.Plugins.VoiceCommand = Clazz.extend({
 				    }
 				}
 				if(!found) {
-					Ext.Msg.minWidth = 300;
-					Ext.Msg.alert("Can't find voice command: " + options.entry);
+                    this.facade.raiseEvent({
+                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                        ntype		: 'error',
+                        msg         : 'Cannot find voice command: ' + options.entry,
+                        title       : ''
+
+                    });
 				}
 			} else {
-				Ext.Msg.minWidth = 300;
-				Ext.Msg.alert("Invalid voice command.");
+                this.facade.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'error',
+                    msg         : 'Invalid voice command.',
+                    title       : ''
+
+                });
 			}
 		} else {
-			Ext.Msg.minWidth = 300;
-			Ext.Msg.alert("Invalid voice command.");
+            this.facade.raiseEvent({
+                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                ntype		: 'error',
+                msg         : 'Invalid voice command.',
+                title       : ''
+
+            });
 		}
 	},
 	_initCommands : function() {

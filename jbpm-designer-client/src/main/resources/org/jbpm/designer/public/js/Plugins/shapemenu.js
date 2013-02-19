@@ -287,7 +287,13 @@ ORYX.Plugins.ShapeMenuPlugin = {
 	            entry: labelText
 	        });
 		} else {
-			Ext.Msg.alert('Name not specified.');
+            this.facade.raiseEvent({
+                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                ntype		: 'error',
+                msg         : 'Name not specified.',
+                title       : ''
+
+            });
 		}
 	},
 	
@@ -301,7 +307,13 @@ ORYX.Plugins.ShapeMenuPlugin = {
 	            tn: taskname
 	        });
 		} else {
-			Ext.Msg.alert('Task Name not specified.');
+            this.facade.raiseEvent({
+                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                ntype		: 'error',
+                msg         : 'Task Name not specified.',
+                title       : ''
+
+            });
 		}
 	},
 	
@@ -326,15 +338,33 @@ ORYX.Plugins.ShapeMenuPlugin = {
 	        	            nodesource: serializedNodeXML
 	        	        });
                     } else {
-                    	Ext.Msg.alert("Unable to find node source.");
+                        this.facade.raiseEvent({
+                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                            ntype		: 'error',
+                            msg         : 'Unable to find node source.',
+                            title       : ''
+
+                        });
                     }
     	   		}catch(e){
-    	   			Ext.Msg.alert("Converting to BPMN2 Failed :\n"+e);
+                       this.facade.raiseEvent({
+                           type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                           ntype		: 'error',
+                           msg         : 'Converting to BPMN2 failed: ' + e,
+                           title       : ''
+
+                       });
     	   		}
                 Ext.Msg.hide();
             }.bind(this),
             failure: function(){
-            	Ext.Msg.alert("Converting to BPMN2 Failed");
+                this.facade.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'error',
+                    msg         : 'Converting to BPMN2 failed.',
+                    title       : ''
+
+                });
             }.bind(this),
             params: {
             	action: 'toXML',

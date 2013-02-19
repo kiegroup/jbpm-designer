@@ -1581,17 +1581,41 @@ Ext.form.ComplexCustomField = Ext.extend(Ext.form.TriggerField,  {
     	   					dialog.show();		
     	   					this.grid.stopEditing();
     	   				} else {
-    	   					Ext.Msg.alert('Unable to find custom editor info for' + this.title);
+                               this.facade.raiseEvent({
+                                   type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                   ntype		: 'error',
+                                   msg         : 'Unable to find custom editor info for' + this.title,
+                                   title       : ''
+
+                               });
     	   				}
     	   			} else {
-    	   				Ext.Msg.alert('Invalid Custom Editors data.');
+                           this.facade.raiseEvent({
+                               type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                               ntype		: 'error',
+                               msg         : 'Invalid Custom Editors data.',
+                               title       : ''
+
+                           });
     	   			}
     	   		} catch(e) {
-    	   			Ext.Msg.alert('Error applying Custom Editor data:\n' + e);
+                       this.facade.raiseEvent({
+                           type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                           ntype		: 'error',
+                           msg         : 'Error applying Custom Editor data:\n' + e,
+                           title       : ''
+
+                       });
     	   		}
             }.bind(this),
             failure: function(){
-            	Ext.Msg.alert('Error applying Custom Editor data.');
+                this.facade.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'error',
+                    msg         : 'Error applying Custom Editor data.',
+                    title       : ''
+
+                });
             },
             params: {
             	profile: ORYX.PROFILE
@@ -3113,7 +3137,13 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                 text: this.addButtonLabel,
                 handler : function(){
                 	if(this.single && vardefs.getCount() > 0) {
-                		Ext.Msg.alert('Only single entry allowed.');
+                        this.facade.raiseEvent({
+                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                            ntype		: 'error',
+                            msg         : 'Only single entry allowed.',
+                            title       : ''
+
+                        });
                 	} else {
                 		vardefs.add(new VarDef({
                             name: '',
@@ -3467,7 +3497,13 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField,  {
     		        					this.dataSource.commitChanges()
     		        					dialog.hide()
     		                    	} else {
-    		                    		Ext.Msg.alert('Plese select a process id.');
+                                        this.facade.raiseEvent({
+                                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                            ntype		: 'error',
+                                            msg         : 'Please select a process id.',
+                                            title       : ''
+
+                                        });
     		                    	}
     		                    }.bind(this)
     		                }, {
@@ -3485,15 +3521,33 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField,  {
     		    		this.grid.stopEditing();
     		    		grid.focus( false, 100 );
     		        } else {
-    		        	Ext.Msg.alert('Unable to find other processes in pacakge.');
+                           this.facade.raiseEvent({
+                               type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                               ntype		: 'error',
+                               msg         : 'Unable to find other processes in pacakge.',
+                               title       : ''
+
+                           });
     		        }
     	   		} catch(e) {
-    	   			Ext.Msg.alert('Error resolving other process info :\n' + e);
+                       this.facade.raiseEvent({
+                           type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                           ntype		: 'error',
+                           msg         : 'Error resolving other process info :\n' + e,
+                           title       : ''
+
+                       });
     	   		}
             }.bind(this),
             failure: function(){
             	loadProcessesMask.hide();
-            	Ext.Msg.alert('Error resolving other process info.');
+                this.facade.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'error',
+                    msg         : 'Error resolving other process info.',
+                    title       : ''
+
+                });
             },
             params: {
             	profile: ORYX.PROFILE,

@@ -220,11 +220,23 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
 					this.addExtensionDirectly(jsonObject);
 				} catch (e) {
 					ORYX.Log.debug("Unable to load extension definition: " + e);
-					Ext.Msg.alert("Oryx", "Unable to load extension definition: " + e);
+                    ORYX.EDITOR._pluginFacade.raiseEvent({
+                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                        ntype		: 'error',
+                        msg         : 'Unable to load extension definition: ' + e,
+                        title       : ''
+
+                    });
 				}
 			}).bind(this),
 			onFailure: (function(transport){
-				Ext.Msg.alert("Oryx", "Unable to create extension definition.");
+                ORYX.EDITOR._pluginFacade.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'error',
+                    msg         : 'Unable to create extension definition.',
+                    title       : ''
+
+                });
 			}).bind(this)
 		});  
 	},

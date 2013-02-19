@@ -97,7 +97,13 @@ ORYX.Plugins.Dictionary = Clazz.extend({
     		                    		entryDesc = attrValue;
     		                    	}
     		                    } else {
-    		                    	Ext.Msg.alert('Error reading Process Dictionary. Invalid item: ' + attrName);
+                                    this.facade.raiseEvent({
+                                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                        ntype		: 'error',
+                                        msg         : 'Error reading Process Dictionary. Invalid item: ' + attrName,
+                                        title       : ''
+
+                                    });
     		                    }
     		                }
     		                ORYX.Dictionary.Dictionaryitems.add(new ORYX.Dictionary.DictionaryDef({
@@ -121,11 +127,23 @@ ORYX.Plugins.Dictionary = Clazz.extend({
     	   				callback();
     	   			}
     	   		} catch(e) {
-    	   			Ext.Msg.alert('Error loading Process Dictionary :\n' + e);
+                       this.facade.raiseEvent({
+                           type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                           ntype		: 'error',
+                           msg         : 'Error loading Process Dictionary: ' + e,
+                           title       : ''
+
+                       });
     	   		}
             }.bind(this),
             failure: function(){
-            	Ext.Msg.alert('Error loading Process Dictionary.');
+                this.facade.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'error',
+                    msg         : 'Error loading Process Dictionary.',
+                    title       : ''
+
+                });
             },
             params: {
             	action: 'load',
@@ -377,11 +395,23 @@ ORYX.Plugins.Dictionary = Clazz.extend({
         	    	   			saveLoadMask.hide();
         	    	   			dialog.hide();
         	    	   		} catch(e) {
-        	    	   			Ext.Msg.alert('Error saving Process Dictionary :\n' + e);
+                                   this.facade.raiseEvent({
+                                       type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                       ntype		: 'error',
+                                       msg         : 'Error saving Process Dictionary :\n' + e,
+                                       title       : ''
+
+                                   });
         	    	   		}
         	            }.createDelegate(this),
         	            failure: function(){
-        	            	Ext.Msg.alert('Error saving Process Dictionary');
+                            this.facade.raiseEvent({
+                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                ntype		: 'error',
+                                msg         : 'Error saving Process Dictionary',
+                                title       : ''
+
+                            });
         	            },
         	            params: {
         	            	action: 'save',

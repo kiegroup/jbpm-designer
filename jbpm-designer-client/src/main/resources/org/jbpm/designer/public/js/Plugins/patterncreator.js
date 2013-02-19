@@ -55,8 +55,13 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
                     }.bind(this));
                     var patternRoots = this.getPatternRoots(patternElements);
                     if(this.selectedRoots.length > 0 && (this.selectedRoots.length != patternRoots.length)) {
-                        Ext.Msg.minWidth = 400;
-                        Ext.Msg.alert("Cannot attach Pattern to selected node(s).");
+                        this.facade.raiseEvent({
+                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                            ntype		: 'error',
+                            msg         : 'Cannot attach Pattern to selected node(s).',
+                            title       : ''
+
+                        });
                         return;
                     }
                     for(var j=0; j<patternElements.length; j++) {
@@ -71,8 +76,13 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
                 }
             }
         } else {
-            Ext.Msg.minWidth = 300;
-            Ext.Msg.alert("Invalid pattern data.");
+            this.facade.raiseEvent({
+                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                ntype		: 'error',
+                msg         : 'Invalid pattern data.',
+                title       : ''
+
+            });
         }
     },
     getPatternRoots : function(patternElements) {
@@ -233,10 +243,22 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
 
                 dialog.show();
             } else {
-                Ext.Msg.alert('Invalid selection');
+                this.facade.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'error',
+                    msg         : 'Invalid selection.',
+                    title       : ''
+
+                });
             }
         } else {
-            Ext.Msg.alert('No nodes selected');
+            this.facade.raiseEvent({
+                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                ntype		: 'error',
+                msg         : 'No nodes selected.',
+                title       : ''
+
+            });
         }
     },
     findParentShapes : function(selection) {

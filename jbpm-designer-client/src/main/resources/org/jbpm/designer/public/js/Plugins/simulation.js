@@ -79,16 +79,32 @@ ORYX.Plugins.Simulation = Clazz.extend({
 	    	   		            type: ORYX.CONFIG.EVENT_SIMULATION_PATH_SVG_GENERATED
 	    	   				});
 	    	   			} else {
-	    	   				Ext.MessageBox.minWidth = 200;
-	    	   				Ext.Msg.alert('Invalid Path data.');
+                               this.facade.raiseEvent({
+                                   type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                   ntype		: 'error',
+                                   msg         : 'Invalid Path data.',
+                                   title       : ''
+
+                               });
 	    	   			}
 	    	   		} catch(e) {
-	    	   			Ext.MessageBox.minWidth = 200;
-	    	   			Ext.Msg.alert('Error finding Paths:\n' + e);
+                           this.facade.raiseEvent({
+                               type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                               ntype		: 'error',
+                               msg         : 'Error finding Paths:\n' + e,
+                               title       : ''
+
+                           });
 	    	   		}
 	            }.bind(this),
 	            failure: function(){
-	            	Ext.Msg.alert('Error finding Paths.');
+                    this.facade.raiseEvent({
+                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                        ntype		: 'error',
+                        msg         : 'Error finding Paths.',
+                        title       : ''
+
+                    });
 	            },
 	            params: {
 	            	action: 'getpathinfo',
@@ -101,8 +117,13 @@ ORYX.Plugins.Simulation = Clazz.extend({
 			
 			loadPathsMask.hide();
 		} else {
-			Ext.MessageBox.minWidth = 200;
-			Ext.Msg.alert('Unknown path id.');
+            this.facade.raiseEvent({
+                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                ntype		: 'error',
+                msg         : 'Unknown path id.',
+                title       : ''
+
+            });
 		}
 	},
 	findPaths: function() {
@@ -249,7 +270,13 @@ ORYX.Plugins.Simulation = Clazz.extend({
     		                    		var outValue = processpathsStore.getAt(selectedIndex).data['pid'];
     		                        	this.setNodeColors(outValue, this.getDisplayColor(selectedIndex), pathobj[outValue]);
     		                    	} else {
-    		                    		Ext.Msg.alert('Plese select a process path.');
+                                        this.facade.raiseEvent({
+                                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                            ntype		: 'info',
+                                            msg         : 'Please select a process path.',
+                                            title       : ''
+
+                                        });
     		                    	}
     		                    }.bind(this)
     		                }, {
@@ -265,18 +292,36 @@ ORYX.Plugins.Simulation = Clazz.extend({
     	   				
     	   			} else {
     	   				loadPathsMask.hide();
-    	   				Ext.MessageBox.minWidth = 200;
-    	   				Ext.Msg.alert('Invalid Path data.');
+                           this.facade.raiseEvent({
+                               type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                               ntype		: 'error',
+                               msg         : 'Invalid Path data.',
+                               title       : ''
+
+                           });
     	   			}
     	   		} catch(e) {
     	   			loadPathsMask.hide();
-    	   			Ext.MessageBox.minWidth = 200;
-    	   			Ext.Msg.alert('Error finding Paths:\n' + e);
+
+                       this.facade.raiseEvent({
+                           type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                           ntype		: 'error',
+                           msg         : 'Error finding Paths:\n' + e,
+                           title       : ''
+
+                       });
+
     	   		}
             }.bind(this),
             failure: function(){
                 loadPathsMask.hide();
-            	Ext.Msg.alert('Error finding Paths.');
+                this.facade.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'error',
+                    msg         : 'Error finding Paths.',
+                    title       : ''
+
+                });
             },
             params: {
             	action: 'getpathinfo',
@@ -415,18 +460,34 @@ ORYX.Plugins.Simulation = Clazz.extend({
 				    	   		        });
 				    	   			} else {
 				    	   				loadMask.hide();
-				    	   				Ext.MessageBox.minWidth = 300;
-				    	   				Ext.Msg.alert('Simulation engine did not return results.');
+                                           this.facade.raiseEvent({
+                                               type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                               ntype		: 'info',
+                                               msg         : 'Simulation engine did not return results.',
+                                               title       : ''
+
+                                           });
 				    	   			}
 				    	   		} catch(e) {
 				    	   			loadMask.hide();
-				    	   			Ext.MessageBox.minWidth = 300;
-				    	   			Ext.Msg.alert('Unable to perform simulation:\n' + e);
+                                       this.facade.raiseEvent({
+                                           type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                           ntype		: 'error',
+                                           msg         : 'Unable to perform simulation:\n' + e,
+                                           title       : ''
+
+                                       });
 				    	   		}
 				            }.bind(this),
 				            failure: function(){
 				            	loadMask.hide();
-				            	Ext.Msg.alert('Unable to perform simulation.');
+                                this.facade.raiseEvent({
+                                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                    ntype		: 'error',
+                                    msg         : 'Unable to perform simulation.',
+                                    title       : ''
+
+                                });
 				            },
 				            params: {
 				            	action: 'runsimulation',

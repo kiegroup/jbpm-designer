@@ -321,7 +321,13 @@ ORYX.Plugins.AbstractPlugin = Clazz.extend({
 			
 			return serializer.serializeToString(result);
 		}catch(e){
-			Ext.Msg.alert("Oryx", error);
+            this.facade.raiseEvent({
+                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                ntype		: 'error',
+                msg         : 'Error: ' + error,
+                title       : ''
+
+            });
 			return "";
 		}
 

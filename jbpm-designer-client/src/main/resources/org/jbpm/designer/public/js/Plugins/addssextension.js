@@ -79,14 +79,25 @@ ORYX.Plugins.SSExtensionLoader = {
                     });
 
 					if (validExtensions.size() == 0)
-						Ext.Msg.alert(ORYX.I18N.Oryx.title, 
-						ORYX.I18N.SSExtensionLoader.noExt);
-					else 
+                        this.facade.raiseEvent({
+                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                            ntype		: 'error',
+                            msg         : ORYX.I18N.SSExtensionLoader.noExt,
+                            title       : ''
+
+                        });
+					else
                     	this._showPanel(validExtensions, loadedExtensions, this._loadExtensions.bind(this));
                     
                 } 
                 catch (e) {
-                    Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.SSExtensionLoader.failed1);
+                    this.facade.raiseEvent({
+                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                        ntype		: 'error',
+                        msg         : ORYX.I18N.SSExtensionLoader.failed1,
+                        title       : ''
+
+                    });
 				}
                 
                 this.facade.raiseEvent({
@@ -95,7 +106,13 @@ ORYX.Plugins.SSExtensionLoader = {
                 
             }).bind(this),
             onFailure: (function(transport){
-                Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.SSExtensionLoader.failed2);
+                this.facade.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'error',
+                    msg         : ORYX.I18N.SSExtensionLoader.failed2,
+                    title       : ''
+
+                });
 
                 this.facade.raiseEvent({
                     type: ORYX.CONFIG.EVENT_LOADING_DISABLE
