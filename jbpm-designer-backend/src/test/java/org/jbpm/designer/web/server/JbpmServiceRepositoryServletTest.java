@@ -40,7 +40,6 @@ public class JbpmServiceRepositoryServletTest  extends RepositoryBaseTest {
         fileSystem = producer.produceFileSystem(env);
     }
 
-
     @After
     public void teardown() {
         File repo = new File(REPOSITORY_ROOT);
@@ -61,7 +60,7 @@ public class JbpmServiceRepositoryServletTest  extends RepositoryBaseTest {
         params.put("repourl", "http://people.redhat.com/tsurdilo/repository/");
         params.put("asset", "Rewardsystem");
         params.put("profile", "jbpm");
-        params.put("category", "Notifications");
+        params.put("category", "Rewards");
         params.put("action", "install");
 
         JbpmServiceRepositoryServlet jbpmServiceRepositoryServlet = new JbpmServiceRepositoryServlet();

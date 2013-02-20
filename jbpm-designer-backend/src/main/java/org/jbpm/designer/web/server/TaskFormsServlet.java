@@ -39,7 +39,7 @@ public class TaskFormsServlet extends HttpServlet {
     public static final String designer_path = ConfigurationProvider.getInstance().getDesignerContext();
 
     private IDiagramProfile profile;
-    // this is here just for unit testing purpose
+
     public void setProfile(IDiagramProfile profile) {
         this.profile = profile;
     }
@@ -133,7 +133,6 @@ public class TaskFormsServlet extends HttpServlet {
             repository.deleteAssetFromPath("/" + taskForm.getPkgName() + "/" + taskForm.getId()+"."+FORMTEMPLATE_FILE_EXTENSION);
 
             AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
-
             builder.name(taskForm.getId())
                    .location(location)
                     .type(FORMTEMPLATE_FILE_EXTENSION)
