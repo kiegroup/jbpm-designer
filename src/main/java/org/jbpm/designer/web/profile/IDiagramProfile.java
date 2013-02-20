@@ -105,6 +105,11 @@ public interface IDiagramProfile {
      * @return the pwd for external resource.
      */
     public String getPwd();
+
+    /**
+     * @return the pwd enc resource.
+     */
+    public String getPwdEnc();
     
     /**
      * Parser to produce the final model to be saved.
