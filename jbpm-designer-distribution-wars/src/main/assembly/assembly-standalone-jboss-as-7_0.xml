@@ -43,7 +43,6 @@
         <excludes>
           <exclude>WEB-INF/jetty-env.xml</exclude>
           <exclude>WEB-INF/web.xml</exclude>
-          <exclude>WEB-INF/beans.xml</exclude>
           <!-- Dom4j on as 7.1.1 breaks the PU-->
           <exclude>WEB-INF/lib/dom4j*.jar</exclude>
           

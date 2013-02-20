@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns="http://java.sun.com/xml/ns/javaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
-		  http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          version="2.5">
+    <display-name>jBPM Designer</display-name>
 
+    <!-- UF -->
     <filter>
         <filter-name>UberFire Security Filter</filter-name>
-        <filter-class>org.uberfire.security.server.UberFireSecurityFilter</filter-class>
+        <filter-class>
+            org.uberfire.security.server.UberFireSecurityFilter
+        </filter-class>
         <init-param>
             <param-name>org.uberfire.cookie.id</param-name>
             <param-value>designer.standalone</param-value>
@@ -32,6 +35,7 @@
     <servlet>
         <servlet-name>UberFireServlet</servlet-name>
         <servlet-class>org.uberfire.server.UberfireServlet</servlet-class>
+
         <load-on-startup>1</load-on-startup>
     </servlet>
 
@@ -55,32 +59,29 @@
         <url-pattern>/org.jbpm.designer.jBPMDesigner/uberFireImages/*</url-pattern>
     </servlet-mapping>
 
-
     <servlet>
         <servlet-name>ErraiServlet</servlet-name>
         <servlet-class>org.jboss.errai.bus.server.servlet.DefaultBlockingServlet</servlet-class>
+        <init-param>
+            <param-name>service-locator</param-name>
+            <param-value>org.jboss.errai.cdi.server.CDIServiceLocator</param-value>
+        </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
-
-    <listener>
-        <listener-class>org.jboss.weld.environment.servlet.Listener</listener-class>
-    </listener>
 
     <servlet-mapping>
         <servlet-name>ErraiServlet</servlet-name>
         <url-pattern>*.erraiBus</url-pattern>
     </servlet-mapping>
 
+    <listener>
+        <listener-class>org.jboss.weld.environment.servlet.Listener</listener-class>
+    </listener>
+
     <resource-env-ref>
         <description>Object factory for the CDI Bean Manager</description>
         <resource-env-ref-name>BeanManager</resource-env-ref-name>
         <resource-env-ref-type>javax.enterprise.inject.spi.BeanManager</resource-env-ref-type>
-    </resource-env-ref>
-
-    <resource-env-ref>
-        <description>Object factory for the Errai Service</description>
-        <resource-env-ref-name>ErraiService</resource-env-ref-name>
-        <resource-env-ref-type>org.jboss.errai.bus.server.service.ErraiService</resource-env-ref-type>
     </resource-env-ref>
 
     <context-param>
@@ -101,6 +102,7 @@
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
+    <!-- END UF -->
 
     <!-- Designer -->
     <servlet>
@@ -350,13 +352,15 @@
         <servlet-name>StencilSetServiceServlet</servlet-name>
         <url-pattern>/stencilset/*</url-pattern>
     </servlet-mapping>
-
-    <!-- END DESIGNER -->
-
+    <!-- the number within the session-timout element must be expressed in
+minutes. it is now 24 hours. -->
     <session-config>
         <session-timeout>1440</session-timeout>
     </session-config>
-
+    <!-- jBoss' default mapping is to "image/svg", which causes the client
+  not to parse the SVG content as XML. However, the Oryx Editor client relies
+  on that behaviour. The mimetype as per W3C specification must be "image/svg+xml".
+  See http://www.w3.org/TR/SVG/intro.html#MIMEType. -->
     <mime-mapping>
         <extension>svg</extension>
         <mime-type>image/svg+xml</mime-type>
@@ -369,7 +373,7 @@
         <extension>css</extension>
         <mime-type>text/css</mime-type>
     </mime-mapping>
-
+    <!-- Set Favourites Icon MIME-Type -->
     <mime-mapping>
         <extension>ico</extension>
         <mime-type>image/x-icon</mime-type>
