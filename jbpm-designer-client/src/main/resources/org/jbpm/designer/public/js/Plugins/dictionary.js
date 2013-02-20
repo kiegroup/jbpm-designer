@@ -97,7 +97,7 @@ ORYX.Plugins.Dictionary = Clazz.extend({
     		                    		entryDesc = attrValue;
     		                    	}
     		                    } else {
-                                    this.facade.raiseEvent({
+                                    ORYX.EDITOR._pluginFacade.raiseEvent({
                                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                         ntype		: 'error',
                                         msg         : 'Error reading Process Dictionary. Invalid item: ' + attrName,
@@ -127,7 +127,7 @@ ORYX.Plugins.Dictionary = Clazz.extend({
     	   				callback();
     	   			}
     	   		} catch(e) {
-                       this.facade.raiseEvent({
+                       ORYX.EDITOR._pluginFacade.raiseEvent({
                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                            ntype		: 'error',
                            msg         : 'Error loading Process Dictionary: ' + e,
@@ -137,7 +137,7 @@ ORYX.Plugins.Dictionary = Clazz.extend({
     	   		}
             }.bind(this),
             failure: function(){
-                this.facade.raiseEvent({
+                ORYX.EDITOR._pluginFacade.raiseEvent({
                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                     ntype		: 'error',
                     msg         : 'Error loading Process Dictionary.',
@@ -155,7 +155,6 @@ ORYX.Plugins.Dictionary = Clazz.extend({
 	showDictionary : function() {
     	var itemDeleter = new Extensive.grid.ItemDeleter();
     	var gridId = Ext.id();
-    	
 //    	var dictionaryPaging = new Ext.PagingToolbar({
 //    	    pageSize: 10,
 //    	    store: Dictionaryitems,
@@ -204,7 +203,7 @@ ORYX.Plugins.Dictionary = Clazz.extend({
             }],
             clicksToEdit: 1
         });
-    	
+
     	var processJSON = ORYX.EDITOR.getSerializedJSON();
     	var processDocumentation = jsonPath(processJSON.evalJSON(), "$.properties.documentation");
     	var docText = "";
@@ -213,15 +212,14 @@ ORYX.Plugins.Dictionary = Clazz.extend({
     	} else {
     		docText = "No process documentation specified.";
     	}
-    	
+
     	var extractFromDocsButton = new Ext.Button({
     		text: 'Process Documentation',
     	    handler: function(){ 
     	    	Ext.getCmp('processdocs').setValue(docText);
     	    }
     	});
-
-    	var extractImportFormFromDocs = new Ext.form.FormPanel({
+    	var extractImportFormFromDocs = new Ext.Panel({
     			title: '<center>From Documentation</center>',
     			bodyStyle:'padding:5px',
     			autoScroll: false,
@@ -232,8 +230,7 @@ ORYX.Plugins.Dictionary = Clazz.extend({
                     align:'middle'
                 }
     	});
-    	
-    	var extractImportFormFromFile = new Ext.form.FormPanel({
+    	var extractImportFormFromFile = new Ext.Panel({
     		baseCls: 'x-plain',
     		labelWidth: 50,
     		defaultType: 'textfield',
@@ -248,8 +245,8 @@ ORYX.Plugins.Dictionary = Clazz.extend({
 	        }
 	        ]
     	});
-    	
-    	var extractImportFormFromDocsWrapper = new Ext.form.FormPanel({
+
+    	var extractImportFormFromDocsWrapper = new Ext.Panel({
 			title: '<center>From File</center>',
 			bodyStyle:'padding:5px',
 			autoScroll: false,
@@ -260,7 +257,8 @@ ORYX.Plugins.Dictionary = Clazz.extend({
                 align:'middle'
             }
 	});
-    	
+
+
     	var dictionaryInnerPanel = new Ext.Panel({
     		header: false,
     		width: '100%',
@@ -281,7 +279,7 @@ ORYX.Plugins.Dictionary = Clazz.extend({
     	            }
     	          ]
     	});
-    	
+
     	var textPannel = new Ext.Panel({
     		title: '<center>Highlight text and click on "Add"</center>',
     		width: '100%',
@@ -317,7 +315,7 @@ ORYX.Plugins.Dictionary = Clazz.extend({
                   }
                   }]
     	});
-    	
+
     	var extractionPanel = new Ext.Panel({
     		id: 'processdocspanel',
     		title: '<center>Extract Dictionary entries</center>',
@@ -332,7 +330,7 @@ ORYX.Plugins.Dictionary = Clazz.extend({
     	        columnWidth: 1.0
     	    }
     	});
-    	
+
     	var dictionaryOutterPanel = new Ext.Panel({
     		header: false,
     	    layout:'column',
@@ -346,8 +344,8 @@ ORYX.Plugins.Dictionary = Clazz.extend({
     	            }
     	          ]
     	});
-    	
-		var dialog = new Ext.Window({ 
+
+		var dialog = new Ext.Window({
 			layout		: 'anchor',
 			autoCreate	: true, 
 			title		: 'Process Dictionary Editor', 
@@ -361,9 +359,8 @@ ORYX.Plugins.Dictionary = Clazz.extend({
 			proxyDrag	: true,
 			autoScroll  : true,
 			keys:[{
-				key	: 27,
 				fn	: function(){
-						dialog.hide()
+						dialog.hide();
 				}.bind(this)
 			}],
 			items		:[dictionaryOutterPanel],
@@ -386,7 +383,7 @@ ORYX.Plugins.Dictionary = Clazz.extend({
                     }
                     jsonDataEncode = Ext.util.JSON.encode(datar);
 
-                    this.facade.raiseEvent({
+                    ORYX.EDITOR._pluginFacade.raiseEvent({
                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                         ntype		: 'info',
                         msg         : 'Storing Process Dictionary.',
@@ -400,7 +397,7 @@ ORYX.Plugins.Dictionary = Clazz.extend({
         	    	   		try {
         	    	   			dialog.hide();
         	    	   		} catch(e) {
-                                   this.facade.raiseEvent({
+                                   ORYX.EDITOR._pluginFacade.raiseEvent({
                                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                        ntype		: 'error',
                                        msg         : 'Error saving Process Dictionary :\n' + e,
@@ -410,7 +407,7 @@ ORYX.Plugins.Dictionary = Clazz.extend({
         	    	   		}
         	            }.createDelegate(this),
         	            failure: function(){
-                            this.facade.raiseEvent({
+                            ORYX.EDITOR._pluginFacade.raiseEvent({
                                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                 ntype		: 'error',
                                 msg         : 'Error saving Process Dictionary',
@@ -432,12 +429,11 @@ ORYX.Plugins.Dictionary = Clazz.extend({
                 	dialog.hide()
                 }.bind(this)
             }]
-		});		
-				
-		dialog.show();		
-		grid.render();
-		grid.focus( false, 100 );
-		
+		});
+
+		dialog.show();
+		//grid.render();
+		//grid.focus( false, 100 );
 		extractImportFormFromFile.items.items[0].getEl().dom.addEventListener('change',function(evt){
 			var reader = new FileReader();
 			reader.onload = function(e) { 

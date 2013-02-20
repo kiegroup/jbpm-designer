@@ -96,11 +96,10 @@ public class DictionaryServlet extends HttpServlet {
             } else {
                 return "false";
             }
-		} catch (Exception e) {
-            e.printStackTrace();
-            _logger.error(e.getMessage());
-        } 
-		return "false";
+		} catch (Throwable t) {
+            _logger.error(t.getMessage());
+            return "false";
+        }
 	}
 	
 	private void storeInRepository(String uuid, IDiagramProfile profile, String dvalue, Repository repository) {

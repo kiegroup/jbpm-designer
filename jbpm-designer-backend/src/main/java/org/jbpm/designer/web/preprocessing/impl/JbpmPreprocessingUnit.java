@@ -43,6 +43,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     public static final String THEME_EXT = ".json";
     public static final String DEFAULT_THEME_NAME = "jBPM";
     public static final String CUSTOMEDITORS_NAME = "customeditors";
+    public static final String PROCESSDICTIONARY_NAME = "processdictionary";
     public static final String CUSTOMEDITORS_EXT = ".json";
     public static final String THEME_COOKIE_NAME = "designercolortheme";
     public static final String DEFAULT_CATEGORY_NAME = "Service Tasks";
@@ -107,8 +108,6 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             outData = "";
             Map<String, ThemeInfo> themeData = setupThemes(req, repository, profile);
             setupCustomEditors(repository, profile);
-
-
             setupFormWidgets(repository, profile);
             setupDefaultIcons(profile.getRepositoryGlobalDir(), repository);
 
