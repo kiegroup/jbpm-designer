@@ -56,6 +56,8 @@ public class HomePerspective {
         perspective.setName( "Home" );
 
         final PanelDefinition west = new PanelDefinitionImpl();
+        west.setWidth(300);
+        west.setMinWidth(200);
         west.addPart(new PartDefinitionImpl(new DefaultPlaceRequest("FileExplorer")));
 
         perspective.getRoot().appendChild( Position.WEST, west );
