@@ -20,8 +20,7 @@ ORYX.Plugins.ActiveNodesHighlighter = Clazz.extend({
             for(var i=0;i<ORYX.ACTIVENODES.length;i++) {
                 if(child instanceof ORYX.Core.Node || child instanceof ORYX.Core.Edge) {
                     if(ORYX.ACTIVENODES[i] == child.resourceId) {
-                        child.setProperty("oryx-bordercolor", "#8A2BE2");
-                        child.setProperty("oryx-bgcolor", "#8A2BE2");
+                        child.setProperty("oryx-bordercolor", "#FF0000");
                     }
                 }
             }
@@ -30,8 +29,8 @@ ORYX.Plugins.ActiveNodesHighlighter = Clazz.extend({
             for(var i=0;i<ORYX.COMPLETEDNODES.length;i++) {
                 if(child instanceof ORYX.Core.Node || child instanceof ORYX.Core.Edge) {
                     if(ORYX.COMPLETEDNODES[i] == child.resourceId) {
-                        child.setProperty("oryx-bordercolor", "#e7d4f9");
-                        child.setProperty("oryx-bgcolor", "#e7d4f9");
+                        child.setProperty("oryx-bordercolor", "#A8A8A8");
+                        child.setProperty("oryx-bgcolor", "#CDCDCD");
                     }
                 }
             }
