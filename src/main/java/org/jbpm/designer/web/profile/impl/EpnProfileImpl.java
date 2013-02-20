@@ -45,6 +45,7 @@ public class EpnProfileImpl implements IDiagramProfile {
     private String _pwd;
     private String _localHistoryEnabled;
     private String _localHistoryTimeout;
+    private String _pwdenc = "false";
     
     public EpnProfileImpl(ServletContext servletContext) {
         this(servletContext, true);
@@ -238,5 +239,9 @@ public class EpnProfileImpl implements IDiagramProfile {
 
     public String getLocalHistoryTimeout() {
         return _localHistoryTimeout;
+    }
+
+    public String getPwdEnc() {
+        return _pwdenc;
     }
 }

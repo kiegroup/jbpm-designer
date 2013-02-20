@@ -115,7 +115,11 @@ public interface IDiagramProfile {
      * @return the local history timeout.
      */
     public String getLocalHistoryTimeout();
-    
+
+    /**
+     * @return the pwd enc resource.
+     */
+    public String getPwdEnc();
     /**
      * Parser to produce the final model to be saved.
      * @author Antoine Toulme

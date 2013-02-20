@@ -64,6 +64,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
     private String _pwd;
     private String _localHistoryEnabled;
     private String _localHistoryTimeout;
+    private String _pwdenc = "false";
     
     public JbpmProfileImpl(ServletContext servletContext) {
         this(servletContext, true);
@@ -164,6 +165,9 @@ public class JbpmProfileImpl implements IDiagramProfile {
                                 // allow any value for pwd
                                 _pwd = reader.getAttributeValue(i);
                             }
+                            if ("pwdenc".equals(reader.getAttributeLocalName(i))) {
+                                _pwdenc = reader.getAttributeValue(i);
+                            }
                         }
                     } else if ("localhostory".equals(reader.getLocalName())) {
                         for (int i = 0 ; i < reader.getAttributeCount() ; i++) {
@@ -220,10 +224,18 @@ public class JbpmProfileImpl implements IDiagramProfile {
     }
 
     public String getPwd() {
-        StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
-        encryptor.setPassword(guvnorName);
-        encryptor.setAlgorithm("PBEWithMD5AndTripleDES");
-        return encryptor.decrypt(_pwd);
+        if(getPwdEnc() != null && getPwdEnc().equalsIgnoreCase("true")) {
+            StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
+            encryptor.setPassword(guvnorName);
+            encryptor.setAlgorithm("PBEWithMD5AndTripleDES");
+            return encryptor.decrypt(_pwd);
+        } else {
+            return _pwd;
+        }
+    }
+
+    public String getPwdEnc() {
+        return _pwdenc;
     }
 
     public String getLocalHistoryEnabled() {
