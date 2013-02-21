@@ -116,7 +116,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 	            expanded: true,
 	            isLeaf: true,
 	            iconCls: 'xnd-icon',
-	            icon: ORYX.PATH + 'images/simulation/diagram.png',
+	            icon: ORYX.BASE_FILE_PATH + 'images/simulation/diagram.png',
 				singleClickExpand:true});
 			graphType.appendChild(graphTypeChild);
 			graphList.appendChild(graphType);
@@ -141,7 +141,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 			            expanded: true,
 			            isLeaf: true,
 			            iconCls: 'xnd-icon',
-			            icon: ORYX.PATH + 'images/simulation/activities/User.png',
+			            icon: ORYX.BASE_FILE_PATH + 'images/simulation/activities/User.png',
 						singleClickExpand:true});
 				    graphType.appendChild(graphTypeChild);
 			}
@@ -159,7 +159,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 		            expanded: true,
 		            isLeaf: true,
 		            iconCls: 'xnd-icon',
-		            icon: ORYX.PATH + 'images/simulation/activities/' + this.taskType + '.png',
+		            icon: ORYX.BASE_FILE_PATH + 'images/simulation/activities/' + this.taskType + '.png',
 					singleClickExpand:true});
 			    
 			    graphType.appendChild(graphTypeChild);
@@ -185,7 +185,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 			            expanded: true,
 			            isLeaf: true,
 			            iconCls: 'xnd-icon',
-			            icon: ORYX.PATH + 'images/simulation/pathicon.png',
+			            icon: ORYX.BASE_FILE_PATH + 'images/simulation/pathicon.png',
 						singleClickExpand:true});
 				    graphType.appendChild(graphTypeChild);
 			}
@@ -236,7 +236,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 		ORYX.EDITOR.simulationChartTitle = "Process Simulation Results";
 		ORYX.EDITOR.simulationChartId = jsonObj[0].id;
 		ORYX.EDITOR.simulationChartNodeName = jsonObj[0].name;
-		Ext.getDom('simchartframe').src = ORYX.PATH + "simulation/processchart.html";
+		Ext.getDom('simchartframe').src = ORYX.BASE_FILE_PATH + "simulation/processchart.html";
 
 	},
 	showTaskAveragesGraph : function(nodeid, jsonstr) {
@@ -251,7 +251,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 				ORYX.EDITOR.simulationChartTitle = "Task Simulation Results";
 				ORYX.EDITOR.simulationChartId = innerWrapper[0].id;
 				ORYX.EDITOR.simulationChartNodeName = innerWrapper[0].name;
-				Ext.getDom('simchartframe').src = ORYX.PATH + "simulation/taskchart.html";
+				Ext.getDom('simchartframe').src = ORYX.BASE_FILE_PATH + "simulation/taskchart.html";
 			}
 		}
 	},
@@ -265,7 +265,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 				ORYX.EDITOR.simulationChartTitle = "Human Task Simulation Results";
 				ORYX.EDITOR.simulationChartId = inner.id;
 				ORYX.EDITOR.simulationChartNodeName = inner.name;
-				Ext.getDom('simchartframe').src = ORYX.PATH + "simulation/humantaskchart.html";
+				Ext.getDom('simchartframe').src = ORYX.BASE_FILE_PATH + "simulation/humantaskchart.html";
 			}
 		}
 	},
@@ -282,7 +282,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 	},
 	pathSvgGenerated : function() {
 		ORYX.EDITOR.simulationPathSVG = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false));
-		Ext.getDom('simchartframe').src = ORYX.PATH + "simulation/pathschart.html";
+		Ext.getDom('simchartframe').src = ORYX.BASE_FILE_PATH+ "simulation/pathschart.html";
 		this.facade.raiseEvent({
             type: ORYX.CONFIG.EVENT_SIMULATION_CLEAR_PATH_SVG
 		});
