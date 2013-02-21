@@ -14,10 +14,22 @@
     <inherits name="org.jbpm.designer.jBPMDesignerClient"/>
     <inherits name="org.jbpm.designer.jBPMDesignerAPI"/>
 
+    <!-- Infrastructure -->
     <inherits name="org.kie.guvnor.project.GuvnorProjectAPI"/>
-    <inherits name="org.kie.guvnor.commons.ui.GuvnorCommonsUI"/>
-    <inherits name="org.kie.guvnor.services.GuvnorCoreServicesAPI"/>
+    <inherits name='org.kie.guvnor.datamodel.GuvnorDataModelAPI'/>
     <inherits name="org.kie.guvnor.commons.data.GuvnorCommonsData"/>
+    <inherits name="org.kie.guvnor.commons.service.GuvnorCommonsServicesAPI"/>
+    <inherits name="org.kie.guvnor.services.GuvnorCoreServicesAPI"/>
+    <inherits name="org.kie.guvnor.commons.ui.GuvnorCommonsUI"/>
+    <inherits name="org.kie.guvnor.commons.security.GuvnorCommonsSecurity"/>
+
+    <!-- projects -->
+    <inherits name="org.kie.guvnor.metadata.GuvnorMetadataWidget"/>
+    <inherits name="org.kie.guvnor.m2repo.GuvnorM2RepoEditorClient"/>
+    <inherits name="org.kie.guvnor.projecteditor.GuvnorProjectEditorClient"/>
+    <inherits name="org.kie.guvnor.projectconfigscreen.GuvnorProjectConfigScreenClient"/>
+    <inherits name="org.kie.guvnor.configresource.GuvnorConfigResourceWidget"/>
+    <inherits name="org.kie.guvnor.explorer.GuvnorExplorerClient"/>
 
 
 

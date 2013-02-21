@@ -11,6 +11,7 @@ import org.uberfire.client.annotations.Perspective;
 import org.uberfire.client.annotations.WorkbenchMenu;
 import org.uberfire.client.annotations.WorkbenchPerspective;
 import org.uberfire.client.mvp.Command;
+import org.uberfire.client.mvp.PlaceManager;
 import org.uberfire.client.workbench.Position;
 import org.uberfire.client.workbench.model.PanelDefinition;
 import org.uberfire.client.workbench.model.PerspectiveDefinition;
@@ -31,7 +32,8 @@ public class HomePerspective {
 
     @Inject
     private NewResourcesMenu newResourcesMenu;
-
+    @Inject
+    private PlaceManager placeManager;
     private PerspectiveDefinition perspective;
     private MenuBar menuBar;
 
@@ -46,10 +48,6 @@ public class HomePerspective {
         return this.perspective;
     }
 
-    @WorkbenchMenu
-    public MenuBar getMenuBar() {
-        return this.menuBar;
-    }
 
     public PerspectiveDefinition buildPerspective() {
         perspective = new PerspectiveDefinitionImpl();
@@ -58,26 +56,29 @@ public class HomePerspective {
         final PanelDefinition west = new PanelDefinitionImpl();
         west.setWidth(300);
         west.setMinWidth(200);
-        west.addPart(new PartDefinitionImpl(new DefaultPlaceRequest("FileExplorer")));
+        west.addPart(new PartDefinitionImpl(new DefaultPlaceRequest("org.kie.guvnor.explorer")));
 
         perspective.getRoot().appendChild( Position.WEST, west );
 
         return perspective;
     }
 
-    private void buildMenuBar() {
-        this.menuBar = new DefaultMenuBar();
-        final MenuBar subMenu = new DefaultMenuBar();
-        subMenu.addItem( new DefaultMenuItemCommand( "Projects",new Command() {
-            @Override
-            public void execute() {
-                redirect(GWT.getModuleBaseURL() + "uf_logout");
-            }
-        } ) );
-        this.menuBar.addItem( newResourcesMenu );
+
+    @WorkbenchMenu
+    public MenuBar getMenuBar() {
+        return this.menuBar;
     }
 
-    public static native void redirect( String url )/*-{
-        $wnd.location = url;
-    }-*/;
+    private void buildMenuBar() {
+        this.menuBar = new DefaultMenuBar();
+        menuBar.addItem(new DefaultMenuItemCommand("Projects",
+                new Command() {
+                    @Override
+                    public void execute() {
+                        placeManager.goTo("org.kie.guvnor.explorer");
+                    }
+                }));
+
+        this.menuBar.addItem(newResourcesMenu);
+    }
 }

@@ -548,7 +548,11 @@
                 <artifactId>commons-lang</artifactId>
                 <version>2.5</version>
             </dependency>
-
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.4</version>
+            </dependency>
             <!-- simulation -->
             <dependency>
                 <groupId>org.jbpm</groupId>
@@ -774,11 +778,6 @@
             <!-- guvnor dependencies -->
             <dependency>
                 <groupId>org.kie.guvnor</groupId>
-                <artifactId>guvnor-project-api</artifactId>
-                <version>${guvnor.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.kie.guvnor</groupId>
                 <artifactId>guvnor-commons-ui</artifactId>
                 <version>${guvnor.version}</version>
             </dependency>
@@ -787,10 +786,86 @@
                 <artifactId>guvnor-core-services-api</artifactId>
                 <version>${guvnor.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>org.kie.guvnor</groupId>
                 <artifactId>guvnor-core-services-backend</artifactId>
+                <version>${guvnor.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.kie.guvnor</groupId>
+                <artifactId>guvnor-project-editor-client</artifactId>
+                <version>${guvnor.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.guvnor</groupId>
+                <artifactId>guvnor-project-editor-backend</artifactId>
+                <version>${guvnor.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.guvnor</groupId>
+                <artifactId>guvnor-metadata-widget</artifactId>
+                <version>${guvnor.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.guvnor</groupId>
+                <artifactId>guvnor-config-resource-widget</artifactId>
+                <version>${guvnor.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.guvnor</groupId>
+                <artifactId>guvnor-commons-security</artifactId>
+                <version>${guvnor.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.guvnor</groupId>
+                <artifactId>guvnor-project-config-editor-client</artifactId>
+                <version>${guvnor.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.guvnor</groupId>
+                <artifactId>guvnor-project-config-editor-backend</artifactId>
+                <version>${guvnor.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.guvnor</groupId>
+                <artifactId>guvnor-project-api</artifactId>
+                <version>${guvnor.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.guvnor</groupId>
+                <artifactId>guvnor-view-source-widget</artifactId>
+                <version>${guvnor.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.guvnor</groupId>
+                <artifactId>guvnor-decorated-grid-widget</artifactId>
+                <version>${guvnor.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.guvnor</groupId>
+                <artifactId>guvnor-commons-services-api</artifactId>
+                <version>${guvnor.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.guvnor</groupId>
+                <artifactId>guvnor-commons-builder</artifactId>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>ant</artifactId>
+                        <groupId>org.apache.ant</groupId>
+                    </exclusion>
+                </exclusions>
+                <version>${guvnor.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.guvnor</groupId>
+                <artifactId>guvnor-explorer-backend</artifactId>
+                <version>${guvnor.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.guvnor</groupId>
+                <artifactId>guvnor-explorer-client</artifactId>
                 <version>${guvnor.version}</version>
             </dependency>
         </dependencies>

@@ -179,14 +179,66 @@
             <groupId>org.kie.guvnor</groupId>
             <artifactId>guvnor-core-services-api</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.kie.guvnor</groupId>
             <artifactId>guvnor-core-services-backend</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.kie.guvnor</groupId>
+            <artifactId>guvnor-project-editor-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.guvnor</groupId>
+            <artifactId>guvnor-project-editor-backend</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.guvnor</groupId>
+            <artifactId>guvnor-metadata-widget</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.guvnor</groupId>
+            <artifactId>guvnor-config-resource-widget</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.guvnor</groupId>
+            <artifactId>guvnor-commons-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.guvnor</groupId>
+            <artifactId>guvnor-project-config-editor-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.guvnor</groupId>
+            <artifactId>guvnor-project-config-editor-backend</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.kie.guvnor</groupId>
             <artifactId>guvnor-project-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.guvnor</groupId>
+            <artifactId>guvnor-view-source-widget</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.guvnor</groupId>
+            <artifactId>guvnor-decorated-grid-widget</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.guvnor</groupId>
+            <artifactId>guvnor-commons-services-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.guvnor</groupId>
+            <artifactId>guvnor-commons-builder</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.guvnor</groupId>
+            <artifactId>guvnor-explorer-backend</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.guvnor</groupId>
+            <artifactId>guvnor-explorer-client</artifactId>
         </dependency>
     </dependencies>
 
@@ -230,10 +282,22 @@
 
                         <compileSourcesArtifact>org.kie.commons:kie-nio2-model</compileSourcesArtifact>
 
-                        <compileSourcesArtifact>org.kie.guvnor:guvnor-project-api</compileSourcesArtifact>
-                        <compileSourcesArtifact>org.kie.guvnor:guvnor-commons-ui</compileSourcesArtifact>
+                        <compileSourcesArtifact>org.kie.guvnor:guvnor-decorated-grid-widget</compileSourcesArtifact>
+                        <compileSourcesArtifact>org.kie.guvnor:guvnor-view-source-widget</compileSourcesArtifact>
+                        <compileSourcesArtifact>org.kie.guvnor:guvnor-common-ui</compileSourcesArtifact>
+                        <compileSourcesArtifact>org.kie.guvnor:guvnor-commons-security</compileSourcesArtifact>
+                        <compileSourcesArtifact>org.kie.guvnor:guvnor-commons-services-api</compileSourcesArtifact>
+                        <compileSourcesArtifact>org.kie.guvnor:guvnor-metadata-widget</compileSourcesArtifact>
+                        <compileSourcesArtifact>org.kie.guvnor:guvnor-config-resource-widget</compileSourcesArtifact>
                         <compileSourcesArtifact>org.kie.guvnor:guvnor-core-services-api</compileSourcesArtifact>
-                        <compileSourcesArtifact>org.kie.guvnor:guvnor-commons-data</compileSourcesArtifact>
+
+                        <compileSourcesArtifact>org.kie.guvnor:guvnor-project-api</compileSourcesArtifact>
+                        <compileSourcesArtifact>org.kie.guvnor:guvnor-project-client</compileSourcesArtifact>
+                        <compileSourcesArtifact>org.kie.guvnor:guvnor-project-editor-api</compileSourcesArtifact>
+                        <compileSourcesArtifact>org.kie.guvnor:guvnor-project-editor-client</compileSourcesArtifact>
+                        <compileSourcesArtifact>org.kie.guvnor:guvnor-project-config-editor-api</compileSourcesArtifact>
+                        <compileSourcesArtifact>org.kie.guvnor:guvnor-project-config-editor-client</compileSourcesArtifact>
+                        <compileSourcesArtifact>org.kie.guvnor:guvnor-explorer-client</compileSourcesArtifact>
 
                     </compileSourcesArtifacts>
                     <runTarget>org.jbpm.designer.jBPMDesigner/designer.html</runTarget>
@@ -322,5 +386,22 @@
         </plugins>
 
     </build>
-
+    <profiles>
+        <profile>
+            <id>fullProfile</id>
+            <activation>
+                <property>
+                    <name>full</name>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.ant</groupId>
+                    <artifactId>ant</artifactId>
+                    <version>1.8.2</version>
+                    <scope>runtime</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 </project>
