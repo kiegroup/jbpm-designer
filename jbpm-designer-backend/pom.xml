@@ -307,10 +307,6 @@
             <artifactId>jaxb1-impl</artifactId>
         </dependency>
         <dependency>
-            <groupId>de.hpi</groupId>
-            <artifactId>atlas</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.thoughtworks.xstream</groupId>
             <artifactId>xstream</artifactId>
             <exclusions>

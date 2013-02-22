@@ -384,11 +384,6 @@
                 <version>2.2</version>
             </dependency>
             <dependency>
-                <groupId>de.hpi</groupId>
-                <artifactId>atlas</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
                 <groupId>com.thoughtworks.xstream</groupId>
                 <artifactId>xstream</artifactId>
                 <version>1.3.1</version>
