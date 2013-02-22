@@ -4,7 +4,6 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import com.google.gwt.core.client.GWT;
 import org.kie.guvnor.commons.ui.client.handlers.NewResourcePresenter;
 import org.kie.guvnor.commons.ui.client.handlers.NewResourcesMenu;
 import org.uberfire.client.annotations.Perspective;
@@ -18,9 +17,8 @@ import org.uberfire.client.workbench.model.PerspectiveDefinition;
 import org.uberfire.client.workbench.model.impl.PanelDefinitionImpl;
 import org.uberfire.client.workbench.model.impl.PartDefinitionImpl;
 import org.uberfire.client.workbench.model.impl.PerspectiveDefinitionImpl;
-import org.uberfire.client.workbench.widgets.menu.MenuBar;
-import org.uberfire.client.workbench.widgets.menu.impl.DefaultMenuBar;
-import org.uberfire.client.workbench.widgets.menu.impl.DefaultMenuItemCommand;
+import org.uberfire.client.workbench.widgets.menu.MenuFactory;
+import org.uberfire.client.workbench.widgets.menu.Menus;
 import org.uberfire.shared.mvp.impl.DefaultPlaceRequest;
 
 @ApplicationScoped
@@ -31,11 +29,11 @@ public class HomePerspective {
     private NewResourcePresenter newResourcePresenter;
 
     @Inject
-    private NewResourcesMenu newResourcesMenu;
+    private NewResourcesMenu      newResourcesMenu;
     @Inject
-    private PlaceManager placeManager;
+    private PlaceManager          placeManager;
     private PerspectiveDefinition perspective;
-    private MenuBar menuBar;
+    private Menus                 menus;
 
     @PostConstruct
     public void init() {
@@ -48,37 +46,37 @@ public class HomePerspective {
         return this.perspective;
     }
 
-
     public PerspectiveDefinition buildPerspective() {
         perspective = new PerspectiveDefinitionImpl();
         perspective.setName( "Home" );
 
         final PanelDefinition west = new PanelDefinitionImpl();
-        west.setWidth(300);
-        west.setMinWidth(200);
-        west.addPart(new PartDefinitionImpl(new DefaultPlaceRequest("org.kie.guvnor.explorer")));
+        west.setWidth( 300 );
+        west.setMinWidth( 200 );
+        west.addPart( new PartDefinitionImpl( new DefaultPlaceRequest( "org.kie.guvnor.explorer" ) ) );
 
         perspective.getRoot().appendChild( Position.WEST, west );
 
         return perspective;
     }
 
-
     @WorkbenchMenu
-    public MenuBar getMenuBar() {
-        return this.menuBar;
+    public Menus getMenus() {
+        return this.menus;
     }
 
     private void buildMenuBar() {
-        this.menuBar = new DefaultMenuBar();
-        menuBar.addItem(new DefaultMenuItemCommand("Projects",
-                new Command() {
-                    @Override
-                    public void execute() {
-                        placeManager.goTo("org.kie.guvnor.explorer");
-                    }
-                }));
-
-        this.menuBar.addItem(newResourcesMenu);
+        this.menus = MenuFactory
+                .newTopLevelMenu("Projects")
+                    .respondsWith( new Command() {
+                        @Override
+                        public void execute() {
+                            placeManager.goTo( "org.kie.guvnor.explorer" );
+                        }
+                    } )
+                .endMenu()
+                .newTopLevelMenu( "New" )
+                    .withItems( newResourcesMenu.getMenuItems() )
+                .endMenu().build();
     }
 }
