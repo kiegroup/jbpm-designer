@@ -434,7 +434,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
 			plain:		true,
 			bodyStyle: 	'padding:5px;',
 			title: 		"Run Process Simulation", 
-			height: 	170, 
+			height: 	300,
 			width:		350,
 			modal:		true,
 			fixedcenter:true, 

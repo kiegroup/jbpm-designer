@@ -193,7 +193,7 @@ public class EpnProfileImpl implements IDiagramProfile {
     }
 
     public String getStencilSetURL() {
-        return "/designer/stencilsets/epn/epn.json";
+        return "/org.jbpm.designer.jBPMDesigner/stencilsets/epn/epn.json";
     }
 
     public String getStencilSetNamespaceURL() {

@@ -485,15 +485,15 @@ public class SimulationServlet extends HttpServlet {
 	private String getIcon(SimulationEvent se) {
 		if(se != null) {
 			if(se instanceof ActivitySimulationEvent) {
-				return "/designer/images/simulation/timeline/activity.png";
+				return "/org.jbpm.designer.jBPMDesigner/images/simulation/timeline/activity.png";
 			} else if(se instanceof EndSimulationEvent) {
-				return "/designer/images/simulation/timeline/endevent.png";
+				return "/org.jbpm.designer.jBPMDesigner/images/simulation/timeline/endevent.png";
 			} else if(se instanceof GatewaySimulationEvent) {
-				return "/designer/images/simulation/timeline/gateway.png";
+				return "/org.jbpm.designer.jBPMDesigner/images/simulation/timeline/gateway.png";
 			} else if(se instanceof HumanTaskActivitySimulationEvent) {
-				return "/designer/images/simulation/timeline/humantask.png";
+				return "/org.jbpm.designer.jBPMDesigner/images/simulation/timeline/humantask.png";
 			} else if(se instanceof StartSimulationEvent) {
-				return "/designer/images/simulation/timeline/startevent.png";
+				return "/org.jbpm.designer.jBPMDesigner/images/simulation/timeline/startevent.png";
 			} else {
 				return "";
 			}
