@@ -7,7 +7,7 @@ import com.google.gwt.core.client.Callback;
 import com.google.gwt.user.client.ui.IsWidget;
 import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.jboss.errai.ioc.client.api.Caller;
-import org.jbpm.designer.client.Bpmn2Type;
+import org.jbpm.designer.client.type.Bpmn2Type;
 import org.jbpm.designer.service.DesignerAssetService;
 import org.kie.guvnor.commons.ui.client.handlers.DefaultNewResourceHandler;
 import org.uberfire.backend.vfs.Path;
