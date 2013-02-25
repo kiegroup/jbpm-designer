@@ -236,7 +236,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 		ORYX.EDITOR.simulationChartTitle = "Process Simulation Results";
 		ORYX.EDITOR.simulationChartId = jsonObj[0].id;
 		ORYX.EDITOR.simulationChartNodeName = jsonObj[0].name;
-		Ext.getDom('simchartframe').src = ORYX.BASE_FILE_PATH + "simulation/processchart.html";
+		Ext.getDom('simchartframe').src = ORYX.BASE_FILE_PATH + "simulation/processchart.htm";
 
 	},
 	showTaskAveragesGraph : function(nodeid, jsonstr) {
@@ -251,7 +251,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 				ORYX.EDITOR.simulationChartTitle = "Task Simulation Results";
 				ORYX.EDITOR.simulationChartId = innerWrapper[0].id;
 				ORYX.EDITOR.simulationChartNodeName = innerWrapper[0].name;
-				Ext.getDom('simchartframe').src = ORYX.BASE_FILE_PATH + "simulation/taskchart.html";
+				Ext.getDom('simchartframe').src = ORYX.BASE_FILE_PATH + "simulation/taskchart.htm";
 			}
 		}
 	},
@@ -265,7 +265,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 				ORYX.EDITOR.simulationChartTitle = "Human Task Simulation Results";
 				ORYX.EDITOR.simulationChartId = inner.id;
 				ORYX.EDITOR.simulationChartNodeName = inner.name;
-				Ext.getDom('simchartframe').src = ORYX.BASE_FILE_PATH + "simulation/humantaskchart.html";
+				Ext.getDom('simchartframe').src = ORYX.BASE_FILE_PATH + "simulation/humantaskchart.htm";
 			}
 		}
 	},
@@ -282,7 +282,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 	},
 	pathSvgGenerated : function() {
 		ORYX.EDITOR.simulationPathSVG = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false));
-		Ext.getDom('simchartframe').src = ORYX.BASE_FILE_PATH+ "simulation/pathschart.html";
+		Ext.getDom('simchartframe').src = ORYX.BASE_FILE_PATH+ "simulation/pathschart.htm";
 		this.facade.raiseEvent({
             type: ORYX.CONFIG.EVENT_SIMULATION_CLEAR_PATH_SVG
 		});

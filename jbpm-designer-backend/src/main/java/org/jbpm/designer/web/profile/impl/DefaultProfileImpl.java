@@ -294,7 +294,7 @@ public class DefaultProfileImpl implements IDiagramProfile {
     }
     
     public String getStencilSetURL() {
-        return "/designer/stencilsets/bpmn2.0/bpmn2.0.json";
+        return "/org.jbpm.designer.jBPMDesigner/stencilsets/bpmn2.0/bpmn2.0.json";
     }
 
     public String getStencilSetNamespaceURL() {
