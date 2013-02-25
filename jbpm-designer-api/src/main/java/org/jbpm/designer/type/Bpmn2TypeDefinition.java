@@ -1,13 +1,12 @@
-package org.jbpm.designer.client;
+package org.jbpm.designer.type;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import com.google.gwt.user.client.ui.IsWidget;
 import org.uberfire.backend.vfs.Path;
-import org.uberfire.client.workbench.file.ResourceType;
+import org.uberfire.shared.workbench.type.ResourceTypeDefinition;
 
 @ApplicationScoped
-public class Bpmn2Type implements ResourceType {
+public class Bpmn2TypeDefinition implements ResourceTypeDefinition {
 
     @Override
     public String getShortName() {
@@ -17,11 +16,6 @@ public class Bpmn2Type implements ResourceType {
     @Override
     public String getDescription() {
         return "BPMN2 file";
-    }
-
-    @Override
-    public IsWidget getIcon() {
-        return null;
     }
 
     @Override
