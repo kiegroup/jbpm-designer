@@ -56,15 +56,15 @@
     <bpmn2:extensionElements>
       <drools:ProcessAnalysisData>
         <drools:Scenario xsi:type="drools:Scenario" id="default" name="Simulationscenario">
-          <drools:ScenarioParameters xsi:type="drools:ScenarioParameters_._type" baseTimeUnit="s"/>
-          <drools:ElementParameters xsi:type="drools:ElementParameters_._type" elementId="_F8778E3C-78BF-4855-B13F-D4D013A67C46" id="_zD_qJ0-NEeKySoJqGeG1EA">
+          <drools:ScenarioParameters xsi:type="drools:ScenarioParameters" baseTimeUnit="s"/>
+          <drools:ElementParameters xsi:type="drools:ElementParameters" elementId="_F8778E3C-78BF-4855-B13F-D4D013A67C46" id="_zD_qJ0-NEeKySoJqGeG1EA">
             <drools:ControlParameters xsi:type="drools:ControlParameters">
               <drools:Probability xsi:type="drools:Parameter">
                 <drools:FloatingParameter value="100.0"/>
               </drools:Probability>
             </drools:ControlParameters>
           </drools:ElementParameters>
-          <drools:ElementParameters xsi:type="drools:ElementParameters_._type" elementId="_4E5281AE-5C52-4C24-BEA3-01E391A163F7" id="_zD_qKE-NEeKySoJqGeG1EA">
+          <drools:ElementParameters xsi:type="drools:ElementParameters" elementId="_4E5281AE-5C52-4C24-BEA3-01E391A163F7" id="_zD_qKE-NEeKySoJqGeG1EA">
             <drools:TimeParameters xsi:type="drools:TimeParameters">
               <drools:ProcessingTime xsi:type="drools:Parameter">
                 <drools:RandomDistribution max="0.0" min="0.0"/>
@@ -72,14 +72,14 @@
               <drools:TimeUnit>ms</drools:TimeUnit>
             </drools:TimeParameters>
           </drools:ElementParameters>
-          <drools:ElementParameters xsi:type="drools:ElementParameters_._type" elementId="_AEAD52B5-7132-4973-AB24-C84814DD9360" id="_zD_qKU-NEeKySoJqGeG1EA">
+          <drools:ElementParameters xsi:type="drools:ElementParameters" elementId="_AEAD52B5-7132-4973-AB24-C84814DD9360" id="_zD_qKU-NEeKySoJqGeG1EA">
             <drools:ControlParameters xsi:type="drools:ControlParameters">
               <drools:Probability xsi:type="drools:Parameter">
                 <drools:FloatingParameter value="100.0"/>
               </drools:Probability>
             </drools:ControlParameters>
           </drools:ElementParameters>
-          <drools:ElementParameters xsi:type="drools:ElementParameters_._type" elementId="_9F6D4AAF-08C7-45B2-B7A6-DDA705C1E355" id="_zD_qKk-NEeKySoJqGeG1EA">
+          <drools:ElementParameters xsi:type="drools:ElementParameters" elementId="_9F6D4AAF-08C7-45B2-B7A6-DDA705C1E355" id="_zD_qKk-NEeKySoJqGeG1EA">
             <drools:TimeParameters xsi:type="drools:TimeParameters">
               <drools:WaitTime xsi:type="drools:Parameter">
                 <drools:FloatingParameter value="0.0"/>
@@ -87,7 +87,7 @@
               <drools:TimeUnit>ms</drools:TimeUnit>
             </drools:TimeParameters>
           </drools:ElementParameters>
-          <drools:ElementParameters xsi:type="drools:ElementParameters_._type" elementId="_CFF035F0-BF61-4857-B889-CFB6DF568C73" id="_zD_qK0-NEeKySoJqGeG1EA">
+          <drools:ElementParameters xsi:type="drools:ElementParameters" elementId="_CFF035F0-BF61-4857-B889-CFB6DF568C73" id="_zD_qK0-NEeKySoJqGeG1EA">
             <drools:TimeParameters xsi:type="drools:TimeParameters">
               <drools:ProcessingTime xsi:type="drools:Parameter">
                 <drools:RandomDistribution max="0.0" min="0.0"/>
