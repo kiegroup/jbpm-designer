@@ -98,7 +98,7 @@ public class DesignerView
     }-*/;
 
     private native void initDesigner()  /*-{
-        $wnd.initDesigner();
+        $wnd.initEditorInstance();
     }-*/;
 
     private native void kickstartEditor()  /*-{

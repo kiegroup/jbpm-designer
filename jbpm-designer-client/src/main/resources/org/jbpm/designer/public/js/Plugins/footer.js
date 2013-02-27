@@ -267,13 +267,13 @@ Ext.ux.SlicedToolbar = Ext.extend(Ext.Toolbar, {
         }.bind(this));
         
         // Add prev button at the end
-        if(slice > 0){
-            this.insertSlicingSeperator(slice, this.items.getCount()+1);
-            this.insertSlicingButton("prev", slice, this.items.getCount()+1);
-            var spacer = new Ext.Toolbar.Spacer();
-            this.insertSlicedHelperButton(spacer, slice, this.items.getCount()+1);
-            Ext.get(spacer.id).setWidth(this.iconStandardWidth);
-        }
+//        if(slice > 0){
+//            this.insertSlicingSeperator(slice, this.items.getCount()+1);
+//            this.insertSlicingButton("prev", slice, this.items.getCount()+1);
+//            var spacer = new Ext.Toolbar.Spacer();
+//            this.insertSlicedHelperButton(spacer, slice, this.items.getCount()+1);
+//            Ext.get(spacer.id).setWidth(this.iconStandardWidth);
+//        }
         
         this.maxSlice = slice;
         
