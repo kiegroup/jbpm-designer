@@ -16,15 +16,6 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 	},
 	showSimulationResults: function(options) {
 		Ext.getCmp('maintabs').setActiveTab(1);
-
-        this.facade.raiseEvent({
-            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-            ntype		: 'info',
-            msg         : 'Generating Simulation Charts...',
-            title       : ''
-
-        });
-
 		this.updateSimView(options);
 	},
 	showGraph: function(options) {

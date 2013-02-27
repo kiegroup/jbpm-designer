@@ -1,5 +1,5 @@
 <script type="text/javascript">
-        function initDesigner() {
+        function initEditorInstance() {
             ORYX.VERSION = "@designerversion@";
             ORYX.LOCALE = "@designerlocale@";
 
@@ -50,6 +50,7 @@
                 return contents;
             });
 
+            // dont load over and over again
             new Ajax.Request(ORYX.CONFIG.ROOT_PATH + "/plugins", {
                 asynchronous:false,
                 method:'get',
@@ -98,8 +99,9 @@
                             try {
                                 model = response.evalJSON();
                                 editor_parameters.model = model;
-                                //delete ORYX.EDITOR;
-                                ORYX.EDITOR = null;
+
+                                delete ORYX.EDITOR;
+
                                 ORYX.EDITOR = new ORYX.Editor(editor_parameters);
                             } catch(err) {
                                 ORYX.LOG.error(err);
@@ -113,4 +115,21 @@
                 });
             }
         }
+
+       function setupEditorDiv(editorID) {
+           if(ORYX.EDITORID) {
+               var child = document.getElementById(ORYX.EDITORID);
+               if(child) {
+                   child.parentNode.removeChild(child);
+               }
+           }
+
+           var current = document.getElementById(editorID);
+           if(current) {
+               var newdiv = document.createElement('div');
+               newdiv.setAttribute('id', 'Definition');
+               current.appendChild(newdiv);
+           }
+       }
+
 </script>

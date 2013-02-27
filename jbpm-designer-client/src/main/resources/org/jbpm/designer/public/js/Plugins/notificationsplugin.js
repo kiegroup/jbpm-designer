@@ -7,8 +7,10 @@ if (!ORYX.Config)
 ORYX.Plugins.NotificationsPlugin = Clazz.extend({
     construct: function(facade){
         this.facade = facade;
-
-        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_NOTIFICATION_SHOW, this.showNotification.bind(this));
+        if(!ORYX.NOTIFICATIONSINIT) {
+            this.facade.registerOnEvent(ORYX.CONFIG.EVENT_NOTIFICATION_SHOW, this.showNotification.bind(this));
+            ORYX.NOTIFICATIONSINIT = true;
+        }
     },
     showNotification: function(options) {
         notifications.options = {
