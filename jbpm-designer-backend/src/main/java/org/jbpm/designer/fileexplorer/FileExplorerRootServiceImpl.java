@@ -12,6 +12,7 @@ import org.jboss.errai.bus.server.annotations.Service;
 import org.uberfire.backend.FileExplorerRootService;
 import org.uberfire.backend.Root;
 import org.uberfire.backend.vfs.ActiveFileSystems;
+import org.uberfire.backend.vfs.FileSystem;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.shared.mvp.impl.DefaultPlaceRequest;
 
@@ -35,11 +36,18 @@ public class FileExplorerRootServiceImpl
     }
 
     private void setupGitRepos() {
-        final Path rootPath = fileSystems.getBootstrapFileSystem().getRootDirectories().get( 0 );
-        final Root root = new Root( rootPath,
-                new DefaultPlaceRequest( "RepositoryEditor" ) );
 
-        roots.add( root );
+        Collection<FileSystem> activefileSystems = fileSystems.fileSystems();
+        if (activefileSystems != null) {
+            for (FileSystem fs : activefileSystems) {
+                Path rootP = fs.getRootDirectories().get(0);
+                final Root root = new Root( rootP,
+                        new DefaultPlaceRequest( "RepositoryEditor" ) );
+
+                roots.add( root );
+            }
+        }
+
     }
 
     @Override
