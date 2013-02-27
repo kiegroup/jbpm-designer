@@ -52,7 +52,7 @@ public class AppSetup {
         } catch ( FileSystemAlreadyExistsException ex ) {
             fs = ioService.getFileSystem( fsURI );
         }
-        activeFileSystems.addBootstrapFileSystem( FileSystemFactory.newFS( new HashMap<String, String>() {{
+        activeFileSystems.addFileSystem( FileSystemFactory.newFS( new HashMap<String, String>() {{
             put( locationWithScheme, location );
         }}, fs.supportedFileAttributeViews() ) );
     }
