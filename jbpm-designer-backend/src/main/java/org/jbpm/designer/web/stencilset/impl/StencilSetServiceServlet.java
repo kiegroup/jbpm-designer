@@ -53,8 +53,8 @@ private static final Logger _logger = LoggerFactory.getLogger(StencilSetServiceS
     
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String requestURI = req.getRequestURI().replaceFirst(req.getContextPath(), "");
-        // urls should be of type: /org.jbpm.designer.jBPMDesigner/stencilset/bpmn2.0
-        // /org.jbpm.designer.jBPMDesigner/stencilset/{name}/{resource}
+        // urls should be of type: stencilset/bpmn2.0
+        // stencilset/{name}/{resource}
 
 
         String[] segments = requestURI.split("/");
@@ -64,7 +64,7 @@ private static final Logger _logger = LoggerFactory.getLogger(StencilSetServiceS
 
         String name = null;
         try {
-            name = segments[5];
+            name = segments[2];
         } catch (Exception e) {
             name = segments[segments.length-1];
         }
@@ -82,10 +82,14 @@ private static final Logger _logger = LoggerFactory.getLogger(StencilSetServiceS
         InputStream input = null;
         if (segments.length > 4) { 
             //looking for a resource under the stencilset.
-            String path = requestURI.substring(requestURI.indexOf(segments[3]) + segments[3].length() + 1);
+            String path = requestURI.substring(requestURI.indexOf(segments[2]) + segments[2].length() + 1);
+            // stencilset//org.jbpm.designer.jBPMDesigner/stencilsets/bpmn2.0jbpm/bpmn2.0jbpm.json
             // this is a bad temp hack..but gets stuff working for nows
             if(path.indexOf(applicationContext + "/stencilset/" + applicationContext + "/stencilsets/bpmn2.0/") >= 0) {
                 path = path.substring((applicationContext + "/stencilset/" + applicationContext + "/stencilsets/bpmn2.0/").length(), path.length());
+            }
+            if(path.indexOf("stencilset//" + applicationContext + "/stencilsets/bpmn2.0jbpm/") >= 0) {
+                path = path.substring(("stencilset//" + applicationContext + "/stencilsets/bpmn2.0jbpm/").length(), path.length());
             }
             if(path.indexOf(applicationContext + "/stencilset/" + applicationContext + "/stencilsets/bpmn2.0jbpm/") >= 0) {
                 path = path.substring((applicationContext + "/stencilset/" +applicationContext + "/stencilsets/bpmn2.0jbpm/").length(), path.length());

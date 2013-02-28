@@ -541,6 +541,7 @@ public class EditorHandler extends HttpServlet {
                 resultHtml.append(elt);
             }
         }
+
         response.setContentType("text/plain; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(resultHtml.toString());

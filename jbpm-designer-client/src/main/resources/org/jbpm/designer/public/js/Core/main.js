@@ -34,13 +34,12 @@ function init() {
 	 * internet. This causes problems when internet or the ext site are not
 	 * available. */
 	Ext.BLANK_IMAGE_URL = ORYX.BASE_FILE_PATH + 'lib/ext-2.0.2/resources/images/default/s.gif';
-	
+
 	ORYX.Log.debug("Querying editor instances");
 
 	// Hack for WebKit to set the SVGElement-Classes
 	ORYX.Editor.setMissingClasses();
     // use this hook to get initialized through the plugin in charge of loading the model
-    // editor is created from gwt code
     //window.onOryxResourcesLoaded();
 
 }
@@ -109,7 +108,7 @@ ORYX.Editor = {
         		this.id = ORYX.Editor.provideId();
         	}
         }
-        
+
         // Defines if the editor should be fullscreen or not
 		this.fullscreen = model.fullscreen || true;
 
@@ -455,16 +454,14 @@ ORYX.Editor = {
 				this.layout_regions.center
 			]
 		};
-		//this.contentviewport = new Ext.Viewport( layout_config  );
+		this.contentviewport = new Ext.Viewport( layout_config  );
 
-        // TODO fix this .. hardcode for now
-        this.fullscreen = config.fullscreen;
+        //this.fullscreen = config.fullscreen;
 
 		if (this.fullscreen) {
 			this.layout = new Ext.Viewport( layout_config );
-		
 		} else {
-			layout_config.renderTo 	= ORYX.EDITORID;
+            layout_config.renderTo 	= this.id;
 			layout_config.height 	= layoutHeight;
 			this.layout = new Ext.Panel( layout_config );
 		}

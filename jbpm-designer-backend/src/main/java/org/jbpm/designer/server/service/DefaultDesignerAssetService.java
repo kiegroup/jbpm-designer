@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
@@ -95,9 +96,7 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
 
     @Override
     public String getEditorID() {
-        // TODO - fix this so it is not always "Definition"
-        return "Definition";
-        //return UUID.randomUUID().toString().replaceAll("-", "");
+        return UUID.randomUUID().toString().replaceAll("-", "");
     }
 
     @Override
