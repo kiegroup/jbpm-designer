@@ -1,135 +1,113 @@
 <script type="text/javascript">
-        function initEditorInstance() {
-            ORYX.VERSION = "@designerversion@";
-            ORYX.LOCALE = "@designerlocale@";
+    function initEditorInstance() {
+        ORYX.VERSION = "@designerversion@";
+        ORYX.LOCALE = "@designerlocale@";
 
-            ORYX.CONFIG.SSET = "@stencilset@";
-            ORYX.CONFIG.DEV = @debug@;
-            if (ORYX.CONFIG.DEV) {
-                ORYX_LOGLEVEL = 4;
-            }
+        ORYX.CONFIG.SSET = "@stencilset@";
+        ORYX.CONFIG.DEV = @debug@;
+        if (ORYX.CONFIG.DEV) {
+            ORYX_LOGLEVEL = 4;
+        }
 
-            ORYX.PREPROCESSING = "@preprocessing@";
-            ORYX.EXTERNAL_PROTOCOL = "@externalprotocol@";
-            ORYX.EXTERNAL_HOST = "@externalhost@";
-            ORYX.EXTERNAL_SUBDOMAIN = "@externalsubdomain@";
-            ORYX.REPOSITORY_ID = "@repositoryid@";
+        ORYX.PREPROCESSING = "@preprocessing@";
+        ORYX.EXTERNAL_PROTOCOL = "@externalprotocol@";
+        ORYX.EXTERNAL_HOST = "@externalhost@";
+        ORYX.EXTERNAL_SUBDOMAIN = "@externalsubdomain@";
+        ORYX.REPOSITORY_ID = "@repositoryid@";
 
-            ORYX.UUID = "@editoruuid@";
-            ORYX.PROFILE = "@editorprofile@";
-            ORYX.EDITORID = "@editorid@";
-            ORYX.ACTIVENODES = @activenodes@;
-            ORYX.COMPLETEDNODES = @completednodes@;
-            ORYX.READONLY = @readonly@;
+        ORYX.UUID = "@editoruuid@";
+        ORYX.PROFILE = "@editorprofile@";
+        ORYX.EDITORID = "@editorid@";
+        ORYX.ACTIVENODES = @activenodes@;
+        ORYX.COMPLETEDNODES = @completednodes@;
+        ORYX.READONLY = @readonly@;
 
-            ORYX.LOCAL_HISTORY_ENABLED = @localhistoryenabled@;
-            ORYX.LOCAL_HISTORY_TIMEOUT = @localhistorytimeout@;
+        ORYX.LOCAL_HISTORY_ENABLED = @localhistoryenabled@;
+        ORYX.LOCAL_HISTORY_TIMEOUT = @localhistorytimeout@;
 
-            ORYX.CONFIG.ROOT_PATH = "@contextroot@";
-            ORYX.PATH = ORYX.CONFIG.ROOT_PATH + "/";
-            ORYX.BASE_FILE_PATH = ORYX.CONFIG.ROOT_PATH + "/org.jbpm.designer.jBPMDesigner/";
+        ORYX.CONFIG.ROOT_PATH = "@contextroot@";
+        ORYX.PATH = ORYX.CONFIG.ROOT_PATH + "/";
+        ORYX.BASE_FILE_PATH = ORYX.CONFIG.ROOT_PATH + "/org.jbpm.designer.jBPMDesigner/";
 
-            ORYX.CONFIG.UUID_AUTOSAVE_INTERVAL = @autosaveinterval@;
-            ORYX.CONFIG.UUID_AUTOSAVE_DEFAULT = @autosavedefault@;
+        ORYX.CONFIG.UUID_AUTOSAVE_INTERVAL = @autosaveinterval@;
+        ORYX.CONFIG.UUID_AUTOSAVE_DEFAULT = @autosavedefault@;
 
-            ORYX.CONFIG.SSEXTS = [@ssextensions@].
-            map(function (ssext) {
-                // for each of the extensions, we get the extension file and return its contents.
-                var contents = null;
-                new Ajax.Request(ORYX.CONFIG.ROOT_PATH + "/stencilset/" + ssext, {
-                    asynchronous:false,
-                    method:'get',
-                    contentType:'application/json',
-                    onSuccess:function (result) {
-                        contents = result.responseText.evalJSON();
-                    },
-                    onFailure:function (result) {
-                        alert("Could not load Process Designer"); //TODO even better logging ?
-                    }
-                });
-                return contents;
-            });
-
-            // dont load over and over again
-            new Ajax.Request(ORYX.CONFIG.ROOT_PATH + "/plugins", {
+        ORYX.CONFIG.SSEXTS = [@ssextensions@].
+        map(function (ssext) {
+            // for each of the extensions, we get the extension file and return its contents.
+            var contents = null;
+            new Ajax.Request(ORYX.CONFIG.ROOT_PATH + "/stencilset/" + ssext, {
                 asynchronous:false,
                 method:'get',
                 contentType:'application/json',
                 onSuccess:function (result) {
-                    var allPlugins = {};
-                    result.responseText.evalJSON().each(function (p) {
-                        allPlugins[p.name] = p;
-                    }.bind(allPlugins));
-                    // install the current plugins
-                    ORYX.availablePlugins = [];
-                    [@profileplugins@].
-                    each(function (pluginName) {
-                        p = allPlugins[pluginName];
-                        if (p) {
-                            ORYX.availablePlugins.push(p);
-                        } else {
-                            ORYX.Log.error("missing plugin " + pluginName);
-                        }
-                    }.bind(allPlugins));
-
+                    contents = result.responseText.evalJSON();
                 },
                 onFailure:function (result) {
-                    alert("Could not load Process Designer: " + result.responseText);
+                    alert("Could not load Process Designer"); //TODO even better logging ?
                 }
             });
-        }
+            return contents;
+        });
 
-        function startEditorInstance() {
-            var stencilset = ORYX.Utils.getParamFromUrl('stencilset') || ORYX.CONFIG.SSET;
-            var editor_parameters = {
-                id: ORYX.EDITORID,
-                fullscreen: false,
-                stencilset: {
-                    url: stencilset
-                }
-            };
-            if(!(ORYX.UUID === undefined)) {
-                //load the model from the repository from its uuid
-                new Ajax.Request(ORYX.CONFIG.UUID_URL(), {
-                    encoding: 'UTF-8',
-                    method: 'GET',
-                    onSuccess: function(transport) {
-                        response = transport.responseText;
-                        if (response.length != 0) {
-                            try {
-                                model = response.evalJSON();
-                                editor_parameters.model = model;
-
-                                delete ORYX.EDITOR;
-
-                                ORYX.EDITOR = new ORYX.Editor(editor_parameters);
-                            } catch(err) {
-                                ORYX.LOG.error(err);
-                            }
-                        }
-
-                    },
-                    onFailure: function(transport) {
-                        ORYX.LOG.error("Could not load the model for uuid " + ORYX.UUID);
+        new Ajax.Request(ORYX.CONFIG.ROOT_PATH + "/plugins", {
+            asynchronous:false,
+            method:'get',
+            contentType:'application/json',
+            onSuccess:function (result) {
+                var allPlugins = {};
+                result.responseText.evalJSON().each(function (p) {
+                    allPlugins[p.name] = p;
+                }.bind(allPlugins));
+                // install the current plugins
+                ORYX.availablePlugins = [];
+                [@profileplugins@].
+                each(function (pluginName) {
+                    p = allPlugins[pluginName];
+                    if (p) {
+                        ORYX.availablePlugins.push(p);
+                    } else {
+                        ORYX.Log.error("missing plugin " + pluginName);
                     }
-                });
+                }.bind(allPlugins));
+
+            },
+            onFailure:function (result) {
+                alert("Could not load Process Designer: " + result.responseText);
             }
-        }
+        });
+    }
 
-       function setupEditorDiv(editorID) {
-           if(ORYX.EDITORID) {
-               var child = document.getElementById(ORYX.EDITORID);
-               if(child) {
-                   child.parentNode.removeChild(child);
+       function startEditorInstance() {
+           var stencilset = ORYX.Utils.getParamFromUrl('stencilset') || ORYX.CONFIG.SSET;
+           var editor_parameters = {
+               fullscreen: true,
+               stencilset: {
+                   url: stencilset
                }
-           }
+           };
+           if(!(ORYX.UUID === undefined)) {
+               //load the model from the repository from its uuid
+               new Ajax.Request(ORYX.CONFIG.UUID_URL(), {
+                   encoding: 'UTF-8',
+                   method: 'GET',
+                   onSuccess: function(transport) {
+                       response = transport.responseText;
+                       if (response.length != 0) {
+                           try {
+                               model = response.evalJSON();
+                               editor_parameters.model = model;
+                               ORYX.EDITOR = new ORYX.Editor(editor_parameters);
+                           } catch(err) {
+                               ORYX.LOG.error(err);
+                           }
+                       }
 
-           var current = document.getElementById(editorID);
-           if(current) {
-               var newdiv = document.createElement('div');
-               newdiv.setAttribute('id', 'Definition');
-               current.appendChild(newdiv);
+                   },
+                   onFailure: function(transport) {
+                       ORYX.LOG.error("Could not load the model for uuid " + ORYX.UUID);
+                   }
+               });
            }
        }
-
 </script>

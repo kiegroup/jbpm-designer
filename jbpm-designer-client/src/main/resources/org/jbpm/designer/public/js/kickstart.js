@@ -79,5 +79,4 @@ var Kickstart = {
 // register kickstart as the new onload event listener on current window.
 // previous listener(s) are triggered to launch with kickstart.
 
-// app kickstarted from gwt app
-// Event.observe(window.top, 'load', Kickstart.load);
+//Event.observe(window, 'load', Kickstart.load);

@@ -27,11 +27,12 @@ public class UUIDBasedJbpmRepository implements IUUIDBasedRepository {
         Repository repository = profile.getRepository();
         String processjson = "";
         String preProcessingParam = req.getParameter("pp");
-        // check with Guvnor to see what it has for this uuid for us
         String processxml = ((Asset<String>)repository.loadAsset(uuid)).getAssetContent();
+
         if(processxml != null && processxml.length() > 0) {
         	DroolsPackageImpl.init();
             processjson = profile.createUnmarshaller().parseModel(processxml, profile, preProcessingParam);
+
             return processjson.getBytes("UTF-8");
         } else {
             return new byte[0];

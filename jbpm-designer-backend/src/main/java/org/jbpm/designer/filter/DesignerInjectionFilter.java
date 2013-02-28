@@ -40,6 +40,9 @@ public class DesignerInjectionFilter implements Filter {
                 // workaround for hosted gwt mode
                 if(!(((HttpServletRequest) request).getRequestURI().endsWith("hosted.html"))) {
                     String modifiedResponse = processContent(buff, rules);
+
+                    System.out.println("********************* MODIFIED RESPONSE: \n" + modifiedResponse + "\n*******************");
+
                     out.write(modifiedResponse);
                 } else {
                     out.write(buff.toString());

@@ -5,6 +5,7 @@ import javax.inject.Inject;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.*;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.IsWidget;
 import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.jboss.errai.ioc.client.api.Caller;
@@ -46,7 +47,7 @@ public class DesignerPresenter {
 
             assetService.call( new RemoteCallback<String>() {
                 @Override
-                public void callback( String editorID ) {
+                public void callback( final String editorID ) {
                     view.setEditorID(editorID);
                     String url =   GWT.getHostPageBaseURL().replaceFirst("/"+GWT.getModuleName()+"/", "");
                     assetService.call( new RemoteCallback<String>() {
@@ -57,12 +58,10 @@ public class DesignerPresenter {
                             editorBody = editorBody.replaceAll("</script>", "");
 
                             final Document doc = Document.get();
-                            final NodeList<Element> nodes = doc.getElementsByTagName( HeadElement.TAG );
-                            final HeadElement head = nodes.getItem( 0 ).cast();
-                            appendScriptSource(head, editorBody);
+                            final FrameElement editorInlineFrame = (FrameElement) doc.getElementById(editorID);
+                            appendScriptSource(editorInlineFrame, editorBody);
 
                             view.startDesigneInstancer();
-                            //ScriptInjector.fromString(editorBody).setRemoveTag(false).inject();
 
                         }
 
@@ -82,10 +81,10 @@ public class DesignerPresenter {
         return view;
     }
 
-    private void appendScriptSource( final Element element,
+    private void appendScriptSource( final FrameElement element,
                                      final String source ) {
         final ScriptElement scriptElement = Document.get().createScriptElement( source );
         scriptElement.setType( "text/javascript" );
-        element.appendChild( scriptElement );
+        element.getContentDocument().getDocumentElement().getElementsByTagName("head").getItem(0).appendChild(scriptElement);
     }
 }
