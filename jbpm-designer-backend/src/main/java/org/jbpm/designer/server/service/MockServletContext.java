@@ -21,7 +21,7 @@ public class MockServletContext implements ServletContext {
     @Override
     public String getRealPath( String s ) {
         //FIXME just for now so it works in embedded mode-gwt hosted mode
-        return "target/jbpm-designer-standalone-6.0.0-SNAPSHOT" + ConfigurationProvider.getInstance().getDesignerContext();
+        return "target/jbpm-designer-standalone-6.0.0.Alpha9" + ConfigurationProvider.getInstance().getDesignerContext();
     }
 
     @Override

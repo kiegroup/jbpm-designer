@@ -4,7 +4,7 @@
 
     <groupId>org.jbpm</groupId>
     <artifactId>jbpm-designer</artifactId>
-    <version>6.0.0-SNAPSHOT</version>
+    <version>6.0.0.Alpha9</version>
     <packaging>pom</packaging>
 
     <name>jBPM Designer</name>
@@ -24,6 +24,13 @@
         <url>https://github.com/droolsjbpm/jbpm-designer</url>
     </scm>
 
+    <developers>
+        <developer>
+            <name>All developers are listed on the team website</name>
+            <url>http://www.jboss.org/drools/team</url>
+        </developer>
+    </developers>
+
     <modules>
         <module>jbpm-designer-backend</module>
         <module>jbpm-designer-client</module>
@@ -31,21 +38,20 @@
         <module>jbpm-designer-standalone</module>
     </modules>
 
-
     <properties>
         <mvel.version>2.1.3.Final</mvel.version>
-        <drools.version>6.0.0-SNAPSHOT</drools.version>
-        <jbpm.version>6.0.0-SNAPSHOT</jbpm.version>
+        <drools.version>6.0.0.Alpha9</drools.version>
+        <jbpm.version>6.0.0.Alpha9</jbpm.version>
         <batik.version>1.6-1</batik.version>
-        <uberfire.version>0.2.0-SNAPSHOT</uberfire.version>
+        <uberfire.version>0.2.0.Alpha2</uberfire.version>
         <errai.version>2.2.0.Final</errai.version>
         <gwt.version>2.5.0</gwt.version>
         <gwt.maven.version>2.5.0</gwt.maven.version>
         <weld.version>1.1.8.Final</weld.version>
         <jetty.version>6.1.25</jetty.version>
         <slf4j.version>1.7.2</slf4j.version>
-        <kie.commons.version>6.0.0-SNAPSHOT</kie.commons.version>
-        <guvnor.version>6.0.0-SNAPSHOT</guvnor.version>
+        <kie.commons.version>6.0.0.Alpha9</kie.commons.version>
+        <guvnor.version>6.0.0.Alpha9</guvnor.version>
         <port>8888</port>
     </properties>
 
@@ -552,7 +558,7 @@
             <dependency>
                 <groupId>org.jbpm</groupId>
                 <artifactId>jbpm-simulation</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
+                <version>1.0.0.Alpha9</version>
             </dependency>
 
             <!-- repository dependencies -->
