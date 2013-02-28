@@ -34,6 +34,11 @@ public class Bpmn2TypeDefinition implements ResourceTypeDefinition {
     }
 
     @Override
+    public String getSimpleWildcardPattern() {
+        return "*.bpmn*";
+    }
+
+    @Override
     public boolean accept( final Path path ) {
         return ( path.getFileName().endsWith( "." + getSuffix() ) || path.getFileName().endsWith( ".bpmn" ) );
     }
