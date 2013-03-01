@@ -57,4 +57,8 @@ public class NewProcessHandler extends DefaultNewResourceHandler {
                             Callback<Boolean, Void> callback ) {
         callback.onSuccess( true );
     }
+
+    public void notifyResourceAdded(Path path) {
+
+    }
 }
