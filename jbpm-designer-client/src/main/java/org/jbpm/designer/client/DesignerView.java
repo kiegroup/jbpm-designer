@@ -41,7 +41,7 @@ public class DesignerView
         inlineFrame.getElement().getStyle().setOverflow(Style.Overflow.AUTO);
         inlineFrame.getElement().getStyle().setWidth(100, Style.Unit.PCT);
         inlineFrame.getElement().getStyle().setHeight(680, Style.Unit.PX);
-        inlineFrame.setUrl(GWT.getModuleBaseURL() + "inlineeditor.html");
+        inlineFrame.setUrl(GWT.getModuleBaseURL() + "inlineeditor.jsp");
     }
 
     @Override
