@@ -14,6 +14,7 @@ import org.jboss.drools.impl.DroolsPackageImpl;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.impl.ExternalInfo;
 import org.jbpm.designer.web.repository.IUUIDBasedRepository;
+import org.jbpm.designer.web.server.ServletUtil;
 
 
 public class UUIDBasedJbpmRepository implements IUUIDBasedRepository {
@@ -31,7 +32,7 @@ public class UUIDBasedJbpmRepository implements IUUIDBasedRepository {
         String processjson = "";
         String preProcessingParam = req.getParameter("pp");
         // check with Guvnor to see what it has for this uuid for us
-        String processxml = doHttpUrlConnectionAction(buildExternalLoadURL(profile, uuid));
+        String processxml = doHttpUrlConnectionAction(buildExternalLoadURL(profile, uuid), profile);
         if(processxml != null && processxml.length() > 0) {
         	DroolsPackageImpl.init();
             processjson = profile.createUnmarshaller().parseModel(processxml, profile, preProcessingParam);
@@ -55,8 +56,8 @@ public class UUIDBasedJbpmRepository implements IUUIDBasedRepository {
         buff.append("/");
         buff.append(profile.getExternalLoadURLSubdomain());
         buff.append("?uuid=").append(uuid);
-        buff.append("&usr=").append(profile.getUsr());
-        buff.append("&pwd=").append(profile.getPwd());
+        //buff.append("&usr=").append(profile.getUsr());
+        //buff.append("&pwd=").append(profile.getPwd());
         
         return buff.toString();
     }
@@ -65,7 +66,7 @@ public class UUIDBasedJbpmRepository implements IUUIDBasedRepository {
         return profile.createMarshaller().parseModel(json, preProcessingData);
     }
 
-    private String doHttpUrlConnectionAction(String desiredUrl) throws Exception {
+    private String doHttpUrlConnectionAction(String desiredUrl, IDiagramProfile profile) throws Exception {
       URL url = null;
       BufferedReader reader = null;
       StringBuilder stringBuilder;
@@ -73,12 +74,13 @@ public class UUIDBasedJbpmRepository implements IUUIDBasedRepository {
       try {
         url = new URL(desiredUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        
+        ServletUtil.applyAuth(profile, connection);
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Content-Type", "application/xml"); 
         connection.setRequestProperty("charset", "UTF-8");
         connection.setRequestProperty("Accept-Charset", "UTF-8");
         connection.setReadTimeout(5*1000);
+
         connection.connect();
 
         reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
