@@ -17,6 +17,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.codehaus.jackson.JsonParseException;
 import org.eclipse.bpmn2.Definitions;
@@ -51,9 +52,9 @@ import org.jbpm.designer.web.profile.IDiagramProfile;
 public class JbpmProfileImpl implements IDiagramProfile {
     
     private static Logger _logger = LoggerFactory.getLogger(JbpmProfileImpl.class);
-    private static final String guvnorName = "droolsGuvnor";
-    
+    private static final String externalPwdKey = "externalpwdkey";
     private Map<String, IDiagramPlugin> _plugins = new LinkedHashMap<String, IDiagramPlugin>();
+
 
     private String _stencilSet;
     private String _externalLoadHost;
@@ -203,10 +204,26 @@ public class JbpmProfileImpl implements IDiagramProfile {
 
     public String getPwd() {
         if(getPwdEnc() != null && getPwdEnc().equalsIgnoreCase("true")) {
-            StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
-            encryptor.setPassword(guvnorName);
-            encryptor.setAlgorithm("PBEWithMD5AndTripleDES");
-            return encryptor.decrypt(_pwd);
+            if(System.getProperty(externalPwdKey) == null) {
+                _logger.error("Unable to find the system property: " + externalPwdKey);
+                throw new IllegalStateException("Unable to find system property: " + externalPwdKey);
+            } else {
+                try {
+                    FileInputStream inputStream = new FileInputStream(System.getProperty(externalPwdKey));
+                    String encKey = IOUtils.toString(inputStream);
+                    encKey = encKey.replace("\n", "").replace("\r", "");
+
+                    StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
+                    encryptor.setPassword(encKey);
+                    encryptor.setAlgorithm("PBEWithMD5AndTripleDES");
+                    inputStream.close();
+
+                    return encryptor.decrypt(_pwd);
+                } catch(Exception e) {
+                    _logger.error("Unable to decrypt pwd: " + e.getMessage());
+                    throw new IllegalStateException("Unable to decrypt pwd: " + e.getMessage());
+                }
+            }
         } else {
             return _pwd;
         }
