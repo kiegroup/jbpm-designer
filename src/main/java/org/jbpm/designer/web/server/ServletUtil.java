@@ -205,7 +205,7 @@ public class ServletUtil {
 				&& profile.getPwd().trim().length() > 0) {
 			String auth = profile.getUsr() + ":" + profile.getPwd();
 	        connection.setRequestProperty("Authorization", "Basic "
-	                + Base64.encodeBase64String(auth.getBytes()));
+	                + Base64.encodeBase64URLSafeString(auth.getBytes()));
 		}
     }
 	

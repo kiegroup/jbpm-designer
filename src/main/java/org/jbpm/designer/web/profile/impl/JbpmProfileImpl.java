@@ -151,28 +151,26 @@ public class JbpmProfileImpl implements IDiagramProfile {
                                     _logger.info("Invalid subdomain specified");
                                 }
                             }
-                            if ("usr".equals(reader.getAttributeLocalName(i))) {
-                                String extUsr = reader.getAttributeValue(i);
-                                if(!isEmpty(extUsr)) {
-                                    _usr = extUsr;
-                                } else {
-                                    _logger.info("Invalid usr specified");
-                                }
-                            }
-                            if ("pwd".equals(reader.getAttributeLocalName(i))) {
-                                // allow any value for pwd
-                                _pwd = reader.getAttributeValue(i);
-                            }
-                            if ("pwdenc".equals(reader.getAttributeLocalName(i))) {
-                                _pwdenc = reader.getAttributeValue(i);
-                            }
                         }
+                    } else if ("usr".equals(reader.getLocalName())) {
+                        String extUsr = reader.getElementText();
+                        if(!isEmpty(extUsr)) {
+                            _usr = extUsr;
+                        } else {
+                            _logger.info("Invalid usr specified");
+                        }
+                    }  else if ("pwd".equals(reader.getLocalName())) {
+                        String extpwd = reader.getElementText();
+                        _pwd = extpwd;
+                    } else if ("pwdenc".equals(reader.getLocalName())) {
+                        String extpwdenc = reader.getElementText();
+                        _pwdenc = extpwdenc;
                     }
                 }
             }
         } catch (XMLStreamException e) {
             _logger.error(e.getMessage(), e);
-            throw new RuntimeException(e); // stop initialization
+            throw new RuntimeException(e);
         } finally {
             if (fileStream != null) { try { fileStream.close(); } catch(IOException e) {}};
         }

@@ -42,6 +42,10 @@
         <plugin name="ORYX.Plugins.DockerCreation"/>
         <plugin name="ORYX.Plugins.TaskPropertiesUpdater"/>
         <plugin name="ORYX.Plugins.VoiceCommand"/>
-        <externalloadurl protocol="http" host="localhost:8080" subdomain="drools-guvnor/org.drools.guvnor.Guvnor/oryxeditor" usr="admin" pwd="admin" pwdenc="false"/>
+        <externalloadurl protocol="http" host="localhost:8080" subdomain="drools-guvnor/org.drools.guvnor.Guvnor/oryxeditor">
+            <usr><![CDATA[admin]]></usr>
+            <pwd><![CDATA[admin]]></pwd>
+            <pwdenc>false</pwdenc>
+        </externalloadurl>
     </profile>
 </profiles>
