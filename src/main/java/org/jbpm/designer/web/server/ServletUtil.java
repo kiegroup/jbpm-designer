@@ -173,6 +173,7 @@ public class ServletUtil {
 	public static InputStream getInputStreamForURL(String urlLocation,
             String requestMethod, IDiagramProfile profile) throws Exception {
         URL url = new URL(urlLocation);
+        System.out.println("********************************** URL TO CONNECT: " + urlLocation);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
         connection.setRequestMethod(requestMethod);
@@ -200,13 +201,17 @@ public class ServletUtil {
     }
 	
 	public static void applyAuth(IDiagramProfile profile, HttpURLConnection connection) {
-		if (profile.getUsr() != null && profile.getUsr().trim().length() > 0
-				&& profile.getPwd() != null
-				&& profile.getPwd().trim().length() > 0) {
-			String auth = profile.getUsr() + ":" + profile.getPwd();
-	        connection.setRequestProperty("Authorization", "Basic "
-	                + Base64.encodeBase64URLSafeString(auth.getBytes()));
-		}
+		try {
+            if (profile.getUsr() != null && profile.getUsr().trim().length() > 0
+                    && profile.getPwd() != null
+                    && profile.getPwd().trim().length() > 0) {
+                String auth = profile.getUsr() + ":" + profile.getPwd();
+                connection.setRequestProperty("Authorization", "Basic "
+                        + new String(Base64.encodeBase64(auth.getBytes("UTF-8"))));
+            }
+        } catch(Exception e) {
+            throw new IllegalStateException(e.getMessage());
+        }
     }
 	
 	public static boolean assetExistsInGuvnor(String packageName, String assetName, IDiagramProfile profile) {

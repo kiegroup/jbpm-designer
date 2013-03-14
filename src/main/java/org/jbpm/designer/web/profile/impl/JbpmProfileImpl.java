@@ -23,7 +23,6 @@ import org.codehaus.jackson.JsonParseException;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.emf.common.util.URI;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
-import org.jasypt.util.text.BasicTextEncryptor;
 import org.jboss.drools.DroolsPackage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

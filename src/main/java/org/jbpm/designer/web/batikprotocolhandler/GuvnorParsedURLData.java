@@ -10,6 +10,7 @@ import org.apache.batik.util.ParsedURLData;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 
 import org.apache.commons.codec.binary.Base64;
+import org.jbpm.designer.web.server.ServletUtil;
 
 public class GuvnorParsedURLData extends ParsedURLData {
     private IDiagramProfile profile;
@@ -49,19 +50,19 @@ public class GuvnorParsedURLData extends ParsedURLData {
         connection.setRequestProperty("Accept-Charset", "UTF-8");
         connection.setReadTimeout(5 * 1000);
 
-        applyAuth(connection);
+        ServletUtil.applyAuth(profile, connection);
         connection.connect();
         return connection.getInputStream();
     }
     
-    private void applyAuth(HttpURLConnection connection) {
-        if (profile.getUsr() != null && profile.getUsr().trim().length() > 0
-                && profile.getPwd() != null
-                && profile.getPwd().trim().length() > 0) {
-            String userpassword = profile.getUsr() + ":" + profile.getPwd();
-            String encodedAuthorization = Base64.encodeBase64String(userpassword.getBytes());
-            connection.setRequestProperty("Authorization", "Basic "
-                    + encodedAuthorization);
-        }
-    }
+//    private void applyAuth(HttpURLConnection connection) {
+//        if (profile.getUsr() != null && profile.getUsr().trim().length() > 0
+//                && profile.getPwd() != null
+//                && profile.getPwd().trim().length() > 0) {
+//            String userpassword = profile.getUsr() + ":" + profile.getPwd();
+//            String encodedAuthorization = Base64.encodeBase64URLSafeString(userpassword.getBytes());
+//            connection.setRequestProperty("Authorization", "Basic "
+//                    + encodedAuthorization);
+//        }
+//    }
 }

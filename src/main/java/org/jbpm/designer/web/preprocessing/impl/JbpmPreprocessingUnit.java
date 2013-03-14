@@ -550,7 +550,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 				URL checkEmailIconURL = new URL(emailIconURL);
 				HttpURLConnection checkEmailIconConnection = (HttpURLConnection) checkEmailIconURL
 				        .openConnection();
-				applyAuth(profile, checkEmailIconConnection);
+                ServletUtil.applyAuth(profile, checkEmailIconConnection);
 				checkEmailIconConnection.setRequestMethod("GET");
 				checkEmailIconConnection.setRequestProperty("charset", "UTF-8");
 				checkEmailIconConnection
@@ -561,7 +561,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 					URL createEmailIconURL = new URL(packageAssetsURL);
 		            HttpURLConnection createEmailIconConnection = (HttpURLConnection) createEmailIconURL
 		                    .openConnection();
-		            applyAuth(profile, createEmailIconConnection);
+                    ServletUtil.applyAuth(profile, createEmailIconConnection);
 		            createEmailIconConnection.setRequestMethod("POST");
 		            createEmailIconConnection.setRequestProperty("Content-Type",
 		                    "application/octet-stream");
@@ -578,7 +578,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 				URL checkLogIconURL = new URL(logIconURL);
 				HttpURLConnection checkLogIconConnection = (HttpURLConnection) checkLogIconURL
 				        .openConnection();
-				applyAuth(profile, checkLogIconConnection);
+                ServletUtil.applyAuth(profile, checkLogIconConnection);
 				checkLogIconConnection.setRequestMethod("GET");
 				checkLogIconConnection
 				        .setRequestProperty("Accept", "application/atom+xml");
@@ -588,7 +588,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 		            URL createLogIconURL = new URL(packageAssetsURL);
 		            HttpURLConnection createLogIconConnection = (HttpURLConnection) createLogIconURL
 		                    .openConnection();
-		            applyAuth(profile, createLogIconConnection);
+                    ServletUtil.applyAuth(profile, createLogIconConnection);
 		            createLogIconConnection.setRequestMethod("POST");
 		            createLogIconConnection.setRequestProperty("Content-Type",
 		                    "application/octet-stream");
@@ -605,7 +605,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 				URL checkServiceNodeIconURL = new URL(serviceNodeIconURL);
 				HttpURLConnection checkServiceNodeIconConnection = (HttpURLConnection) checkServiceNodeIconURL
 				        .openConnection();
-				applyAuth(profile, checkServiceNodeIconConnection);
+                ServletUtil.applyAuth(profile, checkServiceNodeIconConnection);
 				checkServiceNodeIconConnection.setRequestMethod("GET");
 				checkServiceNodeIconConnection
 				        .setRequestProperty("Accept", "application/atom+xml");
@@ -615,7 +615,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 		            URL createServiceNodeIconURL = new URL(packageAssetsURL);
 		            HttpURLConnection createServiceNodeIconConnection = (HttpURLConnection) createServiceNodeIconURL
 		                    .openConnection();
-		            applyAuth(profile, createServiceNodeIconConnection);
+                    ServletUtil.applyAuth(profile, createServiceNodeIconConnection);
 		            createServiceNodeIconConnection.setRequestMethod("POST");
 		            createServiceNodeIconConnection.setRequestProperty("Content-Type",
 		                    "application/octet-stream");
@@ -690,7 +690,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 	            URL createWidURL = new URL(packageAssetsURL);
 	            HttpURLConnection createWidConnection = (HttpURLConnection) createWidURL
 	                    .openConnection();
-	            applyAuth(profile, createWidConnection);
+                ServletUtil.applyAuth(profile, createWidConnection);
 	            createWidConnection.setRequestMethod("POST");
 	            createWidConnection.setRequestProperty("Content-Type",
 	                    "application/octet-stream");
@@ -836,16 +836,16 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         _logger.info("Created file:" + file);
     }
     
-    private void applyAuth(IDiagramProfile profile, HttpURLConnection connection) {
-        if (profile.getUsr() != null && profile.getUsr().trim().length() > 0
-                && profile.getPwd() != null
-                && profile.getPwd().trim().length() > 0) {
-            String userpassword = profile.getUsr() + ":" + profile.getPwd();
-            String encodedAuthorization = Base64.encodeBase64String(userpassword.getBytes());
-            connection.setRequestProperty("Authorization", "Basic "
-                    + encodedAuthorization);
-        }
-    }
+//    private void applyAuth(IDiagramProfile profile, HttpURLConnection connection) {
+//        if (profile.getUsr() != null && profile.getUsr().trim().length() > 0
+//                && profile.getPwd() != null
+//                && profile.getPwd().trim().length() > 0) {
+//            String userpassword = profile.getUsr() + ":" + profile.getPwd();
+//            String encodedAuthorization = Base64.encodeBase64String(userpassword.getBytes());
+//            connection.setRequestProperty("Authorization", "Basic "
+//                    + encodedAuthorization);
+//        }
+//    }
     public static byte[] getBytesFromFile(File file) throws IOException {
     	InputStream is = null;
     	is = new FileInputStream(file);
