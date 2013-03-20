@@ -826,9 +826,22 @@ ORYX.Plugins.PropertyWindow = {
 							cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1,field:cf});							
 							editorGrid = new Ext.Editor(cf);
 							break;
+
+                        case ORYX.CONFIG.TYPE_DATAASSIGNMENT:
+                                var cf = new Ext.form.ComplexDataAssignmenField({
+                                    allowBlank: pair.optional(),
+                                    dataSource:this.dataSource,
+                                    grid:this.grid,
+                                    row:index,
+                                    facade:this.facade,
+                                    shapes:this.shapeSelection.shapes
+                                });
+                                cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1,field:cf});
+                                editorGrid = new Ext.Editor(cf);
+                                break;
 							
-						case ORYX.CONFIG.TYPE_DATAASSIGNMENT:
-							var cf = new Ext.form.ComplexDataAssignmenField({
+						case ORYX.CONFIG.TYPE_VISUALDATAASSIGNMENTS:
+							var cf = new Ext.form.ComplexVisualDataAssignmentField({
 								allowBlank: pair.optional(),
 								dataSource:this.dataSource,
 								grid:this.grid,
@@ -3095,7 +3108,6 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                 editor: new Ext.form.TextField({ allowBlank: true, vtype: 'inputName', regex: /^[a-z0-9 \-\.\_]*$/i }),
                 renderer: Ext.util.Format.htmlEncode
             }, {
-                // tihomir
             	id: 'stype',
                 header: 'Standard Type',
                 width: 100,
@@ -3561,4 +3573,97 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField,  {
             }
         });
 	}
+});
+Ext.form.ComplexVisualDataAssignmentField = Ext.extend(Ext.form.TriggerField,  {
+    onTriggerClick : function() {
+        if(this.disabled){
+            return;
+        }
+
+        Ext.each(this.dataSource.data.items, function(item){
+            if((item.data.gridProperties.propId == "oryx-assignments")) {
+                alert("value: " + item.data['value']);
+            }
+        });
+
+        var processJSON = ORYX.EDITOR.getSerializedJSON();
+        var processVars = jsonPath(processJSON.evalJSON(), "$.properties.vardefs");
+        if(!processVars) {
+                //forEach(processVars.toString().split(","), maybeAdd);
+            processVars = "";
+        }
+        var processGlobals = jsonPath(processJSON.evalJSON(), "$.properties.globals");
+        if(!processGlobals) {
+                //forEach(processGlobals.toString().split(","), maybeAdd);
+            processGlobals = "";
+        }
+        var processdataobjectstr = "";
+        var childShapes = jsonPath(processJSON.evalJSON(), "$.childShapes.*");
+        for(var i = 0; i < childShapes.length;i++) {
+            if(childShapes[i].stencil.id == 'DataObject') {
+                processdataobjectstr += childShapes[i].properties.name;
+                processdataobjectstr += ",";
+            }
+        }
+        if (processdataobjectstr.endsWith(",")) {
+            processdataobjectstr = processdataobjectstr.substr(0, processdataobjectstr.length - 1);
+        }
+        // forEach(processdataobjectstr.toString().split(","), maybeAdd);
+
+        var dialog = new Ext.Window({
+            layout		: 'anchor',
+            autoCreate	: true,
+            title		: 'Visual data associations Editor',
+            height		: 550,
+            width		: 850,
+            modal		: true,
+            collapsible	: false,
+            fixedcenter	: true,
+            shadow		: true,
+            resizable   : true,
+            proxyDrag	: true,
+            autoScroll  : true,
+            keys:[{
+                key	: 27,
+                fn	: function(){
+                    dialog.hide()
+                }.bind(this)
+            }],
+            items : [{
+                xtype : "component",
+                id    : 'visualdataassignmentswindow',
+                autoEl : {
+                    tag : "iframe",
+                    src : ORYX.BASE_FILE_PATH + 'customeditors/visualassignmentseditor.jsp?vars='+processVars+'&globals='+processGlobals+'&dobj='+processdataobjectstr,
+                    width: "100%",
+                    height: "100%"
+                }
+            }],
+            listeners : {
+                hide: function(){
+                    this.fireEvent('dialogClosed', this.value);
+                    dialog.destroy();
+                }.bind(this)
+            },
+            buttons		: [{
+                text: ORYX.I18N.PropertyWindow.ok,
+                handler: function(){
+                    var outValue = document.getElementById('visualdataassignmentswindow').contentWindow.getEditorValue();
+                    this.setValue(outValue);
+                    this.dataSource.getAt(this.row).set('value', outValue)
+                    this.dataSource.commitChanges()
+                    dialog.hide();
+                }.bind(this)
+            }, {
+                text: ORYX.I18N.PropertyWindow.cancel,
+                handler: function(){
+                    this.setValue(this.value);
+                    dialog.hide()
+                }.bind(this)
+            }]
+        });
+        dialog.show();
+        this.grid.stopEditing();
+
+    }
 });

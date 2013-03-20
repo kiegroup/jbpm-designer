@@ -176,6 +176,7 @@ ORYX.CONFIG.TYPE_DATAOUTPUT =           "dataoutput";
 ORYX.CONFIG.TYPE_DATAINPUT_SINGLE =     "datainputsingle";
 ORYX.CONFIG.TYPE_DATAOUTPUT_SINGLE =    "dataoutputsingle";
 ORYX.CONFIG.TYPE_DATAASSIGNMENT =       "dataassignment";
+ORYX.CONFIG.TYPE_VISUALDATAASSIGNMENTS = "visualdataassignment";
 ORYX.CONFIG.TYPE_CALLEDELEMENT  =       "calledelement";
 ORYX.CONFIG.TYPE_CUSTOM =               "custom";
 ORYX.CONFIG.TYPE_REASSIGNMENT =         "reassignment";

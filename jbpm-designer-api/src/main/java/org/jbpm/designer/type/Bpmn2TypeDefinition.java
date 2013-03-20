@@ -38,6 +38,7 @@ public class Bpmn2TypeDefinition implements ResourceTypeDefinition {
         return ( path.getFileName().endsWith( "." + getSuffix() ) || path.getFileName().endsWith( ".bpmn" ) );
     }
 
+    @Override
     public String getSimpleWildcardPattern() {
         return ".+bpmn[2]?$";
     }
