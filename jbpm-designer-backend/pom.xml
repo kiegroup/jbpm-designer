@@ -446,7 +446,7 @@
 
         <!-- simulation -->
         <dependency>
-            <groupId>org.jbpm</groupId>
+            <groupId>org.drools</groupId>
             <artifactId>jbpm-simulation</artifactId>
         </dependency>
 
