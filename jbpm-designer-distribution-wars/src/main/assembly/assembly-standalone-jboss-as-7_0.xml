@@ -96,6 +96,9 @@
           <exclude>WEB-INF/lib/javax*.jar</exclude>
           <exclude>WEB-INF/lib/jboss-interceptors-api*.jar</exclude>
           <exclude>WEB-INF/lib/jaxrs-api-*.jar</exclude>
+
+          <!--Netty-->
+          <exclude>WEB-INF/lib/netty-3*.jar</exclude>
          
         </excludes>
       </unpackOptions>
