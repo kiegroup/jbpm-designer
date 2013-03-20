@@ -1,7 +1,7 @@
 package org.jbpm.designer.web.server;
 
 import org.apache.log4j.Logger;
-import org.drools.command.runtime.rule.InsertElementsCommand;
+import org.drools.core.command.runtime.rule.InsertElementsCommand;
 import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.Process;
 import org.jboss.drools.impl.DroolsFactoryImpl;
