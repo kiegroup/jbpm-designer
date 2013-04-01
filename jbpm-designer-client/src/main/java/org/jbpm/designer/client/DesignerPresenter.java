@@ -27,7 +27,7 @@ public class DesignerPresenter {
             extends
             UberView<DesignerPresenter> {
         void setEditorID( final String id );
-        void startDesigneInstancer();
+        void startDesignerInstance( final String editorId );
     }
 
     @Inject
@@ -44,7 +44,6 @@ public class DesignerPresenter {
         this.path = path;
         this.place = place;
         if(path != null) {
-
             assetService.call( new RemoteCallback<String>() {
                 @Override
                 public void callback( final String editorID ) {
@@ -60,9 +59,6 @@ public class DesignerPresenter {
                             final Document doc = Document.get();
                             final FrameElement editorInlineFrame = (FrameElement) doc.getElementById(editorID);
                             appendScriptSource(editorInlineFrame, editorBody);
-
-                            view.startDesigneInstancer();
-
                         }
 
                     } ).loadEditorBody(path, editorID, url, place);

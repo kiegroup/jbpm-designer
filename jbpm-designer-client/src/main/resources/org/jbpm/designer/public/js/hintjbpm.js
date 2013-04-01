@@ -159,8 +159,8 @@
 		        	var dataoutParts = dataoutputs.split(",");
 		        	for(var k=0; k < dataoutParts.length; k++) {
 		        		var nextPart = dataoutParts[k];
-		        		if(nextPart.indexOf("=") > 0) {
-		        			var innerParts = nextPart.split("=");
+		        		if(nextPart.indexOf(":") > 0) {
+		        			var innerParts = nextPart.split(":");
 		        			maybeAdd(innerParts[0]);
 		        		} else {
 		        			maybeAdd(nextPart);

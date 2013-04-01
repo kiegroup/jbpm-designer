@@ -134,6 +134,10 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
 		if(!jsonProp.fortasktypes) {
 			jsonProp.fortasktypes = "";
 		}
+
+        if(!jsonProp.ifproptrue) {
+            jsonProp.ifproptrue = "";
+        }
 		
 		if(!jsonProp.fordistribution) {
 			jsonProp.fordistribution = "";
@@ -158,7 +162,7 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
             }).bind(this));
         }
 
-        if (jsonProp.type === ORYX.CONFIG.TYPE_CHOICE) {
+        if ( (jsonProp.type === ORYX.CONFIG.TYPE_CHOICE) || (jsonProp.type === ORYX.CONFIG.TYPE_DYNAMICCHOICE) ) {
             if (jsonProp.items && jsonProp.items instanceof Array) {
                 jsonProp.items.each((function(jsonItem){
                 	// why is the item's value used as the key???
@@ -237,6 +241,10 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
 	fortasktypes: function() {
 		return this._jsonProp.fortasktypes;
 	},
+
+    ifproptrue: function() {
+        return this._jsonProp.ifproptrue;
+    },
 
 	fordistribution: function() {
 		return this._jsonProp.fordistribution;

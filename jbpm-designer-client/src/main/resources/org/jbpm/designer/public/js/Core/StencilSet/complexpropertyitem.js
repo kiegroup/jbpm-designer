@@ -67,7 +67,7 @@ ORYX.Core.StencilSet.ComplexPropertyItem = Clazz.extend({
 			jsonItem.type = jsonItem.type.toLowerCase();
 		}
 		
-		if(jsonItem.type === ORYX.CONFIG.TYPE_CHOICE) {
+		if( (jsonItem.type === ORYX.CONFIG.TYPE_CHOICE) || (jsonItem.type === ORYX.CONFIG.TYPE_DYNAMICCHOICE) ) {
 			if(jsonItem.items && jsonItem.items instanceof Array) {
 				jsonItem.items.each((function(item) {
 					this._items[item.value] = new ORYX.Core.StencilSet.PropertyItem(item, namespace, this);

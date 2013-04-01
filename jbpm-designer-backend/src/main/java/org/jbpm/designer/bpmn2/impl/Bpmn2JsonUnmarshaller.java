@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.sun.servicetag.SystemEnvironment;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonParser;
@@ -45,13 +46,9 @@ import org.eclipse.dd.dc.Bounds;
 import org.eclipse.dd.dc.DcFactory;
 import org.eclipse.dd.dc.Point;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature.Internal;
-import org.eclipse.emf.ecore.EcoreFactory;
-import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.impl.EAttributeImpl;
-import org.eclipse.emf.ecore.impl.EStructuralFeatureImpl;
 import org.eclipse.emf.ecore.impl.EStructuralFeatureImpl.SimpleFeatureMapEntry;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -197,6 +194,7 @@ public class Bpmn2JsonUnmarshaller {
             revisitDataObjects(def);
             revisitAssociationsIoSpec(def);
             revisitWsdlImports(def);
+            revisitMultiInstanceTasks(def);
             addSimulation(def);
             
             // return def;
@@ -210,6 +208,115 @@ public class Bpmn2JsonUnmarshaller {
             _sequenceFlowTargets.clear();
             _bounds.clear();
             _currentResource = null;
+        }
+    }
+
+    public void revisitMultiInstanceTasks(Definitions def) {
+        List<RootElement> rootElements =  def.getRootElements();
+        for(RootElement root : rootElements) {
+            if(root instanceof Process) {
+                Process process = (Process) root;
+                List<FlowElement> flowElements = process.getFlowElements();
+                for(FlowElement fe : flowElements) {
+                    if(fe instanceof Task) {
+                        Task task = (Task) fe;
+                        Iterator<FeatureMap.Entry> iter = task.getAnyAttribute().iterator();
+                        while(iter.hasNext()) {
+                            FeatureMap.Entry entry = iter.next();
+                            if(entry.getEStructuralFeature().getName().equals("mitask")) {
+                                String multiValue = (String) entry.getValue();
+                                String[] multiValueParts = multiValue.split("@");
+                                if(multiValueParts != null && multiValueParts.length == 4) {
+                                    String miCollectionInput = (multiValueParts[0].equals(" ") ? "" : multiValueParts[0]);
+                                    String miCollectionOutput = (multiValueParts[1].equals(" ") ? "" : multiValueParts[1]);
+                                    String miDataInput = (multiValueParts[2].equals(" ") ? "" : multiValueParts[2]);
+                                    String miDataOutput = (multiValueParts[3].equals(" ") ? "" : multiValueParts[3]);
+
+                                    MultiInstanceLoopCharacteristics loopCharacteristics = Bpmn2Factory.eINSTANCE.createMultiInstanceLoopCharacteristics();
+
+                                    if(miCollectionInput != null && miCollectionInput.length() > 0) {
+                                        List<Property> properties = process.getProperties();
+                                        for(Property prop : properties) {
+                                            if(prop.getId() != null && prop.getId().equals(miCollectionInput)) {
+                                                loopCharacteristics.setLoopDataInputRef(prop);
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    if(miCollectionOutput != null && miCollectionOutput.length() > 0) {
+                                        List<Property> properties = process.getProperties();
+                                        for(Property prop : properties) {
+                                            if(prop.getId() != null && prop.getId().equals(miCollectionOutput)) {
+                                                loopCharacteristics.setLoopDataOutputRef(prop);
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    if(miDataInput != null && miDataInput.length() > 0) {
+                                        List<DataInput> dins = task.getIoSpecification().getDataInputs();
+                                        for(DataInput di : dins) {
+                                            if(di.getName().equals(miDataInput)) {
+
+                                                DataInput inputDataItemObj = Bpmn2Factory.eINSTANCE.createDataInput();
+                                                inputDataItemObj.setId("miDataInput");
+                                                inputDataItemObj.setItemSubjectRef(di.getItemSubjectRef());
+                                                loopCharacteristics.setInputDataItem(inputDataItemObj);
+
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    if(miDataOutput != null && miDataOutput.length() > 0) {
+                                        List<DataOutput> douts = task.getIoSpecification().getDataOutputs();
+                                        for(DataOutput dout : douts) {
+                                            if(dout.getName().equals(miDataOutput)) {
+
+                                                DataOutput outputDataItemObj = Bpmn2Factory.eINSTANCE.createDataOutput();
+                                                outputDataItemObj.setId("miDataOutput");
+                                                outputDataItemObj.setItemSubjectRef(dout.getItemSubjectRef());
+                                                loopCharacteristics.setOutputDataItem(outputDataItemObj);
+
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    task.setLoopCharacteristics(loopCharacteristics);
+
+                                    if(miDataInput != null && miDataInput.length() > 0 && ((MultiInstanceLoopCharacteristics) task.getLoopCharacteristics()).getInputDataItem() != null) {
+                                        DataInputAssociation dias = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
+                                        dias.getSourceRef().add( ((MultiInstanceLoopCharacteristics) task.getLoopCharacteristics()).getInputDataItem() );
+                                        List<DataInput> dins = task.getIoSpecification().getDataInputs();
+                                        for(DataInput di : dins) {
+                                            if(di.getName().equals(miDataInput)) {
+                                                dias.setTargetRef(di);
+                                                task.getDataInputAssociations().add(dias);
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    if(miDataOutput != null && miDataOutput.length() > 0 && ((MultiInstanceLoopCharacteristics) task.getLoopCharacteristics()).getOutputDataItem() != null) {
+                                        DataOutputAssociation dout = Bpmn2Factory.eINSTANCE.createDataOutputAssociation();
+                                        dout.setTargetRef( ((MultiInstanceLoopCharacteristics) task.getLoopCharacteristics()).getOutputDataItem() );
+                                        List<DataOutput> douts = task.getIoSpecification().getDataOutputs();
+                                        for(DataOutput dou : douts) {
+                                            if(dou.getName().equals(miDataOutput)) {
+                                                dout.getSourceRef().add(dou);
+                                                task.getDataOutputAssociations().add(dout);
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -2154,6 +2261,13 @@ public class Bpmn2JsonUnmarshaller {
 	                } else {
 	                	nextInput.setId(sp.getId() + "_" + dataInput + "Input");
 	                	nextInput.setName(dataInput);
+
+                        ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                        EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                                "http://www.jboss.org/drools", "dtype", false, false);
+                        SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
+                                "Object");
+                        nextInput.getAnyAttribute().add(extensionEntry);
 	                }
 	                
 	                sp.getIoSpecification().getDataInputs().add(nextInput);
@@ -2193,6 +2307,13 @@ public class Bpmn2JsonUnmarshaller {
 	                } else {
 	                	nextOut.setId(sp.getId() + "_" + dataOutput + "Output");
 	                	nextOut.setName(dataOutput);
+
+                        ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                        EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                                "http://www.jboss.org/drools", "dtype", false, false);
+                        SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
+                                "Object");
+                        nextOut.getAnyAttribute().add(extensionEntry);
 	                }
 	                
 	                sp.getIoSpecification().getDataOutputs().add(nextOut);
@@ -3274,6 +3395,13 @@ public class Bpmn2JsonUnmarshaller {
 	                } else {
 	                	nextInput.setId(callActivity.getId() + "_" + dataInput + "Input");
 	                	nextInput.setName(dataInput);
+
+                        ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                        EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                                "http://www.jboss.org/drools", "dtype", false, false);
+                        SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
+                                "Object");
+                        nextInput.getAnyAttribute().add(extensionEntry);
 	                }
 	                callActivity.getIoSpecification().getDataInputs().add(nextInput);
 	                inset.getDataInputRefs().add(nextInput);
@@ -3312,6 +3440,13 @@ public class Bpmn2JsonUnmarshaller {
 	                } else {
 	                	nextOut.setId(callActivity.getId() + "_" + dataOutput + "Output");
 	                	nextOut.setName(dataOutput);
+
+                        ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                        EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                                "http://www.jboss.org/drools", "dtype", false, false);
+                        SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
+                                "Object");
+                        nextOut.getAnyAttribute().add(extensionEntry);
 	                }
 	                
 	                callActivity.getIoSpecification().getDataOutputs().add(nextOut);
@@ -3572,6 +3707,13 @@ public class Bpmn2JsonUnmarshaller {
 	                } else {
 	                	nextInput.setId(task.getId() + "_" + dataInput + (dataInput.endsWith("Input") ? "" : "Input"));
 	                	nextInput.setName(dataInput);
+
+                        ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                        EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                                "http://www.jboss.org/drools", "dtype", false, false);
+                        SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
+                                "Object");
+                        nextInput.getAnyAttribute().add(extensionEntry);
 	                }
 	                
 	                task.getIoSpecification().getDataInputs().add(nextInput);
@@ -3615,6 +3757,13 @@ public class Bpmn2JsonUnmarshaller {
 	                } else {
 	                	nextOut.setId(task.getId() + "_" + dataOutput + (dataOutput.endsWith("Output") ? "" : "Output"));
 	                	nextOut.setName(dataOutput);
+
+                        ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                        EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                                "http://www.jboss.org/drools", "dtype", false, false);
+                        SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
+                                "Object");
+                        nextOut.getAnyAttribute().add(extensionEntry);
 	                }
 	                
 	                task.getIoSpecification().getDataOutputs().add(nextOut);
@@ -3826,6 +3975,26 @@ public class Bpmn2JsonUnmarshaller {
                         (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__ON_EXIT_SCRIPT, onExitScript);
                 task.getExtensionValues().get(0).getValue().add(extensionElementEntry);
             }
+        }
+
+        // multi instance
+        if(properties.get("multipleinstance") != null && properties.get("multipleinstance").length() > 0 && properties.get("multipleinstance").equals("true")) {
+            // will be revisited at end
+            ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+            EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                    "http://www.jboss.org/drools", "mitask", false, false);
+            StringBuffer buff = new StringBuffer();
+            buff.append( (properties.get("multipleinstancecollectioninput") != null && properties.get("multipleinstancecollectioninput").length() > 0) ? properties.get("multipleinstancecollectioninput") : " ");
+            buff.append("@");
+            buff.append((properties.get("multipleinstancecollectionoutput") != null && properties.get("multipleinstancecollectionoutput").length() > 0) ? properties.get("multipleinstancecollectionoutput") : " ");
+            buff.append("@");
+            buff.append((properties.get("multipleinstancedatainput") != null && properties.get("multipleinstancedatainput").length() > 0) ? properties.get("multipleinstancedatainput") : " ");
+            buff.append("@");
+            buff.append((properties.get("multipleinstancedataoutput") != null  && properties.get("multipleinstancedataoutput").length() > 0) ? properties.get("multipleinstancedataoutput") : " ");
+
+            SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
+                   buff.toString());
+            task.getAnyAttribute().add(extensionEntry);
         }
         
         // simulation

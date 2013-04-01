@@ -1452,6 +1452,38 @@ public class Bpmn2JsonMarshaller {
         } else {
             properties.put("tasktype", taskType);
         }
+
+        // multiple instance
+        if(task.getLoopCharacteristics() != null) {
+            properties.put("multipleinstance", "true");
+            MultiInstanceLoopCharacteristics taskmi = (MultiInstanceLoopCharacteristics) task.getLoopCharacteristics();
+            if(taskmi.getLoopDataInputRef() != null) {
+                properties.put("multipleinstancecollectioninput", taskmi.getLoopDataInputRef().getId());
+            }
+            if(taskmi.getLoopDataOutputRef() != null) {
+                properties.put("multipleinstancecollectionoutput", taskmi.getLoopDataOutputRef().getId());
+            }
+
+            if(taskmi.getInputDataItem() != null) {
+                List<DataInput> taskDataInputs = task.getIoSpecification().getDataInputs();
+                for(DataInput din: taskDataInputs) {
+                    if(din.getItemSubjectRef().getId().equals(taskmi.getInputDataItem().getItemSubjectRef().getId())) {
+                        properties.put("multipleinstancedatainput", din.getName());
+                    }
+                }
+            }
+
+            if(taskmi.getOutputDataItem() != null) {
+                List<DataOutput> taskDataOutputs = task.getIoSpecification().getDataOutputs();
+                for(DataOutput dout : taskDataOutputs) {
+                    if(dout.getItemSubjectRef().getId().equals(taskmi.getOutputDataItem().getItemSubjectRef().getId())) {
+                        properties.put("multipleinstancedataoutput", dout.getName());
+                    }
+                }
+            }
+        } else {
+            properties.put("multipleinstance", "false");
+        }
         
         // data inputs
         DataInput groupDataInput = null;
@@ -1548,134 +1580,146 @@ public class Bpmn2JsonMarshaller {
         //List<String> biDirectionalAssociations = new ArrayList<String>();
         
         for(DataInputAssociation datain : inputAssociations) {
-            String lhsAssociation = "";
-            if(datain.getSourceRef() != null && datain.getSourceRef().size() > 0) {
-            	if(datain.getTransformation() != null && datain.getTransformation().getBody() != null) {
-            		lhsAssociation = datain.getTransformation().getBody();
-            	} else {
-            		lhsAssociation = datain.getSourceRef().get(0).getId();
-            	}
+
+            boolean proceed = true;
+            if(task.getLoopCharacteristics() != null) {
+                MultiInstanceLoopCharacteristics taskMultiLoop = (MultiInstanceLoopCharacteristics) task.getLoopCharacteristics();
+                if(datain.getSourceRef().get(0).getId().equals(taskMultiLoop.getInputDataItem().getId())) {
+                    // dont include associations that include mi loop data inputs
+                    proceed = false;
+                }
             }
-            
-            String rhsAssociation = "";
-            if(datain.getTargetRef() != null) {
-                rhsAssociation = ((DataInput) datain.getTargetRef()).getName();
-            }
-            
-            //boolean isBiDirectional = false;
-            boolean isAssignment = false;
-            
-            if(datain.getAssignment() != null && datain.getAssignment().size() > 0) {
-                isAssignment = true;
-            } 
-//            else {
-//                // check if this is a bi-directional association
-//                for(DataOutputAssociation dataout : outputAssociations) {
-//                    if(dataout.getTargetRef().getId().equals(lhsAssociation) && 
-//                       ((DataOutput) dataout.getSourceRef().get(0)).getName().equals(rhsAssociation)) {
-//                        isBiDirectional = true;
-//                        break;
-//                    }
-//                }
-//            }
-            
-            if(isAssignment) {
-            	// only know how to deal with formal expressions
-            	if( datain.getAssignment().get(0).getFrom() instanceof FormalExpression) {
-            		String associationValue = ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody();
-            		if(associationValue == null) {
-            			associationValue = "";
-            		}
-            		
-            		// don't include properties that have their independent input editors:
-            		if(!(rhsAssociation.equals("GroupId") || 
-            		   rhsAssociation.equals("Skippable") ||
-            		   rhsAssociation.equals("Comment") || 
-            		   rhsAssociation.equals("Priority") ||
-            		   rhsAssociation.equals("Content") ||
-            		   rhsAssociation.equals("TaskName")  ||
-                       rhsAssociation.equals("Locale") ||
-                       rhsAssociation.equals("CreatedBy") ||
-                       rhsAssociation.equals("NotCompletedReassign") ||
-                       rhsAssociation.equals("NotStartedReassign") ||
-                       rhsAssociation.equals("NotCompletedNotify") ||
-                       rhsAssociation.equals("NotStartedNotify")
-            		   )) {
-            			String replacer = associationValue.replaceAll(",", "##");
-            			associationBuff.append(rhsAssociation).append("=").append(replacer);
-            			associationBuff.append(",");
-            		}
-            		
-            		if(rhsAssociation.equalsIgnoreCase("TaskName")) {
-            			properties.put("taskname", associationValue);
-            		}
-            		
-            		if (groupDataInput != null && datain.getAssignment().get(0).getTo() != null &&
-            				((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
-            						((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(groupDataInput.getId())) {
-            			properties.put("groupid", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody() == null ? "" : ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
-            		}
-            		if (skippableDataInput != null && datain.getAssignment().get(0).getTo() != null &&
-            				((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
-            						((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(skippableDataInput.getId())) {
-            			properties.put("skippable", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
-            		}
-            		if (commentDataInput != null && datain.getAssignment().get(0).getTo() != null &&
-            				((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
-            						((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(commentDataInput.getId())) {
-            			properties.put("comment", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
-            		}
-            		if (priorityDataInput != null && datain.getAssignment().get(0).getTo() != null &&
-            				((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
-            						((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(priorityDataInput.getId())) {
-            			properties.put("priority", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody() == null ? "" : ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
-            		}
-                    if (localeDataInput != null && datain.getAssignment().get(0).getTo() != null &&
-                            ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
-                            ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(localeDataInput.getId())) {
-                        properties.put("locale", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
+
+            if(proceed) {
+                String lhsAssociation = "";
+                if(datain.getSourceRef() != null && datain.getSourceRef().size() > 0) {
+                    if(datain.getTransformation() != null && datain.getTransformation().getBody() != null) {
+                        lhsAssociation = datain.getTransformation().getBody();
+                    } else {
+                        lhsAssociation = datain.getSourceRef().get(0).getId();
                     }
-                    if (createdByDataInput != null && datain.getAssignment().get(0).getTo() != null &&
-                            ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
-                            ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(createdByDataInput.getId())) {
-                         properties.put("createdby", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
+                }
+
+                String rhsAssociation = "";
+                if(datain.getTargetRef() != null) {
+                    rhsAssociation = ((DataInput) datain.getTargetRef()).getName();
+                }
+
+                //boolean isBiDirectional = false;
+                boolean isAssignment = false;
+
+                if(datain.getAssignment() != null && datain.getAssignment().size() > 0) {
+                    isAssignment = true;
+                }
+    //            else {
+    //                // check if this is a bi-directional association
+    //                for(DataOutputAssociation dataout : outputAssociations) {
+    //                    if(dataout.getTargetRef().getId().equals(lhsAssociation) &&
+    //                       ((DataOutput) dataout.getSourceRef().get(0)).getName().equals(rhsAssociation)) {
+    //                        isBiDirectional = true;
+    //                        break;
+    //                    }
+    //                }
+    //            }
+
+                if(isAssignment) {
+                    // only know how to deal with formal expressions
+                    if( datain.getAssignment().get(0).getFrom() instanceof FormalExpression) {
+                        String associationValue = ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody();
+                        if(associationValue == null) {
+                            associationValue = "";
+                        }
+
+                        // don't include properties that have their independent input editors:
+                        if(!(rhsAssociation.equals("GroupId") ||
+                           rhsAssociation.equals("Skippable") ||
+                           rhsAssociation.equals("Comment") ||
+                           rhsAssociation.equals("Priority") ||
+                           rhsAssociation.equals("Content") ||
+                           rhsAssociation.equals("TaskName")  ||
+                           rhsAssociation.equals("Locale") ||
+                           rhsAssociation.equals("CreatedBy") ||
+                           rhsAssociation.equals("NotCompletedReassign") ||
+                           rhsAssociation.equals("NotStartedReassign") ||
+                           rhsAssociation.equals("NotCompletedNotify") ||
+                           rhsAssociation.equals("NotStartedNotify")
+                           )) {
+                            String replacer = associationValue.replaceAll(",", "##");
+                            associationBuff.append(rhsAssociation).append("=").append(replacer);
+                            associationBuff.append(",");
+                        }
+
+                        if(rhsAssociation.equalsIgnoreCase("TaskName")) {
+                            properties.put("taskname", associationValue);
+                        }
+
+                        if (groupDataInput != null && datain.getAssignment().get(0).getTo() != null &&
+                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
+                                        ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(groupDataInput.getId())) {
+                            properties.put("groupid", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody() == null ? "" : ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
+                        }
+                        if (skippableDataInput != null && datain.getAssignment().get(0).getTo() != null &&
+                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
+                                        ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(skippableDataInput.getId())) {
+                            properties.put("skippable", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
+                        }
+                        if (commentDataInput != null && datain.getAssignment().get(0).getTo() != null &&
+                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
+                                        ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(commentDataInput.getId())) {
+                            properties.put("comment", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
+                        }
+                        if (priorityDataInput != null && datain.getAssignment().get(0).getTo() != null &&
+                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
+                                        ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(priorityDataInput.getId())) {
+                            properties.put("priority", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody() == null ? "" : ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
+                        }
+                        if (localeDataInput != null && datain.getAssignment().get(0).getTo() != null &&
+                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
+                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(localeDataInput.getId())) {
+                            properties.put("locale", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
+                        }
+                        if (createdByDataInput != null && datain.getAssignment().get(0).getTo() != null &&
+                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
+                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(createdByDataInput.getId())) {
+                             properties.put("createdby", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
+                        }
+                        if (notCompletedReassignInput != null && datain.getAssignment().get(0).getTo() != null &&
+                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
+                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(notCompletedReassignInput.getId())) {
+                            properties.put("tmpreassignmentnotcompleted", updateReassignmentAndNotificationInput( ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody(), "not-completed" ));
+                        }
+                        if (notStartedReassignInput != null && datain.getAssignment().get(0).getTo() != null &&
+                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
+                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(notStartedReassignInput.getId())) {
+                            properties.put("tmpreassignmentnotstarted", updateReassignmentAndNotificationInput( ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody(), "not-started" ));
+                        }
+                        if (notCompletedNotificationInput != null && datain.getAssignment().get(0).getTo() != null &&
+                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
+                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(notCompletedNotificationInput.getId())) {
+                            properties.put("tmpnotificationnotcompleted", updateReassignmentAndNotificationInput( ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody(), "not-completed" ));
+                        }
+                        if (notStartedNotificationInput != null && datain.getAssignment().get(0).getTo() != null &&
+                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
+                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(notStartedNotificationInput.getId())) {
+                            properties.put("tmpnotificationnotstarted", updateReassignmentAndNotificationInput( ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody(), "not-started" ));
+                        }
                     }
-                    if (notCompletedReassignInput != null && datain.getAssignment().get(0).getTo() != null &&
-                            ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
-                            ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(notCompletedReassignInput.getId())) {
-                        properties.put("tmpreassignmentnotcompleted", updateReassignmentAndNotificationInput( ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody(), "not-completed" ));
+                }
+    //            else if(isBiDirectional) {
+    //                associationBuff.append(lhsAssociation).append("<->").append(rhsAssociation);
+    //                associationBuff.append(",");
+    //                biDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
+    //            }
+                else {
+                    associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
+                    associationBuff.append(",");
+                    uniDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
+
+                    if(contentDataInput != null) {
+                        if(rhsAssociation.equals(contentDataInput.getName())) {
+                            properties.put("content", lhsAssociation);
+                        }
                     }
-                    if (notStartedReassignInput != null && datain.getAssignment().get(0).getTo() != null &&
-                            ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
-                            ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(notStartedReassignInput.getId())) {
-                        properties.put("tmpreassignmentnotstarted", updateReassignmentAndNotificationInput( ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody(), "not-started" ));
-                    }
-                    if (notCompletedNotificationInput != null && datain.getAssignment().get(0).getTo() != null &&
-                            ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
-                            ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(notCompletedNotificationInput.getId())) {
-                        properties.put("tmpnotificationnotcompleted", updateReassignmentAndNotificationInput( ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody(), "not-completed" ));
-                    }
-                    if (notStartedNotificationInput != null && datain.getAssignment().get(0).getTo() != null &&
-                            ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
-                            ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(notStartedNotificationInput.getId())) {
-                        properties.put("tmpnotificationnotstarted", updateReassignmentAndNotificationInput( ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody(), "not-started" ));
-                    }
-            	}
-            } 
-//            else if(isBiDirectional) {
-//                associationBuff.append(lhsAssociation).append("<->").append(rhsAssociation);
-//                associationBuff.append(",");
-//                biDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
-//            } 
-            else {
-                associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
-                associationBuff.append(",");
-                uniDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
-                
-                if(contentDataInput != null) {
-                	if(rhsAssociation.equals(contentDataInput.getName())) {
-                		properties.put("content", lhsAssociation);
-                	}
                 }
             }
         }
@@ -1697,27 +1741,38 @@ public class Bpmn2JsonMarshaller {
         }
 
         for(DataOutputAssociation dataout : outputAssociations) {
-            if(dataout.getSourceRef().size() > 0) { 
-                String lhsAssociation = ((DataOutput) dataout.getSourceRef().get(0)).getName();
-                String rhsAssociation = dataout.getTargetRef().getId();
-                
-                boolean wasBiDirectional = false;
-                // check if we already addressed this association as bidirectional
-//                for(String bda : biDirectionalAssociations) {
-//                    String[] dbaparts = bda.split( ",\\s*" );
-//                    if(dbaparts[0].equals(rhsAssociation) && dbaparts[1].equals(lhsAssociation)) {
-//                        wasBiDirectional = true;
-//                        break;
-//                    }
-//                }
-                
-                if(dataout.getTransformation() != null && dataout.getTransformation().getBody() != null) {
-                	rhsAssociation = dataout.getTransformation().getBody();
+            boolean proceed = true;
+            if(task.getLoopCharacteristics() != null) {
+                MultiInstanceLoopCharacteristics taskMultiLoop = (MultiInstanceLoopCharacteristics) task.getLoopCharacteristics();
+                if(dataout.getTargetRef().getId().equals(taskMultiLoop.getOutputDataItem().getId())) {
+                    // dont include associations that include mi loop data outputs
+                    proceed = false;
                 }
-                
-                if(!wasBiDirectional) {
-                    associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
-                    associationBuff.append(",");
+            }
+
+            if(proceed) {
+                if(dataout.getSourceRef().size() > 0) {
+                    String lhsAssociation = ((DataOutput) dataout.getSourceRef().get(0)).getName();
+                    String rhsAssociation = dataout.getTargetRef().getId();
+
+                    boolean wasBiDirectional = false;
+                    // check if we already addressed this association as bidirectional
+    //                for(String bda : biDirectionalAssociations) {
+    //                    String[] dbaparts = bda.split( ",\\s*" );
+    //                    if(dbaparts[0].equals(rhsAssociation) && dbaparts[1].equals(lhsAssociation)) {
+    //                        wasBiDirectional = true;
+    //                        break;
+    //                    }
+    //                }
+
+                    if(dataout.getTransformation() != null && dataout.getTransformation().getBody() != null) {
+                        rhsAssociation = dataout.getTransformation().getBody();
+                    }
+
+                    if(!wasBiDirectional) {
+                        associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
+                        associationBuff.append(",");
+                    }
                 }
             }
         }

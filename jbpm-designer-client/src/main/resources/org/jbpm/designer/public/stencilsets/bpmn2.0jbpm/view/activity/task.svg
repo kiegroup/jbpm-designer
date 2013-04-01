@@ -116,5 +116,9 @@
 	</g>
 	
 	<g id="none"></g>
+
+	<g id="sequential">
+        <path oryx:anchors="bottom" fill="none" stroke="#000000" stroke-width="2" d="M46,76h10M46,72h10 M46,68h10"/>
+    </g>
   </g>
 </svg>

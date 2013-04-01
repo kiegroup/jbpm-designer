@@ -3460,6 +3460,103 @@
 					"fortasktypes":"None|User"
 				},
 				{
+                    "id":"multipleinstance",
+                    "type":"Choice",
+                    "title":"Multiple Instance",
+                    "value":"false",
+                    "description":"Specifies whether the task is a multiple instance task.",
+                    "description_ja":"",
+                    "readonly":false,
+                    "optional":true,
+                    "fortasktypes":"None|Send|Receive|User|Manual|Service",
+                    "items": [
+                        {
+                            "id": "c1",
+                            "title":"true",
+                            "value":"true",
+                            "refToView":"sequential"
+                        },
+                        {
+                            "id": "c2",
+                            "title": "false",
+                            "value": "false",
+                            "refToView":"none"
+                        }
+                    ]
+                },
+                {
+                    "id":"multipleinstancecollectioninput",
+                    "type":"Dynamicchoice",
+                    "title":"MI collection input",
+                    "value":"",
+                    "description":"Sets the multiple instances collection input.",
+                    "description_ja":"",
+                    "readonly":false,
+                    "optional":true,
+                    "fortasktypes":"None|Send|Receive|User|Manual|Service",
+                    "ifproptrue":"multipleinstance",
+                    "items": [
+                        {
+                            "id": "c1",
+                            "title":"vardefs",
+                            "value":"\$.properties.vardefs"
+                        },
+                        {
+                            "id": "c2",
+                            "title": "globals",
+                            "value": "\$.properties.globals"
+                        }
+                    ]
+                },
+                {
+                    "id":"multipleinstancecollectionoutput",
+                    "type":"Dynamicchoice",
+                    "title":"MI collection output",
+                    "value":"",
+                    "description":"Sets the multiple instances collection output.",
+                    "description_ja":"",
+                    "readonly":false,
+                    "optional":true,
+                    "fortasktypes":"None|Send|Receive|User|Manual|Service",
+                    "ifproptrue":"multipleinstance",
+                    "items": [
+                        {
+                            "id": "c1",
+                            "title":"vardefs",
+                            "value":"\$.properties.vardefs"
+                        },
+                        {
+                            "id": "c2",
+                            "title": "globals",
+                            "value": "\$.properties.globals"
+                        }
+                    ]
+                },
+                {
+                    "id":"multipleinstancedatainput",
+                    "type":"Dynamicdatainput",
+                    "title":"MI data input",
+                    "value":"",
+                    "description":"Sets a data input for MI.",
+                    "description_ja":"",
+                    "readonly":false,
+                    "optional":true,
+                    "fortasktypes":"None|Send|Receive|User|Manual|Service",
+                    "ifproptrue":"multipleinstance"
+                },
+                {
+                    "id":"multipleinstancedataoutput",
+                    "type":"Dynamicdatoutput",
+                    "title":"MI data output",
+                    "value":"",
+                    "description":"Sets a data output for MI.",
+                    "description_ja":"",
+                    "readonly":false,
+                    "optional":true,
+                    "fortasktypes":"None|Send|Receive|User|Manual|Service",
+                    "ifproptrue":"multipleinstance"
+                },
+				{
 					"id":"min",
 					"type":"Float",
 					"title":"Processing time (min)",
@@ -3868,6 +3965,104 @@
 						\}
 					]
 				\},
+                \{
+                    "id":"multipleinstance",
+                    "type":"Choice",
+                    "title":"Multiple Instance",
+                    "value":"false",
+                    "description":"Specifies whether the task is a multiple instance task.",
+                    "description_ja":"",
+                    "readonly":false,
+                    "optional":true,
+                    "fortasktypes":"None|Send|Receive|User|Manual|Service",
+                    "popular" : true,
+                    "items": [
+                        \{
+                            "id": "c1",
+                            "title":"true",
+                            "value":"true",
+                            "refToView":"sequential"
+                        \},
+                        \{
+                            "id": "c2",
+                            "title": "false",
+                            "value": "false",
+                            "refToView":"none"
+                        \}
+                    ]
+                \},
+                \{
+                    "id":"multipleinstancecollectioninput",
+                    "type":"Dynamicchoice",
+                    "title":"MI collection input",
+                    "value":"",
+                    "description":"Sets the multiple instances collection input.",
+                    "description_ja":"",
+                    "readonly":false,
+                    "optional":true,
+                    "fortasktypes":"None|Send|Receive|User|Manual|Service",
+                    "ifproptrue":"multipleinstance",
+                    "items": [
+                        \{
+                            "id": "c1",
+                            "title":"vardefs",
+                            "value":"\$.properties.vardefs"
+                        \},
+                        \{
+                            "id": "c2",
+                            "title": "globals",
+                            "value": "\$.properties.globals"
+                        \}
+                    ]
+                \},
+                \{
+                    "id":"multipleinstancecollectionoutput",
+                    "type":"Dynamicchoice",
+                    "title":"MI collection output",
+                    "value":"",
+                    "description":"Sets the multiple instances collection output.",
+                    "description_ja":"",
+                    "readonly":false,
+                    "optional":true,
+                    "fortasktypes":"None|Send|Receive|User|Manual|Service",
+                    "ifproptrue":"multipleinstance",
+                    "items": [
+                        \{
+                            "id": "c1",
+                            "title":"vardefs",
+                            "value":"\$.properties.vardefs"
+                        \},
+                        \{
+                            "id": "c2",
+                            "title": "globals",
+                            "value": "\$.properties.globals"
+                        \}
+                    ]
+                \},
+                \{
+                    "id":"multipleinstancedatainput",
+                    "type":"Dynamicdatainput",
+                    "title":"MI data input",
+                    "value":"",
+                    "description":"Sets a data input for MI.",
+                    "description_ja":"",
+                    "readonly":false,
+                    "optional":true,
+                    "fortasktypes":"None|Send|Receive|User|Manual|Service",
+                    "ifproptrue":"multipleinstance"
+                \},
+                \{
+                    "id":"multipleinstancedataoutput",
+                    "type":"Dynamicdatoutput",
+                    "title":"MI data output",
+                    "value":"",
+                    "description":"Sets a data output for MI.",
+                    "description_ja":"",
+                    "readonly":false,
+                    "optional":true,
+                    "fortasktypes":"None|Send|Receive|User|Manual|Service",
+                    "ifproptrue":"multipleinstance"
+                \},
 				\{
 					"id":"isselectable",
 					"type":"Choice",

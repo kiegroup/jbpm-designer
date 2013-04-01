@@ -866,6 +866,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
     updateTaskType: function(shape, shapeTaskType) {
         if(shape && shapeTaskType) {
             shape.setProperty("oryx-tasktype", shapeTaskType);
+            shape.setProperty("oryx-multipleinstance", false);
             shape.refresh();
         }
     },
@@ -1006,7 +1007,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
 							newShape.setProperty("oryx-bgcolor", newShape.getStencil().property("oryx-bgcolor").value());
 						}
 				}
-				
+
 				if(changedBounds !== null) {
 					newShape.bounds.set(changedBounds);
 				}

@@ -74,11 +74,6 @@ public class JbpmServiceRepositoryServletTest  extends RepositoryBaseTest {
         assertNotNull(serviceAssets);
         assertEquals(2, serviceAssets.size());
 
-        Iterator<Asset> it = serviceAssets.iterator();
-
-        assertEquals("reward.png", it.next().getFullName());
-        assertEquals("Rewardsystem.wid", it.next().getFullName());
-
         Asset<String> form = repository.loadAsset(serviceAssets.iterator().next().getUniqueId());
         assertNotNull(form.getAssetContent());
     }

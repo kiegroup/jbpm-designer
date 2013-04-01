@@ -647,6 +647,198 @@ ORYX.Plugins.PropertyWindow = {
 							editorGrid = new Ext.Editor(editorCombo);
 
 							break;
+
+                            case ORYX.CONFIG.TYPE_DYNAMICCHOICE:
+                            var items = pair.items();
+
+                            var options = [];
+                            items.each(function(value) {
+                                if(value.value() == attribute)
+                                    attribute = value.title();
+
+                                if(value.refToView()[0])
+                                    refToViewFlag = true;
+
+                                // add first blank for reset possiblity
+                                options.push(["", "", ""]);
+                                // evaluate each value expression
+                                var processJSON = ORYX.EDITOR.getSerializedJSON();
+                                var expressionresults = jsonPath(processJSON.evalJSON(), value.value());
+                                if(expressionresults) {
+                                    if(expressionresults.toString().length > 0) {
+                                        for(var i=0; i< expressionresults.length; i++) {
+                                            var expressionparts = expressionresults[i].split(",");
+                                            for (var j = 0; j < expressionparts.length; j++) {
+                                                if(expressionparts[j].indexOf(":") > 0) {
+                                                    var valueParts = expressionparts[j].split(":");
+                                                    options.push([value.icon(), valueParts[0], valueParts[0]]);
+                                                } else {
+                                                    options.push([value.icon(), expressionparts[j], expressionparts[j]]);
+                                                }
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    this.facade.raiseEvent({
+                                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                        ntype		: 'info',
+                                        msg         : 'No data available for property.',
+                                        title       : ''
+
+                                    });
+                                }
+
+                                icons.push({
+                                    name: value.title(),
+                                    icon: value.icon()
+                                });
+                            });
+
+                            var store = new Ext.data.SimpleStore({
+                                fields: [{name: 'icon'},
+                                    {name: 'title'},
+                                    {name: 'value'}	],
+                                data : options
+                            });
+
+                            // Set the grid Editor
+
+                            var editorCombo = new Ext.form.ComboBox({
+                                editable: false,
+                                tpl: '<tpl for="."><div class="x-combo-list-item">{[(values.icon) ? "<img src=\'" + values.icon + "\' />" : ""]} {title}</div></tpl>',
+                                store: store,
+                                displayField:'title',
+                                valueField: 'value',
+                                typeAhead: true,
+                                mode: 'local',
+                                triggerAction: 'all',
+                                selectOnFocus:true
+                            });
+
+                            editorCombo.on('select', function(combo, record, index) {
+                                this.editDirectly(key, combo.getValue());
+                            }.bind(this))
+
+                            editorGrid = new Ext.Editor(editorCombo);
+
+                            break;
+
+                            case ORYX.CONFIG.TYPE_DYNAMICDATAINPUT:
+                            var options = [];
+                            var selection = ORYX.EDITOR._pluginFacade.getSelection();
+                            if(selection && selection.length == 1) {
+                                var shape = selection.first();
+                                var shapeid = shape.resourceId;
+                                var processJSON = ORYX.EDITOR.getSerializedJSON();
+
+                                // add blank for reset possiblity
+                                options.push(["", "", ""]);
+                                var childshapes = jsonPath(processJSON.evalJSON(), "$.childShapes.*");
+                                for(var i=0;i<childshapes.length;i++){
+                                    var csobj = childshapes[i];
+                                    if(csobj.resourceId == shapeid) {
+                                        var datainputs = csobj.properties.datainputset;
+                                        var datainParts = datainputs.split(",");
+                                        for(var j=0; j < datainParts.length; j++) {
+                                            var nextPart = datainParts[j];
+                                            if(nextPart.indexOf(":") > 0) {
+                                                var innerParts = nextPart.split(":");
+                                                options.push(["", innerParts[0], innerParts[0]]);
+                                            } else {
+                                                options.push(["", nextPart, nextPart]);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            var store = new Ext.data.SimpleStore({
+                                fields: [{name: 'icon'},
+                                    {name: 'title'},
+                                    {name: 'value'}	],
+                                data : options
+                            });
+
+                            // Set the grid Editor
+
+                            var editorCombo = new Ext.form.ComboBox({
+                                editable: false,
+                                tpl: '<tpl for="."><div class="x-combo-list-item">{[(values.icon) ? "<img src=\'" + values.icon + "\' />" : ""]} {title}</div></tpl>',
+                                store: store,
+                                displayField:'title',
+                                valueField: 'value',
+                                typeAhead: true,
+                                mode: 'local',
+                                triggerAction: 'all',
+                                selectOnFocus:true
+                            });
+
+                            editorCombo.on('select', function(combo, record, index) {
+                                this.editDirectly(key, combo.getValue());
+                            }.bind(this))
+
+                            editorGrid = new Ext.Editor(editorCombo);
+
+                            break;
+
+                            case ORYX.CONFIG.TYPE_DYNAMICDATAOUTPUT:
+                            var options = [];
+                            var selection = ORYX.EDITOR._pluginFacade.getSelection();
+                            if(selection && selection.length == 1) {
+                                var shape = selection.first();
+                                var shapeid = shape.resourceId;
+                                var processJSON = ORYX.EDITOR.getSerializedJSON();
+
+                                // add blank for reset possiblity
+                                options.push(["", "", ""]);
+                                var childshapes = jsonPath(processJSON.evalJSON(), "$.childShapes.*");
+                                for(var i=0;i<childshapes.length;i++){
+                                    var csobj = childshapes[i];
+                                    if(csobj.resourceId == shapeid) {
+                                        var dataoutputs = csobj.properties.dataoutputset;
+                                        var dataoutParts = dataoutputs.split(",");
+                                        for(var k=0; k < dataoutParts.length; k++) {
+                                            var nextPart = dataoutParts[k];
+                                            if(nextPart.indexOf(":") > 0) {
+                                                var innerParts = nextPart.split(":");
+                                                options.push(["", innerParts[0], innerParts[0]]);
+                                            } else {
+                                                options.push(["", nextPart, nextPart]);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            var store = new Ext.data.SimpleStore({
+                                fields: [{name: 'icon'},
+                                    {name: 'title'},
+                                    {name: 'value'}	],
+                                data : options
+                            });
+
+                            // Set the grid Editor
+
+                            var editorCombo = new Ext.form.ComboBox({
+                                editable: false,
+                                tpl: '<tpl for="."><div class="x-combo-list-item">{[(values.icon) ? "<img src=\'" + values.icon + "\' />" : ""]} {title}</div></tpl>',
+                                store: store,
+                                displayField:'title',
+                                valueField: 'value',
+                                typeAhead: true,
+                                mode: 'local',
+                                triggerAction: 'all',
+                                selectOnFocus:true
+                            });
+
+                            editorCombo.on('select', function(combo, record, index) {
+                                this.editDirectly(key, combo.getValue());
+                            }.bind(this))
+
+                            editorGrid = new Ext.Editor(editorCombo);
+
+                            break;
+
 						case ORYX.CONFIG.TYPE_DATE:
 							var currFormat = ORYX.I18N.PropertyWindow.dateFormat
 							if(!(attribute instanceof Date))
@@ -920,6 +1112,19 @@ ORYX.Plugins.PropertyWindow = {
 								proceed = false;
 							}
 						}
+
+                        if(pair.ifproptrue() && pair.ifproptrue().length > 0) {
+                            var foundifproptrue = false;
+                            var itp = pair.ifproptrue();
+                            if(this.shapeSelection.shapes.first().properties["oryx-"+itp] && this.shapeSelection.shapes.first().properties["oryx-"+itp] == "true") {
+                                foundifproptrue = true;
+                            }
+
+                            if(!foundifproptrue) {
+                                proceed = false;
+                            }
+                        }
+
 						
 						if(pair.fordistribution() && pair.fordistribution().length > 0) {
 							var founddistribution = false;
@@ -1221,8 +1426,43 @@ Ext.extend(Ext.form.ComplexListField, Ext.form.TriggerField,  {
 				});				
 				
 				editor = new Ext.form.ComboBox(
-					{ editable: false, typeAhead: true, triggerAction: 'all', transform:select, lazyRender:true,  msgTarget:'title', width : width});			
-			} else if (type == ORYX.CONFIG.TYPE_BOOLEAN) {
+					{ editable: false, typeAhead: true, triggerAction: 'all', transform:select, lazyRender:true,  msgTarget:'title', width : width});
+            } else if(type == ORYX.CONFIG.TYPE_DYNAMICCHOICE) {
+                var items = this.items[i].items();
+                var select = ORYX.Editor.graft("http://www.w3.org/1999/xhtml", parent, ['select', {style:'display:none'}]);
+                var optionTmpl = new Ext.Template('<option value="{value}">{value}</option>');
+                items.each(function(value){
+                    // evaluate each value expression
+                    var processJSON = ORYX.EDITOR.getSerializedJSON();
+                    var expressionresults = jsonPath(processJSON.evalJSON(), value.value());
+                    if(expressionresults) {
+                        if(expressionresults.toString().length > 0) {
+                            for(var i=0; i< expressionresults.length; i++) {
+                                var expressionparts = expressionresults[i].split(",");
+                                for (var j = 0; j < expressionparts.length; j++) {
+                                    if(expressionparts[j].indexOf(":") > 0) {
+                                        var valueParts = expressionparts[j].split(":");
+                                        optionTmpl.append(select, {value:valueParts[0]});
+                                    } else {
+                                        optionTmpl.append(select, {value:expressionparts[j]});
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        this.facade.raiseEvent({
+                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                            ntype		: 'info',
+                            msg         : 'No data available for property.',
+                            title       : ''
+
+                        });
+                    }
+                });
+
+                editor = new Ext.form.ComboBox(
+                    { editable: false, typeAhead: true, triggerAction: 'all', transform:select, lazyRender:true,  msgTarget:'title', width : width});
+            } else if (type == ORYX.CONFIG.TYPE_BOOLEAN) {
 				editor = new Ext.form.Checkbox( { width : width } );
 			} else if (type == "xpath") {
 				//TODO set the xpath type as string, same editor as string.
@@ -1314,10 +1554,10 @@ Ext.extend(Ext.form.ComplexListField, Ext.form.TriggerField,  {
 				var width 	= this.items[i].width();
 				var type 	= this.items[i].type();	
 					
-				if (type == ORYX.CONFIG.TYPE_CHOICE) {
+				if ( (type == ORYX.CONFIG.TYPE_CHOICE) || (type == ORYX.CONFIG.TYPE_DYNAMICCHOICE) ) {
 					type = ORYX.CONFIG.TYPE_STRING;
 				}
-						
+
 				dialogWidth += width;
 				recordType[i] = {name:id, type:type};
 			}			
@@ -3582,7 +3822,7 @@ Ext.form.ComplexVisualDataAssignmentField = Ext.extend(Ext.form.TriggerField,  {
 
         Ext.each(this.dataSource.data.items, function(item){
             if((item.data.gridProperties.propId == "oryx-assignments")) {
-                alert("value: " + item.data['value']);
+                //alert("value: " + item.data['value']);
             }
         });
 

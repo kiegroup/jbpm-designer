@@ -17,7 +17,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>UberFire login</title>
+    <title>jBPM Designer login</title>
 
     <style type="text/css">
         * {
@@ -142,7 +142,7 @@
 
 <div id="login-wrapper" class="png_bg">
     <div id="login-top">
-        <img src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/images/uf_logo.png" alt="UberFire Logo" title="Powered By Uberfire"/>
+        <img src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/images/designerlogo.png" alt="jBPMDesigner Logo" title="Powered By Uberfire"/>
     </div>
 
     <div id="login-content">

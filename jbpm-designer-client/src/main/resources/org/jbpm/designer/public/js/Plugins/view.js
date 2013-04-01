@@ -1437,7 +1437,7 @@ ORYX.Plugins.View = {
     	   			  onGutterClick: this.foldFunc
     	   			});
     	   		}catch(e){
-                       this.facade.raiseEvent({
+                       ORYX.EDITOR._pluginFacade.raiseEvent({
                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                            ntype		: 'error',
                            msg         : 'Converting to BPMN2 failed:' + e,
@@ -1447,7 +1447,7 @@ ORYX.Plugins.View = {
     	   		}
             }.createDelegate(this),
             failure: function(){
-                this.facade.raiseEvent({
+                ORYX.EDITOR._pluginFacade.raiseEvent({
                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                     ntype		: 'error',
                     msg         : 'Converting to BPMN2 failed.',

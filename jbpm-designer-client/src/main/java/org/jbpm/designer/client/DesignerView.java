@@ -5,9 +5,14 @@ import javax.annotation.PostConstruct;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.event.dom.client.LoadEvent;
+import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
+import org.uberfire.client.annotations.OnFocus;
+import org.uberfire.client.annotations.OnReveal;
 
 public class DesignerView
         extends Composite
@@ -15,7 +20,14 @@ public class DesignerView
         RequiresResize {
 
     private DesignerPresenter presenter;
-    private Frame inlineFrame = new Frame();
+    private Frame inlineFrame = new Frame() {{
+        addDomHandler(new LoadHandler() {
+            public void onLoad(LoadEvent event) {
+
+            }
+        }, LoadEvent.getType());
+    }};
+
     private String editorID = "";
 
     @PostConstruct
@@ -33,7 +45,7 @@ public class DesignerView
     }
 
     private void setupInlineFrame() {
-        inlineFrame.setWidth("100%");
+        inlineFrame.setWidth("98%");
         inlineFrame.setHeight("680");
         inlineFrame.getElement().getStyle().setBorderWidth(0, Style.Unit.PX);
         inlineFrame.getElement().getStyle().setOverflowX(Style.Overflow.AUTO);
@@ -50,12 +62,15 @@ public class DesignerView
         inlineFrame.getElement().setId(editorID);
     }
 
-
     @Override
-    public void startDesigneInstancer() {
-        initDesigner(this.editorID);
-        startDesigner(this.editorID);
-        kickstartEditor(editorID);
+    public void startDesignerInstance(String editorId) {
+        initDesigner(editorId);
+        startDesigner(editorId);
+        kickstartEditor(editorId);
+    }
+
+    public void startEditorInstance(String editorId) {
+        startDesignerInstance(editorId);
     }
 
     private native void startDesigner(String editorid)  /*-{
