@@ -212,6 +212,7 @@ public class Bpmn2JsonUnmarshaller {
     }
 
     public void revisitMultiInstanceTasks(Definitions def) {
+        try {
         List<RootElement> rootElements =  def.getRootElements();
         for(RootElement root : rootElements) {
             if(root instanceof Process) {
@@ -238,7 +239,31 @@ public class Bpmn2JsonUnmarshaller {
                                         List<Property> properties = process.getProperties();
                                         for(Property prop : properties) {
                                             if(prop.getId() != null && prop.getId().equals(miCollectionInput)) {
-                                                loopCharacteristics.setLoopDataInputRef(prop);
+
+                                                DataInput miCollectionInputDI = Bpmn2Factory.eINSTANCE.createDataInput();
+                                                miCollectionInputDI.setName("miinputCollection");
+                                                ItemDefinition miCollectionInputDIItemDefinition = Bpmn2Factory.eINSTANCE.createItemDefinition();
+                                                miCollectionInputDIItemDefinition.setStructureRef("java.util.Collection");
+                                                def.getRootElements().add(miCollectionInputDIItemDefinition);
+                                                miCollectionInputDI.setItemSubjectRef(miCollectionInputDIItemDefinition);
+
+                                                task.getIoSpecification().getDataInputs().add(miCollectionInputDI);
+
+                                                if(task.getIoSpecification().getInputSets() == null || task.getIoSpecification().getInputSets().size() < 1) {
+                                                    InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
+                                                    task.getIoSpecification().getInputSets().add(inset);
+                                                }
+                                                task.getIoSpecification().getInputSets().get(0).getDataInputRefs().add(miCollectionInputDI);
+
+                                                loopCharacteristics.setLoopDataInputRef(miCollectionInputDI);
+
+
+                                                DataInputAssociation miCollectionInputDataInputAssociation = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
+                                                miCollectionInputDataInputAssociation.getSourceRef().add(prop);
+                                                miCollectionInputDataInputAssociation.setTargetRef(miCollectionInputDI);
+
+                                                task.getDataInputAssociations().add(miCollectionInputDataInputAssociation);
+
                                                 break;
                                             }
                                         }
@@ -248,7 +273,36 @@ public class Bpmn2JsonUnmarshaller {
                                         List<Property> properties = process.getProperties();
                                         for(Property prop : properties) {
                                             if(prop.getId() != null && prop.getId().equals(miCollectionOutput)) {
-                                                loopCharacteristics.setLoopDataOutputRef(prop);
+
+
+
+                                                DataOutput miCollectionOutputDI = Bpmn2Factory.eINSTANCE.createDataOutput();
+                                                miCollectionOutputDI.setName("mioutputCollection");
+                                                ItemDefinition miCollectionOutputDIItemDefinition = Bpmn2Factory.eINSTANCE.createItemDefinition();
+                                                miCollectionOutputDIItemDefinition.setStructureRef("java.util.Collection");
+                                                def.getRootElements().add(miCollectionOutputDIItemDefinition);
+                                                miCollectionOutputDI.setItemSubjectRef(miCollectionOutputDIItemDefinition);
+
+                                                task.getIoSpecification().getDataOutputs().add(miCollectionOutputDI);
+
+                                                if(task.getIoSpecification().getInputSets() == null || task.getIoSpecification().getInputSets().size() < 1) {
+                                                    InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
+                                                    task.getIoSpecification().getInputSets().add(inset);
+                                                }
+                                                task.getIoSpecification().getOutputSets().get(0).getDataOutputRefs().add(miCollectionOutputDI);
+
+                                                loopCharacteristics.setLoopDataOutputRef(miCollectionOutputDI);
+
+
+                                                DataOutputAssociation miCollectionInputDataOutputAssociation = Bpmn2Factory.eINSTANCE.createDataOutputAssociation();
+                                                miCollectionInputDataOutputAssociation.setTargetRef(prop);
+                                                miCollectionInputDataOutputAssociation.getSourceRef().add(miCollectionOutputDI);
+
+                                                task.getDataOutputAssociations().add(miCollectionInputDataOutputAssociation);
+
+
+
+                                                //loopCharacteristics.setLoopDataOutputRef(prop);
                                                 break;
                                             }
                                         }
@@ -317,6 +371,9 @@ public class Bpmn2JsonUnmarshaller {
                     }
                 }
             }
+        }
+        }catch(Exception e) {
+            e.printStackTrace();
         }
     }
 

@@ -25,90 +25,9 @@ import org.codehaus.jackson.JsonEncoding;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonGenerator;
-import org.eclipse.bpmn2.Activity;
-import org.eclipse.bpmn2.AdHocOrdering;
-import org.eclipse.bpmn2.AdHocSubProcess;
-import org.eclipse.bpmn2.Artifact;
-import org.eclipse.bpmn2.Association;
-import org.eclipse.bpmn2.AssociationDirection;
-import org.eclipse.bpmn2.BaseElement;
-import org.eclipse.bpmn2.BoundaryEvent;
-import org.eclipse.bpmn2.BusinessRuleTask;
-import org.eclipse.bpmn2.CallActivity;
-import org.eclipse.bpmn2.CallableElement;
-import org.eclipse.bpmn2.CatchEvent;
-import org.eclipse.bpmn2.Choreography;
-import org.eclipse.bpmn2.Collaboration;
-import org.eclipse.bpmn2.CompensateEventDefinition;
-import org.eclipse.bpmn2.ComplexGateway;
-import org.eclipse.bpmn2.ConditionalEventDefinition;
-import org.eclipse.bpmn2.Conversation;
-import org.eclipse.bpmn2.DataInput;
-import org.eclipse.bpmn2.DataInputAssociation;
-import org.eclipse.bpmn2.DataObject;
-import org.eclipse.bpmn2.DataOutput;
-import org.eclipse.bpmn2.DataOutputAssociation;
-import org.eclipse.bpmn2.Definitions;
-import org.eclipse.bpmn2.EndEvent;
+import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.Error;
-import org.eclipse.bpmn2.ErrorEventDefinition;
-import org.eclipse.bpmn2.Escalation;
-import org.eclipse.bpmn2.EscalationEventDefinition;
-import org.eclipse.bpmn2.Event;
-import org.eclipse.bpmn2.EventBasedGateway;
-import org.eclipse.bpmn2.EventDefinition;
-import org.eclipse.bpmn2.ExclusiveGateway;
-import org.eclipse.bpmn2.Expression;
-import org.eclipse.bpmn2.ExtensionAttributeValue;
-import org.eclipse.bpmn2.FlowElement;
-import org.eclipse.bpmn2.FlowNode;
-import org.eclipse.bpmn2.FormalExpression;
-import org.eclipse.bpmn2.Gateway;
-import org.eclipse.bpmn2.GlobalBusinessRuleTask;
-import org.eclipse.bpmn2.GlobalChoreographyTask;
-import org.eclipse.bpmn2.GlobalManualTask;
-import org.eclipse.bpmn2.GlobalScriptTask;
-import org.eclipse.bpmn2.GlobalTask;
-import org.eclipse.bpmn2.GlobalUserTask;
-import org.eclipse.bpmn2.Group;
-import org.eclipse.bpmn2.InclusiveGateway;
-import org.eclipse.bpmn2.InputSet;
-import org.eclipse.bpmn2.Interface;
-import org.eclipse.bpmn2.IntermediateCatchEvent;
-import org.eclipse.bpmn2.IntermediateThrowEvent;
-import org.eclipse.bpmn2.ItemDefinition;
-import org.eclipse.bpmn2.Lane;
-import org.eclipse.bpmn2.LaneSet;
-import org.eclipse.bpmn2.LoopCharacteristics;
-import org.eclipse.bpmn2.ManualTask;
-import org.eclipse.bpmn2.Message;
-import org.eclipse.bpmn2.MessageEventDefinition;
-import org.eclipse.bpmn2.MultiInstanceLoopCharacteristics;
-import org.eclipse.bpmn2.Operation;
-import org.eclipse.bpmn2.OutputSet;
-import org.eclipse.bpmn2.ParallelGateway;
-import org.eclipse.bpmn2.PotentialOwner;
 import org.eclipse.bpmn2.Process;
-import org.eclipse.bpmn2.Property;
-import org.eclipse.bpmn2.ReceiveTask;
-import org.eclipse.bpmn2.Relationship;
-import org.eclipse.bpmn2.Resource;
-import org.eclipse.bpmn2.ResourceRole;
-import org.eclipse.bpmn2.RootElement;
-import org.eclipse.bpmn2.ScriptTask;
-import org.eclipse.bpmn2.SendTask;
-import org.eclipse.bpmn2.SequenceFlow;
-import org.eclipse.bpmn2.ServiceTask;
-import org.eclipse.bpmn2.Signal;
-import org.eclipse.bpmn2.SignalEventDefinition;
-import org.eclipse.bpmn2.StartEvent;
-import org.eclipse.bpmn2.SubProcess;
-import org.eclipse.bpmn2.Task;
-import org.eclipse.bpmn2.TerminateEventDefinition;
-import org.eclipse.bpmn2.TextAnnotation;
-import org.eclipse.bpmn2.ThrowEvent;
-import org.eclipse.bpmn2.TimerEventDefinition;
-import org.eclipse.bpmn2.UserTask;
 import org.eclipse.bpmn2.di.BPMNDiagram;
 import org.eclipse.bpmn2.di.BPMNEdge;
 import org.eclipse.bpmn2.di.BPMNPlane;
@@ -1458,10 +1377,26 @@ public class Bpmn2JsonMarshaller {
             properties.put("multipleinstance", "true");
             MultiInstanceLoopCharacteristics taskmi = (MultiInstanceLoopCharacteristics) task.getLoopCharacteristics();
             if(taskmi.getLoopDataInputRef() != null) {
-                properties.put("multipleinstancecollectioninput", taskmi.getLoopDataInputRef().getId());
+                ItemAwareElement iedatainput = taskmi.getLoopDataInputRef();
+
+                List<DataInputAssociation> taskInputAssociations = task.getDataInputAssociations();
+                for(DataInputAssociation dia : taskInputAssociations) {
+                    if(dia.getTargetRef().equals(iedatainput)) {
+                        properties.put("multipleinstancecollectioninput", dia.getSourceRef().get(0).getId());
+                        break;
+                    }
+                }
             }
             if(taskmi.getLoopDataOutputRef() != null) {
-                properties.put("multipleinstancecollectionoutput", taskmi.getLoopDataOutputRef().getId());
+                ItemAwareElement iedataoutput = taskmi.getLoopDataOutputRef();
+
+                List<DataOutputAssociation> taskOutputAssociations = task.getDataOutputAssociations();
+                for(DataOutputAssociation dout : taskOutputAssociations) {
+                    if(dout.getSourceRef().get(0).equals(iedataoutput)) {
+                        properties.put("multipleinstancecollectionoutput", dout.getTargetRef().getId());
+                        break;
+                    }
+                }
             }
 
             if(taskmi.getInputDataItem() != null) {
@@ -1504,7 +1439,7 @@ public class Bpmn2JsonMarshaller {
                 List<DataInput> dataInputList =  inset.getDataInputRefs();
                 for(DataInput dataIn : dataInputList) {
                     // dont add "TaskName" as that is added manually
-                    if(dataIn.getName() != null && !dataIn.getName().equals("TaskName")) {
+                    if(dataIn.getName() != null && !dataIn.getName().equals("TaskName") && !dataIn.getName().equals("miinputCollection")) {
                         dataInBuffer.append(dataIn.getName());
                         if(dataIn.getItemSubjectRef() != null && dataIn.getItemSubjectRef().getStructureRef() != null && dataIn.getItemSubjectRef().getStructureRef().length() > 0) {
                         	dataInBuffer.append(":").append(dataIn.getItemSubjectRef().getStructureRef());
@@ -1559,11 +1494,13 @@ public class Bpmn2JsonMarshaller {
             for(OutputSet outset : outputSetList) {
                 List<DataOutput> dataOutputList =  outset.getDataOutputRefs();
                 for(DataOutput dataOut : dataOutputList) {
-                    dataOutBuffer.append(dataOut.getName());
-                    if(dataOut.getItemSubjectRef() != null && dataOut.getItemSubjectRef().getStructureRef() != null && dataOut.getItemSubjectRef().getStructureRef().length() > 0) {
-                    	dataOutBuffer.append(":").append(dataOut.getItemSubjectRef().getStructureRef());
+                    if(!dataOut.getName().equals("mioutputCollection")) {
+                        dataOutBuffer.append(dataOut.getName());
+                        if(dataOut.getItemSubjectRef() != null && dataOut.getItemSubjectRef().getStructureRef() != null && dataOut.getItemSubjectRef().getStructureRef().length() > 0) {
+                            dataOutBuffer.append(":").append(dataOut.getItemSubjectRef().getStructureRef());
+                        }
+                        dataOutBuffer.append(",");
                     }
-                    dataOutBuffer.append(",");
                 }
             }
             if(dataOutBuffer.length() > 0) {
@@ -1584,8 +1521,12 @@ public class Bpmn2JsonMarshaller {
             boolean proceed = true;
             if(task.getLoopCharacteristics() != null) {
                 MultiInstanceLoopCharacteristics taskMultiLoop = (MultiInstanceLoopCharacteristics) task.getLoopCharacteristics();
+                // dont include associations that include mi loop data inputs
                 if(datain.getSourceRef().get(0).getId().equals(taskMultiLoop.getInputDataItem().getId())) {
-                    // dont include associations that include mi loop data inputs
+                    proceed = false;
+                }
+                // dont include associations that include loopDataInputRef as target
+                if(datain.getTargetRef().equals(taskMultiLoop.getLoopDataInputRef())) {
                     proceed = false;
                 }
             }
@@ -1744,8 +1685,12 @@ public class Bpmn2JsonMarshaller {
             boolean proceed = true;
             if(task.getLoopCharacteristics() != null) {
                 MultiInstanceLoopCharacteristics taskMultiLoop = (MultiInstanceLoopCharacteristics) task.getLoopCharacteristics();
+                // dont include associations that include mi loop data outputs
                 if(dataout.getTargetRef().getId().equals(taskMultiLoop.getOutputDataItem().getId())) {
-                    // dont include associations that include mi loop data outputs
+                    proceed = false;
+                }
+                // dont include associations that include loopDataOutputRef as source
+                if(dataout.getSourceRef().get(0).equals(taskMultiLoop.getLoopDataOutputRef())) {
                     proceed = false;
                 }
             }

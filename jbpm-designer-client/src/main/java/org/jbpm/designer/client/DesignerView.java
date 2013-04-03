@@ -45,8 +45,8 @@ public class DesignerView
     }
 
     private void setupInlineFrame() {
-        inlineFrame.setWidth("98%");
-        inlineFrame.setHeight("680");
+        inlineFrame.setWidth("92%");
+        inlineFrame.setHeight("650");
         inlineFrame.getElement().setPropertyBoolean("allowfullscreen", true);
         inlineFrame.getElement().getStyle().setBorderWidth(0, Style.Unit.PX);
         inlineFrame.getElement().getStyle().setOverflowX(Style.Overflow.AUTO);
