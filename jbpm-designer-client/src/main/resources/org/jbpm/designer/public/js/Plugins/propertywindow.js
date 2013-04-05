@@ -130,7 +130,7 @@ ORYX.Plugins.PropertyWindow = {
 			colModel: this.columnModel,
 			enableHdMenu: false,
 			view: new Ext.grid.GroupingView({
-				forceFit: true ,
+				forceFit: false,
 				groupTextTpl: '{[values.rs.first().data.groupname]}'
 			}),
 			
@@ -1206,7 +1206,7 @@ ORYX.Plugins.PropertyWindow = {
 		if (this.properties.length <= 0){ return }
 		
 		// collapse the "more attr" group
-		this.grid.view.toggleGroup(this.grid.view.getGroupId(this.properties[0][0]), false);
+		//this.grid.view.toggleGroup(this.grid.view.getGroupId(this.properties[0][0]), false);
 		
 		// prevent the more attributes pane from closing after a attribute has been edited
 		this.grid.view.un("refresh", this.hideMoreAttrs, this);
