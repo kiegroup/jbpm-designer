@@ -15,26 +15,12 @@
     <name>jBPM Designer</name>
     <description>jBPM Designer - web-based BPMN2 modeller</description>
     <url>https://github.com/droolsjbpm/jbpm-designer</url>
-    <licenses>
-        <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
 
     <scm>
         <connection>scm:git:git@github.com:droolsjbpm/jbpm-designer.git</connection>
         <developerConnection>scm:git:git@github.com:droolsjbpm/jbpm-designer.git</developerConnection>
         <url>https://github.com/droolsjbpm/jbpm-designer</url>
     </scm>
-
-    <developers>
-        <developer>
-            <name>All developers are listed on the team website</name>
-            <url>http://www.jboss.org/drools/team</url>
-        </developer>
-    </developers>
 
     <modules>
         <module>jbpm-designer-backend</module>
@@ -46,27 +32,6 @@
     <properties>
         <port>8888</port>
     </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <!-- Designer Dependencies -->
-            <dependency>
-                <groupId>org.jbpm</groupId>
-                <artifactId>jbpm-designer-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jbpm</groupId>
-                <artifactId>jbpm-designer-backend</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jbpm</groupId>
-                <artifactId>jbpm-designer-client</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <build>
         <plugins>
@@ -91,25 +56,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>jar</goal>
-                            <goal>test-jar</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 
@@ -127,54 +73,7 @@
         </profile>
     </profiles>
 
-    <!-- overwrite for now repositories definitions from parent -->
     <repositories>
-        <repository>
-            <id>repo1</id>
-            <url>http://repo1.maven.org/maven2</url>
-        </repository>
-        <repository>
-            <id>central</id>
-            <url>https://repository.jboss.org/nexus/content/repositories/central</url>
-        </repository>
-        <repository>
-            <id>snapshots</id>
-            <url>https://repository.jboss.org/nexus/content/repositories/snapshots</url>
-        </repository>
-        <repository>
-            <id>thirdparty</id>
-            <url>https://repository.jboss.org/nexus/content/repositories/thirdparty-uploads</url>
-        </repository>
-        <repository>
-            <id>ibiblio</id>
-            <url>http://mirrors.ibiblio.org/pub/mirrors/maven2</url>
-        </repository>
-
-        <repository>
-            <id>jboss-public-repository-group</id>
-            <name>JBoss Public Repository Group</name>
-            <url>http://repository.jboss.org/nexus/content/groups/public/</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>jboss-deprecated</id>
-            <name>JBoss Deprecated</name>
-            <url>https://repository.jboss.org/nexus/content/repositories/deprecated/</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
         <repository>
             <id>jboss-thirdparty-uploads</id>
             <name>JBoss ThirdParty Uploads</name>
