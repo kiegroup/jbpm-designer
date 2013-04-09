@@ -169,13 +169,18 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 processPackage = processPackage.substring(1, processPackage.length());
             }
             processPackage = processPackage.replaceAll("/", ".");
+            // final check in odd cases
+            if(processPackage.startsWith(".")) {
+                processPackage = processPackage.substring(1, processPackage.length());
+            }
             workItemTemplate.setAttribute("packageName", processPackage);
 
             String processName = asset.getName();
             workItemTemplate.setAttribute("processName", processName);
 
+            String packageNameStr = (processPackage.length() > 0) ? processPackage + "." : "";
             // default the process id to packagename.processName
-            workItemTemplate.setAttribute("processid", workItemTemplate.getAttribute("packageName") + "." + workItemTemplate.getAttribute("processName"));
+            workItemTemplate.setAttribute("processid", packageNameStr + workItemTemplate.getAttribute("processName"));
             // color theme attribute
             workItemTemplate.setAttribute("colortheme", themeData);
 
