@@ -40,6 +40,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import bpsim.impl.BpsimFactoryImpl;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.jboss.drools.impl.DroolsFactoryImpl;
@@ -190,6 +191,7 @@ public class EditorHandler extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         DroolsFactoryImpl.init();
+        BpsimFactoryImpl.init();
         _profileService.init(config.getServletContext());
         _pluginService = PluginServiceImpl.getInstance(
                 config.getServletContext());

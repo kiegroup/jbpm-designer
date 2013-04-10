@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import bpsim.impl.BpsimFactoryImpl;
 import org.apache.log4j.Logger;
 import org.eclipse.bpmn2.Definitions;
 import org.jboss.drools.impl.DroolsFactoryImpl;
@@ -70,6 +71,8 @@ public class TaskFormsServlet extends HttpServlet {
             processAsset = repository.loadAsset(uuid);
 
             DroolsFactoryImpl.init();
+            BpsimFactoryImpl.init();
+
             Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
             Definitions def = ((Definitions) unmarshaller.unmarshall(json, preprocessingData).getContents().get(0));
 

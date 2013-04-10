@@ -17,7 +17,6 @@ package org.jbpm.designer.bpmn2.impl;
 
 import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +27,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.sun.servicetag.SystemEnvironment;
+import bpsim.*;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonParser;
@@ -54,29 +53,12 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.util.FeatureMap;
-import org.jboss.drools.ControlParameters;
-import org.jboss.drools.CostParameters;
-import org.jboss.drools.DecimalParameterType;
 import org.jboss.drools.DroolsFactory;
 import org.jboss.drools.DroolsPackage;
-import org.jboss.drools.ElementParameters;
-import org.jboss.drools.FloatingParameterType;
 import org.jboss.drools.GlobalType;
 import org.jboss.drools.ImportType;
-import org.jboss.drools.NormalDistributionType;
 import org.jboss.drools.OnEntryScriptType;
 import org.jboss.drools.OnExitScriptType;
-import org.jboss.drools.Parameter;
-import org.jboss.drools.PoissonDistributionType;
-import org.jboss.drools.PriorityParameters;
-import org.jboss.drools.ProcessAnalysisDataType;
-import org.jboss.drools.RandomDistributionType;
-import org.jboss.drools.ResourceParameters;
-import org.jboss.drools.Scenario;
-import org.jboss.drools.ScenarioParameters;
-import org.jboss.drools.TimeParameters;
-import org.jboss.drools.TimeUnit;
-import org.jboss.drools.UniformDistributionType;
 import org.jboss.drools.impl.DroolsPackageImpl;
 import org.jbpm.designer.bpmn2.BpmnMarshallerHelper;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceFactoryImpl;
@@ -126,7 +108,7 @@ public class Bpmn2JsonUnmarshaller {
     private Map<String,Message> _messages = new HashMap<String, Message>();
     private Map<String,ItemDefinition> _itemDefinitions = new HashMap<String, ItemDefinition>();
     private Map<String, List<EObject>> _simulationElementParameters = new HashMap<String, List<EObject>>();
-    private ScenarioParameters _simulationScenarioParameters = DroolsFactory.eINSTANCE.createScenarioParameters();
+    private ScenarioParametersType _simulationScenarioParameters = BpsimFactory.eINSTANCE.createScenarioParametersType();
     
     public Bpmn2JsonUnmarshaller() {
         _helpers = new ArrayList<BpmnMarshallerHelper>();
@@ -419,9 +401,9 @@ public class Bpmn2JsonUnmarshaller {
 		relationship.getSources().add(def);
 		relationship.getTargets().add(def);
         relationship.setType(defaultRelationshipType);
-		ProcessAnalysisDataType processAnalysisData = DroolsFactory.eINSTANCE.createProcessAnalysisDataType();
+		BPSimDataType simDataType = BpsimFactory.eINSTANCE.createBPSimDataType();
 		// currently support single scenario
-		Scenario defaultScenario = DroolsFactory.eINSTANCE.createScenario();
+		Scenario defaultScenario = BpsimFactory.eINSTANCE.createScenario();
 		defaultScenario.setId("default"); // single scenario suppoert
 		defaultScenario.setName("Simulationscenario"); // single scenario support
 		defaultScenario.setScenarioParameters(_simulationScenarioParameters);
@@ -430,8 +412,8 @@ public class Bpmn2JsonUnmarshaller {
     		Iterator<String> iter = _simulationElementParameters.keySet().iterator();
     		while(iter.hasNext()) {
     			String key = iter.next();
-    			ElementParameters etype = DroolsFactory.eINSTANCE.createElementParameters();
-    			etype.setElementId(key);
+    			ElementParametersType etype = BpsimFactory.eINSTANCE.createElementParametersType();
+    			etype.setElementRef(key);
     			List<EObject> params = _simulationElementParameters.get(key);
     			for(EObject np : params) {
     				if(np instanceof ControlParameters) {
@@ -449,11 +431,11 @@ public class Bpmn2JsonUnmarshaller {
     			defaultScenario.getElementParameters().add(etype);
     		}
 		}
-		processAnalysisData.getScenario().add(defaultScenario);
+        simDataType.getScenario().add(defaultScenario);
 		ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
 		relationship.getExtensionValues().add(extensionElement);
         FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
-                (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__PROCESS_ANALYSIS_DATA, processAnalysisData);
+                (Internal) BpsimPackage.Literals.DOCUMENT_ROOT__BP_SIM_DATA, simDataType);
         relationship.getExtensionValues().get(0).getValue().add(extensionElementEntry);
         def.getRelationships().add(relationship);
     }
@@ -2894,16 +2876,19 @@ public class Bpmn2JsonUnmarshaller {
         }
         // simulation
         if(properties.get("waittime") != null && properties.get("waittime").length() > 0) {
-            TimeParameters timeParams = DroolsFactory.eINSTANCE.createTimeParameters();
-            Parameter waittimeParam = DroolsFactory.eINSTANCE.createParameter();
-            FloatingParameterType waittimeParamValue = DroolsFactory.eINSTANCE.createFloatingParameterType();
+            TimeParameters timeParams = BpsimFactory.eINSTANCE.createTimeParameters();
+            Parameter waittimeParam = BpsimFactory.eINSTANCE.createParameter();
+            FloatingParameterType waittimeParamValue = BpsimFactory.eINSTANCE.createFloatingParameterType();
             DecimalFormat twoDForm = new DecimalFormat("#.##");
             waittimeParamValue.setValue(Double.valueOf(twoDForm.format(Double.valueOf(properties.get("waittime")))));
             waittimeParam.getParameterValue().add(waittimeParamValue);
             timeParams.setWaitTime(waittimeParam);
-            if(properties.get("timeunit") != null) {
-                timeParams.setTimeUnit(TimeUnit.getByName(properties.get("timeunit")));
-            }
+
+            // no individual time unit defined in 1.0 - use global setting!
+//            if(properties.get("timeunit") != null) {
+//                timeParams.setTimeUnit(TimeUnit.getByName(properties.get("timeunit")));
+//            }
+
             if(_simulationElementParameters.containsKey(event.getId())) {
                 _simulationElementParameters.get(event.getId()).add(timeParams);
             } else {
@@ -3057,31 +3042,37 @@ public class Bpmn2JsonUnmarshaller {
 
         // simulation
         if(properties.get("distributiontype") != null && properties.get("distributiontype").length() > 0) {
-            TimeParameters timeParams = DroolsFactory.eINSTANCE.createTimeParameters();
-            Parameter processingTimeParam = DroolsFactory.eINSTANCE.createParameter();
+            TimeParameters timeParams = BpsimFactory.eINSTANCE.createTimeParameters();
+            Parameter processingTimeParam = BpsimFactory.eINSTANCE.createParameter();
             if(properties.get("distributiontype").equals("normal")) {
-                NormalDistributionType normalDistributionType = DroolsFactory.eINSTANCE.createNormalDistributionType();
+                NormalDistributionType normalDistributionType = BpsimFactory.eINSTANCE.createNormalDistributionType();
                 normalDistributionType.setStandardDeviation(Double.valueOf(properties.get("standarddeviation")));
                 normalDistributionType.setMean(Double.valueOf(properties.get("mean")));
                 processingTimeParam.getParameterValue().add(normalDistributionType);
             } else if(properties.get("distributiontype").equals("uniform")) {
-                UniformDistributionType uniformDistributionType = DroolsFactory.eINSTANCE.createUniformDistributionType();
+                UniformDistributionType uniformDistributionType = BpsimFactory.eINSTANCE.createUniformDistributionType();
                 uniformDistributionType.setMax(Double.valueOf(properties.get("max")));
                 uniformDistributionType.setMin(Double.valueOf(properties.get("min")));
                 processingTimeParam.getParameterValue().add(uniformDistributionType);
-            } else if(properties.get("distributiontype").equals("random")) {
-                RandomDistributionType randomDistributionType = DroolsFactory.eINSTANCE.createRandomDistributionType();
-                randomDistributionType.setMax(Double.valueOf(properties.get("max")));
-                randomDistributionType.setMin(Double.valueOf(properties.get("min")));
-                processingTimeParam.getParameterValue().add(randomDistributionType);
+
+                // random distribution type not supported in bpsim 1.0
+//            } else if(properties.get("distributiontype").equals("random")) {
+//                RandomDistributionType randomDistributionType = DroolsFactory.eINSTANCE.createRandomDistributionType();
+//                randomDistributionType.setMax(Double.valueOf(properties.get("max")));
+//                randomDistributionType.setMin(Double.valueOf(properties.get("min")));
+//                processingTimeParam.getParameterValue().add(randomDistributionType);
+
             } else if(properties.get("distributiontype").equals("poisson")) {
-                PoissonDistributionType poissonDistributionType = DroolsFactory.eINSTANCE.createPoissonDistributionType();
+                PoissonDistributionType poissonDistributionType = BpsimFactory.eINSTANCE.createPoissonDistributionType();
                 poissonDistributionType.setMean(Double.valueOf(properties.get("mean")));
                 processingTimeParam.getParameterValue().add(poissonDistributionType);
             }
-            if(properties.get("timeunit") != null) {
-                timeParams.setTimeUnit(TimeUnit.getByName(properties.get("timeunit")));
-            }
+
+            // no specific time unit available in 1.0 bpsim - use global
+//            if(properties.get("timeunit") != null) {
+//                timeParams.setTimeUnit(TimeUnit.getByName(properties.get("timeunit")));
+//            }
+
             timeParams.setProcessingTime(processingTimeParam);
             if(_simulationElementParameters.containsKey(event.getId())) {
                 _simulationElementParameters.get(event.getId()).add(timeParams);
@@ -4056,34 +4047,38 @@ public class Bpmn2JsonUnmarshaller {
         
         // simulation
         if(properties.get("distributiontype") != null && properties.get("distributiontype").length() > 0) {
-        	TimeParameters timeParams = DroolsFactory.eINSTANCE.createTimeParameters();
-        	Parameter processingTimeParam = DroolsFactory.eINSTANCE.createParameter();
+        	TimeParameters timeParams = BpsimFactory.eINSTANCE.createTimeParameters();
+        	Parameter processingTimeParam = BpsimFactory.eINSTANCE.createParameter();
         	if(properties.get("distributiontype").equals("normal")) {
-        		NormalDistributionType normalDistributionType = DroolsFactory.eINSTANCE.createNormalDistributionType();
+        		NormalDistributionType normalDistributionType = BpsimFactory.eINSTANCE.createNormalDistributionType();
         		normalDistributionType.setStandardDeviation(Double.valueOf(properties.get("standarddeviation")));
         		normalDistributionType.setMean(Double.valueOf(properties.get("mean")));
         		processingTimeParam.getParameterValue().add(normalDistributionType);
         	} else if(properties.get("distributiontype").equals("uniform")) {
-        		UniformDistributionType uniformDistributionType = DroolsFactory.eINSTANCE.createUniformDistributionType();
+        		UniformDistributionType uniformDistributionType = BpsimFactory.eINSTANCE.createUniformDistributionType();
         		uniformDistributionType.setMax(Double.valueOf(properties.get("max")));
         		uniformDistributionType.setMin(Double.valueOf(properties.get("min")));
         		processingTimeParam.getParameterValue().add(uniformDistributionType);
-        	} else if(properties.get("distributiontype").equals("random")) {
-        		RandomDistributionType randomDistributionType = DroolsFactory.eINSTANCE.createRandomDistributionType();
-        		randomDistributionType.setMax(Double.valueOf(properties.get("max")));
-        		randomDistributionType.setMin(Double.valueOf(properties.get("min")));
-        		processingTimeParam.getParameterValue().add(randomDistributionType);
+
+            // random distribution not supported in bpsim 1.0
+//        	} else if(properties.get("distributiontype").equals("random")) {
+//        		RandomDistributionType randomDistributionType = BpsimFactory.eINSTANCE.createRandomDistributionType();
+//        		randomDistributionType.setMax(Double.valueOf(properties.get("max")));
+//        		randomDistributionType.setMin(Double.valueOf(properties.get("min")));
+//        		processingTimeParam.getParameterValue().add(randomDistributionType);
         	} else if(properties.get("distributiontype").equals("poisson")) {
-        		PoissonDistributionType poissonDistributionType = DroolsFactory.eINSTANCE.createPoissonDistributionType();
+        		PoissonDistributionType poissonDistributionType = BpsimFactory.eINSTANCE.createPoissonDistributionType();
         		poissonDistributionType.setMean(Double.valueOf(properties.get("mean")));
         		processingTimeParam.getParameterValue().add(poissonDistributionType);
         	}
-        	if(properties.get("timeunit") != null) {
-        		timeParams.setTimeUnit(TimeUnit.getByName(properties.get("timeunit")));
-        	}
+
+            // individual time unit not supported in bpsim 1.0
+//        	if(properties.get("timeunit") != null) {
+//        		timeParams.setTimeUnit(TimeUnit.getByName(properties.get("timeunit")));
+//        	}
             if(properties.get("waittime") != null) {
-                Parameter waittimeParam = DroolsFactory.eINSTANCE.createParameter();
-                FloatingParameterType waittimeParamValue = DroolsFactory.eINSTANCE.createFloatingParameterType();
+                Parameter waittimeParam = BpsimFactory.eINSTANCE.createParameter();
+                FloatingParameterType waittimeParamValue = BpsimFactory.eINSTANCE.createFloatingParameterType();
                 DecimalFormat twoDForm = new DecimalFormat("#.##");
                 waittimeParamValue.setValue(Double.valueOf(twoDForm.format(Double.valueOf(properties.get("waittime")))));
                 waittimeParam.getParameterValue().add(waittimeParamValue);
@@ -4099,17 +4094,20 @@ public class Bpmn2JsonUnmarshaller {
             }
         }
 
-        CostParameters costParameters = DroolsFactory.eINSTANCE.createCostParameters();
+        CostParameters costParameters = BpsimFactory.eINSTANCE.createCostParameters();
         if(properties.get("unitcost") != null && properties.get("unitcost").length() > 0) {
-            Parameter unitcostParam = DroolsFactory.eINSTANCE.createParameter();
-            DecimalParameterType unitCostParameterValue = DroolsFactory.eINSTANCE.createDecimalParameterType();
-            unitCostParameterValue.setValue(new BigDecimal(properties.get("unitcost")));
+            Parameter unitcostParam = BpsimFactory.eINSTANCE.createParameter();
+            FloatingParameterType unitCostParameterValue = BpsimFactory.eINSTANCE.createFloatingParameterType();
+            unitCostParameterValue.setValue(new Double(properties.get("unitcost")));
             unitcostParam.getParameterValue().add(unitCostParameterValue);
             costParameters.setUnitCost(unitcostParam);
+
+
         }
-        if(properties.get("currency") != null && properties.get("currency").length() > 0) {
-            costParameters.setCurrencyUnit(properties.get("currency"));
-        }
+        // no individual currency unit supported in bpsim 1.0
+//        if(properties.get("currency") != null && properties.get("currency").length() > 0) {
+//            costParameters.setCurrencyUnit(properties.get("currency"));
+//        }
         if(_simulationElementParameters.containsKey(task.getId())) {
             _simulationElementParameters.get(task.getId()).add(costParameters);
         } else {
@@ -4837,10 +4835,10 @@ public class Bpmn2JsonUnmarshaller {
         }
         
         // simulation properties
-        ResourceParameters resourceParameters = DroolsFactory.eINSTANCE.createResourceParameters();
+        ResourceParameters resourceParameters = BpsimFactory.eINSTANCE.createResourceParameters();
         if(properties.get("quantity") != null && properties.get("quantity").length() > 0) {
-        	Parameter quantityParam = DroolsFactory.eINSTANCE.createParameter();
-        	FloatingParameterType quantityValueParam = DroolsFactory.eINSTANCE.createFloatingParameterType();
+        	Parameter quantityParam = BpsimFactory.eINSTANCE.createParameter();
+        	FloatingParameterType quantityValueParam = BpsimFactory.eINSTANCE.createFloatingParameterType();
         	DecimalFormat twoDForm = new DecimalFormat("#.##");
         	quantityValueParam.setValue(Double.valueOf(twoDForm.format(Double.valueOf(properties.get("quantity")))));
         	quantityParam.getParameterValue().add(quantityValueParam);
@@ -4848,12 +4846,12 @@ public class Bpmn2JsonUnmarshaller {
         }
         
         if(properties.get("workinghours") != null && properties.get("workinghours").length() > 0) {
-        	Parameter workingHoursParam = DroolsFactory.eINSTANCE.createParameter();
-        	FloatingParameterType workingHoursValueParam = DroolsFactory.eINSTANCE.createFloatingParameterType();
+        	Parameter workingHoursParam = BpsimFactory.eINSTANCE.createParameter();
+        	FloatingParameterType workingHoursValueParam = BpsimFactory.eINSTANCE.createFloatingParameterType();
         	DecimalFormat twoDForm = new DecimalFormat("#.##");
         	workingHoursValueParam.setValue(Double.valueOf(twoDForm.format(Double.valueOf(properties.get("workinghours")))));
         	workingHoursParam.getParameterValue().add(workingHoursValueParam);
-        	resourceParameters.setWorkinghours(workingHoursParam);
+        	resourceParameters.setAvailability(workingHoursParam);
         }
         
         if(_simulationElementParameters.containsKey(task.getId())) {
@@ -4976,9 +4974,9 @@ public class Bpmn2JsonUnmarshaller {
         
         // simulation properties
         if(properties.get("probability") != null && properties.get("probability").length() > 0) {
-        	ControlParameters controlParams = DroolsFactory.eINSTANCE.createControlParameters();
-        	Parameter probParam = DroolsFactory.eINSTANCE.createParameter();
-        	FloatingParameterType probParamValueParam = DroolsFactory.eINSTANCE.createFloatingParameterType();
+        	ControlParameters controlParams = BpsimFactory.eINSTANCE.createControlParameters();
+        	Parameter probParam = BpsimFactory.eINSTANCE.createParameter();
+        	FloatingParameterType probParamValueParam = BpsimFactory.eINSTANCE.createFloatingParameterType();
         	DecimalFormat twoDForm = new DecimalFormat("#.##");
         	probParamValueParam.setValue(Double.valueOf(twoDForm.format(Double.valueOf(properties.get("probability")))));
         	probParam.getParameterValue().add(probParamValueParam);

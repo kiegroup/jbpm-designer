@@ -2,6 +2,7 @@ package org.jbpm.designer.bpmn2.resource;
 
 import java.util.ArrayList;
 
+import bpsim.impl.BpsimFactoryImpl;
 import org.eclipse.bpmn2.Bpmn2Factory;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.DocumentRoot;
@@ -35,6 +36,7 @@ public class JBPMBpmn2ResourceFactoryImpl extends ResourceFactoryImpl {
     @Override
     public Resource createResource(URI uri) {
         DroolsFactoryImpl.init();
+        BpsimFactoryImpl.init();
         JBPMBpmn2ResourceImpl result = new JBPMBpmn2ResourceImpl(uri);
         ExtendedMetaData extendedMetadata = new XmlExtendedMetadata();
         result.getDefaultSaveOptions().put(XMLResource.OPTION_EXTENDED_META_DATA, extendedMetadata);
@@ -69,6 +71,7 @@ public class JBPMBpmn2ResourceFactoryImpl extends ResourceFactoryImpl {
 
     public Definitions createAndInitResource(URI uri) {
         DroolsFactoryImpl.init();
+        BpsimFactoryImpl.init();
         Resource resource = createResource(uri);
         Bpmn2Factory factory = Bpmn2Factory.eINSTANCE;
         Definitions definitions = factory.createDefinitions();

@@ -1,5 +1,6 @@
 package org.jbpm.designer.web.server.menu.connector.commands;
 
+import bpsim.impl.BpsimFactoryImpl;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.log4j.Logger;
 import org.eclipse.bpmn2.Definitions;
@@ -399,6 +400,8 @@ public abstract class AbstractCommand {
                 Asset ab = profile.getRepository().loadAssetFromPath(asset.getAssetLocation() + "/" + asset.getFullName());
 
                 DroolsFactoryImpl.init();
+                BpsimFactoryImpl.init();
+
                 Definitions def = ((JbpmProfileImpl) profile).getDefinitions((String) ab.getAssetContent());
 
                 List<RootElement> rootElements = def.getRootElements();

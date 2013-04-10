@@ -15,6 +15,7 @@
  */
 package org.jbpm.designer.web.server;
 
+import bpsim.impl.BpsimFactoryImpl;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
@@ -110,6 +111,7 @@ public class TransformerServlet extends HttpServlet {
 
         IDiagramProfile profile = _profileService.findProfile(req, profileName);
         DroolsFactoryImpl.init();
+        BpsimFactoryImpl.init();
 
         Repository repository = profile.getRepository();
 

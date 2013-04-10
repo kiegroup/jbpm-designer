@@ -1,5 +1,6 @@
 package org.jbpm.designer.web.profile.impl;
 
+import bpsim.impl.BpsimFactoryImpl;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.codehaus.jackson.JsonParseException;
 import org.eclipse.bpmn2.Bpmn2Package;
@@ -179,6 +180,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
         return new IDiagramMarshaller() {
             public String parseModel(String jsonModel, String preProcessingData) {
                 DroolsFactoryImpl.init();
+                BpsimFactoryImpl.init();
                 Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
                 JBPMBpmn2ResourceImpl res;
                 try {
@@ -226,6 +228,8 @@ public class JbpmProfileImpl implements IDiagramProfile {
         return new IDiagramUnmarshaller() {
             public String parseModel(String xmlModel, IDiagramProfile profile, String preProcessingData) {
                 DroolsFactoryImpl.init();
+                BpsimFactoryImpl.init();
+
                 Bpmn2JsonMarshaller marshaller = new Bpmn2JsonMarshaller();
                 marshaller.setProfile(profile);
                 try {
@@ -246,6 +250,8 @@ public class JbpmProfileImpl implements IDiagramProfile {
     public Definitions getDefinitions(String xml) {
         try {
             DroolsFactoryImpl.init();
+            BpsimFactoryImpl.init();
+
             ResourceSet resourceSet = new ResourceSetImpl();
             resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
                     .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new JBPMBpmn2ResourceFactoryImpl());

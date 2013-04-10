@@ -320,63 +320,7 @@
                     "optional":true,
                     "simulation" : true,
                     "min" : "0"
-                },
-                {
-                    "id":"timeunit",
-                    "type":"Choice",
-                    "title":"Time Unit",
-                    "value":"",
-                    "description":"Time unit options (seconds, minutes, hours)",
-                    "description_ja":"Time unit options (seconds, minutes, hours)",
-                    "readonly":false,
-                    "optional":true,
-                    "simulation" : true,
-                    "items": [
-                        {
-                            "id": "c1",
-                            "title":"milliseconds",
-                            "value":"ms"
-                        },
-                        {
-                            "id": "c2",
-                            "title": "seconds",
-                            "value": "s"
-                        },
-                        {
-                            "id": "c3",
-                            "title": "minutes",
-                            "value": "min"
-                        },
-                        {
-                            "id": "c4",
-                            "title": "hours",
-                            "value": "hour"
-                        },
-                        {
-                            "id": "c5",
-                            "title": "days",
-                            "value": "day"
-                        },
-                        {
-                            "id": "c6",
-                            "title": "years",
-                            "value": "year"
-                        }
-                    ]
                 }
-				/**,
-				{
-					"id":"outputset",
-					"type":"Text",
-					"title":"OutputSet",
-					"value":"",
-					"description":"The OutputSet for the catch Event.",
-					"description_ja":"キャッチイベントのOutputSet。",
-					"readonly":false,
-					"optional":true,
-					"length":"",
-					"wrapLines":true
-				}**/
  			]
  		},
  		{
@@ -453,7 +397,7 @@
                     "readonly":false,
                     "optional":true,
                     "simulation" : true,
-                    "fordistribution":"uniform|random",
+                    "fordistribution":"uniform",
                     "min" : "0"
                 },
                 {
@@ -466,7 +410,7 @@
                     "readonly":false,
                     "optional":true,
                     "simulation" : true,
-                    "fordistribution":"uniform|random",
+                    "fordistribution":"uniform",
                     "min" : "0"
                 },
                 {
@@ -498,7 +442,7 @@
                     "id":"distributiontype",
                     "type":"Choice",
                     "title":"Distribution Type",
-                    "value":"random",
+                    "value":"normal",
                     "description":"",
                     "description_ja":"",
                     "readonly":false,
@@ -516,57 +460,9 @@
                             "value": "uniform"
                         },
                         {
-                            "id": "c3",
-                            "title": "random",
-                            "value": "random"
-                        },
-                        {
                             "id": "c4",
                             "title": "poisson",
                             "value": "poisson"
-                        }
-                    ]
-                },
-                {
-                    "id":"timeunit",
-                    "type":"Choice",
-                    "title":"Time Unit",
-                    "value":"",
-                    "description":"Time unit options (seconds, minutes, hours)",
-                    "description_ja":"Time unit options (seconds, minutes, hours)",
-                    "readonly":false,
-                    "optional":true,
-                    "simulation" : true,
-                    "items": [
-                        {
-                            "id": "c1",
-                            "title":"milliseconds",
-                            "value":"ms"
-                        },
-                        {
-                            "id": "c2",
-                            "title": "seconds",
-                            "value": "s"
-                        },
-                        {
-                            "id": "c3",
-                            "title": "minutes",
-                            "value": "min"
-                        },
-                        {
-                            "id": "c4",
-                            "title": "hours",
-                            "value": "hour"
-                        },
-                        {
-                            "id": "c5",
-                            "title": "days",
-                            "value": "day"
-                        },
-                        {
-                            "id": "c6",
-                            "title": "years",
-                            "value": "year"
                         }
                     ]
                 }
@@ -3566,7 +3462,7 @@
 					"readonly":false,
 					"optional":true,
 					"simulation" : true,
-					"fordistribution":"uniform|random",
+					"fordistribution":"uniform",
 					"min" : "0"
 				},
 				{
@@ -3579,7 +3475,7 @@
 					"readonly":false,
 					"optional":true,
 					"simulation" : true,
-					"fordistribution":"uniform|random",
+					"fordistribution":"uniform",
 					"min" : "0"
 				},
 				{
@@ -3608,53 +3504,10 @@
 					"min" : "0"
 				},
 				{
-					"id":"timeunit",
-					"type":"Choice",
-					"title":"Time Unit",
-					"value":"",
-					"description":"Time unit options (seconds, minutes, hours)",
-					"description_ja":"Time unit options (seconds, minutes, hours)",
-					"readonly":false,
-					"optional":true,
-					"simulation" : true,
-					"items": [
-						{
-							"id": "c1",
-							"title":"milliseconds",
-							"value":"ms"
-						},
-						{
-							"id": "c2",
-							"title": "seconds",
-							"value": "s"
-						},
-						{
-							"id": "c3",
-							"title": "minutes",
-							"value": "min"
-						},
-						{
-							"id": "c4",
-							"title": "hours",
-							"value": "hour"
-						},
-						{
-							"id": "c5",
-							"title": "days",
-							"value": "day"
-						},
-						{
-							"id": "c6",
-							"title": "years",
-							"value": "year"
-						}
-					]
-				},
-				{
 					"id":"distributiontype",
 					"type":"Choice",
 					"title":"Distribution Type",
-					"value":"random",
+					"value":"normal",
 					"description":"",
 					"description_ja":"",
 					"readonly":false,
@@ -3670,11 +3523,6 @@
 							"id": "c2",
 							"title": "uniform",
 							"value": "uniform"
-						},
-						{
-							"id": "c3",
-							"title": "random",
-							"value": "random"
 						},
 						{
 							"id": "c4",
@@ -3716,17 +3564,6 @@
 					"value":"0",
 					"description":"",
 					"description_ja":"",
-					"readonly":false,
-					"optional":true,
-					"simulation" : true,
-					"min" : "0"
-				},
-				{
-					"id":"currency",
-					"type":"String",
-					"title":"Currency",
-					"value":"",
-					"description":"Base currency (ISO 4217)",
 					"readonly":false,
 					"optional":true,
 					"simulation" : true,
@@ -4204,7 +4041,7 @@
                     "readonly":false,
                     "optional":true,
                     "simulation" : true,
-                    "fordistribution":"uniform|random",
+                    "fordistribution":"uniform",
                     "min" : "0"
                 \},
                 \{
@@ -4217,7 +4054,7 @@
                     "readonly":false,
                     "optional":true,
                     "simulation" : true,
-                    "fordistribution":"uniform|random",
+                    "fordistribution":"uniform",
                     "min" : "0"
                 \},
                 \{
@@ -4246,53 +4083,10 @@
                     "min" : "0"
                 \},
                 \{
-                    "id":"timeunit",
-                    "type":"Choice",
-                    "title":"Time Unit",
-                    "value":"",
-                    "description":"Time unit options (seconds, minutes, hours)",
-                    "description_ja":"Time unit options (seconds, minutes, hours)",
-                    "readonly":false,
-                    "optional":true,
-                    "simulation" : true,
-                    "items": [
-                        \{
-                            "id": "c1",
-                            "title":"milliseconds",
-                            "value":"ms"
-                        \},
-                        \{
-                            "id": "c2",
-                            "title": "seconds",
-                            "value": "s"
-                        \},
-                        \{
-                            "id": "c3",
-                            "title": "minutes",
-                            "value": "min"
-                        \},
-                        \{
-                            "id": "c4",
-                            "title": "hours",
-                            "value": "hour"
-                        \},
-                        \{
-                            "id": "c5",
-                            "title": "days",
-                            "value": "day"
-                        \},
-                        \{
-                            "id": "c6",
-                            "title": "years",
-                            "value": "year"
-                        \}
-                    ]
-                \},
-                \{
                     "id":"distributiontype",
                     "type":"Choice",
                     "title":"Distribution Type",
-                    "value":"random",
+                    "value":"normal",
                     "description":"",
                     "description_ja":"",
                     "readonly":false,
@@ -4310,11 +4104,6 @@
                             "value": "uniform"
                         \},
                         \{
-                            "id": "c3",
-                            "title": "random",
-                            "value": "random"
-                        \},
-                        \{
                             "id": "c4",
                             "title": "poisson",
                             "value": "poisson"
@@ -4328,17 +4117,6 @@
                     "value":"0",
                     "description":"",
                     "description_ja":"",
-                    "readonly":false,
-                    "optional":true,
-                    "simulation" : true,
-                    "min" : "0"
-                \},
-                \{
-                    "id":"currency",
-                    "type":"String",
-                    "title":"Currency",
-                    "value":"",
-                    "description":"Base currency (ISO 4217)",
                     "readonly":false,
                     "optional":true,
                     "simulation" : true,
@@ -8846,49 +8624,6 @@
                     "optional":true,
                     "simulation" : true,
                     "min" : "0"
-                },
-                {
-                    "id":"timeunit",
-                    "type":"Choice",
-                    "title":"Time Unit",
-                    "value":"",
-                    "description":"Time unit options (seconds, minutes, hours)",
-                    "description_ja":"Time unit options (seconds, minutes, hours)",
-                    "readonly":false,
-                    "optional":true,
-                    "simulation" : true,
-                    "items": [
-                        {
-                            "id": "c1",
-                            "title":"milliseconds",
-                            "value":"ms"
-                        },
-                        {
-                            "id": "c2",
-                            "title": "seconds",
-                            "value": "s"
-                        },
-                        {
-                            "id": "c3",
-                            "title": "minutes",
-                            "value": "min"
-                        },
-                        {
-                            "id": "c4",
-                            "title": "hours",
-                            "value": "hour"
-                        },
-                        {
-                            "id": "c5",
-                            "title": "days",
-                            "value": "day"
-                        },
-                        {
-                            "id": "c6",
-                            "title": "years",
-                            "value": "year"
-                        }
-                    ]
                 }
 			]
 		},

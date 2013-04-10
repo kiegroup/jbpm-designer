@@ -290,7 +290,7 @@
 
                         <compileSourcesArtifact>org.kie.guvnor:guvnor-decorated-grid-widget</compileSourcesArtifact>
                         <compileSourcesArtifact>org.kie.guvnor:guvnor-view-source-widget</compileSourcesArtifact>
-                        <compileSourcesArtifact>org.kie.guvnor:guvnor-common-ui</compileSourcesArtifact>
+                        <compileSourcesArtifact>org.kie.guvnor:guvnor-commons-ui</compileSourcesArtifact>
                         <compileSourcesArtifact>org.kie.guvnor:guvnor-commons-security</compileSourcesArtifact>
                         <compileSourcesArtifact>org.kie.guvnor:guvnor-commons-services-api</compileSourcesArtifact>
                         <compileSourcesArtifact>org.kie.guvnor:guvnor-metadata-widget</compileSourcesArtifact>
@@ -298,7 +298,6 @@
                         <compileSourcesArtifact>org.kie.guvnor:guvnor-core-services-api</compileSourcesArtifact>
 
                         <compileSourcesArtifact>org.kie.guvnor:guvnor-project-api</compileSourcesArtifact>
-                        <compileSourcesArtifact>org.kie.guvnor:guvnor-project-client</compileSourcesArtifact>
                         <compileSourcesArtifact>org.kie.guvnor:guvnor-project-editor-api</compileSourcesArtifact>
                         <compileSourcesArtifact>org.kie.guvnor:guvnor-project-editor-client</compileSourcesArtifact>
                         <compileSourcesArtifact>org.kie.guvnor:guvnor-project-config-editor-api</compileSourcesArtifact>

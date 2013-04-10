@@ -1,5 +1,6 @@
 package org.jbpm.designer.web.server;
 
+import bpsim.impl.BpsimFactoryImpl;
 import org.apache.log4j.Logger;
 import org.drools.core.command.runtime.rule.InsertElementsCommand;
 import org.eclipse.bpmn2.*;
@@ -71,6 +72,8 @@ public class SimulationServlet extends HttpServlet {
 
         if(action != null && action.equals(ACTION_GETPATHINFO)) {
         	DroolsFactoryImpl.init();
+            BpsimFactoryImpl.init();
+
         	Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
             Definitions def = ((Definitions) unmarshaller.unmarshall(json, preprocessingData).getContents().get(0));
             PathFinder pfinder = null;
@@ -102,6 +105,8 @@ public class SimulationServlet extends HttpServlet {
         } else if(action != null && action.equals(ACTION_RUNSIMULATION)) {
         	try {
 				DroolsFactoryImpl.init();
+                BpsimFactoryImpl.init();
+
 				Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
 				Definitions def = ((Definitions) unmarshaller.unmarshall(json, preprocessingData).getContents().get(0));
 				String processXML = profile.createMarshaller().parseModel(json, preprocessingData);

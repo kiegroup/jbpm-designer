@@ -1,6 +1,5 @@
 package org.jbpm.designer.bpmn2.validation;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -8,10 +7,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import bpsim.*;
+import bpsim.impl.BpsimFactoryImpl;
 import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.Process;
 import org.eclipse.emf.ecore.util.FeatureMap;
-import org.jboss.drools.*;
 import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.web.profile.IDiagramProfile;
@@ -37,6 +37,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 	
 	public void checkSyntax() {
 		DroolsFactoryImpl.init();
+        BpsimFactoryImpl.init();
 
 		Definitions def = profile.createMarshaller().getDefinitions(json, preprocessingData);
 		List<RootElement> rootElements =  def.getRootElements();
@@ -192,8 +193,8 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 		        
 		        // simulation validation
 		        if(defaultScenario != null && defaultScenario.getElementParameters() != null) {
-		        	for(ElementParameters eleType : defaultScenario.getElementParameters()) {
-		        		if(eleType.getElementId().equals(ut.getId())) {
+		        	for(ElementParametersType eleType : defaultScenario.getElementParameters()) {
+		        		if(eleType.getElementRef().equals(ut.getId())) {
 		        			if(eleType.getResourceParameters() != null) {
 	        					ResourceParameters resourceParams = eleType.getResourceParameters();
 	        					if(resourceParams.getQuantity() != null) {
@@ -214,13 +215,13 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 				
 				// simulation validation
 				if(defaultScenario != null && defaultScenario.getElementParameters() != null) {
-					for(ElementParameters eleType : defaultScenario.getElementParameters()) {
-						if(eleType.getElementId().equals(ta.getId())) {
+					for(ElementParametersType eleType : defaultScenario.getElementParameters()) {
+						if(eleType.getElementRef().equals(ta.getId())) {
 	        				if(eleType.getCostParameters() != null) {
 	        					CostParameters costParams = eleType.getCostParameters();
 	        					if(costParams.getUnitCost() != null) {
-	        						DecimalParameterType unitCostVal = (DecimalParameterType) costParams.getUnitCost().getParameterValue().get(0);
-	        						BigDecimal val = unitCostVal.getValue();
+	        						FloatingParameterType unitCostVal = (FloatingParameterType) costParams.getUnitCost().getParameterValue().get(0);
+	        						Double val = unitCostVal.getValue();
 	        						if(val.doubleValue() < 0) {
 	        							addError(ta, "Cost per Time Unit value must be positive.");
 	        						}
@@ -228,8 +229,8 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 	        				}
 	        				if(eleType.getResourceParameters() != null) {
 	        					ResourceParameters resourceParams = eleType.getResourceParameters();
-	        					if(resourceParams.getWorkinghours() != null) {
-	        						FloatingParameterType workingHoursVal = (FloatingParameterType) resourceParams.getWorkinghours().getParameterValue().get(0);
+	        					if(resourceParams.getQuantity() != null) {
+	        						FloatingParameterType workingHoursVal = (FloatingParameterType) resourceParams.getQuantity().getParameterValue().get(0);
 	        						if(workingHoursVal.getValue() < 0) {
 	        							addError(ta, "Working Hours value must be positive.");
 	        						}
@@ -373,7 +374,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 						for(SequenceFlow sf : outgoingGwSequenceFlows) {
 					        	if(defaultScenario.getElementParameters() != null) {
 					        		for(ElementParameters eleType : defaultScenario.getElementParameters()) {
-					        			if(eleType.getElementId().equals(sf.getId())) {
+					        			if(eleType.getElementRef().equals(sf.getId())) {
 					        				if(eleType.getControlParameters() != null && eleType.getControlParameters().getProbability() != null) {
 					        					FloatingParameterType valType = (FloatingParameterType) eleType.getControlParameters().getProbability().getParameterValue().get(0);
 				                    			if(valType.getValue() < 0) {
@@ -499,9 +500,9 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
         	for(ExtensionAttributeValue extattrval : relationship.getExtensionValues()) {
                 FeatureMap extensionElements = extattrval.getValue();
                 @SuppressWarnings("unchecked")
-                List<ProcessAnalysisDataType> processAnalysisExtensions = (List<ProcessAnalysisDataType>) extensionElements.get(DroolsPackage.Literals.DOCUMENT_ROOT__PROCESS_ANALYSIS_DATA, true);
-                if(processAnalysisExtensions != null && processAnalysisExtensions.size() > 0) {
-                	ProcessAnalysisDataType processAnalysis = processAnalysisExtensions.get(0);
+                List<BPSimDataType> bpsimExtensions = (List<BPSimDataType>) extensionElements.get(BpsimPackage.Literals.DOCUMENT_ROOT__BP_SIM_DATA, true);
+                if(bpsimExtensions != null && bpsimExtensions.size() > 0) {
+                    BPSimDataType processAnalysis = bpsimExtensions.get(0);
                 	if(processAnalysis.getScenario() != null && processAnalysis.getScenario().size() > 0) {
                 		return processAnalysis.getScenario().get(0);
                 	}

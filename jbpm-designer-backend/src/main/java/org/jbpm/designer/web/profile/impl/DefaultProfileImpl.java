@@ -32,6 +32,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import bpsim.impl.BpsimFactoryImpl;
 import org.codehaus.jackson.JsonParseException;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.emf.common.util.URI;
@@ -278,6 +279,8 @@ public class DefaultProfileImpl implements IDiagramProfile {
     private Definitions getDefinitions(String xml) {
         try {
             DroolsFactoryImpl.init();
+            BpsimFactoryImpl.init();
+
             ResourceSet resourceSet = new ResourceSetImpl();
             resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
                 .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new Bpmn2ResourceFactoryImpl());
