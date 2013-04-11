@@ -108,7 +108,7 @@ public class Bpmn2JsonUnmarshaller {
     private Map<String,Message> _messages = new HashMap<String, Message>();
     private Map<String,ItemDefinition> _itemDefinitions = new HashMap<String, ItemDefinition>();
     private Map<String, List<EObject>> _simulationElementParameters = new HashMap<String, List<EObject>>();
-    private ScenarioParametersType _simulationScenarioParameters = BpsimFactory.eINSTANCE.createScenarioParametersType();
+    private ScenarioParameters _simulationScenarioParameters = BpsimFactory.eINSTANCE.createScenarioParameters();
     
     public Bpmn2JsonUnmarshaller() {
         _helpers = new ArrayList<BpmnMarshallerHelper>();
@@ -428,7 +428,7 @@ public class Bpmn2JsonUnmarshaller {
     					etype.setTimeParameters((TimeParameters) np);
     				}
     			}
-    			defaultScenario.getElementParameters().add((ElementParametersType) etype);
+    			defaultScenario.getElementParameters().add(etype);
     		}
 		}
         simDataType.getScenario().add(defaultScenario);
@@ -3161,7 +3161,7 @@ public class Bpmn2JsonUnmarshaller {
         EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
                     "xsi", "schemaLocation", false, false);
         SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
-            "http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd http://www.jboss.org/drools drools.xsd");
+            "http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd http://www.jboss.org/drools drools.xsd http://www.bpsim.org/schemas/1.0 bpsim.xsd");
         def.getAnyAttribute().add(extensionEntry);
         
         //_currentResource.getContents().add(def);// hook the definitions object to the resource early.

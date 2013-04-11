@@ -2463,7 +2463,7 @@ public class Bpmn2JsonMarshaller {
         
         // simulation properties
         if(_simulationScenario != null) {
-        	List<ElementParametersType> elementParams = _simulationScenario.getElementParameters();
+        	List<ElementParameters> elementParams = _simulationScenario.getElementParameters();
         	for(ElementParameters eleType : elementParams) {
         		if(eleType.getElementRef().equals(sequenceFlow.getId())) {
         			FloatingParameterType valType = (FloatingParameterType) eleType.getControlParameters().getProbability().getParameterValue().get(0);

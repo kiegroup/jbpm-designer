@@ -193,7 +193,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 		        
 		        // simulation validation
 		        if(defaultScenario != null && defaultScenario.getElementParameters() != null) {
-		        	for(ElementParametersType eleType : defaultScenario.getElementParameters()) {
+		        	for(ElementParameters eleType : defaultScenario.getElementParameters()) {
 		        		if(eleType.getElementRef().equals(ut.getId())) {
 		        			if(eleType.getResourceParameters() != null) {
 	        					ResourceParameters resourceParams = eleType.getResourceParameters();
@@ -215,7 +215,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 				
 				// simulation validation
 				if(defaultScenario != null && defaultScenario.getElementParameters() != null) {
-					for(ElementParametersType eleType : defaultScenario.getElementParameters()) {
+					for(ElementParameters eleType : defaultScenario.getElementParameters()) {
 						if(eleType.getElementRef().equals(ta.getId())) {
 	        				if(eleType.getCostParameters() != null) {
 	        					CostParameters costParams = eleType.getCostParameters();
