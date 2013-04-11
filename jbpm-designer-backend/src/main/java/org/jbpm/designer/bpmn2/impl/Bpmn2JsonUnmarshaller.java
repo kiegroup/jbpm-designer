@@ -412,7 +412,7 @@ public class Bpmn2JsonUnmarshaller {
     		Iterator<String> iter = _simulationElementParameters.keySet().iterator();
     		while(iter.hasNext()) {
     			String key = iter.next();
-    			ElementParametersType etype = BpsimFactory.eINSTANCE.createElementParametersType();
+    			ElementParameters etype = BpsimFactory.eINSTANCE.createElementParameters();
     			etype.setElementRef(key);
     			List<EObject> params = _simulationElementParameters.get(key);
     			for(EObject np : params) {
@@ -428,7 +428,7 @@ public class Bpmn2JsonUnmarshaller {
     					etype.setTimeParameters((TimeParameters) np);
     				}
     			}
-    			defaultScenario.getElementParameters().add(etype);
+    			defaultScenario.getElementParameters().add((ElementParametersType) etype);
     		}
 		}
         simDataType.getScenario().add(defaultScenario);
