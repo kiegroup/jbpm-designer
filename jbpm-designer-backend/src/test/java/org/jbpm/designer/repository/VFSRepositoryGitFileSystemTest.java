@@ -3,6 +3,7 @@ package org.jbpm.designer.repository;
 import org.jbpm.designer.repository.filters.FilterByExtension;
 import org.jbpm.designer.repository.filters.FilterByFileName;
 import org.jbpm.designer.repository.impl.AssetBuilder;
+import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
 import org.jbpm.designer.repository.vfs.VFSRepository;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.junit.*;
@@ -31,7 +32,7 @@ public class VFSRepositoryGitFileSystemTest {
 
     private static int counter = 0;
     
-    private FileSystem fileSystem;
+    private RepositoryDescriptor descriptor;
     private VFSFileSystemProducer producer;
 
     @BeforeClass
@@ -56,7 +57,7 @@ public class VFSRepositoryGitFileSystemTest {
         producer = new VFSFileSystemProducer();
         env.put("repository.root", VFS_REPOSITORY_ROOT + counter);
         env.put("repository.globaldir", "/global");
-        fileSystem = producer.produceFileSystem(env);
+        descriptor = producer.produceFileSystem(env);
     }
 
     private void deleteFiles(File directory) {
@@ -86,8 +87,8 @@ public class VFSRepositoryGitFileSystemTest {
     @Test
     public void testListDirectories() {
 
-        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
-        ((VFSRepository)repository).init();
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
         boolean rootFolderExists = repository.directoryExists("/processes");
         assertTrue(rootFolderExists);
 
@@ -103,8 +104,8 @@ public class VFSRepositoryGitFileSystemTest {
     @Test
     public void testCreateDirectory() {
 
-        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
-        ((VFSRepository)repository).init();
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
         boolean rootFolderExists = repository.directoryExists("/test");
         assertFalse(rootFolderExists);
 
@@ -120,8 +121,8 @@ public class VFSRepositoryGitFileSystemTest {
 
     @Test
     public void testDirectoryExists() {
-        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
-        ((VFSRepository)repository).init();
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
         boolean rootFolderExists = repository.directoryExists("/test");
         assertFalse(rootFolderExists);
 
@@ -150,8 +151,8 @@ public class VFSRepositoryGitFileSystemTest {
 
     @Test
     public void testDeleteDirectory() {
-        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
-        ((VFSRepository)repository).init();
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
         boolean rootFolderExists = repository.directoryExists("/test");
         assertFalse(rootFolderExists);
 
@@ -171,8 +172,8 @@ public class VFSRepositoryGitFileSystemTest {
 
     @Test
     public void testDeleteNonEmptyDirectory() {
-        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
-        ((VFSRepository)repository).init();
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
         boolean rootFolderExists = repository.directoryExists("/test");
         assertFalse(rootFolderExists);
 
@@ -196,8 +197,8 @@ public class VFSRepositoryGitFileSystemTest {
     @Test
     public void testListAsset() {
 
-        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
-        ((VFSRepository)repository).init();
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
         boolean rootFolderExists = repository.directoryExists("/processes");
         assertTrue(rootFolderExists);
 
@@ -209,8 +210,8 @@ public class VFSRepositoryGitFileSystemTest {
     @Test
     public void testListSingleTextAsset() {
 
-        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
-        ((VFSRepository)repository).init();
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
         boolean rootFolderExists = repository.directoryExists("/processes");
         assertTrue(rootFolderExists);
 
@@ -228,8 +229,8 @@ public class VFSRepositoryGitFileSystemTest {
     @Test
     public void testListSingleBinaryAsset() {
 
-        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
-        ((VFSRepository)repository).init();
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
         boolean rootFolderExists = repository.directoryExists("/images");
         assertTrue(rootFolderExists);
 
@@ -247,8 +248,8 @@ public class VFSRepositoryGitFileSystemTest {
     @Test
     public void testListNestedSingleTextAsset() {
 
-        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
-        ((VFSRepository)repository).init();
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
         boolean rootFolderExists = repository.directoryExists("/processes/nested");
         assertTrue(rootFolderExists);
 
@@ -266,8 +267,8 @@ public class VFSRepositoryGitFileSystemTest {
     @Test
     public void testLoadAssetFromPath() throws AssetNotFoundException{
 
-        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
-        ((VFSRepository)repository).init();
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
         Asset<String> asset = repository.loadAssetFromPath("/processes/BPMN2-ScriptTask.bpmn2");
 
         assertEquals("bpmn2", asset.getAssetType());
@@ -281,8 +282,8 @@ public class VFSRepositoryGitFileSystemTest {
     @Test
     public void testStoreSingleBinaryAsset() throws AssetNotFoundException{
 
-        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
-        ((VFSRepository)repository).init();
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
         Collection<Asset> assets = repository.listAssets("/");
         assertNotNull(assets);
         assertEquals(0, assets.size());
@@ -309,8 +310,8 @@ public class VFSRepositoryGitFileSystemTest {
     @Test
     public void testStoreSingleTextAsset() throws AssetNotFoundException{
 
-        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
-        ((VFSRepository)repository).init();
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
         Collection<Asset> assets = repository.listAssets("/");
         assertNotNull(assets);
         assertEquals(0, assets.size());
@@ -337,8 +338,8 @@ public class VFSRepositoryGitFileSystemTest {
     @Test
     public void testAssetExists() throws AssetNotFoundException{
 
-        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
-        ((VFSRepository)repository).init();
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
         Collection<Asset> assets = repository.listAssets("/");
         assertNotNull(assets);
         for (Asset aset : assets) {
@@ -362,8 +363,8 @@ public class VFSRepositoryGitFileSystemTest {
 
     @Test
     public void testListAssetsRecursively() {
-        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
-        ((VFSRepository)repository).init();
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("simple content")
                 .type("bpmn2")
@@ -380,8 +381,8 @@ public class VFSRepositoryGitFileSystemTest {
 
     @Test
     public void testUpdateAsset() throws AssetNotFoundException {
-        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
-        ((VFSRepository)repository).init();
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("simple content")
                 .type("bpmn2")
@@ -411,8 +412,8 @@ public class VFSRepositoryGitFileSystemTest {
 
     @Test
     public void testDeleteAsset() throws AssetNotFoundException {
-        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
-        ((VFSRepository)repository).init();
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("simple content")
                 .type("bpmn2")
@@ -439,8 +440,8 @@ public class VFSRepositoryGitFileSystemTest {
 
     @Test
     public void testDeleteAssetFromPath() throws AssetNotFoundException {
-        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
-        ((VFSRepository)repository).init();
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("simple content")
                 .type("bpmn2")
@@ -468,8 +469,8 @@ public class VFSRepositoryGitFileSystemTest {
 
     @Test
     public void testCopyAsset() throws AssetNotFoundException {
-        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
-        ((VFSRepository)repository).init();
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("simple content")
                 .type("bpmn2")
@@ -502,8 +503,8 @@ public class VFSRepositoryGitFileSystemTest {
     @Ignore// git based vfs does not yet support move
     @Test
     public void testMoveAsset() throws AssetNotFoundException {
-        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
-        ((VFSRepository)repository).init();
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("simple content")
                 .type("bpmn2")
@@ -543,8 +544,8 @@ public class VFSRepositoryGitFileSystemTest {
     @Ignore// git based vfs does not yet support move
     @Test
     public void testMoveAndRenameAsset() throws AssetNotFoundException {
-        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
-        ((VFSRepository)repository).init();
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("simple content")
                 .type("bpmn2")
@@ -584,8 +585,8 @@ public class VFSRepositoryGitFileSystemTest {
     @Ignore// git based vfs does not yet support move
     @Test
     public void testRenameAsset() throws AssetNotFoundException {
-        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
-        ((VFSRepository)repository).init();
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("simple content")
                 .type("bpmn2")
@@ -625,8 +626,8 @@ public class VFSRepositoryGitFileSystemTest {
     // disabling this test for now
     // @Test
     public void testCopyDirectory() throws AssetNotFoundException {
-        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
-        ((VFSRepository)repository).init();
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
         Directory sourceDir = repository.createDirectory("/source");
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
@@ -664,8 +665,8 @@ public class VFSRepositoryGitFileSystemTest {
     @Ignore// git based vfs does not yet support move
     @Test
     public void testMoveDirectory() throws AssetNotFoundException {
-        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
-        ((VFSRepository)repository).init();
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
         Directory sourceDir = repository.createDirectory("/source");
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
@@ -703,8 +704,8 @@ public class VFSRepositoryGitFileSystemTest {
     @Ignore// git based vfs does not yet support move
     @Test
     public void testMoveEmptyDirectory() throws AssetNotFoundException {
-        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
-        ((VFSRepository)repository).init();
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
         Directory sourceDir = repository.createDirectory("/source");
 
         boolean directoryExists = repository.directoryExists(sourceDir.getLocation()+sourceDir.getName());

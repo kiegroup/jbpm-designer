@@ -17,7 +17,6 @@ import org.junit.Test;
 import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
@@ -37,7 +36,7 @@ public class JbpmServiceRepositoryServletTest  extends RepositoryBaseTest {
         HashMap<String, String> env = new HashMap<String, String>();
         env.put("repository.root", VFS_REPOSITORY_ROOT);
         env.put("repository.globaldir", "/global");
-        fileSystem = producer.produceFileSystem(env);
+        descriptor = producer.produceFileSystem(env);
     }
 
     @After
@@ -52,8 +51,8 @@ public class JbpmServiceRepositoryServletTest  extends RepositoryBaseTest {
     @Test
     public void testJbpmServiceRepositoryServlet() throws Exception {
 
-        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
-        ((VFSRepository)repository).init();
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
         profile.setRepository(repository);
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();

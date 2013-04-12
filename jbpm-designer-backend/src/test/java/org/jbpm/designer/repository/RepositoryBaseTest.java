@@ -2,6 +2,7 @@ package org.jbpm.designer.repository;
 
 import java.io.File;
 
+import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.kie.commons.java.nio.file.FileSystem;
 
@@ -12,7 +13,7 @@ public class RepositoryBaseTest {
     protected static final String VFS_REPOSITORY_ROOT = "default://" + REPOSITORY_ROOT;
     
     protected JbpmProfileImpl profile;
-    protected FileSystem fileSystem;
+    protected RepositoryDescriptor descriptor;
     protected VFSFileSystemProducer producer;
 
     protected void deleteFiles(File directory) {

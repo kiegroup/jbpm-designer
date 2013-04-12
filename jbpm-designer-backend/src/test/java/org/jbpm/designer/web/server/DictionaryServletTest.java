@@ -35,7 +35,7 @@ public class DictionaryServletTest  extends RepositoryBaseTest {
         HashMap<String, String> env = new HashMap<String, String>();
         env.put("repository.root", VFS_REPOSITORY_ROOT);
         env.put("repository.globaldir", "/global");
-        fileSystem = producer.produceFileSystem(env);
+        descriptor = producer.produceFileSystem(env);
     }
 
     @After
@@ -49,8 +49,8 @@ public class DictionaryServletTest  extends RepositoryBaseTest {
 
     @Test
     public void testStoreDictionary() throws Exception {
-        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
-        ((VFSRepository)repository).init();
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
         profile.setRepository(repository);
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
@@ -82,8 +82,8 @@ public class DictionaryServletTest  extends RepositoryBaseTest {
 
     @Test
     public void testLoadDictionary() throws Exception {
-        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
-        ((VFSRepository)repository).init();
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
         profile.setRepository(repository);
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("test dictionary content")

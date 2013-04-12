@@ -34,7 +34,7 @@ public class TaskFormsServletTest  extends RepositoryBaseTest {
         HashMap<String, String> env = new HashMap<String, String>();
         env.put("repository.root", VFS_REPOSITORY_ROOT);
         env.put("repository.globaldir", "/global");
-        fileSystem = producer.produceFileSystem(env);
+        descriptor = producer.produceFileSystem(env);
     }
 
     @After
@@ -49,8 +49,8 @@ public class TaskFormsServletTest  extends RepositoryBaseTest {
     @Test
     public void testTaskFormServlet() throws Exception {
 
-        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
-        ((VFSRepository)repository).init();
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
         profile.setRepository(repository);
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("bpmn2 content")
@@ -85,8 +85,8 @@ public class TaskFormsServletTest  extends RepositoryBaseTest {
     @Test
     public void testTaskFormServletWithUserTask() throws Exception {
 
-        Repository repository = new VFSRepository(fileSystem, producer.getIoService(), producer.getActiveFileSystems());
-        ((VFSRepository)repository).init();
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
         profile.setRepository(repository);
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("bpmn2 content")

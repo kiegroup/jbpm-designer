@@ -1,9 +1,11 @@
 package org.jbpm.designer.repository;
 
+import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.kie.commons.io.IOService;
 import org.kie.commons.io.impl.IOServiceDotFileImpl;
 import org.kie.commons.java.nio.file.FileSystem;
+import org.kie.commons.java.nio.file.Path;
 import org.uberfire.backend.vfs.ActiveFileSystems;
 import org.uberfire.backend.vfs.FileSystemFactory;
 import org.uberfire.backend.vfs.impl.ActiveFileSystemsImpl;
@@ -19,7 +21,7 @@ public class VFSFileSystemProducer {
     private IOService ioService = new IOServiceDotFileImpl();
     ActiveFileSystems activeFileSystems = new ActiveFileSystemsImpl();
 
-    public FileSystem produceFileSystem(final Map<String, String> env) {
+    public RepositoryDescriptor produceFileSystem(final Map<String, String> env) {
         URI repositoryRoot = URI.create(env.get("repository.root"));
 
         FileSystem fileSystem = ioService.getFileSystem( repositoryRoot );
@@ -37,14 +39,13 @@ public class VFSFileSystemProducer {
         HashMap<String, String> map = new HashMap<String, String>();
         map.put(env.get("repository.root"), "designer-repo");
         activeFileSystems.addBootstrapFileSystem( FileSystemFactory.newFS(map, fileSystem.supportedFileAttributeViews()) );
-       return fileSystem;
+
+        Path rootPath = fileSystem.provider().getPath(repositoryRoot);
+        return new RepositoryDescriptor(repositoryRoot, fileSystem, rootPath);
     }
 
     public IOService getIoService() {
         return this.ioService;
     }
 
-    public ActiveFileSystems getActiveFileSystems() {
-        return this.activeFileSystems;
-    }
 }

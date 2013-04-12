@@ -29,7 +29,14 @@ import static java.util.Arrays.*;
 
 @ApplicationScoped
 public class AppSetup {
+    private static final String JBPM_REPO_PLAYGROUND = "jbpm-playground";
+    private static final String GUVNOR_REPO_PLAYGROUND = "uf-playground";
+    // default repository section - start
+    private static final String JBPM_URL      = "https://github.com/guvnorngtestuser1/jbpm-console-ng-playground.git";
+    private static final String GUVNOR_URL      = "https://github.com/guvnorngtestuser1/guvnorng-playground.git";
 
+    private final String userName = "guvnorngtestuser1";
+    private final String password = "test1234";
 
     private final IOService ioService = new IOServiceDotFileImpl();
 
@@ -46,37 +53,47 @@ public class AppSetup {
     @PostConstruct
     public void onStartup() {
         try {
-            Properties repositoryProps = new Properties();
-            repositoryProps.load(this.getClass().getResourceAsStream("/repository.properties"));
+//            Properties repositoryProps = new Properties();
+//            repositoryProps.load(this.getClass().getResourceAsStream("/repository.properties"));
+//
+//
+//            final String originUrl = repositoryProps.getProperty("repository.origin");
+//            final String userName = repositoryProps.getProperty("repository.username");
+//            final String password = repositoryProps.getProperty("repository.password");
+//            final String location = repositoryProps.getProperty("repository.location");
+//            Repository repository = repositoryService.getRepository(location);
+//            if(repository == null) {
+//
+//                repositoryService.cloneRepository("git", location, originUrl, userName, password);
+//                repository = repositoryService.getRepository(location);
+//            }
+//            try {
+//                fs = ioService.newFileSystem(URI.create(repository.getUri()), repository.getEnvironment());
+//
+//            } catch (FileSystemAlreadyExistsException e) {
+//                fs = ioService.getFileSystem(URI.create(repository.getUri()));
+//
+//            }
 
-
-            final String originUrl = repositoryProps.getProperty("repository.origin");
-            final String userName = repositoryProps.getProperty("repository.username");
-            final String password = repositoryProps.getProperty("repository.password");
-            final String location = repositoryProps.getProperty("repository.location");
-            Repository repository = repositoryService.getRepository(location);
-            if(repository == null) {
-
-                repositoryService.cloneRepository("git", location, originUrl, userName, password);
-                repository = repositoryService.getRepository(location);
+            Repository jbpmRepo = repositoryService.getRepository(JBPM_REPO_PLAYGROUND);
+            if(jbpmRepo == null) {
+                final String userName = "guvnorngtestuser1";
+                final String password = "test1234";
+                repositoryService.cloneRepository("git", JBPM_REPO_PLAYGROUND, JBPM_URL, userName, password);
+                jbpmRepo = repositoryService.getRepository(JBPM_REPO_PLAYGROUND);
             }
-            try {
-                fs = ioService.newFileSystem(URI.create(repository.getUri()), repository.getEnvironment());
 
-            } catch (FileSystemAlreadyExistsException e) {
-                fs = ioService.getFileSystem(URI.create(repository.getUri()));
-
+            // TODO in case repo is not defined in system repository so we add default
+            Repository guvnorRepo = repositoryService.getRepository(GUVNOR_REPO_PLAYGROUND);
+            if(guvnorRepo == null) {
+                final String userName = "guvnorngtestuser1";
+                final String password = "test1234";
+                repositoryService.cloneRepository("git", GUVNOR_REPO_PLAYGROUND, GUVNOR_URL, userName, password);
+                guvnorRepo = repositoryService.getRepository(GUVNOR_REPO_PLAYGROUND);
             }
         } catch (Exception e) {
             throw new RuntimeException("Error when starting designer " + e.getMessage(), e);
         }
     }
-
-    @Produces
-    @Named("fileSystem")
-    public FileSystem fileSystem() {
-        return fs;
-    }
-
 }
 
