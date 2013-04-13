@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
@@ -20,6 +21,7 @@ import org.kie.commons.java.nio.file.FileSystem;
 import org.kie.commons.java.nio.file.Path;
 import org.uberfire.backend.repositories.Repository;
 import org.uberfire.backend.repositories.RepositoryService;
+import org.uberfire.backend.server.util.Paths;
 
 @ApplicationScoped
 public class RepositoryDescriptorProvider {
@@ -30,10 +32,11 @@ public class RepositoryDescriptorProvider {
     @Inject
     private RepositoryService repositoryService;
 
-    @Inject
-    private Instance<HttpServletRequest> httpRequest;
 
     private Map<String, RepositoryDescriptor> knownRepositories = new ConcurrentHashMap<String, RepositoryDescriptor>();
+
+
+
 
     @PostConstruct
     public void init() {
@@ -46,15 +49,9 @@ public class RepositoryDescriptorProvider {
         }
     }
 
-    @Produces
-    @RequestScoped
-    public RepositoryDescriptor getRepositoryDescriptor() {
-        String repositoryAlias = "";
-        Pattern pattern = Pattern.compile("@(.*?)/");
-        Matcher matcher = pattern.matcher(httpRequest.get().getParameter("uuid"));
-        if (matcher.find()) {
-            repositoryAlias = matcher.group(1);
-        }
+    public RepositoryDescriptor getRepositoryDescriptor(String repositoryAlias) {
+
+
         if (knownRepositories.containsKey(repositoryAlias)) {
             return knownRepositories.get(repositoryAlias);
         } else if (knownRepositories.size() == 1) {

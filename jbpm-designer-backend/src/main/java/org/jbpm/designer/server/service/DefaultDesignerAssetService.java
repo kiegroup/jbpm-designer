@@ -105,7 +105,7 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
 
         String location = paths.convert( path ).getParent().toString();
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(path.getFileName());
-        builder.location(location).content(PROCESS_STUB);
+        builder.location(location).content(PROCESS_STUB).uniqueId(path.toURI());
         Asset<String> processAsset = builder.getAsset();
 
         repository.createAsset(processAsset);

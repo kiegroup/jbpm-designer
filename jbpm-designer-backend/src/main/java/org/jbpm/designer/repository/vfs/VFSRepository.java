@@ -5,6 +5,7 @@ import org.jbpm.designer.repository.*;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.impl.AbstractAsset;
 import org.jbpm.designer.repository.impl.AssetBuilder;
+import org.jbpm.designer.server.service.PathEvent;
 import org.kie.commons.io.IOService;
 import org.kie.commons.java.nio.IOException;
 import org.kie.commons.java.nio.base.options.CommentedOption;
@@ -19,6 +20,7 @@ import org.uberfire.backend.vfs.*;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.OutputStream;
@@ -42,6 +44,9 @@ public class VFSRepository implements Repository {
     @Inject
     @RequestScoped
     private RepositoryDescriptor descriptor;
+
+    @Inject
+    private Event<PathEvent> pathEvent;
 
     public VFSRepository() {
 
@@ -311,7 +316,7 @@ public class VFSRepository implements Repository {
     }
 
     public String createAsset(Asset asset) {
-        FileSystem fileSystem = descriptor.getFileSystem();
+        FileSystem fileSystem = getFileSystem(asset.getUniqueId());
         URI pathURI = null;
         if (asset.getAssetLocation().startsWith(fileSystem.provider().getScheme()) ||
                 asset.getAssetLocation().startsWith("default://")) {
@@ -502,7 +507,9 @@ public class VFSRepository implements Repository {
     }
 
     private FileSystem getFileSystem(String uri) {
-
+        if (pathEvent != null) {
+            pathEvent.fire(new PathEvent(uri));
+        }
         return descriptor.getFileSystem();
     }
 }

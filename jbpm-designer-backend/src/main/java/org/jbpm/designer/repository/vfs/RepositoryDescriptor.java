@@ -1,17 +1,34 @@
 package org.jbpm.designer.repository.vfs;
 
 import java.net.URI;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.event.Observes;
+import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 
 import org.jboss.solder.core.Veto;
+import org.jbpm.designer.server.service.PathEvent;
 import org.kie.commons.java.nio.file.FileSystem;
 import org.kie.commons.java.nio.file.Path;
 
-@Veto
+@RequestScoped
 public class  RepositoryDescriptor {
+
+    @Inject
+    private Instance<HttpServletRequest> httpRequest;
+    @Inject
+    private RepositoryDescriptorProvider provider;
+
 
     private URI repositoryRoot;
     private Path repositoryRootPath;
     private FileSystem fileSystem;
+    private String path;
+    private boolean configured = false;
 
     public RepositoryDescriptor() {
 
@@ -21,6 +38,12 @@ public class  RepositoryDescriptor {
         this.repositoryRoot = repositoryRoot;
         this.fileSystem = fileSystem;
         this.repositoryRootPath = repositoryRootPath;
+
+        this.configured = true;
+    }
+
+    public void onAnyDocumentEvent(@Observes PathEvent path) {
+        this.path = path.getPath();
     }
 
     public String getStringRepositoryRoot() {
@@ -33,6 +56,7 @@ public class  RepositoryDescriptor {
     }
 
     public URI getRepositoryRoot() {
+        configure();
         return repositoryRoot;
     }
 
@@ -41,6 +65,7 @@ public class  RepositoryDescriptor {
     }
 
     public Path getRepositoryRootPath() {
+        configure();
         return repositoryRootPath;
     }
 
@@ -49,10 +74,33 @@ public class  RepositoryDescriptor {
     }
 
     public FileSystem getFileSystem() {
+        configure();
         return fileSystem;
     }
 
     public void setFileSystem(FileSystem fileSystem) {
         this.fileSystem = fileSystem;
+    }
+
+    private void configure() {
+        String repositoryAlias = "";
+        if (!this.configured) {
+            Pattern pattern = Pattern.compile("@(.*?)/");
+            String uuid = httpRequest.get().getParameter("uuid");
+            if (uuid == null && path != null) {
+                uuid = path;
+            }
+            if (uuid != null) {
+                Matcher matcher = pattern.matcher(uuid);
+                if (matcher.find()) {
+                    repositoryAlias = matcher.group(1);
+                }
+            }
+
+            RepositoryDescriptor found = provider.getRepositoryDescriptor(repositoryAlias);
+            this.fileSystem = found.getFileSystem();
+            this.repositoryRoot = found.getRepositoryRoot();
+            this.repositoryRootPath = found.getRepositoryRootPath();
+        }
     }
 }
