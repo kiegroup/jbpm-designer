@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import org.apache.commons.codec.binary.Base64;
@@ -24,6 +25,7 @@ import org.jbpm.designer.service.DesignerAssetService;
 import org.json.JSONArray;
 import org.uberfire.backend.server.util.Paths;
 import org.uberfire.backend.vfs.Path;
+import org.uberfire.client.workbench.widgets.events.ResourceAddedEvent;
 import org.uberfire.shared.mvp.PlaceRequest;
 
 @Service
@@ -33,7 +35,10 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
     private Paths paths;
     @Inject
     private Repository repository;
-    private static final Object PROCESS_STUB = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \n" +
+    @Inject
+    private Event<ResourceAddedEvent> resourceAddedEvent;
+
+    private static final String PROCESS_STUB = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \n" +
             "<definitions id=\"Definition\"\n" +
             "             targetNamespace=\"http://www.jboss.org/drools\"\n" +
             "             typeLanguage=\"http://www.java.com/javaTypes\"\n" +
@@ -45,10 +50,10 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
             "             xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\"\n" +
             "             xmlns:di=\"http://www.omg.org/spec/DD/20100524/DI\"\n" +
             "             xmlns:tns=\"http://www.jboss.org/drools\">\n" +
-            "  <process processType=\"Private\" isExecutable=\"true\" id=\"\" name=\"\"  >\n" +
+            "  <process processType=\"Private\" isExecutable=\"true\" id=\"${processid}\" name=\"\"  >\n" +
             "  </process>\n" +
             "  <bpmndi:BPMNDiagram>\n" +
-            "    <bpmndi:BPMNPlane bpmnElement=\"\" >\n" +
+            "    <bpmndi:BPMNPlane bpmnElement=\"${processid}\" >\n" +
             "    </bpmndi:BPMNPlane>\n" +
             "  </bpmndi:BPMNDiagram>" +
             "</definitions>";
@@ -104,11 +109,18 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
         final Path path = paths.convert( paths.convert( context ).resolve( fileName ),false);
 
         String location = paths.convert( path ).getParent().toString();
-        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(path.getFileName());
-        builder.location(location).content(PROCESS_STUB).uniqueId(path.toURI());
+        String name = path.getFileName();
+        String processId = buildProcessId(location, name);
+
+        String processContent = PROCESS_STUB.replaceAll("\\$\\{processid\\}", processId);
+
+        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(name);
+        builder.location(location).content(processContent).uniqueId(path.toURI());
         Asset<String> processAsset = builder.getAsset();
 
         repository.createAsset(processAsset);
+
+        resourceAddedEvent.fire( new ResourceAddedEvent( path ) );
 
         return path;
     }
@@ -143,6 +155,16 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
         } finally {
             theMethod.releaseConnection();
         }
+    }
+
+    private String buildProcessId(String location, String name) {
+        if (location.startsWith("/")) {
+            location = location.replaceFirst("/", "");
+        }
+        location = location.replaceAll("/", ".");
+        name = name.substring(0, name.lastIndexOf("."));
+
+        return location+"."+name;
     }
 
 }

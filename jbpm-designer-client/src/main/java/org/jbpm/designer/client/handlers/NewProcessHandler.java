@@ -47,7 +47,6 @@ public class NewProcessHandler extends DefaultNewResourceHandler {
             public void callback( final Path path ) {
                 presenter.complete();
                 notifySuccess();
-                notifyResourceAdded( path );
                 final PlaceRequest place = new PathPlaceRequest( path,
                                                                  "jbpm.designer" );
                 placeManager.goTo( place );
@@ -59,9 +58,5 @@ public class NewProcessHandler extends DefaultNewResourceHandler {
     public void acceptPath( Path path,
                             Callback<Boolean, Void> callback ) {
         callback.onSuccess( true );
-    }
-
-    public void notifyResourceAdded(Path path) {
-
     }
 }

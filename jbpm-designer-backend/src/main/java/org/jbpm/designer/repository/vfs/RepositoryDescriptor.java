@@ -1,5 +1,6 @@
 package org.jbpm.designer.repository.vfs;
 
+import java.io.File;
 import java.net.URI;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,6 +18,8 @@ import org.kie.commons.java.nio.file.Path;
 
 @RequestScoped
 public class  RepositoryDescriptor {
+
+    private static final String SEP = File.separator;
 
     @Inject
     private Instance<HttpServletRequest> httpRequest;
@@ -85,12 +88,21 @@ public class  RepositoryDescriptor {
     private void configure() {
         String repositoryAlias = "";
         if (!this.configured) {
-            Pattern pattern = Pattern.compile("@(.*?)/");
+
             String uuid = httpRequest.get().getParameter("uuid");
+            if (uuid == null) {
+                uuid = httpRequest.get().getParameter("assetId");
+            }
             if (uuid == null && path != null) {
                 uuid = path;
             }
             if (uuid != null) {
+                // git based pattern
+                Pattern pattern = Pattern.compile("@(.*?)/");
+                if (uuid.indexOf("@") == -1) {
+                    // simple fs pattern
+                    pattern = Pattern.compile(SEP + "(.*?)" + SEP);
+                }
                 Matcher matcher = pattern.matcher(uuid);
                 if (matcher.find()) {
                     repositoryAlias = matcher.group(1);
