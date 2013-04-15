@@ -72,7 +72,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                                         title       : ''
                                     });
                                 }.bind(this),
-                                failure: function(){
+                                failure:function(response, opts){
                                     this.facade.raiseEvent({
                                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                         ntype		: 'error',
@@ -81,8 +81,8 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                                     });
                                 }.bind(this),
                                 params: {
-                                    fsvg: formattedSvgDOM,
-                                    rsvg: rawSvgDOM,
+                                    fsvg: Base64.encode(formattedSvgDOM),
+                                    rsvg: Base64.encode(rawSvgDOM),
                                     uuid: ORYX.UUID,
                                     profile: ORYX.PROFILE,
                                     transformto: 'svg',

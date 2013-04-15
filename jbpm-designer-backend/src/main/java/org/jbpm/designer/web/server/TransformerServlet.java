@@ -97,8 +97,8 @@ public class TransformerServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
-        String formattedSvg = req.getParameter("fsvg");
-        String rawSvg = req.getParameter("rsvg");
+        String formattedSvgEncoded = req.getParameter("fsvg");
+        String rawSvgEncoded = req.getParameter("rsvg");
         String uuid = req.getParameter("uuid");
         String profileName = req.getParameter("profile");
         String transformto = req.getParameter("transformto");
@@ -109,7 +109,11 @@ public class TransformerServlet extends HttpServlet {
         String pp = req.getParameter("pp");
         String processid = req.getParameter("processid");
 
+        String formattedSvg = (formattedSvgEncoded == null ? "" : new String(Base64.decodeBase64(formattedSvgEncoded)));
+        String rawSvg = (rawSvgEncoded == null ? "" : new String(Base64.decodeBase64(rawSvgEncoded)));
+
         IDiagramProfile profile = _profileService.findProfile(req, profileName);
+
         DroolsFactoryImpl.init();
         BpsimFactoryImpl.init();
 
@@ -459,8 +463,6 @@ public class TransformerServlet extends HttpServlet {
         try {
             if(processid != null) {
                 Asset<byte[]> processAsset = repository.loadAsset(uuid);
-
-
                 String assetExt = "";
                 String assetFileExt = "";
                 if(transformto.equals(TO_PDF)) {
@@ -519,6 +521,7 @@ public class TransformerServlet extends HttpServlet {
         } catch (Exception e) {
             // we dont want to barf..just log that error happened
             _logger.error(e.getMessage());
+            e.printStackTrace();
         }
     }
 
