@@ -217,7 +217,16 @@ public class TransformerServlet extends HttpServlet {
                 Asset<String> processAsset = repository.loadAsset(uuid);
 
                 // build package name based on the asset location
-                packageName = processAsset.getAssetLocation().replaceAll(File.separator, ".");
+                packageName = processAsset.getAssetLocation();
+                if(packageName.startsWith("/")) {
+                    packageName = packageName.substring(1, packageName.length());
+                }
+                packageName = packageName.replaceAll("/", ".");
+                // final check in odd cases
+                if(packageName.startsWith(".")) {
+                    packageName = packageName.substring(1, packageName.length());
+                }
+
             } catch (AssetNotFoundException e) {
                 _logger.error("Process with uuid " + uuid + " was not found");
             }
