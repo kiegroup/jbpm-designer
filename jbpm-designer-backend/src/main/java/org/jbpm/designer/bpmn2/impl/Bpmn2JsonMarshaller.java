@@ -2068,7 +2068,7 @@ public class Bpmn2JsonMarshaller {
 				properties.put("adhoccompletioncondition", ((FormalExpression) ahsp.getCompletionCondition()).getBody().replaceAll("\n", "\\\\n"));
 			}
 		}
-		
+
 		// data inputs
         if(subProcess.getIoSpecification() != null) {
             List<InputSet> inputSetList = subProcess.getIoSpecification().getInputSets();
@@ -2315,11 +2315,15 @@ public class Bpmn2JsonMarshaller {
 	    if(subProcess instanceof AdHocSubProcess) {
 	        generator.writeObjectField("id", "AdHocSubprocess");
 	    } else {
-	    	if(haveValidLoopCharacteristics) {
-	    		generator.writeObjectField("id", "MultipleInstanceSubprocess");
-	    	} else {
-	    		generator.writeObjectField("id", "Subprocess");
-	    	}
+            if(subProcess.isTriggeredByEvent()) {
+                generator.writeObjectField("id", "EventSubprocess");
+            } else {
+                if(haveValidLoopCharacteristics) {
+                    generator.writeObjectField("id", "MultipleInstanceSubprocess");
+                } else {
+                    generator.writeObjectField("id", "Subprocess");
+                }
+            }
 	    }
 	    generator.writeEndObject();
 	    generator.writeArrayFieldStart("childShapes");

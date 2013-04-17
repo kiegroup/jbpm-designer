@@ -5167,10 +5167,7 @@
 				"flowElement",
 				"activity",
 				"subprocess",
-				"interrupting",
-				"loopcharacteristics",
-				"properties",
-				"iospecification"
+				"properties"
 			],
 			"properties" :		[
 				{
@@ -5375,8 +5372,8 @@
 				"canContainArtifacts",
 				"EventActivitiesMorph"
 			]
-		}, 
-		/** {
+		}, **/
+		{
 			"type" : 			"node",
 			"id" :				"EventSubprocess",
 			"title" :			"Event-Subprocess",
@@ -5388,12 +5385,7 @@
  			"layout" : 			[{"type" : "layout.bpmn2_0.subprocess"}],
 			"propertyPackages" :[
 				"baseAttributes",
-				"flowElement",
-				"activity",
-				"subprocess",
-				"loopcharacteristics",
-				"properties",
-				"iospecification"
+				"flowElement"
 			],
 			"properties" :		[
 				{
@@ -5516,38 +5508,14 @@
 							"value":"72"
 						}
 					]
-				},	
-				{
-					"id":"isatransaction",
-					"type":"Boolean",
-					"title":"is a Transaction",
-					"value":false,
-					"description":"A Transaction is a set of activities that logically belongs together; it might follow a specified transaction protocol.",
-					"description_ja":"トランザクションは、論理的にまとめられているアクティビティのセットです。指定されたトランザクションプロトコルに従います。",
-					"readonly":true,
-					"optional":false
-				},
-				{
-					"id":"callacitivity",
-					"type":"Boolean",
-					"title":"is a Call Activity",
-					"value":false,
-					"description":"a Call Activity is a wrapper for a globally defined Sub-Process that is reused in the current process.",
-                                        "description_ja":"コールアクティビティは、現在のプロセスで再利用されているグローバル定義サブプロセスのラッパーです。",
-					"readonly":true,
-					"optional":"true"
 				}
 			],
 			"roles"	:			[
 				"all",
 				"fromtoall",
-				"canContainArtifacts",
-				"EventActivitiesMorph"
+				"canContainArtifacts"
 			]
-		}, **/
-		
-		// Gateways
-		
+		},
 		{
 			"type" : 			"node",
 			"id" :				"Exclusive_Databased_Gateway",

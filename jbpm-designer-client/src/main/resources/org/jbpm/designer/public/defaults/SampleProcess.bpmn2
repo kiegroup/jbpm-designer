@@ -52,7 +52,7 @@
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
-  <bpmn2:relationship id="_zD_qJk-NEeKySoJqGeG1EA" type="jBPMProcessSimulation">
+  <bpmn2:relationship id="_zD_qJk-NEeKySoJqGeG1EA" type="BPSimData">
     <bpmn2:extensionElements>
       <bpsim:BPSimData>
         <bpsim:Scenario xsi:type="bpsim:Scenario" id="default" name="Simulationscenario">

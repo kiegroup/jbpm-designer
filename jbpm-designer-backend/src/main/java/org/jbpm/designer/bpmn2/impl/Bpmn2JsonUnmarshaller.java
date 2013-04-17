@@ -81,7 +81,7 @@ public class Bpmn2JsonUnmarshaller {
 	public static final String defaultFontColor = "#000000";
 	public static final String defaultSequenceflowColor = "#000000";
 
-    public static final String defaultRelationshipType = "jBPMProcessSimulation";
+    public static final String defaultRelationshipType = "BPSimData";
     // a list of the objects created, kept in memory with their original id for
     // fast lookup.
     private Map<Object, String> _objMap = new HashMap<Object, String>();
@@ -2540,6 +2540,11 @@ public class Bpmn2JsonUnmarshaller {
                 sp.getProperties().add(prop);
                 _subprocessItemDefs.put(itemdef.getId(), itemdef);
             }
+        }
+
+        // event subprocess
+        if(sp instanceof EventSubprocess) {
+            sp.setTriggeredByEvent(true);
         }
     }
     
