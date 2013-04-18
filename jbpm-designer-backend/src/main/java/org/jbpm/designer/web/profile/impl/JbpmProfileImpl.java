@@ -51,6 +51,8 @@ public class JbpmProfileImpl implements IDiagramProfile {
     private String _localHistoryEnabled;
     private String _localHistoryTimeout;
     private boolean initializeLocalPlugins;
+    private String _storeSVGonSaveOption;
+
     @Inject
     private Repository repository;
 
@@ -112,7 +114,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
                             }
                         }
                         _plugins.put(name, registry.get(name));
-                    }  else if ("localhistory".equals(reader.getLocalName())) {
+                    }  else if("localhistory".equals(reader.getLocalName())) {
                         for (int i = 0 ; i < reader.getAttributeCount() ; i++) {
                             if ("enabled".equals(reader.getAttributeLocalName(i))) {
                                 String localhistoryenabled = reader.getAttributeValue(i);
@@ -128,6 +130,17 @@ public class JbpmProfileImpl implements IDiagramProfile {
                                     _localHistoryTimeout = localhistorytimeout;
                                 } else {
                                     _logger.info("Invalid local history timeout");
+                                }
+                            }
+                        }
+                    } else if("storesvgonsave".equals(reader.getLocalName())) {
+                        for (int i = 0 ; i < reader.getAttributeCount() ; i++) {
+                            if ("enabled".equals(reader.getAttributeLocalName(i))) {
+                                String storesvgonsaveenabled = reader.getAttributeValue(i);
+                                if(!isEmpty(storesvgonsaveenabled)) {
+                                    _storeSVGonSaveOption = storesvgonsaveenabled;
+                                } else {
+                                    _logger.info("Invalid store svg on save enabled");
                                 }
                             }
                         }
@@ -158,6 +171,11 @@ public class JbpmProfileImpl implements IDiagramProfile {
 
     public String getLocalHistoryTimeout() {
         return _localHistoryTimeout;
+    }
+
+    @Override
+    public String getStoreSVGonSaveOption() {
+        return _storeSVGonSaveOption;
     }
 
     public Repository getRepository() {

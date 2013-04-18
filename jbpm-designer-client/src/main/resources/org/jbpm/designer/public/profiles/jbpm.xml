@@ -49,6 +49,7 @@
         <plugin name="ORYX.Plugins.NotificationsPlugin"/>
         <plugin name="ORYX.Plugins.ActiveNodesHighlighter"/>
         <localhistory enabled="false" timeout="60000"/>
+        <storesvgonsave enabled="false"/>
         <!--<repository id="vfs">-->
             <!-- acceptable attributes for parameter
                 name - name of the property

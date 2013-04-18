@@ -2373,7 +2373,12 @@ public class Bpmn2JsonMarshaller {
 	}
     
     protected void marshallSequenceFlow(SequenceFlow sequenceFlow, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset) throws JsonGenerationException, IOException {
-    	Map<String, Object> properties = new LinkedHashMap<String, Object>();
+    	// dont marshal "dangling" sequence flow..better to just omit than fail
+        if(sequenceFlow.getSourceRef() == null || sequenceFlow.getTargetRef() == null) {
+            return;
+        }
+
+        Map<String, Object> properties = new LinkedHashMap<String, Object>();
     	// check null for sequence flow name
     	if(sequenceFlow.getName() != null && !"".equals(sequenceFlow.getName())) {
     	    properties.put("name", unescapeXML(sequenceFlow.getName()));
@@ -2482,6 +2487,7 @@ public class Bpmn2JsonMarshaller {
         generator.writeEndObject();
         generator.writeArrayFieldStart("childShapes");
         generator.writeEndArray();
+
         generator.writeArrayFieldStart("outgoing");
         generator.writeStartObject();
         generator.writeObjectField("resourceId", sequenceFlow.getTargetRef().getId());

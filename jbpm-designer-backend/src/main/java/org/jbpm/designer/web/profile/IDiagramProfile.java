@@ -97,6 +97,11 @@ public interface IDiagramProfile {
     public String getLocalHistoryTimeout();
 
     /**
+     * @return the store svg on save option.
+     */
+    public String getStoreSVGonSaveOption();
+
+    /**
      * @return the repository.
      */
     public Repository getRepository();
@@ -133,4 +138,5 @@ public interface IDiagramProfile {
     }
 
     public void init(ServletContext context);
+
 }

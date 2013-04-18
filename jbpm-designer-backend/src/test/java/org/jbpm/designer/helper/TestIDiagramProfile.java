@@ -106,6 +106,10 @@ public class TestIDiagramProfile implements IDiagramProfile {
         return this.repository;
     }
 
+    public String getStoreSVGonSaveOption() {
+        return "true";
+    }
+
     @Override
     public void init(ServletContext context) {
 

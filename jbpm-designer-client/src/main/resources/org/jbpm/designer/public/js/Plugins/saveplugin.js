@@ -56,39 +56,43 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                                 msg         : 'Successfully saved business process',
                                 title       : ''
                             });
-                            // svg save
-                            var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false));
-                            var rawSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getRootNode().cloneNode(true));
-                            var processJSON = ORYX.EDITOR.getSerializedJSON();
-                            var processId = jsonPath(processJSON.evalJSON(), "$.properties.id");
-                            Ext.Ajax.request({
-                                url: ORYX.PATH + "transformer",
-                                method: 'POST',
-                                success: function(request) {
-                                    this.facade.raiseEvent({
-                                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                        ntype		: 'success',
-                                        msg         : 'Successfully saved business process image',
-                                        title       : ''
-                                    });
-                                }.bind(this),
-                                failure:function(response, opts){
-                                    this.facade.raiseEvent({
-                                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                        ntype		: 'error',
-                                        msg         : 'Unable to save business process image.',
-                                        title       : ''
-                                    });
-                                }.bind(this),
-                                params: {
-                                    fsvg: Base64.encode(formattedSvgDOM),
-                                    rsvg: Base64.encode(rawSvgDOM),
-                                    uuid: ORYX.UUID,
-                                    profile: ORYX.PROFILE,
-                                    transformto: 'svg',
-                                    processid: processId
-                                }
-                            });
+
+                            if(ORYX.CONFIG.STORESVGONSAVE && ORYX.CONFIG.STORESVGONSAVE == "true") {
+                                // svg save
+                                var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false));
+                                var rawSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getRootNode().cloneNode(true));
+                                var processJSON = ORYX.EDITOR.getSerializedJSON();
+                                var processId = jsonPath(processJSON.evalJSON(), "$.properties.id");
+                                Ext.Ajax.request({
+                                    url: ORYX.PATH + "transformer",
+                                    method: 'POST',
+                                    success: function(request) {
+                                        this.facade.raiseEvent({
+                                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                            ntype		: 'success',
+                                            msg         : 'Successfully saved business process image',
+                                            title       : ''
+                                        });
+                                    }.bind(this),
+                                    failure:function(response, opts){
+                                        alert(response);
+                                        this.facade.raiseEvent({
+                                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                            ntype		: 'error',
+                                            msg         : 'Unable to save business process image.',
+                                            title       : ''
+                                        });
+                                    }.bind(this),
+                                    params: {
+                                        fsvg: Base64.encode(formattedSvgDOM),
+                                        rsvg: Base64.encode(rawSvgDOM),
+                                        uuid: ORYX.UUID,
+                                        profile: ORYX.PROFILE,
+                                        transformto: 'svg',
+                                        processid: processId
+                                    }
+                                });
+                            }
                         }
                     } else {
                         this.facade.raiseEvent({

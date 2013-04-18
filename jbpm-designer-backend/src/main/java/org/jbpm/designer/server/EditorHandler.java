@@ -156,7 +156,7 @@ public class EditorHandler extends HttpServlet {
      * The designer version setting.
      */
     private String _designerVersion;
-    
+
     /**
      * The profile service, a global registry to get the
      * profiles.
@@ -203,6 +203,7 @@ public class EditorHandler extends HttpServlet {
         _locale = System.getProperty(LOCALE) == null ? config.getInitParameter(LOCALE) : System.getProperty(LOCALE);
         _skin = System.getProperty(SKIN) == null ? config.getInitParameter(SKIN) : System.getProperty(SKIN);
         _designerVersion = readDesignerVersion(config.getServletContext());
+
         
         String editor_file = config.
             getServletContext().getRealPath(designer_path + "editor.html");
@@ -485,6 +486,9 @@ public class EditorHandler extends HttpServlet {
                 replacementMade = true;
             } else if ("designerversion".equals(elt)) {
                 resultHtml.append(_designerVersion);
+                replacementMade = true;
+            } else if ("storesvgonsave".equals(elt)) {
+                resultHtml.append(profile.getStoreSVGonSaveOption());
                 replacementMade = true;
             } else if("designerlocale".equals(elt)) {
             	resultHtml.append(_locale);

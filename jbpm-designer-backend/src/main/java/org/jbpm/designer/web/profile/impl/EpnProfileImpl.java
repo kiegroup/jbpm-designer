@@ -326,6 +326,11 @@ public class EpnProfileImpl implements IDiagramProfile {
         return _localHistoryTimeout;
     }
 
+    @Override
+    public String getStoreSVGonSaveOption() {
+        return "false";
+    }
+
     public Repository getRepository() {
         return null;
     }
