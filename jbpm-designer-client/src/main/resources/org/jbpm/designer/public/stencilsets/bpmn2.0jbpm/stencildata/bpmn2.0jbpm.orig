@@ -8224,7 +8224,7 @@
 				},
 				{
 					"id":"signalref",
-					"type":"Text",
+					"type":"String",
 					"title":"SignalRef",
 					"value":"",
 					"description":"",
@@ -9178,7 +9178,7 @@
 				},**/
 				{
 					"id":"signalref",
-					"type":"Text",
+					"type":"String",
 					"title":"SignalRef",
 					"value":"",
 					"description":"",
@@ -9764,7 +9764,7 @@
 				},**/
 				{
 					"id":"signalref",
-					"type":"Text",
+					"type":"String",
 					"title":"SignalRef",
 					"value":"",
 					"description":"",
@@ -10505,7 +10505,7 @@
 				},**/
 				{
 					"id":"signalref",
-					"type":"Text",
+					"type":"String",
 					"title":"SignalRef",
 					"value":"",
 					"description":"",

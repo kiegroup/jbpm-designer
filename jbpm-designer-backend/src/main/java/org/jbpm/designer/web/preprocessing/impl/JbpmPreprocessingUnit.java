@@ -180,7 +180,12 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
             String packageNameStr = (processPackage.length() > 0) ? processPackage + "." : "";
             // default the process id to packagename.processName
-            workItemTemplate.setAttribute("processid", packageNameStr + workItemTemplate.getAttribute("processName"));
+            String processIdString = packageNameStr + workItemTemplate.getAttribute("processName");
+            if(processIdString.startsWith("."));
+            if(processIdString.startsWith(".")) {
+                processIdString = processIdString.substring(1, processIdString.length());
+            }
+            workItemTemplate.setAttribute("processid", processIdString);
             // color theme attribute
             workItemTemplate.setAttribute("colortheme", themeData);
 

@@ -1177,16 +1177,38 @@ public class Bpmn2JsonUnmarshaller {
                         if(((CatchEvent)fe).getEventDefinitions().size() > 0) {
                             EventDefinition ed = ((CatchEvent)fe).getEventDefinitions().get(0);
                             if (ed instanceof SignalEventDefinition) {
-//                                Signal signal = Bpmn2Factory.eINSTANCE.createSignal();
-//                                Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute().iterator();
-//                                while(iter.hasNext()) {
-//                                    FeatureMap.Entry entry = iter.next();
-//                                    if(entry.getEStructuralFeature().getName().equals("signalrefname")) {
-//                                        signal.setName((String) entry.getValue());
-//                                    }
-//                                }
-//                                toAddSignals.add(signal);
-//                                ((SignalEventDefinition) ed).setSignalRef(signal);
+                                SignalEventDefinition sed = (SignalEventDefinition) ed;
+                                if(sed.getSignalRef() != null && sed.getSignalRef().length() > 0) {
+                                    String signalRef = sed.getSignalRef();
+
+                                    boolean shouldAddSignal = true;
+                                    List<RootElement> rootElements = def.getRootElements();
+                                    for(RootElement re : rootElements) {
+                                        if(re instanceof Signal) {
+                                            if(re.getId().equals(signalRef)) {
+                                                shouldAddSignal = false;
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    if(toAddSignals != null) {
+                                        for(Signal s : toAddSignals) {
+                                            if(s.getId().equals(signalRef)) {
+                                                shouldAddSignal = false;
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    if(shouldAddSignal) {
+                                        Signal signal = Bpmn2Factory.eINSTANCE.createSignal();
+                                        signal.setId(signalRef);
+                                        signal.setName(signalRef);
+                                        toAddSignals.add(signal);
+                                    }
+
+                                }
                             } else if(ed instanceof ErrorEventDefinition) {
                                 String errorCode = null;
                                 String errorId = null;
