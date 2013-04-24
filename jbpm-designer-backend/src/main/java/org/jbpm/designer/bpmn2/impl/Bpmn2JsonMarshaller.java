@@ -21,6 +21,7 @@ import java.util.*;
 import java.util.Map.Entry;
 
 import bpsim.*;
+import bpsim.impl.BpsimPackageImpl;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonEncoding;
 import org.codehaus.jackson.JsonFactory;
@@ -85,13 +86,14 @@ public class Bpmn2JsonMarshaller {
 
     public String marshall(Definitions def, String preProcessingData) throws IOException {
     	DroolsPackageImpl.init();
+        BpsimPackageImpl.init();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         JsonFactory f = new JsonFactory();
         JsonGenerator generator = f.createJsonGenerator(baos, JsonEncoding.UTF8);
         if(def.getRelationships() != null && def.getRelationships().size() > 0) {
         	// current support for single relationship
         	Relationship relationship = def.getRelationships().get(0);
-        	for(ExtensionAttributeValue extattrval : relationship.getExtensionValues()) {
+            for(ExtensionAttributeValue extattrval : relationship.getExtensionValues()) {
                 FeatureMap extensionElements = extattrval.getValue();
                 @SuppressWarnings("unchecked")
                 List<BPSimDataType> bpsimExtensions = (List<BPSimDataType>) extensionElements.get(BpsimPackage.Literals.DOCUMENT_ROOT__BP_SIM_DATA, true);

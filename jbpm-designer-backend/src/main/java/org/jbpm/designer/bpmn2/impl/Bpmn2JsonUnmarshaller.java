@@ -28,6 +28,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import bpsim.*;
+import bpsim.impl.BpsimPackageImpl;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonParser;
@@ -113,6 +114,7 @@ public class Bpmn2JsonUnmarshaller {
     public Bpmn2JsonUnmarshaller() {
         _helpers = new ArrayList<BpmnMarshallerHelper>();
         DroolsPackageImpl.init();
+        BpsimPackageImpl.init();
         // load the helpers to place them in field
         if (getClass().getClassLoader() instanceof BundleReference) {
             BundleContext context = ((BundleReference) getClass().getClassLoader()).

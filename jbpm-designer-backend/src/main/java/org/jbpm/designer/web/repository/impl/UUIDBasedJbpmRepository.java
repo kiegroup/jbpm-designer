@@ -4,6 +4,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
+import bpsim.impl.BpsimPackageImpl;
 import org.apache.log4j.Logger;
 import org.jboss.drools.impl.DroolsPackageImpl;
 import org.jbpm.designer.repository.Asset;
@@ -31,6 +32,7 @@ public class UUIDBasedJbpmRepository implements IUUIDBasedRepository {
 
         if(processxml != null && processxml.length() > 0) {
         	DroolsPackageImpl.init();
+            BpsimPackageImpl.init();
             processjson = profile.createUnmarshaller().parseModel(processxml, profile, preProcessingParam);
 
             return processjson.getBytes("UTF-8");
