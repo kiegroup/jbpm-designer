@@ -2,12 +2,12 @@
 <html>
 <head>
 <meta charset="utf-8">
-<link href="/org.jbpm.designer.jBPMDesigner/css/simulation/nv-core.css" rel="stylesheet" type="text/css">
-<link href="/org.jbpm.designer.jBPMDesigner/css/simulation/simulationcharts.css" rel="stylesheet" type="text/css">
-<script src="/org.jbpm.designer.jBPMDesigner/js/simulation/d3.v2.min.js"></script>
-<script src="/org.jbpm.designer.jBPMDesigner/js/simulation/nv.min.js"></script>
-<script src="/org.jbpm.designer.jBPMDesigner/lib/jquery-1.7.2.min.js" type="text/javascript"></script>
-<script src="/org.jbpm.designer.jBPMDesigner/lib/handlebars-1.0.0.beta.6.js" type="text/javascript"></script>
+<link href="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/css/simulation/nv-core.css" rel="stylesheet" type="text/css">
+<link href="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/css/simulation/simulationcharts.css" rel="stylesheet" type="text/css">
+<script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/simulation/d3.v2.min.js"></script>
+<script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/simulation/nv.min.js"></script>
+<script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/lib/jquery-1.7.2.min.js" type="text/javascript"></script>
+<script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/lib/handlebars-1.0.0.beta.6.js" type="text/javascript"></script>
 <script>
 function clearChart() {
 	var cnt = "<h2>Execution Times</h2> \
@@ -40,12 +40,12 @@ function clearChartForLine() {
 <body onload="showBarChart();">
 <center>
 <div style="margin:20;padding:0;">
-	<div class="lcharticon"><a href="#" onclick="clearChartForLine(); showLineChart(); return false;"><img src="/org.jbpm.designer.jBPMDesigner/images/simulation/linecharticon.png" title="Line Chart"/></a></div>
-	<div class="timelineicon"><a href="#" onclick="clearChart(); showTimeline(); return false;"><img src="/org.jbpm.designer.jBPMDesigner/images/simulation/timelineicon.png" title="Timeline"/></a></div>
-	<div class="tableicon"><a href="#" onclick="clearChart(); showTable(); return false;"><img src="/org.jbpm.designer.jBPMDesigner/images/simulation/tableicon.png" title="Table"/></a></div>
-    <div class="pcharticon"><a href="#" onclick="clearChart(); showPieChart(); return false;"><img src="/org.jbpm.designer.jBPMDesigner/images/simulation/piecharticon.png" title="Pie Chart"/></a></div>
-    <div class="hbcharticon"><a href="#" onclick="clearChart(); showHBarChart(); return false;"><img src="/org.jbpm.designer.jBPMDesigner/images/simulation/hbarcharticon.png" title="Horizontal Bar Chart"/></a></div>
-    <div class="bcharticon"><a href="#" onclick="clearChart(); showBarChart(); return false;"><img src="/org.jbpm.designer.jBPMDesigner/images/simulation/barcharticon.png" title="Bar Chart"/></a></div>
+	<div class="lcharticon"><a href="#" onclick="clearChartForLine(); showLineChart(); return false;"><img src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/images/simulation/linecharticon.png" title="Line Chart"/></a></div>
+	<div class="timelineicon"><a href="#" onclick="clearChart(); showTimeline(); return false;"><img src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/images/simulation/timelineicon.png" title="Timeline"/></a></div>
+	<div class="tableicon"><a href="#" onclick="clearChart(); showTable(); return false;"><img src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/images/simulation/tableicon.png" title="Table"/></a></div>
+    <div class="pcharticon"><a href="#" onclick="clearChart(); showPieChart(); return false;"><img src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/images/simulation/piecharticon.png" title="Pie Chart"/></a></div>
+    <div class="hbcharticon"><a href="#" onclick="clearChart(); showHBarChart(); return false;"><img src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/images/simulation/hbarcharticon.png" title="Horizontal Bar Chart"/></a></div>
+    <div class="bcharticon"><a href="#" onclick="clearChart(); showBarChart(); return false;"><img src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/images/simulation/barcharticon.png" title="Bar Chart"/></a></div>
     <div class="charttitle"><script>document.write(parent.ORYX.EDITOR.simulationChartTitle +  " (" + parent.ORYX.EDITOR.simulationChartNodeName + ")");</script></div>
 </div><br/>
 <div id="outterchart" class="outterchart">
@@ -540,7 +540,7 @@ function clearChartForLine() {
 			var cont = "<div style='margin:0;padding:0;'> \
 				<div class='tlineswitch'><a href='#' onclick='document.getElementById(\"processevents\").contentWindow.switchDisplay(\"chart\"); return false;'>Chart</a> | <a href='#' onclick='document.getElementById(\"processevents\").contentWindow.switchDisplay(\"model\"); return false;'>Model</a></div> \
 				</div> \
-				<iframe id='processevents' name='' src='/org.jbpm.designer.jBPMDesigner/simulation/processevents.htm' width='100%' height='500' scrolling='no' frameBorder='0'></iframe> \
+				<iframe id='processevents' name='' src='<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/simulation/processevents.jsp' width='100%' height='500' scrolling='no' frameBorder='0'></iframe> \
 				";
 			
 			document.getElementById('outterchart').innerHTML = cont;

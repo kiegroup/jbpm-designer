@@ -262,7 +262,7 @@ ORYX.Editor = {
 			    autoScroll: true,
 			    autoEl : {
 			        tag : "iframe",
-			        src : ORYX.BASE_FILE_PATH + 'simulation/default.htm',
+			        src : ORYX.BASE_FILE_PATH + 'simulation/default.jsp',
 			        width: "100%",
 			            height: "500",
 			            frameborder: "0",
