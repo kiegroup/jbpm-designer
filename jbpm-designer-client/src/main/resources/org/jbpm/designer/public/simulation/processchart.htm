@@ -17,7 +17,11 @@ function clearChart() {
 	<h2>Activity Instances</h2> \
   	<p id='chartcontent2'> \
   	<svg id='chart2' style='height:400px;width:400px'></svg> \
-	</p>";
+	</p>  \
+	<h2>Total Cost</h2> \
+    <p id='chartcontent3'> \
+    <svg id='chart3' style='height:400px;width:400px'></svg> \
+    </p>";
 	
 	document.getElementById('outterchart').innerHTML = cnt;
 }
@@ -53,6 +57,10 @@ function clearChartForLine() {
   	<p id="chartcontent2">
   	<svg id="chart2" style='height:400px;width:400px'></svg>
 	</p>
+    <h2 id="chart3label">Total Cost</h2>
+    <p id="chartcontent3">
+        <svg id="chart3" style='height:400px;width:400px'></svg>
+    </p>
 </div>
 </center>
 <script id="tabletemplate" type="text/x-handlebars-template">
@@ -94,6 +102,26 @@ function clearChartForLine() {
 		</tbody>
 	    </table>
         </center>
+</script>
+<script id="tablecosttemplate" type="text/x-handlebars-template">
+    <center>
+        <table id="box-table" summary="Total Cost">
+            <thead>
+            <tr>
+                {{#values}}
+                <th scope="col" align="center">{{label}} (USD)</th>
+                {{/values}}
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                {{#values}}
+                <td align="center">{{value}}</td>
+                {{/values}}
+            </tr>
+            </tbody>
+        </table>
+    </center>
 </script>
 <script>
 		function getEventData() {
@@ -137,7 +165,58 @@ function clearChartForLine() {
 				nv.utils.windowResize(chart2.update);
 	
 				return chart2;
-			}); 
+			});
+
+            var htCostData = parent.ORYX.EDITOR.simulationHTCostData;
+            if(htCostData && htCostData.length > 0) {
+                var max = 0;
+                var min = 0;
+                var avg = 0;
+                for(var i=0; i < htCostData.length; i++ ) {
+                    var nextCostObj = htCostData[i];
+                    max += nextCostObj.values[0].value;
+                    min += nextCostObj.values[1].value;
+                    avg += nextCostObj.values[2].value;
+                }
+
+                var costData = [
+                    {
+                        "values":[
+                            {
+                                "value":max,
+                                "label":"Max"
+                            },
+                            {
+                                "value":min,
+                                "label":"Min"
+                            },
+                            {
+                                "value":avg,
+                                "label":"Average"
+                            }
+                        ],
+                        "color":"#1f77b4",
+                        "key":"Total Cost"
+                    }
+                 ];
+
+                nv.addGraph(function() {
+                    var chart3 = nv.models.discreteBarChart().x(function(d) {
+                        return d.label
+                    }).y(function(d) {
+                                return d.value
+                            }).staggerLabels(true)
+                            .tooltips(true).showValues(true);
+                    chart3.yAxis.axisLabel('Cost (USD)')
+
+                    d3.select('#chart3').datum(costData).transition().duration(500)
+                            .call(chart3);
+
+                    nv.utils.windowResize(chart3.update);
+
+                    return chart3;
+                });
+            }
 		}
 		
 		function showHBarChart() {
@@ -189,7 +268,67 @@ function clearChartForLine() {
 				nv.utils.windowResize(chart2.update);
 			
 				return chart2;
-			}); 
+			});
+
+            var htCostData = parent.ORYX.EDITOR.simulationHTCostData;
+            if(htCostData && htCostData.length > 0) {
+                var max = 0;
+                var min = 0;
+                var avg = 0;
+                for(var i=0; i < htCostData.length; i++ ) {
+                    var nextCostObj = htCostData[i];
+                    max += nextCostObj.values[0].value;
+                    min += nextCostObj.values[1].value;
+                    avg += nextCostObj.values[2].value;
+                }
+
+                var costData = [
+                    {
+                        "values":[
+                            {
+                                "value":max,
+                                "label":"Max"
+                            },
+                            {
+                                "value":min,
+                                "label":"Min"
+                            },
+                            {
+                                "value":avg,
+                                "label":"Average"
+                            }
+                        ],
+                        "color":"#1f77b4",
+                        "key":"Total Cost"
+                    }
+                ];
+
+                nv.addGraph(function() {
+                    var chart3 = nv.models.multiBarHorizontalChart()
+                            .x(function(d) { return d.label })
+                            .y(function(d) { return d.value })
+                            .margin({top: 30, right: 20, bottom: 50, left: 175})
+                            .showValues(true)
+                            .tooltips(true)
+                            .showControls(false);
+
+                    //chart2.yAxis
+                    //	.tickFormat(d3.format(',.2f'));
+
+                    chart3.yAxis.axisLabel('Total Cost (USD)')
+
+                    d3.select('#chart3')
+                            .datum(costData)
+                            .transition().duration(500)
+                            .call(chart3);
+
+                    nv.utils.windowResize(chart3.update);
+
+                    return chart3;
+                });
+            }
+
+
 		}
 		
 		function showPieChart() {
@@ -236,6 +375,62 @@ function clearChartForLine() {
 
 			    return chart;
 			});
+
+
+            var htCostData = parent.ORYX.EDITOR.simulationHTCostData;
+            if(htCostData && htCostData.length > 0) {
+                var max = 0;
+                var min = 0;
+                var avg = 0;
+                for(var i=0; i < htCostData.length; i++ ) {
+                    var nextCostObj = htCostData[i];
+                    max += nextCostObj.values[0].value;
+                    min += nextCostObj.values[1].value;
+                    avg += nextCostObj.values[2].value;
+                }
+
+                var costData = [
+                    {
+                        "values":[
+                            {
+                                "value":max,
+                                "label":"Max"
+                            },
+                            {
+                                "value":min,
+                                "label":"Min"
+                            },
+                            {
+                                "value":avg,
+                                "label":"Average"
+                            }
+                        ],
+                        "color":"#1f77b4",
+                        "key":"Total Cost"
+                    }
+                ];
+
+                nv.addGraph(function() {
+                    var width = 400,
+                            height = 400;
+                    var chart = nv.models.pieChart()
+                            .x(function(d) { return d.label })
+                            .y(function(d) { return d.value })
+                            .showLabels(false)
+                            .color(d3.scale.category10().range())
+                            .width(width)
+                            .height(height);
+
+                    d3.select("#chart3")
+                            .datum(costData)
+                            .transition().duration(500)
+                            .attr('width', width)
+                            .attr('height', height)
+                            .call(chart);
+
+                    return chart;
+                });
+            }
 		}
 		
 		function showTable() {
@@ -243,10 +438,49 @@ function clearChartForLine() {
 			var tableInstanceData = parent.ORYX.EDITOR.simulationInstancesData;
 			var tableSource = $("#tabletemplate").html();
 			var tableInstanceSource = $("#tableinstancestemplate").html();
+            var tableCostSource = $("#tablecosttemplate").html();
+
 	    	var tableTempplate = Handlebars.compile(tableSource);
 	    	var tableInstanceTemplate = Handlebars.compile(tableInstanceSource);
+            var tableCostTemplate =  Handlebars.compile(tableCostSource);
+
 	    	$("#chartcontent1").html(tableTempplate(tableData[0]));
 	    	$("#chartcontent2").html(tableInstanceTemplate(tableInstanceData[0]));
+
+            var htCostData = parent.ORYX.EDITOR.simulationHTCostData;
+            if(htCostData && htCostData.length > 0) {
+                var max = 0;
+                var min = 0;
+                var avg = 0;
+                for(var i=0; i < htCostData.length; i++ ) {
+                    var nextCostObj = htCostData[i];
+                    max += nextCostObj.values[0].value;
+                    min += nextCostObj.values[1].value;
+                    avg += nextCostObj.values[2].value;
+                }
+
+                var costData = {
+                        "values":[
+                            {
+                                "value":max,
+                                "label":"Max"
+                            },
+                            {
+                                "value":min,
+                                "label":"Min"
+                            },
+                            {
+                                "value":avg,
+                                "label":"Average"
+                            }
+                        ],
+                        "color":"#1f77b4",
+                        "key":"Total Cost"
+                    };
+
+                $("#chartcontent3").html(tableCostTemplate(costData));
+            }
+
 		}
 		
 		function showLineChart() {

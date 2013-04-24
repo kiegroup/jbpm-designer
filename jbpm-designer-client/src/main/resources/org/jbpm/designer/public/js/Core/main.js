@@ -82,6 +82,7 @@ ORYX.Editor = {
 		this.simulationEventData = "";
 		this.simulationEventAggregationData = "";
 		this.simulationInstancesData = "";
+        this.simulationHTCostData = "";
 		this.simulationChartTitle = "";
 		this.simulationChartId = "";
 		this.simulationChartNodeName = "";
