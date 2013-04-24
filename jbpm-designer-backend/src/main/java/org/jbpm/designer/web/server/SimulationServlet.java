@@ -353,7 +353,7 @@ public class SimulationServlet extends HttpServlet {
 				parentJSON.put("activityinstances", aggNumActivityInstancesJSONArray);
 				parentJSON.put("htsim", aggHTSimulationJSONArray);
 				parentJSON.put("tasksim", aggTaskSimulationJSONArray);
-				parentJSON.put("timeline", getTaskEventsFromAllEvents(null, allEvents, intervalUnit));
+				parentJSON.put("timeline", getTaskEventsFromAllEvents(null, allEvents, intervalUnit, req.getContextPath()));
 				// event aggregations
 				JSONArray aggEventProcessSimulationJSONArray = new JSONArray();
 				int c = 0;
@@ -487,18 +487,18 @@ public class SimulationServlet extends HttpServlet {
 		return retBuf.toString();
 	}
 
-	private String getIcon(SimulationEvent se) {
+	private String getIcon(SimulationEvent se, String contextPath) {
 		if(se != null) {
 			if(se instanceof ActivitySimulationEvent) {
-				return "/org.jbpm.designer.jBPMDesigner/images/simulation/timeline/activity.png";
+				return contextPath + "/org.jbpm.designer.jBPMDesigner/images/simulation/timeline/activity.png";
 			} else if(se instanceof EndSimulationEvent) {
-				return "/org.jbpm.designer.jBPMDesigner/images/simulation/timeline/endevent.png";
+				return contextPath + "/org.jbpm.designer.jBPMDesigner/images/simulation/timeline/endevent.png";
 			} else if(se instanceof GatewaySimulationEvent) {
-				return "/org.jbpm.designer.jBPMDesigner/images/simulation/timeline/gateway.png";
+				return contextPath + "/org.jbpm.designer.jBPMDesigner/images/simulation/timeline/gateway.png";
 			} else if(se instanceof HumanTaskActivitySimulationEvent) {
-				return "/org.jbpm.designer.jBPMDesigner/images/simulation/timeline/humantask.png";
+				return contextPath + "/org.jbpm.designer.jBPMDesigner/images/simulation/timeline/humantask.png";
 			} else if(se instanceof StartSimulationEvent) {
-				return "/org.jbpm.designer.jBPMDesigner/images/simulation/timeline/startevent.png";
+				return contextPath + "/org.jbpm.designer.jBPMDesigner/images/simulation/timeline/startevent.png";
 			} else {
 				return "";
 			}
@@ -507,7 +507,7 @@ public class SimulationServlet extends HttpServlet {
 		}
 	}
 
-	private JSONObject getTaskEventsFromAllEvents(AggregatedSimulationEvent event, List<SimulationEvent> allEvents, String intervalUnit) throws Exception {
+	private JSONObject getTaskEventsFromAllEvents(AggregatedSimulationEvent event, List<SimulationEvent> allEvents, String intervalUnit, String contextPath) throws Exception {
 		JSONObject allEventsObject = new JSONObject();
 		allEventsObject.put("headline", "Simulation Events");
 		allEventsObject.put("type","default");
@@ -520,10 +520,10 @@ public class SimulationServlet extends HttpServlet {
 					String seActivityId = getSingleEventActivityId(se);
 					String eventActivitytId = getAggregatedEventActivityId(event);
 					if(eventActivitytId.equals(seActivityId)) {
-						allEventsDataArray.put(getTimelineEventObject(se, intervalUnit));
+						allEventsDataArray.put(getTimelineEventObject(se, intervalUnit, contextPath));
 					}
 				} else {
-					allEventsDataArray.put(getTimelineEventObject(se, intervalUnit));
+					allEventsDataArray.put(getTimelineEventObject(se, intervalUnit, contextPath));
 				}
 			}
 		}
@@ -533,7 +533,7 @@ public class SimulationServlet extends HttpServlet {
 		return allEventsObject;
 	}
 
-	private JSONObject getTimelineEventObject(SimulationEvent se, String intervalUnit) throws Exception{
+	private JSONObject getTimelineEventObject(SimulationEvent se, String intervalUnit, String contextPath) throws Exception{
 		JSONObject seObject = new JSONObject();
 		seObject.put("id", se.getUUID().toString());
 		seObject.put("startDate", getDateString(se.getStartTime()));
@@ -552,7 +552,7 @@ public class SimulationServlet extends HttpServlet {
 		seObject.put("tag", "");
 		JSONObject seAsset = new JSONObject();
 		seAsset.put("media", "");
-		seAsset.put("thumbnail", getIcon(se));
+		seAsset.put("thumbnail", getIcon(se, contextPath));
 		seAsset.put("credit", "");
 		seAsset.put("caption", "");
 		seObject.put("asset", seAsset);

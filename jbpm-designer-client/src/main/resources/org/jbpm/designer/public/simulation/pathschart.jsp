@@ -2,12 +2,12 @@
 <html>
 <head>
 <meta charset="utf-8">
-<link href="/org.jbpm.designer.jBPMDesigner/css/simulation/nv-core.css" rel="stylesheet" type="text/css">
-<link href="/org.jbpm.designer.jBPMDesigner/css/simulation/simulationcharts.css" rel="stylesheet" type="text/css">
-<script src="/org.jbpm.designer.jBPMDesigner/js/simulation/d3.v2.min.js"></script>
-<script src="/org.jbpm.designer.jBPMDesigner/js/simulation/nv.min.js"></script>
-<script src="/org.jbpm.designer.jBPMDesigner/lib/jquery-1.7.2.min.js" type="text/javascript"></script>
-<script src="/org.jbpm.designer.jBPMDesigner/lib/handlebars-1.0.0.beta.6.js" type="text/javascript"></script>
+<link href="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/css/simulation/nv-core.css" rel="stylesheet" type="text/css">
+<link href="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/css/simulation/simulationcharts.css" rel="stylesheet" type="text/css">
+<script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/simulation/d3.v2.min.js"></script>
+<script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/simulation/nv.min.js"></script>
+<script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/lib/jquery-1.7.2.min.js" type="text/javascript"></script>
+<script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/lib/handlebars-1.0.0.beta.6.js" type="text/javascript"></script>
 <script>
 function clearChart() {
 	var cnt = "<h2>Path Image</h2> \
@@ -25,9 +25,9 @@ function clearChart() {
 <body onload="showPieChart();">
 <center>
 <div style="margin:20;padding:0;">
-	<!-- <div class="timelineicon"><a href="#" onclick="clearChart(); showTimeline(); return false;"><img src="/org.jbpm.designer.jBPMDesigner/images/simulation/timelineicon.png" title="Timeline"/></a></div> -->
-	<div class="tableicon"><a href="#" onclick="clearChart(); showTable(); return false;"><img src="/org.jbpm.designer.jBPMDesigner/images/simulation/tableicon.png" title="Table"/></a></div>
-    <div class="pcharticon"><a href="#" onclick="clearChart(); showPieChart(); return false;"><img src="/org.jbpm.designer.jBPMDesigner/images/simulation/piecharticon.png" title="Pie Chart"/></a></div>
+	<!-- <div class="timelineicon"><a href="#" onclick="clearChart(); showTimeline(); return false;"><img src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/images/simulation/timelineicon.png" title="Timeline"/></a></div> -->
+	<div class="tableicon"><a href="#" onclick="clearChart(); showTable(); return false;"><img src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/images/simulation/tableicon.png" title="Table"/></a></div>
+    <div class="pcharticon"><a href="#" onclick="clearChart(); showPieChart(); return false;"><img src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/images/simulation/piecharticon.png" title="Pie Chart"/></a></div>
     <div class="charttitle"><script>document.write(parent.ORYX.EDITOR.simulationChartTitle);</script></div>
 </div><br/>
 <div id="outterchart" class="outterchart">
@@ -135,7 +135,7 @@ function clearChart() {
 		}
 		
 		function displayPathImage() {
-			document.getElementById('chartcontent1').innerHTML = "<iframe id='processimageframe' src='/org.jbpm.designer.jBPMDesigner/simulation/pathimage.htm' width='100%' height='300' scrolling='auto' frameBorder='0'></iframe>";
+			document.getElementById('chartcontent1').innerHTML = "<iframe id='processimageframe' src='<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/simulation/pathimage.jsp' width='100%' height='300' scrolling='auto' frameBorder='0'></iframe>";
 		}
 </script>
 </body>
