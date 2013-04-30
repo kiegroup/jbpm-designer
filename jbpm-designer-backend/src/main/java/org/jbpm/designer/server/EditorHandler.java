@@ -307,17 +307,22 @@ public class EditorHandler extends HttpServlet {
         String profileName = request.getParameter("profile");
         String uuid = request.getParameter("uuid");
         String editorID = request.getParameter("editorid");
+
         String encodedActiveNodes = request.getParameter("activenodes");
-
-
         byte[] activeNodesByteArray = Base64.decodeBase64(encodedActiveNodes);
         String activeNodes = new String(activeNodesByteArray, "UTF-8");
+
         String encodedCompletedNodes = request.getParameter("completednodes");
-
-
         byte[] completedNodesByteArray = Base64.decodeBase64(encodedCompletedNodes);
         String completedNodes = new String(completedNodesByteArray, "UTF-8");
+
+        String encodedProcessSource = request.getParameter("processsource");
+        if(encodedProcessSource == null) {
+            encodedProcessSource = "";
+        }
+
         String readOnly = request.getParameter("readonly");
+
 
         if(profileName == null || profileName.length() < 1) {
         	profileName = "jbpm";
@@ -325,10 +330,10 @@ public class EditorHandler extends HttpServlet {
         IDiagramProfile profile = _profileService.findProfile(
                 request, profileName);
         if (profile == null) {
-            _logger.error("No profile with the name " + profileName 
+            _logger.error("No profile with the name " + profileName
                     + " was registered");
             throw new IllegalArgumentException(
-                    "No profile with the name " + profileName + 
+                    "No profile with the name " + profileName +
                         " was registered");
         }
 
@@ -354,20 +359,20 @@ public class EditorHandler extends HttpServlet {
             scriptsArray = new JSONArray();
             scriptsArray.put(designer_path + "jsc/env_combined.js");
         }
-        
+
         // generate script tags for plugins.
         // they are located after the initialization script.
-        
+
         if (_pluginfiles.get(profileName) == null) {
             List<IDiagramPlugin> compressed = new ArrayList<IDiagramPlugin>();
             List<IDiagramPlugin> uncompressed = new ArrayList<IDiagramPlugin>();
             _pluginfiles.put(profileName, compressed);
             _uncompressedPlugins.put(profileName, uncompressed);
             for (String pluginName : profile.getPlugins()) {
-                IDiagramPlugin plugin = _pluginService.findPlugin(request, 
+                IDiagramPlugin plugin = _pluginService.findPlugin(request,
                         pluginName);
                 if (plugin == null) {
-                    _logger.warn("Could not find the plugin " + pluginName + 
+                    _logger.warn("Could not find the plugin " + pluginName +
                             " requested by the profile " + profile.getName());
                     continue;
                 }
@@ -377,10 +382,10 @@ public class EditorHandler extends HttpServlet {
                     uncompressed.add(plugin);
                 }
             }
-            
+
             if (!_devMode) {
                 // let's call the compression routine
-                String rs = compressJS(_pluginfiles.get(profileName), 
+                String rs = compressJS(_pluginfiles.get(profileName),
                         getServletContext());
                 try {
                     FileWriter w = new FileWriter(getServletContext().
@@ -402,12 +407,12 @@ public class EditorHandler extends HttpServlet {
         } else {
             pluginsArray.put(designer_path + "jsc/plugins_" + profileName + ".js");
         }
-        
-        for (IDiagramPlugin uncompressed : 
+
+        for (IDiagramPlugin uncompressed :
                 _uncompressedPlugins.get(profileName)) {
             pluginsArray.put(designer_path + "plugin/" + uncompressed.getName() + ".js");
         }
-        
+
         XMLOutputter outputter = new XMLOutputter();
         Format format = Format.getPrettyFormat();
         format.setExpandEmptyElements(true);
@@ -419,7 +424,7 @@ public class EditorHandler extends HttpServlet {
         StringBuilder resultHtml = new StringBuilder();
         boolean tokenFound = false;
         boolean replacementMade = false;
-      
+
         IDiagramPreference pref = PREFERENCE_FACTORY.createPreference(request);
         int autoSaveInt = pref.getAutosaveInterval();
         boolean autoSaveOn = pref.isAutoSaveEnabled();
@@ -441,7 +446,10 @@ public class EditorHandler extends HttpServlet {
             } else if ("completednodes".equals(elt)) {
                 resultHtml.append(completedNodes);
                 replacementMade = true;
-            } else if ("readonly".equals(elt)) {
+            } else if ("processsource".equals(elt)) {
+                resultHtml.append(encodedProcessSource);
+                replacementMade = true;
+            }else if ("readonly".equals(elt)) {
                 resultHtml.append(readOnly);
                 replacementMade = true;
             } else if ("allscripts".equals(elt)) {
@@ -464,16 +472,16 @@ public class EditorHandler extends HttpServlet {
                 replacementMade = true;
             } else if ("autosavedefault".equals(elt)) {
                 resultHtml.append(autoSaveOn);
-                replacementMade = true;    
+                replacementMade = true;
             } else if ("preprocessing".equals(elt)) {
                 resultHtml.append(preprocessingUnit == null ? "" : preprocessingUnit.getOutData());
-                replacementMade = true;    
+                replacementMade = true;
             } else if ("externalprotocol".equals(elt)) {
                 resultHtml.append(RepositoryInfo.getRepositoryProtocol(profile) == null ? "" : RepositoryInfo.getRepositoryProtocol(profile));
-                replacementMade = true;    
+                replacementMade = true;
             } else if ("externalhost".equals(elt)) {
                 resultHtml.append(RepositoryInfo.getRepositoryHost(profile));
-                replacementMade = true;    
+                replacementMade = true;
             } else if ("externalsubdomain".equals(elt)) {
                 resultHtml.append(RepositoryInfo.getRepositorySubdomain(profile) != null ? RepositoryInfo.getRepositorySubdomain(profile).substring(0,
                     RepositoryInfo.getRepositorySubdomain(profile).indexOf("/")) : "");
@@ -493,7 +501,7 @@ public class EditorHandler extends HttpServlet {
             } else if("designerlocale".equals(elt)) {
             	resultHtml.append(_locale);
                 replacementMade = true;
-            } else if ("defaultSkin".equals(elt)) { 
+            } else if ("defaultSkin".equals(elt)) {
                 resultHtml.append(designer_path + "css/theme-default.css");
                 replacementMade = true;
             } else if("overlaySkin".equals(elt)) {

@@ -20,6 +20,7 @@
         ORYX.EDITORID = "@editorid@";
         ORYX.ACTIVENODES = @activenodes@;
         ORYX.COMPLETEDNODES = @completednodes@;
+        ORYX.PROCESSSOURCE = "@processsource@";
         ORYX.READONLY = @readonly@;
 
         ORYX.LOCAL_HISTORY_ENABLED = @localhistoryenabled@;
@@ -45,7 +46,7 @@
                     contents = result.responseText.evalJSON();
                 },
                 onFailure:function (result) {
-                    alert("Could not load Process Designer"); //TODO even better logging ?
+                    ORYX.LOG.error("Could not load Process Designer");
                 }
             });
             return contents;
@@ -74,7 +75,7 @@
 
             },
             onFailure:function (result) {
-                alert("Could not load Process Designer: " + result.responseText);
+                ORYX.LOG.error("Could not load Process Designer: " + result.responseText);
             }
         });
     }
@@ -87,16 +88,19 @@
                    url: stencilset
                }
            };
-           if(!(ORYX.UUID === undefined)) {
-               //load the model from the repository from its uuid
-               new Ajax.Request(ORYX.CONFIG.UUID_URL(), {
+
+           // if process source was given it has higher priority than UUID
+           if(ORYX.PROCESSSOURCE != "") {
+               new Ajax.Request(ORYX.PATH + "transformer", {
                    encoding: 'UTF-8',
-                   method: 'GET',
+                   method: 'POST',
+                   parameters: {uuid: ORYX.UUID, profile: ORYX.PROFILE, pp: ORYX.PREPROCESSING, bpmn2: ORYX.PROCESSSOURCE, transformto: 'bpmn2json', enc: 'true'},
                    onSuccess: function(transport) {
                        response = transport.responseText;
-                       if (response.length != 0) {
+                       model = response.evalJSON();
+
+                       if (model) {
                            try {
-                               model = response.evalJSON();
                                editor_parameters.model = model;
                                ORYX.EDITOR = new ORYX.Editor(editor_parameters);
                            } catch(err) {
@@ -106,9 +110,33 @@
 
                    },
                    onFailure: function(transport) {
-                       ORYX.LOG.error("Could not load the model for uuid " + ORYX.UUID);
+                       ORYX.LOG.error("Could not load the model");
                    }
                });
+           } else {
+               if(!(ORYX.UUID === undefined)) {
+                   //load the model from the repository from its uuid
+                   new Ajax.Request(ORYX.CONFIG.UUID_URL(), {
+                       encoding: 'UTF-8',
+                       method: 'GET',
+                       onSuccess: function(transport) {
+                           response = transport.responseText;
+                           if (response.length != 0) {
+                               try {
+                                   model = response.evalJSON();
+                                   editor_parameters.model = model;
+                                   ORYX.EDITOR = new ORYX.Editor(editor_parameters);
+                               } catch(err) {
+                                   ORYX.LOG.error(err);
+                               }
+                           }
+
+                       },
+                       onFailure: function(transport) {
+                           ORYX.LOG.error("Could not load the model for uuid " + ORYX.UUID);
+                       }
+                   });
+               }
            }
        }
 

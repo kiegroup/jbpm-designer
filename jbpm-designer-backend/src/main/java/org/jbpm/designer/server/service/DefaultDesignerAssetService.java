@@ -67,6 +67,8 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
         String activeNodesParam = place.getParameter( "activeNodes", null );
 
         String readOnly = place.getParameter( "readOnly", "false" );
+        String encodedProcessSource = place.getParameter("encodedProcessSource", "");
+
         if ( activeNodesParam != null ) {
             activeNodesList = Arrays.asList( activeNodesParam.split( "," ) );
         }
@@ -96,7 +98,7 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
 
         String editorURL = hostInfo + "/editor/?uuid=" + path.toURI() + "&profile=jbpm&pp=&editorid=" + editorID + "&readonly=" + readOnly +
                 "&activenodes=" + encodedActiveNodesParam + "&completednodes=" + encodedCompletedNodesParam;
-        return getEditorResponse(editorURL);
+        return getEditorResponse(editorURL, encodedProcessSource);
     }
 
     @Override
@@ -126,7 +128,7 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
     }
 
 
-    private String getEditorResponse(String urlpath) {
+    private String getEditorResponse(String urlpath, String encProcessSrc) {
         HttpClient httpclient = new HttpClient();
 
         PostMethod authMethod = new PostMethod(urlpath);
@@ -142,7 +144,8 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
             authMethod.releaseConnection();
         }
 
-        HttpMethod theMethod = new GetMethod(urlpath);
+        PostMethod theMethod = new PostMethod(urlpath);
+        theMethod.setParameter("processsource", encProcessSrc);
         StringBuffer sb = new StringBuffer();
         try {
             httpclient.executeMethod(theMethod);
