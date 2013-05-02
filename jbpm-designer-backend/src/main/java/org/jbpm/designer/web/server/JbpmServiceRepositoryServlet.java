@@ -12,7 +12,6 @@ import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.process.workitem.WorkDefinitionImpl;
 import org.jbpm.process.workitem.WorkItemRepository;
 import org.json.JSONObject;
-import sun.net.www.protocol.file.FileURLConnection;
 
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
@@ -76,12 +75,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 		
 		try {
 		    URL url = new URL(repoURL);
-            if(repoURL.startsWith("file:")) {
-                FileURLConnection conn = (FileURLConnection) url.openConnection();
-                conn.setReadTimeout(5 * 1000);
-                conn.setConnectTimeout(5 * 1000);
-                conn.connect();
-            } else {
+            if(!(repoURL.startsWith("file:"))) {
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setReadTimeout(5 * 1000);
                 conn.setConnectTimeout(5 * 1000);
@@ -93,7 +87,6 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
                     return;
                 }
             }
-
 		} catch (Exception e) {
             e.printStackTrace();
 			resp.setCharacterEncoding("UTF-8");
