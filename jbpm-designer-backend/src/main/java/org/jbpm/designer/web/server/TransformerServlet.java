@@ -217,7 +217,7 @@ public class TransformerServlet extends HttpServlet {
             resp.getWriter().print(json);
         }  else if (transformto != null && transformto.equals(BPMN2_TO_JSON)) {
             Definitions def = ((JbpmProfileImpl) profile).getDefinitions(bpmn2in);
-            if(uuid != null) {
+            if(uuid != null && sourceEnc == null) {
                 // fix package name if needed
                 String packageName = null;
                 try {
