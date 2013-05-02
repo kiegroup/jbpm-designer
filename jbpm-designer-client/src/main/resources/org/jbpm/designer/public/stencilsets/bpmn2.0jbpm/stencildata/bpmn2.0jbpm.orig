@@ -11125,7 +11125,8 @@
 					{
 						"from":"Exclusive_Eventbased_Gateway",
 						"to":["FromEventbasedGateway"]
-					},{
+					},
+					{
 						"from" : "EventbasedGateway",
 						"to" : ["FromEventbasedGateway"]
 					}
@@ -11164,7 +11165,13 @@
 					{
 						"from":"Task",
 						"to":["IntermediateEventOnActivityBoundary"]
-					}
+					},
+					$workitemDefs.keys:{k|
+                        \{
+                                                "from":"$workitemDefs.(k).name$",
+                                                "to":["IntermediateEventOnActivityBoundary"]
+                        \}
+					}; separator=","$
 				]
 			},
 			{
