@@ -12,6 +12,7 @@ import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.process.workitem.WorkDefinitionImpl;
 import org.jbpm.process.workitem.WorkItemRepository;
 import org.json.JSONObject;
+import sun.net.www.protocol.file.FileURLConnection;
 
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
@@ -23,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -74,17 +76,26 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 		
 		try {
 		    URL url = new URL(repoURL);
-		    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		    conn.setReadTimeout(5 * 1000);
-		    conn.setConnectTimeout(5 * 1000);
-		    conn.connect();
-		    if(conn.getResponseCode() != 200) {
-		    	resp.setCharacterEncoding("UTF-8");
-				resp.setContentType("application/json");
-				resp.getWriter().write("false");
-				return;
-		    }
+            if(repoURL.startsWith("file:")) {
+                FileURLConnection conn = (FileURLConnection) url.openConnection();
+                conn.setReadTimeout(5 * 1000);
+                conn.setConnectTimeout(5 * 1000);
+                conn.connect();
+            } else {
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setReadTimeout(5 * 1000);
+                conn.setConnectTimeout(5 * 1000);
+                conn.connect();
+                if(conn.getResponseCode() != 200) {
+                    resp.setCharacterEncoding("UTF-8");
+                    resp.setContentType("application/json");
+                    resp.getWriter().write("false");
+                    return;
+                }
+            }
+
 		} catch (Exception e) {
+            e.printStackTrace();
 			resp.setCharacterEncoding("UTF-8");
 			resp.setContentType("application/json");
 			resp.getWriter().write("false");
