@@ -117,9 +117,6 @@ public class TaskFormsEditorServlet extends HttpServlet {
         createConnection.setRequestProperty("Slug", URLEncoder.encode(taskName, "UTF-8") + TASKFORM_NAME_EXTENSION + TASKFORM_FILE_EXTENSION);
         createConnection.setDoOutput(true);
 
-
-         System.out.println("DOING:\n" + formValue);
-
         createConnection.getOutputStream().write(formValue.getBytes("UTF-8"));
         
         createConnection.connect();
