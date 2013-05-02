@@ -45,7 +45,6 @@ public class TaskFormsEditorServlet extends HttpServlet {
 	     String profileName = req.getParameter("profile");
 	     String taskName = req.getParameter("taskname");
 	     String taskFormValue = req.getParameter("tfvalue");
-	     
 	     IDiagramProfile profile = ServletUtil.getProfile(req, profileName, getServletContext());
 	     String[] packageAssetInfo = ServletUtil.findPackageAndAssetInfo(uuid, profile);
 	     String packageName = packageAssetInfo[0];
@@ -108,6 +107,8 @@ public class TaskFormsEditorServlet extends HttpServlet {
         HttpURLConnection createConnection = (HttpURLConnection) createURL
                 .openConnection();
         ServletUtil.applyAuth(profile, createConnection);
+        createConnection.setRequestProperty("Accept-Charset", "UTF-8");
+        createConnection.setRequestProperty("Content-Type", "text/plain; charset=utf-8");
         createConnection.setRequestMethod("POST");
         createConnection.setRequestProperty("Content-Type",
                 "application/octet-stream");
@@ -115,8 +116,11 @@ public class TaskFormsEditorServlet extends HttpServlet {
                 "application/atom+xml");
         createConnection.setRequestProperty("Slug", URLEncoder.encode(taskName, "UTF-8") + TASKFORM_NAME_EXTENSION + TASKFORM_FILE_EXTENSION);
         createConnection.setDoOutput(true);
-        
-        createConnection.getOutputStream ().write(formValue.getBytes("UTF-8"));
+
+
+         System.out.println("DOING:\n" + formValue);
+
+        createConnection.getOutputStream().write(formValue.getBytes("UTF-8"));
         
         createConnection.connect();
         _logger.info("create connection response code: " + createConnection.getResponseCode());
@@ -147,6 +151,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
 		                .openConnection();
 		        ServletUtil.applyAuth(profile, checkConnection);
 		        checkConnection.setRequestMethod("GET");
+                checkConnection.setRequestProperty("Accept-Charset", "UTF-8");
 		        checkConnection
 		                .setRequestProperty("Accept", "application/atom+xml");
 		        checkConnection.setConnectTimeout(2000);
@@ -155,7 +160,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
 		        if (checkConnection.getResponseCode() == 200) {
 		        	InputStream in = ServletUtil.getInputStreamForURL(taskFormSourceURL, "GET", profile);
 		            StringWriter writer = new StringWriter();
-		            IOUtils.copy(in, writer);
+		            IOUtils.copy(in, writer, "UTF-8");
 		            return writer.toString();
 		        }
 			} catch (Exception e) {

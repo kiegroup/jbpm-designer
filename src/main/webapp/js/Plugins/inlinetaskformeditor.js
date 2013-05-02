@@ -211,7 +211,6 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                     saveLoadMask.show();
                     var tosaveValue = "";
                     tosaveValue = this.taskformcolorsourceeditor.getValue();
-                    
                     Ext.Ajax.request({
         	            url: ORYX.PATH + 'taskformseditor',
         	            method: 'POST',

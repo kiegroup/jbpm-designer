@@ -155,6 +155,7 @@ public class TaskFormsServlet extends HttpServlet {
 			HttpURLConnection createConnection = (HttpURLConnection) createURL
 			        .openConnection();
 			ServletUtil.applyAuth(profile, createConnection);
+            createConnection.setRequestProperty("Accept-Charset", "UTF-8");
 			createConnection.setRequestMethod("POST");
 			createConnection.setRequestProperty("Content-Type",
 			        "application/octet-stream");
@@ -162,8 +163,7 @@ public class TaskFormsServlet extends HttpServlet {
 			        "application/atom+xml");
 			createConnection.setRequestProperty("Slug", URLEncoder.encode(taskForm.getId() + FORMTEMPLATE_FILE_EXTENSION, "UTF-8"));
 			createConnection.setDoOutput(true);
-			
-			createConnection.getOutputStream ().write(taskForm.getOutput().getBytes("UTF-8"));
+			createConnection.getOutputStream().write(taskForm.getOutput().getBytes("UTF-8"));
 			
 			createConnection.connect();
 			_logger.info("create connection response code: " + createConnection.getResponseCode());
