@@ -24,11 +24,11 @@
     <inherits name="org.kie.guvnor.commons.security.GuvnorCommonsSecurity"/>
 
     <!-- projects -->
-    <inherits name="org.kie.guvnor.metadata.GuvnorMetadataWidget"/>
-    <inherits name="org.kie.guvnor.m2repo.GuvnorM2RepoEditorClient"/>
+    <inherits name="org.kie.workbench.widgets.metadata.KieWorkbenchMetadataWidget"/>
+    <inherits name="org.guvnor.m2repo.GuvnorM2RepoEditorClient"/>
     <inherits name="org.kie.guvnor.projecteditor.GuvnorProjectEditorClient"/>
     <inherits name="org.kie.guvnor.projectconfigscreen.GuvnorProjectConfigScreenClient"/>
-    <inherits name="org.kie.guvnor.configresource.GuvnorConfigResourceWidget"/>
+    <inherits name="org.kie.workbench.widgets.configresource.KieWorkbenchConfigResourceWidget"/>
     <inherits name="org.kie.guvnor.explorer.GuvnorExplorerClient"/>
 
 
