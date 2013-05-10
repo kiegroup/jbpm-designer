@@ -14,11 +14,11 @@ ORYX.Config.FACADE = {
 ORYX.Plugins.CanvasTitle = {
     facade: undefined,
 	titleNode: undefined,
-	processFormP1: undefined,
-	processFormP2: undefined,
-	processFormP3: undefined,
-	processFormP4: undefined,
-	processFormP5: undefined,
+//	processFormP1: undefined,
+//	processFormP2: undefined,
+//	processFormP3: undefined,
+//	processFormP4: undefined,
+//	processFormP5: undefined,
 	facade: undefined,
 	titleID: undefined,
 	textID: undefined,
@@ -40,53 +40,53 @@ ORYX.Plugins.CanvasTitle = {
                 	       "onmouseover": "ORYX.Plugins.CanvasTitle.addToolTip('"+this.textID+"')"}]
         );
 		
-		this.processFormP1 = ORYX.Editor.graft("http://www.w3.org/2000/svg", null,
-                ['path', {"id":"processFormP1",
-                		   "title":"Edit Process Form",
-                	       "style": "opacity:1;fill:#339966;stroke:#000000", 
-                	       "d": "M0.585,24.167h24.083v-7.833c0,0-2.333-3.917-7.083-5.167h-9.25 c-4.417,1.333-7.833,5.75-7.833,5.75L0.585,24.167z", 
-                	       "onclick": "ORYX.Plugins.CanvasTitle.editProcessForm()"
-                	       }]
-        );
-		
-		this.processFormP2 = ORYX.Editor.graft("http://www.w3.org/2000/svg", null,
-                ['path', {"id":"processFormP2",
-                		   "title":"Edit Process Form",
-                	       "style": "opacity:1;fill:none;stroke:#000000", 
-                	       "d": "M 6 20 L 6 24", 
-                	       "onclick":"ORYX.Plugins.CanvasTitle.editProcessForm()"
-                	       }]
-        );
-		
-		this.processFormP3 = ORYX.Editor.graft("http://www.w3.org/2000/svg", null,
-                ['path', {"id":"processFormP3",
-                		   "title":"Edit Process Form",
-                	       "style": "opacity:1;fill:none;stroke:#000000", 
-                	       "d": "M 20 20 L 20 24", 
-                	       "onclick": "ORYX.Plugins.CanvasTitle.editProcessForm()"
-                	       }]
-        );
-		
-		this.processFormP4 = ORYX.Editor.graft("http://www.w3.org/2000/svg", null,
-                ['circle', {"id":"processFormP4",
-                		   "title":"Edit Process Form",
-                		   "fill": "#000000", 
-                		   "stroke": "#000000",
-                	       "cx": "13.002",
-                	       "cy": "5.916",
-                	       "r": "5.417",
-                	       "onclick": "ORYX.Plugins.CanvasTitle.editProcessForm()"
-                	       }]
-        );
-		
-		this.processFormP5 = ORYX.Editor.graft("http://www.w3.org/2000/svg", null,
-                ['path', {"id":"processFormP5",
-                		   "title":"Edit Process Form",
-                	       "style": "opacity:1;fill:#FFCC99;stroke:#000000", 
-                	       "d": "M8.043,7.083c0,0,2.814-2.426,5.376-1.807s4.624-0.693,4.624-0.693 c0.25,1.688,0.042,3.75-1.458,5.584c0,0,1.083,0.75,1.083,1.5s0.125,1.875-1,3s-5.5,1.25-6.75,0S8.668,12.834,8.668,12 s0.583-1.25,1.25-1.917C8.835,9.5,7.419,7.708,8.043,7.083z", 
-                	       "onclick": "ORYX.Plugins.CanvasTitle.editProcessForm()"
-                	       }]
-        );
+//		this.processFormP1 = ORYX.Editor.graft("http://www.w3.org/2000/svg", null,
+//                ['path', {"id":"processFormP1",
+//                		   "title":"Edit Process Form",
+//                	       "style": "opacity:1;fill:#339966;stroke:#000000",
+//                	       "d": "M0.585,24.167h24.083v-7.833c0,0-2.333-3.917-7.083-5.167h-9.25 c-4.417,1.333-7.833,5.75-7.833,5.75L0.585,24.167z",
+//                	       "onclick": "ORYX.Plugins.CanvasTitle.editProcessForm()"
+//                	       }]
+//        );
+//
+//		this.processFormP2 = ORYX.Editor.graft("http://www.w3.org/2000/svg", null,
+//                ['path', {"id":"processFormP2",
+//                		   "title":"Edit Process Form",
+//                	       "style": "opacity:1;fill:none;stroke:#000000",
+//                	       "d": "M 6 20 L 6 24",
+//                	       "onclick":"ORYX.Plugins.CanvasTitle.editProcessForm()"
+//                	       }]
+//        );
+//
+//		this.processFormP3 = ORYX.Editor.graft("http://www.w3.org/2000/svg", null,
+//                ['path', {"id":"processFormP3",
+//                		   "title":"Edit Process Form",
+//                	       "style": "opacity:1;fill:none;stroke:#000000",
+//                	       "d": "M 20 20 L 20 24",
+//                	       "onclick": "ORYX.Plugins.CanvasTitle.editProcessForm()"
+//                	       }]
+//        );
+//
+//		this.processFormP4 = ORYX.Editor.graft("http://www.w3.org/2000/svg", null,
+//                ['circle', {"id":"processFormP4",
+//                		   "title":"Edit Process Form",
+//                		   "fill": "#000000",
+//                		   "stroke": "#000000",
+//                	       "cx": "13.002",
+//                	       "cy": "5.916",
+//                	       "r": "5.417",
+//                	       "onclick": "ORYX.Plugins.CanvasTitle.editProcessForm()"
+//                	       }]
+//        );
+//
+//		this.processFormP5 = ORYX.Editor.graft("http://www.w3.org/2000/svg", null,
+//                ['path', {"id":"processFormP5",
+//                		   "title":"Edit Process Form",
+//                	       "style": "opacity:1;fill:#FFCC99;stroke:#000000",
+//                	       "d": "M8.043,7.083c0,0,2.814-2.426,5.376-1.807s4.624-0.693,4.624-0.693 c0.25,1.688,0.042,3.75-1.458,5.584c0,0,1.083,0.75,1.083,1.5s0.125,1.875-1,3s-5.5,1.25-6.75,0S8.668,12.834,8.668,12 s0.583-1.25,1.25-1.917C8.835,9.5,7.419,7.708,8.043,7.083z",
+//                	       "onclick": "ORYX.Plugins.CanvasTitle.editProcessForm()"
+//                	       }]
+//        );
 		
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LOADED, this.showTitle.bind(this));
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_PROPWINDOW_PROP_CHANGED, this.updateTitle.bind(this));
@@ -94,42 +94,42 @@ ORYX.Plugins.CanvasTitle = {
 	showTitle : function() {
 		this.titleNode.textContent = this._getTitleFromJSON();
 		
-		this.facade.raiseEvent({
-            type: ORYX.CONFIG.EVENT_OVERLAY_SHOW,
-            id: this.titleFormID,
-            shapes: [this.facade.getCanvas()],
-            node: this.processFormP1,
-            nodePosition: "CANVAS_TITLE_FORM"
-        });
-		this.facade.raiseEvent({
-            type: ORYX.CONFIG.EVENT_OVERLAY_SHOW,
-            id: this.titleFormID,
-            shapes: [this.facade.getCanvas()],
-            node: this.processFormP2,
-            nodePosition: "CANVAS_TITLE_FORM"
-        });
-		this.facade.raiseEvent({
-            type: ORYX.CONFIG.EVENT_OVERLAY_SHOW,
-            id: this.titleFormID,
-            shapes: [this.facade.getCanvas()],
-            node: this.processFormP3,
-            nodePosition: "CANVAS_TITLE_FORM"
-        });
-		this.facade.raiseEvent({
-            type: ORYX.CONFIG.EVENT_OVERLAY_SHOW,
-            id: this.titleFormID,
-            shapes: [this.facade.getCanvas()],
-            node: this.processFormP4,
-            nodePosition: "CANVAS_TITLE_FORM"
-        });
-		this.facade.raiseEvent({
-            type: ORYX.CONFIG.EVENT_OVERLAY_SHOW,
-            id: this.titleFormID,
-            shapes: [this.facade.getCanvas()],
-            node: this.processFormP5,
-            nodePosition: "CANVAS_TITLE_FORM"
-        });
-		
+//		this.facade.raiseEvent({
+//            type: ORYX.CONFIG.EVENT_OVERLAY_SHOW,
+//            id: this.titleFormID,
+//            shapes: [this.facade.getCanvas()],
+//            node: this.processFormP1,
+//            nodePosition: "CANVAS_TITLE_FORM"
+//        });
+//		this.facade.raiseEvent({
+//            type: ORYX.CONFIG.EVENT_OVERLAY_SHOW,
+//            id: this.titleFormID,
+//            shapes: [this.facade.getCanvas()],
+//            node: this.processFormP2,
+//            nodePosition: "CANVAS_TITLE_FORM"
+//        });
+//		this.facade.raiseEvent({
+//            type: ORYX.CONFIG.EVENT_OVERLAY_SHOW,
+//            id: this.titleFormID,
+//            shapes: [this.facade.getCanvas()],
+//            node: this.processFormP3,
+//            nodePosition: "CANVAS_TITLE_FORM"
+//        });
+//		this.facade.raiseEvent({
+//            type: ORYX.CONFIG.EVENT_OVERLAY_SHOW,
+//            id: this.titleFormID,
+//            shapes: [this.facade.getCanvas()],
+//            node: this.processFormP4,
+//            nodePosition: "CANVAS_TITLE_FORM"
+//        });
+//		this.facade.raiseEvent({
+//            type: ORYX.CONFIG.EVENT_OVERLAY_SHOW,
+//            id: this.titleFormID,
+//            shapes: [this.facade.getCanvas()],
+//            node: this.processFormP5,
+//            nodePosition: "CANVAS_TITLE_FORM"
+//        });
+//
 		
 		this.facade.raiseEvent({
             type: ORYX.CONFIG.EVENT_OVERLAY_SHOW,

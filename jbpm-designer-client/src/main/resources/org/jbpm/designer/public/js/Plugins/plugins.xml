@@ -92,6 +92,8 @@
 		<plugin source="keysMove.js" name="ORYX.Plugins.KeysMove" />
 		<plugin source="Layouter/containerLayouter.js" name="ORYX.Plugins.ContainerLayouter" />
 
+        <plugin source="formeditingplugin.js" name="ORYX.Plugins.FormEditing" />
+
 		<!-- plugin for PNML export and deployment -->
 		<plugin source="pnmlexport.js" name="ORYX.Plugins.Pnmlexport">
 			<requires namespace="http://b3mn.org/stencilset/bpmnexec#" />

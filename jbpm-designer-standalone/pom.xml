@@ -219,10 +219,12 @@
         <dependency>
             <groupId>org.kie.guvnor</groupId>
             <artifactId>guvnor-view-source-widget</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.kie.guvnor</groupId>
             <artifactId>guvnor-decorated-grid-widget</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.kie.guvnor</groupId>
