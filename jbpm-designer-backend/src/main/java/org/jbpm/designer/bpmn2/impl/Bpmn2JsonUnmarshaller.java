@@ -695,47 +695,6 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
 
-    /**
-     * public void revisitCatchEvents(Definitions def) {
-     List<RootElement> rootElements =  def.getRootElements();
-     List<Signal> toAddSignals = new ArrayList<Signal>();
-     Set<Error> toAddErrors = new HashSet<Error>();
-     Set<Escalation> toAddEscalations = new HashSet<Escalation>();
-     Set<Message> toAddMessages = new HashSet<Message>();
-     Set<ItemDefinition> toAddItemDefinitions = new HashSet<ItemDefinition>();
-     for(RootElement root : rootElements) {
-     if(root instanceof Process) {
-     setCatchEventsInfo((Process) root, def, toAddSignals, toAddErrors, toAddEscalations, toAddMessages, toAddItemDefinitions);
-     }
-     }
-     for(Signal s : toAddSignals) {
-     def.getRootElements().add(s);
-     }
-     for(Error er : toAddErrors) {
-     def.getRootElements().add(er);
-     }
-     for(Escalation es : toAddEscalations) {
-     def.getRootElements().add(es);
-     }
-     for(ItemDefinition idef : toAddItemDefinitions) {
-     def.getRootElements().add(idef);
-     }
-     for(Message msg : toAddMessages) {
-     def.getRootElements().add(msg);
-     }
-     }
-     * @param def
-     *
-     *
-     *
-     *
-     *
-     * } else if(fe instanceof FlowElementsContainer) {
-    setCatchEventsInfo((FlowElementsContainer) fe, def, toAddSignals, toAddErrors, toAddEscalations, toAddMessages, toAddItemDefinitions);
-    }
-     */
-
-
     public void revisitSendReceiveTasks(Definitions def) {
         List<Message> toAddMessages = new ArrayList<Message>();
         List<ItemDefinition> toAddItemDefinitions = new ArrayList<ItemDefinition>();
@@ -756,9 +715,6 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
 
-
-
-    
     public void setSendReceiveTasksInfo(FlowElementsContainer container, Definitions def, List<Message> toAddMessages, List<ItemDefinition> toAddItemDefinitions) {
         List<FlowElement> flowElements = container.getFlowElements();
         for(FlowElement fe : flowElements) {
