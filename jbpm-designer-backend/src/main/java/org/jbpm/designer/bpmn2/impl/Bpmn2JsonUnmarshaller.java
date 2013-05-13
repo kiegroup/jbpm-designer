@@ -694,58 +694,109 @@ public class Bpmn2JsonUnmarshaller {
             }
         }
     }
-    
+
+    /**
+     * public void revisitCatchEvents(Definitions def) {
+     List<RootElement> rootElements =  def.getRootElements();
+     List<Signal> toAddSignals = new ArrayList<Signal>();
+     Set<Error> toAddErrors = new HashSet<Error>();
+     Set<Escalation> toAddEscalations = new HashSet<Escalation>();
+     Set<Message> toAddMessages = new HashSet<Message>();
+     Set<ItemDefinition> toAddItemDefinitions = new HashSet<ItemDefinition>();
+     for(RootElement root : rootElements) {
+     if(root instanceof Process) {
+     setCatchEventsInfo((Process) root, def, toAddSignals, toAddErrors, toAddEscalations, toAddMessages, toAddItemDefinitions);
+     }
+     }
+     for(Signal s : toAddSignals) {
+     def.getRootElements().add(s);
+     }
+     for(Error er : toAddErrors) {
+     def.getRootElements().add(er);
+     }
+     for(Escalation es : toAddEscalations) {
+     def.getRootElements().add(es);
+     }
+     for(ItemDefinition idef : toAddItemDefinitions) {
+     def.getRootElements().add(idef);
+     }
+     for(Message msg : toAddMessages) {
+     def.getRootElements().add(msg);
+     }
+     }
+     * @param def
+     *
+     *
+     *
+     *
+     *
+     * } else if(fe instanceof FlowElementsContainer) {
+    setCatchEventsInfo((FlowElementsContainer) fe, def, toAddSignals, toAddErrors, toAddEscalations, toAddMessages, toAddItemDefinitions);
+    }
+     */
+
+
     public void revisitSendReceiveTasks(Definitions def) {
-    	List<Message> toAddMessages = new ArrayList<Message>();
+        List<Message> toAddMessages = new ArrayList<Message>();
         List<ItemDefinition> toAddItemDefinitions = new ArrayList<ItemDefinition>();
-    	List<RootElement> rootElements =  def.getRootElements();
+        List<RootElement> rootElements =  def.getRootElements();
+
         for(RootElement root : rootElements) {
             if(root instanceof Process) {
-                Process process = (Process) root;
-                List<FlowElement> flowElements = process.getFlowElements();
-                for(FlowElement fe : flowElements) {
-                	if(fe instanceof ReceiveTask) {
-                		ReceiveTask rt = (ReceiveTask) fe;
-                		ItemDefinition idef = Bpmn2Factory.eINSTANCE.createItemDefinition();
-                        Message msg = Bpmn2Factory.eINSTANCE.createMessage();
-                		Iterator<FeatureMap.Entry> iter = rt.getAnyAttribute().iterator();
-                        while(iter.hasNext()) {
-                            FeatureMap.Entry entry = iter.next();
-                            if(entry.getEStructuralFeature().getName().equals("msgref")) {
-                                msg.setId((String) entry.getValue());
-                                idef.setId((String) entry.getValue() + "Type");
-                            }
-                        }
-                        msg.setItemRef(idef);
-                        rt.setMessageRef(msg);
-                        toAddMessages.add(msg);
-                        toAddItemDefinitions.add(idef);
-                	} else if(fe instanceof SendTask) {
-                		SendTask st = (SendTask) fe;
-                		ItemDefinition idef = Bpmn2Factory.eINSTANCE.createItemDefinition();
-                        Message msg = Bpmn2Factory.eINSTANCE.createMessage();
-                		Iterator<FeatureMap.Entry> iter = st.getAnyAttribute().iterator();
-                        while(iter.hasNext()) {
-                            FeatureMap.Entry entry = iter.next();
-                            if(entry.getEStructuralFeature().getName().equals("msgref")) {
-                                msg.setId((String) entry.getValue());
-                                idef.setId((String) entry.getValue() + "Type");
-                            }
-                        }
-                        msg.setItemRef(idef);
-                        st.setMessageRef(msg);
-                        toAddMessages.add(msg);
-                        toAddItemDefinitions.add(idef);
-                	}
-                }
+                setSendReceiveTasksInfo((Process) root, def, toAddMessages, toAddItemDefinitions);
             }
         }
-        
+
+
         for(ItemDefinition idef : toAddItemDefinitions) {
             def.getRootElements().add(idef);
         }
-        for(Message msg : toAddMessages) { 
+        for(Message msg : toAddMessages) {
             def.getRootElements().add(msg);
+        }
+    }
+
+
+
+    
+    public void setSendReceiveTasksInfo(FlowElementsContainer container, Definitions def, List<Message> toAddMessages, List<ItemDefinition> toAddItemDefinitions) {
+        List<FlowElement> flowElements = container.getFlowElements();
+        for(FlowElement fe : flowElements) {
+            if(fe instanceof ReceiveTask) {
+                ReceiveTask rt = (ReceiveTask) fe;
+                ItemDefinition idef = Bpmn2Factory.eINSTANCE.createItemDefinition();
+                Message msg = Bpmn2Factory.eINSTANCE.createMessage();
+                Iterator<FeatureMap.Entry> iter = rt.getAnyAttribute().iterator();
+                while(iter.hasNext()) {
+                    FeatureMap.Entry entry = iter.next();
+                    if(entry.getEStructuralFeature().getName().equals("msgref")) {
+                        msg.setId((String) entry.getValue());
+                        idef.setId((String) entry.getValue() + "Type");
+                    }
+                }
+                msg.setItemRef(idef);
+                rt.setMessageRef(msg);
+                toAddMessages.add(msg);
+                toAddItemDefinitions.add(idef);
+            } else if(fe instanceof SendTask) {
+                SendTask st = (SendTask) fe;
+                ItemDefinition idef = Bpmn2Factory.eINSTANCE.createItemDefinition();
+                Message msg = Bpmn2Factory.eINSTANCE.createMessage();
+                Iterator<FeatureMap.Entry> iter = st.getAnyAttribute().iterator();
+                while(iter.hasNext()) {
+                    FeatureMap.Entry entry = iter.next();
+                    if(entry.getEStructuralFeature().getName().equals("msgref")) {
+                        msg.setId((String) entry.getValue());
+                        idef.setId((String) entry.getValue() + "Type");
+                    }
+                }
+                msg.setItemRef(idef);
+                st.setMessageRef(msg);
+                toAddMessages.add(msg);
+                toAddItemDefinitions.add(idef);
+            } else if(fe instanceof FlowElementsContainer) {
+                setSendReceiveTasksInfo((FlowElementsContainer) fe, def, toAddMessages, toAddItemDefinitions);
+            }
         }
     }
     
