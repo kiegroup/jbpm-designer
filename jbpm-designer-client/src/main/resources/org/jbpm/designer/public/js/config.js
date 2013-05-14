@@ -165,6 +165,7 @@ ORYX.CONFIG.TYPE_CHOICE =				"choice";
 ORYX.CONFIG.TYPE_DYNAMICCHOICE =	    "dynamicchoice";
 ORYX.CONFIG.TYPE_DYNAMICDATAINPUT=      "dynamicdatainput";
 ORYX.CONFIG.TYPE_DYNAMICDATAOUTPUT=     "dynamicdatoutput";
+ORYX.CONFIG.TYPE_DYNAMICGATEWAYCONNECTIONS = "dynamicgatewayconnections";
 ORYX.CONFIG.TYPE_URL =					"url";
 ORYX.CONFIG.TYPE_DIAGRAM_LINK =			"diagramlink";
 ORYX.CONFIG.TYPE_COMPLEX =				"complex";

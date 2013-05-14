@@ -1854,14 +1854,28 @@ public class Bpmn2JsonMarshaller {
     
     protected void marshallExclusiveGateway(ExclusiveGateway gateway, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
     	if(gateway.getDefault() != null) {
-    		flowElementProperties.put("defaultgate", gateway.getDefault().getId());
+            SequenceFlow defsf = gateway.getDefault();
+            String defGatewayStr = "";
+            if(defsf.getName() != null && defsf.getName().length() > 0) {
+                defGatewayStr = defsf.getName() + " : " + defsf.getId();
+            } else {
+                defGatewayStr = defsf.getId();
+            }
+    		flowElementProperties.put("defaultgate", defGatewayStr);
     	}
     	marshallNode(gateway, flowElementProperties, "Exclusive_Databased_Gateway", plane, generator, xOffset, yOffset);
     }
     
     protected void marshallInclusiveGateway(InclusiveGateway gateway, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
     	if(gateway.getDefault() != null) {
-    		flowElementProperties.put("defaultgate", gateway.getDefault().getId());
+            SequenceFlow defsf = gateway.getDefault();
+            String defGatewayStr = "";
+            if(defsf.getName() != null && defsf.getName().length() > 0) {
+                defGatewayStr = defsf.getName() + " : " + defsf.getId();
+            } else {
+                defGatewayStr = defsf.getId();
+            }
+    		flowElementProperties.put("defaultgate", defGatewayStr);
     	}
     	marshallNode(gateway, flowElementProperties, "InclusiveGateway", plane, generator, xOffset, yOffset);
     }

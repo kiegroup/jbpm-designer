@@ -5624,10 +5624,10 @@
 				},		
 				{
 					"id":"defaultgate",
-					"type":"String",
+					"type":"Dynamicgatewayconnections",
 					"title":"Default gate",
 					"value":"",
-					"description":"",
+					"description":"The default gateway connection.",
 					"readonly":false,
 					"optional":true,
 					"refToView":"",

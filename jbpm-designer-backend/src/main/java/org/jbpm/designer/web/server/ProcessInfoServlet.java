@@ -2,9 +2,7 @@ package org.jbpm.designer.web.server;
 
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
@@ -15,7 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
+import bpsim.impl.BpsimFactoryImpl;
 import org.apache.log4j.Logger;
+import org.eclipse.bpmn2.*;
+import org.eclipse.bpmn2.Process;
+import org.jboss.drools.impl.DroolsFactoryImpl;
+import org.jbpm.designer.bpmn2.impl.Bpmn2JsonUnmarshaller;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.designer.web.profile.impl.RepositoryInfo;
@@ -43,24 +46,88 @@ public class ProcessInfoServlet extends HttpServlet {
             throws ServletException, IOException {
 		String uuid = req.getParameter("uuid");
         String profileName = req.getParameter("profile");
-        
+        String gatewayId = req.getParameter("gatewayid");
+
         IDiagramProfile profile = _profileService.findProfile(req, profileName);
 
-        try {
-        	// find out what package the uuid belongs to
-        	String[] packageAssetInfo = ServletUtil.findPackageAndAssetInfo(uuid, profile);
-        	String packageName = packageAssetInfo[0];
-        	String assetName = packageAssetInfo[1];
-        	Map<String, String> processInfo = getProcessInfo(packageName, assetName, uuid, profile);
-        	resp.setCharacterEncoding("UTF-8");
-        	resp.setContentType("text/html");
-        	resp.getWriter().write(createHtmlTable(processInfo));
-        } catch (Exception e) {
-        	resp.setCharacterEncoding("UTF-8");
-        	resp.setContentType("text/html");
-        	resp.getWriter().write("<center><b>Unable to retrieve process information.</b></center>");
+
+        if(gatewayId != null && gatewayId.length() > 0) {
+            String json = req.getParameter("json");
+            String preprocessingData = req.getParameter("ppdata");
+            DroolsFactoryImpl.init();
+            BpsimFactoryImpl.init();
+
+            Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+            Definitions def = ((Definitions) unmarshaller.unmarshall(json, preprocessingData).getContents().get(0));
+            List<String> outgoingInfo= new ArrayList<String>();
+            List<RootElement> rootElements =  def.getRootElements();
+            for(RootElement root : rootElements) {
+                if(root instanceof Process) {
+                    getAllOutgoing((Process) root, def, outgoingInfo, gatewayId);
+                }
+            }
+
+            StringBuffer buff = new StringBuffer();
+            buff.append("[");
+            for(String nextOutgoingValue : outgoingInfo) {
+                buff.append("{");
+                buff.append("\"sequenceflowinfo\":").append("\"").append(nextOutgoingValue).append("\"");
+                buff.append("}");
+                buff.append(",");
+            }
+
+            String outputStr = buff.toString();
+            if(outputStr.endsWith(",")) {
+                outputStr = outputStr.substring(0, outputStr.length() - 1);
+            }
+
+            outputStr += "]";
+
+            resp.setCharacterEncoding("UTF-8");
+            resp.setContentType("application/json");
+            resp.getWriter().print(outputStr);
+
+        } else {
+            try {
+                // find out what package the uuid belongs to
+                String[] packageAssetInfo = ServletUtil.findPackageAndAssetInfo(uuid, profile);
+                String packageName = packageAssetInfo[0];
+                String assetName = packageAssetInfo[1];
+                Map<String, String> processInfo = getProcessInfo(packageName, assetName, uuid, profile);
+                resp.setCharacterEncoding("UTF-8");
+                resp.setContentType("text/html");
+                resp.getWriter().write(createHtmlTable(processInfo));
+            } catch (Exception e) {
+                resp.setCharacterEncoding("UTF-8");
+                resp.setContentType("text/html");
+                resp.getWriter().write("<center><b>Unable to retrieve process information.</b></center>");
+            }
         }
 	}
+
+    private void getAllOutgoing(FlowElementsContainer container, Definitions def, List<String> outgoingInfo, String gatewayId) {
+        List<FlowElement> flowElements = container.getFlowElements();
+        for(FlowElement fe : flowElements) {
+            if(fe instanceof Gateway) {
+                Gateway gw = (Gateway) fe;
+                if(gw.getId().equals(gatewayId)) {
+                    List<SequenceFlow> outgoingFlows = gw.getOutgoing();
+                    if(outgoingFlows != null) {
+                        for(SequenceFlow sf : outgoingFlows) {
+                            if(sf.getName() != null && sf.getName().length() > 0) {
+                                outgoingInfo.add(sf.getName() + " : " + sf.getId());
+                            } else {
+                                outgoingInfo.add(sf.getId());
+                            }
+                        }
+                    }
+                }
+
+            } else if(fe instanceof FlowElementsContainer) {
+                getAllOutgoing((FlowElementsContainer) fe, def, outgoingInfo, gatewayId);
+            }
+        }
+    }
 	
 	private String createHtmlTable(Map<String, String> processInfo) {
 		StringBuffer sb = new StringBuffer();
