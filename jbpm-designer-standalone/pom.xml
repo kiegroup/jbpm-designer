@@ -176,12 +176,12 @@
             <artifactId>kie-wb-common-ui</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.kie.guvnor</groupId>
-            <artifactId>guvnor-core-services-api</artifactId>
+            <groupId>org.kie.workbench.services</groupId>
+            <artifactId>kie-wb-common-services-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.kie.guvnor</groupId>
-            <artifactId>guvnor-core-services-backend</artifactId>
+            <groupId>org.kie.workbench.services</groupId>
+            <artifactId>kie-wb-common-services-backend</artifactId>
         </dependency>
 
         <dependency>
@@ -201,8 +201,8 @@
             <artifactId>kie-wb-config-resource-widget</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.kie.guvnor</groupId>
-            <artifactId>guvnor-commons-security</artifactId>
+            <groupId>org.kie.workbench.services</groupId>
+            <artifactId>kie-wb-common-security</artifactId>
         </dependency>
         <dependency>
             <groupId>org.kie.guvnor</groupId>
@@ -225,10 +225,6 @@
             <groupId>org.kie.guvnor</groupId>
             <artifactId>guvnor-decorated-grid-widget</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.kie.guvnor</groupId>
-            <artifactId>guvnor-commons-services-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.kie.guvnor</groupId>
@@ -297,11 +293,10 @@
                         <compileSourcesArtifact>org.kie.guvnor:guvnor-decorated-grid-widget</compileSourcesArtifact>
                         <compileSourcesArtifact>org.kie.guvnor:guvnor-view-source-widget</compileSourcesArtifact>
                         <compileSourcesArtifact>org.kie.workbench.widgets:kie-wb-common-ui</compileSourcesArtifact>
-                        <compileSourcesArtifact>org.kie.guvnor:guvnor-commons-security</compileSourcesArtifact>
-                        <compileSourcesArtifact>org.kie.guvnor:guvnor-commons-services-api</compileSourcesArtifact>
+                        <compileSourcesArtifact>org.kie.workbench.services:kie-wb-common-security</compileSourcesArtifact>
                         <compileSourcesArtifact>org.kie.workbench.widgets:kie-wb-metadata-widget</compileSourcesArtifact>
                         <compileSourcesArtifact>org.kie.workbench:guvnor-config-resource-widget</compileSourcesArtifact>
-                        <compileSourcesArtifact>org.kie.guvnor:guvnor-core-services-api</compileSourcesArtifact>
+                        <compileSourcesArtifact>org.kie.workbench.services:kie-wb-common-services-api</compileSourcesArtifact>
 
                         <compileSourcesArtifact>org.kie.guvnor:guvnor-project-api</compileSourcesArtifact>
                         <compileSourcesArtifact>org.kie.guvnor:guvnor-project-editor-api</compileSourcesArtifact>
