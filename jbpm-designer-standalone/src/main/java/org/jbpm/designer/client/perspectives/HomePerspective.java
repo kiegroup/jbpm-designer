@@ -4,8 +4,8 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import org.kie.workbench.widgets.common.client.handlers.NewResourcePresenter;
-import org.kie.workbench.widgets.common.client.handlers.NewResourcesMenu;
+import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
+import org.kie.workbench.common.widgets.client.handlers.NewResourcesMenu;
 import org.uberfire.client.annotations.Perspective;
 import org.uberfire.client.annotations.WorkbenchMenu;
 import org.uberfire.client.annotations.WorkbenchPerspective;
@@ -29,7 +29,7 @@ public class HomePerspective {
     private NewResourcePresenter newResourcePresenter;
 
     @Inject
-    private NewResourcesMenu      newResourcesMenu;
+    private NewResourcesMenu newResourcesMenu;
     @Inject
     private PlaceManager          placeManager;
     private PerspectiveDefinition perspective;
