@@ -1626,7 +1626,7 @@ ORYX.Plugins.View = {
         } else if(docEle.webkitRequestFullScreen) {
             docEle.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
         } else {
-            this.facade.raiseEvent({
+            ORYX.EDITOR._pluginFacade.raiseEvent({
                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                 ntype		: 'error',
                 msg         : 'Browser does not support full screen mode.',
