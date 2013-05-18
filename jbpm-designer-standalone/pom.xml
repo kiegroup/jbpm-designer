@@ -187,7 +187,10 @@
             <groupId>org.kie.workbench.services</groupId>
             <artifactId>kie-wb-common-services-backend</artifactId>
         </dependency>
-
+        <dependency>
+          <groupId>org.kie.workbench.services</groupId>
+          <artifactId>kie-wb-common-datamodel-api</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.kie.guvnor</groupId>
             <artifactId>guvnor-project-editor-client</artifactId>
@@ -302,6 +305,7 @@
                         <compileSourcesArtifact>org.kie.workbench:guvnor-config-resource-widget</compileSourcesArtifact>
                         <compileSourcesArtifact>org.kie.workbench.services:kie-wb-common-services-api</compileSourcesArtifact>
                         <compileSourcesArtifact>org.kie.workbench.services:kie-wb-common-workingset-api</compileSourcesArtifact>
+                        <compileSourcesArtifact>org.kie.workbench.services:kie-wb-common-datamodel-api</compileSourcesArtifact>
 
                         <compileSourcesArtifact>org.kie.guvnor:guvnor-project-api</compileSourcesArtifact>
                         <compileSourcesArtifact>org.kie.guvnor:guvnor-project-editor-api</compileSourcesArtifact>
