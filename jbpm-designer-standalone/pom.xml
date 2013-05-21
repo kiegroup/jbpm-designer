@@ -261,6 +261,14 @@
             <groupId>org.jboss.solder</groupId>
             <artifactId>solder-impl</artifactId>
          </dependency>
+
+      <!-- Drools Workbench Screens -->
+
+      <dependency>
+        <groupId>org.drools</groupId>
+        <artifactId>drools-wb-enum-editor-client</artifactId>
+      </dependency>
+
     </dependencies>
 
     <build>
@@ -286,24 +294,23 @@
                     <module>org.jbpm.designer.jBPMDesigner</module>
                     <logLevel>INFO</logLevel>
                     <compileSourcesArtifacts>
+                        <!-- designer -->
                         <compileSourcesArtifact>org.jbpm:jbpm-designer-api</compileSourcesArtifact>
                         <compileSourcesArtifact>org.jbpm:jbpm-designer-client</compileSourcesArtifact>
 
-                        <compileSourcesArtifact>org.kie.commons:kie-commons-data</compileSourcesArtifact>
-                        <compileSourcesArtifact>org.kie.commons:kie-commons-validation</compileSourcesArtifact>
+                        <!-- uberfire -->
                         <compileSourcesArtifact>org.uberfire:uberfire-security-api</compileSourcesArtifact>
                         <compileSourcesArtifact>org.uberfire:uberfire-security-client</compileSourcesArtifact>
                         <compileSourcesArtifact>org.uberfire:uberfire-api</compileSourcesArtifact>
                         <compileSourcesArtifact>org.uberfire:uberfire-widgets-core-client</compileSourcesArtifact>
                         <compileSourcesArtifact>org.uberfire:uberfire-widgets-commons</compileSourcesArtifact>
                         <compileSourcesArtifact>org.uberfire:uberfire-workbench</compileSourcesArtifact>
-                        <compileSourcesArtifact>org.uberfire:uberfire-api</compileSourcesArtifact>
-                        <compileSourcesArtifact>org.uberfire:uberfire-backend-api</compileSourcesArtifact>
 
+                        <!-- commons -->
+                        <compileSourcesArtifact>org.kie.commons:kie-commons-data</compileSourcesArtifact>
+                        <compileSourcesArtifact>org.kie.commons:kie-commons-validation</compileSourcesArtifact>
                         <compileSourcesArtifact>org.kie.commons:kie-nio2-model</compileSourcesArtifact>
 
-                        <compileSourcesArtifact>org.kie.guvnor:guvnor-decorated-grid-widget</compileSourcesArtifact>
-                        <compileSourcesArtifact>org.kie.guvnor:guvnor-view-source-widget</compileSourcesArtifact>
                         <compileSourcesArtifact>org.kie.workbench.widgets:kie-wb-common-ui</compileSourcesArtifact>
                         <compileSourcesArtifact>org.kie.workbench.services:kie-wb-common-security</compileSourcesArtifact>
                         <compileSourcesArtifact>org.kie.workbench.widgets:kie-wb-metadata-widget</compileSourcesArtifact>
@@ -318,6 +325,14 @@
                         <compileSourcesArtifact>org.kie.workbench.screens:kie-wb-project-imports-editor-client</compileSourcesArtifact>
                         <compileSourcesArtifact>org.kie.workbench.screens:kie-wb-common-project-explorer-api</compileSourcesArtifact>
                         <compileSourcesArtifact>org.kie.workbench.screens:kie-wb-common-project-explorer-client</compileSourcesArtifact>
+
+                        <!-- guvnor -->
+                        <compileSourcesArtifact>org.kie.guvnor:guvnor-decorated-grid-widget</compileSourcesArtifact>
+                        <compileSourcesArtifact>org.kie.guvnor:guvnor-view-source-widget</compileSourcesArtifact>
+
+                      <!-- drools-wb -->
+
+                      <compileSourcesArtifact>org.drools:drools-wb-enum-editor-client</compileSourcesArtifact>
 
                     </compileSourcesArtifacts>
                     <runTarget>org.jbpm.designer.jBPMDesigner/designer.html</runTarget>
