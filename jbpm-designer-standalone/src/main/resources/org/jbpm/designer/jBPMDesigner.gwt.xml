@@ -15,7 +15,6 @@
     <inherits name="org.jbpm.designer.jBPMDesignerAPI"/>
 
     <!-- Infrastructure -->
-    <inherits name="org.kie.guvnor.project.GuvnorProjectAPI"/>
     <inherits name='org.kie.workbench.common.services.datamodel.KieWorkbenchCommonDataModelAPI'/>
     <inherits name="org.kie.workbench.common.services.data.KieWorkbenchCommonData"/>
     <inherits name="org.kie.workbench.common.services.KieWorkbenchCommonServicesAPI"/>
@@ -25,8 +24,8 @@
     <!-- projects -->
     <inherits name="org.kie.workbench.common.widgets.metadata.KieWorkbenchMetadataWidget"/>
     <inherits name="org.guvnor.m2repo.GuvnorM2RepoEditorClient"/>
-    <inherits name="org.kie.guvnor.projecteditor.GuvnorProjectEditorClient"/>
-    <inherits name="org.kie.guvnor.projectconfigscreen.GuvnorProjectConfigScreenClient"/>
+    <inherits name="org.kie.workbench.projecteditor.GuvnorProjectEditorClient" />
+    <inherits name="org.kie.workbench.projectimportsscreen.GuvnorProjectConfigScreenClient" />
     <inherits name="org.kie.workbench.common.widgets.configresource.KieWorkbenchConfigResourceWidget"/>
     <inherits name="org.kie.workbench.common.screens.explorer.KieWorkbenchProjectExplorerClient" />
     <inherits name="org.kie.workbench.common.services.workingset.KieWorkbenchWorkingsetAPI"/>
