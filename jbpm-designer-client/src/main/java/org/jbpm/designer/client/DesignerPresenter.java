@@ -3,9 +3,7 @@ package org.jbpm.designer.client;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.*;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.IsWidget;
 import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.jboss.errai.ioc.client.api.Caller;
@@ -48,7 +46,7 @@ public class DesignerPresenter {
                 @Override
                 public void callback( final String editorID ) {
                     view.setEditorID(editorID);
-                    String url =   GWT.getHostPageBaseURL().replaceFirst("/"+GWT.getModuleName()+"/", "");
+                    String url =  getPageURL();
                     assetService.call( new RemoteCallback<String>() {
                         @Override
                         public void callback( String editorBody ) {
@@ -69,7 +67,7 @@ public class DesignerPresenter {
 
     @WorkbenchPartTitle
     public String getName() {
-        return "jBPM Designer - " + this.path.getFileName();
+        return this.path.getFileName();
     }
 
     @WorkbenchPartView
@@ -83,4 +81,8 @@ public class DesignerPresenter {
         scriptElement.setType( "text/javascript" );
         element.getContentDocument().getDocumentElement().getElementsByTagName("head").getItem(0).appendChild(scriptElement);
     }
+
+    private native String getPageURL()  /*-{
+        return $wnd.location.protocol + "//" + $wnd.location.host;
+    }-*/;
 }
