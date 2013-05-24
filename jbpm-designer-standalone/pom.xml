@@ -263,6 +263,12 @@
     <dependency>
       <groupId>org.guvnor</groupId>
       <artifactId>guvnor-m2repo-editor-backend</artifactId>
+        <exclusions>
+            <exclusion>
+                <artifactId>ant</artifactId>
+                <groupId>org.apache.ant</groupId>
+            </exclusion>
+        </exclusions>
     </dependency>
 
     <dependency>
@@ -331,6 +337,12 @@
     <dependency>
       <groupId>org.kie.workbench.services</groupId>
       <artifactId>kie-wb-common-builder</artifactId>
+       <exclusions>
+           <exclusion>
+               <artifactId>ant</artifactId>
+               <groupId>org.apache.ant</groupId>
+           </exclusion>
+       </exclusions>
     </dependency>
 
   </dependencies>
