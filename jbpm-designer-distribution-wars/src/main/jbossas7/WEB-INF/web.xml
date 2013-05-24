@@ -74,9 +74,9 @@
         <url-pattern>*.erraiBus</url-pattern>
     </servlet-mapping>
 
-    <listener>
-        <listener-class>org.jboss.weld.environment.servlet.Listener</listener-class>
-    </listener>
+    <!--<listener>-->
+        <!--<listener-class>org.jboss.weld.environment.servlet.Listener</listener-class>-->
+    <!--</listener>-->
 
     <resource-env-ref>
         <description>Object factory for the CDI Bean Manager</description>

@@ -19,90 +19,100 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
 
-  <id>jboss-as7.0</id>
-  <formats>
-    <format>war</format>
-    <format>dir</format>
-  </formats>
+    <id>jboss-as7.0</id>
+    <formats>
+        <format>war</format>
+        <format>dir</format>
+    </formats>
 
-  <includeBaseDirectory>false</includeBaseDirectory>
-  <fileSets>
-    <fileSet>
-      <directory>${project.basedir}/src/main/jbossas7</directory>
-      <outputDirectory>.</outputDirectory>
-    </fileSet>
-  </fileSets>
-  <dependencySets>
-    <dependencySet>
-      <includes>
-        <include>org.jbpm:jbpm-designer-standalone:war</include>
-      </includes>
-      <outputDirectory>.</outputDirectory>
-      <unpack>true</unpack>
-      <unpackOptions>
-        <excludes>
-          <exclude>WEB-INF/jetty-env.xml</exclude>
-          <exclude>WEB-INF/web.xml</exclude>
-          <!-- Dom4j on as 7.1.1 breaks the PU-->
-          <exclude>WEB-INF/lib/dom4j*.jar</exclude>
-          
-           <!-- UF Client Related -->
-          <exclude>WEB-INF/lib/uberfire-widget-markdown-*.jar</exclude>
-          <exclude>WEB-INF/lib/uberfire-widgets-core-client-*.jar</exclude>
-          <exclude>WEB-INF/lib/uberfire-workbench-*.jar</exclude>
-          <exclude>WEB-INF/lib/uberfire-security-client-*.jar</exclude>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <fileSets>
+        <fileSet>
+            <directory>${project.basedir}/src/main/jbossas7</directory>
+            <outputDirectory>.</outputDirectory>
+        </fileSet>
+    </fileSets>
+    <dependencySets>
+        <!-- Add ANT dependency excluded in WAR pom that runs on Hosted Mode -->
+        <dependencySet>
+            <includes>
+                <include>org.apache.ant:ant:jar</include>
+                <include>org.apache.ant:ant-launcher:jar</include>
+            </includes>
+            <unpack>false</unpack>
+            <outputDirectory>WEB-INF/lib</outputDirectory>
+        </dependencySet>
+        <dependencySet>
+            <includes>
+                <include>org.jbpm:jbpm-designer-standalone:war</include>
+            </includes>
+            <outputDirectory>.</outputDirectory>
+            <unpack>true</unpack>
+            <unpackOptions>
+                <excludes>
+                    <exclude>WEB-INF/jetty-env.xml</exclude>
+                    <exclude>WEB-INF/web.xml</exclude>
+                    <!-- Dom4j on as 7.1.1 breaks the PU-->
+                    <exclude>WEB-INF/lib/dom4j*.jar</exclude>
 
-          <!-- GWT Client Related -->
-          <exclude>WEB-INF/lib/gwt-user-*.jar</exclude>
-          <exclude>WEB-INF/lib/guava-gwt-*.jar</exclude>
-          <exclude>WEB-INF/lib/gwt-dnd-*.jar</exclude>
-          <exclude>WEB-INF/lib/gchart-*.jar</exclude>
-          <exclude>WEB-INF/lib/gwt-rolodex-*.jar</exclude>
-          <exclude>WEB-INF/lib/gwtent-*.jar</exclude>
-          <exclude>WEB-INF/lib/editor-*.jar</exclude>
-          <exclude>WEB-INF/lib/gwt-visualization-*.jar</exclude>
+                    <!-- UF Client Related -->
+                    <exclude>WEB-INF/lib/uberfire-widget-markdown-*.jar</exclude>
+                    <exclude>WEB-INF/lib/uberfire-widgets-core-client-*.jar</exclude>
+                    <exclude>WEB-INF/lib/uberfire-workbench-*.jar</exclude>
+                    <exclude>WEB-INF/lib/uberfire-security-client-*.jar</exclude>
 
-          <!-- General -->
-          <exclude>WEB-INF/lib/*-sources.jar</exclude>
-          <exclude>WEB-INF/lib/el-api-*.jar</exclude>
-          <exclude>WEB-INF/lib/xml-apis-*.jar</exclude>
-          <exclude>WEB-INF/lib/junit-*.jar</exclude>
-          <exclude>WEB-INF/lib/h2*.jar</exclude>
-          <exclude>WEB-INF/lib/weld-se*.jar</exclude>
-          <exclude>WEB-INF/lib/hibernate*.jar</exclude>
+                    <!-- GWT Client Related -->
+                    <exclude>WEB-INF/lib/gwt-user-*.jar</exclude>
+                    <exclude>WEB-INF/lib/guava-gwt-*.jar</exclude>
+                    <exclude>WEB-INF/lib/gwt-dnd-*.jar</exclude>
+                    <exclude>WEB-INF/lib/gchart-*.jar</exclude>
+                    <exclude>WEB-INF/lib/gwt-rolodex-*.jar</exclude>
+                    <exclude>WEB-INF/lib/gwtent-*.jar</exclude>
+                    <exclude>WEB-INF/lib/editor-*.jar</exclude>
+                    <exclude>WEB-INF/lib/gwt-visualization-*.jar</exclude>
 
-          <!-- Jetty -->
-          <exclude>WEB-INF/lib/jetty-*.jar</exclude>
-          <exclude>WEB-INF/lib/errai-cdi-jetty-*.jar</exclude>
-          <exclude>WEB-INF/lib/mail-*.jar</exclude>
-          <exclude>WEB-INF/lib/geronimo-spec-jta-*.jar</exclude>
-          <exclude>WEB-INF/lib/servlet-api-*.jar</exclude>
-          <exclude>WEB-INF/lib/jboss-servlet*.jar</exclude>
-          <!-- Errai -->
-          <exclude>WEB-INF/lib/errai-jaxrs-client-*.jar</exclude>
+                    <!-- General -->
+                    <exclude>WEB-INF/lib/*-sources.jar</exclude>
+                    <exclude>WEB-INF/lib/el-api-*.jar</exclude>
+                    <exclude>WEB-INF/lib/xml-apis-*.jar</exclude>
+                    <exclude>WEB-INF/lib/junit-*.jar</exclude>
+                    <exclude>WEB-INF/lib/h2*.jar</exclude>
+                    <exclude>WEB-INF/lib/weld-se*.jar</exclude>
+                    <exclude>WEB-INF/lib/cdi-api*.jar</exclude>
+                    <exclude>WEB-INF/lib/hibernate*.jar</exclude>
 
-          <exclude>WEB-INF/lib/resteasy-*.jar</exclude>
-          <exclude>WEB-INF/lib/jcip-annotations-*.jar</exclude>
-          <exclude>WEB-INF/lib/javassist-*.jar</exclude>
-          <exclude>WEB-INF/lib/httpcore-*.jar</exclude>
-          <exclude>WEB-INF/lib/httpclient-*.jar</exclude>
-          <exclude>WEB-INF/lib/commons-logging-*.jar</exclude>
-          <exclude>WEB-INF/lib/activation-*.jar</exclude>
-          <exclude>WEB-INF/lib/scannotation-*.jar</exclude>
-          <exclude>WEB-INF/lib/cal10n-api-*.jar</exclude>
-          <exclude>WEB-INF/lib/jsr250-api-*.jar</exclude>
-          <exclude>WEB-INF/lib/weld-*.jar</exclude>
-          <exclude>WEB-INF/lib/javax*.jar</exclude>
-          <exclude>WEB-INF/lib/jboss-interceptors-api*.jar</exclude>
-          <exclude>WEB-INF/lib/jaxrs-api-*.jar</exclude>
+                    <!-- Jetty -->
+                    <exclude>WEB-INF/lib/jetty-*.jar</exclude>
+                    <exclude>WEB-INF/lib/errai-cdi-jetty-*.jar</exclude>
+                    <exclude>WEB-INF/lib/mail-*.jar</exclude>
+                    <exclude>WEB-INF/lib/geronimo-spec-jta-*.jar</exclude>
+                    <exclude>WEB-INF/lib/servlet-api-*.jar</exclude>
+                    <exclude>WEB-INF/lib/jboss-servlet*.jar</exclude>
+                    <!-- Errai -->
+                    <exclude>WEB-INF/lib/errai-jaxrs-client-*.jar</exclude>
 
-          <!--Netty-->
-          <exclude>WEB-INF/lib/netty-3*.jar</exclude>
-         
-        </excludes>
-      </unpackOptions>
-      <useStrictFiltering>true</useStrictFiltering>
-    </dependencySet>
-  </dependencySets>
+                    <exclude>WEB-INF/lib/resteasy-*.jar</exclude>
+                    <exclude>WEB-INF/lib/jcip-annotations-*.jar</exclude>
+                    <exclude>WEB-INF/lib/javassist-*.jar</exclude>
+                    <exclude>WEB-INF/lib/httpcore-*.jar</exclude>
+                    <exclude>WEB-INF/lib/httpclient-*.jar</exclude>
+                    <exclude>WEB-INF/lib/commons-logging-*.jar</exclude>
+                    <exclude>WEB-INF/lib/activation-*.jar</exclude>
+                    <exclude>WEB-INF/lib/scannotation-*.jar</exclude>
+                    <exclude>WEB-INF/lib/cal10n-api-*.jar</exclude>
+                    <exclude>WEB-INF/lib/jsr250-api-*.jar</exclude>
+                    <exclude>WEB-INF/lib/weld-*.jar</exclude>
+                    <exclude>WEB-INF/lib/javax*.jar</exclude>
+                    <exclude>WEB-INF/lib/jboss-interceptors-api*.jar</exclude>
+                    <exclude>WEB-INF/lib/jaxrs-api-*.jar</exclude>
+
+                    <!--Netty-->
+                    <exclude>WEB-INF/lib/netty-3*.jar</exclude>
+
+                </excludes>
+            </unpackOptions>
+            <useStrictFiltering>true</useStrictFiltering>
+        </dependencySet>
+    </dependencySets>
 
 </assembly>

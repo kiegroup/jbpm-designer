@@ -18,6 +18,14 @@
     <dependencySets>
         <dependencySet>
             <includes>
+                <include>org.apache.ant:ant:jar</include>
+                <include>org.apache.ant:ant-launcher:jar</include>
+            </includes>
+            <unpack>false</unpack>
+            <outputDirectory>WEB-INF/lib</outputDirectory>
+        </dependencySet>
+        <dependencySet>
+            <includes>
                 <include>org.jbpm:jbpm-designer-standalone:war</include>
             </includes>
             <outputDirectory>.</outputDirectory>
