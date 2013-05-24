@@ -13,15 +13,15 @@
 
   <dependencies>
 
+    <!--Logs-->
     <dependency>
-      <groupId>org.kie</groupId>
-      <artifactId>kie-ci</artifactId>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
     </dependency>
-
-    <!-- Manstis hackathon -->
+    <!-- This is a war file, so logback is not in scope test, but in scope compile -->
     <dependency>
-      <groupId>org.drools</groupId>
-      <artifactId>drools-wb-scorecard-xls-editor-client</artifactId>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
     </dependency>
 
     <!-- jBPM Designer -->
@@ -254,11 +254,6 @@
       <groupId>org.eclipse</groupId>
       <artifactId>org.eclipse.bpmn2</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.kie.remote</groupId>
-      <artifactId>kie-services-remote</artifactId>
-      <version>6.0.0-SNAPSHOT</version>
-    </dependency>
 
     <!-- Kie Workbench -->
     <dependency>
@@ -276,11 +271,11 @@
     </dependency>
     <dependency>
       <groupId>org.kie.workbench.screens</groupId>
-      <artifactId>kie-wb-common-project-explorer-backend</artifactId>
+      <artifactId>kie-wb-common-project-explorer-client</artifactId>
     </dependency>
     <dependency>
       <groupId>org.kie.workbench.screens</groupId>
-      <artifactId>kie-wb-common-project-explorer-client</artifactId>
+      <artifactId>kie-wb-common-project-explorer-backend</artifactId>
     </dependency>
     <dependency>
       <groupId>org.kie.workbench.screens</groupId>
@@ -293,11 +288,6 @@
     <dependency>
       <groupId>org.kie.workbench.screens</groupId>
       <artifactId>kie-wb-common-project-imports-editor-client</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.kie.workbench.services</groupId>
-      <artifactId>kie-wb-common-datamodel-api</artifactId>
     </dependency>
 
     <dependency>
@@ -381,7 +371,6 @@
             <compileSourcesArtifact>org.kie.workbench.screens:kie-wb-common-project-explorer-api</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.workbench.screens:kie-wb-common-project-explorer-client</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.workbench.widgets:kie-wb-common-ui</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.workbench.widgets:kie-wb-view-source-widget</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.workbench.widgets:kie-wb-error-messages-widget</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.workbench.widgets:kie-wb-metadata-widget</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.workbench.widgets:kie-wb-config-resource-widget</compileSourcesArtifact>
@@ -390,7 +379,6 @@
             <compileSourcesArtifact>org.kie.workbench.services:kie-wb-common-data</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.workbench.services:kie-wb-common-workingset-api</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.workbench.services:kie-wb-common-workingset-client</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.workbench.services:kie-wb-common-datamodel-api</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.workbench.services:kie-wb-common-project-api</compileSourcesArtifact>
 
             <!-- Kie Commons -->

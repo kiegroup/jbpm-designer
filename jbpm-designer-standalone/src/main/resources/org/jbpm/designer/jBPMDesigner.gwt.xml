@@ -3,9 +3,9 @@
     "http://google-web-toolkit.googlecode.com/svn/tags/2.5.0/distro-source/core/src/gwt-module.dtd">
 <module>
 
-  <inherits name="org.jboss.errai.enterprise.CDI" />
-  <inherits name="org.jboss.errai.ui.UI" />
-  <inherits name="com.google.gwt.xml.XML" />
+  <inherits name="org.jboss.errai.enterprise.CDI"/>
+  <inherits name="org.jboss.errai.ui.UI"/>
+  <inherits name="com.google.gwt.xml.XML"/>
 
   <!-- Uberfire dependencies -->
   <inherits name="org.uberfire.UberfireWorkbench"/>
@@ -26,12 +26,8 @@
   <inherits name="org.kie.workbench.common.widgets.KieWorkbenchWidgetsCommon"/>
   <inherits name='org.kie.workbench.common.services.KieWorkbenchCommonServicesAPI'/>
   <inherits name="org.kie.workbench.common.services.data.KieWorkbenchCommonData"/>
-  <inherits name='org.kie.workbench.common.services.datamodel.KieWorkbenchCommonDataModelAPI'/>
   <inherits name='org.kie.workbench.common.services.security.KieWorkbenchCommonSecurity'/>
   <inherits name="org.kie.workbench.common.services.workingset.KieWorkbenchWorkingsetClient"/>
-
-  <!-- This is a hack it shoudn't be here -->
-  <inherits name="org.drools.workbench.screens.scorecardxls.DroolsWorkbenchScoreCardXLSEditorClient"/>
 
   <!-- designer -->
   <inherits name="org.jbpm.designer.jBPMDesignerAPI"/>
