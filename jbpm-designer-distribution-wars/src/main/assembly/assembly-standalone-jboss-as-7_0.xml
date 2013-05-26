@@ -127,6 +127,13 @@
                     <exclude>WEB-INF/lib/errai-cdi-jetty-*.jar</exclude>
                     <exclude>WEB-INF/lib/errai-jaxrs-client-*.jar</exclude>
 
+                    <!-- Jetty -->
+                    <exclude>WEB-INF/lib/jetty-*.jar</exclude>
+                    <exclude>WEB-INF/lib/mail-*.jar</exclude>
+                    <exclude>WEB-INF/lib/geronimo-spec-jta-*.jar</exclude>
+                    <exclude>WEB-INF/lib/servlet-api-*.jar</exclude>
+                    <exclude>WEB-INF/lib/jboss-servlet*.jar</exclude>
+
                     <exclude>WEB-INF/lib/resteasy-*.jar</exclude>
                     <exclude>WEB-INF/lib/jcip-annotations-*.jar</exclude>
                     <exclude>WEB-INF/lib/javassist-*.jar</exclude>

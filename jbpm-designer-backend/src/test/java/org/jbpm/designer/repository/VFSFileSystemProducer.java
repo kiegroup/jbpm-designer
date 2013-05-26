@@ -1,28 +1,23 @@
 package org.jbpm.designer.repository;
 
-import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
-import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.kie.commons.io.IOService;
-import org.kie.commons.io.impl.IOServiceDotFileImpl;
-import org.kie.commons.java.nio.file.FileSystem;
-import org.kie.commons.java.nio.file.Path;
-import org.uberfire.backend.vfs.ActiveFileSystems;
-import org.uberfire.backend.vfs.FileSystemFactory;
-import org.uberfire.backend.vfs.impl.ActiveFileSystemsImpl;
-
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.kie.commons.io.FileSystemType.Bootstrap.BOOTSTRAP_INSTANCE;
+import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
+import org.kie.commons.io.IOService;
+import org.kie.commons.io.impl.IOServiceDotFileImpl;
+import org.kie.commons.java.nio.file.FileSystem;
+import org.kie.commons.java.nio.file.Path;
+
+import static org.kie.commons.io.FileSystemType.Bootstrap.*;
 
 public class VFSFileSystemProducer {
 
     private IOService ioService = new IOServiceDotFileImpl();
-    ActiveFileSystems activeFileSystems = new ActiveFileSystemsImpl();
 
-    public RepositoryDescriptor produceFileSystem(final Map<String, String> env) {
-        URI repositoryRoot = URI.create(env.get("repository.root"));
+    public RepositoryDescriptor produceFileSystem( final Map<String, String> env ) {
+        URI repositoryRoot = URI.create( env.get( "repository.root" ) );
 
         FileSystem fileSystem = ioService.getFileSystem( repositoryRoot );
 
@@ -32,16 +27,15 @@ public class VFSFileSystemProducer {
         }
 
         // fetch file system changes - mainly for remote based file systems
-        String fetchCommand = (String) env.get("fetch.cmd");
-        if (fetchCommand != null) {
-            fileSystem = ioService.getFileSystem(URI.create(env.get("repository.root") + fetchCommand));
+        String fetchCommand = (String) env.get( "fetch.cmd" );
+        if ( fetchCommand != null ) {
+            fileSystem = ioService.getFileSystem( URI.create( env.get( "repository.root" ) + fetchCommand ) );
         }
         HashMap<String, String> map = new HashMap<String, String>();
-        map.put(env.get("repository.root"), "designer-repo");
-        activeFileSystems.addBootstrapFileSystem( FileSystemFactory.newFS(map, fileSystem.supportedFileAttributeViews()) );
+        map.put( env.get( "repository.root" ), "designer-repo" );
 
-        Path rootPath = fileSystem.provider().getPath(repositoryRoot);
-        return new RepositoryDescriptor(repositoryRoot, fileSystem, rootPath);
+        Path rootPath = fileSystem.provider().getPath( repositoryRoot );
+        return new RepositoryDescriptor( repositoryRoot, fileSystem, rootPath );
     }
 
     public IOService getIoService() {

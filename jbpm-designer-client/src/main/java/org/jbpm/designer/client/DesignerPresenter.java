@@ -4,7 +4,9 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.*;
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.FrameElement;
+import com.google.gwt.dom.client.ScriptElement;
 import com.google.gwt.user.client.ui.IsWidget;
 import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.jboss.errai.ioc.client.api.Caller;
@@ -16,7 +18,7 @@ import org.uberfire.client.annotations.WorkbenchEditor;
 import org.uberfire.client.annotations.WorkbenchPartTitle;
 import org.uberfire.client.annotations.WorkbenchPartView;
 import org.uberfire.client.mvp.UberView;
-import org.uberfire.shared.mvp.PlaceRequest;
+import org.uberfire.mvp.PlaceRequest;
 
 @Dependent
 @WorkbenchEditor(identifier = "jbpm.designer", supportedTypes = { Bpmn2Type.class })
@@ -25,7 +27,9 @@ public class DesignerPresenter {
     public interface View
             extends
             UberView<DesignerPresenter> {
+
         void setEditorID( final String id );
+
         void startDesignerInstance( final String editorId );
     }
 
@@ -39,28 +43,29 @@ public class DesignerPresenter {
     private PlaceRequest place;
 
     @OnStart
-    public void onStart( final Path path, final PlaceRequest place) {
+    public void onStart( final Path path,
+                         final PlaceRequest place ) {
         this.path = path;
         this.place = place;
-        if(path != null) {
+        if ( path != null ) {
             assetService.call( new RemoteCallback<String>() {
                 @Override
                 public void callback( final String editorID ) {
-                    view.setEditorID(editorID);
-                    String url =   GWT.getHostPageBaseURL().replaceFirst("/"+GWT.getModuleName()+"/", "");
+                    view.setEditorID( editorID );
+                    String url = GWT.getHostPageBaseURL().replaceFirst( "/" + GWT.getModuleName() + "/", "" );
                     assetService.call( new RemoteCallback<String>() {
                         @Override
                         public void callback( String editorBody ) {
                             // remove the open+close script tags before injecting
-                            editorBody = editorBody.replaceAll("<script type=\"text/javascript\">", "");
-                            editorBody = editorBody.replaceAll("</script>", "");
+                            editorBody = editorBody.replaceAll( "<script type=\"text/javascript\">", "" );
+                            editorBody = editorBody.replaceAll( "</script>", "" );
 
                             final Document doc = Document.get();
-                            final FrameElement editorInlineFrame = (FrameElement) doc.getElementById(editorID);
-                            appendScriptSource(editorInlineFrame, editorBody);
+                            final FrameElement editorInlineFrame = (FrameElement) doc.getElementById( editorID );
+                            appendScriptSource( editorInlineFrame, editorBody );
                         }
 
-                    } ).loadEditorBody(path, editorID, url, place);
+                    } ).loadEditorBody( path, editorID, url, place );
                 }
             } ).getEditorID();
         }
@@ -80,7 +85,7 @@ public class DesignerPresenter {
                                      final String source ) {
         final ScriptElement scriptElement = Document.get().createScriptElement( source );
         scriptElement.setType( "text/javascript" );
-        element.getContentDocument().getDocumentElement().getElementsByTagName("head").getItem(0).appendChild(scriptElement);
+        element.getContentDocument().getDocumentElement().getElementsByTagName( "head" ).getItem( 0 ).appendChild( scriptElement );
     }
 
 //    private native String getPageURL()  /*-{

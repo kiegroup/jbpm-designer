@@ -3,8 +3,10 @@ package org.jbpm.designer.uberfire.backend.server.impl;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Named;
-import org.uberfire.backend.repositories.Repository;
-import org.uberfire.backend.server.repositories.DefaultSystemRepository;
+
+import org.uberfire.backend.server.repositories.SystemRepository;
+
+import static org.uberfire.backend.server.repositories.SystemRepository.*;
 
 /**
  * This class should contain all ApplicationScoped producers
@@ -13,11 +15,9 @@ import org.uberfire.backend.server.repositories.DefaultSystemRepository;
 @ApplicationScoped
 public class ApplicationScopedProvider {
 
-    private final DefaultSystemRepository systemRepository = new DefaultSystemRepository();
-
     @Produces
     @Named("system")
-    public Repository systemRepository() {
-        return systemRepository;
+    public SystemRepository systemRepository() {
+        return SYSTEM_REPO;
     }
 }

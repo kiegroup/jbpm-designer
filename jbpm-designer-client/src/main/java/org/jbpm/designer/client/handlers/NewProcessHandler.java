@@ -13,8 +13,8 @@ import org.kie.workbench.common.widgets.client.handlers.DefaultNewResourceHandle
 import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.client.mvp.PlaceManager;
-import org.uberfire.shared.mvp.PlaceRequest;
-import org.uberfire.shared.mvp.impl.PathPlaceRequest;
+import org.uberfire.mvp.PlaceRequest;
+import org.uberfire.mvp.impl.PathPlaceRequest;
 
 @ApplicationScoped
 public class NewProcessHandler extends DefaultNewResourceHandler {
@@ -41,7 +41,7 @@ public class NewProcessHandler extends DefaultNewResourceHandler {
     @Override
     public void create( final Path contextPath,
                         final String baseFileName,
-                        final NewResourcePresenter presenter) {
+                        final NewResourcePresenter presenter ) {
         designerAssetService.call( new RemoteCallback<Path>() {
             @Override
             public void callback( final Path path ) {
