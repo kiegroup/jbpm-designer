@@ -2641,7 +2641,7 @@
 			"properties" : [
 				/**{
 					"id":"assignments",
-					"type":"Visualdataassignment",
+					"type":"Dataassignment",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
@@ -2964,7 +2964,7 @@
 			"properties" : [
 			    {
 					"id":"assignments",
-					"type":"Visualdataassignment",
+					"type":"Dataassignment",
 					"title":"Assignments",
 					"value":"",
 					"description":"",
@@ -3982,7 +3982,7 @@
 				\},
 				\{
 					"id":"assignments",
-					"type":"Visualdataassignment",
+					"type":"Dataassignment",
 					"title":"Assignments",
 					"value":"$workitemDefs.(k).parameters:{k1| $k1.name$}; separator="=,"$",
 					"description":"",
