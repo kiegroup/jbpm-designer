@@ -140,9 +140,15 @@
            }
        }
 
-    setTimeout(function(){
+    function startit() {
+        if(!ORYX) {
+            setTimeout(startit, 200);
+            return;
+        }
         initEditorInstance();
         startEditorInstance();
         Kickstart.load();
-    },2000);
+    }
+
+    startit();
 </script>
