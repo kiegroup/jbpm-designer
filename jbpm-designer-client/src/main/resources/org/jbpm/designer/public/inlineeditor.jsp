@@ -133,7 +133,7 @@
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/plugin/ORYX.Plugins.ActiveNodesHighlighter" type="text/javascript"></script>
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/plugin/ORYX.Plugins.FormEditing" type="text/javascript"></script>
 </head>
-<body style="overflow:hidden;">
+<body style="overflow:hidden;" onload="startit();">
     <div id="Definition"></div>
 </body>
 </html>
