@@ -2023,13 +2023,28 @@ public class Bpmn2JsonMarshaller {
                 properties.put("customtype", dataObject.getItemSubjectRef().getStructureRef());
             }
 		}
-		
-		if(findOutgoingAssociation(plane, dataObject) != null) {
-			properties.put("input_output", "Input");
-		} else {
-			properties.put("input_output", "Output");
-		}
-	    
+
+        Association outgoingAssociaton = findOutgoingAssociation(plane, dataObject);
+        Association incomingAssociation = null;
+
+        Process process = (Process) plane.getBpmnElement();
+        for (Artifact artifact : process.getArtifacts()) {
+            if (artifact instanceof Association){
+                Association association = (Association) artifact;
+                if (association.getTargetRef() == dataObject){
+                    incomingAssociation = association;
+                }
+            }
+        }
+
+        if(outgoingAssociaton != null && incomingAssociation == null) {
+            properties.put("input_output", "Input");
+        }
+
+        if(outgoingAssociaton == null && incomingAssociation != null) {
+            properties.put("input_output", "Output");
+        }
+
 		marshallProperties(properties, generator);
 	    
 		generator.writeObjectFieldStart("stencil");

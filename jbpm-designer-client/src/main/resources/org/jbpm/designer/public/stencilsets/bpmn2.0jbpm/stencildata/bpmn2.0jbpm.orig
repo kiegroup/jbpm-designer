@@ -6958,7 +6958,7 @@
 				},
 				{
                     "id":"customtype",
-                    "type":"Text",
+                    "type":"String",
                     "title":"Custom Type",
                     "value":"",
                     "description":"Custom Type",
