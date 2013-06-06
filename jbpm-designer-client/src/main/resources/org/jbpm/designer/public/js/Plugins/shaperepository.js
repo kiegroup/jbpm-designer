@@ -140,16 +140,16 @@ ORYX.Plugins.ShapeRepository = {
 //			if (extensions && extensions.size() > 0) {
 //				typeTitle += " / " + ORYX.Core.StencilSet.getTranslation(extensions.values()[0], "title");
 //			} 
-			
+
 			this.shapeList.appendChild(stencilSetNode = new Ext.tree.TreeNode({
 				text:typeTitle, 			// Stencilset Name
 				allowDrag:false,
-        		allowDrop:false,           
+        		allowDrop:false,
 				iconCls:'headerShapeRepImg',
 	            cls:'headerShapeRep',
 				singleClickExpand:true}));
 			stencilSetNode.render();
-			stencilSetNode.expand();				
+			stencilSetNode.expand();
 			// Get Stencils from Stencilset
 			var stencils = sset.stencils(this.facade.getCanvas().getStencil(),
 										 this.facade.getRules());	

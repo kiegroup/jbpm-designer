@@ -533,7 +533,7 @@ ORYX.I18N.QueryEvaluator.invalidResponse = "Invalid answer from server.";
 ORYX.I18N.PropertyWindow.title = "Properties";
 
 if(!ORYX.I18N.ShapeRepository) ORYX.I18N.ShapeRepository = {};
-ORYX.I18N.ShapeRepository.title = "Shape Repository";
+ORYX.I18N.ShapeRepository.title = "Object Library";
 
 ORYX.I18N.Save.dialogDesciption = "Please enter a name, a description and a comment.";
 ORYX.I18N.Save.dialogLabelTitle = "Title";
