@@ -297,58 +297,14 @@ ORYX.Plugins.View = {
 //			}.bind(this)
 //		});
 
-        // Footer items
         /* Register information view to model */
         this.facade.offer({
-            'name':'ViewBPMN2Button',
+            'name': "View Process BPMN2",
             'functionality': this.showProcessBPMN.bind(this),
-            'group': 'footerViewSourceButton',
-            'text': 'BPMN2',
-            'description': 'View BPMN2 Source',
-            'index': 1,
-            'minShape': 0,
-            'maxShape': 0,
-            'isEnabled': function(){
-                return true;
-//				profileParamName = "profile";
-//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//		        regexa = new RegExp( regexSa );
-//		        profileParams = regexa.exec( window.location.href );
-//		        profileParamValue = profileParams[1];
-//				return profileParamValue == "jbpm";
-            }.bind(this)
-        });
-
-        /* Register information view to model */
-        this.facade.offer({
-            'name':'ViewJSONButton',
-            'functionality': this.showProcessJSON.bind(this),
-            'group': 'footerViewJSONButton',
-            'text': 'JSON',
-            'description': 'View JSON Source',
-            'index': 2,
-            'minShape': 0,
-            'maxShape': 0,
-            'isEnabled': function(){
-                return true;
-//				profileParamName = "profile";
-//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//		        regexa = new RegExp( regexSa );
-//		        profileParams = regexa.exec( window.location.href );
-//		        profileParamValue = profileParams[1];
-//				return profileParamValue == "jbpm";
-            }.bind(this)
-        });
-
-        /* Register information view to model */
-        this.facade.offer({
-            'name':'ViewSVGButton',
-            'functionality': this.showProcessSVG.bind(this),
-            'group': 'footerViewSVGButton',
-            'text': 'SVG',
-            'description': 'View SVG Source',
+            'group': ORYX.I18N.View.jbpmgroup,
+            'icon': ORYX.BASE_FILE_PATH + "images/share.gif",
+            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.gif",
+            'description': "View BPMN2 Source",
             'index': 3,
             'minShape': 0,
             'maxShape': 0,
@@ -364,13 +320,13 @@ ORYX.Plugins.View = {
             }.bind(this)
         });
 
-        /* Register information view to model */
         this.facade.offer({
-            'name':'ViewERDFButton',
-            'functionality': this.showProcessERDF.bind(this),
-            'group': 'footerViewERDFButton',
-            'text': 'ERDF',
-            'description': 'View ERDF Source',
+            'name': "View Process JSON",
+            'functionality': this.showProcessJSON.bind(this),
+            'group': ORYX.I18N.View.jbpmgroup,
+            'icon': ORYX.BASE_FILE_PATH + "images/share.gif",
+            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.gif",
+            'description': "View JSON Source",
             'index': 4,
             'minShape': 0,
             'maxShape': 0,
@@ -386,13 +342,13 @@ ORYX.Plugins.View = {
             }.bind(this)
         });
 
-        /* Register information view to model */
         this.facade.offer({
-            'name':'ViewPDFButton',
-            'functionality': this.showAsPDF.bind(this),
-            'group': 'footerViewPDFButton',
-            'text': 'PDF',
-            'description': 'View PDF',
+            'name': "View Process SVG",
+            'functionality': this.showProcessSVG.bind(this),
+            'group': ORYX.I18N.View.jbpmgroup,
+            'icon': ORYX.BASE_FILE_PATH + "images/share.gif",
+            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.gif",
+            'description': "View SVG Source",
             'index': 5,
             'minShape': 0,
             'maxShape': 0,
@@ -408,14 +364,58 @@ ORYX.Plugins.View = {
             }.bind(this)
         });
 
-        /* Register information view to model */
         this.facade.offer({
-            'name':'ViewPNGButton',
-            'functionality': this.showAsPNG.bind(this),
-            'group': 'footerViewPNGButton',
-            'text': 'PNG',
-            'description': 'View PNG',
+            'name': "View Process ERDF",
+            'functionality': this.showProcessERDF.bind(this),
+            'group': ORYX.I18N.View.jbpmgroup,
+            'icon': ORYX.BASE_FILE_PATH + "images/share.gif",
+            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.gif",
+            'description': "View ERDF Source",
             'index': 6,
+            'minShape': 0,
+            'maxShape': 0,
+            'isEnabled': function(){
+                return true;
+//				profileParamName = "profile";
+//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//		        regexa = new RegExp( regexSa );
+//		        profileParams = regexa.exec( window.location.href );
+//		        profileParamValue = profileParams[1];
+//				return profileParamValue == "jbpm";
+            }.bind(this)
+        });
+
+        this.facade.offer({
+            'name': "View Process as PDF",
+            'functionality': this.showAsPDF.bind(this),
+            'group': ORYX.I18N.View.jbpmgroup,
+            'icon': ORYX.BASE_FILE_PATH + "images/share.gif",
+            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.gif",
+            'description': "View process as PDF",
+            'index': 7,
+            'minShape': 0,
+            'maxShape': 0,
+            'isEnabled': function(){
+                return true;
+//				profileParamName = "profile";
+//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//		        regexa = new RegExp( regexSa );
+//		        profileParams = regexa.exec( window.location.href );
+//		        profileParamValue = profileParams[1];
+//				return profileParamValue == "jbpm";
+            }.bind(this)
+        });
+
+        this.facade.offer({
+            'name': "View Process as PNG",
+            'functionality': this.showAsPNG.bind(this),
+            'group': ORYX.I18N.View.jbpmgroup,
+            'icon': ORYX.BASE_FILE_PATH + "images/share.gif",
+            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.gif",
+            'description': "View process as PNG",
+            'index': 7,
             'minShape': 0,
             'maxShape': 0,
             'isEnabled': function(){
@@ -1169,13 +1169,13 @@ ORYX.Plugins.View = {
         var hfFSVG = document.createElement("input");
         hfFSVG.setAttribute("type", "hidden");
         hfFSVG.setAttribute("name", "fsvg");
-        hfFSVG.setAttribute("value", formattedSvgDOM);
+        hfFSVG.setAttribute("value", Base64.encode(formattedSvgDOM));
         form.appendChild(hfFSVG);
 
         var hfRSVG = document.createElement("input");
         hfRSVG.setAttribute("type", "hidden");
         hfRSVG.setAttribute("name", "rsvg");
-        hfRSVG.setAttribute("value", rawSvgDOM);
+        hfRSVG.setAttribute("value", Base64.encode(rawSvgDOM));
         form.appendChild(hfRSVG);
 
         var hfUUID = document.createElement("input");
@@ -1459,13 +1459,13 @@ ORYX.Plugins.View = {
         var hfFSVG = document.createElement("input");
         hfFSVG.setAttribute("type", "hidden");
         hfFSVG.setAttribute("name", "fsvg");
-        hfFSVG.setAttribute("value", formattedSvgDOM);
+        hfFSVG.setAttribute("value", Base64.encode(formattedSvgDOM));
         form.appendChild(hfFSVG);
 
         var hfRSVG = document.createElement("input");
         hfRSVG.setAttribute("type", "hidden");
         hfRSVG.setAttribute("name", "rsvg");
-        hfRSVG.setAttribute("value", rawSvgDOM);
+        hfRSVG.setAttribute("value", Base64.encode(rawSvgDOM));
         form.appendChild(hfRSVG);
 
         var hfUUID = document.createElement("input");

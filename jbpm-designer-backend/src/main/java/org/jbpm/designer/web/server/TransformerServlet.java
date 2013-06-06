@@ -62,6 +62,7 @@ import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 import java.io.*;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -110,13 +111,14 @@ public class TransformerServlet extends HttpServlet {
         String processid = req.getParameter("processid");
         String sourceEnc = req.getParameter("enc");
 
-        String formattedSvg = (formattedSvgEncoded == null ? "" : new String(Base64.decodeBase64(formattedSvgEncoded)));
-        String rawSvg = (rawSvgEncoded == null ? "" : new String(Base64.decodeBase64(rawSvgEncoded)));
+        String formattedSvg = ( formattedSvgEncoded == null ? "" : new String(Base64.decodeBase64(formattedSvgEncoded), "UTF-8") );
+        //formattedSvg = URLDecoder.decode(formattedSvg, "UTF-8");
+        String rawSvg = ( rawSvgEncoded == null ? "" : new String(Base64.decodeBase64(rawSvgEncoded), "UTF-8") );
+        //rawSvg = URLDecoder.decode(rawSvg, "UTF-8");
 
         if(sourceEnc != null && sourceEnc.equals("true")) {
             bpmn2in = new String(Base64.decodeBase64(bpmn2in), "UTF-8");
         }
-
         IDiagramProfile profile = _profileService.findProfile(req, profileName);
 
         DroolsFactoryImpl.init();
