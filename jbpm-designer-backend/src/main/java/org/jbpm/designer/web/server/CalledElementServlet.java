@@ -1,6 +1,7 @@
 package org.jbpm.designer.web.server;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.codec.binary.Base64;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
@@ -48,7 +50,7 @@ public class CalledElementServlet extends HttpServlet {
         String action = req.getParameter("action");
         
         IDiagramProfile profile = _profileService.findProfile(req, profileName);
-        if(action != null && action.equals("imageview")) {
+        if(action != null && action.equals("openprocessintab")) {
         	String retValue = "";
         	List<String> allPackageNames = ServletUtil.getPackageNamesFromRepository(profile);
         	if(allPackageNames != null && allPackageNames.size() > 0) {
@@ -63,7 +65,16 @@ public class CalledElementServlet extends HttpServlet {
         		            	String pid = idMatcher.group(1);
         		            	String pidcontent = ServletUtil.getProcessImageContent(packageName, pid, profile);
         		            	if(pid != null && pid.equals(processId)) {
-        		            		retValue = pidcontent != null ? pidcontent : "";
+                                    String uniqueId = processContent.getUniqueId();
+                                    if (Base64.isBase64(uniqueId)) {
+                                        byte[] decoded = Base64.decodeBase64(uniqueId);
+                                        try {
+                                            uniqueId =  new String(decoded, "UTF-8");
+                                        } catch (UnsupportedEncodingException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                    retValue = processContent.getName() + "." +processContent.getAssetType() + "|" + uniqueId;
         		            		break;
         		            	}
         		            }

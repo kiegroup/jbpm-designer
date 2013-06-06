@@ -7,18 +7,23 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.FrameElement;
 import com.google.gwt.dom.client.ScriptElement;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.IsWidget;
 import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.jboss.errai.ioc.client.api.Caller;
 import org.jbpm.designer.client.type.Bpmn2Type;
 import org.jbpm.designer.service.DesignerAssetService;
 import org.uberfire.backend.vfs.Path;
+import org.uberfire.backend.vfs.PathFactory;
 import org.uberfire.client.annotations.OnStart;
 import org.uberfire.client.annotations.WorkbenchEditor;
 import org.uberfire.client.annotations.WorkbenchPartTitle;
 import org.uberfire.client.annotations.WorkbenchPartView;
+import org.uberfire.client.mvp.PlaceManager;
 import org.uberfire.client.mvp.UberView;
 import org.uberfire.mvp.PlaceRequest;
+import org.uberfire.mvp.impl.DefaultPlaceRequest;
+import org.uberfire.mvp.impl.PathPlaceRequest;
 
 @Dependent
 @WorkbenchEditor(identifier = "jbpm.designer", supportedTypes = { Bpmn2Type.class })
@@ -39,6 +44,9 @@ public class DesignerPresenter {
     @Inject
     private Caller<DesignerAssetService> assetService;
 
+    @Inject
+    private PlaceManager placeManager;
+
     private Path path;
     private PlaceRequest place;
 
@@ -47,6 +55,7 @@ public class DesignerPresenter {
                          final PlaceRequest place ) {
         this.path = path;
         this.place = place;
+        this.publishOpenInTab(this);
         if ( path != null ) {
             assetService.call( new RemoteCallback<String>() {
                 @Override
@@ -91,4 +100,19 @@ public class DesignerPresenter {
 //    private native String getPageURL()  /*-{
 //        return $wnd.location.protocol + "//" + $wnd.location.host;
 //    }-*/;
+
+    private native void publishOpenInTab(DesignerPresenter dp)/*-{
+        $wnd.designeropenintab = function (filename, uri) {
+            dp.@org.jbpm.designer.client.DesignerPresenter::openInTab(Ljava/lang/String;Ljava/lang/String;)(filename, uri);
+        }
+    }-*/;
+
+    public void openInTab(String filename, String uri) {
+        PlaceRequest placeRequestImpl = new PathPlaceRequest(
+                PathFactory.newPath(this.path.getFileSystem(), filename, uri)
+        );
+        placeRequestImpl.addParameter("uuid", uri);
+        placeRequestImpl.addParameter("profile", "jbpm");
+        this.placeManager.goTo(placeRequestImpl);
+    }
 }
