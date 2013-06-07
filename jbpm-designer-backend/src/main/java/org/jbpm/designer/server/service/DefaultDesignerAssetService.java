@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
@@ -14,12 +15,14 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.protocol.Protocol;
 import org.jboss.errai.bus.server.annotations.Service;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.service.DesignerAssetService;
+import org.jbpm.designer.util.OSProtocolSocketFactory;
 import org.json.JSONArray;
 import org.uberfire.backend.server.util.Paths;
 import org.uberfire.backend.vfs.Path;
@@ -56,6 +59,12 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
             "    </bpmndi:BPMNPlane>\n" +
             "  </bpmndi:BPMNDiagram>" +
             "</definitions>";
+
+    @PostConstruct
+    public void configure() {
+        System.out.println("Registering custom protocol");
+        Protocol.registerProtocol("http", new Protocol("http", new OSProtocolSocketFactory(), 80));
+    }
 
     @Override
     public String loadEditorBody( final Path path,
