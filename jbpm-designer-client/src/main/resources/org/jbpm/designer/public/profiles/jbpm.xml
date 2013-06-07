@@ -4,7 +4,6 @@
     <profile name="jbpm" stencilset="bpmn2.0jbpm">
         <plugin name="ORYX.Plugins.SelectStencilSetPerspective"/>
         <plugin name="ORYX.Plugins.Toolbar"/>
-        <plugin name="ORYX.Plugins.ProcessInfo"/>
         <plugin name="ORYX.Plugins.JPDLMigration"/>
         <plugin name="ORYX.Plugins.ServiceRepoIntegration"/>
         <plugin name="ORYX.Plugins.SavePlugin"/>
