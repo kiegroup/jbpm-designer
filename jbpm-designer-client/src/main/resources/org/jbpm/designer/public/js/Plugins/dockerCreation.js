@@ -86,20 +86,22 @@ ORYX.Plugins.DockerCreation = Clazz.extend({
 	 */
 	handleMouseDown: function(event, uiObj) {	
 		if (event.which==1 && uiObj instanceof ORYX.Core.Edge && this.isEdgeDocked(uiObj)){
-			//Timer for Doubleclick to be able to create a label
-			window.clearTimeout(this.timer);
-			
-			this.timer = window.setTimeout(function () {
-				// Give the event to enable one click creation and drag
-				this.addDockerCommand({
-		            edge: uiObj,
-					event: event,
-		            position: this.facade.eventCoordinates(event)
-		        });
-	
-			}.bind(this),200);
-			this.hideOverlay();
-	
+
+           if(uiObj.getIsSelectable()) {
+               //Timer for Doubleclick to be able to create a label
+               window.clearTimeout(this.timer);
+
+               this.timer = window.setTimeout(function () {
+                   // Give the event to enable one click creation and drag
+                   this.addDockerCommand({
+                       edge: uiObj,
+                       event: event,
+                       position: this.facade.eventCoordinates(event)
+                   });
+
+               }.bind(this),200);
+           }
+           this.hideOverlay();
 		}
 	},
 	

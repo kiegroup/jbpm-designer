@@ -1873,6 +1873,7 @@ ORYX.Editor = {
 			(elementController !== undefined) && (elementController.isSelectable);
 		var currentIsMovable = (elementController !== null) &&
 			(elementController !== undefined) && (elementController.isMovable);
+
 		var modifierKeyPressed = event.shiftKey || event.ctrlKey;
 		var noObjectsSelected = this.selection.length === 0;
 		var currentIsSelected = this.selection.member(elementController);
@@ -1880,7 +1881,6 @@ ORYX.Editor = {
 
 		// Rule #1: When there is nothing selected, select the clicked object.
 		if(currentIsSelectable && noObjectsSelected) {
-
 			this.setSelection([elementController]);
 
 			ORYX.Log.trace("Rule #1 applied for mouse down on %0", element.id);
@@ -1890,7 +1890,6 @@ ORYX.Editor = {
 		// the clicked object.
 		} else if(currentIsSelectable && !noObjectsSelected &&
 			!modifierKeyPressed && !currentIsSelected) {
-
 			this.setSelection([elementController]);
 
 			//var objectType = elementController.readAttributes();
@@ -1902,7 +1901,6 @@ ORYX.Editor = {
 		// not selected, add it to the selection.
 		} else if(currentIsSelectable && modifierKeyPressed
 			&& !currentIsSelected) {
-				
 			var newSelection = this.selection.clone();
 			newSelection.push(elementController)
 			this.setSelection(newSelection)
@@ -1912,7 +1910,6 @@ ORYX.Editor = {
 		// Rule #6
 		} else if(currentIsSelectable && currentIsSelected &&
 			modifierKeyPressed) {
-
 			var newSelection = this.selection.clone();
 			this.setSelection(newSelection.without(elementController))
 
@@ -1929,7 +1926,6 @@ ORYX.Editor = {
 		// Rule #2: When clicked on something that is neither
 		// selectable nor movable, clear the selection, and return.
 		} else if (!currentIsSelectable && !currentIsMovable) {
-			
 			this.setSelection([]);
 			
 			ORYX.Log.trace("Rule #2 applied for mouse down on %0", element.id);
@@ -1941,7 +1937,6 @@ ORYX.Editor = {
 		// the movedObject to the current one and enable Drag. Dockers will
 		// be processed in the dragDocker plugin.
 		} else if(!currentIsSelectable && currentIsMovable && !(elementController instanceof ORYX.Core.Controls.Docker)) {
-			
 			// TODO: If there is any moveable elements, do this in a plugin
 			//ORYX.Core.UIEnableDrag(event, elementController);
 
@@ -1951,7 +1946,6 @@ ORYX.Editor = {
 		// modifier key is pressed
 		} else if(currentIsSelectable && currentIsSelected &&
 			!modifierKeyPressed) {
-			
 			this._subSelection = this._subSelection != elementController ? elementController : undefined;
 						
 			this.setSelection(this.selection, this._subSelection);

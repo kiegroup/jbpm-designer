@@ -41,6 +41,13 @@ ORYX.Plugins.ActiveNodesHighlighter = Clazz.extend({
                 child.setSelectable(false);
                 child.setMovable(false);
                 child.setProperty("oryx-isselectable", "false");
+
+                if(child instanceof ORYX.Core.Edge) {
+                    child.dockers.each((function(docker){
+                        docker.setMovable(false);
+                        docker.update();
+                    }));
+                }
             }
             child.refresh();
         }
