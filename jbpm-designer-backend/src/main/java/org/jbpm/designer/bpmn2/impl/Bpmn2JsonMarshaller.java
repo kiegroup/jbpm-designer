@@ -2037,13 +2037,13 @@ public class Bpmn2JsonMarshaller {
             }
         }
 
-        if(outgoingAssociaton != null && incomingAssociation == null) {
-            properties.put("input_output", "Input");
-        }
-
-        if(outgoingAssociaton == null && incomingAssociation != null) {
-            properties.put("input_output", "Output");
-        }
+//        if(outgoingAssociaton != null && incomingAssociation == null) {
+//            properties.put("input_output", "Input");
+//        }
+//
+//        if(outgoingAssociaton == null && incomingAssociation != null) {
+//            properties.put("input_output", "Output");
+//        }
 
 		marshallProperties(properties, generator);
 	    
@@ -2650,7 +2650,21 @@ public class Bpmn2JsonMarshaller {
         generator.writeEndArray();
         
         Bounds sourceBounds = ((BPMNShape) findDiagramElement(plane, association.getSourceRef())).getBounds();
-        Bounds targetBounds = ((BPMNShape) findDiagramElement(plane, association.getTargetRef())).getBounds();
+
+        Bounds targetBounds = null;
+        float tbx = 0;
+        float tby = 0;
+        if(findDiagramElement(plane, association.getTargetRef()) instanceof BPMNShape) {
+            targetBounds = ((BPMNShape) findDiagramElement(plane, association.getTargetRef())).getBounds();
+        } else if(findDiagramElement(plane, association.getTargetRef()) instanceof BPMNEdge) {
+            // connect it to first waypoint on edge
+            List<Point> waypoints = ((BPMNEdge) findDiagramElement(plane, association.getTargetRef())).getWaypoint();
+            if(waypoints != null && waypoints.size() > 0) {
+                tbx = waypoints.get(0).getX();
+                tby = waypoints.get(0).getY();
+            }
+
+        }
         generator.writeArrayFieldStart("dockers");
         generator.writeStartObject();
         generator.writeObjectField("x", sourceBounds.getWidth() / 2);
@@ -2664,11 +2678,19 @@ public class Bpmn2JsonMarshaller {
             generator.writeObjectField("y", waypoint.getY());
             generator.writeEndObject();
         }
-        generator.writeStartObject();
-        generator.writeObjectField("x", targetBounds.getWidth() / 2);
-        generator.writeObjectField("y", targetBounds.getHeight() / 2);
-        generator.writeEndObject();
-        generator.writeEndArray();
+        if(targetBounds != null) {
+            generator.writeStartObject();
+            generator.writeObjectField("x", targetBounds.getWidth() / 2);
+            generator.writeObjectField("y", targetBounds.getHeight() / 2);
+            generator.writeEndObject();
+            generator.writeEndArray();
+        } else {
+            generator.writeStartObject();
+            generator.writeObjectField("x", tbx);
+            generator.writeObjectField("y", tby);
+            generator.writeEndObject();
+            generator.writeEndArray();
+        }
     }
 
     protected void marshallTextAnnotation(TextAnnotation textAnnotation, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Definitions def)  throws JsonGenerationException, IOException{

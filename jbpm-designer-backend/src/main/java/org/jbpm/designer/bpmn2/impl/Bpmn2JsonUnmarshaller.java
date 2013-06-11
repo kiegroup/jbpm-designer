@@ -622,7 +622,77 @@ public class Bpmn2JsonUnmarshaller {
 	            					ce.getDataOutputAssociation().add(dia);
 	            				}
 	            			}
-	            		} 
+	            		}
+                        if(as.getSourceRef() != null && as.getSourceRef() instanceof DataObject
+                                && as.getTargetRef() != null && (as.getTargetRef() instanceof SequenceFlow)) {
+                            SequenceFlow sf = (SequenceFlow) as.getTargetRef();
+                            if(sf.getSourceRef() != null && sf.getSourceRef() instanceof Activity && sf.getTargetRef() != null && sf.getTargetRef() instanceof Activity) {
+                                Activity sourceElement = (Activity) sf.getSourceRef();
+                                Activity targetElement = (Activity) sf.getTargetRef();
+                                DataObject da = (DataObject) as.getSourceRef();
+
+
+                                if(targetElement.getIoSpecification() == null) {
+                                    InputOutputSpecification iospec = Bpmn2Factory.eINSTANCE.createInputOutputSpecification();
+                                    targetElement.setIoSpecification(iospec);
+                                }
+                                if(targetElement.getIoSpecification().getInputSets() == null || targetElement.getIoSpecification().getInputSets().size() < 1) {
+                                    InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
+                                    targetElement.getIoSpecification().getInputSets().add(inset);
+                                }
+                                InputSet inSet = targetElement.getIoSpecification().getInputSets().get(0);
+                                boolean foundDataInput = false;
+                                for(DataInput dataInput : inSet.getDataInputRefs()) {
+                                    if(dataInput.getId().equals(targetElement.getId() + "_" + da.getId() + "Input")) {
+                                        foundDataInput = true;
+                                    }
+                                }
+                                if(!foundDataInput) {
+                                    DataInput d = Bpmn2Factory.eINSTANCE.createDataInput();
+                                    d.setId(targetElement.getId() + "_" + da.getId() + "Input");
+                                    d.setName(da.getId() + "Input");
+                                    targetElement.getIoSpecification().getDataInputs().add(d);
+                                    targetElement.getIoSpecification().getInputSets().get(0).getDataInputRefs().add(d);
+
+                                    DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
+                                    dia.setTargetRef(d);
+                                    dia.getSourceRef().add(da);
+                                    targetElement.getDataInputAssociations().add(dia);
+                                }
+
+                                if(sourceElement.getIoSpecification() == null) {
+                                    InputOutputSpecification iospec = Bpmn2Factory.eINSTANCE.createInputOutputSpecification();
+                                    sourceElement.setIoSpecification(iospec);
+                                }
+
+                                if(sourceElement.getIoSpecification().getOutputSets() == null || sourceElement.getIoSpecification().getOutputSets().size() < 1) {
+                                    OutputSet outSet = Bpmn2Factory.eINSTANCE.createOutputSet();
+                                    sourceElement.getIoSpecification().getOutputSets().add(outSet);
+                                }
+
+                                boolean foundDataOutput = false;
+                                OutputSet outSet = sourceElement.getIoSpecification().getOutputSets().get(0);
+                                for(DataOutput dataOut : outSet.getDataOutputRefs()) {
+                                    if(dataOut.getId().equals(sourceElement.getId() + "_" + da.getId() + "Output")) {
+                                        foundDataOutput = true;
+                                    }
+                                }
+
+                                if(!foundDataOutput) {
+                                    DataOutput d = Bpmn2Factory.eINSTANCE.createDataOutput();
+                                    d.setId(sourceElement.getId() + "_" + da.getId() + "Output");
+                                    d.setName(da.getId() + "Output");
+                                    sourceElement.getIoSpecification().getDataOutputs().add(d);
+                                    sourceElement.getIoSpecification().getOutputSets().get(0).getDataOutputRefs().add(d);
+
+                                    DataOutputAssociation doa = Bpmn2Factory.eINSTANCE.createDataOutputAssociation();
+                                    doa.getSourceRef().add(d);
+                                    doa.setTargetRef(da);
+                                    sourceElement.getDataOutputAssociations().add(doa);
+                                }
+                            }
+                        }
+
 	            	}
 	            }
 	        }
@@ -1588,7 +1658,12 @@ public class Bpmn2JsonUnmarshaller {
         for (Entry<Object, List<String>> entry : _outgoingFlows.entrySet()) {
             for (String flowId : entry.getValue()) {
                 if (entry.getKey() instanceof SequenceFlow) { // if it is a sequence flow, we can tell its targets
-                    ((SequenceFlow) entry.getKey()).setTargetRef((FlowNode) _idMap.get(flowId));
+                    if(_idMap.get(flowId) instanceof FlowNode) {
+                        ((SequenceFlow) entry.getKey()).setTargetRef((FlowNode) _idMap.get(flowId));
+                    }
+                    if(_idMap.get(flowId) instanceof Association) {
+                        ((Association) _idMap.get(flowId)).setTargetRef((SequenceFlow) entry.getKey());
+                    }
                 } else if (entry.getKey() instanceof Association) {
                     ((Association) entry.getKey()).setTargetRef((BaseElement) _idMap.get(flowId));
                 } else { // if it is a node, we can map it to its outgoing sequence flows
