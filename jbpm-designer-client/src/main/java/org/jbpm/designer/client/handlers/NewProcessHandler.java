@@ -9,6 +9,8 @@ import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.jboss.errai.ioc.client.api.Caller;
 import org.jbpm.designer.client.type.Bpmn2Type;
 import org.jbpm.designer.service.DesignerAssetService;
+import org.kie.workbench.common.services.shared.context.*;
+import org.kie.workbench.common.services.shared.context.Package;
 import org.kie.workbench.common.widgets.client.handlers.DefaultNewResourceHandler;
 import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
 import org.uberfire.backend.vfs.Path;
@@ -39,19 +41,17 @@ public class NewProcessHandler extends DefaultNewResourceHandler {
     }
 
     @Override
-    public void create( final Path contextPath,
-                        final String baseFileName,
-                        final NewResourcePresenter presenter ) {
+    public void create(final Package pkg, final String baseFileName, final NewResourcePresenter presenter) {
         designerAssetService.call( new RemoteCallback<Path>() {
             @Override
             public void callback( final Path path ) {
                 presenter.complete();
                 notifySuccess();
                 final PlaceRequest place = new PathPlaceRequest( path,
-                                                                 "jbpm.designer" );
+                        "jbpm.designer" );
                 placeManager.goTo( place );
             }
-        } ).createProcess( contextPath, buildFileName( resourceType, baseFileName ) );
+        }).createProcess(pkg.getProjectRootPath(), buildFileName( resourceType, baseFileName ));
     }
 
     @Override
