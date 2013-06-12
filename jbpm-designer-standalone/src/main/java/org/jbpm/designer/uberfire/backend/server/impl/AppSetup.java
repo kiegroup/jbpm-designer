@@ -14,12 +14,12 @@ import org.uberfire.backend.group.Group;
 import org.uberfire.backend.group.GroupService;
 import org.uberfire.backend.repositories.Repository;
 import org.uberfire.backend.repositories.RepositoryService;
-import org.uberfire.security.impl.authz.RuntimeAuthorizationManager;
-import org.uberfire.security.server.cdi.SecurityFactory;
 import org.uberfire.backend.server.config.ConfigGroup;
 import org.uberfire.backend.server.config.ConfigType;
 import org.uberfire.backend.server.config.ConfigurationFactory;
 import org.uberfire.backend.server.config.ConfigurationService;
+import org.uberfire.security.impl.authz.RuntimeAuthorizationManager;
+import org.uberfire.security.server.cdi.SecurityFactory;
 
 @ApplicationScoped
 @Startup(StartupType.BOOTSTRAP)
@@ -55,25 +55,25 @@ public class AppSetup {
 
             Repository jbpmRepo = repositoryService.getRepository( JBPM_REPO_PLAYGROUND );
             if ( jbpmRepo == null ) {
-                final String userName = "guvnorngtestuser1";
-                final String password = "test1234";
-                jbpmRepo = repositoryService.createRepository( "git", JBPM_REPO_PLAYGROUND, new HashMap<String, Object>() {{
-                    put( "origin", JBPM_URL );
-                    put( "username", userName );
-                    put( "crypt:password", password );
-                }} );
+                jbpmRepo = repositoryService.createRepository( "git",
+                                                               JBPM_REPO_PLAYGROUND,
+                                                               new HashMap<String, Object>() {{
+                                                                   put( "origin", JBPM_URL );
+                                                                   put( "username", userName );
+                                                                   put( "crypt:password", password );
+                                                               }} );
             }
 
             // TODO in case repo is not defined in system repository so we add default
             Repository guvnorRepo = repositoryService.getRepository( GUVNOR_REPO_PLAYGROUND );
             if ( guvnorRepo == null ) {
-                final String userName = "guvnorngtestuser1";
-                final String password = "test1234";
-                guvnorRepo = repositoryService.createRepository( "git", GUVNOR_REPO_PLAYGROUND, new HashMap<String, Object>() {{
-                    put( "origin", GUVNOR_URL );
-                    put( "username", userName );
-                    put( "crypt:password", password );
-                }} );
+                guvnorRepo = repositoryService.createRepository( "git",
+                                                                 GUVNOR_REPO_PLAYGROUND,
+                                                                 new HashMap<String, Object>() {{
+                                                                     put( "origin", GUVNOR_URL );
+                                                                     put( "username", userName );
+                                                                     put( "crypt:password", password );
+                                                                 }} );
             }
 
             // TODO in case groups are not defined
@@ -82,9 +82,12 @@ public class AppSetup {
                 List<Repository> repositories = new ArrayList<Repository>();
                 repositories.add( jbpmRepo );
                 repositories.add( guvnorRepo );
-                groupService.createGroup( "demo",
-                        "demo@jbpm.org",
-                        repositories );
+                Group g = groupService.createGroup( "demo",
+                                                    "demo@jbpm.org" );
+                groupService.addRepository( g,
+                                            jbpmRepo );
+                groupService.addRepository( g,
+                                            guvnorRepo );
             }
 
             //Define mandatory properties
@@ -107,20 +110,20 @@ public class AppSetup {
     private ConfigGroup getGlobalConfiguration() {
         //Global Configurations used by many of Drools Workbench editors
         final ConfigGroup group = configurationFactory.newConfigGroup( ConfigType.GLOBAL,
-                GLOBAL_SETTINGS,
-                "" );
+                                                                       GLOBAL_SETTINGS,
+                                                                       "" );
         group.addConfigItem( configurationFactory.newConfigItem( "drools.dateformat",
-                "dd-MMM-yyyy" ) );
+                                                                 "dd-MMM-yyyy" ) );
         group.addConfigItem( configurationFactory.newConfigItem( "drools.datetimeformat",
-                "dd-MMM-yyyy hh:mm:ss" ) );
+                                                                 "dd-MMM-yyyy hh:mm:ss" ) );
         group.addConfigItem( configurationFactory.newConfigItem( "drools.defaultlanguage",
-                "en" ) );
+                                                                 "en" ) );
         group.addConfigItem( configurationFactory.newConfigItem( "drools.defaultcountry",
-                "US" ) );
+                                                                 "US" ) );
         group.addConfigItem( configurationFactory.newConfigItem( "build.enable-incremental",
-                "true" ) );
+                                                                 "true" ) );
         group.addConfigItem( configurationFactory.newConfigItem( "rule-modeller-onlyShowDSLStatements",
-                "false" ) );
+                                                                 "false" ) );
         return group;
     }
 }
