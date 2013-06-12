@@ -81,7 +81,7 @@ public class AppSetup {
             if ( groups == null || groups.isEmpty() ) {
                 List<Repository> repositories = new ArrayList<Repository>();
                 repositories.add( jbpmRepo );
-                //repositories.add( guvnorRepo );
+                repositories.add( guvnorRepo );
                 groupService.createGroup( "demo",
                         "admin",
                         repositories );
