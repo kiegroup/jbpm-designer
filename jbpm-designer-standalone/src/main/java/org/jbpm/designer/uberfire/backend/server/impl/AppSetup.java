@@ -83,7 +83,7 @@ public class AppSetup {
                 repositories.add( jbpmRepo );
                 repositories.add( guvnorRepo );
                 groupService.createGroup( "demo",
-                        "admin",
+                        "demo@jbpm.org",
                         repositories );
             }
 

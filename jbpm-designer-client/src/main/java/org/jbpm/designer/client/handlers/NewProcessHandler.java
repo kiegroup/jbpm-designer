@@ -51,7 +51,7 @@ public class NewProcessHandler extends DefaultNewResourceHandler {
                         "jbpm.designer" );
                 placeManager.goTo( place );
             }
-        }).createProcess(pkg.getProjectRootPath(), buildFileName( resourceType, baseFileName ));
+        }).createProcess(pkg.getPackageMainResourcesPath(), buildFileName( resourceType, baseFileName ));
     }
 
     @Override
