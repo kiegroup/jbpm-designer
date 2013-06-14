@@ -82,10 +82,10 @@ public class HomePerspective {
 
         this.perspective.getRoot().addPart( new PartDefinitionImpl( new DefaultPlaceRequest( "RepositoriesEditor" ) ) );
 
-
         final PanelDefinition west = new PanelDefinitionImpl();
         west.setWidth( 300 );
         west.setMinWidth( 200 );
+        west.addPart( new PartDefinitionImpl( new DefaultPlaceRequest( "org.kie.guvnor.explorer" ) ) );
         west.addPart( new PartDefinitionImpl( new DefaultPlaceRequest( "FileExplorer" ) ) );
 
         perspective.getRoot().appendChild( Position.WEST, west );

@@ -79,9 +79,6 @@ public class AppSetup {
             // TODO in case groups are not defined
             Collection<Group> groups = groupService.getGroups();
             if ( groups == null || groups.isEmpty() ) {
-                List<Repository> repositories = new ArrayList<Repository>();
-                repositories.add( jbpmRepo );
-                repositories.add( guvnorRepo );
                 Group g = groupService.createGroup( "demo",
                                                     "demo@jbpm.org" );
                 groupService.addRepository( g,
