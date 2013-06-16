@@ -79,12 +79,12 @@ public class AppSetup {
             // TODO in case groups are not defined
             Collection<Group> groups = groupService.getGroups();
             if ( groups == null || groups.isEmpty() ) {
+                final List<Repository> repositories = new ArrayList<Repository>();
+                repositories.add( jbpmRepo );
+                repositories.add( guvnorRepo );
                 Group g = groupService.createGroup( "demo",
-                                                    "demo@jbpm.org" );
-                groupService.addRepository( g,
-                                            jbpmRepo );
-                groupService.addRepository( g,
-                                            guvnorRepo );
+                                                    "demo@jbpm.org",
+                                                    repositories );
             }
 
             //Define mandatory properties
