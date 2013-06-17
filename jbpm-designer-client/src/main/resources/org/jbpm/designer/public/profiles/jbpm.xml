@@ -24,7 +24,7 @@
         <plugin name="ORYX.Plugins.Edit"/>
         <plugin name="ORYX.Plugins.KeysMove"/>
         <plugin name="ORYX.Plugins.Layouter.EdgeLayouter"/>
-        <plugin name="ORYX.Plugins.SyntaxChecker"/>
+        <plugin name="ORYX.Plugins.VisualValidation"/>
         <plugin name="ORYX.Plugins.RegexTextEditor"/>
         <plugin name="ORYX.Plugins.ConstraintExpressionEditor"/>
         <plugin name="ORYX.Plugins.Overlay"/>

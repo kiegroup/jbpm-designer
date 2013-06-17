@@ -110,7 +110,7 @@
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/plugin/ORYX.Plugins.Edit.js" type="text/javascript"></script>
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/plugin/ORYX.Plugins.KeysMove.js" type="text/javascript"></script>
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/plugin/ORYX.Plugins.Layouter.EdgeLayouter.js" type="text/javascript"></script>
-    <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/plugin/ORYX.Plugins.SyntaxChecker.js" type="text/javascript"></script>
+    <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/plugin/ORYX.Plugins.VisualValidation.js" type="text/javascript"></script>
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/plugin/ORYX.Plugins.RegexTextEditor.js" type="text/javascript"></script>
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/plugin/ORYX.Plugins.ConstraintExpressionEditor.js" type="text/javascript"></script>
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/plugin/ORYX.Plugins.Overlay.js" type="text/javascript"></script>

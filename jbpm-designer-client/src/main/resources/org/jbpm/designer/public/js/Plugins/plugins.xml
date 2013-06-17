@@ -5,6 +5,7 @@
 		<plugin source="footer.js" name="ORYX.Plugins.Footer" core="true" />
 		<plugin source="syntaxchecker.js" name="ORYX.Plugins.SyntaxChecker"
 			core="true" />
+        <plugin source="visualvalidation.js" name="ORYX.Plugins.VisualValidation" core="true" />
 		<!-- <plugin source="toolbar2.js" name="ORYX.Plugins.Toolbar2" /> -->
 
 		<plugin source="shapemenu.js" name="ORYX.Plugins.ShapeMenuPlugin"
