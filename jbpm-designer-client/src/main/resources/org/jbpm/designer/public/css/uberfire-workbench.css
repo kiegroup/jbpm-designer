@@ -183,3 +183,7 @@
 .tabBarControlMinimize:hover {
     background-position: 0px 0;
 }
+
+.navbar-fixed-top, .navbar-fixed-bottom {
+   position: static !important;
+}
