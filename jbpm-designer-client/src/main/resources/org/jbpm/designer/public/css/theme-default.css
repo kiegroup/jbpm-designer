@@ -700,3 +700,24 @@ input.text.disabled:hover, input.disabled:hover, select.disabled:hover, textarea
 * Removes the ugly dashed outline from all buttons in Firefox
 */
 button::-moz-focus-inner { border: 0; }
+
+
+/*
+ * custom tooltip settings
+*/
+.x-tipcustom{position:absolute;top:0;left:0;visibility:hidden;z-index:20000;border:0 none;}
+.x-tipcustom .x-tipcustom-close{background-image:url(../images/slickness/qtip/close.gif);height:15px;float:right;width:15px;margin:0 0 2px 2px;cursor:pointer;display:none;}
+.x-tipcustom .x-tipcustom-tc{background:#FFA801 0 -62px;padding-top:3px;overflow:hidden;zoom:1;}
+.x-tipcustom .x-tipcustom-tl{background:#FFA801 0 0;padding-left:6px;overflow:hidden;zoom:1;}
+.x-tipcustom .x-tipcustom-tr{background:#FFA801 right 0;padding-right:6px;overflow:hidden;zoom:1;}
+.x-tipcustom .x-tipcustom-bc{background:#FFA801 0 -121px;height:3px;overflow:hidden;}
+.x-tipcustom .x-tipcustom-bl{background:#FFA801 0 -59px;padding-left:6px;zoom:1;}
+.x-tipcustom .x-tipcustom-br{background:#FFA801 right -59px;padding-right:6px;zoom:1;}
+.x-tipcustom .x-tipcustom-mc{border:0 none;font:normal 11px tahoma,arial,helvetica,sans-serif;}
+.x-tipcustom .x-tipcustom-ml{background:#FFA801 0 -124px;padding-left:6px;zoom:1;}
+.x-tipcustom .x-tipcustom-mr{background:#FFA801 right -124px;padding-right:6px;zoom:1;}
+.ext-ie .x-tipcustom .x-tipcustom-header,.ext-ie .x-tipcustom .x-tipcustom-tc{font-size:0;line-height:0;}
+.x-tipcustom .x-tipcustom-header-text{font:bold 11px tahoma,arial,helvetica,sans-serif;padding:0;margin:0 0 2px 0;color:#444;}
+.x-tipcustom .x-tipcustom-body{font:normal 11px tahoma,arial,helvetica,sans-serif;margin:0!important;line-height:14px;color:#444;padding:0;}
+.x-tipcustom .x-tipcustom-body .loading-indicator{margin:0;}
+.x-tipcustom-draggable .x-tipcustom-header,.x-tipcustom-draggable .x-tipcustom-header-text{cursor:move;}

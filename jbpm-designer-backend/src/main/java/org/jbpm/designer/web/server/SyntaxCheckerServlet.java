@@ -45,8 +45,6 @@ public class SyntaxCheckerServlet extends HttpServlet {
 		resp.setCharacterEncoding("UTF-8");
         resp.setContentType("application/json");
 
-
-
         if(checker.errorsFound()) {
 			resp.getWriter().write(checker.getErrorsAsJson().toString());
 		}

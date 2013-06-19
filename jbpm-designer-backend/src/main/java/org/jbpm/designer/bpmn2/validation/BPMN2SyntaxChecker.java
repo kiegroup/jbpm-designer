@@ -23,7 +23,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 	private String json;
 	private String preprocessingData;
 	private IDiagramProfile profile;
-	private String defaultResourceId = "";
+	private String defaultResourceId = "processerrors";
 	private String uuid;
     private Repository repository;
 	

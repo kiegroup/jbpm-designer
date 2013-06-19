@@ -41,8 +41,6 @@ import static org.uberfire.workbench.model.toolbar.IconType.FOLDER_CLOSE_ALT;
 public class HomePerspective {
 
     private static String[] PERMISSIONS_ADMIN = new String[]{ "ADMIN" };
-    public static final String RECENT_EDITED_ID = "recentEdited";
-    public static final String RECENT_VIEWED_ID = "recentViewed";
 
     @Inject
     private NewResourcePresenter newResourcePresenter;
@@ -161,26 +159,6 @@ public class HomePerspective {
                 .menu("New Repo")
                 .withRoles(PERMISSIONS_ADMIN)
                 .respondsWith(newRepoCommand)
-                .endMenu()
-                .menu("Recently Edited")
-                .respondsWith(new Command() {
-                    @Override
-                    public void execute() {
-                        PlaceRequest p = new DefaultPlaceRequest("Inbox");
-                        p.addParameter("inboxname", HomePerspective.RECENT_EDITED_ID);
-                        placeManager.goTo(p);
-                    }
-                })
-                .endMenu()
-                .menu("Recently Opened")
-                .respondsWith(new Command() {
-                    @Override
-                    public void execute() {
-                        PlaceRequest p = new DefaultPlaceRequest("Inbox");
-                        p.addParameter("inboxname", HomePerspective.RECENT_VIEWED_ID);
-                        placeManager.goTo(p);
-                    }
-                })
                 .endMenu()
                 .endMenus()
                 .endMenu().build();
