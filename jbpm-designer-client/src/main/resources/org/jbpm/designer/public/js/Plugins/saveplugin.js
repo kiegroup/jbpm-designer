@@ -57,6 +57,9 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                                 title       : ''
                             });
 
+                            // send UF asset update event
+                            parent.designersignalassetupdate(ORYX.UUID);
+
                             if(ORYX.CONFIG.STORESVGONSAVE && ORYX.CONFIG.STORESVGONSAVE == "true") {
                                 // svg save
                                 var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false));
