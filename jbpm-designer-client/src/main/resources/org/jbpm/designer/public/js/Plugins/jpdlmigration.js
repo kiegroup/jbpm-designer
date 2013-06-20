@@ -10,8 +10,9 @@ ORYX.Plugins.JPDLMigration = Clazz.extend({
 		this.facade.offer({
 			'name':ORYX.I18N.View.migratejPDL,
 			'functionality': this.migrateJPDL.bind(this),
-			'group': ORYX.I18N.View.jbpmgroup,
+            'group': 'importgroup',
 			'icon': ORYX.BASE_FILE_PATH + "images/jpdl_import_icon.png",
+            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/import.png",
 			'description': ORYX.I18N.View.migratejPDLDesc,
 			'index': 3,
 			'minShape': 0,

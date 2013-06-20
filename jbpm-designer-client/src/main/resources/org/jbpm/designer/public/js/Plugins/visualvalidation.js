@@ -14,8 +14,8 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
         this.facade.offer({
             'name': ORYX.I18N.SyntaxChecker.name,
             'functionality': this.doValidation.bind(this),
-            'group': ORYX.I18N.View.jbpmgroup,
-            'icon': ORYX.BASE_FILE_PATH + "images/checker_syntax.png",
+            'group': 'visualvalidation',
+            'icon': ORYX.BASE_FILE_PATH + "images/visualvalidation.png",
             'description': ORYX.I18N.SyntaxChecker.desc,
             'index': 6,
             'toggle': true,
