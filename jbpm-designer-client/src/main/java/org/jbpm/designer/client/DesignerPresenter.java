@@ -1,6 +1,7 @@
 package org.jbpm.designer.client;
 
 import javax.enterprise.context.Dependent;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import com.google.gwt.core.client.GWT;
@@ -24,6 +25,8 @@ import org.uberfire.client.mvp.UberView;
 import org.uberfire.mvp.PlaceRequest;
 import org.uberfire.mvp.impl.DefaultPlaceRequest;
 import org.uberfire.mvp.impl.PathPlaceRequest;
+import org.uberfire.workbench.events.ResourceUpdatedEvent;
+import org.uberfire.backend.vfs.VFSService;
 
 @Dependent
 @WorkbenchEditor(identifier = "jbpm.designer", supportedTypes = { Bpmn2Type.class })
@@ -47,6 +50,12 @@ public class DesignerPresenter {
     @Inject
     private PlaceManager placeManager;
 
+    @Inject
+    private Event<ResourceUpdatedEvent> resourceUpdatedEvent;
+
+    @Inject
+    private Caller<VFSService> vfsServices;
+
     private Path path;
     private PlaceRequest place;
 
@@ -56,6 +65,7 @@ public class DesignerPresenter {
         this.path = path;
         this.place = place;
         this.publishOpenInTab(this);
+        this.publishSignalOnAssetUpdate(this);
         if ( path != null ) {
             assetService.call( new RemoteCallback<String>() {
                 @Override
@@ -106,6 +116,21 @@ public class DesignerPresenter {
             dp.@org.jbpm.designer.client.DesignerPresenter::openInTab(Ljava/lang/String;Ljava/lang/String;)(filename, uri);
         }
     }-*/;
+
+    private native void publishSignalOnAssetUpdate(DesignerPresenter dp)/*-{
+        $wnd.designersignalassetupdate = function (uri) {
+            dp.@org.jbpm.designer.client.DesignerPresenter::assetUpdateEvent(Ljava/lang/String;)(uri);
+        }
+    }-*/;
+
+    public void assetUpdateEvent(String uri) {
+        vfsServices.call( new RemoteCallback<Path>() {
+            @Override
+            public void callback( final Path mypath ) {
+                resourceUpdatedEvent.fire( new ResourceUpdatedEvent(mypath) );
+            }
+        } ).get( uri );
+    }
 
     public void openInTab(String filename, String uri) {
         PlaceRequest placeRequestImpl = new PathPlaceRequest(
