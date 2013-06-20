@@ -21,7 +21,7 @@ ORYX.CONFIG.WEB_URL = "org.jbpm.designer.jBPMDesigner";
 
 
 
-ORYX.CONFIG.MENU_INDEX = {"File" : 1, "Edit" : 2, "Undo": 3, "localstorage": 4, "Z-Order" : 5,  "Alignment": 6, "Grouping": 7, "lockunlockgroup": 8, "Docker" : 9, "colorpickergroup": 'AAA', "editprocessforms": 'BBB', 'sharegroup': 'CCC', "importgroup": 'DDD', "simulation": 'EEE',"visualvalidation": 'FFF', "servicerepogroup": 'GGG', "fullscreengroup": 'HHH', "Help" : "ZZZZZZ"};
+ORYX.CONFIG.MENU_INDEX = {"File" : 1, "Edit" : 2, "Undo": 3, "localstorage": 4, "Z-Order" : 5,  "Alignment": 6, "Grouping": 7, "lockunlockgroup": 8, "Docker" : 9, "colorpickergroup": 'AAA', "editprocessforms": 'BBB', 'sharegroup': 'CCC', "importgroup": 'DDD', "validationandsimulation": 'EEE', "servicerepogroup": 'FFF', "fullscreengroup": 'GGG', "Help" : "ZZZZZZ"};
 
 ORYX.CONFIG.UUID_URL = function(uuid, profile) {
   if (uuid === undefined) {
