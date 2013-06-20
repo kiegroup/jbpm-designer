@@ -11,7 +11,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
 		this.facade.offer({
 			'name': "Process Paths",
 			'functionality': this.findPaths.bind(this),
-			'group': "simulation",
+			'group': "validationandsimulation",
 			'icon': ORYX.BASE_FILE_PATH + "images/path.png",
 			dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/simulation.png",
 			'description': "Display Process Paths",
@@ -33,7 +33,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
 		this.facade.offer({
 			'name': "Run Simulation",
 			'functionality': this.runSimulation.bind(this),
-			'group': "simulation",
+			'group': "validationandsimulation",
 			'icon': ORYX.BASE_FILE_PATH + "images/control_play.png",
 			dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/simulation.png",
 			'description': "Run Process Simulation",
