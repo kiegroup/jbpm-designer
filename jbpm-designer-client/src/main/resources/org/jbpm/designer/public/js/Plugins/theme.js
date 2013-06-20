@@ -21,7 +21,7 @@ ORYX.Plugins.Theme = Clazz.extend({
 	   			 this.facade.offer({
 	   				'name': themeNamesArray[i],
 	   				'functionality': this.applyTheme.bind(this, themeNamesArray[i]),
-	   				'group': ORYX.I18N.View.jbpmgroup,
+	   				'group': 'colorpickergroup',
 	   				dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/colorpicker.gif",
 	   				'icon': ORYX.BASE_FILE_PATH + "images/colorize.png",
 	   				'description': "Apply " + themeNamesArray[i] + " Color Theme",
