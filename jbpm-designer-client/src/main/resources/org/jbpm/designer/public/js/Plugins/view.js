@@ -298,35 +298,101 @@ ORYX.Plugins.View = {
 //		});
 
         /* Register information view to model */
-        this.facade.offer({
-            'name': "View Process BPMN2",
-            'functionality': this.showProcessBPMN.bind(this),
-            'group': 'sharegroup',
-            'icon': ORYX.BASE_FILE_PATH + "images/share.png",
-            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.png",
-            'description': "View BPMN2 Source",
-            'index': 3,
-            'minShape': 0,
-            'maxShape': 0,
-            'isEnabled': function(){
-                return true;
-//				profileParamName = "profile";
-//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//		        regexa = new RegExp( regexSa );
-//		        profileParams = regexa.exec( window.location.href );
-//		        profileParamValue = profileParams[1];
-//				return profileParamValue == "jbpm";
-            }.bind(this)
-        });
+//        this.facade.offer({
+//            'name': "View Process BPMN2",
+//            'functionality': this.showProcessBPMN.bind(this),
+//            'group': 'sharegroup',
+//            'icon': ORYX.BASE_FILE_PATH + "images/share.png",
+//            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.png",
+//            'description': "View BPMN2 Source",
+//            'index': 3,
+//            'minShape': 0,
+//            'maxShape': 0,
+//            'isEnabled': function(){
+//                return true;
+////				profileParamName = "profile";
+////				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+////				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+////		        regexa = new RegExp( regexSa );
+////		        profileParams = regexa.exec( window.location.href );
+////		        profileParamValue = profileParams[1];
+////				return profileParamValue == "jbpm";
+//            }.bind(this)
+//        });
+
+//        this.facade.offer({
+//            'name': "View Process JSON",
+//            'functionality': this.showProcessJSON.bind(this),
+//            'group': 'sharegroup',
+//            'icon': ORYX.BASE_FILE_PATH + "images/share.png",
+//            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.png",
+//            'description': "View JSON Source",
+//            'index': 4,
+//            'minShape': 0,
+//            'maxShape': 0,
+//            'isEnabled': function(){
+//                return true;
+////				profileParamName = "profile";
+////				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+////				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+////		        regexa = new RegExp( regexSa );
+////		        profileParams = regexa.exec( window.location.href );
+////		        profileParamValue = profileParams[1];
+////				return profileParamValue == "jbpm";
+//            }.bind(this)
+//        });
+
+//        this.facade.offer({
+//            'name': "View Process SVG",
+//            'functionality': this.showProcessSVG.bind(this),
+//            'group': 'sharegroup',
+//            'icon': ORYX.BASE_FILE_PATH + "images/share.png",
+//            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.png",
+//            'description': "View SVG Source",
+//            'index': 5,
+//            'minShape': 0,
+//            'maxShape': 0,
+//            'isEnabled': function(){
+//                return true;
+////				profileParamName = "profile";
+////				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+////				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+////		        regexa = new RegExp( regexSa );
+////		        profileParams = regexa.exec( window.location.href );
+////		        profileParamValue = profileParams[1];
+////				return profileParamValue == "jbpm";
+//            }.bind(this)
+//        });
+
+//        this.facade.offer({
+//            'name': "View Process ERDF",
+//            'functionality': this.showProcessERDF.bind(this),
+//            'group': 'sharegroup',
+//            'icon': ORYX.BASE_FILE_PATH + "images/share.png",
+//            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.png",
+//            'description': "View ERDF Source",
+//            'index': 6,
+//            'minShape': 0,
+//            'maxShape': 0,
+//            'isEnabled': function(){
+//                return true;
+////				profileParamName = "profile";
+////				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+////				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+////		        regexa = new RegExp( regexSa );
+////		        profileParams = regexa.exec( window.location.href );
+////		        profileParamValue = profileParams[1];
+////				return profileParamValue == "jbpm";
+//            }.bind(this)
+//        });
 
         this.facade.offer({
-            'name': "View Process JSON",
-            'functionality': this.showProcessJSON.bind(this),
+            'name': "Download Process PDF",
+            'functionality': this.showAsPDF.bind(this),
             'group': 'sharegroup',
             'icon': ORYX.BASE_FILE_PATH + "images/share.png",
             dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.png",
-            'description': "View JSON Source",
+            'description': "Download Process PDF",
             'index': 4,
             'minShape': 0,
             'maxShape': 0,
@@ -343,79 +409,35 @@ ORYX.Plugins.View = {
         });
 
         this.facade.offer({
-            'name': "View Process SVG",
-            'functionality': this.showProcessSVG.bind(this),
-            'group': 'sharegroup',
-            'icon': ORYX.BASE_FILE_PATH + "images/share.png",
-            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.png",
-            'description': "View SVG Source",
-            'index': 5,
-            'minShape': 0,
-            'maxShape': 0,
-            'isEnabled': function(){
-                return true;
-//				profileParamName = "profile";
-//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//		        regexa = new RegExp( regexSa );
-//		        profileParams = regexa.exec( window.location.href );
-//		        profileParamValue = profileParams[1];
-//				return profileParamValue == "jbpm";
-            }.bind(this)
-        });
-
-        this.facade.offer({
-            'name': "View Process ERDF",
-            'functionality': this.showProcessERDF.bind(this),
-            'group': 'sharegroup',
-            'icon': ORYX.BASE_FILE_PATH + "images/share.png",
-            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.png",
-            'description': "View ERDF Source",
-            'index': 6,
-            'minShape': 0,
-            'maxShape': 0,
-            'isEnabled': function(){
-                return true;
-//				profileParamName = "profile";
-//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//		        regexa = new RegExp( regexSa );
-//		        profileParams = regexa.exec( window.location.href );
-//		        profileParamValue = profileParams[1];
-//				return profileParamValue == "jbpm";
-            }.bind(this)
-        });
-
-        this.facade.offer({
-            'name': "View Process as PDF",
-            'functionality': this.showAsPDF.bind(this),
-            'group': 'sharegroup',
-            'icon': ORYX.BASE_FILE_PATH + "images/share.png",
-            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.png",
-            'description': "View process as PDF",
-            'index': 7,
-            'minShape': 0,
-            'maxShape': 0,
-            'isEnabled': function(){
-                return true;
-//				profileParamName = "profile";
-//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//		        regexa = new RegExp( regexSa );
-//		        profileParams = regexa.exec( window.location.href );
-//		        profileParamValue = profileParams[1];
-//				return profileParamValue == "jbpm";
-            }.bind(this)
-        });
-
-        this.facade.offer({
-            'name': "View Process as PNG",
+            'name': "Download Process PNG",
             'functionality': this.showAsPNG.bind(this),
             'group': 'sharegroup',
             'icon': ORYX.BASE_FILE_PATH + "images/share.png",
             dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.png",
-            'description': "View process as PNG",
-            'index': 7,
+            'description': "Downlod Process PNG",
+            'index': 3,
+            'minShape': 0,
+            'maxShape': 0,
+            'isEnabled': function(){
+                return true;
+//				profileParamName = "profile";
+//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//		        regexa = new RegExp( regexSa );
+//		        profileParams = regexa.exec( window.location.href );
+//		        profileParamValue = profileParams[1];
+//				return profileParamValue == "jbpm";
+            }.bind(this)
+        });
+
+        this.facade.offer({
+            'name': "View Process Sources",
+            'functionality': this.showProcessSources.bind(this),
+            'group': 'sharegroup',
+            'icon': ORYX.BASE_FILE_PATH + "images/share.png",
+            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.png",
+            'description': "View Process Sources",
+            'index': 5,
             'minShape': 0,
             'maxShape': 0,
             'isEnabled': function(){
@@ -1412,6 +1434,229 @@ ORYX.Plugins.View = {
                         lineNumbers: true,
                         lineWrapping: true,
                         onGutterClick: this.foldFunc
+                    });
+                }catch(e){
+                    ORYX.EDITOR._pluginFacade.raiseEvent({
+                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                        ntype		: 'error',
+                        msg         : 'Converting to BPMN2 failed:' + e,
+                        title       : ''
+
+                    });
+                }
+            }.createDelegate(this),
+            failure: function(){
+                ORYX.EDITOR._pluginFacade.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'error',
+                    msg         : 'Converting to BPMN2 failed.',
+                    title       : ''
+
+                });
+            },
+            params: {
+                action: 'toXML',
+                pp: ORYX.PREPROCESSING,
+                profile: ORYX.PROFILE,
+                data: processJSON
+            }
+        });
+    },
+
+
+    showProcessSources : function() {
+        var processJSON = ORYX.EDITOR.getSerializedJSON();
+        var processERDF = ORYX.EDITOR.getERDF();
+        var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false));
+
+        Ext.Ajax.request({
+            url: ORYX.PATH + "uuidRepository",
+            method: 'POST',
+            success: function(request){
+                try{
+                    var bpmn2SourceArea = new Ext.form.TextArea({
+                        id:"bpmnSourceTextArea",
+                        fieldLabel:"BPMN2",
+                        value:request.responseText,
+                        autoScroll:true
+                    });
+
+                    var bpmn2SourceAreaPanel = new Ext.Panel({
+                        title:"BPMN2",
+                        layout:'fit',
+                        border:false,
+                        items: [bpmn2SourceArea],
+                        listeners: {
+                            expand: function(p) {
+                                this.bpmn2FoldFunc = CodeMirror.newFoldFunction(CodeMirror.tagRangeFinder);
+                                var bpmn2SourceEditor = CodeMirror.fromTextArea(document.getElementById("bpmnSourceTextArea"), {
+                                    mode: "application/xml",
+                                    lineNumbers: true,
+                                    lineWrapping: true,
+                                    onGutterClick: this.bpmn2FoldFunc
+                                });
+                            }
+                        }
+                    });
+
+                    var jsonSourceArea = new Ext.form.TextArea({
+                        id:"jsonSourceTextArea",
+                        fieldLabel:"JSON",
+                        value:processJSON,
+                        autoScroll:true
+                    });
+
+                    var jsonSourceAreaPanel = new Ext.Panel({
+                        title:"JSON",
+                        layout:'fit',
+                        border:false,
+                        items: [jsonSourceArea],
+                        listeners: {
+                            expand: function(p) {
+                                this.jsonFoldFunc = CodeMirror.newFoldFunction(CodeMirror.braceRangeFinder);
+                                var jsonSourceEditor = CodeMirror.fromTextArea(document.getElementById("jsonSourceTextArea"), {
+                                    mode: "application/json",
+                                    lineNumbers: true,
+                                    lineWrapping: true,
+                                    onGutterClick: this.jsonFoldFunc
+                                });
+                            }
+                        }
+                    });
+
+                    var erdfSourceArea = new Ext.form.TextArea({
+                        id:"erdfSourceTextArea",
+                        fieldLabel:"ERDF",
+                        value:processERDF,
+                        autoScroll:true
+                    });
+
+                    var erdfSourceAreaPanel = new Ext.Panel({
+                        title:"ERDF",
+                        layout:'fit',
+                        border:false,
+                        items: [erdfSourceArea],
+                        listeners: {
+                            expand: function(p) {
+                                this.erdfFoldFunc = CodeMirror.newFoldFunction(CodeMirror.tagRangeFinder);
+                                var erdfSourceEditor = CodeMirror.fromTextArea(document.getElementById("erdfSourceTextArea"), {
+                                    mode: "application/xml",
+                                    lineNumbers: true,
+                                    lineWrapping: true,
+                                    onGutterClick: this.erdfFoldFunc
+                                });
+                            }
+                        }
+                    });
+
+                    var svgSourceArea = new Ext.form.TextArea({
+                        id:"svgSourceTextArea",
+                        fieldLabel:"SVG",
+                        value:formattedSvgDOM,
+                        autoScroll:true
+                    });
+
+                    var svgSourceAreaPanel = new Ext.Panel({
+                        title:"SVG",
+                        layout:'fit',
+                        border:false,
+                        items: [svgSourceArea],
+                        listeners: {
+                            expand: function(p) {
+                                this.svgFoldFunc = CodeMirror.newFoldFunction(CodeMirror.tagRangeFinder);
+                                var svgSourceEditor = CodeMirror.fromTextArea(document.getElementById("svgSourceTextArea"), {
+                                    mode: "application/xml",
+                                    lineNumbers: true,
+                                    lineWrapping: true,
+                                    onGutterClick: this.svgFoldFunc
+                                });
+                            }
+                        }
+                    });
+
+                    var sourcesPanel = new Ext.Panel({
+                        layout:'accordion',
+                        items: [ bpmn2SourceAreaPanel, jsonSourceAreaPanel, svgSourceAreaPanel, erdfSourceAreaPanel ]
+                    });
+
+                    var win = new Ext.Window({
+                        width:600,
+                        id:'processSources',
+                        height:550,
+                        layout: 'fit',
+                        title:'Process Sources',
+                        items: [sourcesPanel],
+                        buttons		: [
+                            {
+                                text: 'Download BPMN2',
+                                handler: function(){
+                                    var processJSON = ORYX.EDITOR.getSerializedJSON();
+                                    var processName = jsonPath(processJSON.evalJSON(), "$.properties.name");
+                                    var processPackage = jsonPath(processJSON.evalJSON(), "$.properties.package");
+                                    var processVersion = jsonPath(processJSON.evalJSON(), "$.properties.version");
+                                    var fileName = "";
+                                    if(processPackage && processPackage != "") {
+                                        fileName += processPackage;
+                                    }
+                                    if(processName && processName != "") {
+                                        if(fileName != "") {
+                                            fileName += ".";
+                                        }
+                                        fileName += processName;
+                                    }
+                                    if(processVersion && processVersion != "") {
+                                        if(fileName != "") {
+                                            fileName += ".";
+                                        }
+                                        fileName += "v" + processVersion;
+                                    }
+                                    if(fileName == "") {
+                                        fileName = "processbpmn2";
+                                    }
+                                    var toStoreValue = document.getElementById("bpmnSourceTextArea").getValue();
+                                    var method ="post";
+                                    var form = document.createElement("form");
+                                    form.setAttribute("name", "storetofileform");
+                                    form.setAttribute("method", method);
+                                    form.setAttribute("action", ORYX.PATH + "filestore");
+                                    form.setAttribute("target", "_blank");
+
+                                    var fnameInput = document.createElement("input");
+                                    fnameInput.setAttribute("type", "hidden");
+                                    fnameInput.setAttribute("name", "fname");
+                                    fnameInput.setAttribute("value", fileName);
+                                    form.appendChild(fnameInput);
+
+                                    var fextInput = document.createElement("input");
+                                    fextInput.setAttribute("type", "hidden");
+                                    fextInput.setAttribute("name", "fext");
+                                    fextInput.setAttribute("value", "bpmn2");
+                                    form.appendChild(fextInput);
+
+                                    var fdataInput = document.createElement("input");
+                                    fdataInput.setAttribute("type", "hidden");
+                                    fdataInput.setAttribute("name", "data");
+                                    fdataInput.setAttribute("value", toStoreValue);
+                                    form.appendChild(fdataInput);
+                                    document.body.appendChild(form);
+                                    form.submit();
+                                }
+                            },
+                            {
+                                text : 'Close',
+                                handler:function(){
+                                    win.close();
+                                    win = null;
+                                }.bind(this)
+                            }]
+                    });
+                    win.show();
+                    this.bpmn2FoldFunc = CodeMirror.newFoldFunction(CodeMirror.tagRangeFinder);
+                    var bpmn2SourceEditor = CodeMirror.fromTextArea(document.getElementById("bpmnSourceTextArea"), {
+                        mode: "application/xml",
+                        lineNumbers: true,
+                        lineWrapping: true,
+                        onGutterClick: this.bpmn2FoldFunc
                     });
                 }catch(e){
                     ORYX.EDITOR._pluginFacade.raiseEvent({
