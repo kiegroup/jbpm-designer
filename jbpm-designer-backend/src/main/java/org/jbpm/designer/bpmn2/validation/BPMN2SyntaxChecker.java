@@ -247,12 +247,19 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 				for(EventDefinition ed : eventdefs) {
     				if(ed instanceof TimerEventDefinition) {
     	                TimerEventDefinition ted = (TimerEventDefinition) ed;
-    	                boolean gotTimerDef = (ted.getTimeDate() != null || ted.getTimeDuration() != null || ted.getTimeCycle() != null);
-    	                if(!gotTimerDef) {
-    	                	addError(event, "Catch Event has no timedate.");
-	    	                addError(event, "Catch Event has no timeduration.");
-	    	                addError(event, "Catch Event has no timecycle.");
-    	                }
+                        if(ted.getTimeDate() != null && ted.getTimeDuration() != null && ted.getTimeCycle() != null) {
+                            addError(event, "Catch Even has timeDate and timeDuration and timeCycle defined.");
+                        } else if(ted.getTimeDate() != null && ted.getTimeDuration() != null) {
+                            addError(event, "Catch Even has both timeDate and timeDuration defined.");
+                        } else if(ted.getTimeDate() != null && ted.getTimeCycle() != null) {
+                            addError(event, "Catch Even has both timeDate and timeCycle defined.");
+                        } else if(ted.getTimeDuration() != null && ted.getTimeCycle() != null) {
+                            addError(event, "Catch Even has both timeduration and timecycle defined.");
+                        }
+
+                        if(ted.getTimeDate() == null && ted.getTimeDuration() == null && ted.getTimeCycle() == null) {
+                            addError(event, "Catch Even has no timeDate or timeDuration or timeCycle defined.");
+                        }
     	            } else if( ed instanceof SignalEventDefinition) {
     	                if(((SignalEventDefinition) ed).getSignalRef() == null) {
     	                	addError(event, "Catch Event has no signalref.");
@@ -287,16 +294,20 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 				List<EventDefinition> eventdefs = event.getEventDefinitions();
 		        for(EventDefinition ed : eventdefs) {
 		            if(ed instanceof TimerEventDefinition) {
-		                TimerEventDefinition ted = (TimerEventDefinition) ed;
-		                if(ted.getTimeDate() == null) {
-		                	addError(event, "Throw Event has no timedate.");
-		                }
-		                if(ted.getTimeDuration() == null) {
-		                	addError(event, "Throw Event has no timeduration.");
-		                }
-		                if(ted.getTimeCycle() != null) {
-		                	addError(event, "Throw Event has no timecycle.");
-		                }
+                        TimerEventDefinition ted = (TimerEventDefinition) ed;
+                        if(ted.getTimeDate() != null && ted.getTimeDuration() != null && ted.getTimeCycle() != null) {
+                            addError(event, "Catch Even has timeDate and timeDuration and timeCycle defined.");
+                        } else if(ted.getTimeDate() != null && ted.getTimeDuration() != null) {
+                            addError(event, "Catch Even has both timeDate and timeDuration defined.");
+                        } else if(ted.getTimeDate() != null && ted.getTimeCycle() != null) {
+                            addError(event, "Catch Even has both timeDate and timeCycle defined.");
+                        } else if(ted.getTimeDuration() != null && ted.getTimeCycle() != null) {
+                            addError(event, "Catch Even has both timeduration and timecycle defined.");
+                        }
+
+                        if(ted.getTimeDate() == null && ted.getTimeDuration() == null && ted.getTimeCycle() == null) {
+                            addError(event, "Catch Even has no timeDate or timeDuration or timeCycle defined.");
+                        }
 		            } else if( ed instanceof SignalEventDefinition) {
 		                if(((SignalEventDefinition) ed).getSignalRef() == null) {
 		                	addError(event, "Throw Event has no signalref.");
