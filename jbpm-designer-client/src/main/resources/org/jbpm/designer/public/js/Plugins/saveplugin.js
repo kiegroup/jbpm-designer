@@ -7,6 +7,7 @@ if (!ORYX.Config)
 ORYX.Plugins.SavePlugin = Clazz.extend({
     construct: function(facade){
         this.facade = facade;
+        this.vt;
 
         this.facade.offer({
             'name': ORYX.I18N.Save.save,
@@ -30,49 +31,49 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
             }.bind(this)
         });
 
-//        this.facade.offer({
-//            'name': 'Enable autosave',
-//            'functionality': this.enableautosave.bind(this),
-//            'group': ORYX.I18N.Save.group,
-//            'icon': ORYX.BASE_FILE_PATH + "images/enable.png",
-//            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
-//            'description': 'Enable autosave',
-//            'index': 2,
-//            'minShape': 0,
-//            'maxShape': 0,
-//            'isEnabled': function(){
-//                return !ORYX.AUTOSAVE_ENABLED;
-////                profileParamName = "profile";
-////                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-////                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-////                regexa = new RegExp( regexSa );
-////                profileParams = regexa.exec( window.location.href );
-////                profileParamValue = profileParams[1];
-////                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
-//            }.bind(this)
-//        });
-//
-//        this.facade.offer({
-//            'name': 'Disable autosave',
-//            'functionality': this.disableautosave.bind(this),
-//            'group': ORYX.I18N.Save.group,
-//            'icon': ORYX.BASE_FILE_PATH + "images/disable.png",
-//            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
-//            'description': 'Disable autosave',
-//            'index': 3,
-//            'minShape': 0,
-//            'maxShape': 0,
-//            'isEnabled': function(){
-//                return ORYX.AUTOSAVE_ENABLED;
-////                profileParamName = "profile";
-////                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-////                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-////                regexa = new RegExp( regexSa );
-////                profileParams = regexa.exec( window.location.href );
-////                profileParamValue = profileParams[1];
-////                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
-//            }.bind(this)
-//        });
+        this.facade.offer({
+            'name': 'Enable autosave',
+            'functionality': this.enableautosave.bind(this),
+            'group': ORYX.I18N.Save.group,
+            'icon': ORYX.BASE_FILE_PATH + "images/enable.png",
+            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
+            'description': 'Enable autosave',
+            'index': 2,
+            'minShape': 0,
+            'maxShape': 0,
+            'isEnabled': function(){
+                return !ORYX.AUTOSAVE_ENABLED;
+//                profileParamName = "profile";
+//                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//                regexa = new RegExp( regexSa );
+//                profileParams = regexa.exec( window.location.href );
+//                profileParamValue = profileParams[1];
+//                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
+            }.bind(this)
+        });
+
+        this.facade.offer({
+            'name': 'Disable autosave',
+            'functionality': this.disableautosave.bind(this),
+            'group': ORYX.I18N.Save.group,
+            'icon': ORYX.BASE_FILE_PATH + "images/disable.png",
+            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
+            'description': 'Disable autosave',
+            'index': 3,
+            'minShape': 0,
+            'maxShape': 0,
+            'isEnabled': function(){
+                return ORYX.AUTOSAVE_ENABLED;
+//                profileParamName = "profile";
+//                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//                regexa = new RegExp( regexSa );
+//                profileParams = regexa.exec( window.location.href );
+//                profileParamValue = profileParams[1];
+//                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
+            }.bind(this)
+        });
 
         this.facade.offer({
             'name': 'Delete',
@@ -81,7 +82,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
             'icon': ORYX.BASE_FILE_PATH + "images/delete2.gif",
             dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
             'description': ORYX.I18N.Save.saveDesc,
-            'index': 2,
+            'index': 4,
             'minShape': 0,
             'maxShape': 0,
             'isEnabled': function(){
@@ -203,6 +204,9 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
     enableautosave: function() {
         ORYX.AUTOSAVE_ENABLED = true;
         this.facade.raiseEvent({type: ORYX.CONFIG.EVENT_STENCIL_SET_LOADED});
+        this.vt = window.setInterval((function(){
+            this.save();
+        }).bind(this), 30000);
         this.facade.raiseEvent({
             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
             ntype		: 'info',
@@ -214,6 +218,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
     disableautosave: function() {
         ORYX.AUTOSAVE_ENABLED = false;
         this.facade.raiseEvent({type: ORYX.CONFIG.EVENT_STENCIL_SET_LOADED});
+        window.clearInterval(this.vt);
         this.facade.raiseEvent({
             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
             ntype		: 'info',
