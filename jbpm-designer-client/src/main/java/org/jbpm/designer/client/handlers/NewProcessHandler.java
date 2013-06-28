@@ -5,12 +5,11 @@ import javax.inject.Inject;
 
 import com.google.gwt.core.client.Callback;
 import com.google.gwt.user.client.ui.IsWidget;
+import org.guvnor.common.services.project.model.Package;
 import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.jboss.errai.ioc.client.api.Caller;
 import org.jbpm.designer.client.type.Bpmn2Type;
 import org.jbpm.designer.service.DesignerAssetService;
-import org.kie.workbench.common.services.shared.context.*;
-import org.kie.workbench.common.services.shared.context.Package;
 import org.kie.workbench.common.widgets.client.handlers.DefaultNewResourceHandler;
 import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
 import org.uberfire.backend.vfs.Path;

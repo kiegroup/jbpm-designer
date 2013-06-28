@@ -276,7 +276,16 @@
        <version>1.1.3</version>
     </dependency>
 
-    <!-- Kie Workbench -->
+
+    <!-- Guvnor -->
+    <dependency>
+      <groupId>org.guvnor</groupId>
+      <artifactId>guvnor-services-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.guvnor</groupId>
+      <artifactId>guvnor-m2repo-editor-api</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.guvnor</groupId>
       <artifactId>guvnor-m2repo-editor-client</artifactId>
@@ -285,11 +294,28 @@
       <groupId>org.guvnor</groupId>
       <artifactId>guvnor-m2repo-editor-backend</artifactId>
     </dependency>
-
     <dependency>
-      <groupId>org.kie.workbench.services</groupId>
-      <artifactId>kie-wb-common-project-api</artifactId>
+      <groupId>org.guvnor</groupId>
+      <artifactId>guvnor-project-api</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.guvnor</groupId>
+      <artifactId>guvnor-project-backend</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.guvnor</groupId>
+      <artifactId>guvnor-workingset-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.guvnor</groupId>
+      <artifactId>guvnor-workingset-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.guvnor</groupId>
+      <artifactId>guvnor-project-builder</artifactId>
+    </dependency>
+
+    <!-- Kie Workbench -->
     <dependency>
       <groupId>org.kie.workbench.screens</groupId>
       <artifactId>kie-wb-common-project-explorer-client</artifactId>
@@ -314,21 +340,10 @@
         <groupId>org.kie.workbench.screens</groupId>
         <artifactId>kie-wb-common-project-explorer-api</artifactId>
     </dependency>
-
-    <dependency>
-      <groupId>org.kie.workbench.services</groupId>
-      <artifactId>kie-wb-common-workingset-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.workbench.services</groupId>
-      <artifactId>kie-wb-common-workingset-client</artifactId>
-    </dependency>
-
     <dependency>
       <groupId>org.kie.workbench.services</groupId>
       <artifactId>kie-wb-common-security</artifactId>
     </dependency>
-
     <dependency>
       <groupId>org.kie.workbench.widgets</groupId>
       <artifactId>kie-wb-common-ui</artifactId>
@@ -352,10 +367,6 @@
     <dependency>
       <groupId>org.kie.workbench.widgets</groupId>
       <artifactId>kie-wb-error-messages-widget</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.workbench.services</groupId>
-      <artifactId>kie-wb-common-builder</artifactId>
     </dependency>
 
   </dependencies>
@@ -387,6 +398,10 @@
             <!-- Guvnor -->
             <compileSourcesArtifact>org.guvnor:guvnor-m2repo-editor-api</compileSourcesArtifact>
             <compileSourcesArtifact>org.guvnor:guvnor-m2repo-editor-client</compileSourcesArtifact>
+            <compileSourcesArtifact>org.guvnor:guvnor-workingset-api</compileSourcesArtifact>
+            <compileSourcesArtifact>org.guvnor:guvnor-workingset-client</compileSourcesArtifact>
+            <compileSourcesArtifact>org.guvnor:guvnor-services-api</compileSourcesArtifact>
+            <compileSourcesArtifact>org.guvnor:guvnor-project-api</compileSourcesArtifact>
 
             <!-- Common dependencies -->
             <compileSourcesArtifact>org.kie.workbench.screens:kie-wb-common-project-editor-api</compileSourcesArtifact>
@@ -401,9 +416,6 @@
             <compileSourcesArtifact>org.kie.workbench.widgets:kie-wb-config-resource-widget</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.workbench.services:kie-wb-common-services-api</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.workbench.services:kie-wb-common-security</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.workbench.services:kie-wb-common-workingset-api</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.workbench.services:kie-wb-common-workingset-client</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.workbench.services:kie-wb-common-project-api</compileSourcesArtifact>
 
             <!-- Kie Commons -->
             <compileSourcesArtifact>org.kie.commons:kie-commons-data</compileSourcesArtifact>

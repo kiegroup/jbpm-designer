@@ -1,49 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.4.0//EN"
-        "http://google-web-toolkit.googlecode.com/svn/tags/2.5.0/distro-source/core/src/gwt-module.dtd">
+    "http://google-web-toolkit.googlecode.com/svn/tags/2.5.0/distro-source/core/src/gwt-module.dtd">
 <module>
 
-    <inherits name="org.jboss.errai.enterprise.CDI"/>
-    <inherits name="org.jboss.errai.ui.UI"/>
-    <inherits name="com.google.gwt.xml.XML"/>
+  <inherits name="org.jboss.errai.enterprise.CDI"/>
+  <inherits name="org.jboss.errai.ui.UI"/>
+  <inherits name="com.google.gwt.xml.XML"/>
 
-    <!-- Uberfire dependencies -->
-    <inherits name="org.uberfire.UberfireWorkbench"/>
-    <inherits name="org.uberfire.UberfireWidgetsCore"/>
-    <inherits name="org.uberfire.UberfireWidgetsCommons"/>
-    <inherits name="org.uberfire.UberfireBackend"/>
-    <inherits name="org.uberfire.security.UberfireSecurityClient"/>
+  <!-- Uberfire dependencies -->
+  <inherits name="org.uberfire.UberfireWorkbench"/>
+  <inherits name="org.uberfire.UberfireWidgetsCore"/>
+  <inherits name="org.uberfire.UberfireWidgetsCommons"/>
+  <inherits name="org.uberfire.UberfireBackend"/>
+  <inherits name="org.uberfire.security.UberfireSecurityClient"/>
 
-    <!-- Guvnor dependencies -->
-    <inherits name="org.guvnor.m2repo.GuvnorM2RepoEditorClient"/>
+  <!-- Guvnor dependencies -->
+  <inherits name="org.guvnor.m2repo.GuvnorM2RepoEditorClient"/>
+  <inherits name='org.guvnor.common.services.GuvnorServicesAPI'/>
+  <inherits name="org.guvnor.common.services.project.GuvnorProjectAPI"/>
+  <inherits name="org.guvnor.common.services.workingset.GuvnorWorkingsetAPI"/>
+  <inherits name="org.guvnor.common.services.workingset.GuvnorWorkingsetClient"/>
 
-    <!--Common Screens -->
-    <inherits name="org.kie.workbench.common.screens.explorer.KieWorkbenchProjectExplorerClient"/>
-    <inherits name="org.kie.workbench.common.screens.projecteditor.KieWorkbenchCommonProjectEditorClient"/>
-    <inherits
-            name="org.kie.workbench.common.screens.projectimportsscreen.KieWorkbenchCommonProjectImportsScreenClient"/>
+  <!--Common Screens -->
+  <inherits name="org.kie.workbench.common.screens.explorer.KieWorkbenchProjectExplorerClient"/>
+  <inherits name="org.kie.workbench.common.screens.projecteditor.KieWorkbenchCommonProjectEditorClient"/>
+  <inherits name="org.kie.workbench.common.screens.projectimportsscreen.KieWorkbenchCommonProjectImportsScreenClient"/>
 
-    <!-- Common Services -->
-    <inherits name="org.kie.workbench.common.widgets.KieWorkbenchWidgetsCommon"/>
-    <inherits name='org.kie.workbench.common.services.KieWorkbenchCommonServicesAPI'/>
-    <inherits name='org.kie.workbench.common.services.security.KieWorkbenchCommonSecurity'/>
-    <inherits name="org.kie.workbench.common.services.workingset.KieWorkbenchWorkingsetClient"/>
+  <!-- Common Services -->
+  <inherits name="org.kie.workbench.common.widgets.KieWorkbenchWidgetsCommon"/>
+  <inherits name='org.kie.workbench.common.services.KieWorkbenchCommonServicesAPI'/>
+  <inherits name='org.kie.workbench.common.services.security.KieWorkbenchCommonSecurity'/>
 
-    <!-- designer -->
-    <inherits name="org.jbpm.designer.jBPMDesignerAPI"/>
-    <inherits name="org.jbpm.designer.jBPMDesignerClient"/>
+  <!-- designer -->
+  <inherits name="org.jbpm.designer.jBPMDesignerAPI"/>
+  <inherits name="org.jbpm.designer.jBPMDesignerClient"/>
 
-    <!-- Specify the application specific style sheet. -->
-    <stylesheet src='css/uberfire-showcase.css'/>
+  <!-- Specify the application specific style sheet. -->
+  <stylesheet src='css/uberfire-showcase.css'/>
 
-    <set-property name="user.agent" value="safari,gecko1_8"/>
+  <set-property name="user.agent" value="safari,gecko1_8"/>
 
-    <!-- i18n -->
-    <extend-property name="locale" values="en"/>
-    <extend-property name="locale" values="ja"/>
-    <set-property-fallback name="locale" value="en"/>
+  <!-- i18n -->
+  <extend-property name="locale" values="en"/>
+  <extend-property name="locale" values="ja"/>
+  <set-property-fallback name="locale" value="en"/>
 
-    <!-- Specify the paths for translatable code -->
-    <source path='client'/>
+  <!-- Specify the paths for translatable code -->
+  <source path='client'/>
 
 </module>

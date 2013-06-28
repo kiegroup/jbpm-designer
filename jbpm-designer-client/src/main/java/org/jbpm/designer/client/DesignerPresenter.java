@@ -8,14 +8,18 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.FrameElement;
 import com.google.gwt.dom.client.ScriptElement;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.IsWidget;
+import org.guvnor.common.services.shared.file.DeleteService;
 import org.jboss.errai.bus.client.api.RemoteCallback;
 import org.jboss.errai.ioc.client.api.Caller;
 import org.jbpm.designer.client.type.Bpmn2Type;
 import org.jbpm.designer.service.DesignerAssetService;
+import org.kie.workbench.common.widgets.client.callbacks.HasBusyIndicatorDefaultErrorCallback;
+import org.kie.workbench.common.widgets.client.resources.i18n.CommonConstants;
+import org.kie.workbench.common.widgets.client.widget.BusyIndicatorView;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.PathFactory;
+import org.uberfire.backend.vfs.VFSService;
 import org.uberfire.client.annotations.OnStart;
 import org.uberfire.client.annotations.WorkbenchEditor;
 import org.uberfire.client.annotations.WorkbenchPartTitle;
@@ -23,16 +27,10 @@ import org.uberfire.client.annotations.WorkbenchPartView;
 import org.uberfire.client.mvp.PlaceManager;
 import org.uberfire.client.mvp.UberView;
 import org.uberfire.mvp.PlaceRequest;
-import org.uberfire.mvp.impl.DefaultPlaceRequest;
 import org.uberfire.mvp.impl.PathPlaceRequest;
 import org.uberfire.workbench.events.NotificationEvent;
 import org.uberfire.workbench.events.ResourceDeletedEvent;
 import org.uberfire.workbench.events.ResourceUpdatedEvent;
-import org.uberfire.backend.vfs.VFSService;
-import org.kie.workbench.common.widgets.client.resources.i18n.CommonConstants;
-import org.kie.workbench.common.services.shared.file.DeleteService;
-import org.kie.workbench.common.widgets.client.widget.BusyIndicatorView;
-import org.kie.workbench.common.widgets.client.callbacks.HasBusyIndicatorDefaultErrorCallback;
 
 @Dependent
 @WorkbenchEditor(identifier = "jbpm.designer", supportedTypes = { Bpmn2Type.class })

@@ -2,154 +2,166 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.jbpm</groupId>
-        <artifactId>jbpm-designer</artifactId>
-        <version>6.0.0-SNAPSHOT</version>
-    </parent>
+  <parent>
+    <groupId>org.jbpm</groupId>
+    <artifactId>jbpm-designer</artifactId>
+    <version>6.0.0-SNAPSHOT</version>
+  </parent>
 
-    <artifactId>jbpm-designer-client</artifactId>
-    <packaging>jar</packaging>
+  <artifactId>jbpm-designer-client</artifactId>
+  <packaging>jar</packaging>
 
-    <name>jBPM Designer - Client</name>
+  <name>jBPM Designer - Client</name>
 
-    <dependencies>
+  <dependencies>
 
-        <dependency>
-            <groupId>org.jbpm</groupId>
-            <artifactId>jbpm-designer-api</artifactId>
-        </dependency>
+    <dependency>
+      <groupId>org.jbpm</groupId>
+      <artifactId>jbpm-designer-api</artifactId>
+    </dependency>
 
-        <!-- Errai Core -->
-        <dependency>
-            <groupId>org.jboss.errai</groupId>
-            <artifactId>errai-bus</artifactId>
-        </dependency>
+    <!-- Errai Core -->
+    <dependency>
+      <groupId>org.jboss.errai</groupId>
+      <artifactId>errai-bus</artifactId>
+    </dependency>
 
-        <dependency>
-            <groupId>org.jboss.errai</groupId>
-            <artifactId>errai-ioc</artifactId>
-        </dependency>
+    <dependency>
+      <groupId>org.jboss.errai</groupId>
+      <artifactId>errai-ioc</artifactId>
+    </dependency>
 
-        <dependency>
-            <groupId>javax.enterprise</groupId>
-            <artifactId>cdi-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
+    <dependency>
+      <groupId>javax.enterprise</groupId>
+      <artifactId>cdi-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
 
-        <!-- CDI Integration Modules -->
-        <dependency>
-            <groupId>org.jboss.errai</groupId>
-            <artifactId>errai-cdi-client</artifactId>
-        </dependency>
+    <!-- CDI Integration Modules -->
+    <dependency>
+      <groupId>org.jboss.errai</groupId>
+      <artifactId>errai-cdi-client</artifactId>
+    </dependency>
 
-        <dependency>
-            <groupId>org.jboss.errai</groupId>
-            <artifactId>errai-javax-enterprise</artifactId>
-            <scope>provided</scope>
-        </dependency>
+    <dependency>
+      <groupId>org.jboss.errai</groupId>
+      <artifactId>errai-javax-enterprise</artifactId>
+      <scope>provided</scope>
+    </dependency>
 
-        <dependency>
-            <groupId>org.jboss.errai</groupId>
-            <artifactId>errai-weld-integration</artifactId>
-        </dependency>
+    <dependency>
+      <groupId>org.jboss.errai</groupId>
+      <artifactId>errai-weld-integration</artifactId>
+    </dependency>
 
-        <dependency>
-            <groupId>org.jboss.errai</groupId>
-            <artifactId>errai-cdi-jetty</artifactId>
-        </dependency>
+    <dependency>
+      <groupId>org.jboss.errai</groupId>
+      <artifactId>errai-cdi-jetty</artifactId>
+    </dependency>
 
-        <dependency>
-            <groupId>org.uberfire</groupId>
-            <artifactId>uberfire-workbench</artifactId>
-        </dependency>
-
-
-        <!-- GWT and GWT Extensions -->
-        <dependency>
-            <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-user</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-jdk14</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>log4j-over-slf4j</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
+    <dependency>
+      <groupId>org.uberfire</groupId>
+      <artifactId>uberfire-workbench</artifactId>
+    </dependency>
 
 
-        <!-- KIE dependencies -->
-        <dependency>
-            <groupId>org.kie.workbench.widgets</groupId>
-           <artifactId>kie-wb-common-ui</artifactId>
-        </dependency>
-    </dependencies>
+    <!-- GWT and GWT Extensions -->
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-user</artifactId>
+      <scope>provided</scope>
+    </dependency>
 
-    <build>
-        <resources>
-            <!-- Include src/main/java in order not to break the Eclipse GWT plug-in -->
-            <resource>
-                <directory>src/main/java</directory>
-            </resource>
-            <!-- Include module descriptors from src/main/resources in order not to break the Intellij GWT plug-in -->
-            <resource>
-                <directory>src/main/resources</directory>
-            </resource>
-        </resources>
-        <plugins>
-
-            <!-- We need source files generated by our Java Annotations Processor -->
-            <!-- in the resulting JAR for GWT to reference in child projects. Consequentially -->
-            <!-- copy the source files to the target folder before packaging -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-resources</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/target/classes</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>target/generated-sources/annotations</directory>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>jar</goal>
-                            <goal>test-jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-jdk14</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>log4j-over-slf4j</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
 
 
-        </plugins>
+    <!-- Guvnor dependencies -->
+    <dependency>
+      <groupId>org.guvnor</groupId>
+      <artifactId>guvnor-project-api</artifactId>
+    </dependency>
 
-    </build>
+    <dependency>
+      <groupId>org.guvnor</groupId>
+      <artifactId>guvnor-services-api</artifactId>
+    </dependency>
+
+
+    <!-- KIE dependencies -->
+    <dependency>
+      <groupId>org.kie.workbench.widgets</groupId>
+      <artifactId>kie-wb-common-ui</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <resources>
+      <!-- Include src/main/java in order not to break the Eclipse GWT plug-in -->
+      <resource>
+        <directory>src/main/java</directory>
+      </resource>
+      <!-- Include module descriptors from src/main/resources in order not to break the Intellij GWT plug-in -->
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+    </resources>
+    <plugins>
+
+      <!-- We need source files generated by our Java Annotations Processor -->
+      <!-- in the resulting JAR for GWT to reference in child projects. Consequentially -->
+      <!-- copy the source files to the target folder before packaging -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/target/classes</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>target/generated-sources/annotations</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>jar</goal>
+              <goal>test-jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+
+    </plugins>
+
+  </build>
 
 </project>
