@@ -85,7 +85,6 @@ public class Activator implements BundleActivator {
                 context.getServiceReference(IDiagramPreferenceService.class.getName());
             if (sRef != null) {
             	IDiagramPreferenceService service = (IDiagramPreferenceService) context.getService(sRef);
-                EditorHandler.PREFERENCE_FACTORY = service;
             } else {
                 //use a service tracker to be called back when the IUUIDBasedRepositoryFactory is ready:
                 ServiceTrackerCustomizer cust = new ServiceTrackerCustomizer() {
@@ -100,7 +99,6 @@ public class Activator implements BundleActivator {
 
                     public Object addingService(ServiceReference reference) {
                     	IDiagramPreferenceService service = (IDiagramPreferenceService) context.getService(reference);
-                        EditorHandler.PREFERENCE_FACTORY = service;
                         return service;
                     }
                 };

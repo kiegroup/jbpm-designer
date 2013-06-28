@@ -25,8 +25,14 @@ import org.uberfire.client.mvp.UberView;
 import org.uberfire.mvp.PlaceRequest;
 import org.uberfire.mvp.impl.DefaultPlaceRequest;
 import org.uberfire.mvp.impl.PathPlaceRequest;
+import org.uberfire.workbench.events.NotificationEvent;
+import org.uberfire.workbench.events.ResourceDeletedEvent;
 import org.uberfire.workbench.events.ResourceUpdatedEvent;
 import org.uberfire.backend.vfs.VFSService;
+import org.kie.workbench.common.widgets.client.resources.i18n.CommonConstants;
+import org.kie.workbench.common.services.shared.file.DeleteService;
+import org.kie.workbench.common.widgets.client.widget.BusyIndicatorView;
+import org.kie.workbench.common.widgets.client.callbacks.HasBusyIndicatorDefaultErrorCallback;
 
 @Dependent
 @WorkbenchEditor(identifier = "jbpm.designer", supportedTypes = { Bpmn2Type.class })
@@ -54,7 +60,19 @@ public class DesignerPresenter {
     private Event<ResourceUpdatedEvent> resourceUpdatedEvent;
 
     @Inject
+    Event<ResourceDeletedEvent> resourceDeleteEvent;
+
+    @Inject
+    private Event<NotificationEvent> notification;
+
+    @Inject
     private Caller<VFSService> vfsServices;
+
+    @Inject
+    private Caller<DeleteService> deleteService;
+
+    @Inject
+    private BusyIndicatorView busyIndicatorView;
 
     private Path path;
     private PlaceRequest place;
@@ -66,6 +84,7 @@ public class DesignerPresenter {
         this.place = place;
         this.publishOpenInTab(this);
         this.publishSignalOnAssetUpdate(this);
+        this.publishSignalOnAssetDelete(this);
         if ( path != null ) {
             assetService.call( new RemoteCallback<String>() {
                 @Override
@@ -123,6 +142,12 @@ public class DesignerPresenter {
         }
     }-*/;
 
+    private native void publishSignalOnAssetDelete(DesignerPresenter dp)/*-{
+        $wnd.designersignalassetdelete = function (uri) {
+            dp.@org.jbpm.designer.client.DesignerPresenter::assetDeleteEvent(Ljava/lang/String;)(uri);
+        }
+    }-*/;
+
     public void assetUpdateEvent(String uri) {
         vfsServices.call( new RemoteCallback<Path>() {
             @Override
@@ -130,6 +155,30 @@ public class DesignerPresenter {
                 resourceUpdatedEvent.fire( new ResourceUpdatedEvent(mypath) );
             }
         } ).get( uri );
+    }
+
+    public void assetDeleteEvent(String uri) {
+        vfsServices.call( new RemoteCallback<Path>() {
+            @Override
+            public void callback( final Path mypath ) {
+                deleteService.call( getDeleteSuccessCallback( mypath ),
+                        new HasBusyIndicatorDefaultErrorCallback( busyIndicatorView ) ).delete( mypath,
+                        "" );
+
+            }
+        } ).get( uri );
+    }
+
+    private RemoteCallback<Void> getDeleteSuccessCallback( final Path path ) {
+        return new RemoteCallback<Void>() {
+
+            @Override
+            public void callback( final Void response ) {
+                notification.fire( new NotificationEvent( CommonConstants.INSTANCE.ItemDeletedSuccessfully() ) );
+                placeManager.closePlace( new PathPlaceRequest( path ) );
+                resourceDeleteEvent.fire( new ResourceDeletedEvent( path ) );
+            }
+        };
     }
 
     public void openInTab(String filename, String uri) {

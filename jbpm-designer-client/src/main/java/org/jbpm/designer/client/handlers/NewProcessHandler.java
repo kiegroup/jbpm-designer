@@ -47,8 +47,7 @@ public class NewProcessHandler extends DefaultNewResourceHandler {
             public void callback( final Path path ) {
                 presenter.complete();
                 notifySuccess();
-                final PlaceRequest place = new PathPlaceRequest( path,
-                        "jbpm.designer" );
+                final PlaceRequest place = new PathPlaceRequest( path );
                 placeManager.goTo( place );
             }
         }).createProcess(pkg.getPackageMainResourcesPath(), buildFileName( resourceType, baseFileName ));

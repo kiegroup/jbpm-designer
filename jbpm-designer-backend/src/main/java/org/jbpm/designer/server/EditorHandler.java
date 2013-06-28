@@ -84,23 +84,6 @@ public class EditorHandler extends HttpServlet {
     private static final Logger _logger = 
         Logger.getLogger(EditorHandler.class);
     
-    public static IDiagramPreferenceService PREFERENCE_FACTORY = new IDiagramPreferenceService() {
-
-        public IDiagramPreference createPreference(HttpServletRequest req) {
-            //later we could read the parameters from the URL as well.
-            return new IDiagramPreference() {
-
-                public boolean isAutoSaveEnabled() {
-                    return true;
-                }
-
-                public int getAutosaveInterval() {
-                    return 120000;
-                }
-            };
-        }
-    };
-
     /**
      * The base path under which the application will be made available at runtime.
      * This constant should be used throughout the application.
@@ -425,10 +408,6 @@ public class EditorHandler extends HttpServlet {
         boolean tokenFound = false;
         boolean replacementMade = false;
 
-        IDiagramPreference pref = PREFERENCE_FACTORY.createPreference(request);
-        int autoSaveInt = pref.getAutosaveInterval();
-        boolean autoSaveOn = pref.isAutoSaveEnabled();
-
         while(tokenizer.hasMoreTokens()) {
             String elt = tokenizer.nextToken();
             if ("editorprofile".equals(elt)) {
@@ -466,12 +445,6 @@ public class EditorHandler extends HttpServlet {
                 replacementMade = true;
             } else if ("debug".equals(elt)) {
                 resultHtml.append(_devMode);
-                replacementMade = true;
-            } else if ("autosaveinterval".equals(elt)) {
-                resultHtml.append(autoSaveInt);
-                replacementMade = true;
-            } else if ("autosavedefault".equals(elt)) {
-                resultHtml.append(autoSaveOn);
                 replacementMade = true;
             } else if ("preprocessing".equals(elt)) {
                 resultHtml.append(preprocessingUnit == null ? "" : preprocessingUnit.getOutData());
