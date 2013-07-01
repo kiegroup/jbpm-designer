@@ -126,10 +126,6 @@
       <param-value>true</param-value>
     </init-param>
     <init-param>
-      <param-name>designer.locale</param-name>
-      <param-value>en</param-value>
-    </init-param>
-    <init-param>
       <param-name>designer.skin</param-name>
       <param-value>default</param-value>
     </init-param>

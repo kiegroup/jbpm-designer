@@ -101,11 +101,6 @@ public class EditorHandler extends HttpServlet {
     public static final String PREPROCESS = "designer.preprocess";
     
     /**
-     * The designer locale param.
-     */
-    public static final String LOCALE = "designer.locale";
-    
-    /**
      * The designer skin param.
      */
     public static final String SKIN = "designer.skin";
@@ -124,11 +119,6 @@ public class EditorHandler extends HttpServlet {
      * The designer preprocess mode setting.
      */
     private boolean _preProcess;
-    
-    /**
-     * The designer locale setting.
-     */
-    private String _locale;
     
     /**
      * The designer skin setting.
@@ -183,7 +173,6 @@ public class EditorHandler extends HttpServlet {
         
         _devMode = Boolean.parseBoolean( System.getProperty(DEV) == null ? config.getInitParameter(DEV) : System.getProperty(DEV) );
         _preProcess = Boolean.parseBoolean( System.getProperty(PREPROCESS) == null ? config.getInitParameter(PREPROCESS) : System.getProperty(PREPROCESS) );
-        _locale = System.getProperty(LOCALE) == null ? config.getInitParameter(LOCALE) : System.getProperty(LOCALE);
         _skin = System.getProperty(SKIN) == null ? config.getInitParameter(SKIN) : System.getProperty(SKIN);
         _designerVersion = readDesignerVersion(config.getServletContext());
 
@@ -232,7 +221,6 @@ public class EditorHandler extends HttpServlet {
         }
     
         // generate script to setup the languages
-        _envFiles.add("i18n/translation_" + _locale + ".js");
         if (!_devMode) {
         	if (_logger.isInfoEnabled()) {
                 _logger.info(
@@ -470,9 +458,6 @@ public class EditorHandler extends HttpServlet {
                 replacementMade = true;
             } else if ("storesvgonsave".equals(elt)) {
                 resultHtml.append(profile.getStoreSVGonSaveOption());
-                replacementMade = true;
-            } else if("designerlocale".equals(elt)) {
-            	resultHtml.append(_locale);
                 replacementMade = true;
             } else if ("defaultSkin".equals(elt)) {
                 resultHtml.append(designer_path + "css/theme-default.css");

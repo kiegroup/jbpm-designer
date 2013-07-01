@@ -85,7 +85,7 @@
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/imageviewer.js" type="text/javascript"></script>
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/svgviewer.js" type="text/javascript"></script>
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/panelcollapsedtitle.js" type="text/javascript"></script>
-    <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/i18n/translation_en.js" type="text/javascript"></script>
+    <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/i18n/translation_<%=request.getParameter("locale")%>.js" type="text/javascript"></script>
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/plugin/ORYX.Plugins.SelectStencilSetPerspective.js" type="text/javascript"></script>
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/plugin/ORYX.Plugins.Toolbar.js" type="text/javascript"></script>
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/plugin/ORYX.Plugins.ProcessInfo.js" type="text/javascript"></script>
