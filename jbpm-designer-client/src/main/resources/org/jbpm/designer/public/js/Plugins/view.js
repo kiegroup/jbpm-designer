@@ -1157,11 +1157,86 @@ ORYX.Plugins.View = {
      */
     _loadJSON: function( jsonString ){
         if (jsonString) {
-            var jsonObj = jsonString.evalJSON();
-            this.facade.importJSON(jsonString);
+            Ext.MessageBox.confirm(
+                'Import',
+                'Replace existing model?',
+                function(btn){
+                    if (btn == 'yes') {
+                        this.facade.setSelection(this.facade.getCanvas().getChildShapes(true));
+
+                        var selection = this.facade.getSelection();
+                        var clipboard = new ORYX.Plugins.Edit.ClipBoard();
+                        clipboard.refresh(selection, this.getAllShapesToConsider(selection, true));
+                        var command = new ORYX.Plugins.Edit.DeleteCommand(clipboard , this.facade);
+                        this.facade.executeCommands([command]);
+                        this.facade.importJSON(jsonString);
+                    } else {
+                        this.facade.importJSON(jsonString);
+                    }
+                }.bind(this)
+            );
         } else {
             this._showErrorMessageBox(ORYX.I18N.Oryx.title, ORYX.I18N.jPDLSupport.impFailedJson);
         }
+    },
+
+    getAllShapesToConsider: function(shapes, considerConnections){
+
+        var shapesToConsider = []; // only top-level shapes
+        var childShapesToConsider = []; // all child shapes of top-level shapes
+
+        shapes.each(function(shape){
+            //Throw away these shapes which have a parent in given shapes
+            isChildShapeOfAnother = shapes.any(function(s2){
+                return s2.hasChildShape(shape);
+            });
+            if(isChildShapeOfAnother) return;
+
+            // This shape should be considered
+            shapesToConsider.push(shape);
+            // Consider attached nodes (e.g. intermediate events)
+            if (shape instanceof ORYX.Core.Node) {
+                var attached = shape.getOutgoingNodes();
+                attached = attached.findAll(function(a){ return !shapes.include(a) });
+                shapesToConsider = shapesToConsider.concat(attached);
+            }
+            childShapesToConsider = childShapesToConsider.concat(shape.getChildShapes(true));
+
+
+            if (considerConnections && !(shape instanceof ORYX.Core.Edge)){
+                //concat all incoming and outgoing shapes
+                var connections = shape.getIncomingShapes().concat(shape.getOutgoingShapes());
+
+                connections.each(function(s) {
+                    //we don't want to delete sequence flows with
+                    //an existing 'conditionexpression'
+                    //console.log(s);
+                    if (s instanceof ORYX.Core.Edge && s.properties["oryx-conditionexpression"] && s.properties["oryx-conditionexpression"] != ""){
+                        return;
+                    }
+                    shapesToConsider.push(s);
+                }.bind(this));
+
+            }
+
+        }.bind(this));
+
+        // All edges between considered child shapes should be considered
+        // Look for these edges having incoming and outgoing in childShapesToConsider
+        var edgesToConsider = this.facade.getCanvas().getChildEdges().select(function(edge){
+            // Ignore if already added
+            if(shapesToConsider.include(edge)) return false;
+            // Ignore if there are no docked shapes
+            if(edge.getAllDockedShapes().size() === 0) return false;
+            // True if all docked shapes are in considered child shapes
+            return edge.getAllDockedShapes().all(function(shape){
+                // Remember: Edges can have other edges on outgoing, that is why edges must not be included in childShapesToConsider
+                return shape instanceof ORYX.Core.Edge || childShapesToConsider.include(shape);
+            });
+        });
+        shapesToConsider = shapesToConsider.concat(edgesToConsider);
+
+        return shapesToConsider;
     },
 
     _showErrorMessageBox: function(title, msg){
