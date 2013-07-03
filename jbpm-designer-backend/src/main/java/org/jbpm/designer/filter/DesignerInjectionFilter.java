@@ -31,12 +31,12 @@ public class DesignerInjectionFilter implements Filter {
 
 
         try {
-            PrintWriter out = response.getWriter();
             DesignerResponseWrapper wrapper = new DesignerResponseWrapper((HttpServletResponse) response);
             chain.doFilter(request, wrapper);
             if (!(((HttpServletResponse) response).containsHeader("Content-Encoding")) && response.getContentType() != null &&
                     response.getContentType().indexOf("text/html") >= 0) {
                 StringBuffer buff = wrapper.getBuffer();
+                PrintWriter out = response.getWriter();
                 // workaround for hosted gwt mode
                 if(!(((HttpServletRequest) request).getRequestURI().endsWith("hosted.html"))) {
                     String modifiedResponse = processContent(buff, rules);
