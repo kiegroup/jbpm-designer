@@ -66,6 +66,7 @@ public class TaskFormsEditorServletTest  extends RepositoryBaseTest {
         params.put("profile", "jbpm");
         params.put("taskname", "evaluate");
         params.put("tfvalue", "this is simple task content");
+        params.put("formtype", "ftl");
 
         TaskFormsEditorServlet taskFormsEditorServlet = new TaskFormsEditorServlet();
         taskFormsEditorServlet.setProfile(profile);
@@ -115,6 +116,7 @@ public class TaskFormsEditorServletTest  extends RepositoryBaseTest {
         params.put("profile", "jbpm");
         params.put("taskname", "evaluate");
         params.put("tfvalue", "this is simple task content");
+        params.put("formtype", "ftl");
 
         TaskFormsEditorServlet taskFormsEditorServlet = new TaskFormsEditorServlet();
         taskFormsEditorServlet.setProfile(profile);
