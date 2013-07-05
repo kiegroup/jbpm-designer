@@ -1,8 +1,3 @@
-<html>
-<head>
-<meta charset="utf-8">
-</head>
-<body>
 $usertaskformjavascript()$
 $usertaskformstyle()$
 <div id="container">
@@ -68,5 +63,3 @@ $usertaskformstyle()$
 	<div id="footer">
 	</div>
 </div>
-</body>
-</html>

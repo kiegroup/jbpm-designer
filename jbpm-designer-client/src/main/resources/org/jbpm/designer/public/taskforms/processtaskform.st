@@ -1,8 +1,3 @@
-<html>
-<head>
-<meta charset="utf-8">
-</head>
-<body>
 $processtaskformjavascript()$
 $processtaskformstyle()$
 <div id="container">
@@ -36,5 +31,3 @@ $processtaskformstyle()$
 	<div id="footer">
 	</div>
 </div>
-</body>
-</html>
