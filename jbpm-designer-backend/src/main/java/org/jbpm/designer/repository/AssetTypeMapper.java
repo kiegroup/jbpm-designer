@@ -11,6 +11,7 @@ public class AssetTypeMapper {
         mimeTypes.put("text", "text/plain");
         mimeTypes.put("pdf", "application/pdf");
         mimeTypes.put("ftl", "text/plain");
+        mimeTypes.put("form", "text/xml");
         mimeTypes.put("xml", "text/xml");
         mimeTypes.put("json", "text/json");
         mimeTypes.put("html", "text/html");

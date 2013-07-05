@@ -13,9 +13,26 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
 
     construct: function(facade){
         this.facade = facade;
-        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_TASKFORM_EDIT, this.showTaskFormEditor.bind(this));
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_TASKFORM_EDIT, this.chooseFormEditor.bind(this));
     },
-    showTaskFormEditor: function(options) {
+
+    chooseFormEditor: function(options) {
+        Ext.Msg.show({
+            title : "Form Editor.",
+            msg : "Select which Form Editor to use:",
+            buttons : {yes : 'Graphical Modeler', no : 'Markup Editor', cancel : 'Cancel'},
+            icon : Ext.MessageBox.QUESTION,
+            fn : function(btn) {
+                if(btn == 'yes'){
+                    this.showTaskFormEditor("form", options);
+                } else if(btn == 'no'){
+                    this.showTaskFormEditor("ftl", options);
+                }
+            }.bind(this)
+        });
+    },
+
+    showTaskFormEditor: function(formType, options) {
         if(options && options.tn) {
             // load form widgets first
             Ext.Ajax.request({
@@ -30,7 +47,12 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                             method: 'POST',
                             success: function(response) {
                                 try {
-                                    this._buildandshow(options.tn, response.responseText, widgetJson);
+                                    if(formType == "form") {
+                                        var responseParts = response.responseText.split("|");
+                                        parent.designeropenintab(responseParts[0], responseParts[1]);
+                                    } else {
+                                        this._buildandshow(formType, options.tn, response.responseText, widgetJson);
+                                    }
                                 } catch(e) {
                                     this.facade.raiseEvent({
                                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
@@ -51,6 +73,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                                 });
                             },
                             params: {
+                                formtype: formType,
                                 action: 'load',
                                 taskname: options.tn,
                                 profile: ORYX.PROFILE,
@@ -91,7 +114,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
             });
         }
     },
-    _buildandshow: function(tn, defaultsrc, widgetJson) {
+    _buildandshow: function(formType, tn, defaultsrc, widgetJson) {
         var formvalue = "";
         if(defaultsrc && defaultsrc != "false") {
             formvalue = defaultsrc;
@@ -284,6 +307,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                             });
                         },
                         params: {
+                            formtype: formType,
                             action: 'save',
                             taskname: tn,
                             profile: ORYX.PROFILE,

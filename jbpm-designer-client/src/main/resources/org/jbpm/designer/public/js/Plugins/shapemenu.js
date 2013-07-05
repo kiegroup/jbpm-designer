@@ -234,7 +234,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
 		
 		var utfbutton = new ORYX.Plugins.ShapeMenuButton({
 			callback:		this.editTaskForm.bind(this), 
-			icon: 			ORYX.BASE_FILE_PATH + 'images/human_task_form.png',
+			icon: 			ORYX.BASE_FILE_PATH + 'images/processforms.png',
 			align: 			ORYX.CONFIG.SHAPEMENU_TOP,
 			group:			1,
 			msg:			'Edit Task Form'

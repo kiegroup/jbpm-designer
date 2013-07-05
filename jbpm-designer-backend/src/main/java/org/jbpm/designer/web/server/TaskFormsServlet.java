@@ -37,6 +37,7 @@ public class TaskFormsServlet extends HttpServlet {
             .getLogger(TaskFormsServlet.class);
     private static final String TASKFORMS_PATH = "taskforms";
     private static final String FORMTEMPLATE_FILE_EXTENSION = "ftl";
+    private static final String FORMMODELER_FILE_EXTENSION = "form";
     public static final String designer_path = ConfigurationProvider.getInstance().getDesignerContext();
 
     private IDiagramProfile profile;
@@ -142,6 +143,17 @@ public class TaskFormsServlet extends HttpServlet {
                     .content(taskForm.getOutput().getBytes("UTF-8"));
 
             repository.createAsset(builder.getAsset());
+
+            // create the form modeler asset as well
+            repository.deleteAssetFromPath("/" + taskForm.getPkgName() + "/" + taskForm.getId()+"."+FORMMODELER_FILE_EXTENSION);
+            String formValue = "";
+            AssetBuilder modelerBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
+            modelerBuilder.name(taskForm.getId())
+                    .location(location)
+                    .type(FORMMODELER_FILE_EXTENSION)
+                    .content(formValue.getBytes("UTF-8"));
+
+            repository.createAsset(modelerBuilder.getAsset());
 
 		} catch (Exception e) {
 			_logger.error(e.getMessage());
