@@ -369,6 +369,72 @@
       <artifactId>kie-wb-error-messages-widget</artifactId>
     </dependency>
 
+      <!-- formModeler dependencies -->
+      <dependency>
+          <groupId>org.jbpm</groupId>
+          <artifactId>jbpm-form-modeler-app</artifactId>
+          <version>${jbpm.form.modeler.version}</version>
+          <type>war</type>
+      </dependency>
+
+      <dependency>
+          <groupId>org.jbpm</groupId>
+          <artifactId>jbpm-form-modeler-renderer-api</artifactId>
+          <version>${jbpm.form.modeler.version}</version>
+      </dependency>
+
+      <dependency>
+          <groupId>org.jbpm</groupId>
+          <artifactId>jbpm-form-modeler-renderer-client</artifactId>
+          <version>${jbpm.form.modeler.version}</version>
+      </dependency>
+
+      <dependency>
+          <groupId>org.jbpm</groupId>
+          <artifactId>jbpm-form-modeler-renderer-backend</artifactId>
+          <version>${jbpm.form.modeler.version}</version>
+      </dependency>
+
+      <dependency>
+          <groupId>org.jbpm</groupId>
+          <artifactId>jbpm-form-modeler-editor-api</artifactId>
+          <version>${jbpm.form.modeler.version}</version>
+      </dependency>
+
+      <dependency>
+          <groupId>org.jbpm</groupId>
+          <artifactId>jbpm-form-modeler-editor-client</artifactId>
+          <version>${jbpm.form.modeler.version}</version>
+      </dependency>
+
+      <dependency>
+          <groupId>org.jbpm</groupId>
+          <artifactId>jbpm-form-modeler-editor-backend</artifactId>
+          <version>${jbpm.form.modeler.version}</version>
+      </dependency>
+
+      <dependency>
+          <groupId>org.jbpm</groupId>
+          <artifactId>jbpm-form-modeler-data-modeler</artifactId>
+          <version>${jbpm.form.modeler.version}</version>
+      </dependency>
+
+      <!-- Data Modeller -->
+      <dependency>
+          <groupId>org.kie.workbench.screens</groupId>
+          <artifactId>kie-wb-common-data-modeller-api</artifactId>
+      </dependency>
+
+      <dependency>
+          <groupId>org.kie.workbench.screens</groupId>
+          <artifactId>kie-wb-common-data-modeller-backend</artifactId>
+      </dependency>
+
+      <dependency>
+          <groupId>org.kie.workbench.screens</groupId>
+          <artifactId>kie-wb-common-data-modeller-client</artifactId>
+      </dependency>
+
   </dependencies>
 
   <build>
@@ -434,6 +500,11 @@
             <compileSourcesArtifact>org.jbpm:jbpm-designer-api</compileSourcesArtifact>
             <compileSourcesArtifact>org.jbpm:jbpm-designer-client</compileSourcesArtifact>
 
+            <compileSourcesArtifact>org.jbpm:jbpm-form-modeler-editor-api</compileSourcesArtifact>
+            <compileSourcesArtifact>org.jbpm:jbpm-form-modeler-editor-client</compileSourcesArtifact>
+            <compileSourcesArtifact>org.jbpm:jbpm-form-modeler-renderer-api</compileSourcesArtifact>
+            <compileSourcesArtifact>org.jbpm:jbpm-form-modeler-renderer-client</compileSourcesArtifact>
+
           </compileSourcesArtifacts>
           <runTarget>org.jbpm.designer.jBPMDesigner/designer.html</runTarget>
           <extraJvmArgs>-Xmx1024m -XX:MaxPermSize=256m</extraJvmArgs>
@@ -470,6 +541,25 @@
           <archive>
             <addMavenDescriptor>false</addMavenDescriptor>
           </archive>
+            <overlays>
+                <overlay>
+                    <groupId>org.jbpm</groupId>
+                    <artifactId>jbpm-form-modeler-app</artifactId>
+                </overlay>
+            </overlays>
+            <webResources>
+                <resource>
+                    <directory>${basedir}/src/main/webapp/WEB-INF</directory>
+                    <filtering>true</filtering>
+                    <targetPath>WEB-INF</targetPath>
+                    <includes>
+                        <include>**/web.xml</include>
+                    </includes>
+                </resource>
+            </webResources>
+            <dependentWarExcludes>
+                WEB-INF/lib/jbpm-form-modeler-*.war,
+            </dependentWarExcludes>
         </configuration>
       </plugin>
 

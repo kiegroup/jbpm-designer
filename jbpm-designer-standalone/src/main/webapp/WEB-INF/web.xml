@@ -366,6 +366,22 @@ minutes. it is now 24 hours. -->
   <session-config>
     <session-timeout>1440</session-timeout>
   </session-config>
+
+    <!-- start form-modeler component -->
+    <servlet>
+        <servlet-name>Controller</servlet-name>
+        <servlet-class>org.jbpm.formModeler.service.bb.mvc.controller.ControllerServlet</servlet-class>
+        <init-param>
+            <param-name>base.app.dir</param-name>
+            <param-value>${project.basedir}/target/${project.artifactId}-${project.version}</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Controller</servlet-name>
+        <url-pattern>/org.jbpm.designer.jBPMDesigner/Controller</url-pattern>
+    </servlet-mapping>
+    <!-- end form-modeler component -->
   <!-- jBoss' default mapping is to "image/svg", which causes the client
 not to parse the SVG content as XML. However, the Oryx Editor client relies
 on that behaviour. The mimetype as per W3C specification must be "image/svg+xml".

@@ -26,6 +26,7 @@
   <inherits name="org.kie.workbench.common.screens.projecteditor.KieWorkbenchCommonProjectEditorClient"/>
   <inherits
       name="org.kie.workbench.common.screens.projectimportsscreen.KieWorkbenchCommonProjectImportsScreenClient"/>
+    <inherits name="org.kie.workbench.common.screens.datamodeller.KieWorkbenchDatamodellerClient"/>
 
   <!-- Common Services -->
   <inherits name="org.kie.workbench.common.widgets.KieWorkbenchWidgetsCommon"/>
@@ -35,6 +36,10 @@
   <!-- designer -->
   <inherits name="org.jbpm.designer.jBPMDesignerAPI"/>
   <inherits name="org.jbpm.designer.jBPMDesignerClient"/>
+
+  <!-- Form-Modeler -->
+  <inherits name="org.jbpm.formModeler.editor.FormModelerEditorClient"/>
+  <inherits name="org.jbpm.formModeler.renderer.FormRendererClient"/>
 
   <!-- Specify the application specific style sheet. -->
   <stylesheet src='css/uberfire-showcase.css'/>
