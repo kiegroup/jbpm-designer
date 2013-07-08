@@ -426,6 +426,7 @@ ORYX.I18N.SyntaxChecker.group = "検証";
 ORYX.I18N.SyntaxChecker.name = "プロセスの検証";
 ORYX.I18N.SyntaxChecker.desc = "プロセスの検証";
 ORYX.I18N.SyntaxChecker.noErrors = "検証エラーはありません";
+ORYX.I18N.SyntaxChecker.hasErrors = "検証エラーが見つかりました";
 ORYX.I18N.SyntaxChecker.invalid = "サーバーからの不正な応答";
 ORYX.I18N.SyntaxChecker.checkingMessage = "検証中 ...";
 
@@ -458,7 +459,11 @@ ORYX.I18N.View.convertToPDFDesc = "PDFにコンバート";
 ORYX.I18N.View.convertToPNG = "PNG";
 ORYX.I18N.View.convertToPNGDesc = "PNGコンバート";
 ORYX.I18N.View.generateTaskForms = "タスクフォームのテンプレートを生成";
+ORYX.I18N.View.editProcessForm = "プロセスフォームを編集";
+ORYX.I18N.View.editTaskForm = "タスクフォームを編集";
 ORYX.I18N.View.generateTaskFormsDesc = "タスクフォームのテンプレートを生成";
+ORYX.I18N.View.editProcessFormDesc = "プロセスフォームを編集";
+ORYX.I18N.View.editTaskFormDesc = "タスクフォームを編集";
 ORYX.I18N.View.showInfo = "情報";
 ORYX.I18N.View.showInfoDesc = "情報";
 ORYX.I18N.View.jbpmgroup = "jBPM";
@@ -818,6 +823,7 @@ ORYX.I18N.SyntaxChecker.MULT_ERRORS = "複数のエラー";
 if(!ORYX.I18N.PropertyWindow) ORYX.I18N.PropertyWindow = {};
 ORYX.I18N.PropertyWindow.oftenUsed = "プロパティー"
 ORYX.I18N.PropertyWindow.moreProps = "プロパティー詳細";
+ORYX.I18N.PropertyWindow.simulationProps = "シミュレーション";
 
 /** New Language Properties: 17.09.2009*/
 if(!ORYX.I18N.Bpmn2_0Serialization) ORYX.I18N.Bpmn2_0Serialization = {};
