@@ -907,7 +907,7 @@ public class Bpmn2JsonMarshaller {
     			throw new UnsupportedOperationException("Event definition not supported: " + eventDefinition);
     		}
     	} else {
-    		throw new UnsupportedOperationException("None or multiple event definitions not supported for intermediate catch event");
+    		throw new UnsupportedOperationException("Intermediate catch event does not have event definition.");
     	}
     }
     

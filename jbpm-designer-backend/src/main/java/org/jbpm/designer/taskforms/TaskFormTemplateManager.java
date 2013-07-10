@@ -11,21 +11,8 @@ import java.util.Scanner;
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 import org.apache.log4j.Logger;
-import org.eclipse.bpmn2.Assignment;
-import org.eclipse.bpmn2.DataInput;
-import org.eclipse.bpmn2.DataInputAssociation;
-import org.eclipse.bpmn2.DataOutput;
-import org.eclipse.bpmn2.DataOutputAssociation;
-import org.eclipse.bpmn2.Definitions;
-import org.eclipse.bpmn2.FlowElement;
-import org.eclipse.bpmn2.FormalExpression;
-import org.eclipse.bpmn2.ItemAwareElement;
-import org.eclipse.bpmn2.PotentialOwner;
+import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.Process;
-import org.eclipse.bpmn2.Property;
-import org.eclipse.bpmn2.ResourceRole;
-import org.eclipse.bpmn2.RootElement;
-import org.eclipse.bpmn2.UserTask;
 import org.eclipse.emf.ecore.impl.EStructuralFeatureImpl;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.jbpm.designer.web.profile.IDiagramProfile;
@@ -94,194 +81,9 @@ public class TaskFormTemplateManager {
                     
                     for(FlowElement fe : process.getFlowElements()) {
                         if(fe instanceof UserTask) {
-                            UserTask utask = (UserTask) fe;
-                            TaskFormInfo usertfi = new TaskFormInfo();
-                            if(process.getName() != null && process.getName().length() > 0 ) {
-                                usertfi.setProcessName(process.getName());
-                            } else {
-                                usertfi.setProcessName(process.getId());
-                            }
-                            usertfi.setPkgName(packageName);
-                            // make sure we have a valid task name
-                            boolean validTaskName = false;
-                            List<DataInput> dataInputs = Collections.emptyList();
-                            List<DataOutput> dataOutputs = Collections.emptyList();
-                            List<DataInputAssociation> dataInputAssociations = Collections.emptyList();
-                            List<DataOutputAssociation> dataOutputAssociations = Collections.emptyList();
-                            if (utask.getIoSpecification() != null) {
-                                dataInputs = utask.getIoSpecification().getDataInputs();
-                                dataOutputs = utask.getIoSpecification().getDataOutputs();
-                                dataInputAssociations = utask.getDataInputAssociations();
-                                dataOutputAssociations = utask.getDataOutputAssociations();
-                                for(DataInput din : dataInputs) {
-                                    if(din.getName().equals("TaskName")) {
-                                        // make sure we have a data input association to the task name value
-                                        for(DataInputAssociation inputAssociation : dataInputAssociations) {
-                                            List<Assignment> assignments = inputAssociation.getAssignment();
-                                            for(Assignment assignment : assignments) {
-                                                if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
-                                                    String taskName = ((FormalExpression)assignment.getFrom()).getBody();
-                                                    if(taskName != null && taskName.length() > 0) {
-                                                        usertfi.setId(taskName + "-taskform");
-                                                        usertfi.setTaskName(taskName);
-                                                        validTaskName = true;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if(din.getName().equals("ActorId")) {
-                                        for(DataInputAssociation inputAssociation : dataInputAssociations) {
-                                            List<Assignment> assignments = inputAssociation.getAssignment();
-                                            for(Assignment assignment : assignments) {
-                                                if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
-                                                    String actorid = ((FormalExpression)assignment.getFrom()).getBody();
-                                                    if(actorid != null && actorid.length() > 0) {
-                                                        usertfi.setActorId(replaceInterpolations(actorid));
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if(din.getName().equals("GroupId")) {
-                                        for(DataInputAssociation inputAssociation : dataInputAssociations) {
-                                            List<Assignment> assignments = inputAssociation.getAssignment();
-                                            for(Assignment assignment : assignments) {
-                                                if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
-                                                    String groupid = ((FormalExpression)assignment.getFrom()).getBody();
-                                                    if(groupid != null && groupid.length() > 0) {
-                                                        usertfi.setGroupId(replaceInterpolations(groupid));
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if(din.getName().equals("Skippable")) {
-                                        for(DataInputAssociation inputAssociation : dataInputAssociations) {
-                                            List<Assignment> assignments = inputAssociation.getAssignment();
-                                            for(Assignment assignment : assignments) {
-                                                if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
-                                                    String skippable = ((FormalExpression)assignment.getFrom()).getBody();
-                                                    if(skippable != null && skippable.length() > 0) {
-                                                        usertfi.setSkippable(replaceInterpolations(skippable));
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if(din.getName().equals("Priority")) {
-                                        for(DataInputAssociation inputAssociation : dataInputAssociations) {
-                                            List<Assignment> assignments = inputAssociation.getAssignment();
-                                            for(Assignment assignment : assignments) {
-                                                if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
-                                                    String priority = ((FormalExpression)assignment.getFrom()).getBody();
-                                                    if(priority != null && priority.length() > 0) {
-                                                        usertfi.setPriority(replaceInterpolations(priority));
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if(din.getName().equals("Comment")) {
-                                        for(DataInputAssociation inputAssociation : dataInputAssociations) {
-                                            List<Assignment> assignments = inputAssociation.getAssignment();
-                                            for(Assignment assignment : assignments) {
-                                                if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
-                                                    String comment = ((FormalExpression)assignment.getFrom()).getBody();
-                                                    if(comment != null && comment.length() > 0) {
-                                                        usertfi.setComment(replaceInterpolations(comment));
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            if(validTaskName) {
-                                // get list of potential owners
-                                List<ResourceRole> utaskroles = utask.getResources();
-                                for(ResourceRole role : utaskroles) {
-                                    if(role instanceof PotentialOwner) {
-                                        FormalExpression ownerexp = (FormalExpression) ( (PotentialOwner)role).getResourceAssignmentExpression().getExpression();
-                                        if(ownerexp.getBody() != null && ownerexp.getBody().length() > 0) {
-                                            usertfi.getTaskOwners().add(replaceInterpolations(ownerexp.getBody()));
-                                        }
-                                    }
-                                }
-                                // get all inputs and outputs of the user task
-                                for(DataInput dinput : dataInputs) {
-                                    // we already handled TaskName, ActorId , GroupId, Skippable, Priority, Comment 
-                                    if(!(dinput.getName().equals("TaskName") || dinput.getName().equals("ActorId") || dinput.getName().equals("GroupId")
-                                            || dinput.getName().equals("Skippable") || dinput.getName().equals("Priority") || dinput.getName().equals("Comment"))) {
-                                        TaskFormInput input = new TaskFormInput();
-                                        input.setName(dinput.getName());
-                                        // we need to see if the value of the input references a process var
-                                        // or we have an assignment defined
-                                        for(DataInputAssociation inputAssociation : dataInputAssociations) {
-                                            List<Assignment> assignments = inputAssociation.getAssignment();
-                                            if(assignments != null && assignments.size() > 0) {
-                                                // get the assignment value
-                                                for(Assignment assignment : assignments) {
-                                                    if( ((FormalExpression)assignment.getTo()).getBody().equals(dinput.getId())) {
-                                                        input.setValue( ((FormalExpression)assignment.getFrom()).getBody() );
-                                                    }
-                                                }
-                                            } else {
-                                                // mapping to process var
-                                                if(inputAssociation.getTargetRef().getId().equals(dinput.getId())) {
-                                                    for(Property prop : processProperties) {
-                                                        if(prop.getId().equals(inputAssociation.getSourceRef().get(0).getId())) {
-                                                            input.setRefType( prop.getItemSubjectRef().getStructureRef() ); 
-                                                        }
-                                                    }
-                                                    if(input.getRefType() != null && input.getRefType().equals("Date")) {
-                                                        //input.setValue("${"+ inputAssociation.getSourceRef().get(0).getId() + "?date} ${"+ inputAssociation.getSourceRef().get(0).getId() + "?time}");
-                                                        input.setValue("${"+ ((DataInput)inputAssociation.getTargetRef()).getName() + "?date} ${"+ ((DataInput)inputAssociation.getTargetRef()).getName() + "?time}");
-                                                    } else {
-                                                        //input.setValue("${"+ inputAssociation.getSourceRef().get(0).getId() + "}");
-                                                        input.setValue("${"+ ((DataInput)inputAssociation.getTargetRef()).getName() + "}");
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        
-                                        usertfi.getTaskInputs().add(input);
-                                    }
-                                }
-                                for(DataOutput dout : dataOutputs) {
-                                    TaskFormOutput out = new TaskFormOutput();
-                                    out.setName(dout.getName());
-                                    for(DataOutputAssociation outputAssociation : dataOutputAssociations) {
-                                        List<ItemAwareElement> sources = outputAssociation.getSourceRef();
-                                        for(ItemAwareElement iae : sources) {
-                                            if(iae.getId().equals(dout.getId())) {
-                                                for(Property prop : processProperties) {
-                                                    if(prop.getId().equals(outputAssociation.getTargetRef().getId())) {
-                                                        out.setRefType( prop.getItemSubjectRef().getStructureRef() ); 
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    usertfi.getTaskOutputs().add(out);
-                                }
-                                usertfi.setUserTaskForm(true);
-                                usertfi.setProcessForm(false);
-                                // check if this usertfi already exists..if so, merge their inputs/outputs to create a single form
-                                boolean merged = false;
-                                for(TaskFormInfo existingForm : taskFormInformationList) {
-                                    if(existingForm.getId().equals(usertfi.getId())) {
-                                        mergeUserTaskForms(usertfi, existingForm);
-                                        merged = true;
-                                        break;
-                                    }
-                                } 
-                                if(!merged) {
-                                    taskFormInformationList.add(usertfi);
-                                }
-                            } else {
-                                _logger.info("Could not generate task form for usertask id: " + utask.getId() + ". No task name specified.");
-                            }
+                            getTaskInfoForUserTask((UserTask) fe, process, processProperties);
+                        } else if(fe instanceof FlowElementsContainer) {
+                            getTaskInfoForContainers((FlowElementsContainer) fe, process, processProperties);
                         }
                     }
                     generateTemplates();
@@ -291,6 +93,207 @@ public class TaskFormTemplateManager {
             }
         }
         
+    }
+
+    private void getTaskInfoForContainers(FlowElementsContainer container, Process process, List<Property> processProperties) {
+        List<FlowElement> flowElements = container.getFlowElements();
+        for(FlowElement fe : flowElements) {
+            if(fe instanceof UserTask) {
+                getTaskInfoForUserTask((UserTask) fe, process, processProperties);
+            } else if(fe instanceof FlowElementsContainer) {
+                getTaskInfoForContainers((FlowElementsContainer) fe, process, processProperties);
+            }
+        }
+    }
+
+    private void getTaskInfoForUserTask(UserTask utask, Process process, List<Property> processProperties) {
+        TaskFormInfo usertfi = new TaskFormInfo();
+        if(process.getName() != null && process.getName().length() > 0 ) {
+            usertfi.setProcessName(process.getName());
+        } else {
+            usertfi.setProcessName(process.getId());
+        }
+        usertfi.setPkgName(packageName);
+        // make sure we have a valid task name
+        boolean validTaskName = false;
+        List<DataInput> dataInputs = Collections.emptyList();
+        List<DataOutput> dataOutputs = Collections.emptyList();
+        List<DataInputAssociation> dataInputAssociations = Collections.emptyList();
+        List<DataOutputAssociation> dataOutputAssociations = Collections.emptyList();
+        if (utask.getIoSpecification() != null) {
+            dataInputs = utask.getIoSpecification().getDataInputs();
+            dataOutputs = utask.getIoSpecification().getDataOutputs();
+            dataInputAssociations = utask.getDataInputAssociations();
+            dataOutputAssociations = utask.getDataOutputAssociations();
+            for(DataInput din : dataInputs) {
+                if(din.getName().equals("TaskName")) {
+                    // make sure we have a data input association to the task name value
+                    for(DataInputAssociation inputAssociation : dataInputAssociations) {
+                        List<Assignment> assignments = inputAssociation.getAssignment();
+                        for(Assignment assignment : assignments) {
+                            if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
+                                String taskName = ((FormalExpression)assignment.getFrom()).getBody();
+                                if(taskName != null && taskName.length() > 0) {
+                                    usertfi.setId(taskName + "-taskform");
+                                    usertfi.setTaskName(taskName);
+                                    validTaskName = true;
+                                }
+                            }
+                        }
+                    }
+                }
+                if(din.getName().equals("ActorId")) {
+                    for(DataInputAssociation inputAssociation : dataInputAssociations) {
+                        List<Assignment> assignments = inputAssociation.getAssignment();
+                        for(Assignment assignment : assignments) {
+                            if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
+                                String actorid = ((FormalExpression)assignment.getFrom()).getBody();
+                                if(actorid != null && actorid.length() > 0) {
+                                    usertfi.setActorId(replaceInterpolations(actorid));
+                                }
+                            }
+                        }
+                    }
+                }
+                if(din.getName().equals("GroupId")) {
+                    for(DataInputAssociation inputAssociation : dataInputAssociations) {
+                        List<Assignment> assignments = inputAssociation.getAssignment();
+                        for(Assignment assignment : assignments) {
+                            if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
+                                String groupid = ((FormalExpression)assignment.getFrom()).getBody();
+                                if(groupid != null && groupid.length() > 0) {
+                                    usertfi.setGroupId(replaceInterpolations(groupid));
+                                }
+                            }
+                        }
+                    }
+                }
+                if(din.getName().equals("Skippable")) {
+                    for(DataInputAssociation inputAssociation : dataInputAssociations) {
+                        List<Assignment> assignments = inputAssociation.getAssignment();
+                        for(Assignment assignment : assignments) {
+                            if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
+                                String skippable = ((FormalExpression)assignment.getFrom()).getBody();
+                                if(skippable != null && skippable.length() > 0) {
+                                    usertfi.setSkippable(replaceInterpolations(skippable));
+                                }
+                            }
+                        }
+                    }
+                }
+                if(din.getName().equals("Priority")) {
+                    for(DataInputAssociation inputAssociation : dataInputAssociations) {
+                        List<Assignment> assignments = inputAssociation.getAssignment();
+                        for(Assignment assignment : assignments) {
+                            if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
+                                String priority = ((FormalExpression)assignment.getFrom()).getBody();
+                                if(priority != null && priority.length() > 0) {
+                                    usertfi.setPriority(replaceInterpolations(priority));
+                                }
+                            }
+                        }
+                    }
+                }
+                if(din.getName().equals("Comment")) {
+                    for(DataInputAssociation inputAssociation : dataInputAssociations) {
+                        List<Assignment> assignments = inputAssociation.getAssignment();
+                        for(Assignment assignment : assignments) {
+                            if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
+                                String comment = ((FormalExpression)assignment.getFrom()).getBody();
+                                if(comment != null && comment.length() > 0) {
+                                    usertfi.setComment(replaceInterpolations(comment));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if(validTaskName) {
+            // get list of potential owners
+            List<ResourceRole> utaskroles = utask.getResources();
+            for(ResourceRole role : utaskroles) {
+                if(role instanceof PotentialOwner) {
+                    FormalExpression ownerexp = (FormalExpression) ( (PotentialOwner)role).getResourceAssignmentExpression().getExpression();
+                    if(ownerexp.getBody() != null && ownerexp.getBody().length() > 0) {
+                        usertfi.getTaskOwners().add(replaceInterpolations(ownerexp.getBody()));
+                    }
+                }
+            }
+            // get all inputs and outputs of the user task
+            for(DataInput dinput : dataInputs) {
+                // we already handled TaskName, ActorId , GroupId, Skippable, Priority, Comment
+                if(!(dinput.getName().equals("TaskName") || dinput.getName().equals("ActorId") || dinput.getName().equals("GroupId")
+                        || dinput.getName().equals("Skippable") || dinput.getName().equals("Priority") || dinput.getName().equals("Comment"))) {
+                    TaskFormInput input = new TaskFormInput();
+                    input.setName(dinput.getName());
+                    // we need to see if the value of the input references a process var
+                    // or we have an assignment defined
+                    for(DataInputAssociation inputAssociation : dataInputAssociations) {
+                        List<Assignment> assignments = inputAssociation.getAssignment();
+                        if(assignments != null && assignments.size() > 0) {
+                            // get the assignment value
+                            for(Assignment assignment : assignments) {
+                                if( ((FormalExpression)assignment.getTo()).getBody().equals(dinput.getId())) {
+                                    input.setValue( ((FormalExpression)assignment.getFrom()).getBody() );
+                                }
+                            }
+                        } else {
+                            // mapping to process var
+                            if(inputAssociation.getTargetRef().getId().equals(dinput.getId())) {
+                                for(Property prop : processProperties) {
+                                    if(prop.getId().equals(inputAssociation.getSourceRef().get(0).getId())) {
+                                        input.setRefType( prop.getItemSubjectRef().getStructureRef() );
+                                    }
+                                }
+                                if(input.getRefType() != null && input.getRefType().equals("Date")) {
+                                    //input.setValue("${"+ inputAssociation.getSourceRef().get(0).getId() + "?date} ${"+ inputAssociation.getSourceRef().get(0).getId() + "?time}");
+                                    input.setValue("${"+ ((DataInput)inputAssociation.getTargetRef()).getName() + "?date} ${"+ ((DataInput)inputAssociation.getTargetRef()).getName() + "?time}");
+                                } else {
+                                    //input.setValue("${"+ inputAssociation.getSourceRef().get(0).getId() + "}");
+                                    input.setValue("${"+ ((DataInput)inputAssociation.getTargetRef()).getName() + "}");
+                                }
+                            }
+                        }
+                    }
+
+                    usertfi.getTaskInputs().add(input);
+                }
+            }
+            for(DataOutput dout : dataOutputs) {
+                TaskFormOutput out = new TaskFormOutput();
+                out.setName(dout.getName());
+                for(DataOutputAssociation outputAssociation : dataOutputAssociations) {
+                    List<ItemAwareElement> sources = outputAssociation.getSourceRef();
+                    for(ItemAwareElement iae : sources) {
+                        if(iae.getId().equals(dout.getId())) {
+                            for(Property prop : processProperties) {
+                                if(prop.getId().equals(outputAssociation.getTargetRef().getId())) {
+                                    out.setRefType( prop.getItemSubjectRef().getStructureRef() );
+                                }
+                            }
+                        }
+                    }
+                }
+                usertfi.getTaskOutputs().add(out);
+            }
+            usertfi.setUserTaskForm(true);
+            usertfi.setProcessForm(false);
+            // check if this usertfi already exists..if so, merge their inputs/outputs to create a single form
+            boolean merged = false;
+            for(TaskFormInfo existingForm : taskFormInformationList) {
+                if(existingForm.getId().equals(usertfi.getId())) {
+                    mergeUserTaskForms(usertfi, existingForm);
+                    merged = true;
+                    break;
+                }
+            }
+            if(!merged) {
+                taskFormInformationList.add(usertfi);
+            }
+        } else {
+            _logger.info("Could not generate task form for usertask id: " + utask.getId() + ". No task name specified.");
+        }
     }
     
     private void mergeUserTaskForms(TaskFormInfo sourceForm, TaskFormInfo targetForm) {
