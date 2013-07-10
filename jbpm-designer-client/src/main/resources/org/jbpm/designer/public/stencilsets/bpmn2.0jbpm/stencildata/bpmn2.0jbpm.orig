@@ -218,21 +218,6 @@
 				}
 			]
 		},
-		/**{
-			"name" : "condition",
-			"properties" : [
-				{
-					"id":"condition",
-					"type":"String",
-					"title":"Condition",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"popular":true
-				}
-			]
-		},**/
 		{
 			"name":"boundaryevent",
 			"properties":[
@@ -263,30 +248,6 @@
  		{
  			"name":"catchEventAttributes",
  			"properties":[
- 				/**{
-					"id":"eventdefinitionref",
-					"type":"String",
-					"title":"EventDefinitionRef",
-					"value":"",
-					"description":"EventDefinitionRefs (EventDefinition) is an attribute that defines the type of reusable triggers expected for a catch Event.",
-					"description_ja":"EventDefinitionRefs（EventDefinition）は、キャッチイベントとして想定される再利用可能なトリガーのタイプを定義する属性です。",
-					"readonly":false,
-					"optional":true,
-					"length":"",
-					"wrapLines":true
-				},**/
-				/**{
-					"id":"eventdefinition",
-					"type":"String",
-					"title":"EventDefinition",
-					"value":"",
-					"description":"EventDefinition is an attribute that defines the type of contained triggers expected for a catch Event.",
-					"description_ja":"EventDefinitionは、キャッチイベントとして想定される、中に含まれるトリガーのタイプを定義する属性です。",
-					"readonly":false,
-					"optional":true,
-					"length":"",
-					"wrapLines":true
-				},**/
 				{
 					"id":"dataoutputassociations",
 					"type":"Dataassignment",
@@ -328,18 +289,6 @@
  		{
  			"name":"throwEventAttributes",
  			"properties":[
- 				/**{
-					"id":"eventdefinitionref",
-					"type":"String",
-					"title":"EventDefinitionRef",
-					"value":"",
-					"description":"EventDefinitionRefs (EventDefinition) is an attribute that defines the type of reusable triggers expected for a catch Event.",
-					"description_ja":"EventDefinitionRefs（EventDefinition）は、キャッチイベントとして想定される再利用可能なトリガーのタイプを定義する属性です。",
-					"readonly":false,
-					"optional":true,
-					"length":"",
-					"wrapLines":true
-				},**/
 				{
 					"id":"eventdefinitions",
 					"type":"String",
@@ -376,19 +325,6 @@
 					"length":"",
 					"wrapLines":true
 				},
-				/**,
-				{
-					"id":"inputset",
-					"type":"String",
-					"title":"InputSet",
-					"value":"",
-					"description":"The InputSet for the throw Event.",
-					"description_ja":"スローイベントのInputSet。",
-					"readonly":false,
-					"optional":true,
-					"length":"",
-					"wrapLines":true
-				}**/
 				{
                     "id":"min",
                     "type":"Float",
@@ -673,56 +609,6 @@
 					"simulation" : true,
 					"length":"50"
 				},
-				/**{
-					"id":"author",
-					"type":"String",
-					"title":"Author",
-					"value":"",
-					"description":"This holds the name of the author of the Diagram.",
-					"description_ja":"ダイアグラムの作成者を保持します。",
-					"readonly":false,
-					"optional":true,
-					"length":"50"
-				},**/
-				/**{
-					"id":"language",
-					"type":"String",
-					"title":"Language",
-					"value":"English",
-					"description":"This holds the name of the language in which text is written.",
-					"description_ja":"テキストに使用された言語を保持します。",
-					"readonly":false,
-					"optional":true,
-					"length":"50"
-				},**/
-				/**{	
-					"id":"namespaces",
-					"type":"Complex",
-					"title":"Namespaces",
-					"value":"",
-					"description":"Additional namespaces and theire prefixes used in the diagram., ",
-					"description_ja":"ダイアグラムで使用された追加の名前空間とそのプレフィックス。",
-					"readonly":false,
-					"optional":true,
-					"complexItems": [
-						{
-							"id":"prefix",
-							"name":"Prefix",
-							"type":"String",
-							"value":"",
-							"width":100,
-							"optional":false 
-						},
-						{
-							"id":"url",
-							"name":"URL",
-							"type":"String",
-							"value":"",
-							"width":200,
-							"optional":false 
-						}
-					]
-				},**/
 				{
 					"id":"targetnamespace",
 					"type":"String",
@@ -734,17 +620,6 @@
 					"optional":true,
 					"length":"50"
 				},
-				/**{
-					"id":"expressionlanguage",
-					"type":"String",
-					"title":"ExpressionLanguage",
-					"value":"http://www.w3.org/1999/XPath",
-					"description":"A Language may be provided so that the syntax of expressions used in the Diagram can be understood.",
-					"description_ja":"ダイアグラムで使用される式の構文を理解できるように言語が提供されることがあります。",
-					"readonly":false,
-					"optional":true,
-					"length":"50"
-				},**/
 				{
 					"id":"typelanguage",
 					"type":"String",
@@ -755,46 +630,12 @@
 					"readonly":true,
 					"optional":true,
 					"length":"50"
-				},
-				/**{
-					"id":"creationdate",
-					"type":"Date",
-					"title":"CreationDate",
-					"value":"",
-					"description":"This defines the date on which the Diagram was created.",
-					"description_ja":"ダイアグラムが作成された日付を定義します。",
-					"readonly":false,
-					"optional":true,
-					"dateFormat":"j/m/y"
-				},**/
-				/**{
-					"id":"modificationdate",
-					"type":"Date",
-					"title":"ModificationDate",
-					"value":"",
-					"description":"This defines the date on which the Diagram was last modified.",
-					"description_ja":"ダイアグラムが最後に変更された日付を定義します。",
-					"readonly":false,
-					"optional":true,
-					"dateFormat":"j/m/y"
-				}**/
+				}
 			]
 		},
 		{
 			"name": "flowElement",
 			"properties" : [
-				/**{
-					"id":"categories",
-					"type":"String",
-					"title":"Categories",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				}**/
 			]
 		},
 		{
@@ -824,76 +665,6 @@
 				}
 			]
 		},
-		/**{
-			"name":"properties",
-			"properties": [
-				{
-					"id":"properties",
-					"type":"Complex",
-					"title":"Properties",
-					"value":"",
-					"description":"Modeler-defined properties MAY be added to an Activity. These properties are local to the Activity. (e.g., Add Customer.Customer Name).",
-					"description_ja":"モデラー定義のプロパティをアクティビティに追加することができます。これらのプロパティはアクティビティにローカルです（Customer.Customer Nameの追加など）。",
-					"readonly": 	false,
-					"optional": 	false,
-					"complexItems": [
-						{
-							"id":"name",
-							"name":"Name",
-							"type":"String",
-							"value":"",
-							"width":100,
-							"optional":false 
-						},
-						{
-							"id":"datastate",
-							"name":"DataState",
-							"type":"String",
-							"value":"",
-							"width":80,
-							"optional":true
-						},
-						{
-							"id":"itemkind",
-							"name":"ItemKind",
-							"type":"Choice",
-							"value":"Information",
-							"items" : [
-					           {
-					        	   "id":"information",
-					        	   "title":"Information",
-					        	   "value":"Information"
-					           },
-					           {
-					        	   "id":"physical",
-					        	   "title":"Physical",
-					        	   "value":"Physical"
-					           }
-							           
-							],
-							"width":80,
-							"optional":true
-						},
-						{
-							"id":"structure",
-							"name":"Structure",
-							"type":"String",
-							"value":"",
-							"width":100,
-							"optional":true
-						},
-						{
-							"id":"iscollection",
-							"name":"isCollection",
-							"type":"Boolean",
-							"value":false,
-							"width":50,
-							"optional":true
-						}
-					]
-				}
-			]
-		},**/
 		{
 			"name" : "iospecification",
 			"properties" : [
@@ -907,33 +678,7 @@
 					"readonly":false,
 					"optional":true,
 					"fortasktypes":"None|Send|Receive|User|Manual|Service"
-					/** "complexItems": [
-						{
-							"id":"name",
-							"name":"Name",
-							"type":"String",
-							"value":"",
-							"width":100,
-							"optional":false 
-						},
-						{
-							"id":"optional",
-							"name":"Optional",
-							"type":"Boolean",
-							"value":false,
-							"width":50,
-							"optional":true
-						},
-						{
-							"id":"whileexecuting",
-							"name":"WhileExecuting",
-							"type":"Boolean",
-							"value":false,
-							"width":80,
-							"optional":true
-						}
-					] **/
-				},            
+				},
 				{
 					"id":"dataoutputset",
 					"type":"Dataoutput",
@@ -944,61 +689,12 @@
 					"readonly":false,
 					"optional":true,
 					"fortasktypes":"None|Send|Receive|User|Manual|Service"
-					/** "complexItems": [
-						{
-							"id":"name",
-							"name":"Name",
-							"type":"String",
-							"value":"",
-							"width":100,
-							"optional":false 
-						},
-						{
-							"id":"optional",
-							"name":"Optional",
-							"type":"Boolean",
-							"value":false,
-							"width":50,
-							"optional":true
-						},
-						{
-							"id":"whileexecuting",
-							"name":"WhileExecuting",
-							"type":"Boolean",
-							"value":false,
-							"width":80,
-							"optional":true
-						}
-					] **/
 				}
 			]
 		},
 		{
 			"name" : "activity",
 			"properties": [
-				/**{
-					"id":"startquantity",
-					"type":"Integer",
-					"title":"StartQuantity",
-					"value":1,
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"min":"1"
-				},**/
-				/**{
-					"id":"completionquantity",
-					"type":"Integer",
-					"title":"CompletionQuantity",
-					"value":1,
-					"description":"Defines the number of tokens that must be generated from the activity",
-					"description_ja":"アクティビティから生成する必要のあるトークンの数を定義します。",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"min":"1"
-				},**/
 				{
 					"id":"isforcompensation",
 					"type":"Boolean",
@@ -1018,62 +714,10 @@
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"fortasktypes":"None|Send|Receive|User|Manual|Service"					
-					/** "complexItems": [
-						{
-							"id":"to",
-							"name":"To",
-							"type":"String",
-							"value":"",
-							"width":100,
-							"optional":false 
-						},
-						{
-							"id":"from",
-							"name":"From",
-							"type":"String",
-							"value":"",
-							"width":100,
-							"optional":false
-						},
-						{
-							"id":"assigntime",
-							"name":"AssignTime",
-							"type":"Choice",
-							"value":"Start",
-							"width":100,
-							"optional":true,
-							"items": [
-								{
-									"id":"c1",
-									"title":"Start",
-									"value":"Start",
-									"refToView":""
-								},
-								{
-									"id":"c2",
-									"title":"End",
-									"value":"End",
-									"refToView":""
-								}
-							]
-						}
-					] **/
-				}/**,
-				{
-					"id":"callacitivity",
-					"type":"Boolean",
-					"title":"is a Call Activity",
-					"value":false,
-					"description":"a Call Activity is a wrapper for a globally defined Sub-Process that is reused in the current process.",
-                                        "description_ja":"コールアクティビティは、現在のプロセスで再利用されているグローバル定義サブプロセスのラッパーです。",
-					"readonly":false,
-					"optional":"true",
-					"refToView":"callActivity"
-				}**/
+					"fortasktypes":"None|Send|Receive|User|Manual|Service"
+                }
 			]
 		},
-		// start custom activity properties
 		{
 			"name" : "customactivity",
 			"properties": [
@@ -1087,21 +731,9 @@
 					"readonly":true,
 					"optional":true,
 					"refToView":"compensation"
-				}/**,
-				{
-					"id":"callacitivity",
-					"type":"Boolean",
-					"title":"is a Call Activity",
-					"value":false,
-					"description":"a Call Activity is a wrapper for a globally defined Sub-Process that is reused in the current process.",
-                                        "description_ja":"コールアクティビティは、現在のプロセスで再利用されているグローバル定義サブプロセスのラッパーです。",
-					"readonly":true,
-					"optional":"true",
-					"refToView":"callActivity"
-				}**/
+				}
 			]
 		},
-		// end custom activity properties
 		{
 			"name":"operation",
 			"properties": [
@@ -1172,7 +804,7 @@
 				        	"type":"String",
 				        	"width":200,
 				        	"value":"",
-				        	"name":"ImportType",
+				        	"name":"ImportType"
 				        },
 						{
 				        	"id":"c2",
@@ -1186,7 +818,7 @@
 				        	"type":"String",
 				        	"width":200,
 				        	"value":"",
-				        	"name":"Namespace",
+				        	"name":"Namespace"
 				        }
 					]
 				},
@@ -1257,7 +889,7 @@
 				        	"type":"String",
 				        	"width":200,
 				        	"value":"",
-				        	"name":"ImportType",
+				        	"name":"ImportType"
 				        },
 						{
 				        	"id":"c2",
@@ -1271,7 +903,7 @@
 				        	"type":"String",
 				        	"width":200,
 				        	"value":"",
-				        	"name":"Namespace",
+				        	"name":"Namespace"
 				        }
 					]
 				},
@@ -1335,7 +967,7 @@
 					"title":"TestBefore",
 					"value":false,
 					"description":"Flag that controls whether the loop condition is evaluated at the beginning (testBefore = true) or at the end (testBefore = false)of the loop iteration.",
-					"description_ja":"ループ条件をループの先頭（testBefore = true）で評価するか、末尾で評価するか（testBefore = false）を制御するフラグ。",
+					"description_ja":"ループ条件をループの先頭（testBefore = true）で評価するか、末尾で評価するか（testBefore = false）を制御するフラグ。"
 				},
 				{
 					"id":"loopcondition",
@@ -1406,36 +1038,6 @@
 					"readonly":false,
 					"optional":true
 				},
-				/**{
-					"id":"behavior",
-					"type":"Choice",
-					"title":"Behavior",
-					"description":"The attribute behavior acts as a shortcut for specifying when events shall be thrown from an Activity instance that is about to complete. It can assume values of none, one, all, and complex.",
-					"description_ja":"属性は、完了直前のアクティビティインスタンスからイベントがいつスローされるかを指定するためのショートカットとして動作します。有効な値は、none、one、all、およびcomplexです。",
-					"value":"all",
-					"items": [
-				        {
-				        	"id":"cnone",
-				        	"value":"None",
-				        	"title":"None"
-				        },
-				        {
-				        	"id":"cone",
-				        	"value":"One",
-				        	"title":"One"
-				        },
-				        {
-				        	"id":"call",
-				        	"value":"All",
-				        	"title":"All"
-				        },
-				        {
-				        	"id":"ccomplex",
-				        	"value":"Complex",
-				        	"title":"Complex"
-				        }
-					]
-				},**/
 				{
 					"id":"complexbehaviordefinition",
 					"type":"Complex",
@@ -1451,7 +1053,7 @@
 				        	"type":"String",
 				        	"width":200,
 				        	"value":"",
-				        	"name":"Condition",
+				        	"name":"Condition"
 				        },
 				        {
 				        	"id":"ceventdefinition",
@@ -1504,14 +1106,6 @@
 				        }
 					]
 				},
-				/**{
-					"id":"completioncondition",
-					"type":"String",
-					"title":"CompletionCondition:",
-					"description":"This attribute defines a Boolean Expression that when evaluated to true, cancels the remaining Activity instances and produces a token.",
-					"description_ja":"この属性は、trueに評価されたときに残りのアクティビティインスタンスをキャンセルし、トークンを生成するブール式を定義します。",
-					"value":""
-				},**/
 				{
 		        	"id":"onebehavioreventref",
 		        	"type":"Choice",
@@ -1612,7 +1206,6 @@
 		        }
 			]
 		},
-		// start custom loop characteristics
 		{
 			"name" : "customloopcharacteristics",
 			"properties" : [
@@ -1665,7 +1258,6 @@
 				}
 			]
 		},
-		// end custom loop characteristics
 		{
 			"name" : "task",
 			"properties" : [
@@ -1737,119 +1329,6 @@
 						}
 					]
 				},
-				/**{
-					"id":"implementation",
-					"type":"Choice",
-					"title":"Implementation",
-					"value":"webService",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"",
-					"items": [
-						{
-							"id":"c1",
-							"title":"HumanTaskWebService",
-							"value":"humanTaskWebService",
-							"refToView":""
-						},
-						{
-							"id":"c2",
-							"title":"BuisnessRuleWebService",
-							"value":"BuisnessRuleWebService",
-							"refToView":""
-						},
-						{
-							"id":"c1",
-							"title":"WebService",
-							"value":"webService",
-							"refToView":""
-						},
-						{
-							"id":"c2",
-							"title":"Other",
-							"value":"other",
-							"refToView":""
-						},
-						{
-							"id":"c2",
-							"title":"Unspecified",
-							"value":"unspecified",
-							"refToView":""
-						}
-					]
-				},**/
-				/**{
-					"id":"resources",
-					"type":"Complex",
-					"title":"Resources",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"complexItems": [
-						{
-							"id":"resource_type",
-							"name":"Type",
-							"type":"Choice",
-							"value":"",
-							"width":100,
-							"optional":false,
-							"items": [
-								{
-									"id":"c1",
-									"title":"Performer",
-									"value":"Performer",
-									"refToView":""
-								},
-								{
-									"id":"c2",
-									"title":"HumanPerformer",
-									"value":"HumanPerformer",
-									"refToView":""
-								},
-								{
-									"id":"c3",
-									"title":"PotentialOwner",
-									"value":"PotentialOwner",
-									"refToView":""
-								}
-							]
-						},
-						{
-							"id":"resource",
-							"name":"Resource",
-							"type":"String",
-							"value":"",
-							"width":200,
-							"optional":true
-						},
-						{
-							"id":"resourceassignmentexpr",
-							"name":"ResourceAssignmentExpression",
-							"type":"String",
-							"value":"",
-							"width":200,
-							"optional":true
-						},
-						{
-							"id":"language",
-							"name":"Language",
-							"type":"String",
-							"value":"",
-							"width":100,
-							"optional":true
-						},
-						{
-							"id":"evaluatestotype",
-							"name":"EvaluatesToType",
-							"type":"String",
-							"value":"",
-							"width":200,
-							"optional":true
-						}
-					]
-				},**/
 				{
 					"id":"messageref",
 					"type":"String",
@@ -1862,26 +1341,6 @@
 					"length":"50",
 					"fortasktypes":"None|Send|Receive"
 				},
-				/**{
-					"id":"operationref",
-					"type":"String",
-					"title":"OperationRef",
-					"value":"",
-					"description":"ID-Reference to an operation definition.",
-					"description_ja":"オペレーションの定義へのID参照。",
-					"readonly":false,
-					"optional":true
-				},**/
-				/**{
-					"id":"instantiate",
-					"type":"Boolean",
-					"title":"Instantiate",
-					"value":false,
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":""
-				},**/
 				{
 					"id":"script",
 					"type":"Expression",
@@ -1916,78 +1375,6 @@
 						}
 					]                                               
 				},
-				/**{
-					"id":"inmessagetype",
-					"type":"String",
-					"title":"In Message",
-					"value":"",
-					"description":"Type of input message",
-					"description_ja":"入力メッセージのタイプ",
-					"readonly":false,
-					"optional":true
-				},**/
-				/**{
-					"id":"outmessagetype",
-					"type":"String",
-					"title":"Out Message",
-					"value":"",
-					"description":"Type of output message",
-					"description_ja":"出力メッセージのタイプ",
-					"readonly":false,
-					"optional":true
-				},**/
-				/**{
-					"id":"servicename",
-					"type":"String",
-					"title":"servicename",
-					"value":"",
-					"description":"name of service",
-					"description_ja":"サービスの名前",
-					"readonly":false,
-					"optional":true
-				},**/
-				/**{
-					"id":"namespace",
-					"type":"String",
-					"title":"Namespace",
-					"value":"",
-					"description":"Defines the XML namespace of the elements inside the document.",
-					"description_ja":"ドキュメント内の要素のXML名前空間を定義します。",
-					"readonly":false,
-					"optional":true,
-					"length":"50"
-				},**/
-				/** {
-					"id":"operation",
-					"type":"String",
-					"title":"operation",
-					"value":"",
-					"description":"operation",
-					"description_ja":"オペレーション",
-					"readonly":false,
-					"optional":true,
-					"fortasktypes":"None|Service"
-				}, **/
-				/**{
-					"id":"porttype",
-					"type":"String",
-					"title":"porttype",
-					"value":"",
-					"description":"porttype",
-					"description_ja":"ポートタイプ",
-					"readonly":false,
-					"optional":true
-				},**/
-				/**{
-					"id":"wsdlUrl",
-					"type":"String",
-					"title":"wsdlUrl",
-					"value":"",
-					"description":"wsdlUrl",
-					"description_ja":"WSDLURL",
-					"readonly":false,
-					"optional":true
-				},**/
 				{
 					"id":"bgcolor",
 					"type":"Color",
@@ -2101,52 +1488,9 @@
 				}		
 			]
 		},
-		// start custom task properties
 		{
 			"name" : "customtask",
 			"properties" : [
-				/**{
-					"id":"implementation",
-					"type":"Choice",
-					"title":"Implementation",
-					"value":"other",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"items": [
-						{
-							"id":"c1",
-							"title":"HumanTaskWebService",
-							"value":"humanTaskWebService",
-							"refToView":""
-						},
-						{
-							"id":"c2",
-							"title":"BuisnessRuleWebService",
-							"value":"BuisnessRuleWebService",
-							"refToView":""
-						},
-						{
-							"id":"c1",
-							"title":"WebService",
-							"value":"webService",
-							"refToView":""
-						},
-						{
-							"id":"c2",
-							"title":"Other",
-							"value":"other",
-							"refToView":""
-						},
-						{
-							"id":"c2",
-							"title":"Unspecified",
-							"value":"unspecified",
-							"refToView":""
-						}
-					]
-				},**/
 				{
 					"id":"bgcolor",
 					"type":"Color",
@@ -2260,86 +1604,9 @@
 				}		
 			]
 		},		
-		// end custom task properties
 		{
 			"name" : "subprocess",
 			"properties" : [
-				/**{
-					"id": "subprocesstype",
-					"type": "Choice",
-					"title": "subProcessType",
-					"value": "Embedded",
-					"description": "SubProcessType is an attribute that defines whether the Sub-Process details are embedded within the higher level Process or refers to another, re-usable Process. The default is Embedded.",
-					"description_ja": "SubProcessTypeは、サブプロセスの詳細を上位レベルのプロセスに埋め込むか、別の再利用可能なプロセスを参照するかを定義する属性です。デフォルトはEmbeddedです。",
-					"optional": false,
-					"refToView": "",
-					"items": [
-						{
-							"id": "choice1",
-							"title":"Embedded",
-							"value":"Embedded"
-						},
-						{
-							"id": "choice2",
-							"title": "Independent",
-							"value": "Independent"
-						},
-						{
-							"id": "choice3",
-							"title": "Reusable",
-							"value": "Reusable"
-						}
-					]
-				},**/
-				/**{
-					"id":"isatransaction",
-					"type":"Boolean",
-					"title":"is a Transaction",
-					"value":false,
-					"description":"A Transaction is a set of activities that logically belongs together; it might follow a specified transaction protocol.",
-					"description_ja":"トランザクションは、論理的にまとめられているアクティビティのセットです。指定されたトランザクションプロトコルに従います。",
-					"readonly":false,
-					"optional":false,
-					"refToView":"border"
-				},**/
-				/**{
-					"id":"transaction",
-					"type":"String",
-					"title":"TransactionRef",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50"
-				},**/
-				/**{
-					"id":"transactionmethod",
-					"type":"Choice",
-					"title":"TransactionMethod",
-					"value":"compensate",
-					"description":"The technique that will be used to undo a transaction that has been cancelled.",
-					"description_ja":"キャンセルされたトランザクションを元に戻すために使用される技術。",
-					"readonly":false,
-					"optional":true,
-					"items": [
-						{
-							"id":"c1",
-							"title":"Compensate",
-							"value":"compensate"
-						},
-						{
-							"id":"c2",
-							"title":"Store",
-							"value":"store"
-						},
-						{
-							"id":"c3",
-							"title":"Image",
-							"value":"image"
-						}
-					]
-				},**/
 				{
 					"id":"isadhoc",
 					"type":"Boolean",
@@ -2396,140 +1663,11 @@
 					"readonly":false,
 					"optional":true
 				}
-				/**,
-				{
-					"id":"entry",
-					"type":"DiagramLink",
-					"title":"SubProcessRef",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"u"
-				}**/
-				/**,
-				{
-					"id":"diagramref",
-					"type":"String",
-					"title":"DiagramRef",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":""
-				},
-				{
-					"id":"processref",
-					"type":"String",
-					"title":"ProcessRef",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":""
-				} **/
-				/**,**/
-				/**{
-					"id":"inputmaps",
-					"type":"String",
-					"title":"InputMaps",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":""
-				},**/
-				/**{
-					"id":"outputmaps",
-					"type":"String",
-					"title":"OutputMaps",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":""
-				}**/
 			]
 		},
 		{
 			"name" : "adhocsubprocess",
 			"properties" : [
-				/** {
-					"id": "subprocesstype",
-					"type": "Choice",
-					"title": "subProcessType",
-					"value": "AdHoc",
-					"description": "SubProcessType is an attribute that defines whether the Sub-Process details are embedded within the higher level Process or refers to another, re-usable Process. The default is Embedded.",
-					"description_ja": "SubProcessTypeは、サブプロセスの詳細を上位レベルのプロセスに埋め込むか、別の再利用可能なプロセスを参照するかを定義する属性です。デフォルトはEmbeddedです。",
-					"optional": false,
-					"refToView": "",
-					"items": [
-						{
-							"id": "choice1",
-							"title":"Embedded",
-							"value":"Embedded"
-						},
-						{
-							"id": "choice2",
-							"title": "Independent",
-							"value": "Independent"
-						},
-						{
-							"id": "choice3",
-							"title": "Reusable",
-							"value": "Reusable"
-						}
-					]
-				},**/
-				/**{
-					"id":"isatransaction",
-					"type":"Boolean",
-					"title":"is a Transaction",
-					"value":false,
-					"description":"A Transaction is a set of activities that logically belongs together; it might follow a specified transaction protocol.",
-					"description_ja":"トランザクションは、論理的にまとめられているアクティビティのセットです。指定されたトランザクションプロトコルに従います。",
-					"readonly":false,
-					"optional":false,
-					"refToView":"border"
-				},**/
-				/**{
-					"id":"transaction",
-					"type":"String",
-					"title":"TransactionRef",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50"
-				},**/
-				/**{
-					"id":"transactionmethod",
-					"type":"Choice",
-					"title":"TransactionMethod",
-					"value":"compensate",
-					"description":"The technique that will be used to undo a transaction that has been cancelled.",
-					"description_ja":"キャンセルされたトランザクションを元に戻すために使用される技術。",
-					"readonly":false,
-					"optional":true,
-					"items": [
-						{
-							"id":"c1",
-							"title":"Compensate",
-							"value":"compensate"
-						},
-						{
-							"id":"c2",
-							"title":"Store",
-							"value":"store"
-						},
-						{
-							"id":"c3",
-							"title":"Image",
-							"value":"image"
-						}
-					]
-				},**/
 				{
 					"id":"isadhoc",
 					"type":"Boolean",
@@ -2585,150 +1723,13 @@
 					"description_ja":"この属性は、順序が並列の場合のみ使用されます。completionConditionがtrueになったときに、実行中のインスタンスをキャンセルするかどうかを決定します。",
 					"readonly":false,
 					"optional":true
-				},
-				/**{
-					"id":"entry",
-					"type":"DiagramLink",
-					"title":"SubProcessRef",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"u"
-				},**/
-				/**{
-					"id":"diagramref",
-					"type":"String",
-					"title":"DiagramRef",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":""
-				},**/
-				/**{
-					"id":"processref",
-					"type":"String",
-					"title":"ProcessRef",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":""
 				}
-				/**,**/
-				/**{
-					"id":"inputmaps",
-					"type":"String",
-					"title":"InputMaps",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":""
-				},**/
-				/**{
-					"id":"outputmaps",
-					"type":"String",
-					"title":"OutputMaps",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":""
-				}**/
 			]
 		},
 		{
 			"name" : "gateway",
 			"properties" : [
-				/**{
-					"id":"assignments",
-					"type":"Dataassignment",
-					"title":"Assignments",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"complexItems": [
-						{
-							"id":"to",
-							"name":"To",
-							"type":"String",
-							"value":"",
-							"width":100,
-							"optional":false 
-						},
-						{
-							"id":"from",
-							"name":"From",
-							"type":"String",
-							"value":"",
-							"width":100,
-							"optional":false
-						},
-						{
-							"id":"assigntime",
-							"name":"AssignTime",
-							"type":"Choice",
-							"value":"Start",
-							"width":100,
-							"optional":true,
-							"items": [
-								{
-									"id":"c1",
-									"title":"Start",
-									"value":"Start",
-									"refToView":""
-								},
-								{
-									"id":"c2",
-									"title":"End",
-									"value":"End",
-									"refToView":""
-								}
-							]
-						}
-					]
-				}**/
-				/**,
-				{
-					"id":"gates",
-					"type":"String",
-					"title":"Gates",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				}**/
-				/**,
-				{
-					"id":"gates_outgoingsequenceflow",
-					"type":"String",
-					"title":"[Gates] OutgoingSequenceFlow",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				},
-				{
-					"id":"gates_assignments",
-					"type":"String",
-					"title":"[Gates] Assignments",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				}**/
+
 			]
 		},
 		{
@@ -2991,15 +1992,6 @@
 							"width":100,
 							"optional":false
 						}
-						/**,**/
-						/**{
-							"id":"language",
-							"name":"Language",
-							"type":"String",
-							"value":"",
-							"width":100,
-							"optional":true
-						}**/
 					]
 			    },
 			    {
@@ -3057,8 +2049,6 @@
 				}
 			]
 		},
-		
-		// Acitvities
 		{
 			"type" : 			"node",
 			"id": 				"Task",
@@ -3073,7 +2063,6 @@
 				"flowElement",
 				"activity",
 				"task",
-				/** "loopcharacteristics", **/
 				"properties",
 				"iospecification"
 			],
@@ -3576,8 +2565,7 @@
 				}
 			]
 		},
-		// start custom workitems
-		$workitemDefs.keys:{k| 
+		$workitemDefs.keys:{k|
 		\{
 			"type" : 			"node",
 			"id": 				"$workitemDefs.(k).name$",
@@ -3974,7 +2962,7 @@
 					"description":"An InputSet is a collection of DataInput elements that together define a valid set of data inputs.",
 					"description_ja":"InputSetは、データ入力の有効なセットを合わせて定義するDataInputエレメントのコレクションです。",
 					"readonly":false,
-					"optional":true,
+					"optional":true
 				\},  
 				\{
 					"id":"dataoutputset",
@@ -3984,7 +2972,7 @@
 					"description":"An OutputSet is a collection of DataOutputs elements that together may be produced as output from an Activity or Event.",
 					"description_ja":"OutputSet は、アクティビティまたはイベントの出力としてまとめて生成されるDataOutputs要素のコレクションです。",
 					"readonly":false,
-					"optional":true,
+					"optional":true
 				\},
 				\{
 					"id":"assignments",
@@ -3993,7 +2981,7 @@
 					"value":"$workitemDefs.(k).parameters:{k1| $k1.name$}; separator="=,"$",
 					"description":"",
 					"readonly":false,
-					"optional":true,
+					"optional":true
 				\},
 				\{
 					"id":"onEntryActions",
@@ -4131,8 +3119,6 @@
 			]
 		\},
 		}$
-		// end custom workitems
-		// start patterns
 		$patternData.keys:{k|
            \{
                "type" : 			"node",
@@ -4153,7 +3139,6 @@
                ]
             \},
 		}$
-		// end patterns
 		{
 			"type" : 			"node",
 			"id" :				"ReusableSubprocess",
@@ -4167,8 +3152,6 @@
 				"baseAttributes",
 				"flowElement",
 				"activity",
-				/** "subprocess", **/
-				/** "loopcharacteristics", **/
 				"bgColor",
 				"properties",
 				"iospecification"
@@ -4439,12 +3422,8 @@
 			"propertyPackages" :[
 				"baseAttributes",
 				"flowElement",
-				/** "activity", **/
-				/** "subprocess", **/
-				/** "loopcharacteristics", **/
 				"bgColor",
-				"properties" /**,**/
-				/** "iospecification" **/
+				"properties"
 			],
 			"properties" :		[
 				{
@@ -4702,8 +3681,6 @@
 				"baseAttributes",
 				"flowElement",
 				"activity",
-				/** "subprocess", **/
-				/** "loopcharacteristics", **/
 				"properties",
 				"iospecification"
 			],
@@ -4945,7 +3922,6 @@
 				"flowElement",
 				"activity",
 				"adhocsubprocess",
-				/** "loopcharacteristics", **/
 				"properties",
 				"iospecification"
 			],
@@ -5159,226 +4135,6 @@
 				"ActivitiesMorph"
 			]
 		},
-		/** {
-			"type" : 			"node",
-			"id" :				"CollapsedEventSubprocess",
-			"title" : 			"Collapsed Event-Subprocess",
-			"groups" :			["Activities"],
-			"description" :		"An Event-Subprocess is placed within another subprocess. It becomes active when its start event gets triggered and can interrupt the Subprocess context or run in parallel (non-interrupting). It can be linked to another diagram.",
-			"description_ja" :"イベントサブプロセスは、別のサブプロセスの中に配置されます。開始イベントがトリガーされるとアクティブになり、サブプロセスコンテキストの割り込みや並列実行（割り込みなし）が可能になります。別のダイアグラムにリンクできます。",
-			"view" :			"activity/event.subprocess.collapsed.svg",
-			"icon" :			"activity/event.subprocess.collapsed.png",
-			"propertyPackages" :[
-				"baseAttributes",
-				"flowElement",
-				"activity",
-				"subprocess",
-				"properties"
-			],
-			"properties" :		[
-				{
-					"id":"activitytype",
-					"type":"String",
-					"title":"ActivityType",
-					"value":"Event-Sub-Process",
-					"description":"The Type of Activity.",
-					"description_ja":"アクティビティのタイプ。",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"startevent",
-					"type":"Choice",
-					"title":"Start-Event",
-					"value":"Message",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"items":[
-						{
-							"id":"c1",
-							"title":"Message",
-							"value":"Message",
-							"icon" : "activity/list/event.message.png",
-							"refToView":"message"
-						},
-						{
-							"id":"c2",
-							"title":"Timer",
-							"value":"Timer",
-							"icon" : "activity/list/event.timer.png",
-							"refToView":"timer"
-						},
-						{
-							"id":"c3",
-							"title":"Escalation",
-							"value":"Escalation",
-							"icon" : "activity/list/event.escalation.png",
-							"refToView":"escalation"
-						},
-						{
-							"id":"c4",
-							"title":"Conditional",
-							"value":"Conditional",
-							"icon" : "activity/list/event.conditional.png",
-							"refToView":"conditional"
-						},
-						{
-							"id":"c5",
-							"title":"Error",
-							"value":"Error",
-							"icon" : "activity/list/event.error.png",
-							"refToView":"error"	
-						},
-						{
-							"id":"c6",
-							"title":"Compensation",
-							"value": "Compensation",
-							"icon" : "activity/list/event.compensation.png",
-							"refToView":"compensationStart"
-						},
-						{
-							"id":"c7",
-							"title":"Signal",
-							"value":"Signal",
-							"icon" : "activity/list/event.signal.png",
-							"refToView":"signal"
-						},
-						{
-							"id":"c8",
-							"title":"Multiple",
-							"value":"Multiple",
-							"icon" : "activity/list/event.multiple.png",
-							"refToView":"multiple"
-						},
-						{
-							"id":"c9",
-							"title":"Multiple (Parallel)",
-							"value":"MultipleParallel",
-							"icon" : "activity/list/event.multiple.parallel.png",
-							"refToView":"multipleParallel"
-						}
-					]
-				},
-				{
-					"id":"bgcolor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"fill_el",
-					"fill":true,
-					"stroke":false
-				},
-				{
-					"id":"bordercolor",
-					"type":"Color",
-					"title":"BorderColor",
-					"value":"#000000",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
-					"fill":false,
-					"stroke":true
-				},
-				{
-					"id":"fontcolor",
-					"type":"Color",
-					"title":"Font Color",
-					"value":"#000000",
-					"description":"Font color",
-					"description_ja":"フォントの色",
-					"readonly":false,
-					"optional":false,
-					"refToView": ["text_name"],
-					"fill":true,
-					"stroke":false
-				},
-				{
-					"id":"fontsize",
-					"type":"Choice",
-					"title":"Font Size",
-					"value":"",
-					"description":"The Font Size",
-					"description_ja":"フォントのサイズ",
-					"readonly":false,
-					"optional":false,
-					"refToView":"text_name",
-					"items":[
-						{
-							"id":"c1",
-							"title":"8",
-							"value":"8"
-						},
-						{
-							"id":"c2",
-							"title":"9",
-							"value":"9"
-						},
-						{
-							"id":"c3",
-							"title":"10",
-							"value":"10"
-						},
-						{
-							"id":"c4",
-							"title":"11",
-							"value":"11"
-						},
-						{
-							"id":"c5",
-							"title":"12",
-							"value":"12"
-						},
-						{
-							"id":"c6",
-							"title":"14",
-							"value":"14"
-						},
-						{
-							"id":"c7",
-							"title":"18",
-							"value":"18"
-						},
-						{
-							"id":"c8",
-							"title":"20",
-							"value":"20"
-						},
-						{
-							"id":"c9",
-							"title":"24",
-							"value":"24"
-						},
-						{
-							"id":"c10",
-							"title":"36",
-							"value":"36"
-						},
-						{
-							"id":"c11",
-							"title":"48",
-							"value":"48"
-						},
-						{
-							"id":"c12",
-							"title":"72",
-							"value":"72"
-						}
-					]
-				}	
-			],
-			"roles": 			[
-				"all",
-				"fromtoall",
-				"canContainArtifacts",
-				"EventActivitiesMorph"
-			]
-		}, **/
 		{
 			"type" : 			"node",
 			"id" :				"EventSubprocess",
@@ -5641,30 +4397,6 @@
 					"length":"50",
 					"wrapLines":true
 				}
-				//,
-				/**{
-					"id":"gate_outgoingsequenceflow",
-					"type":"String",
-					"title":"[Gate] OutgoingSequenceFlow",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50"
-				},**/
-				/**{
-					"id":"gate_assignments",
-					"type":"String",
-					"title":"[Gate] Assignments",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				}**/	
 			],
 			"roles": 			[
 				"all",
@@ -5988,30 +4720,6 @@
 					"length":"50",
 					"wrapLines":true
 				}
-				/**,
-				{
-					"id":"gate_outgoingsequenceflow",
-					"type":"String",
-					"title":"[Gate] OutgoingSequenceFlow",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50"
-				},
-				{
-					"id":"gate_assignments",
-					"type":"String",
-					"title":"[Gate] Assignments",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50",
-					"wrapLines":true
-				}**/
 			],
 			"roles": 			[
 				"all",
@@ -6023,295 +4731,6 @@
 				"GatewaysMorph"
 			]
 		},
-		/** {
-			"type": "node",
-			"id":"ComplexGateway",
-			"title":"Complex Gateway",
-			"groups":["Gateways"],
-			"description":"It triggers one or more branches based on complex conditions or verbal descriptions. Use it sparingly as the semantics might not be clear.",
-			"description_ja":"複合条件または口頭の説明に基づいて、1つまたは複数の分岐をトリガーします。セマンティクスが明瞭でなくなるので使用は控えめにしてください。",
-			"view":"gateway/complex.svg",
-			"icon":"gateway/complex.png",
-			"propertyPackages" : [
-				"baseAttributes",
-				"flowElement",
-				"gateway",
-				"bgColor"
-			],
-			"properties" : [
-				{
-					"id":"bgcolor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"$colortheme.("Gateways").bgColor$", 
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView": "fill_el",
-					"fill":true,
-					"stroke":false
-				},
-				{
-					"id":"origbgcolor",
-					"type":"Color",
-					"title":"Original Background Color",
-					"value":"$colortheme.("Gateways").bgColor$",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"hidden":true,
-					"visible":false
-				},
-				{
-					"id":"bordercolor",
-					"type":"Color",
-					"title":"BorderColor",
-					"value":"$colortheme.("Gateways").borderColor$",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
-					"fill":false,
-					"stroke":true
-				},
-				{
-					"id":"origbordercolor",
-					"type":"Color",
-					"title":"Original Border Color",
-					"value":"$colortheme.("Gateways").borderColor$",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"hidden":true,
-					"visible":false
-				},
-				{
-					"id":"fontcolor",
-					"type":"Color",
-					"title":"Font Color",
-					"value":"$colortheme.("Gateways").fontColor$",
-					"description":"Font color",
-					"description_ja":"フォントの色",
-					"readonly":false,
-					"optional":false,
-					"refToView": ["text_name"],
-					"fill":true,
-					"stroke":false
-				},
-				{
-					"id":"gatewaytype",
-					"type":"String",
-					"title":"GatewayType",
-					"value":"Complex",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"length":""
-				},
-				{
-					"id":"activationcondition",
-					"type":"String",
-					"title":"ActivationCondition",
-					"value":"",
-					"popular":true,
-					"description":"Determines which combination of incoming tokens will be synchronized for activation of the Gateway.",
-					"description_ja":"ゲートウェイのアクティブ化のために同期する入力トークンの組み合わせを決定します。",
-					"readonly":false,
-					"optional":true
-				},
-				{
-					"id":"incomingcondition",
-					"type":"String",
-					"title":"IncomingCondition",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50"
-				},
-				{
-					"id":"outgoingcondition",
-					"type":"String",
-					"title":"OutgoingCondition",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":"50"
-				}
-			],
-			"roles": [
-				"all",
-				"sequence_start",
-				"sequence_end",
-				"choreography_sequence_start",
-				"choreography_sequence_end",
-				"fromtoall",
-				"GatewaysMorph"
-			]
-		}, **/
-		
-		// Swimlanes
-		/** {
-			"type" : 			"node",
-			"id" :				"Pool",
-			"title" :			"Pool",
-			"groups" :			["Swimlanes"],
-			"description" :		"Pools and Lanes represent responsibilities for activities in a process. A pool or a lane can be an organization, a role, or a system.",
-			"description_ja" :"プールとレーンは、プロセス内のアクティビティの責任を表します。プールまたはレーンには、組織、ロール、またはシステムを割り当てることができます。",
-			"view" :			"swimlane/pool.svg",
-			"icon" :			"swimlane/pool.png",
-			"propertyPackages": [
-				"baseAttributes",
-				"pool",
-				"process",
-				"bgColor"
-			],
-			"roles" : 			[
-				"all",
-				"messageflow_start",
-				"messageflow_end",
-				"fromtoall",
-				"canContainArtifacts"				
-			],
-			"layout" : [{"type" : "layout.bpmn2_0.pool"}]
-		},**/
-		/**{
-			"type" : 			"node",
-			"id" :				"CollapsedPool",
-			"title" :			"Collapsed Pool",
-			"groups" :			["Swimlanes"],
-			"description" :		"Collapsed Pools hide all internals of the contained processes.",
-			"description_ja" :"折りたたまれたプールは、中に含まれるプロセスの内部すべてを隠蔽します。",
-			"view" :			"swimlane/collapsed.pool.svg",
-			"icon" :			"swimlane/lane.png",
-			"propertyPackages": [
-				"baseAttributes",
-				"pool",
-				"process",
-				"bgColor"
-			],
-			"properties" : 		[
-				{
-					"id":"bgcolor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"fill_el",
-					"fill":true,
-					"stroke":false
-				},
-				{
-					"id":"bordercolor",
-					"type":"Color",
-					"title":"BorderColor",
-					"value":"#000000",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
-					"fill":false,
-					"stroke":true
-				},
-				{
-					"id":"fontcolor",
-					"type":"Color",
-					"title":"Font Color",
-					"value":"#000000",
-					"description":"Font color",
-					"description_ja":"フォントの色",
-					"readonly":false,
-					"optional":false,
-					"refToView": ["text_name"],
-					"fill":true,
-					"stroke":false
-				},
-				{
-					"id":"fontsize",
-					"type":"Choice",
-					"title":"Font Size",
-					"value":"",
-					"description":"The Font Size",
-					"description_ja":"フォントのサイズ",
-					"readonly":false,
-					"optional":false,
-					"refToView":"text_name",
-					"items":[
-						{
-							"id":"c1",
-							"title":"8",
-							"value":"8"
-						},
-						{
-							"id":"c2",
-							"title":"9",
-							"value":"9"
-						},
-						{
-							"id":"c3",
-							"title":"10",
-							"value":"10"
-						},
-						{
-							"id":"c4",
-							"title":"11",
-							"value":"11"
-						},
-						{
-							"id":"c5",
-							"title":"12",
-							"value":"12"
-						},
-						{
-							"id":"c6",
-							"title":"14",
-							"value":"14"
-						},
-						{
-							"id":"c7",
-							"title":"18",
-							"value":"18"
-						},
-						{
-							"id":"c8",
-							"title":"20",
-							"value":"20"
-						},
-						{
-							"id":"c9",
-							"title":"24",
-							"value":"24"
-						},
-						{
-							"id":"c10",
-							"title":"36",
-							"value":"36"
-						},
-						{
-							"id":"c11",
-							"title":"48",
-							"value":"48"
-						},
-						{
-							"id":"c12",
-							"title":"72",
-							"value":"72"
-						}
-					]
-				}
-			],
-			"roles" :		 	[
-				"all",
-				"messageflow_start",
-				"messageflow_end",
-				"fromtoall"				
-			]
-		},**/
 		{
 			"type" : 			"node",
 			"id" :				"Lane",
@@ -6490,33 +4909,6 @@
 						}
 			]
 		},
-        /**{
-            "type" :            "node",
-            "id" :              "processparticipant",
-            "title" :           "Additional Participant",
-            "groups" :          ["Swimlanes"],
-            "description" :     "he additional participant can be connected to a task or sub process. It is used to visualize additional associations of roles or individuals to the respective activity (e.g. responsibility, informed persons, etc.).",
-		    "description_ja" :"追加の参加者はタスクまたはサブプロセスに接続できます。ロールまたは個人の追加の関連を対応する各アクティビティ（責任、通知された人物など）に対して可視化するために使用されます。",
-            "view" :            "swimlane/process.participant.svg",
-            "icon" :            "swimlane/process.participant.png",
-            "defaultAlign" :    "northeast",
-            "propertyPackages": [
-                "baseAttributes",
-                "flowElement",
-                "artifact",
-                "bgColor"
-            ],
-            "roles": [
-                "all",
-                "from_participant",
-                "to_participant",
-                "fromtoall",
-                "eventSubprocessElement"
-            ]
-        },**/
-		
-		// Artifacts
-		
 		{
 			"type" : 			"node",
 			"id" : 				"Group",
@@ -6801,8 +5193,6 @@
 				"TextAnnotationMorph"
 			]
 		},
-		
-		// Data Objects
 		{
 			"type" : 			"node",
 			"id" :				"DataObject",
@@ -6820,17 +5210,6 @@
 				"bgColor"
 			],
 			"properties" :		[
-				/**{
-					"id":"state",
-					"type":"String",
-					"title":"State",
-					"value":"",
-					"description":"",
-					"refToView":"text_state",
-					"readonly":false,
-					"optional":true,
-					"directlyEditable":false
-				},**/
 				{
 					"id":"bgcolor",
 					"type":"Color",
@@ -6976,18 +5355,6 @@
                     "refToView":"",
                     "length":""
                 }
-				/**,		
-				{
-					"id" : "iscollection",
-					"type" : "Boolean",
-					"title" : "is Collection",
-					"value" : false,
-					"description" : "A Collection Data Object represents a collection of information, e.g. a list of order items.",
-					"description_ja" : "コレクションデータオブジェクトは、発注品目のリストなど、情報のコレクションを表します。",
-					"readonly" : false,
-					"optional" : true,
-					"refToView" : "collection"
-				}**/
 			],
 			"roles" : 			[
 				"all",
@@ -6997,361 +5364,6 @@
 				"DataObjectMorph"
 			]
 		},
-//		{
-//			"type" : 			"node",
-//			"id" :				"ITSystem",
-//			"title" :			"IT System",
-//			"groups" :			["Artifacts"],
-//			"description" : 	"An IT System can be associated with an activity. It is a system or application used while fulfilling the activity.",
-//			"description_ja" :"ITシステムはアクティビティに関連付けることができます。アクティビティを実行する際に使用されるシステムまたはアプリケーションです。",
-//			"view" :			"dataobject/it.system.svg",
-//			"icon" : 			"dataobject/it.system.png",
-//			"propertyPackages" : [
-//				"baseAttributes",
-//				"flowElement"				
-//			],
-//			"properties" : [
-//				{
-//					"id":"bgcolor",
-//					"type":"Color",
-//					"title":"BackgroundColor",
-//					"value":"#e1e1e1",
-//					"description":"",
-//					"readonly":false,
-//					"optional":false,
-//					"refToView":"fill_el",
-//					"fill":true,
-//					"stroke":false
-//				}
-//			],
-//			"roles" :			[
-//			    "all",
-//			    "from_task_event",
-//			    "to_task_event",
-//			    "fromtoall",
-//			    "DataObjectMorph"
-//			]
-//		},
-		/**{
-			"type" : 			"node",
-			"id" :				"DataStore",
-			"title" :			"Data Store",
-			"groups" :			["Data Objects"],
-			"description" :		"A Data Store is a place where the process can read or wirte date, e.g. a database or a filling cabinet. It persists beyond the lifetime of the process instance.",
-			"description_ja" :"データストアは、データベースやファイリングキャビネットなど、プロセスがデータを読み書きできる場所です。プロセスインスタンスの寿命を超えて存続します。",
-			"view" :			"dataobject/data.store.svg",
-			"icon" :			"dataobject/data.store.png",
-			"propertyPackages": [
-				"baseAttributes",
-				"flowElement",
-				"itemAwareElement",
-				"bgColor"
-			],
-			"properties" :		[
-				{
-					"id" : "capacity",
-					"type" : "Integer",
-					"title" : "Capacity",
-					"description" : "",
-					"readonly" : false,
-					"optional" : true,
-					"length" : ""
-				},
-				{
-					"id" : "isUnlimited",
-					"type" : "Boolean",
-					"title" : "is Unlimited",
-					"value" : false,
-					"description" : "",
-					"readonly" : false,
-					"optional" : true
-				},
-				{
-					"id" : "dataStoreRef",
-					"type" : "String",
-					"title" : "DataStoreRef",
-					"description" : "",
-					"readonly" : false,
-					"optional" : true,
-					"length": 50,
-					"wrapLines" : true
-				},
-				{
-					"id":"bgcolor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView":"fill_el",
-					"fill":true,
-					"stroke":false
-				},
-				{
-					"id":"bordercolor",
-					"type":"Color",
-					"title":"BorderColor",
-					"value":"#000000",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
-					"fill":false,
-					"stroke":true
-				},
-				{
-					"id":"fontcolor",
-					"type":"Color",
-					"title":"Font Color",
-					"value":"#000000",
-					"description":"Font color",
-					"description_ja":"フォントの色",
-					"readonly":false,
-					"optional":false,
-					"refToView": ["text_name"],
-					"fill":true,
-					"stroke":false
-				},
-				{
-					"id":"fontsize",
-					"type":"Choice",
-					"title":"Font Size",
-					"value":"",
-					"description":"The Font Size",
-					"description_ja":"フォントのサイズ",
-					"readonly":false,
-					"optional":false,
-					"refToView":"text_name",
-					"items":[
-						{
-							"id":"c1",
-							"title":"8",
-							"value":"8"
-						},
-						{
-							"id":"c2",
-							"title":"9",
-							"value":"9"
-						},
-						{
-							"id":"c3",
-							"title":"10",
-							"value":"10"
-						},
-						{
-							"id":"c4",
-							"title":"11",
-							"value":"11"
-						},
-						{
-							"id":"c5",
-							"title":"12",
-							"value":"12"
-						},
-						{
-							"id":"c6",
-							"title":"14",
-							"value":"14"
-						},
-						{
-							"id":"c7",
-							"title":"18",
-							"value":"18"
-						},
-						{
-							"id":"c8",
-							"title":"20",
-							"value":"20"
-						},
-						{
-							"id":"c9",
-							"title":"24",
-							"value":"24"
-						},
-						{
-							"id":"c10",
-							"title":"36",
-							"value":"36"
-						},
-						{
-							"id":"c11",
-							"title":"48",
-							"value":"48"
-						},
-						{
-							"id":"c12",
-							"title":"72",
-							"value":"72"
-						}
-					]
-				}
-			],
-			"roles" :			[
-				"all",
-				"fromtoall",
-				"to_task_event",
-				"from_task_event",
-				"DataObjectMorph"
-			]
-		},**/
-		/** {
-			"type" :			"node",
-			"id" :				"Message",
-			"title" :			"Message",
-			"groups" :			["Data Objects"],
-			"description" :		"A Message is used to depict the contents of a communication between two Participants.",
-			"description_ja" :"メッセージは、2人の参加者の間のコミュニケーションを表現するために使用されます。",
-			"view" :			"dataobject/message.svg",
-			"icon" :			"dataobject/message.png",
-			"propertyPackages":	[
-				"baseAttributes",
-				"flowElement",
-				"itemAwareElement"
-			],
-			"properties" :		[
-				{
-					"id" : "structureref",
-					"type" : "String",
-					"title" : "StructureRef",
-					"description" : "",
-					"readonly" : false,
-					"optional" : true,
-					"length" : 50,
-					"wrapLines" : true
-				},
-				{
-					"id" : "initiating",
-					"type" : "Boolean",
-					"title" : "is initiating",
-					"description" : "",
-					"value" : true,
-					"inverseBoolean":true,
-					"refToView" : ["nonInitiating", "nonInitiating2"],
-					"readonly" : false,
-					"optional" : true
-				},
-				{
-					"id":"bgcolor",
-					"type":"Color",
-					"title":"BackgroundColor",
-					"value":"#ffffff",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":["bg_frame","bg_frame2"],
-					"fill":true,
-					"stroke":false,
-					"hidden":true
-				},
-				{
-					"id":"bordercolor",
-					"type":"Color",
-					"title":"BorderColor",
-					"value":"#000000",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
-					"fill":false,
-					"stroke":true
-				},
-				{
-					"id":"fontcolor",
-					"type":"Color",
-					"title":"Font Color",
-					"value":"#000000",
-					"description":"Font color",
-					"description_ja":"フォントの色",
-					"readonly":false,
-					"optional":false,
-					"refToView": ["text_name"],
-					"fill":true,
-					"stroke":false
-				},
-				{
-					"id":"fontsize",
-					"type":"Choice",
-					"title":"Font Size",
-					"value":"",
-					"description":"The Font Size",
-					"description_ja":"フォントのサイズ",
-					"readonly":false,
-					"optional":false,
-					"refToView":"text_name",
-					"items":[
-						{
-							"id":"c1",
-							"title":"8",
-							"value":"8"
-						},
-						{
-							"id":"c2",
-							"title":"9",
-							"value":"9"
-						},
-						{
-							"id":"c3",
-							"title":"10",
-							"value":"10"
-						},
-						{
-							"id":"c4",
-							"title":"11",
-							"value":"11"
-						},
-						{
-							"id":"c5",
-							"title":"12",
-							"value":"12"
-						},
-						{
-							"id":"c6",
-							"title":"14",
-							"value":"14"
-						},
-						{
-							"id":"c7",
-							"title":"18",
-							"value":"18"
-						},
-						{
-							"id":"c8",
-							"title":"20",
-							"value":"20"
-						},
-						{
-							"id":"c9",
-							"title":"24",
-							"value":"24"
-						},
-						{
-							"id":"c10",
-							"title":"36",
-							"value":"36"
-						},
-						{
-							"id":"c11",
-							"title":"48",
-							"value":"48"
-						},
-						{
-							"id":"c12",
-							"title":"72",
-							"value":"72"
-						}
-					]
-				}
-			],
-			"roles" :			[
-				"all",
-				"fromtoall",
-				"DataObjectMorph"
-			]
-		}, **/
-		
-		// Start Events
-		
 		{
 			"type" : 			"node",
 			"id": 				"StartNoneEvent",
@@ -7436,15 +5448,6 @@
 					"fill":true,
 					"stroke":false
 				}
-				/**{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"None",
-					"description":"",
-					"readonly":true,
-					"optional":false
-				}**/
 			]
 		},
 		{
@@ -7532,15 +5535,6 @@
 					"fill":true,
 					"stroke":false
 				},
-				/**{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Message",
-					"description":"",
-					"readonly":true,
-					"optional":false
-				},**/
 				{
 					"id":"messageref",
 					"type":"String",
@@ -7579,26 +5573,6 @@
 				"StartEventsMorph"
 			],
 			"properties": [
-				/**{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Timer",
-					"description":"",
-					"readonly":true,
-					"optional":false
-				},**/
-				/**{
-					"id":"timedate",
-					"type":"String",
-					"title":"Time Date",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":""
-				},**/
 				{
 					"id":"bgcolor",
 					"type":"Color",
@@ -7788,15 +5762,6 @@
 					"fill":true,
 					"stroke":false
 				},
-				/**{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Escalation",
-					"description":"",
-					"readonly":true,
-					"optional":false
-				},**/
 				{
 					"id":"escalationcode",
 					"type":"String",
@@ -7836,15 +5801,6 @@
 				"StartEventsMorph"
 			],
 			"properties": [
-				/**{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Conditional",
-					"description":"",
-					"readonly":true,
-					"optional":false
-				},**/
 				{
 					"id":"bgcolor",
 					"type":"Color",
@@ -7961,15 +5917,6 @@
 				"StartEventsMorph"
 			],
 			"properties": [
-				/**{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Error",
-					"description":"",
-					"readonly":true,
-					"optional":false
-				},**/
 				{
 					"id":"bgcolor",
 					"type":"Color",
@@ -8126,15 +6073,6 @@
 					"fill":true,
 					"stroke":false
 				}
-				/**{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Compensation",
-					"description":"",
-					"readonly":true,
-					"optional":false
-				}**/
 			]
 		},
 		{
@@ -8163,15 +6101,6 @@
 				"StartEventsMorph"
 			],
 			"properties": [
-				/**{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Signal",
-					"description":"",
-					"readonly":true,
-					"optional":false
-				},**/
 				{
 					"id":"bgcolor",
 					"type":"Color",
@@ -8244,84 +6173,6 @@
 				}
 			]
 		},
-		/**{
-			"type" :		 	"node",
-			"id" :				"StartMultipleEvent",
-			"title" :			"Start Multiple Event",
-			"groups" :			["Start Events"],
-			"description" :		"A process instance is started upon occurence of one out of a set of possible events.",
-			"description_ja" :"プロセスインスタンスは、可能性のあるイベントのセットのうちいずれか1つが発生したときに開始します。",
-			"view" :			"startevent/multiple.svg",
-			"icon" :			"startevent/multiple.png",
-			"propertyPackages":[
-				"baseAttributes",
-				"catchEventAttributes",
-				"interrupting",
-				"bgColor"
-			],
-			"roles" : 			[
-				"all",
-				"messageflow_end",
-				"sequence_start",
-				"to_task_event",
-				"from_task_event",
-				"fromtoall",
-				"Startevents_all",
-				"choreography_sequence_start",
-				"StartEventsMorph"
-			],
-			"properties": [
-				{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Multiple",
-					"description":"",
-					"readonly":true,
-					"optional":false
-				}
-			]
-		},**/
-		/**{
-			"type": "node",
-			"id":"StartParallelMultipleEvent",
-			"title":"Start Parallel Multiple Event",
-			"groups":["Start Events"],
-			"description":"A process instance is started upon occurence of all possible events.",
-			"description_ja":"プロセスインスタンスは、可能性のあるすべてのイベントが発生したときに開始します。",
-			"view":"startevent/multiple.parallel.svg",
-			"icon":"startevent/multiple.parallel.png",
-			"propertyPackages":[
-				"baseAttributes",
-				"catchEventAttributes",
-				"interrupting",
-				"bgColor"
-			],
-			"roles" :			[
-				"all",
-				"messageflow_end",
-				"sequence_start",
-				"to_task_event",
-				"from_task_event",
-				"fromtoall",
-				"Startevents_all",
-				"choreography_sequence_start",
-				"StartEventsMorph"
-			],
-			"properties": [
-				{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Parallel Multiple",
-					"description":"",
-					"readonly":true,
-					"optional":false
-				}
-			]
-		},**/
-		
-		// Intermediate Events Catching
 		{
 			"type": "node",
 			"id":"IntermediateMessageEventCatching",
@@ -8412,17 +6263,6 @@
 					"fill":true,
 					"stroke":false
 				},
-				/**{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Message",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},**/
 				{
 					"id":"messageref",
 					"type":"String",
@@ -8525,28 +6365,6 @@
 					"fill":true,
 					"stroke":false
 				},
-				/**{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Timer",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},**/
-				/**{
-					"id":"timedate",
-					"type":"String",
-					"title":"Time Date",
-					"value":"",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"refToView":"",
-					"length":""
-				},**/
 				{
 					"id":"timeduration",
 					"type":"Text",
@@ -8691,17 +6509,6 @@
 					"fill":true,
 					"stroke":false
 				},
-				/**{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Escalation",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},**/
 				{
 					"id":"escalationcode",
 					"type":"String",
@@ -8806,17 +6613,6 @@
 					"fill":true,
 					"stroke":false
 				},
-				/**{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Rule",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},**/
 				{
 					"id":"conditionlanguage",
 					"type":"Choice",
@@ -8850,53 +6646,6 @@
 				}
 			]
 		},
-		/**{
-			"type": "node",
-			"id":"IntermediateLinkEventCatching",
-			"title":"Link Intermediate Event",
-			"groups":["Catching Intermediate Events"],
-			"description":"Off-page connectors. Two corresponding link events correspond to a sequence flow.",
-			"description_ja":"オフページコネクタ。2つの対応するリンクイベントがシーケンスフローに対応します。
-			"view":"intermediateevent/link.catching.svg",
-			"icon":"catching/link.png",
-			"propertyPackages":[
-				"baseAttributes",
-				"catchEventAttributes",
-				"bgColor"
-			],
-			"roles":[
-				"all",
-				"sequence_start",
-				"to_task_event",
-				"from_task_event",
-				"fromtoall",
-				"choreography_sequence_start",
-				"IntermediateEventsMorph"
-			],
-			"properties": [
-				{
-                    "id":"entry",
-                    "type":"DiagramLink",
-                    "title":"Diagram Link",
-                    "value":"",
-                    "description":"",
-                    "readonly":false,
-					"refToView" : "diagramLink",
-                    "optional":false
-                },
-				{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Link",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				}
-			]
-		},**/
 		{
 			"type": "node",
 			"id":"IntermediateErrorEvent",
@@ -8982,17 +6731,6 @@
 					"fill":true,
 					"stroke":false
 				},
-				/**{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Error",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},**/
 				{
 					"id":"errorref",
 					"type":"Text",
@@ -9006,84 +6744,6 @@
 				}
 			]
 		},
-		/**{
-			"type": "node",
-			"id":"IntermediateCancelEvent",
-			"title":"Cancel Intermediate Event",
-			"groups":["Catching Intermediate Events"],
-			"description":"Reacts on a transaction, which was cancelled inside an inner scope (e.g. subprocess). This event needs to be attached to the boundary of an activity.",
-			"description_ja":"内側のスコープ（サブプロセスなど）内でキャンセルされたトランザクションに反応します。このイベントは、アクティビティのBoundaryにアタッチする必要があります。",
-			"view":"intermediateevent/cancel.svg",
-			"icon":"catching/cancel.png",
-			"propertyPackages":[
-				"baseAttributes",
-				"catchEventAttributes",
-				"boundaryevent",
-				"bgColor"
-			],
-			"roles":[
-				"all",
-				"sequence_start",
-				"to_task_event",
-				"from_task_event",
-				"fromtoall",
-				"IntermediateEventOnSubprocessBoundary",
-				"EventOnChoreographyActivityBoundary",
-				"IntermediateEventsMorph"
-			],
-			"properties": [
-				{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Cancel",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				}
-			]
-		},**/
-		/**{
-			"type": "node",
-			"id":"IntermediateCompensationEventCatching",
-			"title":"Compensation Intermediate Event",
-			"groups":["Catching Intermediate Events"],
-			"description":"Compensation handling in case of partially failed operations. This event needs to be attached to the boundary of an activity.",
-			"description_ja":"オペレーションが部分的に失敗した場合のCompensation処理。このイベントは、アクティビティのBoundaryにアタッチする必要があります。",
-			"view":"intermediateevent/compensation.catching.svg",
-			"icon":"catching/compensation.png",
-			"propertyPackages":[
-				"baseAttributes",
-				"catchEventAttributes",
-				"boundaryevent",
-				"compensation",
-				"bgColor"
-			],
-			"roles":[
-				"all",
-				"from_task_event",
-				"fromtoall",
-				"EventOnChoreographyActivityBoundary",
-				"IntermediateEventOnSubprocessBoundary",
-				"IntermediateEventOnActivityBoundary",
-				"IntermediateEventsMorph"
-			],
-			"properties": [
-				{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Compensation",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				}
-			]
-		},**/
 		{
 			"type": "node",
 			"id":"IntermediateSignalEventCatching",
@@ -9174,17 +6834,6 @@
 					"fill":true,
 					"stroke":false
 				},
-				/**{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Signal",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				},**/
 				{
 					"id":"signalref",
 					"type":"String",
@@ -9198,97 +6847,6 @@
 				}
 			]
 		},
-		/**{
-			"type": "node",
-			"id":"IntermediateMultipleEventCatching",
-			"title":"Multiple Intermediate Event",
-			"groups":["Catching Intermediate Events"],
-			"description":"Process execution is delayed until one out of a set of possible events is triggered.",
-			"description_ja":"プロセスの実行は、可能性のあるイベントのセットのうちのいずれか1つがトリガーされるまで遅延します。",
-			"view":"intermediateevent/multiple.catching.svg",
-			"icon":"catching/multiple.png",
-			"propertyPackages":[
-				"baseAttributes",
-				"catchEventAttributes",
-				"interrupting",
-				"boundaryevent",
-				"bgColor"
-			],
-			"roles":[
-				"all",
-				"sequence_start",
-				"sequence_end",
-				"to_task_event",
-				"from_task_event",
-				"fromtoall",
-				"messageflow_end",
-				"choreography_sequence_start",
-				"choreography_sequence_end",
-				"FromEventbasedGateway",
-				"IntermediateEventOnSubprocessBoundary",
-				"IntermediateEventOnActivityBoundary",
-				"IntermediateEventsMorph"
-			],
-			"properties": [
-				{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Multiple",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				}
-			]
-		},**/
-		/**{
-			"type": "node",
-			"id":"IntermediateParallelMultipleEventCatching",
-			"title":"Parallel Multiple Intermediate Event",
-			"groups":["Catching Intermediate Events"],
-			"description":"Process execution is delayed until all possible events have been triggered.",
-			"description_ja":"プロセスの実行は、可能性のあるすべてのイベントがトリガーされるまで遅延します。",
-			"view":"intermediateevent/multiple.parallel.svg",
-			"icon":"catching/multiple.parallel.png",
-			"propertyPackages":[
-				"baseAttributes",
-				"catchEventAttributes",
-				"interrupting",
-				"boundaryevent",
-				"bgColor"
-			],
-			"roles":[
-				"all",
-				"messageflow_end",
-				"sequence_start",
-				"sequence_end",
-				"to_task_event",
-				"from_task_event",
-				"fromtoall",
-				"choreography_sequence_start",
-				"choreography_sequence_end",
-				"IntermediateEventOnSubprocessBoundary",
-				"IntermediateEventOnActivityBoundary",
-				"IntermediateEventsMorph"
-			],
-			"properties": [
-				{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Multiple",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				}
-			]
-		},**/
-		
-		// Intermediate Events Throwing
 		{
 			"type": "node",
 			"id":"IntermediateEvent",
@@ -9374,17 +6932,6 @@
 					"fill":true,
 					"stroke":false
 				}
-				/**{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"None",
-					"description":"",
-					"readonly":true,
-					"optional":false,
-					"refToView":"",
-					"length":""
-				}**/
 			]
 		},
 		{
@@ -9471,15 +7018,6 @@
 					"fill":true,
 					"stroke":false
 				},
-				/**{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Message",
-					"description":"",
-					"readonly":true,
-					"optional":false
-				},**/
 				{
 					"id":"messageref",
 					"type":"String",
@@ -9576,15 +7114,6 @@
 					"fill":true,
 					"stroke":false
 				},
-				/**{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Escalation",
-					"description":"",
-					"readonly":true,
-					"optional":false
-				},**/
 				{
 					"id":"escalationcode",
 					"type":"String",
@@ -9597,88 +7126,6 @@
 				}
 			]
 		},
-		/** {
-			"type": "node",
-			"id":"IntermediateLinkEventThrowing",
-			"title":"Link Intermediate Event",
-			"groups":["Throwing Intermediate Events"],
-			"description":"Off-page connectors. Two corresponding link events correspond to a sequence flow.",
-			"description_ja":"オフページコネクタ。2つの対応するリンクイベントがシーケンスフローに対応します。
-			"view":"intermediateevent/link.throwing.svg",
-			"icon":"throwing/link.png",
-			"propertyPackages":[
-				"baseAttributes",
-				"throwEventAttributes",
-				"bgColor"
-			],
-			"roles":[
-				"all",
-				"sequence_end",
-				"to_task_event",
-				"from_task_event",
-				"fromtoall",
-				"choreography_sequence_end",
-				"IntermediateEventsMorph"
-			],
-			"properties": [
-			     {
-                    "id":"entry",
-                    "type":"DiagramLink",
-                    "title":"Diagram Link",
-                    "value":"",
-                    "description":"",
-					"refToView": "diagramLink",
-                    "readonly":false,
-                    "optional":false
-                },
-				{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Link",
-					"description":"",
-					"readonly":true,
-					"optional":false
-				}
-			]
-		},**/
-		/**{
-			"type": "node",
-			"id":"IntermediateCompensationEventThrowing",
-			"title":"Compensation Intermediate Event",
-			"groups":["Throwing Intermediate Events"],
-			"description":"Triggers a compensation.",
-			"description_ja":"Compensationをトリガーします。",
-			"view":"intermediateevent/compensation.throwing.svg",
-			"icon":"throwing/compensation.png",
-			"propertyPackages":[
-				"baseAttributes",
-				"throwEventAttributes",
-				"bgColor",
-				"compensationThrowing",
-				"compensation"
-			],
-			"roles":[
-				"all",
-				"sequence_start",
-				"sequence_end",
-				"to_task_event",
-				"from_task_event",
-				"fromtoall",
-				"IntermediateEventsMorph"
-			],
-			"properties": [
-				{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Compensation",
-					"description":"",
-					"readonly":true,
-					"optional":false
-				}
-			]
-		},**/
 		{
 			"type": "node",
 			"id":"IntermediateSignalEventThrowing",
@@ -9762,15 +7209,6 @@
 					"fill":true,
 					"stroke":false
 				},
-				/**{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Signal",
-					"description":"",
-					"readonly":true,
-					"optional":false
-				},**/
 				{
 					"id":"signalref",
 					"type":"String",
@@ -9784,45 +7222,6 @@
 				}
 			]
 		},
-		/**{
-			"type": "node",
-			"id":"IntermediateMultipleEventThrowing",
-			"title":"Multiple Intermediate Event",
-			"groups":["Throwing Intermediate Events"],
-			"description":"The throwing multiple event throws one out of a set of possible events. Afterwards it continues process execution.",
-			"description_ja":"マルチスローイベントは、可能性のあるイベントのセットのうちいずれか1つをスローします。その後、プロセスの実行を続行します。",
-			"view":"intermediateevent/multiple.throwing.svg",
-			"icon":"throwing/multiple.png",
-			"propertyPackages":[
-				"baseAttributes",
-				"throwEventAttributes",
-				"bgColor"
-			],
-			"roles":[
-				"all",
-				"messageflow_start",
-				"sequence_start",
-				"sequence_end",
-				"to_task_event",
-				"from_task_event",
-				"fromtoall",
-				"IntermediateEventsMorph"
-			],
-			"properties": [
-				{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Multiple",
-					"description":"",
-					"readonly":true,
-					"optional":false
-				}
-			]
-		},**/
-		
-		// End Events
-		
 		{
 			"type" : "node",
 			"id": "EndNoneEvent",
@@ -9907,15 +7306,6 @@
 					"fill":true,
 					"stroke":false
 				}
-				/**{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"None",
-					"description":"",
-					"readonly":true,
-					"optional":false
-				}**/
 			]
 		},
 		{
@@ -10002,15 +7392,6 @@
 					"fill":true,
 					"stroke":false
 				},
-				/**{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Message",
-					"description":"",
-					"readonly":true,
-					"optional":false
-				},**/
 				{
 					"id":"messageref",
 					"type":"String",
@@ -10104,15 +7485,6 @@
 					"fill":true,
 					"stroke":false
 				},
-				/**{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Escalation",
-					"description":"",
-					"readonly":true,
-					"optional":false
-				},**/
 				{
 					"id":"escalationcode",
 					"type":"String",
@@ -10208,15 +7580,6 @@
 					"fill":true,
 					"stroke":false
 				},
-				/**{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Error",
-					"description":"",
-					"readonly":true,
-					"optional":false
-				},**/
 				{
 					"id":"errorref",
 					"type":"Text",
@@ -10313,15 +7676,6 @@
 					"fill":true,
 					"stroke":false
 				}
-				/**{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Cancel",
-					"description":"",
-					"readonly":true,
-					"optional":false
-				}**/
 			]
 		},
 		{
@@ -10409,15 +7763,6 @@
 					"fill":true,
 					"stroke":false
 				}
-				/**{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Compensation",
-					"description":"",
-					"readonly":true,
-					"optional":false
-				}**/
 			]
 		},
 		{
@@ -10503,15 +7848,6 @@
 					"fill":true,
 					"stroke":false
 				},
-				/**{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Signal",
-					"description":"",
-					"readonly":true,
-					"optional":false
-				},**/
 				{
 					"id":"signalref",
 					"type":"String",
@@ -10525,42 +7861,6 @@
 				}
 			]
 		},
-		/**{
-			"type": "node",
-			"id":"EndMultipleEvent",
-			"title":"Multiple End Event",
-			"groups":["End Events"],
-			"description":"At the end of the process, one out of a set of possible events is triggered.",
-			"description_ja":"プロセスの終了時に、可能性のあるイベントのセットのうちいずれか1つがトリガーされます。",
-			"view":"endevent/multiple.svg",
-			"icon":"endevent/multiple.png",
-			"propertyPackages":[
-				"baseAttributes",
-				"throwEventAttributes",
-				"bgColor"
-			],
-			"roles": [
-				"all",
-				"messageflow_start",
-				"sequence_end",
-				"to_task_event",
-				"from_task_event",
-				"fromtoall",
-				"Endevents_all",
-				"EndEventsMorph"
-			],
-			"properties": [
-				{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Multiple",
-					"description":"",
-					"readonly":true,
-					"optional":false
-				}
-			]
-		},**/
 		{
 			"type": "node",
 			"id":"EndTerminateEvent",
@@ -10644,20 +7944,8 @@
 					"fill":true,
 					"stroke":false
 				}
-				/**{
-					"id":"trigger",
-					"type":"String",
-					"title":"Trigger",
-					"value":"Terminate",
-					"description":"",
-					"readonly":true,
-					"optional":false
-				}**/
 			]
 		},
-		
-		// Edges
-		
 		{
 			"type": "edge",
 			"id":"SequenceFlow",
@@ -11043,57 +8331,7 @@
 					"visible":false
 				}
            ]
-		},
-		/**{
-			"type": "edge",
-			"id":"Association_Bidirectional",
-			"title":"Association (bidirectional)",
-			"description":"A Bidirected Association indicates that the data object is modified, i.e. read and written during the execution of an actvity.",
-			"description_ja":"双方向関連は、データオブジェクトの改変を表します。つまり、アクティビティの実行中に読み書きが発生したことを表します。",
-			"groups":["Connecting Objects"],
-			"view":"connector/association.bidirectional.svg",
-			"icon":"connector/association.bidirectional.png",
-			"roles": [
-				"all",
-				"ConnectingObjectsMorph",
-				"Directed_Association"
-			],			
-			"propertyPackages" : [
-			    "dataAssociation"
-			],
-			"properties" : [
-                {
-                    "id":"text",
-                    "type":"String",
-                    "title":"Name",
-                    "value":"",
-                    "description":"",
-                    "readonly":false,
-                    "optional":true,
-                    "length":"",
-                    "refToView":"name",
-                    "wrapLines":true,
-					"popular":true
-                }
-           ]
-		},**/
-		/**{
-			"type": "edge",
-			"id":"MessageFlow",
-			"title":"Message Flow",
-			"description":"Message Flow symbolizes information flow across organizational boundaries. Message flow can be attached to pools, activities, or message events. The order of message exchanges can be specified by combining message flow and sequence flow.",
-			"description_ja":"メッセージフローは、組織のBoundaryを越えた情報フローを記号化します。メッセージフローは、プール、アクティビティ、またはメッセージイベントにアタッチできます。メッセージ交換の順序は、メッセージフローとシーケンスフローを組み合わせることで指定できます。",
-			"groups":["Connecting Objects"],
-			"view":"connector/messageflow.svg",
-			"icon":"connector/messageflow.png",
-			"propertyPackages":[
-				"baseAttributes"
-			],
-			"roles": [
-				"ConnectingObjectsMorph",
-				"MessageContainer"
-			]
-		}**/
+		}
 	],
 	
 	"rules" : {
@@ -11194,11 +8432,6 @@
 						"from":"Subprocess",
 						"to":["IntermediateEventOnSubprocessBoundary"]
 					}
-					/** ,
-					{
-						"from":"ReusableSubprocess",
-						"to":["IntermediateEventOnSubprocessBoundary"]
-					}**/
 				]
 			},
 			{
