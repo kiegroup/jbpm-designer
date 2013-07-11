@@ -188,9 +188,12 @@ public class Bpmn2JsonMarshaller {
 	            if (rootElement instanceof Process) {
 	                // have to wait for process node to finish properties and stencil marshalling
 	                props.put("executable", ((Process) rootElement).isIsExecutable() + "");
-	                props.put("id", ((Process) rootElement).getId());
-	                props.put("name", unescapeXML(((Process) rootElement).getName()));
-	                
+	                props.put("id", rootElement.getId());
+                    Process pr = (Process) rootElement;
+                    if(pr.getName() != null && pr.getName().length() > 0) {
+                        props.put("processn", unescapeXML(((Process) rootElement).getName()));
+                    }
+
 	                List<Property> processProperties = ((Process) rootElement).getProperties();
 	                if(processProperties != null && processProperties.size() > 0) {
 	                    String propVal = "";

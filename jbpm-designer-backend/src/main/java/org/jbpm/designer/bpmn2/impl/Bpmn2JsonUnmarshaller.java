@@ -3295,8 +3295,8 @@ public class Bpmn2JsonUnmarshaller {
     }
 
     protected void applyProcessProperties(Process process, Map<String, String> properties) {
-        if(properties.get("name") != null) {
-            process.setName(escapeXmlString(properties.get("name")));
+        if(properties.get("processn") != null) {
+            process.setName(escapeXmlString(properties.get("processn")));
         } else {
             process.setName("");
         }

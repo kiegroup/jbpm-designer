@@ -62,7 +62,6 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
 
     @PostConstruct
     public void configure() {
-        System.out.println("Registering custom protocol");
         Protocol.registerProtocol("http", new Protocol("http", new OSProtocolSocketFactory(), 80));
     }
 
@@ -175,6 +174,12 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
             location = location.replaceFirst( "/", "" );
         }
         location = location.replaceAll( "/", "." );
+
+        if(location.length() > 0) {
+            String[] locationParts = location.split("\\.");
+            location = locationParts[0];
+        }
+
         name = name.substring( 0, name.lastIndexOf( "." ) );
 
         return location + "." + name;

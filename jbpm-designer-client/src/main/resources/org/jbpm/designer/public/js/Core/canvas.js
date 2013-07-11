@@ -132,15 +132,6 @@ ORYX.Core.Canvas = ORYX.Core.AbstractShape.extend({
 	},
 	
 	focus: function(){
-		
-		// Get a href
-		if (!this.headerA){
-			this.headerA = Ext.get("oryx_editor_header").child("a").dom
-		}
-		
-		// Focus it and blurs it
-		this.headerA.focus();
-		this.headerA.blur();
 	},
 	
 	update: function() {

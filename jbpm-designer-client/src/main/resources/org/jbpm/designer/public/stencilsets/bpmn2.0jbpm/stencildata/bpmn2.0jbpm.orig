@@ -547,7 +547,7 @@
 					"id":"version",
 					"type":"String",
 					"title":"Version",
-					"value":"",
+					"value":"$pversion$",
 					"description":"This defines the Version number of the Diagram.",
 					"description_ja":"ダイアグラムのバージョン番号を定義します。",
 					"readonly":false,
@@ -2021,18 +2021,17 @@
 			"roles":			["canContainArtifacts"],
 			"properties": [
 				{
-					"id":"name",
+					"id":"processn",
 					"type":"String",
-					"title":"Name",
-					"value":"$processName$",
-					"description":"The descriptive name of the BPMN element.",
+					"title":"Process Name",
+					"value":"$processn$",
+					"description":"Process Name",
 					"description_ja":"BPMN要素のわかりやすい名前。",
 					"readonly":false,
-					"optional":true,
+					"optional":false,
 					"length":"",
 					"wrapLines" : true,
-					"refToView":"text_name",
-					"popular" : true	
+					"refToView":"text_name"
 				},
 				{
 					"id":"documentation",

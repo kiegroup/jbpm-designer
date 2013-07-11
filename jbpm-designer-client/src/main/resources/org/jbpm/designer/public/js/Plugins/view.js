@@ -1442,7 +1442,7 @@ ORYX.Plugins.View = {
                             text: 'Save to file',
                             handler: function(){
                                 var processJSON = ORYX.EDITOR.getSerializedJSON();
-                                var processName = jsonPath(processJSON.evalJSON(), "$.properties.name");
+                                var processName = jsonPath(processJSON.evalJSON(), "$.properties.processn");
                                 var processPackage = jsonPath(processJSON.evalJSON(), "$.properties.package");
                                 var processVersion = jsonPath(processJSON.evalJSON(), "$.properties.version");
                                 var fileName = "";
@@ -1666,7 +1666,7 @@ ORYX.Plugins.View = {
                                 text: 'Download BPMN2',
                                 handler: function(){
                                     var processJSON = ORYX.EDITOR.getSerializedJSON();
-                                    var processName = jsonPath(processJSON.evalJSON(), "$.properties.name");
+                                    var processName = jsonPath(processJSON.evalJSON(), "$.properties.processn");
                                     var processPackage = jsonPath(processJSON.evalJSON(), "$.properties.package");
                                     var processVersion = jsonPath(processJSON.evalJSON(), "$.properties.version");
                                     var fileName = "";

@@ -148,7 +148,7 @@ ORYX.Plugins.CanvasTitle = {
 	},
 	_getTitleFromJSON: function() {
 		var processJSON = ORYX.EDITOR.getSerializedJSON();
-        var processName = jsonPath(processJSON.evalJSON(), "$.properties.name");
+        var processName = jsonPath(processJSON.evalJSON(), "$.properties.processn");
         var processPackage = jsonPath(processJSON.evalJSON(), "$.properties.package");
         var processId = jsonPath(processJSON.evalJSON(), "$.properties.id");
         var processVersion = jsonPath(processJSON.evalJSON(), "$.properties.version");

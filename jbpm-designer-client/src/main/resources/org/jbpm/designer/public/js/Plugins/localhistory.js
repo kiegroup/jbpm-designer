@@ -329,7 +329,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
     addToHistory : function() {
         var processJSON = ORYX.EDITOR.getSerializedJSON();
         var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false));
-        var processName = jsonPath(processJSON.evalJSON(), "$.properties.name");
+        var processName = jsonPath(processJSON.evalJSON(), "$.properties.processn");
         var processPackage = jsonPath(processJSON.evalJSON(), "$.properties.package");
         var processId = jsonPath(processJSON.evalJSON(), "$.properties.id");
         var processVersion = jsonPath(processJSON.evalJSON(), "$.properties.version");

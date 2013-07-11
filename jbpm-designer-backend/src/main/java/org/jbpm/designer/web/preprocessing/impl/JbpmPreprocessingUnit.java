@@ -102,7 +102,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
         String uuid = req.getParameter("uuid");
         try {
-            createAssetIfNotExisting(repository, "/defaultPackage", "BPMN2-SampleProcess", "bpmn2", getBytesFromFile(new File(sampleBpmn2)));
+            //createAssetIfNotExisting(repository, "/defaultPackage", "BPMN2-SampleProcess", "bpmn2", getBytesFromFile(new File(sampleBpmn2)));
 
             Asset<String> asset = repository.loadAsset(uuid);
             outData = "";
@@ -173,19 +173,30 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             if(processPackage.startsWith(".")) {
                 processPackage = processPackage.substring(1, processPackage.length());
             }
-            workItemTemplate.setAttribute("packageName", processPackage);
+
+            // set package to org.jbpm
+            workItemTemplate.setAttribute("packageName", "org.jbpm");
 
             String processName = asset.getName();
-            workItemTemplate.setAttribute("processName", processName);
+            workItemTemplate.setAttribute("processn", processName);
 
             String packageNameStr = (processPackage.length() > 0) ? processPackage + "." : "";
+            if(packageNameStr.length() > 0) {
+                String[] packageNameParts = packageNameStr.split("\\.");
+                packageNameStr = packageNameParts[0] + ".";
+            }
+
             // default the process id to packagename.processName
-            String processIdString = packageNameStr + workItemTemplate.getAttribute("processName");
+            String processIdString = packageNameStr + processName;
             if(processIdString.startsWith("."));
             if(processIdString.startsWith(".")) {
                 processIdString = processIdString.substring(1, processIdString.length());
             }
+
             workItemTemplate.setAttribute("processid", processIdString);
+
+            // default version to 1.0
+            workItemTemplate.setAttribute("pversion", "1.0");
             // color theme attribute
             workItemTemplate.setAttribute("colortheme", themeData);
 
