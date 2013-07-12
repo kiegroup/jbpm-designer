@@ -28,6 +28,7 @@ import org.uberfire.client.mvp.PlaceManager;
 import org.uberfire.client.mvp.UberView;
 import org.uberfire.mvp.PlaceRequest;
 import org.uberfire.mvp.impl.PathPlaceRequest;
+import org.uberfire.util.URIEncoder;
 import org.uberfire.workbench.events.NotificationEvent;
 import org.uberfire.workbench.events.ResourceDeletedEvent;
 import org.uberfire.workbench.events.ResourceUpdatedEvent;
@@ -152,7 +153,7 @@ public class DesignerPresenter {
             public void callback( final Path mypath ) {
                 resourceUpdatedEvent.fire( new ResourceUpdatedEvent(mypath) );
             }
-        } ).get( uri );
+        } ).get( URIEncoder.encode(uri) );
     }
 
     public void assetDeleteEvent(String uri) {
@@ -164,7 +165,7 @@ public class DesignerPresenter {
                         "" );
 
             }
-        } ).get( uri );
+        } ).get( URIEncoder.encode(uri) );
     }
 
     private RemoteCallback<Void> getDeleteSuccessCallback( final Path path ) {

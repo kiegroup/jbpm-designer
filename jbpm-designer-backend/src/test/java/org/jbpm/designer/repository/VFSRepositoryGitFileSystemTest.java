@@ -308,6 +308,34 @@ public class VFSRepositoryGitFileSystemTest {
     }
 
     @Test
+    public void testStoreSingleBinaryAssetSpaceInName() throws AssetNotFoundException{
+
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
+        Collection<Asset> assets = repository.listAssets("/");
+        assertNotNull(assets);
+        assertEquals(0, assets.size());
+
+        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
+        builder.content("simple content".getBytes())
+                .type("png")
+                .name("test asset")
+                .location("/");
+
+        String id = repository.createAsset(builder.getAsset());
+
+        assertNotNull(id);
+
+        Asset<byte[]> asset = repository.loadAsset(id);
+
+        assertEquals("png", asset.getAssetType());
+        assertEquals("test asset", asset.getName());
+        assertEquals("test asset.png", asset.getFullName());
+        assertEquals("/", asset.getAssetLocation());
+        assertFalse(asset.getAssetContent().length == 0);
+    }
+
+    @Test
     public void testStoreSingleTextAsset() throws AssetNotFoundException{
 
         Repository repository = new VFSRepository(producer.getIoService());

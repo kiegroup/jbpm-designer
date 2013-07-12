@@ -182,7 +182,7 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
 
         name = name.substring( 0, name.lastIndexOf( "." ) );
 
-        return location + "." + name;
+        return location + "." + name.replaceAll("\\s", "");
     }
 
 }

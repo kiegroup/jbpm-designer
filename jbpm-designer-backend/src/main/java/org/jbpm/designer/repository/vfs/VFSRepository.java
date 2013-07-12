@@ -14,10 +14,7 @@ import org.kie.commons.java.nio.file.DirectoryStream;
 import org.kie.commons.java.nio.file.FileSystem;
 import org.kie.commons.java.nio.file.Path;
 import org.kie.commons.java.nio.file.attribute.BasicFileAttributes;
-import org.uberfire.backend.repositories.*;
-import org.uberfire.backend.vfs.*;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Event;
@@ -31,10 +28,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @ApplicationScoped
 public class VFSRepository implements Repository {
@@ -454,25 +447,27 @@ public class VFSRepository implements Repository {
             }
         }
 
-        return assetBuilder.getAsset();
+        return assetBuilder.decode().getAsset();
     }
 
     private String decodeUniqueId(String uniqueId) {
         if (Base64.isBase64(uniqueId)) {
             byte[] decoded = Base64.decodeBase64(uniqueId);
             try {
-                return new String(decoded, "UTF-8");
+                String uri = new String(decoded, "UTF-8");
+
+                return UriUtils.encode(uri);
             } catch (UnsupportedEncodingException e) {
 
             }
         }
 
-        return uniqueId;
+        return UriUtils.encode(uniqueId);
     }
 
     private String encodeUniqueId(String uniqueId) {
         try {
-            return Base64.encodeBase64URLSafeString(uniqueId.getBytes("UTF-8"));
+            return Base64.encodeBase64URLSafeString(UriUtils.decode(uniqueId).getBytes("UTF-8"));
         } catch (UnsupportedEncodingException e) {
             throw new IllegalStateException(e.getMessage());
         }

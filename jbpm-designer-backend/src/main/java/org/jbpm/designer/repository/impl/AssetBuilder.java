@@ -1,6 +1,7 @@
 package org.jbpm.designer.repository.impl;
 
 import org.jbpm.designer.repository.Asset;
+import org.jbpm.designer.repository.UriUtils;
 
 public class AssetBuilder {
 
@@ -16,7 +17,7 @@ public class AssetBuilder {
     }
 
     public AssetBuilder name(String name) {
-        this.asset.setName(name);
+        this.asset.setName(UriUtils.encode(name));
         return this;
     }
 
@@ -31,7 +32,7 @@ public class AssetBuilder {
     }
 
     public AssetBuilder uniqueId(String uniqueId) {
-        this.asset.setUniqueId(uniqueId);
+        this.asset.setUniqueId(UriUtils.encode(uniqueId));
         return this;
     }
 
@@ -63,4 +64,11 @@ public class AssetBuilder {
     public Asset getAsset() {
         return this.asset;
     }
+
+    public AssetBuilder decode() {
+        this.asset.setName(UriUtils.decode(this.asset.getName()));
+        return this;
+    }
+
+
 }
