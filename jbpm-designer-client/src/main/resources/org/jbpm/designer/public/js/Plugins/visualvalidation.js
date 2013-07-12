@@ -6,19 +6,39 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
 
     construct: function(facade){
         this.facade = facade;
-        this.active = false;
         this.vt;
         this.allErrors = {};
         this.errorDisplayView;
 
         this.facade.offer({
-            'name': ORYX.I18N.SyntaxChecker.name,
-            'functionality': this.doValidation.bind(this),
+            'name': "Start validating",
+            'functionality': this.enableValidation.bind(this),
             'group': 'validationandsimulation',
-            'icon': ORYX.BASE_FILE_PATH + "images/visualvalidation.png",
+            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/visualvalidation.png",
             'description': ORYX.I18N.SyntaxChecker.desc,
-            'index': 6,
-            'toggle': true,
+            'index': 1,
+            'minShape': 0,
+            'maxShape': 0
+        });
+
+        this.facade.offer({
+            'name': "Stop validating",
+            'functionality': this.disableValidation.bind(this),
+            'group': 'validationandsimulation',
+            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/visualvalidation.png",
+            'description': ORYX.I18N.SyntaxChecker.desc,
+            'index': 2,
+            'minShape': 0,
+            'maxShape': 0
+        });
+
+        this.facade.offer({
+            'name': "View all issues",
+            'functionality': this.viewAllValidation.bind(this),
+            'group': 'validationandsimulation',
+            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/visualvalidation.png",
+            'description': ORYX.I18N.SyntaxChecker.desc,
+            'index': 3,
             'minShape': 0,
             'maxShape': 0
         });
@@ -26,44 +46,38 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_CLICK, this.displayErrorsOnNode.bind(this));
 
     },
-    doValidation: function(button, pressed) {
-        if (!pressed) {
-            this.facade.raiseEvent({
-                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                ntype		: 'info',
-                msg         : 'Stopping visual validation',
-                title       : ''
 
-            });
-            this.setActivated(button, false);
-            window.clearInterval(this.vt);
-            this.stopValidate();
-        } else {
-            this.facade.raiseEvent({
-                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                ntype		: 'info',
-                msg         : 'Starting visual validation',
-                title       : ''
+    enableValidation: function() {
+        this.facade.raiseEvent({
+            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+            ntype		: 'info',
+            msg         : 'Starting continuous visual validation.',
+            title       : ''
 
-            });
-            this.setActivated(button, true);
-            this.vt = window.setInterval((function(){
-               this.startValidate();
-            }).bind(this), 3000);
-        }
-
+        });
+        this.vt = window.setInterval((function(){
+            this.startValidate(true);
+        }).bind(this), 3000);
     },
 
-    setActivated: function(button, activated){
-        button.toggle(activated);
-        if(activated === undefined){
-            this.active = !this.active;
-        } else {
-            this.active = activated;
-        }
+    disableValidation: function() {
+        this.facade.raiseEvent({
+            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+            ntype		: 'info',
+            msg         : 'Stopping continuous visual validation.',
+            title       : ''
+
+        });
+        window.clearInterval(this.vt);
+        this.stopValidate();
     },
 
-    startValidate: function() {
+    viewAllValidation: function() {
+        this.startValidate(false);
+        this.displayErrorsOnNode();
+    },
+
+    startValidate: function(updateshapes) {
         var processJSON = ORYX.EDITOR.getSerializedJSON();
         new Ajax.Request(ORYX.PATH + "syntaxcheck", {
             method: 'POST',
@@ -82,15 +96,17 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
                     errors = new Hash(errors);
                 }
                 this.allErrors = errors;
-                errors.keys().each(function(value) {
-                    var shape = this.facade.getCanvas().getChildShapeByResourceId(value);
-                    if (shape) {
-                        if(shape instanceof ORYX.Core.Node || shape instanceof ORYX.Core.Edge) {
-                            shape.setProperty("oryx-bordercolor", "#FF6600");
-                            shape.refresh();
+                if(updateshapes) {
+                    errors.keys().each(function(value) {
+                        var shape = this.facade.getCanvas().getChildShapeByResourceId(value);
+                        if (shape) {
+                            if(shape instanceof ORYX.Core.Node || shape instanceof ORYX.Core.Edge) {
+                                shape.setProperty("oryx-bordercolor", "#FF6600");
+                                shape.refresh();
+                            }
                         }
-                    }
-                }.bind(this));
+                    }.bind(this));
+                }
 
             }.bind(this),
             onFailure: function() {
@@ -127,10 +143,10 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
     },
 
     displayErrorsOnNode: function(evt, shape) {
-        if(this.active) {
             if(this.allErrors instanceof Hash) {
             var ErrorData = Ext.data.Record.create([{
-                name: 'name'
+                name: 'name',
+                shapeid: 'shapeid'
             }]);
 
             var errorDataProxy = new Ext.data.MemoryProxy({
@@ -151,17 +167,33 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
             errordata.load();
 
             var foundErrorsForNode = false;
-            this.allErrors.keys().each(function(value) {
-                if(value == shape.resourceId) {
-                    foundErrorsForNode = true;
-                    var ae = this.allErrors[value];
-                    for (var i = 0; i < ae.length; i++){
-                        errordata.add(new ErrorData({
-                            name: ae[i]
-                        }));
+            if(shape) {
+                this.allErrors.keys().each(function(value) {
+                    if(value == shape.resourceId) {
+                        foundErrorsForNode = true;
+                        var ae = this.allErrors[value];
+                        for (var i = 0; i < ae.length; i++){
+                            errordata.add(new ErrorData({
+                                name: ae[i].error,
+                                shapeid: ae[i].id
+                            }));
+                        }
                     }
-                }
-            }.bind(this));
+                }.bind(this));
+            } else {
+                // dont filter (show all);
+                this.allErrors.keys().each(function(value) {
+                        var ae = this.allErrors[value];
+                        for (var i = 0; i < ae.length; i++){
+                            errordata.add(new ErrorData({
+                                name: ae[i].error,
+                                shapeid: ae[i].id
+                            }));
+                        }
+                }.bind(this));
+                foundErrorsForNode = true;
+            }
+
 
             if(foundErrorsForNode) {
                 var grid = new Ext.grid.EditorGridPanel({
@@ -169,14 +201,24 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
                     autoHeight: true,
                     store: errordata,
                     stripeRows: true,
-                    cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
-                        id: 'name',
-                        header: 'Description',
-                        width: 500,
-                        dataIndex: 'name',
-                        editor: new Ext.form.TextField({ allowBlank: true, vtype: 'inputName', regex: /^[a-z0-9 \-\.\_]*$/i }),
-                        renderer: Ext.util.Format.htmlEncode
-                    }]),
+                    cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(),
+                        {
+                            id: 'shapeid',
+                            header: 'Shape ID',
+                            width: 100,
+                            dataIndex: 'shapeid',
+                            editor: new Ext.form.TextField({ allowBlank: true, vtype: 'inputName', regex: /^[a-z0-9 \-\.\_]*$/i }),
+                            renderer: Ext.util.Format.htmlEncode
+                        },
+                        {
+                            id: 'name',
+                            header: 'Description',
+                            width: 500,
+                            dataIndex: 'name',
+                            editor: new Ext.form.TextField({ allowBlank: true, vtype: 'inputName', regex: /^[a-z0-9 \-\.\_]*$/i }),
+                            renderer: Ext.util.Format.htmlEncode
+                        }
+                    ]),
                     autoHeight: true,
                     clicksToEdit: 1
                 });
@@ -187,7 +229,7 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
                     autoCreate	: true,
                     title		: 'Validation suggestions',
                     height		: 300,
-                    width		: 500,
+                    width		: 600,
                     modal		: true,
                     collapsible	: false,
                     fixedcenter	: true,
@@ -204,8 +246,6 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
                     items		:[grid],
                     listeners	:{
                         hide: function(){
-                            this.fireEvent('dialogClosed', this.value);
-                            //this.focus.defer(10, this);
                             dialog.destroy();
                         }.bind(this)
                     },
@@ -222,6 +262,6 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
             }
 
         }
-        }
+
     }
 });

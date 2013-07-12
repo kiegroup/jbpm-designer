@@ -15,11 +15,13 @@ import org.eclipse.emf.ecore.util.FeatureMap;
 import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 
 public class BPMN2SyntaxChecker implements SyntaxChecker {
-	protected Map<String, List<String>> errors = new HashMap<String, List<String>>();
+	protected Map<String, List<ValidationSyntaxError>> errors = new HashMap<String, List<ValidationSyntaxError>>();
 	private String json;
 	private String preprocessingData;
 	private IDiagramProfile profile;
@@ -51,10 +53,10 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
         		}
         		
         		if(isEmpty(process.getId())) {
-        			addError(defaultResourceId, "Process has no id.");
+        			addError(defaultResourceId, new ValidationSyntaxError(process, "Process has no id."));
         		} else {
         			if(!SyntaxCheckerUtils.isNCName(process.getId())) {
-        				addError(defaultResourceId, "Invalid process id. See http://www.w3.org/TR/REC-xml-names/#NT-NCName for more info.");
+        				addError(defaultResourceId, new ValidationSyntaxError(process,"Invalid process id. See http://www.w3.org/TR/REC-xml-names/#NT-NCName for more info."));
         			}
         		}
         		
@@ -67,16 +69,16 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
                     	foundPackageName = true;
                         pname = (String) entry.getValue();
                         if(isEmpty(pname)) {
-                        	addError(defaultResourceId, "Process has no package name.");
+                        	addError(defaultResourceId, new ValidationSyntaxError(process,"Process has no package name."));
                         }
                     }
                 }
                 if(!foundPackageName) {
-                	addError(defaultResourceId, "Process has no package name.");
+                	addError(defaultResourceId, new ValidationSyntaxError(process,"Process has no package name."));
                 }
                 
                 if(isEmpty(process.getName())) {
-        			addError(defaultResourceId, "Process has no name.");
+        			addError(defaultResourceId, new ValidationSyntaxError(process,"Process has no name."));
         		}
                 
                 boolean foundStartEvent = false;
@@ -91,10 +93,10 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
         			}
         		}
         		if(!foundStartEvent && !isAdHocProcess(process)) {
-        			addError(defaultResourceId, "Process has no start node.");
+        			addError(defaultResourceId, new ValidationSyntaxError(process,"Process has no start node."));
         		}
         		if(!foundEndEvent && !isAdHocProcess(process)) {
-        			addError(defaultResourceId, "Process has no end node.");
+        			addError(defaultResourceId, new ValidationSyntaxError(process,"Process has no end node."));
         		}
         		
         		checkFlowElements(process, process, defaultScenario);
@@ -108,22 +110,22 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 			if(fe instanceof StartEvent) {
 				StartEvent se = (StartEvent) fe;
 				if(se.getOutgoing() == null || se.getOutgoing().size() < 1) {
-					addError(se, "Start node has no outgoing connections");
+					addError(se, new ValidationSyntaxError(se,"Start node has no outgoing connections"));
 				}
 			} else if (fe instanceof EndEvent) {
 				EndEvent ee = (EndEvent) fe;
 				if(ee.getIncoming() == null || ee.getIncoming().size() < 1) {
-					addError(ee, "End node has no incoming connections");
+					addError(ee, new ValidationSyntaxError(ee,"End node has no incoming connections"));
 				}
 			} else {
 				if(fe instanceof FlowNode) {
 					FlowNode fn = (FlowNode) fe;
 					if((fn.getOutgoing() == null || fn.getOutgoing().size() < 1) && !isAdHocProcess(process)) {
-    					addError(fn, "Node has no outgoing connections");
+    					addError(fn, new ValidationSyntaxError(fn,"Node has no outgoing connections"));
     				}
                     if(!(fn instanceof BoundaryEvent)) {
                         if((fn.getIncoming() == null || fn.getIncoming().size() < 1) && !isAdHocProcess(process)) {
-                            addError(fn, "Node has no incoming connections");
+                            addError(fn, new ValidationSyntaxError(fn,"Node has no incoming connections"));
                         }
                     }
 				}
@@ -139,36 +141,36 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 	                	foundRuleflowGroup = true;
 	                	String ruleflowGroup = (String) entry.getValue();
 	                	if(isEmpty(ruleflowGroup)) {
-	                		addError(bt, "Business Rule Task has no ruleflow-group.");
+	                		addError(bt, new ValidationSyntaxError(bt,"Business Rule Task has no ruleflow-group."));
 	                	}
 	                }
 	            }
 	            if(!foundRuleflowGroup) {
-	            	addError(bt, "Business Rule Task has no ruleflow-group.");
+	            	addError(bt, new ValidationSyntaxError(bt,"Business Rule Task has no ruleflow-group."));
 	            }
 			}
 			
 			if(fe instanceof ScriptTask) {
 				ScriptTask st = (ScriptTask) fe;
 				if(isEmpty(st.getScript())) {
-					addError(st, "Script Task has no script.");
+					addError(st, new ValidationSyntaxError(st,"Script Task has no script."));
 				}
 				if(isEmpty(st.getScriptFormat())) {
-					addError(st, "Script Task has no script format.");
+					addError(st, new ValidationSyntaxError(st,"Script Task has no script format."));
 				}
 			}
 			
 			if(fe instanceof SendTask) {
 				SendTask st = (SendTask) fe;
 				if(st.getMessageRef() == null) {
-					addError(st, "Send Task has no message.");
+					addError(st, new ValidationSyntaxError(st,"Send Task has no message."));
 				}
 			}
 
             if(fe instanceof ServiceTask) {
                 ServiceTask st = (ServiceTask) fe;
                 if(st.getOperationRef() == null) {
-                    addError(st, "Service Task has no operation.");
+                    addError(st, new ValidationSyntaxError(st,"Service Task has no operation."));
                 }
             }
 			
@@ -183,12 +185,12 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 		            	foundTaskName = true;
 		            	taskName = (String) entry.getValue();
 		            	if(isEmpty(taskName)) {
-		            		addError(ut, "User Task has no task name.");
+		            		addError(ut, new ValidationSyntaxError(ut,"User Task has no task name."));
 		            	}
 		            }
 		        }
 		        if(!foundTaskName) {
-		        	addError(ut, "User Task has no task name.");
+		        	addError(ut, new ValidationSyntaxError(ut,"User Task has no task name."));
 		        }
 		        
 		        // simulation validation
@@ -201,7 +203,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 	        						FloatingParameterType quantityVal = (FloatingParameterType) resourceParams.getQuantity().getParameterValue().get(0);
 	        						double val = quantityVal.getValue();
 	        						if(val < 0) {
-	        							addError(ut, "Staff Availability value must be positive.");
+	        							addError(ut, new ValidationSyntaxError(ut,"Staff Availability value must be positive."));
 	        						}
 	        					}
 	        				}
@@ -223,7 +225,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 	        						FloatingParameterType unitCostVal = (FloatingParameterType) costParams.getUnitCost().getParameterValue().get(0);
 	        						Double val = unitCostVal.getValue();
 	        						if(val.doubleValue() < 0) {
-	        							addError(ta, "Cost per Time Unit value must be positive.");
+	        							addError(ta, new ValidationSyntaxError(ta,"Cost per Time Unit value must be positive."));
 	        						}
 	        					}
 	        				}
@@ -232,7 +234,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 	        					if(resourceParams.getQuantity() != null) {
 	        						FloatingParameterType workingHoursVal = (FloatingParameterType) resourceParams.getQuantity().getParameterValue().get(0);
 	        						if(workingHoursVal.getValue() < 0) {
-	        							addError(ta, "Working Hours value must be positive.");
+	        							addError(ta, new ValidationSyntaxError(ta,"Working Hours value must be positive."));
 	        						}
 	        					}
 	        				}
@@ -248,42 +250,42 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
     				if(ed instanceof TimerEventDefinition) {
     	                TimerEventDefinition ted = (TimerEventDefinition) ed;
                         if(ted.getTimeDate() != null && ted.getTimeDuration() != null && ted.getTimeCycle() != null) {
-                            addError(event, "Catch Even has timeDate and timeDuration and timeCycle defined.");
+                            addError(event, new ValidationSyntaxError(event,"Catch Even has timeDate and timeDuration and timeCycle defined."));
                         } else if(ted.getTimeDate() != null && ted.getTimeDuration() != null) {
-                            addError(event, "Catch Even has both timeDate and timeDuration defined.");
+                            addError(event, new ValidationSyntaxError(event,"Catch Even has both timeDate and timeDuration defined."));
                         } else if(ted.getTimeDate() != null && ted.getTimeCycle() != null) {
-                            addError(event, "Catch Even has both timeDate and timeCycle defined.");
+                            addError(event, new ValidationSyntaxError(event,"Catch Even has both timeDate and timeCycle defined."));
                         } else if(ted.getTimeDuration() != null && ted.getTimeCycle() != null) {
-                            addError(event, "Catch Even has both timeduration and timecycle defined.");
+                            addError(event, new ValidationSyntaxError(event,"Catch Even has both timeduration and timecycle defined."));
                         }
 
                         if(ted.getTimeDate() == null && ted.getTimeDuration() == null && ted.getTimeCycle() == null) {
-                            addError(event, "Catch Even has no timeDate or timeDuration or timeCycle defined.");
+                            addError(event, new ValidationSyntaxError(event,"Catch Even has no timeDate or timeDuration or timeCycle defined."));
                         }
     	            } else if( ed instanceof SignalEventDefinition) {
     	                if(((SignalEventDefinition) ed).getSignalRef() == null) {
-    	                	addError(event, "Catch Event has no signalref.");
+    	                	addError(event, new ValidationSyntaxError(event,"Catch Event has no signalref."));
     	                }
     	            } else if( ed instanceof ErrorEventDefinition) {
     	                if(((ErrorEventDefinition) ed).getErrorRef() == null || ((ErrorEventDefinition) ed).getErrorRef().getErrorCode() == null) {
-    	                	addError(event, "Catch Event has no errorref.");
+    	                	addError(event, new ValidationSyntaxError(event,"Catch Event has no errorref."));
     	                }
     	            } else if( ed instanceof ConditionalEventDefinition ) {
     	                FormalExpression conditionalExp = (FormalExpression) ((ConditionalEventDefinition) ed).getCondition();
     	                if(conditionalExp.getBody() == null) {
-    	                	addError(event, "Catch Event has no conditionexpression.");
+    	                	addError(event, new ValidationSyntaxError(event,"Catch Event has no conditionexpression."));
     	                }
     	            } else if( ed instanceof EscalationEventDefinition ) {
     	                if(((EscalationEventDefinition) ed).getEscalationRef() == null) {
-    	                	addError(event, "Catch Event has no escalationref.");
+    	                	addError(event, new ValidationSyntaxError(event,"Catch Event has no escalationref."));
     	                }
     	            } else if( ed instanceof MessageEventDefinition) {
     	                if(((MessageEventDefinition) ed).getMessageRef() == null) {
-    	                    addError(event, "Catch Event has no messageref.");
+    	                    addError(event, new ValidationSyntaxError(event,"Catch Event has no messageref."));
     	                }
     	            }  else if( ed instanceof CompensateEventDefinition) {
     	                if(((CompensateEventDefinition) ed).getActivityRef() == null) {
-    	                	addError(event, "Catch Event has no activityref.");
+    	                	addError(event, new ValidationSyntaxError(event,"Catch Event has no activityref."));
     	                }
     	            } 
 				}
@@ -296,42 +298,42 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 		            if(ed instanceof TimerEventDefinition) {
                         TimerEventDefinition ted = (TimerEventDefinition) ed;
                         if(ted.getTimeDate() != null && ted.getTimeDuration() != null && ted.getTimeCycle() != null) {
-                            addError(event, "Catch Even has timeDate and timeDuration and timeCycle defined.");
+                            addError(event, new ValidationSyntaxError(event,"Catch Even has timeDate and timeDuration and timeCycle defined."));
                         } else if(ted.getTimeDate() != null && ted.getTimeDuration() != null) {
-                            addError(event, "Catch Even has both timeDate and timeDuration defined.");
+                            addError(event, new ValidationSyntaxError(event,"Catch Even has both timeDate and timeDuration defined."));
                         } else if(ted.getTimeDate() != null && ted.getTimeCycle() != null) {
-                            addError(event, "Catch Even has both timeDate and timeCycle defined.");
+                            addError(event, new ValidationSyntaxError(event,"Catch Even has both timeDate and timeCycle defined."));
                         } else if(ted.getTimeDuration() != null && ted.getTimeCycle() != null) {
-                            addError(event, "Catch Even has both timeduration and timecycle defined.");
+                            addError(event, new ValidationSyntaxError(event,"Catch Even has both timeduration and timecycle defined."));
                         }
 
                         if(ted.getTimeDate() == null && ted.getTimeDuration() == null && ted.getTimeCycle() == null) {
-                            addError(event, "Catch Even has no timeDate or timeDuration or timeCycle defined.");
+                            addError(event, new ValidationSyntaxError(event,"Catch Even has no timeDate or timeDuration or timeCycle defined."));
                         }
 		            } else if( ed instanceof SignalEventDefinition) {
 		                if(((SignalEventDefinition) ed).getSignalRef() == null) {
-		                	addError(event, "Throw Event has no signalref.");
+		                	addError(event, new ValidationSyntaxError(event,"Throw Event has no signalref."));
 		                }
 		            } else if( ed instanceof ErrorEventDefinition) {
 		                if(((ErrorEventDefinition) ed).getErrorRef() == null || ((ErrorEventDefinition) ed).getErrorRef().getErrorCode() == null) {
-		                	addError(event, "Throw Event has no errorref.");
+		                	addError(event, new ValidationSyntaxError(event,"Throw Event has no errorref."));
 		                }
 		            } else if( ed instanceof ConditionalEventDefinition ) {
 		                FormalExpression conditionalExp = (FormalExpression) ((ConditionalEventDefinition) ed).getCondition();
 		                if(conditionalExp.getBody() == null) {
-		                	addError(event, "Throw Event has no conditional expression.");
+		                	addError(event, new ValidationSyntaxError(event,"Throw Event has no conditional expression."));
 		                }
 		            } else if( ed instanceof EscalationEventDefinition ) {
 		                if(((EscalationEventDefinition) ed).getEscalationRef() == null) {
-		                	addError(event, "Throw Event has no conditional escalationref.");
+		                	addError(event, new ValidationSyntaxError(event,"Throw Event has no conditional escalationref."));
 		                }
 		            } else if( ed instanceof MessageEventDefinition) {
 		                if(((MessageEventDefinition) ed).getMessageRef() == null) {
-		                	addError(event, "Throw Event has no conditional messageref.");
+		                	addError(event, new ValidationSyntaxError(event,"Throw Event has no conditional messageref."));
 		                }
 		            }  else if( ed instanceof CompensateEventDefinition) {
 		                if(((CompensateEventDefinition) ed).getActivityRef() == null) {
-		                	addError(event, "Throw Event has no conditional activityref.");
+		                	addError(event, new ValidationSyntaxError(event,"Throw Event has no conditional activityref."));
 		                }
 		            }  
 		        }
@@ -340,41 +342,41 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 			if(fe instanceof SequenceFlow) {
 				SequenceFlow sf = (SequenceFlow) fe;
 				if(sf.getSourceRef() == null) {
-					addError((SequenceFlow) fe, "An Edge must have a source node.");
+					addError((SequenceFlow) fe, new ValidationSyntaxError(fe,"An Edge must have a source node."));
 				}
 				if(sf.getTargetRef() == null) {
-					addError((SequenceFlow) fe, "An Edge must have a target node.");
+					addError((SequenceFlow) fe, new ValidationSyntaxError(fe,"An Edge must have a target node."));
 				}
 			}
 			
 			if(fe instanceof Gateway) {
 				Gateway gw = (Gateway) fe;
 				if(gw.getGatewayDirection() == null || gw.getGatewayDirection().getValue() == GatewayDirection.UNSPECIFIED.getValue()) {
-					addError((Gateway) fe, "Gateway does not specify a valid direction.");
+					addError((Gateway) fe, new ValidationSyntaxError(fe,"Gateway does not specify a valid direction."));
 				}
 				if(gw instanceof ExclusiveGateway) {
 					if(gw.getGatewayDirection().getValue() != GatewayDirection.DIVERGING.getValue() && gw.getGatewayDirection().getValue() != GatewayDirection.CONVERGING.getValue()) {
-						addError((Gateway) fe, "Invalid Gateway direction for Exclusing Gateway. It should be 'Converging' or 'Diverging'.");
+						addError((Gateway) fe, new ValidationSyntaxError(fe,"Invalid Gateway direction for Exclusing Gateway. It should be 'Converging' or 'Diverging'."));
 					}
 				}
 				if(gw instanceof EventBasedGateway) {
 					if(gw.getGatewayDirection().getValue() != GatewayDirection.DIVERGING.getValue()) {
-						addError((Gateway) fe, "Invalid Gateway direction for EventBased Gateway. It should be 'Diverging'.");
+						addError((Gateway) fe, new ValidationSyntaxError(fe,"Invalid Gateway direction for EventBased Gateway. It should be 'Diverging'."));
 					}
 				}
 				if(gw instanceof ParallelGateway) {
 					if(gw.getGatewayDirection().getValue() != GatewayDirection.DIVERGING.getValue() && gw.getGatewayDirection().getValue() != GatewayDirection.CONVERGING.getValue()) {
-						addError((Gateway) fe, "Invalid Gateway direction for Parallel Gateway. It should be 'Converging' or 'Diverging'.");
+						addError((Gateway) fe, new ValidationSyntaxError(fe,"Invalid Gateway direction for Parallel Gateway. It should be 'Converging' or 'Diverging'."));
 					}
 				}
 				if(gw instanceof InclusiveGateway) {
 					if(gw.getGatewayDirection().getValue() != GatewayDirection.DIVERGING.getValue()) {
-						addError((Gateway) fe, "Invalid Gateway direction for Inclusive Gateway. It should be 'Diverging'.");
+						addError((Gateway) fe, new ValidationSyntaxError(fe,"Invalid Gateway direction for Inclusive Gateway. It should be 'Diverging'."));
 					}
 				}
 				if(gw instanceof ComplexGateway) {
 					if(gw.getGatewayDirection().getValue() != GatewayDirection.DIVERGING.getValue() && gw.getGatewayDirection().getValue() != GatewayDirection.CONVERGING.getValue()) {
-						addError((Gateway) fe, "Invalid Gateway direction for Complex Gateway. It should be 'Converging' or 'Diverging'.");
+						addError((Gateway) fe, new ValidationSyntaxError(fe,"Invalid Gateway direction for Complex Gateway. It should be 'Converging' or 'Diverging'."));
 					}
 				}
 				// simulation validation
@@ -389,19 +391,19 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 					        				if(eleType.getControlParameters() != null && eleType.getControlParameters().getProbability() != null) {
 					        					FloatingParameterType valType = (FloatingParameterType) eleType.getControlParameters().getProbability().getParameterValue().get(0);
 				                    			if(valType.getValue() < 0) {
-				                    				addError(sf, "Probability value must be positive.");
+				                    				addError(sf, new ValidationSyntaxError(sf,"Probability value must be positive."));
 				                    			} else {
 				                    				sum += valType.getValue();
 				                    			}
 					        				} else {
-					        					addError(sf, "Sequence Flow has no probability defined.");
+					        					addError(sf, new ValidationSyntaxError(sf,"Sequence Flow has no probability defined."));
 					        				}
 					        			}
 					        		}
 					        	}
 						}
 						if(sum != 100) {
-							addError(gw, "The sum of probability values of all outgoing Sequence Flows must be equal 100.");
+							addError(gw, new ValidationSyntaxError(gw,"The sum of probability values of all outgoing Sequence Flows must be equal 100."));
 						}
 					}
 				}
@@ -410,17 +412,17 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 			if(fe instanceof CallActivity) {
 				CallActivity ca = (CallActivity) fe;
 				if(ca.getCalledElement() == null || ca.getCalledElement().length() < 1) {
-					addError((CallActivity) fe, "Reusable Subprocess has no called element specified.");
+					addError((CallActivity) fe, new ValidationSyntaxError(fe,"Reusable Subprocess has no called element specified."));
 				}
 			}
 			
 			if(fe instanceof DataObject) {
 				DataObject dao = (DataObject) fe;
 				if(dao.getName() == null || dao.getName().length() < 1) {
-					addError((DataObject) fe, "Data Object has no name defined.");
+					addError((DataObject) fe, new ValidationSyntaxError(fe,"Data Object has no name defined."));
 				} else {
 					if(containsWhiteSpace(dao.getName())) {
-						addError((DataObject) fe, "Data Object name contains white spaces.");
+						addError((DataObject) fe, new ValidationSyntaxError(fe,"Data Object name contains white spaces."));
 					}
 				}
 			}
@@ -431,19 +433,24 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 		}
 	}
 
-	public Map<String, List<String>> getErrors() {
+	public Map<String, List<ValidationSyntaxError>> getErrors() {
 		return errors;
 	}
 
 	public JSONObject getErrorsAsJson() {
 		JSONObject jsonObject = new JSONObject();
-		for (Entry<String,List<String>> error: this.getErrors().entrySet()) {
+		for (Entry<String, List<ValidationSyntaxError>> error: this.getErrors().entrySet()) {
 			try {
-				jsonObject.put(error.getKey(), error.getValue());
+                JSONArray errorsArray = new JSONArray();
+                for(ValidationSyntaxError se : error.getValue()) {
+                    errorsArray.put(se.toJSON());
+                }
+				jsonObject.put(error.getKey(), errorsArray);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
+
 		return jsonObject;
 	}
 
@@ -455,15 +462,15 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 		errors.clear();
 	}
 	
-	private void addError(BaseElement element, String error) {
+	private void addError(BaseElement element, ValidationSyntaxError error) {
 		addError(element.getId(), error);
 	}
 	
-	private void addError(String resourceId, String error) {
+	private void addError(String resourceId, ValidationSyntaxError error) {
 		if(errors.containsKey(resourceId) && errors.get(resourceId) != null) {
 			errors.get(resourceId).add(error);
 		} else {
-			List<String> value = new ArrayList<String>();
+			List<ValidationSyntaxError> value = new ArrayList<ValidationSyntaxError>();
 			value.add(error);
 			errors.put(resourceId, value);
 		}
@@ -521,5 +528,32 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
         	}
         }
     	return null;
+    }
+
+    public class ValidationSyntaxError {
+        private BaseElement element;
+        private String error;
+
+        public ValidationSyntaxError(BaseElement element, String error) {
+            this.element = element;
+            this.error = error;
+        }
+
+        public JSONObject toJSON() throws JSONException {
+            JSONObject errorJSON = new JSONObject();
+            errorJSON.put("id", this.element.getId());
+            errorJSON.put("type", this.element.getClass().getName());
+            errorJSON.put("error", this.error);
+
+            return errorJSON;
+        }
+
+        public BaseElement getElement() {
+            return this.element;
+        }
+
+        public String getError() {
+            return this.error;
+        }
     }
 }
