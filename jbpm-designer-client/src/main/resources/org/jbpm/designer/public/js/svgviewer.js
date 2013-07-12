@@ -12,7 +12,7 @@ SVGViewer = Ext.extend(Ext.Window, {
             collapsible: false,
             resizeable: true,
             shadow: true,
-            html: '<iframe id="svgViewFrame" name="svgViewFrame" frameborder="0" scrolling="auto" width="100%" height="400" src="' + ORYX.PATH + 'localhistory/svgview.html?'+uid+'"></iframe>',
+            html: '<iframe id="svgViewFrame" name="svgViewFrame" frameborder="0" scrolling="auto" width="100%" height="400" src="' + ORYX.BASE_FILE_PATH + 'localhistory/svgview.html?'+uid+'"></iframe>',
             width: 400,
             height: 400,
             autoScroll: true,

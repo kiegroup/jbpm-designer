@@ -162,7 +162,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
                 dataIndex: 'svg',
                 renderer: function(val) {
                     if(val && val.length > 0) {
-                        return '<center><img src="'+ ORYX.PATH+'images/page_white_picture.png" onclick="resetSVGView(\''+val+'\');new SVGViewer({title: \'Local History Process Image\', width: \'650\', height: \'450\', autoScroll: true, fixedcenter: true, src: \''+'\',hideAction: \'close\'}).show();" alt="Click to view Process Image"/></center>';
+                        return '<center><img src="'+ ORYX.BASE_FILE_PATH +'images/page_white_picture.png" onclick="resetSVGView(\''+val+'\');new SVGViewer({title: \'Local History Process Image\', width: \'650\', height: \'450\', autoScroll: true, fixedcenter: true, src: \''+'\',hideAction: \'close\'}).show();" alt="Click to view Process Image"/></center>';
                     } else {
                         return "<center>Process image not available.</center>";
                     }
