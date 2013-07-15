@@ -382,7 +382,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 					}
 				}
 
-                if(gw instanceof ExclusiveGateway || gw instanceof InclusiveGateway) {
+                if( (gw instanceof ExclusiveGateway || gw instanceof InclusiveGateway) && (gw.getGatewayDirection().getValue() == GatewayDirection.DIVERGING.getValue())) {
                     List<SequenceFlow> outgoingFlows = gw.getOutgoing();
                     if(outgoingFlows != null && outgoingFlows.size() > 0) {
                         for(SequenceFlow flow : outgoingFlows) {
