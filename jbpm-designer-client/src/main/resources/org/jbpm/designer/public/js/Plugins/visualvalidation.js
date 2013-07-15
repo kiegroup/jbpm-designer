@@ -146,7 +146,8 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
             if(this.allErrors instanceof Hash) {
             var ErrorData = Ext.data.Record.create([{
                 name: 'name',
-                shapeid: 'shapeid'
+                shapeid: 'shapeid',
+                type: 'type'
             }]);
 
             var errorDataProxy = new Ext.data.MemoryProxy({
@@ -175,7 +176,8 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
                         for (var i = 0; i < ae.length; i++){
                             errordata.add(new ErrorData({
                                 name: ae[i].error,
-                                shapeid: ae[i].id
+                                shapeid: ae[i].id,
+                                type: ae[i].type
                             }));
                         }
                     }
@@ -187,7 +189,8 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
                         for (var i = 0; i < ae.length; i++){
                             errordata.add(new ErrorData({
                                 name: ae[i].error,
-                                shapeid: ae[i].id
+                                shapeid: ae[i].id,
+                                type: ae[i].type
                             }));
                         }
                 }.bind(this));
@@ -203,10 +206,10 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
                     stripeRows: true,
                     cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(),
                         {
-                            id: 'shapeid',
-                            header: 'Shape ID',
+                            id: 'type',
+                            header: 'Issue Type',
                             width: 100,
-                            dataIndex: 'shapeid',
+                            dataIndex: 'type',
                             editor: new Ext.form.TextField({ allowBlank: true, vtype: 'inputName', regex: /^[a-z0-9 \-\.\_]*$/i }),
                             renderer: Ext.util.Format.htmlEncode
                         },
@@ -215,6 +218,14 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
                             header: 'Description',
                             width: 500,
                             dataIndex: 'name',
+                            editor: new Ext.form.TextField({ allowBlank: true, vtype: 'inputName', regex: /^[a-z0-9 \-\.\_]*$/i }),
+                            renderer: Ext.util.Format.htmlEncode
+                        },
+                        {
+                            id: 'shapeid',
+                            header: 'Shape ID',
+                            width: 100,
+                            dataIndex: 'shapeid',
                             editor: new Ext.form.TextField({ allowBlank: true, vtype: 'inputName', regex: /^[a-z0-9 \-\.\_]*$/i }),
                             renderer: Ext.util.Format.htmlEncode
                         }
@@ -229,7 +240,7 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
                     autoCreate	: true,
                     title		: 'Validation suggestions',
                     height		: 300,
-                    width		: 600,
+                    width		: 700,
                     modal		: true,
                     collapsible	: false,
                     fixedcenter	: true,
