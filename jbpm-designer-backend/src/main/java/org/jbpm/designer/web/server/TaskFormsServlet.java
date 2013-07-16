@@ -14,6 +14,8 @@ import bpsim.impl.BpsimFactoryImpl;
 import org.apache.log4j.Logger;
 import org.eclipse.bpmn2.Definitions;
 import org.jboss.drools.impl.DroolsFactoryImpl;
+import org.jboss.errai.bus.client.api.RemoteCallback;
+import org.jboss.errai.ioc.client.api.Caller;
 import org.jbpm.designer.bpmn2.impl.Bpmn2JsonUnmarshaller;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
@@ -24,6 +26,11 @@ import org.jbpm.designer.taskforms.TaskFormTemplateManager;
 import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
+
+import org.jbpm.formModeler.designer.integration.BPMNFormBuilderService;
+import org.uberfire.backend.vfs.Path;
+import org.uberfire.backend.vfs.VFSService;
+import org.uberfire.util.URIEncoder;
 
 /** 
  * 
@@ -38,7 +45,7 @@ public class TaskFormsServlet extends HttpServlet {
     private static final String TASKFORMS_PATH = "taskforms";
     private static final String FORMTEMPLATE_FILE_EXTENSION = "ftl";
     private static final String FORMMODELER_FILE_EXTENSION = "form";
-    public static final String designer_path = ConfigurationProvider.getInstance().getDesignerContext();
+    public static final String DESIGNER_PATH = ConfigurationProvider.getInstance().getDesignerContext();
 
     private IDiagramProfile profile;
 
@@ -48,6 +55,12 @@ public class TaskFormsServlet extends HttpServlet {
 
     @Inject
     private IDiagramProfileService _profileService = null;
+
+    @Inject
+    private BPMNFormBuilderService formModelerService;
+
+    @Inject
+    private VFSService vfsServices;
     
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -68,6 +81,7 @@ public class TaskFormsServlet extends HttpServlet {
         Repository repository = profile.getRepository();
 
         Asset<String> processAsset = null;
+
         try {
             processAsset = repository.loadAsset(uuid);
 
@@ -77,9 +91,10 @@ public class TaskFormsServlet extends HttpServlet {
             Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
             Definitions def = ((Definitions) unmarshaller.unmarshall(json, preprocessingData).getContents().get(0));
 
-            TaskFormTemplateManager templateManager = new TaskFormTemplateManager( profile, processAsset.getAssetLocation(), processAsset.getName(), getServletContext().getRealPath(designer_path + TASKFORMS_PATH), def );
+            Path myPath = vfsServices.get( uuid );
+
+            TaskFormTemplateManager templateManager = new TaskFormTemplateManager( myPath, formModelerService, profile, processAsset, getServletContext().getRealPath(DESIGNER_PATH + TASKFORMS_PATH), def );
             templateManager.processTemplates();
-        
 
             storeInRepository(templateManager, processAsset.getAssetLocation(), repository);
             //displayResponse( templateManager, resp, profile );
@@ -136,22 +151,22 @@ public class TaskFormsServlet extends HttpServlet {
 
             repository.deleteAssetFromPath("/" + taskForm.getPkgName() + "/" + taskForm.getId()+"."+FORMTEMPLATE_FILE_EXTENSION);
 
+            // create the form meta form asset
             AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
             builder.name(taskForm.getId())
                    .location(location)
                     .type(FORMTEMPLATE_FILE_EXTENSION)
-                    .content(taskForm.getOutput().getBytes("UTF-8"));
+                    .content(taskForm.getMetaOutput().getBytes("UTF-8"));
 
             repository.createAsset(builder.getAsset());
 
-            // create the form modeler asset as well
+            // create the modeler form asset
             repository.deleteAssetFromPath("/" + taskForm.getPkgName() + "/" + taskForm.getId()+"."+FORMMODELER_FILE_EXTENSION);
-            String formValue = "";
             AssetBuilder modelerBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
             modelerBuilder.name(taskForm.getId())
                     .location(location)
                     .type(FORMMODELER_FILE_EXTENSION)
-                    .content(formValue.getBytes("UTF-8"));
+                    .content(taskForm.getModelerOutput().getBytes("UTF-8"));
 
             repository.createAsset(modelerBuilder.getAsset());
 

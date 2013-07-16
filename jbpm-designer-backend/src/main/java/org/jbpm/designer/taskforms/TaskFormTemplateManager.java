@@ -15,7 +15,10 @@ import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.Process;
 import org.eclipse.emf.ecore.impl.EStructuralFeatureImpl;
 import org.eclipse.emf.ecore.util.FeatureMap;
+import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.jbpm.formModeler.designer.integration.BPMNFormBuilderService;
+import org.uberfire.backend.vfs.Path;
 
 
 /** 
@@ -31,14 +34,21 @@ public class TaskFormTemplateManager {
     private IDiagramProfile profile;
     private String packageName;
     private String assetName;
+    private Asset processAsset;
     private String templatesPath;
     private Definitions def;
     private List<TaskFormInfo> taskFormInformationList = new ArrayList<TaskFormInfo>();
+    private Path myPath;
+    private BPMNFormBuilderService formModelerService;
+
     
-    public TaskFormTemplateManager(IDiagramProfile profile, String packageName, String assetName, String templatesPath, Definitions def) {
+    public TaskFormTemplateManager(Path myPath, BPMNFormBuilderService formModelerService, IDiagramProfile profile, Asset processAsset, String templatesPath, Definitions def) {
+        this.myPath = myPath;
+        this.formModelerService = formModelerService;
         this.profile = profile;
-        this.packageName = packageName;
-        this.assetName = assetName;
+        this.packageName = processAsset.getAssetLocation();
+        this.assetName = processAsset.getName();
+        this.processAsset = processAsset;
         this.templatesPath = templatesPath;
         this.def = def;
     }
@@ -56,6 +66,7 @@ public class TaskFormTemplateManager {
                     } else {
                         tfi.setProcessName(process.getId());
                     }
+                    tfi.setProcessId(process.getId());
                     String packageName1 = "";
                     FeatureMap attrs = process.getAnyAttribute();
                     for (Object attr : attrs) {
@@ -113,6 +124,8 @@ public class TaskFormTemplateManager {
         } else {
             usertfi.setProcessName(process.getId());
         }
+        usertfi.setProcessId(process.getId());
+        usertfi.setTaskId(utask.getId());
         usertfi.setPkgName(packageName);
         // make sure we have a valid task name
         boolean validTaskName = false;
@@ -363,14 +376,38 @@ public class TaskFormTemplateManager {
         StringTemplateGroup templates = new StringTemplateGroup("processtaskgroup", templatesPath);
         StringTemplate processFormTemplate = templates.getInstanceOf("processtaskform");
         processFormTemplate.setAttribute("tfi", tfi);
-        tfi.setOutput(processFormTemplate.toString());
+        tfi.setMetaOutput(processFormTemplate.toString());
+
+        String modelerFileName = tfi.getId() + ".form";
+        String modelerURI = myPath.toURI();
+        modelerURI = modelerURI.substring(0, modelerURI.lastIndexOf("/"));
+        modelerURI = modelerURI + "/" + modelerFileName;
+
+        try {
+            tfi.setModelerOutput(formModelerService.buildFormXML(myPath.getFileSystem(), modelerFileName, modelerURI, def, tfi.getTaskId()));
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
     }
     
     private void generateUserTaskTemplate(TaskFormInfo tfi) {
         StringTemplateGroup templates = new StringTemplateGroup("usertaskgroup", templatesPath);
         StringTemplate usertaskFormTemplate = templates.getInstanceOf("usertaskform");
         usertaskFormTemplate.setAttribute("tfi", tfi);
-        tfi.setOutput(usertaskFormTemplate.toString());
+        tfi.setMetaOutput(usertaskFormTemplate.toString());
+
+        String modelerFileName = tfi.getId() + ".form";
+        String modelerURI = myPath.toURI();
+        modelerURI = modelerURI.substring(0, modelerURI.lastIndexOf("/"));
+        modelerURI = modelerURI + "/" + modelerFileName;
+
+        try {
+            tfi.setModelerOutput(formModelerService.buildFormXML(myPath.getFileSystem(), modelerFileName, modelerURI, def, tfi.getTaskId()));
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
     }
     
     public String readFile(String pathname) throws IOException {

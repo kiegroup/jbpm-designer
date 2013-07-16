@@ -277,6 +277,7 @@ public class EditorHandler extends HttpServlet {
         Document doc = (Document) _doc.clone();
         String profileName = request.getParameter("profile");
         String uuid = request.getParameter("uuid");
+
         String editorID = request.getParameter("editorid");
 
         String encodedActiveNodes = request.getParameter("activenodes");

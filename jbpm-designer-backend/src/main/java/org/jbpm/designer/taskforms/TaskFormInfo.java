@@ -11,14 +11,17 @@ import java.util.List;
 public class TaskFormInfo {
     private String id;
     private String processName;
+    private String processId;
     private String pkgName;
     private String taskName;
+    private String taskId;
     private String groupId;
     private String skippable;
     private String actorId;
     private String comment;
     private String priority;
-    private String output;
+    private String metaOutput;
+    private String modelerOutput;
     private boolean processForm;
     private boolean userTaskForm;
     private List<String> taskOwners = new ArrayList<String>();
@@ -50,6 +53,12 @@ public class TaskFormInfo {
     public void setProcessName(String processName) {
         this.processName = processName;
     }
+    public void setProcessId(String processId) {
+        this.processId = processId;
+    }
+    public String getProcessId() {
+        return processId;
+    }
     public String getPkgName() {
         return pkgName;
     }
@@ -62,11 +71,23 @@ public class TaskFormInfo {
     public void setTaskName(String taskName) {
         this.taskName = taskName;
     }
-    public String getOutput() {
-        return output;
+    public String getTaskId() {
+        return taskId;
     }
-    public void setOutput(String output) {
-        this.output = output;
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
+    }
+    public String getMetaOutput() {
+        return metaOutput;
+    }
+    public void setMetaOutput(String metaOutput) {
+        this.metaOutput = metaOutput;
+    }
+    public String getModelerOutput() {
+        return this.modelerOutput;
+    }
+    public void setModelerOutput(String modelerOutput) {
+        this.modelerOutput = modelerOutput;
     }
     public List<String> getTaskOwners() {
         return taskOwners;

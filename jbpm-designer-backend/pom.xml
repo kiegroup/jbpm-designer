@@ -104,6 +104,13 @@
       <artifactId>drools-compiler</artifactId>
     </dependency>
 
+    <!-- Form Modeler -->
+    <dependency>
+        <groupId>org.jbpm</groupId>
+        <artifactId>jbpm-form-modeler-bpmn-form-builder</artifactId>
+        <version>${jbpm.form.modeler.version}</version>
+    </dependency>
+
     <!-- Google's closure-compiler -->
     <dependency>
       <groupId>com.google.javascript</groupId>
