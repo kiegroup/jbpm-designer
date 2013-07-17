@@ -622,7 +622,8 @@
 					"description_ja":"ドキュメント内の要素のXML名前空間を定義します。",
 					"readonly":true,
 					"optional":true,
-					"length":"50"
+					"length":"50",
+					"extra":true
 				},
 				{
 					"id":"typelanguage",
@@ -633,7 +634,8 @@
 					"description_ja":"この属性は、この定義の要素で使用されるタイプシステムを識別します。",
 					"readonly":true,
 					"optional":true,
-					"length":"50"
+					"length":"50",
+					"extra":true
 				}
 			]
 		},
@@ -4410,7 +4412,10 @@
 					"description":"",
 					"readonly":true,
 					"optional":false,
-					"length":""
+					"length":"",
+					"extra":true,
+					"hidden":true,
+					"visible":false
 				},
 				{
 					"id":"xortype",
@@ -4669,7 +4674,9 @@
 					"readonly":true,
 					"optional":false,
 					"length":"",
-					"extra":true
+					"extra":true,
+					"hidden":true,
+                                        "visible":false
 				}
 			],
 			"roles": 			[
@@ -4769,7 +4776,9 @@
 					"readonly":true,
 					"optional":false,
 					"length":"",
-					"extra":true
+					"extra":true,
+					"hidden":true,
+                                        "visible":false
 				},
 				{
 					"id":"defaultgate",
