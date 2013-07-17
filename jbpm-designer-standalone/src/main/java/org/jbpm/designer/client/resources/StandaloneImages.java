@@ -2,6 +2,7 @@ package org.jbpm.designer.client.resources;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.ImageResource;
 
 /**
  * Application specific Images.
@@ -12,6 +13,7 @@ public interface StandaloneImages
 
     StandaloneImages INSTANCE = GWT.create( StandaloneImages.class );
 
-    //None!
+    @Source("logo.png")
+    ImageResource logo();
 
 }

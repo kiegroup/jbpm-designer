@@ -11,7 +11,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RequiresResize;
-import org.drools.workbench.client.resources.AppResource;
+import org.jbpm.designer.client.resources.StandaloneResources;
 import org.uberfire.client.workbench.widgets.menu.PespectiveContextMenusPresenter;
 
 /**
@@ -41,7 +41,7 @@ public class ComplementNavAreaView
 
     @PostConstruct
     public void init() {
-        logo = new Image( AppResource.INSTANCE.images().logo() );
+        logo = new Image( StandaloneResources.INSTANCE.images().logo() );
         initWidget( uiBinder.createAndBindUi( this ) );
         contextMenuArea.add( contextMenu.getView() );
     }

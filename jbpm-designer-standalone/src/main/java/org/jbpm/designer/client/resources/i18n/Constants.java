@@ -1,4 +1,4 @@
-package org.jbpm.designer.client.i18n;
+package org.jbpm.designer.client.resources.i18n;
 
 /*
  * Copyright 2012 JBoss Inc
