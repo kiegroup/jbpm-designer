@@ -92,6 +92,11 @@
       <artifactId>uberfire-workbench</artifactId>
     </dependency>
 
+     <dependency>
+      <groupId>org.uberfire</groupId>
+       <artifactId>uberfire-js</artifactId>
+     </dependency>
+
     <dependency>
       <groupId>javax.enterprise</groupId>
       <artifactId>cdi-api</artifactId>
@@ -495,6 +500,7 @@
             <compileSourcesArtifact>org.kie.commons:kie-nio2-model</compileSourcesArtifact>
 
             <!-- UberFire -->
+            <compileSourcesArtifact>org.uberfire:uberfire-js</compileSourcesArtifact>
             <compileSourcesArtifact>org.uberfire:uberfire-security-api</compileSourcesArtifact>
             <compileSourcesArtifact>org.uberfire:uberfire-security-client</compileSourcesArtifact>
             <compileSourcesArtifact>org.uberfire:uberfire-client-api</compileSourcesArtifact>

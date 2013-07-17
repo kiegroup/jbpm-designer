@@ -25,6 +25,7 @@ import org.uberfire.workbench.model.PerspectiveDefinition;
 import org.uberfire.workbench.model.Position;
 import org.uberfire.workbench.model.impl.PanelDefinitionImpl;
 import org.uberfire.workbench.model.impl.PartDefinitionImpl;
+import org.uberfire.workbench.model.PanelType;
 import org.uberfire.workbench.model.impl.PerspectiveDefinitionImpl;
 import org.uberfire.workbench.model.menu.MenuFactory;
 import org.uberfire.workbench.model.menu.Menus;
@@ -74,13 +75,13 @@ public class HomePerspective {
         return this.perspective;
     }
 
-    public PerspectiveDefinition buildPerspective() {
-        perspective = new PerspectiveDefinitionImpl();
+    public PerspectiveDefinition buildPerspective( ) {
+        perspective = new PerspectiveDefinitionImpl( PanelType.ROOT_LIST );
         perspective.setName( "Home" );
 
         this.perspective.getRoot().addPart( new PartDefinitionImpl( new DefaultPlaceRequest( "RepositoriesEditor" ) ) );
 
-        final PanelDefinition west = new PanelDefinitionImpl();
+        final PanelDefinition west = new PanelDefinitionImpl( PanelType.MULTI_LIST );
         west.setWidth( 300 );
         west.setMinWidth( 200 );
         west.addPart( new PartDefinitionImpl( new DefaultPlaceRequest( "org.kie.guvnor.explorer" ) ) );

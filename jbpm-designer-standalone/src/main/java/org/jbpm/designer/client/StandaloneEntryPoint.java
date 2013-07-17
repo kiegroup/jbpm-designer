@@ -61,7 +61,7 @@ public class StandaloneEntryPoint {
     }
 
     private void setupMenu() {
-        menubar.aggregateWorkbenchMenus(
+        menubar.addMenus(
                 MenuFactory.newTopLevelMenu( "Logout" ).respondsWith( new Command() {
                     @Override
                     public void execute() {

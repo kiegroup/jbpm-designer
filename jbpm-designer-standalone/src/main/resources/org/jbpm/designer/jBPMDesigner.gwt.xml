@@ -8,6 +8,7 @@
   <inherits name="com.google.gwt.xml.XML"/>
 
   <!-- Uberfire dependencies -->
+  <inherits name="org.uberfire.UberfireJS"/>
   <inherits name="org.uberfire.UberfireWorkbench"/>
   <inherits name="org.uberfire.UberfireWidgetsCore"/>
   <inherits name="org.uberfire.UberfireWidgetsCommons"/>
