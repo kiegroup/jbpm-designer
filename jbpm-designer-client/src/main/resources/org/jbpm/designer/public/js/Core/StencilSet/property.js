@@ -130,6 +130,10 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
 		if(!jsonProp.visible) {
 			jsonProp.visible = true;
 		}
+
+        if(!jsonProp.hidden) {
+            jsonProp.hidden = false;
+        }
 		
 		if(!jsonProp.fortasktypes) {
 			jsonProp.fortasktypes = "";
@@ -150,6 +154,14 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
 		if(!jsonProp.simulation) {
 			jsonProp.simulation = false;
 		}
+
+        if(!jsonProp.display) {
+            jsonProp.display = false;
+        }
+
+        if(!jsonProp.extra) {
+            jsonProp.extra = false;
+        }
         
         if (jsonProp.complexItems && jsonProp.complexItems instanceof Array) {
             jsonProp.complexItems.each((function(jsonComplexItem){
@@ -221,6 +233,14 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
 	simulation : function() {
 		return this._jsonProp.simulation;
 	},
+
+    display : function() {
+        return this._jsonProp.display;
+    },
+
+    extra : function() {
+        return this._jsonProp.extra;
+    },
 	
 	setPopular: function() {
 		this._jsonProp.popular = true;
@@ -229,6 +249,14 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
 	setSimulation: function() {
 		this._jsonProp.simulation = true;
 	},
+
+    setDisplay: function() {
+        this._jsonProp.display = true;
+    },
+
+    setExtra: function() {
+        this._jsonProp.extra = true;
+    },
 	
 	directlyEditable: function() {
 		return this._jsonProp.directlyEditable;
@@ -237,6 +265,10 @@ ORYX.Core.StencilSet.Property = Clazz.extend({
 	visible: function() {
 		return this._jsonProp.visible;
 	},
+
+    hidden: function() {
+        return this._jsonProp.hidden;
+    },
 	
 	fortasktypes: function() {
 		return this._jsonProp.fortasktypes;

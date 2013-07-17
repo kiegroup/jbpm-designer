@@ -66,6 +66,7 @@ ORYX.Plugins.PropertyWindow = {
 		// the properties array
 		this.popularProperties = [];
 		this.simulationProperties = [];
+        this.displayProperties = [];
 		this.properties = [];
 		
 		/* The currently selected shapes whos properties will shown */
@@ -497,6 +498,7 @@ ORYX.Plugins.PropertyWindow = {
 		this.properties = [];
 		this.popularProperties = [];
 		this.simulationProperties = [];
+        this.displayProperties = [];
 		
 		if(this.shapeSelection.commonProperties) {
 			
@@ -1158,7 +1160,7 @@ ORYX.Plugins.PropertyWindow = {
 				}
 				
 				// Push to the properties-array
-				if(pair.visible() && (pair.id() != "origbordercolor" && pair.id() != "origbgcolor" && pair.id() != "isselectable")) {
+				if((pair.visible() && pair.visible() == true) && pair.hidden() != true && (pair.id() != "origbordercolor" && pair.id() != "origbgcolor" && pair.id() != "isselectable")) {
 					var proceed = true;
 					if(this.shapeSelection.shapes.length == 1 && (this.shapeSelection.shapes.first().getStencil().idWithoutNs() == "Task" ||
                            this.shapeSelection.shapes.first().getStencil().idWithoutNs() == "IntermediateEscalationEventThrowing" ||
@@ -1207,26 +1209,32 @@ ORYX.Plugins.PropertyWindow = {
 					}
 					
 					if(proceed) {
-						// Popular Properties are those with a refToView set or those which are set to be popular
-						if (pair.refToView()[0] || refToViewFlag || pair.popular()) {
+						if (pair.popular()) {
 							pair.setPopular();
 						}
 						
 						if (pair.simulation()) {
 							pair.setSimulation();
 						}
-						
-						
-						if(pair.popular()) {
-							this.popularProperties.push([ORYX.I18N.PropertyWindow.oftenUsed, name, attribute, icons, {
-								editor: editorGrid,
-								propId: key,
-								type: pair.type(),
-								tooltip: pair.description(),
-								renderer: editorRenderer,
-								labelProvider: this.getLabelProvider(pair)
-							}]);
-						} else if(pair.simulation()) {
+
+                        if(pair.display()) {
+                            pair.setDisplay();
+                        }
+
+                        if(pair.extra()) {
+                            pair.setExtra();
+                        }
+
+                        if(pair.extra()) {
+                            this.properties.push([ORYX.I18N.PropertyWindow.moreProps, name, attribute, icons, {
+                                editor: editorGrid,
+                                propId: key,
+                                type: pair.type(),
+                                tooltip: pair.description(),
+                                renderer: editorRenderer,
+                                labelProvider: this.getLabelProvider(pair)
+                            }]);
+                        } else if(pair.simulation()) {
 							this.simulationProperties.push([ORYX.I18N.PropertyWindow.simulationProps, name, attribute, icons, {
 								editor: editorGrid,
 								propId: key,
@@ -1235,15 +1243,24 @@ ORYX.Plugins.PropertyWindow = {
 								renderer: editorRenderer,
 								labelProvider: this.getLabelProvider(pair)
 							}]);
-						} else {	
-							this.properties.push([ORYX.I18N.PropertyWindow.moreProps, name, attribute, icons, {
-								editor: editorGrid,
-								propId: key,
-								type: pair.type(),
-								tooltip: pair.description(),
-								renderer: editorRenderer,
-								labelProvider: this.getLabelProvider(pair)
-							}]);
+                        } else if(pair.display()) {
+                            this.displayProperties.push([ORYX.I18N.PropertyWindow.displayProps, name, attribute, icons, {
+                                editor: editorGrid,
+                                propId: key,
+                                type: pair.type(),
+                                tooltip: pair.description(),
+                                renderer: editorRenderer,
+                                labelProvider: this.getLabelProvider(pair)
+                            }]);
+						} else {
+                            this.popularProperties.push([ORYX.I18N.PropertyWindow.oftenUsed, name, attribute, icons, {
+                                editor: editorGrid,
+                                propId: key,
+                                type: pair.type(),
+                                tooltip: pair.description(),
+                                renderer: editorRenderer,
+                                labelProvider: this.getLabelProvider(pair)
+                            }]);
 						}
 					}
 				}
@@ -1279,7 +1296,8 @@ ORYX.Plugins.PropertyWindow = {
 
 	setProperties: function() {
 		var partProps = this.popularProperties.concat(this.properties);
-		var props = partProps.concat(this.simulationProperties);
+		var partPropsOther = partProps.concat(this.simulationProperties);
+        var props = partPropsOther.concat(this.displayProperties);
 		this.dataSource.loadData(props);
 	}
 }
