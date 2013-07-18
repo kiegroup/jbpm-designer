@@ -25,6 +25,8 @@ import org.jbpm.designer.web.plugin.impl.PluginServiceImpl;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.uberfire.backend.vfs.Path;
+import org.uberfire.backend.vfs.VFSService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -55,6 +57,9 @@ public class JbpmProfileImpl implements IDiagramProfile {
 
     @Inject
     private Repository repository;
+
+    @Inject
+    private VFSService vfsServices;
 
     public JbpmProfileImpl(ServletContext servletContext) {
         this(servletContext, true, false);
@@ -262,6 +267,19 @@ public class JbpmProfileImpl implements IDiagramProfile {
 
     @Override
     public String getRepositoryGlobalDir() {
+        return "/global";
+    }
+
+    @Override
+    public String getRepositoryGlobalDir(String uuid) {
+        Path uuidPath = vfsServices.get( uuid );
+        String pathURI = uuidPath.toURI();
+
+        if(pathURI != "/") {
+            String[] pathParts = pathURI.split("/");
+            String pathProjectName = pathParts[3];
+            return "/" + pathProjectName + "/global";
+        }
         return "/global";
     }
 

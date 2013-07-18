@@ -1954,7 +1954,8 @@ Ext.form.ComplexCustomField = Ext.extend(Ext.form.TriggerField,  {
                 });
             },
             params: {
-            	profile: ORYX.PROFILE
+            	profile: ORYX.PROFILE,
+                uuid: ORYX.UUID
             }
         });
 	}

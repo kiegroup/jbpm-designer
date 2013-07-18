@@ -64,6 +64,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     private String customEditorsInfo;
     private String patternsData;
     private String sampleBpmn2;
+    private String globalDir;
 
     public JbpmPreprocessingUnit(ServletContext servletContext) {
         this(servletContext, ConfigurationProvider.getInstance().getDesignerContext());
@@ -105,16 +106,17 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             //createAssetIfNotExisting(repository, "/defaultPackage", "BPMN2-SampleProcess", "bpmn2", getBytesFromFile(new File(sampleBpmn2)));
 
             Asset<String> asset = repository.loadAsset(uuid);
+            this.globalDir = profile.getRepositoryGlobalDir( uuid );
             outData = "";
             Map<String, ThemeInfo> themeData = setupThemes(req, repository, profile);
             setupCustomEditors(repository, profile);
             setupFormWidgets(repository, profile);
-            setupDefaultIcons(profile.getRepositoryGlobalDir(), repository);
+            setupDefaultIcons(globalDir, repository);
 
             // figure out which package our uuid belongs in and get back the list of configs
             Collection<Asset> workitemConfigInfo = findWorkitemInfoForUUID(asset.getAssetLocation(), repository);
             // also get all from globals package
-            Collection<Asset> globalWorkitemConfigInfo = findWorkitemInfoForUUID(profile.getRepositoryGlobalDir(), repository);
+            Collection<Asset> globalWorkitemConfigInfo = findWorkitemInfoForUUID(globalDir, repository);
 
             if(workitemConfigInfo != null) {
                 if(globalWorkitemConfigInfo != null) {
@@ -265,21 +267,21 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
                 Asset<byte[]> iconAsset = null;
 
-                if(!icon.startsWith(profile.getRepositoryGlobalDir())) {
+                if(!icon.startsWith(this.globalDir)) {
                     if(icon.startsWith("/")) {
-                        icon = profile.getRepositoryGlobalDir() + icon;
+                        icon = this.globalDir + icon;
                     } else {
-                        icon = profile.getRepositoryGlobalDir() + "/" + icon;
+                        icon = this.globalDir + "/" + icon;
                     }
                 }
 
                 try {
                     if (!repository.assetExists(icon)) {
-                        icon = profile.getRepositoryGlobalDir() + "/defaultservicenodeicon.png";
+                        icon = this.globalDir + "/defaultservicenodeicon.png";
                     }
                 } catch (Exception e) {
                     _logger.error(e.getMessage());
-                    icon = profile.getRepositoryGlobalDir() + "/defaultservicenodeicon.png";
+                    icon = this.globalDir + "/defaultservicenodeicon.png";
                 }
 
                 iconAsset = repository.loadAssetFromPath(icon);
@@ -344,7 +346,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 int extPosition = formWidget.getName().lastIndexOf(".");
                 String extension = formWidget.getName().substring(extPosition + 1);
                 String name = formWidget.getName().substring(0, extPosition);
-                createAssetIfNotExisting(repository, profile.getRepositoryGlobalDir(), name, extension,
+                createAssetIfNotExisting(repository, this.globalDir, name, extension,
                         getBytesFromFile(formWidget));
 
 
@@ -357,7 +359,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     private void setupCustomEditors(Repository repository, IDiagramProfile profile) {
 
         try {
-            createAssetIfNotExisting(repository, profile.getRepositoryGlobalDir(), CUSTOMEDITORS_NAME, "json",
+            createAssetIfNotExisting(repository, this.globalDir, CUSTOMEDITORS_NAME, "json",
                     getBytesFromFile(new File(customEditorsInfo)));
 
         } catch (Exception e) {
@@ -369,12 +371,12 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         Map<String, ThemeInfo> themeData = new HashMap<String, ThemeInfo>();
         Asset<String> themeAsset = null;
         try {
-            boolean themeExists = repository.assetExists(profile.getRepositoryGlobalDir() + "/" + THEME_NAME + THEME_EXT);
+            boolean themeExists = repository.assetExists(this.globalDir + "/" + THEME_NAME + THEME_EXT);
             if (!themeExists) {
                 // create theme asset
                 AssetBuilder assetBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
                 assetBuilder.content(new String(getBytesFromFile(new File(themeInfo)), "UTF-8"))
-                        .location(profile.getRepositoryGlobalDir())
+                        .location(this.globalDir)
                         .name(THEME_NAME)
                         .type("json")
                         .version("1.0");
@@ -384,7 +386,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 repository.createAsset(themeAsset);
 
             } else {
-                themeAsset = repository.loadAssetFromPath(profile.getRepositoryGlobalDir() + "/" + THEME_NAME + THEME_EXT);
+                themeAsset = repository.loadAssetFromPath(this.globalDir + "/" + THEME_NAME + THEME_EXT);
             }
 
 

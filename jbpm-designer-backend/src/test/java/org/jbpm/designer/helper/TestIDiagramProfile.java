@@ -94,6 +94,10 @@ public class TestIDiagramProfile implements IDiagramProfile {
         return "/global";
     }
 
+    public String getRepositoryGlobalDir(String uuid) {
+        return "/global";
+    }
+
     public String getLocalHistoryEnabled() {
         return null;
     }

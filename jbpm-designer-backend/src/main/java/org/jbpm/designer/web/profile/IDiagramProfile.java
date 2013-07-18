@@ -86,6 +86,8 @@ public interface IDiagramProfile {
 
     public String getRepositoryGlobalDir();
 
+    public String getRepositoryGlobalDir(String uuid);
+
     /**
      * @return the local history enabled.
      */

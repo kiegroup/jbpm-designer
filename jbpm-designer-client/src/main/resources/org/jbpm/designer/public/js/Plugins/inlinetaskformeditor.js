@@ -101,7 +101,8 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                 },
                 params: {
                     action: 'getwidgets',
-                    profile: ORYX.PROFILE
+                    profile: ORYX.PROFILE,
+                    uuid: ORYX.UUID
                 }
             });
         } else {
@@ -181,7 +182,8 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                                 params: {
                                     action: 'getwidgetsource',
                                     profile: ORYX.PROFILE,
-                                    widgetname: combo.getValue()
+                                    widgetname: combo.getValue(),
+                                    uuid: ORYX.UUID
                                 }
                             });
                         } else {

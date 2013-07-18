@@ -2857,7 +2857,7 @@ elFinder.prototype.quickLook.prototype.plugins = {
 		
 		this.show = function(ql, f) {
 
-            var qlurl = '/menuconnector?cmd=getsvg&current=' + f.processlocation + "/" + f.processid + "-svg.svg";
+            var qlurl = '/menuconnector?uuid=' + ORYX.UUID + '&cmd=getsvg&current=' + f.processlocation + "/" + f.processid + "-svg.svg";
 
 			if (f.hash == ql._hash) {
 				ql.ico.hide();

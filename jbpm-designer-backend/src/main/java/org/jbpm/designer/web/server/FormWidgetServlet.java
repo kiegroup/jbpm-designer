@@ -41,6 +41,7 @@ public class FormWidgetServlet extends HttpServlet {
 		String profileName = req.getParameter("profile");
 		String action = req.getParameter("action");
 		String widgetName = req.getParameter("widgetname");
+        String uuid = req.getParameter("uuid");
 
         if (profile == null) {
             profile = _profileService.findProfile(req, profileName);
@@ -49,7 +50,7 @@ public class FormWidgetServlet extends HttpServlet {
 		if(action != null && action.equals("getwidgets")) {
 			List<String> widgetList;
 			try {
-				widgetList = ServletUtil.getFormWidgetList(profile, repository);
+				widgetList = ServletUtil.getFormWidgetList(profile, repository, uuid);
 			} catch (Throwable t) {
 				widgetList = new ArrayList<String>();
 			}
@@ -68,7 +69,7 @@ public class FormWidgetServlet extends HttpServlet {
 			resp.getWriter().write(jsonObject.toString());
 		} else if(action != null && action.equals("getwidgetsource")) {
             try {
-                Asset<String> widgetAsset = repository.loadAssetFromPath(profile.getRepositoryGlobalDir() + "/" + widgetName+".fw");
+                Asset<String> widgetAsset = repository.loadAssetFromPath(profile.getRepositoryGlobalDir( uuid ) + "/" + widgetName+".fw");
 
                 resp.setCharacterEncoding("UTF-8");
                 resp.setContentType("text/plain");

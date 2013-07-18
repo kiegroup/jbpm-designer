@@ -36,10 +36,10 @@ public class ServletUtil {
 	private ServletUtil(){}
 
 	
-	public static List<String> getFormWidgetList(IDiagramProfile profile, Repository repository) {
+	public static List<String> getFormWidgetList(IDiagramProfile profile, Repository repository, String uuid) {
 		List<String> widgets = new ArrayList<String>();
         try {
-            Collection<Asset> formWidgets = repository.listAssets(profile.getRepositoryGlobalDir(), new FilterByExtension("fw"));
+            Collection<Asset> formWidgets = repository.listAssets(profile.getRepositoryGlobalDir( uuid ), new FilterByExtension("fw"));
             for (Asset widget : formWidgets) {
                 widgets.add(widget.getName());
             }

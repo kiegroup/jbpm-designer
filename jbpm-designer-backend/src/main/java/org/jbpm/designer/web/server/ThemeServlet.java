@@ -49,17 +49,18 @@ public class ThemeServlet extends HttpServlet {
             throws ServletException, IOException {
 		String profileName = req.getParameter("profile");
 		String action = req.getParameter("action");
-		
+        String uuid = req.getParameter("uuid");
+
 		IDiagramProfile profile = _profileService.findProfile(req, profileName);
-		
+
 		if(action != null && action.equals(ACTION_GETTHEMENAMES)) {
-			String themeStr = getThemeNames(profile, getServletContext());
+			String themeStr = getThemeNames(profile, getServletContext(), uuid);
 			PrintWriter pw = resp.getWriter();
 			resp.setContentType("text/plain");
 			resp.setCharacterEncoding("UTF-8");
 			pw.write(themeStr);
 		} else if(action != null && action.equals(ACTION_GETTHEMEJSON)) {
-			String themeJSON = getThemeJson(profile, getServletContext());
+			String themeJSON = getThemeJson(profile, getServletContext(), uuid);
 			PrintWriter pw = resp.getWriter();
 			resp.setContentType("text/plain");
 			resp.setCharacterEncoding("UTF-8");
@@ -67,13 +68,13 @@ public class ThemeServlet extends HttpServlet {
 		}
 	}
 	
-	private String getThemeJson(IDiagramProfile profile, ServletContext servletContext) {
+	private String getThemeJson(IDiagramProfile profile, ServletContext servletContext, String uuid) {
         Repository repository = profile.getRepository();
 
 		String retStr = "";
 
     	try {
-            Asset<String> themeAsset = repository.loadAssetFromPath(profile.getRepositoryGlobalDir() + "/" + THEME_NAME+THEME_EXT);
+            Asset<String> themeAsset = repository.loadAssetFromPath(profile.getRepositoryGlobalDir( uuid ) + "/" + THEME_NAME+THEME_EXT);
 
             retStr = themeAsset.getAssetContent();
 
@@ -83,14 +84,14 @@ public class ThemeServlet extends HttpServlet {
         return retStr;
 	}
 	
-	private String getThemeNames(IDiagramProfile profile, ServletContext servletContext) {
+	private String getThemeNames(IDiagramProfile profile, ServletContext servletContext, String uuid) {
         Repository repository = profile.getRepository();
 
 		String themesStr = "";
     	
         try {
 
-            Asset<String> themeAsset = repository.loadAssetFromPath(profile.getRepositoryGlobalDir() + "/" + THEME_NAME+THEME_EXT);
+            Asset<String> themeAsset = repository.loadAssetFromPath(profile.getRepositoryGlobalDir( uuid ) + "/" + THEME_NAME+THEME_EXT);
 
             JSONObject themesObject =  new JSONObject(themeAsset.getAssetContent());
             JSONObject themes = (JSONObject) themesObject.get("themes");

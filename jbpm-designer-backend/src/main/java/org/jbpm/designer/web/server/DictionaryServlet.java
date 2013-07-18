@@ -90,7 +90,7 @@ public class DictionaryServlet extends HttpServlet {
 	
 	private String getFromRepository(String uuid, IDiagramProfile profile, Repository repository) {
         try {
-            Asset<String> dictionaryAsset = repository.loadAssetFromPath(profile.getRepositoryGlobalDir()+"/"+DICTIONARY_FNAME+"."+DICTIONARY_FEXT);
+            Asset<String> dictionaryAsset = repository.loadAssetFromPath(profile.getRepositoryGlobalDir( uuid )+"/"+DICTIONARY_FNAME+"."+DICTIONARY_FEXT);
             if(dictionaryAsset != null) {
                 return dictionaryAsset.getAssetContent();
             } else {
@@ -104,13 +104,13 @@ public class DictionaryServlet extends HttpServlet {
 	
 	private void storeInRepository(String uuid, IDiagramProfile profile, String dvalue, Repository repository) {
         try {
-            repository.deleteAssetFromPath(profile.getRepositoryGlobalDir()+"/" + DICTIONARY_FNAME+"."+DICTIONARY_FEXT);
+            repository.deleteAssetFromPath(profile.getRepositoryGlobalDir( uuid )+"/" + DICTIONARY_FNAME+"."+DICTIONARY_FEXT);
 
             AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
 
             builder.name(DICTIONARY_FNAME)
                    .type(DICTIONARY_FEXT)
-                   .location(profile.getRepositoryGlobalDir())
+                   .location(profile.getRepositoryGlobalDir( uuid ))
                    .content(dvalue);
 
             repository.createAsset(builder.getAsset());

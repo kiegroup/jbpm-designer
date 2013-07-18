@@ -44,23 +44,24 @@ public class CustomEditorsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 		String profileName = req.getParameter("profile");
+        String uuid = req.getParameter("uuid");
 
         if (profile == null) {
             profile = _profileService.findProfile(req, profileName);
         }
-		String customEditorsJSON = getCustomEditorsJSON(profile, getServletContext());
+		String customEditorsJSON = getCustomEditorsJSON(profile, getServletContext(), uuid);
 		PrintWriter pw = resp.getWriter();
 		resp.setContentType("text/plain");
 		resp.setCharacterEncoding("UTF-8");
 		pw.write(customEditorsJSON);
 	}
 	
-	private String getCustomEditorsJSON(IDiagramProfile profile, ServletContext servletContext) {
+	private String getCustomEditorsJSON(IDiagramProfile profile, ServletContext servletContext, String uuid) {
 
         String retStr = "";
         Repository repository = profile.getRepository();
         try {
-            Asset<String> customEditorAsset = repository.loadAssetFromPath(profile.getRepositoryGlobalDir() + "/" + CUSTOMEDITORS_NAME + ".json");
+            Asset<String> customEditorAsset = repository.loadAssetFromPath(profile.getRepositoryGlobalDir( uuid ) + "/" + CUSTOMEDITORS_NAME + ".json");
 
             retStr = customEditorAsset.getAssetContent();
 

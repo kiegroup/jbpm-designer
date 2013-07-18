@@ -176,11 +176,11 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 							_logger.error("Could not read icon image: " + e1.getMessage());
 						}
 						// install wid and icon
-                        repository.deleteAsset(profile.getRepositoryGlobalDir() + "/" +  widName + ".wid");
+                        repository.deleteAsset(profile.getRepositoryGlobalDir( uuid ) + "/" +  widName + ".wid");
 
                         AssetBuilder widAssetBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
                         widAssetBuilder.name(widName)
-                                       .location(profile.getRepositoryGlobalDir())
+                                       .location(profile.getRepositoryGlobalDir( uuid ))
                                        .type("wid")
                                        .content(workItemDefinitionContent);
 
@@ -191,10 +191,10 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
                         String iconFileName = iconName.substring(0, iconName.lastIndexOf("."));
 
 
-                        repository.deleteAsset(profile.getRepositoryGlobalDir() + "/" + iconFileName + "." + iconExtension);
+                        repository.deleteAsset(profile.getRepositoryGlobalDir( uuid ) + "/" + iconFileName + "." + iconExtension);
 
                         iconAssetBuilder.name(iconFileName)
-                                .location(profile.getRepositoryGlobalDir())
+                                .location(profile.getRepositoryGlobalDir( uuid ))
                                 .type(iconExtension)
                                 .content(iconContent);
 

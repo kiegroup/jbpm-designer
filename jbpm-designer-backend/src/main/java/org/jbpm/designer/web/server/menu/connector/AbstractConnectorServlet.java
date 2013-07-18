@@ -49,9 +49,10 @@ public abstract class AbstractConnectorServlet extends HttpServlet {
 
     protected void initializeDefaultRepo(IDiagramProfile profile, Repository repository, HttpServletRequest request) throws Exception {
         String sampleBpmn2 = getServletContext().getRealPath("/defaults/SampleProcess.bpmn2");
+        String uuid = request.getParameter("uuid");
         createAssetIfNotExisting(repository, "/defaultPackage", "BPMN2-SampleProcess", "bpmn2", getBytesFromFile(new File(sampleBpmn2)));
-        if(profile.getRepositoryGlobalDir() != null) {
-            createDirectoryIfNotExist(repository, profile.getRepositoryGlobalDir());
+        if(profile.getRepositoryGlobalDir( uuid ) != null) {
+            createDirectoryIfNotExist(repository, profile.getRepositoryGlobalDir( uuid ));
         }
     }
 

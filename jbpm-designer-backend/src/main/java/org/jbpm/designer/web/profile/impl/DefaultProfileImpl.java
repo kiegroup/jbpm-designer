@@ -197,6 +197,10 @@ public class DefaultProfileImpl implements IDiagramProfile {
         return _repositoryGlobalDir;
     }
 
+    public String getRepositoryGlobalDir(String uuid) {
+        return _repositoryGlobalDir;
+    }
+
     public String getLocalHistoryEnabled() {
         return _localHistoryEnabled;
     }

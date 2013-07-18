@@ -75,7 +75,6 @@ public class ProfileServiceImpl implements IDiagramProfileService {
             for (IDiagramProfile profile : profiles) {
                 profile.init(context);
                 _registry.put(profile.getName(), profile);
-                System.out.println("Profile " + profile.getName() + " registered");
             }
         }
 
