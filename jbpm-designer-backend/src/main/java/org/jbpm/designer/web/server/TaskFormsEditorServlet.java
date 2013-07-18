@@ -9,7 +9,11 @@ import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
+import org.uberfire.backend.vfs.Path;
+import org.uberfire.backend.vfs.VFSService;
+import org.uberfire.workbench.events.ResourceUpdatedEvent;
 
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -44,10 +48,16 @@ public class TaskFormsEditorServlet extends HttpServlet {
     @Inject
     private IDiagramProfileService _profileService = null;
 
-	 @Override
-	 public void init(ServletConfig config) throws ServletException {
-		 super.init(config);
-	 }
+    @Inject
+    private VFSService vfsServices;
+
+    @Inject
+    private Event<ResourceUpdatedEvent> resourceUpdatedEvent;
+
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+	    super.init(config);
+	}
 	 
 	 @Override
 	 protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -101,6 +111,22 @@ public class TaskFormsEditorServlet extends HttpServlet {
                 .content(formValue.getBytes("UTF-8"));
 
         repository.createAsset(builder.getAsset());
+
+         Asset newFormAsset =  repository.loadAssetFromPath(packageName + taskName + TASKFORM_NAME_EXTENSION + "." + formType);
+
+         String uniqueId = newFormAsset.getUniqueId();
+         if (Base64.isBase64(uniqueId)) {
+             byte[] decoded = Base64.decodeBase64(uniqueId);
+             try {
+                 uniqueId =  new String(decoded, "UTF-8");
+             } catch (UnsupportedEncodingException e) {
+                 e.printStackTrace();
+             }
+         }
+
+         Path newFormAssetPath = vfsServices.get(uniqueId);
+         resourceUpdatedEvent.fire( new ResourceUpdatedEvent(newFormAssetPath) );
+
         return "ok";
 	 }
 	 
@@ -135,17 +161,20 @@ public class TaskFormsEditorServlet extends HttpServlet {
 
                  Asset<String> newFormAsset = repository.loadAssetFromPath(packageName + "/" + taskName + TASKFORM_NAME_EXTENSION + "." + formType);
 
-                 if(formType.equals(FORMMODELER_FILE_EXTENSION)) {
-                     String uniqueId = newFormAsset.getUniqueId();
-                     if (Base64.isBase64(uniqueId)) {
-                         byte[] decoded = Base64.decodeBase64(uniqueId);
-                         try {
-                             uniqueId =  new String(decoded, "UTF-8");
-                         } catch (UnsupportedEncodingException e) {
-                             e.printStackTrace();
-                         }
+                 String uniqueId = newFormAsset.getUniqueId();
+                 if (Base64.isBase64(uniqueId)) {
+                     byte[] decoded = Base64.decodeBase64(uniqueId);
+                     try {
+                         uniqueId =  new String(decoded, "UTF-8");
+                     } catch (UnsupportedEncodingException e) {
+                         e.printStackTrace();
                      }
+                 }
 
+                 Path newFormAssetPath = vfsServices.get(uniqueId);
+                 resourceUpdatedEvent.fire( new ResourceUpdatedEvent(newFormAssetPath) );
+
+                 if(formType.equals(FORMMODELER_FILE_EXTENSION)) {
                      return newFormAsset.getName() + "." + newFormAsset.getAssetType() + "|" + uniqueId;
                  } else {
                     return formValue;

@@ -1,8 +1,10 @@
 package org.jbpm.designer.web.server;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bpsim.impl.BpsimFactoryImpl;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.eclipse.bpmn2.Definitions;
 import org.jboss.drools.impl.DroolsFactoryImpl;
@@ -31,6 +34,7 @@ import org.jbpm.formModeler.designer.integration.BPMNFormBuilderService;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.VFSService;
 import org.uberfire.util.URIEncoder;
+import org.uberfire.workbench.events.ResourceUpdatedEvent;
 
 /** 
  * 
@@ -61,7 +65,10 @@ public class TaskFormsServlet extends HttpServlet {
 
     @Inject
     private VFSService vfsServices;
-    
+
+    @Inject
+    private Event<ResourceUpdatedEvent> resourceUpdatedEvent;
+
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -149,7 +156,7 @@ public class TaskFormsServlet extends HttpServlet {
     public void storeTaskForm(TaskFormInfo taskForm, String location, Repository repository) throws Exception {
         try {
 
-            repository.deleteAssetFromPath("/" + taskForm.getPkgName() + "/" + taskForm.getId()+"."+FORMTEMPLATE_FILE_EXTENSION);
+            repository.deleteAssetFromPath(taskForm.getPkgName() + "/" + taskForm.getId()+"." + FORMTEMPLATE_FILE_EXTENSION);
 
             // create the form meta form asset
             AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
@@ -160,8 +167,23 @@ public class TaskFormsServlet extends HttpServlet {
 
             repository.createAsset(builder.getAsset());
 
+            Asset newFormAsset =  repository.loadAssetFromPath(taskForm.getPkgName() + "/" + taskForm.getId()+"." + FORMTEMPLATE_FILE_EXTENSION);
+
+            String uniqueId = newFormAsset.getUniqueId();
+            if (Base64.isBase64(uniqueId)) {
+                byte[] decoded = Base64.decodeBase64(uniqueId);
+                try {
+                    uniqueId =  new String(decoded, "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            Path newFormAssetPath = vfsServices.get(uniqueId);
+            resourceUpdatedEvent.fire( new ResourceUpdatedEvent(newFormAssetPath) );
+
             // create the modeler form asset
-            repository.deleteAssetFromPath("/" + taskForm.getPkgName() + "/" + taskForm.getId()+"."+FORMMODELER_FILE_EXTENSION);
+            repository.deleteAssetFromPath(taskForm.getPkgName() + "/" + taskForm.getId()+"." + FORMMODELER_FILE_EXTENSION);
             AssetBuilder modelerBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
             modelerBuilder.name(taskForm.getId())
                     .location(location)
@@ -169,6 +191,22 @@ public class TaskFormsServlet extends HttpServlet {
                     .content(taskForm.getModelerOutput().getBytes("UTF-8"));
 
             repository.createAsset(modelerBuilder.getAsset());
+
+            Asset newModelerFormAsset =  repository.loadAssetFromPath(taskForm.getPkgName() + "/" + taskForm.getId()+"." + FORMMODELER_FILE_EXTENSION);
+
+            String modelerUniqueId = newModelerFormAsset.getUniqueId();
+            if (Base64.isBase64(modelerUniqueId)) {
+                byte[] decoded = Base64.decodeBase64(modelerUniqueId);
+                try {
+                    modelerUniqueId =  new String(decoded, "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            Path newModelerFormAssetPath = vfsServices.get(modelerUniqueId);
+            resourceUpdatedEvent.fire( new ResourceUpdatedEvent(newModelerFormAssetPath) );
+
 
 		} catch (Exception e) {
 			_logger.error(e.getMessage());
