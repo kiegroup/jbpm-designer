@@ -2152,6 +2152,11 @@ ORYX.Editor.setMissingClasses = function() {
 	}
 	
 }
+
+ORYX.Editor.checkIfSaved = function() {
+    return ORYX.PROCESS_SAVED;
+};
+
 ORYX.Editor.checkClassType = function( classInst, classType ) {
 	
 	if( ORYX.Editor.SVGClassElementsAreAvailable ){

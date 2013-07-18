@@ -76,6 +76,11 @@ public class DesignerView
     }
 
     @Override
+    public String getEditorID() {
+        return this.editorID;
+    }
+
+    @Override
     public void startDesignerInstance(String editorId) {
         initDesigner(editorId);
         startDesigner(editorId);
@@ -85,6 +90,14 @@ public class DesignerView
     public void startEditorInstance(String editorId) {
         startDesignerInstance(editorId);
     }
+
+    public boolean confirmClose() {
+        return Window.confirm( "Business Process may contain unsaved changes. Are you sure you would like to close the editor?" );
+    }
+
+    public native boolean canSaveDesignerModel(String editorID) /*-{
+        return $doc.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved();
+    }-*/;
 
     private native void startDesigner(String editorid)  /*-{
         $doc.getElementById(editorid).contentWindow.startEditorInstance();

@@ -94,7 +94,15 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
 //                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
             }.bind(this)
         });
+
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_MOUSEUP, this.setUnsaved.bind(this));
+
     },
+
+    setUnsaved: function() {
+        ORYX.PROCESS_SAVED = false;
+    },
+
     save : function() {
         // save process bpmn2 and svg
         Ext.Ajax.request({
@@ -125,6 +133,8 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
 
                             // send UF asset update event
                             parent.designersignalassetupdate(ORYX.UUID);
+                            // set the designer flag
+                            ORYX.PROCESS_SAVED = true;
 
                             if(ORYX.CONFIG.STORESVGONSAVE && ORYX.CONFIG.STORESVGONSAVE == "true") {
                                 // svg save

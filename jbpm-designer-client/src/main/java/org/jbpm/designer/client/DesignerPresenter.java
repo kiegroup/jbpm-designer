@@ -8,6 +8,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.FrameElement;
 import com.google.gwt.dom.client.ScriptElement;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.IsWidget;
 import org.guvnor.common.services.shared.file.DeleteService;
 import org.jboss.errai.bus.client.api.RemoteCallback;
@@ -20,10 +21,7 @@ import org.kie.workbench.common.widgets.client.widget.BusyIndicatorView;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.PathFactory;
 import org.uberfire.backend.vfs.VFSService;
-import org.uberfire.client.annotations.OnStart;
-import org.uberfire.client.annotations.WorkbenchEditor;
-import org.uberfire.client.annotations.WorkbenchPartTitle;
-import org.uberfire.client.annotations.WorkbenchPartView;
+import org.uberfire.client.annotations.*;
 import org.uberfire.client.mvp.PlaceManager;
 import org.uberfire.client.mvp.UberView;
 import org.uberfire.mvp.PlaceRequest;
@@ -42,6 +40,8 @@ public class DesignerPresenter {
             UberView<DesignerPresenter> {
 
         void setEditorID( final String id );
+
+        String getEditorID();
 
         void startDesignerInstance( final String editorId );
     }
@@ -105,6 +105,16 @@ public class DesignerPresenter {
                     } ).loadEditorBody( path, editorID, url, place );
                 }
             } ).getEditorID();
+        }
+    }
+
+
+    @OnMayClose
+    public boolean canClose() {
+        if(!view.canSaveDesignerModel(view.getEditorID())) {
+            return view.confirmClose();
+        } else {
+            return true;
         }
     }
 
