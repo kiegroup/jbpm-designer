@@ -15,6 +15,7 @@ import org.jbpm.designer.repository.vfs.VFSRepository;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -46,6 +47,7 @@ public class TaskFormsServletTest  extends RepositoryBaseTest {
         repo.delete();
     }
 
+    @Ignore
     @Test
     public void testTaskFormServlet() throws Exception {
 
@@ -82,6 +84,7 @@ public class TaskFormsServletTest  extends RepositoryBaseTest {
         assertNotNull(form.getAssetContent());
     }
 
+    @Ignore
     @Test
     public void testTaskFormServletWithUserTask() throws Exception {
 
