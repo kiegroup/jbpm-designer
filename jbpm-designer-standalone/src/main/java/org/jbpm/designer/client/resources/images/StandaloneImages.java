@@ -1,4 +1,4 @@
-package org.jbpm.designer.client.resources;
+package org.jbpm.designer.client.resources.images;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;

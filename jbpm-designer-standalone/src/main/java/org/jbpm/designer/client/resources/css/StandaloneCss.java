@@ -1,4 +1,4 @@
-package org.jbpm.designer.client.resources;
+package org.jbpm.designer.client.resources.css;
 
 import com.google.gwt.resources.client.CssResource;
 
