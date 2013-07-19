@@ -37,6 +37,9 @@
     <link xmlns="http://www.w3.org/1999/xhtml" rel="Stylesheet" media="screen" href="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/css/notifications.css" type="text/css" />
     <script xmlns="http://www.w3.org/1999/xhtml" type="text/javascript" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/CFInstall.min.js"></script>
     <link xmlns="http://www.w3.org/1999/xhtml" rel="Stylesheet" media="screen" href="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/css/theme-default.css" type="text/css" />
+    <link xmlns="http://www.w3.org/1999/xhtml" rel="Stylesheet" media="screen" href="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/css/xtheme-gray-colors.css" type="text/css" />
+    <link xmlns="http://www.w3.org/1999/xhtml" rel="Stylesheet" media="screen" href="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/css/xtheme-gray.css" type="text/css" />
+
 
     <link xmlns="http://www.w3.org/1999/xhtml" rel="schema.dc" href="http://purl.org/dc/elements/1.1/" />
     <link xmlns="http://www.w3.org/1999/xhtml" rel="schema.dcTerms" href="http://purl.org/dc/terms/" />

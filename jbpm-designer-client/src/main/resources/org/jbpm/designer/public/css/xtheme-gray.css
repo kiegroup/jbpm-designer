@@ -1,21 +1,3 @@
-/*
- * Ext JS Library 2.2
- * Copyright(c) 2006-2008, Ext JS, LLC.
- * licensing@extjs.com
- * 
- * http://extjs.com/license
- */
-
-/*
-    Document   : Ext Gray Theme
-    Created on : 29/12/2008, 07:13:04 PM
-    Author     : Javier Rincon (syscobra) jjrincon@gmail.com
-    Description:
-        This is a file with the ext-all.css without colors and the only change is the directory to the new images.
-        Change:
-        Original                to      Light Brown
-        ../images/default       =>      ../images/gray
-*/
 html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,blockquote,th,td{margin:0;padding:0;}
 img,body,html{border:0;}
 address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal;}
