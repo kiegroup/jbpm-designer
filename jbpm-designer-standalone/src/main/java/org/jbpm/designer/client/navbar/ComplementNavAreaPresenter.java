@@ -21,7 +21,7 @@ public class ComplementNavAreaPresenter implements Header {
 
     @Override
     public int getOrder() {
-        return MAX_VALUE;
+        return 0;
     }
 
     @Override
