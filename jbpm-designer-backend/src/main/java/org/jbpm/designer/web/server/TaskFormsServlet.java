@@ -155,7 +155,6 @@ public class TaskFormsServlet extends HttpServlet {
     
     public void storeTaskForm(TaskFormInfo taskForm, String location, Repository repository) throws Exception {
         try {
-
             repository.deleteAssetFromPath(taskForm.getPkgName() + "/" + taskForm.getId()+"." + FORMTEMPLATE_FILE_EXTENSION);
 
             // create the form meta form asset

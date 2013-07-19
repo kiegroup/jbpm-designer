@@ -67,15 +67,15 @@ public class TaskFormTemplateManager {
                         tfi.setProcessName(process.getId());
                     }
                     tfi.setProcessId(process.getId());
-                    String packageName1 = "";
-                    FeatureMap attrs = process.getAnyAttribute();
-                    for (Object attr : attrs) {
-                        EStructuralFeatureImpl.SimpleFeatureMapEntry a = (EStructuralFeatureImpl.SimpleFeatureMapEntry) attr;
-                        if("packageName".equals(a.getEStructuralFeature().getName())) {
-                            packageName1 = (String)a.getValue();
-                        }
-                    }
-                    tfi.setPkgName(packageName1);
+                    //String packageName1 = "";
+//                    FeatureMap attrs = process.getAnyAttribute();
+//                    for (Object attr : attrs) {
+//                        EStructuralFeatureImpl.SimpleFeatureMapEntry a = (EStructuralFeatureImpl.SimpleFeatureMapEntry) attr;
+//                        if("packageName".equals(a.getEStructuralFeature().getName())) {
+//                            packageName1 = (String)a.getValue();
+//                        }
+//                    }
+                    tfi.setPkgName(packageName);
                     // get the list of process properties
                     List<Property> processProperties = process.getProperties();
                     for(Property prop : processProperties) {
@@ -387,6 +387,7 @@ public class TaskFormTemplateManager {
             tfi.setModelerOutput(formModelerService.buildFormXML(myPath.getFileSystem(), modelerFileName, modelerURI, def, tfi.getTaskId()));
         } catch(Exception e) {
             _logger.error(e.getMessage());
+            e.printStackTrace();
         }
 
     }
@@ -406,6 +407,7 @@ public class TaskFormTemplateManager {
             tfi.setModelerOutput(formModelerService.buildFormXML(myPath.getFileSystem(), modelerFileName, modelerURI, def, tfi.getTaskId()));
         } catch(Exception e) {
             _logger.error(e.getMessage());
+            e.printStackTrace();
         }
 
     }
