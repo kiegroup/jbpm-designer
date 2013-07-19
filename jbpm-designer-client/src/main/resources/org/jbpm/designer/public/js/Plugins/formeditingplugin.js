@@ -149,7 +149,15 @@ ORYX.Plugins.FormEditing = Clazz.extend({
             url: ORYX.PATH + "taskforms",
             method: 'POST',
             success: function(request){
-                if(request.responseText.length >= 1 && request.responseText != "fail") {
+                var generatedForms = request.responseText.evalJSON();
+                var generated = false;
+                for(var newform in generatedForms) {
+                    parent.designersignalassetupdate(generatedForms[newform].ftl);
+                    parent.designersignalassetupdate(generatedForms[newform].form);
+                    generated = true;
+                }
+
+                if(generated && generated == true) {
                     this.facade.raiseEvent({
                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                         ntype		: 'success',

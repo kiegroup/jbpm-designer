@@ -287,6 +287,9 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                         method: 'POST',
                         success: function(request) {
                             try {
+                                var generatedForm = request.responseText.evalJSON();
+                                parent.designersignalassetupdate(generatedForm.formid);
+
                                 itfe.close();
                                 itfe = null;
                             } catch(e) {

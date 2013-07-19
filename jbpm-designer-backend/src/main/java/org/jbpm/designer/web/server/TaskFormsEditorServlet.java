@@ -9,6 +9,8 @@ import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.VFSService;
 import org.uberfire.workbench.events.ResourceUpdatedEvent;
@@ -85,13 +87,14 @@ public class TaskFormsEditorServlet extends HttpServlet {
                  String taskResponse = getTaskFormFromRepository(formType, taskName, processAsset.getAssetLocation(), repository);
                  pw.write(taskResponse);
              } else if(action != null && action.equals(ACTION_SAVE)) {
-                 resp.setContentType("text/plain");
+                 resp.setContentType("application/json");
                  resp.setCharacterEncoding("UTF-8");
                  PrintWriter pw = resp.getWriter();
                  try {
-                    pw.write(storeTaskFormInRepository(formType, taskName, processAsset.getAssetLocation(), taskFormValue, repository));
+                    pw.write(storeTaskFormInRepository(formType, taskName, processAsset.getAssetLocation(), taskFormValue, repository).toString());
                 } catch (Exception e) {
-                    pw.write("error: " + e.getMessage());
+                     e.printStackTrace();
+                     pw.write(new JSONObject().toString());
                 }
              }
          } catch (Exception e) {
@@ -100,7 +103,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
          }
 	 }
 	 
-	 private String storeTaskFormInRepository(String formType, String taskName, String packageName, String formValue, Repository repository) throws Exception{
+	 private JSONObject storeTaskFormInRepository(String formType, String taskName, String packageName, String formValue, Repository repository) throws Exception{
 
         repository.deleteAssetFromPath(packageName + taskName + TASKFORM_NAME_EXTENSION + "." + formType);
 
@@ -112,22 +115,22 @@ public class TaskFormsEditorServlet extends HttpServlet {
 
         repository.createAsset(builder.getAsset());
 
-         Asset newFormAsset =  repository.loadAssetFromPath(packageName + taskName + TASKFORM_NAME_EXTENSION + "." + formType);
+        Asset newFormAsset =  repository.loadAssetFromPath(packageName + "/" + taskName + TASKFORM_NAME_EXTENSION + "." + formType);
 
-         String uniqueId = newFormAsset.getUniqueId();
-         if (Base64.isBase64(uniqueId)) {
-             byte[] decoded = Base64.decodeBase64(uniqueId);
-             try {
-                 uniqueId =  new String(decoded, "UTF-8");
-             } catch (UnsupportedEncodingException e) {
-                 e.printStackTrace();
-             }
-         }
+        String uniqueId = newFormAsset.getUniqueId();
+        if (Base64.isBase64(uniqueId)) {
+            byte[] decoded = Base64.decodeBase64(uniqueId);
+            try {
+                uniqueId =  new String(decoded, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
 
-         Path newFormAssetPath = vfsServices.get(uniqueId);
-         resourceUpdatedEvent.fire( new ResourceUpdatedEvent(newFormAssetPath) );
+        JSONObject retObj = new JSONObject();
+        retObj.put("formid", uniqueId);
 
-        return "ok";
+        return retObj;
 	 }
 	 
 	 private String getTaskFormFromRepository(String formType, String taskName, String packageName, Repository repository) {

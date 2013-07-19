@@ -31,6 +31,8 @@ import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 
 import org.jbpm.formModeler.designer.integration.BPMNFormBuilderService;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.VFSService;
 import org.uberfire.util.URIEncoder;
@@ -66,9 +68,6 @@ public class TaskFormsServlet extends HttpServlet {
     @Inject
     private VFSService vfsServices;
 
-    @Inject
-    private Event<ResourceUpdatedEvent> resourceUpdatedEvent;
-
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -103,10 +102,10 @@ public class TaskFormsServlet extends HttpServlet {
             TaskFormTemplateManager templateManager = new TaskFormTemplateManager( myPath, formModelerService, profile, processAsset, getServletContext().getRealPath(DESIGNER_PATH + TASKFORMS_PATH), def );
             templateManager.processTemplates();
 
-            storeInRepository(templateManager, processAsset.getAssetLocation(), repository);
+            //storeInRepository(templateManager, processAsset.getAssetLocation(), repository);
             //displayResponse( templateManager, resp, profile );
-            resp.setContentType("text/plain");
-            resp.getWriter().write("success");
+            resp.setContentType("application/json");
+            resp.getWriter().write(storeInRepository(templateManager, processAsset.getAssetLocation(), repository).toString());
         } catch (Exception e) {
             _logger.error(e.getMessage());
             //displayErrorResponse(resp, e.getMessage());
@@ -146,15 +145,20 @@ public class TaskFormsServlet extends HttpServlet {
 //        }
 //    }
     
-    public void storeInRepository(TaskFormTemplateManager templateManager, String location, Repository repository) throws Exception {
+    public JSONArray storeInRepository(TaskFormTemplateManager templateManager, String location, Repository repository) throws Exception {
+        JSONArray retArray = new JSONArray();
         List<TaskFormInfo> taskForms =  templateManager.getTaskFormInformationList();
         for(TaskFormInfo taskForm : taskForms) {
-            storeTaskForm(taskForm, location, repository);
+            retArray.put(storeTaskForm(taskForm, location, repository));
         }
+
+        return retArray;
     }
     
-    public void storeTaskForm(TaskFormInfo taskForm, String location, Repository repository) throws Exception {
+    public JSONObject storeTaskForm(TaskFormInfo taskForm, String location, Repository repository) throws Exception {
         try {
+            JSONObject retObj = new JSONObject();
+
             repository.deleteAssetFromPath(taskForm.getPkgName() + "/" + taskForm.getId()+"." + FORMTEMPLATE_FILE_EXTENSION);
 
             // create the form meta form asset
@@ -177,9 +181,7 @@ public class TaskFormsServlet extends HttpServlet {
                     e.printStackTrace();
                 }
             }
-
-            Path newFormAssetPath = vfsServices.get(uniqueId);
-            resourceUpdatedEvent.fire( new ResourceUpdatedEvent(newFormAssetPath) );
+            retObj.put("ftl", uniqueId);
 
             // create the modeler form asset
             repository.deleteAssetFromPath(taskForm.getPkgName() + "/" + taskForm.getId()+"." + FORMMODELER_FILE_EXTENSION);
@@ -203,12 +205,13 @@ public class TaskFormsServlet extends HttpServlet {
                 }
             }
 
-            Path newModelerFormAssetPath = vfsServices.get(modelerUniqueId);
-            resourceUpdatedEvent.fire( new ResourceUpdatedEvent(newModelerFormAssetPath) );
+            retObj.put("form", modelerUniqueId);
 
+            return retObj;
 
 		} catch (Exception e) {
 			_logger.error(e.getMessage());
+            return new JSONObject();
 		}
     }
 }
