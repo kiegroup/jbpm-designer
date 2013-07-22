@@ -9,6 +9,7 @@ import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
+import org.jbpm.formModeler.designer.integration.BPMNFormBuilderService;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.uberfire.backend.vfs.Path;
@@ -55,6 +56,9 @@ public class TaskFormsEditorServlet extends HttpServlet {
 
     @Inject
     private Event<ResourceUpdatedEvent> resourceUpdatedEvent;
+
+    @Inject
+    private BPMNFormBuilderService formModelerService;
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
@@ -153,8 +157,11 @@ public class TaskFormsEditorServlet extends HttpServlet {
              }
          } catch (AssetNotFoundException anfe) {
              try {
-                 // create empty
                  String formValue = "";
+                 if(formType.equals(FORMMODELER_FILE_EXTENSION)) {
+                    formValue = formModelerService.buildEmptyFormXML(taskName + TASKFORM_NAME_EXTENSION + "." + formType);
+                 }
+
                  AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
                  builder.location(packageName)
                          .name(taskName + TASKFORM_NAME_EXTENSION)
