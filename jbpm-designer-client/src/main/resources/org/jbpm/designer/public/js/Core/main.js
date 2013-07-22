@@ -2154,7 +2154,11 @@ ORYX.Editor.setMissingClasses = function() {
 }
 
 ORYX.Editor.checkIfSaved = function() {
-    return ORYX.PROCESS_SAVED;
+    if(ORYX.READONLY == true) {
+        return true;
+    } else {
+        return ORYX.PROCESS_SAVED;
+    }
 };
 
 ORYX.Editor.checkClassType = function( classInst, classType ) {
