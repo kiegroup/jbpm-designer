@@ -28,6 +28,7 @@ import org.uberfire.mvp.PlaceRequest;
 import org.uberfire.mvp.impl.PathPlaceRequest;
 import org.uberfire.util.URIEncoder;
 import org.uberfire.workbench.events.NotificationEvent;
+import org.uberfire.workbench.events.ResourceAddedEvent;
 import org.uberfire.workbench.events.ResourceDeletedEvent;
 import org.uberfire.workbench.events.ResourceUpdatedEvent;
 
@@ -59,6 +60,9 @@ public class DesignerPresenter {
     private Event<ResourceUpdatedEvent> resourceUpdatedEvent;
 
     @Inject
+    private Event<ResourceAddedEvent> resourceAddedEvent;
+
+    @Inject
     Event<ResourceDeletedEvent> resourceDeleteEvent;
 
     @Inject
@@ -84,6 +88,7 @@ public class DesignerPresenter {
         this.publishOpenInTab(this);
         this.publishSignalOnAssetUpdate(this);
         this.publishSignalOnAssetDelete(this);
+        this.publishSignalOnAssetAdded(this);
         if ( path != null ) {
             assetService.call( new RemoteCallback<String>() {
                 @Override
@@ -145,6 +150,12 @@ public class DesignerPresenter {
         }
     }-*/;
 
+    private native void publishSignalOnAssetAdded(DesignerPresenter dp)/*-{
+        $wnd.designersignalassetadded = function (uri) {
+            dp.@org.jbpm.designer.client.DesignerPresenter::assetAddedEvent(Ljava/lang/String;)(uri);
+        }
+    }-*/;
+
     private native void publishSignalOnAssetUpdate(DesignerPresenter dp)/*-{
         $wnd.designersignalassetupdate = function (uri) {
             dp.@org.jbpm.designer.client.DesignerPresenter::assetUpdateEvent(Ljava/lang/String;)(uri);
@@ -162,6 +173,15 @@ public class DesignerPresenter {
             @Override
             public void callback( final Path mypath ) {
                 resourceUpdatedEvent.fire( new ResourceUpdatedEvent(mypath) );
+            }
+        } ).get( URIEncoder.encode(uri) );
+    }
+
+    public void assetAddedEvent(String uri) {
+        vfsServices.call( new RemoteCallback<Path>() {
+            @Override
+            public void callback( final Path mypath ) {
+                resourceAddedEvent.fire( new ResourceAddedEvent(mypath) );
             }
         } ).get( URIEncoder.encode(uri) );
     }
