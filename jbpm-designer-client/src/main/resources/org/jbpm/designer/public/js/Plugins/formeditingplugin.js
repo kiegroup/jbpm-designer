@@ -149,33 +149,26 @@ ORYX.Plugins.FormEditing = Clazz.extend({
             url: ORYX.PATH + "taskforms",
             method: 'POST',
             success: function(request){
+                this.facade.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'success',
+                    msg         : 'Successfully generated process and task form templates.',
+                    title       : ''
+
+                });
                 var generatedForms = request.responseText.evalJSON();
-                var generated = false;
                 for(var newform in generatedForms) {
-                    parent.designersignalassetupdate(generatedForms[newform].ftl);
-                    parent.designersignalassetupdate(generatedForms[newform].form);
-                    generated = true;
-                }
-
-                if(generated && generated == true) {
-                    this.facade.raiseEvent({
-                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                        ntype		: 'success',
-                        msg         : 'Successfully generated process and task form templates.',
-                        title       : ''
-
-                    });
-                } else {
-                    this.facade.raiseEvent({
-                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                        ntype		: 'error',
-                        msg         : '<p>Failed to generate process and task form templates.</p><p>Check server logs for more details.</p>',
-                        title       : ''
-                    });
+                    parent.designersignalassetupdate(generatedForms[newform].ftluri);
+                    parent.designersignalassetupdate(generatedForms[newform].formuri);
                 }
             }.createDelegate(this),
             failure: function(){
-
+                this.facade.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'error',
+                    msg         : '<p>Failed to generate process and task form templates.</p>',
+                    title       : ''
+                });
             }.createDelegate(this),
             params: {
                 profile: ORYX.PROFILE,

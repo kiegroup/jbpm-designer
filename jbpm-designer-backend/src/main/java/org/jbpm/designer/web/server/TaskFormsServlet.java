@@ -182,7 +182,7 @@ public class TaskFormsServlet extends HttpServlet {
                     e.printStackTrace();
                 }
             }
-            retObj.put("ftl", uniqueId);
+            retObj.put("ftluri", uniqueId);
 
             // create the modeler form asset
             repository.deleteAssetFromPath(taskForm.getPkgName() + "/" + taskForm.getId()+"." + FORMMODELER_FILE_EXTENSION);
@@ -206,7 +206,7 @@ public class TaskFormsServlet extends HttpServlet {
                 }
             }
 
-            retObj.put("form", modelerUniqueId);
+            retObj.put("formuri", modelerUniqueId);
 
             return retObj;
 
