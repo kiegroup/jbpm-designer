@@ -2,10 +2,7 @@ package org.jbpm.designer.server.service;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
@@ -66,7 +63,7 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
     }
 
     @Override
-    public String loadEditorBody( final Path path,
+    public Map<String, String> getEditorParameters( final Path path,
                                   final String editorID,
                                   String hostInfo,
                                   PlaceRequest place ) {
@@ -103,9 +100,21 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
             encodedCompletedNodesParam = "";
         }
 
-        String editorURL = hostInfo + "/editor/?uuid=" + path.toURI() + "&profile=jbpm&pp=&editorid=" + editorID + "&readonly=" + readOnly +
-                "&activenodes=" + encodedActiveNodesParam + "&completednodes=" + encodedCompletedNodesParam;
-        return getEditorResponse( editorURL, encodedProcessSource );
+        Map<String, String> editorParamsMap = new HashMap<String, String>();
+        editorParamsMap.put("hostinfo", hostInfo);
+        editorParamsMap.put("uuid", path.toURI());
+        editorParamsMap.put("profile", "jbpm");
+        editorParamsMap.put("pp", "");
+        editorParamsMap.put("editorid", editorID);
+        editorParamsMap.put("readonly", readOnly);
+        editorParamsMap.put("activenodes", encodedActiveNodesParam);
+        editorParamsMap.put("completednodes", encodedCompletedNodesParam);
+        editorParamsMap.put("processsource", encodedProcessSource);
+
+        return editorParamsMap;
+//        String editorURL = hostInfo + "/editor/?uuid=" + path.toURI() + "&profile=jbpm&pp=&editorid=" + editorID + "&readonly=" + readOnly +
+//                "&activenodes=" + encodedActiveNodesParam + "&completednodes=" + encodedCompletedNodesParam;
+//        return getEditorResponse( editorURL, encodedProcessSource );
     }
 
     @Override

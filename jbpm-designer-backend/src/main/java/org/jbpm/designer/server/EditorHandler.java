@@ -24,13 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
-import java.util.WeakHashMap;
+import java.util.*;
 
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
@@ -41,6 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bpsim.impl.BpsimFactoryImpl;
+import org.antlr.stringtemplate.StringTemplate;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.jboss.drools.impl.DroolsFactoryImpl;
@@ -48,22 +43,12 @@ import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.web.plugin.IDiagramPlugin;
 import org.jbpm.designer.web.plugin.IDiagramPluginService;
 import org.jbpm.designer.web.plugin.impl.PluginServiceImpl;
-import org.jbpm.designer.web.preference.IDiagramPreference;
-import org.jbpm.designer.web.preference.IDiagramPreferenceService;
 import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingService;
 import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingUnit;
 import org.jbpm.designer.web.preprocessing.impl.PreprocessingServiceImpl;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
-import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
 import org.jbpm.designer.web.profile.impl.RepositoryInfo;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.Namespace;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -81,9 +66,9 @@ public class EditorHandler extends HttpServlet {
 
     private static final long serialVersionUID = -7439613152623067053L;
 
-    private static final Logger _logger = 
-        Logger.getLogger(EditorHandler.class);
-    
+    private static final Logger _logger =
+            Logger.getLogger(EditorHandler.class);
+
     /**
      * The base path under which the application will be made available at runtime.
      * This constant should be used throughout the application.
@@ -94,41 +79,43 @@ public class EditorHandler extends HttpServlet {
      * The designer DEV flag looked up from system properties.
      */
     public static final String DEV = "designer.dev";
-    
+
     /**
      * The designer PREPROCESS flag looked up from system properties.
      */
     public static final String PREPROCESS = "designer.preprocess";
-    
+
     /**
      * The designer skin param.
      */
     public static final String SKIN = "designer.skin";
-    
+
     /**
      * The designer bundle version looked up from the manifest.
      */
     public static final String BUNDLE_VERSION = "Bundle-Version";
-    
+
     /**
      * The designer dev mode setting.
      */
     private boolean _devMode;
-    
+
     /**
      * The designer preprocess mode setting.
      */
     private boolean _preProcess;
-    
+
     /**
      * The designer skin setting.
      */
     private String _skin;
-    
+
     /**
      * The designer version setting.
      */
     private String _designerVersion;
+
+    private String _doc;
 
     /**
      * The profile service, a global registry to get the
@@ -136,31 +123,26 @@ public class EditorHandler extends HttpServlet {
      */
     @Inject
     private IDiagramProfileService _profileService = null;
-    
+
     /**
      * The pre-processing service, a global registry to get
      * the pre-processing units.
      */
     private IDiagramPreprocessingService _preProcessingService = null;
-    
+
     /**
      * The plugin service, a global registry for all plugins.
      */
     private IDiagramPluginService _pluginService = null;
-    
+
     private List<String> _envFiles = new ArrayList<String>();
-    
-    private Map<String, List<IDiagramPlugin>> _pluginfiles = 
-        new HashMap<String, List<IDiagramPlugin>>();
-    
-    private Map<String, List<IDiagramPlugin>> _uncompressedPlugins = 
-        new WeakHashMap<String, List<IDiagramPlugin>>();
-    
-    /**
-     * editor.html document.
-     */
-    private Document _doc = null;  
-    
+
+    private Map<String, List<IDiagramPlugin>> _pluginfiles =
+            new HashMap<String, List<IDiagramPlugin>>();
+
+    private Map<String, List<IDiagramPlugin>> _uncompressedPlugins =
+            new WeakHashMap<String, List<IDiagramPlugin>>();
+
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         DroolsFactoryImpl.init();
@@ -170,28 +152,28 @@ public class EditorHandler extends HttpServlet {
                 config.getServletContext());
         _preProcessingService = PreprocessingServiceImpl.INSTANCE;
         _preProcessingService.init(config.getServletContext());
-        
-        _devMode = Boolean.parseBoolean( System.getProperty(DEV) == null ? config.getInitParameter(DEV) : System.getProperty(DEV) );
-        _preProcess = Boolean.parseBoolean( System.getProperty(PREPROCESS) == null ? config.getInitParameter(PREPROCESS) : System.getProperty(PREPROCESS) );
+
+        _devMode = Boolean.parseBoolean(System.getProperty(DEV) == null ? config.getInitParameter(DEV) : System.getProperty(DEV));
+        _preProcess = Boolean.parseBoolean(System.getProperty(PREPROCESS) == null ? config.getInitParameter(PREPROCESS) : System.getProperty(PREPROCESS));
         _skin = System.getProperty(SKIN) == null ? config.getInitParameter(SKIN) : System.getProperty(SKIN);
         _designerVersion = readDesignerVersion(config.getServletContext());
 
-        
+
         String editor_file = config.
-            getServletContext().getRealPath(designer_path + "editor.html");
+                getServletContext().getRealPath(designer_path + "editor.st");
         try {
-            _doc = readDocument(editor_file);
+            _doc = readFile(editor_file);
         } catch (Exception e) {
             throw new ServletException(
-                    "Error while parsing editor.html", e);
+                    "Error while parsing editor.st", e);
         }
         if (_doc == null) {
-            _logger.error("Invalid editor.html, " +
+            _logger.error("Invalid editor.st, " +
                     "could not be read as a document.");
-            throw new ServletException("Invalid editor.html, " +
+            throw new ServletException("Invalid editor.st, " +
                     "could not be read as a document.");
         }
-        
+
         try {
             initEnvFiles(getServletContext(), config);
         } catch (IOException e) {
@@ -201,6 +183,7 @@ public class EditorHandler extends HttpServlet {
 
     /**
      * Initiate the compression of the environment.
+     *
      * @param context
      * @throws java.io.IOException
      */
@@ -208,31 +191,31 @@ public class EditorHandler extends HttpServlet {
         // only do it the first time the servlet starts
         try {
             JSONObject obj = new JSONObject(readEnvFiles(context));
-    
+
             JSONArray array = obj.getJSONArray("files");
-            for (int i = 0 ; i < array.length() ; i++) {
+            for (int i = 0; i < array.length(); i++) {
                 _envFiles.add(array.getString(i));
             }
         } catch (JSONException e) {
             _logger.error("invalid js_files.json");
             _logger.error(e.getMessage(), e);
             throw new RuntimeException("Error initializing the " +
-                "environment of the editor");
+                    "environment of the editor");
         }
-    
+
         // generate script to setup the languages
         if (!_devMode) {
-        	if (_logger.isInfoEnabled()) {
+            if (_logger.isInfoEnabled()) {
                 _logger.info(
-                    "The diagram editor is running in production mode. " +
-                    "Javascript will be served compressed");
+                        "The diagram editor is running in production mode. " +
+                                "Javascript will be served compressed");
             }
             StringWriter sw = new StringWriter();
             List<InputStream> codes = new ArrayList<InputStream>();
             for (String file : _envFiles) {
-                codes.add(new FileInputStream(new File(getServletContext().getRealPath( designer_path + file))));
+                codes.add(new FileInputStream(new File(getServletContext().getRealPath(designer_path + file))));
             }
-            
+
             try {
                 sw.append(compileJS(_envFiles, codes));
                 sw.append("\n");
@@ -241,15 +224,15 @@ public class EditorHandler extends HttpServlet {
             } catch (IOException e) {
                 _logger.error(e.getMessage(), e);
             } finally {
-                try { 
+                try {
                     for (InputStream inputStream : codes) {
                         inputStream.close();
                     }
-                } catch (IOException e) {}
+                } catch (IOException e) {
+                }
             }
 
-                
-            
+
             try {
                 FileWriter w = new FileWriter(
                         context.getRealPath(designer_path + "jsc/env_combined.js"));
@@ -261,20 +244,19 @@ public class EditorHandler extends HttpServlet {
         } else {
             if (_logger.isInfoEnabled()) {
                 _logger.info(
-                    "The diagram editor is running in development mode. " +
-                    "Javascript will be served uncompressed");
+                        "The diagram editor is running in development mode. " +
+                                "Javascript will be served uncompressed");
             }
         }
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)  throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
     }
 
-    protected void doGet(HttpServletRequest request, 
-            HttpServletResponse response) 
+    protected void doGet(HttpServletRequest request,
+                         HttpServletResponse response)
             throws ServletException, IOException {
-        Document doc = (Document) _doc.clone();
         String profileName = request.getParameter("profile");
         String uuid = request.getParameter("uuid");
 
@@ -289,15 +271,15 @@ public class EditorHandler extends HttpServlet {
         String completedNodes = new String(completedNodesByteArray, "UTF-8");
 
         String encodedProcessSource = request.getParameter("processsource");
-        if(encodedProcessSource == null) {
+        if (encodedProcessSource == null) {
             encodedProcessSource = "";
         }
 
         String readOnly = request.getParameter("readonly");
 
 
-        if(profileName == null || profileName.length() < 1) {
-        	profileName = "jbpm";
+        if (profileName == null || profileName.length() < 1) {
+            profileName = "jbpm";
         }
         IDiagramProfile profile = _profileService.findProfile(
                 request, profileName);
@@ -306,14 +288,14 @@ public class EditorHandler extends HttpServlet {
                     + " was registered");
             throw new IllegalArgumentException(
                     "No profile with the name " + profileName +
-                        " was registered");
+                            " was registered");
         }
 
         IDiagramPreprocessingUnit preprocessingUnit = null;
-        if(_preProcess) {
+        if (_preProcess) {
             if (_logger.isInfoEnabled()) {
                 _logger.info(
-                    "Performing diagram information pre-processing steps. ");
+                        "Performing diagram information pre-processing steps. ");
             }
             preprocessingUnit = _preProcessingService.findPreprocessingUnit(request, profile);
             preprocessingUnit.preprocess(request, response, profile, getServletContext());
@@ -323,8 +305,8 @@ public class EditorHandler extends HttpServlet {
         JSONArray scriptsArray;
         if (_devMode) {
             scriptsArray = new JSONArray();
-            for(String nextScript : _envFiles) {
-                scriptsArray.put( designer_path + nextScript);
+            for (String nextScript : _envFiles) {
+                scriptsArray.put(designer_path + nextScript);
             }
 
         } else {
@@ -385,200 +367,78 @@ public class EditorHandler extends HttpServlet {
             pluginsArray.put(designer_path + "plugin/" + uncompressed.getName() + ".js");
         }
 
-        XMLOutputter outputter = new XMLOutputter();
-        Format format = Format.getPrettyFormat();
-        format.setExpandEmptyElements(true);
-        format.setOmitDeclaration(true);
-        outputter.setFormat(format);
-        String html = outputter.outputString(doc);
-        StringTokenizer tokenizer = new StringTokenizer(
-                html, "@", true);
-        StringBuilder resultHtml = new StringBuilder();
-        boolean tokenFound = false;
-        boolean replacementMade = false;
+        StringTemplate editorTemplate = new StringTemplate(_doc);
+        editorTemplate.setAttribute("editorprofile", profileName);
+        editorTemplate.setAttribute("editoruuid", uuid);
+        editorTemplate.setAttribute("editorid", editorID);
+        editorTemplate.setAttribute("activenodes", activeNodes);
+        editorTemplate.setAttribute("completednodes", completedNodes);
+        editorTemplate.setAttribute("processsource", encodedProcessSource);
+        editorTemplate.setAttribute("readonly", readOnly);
+        editorTemplate.setAttribute("allscripts", scriptsArray.toString());
+        editorTemplate.setAttribute("allplugins", pluginsArray.toString());
+        editorTemplate.setAttribute("title", profile.getTitle());
+        editorTemplate.setAttribute("stencilset", profile.getStencilSet());
+        editorTemplate.setAttribute("debug", _devMode);
+        editorTemplate.setAttribute("preprocessing", preprocessingUnit == null ? "" : preprocessingUnit.getOutData());
+        editorTemplate.setAttribute("externalprotocol", RepositoryInfo.getRepositoryProtocol(profile) == null ? "" : RepositoryInfo.getRepositoryProtocol(profile));
+        editorTemplate.setAttribute("externalhost", RepositoryInfo.getRepositoryHost(profile));
+        editorTemplate.setAttribute("externalsubdomain", RepositoryInfo.getRepositorySubdomain(profile) != null ? RepositoryInfo.getRepositorySubdomain(profile).substring(0,
+                RepositoryInfo.getRepositorySubdomain(profile).indexOf("/")) : "");
+        editorTemplate.setAttribute("localhistoryenabled", profile.getLocalHistoryEnabled());
+        editorTemplate.setAttribute("localhistorytimeout", profile.getLocalHistoryTimeout());
+        editorTemplate.setAttribute("designerversion", _designerVersion);
+        editorTemplate.setAttribute("storesvgonsave", profile.getStoreSVGonSaveOption());
+        editorTemplate.setAttribute("defaultSkin", designer_path + "css/theme-default.css");
 
-        while(tokenizer.hasMoreTokens()) {
-            String elt = tokenizer.nextToken();
-            if ("editorprofile".equals(elt)) {
-                resultHtml.append(profileName);
-                replacementMade = true;
-            } else if ("editoruuid".equals(elt)) {
-                resultHtml.append(uuid);
-                replacementMade = true;
-            } else if ("editorid".equals(elt)) {
-                resultHtml.append(editorID);
-                replacementMade = true;
-            } else if ("activenodes".equals(elt)) {
-                resultHtml.append(activeNodes);
-                replacementMade = true;
-            } else if ("completednodes".equals(elt)) {
-                resultHtml.append(completedNodes);
-                replacementMade = true;
-            } else if ("processsource".equals(elt)) {
-                resultHtml.append(encodedProcessSource);
-                replacementMade = true;
-            }else if ("readonly".equals(elt)) {
-                resultHtml.append(readOnly);
-                replacementMade = true;
-            } else if ("allscripts".equals(elt)) {
-                resultHtml.append(scriptsArray.toString());
-                replacementMade = true;
-            } else if ("allplugins".equals(elt)) {
-                resultHtml.append(pluginsArray.toString());
-                replacementMade = true;
-            } else if ("title".equals(elt)) {
-                resultHtml.append(profile.getTitle());
-                replacementMade = true;
-            } else if ("stencilset".equals(elt)) {
-                resultHtml.append(profile.getStencilSet());
-                replacementMade = true;
-            } else if ("debug".equals(elt)) {
-                resultHtml.append(_devMode);
-                replacementMade = true;
-            } else if ("preprocessing".equals(elt)) {
-                resultHtml.append(preprocessingUnit == null ? "" : preprocessingUnit.getOutData());
-                replacementMade = true;
-            } else if ("externalprotocol".equals(elt)) {
-                resultHtml.append(RepositoryInfo.getRepositoryProtocol(profile) == null ? "" : RepositoryInfo.getRepositoryProtocol(profile));
-                replacementMade = true;
-            } else if ("externalhost".equals(elt)) {
-                resultHtml.append(RepositoryInfo.getRepositoryHost(profile));
-                replacementMade = true;
-            } else if ("externalsubdomain".equals(elt)) {
-                resultHtml.append(RepositoryInfo.getRepositorySubdomain(profile) != null ? RepositoryInfo.getRepositorySubdomain(profile).substring(0,
-                    RepositoryInfo.getRepositorySubdomain(profile).indexOf("/")) : "");
-                replacementMade = true;
-            } else if ("localhistoryenabled".equals(elt)) {
-                resultHtml.append(profile.getLocalHistoryEnabled());
-                replacementMade = true;
-            } else if ("localhistorytimeout".equals(elt)) {
-                resultHtml.append(profile.getLocalHistoryTimeout());
-                replacementMade = true;
-            } else if ("designerversion".equals(elt)) {
-                resultHtml.append(_designerVersion);
-                replacementMade = true;
-            } else if ("storesvgonsave".equals(elt)) {
-                resultHtml.append(profile.getStoreSVGonSaveOption());
-                replacementMade = true;
-            } else if ("defaultSkin".equals(elt)) {
-                resultHtml.append(designer_path + "css/theme-default.css");
-                replacementMade = true;
-            } else if("overlaySkin".equals(elt)) {
-            	if(_skin != null && !_skin.equals("default")) {
-            		resultHtml.append(designer_path + "css/theme-" + _skin + ".css");
-            	} else {
-            		resultHtml.append("");
-            	}
-                replacementMade = true;
-            } else if ("profileplugins".equals(elt)) {
-                StringBuilder plugins = new StringBuilder();
-                boolean commaNeeded = false;
-                for (String ext : profile.getPlugins()) {
-                    if (commaNeeded) {
-                        plugins.append(",");
-                    } else {
-                        commaNeeded = true;
-                    }
-                    plugins.append("\"").append(ext).append("\"");
-                }
-                resultHtml.append(plugins.toString());
-                replacementMade = true;
-            } else if ("ssextensions".equals(elt)) {
-                StringBuilder ssexts = new StringBuilder();
-                boolean commaNeeded = false;
-                for (String ext : profile.getStencilSetExtensions()) {
-                    if (commaNeeded) {
-                        ssexts.append(",");
-                    } else {
-                        commaNeeded = true;
-                    }
-                    ssexts.append("\"").append(ext).append("\"");
-                }
-                resultHtml.append(ssexts.toString());
-                replacementMade = true;
-            } else if ("contextroot".equals(elt)) {
-                resultHtml.append(request.getContextPath());
-                replacementMade = true;
-            } else if ("@".equals(elt)) {
-                if (replacementMade) {
-                    tokenFound = false;
-                    replacementMade = false;
-                } else {
-                    tokenFound = true;
-                }
+        String overlaySkin = "";
+        if (_skin != null && !_skin.equals("default")) {
+            overlaySkin = designer_path + "css/theme-" + _skin + ".css";
+        }
+        editorTemplate.setAttribute("overlaySkin", overlaySkin);
+
+        StringBuilder plugins = new StringBuilder();
+        boolean commaNeeded = false;
+        for (String ext : profile.getPlugins()) {
+            if (commaNeeded) {
+                plugins.append(",");
             } else {
-                if (tokenFound) {
-                    tokenFound = false;
-                    resultHtml.append("@");
-                }
-                resultHtml.append(elt);
+                commaNeeded = true;
             }
+            plugins.append("\"").append(ext).append("\"");
         }
+        editorTemplate.setAttribute("profileplugins", plugins.toString());
 
-        response.setContentType("text/plain; charset=UTF-8");
+        StringBuilder ssexts = new StringBuilder();
+        commaNeeded = false;
+        for (String ext : profile.getStencilSetExtensions()) {
+            if (commaNeeded) {
+                ssexts.append(",");
+            } else {
+                commaNeeded = true;
+            }
+            ssexts.append("\"").append(ext).append("\"");
+        }
+        editorTemplate.setAttribute("ssextensions", ssexts.toString());
+
+        editorTemplate.setAttribute("contextroot", request.getContextPath());
+
+        response.setContentType("text/javascript; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(resultHtml.toString());
+        response.getWriter().write(editorTemplate.toString());
     }
-    
-    /**
-     * Reads the document from the file at the given path
-     * @param path the path to the file
-     * @return a document
-     * @throws org.jdom.JDOMException
-     * @throws java.io.IOException
-     */
-    private static Document readDocument(String path) 
-        throws JDOMException, IOException {
-        SAXBuilder builder = new SAXBuilder(false); 
 
-        // no DTD validation
-        builder.setValidation(false);
-        builder.setFeature("http://xml.org/sax/features/validation", false);
-        builder.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
-        builder.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-
-        Document anotherDocument = builder.build(new File(path));
-        return anotherDocument;
-    }
-    
-    /**
-     * Adds a script to the head.
-     * @param doc the document to use.
-     * @param src the location of the script
-     */
-    private void addScript(Document doc, String src, boolean isCore) {
-        Namespace nm = doc.getRootElement().getNamespace();
-        Element script = new Element("script", nm);
-        // set the attributes
-        script.setAttribute("src", src);
-        script.setAttribute("type", "text/javascript");
-        //add an empty text node in them
-        script.addContent("");
-        // put it to the right place
-        Element head = doc.getRootElement().getChild("head", nm);
-        
-        if (isCore) {
-            // then place it first.
-          //insert before the last script tag.
-            head.addContent(head.getContentSize() -2, script);
-        } else {
-            head.addContent(script);
-        }
-        
-        return;
-    }
-    
     /**
      * @return read the files to be placed as core scripts
-     * from a configuration file in a json file.
+     *         from a configuration file in a json file.
      * @throws java.io.IOException
      */
     private static String readEnvFiles(ServletContext context) throws IOException {
         FileInputStream core_scripts = new FileInputStream(
                 context.getRealPath(designer_path + "js/js_files.json"));
         try {
-            ByteArrayOutputStream stream = 
-                new ByteArrayOutputStream();
+            ByteArrayOutputStream stream =
+                    new ByteArrayOutputStream();
             byte[] buffer = new byte[4096];
             int read;
             while ((read = core_scripts.read(buffer)) != -1) {
@@ -593,16 +453,18 @@ public class EditorHandler extends HttpServlet {
             }
         }
     }
-    
+
     /**
      * Compress a list of js files into one combined string
+     *
      * @param plugins list of js files
      * @return a string that contains all the compressed data
      * @throws org.mozilla.javascript.EvaluatorException
+     *
      * @throws java.io.IOException
      */
-    private static String compressJS(Collection<IDiagramPlugin> plugins, 
-            ServletContext context) {
+    private static String compressJS(Collection<IDiagramPlugin> plugins,
+                                     ServletContext context) {
         StringWriter sw = new StringWriter();
         for (IDiagramPlugin plugin : plugins) {
             sw.append("/* ").append(plugin.getName()).append(" */\n");
@@ -614,28 +476,33 @@ public class EditorHandler extends HttpServlet {
             } catch (IOException e) {
                 _logger.error(e.getMessage(), e);
             } finally {
-                try { input.close(); } catch (IOException e) {}
+                try {
+                    input.close();
+                } catch (IOException e) {
+                }
             }
 
             sw.append("\n");
         }
         return sw.toString();
     }
-    
-    
+
+
     /**
      * Determine whether the browser is IE
+     *
      * @param request
      * @return true: IE browser false: others browsers
      */
-    private static boolean isIE(HttpServletRequest request){
+    private static boolean isIE(HttpServletRequest request) {
         return request.getHeader("USER-AGENT").
-            toLowerCase().indexOf("msie") > 0;
+                toLowerCase().indexOf("msie") > 0;
     }
-    
+
     /**
      * Returns the designer version from the manifest.
-     * @param context 
+     *
+     * @param context
      * @return version
      */
     private static String readDesignerVersion(ServletContext context) {
@@ -644,8 +511,8 @@ public class EditorHandler extends HttpServlet {
             InputStream inputStream = context.getResourceAsStream("/META-INF/MANIFEST.MF");
             BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
             String line;
-            while ((line = br.readLine()) != null)   {
-                if(line.startsWith(BUNDLE_VERSION)) {
+            while ((line = br.readLine()) != null) {
+                if (line.startsWith(BUNDLE_VERSION)) {
                     retStr = line.substring(BUNDLE_VERSION.length() + 1);
                     retStr = retStr.trim();
                 }
@@ -656,28 +523,28 @@ public class EditorHandler extends HttpServlet {
         }
         return retStr;
     }
-    
+
     public static String compileJS(String filename, InputStream code) throws IOException {
         List<String> filenames = new ArrayList<String>();
         List<InputStream> codes = new ArrayList<InputStream>();
-        
+
         filenames.add(filename);
         codes.add(code);
-        
+
         return compileJS(filenames, codes);
     }
-    
+
     public static String compileJS(List<String> filenames, List<InputStream> codes) throws IOException {
         com.google.javascript.jscomp.Compiler compiler = new com.google.javascript.jscomp.Compiler();
 
         CompilerOptions options = new CompilerOptions();
         CompilationLevel.SIMPLE_OPTIMIZATIONS.setOptionsForCompilationLevel(
-            options);
+                options);
 
         // To get the complete set of externs, the logic in
         // CompilerRunner.getDefaultExterns() should be used here.
         JSSourceFile extern = JSSourceFile.fromCode("externs.js",
-            "function alert(x) {}");
+                "function alert(x) {}");
 
         // The dummy input name "input.js" is used here so that any warnings or
         // errors will cite line numbers in terms of input.js.
@@ -685,12 +552,26 @@ public class EditorHandler extends HttpServlet {
         for (int i = 0; i < filenames.size(); i++) {
             inputs.add(JSSourceFile.fromInputStream(filenames.get(i), codes.get(i)));
         }
-        
+
         // compile() returns a Result, but it is not needed here.
         Result results = compiler.compile(extern, inputs.toArray(new JSSourceFile[inputs.size()]), options);
-        
+
         // The compiler is responsible for generating the compiled code; it is not
         // accessible via the Result.
         return compiler.toSource();
-  }
+    }
+
+    private String readFile(String pathname) throws IOException {
+        StringBuilder fileContents = new StringBuilder();
+        Scanner scanner = new Scanner(new File(pathname), "UTF-8");
+        String lineSeparator = System.getProperty("line.separator");
+        try {
+            while (scanner.hasNextLine()) {
+                fileContents.append(scanner.nextLine() + lineSeparator);
+            }
+            return fileContents.toString();
+        } finally {
+            scanner.close();
+        }
+    }
 }

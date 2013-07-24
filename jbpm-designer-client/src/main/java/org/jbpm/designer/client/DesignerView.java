@@ -15,21 +15,18 @@ import com.google.gwt.user.client.ui.*;
 import org.uberfire.client.annotations.OnFocus;
 import org.uberfire.client.annotations.OnReveal;
 
+import java.util.Iterator;
+import java.util.Map;
+
 public class DesignerView
         extends Composite
         implements DesignerPresenter.View,
         RequiresResize {
 
     private DesignerPresenter presenter;
-    private Frame inlineFrame = new Frame() {{
-        addDomHandler(new LoadHandler() {
-            public void onLoad(LoadEvent event) {
-
-            }
-        }, LoadEvent.getType());
-    }};
-
+    private Frame inlineFrame = new Frame();
     private String editorID = "";
+    private Map<String, String> editorParameters;
 
     @PostConstruct
     public void initPanel() {
@@ -58,15 +55,7 @@ public class DesignerView
         inlineFrame.getElement().getStyle().setWidth(100, Style.Unit.PCT);
         inlineFrame.getElement().getStyle().setHeight(680, Style.Unit.PX);
 
-        // fix locale if needed (for "default")
-        String locale = LocaleInfo.getCurrentLocale().getLocaleName();
-        if(locale == null) {
-            locale = "en";
-        } else if(locale.equals("default")) {
-            locale = "en";
-        }
 
-        inlineFrame.setUrl(GWT.getModuleBaseURL() + "inlineeditor.jsp?locale=" + locale);
     }
 
     @Override
@@ -76,19 +65,29 @@ public class DesignerView
     }
 
     @Override
-    public String getEditorID() {
-        return this.editorID;
+    public void setEditorParamters( final Map<String, String> editorParameters) {
+        this.editorParameters = editorParameters;
+
+        // fix locale if needed (for "default")
+        String locale = LocaleInfo.getCurrentLocale().getLocaleName();
+        if(locale == null) {
+            locale = "en";
+        } else if(locale.equals("default")) {
+            locale = "en";
+        }
+
+        String paramsStr = "";
+        Iterator<String> paramsIter = this.editorParameters.keySet().iterator();
+        while(paramsIter.hasNext()) {
+            String paramsKey = paramsIter.next();
+            paramsStr += "&" + paramsKey + "=" + editorParameters.get(paramsKey);
+        }
+        inlineFrame.getElement().setAttribute("src", GWT.getModuleBaseURL() + "inlineeditor.jsp?locale=" + locale + paramsStr);
     }
 
     @Override
-    public void startDesignerInstance(String editorId) {
-        initDesigner(editorId);
-        startDesigner(editorId);
-        kickstartEditor(editorId);
-    }
-
-    public void startEditorInstance(String editorId) {
-        startDesignerInstance(editorId);
+    public String getEditorID() {
+        return this.editorID;
     }
 
     public boolean confirmClose() {
@@ -101,18 +100,6 @@ public class DesignerView
         } else {
             return true;
         }
-    }-*/;
-
-    private native void startDesigner(String editorid)  /*-{
-        $doc.getElementById(editorid).contentWindow.startEditorInstance();
-    }-*/;
-
-    private native void initDesigner(String editorid)  /*-{
-        $doc.getElementById(editorid).contentWindow.initEditorInstance();
-    }-*/;
-
-    private native void kickstartEditor(String editorid)  /*-{
-        $doc.getElementById(editorid).contentWindow.Kickstart.load();
     }-*/;
 
     @Override

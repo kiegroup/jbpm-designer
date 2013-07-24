@@ -1,41 +1,39 @@
-<script type="text/javascript">
-    function initEditorInstance() {
-        ORYX.VERSION = "@designerversion@";
+        ORYX.VERSION = "$designerversion$";
 
-        ORYX.CONFIG.SSET = "@stencilset@";
-        ORYX.CONFIG.DEV = @debug@;
+        ORYX.CONFIG.SSET = "$stencilset$";
+        ORYX.CONFIG.DEV = $debug$;
         if (ORYX.CONFIG.DEV) {
             ORYX_LOGLEVEL = 4;
         }
 
-        ORYX.PREPROCESSING = "@preprocessing@";
-        ORYX.EXTERNAL_PROTOCOL = "@externalprotocol@";
-        ORYX.EXTERNAL_HOST = "@externalhost@";
-        ORYX.EXTERNAL_SUBDOMAIN = "@externalsubdomain@";
-        ORYX.REPOSITORY_ID = "@repositoryid@";
+        ORYX.PREPROCESSING = "$preprocessing$";
+        ORYX.EXTERNAL_PROTOCOL = "$externalprotocol$";
+        ORYX.EXTERNAL_HOST = "$externalhost$";
+        ORYX.EXTERNAL_SUBDOMAIN = "$externalsubdomain$";
+        ORYX.REPOSITORY_ID = "$repositoryid$";
 
-        ORYX.UUID = "@editoruuid@";
-        ORYX.PROFILE = "@editorprofile@";
-        ORYX.EDITORID = "@editorid@";
-        ORYX.ACTIVENODES = @activenodes@;
-        ORYX.COMPLETEDNODES = @completednodes@;
-        ORYX.PROCESSSOURCE = "@processsource@";
-        ORYX.READONLY = @readonly@;
+        ORYX.UUID = "$editoruuid$";
+        ORYX.PROFILE = "$editorprofile$";
+        ORYX.EDITORID = "$editorid$";
+        ORYX.ACTIVENODES = $activenodes$;
+        ORYX.COMPLETEDNODES = $completednodes$;
+        ORYX.PROCESSSOURCE = "$processsource$";
+        ORYX.READONLY = $readonly$;
 
-        ORYX.LOCAL_HISTORY_ENABLED = @localhistoryenabled@;
-        ORYX.LOCAL_HISTORY_TIMEOUT = @localhistorytimeout@;
+        ORYX.LOCAL_HISTORY_ENABLED = $localhistoryenabled$;
+        ORYX.LOCAL_HISTORY_TIMEOUT = $localhistorytimeout$;
 
-        ORYX.CONFIG.ROOT_PATH = "@contextroot@";
+        ORYX.CONFIG.ROOT_PATH = "$contextroot$";
         ORYX.PATH = ORYX.CONFIG.ROOT_PATH + "/";
         ORYX.BASE_FILE_PATH = ORYX.CONFIG.ROOT_PATH + "/org.jbpm.designer.jBPMDesigner/";
 
         ORYX.PROCESS_SAVED = true;
         ORYX.AUTOSAVE_ENABLED = false;
-        ORYX.CONFIG.STORESVGONSAVE = "@storesvgonsave@";
+        ORYX.CONFIG.STORESVGONSAVE = "$storesvgonsave$";
 
 
 
-        ORYX.CONFIG.SSEXTS = [@ssextensions@].
+        ORYX.CONFIG.SSEXTS = [$ssextensions$].
         map(function (ssext) {
             // for each of the extensions, we get the extension file and return its contents.
             var contents = null;
@@ -64,7 +62,7 @@
                 }.bind(allPlugins));
                 // install the current plugins
                 ORYX.availablePlugins = [];
-                [@profileplugins@].
+                [$profileplugins$].
                 each(function (pluginName) {
                     p = allPlugins[pluginName];
                     if (p) {
@@ -79,7 +77,6 @@
                 ORYX.LOG.error("Could not load Process Designer: " + result.responseText);
             }
         });
-    }
 
        function startEditorInstance() {
            var stencilset = ORYX.Utils.getParamFromUrl('stencilset') || ORYX.CONFIG.SSET;
@@ -142,14 +139,6 @@
        }
 
     function startit() {
-        if(!ORYX) {
-            setTimeout(startit, 200);
-            return;
-        }
-        initEditorInstance();
         startEditorInstance();
         Kickstart.load();
     }
-
-    startit();
-</script>
