@@ -32,6 +32,8 @@ import org.uberfire.workbench.events.ResourceAddedEvent;
 import org.uberfire.workbench.events.ResourceDeletedEvent;
 import org.uberfire.workbench.events.ResourceUpdatedEvent;
 
+import java.util.Map;
+
 @Dependent
 @WorkbenchEditor(identifier = "jbpm.designer", supportedTypes = { Bpmn2Type.class })
 public class DesignerPresenter {
@@ -39,12 +41,9 @@ public class DesignerPresenter {
     public interface View
             extends
             UberView<DesignerPresenter> {
-
         void setEditorID( final String id );
-
+        void setEditorParamters( final Map<String, String> editorParameters);
         String getEditorID();
-
-        void startDesignerInstance( final String editorId );
     }
 
     @Inject
@@ -95,19 +94,13 @@ public class DesignerPresenter {
                 public void callback( final String editorID ) {
                     view.setEditorID( editorID );
                     String url = GWT.getHostPageBaseURL().replaceFirst( "/" + GWT.getModuleName() + "/", "" );
-                    assetService.call( new RemoteCallback<String>() {
+                    assetService.call( new RemoteCallback< Map<String, String> >() {
                         @Override
-                        public void callback( String editorBody ) {
-                            // remove the open+close script tags before injecting
-                            editorBody = editorBody.replaceAll( "<script type=\"text/javascript\">", "" );
-                            editorBody = editorBody.replaceAll( "</script>", "" );
-
-                            final Document doc = Document.get();
-                            final FrameElement editorInlineFrame = (FrameElement) doc.getElementById( editorID );
-                            appendScriptSource( editorInlineFrame, editorBody );
+                        public void callback( Map<String, String> editorParameters ) {
+                            view.setEditorParamters(editorParameters);
                         }
 
-                    } ).loadEditorBody( path, editorID, url, place );
+                    } ).getEditorParameters(path, editorID, url, place);
                 }
             } ).getEditorID();
         }
@@ -132,17 +125,6 @@ public class DesignerPresenter {
     public IsWidget getView() {
         return view;
     }
-
-    private void appendScriptSource( final FrameElement element,
-                                     final String source ) {
-        final ScriptElement scriptElement = Document.get().createScriptElement( source );
-        scriptElement.setType( "text/javascript" );
-        element.getContentDocument().getDocumentElement().getElementsByTagName( "head" ).getItem( 0 ).appendChild( scriptElement );
-    }
-
-//    private native String getPageURL()  /*-{
-//        return $wnd.location.protocol + "//" + $wnd.location.host;
-//    }-*/;
 
     private native void publishOpenInTab(DesignerPresenter dp)/*-{
         $wnd.designeropenintab = function (filename, uri) {

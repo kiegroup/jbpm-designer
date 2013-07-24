@@ -46,6 +46,7 @@
     <link xmlns="http://www.w3.org/1999/xhtml" rel="schema.b3mn" href="http://b3mn.org" />
     <link xmlns="http://www.w3.org/1999/xhtml" rel="schema.oryx" href="http://oryx-editor.org/" />
     <link xmlns="http://www.w3.org/1999/xhtml" rel="schema.raziel" href="http://raziel.org/" />
+
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/kickstart.js" type="text/javascript"></script>
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/config.js" type="text/javascript"></script>
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/oryx.js" type="text/javascript"></script>
@@ -136,6 +137,9 @@
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/plugin/ORYX.Plugins.NotificationsPlugin.js" type="text/javascript"></script>
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/plugin/ORYX.Plugins.ActiveNodesHighlighter" type="text/javascript"></script>
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/plugin/ORYX.Plugins.FormEditing" type="text/javascript"></script>
+
+    <script xmlns="http://www.w3.org/1999/xhtml" type="text/javascript" src="<%=request.getParameter("hostinfo")%>/editor/?uuid=<%=request.getParameter("uuid")%>&profile=<%=request.getParameter("profile")%>&pp=<%=request.getParameter("pp")%>&editorid=<%=request.getParameter("editorid")%>&readonly=<%=request.getParameter("readonly")%>&activenodes=<%=request.getParameter("activenodes")%>&completednodes=<%=request.getParameter("completednodes")%>&processsource=<%=request.getParameter("processsource")%>"></script>
+
 </head>
 <body style="overflow:hidden;" onload="startit();">
     <div id="Definition"></div>
