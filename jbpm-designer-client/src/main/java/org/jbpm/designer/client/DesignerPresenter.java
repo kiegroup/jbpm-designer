@@ -98,7 +98,7 @@ public class DesignerPresenter {
                                 if(processSources!= null && processSources.length() > 0) {
                                     publishProcessSourcesInfo(editorParameters.get("processsource"));
                                 }
-                                editorParameters.remove("publishProcessSourcesInfo");
+                                editorParameters.remove("processsource");
                             }
                             view.setEditorParamters(editorParameters);
                         }
