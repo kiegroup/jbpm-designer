@@ -17,7 +17,6 @@
         ORYX.EDITORID = "$editorid$";
         ORYX.ACTIVENODES = $activenodes$;
         ORYX.COMPLETEDNODES = $completednodes$;
-        ORYX.PROCESSSOURCE = "";
         ORYX.READONLY = $readonly$;
 
         ORYX.LOCAL_HISTORY_ENABLED = $localhistoryenabled$;
@@ -88,11 +87,12 @@
            };
 
            if(typeof parent.designerprocesssources == 'function') {
-               ORYX.PROCESSSOURCE = parent.designerprocesssources();
+               var dps = parent.designerprocesssources();
+               parent.designerprocesssources = function (){ return ""; }
                new Ajax.Request(ORYX.PATH + "transformer", {
                    encoding: 'UTF-8',
                    method: 'POST',
-                   parameters: {uuid: ORYX.UUID, profile: ORYX.PROFILE, pp: ORYX.PREPROCESSING, bpmn2: ORYX.PROCESSSOURCE, transformto: 'bpmn2json', enc: 'true'},
+                   parameters: {uuid: ORYX.UUID, profile: ORYX.PROFILE, pp: ORYX.PREPROCESSING, bpmn2: dps, transformto: 'bpmn2json', enc: 'true'},
                    onSuccess: function(transport) {
                        response = transport.responseText;
                        model = response.evalJSON();
