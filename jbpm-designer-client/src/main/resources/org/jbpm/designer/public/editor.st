@@ -17,7 +17,7 @@
         ORYX.EDITORID = "$editorid$";
         ORYX.ACTIVENODES = $activenodes$;
         ORYX.COMPLETEDNODES = $completednodes$;
-        ORYX.PROCESSSOURCE = "$processsource$";
+        ORYX.PROCESSSOURCE = "";
         ORYX.READONLY = $readonly$;
 
         ORYX.LOCAL_HISTORY_ENABLED = $localhistoryenabled$;
@@ -87,8 +87,8 @@
                }
            };
 
-           // if process source was given it has higher priority than UUID
-           if(ORYX.PROCESSSOURCE != "") {
+           if(typeof parent.designerprocesssources == 'function') {
+               ORYX.PROCESSSOURCE = parent.designerprocesssources();
                new Ajax.Request(ORYX.PATH + "transformer", {
                    encoding: 'UTF-8',
                    method: 'POST',
