@@ -270,10 +270,11 @@ public class EditorHandler extends HttpServlet {
         byte[] completedNodesByteArray = Base64.decodeBase64(encodedCompletedNodes);
         String completedNodes = new String(completedNodesByteArray, "UTF-8");
 
-        String encodedProcessSource = request.getParameter("processsource");
-        if (encodedProcessSource == null) {
-            encodedProcessSource = "";
-        }
+        // this is set in the persenter now
+//        String encodedProcessSource = request.getParameter("processsource");
+//        if (encodedProcessSource == null) {
+//            encodedProcessSource = "";
+//        }
 
         String readOnly = request.getParameter("readonly");
 
@@ -373,7 +374,7 @@ public class EditorHandler extends HttpServlet {
         editorTemplate.setAttribute("editorid", editorID);
         editorTemplate.setAttribute("activenodes", activeNodes);
         editorTemplate.setAttribute("completednodes", completedNodes);
-        editorTemplate.setAttribute("processsource", encodedProcessSource);
+        //editorTemplate.setAttribute("processsource", encodedProcessSource);
         editorTemplate.setAttribute("readonly", readOnly);
         editorTemplate.setAttribute("allscripts", scriptsArray.toString());
         editorTemplate.setAttribute("allplugins", pluginsArray.toString());

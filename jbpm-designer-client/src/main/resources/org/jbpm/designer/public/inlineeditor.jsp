@@ -40,7 +40,7 @@
     <!-- plugins -->
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/compressed/designer-plugins.js" type="text/javascript"></script>
     <!-- dynamic properties -->
-    <script xmlns="http://www.w3.org/1999/xhtml" type="text/javascript" src="<%=request.getParameter("hostinfo")%>/editor/?uuid=<%=request.getParameter("uuid")%>&profile=<%=request.getParameter("profile")%>&pp=<%=request.getParameter("pp")%>&editorid=<%=request.getParameter("editorid")%>&readonly=<%=request.getParameter("readonly")%>&activenodes=<%=request.getParameter("activenodes")%>&completednodes=<%=request.getParameter("completednodes")%>&processsource=<%=request.getParameter("processsource")%>"></script>
+    <script xmlns="http://www.w3.org/1999/xhtml" type="text/javascript" src="<%=request.getParameter("hostinfo")%>/editor/?uuid=<%=request.getParameter("uuid")%>&profile=<%=request.getParameter("profile")%>&pp=<%=request.getParameter("pp")%>&editorid=<%=request.getParameter("editorid")%>&readonly=<%=request.getParameter("readonly")%>&activenodes=<%=request.getParameter("activenodes")%>&completednodes=<%=request.getParameter("completednodes")%>"></script>
 
 </head>
 <body style="overflow:hidden;" onload="startit();">

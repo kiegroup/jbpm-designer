@@ -5,10 +5,6 @@ import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.FrameElement;
-import com.google.gwt.dom.client.ScriptElement;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.IsWidget;
 import org.guvnor.common.services.shared.file.DeleteService;
 import org.jboss.errai.bus.client.api.RemoteCallback;
@@ -97,6 +93,13 @@ public class DesignerPresenter {
                     assetService.call( new RemoteCallback< Map<String, String> >() {
                         @Override
                         public void callback( Map<String, String> editorParameters ) {
+                            if(editorParameters != null && editorParameters.containsKey("processsource")) {
+                                String processSources = editorParameters.get("processsource");
+                                if(processSources!= null && processSources.length() > 0) {
+                                    publishProcessSourcesInfo(editorParameters.get("processsource"));
+                                }
+                                editorParameters.remove("publishProcessSourcesInfo");
+                            }
                             view.setEditorParamters(editorParameters);
                         }
 
@@ -125,6 +128,12 @@ public class DesignerPresenter {
     public IsWidget getView() {
         return view;
     }
+
+    private native void publishProcessSourcesInfo(String ps)/*-{
+        $wnd.designerprocesssources = function () {
+            return ps;
+        }
+    }-*/;
 
     private native void publishOpenInTab(DesignerPresenter dp)/*-{
         $wnd.designeropenintab = function (filename, uri) {
