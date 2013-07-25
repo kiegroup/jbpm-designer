@@ -84,6 +84,7 @@ public class DesignerPresenter {
         this.publishSignalOnAssetUpdate(this);
         this.publishSignalOnAssetDelete(this);
         this.publishSignalOnAssetAdded(this);
+
         if ( path != null ) {
             assetService.call( new RemoteCallback<String>() {
                 @Override
