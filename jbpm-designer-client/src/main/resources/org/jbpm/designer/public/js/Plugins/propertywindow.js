@@ -85,7 +85,8 @@ ORYX.Plugins.PropertyWindow = {
 				dataIndex: 'name',
 				width: 90,
 				sortable: true,
-				renderer: this.tooltipRenderer.bind(this)
+				renderer: this.tooltipRenderer.bind(this),
+                css: 'font-weight: bold;'
 			}, {
 				//id: 'value',
 				header: ORYX.I18N.PropertyWindow.value,
