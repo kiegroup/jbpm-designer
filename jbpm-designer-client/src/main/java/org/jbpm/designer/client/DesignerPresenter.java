@@ -72,6 +72,9 @@ public class DesignerPresenter {
     @Inject
     private BusyIndicatorView busyIndicatorView;
 
+    @Inject
+    private Bpmn2Type resourceType;
+
     private Path path;
     private PlaceRequest place;
 
@@ -122,7 +125,11 @@ public class DesignerPresenter {
 
     @WorkbenchPartTitle
     public String getName() {
-        return this.path.getFileName();
+        String presName = this.path.getFileName();
+        if(presName.endsWith(resourceType.getSuffix())) {
+            presName = presName.substring(0, presName.length() - (resourceType.getSuffix().length() + 1 ));
+        }
+        return "Process Model - " + presName;
     }
 
     @WorkbenchPartView

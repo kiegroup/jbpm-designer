@@ -15,7 +15,7 @@ public class Bpmn2TypeDefinition implements ResourceTypeDefinition {
 
     @Override
     public String getDescription() {
-        return "Processes";
+        return "Business Processes";
     }
 
     @Override
