@@ -1,5 +1,5 @@
 {
-	"title" : "jBPM BPMN2 (Minimal)",
+	"title" : "Minimal",
 	"namespace":"http://b3mn.org/stencilset/bpmn2.0minimal#",
 	"description":"A subset of JBPM BPMN2",
 	"extends":"http://b3mn.org/stencilset/bpmn2.0#",

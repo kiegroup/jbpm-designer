@@ -24,7 +24,7 @@
 	],
 	"perspectives": [
 		{
-			"title":"jBPM BPMN2 (Full)",
+			"title":"Full",
 			"namespace":"http://b3mn.org/stencilset/bpmn2.0#",
 			"description":"jBPM Full BPMN2 Features",
 			"stencilset":"http://b3mn.org/stencilset/bpmn2.0#",
@@ -36,7 +36,7 @@
 			"addExtensions" : []
 		},
 		{
-			"title":"jBPM BPMN2 (Simple)",
+			"title":"Simple",
 			"namespace":"http://b3mn.org/stencilset/bpmn2.0simple#",
 			"description":"jBPM Simple BPMN2 Features",
 			"stencilset":"http://b3mn.org/stencilset/bpmn2.0#",
@@ -49,7 +49,7 @@
 			]
 		},
         {
-            "title":"jBPM BPMN2 (RuleFlow)",
+            "title":"RuleFlow",
             "namespace":"http://b3mn.org/stencilset/bpmn2.0ruleflow#",
             "description":"jBPM RuleFlow BPMN2 Features",
             "stencilset":"http://b3mn.org/stencilset/bpmn2.0#",
