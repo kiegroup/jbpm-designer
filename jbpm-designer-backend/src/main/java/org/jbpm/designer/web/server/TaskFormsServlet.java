@@ -26,6 +26,7 @@ import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.taskforms.TaskFormInfo;
 import org.jbpm.designer.taskforms.TaskFormTemplateManager;
+import org.jbpm.designer.util.Base64Backport;
 import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
@@ -173,7 +174,7 @@ public class TaskFormsServlet extends HttpServlet {
             Asset newFormAsset =  repository.loadAssetFromPath(taskForm.getPkgName() + "/" + taskForm.getId()+"." + FORMTEMPLATE_FILE_EXTENSION);
 
             String uniqueId = newFormAsset.getUniqueId();
-            if (Base64.isBase64(uniqueId)) {
+            if (Base64Backport.isBase64(uniqueId)) {
                 byte[] decoded = Base64.decodeBase64(uniqueId);
                 try {
                     uniqueId =  new String(decoded, "UTF-8");
@@ -196,7 +197,7 @@ public class TaskFormsServlet extends HttpServlet {
             Asset newModelerFormAsset =  repository.loadAssetFromPath(taskForm.getPkgName() + "/" + taskForm.getId()+"." + FORMMODELER_FILE_EXTENSION);
 
             String modelerUniqueId = newModelerFormAsset.getUniqueId();
-            if (Base64.isBase64(modelerUniqueId)) {
+            if (Base64Backport.isBase64(modelerUniqueId)) {
                 byte[] decoded = Base64.decodeBase64(modelerUniqueId);
                 try {
                     modelerUniqueId =  new String(decoded, "UTF-8");
