@@ -31,7 +31,7 @@ public class NewProcessHandler extends DefaultNewResourceHandler {
 
     @Override
     public String getDescription() {
-        return "BPMN2 Process";
+        return "Business Process";
     }
 
     @Override

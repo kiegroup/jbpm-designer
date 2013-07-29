@@ -140,7 +140,7 @@ ORYX.CONFIG.SHOW_GRIDLINE =             true;
 
 ORYX.CONFIG.BORDER_OFFSET =				14;
 
-ORYX.CONFIG.MAX_NUM_SHAPES_NO_GROUP	=	14;
+ORYX.CONFIG.MAX_NUM_SHAPES_NO_GROUP	=	5;
 
 ORYX.CONFIG.SHAPEMENU_CREATE_OFFSET_CORNER = 30;
 ORYX.CONFIG.SHAPEMENU_CREATE_OFFSET = 45;
@@ -352,57 +352,22 @@ ORYX.CONFIG.PANEL_LEFT_COLLAPSED = true;
 
 ORYX.CONFIG.STENCIL_MAX_ORDER = 999;
 ORYX.CONFIG.STENCIL_GROUP_ORDER = function() {
-	var stencilsHash = {};
-	// jbpm full perspective
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"] = {};
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Activities"] = {};
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Artifacts"] = {};
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Catching Intermediate Events"] = {};
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Connecting Objects"] = {};
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Data Objects"] = {};
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["End Events"] = {};
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Gateways"] = {};
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Service Tasks"] = {};
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Start Events"] = {};
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Swimlanes"] = {};
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Throwing Intermediate Events"] = {};
-	
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Start Events"] = 1;
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Catching Intermediate Events"] = 2;
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Throwing Intermediate Events"] = 3;
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["End Events"] = 4;
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Gateways"] = 5;
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Activities"] = 6;
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Service Tasks"] = 7;
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Connecting Objects"] = 8;
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Data Objects"] = 9;
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Swimlanes"] = 10;
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Artifacts"] = 11;
-	
-	
-	// jbpm minimal perspective
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Task"] = {};
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Reusable Subprocess"] = {};
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Multiple instances"] = {};
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Embedded Subprocess"] = {};
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Data-based Exclusive (XOR) Gateway"] = {};
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Start Event"] = {};
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Timer Intermediate Event"] = {};
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Signal Intermediate Event"] = {};
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["End Event"] = {};
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Error End Event"] = {};
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Sequence Flow"] = {};
-	
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Task"] = 7;
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Reusable Subprocess"] = 8;
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Multiple instances"] = 9;
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Embedded Subprocess"] = 10;
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Data-based Exclusive (XOR) Gateway"] = 6;
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Start Event"] = 1;
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Timer Intermediate Event"] = 2;
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Signal Intermediate Event"] = 3;
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["End Event"] = 4;
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Error End Event"] = 5;
-	stencilsHash["http://b3mn.org/stencilset/bpmn2.0#"]["Sequence Flow"] = 11;
-	return stencilsHash;
+    var stencilObj = {
+        "http://b3mn.org/stencilset/bpmn2.0#" : {
+            "Start Events": 2,
+            "Catching Intermediate Events": 4,
+            "Throwing Intermediate Events": 5,
+            "End Events": 3,
+            "Gateways": 6,
+            "Activities": 1,
+            "Service Tasks": 7,
+            "Connecting Objects": 8,
+            "Data Objects": 9,
+            "Swimlanes": 10,
+            "Artifacts": 11,
+            "Workflow Patterns": 12
+        }
+    }
+    return stencilObj;
+
 };
