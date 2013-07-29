@@ -51,13 +51,13 @@ ORYX.Plugins.ShapeRepository = {
 			anchors: '0, -30'
 		});
 		
-		var sorter = new Ext.tree.TreeSorter(panel, {
-		    folderSort: true,
-		    dir: "asc",
-		    sortType: function(node) {
-		        return node.text;
-		    }
-		});
+//		var sorter = new Ext.tree.TreeSorter(panel, {
+//		    folderSort: true,
+//		    dir: "asc",
+//		    sortType: function(node) {
+//		        return node.text;
+//		    }
+//		});
 		
 		var region = this.facade.addToRegion("west", panel, ORYX.I18N.ShapeRepository.title);
 		
@@ -158,29 +158,6 @@ ORYX.Plugins.ShapeRepository = {
 			// Sort the stencils according to their position and add them to the repository
 			stencils = stencils.sortBy(function(value) { return value.position(); } );
 			stencils.each((function(value) {
-				
-				// Show stencils in no group if there is less than 15 shapes
-				if(stencils.length <= ORYX.CONFIG.MAX_NUM_SHAPES_NO_GROUP) {
-					var stencilOrder = ORYX.CONFIG.STENCIL_GROUP_ORDER();
-					if(stencilOrder[sset.namespace()]) {
-						stencilSetNode.sort(function(a, b) {
-							if(!stencilOrder[sset.namespace()][a.text]) {
-								stencilOrder[sset.namespace()][a.text] = ORYX.CONFIG.STENCIL_MAX_ORDER;
-							}
-							if(!stencilOrder[sset.namespace()][b.text]) {
-								stencilOrder[sset.namespace()][b.text] = ORYX.CONFIG.STENCIL_MAX_ORDER;
-							}
-							return stencilOrder[sset.namespace()][a.text] - stencilOrder[sset.namespace()][b.text];
-						});
-					} else {
-						stencilSetNode.sort(function(a, b) {
-							return a.text > b.text ? 1 : a.text < b.text ? -1 : 0;
-						});
-					}
-					
-					this.createStencilTreeNode(stencilSetNode, value);	
-					return;					
-				}
 				if (value.hidden()) {
 					return;
 				}
@@ -221,16 +198,10 @@ ORYX.Plugins.ShapeRepository = {
 
 				// sort the groups
 				var stencilOrder = ORYX.CONFIG.STENCIL_GROUP_ORDER();
-				if(stencilOrder[sset.namespace()]) {
-					stencilSetNode.sort(function(a, b) {
-						return stencilOrder[sset.namespace()][a.text] - stencilOrder[sset.namespace()][b.text];
-					});
-				} else {
-					stencilSetNode.sort(function(a, b) {
-						return a.text > b.text ? 1 : a.text < b.text ? -1 : 0;
-					});
-				}
-	
+                stencilSetNode.sort(function(a, b) {
+                    return stencilOrder[sset.namespace()][a.text] - stencilOrder[sset.namespace()][b.text];
+                });
+
 			}).bind(this));
 		}).bind(this));
 			

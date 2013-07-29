@@ -125,11 +125,7 @@ public class DesignerPresenter {
 
     @WorkbenchPartTitle
     public String getName() {
-        String presName = this.path.getFileName();
-        if(presName.endsWith(resourceType.getSuffix())) {
-            presName = presName.substring(0, presName.length() - (resourceType.getSuffix().length() + 1 ));
-        }
-        return "Process Model - " + presName;
+        return this.path.getFileName();
     }
 
     @WorkbenchPartView

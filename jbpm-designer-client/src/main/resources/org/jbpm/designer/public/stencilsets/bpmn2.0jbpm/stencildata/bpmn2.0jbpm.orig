@@ -1365,13 +1365,14 @@
 				{
 					"id":"script_language",
 					"type":"Choice",
-					"title":"ScriptLanguage",
+					"title":"Script Language",
 					"value":"java",
 					"description":"Defines the script language. The script language MUST be provided if a script is provided.",
 					"description_ja":"スクリプト言語を定義します。スクリプトを使用する場合は、スクリプト言語を指定する必要があります。",
 					"readonly":false,
 					"optional":true,
 					"fortasktypes":"None|Send|Receive|User|Manual|Service|Script",
+				        "extra":true,
 					"items": [
 						{
 							"id": "c1",
@@ -2183,7 +2184,8 @@
 					"description_ja":"アクション開始時",
 					"readonly":false,
 					"optional":true,
-					"fortasktypes":"None|Send|Receive|User|Manual|Service|Script|Business Rule"
+					"fortasktypes":"None|Send|Receive|User|Manual|Service|Script|Business Rule",
+					"extra":true
 				},
 				{
 					"id":"onExitActions",
@@ -2194,7 +2196,8 @@
 					"description_ja":"アクション終了時",
 					"readonly":false,
 					"optional":true,
-					"fortasktypes":"None|Send|Receive|User|Manual|Service|Script|Business Rule"
+					"fortasktypes":"None|Send|Receive|User|Manual|Service|Script|Business Rule",
+					"extra":true
 				},
 				{
 					"id":"taskname",
@@ -2266,7 +2269,7 @@
 				{
 					"id":"groupid",
 					"type":"String",
-					"title":"GroupID",
+					"title":"Groups",
 					"value":"",
 					"description":"he group id that is responsible for executing the human task",
 					"description_ja":"ヒューマンタスクを担当するグループID",
@@ -2283,7 +2286,8 @@
 					"description_ja":"コメント",
 					"readonly":false,
 					"optional":true,
-					"fortasktypes":"None|User"
+					"fortasktypes":"None|User",
+					"extra":true
 				},
 				{
 					"id":"content",
@@ -2294,7 +2298,8 @@
 					"description_ja":"このタスクに関連付けられているデータ",
 					"readonly":false,
 					"optional":true,
-					"fortasktypes":"None|User"
+					"fortasktypes":"None|User",
+					"extra":true
 				},
 				{
                     "id":"reassignment",
@@ -2305,7 +2310,8 @@
                     "description_ja":"タスク再割り当て",
                     "readonly":false,
                     "optional":true,
-                    "fortasktypes":"None|User"
+                    "fortasktypes":"None|User",
+		    "extra":true
                 },
                 {
                     "id":"notifications",
@@ -2316,7 +2322,8 @@
                     "description_ja":"タスク通知",
                     "readonly":false,
                     "optional":true,
-                    "fortasktypes":"None|User"
+                    "fortasktypes":"None|User",
+		    "extra":true
                 },
 	            {
     			    "id":"locale",
@@ -2327,17 +2334,19 @@
 					"description_ja":"タスクロケール",
     				"readonly":false,
     				"optional":true,
-    				"fortasktypes":"None|User"
+    				"fortasktypes":"None|User",
+				"extra":true
     			},
     			{
                     "id":"createdby",
                     "type":"String",
-                    "title":"CreatedBy",
+                    "title":"Created by",
                     "value":"",
                     "description":"User name of Task creator",
                     "description_ja":"タスクの作成者",
                     "readonly":false,
                     "optional":true,
+		    "extra":true,
                     "fortasktypes":"None|User"
                 },
 				{
@@ -2350,6 +2359,7 @@
 					"readonly":false,
 					"optional":true,
 					"fortasktypes":"None|User",
+					"extra":true,
 					"items": [
 						{
 							"id": "c1",
@@ -2372,7 +2382,8 @@
 					"description_ja":"ヒューマンタスクの優先度を示す整数",
 					"readonly":false,
 					"optional":true,
-					"fortasktypes":"None|User"
+					"fortasktypes":"None|User",
+					"extra":true
 				},
 				{
                     "id":"multipleinstance",
@@ -2384,6 +2395,7 @@
                     "readonly":false,
                     "optional":true,
                     "fortasktypes":"None|Send|Receive|User|Manual|Service",
+		    "extra":true,
                     "items": [
                         {
                             "id": "c1",
@@ -2834,6 +2846,7 @@
                     "readonly":false,
                     "optional":true,
                     "fortasktypes":"None|Send|Receive|User|Manual|Service",
+		    "extra":true,
                     "items": [
                         \{
                             "id": "c1",
@@ -3033,7 +3046,7 @@
 				\{
 					"id":"script_language",
 					"type":"Choice",
-					"title":"ScriptLanguage",
+					"title":"Script Language",
 					"value":"java",
 					"description":"Defines the script language.",
 					"description_ja":"スクリプト言語を定義します。",
@@ -3409,7 +3422,7 @@
  				{
 					"id":"script_language",
 					"type":"Choice",
-					"title":"ScriptLanguage",
+					"title":"Script Language",
 					"value":"java",
 					"description":"Defines the script language.",
 					"description_ja":"スクリプト言語を定義します。",
@@ -3647,7 +3660,7 @@
 				{
 					"id":"script_language",
 					"type":"Choice",
-					"title":"ScriptLanguage",
+					"title":"Script Language",
 					"value":"java",
 					"description":"Defines the script language.",
 					"description_ja":"スクリプト言語を定義します。",
@@ -3890,7 +3903,7 @@
 				{
 					"id":"script_language",
 					"type":"Choice",
-					"title":"ScriptLanguage",
+					"title":"Script Language",
 					"value":"java",
 					"description":"Defines the script language.",
 					"description_ja":"スクリプト言語を定義します。",
@@ -4135,7 +4148,7 @@
 				{
 					"id":"script_language",
 					"type":"Choice",
-					"title":"ScriptLanguage",
+					"title":"Script Language",
 					"value":"java",
 					"description":"Defines the script language.",
 					"description_ja":"スクリプト言語を定義します。",
