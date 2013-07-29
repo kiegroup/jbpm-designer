@@ -6,6 +6,7 @@ import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.impl.AbstractAsset;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.server.service.PathEvent;
+import org.jbpm.designer.util.Base64Backport;
 import org.kie.commons.io.IOService;
 import org.kie.commons.java.nio.IOException;
 import org.kie.commons.java.nio.base.options.CommentedOption;
@@ -451,7 +452,7 @@ public class VFSRepository implements Repository {
     }
 
     private String decodeUniqueId(String uniqueId) {
-        if (Base64.isBase64(uniqueId)) {
+        if (Base64Backport.isBase64(uniqueId)) {
             byte[] decoded = Base64.decodeBase64(uniqueId);
             try {
                 String uri = new String(decoded, "UTF-8");

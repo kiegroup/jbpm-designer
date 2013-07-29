@@ -17,7 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.StringUtils;
 import org.jbpm.designer.repository.Asset;
+import org.jbpm.designer.util.Base64Backport;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.json.JSONObject;
@@ -66,7 +68,7 @@ public class CalledElementServlet extends HttpServlet {
         		            	String pidcontent = ServletUtil.getProcessImageContent(packageName, pid, profile);
         		            	if(pid != null && pid.equals(processId)) {
                                     String uniqueId = processContent.getUniqueId();
-                                    if (Base64.isBase64(uniqueId)) {
+                                    if (Base64Backport.isBase64(uniqueId)) {
                                         byte[] decoded = Base64.decodeBase64(uniqueId);
                                         try {
                                             uniqueId =  new String(decoded, "UTF-8");
