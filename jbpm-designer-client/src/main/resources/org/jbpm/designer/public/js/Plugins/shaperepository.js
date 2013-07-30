@@ -285,7 +285,7 @@ ORYX.Plugins.ShapeRepository = {
 		
 		
 		var commandClass = ORYX.Core.Command.extend({
-			construct: function(option, currentParent, canAttach, position, facade){
+			construct: function(option, currentParent, canAttach, position, facade, ttype){
 				this.option = option;
 				this.currentParent = currentParent;
 				this.canAttach = canAttach;
@@ -319,6 +319,11 @@ ORYX.Plugins.ShapeRepository = {
 				//this.currentParent.update();
 				//this.shape.update();
 
+                if(ttype && ttype.length > 0 && this.shape instanceof ORYX.Core.Node) {
+                    this.shape.setProperty("oryx-tasktype", ttype);
+                    this.shape.refresh();
+                }
+
 				this.facade.setSelection([this.shape]);
 				this.facade.getCanvas().update();
 				this.facade.updateSelection();
@@ -347,6 +352,13 @@ ORYX.Plugins.ShapeRepository = {
                 pdata: this._patternData,
                 pos: position
             });
+        } else if(typeParts[1].endsWith("Task")) {
+            var ttype = typeParts[1];
+            ttype = ttype.substring(0, ttype.length - 4);
+            option.type = typeParts[0] + "#Task";
+
+            var command = new commandClass(option, this._currentParent, this._canAttach, position, this.facade, ttype);
+            this.facade.executeCommands([command]);
         } else {
             var command = new commandClass(option, this._currentParent, this._canAttach, position, this.facade);
             this.facade.executeCommands([command]);
