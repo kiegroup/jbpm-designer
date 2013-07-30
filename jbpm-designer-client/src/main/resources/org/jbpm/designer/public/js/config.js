@@ -354,20 +354,20 @@ ORYX.CONFIG.STENCIL_MAX_ORDER = 999;
 ORYX.CONFIG.STENCIL_GROUP_ORDER = function() {
     var stencilObj = {
         "http://b3mn.org/stencilset/bpmn2.0#" : {
-            "Start Events": 2,
-            "Catching Intermediate Events": 4,
-            "Throwing Intermediate Events": 5,
-            "End Events": 3,
-            "Gateways": 6,
-            "Activities": 1,
-            "Service Tasks": 7,
-            "Connecting Objects": 8,
-            "Data Objects": 9,
-            "Swimlanes": 10,
-            "Artifacts": 11,
-            "Workflow Patterns": 12
+            "Tasks": 1,
+            "Start Events": 3,
+            "Catching Intermediate Events": 5,
+            "Throwing Intermediate Events": 6,
+            "End Events": 4,
+            "Gateways": 7,
+            "Subprocesses": 2,
+            "Service Tasks": 8,
+            "Connecting Objects": 9,
+            "Data Objects": 10,
+            "Swimlanes": 11,
+            "Artifacts": 12,
+            "Workflow Patterns": 13
         }
     }
     return stencilObj;
-
 };
