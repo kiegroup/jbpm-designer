@@ -51,6 +51,17 @@
       <artifactId>jbpm-designer-backend</artifactId>
     </dependency>
 
+    <!-- Workitems -->
+    <dependency>
+        <groupId>org.drools</groupId>
+        <artifactId>drools-wb-workitems-editor-client</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>org.drools</groupId>
+        <artifactId>drools-wb-workitems-editor-backend</artifactId>
+    </dependency>
+
     <!-- UberFire -->
     <dependency>
       <groupId>org.uberfire</groupId>
@@ -488,8 +499,11 @@
             <compileSourcesArtifact>org.kie.workbench.widgets:kie-wb-config-resource-widget</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.workbench.services:kie-wb-common-services-api</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.workbench.services:kie-wb-common-security</compileSourcesArtifact>
+            <compileSourcesArtifact>org.drools:drools-wb-workitems-editor-api</compileSourcesArtifact>
+            <compileSourcesArtifact>org.drools:drools-wb-workitems-editor-client</compileSourcesArtifact>
 
-            <!-- Kie Commons -->
+
+              <!-- Kie Commons -->
             <compileSourcesArtifact>org.kie.commons:kie-commons-data</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.commons:kie-commons-validation</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.commons:kie-nio2-model</compileSourcesArtifact>
