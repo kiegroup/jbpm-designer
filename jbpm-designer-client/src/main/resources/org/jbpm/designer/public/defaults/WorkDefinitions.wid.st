@@ -11,7 +11,7 @@ import org.drools.core.process.core.datatype.impl.type.StringDataType;
     "displayName" : "Email",
     "icon" : "defaultemailicon.gif"
   ],
-  
+
   [
     "name" : "Log",
     "parameters" : [
@@ -19,5 +19,15 @@ import org.drools.core.process.core.datatype.impl.type.StringDataType;
     ],
     "displayName" : "Log",
     "icon" : "defaultlogicon.gif"
+  ],
+
+  [
+    "name" : "Echo",
+    "parameters" : [
+      "message" : new StringDataType()
+    ],
+    "displayName" : "Echo",
+    "icon" : "defaultlogicon.gif"
   ]
+
 ]
