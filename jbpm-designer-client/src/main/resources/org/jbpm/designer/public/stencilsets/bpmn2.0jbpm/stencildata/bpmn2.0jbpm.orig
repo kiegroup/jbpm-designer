@@ -2180,7 +2180,7 @@
 		{
 			"type" : 			"node",
 			"id": 				"Task",
-			"title" : 			"Generic",
+			"title" : 			"None",
 			"groups" : 			["Tasks"],
 			"description" : 	"A task is a unit of work - the job to be performed.",
 			"description_ja" : "タスクとは作業（実行すべきジョブ）の単位です。",
@@ -4446,7 +4446,7 @@
 		{
 			"type" : 			"node",
 			"id" :				"Exclusive_Databased_Gateway",
-			"title" :			"Data-based Exclusive (XOR) Gateway",
+			"title" :			"Data-based Exclusive (XOR)",
 			"description" :		"When splitting, it routes the sequence flow to exactly one of the outgoing branches based on conditions. When merging, it awaits one incoming branch to complete before triggering the outgoing flow.",
 			"description_ja" :"分岐する際は、条件に基づいて必ず出力分岐の1つにシーケンスフローの経路を取ります。合流する際は、入力分岐の1つが完了するまで待ってから出力フローをトリガーします。",
 			"groups" : 			["Gateways"],
@@ -4586,7 +4586,7 @@
 		{
 			"type" : 			"node",
 			"id" : 				"EventbasedGateway",
-			"title" :			"Event-based Gateway",
+			"title" :			"Event-based",
 			"groups" :			["Gateways"],
 			"description" :		"Is always followed by catching events or receive tasks. Sequence flow is routed to the subsequent event/task which happens first.",
 			"description_ja" :"常にキャッチイベントまたは受信タスクが続きます。シーケンスフローは、後続のイベント/タスクのうち最初に発生したものを経路に取ります。",
@@ -4708,7 +4708,7 @@
 		{
 			"type" : 			"node",
 			"id" :				"ParallelGateway",
-			"title" :			"Parallel Gateway",
+			"title" :			"Parallel",
 			"groups" :			["Gateways"],
 			"description" :		"When used to split the sequence flow, all outgoing branches are activated simultaneously. When merging parallel branches it waits for all incoming branches to complete before triggering the outgoing flow.",
 			"description_ja" :"シーケンスフローの分岐に使用されると、すべての出力分岐が同時にアクティブ化されます。並列分岐が合流するときは、すべての入力分岐が完了するまで待ってから、出力フローをトリガーします。",
@@ -4810,7 +4810,7 @@
 		{
 			"type" : 			"node",
 			"id" :				"InclusiveGateway",
-			"title" :			"Inclusive Gateway",
+			"title" :			"Inclusive",
 			"groups" :			["Gateways"],
 			"description" :		"When splitting, one or more branches are activated based on branching conditions. When merging, it awaits all active incoming branches to complete.",
 			"description_ja" :"分岐する際は、分岐条件に基づいて1つまたは複数の分岐がアクティブ化されます。合流する際は、アクティブなすべての入力分岐が完了するまで待ちます。",
@@ -5573,7 +5573,7 @@
 		{
 			"type" : 			"node",
 			"id": 				"StartNoneEvent",
-			"title": 			"Start Event",
+			"title": 			"None",
 			"groups" : 			["Start Events"],
 			"description" : 	"Untyped start event.",
 			"description_ja" :"タイプのない開始イベント。",
@@ -5662,7 +5662,7 @@
 		{
 			"type" :		 	"node",
 			"id" :				"StartMessageEvent",
-			"title" : 			"Start Message Event",
+			"title" : 			"Message",
 			"groups" :			["Start Events"],
 			"description" :		"A process instance is started on receive of a message.",
 			"description_ja" :"プロセスインスタンスは、メッセージを受信したときに開始します。",
@@ -5762,7 +5762,7 @@
 		{
 			"type" :			"node",
 			"id" :				"StartTimerEvent",
-			"title" :			"Start Timer Event",
+			"title" :			"Timer",
 			"groups" :			["Start Events"],
 			"description" :		"A process instance is started on cyclic timer events, points in time, after time spans or timeouts.",
 			"description_ja" :"プロセスインスタンスは、周期タイマイベントの発生時、特定の時刻、特定の時間経過後、またはタイムアウト後に開始します。",
@@ -5895,7 +5895,7 @@
 		{
 			"type": "node",
 			"id":"StartEscalationEvent",
-			"title":"Start Escalation Event",
+			"title":"Escalation",
 			"groups":["Start Events"],
 			"description":"Reacts on an escalation to another role in the organization. This event is only used inside of a event subprocess.",
 			"description_ja":"組織の別のロールへのエスカレーションが発生したときに反応します。このイベントは、イベントサブプロセス内部でのみ使用されます。",
@@ -5995,7 +5995,7 @@
 		{
 			"type" : 			"node",
 			"id" :				"StartConditionalEvent",
-			"title" :			"Start Conditional Event",
+			"title" :			"Conditional",
 			"groups" :			["Start Events"],
 			"description" :		"A process instance is started based on changed business conditions or matching business rules.",
 			"description_ja" :"プロセスインスタンスは、ビジネス条件の変化またはビジネスルールの一致に基づいて開始します。",
@@ -6117,7 +6117,7 @@
 		{
 			"type": "node",
 			"id":"StartErrorEvent",
-			"title":"Start Error Event",
+			"title":"Error",
 			"groups":["Start Events"],
 			"description":"Catches named errors. This event is only used inside of a event subprocess.",
 			"description_ja":"名前付きエラーをキャッチします。このイベントは、イベントサブプロセス内部でのみ使用されます。",
@@ -6216,7 +6216,7 @@
 		{
 			"type": "node",
 			"id":"StartCompensationEvent",
-			"title":"Start Compensation Event",
+			"title":"Compensation",
 			"groups":["Start Events"],
 			"description":"Compensation handling. This event is only used inside of a event subprocess.",
 			"description_ja":"Compensation処理。このイベントは、イベントサブプロセス内部でのみ使用されます。",
@@ -6305,7 +6305,7 @@
 		{
 			"type" : 			"node",
 			"id" :				"StartSignalEvent",
-			"title" :			"Start Signal Event",
+			"title" :			"Signal",
 			"groups" :			["Start Events"],
 			"description" :		"A process instance is started based on signalling across different processes. (One signal thrown can be caught multiple times)",
 			"description_ja" :"プロセスインスタンスは、複数のプロセスに渡るシグナリングに基づいて開始します（スローされた1つのシグナルが複数回キャッチされます）。",
@@ -6406,7 +6406,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateMessageEventCatching",
-			"title":"Message Intermediate Event",
+			"title":"Message",
 			"groups":["Catching Intermediate Events"],
 			"description":"This event reacts on the arrival of a message.",
 			"description_ja":"このイベントは、メッセージの到着に反応します。",
@@ -6511,7 +6511,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateTimerEvent",
-			"title":"Timer Intermediate Event",
+			"title":"Timer",
 			"groups":["Catching Intermediate Events"],
 			"description":"Process execution is delayed until a certain point in time is reached or a particular duration is over.",
 			"description_ja":"プロセスの実行は、特定の時刻に達するか、一定の時間が経過するまで遅延します。",
@@ -6661,7 +6661,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateEscalationEvent",
-			"title":"Escalation Intermediate Event",
+			"title":"Escalation",
 			"groups":["Catching Intermediate Events"],
 			"description":"This event reacts on the escalation of a case. It needs to be attached to the boundary of an activity.",
 			"description_ja":"このイベントは、ケースのエスカレーションに反応します。アクティビティのBoundaryにアタッチする必要があります。",
@@ -6763,7 +6763,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateConditionalEvent",
-			"title":"Conditional Intermediate Event",
+			"title":"Conditional",
 			"groups":["Catching Intermediate Events"],
 			"description":"Process execution is delayed until a changed business condition or business rule matches.",
 			"description_ja":"プロセスの実行は、ビジネス条件が変化するか、ビジネスルールが一致するまで遅延します。",
@@ -6891,7 +6891,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateErrorEvent",
-			"title":"Error Intermediate Event",
+			"title":"Error",
 			"groups":["Catching Intermediate Events"],
 			"description":"Catches a named error, which was thrown be an inner scope (e.g. subprocess). This event needs to be attached to the boundary of an activity.",
 			"description_ja":"内側のスコープ（サブプロセスなど）でスローされた名前付きエラーをキャッチします。このイベントは、アクティビティのBoundaryにアタッチする必要があります。",
@@ -6992,7 +6992,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateSignalEventCatching",
-			"title":"Signal Intermediate Event",
+			"title":"Signal",
 			"groups":["Catching Intermediate Events"],
 			"description":"Process execution is delayed until a particular signal is catched. Signalling can happen across different processes.",
 			"description_ja":"プロセスの実行は、特定のシグナルがキャッチされるまで遅延します。シグナリングは異なるプロセス間でも発生可能です。",
@@ -7097,98 +7097,8 @@
 		},
 		{
 			"type": "node",
-			"id":"IntermediateEvent",
-			"title":"Intermediate Event",
-			"groups":["Throwing Intermediate Events"],
-			"description":"This event marks the occurrence of a particular business event. Process execution is not delayed.",
-			"description_ja":"このイベントは、特定のビジネスイベントの発生をマークします。プロセスの実行は遅延しません。",
-			"view":"intermediateevent/none.svg",
-			"icon":"throwing/none.png",
-			"propertyPackages":[
-				"baseAttributes",
-				"throwEventAttributes",
-				"bgColor"
-			],
-			"roles":[
-				"all",
-				"sequence_start",
-				"sequence_end",
-				"to_task_event",
-				"from_task_event",
-				"fromtoall",
-				"choreography_sequence_end",
-				"choreography_sequence_start",
-				"IntermediateEventsMorph"
-			],
-			"properties": [
-				{
-					"id":"bgcolor",
-					"type":"Color",
-					"title":"Background Color",
-					"value":"$colortheme.("Throwing Intermediate Events").bgColor$", 
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView": "fill_el",
-					"fill":true,
-					"stroke":false,
-					"display" : true
-				},
-				{
-					"id":"origbgcolor",
-					"type":"Color",
-					"title":"Original Background Color",
-					"value":"$colortheme.("Throwing Intermediate Events").bgColor$",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"hidden":true,
-					"visible":false
-				},
-				{
-					"id":"bordercolor",
-					"type":"Color",
-					"title":"Border Color",
-					"value":"$colortheme.("Throwing Intermediate Events").borderColor$",
-					"description":"",
-					"readonly":false,
-					"optional":false,
-					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
-					"fill":false,
-					"stroke":true,
-					"display" : true
-				},
-				{
-					"id":"origbordercolor",
-					"type":"Color",
-					"title":"Original Border Color",
-					"value":"$colortheme.("Throwing Intermediate Events").borderColor$",
-					"description":"",
-					"readonly":false,
-					"optional":true,
-					"hidden":true,
-					"visible":false
-				},
-				{
-					"id":"fontcolor",
-					"type":"Color",
-					"title":"Font Color",
-					"value":"$colortheme.("Throwing Intermediate Events").fontColor$",
-					"description":"Font color",
-					"description_ja":"フォントの色",
-					"readonly":false,
-					"optional":false,
-					"refToView": ["text_name"],
-					"fill":true,
-					"stroke":false,
-					"display" : true
-				}
-			]
-		},
-		{
-			"type": "node",
 			"id":"IntermediateMessageEventThrowing",
-			"title":"Message Intermediate Event",
+			"title":"Message",
 			"groups":["Throwing Intermediate Events"],
 			"description":"The throwing message event sends a message to a communication partner and afterwards continues process execution.",
 			"description_ja":"メッセージスローイベントは、コミュニケーション相手にメッセージを送信し、その後にプロセスの実行を続行します。",
@@ -7287,7 +7197,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateEscalationEventThrowing",
-			"title":"Escalation Intermediate Event",
+			"title":"Escalation",
 			"groups":["Throwing Intermediate Events"],
 			"description":"This event triggers the escalation of the case to another role in the organisation. After this, process execution is resumed.",
 			"description_ja":"このイベントは、組織内の別のロールへのケースのエスカレーションをトリガーします。その後、プロセスの実行は再開されます。",
@@ -7386,7 +7296,7 @@
 		{
 			"type": "node",
 			"id":"IntermediateSignalEventThrowing",
-			"title":"Signal Intermediate Event",
+			"title":"Signal",
 			"groups":["Throwing Intermediate Events"],
 			"description":"The throwing signal event fires up a signal. Afterwards it continues process execution. One signal thrown can be caught multiple times by different catching signal events.",
 			"description_ja":"シグナルスローイベントは、シグナルを発信します。その後、プロセスの実行を続行します。スローされた1つのシグナルは、異なるシグナルキャッチイベントによって複数回キャッチされることがあります。",
@@ -7485,7 +7395,7 @@
 		{
 			"type" : "node",
 			"id": "EndNoneEvent",
-			"title": "End Event",
+			"title": "None",
 			"groups" : ["End Events"],
 			"description" : "The untyped end event typically marks the standard end of a process.",
 			"description_ja" : "タイプなし終了イベントは、通常、プロセスの標準的な終了をマークします。",
@@ -7574,7 +7484,7 @@
 		{
 			"type": "node",
 			"id":"EndMessageEvent",
-			"title":"Message End Event",
+			"title":"Message",
 			"groups":["End Events"],
 			"description":"At the end of the process, a message is sent.",
 			"description_ja":"プロセスの終了時にメッセージが送信されます。",
@@ -7673,7 +7583,7 @@
 		{
 			"type": "node",
 			"id":"EndEscalationEvent",
-			"title":"Escalation End Event",
+			"title":"Escalation",
 			"groups":["End Events"],
 			"description":"The case is escalated with the end of the process.",
 			"description_ja":"ケースはプロセス終了時にエスカレーションされます。",
@@ -7769,7 +7679,7 @@
 		{
 			"type": "node",
 			"id":"EndErrorEvent",
-			"title":"Error End Event",
+			"title":"Error",
 			"groups":["End Events"],
 			"description":"The process ends in an error state. As result a named error is thrown.",
 			"description_ja":"プロセスはエラー状態で終了します。結果として名前付きエラーがスローされます。",
@@ -7868,7 +7778,7 @@
 		{
 			"type": "node",
 			"id":"EndCancelEvent",
-			"title":"Cancel End Event",
+			"title":"Cancel",
 			"groups":["End Events"],
 			"description":"Triggering cancellation of a transaction.",
 			"description_ja":"トランザクションのキャンセルのトリガー。",
@@ -7956,7 +7866,7 @@
 		{
 			"type": "node",
 			"id":"EndCompensationEvent",
-			"title":"Compensation End Event",
+			"title":"Compensation",
 			"groups":["End Events"],
 			"description":"Triggering compensation as final process step.",
 			"description_ja":"最終プロセスステップとしてのCompensationのトリガー。",
@@ -8046,7 +7956,7 @@
 		{
 			"type": "node",
 			"id":"EndSignalEvent",
-			"title":"Signal End Event",
+			"title":"Signal",
 			"groups":["End Events"],
 			"description":"At the end of the process, a signal is thrown. (One signal thrown can be caught multiple times)",
 			"description_ja":"プロセスの終了時にシグナルがスローされます（スローされた1つのシグナルが複数回キャッチされます）。",
@@ -8145,7 +8055,7 @@
 		{
 			"type": "node",
 			"id":"EndTerminateEvent",
-			"title":"Terminate End Event",
+			"title":"Terminate",
 			"groups":["End Events"],
 			"description":"Triggering the immediate termination of a process instance. All steps still in execution in parallel branches are terminated.",
 			"description_ja":"プロセスインスタンスの即時終了のトリガー。並列分岐でまだ実行中のすべてのステップが終了させられます。",
