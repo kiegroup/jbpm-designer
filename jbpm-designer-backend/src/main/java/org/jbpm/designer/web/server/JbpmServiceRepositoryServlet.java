@@ -163,8 +163,8 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 				String pkg = "";
 				for(String key : workitemsFromRepo.keySet()) {
 					if(key.equals(assetsToInstall) && categoryToInstall.equals(workitemsFromRepo.get(key).getCategory())) {
-						String workitemDefinitionURL = repoURL + "/" + workitemsFromRepo.get(key).getName() + "/" + workitemsFromRepo.get(key).getName() + ".wid";
-						String iconFileURL = repoURL + "/" + workitemsFromRepo.get(key).getName() + "/" + workitemsFromRepo.get(key).getIcon();
+                        String workitemDefinitionURL = workitemsFromRepo.get(key).getPath() + "/" + workitemsFromRepo.get(key).getName() + ".wid";
+                        String iconFileURL = workitemsFromRepo.get(key).getPath() + "/" + workitemsFromRepo.get(key).getIcon();
 						String workItemDefinitionContent = ConfFileUtils.URLContentsToString(new URL(workitemDefinitionURL));
 						String iconName = workitemsFromRepo.get(key).getIcon();
 						String widName = workitemsFromRepo.get(key).getName();
