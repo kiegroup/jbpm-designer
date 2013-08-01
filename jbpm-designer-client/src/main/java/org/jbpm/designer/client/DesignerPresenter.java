@@ -125,7 +125,7 @@ public class DesignerPresenter {
 
     @WorkbenchPartTitle
     public String getName() {
-        return this.path.getFileName();
+        return "Business Process [" + this.path.getFileName() + "]";
     }
 
     @WorkbenchPartView
