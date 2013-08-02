@@ -6991,6 +6991,96 @@
 		},
 		{
 			"type": "node",
+			"id":"IntermediateCompensationEventCatching",
+			"title":"Compensation",
+			"groups":["Catching Intermediate Events"],
+			"description":"Compensation handling in case of partially failed operations. This event needs to be attached to the boundary of an activity.",
+			"description_ja":"オペレーションが部分的に失敗した場合のCompensation処理。このイベントは、アクティビティのBoundaryにアタッチする必要があります。",
+			"view":"intermediateevent/compensation.catching.svg",
+			"icon":"catching/compensation.png",
+			"propertyPackages":[
+				"baseAttributes",
+				"catchEventAttributes",
+				"boundaryevent",
+				"compensation",
+				"bgColor"
+			],
+			"roles":[
+				"all",
+				"from_task_event",
+				"fromtoall",
+				"EventOnChoreographyActivityBoundary",
+				"IntermediateEventOnSubprocessBoundary",
+				"IntermediateEventOnActivityBoundary",
+				"IntermediateEventsMorph"
+			],
+			"properties": [
+				{
+					"id":"bgcolor",
+					"type":"Color",
+					"title":"Background Color",
+					"value":"$colortheme.("Catching Intermediate Events").bgColor$", 
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView": "fill_el",
+					"fill":true,
+					"stroke":false,
+					"display" : true
+				},
+				{
+					"id":"origbgcolor",
+					"type":"Color",
+					"title":"Original Background Color",
+					"value":"$colortheme.("Catching Intermediate Events").bgColor$",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"hidden":true,
+					"visible":false
+				},
+				{
+					"id":"bordercolor",
+					"type":"Color",
+					"title":"Border Color",
+					"value":"$colortheme.("Catching Intermediate Events").borderColor$",
+					"description":"",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
+					"fill":false,
+					"stroke":true,
+					"display" : true
+				},
+				{
+					"id":"origbordercolor",
+					"type":"Color",
+					"title":"Original Border Color",
+					"value":"$colortheme.("Catching Intermediate Events").borderColor$",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"hidden":true,
+					"visible":false
+				},
+				{
+					"id":"fontcolor",
+					"type":"Color",
+					"title":"Font Color",
+					"value":"$colortheme.("Catching Intermediate Events").fontColor$",
+					"description":"Font color",
+					"description_ja":"フォントの色",
+					"readonly":false,
+					"optional":false,
+					"refToView": ["text_name"],
+					"fill":true,
+					"stroke":false,
+					"display" : true
+				}
+			]
+		},
+		{
+			"type": "node",
 			"id":"IntermediateSignalEventCatching",
 			"title":"Signal",
 			"groups":["Catching Intermediate Events"],

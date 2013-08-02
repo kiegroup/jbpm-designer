@@ -180,7 +180,7 @@ public class Bpmn2JsonUnmarshaller {
             revisitWsdlImports(def);
             revisitMultiInstanceTasks(def);
             addSimulation(def);
-            
+
             // return def;
             _currentResource.getContents().add(def);
             return _currentResource;
@@ -1054,6 +1054,7 @@ public class Bpmn2JsonUnmarshaller {
 															.equals(activityNameRef)) {
 												((CompensateEventDefinition) ed)
 														.setActivityRef((Activity) f);
+                                                ((Activity) f).setIsForCompensation(true);
 											}
 										}
 									}
@@ -1070,7 +1071,7 @@ public class Bpmn2JsonUnmarshaller {
     
     private void revisitCatchEventsConvertToBoundary(Definitions def) {
     	List<CatchEvent> catchEventsToRemove = new ArrayList<CatchEvent>();
-    	List<BoundaryEvent> boundaryEventsToAdd = new ArrayList<BoundaryEvent>();
+    	Map<BoundaryEvent, List<String>> boundaryEventsToAdd = new HashMap<BoundaryEvent, List<String>>();
     	List<RootElement> rootElements =  def.getRootElements();
     	for(RootElement root : rootElements) {
     		if(root instanceof Process) {
@@ -1080,7 +1081,7 @@ public class Bpmn2JsonUnmarshaller {
                 	if(fe instanceof CatchEvent) {
                 		CatchEvent ce = (CatchEvent) fe;
                 		// check if we have an outgoing connection to this catch event from an activity
-                		 for (Entry<Object, List<String>> entry : _outgoingFlows.entrySet()) {
+                        for(Entry<Object, List<String>> entry : _outgoingFlows.entrySet()) {
                 			 for (String flowId : entry.getValue()) {
                 				 if (entry.getKey() instanceof Activity && flowId.equals(ce.getId())) {
                 					 BoundaryEvent be = Bpmn2Factory.eINSTANCE.createBoundaryEvent();
@@ -1130,24 +1131,30 @@ public class Bpmn2JsonUnmarshaller {
                 					 be.setAttachedToRef(((Activity)entry.getKey()));
                 					 ((Activity)entry.getKey()).getBoundaryEventRefs().add(be);
                 					 catchEventsToRemove.add(ce);
-                					 boundaryEventsToAdd.add(be);
+                					 boundaryEventsToAdd.put(be, _outgoingFlows.get(ce));
                 				 }
                 			 }
                 		 }
                 	}
                 }
-                if(boundaryEventsToAdd.size() > 0) {
-            		for(BoundaryEvent be : boundaryEventsToAdd) {
-            			process.getFlowElements().add(be);
-            		}
-            	}
                 if(catchEventsToRemove.size() > 0) {
-                	for(CatchEvent ce : catchEventsToRemove) {
-                		process.getFlowElements().remove(ce);
-                	}
+                    for(CatchEvent ce : catchEventsToRemove) {
+                        boolean removed = process.getFlowElements().remove(ce);
+                        _outgoingFlows.remove(ce);
+
+                    }
                 }
+                if(boundaryEventsToAdd.size() > 0) {
+                    Iterator<BoundaryEvent> boundaryToAddIterator = boundaryEventsToAdd.keySet().iterator();
+                    while(boundaryToAddIterator.hasNext()) {
+                        BoundaryEvent bToAdd = boundaryToAddIterator.next();
+                        process.getFlowElements().add(bToAdd);
+                        _outgoingFlows.put(bToAdd, boundaryEventsToAdd.get(bToAdd));
+                    }
+            	}
     		}
     	}
+        reconnectFlows();
     }
     
     public void revisitAssociationsIoSpec(Definitions def) {
@@ -1383,6 +1390,7 @@ public class Bpmn2JsonUnmarshaller {
                                                 for(FlowElement f : fes) {
                                                     if(f instanceof Activity && ((Activity) f).getName().equals(activityNameRef)) {
                                                         ((CompensateEventDefinition) ed).setActivityRef((Activity)f);
+                                                        ((Activity) f).setIsForCompensation(true);
                                                     }
                                                 }
                                             }
