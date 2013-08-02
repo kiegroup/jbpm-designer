@@ -20,6 +20,8 @@ import org.uberfire.backend.vfs.VFSService;
 import org.uberfire.client.annotations.*;
 import org.uberfire.client.mvp.PlaceManager;
 import org.uberfire.client.mvp.UberView;
+import org.uberfire.lifecycle.OnMayClose;
+import org.uberfire.lifecycle.OnStartup;
 import org.uberfire.mvp.PlaceRequest;
 import org.uberfire.mvp.impl.PathPlaceRequest;
 import org.uberfire.util.URIEncoder;
@@ -78,8 +80,8 @@ public class DesignerPresenter {
     private Path path;
     private PlaceRequest place;
 
-    @OnStart
-    public void onStart( final Path path,
+    @OnStartup
+    public void onStartup( final Path path,
                          final PlaceRequest place ) {
         this.path = path;
         this.place = place;
