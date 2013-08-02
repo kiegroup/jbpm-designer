@@ -3,17 +3,10 @@ package org.jbpm.designer.client;
 import javax.annotation.PostConstruct;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.event.dom.client.LoadEvent;
-import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.i18n.client.LocaleInfo;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
-import org.uberfire.client.annotations.OnFocus;
-import org.uberfire.client.annotations.OnReveal;
 
 import java.util.Iterator;
 import java.util.Map;
