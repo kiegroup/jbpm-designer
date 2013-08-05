@@ -1,17 +1,20 @@
 package org.jbpm.designer.web.preprocessing.impl;
 
 import org.antlr.stringtemplate.StringTemplate;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.drools.core.process.core.ParameterDefinition;
 import org.drools.core.process.core.datatype.DataType;
 import org.drools.core.process.core.impl.ParameterDefinitionImpl;
+import org.jboss.errai.ioc.client.api.Caller;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.AssetNotFoundException;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.filters.FilterByExtension;
 import org.jbpm.designer.repository.impl.AssetBuilder;
+import org.jbpm.designer.util.Base64Backport;
 import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingUnit;
 import org.jbpm.designer.web.profile.IDiagramProfile;
@@ -19,9 +22,15 @@ import org.jbpm.process.workitem.WorkDefinitionImpl;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.mvel2.MVEL;
+import org.uberfire.backend.vfs.Path;
+import org.uberfire.backend.vfs.VFSService;
+import org.uberfire.workbench.events.ResourceAddedEvent;
+import org.uberfire.workbench.events.ResourceUpdatedEvent;
 import sun.misc.BASE64Encoder;
 import org.apache.commons.io.IOUtils;
 
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -67,13 +76,19 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     private String patternsData;
     private String sampleBpmn2;
     private String globalDir;
+    private VFSService vfsService;
+    private Event<ResourceUpdatedEvent> resourceUpdatedEvent;
+    private Event<ResourceAddedEvent> resourceAddedEvent;
 
-    public JbpmPreprocessingUnit(ServletContext servletContext) {
-        this(servletContext, ConfigurationProvider.getInstance().getDesignerContext());
+    public JbpmPreprocessingUnit(ServletContext servletContext, VFSService vfsService, Event<ResourceUpdatedEvent> resourceUpdatedEvent, Event<ResourceAddedEvent> resourceAddedEvent) {
+        this(servletContext, ConfigurationProvider.getInstance().getDesignerContext(), vfsService, resourceUpdatedEvent, resourceAddedEvent);
     }
 
-    public JbpmPreprocessingUnit(ServletContext servletContext, String designerPath) {
+    public JbpmPreprocessingUnit(ServletContext servletContext, String designerPath, VFSService vfsService, Event<ResourceUpdatedEvent> resourceUpdatedEvent, Event<ResourceAddedEvent> resourceAddedEvent) {
         this.designer_path = designerPath.substring(0, designerPath.length()-1);
+        this.vfsService = vfsService;
+        this.resourceAddedEvent = resourceAddedEvent;
+        this.resourceUpdatedEvent = resourceUpdatedEvent;
         stencilPath = servletContext.getRealPath(designer_path + "/" + STENCILSET_PATH);
         origStencilFilePath = stencilPath + "/bpmn2.0jbpm/stencildata/" + "bpmn2.0jbpm.orig";
         stencilFilePath = stencilPath + "/bpmn2.0jbpm/" + "bpmn2.0jbpm.json";
@@ -455,12 +470,27 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             // push default configuration wid
             // check classpath first
             InputStream widIn = this.getClass().getClassLoader().getResourceAsStream(defaultClasspathWid);
+            String createdUUID;
             if(widIn != null) {
-                createAssetIfNotExisting(repository, location, "WorkDefinitions", "wid", IOUtils.toByteArray(widIn));
+                createdUUID = createAssetIfNotExisting(repository, location, "WorkDefinitions", "wid", IOUtils.toByteArray(widIn));
             } else {
                 StringTemplate widConfigTemplate = new StringTemplate(readFile(default_widconfigtemplate));
-                createAssetIfNotExisting(repository, location, "WorkDefinitions", "wid",
+                createdUUID = createAssetIfNotExisting(repository, location, "WorkDefinitions", "wid",
                         widConfigTemplate.toString().getBytes("UTF-8"));
+
+
+            }
+            if (Base64Backport.isBase64(createdUUID)) {
+                byte[] decoded = Base64.decodeBase64(createdUUID);
+                try {
+                    createdUUID =  new String(decoded, "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(vfsService != null) {
+                Path newFormAssetPath = vfsService.get(createdUUID);
+                resourceAddedEvent.fire(new ResourceAddedEvent( newFormAssetPath ));
             }
         } catch (Exception e) {
             e.printStackTrace();
