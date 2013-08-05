@@ -88,8 +88,8 @@ public class DesignerView
     }
 
     public native boolean canSaveDesignerModel(String editorID) /*-{
-        if($doc.getElementById(editorID)) {
-            return $doc.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved();
+        if($wnd.document.getElementById(editorID)) {
+            return $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved();
         } else {
             return true;
         }
