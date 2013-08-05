@@ -15,12 +15,16 @@
  */
 package org.jbpm.designer.web.preprocessing.impl;
 
+import javax.enterprise.event.Event;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingUnit;
 import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.uberfire.backend.vfs.VFSService;
+import org.uberfire.workbench.events.ResourceAddedEvent;
+import org.uberfire.workbench.events.ResourceUpdatedEvent;
 
 
 /**
@@ -29,7 +33,7 @@ import org.jbpm.designer.web.profile.IDiagramProfile;
  */
 public class DefaultPreprocessingUnit implements IDiagramPreprocessingUnit {
 
-    public DefaultPreprocessingUnit(ServletContext servletContext) {
+    public DefaultPreprocessingUnit(ServletContext servletContext, VFSService vfsService, Event<ResourceUpdatedEvent> resourceUpdatedEvent, Event<ResourceAddedEvent> resourceAddedEvent) {
         
     }
     
