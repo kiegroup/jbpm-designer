@@ -479,7 +479,6 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
-        <version>${gwt.maven.version}</version>
         <configuration>
           <module>org.jbpm.designer.jBPMDesigner</module>
           <logLevel>INFO</logLevel>
