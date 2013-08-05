@@ -20,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.mvel2.MVEL;
 import sun.misc.BASE64Encoder;
+import org.apache.commons.io.IOUtils;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
@@ -59,6 +60,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     private String default_logicon;
     private String default_servicenodeicon;
     private String default_widconfigtemplate;
+    private String defaultClasspathWid = "META-INF/WorkDefinitions.wid";
     private String themeInfo;
     private String formWidgetsDir;
     private String customEditorsInfo;
@@ -449,18 +451,20 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     }
 
     private void setupDefaultWorkitemConfigs(String location, Repository repository) {
-
         try {
             // push default configuration wid
-            StringTemplate widConfigTemplate = new StringTemplate(readFile(default_widconfigtemplate));
-
-            createAssetIfNotExisting(repository, location, "WorkDefinitions", "wid",
-                    widConfigTemplate.toString().getBytes("UTF-8"));
-
+            // check classpath first
+            InputStream widIn = this.getClass().getClassLoader().getResourceAsStream(defaultClasspathWid);
+            if(widIn != null) {
+                createAssetIfNotExisting(repository, location, "WorkDefinitions", "wid", IOUtils.toByteArray(widIn));
+            } else {
+                StringTemplate widConfigTemplate = new StringTemplate(readFile(default_widconfigtemplate));
+                createAssetIfNotExisting(repository, location, "WorkDefinitions", "wid",
+                        widConfigTemplate.toString().getBytes("UTF-8"));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     private Collection<Asset> findWorkitemInfoForUUID(String location, Repository repository) {
