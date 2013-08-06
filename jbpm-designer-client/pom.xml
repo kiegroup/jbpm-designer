@@ -85,21 +85,17 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>log4j-over-slf4j</artifactId>
-      <version>${version.org.slf4j}</version>
     </dependency>
-
 
     <!-- Guvnor dependencies -->
     <dependency>
       <groupId>org.guvnor</groupId>
       <artifactId>guvnor-project-api</artifactId>
     </dependency>
-
     <dependency>
       <groupId>org.guvnor</groupId>
       <artifactId>guvnor-services-api</artifactId>
     </dependency>
-
 
     <!-- KIE dependencies -->
     <dependency>
