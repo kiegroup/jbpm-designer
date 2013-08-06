@@ -73,7 +73,6 @@
     <dependency>
       <groupId>org.jbpm.jbpm5</groupId>
       <artifactId>jbpmmigration</artifactId>
-      <version>${version.org.jbpm.jbpm5.jbpmmigration}</version>
       <exclusions>
         <exclusion>
           <groupId>log4j</groupId>
@@ -108,14 +107,12 @@
     <dependency>
         <groupId>org.jbpm</groupId>
         <artifactId>jbpm-form-modeler-bpmn-form-builder</artifactId>
-        <version>${jbpm.form.modeler.version}</version>
     </dependency>
 
     <!-- Google's closure-compiler -->
     <dependency>
       <groupId>com.google.javascript</groupId>
       <artifactId>closure-compiler</artifactId>
-      <version>${version.com.google.javascript.closure-compiler}</version>
       <exclusions>
         <exclusion>
           <groupId>org.apache.ant</groupId>
@@ -147,7 +144,6 @@
     <dependency>
       <groupId>org.apache.velocity</groupId>
       <artifactId>velocity</artifactId>
-      <version>${version.org.apache.velocity}</version>
       <exclusions>
         <exclusion>
           <groupId>oro</groupId>
@@ -158,22 +154,18 @@
     <dependency>
       <groupId>org.supercsv</groupId>
       <artifactId>SuperCSV</artifactId>
-      <version>${version.org.supercsv}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.xmlgraphics</groupId>
       <artifactId>xmlgraphics-commons</artifactId>
-      <version>${version.org.apache.xmlgraphics.commons}</version>
     </dependency>
     <dependency>
       <groupId>batik</groupId>
       <artifactId>batik-parser</artifactId>
-      <version>${version.batik}</version>
     </dependency>
     <dependency>
       <groupId>batik</groupId>
       <artifactId>batik-transcoder</artifactId>
-      <version>${version.batik}</version>
       <exclusions>
         <exclusion>
           <groupId>fop</groupId>
@@ -184,7 +176,6 @@
     <dependency>
       <groupId>batik</groupId>
       <artifactId>batik-extension</artifactId>
-      <version>${version.batik}</version>
       <exclusions>
         <exclusion>
           <groupId>xml-apis</groupId>
@@ -195,42 +186,34 @@
     <dependency>
       <groupId>batik</groupId>
       <artifactId>batik-dom</artifactId>
-      <version>${version.batik}</version>
     </dependency>
     <dependency>
       <groupId>batik</groupId>
       <artifactId>batik-xml</artifactId>
-      <version>${version.batik}</version>
     </dependency>
     <dependency>
       <groupId>batik</groupId>
       <artifactId>batik-bridge</artifactId>
-      <version>${version.batik}</version>
     </dependency>
     <dependency>
       <groupId>batik</groupId>
       <artifactId>batik-css</artifactId>
-      <version>${version.batik}</version>
     </dependency>
     <dependency>
       <groupId>batik</groupId>
       <artifactId>batik-svg-dom</artifactId>
-      <version>${version.batik}</version>
     </dependency>
     <dependency>
       <groupId>batik</groupId>
       <artifactId>batik-svggen</artifactId>
-      <version>${version.batik}</version>
     </dependency>
     <dependency>
       <groupId>batik</groupId>
       <artifactId>batik-util</artifactId>
-      <version>${version.batik}</version>
     </dependency>
     <dependency>
       <groupId>batik</groupId>
       <artifactId>batik-ext</artifactId>
-      <version>${version.batik}</version>
       <exclusions>
         <exclusion>
           <groupId>xml-apis</groupId>
@@ -241,22 +224,18 @@
     <dependency>
       <groupId>batik</groupId>
       <artifactId>batik-script</artifactId>
-      <version>${version.batik}</version>
     </dependency>
     <dependency>
       <groupId>batik</groupId>
       <artifactId>batik-gvt</artifactId>
-      <version>${version.batik}</version>
     </dependency>
     <dependency>
       <groupId>batik</groupId>
       <artifactId>batik-awt-util</artifactId>
-      <version>${version.batik}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.xmlgraphics</groupId>
       <artifactId>fop</artifactId>
-      <version>${version.org.apache.xmlgraphics.fop}</version>
       <exclusions>
         <exclusion>
           <groupId>org.apache.xmlgraphics</groupId>
@@ -335,17 +314,6 @@
       <artifactId>xstream</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.xmappr</groupId>
-      <artifactId>xmappr</artifactId>
-      <version>${version.org.xmappr}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.codehaus.woodstox</groupId>
-          <artifactId>woodstox-core-asl</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
@@ -356,7 +324,6 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>log4j-over-slf4j</artifactId>
-      <version>${version.org.slf4j}</version>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
@@ -376,7 +343,6 @@
     <dependency>
       <groupId>rhino</groupId>
       <artifactId>js</artifactId>
-      <version>${version.rhino.js}</version>
     </dependency>
     <dependency>
       <groupId>xalan</groupId>
@@ -401,12 +367,10 @@
     <dependency>
       <groupId>org.eclipse</groupId>
       <artifactId>osgi</artifactId>
-      <version>${version.org.eclipse.osgi}</version>
     </dependency>
     <dependency>
         <groupId>avalon-framework</groupId>
         <artifactId>avalon-framework</artifactId>
-        <version>${version.avalon-framework}</version>
     </dependency>
     <dependency>
       <groupId>joda-time</groupId>
@@ -416,7 +380,6 @@
     <dependency>
       <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-i18n</artifactId>
-      <version>${version.org.apache.abdera}</version>
     </dependency>
 
     <!-- commons -->
@@ -431,7 +394,6 @@
     <dependency>
       <groupId>commons-configuration</groupId>
       <artifactId>commons-configuration</artifactId>
-      <version>${version.commons.configuration}</version>
       <exclusions>
         <exclusion>
           <groupId>commons-digester</groupId>
