@@ -181,7 +181,7 @@ public class ServletUtil {
 
 			connection.setRequestProperty("charset", "UTF-8");
 			connection.setRequestProperty("Accept-Charset", "UTF-8");
-			connection.setReadTimeout(5 * 1000);
+			connection.setReadTimeout(profile.getConnectionTimeout());
 
 			ServletUtil.applyAuth(profile, connection);
 
