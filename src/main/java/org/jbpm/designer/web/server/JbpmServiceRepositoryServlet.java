@@ -28,7 +28,6 @@ import org.jbpm.designer.web.profile.impl.ExternalInfo;
 import org.jbpm.process.workitem.WorkDefinitionImpl;
 import org.jbpm.process.workitem.WorkItemRepository;
 import org.json.JSONObject;
-
 import org.apache.commons.codec.binary.Base64;
 
 /**
@@ -65,11 +64,12 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 			return;
 		}
 		
+		IDiagramProfile profile = ServletUtil.getProfile(req, profileName, getServletContext());
 		try {
 		    URL url = new URL(repoURL);
 		    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		    conn.setReadTimeout(5 * 1000);
-		    conn.setConnectTimeout(5 * 1000);
+		    conn.setReadTimeout(profile.getConnectionTimeout());
+		    conn.setConnectTimeout(profile.getConnectionTimeout());
 		    conn.connect();
 		    if(conn.getResponseCode() != 200) {
 		    	resp.setCharacterEncoding("UTF-8");
@@ -88,7 +88,6 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 			repoURL = repoURL.substring(0, repoURL.length() - 1);
 		}
 
-		IDiagramProfile profile = ServletUtil.getProfile(req, profileName, getServletContext());
 		Map<String, WorkDefinitionImpl> workitemsFromRepo = WorkItemRepository.getWorkDefinitions(repoURL);
 		if(action != null && action.equalsIgnoreCase(displayRepoContent)) {
 			if(workitemsFromRepo != null && workitemsFromRepo.size() > 0) {

@@ -42,10 +42,13 @@ public class EpnProfileImpl implements IDiagramProfile {
     private String _externalLoadProtocol;
     private String _externalLoadSubdomain;
     private String _usr;
+    private String _connectionTimeout;    
     private String _pwd;
     private String _localHistoryEnabled;
     private String _localHistoryTimeout;
     private String _pwdenc = "false";
+    
+    private static final int DEFAULT_CONNECTION_TIMEOUT = 3000;
     
     public EpnProfileImpl(ServletContext servletContext) {
         this(servletContext, true);
@@ -102,6 +105,9 @@ public class EpnProfileImpl implements IDiagramProfile {
                             }
                             if ("pwd".equals(reader.getAttributeLocalName(i))) {
                                 _pwd = reader.getAttributeValue(i);
+                            }
+                            if ("timeout".equals(reader.getAttributeLocalName(i))) {
+                                _connectionTimeout = reader.getAttributeValue(i);
                             }
                         }
                     }
@@ -239,6 +245,13 @@ public class EpnProfileImpl implements IDiagramProfile {
 
     public String getLocalHistoryTimeout() {
         return _localHistoryTimeout;
+    }
+    
+    public Integer getConnectionTimeout() {
+    	if (_connectionTimeout == null || _connectionTimeout.isEmpty()) {
+    		return DEFAULT_CONNECTION_TIMEOUT;
+    	}
+        return Integer.valueOf(_connectionTimeout);
     }
 
     public String getPwdEnc() {

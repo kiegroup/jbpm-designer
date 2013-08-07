@@ -44,7 +44,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.drools.process.core.datatype.DataType;
 import org.mvel2.MVEL;
-
 import org.apache.commons.codec.binary.Base64;
 
 import sun.misc.BASE64Encoder;
@@ -897,7 +896,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         connection.setRequestProperty("Accept","text/html,application/xhtml+xml,application/xml,application/json,application/octet-stream,text/json,text/plain;q=0.9,*/*;q=0.8");
 
         connection.setRequestProperty("charset", "UTF-8");
-        connection.setReadTimeout(5 * 1000);
+        connection.setReadTimeout(profile.getConnectionTimeout());
 
         ServletUtil.applyAuth(profile, connection);
         connection.connect();
