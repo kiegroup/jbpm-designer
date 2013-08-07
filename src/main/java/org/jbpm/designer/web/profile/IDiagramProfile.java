@@ -117,6 +117,11 @@ public interface IDiagramProfile {
     public String getLocalHistoryTimeout();
 
     /**
+     * @return the timeout used for http connections.
+     */
+    public Integer getConnectionTimeout();
+    
+    /**
      * @return the pwd enc resource.
      */
     public String getPwdEnc();

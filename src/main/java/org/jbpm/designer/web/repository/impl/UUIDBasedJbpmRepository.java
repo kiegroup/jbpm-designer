@@ -31,7 +31,7 @@ public class UUIDBasedJbpmRepository implements IUUIDBasedRepository {
         String processjson = "";
         String preProcessingParam = req.getParameter("pp");
         // check with Guvnor to see what it has for this uuid for us
-        String processxml = doHttpUrlConnectionAction(buildExternalLoadURL(profile, uuid));
+        String processxml = doHttpUrlConnectionAction(buildExternalLoadURL(profile, uuid), profile);
         if(processxml != null && processxml.length() > 0) {
         	DroolsPackageImpl.init();
             processjson = profile.createUnmarshaller().parseModel(processxml, profile, preProcessingParam);
@@ -65,7 +65,7 @@ public class UUIDBasedJbpmRepository implements IUUIDBasedRepository {
         return profile.createMarshaller().parseModel(json, preProcessingData);
     }
 
-    private String doHttpUrlConnectionAction(String desiredUrl) throws Exception {
+    private String doHttpUrlConnectionAction(String desiredUrl, IDiagramProfile profile) throws Exception {
       URL url = null;
       BufferedReader reader = null;
       StringBuilder stringBuilder;
@@ -78,7 +78,7 @@ public class UUIDBasedJbpmRepository implements IUUIDBasedRepository {
         connection.setRequestProperty("Content-Type", "application/xml"); 
         connection.setRequestProperty("charset", "UTF-8");
         connection.setRequestProperty("Accept-Charset", "UTF-8");
-        connection.setReadTimeout(5*1000);
+        connection.setReadTimeout(profile.getConnectionTimeout());
         connection.connect();
 
         reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));

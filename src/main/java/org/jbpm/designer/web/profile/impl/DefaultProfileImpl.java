@@ -41,7 +41,6 @@ import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.eclipse.bpmn2.DocumentRoot;
 import org.eclipse.bpmn2.Bpmn2Package;
 import org.eclipse.bpmn2.util.Bpmn2ResourceFactoryImpl;
@@ -75,7 +74,10 @@ public class DefaultProfileImpl implements IDiagramProfile {
     private String _pwd;
     private String _localHistoryEnabled;
     private String _localHistoryTimeout;
+    private String _connectionTimeout;
     private String _pwdenc = "false";
+    
+    private static final int DEFAULT_CONNECTION_TIMEOUT = 3000;
     
     public DefaultProfileImpl(ServletContext servletContext) {
         this(servletContext, true);
@@ -172,6 +174,13 @@ public class DefaultProfileImpl implements IDiagramProfile {
     }
     public String getLocalHistoryEnabled() {
         return _localHistoryEnabled;
+    }
+    
+    public Integer getConnectionTimeout() {
+    	if (_connectionTimeout == null || _connectionTimeout.isEmpty()) {
+    		return DEFAULT_CONNECTION_TIMEOUT;
+    	}
+        return Integer.valueOf(_connectionTimeout);
     }
 
     public String getLocalHistoryTimeout() {

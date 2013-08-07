@@ -26,8 +26,6 @@ import org.jasypt.util.text.BasicTextEncryptor;
 import org.jboss.drools.DroolsPackage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-
 import org.eclipse.bpmn2.DocumentRoot;
 import org.eclipse.bpmn2.Bpmn2Package;
 import org.eclipse.emf.common.util.EList;
@@ -64,7 +62,10 @@ public class JbpmProfileImpl implements IDiagramProfile {
     private String _pwd;
     private String _localHistoryEnabled;
     private String _localHistoryTimeout;
+    private String _connectionTimeout;
     private String _pwdenc = "false";
+    
+    private static final int DEFAULT_CONNECTION_TIMEOUT = 3000;
     
     public JbpmProfileImpl(ServletContext servletContext) {
         this(servletContext, true);
@@ -168,6 +169,9 @@ public class JbpmProfileImpl implements IDiagramProfile {
                             if ("pwdenc".equals(reader.getAttributeLocalName(i))) {
                                 _pwdenc = reader.getAttributeValue(i);
                             }
+                            if ("timeout".equals(reader.getAttributeLocalName(i))) {
+                                _connectionTimeout = reader.getAttributeValue(i);
+                            }
                         }
                     } else if ("localhostory".equals(reader.getLocalName())) {
                         for (int i = 0 ; i < reader.getAttributeCount() ; i++) {
@@ -221,6 +225,13 @@ public class JbpmProfileImpl implements IDiagramProfile {
 
     public String getUsr() {
         return _usr;
+    }
+    
+    public Integer getConnectionTimeout() {
+    	if (_connectionTimeout == null || _connectionTimeout.isEmpty()) {
+    		return DEFAULT_CONNECTION_TIMEOUT;
+    	}
+        return Integer.valueOf(_connectionTimeout);
     }
 
     public String getPwd() {
