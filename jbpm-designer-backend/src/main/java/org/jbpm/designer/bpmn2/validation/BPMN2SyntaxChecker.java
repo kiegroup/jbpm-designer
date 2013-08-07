@@ -1,5 +1,6 @@
 package org.jbpm.designer.bpmn2.validation;
 
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -9,20 +10,30 @@ import java.util.Map.Entry;
 
 import bpsim.*;
 import bpsim.impl.BpsimFactoryImpl;
+import org.drools.core.xml.SemanticModules;
 import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.Process;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.jboss.drools.impl.DroolsFactoryImpl;
+import org.jbpm.bpmn2.xml.BPMNDISemanticModule;
+import org.jbpm.bpmn2.xml.BPMNSemanticModule;
+import org.jbpm.compiler.xml.XmlProcessReader;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.jbpm.process.core.validation.ProcessValidationError;
+import org.jbpm.ruleflow.core.validation.RuleFlowProcessValidator;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.apache.log4j.Logger;
 
 
 public class BPMN2SyntaxChecker implements SyntaxChecker {
-    private static final String BPMN2_TYPE = "BPMN2";
-    private static final String SIMULATION_TYPE = "Simulation";
+    public static final String BPMN2_TYPE = "BPMN2";
+    public static final String SIMULATION_TYPE = "Simulation";
+    public static final String PROCESS_TYPE = "Process";
+    private static final Logger _logger = Logger.getLogger(BPMN2SyntaxChecker.class);
+
 	protected Map<String, List<ValidationSyntaxError>> errors = new HashMap<String, List<ValidationSyntaxError>>();
 	private String json;
 	private String preprocessingData;
@@ -46,7 +57,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 		Definitions def = profile.createMarshaller().getDefinitions(json, preprocessingData);
 		List<RootElement> rootElements =  def.getRootElements();
 		Scenario defaultScenario = getDefaultScenario(def);
-		
+
         for(RootElement root : rootElements) {
         	if(root instanceof Process) {
         		Process process = (Process) root;
@@ -104,7 +115,28 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
         		checkFlowElements(process, process, defaultScenario);
         	}
         }
-	}
+
+        // if there are no suggestions add RuleFlowProcessValidator process errors
+        if(this.errors.size() < 1) {
+            try {
+                SemanticModules modules = new SemanticModules();
+                modules.addSemanticModule(new BPMNSemanticModule());
+                modules.addSemanticModule(new BPMNDISemanticModule());
+                XmlProcessReader xmlReader = new XmlProcessReader(modules, getClass().getClassLoader());
+                List<org.kie.api.definition.process.Process> processes = xmlReader.read(new StringReader(profile.createMarshaller().parseModel(json, preprocessingData)));
+                if(processes != null) {
+                    ProcessValidationError[] errors = RuleFlowProcessValidator.getInstance().validateProcess((org.jbpm.ruleflow.core.RuleFlowProcess) processes.get(0));
+                    for(ProcessValidationError er : errors) {
+                        addError(defaultResourceId, new ValidationSyntaxError(null, PROCESS_TYPE, er.getMessage()));
+                    }
+                }
+            } catch(Exception e) {
+                _logger.warn("Could not parse to RuleFlowProcess.");
+                addError(defaultResourceId, new ValidationSyntaxError(null, PROCESS_TYPE, "Could not parse BPMN2 to RuleFlowProcess."));
+            }
+        }
+
+    }
 	
 	private void checkFlowElements(FlowElementsContainer container, Process process, Scenario defaultScenario) {
 		
@@ -566,7 +598,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 
         public JSONObject toJSON() throws JSONException {
             JSONObject errorJSON = new JSONObject();
-            errorJSON.put("id", this.element.getId());
+            errorJSON.put("id", this.element == null ? "" : this.element.getId());
             errorJSON.put("type", type);
             errorJSON.put("error", this.error);
 

@@ -9,6 +9,7 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
         this.vt;
         this.allErrors = {};
         this.errorDisplayView;
+        ORYX.IS_VALIDATING_PROCESS = false;
 
         this.facade.offer({
             'name': "Start validating",
@@ -18,7 +19,10 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
             'description': ORYX.I18N.SyntaxChecker.desc,
             'index': 1,
             'minShape': 0,
-            'maxShape': 0
+            'maxShape': 0,
+            'isEnabled': function(){
+                return !ORYX.IS_VALIDATING_PROCESS;
+            }
         });
 
         this.facade.offer({
@@ -29,7 +33,10 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
             'description': ORYX.I18N.SyntaxChecker.desc,
             'index': 2,
             'minShape': 0,
-            'maxShape': 0
+            'maxShape': 0,
+            'isEnabled': function(){
+                return ORYX.IS_VALIDATING_PROCESS;
+            }
         });
 
         this.facade.offer({
@@ -48,6 +55,8 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
     },
 
     enableValidation: function() {
+        ORYX.IS_VALIDATING_PROCESS = true;
+        this.facade.raiseEvent({type: ORYX.CONFIG.EVENT_STENCIL_SET_LOADED});
         this.facade.raiseEvent({
             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
             ntype		: 'info',
@@ -61,6 +70,8 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
     },
 
     disableValidation: function() {
+        ORYX.IS_VALIDATING_PROCESS = false;
+        this.facade.raiseEvent({type: ORYX.CONFIG.EVENT_STENCIL_SET_LOADED});
         this.facade.raiseEvent({
             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
             ntype		: 'info',
@@ -210,6 +221,7 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
                             header: 'Issue Type',
                             width: 100,
                             dataIndex: 'type',
+                            sortable  : true,
                             editor: new Ext.form.TextField({ allowBlank: true, vtype: 'inputName', regex: /^[a-z0-9 \-\.\_]*$/i }),
                             renderer: Ext.util.Format.htmlEncode
                         },
@@ -218,6 +230,7 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
                             header: 'Description',
                             width: 500,
                             dataIndex: 'name',
+                            sortable  : true,
                             editor: new Ext.form.TextField({ allowBlank: true, vtype: 'inputName', regex: /^[a-z0-9 \-\.\_]*$/i }),
                             renderer: Ext.util.Format.htmlEncode
                         },
@@ -226,6 +239,7 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
                             header: 'Shape ID',
                             width: 100,
                             dataIndex: 'shapeid',
+                            sortable  : true,
                             editor: new Ext.form.TextField({ allowBlank: true, vtype: 'inputName', regex: /^[a-z0-9 \-\.\_]*$/i }),
                             renderer: Ext.util.Format.htmlEncode
                         }
@@ -238,7 +252,7 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
                 var dialog = new Ext.Window({
                     layout		: 'anchor',
                     autoCreate	: true,
-                    title		: 'Validation suggestions',
+                    title		: 'Validation Suggestions',
                     height		: 300,
                     width		: 700,
                     modal		: true,
