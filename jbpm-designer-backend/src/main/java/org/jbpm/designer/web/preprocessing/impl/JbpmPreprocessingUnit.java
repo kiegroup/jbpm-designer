@@ -488,7 +488,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                     e.printStackTrace();
                 }
             }
-            if(vfsService != null) {
+            if(vfsService != null && createdUUID != null) {
                 Path newFormAssetPath = vfsService.get(createdUUID);
                 resourceAddedEvent.fire(new ResourceAddedEvent( newFormAssetPath ));
             }
