@@ -11,7 +11,7 @@ import org.apache.commons.codec.binary.StringUtils;
 public class Base64Backport extends Base64 {
 
     public static boolean isBase64(final String base64) {
-        return isBase64(StringUtils.getBytesUtf8(base64));
+        return base64 == null ? false : isBase64(StringUtils.getBytesUtf8(base64));
     }
 
     private static boolean isBase64(final byte[] arrayOctet) {
