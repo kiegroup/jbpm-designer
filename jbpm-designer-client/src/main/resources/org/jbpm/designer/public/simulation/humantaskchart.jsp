@@ -45,7 +45,7 @@ function clearChart() {
 		<thead>
             <tr>
 				{{#each elements}}
-				<th colspan="3" align="center">{{key}} (min)</th>
+				<th colspan="3" align="center">{{key}} ({{timeunit }})</th>
 				{{/each}}
 			</tr>
 			<tr>
@@ -124,7 +124,7 @@ function clearChart() {
 				 	 .showControls(false);
 				chart.yAxis
 				.tickFormat(d3.format(',.2f'));
-				chart.yAxis.axisLabel('Time (min)')
+				chart.yAxis.axisLabel('Time (' + parent.ORYX.EDITOR.simulationChartTimeUnit + ')')
 				d3.select('#chart1')
 				.datum(chartData.timevalues)
 				.transition().duration(500)
@@ -184,7 +184,9 @@ function clearChart() {
 		
 		function showTables() {
 			var chartData = parent.ORYX.EDITOR.simulationChartData;
-
+            Handlebars.registerHelper('timeunit', function(options) {
+                return parent.ORYX.EDITOR.simulationChartTimeUnit;
+            });
 			
 			var executionTimesFormattedData = { 'elements' : [chartData.timevalues[0], chartData.timevalues[1]] };
 			var executiontimesTableSource = $("#tabletemplateexecution").html();

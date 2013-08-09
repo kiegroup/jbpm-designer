@@ -77,7 +77,8 @@ ORYX.Editor = {
 		this._eventsQueue 	= [];
 		this.loadedPlugins 	= [];
 		this.pluginsData 	= [];
-		
+
+        this.simulationChartTimeUnit = "";
 		this.simulationChartData = "";
 		this.simulationEventData = "";
 		this.simulationEventAggregationData = "";

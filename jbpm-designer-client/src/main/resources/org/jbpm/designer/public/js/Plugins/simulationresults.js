@@ -21,7 +21,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 	showGraph: function(options) {
 		if(options && options.value) {
 			var selectedNode = options.value;
-			if(selectedNode.id.startsWith("pgraph:")) {
+            if(selectedNode.id.startsWith("pgraph:")) {
 				var valueParts = selectedNode.id.split(":");
         		var nodeid = valueParts[1];
         		if(nodeid == "processaverages") {
@@ -228,6 +228,10 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 		var jsonSimObjWrapper = {
 			"timeline": jsonSimObj[0]
 		};
+
+        var processJSON = ORYX.EDITOR.getSerializedJSON();
+        var simTimeUnit = jsonPath(processJSON.evalJSON(), "$.properties.timeunit");
+        ORYX.EDITOR.simulationChartTimeUnit = simTimeUnit;
 		ORYX.EDITOR.simulationChartData = jsonObj;
 		ORYX.EDITOR.simulationEventData = jsonSimObjWrapper;
 		ORYX.EDITOR.simulationEventAggregationData = jsonEventAggregationsObj;
@@ -246,6 +250,9 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 			if(inner.id == nodeid) {
 				var innerWrapper = [];
 				innerWrapper[0] = inner;
+                var processJSON = ORYX.EDITOR.getSerializedJSON();
+                var simTimeUnit = jsonPath(processJSON.evalJSON(), "$.properties.timeunit");
+                ORYX.EDITOR.simulationChartTimeUnit = simTimeUnit;
 				ORYX.EDITOR.simulationChartData = innerWrapper;
 				ORYX.EDITOR.simulationEventData = innerWrapper[0].timeline;
 				ORYX.EDITOR.simulationChartTitle = "Task Simulation Results";
@@ -260,6 +267,9 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 		for(var i=0; i < htobj.length; i++ ) {
 			var inner = htobj[i];
 			if(inner.id == nodeid) {
+                var processJSON = ORYX.EDITOR.getSerializedJSON();
+                var simTimeUnit = jsonPath(processJSON.evalJSON(), "$.properties.timeunit");
+                ORYX.EDITOR.simulationChartTimeUnit = simTimeUnit;
 				ORYX.EDITOR.simulationChartData = inner;
 				ORYX.EDITOR.simulationEventData = inner.timeline;
 				ORYX.EDITOR.simulationChartTitle = "Human Task Simulation Results";
@@ -271,6 +281,9 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 	},
 	showPathGraph : function(pathid, jsonstr) {
 		var pathobj = jsonPath(jsonstr.evalJSON(), "$.pathsim.*");
+        var processJSON = ORYX.EDITOR.getSerializedJSON();
+        var simTimeUnit = jsonPath(processJSON.evalJSON(), "$.properties.timeunit");
+        ORYX.EDITOR.simulationChartTimeUnit = simTimeUnit;
 		ORYX.EDITOR.simulationChartTitle = "Path Execution Info (" + pathid + ")";
 		ORYX.EDITOR.simulationPathData = pathobj;
 		ORYX.EDITOR.simulationPathId = pathid;
