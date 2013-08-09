@@ -69,7 +69,7 @@ function clearChartForLine() {
 		<thead>
 			<tr>
 				{{#values}}
-				<th scope="col" align="center">{{label}} (min)</th>
+				<th scope="col" align="center">{{label}} ({{timeunit }})</th>
 				{{/values}}
 			</tr>
 		</thead>
@@ -140,7 +140,7 @@ function clearChartForLine() {
 					return d.value
 				}).staggerLabels(true)
 				.tooltips(true).showValues(true);
-				chart.yAxis.axisLabel('Time (min)')
+				chart.yAxis.axisLabel('Time (' + parent.ORYX.EDITOR.simulationChartTimeUnit + ')')
 	
 				d3.select('#chart1').datum(chartData).transition().duration(500)
 						.call(chart);
@@ -234,7 +234,7 @@ function clearChartForLine() {
 				//chart.yAxis
 				//		.tickFormat(d3.format(',.2f'));
 				
-				chart.yAxis.axisLabel('Time (min)')
+				chart.yAxis.axisLabel('Time (' + parent.ORYX.EDITOR.simulationChartTimeUnit + ')')
 				
 				d3.select('#chart1')
 					.datum(chartData)
@@ -439,6 +439,10 @@ function clearChartForLine() {
 			var tableSource = $("#tabletemplate").html();
 			var tableInstanceSource = $("#tableinstancestemplate").html();
             var tableCostSource = $("#tablecosttemplate").html();
+
+            Handlebars.registerHelper('timeunit', function(options) {
+                return parent.ORYX.EDITOR.simulationChartTimeUnit;
+            });
 
 	    	var tableTempplate = Handlebars.compile(tableSource);
 	    	var tableInstanceTemplate = Handlebars.compile(tableInstanceSource);

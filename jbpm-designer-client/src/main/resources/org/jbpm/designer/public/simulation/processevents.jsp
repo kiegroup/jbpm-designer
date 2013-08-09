@@ -51,7 +51,7 @@
 					return d.value
 				}).staggerLabels(true)
 				.tooltips(true).showValues(true);
-				chart.yAxis.axisLabel('Time (min)')
+				chart.yAxis.axisLabel('Time (' + parent.ORYX.EDITOR.simulationChartTimeUnit + ')')
 	
 				d3.select('#chart').datum(datawrapper).transition().duration(500)
 						.call(chart);

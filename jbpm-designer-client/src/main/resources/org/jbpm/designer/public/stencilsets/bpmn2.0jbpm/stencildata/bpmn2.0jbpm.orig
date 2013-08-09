@@ -359,13 +359,14 @@
                     "id":"standarddeviation",
                     "type":"Float",
                     "title":"Standard Deviation",
-                    "value":"0",
+                    "value":"1",
                     "description":"",
                     "description_ja":"",
                     "readonly":false,
                     "optional":true,
                     "simulation" : true,
-                    "fordistribution":"normal"
+                    "fordistribution":"normal",
+ 	            "min" : "1"
                 },
                 {
                     "id":"mean",
@@ -562,7 +563,7 @@
 					"id":"timeunit",
 					"type":"Choice",
 					"title":"Base time unit",
-					"value":"s",
+					"value":"min",
 					"description":"Time unit options (seconds, minutes, hours)",
 					"description_ja":"時間単位 (seconds, minutes, hours)",
 					"readonly":false,
@@ -2618,13 +2619,14 @@
 					"id":"standarddeviation",
 					"type":"Float",
 					"title":"Standard Deviation",
-					"value":"0",
+					"value":"1",
 					"description":"",
 					"description_ja":"",
 					"readonly":false,
 					"optional":true,
 					"simulation" : true,
-					"fordistribution":"normal"
+					"fordistribution":"normal",
+					"min" : "1"
 				},
 				{
 					"id":"mean",
@@ -3200,13 +3202,14 @@
                     "id":"standarddeviation",
                     "type":"Float",
                     "title":"Standard Deviation",
-                    "value":"0",
+                    "value":"1",
                     "description":"",
                     "description_ja":"",
                     "readonly":false,
                     "optional":true,
                     "simulation" : true,
-                    "fordistribution":"normal"
+                    "fordistribution":"normal",
+		    "min" : "1"
                 \},
                 \{
                     "id":"mean",
