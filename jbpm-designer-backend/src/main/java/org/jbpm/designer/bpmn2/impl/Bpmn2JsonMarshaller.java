@@ -1161,7 +1161,7 @@ public class Bpmn2JsonMarshaller {
 //                }
                 
                 if(dataout.getTransformation() != null && dataout.getTransformation().getBody() != null) {
-                	rhsAssociation = dataout.getTransformation().getBody();
+                	rhsAssociation = dataout.getTransformation().getBody().replaceAll("=", "||");
                 }
                 
                 if(!wasBiDirectional) {
@@ -1706,7 +1706,7 @@ public class Bpmn2JsonMarshaller {
     //                }
 
                     if(dataout.getTransformation() != null && dataout.getTransformation().getBody() != null) {
-                        rhsAssociation = dataout.getTransformation().getBody();
+                        rhsAssociation = dataout.getTransformation().getBody().replaceAll("=", "||");
                     }
 
                     if(!wasBiDirectional) {
@@ -2224,7 +2224,7 @@ public class Bpmn2JsonMarshaller {
 //                }
                 
                 if(dataout.getTransformation() != null && dataout.getTransformation().getBody() != null) {
-                	rhsAssociation = dataout.getTransformation().getBody();
+                	rhsAssociation = dataout.getTransformation().getBody().replaceAll("=", "||");
                 }
                 
                 if(!wasBiDirectional) {
