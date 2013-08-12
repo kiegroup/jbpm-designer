@@ -3086,9 +3086,12 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                             if (!dataType){
                                 dataType = "java.lang.String";
                             }
-            				var escapedp = innerParts[1].replace(/\#\#/g , ",");
+                            var fromPart = innerParts[0];
+                            innerParts.shift(); // removes the first item from the array
+            				var escapedp = innerParts.join('=').replace(/\#\#/g , ",");
+                            escapedp = escapedp.replace(/\|\|/g , "=");
                             dataassignments.add(new DataAssignment({
-                                from: innerParts[0],
+                                from: fromPart,
                                 type: "is equal to",
                                 to: "",
                                 tostr: escapedp,
@@ -3278,6 +3281,7 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                 				outValue += this.data['from'] + "->" + this.data['to'] + ",";
                 			} else if(this.data["type"] == "is equal to") {
                 				var escapedc = this.data['tostr'].replace(/,/g , "##");
+                                escapedc = escapedc.replace(/=/g, '||');
                 				outValue += this.data['from'] + "=" + escapedc + ",";
                 			}
                 		}

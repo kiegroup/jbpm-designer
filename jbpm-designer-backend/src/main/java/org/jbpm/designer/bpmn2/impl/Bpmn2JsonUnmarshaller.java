@@ -2496,14 +2496,12 @@ public class Bpmn2JsonUnmarshaller {
                     String[] assignmentParts = assignment.split( "=\\s*" );
                     DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
 
-                    boolean foundTaskName = false;
                     if(sp.getIoSpecification() != null && sp.getIoSpecification().getDataOutputs() != null) {
                     	List<DataInput> dataInputs = sp.getIoSpecification().getDataInputs();
                     	for(DataInput di : dataInputs) {
                     		if(di.getId().equals(sp.getId() + "_" + assignmentParts[0] + "Input")) {
                     			dia.setTargetRef(di);
                     			if(di.getName().equals("TaskName")) {
-                    				foundTaskName = true;
                     				break;
                     			}
                     		}
@@ -2514,6 +2512,7 @@ public class Bpmn2JsonUnmarshaller {
                     FormalExpression fromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
                     if(assignmentParts.length > 1) {
                     	String replacer = assignmentParts[1].replaceAll("##", ",");
+                        replacer = replacer.replaceAll("\\|\\|", "=");
                         fromExpression.setBody(wrapInCDATABlock(replacer));
                     } else {
                         fromExpression.setBody("");
@@ -3661,6 +3660,7 @@ public class Bpmn2JsonUnmarshaller {
                     FormalExpression fromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
                     if(assignmentParts.length > 1) {
                     	String replacer = assignmentParts[1].replaceAll("##", ",");
+                        replacer = replacer.replaceAll("\\|\\|", "=");
                         fromExpression.setBody(wrapInCDATABlock(replacer));
                     } else {
                         fromExpression.setBody("");
@@ -3992,6 +3992,7 @@ public class Bpmn2JsonUnmarshaller {
                     FormalExpression fromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
                     if(assignmentParts.length > 1) {
                     	String replacer = assignmentParts[1].replaceAll("##", ",");
+                        replacer = replacer.replaceAll("\\|\\|", "=");
                         fromExpression.setBody(wrapInCDATABlock(replacer));
                     } else {
                         fromExpression.setBody("");
