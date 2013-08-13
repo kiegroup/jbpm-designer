@@ -40,7 +40,6 @@ import org.stringtemplate.v4.ST;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.jboss.drools.impl.DroolsFactoryImpl;
-import org.jboss.errai.ioc.client.api.Caller;
 import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.web.plugin.IDiagramPlugin;
 import org.jbpm.designer.web.plugin.IDiagramPluginService;
@@ -382,7 +381,7 @@ public class EditorHandler extends HttpServlet {
             pluginsArray.put(designer_path + "plugin/" + uncompressed.getName() + ".js");
         }
 
-        ST editorTemplate = new ST(_doc);
+        ST editorTemplate = new ST(_doc, '$', '$');
         editorTemplate.add("editorprofile", profileName);
         editorTemplate.add("editoruuid", uuid);
         editorTemplate.add("editorid", editorID);
@@ -400,6 +399,7 @@ public class EditorHandler extends HttpServlet {
         editorTemplate.add("externalhost", RepositoryInfo.getRepositoryHost(profile));
         editorTemplate.add("externalsubdomain", RepositoryInfo.getRepositorySubdomain(profile) != null ? RepositoryInfo.getRepositorySubdomain(profile).substring(0,
                 RepositoryInfo.getRepositorySubdomain(profile).indexOf("/")) : "");
+        editorTemplate.add("repositoryid", "designer");
         editorTemplate.add("localhistoryenabled", profile.getLocalHistoryEnabled());
         editorTemplate.add("localhistorytimeout", profile.getLocalHistoryTimeout());
         editorTemplate.add("designerversion", _designerVersion);
@@ -440,7 +440,7 @@ public class EditorHandler extends HttpServlet {
 
         response.setContentType("text/javascript; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(editorTemplate.toString());
+        response.getWriter().write(editorTemplate.render());
     }
 
     /**

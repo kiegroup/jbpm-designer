@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 import org.drools.core.process.core.ParameterDefinition;
 import org.drools.core.process.core.datatype.DataType;
 import org.drools.core.process.core.impl.ParameterDefinitionImpl;
-import org.jboss.errai.ioc.client.api.Caller;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.AssetNotFoundException;
@@ -30,7 +29,6 @@ import sun.misc.BASE64Encoder;
 import org.apache.commons.io.IOUtils;
 
 import javax.enterprise.event.Event;
-import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -179,7 +177,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             }
 
             // parse the orig stencil data with workitem definitions
-            ST workItemTemplate = new ST(readFile(origStencilFilePath));
+            ST workItemTemplate = new ST(readFile(origStencilFilePath), '$', '$');
             workItemTemplate.add("workitemDefs", workDefinitions);
             workItemTemplate.add("patternData", patternInfoMap);
 
@@ -222,7 +220,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             // delete stencil data json if exists
             deletefile(stencilFilePath);
             // copy our results as the stencil json data
-            createAndWriteToFile(stencilFilePath, workItemTemplate.toString());
+            createAndWriteToFile(stencilFilePath, workItemTemplate.render());
             // create and parse the view svg to include config data
             createAndParseViewSVG(workDefinitions, repository);
         } catch( Exception e ) {
@@ -241,7 +239,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         }
         try {
             for(Map.Entry<String, WorkDefinitionImpl> definition : workDefinitions.entrySet()) {
-                ST workItemTemplate = new ST(readFile(origWorkitemSVGFile));
+                ST workItemTemplate = new ST(readFile(origWorkitemSVGFile), '$', '$');
                 workItemTemplate.add("workitemDef", definition.getValue());
                 String widIcon = definition.getValue().getIcon();
 
@@ -251,7 +249,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 String iconEncoded = "data:image/png;base64," + enc.encode(iconAsset.getAssetContent());
                 workItemTemplate.add("nodeicon", iconEncoded);
                 String fileToWrite = workitemSVGFilePath + definition.getValue().getName() + ".svg";
-                createAndWriteToFile(fileToWrite, workItemTemplate.toString());
+                createAndWriteToFile(fileToWrite, workItemTemplate.render());
             }
         } catch (Exception e) {
             _logger.error("Failed to setup workitem svg images : " + e.getMessage());
@@ -474,9 +472,9 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             if(widIn != null) {
                 createdUUID = createAssetIfNotExisting(repository, location, "WorkDefinitions", "wid", IOUtils.toByteArray(widIn));
             } else {
-                ST widConfigTemplate = new ST(readFile(default_widconfigtemplate));
+                ST widConfigTemplate = new ST(readFile(default_widconfigtemplate), '$', '$');
                 createdUUID = createAssetIfNotExisting(repository, location, "WorkDefinitions", "wid",
-                        widConfigTemplate.toString().getBytes("UTF-8"));
+                        widConfigTemplate.render().getBytes("UTF-8"));
 
 
             }
