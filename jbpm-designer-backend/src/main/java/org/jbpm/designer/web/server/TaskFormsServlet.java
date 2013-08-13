@@ -117,12 +117,12 @@ public class TaskFormsServlet extends HttpServlet {
     
 //    public void displayResponse(TaskFormTemplateManager templateManager, HttpServletResponse resp, IDiagramProfile profile) {
 //        try {
-//            StringTemplateGroup templates = new StringTemplateGroup("resultsgroup", templateManager.getTemplatesPath());
-//            StringTemplate resultsForm = templates.getInstanceOf("resultsform");
-////            resultsForm.setAttribute("manager", templateManager);
-////            resultsForm.setAttribute("profile", RepositoryInfo.getRepositoryProtocol(profile));
-////            resultsForm.setAttribute("host", RepositoryInfo.getRepositoryHost(profile));
-////            resultsForm.setAttribute("subdomain", RepositoryInfo.getRepositorySubdomain(profile).substring(0,
+//            STGroup templates = new STGroup("resultsgroup", templateManager.getTemplatesPath());
+//            ST resultsForm = templates.getInstanceOf("resultsform");
+////            resultsForm.add("manager", templateManager);
+////            resultsForm.add("profile", RepositoryInfo.getRepositoryProtocol(profile));
+////            resultsForm.add("host", RepositoryInfo.getRepositoryHost(profile));
+////            resultsForm.add("subdomain", RepositoryInfo.getRepositorySubdomain(profile).substring(0,
 ////                RepositoryInfo.getRepositorySubdomain(profile).indexOf("/")));
 //            ServletOutputStream outstr = resp.getOutputStream();
 //            resp.setContentType("text/html");
