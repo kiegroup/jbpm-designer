@@ -1,6 +1,5 @@
 package org.jbpm.designer.web.preprocessing.impl;
 
-import org.antlr.stringtemplate.StringTemplate;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -22,6 +21,7 @@ import org.jbpm.process.workitem.WorkDefinitionImpl;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.mvel2.MVEL;
+import org.stringtemplate.v4.ST;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.VFSService;
 import org.uberfire.workbench.events.ResourceAddedEvent;
@@ -179,9 +179,9 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             }
 
             // parse the orig stencil data with workitem definitions
-            StringTemplate workItemTemplate = new StringTemplate(readFile(origStencilFilePath));
-            workItemTemplate.setAttribute("workitemDefs", workDefinitions);
-            workItemTemplate.setAttribute("patternData", patternInfoMap);
+            ST workItemTemplate = new ST(readFile(origStencilFilePath));
+            workItemTemplate.add("workitemDefs", workDefinitions);
+            workItemTemplate.add("patternData", patternInfoMap);
 
             String processPackage = asset.getAssetLocation();
             if(processPackage.startsWith("/")) {
@@ -194,10 +194,10 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             }
 
             // set package to org.jbpm
-            workItemTemplate.setAttribute("packageName", "org.jbpm");
+            workItemTemplate.add("packageName", "org.jbpm");
 
             String processName = asset.getName();
-            workItemTemplate.setAttribute("processn", processName);
+            workItemTemplate.add("processn", processName);
 
             String packageNameStr = (processPackage.length() > 0) ? processPackage + "." : "";
             if(packageNameStr.length() > 0) {
@@ -212,12 +212,12 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 processIdString = processIdString.substring(1, processIdString.length());
             }
 
-            workItemTemplate.setAttribute("processid", processIdString);
+            workItemTemplate.add("processid", processIdString);
 
             // default version to 1.0
-            workItemTemplate.setAttribute("pversion", "1.0");
+            workItemTemplate.add("pversion", "1.0");
             // color theme attribute
-            workItemTemplate.setAttribute("colortheme", themeData);
+            workItemTemplate.add("colortheme", themeData);
 
             // delete stencil data json if exists
             deletefile(stencilFilePath);
@@ -241,15 +241,15 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         }
         try {
             for(Map.Entry<String, WorkDefinitionImpl> definition : workDefinitions.entrySet()) {
-                StringTemplate workItemTemplate = new StringTemplate(readFile(origWorkitemSVGFile));
-                workItemTemplate.setAttribute("workitemDef", definition.getValue());
+                ST workItemTemplate = new ST(readFile(origWorkitemSVGFile));
+                workItemTemplate.add("workitemDef", definition.getValue());
                 String widIcon = definition.getValue().getIcon();
 
                 Asset<byte[]> iconAsset = repository.loadAssetFromPath(widIcon);
 
                 BASE64Encoder enc = new BASE64Encoder();
                 String iconEncoded = "data:image/png;base64," + enc.encode(iconAsset.getAssetContent());
-                workItemTemplate.setAttribute("nodeicon", iconEncoded);
+                workItemTemplate.add("nodeicon", iconEncoded);
                 String fileToWrite = workitemSVGFilePath + definition.getValue().getName() + ".svg";
                 createAndWriteToFile(fileToWrite, workItemTemplate.toString());
             }
@@ -474,7 +474,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             if(widIn != null) {
                 createdUUID = createAssetIfNotExisting(repository, location, "WorkDefinitions", "wid", IOUtils.toByteArray(widIn));
             } else {
-                StringTemplate widConfigTemplate = new StringTemplate(readFile(default_widconfigtemplate));
+                ST widConfigTemplate = new ST(readFile(default_widconfigtemplate));
                 createdUUID = createAssetIfNotExisting(repository, location, "WorkDefinitions", "wid",
                         widConfigTemplate.toString().getBytes("UTF-8"));
 

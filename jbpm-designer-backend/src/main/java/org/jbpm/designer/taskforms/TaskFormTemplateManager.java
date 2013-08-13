@@ -8,8 +8,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-import org.antlr.stringtemplate.StringTemplate;
-import org.antlr.stringtemplate.StringTemplateGroup;
+import org.stringtemplate.v4.ST;
+import org.stringtemplate.v4.STGroup;
 import org.apache.log4j.Logger;
 import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.Process;
@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.util.FeatureMap;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.formModeler.designer.integration.BPMNFormBuilderService;
+import org.stringtemplate.v4.STGroupDir;
 import org.uberfire.backend.vfs.Path;
 
 
@@ -373,9 +374,9 @@ public class TaskFormTemplateManager {
     }
     
     private void generateProcessTemplate(TaskFormInfo tfi) {
-        StringTemplateGroup templates = new StringTemplateGroup("processtaskgroup", templatesPath);
-        StringTemplate processFormTemplate = templates.getInstanceOf("processtaskform");
-        processFormTemplate.setAttribute("tfi", tfi);
+        STGroup templates = new STGroupDir("processtaskgroup", templatesPath);
+        ST processFormTemplate = templates.getInstanceOf("processtaskform");
+        processFormTemplate.add("tfi", tfi);
         tfi.setMetaOutput(processFormTemplate.toString());
 
         String modelerFileName = tfi.getId() + ".form";
@@ -393,9 +394,9 @@ public class TaskFormTemplateManager {
     }
     
     private void generateUserTaskTemplate(TaskFormInfo tfi) {
-        StringTemplateGroup templates = new StringTemplateGroup("usertaskgroup", templatesPath);
-        StringTemplate usertaskFormTemplate = templates.getInstanceOf("usertaskform");
-        usertaskFormTemplate.setAttribute("tfi", tfi);
+        STGroup templates = new STGroupDir("usertaskgroup", templatesPath);
+        ST usertaskFormTemplate = templates.getInstanceOf("usertaskform");
+        usertaskFormTemplate.add("tfi", tfi);
         tfi.setMetaOutput(usertaskFormTemplate.toString());
 
         String modelerFileName = tfi.getId() + ".form";

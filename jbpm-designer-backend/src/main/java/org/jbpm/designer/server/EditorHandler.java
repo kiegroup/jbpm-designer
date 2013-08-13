@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bpsim.impl.BpsimFactoryImpl;
-import org.antlr.stringtemplate.StringTemplate;
+import org.stringtemplate.v4.ST;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.jboss.drools.impl.DroolsFactoryImpl;
@@ -382,35 +382,35 @@ public class EditorHandler extends HttpServlet {
             pluginsArray.put(designer_path + "plugin/" + uncompressed.getName() + ".js");
         }
 
-        StringTemplate editorTemplate = new StringTemplate(_doc);
-        editorTemplate.setAttribute("editorprofile", profileName);
-        editorTemplate.setAttribute("editoruuid", uuid);
-        editorTemplate.setAttribute("editorid", editorID);
-        editorTemplate.setAttribute("activenodes", activeNodes);
-        editorTemplate.setAttribute("completednodes", completedNodes);
-        //editorTemplate.setAttribute("processsource", encodedProcessSource);
-        editorTemplate.setAttribute("readonly", readOnly);
-        editorTemplate.setAttribute("allscripts", scriptsArray.toString());
-        editorTemplate.setAttribute("allplugins", pluginsArray.toString());
-        editorTemplate.setAttribute("title", profile.getTitle());
-        editorTemplate.setAttribute("stencilset", profile.getStencilSet());
-        editorTemplate.setAttribute("debug", _devMode);
-        editorTemplate.setAttribute("preprocessing", preprocessingUnit == null ? "" : preprocessingUnit.getOutData());
-        editorTemplate.setAttribute("externalprotocol", RepositoryInfo.getRepositoryProtocol(profile) == null ? "" : RepositoryInfo.getRepositoryProtocol(profile));
-        editorTemplate.setAttribute("externalhost", RepositoryInfo.getRepositoryHost(profile));
-        editorTemplate.setAttribute("externalsubdomain", RepositoryInfo.getRepositorySubdomain(profile) != null ? RepositoryInfo.getRepositorySubdomain(profile).substring(0,
+        ST editorTemplate = new ST(_doc);
+        editorTemplate.add("editorprofile", profileName);
+        editorTemplate.add("editoruuid", uuid);
+        editorTemplate.add("editorid", editorID);
+        editorTemplate.add("activenodes", activeNodes);
+        editorTemplate.add("completednodes", completedNodes);
+        //editorTemplate.add("processsource", encodedProcessSource);
+        editorTemplate.add("readonly", readOnly);
+        editorTemplate.add("allscripts", scriptsArray.toString());
+        editorTemplate.add("allplugins", pluginsArray.toString());
+        editorTemplate.add("title", profile.getTitle());
+        editorTemplate.add("stencilset", profile.getStencilSet());
+        editorTemplate.add("debug", _devMode);
+        editorTemplate.add("preprocessing", preprocessingUnit == null ? "" : preprocessingUnit.getOutData());
+        editorTemplate.add("externalprotocol", RepositoryInfo.getRepositoryProtocol(profile) == null ? "" : RepositoryInfo.getRepositoryProtocol(profile));
+        editorTemplate.add("externalhost", RepositoryInfo.getRepositoryHost(profile));
+        editorTemplate.add("externalsubdomain", RepositoryInfo.getRepositorySubdomain(profile) != null ? RepositoryInfo.getRepositorySubdomain(profile).substring(0,
                 RepositoryInfo.getRepositorySubdomain(profile).indexOf("/")) : "");
-        editorTemplate.setAttribute("localhistoryenabled", profile.getLocalHistoryEnabled());
-        editorTemplate.setAttribute("localhistorytimeout", profile.getLocalHistoryTimeout());
-        editorTemplate.setAttribute("designerversion", _designerVersion);
-        editorTemplate.setAttribute("storesvgonsave", profile.getStoreSVGonSaveOption());
-        editorTemplate.setAttribute("defaultSkin", designer_path + "css/theme-default.css");
+        editorTemplate.add("localhistoryenabled", profile.getLocalHistoryEnabled());
+        editorTemplate.add("localhistorytimeout", profile.getLocalHistoryTimeout());
+        editorTemplate.add("designerversion", _designerVersion);
+        editorTemplate.add("storesvgonsave", profile.getStoreSVGonSaveOption());
+        editorTemplate.add("defaultSkin", designer_path + "css/theme-default.css");
 
         String overlaySkin = "";
         if (_skin != null && !_skin.equals("default")) {
             overlaySkin = designer_path + "css/theme-" + _skin + ".css";
         }
-        editorTemplate.setAttribute("overlaySkin", overlaySkin);
+        editorTemplate.add("overlaySkin", overlaySkin);
 
         StringBuilder plugins = new StringBuilder();
         boolean commaNeeded = false;
@@ -422,7 +422,7 @@ public class EditorHandler extends HttpServlet {
             }
             plugins.append("\"").append(ext).append("\"");
         }
-        editorTemplate.setAttribute("profileplugins", plugins.toString());
+        editorTemplate.add("profileplugins", plugins.toString());
 
         StringBuilder ssexts = new StringBuilder();
         commaNeeded = false;
@@ -434,9 +434,9 @@ public class EditorHandler extends HttpServlet {
             }
             ssexts.append("\"").append(ext).append("\"");
         }
-        editorTemplate.setAttribute("ssextensions", ssexts.toString());
+        editorTemplate.add("ssextensions", ssexts.toString());
 
-        editorTemplate.setAttribute("contextroot", request.getContextPath());
+        editorTemplate.add("contextroot", request.getContextPath());
 
         response.setContentType("text/javascript; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
