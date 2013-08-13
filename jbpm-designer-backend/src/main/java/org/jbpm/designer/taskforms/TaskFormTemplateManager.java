@@ -13,14 +13,11 @@ import org.stringtemplate.v4.STGroup;
 import org.apache.log4j.Logger;
 import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.Process;
-import org.eclipse.emf.ecore.impl.EStructuralFeatureImpl;
-import org.eclipse.emf.ecore.util.FeatureMap;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.formModeler.designer.integration.BPMNFormBuilderService;
 import org.stringtemplate.v4.STGroupDir;
 import org.uberfire.backend.vfs.Path;
-
 
 /** 
  * Manager for task form templates.
@@ -374,10 +371,10 @@ public class TaskFormTemplateManager {
     }
     
     private void generateProcessTemplate(TaskFormInfo tfi) {
-        STGroup templates = new STGroupDir("processtaskgroup", templatesPath);
+        STGroup templates = new STGroupDir("processtaskgroup", templatesPath, '$', '$');
         ST processFormTemplate = templates.getInstanceOf("processtaskform");
         processFormTemplate.add("tfi", tfi);
-        tfi.setMetaOutput(processFormTemplate.toString());
+        tfi.setMetaOutput(processFormTemplate.render());
 
         String modelerFileName = tfi.getId() + ".form";
         String modelerURI = myPath.toURI();
@@ -390,14 +387,13 @@ public class TaskFormTemplateManager {
             _logger.error(e.getMessage());
             e.printStackTrace();
         }
-
     }
     
     private void generateUserTaskTemplate(TaskFormInfo tfi) {
-        STGroup templates = new STGroupDir("usertaskgroup", templatesPath);
+        STGroup templates = new STGroupDir("usertaskgroup", templatesPath, '$', '$');
         ST usertaskFormTemplate = templates.getInstanceOf("usertaskform");
         usertaskFormTemplate.add("tfi", tfi);
-        tfi.setMetaOutput(usertaskFormTemplate.toString());
+        tfi.setMetaOutput(usertaskFormTemplate.render());
 
         String modelerFileName = tfi.getId() + ".form";
         String modelerURI = myPath.toURI();
