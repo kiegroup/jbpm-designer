@@ -19,6 +19,7 @@ import org.jbpm.designer.bpmn2.impl.Bpmn2JsonUnmarshaller;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceFactoryImpl;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceImpl;
 import org.jbpm.designer.repository.Repository;
+import org.jbpm.designer.repository.UriUtils;
 import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.web.plugin.IDiagramPlugin;
 import org.jbpm.designer.web.plugin.impl.PluginServiceImpl;
@@ -273,7 +274,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
     @Override
     public String getRepositoryGlobalDir(String uuid) {
         if(uuid != null) {
-            Path uuidPath = vfsServices.get( uuid );
+            Path uuidPath = vfsServices.get(UriUtils.encode(uuid) );
             String pathURI = uuidPath.toURI();
 
             if(pathURI != "/") {
