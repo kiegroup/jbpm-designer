@@ -178,6 +178,8 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
             // parse the orig stencil data with workitem definitions
             ST workItemTemplate = new ST(readFile(origStencilFilePath), '$', '$');
+            workItemTemplate.add("bopen", "{");
+            workItemTemplate.add("bclose", "}");
             workItemTemplate.add("workitemDefs", workDefinitions);
             workItemTemplate.add("patternData", patternInfoMap);
 

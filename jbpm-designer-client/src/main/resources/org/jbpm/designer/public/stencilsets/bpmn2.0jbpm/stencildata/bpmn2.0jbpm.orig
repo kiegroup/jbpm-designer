@@ -2709,8 +2709,8 @@
 				}
 			]
 		},
-		$workitemDefs.keys:{k|
-		\{
+		$workitemDefs:{k|
+		$bopen$
 			"type" : 			"node",
 			"id": 				"$workitemDefs.(k).name$",
 			"title" : 			"$workitemDefs.(k).displayName$",
@@ -2740,7 +2740,7 @@
 				"ActivitiesMorph"
 			],
 			"properties": [
-				\{
+				$bopen$
 					"id":"bgcolor",
 					"type":"Color",
 					"title":"Background Color",
@@ -2752,8 +2752,8 @@
 					"fill":true,
 					"stroke":false,
 					"display" : true
-				\},
-				\{
+				$bclose$,
+				$bopen$
 					"id":"origbgcolor",
 					"type":"Color",
 					"title":"Original Background Color",
@@ -2763,8 +2763,8 @@
 					"optional":true,
 					"hidden":true,
 					"visible":false
-				\},
-				\{
+				$bclose$,
+				$bopen$
 					"id":"bordercolor",
 					"type":"Color",
 					"title":"Border Color",
@@ -2776,8 +2776,8 @@
 					"fill":false,
 					"stroke":true,
 					"display" : true
-				\},
-				\{
+				$bclose$,
+				$bopen$
 					"id":"origbordercolor",
 					"type":"Color",
 					"title":"Original Border Color",
@@ -2787,8 +2787,8 @@
 					"optional":true,
 					"hidden":true,
 					"visible":false
-				\},
-				\{
+				$bclose$,
+				$bopen$
 					"id":"fontcolor",
 					"type":"Color",
 					"title":"Font Color",
@@ -2801,8 +2801,8 @@
 					"fill":true,
 					"stroke":false,
 					"display" : true
-				\},
-				\{
+				$bclose$,
+				$bopen$
 					"id":"fontsize",
 					"type":"Choice",
 					"title":"Font Size",
@@ -2814,69 +2814,69 @@
 					"optional":false,
 					"refToView":"text_name",
 					"items":[
-						\{
+						$bopen$
 							"id":"c1",
 							"title":"8",
 							"value":"8"
-						\},
-						\{
+						$bclose$,
+						$bopen$
 							"id":"c2",
 							"title":"9",
 							"value":"9"
-						\},
-						\{
+						$bclose$,
+						$bopen$
 							"id":"c3",
 							"title":"10",
 							"value":"10"
-						\},
-						\{
+						$bclose$,
+						$bopen$
 							"id":"c4",
 							"title":"11",
 							"value":"11"
-						\},
-						\{
+						$bclose$,
+						$bopen$
 							"id":"c5",
 							"title":"12",
 							"value":"12"
-						\},
-						\{
+						$bclose$,
+						$bopen$
 							"id":"c6",
 							"title":"14",
 							"value":"14"
-						\},
-						\{
+						$bclose$,
+						$bopen$
 							"id":"c7",
 							"title":"18",
 							"value":"18"
-						\},
-						\{
+						$bclose$,
+						$bopen$
 							"id":"c8",
 							"title":"20",
 							"value":"20"
-						\},
-						\{
+						$bclose$,
+						$bopen$
 							"id":"c9",
 							"title":"24",
 							"value":"24"
-						\},
-						\{
+						$bclose$,
+						$bopen$
 							"id":"c10",
 							"title":"36",
 							"value":"36"
-						\},
-						\{
+						$bclose$,
+						$bopen$
 							"id":"c11",
 							"title":"48",
 							"value":"48"
-						\},
-						\{
+						$bclose$,
+						$bopen$
 							"id":"c12",
 							"title":"72",
 							"value":"72"
-						\}
+						$bclose$
 					]
-				\},
-			 \{
+				$bclose$,
+			 $bopen$
 					"id":"tasktype",
 					"type":"Choice",
 					"title":"TaskType",
@@ -2886,64 +2886,64 @@
 					"optional":false,
 					"refToView":"",
 					"items":[
-						\{
+						$bopen$
 							"id":"c1",
 							"title":"None",
 							"value":"None",
 							"refToView":"none"
-						\},
-						\{
+						$bclose$,
+						$bopen$
 							"id":"c2",
 							"title":"Send",
 							"value":"Send",
 							"icon" : "activity/list/type.send.png",
 							"refToView":"sendTask"
-						\},
-						\{
+						$bclose$,
+						$bopen$
 							"id":"c3",
 							"title":"Receive",
 							"value":"Receive",
 							"icon" : "activity/list/type.receive.png",
 							"refToView":"receiveTask"
-						\},
-						\{
+						$bclose$,
+						$bopen$
 							"id":"c4",
 							"title":"User",
 							"value":"User",
 							"icon" : "activity/list/type.user.png",
 							"refToView":"userTask"
-						\},
-						\{
+						$bclose$,
+						$bopen$
 							"id":"c5",
 							"title":"Manual",
 							"value":"Manual",
 							"icon" : "activity/list/type.manual.png",
 							"refToView":"manualTask"	
-						\},
-						\{
+						$bclose$,
+						$bopen$
 							"id":"c6",
 							"title":"Service",
 							"value":"Service",
 							"icon" : "activity/list/type.service.png",
 							"refToView":"serviceTask"
-						\},
-						\{
+						$bclose$,
+						$bopen$
 							"id":"c7",
 							"title":"Business Rule",
 							"value":"Business Rule",
 							"icon" : "activity/list/type.business.rule.png",
 							"refToView":"businessRuleTask"
-						\},
-						\{
+						$bclose$,
+						$bopen$
 							"id":"c8",
 							"title":"Script",
 							"value":"Script",
 							"icon" : "activity/list/type.script.png",
 							"refToView":"scriptTask"
-						\}
+						$bclose$
 					]
-				\},
-                \{
+				$bclose$,
+                $bopen$
                     "id":"multipleinstance",
                     "type":"Choice",
                     "title":"Multiple Instance",
@@ -2955,21 +2955,21 @@
                     "fortasktypes":"None|Send|Receive|User|Manual|Service",
 		    "extra":true,
                     "items": [
-                        \{
+                        $bopen$
                             "id": "c1",
                             "title":"true",
                             "value":"true",
                             "refToView":"sequential"
-                        \},
-                        \{
+                        $bclose$,
+                        $bopen$
                             "id": "c2",
                             "title": "false",
                             "value": "false",
                             "refToView":"none"
-                        \}
+                        $bclose$
                     ]
-                \},
-                \{
+                $bclose$,
+                $bopen$
                     "id":"multipleinstancecollectioninput",
                     "type":"Dynamicchoice",
                     "title":"MI collection input",
@@ -2981,19 +2981,19 @@
                     "fortasktypes":"None|Send|Receive|User|Manual|Service",
                     "ifproptrue":"multipleinstance",
                     "items": [
-                        \{
+                        $bopen$
                             "id": "c1",
                             "title":"vardefs",
                             "value":"\$.properties.vardefs"
-                        \},
-                        \{
+                        $bclose$,
+                        $bopen$
                             "id": "c2",
                             "title": "globals",
                             "value": "\$.properties.globals"
-                        \}
+                        $bclose$
                     ]
-                \},
-                \{
+                $bclose$,
+                $bopen$
                     "id":"multipleinstancecollectionoutput",
                     "type":"Dynamicchoice",
                     "title":"MI collection output",
@@ -3005,19 +3005,19 @@
                     "fortasktypes":"None|Send|Receive|User|Manual|Service",
                     "ifproptrue":"multipleinstance",
                     "items": [
-                        \{
+                        $bopen$
                             "id": "c1",
                             "title":"vardefs",
                             "value":"\$.properties.vardefs"
-                        \},
-                        \{
+                        $bclose$,
+                        $bopen$
                             "id": "c2",
                             "title": "globals",
                             "value": "\$.properties.globals"
-                        \}
+                        $bclose$
                     ]
-                \},
-                \{
+                $bclose$,
+                $bopen$
                     "id":"multipleinstancedatainput",
                     "type":"Dynamicdatainput",
                     "title":"MI data input",
@@ -3028,8 +3028,8 @@
                     "optional":true,
                     "fortasktypes":"None|Send|Receive|User|Manual|Service",
                     "ifproptrue":"multipleinstance"
-                \},
-                \{
+                $bclose$,
+                $bopen$
                     "id":"multipleinstancedataoutput",
                     "type":"Dynamicdatoutput",
                     "title":"MI data output",
@@ -3040,8 +3040,8 @@
                     "optional":true,
                     "fortasktypes":"None|Send|Receive|User|Manual|Service",
                     "ifproptrue":"multipleinstance"
-                \},
-				\{
+                $bclose$,
+				$bopen$
 					"id":"isselectable",
 					"type":"Choice",
 					"title":"Selectable",
@@ -3053,19 +3053,19 @@
 					"optional":true,
 					"hidden":true,
 					"items":[
-						\{
+						$bopen$
 							"id":"c1",
 							"title":"true",
 							"value":"true"
-						\},
-						\{
+						$bclose$,
+						$bopen$
 							"id":"c2",
 							"title":"false",
 							"value":"false"
-						\}
+						$bclose$
 					]
-				\},
-				\{
+				$bclose$,
+				$bopen$
 					"id":"name",
 					"type":"String",
 					"title":"Name",
@@ -3077,8 +3077,8 @@
 					"length":"",
 					"wrapLines" : true,
 					"refToView":"text_name"	
-				\},
-				\{
+				$bclose$,
+				$bopen$
 					"id":"documentation",
 					"type":"Text",
 					"title":"Documentation",
@@ -3090,8 +3090,8 @@
 					"length":"",
 					"wrapLines":true,
 					"extra" : true
-				\},
-				\{
+				$bclose$,
+				$bopen$
 					"id":"taskName",
 					"type":"String",
 					"title":"Task Name",
@@ -3100,8 +3100,8 @@
 					"description_ja":"タスク名",
 					"readonly":true,
 					"optional":true
-				\},
-				\{
+				$bclose$,
+				$bopen$
 					"id":"datainputset",
 					"type":"Datainput",
 					"title":"DataInputSet",
@@ -3110,8 +3110,8 @@
 					"description_ja":"InputSetは、データ入力の有効なセットを合わせて定義するDataInputエレメントのコレクションです。",
 					"readonly":false,
 					"optional":true
-				\},  
-				\{
+				$bclose$,  
+				$bopen$
 					"id":"dataoutputset",
 					"type":"Dataoutput",
 					"title":"DataOutputSet",
@@ -3120,8 +3120,8 @@
 					"description_ja":"OutputSet は、アクティビティまたはイベントの出力としてまとめて生成されるDataOutputs要素のコレクションです。",
 					"readonly":false,
 					"optional":true
-				\},
-				\{
+				$bclose$,
+				$bopen$
 					"id":"assignments",
 					"type":"Dataassignment",
 					"title":"Assignments",
@@ -3129,8 +3129,8 @@
 					"description":"",
 					"readonly":false,
 					"optional":true
-				\},
-				\{
+				$bclose$,
+				$bopen$
 					"id":"onEntryActions",
 					"type":"Action",
 					"title":"On Entry Actions",
@@ -3139,8 +3139,8 @@
 					"description_ja":"アクション開始時",
 					"readonly":false,
 					"optional":true
-				\},
-				\{
+				$bclose$,
+				$bopen$
 					"id":"onExitActions",
 					"type":"Action",
 					"title":"On Exit Actions",
@@ -3149,8 +3149,8 @@
 					"description_ja":"アクション終了時",
 					"readonly":false,
 					"optional":true
-				\},
-				\{
+				$bclose$,
+				$bopen$
 					"id":"script_language",
 					"type":"Choice",
 					"title":"Script Language",
@@ -3160,19 +3160,19 @@
 					"readonly":false,
 					"optional":true,
 					"items": [
-						\{
+						$bopen$
 							"id": "c1",
 							"title":"java",
 							"value":"java"
-						\},
-						\{
+						$bclose$,
+						$bopen$
 							"id": "c2",
 							"title": "mvel",
 							"value": "mvel"
-						\}
+						$bclose$
 					]                                        
-				\},
-				\{
+				$bclose$,
+				$bopen$
                     "id":"min",
                     "type":"Float",
                     "title":"Processing time (min)",
@@ -3184,8 +3184,8 @@
                     "simulation" : true,
                     "fordistribution":"uniform",
                     "min" : "0"
-                \},
-                \{
+                $bclose$,
+                $bopen$
                     "id":"max",
                     "type":"Float",
                     "title":"Processing time (max)",
@@ -3197,8 +3197,8 @@
                     "simulation" : true,
                     "fordistribution":"uniform",
                     "min" : "0"
-                \},
-                \{
+                $bclose$,
+                $bopen$
                     "id":"standarddeviation",
                     "type":"Float",
                     "title":"Standard Deviation",
@@ -3210,8 +3210,8 @@
                     "simulation" : true,
                     "fordistribution":"normal",
 		    "min" : "1"
-                \},
-                \{
+                $bclose$,
+                $bopen$
                     "id":"mean",
                     "type":"Float",
                     "title":"Processing time (mean)",
@@ -3223,8 +3223,8 @@
                     "simulation" : true,
                     "fordistribution":"normal|poisson",
                     "min" : "0"
-                \},
-                \{
+                $bclose$,
+                $bopen$
                     "id":"distributiontype",
                     "type":"Choice",
                     "title":"Distribution Type",
@@ -3235,24 +3235,24 @@
                     "optional":true,
                     "simulation" : true,
                     "items": [
-                        \{
+                        $bopen$
                             "id": "c1",
                             "title":"normal",
                             "value":"normal"
-                        \},
-                        \{
+                        $bclose$,
+                        $bopen$
                             "id": "c2",
                             "title": "uniform",
                             "value": "uniform"
-                        \},
-                        \{
+                        $bclose$,
+                        $bopen$
                             "id": "c4",
                             "title": "poisson",
                             "value": "poisson"
-                        \}
+                        $bclose$
                     ]
-                \},
-                \{
+                $bclose$,
+                $bopen$
                     "id":"unitcost",
                     "type":"Float",
                     "title":"Cost per time unit",
@@ -3263,12 +3263,12 @@
                     "optional":true,
                     "simulation" : true,
                     "min" : "0"
-                \}
+                $bclose$
 			]
-		\},
+		$bclose$,
 		}$
-		$patternData.keys:{k|
-           \{
+		$patternData:{k|
+           $bopen$
                "type" : 			"node",
                "id": 				"$patternData.(k).id$",
                "title" : 			"$patternData.(k).name$",
@@ -3285,7 +3285,7 @@
                ],
                "properties": [
                ]
-            \},
+            $bclose$,
 		}$
 		{
 			"type" : 			"node",
@@ -8712,11 +8712,11 @@
 						"from":"Task",
 						"to":["IntermediateEventOnActivityBoundary"]
 					},
-					$workitemDefs.keys:{k|
-                        \{
+					$workitemDefs:{k|
+                        $bopen$
                                                 "from":"$workitemDefs.(k).name$",
                                                 "to":["IntermediateEventOnActivityBoundary"]
-                        \}
+                        $bclose$
 					}; separator=","$
 				]
 			},
