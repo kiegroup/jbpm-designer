@@ -24,7 +24,7 @@ import org.drools.core.process.core.datatype.impl.type.ObjectDataType;
   ],
 
   [
-    "name" : "Web Service",
+    "name" : "WebService",
     "parameters" : [
         "Url" : new StringDataType(),
          "Namespace" : new StringDataType(),
