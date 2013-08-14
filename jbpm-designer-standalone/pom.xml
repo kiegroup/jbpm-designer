@@ -466,7 +466,7 @@
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
         <configuration>
-          <module>org.jbpm.designer.jBPMDesigner</module>
+          <module>org.jbpm.designer.FastCompiledjBPMDesigner</module>
           <logLevel>INFO</logLevel>
           <compileSourcesArtifacts>
 
@@ -614,6 +614,19 @@
           <scope>runtime</scope>
         </dependency>
       </dependencies>
+      <build>
+        <plugins>
+          <plugin><!-- Keep in sync with soa profile -->
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>gwt-maven-plugin</artifactId>
+            <configuration>
+              <!-- Build all GWT permutations and optimize them -->
+              <module>org.jbpm.designer.jBPMDesigner</module>
+              <draftCompile>false</draftCompile>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
 </project>
