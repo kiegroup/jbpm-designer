@@ -9,14 +9,13 @@ import java.util.List;
 import java.util.Scanner;
 
 import org.stringtemplate.v4.ST;
-import org.stringtemplate.v4.STGroup;
 import org.apache.log4j.Logger;
 import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.Process;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.formModeler.designer.integration.BPMNFormBuilderService;
-import org.stringtemplate.v4.STGroupDir;
+import org.stringtemplate.v4.STRawGroupDir;
 import org.uberfire.backend.vfs.Path;
 
 /** 
@@ -371,9 +370,11 @@ public class TaskFormTemplateManager {
     }
     
     private void generateProcessTemplate(TaskFormInfo tfi) {
-        STGroup templates = new STGroupDir("processtaskgroup", templatesPath, '$', '$');
+        STRawGroupDir templates = new STRawGroupDir(templatesPath, '$', '$');
         ST processFormTemplate = templates.getInstanceOf("processtaskform");
         processFormTemplate.add("tfi", tfi);
+        processFormTemplate.add("bopen", "{");
+        processFormTemplate.add("bclose", "}");
         tfi.setMetaOutput(processFormTemplate.render());
 
         String modelerFileName = tfi.getId() + ".form";
@@ -390,9 +391,11 @@ public class TaskFormTemplateManager {
     }
     
     private void generateUserTaskTemplate(TaskFormInfo tfi) {
-        STGroup templates = new STGroupDir("usertaskgroup", templatesPath, '$', '$');
+        STRawGroupDir templates = new STRawGroupDir(templatesPath, '$', '$');
         ST usertaskFormTemplate = templates.getInstanceOf("usertaskform");
         usertaskFormTemplate.add("tfi", tfi);
+        usertaskFormTemplate.add("bopen", "{");
+        usertaskFormTemplate.add("bclose", "}");
         tfi.setMetaOutput(usertaskFormTemplate.render());
 
         String modelerFileName = tfi.getId() + ".form";
