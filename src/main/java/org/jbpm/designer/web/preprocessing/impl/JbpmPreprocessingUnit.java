@@ -65,6 +65,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     public static final String CUSTOMEDITORS_EXT = ".json";
     public static final String THEME_COOKIE_NAME = "designercolortheme";
     public static final String DEFAULT_CATEGORY_NAME = "Service Tasks";
+    public static final String REST_WORKITEM_DEFINITION_ICON_ID = "rest";
     
     private String stencilPath;
     private String origStencilFilePath;
@@ -255,6 +256,12 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 	icon = ExternalInfo.getExternalProtocol(profile) + "://" + ExternalInfo.getExternalHost(profile) +
                             "/" + profile.getExternalLoadURLSubdomain().substring(0, profile.getExternalLoadURLSubdomain().indexOf("/")) +
                             "/rest/packages/" + URLEncoder.encode(packageName, "UTF-8") + "/assets/defaultservicenodeicon/binary/";
+                }
+                if (icon.startsWith(REST_WORKITEM_DEFINITION_ICON_ID)) {
+                	icon = icon.substring(REST_WORKITEM_DEFINITION_ICON_ID.length() + 1);
+                	icon = ExternalInfo.getExternalProtocol(profile) + "://" + ExternalInfo.getExternalHost(profile) +
+                            "/" + profile.getExternalLoadURLSubdomain().substring(0, profile.getExternalLoadURLSubdomain().indexOf("/")) +
+                            "/rest/packages/" + icon;
                 }
                 workDefinition.setIcon(icon);
                 InputStream iconStream = getImageInstream(icon, "GET", profile);
