@@ -1,7 +1,8 @@
 package org.jbpm.designer.web.server;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.drools.core.util.ConfFileUtils;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
@@ -36,7 +37,7 @@ import java.util.Map.Entry;
  */
 public class JbpmServiceRepositoryServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final Logger _logger = Logger
+	private static final Logger _logger = LoggerFactory
 			.getLogger(JbpmServiceRepositoryServlet.class);
 	private static final String displayRepoContent = "display";
 	private static final String installRepoContent = "install";

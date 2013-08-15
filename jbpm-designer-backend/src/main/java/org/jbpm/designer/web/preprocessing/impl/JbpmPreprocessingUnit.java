@@ -2,7 +2,8 @@ package org.jbpm.designer.web.preprocessing.impl;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.drools.core.process.core.ParameterDefinition;
 import org.drools.core.process.core.datatype.DataType;
 import org.drools.core.process.core.impl.ParameterDefinitionImpl;
@@ -44,7 +45,7 @@ import java.util.*;
  */
 public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     private static final Logger _logger =
-            Logger.getLogger(JbpmPreprocessingUnit.class);
+            LoggerFactory.getLogger(JbpmPreprocessingUnit.class);
     public static final String STENCILSET_PATH = "stencilsets";
     public static final String WORKITEM_DEFINITION_EXT = "wid";
     public static final String THEME_NAME = "themes";

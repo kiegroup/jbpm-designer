@@ -38,7 +38,8 @@ import javax.servlet.http.HttpServletResponse;
 import bpsim.impl.BpsimFactoryImpl;
 import org.stringtemplate.v4.ST;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.web.plugin.IDiagramPlugin;
@@ -71,7 +72,7 @@ public class EditorHandler extends HttpServlet {
     private static final long serialVersionUID = -7439613152623067053L;
 
     private static final Logger _logger =
-            Logger.getLogger(EditorHandler.class);
+            LoggerFactory.getLogger(EditorHandler.class);
 
     /**
      * The base path under which the application will be made available at runtime.

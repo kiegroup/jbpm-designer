@@ -1,7 +1,8 @@
 package org.jbpm.designer.web.server;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.AssetNotFoundException;
@@ -36,7 +37,7 @@ import java.io.UnsupportedEncodingException;
  */
 public class TaskFormsEditorServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final Logger _logger = Logger.getLogger(TaskFormsEditorServlet.class);
+	private static final Logger _logger = LoggerFactory.getLogger(TaskFormsEditorServlet.class);
 	private static final String TASKFORM_FILE_EXTENSION = "ftl";
     private static final String FORMMODELER_FILE_EXTENSION = "form";
 	private static final String TASKFORM_NAME_EXTENSION = "-taskform";

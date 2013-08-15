@@ -8,7 +8,9 @@ package org.jbpm.designer.server;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,7 +30,7 @@ public class RdfJsonTransformation {
 	
 	private static String hostUrl;
 	
-	private static Logger log = Logger.getLogger("org.jbpm.designer.server.RdfJsonTransformation");
+	private static Logger log = LoggerFactory.getLogger("org.jbpm.designer.server.RdfJsonTransformation");
 
 	public static JSONObject toJson(Document rdfDoc, String requestUrl) {
 		
@@ -148,9 +150,9 @@ public class RdfJsonTransformation {
 							properties.put(child.getNodeName(), jsonObj);
 						} catch (JSONException e) {
 							// non-JSON content
-							log.fine("conversion error");
-							log.fine(content);
-							log.fine(e.toString());
+							log.info("conversion error");
+							log.info(content);
+							log.info(e.toString());
 							properties.put(child.getNodeName(), content);
 						}
 					}

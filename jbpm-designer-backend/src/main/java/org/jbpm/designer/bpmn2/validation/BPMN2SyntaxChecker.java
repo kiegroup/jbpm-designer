@@ -25,14 +25,15 @@ import org.jbpm.ruleflow.core.validation.RuleFlowProcessValidator;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class BPMN2SyntaxChecker implements SyntaxChecker {
     public static final String BPMN2_TYPE = "BPMN2";
     public static final String SIMULATION_TYPE = "Simulation";
     public static final String PROCESS_TYPE = "Process";
-    private static final Logger _logger = Logger.getLogger(BPMN2SyntaxChecker.class);
+    private static final Logger _logger = LoggerFactory.getLogger(BPMN2SyntaxChecker.class);
 
 	protected Map<String, List<ValidationSyntaxError>> errors = new HashMap<String, List<ValidationSyntaxError>>();
 	private String json;

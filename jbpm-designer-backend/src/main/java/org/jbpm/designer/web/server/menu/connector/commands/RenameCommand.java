@@ -1,6 +1,7 @@
 package org.jbpm.designer.web.server.menu.connector.commands;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetNotFoundException;
 import org.jbpm.designer.repository.Repository;
@@ -12,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 public class RenameCommand extends AbstractCommand {
-    private static Logger logger = Logger.getLogger(RenameCommand.class);
+    private static Logger logger = LoggerFactory.getLogger(RenameCommand.class);
     private HttpServletRequest request;
     private HttpServletResponse response;
     private IDiagramProfile profile;

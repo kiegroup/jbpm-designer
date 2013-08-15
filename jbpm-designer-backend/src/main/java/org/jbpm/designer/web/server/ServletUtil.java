@@ -1,7 +1,8 @@
 package org.jbpm.designer.web.server;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetNotFoundException;
 import org.jbpm.designer.repository.Directory;
@@ -30,7 +31,7 @@ import java.util.List;
  *
  */
 public class ServletUtil {
-	private static final Logger _logger = Logger.getLogger(ServletUtil.class);
+	private static final Logger _logger = LoggerFactory.getLogger(ServletUtil.class);
 	public static final String EXT_BPMN = "bpmn";
     public static final String EXT_BPMN2 = "bpmn2";
 	private ServletUtil(){}

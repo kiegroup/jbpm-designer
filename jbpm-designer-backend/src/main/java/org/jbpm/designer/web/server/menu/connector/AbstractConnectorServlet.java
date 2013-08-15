@@ -5,7 +5,8 @@ import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.AssetNotFoundException;
@@ -27,7 +28,7 @@ import java.io.*;
 import java.util.*;
 
 public abstract class AbstractConnectorServlet extends HttpServlet {
-    private static Logger logger = Logger.getLogger(AbstractConnectorServlet.class);
+    private static Logger logger = LoggerFactory.getLogger(AbstractConnectorServlet.class);
 
     private Map<String, Object> requestParams;
     private List<FileItemStream> listFiles;

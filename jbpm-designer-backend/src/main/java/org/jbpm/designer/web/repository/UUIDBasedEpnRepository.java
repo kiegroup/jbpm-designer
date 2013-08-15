@@ -4,13 +4,14 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 
 
 public class UUIDBasedEpnRepository implements IUUIDBasedRepository {
 
-    private static final Logger _logger = Logger.getLogger(UUIDBasedEpnRepository.class);
+    private static final Logger _logger = LoggerFactory.getLogger(UUIDBasedEpnRepository.class);
     private final static String DEFAULTS_PATH = "defaults";
     
     private String _defaultsPath;

@@ -1,7 +1,8 @@
 package org.jbpm.designer.web.server.menu.connector.commands;
 
 import org.apache.commons.fileupload.FileItemStream;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.json.JSONObject;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 public class UploadCommand extends AbstractCommand {
-    private static Logger logger = Logger.getLogger(RenameCommand.class);
+    private static Logger logger = LoggerFactory.getLogger(RenameCommand.class);
     private HttpServletRequest request;
     private HttpServletResponse response;
     private IDiagramProfile profile;

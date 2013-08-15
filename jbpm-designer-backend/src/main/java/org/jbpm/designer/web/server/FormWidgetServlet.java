@@ -1,6 +1,7 @@
 package org.jbpm.designer.web.server;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.web.profile.IDiagramProfile;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FormWidgetServlet extends HttpServlet {
-	private static final Logger _logger = Logger.getLogger(FormWidgetServlet.class);
+	private static final Logger _logger = LoggerFactory.getLogger(FormWidgetServlet.class);
 
     private IDiagramProfile profile;
     // this is here just for unit testing purpose

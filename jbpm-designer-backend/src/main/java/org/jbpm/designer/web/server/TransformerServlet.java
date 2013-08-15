@@ -23,7 +23,8 @@ import org.apache.batik.transcoder.image.ImageTranscoder;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.fop.svg.PDFTranscoder;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.Process;
 import org.eclipse.bpmn2.di.*;
@@ -77,7 +78,7 @@ import java.util.Map;
  */
 public class TransformerServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private static final Logger _logger = Logger.getLogger(TransformerServlet.class);
+    private static final Logger _logger = LoggerFactory.getLogger(TransformerServlet.class);
     private static final String TO_PDF = "pdf";
     private static final String TO_PNG = "png";
     private static final String TO_SVG = "svg";
