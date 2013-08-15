@@ -1,6 +1,7 @@
 package org.jbpm.designer.web.server;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.web.profile.IDiagramProfile;
@@ -23,7 +24,7 @@ import java.io.PrintWriter;
  */
 public class CustomEditorsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final Logger _logger = Logger.getLogger(CustomEditorsServlet.class);
+	private static final Logger _logger = LoggerFactory.getLogger(CustomEditorsServlet.class);
 	public static final String CUSTOMEDITORS_NAME = "customeditors";
 
     private IDiagramProfile profile;

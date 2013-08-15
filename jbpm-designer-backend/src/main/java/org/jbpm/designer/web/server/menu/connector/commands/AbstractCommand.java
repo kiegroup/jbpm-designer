@@ -2,7 +2,8 @@ package org.jbpm.designer.web.server.menu.connector.commands;
 
 import bpsim.impl.BpsimFactoryImpl;
 import org.apache.commons.fileupload.FileItemStream;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.RootElement;
 import org.eclipse.bpmn2.Process;
@@ -20,7 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.*;
 
 public abstract class AbstractCommand {
-    private static Logger logger = Logger.getLogger(AbstractCommand.class);
+    private static Logger logger = LoggerFactory.getLogger(AbstractCommand.class);
 
     public JSONObject listContent(IDiagramProfile profile, String target, String current, boolean tree) throws Exception {
         try {

@@ -1,6 +1,7 @@
 package org.jbpm.designer.repository.servlet;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jbpm.designer.repository.*;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.web.profile.IDiagramProfile;
@@ -24,7 +25,7 @@ import java.util.Collection;
  * Servlet wraps Repository asset api.
  */
 public class AssetServiceServlet extends HttpServlet {
-    private static final Logger _logger = Logger.getLogger(AssetServiceServlet.class);
+    private static final Logger _logger = LoggerFactory.getLogger(AssetServiceServlet.class);
     private static final String ACTION_CREATE_ASSET = "createasset";
     private static final String ACTION_UPDATE_ASSET    = "updateasset";
     private static final String ACTION_DELETE_ASSET   = "deleteasset";

@@ -30,7 +30,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -59,7 +60,7 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     
-    private static final Logger _logger = Logger.getLogger(UUIDBasedRepositoryServlet.class);
+    private static final Logger _logger = LoggerFactory.getLogger(UUIDBasedRepositoryServlet.class);
 
     @Inject
     private IDiagramProfileService _profileService = null;

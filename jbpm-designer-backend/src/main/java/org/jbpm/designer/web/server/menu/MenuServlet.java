@@ -1,6 +1,7 @@
 package org.jbpm.designer.web.server.menu;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
@@ -25,7 +26,7 @@ public class MenuServlet extends HttpServlet {
     private Document _doc = null;
     @Inject
     private IDiagramProfileService _profileService = null;
-    private static final Logger _logger = Logger.getLogger(MenuServlet.class);
+    private static final Logger _logger = LoggerFactory.getLogger(MenuServlet.class);
 
     @Override
     public void init(ServletConfig config) throws ServletException {

@@ -25,7 +25,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
@@ -43,7 +44,7 @@ public class DictionaryServlet extends HttpServlet {
 	private static final String ACTION_SAVE = "save";
 	private static final String DICTIONARY_FNAME = "processdictionary";
 	private static final String DICTIONARY_FEXT = "json";
-	private static final Logger _logger = Logger.getLogger(DictionaryServlet.class);
+	private static final Logger _logger = LoggerFactory.getLogger(DictionaryServlet.class);
 	private ServletConfig config;
 
     private IDiagramProfile profile;

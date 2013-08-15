@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Scanner;
 
 import org.stringtemplate.v4.ST;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.Process;
 import org.jbpm.designer.repository.Asset;
@@ -24,7 +25,7 @@ import org.uberfire.backend.vfs.Path;
  * @author Tihomir Surdilovic
  */
 public class TaskFormTemplateManager {
-    private static final Logger _logger = Logger.getLogger(TaskFormTemplateManager.class);
+    private static final Logger _logger = LoggerFactory.getLogger(TaskFormTemplateManager.class);
     private static final String[] validStructureRefs = new String[] {"Float", "Integer", "String", "Object", "Boolean", "Undefined"};
     public final static String TASKFORMS_PATH = "stencilsets";
 

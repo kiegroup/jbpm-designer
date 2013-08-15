@@ -445,6 +445,17 @@
           <artifactId>kie-wb-common-data-modeller-client</artifactId>
       </dependency>
 
+    <!-- Logging -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
   </dependencies>
 
   <build>

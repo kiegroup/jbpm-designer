@@ -22,7 +22,8 @@ import java.util.Map.Entry;
 
 import bpsim.*;
 import bpsim.impl.BpsimPackageImpl;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.codehaus.jackson.JsonEncoding;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerationException;
@@ -77,7 +78,7 @@ public class Bpmn2JsonMarshaller {
 	private Map<String, DiagramElement> _diagramElements = new HashMap<String, DiagramElement>();
 	private Map<String,Association> _diagramAssociations = new HashMap<String, Association>();
 	private Scenario _simulationScenario = null;
-	private static final Logger _logger = Logger.getLogger(Bpmn2JsonMarshaller.class);
+	private static final Logger _logger = LoggerFactory.getLogger(Bpmn2JsonMarshaller.class);
 	private IDiagramProfile profile;
 	
 	public void setProfile(IDiagramProfile profile) {

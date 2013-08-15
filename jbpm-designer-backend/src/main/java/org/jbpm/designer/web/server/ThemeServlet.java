@@ -11,7 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.web.profile.IDiagramProfile;
@@ -31,7 +32,7 @@ public class ThemeServlet extends HttpServlet {
 	private static final String THEME_NAME = "themes";
     public static final String THEME_EXT = ".json";
 	private static final String DEFAULT_THEME = "jBPM";
-	private static final Logger _logger = Logger.getLogger(ThemeServlet.class);
+	private static final Logger _logger = LoggerFactory.getLogger(ThemeServlet.class);
 	private ServletConfig config;
 	private String themeInfo;
 

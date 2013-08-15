@@ -14,7 +14,8 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
 import bpsim.impl.BpsimFactoryImpl;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.Process;
 import org.jboss.drools.impl.DroolsFactoryImpl;
@@ -31,7 +32,7 @@ import org.jbpm.designer.web.profile.impl.RepositoryInfo;
  */
 public class ProcessInfoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final Logger _logger = Logger.getLogger(ProcessInfoServlet.class);
+	private static final Logger _logger = LoggerFactory.getLogger(ProcessInfoServlet.class);
 
     @Inject
     private IDiagramProfileService _profileService = null;

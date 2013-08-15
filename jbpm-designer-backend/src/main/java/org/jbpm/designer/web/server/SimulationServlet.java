@@ -4,7 +4,8 @@ import bpsim.BPSimDataType;
 import bpsim.BpsimPackage;
 import bpsim.Scenario;
 import bpsim.impl.BpsimFactoryImpl;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.drools.core.command.runtime.rule.InsertElementsCommand;
 import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.Process;
@@ -41,7 +42,7 @@ import java.util.*;
  */
 public class SimulationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final Logger _logger = Logger.getLogger(SimulationServlet.class);
+	private static final Logger _logger = LoggerFactory.getLogger(SimulationServlet.class);
 	private static final String ACTION_GETPATHINFO = "getpathinfo";
 	private static final String ACTION_RUNSIMULATION = "runsimulation";
 	private ServletConfig config;

@@ -14,7 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import bpsim.impl.BpsimFactoryImpl;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.eclipse.bpmn2.Definitions;
 import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jboss.errai.bus.client.api.RemoteCallback;
@@ -47,7 +48,7 @@ import org.uberfire.workbench.events.ResourceUpdatedEvent;
  */
 public class TaskFormsServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private static final Logger _logger = Logger
+    private static final Logger _logger = LoggerFactory
             .getLogger(TaskFormsServlet.class);
     private static final String TASKFORMS_PATH = "taskforms";
     private static final String FORMTEMPLATE_FILE_EXTENSION = "ftl";

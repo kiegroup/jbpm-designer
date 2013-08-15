@@ -1,6 +1,7 @@
 package org.jbpm.designer.web.server;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jbpm.designer.util.ConfigurationProvider;
 
 import javax.servlet.ServletConfig;
@@ -21,7 +22,7 @@ import java.util.Scanner;
  */
 public class StencilPatternsServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private static final Logger _logger = Logger.getLogger(StencilPatternsServlet.class);
+    private static final Logger _logger = LoggerFactory.getLogger(StencilPatternsServlet.class);
     private static final String designer_path = ConfigurationProvider.getInstance().getDesignerContext();
 
     @Override

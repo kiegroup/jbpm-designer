@@ -15,7 +15,8 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.designer.web.profile.impl.RepositoryInfo;
@@ -28,7 +29,7 @@ import org.json.JSONObject;
  * @author Tihomir Surdilovic
  */
 public class ProcessDiffServiceServlet extends HttpServlet {
-	private static final Logger _logger = Logger
+	private static final Logger _logger = LoggerFactory
 			.getLogger(ProcessDiffServiceServlet.class);
 
     @Inject

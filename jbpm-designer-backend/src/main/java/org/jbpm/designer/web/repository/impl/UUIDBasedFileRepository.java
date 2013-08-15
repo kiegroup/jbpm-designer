@@ -29,7 +29,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfile.IDiagramMarshaller;
 import org.jbpm.designer.web.repository.IUUIDBasedRepository;
@@ -43,7 +44,7 @@ import org.jbpm.designer.web.repository.IUUIDBasedRepository;
  */
 public class UUIDBasedFileRepository implements IUUIDBasedRepository {
 
-    private static final Logger _logger = Logger.getLogger(UUIDBasedFileRepository.class);
+    private static final Logger _logger = LoggerFactory.getLogger(UUIDBasedFileRepository.class);
     
     /**
      * the path to the repository inside the servlet.
