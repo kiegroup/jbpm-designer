@@ -122,10 +122,6 @@
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
     </dependency>
-    <dependency>
-      <groupId>jbpt</groupId>
-      <artifactId>jbpt</artifactId>
-    </dependency>
 
     <dependency>
       <groupId>org.jdom</groupId>
