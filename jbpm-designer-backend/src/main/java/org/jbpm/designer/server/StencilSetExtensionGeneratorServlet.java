@@ -52,8 +52,6 @@ import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
-import org.supercsv.io.CsvMapReader;
-import org.supercsv.prefs.CsvPreference;
 
 public class StencilSetExtensionGeneratorServlet extends HttpServlet {
 	
@@ -134,25 +132,6 @@ public class StencilSetExtensionGeneratorServlet extends HttpServlet {
 				        	modelTags = value.split(",");
 				        } else if (name.equals("additionalERDFContentForGeneratedModel")) {
 				        	additionalERDFContentForGeneratedModel = value;
-				        }
-				    } else {
-				    	// file field
-				        //System.out.println("File field " + name + " with file name "
-				        //    + item.getName() + " detected.");
-				        // Process the input stream
-				        if (name.equals("csvFile")) {
-				        	CsvMapReader csvFileReader = new CsvMapReader(
-					        		new InputStreamReader(stream, "UTF-8"),
-					        		CsvPreference.EXCEL_PREFERENCE
-					        		);
-					        csvHeader = csvFileReader.getCSVHeader(true);
-							if (columnPropertyMapping != null || columnPropertyMapping.length > 0) {
-								csvHeader = columnPropertyMapping;
-							}
-					        Map<String,String> row;
-					        while ((row = csvFileReader.read(csvHeader)) != null) {
-					        	stencilPropertyMatrix.add(row);
-					        }
 				        }
 				    }
 				}
