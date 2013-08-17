@@ -94,6 +94,19 @@
       <name>JBoss ThirdParty Uploads</name>
       <url>https://repository.jboss.org/nexus/content/repositories/thirdparty-uploads/</url>
     </repository>
+    <repository>
+      <id>intalio</id>
+      <url>http://www.intalio.org/public/maven2/</url>
+      <layout>default</layout>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </snapshots>
+    </repository>
   </repositories>
 </project>
 
