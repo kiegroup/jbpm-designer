@@ -311,16 +311,6 @@
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>org.xmappr</groupId>
-      <artifactId>xmappr</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>org.codehaus.woodstox</groupId>
-          <artifactId>woodstox-core-asl</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
       <groupId>rhino</groupId>
       <artifactId>js</artifactId>
     </dependency>
