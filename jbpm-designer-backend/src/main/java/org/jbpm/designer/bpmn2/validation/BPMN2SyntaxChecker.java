@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Pattern;
 
 import bpsim.*;
 import bpsim.impl.BpsimFactoryImpl;
@@ -84,6 +85,9 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
                         pname = (String) entry.getValue();
                         if(isEmpty(pname)) {
                         	addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE,  "Process has no package name."));
+                        }
+                        if(!isValidPackageName(pname)) {
+                            addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE,  "Package name contains invalid characters."));
                         }
                     }
                 }
@@ -565,6 +569,11 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
             }
         }
         return false;
+    }
+
+    private boolean isValidPackageName(String pkg) {
+        Pattern p = Pattern.compile("^[a-zA-Z_\\$][\\w\\$]*(?:\\.[a-zA-Z_\\$][\\w\\$]*)*$");
+        return p.matcher(pkg).matches();
     }
     
     private Scenario getDefaultScenario(Definitions def) {
