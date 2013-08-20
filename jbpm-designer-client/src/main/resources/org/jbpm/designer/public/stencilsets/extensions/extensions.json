@@ -1,23 +1,16 @@
 {
 	"extensions": [
-		{
-			"title" : "jBPM BPMN2 Minimal Subset",
-			"namespace" : "http://b3mn.org/stencilset/bpmn2.0minimal#",
-			"description":"A subset of JBPM BPMN2",
-			"definition":"bpmn2.0jbpmminimal/bpmn2.0jbpmminimalsubset.json",
-			"extends":"http://b3mn.org/stencilset/bpmn2.0#"
-		},
         {
-            "title" : "jBPM BPMN2 Simple Subset",
+            "title" : "Simple",
             "namespace" : "http://b3mn.org/stencilset/bpmn2.0simple#",
-            "description":"A subset of JBPM BPMN2",
+            "description":"Simple subset of JBPM BPMN2",
             "definition":"bpmn2.0jbpmsimple/bpmn2.0jbpmsimplesubset.json",
             "extends":"http://b3mn.org/stencilset/bpmn2.0#"
         },
         {
-            "title" : "jBPM BPMN2 RuleFlow Subset",
+            "title" : "Ruleflow",
             "namespace" : "http://b3mn.org/stencilset/bpmn2.0ruleflow#",
-            "description":"A subset of JBPM BPMN2",
+            "description":"Ruleflow subset of JBPM BPMN2",
             "definition":"bpmn2.0jbpmruleflow/bpmn2.0jbpmruleflowsubset.json",
             "extends":"http://b3mn.org/stencilset/bpmn2.0#"
         }
@@ -26,10 +19,9 @@
 		{
 			"title":"Full",
 			"namespace":"http://b3mn.org/stencilset/bpmn2.0#",
-			"description":"jBPM Full BPMN2 Features",
+			"description":"Full jBPMBPMN2 Features",
 			"stencilset":"http://b3mn.org/stencilset/bpmn2.0#",
 			"removeExtensions" : [
-				"http://b3mn.org/stencilset/bpmn2.0minimal#",
                 "http://b3mn.org/stencilset/bpmn2.0simple#",
                 "http://b3mn.org/stencilset/bpmn2.0ruleflow#"
 			],
@@ -38,12 +30,8 @@
 		{
 			"title":"Simple",
 			"namespace":"http://b3mn.org/stencilset/bpmn2.0simple#",
-			"description":"jBPM Simple BPMN2 Features",
+			"description":"Simple jBPM BPMN2 Features",
 			"stencilset":"http://b3mn.org/stencilset/bpmn2.0#",
-			"removeExtensions" : [
-                "http://b3mn.org/stencilset/bpmn2.0minimal#",
-                "http://b3mn.org/stencilset/bpmn2.0ruleflow#"
-            ],
 			"addExtensions" : [
 				"http://b3mn.org/stencilset/bpmn2.0simple#"
 			]
@@ -51,12 +39,8 @@
         {
             "title":"RuleFlow",
             "namespace":"http://b3mn.org/stencilset/bpmn2.0ruleflow#",
-            "description":"jBPM RuleFlow BPMN2 Features",
+            "description":"RuleFlow jBPM BPMN2 Features",
             "stencilset":"http://b3mn.org/stencilset/bpmn2.0#",
-            "removeExtensions" : [
-                "http://b3mn.org/stencilset/bpmn2.0minimal#",
-                "http://b3mn.org/stencilset/bpmn2.0simple#"
-            ],
             "addExtensions" : [
                 "http://b3mn.org/stencilset/bpmn2.0ruleflow#"
             ]

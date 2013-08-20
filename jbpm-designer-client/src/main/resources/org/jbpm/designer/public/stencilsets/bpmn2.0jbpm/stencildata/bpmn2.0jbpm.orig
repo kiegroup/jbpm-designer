@@ -1,5 +1,5 @@
 {
-	"title":"jBPM BPMN2 (Full)",
+	"title":"Full",
 	"namespace":"http://b3mn.org/stencilset/bpmn2.0#",
 	"description":"This is the jBPM BPMN 2.0 stencil set specification.",
 	"description_ja":"これはjBPM BPMN 2.0ステンシルセット仕様です。",
@@ -4580,8 +4580,6 @@
 				"all",
 				"sequence_start",
 				"sequence_end",
-				"choreography_sequence_start",
-				"choreography_sequence_end",
 				"fromtoall",
 				"GatewaysMorph"
 			]
@@ -4701,8 +4699,6 @@
 			"roles":			[
 				"all",
 				"sequence_end",
-				"choreography_sequence_start",
-				"choreography_sequence_end",
 				"fromtoall",
 				"GatewaysMorph",
 				"EventbasedGateway"
@@ -4804,8 +4800,6 @@
 				"all",
 				"sequence_start",
 				"sequence_end",
-				"choreography_sequence_start",
-				"choreography_sequence_end",
 				"fromtoall",
 				"GatewaysMorph"
 			]
@@ -4918,8 +4912,6 @@
 				"all",
 				"sequence_start",
 				"sequence_end",
-				"choreography_sequence_start",
-				"choreography_sequence_end",
 				"fromtoall",
 				"GatewaysMorph"
 			]
@@ -5591,7 +5583,6 @@
 				"all",
 				"Startevents_all",
 				"sequence_start",
-				"choreography_sequence_start",
 				"to_task_event",
 				"from_task_event",
 				"fromtoall",
@@ -5784,7 +5775,6 @@
 				"from_task_event",
 				"fromtoall",
 				"Startevents_all",
-				"choreography_sequence_start",
 				"StartEventsMorph"
 			],
 			"properties": [
@@ -6018,7 +6008,6 @@
 				"from_task_event",
 				"fromtoall",
 				"Startevents_all",
-				"choreography_sequence_start",
 				"StartEventsMorph"
 			],
 			"properties": [
@@ -6327,7 +6316,6 @@
 				"to_task_event",
 				"from_task_event",
 				"fromtoall",
-				"choreography_sequence_start",
 				"StartEventsMorph"
 			],
 			"properties": [
@@ -6432,9 +6420,7 @@
 				"fromtoall",
 				"FromEventbasedGateway",
 				"IntermediateEventOnSubprocessBoundary",
-				"IntermediateEventOnActivityBoundary",
-				"EventOnChoreographyActivityBoundary",
-				"IntermediateEventsMorph"
+				"IntermediateEventOnActivityBoundary"
 			],
 			"properties": [
 				{
@@ -6533,13 +6519,9 @@
 				"to_task_event",
 				"from_task_event",
 				"fromtoall",
-				"choreography_sequence_start",
-				"choreography_sequence_end",
 				"FromEventbasedGateway",
 				"IntermediateEventOnSubprocessBoundary",
-				"IntermediateEventOnActivityBoundary",
-				"EventOnChoreographyActivityBoundary",
-				"IntermediateEventsMorph"
+				"IntermediateEventOnActivityBoundary"
 			],
 			"properties": [
 				{
@@ -6685,8 +6667,7 @@
 				"from_task_event",
 				"fromtoall",
 				"IntermediateEventOnSubprocessBoundary",
-				"IntermediateEventOnActivityBoundary",
-				"IntermediateEventsMorph"
+				"IntermediateEventOnActivityBoundary"
 			],
 			"properties": [
 				{
@@ -6784,16 +6765,12 @@
 				"all",
 				"sequence_start",
 				"sequence_end",
-				"choreography_sequence_start",
-				"choreography_sequence_end",
 				"to_task_event",
 				"from_task_event",
 				"fromtoall",
 				"FromEventbasedGateway",
 				"IntermediateEventOnSubprocessBoundary",
-				"IntermediateEventOnActivityBoundary",
-				"EventOnChoreographyActivityBoundary",
-				"IntermediateEventsMorph"
+				"IntermediateEventOnActivityBoundary"
 			],
 			"properties": [
 				{
@@ -6913,8 +6890,7 @@
 				"from_task_event",
 				"fromtoall",
 				"IntermediateEventOnSubprocessBoundary",
-				"IntermediateEventOnActivityBoundary",
-				"IntermediateEventsMorph"
+				"IntermediateEventOnActivityBoundary"
 			],
 			"properties": [
 				{
@@ -7012,10 +6988,8 @@
 				"all",
 				"from_task_event",
 				"fromtoall",
-				"EventOnChoreographyActivityBoundary",
 				"IntermediateEventOnSubprocessBoundary",
-				"IntermediateEventOnActivityBoundary",
-				"IntermediateEventsMorph"
+				"IntermediateEventOnActivityBoundary"
 			],
 			"properties": [
 				{
@@ -7105,12 +7079,9 @@
 				"to_task_event",
 				"from_task_event",
 				"fromtoall",
-				"choreography_sequence_start",
-				"choreography_sequence_end",
 				"FromEventbasedGateway",
 				"IntermediateEventOnSubprocessBoundary",
-				"IntermediateEventOnActivityBoundary",
-				"IntermediateEventsMorph"
+				"IntermediateEventOnActivityBoundary"
 			],
 			"properties": [
 				{
@@ -7209,8 +7180,7 @@
 				"sequence_end",
 				"to_task_event",
 				"from_task_event",
-				"fromtoall",
-				"IntermediateEventsMorph"
+				"fromtoall"
 			],
 			"properties": [
 				{
@@ -7308,8 +7278,7 @@
 				"sequence_end",
 				"to_task_event",
 				"from_task_event",
-				"fromtoall",
-				"IntermediateEventsMorph"
+				"fromtoall"
 			],
 			"properties": [
 				{
@@ -7406,8 +7375,7 @@
 				"sequence_end",
 				"to_task_event",
 				"from_task_event",
-				"fromtoall",
-				"IntermediateEventsMorph"
+				"fromtoall"
 			],
 			"properties": [
 				{
@@ -7505,7 +7473,6 @@
 				"to_task_event",
 				"from_task_event",
 				"fromtoall",
-				"choreography_sequence_end",
 				"Endevents_all",
 				"EndEventsMorph"
 			],
@@ -8165,7 +8132,6 @@
 				"to_task_event",
 				"from_task_event",
 				"fromtoall",
-				"choreography_sequence_end",
 				"EndEventsMorph"
 			],
 			"properties": [
@@ -8665,10 +8631,6 @@
 						"to":["sequence_end"]
 					},
 					{
-						"from":"choreography_sequence_start",
-						"to":["choreography_sequence_end"]
-					},
-					{
 						"from":"Exclusive_Eventbased_Gateway",
 						"to":["FromEventbasedGateway"]
 					},
@@ -8683,24 +8645,6 @@
 				"connects": [
 					{
 						"from":"messageflow_start",
-						"to":["messageflow_end"]
-					}
-				]
-			},
-			{
-				"role":"ChoreographyMessageFlowStart",
-				"connects": [
-					{
-						"from":"messageflow_start",
-						"to":["choreography_messageflow_end"]
-					}
-				]
-			},
-			{
-				"role":"ChoreographyMessageFlowEnd",
-				"connects": [
-					{
-						"from":"choreography_messageflow_start",
 						"to":["messageflow_end"]
 					}
 				]
@@ -8730,15 +8674,6 @@
 					{
 						"from":"Subprocess",
 						"to":["IntermediateEventOnSubprocessBoundary"]
-					}
-				]
-			},
-			{
-				"role":"EventOnChoreographyActivityBoundary",
-				"connects": [
-					{
-						"from":"ChoreographyMorph",
-						"to":["EventOnChoreographyActivityBoundary"]
 					}
 				]
 			},
@@ -8827,22 +8762,6 @@
 						"to" : ["Message"]
 					},
 					{
-						"from" : "Message",
-						"to" : ["ChoreographyElement"]
-					},
-					{
-						"from" : "ChoreographyElement",
-						"to" : ["Message"]
-					},
-					{
-						"from" : "ChoreographyElement",
-						"to" : ["TextAnnotation"]
-					},
-					{
-						"from" : "TextAnnotation",
-						"to" : "ChoreographyElement"
-					},
-					{
 					   "from" : "ActivitiesMorph",
 					   "to" : ["to_participant"]
 					},
@@ -8884,7 +8803,6 @@
 					"from_task_event",
 					"to_task_event",
 					"EventSubprocess",
-					"CollapsedEventSubprocess",
 					"TextAnnotation",
 					"from_participant"
 				]
@@ -8897,7 +8815,6 @@
 					"from_task_event",
 					"to_task_event",
 					"EventSubprocess",
-					"CollapsedEventSubprocess",
 					"TextAnnotation",
 					"from_participant"
 				]
@@ -8910,7 +8827,6 @@
 					"from_task_event",
 					"to_task_event",
 					"EventSubprocess",
-					"CollapsedEventSubprocess",
 					"TextAnnotation",
 					"from_participant"
 				]
@@ -8918,32 +8834,14 @@
 			{
 				"role" : "MessageContainer",
 				"contains" : ["Message"]
-			},
-			{
-				"role" : "ChoreographyElement",
-				"contains" : ["ChoreographyParticipant"]
-			},
-			{
-				"role" : "ChoreographySubprocessExpanded",
-				"contains":	[
-								"ChoreographyElement",
-								"choreography_sequence_start",
-								"choreography_sequence_end",
-								"Message",
-								"TextAnnotation"
-																
-							]
 			}
+
 		],
 		"morphingRules": [
 			{
 				"role": "ActivitiesMorph",
 				"baseMorphs": ["Task"],
 				"preserveBounds" : true
-			},
-			{
-				"role": "EventActivitiesMorph",
-				"baseMorphs": ["CollapsedEventSubprocess"]
 			},
 			{
 				"role": "GatewaysMorph",
@@ -8953,10 +8851,6 @@
 				"role": "StartEventsMorph",
 				"baseMorphs": ["StartNoneEvent"],
 				"showInShapeMenu":false
-			},
-			{
-				"role": "IntermediateEventsMorph",
-				"baseMorphs": ["IntermediateEvent"]
 			},
 			{
 				"role": "EndEventsMorph",
@@ -8975,10 +8869,6 @@
 				"baseMorphs": ["SequenceFlow"]
 			},
 			{
-				"role": "ChoreographyMorph",
-				"baseMorphs": ["ChoreographyTask"]
-			},
-			{
 				"role": "AssociationMorph",
 				"baseMorphs": [""]
 			}
@@ -8992,32 +8882,11 @@
 						{"t":1, "r":2, "b":1, "l":2}]
 			},
 			{
-				"role": "EventActivitiesMorph",
-				"outs":[{"edgeRole":"MessageFlow","t":2, "r":1, "b":2, "l":1},
-						{"t":1,"r":2,"b":1,"l":2}],
-				"ins": [{"edgeRole":"MessageFlow","t":2, "r":1, "b":2, "l":1},
-						{"t":1, "r":2, "b":1, "l":2}]
-			},
-			{
-				"role": "ChoreographyMorph",
-				"outs":[{"edgeRole":"MessageFlow","t":2, "r":1, "b":2, "l":1},
-						{"t":1,"r":2,"b":1,"l":2}],
-				"ins": [{"edgeRole":"MessageFlow","t":2, "r":1, "b":2, "l":1},
-						{"t":1, "r":2, "b":1, "l":2}]
-			},
-			{
 				"role": "GatewaysMorph",
 				"outs": [{"t":2, "r":1, "b":2, "l":1}]
 			},
 			{
 				"role": "StartEventsMorph",
-				"outs":[{"edgeRole":"MessageFlow","t":2, "r":1, "b":2, "l":1},
-						{"t":1,"r":2,"b":1,"l":2}],
-				"ins": [{"edgeRole":"MessageFlow","t":2, "r":1, "b":2, "l":1},
-						{"t":1, "r":2, "b":1, "l":2}]
-			},
-			{
-				"role": "IntermediateEventsMorph",
 				"outs":[{"edgeRole":"MessageFlow","t":2, "r":1, "b":2, "l":1},
 						{"t":1,"r":2,"b":1,"l":2}],
 				"ins": [{"edgeRole":"MessageFlow","t":2, "r":1, "b":2, "l":1},

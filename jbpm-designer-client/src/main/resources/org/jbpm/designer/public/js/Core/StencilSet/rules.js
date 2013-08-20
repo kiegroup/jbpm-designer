@@ -311,6 +311,9 @@ ORYX.Core.StencilSet.Rules = {
 	
 	_getStencilById: function(id) {
 		return this._stencils.find(function(stencil) {
+            if(!stencil) {
+                return false;
+            }
 			return stencil.id()==id;
 		});
 	},

@@ -148,6 +148,9 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
 			}
 			
 			var edges = stencils.findAll(function(stencil) {
+                if(!stencil) {
+                    return false;
+                }
 				return stencil.type() == "edge";
 			});
 			result = result.concat(edges);
@@ -167,12 +170,18 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
     
     nodes: function(){
         return this._availableStencils.values().findAll(function(stencil){
+            if(!stencil) {
+                return false;
+            }
             return (stencil.type() === 'node')
         });
     },
     
     edges: function(){
         return this._availableStencils.values().findAll(function(stencil){
+            if(!stencil) {
+                return false;
+            }
             return (stencil.type() === 'edge')
         });
     },
