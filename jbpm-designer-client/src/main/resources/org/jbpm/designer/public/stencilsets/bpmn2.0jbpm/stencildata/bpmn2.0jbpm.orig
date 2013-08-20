@@ -455,7 +455,7 @@
 					"readonly":false,
 					"optional":true,
 					"hidden":true,
-                                        "visible":false,
+                    "visible":false,
 					"refToView": [
 						"frame",
 						"frame2"
@@ -2085,7 +2085,7 @@
 	    "propertyPackages": [],
             "properties" :      [],
 	    "roles" :                       [
-                                "all",
+                                "all"
                         ]
         },
 	{
@@ -2100,7 +2100,7 @@
             "propertyPackages": [],
             "properties" :      [],
   	    "roles" :                       [
-                                "all",
+                                "all"
                         ]
         },
 	{
@@ -2115,7 +2115,7 @@
             "propertyPackages": [],
             "properties" :      [],
             "roles" :                       [
-                                "all",
+                                "all"
                         ]
         },
 	{
@@ -2130,7 +2130,7 @@
             "propertyPackages": [],                     
             "properties" :      [],                     
             "roles" :                       [           
-                                "all",
+                                "all"
                         ]
         },
 	{
@@ -2145,7 +2145,7 @@
             "propertyPackages": [],
             "properties" :      [],
             "roles" :                       [
-                                "all",
+                                "all"
                         ]
         },
 	{
@@ -2160,7 +2160,7 @@
             "propertyPackages": [],                     
             "properties" :      [],                     
             "roles" :                       [           
-                                "all",
+                                "all"
                         ]
         },
 	{
@@ -2175,7 +2175,7 @@
             "propertyPackages": [],
             "properties" :      [],
             "roles" :                       [
-                                "all",
+                                "all"
                         ]
         },
 		{
@@ -4560,7 +4560,7 @@
 					"optional":false,
 					"refToView":"cross",
 					"hidden":true,
-                                        "visible":false,
+                    "visible":false
 				},		
 				{
 					"id":"defaultgate",
