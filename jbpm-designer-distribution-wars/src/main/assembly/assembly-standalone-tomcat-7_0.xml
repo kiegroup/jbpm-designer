@@ -84,6 +84,7 @@
 
                     <exclude>WEB-INF/lib/*-sources.jar</exclude>
                     <exclude>WEB-INF/lib/el-api-*.jar</exclude>
+                    <exclude>WEB-INF/lib/jboss-el-api_*.jar</exclude>
                     <exclude>WEB-INF/lib/xml-apis-*.jar</exclude>
 
                     <!-- Errai -->
@@ -95,7 +96,9 @@
                     <exclude>WEB-INF/lib/mail-*.jar</exclude>
                     <exclude>WEB-INF/lib/geronimo-spec-jta-*.jar</exclude>
                     <exclude>WEB-INF/lib/servlet-api-*.jar</exclude>
+                    <exclude>WEB-INF/lib/jboss-servlet-api_*.jar</exclude>
                     <exclude>WEB-INF/lib/jsp-api-*.jar</exclude>
+                    <exclude>WEB-INF/lib/jboss-jsp-api_*.jar</exclude>
                 </excludes>
             </unpackOptions>
             <useStrictFiltering>true</useStrictFiltering>
