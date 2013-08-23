@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -440,15 +441,16 @@ public class SimulationServlet extends HttpServlet {
         }
 	}
 	
-	private double adjustToSecs(double in) {
+	private double adjustToSecs(double in) throws ParseException {
 		if(in > 0) {
 			in = in / 1000;
 		}
 		DecimalFormat twoDForm = new DecimalFormat("#.##");
-        return Double.valueOf(twoDForm.format(in));
+        String formattedValue = twoDForm.format(in);
+        return twoDForm.parse(formattedValue).doubleValue();
 	}
 
-	private double adjustToBaseTimeUnit(double in, int baseTime) {
+	private double adjustToBaseTimeUnit(double in, int baseTime) throws ParseException {
         if(in > 0) {
             if(baseTime == 1) {
                 in = in / 1000;
@@ -464,12 +466,14 @@ public class SimulationServlet extends HttpServlet {
         }
 
 		DecimalFormat twoDForm = new DecimalFormat("#.##");
-        return Double.valueOf(twoDForm.format(in));
+        String formattedValue = twoDForm.format(in);
+        return twoDForm.parse(formattedValue).doubleValue();
 	}
 
-	private double adjustDouble(double in) {
+	private double adjustDouble(double in) throws ParseException {
 		DecimalFormat twoDForm = new DecimalFormat("#.##");
-        return Double.valueOf(twoDForm.format(in));
+        String formattedValue = twoDForm.format(in);
+        return twoDForm.parse(formattedValue).doubleValue();
 	}
 
 	private SubProcess findSelectedContainer(String id, FlowElementsContainer container) {
