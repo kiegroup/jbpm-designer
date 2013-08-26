@@ -98,7 +98,7 @@ public class DictionaryServlet extends HttpServlet {
                 return "false";
             }
 		} catch (Throwable t) {
-            _logger.error(t.getMessage());
+            _logger.info(t.getMessage());
             return "false";
         }
 	}
@@ -117,8 +117,7 @@ public class DictionaryServlet extends HttpServlet {
             repository.createAsset(builder.getAsset());
 
 		} catch (Exception e) {
-            // we dont want to barf..just log that error happened
-            _logger.error(e.getMessage());
+            _logger.info(e.getMessage());
         }
 	}
 	 
