@@ -366,7 +366,7 @@
                     "optional":true,
                     "simulation" : true,
                     "fordistribution":"normal",
- 	            "min" : "1"
+ 	                "min" : "1"
                 },
                 {
                     "id":"mean",
@@ -3209,7 +3209,7 @@
                     "optional":true,
                     "simulation" : true,
                     "fordistribution":"normal",
-		    "min" : "1"
+		            "min" : "1"
                 $bclose$,
                 $bopen$
                     "id":"mean",

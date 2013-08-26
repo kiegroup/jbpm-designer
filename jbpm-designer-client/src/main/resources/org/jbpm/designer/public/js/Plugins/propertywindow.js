@@ -1163,11 +1163,7 @@ ORYX.Plugins.PropertyWindow = {
 				// Push to the properties-array
 				if((pair.visible() && pair.visible() == true) && pair.hidden() != true && (pair.id() != "origbordercolor" && pair.id() != "origbgcolor" && pair.id() != "isselectable")) {
 					var proceed = true;
-					if(this.shapeSelection.shapes.length == 1 && (this.shapeSelection.shapes.first().getStencil().idWithoutNs() == "Task" ||
-                           this.shapeSelection.shapes.first().getStencil().idWithoutNs() == "IntermediateEscalationEventThrowing" ||
-                           this.shapeSelection.shapes.first().getStencil().idWithoutNs() == "IntermediateEvent" ||
-                           this.shapeSelection.shapes.first().getStencil().idWithoutNs() == "IntermediateMessageEventThrowing" ||
-                           this.shapeSelection.shapes.first().getStencil().idWithoutNs() == "IntermediateSignalEventThrowing")) {
+					if(this.shapeSelection.shapes.length == 1) {
 						if(pair.fortasktypes() && pair.fortasktypes().length > 0) {
 							var foundtasktype = false;
 							var tts = pair.fortasktypes().split("|");
@@ -1193,7 +1189,7 @@ ORYX.Plugins.PropertyWindow = {
                             }
                         }
 
-						
+
 						if(pair.fordistribution() && pair.fordistribution().length > 0) {
 							var founddistribution = false;
 							var tts = pair.fordistribution().split("|");
