@@ -76,15 +76,16 @@ public class AppSetup {
                                                                  }} );
             }
 
-            // TODO in case Organizational Units are not defined
-            Collection<OrganizationalUnit> organizationalUnits = organizationalUnitService.getOrganizationalUnits();
-            if ( organizationalUnits == null || organizationalUnits.isEmpty() ) {
+            // TODO in case groups are not defined
+            Collection<OrganizationalUnit> groups = organizationalUnitService.getOrganizationalUnits();
+            if ( groups == null || groups.isEmpty() ) {
                 final List<Repository> repositories = new ArrayList<Repository>();
                 repositories.add( jbpmRepo );
                 repositories.add( guvnorRepo );
-                OrganizationalUnit ou = organizationalUnitService.createOrganizationalUnit( "demo",
-                                                                                            "demo@jbpm.org",
-                                                                                            repositories );
+
+                organizationalUnitService.createOrganizationalUnit( "demo",
+                                                                    "demo@jbpm.org",
+                                                                    repositories );
             }
 
             //Define mandatory properties
