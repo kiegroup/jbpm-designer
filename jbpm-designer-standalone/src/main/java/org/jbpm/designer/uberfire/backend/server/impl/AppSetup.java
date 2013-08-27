@@ -84,7 +84,7 @@ public class AppSetup {
                 repositories.add( guvnorRepo );
 
                 organizationalUnitService.createOrganizationalUnit( "demo",
-                                                                    "demo@jbpm.org",
+                                                                     "demo@jbpm.org",
                                                                     repositories );
             }
 
