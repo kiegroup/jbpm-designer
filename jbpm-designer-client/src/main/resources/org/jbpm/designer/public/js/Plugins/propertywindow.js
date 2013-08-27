@@ -465,7 +465,7 @@ ORYX.Plugins.PropertyWindow = {
 	onSelectionChanged: function(event) {
 		/* Event to call afterEdit method */
 		this.grid.stopEditing();
-		
+
 		/* Selected shapes */
 		this.shapeSelection.shapes = event.elements;
 		
@@ -473,7 +473,18 @@ ORYX.Plugins.PropertyWindow = {
 		if(event.elements) {
 			if(event.elements.length == 0) {
 				this.shapeSelection.shapes = [this.facade.getCanvas()];
-			}
+			} else {
+                var elength = this.shapeSelection.shapes.length;
+                while(elength--) {
+                    var nextNode = this.shapeSelection.shapes[elength];
+                    if(nextNode && (nextNode instanceof ORYX.Core.Node || nextNode instanceof ORYX.Core.Edge) && nextNode.properties["oryx-isselectable"] == "false") {
+                        this.shapeSelection.shapes.splice(elength);
+                    }
+                }
+                if(this.shapeSelection.shapes.length == 0) {
+                    this.shapeSelection.shapes = [this.facade.getCanvas()];
+                }
+            }
 		} else {
 			this.shapeSelection.shapes = [this.facade.getCanvas()];
 		}
