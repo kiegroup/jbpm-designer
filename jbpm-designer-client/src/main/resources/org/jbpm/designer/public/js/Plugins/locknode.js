@@ -79,13 +79,14 @@ ORYX.Plugins.LockNode = Clazz.extend({
         selection.each(function(shape) {
             this.lockShape(shape);
         }.bind(this));
-
+        this.facade.setSelection([]);
     },
     unlocknodes: function() {
         var selection = this.facade.getSelection();
         selection.each(function(shape) {
             this.unlockShape(shape);
         }.bind(this));
+        this.facade.setSelection([]);
     },
     unlockShape: function(shape) {
         if(shape) {
