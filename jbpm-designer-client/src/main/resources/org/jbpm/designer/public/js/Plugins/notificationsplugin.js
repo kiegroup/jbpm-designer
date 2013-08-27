@@ -12,7 +12,9 @@ ORYX.Plugins.NotificationsPlugin = Clazz.extend({
     showNotification: function(options) {
         notifications.options = {
             positionClass: options.position || 'notification-top-right',
-            onclick: options.onclick || null
+            onclick: options.onclick || null,
+            timeOut: options.timeOut || 1000,
+            extendedTimeOut: options.extendedTimeOut || 4000
         };
         var notification = notifications[options.ntype](options.msg, options.title);
     }

@@ -104,76 +104,86 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
     },
 
     save : function() {
-        // save process bpmn2 and svg
-        Ext.Ajax.request({
-            url: ORYX.PATH + 'assetservice',
-            method: 'POST',
-            success: function(response) {
-                try {
-                    if(response.responseText && response.responseText.length > 0) {
-                        var saveResponse = response.responseText.evalJSON();
-                        if(saveResponse.errors && saveResponse.errors.lengt > 0) {
-                            var errors = saveResponse.errors;
-                            for(var j=0; j < errors.length; j++) {
-                                var errormessageobj = errors[j];
+        if(!ORYX.PROCESS_SAVED) {
+            // save process bpmn2 and svg
+            Ext.Ajax.request({
+                url: ORYX.PATH + 'assetservice',
+                method: 'POST',
+                success: function(response) {
+                    try {
+                        if(response.responseText && response.responseText.length > 0) {
+                            var saveResponse = response.responseText.evalJSON();
+                            if(saveResponse.errors && saveResponse.errors.lengt > 0) {
+                                var errors = saveResponse.errors;
+                                for(var j=0; j < errors.length; j++) {
+                                    var errormessageobj = errors[j];
+                                    this.facade.raiseEvent({
+                                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                        ntype		: 'error',
+                                        msg         : errormessageobj.message,
+                                        title       : ''
+                                    });
+                                }
+                            } else {
                                 this.facade.raiseEvent({
                                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                    ntype		: 'error',
-                                    msg         : errormessageobj.message,
-                                    title       : ''
+                                    ntype		: 'success',
+                                    msg         : 'Successfully saved business process',
+                                    title       : '',
+                                    timeOut: 1000,
+                                    extendedTimeOut: 1000
                                 });
+
+                                // send UF asset update event
+                                parent.designersignalassetupdate(ORYX.UUID);
+                                // set the designer flag
+                                ORYX.PROCESS_SAVED = true;
+
+                                if(ORYX.CONFIG.STORESVGONSAVE && ORYX.CONFIG.STORESVGONSAVE == "true") {
+                                    // svg save
+                                    var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false));
+                                    var rawSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getRootNode().cloneNode(true));
+                                    var processJSON = ORYX.EDITOR.getSerializedJSON();
+                                    var processId = jsonPath(processJSON.evalJSON(), "$.properties.id");
+                                    Ext.Ajax.request({
+                                        url: ORYX.PATH + "transformer",
+                                        method: 'POST',
+                                        success: function(request) {
+                                            this.facade.raiseEvent({
+                                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                                ntype		: 'success',
+                                                msg         : 'Successfully saved business process image',
+                                                title       : ''
+                                            });
+                                        }.bind(this),
+                                        failure:function(response, opts){
+                                            this.facade.raiseEvent({
+                                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                                ntype		: 'error',
+                                                msg         : 'Unable to save business process image.',
+                                                title       : ''
+                                            });
+                                        }.bind(this),
+                                        params: {
+                                            fsvg: Base64.encode(formattedSvgDOM),
+                                            rsvg: Base64.encode(rawSvgDOM),
+                                            uuid: ORYX.UUID,
+                                            profile: ORYX.PROFILE,
+                                            transformto: 'svg',
+                                            processid: processId
+                                        }
+                                    });
+                                }
                             }
                         } else {
                             this.facade.raiseEvent({
                                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                ntype		: 'success',
-                                msg         : 'Successfully saved business process',
+                                ntype		: 'error',
+                                msg         : 'Unable to save: ' + e,
                                 title       : ''
                             });
-
-                            // send UF asset update event
-                            parent.designersignalassetupdate(ORYX.UUID);
-                            // set the designer flag
-                            ORYX.PROCESS_SAVED = true;
-
-                            if(ORYX.CONFIG.STORESVGONSAVE && ORYX.CONFIG.STORESVGONSAVE == "true") {
-                                // svg save
-                                var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false));
-                                var rawSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getRootNode().cloneNode(true));
-                                var processJSON = ORYX.EDITOR.getSerializedJSON();
-                                var processId = jsonPath(processJSON.evalJSON(), "$.properties.id");
-                                Ext.Ajax.request({
-                                    url: ORYX.PATH + "transformer",
-                                    method: 'POST',
-                                    success: function(request) {
-                                        this.facade.raiseEvent({
-                                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                            ntype		: 'success',
-                                            msg         : 'Successfully saved business process image',
-                                            title       : ''
-                                        });
-                                    }.bind(this),
-                                    failure:function(response, opts){
-                                        alert(response);
-                                        this.facade.raiseEvent({
-                                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                            ntype		: 'error',
-                                            msg         : 'Unable to save business process image.',
-                                            title       : ''
-                                        });
-                                    }.bind(this),
-                                    params: {
-                                        fsvg: Base64.encode(formattedSvgDOM),
-                                        rsvg: Base64.encode(rawSvgDOM),
-                                        uuid: ORYX.UUID,
-                                        profile: ORYX.PROFILE,
-                                        transformto: 'svg',
-                                        processid: processId
-                                    }
-                                });
-                            }
                         }
-                    } else {
+                    } catch(e) {
                         this.facade.raiseEvent({
                             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                             ntype		: 'error',
@@ -181,32 +191,32 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                             title       : ''
                         });
                     }
-                } catch(e) {
+                }.bind(this),
+                failure: function(){
                     this.facade.raiseEvent({
                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                         ntype		: 'error',
-                        msg         : 'Unable to save: ' + e,
+                        msg         : 'Unable to save.',
                         title       : ''
                     });
+                }.bind(this),
+                params: {
+                    action: 'updateasset',
+                    profile: ORYX.PROFILE,
+                    assetcontent: ORYX.EDITOR.getSerializedJSON(),
+                    pp: ORYX.PREPROCESSING,
+                    assetid: ORYX.UUID,
+                    assetcontenttransform: 'jsontobpmn2'
                 }
-            }.bind(this),
-            failure: function(){
-                this.facade.raiseEvent({
-                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                    ntype		: 'error',
-                    msg         : 'Unable to save.',
-                    title       : ''
-                });
-            }.bind(this),
-            params: {
-                action: 'updateasset',
-                profile: ORYX.PROFILE,
-                assetcontent: ORYX.EDITOR.getSerializedJSON(),
-                pp: ORYX.PREPROCESSING,
-                assetid: ORYX.UUID,
-                assetcontenttransform: 'jsontobpmn2'
-            }
-        });
+            });
+        } else {
+            this.facade.raiseEvent({
+                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                ntype		: 'info',
+                msg         : 'Process contains no changes since last save.',
+                title       : ''
+            });
+        }
     },
 
     enableautosave: function() {
