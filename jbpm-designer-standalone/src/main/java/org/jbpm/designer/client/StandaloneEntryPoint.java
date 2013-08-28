@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import org.jboss.errai.ioc.client.api.AfterInitialization;
 import org.jboss.errai.ioc.client.api.EntryPoint;
 import org.jboss.errai.ioc.client.container.IOCBeanDef;
-import org.jboss.errai.ioc.client.container.IOCBeanManager;
+import org.jboss.errai.ioc.client.container.SyncBeanManager;
 import org.jbpm.designer.client.resources.StandaloneResources;
 import org.uberfire.client.mvp.AbstractWorkbenchPerspectiveActivity;
 import org.uberfire.client.mvp.ActivityManager;
@@ -33,16 +33,13 @@ import org.uberfire.workbench.model.menu.MenuFactory;
 public class StandaloneEntryPoint {
 
     @Inject
-    private IOCBeanManager manager;
+    private SyncBeanManager manager;
 
     @Inject
     private WorkbenchMenuBarPresenter menubar;
 
     @Inject
     private PlaceManager placeManager;
-
-    @Inject
-    private IOCBeanManager iocManager;
 
     @Inject
     private ActivityManager activityManager;
@@ -72,7 +69,7 @@ public class StandaloneEntryPoint {
 
     private AbstractWorkbenchPerspectiveActivity getDefaultPerspectiveActivity() {
         AbstractWorkbenchPerspectiveActivity defaultPerspective = null;
-        final Collection<IOCBeanDef<AbstractWorkbenchPerspectiveActivity>> perspectives = iocManager.lookupBeans( AbstractWorkbenchPerspectiveActivity.class );
+        final Collection<IOCBeanDef<AbstractWorkbenchPerspectiveActivity>> perspectives = manager.lookupBeans( AbstractWorkbenchPerspectiveActivity.class );
         final Iterator<IOCBeanDef<AbstractWorkbenchPerspectiveActivity>> perspectivesIterator = perspectives.iterator();
         outer_loop:
         while ( perspectivesIterator.hasNext() ) {
@@ -82,7 +79,7 @@ public class StandaloneEntryPoint {
                 defaultPerspective = instance;
                 break outer_loop;
             } else {
-                iocManager.destroyBean( instance );
+                manager.destroyBean( instance );
             }
         }
         return defaultPerspective;
