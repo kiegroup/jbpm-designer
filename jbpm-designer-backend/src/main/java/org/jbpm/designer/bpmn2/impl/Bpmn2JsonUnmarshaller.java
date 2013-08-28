@@ -18,14 +18,8 @@ package org.jbpm.designer.bpmn2.impl;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import bpsim.*;
 import bpsim.impl.BpsimPackageImpl;
@@ -83,6 +77,7 @@ public class Bpmn2JsonUnmarshaller {
 	public static final String defaultSequenceflowColor = "#000000";
 
     public static final String defaultRelationshipType = "BPSimData";
+
     // a list of the objects created, kept in memory with their original id for
     // fast lookup.
     private Map<Object, String> _objMap = new HashMap<Object, String>();
@@ -2765,10 +2760,11 @@ public class Bpmn2JsonUnmarshaller {
     }
 
     protected void applyDataObjectProperties(DataObject da, Map<String, String> properties) {
-        if(properties.get("name") != null) {
+        if(properties.get("name") != null && properties.get("name").length() > 0) {
             da.setName(escapeXmlString(properties.get("name")));
         } else {
-            da.setName("");
+            // we need a name, use id instead
+            da.setName(da.getId());
         }
 
         boolean haveCustomType = false;

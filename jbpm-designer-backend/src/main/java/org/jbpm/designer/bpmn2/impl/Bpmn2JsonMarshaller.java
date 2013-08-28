@@ -2015,10 +2015,11 @@ public class Bpmn2JsonMarshaller {
         if(dataObject.getDocumentation() != null && dataObject.getDocumentation().size() > 0) {
             properties.put("documentation", dataObject.getDocumentation().get(0).getText());
         }
-        if(dataObject.getName() != null) {
+        if(dataObject.getName() != null && dataObject.getName().length() > 0) {
     		properties.put("name", unescapeXML(dataObject.getName()));
     	} else {
-    		properties.put("name", "");
+            // we need a name, use id instead
+    		properties.put("name", dataObject.getId());
     	}
 		if(dataObject.getItemSubjectRef().getStructureRef() != null && dataObject.getItemSubjectRef().getStructureRef().length() > 0) {
             if(defaultTypesList.contains(dataObject.getItemSubjectRef().getStructureRef())) {
