@@ -3,8 +3,6 @@ package org.jbpm.designer.web.server;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
-
-import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -14,12 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import bpsim.impl.BpsimFactoryImpl;
 import org.apache.commons.codec.binary.Base64;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.eclipse.bpmn2.Definitions;
 import org.jboss.drools.impl.DroolsFactoryImpl;
-import org.jboss.errai.bus.client.api.RemoteCallback;
-import org.jboss.errai.ioc.client.api.Caller;
 import org.jbpm.designer.bpmn2.impl.Bpmn2JsonUnmarshaller;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
@@ -31,14 +25,13 @@ import org.jbpm.designer.util.Base64Backport;
 import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
-
 import org.jbpm.formModeler.designer.integration.BPMNFormBuilderService;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.VFSService;
-import org.uberfire.util.URIEncoder;
-import org.uberfire.workbench.events.ResourceUpdatedEvent;
 
 /** 
  * 
