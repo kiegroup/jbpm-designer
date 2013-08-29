@@ -367,7 +367,6 @@ ORYX.Plugins.DragDropResize = ORYX.Plugins.AbstractPlugin.extend({
 		
 		//visualize the containment result
 		if( this.isAttachingAllowed ) {
-			
 			this.facade.raiseEvent({
 									type: 			ORYX.CONFIG.EVENT_HIGHLIGHT_SHOW,
 									highlightId: 	"dragdropresize.attached",
@@ -448,12 +447,15 @@ ORYX.Plugins.DragDropResize = ORYX.Plugins.AbstractPlugin.extend({
 		}).bind(this));
 								
 		if( checkIfAttachable &&  this.containmentParentNode){
-				
+
 			this.isAttachingAllowed	= this.facade.getRules().canConnect({
 												sourceShape:	this.containmentParentNode, 
 												edgeShape:		this.toMoveShapes[0], 
 												targetShape:	this.toMoveShapes[0]
-												});						
+												});
+            if(this.containmentParentNode && this.containmentParentNode.properties['oryx-tasktype'] && this.containmentParentNode.properties['oryx-tasktype'] == "Script") {
+                this.isAttachingAllowed = false;
+            }
 			
 			if ( this.isAttachingAllowed	) {
 				var point = this.facade.eventCoordinates(event);
@@ -471,7 +473,7 @@ ORYX.Plugins.DragDropResize = ORYX.Plugins.AbstractPlugin.extend({
 				} else if(this.containmentParentNode !== currentShape) {
 					
 					if(!(this.containmentParentNode instanceof ORYX.Core.Edge) || !noEdges) {
-					
+
 						if(this.facade.getRules().canContain({containingShape:this.containmentParentNode,
 															  containedShape:currentShape})) {	  	
 							return true;
