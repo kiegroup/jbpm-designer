@@ -3432,6 +3432,24 @@ public class Bpmn2JsonUnmarshaller {
                     properties.get("ruleflowgroup"));
             task.getAnyAttribute().add(extensionEntry);
         }
+
+        if(properties.get("script_language") != null && properties.get("script_language").length() > 0) {
+            String scriptLanguage;
+            if(properties.get("script_language").equals("java")) {
+                scriptLanguage = "http://www.java.com/java";
+            } else if(properties.get("script_language").equals("mvel")) {
+                scriptLanguage = "http://www.mvel.org/2.0";
+            } else {
+                // default to java
+                scriptLanguage = "http://www.java.com/java";
+            }
+            ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+            EAttributeImpl scriptLanguageElement = (EAttributeImpl) metadata.demandFeature(
+                    "http://www.jboss.org/drools", "scriptFormat", false   , false);
+            SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(scriptLanguageElement,
+                    scriptLanguage);
+            task.getAnyAttribute().add(extensionEntry);
+        }
     }
     
     protected void applyScriptTaskProperties(ScriptTask scriptTask, Map<String, String> properties) {
