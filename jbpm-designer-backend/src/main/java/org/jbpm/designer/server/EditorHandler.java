@@ -56,10 +56,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.mozilla.javascript.EvaluatorException;
 
-import com.google.javascript.jscomp.CompilationLevel;
-import com.google.javascript.jscomp.CompilerOptions;
-import com.google.javascript.jscomp.JSSourceFile;
-import com.google.javascript.jscomp.Result;
 import org.uberfire.backend.vfs.VFSService;
 import org.uberfire.workbench.events.ResourceAddedEvent;
 import org.uberfire.workbench.events.ResourceUpdatedEvent;
@@ -187,82 +183,8 @@ public class EditorHandler extends HttpServlet {
             throw new ServletException("Invalid editor.st, " +
                     "could not be read as a document.");
         }
-
-        try {
-            initEnvFiles(getServletContext(), config);
-        } catch (IOException e) {
-            throw new ServletException(e);
-        }
     }
 
-    /**
-     * Initiate the compression of the environment.
-     *
-     * @param context
-     * @throws java.io.IOException
-     */
-    private void initEnvFiles(ServletContext context, ServletConfig config) throws IOException {
-        // only do it the first time the servlet starts
-        try {
-            JSONObject obj = new JSONObject(readEnvFiles(context));
-
-            JSONArray array = obj.getJSONArray("files");
-            for (int i = 0; i < array.length(); i++) {
-                _envFiles.add(array.getString(i));
-            }
-        } catch (JSONException e) {
-            _logger.error("invalid js_files.json");
-            _logger.error(e.getMessage(), e);
-            throw new RuntimeException("Error initializing the " +
-                    "environment of the editor");
-        }
-
-        // generate script to setup the languages
-        if (!_devMode) {
-            if (_logger.isInfoEnabled()) {
-                _logger.info(
-                        "The diagram editor is running in production mode. " +
-                                "Javascript will be served compressed");
-            }
-            StringWriter sw = new StringWriter();
-            List<InputStream> codes = new ArrayList<InputStream>();
-            for (String file : _envFiles) {
-                codes.add(new FileInputStream(new File(getServletContext().getRealPath(designer_path + file))));
-            }
-
-            try {
-                sw.append(compileJS(_envFiles, codes));
-                sw.append("\n");
-            } catch (EvaluatorException e) {
-                _logger.error(e.getMessage(), e);
-            } catch (IOException e) {
-                _logger.error(e.getMessage(), e);
-            } finally {
-                try {
-                    for (InputStream inputStream : codes) {
-                        inputStream.close();
-                    }
-                } catch (IOException e) {
-                }
-            }
-
-
-            try {
-                FileWriter w = new FileWriter(
-                        context.getRealPath(designer_path + "jsc/env_combined.js"));
-                w.write(sw.toString());
-                w.close();
-            } catch (IOException e) {
-                _logger.error(e.getMessage(), e);
-            }
-        } else {
-            if (_logger.isInfoEnabled()) {
-                _logger.info(
-                        "The diagram editor is running in development mode. " +
-                                "Javascript will be served uncompressed");
-            }
-        }
-    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
@@ -352,20 +274,6 @@ public class EditorHandler extends HttpServlet {
                 }
             }
 
-            if (!_devMode) {
-                // let's call the compression routine
-                String rs = compressJS(_pluginfiles.get(profileName),
-                        getServletContext());
-                try {
-                    FileWriter w = new FileWriter(getServletContext().
-                            getRealPath(designer_path + "jsc/plugins_" + profileName
-                                    + ".js"));
-                    w.write(rs.toString());
-                    w.close();
-                } catch (Exception e) {
-                    _logger.error(e.getMessage(), e);
-                }
-            }
         }
 
         JSONArray pluginsArray = new JSONArray();
@@ -471,40 +379,6 @@ public class EditorHandler extends HttpServlet {
     }
 
     /**
-     * Compress a list of js files into one combined string
-     *
-     * @param plugins list of js files
-     * @return a string that contains all the compressed data
-     * @throws org.mozilla.javascript.EvaluatorException
-     *
-     * @throws java.io.IOException
-     */
-    private static String compressJS(Collection<IDiagramPlugin> plugins,
-                                     ServletContext context) {
-        StringWriter sw = new StringWriter();
-        for (IDiagramPlugin plugin : plugins) {
-            sw.append("/* ").append(plugin.getName()).append(" */\n");
-            InputStream input = plugin.getContents();
-            try {
-                sw.append(compileJS(plugin.getName(), input));
-            } catch (EvaluatorException e) {
-                _logger.error(e.getMessage(), e);
-            } catch (IOException e) {
-                _logger.error(e.getMessage(), e);
-            } finally {
-                try {
-                    input.close();
-                } catch (IOException e) {
-                }
-            }
-
-            sw.append("\n");
-        }
-        return sw.toString();
-    }
-
-
-    /**
      * Determine whether the browser is IE
      *
      * @param request
@@ -540,42 +414,6 @@ public class EditorHandler extends HttpServlet {
         return retStr;
     }
 
-    public static String compileJS(String filename, InputStream code) throws IOException {
-        List<String> filenames = new ArrayList<String>();
-        List<InputStream> codes = new ArrayList<InputStream>();
-
-        filenames.add(filename);
-        codes.add(code);
-
-        return compileJS(filenames, codes);
-    }
-
-    public static String compileJS(List<String> filenames, List<InputStream> codes) throws IOException {
-        com.google.javascript.jscomp.Compiler compiler = new com.google.javascript.jscomp.Compiler();
-
-        CompilerOptions options = new CompilerOptions();
-        CompilationLevel.SIMPLE_OPTIMIZATIONS.setOptionsForCompilationLevel(
-                options);
-
-        // To get the complete set of externs, the logic in
-        // CompilerRunner.getDefaultExterns() should be used here.
-        JSSourceFile extern = JSSourceFile.fromCode("externs.js",
-                "function alert(x) {}");
-
-        // The dummy input name "input.js" is used here so that any warnings or
-        // errors will cite line numbers in terms of input.js.
-        List<JSSourceFile> inputs = new ArrayList<JSSourceFile>();
-        for (int i = 0; i < filenames.size(); i++) {
-            inputs.add(JSSourceFile.fromInputStream(filenames.get(i), codes.get(i)));
-        }
-
-        // compile() returns a Result, but it is not needed here.
-        Result results = compiler.compile(extern, inputs.toArray(new JSSourceFile[inputs.size()]), options);
-
-        // The compiler is responsible for generating the compiled code; it is not
-        // accessible via the Result.
-        return compiler.toSource();
-    }
 
     private String readFile(String pathname) throws IOException {
         StringBuilder fileContents = new StringBuilder();
