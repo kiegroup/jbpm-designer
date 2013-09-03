@@ -234,7 +234,8 @@ ORYX.Plugins.ShapeRepository = {
 				node: 		ui.node,
 		        handles: 	[ui.elNode, ui.textNode].concat($A(ui.elNode.childNodes)), // Set the Handles
 		        isHandle: 	false,
-				type:		stencil.id(),			// Set Type of stencil 
+				type:		stencil.id(),			// Set Type of stencil
+                title:      stencil.title(),
 				namespace:	stencil.namespace()		// Set Namespace of stencil
 				});
 								
@@ -357,11 +358,23 @@ ORYX.Plugins.ShapeRepository = {
             ttype = ttype.substring(0, ttype.length - 4);
             option.type = typeParts[0] + "#Task";
 
+            if(ttype.length < 1) {
+                if(option.title == "User" ||
+                    option.title == "Send" ||
+                    option.title == "Receive" ||
+                    option.title == "Manual" ||
+                    option.title == "Service" ||
+                    option.title == "Business Rule" ||
+                    option.title == "Script") {
+                    ttype = option.title;
+                }
+            }
+
             var command = new commandClass(option, this._currentParent, this._canAttach, position, this.facade, ttype);
             this.facade.executeCommands([command]);
         } else {
-            var command = new commandClass(option, this._currentParent, this._canAttach, position, this.facade);
-            this.facade.executeCommands([command]);
+           var command = new commandClass(option, this._currentParent, this._canAttach, position, this.facade);
+           this.facade.executeCommands([command]);
         }
 		this._currentParent = undefined;
 	},
