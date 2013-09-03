@@ -5487,6 +5487,8 @@
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
+                    "hidden":true,
+                    "visible":false,
 					"items":[
 						{
 							"id":"c1",
