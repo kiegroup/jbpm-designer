@@ -2042,13 +2042,13 @@ public class Bpmn2JsonMarshaller {
             }
         }
 
-//        if(outgoingAssociaton != null && incomingAssociation == null) {
-//            properties.put("input_output", "Input");
-//        }
-//
-//        if(outgoingAssociaton == null && incomingAssociation != null) {
-//            properties.put("input_output", "Output");
-//        }
+        if(outgoingAssociaton != null && incomingAssociation == null) {
+            properties.put("input_output", "Input");
+        }
+
+        if(outgoingAssociaton == null && incomingAssociation != null) {
+            properties.put("input_output", "Output");
+        }
 
 		marshallProperties(properties, generator);
 	    
