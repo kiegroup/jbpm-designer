@@ -428,6 +428,12 @@
       <dependency>
           <groupId>org.jbpm</groupId>
           <artifactId>jbpm-form-modeler-data-modeler</artifactId>
+        <exclusions>
+          <exclusion>
+            <groupId>org.jbpm</groupId>
+            <artifactId>jbpm-kie-services</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
 
       <dependency>
