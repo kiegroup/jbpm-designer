@@ -1,16 +1,13 @@
 package org.jbpm.designer.client.handlers;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import com.google.gwt.core.client.Callback;
 import com.google.gwt.user.client.ui.IsWidget;
 import org.guvnor.common.services.project.model.Package;
-import org.jboss.errai.common.client.api.ErrorCallback;
 import org.jboss.errai.common.client.api.RemoteCallback;
 import org.jboss.errai.common.client.api.Caller;
-import org.jboss.errai.bus.client.api.messaging.Message;
 import org.jbpm.designer.client.type.Bpmn2Type;
 import org.jbpm.designer.service.DesignerAssetService;
 import org.kie.workbench.common.widgets.client.callbacks.DefaultErrorCallback;
@@ -20,7 +17,6 @@ import org.uberfire.backend.vfs.Path;
 import org.uberfire.client.mvp.PlaceManager;
 import org.uberfire.mvp.PlaceRequest;
 import org.uberfire.mvp.impl.PathPlaceRequest;
-import org.uberfire.workbench.events.NotificationEvent;
 
 @ApplicationScoped
 public class NewProcessHandler extends DefaultNewResourceHandler {
@@ -33,9 +29,6 @@ public class NewProcessHandler extends DefaultNewResourceHandler {
 
     @Inject
     private Bpmn2Type resourceType;
-
-    @Inject
-    private Event<NotificationEvent> myNotificationEvent;
 
     @Override
     public String getDescription() {
