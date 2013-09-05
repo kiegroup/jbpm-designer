@@ -320,6 +320,10 @@ public class VFSRepository implements Repository {
         }
 
         Path filePath = fileSystem.provider().getPath(pathURI);
+
+        if (assetExists(filePath.toUri().toString())) {
+            throw new org.kie.commons.java.nio.file.FileAlreadyExistsException( pathURI.toString() );
+        }
         createIfNotExists(filePath);
         try {
             CommentedOption commentedOption = new CommentedOption("admin", "Created asset " + asset.getFullName());
