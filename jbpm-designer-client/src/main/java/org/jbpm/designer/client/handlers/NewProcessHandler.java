@@ -50,18 +50,7 @@ public class NewProcessHandler extends DefaultNewResourceHandler {
                 final PlaceRequest place = new PathPlaceRequest( path );
                 placeManager.goTo( place );
             }
-        }).createProcess(pkg.getPackageMainResourcesPath(), buildFileName( resourceType, baseFileName ));
-
-        designerAssetService.call( new RemoteCallback<Path>() {
-                                       @Override
-                                       public void callback( final Path path ) {
-                                           presenter.complete();
-                                           notifySuccess();
-                                           final PlaceRequest place = new PathPlaceRequest( path );
-                                           placeManager.goTo( place );
-                                       }
-                                   }, new DefaultErrorCallback()
-        ).createProcess(pkg.getPackageMainResourcesPath(), buildFileName(resourceType, baseFileName));
+        }, new DefaultErrorCallback()).createProcess(pkg.getPackageMainResourcesPath(), buildFileName(resourceType, baseFileName));
     }
 
     @Override
