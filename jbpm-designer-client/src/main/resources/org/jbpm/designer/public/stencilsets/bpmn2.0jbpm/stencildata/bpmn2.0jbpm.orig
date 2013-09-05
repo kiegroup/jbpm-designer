@@ -2736,8 +2736,7 @@
 				"FromEventbasedGateway",
 				"messageflow_start",
 				"messageflow_end",
-				"fromtoall",
-				"ActivitiesMorph"
+				"fromtoall"
 			],
 			"properties": [
 				$bopen$
