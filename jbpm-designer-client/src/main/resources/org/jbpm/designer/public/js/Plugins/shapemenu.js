@@ -868,6 +868,12 @@ ORYX.Plugins.ShapeMenuPlugin = {
             shape.setProperty("oryx-tasktype", shapeTaskType);
             shape.setProperty("oryx-multipleinstance", false);
             shape.refresh();
+
+            this.facade.setSelection([shape]);
+            this.facade.raiseEvent({
+                type: ORYX.CONFIG.EVENT_LOADED,
+                elements: [shape]
+            });
         }
     },
 	
