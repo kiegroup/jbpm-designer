@@ -10,6 +10,7 @@ import org.jboss.errai.common.client.api.RemoteCallback;
 import org.jboss.errai.common.client.api.Caller;
 import org.jbpm.designer.client.type.Bpmn2Type;
 import org.jbpm.designer.service.DesignerAssetService;
+import org.kie.workbench.common.widgets.client.callbacks.DefaultErrorCallback;
 import org.kie.workbench.common.widgets.client.handlers.DefaultNewResourceHandler;
 import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
 import org.uberfire.backend.vfs.Path;
@@ -49,7 +50,7 @@ public class NewProcessHandler extends DefaultNewResourceHandler {
                 final PlaceRequest place = new PathPlaceRequest( path );
                 placeManager.goTo( place );
             }
-        }).createProcess(pkg.getPackageMainResourcesPath(), buildFileName( resourceType, baseFileName ));
+        }, new DefaultErrorCallback()).createProcess(pkg.getPackageMainResourcesPath(), buildFileName(resourceType, baseFileName));
     }
 
     @Override
