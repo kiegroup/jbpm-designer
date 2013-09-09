@@ -298,7 +298,7 @@ Ext.ux.SlicedToolbar = Ext.extend(Ext.Toolbar, {
             
             if(sliceWidth + itemWidth + 5 * this.iconStandardWidth > toolbarWidth){
                 var itemIndex = this.items.indexOf(item);
-                
+
                 this.insertSlicingButton("next", slice, itemIndex);
                 
                 if (slice !== 0) {
@@ -349,7 +349,6 @@ Ext.ux.SlicedToolbar = Ext.extend(Ext.Toolbar, {
     insertSlicingButton: function(type, slice, index){
         var nextHandler = function(){this.setCurrentSlice(this.currentSlice+1)}.bind(this);
         var prevHandler = function(){this.setCurrentSlice(this.currentSlice-1)}.bind(this);
-        
         var button = new Ext.Toolbar.Button({
             cls: "x-btn-icon",
             icon: ORYX.BASE_FILE_PATH + "images/toolbar_"+type+".png",

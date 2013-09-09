@@ -246,7 +246,6 @@
                             <include>${project.build.directory}/classes/org/jbpm/designer/public/js/Plugins/processinfo-min.js</include>
                             <include>${project.build.directory}/classes/org/jbpm/designer/public/js/Plugins/jpdlmigration-min.js</include>
                             <include>${project.build.directory}/classes/org/jbpm/designer/public/js/Plugins/servicerepo-min.js</include>
-                            <include>${project.build.directory}/classes/org/jbpm/designer/public/js/Plugins/footer-min.js</include>
                             <include>${project.build.directory}/classes/org/jbpm/designer/public/js/Plugins/saveplugin-min.js</include>
                             <include>${project.build.directory}/classes/org/jbpm/designer/public/js/Plugins/shapemenu-min.js</include>
                             <include>${project.build.directory}/classes/org/jbpm/designer/public/js/Plugins/shaperepository-min.js</include>

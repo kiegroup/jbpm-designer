@@ -165,8 +165,8 @@ ORYX.Plugins.Footer = Clazz.extend({
                     handler:        value.toggle ? null : value.functionality,  // Handler for mouse click
                     enableToggle:   value.toggle, // Option for enabling toggling
                     toggleHandler:  value.toggle ? value.functionality : null // Handler for toggle (Parameters: button, active)
-                }); 
-                
+                });
+
                 this.footer.add(button);
 
                 button.getEl().onclick = function() {this.blur()}
@@ -300,7 +300,7 @@ Ext.ux.SlicedToolbar = Ext.extend(Ext.Toolbar, {
     insertSlicingButton: function(type, slice, index){
         var nextHandler = function(){this.setCurrentSlice(this.currentSlice+1)}.bind(this);
         var prevHandler = function(){this.setCurrentSlice(this.currentSlice-1)}.bind(this);
-        
+
         var button = new Ext.Toolbar.Button({
             cls: "x-btn-icon",
             icon: ORYX.BASE_FILE_PATH + "images/toolbar_"+type+".png",
