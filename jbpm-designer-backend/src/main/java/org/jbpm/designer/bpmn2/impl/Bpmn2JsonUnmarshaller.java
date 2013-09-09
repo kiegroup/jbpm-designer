@@ -1075,7 +1075,10 @@ public class Bpmn2JsonUnmarshaller {
                 for(FlowElement fe : flowElements) {
                 	if(fe instanceof CatchEvent) {
                 		CatchEvent ce = (CatchEvent) fe;
-                        EventDefinition ed = ce.getEventDefinitions().get(0);
+                        EventDefinition ed = null;
+                        if(ce.getEventDefinitions() != null && ce.getEventDefinitions().size() > 0) {
+                            ed = ce.getEventDefinitions().get(0);
+                        }
                 		// check if we have an outgoing connection to this catch event from an activity
                         for(Entry<Object, List<String>> entry : _outgoingFlows.entrySet()) {
                 			 for (String flowId : entry.getValue()) {
