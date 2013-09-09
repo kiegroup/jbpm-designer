@@ -1075,11 +1075,25 @@ public class Bpmn2JsonUnmarshaller {
                 for(FlowElement fe : flowElements) {
                 	if(fe instanceof CatchEvent) {
                 		CatchEvent ce = (CatchEvent) fe;
+                        EventDefinition ed = ce.getEventDefinitions().get(0);
                 		// check if we have an outgoing connection to this catch event from an activity
                         for(Entry<Object, List<String>> entry : _outgoingFlows.entrySet()) {
                 			 for (String flowId : entry.getValue()) {
                 				 if (entry.getKey() instanceof Activity && flowId.equals(ce.getId())) {
                 					 BoundaryEvent be = Bpmn2Factory.eINSTANCE.createBoundaryEvent();
+                                     if(ed != null && ed instanceof ErrorEventDefinition) {
+                                         be.setCancelActivity(true);
+                                     } else {
+                                         Iterator<FeatureMap.Entry> iter = ce.getAnyAttribute().iterator();
+                                         while(iter.hasNext()) {
+                                             FeatureMap.Entry entry2 = iter.next();
+                                             if(entry2.getEStructuralFeature().getName().equals("boundaryca")) {
+                                                 String boundaryceVal = (String) entry2.getValue();
+                                                 be.setCancelActivity(Boolean.parseBoolean(boundaryceVal));
+                                             }
+                                         }
+                                     }
+
                 					 if(ce.getDataOutputs() != null) {
                 						 be.getDataOutputs().addAll(ce.getDataOutputs());
                 					 }
@@ -1110,16 +1124,7 @@ public class Bpmn2JsonUnmarshaller {
                 					 if(ce.getProperties() != null) {
                 						 be.getProperties().addAll(ce.getProperties());
                 					 }
-                					 
-                					 Iterator<FeatureMap.Entry> iter = ce.getAnyAttribute().iterator();
-                                     while(iter.hasNext()) {
-                                         FeatureMap.Entry entry2 = iter.next();
-                                         if(entry2.getEStructuralFeature().getName().equals("boundaryca")) {
-                                        	 String boundaryceVal = (String) entry2.getValue();
-                                             be.setCancelActivity(Boolean.parseBoolean(boundaryceVal));
-                                         }
-                                     }
-                					 
+
                 					 be.setName(ce.getName());
                 					 be.setId(ce.getId());
                 					 
