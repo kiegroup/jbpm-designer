@@ -400,7 +400,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
 	            width: 120
 	        },
 	        {
-	        	fieldLabel: 'Inteval',
+	        	fieldLabel: 'Interval',
 	            name: 'interval',
 	            allowBlank:false,
 	            allowDecimals:false,
