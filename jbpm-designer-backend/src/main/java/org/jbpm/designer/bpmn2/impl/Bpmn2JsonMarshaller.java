@@ -859,6 +859,8 @@ public class Bpmn2JsonMarshaller {
     			marshallNode(endEvent, properties, "EndEscalationEvent", plane, generator, xOffset, yOffset);
     		} else if (eventDefinition instanceof CompensateEventDefinition) {
     			marshallNode(endEvent, properties, "EndCompensationEvent", plane, generator, xOffset, yOffset);
+            } else if(eventDefinition instanceof CancelEventDefinition) {
+                marshallNode(endEvent, properties, "EndCancelEvent", plane, generator, xOffset, yOffset);
     		} else {
     			throw new UnsupportedOperationException("Event definition not supported: " + eventDefinition);
     		}
