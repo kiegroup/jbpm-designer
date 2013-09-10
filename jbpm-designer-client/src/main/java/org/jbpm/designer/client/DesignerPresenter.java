@@ -1,5 +1,6 @@
 package org.jbpm.designer.client;
 
+import java.util.Map;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
@@ -7,8 +8,8 @@ import javax.inject.Inject;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
 import org.guvnor.common.services.shared.file.DeleteService;
-import org.jboss.errai.common.client.api.RemoteCallback;
 import org.jboss.errai.common.client.api.Caller;
+import org.jboss.errai.common.client.api.RemoteCallback;
 import org.jbpm.designer.client.type.Bpmn2Type;
 import org.jbpm.designer.service.DesignerAssetService;
 import org.kie.workbench.common.widgets.client.callbacks.HasBusyIndicatorDefaultErrorCallback;
@@ -17,20 +18,21 @@ import org.kie.workbench.common.widgets.client.widget.BusyIndicatorView;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.PathFactory;
 import org.uberfire.backend.vfs.VFSService;
-import org.uberfire.client.annotations.*;
+import org.uberfire.client.annotations.WorkbenchEditor;
+import org.uberfire.client.annotations.WorkbenchPartTitle;
+import org.uberfire.client.annotations.WorkbenchPartView;
 import org.uberfire.client.mvp.PlaceManager;
 import org.uberfire.client.mvp.UberView;
 import org.uberfire.lifecycle.OnMayClose;
 import org.uberfire.lifecycle.OnStartup;
 import org.uberfire.mvp.PlaceRequest;
 import org.uberfire.mvp.impl.PathPlaceRequest;
+import org.uberfire.rpc.SessionInfo;
 import org.uberfire.util.URIEncoder;
 import org.uberfire.workbench.events.NotificationEvent;
 import org.uberfire.workbench.events.ResourceAddedEvent;
 import org.uberfire.workbench.events.ResourceDeletedEvent;
 import org.uberfire.workbench.events.ResourceUpdatedEvent;
-
-import java.util.Map;
 
 @Dependent
 @WorkbenchEditor(identifier = "jbpm.designer", supportedTypes = { Bpmn2Type.class })
@@ -76,6 +78,9 @@ public class DesignerPresenter {
 
     @Inject
     private Bpmn2Type resourceType;
+
+    @Inject
+    private SessionInfo sessionInfo;
 
     private Path path;
     private PlaceRequest place;
@@ -169,7 +174,7 @@ public class DesignerPresenter {
         vfsServices.call( new RemoteCallback<Path>() {
             @Override
             public void callback( final Path mypath ) {
-                resourceUpdatedEvent.fire( new ResourceUpdatedEvent(mypath) );
+                resourceUpdatedEvent.fire( new ResourceUpdatedEvent(mypath, sessionInfo) );
             }
         } ).get( URIEncoder.encode(uri) );
     }
@@ -202,7 +207,6 @@ public class DesignerPresenter {
             public void callback( final Void response ) {
                 notification.fire( new NotificationEvent( CommonConstants.INSTANCE.ItemDeletedSuccessfully() ) );
                 placeManager.closePlace( new PathPlaceRequest( path ) );
-                resourceDeleteEvent.fire( new ResourceDeletedEvent( path ) );
             }
         };
     }
