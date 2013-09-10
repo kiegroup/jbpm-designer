@@ -234,7 +234,7 @@ public class Bpmn2JsonMarshaller {
 	                if((rootElement).getExtensionValues() != null && (rootElement).getExtensionValues().size() > 0) {
 	                    String importsStr = "";
 	                    String globalsStr = "";
-	                    for(ExtensionAttributeValue extattrval : ((Process) rootElement).getExtensionValues()) {
+	                    for(ExtensionAttributeValue extattrval : rootElement.getExtensionValues()) {
 	                        FeatureMap extensionElements = extattrval.getValue();
 	                        
 	                        @SuppressWarnings("unchecked")
@@ -246,7 +246,7 @@ public class Bpmn2JsonMarshaller {
 	                    
 	                        for(ImportType importType : importExtensions) {
 	                            importsStr += importType.getName();
-	                            importsStr += ",";
+	                            importsStr += "|default,";
 	                        }
 	                        
 	                        for(GlobalType globalType : globalExtensions) {
@@ -254,12 +254,7 @@ public class Bpmn2JsonMarshaller {
 	                            globalsStr += ",";
 	                        }
 	                    }
-	                    if(importsStr.length() > 0) {
-	                        if(importsStr.endsWith(",")) {
-	                            importsStr = importsStr.substring(0, importsStr.length() - 1);
-	                        }
-                            allImports += importsStr + "|default,";
-	                    }
+                        allImports += importsStr;
 	                    if(globalsStr.length() > 0) {
 	                        if(globalsStr.endsWith(",")) {
 	                            globalsStr = globalsStr.substring(0, globalsStr.length() - 1);
