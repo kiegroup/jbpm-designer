@@ -7836,6 +7836,94 @@
 				}
 			]
 		},
+        {
+            "type": "node",
+            "id":"EndCancelEvent",
+            "title":"Cancel",
+            "groups":["End Events"],
+            "description":"Triggering cancellation of a transaction.",
+            "description_ja":"トランザクションのキャンセルのトリガー。",
+            "view":"endevent/cancel.svg",
+            "icon":"endevent/cancel.png",
+            "propertyPackages":[
+                "baseAttributes",
+                "throwEventAttributes",
+                "bgColor"
+            ],
+            "roles":[
+                "all",
+                "sequence_end",
+                "to_task_event",
+                "from_task_event",
+                "fromtoall",
+                "Endevents_all",
+                "EndEventsMorph"
+            ],
+            "properties": [
+                {
+                  "id":"bgcolor",
+                  "type":"Color",
+                  "title":"Background Color",
+                  "value":"$colortheme.("End Events").bgColor$",
+                  "description":"",
+                  "readonly":false,
+                  "optional":false,
+                  "refToView": "fill_el",
+                  "fill":true,
+                  "stroke":false,
+                  "display" : true
+                },
+                {
+                  "id":"origbgcolor",
+                  "type":"Color",
+                  "title":"Original Background Color",
+                  "value":"$colortheme.("End Events").bgColor$",
+                  "description":"",
+                  "readonly":false,
+                  "optional":true,
+                  "hidden":true,
+                  "visible":false
+                },
+                {
+                  "id":"bordercolor",
+                  "type":"Color",
+                  "title":"Border Color",
+                  "value":"$colortheme.("End Events").borderColor$",
+                  "description":"",
+                  "readonly":false,
+                  "optional":false,
+                  "refToView": ["edge", "fill_border", "bg_frame", "frame", "frame2", "frame3", "frame4", "frame5", "frame6", "frame7", "frame8", "frame9", "frame10", "frame11", "frame12", "frame13", "frame14", "frame15", "frame16", "frame17", "frame18", "frame19", "frame20", "frame21", "frame22", "frame23", "frame24", "frame25", "frame26", "border"],
+                  "fill":false,
+                  "stroke":true,
+                  "display" : true
+                },
+                {
+                  "id":"origbordercolor",
+                  "type":"Color",
+                  "title":"Original Border Color",
+                  "value":"$colortheme.("End Events").borderColor$",
+                  "description":"",
+                  "readonly":false,
+                  "optional":true,
+                  "hidden":true,
+                  "visible":false
+                },
+                {
+                "id":"fontcolor",
+                "type":"Color",
+                "title":"Font Color",
+                "value":"$colortheme.("End Events").fontColor$",
+                "description":"Font color",
+                "description_ja":"フォントの色",
+                "readonly":false,
+                "optional":false,
+                "refToView": ["text_name"],
+                "fill":true,
+                "stroke":false,
+                "display" : true
+                }
+            ]
+        },
 		{
 			"type": "node",
 			"id":"EndCompensationEvent",
