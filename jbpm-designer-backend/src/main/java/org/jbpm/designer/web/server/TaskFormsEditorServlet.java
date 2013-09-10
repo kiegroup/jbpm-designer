@@ -16,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.VFSService;
+import org.uberfire.rpc.SessionInfo;
 import org.uberfire.workbench.events.ResourceUpdatedEvent;
 
 import javax.enterprise.event.Event;
@@ -62,7 +63,10 @@ public class TaskFormsEditorServlet extends HttpServlet {
     @Inject
     private BPMNFormBuilderService formModelerService;
 
-	@Override
+    @Inject
+    private SessionInfo sessionInfo;
+
+    @Override
 	public void init(ServletConfig config) throws ServletException {
 	    super.init(config);
 	}
@@ -184,7 +188,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
                  }
 
                  Path newFormAssetPath = vfsServices.get(uniqueId);
-                 resourceUpdatedEvent.fire( new ResourceUpdatedEvent(newFormAssetPath) );
+                 resourceUpdatedEvent.fire( new ResourceUpdatedEvent(newFormAssetPath, sessionInfo) );
 
                  if(formType.equals(FORMMODELER_FILE_EXTENSION)) {
                      return newFormAsset.getName() + "." + newFormAsset.getAssetType() + "|" + uniqueId;
