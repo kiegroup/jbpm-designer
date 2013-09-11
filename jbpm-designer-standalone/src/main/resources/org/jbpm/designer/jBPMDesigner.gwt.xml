@@ -15,6 +15,9 @@
   <inherits name="org.uberfire.UberfireBackend"/>
   <inherits name="org.uberfire.security.UberfireSecurityClient"/>
 
+  <!-- Drools dependencies -->
+  <inherits name="org.drools.workbench.models.datamodel.DroolsWorkbenchDataModelAPI"/>
+
   <!-- Guvnor dependencies -->
   <inherits name="org.guvnor.m2repo.GuvnorM2RepoEditorClient"/>
   <inherits name='org.guvnor.common.services.GuvnorServicesAPI'/>
