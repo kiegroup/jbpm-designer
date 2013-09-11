@@ -5,9 +5,10 @@ import javax.inject.Inject;
 
 import com.google.gwt.core.client.Callback;
 import com.google.gwt.user.client.ui.IsWidget;
+import org.guvnor.common.services.project.context.ProjectContext;
 import org.guvnor.common.services.project.model.Package;
-import org.jboss.errai.common.client.api.RemoteCallback;
 import org.jboss.errai.common.client.api.Caller;
+import org.jboss.errai.common.client.api.RemoteCallback;
 import org.jbpm.designer.client.type.Bpmn2Type;
 import org.jbpm.designer.service.DesignerAssetService;
 import org.kie.workbench.common.widgets.client.callbacks.DefaultErrorCallback;
@@ -41,7 +42,9 @@ public class NewProcessHandler extends DefaultNewResourceHandler {
     }
 
     @Override
-    public void create(final Package pkg, final String baseFileName, final NewResourcePresenter presenter) {
+    public void create( final Package pkg,
+                        final String baseFileName,
+                        final NewResourcePresenter presenter ) {
         designerAssetService.call( new RemoteCallback<Path>() {
             @Override
             public void callback( final Path path ) {
@@ -50,12 +53,12 @@ public class NewProcessHandler extends DefaultNewResourceHandler {
                 final PlaceRequest place = new PathPlaceRequest( path );
                 placeManager.goTo( place );
             }
-        }, new DefaultErrorCallback()).createProcess(pkg.getPackageMainResourcesPath(), buildFileName(resourceType, baseFileName));
+        }, new DefaultErrorCallback() ).createProcess( pkg.getPackageMainResourcesPath(), buildFileName( resourceType, baseFileName ) );
     }
 
     @Override
-    public void acceptPath( Path path,
-                            Callback<Boolean, Void> callback ) {
+    public void acceptContext( final ProjectContext context,
+                               final Callback<Boolean, Void> callback ) {
         callback.onSuccess( true );
     }
 }
