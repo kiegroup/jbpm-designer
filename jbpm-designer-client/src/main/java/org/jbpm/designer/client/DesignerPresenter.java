@@ -7,12 +7,18 @@ import javax.inject.Inject;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
+import org.guvnor.common.services.shared.file.CopyService;
 import org.guvnor.common.services.shared.file.DeleteService;
-import org.jboss.errai.common.client.api.Caller;
+import org.guvnor.common.services.shared.file.RenameService;
 import org.jboss.errai.common.client.api.RemoteCallback;
+import org.jboss.errai.common.client.api.Caller;
 import org.jbpm.designer.client.type.Bpmn2Type;
 import org.jbpm.designer.service.DesignerAssetService;
 import org.kie.workbench.common.widgets.client.callbacks.HasBusyIndicatorDefaultErrorCallback;
+import org.kie.workbench.common.widgets.client.popups.file.CommandWithFileNameAndCommitMessage;
+import org.kie.workbench.common.widgets.client.popups.file.CopyPopup;
+import org.kie.workbench.common.widgets.client.popups.file.FileNameAndCommitMessage;
+import org.kie.workbench.common.widgets.client.popups.file.RenamePopup;
 import org.kie.workbench.common.widgets.client.resources.i18n.CommonConstants;
 import org.kie.workbench.common.widgets.client.widget.BusyIndicatorView;
 import org.uberfire.backend.vfs.Path;
@@ -74,6 +80,12 @@ public class DesignerPresenter {
     private Caller<DeleteService> deleteService;
 
     @Inject
+    private Caller<CopyService> copyService;
+
+    @Inject
+    private Caller<RenameService> renameService;
+
+    @Inject
     private BusyIndicatorView busyIndicatorView;
 
     @Inject
@@ -94,6 +106,9 @@ public class DesignerPresenter {
         this.publishSignalOnAssetUpdate(this);
         this.publishSignalOnAssetDelete(this);
         this.publishSignalOnAssetAdded(this);
+
+        this.publishSignalOnAssetCopy(this);
+        this.publishSignalOnAssetRename(this);
 
         if ( path != null ) {
             assetService.call( new RemoteCallback<String>() {
@@ -170,6 +185,18 @@ public class DesignerPresenter {
         }
     }-*/;
 
+    private native void publishSignalOnAssetCopy(DesignerPresenter dp)/*-{
+        $wnd.designersignalassetdelete = function (uri) {
+            dp.@org.jbpm.designer.client.DesignerPresenter::assetCopyEvent(Ljava/lang/String;)(uri);
+        }
+    }-*/;
+
+    private native void publishSignalOnAssetRename(DesignerPresenter dp)/*-{
+        $wnd.designersignalassetdelete = function (uri) {
+            dp.@org.jbpm.designer.client.DesignerPresenter::assetRenameEvent(Ljava/lang/String;)(uri);
+        }
+    }-*/;
+
     public void assetUpdateEvent(String uri) {
         vfsServices.call( new RemoteCallback<Path>() {
             @Override
@@ -184,6 +211,45 @@ public class DesignerPresenter {
             @Override
             public void callback( final Path mypath ) {
                 resourceAddedEvent.fire( new ResourceAddedEvent(mypath) );
+            }
+        } ).get( URIEncoder.encode(uri) );
+    }
+
+    public void assetCopyEvent(String uri) {
+        vfsServices.call( new RemoteCallback<Path>() {
+            @Override
+            public void callback( final Path mypath ) {
+                final CopyPopup popup = new CopyPopup( new CommandWithFileNameAndCommitMessage() {
+                    @Override
+                    public void execute( final FileNameAndCommitMessage details ) {
+                        busyIndicatorView.showBusyIndicator( CommonConstants.INSTANCE.Copying() );
+                        copyService.call( getCopySuccessCallback(),
+                                new HasBusyIndicatorDefaultErrorCallback( busyIndicatorView ) ).copy( path,
+                                details.getNewFileName(),
+                                details.getCommitMessage() );
+                    }
+                } );
+                popup.show();
+            }
+        } ).get( URIEncoder.encode(uri) );
+    }
+
+    public void assetRenameEvent(String uri) {
+        vfsServices.call( new RemoteCallback<Path>() {
+            @Override
+            public void callback( final Path mypath ) {
+                final RenamePopup popup = new RenamePopup( new CommandWithFileNameAndCommitMessage() {
+                    @Override
+                    public void execute( final FileNameAndCommitMessage details ) {
+                        busyIndicatorView.showBusyIndicator( CommonConstants.INSTANCE.Renaming() );
+                        renameService.call( getRenameSuccessCallback(),
+                                new HasBusyIndicatorDefaultErrorCallback( busyIndicatorView ) ).rename(path,
+                                details.getNewFileName(),
+                                details.getCommitMessage());
+                    }
+                } );
+
+                popup.show();
             }
         } ).get( URIEncoder.encode(uri) );
     }
@@ -207,6 +273,28 @@ public class DesignerPresenter {
             public void callback( final Void response ) {
                 notification.fire( new NotificationEvent( CommonConstants.INSTANCE.ItemDeletedSuccessfully() ) );
                 placeManager.closePlace( new PathPlaceRequest( path ) );
+                resourceDeleteEvent.fire( new ResourceDeletedEvent( path, sessionInfo ) );
+            }
+        };
+    }
+
+    private RemoteCallback<Path> getCopySuccessCallback() {
+        return new RemoteCallback<Path>() {
+            @Override
+            public void callback( final Path path ) {
+                busyIndicatorView.hideBusyIndicator();
+                notification.fire( new NotificationEvent( CommonConstants.INSTANCE.ItemCopiedSuccessfully() ) );
+            }
+        };
+    }
+
+    private RemoteCallback<Path> getRenameSuccessCallback() {
+        return new RemoteCallback<Path>() {
+
+            @Override
+            public void callback( final Path path ) {
+                busyIndicatorView.hideBusyIndicator();
+                notification.fire( new NotificationEvent( CommonConstants.INSTANCE.ItemRenamedSuccessfully() ) );
             }
         };
     }

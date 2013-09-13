@@ -52,6 +52,9 @@ public class TaskFormsEditorServlet extends HttpServlet {
     }
 
     @Inject
+    private SessionInfo sessionInfo;
+
+    @Inject
     private IDiagramProfileService _profileService = null;
 
     @Inject
@@ -188,7 +191,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
                  }
 
                  Path newFormAssetPath = vfsServices.get(uniqueId);
-                 resourceUpdatedEvent.fire( new ResourceUpdatedEvent(newFormAssetPath, sessionInfo) );
+                 resourceUpdatedEvent.fire( new ResourceUpdatedEvent( newFormAssetPath, sessionInfo ) );
 
                  if(formType.equals(FORMMODELER_FILE_EXTENSION)) {
                      return newFormAsset.getName() + "." + newFormAsset.getAssetType() + "|" + uniqueId;
