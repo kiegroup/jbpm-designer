@@ -74,13 +74,57 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         });
 
         this.facade.offer({
+            'name': 'Copy',
+            'functionality': this.copyassetnotify.bind(this),
+            'group': ORYX.I18N.Save.group,
+            'icon': ORYX.BASE_FILE_PATH + "images/page_copy.png",
+            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
+            'description': 'Copy asset',
+            'index': 4,
+            'minShape': 0,
+            'maxShape': 0,
+            'isEnabled': function(){
+                return ORYX.REPOSITORY_ID != "guvnor";
+//                profileParamName = "profile";
+//                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//                regexa = new RegExp( regexSa );
+//                profileParams = regexa.exec( window.location.href );
+//                profileParamValue = profileParams[1];
+//                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
+            }.bind(this)
+        });
+
+        this.facade.offer({
+            'name': 'Rename',
+            'functionality': this.renameassetnotify.bind(this),
+            'group': ORYX.I18N.Save.group,
+            'icon': ORYX.BASE_FILE_PATH + "images/rename.png",
+            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
+            'description': 'Rename asset',
+            'index': 5,
+            'minShape': 0,
+            'maxShape': 0,
+            'isEnabled': function(){
+                return ORYX.REPOSITORY_ID != "guvnor";
+//                profileParamName = "profile";
+//                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//                regexa = new RegExp( regexSa );
+//                profileParams = regexa.exec( window.location.href );
+//                profileParamValue = profileParams[1];
+//                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
+            }.bind(this)
+        });
+
+        this.facade.offer({
             'name': 'Delete',
             'functionality': this.deleteassetnotify.bind(this),
             'group': ORYX.I18N.Save.group,
             'icon': ORYX.BASE_FILE_PATH + "images/delete2.gif",
             dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
-            'description': ORYX.I18N.Save.saveDesc,
-            'index': 4,
+            'description': "Delete asset",
+            'index': 6,
             'minShape': 0,
             'maxShape': 0,
             'isEnabled': function(){
@@ -257,5 +301,36 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                 }
             }.bind(this)
         );
+    },
+
+    copyassetnotify: function() {
+        Ext.MessageBox.confirm(
+            'Copy process confirmation',
+            'Would you like to save your changes before copying?',
+            function(btn){
+                if (btn == 'yes') {
+                    this.save();
+                    parent.designersignalassetcopy(ORYX.UUID);
+                } else {
+                    parent.designersignalassetcopy(ORYX.UUID);
+                }
+            }.bind(this)
+        );
+    },
+
+    renameassetnotify: function() {
+        Ext.MessageBox.confirm(
+            'Rename process confirmation',
+            'Would you like to save your changes before renaming?',
+            function(btn){
+                if (btn == 'yes') {
+                    this.save();
+                    parent.designersignalassetrename(ORYX.UUID);
+                } else {
+                    parent.designersignalassetrename(ORYX.UUID);
+                }
+            }.bind(this)
+        );
     }
+
 });

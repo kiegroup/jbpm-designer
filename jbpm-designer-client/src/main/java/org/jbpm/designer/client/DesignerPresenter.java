@@ -106,7 +106,6 @@ public class DesignerPresenter {
         this.publishSignalOnAssetUpdate(this);
         this.publishSignalOnAssetDelete(this);
         this.publishSignalOnAssetAdded(this);
-
         this.publishSignalOnAssetCopy(this);
         this.publishSignalOnAssetRename(this);
 
@@ -186,13 +185,13 @@ public class DesignerPresenter {
     }-*/;
 
     private native void publishSignalOnAssetCopy(DesignerPresenter dp)/*-{
-        $wnd.designersignalassetdelete = function (uri) {
+        $wnd.designersignalassetcopy = function (uri) {
             dp.@org.jbpm.designer.client.DesignerPresenter::assetCopyEvent(Ljava/lang/String;)(uri);
         }
     }-*/;
 
     private native void publishSignalOnAssetRename(DesignerPresenter dp)/*-{
-        $wnd.designersignalassetdelete = function (uri) {
+        $wnd.designersignalassetrename = function (uri) {
             dp.@org.jbpm.designer.client.DesignerPresenter::assetRenameEvent(Ljava/lang/String;)(uri);
         }
     }-*/;
