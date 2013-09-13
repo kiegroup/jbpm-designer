@@ -371,7 +371,12 @@ ORYX.Plugins.PropertyWindow = {
 	setPropertyWindowTitle: function() {
 		if(this.shapeSelection.shapes.length == 1) {
 			// add the name of the stencil of the selected shape to the title
-				region.setTitle(ORYX.I18N.PropertyWindow.title +' ('+this.shapeSelection.shapes.first().getStencil().title()+')' );
+                var nodeTitle = this.shapeSelection.shapes.first().getStencil().title();
+            if(this.shapeSelection.shapes.first() && this.shapeSelection.shapes.first().properties && this.shapeSelection.shapes.first().properties['oryx-tasktype'] &&
+                this.shapeSelection.shapes.first().properties['oryx-tasktype'].length > 0) {
+                nodeTitle = this.shapeSelection.shapes.first().properties['oryx-tasktype'];
+            }
+				region.setTitle(ORYX.I18N.PropertyWindow.title +' ('+ nodeTitle +')' );
 		} else {
 			region.setTitle(ORYX.I18N.PropertyWindow.title +' ('
 							+ this.shapeSelection.shapes.length
