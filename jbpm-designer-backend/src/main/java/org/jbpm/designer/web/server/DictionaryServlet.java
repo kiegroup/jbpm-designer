@@ -98,7 +98,7 @@ public class DictionaryServlet extends HttpServlet {
                 return "false";
             }
 		} catch (Throwable t) {
-            _logger.info(t.getMessage());
+            _logger.info("Unable to find existing dictionary information.");
             return "false";
         }
 	}
@@ -117,7 +117,7 @@ public class DictionaryServlet extends HttpServlet {
             repository.createAsset(builder.getAsset());
 
 		} catch (Exception e) {
-            _logger.info(e.getMessage());
+            _logger.error(e.getMessage());
         }
 	}
 	 
