@@ -52,9 +52,6 @@ public class TaskFormsEditorServlet extends HttpServlet {
     }
 
     @Inject
-    private SessionInfo sessionInfo;
-
-    @Inject
     private IDiagramProfileService _profileService = null;
 
     @Inject
