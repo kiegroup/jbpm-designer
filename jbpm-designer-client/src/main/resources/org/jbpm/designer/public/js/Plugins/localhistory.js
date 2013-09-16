@@ -17,7 +17,8 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
 
         if(this.haveSupportForLocalHistory()) {
             this.setupAndLoadHistoryData();
-            this.startStoring();
+            this.enableLocalHistory();
+            //this.startStoring();
         }
 
         this.facade.offer({
@@ -324,6 +325,13 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
             this.storage.removeItem(this.uid);
             this.fail && (this.storage = false);
         } catch(e) {}
+
+        var localHistoryCookieVal = this._readCookie("designerlocalhistory");
+        var enabledFromCookie = false;
+        if(localHistoryCookieVal != null && localHistoryCookieVal == "true") {
+            enabledFromCookie = true;
+            return this.storage && enabledFromCookie;
+        }
         return this.storage && ORYX.LOCAL_HISTORY_ENABLED;
     },
     addToHistory : function() {
@@ -378,6 +386,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
     },
     disableLocalHistory: function() {
         ORYX.LOCAL_HISTORY_ENABLED = false;
+        this._createCookie("designerlocalhistory", "false", 365);
         this.stopStoring();
         this.facade.raiseEvent({type: ORYX.CONFIG.EVENT_STENCIL_SET_LOADED});
         this.facade.raiseEvent({
@@ -389,6 +398,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
     },
     enableLocalHistory: function() {
         ORYX.LOCAL_HISTORY_ENABLED = true;
+        this._createCookie("designerlocalhistory", "true", 365);
         this.setupAndLoadHistoryData();
         this.startStoring();
         this.facade.raiseEvent({type: ORYX.CONFIG.EVENT_STENCIL_SET_LOADED});
@@ -404,6 +414,28 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
     },
     stopStoring: function() {
         clearInterval(this.historyInterval);
+    },
+    _createCookie: function(name, value, days) {
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime()+(days*24*60*60*1000));
+            var expires = "; expires="+date.toGMTString();
+        }
+        else {
+            var expires = "";
+        }
+
+        document.cookie = name+"="+value+expires+"; path=/";
+    },
+    _readCookie: function(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0;i < ca.length;i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1,c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+        }
+        return null;
     }
 });
 
