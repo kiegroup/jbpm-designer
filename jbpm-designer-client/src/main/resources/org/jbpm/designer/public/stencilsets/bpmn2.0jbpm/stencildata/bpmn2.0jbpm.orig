@@ -2082,13 +2082,22 @@
             "description_ja" : 		"タスクとは作業（実行すべきジョブ）の単位です。",
             "view" : 			"activity/task.svg",
             "icon" : 			"activity/list/type.user.png",
-	    "propertyPackages": [],
+	        "propertyPackages": [],
             "properties" :      [],
-	    "roles" :                       [
-                                "all"
-                        ]
+            "roles" : 			[
+                "all",
+                "sequence_start",
+                "sequence_end",
+                "from_task_event",
+                "to_task_event",
+                "FromEventbasedGateway",
+                "messageflow_start",
+                "messageflow_end",
+                "fromtoall",
+                "ActivitiesMorph"
+            ]
         },
-	{
+	    {
             "type" :                    "node",
             "id":                       "SendTask",
             "title" :                   "Send",
@@ -2099,11 +2108,20 @@
             "icon" :                    "activity/list/type.send.png",
             "propertyPackages": [],
             "properties" :      [],
-  	    "roles" :                       [
-                                "all"
-                        ]
+            "roles" : 			[
+                "all",
+                "sequence_start",
+                "sequence_end",
+                "from_task_event",
+                "to_task_event",
+                "FromEventbasedGateway",
+                "messageflow_start",
+                "messageflow_end",
+                "fromtoall",
+                "ActivitiesMorph"
+            ]
         },
-	{
+	    {
             "type" :                    "node",
             "id":                       "ReceiveTask",
             "title" :                   "Receive",
@@ -2114,11 +2132,20 @@
             "icon" :                    "activity/list/type.receive.png",
             "propertyPackages": [],
             "properties" :      [],
-            "roles" :                       [
-                                "all"
-                        ]
+            "roles" : 			[
+                "all",
+                "sequence_start",
+                "sequence_end",
+                "from_task_event",
+                "to_task_event",
+                "FromEventbasedGateway",
+                "messageflow_start",
+                "messageflow_end",
+                "fromtoall",
+                "ActivitiesMorph"
+            ]
         },
-	{
+	    {
             "type" :                    "node",
             "id":                       "ManualTask",
             "title" :                   "Manual",
@@ -2128,12 +2155,21 @@
             "view" :                    "activity/task.svg",
             "icon" :                    "activity/list/type.manual.png",
             "propertyPackages": [],                     
-            "properties" :      [],                     
-            "roles" :                       [           
-                                "all"
-                        ]
+            "properties" :      [],
+            "roles" : 			[
+                "all",
+                "sequence_start",
+                "sequence_end",
+                "from_task_event",
+                "to_task_event",
+                "FromEventbasedGateway",
+                "messageflow_start",
+                "messageflow_end",
+                "fromtoall",
+                "ActivitiesMorph"
+            ]
         },
-	{
+	    {
             "type" :                    "node",
             "id":                       "ServiceTask",
             "title" :                   "Service",
@@ -2144,11 +2180,20 @@
             "icon" :                    "activity/list/type.service.png",
             "propertyPackages": [],
             "properties" :      [],
-            "roles" :                       [
-                                "all"
-                        ]
+            "roles" : 			[
+                "all",
+                "sequence_start",
+                "sequence_end",
+                "from_task_event",
+                "to_task_event",
+                "FromEventbasedGateway",
+                "messageflow_start",
+                "messageflow_end",
+                "fromtoall",
+                "ActivitiesMorph"
+            ]
         },
-	{
+	    {
             "type" :                    "node",
             "id":                       "Business RuleTask",
             "title" :                   "Business Rule",
@@ -2158,12 +2203,21 @@
             "view" :                    "activity/task.svg",
             "icon" :                    "activity/list/type.business.rule.png",
             "propertyPackages": [],                     
-            "properties" :      [],                     
-            "roles" :                       [           
-                                "all"
-                        ]
+            "properties" :      [],
+            "roles" : 			[
+                "all",
+                "sequence_start",
+                "sequence_end",
+                "from_task_event",
+                "to_task_event",
+                "FromEventbasedGateway",
+                "messageflow_start",
+                "messageflow_end",
+                "fromtoall",
+                "ActivitiesMorph"
+            ]
         },
-	{
+	    {
             "type" :                    "node",
             "id":                       "ScriptTask",
             "title" :                   "Script",
@@ -2174,9 +2228,18 @@
             "icon" :                    "activity/list/type.script.png",
             "propertyPackages": [],
             "properties" :      [],
-            "roles" :                       [
-                                "all"
-                        ]
+            "roles" : 			[
+                "all",
+                "sequence_start",
+                "sequence_end",
+                "from_task_event",
+                "to_task_event",
+                "FromEventbasedGateway",
+                "messageflow_start",
+                "messageflow_end",
+                "fromtoall",
+                "ActivitiesMorph"
+            ]
         },
 		{
 			"type" : 			"node",
