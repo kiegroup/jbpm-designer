@@ -10,8 +10,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import org.guvnor.common.services.shared.file.CopyService;
 import org.guvnor.common.services.shared.file.DeleteService;
 import org.guvnor.common.services.shared.file.RenameService;
-import org.jboss.errai.common.client.api.RemoteCallback;
 import org.jboss.errai.common.client.api.Caller;
+import org.jboss.errai.common.client.api.RemoteCallback;
 import org.jbpm.designer.client.type.Bpmn2Type;
 import org.jbpm.designer.service.DesignerAssetService;
 import org.kie.workbench.common.widgets.client.callbacks.HasBusyIndicatorDefaultErrorCallback;
@@ -34,7 +34,7 @@ import org.uberfire.lifecycle.OnStartup;
 import org.uberfire.mvp.PlaceRequest;
 import org.uberfire.mvp.impl.PathPlaceRequest;
 import org.uberfire.rpc.SessionInfo;
-import org.uberfire.util.URIEncoder;
+import org.uberfire.util.URIUtil;
 import org.uberfire.workbench.events.NotificationEvent;
 import org.uberfire.workbench.events.ResourceAddedEvent;
 import org.uberfire.workbench.events.ResourceDeletedEvent;
@@ -202,7 +202,7 @@ public class DesignerPresenter {
             public void callback( final Path mypath ) {
                 resourceUpdatedEvent.fire( new ResourceUpdatedEvent(mypath, sessionInfo) );
             }
-        } ).get( URIEncoder.encode(uri) );
+        } ).get( URIUtil.encode( uri ) );
     }
 
     public void assetAddedEvent(String uri) {
@@ -211,7 +211,7 @@ public class DesignerPresenter {
             public void callback( final Path mypath ) {
                 resourceAddedEvent.fire( new ResourceAddedEvent(mypath) );
             }
-        } ).get( URIEncoder.encode(uri) );
+        } ).get( URIUtil.encode(uri) );
     }
 
     public void assetCopyEvent(String uri) {
@@ -230,7 +230,7 @@ public class DesignerPresenter {
                 } );
                 popup.show();
             }
-        } ).get( URIEncoder.encode(uri) );
+        } ).get( URIUtil.encode(uri) );
     }
 
     public void assetRenameEvent(String uri) {
@@ -250,7 +250,7 @@ public class DesignerPresenter {
 
                 popup.show();
             }
-        } ).get( URIEncoder.encode(uri) );
+        } ).get( URIUtil.encode(uri) );
     }
 
     public void assetDeleteEvent(String uri) {
@@ -259,10 +259,10 @@ public class DesignerPresenter {
             public void callback( final Path mypath ) {
                 deleteService.call( getDeleteSuccessCallback( mypath ),
                         new HasBusyIndicatorDefaultErrorCallback( busyIndicatorView ) ).delete( mypath,
-                        "" );
+                                                                                                "" );
 
             }
-        } ).get( URIEncoder.encode(uri) );
+        } ).get( URIUtil.encode(uri) );
     }
 
     private RemoteCallback<Void> getDeleteSuccessCallback( final Path path ) {
