@@ -99,7 +99,7 @@ public class DesignerPresenter {
 
     @OnStartup
     public void onStartup( final Path path,
-                         final PlaceRequest place ) {
+                           final PlaceRequest place ) {
         this.path = path;
         this.place = place;
         this.publishOpenInTab(this);
