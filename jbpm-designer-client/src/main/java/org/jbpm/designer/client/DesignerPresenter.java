@@ -34,7 +34,7 @@ import org.uberfire.lifecycle.OnStartup;
 import org.uberfire.mvp.PlaceRequest;
 import org.uberfire.mvp.impl.PathPlaceRequest;
 import org.uberfire.rpc.SessionInfo;
-import org.uberfire.util.URIEncoder;
+import org.uberfire.util.URIUtil;
 import org.uberfire.workbench.events.NotificationEvent;
 import org.uberfire.workbench.events.ResourceAddedEvent;
 import org.uberfire.workbench.events.ResourceDeletedEvent;
@@ -202,7 +202,7 @@ public class DesignerPresenter {
             public void callback( final Path mypath ) {
                 resourceUpdatedEvent.fire( new ResourceUpdatedEvent(mypath, sessionInfo) );
             }
-        } ).get( URIEncoder.encode(uri) );
+        } ).get( URIUtil.encode(uri) );
     }
 
     public void assetAddedEvent(String uri) {
@@ -211,7 +211,7 @@ public class DesignerPresenter {
             public void callback( final Path mypath ) {
                 resourceAddedEvent.fire( new ResourceAddedEvent(mypath) );
             }
-        } ).get( URIEncoder.encode(uri) );
+        } ).get( URIUtil.encode(uri) );
     }
 
     public void assetCopyEvent(String uri) {
@@ -262,7 +262,7 @@ public class DesignerPresenter {
                         "" );
 
             }
-        } ).get( URIEncoder.encode(uri) );
+        } ).get( URIUtil.encode( uri ) );
     }
 
     private RemoteCallback<Void> getDeleteSuccessCallback( final Path path ) {
