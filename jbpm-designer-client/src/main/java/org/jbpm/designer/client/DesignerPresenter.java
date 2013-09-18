@@ -230,7 +230,7 @@ public class DesignerPresenter {
                 } );
                 popup.show();
             }
-        } ).get( URIEncoder.encode(uri) );
+        } ).get( URIUtil.encode(uri) );
     }
 
     public void assetRenameEvent(String uri) {
@@ -250,7 +250,7 @@ public class DesignerPresenter {
 
                 popup.show();
             }
-        } ).get( URIEncoder.encode(uri) );
+        } ).get( URIUtil.encode(uri) );
     }
 
     public void assetDeleteEvent(String uri) {
