@@ -144,7 +144,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
             if(workitemConfigInfo != null) {
                 setupDefaultWorkitemConfigs(asset.getAssetLocation(), repository);
-
+                workitemConfigInfo = findWorkitemInfoForUUID(asset.getAssetLocation(), repository);
             }
 
             // get the contents of each of the configs
@@ -490,8 +490,8 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 }
             }
             if(vfsService != null && createdUUID != null) {
-                Path newFormAssetPath = vfsService.get(createdUUID);
-                resourceAddedEvent.fire(new ResourceAddedEvent( newFormAssetPath ));
+                Path newWidAssetPath = vfsService.get(createdUUID);
+                resourceAddedEvent.fire(new ResourceAddedEvent( newWidAssetPath ));
             }
         } catch (Exception e) {
             e.printStackTrace();
