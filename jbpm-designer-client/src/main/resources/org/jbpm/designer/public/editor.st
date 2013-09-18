@@ -29,6 +29,7 @@
         ORYX.PROCESS_SAVED = true;
         ORYX.AUTOSAVE_ENABLED = false;
         ORYX.CONFIG.STORESVGONSAVE = "$storesvgonsave$";
+        ORYX.PRESET_PERSPECTIVE = "$presetperspective$";
 
 
 
