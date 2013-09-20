@@ -66,6 +66,11 @@
       <artifactId>uberfire-workbench</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>org.uberfire</groupId>
+      <artifactId>uberfire-widgets-core-client</artifactId>
+    </dependency>
+
 
     <!-- GWT and GWT Extensions -->
     <dependency>
