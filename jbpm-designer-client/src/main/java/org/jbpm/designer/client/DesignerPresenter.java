@@ -39,6 +39,7 @@ import org.uberfire.workbench.events.NotificationEvent;
 import org.uberfire.workbench.events.ResourceAddedEvent;
 import org.uberfire.workbench.events.ResourceDeletedEvent;
 import org.uberfire.workbench.events.ResourceUpdatedEvent;
+import org.uberfire.util.FileNameUtil;
 
 @Dependent
 @WorkbenchEditor(identifier = "jbpm.designer", supportedTypes = { Bpmn2Type.class })
@@ -146,7 +147,7 @@ public class DesignerPresenter {
 
     @WorkbenchPartTitle
     public String getName() {
-        return "Business Process [" + this.path.getFileNameWithoutExtension() + "]";
+        return "Business Process [" + FileNameUtil.removeExtension(this.path.getFileName()) + "]";
     }
 
     @WorkbenchPartView
