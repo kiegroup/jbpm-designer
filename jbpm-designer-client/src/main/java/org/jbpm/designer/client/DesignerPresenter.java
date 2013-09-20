@@ -39,7 +39,8 @@ import org.uberfire.workbench.events.NotificationEvent;
 import org.uberfire.workbench.events.ResourceAddedEvent;
 import org.uberfire.workbench.events.ResourceDeletedEvent;
 import org.uberfire.workbench.events.ResourceUpdatedEvent;
-import org.uberfire.util.FileNameUtil;
+import org.uberfire.workbench.type.FileNameUtil;
+import org.uberfire.client.editors.texteditor.TextResourceType;
 
 @Dependent
 @WorkbenchEditor(identifier = "jbpm.designer", supportedTypes = { Bpmn2Type.class })
@@ -95,6 +96,9 @@ public class DesignerPresenter {
     @Inject
     private SessionInfo sessionInfo;
 
+    @Inject
+    private TextResourceType type;
+
     private Path path;
     private PlaceRequest place;
 
@@ -147,7 +151,7 @@ public class DesignerPresenter {
 
     @WorkbenchPartTitle
     public String getName() {
-        return "Business Process [" + FileNameUtil.removeExtension(this.path.getFileName()) + "]";
+        return "Business Process [" + FileNameUtil.removeExtension(this.path, type) + "]";
     }
 
     @WorkbenchPartView
