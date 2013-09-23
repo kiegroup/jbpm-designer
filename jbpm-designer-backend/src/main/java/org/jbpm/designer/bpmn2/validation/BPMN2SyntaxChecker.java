@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import bpsim.*;
@@ -98,6 +99,18 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
                 if(isEmpty(process.getName())) {
         			addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE,  "Process has no name."));
         		}
+
+                List<Property> processProperties = process.getProperties();
+                if(processProperties != null && processProperties.size() > 0) {
+                    for(Property prop : processProperties) {
+                        String propId = prop.getId();
+                        Pattern pattern = Pattern.compile("\\s");
+                        Matcher matcher = pattern.matcher(propId);
+                        if(matcher.find()) {
+                            addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE,  "Process variable \"" + propId + "\" contains white spaces."));
+                        }
+                    }
+                }
                 
                 boolean foundStartEvent = false;
                 boolean foundEndEvent = false;
