@@ -55,10 +55,4 @@ public class NewProcessHandler extends DefaultNewResourceHandler {
             }
         }, new DefaultErrorCallback() ).createProcess( pkg.getPackageMainResourcesPath(), buildFileName( resourceType, baseFileName ) );
     }
-
-    @Override
-    public void acceptContext( final ProjectContext context,
-                               final Callback<Boolean, Void> callback ) {
-        callback.onSuccess( true );
-    }
 }
