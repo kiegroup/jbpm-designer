@@ -3468,7 +3468,8 @@ public class Bpmn2JsonUnmarshaller {
         }
         
         if(properties.get("script") != null && properties.get("script").length() > 0) {
-        	scriptTask.setScript(wrapInCDATABlock(properties.get("script")));
+            String scriptStr = properties.get("script").replaceAll("\\\\n", "\n");
+        	scriptTask.setScript(wrapInCDATABlock(scriptStr));
         }
         
         if(properties.get("script_language") != null && properties.get("script_language").length() > 0) {
