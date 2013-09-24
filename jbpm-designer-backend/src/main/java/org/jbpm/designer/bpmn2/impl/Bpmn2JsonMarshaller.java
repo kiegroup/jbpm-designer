@@ -1348,13 +1348,19 @@ public class Bpmn2JsonMarshaller {
     			properties.put("messageref", rt.getMessageRef().getId());
     		}
     	}
-    	
-    	// get out the droolsjbpm-specific attributes "ruleflowGroup" and "taskName"
-    	Iterator<FeatureMap.Entry> iter = task.getAnyAttribute().iterator();
-        while(iter.hasNext()) {
-            FeatureMap.Entry entry = iter.next();
-            if(entry.getEStructuralFeature().getName().equals("taskName")) {
-                properties.put("taskname", entry.getValue());
+
+        if(task.getIoSpecification() != null && task.getIoSpecification().getDataInputs() != null) {
+            List<DataInput> taskDataInputs = task.getIoSpecification().getDataInputs();
+            for(DataInput din : taskDataInputs) {
+                if(din.getName() != null && din.getName().equals("TaskName")) {
+                    List<DataInputAssociation> taskDataInputAssociations = task.getDataInputAssociations();
+                    for(DataInputAssociation dia : taskDataInputAssociations) {
+                        if(dia.getTargetRef().getId().equals(din.getId())) {
+                            properties.put("taskname", ((FormalExpression) dia.getAssignment().get(0).getFrom()).getBody());
+                        }
+                    }
+                    break;
+                }
             }
         }
         
