@@ -3843,13 +3843,13 @@ public class Bpmn2JsonUnmarshaller {
         }
         DataInput taskNameDataInput = null;
         if(properties.get("taskname") != null && properties.get("taskname").length() > 0) {
-            // add droolsjbpm-specific attribute "taskName"
-            ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
-            EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
-                    "http://www.jboss.org/drools", "taskName", false, false);
-            SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
-                    properties.get("taskname").replaceAll("&","").replaceAll(" ", ""));
-            task.getAnyAttribute().add(extensionEntry);
+//            // add droolsjbpm-specific attribute "taskName"
+//            ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+//            EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+//                    "http://www.jboss.org/drools", "taskName", false, false);
+//            SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
+//                    properties.get("taskname").replaceAll("&","").replaceAll(" ", ""));
+//            task.getAnyAttribute().add(extensionEntry);
 
             // map the taskName to iospecification
             taskNameDataInput = Bpmn2Factory.eINSTANCE.createDataInput();

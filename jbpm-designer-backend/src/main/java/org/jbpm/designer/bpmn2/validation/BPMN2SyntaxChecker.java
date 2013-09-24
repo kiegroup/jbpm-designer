@@ -231,16 +231,26 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 				String taskName = null;
 				Iterator<FeatureMap.Entry> utiter = ut.getAnyAttribute().iterator();
 				boolean foundTaskName = false;
-		        while(utiter.hasNext()) {
-		            FeatureMap.Entry entry = utiter.next();
-		            if(entry.getEStructuralFeature().getName().equals("taskName")) {
-		            	foundTaskName = true;
-		            	taskName = (String) entry.getValue();
-		            	if(isEmpty(taskName)) {
-		            		addError(ut, new ValidationSyntaxError(ut, BPMN2_TYPE, "User Task has no task name."));
-		            	}
-		            }
-		        }
+
+
+                if(ut.getIoSpecification() != null && ut.getIoSpecification().getDataInputs() != null) {
+                    List<DataInput> taskDataInputs = ut.getIoSpecification().getDataInputs();
+                    for(DataInput din : taskDataInputs) {
+                        if(din.getName() != null && din.getName().equals("TaskName")) {
+                            List<DataInputAssociation> taskDataInputAssociations = ut.getDataInputAssociations();
+                            for(DataInputAssociation dia : taskDataInputAssociations) {
+                                if(dia.getTargetRef().getId().equals(din.getId())) {
+                                    foundTaskName = true;
+                                    taskName = ((FormalExpression) dia.getAssignment().get(0).getFrom()).getBody();
+                                    if(isEmpty(taskName)) {
+                                        addError(ut, new ValidationSyntaxError(ut, BPMN2_TYPE, "User Task has no task name."));
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
 		        if(!foundTaskName) {
 		        	addError(ut, new ValidationSyntaxError(ut, BPMN2_TYPE, "User Task has no task name."));
 		        }
