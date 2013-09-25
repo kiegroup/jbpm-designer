@@ -1939,12 +1939,14 @@ ORYX.Plugins.View = {
     },
     goFullscreen : function() {
         var docEle = document.documentElement;
-        if(docEle.requestFullScreen) {
-            docEle.requestFullScreen();
-        } else if(docEle.mozRequestFullScreen) {
-            docEle.mozRequestFullScreen();
-        } else if(docEle.webkitRequestFullScreen) {
-            docEle.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+        var docEle2 = parent.document.getElementById(ORYX.EDITORID);
+
+        if(docEle2.requestFullScreen) {
+            docEle2.requestFullScreen();
+        } else if(docEle2.mozRequestFullScreen) {
+            docEle2.mozRequestFullScreen();
+        } else if(docEle2.webkitRequestFullScreen) {
+            docEle2.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
         } else {
             ORYX.EDITOR._pluginFacade.raiseEvent({
                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
