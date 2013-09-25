@@ -395,10 +395,10 @@ ORYX.Plugins.ShapeMenuPlugin = {
 	showDictionaryButton: function() {
 		this.dictionaryButton.prepareToShow();
 	},
-	
+
 	showTaskFormButton : function() {
 		if(this.currentShapes && this.currentShapes[0] && this.currentShapes[0].properties && this.currentShapes[0].properties['oryx-tasktype'] && 
-				this.currentShapes[0].properties['oryx-tasktype'] == "User") {
+				this.currentShapes[0].properties['oryx-tasktype'] == "User" && ORYX.PRESET_PERSPECTIVE != "ruleflow") {
 			this.taskFormButton.prepareToShow();
 		}
 	},
