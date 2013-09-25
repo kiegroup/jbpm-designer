@@ -2978,7 +2978,8 @@ public class Bpmn2JsonUnmarshaller {
                     conditionExpression.setLanguage(languageStr);
                 }
                 if(properties.get("conditionexpression") != null && !"".equals(properties.get("conditionexpression"))) {
-                    conditionExpression.setBody(wrapInCDATABlock(properties.get("conditionexpression")));
+                    String scriptStr = properties.get("conditionexpression").replaceAll("\\\\n", "\n");
+                    conditionExpression.setBody(wrapInCDATABlock(scriptStr));
                 }
                 ((ConditionalEventDefinition) event.getEventDefinitions().get(0)).setCondition(conditionExpression);
             } else if(ed instanceof EscalationEventDefinition) {
@@ -3143,7 +3144,8 @@ public class Bpmn2JsonUnmarshaller {
                     conditionExpression.setLanguage(languageStr);
                 }
                 if(properties.get("conditionexpression") != null && !"".equals(properties.get("conditionexpression"))) {
-                    conditionExpression.setBody(wrapInCDATABlock(properties.get("conditionexpression")));
+                    String scriptStr = properties.get("conditionexpression").replaceAll("\\\\n", "\n");
+                    conditionExpression.setBody(wrapInCDATABlock(scriptStr));
                 }
                 ((ConditionalEventDefinition) event.getEventDefinitions().get(0)).setCondition(conditionExpression);
             } else if(ed instanceof EscalationEventDefinition) {
@@ -5096,7 +5098,8 @@ public class Bpmn2JsonUnmarshaller {
         }
         if (properties.get("conditionexpression") != null && !"".equals(properties.get("conditionexpression"))) {
             FormalExpression expr = Bpmn2Factory.eINSTANCE.createFormalExpression();
-            expr.setBody(wrapInCDATABlock(properties.get("conditionexpression")));
+            String scriptStr = properties.get("conditionexpression").replaceAll("\\\\n", "\n");
+            expr.setBody(wrapInCDATABlock(scriptStr));
             // check if language was specified 
             if (properties.get("conditionexpressionlanguage") != null && !"".equals(properties.get("conditionexpressionlanguage"))) {
                 String languageStr;
