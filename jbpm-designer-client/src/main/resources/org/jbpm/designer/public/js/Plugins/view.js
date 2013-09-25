@@ -141,7 +141,24 @@ ORYX.Plugins.View = {
         /* Register full screen to model */
         this.facade.offer({
             'name':'Show in full screen',
-            'functionality': this.showInFullScreen.bind(this),
+            'functionality': function(context) {
+                var docEle = parent.document.getElementById(ORYX.EDITORID);
+                if(docEle.requestFullScreen) {
+                    docEle.requestFullScreen();
+                } else if(docEle.mozRequestFullScreen) {
+                    docEle.mozRequestFullScreen();
+                } else if(docEle.webkitRequestFullScreen) {
+                    docEle.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+                } else {
+                    ORYX.EDITOR._pluginFacade.raiseEvent({
+                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                        ntype		: 'error',
+                        msg         : 'Browser does not support full screen mode.',
+                        title       : ''
+
+                    });
+                }
+            }.bind(this),
             'group': 'fullscreengroup',
             'icon': ORYX.BASE_FILE_PATH + "images/fullscreen.png",
             'description': 'Show in full screen mode',
@@ -478,10 +495,6 @@ ORYX.Plugins.View = {
 
         uuidParamValue = uuidParams[1];
         window.open (ORYX.EXTERNAL_PROTOCOL + "://" + ORYX.EXTERNAL_HOST + "/" + ORYX.EXTERNAL_SUBDOMAIN  + "/org.drools.guvnor.Guvnor/standaloneEditorServlet?assetsUUIDs=" + uuidParamValue + "&client=oryx" , "Process Editor","status=0,toolbar=0,menubar=0,resizable=0,location=no,width=1400,height=1000");
-    },
-
-    showInFullScreen : function() {
-        this.goFullscreen();
     },
 
     /**
@@ -1936,27 +1949,8 @@ ORYX.Plugins.View = {
         if(this.zoomLevel > this.maxZoomLevel) {
             this.zoomLevel = this.maxZoomLevel;
         }
-    },
-    goFullscreen : function() {
-        var docEle = document.documentElement;
-        var docEle2 = parent.document.getElementById(ORYX.EDITORID);
-
-        if(docEle2.requestFullScreen) {
-            docEle2.requestFullScreen();
-        } else if(docEle2.mozRequestFullScreen) {
-            docEle2.mozRequestFullScreen();
-        } else if(docEle2.webkitRequestFullScreen) {
-            docEle2.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
-        } else {
-            ORYX.EDITOR._pluginFacade.raiseEvent({
-                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                ntype		: 'error',
-                msg         : 'Browser does not support full screen mode.',
-                title       : ''
-
-            });
-        }
     }
+
 };
 
 ORYX.Plugins.View = Clazz.extend(ORYX.Plugins.View);
