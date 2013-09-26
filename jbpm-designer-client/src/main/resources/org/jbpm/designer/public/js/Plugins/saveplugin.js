@@ -141,6 +141,8 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
 
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_MOUSEUP, this.setUnsaved.bind(this));
 
+        window.onunload = this.unloadWindow.bind(this);
+
     },
 
     setUnsaved: function() {
@@ -263,6 +265,62 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         }
     },
 
+    saveSync : function() {
+        if(!ORYX.PROCESS_SAVED) {
+            // save process bpmn2 and svg
+            var processJSON = ORYX.EDITOR.getSerializedJSON();
+            var saveAjaxObj = new XMLHttpRequest;
+            var saveURL = ORYX.PATH + "assetservice";
+            var saveParams  = "action=updateasset&profile=" + ORYX.PROFILE + "&pp=" + ORYX.PREPROCESSING + "&assetid=" + ORYX.UUID + "&assetcontenttransform=jsontobpmn2&assetcontent=" + encodeURIComponent(processJSON);
+            saveAjaxObj.open("POST",saveURL,false);
+            saveAjaxObj.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            saveAjaxObj.send(saveParams);
+            if(saveAjaxObj.status == 200) {
+                try {
+                    if(saveAjaxObj.responseText && saveAjaxObj.responseText.length > 0) {
+                        var saveResponse = saveAjaxObj.responseText.evalJSON();
+                        if(saveResponse.errors && saveResponse.errors.lengt > 0) {
+                            var errors = saveResponse.errors;
+                            for(var j=0; j < errors.length; j++) {
+                                var errormessageobj = errors[j];
+                                this.facade.raiseEvent({
+                                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                    ntype		: 'error',
+                                    msg         : errormessageobj.message,
+                                    title       : ''
+                                });
+                            }
+                        } else {
+                            this.facade.raiseEvent({
+                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                ntype		: 'success',
+                                msg         : 'Successfully saved business process',
+                                title       : '',
+                                timeOut: 1000,
+                                extendedTimeOut: 1000
+                            });
+
+                            // send UF asset update event
+                            parent.designersignalassetupdate(ORYX.UUID);
+                            // set the designer flag
+                            ORYX.PROCESS_SAVED = true;
+                        }
+                    } else {
+                        this.facade.raiseEvent({
+                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                            ntype		: 'error',
+                            msg         : 'Unable to save: ' + e,
+                            title       : ''
+                        });
+                    }
+                } catch(e) {
+                   // swallow errors for now
+                    alert("error : " + e);
+                }
+            }
+        }
+    },
+
     enableautosave: function() {
         ORYX.AUTOSAVE_ENABLED = true;
         this.facade.raiseEvent({type: ORYX.CONFIG.EVENT_STENCIL_SET_LOADED});
@@ -331,6 +389,9 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                 }
             }.bind(this)
         );
-    }
+    },
 
+    unloadWindow: function() {
+        this.saveSync();
+    }
 });
