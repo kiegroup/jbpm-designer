@@ -10,8 +10,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import org.guvnor.common.services.shared.file.CopyService;
 import org.guvnor.common.services.shared.file.DeleteService;
 import org.guvnor.common.services.shared.file.RenameService;
-import org.jboss.errai.common.client.api.RemoteCallback;
 import org.jboss.errai.common.client.api.Caller;
+import org.jboss.errai.common.client.api.RemoteCallback;
 import org.jbpm.designer.client.type.Bpmn2Type;
 import org.jbpm.designer.service.DesignerAssetService;
 import org.kie.workbench.common.widgets.client.callbacks.HasBusyIndicatorDefaultErrorCallback;
@@ -64,15 +64,6 @@ public class DesignerPresenter {
     private PlaceManager placeManager;
 
     @Inject
-    private Event<ResourceUpdatedEvent> resourceUpdatedEvent;
-
-    @Inject
-    private Event<ResourceAddedEvent> resourceAddedEvent;
-
-    @Inject
-    Event<ResourceDeletedEvent> resourceDeleteEvent;
-
-    @Inject
     private Event<NotificationEvent> notification;
 
     @Inject
@@ -108,9 +99,7 @@ public class DesignerPresenter {
         this.path = path;
         this.place = place;
         this.publishOpenInTab(this);
-        this.publishSignalOnAssetUpdate(this);
         this.publishSignalOnAssetDelete(this);
-        this.publishSignalOnAssetAdded(this);
         this.publishSignalOnAssetCopy(this);
         this.publishSignalOnAssetRename(this);
 
@@ -171,18 +160,6 @@ public class DesignerPresenter {
         }
     }-*/;
 
-    private native void publishSignalOnAssetAdded(DesignerPresenter dp)/*-{
-        $wnd.designersignalassetadded = function (uri) {
-            dp.@org.jbpm.designer.client.DesignerPresenter::assetAddedEvent(Ljava/lang/String;)(uri);
-        }
-    }-*/;
-
-    private native void publishSignalOnAssetUpdate(DesignerPresenter dp)/*-{
-        $wnd.designersignalassetupdate = function (uri) {
-            dp.@org.jbpm.designer.client.DesignerPresenter::assetUpdateEvent(Ljava/lang/String;)(uri);
-        }
-    }-*/;
-
     private native void publishSignalOnAssetDelete(DesignerPresenter dp)/*-{
         $wnd.designersignalassetdelete = function (uri) {
             dp.@org.jbpm.designer.client.DesignerPresenter::assetDeleteEvent(Ljava/lang/String;)(uri);
@@ -200,24 +177,6 @@ public class DesignerPresenter {
             dp.@org.jbpm.designer.client.DesignerPresenter::assetRenameEvent(Ljava/lang/String;)(uri);
         }
     }-*/;
-
-    public void assetUpdateEvent(String uri) {
-        vfsServices.call( new RemoteCallback<Path>() {
-            @Override
-            public void callback( final Path mypath ) {
-                resourceUpdatedEvent.fire( new ResourceUpdatedEvent(mypath, sessionInfo) );
-            }
-        } ).get( URIUtil.encode(uri) );
-    }
-
-    public void assetAddedEvent(String uri) {
-        vfsServices.call( new RemoteCallback<Path>() {
-            @Override
-            public void callback( final Path mypath ) {
-                resourceAddedEvent.fire( new ResourceAddedEvent(mypath) );
-            }
-        } ).get( URIUtil.encode(uri) );
-    }
 
     public void assetCopyEvent(String uri) {
         vfsServices.call( new RemoteCallback<Path>() {
@@ -267,7 +226,7 @@ public class DesignerPresenter {
                         "" );
 
             }
-        } ).get( URIUtil.encode( uri ) );
+        } ).get( URIUtil.encode(uri) );
     }
 
     private RemoteCallback<Void> getDeleteSuccessCallback( final Path path ) {
@@ -277,7 +236,6 @@ public class DesignerPresenter {
             public void callback( final Void response ) {
                 notification.fire( new NotificationEvent( CommonConstants.INSTANCE.ItemDeletedSuccessfully() ) );
                 placeManager.closePlace( new PathPlaceRequest( path ) );
-                resourceDeleteEvent.fire( new ResourceDeletedEvent( path, sessionInfo ) );
             }
         };
     }

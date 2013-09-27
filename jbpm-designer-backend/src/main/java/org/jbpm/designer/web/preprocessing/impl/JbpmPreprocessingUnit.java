@@ -76,18 +76,14 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     private String sampleBpmn2;
     private String globalDir;
     private VFSService vfsService;
-    private Event<ResourceUpdatedEvent> resourceUpdatedEvent;
-    private Event<ResourceAddedEvent> resourceAddedEvent;
 
-    public JbpmPreprocessingUnit(ServletContext servletContext, VFSService vfsService, Event<ResourceUpdatedEvent> resourceUpdatedEvent, Event<ResourceAddedEvent> resourceAddedEvent) {
-        this(servletContext, ConfigurationProvider.getInstance().getDesignerContext(), vfsService, resourceUpdatedEvent, resourceAddedEvent);
+    public JbpmPreprocessingUnit(ServletContext servletContext, VFSService vfsService) {
+        this(servletContext, ConfigurationProvider.getInstance().getDesignerContext(), vfsService);
     }
 
-    public JbpmPreprocessingUnit(ServletContext servletContext, String designerPath, VFSService vfsService, Event<ResourceUpdatedEvent> resourceUpdatedEvent, Event<ResourceAddedEvent> resourceAddedEvent) {
+    public JbpmPreprocessingUnit(ServletContext servletContext, String designerPath, VFSService vfsService) {
         this.designer_path = designerPath.substring(0, designerPath.length()-1);
         this.vfsService = vfsService;
-        this.resourceAddedEvent = resourceAddedEvent;
-        this.resourceUpdatedEvent = resourceUpdatedEvent;
         stencilPath = servletContext.getRealPath(designer_path + "/" + STENCILSET_PATH);
         origStencilFilePath = stencilPath + "/bpmn2.0jbpm/stencildata/" + "bpmn2.0jbpm.orig";
         stencilFilePath = stencilPath + "/bpmn2.0jbpm/" + "bpmn2.0jbpm.json";
@@ -491,7 +487,6 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             }
             if(vfsService != null && createdUUID != null) {
                 Path newWidAssetPath = vfsService.get(createdUUID);
-                resourceAddedEvent.fire(new ResourceAddedEvent( newWidAssetPath ));
             }
         } catch (Exception e) {
             e.printStackTrace();

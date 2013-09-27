@@ -33,7 +33,7 @@ import org.uberfire.workbench.events.ResourceUpdatedEvent;
  */
 public class DefaultPreprocessingUnit implements IDiagramPreprocessingUnit {
 
-    public DefaultPreprocessingUnit(ServletContext servletContext, VFSService vfsService, Event<ResourceUpdatedEvent> resourceUpdatedEvent, Event<ResourceAddedEvent> resourceAddedEvent) {
+    public DefaultPreprocessingUnit(ServletContext servletContext, VFSService vfsService) {
         
     }
     

@@ -36,5 +36,5 @@ import org.uberfire.workbench.events.ResourceUpdatedEvent;
 public interface IDiagramPreprocessingService {
     public Collection<IDiagramPreprocessingUnit> getRegisteredPreprocessingUnits(HttpServletRequest request);
     public IDiagramPreprocessingUnit findPreprocessingUnit(HttpServletRequest request, IDiagramProfile profile);
-    public void init(ServletContext servletContext,VFSService vfsService, Event<ResourceUpdatedEvent> resourceUpdatedEvent, Event<ResourceAddedEvent> resourceAddedEvent);
+    public void init(ServletContext servletContext,VFSService vfsService);
 }

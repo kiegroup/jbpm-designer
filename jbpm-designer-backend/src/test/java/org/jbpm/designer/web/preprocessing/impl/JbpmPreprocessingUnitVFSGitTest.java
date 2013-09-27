@@ -105,7 +105,7 @@ public class JbpmPreprocessingUnitVFSGitTest {
         String uniqueId = repository.createAsset(builder.getAsset());
 
         // create instance of preprocessing unit
-        JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit(new TestServletContext(), "/", null, null, null);
+        JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit(new TestServletContext(), "/", null);
 
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
