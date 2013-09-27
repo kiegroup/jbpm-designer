@@ -159,14 +159,15 @@ ORYX.Plugins.FormEditing = Clazz.extend({
                     title       : ''
 
                 });
-                var generatedForms = request.responseText.evalJSON();
-                for(var newform in generatedForms) {
-                    parent.designersignalassetadded(generatedForms[newform].ftluri);
-                    parent.designersignalassetadded(generatedForms[newform].formuri);
-
-                    parent.designersignalassetupdate(generatedForms[newform].ftluri);
-                    parent.designersignalassetupdate(generatedForms[newform].formuri);
-                }
+                // no longer needed
+//                var generatedForms = request.responseText.evalJSON();
+//                for(var newform in generatedForms) {
+//                    parent.designersignalassetadded(generatedForms[newform].ftluri);
+//                    parent.designersignalassetadded(generatedForms[newform].formuri);
+//
+//                    parent.designersignalassetupdate(generatedForms[newform].ftluri);
+//                    parent.designersignalassetupdate(generatedForms[newform].formuri);
+//                }
             }.createDelegate(this),
             failure: function(){
                 this.facade.raiseEvent({
