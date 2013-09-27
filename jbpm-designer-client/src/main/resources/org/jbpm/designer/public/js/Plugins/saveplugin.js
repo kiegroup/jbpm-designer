@@ -181,7 +181,8 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                                 });
 
                                 // send UF asset update event
-                                parent.designersignalassetupdate(ORYX.UUID);
+                                // no longer needed
+//                                parent.designersignalassetupdate(ORYX.UUID);
                                 // set the designer flag
                                 ORYX.PROCESS_SAVED = true;
 
@@ -301,7 +302,8 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                             });
 
                             // send UF asset update event
-                            parent.designersignalassetupdate(ORYX.UUID);
+                            // no longer needed
+//                            parent.designersignalassetupdate(ORYX.UUID);
                             // set the designer flag
                             ORYX.PROCESS_SAVED = true;
                         }
