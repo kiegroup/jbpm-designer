@@ -58,9 +58,6 @@ public class TaskFormsEditorServlet extends HttpServlet {
     private VFSService vfsServices;
 
     @Inject
-    private Event<ResourceUpdatedEvent> resourceUpdatedEvent;
-
-    @Inject
     private BPMNFormBuilderService formModelerService;
 
     @Inject
@@ -186,9 +183,6 @@ public class TaskFormsEditorServlet extends HttpServlet {
                          e.printStackTrace();
                      }
                  }
-
-                 Path newFormAssetPath = vfsServices.get(uniqueId);
-                 resourceUpdatedEvent.fire( new ResourceUpdatedEvent( newFormAssetPath, sessionInfo ) );
 
                  if(formType.equals(FORMMODELER_FILE_EXTENSION)) {
                      return newFormAsset.getName() + "." + newFormAsset.getAssetType() + "|" + uniqueId;

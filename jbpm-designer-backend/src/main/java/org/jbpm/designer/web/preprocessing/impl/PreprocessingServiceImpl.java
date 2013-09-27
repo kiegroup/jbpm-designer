@@ -54,9 +54,9 @@ public class PreprocessingServiceImpl implements IDiagramPreprocessingService {
         return preprocessingUnits.get(profile.getName());
     }
     
-    public void init(ServletContext context, VFSService vfsService, Event<ResourceUpdatedEvent> resourceUpdatedEvent, Event<ResourceAddedEvent> resourceAddedEvent) {
-        _registry.put("default", new DefaultPreprocessingUnit(context, vfsService, resourceUpdatedEvent, resourceAddedEvent));
-        _registry.put("jbpm", new JbpmPreprocessingUnit(context, vfsService, resourceUpdatedEvent, resourceAddedEvent));
+    public void init(ServletContext context, VFSService vfsService) {
+        _registry.put("default", new DefaultPreprocessingUnit(context, vfsService));
+        _registry.put("jbpm", new JbpmPreprocessingUnit(context, vfsService));
     }
     
 }

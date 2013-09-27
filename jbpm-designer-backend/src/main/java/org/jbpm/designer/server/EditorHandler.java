@@ -19,14 +19,15 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringWriter;
-import java.util.*;
-
-import javax.enterprise.event.Event;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.WeakHashMap;
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -36,10 +37,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bpsim.impl.BpsimFactoryImpl;
-import org.stringtemplate.v4.ST;
 import org.apache.commons.codec.binary.Base64;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.web.plugin.IDiagramPlugin;
@@ -52,13 +50,10 @@ import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.designer.web.profile.impl.RepositoryInfo;
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.mozilla.javascript.EvaluatorException;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.stringtemplate.v4.ST;
 import org.uberfire.backend.vfs.VFSService;
-import org.uberfire.workbench.events.ResourceAddedEvent;
-import org.uberfire.workbench.events.ResourceUpdatedEvent;
 
 /**
  * Servlet to load plugin and Oryx stencilset
@@ -130,12 +125,6 @@ public class EditorHandler extends HttpServlet {
     @Inject
     private VFSService vfsServices;
 
-    @Inject
-    private Event<ResourceUpdatedEvent> resourceUpdatedEvent;
-
-    @Inject
-    private Event<ResourceAddedEvent> resourceAddedEvent;
-
     /**
      * The pre-processing service, a global registry to get
      * the pre-processing units.
@@ -163,7 +152,7 @@ public class EditorHandler extends HttpServlet {
         _pluginService = PluginServiceImpl.getInstance(
                 config.getServletContext());
         _preProcessingService = PreprocessingServiceImpl.INSTANCE;
-        _preProcessingService.init(config.getServletContext(), vfsServices, resourceUpdatedEvent, resourceAddedEvent);
+        _preProcessingService.init(config.getServletContext(), vfsServices);
 
         _devMode = Boolean.parseBoolean(System.getProperty(DEV) == null ? config.getInitParameter(DEV) : System.getProperty(DEV));
         _preProcess = Boolean.parseBoolean(System.getProperty(PREPROCESS) == null ? config.getInitParameter(PREPROCESS) : System.getProperty(PREPROCESS));
