@@ -566,14 +566,7 @@ ORYX.Plugins.View = {
                                     dialog.hide();
                                 } else {
                                     try {
-                                        this._loadJSON( request.responseText );
-                                        this.facade.raiseEvent({
-                                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                            ntype		: 'success',
-                                            msg         : 'Successfully imported BPMN2',
-                                            title       : ''
-
-                                        });
+                                        this._loadJSON( request.responseText, "BPMN2" );
                                     } catch(e) {
                                         this.facade.raiseEvent({
                                             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
@@ -687,7 +680,7 @@ ORYX.Plugins.View = {
 
                         var jsonString =  form.items.items[2].getValue();
                         try {
-                            this._loadJSON( jsonString );
+                            this._loadJSON( jsonString, "JSON" );
                         } catch(e) {
                             this.facade.raiseEvent({
                                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
@@ -1168,7 +1161,7 @@ ORYX.Plugins.View = {
      * Loads JSON into the editor
      *
      */
-    _loadJSON: function( jsonString ){
+    _loadJSON: function( jsonString, mtype ){
         if (jsonString) {
             Ext.MessageBox.confirm(
                 'Import',
@@ -1177,14 +1170,52 @@ ORYX.Plugins.View = {
                     if (btn == 'yes') {
                         this.facade.setSelection(this.facade.getCanvas().getChildShapes(true));
 
+                        var currentJSON = ORYX.EDITOR.getSerializedJSON();
                         var selection = this.facade.getSelection();
                         var clipboard = new ORYX.Plugins.Edit.ClipBoard();
                         clipboard.refresh(selection, this.getAllShapesToConsider(selection, true));
                         var command = new ORYX.Plugins.Edit.DeleteCommand(clipboard , this.facade);
                         this.facade.executeCommands([command]);
-                        this.facade.importJSON(jsonString);
+                        try {
+                            this.facade.importJSON(jsonString);
+                            this.facade.raiseEvent({
+                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                ntype		: 'success',
+                                msg         : 'Successfully imported ' + mtype,
+                                title       : ''
+
+                            });
+                        } catch(err) {
+                            this.facade.importJSON(currentJSON);
+                            this.facade.raiseEvent({
+                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                ntype		: 'error',
+                                msg         : 'Unable to import provided ' + mtype,
+                                title       : ''
+
+                            });
+                        }
                     } else {
-                        this.facade.importJSON(jsonString);
+                        try {
+                            this.facade.importJSON(jsonString);
+                            this.facade.raiseEvent({
+                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                ntype		: 'success',
+                                msg         : 'Successfully imported ' + mtype,
+                                title       : ''
+
+                            });
+                        } catch(err) {
+                            var currentJSON = ORYX.EDITOR.getSerializedJSON();
+                            this.facade.importJSON(currentJSON);
+                            this.facade.raiseEvent({
+                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                ntype		: 'error',
+                                msg         : 'Unable to import provided ' + mtype,
+                                title       : ''
+
+                            });
+                        }
                     }
                 }.bind(this)
             );
