@@ -2460,7 +2460,7 @@ Ext.form.ComplexReassignmentField = Ext.extend(Ext.form.TriggerField,  {
                 header: 'Users',
                 width: 150,
                 dataIndex: 'users',
-                editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \-\.\_\,]*$/i }),
+                editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \#\{\}\-\.\_\,]*$/i }),
                 renderer: Ext.util.Format.htmlEncode
             },
             {
@@ -2468,7 +2468,7 @@ Ext.form.ComplexReassignmentField = Ext.extend(Ext.form.TriggerField,  {
                 header: 'Groups',
                 width: 150,
                 dataIndex: 'groups',
-                editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \-\.\_\,]*$/i }),
+                editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \#\{\}\-\.\_\,]*$/i }),
                 renderer: Ext.util.Format.htmlEncode
             },
             {
@@ -2476,7 +2476,7 @@ Ext.form.ComplexReassignmentField = Ext.extend(Ext.form.TriggerField,  {
                 header: 'Expires At',
                 width: 150,
                 dataIndex: 'expires',
-                editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \-\.\_]*$/i }),
+                editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \#\{\}\-\.\_]*$/i }),
                 renderer: Ext.util.Format.htmlEncode
             },
             {
