@@ -162,22 +162,62 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 			if(fe instanceof StartEvent) {
 				StartEvent se = (StartEvent) fe;
 				if(se.getOutgoing() == null || se.getOutgoing().size() < 1) {
-					addError(se, new ValidationSyntaxError(se, BPMN2_TYPE,  "Start node has no outgoing connections"));
+                    if(container instanceof Process) {
+                        if(!isAdHocProcess(process)) {
+                            addError(se, new ValidationSyntaxError(se, BPMN2_TYPE,  "Start node has no outgoing connections"));
+                        }
+                    } else if(container instanceof SubProcess) {
+                        if(!(container instanceof AdHocSubProcess)) {
+                            addError(se, new ValidationSyntaxError(se, BPMN2_TYPE,  "Start node has no outgoing connections"));
+                        }
+                    } else {
+                        addError(se, new ValidationSyntaxError(se, BPMN2_TYPE,  "Start node has no outgoing connections"));
+                    }
 				}
 			} else if (fe instanceof EndEvent) {
 				EndEvent ee = (EndEvent) fe;
 				if(ee.getIncoming() == null || ee.getIncoming().size() < 1) {
-					addError(ee, new ValidationSyntaxError(ee, BPMN2_TYPE,  "End node has no incoming connections"));
+                    if(container instanceof Process) {
+                        if(!isAdHocProcess(process)) {
+                            addError(ee, new ValidationSyntaxError(ee, BPMN2_TYPE,  "End node has no incoming connections"));
+                        }
+                    } else if(container instanceof SubProcess) {
+                        if(!(container instanceof AdHocSubProcess)) {
+                            addError(ee, new ValidationSyntaxError(ee, BPMN2_TYPE,  "End node has no incoming connections"));
+                        }
+                    } else {
+                        addError(ee, new ValidationSyntaxError(ee, BPMN2_TYPE,  "End node has no incoming connections"));
+                    }
 				}
 			} else {
 				if(fe instanceof FlowNode) {
 					FlowNode fn = (FlowNode) fe;
 					if((fn.getOutgoing() == null || fn.getOutgoing().size() < 1) && !isAdHocProcess(process)) {
-    					addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no outgoing connections"));
+                        if(container instanceof Process) {
+                            if(!isAdHocProcess(process)) {
+                                addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no outgoing connections"));
+                            }
+                        } else if(container instanceof SubProcess) {
+                            if(!(container instanceof AdHocSubProcess)) {
+                                addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no outgoing connections"));
+                            }
+                        } else {
+                            addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no outgoing connections"));
+                        }
     				}
                     if(!(fn instanceof BoundaryEvent)) {
                         if((fn.getIncoming() == null || fn.getIncoming().size() < 1) && !isAdHocProcess(process)) {
-                            addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no incoming connections"));
+                            if(container instanceof Process) {
+                                if(!isAdHocProcess(process)) {
+                                    addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no incoming connections"));
+                                }
+                            } else if(container instanceof SubProcess) {
+                                if(!(container instanceof AdHocSubProcess)) {
+                                    addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no incoming connections"));
+                                }
+                            } else {
+                                addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no incoming connections"));
+                            }
                         }
                     }
 				}
