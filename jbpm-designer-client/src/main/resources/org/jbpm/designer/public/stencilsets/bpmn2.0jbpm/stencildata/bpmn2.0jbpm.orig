@@ -2083,7 +2083,15 @@
             "view" : 			"activity/task.svg",
             "icon" : 			"activity/list/type.user.png",
 	        "propertyPackages": [],
-            "properties" :      [],
+            "properties" :      [
+                {
+                    "id":"nomorph",
+                    "type":"String",
+                    "title":"nomorph",
+                    "value":"true",
+		    "hidden":true,
+                    "visible":false
+                }],
             "roles" : 			[
                 "all",
                 "sequence_start",
@@ -2093,8 +2101,7 @@
                 "FromEventbasedGateway",
                 "messageflow_start",
                 "messageflow_end",
-                "fromtoall",
-                "ActivitiesMorph"
+                "fromtoall"
             ]
         },
 	    {
@@ -2107,7 +2114,15 @@
             "view" :                    "activity/task.svg",
             "icon" :                    "activity/list/type.send.png",
             "propertyPackages": [],
-            "properties" :      [],
+            "properties" :      [
+	    	{
+                    "id":"nomorph",
+                    "type":"String",
+                    "title":"nomorph",
+                    "value":"true",
+                    "hidden":true,
+                    "visible":false
+                }],
             "roles" : 			[
                 "all",
                 "sequence_start",
@@ -2117,8 +2132,7 @@
                 "FromEventbasedGateway",
                 "messageflow_start",
                 "messageflow_end",
-                "fromtoall",
-                "ActivitiesMorph"
+                "fromtoall"
             ]
         },
 	    {
@@ -2131,7 +2145,15 @@
             "view" :                    "activity/task.svg",
             "icon" :                    "activity/list/type.receive.png",
             "propertyPackages": [],
-            "properties" :      [],
+            "properties" :      [
+		{
+                    "id":"nomorph",
+                    "type":"String",
+                    "title":"nomorph",
+                    "value":"true",
+                    "hidden":true,
+                    "visible":false
+                }],
             "roles" : 			[
                 "all",
                 "sequence_start",
@@ -2141,8 +2163,7 @@
                 "FromEventbasedGateway",
                 "messageflow_start",
                 "messageflow_end",
-                "fromtoall",
-                "ActivitiesMorph"
+                "fromtoall"
             ]
         },
 	    {
@@ -2155,7 +2176,15 @@
             "view" :                    "activity/task.svg",
             "icon" :                    "activity/list/type.manual.png",
             "propertyPackages": [],                     
-            "properties" :      [],
+            "properties" :      [
+		{
+                    "id":"nomorph",
+                    "type":"String",
+                    "title":"nomorph",
+                    "value":"true",
+                    "hidden":true,
+                    "visible":false
+                }],
             "roles" : 			[
                 "all",
                 "sequence_start",
@@ -2165,8 +2194,7 @@
                 "FromEventbasedGateway",
                 "messageflow_start",
                 "messageflow_end",
-                "fromtoall",
-                "ActivitiesMorph"
+                "fromtoall"
             ]
         },
 	    {
@@ -2179,7 +2207,15 @@
             "view" :                    "activity/task.svg",
             "icon" :                    "activity/list/type.service.png",
             "propertyPackages": [],
-            "properties" :      [],
+            "properties" :      [
+		{
+                    "id":"nomorph",
+                    "type":"String",
+                    "title":"nomorph",
+                    "value":"true",
+                    "hidden":true,
+                    "visible":false
+                }],
             "roles" : 			[
                 "all",
                 "sequence_start",
@@ -2189,8 +2225,7 @@
                 "FromEventbasedGateway",
                 "messageflow_start",
                 "messageflow_end",
-                "fromtoall",
-                "ActivitiesMorph"
+                "fromtoall"
             ]
         },
 	    {
@@ -2203,7 +2238,15 @@
             "view" :                    "activity/task.svg",
             "icon" :                    "activity/list/type.business.rule.png",
             "propertyPackages": [],                     
-            "properties" :      [],
+            "properties" :      [
+		{
+                    "id":"nomorph",
+                    "type":"String",
+                    "title":"nomorph",
+                    "value":"true",
+                    "hidden":true,
+                    "visible":false
+                }],
             "roles" : 			[
                 "all",
                 "sequence_start",
@@ -2213,8 +2256,7 @@
                 "FromEventbasedGateway",
                 "messageflow_start",
                 "messageflow_end",
-                "fromtoall",
-                "ActivitiesMorph"
+                "fromtoall"
             ]
         },
 	    {
@@ -2227,7 +2269,15 @@
             "view" :                    "activity/task.svg",
             "icon" :                    "activity/list/type.script.png",
             "propertyPackages": [],
-            "properties" :      [],
+            "properties" :      [
+		{
+                    "id":"nomorph",
+                    "type":"String",
+                    "title":"nomorph",
+                    "value":"true",
+                    "hidden":true,
+                    "visible":false
+                }],
             "roles" : 			[
                 "all",
                 "sequence_start",
@@ -2237,8 +2287,7 @@
                 "FromEventbasedGateway",
                 "messageflow_start",
                 "messageflow_end",
-                "fromtoall",
-                "ActivitiesMorph"
+                "fromtoall"
             ]
         },
 		{
@@ -2308,6 +2357,14 @@
 					"stroke":true,
 					"display" : true
 				},
+				{
+                    			"id":"nomorph",
+                    			"type":"String",
+                    			"title":"nomorph",
+                    			"value":"true",
+                    			"hidden":true,
+                    			"visible":false
+                		},	
 				{
 					"id":"origbordercolor",
 					"type":"Color",
@@ -2799,8 +2856,7 @@
 				"FromEventbasedGateway",
 				"messageflow_start",
 				"messageflow_end",
-				"fromtoall",
-                "ActivitiesMorph"
+				"fromtoall"
 			],
 			"properties": [
 				$bopen$
