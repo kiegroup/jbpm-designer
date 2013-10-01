@@ -2800,7 +2800,7 @@
 				"messageflow_start",
 				"messageflow_end",
 				"fromtoall",
-                "ActivitiesMorph" tihomir
+                "ActivitiesMorph"
 			],
 			"properties": [
 				$bopen$
