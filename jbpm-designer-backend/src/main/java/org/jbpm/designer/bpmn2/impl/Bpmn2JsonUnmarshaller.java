@@ -1999,7 +1999,7 @@ public class Bpmn2JsonUnmarshaller {
         _idMap.put(resourceId, baseElt);
         // baseElt.setId(resourceId); commented out as bpmn2 seems to create
         // duplicate ids right now.
-        applyProperties(baseElt, properties);
+        applyProperties(baseElt, properties, preProcessingData);
         if (baseElt instanceof Definitions) {
         	Process rootLevelProcess = null;
         	if(childElements == null || childElements.size() < 1) {
@@ -2250,7 +2250,7 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
 
-    protected void applyProperties(BaseElement baseElement, Map<String, String> properties) {
+    protected void applyProperties(BaseElement baseElement, Map<String, String> properties, String preProcessingData) {
         applyBaseElementProperties(baseElement, properties);
         if (baseElement instanceof SubProcess) {
             applySubProcessProperties((SubProcess) baseElement, properties);
@@ -2277,7 +2277,7 @@ public class Bpmn2JsonUnmarshaller {
             applySequenceFlowProperties((SequenceFlow) baseElement, properties);
         }
         if (baseElement instanceof Task) {
-            applyTaskProperties((Task) baseElement, properties);
+            applyTaskProperties((Task) baseElement, properties, preProcessingData);
         }
         if (baseElement instanceof UserTask) {
             applyUserTaskProperties((UserTask) baseElement, properties);
@@ -3830,7 +3830,7 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
 
-    protected void applyTaskProperties(Task task, Map<String, String> properties) {
+    protected void applyTaskProperties(Task task, Map<String, String> properties, String preProcessingData) {
         if(properties.get("name") != null) {
             task.setName(escapeXmlString(properties.get("name")));
         } else {
@@ -3838,13 +3838,16 @@ public class Bpmn2JsonUnmarshaller {
         }
         DataInput taskNameDataInput = null;
         if(properties.get("taskname") != null && properties.get("taskname").length() > 0) {
-//            // add droolsjbpm-specific attribute "taskName"
-//            ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
-//            EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
-//                    "http://www.jboss.org/drools", "taskName", false, false);
-//            SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
-//                    properties.get("taskname").replaceAll("&","").replaceAll(" ", ""));
-//            task.getAnyAttribute().add(extensionEntry);
+
+            if(isCustomElement(properties.get("tasktype"), preProcessingData)) {
+                // add droolsjbpm-specific attribute "taskName"
+                ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                        "http://www.jboss.org/drools", "taskName", false, false);
+                SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
+                        properties.get("taskname").replaceAll("&","").replaceAll(" ", ""));
+                task.getAnyAttribute().add(extensionEntry);
+            }
 
             // map the taskName to iospecification
             taskNameDataInput = Bpmn2Factory.eINSTANCE.createDataInput();
