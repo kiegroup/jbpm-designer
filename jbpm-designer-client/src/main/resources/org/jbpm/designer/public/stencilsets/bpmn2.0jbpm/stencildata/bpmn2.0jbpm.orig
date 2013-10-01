@@ -2102,7 +2102,7 @@
             "id":                       "SendTask",
             "title" :                   "Send",
             "groups" :                  ["Tasks"],
-            "description" :             "User Task.",
+            "description" :             "Send Task.",
             "description_ja" :          "タスクとは作業（実行すべきジョブ）の単位です。",
             "view" :                    "activity/task.svg",
             "icon" :                    "activity/list/type.send.png",
@@ -2799,7 +2799,8 @@
 				"FromEventbasedGateway",
 				"messageflow_start",
 				"messageflow_end",
-				"fromtoall"
+				"fromtoall",
+                "ActivitiesMorph" tihomir
 			],
 			"properties": [
 				$bopen$
