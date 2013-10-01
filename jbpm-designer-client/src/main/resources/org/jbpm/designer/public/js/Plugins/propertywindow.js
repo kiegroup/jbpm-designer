@@ -2151,7 +2151,7 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
                 header: 'Expires At',
                 width: 100,
                 dataIndex: 'expires',
-                editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \-\.\_]*$/i }),
+                editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \#\{\}\-\.\_]*$/i }),
                 renderer: Ext.util.Format.htmlEncode
             },
             {
@@ -2159,7 +2159,7 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
                 header: 'From',
                 width: 100,
                 dataIndex: 'from',
-                editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \-\.\_\,]*$/i }),
+                editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \#\{\}\-\.\_\,]*$/i }),
                 renderer: Ext.util.Format.htmlEncode
             },
             {
@@ -2167,7 +2167,7 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
                 header: 'To Users',
                 width: 100,
                 dataIndex: 'tousers',
-                editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \-\.\_\,]*$/i }),
+                editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \#\{\}\-\.\_\,]*$/i }),
                 renderer: Ext.util.Format.htmlEncode
             },
             {
@@ -2175,7 +2175,7 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
                 header: 'To Groups',
                 width: 100,
                 dataIndex: 'togroups',
-                editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \-\.\_\,]*$/i }),
+                editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \#\{\}\-\.\_\,]*$/i }),
                 renderer: Ext.util.Format.htmlEncode
             },
             {
@@ -2183,7 +2183,7 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
                 header: 'Reply To',
                 width: 100,
                 dataIndex: 'replyto',
-                editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \-\.\_\,]*$/i }),
+                editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \#\{\}\-\.\_\,]*$/i }),
                 renderer: Ext.util.Format.htmlEncode
             },
             {
@@ -2191,7 +2191,7 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
                 header: 'Subject',
                 width: 100,
                 dataIndex: 'subject',
-                editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \-\.\_\,]*$/i }),
+                editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \#\{\}\-\.\_\,]*$/i }),
                 renderer: Ext.util.Format.htmlEncode
             },
             {
