@@ -289,16 +289,31 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
         }
     },
     addToStore : function(item) {
-        this.historyStore.insert(0, new this.historyEntry({
-            processid: item.processid,
-            processname: item.processname,
-            processpkg: item.processpkg,
-            processversion: item.processversion,
-            timestamp: new Date(item.timestamp).format("d.m.Y H:i:s"),
-            json: item.json,
-            svg:  item.svg
-        }));
-        this.historyStore.commitChanges();
+        if(this.historyStore.data.length > 0) {
+            if(this.historyStore.getAt(0).data['json'] != item.json) {
+                this.historyStore.insert(0, new this.historyEntry({
+                    processid: item.processid,
+                    processname: item.processname,
+                    processpkg: item.processpkg,
+                    processversion: item.processversion,
+                    timestamp: new Date(item.timestamp).format("d.m.Y H:i:s"),
+                    json: item.json,
+                    svg:  item.svg
+                }));
+                this.historyStore.commitChanges();
+            }
+        } else {
+            this.historyStore.insert(0, new this.historyEntry({
+                processid: item.processid,
+                processname: item.processname,
+                processpkg: item.processpkg,
+                processversion: item.processversion,
+                timestamp: new Date(item.timestamp).format("d.m.Y H:i:s"),
+                json: item.json,
+                svg:  item.svg
+            }));
+            this.historyStore.commitChanges();
+        }
     },
     clearLocalHistory : function() {
         this.historyStore.removeAll();
