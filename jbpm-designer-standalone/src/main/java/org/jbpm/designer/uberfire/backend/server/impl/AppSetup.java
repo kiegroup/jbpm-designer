@@ -29,10 +29,10 @@ import org.uberfire.security.server.cdi.SecurityFactory;
 public class AppSetup {
 
     private static final String JBPM_REPO_PLAYGROUND = "jbpm-playground";
-    private static final String GUVNOR_REPO_PLAYGROUND = "uf-playground";
+//    private static final String GUVNOR_REPO_PLAYGROUND = "uf-playground";
     // default repository section - start
     private static final String JBPM_URL = "https://github.com/guvnorngtestuser1/jbpm-console-ng-playground-kjar.git";
-    private static final String GUVNOR_URL = "https://github.com/guvnorngtestuser1/guvnorng-playground.git";
+//    private static final String GUVNOR_URL = "https://github.com/guvnorngtestuser1/guvnorng-playground.git";
 
     private final String userName = "guvnorngtestuser1";
     private final String password = "test1234";
@@ -72,23 +72,23 @@ public class AppSetup {
             }
 
             // TODO in case repo is not defined in system repository so we add default
-            Repository guvnorRepo = repositoryService.getRepository( GUVNOR_REPO_PLAYGROUND );
-            if ( guvnorRepo == null ) {
-                guvnorRepo = repositoryService.createRepository( "git",
-                                                                 GUVNOR_REPO_PLAYGROUND,
-                                                                 new HashMap<String, Object>() {{
-                                                                     put( "origin", GUVNOR_URL );
-                                                                     put( "username", userName );
-                                                                     put( "crypt:password", password );
-                                                                 }} );
-            }
+//            Repository guvnorRepo = repositoryService.getRepository( GUVNOR_REPO_PLAYGROUND );
+//            if ( guvnorRepo == null ) {
+//                guvnorRepo = repositoryService.createRepository( "git",
+//                                                                 GUVNOR_REPO_PLAYGROUND,
+//                                                                 new HashMap<String, Object>() {{
+//                                                                     put( "origin", GUVNOR_URL );
+//                                                                     put( "username", userName );
+//                                                                     put( "crypt:password", password );
+//                                                                 }} );
+//            }
 
             // TODO in case groups are not defined
             Collection<OrganizationalUnit> groups = organizationalUnitService.getOrganizationalUnits();
             if ( groups == null || groups.isEmpty() ) {
                 final List<Repository> repositories = new ArrayList<Repository>();
                 repositories.add( jbpmRepo );
-                repositories.add( guvnorRepo );
+//                repositories.add( guvnorRepo );
 
                 organizationalUnitService.createOrganizationalUnit( "demo",
                                                                      "demo@jbpm.org",
