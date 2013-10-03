@@ -67,6 +67,28 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
         });
 
         this.facade.offer({
+            'name': "Configure Snapshot Interval",
+            'functionality': this.configureSnapshotInterval.bind(this),
+            'group': "localstorage",
+            'icon': ORYX.BASE_FILE_PATH + "images/clock.png",
+            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/localhistory.png",
+            'description': "Configure Snaphot Interval",
+            'index': 3,
+            'minShape': 0,
+            'maxShape': 0,
+            'isEnabled': function(){
+                return ORYX.LOCAL_HISTORY_ENABLED;
+//                profileParamName = "profile";
+//                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//                regexa = new RegExp( regexSa );
+//                profileParams = regexa.exec( window.location.href );
+//                profileParamValue = profileParams[1];
+//                return profileParamValue == "jbpm" && ORYX.LOCAL_HISTORY_ENABLED;
+            }.bind(this)
+        });
+
+        this.facade.offer({
             'name': "Enable Local History",
             'functionality': this.enableLocalHistory.bind(this),
             'group': "localstorage",
@@ -268,7 +290,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
         );
         this.historyProxy = new Ext.data.MemoryProxy({root: []});
         this.historyStore = new Ext.data.Store({
-            autoDestroy: true,
+            autoDestroy: false,
             reader: new Ext.data.JsonReader({
                 root: "root"
             }, this.historyEntry),
@@ -455,6 +477,107 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
             if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
         }
         return null;
+    },
+    configureSnapshotInterval : function() {
+        var siform = new Ext.form.FormPanel({
+            baseCls: 		'x-plain',
+            labelWidth: 	150,
+            defaultType: 	'numberfield',
+            items: [
+                {
+                    fieldLabel: 'Interval',
+                    name: 'interval',
+                    allowBlank:false,
+                    allowDecimals:false,
+                    minValue:1,
+                    width: 120
+                },
+                {
+                    xtype: 'combo',
+                    name: 'intervalunits',
+                    store: new Ext.data.SimpleStore({
+                        fields: ['units'],
+                        data: [['millisecond'], ['seconds'], ['minutes'], ['hours'], ['days']]
+                    }),
+                    allowBlank: false,
+                    displayField: 'units',
+                    valueField: 'units',
+                    mode: 'local',
+                    typeAhead: true,
+                    value: "minutes",
+                    triggerAction: 'all',
+                    fieldLabel: 'Interval units',
+                    width: 120
+                }
+            ]
+        });
+
+        var dialog = new Ext.Window({
+            autoCreate: true,
+            layout: 	'fit',
+            plain:		true,
+            bodyStyle: 	'padding:5px;',
+            title: 		"Configure Snapshot Interval",
+            height: 	300,
+            width:		350,
+            modal:		true,
+            fixedcenter:true,
+            shadow:		true,
+            proxyDrag: 	true,
+            resizable:	true,
+            items: 		[siform],
+            buttons:[
+                {
+                    text:"Set",
+                    handler:function(){
+                        dialog.hide();
+                        var intervalInput = siform.items.items[0].getValue();
+                        var intervalUnit = siform.items.items[1].getValue();
+                        if(intervalInput && intervalUnit && intervalInput > 0) {
+                            if(intervalUnit == "seconds") {
+                                intervalInput = intervalInput*1000;
+                            } else if(intervalUnit == "minutes") {
+                                intervalInput = intervalInput*1000*60;
+                            } else if(intervalUnit == "hours") {
+                                intervalInput = intervalInput*1000*60*60;
+                            } else if(intervalUnit == "days") {
+                                intervalInput = intervalInput*1000*60*60*24;
+                            } else {
+                                // default to milliseconds
+                            }
+                            this.stopStoring();
+                            ORYX.LOCAL_HISTORY_TIMEOUT = intervalInput;
+                            this.startStoring();
+                            this.facade.raiseEvent({
+                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                ntype		: 'info',
+                                msg         : 'Updated Snapshot Interval"',
+                                title       : ''
+                            });
+                        } else {
+                            this.facade.raiseEvent({
+                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                ntype		: 'error',
+                                msg         : 'Invalid input specified',
+                                title       : ''
+                            });
+                        }
+
+                    }.bind(this)
+                },{
+                    text:ORYX.I18N.FromBPMN2Support.close,
+                    handler:function(){
+                        dialog.hide();
+                    }.bind(this)
+                }
+            ]
+        });
+        dialog.on('hide', function(){
+            dialog.destroy(true);
+            delete dialog;
+        });
+        dialog.show();
+
     }
 });
 
