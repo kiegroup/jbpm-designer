@@ -14,6 +14,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
         this.fail;
         this.uid;
         this.historyInterval;
+        this.mygrid;
 
         if(this.haveSupportForLocalHistory()) {
             this.setupAndLoadHistoryData();
@@ -115,7 +116,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
     },
     displayLocalHistory : function() {
         var gridId = Ext.id();
-        var grid = new Ext.grid.EditorGridPanel({
+        this.mygrid = new Ext.grid.EditorGridPanel({
             autoScroll: true,
             autoHeight: true,
             store: this.historyStore,
@@ -177,7 +178,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
             title: '<center>Select Process Id and click "Restore" to restore.</center>',
             layout:'column',
             items:[
-                grid
+                this.mygrid
             ],
             layoutConfig: {
                 columns: 1
@@ -215,8 +216,8 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
             buttons		: [{
                 text: 'Restore',
                 handler: function(){
-                    if(grid.getSelectionModel().getSelectedCell() != null) {
-                        var selectedIndex = grid.getSelectionModel().getSelectedCell()[0];
+                    if(this.mygrid.getSelectionModel().getSelectedCell() != null) {
+                        var selectedIndex = this.mygrid.getSelectionModel().getSelectedCell()[0];
                         var outValue = this.historyStore.getAt(selectedIndex).data['json'];
                         if(outValue && outValue.length > 0) {
                             outValue = Base64.decode(outValue);
@@ -250,8 +251,8 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
         });
 
         dialog.show();
-        grid.render();
-        grid.focus( false, 100 );
+        this.mygrid.render();
+        this.mygrid.focus( false, 100 );
     },
     setupAndLoadHistoryData : function() {
         this.historyEntry = Ext.data.Record.create(
@@ -301,6 +302,9 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
                     svg:  item.svg
                 }));
                 this.historyStore.commitChanges();
+                if(this.mygrid) {
+                    this.mygrid.getView().refresh(false);
+                }
             }
         } else {
             this.historyStore.insert(0, new this.historyEntry({
