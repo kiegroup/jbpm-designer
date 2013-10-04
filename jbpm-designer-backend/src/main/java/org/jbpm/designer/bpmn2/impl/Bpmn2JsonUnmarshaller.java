@@ -2678,6 +2678,77 @@ public class Bpmn2JsonUnmarshaller {
         if(sp instanceof EventSubprocess) {
             sp.setTriggeredByEvent(true);
         }
+
+        // simulation
+        if(properties.get("distributiontype") != null && properties.get("distributiontype").length() > 0) {
+            TimeParameters timeParams = BpsimFactory.eINSTANCE.createTimeParameters();
+            Parameter processingTimeParam = BpsimFactory.eINSTANCE.createParameter();
+            if(properties.get("distributiontype").equals("normal")) {
+                NormalDistributionType normalDistributionType = BpsimFactory.eINSTANCE.createNormalDistributionType();
+                normalDistributionType.setStandardDeviation(Double.valueOf(properties.get("standarddeviation")));
+                normalDistributionType.setMean(Double.valueOf(properties.get("mean")));
+                processingTimeParam.getParameterValue().add(normalDistributionType);
+            } else if(properties.get("distributiontype").equals("uniform")) {
+                UniformDistributionType uniformDistributionType = BpsimFactory.eINSTANCE.createUniformDistributionType();
+                uniformDistributionType.setMax(Double.valueOf(properties.get("max")));
+                uniformDistributionType.setMin(Double.valueOf(properties.get("min")));
+                processingTimeParam.getParameterValue().add(uniformDistributionType);
+
+                // random distribution not supported in bpsim 1.0
+//        	} else if(properties.get("distributiontype").equals("random")) {
+//        		RandomDistributionType randomDistributionType = BpsimFactory.eINSTANCE.createRandomDistributionType();
+//        		randomDistributionType.setMax(Double.valueOf(properties.get("max")));
+//        		randomDistributionType.setMin(Double.valueOf(properties.get("min")));
+//        		processingTimeParam.getParameterValue().add(randomDistributionType);
+            } else if(properties.get("distributiontype").equals("poisson")) {
+                PoissonDistributionType poissonDistributionType = BpsimFactory.eINSTANCE.createPoissonDistributionType();
+                poissonDistributionType.setMean(Double.valueOf(properties.get("mean")));
+                processingTimeParam.getParameterValue().add(poissonDistributionType);
+            }
+
+            // individual time unit not supported in bpsim 1.0
+//        	if(properties.get("timeunit") != null) {
+//        		timeParams.setTimeUnit(TimeUnit.getByName(properties.get("timeunit")));
+//        	}
+            if(properties.get("waittime") != null) {
+                Parameter waittimeParam = BpsimFactory.eINSTANCE.createParameter();
+                FloatingParameterType waittimeParamValue = BpsimFactory.eINSTANCE.createFloatingParameterType();
+                DecimalFormat twoDForm = new DecimalFormat("#.##");
+                waittimeParamValue.setValue(Double.valueOf(twoDForm.format(Double.valueOf(properties.get("waittime")))));
+                waittimeParam.getParameterValue().add(waittimeParamValue);
+                timeParams.setWaitTime(waittimeParam);
+            }
+            timeParams.setProcessingTime(processingTimeParam);
+            if(_simulationElementParameters.containsKey(sp.getId())) {
+                _simulationElementParameters.get(sp.getId()).add(timeParams);
+            } else {
+                List<EObject> values = new ArrayList<EObject>();
+                values.add(timeParams);
+                _simulationElementParameters.put(sp.getId(), values);
+            }
+        }
+
+        CostParameters costParameters = BpsimFactory.eINSTANCE.createCostParameters();
+        if(properties.get("unitcost") != null && properties.get("unitcost").length() > 0) {
+            Parameter unitcostParam = BpsimFactory.eINSTANCE.createParameter();
+            FloatingParameterType unitCostParameterValue = BpsimFactory.eINSTANCE.createFloatingParameterType();
+            unitCostParameterValue.setValue(new Double(properties.get("unitcost")));
+            unitcostParam.getParameterValue().add(unitCostParameterValue);
+            costParameters.setUnitCost(unitcostParam);
+
+
+        }
+        // no individual currency unit supported in bpsim 1.0
+//        if(properties.get("currency") != null && properties.get("currency").length() > 0) {
+//            costParameters.setCurrencyUnit(properties.get("currency"));
+//        }
+        if(_simulationElementParameters.containsKey(sp.getId())) {
+            _simulationElementParameters.get(sp.getId()).add(costParameters);
+        } else {
+            List<EObject> values = new ArrayList<EObject>();
+            values.add(costParameters);
+            _simulationElementParameters.put(sp.getId(), values);
+        }
     }
     
     protected void applyAdHocSubProcessProperties(AdHocSubProcess ahsp, Map<String, String> properties) {
@@ -3835,6 +3906,77 @@ public class Bpmn2JsonUnmarshaller {
                         (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__ON_EXIT_SCRIPT, onExitScript);
                 callActivity.getExtensionValues().get(0).getValue().add(extensionElementEntry);
             }
+        }
+
+        // simulation
+        if(properties.get("distributiontype") != null && properties.get("distributiontype").length() > 0) {
+            TimeParameters timeParams = BpsimFactory.eINSTANCE.createTimeParameters();
+            Parameter processingTimeParam = BpsimFactory.eINSTANCE.createParameter();
+            if(properties.get("distributiontype").equals("normal")) {
+                NormalDistributionType normalDistributionType = BpsimFactory.eINSTANCE.createNormalDistributionType();
+                normalDistributionType.setStandardDeviation(Double.valueOf(properties.get("standarddeviation")));
+                normalDistributionType.setMean(Double.valueOf(properties.get("mean")));
+                processingTimeParam.getParameterValue().add(normalDistributionType);
+            } else if(properties.get("distributiontype").equals("uniform")) {
+                UniformDistributionType uniformDistributionType = BpsimFactory.eINSTANCE.createUniformDistributionType();
+                uniformDistributionType.setMax(Double.valueOf(properties.get("max")));
+                uniformDistributionType.setMin(Double.valueOf(properties.get("min")));
+                processingTimeParam.getParameterValue().add(uniformDistributionType);
+
+                // random distribution not supported in bpsim 1.0
+//        	} else if(properties.get("distributiontype").equals("random")) {
+//        		RandomDistributionType randomDistributionType = BpsimFactory.eINSTANCE.createRandomDistributionType();
+//        		randomDistributionType.setMax(Double.valueOf(properties.get("max")));
+//        		randomDistributionType.setMin(Double.valueOf(properties.get("min")));
+//        		processingTimeParam.getParameterValue().add(randomDistributionType);
+            } else if(properties.get("distributiontype").equals("poisson")) {
+                PoissonDistributionType poissonDistributionType = BpsimFactory.eINSTANCE.createPoissonDistributionType();
+                poissonDistributionType.setMean(Double.valueOf(properties.get("mean")));
+                processingTimeParam.getParameterValue().add(poissonDistributionType);
+            }
+
+            // individual time unit not supported in bpsim 1.0
+//        	if(properties.get("timeunit") != null) {
+//        		timeParams.setTimeUnit(TimeUnit.getByName(properties.get("timeunit")));
+//        	}
+            if(properties.get("waittime") != null) {
+                Parameter waittimeParam = BpsimFactory.eINSTANCE.createParameter();
+                FloatingParameterType waittimeParamValue = BpsimFactory.eINSTANCE.createFloatingParameterType();
+                DecimalFormat twoDForm = new DecimalFormat("#.##");
+                waittimeParamValue.setValue(Double.valueOf(twoDForm.format(Double.valueOf(properties.get("waittime")))));
+                waittimeParam.getParameterValue().add(waittimeParamValue);
+                timeParams.setWaitTime(waittimeParam);
+            }
+            timeParams.setProcessingTime(processingTimeParam);
+            if(_simulationElementParameters.containsKey(callActivity.getId())) {
+                _simulationElementParameters.get(callActivity.getId()).add(timeParams);
+            } else {
+                List<EObject> values = new ArrayList<EObject>();
+                values.add(timeParams);
+                _simulationElementParameters.put(callActivity.getId(), values);
+            }
+        }
+
+        CostParameters costParameters = BpsimFactory.eINSTANCE.createCostParameters();
+        if(properties.get("unitcost") != null && properties.get("unitcost").length() > 0) {
+            Parameter unitcostParam = BpsimFactory.eINSTANCE.createParameter();
+            FloatingParameterType unitCostParameterValue = BpsimFactory.eINSTANCE.createFloatingParameterType();
+            unitCostParameterValue.setValue(new Double(properties.get("unitcost")));
+            unitcostParam.getParameterValue().add(unitCostParameterValue);
+            costParameters.setUnitCost(unitcostParam);
+
+
+        }
+        // no individual currency unit supported in bpsim 1.0
+//        if(properties.get("currency") != null && properties.get("currency").length() > 0) {
+//            costParameters.setCurrencyUnit(properties.get("currency"));
+//        }
+        if(_simulationElementParameters.containsKey(callActivity.getId())) {
+            _simulationElementParameters.get(callActivity.getId()).add(costParameters);
+        } else {
+            List<EObject> values = new ArrayList<EObject>();
+            values.add(costParameters);
+            _simulationElementParameters.put(callActivity.getId(), values);
         }
     }
 
