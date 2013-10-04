@@ -782,6 +782,7 @@ ORYX.Plugins.View = {
      * Share the process PDF URL.
      */
     shareProcessPdf : function() {
+
         this.facade.raiseEvent({
             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
             ntype		: 'info',
@@ -836,8 +837,8 @@ ORYX.Plugins.View = {
             params: {
                 profile: ORYX.PROFILE,
                 uuid : ORYX.UUID,
-                fsvg : formattedSvgDOM,
-                rsvg : rawSvgDOM,
+                fsvg : Base64.encode(formattedSvgDOM),
+                rsvg : Base64.encode(rawSvgDOM),
                 transformto : "pdf",
                 respaction : "showurl"
             }
@@ -902,8 +903,8 @@ ORYX.Plugins.View = {
             params: {
                 profile: ORYX.PROFILE,
                 uuid : ORYX.UUID,
-                fsvg : formattedSvgDOM,
-                rsvg : rawSvgDOM,
+                fsvg : Base64.encode(formattedSvgDOM),
+                rsvg : Base64.encode(rawSvgDOM),
                 transformto : "png",
                 respaction : "showurl"
             }
