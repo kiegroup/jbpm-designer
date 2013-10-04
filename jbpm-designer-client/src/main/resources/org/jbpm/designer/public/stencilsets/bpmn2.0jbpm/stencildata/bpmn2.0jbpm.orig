@@ -3667,7 +3667,99 @@
 							"value": "mvel"
 						}
 					]                                        
-				}
+				},
+			        {
+        "id":"unitcost",
+        "type":"Float",
+        "title":"Cost per time unit",
+        "value":"0",
+        "description":"",
+        "description_ja":"",
+        "readonly":false,
+        "optional":true,
+        "simulation" : true,
+        "min" : "0"
+    },
+    {
+        "id":"distributiontype",
+        "type":"Choice",
+        "title":"Distribution Type",
+        "value":"uniform",
+        "description":"",
+        "description_ja":"",
+        "readonly":false,
+        "optional":true,
+        "simulation" : true,
+        "items": [
+            {
+            "id": "c1",
+            "title":"normal",
+            "value":"normal"
+            },
+            {
+            "id": "c2",
+            "title": "uniform",
+            "value": "uniform"
+            },
+            {
+            "id": "c4",
+            "title": "poisson",
+            "value": "poisson"
+            }
+        ]
+    },
+    {
+        "id":"min",
+        "type":"Float",
+        "title":"Processing time (min)",
+        "value":"5",
+        "description":"",
+        "description_ja":"",
+        "readonly":false,
+        "optional":true,
+        "simulation" : true,
+        "fordistribution":"uniform",
+        "min" : "0"
+    },
+    {
+        "id":"max",
+        "type":"Float",
+        "title":"Processing time (max)",
+        "value":"10",
+        "description":"",
+        "description_ja":"",
+        "readonly":false,
+        "optional":true,
+        "simulation" : true,
+        "fordistribution":"uniform",
+        "min" : "0"
+    },
+    {
+        "id":"mean",
+        "type":"Float",
+        "title":"Processing time (mean)",
+        "value":"0",
+        "description":"",
+        "description_ja":"",
+        "readonly":false,
+        "optional":true,
+        "simulation" : true,
+        "fordistribution":"normal|poisson",
+        "min" : "0"
+    },
+    {
+        "id":"standarddeviation",
+        "type":"Float",
+        "title":"Standard Deviation",
+        "value":"1",
+        "description":"",
+        "description_ja":"",
+        "readonly":false,
+        "optional":true,
+        "simulation" : true,
+        "fordistribution":"normal",
+        "min" : "1"
+    }
 			],
 			"roles": 			[
 				"all",
@@ -3915,7 +4007,99 @@
 					"description_ja":"カンマ区切りの変数定義",
 					"readonly":false,
 					"optional":true
-				}
+				},
+				{
+        "id":"unitcost",
+        "type":"Float",
+        "title":"Cost per time unit",
+        "value":"0",
+        "description":"",
+        "description_ja":"",
+        "readonly":false,
+        "optional":true,
+        "simulation" : true,
+        "min" : "0"
+    },
+    {
+        "id":"distributiontype",
+        "type":"Choice",
+        "title":"Distribution Type",
+        "value":"uniform",
+        "description":"",
+        "description_ja":"",
+        "readonly":false,
+        "optional":true,
+        "simulation" : true,
+        "items": [
+            {
+            "id": "c1",
+            "title":"normal",
+            "value":"normal"
+            },
+            {
+            "id": "c2",
+            "title": "uniform",
+            "value": "uniform"
+            },
+            {
+            "id": "c4",
+            "title": "poisson",
+            "value": "poisson"
+            }
+        ]
+    },
+    {
+        "id":"min",
+        "type":"Float",
+        "title":"Processing time (min)",
+        "value":"5",
+        "description":"",
+        "description_ja":"",
+        "readonly":false,
+        "optional":true,
+        "simulation" : true,
+        "fordistribution":"uniform",
+        "min" : "0"
+    },
+    {
+        "id":"max",
+        "type":"Float",
+        "title":"Processing time (max)",
+        "value":"10",
+        "description":"",
+        "description_ja":"",
+        "readonly":false,
+        "optional":true,
+        "simulation" : true,
+        "fordistribution":"uniform",
+        "min" : "0"
+    },
+    {
+        "id":"mean",
+        "type":"Float",
+        "title":"Processing time (mean)",
+        "value":"0",
+        "description":"",
+        "description_ja":"",
+        "readonly":false,
+        "optional":true,
+        "simulation" : true,
+        "fordistribution":"normal|poisson",
+        "min" : "0"
+    },
+    {
+        "id":"standarddeviation",
+        "type":"Float",
+        "title":"Standard Deviation",
+        "value":"1",
+        "description":"",
+        "description_ja":"",
+        "readonly":false,
+        "optional":true,
+        "simulation" : true,
+        "fordistribution":"normal",
+        "min" : "1"
+    }
 			],
 			"roles": [
 				"all",
@@ -4158,7 +4342,99 @@
 					"description_ja":"カンマ区切りの変数定義",
 					"readonly":false,
 					"optional":true
-				}
+				},
+				{
+        "id":"unitcost",
+        "type":"Float",
+        "title":"Cost per time unit",
+        "value":"0",
+        "description":"",
+        "description_ja":"",
+        "readonly":false,
+        "optional":true,
+        "simulation" : true,
+        "min" : "0"
+    },
+    {
+        "id":"distributiontype",
+        "type":"Choice",
+        "title":"Distribution Type",
+        "value":"uniform",
+        "description":"",
+        "description_ja":"",
+        "readonly":false,
+        "optional":true,
+        "simulation" : true,
+        "items": [
+            {
+            "id": "c1",
+            "title":"normal",
+            "value":"normal"
+            },
+            {
+            "id": "c2",
+            "title": "uniform",
+            "value": "uniform"
+            },
+            {
+            "id": "c4",
+            "title": "poisson",
+            "value": "poisson"
+            }
+        ]
+    },
+    {
+        "id":"min",
+        "type":"Float",
+        "title":"Processing time (min)",
+        "value":"5",
+        "description":"",
+        "description_ja":"",
+        "readonly":false,
+        "optional":true,
+        "simulation" : true,
+        "fordistribution":"uniform",
+        "min" : "0"
+    },
+    {
+        "id":"max",
+        "type":"Float",
+        "title":"Processing time (max)",
+        "value":"10",
+        "description":"",
+        "description_ja":"",
+        "readonly":false,
+        "optional":true,
+        "simulation" : true,
+        "fordistribution":"uniform",
+        "min" : "0"
+    },
+    {
+        "id":"mean",
+        "type":"Float",
+        "title":"Processing time (mean)",
+        "value":"0",
+        "description":"",
+        "description_ja":"",
+        "readonly":false,
+        "optional":true,
+        "simulation" : true,
+        "fordistribution":"normal|poisson",
+        "min" : "0"
+    },
+    {
+        "id":"standarddeviation",
+        "type":"Float",
+        "title":"Standard Deviation",
+        "value":"1",
+        "description":"",
+        "description_ja":"",
+        "readonly":false,
+        "optional":true,
+        "simulation" : true,
+        "fordistribution":"normal",
+        "min" : "1"
+    }
 			],
 			"roles"	:			[
 				"all",
@@ -4403,7 +4679,99 @@
 					"description_ja":"カンマ区切りの変数定義",
 					"readonly":false,
 					"optional":true
-				}
+				},
+				{
+        "id":"unitcost",
+        "type":"Float",
+        "title":"Cost per time unit",
+        "value":"0",
+        "description":"",
+        "description_ja":"",
+        "readonly":false,
+        "optional":true,
+        "simulation" : true,
+        "min" : "0"
+    },
+    {
+        "id":"distributiontype",
+        "type":"Choice",
+        "title":"Distribution Type",
+        "value":"uniform",
+        "description":"",
+        "description_ja":"",
+        "readonly":false,
+        "optional":true,
+        "simulation" : true,
+        "items": [
+            {
+            "id": "c1",
+            "title":"normal",
+            "value":"normal"
+            },
+            {
+            "id": "c2",
+            "title": "uniform",
+            "value": "uniform"
+            },
+            {
+            "id": "c4",
+            "title": "poisson",
+            "value": "poisson"
+            }
+        ]
+    },
+    {
+        "id":"min",
+        "type":"Float",
+        "title":"Processing time (min)",
+        "value":"5",
+        "description":"",
+        "description_ja":"",
+        "readonly":false,
+        "optional":true,
+        "simulation" : true,
+        "fordistribution":"uniform",
+        "min" : "0"
+    },
+    {
+        "id":"max",
+        "type":"Float",
+        "title":"Processing time (max)",
+        "value":"10",
+        "description":"",
+        "description_ja":"",
+        "readonly":false,
+        "optional":true,
+        "simulation" : true,
+        "fordistribution":"uniform",
+        "min" : "0"
+    },
+    {
+        "id":"mean",
+        "type":"Float",
+        "title":"Processing time (mean)",
+        "value":"0",
+        "description":"",
+        "description_ja":"",
+        "readonly":false,
+        "optional":true,
+        "simulation" : true,
+        "fordistribution":"normal|poisson",
+        "min" : "0"
+    },
+    {
+        "id":"standarddeviation",
+        "type":"Float",
+        "title":"Standard Deviation",
+        "value":"1",
+        "description":"",
+        "description_ja":"",
+        "readonly":false,
+        "optional":true,
+        "simulation" : true,
+        "fordistribution":"normal",
+        "min" : "1"
+    }
 			],
 			"roles"	:			[
 				"all",
@@ -4557,7 +4925,99 @@
 							"value":"72"
 						}
 					]
-				}
+				},
+				{
+        "id":"unitcost",
+        "type":"Float",
+        "title":"Cost per time unit",
+        "value":"0",
+        "description":"",
+        "description_ja":"",
+        "readonly":false,
+        "optional":true,
+        "simulation" : true,
+        "min" : "0"
+    },
+    {
+        "id":"distributiontype",
+        "type":"Choice",
+        "title":"Distribution Type",
+        "value":"uniform",
+        "description":"",
+        "description_ja":"",
+        "readonly":false,
+        "optional":true,
+        "simulation" : true,
+        "items": [
+            {
+            "id": "c1",
+            "title":"normal",
+            "value":"normal"
+            },
+            {
+            "id": "c2",
+            "title": "uniform",
+            "value": "uniform"
+            },
+            {
+            "id": "c4",
+            "title": "poisson",
+            "value": "poisson"
+            }
+        ]
+    },
+    {
+        "id":"min",
+        "type":"Float",
+        "title":"Processing time (min)",
+        "value":"5",
+        "description":"",
+        "description_ja":"",
+        "readonly":false,
+        "optional":true,
+        "simulation" : true,
+        "fordistribution":"uniform",
+        "min" : "0"
+    },
+    {
+        "id":"max",
+        "type":"Float",
+        "title":"Processing time (max)",
+        "value":"10",
+        "description":"",
+        "description_ja":"",
+        "readonly":false,
+        "optional":true,
+        "simulation" : true,
+        "fordistribution":"uniform",
+        "min" : "0"
+    },
+    {
+        "id":"mean",
+        "type":"Float",
+        "title":"Processing time (mean)",
+        "value":"0",
+        "description":"",
+        "description_ja":"",
+        "readonly":false,
+        "optional":true,
+        "simulation" : true,
+        "fordistribution":"normal|poisson",
+        "min" : "0"
+    },
+    {
+        "id":"standarddeviation",
+        "type":"Float",
+        "title":"Standard Deviation",
+        "value":"1",
+        "description":"",
+        "description_ja":"",
+        "readonly":false,
+        "optional":true,
+        "simulation" : true,
+        "fordistribution":"normal",
+        "min" : "1"
+    }
 			],
 			"roles"	:			[
 				"all",
