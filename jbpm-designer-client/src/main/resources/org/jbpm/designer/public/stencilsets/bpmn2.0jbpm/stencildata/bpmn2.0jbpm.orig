@@ -684,7 +684,7 @@
 					"description_ja":"InputSetは、データ入力の有効なセットを合わせて定義するDataInputエレメントのコレクションです。",
 					"readonly":false,
 					"optional":true,
-					"fortasktypes":"None|Send|Receive|User|Manual|Service"
+					"fortasktypes":"None|Send|Receive|User|Manual|Service|Business Rule"
 				},
 				{
 					"id":"dataoutputset",
@@ -695,7 +695,7 @@
 					"description_ja":"OutputSet は、アクティビティまたはイベントの出力としてまとめて生成されるDataOutputs要素のコレクションです。",
 					"readonly":false,
 					"optional":true,
-					"fortasktypes":"None|Send|Receive|User|Manual|Service"
+					"fortasktypes":"None|Send|Receive|User|Manual|Service|Business Rule"
 				}
 			]
 		},
@@ -723,7 +723,7 @@
 					"description":"",
 					"readonly":false,
 					"optional":true,
-					"fortasktypes":"None|Send|Receive|User|Manual|Service"
+					"fortasktypes":"None|Send|Receive|User|Manual|Service|Business Rule"
                 }
 			]
 		},
