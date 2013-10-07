@@ -45,5 +45,11 @@
 </head>
 <body style="overflow:hidden;" onload="startit();">
     <div id="Definition"></div>
+
+    <script>
+        if(parent.document.getElementById(ORYX.EDITORID) && parent.document.getElementById(ORYX.EDITORID).parentNode && parent.document.getElementById(ORYX.EDITORID).parentNode.parentNode) {
+            parent.document.getElementById(ORYX.EDITORID).parentNode.parentNode.style.overflow = 'hidden';
+        }
+    </script>
 </body>
 </html>
