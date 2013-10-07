@@ -416,13 +416,27 @@
  			"properties" : [
  				{
  					"id":"waitforcompletion",
-					"type":"Boolean",
+					"type":"Choice",
 					"title":"Wait for completion",
-					"value":true,
+					"value":"true",
 					"description":"Determine whether a throw compensation is performed synchronously or asynchronously.",
 					"description_ja":"スローCompensationが同期して実行されるか、非同期に実行されるかを決定します。",
 					"readonly":false,
-					"optional":true
+					"optional":true,
+					"hidden":true,
+					"visible":false,
+                     "items": [
+                         {
+                             "id": "c1",
+                             "title":"true",
+                             "value":"true"
+                         },
+                         {
+                             "id": "c2",
+                             "title": "false",
+                             "value": "false"
+                         }
+                     ]
  				}
  			]
  		},
@@ -468,13 +482,25 @@
 			"properties" : [
 				{
 					"id":"executable",
-					"type":"Boolean",
+					"type":"Choice",
 					"title":"Executable",
-					"value":true,
+					"value":"true",
 					"description":"Executable",
 					"description_ja":"実行可能",
 					"readonly":false,
-					"optional":true
+					"optional":true,
+                    "items": [
+                        {
+                            "id": "c1",
+                            "title":"true",
+                            "value":"true"
+                        },
+                        {
+                            "id": "c2",
+                            "title": "false",
+                            "value": "false"
+                        }
+                    ]
 				},
 				{
 					"id":"package",
