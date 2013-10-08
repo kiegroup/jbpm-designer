@@ -9405,7 +9405,15 @@
 			},
 			{
 				"role" : "Lane",
-				"contains" : ["all"]
+				"contains" : [
+                    "sequence_start",
+                    "sequence_end",
+                    "from_task_event",
+                    "to_task_event",
+                    "EventSubprocess",
+                    "TextAnnotation",
+                    "from_participant"
+                ]
 			},
 			{
 				"role" : "Subprocess",

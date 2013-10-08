@@ -61,6 +61,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Antoine Toulme
@@ -105,7 +107,9 @@ public class Bpmn2JsonUnmarshaller {
     private Map<String,ItemDefinition> _itemDefinitions = new HashMap<String, ItemDefinition>();
     private Map<String, List<EObject>> _simulationElementParameters = new HashMap<String, List<EObject>>();
     private ScenarioParameters _simulationScenarioParameters = BpsimFactory.eINSTANCE.createScenarioParameters();
-    
+
+    private static final Logger _logger = LoggerFactory.getLogger(Bpmn2JsonUnmarshaller.class);
+
     public Bpmn2JsonUnmarshaller() {
         _helpers = new ArrayList<BpmnMarshallerHelper>();
         DroolsPackageImpl.init();
@@ -2176,7 +2180,7 @@ public class Bpmn2JsonUnmarshaller {
 	                    } else if(child instanceof Lane) {
 	                    	// lanes handled later
 	                    } else {
-	                        throw new IllegalArgumentException("Don't know what to do of " + child);
+                            _logger.error("Don't know what to do of " + child);
 	                    }
 	               // }
 	            }
@@ -2192,7 +2196,7 @@ public class Bpmn2JsonUnmarshaller {
                 } else if (child instanceof Artifact) {
                     ((Process) baseElt).getArtifacts().add((Artifact) child);
                 } else {
-                    throw new IllegalArgumentException("Don't know what to do of " + child);
+                    _logger.error("Don't know what to do of " + child);
                 }
             }
         } else if (baseElt instanceof SubProcess) {
@@ -2202,7 +2206,7 @@ public class Bpmn2JsonUnmarshaller {
                 } else if(child instanceof Artifact) { 
                 	((SubProcess) baseElt).getArtifacts().add((Artifact) child);
                 } else {
-                    throw new IllegalArgumentException("Subprocess - don't know what to do of " + child);
+                    _logger.error("Subprocess - don't know what to do of " + child);
                 }
             }
         } else if (baseElt instanceof Message) {
@@ -2223,13 +2227,13 @@ public class Bpmn2JsonUnmarshaller {
         		else if(child instanceof Artifact){
         			_artifacts.add((Artifact) child);
         		} else {
-        			throw new IllegalArgumentException("Don't know what to do of " + childElements);
+                    _logger.error("Don't know what to do of " + childElements);
         		}
         	}
         	_lanes.add((Lane) baseElt);
       } else {
             if (!childElements.isEmpty()) {
-                throw new IllegalArgumentException("Don't know what to do of " + childElements + " with " + baseElt);
+                _logger.error("Don't know what to do of " + childElements + " with " + baseElt);
             }
         }
         return baseElt;
