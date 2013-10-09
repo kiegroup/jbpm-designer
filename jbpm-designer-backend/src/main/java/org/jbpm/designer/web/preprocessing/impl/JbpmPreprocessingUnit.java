@@ -109,7 +109,27 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         return outData;
     }
 
-    public void preprocess(HttpServletRequest req, HttpServletResponse res, IDiagramProfile profile, ServletContext serlvetContext) {
+    public void preprocess(HttpServletRequest req, HttpServletResponse res, IDiagramProfile profile, ServletContext serlvetContext, boolean readOnly) {
+        if(readOnly) {
+            _logger.info("Performing preprocessing steps in readonly mode.");
+            try {
+                ST workItemTemplate = new ST(readFile(origStencilFilePath), '$', '$');
+                workItemTemplate.add("bopen", "{");
+                workItemTemplate.add("bclose", "}");
+                workItemTemplate.add("workitemDefs", new HashMap<String, WorkDefinitionImpl>());
+                workItemTemplate.add("patternData", new HashMap<String, PatternInfo>());
+                workItemTemplate.add("packageName", "org.jbpm");
+                workItemTemplate.add("processn", "");
+                workItemTemplate.add("processid", "");
+                workItemTemplate.add("pversion", "1.0");
+                workItemTemplate.add("colortheme", new HashMap<String, ThemeInfo>());
+                deletefile(stencilFilePath);
+                createAndWriteToFile(stencilFilePath, workItemTemplate.render());
+            } catch(Exception e) {
+                _logger.error("Unable to preprocess in readonly mode: " + e.getMessage());
+            }
+            return;
+        }
 
         Repository repository = profile.getRepository();
 
