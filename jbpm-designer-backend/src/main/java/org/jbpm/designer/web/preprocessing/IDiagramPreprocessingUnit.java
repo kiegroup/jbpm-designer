@@ -29,6 +29,6 @@ import org.jbpm.designer.web.profile.IDiagramProfile;
  *
  */
 public interface IDiagramPreprocessingUnit {
-    public void preprocess(HttpServletRequest request, HttpServletResponse response, IDiagramProfile profile, ServletContext serlvetContext);
+    public void preprocess(HttpServletRequest request, HttpServletResponse response, IDiagramProfile profile, ServletContext serlvetContext, boolean readOnly);
     public String getOutData();
 }
