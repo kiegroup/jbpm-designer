@@ -5,10 +5,10 @@ $processtaskformstyle()$
 		New Process Instance: $tfi.pkgName$.$tfi.processName$
 	</div>
 	<div id="content">
+	    <input type="hidden" name="processId" value="$dollar$$bopen$process.id$bclose$"/>
 		<fieldset>
             <legend>Process inputs</legend>
-            <form action="complete" method="POST" enctype="multipart/form-data" onsubmit="return taskFormValidator()">
-              $tfi.taskInputs:{ input | 
+              $tfi.taskInputs:{ input |
               	$if(input.booleanRefType)$
               		<label for="name">$input.name$</label>
               		<div class="div_checkbox">
@@ -21,11 +21,6 @@ $processtaskformstyle()$
               		</div>
               	$endif$	
               }$
-              <div class="button_div">
-                <input name="Submit" type="submit" value="Submit" class="buttons" />
-              </div>
-            </form>
-            <div class="clear"></div>
           </fieldset>
 	</div>
 	<div id="footer">
