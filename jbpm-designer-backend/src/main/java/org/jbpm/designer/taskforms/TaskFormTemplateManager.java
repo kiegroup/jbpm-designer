@@ -376,6 +376,7 @@ public class TaskFormTemplateManager {
         processFormTemplate.add("tfi", tfi);
         processFormTemplate.add("bopen", "{");
         processFormTemplate.add("bclose", "}");
+        processFormTemplate.add("dollar", "$");
         tfi.setMetaOutput(processFormTemplate.render());
 
         String modelerFileName = tfi.getId() + ".form";
@@ -397,6 +398,7 @@ public class TaskFormTemplateManager {
         usertaskFormTemplate.add("tfi", tfi);
         usertaskFormTemplate.add("bopen", "{");
         usertaskFormTemplate.add("bclose", "}");
+        usertaskFormTemplate.add("dollar", "$");
         tfi.setMetaOutput(usertaskFormTemplate.render());
 
         String modelerFileName = tfi.getId() + ".form";

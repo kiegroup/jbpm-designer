@@ -5,6 +5,7 @@ $usertaskformstyle()$
 		User Task Form: $tfi.processName$.$tfi.taskName$
 	</div>
 	<div id="content">
+	    <input type="hidden" name="taskId" value="$dollar$$bopen$task.id$bclose$"/>
 		<fieldset>
             <legend>Task Info</legend>
             	<label for="name">Owners</label>
@@ -39,8 +40,7 @@ $usertaskformstyle()$
           
           <fieldset>
             <legend>Task Outputs</legend>
-            <form action="complete" method="POST" enctype="multipart/form-data" onsubmit="return taskFormValidator()">
-              $tfi.taskOutputs:{ output | 
+              $tfi.taskOutputs:{ output |
               	$if(output.booleanRefType)$
               		<label for="name">$output.name$</label>
               		<div class="div_checkbox">
@@ -53,11 +53,6 @@ $usertaskformstyle()$
               		</div>
               	$endif$	
               }$
-              <div class="button_div">
-                <input name="Submit" type="submit" value="Submit" class="buttons" />
-              </div>
-            </form>
-            <div class="clear"></div>
           </fieldset>
 	</div>
 	<div id="footer">
