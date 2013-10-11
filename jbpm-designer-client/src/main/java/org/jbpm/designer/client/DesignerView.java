@@ -75,6 +75,8 @@ public class DesignerView
             String paramsKey = paramsIter.next();
             paramsStr += "&" + paramsKey + "=" + editorParameters.get(paramsKey);
         }
+	// add timestamp to end of url to bypass caching
+        paramsStr += "&ms=" + System.currentTimeMillis();
         inlineFrame.getElement().setAttribute("src", GWT.getModuleBaseURL() + "inlineeditor.jsp?locale=" + locale + paramsStr);
     }
 
