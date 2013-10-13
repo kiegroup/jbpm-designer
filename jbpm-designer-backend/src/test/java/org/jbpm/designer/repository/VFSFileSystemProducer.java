@@ -5,12 +5,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
-import org.kie.commons.io.IOService;
-import org.kie.commons.io.impl.IOServiceDotFileImpl;
-import org.kie.commons.java.nio.file.FileSystem;
-import org.kie.commons.java.nio.file.Path;
+import org.uberfire.io.IOService;
+import org.uberfire.io.impl.IOServiceDotFileImpl;
+import org.uberfire.java.nio.file.FileSystem;
+import org.uberfire.java.nio.file.Path;
 
-import static org.kie.commons.io.FileSystemType.Bootstrap.*;
+import static org.uberfire.io.FileSystemType.Bootstrap.*;
 
 public class VFSFileSystemProducer {
 

@@ -113,7 +113,7 @@
                     <exclude>WEB-INF/lib/junit-*.jar</exclude>
                     <exclude>WEB-INF/lib/h2*.jar</exclude>
                     <exclude>WEB-INF/lib/weld-se*.jar</exclude>
-                    <exclude>WEB-INF/lib/cdi-api*.jar</exclude>
+                    <exclude>WEB-INF/lib/org.uberfire.commons.services.cdi-api*.jar</exclude>
                     <exclude>WEB-INF/lib/hibernate*.jar</exclude>
 
                     <!-- Jetty -->
@@ -126,7 +126,7 @@
 
                     <!-- Errai -->
                     <exclude>WEB-INF/lib/errai-codegen-gwt-*.jar</exclude>
-                    <exclude>WEB-INF/lib/errai-cdi-jetty-*.jar</exclude>
+                    <exclude>WEB-INF/lib/errai-org.uberfire.commons.services.cdi-jetty-*.jar</exclude>
                     <exclude>WEB-INF/lib/errai-jaxrs-client-*.jar</exclude>
 
                     <exclude>WEB-INF/lib/resteasy-*.jar</exclude>

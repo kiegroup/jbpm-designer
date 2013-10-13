@@ -9,10 +9,10 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.kie.commons.io.IOClusteredService;
-import org.kie.commons.io.IOService;
-import org.kie.commons.services.cdi.Startup;
-import org.kie.commons.services.cdi.StartupType;
+import org.uberfire.io.IOClusteredService;
+import org.uberfire.io.IOService;
+import org.uberfire.commons.services.cdi.Startup;
+import org.uberfire.commons.services.cdi.StartupType;
 import org.uberfire.backend.organizationalunit.OrganizationalUnit;
 import org.uberfire.backend.organizationalunit.OrganizationalUnitService;
 import org.uberfire.backend.repositories.Repository;

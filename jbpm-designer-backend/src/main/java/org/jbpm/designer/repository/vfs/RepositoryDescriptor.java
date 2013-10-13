@@ -11,10 +11,9 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
-import org.jboss.solder.core.Veto;
 import org.jbpm.designer.server.service.PathEvent;
-import org.kie.commons.java.nio.file.FileSystem;
-import org.kie.commons.java.nio.file.Path;
+import org.uberfire.java.nio.file.FileSystem;
+import org.uberfire.java.nio.file.Path;
 
 @RequestScoped
 public class  RepositoryDescriptor {

@@ -7,14 +7,16 @@ import org.jbpm.designer.repository.impl.AbstractAsset;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.server.service.PathEvent;
 import org.jbpm.designer.util.Base64Backport;
-import org.kie.commons.io.IOService;
-import org.kie.commons.java.nio.IOException;
-import org.kie.commons.java.nio.base.options.CommentedOption;
-import org.kie.commons.java.nio.file.*;
-import org.kie.commons.java.nio.file.DirectoryStream;
-import org.kie.commons.java.nio.file.FileSystem;
-import org.kie.commons.java.nio.file.Path;
-import org.kie.commons.java.nio.file.attribute.BasicFileAttributes;
+import org.uberfire.io.IOService;
+import org.uberfire.java.nio.IOException;
+import org.uberfire.java.nio.base.options.CommentedOption;
+import org.uberfire.java.nio.file.*;
+import org.uberfire.java.nio.file.DirectoryStream;
+import org.uberfire.java.nio.file.FileSystem;
+import org.uberfire.java.nio.file.Path;
+import org.uberfire.java.nio.file.attribute.BasicFileAttributes;
+import org.uberfire.java.nio.file.Files;
+import org.uberfire.java.nio.file.SimpleFileVisitor;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
@@ -71,7 +73,7 @@ public class VFSRepository implements Repository {
         DirectoryStream<Path> directories = ioService.newDirectoryStream(path, new DirectoryStream.Filter<Path>() {
 
             public boolean accept( final Path entry ) throws IOException {
-                if ( Files.isDirectory(entry) ) {
+                if ( Files.isDirectory( entry ) ) {
                     return true;
                 }
                 return false;
@@ -322,7 +324,7 @@ public class VFSRepository implements Repository {
         Path filePath = fileSystem.provider().getPath(pathURI);
 
         if (assetExists(filePath.toUri().toString())) {
-            throw new org.kie.commons.java.nio.file.FileAlreadyExistsException( pathURI.toString() );
+            throw new org.uberfire.java.nio.file.FileAlreadyExistsException( pathURI.toString() );
         }
         createIfNotExists(filePath);
         try {

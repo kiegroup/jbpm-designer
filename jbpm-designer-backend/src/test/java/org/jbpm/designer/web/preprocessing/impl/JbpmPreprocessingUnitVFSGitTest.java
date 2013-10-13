@@ -12,7 +12,6 @@ import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
 import org.jbpm.designer.repository.vfs.VFSRepository;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.junit.*;
-import org.kie.commons.java.nio.file.FileSystem;
 
 import java.io.File;
 import java.util.Collection;

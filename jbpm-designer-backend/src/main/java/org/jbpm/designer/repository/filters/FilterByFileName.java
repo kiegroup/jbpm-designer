@@ -1,7 +1,7 @@
 package org.jbpm.designer.repository.filters;
 
 import org.jbpm.designer.repository.Filter;
-import org.kie.commons.java.nio.file.Path;
+import org.uberfire.java.nio.file.Path;
 
 public class FilterByFileName implements Filter<Path> {
 

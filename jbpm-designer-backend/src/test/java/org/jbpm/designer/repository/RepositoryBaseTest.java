@@ -4,7 +4,6 @@ import java.io.File;
 
 import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
-import org.kie.commons.java.nio.file.FileSystem;
 
 public class RepositoryBaseTest {
 
