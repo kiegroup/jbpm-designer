@@ -67,7 +67,7 @@
         <servlet-class>org.jboss.errai.bus.server.servlet.DefaultBlockingServlet</servlet-class>
         <init-param>
             <param-name>service-locator</param-name>
-            <param-value>org.jboss.errai.org.uberfire.commons.services.org.uberfire.commons.services.cdi.server.CDIServiceLocator</param-value>
+            <param-value>org.jboss.errai.cdi.server.CDIServiceLocator</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
