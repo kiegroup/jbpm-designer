@@ -116,7 +116,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 		var taskSimInfo = jsonPath(options.results.evalJSON(), "$.tasksim.*");
 		if(htSimInfo || taskSimInfo) {
 			graphType = new Ext.tree.TreeNode({
-				text:"Activities", 			
+				text:"Process elements",
 				allowDrag:false,
 	    		allowDrop:false,           
 	            expanded: true,
@@ -139,7 +139,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 			for (var j = 0; j < taskSimInfo.length; j++) {
 				var nextTask = taskSimInfo[j];
 				// find the task type
-				this.taskType = "";
+				this.taskType = "None";
 				this.findTaskType(nextTask.id);
 				this.taskType = this.taskType.replace(/\s/g, "");
 			    graphTypeChild = new Ext.tree.TreeNode({

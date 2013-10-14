@@ -310,16 +310,88 @@
 					"wrapLines":true
 				},
 				{
-                    "id":"waittime",
+                    "id":"min",
                     "type":"Float",
-                    "title":"Wait Time",
+                    "title":"Processing time (min)",
                     "value":"0",
                     "description":"",
                     "description_ja":"",
                     "readonly":false,
                     "optional":true,
                     "simulation" : true,
+                    "fordistribution":"uniform|random",
                     "min" : "0"
+                },
+                {
+                    "id":"max",
+                    "type":"Float",
+                    "title":"Processing time (max)",
+                    "value":"0",
+                    "description":"",
+                    "description_ja":"",
+                    "readonly":false,
+                    "optional":true,
+                    "simulation" : true,
+                    "fordistribution":"uniform|random",
+                    "min" : "0"
+                },
+                {
+                    "id":"standarddeviation",
+                    "type":"Float",
+                    "title":"Standard Deviation",
+                    "value":"0",
+                    "description":"",
+                    "description_ja":"",
+                    "readonly":false,
+                    "optional":true,
+                    "simulation" : true,
+                    "fordistribution":"normal"
+                },
+                {
+                    "id":"mean",
+                    "type":"Float",
+                    "title":"Processing time (mean)",
+                    "value":"0",
+                    "description":"",
+                    "description_ja":"",
+                    "readonly":false,
+                    "optional":true,
+                    "simulation" : true,
+                    "fordistribution":"normal|poisson",
+                    "min" : "0"
+                },
+                {
+                    "id":"distributiontype",
+                    "type":"Choice",
+                    "title":"Distribution Type",
+                    "value":"random",
+                    "description":"",
+                    "description_ja":"",
+                    "readonly":false,
+                    "optional":true,
+                    "simulation" : true,
+                    "items": [
+                        {
+                            "id": "c1",
+                            "title":"normal",
+                            "value":"normal"
+                        },
+                        {
+                            "id": "c2",
+                            "title": "uniform",
+                            "value": "uniform"
+                        },
+                        {
+                            "id": "c3",
+                            "title": "random",
+                            "value": "random"
+                        },
+                        {
+                            "id": "c4",
+                            "title": "poisson",
+                            "value": "poisson"
+                        }
+                    ]
                 },
                 {
                     "id":"timeunit",
