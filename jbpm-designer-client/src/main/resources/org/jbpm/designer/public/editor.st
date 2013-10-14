@@ -31,6 +31,8 @@
         ORYX.CONFIG.STORESVGONSAVE = "$storesvgonsave$";
         ORYX.PRESET_PERSPECTIVE = "$presetperspective$";
 
+        ORYX.DEFAULT_JSON_MODEL = {"resourceId":"Definition","properties":{"namespaces":"","name":"","expressionlanguage":"http://www.mvel.org/2.0","executable":"true","package":"org.jbpm","vardefs":"","adhocprocess":"false","imports":"","globals":"","id":"defaultprocess","version":"1.0","timeunit":"min","currency":"","targetnamespace":"http://www.omg.org/bpmn20","typelanguage":"http://www.java.com/javaTypes","processn":"","documentation":""},"stencil":{"id":"BPMNDiagram"},"childShapes":[],"bounds":{"lowerRight":{"x":3000,"y":2000},"upperLeft":{"x":0,"y":0}},"stencilset":{"url":"/org.jbpm.designer.jBPMDesigner/stencilsets/bpmn2.0jbpm/bpmn2.0jbpm.json","namespace":"http://b3mn.org/stencilset/bpmn2.0#"},"ssextensions":[]};
+
 
 
         ORYX.CONFIG.SSEXTS = [$ssextensions$].
@@ -120,16 +122,25 @@
                            method: 'GET',
                            onSuccess: function(transport) {
                                response = transport.responseText;
-                               if (response.length != 0) {
-                                   try {
-                                       model = response.evalJSON();
-                                       editor_parameters.model = model;
-                                       ORYX.EDITOR = new ORYX.Editor(editor_parameters);
-                                   } catch(err) {
-                                       ORYX.LOG.error(err);
+                               try {
+                                   if (response.length != 0) {
+                                        if(response.startsWith("error:")) {
+                                            editor_parameters.error = response.substr(7, response.length);
+                                            model = ORYX.DEFAULT_JSON_MODEL;
+                                            editor_parameters.model = model;
+                                        } else {
+                                            model = response.evalJSON();
+                                            editor_parameters.model = model;
+                                        }
+                                   } else {
+                                        editor_parameters.error = "Server returned no response.";
+                                        model = ORYX.DEFAULT_JSON_MODEL;
+                                        editor_parameters.model = model;
                                    }
+                                   ORYX.EDITOR = new ORYX.Editor(editor_parameters);
+                               } catch(err) {
+                                    ORYX.LOG.error(err);
                                }
-
                            },
                            onFailure: function(transport) {
                                ORYX.LOG.error("Could not load the model for uuid " + ORYX.UUID);
@@ -144,17 +155,26 @@
                        encoding: 'UTF-8',
                        method: 'GET',
                        onSuccess: function(transport) {
-                           response = transport.responseText;
-                           if (response.length != 0) {
-                               try {
-                                   model = response.evalJSON();
+                       response = transport.responseText;
+                          try {
+                              if (response.length != 0) {
+                                   if(response.startsWith("error:")) {
+                                       editor_parameters.error = response.substr(7, response.length);
+                                       model = ORYX.DEFAULT_JSON_MODEL;
+                                       editor_parameters.model = model;
+                                   } else {
+                                       model = response.evalJSON();
+                                       editor_parameters.model = model;
+                                   }
+                              } else {
+                                   editor_parameters.error = "Server returned no response.";
+                                   model = ORYX.DEFAULT_JSON_MODEL;
                                    editor_parameters.model = model;
-                                   ORYX.EDITOR = new ORYX.Editor(editor_parameters);
-                               } catch(err) {
-                                   ORYX.LOG.error(err);
-                               }
-                           }
-
+                              }
+                              ORYX.EDITOR = new ORYX.Editor(editor_parameters);
+                          } catch(err) {
+                               ORYX.LOG.error(err);
+                          }
                        },
                        onFailure: function(transport) {
                            ORYX.LOG.error("Could not load the model for uuid " + ORYX.UUID);

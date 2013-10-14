@@ -117,7 +117,7 @@ public class UUIDBasedFileRepository implements IUUIDBasedRepository {
         }
     }
 
-    public String toXML(String json, IDiagramProfile profile, String preProcessingData) {
+    public String toXML(String json, IDiagramProfile profile, String preProcessingData) throws Exception {
         return profile.createMarshaller().parseModel(json, preProcessingData);
     }
     

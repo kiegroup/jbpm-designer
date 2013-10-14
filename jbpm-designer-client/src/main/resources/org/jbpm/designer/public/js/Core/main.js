@@ -102,6 +102,39 @@ ORYX.Editor = {
 		if(config.model) {
 			model = config.model;
 		}
+        if(config.error) {
+            var cf = new Ext.form.TextArea({
+                id:"processErrorTextArea",
+                fieldLabel:"Process Loading Error",
+                value:config.error,
+                autoScroll:true
+            });
+            var win = new Ext.Window({
+                width:600,
+                id:'processErrorSource',
+                height:550,
+                layout: 'fit',
+                title:'Process loading errors (empty process will be loaded)',
+                items: [cf],
+                buttons:[{
+                    text : 'Close',
+                    handler:function(){
+                        win.close();
+                        win = null;
+                        cf = null;
+                        sourceEditor = null;
+                    }.bind(this)
+                }]
+            });
+            win.show();
+            this.foldFunc = CodeMirror.newFoldFunction(CodeMirror.tagRangeFinder);
+            var sourceEditor = CodeMirror.fromTextArea(document.getElementById("processErrorTextArea"), {
+                mode: "text",
+                lineNumbers: true,
+                lineWrapping: true,
+                onGutterClick: this.foldFunc
+            });
+        }
 		
 		this.id = model.resourceId;
         if(!this.id) {

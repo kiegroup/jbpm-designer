@@ -31,7 +31,7 @@ public class UUIDBasedEpnRepository implements IUUIDBasedRepository {
         //TODO hook up with Guvnor 
     }
 
-    public String toXML(String json, IDiagramProfile profile,String preProcessingData) {
+    public String toXML(String json, IDiagramProfile profile,String preProcessingData) throws Exception {
         return profile.createMarshaller().parseModel(json, preProcessingData);
     }
     

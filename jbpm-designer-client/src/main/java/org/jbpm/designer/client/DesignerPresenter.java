@@ -6,6 +6,7 @@ import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.IsWidget;
 import org.guvnor.common.services.shared.file.CopyService;
 import org.guvnor.common.services.shared.file.DeleteService;
@@ -21,6 +22,8 @@ import org.kie.workbench.common.widgets.client.popups.file.FileNameAndCommitMess
 import org.kie.workbench.common.widgets.client.popups.file.RenamePopup;
 import org.kie.workbench.common.widgets.client.resources.i18n.CommonConstants;
 import org.kie.workbench.common.widgets.client.widget.BusyIndicatorView;
+import org.kie.workbench.common.widgets.client.widget.HasBusyIndicator;
+import org.uberfire.backend.vfs.ObservablePath;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.PathFactory;
 import org.uberfire.backend.vfs.VFSService;
@@ -29,18 +32,23 @@ import org.uberfire.client.annotations.WorkbenchPartTitle;
 import org.uberfire.client.annotations.WorkbenchPartView;
 import org.uberfire.client.mvp.PlaceManager;
 import org.uberfire.client.mvp.UberView;
+import org.uberfire.client.workbench.events.ChangeTitleWidgetEvent;
 import org.uberfire.lifecycle.OnMayClose;
+import org.uberfire.lifecycle.OnSave;
 import org.uberfire.lifecycle.OnStartup;
+import org.uberfire.mvp.Command;
+import org.uberfire.mvp.ParameterizedCommand;
 import org.uberfire.mvp.PlaceRequest;
 import org.uberfire.mvp.impl.PathPlaceRequest;
 import org.uberfire.rpc.SessionInfo;
 import org.uberfire.util.URIUtil;
 import org.uberfire.workbench.events.NotificationEvent;
-import org.uberfire.workbench.events.ResourceAddedEvent;
-import org.uberfire.workbench.events.ResourceDeletedEvent;
 import org.uberfire.workbench.events.ResourceUpdatedEvent;
 import org.uberfire.workbench.type.FileNameUtil;
 import org.uberfire.client.editors.texteditor.TextResourceType;
+
+
+import static org.uberfire.client.common.ConcurrentChangePopup.*;
 
 @Dependent
 @WorkbenchEditor(identifier = "jbpm.designer", supportedTypes = { Bpmn2Type.class })
@@ -48,7 +56,7 @@ public class DesignerPresenter {
 
     public interface View
             extends
-            UberView<DesignerPresenter> {
+            HasBusyIndicator, UberView<DesignerPresenter> {
         void setEditorID( final String id );
         void setEditorParamters( final Map<String, String> editorParameters);
         String getEditorID();
@@ -88,20 +96,111 @@ public class DesignerPresenter {
     private SessionInfo sessionInfo;
 
     @Inject
+    private Event<ChangeTitleWidgetEvent> changeTitleNotification;
+
+    @Inject
     private TextResourceType type;
 
-    private Path path;
+    @Inject
+    private Event<ResourceUpdatedEvent> resourceUpdatedEvent;
+
+    private ObservablePath path;
     private PlaceRequest place;
+    private ObservablePath.OnConcurrentUpdateEvent concurrentUpdateSessionInfo = null;
 
     @OnStartup
-    public void onStartup( final Path path,
+    public void onStartup( final ObservablePath path,
                            final PlaceRequest place ) {
         this.path = path;
         this.place = place;
+
+        this.path.onRename( new Command() {
+            @Override
+            public void execute() {
+                changeTitleNotification.fire( new ChangeTitleWidgetEvent( place, getName(), null ) );
+            }
+        } );
+        this.path.onConcurrentUpdate( new ParameterizedCommand<ObservablePath.OnConcurrentUpdateEvent>() {
+            @Override
+            public void execute( final ObservablePath.OnConcurrentUpdateEvent eventInfo ) {
+                concurrentUpdateSessionInfo = eventInfo;
+                        if ( concurrentUpdateSessionInfo != null ) {
+                            newConcurrentUpdate( concurrentUpdateSessionInfo.getPath(),
+                                    concurrentUpdateSessionInfo.getIdentity(),
+                                    new Command() {
+                                        @Override
+                                        public void execute() {
+                                            // save in designer is not done in presenter
+                                            //save();
+                                        }
+                                    },
+                                    new Command() {
+                                        @Override
+                                        public void execute() {
+                                            //cancel?
+                                        }
+                                    },
+                                    new Command() {
+                                        @Override
+                                        public void execute() {
+                                            reload();
+                                        }
+                                    }
+                            ).show();
+                        }
+            }
+        } );
+
+        this.path.onConcurrentRename( new ParameterizedCommand<ObservablePath.OnConcurrentRenameEvent>() {
+            @Override
+            public void execute( final ObservablePath.OnConcurrentRenameEvent info ) {
+                newConcurrentRename( info.getSource(),
+                        info.getTarget(),
+                        info.getIdentity(),
+                        new Command() {
+                            @Override
+                            public void execute() {
+                                disableMenus();
+                            }
+                        },
+                        new Command() {
+                            @Override
+                            public void execute() {
+                                reload();
+                            }
+                        }
+                ).show();
+            }
+        } );
+
+
+        this.path.onConcurrentDelete( new ParameterizedCommand<ObservablePath.OnConcurrentDelete>() {
+            @Override
+            public void execute( final ObservablePath.OnConcurrentDelete info ) {
+                newConcurrentDelete( info.getPath(),
+                        info.getIdentity(),
+                        new Command() {
+                            @Override
+                            public void execute() {
+                                disableMenus();
+                            }
+                        },
+                        new Command() {
+                            @Override
+                            public void execute() {
+                                placeManager.closePlace( place );
+                            }
+                        }
+                ).show();
+            }
+        } );
+
+
         this.publishOpenInTab(this);
         this.publishSignalOnAssetDelete(this);
         this.publishSignalOnAssetCopy(this);
         this.publishSignalOnAssetRename(this);
+        this.publishSignalOnAssetUpdate(this);
 
         if ( path != null ) {
             assetService.call( new RemoteCallback<String>() {
@@ -178,6 +277,12 @@ public class DesignerPresenter {
         }
     }-*/;
 
+    private native void publishSignalOnAssetUpdate(DesignerPresenter dp)/*-{
+        $wnd.designersignalassetupdate = function (uri) {
+            dp.@org.jbpm.designer.client.DesignerPresenter::assetUpdatedEvent(Ljava/lang/String;)(uri);
+        }
+    }-*/;
+
     public void assetCopyEvent(String uri) {
         vfsServices.call( new RemoteCallback<Path>() {
             @Override
@@ -229,6 +334,39 @@ public class DesignerPresenter {
         } ).get( URIUtil.encode(uri) );
     }
 
+    public void assetUpdatedEvent(String uri) {
+        vfsServices.call( new RemoteCallback<Path>() {
+            @Override
+            public void callback( final Path mypath ) {
+                resourceUpdatedEvent.fire( new ResourceUpdatedEvent(mypath, sessionInfo) );
+            }
+        } ).get( URIUtil.encode(uri) );
+//        if ( concurrentUpdateSessionInfo != null ) {
+//            newConcurrentUpdate( concurrentUpdateSessionInfo.getPath(),
+//                    concurrentUpdateSessionInfo.getIdentity(),
+//                    new Command() {
+//                        @Override
+//                        public void execute() {
+//                            // save in designer is not done in presenter
+//                            //save();
+//                        }
+//                    },
+//                    new Command() {
+//                        @Override
+//                        public void execute() {
+//                            //cancel?
+//                        }
+//                    },
+//                    new Command() {
+//                        @Override
+//                        public void execute() {
+//                            reload();
+//                        }
+//                    }
+//            ).show();
+//        }
+    }
+
     private RemoteCallback<Void> getDeleteSuccessCallback( final Path path ) {
         return new RemoteCallback<Void>() {
 
@@ -268,5 +406,14 @@ public class DesignerPresenter {
         placeRequestImpl.addParameter("uuid", uri);
         placeRequestImpl.addParameter("profile", "jbpm");
         this.placeManager.goTo(placeRequestImpl);
+    }
+
+    private void disableMenus() {
+        // TODO no impl for this in designer yet
+    }
+
+    private void reload() {
+        placeManager.closePlace( new PathPlaceRequest( path ) );
+        placeManager.goTo(path);
     }
 }

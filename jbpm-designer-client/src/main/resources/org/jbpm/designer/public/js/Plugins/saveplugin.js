@@ -180,9 +180,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                                     extendedTimeOut: 1000
                                 });
 
-                                // send UF asset update event
-                                // no longer needed
-//                                parent.designersignalassetupdate(ORYX.UUID);
+                                parent.designersignalassetupdate(ORYX.UUID);
                                 // set the designer flag
                                 ORYX.PROCESS_SAVED = true;
 
@@ -301,9 +299,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                                 extendedTimeOut: 1000
                             });
 
-                            // send UF asset update event
-                            // no longer needed
-//                            parent.designersignalassetupdate(ORYX.UUID);
+                            parent.designersignalassetupdate(ORYX.UUID);
                             // set the designer flag
                             ORYX.PROCESS_SAVED = true;
                         }

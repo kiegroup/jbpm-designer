@@ -196,42 +196,54 @@ public class TransformerServlet extends HttpServlet {
         } else if (transformto != null && transformto.equals(TO_SVG)) {
             storeInRepository(uuid, rawSvg, transformto, processid, repository);
         } else if (transformto != null && transformto.equals(JPDL_TO_BPMN2)) {
-            String bpmn2 = JbpmMigration.transform(jpdl);
-            Definitions def = ((JbpmProfileImpl) profile).getDefinitions(bpmn2);
-            // add bpmndi info to Definitions with help of gpd
-            addBpmnDiInfo(def, gpd);
-            // hack for now
-            revisitSequenceFlows(def, bpmn2);
-            // another hack if id == name
-            revisitNodeNames(def);
+            try {
+                String bpmn2 = JbpmMigration.transform(jpdl);
+                Definitions def = ((JbpmProfileImpl) profile).getDefinitions(bpmn2);
+                // add bpmndi info to Definitions with help of gpd
+                addBpmnDiInfo(def, gpd);
+                // hack for now
+                revisitSequenceFlows(def, bpmn2);
+                // another hack if id == name
+                revisitNodeNames(def);
 
-            // get the xml from Definitions
-            ResourceSet rSet = new ResourceSetImpl();
-            rSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("bpmn2", new JBPMBpmn2ResourceFactoryImpl());
-            JBPMBpmn2ResourceImpl bpmn2resource = (JBPMBpmn2ResourceImpl) rSet.createResource(URI.createURI("virtual.bpmn2"));
-            rSet.getResources().add(bpmn2resource);
-            bpmn2resource.getContents().add(def);
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            bpmn2resource.save(outputStream, new HashMap<Object, Object>());
-            String fullXmlModel =  outputStream.toString();
-            // convert to json and write response
-            String json = profile.createUnmarshaller().parseModel(fullXmlModel, profile, pp);
-            resp.setContentType("application/json");
-            resp.getWriter().print(json);
+                // get the xml from Definitions
+                ResourceSet rSet = new ResourceSetImpl();
+                rSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("bpmn2", new JBPMBpmn2ResourceFactoryImpl());
+                JBPMBpmn2ResourceImpl bpmn2resource = (JBPMBpmn2ResourceImpl) rSet.createResource(URI.createURI("virtual.bpmn2"));
+                rSet.getResources().add(bpmn2resource);
+                bpmn2resource.getContents().add(def);
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                bpmn2resource.save(outputStream, new HashMap<Object, Object>());
+                String fullXmlModel =  outputStream.toString();
+                // convert to json and write response
+                String json = profile.createUnmarshaller().parseModel(fullXmlModel, profile, pp);
+                resp.setContentType("application/json");
+                resp.getWriter().print(json);
+            } catch(Exception e) {
+                _logger.error(e.getMessage());
+                resp.setContentType("application/json");
+                resp.getWriter().print("{}");
+            }
         }  else if (transformto != null && transformto.equals(BPMN2_TO_JSON)) {
-            Definitions def = ((JbpmProfileImpl) profile).getDefinitions(bpmn2in);
-            // get the xml from Definitions
-            ResourceSet rSet = new ResourceSetImpl();
-            rSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("bpmn2", new JBPMBpmn2ResourceFactoryImpl());
-            JBPMBpmn2ResourceImpl bpmn2resource = (JBPMBpmn2ResourceImpl) rSet.createResource(URI.createURI("virtual.bpmn2"));
-            rSet.getResources().add(bpmn2resource);
-            bpmn2resource.getContents().add(def);
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            bpmn2resource.save(outputStream, new HashMap<Object, Object>());
-            String revisedXmlModel =  outputStream.toString();
-            String json = profile.createUnmarshaller().parseModel(revisedXmlModel, profile, pp);
-            resp.setContentType("application/json");
-            resp.getWriter().print(json);
+            try {
+                Definitions def = ((JbpmProfileImpl) profile).getDefinitions(bpmn2in);
+                // get the xml from Definitions
+                ResourceSet rSet = new ResourceSetImpl();
+                rSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("bpmn2", new JBPMBpmn2ResourceFactoryImpl());
+                JBPMBpmn2ResourceImpl bpmn2resource = (JBPMBpmn2ResourceImpl) rSet.createResource(URI.createURI("virtual.bpmn2"));
+                rSet.getResources().add(bpmn2resource);
+                bpmn2resource.getContents().add(def);
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                bpmn2resource.save(outputStream, new HashMap<Object, Object>());
+                String revisedXmlModel =  outputStream.toString();
+                String json = profile.createUnmarshaller().parseModel(revisedXmlModel, profile, pp);
+                resp.setContentType("application/json");
+                resp.getWriter().print(json);
+            } catch(Exception e) {
+                _logger.error(e.getMessage());
+                resp.setContentType("application/json");
+                resp.getWriter().print("{}");
+            }
         }
     }
 
