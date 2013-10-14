@@ -7,6 +7,8 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
+import org.kie.workbench.common.widgets.client.widget.HasBusyIndicator;
+import org.uberfire.client.common.BusyPopup;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -75,7 +77,7 @@ public class DesignerView
             String paramsKey = paramsIter.next();
             paramsStr += "&" + paramsKey + "=" + editorParameters.get(paramsKey);
         }
-	// add timestamp to end of url to bypass caching
+        // add timestamp to end of url for caching
         paramsStr += "&ms=" + System.currentTimeMillis();
         inlineFrame.getElement().setAttribute("src", GWT.getModuleBaseURL() + "inlineeditor.jsp?locale=" + locale + paramsStr);
     }
@@ -101,5 +103,15 @@ public class DesignerView
         final Widget w = getParent();
         final int width = w.getOffsetWidth();
         inlineFrame.setWidth(width + "px");
+    }
+
+    @Override
+    public void showBusyIndicator( final String message ) {
+        BusyPopup.showMessage(message);
+    }
+
+    @Override
+    public void hideBusyIndicator() {
+        BusyPopup.close();
     }
 }

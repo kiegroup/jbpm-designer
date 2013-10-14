@@ -62,6 +62,6 @@ public interface IUUIDBasedRepository {
      * @param preProcessingData
      * @return bpmn2 xml
      */
-    public String toXML(String json, IDiagramProfile profile, String preProcessingData);
+    public String toXML(String json, IDiagramProfile profile, String preProcessingData) throws Exception;
 
 }

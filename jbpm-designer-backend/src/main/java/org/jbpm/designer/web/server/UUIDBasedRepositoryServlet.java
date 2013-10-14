@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.eclipse.bpmn2.Definitions;
@@ -125,7 +126,8 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
 			String response =  new String(_repository.load(req, uuid, profile, getServletContext()), Charset.forName("UTF-8"));
 			resp.getWriter().write(response);
 		} catch (Exception e) {
-			throw new ServletException("Exception loading process: " + e.getMessage(), e);
+            e.printStackTrace();
+            resp.getWriter().write("error: " + ExceptionUtils.getStackTrace(e));
 		}
     }
 
@@ -137,7 +139,12 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
         if(actionParam != null && actionParam.equals("toXML")) {
             IDiagramProfile profile = _profileService.findProfile(req, req.getParameter("profile"));
             String json = req.getParameter("data");
-            String xml = _repository.toXML(json, profile, preProcessingParam);
+            String xml = "";
+            try {
+                xml = _repository.toXML(json, profile, preProcessingParam);
+            } catch(Exception e) {
+                _logger.error("Error transforming to XML : " + e.getMessage());
+            }
             StringWriter output = new StringWriter();
             output.write(xml);
             resp.setContentType("application/xml");
@@ -156,7 +163,7 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
 				}
 			} catch (Throwable t) {
 				retValue = "true";
-				System.out.println("Exception parsing process: " + t.getMessage());
+				_logger.error("Exception parsing process: " + t.getMessage());
 			}
             resp.setContentType("text/plain");
             resp.setCharacterEncoding("UTF-8");

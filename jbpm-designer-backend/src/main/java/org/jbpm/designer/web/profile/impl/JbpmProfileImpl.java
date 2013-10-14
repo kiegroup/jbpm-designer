@@ -48,6 +48,21 @@ public class JbpmProfileImpl implements IDiagramProfile {
 
     private static Logger _logger = LoggerFactory.getLogger(JbpmProfileImpl.class);
 
+    private static final String PROCESS_STUB = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \n" +
+            "<bpmn2:definitions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.omg.org/bpmn20\" xmlns:bpmn2=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\" xmlns:bpsim=\"http://www.bpsim.org/schemas/1.0\" xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\" xmlns:drools=\"http://www.jboss.org/drools\" \n" +
+            "id=\"Definition\" xsi:schemaLocation=\"http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd http://www.jboss.org/drools drools.xsd http://www.bpsim.org/schemas/1.0 bpsim.xsd\" expressionLanguage=\"http://www.mvel.org/2.0\" targetNamespace=\"http://www.omg.org/bpmn20\" typeLanguage=\"http://www.java.com/javaTypes\"> \n" +
+            "   <bpmn2:process id=\"${processid}\" drools:packageName=\"org.jbpm\" drools:version=\"1.0\" name=\"\" isExecutable=\"true\"> \n" +
+            "      <bpmn2:startEvent id=\"processStartEvent\" drools:bgcolor=\"#9acd32\" drools:selectable=\"true\" name=\"\"/> \n" +
+            "   </bpmn2:process> \n" +
+            "   <bpmndi:BPMNDiagram> \n" +
+            "      <bpmndi:BPMNPlane bpmnElement=\"${processid}\"> \n" +
+            "         <bpmndi:BPMNShape bpmnElement=\"processStartEvent\"> \n" +
+            "            <dc:Bounds height=\"30.0\" width=\"30.0\" x=\"120.0\" y=\"165.0\"/> \n" +
+            "         </bpmndi:BPMNShape> \n" +
+            "      </bpmndi:BPMNPlane> \n" +
+            "   </bpmndi:BPMNDiagram> \n" +
+            "</bpmn2:definitions>";
+
     private Map<String, IDiagramPlugin> _plugins = new LinkedHashMap<String, IDiagramPlugin>();
 
     private String _stencilSet;
@@ -202,22 +217,15 @@ public class JbpmProfileImpl implements IDiagramProfile {
 
     public IDiagramMarshaller createMarshaller() {
         return new IDiagramMarshaller() {
-            public String parseModel(String jsonModel, String preProcessingData) {
+            public String parseModel(String jsonModel, String preProcessingData) throws Exception {
                 DroolsFactoryImpl.init();
                 BpsimFactoryImpl.init();
                 Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
                 JBPMBpmn2ResourceImpl res;
-                try {
-                    res = (JBPMBpmn2ResourceImpl) unmarshaller.unmarshall(jsonModel, preProcessingData);
-                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                    res.save(outputStream, new HashMap<Object, Object>());
-                    return StringEscapeUtils.unescapeHtml(outputStream.toString("UTF-8"));
-                } catch (JsonParseException e) {
-                    _logger.error(e.getMessage(), e);
-                } catch (IOException e) {
-                    _logger.error(e.getMessage(), e);
-                }
-                return "";
+                res = (JBPMBpmn2ResourceImpl) unmarshaller.unmarshall(jsonModel, preProcessingData);
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                res.save(outputStream, new HashMap<Object, Object>());
+                return StringEscapeUtils.unescapeHtml(outputStream.toString("UTF-8"));
             }
 
             public Definitions getDefinitions(String jsonModel,
@@ -234,34 +242,22 @@ public class JbpmProfileImpl implements IDiagramProfile {
                 return null;
             }
 
-            public Resource getResource(String jsonModel, String preProcessingData) {
-                try {
-                    Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
-                    return (JBPMBpmn2ResourceImpl) unmarshaller.unmarshall(jsonModel, preProcessingData);
-                } catch (JsonParseException e) {
-                    _logger.error(e.getMessage(), e);
-                } catch (IOException e) {
-                    _logger.error(e.getMessage(), e);
-                }
-                return null;
+            public Resource getResource(String jsonModel, String preProcessingData) throws Exception {
+                Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+                return (JBPMBpmn2ResourceImpl) unmarshaller.unmarshall(jsonModel, preProcessingData);
             }
         };
     }
 
     public IDiagramUnmarshaller createUnmarshaller() {
         return new IDiagramUnmarshaller() {
-            public String parseModel(String xmlModel, IDiagramProfile profile, String preProcessingData) {
+            public String parseModel(String xmlModel, IDiagramProfile profile, String preProcessingData) throws Exception {
                 DroolsFactoryImpl.init();
                 BpsimFactoryImpl.init();
 
                 Bpmn2JsonMarshaller marshaller = new Bpmn2JsonMarshaller();
                 marshaller.setProfile(profile);
-                try {
-                    return marshaller.marshall(getDefinitions(xmlModel), preProcessingData);
-                } catch (Exception e) {
-                    _logger.error(e.getMessage(), e);
-                }
-                return "";
+                return marshaller.marshall(getDefinitions(xmlModel), preProcessingData);
             }
         };
     }
@@ -296,7 +292,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
         return "/global";
     }
 
-    public Definitions getDefinitions(String xml) {
+    public Definitions getDefinitions(String xml) throws Exception {
         try {
             DroolsFactoryImpl.init();
             BpsimFactoryImpl.init();
@@ -319,25 +315,21 @@ public class JbpmProfileImpl implements IDiagramProfile {
 
             if (warnings != null && !warnings.isEmpty()){
                 for (Diagnostic diagnostic : warnings) {
-                    System.out.println("Warning: "+diagnostic.getMessage());
+                    _logger.info("Warning: "+diagnostic.getMessage());
                 }
             }
 
             EList<Diagnostic> errors = resource.getErrors();
             if (errors != null && !errors.isEmpty()){
                 for (Diagnostic diagnostic : errors) {
-                    System.out.println("Error: "+diagnostic.getMessage());
+                   _logger.info("Error: "+diagnostic.getMessage());
                 }
-                throw new IllegalStateException("Error parsing process definition");
+                throw new Exception("Error parsing process definition");
             }
 
             return ((DocumentRoot) resource.getContents().get(0)).getDefinitions();
-        } catch(IOException e) {
-            e.printStackTrace();
-            return null;
-        } catch (Throwable t) {
-            t.printStackTrace();
-            return null;
+        } catch(Exception e) {
+            throw new Exception(e);
         }
     }
 

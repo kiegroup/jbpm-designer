@@ -57,81 +57,85 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 		DroolsFactoryImpl.init();
         BpsimFactoryImpl.init();
 
-		Definitions def = profile.createMarshaller().getDefinitions(json, preprocessingData);
-		List<RootElement> rootElements =  def.getRootElements();
-		Scenario defaultScenario = getDefaultScenario(def);
+        try {
+            Definitions def = profile.createMarshaller().getDefinitions(json, preprocessingData);
+            List<RootElement> rootElements =  def.getRootElements();
+            Scenario defaultScenario = getDefaultScenario(def);
 
-        for(RootElement root : rootElements) {
-        	if(root instanceof Process) {
-        		Process process = (Process) root;
-        		if(process.getFlowElements() != null && process.getFlowElements().size() > 0) {
-        			defaultResourceId = process.getFlowElements().get(0).getId();
-        		}
-        		
-        		if(isEmpty(process.getId())) {
-        			addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE, "Process has no id."));
-        		} else {
-        			if(!SyntaxCheckerUtils.isNCName(process.getId())) {
-        				addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE,  "Invalid process id. See http://www.w3.org/TR/REC-xml-names/#NT-NCName for more info."));
-        			}
-        		}
-        		
-        		String pname;
-        		Iterator<FeatureMap.Entry> iter = process.getAnyAttribute().iterator();
-        		boolean foundPackageName = false;
-                while(iter.hasNext()) {
-                    FeatureMap.Entry entry = iter.next();
-                    if(entry.getEStructuralFeature().getName().equals("packageName")) {
-                    	foundPackageName = true;
-                        pname = (String) entry.getValue();
-                        if(isEmpty(pname)) {
-                        	addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE,  "Process has no package name."));
-                        }
-                        if(!isValidPackageName(pname)) {
-                            addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE,  "Package name contains invalid characters."));
+            for(RootElement root : rootElements) {
+                if(root instanceof Process) {
+                    Process process = (Process) root;
+                    if(process.getFlowElements() != null && process.getFlowElements().size() > 0) {
+                        defaultResourceId = process.getFlowElements().get(0).getId();
+                    }
+
+                    if(isEmpty(process.getId())) {
+                        addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE, "Process has no id."));
+                    } else {
+                        if(!SyntaxCheckerUtils.isNCName(process.getId())) {
+                            addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE,  "Invalid process id. See http://www.w3.org/TR/REC-xml-names/#NT-NCName for more info."));
                         }
                     }
-                }
-                if(!foundPackageName) {
-                	addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE,  "Process has no package name."));
-                }
-                
-                if(isEmpty(process.getName())) {
-        			addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE,  "Process has no name."));
-        		}
 
-                List<Property> processProperties = process.getProperties();
-                if(processProperties != null && processProperties.size() > 0) {
-                    for(Property prop : processProperties) {
-                        String propId = prop.getId();
-                        Pattern pattern = Pattern.compile("\\s");
-                        Matcher matcher = pattern.matcher(propId);
-                        if(matcher.find()) {
-                            addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE,  "Process variable \"" + propId + "\" contains white spaces."));
+                    String pname;
+                    Iterator<FeatureMap.Entry> iter = process.getAnyAttribute().iterator();
+                    boolean foundPackageName = false;
+                    while(iter.hasNext()) {
+                        FeatureMap.Entry entry = iter.next();
+                        if(entry.getEStructuralFeature().getName().equals("packageName")) {
+                            foundPackageName = true;
+                            pname = (String) entry.getValue();
+                            if(isEmpty(pname)) {
+                                addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE,  "Process has no package name."));
+                            }
+                            if(!isValidPackageName(pname)) {
+                                addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE,  "Package name contains invalid characters."));
+                            }
                         }
                     }
+                    if(!foundPackageName) {
+                        addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE,  "Process has no package name."));
+                    }
+
+                    if(isEmpty(process.getName())) {
+                        addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE,  "Process has no name."));
+                    }
+
+                    List<Property> processProperties = process.getProperties();
+                    if(processProperties != null && processProperties.size() > 0) {
+                        for(Property prop : processProperties) {
+                            String propId = prop.getId();
+                            Pattern pattern = Pattern.compile("\\s");
+                            Matcher matcher = pattern.matcher(propId);
+                            if(matcher.find()) {
+                                addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE,  "Process variable \"" + propId + "\" contains white spaces."));
+                            }
+                        }
+                    }
+
+                    boolean foundStartEvent = false;
+                    boolean foundEndEvent = false;
+                    List<FlowElement> flowElements =  process.getFlowElements();
+                    for(FlowElement fe : flowElements) {
+                        if(fe instanceof StartEvent) {
+                            foundStartEvent = true;
+                        }
+                        if(fe instanceof EndEvent) {
+                            foundEndEvent = true;
+                        }
+                    }
+                    if(!foundStartEvent && !isAdHocProcess(process)) {
+                        addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE,  "Process has no start node."));
+                    }
+                    if(!foundEndEvent && !isAdHocProcess(process)) {
+                        addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE, "Process has no end node."));
+                    }
+
+                    checkFlowElements(process, process, defaultScenario);
                 }
-                
-                boolean foundStartEvent = false;
-                boolean foundEndEvent = false;
-        		List<FlowElement> flowElements =  process.getFlowElements();
-        		for(FlowElement fe : flowElements) {
-        			if(fe instanceof StartEvent) {
-        				foundStartEvent = true;
-        			}
-        			if(fe instanceof EndEvent) {
-        				foundEndEvent = true;
-        			}
-        		}
-        		if(!foundStartEvent && !isAdHocProcess(process)) {
-        			addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE,  "Process has no start node."));
-        		}
-        		if(!foundEndEvent && !isAdHocProcess(process)) {
-        			addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE, "Process has no end node."));
-        		}
-        		
-        		checkFlowElements(process, process, defaultScenario);
-        	}
+            }
+        } catch(Exception e) {
+            addError(defaultResourceId, new ValidationSyntaxError(null, PROCESS_TYPE, "Could not parse BPMN2 process."));
         }
 
         // if there are no suggestions add RuleFlowProcessValidator process errors

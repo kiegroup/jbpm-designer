@@ -47,7 +47,7 @@ public class UUIDBasedJbpmRepository implements IUUIDBasedRepository {
         // Guvnor is responsible for saving 
     }
     
-    public String toXML(String json, IDiagramProfile profile, String preProcessingData) {
+    public String toXML(String json, IDiagramProfile profile, String preProcessingData) throws Exception {
         return profile.createMarshaller().parseModel(json, preProcessingData);
     }
 }
