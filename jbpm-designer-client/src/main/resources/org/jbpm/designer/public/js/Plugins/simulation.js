@@ -464,7 +464,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
 				            method: 'POST',
 				            success: function(response) {
 				    	   		try {
-				    	   			if(response.responseText && response.responseText.length > 0 && response.responseText != "{}") {
+				    	   			if(response.responseText && response.responseText.length > 0 && response.status == 200) {
 				    	   				this.facade.raiseEvent({
 				    	   		            type: ORYX.CONFIG.EVENT_SIMULATION_SHOW_RESULTS,
 				    	   		            results: response.responseText
@@ -472,8 +472,8 @@ ORYX.Plugins.Simulation = Clazz.extend({
 				    	   			} else {
                                            this.facade.raiseEvent({
                                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                               ntype		: 'info',
-                                               msg         : 'Simulation engine did not return results.',
+                                               ntype		: 'error',
+                                               msg         : 'Simulation engine did not return results:\n' + response.statusText,
                                                title       : ''
 
                                            });
