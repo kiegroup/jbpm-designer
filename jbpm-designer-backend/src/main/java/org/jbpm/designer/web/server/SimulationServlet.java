@@ -427,15 +427,14 @@ public class SimulationServlet extends HttpServlet {
 					parentJSON.put("pathsim", processPathsJSONArray);
 				}
 
-				PrintWriter pw = resp.getWriter();
+                PrintWriter pw = resp.getWriter();
 	    		resp.setContentType("text/json");
 	    		resp.setCharacterEncoding("UTF-8");
 	    		pw.write(parentJSON.toString());
+
 			} catch (Exception e) {
-				PrintWriter pw = resp.getWriter();
-	    		resp.setContentType("text/json");
-	    		resp.setCharacterEncoding("UTF-8");
-	    		pw.write("{}");
+                _logger.error("Error during simulation", e);
+	    		resp.sendError(HttpServletResponse.SC_NO_CONTENT, e.getMessage());
 			}
 
         }
