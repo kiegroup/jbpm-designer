@@ -6161,6 +6161,19 @@
 				"bgColor"
 			],
 			"properties" :		[
+                {
+                    "id":"name",
+                    "type":"String",
+                    "title":"Name",
+                    "value":"dataObject",
+                    "description":"The descriptive name of the BPMN element.",
+                    "description_ja":"BPMN要素のわかりやすい名前。",
+                    "readonly":false,
+                    "optional":true,
+                    "length":"",
+                    "wrapLines" : true,
+                    "refToView":"text_name"
+                },
 				{
 					"id":"bgcolor",
 					"type":"Color",
