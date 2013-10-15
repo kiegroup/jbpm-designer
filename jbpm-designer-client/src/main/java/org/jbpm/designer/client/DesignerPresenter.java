@@ -123,53 +123,53 @@ public class DesignerPresenter {
         this.path.onConcurrentUpdate( new ParameterizedCommand<ObservablePath.OnConcurrentUpdateEvent>() {
             @Override
             public void execute( final ObservablePath.OnConcurrentUpdateEvent eventInfo ) {
-                concurrentUpdateSessionInfo = eventInfo;
-                        if ( concurrentUpdateSessionInfo != null ) {
-                            newConcurrentUpdate( concurrentUpdateSessionInfo.getPath(),
-                                    concurrentUpdateSessionInfo.getIdentity(),
-                                    new Command() {
-                                        @Override
-                                        public void execute() {
-                                            // save in designer is not done in presenter
-                                            //save();
-                                        }
-                                    },
-                                    new Command() {
-                                        @Override
-                                        public void execute() {
-                                            //cancel?
-                                        }
-                                    },
-                                    new Command() {
-                                        @Override
-                                        public void execute() {
-                                            reload();
-                                        }
-                                    }
-                            ).show();
-                        }
+//                concurrentUpdateSessionInfo = eventInfo;
+//                        if ( concurrentUpdateSessionInfo != null ) {
+//                            newConcurrentUpdate( concurrentUpdateSessionInfo.getPath(),
+//                                    concurrentUpdateSessionInfo.getIdentity(),
+//                                    new Command() {
+//                                        @Override
+//                                        public void execute() {
+//                                            // save in designer is not done in presenter
+//                                            //save();
+//                                        }
+//                                    },
+//                                    new Command() {
+//                                        @Override
+//                                        public void execute() {
+//                                            //cancel?
+//                                        }
+//                                    },
+//                                    new Command() {
+//                                        @Override
+//                                        public void execute() {
+//                                            reload();
+//                                        }
+//                                    }
+//                            ).show();
+//                        }
             }
         } );
 
         this.path.onConcurrentRename( new ParameterizedCommand<ObservablePath.OnConcurrentRenameEvent>() {
             @Override
             public void execute( final ObservablePath.OnConcurrentRenameEvent info ) {
-                newConcurrentRename( info.getSource(),
-                        info.getTarget(),
-                        info.getIdentity(),
-                        new Command() {
-                            @Override
-                            public void execute() {
-                                disableMenus();
-                            }
-                        },
-                        new Command() {
-                            @Override
-                            public void execute() {
-                                reload();
-                            }
-                        }
-                ).show();
+//                newConcurrentRename( info.getSource(),
+//                        info.getTarget(),
+//                        info.getIdentity(),
+//                        new Command() {
+//                            @Override
+//                            public void execute() {
+//                                disableMenus();
+//                            }
+//                        },
+//                        new Command() {
+//                            @Override
+//                            public void execute() {
+//                                reload();
+//                            }
+//                        }
+//                ).show();
             }
         } );
 
@@ -177,21 +177,21 @@ public class DesignerPresenter {
         this.path.onConcurrentDelete( new ParameterizedCommand<ObservablePath.OnConcurrentDelete>() {
             @Override
             public void execute( final ObservablePath.OnConcurrentDelete info ) {
-                newConcurrentDelete( info.getPath(),
-                        info.getIdentity(),
-                        new Command() {
-                            @Override
-                            public void execute() {
-                                disableMenus();
-                            }
-                        },
-                        new Command() {
-                            @Override
-                            public void execute() {
-                                placeManager.closePlace( place );
-                            }
-                        }
-                ).show();
+//                newConcurrentDelete( info.getPath(),
+//                        info.getIdentity(),
+//                        new Command() {
+//                            @Override
+//                            public void execute() {
+//                                disableMenus();
+//                            }
+//                        },
+//                        new Command() {
+//                            @Override
+//                            public void execute() {
+//                                placeManager.closePlace( place );
+//                            }
+//                        }
+//                ).show();
             }
         } );
 
