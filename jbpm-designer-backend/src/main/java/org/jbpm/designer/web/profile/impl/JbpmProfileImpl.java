@@ -305,9 +305,11 @@ public class JbpmProfileImpl implements IDiagramProfile {
 
             JBPMBpmn2ResourceImpl resource = (JBPMBpmn2ResourceImpl) resourceSet.createResource(URI.createURI("inputStream://dummyUriWithValidSuffix.xml"));
             resource.getDefaultLoadOptions().put(JBPMBpmn2ResourceImpl.OPTION_ENCODING, "UTF-8");
+            resource.getDefaultLoadOptions().put(JBPMBpmn2ResourceImpl.OPTION_DEFER_IDREF_RESOLUTION, true);
             resource.setEncoding("UTF-8");
             Map<String, Object> options = new HashMap<String, Object>();
             options.put( JBPMBpmn2ResourceImpl.OPTION_ENCODING, "UTF-8" );
+            options.put( JBPMBpmn2ResourceImpl.OPTION_DEFER_IDREF_RESOLUTION, true );
             InputStream is = new ByteArrayInputStream(xml.getBytes("UTF-8"));
             resource.load(is, options);
 

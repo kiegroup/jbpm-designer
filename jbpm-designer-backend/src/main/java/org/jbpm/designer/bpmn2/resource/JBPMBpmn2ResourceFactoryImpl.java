@@ -57,6 +57,7 @@ public class JBPMBpmn2ResourceFactoryImpl extends ResourceFactoryImpl {
 
         result.getDefaultSaveOptions().put(XMLResource.OPTION_ENCODING, "UTF-8");
         result.getDefaultSaveOptions().put(XMLResource.OPTION_USE_CACHED_LOOKUP_TABLE, new ArrayList<Object>());
+        result.getDefaultSaveOptions().put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, true);
 
         return result;
     }
