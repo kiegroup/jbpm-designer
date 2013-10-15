@@ -21,10 +21,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.servlet.ServletContext;
@@ -231,7 +228,10 @@ public class DefaultProfileImpl implements IDiagramProfile {
                 try {
                     res = unmarshaller.unmarshall(jsonModel, preProcessingData);
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                    res.save(outputStream, Collections.singletonMap(XMLResource.OPTION_ENCODING, "UTF-8"));
+                    Map saveMap = new HashMap();
+                    saveMap.put(XMLResource.OPTION_ENCODING, "UTF-8");
+                    saveMap.put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, true);
+                    res.save(outputStream, saveMap);
                     return outputStream.toString();
                 } catch (JsonParseException e) {
                     _logger.error(e.getMessage(), e);
