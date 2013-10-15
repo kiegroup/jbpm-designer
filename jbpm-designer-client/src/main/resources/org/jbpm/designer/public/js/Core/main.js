@@ -103,38 +103,69 @@ ORYX.Editor = {
 			model = config.model;
 		}
         if(config.error) {
-            var cf = new Ext.form.TextArea({
-                id:"processErrorTextArea",
-                fieldLabel:"Process Loading Error",
+            try {
+            var errorSourceArea = new Ext.form.TextArea({
+                id:"errorSourceTextArea",
+                fieldLabel:"Error Details",
                 value:config.error,
                 autoScroll:true
             });
+
+            var errorSourceAreaPanel = new Ext.Panel({
+                title:"Details",
+                layout:'fit',
+                border:false,
+                items: [errorSourceArea],
+                collapsed : true,
+                listeners: {
+                    expand: function(p) {
+                        this.foldFunc = CodeMirror.newFoldFunction(CodeMirror.tagRangeFinder);
+                        var errorSourceEditor = CodeMirror.fromTextArea(document.getElementById("errorSourceTextArea"), {
+                            mode: "text",
+                            lineNumbers: true,
+                            lineWrapping: true,
+                            onGutterClick: this.foldFunc
+                        });
+                    }
+                }
+            });
+
+            var errorInfoPanel = new Ext.Panel({
+                title:"Info",
+                layout:'table',
+                border:false,
+                bodyBorder:false,
+                hideBorders:true,
+                html: '<p/><p/><center>Could not open requested business process due to processing errors. <br/> Empty process was loaded instead.<br/> Click on the Details tab below to view error details.</center>'
+            });
+
+            var errorOutterPanel = new Ext.Panel({
+                layout:'accordion',
+                items: [ errorInfoPanel, errorSourceAreaPanel ]
+            });
+
             var win = new Ext.Window({
                 width:600,
                 id:'processErrorSource',
                 height:550,
                 layout: 'fit',
-                title:'Process loading errors (empty process will be loaded)',
-                items: [cf],
+                title:'Process loading errors',
+                items: [errorOutterPanel],
                 buttons:[{
                     text : 'Close',
                     handler:function(){
                         win.close();
                         win = null;
                         cf = null;
-                        sourceEditor = null;
                     }.bind(this)
                 }]
             });
             win.show();
-            this.foldFunc = CodeMirror.newFoldFunction(CodeMirror.tagRangeFinder);
-            var sourceEditor = CodeMirror.fromTextArea(document.getElementById("processErrorTextArea"), {
-                mode: "text",
-                lineNumbers: true,
-                lineWrapping: true,
-                onGutterClick: this.foldFunc
-            });
+
+        } catch(err) {
+            alert(err);
         }
+    }
 		
 		this.id = model.resourceId;
         if(!this.id) {
