@@ -227,10 +227,14 @@ public class TransformerServlet extends HttpServlet {
         }  else if (transformto != null && transformto.equals(BPMN2_TO_JSON)) {
             try {
                 Definitions def = ((JbpmProfileImpl) profile).getDefinitions(bpmn2in);
+                def.setTargetNamespace("http://www.omg.org/bpmn20");
                 // get the xml from Definitions
                 ResourceSet rSet = new ResourceSetImpl();
                 rSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("bpmn2", new JBPMBpmn2ResourceFactoryImpl());
                 JBPMBpmn2ResourceImpl bpmn2resource = (JBPMBpmn2ResourceImpl) rSet.createResource(URI.createURI("virtual.bpmn2"));
+                bpmn2resource.getDefaultLoadOptions().put(JBPMBpmn2ResourceImpl.OPTION_ENCODING, "UTF-8");
+                bpmn2resource.getDefaultLoadOptions().put(JBPMBpmn2ResourceImpl.OPTION_DEFER_IDREF_RESOLUTION, true);
+                bpmn2resource.setEncoding("UTF-8");
                 rSet.getResources().add(bpmn2resource);
                 bpmn2resource.getContents().add(def);
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
