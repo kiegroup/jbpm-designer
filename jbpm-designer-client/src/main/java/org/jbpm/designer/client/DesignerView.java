@@ -91,6 +91,12 @@ public class DesignerView
         return Window.confirm( "Business Process may contain unsaved changes. Are you sure you would like to close the editor?" );
     }
 
+    public native void setProcessSaved(String editorID) /*-{
+        if($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor) {
+            $wnd.document.getElementById(editorID).contentWindow.ORYX.PROCESS_SAVED = true;
+        }
+    }-*/;
+
     public native boolean canSaveDesignerModel(String editorID) /*-{
         if($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor && (typeof($wnd.document.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved) == "function")) {
             return $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved();
