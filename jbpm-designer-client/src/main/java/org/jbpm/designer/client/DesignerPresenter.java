@@ -99,9 +99,6 @@ public class DesignerPresenter {
     private Event<ChangeTitleWidgetEvent> changeTitleNotification;
 
     @Inject
-    private TextResourceType type;
-
-    @Inject
     private Event<ResourceUpdatedEvent> resourceUpdatedEvent;
 
     private ObservablePath path;
@@ -240,7 +237,7 @@ public class DesignerPresenter {
 
     @WorkbenchPartTitle
     public String getName() {
-        return "Business Process [" + FileNameUtil.removeExtension(this.path, type) + "]";
+        return "Business Process [" + FileNameUtil.removeExtension( this.path, resourceType ) + "]";
     }
 
     @WorkbenchPartView
