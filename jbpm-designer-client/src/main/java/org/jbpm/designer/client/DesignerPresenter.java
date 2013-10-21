@@ -6,6 +6,7 @@ import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.IsWidget;
 import org.guvnor.common.services.shared.file.CopyService;
 import org.guvnor.common.services.shared.file.DeleteService;
@@ -94,9 +95,6 @@ public class DesignerPresenter {
 
     @Inject
     private Event<ChangeTitleWidgetEvent> changeTitleNotification;
-
-    @Inject
-    private TextResourceType type;
 
     @Inject
     private Event<ResourceUpdatedEvent> resourceUpdatedEvent;
@@ -211,7 +209,7 @@ public class DesignerPresenter {
 
     @WorkbenchPartTitle
     public String getName() {
-        return "Business Process [" + FileNameUtil.removeExtension( this.path, type ) + "]";
+        return "Business Process [" + FileNameUtil.removeExtension( this.path, resourceType ) + "]";
     }
 
     @WorkbenchPartView
