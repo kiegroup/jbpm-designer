@@ -24,12 +24,9 @@ import org.mvel2.MVEL;
 import org.stringtemplate.v4.ST;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.VFSService;
-import org.uberfire.workbench.events.ResourceAddedEvent;
-import org.uberfire.workbench.events.ResourceUpdatedEvent;
 import sun.misc.BASE64Encoder;
 import org.apache.commons.io.IOUtils;
 
-import javax.enterprise.event.Event;
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -147,6 +144,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
             // figure out which package our uuid belongs in and get back the list of configs
             Collection<Asset> workitemConfigInfo = findWorkitemInfoForUUID(asset.getAssetLocation(), repository);
+
             // also get all from globals package
             Collection<Asset> globalWorkitemConfigInfo = findWorkitemInfoForUUID(globalDir, repository);
 
@@ -158,7 +156,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 workitemConfigInfo = globalWorkitemConfigInfo;
             }
 
-            if(workitemConfigInfo != null) {
+            if(workitemConfigInfo == null || workitemConfigInfo.size() < 1) {
                 setupDefaultWorkitemConfigs(asset.getAssetLocation(), repository);
                 workitemConfigInfo = findWorkitemInfoForUUID(asset.getAssetLocation(), repository);
             }
