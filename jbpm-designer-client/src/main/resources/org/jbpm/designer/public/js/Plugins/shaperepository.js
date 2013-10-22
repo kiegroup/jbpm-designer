@@ -170,14 +170,27 @@ ORYX.Plugins.ShapeRepository = {
 					
 					// If there is a new group
 					if(!treeGroups[group]) {
-						// Create a new group
-						treeGroups[group] = new Ext.tree.TreeNode({
-							text:group,					// Group-Name
-							allowDrag:false,
-        					allowDrop:false,            
-							iconCls:'headerShapeRepImg', // Css-Class for Icon
-				            cls:'headerShapeRepChild',  // CSS-Class for Stencil-Group
-							singleClickExpand:true});
+                        if(Ext.isIE) {
+                            // Create a new group
+                            treeGroups[group] = new Ext.tree.TreeNode({
+                                text:group,					// Group-Name
+                                allowDrag:false,
+                                allowDrop:false,
+                                iconCls:'headerShapeRepImg', // Css-Class for Icon
+                                cls:'headerShapeRepChild',  // CSS-Class for Stencil-Group
+                                singleClickExpand:true,
+                                expanded:true});
+                            treeGroups[group].expand();
+                        } else {
+                            // Create a new group
+                            treeGroups[group] = new Ext.tree.TreeNode({
+                                text:group,					// Group-Name
+                                allowDrag:false,
+                                allowDrop:false,
+                                iconCls:'headerShapeRepImg', // Css-Class for Icon
+                                cls:'headerShapeRepChild',  // CSS-Class for Stencil-Group
+                                singleClickExpand:true});
+                        }
 						// Add the Group to the ShapeRepository
 						stencilSetNode.appendChild(treeGroups[group]);
 						treeGroups[group].render();	
