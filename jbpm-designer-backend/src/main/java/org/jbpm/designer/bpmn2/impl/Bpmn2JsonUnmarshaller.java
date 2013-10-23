@@ -157,6 +157,11 @@ public class Bpmn2JsonUnmarshaller {
             Bpmn2Resource bpmn2 = (Bpmn2Resource) rSet.createResource(URI.createURI("virtual.bpmn2"));
             rSet.getResources().add(bpmn2);
             _currentResource = bpmn2;
+
+            if(preProcessingData == null || preProcessingData.length() < 1) {
+                preProcessingData = "ReadOnlyService";
+            }
+
             // do the unmarshalling now:
             Definitions def = (Definitions) unmarshallItem(parser, preProcessingData);
             revisitServiceTasks(def);
@@ -5339,6 +5344,7 @@ public class Bpmn2JsonUnmarshaller {
     }
     
     private boolean isCustomElement(String taskType, String preProcessingData) {
+        System.out.println("********************************************* IS CUSTOM ELEMENT???? : " + taskType + " ----- " + preProcessingData);
         if(taskType != null && taskType.length() > 0 && preProcessingData != null && preProcessingData.length() > 0) {
             String[] preProcessingDataElements = preProcessingData.split( ",\\s*" );
             for(String preProcessingDataElement : preProcessingDataElements) {

@@ -113,15 +113,28 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 ST workItemTemplate = new ST(readFile(origStencilFilePath), '$', '$');
                 workItemTemplate.add("bopen", "{");
                 workItemTemplate.add("bclose", "}");
-                workItemTemplate.add("workitemDefs", new HashMap<String, WorkDefinitionImpl>());
                 workItemTemplate.add("patternData", new HashMap<String, PatternInfo>());
                 workItemTemplate.add("packageName", "org.jbpm");
                 workItemTemplate.add("processn", "");
                 workItemTemplate.add("processid", "");
                 workItemTemplate.add("pversion", "1.0");
-                workItemTemplate.add("colortheme", new HashMap<String, ThemeInfo>());
+
+                String readOnlyIconEncoded = "data:image/png;base64,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";
+                Map<String, WorkDefinitionImpl> workDefinitions = new HashMap<String, WorkDefinitionImpl>();
+                WorkDefinitionImpl readOnlyImpl = new WorkDefinitionImpl();
+                readOnlyImpl.setName("ReadOnlyService");
+                readOnlyImpl.setDisplayName("ReadOnlyService");
+                readOnlyImpl.setCategory("Service Tasks");
+                readOnlyImpl.setIcon("/global/defaultservicenodeicon.png");
+                readOnlyImpl.setIconEncoded(URLEncoder.encode(readOnlyIconEncoded, "UTF-8"));
+                readOnlyImpl.setCustomEditor("");
+                workDefinitions.put("ReadOnlyService", readOnlyImpl);
+                workItemTemplate.add("workitemDefs", workDefinitions);
+                Map<String, ThemeInfo> themeData = setupThemesForReadOnly(req);
+                workItemTemplate.add("colortheme", themeData);
                 deletefile(stencilFilePath);
                 createAndWriteToFile(stencilFilePath, workItemTemplate.render());
+                createAndParseViewSVGForReadOnly(workDefinitions, readOnlyIconEncoded);
             } catch(Exception e) {
                 _logger.error("Unable to preprocess in readonly mode: " + e.getMessage());
             }
@@ -242,6 +255,24 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             createAndParseViewSVG(workDefinitions, repository);
         } catch( Exception e ) {
             _logger.error("Failed to setup workitems : " + e.getMessage());
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void createAndParseViewSVGForReadOnly(Map<String, WorkDefinitionImpl> workDefinitions, String iconBase64) {
+        try {
+            for(Map.Entry<String, WorkDefinitionImpl> definition : workDefinitions.entrySet()) {
+                ST workItemTemplate = new ST(readFile(origWorkitemSVGFile), '$', '$');
+                workItemTemplate.add("workitemDef", definition.getValue());
+                String widIcon = definition.getValue().getIcon();
+
+                String iconEncoded = iconBase64;
+                workItemTemplate.add("nodeicon", iconEncoded);
+                String fileToWrite = workitemSVGFilePath + definition.getValue().getName() + ".svg";
+                createAndWriteToFile(fileToWrite, workItemTemplate.render());
+            }
+        } catch (Exception e) {
+            _logger.error("Failed to setup workitem svg images : " + e.getMessage());
         }
     }
 
@@ -396,6 +427,35 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
         } catch (Exception e) {
             _logger.error(e.getMessage());
+        }
+    }
+
+    private Map<String, ThemeInfo> setupThemesForReadOnly(HttpServletRequest req) {
+        Map<String, ThemeInfo> themeData = new HashMap<String, ThemeInfo>();
+        try {
+            String themesStr = readFile(themeInfo);
+            JSONObject themesObject =  new JSONObject(themesStr);
+
+            // extract theme info from json
+            JSONObject themes = (JSONObject) themesObject.get("themes");
+            JSONObject selectedTheme = (JSONObject) themes.get("jBPM");
+            for(String key : JSONObject.getNames(selectedTheme)) {
+                String val = (String) selectedTheme.get(key);
+                String[] valParts = val.split( "\\|\\s*" );
+                ThemeInfo ti;
+                if(valParts.length == 3) {
+                    ti = new ThemeInfo(valParts[0], valParts[1], valParts[2]);
+                } else {
+                    ti = new ThemeInfo("#000000", "#000000", "#000000");
+                }
+                themeData.put(key, ti);
+            }
+            return themeData;
+        } catch (Exception e) {
+            e.printStackTrace();
+            // we dont want to barf..just log that error happened
+            _logger.error(e.getMessage());
+            return themeData;
         }
     }
 

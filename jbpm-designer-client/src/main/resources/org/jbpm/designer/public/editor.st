@@ -93,10 +93,11 @@
                var dps = parent.designerprocesssources();
                parent.designerprocesssources = function (){ return ""; }
                if(dps && dps.length > 0) {
+                    ORYX.PREPROCESSING = "ReadOnlyService";
                     new Ajax.Request(ORYX.PATH + "transformer", {
                                    encoding: 'UTF-8',
                                    method: 'POST',
-                                   parameters: {uuid: ORYX.UUID, profile: ORYX.PROFILE, pp: ORYX.PREPROCESSING, bpmn2: dps, transformto: 'bpmn2json', enc: 'true'},
+                                   parameters: {uuid: ORYX.UUID, profile: ORYX.PROFILE, pp: ORYX.PREPROCESSING, bpmn2: dps, transformto: 'bpmn2json', enc: 'true', convertservicetasks: 'true'},
                                    onSuccess: function(transport) {
                                        response = transport.responseText;
                                        model = response.evalJSON();

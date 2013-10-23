@@ -111,6 +111,7 @@ public class TransformerServlet extends HttpServlet {
         String pp = req.getParameter("pp");
         String processid = req.getParameter("processid");
         String sourceEnc = req.getParameter("enc");
+        String convertServiceTasks = req.getParameter("convertservicetasks");
 
         String formattedSvg = ( formattedSvgEncoded == null ? "" : new String(Base64.decodeBase64(formattedSvgEncoded), "UTF-8") );
         //formattedSvg = URLDecoder.decode(formattedSvg, "UTF-8");
@@ -226,6 +227,11 @@ public class TransformerServlet extends HttpServlet {
             }
         }  else if (transformto != null && transformto.equals(BPMN2_TO_JSON)) {
             try {
+                if(convertServiceTasks != null && convertServiceTasks.equals("true")) {
+                    bpmn2in = bpmn2in.replaceAll("drools:taskName=\".*?\"", "drools:taskName=\"ReadOnlyService\"");
+                    bpmn2in = bpmn2in.replaceAll("tns:taskName=\".*?\"", "tns:taskName=\"ReadOnlyService\"");
+                }
+
                 Definitions def = ((JbpmProfileImpl) profile).getDefinitions(bpmn2in);
                 def.setTargetNamespace("http://www.omg.org/bpmn20");
                 // get the xml from Definitions
