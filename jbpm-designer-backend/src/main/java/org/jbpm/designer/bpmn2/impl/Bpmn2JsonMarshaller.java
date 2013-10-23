@@ -107,6 +107,9 @@ public class Bpmn2JsonMarshaller {
         	}
         	
         }
+        if(preProcessingData == null || preProcessingData.length() < 1) {
+            preProcessingData = "ReadOnlyService";
+        }
         marshallDefinitions(def, generator, preProcessingData);
         generator.close();
         

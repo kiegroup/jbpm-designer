@@ -16,7 +16,6 @@
 package org.jbpm.designer.web.server;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
@@ -33,14 +32,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.eclipse.bpmn2.Definitions;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
-import org.jbpm.designer.web.profile.impl.DefaultProfileImpl;
-import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
 import org.jbpm.designer.web.repository.IUUIDBasedRepository;
 import org.jbpm.designer.web.repository.IUUIDBasedRepositoryService;
 import org.jbpm.designer.web.repository.UUIDBasedEpnRepository;
@@ -48,9 +41,6 @@ import org.jbpm.designer.web.repository.impl.UUIDBasedFileRepository;
 import org.jbpm.designer.web.repository.impl.UUIDBasedJbpmRepository;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleReference;
-import org.osgi.framework.ServiceReference;
 
 /**
  * @author Antoine Toulme
@@ -136,6 +126,9 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
         String actionParam = req.getParameter("action");
         String preProcessingParam = req.getParameter("pp");
+        if(preProcessingParam == null) {
+            preProcessingParam = "ReadOnlyService";
+        }
         if(actionParam != null && actionParam.equals("toXML")) {
             IDiagramProfile profile = _profileService.findProfile(req, req.getParameter("profile"));
             String json = req.getParameter("data");
