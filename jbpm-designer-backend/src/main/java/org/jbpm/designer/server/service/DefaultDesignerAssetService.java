@@ -31,8 +31,6 @@ import org.uberfire.workbench.events.ResourceAddedEvent;
 public class DefaultDesignerAssetService implements DesignerAssetService {
 
     @Inject
-    private Paths paths;
-    @Inject
     private Repository repository;
 
     private static final String PROCESS_STUB = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \n" +
@@ -119,9 +117,9 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
     @Override
     public Path createProcess( final Path context,
                                final String fileName ) {
-        final Path path = paths.convert( paths.convert( context ).resolve( fileName ), false );
+        final Path path = Paths.convert( Paths.convert( context ).resolve( fileName ) );
 
-        String location = paths.convert( path ).getParent().toString();
+        String location = Paths.convert( path ).getParent().toString();
         String name = path.getFileName();
         String processId = buildProcessId( location, name );
 

@@ -45,10 +45,4 @@ public class ApplicationScopedProvider {
     public IOService ioService() {
         return ioService;
     }
-
-    @Produces
-    @Named("system")
-    public Repository systemRepository() {
-        return SYSTEM_REPO;
-    }
 }
