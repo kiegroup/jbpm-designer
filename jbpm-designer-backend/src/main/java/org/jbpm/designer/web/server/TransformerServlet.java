@@ -23,6 +23,8 @@ import org.apache.batik.transcoder.image.ImageTranscoder;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.fop.svg.PDFTranscoder;
+import org.jboss.drools.DroolsPackage;
+import org.jboss.drools.OnEntryScriptType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.eclipse.bpmn2.*;
@@ -234,6 +236,18 @@ public class TransformerServlet extends HttpServlet {
 
                 Definitions def = ((JbpmProfileImpl) profile).getDefinitions(bpmn2in);
                 def.setTargetNamespace("http://www.omg.org/bpmn20");
+
+                if(convertServiceTasks != null && convertServiceTasks.equals("true")) {
+                    // fix the data input associations for converted tasks
+                    List<RootElement> rootElements =  def.getRootElements();
+                    for(RootElement root : rootElements) {
+                        if(root instanceof Process) {
+                            updateTaskDataInputs((Process) root, def);
+                        }
+                    }
+                }
+
+
                 // get the xml from Definitions
                 ResourceSet rSet = new ResourceSetImpl();
                 rSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("bpmn2", new JBPMBpmn2ResourceFactoryImpl());
@@ -253,6 +267,42 @@ public class TransformerServlet extends HttpServlet {
                 _logger.error(e.getMessage());
                 resp.setContentType("application/json");
                 resp.getWriter().print("{}");
+            }
+        }
+    }
+
+    private void updateTaskDataInputs(FlowElementsContainer container, Definitions def) {
+        List<FlowElement> flowElements = container.getFlowElements();
+        for(FlowElement fe : flowElements) {
+            if(fe instanceof Task) {
+                Task task = (Task) fe;
+                boolean foundReadOnlyServiceTask = false;
+                if(task.getExtensionValues() != null && task.getExtensionValues().size() > 0) {
+                    for(ExtensionAttributeValue extattrval : task.getExtensionValues()) {
+                        FeatureMap extensionElements = extattrval.getValue();
+                        List<String> taskNameExtensions = (List<String>) extensionElements
+                                .get(DroolsPackage.Literals.DOCUMENT_ROOT__TASK_NAME, true);
+                        for(String taskName : taskNameExtensions) {
+                            if(taskName.equals("ReadOnlyService")) {
+                                foundReadOnlyServiceTask = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if(foundReadOnlyServiceTask) {
+                    if(task.getDataInputAssociations() != null) {
+                        List<DataInputAssociation> dataInputAssociations = task.getDataInputAssociations();
+                        for(DataInputAssociation dia : dataInputAssociations) {
+                            if(dia.getTargetRef().getId().endsWith("TaskNameInput")) {
+                                ((FormalExpression) dia.getAssignment().get(0)).setBody("ReadOnlyService");
+                            }
+                        }
+                    }
+                }
+            } else if(fe instanceof FlowElementsContainer) {
+                updateTaskDataInputs((FlowElementsContainer) fe, def);
             }
         }
     }
