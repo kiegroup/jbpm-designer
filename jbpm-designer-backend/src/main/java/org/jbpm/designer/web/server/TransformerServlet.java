@@ -277,16 +277,12 @@ public class TransformerServlet extends HttpServlet {
             if(fe instanceof Task) {
                 Task task = (Task) fe;
                 boolean foundReadOnlyServiceTask = false;
-                if(task.getExtensionValues() != null && task.getExtensionValues().size() > 0) {
-                    for(ExtensionAttributeValue extattrval : task.getExtensionValues()) {
-                        FeatureMap extensionElements = extattrval.getValue();
-                        List<String> taskNameExtensions = (List<String>) extensionElements
-                                .get(DroolsPackage.Literals.DOCUMENT_ROOT__TASK_NAME, true);
-                        for(String taskName : taskNameExtensions) {
-                            if(taskName.equals("ReadOnlyService")) {
-                                foundReadOnlyServiceTask = true;
-                                break;
-                            }
+                Iterator<FeatureMap.Entry> iter = task.getAnyAttribute().iterator();
+                while(iter.hasNext()) {
+                    FeatureMap.Entry entry = iter.next();
+                    if(entry.getEStructuralFeature().getName().equals("taskName")) {
+                        if(entry.getValue().equals("ReadOnlyService")) {
+                            foundReadOnlyServiceTask = true;
                         }
                     }
                 }
@@ -296,7 +292,7 @@ public class TransformerServlet extends HttpServlet {
                         List<DataInputAssociation> dataInputAssociations = task.getDataInputAssociations();
                         for(DataInputAssociation dia : dataInputAssociations) {
                             if(dia.getTargetRef().getId().endsWith("TaskNameInput")) {
-                                ((FormalExpression) dia.getAssignment().get(0)).setBody("ReadOnlyService");
+                                ((FormalExpression) dia.getAssignment().get(0).getFrom()).setBody("ReadOnlyService");
                             }
                         }
                     }

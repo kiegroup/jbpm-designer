@@ -5344,7 +5344,6 @@ public class Bpmn2JsonUnmarshaller {
     }
     
     private boolean isCustomElement(String taskType, String preProcessingData) {
-        System.out.println("********************************************* IS CUSTOM ELEMENT???? : " + taskType + " ----- " + preProcessingData);
         if(taskType != null && taskType.length() > 0 && preProcessingData != null && preProcessingData.length() > 0) {
             String[] preProcessingDataElements = preProcessingData.split( ",\\s*" );
             for(String preProcessingDataElement : preProcessingDataElements) {
