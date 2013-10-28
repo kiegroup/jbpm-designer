@@ -880,6 +880,9 @@ public class Bpmn2JsonMarshaller {
                 if(eleType.getElementRef().equals(catchEvent.getId())) {
                     TimeParameters timeParams = eleType.getTimeParameters();
                     Parameter processingTime = timeParams.getProcessingTime();
+                    if (processingTime == null) {
+                        continue;
+                    }
                     ParameterValue paramValue =  processingTime.getParameterValue().get(0);
                     if(paramValue instanceof NormalDistributionType) {
                         NormalDistributionType ndt = (NormalDistributionType) paramValue;
@@ -948,6 +951,9 @@ public class Bpmn2JsonMarshaller {
                 if(eleType.getElementRef().equals(boundaryEvent.getId())) {
                     TimeParameters timeParams = eleType.getTimeParameters();
                     Parameter processingTime = timeParams.getProcessingTime();
+                    if (processingTime == null) {
+                        continue;
+                    }
                     ParameterValue paramValue =  processingTime.getParameterValue().get(0);
                     if(paramValue instanceof NormalDistributionType) {
                         NormalDistributionType ndt = (NormalDistributionType) paramValue;
@@ -1011,6 +1017,9 @@ public class Bpmn2JsonMarshaller {
                 if(eleType.getElementRef().equals(throwEvent.getId())) {
                     TimeParameters timeParams = eleType.getTimeParameters();
                     Parameter processingTime = timeParams.getProcessingTime();
+                    if (processingTime == null) {
+                        continue;
+                    }
                     ParameterValue paramValue =  processingTime.getParameterValue().get(0);
                     if(paramValue instanceof NormalDistributionType) {
                         NormalDistributionType ndt = (NormalDistributionType) paramValue;

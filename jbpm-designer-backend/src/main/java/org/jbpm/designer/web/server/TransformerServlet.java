@@ -274,7 +274,7 @@ public class TransformerServlet extends HttpServlet {
     private void updateTaskDataInputs(FlowElementsContainer container, Definitions def) {
         List<FlowElement> flowElements = container.getFlowElements();
         for(FlowElement fe : flowElements) {
-            if(fe instanceof Task) {
+            if(fe instanceof Task && !(fe instanceof UserTask)) {
                 Task task = (Task) fe;
                 boolean foundReadOnlyServiceTask = false;
                 Iterator<FeatureMap.Entry> iter = task.getAnyAttribute().iterator();
