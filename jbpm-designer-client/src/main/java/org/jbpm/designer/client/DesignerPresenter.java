@@ -186,13 +186,17 @@ public class DesignerPresenter {
                                         publishProcessSourcesInfo( editorParameters.get( "processsource" ) );
                                     }
                                     editorParameters.remove( "processsource" );
-                                } else if(editorParameters.containsKey( "activenodes" )) {
+                                }
+
+                                if(editorParameters.containsKey( "activenodes" )) {
                                     String activeNodes = editorParameters.get( "activenodes" );
                                     if ( activeNodes != null && activeNodes.length() > 0 ) {
                                         publishActiveNodesInfo( editorParameters.get( "activenodes" ) );
                                     }
                                     editorParameters.remove( "activenodes" );
-                                } else if(editorParameters.containsKey( "completednodes" )) {
+                                }
+
+                                if(editorParameters.containsKey( "completednodes" )) {
                                     String activeNodes = editorParameters.get( "completednodes" );
                                     if ( activeNodes != null && activeNodes.length() > 0 ) {
                                         publishCompletedNodesInfo( editorParameters.get( "completednodes" ) );
