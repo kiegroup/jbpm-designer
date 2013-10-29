@@ -15,8 +15,8 @@
         ORYX.UUID = "$editoruuid$";
         ORYX.PROFILE = "$editorprofile$";
         ORYX.EDITORID = "$editorid$";
-        ORYX.ACTIVENODES = $activenodes$;
-        ORYX.COMPLETEDNODES = $completednodes$;
+        ORYX.ACTIVENODES = "";
+        ORYX.COMPLETEDNODES = "";
         ORYX.READONLY = $readonly$;
 
         ORYX.LOCAL_HISTORY_ENABLED = $localhistoryenabled$;
@@ -88,6 +88,16 @@
                    url: stencilset
                }
            };
+
+           if(typeof parent.designeractivenodes == 'function') {
+              ORYX.ACTIVENODES = parent.designeractivenodes();
+              parent.designeractivenodes = function (){ return ""; }
+           }
+
+           if(typeof parent.designercompletednodes == 'function') {
+             ORYX.COMPLETEDNODES = parent.designercompletednodes();
+             parent.designercompletednodes = function (){ return ""; }
+           }
 
            if(typeof parent.designerprocesssources == 'function') {
                var dps = parent.designerprocesssources();

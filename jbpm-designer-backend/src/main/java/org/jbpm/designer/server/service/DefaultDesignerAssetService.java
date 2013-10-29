@@ -1,14 +1,11 @@
 package org.jbpm.designer.server.service;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.*;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -24,7 +21,6 @@ import org.json.JSONArray;
 import org.uberfire.backend.server.util.Paths;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.mvp.PlaceRequest;
-import org.uberfire.workbench.events.ResourceAddedEvent;
 
 @Service
 @ApplicationScoped
@@ -77,20 +73,20 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
         }
 
         JSONArray activeNodesArray = new JSONArray( activeNodesList );
-        String encodedActiveNodesParam;
-        try {
-            encodedActiveNodesParam = Base64.encodeBase64URLSafeString( activeNodesArray.toString().getBytes( "UTF-8" ) );
-        } catch ( UnsupportedEncodingException e ) {
-            encodedActiveNodesParam = "";
-        }
+//        String encodedActiveNodesParam;
+//        try {
+//            encodedActiveNodesParam = Base64.encodeBase64URLSafeString( activeNodesArray.toString().getBytes( "UTF-8" ) );
+//        } catch ( UnsupportedEncodingException e ) {
+//            encodedActiveNodesParam = "";
+//        }
 
         JSONArray completedNodesArray = new JSONArray( completedNodesList );
-        String encodedCompletedNodesParam;
-        try {
-            encodedCompletedNodesParam = Base64.encodeBase64URLSafeString( completedNodesArray.toString().getBytes( "UTF-8" ) );
-        } catch ( UnsupportedEncodingException e ) {
-            encodedCompletedNodesParam = "";
-        }
+//        String encodedCompletedNodesParam;
+//        try {
+//            encodedCompletedNodesParam = Base64.encodeBase64URLSafeString( completedNodesArray.toString().getBytes( "UTF-8" ) );
+//        } catch ( UnsupportedEncodingException e ) {
+//            encodedCompletedNodesParam = "";
+//        }
 
         Map<String, String> editorParamsMap = new HashMap<String, String>();
         editorParamsMap.put("hostinfo", hostInfo);
@@ -99,8 +95,8 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
         editorParamsMap.put("pp", "");
         editorParamsMap.put("editorid", editorID);
         editorParamsMap.put("readonly", readOnly);
-        editorParamsMap.put("activenodes", encodedActiveNodesParam);
-        editorParamsMap.put("completednodes", encodedCompletedNodesParam);
+        editorParamsMap.put("activenodes", activeNodesArray.toString());
+        editorParamsMap.put("completednodes", completedNodesArray.toString());
         editorParamsMap.put("processsource", encodedProcessSource);
 
         return editorParamsMap;

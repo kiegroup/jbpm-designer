@@ -179,14 +179,28 @@ public class DesignerPresenter {
                     assetService.call( new RemoteCallback<Map<String, String>>() {
                         @Override
                         public void callback( Map<String, String> editorParameters ) {
-                            if ( editorParameters != null && editorParameters.containsKey( "processsource" ) ) {
-                                String processSources = editorParameters.get( "processsource" );
-                                if ( processSources != null && processSources.length() > 0 ) {
-                                    publishProcessSourcesInfo( editorParameters.get( "processsource" ) );
+                            if( editorParameters != null ) {
+                                if ( editorParameters.containsKey( "processsource" ) ) {
+                                    String processSources = editorParameters.get( "processsource" );
+                                    if ( processSources != null && processSources.length() > 0 ) {
+                                        publishProcessSourcesInfo( editorParameters.get( "processsource" ) );
+                                    }
+                                    editorParameters.remove( "processsource" );
+                                } else if(editorParameters.containsKey( "activenodes" )) {
+                                    String activeNodes = editorParameters.get( "activenodes" );
+                                    if ( activeNodes != null && activeNodes.length() > 0 ) {
+                                        publishActiveNodesInfo( editorParameters.get( "activenodes" ) );
+                                    }
+                                    editorParameters.remove( "activenodes" );
+                                } else if(editorParameters.containsKey( "completednodes" )) {
+                                    String activeNodes = editorParameters.get( "completednodes" );
+                                    if ( activeNodes != null && activeNodes.length() > 0 ) {
+                                        publishCompletedNodesInfo( editorParameters.get( "completednodes" ) );
+                                    }
+                                    editorParameters.remove( "completednodes" );
                                 }
-                                editorParameters.remove( "processsource" );
-                            }
                             view.setEditorParamters( editorParameters );
+                            }
                         }
 
                     } ).getEditorParameters( path, editorID, url, place );
@@ -218,6 +232,18 @@ public class DesignerPresenter {
     private native void publishProcessSourcesInfo( String ps )/*-{
         $wnd.designerprocesssources = function () {
             return ps;
+        }
+    }-*/;
+
+    private native void publishActiveNodesInfo( String an )/*-{
+        $wnd.designeractivenodes = function () {
+            return an;
+        }
+    }-*/;
+
+    private native void publishCompletedNodesInfo( String cn )/*-{
+        $wnd.designercompletednodes = function () {
+            return cn;
         }
     }-*/;
 

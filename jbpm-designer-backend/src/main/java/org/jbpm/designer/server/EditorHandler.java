@@ -189,13 +189,14 @@ public class EditorHandler extends HttpServlet {
 
         String editorID = request.getParameter("editorid");
 
-        String encodedActiveNodes = request.getParameter("activenodes");
-        byte[] activeNodesByteArray = Base64.decodeBase64(encodedActiveNodes);
-        String activeNodes = new String(activeNodesByteArray, "UTF-8");
-
-        String encodedCompletedNodes = request.getParameter("completednodes");
-        byte[] completedNodesByteArray = Base64.decodeBase64(encodedCompletedNodes);
-        String completedNodes = new String(completedNodesByteArray, "UTF-8");
+        // passed through via JSNI now
+//        String encodedActiveNodes = request.getParameter("activenodes");
+//        byte[] activeNodesByteArray = Base64.decodeBase64(encodedActiveNodes);
+//        String activeNodes = new String(activeNodesByteArray, "UTF-8");
+//
+//        String encodedCompletedNodes = request.getParameter("completednodes");
+//        byte[] completedNodesByteArray = Base64.decodeBase64(encodedCompletedNodes);
+//        String completedNodes = new String(completedNodesByteArray, "UTF-8");
 
         // this is set in the persenter now
 //        String encodedProcessSource = request.getParameter("processsource");
@@ -285,8 +286,8 @@ public class EditorHandler extends HttpServlet {
         editorTemplate.add("editorprofile", profileName);
         editorTemplate.add("editoruuid", uuid);
         editorTemplate.add("editorid", editorID);
-        editorTemplate.add("activenodes", activeNodes);
-        editorTemplate.add("completednodes", completedNodes);
+        //editorTemplate.add("activenodes", activeNodes);
+        //editorTemplate.add("completednodes", completedNodes);
         //editorTemplate.add("processsource", encodedProcessSource);
         editorTemplate.add("readonly", readOnly);
         editorTemplate.add("allscripts", scriptsArray.toString());
