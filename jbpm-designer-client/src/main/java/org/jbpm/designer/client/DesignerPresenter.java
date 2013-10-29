@@ -33,19 +33,15 @@ import org.uberfire.client.mvp.PlaceManager;
 import org.uberfire.client.mvp.UberView;
 import org.uberfire.client.workbench.events.ChangeTitleWidgetEvent;
 import org.uberfire.lifecycle.OnMayClose;
-import org.uberfire.lifecycle.OnSave;
 import org.uberfire.lifecycle.OnStartup;
 import org.uberfire.mvp.Command;
 import org.uberfire.mvp.ParameterizedCommand;
 import org.uberfire.mvp.PlaceRequest;
 import org.uberfire.mvp.impl.PathPlaceRequest;
-import org.uberfire.rpc.SessionInfo;
 import org.uberfire.util.URIUtil;
 import org.uberfire.workbench.events.NotificationEvent;
 import org.uberfire.workbench.events.ResourceUpdatedEvent;
 import org.uberfire.workbench.type.FileNameUtil;
-import org.uberfire.client.editors.texteditor.TextResourceType;
-
 
 import static org.uberfire.client.common.ConcurrentChangePopup.*;
 
@@ -55,9 +51,13 @@ public class DesignerPresenter {
 
     public interface View
             extends
-            HasBusyIndicator, UberView<DesignerPresenter> {
+            HasBusyIndicator,
+            UberView<DesignerPresenter> {
+
         void setEditorID( final String id );
-        void setEditorParamters( final Map<String, String> editorParameters);
+
+        void setEditorParamters( final Map<String, String> editorParameters );
+
         String getEditorID();
     }
 
@@ -92,9 +92,6 @@ public class DesignerPresenter {
     private Bpmn2Type resourceType;
 
     @Inject
-    private SessionInfo sessionInfo;
-
-    @Inject
     private Event<ChangeTitleWidgetEvent> changeTitleNotification;
 
     @Inject
@@ -116,87 +113,62 @@ public class DesignerPresenter {
                 changeTitleNotification.fire( new ChangeTitleWidgetEvent( place, getName(), null ) );
             }
         } );
+
         this.path.onConcurrentUpdate( new ParameterizedCommand<ObservablePath.OnConcurrentUpdateEvent>() {
             @Override
             public void execute( final ObservablePath.OnConcurrentUpdateEvent eventInfo ) {
-//                concurrentUpdateSessionInfo = eventInfo;
-//                        if ( concurrentUpdateSessionInfo != null ) {
-//                            newConcurrentUpdate( concurrentUpdateSessionInfo.getPath(),
-//                                    concurrentUpdateSessionInfo.getIdentity(),
-//                                    new Command() {
-//                                        @Override
-//                                        public void execute() {
-//                                            // save in designer is not done in presenter
-//                                            //save();
-//                                        }
-//                                    },
-//                                    new Command() {
-//                                        @Override
-//                                        public void execute() {
-//                                            //cancel?
-//                                        }
-//                                    },
-//                                    new Command() {
-//                                        @Override
-//                                        public void execute() {
-//                                            reload();
-//                                        }
-//                                    }
-//                            ).show();
-//                        }
+                concurrentUpdateSessionInfo = eventInfo;
             }
         } );
 
         this.path.onConcurrentRename( new ParameterizedCommand<ObservablePath.OnConcurrentRenameEvent>() {
             @Override
             public void execute( final ObservablePath.OnConcurrentRenameEvent info ) {
-//                newConcurrentRename( info.getSource(),
-//                        info.getTarget(),
-//                        info.getIdentity(),
-//                        new Command() {
-//                            @Override
-//                            public void execute() {
-//                                disableMenus();
-//                            }
-//                        },
-//                        new Command() {
-//                            @Override
-//                            public void execute() {
-//                                reload();
-//                            }
-//                        }
-//                ).show();
+                newConcurrentRename( info.getSource(),
+                        info.getTarget(),
+                        info.getIdentity(),
+                        new Command() {
+                            @Override
+                            public void execute() {
+                                disableMenus();
+                            }
+                        },
+                        new Command() {
+                            @Override
+                            public void execute() {
+                                reload();
+                            }
+                        }
+                ).show();
             }
         } );
-
 
         this.path.onConcurrentDelete( new ParameterizedCommand<ObservablePath.OnConcurrentDelete>() {
             @Override
             public void execute( final ObservablePath.OnConcurrentDelete info ) {
-//                newConcurrentDelete( info.getPath(),
-//                        info.getIdentity(),
-//                        new Command() {
-//                            @Override
-//                            public void execute() {
-//                                disableMenus();
-//                            }
-//                        },
-//                        new Command() {
-//                            @Override
-//                            public void execute() {
-//                                placeManager.closePlace( place );
-//                            }
-//                        }
-//                ).show();
+                newConcurrentDelete( info.getPath(),
+                        info.getIdentity(),
+                        new Command() {
+                            @Override
+                            public void execute() {
+                                disableMenus();
+                            }
+                        },
+                        new Command() {
+                            @Override
+                            public void execute() {
+                                placeManager.closePlace( place );
+                            }
+                        }
+                ).show();
             }
         } );
 
-
-        this.publishOpenInTab(this);
-        this.publishSignalOnAssetDelete(this);
-        this.publishSignalOnAssetCopy(this);
-        this.publishSignalOnAssetRename(this);
-        this.publishSignalOnAssetUpdate(this);
+        this.publishOpenInTab( this );
+        this.publishSignalOnAssetDelete( this );
+        this.publishSignalOnAssetCopy( this );
+        this.publishSignalOnAssetRename( this );
+        this.publishSignalOnAssetUpdate( this );
 
         if ( path != null ) {
             assetService.call( new RemoteCallback<String>() {
@@ -204,25 +176,38 @@ public class DesignerPresenter {
                 public void callback( final String editorID ) {
                     view.setEditorID( editorID );
                     String url = GWT.getHostPageBaseURL().replaceFirst( "/" + GWT.getModuleName() + "/", "" );
-                    assetService.call( new RemoteCallback< Map<String, String> >() {
+                    assetService.call( new RemoteCallback<Map<String, String>>() {
                         @Override
                         public void callback( Map<String, String> editorParameters ) {
-                            if(editorParameters != null && editorParameters.containsKey("processsource")) {
-                                String processSources = editorParameters.get("processsource");
-                                if(processSources!= null && processSources.length() > 0) {
-                                    publishProcessSourcesInfo(editorParameters.get("processsource"));
+                            if( editorParameters != null ) {
+                                if ( editorParameters.containsKey( "processsource" ) ) {
+                                    String processSources = editorParameters.get( "processsource" );
+                                    if ( processSources != null && processSources.length() > 0 ) {
+                                        publishProcessSourcesInfo( editorParameters.get( "processsource" ) );
+                                    }
+                                    editorParameters.remove( "processsource" );
+                                } else if(editorParameters.containsKey( "activenodes" )) {
+                                    String activeNodes = editorParameters.get( "activenodes" );
+                                    if ( activeNodes != null && activeNodes.length() > 0 ) {
+                                        publishActiveNodesInfo( editorParameters.get( "activenodes" ) );
+                                    }
+                                    editorParameters.remove( "activenodes" );
+                                } else if(editorParameters.containsKey( "completednodes" )) {
+                                    String activeNodes = editorParameters.get( "completednodes" );
+                                    if ( activeNodes != null && activeNodes.length() > 0 ) {
+                                        publishCompletedNodesInfo( editorParameters.get( "completednodes" ) );
+                                    }
+                                    editorParameters.remove( "completednodes" );
                                 }
-                                editorParameters.remove("processsource");
+                                view.setEditorParamters( editorParameters );
                             }
-                            view.setEditorParamters(editorParameters);
                         }
 
-                    } ).getEditorParameters(path, editorID, url, place);
+                    } ).getEditorParameters( path, editorID, url, place );
                 }
             } ).getEditorID();
         }
     }
-
 
     @OnMayClose
     public boolean canClose() {
@@ -244,43 +229,55 @@ public class DesignerPresenter {
         return view;
     }
 
-    private native void publishProcessSourcesInfo(String ps)/*-{
+    private native void publishProcessSourcesInfo( String ps )/*-{
         $wnd.designerprocesssources = function () {
             return ps;
         }
     }-*/;
 
-    private native void publishOpenInTab(DesignerPresenter dp)/*-{
+    private native void publishActiveNodesInfo( String an )/*-{
+        $wnd.designeractivenodes = function () {
+            return an;
+        }
+    }-*/;
+
+    private native void publishCompletedNodesInfo( String cn )/*-{
+        $wnd.designercompletednodes = function () {
+            return cn;
+        }
+    }-*/;
+
+    private native void publishOpenInTab( DesignerPresenter dp )/*-{
         $wnd.designeropenintab = function (filename, uri) {
             dp.@org.jbpm.designer.client.DesignerPresenter::openInTab(Ljava/lang/String;Ljava/lang/String;)(filename, uri);
         }
     }-*/;
 
-    private native void publishSignalOnAssetDelete(DesignerPresenter dp)/*-{
+    private native void publishSignalOnAssetDelete( DesignerPresenter dp )/*-{
         $wnd.designersignalassetdelete = function (uri) {
             dp.@org.jbpm.designer.client.DesignerPresenter::assetDeleteEvent(Ljava/lang/String;)(uri);
         }
     }-*/;
 
-    private native void publishSignalOnAssetCopy(DesignerPresenter dp)/*-{
+    private native void publishSignalOnAssetCopy( DesignerPresenter dp )/*-{
         $wnd.designersignalassetcopy = function (uri) {
             dp.@org.jbpm.designer.client.DesignerPresenter::assetCopyEvent(Ljava/lang/String;)(uri);
         }
     }-*/;
 
-    private native void publishSignalOnAssetRename(DesignerPresenter dp)/*-{
+    private native void publishSignalOnAssetRename( DesignerPresenter dp )/*-{
         $wnd.designersignalassetrename = function (uri) {
             dp.@org.jbpm.designer.client.DesignerPresenter::assetRenameEvent(Ljava/lang/String;)(uri);
         }
     }-*/;
 
-    private native void publishSignalOnAssetUpdate(DesignerPresenter dp)/*-{
+    private native void publishSignalOnAssetUpdate( DesignerPresenter dp )/*-{
         $wnd.designersignalassetupdate = function (uri) {
             dp.@org.jbpm.designer.client.DesignerPresenter::assetUpdatedEvent(Ljava/lang/String;)(uri);
         }
     }-*/;
 
-    public void assetCopyEvent(String uri) {
+    public void assetCopyEvent( String uri ) {
         vfsServices.call( new RemoteCallback<Path>() {
             @Override
             public void callback( final Path mypath ) {
@@ -296,10 +293,10 @@ public class DesignerPresenter {
                 } );
                 popup.show();
             }
-        } ).get( URIUtil.encode(uri) );
+        } ).get( URIUtil.encode( uri ) );
     }
 
-    public void assetRenameEvent(String uri) {
+    public void assetRenameEvent( String uri ) {
         vfsServices.call( new RemoteCallback<Path>() {
             @Override
             public void callback( final Path mypath ) {
@@ -308,18 +305,18 @@ public class DesignerPresenter {
                     public void execute( final FileNameAndCommitMessage details ) {
                         busyIndicatorView.showBusyIndicator( CommonConstants.INSTANCE.Renaming() );
                         renameService.call( getRenameSuccessCallback(),
-                                new HasBusyIndicatorDefaultErrorCallback( busyIndicatorView ) ).rename(path,
+                                new HasBusyIndicatorDefaultErrorCallback( busyIndicatorView ) ).rename( path,
                                 details.getNewFileName(),
-                                details.getCommitMessage());
+                                details.getCommitMessage() );
                     }
                 } );
 
                 popup.show();
             }
-        } ).get( URIUtil.encode(uri) );
+        } ).get( URIUtil.encode( uri ) );
     }
 
-    public void assetDeleteEvent(String uri) {
+    public void assetDeleteEvent( String uri ) {
         vfsServices.call( new RemoteCallback<Path>() {
             @Override
             public void callback( final Path mypath ) {
@@ -328,40 +325,34 @@ public class DesignerPresenter {
                         "" );
 
             }
-        } ).get( URIUtil.encode(uri) );
+        } ).get( URIUtil.encode( uri ) );
     }
 
-    public void assetUpdatedEvent(String uri) {
-        vfsServices.call( new RemoteCallback<Path>() {
-            @Override
-            public void callback( final Path mypath ) {
-                resourceUpdatedEvent.fire( new ResourceUpdatedEvent(mypath, sessionInfo) );
-            }
-        } ).get( URIUtil.encode(uri) );
-//        if ( concurrentUpdateSessionInfo != null ) {
-//            newConcurrentUpdate( concurrentUpdateSessionInfo.getPath(),
-//                    concurrentUpdateSessionInfo.getIdentity(),
-//                    new Command() {
-//                        @Override
-//                        public void execute() {
-//                            // save in designer is not done in presenter
-//                            //save();
-//                        }
-//                    },
-//                    new Command() {
-//                        @Override
-//                        public void execute() {
-//                            //cancel?
-//                        }
-//                    },
-//                    new Command() {
-//                        @Override
-//                        public void execute() {
-//                            reload();
-//                        }
-//                    }
-//            ).show();
-//        }
+    public void assetUpdatedEvent( String uri ) {
+        if ( concurrentUpdateSessionInfo != null ) {
+            newConcurrentUpdate( concurrentUpdateSessionInfo.getPath(),
+                    concurrentUpdateSessionInfo.getIdentity(),
+                    new Command() {
+                        @Override
+                        public void execute() {
+                            // save in designer is not done in presenter
+                            //save();
+                        }
+                    },
+                    new Command() {
+                        @Override
+                        public void execute() {
+                            //cancel?
+                        }
+                    },
+                    new Command() {
+                        @Override
+                        public void execute() {
+                            reload();
+                        }
+                    }
+            ).show();
+        }
     }
 
     private RemoteCallback<Void> getDeleteSuccessCallback( final Path path ) {
@@ -396,13 +387,14 @@ public class DesignerPresenter {
         };
     }
 
-    public void openInTab(String filename, String uri) {
+    public void openInTab( String filename,
+                           String uri ) {
         PlaceRequest placeRequestImpl = new PathPlaceRequest(
-                PathFactory.newPath(this.path.getFileSystem(), filename, uri)
+                PathFactory.newPath( this.path.getFileSystem(), filename, uri )
         );
-        placeRequestImpl.addParameter("uuid", uri);
-        placeRequestImpl.addParameter("profile", "jbpm");
-        this.placeManager.goTo(placeRequestImpl);
+        placeRequestImpl.addParameter( "uuid", uri );
+        placeRequestImpl.addParameter( "profile", "jbpm" );
+        this.placeManager.goTo( placeRequestImpl );
     }
 
     private void disableMenus() {
@@ -411,6 +403,6 @@ public class DesignerPresenter {
 
     private void reload() {
         placeManager.closePlace( new PathPlaceRequest( path ) );
-        placeManager.goTo(path);
+        placeManager.goTo( path );
     }
 }
