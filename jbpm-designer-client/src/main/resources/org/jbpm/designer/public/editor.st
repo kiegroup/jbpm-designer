@@ -15,8 +15,8 @@
         ORYX.UUID = "$editoruuid$";
         ORYX.PROFILE = "$editorprofile$";
         ORYX.EDITORID = "$editorid$";
-        ORYX.ACTIVENODES = "";
-        ORYX.COMPLETEDNODES = "";
+        ORYX.ACTIVENODES;
+        ORYX.COMPLETEDNODES;
         ORYX.READONLY = $readonly$;
 
         ORYX.LOCAL_HISTORY_ENABLED = $localhistoryenabled$;
@@ -90,12 +90,12 @@
            };
 
            if(typeof parent.designeractivenodes == 'function') {
-              ORYX.ACTIVENODES = parent.designeractivenodes();
+              ORYX.ACTIVENODES = parent.designeractivenodes().evalJSON();
               parent.designeractivenodes = function (){ return ""; }
            }
 
            if(typeof parent.designercompletednodes == 'function') {
-             ORYX.COMPLETEDNODES = parent.designercompletednodes();
+             ORYX.COMPLETEDNODES = parent.designercompletednodes().evalJSON();
              parent.designercompletednodes = function (){ return ""; }
            }
 
