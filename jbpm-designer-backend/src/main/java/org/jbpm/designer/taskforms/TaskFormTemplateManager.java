@@ -35,12 +35,13 @@ public class TaskFormTemplateManager {
     private Asset processAsset;
     private String templatesPath;
     private Definitions def;
+    private String taskId;
     private List<TaskFormInfo> taskFormInformationList = new ArrayList<TaskFormInfo>();
     private Path myPath;
     private BPMNFormBuilderService formModelerService;
 
     
-    public TaskFormTemplateManager(Path myPath, BPMNFormBuilderService formModelerService, IDiagramProfile profile, Asset processAsset, String templatesPath, Definitions def) {
+    public TaskFormTemplateManager(Path myPath, BPMNFormBuilderService formModelerService, IDiagramProfile profile, Asset processAsset, String templatesPath, Definitions def, String taskId) {
         this.myPath = myPath;
         this.formModelerService = formModelerService;
         this.profile = profile;
@@ -49,6 +50,7 @@ public class TaskFormTemplateManager {
         this.processAsset = processAsset;
         this.templatesPath = templatesPath;
         this.def = def;
+        this.taskId = taskId;
     }
     
     public void processTemplates() {
@@ -90,9 +92,9 @@ public class TaskFormTemplateManager {
                     
                     for(FlowElement fe : process.getFlowElements()) {
                         if(fe instanceof UserTask) {
-                            getTaskInfoForUserTask((UserTask) fe, process, processProperties);
+                            getTaskInfoForUserTask((UserTask) fe, process, processProperties, taskId);
                         } else if(fe instanceof FlowElementsContainer) {
-                            getTaskInfoForContainers((FlowElementsContainer) fe, process, processProperties);
+                            getTaskInfoForContainers((FlowElementsContainer) fe, process, processProperties, taskId);
                         }
                     }
                     generateTemplates();
@@ -104,18 +106,18 @@ public class TaskFormTemplateManager {
         
     }
 
-    private void getTaskInfoForContainers(FlowElementsContainer container, Process process, List<Property> processProperties) {
+    private void getTaskInfoForContainers(FlowElementsContainer container, Process process, List<Property> processProperties, String taskId) {
         List<FlowElement> flowElements = container.getFlowElements();
         for(FlowElement fe : flowElements) {
             if(fe instanceof UserTask) {
-                getTaskInfoForUserTask((UserTask) fe, process, processProperties);
+                getTaskInfoForUserTask((UserTask) fe, process, processProperties, taskId);
             } else if(fe instanceof FlowElementsContainer) {
-                getTaskInfoForContainers((FlowElementsContainer) fe, process, processProperties);
+                getTaskInfoForContainers((FlowElementsContainer) fe, process, processProperties, taskId);
             }
         }
     }
 
-    private void getTaskInfoForUserTask(UserTask utask, Process process, List<Property> processProperties) {
+    public void generateUserTaskForm(UserTask utask, Process process, List<Property> processProperties) {
         TaskFormInfo usertfi = new TaskFormInfo();
         if(process.getName() != null && process.getName().length() > 0 ) {
             usertfi.setProcessName(process.getName());
@@ -304,6 +306,18 @@ public class TaskFormTemplateManager {
             }
         } else {
             _logger.info("Could not generate task form for usertask id: " + utask.getId() + ". No task name specified.");
+        }
+    }
+
+    private void getTaskInfoForUserTask(UserTask utask, Process process, List<Property> processProperties, String taskId) {
+        if(taskId != null && taskId.length() > 0) {
+            if(utask.getId().equals(taskId)) {
+                generateUserTaskForm(utask, process, processProperties);
+            } else {
+                _logger.info("Generating for specific task id: " + taskId + ". Omitting task id: " + utask.getId());
+            }
+        } else {
+            generateUserTaskForm(utask, process, processProperties);
         }
     }
     

@@ -76,6 +76,8 @@ public class TaskFormsServlet extends HttpServlet {
         String uuid = req.getParameter("uuid");
         String profileName = req.getParameter("profile");
         String preprocessingData = req.getParameter("ppdata");
+        String taskId = req.getParameter("taskid");
+
         if (profile == null) {
             profile = _profileService.findProfile(req, profileName);
         }
@@ -94,7 +96,7 @@ public class TaskFormsServlet extends HttpServlet {
 
             Path myPath = vfsServices.get( uuid );
 
-            TaskFormTemplateManager templateManager = new TaskFormTemplateManager( myPath, formModelerService, profile, processAsset, getServletContext().getRealPath(DESIGNER_PATH + TASKFORMS_PATH), def );
+            TaskFormTemplateManager templateManager = new TaskFormTemplateManager( myPath, formModelerService, profile, processAsset, getServletContext().getRealPath(DESIGNER_PATH + TASKFORMS_PATH), def, taskId );
             templateManager.processTemplates();
 
             //storeInRepository(templateManager, processAsset.getAssetLocation(), repository);
