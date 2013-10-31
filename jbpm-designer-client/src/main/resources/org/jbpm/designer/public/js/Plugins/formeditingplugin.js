@@ -40,8 +40,8 @@ ORYX.Plugins.FormEditing = Clazz.extend({
                 dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/processforms.png",
                 'description': "Edit Task Form",
                 'index': 2,
-                'minShape': 0,
-                'maxShape': 0,
+                'minShape': 1,
+                'maxShape': 1,
                 'isEnabled': function(){
                     return true;
     //                profileParamName = "profile";
@@ -55,13 +55,35 @@ ORYX.Plugins.FormEditing = Clazz.extend({
             });
 
             this.facade.offer({
+                'name': "Generate Task Form",
+                'functionality': this.generateTaskForm.bind(this),
+                'group': "editprocessforms",
+                'icon': ORYX.BASE_FILE_PATH + "images/processforms.png",
+                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/processforms.png",
+                'description': "Generate Task Form",
+                'index': 3,
+                'minShape': 1,
+                'maxShape': 1,
+                'isEnabled': function(){
+                    return true;
+                    //                profileParamName = "profile";
+                    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+                    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+                    //                regexa = new RegExp( regexSa );
+                    //                profileParams = regexa.exec( window.location.href );
+                    //                profileParamValue = profileParams[1];
+                    //                return profileParamValue == "jbpm" && !ORYX.LOCAL_HISTORY_ENABLED;
+                }.bind(this)
+            });
+
+            this.facade.offer({
                 'name': "Generate all Forms",
                 'functionality': this.generateTaskForms.bind(this),
                 'group': "editprocessforms",
                 'icon': ORYX.BASE_FILE_PATH + "images/processforms.png",
                 dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/processforms.png",
                 'description': "Generate all Forms",
-                'index': 3,
+                'index': 4,
                 'minShape': 0,
                 'maxShape': 0,
                 'isEnabled': function(){
@@ -77,6 +99,86 @@ ORYX.Plugins.FormEditing = Clazz.extend({
             });
         }
     },
+
+    generateTaskForm: function() {
+        var currentShapes = ORYX.Config.FACADE.getSelection();
+        if(currentShapes) {
+            if(currentShapes.length != 1) {
+                ORYX.Config.FACADE.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'error',
+                    msg         : 'Invalid number of nodes selected..',
+                    title       : ''
+
+                });
+            } else {
+                var tasktype = currentShapes[0].properties['oryx-tasktype'];
+                if(tasktype && tasktype == "User") {
+                    var taskname = currentShapes[0].properties['oryx-taskname'];
+                    if(taskname && taskname.length > 0) {
+                        taskname =  taskname.replace(/\&/g, "");
+                        taskname = taskname.replace(/\s/g, "");
+
+                        Ext.Ajax.request({
+                            url: ORYX.PATH + "taskforms",
+                            method: 'POST',
+                            success: function(request){
+                                this.facade.raiseEvent({
+                                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                    ntype		: 'success',
+                                    msg         : 'Successfully generated task form template.',
+                                    title       : ''
+
+                                });
+                            }.createDelegate(this),
+                            failure: function(){
+                                this.facade.raiseEvent({
+                                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                    ntype		: 'error',
+                                    msg         : '<p>Failed to generate task form template.</p>',
+                                    title       : ''
+                                });
+                            }.createDelegate(this),
+                            params: {
+                                profile: ORYX.PROFILE,
+                                uuid : ORYX.UUID,
+                                json : ORYX.EDITOR.getSerializedJSON(),
+                                ppdata: ORYX.PREPROCESSING,
+                                taskid: currentShapes[0].resourceId
+                            }
+                        });
+
+                    } else {
+                        ORYX.Config.FACADE.raiseEvent({
+                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                            ntype		: 'error',
+                            msg         : 'Task Name not specified.',
+                            title       : ''
+
+                        });
+                    }
+                } else {
+                    ORYX.Config.FACADE.raiseEvent({
+                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                        ntype		: 'error',
+                        msg         : 'Selected node is not User Task.',
+                        title       : ''
+
+                    });
+                }
+            }
+
+        } else {
+            ORYX.Config.FACADE.raiseEvent({
+                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                ntype		: 'error',
+                msg         : 'No task selected.',
+                title       : ''
+
+            });
+        }
+    },
+
     editTaskForm: function() {
         var currentShapes = ORYX.Config.FACADE.getSelection();
         if(currentShapes) {

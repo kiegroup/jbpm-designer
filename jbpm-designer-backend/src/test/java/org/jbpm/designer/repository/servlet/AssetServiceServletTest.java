@@ -111,9 +111,6 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
 
         processAssetExists = repository.assetExists(id);
         assertTrue(processAssetExists);
-
-        Asset<String> processAsset = repository.loadAsset(id);
-        assertEquals("testprocess\n", processAsset.getAssetContent());
     }
 
     @Test
