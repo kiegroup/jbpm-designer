@@ -140,6 +140,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         });
 
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_MOUSEUP, this.setUnsaved.bind(this));
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_PROPWINDOW_PROP_CHANGED, this.setUnsaved.bind(this));
 
         window.onunload = this.unloadWindow.bind(this);
 
