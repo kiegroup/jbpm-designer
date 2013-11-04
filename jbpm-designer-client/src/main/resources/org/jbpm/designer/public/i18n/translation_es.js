@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author Anna Luebbe
  * 
  * Contains all strings for Spanish language.

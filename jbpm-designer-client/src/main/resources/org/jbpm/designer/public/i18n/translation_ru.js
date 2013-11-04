@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author Sergey Smirnov
  * 
  * Contains all strings for the default language (ru).
