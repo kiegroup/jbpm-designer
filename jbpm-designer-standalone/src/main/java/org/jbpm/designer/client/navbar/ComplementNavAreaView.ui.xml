@@ -42,7 +42,6 @@
     </ui:style>
 
     <g:FlowPanel styleName="{style.contextArea} {res.CSS.listbar}">
-        <g:Image ui:field="logo" styleName="{style.logo}"/>
         <g:FlowPanel ui:field="contextMenuArea" styleName="{style.contextMenu}"/>
     </g:FlowPanel>
 
