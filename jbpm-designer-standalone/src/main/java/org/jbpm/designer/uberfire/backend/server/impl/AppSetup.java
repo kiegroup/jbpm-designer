@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -28,7 +29,8 @@ import org.uberfire.security.server.cdi.SecurityFactory;
 @Startup(StartupType.BOOTSTRAP)
 public class AppSetup {
 
-    private static final String JBPM_REPO_PLAYGROUND = "jbpm-playground";
+    private static final String SYNDATIS_JBPM = "syndatis-jbpm";
+	private static final String JBPM_REPO_PLAYGROUND = "jbpm-playground";
 //    private static final String GUVNOR_REPO_PLAYGROUND = "uf-playground";
     // default repository section - start
     private static final String JBPM_URL = "https://github.com/guvnorngtestuser1/jbpm-console-ng-playground-kjar.git";
@@ -60,15 +62,15 @@ public class AppSetup {
         try {
             SecurityFactory.setAuthzManager( new RuntimeAuthorizationManager() );
 
-            Repository jbpmRepo = repositoryService.getRepository( JBPM_REPO_PLAYGROUND );
+            Repository jbpmRepo = repositoryService.getRepository( SYNDATIS_JBPM );
             if ( jbpmRepo == null ) {
                 jbpmRepo = repositoryService.createRepository( "git",
-                                                               JBPM_REPO_PLAYGROUND,
-                                                               new HashMap<String, Object>() {{
+                                                               SYNDATIS_JBPM,
+                                                               new HashMap<String, Object>() /* {{
                                                                    put( "origin", JBPM_URL );
                                                                    put( "username", userName );
                                                                    put( "crypt:password", password );
-                                                               }} );
+                                                               }}*/ );
             }
 
             // TODO in case repo is not defined in system repository so we add default
@@ -90,8 +92,8 @@ public class AppSetup {
                 repositories.add( jbpmRepo );
 //                repositories.add( guvnorRepo );
 
-                organizationalUnitService.createOrganizationalUnit( "demo",
-                                                                     "demo@jbpm.org",
+                organizationalUnitService.createOrganizationalUnit( "Syndatis",
+                                                                     "piotr.wilkin@syndatis.com",
                                                                     repositories );
             }
 

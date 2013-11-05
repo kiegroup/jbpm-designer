@@ -1,6 +1,7 @@
 package org.jbpm.designer.service;
 
 import org.jboss.errai.bus.server.annotations.Remote;
+import org.jbpm.designer.repository.Asset;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.mvp.PlaceRequest;
 
@@ -21,4 +22,7 @@ public interface DesignerAssetService {
 
     public Path createProcess( final Path context,
                                final String fileName );
+
+	public Asset createProcessVFS( final org.uberfire.java.nio.file.Path vfsPath, 
+							final String location);
 }

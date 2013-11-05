@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
 import javax.inject.Inject;
 
 import com.google.gwt.animation.client.Animation;
@@ -14,10 +15,12 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.RootPanel;
+
 import org.jboss.errai.ioc.client.api.AfterInitialization;
 import org.jboss.errai.ioc.client.api.EntryPoint;
 import org.jboss.errai.ioc.client.container.IOCBeanDef;
 import org.jboss.errai.ioc.client.container.SyncBeanManager;
+import org.jbpm.designer.client.perspectives.HomePerspective;
 import org.jbpm.designer.client.resources.StandaloneResources;
 import org.uberfire.client.UberFirePreferences;
 import org.uberfire.client.mvp.AbstractWorkbenchPerspectiveActivity;
@@ -60,13 +63,13 @@ public class StandaloneEntryPoint {
     }
 
     private void setupMenu() {
-        menubar.addMenus(
-                MenuFactory.newTopLevelMenu( "Logout" ).respondsWith( new Command() {
-                    @Override
-                    public void execute() {
-                        redirect( GWT.getModuleBaseURL() + "uf_logout" );
-                    }
-                } ).endMenu().build() );
+        menubar.addMenus( 
+        		MenuFactory.newTopLevelMenu( "Logout" ).respondsWith( new Command() {
+    				@Override
+    				public void execute() {
+    					redirect( GWT.getModuleBaseURL() + "uf_logout" );
+    				}
+        		} ).endMenu().build() );
     }
 
     private AbstractWorkbenchPerspectiveActivity getDefaultPerspectiveActivity() {

@@ -62,6 +62,12 @@ public class HomePerspective {
     private Command newRepoCommand   = null;
     private Command cloneRepoCommand = null;
 
+	private Command resetCommand;
+
+	private PanelDefinitionImpl west;
+
+	private PanelDefinition root;
+
     @PostConstruct
     public void init() {
         buildCommands();
@@ -79,17 +85,23 @@ public class HomePerspective {
         perspective = new PerspectiveDefinitionImpl( PanelType.ROOT_LIST );
         perspective.setName( "Home" );
 
-        this.perspective.getRoot().addPart( new PartDefinitionImpl( new DefaultPlaceRequest( "RepositoriesEditor" ) ) );
+        root = this.perspective.getRoot();
+        
+        root.addPart( new PartDefinitionImpl( new DefaultPlaceRequest( "RepositoriesEditor" ) ) );
 
-        final PanelDefinition west = new PanelDefinitionImpl( PanelType.MULTI_LIST );
+        initWestPanel();
+
+        perspective.setTransient(true);
+        return perspective;
+    }
+
+	protected void initWestPanel() {
+		west = new PanelDefinitionImpl( PanelType.MULTI_LIST );
         west.setWidth( 300 );
         west.setMinWidth( 200 );
         west.addPart( new PartDefinitionImpl( new DefaultPlaceRequest( "org.kie.guvnor.explorer" ) ) );
-
-        perspective.getRoot().appendChild( Position.WEST, west );
-
-        return perspective;
-    }
+        root.appendChild( Position.WEST, west );
+	}
 
     @WorkbenchMenu
     public Menus getMenus() {
@@ -135,6 +147,18 @@ public class HomePerspective {
                 newRepositoryWizard.show();
             }
         };
+        
+        this.resetCommand = new Command() {
+        	@Override
+            public void execute() {
+        		placeManager.goTo("RepositoriesEditor", root);
+        		if (west == null || root.getChild(Position.WEST) == null) {
+        			initWestPanel();
+        		}
+        		placeManager.goTo("org.kie.guvnor.explorer", west);
+        		
+        	}
+        };
     }
 
     private void buildMenuBar() {
@@ -161,6 +185,13 @@ public class HomePerspective {
                 .respondsWith(newRepoCommand)
                 .endMenu()
                 .endMenus()
+                .endMenu()
+                .newTopLevelMenu( "View" )
+                .menus()
+                .menu("Reset")
+                .respondsWith(resetCommand)
+                .endMenu()
+                .endMenus()
                 .endMenu().build();
     }
 
@@ -177,4 +208,5 @@ public class HomePerspective {
         toolBar.addItem( i1 );
         toolBar.addItem( i2 );
     }
+    
 }

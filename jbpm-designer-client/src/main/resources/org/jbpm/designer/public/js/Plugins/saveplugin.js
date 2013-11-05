@@ -183,7 +183,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                                     extendedTimeOut: 1000
                                 });
 
-                                parent.designersignalassetupdate(ORYX.UUID);
+                                if (parent && parent.designersignalassetupdate) parent.designersignalassetupdate(ORYX.UUID);
                                 // set the designer flag
                                 ORYX.PROCESS_SAVED = true;
 
@@ -302,7 +302,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                                 extendedTimeOut: 1000
                             });
 
-                            parent.designersignalassetupdate(ORYX.UUID);
+                            if (parent && parent.designersignalassetupdate) parent.designersignalassetupdate(ORYX.UUID);
                             // set the designer flag
                             ORYX.PROCESS_SAVED = true;
                         }
@@ -356,7 +356,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                 if (btn == 'yes') {
                     // send UF asset delete event
                     // to close tab and show UF notication
-                    parent.designersignalassetdelete(ORYX.UUID);
+                	if (parent && parent.designersignalassetdelete) parent.designersignalassetdelete(ORYX.UUID);
                 }
             }.bind(this)
         );
@@ -369,9 +369,9 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
             function(btn){
                 if (btn == 'yes') {
                     this.save();
-                    parent.designersignalassetcopy(ORYX.UUID);
+                    if (parent && parent.designersignalassetcopy) parent.designersignalassetcopy(ORYX.UUID);
                 } else {
-                    parent.designersignalassetcopy(ORYX.UUID);
+                	if (parent && parent.designersignalassetcopy) parent.designersignalassetcopy(ORYX.UUID);
                 }
             }.bind(this)
         );
@@ -384,9 +384,9 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
             function(btn){
                 if (btn == 'yes') {
                     this.save();
-                    parent.designersignalassetrename(ORYX.UUID);
+                    if (parent && parent.designersignalassetrename) parent.designersignalassetrename(ORYX.UUID);
                 } else {
-                    parent.designersignalassetrename(ORYX.UUID);
+                	if (parent && parent.designersignalassetrename) parent.designersignalassetrename(ORYX.UUID);
                 }
             }.bind(this)
         );

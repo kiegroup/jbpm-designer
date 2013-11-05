@@ -2,6 +2,7 @@ package org.jbpm.designer.server.service;
 
 import java.io.IOException;
 import java.util.*;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -128,6 +129,21 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
         repository.createAsset( processAsset );
 
         return path;
+    }
+    
+    @Override
+    public Asset createProcessVFS( org.uberfire.java.nio.file.Path vfsPath, String location ) {
+    	String name = vfsPath.getFileName().toString();
+    	String processId = buildProcessId(location, name);
+        String processContent = PROCESS_STUB.replaceAll( "\\$\\{processid\\}", processId );
+
+        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder( name );
+        builder.location( location ).content( processContent ).uniqueId( vfsPath.toUri().toString() );
+        Asset<String> processAsset = builder.getAsset();
+
+        repository.createAsset( processAsset );
+
+        return processAsset;
     }
 
     private String getEditorResponse( String urlpath,
