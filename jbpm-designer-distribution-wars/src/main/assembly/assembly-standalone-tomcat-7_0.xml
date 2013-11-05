@@ -5,7 +5,6 @@
 
     <id>tomcat7.0</id>
     <formats>
-        <format>war</format>
         <format>dir</format>
     </formats>
 

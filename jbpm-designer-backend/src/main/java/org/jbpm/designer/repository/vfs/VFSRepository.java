@@ -2,18 +2,16 @@ package org.jbpm.designer.repository.vfs;
 
 import org.apache.commons.codec.binary.Base64;
 import org.jbpm.designer.repository.*;
-import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.impl.AbstractAsset;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.server.service.PathEvent;
+import org.jbpm.designer.service.DesignerAssetService;
 import org.jbpm.designer.util.Base64Backport;
+import org.uberfire.backend.vfs.PathFactory;
 import org.uberfire.io.IOService;
 import org.uberfire.java.nio.IOException;
 import org.uberfire.java.nio.base.options.CommentedOption;
 import org.uberfire.java.nio.file.*;
-import org.uberfire.java.nio.file.DirectoryStream;
-import org.uberfire.java.nio.file.FileSystem;
-import org.uberfire.java.nio.file.Path;
 import org.uberfire.java.nio.file.attribute.BasicFileAttributes;
 import org.uberfire.java.nio.file.Files;
 import org.uberfire.java.nio.file.SimpleFileVisitor;
@@ -23,6 +21,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.inject.Named;
+
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -35,7 +34,12 @@ import java.util.Iterator;
 @ApplicationScoped
 public class VFSRepository implements Repository {
 
-    private IOService ioService;
+    private static final String BPMN2 = "bpmn2";
+
+	private IOService ioService;
+    
+    @Inject
+    private DesignerAssetService assetService;
 
     @Inject
     @RequestScoped
@@ -435,26 +439,40 @@ public class VFSRepository implements Repository {
 
         String name = file.getFileName().toString();
         String location = trimLocation(file);
-
+        
         AssetBuilder assetBuilder = AssetBuilderFactory.getAssetBuilder(name);
-        BasicFileAttributes attrs = getFileSystem(file.toUri().toString()).provider().readAttributes(file, BasicFileAttributes.class);
-        assetBuilder.uniqueId(encodeUniqueId(file.toUri().toString()))
-                    .location(location)
-                    .creationDate(attrs.creationTime() == null ? "" : new Date(attrs.creationTime().toMillis()).toString())
-                    .lastModificationDate(attrs.lastModifiedTime() == null ? "" : new Date(attrs.lastModifiedTime().toMillis()).toString())
-                    // TODO some provider specific details
-                    .description("")
-                    .owner("");
-
-        if (loadContent) {
-            if (((AbstractAsset)assetBuilder.getAsset()).acceptBytes()) {
-                assetBuilder.content(ioService.readAllBytes(file));
-            } else {
-                assetBuilder.content(ioService.readAllString(file, Charset.forName("UTF-8")));
-            }
+        try {
+	        BasicFileAttributes attrs = getFileSystem(file.toUri().toString()).provider().readAttributes(file, BasicFileAttributes.class);
+	        assetBuilder.uniqueId(encodeUniqueId(file.toUri().toString()))
+	                    .location(location)
+	                    .creationDate(attrs.creationTime() == null ? "" : new Date(attrs.creationTime().toMillis()).toString())
+	                    .lastModificationDate(attrs.lastModifiedTime() == null ? "" : new Date(attrs.lastModifiedTime().toMillis()).toString())
+	                    // TODO some provider specific details
+	                    .description("")
+	                    .owner("");
+	
+	        if (loadContent) {
+	            if (((AbstractAsset)assetBuilder.getAsset()).acceptBytes()) {
+	                assetBuilder.content(ioService.readAllBytes(file));
+	            } else {
+	                assetBuilder.content(ioService.readAllString(file, Charset.forName("UTF-8")));
+	            }
+	        }
+	
+	        return assetBuilder.decode().getAsset();
+        } catch (NoSuchFileException e) {
+        	if (BPMN2.equals(assetBuilder.getAsset().getAssetType())) {
+        		Asset processAsset = assetService.createProcessVFS(file, location);
+        		return processAsset;
+        	} else {
+	        	assetBuilder.uniqueId(encodeUniqueId(file.toUri().toString()))
+	            .location(location)
+	            .content("");
+	        	Asset newAsset = assetBuilder.getAsset();
+	        	createAsset(newAsset);
+	        	return newAsset;
+        	}
         }
-
-        return assetBuilder.decode().getAsset();
     }
 
     private String decodeUniqueId(String uniqueId) {
