@@ -39,6 +39,7 @@
     <!-- Common Services -->
   <inherits name="org.kie.workbench.common.widgets.KieWorkbenchWidgetsCommon"/>
   <inherits name='org.kie.workbench.common.services.KieWorkbenchCommonServicesAPI'/>
+  <inherits name="org.kie.workbench.common.widgets.metadata.KieWorkbenchMetadataWidget"/>
   <inherits name='org.kie.workbench.common.services.security.KieWorkbenchCommonSecurity'/>
 
   <!-- designer -->

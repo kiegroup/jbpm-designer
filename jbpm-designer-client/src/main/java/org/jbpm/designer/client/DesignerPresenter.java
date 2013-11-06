@@ -10,6 +10,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 import org.guvnor.common.services.shared.file.CopyService;
 import org.guvnor.common.services.shared.file.DeleteService;
 import org.guvnor.common.services.shared.file.RenameService;
+import org.guvnor.common.services.shared.metadata.MetadataService;
+import org.kie.workbench.common.widgets.metadata.client.callbacks.MetadataSuccessCallback;
+import org.kie.workbench.common.widgets.metadata.client.widget.MetadataWidget;
 import org.jboss.errai.common.client.api.Caller;
 import org.jboss.errai.common.client.api.RemoteCallback;
 import org.jbpm.designer.client.type.Bpmn2Type;
@@ -29,6 +32,8 @@ import org.uberfire.backend.vfs.VFSService;
 import org.uberfire.client.annotations.WorkbenchEditor;
 import org.uberfire.client.annotations.WorkbenchPartTitle;
 import org.uberfire.client.annotations.WorkbenchPartView;
+import org.uberfire.client.common.MultiPageEditor;
+import org.uberfire.client.common.Page;
 import org.uberfire.client.mvp.PlaceManager;
 import org.uberfire.client.mvp.UberView;
 import org.uberfire.client.workbench.events.ChangeTitleWidgetEvent;
@@ -97,15 +102,28 @@ public class DesignerPresenter {
     @Inject
     private Event<ResourceUpdatedEvent> resourceUpdatedEvent;
 
+    @Inject
+    private Caller<MetadataService> metadataService;
+
+    @Inject
+    private MetadataWidget metadataWidget;
+
+    @Inject
+    private MultiPageEditor multiPage;
+
     private ObservablePath path;
     private PlaceRequest place;
     private ObservablePath.OnConcurrentUpdateEvent concurrentUpdateSessionInfo = null;
+    private boolean isReadOnly;
 
     @OnStartup
     public void onStartup( final ObservablePath path,
                            final PlaceRequest place ) {
         this.path = path;
         this.place = place;
+
+        // read only set to true for now
+        this.isReadOnly = true;
 
         this.path.onRename( new Command() {
             @Override
@@ -211,6 +229,25 @@ public class DesignerPresenter {
                 }
             } ).getEditorID();
         }
+
+        multiPage.addWidget( view,
+                "Business Process" );
+
+        multiPage.addPage( new Page( metadataWidget,
+                CommonConstants.INSTANCE.MetadataTabTitle() ) {
+            @Override
+            public void onFocus() {
+                metadataWidget.showBusyIndicator( CommonConstants.INSTANCE.Loading() );
+                metadataService.call( new MetadataSuccessCallback( metadataWidget,
+                        isReadOnly ),
+                        new HasBusyIndicatorDefaultErrorCallback( metadataWidget ) ).getMetadata( path );
+            }
+
+            @Override
+            public void onLostFocus() {
+                //Nothing to do
+            }
+        } );
     }
 
     @OnMayClose
@@ -230,7 +267,7 @@ public class DesignerPresenter {
 
     @WorkbenchPartView
     public IsWidget getView() {
-        return view;
+        return multiPage;
     }
 
     private native void publishProcessSourcesInfo( String ps )/*-{

@@ -31,6 +31,11 @@ ORYX.CONFIG.UUID_URL = function(uuid, profile) {
     profile = ORYX.PROFILE;
   }
 
+  if(ORYX.PATH === undefined) {
+      ORYX.PATH = "designer/";
+  }
+
+
   return ORYX.PATH + "uuidRepository?uuid="+ uuid + "&profile=" + profile + "&pp=" + ORYX.PREPROCESSING;
 };
 
