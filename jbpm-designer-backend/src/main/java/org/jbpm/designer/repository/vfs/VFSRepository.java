@@ -342,13 +342,16 @@ public class VFSRepository implements Repository {
         return encodeUniqueId(filePath.toUri().toString());
     }
 
-    public String updateAsset(Asset asset) throws AssetNotFoundException {
+    public String updateAsset(Asset asset, String commitMessage) throws AssetNotFoundException {
         String uniqueId = decodeUniqueId(asset.getUniqueId());
         Path filePath = getFileSystem(uniqueId).provider().getPath(URI.create(uniqueId));
+        if(commitMessage == null) {
+            commitMessage = "Updated asset ";
+        }
         if (!ioService.exists(filePath)) {
             throw new AssetNotFoundException();
         }
-        CommentedOption commentedOption = new CommentedOption("admin", "Updated asset " + asset.getFullName());
+        CommentedOption commentedOption = new CommentedOption("admin", commitMessage);
         if(((AbstractAsset)asset).acceptBytes()) {
             ioService.write(filePath, ((Asset<byte[]>)asset).getAssetContent(), StandardOpenOption.TRUNCATE_EXISTING, commentedOption);
         } else {

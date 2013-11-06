@@ -425,7 +425,7 @@ public class VFSRepositoryGitFileSystemTest {
 
         builder.content("updated content").uniqueId(id);
 
-        id = repository.updateAsset(builder.getAsset());
+        id = repository.updateAsset(builder.getAsset(), "");
 
         foundAsset = repository.listAssetsRecursively("/", new FilterByFileName("process.bpmn2"));
 

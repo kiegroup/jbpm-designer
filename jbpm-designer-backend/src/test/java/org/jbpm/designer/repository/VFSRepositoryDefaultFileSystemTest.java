@@ -417,7 +417,7 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
         builder.content("updated content").uniqueId(id);
 
-        id = repository.updateAsset(builder.getAsset());
+        id = repository.updateAsset(builder.getAsset(), "");
 
         foundAsset = repository.listAssetsRecursively("/", new FilterByExtension("bpmn2"));
 

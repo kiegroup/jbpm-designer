@@ -68,6 +68,7 @@ public class AssetServiceServlet extends HttpServlet {
         String assetContentTransform = req.getParameter("assetcontenttransform");
         String assetLocation = req.getParameter("assetlocation");
         String loadoption = req.getParameter("loadoption");
+        String commitMessage = req.getParameter("commitmessage");
         JSONObject returnObj = new JSONObject();
         JSONArray errorsArray = new JSONArray();
 
@@ -105,7 +106,7 @@ public class AssetServiceServlet extends HttpServlet {
                     Asset<String> currentAsset = repository.loadAsset(assetId);
                     AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(currentAsset);
                     builder.content(assetContent);
-                    String id = repository.updateAsset(builder.getAsset());
+                    String id = repository.updateAsset(builder.getAsset(), commitMessage);
 
                     if(id == null) {
                         _logger.error("Unable to store asset: " + assetLocation);
