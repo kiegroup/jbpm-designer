@@ -11,7 +11,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
 
         this.facade.offer({
             'name': ORYX.I18N.Save.save,
-            'functionality': this.save.bind(this),
+            'functionality': this.saveWithMessage.bind(this),
             'group': ORYX.I18N.Save.group,
             'icon': ORYX.BASE_FILE_PATH + "images/disk.png",
             dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
@@ -152,9 +152,17 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         ORYX.PROCESS_SAVED = false;
     },
 
-    save : function() {
+    saveWithMessage: function() {
+        this.save(true);
+    },
+
+    save : function(showCommit) {
         if(!ORYX.PROCESS_SAVED) {
             // save process bpmn2 and svg
+            var commitMessage = "";
+            if(showCommit && showCommit == true) {
+                commitMessage = prompt("Save this item", "Check in comment");
+            }
             Ext.Ajax.request({
                 url: ORYX.PATH + 'assetservice',
                 method: 'POST',
@@ -254,7 +262,8 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                     assetcontent: ORYX.EDITOR.getSerializedJSON(),
                     pp: ORYX.PREPROCESSING,
                     assetid: ORYX.UUID,
-                    assetcontenttransform: 'jsontobpmn2'
+                    assetcontenttransform: 'jsontobpmn2',
+                    commitmessage: commitMessage
                 }
             });
         } else {
@@ -326,7 +335,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         ORYX.AUTOSAVE_ENABLED = true;
         this.facade.raiseEvent({type: ORYX.CONFIG.EVENT_STENCIL_SET_LOADED});
         this.vt = window.setInterval((function(){
-            this.save();
+            this.save(false);
         }).bind(this), 30000);
         this.facade.raiseEvent({
             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
@@ -368,7 +377,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
             'Would you like to save your changes before copying?',
             function(btn){
                 if (btn == 'yes') {
-                    this.save();
+                    this.save(true);
                     parent.designersignalassetcopy(ORYX.UUID);
                 } else {
                     parent.designersignalassetcopy(ORYX.UUID);
@@ -383,7 +392,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
             'Would you like to save your changes before renaming?',
             function(btn){
                 if (btn == 'yes') {
-                    this.save();
+                    this.save(true);
                     parent.designersignalassetrename(ORYX.UUID);
                 } else {
                     parent.designersignalassetrename(ORYX.UUID);
@@ -393,6 +402,6 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
     },
 
     unloadWindow: function() {
-        this.saveSync();
+        this.saveSync(false);
     }
 });

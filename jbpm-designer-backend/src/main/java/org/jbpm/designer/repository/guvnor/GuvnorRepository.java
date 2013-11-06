@@ -70,7 +70,7 @@ public class GuvnorRepository implements Repository {
         throw new UnsupportedOperationException();
     }
 
-    public String updateAsset(Asset asset) throws AssetNotFoundException {
+    public String updateAsset(Asset asset, String commitMessage) throws AssetNotFoundException {
         return null;
     }
 
