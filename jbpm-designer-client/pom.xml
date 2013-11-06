@@ -97,6 +97,11 @@
     <!-- KIE dependencies -->
     <dependency>
       <groupId>org.kie.workbench.widgets</groupId>
+      <artifactId>kie-wb-metadata-widget</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.kie.workbench.widgets</groupId>
       <artifactId>kie-wb-common-ui</artifactId>
     </dependency>
   </dependencies>
