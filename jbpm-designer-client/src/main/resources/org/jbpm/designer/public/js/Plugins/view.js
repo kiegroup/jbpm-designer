@@ -1606,8 +1606,9 @@ ORYX.Plugins.View = {
                         layout:'fit',
                         border:false,
                         items: [bpmn2SourceArea],
+                        style: 'padding-bottom:20px',
                         listeners: {
-                            expand: function(p) {
+                            afterlayout: function(p) {
                                 this.bpmn2FoldFunc = CodeMirror.newFoldFunction(CodeMirror.tagRangeFinder);
                                 var bpmn2SourceEditor = CodeMirror.fromTextArea(document.getElementById("bpmnSourceTextArea"), {
                                     mode: "application/xml",
@@ -1631,8 +1632,9 @@ ORYX.Plugins.View = {
                         layout:'fit',
                         border:false,
                         items: [jsonSourceArea],
+                        style: 'padding-bottom:20px',
                         listeners: {
-                            expand: function(p) {
+                            afterlayout: function(p) {
                                 this.jsonFoldFunc = CodeMirror.newFoldFunction(CodeMirror.braceRangeFinder);
                                 var jsonSourceEditor = CodeMirror.fromTextArea(document.getElementById("jsonSourceTextArea"), {
                                     mode: "application/json",
@@ -1656,8 +1658,9 @@ ORYX.Plugins.View = {
                         layout:'fit',
                         border:false,
                         items: [erdfSourceArea],
+                        style: 'padding-bottom:20px',
                         listeners: {
-                            expand: function(p) {
+                            afterlayout: function(p) {
                                 this.erdfFoldFunc = CodeMirror.newFoldFunction(CodeMirror.tagRangeFinder);
                                 var erdfSourceEditor = CodeMirror.fromTextArea(document.getElementById("erdfSourceTextArea"), {
                                     mode: "application/xml",
@@ -1681,8 +1684,9 @@ ORYX.Plugins.View = {
                         layout:'fit',
                         border:false,
                         items: [svgSourceArea],
+                        style: 'padding-bottom:10px',
                         listeners: {
-                            expand: function(p) {
+                            afterlayout: function(p) {
                                 this.svgFoldFunc = CodeMirror.newFoldFunction(CodeMirror.tagRangeFinder);
                                 var svgSourceEditor = CodeMirror.fromTextArea(document.getElementById("svgSourceTextArea"), {
                                     mode: "application/xml",
@@ -1694,9 +1698,72 @@ ORYX.Plugins.View = {
                         }
                     });
 
-                    var sourcesPanel = new Ext.Panel({
-                        layout:'accordion',
+                    var sourcesPanel = new Ext.TabPanel({
+                        activeTab: 0,
+                        border: false,
+                        width:'100%',
+                        height:'100%',
+                        tabPosition: 'top',
+                        layoutOnTabChange: true,
+                        deferredRender : false,
+                        defaults:{autoHeight: true, autoScroll: true},
                         items: [ bpmn2SourceAreaPanel, jsonSourceAreaPanel, svgSourceAreaPanel, erdfSourceAreaPanel ]
+                    });
+
+                    var dlBPMN2Button = new Ext.Button({
+                        text: 'Download BPMN2',
+                        handler: function(){
+                            var processJSON = ORYX.EDITOR.getSerializedJSON();
+                            var processName = jsonPath(processJSON.evalJSON(), "$.properties.processn");
+                            var processPackage = jsonPath(processJSON.evalJSON(), "$.properties.package");
+                            var processVersion = jsonPath(processJSON.evalJSON(), "$.properties.version");
+                            var fileName = "";
+                            if(processPackage && processPackage != "") {
+                                fileName += processPackage;
+                            }
+                            if(processName && processName != "") {
+                                if(fileName != "") {
+                                    fileName += ".";
+                                }
+                                fileName += processName;
+                            }
+                            if(processVersion && processVersion != "") {
+                                if(fileName != "") {
+                                    fileName += ".";
+                                }
+                                fileName += "v" + processVersion;
+                            }
+                            if(fileName == "") {
+                                fileName = "processbpmn2";
+                            }
+                            var toStoreValue = request.responseText;
+                            var method ="post";
+                            var form = document.createElement("form");
+                            form.setAttribute("name", "storetofileform");
+                            form.setAttribute("method", method);
+                            form.setAttribute("action", ORYX.PATH + "filestore");
+                            form.setAttribute("target", "_blank");
+
+                            var fnameInput = document.createElement("input");
+                            fnameInput.setAttribute("type", "hidden");
+                            fnameInput.setAttribute("name", "fname");
+                            fnameInput.setAttribute("value", fileName);
+                            form.appendChild(fnameInput);
+
+                            var fextInput = document.createElement("input");
+                            fextInput.setAttribute("type", "hidden");
+                            fextInput.setAttribute("name", "fext");
+                            fextInput.setAttribute("value", "bpmn2");
+                            form.appendChild(fextInput);
+
+                            var fdataInput = document.createElement("input");
+                            fdataInput.setAttribute("type", "hidden");
+                            fdataInput.setAttribute("name", "data");
+                            fdataInput.setAttribute("value", toStoreValue);
+                            form.appendChild(fdataInput);
+                            document.body.appendChild(form);
+                            form.submit();
+                        }
                     });
 
                     var win = new Ext.Window({
@@ -1706,69 +1773,9 @@ ORYX.Plugins.View = {
                         layout: 'fit',
                         title:'Process Sources',
                         items: [sourcesPanel],
-                        buttons		: [
-                            {
-                                text: 'Download BPMN2',
-                                handler: function(){
-                                    var processJSON = ORYX.EDITOR.getSerializedJSON();
-                                    var processName = jsonPath(processJSON.evalJSON(), "$.properties.processn");
-                                    var processPackage = jsonPath(processJSON.evalJSON(), "$.properties.package");
-                                    var processVersion = jsonPath(processJSON.evalJSON(), "$.properties.version");
-                                    var fileName = "";
-                                    if(processPackage && processPackage != "") {
-                                        fileName += processPackage;
-                                    }
-                                    if(processName && processName != "") {
-                                        if(fileName != "") {
-                                            fileName += ".";
-                                        }
-                                        fileName += processName;
-                                    }
-                                    if(processVersion && processVersion != "") {
-                                        if(fileName != "") {
-                                            fileName += ".";
-                                        }
-                                        fileName += "v" + processVersion;
-                                    }
-                                    if(fileName == "") {
-                                        fileName = "processbpmn2";
-                                    }
-                                    var toStoreValue = document.getElementById("bpmnSourceTextArea").getValue();
-                                    var method ="post";
-                                    var form = document.createElement("form");
-                                    form.setAttribute("name", "storetofileform");
-                                    form.setAttribute("method", method);
-                                    form.setAttribute("action", ORYX.PATH + "filestore");
-                                    form.setAttribute("target", "_blank");
-
-                                    var fnameInput = document.createElement("input");
-                                    fnameInput.setAttribute("type", "hidden");
-                                    fnameInput.setAttribute("name", "fname");
-                                    fnameInput.setAttribute("value", fileName);
-                                    form.appendChild(fnameInput);
-
-                                    var fextInput = document.createElement("input");
-                                    fextInput.setAttribute("type", "hidden");
-                                    fextInput.setAttribute("name", "fext");
-                                    fextInput.setAttribute("value", "bpmn2");
-                                    form.appendChild(fextInput);
-
-                                    var fdataInput = document.createElement("input");
-                                    fdataInput.setAttribute("type", "hidden");
-                                    fdataInput.setAttribute("name", "data");
-                                    fdataInput.setAttribute("value", toStoreValue);
-                                    form.appendChild(fdataInput);
-                                    document.body.appendChild(form);
-                                    form.submit();
-                                }
-                            },
-                            {
-                                text : 'Close',
-                                handler:function(){
-                                    win.close();
-                                    win = null;
-                                }.bind(this)
-                            }]
+                        tbar: [
+                            dlBPMN2Button
+                        ]
                     });
                     win.show();
                     this.bpmn2FoldFunc = CodeMirror.newFoldFunction(CodeMirror.tagRangeFinder);
