@@ -7,12 +7,12 @@ import org.slf4j.LoggerFactory;
 import org.drools.core.process.core.ParameterDefinition;
 import org.drools.core.process.core.datatype.DataType;
 import org.drools.core.process.core.impl.ParameterDefinitionImpl;
-import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.AssetNotFoundException;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.filters.FilterByExtension;
 import org.jbpm.designer.repository.impl.AssetBuilder;
+import org.jbpm.designer.type.Asset;
 import org.jbpm.designer.util.Base64Backport;
 import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingUnit;
@@ -24,13 +24,16 @@ import org.mvel2.MVEL;
 import org.stringtemplate.v4.ST;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.VFSService;
+
 import sun.misc.BASE64Encoder;
+
 import org.apache.commons.io.IOUtils;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.*;
 import java.net.URLEncoder;
 import java.util.*;

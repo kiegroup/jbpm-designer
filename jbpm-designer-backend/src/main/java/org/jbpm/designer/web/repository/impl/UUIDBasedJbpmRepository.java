@@ -5,11 +5,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
 import bpsim.impl.BpsimPackageImpl;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.jboss.drools.impl.DroolsPackageImpl;
-import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.Repository;
+import org.jbpm.designer.type.Asset;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.repository.IUUIDBasedRepository;
 

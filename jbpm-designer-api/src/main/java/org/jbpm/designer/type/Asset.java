@@ -1,4 +1,5 @@
-package org.jbpm.designer.repository;
+package org.jbpm.designer.type;
+
 
 /**
  * Primary component managed by repository and can represent any type of underlying files.

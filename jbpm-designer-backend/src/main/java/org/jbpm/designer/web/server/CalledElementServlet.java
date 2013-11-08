@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.StringUtils;
-import org.jbpm.designer.repository.Asset;
+import org.jbpm.designer.type.Asset;
 import org.jbpm.designer.util.Base64Backport;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;

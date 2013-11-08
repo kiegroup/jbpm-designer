@@ -3,6 +3,8 @@ package org.jbpm.designer.repository;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jbpm.designer.type.Asset;
+
 public class AssetTypeMapper {
 
     private static Map<String, String> mimeTypes = new HashMap<String, String>();

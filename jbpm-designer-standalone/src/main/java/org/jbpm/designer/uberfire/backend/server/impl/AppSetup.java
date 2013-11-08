@@ -60,7 +60,7 @@ public class AppSetup {
     @PostConstruct
     public void onStartup() {
         try {
-            SecurityFactory.setAuthzManager( new RuntimeAuthorizationManager() );
+        	SecurityFactory.setAuthzManager( new NullAuthorizationManager() );
 
             Repository jbpmRepo = repositoryService.getRepository( SYNDATIS_JBPM );
             if ( jbpmRepo == null ) {

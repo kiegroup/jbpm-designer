@@ -3,6 +3,7 @@ package org.jbpm.designer.repository;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.repository.impl.BinaryAsset;
 import org.jbpm.designer.repository.impl.TextAsset;
+import org.jbpm.designer.type.Asset;
 
 import java.util.HashSet;
 import java.util.Set;

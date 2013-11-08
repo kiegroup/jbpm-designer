@@ -1,6 +1,6 @@
 package org.jbpm.designer.repository.impl;
 
-import org.jbpm.designer.repository.Asset;
+import org.jbpm.designer.type.Asset;
 
 public class BinaryAsset extends AbstractAsset<byte[]> {
 

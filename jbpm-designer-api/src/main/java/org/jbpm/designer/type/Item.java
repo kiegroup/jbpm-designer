@@ -1,4 +1,4 @@
-package org.jbpm.designer.repository;
+package org.jbpm.designer.type;
 
 /**
  * Generic type of component managed by repository

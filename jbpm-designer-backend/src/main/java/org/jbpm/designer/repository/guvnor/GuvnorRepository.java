@@ -1,9 +1,11 @@
 package org.jbpm.designer.repository.guvnor;
 
 import org.jbpm.designer.repository.*;
+import org.jbpm.designer.type.Asset;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 
 import javax.enterprise.inject.Alternative;
+
 import java.util.Collection;
 import java.util.Map;
 

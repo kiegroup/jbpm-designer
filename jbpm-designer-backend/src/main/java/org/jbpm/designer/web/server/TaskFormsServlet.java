@@ -3,6 +3,7 @@ package org.jbpm.designer.web.server;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -11,16 +12,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bpsim.impl.BpsimFactoryImpl;
+
 import org.apache.commons.codec.binary.Base64;
 import org.eclipse.bpmn2.Definitions;
 import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.designer.bpmn2.impl.Bpmn2JsonUnmarshaller;
-import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.taskforms.TaskFormInfo;
 import org.jbpm.designer.taskforms.TaskFormTemplateManager;
+import org.jbpm.designer.type.Asset;
 import org.jbpm.designer.util.Base64Backport;
 import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.web.profile.IDiagramProfile;

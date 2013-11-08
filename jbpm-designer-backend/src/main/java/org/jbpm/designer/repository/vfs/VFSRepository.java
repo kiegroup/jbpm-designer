@@ -6,6 +6,7 @@ import org.jbpm.designer.repository.impl.AbstractAsset;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.server.service.PathEvent;
 import org.jbpm.designer.service.DesignerAssetService;
+import org.jbpm.designer.type.Asset;
 import org.jbpm.designer.util.Base64Backport;
 import org.uberfire.backend.vfs.PathFactory;
 import org.uberfire.io.IOService;

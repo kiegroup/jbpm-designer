@@ -1,7 +1,7 @@
 package org.jbpm.designer.repository.impl;
 
-import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.UriUtils;
+import org.jbpm.designer.type.Asset;
 
 public class AssetBuilder {
 

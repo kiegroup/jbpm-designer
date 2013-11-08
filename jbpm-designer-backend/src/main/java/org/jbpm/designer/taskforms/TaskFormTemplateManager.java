@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.Process;
-import org.jbpm.designer.repository.Asset;
+import org.jbpm.designer.type.Asset;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.formModeler.designer.integration.BPMNFormBuilderService;
 import org.stringtemplate.v4.STRawGroupDir;

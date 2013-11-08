@@ -15,11 +15,11 @@ import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.jboss.errai.bus.server.annotations.Service;
-import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.service.DesignerAssetService;
+import org.jbpm.designer.type.Asset;
 import org.jbpm.designer.util.OSProtocolSocketFactory;
 import org.json.JSONArray;
 import org.uberfire.backend.server.util.Paths;
@@ -136,13 +136,14 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
     }
     
     @Override
-    public Asset createProcessVFS( org.uberfire.java.nio.file.Path vfsPath, String location ) {
-    	String name = vfsPath.getFileName().toString();
+    public Asset createProcessVFS( Object vfsPath, String location ) {
+    	org.uberfire.java.nio.file.Path vfsPathReal = (org.uberfire.java.nio.file.Path) vfsPath; // dirty hack to avoid rewriting api
+    	String name = vfsPathReal.getFileName().toString();
     	String processId = buildProcessId(location, name);
         String processContent = PROCESS_STUB.replaceAll( "\\$\\{processid\\}", processId );
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder( name );
-        builder.location( location ).content( processContent ).uniqueId( vfsPath.toUri().toString() );
+        builder.location( location ).content( processContent ).uniqueId( vfsPathReal.toUri().toString() );
         Asset<String> processAsset = builder.getAsset();
 
         repository.createAsset( processAsset );

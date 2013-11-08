@@ -3,6 +3,8 @@ package org.jbpm.designer.repository;
 import java.util.Collection;
 import java.util.Map;
 
+import org.jbpm.designer.type.Asset;
+
 /**
  * Repository is responsible for managing its components that are as follows:
  * <ul>

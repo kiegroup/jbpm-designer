@@ -16,6 +16,7 @@
 package org.jbpm.designer.web.server;
 
 import bpsim.impl.BpsimFactoryImpl;
+
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
@@ -43,16 +44,17 @@ import org.eclipse.emf.ecore.util.FeatureMap;
 import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceFactoryImpl;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceImpl;
-import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.AssetNotFoundException;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.impl.AssetBuilder;
+import org.jbpm.designer.type.Asset;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.jbpm.designer.web.profile.impl.RepositoryInfo;
 import org.jbpm.migration.JbpmMigration;
+
 import sun.misc.BASE64Encoder;
 
 import javax.inject.Inject;
@@ -64,6 +66,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
+
 import java.io.*;
 import java.net.URLDecoder;
 import java.util.HashMap;
