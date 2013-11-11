@@ -17,6 +17,7 @@ import org.uberfire.java.nio.file.Path;
 import org.uberfire.java.nio.file.attribute.BasicFileAttributes;
 import org.uberfire.java.nio.file.Files;
 import org.uberfire.java.nio.file.SimpleFileVisitor;
+import com.google.gwt.http.client.URL.*;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
@@ -316,9 +317,9 @@ public class VFSRepository implements Repository {
         URI pathURI = null;
         if (asset.getAssetLocation().startsWith(fileSystem.provider().getScheme()) ||
                 asset.getAssetLocation().startsWith("default://")) {
-            pathURI = URI.create(asset.getAssetLocation()+ "/" +asset.getFullName()) ;
+            pathURI = URI.create(UriUtils.encode(asset.getAssetLocation()+ "/" +asset.getFullName())) ;
         } else {
-            pathURI = URI.create(descriptor.getStringRepositoryRoot() + (asset.getAssetLocation().equals("/")?"":asset.getAssetLocation()) + "/" +asset.getFullName());
+            pathURI = URI.create(UriUtils.encode(descriptor.getStringRepositoryRoot() + (asset.getAssetLocation().equals("/")?"":asset.getAssetLocation()) + "/" +asset.getFullName()));
         }
 
         Path filePath = fileSystem.provider().getPath(pathURI);
@@ -435,7 +436,6 @@ public class VFSRepository implements Repository {
     }
 
     protected Asset buildAsset(Path file, boolean loadContent) {
-
         String name = file.getFileName().toString();
         String location = trimLocation(file);
 

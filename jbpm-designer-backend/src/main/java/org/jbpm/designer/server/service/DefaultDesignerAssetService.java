@@ -119,14 +119,13 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
         String name = path.getFileName();
         String processId = buildProcessId( location, name );
 
-        String processContent = PROCESS_STUB.replaceAll( "\\$\\{processid\\}", processId );
+        String processContent = PROCESS_STUB.replaceAll( "\\$\\{processid\\}", processId.replaceAll("\\s", "") );
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder( name );
         builder.location( location ).content( processContent ).uniqueId( path.toURI() );
         Asset<String> processAsset = builder.getAsset();
 
         repository.createAsset( processAsset );
-
         return path;
     }
 
