@@ -979,7 +979,7 @@ ORYX.Plugins.View = {
             this.facade.raiseEvent({
                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                 ntype		: 'error',
-                msg         : 'Unable to find proces versions.',
+                msg         : 'Unable to find process versions.',
                 title       : 'Diff'
 
             });
