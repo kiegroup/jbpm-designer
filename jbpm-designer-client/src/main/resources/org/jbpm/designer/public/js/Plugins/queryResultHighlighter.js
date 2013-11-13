@@ -178,7 +178,7 @@ ORYX.Plugins.QueryResultHighlighter = ORYX.Plugins.AbstractPlugin.extend({
 	
 	highlightSelectedTask: function(shape){ //edge marking of selected/ given task
 		if(!(shape instanceof ORYX.Core.Shape)) return;
-		this.facade.raiseEvent({
+        this.facade.raiseEvent({
 			type:			ORYX.CONFIG.EVENT_HIGHLIGHT_SHOW, 
 			highlightId:	shape.id,
 			elements:		[shape],
