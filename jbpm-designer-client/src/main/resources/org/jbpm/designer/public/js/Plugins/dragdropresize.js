@@ -352,7 +352,6 @@ ORYX.Plugins.DragDropResize = ORYX.Plugins.AbstractPlugin.extend({
 			this.containmentParentNode = this.facade.getCanvas();
 			
 		} else {
-		
 			/* Check the containment and connection rules */
 			var options = {
 				event : event,
@@ -456,7 +455,7 @@ ORYX.Plugins.DragDropResize = ORYX.Plugins.AbstractPlugin.extend({
             if(this.containmentParentNode && this.containmentParentNode.properties['oryx-tasktype'] && this.containmentParentNode.properties['oryx-tasktype'] == "Script") {
                 this.isAttachingAllowed = false;
             }
-			
+
 			if ( this.isAttachingAllowed	) {
 				var point = this.facade.eventCoordinates(event);
 				this.isAttachingAllowed	= this.containmentParentNode.isPointOverOffset( point.x, point.y );

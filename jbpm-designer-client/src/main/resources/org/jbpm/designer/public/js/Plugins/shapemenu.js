@@ -732,7 +732,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
 										
 				this._currentReference = canConnect ? candidate : undefined;		
 				
-			}	
+			}
 
 			this.facade.raiseEvent({
 											type:		ORYX.CONFIG.EVENT_HIGHLIGHT_SHOW, 

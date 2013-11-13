@@ -9429,6 +9429,30 @@
 						"from":"Task",
 						"to":["IntermediateEventOnActivityBoundary"]
 					},
+                    {
+                        "from":"UserTask",
+                        "to":["IntermediateEventOnActivityBoundary"]
+                    },
+                    {
+                        "from":"SendTask",
+                        "to":["IntermediateEventOnActivityBoundary"]
+                    },
+                    {
+                        "from":"ReceiveTask",
+                        "to":["IntermediateEventOnActivityBoundary"]
+                    },
+                    {
+                        "from":"ManualTask",
+                        "to":["IntermediateEventOnActivityBoundary"]
+                    },
+                    {
+                        "from":"ServiceTask",
+                        "to":["IntermediateEventOnActivityBoundary"]
+                    },
+                    {
+                        "from":"Business RuleTask",
+                        "to":["IntermediateEventOnActivityBoundary"]
+                    },
 					$workitemDefs:{k|
                         $bopen$
                                                 "from":"$workitemDefs.(k).name$",

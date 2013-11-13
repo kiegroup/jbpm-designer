@@ -446,6 +446,9 @@ ORYX.Plugins.ShapeRepository = {
 												edgeStencil: stencil,
 												targetStencil: stencil
 											});
+                        if(parentCandidate && parentCandidate.properties['oryx-tasktype'] && parentCandidate.properties['oryx-tasktype'] == "Script") {
+                            this._canAttach = false;
+                        }
 						
 						if( this._canAttach ){
 							// Show Highlight
