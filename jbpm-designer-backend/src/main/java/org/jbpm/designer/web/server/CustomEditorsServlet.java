@@ -1,5 +1,6 @@
 package org.jbpm.designer.web.server;
 
+import org.jbpm.designer.expressioneditor.server.ExpressionEditorProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.jbpm.designer.repository.Asset;
@@ -47,17 +48,25 @@ public class CustomEditorsServlet extends HttpServlet {
 		String profileName = req.getParameter("profile");
         String uuid = req.getParameter("uuid");
 
-        if (profile == null) {
-            profile = _profileService.findProfile(req, profileName);
+        if (isExpressionEditorRequest(req)) {
+            //do the processing for the expression editor.
+            ExpressionEditorProcessor expressionEditorProcessor = new ExpressionEditorProcessor();
+            expressionEditorProcessor.doProcess(req, resp);
+
+        } else {
+            //do the normal processing of this servlet.
+            if (profile == null) {
+                profile = _profileService.findProfile(req, profileName);
+            }
+		    String customEditorsJSON = getCustomEditorsJSON(profile, getServletContext(), uuid);
+		    PrintWriter pw = resp.getWriter();
+		    resp.setContentType("text/plain");
+		    resp.setCharacterEncoding("UTF-8");
+		    pw.write(customEditorsJSON);
         }
-		String customEditorsJSON = getCustomEditorsJSON(profile, getServletContext(), uuid);
-		PrintWriter pw = resp.getWriter();
-		resp.setContentType("text/plain");
-		resp.setCharacterEncoding("UTF-8");
-		pw.write(customEditorsJSON);
 	}
-	
-	private String getCustomEditorsJSON(IDiagramProfile profile, ServletContext servletContext, String uuid) {
+
+    private String getCustomEditorsJSON(IDiagramProfile profile, ServletContext servletContext, String uuid) {
 
         String retStr = "";
         Repository repository = profile.getRepository();
@@ -72,4 +81,9 @@ public class CustomEditorsServlet extends HttpServlet {
     	
         return retStr;
 	}
+
+    private boolean isExpressionEditorRequest(HttpServletRequest req) {
+        return req.getParameter(ExpressionEditorProcessor.COMMAND_PARAM) != null && req.getParameter(ExpressionEditorProcessor.MESSAGE_PARAM) != null;
+    }
+
 }

@@ -288,6 +288,35 @@ ORYX.I18N.PropertyWindow.ok = "Ok";
 ORYX.I18N.PropertyWindow.cancel = "Cancelar";
 ORYX.I18N.PropertyWindow.dateFormat = "dia/mes/año";
 
+if (!ORYX.I18N.ConditionExpressionEditorField) ORYX.I18N.ConditionExpressionEditorField = {};
+
+ORYX.I18N.ConditionExpressionEditorField.simpleTitle = "Editor de Expresiones - Pulse [Ctrl-Z] para activar auto-completar";
+ORYX.I18N.ConditionExpressionEditorField.sequenceFlowTitle = "Sequence Flow Conditions";
+ORYX.I18N.ConditionExpressionEditorField.sequenceFlowFullTitle = "Sequence Flow Conditions - Pulse [Ctrl-Z] para activar auto-completar";
+ORYX.I18N.ConditionExpressionEditorField.scriptTab = "Script";
+ORYX.I18N.ConditionExpressionEditorField.editorTab = "Editor";
+ORYX.I18N.ConditionExpressionEditorField.editorDescription = "Ejecuta flujo si se cumplen las siguientes condiciones."
+ORYX.I18N.ConditionExpressionEditorField.processVariable = "Variable del proceso::"
+ORYX.I18N.ConditionExpressionEditorField.condition = "Condición:"
+ORYX.I18N.ConditionExpressionEditorField.between = "Entre";
+ORYX.I18N.ConditionExpressionEditorField.contains = "Contiene";
+ORYX.I18N.ConditionExpressionEditorField.endsWith = "Termina con";
+ORYX.I18N.ConditionExpressionEditorField.equalsTo = "Es igual a";
+ORYX.I18N.ConditionExpressionEditorField.greaterThan = "Mayor que";
+ORYX.I18N.ConditionExpressionEditorField.greaterThanOrEqual = "Mayor o igual que";
+ORYX.I18N.ConditionExpressionEditorField.isEmpty = "Está vacío";
+ORYX.I18N.ConditionExpressionEditorField.isFalse = "Es falso";
+ORYX.I18N.ConditionExpressionEditorField.isNull = "Es nulo";
+ORYX.I18N.ConditionExpressionEditorField.isTrue = "Es verdadero";
+ORYX.I18N.ConditionExpressionEditorField.lessThan = "Menor que";
+ORYX.I18N.ConditionExpressionEditorField.lessThanOrEqual = "Menor o igual que";
+ORYX.I18N.ConditionExpressionEditorField.startsWith = "Empieza con";
+ORYX.I18N.ConditionExpressionEditorField.paramsError = "No se ha podido generar la expresión, por favor rellene los campos correctamente.";
+ORYX.I18N.ConditionExpressionEditorField.saveError = "No se ha podido guardar la propiedad, por favor revise el valor configurado y pruebe otra vez";
+ORYX.I18N.ConditionExpressionEditorField.scriptParseError = "Se ha encontrado un error parseando el script: <br/>{0}<br/><br/>Pulse OK para quedarse en el Editor de Expresiones y perder el Script o Cancelar para volver al Editor de Scripts.";
+ORYX.I18N.ConditionExpressionEditorField.scriptGenerationError = "Se ha encontrado un error generando el script: <br/>{0}<br/><br/>Por favor revise los datos insertados en el Editor de Expresiones.";
+ORYX.I18N.ConditionExpressionEditorField.nonExistingVariable = "El proceso no contiene ninguna variable llamada '{0}'.";
+
 if(!ORYX.I18N.ShapeMenuPlugin) ORYX.I18N.ShapeMenuPlugin = {};
 
 ORYX.I18N.ShapeMenuPlugin.drag = "Tirar";
