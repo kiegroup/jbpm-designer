@@ -315,7 +315,7 @@ ORYX.I18N.ConditionExpressionEditorField.paramsError = "No se ha podido generar 
 ORYX.I18N.ConditionExpressionEditorField.saveError = "No se ha podido guardar la propiedad, por favor revise el valor configurado y pruebe otra vez";
 ORYX.I18N.ConditionExpressionEditorField.scriptParseError = "Se ha encontrado un error parseando el script: <br/>{0}<br/><br/>Pulse OK para quedarse en el Editor de Expresiones y perder el Script o Cancelar para volver al Editor de Scripts.";
 ORYX.I18N.ConditionExpressionEditorField.scriptGenerationError = "Se ha encontrado un error generando el script: <br/>{0}<br/><br/>Por favor revise los datos insertados en el Editor de Expresiones.";
-ORYX.I18N.ConditionExpressionEditorField.nonExistingVariable = "El proceso no contiene ninguna variable llamada '{0}'.";
+ORYX.I18N.ConditionExpressionEditorField.nonExistingVariable = "El proceso no contiene ninguna variable llamada \"{0}\".";
 
 if(!ORYX.I18N.ShapeMenuPlugin) ORYX.I18N.ShapeMenuPlugin = {};
 

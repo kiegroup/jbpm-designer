@@ -40,25 +40,25 @@ public class ExpressionParser {
 
     private String functionName = null;
 
-    public static final String FUNCTION_NAME_NOT_RECOGNIZED_ERROR = "The function name \'{0}\' is not recognized by system.";
+    public static final String FUNCTION_NAME_NOT_RECOGNIZED_ERROR = "The function name \"{0}\" is not recognized by system.";
 
-    public static final String FUNCTION_CALL_NOT_FOUND_ERROR = "Function call was not found, a token like \'" + KIE_FUNCTIONS + "functionName(variable, params)\' is expected.";
+    public static final String FUNCTION_CALL_NOT_FOUND_ERROR = "Function call was not found, a token like \"" + KIE_FUNCTIONS + "functionName(variable, params)\" is expected.";
 
-    public static final String VALID_FUNCTION_CALL_NOT_FOUND_ERROR = "The \'" + KIE_FUNCTIONS + "\' keyword must be followed by one of the following function names: \'{0}\'";
+    public static final String VALID_FUNCTION_CALL_NOT_FOUND_ERROR = "The \"" + KIE_FUNCTIONS + "\" keyword must be followed by one of the following function names: \"{0}\"";
 
-    public static final String FUNCTION_CALL_NOT_CLOSED_PROPERLY_ERROR = "Function call \'{0}\' is not closed properly, character \')\' is expected.";
+    public static final String FUNCTION_CALL_NOT_CLOSED_PROPERLY_ERROR = "Function call \"{0}\" is not closed properly, character \")\" is expected.";
 
-    public static final String SENTENCE_NOT_CLOSED_PROPERLY_ERROR = "Script not closed properly, character \';\' is expected.";
+    public static final String SENTENCE_NOT_CLOSED_PROPERLY_ERROR = "Script not closed properly, character \";\" is expected.";
 
     public static final String VARIABLE_NAME_EXPECTED_ERROR = "Variable name not found, a valid process variable name is expected.";
 
-    public static final String PARAMETER_DELIMITER_EXPECTED_ERROR = "Parameter delimiter \',\' is expected.";
+    public static final String PARAMETER_DELIMITER_EXPECTED_ERROR = "Parameter delimiter \",\" is expected.";
 
     public static final String STRING_PARAMETER_EXPECTED_ERROR = "String parameter value like \"some value\" is expected.";
 
-    public static final String RETURN_SENTENCE_EXPECTED_ERROR = "Sentence \'{0}\' is expected.";
+    public static final String RETURN_SENTENCE_EXPECTED_ERROR = "Sentence \"{0}\" is expected.";
 
-    public static final String BLANK_AFTER_RETURN_EXPECTED_ERROR = "Sentence \'{0}\' must be followed by a blank space or a line break.";
+    public static final String BLANK_AFTER_RETURN_EXPECTED_ERROR = "Sentence \"{0}\" must be followed by a blank space or a line break.";
 
     private static String functionNames = null;
 

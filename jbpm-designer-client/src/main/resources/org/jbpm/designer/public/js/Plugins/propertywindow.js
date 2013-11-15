@@ -3770,25 +3770,27 @@ Ext.form.ConditionExpressionEditorField = Ext.extend(Ext.form.TriggerField,  {
                             var nextPart = valueParts[i];
                             if(nextPart.indexOf(":") > 0) {
                                 var innerParts = nextPart.split(":");
-                                switch (innerParts[1]) {
+                                var varName = innerParts[0].trim();
+                                var varType = innerParts[1].trim();
+                                switch (varType) {
                                     case "String":
-                                    case "java.lang.String": processVars.push([innerParts[0], innerParts[1], sActionStore]);
+                                    case "java.lang.String": processVars.push([varName, varType, sActionStore]);
                                         break;
                                     case "Integer":
                                     case "java.lang.Integer":
                                     case "java.math.BigInteger":
                                     case "java.lang.Short":
-                                    case "java.lang.Long": processVars.push([innerParts[0], innerParts[1], iActionStore]);
+                                    case "java.lang.Long": processVars.push([varName, varType, iActionStore]);
                                         break;
                                     case "Float":
                                     case "java.math.BigDecimal":
                                     case "java.lang.Float":
-                                    case "java.lang.Double": processVars.push([innerParts[0], innerParts[1], fActionStore]);
+                                    case "java.lang.Double": processVars.push([varName, varType, fActionStore]);
                                         break;
                                     case "Boolean":
-                                    case "java.lang.Boolean": processVars.push([innerParts[0], innerParts[1], bActionStore]);
+                                    case "java.lang.Boolean": processVars.push([varName, varType, bActionStore]);
                                         break;
-                                    default: processVars.push([innerParts[0], innerParts[1], oActionStore]);
+                                    default: processVars.push([varName, varType, oActionStore]);
                                 }
                             }
                         }
