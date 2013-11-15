@@ -1,0 +1,16 @@
+{
+    "operator" : "OR",
+    "conditions" : [
+        {
+            "condition"    :  "isEquals",
+            "parameters" :  [ "variableName1", "param1.1" ]
+        },
+        {
+            "condition"    :  "isBetween",
+            "parameters" :  [ "variableName2", "param2.1", "param2.2" ]
+        }
+    ],
+    "script" : "return true;",
+    "errorCode": "The error code",
+    "errorMessage": "The error message"
+}
