@@ -112,7 +112,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
 	 
 	 private JSONObject storeTaskFormInRepository(String formType, String taskName, String packageName, String formValue, Repository repository) throws Exception{
 
-        repository.deleteAssetFromPath(packageName + taskName + TASKFORM_NAME_EXTENSION + "." + formType);
+        repository.deleteAssetFromPath(packageName + "/" + taskName + TASKFORM_NAME_EXTENSION + "." + formType);
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
         builder.location(packageName)
