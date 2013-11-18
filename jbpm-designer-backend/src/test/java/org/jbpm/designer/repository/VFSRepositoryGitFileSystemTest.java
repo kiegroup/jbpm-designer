@@ -328,8 +328,8 @@ public class VFSRepositoryGitFileSystemTest {
         Asset<byte[]> asset = repository.loadAsset(id);
 
         assertEquals("png", asset.getAssetType());
-        assertEquals("test asset", asset.getName());
-        assertEquals("test asset.png", asset.getFullName());
+        assertEquals("test%20asset", asset.getName());
+        assertEquals("test%20asset.png", asset.getFullName());
         assertEquals("/", asset.getAssetLocation());
         assertFalse(asset.getAssetContent().length == 0);
     }
