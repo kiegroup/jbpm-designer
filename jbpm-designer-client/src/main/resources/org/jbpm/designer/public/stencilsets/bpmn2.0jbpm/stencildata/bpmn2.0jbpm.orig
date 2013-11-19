@@ -3594,8 +3594,7 @@
 				"flowElement",
 				"activity",
 				"bgColor",
-				"properties",
-				"iospecification"
+				"properties"
 			],
 			"properties" :		[
 				{
@@ -3609,6 +3608,35 @@
 					"optional":false,
 					"length":""
 				},
+                {
+                    "id":"datainputset",
+                    "type":"Datainput",
+                    "title":"DataInputSet",
+                    "value":"",
+                    "description":"An InputSet is a collection of DataInput elements that together define a valid set of data inputs.",
+                    "description_ja":"InputSetは、データ入力の有効なセットを合わせて定義するDataInputエレメントのコレクションです。",
+                    "readonly":false,
+                    "optional":true
+                },
+                {
+                    "id":"dataoutputset",
+                    "type":"Dataoutput",
+                    "title":"DataOutputSet",
+                    "value":"",
+                    "description":"An OutputSet is a collection of DataOutputs elements that together may be produced as output from an Activity or Event.",
+                    "description_ja":"OutputSet は、アクティビティまたはイベントの出力としてまとめて生成されるDataOutputs要素のコレクションです。",
+                    "readonly":false,
+                    "optional":true
+                },
+                {
+                    "id":"assignments",
+                    "type":"Dataassignment",
+                    "title":"Assignments",
+                    "value":"",
+                    "description":"",
+                    "readonly":false,
+                    "optional":true
+                },
 				{
 					"id":"bgcolor",
 					"type":"Color",
