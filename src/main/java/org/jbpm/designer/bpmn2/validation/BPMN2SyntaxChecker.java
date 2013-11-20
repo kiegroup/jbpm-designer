@@ -1,5 +1,7 @@
 package org.jbpm.designer.bpmn2.validation;
 
+import java.io.StringReader;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -9,17 +11,27 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.drools.xml.SemanticModules;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.Process;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.jboss.drools.DroolsPackage;
 import org.jboss.drools.impl.DroolsFactoryImpl;
+import org.jbpm.bpmn2.xml.BPMNDISemanticModule;
+import org.jbpm.bpmn2.xml.BPMNSemanticModule;
+import org.jbpm.compiler.xml.XmlProcessReader;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.server.ServletUtil;
+import org.jbpm.process.core.validation.ProcessValidationError;
+import org.jbpm.ruleflow.core.validation.RuleFlowProcessValidator;
 import org.json.JSONObject;
 
 
 public class BPMN2SyntaxChecker implements SyntaxChecker {
+	private static final Logger _logger = LoggerFactory.getLogger(BPMN2SyntaxChecker.class);
+
 	protected Map<String, List<String>> errors = new HashMap<String, List<String>>();
 	private String json;
 	private String preprocessingData;
@@ -110,6 +122,26 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
         		
         		checkFlowElements(process, process);
         	}
+        }
+
+        // if there are no suggestions add RuleFlowProcessValidator process errors
+        if(this.errors.size() < 1) {
+            try {
+                SemanticModules modules = new SemanticModules();
+                modules.addSemanticModule(new BPMNSemanticModule());
+                modules.addSemanticModule(new BPMNDISemanticModule());
+                XmlProcessReader xmlReader = new XmlProcessReader(modules, getClass().getClassLoader());
+                List<org.drools.definition.process.Process> processes = xmlReader.read(new StringReader(profile.createMarshaller().parseModel(json, preprocessingData)));
+                if(processes != null) {
+                        ProcessValidationError[] errors = RuleFlowProcessValidator.getInstance().validateProcess((org.jbpm.ruleflow.core.RuleFlowProcess) processes.get(0));
+                        for(ProcessValidationError er : errors) {
+                                addError(defaultResourceId, er.getMessage());
+                            }
+                    }
+            } catch(Exception e) {
+                _logger.warn("Could not parse to RuleFlowProcess.", e);
+                addError(defaultResourceId, "Could not parse BPMN2 to RuleFlowProcess. " + e.getMessage());
+            }
         }
 	}
 	
