@@ -72,7 +72,6 @@ public class DesignerView
             }
             if(locale.indexOf("_") > 0) {
                 locale = locale.split("_")[0]; // just use the language (ommit country and variant)
-                Window.alert("STRIPPING LOCALE TO: " + locale);
             }
         }
 
