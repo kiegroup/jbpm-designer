@@ -62,13 +62,18 @@ public class DesignerView
     @Override
     public void setEditorParamters( final Map<String, String> editorParameters) {
         this.editorParameters = editorParameters;
-
         // fix locale if needed (for "default")
         String locale = LocaleInfo.getCurrentLocale().getLocaleName();
         if(locale == null) {
             locale = "en";
-        } else if(locale.equals("default")) {
-            locale = "en";
+        } else {
+            if(locale.equals("default")) {
+                locale = "en";
+            }
+            if(locale.indexOf("_") > 0) {
+                locale = locale.split("_")[0]; // just use the language (ommit country and variant)
+                Window.alert("STRIPPING LOCALE TO: " + locale);
+            }
         }
 
         String paramsStr = "";
