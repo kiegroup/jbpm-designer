@@ -3866,7 +3866,7 @@ Ext.form.ConditionExpressionEditorField = Ext.extend(Ext.form.TriggerField,  {
                         style: 'font-size:12px;margin:10px;display:block;',
                         anchor: '100%',
                         xtype: 'label',
-                        html: ORYX.I18N.ConditionExpressionEditorField.condition}, actionsCombo, {layout: 'column', items: [stringPanel, floatPanel, floatPanelRange, integerPanel, integerPanelRange]}]
+                        html: ORYX.I18N.ConditionExpressionEditorField.condition}, actionsCombo, {items: [stringPanel, floatPanel, floatPanelRange, integerPanel, integerPanelRange]}]
             });
 
             var scriptEditorLayout = new Ext.Panel({
