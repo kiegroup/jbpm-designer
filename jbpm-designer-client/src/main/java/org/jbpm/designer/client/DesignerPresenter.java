@@ -37,6 +37,7 @@ import org.uberfire.client.common.Page;
 import org.uberfire.client.mvp.PlaceManager;
 import org.uberfire.client.mvp.UberView;
 import org.uberfire.client.workbench.events.ChangeTitleWidgetEvent;
+import org.uberfire.lifecycle.OnClose;
 import org.uberfire.lifecycle.OnMayClose;
 import org.uberfire.lifecycle.OnStartup;
 import org.uberfire.mvp.Command;
@@ -64,6 +65,8 @@ public class DesignerPresenter {
         void setEditorParamters( final Map<String, String> editorParameters );
 
         String getEditorID();
+
+        boolean confirmClose();
     }
 
     @Inject
@@ -258,6 +261,11 @@ public class DesignerPresenter {
         } else {
             return true;
         }
+    }
+
+    @OnClose
+    public void onClose() {
+        this.path = null;
     }
 
     @WorkbenchPartTitle
