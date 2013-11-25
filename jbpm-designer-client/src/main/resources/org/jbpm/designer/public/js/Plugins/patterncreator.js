@@ -139,7 +139,7 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
         };
         this.patternShapes[element.id] = this.facade.createShape(elementOptions);
         this.patternPositions[element.id] = elementPosition;
-        this.patternShapes[element.id].setProperty("oryx-name", element.name);
+        //this.patternShapes[element.id].setProperty("oryx-name", element.name);
         this.patternShapes[element.id].refresh();
         this.facade.getCanvas().update();
 
@@ -166,7 +166,7 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
                     };
                     this.patternShapes[elementChildObject.id] = this.facade.createShape(elementChildOptions);
                     this.patternPositions[elementChildObject.id] = childPosition;
-                    this.patternShapes[elementChildObject.id].setProperty("oryx-name", elementChildObject.name);
+                    //this.patternShapes[elementChildObject.id].setProperty("oryx-name", elementChildObject.name);
                     this.patternShapes[elementChildObject.id].refresh();
                     this.facade.getCanvas().update();
                 }
