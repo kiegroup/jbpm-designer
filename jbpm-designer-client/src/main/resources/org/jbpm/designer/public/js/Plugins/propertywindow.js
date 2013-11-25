@@ -890,14 +890,6 @@ ORYX.Plugins.PropertyWindow = {
 
                                         });
                                     }
-                                } else {
-                                    ORYX.EDITOR._pluginFacade.raiseEvent({
-                                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                        ntype		: 'error',
-                                        msg         : 'Invalid number of nodes selected.',
-                                        title       : ''
-
-                                    });
                                 }
 
                                 var store = new Ext.data.SimpleStore({
