@@ -2581,6 +2581,12 @@ public class Bpmn2JsonMarshaller {
     	if(sequenceFlow.getDocumentation() != null && sequenceFlow.getDocumentation().size() > 0) {
             properties.put("documentation", sequenceFlow.getDocumentation().get(0).getText());
         }
+
+        if(sequenceFlow.isIsImmediate()) {
+            properties.put("isimmediate", "true");
+        } else {
+            properties.put("isimmediate", "false");
+        }
     	
     	Expression conditionExpression = sequenceFlow.getConditionExpression();
     	if (conditionExpression instanceof FormalExpression) {

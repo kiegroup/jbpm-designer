@@ -7,6 +7,7 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
+import org.kie.workbench.common.widgets.client.resources.i18n.CommonConstants;
 import org.kie.workbench.common.widgets.client.widget.HasBusyIndicator;
 import org.uberfire.client.common.BusyPopup;
 
@@ -91,6 +92,7 @@ public class DesignerView
         return this.editorID;
     }
 
+    @Override
     public boolean confirmClose() {
         return Window.confirm( "Business Process may contain unsaved changes. Are you sure you would like to close the editor?" );
     }

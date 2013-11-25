@@ -5305,6 +5305,7 @@ public class Bpmn2JsonUnmarshaller {
             monitoring.getDocumentation().add(createDocumentation(properties.get("monitoring")));
             sequenceFlow.setMonitoring(monitoring);
         }
+
         sequenceFlow.setIsImmediate(Boolean.parseBoolean(properties.get("isimmediate")));
         
         // simulation properties
