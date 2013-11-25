@@ -75,6 +75,9 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
                     }
                 }
             }
+            this.facade.setSelection([]);
+            this.facade.getCanvas().update();
+            this.facade.updateSelection();
         } else {
             this.facade.raiseEvent({
                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
