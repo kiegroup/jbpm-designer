@@ -17,7 +17,7 @@ public class AssetBuilder {
     }
 
     public AssetBuilder name(String name) {
-        this.asset.setName(UriUtils.encode(name));
+        this.asset.setName(name);
         return this;
     }
 
@@ -32,7 +32,7 @@ public class AssetBuilder {
     }
 
     public AssetBuilder uniqueId(String uniqueId) {
-        this.asset.setUniqueId(UriUtils.encode(uniqueId));
+        this.asset.setUniqueId(uniqueId);
         return this;
     }
 
@@ -66,7 +66,7 @@ public class AssetBuilder {
     }
 
     public AssetBuilder decode() {
-        this.asset.setName(UriUtils.decode(this.asset.getName()));
+//        this.asset.setName(UriUtils.decode(this.asset.getName()));
         return this;
     }
 
