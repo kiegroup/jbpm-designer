@@ -162,6 +162,15 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
             var commitMessage = "";
             if(showCommit && showCommit == true) {
                 commitMessage = prompt("Save this item", "Check in comment");
+                if(commitMessage == null) {
+                    this.facade.raiseEvent({
+                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                        ntype		: 'info',
+                        msg         : 'Save operation has been cancelled.',
+                        title       : ''
+                    });
+                    return;
+                }
             }
             Ext.Ajax.request({
                 url: ORYX.PATH + 'assetservice',
