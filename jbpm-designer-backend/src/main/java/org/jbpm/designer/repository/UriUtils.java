@@ -1,18 +1,25 @@
 package org.jbpm.designer.repository;
 
-import org.yaml.snakeyaml.util.UriEncoder;
+import org.apache.commons.httpclient.URIException;
 
 public class UriUtils {
 
 
     public static String encode(String value) {
-
-        return UriEncoder.encode(value);
+        try {
+            return org.apache.commons.httpclient.util.URIUtil.encodePath(value);
+        } catch (URIException e) {
+            throw new IllegalArgumentException("Invalid value " + value + " given, error: " + e.getMessage(), e);
+        }
     }
 
     public static String decode(String value) {
 
-        return UriEncoder.decode(value);
+        try {
+            return org.apache.commons.httpclient.util.URIUtil.decode(value);
+        } catch (URIException e) {
+            throw new IllegalArgumentException("Invalid value " + value + " given, error: " + e.getMessage(), e);
+        }
 
     }
 }
