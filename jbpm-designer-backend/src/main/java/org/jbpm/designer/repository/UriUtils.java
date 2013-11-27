@@ -4,8 +4,12 @@ import org.apache.commons.httpclient.URIException;
 
 public class UriUtils {
 
+    private static final String URL_ENCODED_REGEX = ".*%\\d{1,}.*";
 
     public static String encode(String value) {
+        if (value.matches(URL_ENCODED_REGEX)) {
+            return value;
+        }
         try {
             return org.apache.commons.httpclient.util.URIUtil.encodePath(value);
         } catch (URIException e) {
