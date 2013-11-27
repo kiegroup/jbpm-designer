@@ -2,6 +2,7 @@ package org.jbpm.designer.web.preprocessing.impl;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
+import org.jbpm.designer.repository.UriUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.drools.core.process.core.ParameterDefinition;
@@ -542,6 +543,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
     private void setupDefaultWorkitemConfigs(String location, Repository repository) {
         try {
+            location = UriUtils.encode(location);
             // push default configuration wid
             // check classpath first
             InputStream widIn = this.getClass().getClassLoader().getResourceAsStream(defaultClasspathWid);
@@ -558,13 +560,13 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             if (Base64Backport.isBase64(createdUUID)) {
                 byte[] decoded = Base64.decodeBase64(createdUUID);
                 try {
-                    createdUUID =  new String(decoded, "UTF-8");
+                    createdUUID = new String(decoded, "UTF-8");
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
             }
             if(vfsService != null && createdUUID != null) {
-                Path newWidAssetPath = vfsService.get(createdUUID);
+                Path newWidAssetPath = vfsService.get(UriUtils.encode(createdUUID));
             }
         } catch (Exception e) {
             e.printStackTrace();

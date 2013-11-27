@@ -69,7 +69,7 @@ public class VFSRepository implements Repository {
     }
 
     public Collection<Directory> listDirectories(String startAt) {
-        
+        startAt = UriUtils.encode(startAt);
         Path path = descriptor.getFileSystem().provider().getPath(URI.create(descriptor.getStringRepositoryRoot() + startAt));
         DirectoryStream<Path> directories = ioService.newDirectoryStream(path, new DirectoryStream.Filter<Path>() {
 
@@ -92,6 +92,7 @@ public class VFSRepository implements Repository {
     }
 
     public Collection<Asset> listAssetsRecursively(String startAt, final Filter filter) {
+        startAt = UriUtils.encode(startAt);
         final Collection<Asset> foundAssets = new ArrayList<Asset>();
         Path path = descriptor.getFileSystem().provider().getPath(URI.create(descriptor.getStringRepositoryRoot() + startAt));
 
@@ -110,6 +111,7 @@ public class VFSRepository implements Repository {
     }
 
     public Directory createDirectory(String location) {
+        location = UriUtils.encode(location);
         Path path = descriptor.getFileSystem().provider().getPath(URI.create(descriptor.getStringRepositoryRoot() + location));
 
         path = ioService.createDirectories(path);
@@ -119,13 +121,14 @@ public class VFSRepository implements Repository {
     }
 
     public boolean directoryExists(String directory) {
+        directory = UriUtils.encode(directory);
         Path path = descriptor.getFileSystem().provider().getPath(URI.create(descriptor.getStringRepositoryRoot() + directory));
 
         return ioService.exists(path) && Files.isDirectory(path);
     }
 
     public boolean deleteDirectory(String directory, boolean failIfNotEmpty) {
-
+        directory = UriUtils.encode(directory);
         try {
             Path path = descriptor.getFileSystem().provider().getPath(URI.create(descriptor.getStringRepositoryRoot() + directory));
             if (!Files.isDirectory(path)) {
@@ -157,7 +160,9 @@ public class VFSRepository implements Repository {
         }
     }
 
-    public boolean copyDirectory(String sourceDirectory, final String location) {
+    public boolean copyDirectory(String sourceDirectory, String location) {
+        sourceDirectory = UriUtils.encode(sourceDirectory);
+        location = UriUtils.encode(location);
         if (!directoryExists(sourceDirectory)) {
             throw new IllegalArgumentException("Directory does not exist " + sourceDirectory);
         }
@@ -200,7 +205,9 @@ public class VFSRepository implements Repository {
         }
     }
 
-    public boolean moveDirectory(String sourceDirectory, final String location, String name) {
+    public boolean moveDirectory(String sourceDirectory, String location, String name) {
+        sourceDirectory = UriUtils.encode(sourceDirectory);
+        location = UriUtils.encode(location);
         if (!directoryExists(sourceDirectory)) {
             throw new IllegalArgumentException("Directory does not exist " + sourceDirectory);
         }
@@ -253,6 +260,7 @@ public class VFSRepository implements Repository {
     }
 
     public Collection<Asset> listAssets(String location) {
+        location = UriUtils.encode(location);
         Path path = descriptor.getFileSystem().provider().getPath(URI.create(descriptor.getStringRepositoryRoot() + location));
         DirectoryStream<Path> directories = ioService.newDirectoryStream(path, new DirectoryStream.Filter<Path>() {
 
@@ -274,6 +282,7 @@ public class VFSRepository implements Repository {
     }
 
     public Collection<Asset> listAssets(String location, final Filter filter) {
+        location = UriUtils.encode(location);
         Path path = descriptor.getFileSystem().provider().getPath(URI.create(descriptor.getStringRepositoryRoot() + location));
         DirectoryStream<Path> directories = ioService.newDirectoryStream(path, new DirectoryStream.Filter<Path>() {
 
@@ -302,6 +311,7 @@ public class VFSRepository implements Repository {
     }
 
     public Asset loadAssetFromPath(String location) throws AssetNotFoundException {
+        location = UriUtils.encode(location);
         Path path = descriptor.getFileSystem().provider().getPath(URI.create(descriptor.getStringRepositoryRoot() + location));
 
         if (ioService.exists(path)) {
@@ -313,13 +323,14 @@ public class VFSRepository implements Repository {
     }
 
     public String createAsset(Asset asset) {
+        encodeAsset(asset);
         FileSystem fileSystem = getFileSystem(asset.getUniqueId());
         URI pathURI = null;
         if (asset.getAssetLocation().startsWith(fileSystem.provider().getScheme()) ||
                 asset.getAssetLocation().startsWith("default://")) {
-            pathURI = URI.create(UriUtils.encode(asset.getAssetLocation()+ "/" +asset.getFullName())) ;
+            pathURI = URI.create(asset.getAssetLocation()+ "/" +asset.getFullName());
         } else {
-            pathURI = URI.create(UriUtils.encode(descriptor.getStringRepositoryRoot() + (asset.getAssetLocation().equals("/")?"":asset.getAssetLocation()) + "/" +asset.getFullName()));
+            pathURI = URI.create(descriptor.getStringRepositoryRoot() + (asset.getAssetLocation().equals("/")?"":asset.getAssetLocation()) + "/" +asset.getFullName());
         }
 
         Path filePath = fileSystem.provider().getPath(pathURI);
@@ -344,6 +355,7 @@ public class VFSRepository implements Repository {
     }
 
     public String updateAsset(Asset asset, String commitMessage) throws AssetNotFoundException {
+        encodeAsset(asset);
         String uniqueId = decodeUniqueId(asset.getUniqueId());
         Path filePath = getFileSystem(uniqueId).provider().getPath(URI.create(uniqueId));
         if(commitMessage == null) {
@@ -372,6 +384,7 @@ public class VFSRepository implements Repository {
     }
 
     public boolean deleteAssetFromPath(String path) {
+        path = UriUtils.encode(path);
         Path filePath = descriptor.getFileSystem().provider().getPath(URI.create(descriptor.getStringRepositoryRoot() + path));
 
         return deleteAsset(filePath.toUri().toString());
@@ -387,6 +400,7 @@ public class VFSRepository implements Repository {
     }
 
     public boolean copyAsset(String uniqueId, String location) {
+        location = UriUtils.encode(location);
         String decodedUniqueId = decodeUniqueId(uniqueId);
         if (!assetExists(decodedUniqueId)) {
             throw new IllegalArgumentException("Asset does not exist");
@@ -411,6 +425,8 @@ public class VFSRepository implements Repository {
     }
 
     public boolean moveAsset(String uniqueId, String location, String name) {
+        name = UriUtils.encode(name);
+        location = UriUtils.encode(location);
         String decodedUniqueId = decodeUniqueId(uniqueId);
         if (!assetExists(decodedUniqueId)) {
             throw new IllegalArgumentException("Asset does not exist");
@@ -457,7 +473,7 @@ public class VFSRepository implements Repository {
             }
         }
 
-        return assetBuilder.decode().getAsset();
+        return assetBuilder.getAsset();
     }
 
     private String decodeUniqueId(String uniqueId) {
@@ -516,5 +532,12 @@ public class VFSRepository implements Repository {
             pathEvent.fire(new PathEvent(uri));
         }
         return descriptor.getFileSystem();
+    }
+
+    private Asset encodeAsset(Asset asset) {
+        ((AbstractAsset)asset).setAssetLocation(UriUtils.encode(asset.getAssetLocation()));
+        ((AbstractAsset)asset).setName(UriUtils.encode(asset.getName()));
+
+        return asset;
     }
 }
