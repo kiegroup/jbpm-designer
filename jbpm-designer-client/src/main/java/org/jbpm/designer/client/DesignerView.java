@@ -7,8 +7,6 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
-import org.kie.workbench.common.widgets.client.resources.i18n.CommonConstants;
-import org.kie.workbench.common.widgets.client.widget.HasBusyIndicator;
 import org.uberfire.client.common.BusyPopup;
 
 import java.util.Iterator;
@@ -50,6 +48,7 @@ public class DesignerView
         inlineFrame.getElement().getStyle().setOverflow(Style.Overflow.AUTO);
         inlineFrame.getElement().getStyle().setWidth(100, Style.Unit.PCT);
         inlineFrame.getElement().getStyle().setHeight(680, Style.Unit.PX);
+
 
 
     }
@@ -114,7 +113,9 @@ public class DesignerView
     public void onResize() {
         final Widget w = getParent();
         final int width = w.getOffsetWidth();
-        inlineFrame.setWidth(width + "px");
+        final int height = w.getOffsetHeight();
+        inlineFrame.setWidth( width + "px" );
+        inlineFrame.setHeight( height + "px" );
     }
 
     @Override
