@@ -18,6 +18,7 @@ import org.jbpm.designer.util.Base64Backport;
 import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingUnit;
 import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.jbpm.flow.util.MVELSafeHelper;
 import org.jbpm.process.workitem.WorkDefinitionImpl;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -25,13 +26,16 @@ import org.mvel2.MVEL;
 import org.stringtemplate.v4.ST;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.VFSService;
+
 import sun.misc.BASE64Encoder;
+
 import org.apache.commons.io.IOUtils;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.*;
 import java.net.URLEncoder;
 import java.util.*;
@@ -310,7 +314,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         List<Map<String, Object>> workDefinitionsMaps;
 
         try {
-            workDefinitionsMaps = (List<Map<String, Object>>) MVEL.eval(widAsset.getAssetContent(), new HashMap());
+            workDefinitionsMaps = (List<Map<String, Object>>) MVELSafeHelper.getEvaluator().eval(widAsset.getAssetContent(), new HashMap());
         } catch(Exception e) {
             throw new Exception(e.getMessage());
         }
