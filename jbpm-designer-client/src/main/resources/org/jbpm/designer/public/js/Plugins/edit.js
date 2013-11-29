@@ -201,7 +201,7 @@ ORYX.Plugins.Edit = Clazz.extend({
                 return s2.hasChildShape(shape);
             });
             if(isChildShapeOfAnother) return;
-            
+
             // This shape should be considered
             shapesToConsider.push(shape);
             // Consider attached nodes (e.g. intermediate events)
@@ -211,17 +211,20 @@ ORYX.Plugins.Edit = Clazz.extend({
                 shapesToConsider = shapesToConsider.concat(attached);
             }
             childShapesToConsider = childShapesToConsider.concat(shape.getChildShapes(true));
-            
+
             
             if (considerConnections && !(shape instanceof ORYX.Core.Edge)){
                 //concat all incoming and outgoing shapes
                 var connections = shape.getIncomingShapes().concat(shape.getOutgoingShapes());
-                
                 connections.each(function(s) {
                     //we don't want to delete sequence flows with
                     //an existing 'conditionexpression'
                     //console.log(s);
                     if (s instanceof ORYX.Core.Edge && s.properties["oryx-conditionexpression"] && s.properties["oryx-conditionexpression"] != ""){
+                        return;
+                    }
+                    if( shape instanceof ORYX.Core.Node && s instanceof ORYX.Core.Node) {
+                        // dont remove nodes attached to nodes (boundary event scenario)
                         return;
                     }
                     shapesToConsider.push(s);
