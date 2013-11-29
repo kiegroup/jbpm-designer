@@ -7,6 +7,9 @@ public class UriUtils {
     private static final String URL_ENCODED_REGEX = ".*%\\d{1,}.*";
 
     public static String encode(String value) {
+        if(value == null) {
+            return value;
+        }
         if (value.matches(URL_ENCODED_REGEX)) {
             return value;
         }
@@ -18,7 +21,9 @@ public class UriUtils {
     }
 
     public static String decode(String value) {
-
+        if(value == null) {
+            return value;
+        }
         try {
             return org.apache.commons.httpclient.util.URIUtil.decode(value);
         } catch (URIException e) {
