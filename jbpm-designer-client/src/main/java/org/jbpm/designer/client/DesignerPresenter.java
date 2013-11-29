@@ -410,7 +410,7 @@ public class DesignerPresenter {
             @Override
             public void callback( final Void response ) {
                 notification.fire( new NotificationEvent( CommonConstants.INSTANCE.ItemDeletedSuccessfully() ) );
-                placeManager.closePlace( new PathPlaceRequest( path ) );
+                placeManager.forceClosePlace( new PathPlaceRequest( path ) );
             }
         };
     }
