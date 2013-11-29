@@ -1,44 +1,57 @@
 package org.jbpm.designer.web.preprocessing.impl;
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.FileUtils;
-import org.jbpm.designer.repository.UriUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.drools.core.process.core.ParameterDefinition;
-import org.drools.core.process.core.datatype.DataType;
-import org.drools.core.process.core.impl.ParameterDefinitionImpl;
-import org.jbpm.designer.repository.Asset;
-import org.jbpm.designer.repository.AssetBuilderFactory;
-import org.jbpm.designer.repository.AssetNotFoundException;
-import org.jbpm.designer.repository.Repository;
-import org.jbpm.designer.repository.filters.FilterByExtension;
-import org.jbpm.designer.repository.impl.AssetBuilder;
-import org.jbpm.designer.util.Base64Backport;
-import org.jbpm.designer.util.ConfigurationProvider;
-import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingUnit;
-import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.flow.util.MVELSafeHelper;
-import org.jbpm.process.workitem.WorkDefinitionImpl;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.mvel2.MVEL;
-import org.stringtemplate.v4.ST;
-import org.uberfire.backend.vfs.Path;
-import org.uberfire.backend.vfs.VFSService;
-
-import sun.misc.BASE64Encoder;
-
-import org.apache.commons.io.IOUtils;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import java.io.*;
-import java.net.URLEncoder;
-import java.util.*;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.drools.core.process.core.ParameterDefinition;
+import org.drools.core.process.core.datatype.DataType;
+import org.drools.core.process.core.impl.ParameterDefinitionImpl;
+import org.drools.core.util.MVELSafeHelper;
+import org.jbpm.designer.repository.Asset;
+import org.jbpm.designer.repository.AssetBuilderFactory;
+import org.jbpm.designer.repository.AssetNotFoundException;
+import org.jbpm.designer.repository.Repository;
+import org.jbpm.designer.repository.UriUtils;
+import org.jbpm.designer.repository.filters.FilterByExtension;
+import org.jbpm.designer.repository.impl.AssetBuilder;
+import org.jbpm.designer.util.Base64Backport;
+import org.jbpm.designer.util.ConfigurationProvider;
+import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingUnit;
+import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.jbpm.process.workitem.WorkDefinitionImpl;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.stringtemplate.v4.ST;
+import org.uberfire.backend.vfs.Path;
+import org.uberfire.backend.vfs.VFSService;
+
+import sun.misc.BASE64Encoder;
 
 /**
  * JbpmPreprocessingUnit - preprocessing unit for the jbpm profile
