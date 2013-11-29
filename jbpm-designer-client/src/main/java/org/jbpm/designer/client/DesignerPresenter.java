@@ -256,8 +256,14 @@ public class DesignerPresenter {
     @OnMayClose
     public boolean canClose() {
         if(!view.canSaveDesignerModel(view.getEditorID())) {
-            view.setProcessSaved(view.getEditorID());
-            return view.confirmClose();
+            boolean canClose = view.confirmClose();
+            if(canClose) {
+                view.setProcessSaved(view.getEditorID());
+                return canClose;
+            } else {
+                view.setProcessUnSaved(view.getEditorID());
+                return canClose;
+            }
         } else {
             return true;
         }

@@ -102,6 +102,12 @@ public class DesignerView
         }
     }-*/;
 
+    public native void setProcessUnSaved(String editorID) /*-{
+        if($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor) {
+            $wnd.document.getElementById(editorID).contentWindow.ORYX.PROCESS_SAVED = false;
+        }
+    }-*/;
+
     public native boolean canSaveDesignerModel(String editorID) /*-{
         if($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor && (typeof($wnd.document.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved) == "function")) {
             return $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved();
