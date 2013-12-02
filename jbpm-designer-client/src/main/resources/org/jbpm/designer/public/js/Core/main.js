@@ -504,7 +504,7 @@ ORYX.Editor = {
 		
 		// Hide every region except the center
 		for (region in this.layout_regions) {
-			if ( region != "center" && ORYX.READONLY == true) {
+			if ( (region != "center" && region != "north") && ORYX.READONLY == true) {
                 this.layout_regions[ region ].setVisible(false);
 			}
 		}
@@ -589,7 +589,7 @@ ORYX.Editor = {
 			// trigger doLayout() and show the pane
 			current_region.ownerCt.doLayout();
 
-            if(ORYX.READONLY == true && current_region.region != "center") {
+            if(ORYX.READONLY == true && current_region.region != "center" ) {
             } else {
                 current_region.show();
             }

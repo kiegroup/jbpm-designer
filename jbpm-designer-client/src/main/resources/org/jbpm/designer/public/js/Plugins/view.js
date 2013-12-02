@@ -138,6 +138,7 @@ ORYX.Plugins.View = {
 //			}.bind(this)
 //		});
 
+        if(ORYX.READONLY != true) {
         /* Register full screen to model */
         this.facade.offer({
             'name':'Show in full screen',
@@ -166,7 +167,7 @@ ORYX.Plugins.View = {
             'minShape': 0,
             'maxShape': 0,
             'isEnabled': function(){
-                return true;
+                return ORYX.READONLY != true;
 //				profileParamName = "profile";
 //				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
 //				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
@@ -190,7 +191,7 @@ ORYX.Plugins.View = {
             'minShape': 0,
             'maxShape': 0,
             'isEnabled': function(){
-                return true;
+                return ORYX.READONLY != true;
 //				profileParamName = "profile";
 //				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
 //				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
@@ -213,7 +214,7 @@ ORYX.Plugins.View = {
             'minShape': 0,
             'maxShape': 0,
             'isEnabled': function(){
-                return true;
+                return ORYX.READONLY != true;
 //				profileParamName = "profile";
 //				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
 //				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
@@ -236,7 +237,7 @@ ORYX.Plugins.View = {
             'minShape': 0,
             'maxShape': 0,
             'isEnabled': function(){
-                return true;
+                return ORYX.READONLY != true;
 //				profileParamName = "profile";
 //				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
 //				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
@@ -259,7 +260,7 @@ ORYX.Plugins.View = {
             'minShape': 0,
             'maxShape': 0,
             'isEnabled': function(){
-                return true;
+                return ORYX.READONLY != true;
 //				profileParamName = "profile";
 //				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
 //				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
@@ -414,7 +415,7 @@ ORYX.Plugins.View = {
             'minShape': 0,
             'maxShape': 0,
             'isEnabled': function(){
-                return true;
+                return ORYX.READONLY != true;
 //				profileParamName = "profile";
 //				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
 //				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
@@ -436,7 +437,7 @@ ORYX.Plugins.View = {
             'minShape': 0,
             'maxShape': 0,
             'isEnabled': function(){
-                return true;
+                return ORYX.READONLY != true;
 //				profileParamName = "profile";
 //				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
 //				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
@@ -458,7 +459,7 @@ ORYX.Plugins.View = {
             'minShape': 0,
             'maxShape': 0,
             'isEnabled': function(){
-                return true;
+                return ORYX.READONLY != true;
 //				profileParamName = "profile";
 //				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
 //				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
@@ -468,6 +469,7 @@ ORYX.Plugins.View = {
 //				return profileParamValue == "jbpm";
             }.bind(this)
         });
+        }
     },
 
     /**

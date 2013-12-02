@@ -9,135 +9,137 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         this.facade = facade;
         this.vt;
 
-        this.facade.offer({
-            'name': ORYX.I18N.Save.save,
-            'functionality': this.saveWithMessage.bind(this),
-            'group': ORYX.I18N.Save.group,
-            'icon': ORYX.BASE_FILE_PATH + "images/disk.png",
-            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
-            'description': ORYX.I18N.Save.saveDesc,
-            'index': 1,
-            'minShape': 0,
-            'maxShape': 0,
-            'isEnabled': function(){
-                return ORYX.REPOSITORY_ID != "guvnor";
-//                profileParamName = "profile";
-//                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//                regexa = new RegExp( regexSa );
-//                profileParams = regexa.exec( window.location.href );
-//                profileParamValue = profileParams[1];
-//                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
-            }.bind(this)
-        });
+        if(ORYX.READONLY != true) {
+            this.facade.offer({
+                'name': ORYX.I18N.Save.save,
+                'functionality': this.saveWithMessage.bind(this),
+                'group': ORYX.I18N.Save.group,
+                'icon': ORYX.BASE_FILE_PATH + "images/disk.png",
+                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
+                'description': ORYX.I18N.Save.saveDesc,
+                'index': 1,
+                'minShape': 0,
+                'maxShape': 0,
+                'isEnabled': function(){
+                    return ORYX.REPOSITORY_ID != "guvnor" && ORYX.READONLY != true;
+    //                profileParamName = "profile";
+    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+    //                regexa = new RegExp( regexSa );
+    //                profileParams = regexa.exec( window.location.href );
+    //                profileParamValue = profileParams[1];
+    //                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
+                }.bind(this)
+            });
 
-        this.facade.offer({
-            'name': 'Enable autosave',
-            'functionality': this.enableautosave.bind(this),
-            'group': ORYX.I18N.Save.group,
-            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
-            'description': 'Enable autosave',
-            'index': 2,
-            'minShape': 0,
-            'maxShape': 0,
-            'isEnabled': function(){
-                return !ORYX.AUTOSAVE_ENABLED;
-//                profileParamName = "profile";
-//                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//                regexa = new RegExp( regexSa );
-//                profileParams = regexa.exec( window.location.href );
-//                profileParamValue = profileParams[1];
-//                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
-            }.bind(this)
-        });
+            this.facade.offer({
+                'name': 'Enable autosave',
+                'functionality': this.enableautosave.bind(this),
+                'group': ORYX.I18N.Save.group,
+                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
+                'description': 'Enable autosave',
+                'index': 2,
+                'minShape': 0,
+                'maxShape': 0,
+                'isEnabled': function(){
+                    return !ORYX.AUTOSAVE_ENABLED && ORYX.READONLY != true;
+    //                profileParamName = "profile";
+    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+    //                regexa = new RegExp( regexSa );
+    //                profileParams = regexa.exec( window.location.href );
+    //                profileParamValue = profileParams[1];
+    //                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
+                }.bind(this)
+            });
 
-        this.facade.offer({
-            'name': 'Disable autosave',
-            'functionality': this.disableautosave.bind(this),
-            'group': ORYX.I18N.Save.group,
-            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
-            'description': 'Disable autosave',
-            'index': 3,
-            'minShape': 0,
-            'maxShape': 0,
-            'isEnabled': function(){
-                return ORYX.AUTOSAVE_ENABLED;
-//                profileParamName = "profile";
-//                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//                regexa = new RegExp( regexSa );
-//                profileParams = regexa.exec( window.location.href );
-//                profileParamValue = profileParams[1];
-//                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
-            }.bind(this)
-        });
+            this.facade.offer({
+                'name': 'Disable autosave',
+                'functionality': this.disableautosave.bind(this),
+                'group': ORYX.I18N.Save.group,
+                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
+                'description': 'Disable autosave',
+                'index': 3,
+                'minShape': 0,
+                'maxShape': 0,
+                'isEnabled': function(){
+                    return ORYX.AUTOSAVE_ENABLED && ORYX.READONLY != true;
+    //                profileParamName = "profile";
+    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+    //                regexa = new RegExp( regexSa );
+    //                profileParams = regexa.exec( window.location.href );
+    //                profileParamValue = profileParams[1];
+    //                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
+                }.bind(this)
+            });
 
-        this.facade.offer({
-            'name': 'Copy',
-            'functionality': this.copyassetnotify.bind(this),
-            'group': ORYX.I18N.Save.group,
-            'icon': ORYX.BASE_FILE_PATH + "images/page_copy.png",
-            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
-            'description': 'Copy asset',
-            'index': 4,
-            'minShape': 0,
-            'maxShape': 0,
-            'isEnabled': function(){
-                return ORYX.REPOSITORY_ID != "guvnor";
-//                profileParamName = "profile";
-//                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//                regexa = new RegExp( regexSa );
-//                profileParams = regexa.exec( window.location.href );
-//                profileParamValue = profileParams[1];
-//                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
-            }.bind(this)
-        });
+            this.facade.offer({
+                'name': 'Copy',
+                'functionality': this.copyassetnotify.bind(this),
+                'group': ORYX.I18N.Save.group,
+                'icon': ORYX.BASE_FILE_PATH + "images/page_copy.png",
+                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
+                'description': 'Copy asset',
+                'index': 4,
+                'minShape': 0,
+                'maxShape': 0,
+                'isEnabled': function(){
+                    return ORYX.REPOSITORY_ID != "guvnor" && ORYX.READONLY != true;
+    //                profileParamName = "profile";
+    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+    //                regexa = new RegExp( regexSa );
+    //                profileParams = regexa.exec( window.location.href );
+    //                profileParamValue = profileParams[1];
+    //                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
+                }.bind(this)
+            });
 
-        this.facade.offer({
-            'name': 'Rename',
-            'functionality': this.renameassetnotify.bind(this),
-            'group': ORYX.I18N.Save.group,
-            'icon': ORYX.BASE_FILE_PATH + "images/rename.png",
-            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
-            'description': 'Rename asset',
-            'index': 5,
-            'minShape': 0,
-            'maxShape': 0,
-            'isEnabled': function(){
-                return ORYX.REPOSITORY_ID != "guvnor";
-//                profileParamName = "profile";
-//                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//                regexa = new RegExp( regexSa );
-//                profileParams = regexa.exec( window.location.href );
-//                profileParamValue = profileParams[1];
-//                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
-            }.bind(this)
-        });
+            this.facade.offer({
+                'name': 'Rename',
+                'functionality': this.renameassetnotify.bind(this),
+                'group': ORYX.I18N.Save.group,
+                'icon': ORYX.BASE_FILE_PATH + "images/rename.png",
+                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
+                'description': 'Rename asset',
+                'index': 5,
+                'minShape': 0,
+                'maxShape': 0,
+                'isEnabled': function(){
+                    return ORYX.REPOSITORY_ID != "guvnor" && ORYX.READONLY != true;
+    //                profileParamName = "profile";
+    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+    //                regexa = new RegExp( regexSa );
+    //                profileParams = regexa.exec( window.location.href );
+    //                profileParamValue = profileParams[1];
+    //                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
+                }.bind(this)
+            });
 
-        this.facade.offer({
-            'name': 'Delete',
-            'functionality': this.deleteassetnotify.bind(this),
-            'group': ORYX.I18N.Save.group,
-            'icon': ORYX.BASE_FILE_PATH + "images/delete2.gif",
-            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
-            'description': "Delete asset",
-            'index': 6,
-            'minShape': 0,
-            'maxShape': 0,
-            'isEnabled': function(){
-                return ORYX.REPOSITORY_ID != "guvnor";
-//                profileParamName = "profile";
-//                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//                regexa = new RegExp( regexSa );
-//                profileParams = regexa.exec( window.location.href );
-//                profileParamValue = profileParams[1];
-//                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
-            }.bind(this)
-        });
+            this.facade.offer({
+                'name': 'Delete',
+                'functionality': this.deleteassetnotify.bind(this),
+                'group': ORYX.I18N.Save.group,
+                'icon': ORYX.BASE_FILE_PATH + "images/delete2.gif",
+                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
+                'description': "Delete asset",
+                'index': 6,
+                'minShape': 0,
+                'maxShape': 0,
+                'isEnabled': function(){
+                    return ORYX.REPOSITORY_ID != "guvnor" && ORYX.READONLY != true;
+    //                profileParamName = "profile";
+    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+    //                regexa = new RegExp( regexSa );
+    //                profileParams = regexa.exec( window.location.href );
+    //                profileParamValue = profileParams[1];
+    //                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
+                }.bind(this)
+            });
+        }
 
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_MOUSEUP, this.setUnsaved.bind(this));
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_PROPWINDOW_PROP_CHANGED, this.setUnsaved.bind(this));

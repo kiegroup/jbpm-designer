@@ -10,26 +10,29 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
 
     construct: function(facade){
         this.facade = facade;
-        this.facade.offer({
-            'name':ORYX.I18N.View.connectServiceRepo,
-            'functionality': this.jbpmServiceRepoConnect.bind(this),
-            'group': "servicerepogroup",
-            'icon': ORYX.BASE_FILE_PATH + "images/repository_rep.gif",
-            'description': ORYX.I18N.View.connectServiceRepoDesc,
-            'index': 4,
-            'minShape': 0,
-            'maxShape': 0,
-            'isEnabled': function(){
-                return true;
-//				profileParamName = "profile";
-//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//		        regexa = new RegExp( regexSa );
-//		        profileParams = regexa.exec( window.location.href );
-//		        profileParamValue = profileParams[1];
-//				return profileParamValue == "jbpm";
-            }.bind(this)
-        });
+
+        if(ORYX.READONLY != true) {
+            this.facade.offer({
+                'name':ORYX.I18N.View.connectServiceRepo,
+                'functionality': this.jbpmServiceRepoConnect.bind(this),
+                'group': "servicerepogroup",
+                'icon': ORYX.BASE_FILE_PATH + "images/repository_rep.gif",
+                'description': ORYX.I18N.View.connectServiceRepoDesc,
+                'index': 4,
+                'minShape': 0,
+                'maxShape': 0,
+                'isEnabled': function(){
+                    return ORYX.READONLY != true;
+    //				profileParamName = "profile";
+    //				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    //				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+    //		        regexa = new RegExp( regexSa );
+    //		        profileParams = regexa.exec( window.location.href );
+    //		        profileParamValue = profileParams[1];
+    //				return profileParamValue == "jbpm";
+                }.bind(this)
+            });
+        }
     },
     jbpmServiceRepoConnect : function() {
         this._showInitialRepoScreen();

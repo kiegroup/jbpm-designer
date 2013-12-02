@@ -18,27 +18,29 @@ ORYX.Plugins.Theme = Clazz.extend({
 	    if (ajaxObj.status == 200) {
 			var themeNamesArray = ajaxObj.responseText.split(",");
 			for (var i = 0; i < themeNamesArray.length; i++) {
-	   			 this.facade.offer({
-	   				'name': themeNamesArray[i],
-	   				'functionality': this.applyTheme.bind(this, themeNamesArray[i]),
-	   				'group': 'colorpickergroup',
-	   				dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/colorpicker.gif",
-	   				'icon': ORYX.BASE_FILE_PATH + "images/colorize.png",
-	   				'description': "Apply " + themeNamesArray[i] + " Color Theme",
-	   				'index': 10,
-	   				'minShape': 0,
-	   				'maxShape': 0,
-	   				'isEnabled': function(){
-                           return true;
-//	   					profileParamName = "profile";
-//	   					profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//	   					regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//	   			        regexa = new RegExp( regexSa );
-//	   			        profileParams = regexa.exec( window.location.href );
-//	   			        profileParamValue = profileParams[1];
-//	   					return profileParamValue == "jbpm";
-	   				}.bind(this)
-	   			});
+                if(ORYX.READONLY != true) {
+                     this.facade.offer({
+                        'name': themeNamesArray[i],
+                        'functionality': this.applyTheme.bind(this, themeNamesArray[i]),
+                        'group': 'colorpickergroup',
+                        dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/colorpicker.gif",
+                        'icon': ORYX.BASE_FILE_PATH + "images/colorize.png",
+                        'description': "Apply " + themeNamesArray[i] + " Color Theme",
+                        'index': 10,
+                        'minShape': 0,
+                        'maxShape': 0,
+                        'isEnabled': function(){
+                               return ORYX.READONLY != true;
+    //	   					profileParamName = "profile";
+    //	   					profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    //	   					regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+    //	   			        regexa = new RegExp( regexSa );
+    //	   			        profileParams = regexa.exec( window.location.href );
+    //	   			        profileParamValue = profileParams[1];
+    //	   					return profileParamValue == "jbpm";
+                        }.bind(this)
+                    });
+                }
   			}
 		}
 	},
