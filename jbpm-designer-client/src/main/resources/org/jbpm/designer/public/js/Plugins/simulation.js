@@ -7,50 +7,52 @@ if (!ORYX.Config)
 ORYX.Plugins.Simulation = Clazz.extend({
 	construct: function(facade){
 		this.facade = facade;
-		
-		this.facade.offer({
-			'name': "Process Paths",
-			'functionality': this.findPaths.bind(this),
-			'group': "validationandsimulation",
-			'icon': ORYX.BASE_FILE_PATH + "images/path.png",
-			dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/simulation.png",
-			'description': "Display Process Paths",
-			'index': 1,
-			'minShape': 0,
-			'maxShape': 0,
-			'isEnabled': function(){
-                return true;
-//				profileParamName = "profile";
-//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//		        regexa = new RegExp( regexSa );
-//		        profileParams = regexa.exec( window.location.href );
-//		        profileParamValue = profileParams[1];
-//				return profileParamValue == "jbpm";
-			}.bind(this)
-		});
-		
-		this.facade.offer({
-			'name': "Run Simulation",
-			'functionality': this.runSimulation.bind(this),
-			'group': "validationandsimulation",
-			'icon': ORYX.BASE_FILE_PATH + "images/control_play.png",
-			dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/simulation.png",
-			'description': "Run Process Simulation",
-			'index': 2,
-			'minShape': 0,
-			'maxShape': 0,
-			'isEnabled': function(){
-                return true;
-//				profileParamName = "profile";
-//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//		        regexa = new RegExp( regexSa );
-//		        profileParams = regexa.exec( window.location.href );
-//		        profileParamValue = profileParams[1];
-//				return profileParamValue == "jbpm";
-			}.bind(this)
-		});
+
+        if(ORYX.READONLY != true) {
+            this.facade.offer({
+                'name': "Process Paths",
+                'functionality': this.findPaths.bind(this),
+                'group': "validationandsimulation",
+                'icon': ORYX.BASE_FILE_PATH + "images/path.png",
+                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/simulation.png",
+                'description': "Display Process Paths",
+                'index': 1,
+                'minShape': 0,
+                'maxShape': 0,
+                'isEnabled': function(){
+                    return ORYX.READONLY != true;
+    //				profileParamName = "profile";
+    //				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    //				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+    //		        regexa = new RegExp( regexSa );
+    //		        profileParams = regexa.exec( window.location.href );
+    //		        profileParamValue = profileParams[1];
+    //				return profileParamValue == "jbpm";
+                }.bind(this)
+            });
+
+            this.facade.offer({
+                'name': "Run Simulation",
+                'functionality': this.runSimulation.bind(this),
+                'group': "validationandsimulation",
+                'icon': ORYX.BASE_FILE_PATH + "images/control_play.png",
+                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/simulation.png",
+                'description': "Run Process Simulation",
+                'index': 2,
+                'minShape': 0,
+                'maxShape': 0,
+                'isEnabled': function(){
+                    return ORYX.READONLY != true;
+    //				profileParamName = "profile";
+    //				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    //				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+    //		        regexa = new RegExp( regexSa );
+    //		        profileParams = regexa.exec( window.location.href );
+    //		        profileParamValue = profileParams[1];
+    //				return profileParamValue == "jbpm";
+                }.bind(this)
+            });
+        }
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_SIMULATION_BUILD_PATH_SVG, this.autoDisplayPath.bind(this));
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_SIMULATION_CLEAR_PATH_SVG, this.resetNodeColors.bind(this));
 	},

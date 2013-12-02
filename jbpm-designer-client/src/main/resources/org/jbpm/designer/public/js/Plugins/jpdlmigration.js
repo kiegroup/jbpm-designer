@@ -7,27 +7,30 @@ if (!ORYX.Config)
 ORYX.Plugins.JPDLMigration = Clazz.extend({
 	construct: function(facade){
 		this.facade = facade;
-		this.facade.offer({
-			'name':ORYX.I18N.View.migratejPDL,
-			'functionality': this.migrateJPDL.bind(this),
-            'group': 'importgroup',
-			'icon': ORYX.BASE_FILE_PATH + "images/jpdl_import_icon.png",
-            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/import.png",
-			'description': ORYX.I18N.View.migratejPDLDesc,
-			'index': 3,
-			'minShape': 0,
-			'maxShape': 0,
-			'isEnabled': function(){
-                return true;
-//				profileParamName = "profile";
-//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//		        regexa = new RegExp( regexSa );
-//		        profileParams = regexa.exec( window.location.href );
-//		        profileParamValue = profileParams[1];
-//				return profileParamValue == "jbpm";
-			}.bind(this)
-		});
+
+        if(ORYX.READONLY != true) {
+            this.facade.offer({
+                'name':ORYX.I18N.View.migratejPDL,
+                'functionality': this.migrateJPDL.bind(this),
+                'group': 'importgroup',
+                'icon': ORYX.BASE_FILE_PATH + "images/jpdl_import_icon.png",
+                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/import.png",
+                'description': ORYX.I18N.View.migratejPDLDesc,
+                'index': 3,
+                'minShape': 0,
+                'maxShape': 0,
+                'isEnabled': function(){
+                    return ORYX.READONLY != true;
+    //				profileParamName = "profile";
+    //				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    //				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+    //		        regexa = new RegExp( regexSa );
+    //		        profileParams = regexa.exec( window.location.href );
+    //		        profileParamValue = profileParams[1];
+    //				return profileParamValue == "jbpm";
+                }.bind(this)
+            });
+        }
 	},
 	
 	migrateJPDL : function() {

@@ -22,115 +22,117 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
             //this.startStoring();
         }
 
-        this.facade.offer({
-            'name': "Display Local History",
-            'functionality': this.displayLocalHistory.bind(this),
-            'group': "localstorage",
-            'icon': ORYX.BASE_FILE_PATH + "images/view.png",
-             dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/localhistory.png",
-            'description': "Display Local History",
-            'index': 1,
-            'minShape': 0,
-            'maxShape': 0,
-            'isEnabled': function(){
-                return ORYX.LOCAL_HISTORY_ENABLED;
-//                profileParamName = "profile";
-//                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//                regexa = new RegExp( regexSa );
-//                profileParams = regexa.exec( window.location.href );
-//                profileParamValue = profileParams[1];
-//                return profileParamValue == "jbpm" && ORYX.LOCAL_HISTORY_ENABLED;
-            }.bind(this)
-        });
+        if(ORYX.READONLY != true) {
+            this.facade.offer({
+                'name': "Display Local History",
+                'functionality': this.displayLocalHistory.bind(this),
+                'group': "localstorage",
+                'icon': ORYX.BASE_FILE_PATH + "images/view.png",
+                 dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/localhistory.png",
+                'description': "Display Local History",
+                'index': 1,
+                'minShape': 0,
+                'maxShape': 0,
+                'isEnabled': function(){
+                    return ORYX.LOCAL_HISTORY_ENABLED && ORYX.READONLY != true;
+    //                profileParamName = "profile";
+    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+    //                regexa = new RegExp( regexSa );
+    //                profileParams = regexa.exec( window.location.href );
+    //                profileParamValue = profileParams[1];
+    //                return profileParamValue == "jbpm" && ORYX.LOCAL_HISTORY_ENABLED;
+                }.bind(this)
+            });
 
-        this.facade.offer({
-            'name': "Clear Local History",
-            'functionality': this.clearLocalHistory.bind(this),
-            'group': "localstorage",
-            'icon': ORYX.BASE_FILE_PATH + "images/clear.png",
-            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/localhistory.png",
-            'description': "Clear Local History",
-            'index': 2,
-            'minShape': 0,
-            'maxShape': 0,
-            'isEnabled': function(){
-                return ORYX.LOCAL_HISTORY_ENABLED;
-//                profileParamName = "profile";
-//                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//                regexa = new RegExp( regexSa );
-//                profileParams = regexa.exec( window.location.href );
-//                profileParamValue = profileParams[1];
-//                return profileParamValue == "jbpm" && ORYX.LOCAL_HISTORY_ENABLED;
-            }.bind(this)
-        });
+            this.facade.offer({
+                'name': "Clear Local History",
+                'functionality': this.clearLocalHistory.bind(this),
+                'group': "localstorage",
+                'icon': ORYX.BASE_FILE_PATH + "images/clear.png",
+                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/localhistory.png",
+                'description': "Clear Local History",
+                'index': 2,
+                'minShape': 0,
+                'maxShape': 0,
+                'isEnabled': function(){
+                    return ORYX.LOCAL_HISTORY_ENABLED && ORYX.READONLY != true;
+    //                profileParamName = "profile";
+    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+    //                regexa = new RegExp( regexSa );
+    //                profileParams = regexa.exec( window.location.href );
+    //                profileParamValue = profileParams[1];
+    //                return profileParamValue == "jbpm" && ORYX.LOCAL_HISTORY_ENABLED;
+                }.bind(this)
+            });
 
-        this.facade.offer({
-            'name': "Configure Snapshot Interval",
-            'functionality': this.configureSnapshotInterval.bind(this),
-            'group': "localstorage",
-            'icon': ORYX.BASE_FILE_PATH + "images/clock.png",
-            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/localhistory.png",
-            'description': "Configure Snaphot Interval",
-            'index': 3,
-            'minShape': 0,
-            'maxShape': 0,
-            'isEnabled': function(){
-                return ORYX.LOCAL_HISTORY_ENABLED;
-//                profileParamName = "profile";
-//                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//                regexa = new RegExp( regexSa );
-//                profileParams = regexa.exec( window.location.href );
-//                profileParamValue = profileParams[1];
-//                return profileParamValue == "jbpm" && ORYX.LOCAL_HISTORY_ENABLED;
-            }.bind(this)
-        });
+            this.facade.offer({
+                'name': "Configure Snapshot Interval",
+                'functionality': this.configureSnapshotInterval.bind(this),
+                'group': "localstorage",
+                'icon': ORYX.BASE_FILE_PATH + "images/clock.png",
+                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/localhistory.png",
+                'description': "Configure Snaphot Interval",
+                'index': 3,
+                'minShape': 0,
+                'maxShape': 0,
+                'isEnabled': function(){
+                    return ORYX.LOCAL_HISTORY_ENABLED && ORYX.READONLY != true;
+    //                profileParamName = "profile";
+    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+    //                regexa = new RegExp( regexSa );
+    //                profileParams = regexa.exec( window.location.href );
+    //                profileParamValue = profileParams[1];
+    //                return profileParamValue == "jbpm" && ORYX.LOCAL_HISTORY_ENABLED;
+                }.bind(this)
+            });
 
-        this.facade.offer({
-            'name': "Enable Local History",
-            'functionality': this.enableLocalHistory.bind(this),
-            'group': "localstorage",
-            'icon': ORYX.BASE_FILE_PATH + "images/enable.png",
-            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/localhistory.png",
-            'description': "Enable Local History",
-            'index': 3,
-            'minShape': 0,
-            'maxShape': 0,
-            'isEnabled': function(){
-                return !ORYX.LOCAL_HISTORY_ENABLED;
-//                profileParamName = "profile";
-//                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//                regexa = new RegExp( regexSa );
-//                profileParams = regexa.exec( window.location.href );
-//                profileParamValue = profileParams[1];
-//                return profileParamValue == "jbpm" && !ORYX.LOCAL_HISTORY_ENABLED;
-            }.bind(this)
-        });
+            this.facade.offer({
+                'name': "Enable Local History",
+                'functionality': this.enableLocalHistory.bind(this),
+                'group': "localstorage",
+                'icon': ORYX.BASE_FILE_PATH + "images/enable.png",
+                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/localhistory.png",
+                'description': "Enable Local History",
+                'index': 3,
+                'minShape': 0,
+                'maxShape': 0,
+                'isEnabled': function(){
+                    return !ORYX.LOCAL_HISTORY_ENABLED && ORYX.READONLY != true;
+    //                profileParamName = "profile";
+    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+    //                regexa = new RegExp( regexSa );
+    //                profileParams = regexa.exec( window.location.href );
+    //                profileParamValue = profileParams[1];
+    //                return profileParamValue == "jbpm" && !ORYX.LOCAL_HISTORY_ENABLED;
+                }.bind(this)
+            });
 
-        this.facade.offer({
-            'name': "Disable Local History",
-            'functionality': this.disableLocalHistory.bind(this),
-            'group': "localstorage",
-            'icon': ORYX.BASE_FILE_PATH + "images/disable.png",
-            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/localhistory.png",
-            'description': "Disable Local History",
-            'index': 4,
-            'minShape': 0,
-            'maxShape': 0,
-            'isEnabled': function(){
-                return ORYX.LOCAL_HISTORY_ENABLED;
-//                profileParamName = "profile";
-//                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//                regexa = new RegExp( regexSa );
-//                profileParams = regexa.exec( window.location.href );
-//                profileParamValue = profileParams[1];
-//                return profileParamValue == "jbpm" && ORYX.LOCAL_HISTORY_ENABLED;
-            }.bind(this)
-        });
+            this.facade.offer({
+                'name': "Disable Local History",
+                'functionality': this.disableLocalHistory.bind(this),
+                'group': "localstorage",
+                'icon': ORYX.BASE_FILE_PATH + "images/disable.png",
+                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/localhistory.png",
+                'description': "Disable Local History",
+                'index': 4,
+                'minShape': 0,
+                'maxShape': 0,
+                'isEnabled': function(){
+                    return ORYX.LOCAL_HISTORY_ENABLED && ORYX.READONLY != true;
+    //                profileParamName = "profile";
+    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+    //                regexa = new RegExp( regexSa );
+    //                profileParams = regexa.exec( window.location.href );
+    //                profileParamValue = profileParams[1];
+    //                return profileParamValue == "jbpm" && ORYX.LOCAL_HISTORY_ENABLED;
+                }.bind(this)
+            });
+        }
 
         window.onbeforeunload = function(){
             this.stopStoring();

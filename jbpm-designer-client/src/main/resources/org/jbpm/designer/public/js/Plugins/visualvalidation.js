@@ -11,44 +11,50 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
         this.errorDisplayView;
         ORYX.IS_VALIDATING_PROCESS = false;
 
-        this.facade.offer({
-            'name': "Start validating",
-            'functionality': this.enableValidation.bind(this),
-            'group': 'validationandsimulation',
-            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/visualvalidation.png",
-            'description': ORYX.I18N.SyntaxChecker.desc,
-            'index': 1,
-            'minShape': 0,
-            'maxShape': 0,
-            'isEnabled': function(){
-                return !ORYX.IS_VALIDATING_PROCESS;
-            }
-        });
+        if(ORYX.READONLY != true) {
+            this.facade.offer({
+                'name': "Start validating",
+                'functionality': this.enableValidation.bind(this),
+                'group': 'validationandsimulation',
+                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/visualvalidation.png",
+                'description': ORYX.I18N.SyntaxChecker.desc,
+                'index': 1,
+                'minShape': 0,
+                'maxShape': 0,
+                'isEnabled': function(){
+                    return !ORYX.IS_VALIDATING_PROCESS && ORYX.READONLY != true;
+                }
+            });
 
-        this.facade.offer({
-            'name': "Stop validating",
-            'functionality': this.disableValidation.bind(this),
-            'group': 'validationandsimulation',
-            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/visualvalidation.png",
-            'description': ORYX.I18N.SyntaxChecker.desc,
-            'index': 2,
-            'minShape': 0,
-            'maxShape': 0,
-            'isEnabled': function(){
-                return ORYX.IS_VALIDATING_PROCESS;
-            }
-        });
+            this.facade.offer({
+                'name': "Stop validating",
+                'functionality': this.disableValidation.bind(this),
+                'group': 'validationandsimulation',
+                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/visualvalidation.png",
+                'description': ORYX.I18N.SyntaxChecker.desc,
+                'index': 2,
+                'minShape': 0,
+                'maxShape': 0,
+                'isEnabled': function(){
+                    return ORYX.IS_VALIDATING_PROCESS && ORYX.READONLY != true;
+                }
+            });
 
-        this.facade.offer({
-            'name': "View all issues",
-            'functionality': this.viewAllValidation.bind(this),
-            'group': 'validationandsimulation',
-            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/visualvalidation.png",
-            'description': ORYX.I18N.SyntaxChecker.desc,
-            'index': 3,
-            'minShape': 0,
-            'maxShape': 0
-        });
+            this.facade.offer({
+                'name': "View all issues",
+                'functionality': this.viewAllValidation.bind(this),
+                'group': 'validationandsimulation',
+                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/visualvalidation.png",
+                'description': ORYX.I18N.SyntaxChecker.desc,
+                'index': 3,
+                'minShape': 0,
+                'maxShape': 0,
+                'isEnabled': function(){
+                    return
+                    ORYX.READONLY != true;
+                }
+            });
+        }
 
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_CLICK, this.displayErrorsOnNode.bind(this));
 

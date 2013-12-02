@@ -33,6 +33,7 @@ ORYX.Plugins.AddDocker = Clazz.extend({
 	construct: function(facade) {
 		this.facade = facade;
 
+        if(ORYX.READONLY != true) {
 		this.facade.offer({
 			'name':ORYX.I18N.AddDocker.add,
 			'functionality': this.enableAddDocker.bind(this),
@@ -55,6 +56,7 @@ ORYX.Plugins.AddDocker = Clazz.extend({
             'toggle': true,
 			'minShape': 0,
 			'maxShape': 0});
+        }
 		
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_MOUSEDOWN, this.handleMouseDown.bind(this));
 	},

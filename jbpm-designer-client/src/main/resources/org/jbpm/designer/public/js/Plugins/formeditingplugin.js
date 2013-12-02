@@ -7,96 +7,97 @@ if (!ORYX.Config)
 ORYX.Plugins.FormEditing = Clazz.extend({
     construct: function(facade){
         this.facade = facade;
+        if(ORYX.READONLY != true) {
+            // disable for ruleflow perspective preset
+            if(ORYX.PRESET_PERSPECTIVE != "ruleflow") {
+                this.facade.offer({
+                    'name': "Edit Process Form",
+                    'functionality': this.editProcessForm.bind(this),
+                    'group': "editprocessforms",
+                    'icon': ORYX.BASE_FILE_PATH + "images/processforms.png",
+                    dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/processforms.png",
+                    'description': "Edit Process Form",
+                    'index': 1,
+                    'minShape': 0,
+                    'maxShape': 0,
+                    'isEnabled': function(){
+                        return ORYX.READONLY != true;
+        //                profileParamName = "profile";
+        //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+        //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+        //                regexa = new RegExp( regexSa );
+        //                profileParams = regexa.exec( window.location.href );
+        //                profileParamValue = profileParams[1];
+        //                return profileParamValue == "jbpm" && ORYX.LOCAL_HISTORY_ENABLED;
+                    }.bind(this)
+                });
 
-        // disable for ruleflow perspective preset
-        if(ORYX.PRESET_PERSPECTIVE != "ruleflow") {
-            this.facade.offer({
-                'name': "Edit Process Form",
-                'functionality': this.editProcessForm.bind(this),
-                'group': "editprocessforms",
-                'icon': ORYX.BASE_FILE_PATH + "images/processforms.png",
-                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/processforms.png",
-                'description': "Edit Process Form",
-                'index': 1,
-                'minShape': 0,
-                'maxShape': 0,
-                'isEnabled': function(){
-                    return true;
-    //                profileParamName = "profile";
-    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-    //                regexa = new RegExp( regexSa );
-    //                profileParams = regexa.exec( window.location.href );
-    //                profileParamValue = profileParams[1];
-    //                return profileParamValue == "jbpm" && ORYX.LOCAL_HISTORY_ENABLED;
-                }.bind(this)
-            });
+                this.facade.offer({
+                    'name': "Edit Task Form",
+                    'functionality': this.editTaskForm.bind(this),
+                    'group': "editprocessforms",
+                    'icon': ORYX.BASE_FILE_PATH + "images/processforms.png",
+                    dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/processforms.png",
+                    'description': "Edit Task Form",
+                    'index': 2,
+                    'minShape': 1,
+                    'maxShape': 1,
+                    'isEnabled': function(){
+                        return ORYX.READONLY != true;
+        //                profileParamName = "profile";
+        //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+        //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+        //                regexa = new RegExp( regexSa );
+        //                profileParams = regexa.exec( window.location.href );
+        //                profileParamValue = profileParams[1];
+        //                return profileParamValue == "jbpm" && !ORYX.LOCAL_HISTORY_ENABLED;
+                    }.bind(this)
+                });
 
-            this.facade.offer({
-                'name': "Edit Task Form",
-                'functionality': this.editTaskForm.bind(this),
-                'group': "editprocessforms",
-                'icon': ORYX.BASE_FILE_PATH + "images/processforms.png",
-                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/processforms.png",
-                'description': "Edit Task Form",
-                'index': 2,
-                'minShape': 1,
-                'maxShape': 1,
-                'isEnabled': function(){
-                    return true;
-    //                profileParamName = "profile";
-    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-    //                regexa = new RegExp( regexSa );
-    //                profileParams = regexa.exec( window.location.href );
-    //                profileParamValue = profileParams[1];
-    //                return profileParamValue == "jbpm" && !ORYX.LOCAL_HISTORY_ENABLED;
-                }.bind(this)
-            });
+                this.facade.offer({
+                    'name': "Generate Task Form",
+                    'functionality': this.generateTaskForm.bind(this),
+                    'group': "editprocessforms",
+                    'icon': ORYX.BASE_FILE_PATH + "images/processforms.png",
+                    dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/processforms.png",
+                    'description': "Generate Task Form",
+                    'index': 3,
+                    'minShape': 1,
+                    'maxShape': 1,
+                    'isEnabled': function(){
+                        return ORYX.READONLY != true;
+                        //                profileParamName = "profile";
+                        //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+                        //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+                        //                regexa = new RegExp( regexSa );
+                        //                profileParams = regexa.exec( window.location.href );
+                        //                profileParamValue = profileParams[1];
+                        //                return profileParamValue == "jbpm" && !ORYX.LOCAL_HISTORY_ENABLED;
+                    }.bind(this)
+                });
 
-            this.facade.offer({
-                'name': "Generate Task Form",
-                'functionality': this.generateTaskForm.bind(this),
-                'group': "editprocessforms",
-                'icon': ORYX.BASE_FILE_PATH + "images/processforms.png",
-                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/processforms.png",
-                'description': "Generate Task Form",
-                'index': 3,
-                'minShape': 1,
-                'maxShape': 1,
-                'isEnabled': function(){
-                    return true;
-                    //                profileParamName = "profile";
-                    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-                    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-                    //                regexa = new RegExp( regexSa );
-                    //                profileParams = regexa.exec( window.location.href );
-                    //                profileParamValue = profileParams[1];
-                    //                return profileParamValue == "jbpm" && !ORYX.LOCAL_HISTORY_ENABLED;
-                }.bind(this)
-            });
-
-            this.facade.offer({
-                'name': "Generate all Forms",
-                'functionality': this.generateTaskForms.bind(this),
-                'group': "editprocessforms",
-                'icon': ORYX.BASE_FILE_PATH + "images/processforms.png",
-                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/processforms.png",
-                'description': "Generate all Forms",
-                'index': 4,
-                'minShape': 0,
-                'maxShape': 0,
-                'isEnabled': function(){
-                    return true;
-    //                profileParamName = "profile";
-    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-    //                regexa = new RegExp( regexSa );
-    //                profileParams = regexa.exec( window.location.href );
-    //                profileParamValue = profileParams[1];
-    //                return profileParamValue == "jbpm" && ORYX.LOCAL_HISTORY_ENABLED;
-                }.bind(this)
-            });
+                this.facade.offer({
+                    'name': "Generate all Forms",
+                    'functionality': this.generateTaskForms.bind(this),
+                    'group': "editprocessforms",
+                    'icon': ORYX.BASE_FILE_PATH + "images/processforms.png",
+                    dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/processforms.png",
+                    'description': "Generate all Forms",
+                    'index': 4,
+                    'minShape': 0,
+                    'maxShape': 0,
+                    'isEnabled': function(){
+                        return ORYX.READONLY != true;
+        //                profileParamName = "profile";
+        //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+        //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+        //                regexa = new RegExp( regexSa );
+        //                profileParams = regexa.exec( window.location.href );
+        //                profileParamValue = profileParams[1];
+        //                return profileParamValue == "jbpm" && ORYX.LOCAL_HISTORY_ENABLED;
+                    }.bind(this)
+                });
+            }
         }
     },
 
