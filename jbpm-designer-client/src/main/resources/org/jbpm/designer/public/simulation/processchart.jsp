@@ -10,15 +10,15 @@
 <script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/lib/handlebars-1.0.0.beta.6.js" type="text/javascript"></script>
 <script>
 function clearChart() {
-	var cnt = "<h2>Execution Times</h2> \
+	var cnt = "<h2>" + parent.ORYX.I18N.View.sim.chartsExecutionTimes + "</h2> \
   	<p id='chartcontent1'> \
   	<svg id='chart1' style='height:400px;width:400px'></svg> \
 	</p> \
-	<h2>Activity Instances</h2> \
+	<h2>" + parent.ORYX.I18N.View.sim.chartsActivityInstances + "</h2> \
   	<p id='chartcontent2'> \
   	<svg id='chart2' style='height:400px;width:400px'></svg> \
 	</p>  \
-	<h2>Total Cost</h2> \
+	<h2>" + parent.ORYX.I18N.View.sim.chartsTotalCost + "</h2> \
     <p id='chartcontent3'> \
     <svg id='chart3' style='height:400px;width:400px'></svg> \
     </p>";
@@ -53,7 +53,7 @@ function clearChartForLine() {
   	<p id="chartcontent1">
   	<svg id="chart1" style='height:400px;width:400px'></svg>
 	</p>
-	<h2 id="chart2label">Activity Instances</h2>
+	<h2 id="chart2label"><script>document.write(parent.ORYX.I18N.View.sim.chartsActivityInstances);</script></h2>
   	<p id="chartcontent2">
   	<svg id="chart2" style='height:400px;width:400px'></svg>
 	</p>

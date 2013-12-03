@@ -25,7 +25,7 @@ function clearChart() {
     <div class="charttitle"><script>document.write(parent.ORYX.EDITOR.simulationChartTitle +  " (" + parent.ORYX.EDITOR.simulationChartNodeName + ")");</script></div>
 </div><br/>
 <div class="outterchart">
-    <h2>Execution Times</h2>
+    <h2><script>document.write(parent.ORYX.I18N.View.sim.chartsExecutionTimes);</script></h2>
   	<p id="chartcontent">
   	<svg id="chart" style='height:400px;width:400px'></svg>
 	</p>

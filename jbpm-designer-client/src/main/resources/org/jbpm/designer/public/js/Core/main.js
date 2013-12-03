@@ -339,7 +339,7 @@ ORYX.Editor = {
         this.simInfoPanel = new Ext.Panel({
             bodyStyle:'background:#ffff;font-size:9px;font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;padding-left:5px;',
             id: "siminfopanel",
-            title: "Simulation Info",
+            title: ORYX.I18N.View.sim.resultsInfo,
             autoScroll: true,
             autoheight: true,
             border: false,
@@ -348,7 +348,7 @@ ORYX.Editor = {
 
 		this.simResultsTree = new Ext.tree.TreePanel({
 			id: "simresultscharts",
-			title: "Simulation Graphs",
+			title: ORYX.I18N.View.sim.resultsGraphs,
 			autoheight: true, 
 			animate:true,
 			loader: new Ext.tree.TreeLoader(),
@@ -420,13 +420,13 @@ ORYX.Editor = {
 	            },
 		        items: [{
 		        	layout: "fit",
-		            title: 'Process Modelling',
+		            title: ORYX.I18N.View.tabs.modelling,
                     id: 'processmodellingtab',
 	                items	: [this.centerContentPanel]
 		        },
 		        {
 		        	layout: "fit",
-		        	title: 'Simulation Results',
+		        	title: ORYX.I18N.View.tabs.simResults,
                     id: 'simulationtab',
 	                autoScroll   : false,
 	                items	: [this.simResultsContentPanelLayout]

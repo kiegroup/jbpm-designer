@@ -15,7 +15,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
                 'group': "validationandsimulation",
                 'icon': ORYX.BASE_FILE_PATH + "images/path.png",
                 dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/simulation.png",
-                'description': "Display Process Paths",
+                'description': ORYX.I18N.View.sim.processPaths,
                 'index': 1,
                 'minShape': 0,
                 'maxShape': 0,
@@ -37,7 +37,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
                 'group': "validationandsimulation",
                 'icon': ORYX.BASE_FILE_PATH + "images/control_play.png",
                 dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/simulation.png",
-                'description': "Run Process Simulation",
+                'description': ORYX.I18N.View.sim.runSim,
                 'index': 2,
                 'minShape': 0,
                 'maxShape': 0,
@@ -136,19 +136,19 @@ ORYX.Plugins.Simulation = Clazz.extend({
         this.facade.raiseEvent({
             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
             ntype		: 'info',
-            msg         : 'Calculating process paths.',
+            msg         : ORYX.I18N.View.sim.calculatingPaths,
             title       : ''
 
         });
 
 		var selection = this.facade.getSelection();
 		var selectedId = "";
-		var wintitle = "Process Paths";
+		var wintitle = ORYX.I18N.View.sim.processPathsTitle;
 		if(selection.length == 1) {
 			selection.each(function(shape) {
 				if(shape.getStencil().title() == "Embedded Subprocess") {
 					selectedId = shape.resourceId;
-					wintitle = "Subprocess Paths";
+					wintitle = ORYX.I18N.View.sim.subProcessPathsTitle;
 				}
 			});
 		} 
@@ -206,7 +206,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
     		                stripeRows: true,
     		                cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
     		                	id: 'display',
-    		                    header: 'Display Color',
+    		                    header: ORYX.I18N.View.sim.dispColor,
     		                    width: 90,
     		                    dataIndex: 'display',
     		                    renderer: function(val) {
@@ -218,7 +218,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
 		                        }
     		                }, {
     		                	id: 'numele',
-    		                    header: 'Number of Elements',
+    		                    header: ORYX.I18N.View.sim.numElements,
     		                    width: 130,
     		                    dataIndex: 'numele',
     		                    renderer: function(val) {
@@ -234,7 +234,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
     		        	
     	   				var processPathsPanel = new Ext.Panel({
     		        		id: 'processPathsPanel',
-    		        		title: '<center>Select ' + wintitle + ' and click "Show Path" to display it.</center>',
+    		        		title: '<center>' + ORYX.I18N.View.sim.select + wintitle + ORYX.I18N.View.sim.display + '</center>',
     		        		layout:'column',
     		        		items:[
     		        		       grid
@@ -275,7 +275,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
     		    				}.bind(this)				
     		    			},
     		    			buttons		: [{
-    		                    text: 'Show Path',
+    		                    text: ORYX.I18N.View.sim.showPath,
     		                    handler: function(){
     		                    	if(grid.getSelectionModel().getSelectedCell() != null) {
     		                    		var selectedIndex = grid.getSelectionModel().getSelectedCell()[0];
@@ -285,7 +285,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
                                         this.facade.raiseEvent({
                                             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                             ntype		: 'info',
-                                            msg         : 'Please select a process path.',
+                                            msg         : ORYX.I18N.View.sim.selectPath,
                                             title       : ''
 
                                         });
@@ -394,7 +394,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
 	        labelWidth: 	150,
 	        defaultType: 	'numberfield',
 	        items: [{
-	        	fieldLabel: 'Number of instances',
+	        	fieldLabel: ORYX.I18N.View.sim.numInstances,
 	            name: 'instances',
 	            allowBlank:false,
 	            allowDecimals:false,
@@ -402,7 +402,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
 	            width: 120
 	        },
 	        {
-	        	fieldLabel: 'Interval',
+	        	fieldLabel: ORYX.I18N.View.sim.interval,
 	            name: 'interval',
 	            allowBlank:false,
 	            allowDecimals:false,
@@ -423,7 +423,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
                 typeAhead: true,
                 value: "minutes",
                 triggerAction: 'all',
-                fieldLabel: 'Interval units',
+                fieldLabel: ORYX.I18N.View.sim.intervalUnits,
                 width: 120
             }
 	        ]
@@ -435,7 +435,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
 			layout: 	'fit',
 			plain:		true,
 			bodyStyle: 	'padding:5px;',
-			title: 		"Run Process Simulation", 
+			title: 		ORYX.I18N.View.sim.runSim,
 			height: 	300,
 			width:		350,
 			modal:		true,
@@ -446,14 +446,14 @@ ORYX.Plugins.Simulation = Clazz.extend({
 			items: 		[simform],
 			buttons:[
 				{
-					text:"Run Simulation",
+					text: ORYX.I18N.View.sim.runSim,
 					handler:function(){
 						dialog.hide();
 
                         this.facade.raiseEvent({
                             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                             ntype		: 'info',
-                            msg         : 'Running Process Simulation...',
+                            msg         : ORYX.I18N.View.sim.runningSim,
                             title       : ''
 
                         });
@@ -475,7 +475,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
                                            this.facade.raiseEvent({
                                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                                ntype		: 'error',
-                                               msg         : 'Simulation engine did not return results:\n' + response.statusText,
+                                               msg         : ORYX.I18N.View.sim.simNoResults + response.statusText,
                                                title       : ''
 
                                            });
@@ -484,7 +484,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
                                        this.facade.raiseEvent({
                                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                            ntype		: 'error',
-                                           msg         : 'Unable to perform simulation:\n' + e,
+                                           msg         : ORYX.I18N.View.sim.unableToPerform + e,
                                            title       : ''
 
                                        });
@@ -494,7 +494,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
                                 this.facade.raiseEvent({
                                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                     ntype		: 'error',
-                                    msg         : 'Unable to perform simulation.',
+                                    msg         : ORYX.I18N.View.sim.unableToPerform,
                                     title       : ''
 
                                 });

@@ -10,10 +10,10 @@
 <script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/lib/handlebars-1.0.0.beta.6.js" type="text/javascript"></script>
 <script>
 function clearChart() {
-	var cnt = "<h2>Path Image</h2> \
+	var cnt = "<h2>" + parent.ORYX.I18N.View.sim.chartsPathImage + "</h2> \
   			   <p id='chartcontent1'> \
 			   </p> \
-			   <h2>Path Instance Execution</h2> \
+			   <h2>" + parent.ORYX.I18N.View.sim.chartsPathInstanceExecution + "</h2> \
   			   <p id='chartcontent2'> \
   			   <svg id='chart2' style='height:300px;width:450px'></svg> \
 			   </p>";
@@ -31,10 +31,10 @@ function clearChart() {
     <div class="charttitle"><script>document.write(parent.ORYX.EDITOR.simulationChartTitle);</script></div>
 </div><br/>
 <div id="outterchart" class="outterchart">
-    <h2>Path Image</h2>
+    <h2><script>document.write(parent.ORYX.I18N.View.sim.chartsPathImage);</script></h2>
   	<p id="chartcontent1">
 	</p>
-	<h2>Path Instance Execution</h2>
+	<h2><script>document.write(parent.ORYX.I18N.View.sim.chartsPathInstanceExecution);</script></h2>
   	<p id="chartcontent2">
   	<svg id="chart2" style='height:300px;width:450px'></svg>
 	</p>

@@ -53,31 +53,31 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
         var simInfo = jsonPath(options.results.evalJSON(), "$.siminfo.*");
         var infomarkup = '<table border="0" width="100%"> \
                           <tr>\
-                          <td><span style="font-size: 10px"><b>Process id: </b></span></td> \
+                          <td><span style="font-size: 10px"><b>' + ORYX.I18N.View.sim.resultsProcessId + '</b></span></td> \
                           <td><span style="font-size: 10px">' + simInfo[0].id  + '</span></td> \
                           </tr> \
                           <tr> \
-                          <td><span style="font-size: 10px"><b>Process name: </b></span></td> \
+                          <td><span style="font-size: 10px"><b>' + ORYX.I18N.View.sim.resultsProcessName + '</b></span></td> \
                           <td><span style="font-size: 10px">' + simInfo[0].name  + '</span></td> \
                           </tr> \
                           <tr> \
-                          <td><span style="font-size: 10px"><b>Process version: </b></span></td> \
+                          <td><span style="font-size: 10px"><b>' + ORYX.I18N.View.sim.resultsProcessVersion + '</b></span></td> \
                           <td><span style="font-size: 10px">' + simInfo[0].version  + '</span></td> \
                           </tr> \
                           <tr> \
-                          <td><span style="font-size: 10px"><b>Simulation start: </b></span></td> \
+                          <td><span style="font-size: 10px"><b>' + ORYX.I18N.View.sim.resultsSimStartTime + '</b></span></td> \
                           <td><span style="font-size: 10px">' + simInfo[0].starttime  + '</span></td> \
                           </tr> \
                           <tr> \
-                          <td><span style="font-size: 10px"><b>Simulation end: </b></span></td> \
+                          <td><span style="font-size: 10px"><b>' + ORYX.I18N.View.sim.resultsSimEndTime + '</b></span></td> \
                           <td><span style="font-size: 10px">' + simInfo[0].endtime  + '</span></td> \
                           </tr> \
                           <tr> \
-                          <td><span style="font-size: 10px"><b>Num. of Executions: </b></span></td> \
+                          <td><span style="font-size: 10px"><b>' + ORYX.I18N.View.sim.resultsNumOfExecutions + '</b></span></td> \
                           <td><span style="font-size: 10px">' + simInfo[0].executions  + '</span></td> \
                           </tr> \
                           <tr> \
-                          <td><span style="font-size: 10px"><b>Interval </b></span></td> \
+                          <td><span style="font-size: 10px"><b>' + ORYX.I18N.View.sim.resultsInterval + '</b></span></td> \
                           <td><span style="font-size: 10px">' + simInfo[0].interval  + '</span></td> \
                           </tr> \
                           </table>';
@@ -93,7 +93,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 		var processSimInfo = jsonPath(options.results.evalJSON(), "$.processsim.*");
 		if(processSimInfo) {
 			graphType = new Ext.tree.TreeNode({
-				text:"Process", 			
+				text: ORYX.I18N.View.sim.resultsGroupProcess,
 				allowDrag:false,
 	    		allowDrop:false,           
 	            expanded: true,
@@ -116,7 +116,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 		var taskSimInfo = jsonPath(options.results.evalJSON(), "$.tasksim.*");
 		if(htSimInfo || taskSimInfo) {
 			graphType = new Ext.tree.TreeNode({
-				text:"Process elements",
+				text: ORYX.I18N.View.sim.resultsGroupProcessElements,
 				allowDrag:false,
 	    		allowDrop:false,           
 	            expanded: true,
@@ -160,7 +160,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 		var pathSimInfo = jsonPath(options.results.evalJSON(), "$.pathsim.*");
 		if(pathSimInfo) {
 			graphType = new Ext.tree.TreeNode({
-				text:"Paths", 			
+				text: ORYX.I18N.View.sim.resultsGroupProcessPaths,
 				allowDrag:false,
 	    		allowDrop:false,           
 	            expanded: true,
@@ -237,7 +237,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 		ORYX.EDITOR.simulationEventAggregationData = jsonEventAggregationsObj;
 		ORYX.EDITOR.simulationInstancesData = jsonInstancesObj;
         ORYX.EDITOR.simulationHTCostData = htobjarray;
-		ORYX.EDITOR.simulationChartTitle = "Process Simulation Results";
+		ORYX.EDITOR.simulationChartTitle = ORYX.I18N.View.sim.resultsTitlesProcessSimResults;
 		ORYX.EDITOR.simulationChartId = jsonObj[0].id;
 		ORYX.EDITOR.simulationChartNodeName = jsonObj[0].name;
 		Ext.getDom('simchartframe').src = ORYX.BASE_FILE_PATH + "simulation/processchart.jsp";
@@ -255,7 +255,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
                 ORYX.EDITOR.simulationChartTimeUnit = simTimeUnit;
 				ORYX.EDITOR.simulationChartData = innerWrapper;
 				ORYX.EDITOR.simulationEventData = innerWrapper[0].timeline;
-				ORYX.EDITOR.simulationChartTitle = "Task Simulation Results";
+				ORYX.EDITOR.simulationChartTitle = ORYX.I18N.View.sim.resultsTitlesTaskSimResults;
 				ORYX.EDITOR.simulationChartId = innerWrapper[0].id;
 				ORYX.EDITOR.simulationChartNodeName = innerWrapper[0].name;
 				Ext.getDom('simchartframe').src = ORYX.BASE_FILE_PATH + "simulation/taskchart.jsp";
@@ -272,7 +272,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
                 ORYX.EDITOR.simulationChartTimeUnit = simTimeUnit;
 				ORYX.EDITOR.simulationChartData = inner;
 				ORYX.EDITOR.simulationEventData = inner.timeline;
-				ORYX.EDITOR.simulationChartTitle = "Human Task Simulation Results";
+				ORYX.EDITOR.simulationChartTitle = ORYX.I18N.View.sim.resultsTitlesHumanTaskSimResults;
 				ORYX.EDITOR.simulationChartId = inner.id;
 				ORYX.EDITOR.simulationChartNodeName = inner.name;
 				Ext.getDom('simchartframe').src = ORYX.BASE_FILE_PATH + "simulation/humantaskchart.jsp";
@@ -284,7 +284,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
         var processJSON = ORYX.EDITOR.getSerializedJSON();
         var simTimeUnit = jsonPath(processJSON.evalJSON(), "$.properties.timeunit");
         ORYX.EDITOR.simulationChartTimeUnit = simTimeUnit;
-		ORYX.EDITOR.simulationChartTitle = "Path Execution Info (" + pathid + ")";
+		ORYX.EDITOR.simulationChartTitle = ORYX.I18N.View.sim.resultsTitlesPathExecutionInfo + " (" + pathid + ")";
 		ORYX.EDITOR.simulationPathData = pathobj;
 		ORYX.EDITOR.simulationPathId = pathid;
 		
