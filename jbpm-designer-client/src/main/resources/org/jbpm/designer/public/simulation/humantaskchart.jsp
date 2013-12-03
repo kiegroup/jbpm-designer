@@ -25,15 +25,15 @@ function clearChart() {
     <div class="charttitle"><script>document.write(parent.ORYX.EDITOR.simulationChartTitle +  " (" + parent.ORYX.EDITOR.simulationChartNodeName + ")");</script></div>
 </div><br/>
 <div class="outterchart">
-    <h2>Execution Times</h2>
+    <h2><script>document.write(parent.ORYX.I18N.View.sim.chartsExecutionTimes);</script></h2>
   	<p id="chartcontent1">
   	<svg id="chart1" style='height:300px;width:450px'></svg>
 	</p>
-	<h2>Resource Utilization</h2>
+	<h2><script>document.write(parent.ORYX.I18N.View.sim.chartsResourceUtilization);</script></h2>
   	<p id="chartcontent2">
   	<svg id="chart2" style='height:300px;width:450px'></svg>
 	</p>
-	<h2>Resource Cost</h2>
+	<h2><script>document.write(parent.ORYX.I18N.View.sim.chartsResourceCost);</script></h2>
   	<p id="chartcontent3">
   	<svg id="chart3" style='height:300px;width:450px'></svg>
 	</p>

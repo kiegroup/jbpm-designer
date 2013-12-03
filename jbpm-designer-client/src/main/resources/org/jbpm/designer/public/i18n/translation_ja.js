@@ -510,6 +510,53 @@ ORYX.I18N.View.shareProcess = "プロセスを共有";
 ORYX.I18N.View.shareProcessDesc = "プロセスを共有";
 ORYX.I18N.View.infogroup = "情報";
 
+if(!ORYX.I18N.View.tabs) ORYX.I18N.View.tabs = {};
+ORYX.I18N.View.tabs.modelling = "Process Modelling";
+ORYX.I18N.View.tabs.simResults = "Simulation Results";
+
+if(!ORYX.I18N.View.sim) ORYX.I18N.View.sim = {};
+ORYX.I18N.View.sim.processPaths = "Display Process Paths";
+ORYX.I18N.View.sim.runSim = "Run Process Simulation";
+ORYX.I18N.View.sim.calculatingPaths = "Calculating process paths.";
+ORYX.I18N.View.sim.dispColor = "Display Color";
+ORYX.I18N.View.sim.numElements = "Number of Elements";
+ORYX.I18N.View.sim.processPathsTitle = "Process Paths";
+ORYX.I18N.View.sim.subProcessPathsTitle = "Subprocess Paths";
+ORYX.I18N.View.sim.select = "Select ";
+ORYX.I18N.View.sim.display = " and click Show Path to display it.";
+ORYX.I18N.View.sim.showPath = "Show Path";
+ORYX.I18N.View.sim.selectPath = "Please select a process path.";
+ORYX.I18N.View.sim.numInstances = "Number of instances";
+ORYX.I18N.View.sim.interval = "Interval";
+ORYX.I18N.View.sim.intervalUnits = "Interval units";
+ORYX.I18N.View.sim.runSim = "Run Process Simulation";
+ORYX.I18N.View.sim.runningSim = "Running Process Simulation...";
+ORYX.I18N.View.sim.simNoResults = "Simulation engine did not return results: ";
+ORYX.I18N.View.sim.unableToPerform = "Unable to perform simulation:";
+ORYX.I18N.View.sim.resultsInfo = "Simulation Info";
+ORYX.I18N.View.sim.resultsGraphs = "Simulation Graphs";
+ORYX.I18N.View.sim.resultsProcessId = "Process id: ";
+ORYX.I18N.View.sim.resultsProcessName = "Process name: ";
+ORYX.I18N.View.sim.resultsProcessVersion = "Process version: ";
+ORYX.I18N.View.sim.resultsSimStartTime = "Simulation start: ";
+ORYX.I18N.View.sim.resultsSimEndTime = "Simulation end: ";
+ORYX.I18N.View.sim.resultsNumOfExecutions = "Num. of Executions: ";
+ORYX.I18N.View.sim.resultsInterval = "Interval "
+ORYX.I18N.View.sim.resultsGroupProcess = "Process";
+ORYX.I18N.View.sim.resultsGroupProcessElements = "Process Elements";
+ORYX.I18N.View.sim.resultsGroupProcessPaths = "Paths";
+ORYX.I18N.View.sim.resultsTitlesProcessSimResults = "Process Simulation Results";
+ORYX.I18N.View.sim.resultsTitlesTaskSimResults = "Task Simulation Results";
+ORYX.I18N.View.sim.resultsTitlesHumanTaskSimResults = "Human Task Simulation Results";
+ORYX.I18N.View.sim.resultsTitlesPathExecutionInfo = "Path Execution Info";
+ORYX.I18N.View.sim.chartsExecutionTimes = "Execution Times";
+ORYX.I18N.View.sim.chartsActivityInstances = "Activity Instances";
+ORYX.I18N.View.sim.chartsTotalCost = "Total Cost";
+ORYX.I18N.View.sim.chartsResourceUtilization = "Resource Utilization";
+ORYX.I18N.View.sim.chartsResourceCost = "Resource Cost";
+ORYX.I18N.View.sim.chartsPathImage = "Path Image";
+ORYX.I18N.View.sim.chartsPathInstanceExecution = "Path Instance Execution";
+
 
 
 if(!ORYX.I18N.XFormsSerialization) ORYX.I18N.XFormsSerialization = {};
