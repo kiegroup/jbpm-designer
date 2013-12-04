@@ -90,13 +90,21 @@
            };
 
            if(typeof parent.designeractivenodes == 'function') {
-              ORYX.ACTIVENODES = parent.designeractivenodes().evalJSON();
-              parent.designeractivenodes = function (){ return ""; }
+              try {
+                ORYX.ACTIVENODES = parent.designeractivenodes().evalJSON();
+                parent.designeractivenodes = function (){ return ""; }
+              } catch(err) {
+                parent.designersignalcloseplace();
+              }
            }
 
            if(typeof parent.designercompletednodes == 'function') {
-             ORYX.COMPLETEDNODES = parent.designercompletednodes().evalJSON();
-             parent.designercompletednodes = function (){ return ""; }
+             try {
+                ORYX.COMPLETEDNODES = parent.designercompletednodes().evalJSON();
+                parent.designercompletednodes = function (){ return ""; }
+             } catch(err) {
+                parent.designersignalcloseplace();
+             }
            }
 
            if(typeof parent.designerprocesssources == 'function') {

@@ -118,6 +118,7 @@ public class DesignerPresenter {
     private PlaceRequest place;
     private ObservablePath.OnConcurrentUpdateEvent concurrentUpdateSessionInfo = null;
     private boolean isReadOnly;
+    private boolean passedProcessSources;
 
     @OnStartup
     public void onStartup( final ObservablePath path,
@@ -190,6 +191,10 @@ public class DesignerPresenter {
         this.publishSignalOnAssetCopy( this );
         this.publishSignalOnAssetRename( this );
         this.publishSignalOnAssetUpdate( this );
+        this.publishClosePlace( this );
+
+        multiPage.addWidget( view,
+                "Business Process" );
 
         if ( path != null ) {
             assetService.call( new RemoteCallback<String>() {
@@ -201,6 +206,12 @@ public class DesignerPresenter {
                         @Override
                         public void callback( Map<String, String> editorParameters ) {
                             if( editorParameters != null ) {
+                                if (editorParameters.containsKey( "readonly" )) {
+                                    String readOnlyParam = editorParameters.get( "readonly" );
+                                    if(!readOnlyParam.equals("false")) {
+                                        passedProcessSources = true;
+                                    }
+                                }
                                 if ( editorParameters.containsKey( "processsource" ) ) {
                                     String processSources = editorParameters.get( "processsource" );
                                     if ( processSources != null && processSources.length() > 0 ) {
@@ -224,7 +235,27 @@ public class DesignerPresenter {
                                     }
                                     editorParameters.remove( "completednodes" );
                                 }
-                            view.setEditorParamters( editorParameters );
+                                view.setEditorParamters( editorParameters );
+
+                                // dont add in instance details view
+                                if(!passedProcessSources) {
+                                    multiPage.addPage( new Page( metadataWidget,
+                                            CommonConstants.INSTANCE.MetadataTabTitle() ) {
+                                        @Override
+                                        public void onFocus() {
+                                            metadataWidget.showBusyIndicator( CommonConstants.INSTANCE.Loading() );
+                                            metadataService.call( new MetadataSuccessCallback( metadataWidget,
+                                                    isReadOnly ),
+                                                    new HasBusyIndicatorDefaultErrorCallback( metadataWidget ) ).getMetadata( path );
+                                        }
+
+                                        @Override
+                                        public void onLostFocus() {
+                                            //Nothing to do
+                                        }
+                                    } );
+                                }
+
                             }
                         }
 
@@ -232,25 +263,6 @@ public class DesignerPresenter {
                 }
             } ).getEditorID();
         }
-
-        multiPage.addWidget( view,
-                "Business Process" );
-
-        multiPage.addPage( new Page( metadataWidget,
-                CommonConstants.INSTANCE.MetadataTabTitle() ) {
-            @Override
-            public void onFocus() {
-                metadataWidget.showBusyIndicator( CommonConstants.INSTANCE.Loading() );
-                metadataService.call( new MetadataSuccessCallback( metadataWidget,
-                        isReadOnly ),
-                        new HasBusyIndicatorDefaultErrorCallback( metadataWidget ) ).getMetadata( path );
-            }
-
-            @Override
-            public void onLostFocus() {
-                //Nothing to do
-            }
-        } );
     }
 
     @OnMayClose
@@ -331,6 +343,16 @@ public class DesignerPresenter {
             dp.@org.jbpm.designer.client.DesignerPresenter::assetUpdatedEvent(Ljava/lang/String;)(uri);
         }
     }-*/;
+
+    private native void publishClosePlace( DesignerPresenter dp )/*-{
+        $wnd.designersignalcloseplace = function () {
+            dp.@org.jbpm.designer.client.DesignerPresenter::closePlace()();
+        }
+    }-*/;
+
+    public void closePlace() {
+        placeManager.forceClosePlace( this.place );
+    }
 
     public void assetCopyEvent( String uri ) {
         vfsServices.call( new RemoteCallback<Path>() {
