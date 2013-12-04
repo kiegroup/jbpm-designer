@@ -48,9 +48,6 @@ public class DesignerView
         inlineFrame.getElement().getStyle().setOverflow(Style.Overflow.AUTO);
         inlineFrame.getElement().getStyle().setWidth(100, Style.Unit.PCT);
         inlineFrame.getElement().getStyle().setHeight(680, Style.Unit.PX);
-
-
-
     }
 
     @Override
