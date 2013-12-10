@@ -1,4 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%
+    response.setHeader("Cache-Control","no-cache");
+    response.setHeader("Pragma","no-cache");
+    response.setDateHeader ("Expires", 0);
+%>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:b3mn="http://b3mn.org/2007/b3mn" xmlns:ext="http://b3mn.org/2007/ext" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:atom="http://b3mn.org/2007/atom+xhtml">
 <head profile="http://purl.org/NET/erdf/profile">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
