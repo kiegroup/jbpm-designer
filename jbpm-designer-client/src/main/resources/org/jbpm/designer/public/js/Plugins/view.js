@@ -1181,6 +1181,7 @@ ORYX.Plugins.View = {
                         this.facade.executeCommands([command]);
                         try {
                             this.facade.importJSON(jsonString);
+                            ORYX.PROCESS_SAVED = false;
                             this.facade.raiseEvent({
                                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                 ntype		: 'success',
