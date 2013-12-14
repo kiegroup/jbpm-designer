@@ -6172,6 +6172,7 @@
 				"TextAnnotationMorph"
 			]
 		},
+        $if(includedo)$
 		{
 			"type" : 			"node",
 			"id" :				"DataObject",
@@ -6361,6 +6362,7 @@
 				"DataObjectMorph"
 			]
 		},
+        $endif$
 		{
 			"type" : 			"node",
 			"id": 				"StartNoneEvent",
