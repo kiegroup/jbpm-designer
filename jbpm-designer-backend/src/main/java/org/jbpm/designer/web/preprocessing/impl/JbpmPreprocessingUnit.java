@@ -71,6 +71,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     public static final String CUSTOMEDITORS_EXT = ".json";
     public static final String THEME_COOKIE_NAME = "designercolortheme";
     public static final String DEFAULT_CATEGORY_NAME = "Service Tasks";
+    public static final String INCLUDE_DATA_OBJECT = "designerdataobjects";
 
     private String designer_path;
     private String stencilPath;
@@ -91,6 +92,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     private String sampleBpmn2;
     private String globalDir;
     private VFSService vfsService;
+    private boolean includeDataObjects;
 
     public JbpmPreprocessingUnit(ServletContext servletContext, VFSService vfsService) {
         this(servletContext, ConfigurationProvider.getInstance().getDesignerContext(), vfsService);
@@ -113,6 +115,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         customEditorsInfo = servletContext.getRealPath(designer_path + "/defaults/customeditors.json");
         patternsData = servletContext.getRealPath(designer_path + "/defaults/patterns.json");
         sampleBpmn2 = servletContext.getRealPath(designer_path + "/defaults/SampleProcess.bpmn2");
+        includeDataObjects = Boolean.parseBoolean(System.getProperty(INCLUDE_DATA_OBJECT) == null ? "true" : System.getProperty(INCLUDE_DATA_OBJECT));
     }
 
     public String getOutData() {
@@ -228,6 +231,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             workItemTemplate.add("bclose", "}");
             workItemTemplate.add("workitemDefs", workDefinitions);
             workItemTemplate.add("patternData", patternInfoMap);
+            workItemTemplate.add("includedo", includeDataObjects);
 
             String processPackage = asset.getAssetLocation();
             if(processPackage.startsWith("/")) {
