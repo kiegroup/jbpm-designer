@@ -50,8 +50,7 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
                 'minShape': 0,
                 'maxShape': 0,
                 'isEnabled': function(){
-                    return
-                    ORYX.READONLY != true;
+                    return ORYX.READONLY != true;
                 }
             });
         }
