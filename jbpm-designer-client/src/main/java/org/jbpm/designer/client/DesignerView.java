@@ -99,6 +99,12 @@ public class DesignerView
         }
     }-*/;
 
+    public native boolean getIsReadOnly(String editorID) /*-{
+        if($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor) {
+            return $wnd.document.getElementById(editorID).contentWindow.ORYX.READONLY;
+        }
+    }-*/;
+
     public native void setProcessUnSaved(String editorID) /*-{
         if($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor) {
             $wnd.document.getElementById(editorID).contentWindow.ORYX.PROCESS_SAVED = false;
