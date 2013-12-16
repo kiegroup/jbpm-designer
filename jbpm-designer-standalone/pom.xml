@@ -26,17 +26,6 @@
       </exclusions>
     </dependency>
 
-    <!--Logs-->
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-    </dependency>
-    <!-- This is a war file, so logback is not in scope test, but in scope compile -->
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-    </dependency>
-
     <!-- jBPM Designer -->
     <dependency>
       <groupId>org.jbpm</groupId>
