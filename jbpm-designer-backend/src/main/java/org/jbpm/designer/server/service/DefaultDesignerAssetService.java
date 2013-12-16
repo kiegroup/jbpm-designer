@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.*;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import org.apache.commons.httpclient.HttpClient;
@@ -15,6 +16,7 @@ import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.impl.AssetBuilder;
+import org.jbpm.designer.service.BPMN2DataServices;
 import org.jbpm.designer.service.DesignerAssetService;
 import org.jbpm.designer.util.OSProtocolSocketFactory;
 import org.json.JSONArray;
@@ -28,6 +30,9 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
 
     @Inject
     private Repository repository;
+    
+    @Inject
+    private Instance<BPMN2DataServices> bpmn2DataServices;
 
     private static final String PROCESS_STUB = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \n" +
     "<bpmn2:definitions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.omg.org/bpmn20\" xmlns:bpmn2=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\" xmlns:bpsim=\"http://www.bpsim.org/schemas/1.0\" xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\" xmlns:drools=\"http://www.jboss.org/drools\" \n" +
@@ -59,8 +64,11 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
         String activeNodesParam = place.getParameter( "activeNodes", null );
 
         String readOnly = place.getParameter( "readOnly", "false" );
-        String encodedProcessSource = place.getParameter( "encodedProcessSource", "" );
+        String processId = place.getParameter( "processId", "" );
+        String deploymentId = place.getParameter( "deploymentId", "" );
+        String encodedProcessSource = bpmn2DataServices.iterator().next().getProcessSources(deploymentId,  processId );
 
+        
         if ( activeNodesParam != null ) {
             activeNodesList = Arrays.asList( activeNodesParam.split( "," ) );
         }
