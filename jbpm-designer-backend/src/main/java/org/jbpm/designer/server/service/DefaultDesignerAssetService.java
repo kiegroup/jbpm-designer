@@ -66,7 +66,13 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
         String readOnly = place.getParameter( "readOnly", "false" );
         String processId = place.getParameter( "processId", "" );
         String deploymentId = place.getParameter( "deploymentId", "" );
-        String encodedProcessSource = bpmn2DataServices.iterator().next().getProcessSources(deploymentId,  processId );
+        String encodedProcessSource = "";
+        try {
+            encodedProcessSource = bpmn2DataServices.iterator().next().getProcessSources(deploymentId,  processId );
+        } catch(Exception e) {
+            encodedProcessSource = place.getParameter( "encodedProcessSource", "" );
+        }
+
 
         
         if ( activeNodesParam != null ) {
