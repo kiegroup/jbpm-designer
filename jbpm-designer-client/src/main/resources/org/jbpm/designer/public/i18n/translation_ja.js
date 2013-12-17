@@ -552,6 +552,7 @@ ORYX.I18N.View.sim.resultsTitlesPathExecutionInfo = "パス実行情報";
 ORYX.I18N.View.sim.chartsExecutionTimes = "実行時間";
 ORYX.I18N.View.sim.chartsActivityInstances = "アクティビティインスタンス";
 ORYX.I18N.View.sim.chartsTotalCost = "トータルコスト";
+ORYX.I18N.View.sim.chartsTotalResourceUtilization = "Total Resource Utilization";
 ORYX.I18N.View.sim.chartsResourceUtilization = "リソース利用";
 ORYX.I18N.View.sim.chartsResourceCost = "リソースコスト";
 ORYX.I18N.View.sim.chartsPathImage = "パスイメージ";

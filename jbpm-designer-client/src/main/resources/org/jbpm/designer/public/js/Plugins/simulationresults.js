@@ -225,6 +225,13 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
             htobjarray.push(inner.costvalues);
         }
 
+        var htrobjarray = [];
+        var htrobj = jsonPath(jsonstr.evalJSON(), "$.htsim.*");
+        for(var i=0; i < htrobj.length; i++ ) {
+            var inner = htrobj[i];
+            htrobjarray.push(inner.resourcevalues);
+        }
+
 		var jsonSimObjWrapper = {
 			"timeline": jsonSimObj[0]
 		};
@@ -237,6 +244,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 		ORYX.EDITOR.simulationEventAggregationData = jsonEventAggregationsObj;
 		ORYX.EDITOR.simulationInstancesData = jsonInstancesObj;
         ORYX.EDITOR.simulationHTCostData = htobjarray;
+        ORYX.EDITOR.simulationHTResourceData = htrobjarray;
 		ORYX.EDITOR.simulationChartTitle = ORYX.I18N.View.sim.resultsTitlesProcessSimResults;
 		ORYX.EDITOR.simulationChartId = jsonObj[0].id;
 		ORYX.EDITOR.simulationChartNodeName = jsonObj[0].name;

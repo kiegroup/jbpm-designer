@@ -403,6 +403,7 @@ ORYX.I18N.View.sim.resultsTitlesPathExecutionInfo = "Path Execution Info";
 ORYX.I18N.View.sim.chartsExecutionTimes = "Execution Times";
 ORYX.I18N.View.sim.chartsActivityInstances = "Activity Instances";
 ORYX.I18N.View.sim.chartsTotalCost = "Total Cost";
+ORYX.I18N.View.sim.chartsTotalResourceUtilization = "Total Resource Utilization";
 ORYX.I18N.View.sim.chartsResourceUtilization = "Resource Utilization";
 ORYX.I18N.View.sim.chartsResourceCost = "Resource Cost";
 ORYX.I18N.View.sim.chartsPathImage = "Path Image";
