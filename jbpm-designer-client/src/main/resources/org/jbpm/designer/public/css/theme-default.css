@@ -721,3 +721,89 @@ button::-moz-focus-inner { border: 0; }
 .x-tipcustom .x-tipcustom-body{font:normal 11px tahoma,arial,helvetica,sans-serif;margin:0!important;line-height:14px;color:#444;padding:0;}
 .x-tipcustom .x-tipcustom-body .loading-indicator{margin:0;}
 .x-tipcustom-draggable .x-tipcustom-header,.x-tipcustom-draggable .x-tipcustom-header-text{cursor:move;}
+
+/*
+ * paint
+*/
+.paint-canvas-container {
+    background-color: rgba(255,255,255,0.4);
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    float: left;
+    z-index: 4000;
+    display: "none";
+}
+
+.paint-canvas-container-active {
+    cursor: crosshair;
+}
+
+.paint-canvas {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    float: left;
+}
+
+#paint-toolbar {
+    position: fixed;
+    width: 54px;
+    top: 40px;
+    background-color:transparent;
+    z-index: 9500;
+}
+
+.paint-toolbar-button {
+    background-image: url("../images/repository-groupstencil-bg.png");
+    background-color:transparent;
+    background-repeat: no-repeat;
+    background-position: 0px -53px;
+    border: 0px;
+    cursor: pointer;
+}
+
+.paint-toolbar-button:first-child {
+    background-position: 0px 0px;
+}
+
+.paint-toolbar-button:last-child {
+    background-position: 0px -106px;
+}
+
+.paint-toolbar-button-pressed {
+    background-position: -55px -53px;
+}
+
+.paint-toolbar-button-pressed:first-child {
+    background-position: -55px -0px;
+}
+
+.paint-toolbar-button-pressed:last-child {
+    background-position: -55px -106px;
+}
+
+.paint-toolbar-button > div {
+    height: 53px;
+    width: 54px;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.paint-toolbar-button:first-child > div {
+    -moz-border-radius-topright: 5px;
+    -webkit-border-top-right-radius: 5px;
+}
+
+.paint-toolbar-button:last-child > div {
+    -moz-border-radius-bottomright: 5px;
+    -webkit-border-bottom-right-radius: 5px;
+}
+
+.paint-toolbar-button:hover > div {
+    background-color: rgba(0, 157, 0, 0.2);
+}
+
+.paint-toolbar-button-pressed > div {
+    background-color:transparent;
+}

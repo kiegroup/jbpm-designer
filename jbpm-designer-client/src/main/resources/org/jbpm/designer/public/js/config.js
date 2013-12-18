@@ -21,7 +21,7 @@ ORYX.CONFIG.WEB_URL = "org.jbpm.designer.jBPMDesigner";
 
 
 
-ORYX.CONFIG.MENU_INDEX = {"File" : 1, "Edit" : 2, "Undo": 3, "localstorage": 4, "Z-Order" : 5,  "Alignment": 6, "Grouping": 7, "lockunlockgroup": 8, "Docker" : 9, "colorpickergroup": 'AAA', "editprocessforms": 'BBB', 'sharegroup': 'CCC', "importgroup": 'DDD', "validationandsimulation": 'EEE', "servicerepogroup": 'FFF', "fullscreengroup": 'GGG', "Help" : "ZZZZZZ"};
+ORYX.CONFIG.MENU_INDEX = {"File" : 1, "Edit" : 2, "Undo": 3, "localstorage": 4, "Z-Order" : 5,  "Alignment": 6, "Grouping": 7, "lockunlockgroup": 8, "Docker" : 9, "colorpickergroup": 'AAA', "editprocessforms": 'BBB', 'sharegroup': 'CCC', "importgroup": 'DDD', "validationandsimulation": 'EEE', "servicerepogroup": 'FFF', "paintgroup": 'GGG', "fullscreengroup": 'HHH', "Help" : "ZZZZZZ"};
 
 ORYX.CONFIG.UUID_URL = function(uuid, profile) {
   if (uuid === undefined) {
@@ -273,6 +273,15 @@ ORYX.CONFIG.EVENT_SIMULATION_PATH_SVG_GENERATED = "simulation.pathsvggenerated";
 ORYX.CONFIG.EVENT_SIMULATION_ANNOTATE_PROCESS = "simulation.annotateprocess";
 ORYX.CONFIG.EVENT_SIMULATION_SHOW_ANNOTATED_PROCESS = "simulation.showannotatedprocess";
 ORYX.CONFIG.EVENT_NOTIFICATION_SHOW = "notification.show";
+// paint
+ORYX.CONFIG.EVENT_PAINT_NEWSHAPE = "paint.newshape";
+ORYX.CONFIG.EVENT_PAINT_REMOVESHAPE = "paint.removeshape";
+ORYX.CONFIG.EVENT_CANVAS_RESIZED = "canvas.resized";
+ORYX.CONFIG.EVENT_CANVAS_RESIZE_SHAPES_MOVED = "canvas.resizeshapemoved";
+ORYX.CONFIG.EVENT_CANVAS_ZOOMED = "canvas.zoomed";
+ORYX.CONFIG.EVENT_MODE_CHANGED = "mode.changed";
+ORYX.CONFIG.EVENT_PAINT_CANVAS_TOGGLED  = "canvas.toggled";
+
 
 // voice commands
 ORYX.CONFIG.VOICE_COMMAND_GENERATE_FORMS = "voice.command.generate.forms";

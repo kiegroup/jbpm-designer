@@ -296,6 +296,8 @@
                             <include>${project.build.directory}/classes/org/jbpm/designer/public/js/Plugins/notificationsplugin-min.js</include>
                             <include>${project.build.directory}/classes/org/jbpm/designer/public/js/Plugins/activenodeshighlighter-min.js</include>
                             <include>${project.build.directory}/classes/org/jbpm/designer/public/js/Plugins/formeditingplugin-min.js</include>
+                            <include>${project.build.directory}/classes/org/jbpm/designer/public/js/Plugins/paint-min.js</include>
+
                     </includes>
                     <output>${project.build.directory}/classes/org/jbpm/designer/public/js/compressed/designer-plugins.js</output>
                 </aggregation>
