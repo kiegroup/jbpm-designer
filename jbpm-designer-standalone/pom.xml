@@ -473,6 +473,7 @@
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
         <configuration>
+          <deploy>${project.build.directory}/gwt-symbols-deploy</deploy>
           <module>org.jbpm.designer.FastCompiledjBPMDesigner</module>
           <logLevel>INFO</logLevel>
           <compileSourcesArtifacts>
