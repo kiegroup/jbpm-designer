@@ -813,6 +813,7 @@ ORYX.Plugins.View = {
                         id:'sharedPDFURL',
                         height:250,
                         autoScroll:true,
+                        layout: 'fit',
                         title:'Process PDF URL',
                         items: [cf]
                     });
@@ -878,6 +879,7 @@ ORYX.Plugins.View = {
                         width:400,
                         id:'sharedImageURL',
                         height:250,
+                        layout: 'fit',
                         autoScroll:true,
                         title:'Process Image URL',
                         items: [cf]
