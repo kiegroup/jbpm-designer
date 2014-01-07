@@ -196,14 +196,18 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 			} else {
 				if(fe instanceof FlowNode) {
 					FlowNode fn = (FlowNode) fe;
-					if((fn.getOutgoing() == null || fn.getOutgoing().size() < 1) && !isAdHocProcess(process)) {
+					if((fn.getOutgoing() == null || fn.getOutgoing().size() < 1) && !isAdHocProcess(process) && !(fn instanceof BoundaryEvent)) {
                         if(container instanceof Process) {
                             if(!isAdHocProcess(process)) {
-                                addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no outgoing connections"));
+                                if(!isCompensatingFlowNodeInProcess(fn, (Process) container)) {
+                                    addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no outgoing connections"));
+                                }
                             }
                         } else if(container instanceof SubProcess) {
                             if(!(container instanceof AdHocSubProcess)) {
-                                addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no outgoing connections"));
+                                if(!isCompensatingFlowNodeInSubprocess(fn, (SubProcess) container)) {
+                                    addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no outgoing connections"));
+                                }
                             }
                         } else {
                             addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no outgoing connections"));
@@ -213,11 +217,15 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
                         if((fn.getIncoming() == null || fn.getIncoming().size() < 1) && !isAdHocProcess(process)) {
                             if(container instanceof Process) {
                                 if(!isAdHocProcess(process)) {
-                                    addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no incoming connections"));
+                                    if(!isCompensatingFlowNodeInProcess(fn, (Process) container)) {
+                                        addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no incoming connections"));
+                                    }
                                 }
                             } else if(container instanceof SubProcess) {
                                 if(!(container instanceof AdHocSubProcess)) {
-                                    addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no incoming connections"));
+                                    if(!isCompensatingFlowNodeInSubprocess(fn, (SubProcess) container)) {
+                                        addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no incoming connections"));
+                                    }
                                 }
                             } else {
                                 addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no incoming connections"));
@@ -626,7 +634,33 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
         }
         return false;
     }
-    
+
+    private boolean isCompensatingFlowNodeInSubprocess(FlowNode node, SubProcess subProcess ) {
+        for(Artifact artifact : subProcess.getArtifacts()) {
+            if (artifact instanceof Association){
+                Association association = (Association) artifact;
+                if (association.getTargetRef().getId().equals(node.getId())) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean isCompensatingFlowNodeInProcess(FlowNode node, Process process ) {
+        for(Artifact artifact : process.getArtifacts()) {
+            if (artifact instanceof Association){
+                Association association = (Association) artifact;
+                if (association.getTargetRef().getId().equals(node.getId())) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     private boolean containsWhiteSpace(String testString){
         if(testString != null){
             for(int i = 0; i < testString.length(); i++){
