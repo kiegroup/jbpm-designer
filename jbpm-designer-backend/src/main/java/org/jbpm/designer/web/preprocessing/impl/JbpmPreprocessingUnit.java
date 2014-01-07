@@ -595,7 +595,15 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     }
 
     private Collection<Asset> findWorkitemInfoForUUID(String location, Repository repository) {
-        Collection<Asset> widAssets = repository.listAssets(location, new FilterByExtension(WORKITEM_DEFINITION_EXT));
+        Collection<Asset> widAssets = repository.listAssets(location, new FilterByExtension(WORKITEM_DEFINITION_EXT){
+
+            @Override
+            public boolean accept(org.uberfire.java.nio.file.Path path)
+            {
+                boolean accept = super.accept(path);
+                return accept && ! path.getFileName().toString().startsWith("."); // JBPM-4215 fix: filter out hidden files of the same suffix but different format
+            }
+        });
         return widAssets;
     }
 
