@@ -302,7 +302,7 @@ public class Bpmn2JsonUnmarshaller {
                                             if(di.getName().equals(miDataInput)) {
 
                                                 DataInput inputDataItemObj = Bpmn2Factory.eINSTANCE.createDataInput();
-                                                inputDataItemObj.setId("miDataInput");
+                                                inputDataItemObj.setId("miDataInputX");
                                                 inputDataItemObj.setItemSubjectRef(di.getItemSubjectRef());
                                                 loopCharacteristics.setInputDataItem(inputDataItemObj);
 
@@ -317,7 +317,7 @@ public class Bpmn2JsonUnmarshaller {
                                             if(dout.getName().equals(miDataOutput)) {
 
                                                 DataOutput outputDataItemObj = Bpmn2Factory.eINSTANCE.createDataOutput();
-                                                outputDataItemObj.setId("miDataOutput");
+                                                outputDataItemObj.setId("miDataOutputX");
                                                 outputDataItemObj.setItemSubjectRef(dout.getItemSubjectRef());
                                                 loopCharacteristics.setOutputDataItem(outputDataItemObj);
 
@@ -518,14 +518,14 @@ public class Bpmn2JsonUnmarshaller {
 	            				InputSet inSet = task.getIoSpecification().getInputSets().get(0);
 	            				boolean foundDataInput = false;
 	            				for(DataInput dataInput : inSet.getDataInputRefs()) {
-	            					if(dataInput.getId().equals(task.getId() + "_" + da.getId() + "Input")) {
+	            					if(dataInput.getId().equals(task.getId() + "_" + da.getId() + "InputX")) {
 	            						foundDataInput = true;
 	            					}
 	            				}
 	            				if(!foundDataInput) {
 		            	        	DataInput d = Bpmn2Factory.eINSTANCE.createDataInput();
-		            	            d.setId(task.getId() + "_" + da.getId() + "Input");
-		            	            d.setName(da.getId() + "Input");
+		            	            d.setId(task.getId() + "_" + da.getId() + "InputX");
+		            	            d.setName(da.getId() + "InputX");
 		            	            task.getIoSpecification().getDataInputs().add(d);
 		            	            task.getIoSpecification().getInputSets().get(0).getDataInputRefs().add(d);
 
@@ -540,14 +540,14 @@ public class Bpmn2JsonUnmarshaller {
 	            				boolean foundDataInput = false;
 	            				List<DataInput> dataInputs = te.getDataInputs();
 	            				for(DataInput din : dataInputs) {
-	            					if(din.getId().equals(te.getId() + "_" + da.getId() + "Input")) {
+	            					if(din.getId().equals(te.getId() + "_" + da.getId() + "InputX")) {
 	            						foundDataInput = true;
 	            					}
 	            				}
 	            				if(!foundDataInput) {
 	            					DataInput datain = Bpmn2Factory.eINSTANCE.createDataInput();
-	            					datain.setId(te.getId() + "_" + da.getId() + "Input");
-	            					datain.setName(da.getId() + "Input");
+	            					datain.setId(te.getId() + "_" + da.getId() + "InputX");
+	            					datain.setName(da.getId() + "InputX");
 	            					te.getDataInputs().add(datain);
 	            					
 	            					if(te.getInputSet() == null) {
@@ -581,15 +581,15 @@ public class Bpmn2JsonUnmarshaller {
 	            				boolean foundDataOutput = false;
 	            				OutputSet outSet = task.getIoSpecification().getOutputSets().get(0);
 	            				for(DataOutput dataOut : outSet.getDataOutputRefs()) {
-	            					if(dataOut.getId().equals(task.getId() + "_" + da.getId() + "Output")) {
+	            					if(dataOut.getId().equals(task.getId() + "_" + da.getId() + "OutputX")) {
 	            						foundDataOutput = true;
 	            					}
 	            				}
 
 	            				if(!foundDataOutput) {
 		            	        	DataOutput d = Bpmn2Factory.eINSTANCE.createDataOutput();
-		            	            d.setId(task.getId() + "_" + da.getId() + "Output");
-		            	            d.setName(da.getId() + "Output");
+		            	            d.setId(task.getId() + "_" + da.getId() + "OutputX");
+		            	            d.setName(da.getId() + "OutputX");
 		            	            task.getIoSpecification().getDataOutputs().add(d);
 		            	            task.getIoSpecification().getOutputSets().get(0).getDataOutputRefs().add(d);
 
@@ -604,14 +604,14 @@ public class Bpmn2JsonUnmarshaller {
 	            				boolean foundDataOutput = false;
 	            				List<DataOutput> dataOutputs = ce.getDataOutputs();
 	            				for(DataOutput dout : dataOutputs) {
-	            					if(dout.getId().equals(ce.getId() + "_" + da.getId() + "Output")) {
+	            					if(dout.getId().equals(ce.getId() + "_" + da.getId() + "OutputX")) {
 	            						foundDataOutput = true;
 	            					}
 	            				}
 	            				if(!foundDataOutput) {
 	            					DataOutput dataout = Bpmn2Factory.eINSTANCE.createDataOutput();
-	            					dataout.setId(ce.getId() + "_" + da.getId() + "Output");
-	            					dataout.setName(da.getId() + "Output");
+	            					dataout.setId(ce.getId() + "_" + da.getId() + "OutputX");
+	            					dataout.setName(da.getId() + "OutputX");
 	            					ce.getDataOutputs().add(dataout);
 	            					
 	            					if(ce.getOutputSet() == null) {
@@ -647,14 +647,14 @@ public class Bpmn2JsonUnmarshaller {
                                 InputSet inSet = targetElement.getIoSpecification().getInputSets().get(0);
                                 boolean foundDataInput = false;
                                 for(DataInput dataInput : inSet.getDataInputRefs()) {
-                                    if(dataInput.getId().equals(targetElement.getId() + "_" + da.getId() + "Input")) {
+                                    if(dataInput.getId().equals(targetElement.getId() + "_" + da.getId() + "InputX")) {
                                         foundDataInput = true;
                                     }
                                 }
                                 if(!foundDataInput) {
                                     DataInput d = Bpmn2Factory.eINSTANCE.createDataInput();
-                                    d.setId(targetElement.getId() + "_" + da.getId() + "Input");
-                                    d.setName(da.getId() + "Input");
+                                    d.setId(targetElement.getId() + "_" + da.getId() + "InputX");
+                                    d.setName(da.getId() + "InputX");
                                     targetElement.getIoSpecification().getDataInputs().add(d);
                                     targetElement.getIoSpecification().getInputSets().get(0).getDataInputRefs().add(d);
 
@@ -677,15 +677,15 @@ public class Bpmn2JsonUnmarshaller {
                                 boolean foundDataOutput = false;
                                 OutputSet outSet = sourceElement.getIoSpecification().getOutputSets().get(0);
                                 for(DataOutput dataOut : outSet.getDataOutputRefs()) {
-                                    if(dataOut.getId().equals(sourceElement.getId() + "_" + da.getId() + "Output")) {
+                                    if(dataOut.getId().equals(sourceElement.getId() + "_" + da.getId() + "OutputX")) {
                                         foundDataOutput = true;
                                     }
                                 }
 
                                 if(!foundDataOutput) {
                                     DataOutput d = Bpmn2Factory.eINSTANCE.createDataOutput();
-                                    d.setId(sourceElement.getId() + "_" + da.getId() + "Output");
-                                    d.setName(da.getId() + "Output");
+                                    d.setId(sourceElement.getId() + "_" + da.getId() + "OutputX");
+                                    d.setName(da.getId() + "OutputX");
                                     sourceElement.getIoSpecification().getDataOutputs().add(d);
                                     sourceElement.getIoSpecification().getOutputSets().get(0).getDataOutputRefs().add(d);
 
@@ -2430,7 +2430,7 @@ public class Bpmn2JsonUnmarshaller {
 	                DataInput nextInput = Bpmn2Factory.eINSTANCE.createDataInput();
 	                String[] dataInputParts = dataInput.split( ":\\s*" );
 	                if(dataInputParts.length == 2) {
-	                	nextInput.setId(sp.getId() + "_" + dataInputParts[0] + "Input");
+	                	nextInput.setId(sp.getId() + "_" + dataInputParts[0] + "InputX");
 	                	nextInput.setName(dataInputParts[0]);
 	                	
 	                	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
@@ -2440,7 +2440,7 @@ public class Bpmn2JsonUnmarshaller {
 	                    		dataInputParts[1]);
 	                    nextInput.getAnyAttribute().add(extensionEntry);
 	                } else {
-	                	nextInput.setId(sp.getId() + "_" + dataInput + "Input");
+	                	nextInput.setId(sp.getId() + "_" + dataInput + "InputX");
 	                	nextInput.setName(dataInput);
 
                         ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
@@ -2476,7 +2476,7 @@ public class Bpmn2JsonUnmarshaller {
 	                DataOutput nextOut = Bpmn2Factory.eINSTANCE.createDataOutput();
 	                String[] dataOutputParts = dataOutput.split( ":\\s*" );
 	                if(dataOutputParts.length == 2) {
-	                	nextOut.setId(sp.getId() + "_" + dataOutputParts[0] + "Output");
+	                	nextOut.setId(sp.getId() + "_" + dataOutputParts[0] + "OutputX");
 	                	nextOut.setName(dataOutputParts[0]);
 	                	
 	                	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
@@ -2486,7 +2486,7 @@ public class Bpmn2JsonUnmarshaller {
 	                    		dataOutputParts[1]);
 	                    nextOut.getAnyAttribute().add(extensionEntry);
 	                } else {
-	                	nextOut.setId(sp.getId() + "_" + dataOutput + "Output");
+	                	nextOut.setId(sp.getId() + "_" + dataOutput + "OutputX");
 	                	nextOut.setName(dataOutput);
 
                         ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
@@ -2519,7 +2519,7 @@ public class Bpmn2JsonUnmarshaller {
                     if(sp.getIoSpecification() != null && sp.getIoSpecification().getDataOutputs() != null) {
                     	List<DataInput> dataInputs = sp.getIoSpecification().getDataInputs();
                     	for(DataInput di : dataInputs) {
-                    		if(di.getId().equals(sp.getId() + "_" + assignmentParts[0] + "Input")) {
+                    		if(di.getId().equals(sp.getId() + "_" + assignmentParts[0] + "InputX")) {
                     			dia.setTargetRef(di);
                     			if(di.getName().equals("TaskName")) {
                     				break;
@@ -2558,14 +2558,14 @@ public class Bpmn2JsonUnmarshaller {
                     
                     List<DataInput> dataInputs = sp.getIoSpecification().getDataInputs();
                     for(DataInput di : dataInputs) {
-                        if(di.getId().equals(sp.getId() + "_" + assignmentParts[1] + "Input")) {
+                        if(di.getId().equals(sp.getId() + "_" + assignmentParts[1] + "InputX")) {
                             dia.setTargetRef(di);
                             break;
                         }
                     }
                     List<DataOutput> dataOutputs = sp.getIoSpecification().getDataOutputs();
                     for(DataOutput dout : dataOutputs) {
-                        if(dout.getId().equals(sp.getId() + "_" + assignmentParts[1] + "Output")) {
+                        if(dout.getId().equals(sp.getId() + "_" + assignmentParts[1] + "OutputX")) {
                             doa.getSourceRef().add(dout);
                             break;
                         }
@@ -2579,7 +2579,7 @@ public class Bpmn2JsonUnmarshaller {
                     boolean leftHandAssignMentIsDO = false;
                     List<DataOutput> dataOutputs = sp.getIoSpecification().getDataOutputs();
                     for(DataOutput dout : dataOutputs) {
-                        if(dout.getId().equals(sp.getId() + "_" + assignmentParts[0] + "Output")) {
+                        if(dout.getId().equals(sp.getId() + "_" + assignmentParts[0] + "OutputX")) {
                             leftHandAssignMentIsDO = true;
                             break;
                         }
@@ -2588,7 +2588,7 @@ public class Bpmn2JsonUnmarshaller {
                         // doing data output
                         DataOutputAssociation doa = Bpmn2Factory.eINSTANCE.createDataOutputAssociation();
                         for(DataOutput dout : dataOutputs) {
-                            if(dout.getId().equals(sp.getId() + "_" + assignmentParts[0] + "Output")) {
+                            if(dout.getId().equals(sp.getId() + "_" + assignmentParts[0] + "OutputX")) {
                                 doa.getSourceRef().add(dout);
                                 break;
                             }
@@ -2608,7 +2608,7 @@ public class Bpmn2JsonUnmarshaller {
 
                         List<DataInput> dataInputs = sp.getIoSpecification().getDataInputs();
                         for(DataInput di : dataInputs) {
-                            if(di.getId().equals(sp.getId() + "_" + assignmentParts[1] + "Input")) {
+                            if(di.getId().equals(sp.getId() + "_" + assignmentParts[1] + "InputX")) {
                                 dia.setTargetRef(di);
                                 break;
                             }
@@ -2638,7 +2638,7 @@ public class Bpmn2JsonUnmarshaller {
         	InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
         	DataInput multiInput = Bpmn2Factory.eINSTANCE.createDataInput();
         	multiInput.setId(sp.getId() + "_" + "input");
-        	multiInput.setName("MultiInstanceInput");
+        	multiInput.setName("MultiInstanceInputX");
             sp.getIoSpecification().getDataInputs().add(multiInput);
             inset.getDataInputRefs().add(multiInput);
             sp.getIoSpecification().getInputSets().add(inset);
@@ -3689,7 +3689,7 @@ public class Bpmn2JsonUnmarshaller {
 	                DataInput nextInput = Bpmn2Factory.eINSTANCE.createDataInput();
 	                String[] dataInputParts = dataInput.split( ":\\s*" );
 	                if(dataInputParts.length == 2) {
-	                	nextInput.setId(callActivity.getId() + "_" + dataInputParts[0] + "Input");
+	                	nextInput.setId(callActivity.getId() + "_" + dataInputParts[0] + "InputX");
 	                	nextInput.setName(dataInputParts[0]);
 	                	
 	                	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
@@ -3699,7 +3699,7 @@ public class Bpmn2JsonUnmarshaller {
 	                    		dataInputParts[1]);
 	                    nextInput.getAnyAttribute().add(extensionEntry);
 	                } else {
-	                	nextInput.setId(callActivity.getId() + "_" + dataInput + "Input");
+	                	nextInput.setId(callActivity.getId() + "_" + dataInput + "InputX");
 	                	nextInput.setName(dataInput);
 
                         ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
@@ -3734,7 +3734,7 @@ public class Bpmn2JsonUnmarshaller {
 	                DataOutput nextOut = Bpmn2Factory.eINSTANCE.createDataOutput();
 	                String[] dataOutputParts = dataOutput.split( ":\\s*" );
 	                if(dataOutputParts.length == 2) {
-	                	nextOut.setId(callActivity.getId() + "_" + dataOutputParts[0] + "Output");
+	                	nextOut.setId(callActivity.getId() + "_" + dataOutputParts[0] + "OutputX");
 	                	nextOut.setName(dataOutputParts[0]);
 	                	
 	                	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
@@ -3744,7 +3744,7 @@ public class Bpmn2JsonUnmarshaller {
 	                    		dataOutputParts[1]);
 	                    nextOut.getAnyAttribute().add(extensionEntry);
 	                } else {
-	                	nextOut.setId(callActivity.getId() + "_" + dataOutput + "Output");
+	                	nextOut.setId(callActivity.getId() + "_" + dataOutput + "OutputX");
 	                	nextOut.setName(dataOutput);
 
                         ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
@@ -3778,7 +3778,7 @@ public class Bpmn2JsonUnmarshaller {
                     if(callActivity.getIoSpecification() != null && callActivity.getIoSpecification().getDataOutputs() != null) {
                     	List<DataInput> dataInputs = callActivity.getIoSpecification().getDataInputs();
                     	for(DataInput di : dataInputs) {
-                    		if(di.getId().equals(callActivity.getId() + "_" + assignmentParts[0] + "Input")) {
+                    		if(di.getId().equals(callActivity.getId() + "_" + assignmentParts[0] + "InputX")) {
                     			dia.setTargetRef(di);
                     			if(di.getName().equals("TaskName")) {
                     				foundTaskName = true;
@@ -3818,14 +3818,14 @@ public class Bpmn2JsonUnmarshaller {
                     
                     List<DataInput> dataInputs = callActivity.getIoSpecification().getDataInputs();
                     for(DataInput di : dataInputs) {
-                        if(di.getId().equals(callActivity.getId() + "_" + assignmentParts[1] + "Input")) {
+                        if(di.getId().equals(callActivity.getId() + "_" + assignmentParts[1] + "InputX")) {
                             dia.setTargetRef(di);
                             break;
                         }
                     }
                     List<DataOutput> dataOutputs = callActivity.getIoSpecification().getDataOutputs();
                     for(DataOutput dout : dataOutputs) {
-                        if(dout.getId().equals(callActivity.getId() + "_" + assignmentParts[1] + "Output")) {
+                        if(dout.getId().equals(callActivity.getId() + "_" + assignmentParts[1] + "OutputX")) {
                             doa.getSourceRef().add(dout);
                             break;
                         }
@@ -3839,7 +3839,7 @@ public class Bpmn2JsonUnmarshaller {
                     boolean leftHandAssignMentIsDO = false;
                     List<DataOutput> dataOutputs = callActivity.getIoSpecification().getDataOutputs();
                     for(DataOutput dout : dataOutputs) {
-                        if(dout.getId().equals(callActivity.getId() + "_" + assignmentParts[0] + "Output")) {
+                        if(dout.getId().equals(callActivity.getId() + "_" + assignmentParts[0] + "OutputX")) {
                             leftHandAssignMentIsDO = true;
                             break;
                         }
@@ -3848,7 +3848,7 @@ public class Bpmn2JsonUnmarshaller {
                         // doing data output
                         DataOutputAssociation doa = Bpmn2Factory.eINSTANCE.createDataOutputAssociation();
                         for(DataOutput dout : dataOutputs) {
-                            if(dout.getId().equals(callActivity.getId() + "_" + assignmentParts[0] + "Output")) {
+                            if(dout.getId().equals(callActivity.getId() + "_" + assignmentParts[0] + "OutputX")) {
                                 doa.getSourceRef().add(dout);
                                 break;
                             }
@@ -3868,7 +3868,7 @@ public class Bpmn2JsonUnmarshaller {
 
                         List<DataInput> dataInputs = callActivity.getIoSpecification().getDataInputs();
                         for(DataInput di : dataInputs) {
-                            if(di.getId().equals(callActivity.getId() + "_" + assignmentParts[1] + "Input")) {
+                            if(di.getId().equals(callActivity.getId() + "_" + assignmentParts[1] + "InputX")) {
                                 dia.setTargetRef(di);
                                 break;
                             }
@@ -4029,7 +4029,7 @@ public class Bpmn2JsonUnmarshaller {
 
             // map the taskName to iospecification
             taskNameDataInput = Bpmn2Factory.eINSTANCE.createDataInput();
-            taskNameDataInput.setId(task.getId() + "_TaskNameInput");
+            taskNameDataInput.setId(task.getId() + "_TaskNameInputX");
             taskNameDataInput.setName("TaskName");
             
             if(task.getIoSpecification() == null) {
@@ -4046,7 +4046,7 @@ public class Bpmn2JsonUnmarshaller {
             fromExp.setBody(properties.get("taskname").replaceAll("&","").replaceAll(" ", ""));
             taskNameAssignment.setFrom(fromExp);
             FormalExpression toExp = Bpmn2Factory.eINSTANCE.createFormalExpression();
-            toExp.setBody(task.getId() + "_TaskNameInput");
+            toExp.setBody(task.getId() + "_TaskNameInputX");
             taskNameAssignment.setTo(toExp);
             taskNameDataInputAssociation.getAssignment().add(taskNameAssignment);
 
@@ -4076,7 +4076,7 @@ public class Bpmn2JsonUnmarshaller {
 	                DataInput nextInput = Bpmn2Factory.eINSTANCE.createDataInput();
 	                String[] dataInputParts = dataInput.split( ":\\s*" );
 	                if(dataInputParts.length == 2) {
-	                	nextInput.setId(task.getId() + "_" + dataInputParts[0] + (dataInputParts[0].endsWith("Input") ? "" : "Input"));
+	                	nextInput.setId(task.getId() + "_" + dataInputParts[0] + (dataInputParts[0].endsWith("InputX") ? "" : "InputX"));
 	                	nextInput.setName(dataInputParts[0]);
 	                	
 	                	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
@@ -4086,7 +4086,7 @@ public class Bpmn2JsonUnmarshaller {
 	                    		dataInputParts[1]);
 	                    nextInput.getAnyAttribute().add(extensionEntry);
 	                } else {
-	                	nextInput.setId(task.getId() + "_" + dataInput + (dataInput.endsWith("Input") ? "" : "Input"));
+	                	nextInput.setId(task.getId() + "_" + dataInput + (dataInput.endsWith("InputX") ? "" : "InputX"));
 	                	nextInput.setName(dataInput);
 
                         ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
@@ -4126,7 +4126,7 @@ public class Bpmn2JsonUnmarshaller {
 	                DataOutput nextOut = Bpmn2Factory.eINSTANCE.createDataOutput();
 	                String[] dataOutputParts = dataOutput.split( ":\\s*" );
 	                if(dataOutputParts.length == 2) {
-	                	nextOut.setId(task.getId() + "_" + dataOutputParts[0] + (dataOutputParts[0].endsWith("Output") ? "" : "Output"));
+	                	nextOut.setId(task.getId() + "_" + dataOutputParts[0] + (dataOutputParts[0].endsWith("OutputX") ? "" : "OutputX"));
 	                	nextOut.setName(dataOutputParts[0]);
 	                	
 	                	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
@@ -4136,7 +4136,7 @@ public class Bpmn2JsonUnmarshaller {
 	                    		dataOutputParts[1]);
 	                    nextOut.getAnyAttribute().add(extensionEntry);
 	                } else {
-	                	nextOut.setId(task.getId() + "_" + dataOutput + (dataOutput.endsWith("Output") ? "" : "Output"));
+	                	nextOut.setId(task.getId() + "_" + dataOutput + (dataOutput.endsWith("OutputX") ? "" : "OutputX"));
 	                	nextOut.setName(dataOutput);
 
                         ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
@@ -4170,7 +4170,7 @@ public class Bpmn2JsonUnmarshaller {
                     if(task.getIoSpecification() != null && task.getIoSpecification().getDataOutputs() != null) {
                     	List<DataInput> dataInputs = task.getIoSpecification().getDataInputs();
                     	for(DataInput di : dataInputs) {
-                    		if(di.getId().equals(task.getId() + "_" + assignmentParts[0] + (assignmentParts[0].endsWith("Input") ? "" : "Input"))) {
+                    		if(di.getId().equals(task.getId() + "_" + assignmentParts[0] + (assignmentParts[0].endsWith("InputX") ? "" : "InputX"))) {
                     			dia.setTargetRef(di);
                     			if(di.getName().equals("TaskName")) {
                     				foundTaskName = true;
@@ -4182,7 +4182,7 @@ public class Bpmn2JsonUnmarshaller {
                     // if we are dealing with TaskName and none has been defined, add it
                     if(assignmentParts[0].equals("TaskName") && !foundTaskName) {
                         DataInput assignmentTaskNameDataInput = Bpmn2Factory.eINSTANCE.createDataInput();
-                        assignmentTaskNameDataInput.setId(task.getId() + "_TaskNameInput");
+                        assignmentTaskNameDataInput.setId(task.getId() + "_TaskNameInputX");
                         assignmentTaskNameDataInput.setName("TaskName");
                         if(task.getIoSpecification() == null) {
                             InputOutputSpecification iospec = Bpmn2Factory.eINSTANCE.createInputOutputSpecification();
@@ -4224,14 +4224,14 @@ public class Bpmn2JsonUnmarshaller {
                     
                     List<DataInput> dataInputs = task.getIoSpecification().getDataInputs();
                     for(DataInput di : dataInputs) {
-                        if(di.getId().equals(task.getId() + "_" + assignmentParts[1] + (assignmentParts[1].endsWith("Input") ? "" : "Input"))) {
+                        if(di.getId().equals(task.getId() + "_" + assignmentParts[1] + (assignmentParts[1].endsWith("InputX") ? "" : "InputX"))) {
                             dia.setTargetRef(di);
                             break;
                         }
                     }
                     List<DataOutput> dataOutputs = task.getIoSpecification().getDataOutputs();
                     for(DataOutput dout : dataOutputs) {
-                        if(dout.getId().equals(task.getId() + "_" + assignmentParts[1] + (assignmentParts[1].endsWith("Output") ? "" : "Output"))) {
+                        if(dout.getId().equals(task.getId() + "_" + assignmentParts[1] + (assignmentParts[1].endsWith("OutputX") ? "" : "OutputX"))) {
                             doa.getSourceRef().add(dout);
                             break;
                         }
@@ -4244,7 +4244,7 @@ public class Bpmn2JsonUnmarshaller {
                     boolean leftHandAssignMentIsDO = false;
                     List<DataOutput> dataOutputs = task.getIoSpecification().getDataOutputs();
                     for(DataOutput dout : dataOutputs) {
-                        if(dout.getId().equals(task.getId() + "_" + assignmentParts[0] + (assignmentParts[0].endsWith("Output") ? "" : "Output"))) {
+                        if(dout.getId().equals(task.getId() + "_" + assignmentParts[0] + (assignmentParts[0].endsWith("OutputX") ? "" : "OutputX"))) {
                             leftHandAssignMentIsDO = true;
                             break;
                         }
@@ -4253,7 +4253,7 @@ public class Bpmn2JsonUnmarshaller {
                         // doing data output
                         DataOutputAssociation doa = Bpmn2Factory.eINSTANCE.createDataOutputAssociation();
                         for(DataOutput dout : dataOutputs) {
-                            if(dout.getId().equals(task.getId() + "_" + assignmentParts[0] + (assignmentParts[0].endsWith("Output") ? "" : "Output"))) {
+                            if(dout.getId().equals(task.getId() + "_" + assignmentParts[0] + (assignmentParts[0].endsWith("OutputX") ? "" : "OutputX"))) {
                                 doa.getSourceRef().add(dout);
                                 break;
                             }
@@ -4273,7 +4273,7 @@ public class Bpmn2JsonUnmarshaller {
 
                         List<DataInput> dataInputs = task.getIoSpecification().getDataInputs();
                         for(DataInput di : dataInputs) {
-                            if(di.getId().equals(task.getId() + "_" + assignmentParts[1] + (assignmentParts[1].endsWith("Input") ? "" : "Input"))) {
+                            if(di.getId().equals(task.getId() + "_" + assignmentParts[1] + (assignmentParts[1].endsWith("InputX") ? "" : "InputX"))) {
                                 dia.setTargetRef(di);
                                 break;
                             }
@@ -4293,7 +4293,7 @@ public class Bpmn2JsonUnmarshaller {
                 DataInputAssociation da = itr.next();
                 if(da.getAssignment() != null && da.getAssignment().size() > 0) {
                     Assignment a = da.getAssignment().get(0);
-                    if(((FormalExpression) a.getTo()).getBody().equals(task.getId() + "_TaskNameInput")) {
+                    if(((FormalExpression) a.getTo()).getBody().equals(task.getId() + "_TaskNameInputX")) {
                         if(!haveTaskNameInput) {
                             haveTaskNameInput = true;
                         } else {
@@ -4501,7 +4501,7 @@ public class Bpmn2JsonUnmarshaller {
         	
         	if(!foundGroupIdInput) {
         		DataInput d = Bpmn2Factory.eINSTANCE.createDataInput();
-                d.setId(task.getId() + "_" + "GroupId" + "Input");
+                d.setId(task.getId() + "_" + "GroupId" + "InputX");
                 d.setName("GroupId");
                 task.getIoSpecification().getDataInputs().add(d);
                 foundInput = d;
@@ -4559,7 +4559,7 @@ public class Bpmn2JsonUnmarshaller {
         	
         	if(!foundSkippableInput) {
         		DataInput d = Bpmn2Factory.eINSTANCE.createDataInput();
-                d.setId(task.getId() + "_" + "Skippable" + "Input");
+                d.setId(task.getId() + "_" + "Skippable" + "InputX");
                 d.setName("Skippable");
                 task.getIoSpecification().getDataInputs().add(d);
                 foundInput = d;
@@ -4617,7 +4617,7 @@ public class Bpmn2JsonUnmarshaller {
         	
         	if(!foundCommentInput) {
         		DataInput d = Bpmn2Factory.eINSTANCE.createDataInput();
-                d.setId(task.getId() + "_" + "Comment" + "Input");
+                d.setId(task.getId() + "_" + "Comment" + "InputX");
                 d.setName("Comment");
                 task.getIoSpecification().getDataInputs().add(d);
                 foundInput = d;
@@ -4675,7 +4675,7 @@ public class Bpmn2JsonUnmarshaller {
         	
         	if(!foundPriorityInput) {
         		DataInput d = Bpmn2Factory.eINSTANCE.createDataInput();
-                d.setId(task.getId() + "_" + "Priority" + "Input");
+                d.setId(task.getId() + "_" + "Priority" + "InputX");
                 d.setName("Priority");
                 task.getIoSpecification().getDataInputs().add(d);
                 foundInput = d;
@@ -4733,7 +4733,7 @@ public class Bpmn2JsonUnmarshaller {
         	
         	if(!foundContentInput) {
         		DataInput d = Bpmn2Factory.eINSTANCE.createDataInput();
-                d.setId(task.getId() + "_" + "Content" + "Input");
+                d.setId(task.getId() + "_" + "Content" + "InputX");
                 d.setName("Content");
                 task.getIoSpecification().getDataInputs().add(d);
                 foundInput = d;
@@ -4785,7 +4785,7 @@ public class Bpmn2JsonUnmarshaller {
 
             if(!foundLocaleInput) {
                 DataInput d = Bpmn2Factory.eINSTANCE.createDataInput();
-                d.setId(task.getId() + "_" + "Locale" + "Input");
+                d.setId(task.getId() + "_" + "Locale" + "InputX");
                 d.setName("Locale");
                 task.getIoSpecification().getDataInputs().add(d);
                 foundInput = d;
@@ -4843,7 +4843,7 @@ public class Bpmn2JsonUnmarshaller {
 
             if(!foundCreatedByInput) {
                 DataInput d = Bpmn2Factory.eINSTANCE.createDataInput();
-                d.setId(task.getId() + "_" + "CreatedBy" + "Input");
+                d.setId(task.getId() + "_" + "CreatedBy" + "InputX");
                 d.setName("CreatedBy");
                 task.getIoSpecification().getDataInputs().add(d);
                 foundInput = d;
@@ -4908,7 +4908,7 @@ public class Bpmn2JsonUnmarshaller {
 
             if(!foundNotCompletedReassignmentsInput) {
                 DataInput d = Bpmn2Factory.eINSTANCE.createDataInput();
-                d.setId(task.getId() + "_" + "NotCompletedReassign" + "Input");
+                d.setId(task.getId() + "_" + "NotCompletedReassign" + "InputX");
                 d.setName("NotCompletedReassign");
                 task.getIoSpecification().getDataInputs().add(d);
                 foundNotCompletedDataInput = d;
@@ -4922,7 +4922,7 @@ public class Bpmn2JsonUnmarshaller {
 
             if(!foundNotStartedReassignmentsInput) {
                 DataInput d = Bpmn2Factory.eINSTANCE.createDataInput();
-                d.setId(task.getId() + "_" + "NotStartedReassign" + "Input");
+                d.setId(task.getId() + "_" + "NotStartedReassign" + "InputX");
                 d.setName("NotStartedReassign");
                 task.getIoSpecification().getDataInputs().add(d);
                 foundNotStartedDataInput = d;
@@ -5012,7 +5012,7 @@ public class Bpmn2JsonUnmarshaller {
 
             if(!foundNotCompletedNotificationsInput) {
                 DataInput d = Bpmn2Factory.eINSTANCE.createDataInput();
-                d.setId(task.getId() + "_" + "NotCompletedNotify" + "Input");
+                d.setId(task.getId() + "_" + "NotCompletedNotify" + "InputX");
                 d.setName("NotCompletedNotify");
                 task.getIoSpecification().getDataInputs().add(d);
                 foundNotCompletedDataInput = d;
@@ -5026,7 +5026,7 @@ public class Bpmn2JsonUnmarshaller {
 
             if(!foundNotStartedNotificationsInput) {
                 DataInput d = Bpmn2Factory.eINSTANCE.createDataInput();
-                d.setId(task.getId() + "_" + "NotStartedNotify" + "Input");
+                d.setId(task.getId() + "_" + "NotStartedNotify" + "InputX");
                 d.setName("NotStartedNotify");
                 task.getIoSpecification().getDataInputs().add(d);
                 foundNotStartedDataInput = d;
