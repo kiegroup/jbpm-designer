@@ -397,11 +397,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
     	                if(((MessageEventDefinition) ed).getMessageRef() == null) {
     	                    addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, "Catch Event has no messageref."));
     	                }
-    	            }  else if( ed instanceof CompensateEventDefinition) {
-    	                if(((CompensateEventDefinition) ed).getActivityRef() == null) {
-    	                	addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, "Catch Event has no activityref."));
-    	                }
-    	            } 
+    	            }
 				}
 			}
 			

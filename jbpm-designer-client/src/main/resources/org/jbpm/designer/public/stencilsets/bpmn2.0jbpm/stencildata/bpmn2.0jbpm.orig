@@ -7015,8 +7015,7 @@
 			"propertyPackages":[
 				"baseAttributes",
 				"catchEventAttributes",
-				"bgColor",
-				"compensation"
+				"bgColor"
 			],
 			"roles": [
 				"all",
@@ -7779,7 +7778,6 @@
 				"baseAttributes",
 				"catchEventAttributes",
 				"boundaryevent",
-				"compensation",
 				"bgColor"
 			],
 			"roles":[

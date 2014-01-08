@@ -115,7 +115,7 @@
                     new Ajax.Request(ORYX.PATH + "transformer", {
                                    encoding: 'UTF-8',
                                    method: 'POST',
-                                   parameters: {uuid: ORYX.UUID, profile: ORYX.PROFILE, pp: ORYX.PREPROCESSING, bpmn2: dps, transformto: 'bpmn2json', enc: 'true', convertservicetasks: 'true'},
+                                   parameters: {uuid: ORYX.UUID, profile: ORYX.PROFILE, pp: ORYX.PREPROCESSING, bpmn2: dps, transformto: 'bpmn2json', enc: 'true', convertservicetasks: 'true', ts: new Date().getTime()},
                                    onSuccess: function(transport) {
                                        response = transport.responseText;
                                        model = response.evalJSON();
