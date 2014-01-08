@@ -2,11 +2,13 @@
 <%
     response.setHeader("Cache-Control","no-cache");
     response.setHeader("Pragma","no-cache");
-    response.setDateHeader ("Expires", 0);
+    response.setDateHeader ("Expires", -1);
 %>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:b3mn="http://b3mn.org/2007/b3mn" xmlns:ext="http://b3mn.org/2007/ext" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:atom="http://b3mn.org/2007/atom+xhtml">
 <head profile="http://purl.org/NET/erdf/profile">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="PRAGMA" content="NO-CACHE">
+    <meta http-equiv="Expires" content="-1">
     <link xmlns="http://www.w3.org/1999/xhtml" rel="icon" href="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/jbpm.gif" />
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/lib/prototype-1.5.1.js" type="text/javascript"></script>
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/lib/path_parser.js" type="text/javascript"></script>
@@ -45,7 +47,7 @@
     <!-- plugins -->
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/compressed/designer-plugins.js" type="text/javascript"></script>
     <!-- dynamic properties -->
-    <script xmlns="http://www.w3.org/1999/xhtml" type="text/javascript" src="<%=request.getContextPath()%>/editor/?uuid=<%=request.getParameter("uuid")%>&profile=<%=request.getParameter("profile")%>&pp=<%=request.getParameter("pp")%>&editorid=<%=request.getParameter("editorid")%>&readonly=<%=request.getParameter("readonly")%>"></script>
+    <script xmlns="http://www.w3.org/1999/xhtml" type="text/javascript" src="<%=request.getContextPath()%>/editor/?uuid=<%=request.getParameter("uuid")%>&profile=<%=request.getParameter("profile")%>&pp=<%=request.getParameter("pp")%>&editorid=<%=request.getParameter("editorid")%>&readonly=<%=request.getParameter("readonly")%>&ts=<%=request.getParameter("ts")%>"></script>
 
 </head>
 <body style="overflow:hidden;" onload="startit();">
