@@ -236,6 +236,7 @@ public class DesignerPresenter {
                                     }
                                     editorParameters.remove( "completednodes" );
                                 }
+                                editorParameters.put("ts", Long.toString(System.currentTimeMillis()));
                                 view.setEditorParamters( editorParameters );
 
                                 // dont add in instance details view
