@@ -54,6 +54,7 @@ public class DesignerView
     public void setEditorID( final String editorID ) {
         this.editorID = editorID;
         inlineFrame.getElement().setId(editorID);
+        inlineFrame.getElement().setAttribute("name", editorID);
     }
 
     @Override
@@ -69,6 +70,10 @@ public class DesignerView
             }
             if(locale.indexOf("_") > 0) {
                 locale = locale.split("_")[0]; // just use the language (ommit country and variant)
+            }
+            if(!(locale.equalsIgnoreCase("en") || locale.equalsIgnoreCase("ja"))) {
+                // we currently only support english and japanese. default to english
+                locale = "en";
             }
         }
 
