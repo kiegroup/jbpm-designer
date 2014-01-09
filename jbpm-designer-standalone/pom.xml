@@ -474,6 +474,7 @@
         <artifactId>gwt-maven-plugin</artifactId>
         <configuration>
           <deploy>${project.build.directory}/gwt-symbols-deploy</deploy>
+          <localWorkers>4</localWorkers>
           <module>org.jbpm.designer.FastCompiledjBPMDesigner</module>
           <logLevel>INFO</logLevel>
           <compileSourcesArtifacts>
@@ -524,7 +525,7 @@
 
           </compileSourcesArtifacts>
           <runTarget>org.jbpm.designer.jBPMDesigner/designer.html</runTarget>
-          <extraJvmArgs>-Xmx1024m -XX:MaxPermSize=256m</extraJvmArgs>
+          <extraJvmArgs>-Xmx2048m -XX:MaxPermSize=256m</extraJvmArgs>
           <soyc>false</soyc>
           <server>org.jboss.errai.cdi.server.gwt.JettyLauncher</server>
           <!-- drools-compiler has dependency on org.eclipse.jdt.core.compiler:ecj:jar:3.5.1:compile, see http://code.google.com/p/google-web-toolkit/issues/detail?id=4479 -->
