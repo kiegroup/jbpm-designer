@@ -281,6 +281,10 @@ ORYX.CONFIG.EVENT_CANVAS_RESIZE_SHAPES_MOVED = "canvas.resizeshapemoved";
 ORYX.CONFIG.EVENT_CANVAS_ZOOMED = "canvas.zoomed";
 ORYX.CONFIG.EVENT_MODE_CHANGED = "mode.changed";
 ORYX.CONFIG.EVENT_PAINT_CANVAS_TOGGLED  = "canvas.toggled";
+// save-cancel-reload
+ORYX.CONFIG.EVENT_DO_SAVE = "designereventdosave";
+ORYX.CONFIG.EVENT_CANCEL_SAVE = "designereventcancelsave";
+ORYX.CONFIG.EVENT_DO_RELOAD = "designereventreloads";
 
 
 // voice commands

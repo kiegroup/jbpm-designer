@@ -6,8 +6,8 @@ import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.IsWidget;
+import org.apache.maven.settings.Settings;
 import org.guvnor.common.services.shared.file.CopyService;
 import org.guvnor.common.services.shared.file.DeleteService;
 import org.guvnor.common.services.shared.file.RenameService;
@@ -341,8 +341,8 @@ public class DesignerPresenter {
     }-*/;
 
     private native void publishSignalOnAssetUpdate( DesignerPresenter dp )/*-{
-        $wnd.designersignalassetupdate = function (uri) {
-            dp.@org.jbpm.designer.client.DesignerPresenter::assetUpdatedEvent(Ljava/lang/String;)(uri);
+        $wnd.designersignalassetupdate = function () {
+            return dp.@org.jbpm.designer.client.DesignerPresenter::assetUpdatedEvent()();
         }
     }-*/;
 
@@ -409,30 +409,32 @@ public class DesignerPresenter {
         } ).get( URIUtil.encode( uri ) );
     }
 
-    public void assetUpdatedEvent( String uri ) {
+    public boolean assetUpdatedEvent() {
         if ( concurrentUpdateSessionInfo != null ) {
             newConcurrentUpdate( concurrentUpdateSessionInfo.getPath(),
                                  concurrentUpdateSessionInfo.getIdentity(),
                                  new Command() {
                                      @Override
                                      public void execute() {
-                                         // save in designer is not done in presenter
-                                         //save();
+                                         view.raiseEventSave(view.getEditorID());
                                      }
                                  },
                                  new Command() {
                                      @Override
                                      public void execute() {
-                                         //cancel?
+                                         view.raiseEventSaveCancel(view.getEditorID());
                                      }
                                  },
                                  new Command() {
                                      @Override
                                      public void execute() {
-                                         reload();
+                                         view.raiseEventReload(view.getEditorID());
                                      }
                                  }
                                ).show();
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -482,8 +484,11 @@ public class DesignerPresenter {
         // TODO no impl for this in designer yet
     }
 
+    private void save() {
+        view.setProcessUnSaved(view.getEditorID());
+    }
+
     private void reload() {
-        placeManager.closePlace( new PathPlaceRequest( path ) );
-        placeManager.goTo( path );
+        view.raiseEventReload(view.getEditorID());
     }
 }
