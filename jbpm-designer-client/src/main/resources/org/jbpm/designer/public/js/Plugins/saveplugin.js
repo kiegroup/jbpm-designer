@@ -146,6 +146,10 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_UNDO_ROLLBACK, this.setUnsaved.bind(this));
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_UNDO_EXECUTE, this.setUnsaved.bind(this));
 
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DO_SAVE, this.handleEventDoSave.bind(this));
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_CANCEL_SAVE, this.handleEventCancelSave.bind(this));
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DO_RELOAD, this.handleEventDoRealod.bind(this));
+
         window.onunload = this.unloadWindow.bind(this);
 
     },
@@ -155,7 +159,77 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
     },
 
     saveWithMessage: function() {
+        // check with presenter if we can save
+        var hasConcurrentUpdate = parent.designersignalassetupdate(ORYX.UUID);
+        if(hasConcurrentUpdate && hasConcurrentUpdate == true) {
+            // let the gwt code handle this from here on....
+        } else {
+            this.save(true);
+        }
+    },
+
+    handleEventDoSave: function() {
+        this.setUnsaved();
         this.save(true);
+    },
+
+    handleEventCancelSave: function() {
+        this.facade.raiseEvent({
+            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+            ntype		: 'info',
+            msg         : 'Save operation has been cancelled.',
+            title       : ''
+        });
+    },
+
+    handleEventDoRealod: function() {
+        this.facade.raiseEvent({
+            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+            ntype		: 'info',
+            msg         : 'Reloading process content.',
+            title       : ''
+        });
+
+        new Ajax.Request(ORYX.CONFIG.UUID_URL(), {
+            encoding: 'UTF-8',
+            method: 'GET',
+            onSuccess: function(transport) {
+                response = transport.responseText;
+                try {
+                    if (response.length != 0) {
+                        if(response.startsWith("error:")) {
+                            this.facade.raiseEvent({
+                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                ntype		: 'error',
+                                msg         : 'Unable to reload process content.',
+                                title       : ''
+                            });
+                        } else {
+                            this.updateProcessOnReload(response.evalJSON());
+                        }
+                    } else {
+                        this.facade.raiseEvent({
+                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                            ntype		: 'error',
+                            msg         : 'Invalid content.',
+                            title       : ''
+                        });
+                    }
+                } catch(err) {
+                    ORYX.LOG.error(err);
+                }
+            }.createDelegate(this),
+            onFailure: function(transport) {
+                this.facade.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'error',
+                    msg         : 'Could not reload process content.',
+                    title       : ''
+                });
+            }
+        });
+
+        ORYX.PROCESS_SAVED = false;
     },
 
     save : function(showCommit) {
@@ -174,6 +248,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                     return;
                 }
             }
+
             Ext.Ajax.request({
                 url: ORYX.PATH + 'assetservice',
                 method: 'POST',
@@ -202,7 +277,6 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                                     extendedTimeOut: 1000
                                 });
 
-                                parent.designersignalassetupdate(ORYX.UUID);
                                 // set the designer flag
                                 ORYX.PROCESS_SAVED = true;
 
@@ -322,7 +396,6 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                                 extendedTimeOut: 1000
                             });
 
-                            parent.designersignalassetupdate(ORYX.UUID);
                             // set the designer flag
                             ORYX.PROCESS_SAVED = true;
                         }
@@ -414,5 +487,48 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
 
     unloadWindow: function() {
         this.saveSync(false);
+    },
+
+    clearCanvas: function() {
+        ORYX.EDITOR.getCanvas().nodes.each(function(node) {
+            ORYX.EDITOR.deleteShape(node);
+        }.bind(this));
+
+        ORYX.EDITOR.getCanvas().edges.each(function(edge) {
+            ORYX.EDITOR.deleteShape(edge);
+        }.bind(this));
+    },
+
+    updateProcessOnReload: function( jsonString ){
+        if (jsonString) {
+            try {
+                this.clearCanvas();
+                this.facade.importJSON(jsonString);
+                ORYX.PROCESS_SAVED = false;
+                this.facade.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'success',
+                    msg         : 'Successfully reloaded process.',
+                    title       : ''
+
+                });
+            } catch(err) {
+                this.facade.importJSON(currentJSON);
+                this.facade.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'error',
+                    msg         : 'Unable to reload process.',
+                    title       : ''
+
+                });
+            }
+        } else {
+            this.facade.raiseEvent({
+                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                ntype		: 'error',
+                msg         : 'Process content to be reloaded is invalid.',
+                title       : ''
+            });
+        }
     }
 });

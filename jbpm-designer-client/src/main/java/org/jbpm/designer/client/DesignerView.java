@@ -123,6 +123,30 @@ public class DesignerView
         return true;
     }-*/;
 
+    public native void raiseEventSave(String editorID) /*-{
+        if($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor && (typeof($wnd.document.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved) == "function")) {
+            $wnd.document.getElementById(editorID).contentWindow.ORYX.EDITOR._pluginFacade.raiseEvent({
+                type: "designereventdosave"
+            });
+        }
+    }-*/;
+
+    public native void raiseEventSaveCancel(String editorID) /*-{
+        if($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor && (typeof($wnd.document.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved) == "function")) {
+            $wnd.document.getElementById(editorID).contentWindow.ORYX.EDITOR._pluginFacade.raiseEvent({
+                type: "designereventcancelsave"
+            });
+        }
+    }-*/;
+
+    public native void raiseEventReload(String editorID) /*-{
+        if($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor && (typeof($wnd.document.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved) == "function")) {
+            $wnd.document.getElementById(editorID).contentWindow.ORYX.EDITOR._pluginFacade.raiseEvent({
+                type: "designereventreloads"
+            });
+        }
+    }-*/;
+
     @Override
     public void onResize() {
         final Widget w = getParent();

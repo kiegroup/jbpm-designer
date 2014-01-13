@@ -273,6 +273,18 @@ ORYX.CONFIG.EVENT_SIMULATION_PATH_SVG_GENERATED = "simulation.pathsvggenerated";
 ORYX.CONFIG.EVENT_SIMULATION_ANNOTATE_PROCESS = "simulation.annotateprocess";
 ORYX.CONFIG.EVENT_SIMULATION_SHOW_ANNOTATED_PROCESS = "simulation.showannotatedprocess";
 ORYX.CONFIG.EVENT_NOTIFICATION_SHOW = "notification.show";
+// paint
+ORYX.CONFIG.EVENT_PAINT_NEWSHAPE = "paint.newshape";
+ORYX.CONFIG.EVENT_PAINT_REMOVESHAPE = "paint.removeshape";
+ORYX.CONFIG.EVENT_CANVAS_RESIZED = "canvas.resized";
+ORYX.CONFIG.EVENT_CANVAS_RESIZE_SHAPES_MOVED = "canvas.resizeshapemoved";
+ORYX.CONFIG.EVENT_CANVAS_ZOOMED = "canvas.zoomed";
+ORYX.CONFIG.EVENT_MODE_CHANGED = "mode.changed";
+ORYX.CONFIG.EVENT_PAINT_CANVAS_TOGGLED  = "canvas.toggled";
+// save-cancel-reload
+ORYX.CONFIG.EVENT_DO_SAVE = "designereventdosave";
+ORYX.CONFIG.EVENT_CANCEL_SAVE = "designereventcancelsave";
+ORYX.CONFIG.EVENT_DO_RELOAD = "designereventreloads";
 
 // voice commands
 ORYX.CONFIG.VOICE_COMMAND_GENERATE_FORMS = "voice.command.generate.forms";
