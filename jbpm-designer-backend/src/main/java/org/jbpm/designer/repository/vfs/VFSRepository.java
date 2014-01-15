@@ -18,6 +18,7 @@ import org.uberfire.java.nio.file.attribute.BasicFileAttributes;
 import org.uberfire.java.nio.file.Files;
 import org.uberfire.java.nio.file.SimpleFileVisitor;
 import com.google.gwt.http.client.URL.*;
+import org.uberfire.security.Identity;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
@@ -44,6 +45,9 @@ public class VFSRepository implements Repository {
 
     @Inject
     private Event<PathEvent> pathEvent;
+
+    @Inject
+    Identity identity;
 
     public VFSRepository() {
 
@@ -340,7 +344,7 @@ public class VFSRepository implements Repository {
         }
         createIfNotExists(filePath);
         try {
-            CommentedOption commentedOption = new CommentedOption("admin", "Created asset " + asset.getFullName());
+            CommentedOption commentedOption = new CommentedOption(getIdentity(), "Created asset " + asset.getFullName());
             OutputStream outputStream = fileSystem.provider().newOutputStream(filePath, StandardOpenOption.TRUNCATE_EXISTING, commentedOption);
             if(((AbstractAsset)asset).acceptBytes()) {
                 outputStream.write(((Asset<byte[]>)asset).getAssetContent());
@@ -364,7 +368,7 @@ public class VFSRepository implements Repository {
         if (!ioService.exists(filePath)) {
             throw new AssetNotFoundException();
         }
-        CommentedOption commentedOption = new CommentedOption("admin", commitMessage);
+        CommentedOption commentedOption = new CommentedOption(getIdentity(), commitMessage);
         if(((AbstractAsset)asset).acceptBytes()) {
             ioService.write(filePath, ((Asset<byte[]>)asset).getAssetContent(), StandardOpenOption.TRUNCATE_EXISTING, commentedOption);
         } else {
@@ -412,7 +416,7 @@ public class VFSRepository implements Repository {
                     + fileSystem.getSeparator() + sourcePath.getFileName().toString()));
             createIfNotExists(destinationPath);
 
-            CommentedOption commentedOption = new CommentedOption("admin", "Copied asset " + sourcePath.getFileName()
+            CommentedOption commentedOption = new CommentedOption(getIdentity(), "Copied asset " + sourcePath.getFileName()
                     + " into " + location);
 
             fileSystem.provider().copy(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING,commentedOption);
@@ -440,7 +444,7 @@ public class VFSRepository implements Repository {
 
             Path destinationPath = fileSystem.provider().getPath(URI.create(descriptor.getStringRepositoryRoot() + location + fileSystem.getSeparator() + name));
             createIfNotExists(destinationPath);
-            CommentedOption commentedOption = new CommentedOption("admin", "Moved asset " + sourcePath.getFileName()
+            CommentedOption commentedOption = new CommentedOption(getIdentity(), "Moved asset " + sourcePath.getFileName()
                     + " into " + location);
             fileSystem.provider().move(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING, commentedOption);
 
@@ -539,5 +543,13 @@ public class VFSRepository implements Repository {
         ((AbstractAsset)asset).setName(UriUtils.encode(asset.getName()));
 
         return asset;
+    }
+
+    private String getIdentity() {
+        if(this.identity != null && this.identity.getName() != null) {
+            return identity.getName();
+        } else {
+            return "admin";
+        }
     }
 }
