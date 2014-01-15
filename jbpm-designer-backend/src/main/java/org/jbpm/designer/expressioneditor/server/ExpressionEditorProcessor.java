@@ -117,7 +117,7 @@ public class ExpressionEditorProcessor {
             requestMessage.setErrorCode(null);
             requestMessage.setErrorMessage(null);
         } catch (ParseException e) {
-            logger.error("Script sent to server couldn't be parsed: " + script + " due to the following error: " + e.getMessage(), e);
+            logger.warn("Script sent to server couldn't be parsed: " + script + " due to the following error: " + e.getMessage());
             requestMessage.setErrorCode(ExpressionEditorErrors.SCRIPT_PARSING_ERROR);
             requestMessage.setErrorMessage(e.getMessage());
             requestMessage.setExpression(new ConditionExpression());
