@@ -490,15 +490,15 @@ ORYX.Plugins.Simulation = Clazz.extend({
                                        });
 				    	   		}
 				            }.bind(this),
-				            failure: function(){
+				            failure: function(response){
                                 this.facade.raiseEvent({
                                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                     ntype		: 'error',
-                                    msg         : ORYX.I18N.View.sim.unableToPerform,
+                                    msg         : ORYX.I18N.View.sim.unableToPerform + response.responseText,
                                     title       : ''
 
                                 });
-				            },
+				            }.bind(this),
 				            params: {
 				            	action: 'runsimulation',
 				            	profile: ORYX.PROFILE,

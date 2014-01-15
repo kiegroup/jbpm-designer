@@ -434,7 +434,10 @@ public class SimulationServlet extends HttpServlet {
 
 			} catch (Exception e) {
                 _logger.error("Error during simulation", e);
-	    		resp.sendError(HttpServletResponse.SC_NO_CONTENT, e.getMessage());
+                // need to return error code to use failure callback on client (js) side
+                resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                PrintWriter pw = resp.getWriter();
+                pw.write(e.getMessage());
 			}
 
         }
