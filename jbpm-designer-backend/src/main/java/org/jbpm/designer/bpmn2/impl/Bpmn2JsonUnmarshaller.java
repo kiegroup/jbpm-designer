@@ -1071,95 +1071,101 @@ public class Bpmn2JsonUnmarshaller {
             }
 		}
 	}
-    
+
     private void revisitCatchEventsConvertToBoundary(Definitions def) {
-    	List<CatchEvent> catchEventsToRemove = new ArrayList<CatchEvent>();
-    	List<BoundaryEvent> boundaryEventsToAdd = new ArrayList<BoundaryEvent>();
-    	List<RootElement> rootElements =  def.getRootElements();
-    	for(RootElement root : rootElements) {
-    		if(root instanceof Process) {
-    			Process process = (Process) root;
+        List<CatchEvent> catchEventsToRemove = new ArrayList<CatchEvent>();
+        Map<BoundaryEvent, List<String>> boundaryEventsToAdd = new HashMap<BoundaryEvent, List<String>>();
+        List<RootElement> rootElements =  def.getRootElements();
+        for(RootElement root : rootElements) {
+            if(root instanceof Process) {
+                Process process = (Process) root;
                 List<FlowElement> flowElements =  process.getFlowElements();
                 for(FlowElement fe : flowElements) {
-                	if(fe instanceof CatchEvent) {
-                		CatchEvent ce = (CatchEvent) fe;
+                    if(fe instanceof CatchEvent) {
+                        CatchEvent ce = (CatchEvent) fe;
                         EventDefinition ed = null;
                         if(ce.getEventDefinitions() != null && ce.getEventDefinitions().size() > 0) {
                             ed = ce.getEventDefinitions().get(0);
                         }
-                		// check if we have an outgoing connection to this catch event from an activity
-                		 for (Entry<Object, List<String>> entry : _outgoingFlows.entrySet()) {
-                			 for (String flowId : entry.getValue()) {
-                				 if (entry.getKey() instanceof Activity && flowId.equals(ce.getId())) {
-                					 BoundaryEvent be = Bpmn2Factory.eINSTANCE.createBoundaryEvent();
-                                     if(ed != null && ed instanceof ErrorEventDefinition) {
-                                         be.setCancelActivity(true);
-                                     } else {
-                                         Iterator<FeatureMap.Entry> iter = ce.getAnyAttribute().iterator();
-                                         while(iter.hasNext()) {
-                                             FeatureMap.Entry entry2 = iter.next();
-                                             if(entry2.getEStructuralFeature().getName().equals("boundaryca")) {
-                                                 String boundaryceVal = (String) entry2.getValue();
-                                                 be.setCancelActivity(Boolean.parseBoolean(boundaryceVal));
-                                             }
-                                         }
-                                     }
+                        // check if we have an outgoing connection to this catch event from an activity
+                        for(Entry<Object, List<String>> entry : _outgoingFlows.entrySet()) {
+                            for (String flowId : entry.getValue()) {
+                                if (entry.getKey() instanceof Activity && flowId.equals(ce.getId())) {
+                                    BoundaryEvent be = Bpmn2Factory.eINSTANCE.createBoundaryEvent();
+                                    if(ed != null && ed instanceof ErrorEventDefinition) {
+                                        be.setCancelActivity(true);
+                                    } else {
+                                        Iterator<FeatureMap.Entry> iter = ce.getAnyAttribute().iterator();
+                                        while(iter.hasNext()) {
+                                            FeatureMap.Entry entry2 = iter.next();
+                                            if(entry2.getEStructuralFeature().getName().equals("boundaryca")) {
+                                                String boundaryceVal = (String) entry2.getValue();
+                                                be.setCancelActivity(Boolean.parseBoolean(boundaryceVal));
+                                            }
+                                        }
+                                    }
 
-                					 if(ce.getDataOutputs() != null) {
-                						 be.getDataOutputs().addAll(ce.getDataOutputs());
-                					 }
-                					 if(ce.getDataOutputAssociation() != null) {
-                						 be.getDataOutputAssociation().addAll(ce.getDataOutputAssociation());
-                					 }
-                					 if(ce.getOutputSet() != null) {
-                						 be.setOutputSet(ce.getOutputSet());
-                					 }
-                					 if(ce.getEventDefinitions() != null) {
-                						 be.getEventDefinitions().addAll(ce.getEventDefinitions());
-                					 }
-                					 if(ce.getEventDefinitionRefs() != null) {
-                						 be.getEventDefinitionRefs().addAll(ce.getEventDefinitionRefs());
-                					 }
-                					 if(ce.getProperties() != null) {
-                						 be.getProperties().addAll(ce.getProperties());
-                					 }
-                					 if(ce.getAnyAttribute() != null) {
-                						 be.getAnyAttribute().addAll(ce.getAnyAttribute());
-                					 }
-                					 if(ce.getOutgoing() != null) {
-                						 be.getOutgoing().addAll(ce.getOutgoing());
-                					 }
-                					 if(ce.getIncoming() != null) {
-                						 be.getIncoming().addAll(ce.getIncoming());
-                					 }
-                					 if(ce.getProperties() != null) {
-                						 be.getProperties().addAll(ce.getProperties());
-                					 }
+                                    if(ce.getDataOutputs() != null) {
+                                        be.getDataOutputs().addAll(ce.getDataOutputs());
+                                    }
+                                    if(ce.getDataOutputAssociation() != null) {
+                                        be.getDataOutputAssociation().addAll(ce.getDataOutputAssociation());
+                                    }
+                                    if(ce.getOutputSet() != null) {
+                                        be.setOutputSet(ce.getOutputSet());
+                                    }
+                                    if(ce.getEventDefinitions() != null) {
+                                        be.getEventDefinitions().addAll(ce.getEventDefinitions());
+                                    }
+                                    if(ce.getEventDefinitionRefs() != null) {
+                                        be.getEventDefinitionRefs().addAll(ce.getEventDefinitionRefs());
+                                    }
+                                    if(ce.getProperties() != null) {
+                                        be.getProperties().addAll(ce.getProperties());
+                                    }
+                                    if(ce.getAnyAttribute() != null) {
+                                        be.getAnyAttribute().addAll(ce.getAnyAttribute());
+                                    }
+                                    if(ce.getOutgoing() != null) {
+                                        be.getOutgoing().addAll(ce.getOutgoing());
+                                    }
+                                    if(ce.getIncoming() != null) {
+                                        be.getIncoming().addAll(ce.getIncoming());
+                                    }
+                                    if(ce.getProperties() != null) {
+                                        be.getProperties().addAll(ce.getProperties());
+                                    }
 
-                					 be.setName(ce.getName());
-                					 be.setId(ce.getId());
-                					 
-                					 be.setAttachedToRef(((Activity)entry.getKey()));
-                					 ((Activity)entry.getKey()).getBoundaryEventRefs().add(be);
-                					 catchEventsToRemove.add(ce);
-                					 boundaryEventsToAdd.add(be);
-                				 }
-                			 }
-                		 }
-                	}
+                                    be.setName(ce.getName());
+                                    be.setId(ce.getId());
+
+                                    be.setAttachedToRef(((Activity)entry.getKey()));
+                                    ((Activity)entry.getKey()).getBoundaryEventRefs().add(be);
+                                    catchEventsToRemove.add(ce);
+                                    boundaryEventsToAdd.put(be, _outgoingFlows.get(ce));
+                                }
+                            }
+                        }
+                    }
+                }
+                if(catchEventsToRemove.size() > 0) {
+                    for(CatchEvent ce : catchEventsToRemove) {
+                        boolean removed = process.getFlowElements().remove(ce);
+                        _outgoingFlows.remove(ce);
+
+                    }
                 }
                 if(boundaryEventsToAdd.size() > 0) {
-            		for(BoundaryEvent be : boundaryEventsToAdd) {
-            			process.getFlowElements().add(be);
-            		}
-            	}
-                if(catchEventsToRemove.size() > 0) {
-                	for(CatchEvent ce : catchEventsToRemove) {
-                		process.getFlowElements().remove(ce);
-                	}
+                    Iterator<BoundaryEvent> boundaryToAddIterator = boundaryEventsToAdd.keySet().iterator();
+                    while(boundaryToAddIterator.hasNext()) {
+                        BoundaryEvent bToAdd = boundaryToAddIterator.next();
+                        process.getFlowElements().add(bToAdd);
+                        _outgoingFlows.put(bToAdd, boundaryEventsToAdd.get(bToAdd));
+                    }
                 }
-    		}
-    	}
+            }
+        }
+        reconnectFlows();
     }
     
     public void revisitAssociationsIoSpec(Definitions def) {
@@ -1259,153 +1265,154 @@ public class Bpmn2JsonUnmarshaller {
             def.getRootElements().add(msg);
         }
     }
-    
-    public void setCatchEventsInfo(FlowElementsContainer container, Definitions def, List<Signal> toAddSignals, Set<Error> toAddErrors, 
-    		Set<Escalation> toAddEscalations, Set<Message> toAddMessages, Set<ItemDefinition> toAddItemDefinitions) {
-                List<FlowElement> flowElements =  container.getFlowElements();
-                for(FlowElement fe : flowElements) {
-                    if(fe instanceof CatchEvent) {
-                        if(((CatchEvent)fe).getEventDefinitions().size() > 0) {
-                            EventDefinition ed = ((CatchEvent)fe).getEventDefinitions().get(0);
-                            if (ed instanceof SignalEventDefinition) {
-                                SignalEventDefinition sed = (SignalEventDefinition) ed;
-                                if(sed.getSignalRef() != null && sed.getSignalRef().length() > 0) {
-                                    String signalRef = sed.getSignalRef();
 
-                                    boolean shouldAddSignal = true;
-                                    List<RootElement> rootElements = def.getRootElements();
-                                    for(RootElement re : rootElements) {
-                                        if(re instanceof Signal) {
-                                            if(re.getId().equals(signalRef)) {
-                                                shouldAddSignal = false;
-                                                break;
-                                            }
-                                        }
-                                    }
+    public void setCatchEventsInfo(FlowElementsContainer container, Definitions def, List<Signal> toAddSignals, Set<Error> toAddErrors,
+                                   Set<Escalation> toAddEscalations, Set<Message> toAddMessages, Set<ItemDefinition> toAddItemDefinitions) {
+        List<FlowElement> flowElements =  container.getFlowElements();
+        for(FlowElement fe : flowElements) {
+            if(fe instanceof CatchEvent) {
+                if(((CatchEvent)fe).getEventDefinitions().size() > 0) {
+                    EventDefinition ed = ((CatchEvent)fe).getEventDefinitions().get(0);
+                    if (ed instanceof SignalEventDefinition) {
+                        SignalEventDefinition sed = (SignalEventDefinition) ed;
+                        if(sed.getSignalRef() != null && sed.getSignalRef().length() > 0) {
+                            String signalRef = sed.getSignalRef();
 
-                                    if(toAddSignals != null) {
-                                        for(Signal s : toAddSignals) {
-                                            if(s.getId().equals(signalRef)) {
-                                                shouldAddSignal = false;
-                                                break;
-                                            }
-                                        }
-                                    }
-
-                                    if(shouldAddSignal) {
-                                        Signal signal = Bpmn2Factory.eINSTANCE.createSignal();
-                                        signal.setId(signalRef);
-                                        signal.setName(signalRef);
-                                        toAddSignals.add(signal);
-                                    }
-
-                                }
-                            } else if(ed instanceof ErrorEventDefinition) {
-                                String errorCode = null;
-                                String errorId = null;
-                                Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute()
-                                                .iterator();
-                                while (iter.hasNext()) {
-                                        FeatureMap.Entry entry = iter.next();
-                                        if (entry.getEStructuralFeature().getName()
-                                                        .equals("erefname")) {
-                                                errorId = (String) entry.getValue();
-                                                errorCode = (String) entry.getValue();
-                                        }
-                                }
-
-                                Error err = this._errors.get(errorCode);
-                                if (err == null){
-                                    err = Bpmn2Factory.eINSTANCE.createError();
-                                    err.setId(errorId);
-                                    err.setErrorCode(errorCode);
-                                    this._errors.put(errorCode, err);
-                                }
-
-                                toAddErrors.add(err);
-                                ((ErrorEventDefinition) ed).setErrorRef(err);
-                                
-                            } else if(ed instanceof EscalationEventDefinition) {
-                                String escalationCode = null;
-                                Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute().iterator();
-                                while(iter.hasNext()) {
-                                    FeatureMap.Entry entry = iter.next();
-                                    if(entry.getEStructuralFeature().getName().equals("esccode")) {
-                                        escalationCode = (String) entry.getValue();
+                            boolean shouldAddSignal = true;
+                            List<RootElement> rootElements = def.getRootElements();
+                            for(RootElement re : rootElements) {
+                                if(re instanceof Signal) {
+                                    if(re.getId().equals(signalRef)) {
+                                        shouldAddSignal = false;
                                         break;
                                     }
                                 }
-                                
-                                Escalation escalation = this._escalations.get(escalationCode);
-                                if (escalation == null){
-                                    escalation = Bpmn2Factory.eINSTANCE.createEscalation();
-                                    escalation.setEscalationCode(escalationCode);
-                                    this._escalations.put(escalationCode, escalation);
+                            }
+
+                            if(toAddSignals != null) {
+                                for(Signal s : toAddSignals) {
+                                    if(s.getId().equals(signalRef)) {
+                                        shouldAddSignal = false;
+                                        break;
+                                    }
                                 }
-                                toAddEscalations.add(escalation);
-                                ((EscalationEventDefinition) ed).setEscalationRef(escalation);
-                            } else if(ed instanceof MessageEventDefinition) {
-                                String idefId = null;
-                                String msgId = null;
+                            }
 
-                                Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute()
-                                                .iterator();
-                                while (iter.hasNext()) {
-                                        FeatureMap.Entry entry = iter.next();
-                                        if (entry.getEStructuralFeature().getName()
-                                                        .equals("msgref")) {
-                                            msgId = (String) entry.getValue();
-                                            idefId = (String) entry.getValue() + "Type";
-                                        }
-                                }
+                            if(shouldAddSignal) {
+                                Signal signal = Bpmn2Factory.eINSTANCE.createSignal();
+                                signal.setId(signalRef);
+                                signal.setName(signalRef);
+                                toAddSignals.add(signal);
+                            }
 
-                                ItemDefinition idef = _itemDefinitions.get(idefId);
-                                if (idef == null){
-                                    idef = Bpmn2Factory.eINSTANCE
-                                                .createItemDefinition();
-                                    idef.setId(idefId);
-                                    _itemDefinitions.put(idefId, idef);
-                                }
+                        }
+                    } else if(ed instanceof ErrorEventDefinition) {
+                        String errorCode = null;
+                        String errorId = null;
+                        Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute()
+                                .iterator();
+                        while (iter.hasNext()) {
+                            FeatureMap.Entry entry = iter.next();
+                            if (entry.getEStructuralFeature().getName()
+                                    .equals("erefname")) {
+                                errorId = (String) entry.getValue();
+                                errorCode = (String) entry.getValue();
+                            }
+                        }
 
-                                Message msg = _messages.get(msgId);
-                                if (msg == null){
-                                    msg = Bpmn2Factory.eINSTANCE.createMessage();
-                                    msg.setId(msgId);
-                                    msg.setItemRef(idef);
-                                    _messages.put(msgId, msg);
-                                }
+                        Error err = this._errors.get(errorCode);
+                        if (err == null){
+                            err = Bpmn2Factory.eINSTANCE.createError();
+                            err.setId(errorId);
+                            err.setErrorCode(errorCode);
+                            this._errors.put(errorCode, err);
+                        }
+
+                        toAddErrors.add(err);
+                        ((ErrorEventDefinition) ed).setErrorRef(err);
+
+                    } else if(ed instanceof EscalationEventDefinition) {
+                        String escalationCode = null;
+                        Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute().iterator();
+                        while(iter.hasNext()) {
+                            FeatureMap.Entry entry = iter.next();
+                            if(entry.getEStructuralFeature().getName().equals("esccode")) {
+                                escalationCode = (String) entry.getValue();
+                                break;
+                            }
+                        }
+
+                        Escalation escalation = this._escalations.get(escalationCode);
+                        if (escalation == null){
+                            escalation = Bpmn2Factory.eINSTANCE.createEscalation();
+                            escalation.setEscalationCode(escalationCode);
+                            this._escalations.put(escalationCode, escalation);
+                        }
+                        toAddEscalations.add(escalation);
+                        ((EscalationEventDefinition) ed).setEscalationRef(escalation);
+                    } else if(ed instanceof MessageEventDefinition) {
+                        String idefId = null;
+                        String msgId = null;
+
+                        Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute()
+                                .iterator();
+                        while (iter.hasNext()) {
+                            FeatureMap.Entry entry = iter.next();
+                            if (entry.getEStructuralFeature().getName()
+                                    .equals("msgref")) {
+                                msgId = (String) entry.getValue();
+                                idefId = (String) entry.getValue() + "Type";
+                            }
+                        }
+
+                        ItemDefinition idef = _itemDefinitions.get(idefId);
+                        if (idef == null){
+                            idef = Bpmn2Factory.eINSTANCE
+                                    .createItemDefinition();
+                            idef.setId(idefId);
+                            _itemDefinitions.put(idefId, idef);
+                        }
+
+                        Message msg = _messages.get(msgId);
+                        if (msg == null){
+                            msg = Bpmn2Factory.eINSTANCE.createMessage();
+                            msg.setId(msgId);
+                            msg.setItemRef(idef);
+                            _messages.put(msgId, msg);
+                        }
 
 
-                                toAddMessages.add(msg);
-                                toAddItemDefinitions.add(idef);
-                                ((MessageEventDefinition) ed).setMessageRef(msg);
-                            } else if(ed instanceof CompensateEventDefinition) {
-                                Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute().iterator();
-                                while(iter.hasNext()) {
-                                    FeatureMap.Entry entry = iter.next();
-                                    if(entry.getEStructuralFeature().getName().equals("actrefname")) {
-                                        String activityNameRef = (String) entry.getValue();
-                                        // we have to iterate again through all flow elements
-                                        // in order to find our activity name
-                                        List<RootElement> re =  def.getRootElements();
-                                        for(RootElement r : re) {
-                                            if(r instanceof Process) {
-                                                Process p = (Process) r;
-                                                List<FlowElement> fes =  p.getFlowElements();
-                                                for(FlowElement f : fes) {
-                                                    if(f instanceof Activity && ((Activity) f).getName().equals(activityNameRef)) {
-                                                        ((CompensateEventDefinition) ed).setActivityRef((Activity)f);
-                                                    }
-                                                }
+                        toAddMessages.add(msg);
+                        toAddItemDefinitions.add(idef);
+                        ((MessageEventDefinition) ed).setMessageRef(msg);
+                    } else if(ed instanceof CompensateEventDefinition) {
+                        Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute().iterator();
+                        while(iter.hasNext()) {
+                            FeatureMap.Entry entry = iter.next();
+                            if(entry.getEStructuralFeature().getName().equals("actrefname")) {
+                                String activityNameRef = (String) entry.getValue();
+                                // we have to iterate again through all flow elements
+                                // in order to find our activity name
+                                List<RootElement> re =  def.getRootElements();
+                                for(RootElement r : re) {
+                                    if(r instanceof Process) {
+                                        Process p = (Process) r;
+                                        List<FlowElement> fes =  p.getFlowElements();
+                                        for(FlowElement f : fes) {
+                                            if(f instanceof Activity && ((Activity) f).getName().equals(activityNameRef)) {
+                                                ((CompensateEventDefinition) ed).setActivityRef((Activity)f);
+                                                ((Activity) f).setIsForCompensation(true);
                                             }
                                         }
                                     }
                                 }
                             }
                         }
-                    } else if(fe instanceof FlowElementsContainer) {
-                    	setCatchEventsInfo((FlowElementsContainer) fe, def, toAddSignals, toAddErrors, toAddEscalations, toAddMessages, toAddItemDefinitions);
                     }
+                }
+            } else if(fe instanceof FlowElementsContainer) {
+                setCatchEventsInfo((FlowElementsContainer) fe, def, toAddSignals, toAddErrors, toAddEscalations, toAddMessages, toAddItemDefinitions);
+            }
         }
     }
     
