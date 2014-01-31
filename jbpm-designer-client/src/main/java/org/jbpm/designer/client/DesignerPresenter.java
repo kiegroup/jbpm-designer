@@ -11,6 +11,7 @@ import org.guvnor.common.services.shared.file.CopyService;
 import org.guvnor.common.services.shared.file.DeleteService;
 import org.guvnor.common.services.shared.file.RenameService;
 import org.guvnor.common.services.shared.metadata.MetadataService;
+import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.kie.workbench.common.widgets.metadata.client.callbacks.MetadataSuccessCallback;
 import org.kie.workbench.common.widgets.metadata.client.widget.MetadataWidget;
 import org.jboss.errai.common.client.api.Caller;
@@ -288,7 +289,7 @@ public class DesignerPresenter {
 
     @WorkbenchPartTitle
     public String getName() {
-        return "Business Process [" + FileNameUtil.removeExtension( this.path, resourceType ) + "]";
+        return DesignerEditorConstants.INSTANCE.businessProcess()+" [" + FileNameUtil.removeExtension( this.path, resourceType ) + "]";
     }
 
     @WorkbenchPartView
