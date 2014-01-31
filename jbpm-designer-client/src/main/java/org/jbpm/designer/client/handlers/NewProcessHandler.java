@@ -9,6 +9,7 @@ import org.guvnor.common.services.project.context.ProjectContext;
 import org.guvnor.common.services.project.model.Package;
 import org.jboss.errai.common.client.api.Caller;
 import org.jboss.errai.common.client.api.RemoteCallback;
+import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.jbpm.designer.client.type.Bpmn2Type;
 import org.jbpm.designer.service.DesignerAssetService;
 import org.kie.workbench.common.widgets.client.callbacks.DefaultErrorCallback;
@@ -33,7 +34,7 @@ public class NewProcessHandler extends DefaultNewResourceHandler {
 
     @Override
     public String getDescription() {
-        return "Business Process";
+        return DesignerEditorConstants.INSTANCE.businessProcess();
     }
 
     @Override
