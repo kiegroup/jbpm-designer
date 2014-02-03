@@ -202,9 +202,11 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
                 {header: 'RESULTS', width: 200, sortable: true, dataIndex: 'results'},
                 {header: 'CATEGORY', width: 100, sortable: true, dataIndex: 'category'}
             ],
-            title: 'Service Nodes. Double-click on a row to install.',
-            autoHeight:true,
-            frame:true
+            title: 'Service Nodes. doud-click on a row to install.',
+            autoScroll : true,
+            viewConfig : {
+                autoFit : true
+            }
         });
 
         grid.on('rowdblclick', function(g, i, e) {
@@ -281,18 +283,12 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
             tabPosition: 'top',
             layoutOnTabChange: true,
             deferredRender : false,
-            defaults:{autoHeight: true, autoScroll: true},
             items: [{
                 title: 'Service Nodes',
-                anchor: '100%',
-                autoScroll   : true,
-                layout       : 'table',
+                autoScroll : true,
                 items: [grid],
-                margins: '10 10 10 10',
-                listeners: {
-                    'tabchange': function(tp, p) {
-                        tabs.doLayout();
-                    }}
+                layout: 'fit',
+                margins: '10 10 10 10'
             }]
         });
         this.repoDialog.add(this.repoContent);
