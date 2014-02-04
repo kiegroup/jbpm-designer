@@ -11,6 +11,14 @@
         "containmentRules": []
     },
     "removestencils": [
+        "UserTask",
+        "SendTask",
+        "ReceiveTask",
+        "ManualTask",
+        "ServiceTask",
+        "Business RuleTask",
+        "ScriptTask",
+        "Task",
         "StartMessageEvent",
         "StartTimerEvent",
         "StartEscalationEvent",
@@ -21,9 +29,12 @@
         "Group",
         "TextAnnotation",
         "IntermediateMessageEventCatching",
+        "IntermediateCompensationEventCatching",
         "IntermediateEscalationEvent",
         "IntermediateConditionalEvent",
         "IntermediateErrorEvent",
+        "Log",
+        "Email",
         "DataObject",
         "EndMessageEvent",
         "EndEscalationEvent",
@@ -46,7 +57,18 @@
         "AdHocSubprocess",
         "Association_Undirected",
         "Association_Unidirectional",
-        "StartSignalEvent"
+        "StartSignalEvent",
+        "wp-simplemerge",
+        "wp-implicittermination",
+        "wp-deferredchoice",
+        "wp-synchronization",
+        "wp-miwithoutsynchronization",
+        "wp-synchronizingmerge",
+        "wp-exclusivechoice",
+        "wp-parallelsplit",
+        "wp-xorsplit",
+        "wp-sequence",
+        "wp-arbitrarycycles"
     ],
     "removeproperties": []
 }
