@@ -1170,7 +1170,7 @@ ORYX.Plugins.PropertyWindow = {
 						attribute = "<a href='" + attribute + "' target='_blank'>" + attribute.split("://")[1] + "</a>"
 					}
 				}
-				
+
 				// Push to the properties-array
 				if((pair.visible() && pair.visible() == true) && pair.hidden() != true && (pair.id() != "origbordercolor" && pair.id() != "origbgcolor" && pair.id() != "isselectable")) {
 					var proceed = true;
@@ -1348,6 +1348,8 @@ Ext.extend(Ext.form.ComplexListField, Ext.form.TriggerField,  {
     triggerClass:	'x-form-complex-trigger',
 	readOnly:		true,
 	emptyText: 		ORYX.I18N.PropertyWindow.clickIcon,
+    editable: false,
+    readOnly: true,
 		
 	/**
 	 * Builds the JSON value from the data source of the grid in the dialog.
@@ -1777,6 +1779,8 @@ Ext.extend(Ext.form.ComplexListField, Ext.form.TriggerField,  {
 Ext.form.ComplexTextField = Ext.extend(Ext.form.TriggerField,  {
 
 	defaultAutoCreate : {tag: "textarea", rows:1, style:"height:16px;overflow:hidden;" },
+    editable: false,
+    readOnly: true,
 
     /**
      * If the trigger was clicked a dialog has to be opened
@@ -1856,6 +1860,8 @@ Ext.form.ComplexTextField = Ext.extend(Ext.form.TriggerField,  {
 });
 
 Ext.form.ComplexCustomField = Ext.extend(Ext.form.TriggerField,  {
+    editable: false,
+    readOnly: true,
 	onTriggerClick : function() {
     	if(this.disabled){
             return;
@@ -1970,6 +1976,8 @@ Ext.form.ComplexCustomField = Ext.extend(Ext.form.TriggerField,  {
 });
 
 Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
+    editable: false,
+    readOnly: true,
     onTriggerClick : function() {
         if(this.disabled){
             return;
@@ -2344,6 +2352,8 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
 
 
 Ext.form.ComplexReassignmentField = Ext.extend(Ext.form.TriggerField,  {
+    editable: false,
+    readOnly: true,
     onTriggerClick : function() {
         if(this.disabled){
             return;
@@ -2591,6 +2601,8 @@ Ext.form.ComplexReassignmentField = Ext.extend(Ext.form.TriggerField,  {
 });
 
 Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
+    editable: false,
+    readOnly: true,
 	/**
      * If the trigger was clicked a dialog has to be opened
      * to enter the values for the complex property.
@@ -2818,6 +2830,8 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
 });
 
 Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
+    editable: false,
+    readOnly: true,
 	/**
      * If the trigger was clicked a dialog has to be opened
      * to enter the values for the complex property.
@@ -2954,6 +2968,8 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
 });
 
 Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
+    editable: false,
+    readOnly: true,
     /**
      * If the trigger was clicked a dialog has to be opened
      * to enter the values for the complex property.
@@ -3326,6 +3342,8 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
     windowTitle : "",
     addButtonLabel : "",
     single : false,
+    editable: false,
+    readOnly: true,
     
     /**
      * If the trigger was clicked a dialog has to be opened
@@ -3613,6 +3631,8 @@ Ext.form.ComplexGlobalsField = Ext.extend(Ext.form.NameTypeEditor,  {
 });
 
 Ext.form.ConditionExpressionEditorField = Ext.extend(Ext.form.TriggerField,  {
+    editable: false,
+    readOnly: true,
     onTriggerClick: function(){
         if(this.disabled){
             return;
@@ -4238,6 +4258,8 @@ Ext.form.ConditionExpressionEditorField = Ext.extend(Ext.form.TriggerField,  {
 });
 
 Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField,  {
+    editable: false,
+    readOnly: true,
 	onTriggerClick : function(){
         if(this.disabled){
             return;
@@ -4460,6 +4482,8 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField,  {
 	}
 });
 Ext.form.ComplexVisualDataAssignmentField = Ext.extend(Ext.form.TriggerField,  {
+    editable: false,
+    readOnly: true,
     onTriggerClick : function() {
         if(this.disabled){
             return;
