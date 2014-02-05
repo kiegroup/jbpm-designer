@@ -73,7 +73,7 @@ public class CustomEditorsServletTest  extends RepositoryBaseTest {
 
         String responseText = new String(response.getContent());
         assertNotNull(responseText);
-        assertEquals("custom editors content\n", responseText);
+        assertEquals("custom editors content", responseText);
 
         Collection<Asset> dictionary = repository.listAssets("/global", new FilterByExtension("json"));
         assertNotNull(dictionary);
@@ -81,6 +81,6 @@ public class CustomEditorsServletTest  extends RepositoryBaseTest {
 
         Asset<String> dictionaryAsset = repository.loadAsset(dictionary.iterator().next().getUniqueId());
         assertNotNull(dictionaryAsset);
-        assertEquals("custom editors content\n", dictionaryAsset.getAssetContent());
+        assertEquals("custom editors content", dictionaryAsset.getAssetContent());
     }
 }
