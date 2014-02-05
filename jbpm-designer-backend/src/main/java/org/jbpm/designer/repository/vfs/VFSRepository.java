@@ -1,30 +1,5 @@
 package org.jbpm.designer.repository.vfs;
 
-import org.apache.commons.codec.binary.Base64;
-import org.jbpm.designer.repository.*;
-import org.jbpm.designer.repository.Repository;
-import org.jbpm.designer.repository.impl.AbstractAsset;
-import org.jbpm.designer.repository.impl.AssetBuilder;
-import org.jbpm.designer.server.service.PathEvent;
-import org.jbpm.designer.util.Base64Backport;
-import org.uberfire.io.IOService;
-import org.uberfire.java.nio.IOException;
-import org.uberfire.java.nio.base.options.CommentedOption;
-import org.uberfire.java.nio.file.*;
-import org.uberfire.java.nio.file.DirectoryStream;
-import org.uberfire.java.nio.file.FileSystem;
-import org.uberfire.java.nio.file.Path;
-import org.uberfire.java.nio.file.attribute.BasicFileAttributes;
-import org.uberfire.java.nio.file.Files;
-import org.uberfire.java.nio.file.SimpleFileVisitor;
-import com.google.gwt.http.client.URL.*;
-import org.uberfire.security.Identity;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -33,6 +8,38 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.apache.commons.codec.binary.Base64;
+import org.jbpm.designer.repository.Asset;
+import org.jbpm.designer.repository.AssetBuilderFactory;
+import org.jbpm.designer.repository.AssetNotFoundException;
+import org.jbpm.designer.repository.Directory;
+import org.jbpm.designer.repository.Filter;
+import org.jbpm.designer.repository.Repository;
+import org.jbpm.designer.repository.UriUtils;
+import org.jbpm.designer.repository.impl.AbstractAsset;
+import org.jbpm.designer.repository.impl.AssetBuilder;
+import org.jbpm.designer.server.service.PathEvent;
+import org.jbpm.designer.util.Base64Backport;
+import org.uberfire.io.IOService;
+import org.uberfire.java.nio.IOException;
+import org.uberfire.java.nio.base.options.CommentedOption;
+import org.uberfire.java.nio.file.DirectoryStream;
+import org.uberfire.java.nio.file.FileAlreadyExistsException;
+import org.uberfire.java.nio.file.FileSystem;
+import org.uberfire.java.nio.file.FileVisitResult;
+import org.uberfire.java.nio.file.Files;
+import org.uberfire.java.nio.file.Path;
+import org.uberfire.java.nio.file.SimpleFileVisitor;
+import org.uberfire.java.nio.file.StandardCopyOption;
+import org.uberfire.java.nio.file.StandardOpenOption;
+import org.uberfire.java.nio.file.attribute.BasicFileAttributes;
+import org.uberfire.security.Identity;
 
 @ApplicationScoped
 public class VFSRepository implements Repository {
