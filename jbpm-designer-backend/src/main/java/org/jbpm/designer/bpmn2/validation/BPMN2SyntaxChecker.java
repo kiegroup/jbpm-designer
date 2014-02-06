@@ -196,7 +196,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 			} else {
 				if(fe instanceof FlowNode) {
 					FlowNode fn = (FlowNode) fe;
-					if((fn.getOutgoing() == null || fn.getOutgoing().size() < 1) && !isAdHocProcess(process) && !(fn instanceof BoundaryEvent)) {
+					if((fn.getOutgoing() == null || fn.getOutgoing().size() < 1) && !isAdHocProcess(process) && !(fn instanceof BoundaryEvent) && !(fn instanceof EventSubprocess)) {
                         if(container instanceof Process) {
                             if(!isAdHocProcess(process)) {
                                 if(!isCompensatingFlowNodeInProcess(fn, (Process) container)) {
@@ -216,7 +216,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
                     if(!(fn instanceof BoundaryEvent)) {
                         if((fn.getIncoming() == null || fn.getIncoming().size() < 1) && !isAdHocProcess(process)) {
                             if(container instanceof Process) {
-                                if(!isAdHocProcess(process)) {
+                                if(!isAdHocProcess(process) && !(fn instanceof EventSubprocess)) {
                                     if(!isCompensatingFlowNodeInProcess(fn, (Process) container)) {
                                         addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no incoming connections"));
                                     }
