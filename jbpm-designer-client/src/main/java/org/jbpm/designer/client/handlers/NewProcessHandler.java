@@ -3,25 +3,33 @@ package org.jbpm.designer.client.handlers;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import com.google.gwt.core.client.Callback;
 import com.google.gwt.user.client.ui.IsWidget;
-import org.guvnor.common.services.project.context.ProjectContext;
 import org.guvnor.common.services.project.model.Package;
 import org.jboss.errai.common.client.api.Caller;
 import org.jboss.errai.common.client.api.RemoteCallback;
 import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.jbpm.designer.client.type.Bpmn2Type;
 import org.jbpm.designer.service.DesignerAssetService;
+import org.kie.workbench.common.services.shared.validation.ValidatorWithReasonCallback;
 import org.kie.workbench.common.widgets.client.callbacks.DefaultErrorCallback;
 import org.kie.workbench.common.widgets.client.handlers.DefaultNewResourceHandler;
 import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.client.mvp.PlaceManager;
+import org.kie.workbench.common.widgets.client.resources.i18n.CommonConstants;
+import org.uberfire.client.workbench.widgets.common.ErrorPopup;
 import org.uberfire.mvp.PlaceRequest;
 import org.uberfire.mvp.impl.PathPlaceRequest;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Pattern;
+
 @ApplicationScoped
 public class NewProcessHandler extends DefaultNewResourceHandler {
+
+    private static List<String> INVALID_FILENAME_CHARS = Arrays.asList(new String[]{
+            "||", "/", ":", "*", "?", "|", "<", ">", "\\", "\\+"});
 
     @Inject
     private Caller<DesignerAssetService> designerAssetService;
@@ -55,5 +63,43 @@ public class NewProcessHandler extends DefaultNewResourceHandler {
                 placeManager.goTo( place );
             }
         }, new DefaultErrorCallback() ).createProcess( pkg.getPackageMainResourcesPath(), buildFileName( resourceType, baseFileName ) );
+    }
+
+    @Override
+    public void validate( final String fileName,
+                          final ValidatorWithReasonCallback callback ) {
+        if ( pathLabel.getPath() == null ) {
+            ErrorPopup.showMessage(CommonConstants.INSTANCE.MissingPath());
+            callback.onFailure();
+            return;
+        }
+
+        if( !(processAssetFileNameValid(fileName)) ) {
+            ErrorPopup.showMessage(CommonConstants.INSTANCE.InvalidFileName0(fileName));
+            callback.onFailure();
+            return;
+        }
+
+        fileNameValidationService.call( new RemoteCallback<Boolean>() {
+            @Override
+            public void callback( final Boolean response ) {
+                if ( Boolean.TRUE.equals( response ) ) {
+                    callback.onSuccess();
+                } else {
+                    callback.onFailure( CommonConstants.INSTANCE.InvalidFileName0(fileName) );
+                }
+            }
+        } ).isFileNameValid( fileName );
+
+
+    }
+
+    private static boolean processAssetFileNameValid(String str) {
+        for(String item : INVALID_FILENAME_CHARS) {
+            if(str.contains(item)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
