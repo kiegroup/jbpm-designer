@@ -442,8 +442,19 @@ ORYX.Plugins.ShapeMenuPlugin = {
 
         // add task types for tasks
         if(elements[0].getStencil().id().endsWith("#Task")) {
+            // checking the designer perspective to hide some task types if ruleflow profile is selected
+            var isRuleflow = false;
+            var nsCookieVal = null;
+            var ca = document.cookie.split(';');
+            for(var i=0;i < ca.length && nsCookieVal == null; i++) {
+                var c = ca[i];
+                while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                if (c.indexOf("designerperspective=") == 0) nsCookieVal = c.substring("designerperspective=".length,c.length);
+            }
+            isRuleflow = nsCookieVal != null && nsCookieVal.endsWith("ruleflow#");
+
             // user task
-            if(elements[0].properties["oryx-tasktype"] != "User") {
+            if(elements[0].properties["oryx-tasktype"] != "User" && !isRuleflow) {
                 var menuItem = new Ext.menu.Item({
                     text: 'User Task',
                     icon: ORYX.BASE_FILE_PATH + 'stencilsets/bpmn2.0jbpm/icons/activity/list/type.user.png',
@@ -453,7 +464,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
                 });
                 this.morphMenu.add(menuItem);
             }
-            if(elements[0].properties["oryx-tasktype"] != "Send") {
+            if(elements[0].properties["oryx-tasktype"] != "Send" && !isRuleflow) {
                 var menuItem = new Ext.menu.Item({
                     text: 'Send Task',
                     icon: ORYX.BASE_FILE_PATH + 'stencilsets/bpmn2.0jbpm/icons/activity/list/type.send.png',
@@ -463,7 +474,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
                 });
                 this.morphMenu.add(menuItem);
             }
-            if(elements[0].properties["oryx-tasktype"] != "Receive") {
+            if(elements[0].properties["oryx-tasktype"] != "Receive" && !isRuleflow) {
                 var menuItem = new Ext.menu.Item({
                     text: 'Receive Task',
                     icon: ORYX.BASE_FILE_PATH + 'stencilsets/bpmn2.0jbpm/icons/activity/list/type.receive.png',
@@ -473,7 +484,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
                 });
                 this.morphMenu.add(menuItem);
             }
-            if(elements[0].properties["oryx-tasktype"] != "Manual") {
+            if(elements[0].properties["oryx-tasktype"] != "Manual" && !isRuleflow) {
                 var menuItem = new Ext.menu.Item({
                     text: 'Manual Task',
                     icon: ORYX.BASE_FILE_PATH + 'stencilsets/bpmn2.0jbpm/icons/activity/list/type.manual.png',
@@ -483,7 +494,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
                 });
                 this.morphMenu.add(menuItem);
             }
-            if(elements[0].properties["oryx-tasktype"] != "Service") {
+            if(elements[0].properties["oryx-tasktype"] != "Service" && !isRuleflow) {
                 var menuItem = new Ext.menu.Item({
                     text: 'Service Task',
                     icon: ORYX.BASE_FILE_PATH + 'stencilsets/bpmn2.0jbpm/icons/activity/list/type.service.png',
