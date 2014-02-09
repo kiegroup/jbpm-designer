@@ -86,7 +86,13 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
         }
     },
 	createGraphsTree: function(options) {
-		var graphList = new Ext.tree.TreeNode({});
+		var graphList = new Ext.tree.TreeNode({
+            listeners: {
+                beforecollapse: function(node, deep, anim){
+                    return false;
+                }
+            }
+        });
 		var graphType;
 		var graphTypeChild;
 		this.resultsjson = options.results;
@@ -98,7 +104,12 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 	    		allowDrop:false,           
 	            expanded: true,
 	            isLeaf: false,
-				singleClickExpand:true});
+				singleClickExpand:false,
+                listeners: {
+                    beforecollapse: function(node, deep, anim){
+                        return false;
+                    }
+                }});
 			graphTypeChild = new Ext.tree.TreeNode({
 				id:"pgraph:processaverages",
 				text:processSimInfo[0].name + " (" + processSimInfo[0].id + ")",
@@ -108,9 +119,15 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 	            isLeaf: true,
 	            iconCls: 'xnd-icon',
 	            icon: ORYX.BASE_FILE_PATH + 'images/simulation/diagram.png',
-				singleClickExpand:true});
+				singleClickExpand:false,
+                listeners: {
+                    beforecollapse: function(node, deep, anim){
+                        return false;
+                    }
+                }});
 			graphType.appendChild(graphTypeChild);
 			graphList.appendChild(graphType);
+
 		}
 		var htSimInfo = jsonPath(options.results.evalJSON(), "$.htsim.*");
 		var taskSimInfo = jsonPath(options.results.evalJSON(), "$.tasksim.*");
@@ -121,7 +138,12 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 	    		allowDrop:false,           
 	            expanded: true,
 	            isLeaf: false,
-				singleClickExpand:true});
+				singleClickExpand:true,
+                listeners: {
+                    beforecollapse: function(node, deep, anim){
+                        return false;
+                    }
+                }});
 			for (var i = 0; i < htSimInfo.length; i++) {
 				var nextHt = htSimInfo[i];
 					graphTypeChild = new Ext.tree.TreeNode({
@@ -165,7 +187,12 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 	    		allowDrop:false,           
 	            expanded: true,
 	            isLeaf: false,
-				singleClickExpand:true});
+				singleClickExpand:true,
+                listeners: {
+                    beforecollapse: function(node, deep, anim){
+                        return false;
+                    }
+                }});
 			for (var i = 0; i < pathSimInfo.length; i++) {
 				var nextPath = pathSimInfo[i];
 					graphTypeChild = new Ext.tree.TreeNode({
