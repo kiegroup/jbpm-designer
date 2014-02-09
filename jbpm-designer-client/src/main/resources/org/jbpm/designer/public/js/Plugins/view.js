@@ -49,6 +49,8 @@ ORYX.Plugins.View = {
         this.facade.registerOnEvent(ORYX.CONFIG.VOICE_COMMAND_GENERATE_IMAGE, this.showAsPNG.bind(this));
         this.facade.registerOnEvent(ORYX.CONFIG.VOICE_COMMAND_VIEW_SOURCE, this.showProcessBPMN.bind(this));
 
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_MOUSEUP, this.refreshCanvasforIE.bind(this));
+
         //Standard Values
         this.zoomLevel = 1.0;
         this.maxFitToScreenLevel=1.5;
@@ -1992,6 +1994,19 @@ ORYX.Plugins.View = {
 
         if(this.zoomLevel > this.maxZoomLevel) {
             this.zoomLevel = this.maxZoomLevel;
+        }
+    },
+
+    refreshCanvasforIE : function() {
+        if(Ext.isIE) {
+            var currentJSON = ORYX.EDITOR.getSerializedJSON();
+            var selection = this.facade.getSelection();
+            var clipboard = new ORYX.Plugins.Edit.ClipBoard();
+            clipboard.refresh(selection, this.getAllShapesToConsider(selection, true));
+            var command = new ORYX.Plugins.Edit.DeleteCommand(clipboard , this.facade);
+            this.facade.executeCommands([command]);
+            this.facade.importJSON(currentJSON);
+            this.facade.setSelection([]);
         }
     }
 
