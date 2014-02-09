@@ -23,13 +23,11 @@ import org.uberfire.mvp.impl.PathPlaceRequest;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Pattern;
 
 @ApplicationScoped
 public class NewProcessHandler extends DefaultNewResourceHandler {
 
-    private static List<String> INVALID_FILENAME_CHARS = Arrays.asList(new String[]{
-            "||", "/", ":", "*", "?", "|", "<", ">", "\\", "\\+"});
+    private static List<String> EXTRA_INVALID_FILENAME_CHARS = Arrays.asList(new String[]{ "+" });
 
     @Inject
     private Caller<DesignerAssetService> designerAssetService;
@@ -95,11 +93,11 @@ public class NewProcessHandler extends DefaultNewResourceHandler {
     }
 
     private static boolean processAssetFileNameValid(String str) {
-        for(String item : INVALID_FILENAME_CHARS) {
+        for(String item : EXTRA_INVALID_FILENAME_CHARS) {
             if(str.contains(item)) {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 }
