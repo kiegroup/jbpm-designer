@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.*;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
@@ -23,6 +24,8 @@ import org.json.JSONArray;
 import org.uberfire.backend.server.util.Paths;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.mvp.PlaceRequest;
+import org.uberfire.rpc.SessionInfo;
+import org.uberfire.workbench.events.ResourceOpenedEvent;
 
 @Service
 @ApplicationScoped
@@ -33,6 +36,12 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
     
     @Inject
     private Instance<BPMN2DataServices> bpmn2DataServices;
+
+    @Inject
+    private SessionInfo sessionInfo;
+
+    @Inject
+    private Event<ResourceOpenedEvent> resourceOpenedEvent;
 
     private static final String PROCESS_STUB = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \n" +
     "<bpmn2:definitions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.omg.org/bpmn20\" xmlns:bpmn2=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\" xmlns:bpsim=\"http://www.bpsim.org/schemas/1.0\" xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\" xmlns:drools=\"http://www.jboss.org/drools\" \n" +
@@ -112,6 +121,9 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
         editorParamsMap.put("activenodes", activeNodesArray.toString());
         editorParamsMap.put("completednodes", completedNodesArray.toString());
         editorParamsMap.put("processsource", encodedProcessSource);
+
+        //Signal opening to interested parties
+        resourceOpenedEvent.fire(new ResourceOpenedEvent( path, sessionInfo ));
 
         return editorParamsMap;
 //        String editorURL = hostInfo + "/editor/?uuid=" + path.toURI() + "&profile=jbpm&pp=&editorid=" + editorID + "&readonly=" + readOnly +
