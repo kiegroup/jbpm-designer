@@ -245,10 +245,12 @@ public class DesignerPresenter {
                                             CommonConstants.INSTANCE.MetadataTabTitle() ) {
                                         @Override
                                         public void onFocus() {
-                                            metadataWidget.showBusyIndicator( CommonConstants.INSTANCE.Loading() );
-                                            metadataService.call( new MetadataSuccessCallback( metadataWidget,
-                                                    isReadOnly ),
-                                                    new HasBusyIndicatorDefaultErrorCallback( metadataWidget ) ).getMetadata( path );
+                                            if (!metadataWidget.isAlreadyLoaded()){
+                                                metadataWidget.showBusyIndicator( CommonConstants.INSTANCE.Loading() );
+                                                metadataService.call( new MetadataSuccessCallback( metadataWidget,
+                                                                                                   isReadOnly ),
+                                                                      new HasBusyIndicatorDefaultErrorCallback( metadataWidget ) ).getMetadata( path );
+                                            }
                                         }
 
                                         @Override
