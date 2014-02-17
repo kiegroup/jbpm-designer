@@ -6,6 +6,7 @@ import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.IsWidget;
 import org.guvnor.common.services.shared.file.CopyService;
 import org.guvnor.common.services.shared.file.DeleteService;
@@ -467,7 +468,8 @@ public class DesignerPresenter {
             @Override
             public void callback( final Path path ) {
                 busyIndicatorView.hideBusyIndicator();
-                notification.fire( new NotificationEvent( CommonConstants.INSTANCE.ItemRenamedSuccessfully() ) );
+                notification.fire(new NotificationEvent(CommonConstants.INSTANCE.ItemRenamedSuccessfully()));
+                placeManager.forceClosePlace( place );
             }
         };
     }
