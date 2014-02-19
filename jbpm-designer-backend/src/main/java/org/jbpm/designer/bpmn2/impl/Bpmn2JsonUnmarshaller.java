@@ -2826,6 +2826,7 @@ public class Bpmn2JsonUnmarshaller {
         } else {
             se.setName("");
         }
+        se.setIsInterrupting(Boolean.parseBoolean(properties.get("isinterrupting")));
     }
     
     protected void applyMessageProperties(Message msg, Map<String, String> properties) {

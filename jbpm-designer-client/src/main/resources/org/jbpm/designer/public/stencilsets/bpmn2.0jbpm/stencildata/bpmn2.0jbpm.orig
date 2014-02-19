@@ -616,8 +616,8 @@
 					"inverseBoolean":false,
 					"readonly":false,
 					"optional":true,
-					"hidden":true,
-                    "visible":false,
+					"hidden":false,
+                    "visible":true,
 					"refToView": [
 						"frame",
 						"frame2"
@@ -6375,6 +6375,7 @@
 			"propertyPackages":	[
 				"baseAttributes",
 				"catchEventAttributes",
+                "interrupting",
 				"bgColor"
 			],
 			"roles" : [
@@ -6916,6 +6917,7 @@
 			"propertyPackages":[
 				"baseAttributes",
 				"catchEventAttributes",
+				"interrupting",
 				"bgColor"
 			],
 			"roles": [
@@ -7015,6 +7017,7 @@
 			"propertyPackages":[
 				"baseAttributes",
 				"catchEventAttributes",
+				"interrupting",
 				"bgColor"
 			],
 			"roles": [
