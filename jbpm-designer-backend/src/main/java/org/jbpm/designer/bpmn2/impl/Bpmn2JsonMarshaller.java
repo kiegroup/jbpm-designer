@@ -815,6 +815,7 @@ public class Bpmn2JsonMarshaller {
     
     protected void marshallStartEvent(StartEvent startEvent, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> properties) throws JsonGenerationException, IOException {
         List<EventDefinition> eventDefinitions = startEvent.getEventDefinitions();
+        properties.put("isinterrupting", startEvent.isIsInterrupting());
     	if (eventDefinitions == null || eventDefinitions.size() == 0) {
     		marshallNode(startEvent, properties, "StartNoneEvent", plane, generator, xOffset, yOffset);
     	} else if (eventDefinitions.size() == 1) {
