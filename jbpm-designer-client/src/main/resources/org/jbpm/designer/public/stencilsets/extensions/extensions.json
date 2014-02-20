@@ -32,6 +32,9 @@
 			"namespace":"http://b3mn.org/stencilset/bpmn2.0simple#",
 			"description":"Simple jBPM BPMN2 Features",
 			"stencilset":"http://b3mn.org/stencilset/bpmn2.0#",
+            "removeExtensions" : [
+                "http://b3mn.org/stencilset/bpmn2.0ruleflow#"
+            ],
 			"addExtensions" : [
 				"http://b3mn.org/stencilset/bpmn2.0simple#"
 			]
@@ -41,6 +44,9 @@
             "namespace":"http://b3mn.org/stencilset/bpmn2.0ruleflow#",
             "description":"RuleFlow jBPM BPMN2 Features",
             "stencilset":"http://b3mn.org/stencilset/bpmn2.0#",
+            "removeExtensions" : [
+                "http://b3mn.org/stencilset/bpmn2.0simple#"
+            ],
             "addExtensions" : [
                 "http://b3mn.org/stencilset/bpmn2.0ruleflow#"
             ]

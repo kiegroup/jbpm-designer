@@ -61,9 +61,10 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
         this._source = source;
         this._baseUrl = ORYX.PATH + "stencilset/" + source + "/"
         this._jsonObject = {};
-        
+
         this._stencils = new Hash();
 		this._availableStencils = new Hash();
+        this._removedStencils = [];
 		new Ajax.Request(ORYX.PATH + "stencilset/" + source, {
             asynchronous: false,
             method: 'get',
@@ -263,7 +264,7 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
 				if(jsonExtension.stencils) {
 					$A(jsonExtension.stencils).each(function(stencil) {
 						defaultPosition++;
-						var oStencil = new ORYX.Core.StencilSet.Stencil(stencil, this.namespace(), this._baseUrl, this, undefined, defaultPosition);            
+						var oStencil = new ORYX.Core.StencilSet.Stencil(stencil, this.namespace(), this._baseUrl, this, undefined, defaultPosition);
 						this._stencils[oStencil.id()] = oStencil;
 						this._availableStencils[oStencil.id()] = oStencil;
 					}.bind(this));
@@ -292,7 +293,7 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
 						})
 					}.bind(this));
 				}
-				
+
 				//remove stencil properties
 				if(jsonExtension.removeproperties) {
 					jsonExtension.removeproperties.each(function(remprop) {
@@ -304,11 +305,29 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
 						}
 					}.bind(this));
 				}
-				
+
+                //remove stencil groups
+                if (jsonExtension.removestencilgroups) {
+                    var stencils = this._stencils.values();
+
+                    stencils.each(function(stencil) {
+                        if (stencil.groups) {
+                            $A(stencil.groups()).each(function(group) {
+                                if(jsonExtension.removestencilgroups.indexOf(group) != -1) {
+                                    delete this._availableStencils[stencil.id()];
+                                    this._removedStencils.push(stencil.id());
+                                }
+                            }.bind(this));
+                        }
+                    }.bind(this));
+                }
+
 				//remove stencils
 				if(jsonExtension.removestencils) {
 					$A(jsonExtension.removestencils).each(function(remstencil) {
-						delete this._availableStencils[jsonExtension["extends"] + remstencil];
+                        var stencilid = jsonExtension["extends"] + remstencil;
+						delete this._availableStencils[stencilid];
+                        this._removedStencils.push(stencilid);
 					}.bind(this));
 				}
 			}
@@ -371,13 +390,13 @@ ORYX.Core.StencilSet.StencilSet = Clazz.extend({
 					}
 				}.bind(this));
 			}
-			
+
 			//restore removed stencils
-			if(jsonExtension.removestencils) {
-				$A(jsonExtension.removestencils).each(function(remstencil) {
-					var sId = jsonExtension["extends"] + remstencil;
-					this._availableStencils[sId] = this._stencils[sId];
+			if(this._removedStencils.length > 0) {
+				$A(this._removedStencils).each(function(remstencil) {
+                    this._availableStencils[remstencil] = this._stencils[remstencil];
 				}.bind(this));
+                this._removedStencils.length = 0;
 			}
 		}
 		delete this._extensions[namespace];
