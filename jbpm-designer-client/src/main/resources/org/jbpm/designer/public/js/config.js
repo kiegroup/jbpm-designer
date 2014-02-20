@@ -39,6 +39,24 @@ ORYX.CONFIG.UUID_URL = function(uuid, profile) {
   return ORYX.PATH + "uuidRepository?uuid="+ uuid + "&profile=" + profile + "&pp=" + ORYX.PREPROCESSING + "&ts=" + new Date().getTime();
 };
 
+ORYX.FULL_PERSPECTIVE = "http://b3mn.org/stencilset/bpmn2.0#";
+ORYX.SIMPLE_PERSPECTIVE = "http://b3mn.org/stencilset/bpmn2.0simple#";
+ORYX.RULEFLOW_PERSPECTIVE = "http://b3mn.org/stencilset/bpmn2.0ruleflow#";
+
+ORYX.CURRENT_PERSPECTIVE;
+ORYX.CALCULATE_CURRENT_PERSPECTIVE = function () {
+    if (!ORYX.CURRENT_PERSPECTIVE) {
+        var ca = document.cookie.split(';');
+        for(var i=0;i < ca.length && !ORYX.CURRENT_PERSPECTIVE; i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1,c.length);
+            if (c.indexOf("designerperspective=") == 0) ORYX.CURRENT_PERSPECTIVE = c.substring("designerperspective=".length,c.length);
+        }
+        if (!ORYX.CURRENT_PERSPECTIVE) ORYX.CURRENT_PERSPECTIVE = ORYX.FULL_PERSPECTIVE;
+    }
+    return ORYX.CURRENT_PERSPECTIVE;
+}
+
 ORYX.CONFIG.TRANSFORMER_URL = function(uuid, profile) {
    if (uuid === undefined) {
       uuid = ORYX.UUID;

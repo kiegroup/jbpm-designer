@@ -623,22 +623,41 @@ ORYX.Plugins.PropertyWindow = {
 						case ORYX.CONFIG.TYPE_CHOICE:
 							var items = pair.items();
 
-							var options = [];
-							items.each(function(value) {
-								if(value.value() == attribute)
-									attribute = value.title();
+                            var options = [];
 
-								if(value.refToView()[0])
-									refToViewFlag = true;
+                            if (pair.id() == "tasktype" && ORYX.CALCULATE_CURRENT_PERSPECTIVE() == ORYX.RULEFLOW_PERSPECTIVE) {
+                                items.each(function(value) {
+                                    if(value.value() == attribute)
+                                        attribute = value.title();
 
-								options.push([value.icon(), value.title(), value.value()]);
+                                    if(value.refToView()[0])
+                                        refToViewFlag = true;
 
-								icons.push({
-									name: value.title(),
-									icon: value.icon()
-								});
-							});
+                                    if (value.value() == "Business Rule" || value.value() == "Script" || value.value() == "None") {
+                                        options.push([value.icon(), value.title(), value.value()]);
 
+                                        icons.push({
+                                            name: value.title(),
+                                            icon: value.icon()
+                                        });
+                                    }
+                                });
+                            } else {
+                                items.each(function(value) {
+                                    if(value.value() == attribute)
+                                        attribute = value.title();
+
+                                    if(value.refToView()[0])
+                                        refToViewFlag = true;
+
+                                    options.push([value.icon(), value.title(), value.value()]);
+
+                                    icons.push({
+                                        name: value.title(),
+                                        icon: value.icon()
+                                    });
+                                });
+                            }
 							var store = new Ext.data.SimpleStore({
 								fields: [{name: 'icon'},
 								         {name: 'title'},

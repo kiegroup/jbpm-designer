@@ -442,16 +442,9 @@ ORYX.Plugins.ShapeMenuPlugin = {
 
         // add task types for tasks
         if(elements[0].getStencil().id().endsWith("#Task")) {
+
             // checking the designer perspective to hide some task types if ruleflow profile is selected
-            var isRuleflow = false;
-            var nsCookieVal = null;
-            var ca = document.cookie.split(';');
-            for(var i=0;i < ca.length && nsCookieVal == null; i++) {
-                var c = ca[i];
-                while (c.charAt(0)==' ') c = c.substring(1,c.length);
-                if (c.indexOf("designerperspective=") == 0) nsCookieVal = c.substring("designerperspective=".length,c.length);
-            }
-            isRuleflow = nsCookieVal != null && nsCookieVal.endsWith("ruleflow#");
+            var isRuleflow = ORYX.CALCULATE_CURRENT_PERSPECTIVE() == ORYX.RULEFLOW_PERSPECTIVE;
 
             // user task
             if(elements[0].properties["oryx-tasktype"] != "User" && !isRuleflow) {
