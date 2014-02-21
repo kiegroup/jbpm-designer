@@ -2,16 +2,17 @@
 <config xmlns="http://zanata.org/namespace/config/">
   <url>https://translate.jboss.org/</url>
   <project>jbpm-designer</project>
-  <project-version>6.0.0</project-version>
+  <project-version>6.0.1</project-version>
   <project-type>utf8properties</project-type>
 
   <locales>
-    <locale >es</locale>
-    <locale >fr</locale>
-    <locale >ja</locale>
-    <locale>de</locale>
-    <locale>pt-BR</locale>
-    <locale map-from="zh_CN">zh-Hans</locale>
+      <locale map-from="zh_CN">zh-Hans</locale>
+      <locale>pt-BR</locale>
+      <locale>de</locale>
+      <locale>ru</locale>
+      <locale>es</locale>
+      <locale>ja</locale>
+      <locale>fr</locale>
   </locales>
 
 </config>

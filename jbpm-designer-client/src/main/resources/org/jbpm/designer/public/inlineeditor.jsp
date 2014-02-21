@@ -43,7 +43,8 @@
     <!-- core scripts -->
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/compressed/designer-core.js" type="text/javascript"></script>
     <!-- translations -->
-    <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/i18n/translation_<%=request.getParameter("locale")%>.js" type="text/javascript"></script>
+
+    <jsp:include page="i18n/translation.jsp"/>
     <!-- plugins -->
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/compressed/designer-plugins.js" type="text/javascript"></script>
     <!-- dynamic properties -->
