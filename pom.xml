@@ -145,7 +145,6 @@
               </executions>
               <configuration>
                   <workDir>jbpm-designer-api/src/main/resources/org/jbpm/designer/resources/i18n/</workDir>
-                  <tempDir>/home/nmirasch/tmp</tempDir>
               </configuration>
         </plugin>
       </plugins>
