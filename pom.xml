@@ -62,13 +62,92 @@
           <plugin>
               <groupId>com.google.code.maven-replacer-plugin</groupId>
               <artifactId>replacer</artifactId>
+              <configuration>
+                  <includes>
+                      <include>**/*_de.properties</include>
+                      <include>**/*_es.properties</include>
+                      <include>**/*_fr.properties</include>
+                      <include>**/*_ja.properties</include>
+                      <include>**/*_pt_BR.properties</include>
+                      <include>**/*_zh_CN.properties</include>
+                      <include>**/*_ru.properties</include>
+                  </includes>
+                  <excludes>
+                      <exclude>**/ErraiApp.properties</exclude>
+                  </excludes>
+                  <replacements>
+                      <replacement>
+                          <token>\\\\"</token>
+                          <value>"</value>
+                      </replacement>
+                      <replacement>
+                          <token>\\"</token>
+                          <value>"</value>
+                      </replacement>
+                      <replacement>
+                          <token>"</token>
+                          <value>\\\\"</value>
+                      </replacement>
+                      <replacement>
+                          <token>\\\\'</token>
+                          <value>'</value>
+                      </replacement>
+                      <replacement>
+                          <token>\\'</token>
+                          <value>'</value>
+                      </replacement>
+                      <replacement>
+                          <token>'</token>
+                          <value>\\\\'</value>
+                      </replacement>
+                      <replacement>
+                          <token>'</token>
+                          <value>\\'</value>
+                      </replacement>
+                      <replacement>
+                          <token>"</token>
+                          <value>\\"</value>
+                      </replacement>
+                      <replacement>
+                          <token>\\\\n</token>
+                          <value>\\n</value>
+                      </replacement>
+                      <replacement>
+                          <token>\\n</token>
+                          <value>\\\\n</value>
+                      </replacement>
+                  </replacements>
+              </configuration>
           </plugin>
 
           <!-- Zanata - translations -->
           <plugin>
               <groupId>org.zanata</groupId>
               <artifactId>zanata-maven-plugin</artifactId>
+              <configuration>
+                  <excludes>**/ErraiApp.properties</excludes>
+                  <projectConfig>${session.executionRootDirectory}/src/main/config/zanata.xml</projectConfig>
+                  <srcDir>src/main/</srcDir>
+                  <transDir>src/main/</transDir>
+                  <includes>**/*Constants*.properties</includes>
+              </configuration>
           </plugin>
+          <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>native2ascii-maven-plugin</artifactId>
+              <version>1.0-beta-1</version>
+              <executions>
+                  <execution>
+                      <goals>
+                          <goal>native2ascii</goal>
+                      </goals>
+                  </execution>
+              </executions>
+              <configuration>
+                  <workDir>jbpm-designer-api/src/main/resources/org/jbpm/designer/resources/i18n/</workDir>
+                  <tempDir>/home/nmirasch/tmp</tempDir>
+              </configuration>
+        </plugin>
       </plugins>
   </build>
 
