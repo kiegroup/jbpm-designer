@@ -31,6 +31,7 @@ import org.drools.core.process.core.datatype.impl.type.ObjectDataType;
          "Interface" : new StringDataType(),
          "Operation" : new StringDataType(),
          "Parameter" : new StringDataType(),
+         "Endpoint" : new StringDataType(),
          "Mode" : new StringDataType()
     ],
     "results" : [
