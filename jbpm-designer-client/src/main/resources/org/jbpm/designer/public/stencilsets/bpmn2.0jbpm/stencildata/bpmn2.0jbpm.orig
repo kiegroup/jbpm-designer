@@ -433,6 +433,19 @@
                             "value": "poisson"
                         }
                     ]
+                },
+                {
+                    "id":"probability",
+                    "type":"Integer",
+                    "title":"Probability (Boundary Event only)",
+                    "value":"100",
+                    "description":"Probability",
+                    "description_ja":"Probability",
+                    "readonly":false,
+                    "optional":true,
+                    "simulation" : true,
+                    "min" : "0",
+                    "max" : "100"
                 }
  			]
  		},
@@ -7440,6 +7453,19 @@
                     "optional":true,
                     "simulation" : true,
                     "min" : "0"
+                },
+                {
+                    "id":"probability",
+                    "type":"Integer",
+                    "title":"Probability (Boundary Event only)",
+                    "value":"100",
+                    "description":"Probability",
+                    "description_ja":"Probability",
+                    "readonly":false,
+                    "optional":true,
+                    "simulation" : true,
+                    "min" : "0",
+                    "max" : "100"
                 }
 			]
 		},

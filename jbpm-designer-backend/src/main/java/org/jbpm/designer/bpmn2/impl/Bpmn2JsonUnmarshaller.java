@@ -39,6 +39,7 @@ import org.eclipse.bpmn2.util.Bpmn2Resource;
 import org.eclipse.dd.dc.Bounds;
 import org.eclipse.dd.dc.DcFactory;
 import org.eclipse.dd.dc.Point;
+import org.eclipse.dd.di.DiagramElement;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature.Internal;
@@ -184,6 +185,7 @@ public class Bpmn2JsonUnmarshaller {
             revisitWsdlImports(def);
             revisitMultiInstanceTasks(def);
             addSimulation(def);
+            //revisitDI(def);
 
             // return def;
             _currentResource.getContents().add(def);
@@ -197,6 +199,89 @@ public class Bpmn2JsonUnmarshaller {
             _bounds.clear();
             _currentResource = null;
         }
+    }
+
+    public void revisitDI(Definitions def) {
+        BPMNPlane plane = def.getDiagrams().get(0).getPlane();
+        List<DiagramElement> diagramElements = plane.getPlaneElement();
+        for(DiagramElement dia : diagramElements) {
+            if(dia instanceof BPMNShape) {
+                BPMNShape shape = (BPMNShape) dia;
+                updateShapeBounds(def, plane, shape.getBpmnElement());
+            }
+            // TODO Edges
+            //else if(dia instanceof BPMNEdge) {
+                //BPMNEdge edge = (BPMNEdge) dia;
+                //updateEdgeBounds(def, plane, edge.getBpmnElement());
+            //}
+
+        }
+    }
+
+    public void updateShapeBounds(Definitions def, BPMNPlane plane, BaseElement ele) {
+        List<RootElement> rootElements =  def.getRootElements();
+        for(RootElement root : rootElements) {
+            if(root instanceof Process) {
+                Process process = (Process) root;
+                List<FlowElement> flowElements = process.getFlowElements();
+
+                boolean foundAsTopLevel = false;
+                for(FlowElement fe : flowElements) {
+                    if(fe.getId().equals(ele.getId())) {
+                        foundAsTopLevel = true;
+                        break;
+                    }
+                }
+
+                if(!foundAsTopLevel) {
+                    for(FlowElement fe : flowElements) {
+                        if(fe instanceof SubProcess) {
+                            // find the subprocess bounds
+                            Bounds subprocessBounds = getBoundsForShape(plane, fe);
+                            if(subprocessBounds != null) {
+                                updateShapeBoundsInSubprocess(plane, ele, (SubProcess) fe, subprocessBounds.getX(), subprocessBounds.getY());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void updateShapeBoundsInSubprocess(BPMNPlane plane, BaseElement ele, SubProcess sub, float parentX, float parentY) {
+        boolean foundInSubprocess = false;
+        for(FlowElement subEle : sub.getFlowElements()) {
+            if(subEle.getId().equals(ele.getId())) {
+                foundInSubprocess = true;
+                Bounds subEleBounds = getBoundsForShape(plane, subEle);
+                if(subEleBounds != null) {
+                    subEleBounds.setX(subEleBounds.getX() + parentX);
+                    subEleBounds.setY(subEleBounds.getY() + parentY);
+                }
+            }
+        }
+
+        if(!foundInSubprocess) {
+            for(FlowElement subEle : sub.getFlowElements()) {
+                if(subEle instanceof SubProcess) {
+                    Bounds subEleBounds = getBoundsForShape(plane, subEle);
+                    updateShapeBoundsInSubprocess(plane, ele, (SubProcess) subEle, subEleBounds.getX() + parentX, subEleBounds.getY() + parentY);
+                }
+            }
+        }
+    }
+
+    private Bounds getBoundsForShape(BPMNPlane plane, BaseElement ele) {
+        List<DiagramElement> diagramElements = plane.getPlaneElement();
+        for(DiagramElement dia : diagramElements) {
+            if(dia instanceof BPMNShape) {
+                BPMNShape shape = (BPMNShape) dia;
+                if(shape.getBpmnElement().getId().equals(ele.getId())) {
+                    return shape.getBounds();
+                }
+            }
+        }
+        return null;
     }
 
     public void revisitMultiInstanceTasks(Definitions def) {
@@ -3135,6 +3220,24 @@ public class Bpmn2JsonUnmarshaller {
                 values.add(timeParams);
                 _simulationElementParameters.put(event.getId(), values);
             }
+        }
+
+        if(properties.get("probability") != null && properties.get("probability").length() > 0) {
+            ControlParameters controlParams = BpsimFactory.eINSTANCE.createControlParameters();
+            Parameter probParam = BpsimFactory.eINSTANCE.createParameter();
+            FloatingParameterType probParamValueParam = BpsimFactory.eINSTANCE.createFloatingParameterType();
+            DecimalFormat twoDForm = new DecimalFormat("#.##");
+            probParamValueParam.setValue(Double.valueOf(twoDForm.format(Double.valueOf(properties.get("probability")))));
+            probParam.getParameterValue().add(probParamValueParam);
+            controlParams.setProbability(probParam);
+            if(_simulationElementParameters.containsKey(event.getId())) {
+                _simulationElementParameters.get(event.getId()).add(controlParams);
+            } else {
+                List<EObject> values = new ArrayList<EObject>();
+                values.add(controlParams);
+                _simulationElementParameters.put(event.getId(), values);
+            }
+
         }
 
     }
