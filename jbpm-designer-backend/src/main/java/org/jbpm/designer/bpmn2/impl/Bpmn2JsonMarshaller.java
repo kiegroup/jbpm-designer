@@ -978,10 +978,9 @@ public class Bpmn2JsonMarshaller {
                         catchEventProperties.put("mean", pdt.getMean());
                         catchEventProperties.put("distributiontype", "poisson");
                     }
-                    // bpsim 1.0 has no support for individual time unit
-//                    if(timeParams.getTimeUnit() != null) {
-//                        properties.put("timeunit", timeParams.getTimeUnit().getName());
-//                    }
+                    ControlParameters controlParams = eleType.getControlParameters();
+                    FloatingParameterType valType = (FloatingParameterType) controlParams.getProbability().getParameterValue().get(0);
+                    catchEventProperties.put("probability", valType.getValue());
                 }
             }
         }
