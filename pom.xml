@@ -136,13 +136,13 @@
               <groupId>org.codehaus.mojo</groupId>
               <artifactId>native2ascii-maven-plugin</artifactId>
               <version>1.0-beta-1</version>
-              <executions>
+              <!--executions>
                   <execution>
                       <goals>
                           <goal>native2ascii</goal>
                       </goals>
                   </execution>
-              </executions>
+              </executions-->
               <configuration>
                   <workDir>jbpm-designer-api/src/main/resources/org/jbpm/designer/resources/i18n/</workDir>
               </configuration>
