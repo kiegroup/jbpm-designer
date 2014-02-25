@@ -602,7 +602,7 @@ ORYX.Plugins.View = {
                         });
                     }.bind(this)
                 },{
-                    text:ORYX.I18N.FromBPMN2Support.close,
+                    text: ORYX.I18N.Save.close,
                     handler:function(){
 
                         dialog.hide();
@@ -697,7 +697,7 @@ ORYX.Plugins.View = {
                         dialog.hide();
                     }.bind(this)
                 },{
-                    text: ORYX.I18N.FromJSONSupport.close,
+                    text: ORYX.I18N.Save.close,
                     handler:function(){
                         dialog.hide();
                     }.bind(this)
@@ -1152,7 +1152,7 @@ ORYX.Plugins.View = {
                 tbar: [versionCombo],
                 buttons:[
                     {
-                        text : ORYX.I18N.FromJSONSupport.close,
+                        text : ORYX.I18N.Save.close,
                         handler:function(){
                             this.diffDialog.hide();
                         }.bind(this)
@@ -1377,7 +1377,7 @@ ORYX.Plugins.View = {
             title:ORYX.I18N.view.processSVGSource,
             items: [cf],
             buttons:[{
-                text : ORYX.I18N.FromJSONSupport.close,
+                text : ORYX.I18N.Save.close,
                 handler:function(){
                     win.close();
                     win = null;
@@ -1414,7 +1414,7 @@ ORYX.Plugins.View = {
             title:ORYX.I18N.view.erdfSource,
             items: [cf],
             buttons:[{
-                text : ORYX.I18N.FromJSONSupport.close,
+                text : ORYX.I18N.Save.close,
                 handler:function(){
                     win.close();
                     win = null;
@@ -1450,7 +1450,7 @@ ORYX.Plugins.View = {
             title:ORYX.I18N.view.jsonSource,
             items: [cf],
             buttons:[{
-                text : ORYX.I18N.FromJSONSupport.close,
+                text : ORYX.I18N.Save.close,
                 handler:function(){
                     win.close();
                     win = null;
@@ -1545,7 +1545,7 @@ ORYX.Plugins.View = {
                                 form.submit();
                             }
                         },{
-                            text : ORYX.I18N.FromJSONSupport.close,
+                            text : ORYX.I18N.Save.close,
                             handler:function(){
                                 win.close();
                                 win = null;

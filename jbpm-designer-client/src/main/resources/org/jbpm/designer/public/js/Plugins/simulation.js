@@ -10,7 +10,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
 
         if(ORYX.READONLY != true) {
             this.facade.offer({
-                'name': "Process Paths",
+                'name': ORYX.I18N.View.sim.processPathsTitle,
                 'functionality': this.findPaths.bind(this),
                 'group': "validationandsimulation",
                 'icon': ORYX.BASE_FILE_PATH + "images/path.png",
@@ -32,7 +32,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
             });
 
             this.facade.offer({
-                'name': "Run Simulation",
+                'name': ORYX.I18N.View.sim.runSim,
                 'functionality': this.runSimulation.bind(this),
                 'group': "validationandsimulation",
                 'icon': ORYX.BASE_FILE_PATH + "images/control_play.png",
@@ -63,7 +63,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
             this.facade.raiseEvent({
                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                 ntype		: 'info',
-                msg         : 'Creating path image.',
+                msg         : ORYX.I18N.View.sim.creatingPathImage,
                 title       : ''
 
             });
@@ -90,7 +90,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
                                this.facade.raiseEvent({
                                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                    ntype		: 'error',
-                                   msg         : 'Invalid Path data.',
+                                   msg         : ORYX.I18N.View.sim.errorInvalidData,
                                    title       : ''
 
                                });
@@ -99,7 +99,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
                            this.facade.raiseEvent({
                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                ntype		: 'error',
-                               msg         : 'Error finding Paths:\n' + e,
+                               msg         : ORYX.I18N.View.sim.errorFindingPath+':\n' + e,
                                title       : ''
 
                            });
@@ -109,7 +109,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
                     this.facade.raiseEvent({
                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                         ntype		: 'error',
-                        msg         : 'Error finding Paths.',
+                        msg         : ORYX.I18N.View.sim.errorFindingPath + '.',
                         title       : ''
 
                     });
@@ -126,7 +126,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
             this.facade.raiseEvent({
                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                 ntype		: 'error',
-                msg         : 'Unknown path id.',
+                msg         : ORYX.I18N.View.sim.errorUnknownPathId,
                 title       : ''
 
             });
@@ -292,7 +292,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
     		                    	}
     		                    }.bind(this)
     		                }, {
-    		                    text: 'Close',
+    		                    text: ORYX.I18N.Save.close,
     		                    handler: function(){
     		                    	this.resetNodeColors();
     		                    	dialog.hide();
@@ -305,7 +305,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
                            this.facade.raiseEvent({
                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                ntype		: 'error',
-                               msg         : 'Invalid Path data.',
+                               msg         : ORYX.I18N.View.sim.errorInvalidData,
                                title       : ''
 
                            });
@@ -314,7 +314,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
                        this.facade.raiseEvent({
                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                            ntype		: 'error',
-                           msg         : 'Error finding Paths:\n' + e,
+                           msg         : ORYX.I18N.View.sim.errorFindingPath+':\n' + e,
                            title       : ''
 
                        });
@@ -325,7 +325,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
                 this.facade.raiseEvent({
                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                     ntype		: 'error',
-                    msg         : 'Error finding Paths.',
+                    msg         : ORYX.I18N.View.sim.errorFindingPath+'.',
                     title       : ''
 
                 });
@@ -511,7 +511,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
 				        });
 					}.bind(this)
 				},{
-					text:ORYX.I18N.FromBPMN2Support.close,
+					text: ORYX.I18N.Save.close,
 					handler:function(){
 						dialog.hide();
 					}.bind(this)
