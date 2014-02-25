@@ -22,6 +22,7 @@ import org.kie.workbench.common.widgets.client.popups.file.CommandWithFileNameAn
 import org.kie.workbench.common.widgets.client.popups.file.CopyPopup;
 import org.kie.workbench.common.widgets.client.popups.file.FileNameAndCommitMessage;
 import org.kie.workbench.common.widgets.client.popups.file.RenamePopup;
+import org.kie.workbench.common.widgets.client.popups.validation.DefaultFileNameValidator;
 import org.kie.workbench.common.widgets.client.resources.i18n.CommonConstants;
 import org.kie.workbench.common.widgets.client.widget.BusyIndicatorView;
 import org.kie.workbench.common.widgets.client.widget.HasBusyIndicator;
@@ -116,6 +117,9 @@ public class DesignerPresenter {
     @Inject
     private MultiPageEditor multiPage;
 
+    @Inject
+    private DefaultFileNameValidator fileNameValidator;
+
     private ObservablePath path;
     private PlaceRequest place;
     private ObservablePath.OnConcurrentUpdateEvent concurrentUpdateSessionInfo = null;
@@ -196,7 +200,7 @@ public class DesignerPresenter {
         this.publishClosePlace( this );
 
         multiPage.addWidget( view,
-                "Business Process" );
+                             "Business Process" );
 
         if ( path != null ) {
             assetService.call( new RemoteCallback<String>() {
@@ -207,10 +211,10 @@ public class DesignerPresenter {
                     assetService.call( new RemoteCallback<Map<String, String>>() {
                         @Override
                         public void callback( Map<String, String> editorParameters ) {
-                            if( editorParameters != null ) {
-                                if (editorParameters.containsKey( "readonly" )) {
+                            if ( editorParameters != null ) {
+                                if ( editorParameters.containsKey( "readonly" ) ) {
                                     String readOnlyParam = editorParameters.get( "readonly" );
-                                    if(!readOnlyParam.equals("false")) {
+                                    if ( !readOnlyParam.equals( "false" ) ) {
                                         passedProcessSources = true;
                                     }
                                 }
@@ -222,7 +226,7 @@ public class DesignerPresenter {
                                     editorParameters.remove( "processsource" );
                                 }
 
-                                if(editorParameters.containsKey( "activenodes" )) {
+                                if ( editorParameters.containsKey( "activenodes" ) ) {
                                     String activeNodes = editorParameters.get( "activenodes" );
                                     if ( activeNodes != null && activeNodes.length() > 0 ) {
                                         publishActiveNodesInfo( editorParameters.get( "activenodes" ) );
@@ -230,23 +234,23 @@ public class DesignerPresenter {
                                     editorParameters.remove( "activenodes" );
                                 }
 
-                                if(editorParameters.containsKey( "completednodes" )) {
+                                if ( editorParameters.containsKey( "completednodes" ) ) {
                                     String activeNodes = editorParameters.get( "completednodes" );
                                     if ( activeNodes != null && activeNodes.length() > 0 ) {
                                         publishCompletedNodesInfo( editorParameters.get( "completednodes" ) );
                                     }
                                     editorParameters.remove( "completednodes" );
                                 }
-                                editorParameters.put("ts", Long.toString(System.currentTimeMillis()));
+                                editorParameters.put( "ts", Long.toString( System.currentTimeMillis() ) );
                                 view.setEditorParamters( editorParameters );
 
                                 // dont add in instance details view
-                                if(!passedProcessSources) {
+                                if ( !passedProcessSources ) {
                                     multiPage.addPage( new Page( metadataWidget,
-                                            CommonConstants.INSTANCE.MetadataTabTitle() ) {
+                                                                 CommonConstants.INSTANCE.MetadataTabTitle() ) {
                                         @Override
                                         public void onFocus() {
-                                            if (!metadataWidget.isAlreadyLoaded()){
+                                            if ( !metadataWidget.isAlreadyLoaded() ) {
                                                 metadataWidget.showBusyIndicator( CommonConstants.INSTANCE.Loading() );
                                                 metadataService.call( new MetadataSuccessCallback( metadataWidget,
                                                                                                    isReadOnly ),
@@ -272,13 +276,13 @@ public class DesignerPresenter {
 
     @OnMayClose
     public boolean canClose() {
-        if(!view.canSaveDesignerModel(view.getEditorID())) {
+        if ( !view.canSaveDesignerModel( view.getEditorID() ) ) {
             boolean canClose = view.confirmClose();
-            if(canClose) {
-                view.setProcessSaved(view.getEditorID());
+            if ( canClose ) {
+                view.setProcessSaved( view.getEditorID() );
                 return canClose;
             } else {
-                view.setProcessUnSaved(view.getEditorID());
+                view.setProcessUnSaved( view.getEditorID() );
                 return canClose;
             }
         } else {
@@ -293,7 +297,7 @@ public class DesignerPresenter {
 
     @WorkbenchPartTitle
     public String getName() {
-        return DesignerEditorConstants.INSTANCE.businessProcess()+" [" + FileNameUtil.removeExtension( this.path, resourceType ) + "]";
+        return DesignerEditorConstants.INSTANCE.businessProcess() + " [" + FileNameUtil.removeExtension( this.path, resourceType ) + "]";
     }
 
     @WorkbenchPartView
@@ -356,7 +360,7 @@ public class DesignerPresenter {
     }-*/;
 
     public void closePlace() {
-        if(view.getIsReadOnly(view.getEditorID())) {
+        if ( view.getIsReadOnly( view.getEditorID() ) ) {
             placeManager.forceClosePlace( this.place );
         }
     }
@@ -365,16 +369,18 @@ public class DesignerPresenter {
         vfsServices.call( new RemoteCallback<Path>() {
             @Override
             public void callback( final Path mypath ) {
-                final CopyPopup popup = new CopyPopup( new CommandWithFileNameAndCommitMessage() {
-                    @Override
-                    public void execute( final FileNameAndCommitMessage details ) {
-                        busyIndicatorView.showBusyIndicator( CommonConstants.INSTANCE.Copying() );
-                        copyService.call( getCopySuccessCallback(),
-                                          new HasBusyIndicatorDefaultErrorCallback( busyIndicatorView ) ).copy( path,
-                                                                                                                details.getNewFileName(),
-                                                                                                                details.getCommitMessage() );
-                    }
-                } );
+                final CopyPopup popup = new CopyPopup( mypath,
+                                                       fileNameValidator,
+                                                       new CommandWithFileNameAndCommitMessage() {
+                                                           @Override
+                                                           public void execute( final FileNameAndCommitMessage details ) {
+                                                               busyIndicatorView.showBusyIndicator( CommonConstants.INSTANCE.Copying() );
+                                                               copyService.call( getCopySuccessCallback(),
+                                                                                 new HasBusyIndicatorDefaultErrorCallback( busyIndicatorView ) ).copy( path,
+                                                                                                                                                       details.getNewFileName(),
+                                                                                                                                                       details.getCommitMessage() );
+                                                           }
+                                                       } );
                 popup.show();
             }
         } ).get( URIUtil.encode( uri ) );
@@ -384,16 +390,18 @@ public class DesignerPresenter {
         vfsServices.call( new RemoteCallback<Path>() {
             @Override
             public void callback( final Path mypath ) {
-                final RenamePopup popup = new RenamePopup( new CommandWithFileNameAndCommitMessage() {
-                    @Override
-                    public void execute( final FileNameAndCommitMessage details ) {
-                        busyIndicatorView.showBusyIndicator( CommonConstants.INSTANCE.Renaming() );
-                        renameService.call( getRenameSuccessCallback(),
-                                            new HasBusyIndicatorDefaultErrorCallback( busyIndicatorView ) ).rename( path,
-                                                                                                                    details.getNewFileName(),
-                                                                                                                    details.getCommitMessage() );
-                    }
-                } );
+                final RenamePopup popup = new RenamePopup( mypath,
+                                                           fileNameValidator,
+                                                           new CommandWithFileNameAndCommitMessage() {
+                                                               @Override
+                                                               public void execute( final FileNameAndCommitMessage details ) {
+                                                                   busyIndicatorView.showBusyIndicator( CommonConstants.INSTANCE.Renaming() );
+                                                                   renameService.call( getRenameSuccessCallback(),
+                                                                                       new HasBusyIndicatorDefaultErrorCallback( busyIndicatorView ) ).rename( path,
+                                                                                                                                                               details.getNewFileName(),
+                                                                                                                                                               details.getCommitMessage() );
+                                                               }
+                                                           } );
 
                 popup.show();
             }
@@ -419,19 +427,19 @@ public class DesignerPresenter {
                                  new Command() {
                                      @Override
                                      public void execute() {
-                                         view.raiseEventSave(view.getEditorID());
+                                         view.raiseEventSave( view.getEditorID() );
                                      }
                                  },
                                  new Command() {
                                      @Override
                                      public void execute() {
-                                         view.raiseEventSaveCancel(view.getEditorID());
+                                         view.raiseEventSaveCancel( view.getEditorID() );
                                      }
                                  },
                                  new Command() {
                                      @Override
                                      public void execute() {
-                                         view.raiseEventReload(view.getEditorID());
+                                         view.raiseEventReload( view.getEditorID() );
                                      }
                                  }
                                ).show();
@@ -468,7 +476,7 @@ public class DesignerPresenter {
             @Override
             public void callback( final Path path ) {
                 busyIndicatorView.hideBusyIndicator();
-                notification.fire(new NotificationEvent(CommonConstants.INSTANCE.ItemRenamedSuccessfully()));
+                notification.fire( new NotificationEvent( CommonConstants.INSTANCE.ItemRenamedSuccessfully() ) );
                 placeManager.forceClosePlace( place );
             }
         };
@@ -489,10 +497,10 @@ public class DesignerPresenter {
     }
 
     private void save() {
-        view.setProcessUnSaved(view.getEditorID());
+        view.setProcessUnSaved( view.getEditorID() );
     }
 
     private void reload() {
-        view.raiseEventReload(view.getEditorID());
+        view.raiseEventReload( view.getEditorID() );
     }
 }

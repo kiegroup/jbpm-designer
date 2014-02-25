@@ -428,6 +428,12 @@
       <artifactId>solder-api</artifactId>
     </dependency>
 
+    <!-- Common services -->
+    <dependency>
+      <groupId>org.kie.workbench.services</groupId>
+      <artifactId>kie-wb-common-services-backend</artifactId>
+    </dependency>
+
     <!-- Logging -->
     <dependency>
       <groupId>org.slf4j</groupId>
