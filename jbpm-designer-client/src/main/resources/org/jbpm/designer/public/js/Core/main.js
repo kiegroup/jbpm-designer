@@ -350,11 +350,15 @@ ORYX.Editor = {
 		this.simResultsTree = new Ext.tree.TreePanel({
 			id: "simresultscharts",
 			title: ORYX.I18N.View.sim.resultsGraphs,
-			autoheight: true, 
+            layout: 'fit',
 			animate:true,
 			loader: new Ext.tree.TreeLoader(),
 			rootVisible: false,
-			autoScroll:false,
+			autoScroll:true,
+            scroll:true,
+            viewConfig : {
+                style : { overflow: 'auto' }
+            },
 			lines: true,
 			listeners: {
 		        click: {
