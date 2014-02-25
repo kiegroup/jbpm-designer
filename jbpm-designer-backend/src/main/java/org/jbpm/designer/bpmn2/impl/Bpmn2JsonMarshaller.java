@@ -979,8 +979,13 @@ public class Bpmn2JsonMarshaller {
                         catchEventProperties.put("distributiontype", "poisson");
                     }
                     ControlParameters controlParams = eleType.getControlParameters();
-                    FloatingParameterType valType = (FloatingParameterType) controlParams.getProbability().getParameterValue().get(0);
-                    catchEventProperties.put("probability", valType.getValue());
+                    if(controlParams != null) {
+                        Parameter probabilityParam = controlParams.getProbability();
+                        if(probabilityParam != null && probabilityParam.getParameterValue() != null) {
+                            FloatingParameterType valType = (FloatingParameterType) probabilityParam.getParameterValue().get(0);
+                            catchEventProperties.put("probability", valType.getValue());
+                        }
+                    }
                 }
             }
         }
