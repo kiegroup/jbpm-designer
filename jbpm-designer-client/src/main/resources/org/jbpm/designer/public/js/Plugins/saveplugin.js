@@ -33,11 +33,11 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
             });
 
             this.facade.offer({
-                'name': 'Enable autosave',
+                'name': ORYX.I18N.Save.enableAutosave,
                 'functionality': this.enableautosave.bind(this),
                 'group': ORYX.I18N.Save.group,
                 dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
-                'description': 'Enable autosave',
+                'description': ORYX.I18N.Save.enableAutosave_desc,
                 'index': 2,
                 'minShape': 0,
                 'maxShape': 0,
@@ -54,11 +54,11 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
             });
 
             this.facade.offer({
-                'name': 'Disable autosave',
+                'name': ORYX.I18N.Save.disableAutosave,
                 'functionality': this.disableautosave.bind(this),
                 'group': ORYX.I18N.Save.group,
                 dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
-                'description': 'Disable autosave',
+                'description': ORYX.I18N.Save.disableAutosave_desc,
                 'index': 3,
                 'minShape': 0,
                 'maxShape': 0,
@@ -75,12 +75,12 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
             });
 
             this.facade.offer({
-                'name': 'Copy',
+                'name': ORYX.I18N.Save.copy,
                 'functionality': this.copyassetnotify.bind(this),
                 'group': ORYX.I18N.Save.group,
                 'icon': ORYX.BASE_FILE_PATH + "images/page_copy.png",
                 dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
-                'description': 'Copy asset',
+                'description': ORYX.I18N.Save.copy_desc,
                 'index': 4,
                 'minShape': 0,
                 'maxShape': 0,
@@ -97,12 +97,12 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
             });
 
             this.facade.offer({
-                'name': 'Rename',
+                'name': ORYX.I18N.Save.rename,
                 'functionality': this.renameassetnotify.bind(this),
                 'group': ORYX.I18N.Save.group,
                 'icon': ORYX.BASE_FILE_PATH + "images/rename.png",
                 dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
-                'description': 'Rename asset',
+                'description': ORYX.I18N.Save.rename_desc,
                 'index': 5,
                 'minShape': 0,
                 'maxShape': 0,
@@ -119,12 +119,12 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
             });
 
             this.facade.offer({
-                'name': 'Delete',
+                'name': ORYX.I18N.Save.delete_name,
                 'functionality': this.deleteassetnotify.bind(this),
                 'group': ORYX.I18N.Save.group,
                 'icon': ORYX.BASE_FILE_PATH + "images/delete2.gif",
                 dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
-                'description': "Delete asset",
+                'description': ORYX.I18N.Save.delete_desc,
                 'index': 6,
                 'minShape': 0,
                 'maxShape': 0,
@@ -177,7 +177,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         this.facade.raiseEvent({
             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
             ntype		: 'info',
-            msg         : 'Save operation has been cancelled.',
+            msg         : ORYX.I18N.Save.saveCancelled,
             title       : ''
         });
     },
@@ -186,7 +186,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         this.facade.raiseEvent({
             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
             ntype		: 'info',
-            msg         : 'Reloading process content.',
+            msg         : ORYX.I18N.Save.processReloading,
             title       : ''
         });
 
@@ -201,7 +201,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                             this.facade.raiseEvent({
                                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                 ntype		: 'error',
-                                msg         : 'Unable to reload process content.',
+                                msg         : ORYX.I18N.Save.unableReloadContent,
                                 title       : ''
                             });
                         } else {
@@ -211,7 +211,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                         this.facade.raiseEvent({
                             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                             ntype		: 'error',
-                            msg         : 'Invalid content.',
+                            msg         : ORYX.I18N.Save.invalidContent,
                             title       : ''
                         });
                     }
@@ -223,7 +223,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                 this.facade.raiseEvent({
                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                     ntype		: 'error',
-                    msg         : 'Could not reload process content.',
+                    msg         : ORYX.I18N.Save.couldNotReload,
                     title       : ''
                 });
             }
@@ -242,7 +242,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                     this.facade.raiseEvent({
                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                         ntype		: 'info',
-                        msg         : 'Save operation has been cancelled.',
+                        msg         : ORYX.I18N.Save.saveCancelled,
                         title       : ''
                     });
                     return;
@@ -271,7 +271,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                                 this.facade.raiseEvent({
                                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                     ntype		: 'success',
-                                    msg         : 'Successfully saved business process',
+                                    msg         : ORYX.I18N.Save.saveSuccess,
                                     title       : '',
                                     timeOut: 1000,
                                     extendedTimeOut: 1000
@@ -293,7 +293,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                                             this.facade.raiseEvent({
                                                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                                 ntype		: 'success',
-                                                msg         : 'Successfully saved business process image',
+                                                msg         : ORYX.I18N.Save.saveImageSuccess,
                                                 title       : ''
                                             });
                                         }.bind(this),
@@ -301,7 +301,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                                             this.facade.raiseEvent({
                                                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                                 ntype		: 'error',
-                                                msg         : 'Unable to save business process image.',
+                                                msg         : ORYX.I18N.Save.saveImageFailed,
                                                 title       : ''
                                             });
                                         }.bind(this),
@@ -320,7 +320,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                             this.facade.raiseEvent({
                                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                 ntype		: 'error',
-                                msg         : 'Unable to save: ' + e,
+                                msg         : ORYX.I18N.Save.unableToSave + ': ' + e,
                                 title       : ''
                             });
                         }
@@ -328,7 +328,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                         this.facade.raiseEvent({
                             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                             ntype		: 'error',
-                            msg         : 'Unable to save: ' + e,
+                            msg         : ORYX.I18N.Save.unableToSave + ': ' + e,
                             title       : ''
                         });
                     }
@@ -337,7 +337,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                     this.facade.raiseEvent({
                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                         ntype		: 'error',
-                        msg         : 'Unable to save.',
+                        msg         : ORYX.I18N.Save.unableToSave+'.',
                         title       : ''
                     });
                 }.bind(this),
@@ -355,7 +355,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
             this.facade.raiseEvent({
                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                 ntype		: 'info',
-                msg         : 'Process contains no changes since last save.',
+                msg         : ORYX.I18N.Save.noChanges,
                 title       : ''
             });
         }
@@ -390,7 +390,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                             this.facade.raiseEvent({
                                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                 ntype		: 'success',
-                                msg         : 'Successfully saved business process',
+                                msg         : ORYX.I18N.Save.saveSuccess,
                                 title       : '',
                                 timeOut: 1000,
                                 extendedTimeOut: 1000
@@ -403,7 +403,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                         this.facade.raiseEvent({
                             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                             ntype		: 'error',
-                            msg         : 'Unable to save: ' + e,
+                            msg         :  ORYX.I18N.Save.unableToSave+': ' + e,
                             title       : ''
                         });
                     }
@@ -424,7 +424,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         this.facade.raiseEvent({
             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
             ntype		: 'info',
-            msg         : 'Autosave has been enabled.',
+            msg         : ORYX.I18N.Save.autosaveEnabled,
             title       : ''
         });
     },
@@ -436,15 +436,15 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         this.facade.raiseEvent({
             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
             ntype		: 'info',
-            msg         : 'Autosave has been disabled.',
+            msg         : ORYX.I18N.Save.autosaveDisabled,
             title       : ''
         });
     },
 
     deleteassetnotify: function() {
         Ext.MessageBox.confirm(
-            'Delete process confirmation',
-            'Are you sure you want to delete this process?',
+            ORYX.I18N.Save.deleteConfirm_title,
+            ORYX.I18N.Save.deleteConfirm_msg,
             function(btn){
                 if (btn == 'yes') {
                     // send UF asset delete event
@@ -457,8 +457,8 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
 
     copyassetnotify: function() {
         Ext.MessageBox.confirm(
-            'Copy process confirmation',
-            'Would you like to save your changes before copying?',
+            ORYX.I18N.Save.copyConfirm_title,
+            ORYX.I18N.Save.copyConfirm_msg,
             function(btn){
                 if (btn == 'yes') {
                     this.save(true);
@@ -472,8 +472,8 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
 
     renameassetnotify: function() {
         Ext.MessageBox.confirm(
-            'Rename process confirmation',
-            'Would you like to save your changes before renaming?',
+            ORYX.I18N.Save.renameConfirm_title,
+            ORYX.I18N.Save.renameConfirm_msg,
             function(btn){
                 if (btn == 'yes') {
                     this.save(true);
@@ -508,7 +508,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                 this.facade.raiseEvent({
                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                     ntype		: 'success',
-                    msg         : 'Successfully reloaded process.',
+                    msg         : ORYX.I18N.Save.reloadSuccess,
                     title       : ''
 
                 });
@@ -517,7 +517,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                 this.facade.raiseEvent({
                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                     ntype		: 'error',
-                    msg         : 'Unable to reload process.',
+                    msg         : ORYX.I18N.Save.reloadFail,
                     title       : ''
 
                 });
@@ -526,7 +526,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
             this.facade.raiseEvent({
                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                 ntype		: 'error',
-                msg         : 'Process content to be reloaded is invalid.',
+                msg         : ORYX.I18N.Save.processReloadedInvalid,
                 title       : ''
             });
         }

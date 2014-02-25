@@ -1118,6 +1118,54 @@ ORYX.I18N.view.saveToFile='<i18n:message key="ORYX.I18N.view.saveToFile">Save to
 ORYX.I18N.view.downloadBPMN2='<i18n:message key="ORYX.I18N.view.downloadBPMN2">Download BPMN2</i18n:message>';
 ORYX.I18N.view.processSources='<i18n:message key="ORYX.I18N.view.processSources">Process Sources</i18n:message>';
 
+ORYX.I18N.Save.enableAutosave='<i18n:message key="ORYX.I18N.Save.enableAutosave">Enable autosave</i18n:message>';
+ORYX.I18N.Save.enableAutosave_desc='<i18n:message key="ORYX.I18N.Save.enableAutosave_desc">Enable autosave</i18n:message>';
+ORYX.I18N.Save.disableAutosave='<i18n:message key="ORYX.I18N.Save.disableAutosave">Disable autosave</i18n:message>';
+ORYX.I18N.Save.disableAutosave_desc='<i18n:message key="ORYX.I18N.Save.disableAutosave_desc">Disable autosave</i18n:message>';
+ORYX.I18N.Save.copy='<i18n:message key="ORYX.I18N.Save.copy">Copy</i18n:message>';
+ORYX.I18N.Save.copy_desc='<i18n:message key="ORYX.I18N.Save.copy_desc">Copy asset</i18n:message>';
+ORYX.I18N.Save.rename='<i18n:message key="ORYX.I18N.Save.rename">Rename</i18n:message>';
+ORYX.I18N.Save.rename_desc='<i18n:message key="ORYX.I18N.Save.rename_desc">Rename asset</i18n:message>';
+ORYX.I18N.Save.delete_name='<i18n:message key="ORYX.I18N.Save.delete_name">Delete</i18n:message>';
+ORYX.I18N.Save.delete_desc='<i18n:message key="ORYX.I18N.Save.delete_desc">Delete asset</i18n:message>';
+ORYX.I18N.Save.saveCancelled='<i18n:message key="ORYX.I18N.Save.saveCancelled">Save operation has been cancelled.</i18n:message>';
+ORYX.I18N.Save.processReloading='<i18n:message key="ORYX.I18N.Save.processReloading">Reloading process content.</i18n:message>';
+ORYX.I18N.Save.unableReloadContent='<i18n:message key="ORYX.I18N.Save.unableReloadContent">Unable to reload process content.</i18n:message>';
+ORYX.I18N.Save.invalidContent='<i18n:message key="ORYX.I18N.Save.invalidContent">Invalid content.</i18n:message>';
+ORYX.I18N.Save.couldNotReload='<i18n:message key="ORYX.I18N.Save.couldNotReload">Could not reload process content.</i18n:message>';
+ORYX.I18N.Save.saveSuccess='<i18n:message key="ORYX.I18N.Save.saveSuccess">Successfully saved business process</i18n:message>';
+ORYX.I18N.Save.saveImageSuccess='<i18n:message key="ORYX.I18N.Save.saveImageSuccess">Successfully saved business process image</i18n:message>';
+ORYX.I18N.Save.saveImageFailed='<i18n:message key="ORYX.I18N.Save.saveImageFailed">Unable to save business process image.</i18n:message>';
+ORYX.I18N.Save.unableToSave='<i18n:message key="ORYX.I18N.Save.unableToSave">Unable to save</i18n:message>';
+ORYX.I18N.Save.noChanges='<i18n:message key="ORYX.I18N.Save.noChanges">Process contains no changes since last save.</i18n:message>';
+
+ORYX.I18N.Save.autosaveEnabled='<i18n:message key="ORYX.I18N.Save.autosaveEnabled">Autosave has been enabled.</i18n:message>';
+ORYX.I18N.Save.autosaveDisabled='<i18n:message key="ORYX.I18N.Save.autosaveDisabled">Autosave has been disabled.</i18n:message>';
+ORYX.I18N.Save.deleteConfirm_title='<i18n:message key="ORYX.I18N.Save.deleteConfirm_title">Delete process confirmation</i18n:message>';
+ORYX.I18N.Save.deleteConfirm_msg='<i18n:message key="ORYX.I18N.Save.deleteConfirm_msg">Are you sure you want to delete this process?</i18n:message>';
+ORYX.I18N.Save.copyConfirm_title='<i18n:message key="ORYX.I18N.Save.copyConfirm_title">Copy process confirmation</i18n:message>';
+ORYX.I18N.Save.copyConfirm_msg='<i18n:message key="ORYX.I18N.Save.copyConfirm_msg">Would you like to save your changes before copying?</i18n:message>';
+ORYX.I18N.Save.renameConfirm_title='<i18n:message key="ORYX.I18N.Save.renameConfirm_title">Rename process confirmation</i18n:message>';
+ORYX.I18N.Save.renameConfirm_msg='<i18n:message key="ORYX.I18N.Save.renameConfirm_msg">Would you like to save your changes before renaming?</i18n:message>';
+ORYX.I18N.Save.reloadSuccess='<i18n:message key="ORYX.I18N.Save.reloadSuccess">Successfully reloaded process.</i18n:message>';
+ORYX.I18N.Save.reloadFail='<i18n:message key="ORYX.I18N.Save.reloadFail">Unable to reload process.</i18n:message>';
+ORYX.I18N.Save.processReloadedInvalid='<i18n:message key="ORYX.I18N.Save.processReloadedInvalid">Process content to be reloaded is invalid.</i18n:message>';
+
+ORYX.I18N.SyntaxChecker.startValidating='<i18n:message key="ORYX.I18N.SyntaxChecker.startValidating">Start validating</i18n:message>';
+ORYX.I18N.SyntaxChecker.startValidating_desc='<i18n:message key="ORYX.I18N.SyntaxChecker.startValidating_desc">Start validating</i18n:message>';
+ORYX.I18N.SyntaxChecker.stopValidating='<i18n:message key="ORYX.I18N.SyntaxChecker.stopValidating">Stop validating</i18n:message>';
+ORYX.I18N.SyntaxChecker.stopValidating_desc='<i18n:message key="ORYX.I18N.SyntaxChecker.stopValidating_desc">Stop validating</i18n:message>';
+ORYX.I18N.SyntaxChecker.viewAllIssues='<i18n:message key="ORYX.I18N.SyntaxChecker.viewAllIssues">View all issues</i18n:message>';
+ORYX.I18N.SyntaxChecker.viewAllIssues_desc='<i18n:message key="ORYX.I18N.SyntaxChecker.viewAllIssues_desc">View all issues</i18n:message>';
+ORYX.I18N.SyntaxChecker.startingContinousVal='<i18n:message key="ORYX.I18N.SyntaxChecker.startingContinousVal">Starting continuous visual validation.</i18n:message>';
+ORYX.I18N.SyntaxChecker.stoppingContinousVal='<i18n:message key="ORYX.I18N.SyntaxChecker.stoppingContinousVal">Stopping continuous visual validation.</i18n:message>';
+ORYX.I18N.SyntaxChecker.header_IssueType='<i18n:message key="ORYX.I18N.SyntaxChecker.header_IssueType">Issue Type</i18n:message>';
+ORYX.I18N.SyntaxChecker.header_Description='<i18n:message key="ORYX.I18N.SyntaxChecker.header_Description">Description</i18n:message>';
+ORYX.I18N.SyntaxChecker.header_ShapeId='<i18n:message key="ORYX.I18N.SyntaxChecker.header_ShapeId">Shape ID</i18n:message>';
+ORYX.I18N.SyntaxChecker.suggestions='<i18n:message key="ORYX.I18N.SyntaxChecker.suggestions">Validation Suggestions</i18n:message>';
+
+
+
 
 
 

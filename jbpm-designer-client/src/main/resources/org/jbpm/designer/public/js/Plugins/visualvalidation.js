@@ -13,11 +13,11 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
 
         if(ORYX.READONLY != true) {
             this.facade.offer({
-                'name': "Start validating",
+                'name': ORYX.I18N.SyntaxChecker.startValidating,
                 'functionality': this.enableValidation.bind(this),
                 'group': 'validationandsimulation',
                 dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/visualvalidation.png",
-                'description': ORYX.I18N.SyntaxChecker.desc,
+                'description': ORYX.I18N.SyntaxChecker.startValidating_desc,
                 'index': 1,
                 'minShape': 0,
                 'maxShape': 0,
@@ -27,11 +27,11 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
             });
 
             this.facade.offer({
-                'name': "Stop validating",
+                'name': ORYX.I18N.SyntaxChecker.stopValidating,
                 'functionality': this.disableValidation.bind(this),
                 'group': 'validationandsimulation',
                 dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/visualvalidation.png",
-                'description': ORYX.I18N.SyntaxChecker.desc,
+                'description': ORYX.I18N.SyntaxChecker.stopValidating_desc,
                 'index': 2,
                 'minShape': 0,
                 'maxShape': 0,
@@ -41,11 +41,11 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
             });
 
             this.facade.offer({
-                'name': "View all issues",
+                'name': ORYX.I18N.SyntaxChecker.viewAllIssues,
                 'functionality': this.viewAllValidation.bind(this),
                 'group': 'validationandsimulation',
                 dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/visualvalidation.png",
-                'description': ORYX.I18N.SyntaxChecker.desc,
+                'description': ORYX.I18N.SyntaxChecker.viewAllIssues_desc,
                 'index': 3,
                 'minShape': 0,
                 'maxShape': 0,
@@ -65,7 +65,7 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
         this.facade.raiseEvent({
             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
             ntype		: 'info',
-            msg         : 'Starting continuous visual validation.',
+            msg         : ORYX.I18N.SyntaxChecker.startingContinousVal,
             title       : ''
 
         });
@@ -80,7 +80,7 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
         this.facade.raiseEvent({
             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
             ntype		: 'info',
-            msg         : 'Stopping continuous visual validation.',
+            msg         : ORYX.I18N.SyntaxChecker.stoppingContinousVal,
             title       : ''
 
         });
@@ -225,7 +225,7 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
                     cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(),
                         {
                             id: 'type',
-                            header: 'Issue Type',
+                            header: ORYX.I18N.SyntaxChecker.header_IssueType,
                             width: 100,
                             dataIndex: 'type',
                             sortable  : true,
@@ -234,7 +234,7 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
                         },
                         {
                             id: 'name',
-                            header: 'Description',
+                            header: ORYX.I18N.SyntaxChecker.header_Description,
                             width: 500,
                             dataIndex: 'name',
                             sortable  : true,
@@ -243,7 +243,7 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
                         },
                         {
                             id: 'shapeid',
-                            header: 'Shape ID',
+                            header: ORYX.I18N.SyntaxChecker.header_ShapeId,
                             width: 100,
                             dataIndex: 'shapeid',
                             sortable  : true,
@@ -259,7 +259,7 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
                 var dialog = new Ext.Window({
                     layout		: 'anchor',
                     autoCreate	: true,
-                    title		: 'Validation Suggestions',
+                    title		: ORYX.I18N.SyntaxChecker.suggestions,
                     height		: 300,
                     width		: 700,
                     modal		: true,
