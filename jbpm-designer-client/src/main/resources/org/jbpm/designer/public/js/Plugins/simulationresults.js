@@ -212,6 +212,8 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 		
 		Ext.getCmp('simresultscharts').setRootNode(graphList);
 		Ext.getCmp('simresultscharts').getRootNode().render();
+        Ext.getCmp('simresultscharts').el.dom.style.height = '100%';
+        Ext.getCmp('simresultscharts').el.dom.style.overflow = 'scroll';
 		Ext.getCmp('simresultscharts').render();
 		
 		// select process graph and show its chart
