@@ -567,7 +567,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
 
                     }.bind(this)
                 },{
-                    text:ORYX.I18N.FromBPMN2Support.close,
+                    text: ORYX.I18N.Save.close,
                     handler:function(){
                         dialog.hide();
                     }.bind(this)

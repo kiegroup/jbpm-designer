@@ -967,7 +967,7 @@ ORYX.I18N.SyntaxChecker.BPMN_MESSAGE_FLOW_NOT_ALLOWED = '<i18n:message key="ORYX
 /** New Language Properties 27.11.2009 */
 ORYX.I18N.SyntaxChecker.BPMN2_EVENT_BASED_WITH_TOO_LESS_INCOMING_SEQUENCE_FLOWS = '<i18n:message key="ORYX.I18N.SyntaxChecker.BPMN2_EVENT_BASED_WITH_TOO_LESS_INCOMING_SEQUENCE_FLOWS">An Event-based Gateway that is not instantiating must have a minimum of one incoming Sequence Flow.</i18n:message>';
 ORYX.I18N.SyntaxChecker.BPMN2_TOO_FEW_INITIATING_PARTICIPANTS = '<i18n:message key="ORYX.I18N.SyntaxChecker.BPMN2_TOO_FEW_INITIATING_PARTICIPANTS">A Choreography Activity must have one initiating Participant (white).</i18n:message>';
-ORYX.I18N.SyntaxChecker.BPMN2_TOO_MANY_INITIATING_PARTICIPANTS = '<i18n:message key="ORYX.I18N.SyntaxChecker.BPMN2_TOO_MANY_INITIATING_PARTICIPANTS">A Choreography Acitivity must not have more than one initiating Participant (white).</i18n:message>';
+ORYX.I18N.SyntaxChecker.BPMN2_TOO_MANY_INITIATING_PARTICIPANTS = '<i18n:message key="ORYX.I18N.SyntaxChecker.BPMN2_TOO_MANY_INITIATING_PARTICIPANTS">A Choreography Activity must not have more than one initiating Participant (white).</i18n:message>';
 
 ORYX.I18N.SyntaxChecker.COMMUNICATION_AT_LEAST_TWO_PARTICIPANTS = '<i18n:message key="ORYX.I18N.SyntaxChecker.COMMUNICATION_AT_LEAST_TWO_PARTICIPANTS">The communication must be connected to at least two participants.</i18n:message>';
 ORYX.I18N.SyntaxChecker.MESSAGEFLOW_START_MUST_BE_PARTICIPANT = '<i18n:message key="ORYX.I18N.SyntaxChecker.MESSAGEFLOW_START_MUST_BE_PARTICIPANT">The message flow\'s source must be a participant.</i18n:message>';
@@ -1163,6 +1163,11 @@ ORYX.I18N.SyntaxChecker.header_IssueType='<i18n:message key="ORYX.I18N.SyntaxChe
 ORYX.I18N.SyntaxChecker.header_Description='<i18n:message key="ORYX.I18N.SyntaxChecker.header_Description">Description</i18n:message>';
 ORYX.I18N.SyntaxChecker.header_ShapeId='<i18n:message key="ORYX.I18N.SyntaxChecker.header_ShapeId">Shape ID</i18n:message>';
 ORYX.I18N.SyntaxChecker.suggestions='<i18n:message key="ORYX.I18N.SyntaxChecker.suggestions">Validation Suggestions</i18n:message>';
+
+ORYX.I18N.View.sim.creatingPathImage='<i18n:message key="ORYX.I18N.View.sim.creatingPathImage">Creating path image.</i18n:message>';
+ORYX.I18N.View.sim.errorInvalidData='<i18n:message key="ORYX.I18N.View.sim.errorInvalidData">Invalid Path data.</i18n:message>';
+ORYX.I18N.View.sim.errorFindingPath='<i18n:message key="ORYX.I18N.View.sim.errorFindingPath">Error finding Paths</i18n:message>';
+ORYX.I18N.View.sim.errorUnknownPathId='<i18n:message key="ORYX.I18N.View.sim.errorUnknownPathId">Unknown path id.</i18n:message>';
 
 
 

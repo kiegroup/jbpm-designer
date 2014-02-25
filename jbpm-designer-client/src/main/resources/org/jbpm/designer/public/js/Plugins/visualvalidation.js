@@ -282,7 +282,7 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
                         }.bind(this)
                     },
                     buttons		: [{
-                        text: 'Close',
+                        text: ORYX.I18N.Save.close,
                         handler: function(){
                             dialog.hide()
                         }.bind(this)
