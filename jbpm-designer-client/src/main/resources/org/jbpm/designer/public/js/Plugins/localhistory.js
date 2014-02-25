@@ -24,12 +24,12 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
 
         if(ORYX.READONLY != true) {
             this.facade.offer({
-                'name': "Display Local History",
+                'name': ORYX.I18N.LocalHistory.display,
                 'functionality': this.displayLocalHistory.bind(this),
                 'group': "localstorage",
                 'icon': ORYX.BASE_FILE_PATH + "images/view.png",
                  dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/localhistory.png",
-                'description': "Display Local History",
+                'description': ORYX.I18N.LocalHistory.display_desc,
                 'index': 1,
                 'minShape': 0,
                 'maxShape': 0,
@@ -46,12 +46,12 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
             });
 
             this.facade.offer({
-                'name': "Clear Local History",
+                'name': ORYX.I18N.LocalHistory.clear,
                 'functionality': this.clearLocalHistory.bind(this),
                 'group': "localstorage",
                 'icon': ORYX.BASE_FILE_PATH + "images/clear.png",
                 dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/localhistory.png",
-                'description': "Clear Local History",
+                'description': ORYX.I18N.LocalHistory.clear_desc,
                 'index': 2,
                 'minShape': 0,
                 'maxShape': 0,
@@ -68,12 +68,12 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
             });
 
             this.facade.offer({
-                'name': "Configure Snapshot Interval",
+                'name': ORYX.I18N.LocalHistory.config,
                 'functionality': this.configureSnapshotInterval.bind(this),
                 'group': "localstorage",
                 'icon': ORYX.BASE_FILE_PATH + "images/clock.png",
                 dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/localhistory.png",
-                'description': "Configure Snaphot Interval",
+                'description': ORYX.I18N.LocalHistory.config_desc,
                 'index': 3,
                 'minShape': 0,
                 'maxShape': 0,
@@ -90,12 +90,12 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
             });
 
             this.facade.offer({
-                'name': "Enable Local History",
+                'name': ORYX.I18N.LocalHistory.enable,
                 'functionality': this.enableLocalHistory.bind(this),
                 'group': "localstorage",
                 'icon': ORYX.BASE_FILE_PATH + "images/enable.png",
                 dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/localhistory.png",
-                'description': "Enable Local History",
+                'description': ORYX.I18N.LocalHistory.enable_desc,
                 'index': 3,
                 'minShape': 0,
                 'maxShape': 0,
@@ -112,12 +112,12 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
             });
 
             this.facade.offer({
-                'name': "Disable Local History",
+                'name': ORYX.I18N.LocalHistory.disable,
                 'functionality': this.disableLocalHistory.bind(this),
                 'group': "localstorage",
                 'icon': ORYX.BASE_FILE_PATH + "images/disable.png",
                 dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/localhistory.png",
-                'description': "Disable Local History",
+                'description': ORYX.I18N.LocalHistory.disable_desc,
                 'index': 4,
                 'minShape': 0,
                 'maxShape': 0,
@@ -149,48 +149,48 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
             cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(),
             {
                 id: 'pid',
-                header: 'Id',
+                header: ORYX.I18N.LocalHistory.headertxt.id,
                 width: 100,
                 dataIndex: 'processid',
                 editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
             },
             {
                 id: 'pname',
-                header: 'Name',
+                header: ORYX.I18N.LocalHistory.headertxt.name,
                 width: 100,
                 dataIndex: 'processname',
                 editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
             },
             {
                 id: 'ppkg',
-                header: 'Package',
+                header: ORYX.I18N.LocalHistory.headertxt.Package,
                 width: 100,
                 dataIndex: 'processpkg',
                 editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
             },
             {
                 id: 'pver',
-                header: 'Version',
+                header: ORYX.I18N.LocalHistory.headertxt.Version,
                 width: 100,
                 dataIndex: 'processversion',
                 editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
             },
             {
                 id: 'tms',
-                header: 'Time Stamp',
+                header: ORYX.I18N.LocalHistory.headertxt.TimeStamp,
                 width: 200,
                 dataIndex: 'timestamp',
                 editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
             },{
                 id: 'pim',
-                header: 'Process Image',
+                header: ORYX.I18N.LocalHistory.headertxt.ProcessImage,
                 width: 150,
                 dataIndex: 'svg',
                 renderer: function(val) {
                     if(val && val.length > 0) {
                         return '<center><img src="'+ ORYX.BASE_FILE_PATH +'images/page_white_picture.png" onclick="resetSVGView(\''+val+'\');new SVGViewer({title: \'Local History Process Image\', width: \'650\', height: \'450\', autoScroll: true, fixedcenter: true, src: \''+'\',hideAction: \'close\'}).show();" alt="Click to view Process Image"/></center>';
                     } else {
-                        return "<center>Process image not available.</center>";
+                        return ORYX.I18N.LocalHistory.headertxt.ProcessImage_NoAvailable;
                     }
                     return "";
                 }
@@ -199,7 +199,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
 
         var localHistoryPanel = new Ext.Panel({
             id: 'localHistoryPanel',
-            title: '<center>Select Process Id and click "Restore" to restore.</center>',
+            title: ORYX.I18N.LocalHistory.localHistoryPanel.title,
             layout:'column',
             items:[
                 this.mygrid
@@ -215,7 +215,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
         var dialog = new Ext.Window({
             layout		: 'anchor',
             autoCreate	: true,
-            title		: 'Local History View',
+            title		: ORYX.I18N.LocalHistory.LocalHistoryView,
             height		: 350,
             width		: 780,
             modal		: true,
@@ -238,7 +238,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
                 }.bind(this)
             },
             buttons		: [{
-                text: 'Restore',
+                text: ORYX.I18N.LocalHistory.LocalHistoryView.restore,
                 handler: function(){
                     if(this.mygrid.getSelectionModel().getSelectedCell() != null) {
                         var selectedIndex = this.mygrid.getSelectionModel().getSelectedCell()[0];
@@ -252,7 +252,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
                             this.facade.raiseEvent({
                                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                 ntype		: 'error',
-                                msg         : 'Invalid Process info. Unable to restore.',
+                                msg         : ORYX.I18N.LocalHistory.LocalHistoryView.invalidProcessInfo,
                                 title       : ''
                             });
                         }
@@ -261,7 +261,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
                         this.facade.raiseEvent({
                             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                             ntype		: 'info',
-                            msg         : 'Please select a process id.',
+                            msg         : ORYX.I18N.LocalHistory.LocalHistoryView.msg,
                             title       : ''
                         });
                     }
@@ -353,7 +353,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
         this.facade.raiseEvent({
             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
             ntype		: 'info',
-            msg         : 'Local History has been cleared.',
+            msg         : ORYX.I18N.LocalHistory.clearLocalHistory.msg,
             title       : ''
         });
     },
@@ -411,7 +411,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
             this.facade.raiseEvent({
                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                 ntype		: 'info',
-                msg         : 'Local History quota exceeded. Clearing local history.',
+                msg         : ORYX.I18N.LocalHistory.addQuotaexceed,
                 title       : ''
             });
             this.clearLocalHistory();
@@ -435,7 +435,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
         this.facade.raiseEvent({
             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
             ntype		: 'info',
-            msg         : 'Local History has been disabled.',
+            msg         : ORYX.I18N.LocalHistory.historyDisabled,
             title       : ''
         });
     },
@@ -448,7 +448,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
         this.facade.raiseEvent({
             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
             ntype		: 'info',
-            msg         : 'Local History has been enabled.',
+            msg         : ORYX.I18N.LocalHistory.historyEnabled,
             title       : ''
         });
     },
@@ -508,7 +508,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
                     typeAhead: true,
                     value: "minutes",
                     triggerAction: 'all',
-                    fieldLabel: 'Interval units',
+                    fieldLabel: ORYX.I18N.LocalHistory.intervalUnits,
                     width: 120
                 }
             ]
@@ -519,7 +519,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
             layout: 	'fit',
             plain:		true,
             bodyStyle: 	'padding:5px;',
-            title: 		"Configure Snapshot Interval",
+            title: 		ORYX.I18N.LocalHistory.ConfigureSnapshotInterval,
             height: 	300,
             width:		350,
             modal:		true,
@@ -553,14 +553,14 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
                             this.facade.raiseEvent({
                                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                 ntype		: 'info',
-                                msg         : 'Updated Snapshot Interval"',
+                                msg         : ORYX.I18N.LocalHistory.UpdatedSnapshotInterval,
                                 title       : ''
                             });
                         } else {
                             this.facade.raiseEvent({
                                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                 ntype		: 'error',
-                                msg         : 'Invalid input specified',
+                                msg         : ORYX.I18N.LocalHistory.InvalidInput,
                                 title       : ''
                             });
                         }

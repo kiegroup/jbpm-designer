@@ -11,12 +11,12 @@ ORYX.Plugins.FormEditing = Clazz.extend({
             // disable for ruleflow perspective preset
             if(ORYX.PRESET_PERSPECTIVE != "ruleflow") {
                 this.facade.offer({
-                    'name': "Edit Process Form",
+                    'name': ORYX.I18N.View.editProcessForm,
                     'functionality': this.editProcessForm.bind(this),
                     'group': "editprocessforms",
                     'icon': ORYX.BASE_FILE_PATH + "images/processforms.png",
                     dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/processforms.png",
-                    'description': "Edit Process Form",
+                    'description': ORYX.I18N.View.editProcessFormDesc ,
                     'index': 1,
                     'minShape': 0,
                     'maxShape': 0,
@@ -33,12 +33,12 @@ ORYX.Plugins.FormEditing = Clazz.extend({
                 });
 
                 this.facade.offer({
-                    'name': "Edit Task Form",
+                    'name': ORYX.I18N.View.editTaskForm,
                     'functionality': this.editTaskForm.bind(this),
                     'group': "editprocessforms",
                     'icon': ORYX.BASE_FILE_PATH + "images/processforms.png",
                     dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/processforms.png",
-                    'description': "Edit Task Form",
+                    'description': ORYX.I18N.View.editTaskFormDesc,
                     'index': 2,
                     'minShape': 1,
                     'maxShape': 1,
@@ -55,12 +55,12 @@ ORYX.Plugins.FormEditing = Clazz.extend({
                 });
 
                 this.facade.offer({
-                    'name': "Generate Task Form",
+                    'name': ORYX.I18N.forms.generateTaskForm,
                     'functionality': this.generateTaskForm.bind(this),
                     'group': "editprocessforms",
                     'icon': ORYX.BASE_FILE_PATH + "images/processforms.png",
                     dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/processforms.png",
-                    'description': "Generate Task Form",
+                    'description': ORYX.I18N.forms.generateTaskForm_desc,
                     'index': 3,
                     'minShape': 1,
                     'maxShape': 1,
@@ -77,12 +77,12 @@ ORYX.Plugins.FormEditing = Clazz.extend({
                 });
 
                 this.facade.offer({
-                    'name': "Generate all Forms",
+                    'name': ORYX.I18N.forms.generateAllForms,
                     'functionality': this.generateTaskForms.bind(this),
                     'group': "editprocessforms",
                     'icon': ORYX.BASE_FILE_PATH + "images/processforms.png",
                     dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/processforms.png",
-                    'description': "Generate all Forms",
+                    'description': ORYX.I18N.forms.generateAllForms_desc,
                     'index': 4,
                     'minShape': 0,
                     'maxShape': 0,
@@ -108,7 +108,7 @@ ORYX.Plugins.FormEditing = Clazz.extend({
                 ORYX.Config.FACADE.raiseEvent({
                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                     ntype		: 'error',
-                    msg         : 'Invalid number of nodes selected..',
+                    msg         : ORYX.I18N.forms.invalidNumberNodes,
                     title       : ''
 
                 });
@@ -127,7 +127,7 @@ ORYX.Plugins.FormEditing = Clazz.extend({
                                 this.facade.raiseEvent({
                                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                     ntype		: 'success',
-                                    msg         : 'Successfully generated task form template.',
+                                    msg         : ORYX.I18N.forms.successGenTask,
                                     title       : ''
 
                                 });
@@ -136,7 +136,7 @@ ORYX.Plugins.FormEditing = Clazz.extend({
                                 this.facade.raiseEvent({
                                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                     ntype		: 'error',
-                                    msg         : '<p>Failed to generate task form template.</p>',
+                                    msg         : ORYX.I18N.forms.failGenTask,
                                     title       : ''
                                 });
                             }.createDelegate(this),
@@ -153,7 +153,7 @@ ORYX.Plugins.FormEditing = Clazz.extend({
                         ORYX.Config.FACADE.raiseEvent({
                             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                             ntype		: 'error',
-                            msg         : 'Task Name not specified.',
+                            msg         : ORYX.I18N.forms.failNoTaskName,
                             title       : ''
 
                         });
@@ -162,7 +162,7 @@ ORYX.Plugins.FormEditing = Clazz.extend({
                     ORYX.Config.FACADE.raiseEvent({
                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                         ntype		: 'error',
-                        msg         : 'Selected node is not User Task.',
+                        msg         : ORYX.I18N.forms.failNoUserTask,
                         title       : ''
 
                     });
@@ -173,7 +173,7 @@ ORYX.Plugins.FormEditing = Clazz.extend({
             ORYX.Config.FACADE.raiseEvent({
                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                 ntype		: 'error',
-                msg         : 'No task selected.',
+                msg         : ORYX.I18N.forms.failNoTaskSelected,
                 title       : ''
 
             });
@@ -187,7 +187,7 @@ ORYX.Plugins.FormEditing = Clazz.extend({
                 ORYX.Config.FACADE.raiseEvent({
                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                     ntype		: 'error',
-                    msg         : 'Invalid number of nodes selected..',
+                    msg         : ORYX.I18N.forms.invalidNumberNodes,
                     title       : ''
 
                 });
@@ -206,7 +206,7 @@ ORYX.Plugins.FormEditing = Clazz.extend({
                         ORYX.Config.FACADE.raiseEvent({
                             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                             ntype		: 'error',
-                            msg         : 'Task Name not specified.',
+                            msg         : ORYX.I18N.forms.failNoTaskName,
                             title       : ''
 
                         });
@@ -215,7 +215,7 @@ ORYX.Plugins.FormEditing = Clazz.extend({
                     ORYX.Config.FACADE.raiseEvent({
                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                         ntype		: 'error',
-                        msg         : 'Selected node is not User Task.',
+                        msg         : ORYX.I18N.forms.failNoUserTask,
                         title       : ''
 
                     });
@@ -225,7 +225,7 @@ ORYX.Plugins.FormEditing = Clazz.extend({
             ORYX.Config.FACADE.raiseEvent({
                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                 ntype		: 'error',
-                msg         : 'No task selected.',
+                msg         : ORYX.I18N.forms.failNoTaskSelected,
                 title       : ''
 
             });
@@ -244,7 +244,7 @@ ORYX.Plugins.FormEditing = Clazz.extend({
             ORYX.Config.FACADE.raiseEvent({
                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                 ntype		: 'error',
-                msg         : 'Process Id not specified.',
+                msg         : ORYX.I18N.forms.failProcIdUndef,
                 title       : ''
 
             });
@@ -258,7 +258,7 @@ ORYX.Plugins.FormEditing = Clazz.extend({
                 this.facade.raiseEvent({
                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                     ntype		: 'success',
-                    msg         : 'Successfully generated process and task form templates.',
+                    msg         : ORYX.I18N.forms.successGenProcAndTask,
                     title       : ''
 
                 });
@@ -276,7 +276,7 @@ ORYX.Plugins.FormEditing = Clazz.extend({
                 this.facade.raiseEvent({
                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                     ntype		: 'error',
-                    msg         : '<p>Failed to generate process and task form templates.</p>',
+                    msg         : ORYX.I18N.forms.failGenProcAndTask,
                     title       : ''
                 });
             }.createDelegate(this),

@@ -1003,4 +1003,125 @@ if(!ORYX.I18N.BPMN2YAWLMapper) ORYX.I18N.BPMN2YAWLMapper = {};
 ORYX.I18N.BPMN2YAWLMapper.group = '<i18n:message key="ORYX.I18N.BPMN2YAWLMapper.group">Export</i18n:message>';
 ORYX.I18N.BPMN2YAWLMapper.name = '<i18n:message key="ORYX.I18N.BPMN2YAWLMapper.name">YAWL Export</i18n:message>';
 ORYX.I18N.BPMN2YAWLMapper.desc = '<i18n:message key="ORYX.I18N.BPMN2YAWLMapper.desc">Map this diagram to YAWL and export it, please ensure \"BPMN Subset for mapping to YAWL\" is loaded</i18n:message>';
+
+if(!ORYX.I18N.LocalHistory) ORYX.I18N.LocalHistory = {};
+
+ORYX.I18N.LocalHistory.display='<i18n:message key="ORYX.I18N.LocalHistory.display">Display Local History</i18n:message>';
+ORYX.I18N.LocalHistory.display_desc='<i18n:message key="ORYX.I18N.LocalHistory.display_desc">Display Local History</i18n:message>';
+ORYX.I18N.LocalHistory.clear='<i18n:message key="ORYX.I18N.LocalHistory.clear">Clear Local History</i18n:message>';
+ORYX.I18N.LocalHistory.clear_desc='<i18n:message key="ORYX.I18N.LocalHistory.clear_desc">Clear Local History</i18n:message>';
+ORYX.I18N.LocalHistory.config='<i18n:message key="ORYX.I18N.LocalHistory.config">Configure Snaphot Interval</i18n:message>';
+ORYX.I18N.LocalHistory.config_desc='<i18n:message key="ORYX.I18N.LocalHistory.config_desc">Configure Snaphot Interval</i18n:message>';
+ORYX.I18N.LocalHistory.enable='<i18n:message key="ORYX.I18N.LocalHistory.enable">Enable Local History</i18n:message>';
+ORYX.I18N.LocalHistory.enable_desc='<i18n:message key="ORYX.I18N.LocalHistory.enable_desc">Enable Local History</i18n:message>';
+ORYX.I18N.LocalHistory.disable='<i18n:message key="ORYX.I18N.LocalHistory.disable">Disable Local History</i18n:message>';
+ORYX.I18N.LocalHistory.disable_desc='<i18n:message key="ORYX.I18N.LocalHistory.disable_desc">Disable Local History</i18n:message>';
+
+if(!ORYX.I18N.LocalHistory.headertxt) ORYX.I18N.LocalHistory.headertxt = {};
+
+ORYX.I18N.LocalHistory.headertxt.id='<i18n:message key="ORYX.I18N.LocalHistory.headertxt.id">Id</i18n:message>';
+ORYX.I18N.LocalHistory.headertxt.name='<i18n:message key="ORYX.I18N.LocalHistory.headertxt.name">Name</i18n:message>';
+ORYX.I18N.LocalHistory.headertxt.Package='<i18n:message key="ORYX.I18N.LocalHistory.headertxt.Package">Package</i18n:message>';
+ORYX.I18N.LocalHistory.headertxt.Version='<i18n:message key="ORYX.I18N.LocalHistory.headertxt.Version">Version</i18n:message>';
+ORYX.I18N.LocalHistory.headertxt.TimeStamp='<i18n:message key="ORYX.I18N.LocalHistory.headertxt.TimeStamp">Time Stamp</i18n:message>';
+ORYX.I18N.LocalHistory.headertxt.ProcessImage='<i18n:message key="ORYX.I18N.LocalHistory.headertxt.ProcessImage">Process Image</i18n:message>';
+ORYX.I18N.LocalHistory.headertxt.ProcessImage_NoAvailable='<i18n:message key="ORYX.I18N.LocalHistory.headertxt.ProcessImage.NoAvailable"><center>Process image not available.</center></i18n:message>';
+
+if(!ORYX.I18N.LocalHistory.localHistoryPanel) ORYX.I18N.LocalHistory.localHistoryPanel = {};
+ORYX.I18N.LocalHistory.localHistoryPanel.title='<i18n:message key="ORYX.I18N.LocalHistory.localHistoryPanel.title"><center>Select Process Id and click \"Restore\" to restore.</center></i18n:message>';
+
+
+if(!ORYX.I18N.LocalHistory.LocalHistoryView) ORYX.I18N.LocalHistory.LocalHistoryView = {};
+ORYX.I18N.LocalHistory.LocalHistoryView='<i18n:message key="ORYX.I18N.LocalHistory.LocalHistoryView">Local History View</i18n:message>';
+ORYX.I18N.LocalHistory.LocalHistoryView.restore='<i18n:message key="ORYX.I18N.LocalHistory.LocalHistoryView.restore">Restore</i18n:message>';
+ORYX.I18N.LocalHistory.LocalHistoryView.invalidProcessInfo='<i18n:message key="ORYX.I18N.LocalHistory.LocalHistoryView.invalidProcessInfo">Invalid Process info. Unable to restore.</i18n:message>';
+ORYX.I18N.LocalHistory.LocalHistoryView.msg='<i18n:message key="ORYX.I18N.LocalHistory.LocalHistoryView.msg">Please select a process id.</i18n:message>';
+
+ORYX.I18N.LocalHistory.clearLocalHistoryMsg='<i18n:message key="ORYX.I18N.LocalHistory.clearLocalHistory.msg">Local History has been cleared.</i18n:message>';
+ORYX.I18N.LocalHistory.addQuotaexceed='<i18n:message key="ORYX.I18N.LocalHistory.addQuotaexceed">Local History quota exceeded. Clearing local history.</i18n:message>';
+ORYX.I18N.LocalHistory.historyDisabled='<i18n:message key="ORYX.I18N.LocalHistory.historyDisabled">Local History has been disabled.</i18n:message>';
+ORYX.I18N.LocalHistory.historyEnabled='<i18n:message key="ORYX.I18N.LocalHistory.historyEnabled">Local History has been enabled.</i18n:message>';
+ORYX.I18N.LocalHistory.intervalUnits='<i18n:message key="ORYX.I18N.LocalHistory.intervalUnits">Interval units</i18n:message>';
+ORYX.I18N.LocalHistory.ConfigureSnapshotInterval='<i18n:message key="ORYX.I18N.LocalHistory.ConfigureSnapshotInterval">Configure Snapshot Interval</i18n:message>';
+ORYX.I18N.LocalHistory.UpdatedSnapshotInterval='<i18n:message key="ORYX.I18N.LocalHistory.UpdatedSnapshotInterval">Updated Snapshot Interval</i18n:message>';
+ORYX.I18N.LocalHistory.InvalidInput='<i18n:message key="ORYX.I18N.LocalHistory.InvalidInput">Invalid input specified</i18n:message>';
+
+if(!ORYX.I18N.theme) ORYX.I18N.theme = {};
+ORYX.I18N.theme.Apply='<i18n:message key="ORYX.I18N.theme.Apply">Apply</i18n:message>';
+ORYX.I18N.theme.ColorTheme='<i18n:message key="ORYX.I18N.theme.ColorTheme">Color Theme</i18n:message>';
+ORYX.I18N.theme.invalidColorTheme='<i18n:message key="ORYX.I18N.theme.invalidColorTheme">Invalid Color Theme data.</i18n:message>';
+ORYX.I18N.theme.errorApplying='<i18n:message key="ORYX.I18N.theme.errorApplying">Error applying Color Theme</i18n:message>';
+
+if(!ORYX.I18N.forms) ORYX.I18N.forms = {};
+ORYX.I18N.forms.generateTaskForm='<i18n:message key="ORYX.I18N.forms.generateTaskForm">Generate Task Form</i18n:message>';
+ORYX.I18N.forms.generateTaskForm_desc='<i18n:message key="ORYX.I18N.forms.generateTaskForm_desc">Generate Task Form</i18n:message>';
+ORYX.I18N.forms.generateAllForms='<i18n:message key="ORYX.I18N.forms.generateAllForms">Generate all Forms</i18n:message>';
+ORYX.I18N.forms.generateAllForms_desc='<i18n:message key="ORYX.I18N.forms.generateAllForms_desc">Generate all Forms</i18n:message>';
+ORYX.I18N.forms.invalidNumberNodes='<i18n:message key="ORYX.I18N.forms.invalidNumberNodes">Invalid number of nodes selected..</i18n:message>';
+ORYX.I18N.forms.successGenTask='<i18n:message key="ORYX.I18N.forms.successGenTask">Successfully generated task form template.</i18n:message>';
+ORYX.I18N.forms.failGenTask='<i18n:message key="ORYX.I18N.forms.failGenTask"><p>Failed to generate task form template.</p></i18n:message>';
+ORYX.I18N.forms.failNoTaskName='<i18n:message key="ORYX.I18N.forms.failNoTaskName">Task Name not specified.</i18n:message>';
+ORYX.I18N.forms.failNoUserTask='<i18n:message key="ORYX.I18N.forms.failNoUserTask">Selected node is not User Task.</i18n:message>';
+ORYX.I18N.forms.failNoTaskSelected='<i18n:message key="ORYX.I18N.forms.failNoTaskSelected">No task selected.</i18n:message>';
+ORYX.I18N.forms.failProcIdUndef='<i18n:message key="ORYX.I18N.forms.failProcIdUndef">Process Id not specified.</i18n:message>';
+ORYX.I18N.forms.successGenProcAndTask='<i18n:message key="ORYX.I18N.forms.successGenProcAndTask">Successfully generated process and task form templates</i18n:message>';
+ORYX.I18N.forms.failGenProcAndTask='<i18n:message key="ORYX.I18N.forms.failGenProcAndTask"><p>Failed to generate process and task form templates.</p></i18n:message>';
+
+
+if(!ORYX.I18N.view) ORYX.I18N.view = {};
+ORYX.I18N.view.showFullScreen='<i18n:message key="ORYX.I18N.view.showFullScreen">Show in full screen</i18n:message>';
+ORYX.I18N.view.showFullScreen_desc='<i18n:message key="ORYX.I18N.view.showFullScreen_desc">Show in full screen mode</i18n:message>';
+ORYX.I18N.view.failShowFullScreen='<i18n:message key="ORYX.I18N.view.failShowFullScreen">Browser does not support full screen mode.</i18n:message>';
+
+ORYX.I18N.view.shareProcessImg='<i18n:message key="ORYX.I18N.view.shareProcessImg">Share Process Image</i18n:message>';
+ORYX.I18N.view.shareProcessImg_desc='<i18n:message key="ORYX.I18N.view.shareProcessImg_desc">Share Process Image</i18n:message>';
+ORYX.I18N.view.shareProcessPDF='<i18n:message key="ORYX.I18N.view.shareProcessPDF">Share Process PDF</i18n:message>';
+ORYX.I18N.view.shareProcessPDF_desc='<i18n:message key="ORYX.I18N.view.shareProcessPDF_desc">Share Process PDF</i18n:message>';
+ORYX.I18N.view.importFromBPMN2='<i18n:message key="ORYX.I18N.view.importFromBPMN2">Import from BPMN2</i18n:message>';
+ORYX.I18N.view.importFromBPMN2_desc='<i18n:message key="ORYX.I18N.view.importFromBPMN2_desc">Import from BPMN2</i18n:message>';
+ORYX.I18N.view.importFromJSON='<i18n:message key="ORYX.I18N.view.importFromJSON">Import from JSON</i18n:message>';
+ORYX.I18N.view.importFromJSON_desc='<i18n:message key="ORYX.I18N.view.importFromJSON_desc">Import from existing JSON</i18n:message>';
+ORYX.I18N.view.downloadProcPDF='<i18n:message key="ORYX.I18N.view.downloadProcPDF">Download Process PDF</i18n:message>';
+ORYX.I18N.view.downloadProcPDF_desc='<i18n:message key="ORYX.I18N.view.downloadProcPDF_desc">Download Process PDF</i18n:message>';
+ORYX.I18N.view.downloadProcPNG='<i18n:message key="ORYX.I18N.view.downloadProcPNG">Download Process PNG</i18n:message>';
+ORYX.I18N.view.downloadProcPNG_desc='<i18n:message key="ORYX.I18N.view.downloadProcPNG_desc">Download Process PNG</i18n:message>';
+ORYX.I18N.view.viewProcSources='<i18n:message key="ORYX.I18N.view.viewProcSources">View Process Sources</i18n:message>';
+ORYX.I18N.view.viewProcSources_desc='<i18n:message key="ORYX.I18N.view.viewProcSources_desc">View Process Sources</i18n:message>';
+ORYX.I18N.view.importFromBPMN2ErrorCheckLogs='<i18n:message key="ORYX.I18N.view.importFromBPMN2ErrorCheckLogs"><p>Check server logs for more details.</p></i18n:message>';
+ORYX.I18N.view.importFromBPMN2Error='<i18n:message key="ORYX.I18N.view.importFromBPMN2Error"><p>Failed to import BPMN2</p></i18n:message>';
+ORYX.I18N.view.creatingEmbeddableProc='<i18n:message key="ORYX.I18N.view.creatingEmbeddableProc">Creating Embeddable Process...</i18n:message>';
+ORYX.I18N.view.enbedableProc='<i18n:message key="ORYX.I18N.view.enbedableProc">Embeddable Process</i18n:message>';
+ORYX.I18N.view.enbedableProcFailCreate='<i18n:message key="ORYX.I18N.view.enbedableProcFailCreate">Failed to create embeddable process code</i18n:message>';
+ORYX.I18N.view.importFromJSONError='<i18n:message key="ORYX.I18N.view.importFromJSONError">Failed to import JSON</i18n:message>';
+ORYX.I18N.view.creatingProcPDF='<i18n:message key="ORYX.I18N.view.creatingProcPDF">Creating the process PDF</i18n:message>';
+ORYX.I18N.view.processImgPDF='<i18n:message key="ORYX.I18N.view.processImgPDF">Process Image PDF</i18n:message>';
+ORYX.I18N.view.processPDFurl='<i18n:message key="ORYX.I18N.view.processPDFurl">Process PDF URL</i18n:message>';
+ORYX.I18N.view.processPDFFail='<i18n:message key="ORYX.I18N.view.processPDFFail">Failed to create the process PDF</i18n:message>';
+ORYX.I18N.view.processCreatingImg='<i18n:message key="ORYX.I18N.view.processCreatingImg">Creating the process image...</i18n:message>';
+ORYX.I18N.view.processImgUrl='<i18n:message key="ORYX.I18N.view.processImgUrl">Process Image URL</i18n:message>';
+ORYX.I18N.view.processImgFail='<i18n:message key="ORYX.I18N.view.processImgFail">Failed to create the process image</i18n:message>';
+ORYX.I18N.view.versionsFail='<i18n:message key="ORYX.I18N.view.versionsFail">Failed to retrieve process version information</i18n:message>';
+ORYX.I18N.view.versionsNotfound='<i18n:message key="ORYX.I18N.view.versionsNotfound">Unable to find process versions</i18n:message>';
+ORYX.I18N.view.versionsSelect='<i18n:message key="ORYX.I18N.view.versionsSelect">Select process version</i18n:message>';
+ORYX.I18N.view.creatingDiff='<i18n:message key="ORYX.I18N.view.creatingDiff">Creating diff</i18n:message>';
+ORYX.I18N.view.failRetrieveVersionsSource='<i18n:message key="ORYX.I18N.view.failRetrieveVersionsSource">Failed to retrieve process version source</i18n:message>';
+ORYX.I18N.view.convertingToBPMN2Fail='<i18n:message key="ORYX.I18N.view.convertingToBPMN2Fail">Converting to BPMN2 failed</i18n:message>';
+ORYX.I18N.view.compareBPMN2PReviousVersions='<i18n:message key="ORYX.I18N.view.compareBPMN2PReviousVersions">Compare process BPMN2 with previous versions</i18n:message>';
+ORYX.I18N.view.replaceExistingModel='<i18n:message key="ORYX.I18N.view.replaceExistingModel">Replace existing model?</i18n:message>';
+ORYX.I18N.view.importSuccess='<i18n:message key="ORYX.I18N.view.importSuccess">Successfully imported</i18n:message>';
+ORYX.I18N.view.unableImportProvided='<i18n:message key="ORYX.I18N.view.unableImportProvided">Unable to import provided</i18n:message>';
+ORYX.I18N.view.processSVGSource='<i18n:message key="ORYX.I18N.view.processSVGSource">Process SVG Source</i18n:message>';
+ORYX.I18N.view.erdfSource='<i18n:message key="ORYX.I18N.view.erdfSource">ERDF Source</i18n:message>';
+ORYX.I18N.view.jsonSource='<i18n:message key="ORYX.I18N.view.jsonSource">JSON Source</i18n:message>';
+ORYX.I18N.view.bpmn2Source='<i18n:message key="ORYX.I18N.view.bpmn2Source">BPMN2 Source</i18n:message>';
+ORYX.I18N.view.saveToFile='<i18n:message key="ORYX.I18N.view.saveToFile">Save to file</i18n:message>';
+ORYX.I18N.view.downloadBPMN2='<i18n:message key="ORYX.I18N.view.downloadBPMN2">Download BPMN2</i18n:message>';
+ORYX.I18N.view.processSources='<i18n:message key="ORYX.I18N.view.processSources">Process Sources</i18n:message>';
+
+
+
+
+
+
+
 </script>
