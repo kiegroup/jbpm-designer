@@ -25,7 +25,7 @@ ORYX.Plugins.Theme = Clazz.extend({
                         'group': 'colorpickergroup',
                         dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/colorpicker.gif",
                         'icon': ORYX.BASE_FILE_PATH + "images/colorize.png",
-                        'description': "Apply " + themeNamesArray[i] + " Color Theme",
+                        'description':ORYX.I18N.theme.Apply +' '+ themeNamesArray[i] + " "+ ORYX.I18N.theme.ColorTheme,
                         'index': 10,
                         'minShape': 0,
                         'maxShape': 0,
@@ -63,7 +63,7 @@ ORYX.Plugins.Theme = Clazz.extend({
                        this.facade.raiseEvent({
                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                            ntype		: 'error',
-                           msg         : 'Invalid Color Theme data.',
+                           msg         : ORYX.I18N.theme.invalidColorTheme,
                            title       : ''
                        });
     	   			}
@@ -71,7 +71,7 @@ ORYX.Plugins.Theme = Clazz.extend({
                    this.facade.raiseEvent({
                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                        ntype		: 'error',
-                       msg         : 'Error applying Color Theme: ' + e,
+                       msg         : ORYX.I18N.theme.errorApplying +": "+ e,
                        title       : ''
                    });
     	   		}
@@ -80,7 +80,7 @@ ORYX.Plugins.Theme = Clazz.extend({
                 this.facade.raiseEvent({
                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                     ntype		: 'error',
-                    msg         : 'Error applying Color Theme.',
+                    msg         : ORYX.I18N.theme.errorApplying+". ",
                     title       : ''
                 });
             },

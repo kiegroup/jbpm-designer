@@ -143,7 +143,7 @@ ORYX.Plugins.View = {
         if(ORYX.READONLY != true) {
         /* Register full screen to model */
         this.facade.offer({
-            'name':'Show in full screen',
+            'name':ORYX.I18N.view.showFullScreen,
             'functionality': function(context) {
                 var docEle = parent.document.getElementById(ORYX.EDITORID);
                 if(docEle.requestFullScreen) {
@@ -156,7 +156,7 @@ ORYX.Plugins.View = {
                     ORYX.EDITOR._pluginFacade.raiseEvent({
                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                         ntype		: 'error',
-                        msg         : 'Browser does not support full screen mode.',
+                        msg         : ORYX.I18N.view.failShowFullScreen,
                         title       : ''
 
                     });
@@ -164,7 +164,7 @@ ORYX.Plugins.View = {
             }.bind(this),
             'group': 'fullscreengroup',
             'icon': ORYX.BASE_FILE_PATH + "images/fullscreen.png",
-            'description': 'Show in full screen mode',
+            'description': ORYX.I18N.view.showFullScreen_desc,
             'index': 2,
             'minShape': 0,
             'maxShape': 0,
@@ -183,12 +183,12 @@ ORYX.Plugins.View = {
 
         /* Register sharing to model 1*/
         this.facade.offer({
-            'name': "Share Process Image",
+            'name': ORYX.I18N.view.shareProcessImg,
             'functionality': this.shareProcessImage.bind(this),
             'group': 'sharegroup',
             'icon': ORYX.BASE_FILE_PATH + "images/share.png",
             dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.png",
-            'description': "Share Process Image",
+            'description': ORYX.I18N.view.shareProcessImg_desc,
             'index': 1,
             'minShape': 0,
             'maxShape': 0,
@@ -206,12 +206,12 @@ ORYX.Plugins.View = {
 
         /* Register sharing to model 2*/
         this.facade.offer({
-            'name': "Share Process PDF",
+            'name': ORYX.I18N.view.shareProcessPDF,
             'functionality': this.shareProcessPdf.bind(this),
             'group': 'sharegroup',
             'icon': ORYX.BASE_FILE_PATH + "images/share.png",
             dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.png",
-            'description': "Share Process PDF",
+            'description': ORYX.I18N.view.shareProcessPDF_desc,
             'index': 2,
             'minShape': 0,
             'maxShape': 0,
@@ -229,12 +229,12 @@ ORYX.Plugins.View = {
 
         /* Register import from BPMN2*/
         this.facade.offer({
-            'name': "Import from BPMN2",
+            'name': ORYX.I18N.view.importFromBPMN2,
             'functionality': this.importFromBPMN2.bind(this),
             'group': 'importgroup',
             'icon': ORYX.BASE_FILE_PATH + "images/import.png",
             dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/import.png",
-            'description': "Import from existing BPMN2",
+            'description': ORYX.I18N.view.importFromBPMN2_desc,
             'index': 1,
             'minShape': 0,
             'maxShape': 0,
@@ -252,12 +252,12 @@ ORYX.Plugins.View = {
 
         /* Register import from JSON*/
         this.facade.offer({
-            'name': "Import from JSON",
+            'name': ORYX.I18N.view.importFromJSON,
             'functionality': this.importFromJSON.bind(this),
             'group': 'importgroup',
             'icon': ORYX.BASE_FILE_PATH + "images/import.png",
             dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/import.png",
-            'description': "Import from existing JSON",
+            'description': ORYX.I18N.view.importFromJSON_desc,
             'index': 2,
             'minShape': 0,
             'maxShape': 0,
@@ -407,12 +407,12 @@ ORYX.Plugins.View = {
 //        });
 
         this.facade.offer({
-            'name': "Download Process PDF",
+            'name': ORYX.I18N.view.downloadProcPDF,
             'functionality': this.showAsPDF.bind(this),
             'group': 'sharegroup',
             'icon': ORYX.BASE_FILE_PATH + "images/share.png",
             dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.png",
-            'description': "Download Process PDF",
+            'description': ORYX.I18N.view.downloadProcPDF_desc,
             'index': 4,
             'minShape': 0,
             'maxShape': 0,
@@ -429,12 +429,12 @@ ORYX.Plugins.View = {
         });
 
         this.facade.offer({
-            'name': "Download Process PNG",
+            'name': ORYX.I18N.view.downloadProcPNG,
             'functionality': this.showAsPNG.bind(this),
             'group': 'sharegroup',
             'icon': ORYX.BASE_FILE_PATH + "images/share.png",
             dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.png",
-            'description': "Downlod Process PNG",
+            'description': ORYX.I18N.view.downloadProcPNG_desc,
             'index': 3,
             'minShape': 0,
             'maxShape': 0,
@@ -451,12 +451,12 @@ ORYX.Plugins.View = {
         });
 
         this.facade.offer({
-            'name': "View Process Sources",
+            'name': ORYX.I18N.view.viewProcSources,
             'functionality': this.showProcessSources.bind(this),
             'group': 'sharegroup',
             'icon': ORYX.BASE_FILE_PATH + "images/share.png",
             dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.png",
-            'description': "View Process Sources",
+            'description': ORYX.I18N.view.viewProcSources_desc,
             'index': 5,
             'minShape': 0,
             'maxShape': 0,
@@ -564,7 +564,7 @@ ORYX.Plugins.View = {
                                     this.facade.raiseEvent({
                                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                         ntype		: 'error',
-                                        msg         : '<p>Failed to import BPMN2.</p><p>Check server logs for more details.</p>',
+                                        msg         : ORYX.I18N.view.importFromBPMN2Error+ ORYX.I18N.view.importFromBPMN2ErrorCheckLogs,
                                         title       : ''
                                     });
                                     dialog.hide();
@@ -575,7 +575,7 @@ ORYX.Plugins.View = {
                                         this.facade.raiseEvent({
                                             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                             ntype		: 'error',
-                                            msg         : '<p>Failed to import BPMN2:</p><p>' + e + '</p>',
+                                            msg         : ORYX.I18N.view.importFromBPMN2Error+'<p>' + e + '</p>',
                                             title       : ''
                                         });
                                     }
@@ -586,7 +586,7 @@ ORYX.Plugins.View = {
                                 this.facade.raiseEvent({
                                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                     ntype		: 'error',
-                                    msg         : '<p>Failed to import BPMN2.</p><p>Check server logs for more details.</p>',
+                                    msg         :  ORYX.I18N.view.importFromBPMN2Error+ ORYX.I18N.view.importFromBPMN2ErrorCheckLogs,
                                     title       : ''
                                 });
                                 dialog.hide();
@@ -689,7 +689,7 @@ ORYX.Plugins.View = {
                             this.facade.raiseEvent({
                                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                 ntype		: 'error',
-                                msg         : 'Failed to import JSON :\n' + e,
+                                msg         : ORYX.I18N.view.importFromJSONError+'\n' + e,
                                 title       : ''
 
                             });
@@ -697,7 +697,7 @@ ORYX.Plugins.View = {
                         dialog.hide();
                     }.bind(this)
                 },{
-                    text:ORYX.I18N.FromJSONSupport.close,
+                    text: ORYX.I18N.FromJSONSupport.close,
                     handler:function(){
                         dialog.hide();
                     }.bind(this)
@@ -729,7 +729,7 @@ ORYX.Plugins.View = {
         this.facade.raiseEvent({
             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
             ntype		: 'info',
-            msg         : 'Creating Embeddable Process...',
+            msg         : ORYX.I18N.view.creatingEmbeddableProc,
             title       : ''
 
         });
@@ -740,7 +740,7 @@ ORYX.Plugins.View = {
                 try {
                     var cf = new Ext.form.TextArea({
                         id:"sharedEmbeddableArea",
-                        fieldLabel:"Embeddable Process",
+                        fieldLabel:ORYX.I18N.view.enbedableProc,
                         width:400,
                         height:250,
                         value:request.responseText
@@ -751,7 +751,7 @@ ORYX.Plugins.View = {
                         id:'sharedEmbeddableURL',
                         height:250,
                         autoScroll:true,
-                        title:'Embeddable Process',
+                        title:ORYX.I18N.view.enbedableProc,
                         items: [cf]
                     });
                     win.show();
@@ -759,7 +759,7 @@ ORYX.Plugins.View = {
                     this.facade.raiseEvent({
                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                         ntype		: 'error',
-                        msg         : 'Failed to create embeddable process code: ' + e,
+                        msg         : ORYX.I18N.view.enbedableProcFailCreate+': ' + e,
                         title       : ''
 
                     });
@@ -769,7 +769,7 @@ ORYX.Plugins.View = {
                 this.facade.raiseEvent({
                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                     ntype		: 'error',
-                    msg         : 'Failed to create embeddable process code.',
+                    msg         : ORYX.I18N.view.enbedableProcFailCreate+'.',
                     title       : ''
 
                 });
@@ -790,7 +790,7 @@ ORYX.Plugins.View = {
         this.facade.raiseEvent({
             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
             ntype		: 'info',
-            msg         : 'Creating the process PDF...',
+            msg         : ORYX.I18N.view.creatingProcPDF,
             title       : ''
 
         });
@@ -804,7 +804,7 @@ ORYX.Plugins.View = {
                 try {
                     var cf = new Ext.form.TextArea({
                         id:"sharedPDFArea",
-                        fieldLabel:"Process Image PDF",
+                        fieldLabel:ORYX.I18N.view.processImgPDF,
                         width:400,
                         height:250,
                         value:request.responseText
@@ -816,7 +816,7 @@ ORYX.Plugins.View = {
                         height:250,
                         autoScroll:true,
                         layout: 'fit',
-                        title:'Process PDF URL',
+                        title: ORYX.I18N.view.processPDFurl,
                         items: [cf]
                     });
                     win.show();
@@ -824,7 +824,7 @@ ORYX.Plugins.View = {
                     this.facade.raiseEvent({
                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                         ntype		: 'error',
-                        msg          : 'Failed to create the process PDF: ' + e,
+                        msg          : ORYX.I18N.view.processPDFFail +': ' + e,
                         title        : ''
 
                     });
@@ -834,7 +834,7 @@ ORYX.Plugins.View = {
                 this.facade.raiseEvent({
                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                     ntype		: 'error',
-                    msg         : 'Failed to create the process PDF.',
+                    msg         : ORYX.I18N.view.processPDFFail+'.',
                     title       : ''
 
                 });
@@ -857,7 +857,7 @@ ORYX.Plugins.View = {
         this.facade.raiseEvent({
             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
             ntype		: 'info',
-            msg         : 'Creating the process image...',
+            msg         : ORYX.I18N.view.processCreatingImg,
             title       : ''
 
         });
@@ -871,7 +871,7 @@ ORYX.Plugins.View = {
                 try {
                     var cf = new Ext.form.TextArea({
                         id:"sharedImageArea",
-                        fieldLabel:"Process Image URL",
+                        fieldLabel:ORYX.I18N.view.processImgUrl,
                         width:400,
                         height:250,
                         value:request.responseText
@@ -883,7 +883,7 @@ ORYX.Plugins.View = {
                         height:250,
                         layout: 'fit',
                         autoScroll:true,
-                        title:'Process Image URL',
+                        title:ORYX.I18N.view.processImgUrl,
                         items: [cf]
                     });
                     win.show();
@@ -891,7 +891,7 @@ ORYX.Plugins.View = {
                     this.facade.raiseEvent({
                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                         ntype		: 'error',
-                        msg         : 'Failed to create the process image: ' + e,
+                        msg         : ORYX.I18N.view.processImgFail+': ' + e,
                         title       : ''
 
                     });
@@ -901,7 +901,7 @@ ORYX.Plugins.View = {
                 this.facade.raiseEvent({
                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                     ntype		: 'error',
-                    msg         : 'Failed to create the process image.',
+                    msg         : ORYX.I18N.view.processImgFail+'.',
                     title       : ''
 
                 });
@@ -947,7 +947,7 @@ ORYX.Plugins.View = {
                     this.facade.raiseEvent({
                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                         ntype		: 'error',
-                        msg         : 'Failed to retrieve process version information:\n' + e,
+                        msg         : ORYX.I18N.view.versionsFail+':\n' + e,
                         title       : ''
 
                     });
@@ -957,7 +957,7 @@ ORYX.Plugins.View = {
                 this.facade.raiseEvent({
                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                     ntype		: 'error',
-                    msg         : 'Failed to retrieve process version information.',
+                    msg         : ORYX.I18N.view.versionsFail+'.',
                     title       : ''
 
                 });
@@ -985,7 +985,7 @@ ORYX.Plugins.View = {
             this.facade.raiseEvent({
                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                 ntype		: 'error',
-                msg         : 'Unable to find process versions.',
+                msg         : ORYX.I18N.view.versionsNotfound+'.',
                 title       : 'Diff'
 
             });
@@ -1001,10 +1001,10 @@ ORYX.Plugins.View = {
             });
 
             var versionCombo = new Ext.form.ComboBox({
-                fieldLabel: 'Select process version',
+                fieldLabel: ORYX.I18N.view.versionsSelect,
                 labelStyle: 'width:180px',
                 hiddenName: 'version_name',
-                emptyText: 'Select process version...',
+                emptyText: ORYX.I18N.view.versionsSelect+'...',
                 store: versionStore,
                 displayField: 'name',
                 valueField: 'name',
@@ -1032,7 +1032,7 @@ ORYX.Plugins.View = {
                                                     this.facade.raiseEvent({
                                                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                                         ntype		: 'info',
-                                                        msg         : 'Creating diff...',
+                                                        msg         : ORYX.I18N.view.creatingDiff+'...',
                                                         title       : ''
 
                                                     });
@@ -1066,7 +1066,7 @@ ORYX.Plugins.View = {
                                                     this.facade.raiseEvent({
                                                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                                         ntype		: 'error',
-                                                        msg         : 'Failed to retrieve process version source:' + e,
+                                                        msg         : ORYX.I18N.view.failRetrieveVersionsSource+':' + e,
                                                         title       : ''
 
                                                     });
@@ -1076,7 +1076,7 @@ ORYX.Plugins.View = {
                                                 this.facade.raiseEvent({
                                                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                                     ntype		: 'error',
-                                                    msg         : 'Failed to retrieve process version source.',
+                                                    msg         : ORYX.I18N.view.failRetrieveVersionsSource+'.',
                                                     title       : ''
 
                                                 });
@@ -1092,7 +1092,7 @@ ORYX.Plugins.View = {
                                         this.facade.raiseEvent({
                                             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                             ntype		: 'error',
-                                            msg         : 'Converting to BPMN2 failed:' + e,
+                                            msg         : ORYX.I18N.view.convertingToBPMN2Fail+':' + e,
                                             title       : ''
 
                                         });
@@ -1102,7 +1102,7 @@ ORYX.Plugins.View = {
                                     this.facade.raiseEvent({
                                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                         ntype		: 'error',
-                                        msg         : 'Converting to BPMN2 failed.',
+                                        msg         : ORYX.I18N.view.convertingToBPMN2Fail+'.',
                                         title       : ''
 
                                     });
@@ -1140,7 +1140,7 @@ ORYX.Plugins.View = {
                 autoScroll: false,
                 plain:		true,
                 bodyStyle: 	'padding:5px;',
-                title: 		'Compare process BPMN2 with previous versions',
+                title: 		ORYX.I18N.view.compareBPMN2PReviousVersions,
                 height: 	410,
                 width:		550,
                 modal:		true,
@@ -1152,7 +1152,7 @@ ORYX.Plugins.View = {
                 tbar: [versionCombo],
                 buttons:[
                     {
-                        text : 'Close',
+                        text : ORYX.I18N.FromJSONSupport.close,
                         handler:function(){
                             this.diffDialog.hide();
                         }.bind(this)
@@ -1172,7 +1172,7 @@ ORYX.Plugins.View = {
         if (jsonString) {
             Ext.MessageBox.confirm(
                 'Import',
-                'Replace existing model?',
+                ORYX.I18N.view.replaceExistingModel,
                 function(btn){
                     if (btn == 'yes') {
                         this.facade.setSelection(this.facade.getCanvas().getChildShapes(true));
@@ -1189,7 +1189,7 @@ ORYX.Plugins.View = {
                             this.facade.raiseEvent({
                                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                 ntype		: 'success',
-                                msg         : 'Successfully imported ' + mtype,
+                                msg         : ORYX.I18N.view.importSuccess+' ' + mtype,
                                 title       : ''
 
                             });
@@ -1198,7 +1198,7 @@ ORYX.Plugins.View = {
                             this.facade.raiseEvent({
                                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                 ntype		: 'error',
-                                msg         : 'Unable to import provided ' + mtype,
+                                msg         : ORYX.I18N.view.unableImportProvided+' ' + mtype,
                                 title       : ''
 
                             });
@@ -1209,7 +1209,7 @@ ORYX.Plugins.View = {
                             this.facade.raiseEvent({
                                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                 ntype		: 'success',
-                                msg         : 'Successfully imported ' + mtype,
+                                msg         : ORYX.I18N.view.importSuccess+' ' + mtype,
                                 title       : ''
 
                             });
@@ -1219,7 +1219,7 @@ ORYX.Plugins.View = {
                             this.facade.raiseEvent({
                                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                 ntype		: 'error',
-                                msg         : 'Unable to import provided ' + mtype,
+                                msg         : ORYX.I18N.view.unableImportProvided+' ' + mtype,
                                 title       : ''
 
                             });
@@ -1364,7 +1364,7 @@ ORYX.Plugins.View = {
         var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false));
         var cf = new Ext.form.TextArea({
             id:"svgSourceTextArea",
-            fieldLabel:"SVG Source",
+            fieldLabel:ORYX.I18N.view.processSVGSource,
             value:formattedSvgDOM,
             autoScroll:true
         });
@@ -1374,10 +1374,10 @@ ORYX.Plugins.View = {
             id:'processSVGSource',
             height:550,
             layout: 'fit',
-            title:'Process SVG Source',
+            title:ORYX.I18N.view.processSVGSource,
             items: [cf],
             buttons:[{
-                text : 'Close',
+                text : ORYX.I18N.FromJSONSupport.close,
                 handler:function(){
                     win.close();
                     win = null;
@@ -1400,7 +1400,7 @@ ORYX.Plugins.View = {
         var processERDF = ORYX.EDITOR.getERDF();
         var cf = new Ext.form.TextArea({
             id:"erdfSourceTextArea",
-            fieldLabel:"ERDF Source",
+            fieldLabel:ORYX.I18N.view.erdfSource,
             value:processERDF,
             autoScroll:true,
             height:'80%'
@@ -1411,10 +1411,10 @@ ORYX.Plugins.View = {
             id:'processERDFSource',
             height:550,
             layout: 'fit',
-            title:'ERDF Source',
+            title:ORYX.I18N.view.erdfSource,
             items: [cf],
             buttons:[{
-                text : 'Close',
+                text : ORYX.I18N.FromJSONSupport.close,
                 handler:function(){
                     win.close();
                     win = null;
@@ -1437,7 +1437,7 @@ ORYX.Plugins.View = {
         var processJSON = ORYX.EDITOR.getSerializedJSON();
         var cf = new Ext.form.TextArea({
             id:"jsonSourceTextArea",
-            fieldLabel:"JSON Source",
+            fieldLabel:ORYX.I18N.view.jsonSource,
             value:processJSON,
             autoScroll:true
         });
@@ -1447,10 +1447,10 @@ ORYX.Plugins.View = {
             id:'processJSONSource',
             height:550,
             layout: 'fit',
-            title:'JSON Source',
+            title:ORYX.I18N.view.jsonSource,
             items: [cf],
             buttons:[{
-                text : 'Close',
+                text : ORYX.I18N.FromJSONSupport.close,
                 handler:function(){
                     win.close();
                     win = null;
@@ -1478,7 +1478,7 @@ ORYX.Plugins.View = {
                 try{
                     var cf = new Ext.form.TextArea({
                         id:"bpmnSourceTextArea",
-                        fieldLabel:"BPMN2 Source",
+                        fieldLabel:ORYX.I18N.view.bpmn2Source,
                         value:request.responseText,
                         autoScroll:true
                     });
@@ -1488,10 +1488,10 @@ ORYX.Plugins.View = {
                         id:'processBPMNSource',
                         height:550,
                         layout: 'fit',
-                        title:'BPMN2 Source',
+                        title:ORYX.I18N.view.bpmn2Source,
                         items: [cf],
                         buttons		: [{
-                            text: 'Save to file',
+                            text: ORYX.I18N.view.saveToFile,
                             handler: function(){
                                 var processJSON = ORYX.EDITOR.getSerializedJSON();
                                 var processName = jsonPath(processJSON.evalJSON(), "$.properties.processn");
@@ -1545,7 +1545,7 @@ ORYX.Plugins.View = {
                                 form.submit();
                             }
                         },{
-                            text : 'Close',
+                            text : ORYX.I18N.FromJSONSupport.close,
                             handler:function(){
                                 win.close();
                                 win = null;
@@ -1566,7 +1566,7 @@ ORYX.Plugins.View = {
                     ORYX.EDITOR._pluginFacade.raiseEvent({
                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                         ntype		: 'error',
-                        msg         : 'Converting to BPMN2 failed:' + e,
+                        msg         : ORYX.I18N.view.convertingToBPMN2Fail+':' + e,
                         title       : ''
 
                     });
@@ -1576,7 +1576,7 @@ ORYX.Plugins.View = {
                 ORYX.EDITOR._pluginFacade.raiseEvent({
                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                     ntype		: 'error',
-                    msg         : 'Converting to BPMN2 failed.',
+                    msg         : ORYX.I18N.view.convertingToBPMN2Fail+'.',
                     title       : ''
 
                 });
@@ -1718,7 +1718,7 @@ ORYX.Plugins.View = {
                     });
 
                     var dlBPMN2Button = new Ext.Button({
-                        text: 'Download BPMN2',
+                        text: ORYX.I18N.view.downloadBPMN2,
                         handler: function(){
                             var processJSON = ORYX.EDITOR.getSerializedJSON();
                             var processName = jsonPath(processJSON.evalJSON(), "$.properties.processn");
@@ -1778,7 +1778,7 @@ ORYX.Plugins.View = {
                         id:'processSources',
                         height:550,
                         layout: 'fit',
-                        title:'Process Sources',
+                        title: ORYX.I18N.view.processSources,
                         items: [sourcesPanel],
                         tbar: [
                             dlBPMN2Button
@@ -1796,7 +1796,7 @@ ORYX.Plugins.View = {
                     ORYX.EDITOR._pluginFacade.raiseEvent({
                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                         ntype		: 'error',
-                        msg         : 'Converting to BPMN2 failed:' + e,
+                        msg         : ORYX.I18N.view.convertingToBPMN2Fail+':' + e,
                         title       : ''
 
                     });
@@ -1806,7 +1806,7 @@ ORYX.Plugins.View = {
                 ORYX.EDITOR._pluginFacade.raiseEvent({
                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                     ntype		: 'error',
-                    msg         : 'Converting to BPMN2 failed.',
+                    msg         : ORYX.I18N.view.convertingToBPMN2Fail+'.',
                     title       : ''
 
                 });
