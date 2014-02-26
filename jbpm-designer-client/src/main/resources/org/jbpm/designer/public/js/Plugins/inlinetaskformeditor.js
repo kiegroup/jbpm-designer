@@ -18,9 +18,9 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
 
     chooseFormEditor: function(options) {
         Ext.Msg.show({
-            title : "Form Editor.",
-            msg : "Select which Form Editor to use:",
-            buttons : {yes : 'Graphical Modeler', no : 'Markup Editor', cancel : 'Cancel'},
+            title : ORYX.I18N.inlineTaskFormEditor.formEditor,
+            msg : ORYX.I18N.inlineTaskFormEditor.selectForm,
+            buttons : {yes : ORYX.I18N.inlineTaskFormEditor.graphicalModeler, no : ORYX.I18N.inlineTaskFormEditor.markupEditor, cancel : ORYX.I18N.Dictionary.cancel},
             icon : Ext.MessageBox.QUESTION,
             fn : function(btn) {
                 if(btn == 'yes'){
@@ -57,7 +57,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                                     this.facade.raiseEvent({
                                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                         ntype		: 'error',
-                                        msg         : 'Error initiating Form Editor: ' + e,
+                                        msg         : ORYX.I18N.inlineTaskFormEditor.errorInitiatingEditor + ': ' + e,
                                         title       : ''
 
                                     });
@@ -67,7 +67,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                                 this.facade.raiseEvent({
                                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                     ntype		: 'error',
-                                    msg         : 'Error initiating Form Editor',
+                                    msg         : ORYX.I18N.inlineTaskFormEditor.errorInitiatingEditor+'.',
                                     title       : ''
 
                                 });
@@ -84,7 +84,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                         this.facade.raiseEvent({
                             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                             ntype		: 'error',
-                            msg         : 'Error initiating Form Widgets: ' + e,
+                            msg         : ORYX.I18N.inlineTaskFormEditor.errorInitiatingWidgets+': ' + e,
                             title       : ''
 
                         });
@@ -94,7 +94,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                     this.facade.raiseEvent({
                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                         ntype		: 'error',
-                        msg         : 'Error initiating Form Widgets',
+                        msg         : ORYX.I18N.inlineTaskFormEditor.errorInitiatingWidgets+'.',
                         title       : ''
 
                     });
@@ -109,7 +109,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
             this.facade.raiseEvent({
                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                 ntype		: 'error',
-                msg         : 'Task Name not specified.',
+                msg         : ORYX.I18N.inlineTaskFormEditor.taskNameNotSpecified,
                 title       : ''
 
             });
@@ -142,7 +142,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
             fieldLabel: 'Insert form widget',
             labelStyle: 'width:240px',
             hiddenName: 'widget_name',
-            emptyText: 'Insert form widget...',
+            emptyText: ORYX.I18N.inlineTaskFormEditor.insertFormWidget+'...',
             store: widgetStore,
             displayField: 'name',
             valueField: 'name',
@@ -164,7 +164,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                                         this.facade.raiseEvent({
                                             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                             ntype		: 'error',
-                                            msg         : 'Error inserting Form Widget: ' + e,
+                                            msg         : ORYX.I18N.inlineTaskFormEditor.errorInsertingFormWidget+': ' + e,
                                             title       : ''
 
                                         });
@@ -174,7 +174,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                                     this.facade.raiseEvent({
                                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                         ntype		: 'error',
-                                        msg         : 'Error inserting Form Widget',
+                                        msg         : ORYX.I18N.inlineTaskFormEditor.errorInsertingFormWidget+'.',
                                         title       : ''
 
                                     });
@@ -190,7 +190,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                             this.facade.raiseEvent({
                                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                 ntype		: 'error',
-                                msg         : 'Widget insertion is only possible in Source Mode',
+                                msg         : ORYX.I18N.inlineTaskFormEditor.widgetInsertionSourceMode,
                                 title       : ''
 
                             });
@@ -247,7 +247,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
             id          : 'maineditorwindow',
             layout		: 'fit',
             autoCreate	: true,
-            title		: 'Editing Form: ' + tn + ' - Press [Ctrl-Z] to activate auto-completion' ,
+            title		: ORYX.I18N.inlineTaskFormEditor.editingForm + tn + ' - '+ORYX.I18N.inlineTaskFormEditor.completionInst,
             height		: 570,
             width		: 930,
             modal		: true,
@@ -269,12 +269,12 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                 }.bind(this)
             },
             buttons		: [{
-                text: 'Save',
+                text: ORYX.I18N.Dictionary.Save,
                 handler: function(){
                     this.facade.raiseEvent({
                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                         ntype		: 'info',
-                        msg         : 'Storing Task Form',
+                        msg         : ORYX.I18N.inlineTaskFormEditor.storingForm,
                         title       : ''
 
                     });
@@ -298,7 +298,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                                 this.facade.raiseEvent({
                                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                     ntype		: 'error',
-                                    msg         : 'Error saving Task Form: ' + e,
+                                    msg         : ORYX.I18N.inlineTaskFormEditor.errorSavingForm + ': ' + e,
                                     title       : ''
 
                                 });
@@ -308,7 +308,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                             this.facade.raiseEvent({
                                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                 ntype		: 'error',
-                                msg         : 'Error saving Task Form',
+                                msg         : ORYX.I18N.inlineTaskFormEditor.errorSavingForm+'.',
                                 title       : ''
 
                             });
@@ -325,7 +325,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                 }.bind(this)
             },
                 {
-                    text: 'Cancel',
+                    text: ORYX.I18N.Dictionary.cancel,
                     handler: function(){
                         itfe.close();
                         itfe = null;

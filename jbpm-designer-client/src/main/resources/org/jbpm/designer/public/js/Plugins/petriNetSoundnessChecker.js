@@ -107,11 +107,11 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
         arguments.callee.$.construct.apply(this, arguments);
                 
         this.facade.offer({
-            'name': "Check soundness",//ORYX.I18N.BPMN2PNConverter.name,
+            'name':ORYX.I18N.PetriNetSoundness.checkSoundness,//ORYX.I18N.BPMN2PNConverter.name,
             'functionality': this.showCheckerWindow.bind(this),
             'group': "Verification",
             'icon': ORYX.BASE_FILE_PATH + "images/checker_validation.png",
-            'description': "Checks current Petri net for different soundness criteria.",
+            'description': ORYX.I18N.PetriNetSoundness.checkSoundness_desc,
             'index': 3,
             'minShape': 0,
             'maxShape': 0
@@ -231,7 +231,7 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
         
         var DeadLocksNode = Ext.extend(CheckNode, {
             constructor: function(config) {
-                config.qtip = '<b>Termination Criteria</b>: Makes sure that any process instance that starts in the initial state will eventually reach the final state. If any dead locks are detected, click to show one counter example.';
+                config.qtip = ORYX.I18N.PetriNetSoundness.tipTerminationCriteria;
             
                 DeadLocksNode.superclass.constructor.apply(this, arguments);
             },
@@ -247,13 +247,13 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
             update: function(deadLocks){
                 this.deadLocks = deadLocks;
                 this.setIcon(this.deadLocks.length == 0 ? CheckNode.OK_STATUS : CheckNode.ERROR_STATUS);
-                this.setText('There is '+(this.deadLocks.length == 0 ? 'no' : 'a')+' path that leads to a deadlock.');
+                this.setText(ORYX.I18N.PetriNetSoundness.thereIs+(this.deadLocks.length == 0 ? ORYX.I18N.PetriNetSoundness.no : ORYX.I18N.PetriNetSoundness.a)+' '+ORYX.I18N.PetriNetSoundness.pathsDeadLock);
             }
         });
         
         var ImproperTerminatingsNode = Ext.extend(CheckNode, {
             constructor: function(config) {
-                config.qtip = '<b>Proper Termination Criteria</b>: The final state is the only state reachable from the initial state in which there is a token in the final place. If any improper terminating states are detected, click to show one counter example.';
+                config.qtip = ORYX.I18N.PetriNetSoundness.tipProperTerminationCriteria;
             
                 ImproperTerminatingsNode.superclass.constructor.apply(this, arguments);
             },
@@ -270,13 +270,13 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                 this.improperTerminatings = improperTerminatings;
                 
                 this.setIcon(this.improperTerminatings.length == 0 ? CheckNode.OK_STATUS : CheckNode.ERROR_STATUS);
-                this.setText('There are ' + this.improperTerminatings.length +' markings covering the final marking.');
+                this.setText(ORYX.I18N.PetriNetSoundness.thereAre +' '+ this.improperTerminatings.length +' ' +ORYX.I18N.PetriNetSoundness.markings);
             }
         });
         
         var DeadTransitionsNode = Ext.extend(CheckNode, {
             constructor: function(config) {
-                config.qtip = '<b>No Dead Transitions Criteria</b>: Each transition can contribute to at least one process instance. Click to see all dead transitions.';
+                config.qtip = ORYX.I18N.PetriNetSoundness.tipDeadTransitionsCriteria;
             
                 DeadTransitionsNode.superclass.constructor.apply(this, arguments);
             },
@@ -289,13 +289,13 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                 this.deadTransitions = deadTransitions;
                 
                 this.setIcon(this.deadTransitions.length == 0 ? CheckNode.OK_STATUS : CheckNode.ERROR_STATUS);
-                this.setText('There are ' + this.deadTransitions.length +' dead transitions.');
+                this.setText(ORYX.I18N.PetriNetSoundness.thereAre +' ' + this.deadTransitions.length +' '+ORYX.I18N.PetriNetSoundness.deadTransitions);
             }
         });
         
         var NotParticipatingTransitionsNode = Ext.extend(CheckNode, {
             constructor: function(config) {
-                config.qtip = '<b>Transition Participation Criteria</b>: Each transition participates in at least one process instance that starts in the initial state and reaches the final state. Click to see all transitions not participating in any process instance.';
+                config.qtip = ORYX.I18N.PetriNetSoundness.tipTransitionParticipationCriteria;
             
                 NotParticipatingTransitionsNode.superclass.constructor.apply(this, arguments);
             },
@@ -308,30 +308,30 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                 this.notParticipatingTransitions = notParticipatingTransitions;
                 
                 this.setIcon(this.notParticipatingTransitions.length == 0 ? CheckNode.OK_STATUS : CheckNode.ERROR_STATUS);
-                this.setText('There are ' + this.notParticipatingTransitions.length +' transitions that cannot participate in a properly terminating firing sequence.');
+                this.setText(ORYX.I18N.PetriNetSoundness.thereAre + ' ' + this.notParticipatingTransitions.length +' '+ ORYX.I18N.PetriNetSoundness.transtionsNoParticipants);
             }
         });
         
         this.checkerWindow = new Ext.Window({
-            title: 'Soundness Checker',
+            title: ORYX.I18N.PetriNetSoundness.soundnessChecker,
             autoScroll: true,
             width: '500',
             tbar: [
                 {
-                    text: 'Check', 
+                    text: ORYX.I18N.PetriNetSoundness.check,
                     handler: function(){
                         this.checkerWindow.check();
                     }.bind(this)
                 },
                 {
-                    text: 'Hide Errors', 
+                    text: ORYX.I18N.PetriNetSoundness.hideErrors,
                     handler: function(){
                         this.checkerWindow.getTree().getRootNode().reset();
                     }.bind(this)
                 },
                 '->',
                 {
-                    text: 'Close', 
+                    text: ORYX.I18N.Save.close,
                     handler: function(){
                         this.checkerWindow.close();
                     }.bind(this)
@@ -361,7 +361,7 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                 plugin.facade.raiseEvent({
                     type: ORYX.Plugins.SyntaxChecker.CHECK_FOR_ERRORS_EVENT,
                     onErrors: function(){
-                        Ext.Msg.alert("Syntax Check", "Some syntax errors have been found, please correct them!")
+                        Ext.Msg.alert(ORYX.I18N.TreeGraphSupport.syntaxCheckName, ORYX.I18N.PetriNetSoundness.syntaxErrors)
                         this.turnLoadingIntoUnknownStatus();
                     }.bind(this),
                     onNoErrors: function(){
@@ -418,14 +418,14 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                 containerScroll: true,
                 
                 root: new CheckNode({
-                    text: 'Checks',
+                    text: ORYX.I18N.PetriNetSoundness.checks,
                     id: 'source',
                     expanded: true
                 }),
                 listeners: {
                     render: function(treePanel){
                         var structuralSoundNode = new CheckNode({
-                            text: 'Structural Sound (Workflow Net)',
+                            text: ORYX.I18N.PetriNetSoundness.structuralSound,
                             id: 'structuralSound',
                             /* Returns false when any error has been found */
                             check: function(){
@@ -443,7 +443,7 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                                 }
                             },
                             checkInitialNode: new CheckNode({
-                                qtip: 'There must be exactly one initial place, which is the only place without any incoming edges.',
+                                qtip: ORYX.I18N.PetriNetSoundness.exactlyOneInitialPlace,
                                 update: function(){
                                     this.initialNodes = [];
                                     Ext.each(plugin.facade.getCanvas().getChildShapes(), function(shape){
@@ -452,7 +452,7 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                                         }
                                     }.bind(this));
                                     
-                                    this.setText(this.initialNodes.length + ' initial places found.');
+                                    this.setText(this.initialNodes.length + ' '+ORYX.I18N.PetriNetSoundness.initialPlacesFound);
                                     
                                     this.setIcon(!this.hasErrors() ? CheckNode.OK_STATUS : CheckNode.ERROR_STATUS);
                                 },
@@ -466,7 +466,7 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                                 }
                             }),
                             checkFinalNode: new CheckNode({
-                                qtip: 'There must be exactly one final place, which is the only place without any outgoing edges.',
+                                qtip: ORYX.I18N.PetriNetSoundness.exactlyOneFinalPlace,
                                 update: function(){
                                     this.finalNodes = [];
                                     Ext.each(plugin.facade.getCanvas().getChildShapes(), function(shape){
@@ -475,7 +475,7 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                                         }
                                     }.bind(this));
                                     
-                                    this.setText(this.finalNodes.length + ' final places found.');
+                                    this.setText(this.finalNodes.length + ' '+ORYX.I18N.PetriNetSoundness.finalPlacesFound);
                                     
                                     this.setIcon(!this.hasErrors() ? CheckNode.OK_STATUS : CheckNode.ERROR_STATUS);
                                 },
@@ -489,11 +489,11 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                                 }
                             }),
                             checkConnectedNode: new CheckNode({
-                                qtip: 'Each node in the process model is on the path from the initial node to the final node.',
+                                qtip: ORYX.I18N.PetriNetSoundness.eachNode,
                                 update: function(initialNodes, finalNodes){
                                     //Step through without semantic knowledge
                                     if(initialNodes.length !== 1 || finalNodes.length !== 1){
-                                        this.setText("There must be exactly one initial and final place to perform further checks!");
+                                        this.setText(ORYX.I18N.PetriNetSoundness.exactlyOneInitAndFinalPlace);
                                         this.setIcon(CheckNode.UNKNOWN_STATUS);
                                         return;
                                     }
@@ -508,7 +508,7 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                                     
                                     this.findNotParticipatingNodes(initialNodes[0]);
                                     
-                                    this.setText(this.notParticipatingNodes.length + ' nodes that aren\'t on any path from beginning to end found.');
+                                    this.setText(this.notParticipatingNodes.length + ' '+ORYX.I18N.PetriNetSoundness.nodesNoInPath);
                                     
                                     this.setIcon(!this.hasErrors() ? CheckNode.OK_STATUS : CheckNode.ERROR_STATUS);
                                 },
@@ -539,7 +539,7 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                         ]);
                     
                         var soundNode = new CheckNode({
-                            text: 'Sound',
+                            text: ORYX.I18N.PetriNetSoundness.sound,
                             id: 'sound',
                             check: function(res){
                                 if (res.isSound) {
@@ -565,7 +565,7 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                         ]);
                         
                         var weakSoundNode = new CheckNode({
-                            text: 'Weak Sound',
+                            text: ORYX.I18N.PetriNetSoundness.weakSound,
                             id: 'weakSound',
                             check: function(res){
                                 if (res.isWeakSound) {
@@ -589,7 +589,7 @@ ORYX.Plugins.PetriNetSoundnessChecker = ORYX.Plugins.AbstractPlugin.extend({
                         ]);
                         
                         var relaxedSoundNode = new CheckNode({
-                            text: 'Relaxed Sound',
+                            text: ORYX.I18N.PetriNetSoundness.relaxedSound,
                             id: 'relaxedSound',
                             check: function(res){
                                 if (res.isRelaxedSound) {

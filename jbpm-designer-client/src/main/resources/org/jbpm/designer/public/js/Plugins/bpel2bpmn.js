@@ -40,11 +40,11 @@ ORYX.Plugins.BPEL2BPMN = Clazz.extend({
 		this.facade = facade;
 		
 		this.facade.offer({
-			'name':"Transform BPEL into BPMN",
+			'name':ORYX.I18N.BPELSupport.transformBPELToBPMN,
 			'functionality': this.transform.bind(this),
 			'group': 			'Export',
             dropDownGroupIcon: ORYX.BASE_FILE_PATH + "images/import.png",
-			'description': "Transform a BPEL process into its BPMN representation",
+			'description': ORYX.I18N.BPELSupport.transformBPELToBPMN_desc,
 			'index': 1,
 			'minShape': 0,
 			'maxShape': 0});
@@ -77,7 +77,7 @@ ORYX.Plugins.BPEL2BPMN = Clazz.extend({
 		  	style: 'font-size:12px;',
 		  	items : [
 		  	{
-		    	fieldLabel : 'File',
+		    	fieldLabel : ORYX.I18N.BPELSupport.file,
 		    	inputType : 'file',
 			  	style: 'font-size:12px;',
 				allowBlank: false
@@ -90,7 +90,7 @@ ORYX.Plugins.BPEL2BPMN = Clazz.extend({
 
 		dialog = new Ext.Window({ 
 			autoCreate: true, 
-			title: 'Upload BPEL File', 
+			title: ORYX.I18N.BPELSupport.uploadBPELFile,
 			height: 240, 
 			width: 400, 
 			modal:true,
@@ -100,15 +100,15 @@ ORYX.Plugins.BPEL2BPMN = Clazz.extend({
 		  	style: 'font-size:12px;',
 			proxyDrag: true,
 			resizable:true,
-			items: [new Ext.form.Label({text: "Select a BPEL (.bpel) file and transform it to BPMN.", style: 'font-size:12px;'}),form, errorMsg],
+			items: [new Ext.form.Label({text: ORYX.I18N.BPELSupport.selectBPELFile, style: 'font-size:12px;'}),form, errorMsg],
 			buttons:[{
-				text:"Submit",
+				text: ORYX.I18N.BPELSupport.submit,
 				handler: function()
 				{
 					form.form.submit({
 			      		clientValidation: false,
 						url: ORYX.PATH + '/bpel2bpmn',
-			      		waitMsg: "Transforming...",
+			      		waitMsg: ORYX.I18N.BPELSupport.transforming,
 			      		success: function(f,a){
 							/*
 							 * The XML that comes from the server is escaped. Therefore we need to replace the escape symbols once again.
@@ -133,7 +133,7 @@ ORYX.Plugins.BPEL2BPMN = Clazz.extend({
 									/*
 									 * In case the BPEL file did not comply to the schema the dialog remains open.
 									 */
-									errorMsg.body.dom.innerHTML = '<p style="background-color: transparent;">Your BPEL file does not comply with the XML schema definition. <br /> <br />Error message: ' + validationError + '</p>';
+									errorMsg.body.dom.innerHTML = '<p style="background-color: transparent;">'+ ORYX.I18N.BPELSupport.noComply+' <br /> <br />'+ ORYX.I18N.BPELSupport.errorMessage+' ' + validationError + '</p>';
 								}
 								
 								/*
@@ -150,7 +150,7 @@ ORYX.Plugins.BPEL2BPMN = Clazz.extend({
 								 */
 								Ext.MessageBox.show({
 		           					title: 'Error',
-		          	 				msg: 'The BPEL file could not be imported.',
+		          	 				msg: ORYX.I18N.BPELSupport.errorImporting,
 		           					buttons: Ext.MessageBox.OK,
 		           					icon: Ext.MessageBox.ERROR
 		       					});

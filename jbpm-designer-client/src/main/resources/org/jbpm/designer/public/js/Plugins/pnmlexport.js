@@ -106,7 +106,7 @@ ORYX.Plugins.Pnmlexport = ORYX.Plugins.AbstractPlugin.extend({
                     }
                     else {
                         var absolutepath = "http://" + location.host + ORYX.CONFIG.ROOT_PATH + pnmlfile;
-                        var output = "<h2>Process: " +
+                        var output = "<h2>"+ORYX.I18N.Pnmlexport.process+": " +
                         self.document.title +
                         "</h2><a target=\"_blank\" href=\"" +
                         absolutepath;
@@ -118,10 +118,10 @@ ORYX.Plugins.Pnmlexport = ORYX.Plugins.AbstractPlugin.extend({
                             minimizable: false,
                             modal: true,
                             autoScroll: true,
-                            title: 'Deployment successful',
+                            title: ORYX.I18N.Pnmlexport.deploySuccess,
                             html: output,
                             buttons: [{
-                                text: 'OK',
+                                text: Ext.MessageBox.buttonText.ok,
                                 handler: function(){
                                     win.hide();
                                 }

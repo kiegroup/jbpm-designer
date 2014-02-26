@@ -139,6 +139,16 @@ ORYX.I18N.BPELSupport.error = '<i18n:message key="ORYX.I18N.BPELSupport.error">E
 ORYX.I18N.BPELSupport.progressImp = '<i18n:message key="ORYX.I18N.BPELSupport.progressImp">Import...</i18n:message>';
 ORYX.I18N.BPELSupport.progressExp = '<i18n:message key="ORYX.I18N.BPELSupport.progressExp">Export...</i18n:message>';
 ORYX.I18N.BPELSupport.impFailed = '<i18n:message key="ORYX.I18N.BPELSupport.impFailed">An error while importing occurs! <br/>Please check error message: <br/><br/></i18n:message>';
+ORYX.I18N.BPELSupport.selectBPELFile='<i18n:message key="ORYX.I18N.BPELSupport.selectBPELFile">Select a BPEL (.bpel) file and transform it to BPMN.</i18n:message>';
+ORYX.I18N.BPELSupport.uploadBPELFile='<i18n:message key="ORYX.I18N.BPELSupport.uploadBPELFile">Upload BPEL File</i18n:message>';
+ORYX.I18N.BPELSupport.transformBPELToBPMN='<i18n:message key="ORYX.I18N.BPELSupport.transformBPELToBPMN">Transform BPEL into BPMN</i18n:message>';
+ORYX.I18N.BPELSupport.transformBPELToBPMN_desc='<i18n:message key="ORYX.I18N.BPELSupport.transformBPELToBPMN_desc">Transform a BPEL process into its BPMN representation</i18n:message>';
+ORYX.I18N.BPELSupport.submit='<i18n:message key="ORYX.I18N.BPELSupport.submit">Submit</i18n:message>';
+ORYX.I18N.BPELSupport.transforming='<i18n:message key="ORYX.I18N.BPELSupport.transforming">Transforming...</i18n:message>';
+ORYX.I18N.BPELSupport.errorImporting='<i18n:message key="ORYX.I18N.BPELSupport.errorImporting">The BPEL file could not be imported.</i18n:message>';
+ORYX.I18N.BPELSupport.noComply='<i18n:message key="ORYX.I18N.BPELSupport.noComply">Your BPEL file does not comply with the XML schema definition.</i18n:message>';
+ORYX.I18N.BPELSupport.errorMessage='<i18n:message key="ORYX.I18N.BPELSupport.errorMessage">Error message:</i18n:message>';
+
 
 if(!ORYX.I18N.BPELLayout) ORYX.I18N.BPELLayout = {};
 
@@ -257,6 +267,23 @@ ORYX.I18N.EPCSupport.impBtn = '<i18n:message key="ORYX.I18N.EPCSupport.impBtn">I
 ORYX.I18N.EPCSupport.close = '<i18n:message key="ORYX.I18N.EPCSupport.close">Close</i18n:message>';
 ORYX.I18N.EPCSupport.error = '<i18n:message key="ORYX.I18N.EPCSupport.error">Error</i18n:message>';
 ORYX.I18N.EPCSupport.progressImp = '<i18n:message key="ORYX.I18N.EPCSupport.progressImp">Import...</i18n:message>';
+ORYX.I18N.EPCSupport.epcToBPMN='<i18n:message key="ORYX.I18N.EPCSupport.epcToBPMN">EPC to BPMN transform</i18n:message>';
+ORYX.I18N.EPCSupport.epcToBPMN_desc='<i18n:message key="ORYX.I18N.EPCSupport.epcToBPMN_desc">EPC to BPMN transform</i18n:message>';
+ORYX.I18N.EPCSupport.pleaseWait='<i18n:message key="ORYX.I18N.EPCSupport.pleaseWait">Please wait while importing..</i18n:message>';
+ORYX.I18N.EPCSupport.errorImporting='<i18n:message key="ORYX.I18N.EPCSupport.errorImporting">An Error is occured while importing!</i18n:message>';
+ORYX.I18N.EPCSupport.requestFailed='<i18n:message key="ORYX.I18N.EPCSupport.requestFailed">Request to server failed!</i18n:message>';
+ORYX.I18N.EPCSupport.setTheURL='<i18n:message key="ORYX.I18N.EPCSupport.setTheURL">For the import and transformation from EPC to BPMN please set the URL to the EPC model.</i18n:message>';
+ORYX.I18N.EPCSupport.url='<i18n:message key="ORYX.I18N.EPCSupport.url">URL</i18n:message>';
+ORYX.I18N.EPCSupport.eventMapping='<i18n:message key="ORYX.I18N.EPCSupport.eventMapping">Event-Mapping</i18n:message>';
+ORYX.I18N.EPCSupport.giveKeyword='<i18n:message key="ORYX.I18N.EPCSupport.giveKeyword">If you like to transform individual event from EPC to event in BPMN, please give keyword regarding to these (separated with a \\\';\\\')</i18n:message>';
+ORYX.I18N.EPCSupport.organization='<i18n:message key="ORYX.I18N.EPCSupport.organization">Organization</i18n:message>';
+ORYX.I18N.EPCSupport.askIfOUandRolesMapped='<i18n:message key="ORYX.I18N.EPCSupport.askIfOUandRolesMapped">Should the organizational units and roles mapped to a pool/lane? (Required Auto-Layout)</i18n:message>';
+ORYX.I18N.EPCSupport.autoLayout='<i18n:message key="ORYX.I18N.EPCSupport.autoLayout">Auto-Layout</i18n:message>';
+ORYX.I18N.EPCSupport.autoLayout_desc='<i18n:message key="ORYX.I18N.EPCSupport.autoLayout_desc">By enable the Auto-Layout, the model will be auto layouted afterwards with the Auto-Layout Plugin. (Needs a while)</i18n:message>';
+ORYX.I18N.EPCSupport.advancedSettings='<i18n:message key="ORYX.I18N.EPCSupport.advancedSettings">Advanced Settings</i18n:message>';
+ORYX.I18N.EPCSupport.transformEPCToBPMN='<i18n:message key="ORYX.I18N.EPCSupport.transformEPCToBPMN">Transform EPC to BPMN</i18n:message>';
+
+
 
 if(!ORYX.I18N.ERDFSupport) ORYX.I18N.ERDFSupport = {};
 
@@ -396,6 +423,9 @@ if(!ORYX.I18N.Pnmlexport) ORYX.I18N.Pnmlexport = {};
 ORYX.I18N.Pnmlexport.group = '<i18n:message key="ORYX.I18N.Pnmlexport.group">Export</i18n:message>';
 ORYX.I18N.Pnmlexport.name = '<i18n:message key="ORYX.I18N.Pnmlexport.name">BPMN to PNML</i18n:message>';
 ORYX.I18N.Pnmlexport.desc = '<i18n:message key="ORYX.I18N.Pnmlexport.desc">Export as executable PNML and deploy</i18n:message>';
+ORYX.I18N.Pnmlexport.process='<i18n:message key="ORYX.I18N.Pnmlexport.process">Process</i18n:message>';
+ORYX.I18N.Pnmlexport.deploySuccess='<i18n:message key="ORYX.I18N.Pnmlexport.deploySuccess">Deployment successful</i18n:message>';
+
 
 if(!ORYX.I18N.PropertyWindow) ORYX.I18N.PropertyWindow = {};
 
@@ -410,6 +440,65 @@ ORYX.I18N.PropertyWindow.text = '<i18n:message key="ORYX.I18N.PropertyWindow.tex
 ORYX.I18N.PropertyWindow.ok = '<i18n:message key="ORYX.I18N.PropertyWindow.ok">Ok</i18n:message>';
 ORYX.I18N.PropertyWindow.cancel = '<i18n:message key="ORYX.I18N.PropertyWindow.cancel">Cancel</i18n:message>';
 ORYX.I18N.PropertyWindow.dateFormat = '<i18n:message key="ORYX.I18N.PropertyWindow.dateFormat">m/d/y</i18n:message>';
+ORYX.I18N.PropertyWindow.desk='<i18n:message key="ORYX.I18N.PropertyWindow.desk">Desk</i18n:message>';
+ORYX.I18N.PropertyWindow.noDataAvailableForProp='<i18n:message key="ORYX.I18N.PropertyWindow.noDataAvailableForProp">No data available for property.</i18n:message>';
+ORYX.I18N.PropertyWindow.errorDetOutConnections='<i18n:message key="ORYX.I18N.PropertyWindow.errorDetOutConnections">Error determining outgoing connections.</i18n:message>';
+ORYX.I18N.PropertyWindow.customEditorFor='<i18n:message key="ORYX.I18N.PropertyWindow.customEditorFor">Custom Editor for</i18n:message>';
+ORYX.I18N.PropertyWindow.unableFindCustomEditor='<i18n:message key="ORYX.I18N.PropertyWindow.unableFindCustomEditor">Unable to find custom editor info for</i18n:message>';
+ORYX.I18N.PropertyWindow.invalidCustomEditorData='<i18n:message key="ORYX.I18N.PropertyWindow.invalidCustomEditorData">Invalid Custom Editors data.</i18n:message>';
+ORYX.I18N.PropertyWindow.errorApplyingCustomEditor='<i18n:message key="ORYX.I18N.PropertyWindow.errorApplyingCustomEditor">Error applying Custom Editor data</i18n:message>';
+ORYX.I18N.PropertyWindow.toUsers='<i18n:message key="ORYX.I18N.PropertyWindow.toUsers">To Users</i18n:message>';
+ORYX.I18N.PropertyWindow.toGroups='<i18n:message key="ORYX.I18N.PropertyWindow.toGroups">To Groups</i18n:message>';
+ORYX.I18N.PropertyWindow.replyTo='<i18n:message key="ORYX.I18N.PropertyWindow.replyTo">Reply To</i18n:message>';
+ORYX.I18N.PropertyWindow.subject='<i18n:message key="ORYX.I18N.PropertyWindow.subject">Subject</i18n:message>';
+ORYX.I18N.PropertyWindow.body='<i18n:message key="ORYX.I18N.PropertyWindow.body">Body</i18n:message>';
+ORYX.I18N.PropertyWindow.addNotification='<i18n:message key="ORYX.I18N.PropertyWindow.addNotification">Add Notification</i18n:message>';
+ORYX.I18N.PropertyWindow.addNotificationInstructions='<i18n:message key="ORYX.I18N.PropertyWindow.addNotificationInstructions">Enter Notification body message.</i18n:message>';
+ORYX.I18N.PropertyWindow.editorForNotifications='<i18n:message key="ORYX.I18N.PropertyWindow.editorForNotifications">Editor for Notifications</i18n:message>';
+ORYX.I18N.PropertyWindow.users='<i18n:message key="ORYX.I18N.PropertyWindow.users">Users</i18n:message>';
+ORYX.I18N.PropertyWindow.groups='<i18n:message key="ORYX.I18N.PropertyWindow.groups">Groups</i18n:message>';
+ORYX.I18N.PropertyWindow.expiresAt='<i18n:message key="ORYX.I18N.PropertyWindow.expiresAt">Expires At</i18n:message>';
+ORYX.I18N.PropertyWindow.from='<i18n:message key="ORYX.I18N.PropertyWindow.from">From</i18n:message>';
+ORYX.I18N.PropertyWindow.type='<i18n:message key="ORYX.I18N.PropertyWindow.type">Type</i18n:message>';
+ORYX.I18N.PropertyWindow.addReassignment='<i18n:message key="ORYX.I18N.PropertyWindow.addReassignment">Add Reassignment</i18n:message>';
+ORYX.I18N.PropertyWindow.editorForReassignment='<i18n:message key="ORYX.I18N.PropertyWindow.editorForReassignment">Editor for Reassignments</i18n:message>';
+ORYX.I18N.PropertyWindow.importType='<i18n:message key="ORYX.I18N.PropertyWindow.importType">Import Type</i18n:message>';
+ORYX.I18N.PropertyWindow.className='<i18n:message key="ORYX.I18N.PropertyWindow.className">Class Name</i18n:message>';
+ORYX.I18N.PropertyWindow.wsdlLocation='<i18n:message key="ORYX.I18N.PropertyWindow.wsdlLocation">WSDL Location</i18n:message>';
+ORYX.I18N.PropertyWindow.wsdlNamespace='<i18n:message key="ORYX.I18N.PropertyWindow.wsdlNamespace">WSDL Namespace</i18n:message>';
+ORYX.I18N.PropertyWindow.addImport='<i18n:message key="ORYX.I18N.PropertyWindow.addImport">Add Import</i18n:message>';
+ORYX.I18N.PropertyWindow.editorForImports='<i18n:message key="ORYX.I18N.PropertyWindow.editorForImports">Editor for Imports</i18n:message>';
+ORYX.I18N.PropertyWindow.action='<i18n:message key="ORYX.I18N.PropertyWindow.action">Action</i18n:message>';
+ORYX.I18N.PropertyWindow.addAction='<i18n:message key="ORYX.I18N.PropertyWindow.addAction">Add Action</i18n:message>';
+ORYX.I18N.PropertyWindow.editorForActions='<i18n:message key="ORYX.I18N.PropertyWindow.editorForActions">Editor for Actions</i18n:message>';
+ORYX.I18N.PropertyWindow.dataType='<i18n:message key="ORYX.I18N.PropertyWindow.dataType">Data Type</i18n:message>';
+ORYX.I18N.PropertyWindow.fromObject='<i18n:message key="ORYX.I18N.PropertyWindow.fromObject">From Object</i18n:message>';
+ORYX.I18N.PropertyWindow.assignmentType='<i18n:message key="ORYX.I18N.PropertyWindow.assignmentType">Assignment Type</i18n:message>';
+ORYX.I18N.PropertyWindow.toObject='<i18n:message key="ORYX.I18N.PropertyWindow.toObject">To Object</i18n:message>';
+ORYX.I18N.PropertyWindow.toValue='<i18n:message key="ORYX.I18N.PropertyWindow.toValue">To Value</i18n:message>';
+ORYX.I18N.PropertyWindow.addAssignment='<i18n:message key="ORYX.I18N.PropertyWindow.addAssignment">Add Assignment</i18n:message>';
+ORYX.I18N.PropertyWindow.editorForDataAssignments='<i18n:message key="ORYX.I18N.PropertyWindow.editorForDataAssignments">Editor for Data Assignments</i18n:message>';
+ORYX.I18N.PropertyWindow.standardType='<i18n:message key="ORYX.I18N.PropertyWindow.standardType">Standard Type</i18n:message>';
+ORYX.I18N.PropertyWindow.customType='<i18n:message key="ORYX.I18N.PropertyWindow.customType">Custom Type</i18n:message>';
+ORYX.I18N.PropertyWindow.OnlySingleEntry='<i18n:message key="ORYX.I18N.PropertyWindow.OnlySingleEntry">Only single entry allowed.</i18n:message>';
+ORYX.I18N.PropertyWindow.editorForVariableDefinitions='<i18n:message key="ORYX.I18N.PropertyWindow.editorForVariableDefinitions">Editor for Variable Definitions</i18n:message>';
+ORYX.I18N.PropertyWindow.addVariable='<i18n:message key="ORYX.I18N.PropertyWindow.addVariable">Add Variable</i18n:message>';
+ORYX.I18N.PropertyWindow.editorForDataInput='<i18n:message key="ORYX.I18N.PropertyWindow.editorForDataInput">Editor for Data Input</i18n:message>';
+ORYX.I18N.PropertyWindow.addDataInput='<i18n:message key="ORYX.I18N.PropertyWindow.addDataInput">Add Data Input</i18n:message>';
+ORYX.I18N.PropertyWindow.editorForDataOutput='<i18n:message key="ORYX.I18N.PropertyWindow.editorForDataOutput">Editor for Data Output</i18n:message>';
+ORYX.I18N.PropertyWindow.addDataOutput='<i18n:message key="ORYX.I18N.PropertyWindow.addDataOutput">Add Data Output</i18n:message>';
+ORYX.I18N.PropertyWindow.editorForGlobals='<i18n:message key="ORYX.I18N.PropertyWindow.editorForGlobals">Editor for Globals</i18n:message>';
+ORYX.I18N.PropertyWindow.addGlobal='<i18n:message key="ORYX.I18N.PropertyWindow.addGlobal">Add Global</i18n:message>';
+ORYX.I18N.PropertyWindow.expressionEditor='<i18n:message key="ORYX.I18N.PropertyWindow.expressionEditor">Expression Editor</i18n:message>';
+ORYX.I18N.PropertyWindow.loadingProcessInf='<i18n:message key="ORYX.I18N.PropertyWindow.loadingProcessInf">Loading Process Information.</i18n:message>';
+ORYX.I18N.PropertyWindow.processId='<i18n:message key="ORYX.I18N.PropertyWindow.processId">Process Id</i18n:message>';
+ORYX.I18N.PropertyWindow.packageName='<i18n:message key="ORYX.I18N.PropertyWindow.packageName">Package Name</i18n:message>';
+ORYX.I18N.PropertyWindow.selectProcessId='<i18n:message key="ORYX.I18N.PropertyWindow.selectProcessId">Select Process Id and click \"Save\" to select</i18n:message>';
+ORYX.I18N.PropertyWindow.editorForCalledEvents='<i18n:message key="ORYX.I18N.PropertyWindow.editorForCalledEvents">Editor for Called Elements</i18n:message>';
+ORYX.I18N.PropertyWindow.unableToFindOtherProcess='<i18n:message key="ORYX.I18N.PropertyWindow.unableToFindOtherProcess">Unable to find other processes in package.</i18n:message>';
+ORYX.I18N.PropertyWindow.errorResolvingOtherProcessInfo='<i18n:message key="ORYX.I18N.PropertyWindow.errorResolvingOtherProcessInfo">Error resolving other process info</i18n:message>';
+ORYX.I18N.PropertyWindow.editorVisualDataAssociations='<i18n:message key="ORYX.I18N.PropertyWindow.editorVisualDataAssociations">Visual data associations Editor</i18n:message>';
+
 
 if (!ORYX.I18N.ConditionExpressionEditorField) ORYX.I18N.ConditionExpressionEditorField = {};
 
@@ -679,6 +768,10 @@ if(!ORYX.I18N.ResourceAssignment) ORYX.I18N.ResourceAssignment = {};
 ORYX.I18N.ResourceAssignment.name = '<i18n:message key="ORYX.I18N.ResourceAssignment.name">Resource Assignment</i18n:message>';
 ORYX.I18N.ResourceAssignment.group = '<i18n:message key="ORYX.I18N.ResourceAssignment.group">Resource Perspective</i18n:message>';
 ORYX.I18N.ResourceAssignment.desc = '<i18n:message key="ORYX.I18N.ResourceAssignment.desc">Assign resources to the selected task(s)</i18n:message>';
+ORYX.I18N.ResourceAssignment.chooseResource='<i18n:message key="ORYX.I18N.ResourceAssignment.chooseResource">Please choose resources for assignment</i18n:message>';
+ORYX.I18N.ResourceAssignment.wrongEntry='<i18n:message key="ORYX.I18N.ResourceAssignment.wrongEntry">wrong entry, please try again</i18n:message>';
+
+
 
 if(!ORYX.I18N.ClearSodBodHighlights) ORYX.I18N.ClearSodBodHighlights = {};
 
@@ -997,6 +1090,7 @@ ORYX.I18N.cpntoolsSupport.importProgress = '<i18n:message key="ORYX.I18N.cpntool
 ORYX.I18N.cpntoolsSupport.exportProgress = '<i18n:message key="ORYX.I18N.cpntoolsSupport.exportProgress">Exporting ...</i18n:message>';
 ORYX.I18N.cpntoolsSupport.exportDescription = '<i18n:message key="ORYX.I18N.cpntoolsSupport.exportDescription">Export to CPN Tools</i18n:message>';
 ORYX.I18N.cpntoolsSupport.importDescription = '<i18n:message key="ORYX.I18N.cpntoolsSupport.importDescription">Import from CPN Tools</i18n:message>';
+ORYX.I18N.cpntoolsSupport.cpnToolsPage='<i18n:message key="ORYX.I18N.cpntoolsSupport.cpnToolsPage">CPNTools Page</i18n:message>';
 
 if(!ORYX.I18N.BPMN2YAWLMapper) ORYX.I18N.BPMN2YAWLMapper = {};
 
@@ -1045,6 +1139,7 @@ ORYX.I18N.LocalHistory.intervalUnits='<i18n:message key="ORYX.I18N.LocalHistory.
 ORYX.I18N.LocalHistory.ConfigureSnapshotInterval='<i18n:message key="ORYX.I18N.LocalHistory.ConfigureSnapshotInterval">Configure Snapshot Interval</i18n:message>';
 ORYX.I18N.LocalHistory.UpdatedSnapshotInterval='<i18n:message key="ORYX.I18N.LocalHistory.UpdatedSnapshotInterval">Updated Snapshot Interval</i18n:message>';
 ORYX.I18N.LocalHistory.InvalidInput='<i18n:message key="ORYX.I18N.LocalHistory.InvalidInput">Invalid input specified</i18n:message>';
+ORYX.I18N.LocalHistory.set='<i18n:message key="ORYX.I18N.LocalHistory.set">Set</i18n:message>';
 
 if(!ORYX.I18N.theme) ORYX.I18N.theme = {};
 ORYX.I18N.theme.Apply='<i18n:message key="ORYX.I18N.theme.Apply">Apply</i18n:message>';
@@ -1169,10 +1264,79 @@ ORYX.I18N.View.sim.errorInvalidData='<i18n:message key="ORYX.I18N.View.sim.error
 ORYX.I18N.View.sim.errorFindingPath='<i18n:message key="ORYX.I18N.View.sim.errorFindingPath">Error finding Paths</i18n:message>';
 ORYX.I18N.View.sim.errorUnknownPathId='<i18n:message key="ORYX.I18N.View.sim.errorUnknownPathId">Unknown path id.</i18n:message>';
 
+if(!ORYX.I18N.Dictionary) ORYX.I18N.Dictionary = {}
 
+ORYX.I18N.Dictionary.dictionary='<i18n:message key="ORYX.I18N.Dictionary.dictionary">Dictionary</i18n:message>';
+ORYX.I18N.Dictionary.processDictionary='<i18n:message key="ORYX.I18N.Dictionary.processDictionary">Process dictionary</i18n:message>';
+ORYX.I18N.Dictionary.errorReadingProcDic='<i18n:message key="ORYX.I18N.Dictionary.errorReadingProcDic">Error reading Process Dictionary. Invalid item</i18n:message>';
+ORYX.I18N.Dictionary.errorLoadingProcDic='<i18n:message key="ORYX.I18N.Dictionary.errorLoadingProcDic">Error loading Process Dictionary</i18n:message>';
+ORYX.I18N.Dictionary.header_name='<i18n:message key="ORYX.I18N.Dictionary.header_name">Name</i18n:message>';
+ORYX.I18N.Dictionary.headerAliases='<i18n:message key="ORYX.I18N.Dictionary.headerAliases">Aliases</i18n:message>';
+ORYX.I18N.Dictionary.headerDesc='<i18n:message key="ORYX.I18N.Dictionary.headerDesc">Description</i18n:message>';
+ORYX.I18N.Dictionary.addNewEntry='<i18n:message key="ORYX.I18N.Dictionary.addNewEntry">Add New Entry</i18n:message>';
+ORYX.I18N.Dictionary.noProcDoc='<i18n:message key="ORYX.I18N.Dictionary.noProcDoc">No process documentation specified.</i18n:message>';
+ORYX.I18N.Dictionary.procDoc='<i18n:message key="ORYX.I18N.Dictionary.procDoc">Process Documentation</i18n:message>';
+ORYX.I18N.Dictionary.fromDoc='<i18n:message key="ORYX.I18N.Dictionary.fromDoc"><center>From Documentation</center></i18n:message>';
+ORYX.I18N.Dictionary.fromFile='<i18n:message key="ORYX.I18N.Dictionary.fromFile"><center>From File</center></i18n:message>';
+ORYX.I18N.Dictionary.select='<i18n:message key="ORYX.I18N.Dictionary.select">Select</i18n:message>';
+ORYX.I18N.Dictionary.highlightText='<i18n:message key="ORYX.I18N.Dictionary.highlightText"><center>Highlight text and click on \\\"Add\\\"</center></i18n:message>';
+ORYX.I18N.Dictionary.add='<i18n:message key="ORYX.I18N.Dictionary.add">Add</i18n:message>';
+ORYX.I18N.Dictionary.extractDicEntries='<i18n:message key="ORYX.I18N.Dictionary.extractDicEntries"><center>Extract Dictionary entries</center></i18n:message>';
+ORYX.I18N.Dictionary.procDicEditor='<i18n:message key="ORYX.I18N.Dictionary.procDicEditor">Process Dictionary Editor</i18n:message>';
+ORYX.I18N.Dictionary.Save='<i18n:message key="ORYX.I18N.Dictionary.Save">Save</i18n:message>';
+ORYX.I18N.Dictionary.storingDic='<i18n:message key="ORYX.I18N.Dictionary.storingDic">Storing Process Dictionary.</i18n:message>';
+ORYX.I18N.Dictionary.errorSavingDic='<i18n:message key="ORYX.I18N.Dictionary.errorSavingDic">Error saving Process Dictionary</i18n:message>';
+ORYX.I18N.Dictionary.cancel='<i18n:message key="ORYX.I18N.Dictionary.cancel">Cancel</i18n:message>';
 
+if(!ORYX.I18N.inlineTaskFormEditor) ORYX.I18N.inlineTaskFormEditor = {}
 
+ORYX.I18N.inlineTaskFormEditor.formEditor='<i18n:message key="ORYX.I18N.inlineTaskFormEditor.formEditor">Form Editor</i18n:message>';
+ORYX.I18N.inlineTaskFormEditor.selectForm='<i18n:message key="ORYX.I18N.inlineTaskFormEditor.selectForm">Select which Form Editor to use:</i18n:message>';
+ORYX.I18N.inlineTaskFormEditor.graphicalModeler='<i18n:message key="ORYX.I18N.inlineTaskFormEditor.graphicalModeler">Graphical Modeler</i18n:message>';
+ORYX.I18N.inlineTaskFormEditor.markupEditor='<i18n:message key="ORYX.I18N.inlineTaskFormEditor.markupEditor">Markup Editor</i18n:message>';
+ORYX.I18N.inlineTaskFormEditor.errorInitiatingEditor='<i18n:message key="ORYX.I18N.inlineTaskFormEditor.errorInitiatingEditor">Error initiating Form Editor</i18n:message>';
+ORYX.I18N.inlineTaskFormEditor.errorInitiatingWidgets='<i18n:message key="ORYX.I18N.inlineTaskFormEditor.errorInitiatingWidgets">Error initiating Form Widgets</i18n:message>';
+ORYX.I18N.inlineTaskFormEditor.taskNameNotSpecified='<i18n:message key="ORYX.I18N.inlineTaskFormEditor.taskNameNotSpecified">Task Name not specified.</i18n:message>';
+ORYX.I18N.inlineTaskFormEditor.insertFormWidget='<i18n:message key="ORYX.I18N.inlineTaskFormEditor.insertFormWidget">Insert form widget</i18n:message>';
+ORYX.I18N.inlineTaskFormEditor.errorInsertingFormWidget='<i18n:message key="ORYX.I18N.inlineTaskFormEditor.errorInsertingFormWidget">Error inserting Form Widget</i18n:message>';
+ORYX.I18N.inlineTaskFormEditor.widgetInsertionSourceMode='<i18n:message key="ORYX.I18N.inlineTaskFormEditor.widgetInsertionSourceMode">Widget insertion is only possible in Source Mode</i18n:message>';
+ORYX.I18N.inlineTaskFormEditor.editingForm='<i18n:message key="ORYX.I18N.inlineTaskFormEditor.editingForm">Editing Form:</i18n:message>';
+ORYX.I18N.inlineTaskFormEditor.completionInst='<i18n:message key="ORYX.I18N.inlineTaskFormEditor.completionInst">Press [Ctrl-Z] to activate auto-completion</i18n:message>';
+ORYX.I18N.inlineTaskFormEditor.storingForm='<i18n:message key="ORYX.I18N.inlineTaskFormEditor.storingForm">Storing Task Form</i18n:message>';
+ORYX.I18N.inlineTaskFormEditor.errorSavingForm='<i18n:message key="ORYX.I18N.inlineTaskFormEditor.errorSavingForm">Error saving Task Form</i18n:message>';
 
+if(!ORYX.I18N.PetriNetSoundness) ORYX.I18N.PetriNetSoundness = {}
+
+ORYX.I18N.PetriNetSoundness.checkSoundness='<i18n:message key="ORYX.I18N.PetriNetSoundness.checkSoundness">Check soundness</i18n:message>';
+ORYX.I18N.PetriNetSoundness.checkSoundness_desc='<i18n:message key="ORYX.I18N.PetriNetSoundness.checkSoundness_desc">Checks current Petri net for different soundness criteria.</i18n:message>';
+ORYX.I18N.PetriNetSoundness.tipTerminationCriteria='<i18n:message key="ORYX.I18N.PetriNetSoundness.tipTerminationCriteria"><b>Termination Criteria</b>: Makes sure that any process instance that starts in the initial state will eventually reach the final state. If any dead locks are detected, click to show one counter example.</i18n:message>';
+ORYX.I18N.PetriNetSoundness.thereIs='<i18n:message key="ORYX.I18N.PetriNetSoundness.thereIs">There is</i18n:message>';
+ORYX.I18N.PetriNetSoundness.no='<i18n:message key="ORYX.I18N.PetriNetSoundness.no">no</i18n:message>';
+ORYX.I18N.PetriNetSoundness.a='<i18n:message key="ORYX.I18N.PetriNetSoundness.a">a</i18n:message>';
+ORYX.I18N.PetriNetSoundness.pathsDeadLock='<i18n:message key="ORYX.I18N.PetriNetSoundness.pathsDeadLock">path that leads to a deadlock.</i18n:message>';
+ORYX.I18N.PetriNetSoundness.tipProperTerminationCriteria='<i18n:message key="ORYX.I18N.PetriNetSoundness.tipProperTerminationCriteria"><b>Proper Termination Criteria</b>: The final state is the only state reachable from the initial state in which there is a token in the final place. If any improper terminating states are detected, click to show one counter example.</i18n:message>';
+ORYX.I18N.PetriNetSoundness.thereAre='<i18n:message key="ORYX.I18N.PetriNetSoundness.thereAre">There are</i18n:message>';
+ORYX.I18N.PetriNetSoundness.markings='<i18n:message key="ORYX.I18N.PetriNetSoundness.markings">markings covering the final marking.</i18n:message>';
+ORYX.I18N.PetriNetSoundness.tipDeadTransitionsCriteria='<i18n:message key="ORYX.I18N.PetriNetSoundness.tipDeadTransitionsCriteria"><b>No Dead Transitions Criteria</b>: Each transition can contribute to at least one process instance. Click to see all dead transitions.</i18n:message>';
+ORYX.I18N.PetriNetSoundness.deadTransitions='<i18n:message key="ORYX.I18N.PetriNetSoundness.deadTransitions">dead transitions</i18n:message>';
+ORYX.I18N.PetriNetSoundness.tipTransitionParticipationCriteria='<i18n:message key="ORYX.I18N.PetriNetSoundness.tipTransitionParticipationCriteria"><b>Transition Participation Criteria</b>: Each transition participates in at least one process instance that starts in the initial state and reaches the final state. Click to see all transitions not participating in any process instance.</i18n:message>';
+ORYX.I18N.PetriNetSoundness.transtionsNoParticipants='<i18n:message key="ORYX.I18N.PetriNetSoundness.transtionsNoParticipants">transitions that cannot participate in a properly terminating firing sequence.</i18n:message>';
+ORYX.I18N.PetriNetSoundness.soundnessChecker='<i18n:message key="ORYX.I18N.PetriNetSoundness.soundnessChecker">Soundness Checker</i18n:message>';
+ORYX.I18N.PetriNetSoundness.check='<i18n:message key="ORYX.I18N.PetriNetSoundness.check">Check</i18n:message>';
+ORYX.I18N.PetriNetSoundness.hideErrors='<i18n:message key="ORYX.I18N.PetriNetSoundness.hideErrors">Hide Errors</i18n:message>';
+ORYX.I18N.PetriNetSoundness.syntaxErrors='<i18n:message key="ORYX.I18N.PetriNetSoundness.syntaxErrors">Some syntax errors have been found, please correct them!</i18n:message>';
+ORYX.I18N.PetriNetSoundness.checks='<i18n:message key="ORYX.I18N.PetriNetSoundness.checks">Checks</i18n:message>';
+ORYX.I18N.PetriNetSoundness.structuralSound='<i18n:message key="ORYX.I18N.PetriNetSoundness.structuralSound">Structural Sound (Workflow Net)</i18n:message>';
+ORYX.I18N.PetriNetSoundness.exactlyOneInitialPlace='<i18n:message key="ORYX.I18N.PetriNetSoundness.exactlyOneInitialPlace">There must be exactly one initial place, which is the only place without any incoming edges.</i18n:message>';
+ORYX.I18N.PetriNetSoundness.initialPlacesFound='<i18n:message key="ORYX.I18N.PetriNetSoundness.initialPlacesFound">initial places found.</i18n:message>';
+ORYX.I18N.PetriNetSoundness.exactlyOneFinalPlace='<i18n:message key="ORYX.I18N.PetriNetSoundness.exactlyOneFinalPlace">There must be exactly one final place, which is the only place without any outgoing edges.</i18n:message>';
+ORYX.I18N.PetriNetSoundness.finalPlacesFound='<i18n:message key="ORYX.I18N.PetriNetSoundness.finalPlacesFound">final places found.</i18n:message>';
+ORYX.I18N.PetriNetSoundness.eachNode='<i18n:message key="ORYX.I18N.PetriNetSoundness.eachNode">Each node in the process model is on the path from the initial node to the final node.</i18n:message>';
+ORYX.I18N.PetriNetSoundness.exactlyOneInitAndFinalPlace='<i18n:message key="ORYX.I18N.PetriNetSoundness.exactlyOneInitAndFinalPlace">There must be exactly one initial and final place to perform further checks!</i18n:message>';
+ORYX.I18N.PetriNetSoundness.nodesNoInPath='<i18n:message key="ORYX.I18N.PetriNetSoundness.nodesNoInPath">nodes that aren\'t on any path from beginning to end found.</i18n:message>';
+ORYX.I18N.PetriNetSoundness.sound='<i18n:message key="ORYX.I18N.PetriNetSoundness.sound">Sound</i18n:message>';
+ORYX.I18N.PetriNetSoundness.weakSound='<i18n:message key="ORYX.I18N.PetriNetSoundness.weakSound">Weak Sound</i18n:message>';
+ORYX.I18N.PetriNetSoundness.relaxedSound='<i18n:message key="ORYX.I18N.PetriNetSoundness.relaxedSound">Relaxed Sound</i18n:message>';
 
 
 

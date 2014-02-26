@@ -201,7 +201,7 @@ ORYX.Plugins.AdHocCC = Clazz.extend({
 		
 		var valueField = new Ext.form.TextField({
 			width: 180,
-			emptyText: ORYX.I18N.AdHocCC.enterEqual,
+			emptyText: ORYX.I18N.AdHocCC.enterEqual
 		});
 		
 		var addDataExprButton = new Ext.Button({
@@ -305,7 +305,7 @@ ORYX.Plugins.AdHocCC = Clazz.extend({
 			],
 			buttons: [
 				{
-		        	text: 'Apply',
+		        	text: ORYX.I18N.theme.Apply,
 		        	handler: function(){
 		            	win.hide();
 						adHocActivity.properties['oryx-adhoccompletioncondition'] = textArea.getValue();
@@ -315,7 +315,7 @@ ORYX.Plugins.AdHocCC = Clazz.extend({
 		        	}.bind(this)
 		    	},
 				{
-		        	text: 'Cancel',
+		        	text: ORYX.I18N.PropertyWindow.cancel,
 		        	handler: function(){win.hide();}
 		    	}
 			],
@@ -352,7 +352,7 @@ ORYX.Plugins.AdHocCC = Clazz.extend({
 	 */
 	openErroDialog: function(errorMsg){
 		Ext.MessageBox.show({
-           title: 'Error',
+           title: ORYX.I18N.BPMN2PNConverter_error,
            msg: errorMsg,
            buttons: Ext.MessageBox.OK,
            icon: Ext.MessageBox.ERROR
