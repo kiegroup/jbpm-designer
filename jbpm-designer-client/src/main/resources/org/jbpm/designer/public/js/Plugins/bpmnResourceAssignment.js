@@ -78,7 +78,7 @@ ORYX.Plugins.ResourceAssignment = Clazz.extend({
 				//Dialog to select resources respectively roles
 				var resourceSelection = new Ext.Window({
 					frame: true,
-					title: 'Please choose resources for assignment',
+					title: ORYX.I18N.ResourceAssignment.chooseResource,
 					width: 600,
 					modal: true,
 					closable: false,
@@ -89,14 +89,14 @@ ORYX.Plugins.ResourceAssignment = Clazz.extend({
 						name: 'checkbox0'
 					},
 					buttons: [{
-						text: 'Select',
+						text: ORYX.I18N.Dictionary.select,
 						handler: function() {
 							resourceSelection.close();
 							checkedValues = this.getCheckedValues(resourceSelection);
 							this.writeAssignments(checkedValues, taskElements, allocationType);
 						}.bind(this)
 					},{
-						text: 'Close',
+						text: ORYX.I18N.Save.close,
 						handler: function() {
 							resourceSelection.close();
 						}.bind(this)
@@ -204,7 +204,7 @@ ORYX.Plugins.ResourceAssignment = Clazz.extend({
 		//get possible new assignments for current task
 		var promptResult = prompt("for task " + taskId + "\n1: direct, \n2: role, \n3: org, \n4: auto");
 		if(promptResult != "1" && promptResult != "2" && promptResult != "3" && promptResult != "4" && promptResult != null) {
-			alert("wrong entry, please try again");
+			alert(ORYX.I18N.ResourceAssignment.wrongEntry);
 			returnValue = this.handleAllocationTypeData(taskId);
 		} else {
 			if(promptResult == "1") {

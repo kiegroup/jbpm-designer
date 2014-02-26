@@ -530,7 +530,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
             items: 		[siform],
             buttons:[
                 {
-                    text:"Set",
+                    text:ORYX.I18N.LocalHistory.set,
                     handler:function(){
                         dialog.hide();
                         var intervalInput = siform.items.items[0].getValue();

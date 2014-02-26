@@ -51,11 +51,11 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 		if( !this.isBPMN1_0 && !this.isBPMN1_1){ return }
 		
 		this.facade.offer({
-            'name': "EPC to BPMN transform",
+            'name': ORYX.I18N.EPCSupport.epcToBPMN,
             'functionality': this.startTransform.bind(this),
             'group': "epc",
             'icon': ORYX.BASE_FILE_PATH + "images/epc_export.png",
-            'description': "Import from EPC",
+            'description': ORYX.I18N.EPCSupport.epcToBPMN_desc,
             'index': 1,
             'minShape': 0,
             'maxShape': 0
@@ -80,7 +80,7 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 	 */
 	sendRequest: function(options){
 
-		var waitingpanel = new Ext.Window({id:'oryx-loading-panel_epc2bpmn',bodyStyle:'padding: 8px',title:'Oryx',width:230,height:55,modal:true,resizable:false,closable:false,frame:true,html:'<span style="font-size:11px;">Please wait while importing...</span>'})
+		var waitingpanel = new Ext.Window({id:'oryx-loading-panel_epc2bpmn',bodyStyle:'padding: 8px',title:'Oryx',width:230,height:55,modal:true,resizable:false,closable:false,frame:true,html:'<span style="font-size:11px;">'+ORYX.I18N.EPCSupport.pleaseWait+'</span>'})
 		waitingpanel.show()
 		
 		if( !options || !options.url ){ return }
@@ -100,7 +100,7 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 			 		try{
 						this.doTransform( request.responseText, options);
 					} catch(e) {
-						Ext.Msg.alert(ORYX.I18N.Oryx.title,"An Error is occured while importing!");
+						Ext.Msg.alert(ORYX.I18N.Oryx.title,ORYX.I18N.EPCSupport.errorImporting);
 					}
 					
 					Ext.getCmp("oryx-loading-panel_epc2bpmn").close();
@@ -120,7 +120,7 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 				// Disable the loading panel
 				this.facade.raiseEvent({ type: ORYX.CONFIG.EVENT_LOADING_DISABLE});	
 				
-				Ext.Msg.alert(ORYX.I18N.Oryx.title, "Request to server failed!");
+				Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.EPCSupport.requestFailed);
 			
 			}.bind(this)
         });
@@ -761,12 +761,12 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 					    bodyStyle:		'padding:5px',
 					    defaults: 		{width: 300, msgTarget: 'side'},
 					    items: [{
-								text:'For the import and transformation from EPC to BPMN please set the URL to the EPC model.', 
+								text: ORYX.I18N.EPCSupport.setTheURL,
 								xtype:'label',
 								style:'padding-bottom:10px;display:block',
 								width:"100%"
 							},{
-								fieldLabel: 'URL',
+								fieldLabel: ORYX.I18N.EPCSupport.url,
 								name: 		'last',
 								//vtype: 		'url',
 								allowBlank: false
@@ -782,11 +782,11 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 					    bodyStyle:		'padding:15px',
 						defaults:		{width: 300,msgTarget: 'side',labelSeparator:''},
 					    items: [{
-								text:	'Event-Mapping',
+								text:	ORYX.I18N.EPCSupport.eventMapping,
 								xtype: 	'label',
 								cls:	'transform-epc-bpmn-title'
 					        },{
-								text:	'If u like to transform indivual event from EPC to event in BPMN, please give keyword regarding to these (separated with a \';\').',
+								text:	ORYX.I18N.EPCSupport.giveKeyword,
 								xtype: 	'label',
 								width:	'100%',
 								style:	'margin-bottom:10px;display:block;'
@@ -798,33 +798,33 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 					            name: 	'events_throw',
 								style:	this.isBPMN1_0 ? "display:none;" : ""
 					        },{
-								text:	'Organization',
+								text:	ORYX.I18N.EPCSupport.organization,
 								xtype: 	'label',
 								style:	'margin-top:10px;display:block;',
 								cls:	'transform-epc-bpmn-title'
 					        },{
-								text:	'Should the organizational units and roles maped to a pool/lane? (Required Auto-Layout)',
+								text:	ORYX.I18N.EPCSupport.askIfOUandRolesMapped,
 								xtype: 	'label',
 								width:	'100%',
 								style:	'margin-bottom:10px;display:block;'
 					        },{
-								boxLabel: 'Organization',
+								boxLabel: ORYX.I18N.EPCSupport.organization,
 								name: 	'autolayout',
 								id:		'transform-epc-bpmn-id-organization',
 								xtype:	'checkbox',
 								labelStyle:	'width:30px;height:20px'
 					        },{
-								text:	'Auto-Layout',
+								text:	ORYX.I18N.EPCSupport.autoLayout,
 								xtype: 	'label',
 								style:	'margin-top:10px;display:block;',
 								cls:	'transform-epc-bpmn-title'
 					        },{
-								text:	'By enable the autolayout, the model will be auto layouted afterwards with the AutoLayout Plugin. (Needs a while)',
+								text:	ORYX.I18N.EPCSupport.autoLayout_desc,
 								xtype: 	'label',
 								width:	'100%',
 								style:	'margin-bottom:10px;display:block;'
 					        },{
-								boxLabel: 'Auto-Layout',
+								boxLabel: ORYX.I18N.EPCSupport.autoLayout,
 								name: 	'autolayout',
 								id:		'transform-epc-bpmn-id-autolayout',
 								xtype:	'checkbox',
@@ -843,7 +843,7 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 		
 		
 		var groupButton = {
-			            text:			'Advanced Settings',
+			            text:			ORYX.I18N.EPCSupport.advancedSettings,
 			            xtype:			'button',
 			            enableToggle:	true,
 						cls:			'transform-epc-bpmn-group-button',
@@ -859,7 +859,7 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 					
 		
 		var windowPanel = new Ext.Window({
-					    title:			ORYX.I18N.Oryx.title + " - Transform EPC to BPMN",
+					    title:			ORYX.I18N.Oryx.title + " - "+ORYX.I18N.EPCSupport.transformEPCToBPMN,
 					    width:			400,
 						id:				'transform-epc-bpmn-id-panel',
 						cls:			'transform-epc-bpmn-window',
@@ -870,7 +870,7 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 						resizable:		false,
 						autoHeight:		true,			    
 						buttons:[{
-								text:	'Import',
+								text:	ORYX.I18N.EPCSupport.impBtn,
 								handler: function(){
 									var res = {};
 									
@@ -894,7 +894,7 @@ ORYX.Plugins.EPC2BPMN = Clazz.extend({
 									callback( res );
 								}.bind(this)
 							},{
-								text:	'Cancel',
+								text:	Ext.MessageBox.buttonText.cancel,
 								handler: function(){
 									Ext.getCmp('transform-epc-bpmn-id-panel').close();
 								}
