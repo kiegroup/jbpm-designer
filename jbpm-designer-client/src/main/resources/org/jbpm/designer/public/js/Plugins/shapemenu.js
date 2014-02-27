@@ -824,8 +824,10 @@ ORYX.Plugins.ShapeMenuPlugin = {
 		}
 			
 		var command = new ORYX.Plugins.ShapeMenuPlugin.CreateCommand(Object.clone(option), this._currentReference, pos, this);
-		
 		this.facade.executeCommands([command]);
+        this.facade.raiseEvent({
+            type: ORYX.CONFIG.EVENT_SHAPE_ADDED
+        });
 		
 		// Inform about completed Drag 
 		this.facade.raiseEvent({type: ORYX.CONFIG.EVENT_SHAPE_MENU_CLOSE, source:sourceShape, destination:this.currentShapes});
@@ -866,6 +868,10 @@ ORYX.Plugins.ShapeMenuPlugin = {
 			var command = new ORYX.Plugins.ShapeMenuPlugin.CreateCommand(option, undefined, undefined, this);
 		
 			this.facade.executeCommands([command]);
+
+            this.facade.raiseEvent({
+                type: ORYX.CONFIG.EVENT_SHAPE_ADDED
+            });
 		}
 	},
 

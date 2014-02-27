@@ -49,7 +49,8 @@ ORYX.Plugins.View = {
         this.facade.registerOnEvent(ORYX.CONFIG.VOICE_COMMAND_GENERATE_IMAGE, this.showAsPNG.bind(this));
         this.facade.registerOnEvent(ORYX.CONFIG.VOICE_COMMAND_VIEW_SOURCE, this.showProcessBPMN.bind(this));
 
-        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_MOUSEUP, this.refreshCanvasforIE.bind(this));
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DRAGDROP_END, this.refreshCanvasforIE.bind(this));
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_SHAPE_ADDED, this.refreshCanvasforIE.bind(this));
 
         //Standard Values
         this.zoomLevel = 1.0;
@@ -1998,8 +1999,10 @@ ORYX.Plugins.View = {
     },
 
     refreshCanvasforIE : function() {
-        if(Ext.isIE) {
+        // IE 11 specific detection
+        if (Object.hasOwnProperty.call(window, "ActiveXObject") && !window.ActiveXObject) {
             var currentJSON = ORYX.EDITOR.getSerializedJSON();
+            this.facade.setSelection(this.facade.getCanvas().getChildShapes(true));
             var selection = this.facade.getSelection();
             var clipboard = new ORYX.Plugins.Edit.ClipBoard();
             clipboard.refresh(selection, this.getAllShapesToConsider(selection, true));
