@@ -229,7 +229,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
 			icon: 			ORYX.BASE_FILE_PATH + 'images/dictionary.png',
 			align: 			ORYX.CONFIG.SHAPEMENU_TOP,
 			group:			0,
-			msg:			'Add to Process Dictionary'
+			msg:			ORYX.I18N.ShapeMenuPlugin.addTpProcessDic
 		});	
 		
 		var utfbutton = new ORYX.Plugins.ShapeMenuButton({
@@ -237,7 +237,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
 			icon: 			ORYX.BASE_FILE_PATH + 'images/processforms.png',
 			align: 			ORYX.CONFIG.SHAPEMENU_TOP,
 			group:			1,
-			msg:			'Edit Task Form'
+			msg:			ORYX.I18N.View.editTaskForm
 		});
 		
 		var swbutton = new ORYX.Plugins.ShapeMenuButton({
@@ -245,7 +245,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
 			icon: 			ORYX.BASE_FILE_PATH + 'images/view.png',
 			align: 			ORYX.CONFIG.SHAPEMENU_TOP,
 			group:			2,
-			msg:			'View Node Source'
+			msg:			ORYX.I18N.ShapeMenuPlugin.viewSourceNode
 		});
 		
 		this.shapeMenu.setNumberOfButtonsPerLevel(ORYX.CONFIG.SHAPEMENU_BOTTOM, 2);
@@ -290,7 +290,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
             this.facade.raiseEvent({
                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                 ntype		: 'error',
-                msg         : 'Name not specified.',
+                msg         : ORYX.I18N.ShapeMenuPlugin.nameNotSpecified,
                 title       : ''
 
             });
@@ -310,7 +310,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
             this.facade.raiseEvent({
                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                 ntype		: 'error',
-                msg         : 'Task Name not specified.',
+                msg         : ORYX.I18N.forms.failNoTaskName,
                 title       : ''
 
             });
@@ -341,7 +341,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
                         this.facade.raiseEvent({
                             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                             ntype		: 'error',
-                            msg         : 'Unable to find node source.',
+                            msg         : ORYX.I18N.ShapeMenuPlugin.unableToFindNodeSource,
                             title       : ''
 
                         });
@@ -350,7 +350,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
                        this.facade.raiseEvent({
                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                            ntype		: 'error',
-                           msg         : 'Converting to BPMN2 failed: ' + e,
+                           msg         : ORYX.I18N.view.convertingToBPMN2Fail+': ' + e,
                            title       : ''
 
                        });
@@ -361,7 +361,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
                 this.facade.raiseEvent({
                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                     ntype		: 'error',
-                    msg         : 'Converting to BPMN2 failed.',
+                    msg         : ORYX.I18N.view.convertingToBPMN2Fail+'.',
                     title       : ''
 
                 });
@@ -449,7 +449,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
             // user task
             if(elements[0].properties["oryx-tasktype"] != "User" && !isRuleflow) {
                 var menuItem = new Ext.menu.Item({
-                    text: 'User Task',
+                    text: ORYX.I18N.ShapeMenuPlugin.userTask,
                     icon: ORYX.BASE_FILE_PATH + 'stencilsets/bpmn2.0jbpm/icons/activity/list/type.user.png',
                     disabled: false,
                     disabledClass: ORYX.CONFIG.MORPHITEM_DISABLED,
@@ -459,7 +459,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
             }
             if(elements[0].properties["oryx-tasktype"] != "Send" && !isRuleflow) {
                 var menuItem = new Ext.menu.Item({
-                    text: 'Send Task',
+                    text: ORYX.I18N.ShapeMenuPlugin.sendTask,
                     icon: ORYX.BASE_FILE_PATH + 'stencilsets/bpmn2.0jbpm/icons/activity/list/type.send.png',
                     disabled: false,
                     disabledClass: ORYX.CONFIG.MORPHITEM_DISABLED,
@@ -469,7 +469,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
             }
             if(elements[0].properties["oryx-tasktype"] != "Receive" && !isRuleflow) {
                 var menuItem = new Ext.menu.Item({
-                    text: 'Receive Task',
+                    text: ORYX.I18N.ShapeMenuPlugin.receiveTask,
                     icon: ORYX.BASE_FILE_PATH + 'stencilsets/bpmn2.0jbpm/icons/activity/list/type.receive.png',
                     disabled: false,
                     disabledClass: ORYX.CONFIG.MORPHITEM_DISABLED,
@@ -479,7 +479,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
             }
             if(elements[0].properties["oryx-tasktype"] != "Manual" && !isRuleflow) {
                 var menuItem = new Ext.menu.Item({
-                    text: 'Manual Task',
+                    text: ORYX.I18N.ShapeMenuPlugin.manualTask,
                     icon: ORYX.BASE_FILE_PATH + 'stencilsets/bpmn2.0jbpm/icons/activity/list/type.manual.png',
                     disabled: false,
                     disabledClass: ORYX.CONFIG.MORPHITEM_DISABLED,
@@ -489,7 +489,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
             }
             if(elements[0].properties["oryx-tasktype"] != "Service" && !isRuleflow) {
                 var menuItem = new Ext.menu.Item({
-                    text: 'Service Task',
+                    text: ORYX.I18N.ShapeMenuPlugin.serviceTask,
                     icon: ORYX.BASE_FILE_PATH + 'stencilsets/bpmn2.0jbpm/icons/activity/list/type.service.png',
                     disabled: false,
                     disabledClass: ORYX.CONFIG.MORPHITEM_DISABLED,
@@ -499,7 +499,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
             }
             if(elements[0].properties["oryx-tasktype"] != "Business Rule") {
                 var menuItem = new Ext.menu.Item({
-                    text: 'Business Rule Task',
+                    text: ORYX.I18N.ShapeMenuPlugin.businessRuleTask,
                     icon: ORYX.BASE_FILE_PATH + 'stencilsets/bpmn2.0jbpm/icons/activity/list/type.business.rule.png',
                     disabled: false,
                     disabledClass: ORYX.CONFIG.MORPHITEM_DISABLED,
@@ -509,7 +509,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
             }
             if(elements[0].properties["oryx-tasktype"] != "Script") {
                 var menuItem = new Ext.menu.Item({
-                    text: 'Script Task',
+                    text: ORYX.I18N.ShapeMenuPlugin.scriptTask,
                     icon: ORYX.BASE_FILE_PATH + 'stencilsets/bpmn2.0jbpm/icons/activity/list/type.script.png',
                     disabled: false,
                     disabledClass: ORYX.CONFIG.MORPHITEM_DISABLED,

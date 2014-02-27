@@ -6,7 +6,7 @@ SVGViewer = Ext.extend(Ext.Window, {
             layout: 'anchor',
             autoCreate: true,
             closeAction :'close',
-            title: 'SVG Viewer',
+            title: ORYX.I18N.svgViewer,
             plain: true,
             modal: true,
             collapsible: false,

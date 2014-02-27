@@ -139,7 +139,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
         });
 
         var widgetCombo = new Ext.form.ComboBox({
-            fieldLabel: 'Insert form widget',
+            fieldLabel: ORYX.I18N.inlineTaskFormEditor.insertFormWidget,
             labelStyle: 'width:240px',
             hiddenName: 'widget_name',
             emptyText: ORYX.I18N.inlineTaskFormEditor.insertFormWidget+'...',

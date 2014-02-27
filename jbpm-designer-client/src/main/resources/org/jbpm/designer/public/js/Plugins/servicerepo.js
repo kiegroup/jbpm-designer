@@ -40,11 +40,11 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
     _showInitialRepoScreen : function() {
         this.repoContent = new Ext.Panel({
             layout:'table',
-            html: '<br/><br/><br/><br/><center>No Service Repository specified.</center>'
+            html: '<br/><br/><br/><br/><center>'+ORYX.I18N.View.noServiceSpecified+'</center>'
         });
 
         var connectToRepo = new Ext.Button({
-            text: 'Connect',
+            text: ORYX.I18N.View.connect,
             handler: function(){
                 this._updateRepoDialog(Ext.getCmp('serviceurlfield').getValue());
             }.bind(this)
@@ -72,7 +72,7 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
                     fieldLabel: 'URL',
                     name: 'repourl',
                     width: '300',
-                    value: 'Enter Service Repository URL',
+                    value: ORYX.I18N.View.enterServiceURL,
                     handleMouseEvents: true,
                     listeners: {
                         render: function() {
@@ -116,14 +116,14 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
                         this.repoDialog.remove(this.repoContent, true);
                         this.repoContent = new Ext.Panel({
                             layout:'table',
-                            html: '<br/><br/><br/><br/><center>No Service Repository specified.</center>'
+                            html: '<br/><br/><br/><br/><center>'+ORYX.I18N.View.noServiceSpecified+'.</center>'
                         });
                         this.repoDialog.add(this.repoContent);
                         this.repoDialog.doLayout();
                         ORYX.EDITOR._pluginFacade.raiseEvent({
                             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                             ntype		: 'error',
-                            msg         : 'Failed to connect to the Service Repository.',
+                            msg         : ORYX.I18N.View.failConnectService,
                             title       : ''
                         });
                     } else {
@@ -133,14 +133,14 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
                     this.repoDialog.remove(this.repoContent, true);
                     this.repoContent = new Ext.Panel({
                         layout:'table',
-                        html: '<br/><br/><br/><br/><center>No Service Repository specified.</center>'
+                        html: '<br/><br/><br/><br/><center>'+ORYX.I18N.View.noServiceSpecified+'</center>'
                     });
                     this.repoDialog.add(this.repoContent);
                     this.repoDialog.doLayout();
                     ORYX.EDITOR._pluginFacade.raiseEvent({
                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                         ntype		: 'error',
-                        msg         : 'Connecting the the Service Repository failed:' + e,
+                        msg         : ORYX.I18N.View.failConnectService+':' + e,
                         title       : ''
                     });
                 }
@@ -149,14 +149,14 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
                 this.repoDialog.remove(this.repoContent, true);
                 this.repoContent = new Ext.Panel({
                     layout:'table',
-                    html: '<br/><br/><br/><br/><center>No Service Repository specified.</center>'
+                    html: '<br/><br/><br/><br/><center>'+ORYX.I18N.View.noServiceSpecified+'</center>'
                 });
                 this.repoDialog.add(this.repoContent);
                 this.repoDialog.doLayout();
                 ORYX.EDITOR._pluginFacade.raiseEvent({
                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                     ntype		: 'error',
-                    msg         : 'Failed to connect to the Service Repository.',
+                    msg         : ORYX.I18N.View.failConnectService+'.',
                     title       : ''
                 });
             },
@@ -194,15 +194,15 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
         var grid = new 	Ext.grid.GridPanel({
             store: store,
             columns: [
-                {header: 'ICON', width: 50, sortable: true, dataIndex: 'icon', renderer: this._renderIcon},
-                {header: 'NAME', width: 100, sortable: true, dataIndex: 'displayName'},
-                {header: 'EXPLANATION', width: 100, sortable: true, dataIndex: 'explanation'},
-                {header: 'DOCUMENTATION', width: 100, sortable: true, dataIndex: 'documentation', renderer: this._renderDocs},
-                {header: 'INPUT PARAMETERS', width: 200, sortable: true, dataIndex: 'inputparams'},
-                {header: 'RESULTS', width: 200, sortable: true, dataIndex: 'results'},
-                {header: 'CATEGORY', width: 100, sortable: true, dataIndex: 'category'}
+                {header: ORYX.I18N.View.headerIcon, width: 50, sortable: true, dataIndex: 'icon', renderer: this._renderIcon},
+                {header: ORYX.I18N.View.headerName, width: 100, sortable: true, dataIndex: 'displayName'},
+                {header: ORYX.I18N.View.headerExplanation, width: 100, sortable: true, dataIndex: 'explanation'},
+                {header: ORYX.I18N.View.headerDocumentation, width: 100, sortable: true, dataIndex: 'documentation', renderer: this._renderDocs},
+                {header: ORYX.I18N.View.headerInput, width: 200, sortable: true, dataIndex: 'inputparams'},
+                {header: ORYX.I18N.View.headerResults, width: 200, sortable: true, dataIndex: 'results'},
+                {header: ORYX.I18N.View.headerCategory, width: 100, sortable: true, dataIndex: 'category'}
             ],
-            title: 'Service Nodes. doud-click on a row to install.',
+            title: ORYX.I18N.View.clickOnRowToInstall,
             autoScroll : true,
             viewConfig : {
                 autoFit : true
@@ -234,14 +234,14 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
                             ORYX.EDITOR._pluginFacade.raiseEvent({
                                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                 ntype		: 'error',
-                                msg         : 'Failed to install the repository assets.',
+                                msg         : ORYX.I18N.View.failInstallation,
                                 title       : ''
                             });
                         } else {
                             ORYX.EDITOR._pluginFacade.raiseEvent({
                                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                 ntype		: 'success',
-                                msg         : 'Assets successfully installed. Save and re-open your process to start using them.',
+                                msg         : ORYX.I18N.View.successInstall,
                                 title       : ''
                             });
                         }
@@ -249,7 +249,7 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
                         ORYX.EDITOR._pluginFacade.raiseEvent({
                             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                             ntype		: 'error',
-                            msg         : 'Installing the repository assets failed: ' + e,
+                            msg         : ORYX.I18N.View.failAssetsInstallation+': ' + e,
                             title       : ''
                         });
                     }
@@ -258,7 +258,7 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
                     ORYX.EDITOR._pluginFacade.raiseEvent({
                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                         ntype		: 'error',
-                        msg         : 'Failed to install the repository assets.',
+                        msg         : ORYX.I18N.View.failAssetsInstallation+'.',
                         title       : ''
                     });
                 }.createDelegate(this),
@@ -284,7 +284,7 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
             layoutOnTabChange: true,
             deferredRender : false,
             items: [{
-                title: 'Service Nodes',
+                title: ORYX.I18N.View.serviceNodes,
                 autoScroll : true,
                 items: [grid],
                 layout: 'fit',

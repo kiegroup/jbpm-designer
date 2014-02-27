@@ -58,7 +58,7 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
                         this.facade.raiseEvent({
                             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                             ntype		: 'error',
-                            msg         : 'Cannot attach Pattern to selected node(s).',
+                            msg         : ORYX.I18N.patternCreator.errorAttaching,
                             title       : ''
 
                         });
@@ -82,7 +82,7 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
             this.facade.raiseEvent({
                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                 ntype		: 'error',
-                msg         : 'Invalid pattern data.',
+                msg         : ORYX.I18N.patternCreator.invalidData,
                 title       : ''
 
             });
@@ -191,7 +191,7 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
         if(selection && selection.size() > 0) {
             var parentShapes = this.findParentShapes(selection);
             if(parentShapes && parentShapes.size() > 0) {
-                var patternNameField = new Ext.form.TextField({ fieldLabel: 'Pattern Name', allowBlank: false, id: 'patternName', regex: /^[a-z0-9 \-\.\_]*$/i });
+                var patternNameField = new Ext.form.TextField({ fieldLabel: ORYX.I18N.patternCreator.patternName, allowBlank: false, id: 'patternName', regex: /^[a-z0-9 \-\.\_]*$/i });
                 var patternForm = new Ext.form.FormPanel({
                     baseCls: 		'x-plain',
                     labelWidth: 	150,
@@ -205,7 +205,7 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
                 var dialog = new Ext.Window({
                     layout		: 'anchor',
                     autoCreate	: true,
-                    title		: "Create a new Workflow Pattern",
+                    title		: ORYX.I18N.patternCreator.create,
                     height		: 150,
                     width		: 400,
                     modal		: true,
@@ -249,7 +249,7 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
                 this.facade.raiseEvent({
                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                     ntype		: 'error',
-                    msg         : 'Invalid selection.',
+                    msg         : ORYX.I18N.patternCreator.invalidSelect,
                     title       : ''
 
                 });
@@ -258,7 +258,7 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
             this.facade.raiseEvent({
                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                 ntype		: 'error',
-                msg         : 'No nodes selected.',
+                msg         : ORYX.I18N.patternCreator.noNodesSel,
                 title       : ''
 
             });

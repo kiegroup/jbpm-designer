@@ -487,7 +487,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
             defaultType: 	'numberfield',
             items: [
                 {
-                    fieldLabel: 'Interval',
+                    fieldLabel: ORYX.I18N.View.sim.interval,
                     name: 'interval',
                     allowBlank:false,
                     allowDecimals:false,
@@ -498,11 +498,15 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
                     xtype: 'combo',
                     name: 'intervalunits',
                     store: new Ext.data.SimpleStore({
-                        fields: ['units'],
-                        data: [['millisecond'], ['seconds'], ['minutes'], ['hours'], ['days']]
+                        fields: ['units','value'],
+                        data: [['millisecond',ORYX.I18N.LocalHistory.unitsMillisecond],
+                               ['seconds',ORYX.I18N.LocalHistory.unitsSeconds],
+                               ['minutes',ORYX.I18N.LocalHistory.unitsMinutes],
+                               ['hours',ORYX.I18N.LocalHistory.unitsHours],
+                               ['days',ORYX.I18N.LocalHistory.unitsDays]]
                     }),
                     allowBlank: false,
-                    displayField: 'units',
+                    displayField: 'value',
                     valueField: 'units',
                     mode: 'local',
                     typeAhead: true,

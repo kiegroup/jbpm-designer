@@ -78,11 +78,14 @@ ORYX.Plugins.FeedbackPlugin = ORYX.Plugins.AbstractPlugin.extend({
                     anchor: '100%',
                     name: 'subject',
                     store: new Ext.data.SimpleStore({
-                        fields: ['title'],
-                        data: [['[Feedback] '], ['[Bug Report] '], ['[Feature Request] ']]
+                        fields: ['name','title'],
+                        data: [['[Feedback] ','['+ORYX.I18N.Feedback.typeFeedback+']'],
+                               ['[Bug Report] ','['+ORYX.I18N.Feedback.typeBug+']'],
+                               ['[Feature Request] ','['+ORYX.I18N.Feedback.typeFeatureReq+']']]
                     }),
                     allowBlank: false,
                     displayField: 'title',
+                    valueField: 'name',
                     mode: 'local',
                     typeAhead: true,
                     triggerAction: 'all',

@@ -2284,7 +2284,7 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
                                         }],
                                 bbar:
                                     [{
-                                        text: 'OK',
+                                        text: ORYX.I18N.PropertyWindow.ok,
                                         handler: function()
                                         {
                                             evt.record.set('body', Ext.get('notificationbodyinput').getValue());
@@ -3234,8 +3234,8 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
 				                  'value'
 				                ],
 				        data: [
-	                	        ['is mapped to','is mapped to'],
-	                	        ['is equal to','is equal to']
+	                	        ['is mapped to',ORYX.I18N.PropertyWindow.isMappedTo],
+	                	        ['is equal to',ORYX.I18N.PropertyWindow.isEqualTo]
 	                	       ]
 				    })
                 })
@@ -4428,7 +4428,7 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField,  {
     		    				}.bind(this)				
     		    			},
     		    			buttons		: [{
-    		                    text: 'Save',
+    		                    text: ORYX.I18N.Save.save,
     		                    handler: function(){
     		                    	if(grid.getSelectionModel().getSelectedCell() != null) {
     		                    		var selectedIndex = grid.getSelectionModel().getSelectedCell()[0];

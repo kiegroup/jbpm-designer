@@ -132,12 +132,12 @@ ORYX.Plugins.ConstraintExpressionEditor.BaseConstraintExpressionEditorFactory = 
         if (pair._jsonProp.showConstraintEditorWhen){
             var prop = pair._jsonProp.showConstraintEditorWhen.property;
             if (!prop){
-                alert ("Error reading definition of showConstraintEditorWhen: 'property' is missing!");
+                alert (ORYX.I18N.constraintExpr.errorPropertyMissing);
                 return null;
             }
             var value = pair._jsonProp.showConstraintEditorWhen.value;
             if (!value){
-                alert ("Error reading definition of showConstraintEditorWhen: 'value' is missing!");
+                alert (ORYX.I18N.constraintExpr.errorValueIsMissing);
                 return null;
             }
             showPopup = this.shapeSelection.shapes[0].properties[pair.prefix() + "-" + prop] == value;
@@ -219,7 +219,7 @@ Ext.form.GuvnorPopupEditor = function(_srcShape, _onSave){
                 if (_json.properties['package'] && _json.properties['package'] != ""){
                     
                 }else{
-                    alert ("Please configure Process' 'package' attribute first");
+                    alert (ORYX.I18N.constraintExpr.configureProcess);
                     return;
                 }
                 _pkg = _json.properties['package'];
@@ -262,7 +262,7 @@ Ext.form.GuvnorPopupEditor = function(_srcShape, _onSave){
                _modelEntitiesInPath = _modelEntitiesInPath.concat(collectNodesInPath(srcShape, new RegExp("Model_")));
                
                if (!_modelEntitiesInPath || _modelEntitiesInPath.length == 0){
-                   alert ("You must define at least 1 Model Entity in your process!");
+                   alert (ORYX.I18N.constraintExpr.defineOneModel);
                    return;
                }
 
@@ -277,15 +277,15 @@ Ext.form.GuvnorPopupEditor = function(_srcShape, _onSave){
                    var _matchesString = _modelEntity.properties['oryx-constraintvalue'];
                    
                    if (!_validFact){
-                       errors.push("Fact Name is mandatory!");
+                       errors.push(ORYX.I18N.constraintExpr.factNameMandatory);
                        return;
                    }
                    if (!_factField){
-                       errors.push("You must specify a field for '"+_validFact+"' Model Entity");
+                       errors.push(ORYX.I18N.constraintExpr.mustSpecifyField +" '"+_validFact+"' "+ORYX.I18N.constraintExpr.modelEntity);
                        return;
                    }
                    if (!_matchesString){
-                       errors.push("You must specify a value for '"+_validFact+"."+_factField+"' Model Entity");
+                       errors.push(ORYX.I18N.constraintExpr.mustSpecifyValue+" '"+_validFact+"."+_factField+"' "+ORYX.I18N.constraintExpr.modelEntity);
                        return;
                    }
                    
@@ -355,7 +355,7 @@ Ext.form.GuvnorPopupEditor = function(_srcShape, _onSave){
                 plain       : true,
                 modal       : true,
      
-                title       : 'Title',
+                title       : ORYX.I18N.AMLSupport.title,
                 autoScroll  : true,
                 resizable: true,
                 html: '<iframe id="guvnorFrame" name="guvnorFrame" width="'+_width+'" height="'+_height+'"  onload="attachCallbacksToGuvnor();" src="'+_guvnorURL+'"></iframe>'

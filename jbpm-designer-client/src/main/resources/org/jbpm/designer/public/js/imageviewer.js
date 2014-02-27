@@ -7,7 +7,7 @@ ImageViewer = Ext.extend(Ext.Window, {
             layout: 'anchor',
             autoCreate: true,
             closeAction :'close',
-            title: 'Image Viewer',
+            title: ORYX.I18N.imageViewer,
             plain: true,
             modal: true,
             collapsible: false,
