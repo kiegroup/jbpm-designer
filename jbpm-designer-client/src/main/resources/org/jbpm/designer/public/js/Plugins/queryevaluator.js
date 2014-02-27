@@ -78,7 +78,7 @@ ORYX.Plugins.QueryEvaluator = ORYX.Plugins.AbstractPlugin.extend({
 			id			: 'optionsPopup',
 			
 			buttons: [{
-				text	: 'Submit',
+				text	: ORYX.I18N.BPELSupport.submit,
 				handler	: function(){
 					// set options
 					options = formPanel.getForm().getValues(false);
@@ -87,7 +87,7 @@ ORYX.Plugins.QueryEvaluator = ORYX.Plugins.AbstractPlugin.extend({
 					this.issueQuery(options);
 				}.bind(this)
 			}, {
-                text     : 'Abort',
+                text     : ORYX.I18N.QueryEvaluator.abort,
                 handler  : function(){
                     optionsPopup.close();
                 }.bind(this)
@@ -96,9 +96,9 @@ ORYX.Plugins.QueryEvaluator = ORYX.Plugins.AbstractPlugin.extend({
 		})
 		
 		var modelIdField = new Ext.form.TextField({
-			fieldLabel	: 'Model ID',
+			fieldLabel	: ORYX.I18N.QueryEvaluator.modelId,
 			name		: 'modelID',
-			grow		: true,
+			grow		: true
 //			hideLabel	: true
 		});
 		modelIdField.hide();
@@ -139,7 +139,7 @@ ORYX.Plugins.QueryEvaluator = ORYX.Plugins.AbstractPlugin.extend({
 		
 		var formPanel = new Ext.form.FormPanel({
 			frame		: true,
-			title		: 'Query options',
+			title		: ORYX.I18N.QueryEvaluator.queryOpts,
 			bodyStyle	: 'padding:0 10px 0;',
 			items		: [{
 				// create a radio button group
@@ -150,23 +150,23 @@ ORYX.Plugins.QueryEvaluator = ORYX.Plugins.AbstractPlugin.extend({
 				defaultType	: 'radio',
 				items		: [
                     {
-						boxLabel	: 'Process query', 
-						fieldLabel	: 'Query Type', 
+						boxLabel	: ORYX.I18N.QueryEvaluator.processQuery,
+						fieldLabel	: ORYX.I18N.QueryEvaluator.queryType,
 						name		: 'command', 
 						inputValue	: 'processQuery', 
 						checked: true},
 					{
 					// this is edited by Ahmed Awad on 28.07.09 to reflect compliance checking in the Oryx editor
-						boxLabel	: 'Process Compliance Query', 
+						boxLabel	: ORYX.I18N.QueryEvaluator.processComplianceQuery,
 						labelSeparator: '', 
 						name		: 'command', 
-						inputValue	: 'processComplianceQuery', 
+						inputValue	: 'processComplianceQuery'
 						//listeners	: {
 						//	'check': checkListener.bind(this)
 						//} 
 					},
                     {
-						boxLabel	: 'Run query against specific model', 
+						boxLabel	: ORYX.I18N.QueryEvaluator.runQueryAgainstModel,
 						labelSeparator: '',
 						name		: 'command',
 						inputValue	: 'runQueryAgainstModel',
@@ -175,7 +175,7 @@ ORYX.Plugins.QueryEvaluator = ORYX.Plugins.AbstractPlugin.extend({
 						}
 					},
 					{
-						boxLabel	: 'Run compliance query against specific model', 
+						boxLabel	: ORYX.I18N.QueryEvaluator.runComplianceAgainstModel,
 						labelSeparator: '',
 						name		: 'command',
 						inputValue	: 'runComplianceQueryAgainstModel',
@@ -190,7 +190,7 @@ ORYX.Plugins.QueryEvaluator = ORYX.Plugins.AbstractPlugin.extend({
 //						inputValue	: 'processMultiQuery'},
 					{
 						xtype		: 'checkbox',
-						fieldLabel	: 'Stop after first match in a model was found',
+						fieldLabel	: ORYX.I18N.QueryEvaluator.stop,
 						name		: 'stopAtFirstMatch',
 						checked		: true,
 					}
@@ -213,7 +213,7 @@ ORYX.Plugins.QueryEvaluator = ORYX.Plugins.AbstractPlugin.extend({
 
 			this.facade.raiseEvent({
 	            type: ORYX.CONFIG.EVENT_LOADING_ENABLE,
-				text: "Processing query"  //ORYX.I18N.Save.saving
+				text: ORYX.I18N.QueryEvaluator.processingQuery  //ORYX.I18N.Save.saving
 	        });
 			// Send the request to the server.
 			new Ajax.Request(ORYX.CONFIG.QUERYEVAL_URL, {
@@ -262,7 +262,7 @@ ORYX.Plugins.QueryEvaluator = ORYX.Plugins.AbstractPlugin.extend({
 					this.facade.raiseEvent({
 						type:ORYX.CONFIG.EVENT_LOADING_DISABLE
 					});
-					Ext.Msg.alert(ORYX.I18N.Oryx.title, "Server encountered an error (" + response.statusText + ").\n"
+					Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.QueryEvaluator.serverError+" (" + response.statusText + ").\n"
 						+ response.responseText);
 				}.bind(this)
 			});
@@ -327,7 +327,7 @@ ORYX.Plugins.QueryEvaluator = ORYX.Plugins.AbstractPlugin.extend({
 	 */
 	processProcessList: function(processList){
 		if(processList.length == 0) {
-			Ext.Msg.alert(ORYX.I18N.Oryx.title, "Found no matching processes!");
+			Ext.Msg.alert(ORYX.I18N.Oryx.title, ORYX.I18N.QueryEvaluator.noMatch);
 			return;
 		}
 		
@@ -361,11 +361,11 @@ ORYX.Plugins.QueryEvaluator = ORYX.Plugins.AbstractPlugin.extend({
             plain       : true,
 			modal		: true,
 			autoScroll  : true, // Added by Ahmed Awad on 30.07.2009
-			title       : 'Query Result',
+			title       : ORYX.I18N.QueryEvaluator.queryResults,
 			id			: 'procResPopup',
 			
 			buttons: [{
-                text     : 'Close',
+                text     : ORYX.I18N.Save.close,
                 handler  : function(){
                     myProcsPopup.close();
                 }.bind(this)
@@ -415,7 +415,7 @@ ORYX.Plugins.QueryEvaluator = ORYX.Plugins.AbstractPlugin.extend({
 					processEntry.metadata = transport.responseText.evalJSON();
 				}.bind(this),
 				onFailure		: function() {
-					Ext.MessageBox.alert(ORYX.I18N.Oryx.title, "Error loading model meta data.");
+					Ext.MessageBox.alert(ORYX.I18N.Oryx.title, ORYX.I18N.QueryEvaluator.errorLoading);
 				}.bind(this)
 			});
 		

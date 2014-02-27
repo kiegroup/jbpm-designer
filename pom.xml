@@ -64,13 +64,14 @@
               <artifactId>replacer</artifactId>
               <configuration>
                   <includes>
-                      <include>**/*_de.properties</include>
-                      <include>**/*_es.properties</include>
-                      <include>**/*_fr.properties</include>
-                      <include>**/*_ja.properties</include>
-                      <include>**/*_pt_BR.properties</include>
-                      <include>**/*_zh_CN.properties</include>
-                      <include>**/*_ru.properties</include>
+                      <include>**/DesignerConstants.properties</include>
+                      <include>**/DesignerConstants_de.properties</include>
+                      <include>**/DesignerConstants_es.properties</include>
+                      <include>**/DesignerConstants_fr.properties</include>
+                      <include>**/DesignerConstants_ja.properties</include>
+                      <include>**/DesignerConstants_pt_BR.properties</include>
+                      <include>**/DesignerConstants_zh_CN.properties</include>
+                      <include>**/DesignerConstants_ru.properties</include>
                   </includes>
                   <excludes>
                       <exclude>**/ErraiApp.properties</exclude>

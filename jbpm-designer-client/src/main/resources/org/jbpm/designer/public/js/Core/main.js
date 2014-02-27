@@ -107,13 +107,13 @@ ORYX.Editor = {
             try {
             var errorSourceArea = new Ext.form.TextArea({
                 id:"errorSourceTextArea",
-                fieldLabel:"Error Details",
+                fieldLabel:ORYX.I18N.main.errorDetails,
                 value:config.error,
                 autoScroll:true
             });
 
             var errorSourceAreaPanel = new Ext.Panel({
-                title:"Details",
+                title:ORYX.I18N.main.details,
                 layout:'fit',
                 border:false,
                 items: [errorSourceArea],
@@ -132,12 +132,12 @@ ORYX.Editor = {
             });
 
             var errorInfoPanel = new Ext.Panel({
-                title:"Info",
+                title:ORYX.I18N.File.info,
                 layout:'table',
                 border:false,
                 bodyBorder:false,
                 hideBorders:true,
-                html: '<p/><p/><center>Could not open requested business process due to processing errors. <br/> Empty process was loaded instead.<br/> Click on the Details tab below to view error details.</center>'
+                html: ORYX.I18N.main.errorOpening
             });
 
             var errorOutterPanel = new Ext.Panel({
@@ -150,10 +150,10 @@ ORYX.Editor = {
                 id:'processErrorSource',
                 height:550,
                 layout: 'fit',
-                title:'Process loading errors',
+                title:ORYX.I18N.main.errorLoadingProc,
                 items: [errorOutterPanel],
                 buttons:[{
-                    text : 'Close',
+                    text : ORYX.I18N.Save.close,
                     handler:function(){
                         win.close();
                         win = null;
@@ -498,7 +498,7 @@ ORYX.Editor = {
 					animate: true,
 					collapsible : true,
 					titleCollapse: true,
-					title: "Shape Repository",
+					title: ORYX.I18N.main.shapeRepo,
 					plugins: new Ext.ux.PanelCollapsedTitlePlugin()
 				}),
 				
@@ -972,7 +972,7 @@ ORYX.Editor = {
                         this.facade.raiseEvent({
                             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                             ntype		: 'error',
-                            msg         : 'Failed to save process SVG.',
+                            msg         : ORYX.I18N.main.failSave,
                             title       : ''
 
                         });
@@ -995,7 +995,7 @@ ORYX.Editor = {
     
     showParsingErrors : function() {
     	Ext.Msg.minWidth = 360;
-    	Ext.MessageBox.alert( "Unable to perform action", "Unable to perform user action due to error(s).<br/>Validate your process before saving, and view server logs to see error details." );
+    	Ext.MessageBox.alert( ORYX.I18N.main.unableUserAction );
     },
 	
     /**
@@ -1239,7 +1239,7 @@ ORYX.Editor = {
                 this.facade.raiseEvent({
                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                     ntype		: 'error',
-                    msg         : 'Error: ' + e,
+                    msg         : ORYX.I18N.BPELSupport.error+': ' + e,
                     title       : ''
 
                 });

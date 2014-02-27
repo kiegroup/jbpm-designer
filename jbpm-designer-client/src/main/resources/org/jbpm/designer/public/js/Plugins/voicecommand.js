@@ -52,7 +52,7 @@ ORYX.Plugins.VoiceCommand = Clazz.extend({
                     this.facade.raiseEvent({
                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                         ntype		: 'error',
-                        msg         : 'Cannot find voice command: ' + options.entry,
+                        msg         : ORYX.I18N.voiceCommand.commandNotFound+': ' + options.entry,
                         title       : ''
 
                     });
@@ -61,7 +61,7 @@ ORYX.Plugins.VoiceCommand = Clazz.extend({
                 this.facade.raiseEvent({
                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                     ntype		: 'error',
-                    msg         : 'Invalid voice command.',
+                    msg         : ORYX.I18N.voiceCommand.invalidcommand,
                     title       : ''
 
                 });
@@ -70,7 +70,7 @@ ORYX.Plugins.VoiceCommand = Clazz.extend({
             this.facade.raiseEvent({
                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                 ntype		: 'error',
-                msg         : 'Invalid voice command.',
+                msg         : ORYX.I18N.voiceCommand.invalidcommand,
                 title       : ''
 
             });

@@ -205,8 +205,8 @@ ORYX.Plugins.Paint = ORYX.Plugins.AbstractPlugin.extend({
         arguments.callee.$.construct.apply(this, arguments);
 
         ORYX.EDITOR._pluginFacade.offer({
-            name: "Paint",
-            description: "Paint",
+            name: ORYX.I18N.paint_name,
+            description: ORYX.I18N.paint_desc,
             'icon': ORYX.BASE_FILE_PATH + "images/paint.png",
             functionality: this._togglePaint.bind(this),
             group: "paintgroup",

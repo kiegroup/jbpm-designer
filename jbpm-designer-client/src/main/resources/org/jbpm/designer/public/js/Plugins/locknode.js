@@ -11,11 +11,11 @@ ORYX.Plugins.LockNode = Clazz.extend({
         if(ORYX.READONLY != true) {
             this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LOADED, this.checkLocksOnLoad.bind(this));
             this.facade.offer({
-                'name': 'Lock',
+                'name': ORYX.I18N.lockNode.lock,
                 'functionality': this.locknodes.bind(this),
                 'group': 'lockunlockgroup',
                 'icon': ORYX.BASE_FILE_PATH + "images/lock.png",
-                'description': 'Lock Elements',
+                'description': ORYX.I18N.lockNode.lock_desc,
                 'index': 1,
                 'minShape': 1,
                 'maxShape': 0,
@@ -31,11 +31,11 @@ ORYX.Plugins.LockNode = Clazz.extend({
                 }.bind(this)
             });
             this.facade.offer({
-                'name': 'Unlock',
+                'name': ORYX.I18N.lockNode.unlock,
                 'functionality': this.unlocknodes.bind(this),
                 'group': 'lockunlockgroup',
                 'icon': ORYX.BASE_FILE_PATH + "images/unlock.png",
-                'description': 'Unlock Elements',
+                'description': ORYX.I18N.lockNode.unlock_desc,
                 'index': 2,
                 'minShape': 1,
                 'maxShape': 0,
