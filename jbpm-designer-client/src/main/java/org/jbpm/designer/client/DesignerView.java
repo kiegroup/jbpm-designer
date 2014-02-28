@@ -62,7 +62,7 @@ public class DesignerView
         this.editorParameters = editorParameters;
         // fix locale if needed (for "default")
         String locale = LocaleInfo.getCurrentLocale().getLocaleName();
-        if(locale == null) {
+/*        if(locale == null) {
             locale = "en";
         } else {
             if(locale.equals("default")) {
@@ -76,7 +76,7 @@ public class DesignerView
                 locale = "en";
             }
         }
-
+*/
         String paramsStr = "";
         Iterator<String> paramsIter = this.editorParameters.keySet().iterator();
         while(paramsIter.hasNext()) {
