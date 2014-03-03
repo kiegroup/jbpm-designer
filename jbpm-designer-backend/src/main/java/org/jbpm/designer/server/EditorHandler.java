@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.WeakHashMap;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -54,6 +55,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.stringtemplate.v4.ST;
 import org.uberfire.backend.vfs.VFSService;
+import org.uberfire.io.IOService;
 
 /**
  * Servlet to load plugin and Oryx stencilset
@@ -124,6 +126,10 @@ public class EditorHandler extends HttpServlet {
 
     @Inject
     private VFSService vfsServices;
+
+    @Inject
+    @Named("ioStrategy")
+    private IOService ioService;
 
     /**
      * The pre-processing service, a global registry to get
@@ -227,7 +233,7 @@ public class EditorHandler extends HttpServlet {
                         "Performing diagram information pre-processing steps. ");
             }
             preprocessingUnit = _preProcessingService.findPreprocessingUnit(request, profile);
-            preprocessingUnit.preprocess(request, response, profile, getServletContext(), Boolean.parseBoolean(readOnly));
+            preprocessingUnit.preprocess(request, response, profile, getServletContext(), Boolean.parseBoolean(readOnly), ioService);
         }
 
         //output env javascript files
