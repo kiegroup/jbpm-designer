@@ -49,6 +49,7 @@ import org.slf4j.LoggerFactory;
 import org.stringtemplate.v4.ST;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.VFSService;
+import org.uberfire.io.IOService;
 import sun.misc.BASE64Encoder;
 
 /**
@@ -125,10 +126,13 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         return outData;
     }
 
-    public void preprocess(HttpServletRequest req, HttpServletResponse res, IDiagramProfile profile, ServletContext serlvetContext, boolean readOnly) {
-        if(readOnly) {
-            _logger.info("Performing preprocessing steps in readonly mode.");
-            try {
+    public void preprocess(HttpServletRequest req, HttpServletResponse res, IDiagramProfile profile, ServletContext serlvetContext, boolean readOnly, IOService ioService) {
+        try {
+            if(ioService != null) {
+                ioService.startBatch();
+            }
+            if(readOnly) {
+                _logger.info("Performing preprocessing steps in readonly mode.");
                 ST workItemTemplate = new ST(readFile(origStencilFilePath), '$', '$');
                 workItemTemplate.add("bopen", "{");
                 workItemTemplate.add("bclose", "}");
@@ -154,16 +158,16 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 deletefile(stencilFilePath);
                 createAndWriteToFile(stencilFilePath, workItemTemplate.render());
                 createAndParseViewSVGForReadOnly(workDefinitions, readOnlyIconEncoded);
-            } catch(Exception e) {
-                _logger.error("Unable to preprocess in readonly mode: " + e.getMessage());
+
+                if(ioService != null) {
+                    ioService.endBatch();
+                }
+                return;
             }
-            return;
-        }
 
-        Repository repository = profile.getRepository();
+            Repository repository = profile.getRepository();
 
-        String uuid = req.getParameter("uuid");
-        try {
+            String uuid = req.getParameter("uuid");
             //createAssetIfNotExisting(repository, "/defaultPackage", "BPMN2-SampleProcess", "bpmn2", getBytesFromFile(new File(sampleBpmn2)));
 
             Asset<String> asset = repository.loadAsset(uuid);
@@ -203,8 +207,6 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 try {
                     evaluateWorkDefinitions(workDefinitions, entry, repository, profile);
                 } catch(Exception e) {
-                    e.printStackTrace();
-                    // log and continue
                     _logger.error("Unable to parse a workitem definition: " + e.getMessage());
                 }
 
@@ -273,8 +275,13 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             createAndWriteToFile(stencilFilePath, workItemTemplate.render());
             // create and parse the view svg to include config data
             createAndParseViewSVG(workDefinitions, repository);
-        } catch( Exception e ) {
-            _logger.error("Failed to setup workitems : " + e.getMessage());
+
+        } catch ( final Exception e ) {
+            _logger.error(e.getMessage());
+        } finally {
+            if(ioService != null) {
+                ioService.endBatch();
+            }
         }
     }
 
