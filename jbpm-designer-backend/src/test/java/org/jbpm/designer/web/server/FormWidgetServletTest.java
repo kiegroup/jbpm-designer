@@ -103,6 +103,6 @@ public class FormWidgetServletTest  extends RepositoryBaseTest {
 
         String widgets = new String(response.getContent());
         assertNotNull(widgets);
-        assertEquals("form widget content\n", widgets);
+        assertEquals("form widget content", widgets);
     }
 }

@@ -426,7 +426,7 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
 
         String jsonResponse = new String(response.getContent());
         assertNotNull(jsonResponse);
-        assertEquals(jsonResponse, "custom editors content\n");
+        assertEquals(jsonResponse, "custom editors content");
     }
 
     @Test
@@ -460,7 +460,7 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
 
         String jsonResponse = new String(response.getContent());
         assertNotNull(jsonResponse);
-        assertEquals(jsonResponse, "custom editors content\n");
+        assertEquals(jsonResponse, "custom editors content");
     }
 
     @Test

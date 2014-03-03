@@ -359,7 +359,7 @@ public class VFSRepositoryGitFileSystemTest {
         assertEquals("test", asset.getName());
         assertEquals("test.txt", asset.getFullName());
         assertEquals("/", asset.getAssetLocation());
-        assertEquals("simple content\n", asset.getAssetContent());
+        assertEquals("simple content", asset.getAssetContent());
     }
 
     @Test
@@ -434,7 +434,7 @@ public class VFSRepositoryGitFileSystemTest {
 
         String content = ((Asset<String>)repository.loadAsset(id)).getAssetContent();
         assertNotNull(content);
-        assertEquals("updated content\n", content);
+        assertEquals("updated content", content);
     }
 
     @Test

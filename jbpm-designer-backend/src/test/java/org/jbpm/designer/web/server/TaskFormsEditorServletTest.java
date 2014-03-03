@@ -86,7 +86,7 @@ public class TaskFormsEditorServletTest  extends RepositoryBaseTest {
 
         Asset<String> form1 = repository.loadAsset(asset1.getUniqueId());
         assertNotNull(form1.getAssetContent());
-        assertEquals("this is simple task content\n", form1.getAssetContent());
+        assertEquals("this is simple task content", form1.getAssetContent());
 
     }
 
@@ -127,6 +127,6 @@ public class TaskFormsEditorServletTest  extends RepositoryBaseTest {
 
         String formData =      new String(response.getContent());
         System.out.println(formData);
-        assertEquals("this is simple task content\n", formData);
+        assertEquals("this is simple task content", formData);
     }
 }
