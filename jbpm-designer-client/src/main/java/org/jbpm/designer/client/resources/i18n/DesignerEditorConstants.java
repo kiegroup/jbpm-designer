@@ -9,4 +9,6 @@ public interface DesignerEditorConstants extends
     DesignerEditorConstants INSTANCE = GWT.create(DesignerEditorConstants.class);
 
     String businessProcess();
+
+    String businessProcessResourceTypeDescription();
 }
