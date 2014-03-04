@@ -62,7 +62,7 @@ if(!ORYX.I18N.AdHocCC) ORYX.I18N.AdHocCC = {};
 
 ORYX.I18N.AdHocCC.group = '<i18n:message key="ORYX.I18N.AdHocCC.group">Ad Hoc</i18n:message>';
 ORYX.I18N.AdHocCC.compl = '<i18n:message key="ORYX.I18N.AdHocCC.compl">Edit Completion Condition</i18n:message>';
-ORYX.I18N.AdHocCC.complDesc = '<i18n:message key="ORYX.I18N.AdHocCC.complDesc">Edit an Ad Hoc Activity\'s Completion Condition</i18n:message>';
+ORYX.I18N.AdHocCC.complDesc = '<i18n:message key="ORYX.I18N.AdHocCC.complDesc">Edit an Ad Hoc Activity\\\'s Completion Condition</i18n:message>';
 ORYX.I18N.AdHocCC.notOne = '<i18n:message key="ORYX.I18N.AdHocCC.notOne">Not exactly one element selected!</i18n:message>';
 ORYX.I18N.AdHocCC.nodAdHocCC = '<i18n:message key="ORYX.I18N.AdHocCC.nodAdHocCC">Selected element has no ad hoc completion condition!</i18n:message>';
 ORYX.I18N.AdHocCC.selectTask = '<i18n:message key="ORYX.I18N.AdHocCC.selectTask">Select a task...</i18n:message>';
@@ -575,7 +575,7 @@ ORYX.I18N.StepThroughPlugin.stepThrough = '<i18n:message key="ORYX.I18N.StepThro
 ORYX.I18N.StepThroughPlugin.stepThroughDesc = '<i18n:message key="ORYX.I18N.StepThroughPlugin.stepThroughDesc">Step through your model</i18n:message>';
 ORYX.I18N.StepThroughPlugin.undo = '<i18n:message key="ORYX.I18N.StepThroughPlugin.undo">Undo</i18n:message>';
 ORYX.I18N.StepThroughPlugin.undoDesc = '<i18n:message key="ORYX.I18N.StepThroughPlugin.undoDesc">Undo one Step</i18n:message>';
-ORYX.I18N.StepThroughPlugin.error = '<i18n:message key="ORYX.I18N.StepThroughPlugin.error">Can\'t step through this diagram.</i18n:message>';
+ORYX.I18N.StepThroughPlugin.error = '<i18n:message key="ORYX.I18N.StepThroughPlugin.error">Can\\\'t step through this diagram.</i18n:message>';
 ORYX.I18N.StepThroughPlugin.executing = '<i18n:message key="ORYX.I18N.StepThroughPlugin.executing">Executing</i18n:message>';
 
 if(!ORYX.I18N.SyntaxChecker) ORYX.I18N.SyntaxChecker = {};
@@ -934,13 +934,13 @@ ORYX.I18N.Feedback.subjects = [
     {
     	id: '<i18n:message key="ORYX.I18N.Feedback.subjects_first_id">question</i18n:message>',   // ansi-compatible name
     	name: '<i18n:message key="ORYX.I18N.Feedback.subjects_first_name">Question</i18n:message>', // natural name
-    	description: '<i18n:message key="ORYX.I18N.Feedback.subjects_first_description">Ask your question here! \\nPlease give us as much information as possible, so we don\'t have to bother you with more questions, before we can give an answer.</i18n:message>', // default text for the description text input field
+    	description: '<i18n:message key="ORYX.I18N.Feedback.subjects_first_description">Ask your question here! \\nPlease give us as much information as possible, so we don\\\'t have to bother you with more questions, before we can give an answer.</i18n:message>', // default text for the description text input field
     	info: '<i18n:message key="ORYX.I18N.Feedback.subjects_first_info"/>' // optional field to give more info
     },
     {
     	id: '<i18n:message key="ORYX.I18N.Feedback.subjects_second_id">problem</i18n:message>',   // ansi-compatible name
     	name: '<i18n:message key="ORYX.I18N.Feedback.subjects_second_name">Problem</i18n:message>', // natural name
-    	description: '<i18n:message key="ORYX.I18N.Feedback.subjects_second_description">We\'re sorry for the inconvenience. Give us feedback on the problem, and we\'ll try to solve it for you. Describe it as detailed as possible, please.</i18n:message>', // default text for the description text input field
+    	description: '<i18n:message key="ORYX.I18N.Feedback.subjects_second_description">We\\\'re sorry for the inconvenience. Give us feedback on the problem, and we\\\'ll try to solve it for you. Describe it as detailed as possible, please.</i18n:message>', // default text for the description text input field
     	info: '<i18n:message key="ORYX.I18N.Feedback.subjects_second_info"/>' // optional field to give more info
     },
     {
@@ -955,7 +955,7 @@ ORYX.I18N.Feedback.subjects = [
 if(!ORYX.I18N.BPMN2DTRPXMI) ORYX.I18N.BPMN2DTRPXMI = {};
 ORYX.I18N.BPMN2DTRPXMI.group = '<i18n:message key="ORYX.I18N.BPMN2DTRPXMI.group">Export</i18n:message>';
 ORYX.I18N.BPMN2DTRPXMI.DTRPXMIExport = '<i18n:message key="ORYX.I18N.BPMN2DTRPXMI.DTRPXMIExport">Export to XMI (Design Thinking)</i18n:message>';
-ORYX.I18N.BPMN2DTRPXMI.DTRPXMIExportDescription = '<i18n:message key="ORYX.I18N.BPMN2DTRPXMI.DTRPXMIExportDescription">Exports current model to XMI (requires stencil set extension \'BPMN Subset for Design Thinking\')</i18n:message>';
+ORYX.I18N.BPMN2DTRPXMI.DTRPXMIExportDescription = '<i18n:message key="ORYX.I18N.BPMN2DTRPXMI.DTRPXMIExportDescription">Exports current model to XMI (requires stencil set extension \\\'BPMN Subset for Design Thinking\\\')</i18n:message>';
 
 /** New Language Properties: 14.05.2009 */
 if(!ORYX.I18N.RDFExport) ORYX.I18N.RDFExport = {};
@@ -1128,8 +1128,8 @@ ORYX.I18N.SyntaxChecker.BPMN2_TOO_FEW_INITIATING_PARTICIPANTS = '<i18n:message k
 ORYX.I18N.SyntaxChecker.BPMN2_TOO_MANY_INITIATING_PARTICIPANTS = '<i18n:message key="ORYX.I18N.SyntaxChecker.BPMN2_TOO_MANY_INITIATING_PARTICIPANTS">A Choreography Activity must not have more than one initiating Participant (white).</i18n:message>';
 
 ORYX.I18N.SyntaxChecker.COMMUNICATION_AT_LEAST_TWO_PARTICIPANTS = '<i18n:message key="ORYX.I18N.SyntaxChecker.COMMUNICATION_AT_LEAST_TWO_PARTICIPANTS">The communication must be connected to at least two participants.</i18n:message>';
-ORYX.I18N.SyntaxChecker.MESSAGEFLOW_START_MUST_BE_PARTICIPANT = '<i18n:message key="ORYX.I18N.SyntaxChecker.MESSAGEFLOW_START_MUST_BE_PARTICIPANT">The message flow\'s source must be a participant.</i18n:message>';
-ORYX.I18N.SyntaxChecker.MESSAGEFLOW_END_MUST_BE_PARTICIPANT = '<i18n:message key="ORYX.I18N.SyntaxChecker.MESSAGEFLOW_END_MUST_BE_PARTICIPANT">The message flow\'s target must be a participant.</i18n:message>';
+ORYX.I18N.SyntaxChecker.MESSAGEFLOW_START_MUST_BE_PARTICIPANT = '<i18n:message key="ORYX.I18N.SyntaxChecker.MESSAGEFLOW_START_MUST_BE_PARTICIPANT">The message flow\\\'s source must be a participant.</i18n:message>';
+ORYX.I18N.SyntaxChecker.MESSAGEFLOW_END_MUST_BE_PARTICIPANT = '<i18n:message key="ORYX.I18N.SyntaxChecker.MESSAGEFLOW_END_MUST_BE_PARTICIPANT">The message flow\\\'s target must be a participant.</i18n:message>';
 ORYX.I18N.SyntaxChecker.CONV_LINK_CANNOT_CONNECT_CONV_NODES = '<i18n:message key="ORYX.I18N.SyntaxChecker.CONV_LINK_CANNOT_CONNECT_CONV_NODES">The conversation link must connect a communication or sub conversation node with a participant.</i18n:message>';
 
 /** New Language Properties 30.12.2009 */
@@ -1192,7 +1192,7 @@ ORYX.I18N.LocalHistory.localHistoryPanel.title='<i18n:message key="ORYX.I18N.Loc
 
 if(!ORYX.I18N.LocalHistory.LocalHistoryView) ORYX.I18N.LocalHistory.LocalHistoryView = {};
 ORYX.I18N.LocalHistory.LocalHistoryView='<i18n:message key="ORYX.I18N.LocalHistory.LocalHistoryView">Local History View</i18n:message>';
-ORYX.I18N.LocalHistory.LocalHistoryView.restore='<i18n:message key="ORYX.I18N.LocalHistory.LocalHistoryView.restore">Restore</i18n:message>';
+ORYX.I18N.LocalHistory.LocalHistoryView.restore_btn='<i18n:message key="ORYX.I18N.LocalHistory.LocalHistoryView.restore_btn">Restore</i18n:message>';
 ORYX.I18N.LocalHistory.LocalHistoryView.invalidProcessInfo='<i18n:message key="ORYX.I18N.LocalHistory.LocalHistoryView.invalidProcessInfo">Invalid Process info. Unable to restore.</i18n:message>';
 ORYX.I18N.LocalHistory.LocalHistoryView.msg='<i18n:message key="ORYX.I18N.LocalHistory.LocalHistoryView.msg">Please select a process id.</i18n:message>';
 
@@ -1404,7 +1404,7 @@ ORYX.I18N.PetriNetSoundness.exactlyOneFinalPlace='<i18n:message key="ORYX.I18N.P
 ORYX.I18N.PetriNetSoundness.finalPlacesFound='<i18n:message key="ORYX.I18N.PetriNetSoundness.finalPlacesFound">final places found.</i18n:message>';
 ORYX.I18N.PetriNetSoundness.eachNode='<i18n:message key="ORYX.I18N.PetriNetSoundness.eachNode">Each node in the process model is on the path from the initial node to the final node.</i18n:message>';
 ORYX.I18N.PetriNetSoundness.exactlyOneInitAndFinalPlace='<i18n:message key="ORYX.I18N.PetriNetSoundness.exactlyOneInitAndFinalPlace">There must be exactly one initial and final place to perform further checks!</i18n:message>';
-ORYX.I18N.PetriNetSoundness.nodesNoInPath='<i18n:message key="ORYX.I18N.PetriNetSoundness.nodesNoInPath">nodes that aren\'t on any path from beginning to end found.</i18n:message>';
+ORYX.I18N.PetriNetSoundness.nodesNoInPath='<i18n:message key="ORYX.I18N.PetriNetSoundness.nodesNoInPath">nodes that aren\\\'t on any path from beginning to end found.</i18n:message>';
 ORYX.I18N.PetriNetSoundness.sound='<i18n:message key="ORYX.I18N.PetriNetSoundness.sound">Sound</i18n:message>';
 ORYX.I18N.PetriNetSoundness.weakSound='<i18n:message key="ORYX.I18N.PetriNetSoundness.weakSound">Weak Sound</i18n:message>';
 ORYX.I18N.PetriNetSoundness.relaxedSound='<i18n:message key="ORYX.I18N.PetriNetSoundness.relaxedSound">Relaxed Sound</i18n:message>';
@@ -1420,9 +1420,9 @@ ORYX.I18N.main.failSave='<i18n:message key="ORYX.I18N.main.failSave">Failed to s
 ORYX.I18N.main.unableUserAction='<i18n:message key="ORYX.I18N.main.unableUserAction">Unable to perform user action due to error(s).<br/>Validate your process before saving, and view server logs to see error details.</i18n:message>';
 
 if(!ORYX.I18N.constraintExpr) ORYX.I18N.constraintExpr = {}
-ORYX.I18N.constraintExpr.errorPropertyMissing='<i18n:message key="ORYX.I18N.constraintExpr.errorPropertyMissing">Error reading definition of showConstraintEditorWhen: \'property\' is missing!</i18n:message>';
-ORYX.I18N.constraintExpr.errorValueIsMissing='<i18n:message key="ORYX.I18N.constraintExpr.errorValueIsMissing">Error reading definition of showConstraintEditorWhen: \'value\' is missing!</i18n:message>';
-ORYX.I18N.constraintExpr.configureProcess='<i18n:message key="ORYX.I18N.constraintExpr.configureProcess">Please configure Process \'package\' attribute first</i18n:message>';
+ORYX.I18N.constraintExpr.errorPropertyMissing='<i18n:message key="ORYX.I18N.constraintExpr.errorPropertyMissing">Error reading definition of showConstraintEditorWhen: \\\'property\\\' is missing!</i18n:message>';
+ORYX.I18N.constraintExpr.errorValueIsMissing='<i18n:message key="ORYX.I18N.constraintExpr.errorValueIsMissing">Error reading definition of showConstraintEditorWhen: \\\'value\\\' is missing!</i18n:message>';
+ORYX.I18N.constraintExpr.configureProcess='<i18n:message key="ORYX.I18N.constraintExpr.configureProcess">Please configure Process \\\'package\\\' attribute first</i18n:message>';
 ORYX.I18N.constraintExpr.defineOneModel='<i18n:message key="ORYX.I18N.constraintExpr.defineOneModel">You must define at least 1 Model Entity in your process!</i18n:message>';
 ORYX.I18N.constraintExpr.factNameMandatory='<i18n:message key="ORYX.I18N.constraintExpr.factNameMandatory">Fact Name is mandatory</i18n:message>';
 ORYX.I18N.constraintExpr.mustSpecifyField='<i18n:message key="ORYX.I18N.constraintExpr.mustSpecifyField">You must specify a field for</i18n:message>';
