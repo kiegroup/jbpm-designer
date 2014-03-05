@@ -1192,7 +1192,7 @@ ORYX.I18N.LocalHistory.localHistoryPanel.title='<i18n:message key="ORYX.I18N.Loc
 
 if(!ORYX.I18N.LocalHistory.LocalHistoryView) ORYX.I18N.LocalHistory.LocalHistoryView = {};
 ORYX.I18N.LocalHistory.LocalHistoryView='<i18n:message key="ORYX.I18N.LocalHistory.LocalHistoryView">Local History View</i18n:message>';
-ORYX.I18N.LocalHistory.LocalHistoryView.restore_btn='<i18n:message key="ORYX.I18N.LocalHistory.LocalHistoryView.restore_btn">Restore</i18n:message>';
+ORYX.I18N.LocalHistory.LocalHistoryView.restore='<i18n:message key="ORYX.I18N.LocalHistory.LocalHistoryView.restore">Restore</i18n:message>';
 ORYX.I18N.LocalHistory.LocalHistoryView.invalidProcessInfo='<i18n:message key="ORYX.I18N.LocalHistory.LocalHistoryView.invalidProcessInfo">Invalid Process info. Unable to restore.</i18n:message>';
 ORYX.I18N.LocalHistory.LocalHistoryView.msg='<i18n:message key="ORYX.I18N.LocalHistory.LocalHistoryView.msg">Please select a process id.</i18n:message>';
 
@@ -1412,7 +1412,7 @@ ORYX.I18N.PetriNetSoundness.relaxedSound='<i18n:message key="ORYX.I18N.PetriNetS
 if(!ORYX.I18N.main) ORYX.I18N.main = {}
 
 ORYX.I18N.main.errorDetails='<i18n:message key="ORYX.I18N.main.errorDetails">Error Details</i18n:message>';
-ORYX.I18N.main.details='<i18n:message key="ORYX.I18N.main.">Details</i18n:message>';
+ORYX.I18N.main.details='<i18n:message key="ORYX.I18N.main.details">Details</i18n:message>';
 ORYX.I18N.main.errorOpening='<i18n:message key="ORYX.I18N.main.errorOpening"><p/><p/><center>Could not open requested business process due to processing errors. <br/> Empty process was loaded instead.<br/> Click on the Details tab below to view error details.</center></i18n:message>';
 ORYX.I18N.main.errorLoadingProc='<i18n:message key="ORYX.I18N.main.errorLoadingProc">Process loading errors</i18n:message>';
 ORYX.I18N.main.shapeRepo='<i18n:message key="ORYX.I18N.main.shapeRepo">Shape Repository</i18n:message>';
