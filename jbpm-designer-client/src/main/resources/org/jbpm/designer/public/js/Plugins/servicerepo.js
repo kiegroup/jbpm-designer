@@ -23,13 +23,6 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
                 'maxShape': 0,
                 'isEnabled': function(){
                     return ORYX.READONLY != true;
-    //				profileParamName = "profile";
-    //				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    //				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-    //		        regexa = new RegExp( regexSa );
-    //		        profileParams = regexa.exec( window.location.href );
-    //		        profileParamValue = profileParams[1];
-    //				return profileParamValue == "jbpm";
                 }.bind(this)
             });
         }
@@ -46,7 +39,16 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
         var connectToRepo = new Ext.Button({
             text: ORYX.I18N.View.connect,
             handler: function(){
-                this._updateRepoDialog(Ext.getCmp('serviceurlfield').getValue());
+                var tosaveVal = "";
+                var repoURLsCookieValue = this._readCookie("designerservicerepos");
+                if(repoURLsCookieValue != null) {
+                    tosaveVal = repoURLsCookieValue + "," + Ext.getCmp('serviceurlfield').getRawValue();
+                } else {
+                    tosaveVal = Ext.getCmp('serviceurlfield').getRawValue();
+                }
+
+                this._createCookie("designerservicerepos", tosaveVal, 365);
+                this._updateRepoDialog(Ext.getCmp('serviceurlfield').getRawValue());
             }.bind(this)
         });
 
@@ -66,20 +68,7 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
             resizable:	true,
             items: 		[this.repoContent],
             tbar: [
-                {
-                    id: 'serviceurlfield',
-                    xtype: 'textfield',
-                    fieldLabel: 'URL',
-                    name: 'repourl',
-                    width: '300',
-                    value: ORYX.I18N.View.enterServiceURL,
-                    handleMouseEvents: true,
-                    listeners: {
-                        render: function() {
-                            this.getEl().on('mousedown', function(e, t, eOpts) {Ext.getCmp('serviceurlfield').setValue("");});
-                        }
-                    }
-                },
+                this._getRepoCombo(),
                 connectToRepo
             ],
             buttons:[
@@ -87,6 +76,8 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
                     text:ORYX.I18N.jPDLSupport.close,
                     handler:function(){
                         this.repoDialog.hide();
+                        this.repoDialog.destroy(true);
+                        delete this.repoDialog;
                     }.bind(this)
                 }
             ]
@@ -98,7 +89,74 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
             }
         });
         this.repoDialog.show();
+
+
     },
+    _getRepoCombo : function() {
+        var repoLocationData = new Array();
+        var repoLocationStore = new Ext.data.SimpleStore({
+            fields: [
+                'url',
+                'value'
+            ],
+            data: [[]]
+        });
+        var repoURLsCookieValue = this._readCookie("designerservicerepos");
+        if(repoURLsCookieValue != null) {
+            if (repoURLsCookieValue.startsWith(",")) {
+                repoURLsCookieValue = repoURLsCookieValue.substr(1, repoURLsCookieValue.length);
+            }
+            if (repoURLsCookieValue.endsWith(",")) {
+                repoURLsCookieValue = repoURLsCookieValue.substr(0, repoURLsCookieValue.length - 1);
+            }
+            var valueParts = repoURLsCookieValue.split(",");
+            for(var i = 0; i < valueParts.length; i++) {
+                var nextPart = valueParts[i];
+                if(nextPart.length >= 0) {
+                    var nextPartArray = new Array();
+                    nextPartArray.push(nextPart);
+                    nextPartArray.push(nextPart);
+                    repoLocationData.push(nextPartArray);
+                }
+            }
+            repoLocationStore.loadData(repoLocationData);
+            repoLocationStore.commitChanges();
+        } else {
+            // add the community defaults
+            var communityRepoOne = new Array();
+            communityRepoOne.push("http://people.redhat.com/tsurdilo/repository");
+            communityRepoOne.push("http://people.redhat.com/tsurdilo/repository");
+            repoLocationData.push(communityRepoOne);
+            var communityRepoTwo = new Array();
+            communityRepoTwo.push("http://people.redhat.com/kverlaen/repository");
+            communityRepoTwo.push("http://people.redhat.com/kverlaen/repository");
+            repoLocationData.push(communityRepoTwo);
+
+            repoLocationStore.loadData(repoLocationData);
+            repoLocationStore.commitChanges();
+        }
+
+        var repoUrlCombo = new Ext.form.ComboBox({
+            id: 'serviceurlfield',
+            name: 'repourl',
+            forceSelection: false,
+            editable: true,
+            allowBlank: false,
+            displayField: 'url',
+            valueField: 'value',
+            mode: 'local',
+            queryMode: 'local',
+            typeAhead: true,
+            value: "",
+            triggerAction: 'all',
+            fieldLabel: 'Location',
+            width: 300,
+            store: repoLocationStore
+        });
+
+        return repoUrlCombo;
+    },
+
     _updateRepoDialog : function(serviceRepoURL) {
         this.facade.raiseEvent({
             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
@@ -113,7 +171,9 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
             success: function(request){
                 try {
                     if(request.responseText == "false") {
-                        this.repoDialog.remove(this.repoContent, true);
+                        if(this.repoDialog) {
+                            this.repoDialog.remove(this.repoContent, true);
+                        }
                         this.repoContent = new Ext.Panel({
                             layout:'table',
                             html: '<br/><br/><br/><br/><center>'+ORYX.I18N.View.noServiceSpecified+'.</center>'
@@ -130,7 +190,9 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
                         this._showJbpmServiceInfo(request.responseText, serviceRepoURL);
                     }
                 } catch(e) {
-                    this.repoDialog.remove(this.repoContent, true);
+                    if(this.repoDialog) {
+                        this.repoDialog.remove(this.repoContent, true);
+                    }
                     this.repoContent = new Ext.Panel({
                         layout:'table',
                         html: '<br/><br/><br/><br/><center>'+ORYX.I18N.View.noServiceSpecified+'</center>'
@@ -146,7 +208,9 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
                 }
             }.createDelegate(this),
             failure: function(){
-                this.repoDialog.remove(this.repoContent, true);
+                if(this.repoDialog) {
+                    this.repoDialog.remove(this.repoContent, true);
+                }
                 this.repoContent = new Ext.Panel({
                     layout:'table',
                     html: '<br/><br/><br/><br/><center>'+ORYX.I18N.View.noServiceSpecified+'</center>'
@@ -274,7 +338,9 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
 
         });
 
-        this.repoDialog.remove(this.repoContent, true);
+        if(this.repoDialog) {
+            this.repoDialog.remove(this.repoContent, true);
+        }
         this.repoContent = new Ext.TabPanel({
             activeTab: 0,
             border: false,
@@ -300,5 +366,28 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
 
     _renderDocs: function(val) {
         return '<a href="' + val + '" target="_blank">link</a>';
+    },
+
+    _createCookie: function(name, value, days) {
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime()+(days*24*60*60*1000));
+            var expires = "; expires="+date.toGMTString();
+        }
+        else {
+            var expires = "";
+        }
+
+        document.cookie = name+"="+value+expires+"; path=/";
+    },
+    _readCookie: function(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0;i < ca.length;i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1,c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+        }
+        return null;
     }
 });

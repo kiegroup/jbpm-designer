@@ -52,7 +52,11 @@
 
 </head>
 <body style="overflow:hidden;" onload="startit();">
-    <div id="Definition"></div>
+    <div id="Definition"> <!-- <canvas id="comp"></canvas> --> </div>
+    <!-- <video id="video" autoplay width="300" style="display:none"></video>
+    <canvas id="canvas" style="width:300px;display:none;"></canvas>
+    <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/gestures/gesture.js" type="text/javascript"></script>
+    -->
 
     <script>
         if(parent.document.getElementById(ORYX.EDITORID) && parent.document.getElementById(ORYX.EDITORID).parentNode && parent.document.getElementById(ORYX.EDITORID).parentNode.parentNode) {
