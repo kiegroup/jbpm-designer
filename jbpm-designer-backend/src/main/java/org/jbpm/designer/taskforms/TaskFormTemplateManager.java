@@ -59,36 +59,40 @@ public class TaskFormTemplateManager {
             if(re instanceof Process) {
                 Process process = (Process) re;
                 if(process != null && process.getId() != null && process.getId().length() > 0) {
-                    TaskFormInfo tfi = new TaskFormInfo();
-                    tfi.setId(process.getId() + "-taskform");
-                    if(process.getName() != null && process.getName().length() > 0 ) {
-                        tfi.setProcessName(process.getName());
-                    } else {
-                        tfi.setProcessName(process.getId());
-                    }
-                    tfi.setProcessId(process.getId());
-                    //String packageName1 = "";
-//                    FeatureMap attrs = process.getAnyAttribute();
-//                    for (Object attr : attrs) {
-//                        EStructuralFeatureImpl.SimpleFeatureMapEntry a = (EStructuralFeatureImpl.SimpleFeatureMapEntry) attr;
-//                        if("packageName".equals(a.getEStructuralFeature().getName())) {
-//                            packageName1 = (String)a.getValue();
-//                        }
-//                    }
-                    tfi.setPkgName(packageName);
+
                     // get the list of process properties
                     List<Property> processProperties = process.getProperties();
-                    for(Property prop : processProperties) {
-                        if(isValidStructureRef(prop.getItemSubjectRef().getStructureRef())) {
-                            TaskFormInput input = new TaskFormInput();
-                            input.setName(prop.getId());
-                            input.setRefType(prop.getItemSubjectRef().getStructureRef());
-                            tfi.getTaskInputs().add(input);
+
+                    if (taskId == null) {
+                        TaskFormInfo tfi = new TaskFormInfo();
+                        tfi.setId(process.getId() + "-taskform");
+                        if(process.getName() != null && process.getName().length() > 0 ) {
+                            tfi.setProcessName(process.getName());
+                        } else {
+                            tfi.setProcessName(process.getId());
                         }
+                        tfi.setProcessId(process.getId());
+                        //String packageName1 = "";
+    //                    FeatureMap attrs = process.getAnyAttribute();
+    //                    for (Object attr : attrs) {
+    //                        EStructuralFeatureImpl.SimpleFeatureMapEntry a = (EStructuralFeatureImpl.SimpleFeatureMapEntry) attr;
+    //                        if("packageName".equals(a.getEStructuralFeature().getName())) {
+    //                            packageName1 = (String)a.getValue();
+    //                        }
+    //                    }
+                        tfi.setPkgName(packageName);
+                        for(Property prop : processProperties) {
+                            if(isValidStructureRef(prop.getItemSubjectRef().getStructureRef())) {
+                                TaskFormInput input = new TaskFormInput();
+                                input.setName(prop.getId());
+                                input.setRefType(prop.getItemSubjectRef().getStructureRef());
+                                tfi.getTaskInputs().add(input);
+                            }
+                        }
+                        tfi.setProcessForm(true);
+                        tfi.setUserTaskForm(false);
+                        taskFormInformationList.add(tfi);
                     }
-                    tfi.setProcessForm(true);
-                    tfi.setUserTaskForm(false);
-                    taskFormInformationList.add(tfi);
                     
                     for(FlowElement fe : process.getFlowElements()) {
                         if(fe instanceof UserTask) {
