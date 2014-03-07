@@ -215,7 +215,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
         var dialog = new Ext.Window({
             layout		: 'anchor',
             autoCreate	: true,
-            title		: ORYX.I18N.LocalHistory.LocalHistoryView,
+            title		: ORYX.I18N.LocalHistory.LocalHistoryView.title,
             height		: 350,
             width		: 780,
             modal		: true,

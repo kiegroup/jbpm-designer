@@ -1191,7 +1191,7 @@ ORYX.I18N.LocalHistory.localHistoryPanel.title='<i18n:message key="ORYX.I18N.Loc
 
 
 if(!ORYX.I18N.LocalHistory.LocalHistoryView) ORYX.I18N.LocalHistory.LocalHistoryView = {};
-ORYX.I18N.LocalHistory.LocalHistoryView='<i18n:message key="ORYX.I18N.LocalHistory.LocalHistoryView">Local History View</i18n:message>';
+ORYX.I18N.LocalHistory.LocalHistoryView.title='<i18n:message key="ORYX.I18N.LocalHistory.LocalHistoryView.title">Local History View</i18n:message>';
 ORYX.I18N.LocalHistory.LocalHistoryView.restore='<i18n:message key="ORYX.I18N.LocalHistory.LocalHistoryView.restore">Restore</i18n:message>';
 ORYX.I18N.LocalHistory.LocalHistoryView.invalidProcessInfo='<i18n:message key="ORYX.I18N.LocalHistory.LocalHistoryView.invalidProcessInfo">Invalid Process info. Unable to restore.</i18n:message>';
 ORYX.I18N.LocalHistory.LocalHistoryView.msg='<i18n:message key="ORYX.I18N.LocalHistory.LocalHistoryView.msg">Please select a process id.</i18n:message>';
