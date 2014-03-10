@@ -471,18 +471,22 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
     },
 
     renameassetnotify: function() {
-        Ext.MessageBox.confirm(
-            ORYX.I18N.Save.renameConfirm_title,
-            ORYX.I18N.Save.renameConfirm_msg,
-            function(btn){
-                if (btn == 'yes') {
-                    this.save(true);
-                    parent.designersignalassetrename(ORYX.UUID);
-                } else {
-                    parent.designersignalassetrename(ORYX.UUID);
-                }
-            }.bind(this)
-        );
+        if(ORYX.Editor.checkIfSaved()) {
+            parent.designersignalassetrename(ORYX.UUID);
+        } else {
+            Ext.MessageBox.confirm(
+                ORYX.I18N.Save.renameConfirm_title,
+                ORYX.I18N.Save.renameConfirm_msg,
+                function(btn){
+                    if (btn == 'yes') {
+                        this.save(true);
+                        parent.designersignalassetrename(ORYX.UUID);
+                    } else {
+                        parent.designersignalassetrename(ORYX.UUID);
+                    }
+                }.bind(this)
+            );
+        }
     },
 
     unloadWindow: function() {
