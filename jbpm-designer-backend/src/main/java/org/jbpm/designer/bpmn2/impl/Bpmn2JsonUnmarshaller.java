@@ -185,6 +185,7 @@ public class Bpmn2JsonUnmarshaller {
             revisitWsdlImports(def);
             revisitMultiInstanceTasks(def);
             addSimulation(def);
+            revisitItemDefinitions(def);
             //revisitDI(def);
 
             // return def;
@@ -200,6 +201,25 @@ public class Bpmn2JsonUnmarshaller {
             _currentResource = null;
         }
     }
+
+    public void revisitItemDefinitions(Definitions def) {
+        List<String> itemIds = new ArrayList<String>();
+        List<ItemDefinition> itemsToRemove = new ArrayList<ItemDefinition>();
+        for(RootElement root : def.getRootElements()) {
+            if(root instanceof ItemDefinition) {
+                if(!itemIds.contains(root.getId())) {
+                    itemIds.add(root.getId());
+                } else {
+                    ItemDefinition idef = (ItemDefinition) root;
+                    Random rand = new Random();
+                    int randomNum = rand.nextInt((1000 - 10) + 1) + 10;
+                    idef.setId(idef.getId() + randomNum);
+                }
+            }
+        }
+    }
+
+
 
     public void revisitDI(Definitions def) {
         BPMNPlane plane = def.getDiagrams().get(0).getPlane();

@@ -420,10 +420,13 @@ public class Bpmn2JsonMarshaller {
             List<DataOutputAssociation> outputAssociations = event.getDataOutputAssociation();
             StringBuffer doutassociationbuff = new StringBuffer();
             for(DataOutputAssociation doa : outputAssociations) {
-                doutassociationbuff.append(((DataOutput)doa.getSourceRef().get(0)).getName());
-                doutassociationbuff.append("->");
-                doutassociationbuff.append(doa.getTargetRef().getId());
-                doutassociationbuff.append(",");
+                String doaName = ((DataOutput)doa.getSourceRef().get(0)).getName();
+                if(doaName != null && doaName.length() > 0) {
+                    doutassociationbuff.append(((DataOutput)doa.getSourceRef().get(0)).getName());
+                    doutassociationbuff.append("->");
+                    doutassociationbuff.append(doa.getTargetRef().getId());
+                    doutassociationbuff.append(",");
+                }
             }
             if(doutassociationbuff.length() > 0) {
                 doutassociationbuff.setLength(doutassociationbuff.length() - 1);
@@ -514,10 +517,12 @@ public class Bpmn2JsonMarshaller {
             List<DataInputAssociation> inputAssociations = event.getDataInputAssociation();
             StringBuffer dinassociationbuff = new StringBuffer();
             for(DataInputAssociation din : inputAssociations) {
-                dinassociationbuff.append(din.getSourceRef().get(0).getId());
-                dinassociationbuff.append("->");
-                dinassociationbuff.append( ((DataInput)din.getTargetRef()).getName());
-                dinassociationbuff.append(",");
+                if(din.getSourceRef().get(0).getId() != null && din.getSourceRef().get(0).getId().length() > 0) {
+                    dinassociationbuff.append(din.getSourceRef().get(0).getId());
+                    dinassociationbuff.append("->");
+                    dinassociationbuff.append( ((DataInput)din.getTargetRef()).getName());
+                    dinassociationbuff.append(",");
+                }
             }
             if(dinassociationbuff.length() > 0) {
                 dinassociationbuff.setLength(dinassociationbuff.length() - 1);
@@ -1194,9 +1199,11 @@ public class Bpmn2JsonMarshaller {
 //                biDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
 //            } 
             else {
-                associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
-                associationBuff.append(",");
-                uniDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
+                if(lhsAssociation != null && lhsAssociation.length() > 0) {
+                    associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
+                    associationBuff.append(",");
+                    uniDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
+                }
             }
         }
         
@@ -1220,8 +1227,10 @@ public class Bpmn2JsonMarshaller {
                 }
                 
                 if(!wasBiDirectional) {
-                    associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
-                    associationBuff.append(",");
+                    if(lhsAssociation != null && lhsAssociation.length() > 0) {
+                        associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
+                        associationBuff.append(",");
+                    }
                 }
             }
         }
@@ -1759,8 +1768,11 @@ public class Bpmn2JsonMarshaller {
     //                biDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
     //            }
                 else {
-                    associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
-                    associationBuff.append(",");
+                    if(lhsAssociation != null && lhsAssociation.length() > 0) {
+                        associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
+                        associationBuff.append(",");
+                        uniDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
+                    }
                     uniDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
 
                     if(contentDataInput != null) {
@@ -1822,8 +1834,10 @@ public class Bpmn2JsonMarshaller {
                     }
 
                     if(!wasBiDirectional) {
-                        associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
-                        associationBuff.append(",");
+                        if(lhsAssociation != null && lhsAssociation.length() > 0) {
+                            associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
+                            associationBuff.append(",");
+                        }
                     }
                 }
             }
@@ -2315,9 +2329,11 @@ public class Bpmn2JsonMarshaller {
 //                biDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
 //            } 
             else {
-                associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
-                associationBuff.append(",");
-                uniDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
+                if(lhsAssociation != null && lhsAssociation.length() > 0) {
+                    associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
+                    associationBuff.append(",");
+                    uniDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
+                }
             }
         }
         
@@ -2341,8 +2357,10 @@ public class Bpmn2JsonMarshaller {
                 }
                 
                 if(!wasBiDirectional) {
-                    associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
-                    associationBuff.append(",");
+                    if(lhsAssociation != null && lhsAssociation.length() > 0) {
+                        associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
+                        associationBuff.append(",");
+                    }
                 }
             }
         }
