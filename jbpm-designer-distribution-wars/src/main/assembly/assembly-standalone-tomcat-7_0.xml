@@ -37,13 +37,18 @@
                     <exclude>WEB-INF/web.xml</exclude>
 
                     <!-- UF Client Related -->
+                    <exclude>WEB-INF/lib/uberfire-js-*.jar</exclude>
                     <exclude>WEB-INF/lib/uberfire-client-api-*.jar</exclude>
                     <exclude>WEB-INF/lib/uberfire-widget-markdown-*.jar</exclude>
                     <exclude>WEB-INF/lib/uberfire-widgets-core-client-*.jar</exclude>
                     <exclude>WEB-INF/lib/uberfire-security-client-*.jar</exclude>
                     <exclude>WEB-INF/lib/uberfire-workbench-*.jar</exclude>
                     <exclude>WEB-INF/lib/uberfire-widgets-commons-*.jar</exclude>
-                    <exclude>WEB-INF/lib/uberfire-widgets-core-backend-*.jar</exclude>
+
+                    <!-- Guvnor client related -->
+                    <exclude>WEB-INF/lib/guvnor-inbox-client-*.jar</exclude>
+                    <exclude>WEB-INF/lib/guvnor-m2repo-editor-client-*.jar</exclude>
+                    <exclude>WEB-INF/lib/guvnor-workingset-client-*.jar</exclude>
 
                     <!-- Kie Workbench client related-->
                     <exclude>WEB-INF/lib/kie-wb-common-ui-*.jar</exclude>
@@ -66,7 +71,6 @@
                     <exclude>WEB-INF/lib/drools-wb-dsl-text-editor-client-*.jar</exclude>
                     <exclude>WEB-INF/lib/drools-wb-dtable-xls-editor-client-*.jar</exclude>
                     <exclude>WEB-INF/lib/drools-wb-enum-editor-client-*.jar</exclude>
-                    <exclude>WEB-INF/lib/drools-wb-factmodel-editor-client-*.jar</exclude>
                     <exclude>WEB-INF/lib/drools-wb-globals-editor-client-*.jar</exclude>
                     <exclude>WEB-INF/lib/drools-wb-guided-dtable-editor-client-*.jar</exclude>
                     <exclude>WEB-INF/lib/drools-wb-guided-rule-editor-client-*.jar</exclude>
@@ -75,6 +79,10 @@
                     <exclude>WEB-INF/lib/drools-wb-scorecard-xls-editor-client-*.jar</exclude>
                     <exclude>WEB-INF/lib/drools-wb-test-scenario-editor-client-*.jar</exclude>
                     <exclude>WEB-INF/lib/drools-wb-workitems-editor-client-*.jar</exclude>
+
+                    <!-- Form Modeler client related -->
+                    <exclude>WEB-INF/lib/jbpm-form-modeler-editor-client-*.jar</exclude>
+                    <exclude>WEB-INF/lib/jbpm-form-modeler-renderer-client-*.jar</exclude>
 
                     <!-- GWT Client Related -->
                     <exclude>WEB-INF/lib/gwt-user-*.jar</exclude>
@@ -90,16 +98,31 @@
                     <!-- Errai -->
                     <exclude>WEB-INF/lib/errai-codegen-gwt-*.jar</exclude>
                     <exclude>WEB-INF/lib/errai-cdi-jetty-*.jar</exclude>
-                  <exclude>WEB-INF/lib/errai-jboss-as-support-*.jar</exclude>
+                    <exclude>WEB-INF/lib/errai-jboss-as-support-*.jar</exclude>
+                    <exclude>WEB-INF/lib/netty-4.0.0.*.errai.*.jar</exclude>
 
                     <!-- Jetty -->
                     <exclude>WEB-INF/lib/jetty-*.jar</exclude>
-                    <exclude>WEB-INF/lib/mail-*.jar</exclude>
+                    <!-- mail.jar is needed by tomcat-->
+                    <!--exclude>WEB-INF/lib/mail-*.jar</exclude-->
                     <exclude>WEB-INF/lib/geronimo-spec-jta-*.jar</exclude>
                     <exclude>WEB-INF/lib/servlet-api-*.jar</exclude>
                     <exclude>WEB-INF/lib/jboss-servlet-api_*.jar</exclude>
                     <exclude>WEB-INF/lib/jsp-api-*.jar</exclude>
                     <exclude>WEB-INF/lib/jboss-jsp-api_*.jar</exclude>
+
+                    <exclude>WEB-INF/lib/jboss-servlet-*.jar</exclude>
+                    <exclude>WEB-INF/lib/jboss-transaction-*.jar</exclude>
+                    <exclude>WEB-INF/lib/btm-*.jar</exclude>
+                    <exclude>WEB-INF/lib/jta-*.jar</exclude>
+
+                    <!-- Form Modeler client related -->
+                    <exclude>WEB-INF/lib/jbpm-form-modeler-editor-client-*.jar</exclude>
+                    <exclude>WEB-INF/lib/jbpm-form-modeler-renderer-client-*.jar</exclude>
+                    <exclude>WEB-INF/lib/jbpm-form-modeler-app-*.jar</exclude>
+
+                    <!-- Errai -->
+                    <exclude>WEB-INF/lib/errai-jaxrs-client-*.jar</exclude>
                 </excludes>
             </unpackOptions>
             <useStrictFiltering>true</useStrictFiltering>
