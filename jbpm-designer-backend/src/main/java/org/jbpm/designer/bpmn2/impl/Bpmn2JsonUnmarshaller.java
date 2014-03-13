@@ -826,10 +826,10 @@ public class Bpmn2JsonUnmarshaller {
                 						for(ItemAwareElement iae : sourceRef) {
                 							String[] iaeParts = iae.getId().split( "\\." );
                 							if(iaeParts.length > 1) {
-                								FormalExpression dataInputTransformationExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
-                								dataInputTransformationExpression.setBody(iae.getId());
-                								input.setTransformation(dataInputTransformationExpression);
-                    		                    iae.setId(iaeParts[0]);
+//                								FormalExpression dataInputTransformationExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+//                								dataInputTransformationExpression.setBody(iae.getId());
+//                								input.setTransformation(dataInputTransformationExpression);
+//                    		                    iae.setId(iaeParts[0]);
                 							}
                 						}
                 					}
@@ -844,10 +844,10 @@ public class Bpmn2JsonUnmarshaller {
                 					if(targetEle != null) {
                 						String[] targetEleParts = targetEle.getId().split( "\\." );
                 						if(targetEleParts.length > 1) {
-                							FormalExpression dataOutputTransformationExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
-                							dataOutputTransformationExpression.setBody(targetEle.getId());
-            								output.setTransformation(dataOutputTransformationExpression);
-                		                    targetEle.setId(targetEleParts[0]);
+//                							FormalExpression dataOutputTransformationExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+//                							dataOutputTransformationExpression.setBody(targetEle.getId());
+//            								output.setTransformation(dataOutputTransformationExpression);
+//                		                    targetEle.setId(targetEleParts[0]);
             							}
                 					}
                 				}
