@@ -199,7 +199,7 @@ public class DesignerPresenter {
         this.publishClosePlace( this );
 
         multiPage.addWidget( view,
-                             "Business Process" );
+                             DesignerEditorConstants.INSTANCE.businessProcess() );
 
         if ( path != null ) {
             assetService.call( new RemoteCallback<String>() {
