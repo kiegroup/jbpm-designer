@@ -135,7 +135,7 @@ ORYX.Plugins.ShapeRepository = {
 			// For each Stencilset create and add a new Tree-Node
 			var stencilSetNode
 			
-			var typeTitle = sset.title();
+			var typeTitle = ORYX.I18N.propertyNames[sset.title()];
 			var extensions = sset.extensions();
 //			if (extensions && extensions.size() > 0) {
 //				typeTitle += " / " + ORYX.Core.StencilSet.getTranslation(extensions.values()[0], "title");
@@ -173,7 +173,7 @@ ORYX.Plugins.ShapeRepository = {
                         if(Ext.isIE) {
                             // Create a new group
                             treeGroups[group] = new Ext.tree.TreeNode({
-                                text:group,					// Group-Name
+                                text: ORYX.I18N.propertyNames[group],					// Group-Name
                                 allowDrag:false,
                                 allowDrop:false,
                                 iconCls:'headerShapeRepImg', // Css-Class for Icon
@@ -184,7 +184,7 @@ ORYX.Plugins.ShapeRepository = {
                         } else {
                             // Create a new group
                             treeGroups[group] = new Ext.tree.TreeNode({
-                                text:group,					// Group-Name
+                                text:ORYX.I18N.propertyNames[group],					// Group-Name
                                 allowDrag:false,
                                 allowDrop:false,
                                 iconCls:'headerShapeRepImg', // Css-Class for Icon
@@ -225,8 +225,10 @@ ORYX.Plugins.ShapeRepository = {
 
 	createStencilTreeNode: function(parentTreeNode, stencil) {
 		// Create and add the Stencil to the Group
-		var newElement = new Ext.tree.TreeNode({
-				text:		stencil.title(), 		// Text of the stencil
+        var IdParts = stencil.id().split("#");
+
+        var newElement = new Ext.tree.TreeNode({
+				text:		ORYX.I18N.propertyNames[IdParts[1]], 		// Text of the stencil
 				icon:		decodeURIComponent(stencil.icon()),			// Icon of the stencil
 				allowDrag:	false,					// Don't use the Drag and Drop of Ext-Tree
 				allowDrop:	false,
@@ -240,7 +242,7 @@ ORYX.Plugins.ShapeRepository = {
 		var ui = newElement.getUI();
 		
 		// Set the tooltip
-		ui.elNode.setAttributeNS(null, "title", stencil.description());
+		ui.elNode.setAttributeNS(null, "title", ORYX.I18N.propertyNames[IdParts[1]+"_desc"]);
 		
 		// Register the Stencil on Drag and Drop
 		Ext.dd.Registry.register(ui.elNode, {
