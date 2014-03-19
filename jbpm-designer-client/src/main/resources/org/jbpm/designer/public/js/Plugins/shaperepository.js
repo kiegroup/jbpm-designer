@@ -370,7 +370,7 @@ ORYX.Plugins.ShapeRepository = {
                 }
             }
         }
-        if(typeParts[1].startsWith("wp-")) {
+        if(typeParts[1].startsWith("wp-") && !isCustom) {
             this.facade.raiseEvent({
                 type: ORYX.CONFIG.CREATE_PATTERN,
                 pid: typeParts[1],
