@@ -361,6 +361,15 @@ ORYX.Plugins.ShapeRepository = {
 
 		var position = this.facade.eventCoordinates( event.browserEvent );
         var typeParts = option.type.split("#");
+        var isCustom = false;
+        if(ORYX.PREPROCESSING) {
+            var customParts = ORYX.PREPROCESSING.split(",");
+            for (var i = 0; i < customParts.length; i++) {
+                if(customParts[i] == typeParts[1]) {
+                    isCustom = true;
+                }
+            }
+        }
         if(typeParts[1].startsWith("wp-")) {
             this.facade.raiseEvent({
                 type: ORYX.CONFIG.CREATE_PATTERN,
@@ -368,7 +377,7 @@ ORYX.Plugins.ShapeRepository = {
                 pdata: this._patternData,
                 pos: position
             });
-        } else if(typeParts[1].endsWith("Task")) {
+        } else if(typeParts[1].endsWith("Task") && !isCustom) {
             var ttype = typeParts[1];
             ttype = ttype.substring(0, ttype.length - 4);
             option.type = typeParts[0] + "#Task";
