@@ -159,9 +159,6 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 createAndWriteToFile(stencilFilePath, workItemTemplate.render());
                 createAndParseViewSVGForReadOnly(workDefinitions, readOnlyIconEncoded);
 
-                if(ioService != null) {
-                    ioService.endBatch();
-                }
                 return;
             }
 
