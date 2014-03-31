@@ -1,6 +1,7 @@
 package org.jbpm.designer.web.server;
 
 import org.apache.commons.io.IOUtils;
+import org.jbpm.designer.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.drools.core.util.ConfFileUtils;
@@ -59,7 +60,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		String uuid = req.getParameter("uuid");
+        String uuid = Utils.getUUID(req);
 		String profileName = req.getParameter("profile");
 		String action = req.getParameter("action");
 		String assetsToInstall = req.getParameter("asset");

@@ -157,7 +157,7 @@ ORYX.Plugins.SyntaxChecker = ORYX.Plugins.AbstractPlugin.extend({
             	data: data,
             	profile: ORYX.PROFILE,
             	pp: ORYX.PREPROCESSING,
-            	uuid: ORYX.UUID
+            	uuid:  window.btoa(encodeURI(ORYX.UUID))
             },
             onSuccess: function(request){
                 var resp = (request&&request.responseText?request.responseText:"{}").evalJSON();

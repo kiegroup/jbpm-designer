@@ -10,7 +10,7 @@ ORYX.Plugins.Theme = Clazz.extend({
 		
 		var ajaxObj = new XMLHttpRequest;
 		var url = ORYX.PATH + "themes";
-	    var params  = "action=getThemeNames&profile=" + ORYX.PROFILE + "&uuid=" + ORYX.UUID;
+	    var params  = "action=getThemeNames&profile=" + ORYX.PROFILE + "&uuid=" +  window.btoa(encodeURI(ORYX.UUID));
 	    ajaxObj.open("POST",url,false);
 	    ajaxObj.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	    ajaxObj.send(params);
@@ -87,7 +87,7 @@ ORYX.Plugins.Theme = Clazz.extend({
             params: {
             	action: 'getThemeJSON',
             	profile: ORYX.PROFILE,
-                uuid: ORYX.UUID
+                uuid:  window.btoa(encodeURI(ORYX.UUID))
             }
         });
 	},

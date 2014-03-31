@@ -892,7 +892,7 @@ ORYX.Plugins.PropertyWindow = {
                                     var processJSON = ORYX.EDITOR.getSerializedJSON();
                                     var ajaxObj = new XMLHttpRequest;
                                     var url = ORYX.PATH + "processinfo";
-                                    var params  = "uuid=" + ORYX.UUID + "&ppdata=" + ORYX.PREPROCESSING + "&profile=" + ORYX.PROFILE + "&gatewayid=" + shapeid + "&json=" + encodeURIComponent(processJSON);
+                                    var params  = "uuid=" +  window.btoa(encodeURI(ORYX.UUID)) + "&ppdata=" + ORYX.PREPROCESSING + "&profile=" + ORYX.PROFILE + "&gatewayid=" + shapeid + "&json=" + encodeURIComponent(processJSON);
                                     ajaxObj.open("POST",url,false);
                                     ajaxObj.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
                                     ajaxObj.send(params);

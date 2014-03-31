@@ -1,6 +1,7 @@
 package org.jbpm.designer.web.server;
 
 import org.apache.commons.codec.binary.Base64;
+import org.jbpm.designer.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.jbpm.designer.repository.Asset;
@@ -12,14 +13,10 @@ import org.jbpm.designer.util.Base64Backport;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.formModeler.designer.integration.BPMNFormBuilderService;
-import org.json.JSONArray;
 import org.json.JSONObject;
-import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.VFSService;
 import org.uberfire.rpc.SessionInfo;
-import org.uberfire.workbench.events.ResourceUpdatedEvent;
 
-import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -71,7 +68,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
 	 @Override
 	 protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		 String action = req.getParameter("action");
-	     String uuid = req.getParameter("uuid");
+         String uuid = Utils.getUUID(req);
 	     String profileName = req.getParameter("profile");
 	     String taskName = req.getParameter("taskname");
 	     String taskFormValue = req.getParameter("tfvalue");

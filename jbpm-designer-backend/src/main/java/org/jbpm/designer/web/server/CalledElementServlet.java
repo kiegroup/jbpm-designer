@@ -17,9 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.binary.StringUtils;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.util.Base64Backport;
+import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.json.JSONObject;
@@ -46,7 +46,7 @@ public class CalledElementServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         String profileName = req.getParameter("profile");
-        String uuid = req.getParameter("uuid");
+        String uuid = Utils.getUUID(req);
         String processPackage = req.getParameter("ppackage");
         String processId = req.getParameter("pid");
         String action = req.getParameter("action");

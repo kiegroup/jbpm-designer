@@ -142,7 +142,7 @@ ORYX.Plugins.FormEditing = Clazz.extend({
                             }.createDelegate(this),
                             params: {
                                 profile: ORYX.PROFILE,
-                                uuid : ORYX.UUID,
+                                uuid :   window.btoa(encodeURI(ORYX.UUID)),
                                 json : ORYX.EDITOR.getSerializedJSON(),
                                 ppdata: ORYX.PREPROCESSING,
                                 taskid: currentShapes[0].resourceId
@@ -282,7 +282,7 @@ ORYX.Plugins.FormEditing = Clazz.extend({
             }.createDelegate(this),
             params: {
                 profile: ORYX.PROFILE,
-                uuid : ORYX.UUID,
+                uuid :  window.btoa(encodeURI(ORYX.UUID)),
                 json : ORYX.EDITOR.getSerializedJSON(),
                 ppdata: ORYX.PREPROCESSING
             }
@@ -296,7 +296,7 @@ ORYX.Plugins.FormEditing = Clazz.extend({
             if (profile === undefined) {
                 profile = ORYX.PROFILE;
             }
-            return ORYX.PATH + "taskforms?uuid="+ uuid + "&profile=" + profile;
+            return ORYX.PATH + "taskforms?uuid="+  window.btoa(encodeURI(uuid)) + "&profile=" + profile;
         };
     }
 

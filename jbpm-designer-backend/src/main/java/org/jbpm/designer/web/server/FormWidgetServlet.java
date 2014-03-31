@@ -1,5 +1,6 @@
 package org.jbpm.designer.web.server;
 
+import org.jbpm.designer.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.jbpm.designer.repository.Asset;
@@ -42,7 +43,7 @@ public class FormWidgetServlet extends HttpServlet {
 		String profileName = req.getParameter("profile");
 		String action = req.getParameter("action");
 		String widgetName = req.getParameter("widgetname");
-        String uuid = req.getParameter("uuid");
+        String uuid = Utils.getUUID(req);
 
         if (profile == null) {
             profile = _profileService.findProfile(req, profileName);

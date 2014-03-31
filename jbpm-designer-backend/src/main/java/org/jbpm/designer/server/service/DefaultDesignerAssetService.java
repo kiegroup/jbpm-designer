@@ -1,6 +1,7 @@
 package org.jbpm.designer.server.service;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -8,6 +9,7 @@ import javax.enterprise.event.Event;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -16,6 +18,7 @@ import org.jboss.errai.bus.server.annotations.Service;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
+import org.jbpm.designer.repository.UriUtils;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.service.BPMN2DataServices;
 import org.jbpm.designer.service.DesignerAssetService;
@@ -113,7 +116,11 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
 
         Map<String, String> editorParamsMap = new HashMap<String, String>();
         editorParamsMap.put("hostinfo", hostInfo);
-        editorParamsMap.put("uuid", path.toURI());
+        try {
+            editorParamsMap.put("uuid", Base64.encodeBase64URLSafeString(UriUtils.decode(path.toURI()).getBytes("UTF-8")));
+        } catch(UnsupportedEncodingException e) {
+
+        }
         editorParamsMap.put("profile", "jbpm");
         editorParamsMap.put("pp", "");
         editorParamsMap.put("editorid", editorID);

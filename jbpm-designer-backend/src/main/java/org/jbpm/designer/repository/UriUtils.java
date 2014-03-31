@@ -4,7 +4,7 @@ import org.apache.commons.httpclient.URIException;
 
 public class UriUtils {
 
-    private static final String URL_ENCODED_REGEX = ".*%\\d{1,}.*";
+    private static final String URL_ENCODED_REGEX = ".*%\\w{1,}.*";
 
     public static String encode(String value) {
         if(value == null) {

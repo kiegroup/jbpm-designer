@@ -308,7 +308,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                                         params: {
                                             fsvg: Base64.encode(formattedSvgDOM),
                                             rsvg: Base64.encode(rawSvgDOM),
-                                            uuid: ORYX.UUID,
+                                            uuid:  window.btoa(encodeURI(ORYX.UUID)),
                                             profile: ORYX.PROFILE,
                                             transformto: 'svg',
                                             processid: processId
@@ -346,7 +346,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                     profile: ORYX.PROFILE,
                     assetcontent: ORYX.EDITOR.getSerializedJSON(),
                     pp: ORYX.PREPROCESSING,
-                    assetid: ORYX.UUID,
+                    assetid: window.btoa(encodeURI(ORYX.UUID)),
                     assetcontenttransform: 'jsontobpmn2',
                     commitmessage: commitMessage
                 }
@@ -367,7 +367,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
             var processJSON = ORYX.EDITOR.getSerializedJSON();
             var saveAjaxObj = new XMLHttpRequest;
             var saveURL = ORYX.PATH + "assetservice";
-            var saveParams  = "action=updateasset&profile=" + ORYX.PROFILE + "&pp=" + ORYX.PREPROCESSING + "&assetid=" + ORYX.UUID + "&assetcontenttransform=jsontobpmn2&assetcontent=" + encodeURIComponent(processJSON);
+            var saveParams  = "action=updateasset&profile=" + ORYX.PROFILE + "&pp=" + ORYX.PREPROCESSING + "&assetid=" + window.btoa(encodeURI(ORYX.UUID)) + "&assetcontenttransform=jsontobpmn2&assetcontent=" + encodeURIComponent(processJSON);
             saveAjaxObj.open("POST",saveURL,false);
             saveAjaxObj.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             saveAjaxObj.send(saveParams);

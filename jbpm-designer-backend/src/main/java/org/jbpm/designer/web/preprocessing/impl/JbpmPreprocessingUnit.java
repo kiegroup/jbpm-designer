@@ -39,6 +39,7 @@ import org.jbpm.designer.repository.filters.FilterByExtension;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.util.Base64Backport;
 import org.jbpm.designer.util.ConfigurationProvider;
+import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingUnit;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.process.workitem.WorkDefinitionImpl;
@@ -164,7 +165,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
             Repository repository = profile.getRepository();
 
-            String uuid = req.getParameter("uuid");
+            String uuid = Utils.getUUID(req);
             //createAssetIfNotExisting(repository, "/defaultPackage", "BPMN2-SampleProcess", "bpmn2", getBytesFromFile(new File(sampleBpmn2)));
 
             Asset<String> asset = repository.loadAsset(uuid);
