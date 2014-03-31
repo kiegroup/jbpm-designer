@@ -41,6 +41,7 @@ import bpsim.impl.BpsimFactoryImpl;
 import org.apache.commons.codec.binary.Base64;
 import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.designer.util.ConfigurationProvider;
+import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.plugin.IDiagramPlugin;
 import org.jbpm.designer.web.plugin.IDiagramPluginService;
 import org.jbpm.designer.web.plugin.impl.PluginServiceImpl;
@@ -191,7 +192,7 @@ public class EditorHandler extends HttpServlet {
                          HttpServletResponse response)
             throws ServletException, IOException {
         String profileName = request.getParameter("profile");
-        String uuid = request.getParameter("uuid");
+        String uuid = Utils.getUUID(request);
 
         String editorID = request.getParameter("editorid");
 

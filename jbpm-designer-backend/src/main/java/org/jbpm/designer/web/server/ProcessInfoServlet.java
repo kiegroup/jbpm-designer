@@ -14,6 +14,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
 import bpsim.impl.BpsimFactoryImpl;
+import org.jbpm.designer.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.eclipse.bpmn2.*;
@@ -45,7 +46,7 @@ public class ProcessInfoServlet extends HttpServlet {
 	@Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-		String uuid = req.getParameter("uuid");
+        String uuid = Utils.getUUID(req);
         String profileName = req.getParameter("profile");
         String gatewayId = req.getParameter("gatewayid");
 

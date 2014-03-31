@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.jbpm.designer.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.jbpm.designer.web.profile.IDiagramProfile;
@@ -106,7 +107,7 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("application/json");
-        String uuid = req.getParameter("uuid");
+        String uuid = Utils.getUUID(req);
         String preProcessingParam = req.getParameter("pp");
         if (uuid == null) {
             throw new ServletException("uuid parameter required");

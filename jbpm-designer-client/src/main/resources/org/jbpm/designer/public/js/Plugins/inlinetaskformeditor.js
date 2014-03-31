@@ -77,7 +77,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                                 action: 'load',
                                 taskname: options.tn,
                                 profile: ORYX.PROFILE,
-                                uuid : ORYX.UUID
+                                uuid :  window.btoa(encodeURI(ORYX.UUID))
                             }
                         });
                     } catch(e) {
@@ -102,7 +102,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                 params: {
                     action: 'getwidgets',
                     profile: ORYX.PROFILE,
-                    uuid: ORYX.UUID
+                    uuid:  window.btoa(encodeURI(ORYX.UUID))
                 }
             });
         } else {
@@ -183,7 +183,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                                     action: 'getwidgetsource',
                                     profile: ORYX.PROFILE,
                                     widgetname: combo.getValue(),
-                                    uuid: ORYX.UUID
+                                    uuid:  window.btoa(encodeURI(ORYX.UUID))
                                 }
                             });
                         } else {
@@ -318,7 +318,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                             action: 'save',
                             taskname: tn,
                             profile: ORYX.PROFILE,
-                            uuid : ORYX.UUID,
+                            uuid :  window.btoa(encodeURI(ORYX.UUID)),
                             tfvalue: tosaveValue
                         }
                     });

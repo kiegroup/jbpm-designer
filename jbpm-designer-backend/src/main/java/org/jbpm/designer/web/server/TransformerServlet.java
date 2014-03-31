@@ -42,6 +42,7 @@ import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.impl.AssetBuilder;
+import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
@@ -95,7 +96,7 @@ public class TransformerServlet extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
         String formattedSvgEncoded = req.getParameter("fsvg");
         String rawSvgEncoded = req.getParameter("rsvg");
-        String uuid = req.getParameter("uuid");
+        String uuid = Utils.getUUID(req);
         String profileName = req.getParameter("profile");
         String transformto = req.getParameter("transformto");
         String jpdl = req.getParameter("jpdl");

@@ -1,6 +1,7 @@
 package org.jbpm.designer.web.server;
 
 import org.jbpm.designer.expressioneditor.server.ExpressionEditorProcessor;
+import org.jbpm.designer.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.jbpm.designer.repository.Asset;
@@ -46,7 +47,7 @@ public class CustomEditorsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 		String profileName = req.getParameter("profile");
-        String uuid = req.getParameter("uuid");
+        String uuid = Utils.getUUID(req);
 
         if (isExpressionEditorRequest(req)) {
             //do the processing for the expression editor.

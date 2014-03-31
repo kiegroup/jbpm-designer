@@ -593,11 +593,10 @@ ORYX.Plugins.View = {
                             }.createDelegate(this),
                             params: {
                                 profile: ORYX.PROFILE,
-                                uuid : ORYX.UUID,
+                                uuid :  window.btoa(encodeURI(ORYX.UUID)),
                                 pp: ORYX.PREPROCESSING,
                                 bpmn2 : bpmn2string,
-                                transformto : "bpmn2json",
-                                uuid : ORYX.UUID
+                                transformto : "bpmn2json"
                             }
                         });
                     }.bind(this)
@@ -776,7 +775,7 @@ ORYX.Plugins.View = {
             },
             params: {
                 profile: ORYX.PROFILE,
-                uuid : ORYX.UUID,
+                uuid :  window.btoa(encodeURI(ORYX.UUID)),
                 respaction : "showembeddable"
             }
         });
@@ -841,7 +840,7 @@ ORYX.Plugins.View = {
             },
             params: {
                 profile: ORYX.PROFILE,
-                uuid : ORYX.UUID,
+                uuid :  window.btoa(encodeURI(ORYX.UUID)),
                 fsvg : Base64.encode(formattedSvgDOM),
                 rsvg : Base64.encode(rawSvgDOM),
                 transformto : "pdf",
@@ -908,7 +907,7 @@ ORYX.Plugins.View = {
             },
             params: {
                 profile: ORYX.PROFILE,
-                uuid : ORYX.UUID,
+                uuid :  window.btoa(encodeURI(ORYX.UUID)),
                 fsvg : Base64.encode(formattedSvgDOM),
                 rsvg : Base64.encode(rawSvgDOM),
                 transformto : "png",
@@ -965,7 +964,7 @@ ORYX.Plugins.View = {
             params: {
                 action: 'versions',
                 profile: ORYX.PROFILE,
-                uuid : ORYX.UUID
+                uuid :  window.btoa(encodeURI(ORYX.UUID))
             }
         });
     },
@@ -1085,7 +1084,7 @@ ORYX.Plugins.View = {
                                                 action: 'getversion',
                                                 version: combo.getValue(),
                                                 profile: ORYX.PROFILE,
-                                                uuid : ORYX.UUID
+                                                uuid :  window.btoa(encodeURI(ORYX.UUID))
                                             }
                                         });
                                     } catch(e){

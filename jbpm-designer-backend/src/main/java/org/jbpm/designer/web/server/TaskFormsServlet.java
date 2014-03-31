@@ -23,6 +23,7 @@ import org.jbpm.designer.taskforms.TaskFormInfo;
 import org.jbpm.designer.taskforms.TaskFormTemplateManager;
 import org.jbpm.designer.util.Base64Backport;
 import org.jbpm.designer.util.ConfigurationProvider;
+import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.formModeler.designer.integration.BPMNFormBuilderService;
@@ -73,7 +74,7 @@ public class TaskFormsServlet extends HttpServlet {
             throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         String json = req.getParameter("json");
-        String uuid = req.getParameter("uuid");
+        String uuid = Utils.getUUID(req);
         String profileName = req.getParameter("profile");
         String preprocessingData = req.getParameter("ppdata");
         String taskId = req.getParameter("taskid");

@@ -23,13 +23,13 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
                 'maxShape': 0,
                 'isEnabled': function(){
                     return ORYX.READONLY != true;
-    //				profileParamName = "profile";
-    //				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    //				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-    //		        regexa = new RegExp( regexSa );
-    //		        profileParams = regexa.exec( window.location.href );
-    //		        profileParamValue = profileParams[1];
-    //				return profileParamValue == "jbpm";
+                    //				profileParamName = "profile";
+                    //				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+                    //				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+                    //		        regexa = new RegExp( regexSa );
+                    //		        profileParams = regexa.exec( window.location.href );
+                    //		        profileParamValue = profileParams[1];
+                    //				return profileParamValue == "jbpm";
                 }.bind(this)
             });
         }
@@ -163,7 +163,7 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
             params: {
                 action: 'display',
                 profile: ORYX.PROFILE,
-                uuid : ORYX.UUID,
+                uuid : window.btoa(encodeURI(ORYX.UUID)),
                 repourl : serviceRepoURL
             }
         });
@@ -265,7 +265,7 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
                 params: {
                     action: 'install',
                     profile: ORYX.PROFILE,
-                    uuid : ORYX.UUID,
+                    uuid : window.btoa(encodeURI(ORYX.UUID)),
                     asset : aname,
                     category : acategory,
                     repourl : serviceRepoURL

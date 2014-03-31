@@ -1,12 +1,12 @@
 package org.jbpm.designer.repository.servlet;
 
+import org.jbpm.designer.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.jbpm.designer.repository.*;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
-import org.jbpm.designer.web.server.ServletUtil;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,7 +61,7 @@ public class AssetServiceServlet extends HttpServlet {
         String profileName = req.getParameter("profile");
         String action = req.getParameter("action");
         String preprocessingData = req.getParameter("pp");
-        String assetId = req.getParameter("assetid");
+        String assetId = Utils.getEncodedParam(req, "assetid");
         String assetType = req.getParameter("assettype");
         String assetName = req.getParameter("assetname");
         String assetContent = req.getParameter("assetcontent");

@@ -1,6 +1,7 @@
 package org.jbpm.designer.web.server;
 
 import java.io.IOException;
+import org.jbpm.designer.util.Utils;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,7 @@ public class ProcessDiffServiceServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		String uuid = req.getParameter("uuid");
+        String uuid = Utils.getUUID(req);
 		String profileName = req.getParameter("profile");
 		String action = req.getParameter("action");
 		String versionNum = req.getParameter("version");
