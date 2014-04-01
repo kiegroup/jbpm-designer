@@ -3,7 +3,14 @@
 <%
     Locale locale= request.getLocale();
     try{
-        locale = new Locale(request.getParameter("locale"));
+        String localeStr=request.getParameter("locale");
+        if(localeStr!= null && localeStr.length()==2){
+            locale = new Locale(request.getParameter("locale"));
+        }else if(localeStr!= null && localeStr.length()==5){
+
+            locale = new Locale(localeStr.substring(0,2),localeStr.substring(3));
+        }
+
     } catch(Exception e){
 
     }
@@ -2000,6 +2007,8 @@ ORYX.I18N.propertyNames['Full'] = '<i18n:message key="ORYX.I18N.propertyNames_Fu
 ORYX.I18N.propertyNames['Simple'] = '<i18n:message key="ORYX.I18N.propertyNames_Simple">Simple</i18n:message>';
 ORYX.I18N.propertyNames['RuleFlow'] = '<i18n:message key="ORYX.I18N.propertyNames_RuleFlow">RuleFlow</i18n:message>';
 
-
+ORYX.I18N.SortAscending = '<i18n:message key="ORYX.I18N.SortAscending">Sort Ascending</i18n:message>';
+ORYX.I18N.SortDescending = '<i18n:message key="ORYX.I18N.SortDescending">Sort Descending</i18n:message>';
+ORYX.I18N.Columns = '<i18n:message key="ORYX.I18N.Columns">Columns</i18n:message>';
 
 </script>
