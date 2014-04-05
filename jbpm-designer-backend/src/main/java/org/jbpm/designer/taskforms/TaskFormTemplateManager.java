@@ -280,6 +280,7 @@ public class TaskFormTemplateManager {
             for(DataOutput dout : dataOutputs) {
                 TaskFormOutput out = new TaskFormOutput();
                 out.setName(dout.getName());
+                out.setValue("${" + dout.getName() + "}");
                 for(DataOutputAssociation outputAssociation : dataOutputAssociations) {
                     List<ItemAwareElement> sources = outputAssociation.getSourceRef();
                     for(ItemAwareElement iae : sources) {
