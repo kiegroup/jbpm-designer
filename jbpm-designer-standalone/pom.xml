@@ -69,6 +69,12 @@
       <scope>provided</scope>
     </dependency>
 
+    <dependency>
+      <groupId>org.uberfire</groupId>
+      <artifactId>uberfire-nswe-manager</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
     <!-- Errai AS -->
     <dependency>
       <groupId>org.jboss.errai</groupId>
