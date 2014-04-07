@@ -3,6 +3,7 @@ package org.jbpm.designer.client;
 import java.util.Map;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Event;
+import javax.enterprise.inject.New;
 import javax.inject.Inject;
 
 import com.google.gwt.core.client.GWT;
@@ -17,6 +18,7 @@ import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.jbpm.designer.client.type.Bpmn2Type;
 import org.jbpm.designer.service.DesignerAssetService;
 import org.kie.workbench.common.widgets.client.callbacks.HasBusyIndicatorDefaultErrorCallback;
+import org.kie.workbench.common.widgets.client.menu.FileMenuBuilder;
 import org.kie.workbench.common.widgets.client.popups.file.CommandWithFileNameAndCommitMessage;
 import org.kie.workbench.common.widgets.client.popups.file.CopyPopup;
 import org.kie.workbench.common.widgets.client.popups.file.FileNameAndCommitMessage;
@@ -32,6 +34,7 @@ import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.PathFactory;
 import org.uberfire.backend.vfs.VFSService;
 import org.uberfire.client.annotations.WorkbenchEditor;
+import org.uberfire.client.annotations.WorkbenchMenu;
 import org.uberfire.client.annotations.WorkbenchPartTitle;
 import org.uberfire.client.annotations.WorkbenchPartView;
 import org.uberfire.client.common.MultiPageEditor;
@@ -49,6 +52,7 @@ import org.uberfire.mvp.impl.PathPlaceRequest;
 import org.uberfire.util.URIUtil;
 import org.uberfire.workbench.events.NotificationEvent;
 import org.uberfire.workbench.events.ResourceUpdatedEvent;
+import org.uberfire.workbench.model.menu.Menus;
 import org.uberfire.workbench.type.FileNameUtil;
 
 import static org.uberfire.client.common.ConcurrentChangePopup.*;
@@ -122,7 +126,15 @@ public class DesignerPresenter {
     private ObservablePath path;
     private PlaceRequest place;
     private ObservablePath.OnConcurrentUpdateEvent concurrentUpdateSessionInfo = null;
-    private boolean isReadOnly;
+
+    @Inject
+    @New
+    private FileMenuBuilder menuBuilder;
+    private Menus menus;
+
+    protected boolean isReadOnly;
+    private String version;
+
     private boolean passedProcessSources;
 
     @OnStartup
@@ -133,6 +145,8 @@ public class DesignerPresenter {
 
         // read only set to true for now
         this.isReadOnly = true;
+
+        this.version = place.getParameter( "version", null );
 
         this.path.onRename( new Command() {
             @Override
@@ -212,8 +226,8 @@ public class DesignerPresenter {
                         public void callback( Map<String, String> editorParameters ) {
                             if ( editorParameters != null ) {
                                 if ( editorParameters.containsKey( "readonly" ) ) {
-                                    String readOnlyParam = editorParameters.get( "readonly" );
-                                    if ( !readOnlyParam.equals( "false" ) ) {
+                                    isReadOnly = Boolean.valueOf(editorParameters.get( "readonly" ));
+                                    if (isReadOnly) {
                                         passedProcessSources = true;
                                     }
                                 }
@@ -288,6 +302,22 @@ public class DesignerPresenter {
         }
     }
 
+    @WorkbenchMenu
+    public Menus getMenus() {
+        if ( menus == null ) {
+            makeMenuBar();
+        }
+        return menus;
+    }
+
+    private void makeMenuBar() {
+        if ( isReadOnly && version != null) {
+            menus = menuBuilder.addRestoreVersion( path ).build();
+        } else {
+            menus = menuBuilder.build();
+        }
+    }
+
     @OnClose
     public void onClose() {
         this.path = null;
@@ -295,7 +325,13 @@ public class DesignerPresenter {
 
     @WorkbenchPartTitle
     public String getName() {
-        return DesignerEditorConstants.INSTANCE.businessProcess() + " [" + FileNameUtil.removeExtension( this.path, resourceType ) + "]";
+        String fileName = FileNameUtil.removeExtension(this.path, resourceType);
+
+        if ( version != null ) {
+            fileName = fileName + " v" + version;
+        }
+
+        return DesignerEditorConstants.INSTANCE.businessProcess() + " [" + fileName + "]";
     }
 
     @WorkbenchPartView
