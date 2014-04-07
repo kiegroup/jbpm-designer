@@ -75,7 +75,7 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
         List<String> activeNodesList = new ArrayList<String>();
         String activeNodesParam = place.getParameter( "activeNodes", null );
 
-        String readOnly = place.getParameter( "readOnly", "false" );
+        boolean readOnly = place.getParameter( "readOnly", null ) != null;
         String processId = place.getParameter( "processId", "" );
         String deploymentId = place.getParameter( "deploymentId", "" );
         String encodedProcessSource = "";
@@ -84,8 +84,6 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
         } catch(Exception e) {
             encodedProcessSource = place.getParameter( "encodedProcessSource", "" );
         }
-
-
         
         if ( activeNodesParam != null ) {
             activeNodesList = Arrays.asList( activeNodesParam.split( "," ) );
@@ -124,7 +122,7 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
         editorParamsMap.put("profile", "jbpm");
         editorParamsMap.put("pp", "");
         editorParamsMap.put("editorid", editorID);
-        editorParamsMap.put("readonly", readOnly);
+        editorParamsMap.put("readonly", String.valueOf(readOnly));
         editorParamsMap.put("activenodes", activeNodesArray.toString());
         editorParamsMap.put("completednodes", completedNodesArray.toString());
         editorParamsMap.put("processsource", encodedProcessSource);
