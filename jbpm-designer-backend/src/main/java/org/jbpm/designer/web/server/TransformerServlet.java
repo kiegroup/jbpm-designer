@@ -64,6 +64,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.FeatureMap;
+import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceFactoryImpl;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceImpl;
@@ -263,6 +264,8 @@ public class TransformerServlet extends HttpServlet {
                 JBPMBpmn2ResourceImpl bpmn2resource = (JBPMBpmn2ResourceImpl) rSet.createResource(URI.createURI("virtual.bpmn2"));
                 bpmn2resource.getDefaultLoadOptions().put(JBPMBpmn2ResourceImpl.OPTION_ENCODING, "UTF-8");
                 bpmn2resource.getDefaultLoadOptions().put(JBPMBpmn2ResourceImpl.OPTION_DEFER_IDREF_RESOLUTION, true);
+                bpmn2resource.getDefaultLoadOptions().put( JBPMBpmn2ResourceImpl.OPTION_DISABLE_NOTIFY, true );
+                bpmn2resource.getDefaultLoadOptions().put(JBPMBpmn2ResourceImpl.OPTION_PROCESS_DANGLING_HREF, JBPMBpmn2ResourceImpl.OPTION_PROCESS_DANGLING_HREF_RECORD);
                 bpmn2resource.setEncoding("UTF-8");
                 rSet.getResources().add(bpmn2resource);
                 bpmn2resource.getContents().add(def);
@@ -273,6 +276,7 @@ public class TransformerServlet extends HttpServlet {
                 resp.setContentType("application/json");
                 resp.getWriter().print(json);
             } catch(Exception e) {
+                e.printStackTrace();
                 _logger.error(e.getMessage());
                 resp.setContentType("application/json");
                 resp.getWriter().print("{}");

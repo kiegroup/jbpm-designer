@@ -229,8 +229,10 @@ public class DefaultProfileImpl implements IDiagramProfile {
                     res = unmarshaller.unmarshall(jsonModel, preProcessingData);
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                     Map saveMap = new HashMap();
-                    saveMap.put(XMLResource.OPTION_ENCODING, "UTF-8");
-                    saveMap.put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, true);
+                    saveMap.put( XMLResource.OPTION_ENCODING, "UTF-8"  );
+                    saveMap.put( XMLResource.OPTION_DEFER_IDREF_RESOLUTION, true );
+                    saveMap.put( XMLResource.OPTION_DISABLE_NOTIFY, true );
+                    saveMap.put( XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_RECORD );
                     res.save(outputStream, saveMap);
                     return outputStream.toString();
                 } catch (JsonParseException e) {

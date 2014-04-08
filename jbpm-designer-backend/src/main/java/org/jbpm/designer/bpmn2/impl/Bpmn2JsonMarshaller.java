@@ -1472,7 +1472,7 @@ public class Bpmn2JsonMarshaller {
                 if(din.getName() != null && din.getName().equals("TaskName")) {
                     List<DataInputAssociation> taskDataInputAssociations = task.getDataInputAssociations();
                     for(DataInputAssociation dia : taskDataInputAssociations) {
-                        if(dia.getTargetRef().getId().equals(din.getId())) {
+                        if(dia.getTargetRef() != null && dia.getTargetRef().getId().equals(din.getId())) {
                             properties.put("taskname", ((FormalExpression) dia.getAssignment().get(0).getFrom()).getBody());
                         }
                     }
