@@ -6,8 +6,9 @@
     <inherits name="org.jboss.errai.bus.ErraiBus"/>
     <inherits name="org.uberfire.UberfireBackend"/>
 
-    <!-- Specify the paths for translatable code -->
-    <source path='service'/>
-    <source path='type'/>
+  <!-- Specify the paths for translatable code -->
+  <source path='service'/>
+  <source path='notification'/>
+  <source path='type'/>
 
 </module>

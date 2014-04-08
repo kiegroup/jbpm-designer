@@ -18,6 +18,7 @@ import org.jbpm.designer.bpmn2.impl.Bpmn2JsonMarshaller;
 import org.jbpm.designer.bpmn2.impl.Bpmn2JsonUnmarshaller;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceFactoryImpl;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceImpl;
+import org.jbpm.designer.notification.DesignerNotificationEvent;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.UriUtils;
 import org.jbpm.designer.util.ConfigurationProvider;
@@ -28,8 +29,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.VFSService;
+import org.uberfire.workbench.events.NotificationEvent;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.xml.stream.XMLInputFactory;
@@ -61,6 +64,9 @@ public class JbpmProfileImpl implements IDiagramProfile {
 
     @Inject
     private VFSService vfsServices;
+
+    @Inject
+    private Event<DesignerNotificationEvent> notification;
 
     public JbpmProfileImpl(ServletContext servletContext) {
         this(servletContext, true, false);
@@ -294,27 +300,37 @@ public class JbpmProfileImpl implements IDiagramProfile {
             Map<String, Object> options = new HashMap<String, Object>();
             options.put( JBPMBpmn2ResourceImpl.OPTION_ENCODING, "UTF-8" );
             options.put( JBPMBpmn2ResourceImpl.OPTION_DEFER_IDREF_RESOLUTION, true );
+            options.put(JBPMBpmn2ResourceImpl.OPTION_DISABLE_NOTIFY, true);
+            options.put( JBPMBpmn2ResourceImpl.OPTION_PROCESS_DANGLING_HREF, JBPMBpmn2ResourceImpl.OPTION_PROCESS_DANGLING_HREF_RECORD );
             InputStream is = new ByteArrayInputStream(xml.getBytes("UTF-8"));
             resource.load(is, options);
+            if(!resource.getErrors().isEmpty()) {
+                String errorMessages = "";
+                for (Resource.Diagnostic error : resource.getErrors()) {
+                    errorMessages += error.getMessage() + "\n";
+                }
+                notification.fire( new DesignerNotificationEvent( errorMessages, NotificationEvent.NotificationType.ERROR ) );
+            }
+
+            if(!resource.getWarnings().isEmpty()) {
+                String warningMessages = "";
+                for(Resource.Diagnostic warning : resource.getWarnings()) {
+                    warningMessages += warning.getMessage() + "\n";
+                }
+                notification.fire( new DesignerNotificationEvent( warningMessages, NotificationEvent.NotificationType.WARNING ) );
+            }
 
             EList<Diagnostic> warnings = resource.getWarnings();
 
             if (warnings != null && !warnings.isEmpty()){
                 for (Diagnostic diagnostic : warnings) {
-                    _logger.info("Warning: "+diagnostic.getMessage());
+                    _logger.info("Warning: " + diagnostic.getMessage());
                 }
-            }
-
-            EList<Diagnostic> errors = resource.getErrors();
-            if (errors != null && !errors.isEmpty()){
-                for (Diagnostic diagnostic : errors) {
-                   _logger.info("Error: "+diagnostic.getMessage());
-                }
-                throw new Exception("Error parsing process definition");
             }
 
             return ((DocumentRoot) resource.getContents().get(0)).getDefinitions();
         } catch(Exception e) {
+            _logger.error(e.getMessage());
             throw new Exception(e);
         }
     }
