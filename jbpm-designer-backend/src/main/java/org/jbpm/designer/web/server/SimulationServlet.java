@@ -659,7 +659,7 @@ public class SimulationServlet extends HttpServlet {
             retVal = interval + " seconds";
         } else if(intervalUnit.equals("minutes")) {
             interval = interval / (1000*60);
-            retVal = interval + " minutess";
+            retVal = interval + " minutes";
         } else if(intervalUnit.equals("hours")) {
             interval = interval / (1000*60*60);
             retVal = interval + " hours";
