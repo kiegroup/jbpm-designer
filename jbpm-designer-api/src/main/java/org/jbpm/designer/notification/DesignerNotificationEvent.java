@@ -2,10 +2,9 @@ package org.jbpm.designer.notification;
 
 import org.jboss.errai.common.client.api.annotations.Portable;
 import org.uberfire.workbench.events.NotificationEvent;
-import org.uberfire.workbench.events.UberFireEvent;
 
 @Portable
-public class DesignerNotificationEvent extends UberFireEvent {
+public class DesignerNotificationEvent {
 
     private final String notification;
     private final NotificationEvent.NotificationType type;

@@ -1,18 +1,19 @@
 package org.jbpm.designer.client.notification;
 
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Window;
-import org.jboss.errai.ioc.client.container.SyncBeanManager;
-import org.jbpm.designer.notification.DesignerNotificationEvent;
-import org.uberfire.client.workbench.widgets.notifications.NotificationPopupView;
-
+import java.util.ArrayList;
+import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.uberfire.client.workbench.widgets.animations.LinearFadeOutAnimation;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
+import org.jboss.errai.ioc.client.container.SyncBeanManager;
+import org.uberfire.client.animations.LinearFadeOutAnimation;
+import org.uberfire.client.workbench.widgets.notifications.NotificationPopupView;
+import org.uberfire.workbench.events.NotificationEvent;
+import org.jbpm.designer.notification.DesignerNotificationEvent;
+
 
 @ApplicationScoped
 public class DesignerNotificationPopupsManager {
@@ -27,7 +28,6 @@ public class DesignerNotificationPopupsManager {
 
     private List<NotificationPopupView> activeNotifications = new ArrayList<NotificationPopupView>();
     private List<NotificationPopupView> deactiveNotifications = new ArrayList<NotificationPopupView>();
-
 
     /**
      * Display a Notification message
@@ -103,5 +103,6 @@ public class DesignerNotificationPopupsManager {
         };
         fadeOutAnimation.run( 500 );
     }
+
 
 }
