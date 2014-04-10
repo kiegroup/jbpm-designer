@@ -3001,16 +3001,25 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
         if(this.disabled){
             return undefined;
         }
-        
+
+        var newAssignmentType = "";
         var processJSON = ORYX.EDITOR.getSerializedJSON();
         var processVars = jsonPath(processJSON.evalJSON(), "$.properties.vardefs");
         var varData = new Array();
         var varDataTitle = new Array();
         var dataTypeMap = new Hash();
 
+        var variableDefsOnly = new Array();
+        var variableDefsOnlyVals = new Array();
+        var dataInputsOnly = new Array();
+        var dataInputsOnlyVals = new Array();
+        var dataOutputsOnly = new Array();
+        var dataOutputsOnlyVals = new Array();
+
         varDataTitle.push("");
         varDataTitle.push("** Variable Definitions **");
         varData.push(varDataTitle);
+        variableDefsOnly.push(varDataTitle);
         if(processVars) {
         	processVars.forEach(function(item){
             	if(item.length > 0) {
@@ -3022,13 +3031,16 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
 	        				var innerParts = nextPart.split(":");
 	        				innerVal.push(innerParts[0]);
 	        				innerVal.push(innerParts[0]);
-                                                dataTypeMap[innerParts[0]] = innerParts[1];
+                            dataTypeMap[innerParts[0]] = innerParts[1];
+                            variableDefsOnlyVals.push(innerParts[0]);
 	        			} else {
 	        				innerVal.push(nextPart);
 	        				innerVal.push(nextPart);
-                                                dataTypeMap[nextPart] = "java.lang.String";
+                            dataTypeMap[nextPart] = "java.lang.String";
+                            variableDefsOnlyVals.push(nextPart);
 	        			}
 	        			varData.push(innerVal);
+                        variableDefsOnly.push(innerVal);
 	        		}
         	    }
         	});
@@ -3038,6 +3050,7 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
         dataInputsTitle.push("");
         dataInputsTitle.push("** Data Inputs **");
         varData.push(dataInputsTitle);
+        dataInputsOnly.push(dataInputsTitle);
         Ext.each(this.dataSource.data.items, function(item){
         	if((item.data.gridProperties.propId == "oryx-datainputset") || (item.data.gridProperties.propId == "oryx-datainput")) {
         		var valueParts = item.data['value'].split(",");
@@ -3049,12 +3062,15 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                                         innerVal.push(innerParts[0]);
                                         innerVal.push(innerParts[0]);
                                         dataTypeMap[innerParts[0]] = innerParts[1];
+                                        dataInputsOnlyVals.push(innerParts[0]);
                                 } else {
                                         innerVal.push(nextPart);
                                         innerVal.push(nextPart);
                                         dataTypeMap[nextPart] = "java.lang.String";
+                                        dataInputsOnlyVals.push(nextPart);
                                 }
     				varData.push(innerVal);
+                    dataInputsOnly.push(innerVal);
         		}
         	} 
         });
@@ -3063,6 +3079,7 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
         dataOutputsTitle.push("");
         dataOutputsTitle.push("** Data Outputs **");
         varData.push(dataOutputsTitle);
+        dataOutputsOnly.push(dataOutputsTitle);
         Ext.each(this.dataSource.data.items, function(item){
         	if((item.data.gridProperties.propId == "oryx-dataoutputset") || (item.data.gridProperties.propId == "oryx-dataoutput")) {
         		var valueParts = item.data['value'].split(",");
@@ -3074,17 +3091,23 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                                         innerVal.push(innerParts[0]);
                                         innerVal.push(innerParts[0]);
                                         dataTypeMap[innerParts[0]] = innerParts[1];
+                                        dataOutputsOnlyVals.push(innerParts[0]);
                                 } else {
                                         innerVal.push(nextPart);
                                         innerVal.push(nextPart);
                                         dataTypeMap[nextPart] = "java.lang.String";
+                                        dataOutputsOnlyVals.push(nextPart);
                                 }
     				varData.push(innerVal);
+                    dataOutputsOnly.push(innerVal);
         		}
         	} 
         });
         
-    	var DataAssignment = Ext.data.Record.create([{
+    	var DataAssignment = Ext.data.Record.create([
+        {
+            name: 'atype'
+        }, {
             name: 'from'
         }, {
             name: 'type'
@@ -3107,7 +3130,11 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                 root: "root"
             }, DataAssignment),
             proxy: dataassignmentProxy,
-            sorters: [{
+            sorters: [
+            {
+                property: 'atype',
+                direction: 'ASC'
+            }, {
                 property: 'from',
                 direction:'ASC'
             }, {
@@ -3136,6 +3163,7 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
             				var escapedp = innerParts.join('=').replace(/\#\#/g , ",");
                             escapedp = escapedp.replace(/\|\|/g , "=");
                             dataassignments.add(new DataAssignment({
+                                atype: variableDefsOnlyVals.indexOf(fromPart) >= 0 ? "DataInput" : "DataOutput",
                                 from: fromPart,
                                 type: "is equal to",
                                 to: "",
@@ -3149,6 +3177,7 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                                 dataType = "java.lang.String";
                             }
                             dataassignments.add(new DataAssignment({
+                                atype: variableDefsOnlyVals.indexOf(innerParts[0]) >= 0 ? "DataInput" : "DataOutput",
                                 from: innerParts[0],
                                 type: "is mapped to",
                                 to: innerParts[1],
@@ -3182,7 +3211,61 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                 record.set("dataType", newType);
             }
         });
-    	
+
+        var fromCombo = new Ext.form.ComboBox({
+            name: 'fromCombo',
+            valueField:'name',
+            displayField:'value',
+            typeAhead: true,
+            mode: 'local',
+            triggerAction: 'all',
+            selectOnFocus:true,
+            store: new Ext.data.SimpleStore({
+                fields: [
+                    'name',
+                    'value'
+                ],
+                data: varData
+            })
+        });
+
+        var typeCombo = new Ext.form.ComboBox({
+            name: 'typeCombo',
+            valueField:'name',
+            displayField:'value',
+            typeAhead: true,
+            mode: 'local',
+            triggerAction: 'all',
+            selectOnFocus:true,
+            store: new Ext.data.SimpleStore({
+                fields: [
+                    'name',
+                    'value'
+                ],
+                data: [
+                    ['is mapped to',ORYX.I18N.PropertyWindow.isMappedTo],
+                    ['is equal to',ORYX.I18N.PropertyWindow.isEqualTo]
+                ]
+            })
+        });
+
+        var toCombo = new Ext.form.ComboBox({
+            name: 'toCombo',
+            valueField:'name',
+            displayField:'value',
+            typeAhead: true,
+            mode: 'local',
+            triggerAction: 'all',
+            selectOnFocus:true,
+            store: new Ext.data.SimpleStore({
+                fields: [
+                    'name',
+                    'value'
+                ],
+                data: varData
+            })
+        });
+
     	var itemDeleter = new Extensive.grid.ItemDeleter();
     	var gridId = Ext.id();
     	var grid = new Ext.grid.EditorGridPanel({
@@ -3191,78 +3274,35 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
             store: dataassignments,
             id: gridId,
             stripeRows: true,
-            cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
+            cm: new  Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
                     id: 'valueType',
                     header: ORYX.I18N.PropertyWindow.dataType,
 	            width: 180,
                     dataIndex: 'dataType',
                     hidden: 'true'
                 },{
+                id: 'atype',
+                header: 'Assignment Type',
+                width: 180,
+                dataIndex: 'atype'
+                }, {
             	id: 'from',
 	            header: ORYX.I18N.PropertyWindow.fromObject,
 	            width: 180,
 	            dataIndex: 'from',
-	            editor: new Ext.form.ComboBox({
-	            	id: 'fromCombo',
-	            	valueField:'name',
-	            	displayField:'value',
-	            	typeAhead: true,
-                        mode: 'local',
-                        triggerAction: 'all',
-                        selectOnFocus:true,
-                        store: new Ext.data.SimpleStore({
-                            fields: [
-                                        'name',
-                                        'value'
-                                    ],
-                            data: varData
-                        })
-	            })
+	            editor: fromCombo
             }, {
             	id: 'type',
                 header: ORYX.I18N.PropertyWindow.assignmentType,
                 width: 100,
                 dataIndex: 'type',
-                editor: new Ext.form.ComboBox({
-                	id: 'typeCombo',
-                	valueField:'name',
-                	displayField:'value',
-                	typeAhead: true,
-					mode: 'local',
-					triggerAction: 'all',
-					selectOnFocus:true,
-					store: new Ext.data.SimpleStore({
-				        fields: [
-				                  'name',
-				                  'value'
-				                ],
-				        data: [
-	                	        ['is mapped to',ORYX.I18N.PropertyWindow.isMappedTo],
-	                	        ['is equal to',ORYX.I18N.PropertyWindow.isEqualTo]
-	                	       ]
-				    })
-                })
+                editor: typeCombo
             }, {
             	id: 'to',
                 header: ORYX.I18N.PropertyWindow.toObject,
                 width: 180,
                 dataIndex: 'to',
-                editor: new Ext.form.ComboBox({
-                	id: 'toCombo',
-                	valueField:'name',
-                	displayField:'value',
-                	typeAhead: true,
-					mode: 'local',
-					triggerAction: 'all',
-					selectOnFocus:true,
-					store: new Ext.data.SimpleStore({
-				        fields: [
-				                  'name',
-				                  'value'
-				                ],
-				        data: varData
-				    })
-                })
+                editor: toCombo
             }, {
             	id: 'tostr',
                 header: ORYX.I18N.PropertyWindow.toValue,
@@ -3274,18 +3314,175 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
     		selModel: itemDeleter,
             autoHeight: true,
             tbar: [{
-                text: ORYX.I18N.PropertyWindow.addAssignment,
+                text: "[ New Data Input Assignment ]",
                 handler : function(){
                 	dataassignments.add(new DataAssignment({
+                        atype: 'DataInput',
                         from: '',
                         type: '',
                         to: '',
                         tostr: ''
                     }));
+                    newAssignmentType = "datainput";
                     grid.fireEvent('cellclick', grid, dataassignments.getCount()-1, 1, null);
                 }
-            }],
-            clicksToEdit: 1
+                },
+                {
+                    text: "[ New Data Output Assignment ]",
+                    handler : function(){
+                        dataassignments.add(new DataAssignment({
+                            atype: 'DataOutput',
+                            from: '',
+                            type: '',
+                            to: '',
+                            tostr: ''
+                        }));
+                        newAssignmentType = "dataoutput";
+                        grid.fireEvent('cellclick', grid, dataassignments.getCount()-1, 1, null);
+                    }
+                }],
+            clicksToEdit: 1,
+            listeners: {
+                beforeedit: function(e) {
+                    if(e.record.data.atype == "DataInput") {
+                        var ed = e.grid.getColumnModel().getCellEditor(e.column, e.row) || {};
+                        ed = ed.field || {};
+                        if(ed.name == "typeCombo") {
+                            ed.destroy();
+                            var newTypeCombo = new Ext.form.ComboBox({
+                                name: 'typeCombo',
+                                valueField:'name',
+                                displayField:'value',
+                                typeAhead: true,
+                                mode: 'local',
+                                triggerAction: 'all',
+                                selectOnFocus:true,
+                                store: new Ext.data.SimpleStore({
+                                    fields: [
+                                        'name',
+                                        'value'
+                                    ],
+                                    data: [
+                                        ['is mapped to',ORYX.I18N.PropertyWindow.isMappedTo]
+                                    ]
+                                })
+                            });
+                            e.grid.getColumnModel().setEditor(e.column, new Ext.grid.GridEditor(newTypeCombo));
+                        }
+                        if(ed.name == "fromCombo") {
+                            ed.destroy();
+
+                            var newFromCombo = new Ext.form.ComboBox({
+                                name: 'fromCombo',
+                                valueField:'name',
+                                displayField:'value',
+                                typeAhead: true,
+                                mode: 'local',
+                                triggerAction: 'all',
+                                selectOnFocus:true,
+                                store: new Ext.data.SimpleStore({
+                                    fields: [
+                                        'name',
+                                        'value'
+                                    ],
+                                    data: variableDefsOnly
+                                })
+                            });
+                            e.grid.getColumnModel().setEditor(e.column, new Ext.grid.GridEditor(newFromCombo));
+                        }
+
+                        if(ed.name == "toCombo") {
+                            ed.destroy();
+                            var newToCombo = new Ext.form.ComboBox({
+                                name: 'toCombo',
+                                valueField:'name',
+                                displayField:'value',
+                                typeAhead: true,
+                                mode: 'local',
+                                triggerAction: 'all',
+                                selectOnFocus:true,
+                                store: new Ext.data.SimpleStore({
+                                    fields: [
+                                        'name',
+                                        'value'
+                                    ],
+                                    data: dataInputsOnly
+                                })
+                            });
+                            e.grid.getColumnModel().setEditor(e.column, new Ext.grid.GridEditor(newToCombo));
+                        }
+                    }
+                    if(e.record.data.atype == "DataOutput") {
+                        var ed = e.grid.getColumnModel().getCellEditor(e.column, e.row) || {};
+                        ed = ed.field || {};
+                        if(ed.name == "typeCombo") {
+                            ed.destroy();
+                            var newTypeCombo = new Ext.form.ComboBox({
+                                name: 'typeCombo',
+                                valueField:'name',
+                                displayField:'value',
+                                typeAhead: true,
+                                mode: 'local',
+                                triggerAction: 'all',
+                                selectOnFocus:true,
+                                store: new Ext.data.SimpleStore({
+                                    fields: [
+                                        'name',
+                                        'value'
+                                    ],
+                                    data: [
+                                        ['is mapped to',ORYX.I18N.PropertyWindow.isMappedTo],
+                                        ['is equal to',ORYX.I18N.PropertyWindow.isEqualTo]
+                                    ]
+                                })
+                            });
+                            e.grid.getColumnModel().setEditor(e.column, new Ext.grid.GridEditor(newTypeCombo));
+                        }
+                        if(ed.name == "fromCombo") {
+                            ed.destroy();
+
+                            var newFromCombo = new Ext.form.ComboBox({
+                                name: 'fromCombo',
+                                valueField:'name',
+                                displayField:'value',
+                                typeAhead: true,
+                                mode: 'local',
+                                triggerAction: 'all',
+                                selectOnFocus:true,
+                                store: new Ext.data.SimpleStore({
+                                    fields: [
+                                        'name',
+                                        'value'
+                                    ],
+                                    data: dataOutputsOnly
+                                })
+                            });
+                            e.grid.getColumnModel().setEditor(e.column, new Ext.grid.GridEditor(newFromCombo));
+                        }
+
+                        if(ed.name == "toCombo") {
+                            ed.destroy();
+                            var newToCombo = new Ext.form.ComboBox({
+                                name: 'toCombo',
+                                valueField:'name',
+                                displayField:'value',
+                                typeAhead: true,
+                                mode: 'local',
+                                triggerAction: 'all',
+                                selectOnFocus:true,
+                                store: new Ext.data.SimpleStore({
+                                    fields: [
+                                        'name',
+                                        'value'
+                                    ],
+                                    data: variableDefsOnly
+                                })
+                            });
+                            e.grid.getColumnModel().setEditor(e.column, new Ext.grid.GridEditor(newToCombo));
+                        }
+                    }
+                }
+            }
         });
     	
 		var dialog = new Ext.Window({ 
@@ -3293,7 +3490,7 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
 			autoCreate	: true, 
 			title		: ORYX.I18N.PropertyWindow.editorForDataAssignments,
 			height		: 350, 
-			width		: 730, 
+			width		: 890,
 			modal		: true,
 			collapsible	: false,
 			fixedcenter	: true, 
@@ -3323,11 +3520,31 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                 	dataassignments.data.each(function() {
                 		if(this.data['from'].length > 0 && this.data["type"].length > 0) {
                 			if(this.data["type"] == "is mapped to") {
-                				outValue += this.data['from'] + "->" + this.data['to'] + ",";
+                                if(this.data['to'].length > 0) {
+                				    outValue += this.data['from'] + "->" + this.data['to'] + ",";
+                                } else {
+                                    ORYX.EDITOR._pluginFacade.raiseEvent({
+                                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                        ntype		: 'warning',
+                                        msg         : "Assignment for " + this.data['from'] + " does not contain a proper mapping",
+                                        title       : ''
+
+                                    });
+                                }
                 			} else if(this.data["type"] == "is equal to") {
-                				var escapedc = this.data['tostr'].replace(/,/g , "##");
-                                escapedc = escapedc.replace(/=/g, '||');
-                				outValue += this.data['from'] + "=" + escapedc + ",";
+                                if(this.data['tostr'].length > 0) {
+                                    var escapedc = this.data['tostr'].replace(/,/g , "##");
+                                    escapedc = escapedc.replace(/=/g, '||');
+                                    outValue += this.data['from'] + "=" + escapedc + ",";
+                                } else {
+                                    ORYX.EDITOR._pluginFacade.raiseEvent({
+                                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                        ntype		: 'warning',
+                                        msg         : "Assignment for " + this.data['from'] + " does not contain a proper mapping.",
+                                        title       : ''
+
+                                    });
+                                }
                 			}
                 		}
                     });
