@@ -83,6 +83,10 @@ private static final Logger _logger = LoggerFactory.getLogger(StencilSetServiceS
         if (segments.length > 4) { 
             //looking for a resource under the stencilset.
             String path = requestURI.substring(requestURI.indexOf(segments[2]) + segments[2].length() + 1);
+            if(path.indexOf(applicationContext + "/stencilset/org.jbpm.designer.jBPMDesigner/stencilsets/bpmn2.0jbpm/bpmn2.0jbpm.json") >= 0) {
+                path = applicationContext + "/stencilsets/bpmn2.0jbpm/bpmn2.0jbpm.json";
+            }
+
             if(path.indexOf(applicationContext + "/stencilset/bpmn2.0jbpm/stencilset/org.jbpm.designer.jBPMDesigner/stencilsets/bpmn2.0jbpm/bpmn2.0jbpm.json") >= 0) {
                 path = applicationContext + "/stencilsets/bpmn2.0jbpm/bpmn2.0jbpm.json";
             }
