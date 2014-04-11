@@ -1,6 +1,7 @@
 package org.jbpm.designer.bpmn2.resource;
 
 
+import bpsim.impl.BpsimPackageImpl;
 import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.util.Bpmn2ResourceImpl;
 import org.eclipse.emf.common.util.URI;
@@ -14,6 +15,7 @@ import org.eclipse.emf.ecore.xmi.XMLLoad;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.XMLSave;
 import org.eclipse.emf.ecore.xmi.impl.XMLLoadImpl;
+import org.jboss.drools.impl.DroolsPackageImpl;
 import org.xml.sax.helpers.DefaultHandler;
 import org.eclipse.emf.ecore.resource.Resource;
 
@@ -50,19 +52,11 @@ public class JBPMBpmn2ResourceImpl extends Bpmn2ResourceImpl {
         };
     }
 
-    /**
-     * Override this method to hook in our own XmlHandler
-     */
     @Override
     protected XMLLoad createXMLLoad() {
+//        DroolsPackageImpl.init();
+//        BpsimPackageImpl.init();
         return new XMLLoadImpl(createXMLHelper()) {
-            Bpmn2ModelerXmlHandler handler;
-
-            @Override
-            protected DefaultHandler makeDefaultHandler() {
-                handler = new Bpmn2ModelerXmlHandler(resource, helper, options);
-                return handler;
-            }
 
             @Override
             public void load(XMLResource resource, InputStream inputStream, Map<?, ?> options) throws IOException {
@@ -71,9 +65,6 @@ public class JBPMBpmn2ResourceImpl extends Bpmn2ResourceImpl {
                 }
                 catch (Exception e) {
                     DiagnosticWrappedException error = new DiagnosticWrappedException(e);
-                    error.setLine(handler.getLineNumber());
-                    error.setColumn(handler.getColumnNumber());
-                    error.setLocation(handler.getLocation());
                     resource.getErrors().add(error);
                 }
             }
@@ -113,61 +104,5 @@ public class JBPMBpmn2ResourceImpl extends Bpmn2ResourceImpl {
         public int getLine() {
             return line;
         }
-    }
-
-    /**
-     * We need to extend the standard SAXXMLHandler to hook into the handling of
-     * attribute references which may be either simple ID Strings or QNames.
-     * We'll search through all of the objects' IDs first to find the one we're
-     * looking for. If not, we'll try a QName search.
-     */
-    protected static class Bpmn2ModelerXmlHandler extends BpmnXmlHandler {
-        public Bpmn2ModelerXmlHandler(XMLResource xmiResource, XMLHelper helper, Map<?, ?> options) {
-            super(xmiResource, helper, options);
-        }
-
-        public int getLineNumber() {
-            return super.getLineNumber();
-        }
-
-        public int getColumnNumber() {
-            return super.getColumnNumber();
-        }
-
-        public String getLocation() {
-            return super.getLocation();
-        }
-
-    }
-
-    public static EObject createStringWrapper(String value) {
-        DynamicEObjectImpl de = new DynamicEObjectImpl() {
-            // prevent owners from trying to resolve this thing - it's just a string!
-            public boolean eIsProxy() {
-                return false;
-            }
-
-            @Override
-            public boolean equals(Object object) {
-                if (object instanceof DynamicEObjectImpl) {
-                    DynamicEObjectImpl that = (DynamicEObjectImpl) object;
-                    if (eProxyURI()==null) {
-                        return that.eProxyURI()==null;
-                    }
-                    String thisString = eProxyURI().toString();
-                    String thatString = that.eProxyURI() == null ? null : that.eProxyURI().toString();
-                    return thisString.equals(thatString);
-                }
-                else if (object instanceof String) {
-                    String thisString = eProxyURI().toString();
-                    return thisString.equals(object);
-                }
-                return super.equals(object);
-            }
-
-        };
-        de.eSetClass(EcorePackage.eINSTANCE.getEObject());
-        de.eSetProxyURI(URI.createURI(value));
-        return de;
     }
 }
