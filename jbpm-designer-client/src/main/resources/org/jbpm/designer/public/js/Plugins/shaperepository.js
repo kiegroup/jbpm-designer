@@ -226,9 +226,16 @@ ORYX.Plugins.ShapeRepository = {
 	createStencilTreeNode: function(parentTreeNode, stencil) {
 		// Create and add the Stencil to the Group
         var IdParts = stencil.id().split("#");
-
+        var textTitle = ORYX.I18N.propertyNames[IdParts[1]];
+        if(!textTitle) {
+            textTitle = IdParts[1];
+        } else {
+            if(textTitle.length <= 0) {
+                textTitle = IdParts[1];
+            }
+        }
         var newElement = new Ext.tree.TreeNode({
-				text:		ORYX.I18N.propertyNames[IdParts[1]], 		// Text of the stencil
+				text:		textTitle, 		// Text of the stencil
 				icon:		decodeURIComponent(stencil.icon()),			// Icon of the stencil
 				allowDrag:	false,					// Don't use the Drag and Drop of Ext-Tree
 				allowDrop:	false,
