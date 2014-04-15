@@ -479,11 +479,11 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 						addError(fe, new ValidationSyntaxError(fe, BPMN2_TYPE, "Invalid Gateway direction for Parallel Gateway. It should be 'Converging' or 'Diverging'."));
 					}
 				}
-				if(gw instanceof InclusiveGateway) {
-					if(gw.getGatewayDirection().getValue() != GatewayDirection.DIVERGING.getValue()) {
-						addError(fe, new ValidationSyntaxError(fe, BPMN2_TYPE, "Invalid Gateway direction for Inclusive Gateway. It should be 'Diverging'."));
-					}
-				}
+//				if(gw instanceof InclusiveGateway) {
+//					if(gw.getGatewayDirection().getValue() != GatewayDirection.DIVERGING.getValue()) {
+//						addError(fe, new ValidationSyntaxError(fe, BPMN2_TYPE, "Invalid Gateway direction for Inclusive Gateway. It should be 'Diverging'."));
+//					}
+//				}
 				if(gw instanceof ComplexGateway) {
 					if(gw.getGatewayDirection().getValue() != GatewayDirection.DIVERGING.getValue() && gw.getGatewayDirection().getValue() != GatewayDirection.CONVERGING.getValue()) {
 						addError(fe, new ValidationSyntaxError(fe, BPMN2_TYPE, "Invalid Gateway direction for Complex Gateway. It should be 'Converging' or 'Diverging'."));
