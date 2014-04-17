@@ -3163,7 +3163,7 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
             				var escapedp = innerParts.join('=').replace(/\#\#/g , ",");
                             escapedp = escapedp.replace(/\|\|/g , "=");
                             dataassignments.add(new DataAssignment({
-                                atype: variableDefsOnlyVals.indexOf(fromPart) >= 0 ? "DataInput" : "DataOutput",
+                                atype: ( variableDefsOnlyVals.indexOf(fromPart) >= 0 || dataInputsOnlyVals.indexOf(fromPart) >= 0 ) ? "DataInput" : "DataOutput",
                                 from: fromPart,
                                 type: "is equal to",
                                 to: "",
@@ -3177,7 +3177,7 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                                 dataType = "java.lang.String";
                             }
                             dataassignments.add(new DataAssignment({
-                                atype: variableDefsOnlyVals.indexOf(innerParts[0]) >= 0 ? "DataInput" : "DataOutput",
+                                atype: ( variableDefsOnlyVals.indexOf(fromPart) >= 0 || dataInputsOnlyVals.indexOf(fromPart) >= 0 ) ? "DataInput" : "DataOutput",
                                 from: innerParts[0],
                                 type: "is mapped to",
                                 to: innerParts[1],
@@ -3191,6 +3191,7 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                         dataType = "java.lang.String";
                     }
                     dataassignments.add(new DataAssignment({
+                        atype: ( variableDefsOnlyVals.indexOf(fromPart) >= 0 || dataInputsOnlyVals.indexOf(fromPart) >= 0 ) ? "DataInput" : "DataOutput",
                         from: nextPart,
                         type: "is equal to",
                         to: "",
@@ -3363,7 +3364,8 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                                         'value'
                                     ],
                                     data: [
-                                        ['is mapped to',ORYX.I18N.PropertyWindow.isMappedTo]
+                                        ['is mapped to',ORYX.I18N.PropertyWindow.isMappedTo],
+                                        ['is equal to',ORYX.I18N.PropertyWindow.isEqualTo]
                                     ]
                                 })
                             });
@@ -3385,7 +3387,7 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                                         'name',
                                         'value'
                                     ],
-                                    data: variableDefsOnly
+                                    data: variableDefsOnly.concat(dataInputsOnly)
                                 })
                             });
                             e.grid.getColumnModel().setEditor(e.column, new Ext.grid.GridEditor(newFromCombo));
