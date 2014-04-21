@@ -21,6 +21,7 @@ import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceImpl;
 import org.jbpm.designer.notification.DesignerNotificationEvent;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.UriUtils;
+import org.jbpm.designer.server.service.DefaultDesignerAssetService;
 import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.web.plugin.IDiagramPlugin;
 import org.jbpm.designer.web.plugin.impl.PluginServiceImpl;
@@ -331,7 +332,10 @@ public class JbpmProfileImpl implements IDiagramProfile {
             return ((DocumentRoot) resource.getContents().get(0)).getDefinitions();
         } catch(Exception e) {
             _logger.error(e.getMessage());
-            throw new Exception(e);
+            String defaultProcessContent = DefaultDesignerAssetService.PROCESS_STUB.replaceAll( "\\$\\{processid\\}", "defaultprocessid" );
+            String errorMessages = "Unable to load process content due to errors. Displaying default process instead. Check logs for error details.";
+            notification.fire( new DesignerNotificationEvent( errorMessages, NotificationEvent.NotificationType.ERROR ) );
+            return getDefinitions(defaultProcessContent);
         }
     }
 
