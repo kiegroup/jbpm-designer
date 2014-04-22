@@ -9665,7 +9665,6 @@
                     "from_task_event",
                     "to_task_event",
                     "EventSubprocess",
-                    "TextAnnotation",
                     "from_participant"
                 ]
 			},
@@ -9732,7 +9731,8 @@
 			},
 			{
 				"role": "TextAnnotationMorph",
-				"baseMorphs": ["TextAnnotation"]
+				"baseMorphs": ["TextAnnotation"],
+                "preserveBounds" : true
 			},
 			{
 				"role": "DataObjectMorph",
