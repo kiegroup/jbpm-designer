@@ -9665,6 +9665,7 @@
                     "from_task_event",
                     "to_task_event",
                     "EventSubprocess",
+                    "TextAnnotation",
                     "from_participant"
                 ]
 			},
