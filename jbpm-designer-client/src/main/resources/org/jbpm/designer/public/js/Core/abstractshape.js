@@ -434,10 +434,17 @@ ORYX.Core.AbstractShape = ORYX.Core.UIObject.extend(
         }
         
         if(this.bounds){
-            json.bounds = { 
-                lowerRight: this.bounds.lowerRight(), 
-                upperLeft: this.bounds.upperLeft() 
-            };
+            if(this.getStencil().id().endsWith("TextAnnotation")) {
+                json.bounds = {
+                    lowerRight: this.absoluteBounds().lowerRight(),
+                    upperLeft: this.absoluteBounds().upperLeft()
+                };
+            } else {
+                json.bounds = {
+                    lowerRight: this.bounds.lowerRight(),
+                    upperLeft: this.bounds.upperLeft()
+                };
+            }
         }
         
         if(this.dockers){
