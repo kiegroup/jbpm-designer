@@ -634,12 +634,23 @@ ORYX.Plugins.PropertyWindow = {
                                         refToViewFlag = true;
 
                                     if (value.value() == "Business Rule" || value.value() == "Script" || value.value() == "None") {
-                                        options.push([value.icon(), ORYX.I18N.propertyNamesTaskType[value.title()], value.value()]);
+                                        if(ORYX.I18N.propertyNamesTaskType[value.title()] && ORYX.I18N.propertyNamesTaskType[value.title()].length > 0) {
+                                            options.push([value.icon(), ORYX.I18N.propertyNamesTaskType[value.title()], value.value()]);
+                                        } else {
+                                            options.push([value.icon(), value.title(), value.value()]);
+                                        }
 
-                                        icons.push({
-                                            name: ORYX.I18N.propertyNamesTaskType[value.title()],
-                                            icon: value.icon()
-                                        });
+                                        if(ORYX.I18N.propertyNamesTaskType[value.title()] && ORYX.I18N.propertyNamesTaskType[value.title()].length > 0) {
+                                            icons.push({
+                                                name: ORYX.I18N.propertyNamesTaskType[value.title()],
+                                                icon: value.icon()
+                                            });
+                                        } else {
+                                            icons.push({
+                                                name: value.title(),
+                                                icon: value.icon()
+                                            });
+                                        }
                                     }
                                 });
                             }  else {
@@ -650,7 +661,12 @@ ORYX.Plugins.PropertyWindow = {
                                     if(value.refToView()[0])
                                         refToViewFlag = true;
 
-                                    var name=ORYX.I18N.propertyNamesValue[value.title()];
+                                    var name = "";
+                                    if(ORYX.I18N.propertyNamesValue[value.title()] && ORYX.I18N.propertyNamesValue[value.title()].length > 0) {
+                                        name = ORYX.I18N.propertyNamesValue[value.title()];
+                                    } else {
+                                        name = value.title();
+                                    }
                                     if(!name) name=value.title();
 
                                     options.push([value.icon(), name, value.value()]);
@@ -1003,7 +1019,7 @@ ORYX.Plugins.PropertyWindow = {
 								grid:this.grid,
 								row:index,
 								facade:this.facade,
-								title:ORYX.I18N.propertyNames[pair.id()],
+								title: (ORYX.I18N.propertyNames[pair.id()] && ORYX.I18N.propertyNames[pair.id()].length > 0) ? ORYX.I18N.propertyNames[pair.id()] : pair.title(),
 								attr:attribute
 							});
 							cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1,field:cf});							
@@ -1256,38 +1272,42 @@ ORYX.Plugins.PropertyWindow = {
                         }
 
                         if(pair.extra()) {
-                            this.properties.push([ORYX.I18N.PropertyWindow.moreProps,  ORYX.I18N.propertyNames[pair.id()], attribute, icons, {
+                            var propid = (ORYX.I18N.propertyNames[pair.id()] && ORYX.I18N.propertyNames[pair.id()].length > 0) ? ORYX.I18N.propertyNames[pair.id()] : name;
+                            this.properties.push([ORYX.I18N.PropertyWindow.moreProps,  propid, attribute, icons, {
                                 editor: editorGrid,
                                 propId: key,
                                 type: pair.type(),
-                                tooltip: ORYX.I18N.propertyNames[pair.id()+"_desc"],
+                                tooltip: (ORYX.I18N.propertyNames[pair.id()+"_desc"] && ORYX.I18N.propertyNames[pair.id()+"_desc"].length > 0) ? ORYX.I18N.propertyNames[pair.id()+"_desc"] : pair.description(),
                                 renderer: editorRenderer,
                                 labelProvider: this.getLabelProvider(pair)
                             }]);
                         } else if(pair.simulation()) {
-							this.simulationProperties.push([ORYX.I18N.PropertyWindow.simulationProps,  ORYX.I18N.propertyNames[pair.id()], attribute, icons, {
+                            var propid = (ORYX.I18N.propertyNames[pair.id()] && ORYX.I18N.propertyNames[pair.id()].length > 0) ?  ORYX.I18N.propertyNames[pair.id()] : name;
+							this.simulationProperties.push([ORYX.I18N.PropertyWindow.simulationProps,  propid, attribute, icons, {
 								editor: editorGrid,
 								propId: key,
 								type: pair.type(),
-								tooltip: ORYX.I18N.propertyNames[pair.id()+"_desc"],
+								tooltip: (ORYX.I18N.propertyNames[pair.id()+"_desc"] && ORYX.I18N.propertyNames[pair.id()+"_desc"].length > 0) ? ORYX.I18N.propertyNames[pair.id()+"_desc"] : pair.description(),
 								renderer: editorRenderer,
 								labelProvider: this.getLabelProvider(pair)
 							}]);
                         } else if(pair.display()) {
-                            this.displayProperties.push([ORYX.I18N.PropertyWindow.displayProps, ORYX.I18N.propertyNames[pair.id()], attribute, icons, {
+                            var propid = (ORYX.I18N.propertyNames[pair.id()] && ORYX.I18N.propertyNames[pair.id()].length > 0) ? ORYX.I18N.propertyNames[pair.id()] : name;
+                            this.displayProperties.push([ORYX.I18N.PropertyWindow.displayProps, propid, attribute, icons, {
                                 editor: editorGrid,
                                 propId: key,
                                 type: pair.type(),
-                                tooltip: ORYX.I18N.propertyNames[pair.id()+"_desc"],
+                                tooltip: (ORYX.I18N.propertyNames[pair.id()+"_desc"] && ORYX.I18N.propertyNames[pair.id()+"_desc"].length > 0) ? ORYX.I18N.propertyNames[pair.id()+"_desc"] : pair.description(),
                                 renderer: editorRenderer,
                                 labelProvider: this.getLabelProvider(pair)
                             }]);
 						} else {
-                            this.popularProperties.push([ORYX.I18N.PropertyWindow.oftenUsed,  ORYX.I18N.propertyNames[pair.id()], attribute, icons, {
+                            var propid =  (ORYX.I18N.propertyNames[pair.id()] && ORYX.I18N.propertyNames[pair.id()].length > 0) ? ORYX.I18N.propertyNames[pair.id()] : name;
+                            this.popularProperties.push([ORYX.I18N.PropertyWindow.oftenUsed,  propid, attribute, icons, {
                                 editor: editorGrid,
                                 propId: key,
                                 type: pair.type(),
-                                tooltip: ORYX.I18N.propertyNames[pair.id()+"_desc"],
+                                tooltip: (ORYX.I18N.propertyNames[pair.id()+"_desc"] && ORYX.I18N.propertyNames[pair.id()+"_desc"].length > 0) ? ORYX.I18N.propertyNames[pair.id()+"_desc"] : pair.description(),
                                 renderer: editorRenderer,
                                 labelProvider: this.getLabelProvider(pair)
                             }]);
