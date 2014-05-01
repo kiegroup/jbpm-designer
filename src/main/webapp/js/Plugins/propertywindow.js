@@ -647,6 +647,71 @@ ORYX.Plugins.PropertyWindow = {
 							editorGrid = new Ext.Editor(editorCombo);
 
 							break;
+
+                            case ORYX.CONFIG.TYPE_DYNAMICGATEWAYCONNECTIONS:
+                                var currentShapes = ORYX.Config.FACADE.getSelection();
+                                var options = [];
+                                if(currentShapes && currentShapes.length == 1) {
+                                    var shape = currentShapes.first();
+                                    var shapeid = shape.resourceId;
+
+                                    var processJSON = ORYX.EDITOR.getSerializedJSON();
+                                    var ajaxObj = new XMLHttpRequest;
+                                    var url = ORYX.PATH + "processinfo";
+                                    var params  = "uuid=" + ORYX.UUID + "&ppdata=" + ORYX.PREPROCESSING + "&profile=" + ORYX.PROFILE + "&gatewayid=" + shapeid + "&json=" + encodeURIComponent(processJSON);
+                                    ajaxObj.open("POST",url,false);
+                                    ajaxObj.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                                    ajaxObj.send(params);
+                                    if (ajaxObj.status == 200) {
+                                        var gatewayconnectionsJson = ajaxObj.responseText.evalJSON();
+
+                                        for(var i=0;i<gatewayconnectionsJson.length;i++){
+                                            var csobj = gatewayconnectionsJson[i];
+                                            options.push(["", csobj.sequenceflowinfo, csobj.sequenceflowinfo]);
+                                        }
+                                    } else {
+                                        ORYX.EDITOR._pluginFacade.raiseEvent({
+                                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                            ntype		: 'error',
+                                            msg         : 'Error determining outgoing connections.',
+                                            title       : ''
+
+                                        });
+                                    }
+                                } else {
+                                    ORYX.EDITOR._pluginFacade.raiseEvent({
+                                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                        ntype		: 'error',
+                                        msg         : 'Invalid number of nodes selected.',
+                                        title       : ''
+
+                                    });
+                                }
+
+                                var store = new Ext.data.SimpleStore({
+                                    fields: [{name: 'icon'},
+                                        {name: 'title'},
+                                        {name: 'value'}	],
+                                    data : options
+                                });
+                                // Set the grid Editor
+                                var editorCombo = new Ext.form.ComboBox({
+                                    editable: false,
+                                    tpl: '<tpl for="."><div class="x-combo-list-item">{[(values.icon) ? "<img src=\'" + values.icon + "\' />" : ""]} {title}</div></tpl>',
+                                    store: store,
+                                    displayField:'title',
+                                    valueField: 'value',
+                                    typeAhead: true,
+                                    mode: 'local',
+                                    triggerAction: 'all',
+                                    selectOnFocus:true
+                                });
+                                editorCombo.on('select', function(combo, record, index) {
+                                    this.editDirectly(key, combo.getValue());
+                                }.bind(this))
+                                editorGrid = new Ext.Editor(editorCombo);
+                                break;
+
 						case ORYX.CONFIG.TYPE_DATE:
 							var currFormat = ORYX.I18N.PropertyWindow.dateFormat
 							if(!(attribute instanceof Date))

@@ -161,6 +161,7 @@ ORYX.CONFIG.TYPE_FLOAT =				"float";
 ORYX.CONFIG.TYPE_COLOR =				"color";
 ORYX.CONFIG.TYPE_DATE =					"date";
 ORYX.CONFIG.TYPE_CHOICE =				"choice";
+ORYX.CONFIG.TYPE_DYNAMICGATEWAYCONNECTIONS = "dynamicgatewayconnections";
 ORYX.CONFIG.TYPE_URL =					"url";
 ORYX.CONFIG.TYPE_DIAGRAM_LINK =			"diagramlink";
 ORYX.CONFIG.TYPE_COMPLEX =				"complex";

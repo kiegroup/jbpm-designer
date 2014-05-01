@@ -1168,7 +1168,15 @@ public class Bpmn2JsonUnmarshaller {
                     FeatureMap.Entry entry = iter.next();
                     if(entry.getEStructuralFeature().getName().equals("dg")) {
                     	for(FlowElement feg : flowElements) {
-                    		if(feg instanceof SequenceFlow && feg.getId().equals((String) entry.getValue())) {
+                            String entryValue = (String) entry.getValue();
+                            String entryValueId = "";
+                            String[] entryValueParts = entryValue.split(" : ");
+                            if(entryValueParts.length == 1) {
+                                entryValueId = entryValueParts[0];
+                            } else if(entryValueParts.length > 1) {
+                                entryValueId = entryValueParts[1];
+                            }
+                            if(feg instanceof SequenceFlow && feg.getId().equals(entryValueId)) {
                     			SequenceFlow sf = (SequenceFlow) feg;
                     			((InclusiveGateway) fe).setDefault(sf);
                     			if(sf.getConditionExpression() == null) {
@@ -1187,7 +1195,15 @@ public class Bpmn2JsonUnmarshaller {
                     FeatureMap.Entry entry = iter.next();
                     if(entry.getEStructuralFeature().getName().equals("dg")) {
                     	for(FlowElement feg : flowElements) {
-                    		if(feg instanceof SequenceFlow && feg.getId().equals((String) entry.getValue())) {
+                            String entryValue = (String) entry.getValue();
+                            String entryValueId = "";
+                            String[] entryValueParts = entryValue.split(" : ");
+                            if(entryValueParts.length == 1) {
+                                entryValueId = entryValueParts[0];
+                            } else if(entryValueParts.length > 1) {
+                                entryValueId = entryValueParts[1];
+                            }
+                            if(feg instanceof SequenceFlow && feg.getId().equals(entryValueId)) {
                     			SequenceFlow sf = (SequenceFlow) feg;
                     			((ExclusiveGateway) fe).setDefault(sf);
                     			if(sf.getConditionExpression() == null) {
