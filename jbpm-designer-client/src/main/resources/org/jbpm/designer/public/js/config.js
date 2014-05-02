@@ -207,7 +207,11 @@ ORYX.CONFIG.TYPE_CALLEDELEMENT  =       "calledelement";
 ORYX.CONFIG.TYPE_CUSTOM =               "custom";
 ORYX.CONFIG.TYPE_REASSIGNMENT =         "reassignment";
 ORYX.CONFIG.TYPE_NOTIFICATIONS =        "notifications";
-	
+ORYX.CONFIG.TYPE_DTYPE_VARDEF =         "vardef";
+ORYX.CONFIG.TYPE_DTYPE_DINPUT =         "dinput";
+ORYX.CONFIG.TYPE_DTYPE_DOUTPUT =        "doutput";
+ORYX.CONFIG.TYPE_DTYPE_GLOBAL =         "global";
+
 /* Vertical line distance of multiline labels */
 ORYX.CONFIG.LABEL_LINE_DISTANCE =		2;
 ORYX.CONFIG.LABEL_DEFAULT_LINE_HEIGHT =	12;
@@ -291,6 +295,8 @@ ORYX.CONFIG.EVENT_SIMULATION_PATH_SVG_GENERATED = "simulation.pathsvggenerated";
 ORYX.CONFIG.EVENT_SIMULATION_ANNOTATE_PROCESS = "simulation.annotateprocess";
 ORYX.CONFIG.EVENT_SIMULATION_SHOW_ANNOTATED_PROCESS = "simulation.showannotatedprocess";
 ORYX.CONFIG.EVENT_NOTIFICATION_SHOW = "notification.show";
+ORYX.CONFIG.EVENT_DEF_DELETED = "notification.def.deleted";
+
 // paint
 ORYX.CONFIG.EVENT_PAINT_NEWSHAPE = "paint.newshape";
 ORYX.CONFIG.EVENT_PAINT_REMOVESHAPE = "paint.removeshape";
