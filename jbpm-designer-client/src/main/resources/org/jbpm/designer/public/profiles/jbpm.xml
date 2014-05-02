@@ -48,6 +48,7 @@
         <plugin name="ORYX.Plugins.NotificationsPlugin"/>
         <plugin name="ORYX.Plugins.ActiveNodesHighlighter"/>
         <plugin name="ORYX.Plugins.FormEditing"/>
+        <plugin name="ORYX.Plugins.DefDeleteManager"/>
         <localhistory enabled="false" timeout="60000"/>
         <storesvgonsave enabled="false"/>
         <!--<repository id="vfs">-->

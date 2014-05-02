@@ -345,6 +345,7 @@
 		<plugin source="simulationresults.js" name="ORYX.Plugins.SimulationResults"/>
 		<plugin source="locknode.js" name="ORYX.Plugins.Paint"/>
     <plugin source="paint.js" name="ORYX.Plugins.LockNode"/>
+    <plugin source="defdeletemanager.js" name="ORYX.Plugins.DefDeleteManager"/>
 		<plugin source="voicecommand.js" name="ORYX.Plugins.VoiceCommand"/>
         <plugin source="patterncreator.js" name="ORYX.Plugins.PatternCreator"/>
         <plugin source="localhistory.js" name="ORYX.Plugins.LocalHistory"/>
