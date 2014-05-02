@@ -634,13 +634,13 @@ ORYX.Plugins.PropertyWindow = {
                                         refToViewFlag = true;
 
                                     if (value.value() == "Business Rule" || value.value() == "Script" || value.value() == "None") {
-                                        if(ORYX.I18N.propertyNamesTaskType[value.title()] && ORYX.I18N.propertyNamesTaskType[value.title()].length > 0) {
+                                        if(ORYX.I18N.propertyNamesTaskType && ORYX.I18N.propertyNamesTaskType[value.title()] && ORYX.I18N.propertyNamesTaskType[value.title()].length > 0) {
                                             options.push([value.icon(), ORYX.I18N.propertyNamesTaskType[value.title()], value.value()]);
                                         } else {
                                             options.push([value.icon(), value.title(), value.value()]);
                                         }
 
-                                        if(ORYX.I18N.propertyNamesTaskType[value.title()] && ORYX.I18N.propertyNamesTaskType[value.title()].length > 0) {
+                                        if(ORYX.I18N.propertyNamesTaskType && ORYX.I18N.propertyNamesTaskType[value.title()] && ORYX.I18N.propertyNamesTaskType[value.title()].length > 0) {
                                             icons.push({
                                                 name: ORYX.I18N.propertyNamesTaskType[value.title()],
                                                 icon: value.icon()
@@ -3605,6 +3605,7 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
     single : false,
     editable: false,
     readOnly: true,
+    dtype : "",
     
     /**
      * If the trigger was clicked a dialog has to be opened
@@ -3680,6 +3681,7 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
     	}
 
     	var itemDeleter = new Extensive.grid.ItemDeleter();
+        itemDeleter.setDType(this.dtype);
 
     	var typeData = new Array();
     	var stringType = new Array();
@@ -3861,34 +3863,40 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
 
 Ext.form.ComplexVardefField = Ext.extend(Ext.form.NameTypeEditor,  {
      windowTitle : ORYX.I18N.PropertyWindow.editorForVariableDefinitions,
-     addButtonLabel : ORYX.I18N.PropertyWindow.addVariable
+     addButtonLabel : ORYX.I18N.PropertyWindow.addVariable,
+     dtype: ORYX.CONFIG.TYPE_DTYPE_VARDEF
 });
 
 Ext.form.ComplexDataInputField = Ext.extend(Ext.form.NameTypeEditor,  {
      windowTitle : ORYX.I18N.PropertyWindow.editorForDataInput,
-     addButtonLabel : ORYX.I18N.PropertyWindow.addDataInput
+     addButtonLabel : ORYX.I18N.PropertyWindow.addDataInput,
+     dtype: ORYX.CONFIG.TYPE_DTYPE_DINPUT
 });
 
 Ext.form.ComplexDataOutputField = Ext.extend(Ext.form.NameTypeEditor,  {
      windowTitle : ORYX.I18N.PropertyWindow.editorForDataOutput,
-     addButtonLabel : ORYX.I18N.PropertyWindow.addDataOutput
+     addButtonLabel : ORYX.I18N.PropertyWindow.addDataOutput,
+     dtype: ORYX.CONFIG.TYPE_DTYPE_DOUTPUT
 });
 
 Ext.form.ComplexDataInputFieldSingle = Ext.extend(Ext.form.NameTypeEditor,  {
     windowTitle : ORYX.I18N.PropertyWindow.editorForDataInput,
     addButtonLabel :  ORYX.I18N.PropertyWindow.addDataInput,
-    single : true
+    single : true,
+    dtype: ORYX.CONFIG.TYPE_DTYPE_DINPUT
 });
 
 Ext.form.ComplexDataOutputFieldSingle = Ext.extend(Ext.form.NameTypeEditor,  {
     windowTitle : ORYX.I18N.PropertyWindow.editorForDataOutput,
     addButtonLabel : ORYX.I18N.PropertyWindow.addDataOutput,
-    single : true
+    single : true,
+    dtype: ORYX.CONFIG.TYPE_DTYPE_DOUTPUT
 });
 
 Ext.form.ComplexGlobalsField = Ext.extend(Ext.form.NameTypeEditor,  {
     windowTitle : ORYX.I18N.PropertyWindow.editorForGlobals,
-    addButtonLabel : ORYX.I18N.PropertyWindow.addGlobal
+    addButtonLabel : ORYX.I18N.PropertyWindow.addGlobal,
+    dtype: ORYX.CONFIG.TYPE_DTYPE_GLOBAL
 });
 
 Ext.form.ConditionExpressionEditorField = Ext.extend(Ext.form.TriggerField,  {
