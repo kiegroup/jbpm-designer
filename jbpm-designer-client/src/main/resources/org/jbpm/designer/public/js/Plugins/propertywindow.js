@@ -1820,7 +1820,7 @@ Ext.extend(Ext.form.ComplexListField, Ext.form.TriggerField,  {
 
 Ext.form.ComplexTextField = Ext.extend(Ext.form.TriggerField,  {
 
-	defaultAutoCreate : {tag: "textarea", rows:1, style:"height:16px;overflow:hidden;" },
+	//defaultAutoCreate : {tag: "textarea", rows:1, style:"height:16px;overflow:hidden;" },
     editable: false,
     readOnly: true,
 
