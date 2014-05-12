@@ -352,6 +352,9 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
                 String icon = (String) workDefinitionMap.get("icon");
 
+                if (icon == null) {
+                	icon = this.globalDir + "/defaultservicenodeicon.png";
+                }
 
                 Asset<byte[]> iconAsset = null;
 
