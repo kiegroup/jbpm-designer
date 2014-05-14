@@ -173,7 +173,7 @@ ORYX.Plugins.ShapeRepository = {
                         if(Ext.isIE) {
                             // Create a new group
                             treeGroups[group] = new Ext.tree.TreeNode({
-                                text: ORYX.I18N.propertyNames[group],					// Group-Name
+                                text: group,					// Group-Name
                                 allowDrag:false,
                                 allowDrop:false,
                                 iconCls:'headerShapeRepImg', // Css-Class for Icon
@@ -184,7 +184,7 @@ ORYX.Plugins.ShapeRepository = {
                         } else {
                             // Create a new group
                             treeGroups[group] = new Ext.tree.TreeNode({
-                                text:ORYX.I18N.propertyNames[group],					// Group-Name
+                                text: group,					// Group-Name
                                 allowDrag:false,
                                 allowDrop:false,
                                 iconCls:'headerShapeRepImg', // Css-Class for Icon
@@ -249,7 +249,7 @@ ORYX.Plugins.ShapeRepository = {
 		var ui = newElement.getUI();
 		
 		// Set the tooltip
-		ui.elNode.setAttributeNS(null, "title", ORYX.I18N.propertyNames[IdParts[1]+"_desc"]);
+		ui.elNode.setAttributeNS(null, "title", stencil.description());
 		
 		// Register the Stencil on Drag and Drop
 		Ext.dd.Registry.register(ui.elNode, {
