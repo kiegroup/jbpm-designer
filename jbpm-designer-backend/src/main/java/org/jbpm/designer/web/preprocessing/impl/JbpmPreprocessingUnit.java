@@ -245,7 +245,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             workItemTemplate.add("packageName", "org.jbpm");
 
             String processName = asset.getName();
-            workItemTemplate.add("processn", "");
+            workItemTemplate.add("processn", processName);
 
             String packageNameStr = (processPackage.length() > 0) ? processPackage + "." : "";
             if(packageNameStr.length() > 0) {
