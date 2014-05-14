@@ -228,10 +228,10 @@ ORYX.Plugins.ShapeRepository = {
         var IdParts = stencil.id().split("#");
         var textTitle = ORYX.I18N.propertyNames[IdParts[1]];
         if(!textTitle) {
-            textTitle = IdParts[1];
+            textTitle = stencil.title();
         } else {
             if(textTitle.length <= 0) {
-                textTitle = IdParts[1];
+                textTitle = stencil.title();
             }
         }
         var newElement = new Ext.tree.TreeNode({
