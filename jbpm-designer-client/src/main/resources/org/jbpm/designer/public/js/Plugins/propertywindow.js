@@ -3196,6 +3196,7 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                             if (!dataType){
                                 dataType = "java.lang.String";
                             }
+                            var fromPart = innerParts[0];
                             dataassignments.add(new DataAssignment({
                                 atype: ( variableDefsOnlyVals.indexOf(fromPart) >= 0 || dataInputsOnlyVals.indexOf(fromPart) >= 0 ) ? "DataInput" : "DataOutput",
                                 from: innerParts[0],
@@ -3211,7 +3212,7 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                         dataType = "java.lang.String";
                     }
                     dataassignments.add(new DataAssignment({
-                        atype: ( variableDefsOnlyVals.indexOf(fromPart) >= 0 || dataInputsOnlyVals.indexOf(fromPart) >= 0 ) ? "DataInput" : "DataOutput",
+                        atype: ( variableDefsOnlyVals.indexOf(nextPart) >= 0 || dataInputsOnlyVals.indexOf(nextPart) >= 0 ) ? "DataInput" : "DataOutput",
                         from: nextPart,
                         type: "is equal to",
                         to: "",
