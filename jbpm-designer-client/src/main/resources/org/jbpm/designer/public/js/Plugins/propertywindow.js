@@ -3182,14 +3182,17 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                             innerParts.shift(); // removes the first item from the array
             				var escapedp = innerParts.join('=').replace(/\#\#/g , ",");
                             escapedp = escapedp.replace(/\|\|/g , "=");
-                            dataassignments.add(new DataAssignment({
-                                atype: ( variableDefsOnlyVals.indexOf(fromPart) >= 0 || dataInputsOnlyVals.indexOf(fromPart) >= 0 ) ? "DataInput" : "DataOutput",
-                                from: fromPart,
-                                type: "is equal to",
-                                to: "",
-                                tostr: escapedp,
-                                dataType: dataType
-                            }));
+
+                            if(variableDefsOnlyVals.indexOf(fromPart) < 0) {
+                                dataassignments.add(new DataAssignment({
+                                    atype: ( dataInputsOnlyVals.indexOf(fromPart) >= 0 ) ? "DataInput" : "DataOutput",
+                                    from: fromPart,
+                                    type: "is equal to",
+                                    to: "",
+                                    tostr: escapedp,
+                                    dataType: dataType
+                                }));
+                            }
     			} else if(nextPart.indexOf("->") > 0) {
                             var innerParts = nextPart.split("->");
                             var dataType = dataTypeMap[innerParts[0]];
@@ -3197,28 +3200,46 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                                 dataType = "java.lang.String";
                             }
                             var fromPart = innerParts[0];
-                            dataassignments.add(new DataAssignment({
-                                atype: ( variableDefsOnlyVals.indexOf(fromPart) >= 0 || dataInputsOnlyVals.indexOf(fromPart) >= 0 ) ? "DataInput" : "DataOutput",
-                                from: innerParts[0],
-                                type: "is mapped to",
-                                to: innerParts[1],
-                                tostr: "",
-                                dataType: dataType
-                            }));
+                            var hasErrors = false;
+                            if( dataInputsOnlyVals.indexOf(fromPart) >= 0 && dataInputsOnlyVals.indexOf(innerParts[1]) >= 0 ){
+                                hasErrors = true;
+                            }
+                            if( dataInputsOnlyVals.indexOf(fromPart) >= 0 && variableDefsOnlyVals.indexOf(innerParts[1]) >= 0 ){
+                                hasErrors = true;
+                            }
+                            if( variableDefsOnlyVals.indexOf(fromPart) >= 0 && variableDefsOnlyVals.indexOf(innerParts[1]) >= 0 ){
+                                hasErrors = true;
+                            }
+                            if( dataOutputsOnlyVals.indexOf(fromPart) >= 0 && dataInputsOnlyVals.indexOf(innerParts[1]) >= 0 ){
+                                hasErrors = true;
+                            }
+
+                            if(!hasErrors) {
+                                dataassignments.add(new DataAssignment({
+                                    atype: ( variableDefsOnlyVals.indexOf(fromPart) >= 0 || dataInputsOnlyVals.indexOf(fromPart) >= 0 ) ? "DataInput" : "DataOutput",
+                                    from: innerParts[0],
+                                    type: "is mapped to",
+                                    to: innerParts[1],
+                                    tostr: "",
+                                    dataType: dataType
+                                }));
+                            }
     			} else {
     				// default to equality
     				var dataType = dataTypeMap[nextPart];
                     if (!dataType){
                         dataType = "java.lang.String";
                     }
-                    dataassignments.add(new DataAssignment({
-                        atype: ( variableDefsOnlyVals.indexOf(nextPart) >= 0 || dataInputsOnlyVals.indexOf(nextPart) >= 0 ) ? "DataInput" : "DataOutput",
-                        from: nextPart,
-                        type: "is equal to",
-                        to: "",
-                        tostr: "",
-                        dataType: dataType
-                    }));
+                    if(variableDefsOnlyVals.indexOf(nextPart) < 0) {
+                        dataassignments.add(new DataAssignment({
+                            atype: ( variableDefsOnlyVals.indexOf(nextPart) >= 0 || dataInputsOnlyVals.indexOf(nextPart) >= 0 ) ? "DataInput" : "DataOutput",
+                            from: nextPart,
+                            type: "is equal to",
+                            to: "",
+                            tostr: "",
+                            dataType: dataType
+                        }));
+                    }
     			}
     		}
     	}
@@ -3544,7 +3565,42 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                 		if(this.data['from'].length > 0 && this.data["type"].length > 0) {
                 			if(this.data["type"] == "is mapped to") {
                                 if(this.data['to'].length > 0) {
-                				    outValue += this.data['from'] + "->" + this.data['to'] + ",";
+                                    // type specific checks
+                                    if(dataInputsOnlyVals.indexOf(this.data['from']) >= 0 && dataInputsOnlyVals.indexOf(this.data['to']) >= 0) {
+                                        ORYX.EDITOR._pluginFacade.raiseEvent({
+                                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                            ntype		: 'warning',
+                                            msg         : "Assignment for " + this.data['from'] + " is invalid",
+                                            title       : ''
+
+                                        });
+                                    } else  if(dataInputsOnlyVals.indexOf(this.data['from']) >= 0 && variableDefsOnly.indexOf(this.data['to']) >= 0) {
+                                        ORYX.EDITOR._pluginFacade.raiseEvent({
+                                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                            ntype		: 'warning',
+                                            msg         : "Assignment for " + this.data['from'] + " is invalid",
+                                            title       : ''
+
+                                        });
+                                    } else if(variableDefsOnly.indexOf(this.data['from']) >= 0 && variableDefsOnly.indexOf(this.data['to']) >= 0) {
+                                        ORYX.EDITOR._pluginFacade.raiseEvent({
+                                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                            ntype		: 'warning',
+                                            msg         : "Assignment for " + this.data['from'] + " is invalid",
+                                            title       : ''
+
+                                        });
+                                    } else if(dataOutputsOnlyVals.indexOf(this.data['from']) >= 0 && dataInputsOnlyVals.indexOf(this.data['to']) >= 0) {
+                                        ORYX.EDITOR._pluginFacade.raiseEvent({
+                                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                            ntype		: 'warning',
+                                            msg         : "Assignment for " + this.data['from'] + " is invalid",
+                                            title       : ''
+
+                                        });
+                                    } else {
+                                        outValue += this.data['from'] + "->" + this.data['to'] + ",";
+                                    }
                                 } else {
                                     ORYX.EDITOR._pluginFacade.raiseEvent({
                                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
@@ -3556,9 +3612,20 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                                 }
                 			} else if(this.data["type"] == "is equal to") {
                                 if(this.data['tostr'].length > 0) {
-                                    var escapedc = this.data['tostr'].replace(/,/g , "##");
-                                    escapedc = escapedc.replace(/=/g, '||');
-                                    outValue += this.data['from'] + "=" + escapedc + ",";
+                                    // type specific checks
+                                    if(variableDefsOnly.indexOf(this.data['from']) >= 0) {
+                                        ORYX.EDITOR._pluginFacade.raiseEvent({
+                                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                            ntype		: 'warning',
+                                            msg         : "Assignment for " + this.data['from'] + " is invalid",
+                                            title       : ''
+
+                                        });
+                                    }  else {
+                                        var escapedc = this.data['tostr'].replace(/,/g , "##");
+                                        escapedc = escapedc.replace(/=/g, '||');
+                                        outValue += this.data['from'] + "=" + escapedc + ",";
+                                    }
                                 } else {
                                     ORYX.EDITOR._pluginFacade.raiseEvent({
                                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
