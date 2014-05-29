@@ -296,6 +296,19 @@
       <artifactId>kie-wb-config-resource-widget</artifactId>
     </dependency>
 
+    <dependency>
+        <groupId>org.kie.workbench.screens</groupId>
+        <artifactId>kie-wb-common-message-console-api</artifactId>
+      </dependency>
+    <dependency>
+      <groupId>org.kie.workbench.screens</groupId>
+      <artifactId>kie-wb-common-message-console-backend</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.workbench.screens</groupId>
+      <artifactId>kie-wb-common-message-console-client</artifactId>
+    </dependency>
+
       <!-- formModeler dependencies -->
       <dependency>
           <groupId>org.jbpm</groupId>
@@ -466,6 +479,9 @@
             <compileSourcesArtifact>org.jbpm:jbpm-form-modeler-editor-client</compileSourcesArtifact>
             <compileSourcesArtifact>org.jbpm:jbpm-form-modeler-renderer-api</compileSourcesArtifact>
             <compileSourcesArtifact>org.jbpm:jbpm-form-modeler-renderer-client</compileSourcesArtifact>
+
+            <compileSourcesArtifact>org.kie.workbench.screens:kie-wb-common-message-console-api</compileSourcesArtifact>
+            <compileSourcesArtifact>org.kie.workbench.screens:kie-wb-common-message-console-client</compileSourcesArtifact>
 
           </compileSourcesArtifacts>
           <runTarget>org.jbpm.designer.jBPMDesigner/designer.html</runTarget>
