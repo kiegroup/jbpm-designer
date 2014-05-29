@@ -169,7 +169,7 @@ ORYX.Plugins.ShapeRepository = {
 				groups.each((function(group) {
 					
 					// If there is a new group
-					if(!treeGroups[group]) {
+					if(!treeGroups[group] && group != "Connecting Objects") {
                         if(Ext.isIE) {
                             // Create a new group
                             treeGroups[group] = new Ext.tree.TreeNode({
