@@ -3184,6 +3184,7 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                             escapedp = escapedp.replace(/\|\|/g , "=");
 
                             if(variableDefsOnlyVals.indexOf(fromPart) < 0) {
+                                alert("doing it...");
                                 dataassignments.add(new DataAssignment({
                                     atype: ( dataInputsOnlyVals.indexOf(fromPart) >= 0 ) ? "DataInput" : "DataOutput",
                                     from: fromPart,
@@ -3582,7 +3583,7 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                                             title       : ''
 
                                         });
-                                    } else if(variableDefsOnly.indexOf(this.data['from']) >= 0 && variableDefsOnly.indexOf(this.data['to']) >= 0) {
+                                    } else if(variableDefsOnlyVals.indexOf(this.data['from']) >= 0 && variableDefsOnly.indexOf(this.data['to']) >= 0) {
                                         ORYX.EDITOR._pluginFacade.raiseEvent({
                                             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                             ntype		: 'warning',
@@ -3613,7 +3614,7 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                 			} else if(this.data["type"] == "is equal to") {
                                 if(this.data['tostr'].length > 0) {
                                     // type specific checks
-                                    if(variableDefsOnly.indexOf(this.data['from']) >= 0) {
+                                    if(variableDefsOnlyVals.indexOf(this.data['from']) >= 0) {
                                         ORYX.EDITOR._pluginFacade.raiseEvent({
                                             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                             ntype		: 'warning',
