@@ -222,7 +222,7 @@
                 <include>${project.build.directory}/classes/org/jbpm/designer/public/css/xtheme-gray-colors.css</include>
                 <include>${project.build.directory}/classes/org/jbpm/designer/public/css/xtheme-gray.css</include>
              </includes>
-              <output>${project.build.directory}/classes/org/jbpm/designer/public/css/designer-compressed-stylesheets1.css</output>
+              <output>${project.build.directory}/classes/org/jbpm/designer/public/css/designer-compressed-stylesheets.css</output>
             </aggregation>
 
             <aggregation>
