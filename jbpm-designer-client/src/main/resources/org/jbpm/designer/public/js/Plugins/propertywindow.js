@@ -3184,7 +3184,6 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                             escapedp = escapedp.replace(/\|\|/g , "=");
 
                             if(variableDefsOnlyVals.indexOf(fromPart) < 0) {
-                                alert("doing it...");
                                 dataassignments.add(new DataAssignment({
                                     atype: ( dataInputsOnlyVals.indexOf(fromPart) >= 0 ) ? "DataInput" : "DataOutput",
                                     from: fromPart,
