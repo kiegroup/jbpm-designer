@@ -118,28 +118,6 @@
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-validator</artifactId>
     </dependency>
-    <!-- This must be placed above com.google.gwt:gwt-dev to override the
-      Jetty that is present there -->
-    <dependency>
-      <groupId>org.mortbay.jetty</groupId>
-      <artifactId>jetty</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.mortbay.jetty</groupId>
-      <artifactId>jetty-plus</artifactId>
-      <exclusions>
-        <exclusion>
-          <artifactId>geronimo-spec-jta</artifactId>
-          <groupId>geronimo-spec</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
-    <dependency>
-      <groupId>org.mortbay.jetty</groupId>
-      <artifactId>jetty-naming</artifactId>
-    </dependency>
 
     <!-- Weld Modules -->
     <dependency>
