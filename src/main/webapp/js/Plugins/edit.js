@@ -34,6 +34,22 @@ ORYX.Plugins.Edit = Clazz.extend({
         //this.facade.registerOnEvent(ORYX.CONFIG.EVENT_KEYDOWN, this.keyHandler.bind(this));
         
         this.facade.offer({
+         name: ORYX.I18N.Edit.save,
+         description: ORYX.I18N.Edit.saveDesc,
+         icon: ORYX.PATH + "images/page_save.png",
+		 keyCodes: [{
+				metaKeys: [ORYX.CONFIG.META_KEY_META_CTRL],
+				keyCode: 85,
+				keyAction: ORYX.CONFIG.KEY_ACTION_DOWN
+			}
+		 ],
+         functionality: this.callEdit.bind(this, this.save),
+         group: ORYX.I18N.Edit.group,
+         index: 1,
+         minShape: 0
+         });
+
+        this.facade.offer({
          name: ORYX.I18N.Edit.cut,
          description: ORYX.I18N.Edit.cutDesc,
          icon: ORYX.PATH + "images/cut.png",
@@ -45,7 +61,7 @@ ORYX.Plugins.Edit = Clazz.extend({
 		 ],
          functionality: this.callEdit.bind(this, this.editCut),
          group: ORYX.I18N.Edit.group,
-         index: 1,
+         index: 2,
          minShape: 1
          });
          
@@ -61,7 +77,7 @@ ORYX.Plugins.Edit = Clazz.extend({
 		 ],
          functionality: this.callEdit.bind(this, this.editCopy, [true, false]),
          group: ORYX.I18N.Edit.group,
-         index: 2,
+         index: 3,
          minShape: 1
          });
          
@@ -78,7 +94,7 @@ ORYX.Plugins.Edit = Clazz.extend({
          functionality: this.callEdit.bind(this, this.editPaste),
          isEnabled: this.clipboard.isOccupied.bind(this.clipboard),
          group: ORYX.I18N.Edit.group,
-         index: 3,
+         index: 4,
          minShape: 0,
          maxShape: 0
          });
@@ -99,7 +115,7 @@ ORYX.Plugins.Edit = Clazz.extend({
 			],
             functionality: this.callEdit.bind(this, this.editDelete),
             group: ORYX.I18N.Edit.group,
-            index: 4,
+            index: 5,
             minShape: 1
         });
         
@@ -275,6 +291,51 @@ ORYX.Plugins.Edit = Clazz.extend({
         this.clipboard.refresh(selection, this.getAllShapesToConsider(selection), this.facade.getCanvas().getStencil().stencilSet().namespace(), useNoOffset);
 
         if( will_update ) this.facade.updateSelection();
+    },
+
+    save: function () {
+      var processJSON = ORYX.EDITOR.getSerializedJSON();
+      var processName = jsonPath(processJSON.evalJSON(), "$.properties.name");
+      var processPackage = jsonPath(processJSON.evalJSON(), "$.properties.package");
+      var processVersion = jsonPath(processJSON.evalJSON(), "$.properties.version");
+      var fileName = "";
+      if(processPackage && processPackage != "") {
+        fileName += processPackage;
+      }
+      if(processName && processName != "") {
+        if(fileName != "") {
+          fileName += ".";
+        }
+        fileName += processName;
+      }
+      if(processVersion && processVersion != "") {
+        if(fileName != "") {
+          fileName += ".";
+        }
+        fileName += "v" + processVersion;
+      }
+      if(fileName == "") {
+        fileName = "processbpmn2";
+      }
+
+      Ext.Ajax.request({
+        url: ORYX.PATH + "savebpmn",
+        method: 'POST',
+        success: function() {
+          Ext.Msg.minWidth = 400;
+          Ext.Msg.alert("Process Definition xml successfully saved");
+        },
+        failure: function() {
+          Ext.Msg.minWidth = 400;
+          Ext.Msg.alert("Converting to BPMN2 Failed");
+        },
+        params: {
+          pp: ORYX.PREPROCESSING,
+          profile: ORYX.PROFILE,
+          data: processJSON,
+          fileName: fileName
+        }
+      });
     },
     
     /**

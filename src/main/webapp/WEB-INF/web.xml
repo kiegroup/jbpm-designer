@@ -68,6 +68,11 @@
   <servlet-name>TransformerServlet</servlet-name>
   <servlet-class>org.jbpm.designer.web.server.TransformerServlet</servlet-class>
  </servlet>
+  <servlet>
+  <display-name>SaveBpmn2</display-name>
+  <servlet-name>SaveBpmn2Servlet</servlet-name>
+  <servlet-class>org.jbpm.designer.web.server.SaveBpmn2Servlet</servlet-class>
+ </servlet>
  <servlet>
   <display-name>FileStore</display-name>
   <servlet-name>FileStoreServlet</servlet-name>
@@ -175,6 +180,10 @@
  <servlet-mapping>
   <servlet-name>UUIDBasedRepositoryServlet</servlet-name>
   <url-pattern>/uuidRepository</url-pattern>
+ </servlet-mapping>
+  <servlet-mapping>
+  <servlet-name>SaveBpmn2Servlet</servlet-name>
+  <url-pattern>/savebpmn</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
   <servlet-name>TransformerServlet</servlet-name>
