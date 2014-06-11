@@ -21,12 +21,12 @@
   <servlet-class>io.undertow.servlet.handlers.DefaultServlet</servlet-class>
    <!--for wildfly-->
   <init-param>
-   <param-name>directory-listing</param-name>
+   <param-name>debug</param-name>
    <param-value>0</param-value>
   </init-param>
   <init-param>
    <!-- <param-name>dirAllowed</param-name> for Tomcat -->
-   <param-name>listings</param-name>
+   <param-name>directory-listing</param-name>
    <param-value>true</param-value>
   </init-param>
   <load-on-startup>1</load-on-startup>
