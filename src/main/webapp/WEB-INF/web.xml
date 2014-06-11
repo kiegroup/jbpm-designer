@@ -16,9 +16,12 @@
   <servlet-name>DirectoryListingServlet</servlet-name>
   <!-- <servlet-class>org.eclipse.jetty.servlet.DefaultServlet</servlet-class> 
       For Tomcat -->
-  <servlet-class>org.apache.catalina.servlets.DefaultServlet</servlet-class>
+  <!--<servlet-class>org.apache.catalina.servlets.DefaultServlet</servlet-class>-->
+   <!--for jBoss7-->
+  <servlet-class>io.undertow.servlet.handlers.DefaultServlet</servlet-class>
+   <!--for wildfly-->
   <init-param>
-   <param-name>debug</param-name>
+   <param-name>directory-listing</param-name>
    <param-value>0</param-value>
   </init-param>
   <init-param>
