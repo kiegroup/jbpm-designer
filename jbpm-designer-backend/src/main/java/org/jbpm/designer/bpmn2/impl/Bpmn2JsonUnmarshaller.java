@@ -1325,101 +1325,108 @@ public class Bpmn2JsonUnmarshaller {
             }
         }
     }
-    
+
+
     private void revisitCatchEventsConvertToBoundary(Definitions def) {
     	List<CatchEvent> catchEventsToRemove = new ArrayList<CatchEvent>();
     	Map<BoundaryEvent, List<String>> boundaryEventsToAdd = new HashMap<BoundaryEvent, List<String>>();
     	List<RootElement> rootElements =  def.getRootElements();
     	for(RootElement root : rootElements) {
     		if(root instanceof Process) {
-    			Process process = (Process) root;
-                List<FlowElement> flowElements =  process.getFlowElements();
-                for(FlowElement fe : flowElements) {
-                	if(fe instanceof CatchEvent) {
-                		CatchEvent ce = (CatchEvent) fe;
-                        EventDefinition ed = null;
-                        if(ce.getEventDefinitions() != null && ce.getEventDefinitions().size() > 0) {
-                            ed = ce.getEventDefinitions().get(0);
-                        }
-                		// check if we have an outgoing connection to this catch event from an activity
-                        for(Entry<Object, List<String>> entry : _outgoingFlows.entrySet()) {
-                			 for (String flowId : entry.getValue()) {
-                				 if (entry.getKey() instanceof Activity && flowId.equals(ce.getId())) {
-                					 BoundaryEvent be = Bpmn2Factory.eINSTANCE.createBoundaryEvent();
-                                     if(ed != null && ed instanceof ErrorEventDefinition) {
-                                         be.setCancelActivity(true);
-                                     } else {
-                                         Iterator<FeatureMap.Entry> iter = ce.getAnyAttribute().iterator();
-                                         while(iter.hasNext()) {
-                                             FeatureMap.Entry entry2 = iter.next();
-                                             if(entry2.getEStructuralFeature().getName().equals("boundaryca")) {
-                                                 String boundaryceVal = (String) entry2.getValue();
-                                                 be.setCancelActivity(Boolean.parseBoolean(boundaryceVal));
-                                             }
-                                         }
-                                     }
-
-                					 if(ce.getDataOutputs() != null) {
-                						 be.getDataOutputs().addAll(ce.getDataOutputs());
-                					 }
-                					 if(ce.getDataOutputAssociation() != null) {
-                						 be.getDataOutputAssociation().addAll(ce.getDataOutputAssociation());
-                					 }
-                					 if(ce.getOutputSet() != null) {
-                						 be.setOutputSet(ce.getOutputSet());
-                					 }
-                					 if(ce.getEventDefinitions() != null) {
-                						 be.getEventDefinitions().addAll(ce.getEventDefinitions());
-                					 }
-                					 if(ce.getEventDefinitionRefs() != null) {
-                						 be.getEventDefinitionRefs().addAll(ce.getEventDefinitionRefs());
-                					 }
-                					 if(ce.getProperties() != null) {
-                						 be.getProperties().addAll(ce.getProperties());
-                					 }
-                					 if(ce.getAnyAttribute() != null) {
-                						 be.getAnyAttribute().addAll(ce.getAnyAttribute());
-                					 }
-                					 if(ce.getOutgoing() != null) {
-                						 be.getOutgoing().addAll(ce.getOutgoing());
-                					 }
-                					 if(ce.getIncoming() != null) {
-                						 be.getIncoming().addAll(ce.getIncoming());
-                					 }
-                					 if(ce.getProperties() != null) {
-                						 be.getProperties().addAll(ce.getProperties());
-                					 }
-
-                					 be.setName(ce.getName());
-                					 be.setId(ce.getId());
-                					 
-                					 be.setAttachedToRef(((Activity)entry.getKey()));
-                					 ((Activity)entry.getKey()).getBoundaryEventRefs().add(be);
-                					 catchEventsToRemove.add(ce);
-                					 boundaryEventsToAdd.put(be, _outgoingFlows.get(ce));
-                				 }
-                			 }
-                		 }
-                	}
-                }
-                if(catchEventsToRemove.size() > 0) {
-                    for(CatchEvent ce : catchEventsToRemove) {
-                        boolean removed = process.getFlowElements().remove(ce);
-                        _outgoingFlows.remove(ce);
-
-                    }
-                }
-                if(boundaryEventsToAdd.size() > 0) {
-                    Iterator<BoundaryEvent> boundaryToAddIterator = boundaryEventsToAdd.keySet().iterator();
-                    while(boundaryToAddIterator.hasNext()) {
-                        BoundaryEvent bToAdd = boundaryToAddIterator.next();
-                        process.getFlowElements().add(bToAdd);
-                        _outgoingFlows.put(bToAdd, boundaryEventsToAdd.get(bToAdd));
-                    }
-            	}
+                Process process = (Process) root;
+                revisitCatchEVentsConvertToBoundaryExecute(process, catchEventsToRemove, boundaryEventsToAdd);
     		}
     	}
         reconnectFlows();
+    }
+
+    private void revisitCatchEVentsConvertToBoundaryExecute(FlowElementsContainer container, List<CatchEvent> catchEventsToRemove, Map<BoundaryEvent, List<String>> boundaryEventsToAdd) {
+        List<FlowElement> flowElements =  container.getFlowElements();
+        for(FlowElement fe : flowElements) {
+            if(fe instanceof CatchEvent) {
+                CatchEvent ce = (CatchEvent) fe;
+                EventDefinition ed = null;
+                if(ce.getEventDefinitions() != null && ce.getEventDefinitions().size() > 0) {
+                    ed = ce.getEventDefinitions().get(0);
+                }
+                // check if we have an outgoing connection to this catch event from an activity
+                for(Entry<Object, List<String>> entry : _outgoingFlows.entrySet()) {
+                    for (String flowId : entry.getValue()) {
+                        if (entry.getKey() instanceof Activity && flowId.equals(ce.getId())) {
+                            BoundaryEvent be = Bpmn2Factory.eINSTANCE.createBoundaryEvent();
+                            if(ed != null && ed instanceof ErrorEventDefinition) {
+                                be.setCancelActivity(true);
+                            } else {
+                                Iterator<FeatureMap.Entry> iter = ce.getAnyAttribute().iterator();
+                                while(iter.hasNext()) {
+                                    FeatureMap.Entry entry2 = iter.next();
+                                    if(entry2.getEStructuralFeature().getName().equals("boundaryca")) {
+                                        String boundaryceVal = (String) entry2.getValue();
+                                        be.setCancelActivity(Boolean.parseBoolean(boundaryceVal));
+                                    }
+                                }
+                            }
+
+                            if(ce.getDataOutputs() != null) {
+                                be.getDataOutputs().addAll(ce.getDataOutputs());
+                            }
+                            if(ce.getDataOutputAssociation() != null) {
+                                be.getDataOutputAssociation().addAll(ce.getDataOutputAssociation());
+                            }
+                            if(ce.getOutputSet() != null) {
+                                be.setOutputSet(ce.getOutputSet());
+                            }
+                            if(ce.getEventDefinitions() != null) {
+                                be.getEventDefinitions().addAll(ce.getEventDefinitions());
+                            }
+                            if(ce.getEventDefinitionRefs() != null) {
+                                be.getEventDefinitionRefs().addAll(ce.getEventDefinitionRefs());
+                            }
+                            if(ce.getProperties() != null) {
+                                be.getProperties().addAll(ce.getProperties());
+                            }
+                            if(ce.getAnyAttribute() != null) {
+                                be.getAnyAttribute().addAll(ce.getAnyAttribute());
+                            }
+                            if(ce.getOutgoing() != null) {
+                                be.getOutgoing().addAll(ce.getOutgoing());
+                            }
+                            if(ce.getIncoming() != null) {
+                                be.getIncoming().addAll(ce.getIncoming());
+                            }
+                            if(ce.getProperties() != null) {
+                                be.getProperties().addAll(ce.getProperties());
+                            }
+
+                            be.setName(ce.getName());
+                            be.setId(ce.getId());
+
+                            be.setAttachedToRef(((Activity)entry.getKey()));
+                            ((Activity)entry.getKey()).getBoundaryEventRefs().add(be);
+                            catchEventsToRemove.add(ce);
+                            boundaryEventsToAdd.put(be, _outgoingFlows.get(ce));
+                        }
+                    }
+                }
+            } else if(fe instanceof FlowElementsContainer) {
+                revisitCatchEVentsConvertToBoundaryExecute((FlowElementsContainer) fe, catchEventsToRemove, boundaryEventsToAdd);
+            }
+        }
+        if(catchEventsToRemove.size() > 0) {
+            for(CatchEvent ce : catchEventsToRemove) {
+                boolean removed = container.getFlowElements().remove(ce);
+                _outgoingFlows.remove(ce);
+
+            }
+        }
+        if(boundaryEventsToAdd.size() > 0) {
+            Iterator<BoundaryEvent> boundaryToAddIterator = boundaryEventsToAdd.keySet().iterator();
+            while(boundaryToAddIterator.hasNext()) {
+                BoundaryEvent bToAdd = boundaryToAddIterator.next();
+                container.getFlowElements().add(bToAdd);
+                _outgoingFlows.put(bToAdd, boundaryEventsToAdd.get(bToAdd));
+            }
+        }
     }
     
     public void revisitAssociationsIoSpec(Definitions def) {
