@@ -36,7 +36,7 @@ ORYX.Plugins.Edit = Clazz.extend({
         this.facade.offer({
          name: ORYX.I18N.Edit.save,
          description: ORYX.I18N.Edit.saveDesc,
-         icon: ORYX.PATH + "images/page_save.png",
+         icon: ORYX.PATH + "images/disk.png",
 		 keyCodes: [{
 				metaKeys: [ORYX.CONFIG.META_KEY_META_CTRL],
 				keyCode: 85,
@@ -295,28 +295,7 @@ ORYX.Plugins.Edit = Clazz.extend({
 
     save: function () {
       var processJSON = ORYX.EDITOR.getSerializedJSON();
-      var processName = jsonPath(processJSON.evalJSON(), "$.properties.name");
-      var processPackage = jsonPath(processJSON.evalJSON(), "$.properties.package");
-      var processVersion = jsonPath(processJSON.evalJSON(), "$.properties.version");
-      var fileName = "";
-      if(processPackage && processPackage != "") {
-        fileName += processPackage;
-      }
-      if(processName && processName != "") {
-        if(fileName != "") {
-          fileName += ".";
-        }
-        fileName += processName;
-      }
-      if(processVersion && processVersion != "") {
-        if(fileName != "") {
-          fileName += ".";
-        }
-        fileName += "v" + processVersion;
-      }
-      if(fileName == "") {
-        fileName = "processbpmn2";
-      }
+      var fileName = ORYX.CONFIG.PROCESS_DEF_ID + ".xml";
 
       Ext.Ajax.request({
         url: ORYX.PATH + "savebpmn",
@@ -333,7 +312,8 @@ ORYX.Plugins.Edit = Clazz.extend({
           pp: ORYX.PREPROCESSING,
           profile: ORYX.PROFILE,
           data: processJSON,
-          fileName: fileName
+          fileName: fileName,
+          projectId: ORYX.CONFIG.PROJECT_ID
         }
       });
     },

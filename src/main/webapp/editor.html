@@ -91,7 +91,9 @@
       if (ORYX.UUID === undefined) {
         ORYX.UUID = segments.pop();
       }
-      
+
+      ORYX.CONFIG.PROJECT_ID = "@projectId@";
+      ORYX.CONFIG.PROCESS_DEF_ID = "@procDefId@";
       ORYX.CONFIG.UUID_AUTOSAVE_INTERVAL = @autosaveinterval@;
 	  ORYX.CONFIG.UUID_AUTOSAVE_DEFAULT = @autosavedefault@;
 	  

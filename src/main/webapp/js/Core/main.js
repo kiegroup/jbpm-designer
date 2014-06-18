@@ -141,10 +141,11 @@ ORYX.Editor = {
 		// Initializing of a callback to check loading ends
 		var loadPluginFinished 	= false;
 		var loadContentFinished = false;
-		var initFinished = function(){	
+
+        var loadBpmnDiagram = function(){
 			if( !loadPluginFinished || !loadContentFinished ){ return }
-			this._finishedLoading();
-		}.bind(this)
+            this._loadBpmnDiagram();
+		}.bind(this);
 		
 		// disable key events when Ext modal window is active
 		ORYX.Editor.makeExtModalWindowKeysave(this._getPluginFacade());
@@ -153,7 +154,7 @@ ORYX.Editor = {
 		window.setTimeout(function(){
 			this.loadPlugins();
 			loadPluginFinished = true;
-			initFinished();
+            loadBpmnDiagram();
 		}.bind(this), 100);
 
 		// LOAD the content of the current editor instance
@@ -161,9 +162,33 @@ ORYX.Editor = {
             this.loadSerialized(model);
             this.getCanvas().update();
 			loadContentFinished = true;
-			initFinished();
+            loadBpmnDiagram();
 		}.bind(this), 200);
 	},
+
+    _loadBpmnDiagram: function() {
+      var url = ORYX.PATH + "loadBpmnDiagram";
+      new Ajax.Request(url, {
+        method: 'POST',
+        asynchronous: false,
+        parameters: {
+          projectId: ORYX.CONFIG.PROJECT_ID,
+          procDefId: ORYX.CONFIG.PROCESS_DEF_ID,
+          profile: ORYX.PROFILE,
+          pp: ORYX.PREPROCESSING,
+          uuid : ORYX.UUID
+        },
+        onSuccess: function(request) {
+          this.importJSON(request.responseText);
+          this._finishedLoading();
+        }.bind(this),
+        onFailure: (function() {
+          this._finishedLoading();
+          Ext.Msg.minWidth = 400;
+          Ext.Msg.alert("BPMN2 Diagram loading Failed");
+        }).bind(this)
+      });
+    },
 	
 	_finishedLoading: function() {
 		if(Ext.getCmp('oryx-loading-panel')){
