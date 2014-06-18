@@ -2000,6 +2000,8 @@ ORYX.Plugins.View = {
     refreshCanvasforIE : function() {
         // IE 11 specific detection
         if (Object.hasOwnProperty.call(window, "ActiveXObject") && !window.ActiveXObject) {
+            var currectSelection = this.facade.getSelection();
+
             var currentJSON = ORYX.EDITOR.getSerializedJSON();
             this.facade.setSelection(this.facade.getCanvas().getChildShapes(true));
             var selection = this.facade.getSelection();
@@ -2008,7 +2010,10 @@ ORYX.Plugins.View = {
             var command = new ORYX.Plugins.Edit.DeleteCommand(clipboard , this.facade);
             this.facade.executeCommands([command]);
             this.facade.importJSON(currentJSON);
-            this.facade.setSelection([]);
+
+            this.facade.setSelection(currectSelection);
+            this.facade.getCanvas().update();
+            this.facade.updateSelection();
         }
     }
 
