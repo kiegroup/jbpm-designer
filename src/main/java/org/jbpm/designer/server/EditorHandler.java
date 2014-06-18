@@ -314,6 +314,8 @@ public class EditorHandler extends HttpServlet {
       throws ServletException, IOException {
     Document doc = (Document) _doc.clone();
     String profileName = request.getParameter("profile");
+    String projectId = request.getParameter("projectId");
+    String procDefId = request.getParameter("procDefId");
     if (profileName == null || profileName.length() < 1) {
       // default to jbpm
       profileName = "jbpm";
@@ -438,6 +440,14 @@ public class EditorHandler extends HttpServlet {
       }
       else if ("debug".equals(elt)) {
         resultHtml.append(_devMode);
+        replacementMade = true;
+      }
+      else if ("projectId".equals(elt)) {
+        resultHtml.append(projectId);
+        replacementMade = true;
+      }
+      else if ("procDefId".equals(elt)) {
+        resultHtml.append(procDefId);
         replacementMade = true;
       }
       else if ("autosaveinterval".equals(elt)) {
