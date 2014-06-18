@@ -10,14 +10,14 @@
     <meta http-equiv="PRAGMA" content="NO-CACHE">
     <meta http-equiv="Expires" content="-1">
     <link xmlns="http://www.w3.org/1999/xhtml" rel="icon" href="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/jbpm.gif" />
-    <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/lib/prototype-1.5.1.js" type="text/javascript"></script>
-    <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/lib/path_parser.js" type="text/javascript"></script>
-    <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/lib/ext-2.0.2/adapter/ext/ext-base.js" type="text/javascript"></script>
-    <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/lib/ext-2.0.2/ext-all.js" type="text/javascript"></script>
-    <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/lib/ext-2.0.2/color-field.js" type="text/javascript"></script>
+  <!-- lib scripts -->
+  <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/compressed/designer-lib.js" type="text/javascript"></script>
+  <!-- ext scripts -->
+  <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/compressed/designer-ext.js" type="text/javascript"></script>
+
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/lib/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script xmlns="http://www.w3.org/1999/xhtml" type="text/javascript">jQuery.noConflict();</script>
-    <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/lib/handlebars-1.0.0.beta.6.js" type="text/javascript"></script>
+
     <style xmlns="http://www.w3.org/1999/xhtml" media="screen" type="text/css">@import url("<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/lib/ext-2.0.2/resources/css/ext-all.css");
     .extensive-remove {
         background-image: url(<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/images/remove.gif) ! important;
