@@ -181,6 +181,7 @@ ORYX.CONFIG.TYPE_DATAASSIGNMENT =       "dataassignment";
 ORYX.CONFIG.TYPE_CALLEDELEMENT  =       "calledelement";
 ORYX.CONFIG.TYPE_CUSTOM =               "custom";
 ORYX.CONFIG.TYPE_REASSIGNMENT =         "reassignment";
+ORYX.CONFIG.TYPE_GROUPS_EDITOR =        "groupseditor";
 ORYX.CONFIG.TYPE_NOTIFICATIONS =        "notifications";
 	
 /* Vertical line distance of multiline labels */

@@ -766,6 +766,19 @@ ORYX.Plugins.PropertyWindow = {
                             editorGrid = new Ext.Editor(cf);
                             break;
 
+                          case ORYX.CONFIG.TYPE_GROUPS_EDITOR:
+                            var cf = new Ext.form.GroupsEditorField({
+                              allowBlank: pair.optional(),
+                              dataSource:this.dataSource,
+                              grid:this.grid,
+                              row:index,
+                              facade:this.facade,
+                              disabled:true
+                            });
+                            cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1,field:cf});
+                            editorGrid = new Ext.Editor(cf);
+                            break;
+
 
                         case ORYX.CONFIG.TYPE_NOTIFICATIONS:
                             var cf = new Ext.form.ComplexNotificationsField({
@@ -1598,6 +1611,166 @@ Ext.form.ComplexCustomField = Ext.extend(Ext.form.TriggerField,  {
             }
         });
 	}
+});
+
+Ext.form.GroupsEditorField = Ext.extend(Ext.form.TriggerField, {
+
+  onTriggerClick : function() {
+    var cols = [
+      { id : 'name', header: "Group", width: 160, sortable: true, dataIndex: 'name'}
+    ];
+
+    var fields = [
+      {name: 'name', mapping : 'name'}
+    ];
+
+    var projectGroups = {
+      records : [
+        { name : "PM"},
+        { name : "HR"},
+        { name : "analyst"},
+        { name : "test"}
+      ]
+    };
+
+    var taskGroups = {records : []};
+    var groupsStr = this.value;
+    if(groupsStr.length > 0) {
+      groupsStr.split(', ').each( function(value) {
+        taskGroups.records.push({ name : value});
+        projectGroups.records = projectGroups.records.filter(function(el) {
+          return el.name != value;
+        });
+      });
+    }
+
+    var firstGridStore = new Ext.data.JsonStore({
+      fields : fields,
+      data   : projectGroups,
+      root   : 'records'
+    });
+
+    var firstGrid = new Ext.grid.GridPanel({
+      ddGroup          : 'secondGridDDGroup',
+      store            : firstGridStore,
+      columns          : cols,
+      enableDragDrop   : true,
+      stripeRows       : true,
+      autoExpandColumn : 'name',
+      width            : 325,
+      region           : 'west',
+      title            : 'Project groups'
+    });
+
+    var secondGridStore = new Ext.data.JsonStore({
+      fields : fields,
+      data   : taskGroups,
+      root   : 'records'
+    });
+
+    var secondGrid = new Ext.grid.GridPanel({
+      ddGroup          : 'firstGridDDGroup',
+      store            : secondGridStore,
+      columns          : cols,
+      enableDragDrop   : true,
+      stripeRows       : true,
+      autoExpandColumn : 'name',
+      width            : 325,
+      region           : 'center',
+      title            : 'Groups for task'
+    });
+
+    var dialog = new Ext.Window({
+      layout		: 'border',
+      autoCreate	: true,
+      title		: 'Editor for Groups',
+      height		: 300,
+      width		: 650,
+      modal		: true,
+      collapsible	: false,
+      fixedcenter	: true,
+      shadow		: true,
+      resizable   : true,
+      proxyDrag	: true,
+      autoScroll  : true,
+      keys:[{
+        key	: 27,
+        fn	: function(){
+          dialog.hide()
+        }.bind(this)
+      }],
+      items		:[
+        firstGrid,
+        secondGrid
+      ],
+      listeners	:{
+        hide: function(){
+          this.fireEvent('dialogClosed', this.value);
+          dialog.destroy();
+        }.bind(this)
+      },
+      buttons		: [{
+        text: ORYX.I18N.PropertyWindow.ok,
+        handler: function() {
+          var outValue = "";
+          var groupCount = 0;
+          secondGridStore.data.items.each( function(value) {
+            if (groupCount > 0) {
+              outValue += ', ';
+            }
+            outValue += value.data.name;
+            groupCount++;
+          });
+          this.setValue(outValue);
+          this.dataSource.getAt(this.row).set('value', outValue);
+          this.dataSource.commitChanges();
+          dialog.hide();
+        }.bind(this)
+      }, {
+        text: ORYX.I18N.PropertyWindow.cancel,
+        handler: function() {
+          dialog.hide()
+        }.bind(this)
+      }]
+    });
+    dialog.show();
+
+    var firstGridDropTargetEl =  firstGrid.getView().el.dom.childNodes[0].childNodes[1];
+    var firstGridDropTarget = new Ext.dd.DropTarget(firstGridDropTargetEl, {
+      ddGroup    : 'firstGridDDGroup',
+      copy       : true,
+      notifyDrop : function(ddSource, e, data) {
+        function addRow(record, index, allItems) {
+          var foundItem = firstGridStore.find('name', record.data.name);
+          if (foundItem  == -1) {
+            firstGridStore.add(record);
+            firstGridStore.sort('name', 'ASC');
+            ddSource.grid.store.remove(record);
+          }
+        }
+        Ext.each(ddSource.dragData.selections ,addRow);
+        return(true);
+      }
+    });
+
+    var secondGridDropTargetEl = secondGrid.getView().el.dom.childNodes[0].childNodes[1];
+    var destGridDropTarget = new Ext.dd.DropTarget(secondGridDropTargetEl, {
+      ddGroup    : 'secondGridDDGroup',
+      copy       : false,
+      notifyDrop : function(ddSource, e, data) {
+        function addRow(record, index, allItems) {
+          var foundItem = secondGridStore.find('name', record.data.name);
+          if (foundItem  == -1) {
+            secondGridStore.add(record);
+            secondGridStore.sort('name', 'ASC');
+            ddSource.grid.store.remove(record);
+          }
+        }
+        Ext.each(ddSource.dragData.selections ,addRow);
+        return(true);
+      }
+    });
+  }
 });
 
 Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
