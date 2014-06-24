@@ -520,7 +520,7 @@ public class DesignerPresenter {
     public void openInTab( String filename,
                            String uri ) {
         PlaceRequest placeRequestImpl = new PathPlaceRequest(
-                PathFactory.newPath( this.path.getFileSystem(), filename, uri )
+                PathFactory.newPathBasedOn( filename, uri, this.path )
         );
         placeRequestImpl.addParameter( "uuid", uri );
         placeRequestImpl.addParameter( "profile", "jbpm" );
