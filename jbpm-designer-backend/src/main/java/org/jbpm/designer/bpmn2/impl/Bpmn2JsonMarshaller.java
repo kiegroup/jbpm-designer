@@ -184,15 +184,15 @@ public class Bpmn2JsonMarshaller {
 	        props.put("name",unescapeXML(def.getName()));
 	        props.put("id", def.getId());
 	        props.put("expressionlanguage", def.getExpressionLanguage());
-	        if( def.getDocumentation() != null && def.getDocumentation().size() > 0 ) {
-	            props.put("documentation", def.getDocumentation().get(0).getText());
-	        }
-	        
+
 	        for (RootElement rootElement : def.getRootElements()) {
 	            if (rootElement instanceof Process) {
 	                // have to wait for process node to finish properties and stencil marshalling
 	                props.put("executable", ((Process) rootElement).isIsExecutable() + "");
 	                props.put("id", rootElement.getId());
+                    if( rootElement.getDocumentation() != null && rootElement.getDocumentation().size() > 0 ) {
+                        props.put("documentation", rootElement.getDocumentation().get(0).getText());
+                    }
                     Process pr = (Process) rootElement;
                     if(pr.getName() != null && pr.getName().length() > 0) {
                         props.put("processn", unescapeXML(((Process) rootElement).getName()));
