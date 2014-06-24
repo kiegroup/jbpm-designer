@@ -404,7 +404,7 @@ public class TaskFormTemplateManager {
         modelerURI = modelerURI + "/" + modelerFileName;
 
         try {
-            tfi.setModelerOutput(formModelerService.buildFormXML(myPath.getFileSystem(), modelerFileName, modelerURI, def, tfi.getTaskId()));
+            tfi.setModelerOutput(formModelerService.buildFormXML(myPath, modelerFileName, modelerURI, def, tfi.getTaskId()));
         } catch(Exception e) {
             _logger.error(e.getMessage());
             e.printStackTrace();
@@ -426,7 +426,7 @@ public class TaskFormTemplateManager {
         modelerURI = modelerURI + "/" + modelerFileName;
 
         try {
-            tfi.setModelerOutput(formModelerService.buildFormXML(myPath.getFileSystem(), modelerFileName, modelerURI, def, tfi.getTaskId()));
+            tfi.setModelerOutput(formModelerService.buildFormXML(myPath, modelerFileName, modelerURI, def, tfi.getTaskId()));
         } catch(Exception e) {
             _logger.error(e.getMessage());
             e.printStackTrace();
