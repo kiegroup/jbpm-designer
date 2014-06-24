@@ -99,6 +99,7 @@ public class Bpmn2JsonUnmarshaller {
     private Map<String, ItemDefinition> _subprocessItemDefs = new HashMap<String, ItemDefinition>();
     private List<Import> _wsdlImports = new ArrayList<Import>();
     private List<BpmnMarshallerHelper> _helpers;
+    private String processDocs;
 
     private Bpmn2Resource _currentResource;
     
@@ -186,6 +187,7 @@ public class Bpmn2JsonUnmarshaller {
             revisitMultiInstanceTasks(def);
             addSimulation(def);
             revisitItemDefinitions(def);
+            revisitProcessDoc(def);
             //revisitDI(def);
 
             // return def;
@@ -235,6 +237,18 @@ public class Bpmn2JsonUnmarshaller {
                 //updateEdgeBounds(def, plane, edge.getBpmnElement());
             //}
 
+        }
+    }
+
+    public void revisitProcessDoc(Definitions def) {
+        List<RootElement> rootElements =  def.getRootElements();
+        for(RootElement root : rootElements) {
+            if(root instanceof Process) {
+                Process process = (Process) root;
+                if(this.processDocs != null && this.processDocs.length() > 0) {
+                    process.getDocumentation().add(createDocumentation(wrapInCDATABlock(this.processDocs)));
+                }
+            }
         }
     }
 
@@ -3612,7 +3626,11 @@ public class Bpmn2JsonUnmarshaller {
 
     protected void applyBaseElementProperties(BaseElement baseElement, Map<String, String> properties) {
         if (properties.get("documentation") != null && !"".equals(properties.get("documentation"))) {
-            baseElement.getDocumentation().add(createDocumentation(wrapInCDATABlock(properties.get("documentation"))));
+            if(baseElement instanceof Definitions) {
+                this.processDocs = properties.get("documentation");
+            } else {
+                baseElement.getDocumentation().add(createDocumentation(wrapInCDATABlock(properties.get("documentation"))));
+            }
         }
         if(baseElement.getId() == null || baseElement.getId().length() < 1) {
             baseElement.setId(properties.get("resourceId"));
