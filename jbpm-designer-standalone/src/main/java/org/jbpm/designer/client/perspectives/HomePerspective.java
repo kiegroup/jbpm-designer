@@ -7,6 +7,8 @@ import javax.inject.Inject;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.ui.PopupPanel;
+import org.guvnor.structure.client.editors.repository.clone.CloneRepositoryForm;
+import org.guvnor.structure.client.editors.repository.create.CreateRepositoryForm;
 import org.jboss.errai.ioc.client.container.SyncBeanManager;
 import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
 import org.kie.workbench.common.widgets.client.handlers.NewResourcesMenu;
@@ -14,28 +16,23 @@ import org.uberfire.client.annotations.Perspective;
 import org.uberfire.client.annotations.WorkbenchMenu;
 import org.uberfire.client.annotations.WorkbenchPerspective;
 import org.uberfire.client.annotations.WorkbenchToolBar;
-import org.uberfire.client.editors.repository.clone.CloneRepositoryForm;
-import org.uberfire.client.editors.repository.create.CreateRepositoryForm;
 import org.uberfire.client.mvp.PlaceManager;
 import org.uberfire.mvp.Command;
-import org.uberfire.mvp.PlaceRequest;
 import org.uberfire.mvp.impl.DefaultPlaceRequest;
 import org.uberfire.workbench.model.PanelDefinition;
+import org.uberfire.workbench.model.PanelType;
 import org.uberfire.workbench.model.PerspectiveDefinition;
 import org.uberfire.workbench.model.Position;
 import org.uberfire.workbench.model.impl.PanelDefinitionImpl;
 import org.uberfire.workbench.model.impl.PartDefinitionImpl;
-import org.uberfire.workbench.model.PanelType;
 import org.uberfire.workbench.model.impl.PerspectiveDefinitionImpl;
 import org.uberfire.workbench.model.menu.MenuFactory;
 import org.uberfire.workbench.model.menu.Menus;
-import org.uberfire.workbench.model.toolbar.IconType;
 import org.uberfire.workbench.model.toolbar.ToolBar;
 import org.uberfire.workbench.model.toolbar.impl.DefaultToolBar;
 import org.uberfire.workbench.model.toolbar.impl.DefaultToolBarItem;
 
-import static org.uberfire.workbench.model.toolbar.IconType.DOWNLOAD_ALT;
-import static org.uberfire.workbench.model.toolbar.IconType.FOLDER_CLOSE_ALT;
+import static org.uberfire.workbench.model.toolbar.IconType.*;
 
 @ApplicationScoped
 @WorkbenchPerspective(identifier = "home", isDefault = true)
@@ -59,7 +56,7 @@ public class HomePerspective {
     private Menus menus;
     private ToolBar toolBar;
 
-    private Command newRepoCommand   = null;
+    private Command newRepoCommand = null;
     private Command cloneRepoCommand = null;
 
     @PostConstruct
@@ -75,7 +72,7 @@ public class HomePerspective {
         return this.perspective;
     }
 
-    public PerspectiveDefinition buildPerspective( ) {
+    public PerspectiveDefinition buildPerspective() {
         perspective = new PerspectiveDefinitionImpl( PanelType.ROOT_LIST );
         perspective.setName( "Home" );
 
@@ -153,12 +150,12 @@ public class HomePerspective {
                 .newTopLevelMenu( "Repositories" )
                 .menus()
                 .menu( "Clone Repo" )
-                .withRoles(PERMISSIONS_ADMIN)
-                .respondsWith(cloneRepoCommand)
+                .withRoles( PERMISSIONS_ADMIN )
+                .respondsWith( cloneRepoCommand )
                 .endMenu()
-                .menu("New Repo")
-                .withRoles(PERMISSIONS_ADMIN)
-                .respondsWith(newRepoCommand)
+                .menu( "New Repo" )
+                .withRoles( PERMISSIONS_ADMIN )
+                .respondsWith( newRepoCommand )
                 .endMenu()
                 .endMenus()
                 .endMenu().build();
@@ -167,11 +164,11 @@ public class HomePerspective {
     private void buildToolBar() {
         this.toolBar = new DefaultToolBar( "file.explorer" );
         final DefaultToolBarItem i1 = new DefaultToolBarItem( FOLDER_CLOSE_ALT,
-                "New Repository",
-                newRepoCommand );
+                                                              "New Repository",
+                                                              newRepoCommand );
         final DefaultToolBarItem i2 = new DefaultToolBarItem( DOWNLOAD_ALT,
-                "Clone Repository",
-                cloneRepoCommand );
+                                                              "Clone Repository",
+                                                              cloneRepoCommand );
         i1.setRoles( PERMISSIONS_ADMIN );
         i2.setRoles( PERMISSIONS_ADMIN );
         toolBar.addItem( i1 );

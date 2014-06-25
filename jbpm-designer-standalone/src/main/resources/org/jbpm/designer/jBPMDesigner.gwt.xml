@@ -10,16 +10,18 @@
   <!-- Uberfire dependencies -->
   <inherits name="org.uberfire.UberfireJS"/>
   <inherits name="org.uberfire.UberfireWorkbench"/>
-  <inherits name="org.uberfire.UberfireWidgetsCore"/>
-  <inherits name="org.uberfire.UberfireWidgetsCommons"/>
   <inherits name="org.uberfire.UberfireBackend"/>
   <inherits name="org.uberfire.security.UberfireSecurityClient"/>
   <inherits name="org.uberfire.UberfireNSWEManager"/>
+
+  <!-- Uberfire Extensions - Core Widgets -->
+  <inherits name="org.kie.uberfire.KIEUberfireWidgetsCore"/>
 
   <!-- Drools dependencies -->
   <inherits name="org.drools.workbench.models.datamodel.DroolsWorkbenchDataModelAPI"/>
 
   <!-- Guvnor dependencies -->
+  <inherits name="org.guvnor.structure.GuvnorStructureClient"/>
   <inherits name="org.guvnor.m2repo.GuvnorM2RepoEditorClient"/>
   <inherits name='org.guvnor.common.services.GuvnorServicesAPI'/>
   <inherits name="org.guvnor.common.services.project.GuvnorProjectAPI"/>

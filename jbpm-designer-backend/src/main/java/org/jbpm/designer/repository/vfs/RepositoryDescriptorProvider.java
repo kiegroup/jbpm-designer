@@ -9,11 +9,11 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.guvnor.structure.repositories.Repository;
+import org.guvnor.structure.repositories.RepositoryService;
 import org.uberfire.io.IOService;
 import org.uberfire.java.nio.file.FileSystem;
 import org.uberfire.java.nio.file.Path;
-import org.uberfire.backend.repositories.Repository;
-import org.uberfire.backend.repositories.RepositoryService;
 
 @ApplicationScoped
 public class RepositoryDescriptorProvider {
@@ -35,7 +35,7 @@ public class RepositoryDescriptorProvider {
 
         Collection<Repository> active = repositoryService.getRepositories();
         if (active != null) {
-            for (org.uberfire.backend.repositories.Repository repo : active) {
+            for (org.guvnor.structure.repositories.Repository repo : active) {
                 buildAndRegister(repo);
             }
         }

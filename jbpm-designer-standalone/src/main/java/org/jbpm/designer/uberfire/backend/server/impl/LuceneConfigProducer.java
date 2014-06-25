@@ -3,9 +3,9 @@ package org.jbpm.designer.uberfire.backend.server.impl;
 import org.apache.lucene.analysis.Analyzer;
 import org.kie.workbench.common.services.refactoring.backend.server.indexing.RuleAttributeNameAnalyzer;
 import org.kie.workbench.common.services.refactoring.model.index.terms.RuleIndexTerm;
-import org.uberfire.metadata.backend.lucene.LuceneConfig;
-import org.uberfire.metadata.backend.lucene.LuceneConfigBuilder;
-import org.uberfire.metadata.engine.Indexer;
+import org.kie.uberfire.metadata.backend.lucene.LuceneConfig;
+import org.kie.uberfire.metadata.backend.lucene.LuceneConfigBuilder;
+import org.kie.uberfire.metadata.engine.Indexer;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -16,7 +16,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.*;
 
-import static org.apache.lucene.util.Version.*;
 import static org.apache.lucene.util.Version.LUCENE_40;
 
 @ApplicationScoped

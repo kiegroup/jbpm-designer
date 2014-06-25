@@ -10,8 +10,6 @@ import org.uberfire.io.impl.IOServiceDotFileImpl;
 import org.uberfire.java.nio.file.FileSystem;
 import org.uberfire.java.nio.file.Path;
 
-import static org.uberfire.io.FileSystemType.Bootstrap.*;
-
 public class VFSFileSystemProducer {
 
     private IOService ioService = new IOServiceDotFileImpl();
@@ -23,7 +21,7 @@ public class VFSFileSystemProducer {
 
         if ( fileSystem == null ) {
 
-            fileSystem = ioService.newFileSystem( repositoryRoot, env, BOOTSTRAP_INSTANCE );
+            fileSystem = ioService.newFileSystem( repositoryRoot, env );
         }
 
         // fetch file system changes - mainly for remote based file systems

@@ -37,8 +37,8 @@ import org.uberfire.client.annotations.WorkbenchEditor;
 import org.uberfire.client.annotations.WorkbenchMenu;
 import org.uberfire.client.annotations.WorkbenchPartTitle;
 import org.uberfire.client.annotations.WorkbenchPartView;
-import org.uberfire.client.common.MultiPageEditor;
-import org.uberfire.client.common.Page;
+import org.kie.uberfire.client.common.MultiPageEditor;
+import org.kie.uberfire.client.common.Page;
 import org.uberfire.client.mvp.PlaceManager;
 import org.uberfire.client.mvp.UberView;
 import org.uberfire.client.workbench.events.ChangeTitleWidgetEvent;
@@ -55,7 +55,7 @@ import org.uberfire.workbench.events.ResourceUpdatedEvent;
 import org.uberfire.workbench.model.menu.Menus;
 import org.uberfire.workbench.type.FileNameUtil;
 
-import static org.uberfire.client.common.ConcurrentChangePopup.*;
+import static org.kie.uberfire.client.common.ConcurrentChangePopup.*;
 
 @Dependent
 @WorkbenchEditor(identifier = "jbpm.designer", supportedTypes = { Bpmn2Type.class })

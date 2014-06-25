@@ -9,18 +9,18 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.uberfire.io.IOClusteredService;
-import org.uberfire.io.IOService;
+import org.guvnor.structure.organizationalunit.OrganizationalUnit;
+import org.guvnor.structure.organizationalunit.OrganizationalUnitService;
+import org.guvnor.structure.repositories.Repository;
+import org.guvnor.structure.repositories.RepositoryService;
+import org.guvnor.structure.server.config.ConfigGroup;
+import org.guvnor.structure.server.config.ConfigType;
+import org.guvnor.structure.server.config.ConfigurationFactory;
+import org.guvnor.structure.server.config.ConfigurationService;
 import org.uberfire.commons.services.cdi.Startup;
 import org.uberfire.commons.services.cdi.StartupType;
-import org.uberfire.backend.organizationalunit.OrganizationalUnit;
-import org.uberfire.backend.organizationalunit.OrganizationalUnitService;
-import org.uberfire.backend.repositories.Repository;
-import org.uberfire.backend.repositories.RepositoryService;
-import org.uberfire.backend.server.config.ConfigGroup;
-import org.uberfire.backend.server.config.ConfigType;
-import org.uberfire.backend.server.config.ConfigurationFactory;
-import org.uberfire.backend.server.config.ConfigurationService;
+import org.uberfire.io.IOClusteredService;
+import org.uberfire.io.IOService;
 import org.uberfire.security.impl.authz.RuntimeAuthorizationManager;
 import org.uberfire.security.server.cdi.SecurityFactory;
 
