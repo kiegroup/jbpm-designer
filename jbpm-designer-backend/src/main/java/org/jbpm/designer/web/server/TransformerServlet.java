@@ -79,7 +79,6 @@ import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.jbpm.migration.JbpmMigration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.misc.BASE64Encoder;
 
 /**
  *
@@ -150,9 +149,8 @@ public class TransformerServlet extends HttpServlet {
                     t.transcode(input, output);
                     resp.setCharacterEncoding("UTF-8");
                     resp.setContentType("text/plain");
-                    BASE64Encoder enc = new BASE64Encoder();
 
-                    resp.getWriter().write("<object data=\"data:application/pdf;base64," + enc.encode(bout.toByteArray()) +  "\" type=\"application/pdf\"></object>");
+                    resp.getWriter().write("<object data=\"data:application/pdf;base64," + Base64.encodeBase64(bout.toByteArray()) +  "\" type=\"application/pdf\"></object>");
                 } else {
                     storeInRepository(uuid, rawSvg, transformto, processid, repository);
 
@@ -184,8 +182,7 @@ public class TransformerServlet extends HttpServlet {
                     t.transcode(input, output);
                     resp.setCharacterEncoding("UTF-8");
                     resp.setContentType("text/plain");
-                    BASE64Encoder enc = new BASE64Encoder();
-                    resp.getWriter().write("<img src=\"data:image/png;base64," + enc.encode(bout.toByteArray()) + "\">");
+                    resp.getWriter().write("<img src=\"data:image/png;base64," + Base64.encodeBase64(bout.toByteArray()) + "\">");
                 } else {
                     storeInRepository(uuid, rawSvg, transformto, processid, repository);
                     resp.setContentType("image/png");

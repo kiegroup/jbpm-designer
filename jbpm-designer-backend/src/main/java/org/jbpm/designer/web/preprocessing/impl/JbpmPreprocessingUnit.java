@@ -51,7 +51,6 @@ import org.stringtemplate.v4.ST;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.VFSService;
 import org.uberfire.io.IOService;
-import sun.misc.BASE64Encoder;
 
 /**
  * JbpmPreprocessingUnit - preprocessing unit for the jbpm profile
@@ -318,8 +317,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
                 Asset<byte[]> iconAsset = repository.loadAssetFromPath(widIcon);
 
-                BASE64Encoder enc = new BASE64Encoder();
-                String iconEncoded = "data:image/png;base64," + enc.encode(iconAsset.getAssetContent());
+                String iconEncoded = "data:image/png;base64," + Base64.encodeBase64(iconAsset.getAssetContent());
                 workItemTemplate.add("nodeicon", iconEncoded);
                 String fileToWrite = workitemSVGFilePath + definition.getValue().getName() + ".svg";
                 createAndWriteToFile(fileToWrite, workItemTemplate.render());
@@ -376,8 +374,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
                 workDefinition.setIcon(icon);
 
-                BASE64Encoder enc = new BASE64Encoder();
-                String iconEncoded = "data:image/png;base64," + enc.encode(iconAsset.getAssetContent());
+                String iconEncoded = "data:image/png;base64," + Base64.encodeBase64(iconAsset.getAssetContent());
                 workDefinition.setIconEncoded(URLEncoder.encode(iconEncoded, "UTF-8"));
                 workDefinition.setCustomEditor((String) workDefinitionMap.get("customEditor"));
                 Set<ParameterDefinition> parameters = new HashSet<ParameterDefinition>();
