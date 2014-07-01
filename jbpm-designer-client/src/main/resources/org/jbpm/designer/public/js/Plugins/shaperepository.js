@@ -167,13 +167,16 @@ ORYX.Plugins.ShapeRepository = {
 				
 				// For each Group-Entree
 				groups.each((function(group) {
-					
+                    var groupText = group;
+                    if(ORYX.I18N.propertyNames[group] && ORYX.I18N.propertyNames[group].length > 0) {
+                        groupText = ORYX.I18N.propertyNames[group];
+                    }
 					// If there is a new group
 					if(!treeGroups[group] && group != "Connecting Objects") {
                         if(Ext.isIE) {
                             // Create a new group
                             treeGroups[group] = new Ext.tree.TreeNode({
-                                text: group,					// Group-Name
+                                text: groupText,					// Group-Name
                                 allowDrag:false,
                                 allowDrop:false,
                                 iconCls:'headerShapeRepImg', // Css-Class for Icon
@@ -184,7 +187,7 @@ ORYX.Plugins.ShapeRepository = {
                         } else {
                             // Create a new group
                             treeGroups[group] = new Ext.tree.TreeNode({
-                                text: group,					// Group-Name
+                                text: groupText,					// Group-Name
                                 allowDrag:false,
                                 allowDrop:false,
                                 iconCls:'headerShapeRepImg', // Css-Class for Icon
