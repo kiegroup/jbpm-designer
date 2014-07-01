@@ -5381,10 +5381,10 @@
 				},
 				{
 					"id":"defaultgate",
-					"type":"String",
-					"title":"DefaultGate",
+					"type":"Dynamicgatewayconnections",
+					"title":"Default Gate",
 					"value":"",
-					"description":"",
+					"description":"The default gateway connection",
 					"readonly":false,
 					"optional":true,
 					"refToView":"",
