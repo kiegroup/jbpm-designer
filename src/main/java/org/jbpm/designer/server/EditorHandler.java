@@ -316,6 +316,7 @@ public class EditorHandler extends HttpServlet {
     String profileName = request.getParameter("profile");
     String projectId = request.getParameter("projectId");
     String procDefId = request.getParameter("procDefId");
+    String studioApiUrl = request.getParameter("studioApiUrl");
     if (profileName == null || profileName.length() < 1) {
       // default to jbpm
       profileName = "jbpm";
@@ -448,6 +449,10 @@ public class EditorHandler extends HttpServlet {
       }
       else if ("procDefId".equals(elt)) {
         resultHtml.append(procDefId);
+        replacementMade = true;
+      }
+      else if ("studioApiUrl".equals(elt)) {
+        resultHtml.append(studioApiUrl);
         replacementMade = true;
       }
       else if ("autosaveinterval".equals(elt)) {

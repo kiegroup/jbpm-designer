@@ -18,6 +18,7 @@ if(!ORYX) var ORYX = {};
 if(!ORYX.CONFIG) ORYX.CONFIG = {};
 
 ORYX.CONFIG.WEB_URL = "designer";
+ORYX.CONFIG.STUDIO_API_URL = "";
 
 
 
