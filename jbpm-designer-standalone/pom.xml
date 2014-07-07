@@ -189,10 +189,6 @@
       <artifactId>jbpm-bpmn2-emfextmodel</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.eclipse</groupId>
-      <artifactId>org.eclipse.bpmn2</artifactId>
-    </dependency>
-    <dependency>
        <groupId>org.jdom</groupId>
        <artifactId>jdom</artifactId>
     </dependency>
@@ -407,6 +403,16 @@
     </dependency>
 
   </dependencies>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.eclipse</groupId>
+        <artifactId>org.eclipse.bpmn2</artifactId>
+        <version>0.7.4-jboss</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <build>
 

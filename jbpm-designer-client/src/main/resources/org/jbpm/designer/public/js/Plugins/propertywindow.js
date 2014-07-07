@@ -4595,8 +4595,8 @@ Ext.form.ConditionExpressionEditorField = Ext.extend(Ext.form.TriggerField,  {
 });
 
 Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField,  {
-    editable: false,
-    readOnly: true,
+    editable: true,
+    readOnly: false,
 	onTriggerClick : function(){
         if(this.disabled){
             return;

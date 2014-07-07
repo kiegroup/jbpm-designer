@@ -111,12 +111,6 @@
       </exclusions>
     </dependency>
 
-    <!-- bpmn2 libs -->
-    <dependency>
-      <groupId>org.eclipse</groupId>
-      <artifactId>org.eclipse.bpmn2</artifactId>
-    </dependency>
-
     <!-- war libs -->
     <dependency>
       <groupId>org.json</groupId>
@@ -458,6 +452,16 @@
     </dependency>
 
   </dependencies>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.eclipse</groupId>
+        <artifactId>org.eclipse.bpmn2</artifactId>
+        <version>0.7.4-jboss</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <build>
     <plugins>
