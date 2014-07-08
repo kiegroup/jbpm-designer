@@ -1730,6 +1730,11 @@ public class Bpmn2JsonMarshaller {
                                         ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(priorityDataInput.getId())) {
                             properties.put("priority", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody() == null ? "" : ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
                         }
+                        if (contentDataInput != null && datain.getAssignment().get(0).getTo() != null &&
+                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
+                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(contentDataInput.getId())) {
+                            properties.put("content", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
+                        }
                         if (localeDataInput != null && datain.getAssignment().get(0).getTo() != null &&
                                 ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
                                 ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(localeDataInput.getId())) {
@@ -1775,11 +1780,11 @@ public class Bpmn2JsonMarshaller {
                     }
                     uniDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
 
-                    if(contentDataInput != null) {
-                        if(rhsAssociation.equals(contentDataInput.getName())) {
-                            properties.put("content", lhsAssociation);
-                        }
-                    }
+//                    if(contentDataInput != null) {
+//                        if(rhsAssociation.equals(contentDataInput.getName())) {
+//                            properties.put("content", lhsAssociation);
+//                        }
+//                    }
                 }
             }
         }
