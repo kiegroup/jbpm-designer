@@ -5168,6 +5168,8 @@ public class Bpmn2JsonUnmarshaller {
         if(properties.get("content") != null && properties.get("content").length() > 0) {
             if(task.getIoSpecification() == null) {
                 InputOutputSpecification iospec = Bpmn2Factory.eINSTANCE.createInputOutputSpecification();
+                OutputSet outSet = Bpmn2Factory.eINSTANCE.createOutputSet();
+                iospec.getOutputSets().add(outSet);
                 task.setIoSpecification(iospec);
             }
             List<DataInput> dataInputs = task.getIoSpecification().getDataInputs();
