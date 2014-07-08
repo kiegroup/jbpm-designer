@@ -1998,8 +1998,8 @@ ORYX.Plugins.View = {
     },
 
     refreshCanvasforIE : function() {
-        // IE 11 specific detection
-        if (Object.hasOwnProperty.call(window, "ActiveXObject") && !window.ActiveXObject) {
+        if ( (Object.hasOwnProperty.call(window, "ActiveXObject") && !window.ActiveXObject) ||
+            (navigator.appVersion.indexOf("MSIE 10") !== -1) ) {
             var currectSelection = this.facade.getSelection();
 
             var currentJSON = ORYX.EDITOR.getSerializedJSON();
