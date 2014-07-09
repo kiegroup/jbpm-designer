@@ -458,7 +458,7 @@
       <dependency>
         <groupId>org.eclipse</groupId>
         <artifactId>org.eclipse.bpmn2</artifactId>
-        <version>0.7.4-jboss</version>
+        <version>0.7.4-jboss-1</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
