@@ -321,7 +321,6 @@ public class DesignerPresenter {
 
     @OnClose
     public void onClose() {
-        this.path = null;
     }
 
     @WorkbenchPartTitle
@@ -522,6 +521,7 @@ public class DesignerPresenter {
         PlaceRequest placeRequestImpl = new PathPlaceRequest(
                 PathFactory.newPathBasedOn( filename, uri, this.path )
         );
+
         placeRequestImpl.addParameter( "uuid", uri );
         placeRequestImpl.addParameter( "profile", "jbpm" );
         this.placeManager.goTo( placeRequestImpl );
