@@ -9540,7 +9540,11 @@
 					{
 						"from":"Subprocess",
 						"to":["IntermediateEventOnSubprocessBoundary"]
-					}
+					},
+                                        {
+						"from":"AdHocSubprocess",
+						"to":["IntermediateEventOnSubprocessBoundary"]
+                                        }
 				]
 			},
 			{
