@@ -298,22 +298,40 @@ ORYX.Plugins.Edit = Clazz.extend({
       var fileName = ORYX.CONFIG.PROCESS_DEF_ID + ".xml";
 
       Ext.Ajax.request({
-        url: ORYX.PATH + "savebpmn",
-        method: 'POST',
-        success: function() {
-          Ext.Msg.minWidth = 400;
-          Ext.Msg.alert("Process Definition xml successfully saved");
+        url: window.location.protocol + '//' + ORYX.CONFIG.STUDIO_API_URL + 'getProcDefFolder',
+        method: 'GET',
+        headers: {
+          'X-Auth-Token': ORYX.CONFIG.TOKEN,
+          'ProjectId': ORYX.CONFIG.PROJECT_ID
         },
-        failure: function() {
+        success: function(response) {
+          if(response.responseText && response.responseText.length > 0) {
+
+            Ext.Ajax.request({
+              url: ORYX.PATH + "savebpmn",
+              method: 'POST',
+              success: function() {
+                Ext.Msg.minWidth = 400;
+                Ext.Msg.alert("Process Definition xml successfully saved");
+              },
+              failure: function() {
+                Ext.Msg.minWidth = 400;
+                Ext.Msg.alert("Converting to BPMN2 Failed");
+              },
+              params: {
+                pp: ORYX.PREPROCESSING,
+                profile: ORYX.PROFILE,
+                data: processJSON,
+                fileName: fileName,
+                procDefId: ORYX.CONFIG.PROCESS_DEF_ID,
+                procDefFolderPath: response.responseText
+              }
+            });
+          }
+        }.bind(this),
+        failure: function(){
           Ext.Msg.minWidth = 400;
           Ext.Msg.alert("Converting to BPMN2 Failed");
-        },
-        params: {
-          pp: ORYX.PREPROCESSING,
-          profile: ORYX.PROFILE,
-          data: processJSON,
-          fileName: fileName,
-          projectId: ORYX.CONFIG.PROJECT_ID
         }
       });
     },

@@ -36,15 +36,15 @@ public class LoadBpmn2Servlet extends HttpServlet {
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     req.setCharacterEncoding("UTF-8");
-    String projectId = req.getParameter("projectId");
     String procDefId = req.getParameter("procDefId");
+    String procDefFolderPath = req.getParameter("procDefFolderPath");
     String profileParam = req.getParameter("profile");
     String pp = req.getParameter("pp");
     String uuid = req.getParameter("uuid");
     String bpmnXmlStr = null;
 
-    File projectDir = new File(FileUtils.getUserDirectoryPath() + File.separator + projectId);
-    File[] projectsFiles = projectDir.listFiles();
+    File procDefFolder = new File(procDefFolderPath);
+    File[] projectsFiles = procDefFolder.listFiles();
     if (projectsFiles != null) {
       for (File file : projectsFiles) {
         String fileNameWithoutExt = file.getName().replace(".xml", "");

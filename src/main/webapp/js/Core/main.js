@@ -167,26 +167,44 @@ ORYX.Editor = {
 	},
 
     _loadBpmnDiagram: function() {
-      var url = ORYX.PATH + "loadBpmnDiagram";
-      new Ajax.Request(url, {
-        method: 'POST',
-        asynchronous: false,
-        parameters: {
-          projectId: ORYX.CONFIG.PROJECT_ID,
-          procDefId: ORYX.CONFIG.PROCESS_DEF_ID,
-          profile: ORYX.PROFILE,
-          pp: ORYX.PREPROCESSING,
-          uuid : ORYX.UUID
+      Ext.Ajax.request({
+        url: window.location.protocol + '//' + ORYX.CONFIG.STUDIO_API_URL + 'getProcDefFolder',
+        method: 'GET',
+        headers: {
+          'X-Auth-Token': ORYX.CONFIG.TOKEN,
+          'ProjectId': ORYX.CONFIG.PROJECT_ID
         },
-        onSuccess: function(request) {
-          this.importJSON(request.responseText);
-          this._finishedLoading();
+        success: function(response) {
+          if(response.responseText && response.responseText.length > 0) {
+
+            var url = ORYX.PATH + "loadBpmnDiagram";
+            new Ajax.Request(url, {
+              method: 'POST',
+              asynchronous: false,
+              parameters: {
+                procDefId: ORYX.CONFIG.PROCESS_DEF_ID,
+                procDefFolderPath: response.responseText,
+                profile: ORYX.PROFILE,
+                pp: ORYX.PREPROCESSING,
+                uuid : ORYX.UUID
+              },
+              onSuccess: function(request) {
+                this.importJSON(request.responseText);
+                this._finishedLoading();
+              }.bind(this),
+              onFailure: (function() {
+                this._finishedLoading();
+                Ext.Msg.minWidth = 400;
+                Ext.Msg.alert("BPMN2 Diagram loading Failed");
+              }).bind(this)
+            });
+
+          }
         }.bind(this),
-        onFailure: (function() {
-          this._finishedLoading();
+        failure: function(){
           Ext.Msg.minWidth = 400;
-          Ext.Msg.alert("BPMN2 Diagram loading Failed");
-        }).bind(this)
+          Ext.Msg.alert('BPMN2 Diagram loading Failed');
+        }
       });
     },
 	
