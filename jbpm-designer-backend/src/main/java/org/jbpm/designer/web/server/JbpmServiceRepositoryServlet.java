@@ -93,7 +93,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
             e.printStackTrace();
 			resp.setCharacterEncoding("UTF-8");
 			resp.setContentType("application/json");
-			resp.getWriter().write("false");
+			resp.getWriter().write("false||" + e.getMessage());
 			return;
 		}
 		

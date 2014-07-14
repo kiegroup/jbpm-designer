@@ -243,7 +243,7 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
             method: 'POST',
             success: function(request){
                 try {
-                    if(request.responseText == "false") {
+                    if( (request.responseText == "false") || (request.responseText.startsWith("false||"))) {
                         if(this.repoDialog) {
                             this.repoDialog.remove(this.repoContent, true);
                         }
@@ -253,12 +253,23 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
                         });
                         this.repoDialog.add(this.repoContent);
                         this.repoDialog.doLayout();
-                        ORYX.EDITOR._pluginFacade.raiseEvent({
-                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                            ntype		: 'error',
-                            msg         : ORYX.I18N.View.failConnectService,
-                            title       : ''
-                        });
+
+                        if(request.responseText.startsWith("false||")) {
+                            var errorParts = request.responseText.split("||");
+                            ORYX.EDITOR._pluginFacade.raiseEvent({
+                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                ntype		: 'error',
+                                msg         : ORYX.I18N.View.failConnectService + " - " + errorParts[1],
+                                title       : ''
+                            });
+                        } else {
+                            ORYX.EDITOR._pluginFacade.raiseEvent({
+                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                ntype		: 'error',
+                                msg         : ORYX.I18N.View.failConnectService,
+                                title       : ''
+                            });
+                        }
                     } else {
                         this._showJbpmServiceInfo(request.responseText, serviceRepoURL);
                     }
