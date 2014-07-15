@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.WeakHashMap;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletConfig;
@@ -40,6 +41,7 @@ import javax.servlet.http.HttpServletResponse;
 import bpsim.impl.BpsimFactoryImpl;
 import org.apache.commons.codec.binary.Base64;
 import org.jboss.drools.impl.DroolsFactoryImpl;
+import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
 import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.plugin.IDiagramPlugin;
@@ -131,6 +133,10 @@ public class EditorHandler extends HttpServlet {
     @Inject
     @Named("ioStrategy")
     private IOService ioService;
+
+    @Inject
+    @RequestScoped
+    private RepositoryDescriptor descriptor;
 
     /**
      * The pre-processing service, a global registry to get
@@ -234,7 +240,7 @@ public class EditorHandler extends HttpServlet {
                         "Performing diagram information pre-processing steps. ");
             }
             preprocessingUnit = _preProcessingService.findPreprocessingUnit(request, profile);
-            preprocessingUnit.preprocess(request, response, profile, getServletContext(), Boolean.parseBoolean(readOnly), ioService);
+            preprocessingUnit.preprocess(request, response, profile, getServletContext(), Boolean.parseBoolean(readOnly), ioService, descriptor);
         }
 
         //output env javascript files

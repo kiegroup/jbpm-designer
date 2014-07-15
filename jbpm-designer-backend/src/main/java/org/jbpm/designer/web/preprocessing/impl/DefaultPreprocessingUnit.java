@@ -20,6 +20,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
 import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingUnit;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.uberfire.backend.vfs.VFSService;
@@ -39,7 +40,7 @@ public class DefaultPreprocessingUnit implements IDiagramPreprocessingUnit {
     }
     
     public void preprocess(HttpServletRequest request,
-            HttpServletResponse response, IDiagramProfile profile, ServletContext servletContext, boolean readOnly, IOService ioService) {
+            HttpServletResponse response, IDiagramProfile profile, ServletContext servletContext, boolean readOnly, IOService ioService, RepositoryDescriptor descriptor) {
         // nothing to do
     }
 
