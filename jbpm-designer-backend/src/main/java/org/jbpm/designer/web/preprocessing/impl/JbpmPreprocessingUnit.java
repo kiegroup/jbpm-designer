@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -319,8 +317,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 String widIcon = definition.getValue().getIcon();
 
                 Asset<byte[]> iconAsset = repository.loadAssetFromPath(widIcon);
-
-                String iconEncoded = "data:image/png;base64," + Base64.encodeBase64(iconAsset.getAssetContent());
+                String iconEncoded = "data:image/png;base64," + javax.xml.bind.DatatypeConverter.printBase64Binary(iconAsset.getAssetContent());
                 workItemTemplate.add("nodeicon", iconEncoded);
                 String fileToWrite = workitemSVGFilePath + definition.getValue().getName() + ".svg";
                 createAndWriteToFile(fileToWrite, workItemTemplate.render());
@@ -377,7 +374,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
                 workDefinition.setIcon(icon);
 
-                String iconEncoded = "data:image/png;base64," + Base64.encodeBase64(iconAsset.getAssetContent());
+                String iconEncoded = "data:image/png;base64," + javax.xml.bind.DatatypeConverter.printBase64Binary(iconAsset.getAssetContent());
                 workDefinition.setIconEncoded(URLEncoder.encode(iconEncoded, "UTF-8"));
                 workDefinition.setCustomEditor((String) workDefinitionMap.get("customEditor"));
                 Set<ParameterDefinition> parameters = new HashSet<ParameterDefinition>();
