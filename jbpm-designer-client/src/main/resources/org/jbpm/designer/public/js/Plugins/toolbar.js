@@ -153,11 +153,12 @@ ORYX.Plugins.Toolbar = Clazz.extend({
             if(value.dropDownGroupIcon){
                 var splitButton = currentGroupsDropDownButton[value.dropDownGroupIcon];
                 
-                // Create a new split button if this is the first plugin using it 
+                // Create a new split button if this is the first plugin using it - drop-down toolbar button
                 if(splitButton === undefined){
                     splitButton = currentGroupsDropDownButton[value.dropDownGroupIcon] = new Ext.Toolbar.SplitButton({
-                        cls: "x-btn-icon", //show icon only
-                        icon: value.dropDownGroupIcon,
+                        //cls: "x-btn-icon", //show icon only
+                        //icon: value.dropDownGroupIcon,
+                        iconCls: window.SpriteUtils.toUniqueId(value.dropDownGroupIcon), // set iconCls to sprite css class
                         menu: new Ext.menu.Menu({
                             items: [] // items are added later on
                         }),
@@ -177,9 +178,10 @@ ORYX.Plugins.Toolbar = Clazz.extend({
                 }
                 
                 // General config button which will be used either to create a normal button
-                // or a check button (if toggling is enabled)
+                // or a check button (if toggling is enabled) - used for menu items in drop-down list
                 var buttonCfg = {
-                    icon: value.icon,
+                    //icon: value.icon,
+                    iconCls: window.SpriteUtils.toUniqueId(value.icon), // set iconCls to sprite css class
                     text: value.name,
                     itemId: value.id,
                     handler: value.toggle ? undefined : value.functionality,
@@ -206,10 +208,11 @@ ORYX.Plugins.Toolbar = Clazz.extend({
                 
                 splitButton.menu.add(button);
                 
-            } else { // create normal, simple button
+            } else { // create normal, simple button - used by top level toolbar buttons
                 var button = new Ext.Toolbar.Button({
-                    icon:           value.icon,         // icons can also be specified inline
-                    cls:            'x-btn-icon',       // Class who shows only the icon
+                    //icon:           value.icon,         // icons can also be specified inline
+                    //cls:            'x-btn-icon',       // Class who shows only the icon
+                    iconCls: window.SpriteUtils.toUniqueId(value.icon), // set iconCls to sprite css class
                     itemId:         value.id,
 					tooltip:        value.description,  // Set the tooltip
                     tooltipType:    'title',            // Tooltip will be shown as in the html-title attribute

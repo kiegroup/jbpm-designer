@@ -204,6 +204,7 @@
                 <include>${project.build.directory}/classes/org/jbpm/designer/public/js/cmdialog-min.js</include>
                 <include>${project.build.directory}/classes/org/jbpm/designer/public/js/cmfold-min.js</include>
                 <include>${project.build.directory}/classes/org/jbpm/designer/public/js/notifications-min.js</include>
+                <include>${project.build.directory}/classes/org/jbpm/designer/public/js/sprite-utils-min.js</include>
               </includes>
               <output>${project.build.directory}/classes/org/jbpm/designer/public/js/compressed/designer-utils.js</output>
             </aggregation>
@@ -243,6 +244,9 @@
                 <include>${project.build.directory}/classes/org/jbpm/designer/public/css/theme-default.css</include>
                 <include>${project.build.directory}/classes/org/jbpm/designer/public/css/xtheme-gray-colors.css</include>
                 <include>${project.build.directory}/classes/org/jbpm/designer/public/css/xtheme-gray.css</include>
+
+                <include>${project.build.directory}/classes/org/jbpm/designer/public/css/toolbar-images-sprite.css</include>
+                <include>${project.build.directory}/classes/org/jbpm/designer/public/css/palette-images-sprite.css</include>
              </includes>
               <output>${project.build.directory}/classes/org/jbpm/designer/public/css/designer-compressed-stylesheets.css</output>
             </aggregation>
@@ -258,7 +262,7 @@
                 <include>${project.build.directory}/classes/org/jbpm/designer/public/js/Plugins/servicerepo-min.js</include>
                 <include>${project.build.directory}/classes/org/jbpm/designer/public/js/Plugins/saveplugin-min.js</include>
                 <include>${project.build.directory}/classes/org/jbpm/designer/public/js/Plugins/shapemenu-min.js</include>
-                <include>${project.build.directory}/classes/org/jbpm/designer/public/js/Plugins/shaperepository-min.js</include>
+                <include>${project.build.directory}/classes/org/jbpm/designer/public/js/Plugins/shaperepository.js</include>
                 <include>${project.build.directory}/classes/org/jbpm/designer/public/js/Plugins/propertywindow-min.js</include>
                 <include>${project.build.directory}/classes/org/jbpm/designer/public/js/Plugins/canvasResize-min.js</include>
                 <include>${project.build.directory}/classes/org/jbpm/designer/public/js/Plugins/view-min.js</include>

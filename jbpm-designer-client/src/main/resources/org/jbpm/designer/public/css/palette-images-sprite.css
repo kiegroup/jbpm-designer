@@ -1,0 +1,527 @@
+
+/*
+ * ********************************************************************************************************************
+ * Stylesheet for palette images
+ * ********************************************************************************************************************
+ */
+
+/* Tasks group */
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_activity_list_type_user {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -0px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_activity_list_type_send {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -16px;
+}
+
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_activity_list_type_receive {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -32px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_activity_list_type_manual {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -48px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_activity_list_type_service {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -64px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_activity_list_type_business_rule {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -80px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_activity_list_type_script {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -96px;
+}
+
+/* task icon used for 'None' activity */
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_activity_task {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -112px;
+}
+
+/* Subprocesses group */
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_activity_subprocess {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -128px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_activity_expanded_subprocess {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -144px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_activity_event_subprocess {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -160px;
+}
+
+/* Start Events group */
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_startevent_none {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -176px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_startevent_message {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -192px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_startevent_timer {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -208px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_startevent_escalation {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -224px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_startevent_conditional {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -240px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_startevent_error {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -256px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_startevent_compensation {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -272px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_startevent_signal {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -288px;
+}
+
+/* End Events group */
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_endevent_none {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -304px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_endevent_message {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -320px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_endevent_escalation {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -336px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_endevent_error {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -352px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_endevent_cancel {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -368px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_endevent_compensation {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -384px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_endevent_signal {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -400px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_endevent_terminate {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -416px;
+}
+
+/* Catching Intermediate Events group */
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_catching_message {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -432px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_catching_timer {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -448px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_catching_escalation {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -464px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_catching_conditional {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -480px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_catching_error {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -496px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_catching_compensation {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -512px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_catching_signal {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -528px;
+}
+
+/* Throwing Intermediate Events group */
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_throwing_message {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -544px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_throwing_escalation {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -560px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_throwing_signal {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -576px;
+}
+
+/* Gateways group */
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_gateway_exclusive_databased {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -592px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_gateway_eventbased {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -608px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_gateway_parallel {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -624px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_gateway_inclusive {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -640px;
+}
+
+/* Service Tasks group */
+/*
+These don't have a static icon
+*/
+
+/* Data objects group */
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_dataobject_data_object {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -656px;
+}
+
+/* Swimlanes group */
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_swimlane_lane {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -672px;
+}
+
+/* Artifacts group */
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_artifact_group {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -688px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_artifact_text_annotation {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -704px;
+}
+
+/* Workflow Patterns group */
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_patterns_pattern {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -720px;
+}
+
+
+
+
+
+
+/* loopcharacteristics - not in palette */
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_activity_list_looptype_standard {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -736px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_activity_list_mi_parallel {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -752px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_activity_list_mi_sequential {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -768px;
+}
+
+/* task - not in palette */
+
+
+/* BPMNDiagram - not in palette */
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_diagram {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -784px;
+}
+
+/* Event type - not in palette */
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_gateway_list_eventbased_exclusive {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -800px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_gateway_list_eventbased_parallel {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -816px;
+}
+
+/* dataobject/list - not in palette */
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_dataobject_list_input {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -832px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_dataobject_list_output {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -848px;
+}
+
+/* connector - not in palette */
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_connector_sequenceflow {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -864px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_connector_list_type_expression {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -880px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_connector_list_type_default {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -896px;
+}
+
+/* Connecting objects (edges) - not in palette */
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_connector_association_undirected {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -912px;
+}
+
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_connector_association_unidirectional {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/palette-images-sprite.png');
+  background-position: left -928px;
+}

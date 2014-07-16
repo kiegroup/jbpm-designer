@@ -237,14 +237,26 @@ ORYX.Plugins.ShapeRepository = {
                 textTitle = stencil.title();
             }
         }
-        var newElement = new Ext.tree.TreeNode({
-				text:		textTitle, 		// Text of the stencil
-				icon:		decodeURIComponent(stencil.icon()),			// Icon of the stencil
-				allowDrag:	false,					// Don't use the Drag and Drop of Ext-Tree
-				allowDrop:	false,
-				iconCls:	'ShapeRepEntreeImg', 	// CSS-Class for Icon
-				cls:		'ShapeRepEntree'		// CSS-Class for the Tree-Entree
-				});
+        var newElement;
+        // if stencil.icon() is a .png or .gif file, load from image sprite
+        if (window.SpriteUtils.isIconFile(stencil.icon())) {
+            newElement = new Ext.tree.TreeNode({
+                text: textTitle, 		// Text of the stencil
+                iconCls: window.SpriteUtils.toUniqueId(stencil.icon()), // set iconCls to sprite css class
+                allowDrag: false,					// Don't use the Drag and Drop of Ext-Tree
+                allowDrop: false,
+            });
+        }
+        else {
+            newElement = new Ext.tree.TreeNode({
+                text: textTitle, 		// Text of the stencil
+                icon:		decodeURIComponent(stencil.icon()),			// Icon of the stencil
+                allowDrag: false,					// Don't use the Drag and Drop of Ext-Tree
+                allowDrop: false,
+                iconCls:	'ShapeRepEntreeImg', 	// CSS-Class for Icon
+                cls:		'ShapeRepEntree'		// CSS-Class for the Tree-Entree
+            });
+        }
 
 		parentTreeNode.appendChild(newElement);		
 		newElement.render();	

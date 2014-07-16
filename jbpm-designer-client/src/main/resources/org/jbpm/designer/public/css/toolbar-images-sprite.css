@@ -1,0 +1,498 @@
+
+/*!
+ * ********************************************************************************************************************
+ * Stylesheet for Toolbar images
+ * 
+ * Toolbar button with drop-down are <button> elements inside ancestors with classes
+ *     ".x-toolbar .x-btn-menu-text-wrap .x-btn-center "
+ * Toolbar buttons are <button> elements inside ancestors with classes
+ *     .x-btn-icon .x-btn-center 
+ * ********************************************************************************************************************
+ */
+
+/* Disk drop-down and menu items */
+.x-toolbar .x-btn-menu-text-wrap .x-btn-center .images_disk {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -0px;
+}
+
+.images_disk {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -0px;
+}
+
+.images_page_copy {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -16px;
+}
+
+.images_rename {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -32px;
+}
+
+.images_delete2 {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -48px;
+}
+
+/* Cut button */
+.x-btn-icon .x-btn-center .images_cut {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -64px;
+}
+
+/* Page copy button */
+.x-btn-icon .x-btn-center .images_page_copy {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -16px;
+}
+
+/* Page paste button */
+.x-btn-icon .x-btn-center .images_page_paste {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -80px;
+}
+
+/* Delete all selected button */
+.x-btn-icon .x-btn-center .images_cross {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -96px;
+}
+
+/* Undo button */
+.x-btn-icon .x-btn-center .images_arrow_undo {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -112px;
+}
+
+/* Redo button */
+.x-btn-icon .x-btn-center .images_arrow_redo {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -128px;
+}
+
+/* Local history (pic of clock) drop-down and menu items */
+.x-toolbar .x-btn-menu-text-wrap .x-btn-center .images_localhistory {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -144px;
+}
+
+.images_view {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -160px;
+}
+
+.images_clear {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -176px;
+}
+
+.images_clock {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -192px;
+}
+
+.images_enable {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -208px;
+}
+
+.images_disable {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -224px;
+}
+
+/* Move front/back drop-down and menu items */
+.x-toolbar .x-btn-menu-text-wrap .x-btn-center .images_shape_move_backwards {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -240px;
+}
+
+.images_shape_move_front {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -256px;
+}
+
+.images_shape_move_back {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -272px;
+}
+
+.images_shape_move_forwards {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -288px;
+}
+
+.images_shape_move_backwards {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -240px;
+}
+
+/* Alignment drop-down and menu items */
+.x-toolbar .x-btn-menu-text-wrap .x-btn-center .images_shape_align_center {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -304px;
+}
+
+.images_shape_align_bottom {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -320px;
+}
+
+.images_shape_align_middle {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -336px;
+}
+
+.images_shape_align_top {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -352px;
+}
+
+.images_shape_align_left {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -368px;
+}
+
+.images_shape_align_center {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -304px;
+}
+
+.images_shape_align_right {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -384px;
+}
+
+.images_shape_align_size {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -400px;
+}
+
+/* Group button */
+.x-btn-icon .x-btn-center .images_shape_group {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -416px;
+}
+
+/* Ungroup button */
+.x-btn-icon .x-btn-center .images_shape_ungroup {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -432px;
+}
+
+/* Lock button */
+.x-btn-icon .x-btn-center .images_lock {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -448px;
+}
+
+/* Unlock button */
+.x-btn-icon .x-btn-center .images_unlock {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -464px;
+}
+
+/* Add docker button */
+.x-btn-icon .x-btn-center .images_vector_add {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -480px;
+}
+
+
+/* Delete docker button */
+.x-btn-icon .x-btn-center .images_vector_delete {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -496px;
+}
+
+/* Color picker drop-down and menu items */
+.x-toolbar .x-btn-menu-text-wrap .x-btn-center .images_colorpicker {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -512px;
+}
+
+.images_colorize {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -528px;
+}
+
+/* Process forms drop-down and menu items */
+.x-toolbar .x-btn-menu-text-wrap .x-btn-center .images_processforms {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -544px;
+}
+
+.images_processforms {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -544px;
+}
+
+/* Share drop-down and menu items */
+.x-toolbar .x-btn-menu-text-wrap .x-btn-center .images_share {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -560px;
+}
+
+.images_share {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -560px;
+}
+
+/* Import drop-down and menu items */
+.x-toolbar .x-btn-menu-text-wrap .x-btn-center .images_import {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -576px;
+}
+
+.images_import {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -576px;
+}
+
+.images_jpdl_import_icon {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -592px;
+}
+
+/* Validate drop-down and menu items */
+.x-toolbar .x-btn-menu-text-wrap .x-btn-center .images_visualvalidation {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -608px;
+}
+
+/* Simulation drop-down and menu items */
+.x-toolbar .x-btn-menu-text-wrap .x-btn-center .images_simulation {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -624px;
+}
+
+.images_path {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -640px;
+}
+
+.images_control_play {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -656px;
+}
+
+/* Repository button */
+.x-btn-icon .x-btn-center .images_repository_rep {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -672px;
+}
+
+/* Paint button */
+.x-btn-icon .x-btn-center .images_paint {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -688px;
+}
+
+/* Full screen mode button */
+.x-btn-icon .x-btn-center .images_fullscreen {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -704px;
+}
+
+/* Process dictionary mode button */
+.x-btn-icon .x-btn-center .images_dictionary {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -720px;
+}
+
+/* Zoom in button */
+.x-btn-icon .x-btn-center .images_magnifier_zoom_in {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -737px;
+}
+
+/* Zoom out button */
+.x-btn-icon .x-btn-center .images_magnifier_zoom_out {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -753px;
+}
+
+/* Zoom standard button */
+.x-btn-icon .x-btn-center .images_zoom_standard {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -769px;
+}
+
+/* Zoom to fit model size button */
+.x-btn-icon .x-btn-center .images_image {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../images/toolbar-images-sprite.png');
+  background-position: left -785px;
+}
