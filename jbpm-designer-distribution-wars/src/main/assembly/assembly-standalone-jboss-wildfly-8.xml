@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2012 JBoss Inc
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+
+  <!-- including a . in the id will modify the *classifier* of the artifact, instead of the name/id of the artifact -->
+  <id>wildfly8</id>
+  <formats>
+    <format>war</format>
+    <format>dir</format>
+  </formats>
+
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>${project.basedir}/src/main/wildfly8</directory>
+      <outputDirectory>.</outputDirectory>
+    </fileSet>
+  </fileSets>
+  <dependencySets>
+    <!-- Add ANT dependency excluded in WAR pom that runs on Hosted Mode -->
+    <dependencySet>
+      <includes>
+        <include>org.apache.ant:ant:jar</include>
+        <include>org.apache.ant:ant-launcher:jar</include>
+      </includes>
+      <unpack>false</unpack>
+      <outputDirectory>WEB-INF/lib</outputDirectory>
+    </dependencySet>
+    <dependencySet>
+      <includes>
+        <include>org.jbpm:jbpm-designer-standalone:war</include>
+      </includes>
+      <outputDirectory>.</outputDirectory>
+      <unpack>true</unpack>
+      <unpackOptions>
+        <excludes>
+          <exclude>WEB-INF/jetty-env.xml</exclude>
+          <exclude>WEB-INF/web.xml</exclude>
+          <exclude>WEB-INF/beans.xml</exclude>
+          <exclude>WEB-INF/classes/META-INF/persistence.xml</exclude>
+          <exclude>WEB-INF/classes/META-INF/services/org.uberfire.security.auth.AuthenticationSource</exclude>
+          <exclude>WEB-INF/classes/META-INF/services/javax.enterprise.inject.spi.Extension</exclude>
+          <exclude>WEB-INF/classes/users.properties</exclude>
+
+          <!-- remove shared services with btm -->
+          <exclude>WEB-INF/lib/jbpm-shared-services-*-btm.jar</exclude>
+          <exclude>WEB-INF/lib/btm-*.jar</exclude>
+
+          <!-- UF client related -->
+          <exclude>WEB-INF/lib/uberfire-js-*.jar</exclude>
+          <exclude>WEB-INF/lib/uberfire-client-api-*.jar</exclude>
+          <exclude>WEB-INF/lib/kie-uberfire-widget-markdown-*.jar</exclude>
+          <exclude>WEB-INF/lib/kie-uberfire-widgets-core-client-*.jar</exclude>
+          <exclude>WEB-INF/lib/uberfire-security-client-*.jar</exclude>
+          <exclude>WEB-INF/lib/uberfire-workbench-*.jar</exclude>
+          <exclude>WEB-INF/lib/kie-uberfire-widgets-commons-*.jar</exclude>
+          <!-- Dom4j on as 7.1.1 breaks the PU-->
+          <exclude>WEB-INF/lib/dom4j*.jar</exclude>
+
+          <!-- Guvnor client related -->
+          <exclude>WEB-INF/lib/guvnor-structure-client-*.jar</exclude>
+          <exclude>WEB-INF/lib/guvnor-inbox-client-*.jar</exclude>
+          <exclude>WEB-INF/lib/guvnor-m2repo-editor-client-*.jar</exclude>
+          <exclude>WEB-INF/lib/guvnor-workingset-client-*.jar</exclude>
+          <exclude>WEB-INF/lib/guvnor-message-console-client-*.jar</exclude>
+          <exclude>WEB-INF/lib/guvnor-organizationalunit-manager-*.jar</exclude>
+
+          <!-- Kie Workbench client related-->
+          <exclude>WEB-INF/lib/kie-wb-common-ui-*.jar</exclude>
+          <exclude>WEB-INF/lib/kie-wb-common-data-modeller-client-*.jar</exclude>
+          <exclude>WEB-INF/lib/kie-wb-common-project-editor-client-*.jar</exclude>
+          <exclude>WEB-INF/lib/kie-wb-common-project-explorer-client-*.jar</exclude>
+          <exclude>WEB-INF/lib/kie-wb-common-project-imports-editor-*.jar</exclude>
+          <exclude>WEB-INF/lib/kie-wb-common-search-screen-client-*.jar</exclude>
+          <exclude>WEB-INF/lib/kie-wb-common-home-client-*.jar</exclude>
+          <exclude>WEB-INF/lib/kie-wb-config-resource-widget-*.jar</exclude>
+          <exclude>WEB-INF/lib/kie-wb-decorated-grid-widget-*.jar</exclude>
+          <exclude>WEB-INF/lib/kie-wb-metadata-widget-*.jar</exclude>
+          <exclude>WEB-INF/lib/kie-wb-view-source-widget-*.jar</exclude>
+          <exclude>WEB-INF/lib/kie-wb-common-default-editor-client-*.jar</exclude>
+          <exclude>WEB-INF/lib/kie-wb-common-java-editor-client-*.jar</exclude>
+
+          <!-- Drools Workbench client related -->
+          <exclude>WEB-INF/lib/drools-wb-categories-editor-client-*.jar</exclude>
+          <exclude>WEB-INF/lib/drools-wb-default-editor-client-*.jar</exclude>
+          <exclude>WEB-INF/lib/drools-wb-drl-text-editor-client-*.jar</exclude>
+          <exclude>WEB-INF/lib/drools-wb-dsl-text-editor-client-*.jar</exclude>
+          <exclude>WEB-INF/lib/drools-wb-dtable-xls-editor-client-*.jar</exclude>
+          <exclude>WEB-INF/lib/drools-wb-enum-editor-client-*.jar</exclude>
+          <exclude>WEB-INF/lib/drools-wb-globals-editor-client-*.jar</exclude>
+          <exclude>WEB-INF/lib/drools-wb-guided-dtable-editor-client-*.jar</exclude>
+          <exclude>WEB-INF/lib/drools-wb-guided-rule-editor-client-*.jar</exclude>
+          <exclude>WEB-INF/lib/drools-wb-guided-scorecard-editor-client-*.jar</exclude>
+          <exclude>WEB-INF/lib/drools-wb-guided-template-editor-client-*.jar</exclude>
+          <exclude>WEB-INF/lib/drools-wb-scorecard-xls-editor-client-*.jar</exclude>
+          <exclude>WEB-INF/lib/drools-wb-test-scenario-editor-client-*.jar</exclude>
+          <exclude>WEB-INF/lib/drools-wb-workitems-editor-client-*.jar</exclude>
+
+          <!-- GWT Client Related -->
+          <exclude>WEB-INF/lib/gwt-bootstrap-*.jar</exclude>
+          <exclude>WEB-INF/lib/gwt-user-*.jar</exclude>
+          <exclude>WEB-INF/lib/guava-gwt-*.jar</exclude>
+          <exclude>WEB-INF/lib/gwt-dnd-*.jar</exclude>
+          <exclude>WEB-INF/lib/gchart-*.jar</exclude>
+
+          <!-- General -->
+          <exclude>WEB-INF/lib/*-sources.jar</exclude>
+          <exclude>WEB-INF/lib/el-api-*.jar</exclude>
+          <exclude>WEB-INF/lib/jboss-el-api_*.jar</exclude>
+          <exclude>WEB-INF/lib/xml-apis-*.jar</exclude>
+
+          <!-- Errai -->
+          <exclude>WEB-INF/lib/errai-codegen-gwt-*.jar</exclude>
+          <exclude>WEB-INF/lib/errai-cdi-jetty-*.jar</exclude>
+          <exclude>WEB-INF/lib/netty-4.0.0.*.errai.*.jar</exclude>
+
+          <!-- Jetty -->
+          <exclude>WEB-INF/lib/jetty-*.jar</exclude>
+          <exclude>WEB-INF/lib/mail-*.jar</exclude>
+          <exclude>WEB-INF/lib/geronimo-spec-jta-*.jar</exclude>
+          <exclude>WEB-INF/lib/servlet-api-*.jar</exclude>
+          <exclude>WEB-INF/lib/jboss-servlet-api_*.jar</exclude>
+          <exclude>WEB-INF/lib/jstl-*.jar</exclude>
+
+          <exclude>WEB-INF/lib/jcip-annotations-*.jar</exclude>
+          <exclude>WEB-INF/lib/cal10n-api-*.jar</exclude>
+          <exclude>WEB-INF/lib/jsr250-api-*.jar</exclude>
+          <exclude>WEB-INF/lib/weld-*.jar</exclude>
+          <exclude>WEB-INF/lib/cdi-api*.jar</exclude>
+          <exclude>WEB-INF/lib/javax*.jar</exclude>
+          <exclude>WEB-INF/lib/jboss-interceptors-api_1-*.jar</exclude>
+          <exclude>WEB-INF/lib/resteasy*.jar</exclude>
+
+          <!-- We need org.jboss.netty not io.netty bundled with Wildfly -->
+          <!--<exclude>WEB-INF/lib/netty-3*.jar</exclude>-->
+
+          <!-- Form Modeler client related -->
+          <exclude>WEB-INF/lib/jbpm-form-modeler-editor-client-*.jar</exclude>
+          <exclude>WEB-INF/lib/jbpm-form-modeler-renderer-client-*.jar</exclude>
+          <exclude>WEB-INF/lib/jbpm-form-modeler-app-*.jar</exclude>
+
+          <!-- jBPM console & other client related -->
+          <exclude>WEB-INF/lib/jbpm-*-client-*.jar</exclude>
+
+          <!-- EAP 6.1 alignement -->
+          <exclude>WEB-INF/lib/activation-*.jar</exclude>
+          <exclude>WEB-INF/lib/antlr-2*.jar</exclude>
+          <!-- <exclude>WEB-INF/lib/cdi-api*.jar</exclude> ALREADY EXCLUDED-->
+          <exclude>WEB-INF/lib/commons-cli-*.jar</exclude>
+          <exclude>WEB-INF/lib/commons-collections-*.jar</exclude>
+          <exclude>WEB-INF/lib/commons-lang-*.jar</exclude>
+          <exclude>WEB-INF/lib/commons-codec-*.jar</exclude>
+          <exclude>WEB-INF/lib/commons-io-*.jar</exclude>
+          <exclude>WEB-INF/lib/jaxb-impl-*.jar</exclude>
+          <exclude>WEB-INF/lib/jaxb-xjc-*.jar</exclude>
+          <exclude>WEB-INF/lib/org.osgi.core-*.jar</exclude>
+          <exclude>WEB-INF/lib/snakeyaml-*.jar</exclude>
+          <exclude>WEB-INF/lib/cxf-rt-databinding-jaxb-*.jar</exclude>
+          <exclude>WEB-INF/lib/cxf-rt-frontend-jaxws-*.jar</exclude>
+          <exclude>WEB-INF/lib/dom4j-*.jar</exclude>
+          <!--<exclude>WEB-INF/lib/ecj-*.jar</exclude> this *.jar is not in the AS 7.1.1 -->
+          <!-- Include com.google.guava:guava:13.0.1 as Wildfly bundles com.google.guava:guava:16.0.1 and is incompatible -->
+          <!--<exclude>WEB-INF/lib/guava-*.jar</exclude>-->
+          <exclude>WEB-INF/lib/h2-*.jar</exclude>
+          <exclude>WEB-INF/lib/hibernate-commons-annotations-*.jar</exclude>
+          <exclude>WEB-INF/lib/hibernate-core-*.jar</exclude>
+          <exclude>WEB-INF/lib/hibernate-entitymanager-*.jar</exclude>
+          <exclude>WEB-INF/lib/hibernate-jpa-2.0-api-*.jar</exclude>
+          <exclude>WEB-INF/lib/hibernate-validator-*.jar</exclude>
+          <exclude>WEB-INF/lib/hornetq-core-client-*jar</exclude>
+          <exclude>WEB-INF/lib/hornetq-jms-client-*.jar</exclude>
+          <exclude>WEB-INF/lib/jackson-core-asl-*.jar</exclude>
+          <exclude>WEB-INF/lib/jackson-jaxrs-*.jar</exclude>
+          <exclude>WEB-INF/lib/jackson-mapper-asl-*.jar</exclude>
+          <exclude>WEB-INF/lib/jackson-xc-*.jar</exclude>
+          <exclude>WEB-INF/lib/javassist-*.jar</exclude>
+          <!-- <exclude>WEB-INF/lib/javax.inject-1*.jar</exclude>  ALREADY EXCLUDED-->
+          <exclude>WEB-INF/lib/jboss-ejb-api_*.jar</exclude>
+          <exclude>WEB-INF/lib/jcl-over-slf4j-*.jar</exclude>
+          <exclude>WEB-INF/lib/jdom-*.jar</exclude>
+          <exclude>WEB-INF/lib/jettison-*.jar</exclude>
+          <exclude>WEB-INF/lib/joda-time-*.jar</exclude>
+          <exclude>WEB-INF/lib/jsf-api-*.jar</exclude>
+          <!-- <exclude>WEB-INF/lib/mail-*.jar</exclude>  ALREADY EXCLUDED-->
+          <!-- <exclude>WEB-INF/lib/resteasy-jaxb-provider*.jar</exclude> -->
+          <!-- <exclude>WEB-INF/lib/resteasy-jaxrs-*.jar</exclude> -->
+          <!-- <exclude>WEB-INF/lib/resteasy-multipart-provider-*.jar</exclude>  ALREADY EXCLUDED-->
+          <exclude>WEB-INF/lib/slf4j-api-*.jar</exclude>
+          <exclude>WEB-INF/lib/slf4j-ext-*.jar</exclude>
+          <exclude>WEB-INF/lib/velocity-*.jar</exclude>
+          <!-- <exclude>WEB-INF/lib/weld-core-*.jar</exclude> ALREADY EXCLUDED -->
+          <!--<exclude>WEB-INF/lib/weld-spi-*.jar</exclude>  ALREADY EXCLUDED -->
+          <exclude>WEB-INF/lib/woodstox-core-asl-*.jar</exclude>
+          <exclude>WEB-INF/lib/wsdl4j-*.jar</exclude>
+          <exclude>WEB-INF/lib/xalan-*.jar</exclude>
+          <exclude>WEB-INF/lib/xercesImpl-*.jar</exclude>
+
+          <!-- transitive dependencies -->
+          <exclude>WEB-INF/lib/apache-mime4j-*.jar</exclude>
+          <exclude>WEB-INF/lib/commons-configuration-*.jar</exclude>
+          <exclude>WEB-INF/lib/cxf-api-*.jar</exclude>
+          <exclude>WEB-INF/lib/cxf-rt-bindings-soap-*.jar</exclude>
+          <exclude>WEB-INF/lib/cxf-rt-bindings-xml-*.jar</exclude>
+          <exclude>WEB-INF/lib/cxf-rt-core-*.jar</exclude>
+          <exclude>WEB-INF/lib/cxf-rt-frontend-simple-*.jar</exclude>
+          <exclude>WEB-INF/lib/cxf-rt-transports-http-*.jar</exclude>
+          <exclude>WEB-INF/lib/cxf-rt-ws-addr-*.jar</exclude>
+          <exclude>WEB-INF/lib/cxf-rt-ws-policy-*.jar</exclude>
+          <exclude>WEB-INF/lib/hornetq-commons-*.jar</exclude>
+          <exclude>WEB-INF/lib/hornetq-journal-*.jar</exclude>
+          <exclude>WEB-INF/lib/httpclient-*.jar</exclude>
+          <exclude>WEB-INF/lib/httpcore_*.jar</exclude>
+          <exclude>WEB-INF/lib/jboss-ejb-client-*.jar</exclude>
+          <exclude>WEB-INF/lib/jboss-jms-api_*.jar</exclude>
+          <exclude>WEB-INF/lib/jboss-logging-*.jar</exclude>
+          <exclude>WEB-INF/lib/jboss-logmanager*.jar</exclude>
+          <exclude>WEB-INF/lib/jboss-marshalling-*.jar</exclude>
+          <exclude>WEB-INF/lib/jboss-remote-naming-*.jar</exclude>
+          <exclude>WEB-INF/lib/jboss-remoting-*.jar</exclude>
+          <exclude>WEB-INF/lib/jboss-sasl*.jar</exclude>
+          <exclude>WEB-INF/lib/jboss-transaction-api_1.1_spec-*.jar</exclude>
+          <exclude>WEB-INF/lib/jgroups-*.jar</exclude>
+          <exclude>WEB-INF/lib/neethi-*.jar</exclude>
+          <exclude>WEB-INF/lib/serializer*.jar</exclude>
+          <exclude>WEB-INF/lib/validation-api-*.jar</exclude>
+          <exclude>WEB-INF/lib/xml-resolver*.jar</exclude>
+          <exclude>WEB-INF/lib/xnio-api-*.jar</exclude>
+          <exclude>WEB-INF/lib/xnio-nio-*.jar</exclude>
+
+          <!-- exclude UF form-based login.jsp -->
+          <exclude>login.jsp</exclude>
+
+        </excludes>
+      </unpackOptions>
+      <useStrictFiltering>true</useStrictFiltering>
+    </dependencySet>
+  </dependencySets>
+
+</assembly>
