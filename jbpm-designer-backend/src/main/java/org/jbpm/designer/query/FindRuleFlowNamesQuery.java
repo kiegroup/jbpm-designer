@@ -19,7 +19,7 @@ import java.net.URI;
 import java.util.*;
 
 @ApplicationScoped
-public class FundRuleFlowNamesQuery extends FindRuleAttributesQuery {
+public class FindRuleFlowNamesQuery extends FindRuleAttributesQuery {
 
     @Inject
     @Named("ioStrategy")
@@ -29,7 +29,7 @@ public class FundRuleFlowNamesQuery extends FindRuleAttributesQuery {
 
     @Override
     public String getName() {
-        return "FundRuleFlowNamesQuery";
+        return "FindRuleFlowNamesQuery";
     }
 
     @Override

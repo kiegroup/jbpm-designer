@@ -98,7 +98,7 @@ public class CalledElementServlet extends HttpServlet {
 	        resp.getWriter().write(retValue);
         } else if(action != null && action.equals("showruleflowgroups")) {
             //Query for RuleFlowGroups
-            final List<RefactoringPageRow> results = queryService.query( "FundRuleFlowNamesQuery",
+            final List<RefactoringPageRow> results = queryService.query( "FindRuleFlowNamesQuery",
                     new HashSet<ValueIndexTerm>() {{
                         add( new ValueRuleAttributeIndexTerm( "ruleflow-group" ) );
                         add( new ValueRuleAttributeValueIndexTerm( "*" ) );
