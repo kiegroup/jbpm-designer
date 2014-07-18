@@ -1618,8 +1618,12 @@ Ext.form.GroupsEditorField = Ext.extend(Ext.form.TriggerField, {
   onTriggerClick : function() {
 
     Ext.Ajax.request({
-      url: window.location.protocol + '//' + ORYX.CONFIG.STUDIO_API_URL + 'getRolesForBPMN/' + ORYX.CONFIG.PROJECT_ID,
+      url: window.location.protocol + '//' + ORYX.CONFIG.STUDIO_API_URL + '/rest/project/' + ORYX.CONFIG.PROJECT_ID + '/roles/',
       method: 'GET',
+      headers: {
+        'X-Auth-Token': ORYX.CONFIG.TOKEN,
+        'ProjectId': ORYX.CONFIG.PROJECT_ID
+      },
       success: function(response) {
           if(response.responseText && response.responseText.length > 0) {
             var projectGroups = JSON.parse(response.responseText);

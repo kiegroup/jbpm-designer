@@ -40,10 +40,9 @@ public class SaveBpmn2Servlet extends HttpServlet {
     String preProcessingParam = req.getParameter("pp");
     String profileParam = req.getParameter("profile");
     String fileName = req.getParameter("fileName");
-    String projectId = req.getParameter("projectId");
-    File projectDir = new File(FileUtils.getUserDirectoryPath() + File.separator + projectId);
-    if (!projectDir.exists()) projectDir.mkdir();
-    File bpmnXml = new File(projectDir.getAbsolutePath() + File.separator + fileName);
+    String procDefFolderPath = req.getParameter("procDefFolderPath");
+    File procDefFolder = new File(procDefFolderPath);
+    File bpmnXml = new File(procDefFolder.getAbsolutePath() + File.separator + fileName);
     IDiagramProfile profile = ServletUtil.getProfile(req, profileParam, getServletContext());
     String xml = _repository.toXML(json, profile, preProcessingParam);
     FileUtils.writeStringToFile(bpmnXml, xml);
