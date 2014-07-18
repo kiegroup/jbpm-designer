@@ -298,7 +298,7 @@ ORYX.Plugins.Edit = Clazz.extend({
       var fileName = ORYX.CONFIG.PROCESS_DEF_ID + ".xml";
 
       Ext.Ajax.request({
-        url: window.location.protocol + '//' + ORYX.CONFIG.STUDIO_API_URL + 'getProcDefFolder',
+        url: window.location.protocol + '//' + ORYX.CONFIG.STUDIO_API_URL + 'rest/properties/procDefFolder',
         method: 'GET',
         headers: {
           'X-Auth-Token': ORYX.CONFIG.TOKEN,

@@ -168,7 +168,7 @@ ORYX.Editor = {
 
     _loadBpmnDiagram: function() {
       Ext.Ajax.request({
-        url: window.location.protocol + '//' + ORYX.CONFIG.STUDIO_API_URL + '/rest/procDefFolder',
+        url: window.location.protocol + '//' + ORYX.CONFIG.STUDIO_API_URL + 'rest/procDefFolder',
         method: 'GET',
         headers: {
           'X-Auth-Token': ORYX.CONFIG.TOKEN,
