@@ -1011,7 +1011,20 @@ ORYX.Plugins.PropertyWindow = {
 							cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1,field:cf});							
 							editorGrid = new Ext.Editor(cf);
 							break;
-							
+
+
+                        case ORYX.CONFIG.TYPE_RULEFLOW_GROUP:
+                            var cf = new Ext.form.ComplexRuleflowGroupElementField({
+                                allowBlank: pair.optional(),
+                                dataSource:this.dataSource,
+                                grid:this.grid,
+                                row:index,
+                                facade:this.facade
+                            });
+                            cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1,field:cf});
+                            editorGrid = new Ext.Editor(cf);
+                            break;
+
 						case ORYX.CONFIG.TYPE_CUSTOM:
 							var cf = new Ext.form.ComplexCustomField({
 								allowBlank: pair.optional(),
@@ -4589,6 +4602,223 @@ Ext.form.ConditionExpressionEditorField = Ext.extend(Ext.form.TriggerField,  {
 
         contentPanel.setHeight(dialog.getInnerHeight())
         if (!isJavaCondition) initCodeEditor();
+
+        this.grid.stopEditing();
+    }
+});
+
+Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
+    editable: true,
+    readOnly: false,
+    onTriggerClick : function() {
+        if(this.disabled){
+            return;
+        }
+
+        var processJSON = ORYX.EDITOR.getSerializedJSON();
+        var processPackage = jsonPath(processJSON.evalJSON(), "$.properties.package");
+        var processId = jsonPath(processJSON.evalJSON(), "$.properties.id");
+
+        var RuleFlowGroupDef = Ext.data.Record.create([{
+            name: 'name'
+        }, {
+            name: 'drlname'
+        }]);
+
+        var ruleflowgroupsProxy = new Ext.data.MemoryProxy({
+            root: []
+        });
+
+        var ruleflowgroupsdefs = new Ext.data.Store({
+            autoDestroy: true,
+            reader: new Ext.data.JsonReader({
+                root: "root"
+            }, RuleFlowGroupDef),
+            proxy: ruleflowgroupsProxy,
+            sorters: [{
+                property: 'name',
+                direction:'ASC'
+            }]
+        });
+        ruleflowgroupsdefs.load();
+
+        this.facade.raiseEvent({
+            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+            ntype		: 'info',
+            msg         : "Loading RuleFlow Groups",
+            title       : ''
+
+        });
+
+        // reuse called element servlet
+        Ext.Ajax.request({
+            url: ORYX.PATH + 'calledelement',
+            method: 'POST',
+            success: function(response) {
+                try {
+                    if(response.responseText.length > 0 && response.responseText != "false") {
+                        var responseJson = Ext.decode(response.responseText);
+                        for(var key in responseJson){
+                            var keyVal = responseJson[key];
+                            var keyValParts = keyVal.split("||");
+                            ruleflowgroupsdefs.add(new RuleFlowGroupDef({
+                                name: keyValParts[0],
+                                drlname : keyValParts[1].substring(1, keyValParts[1].length - 1)
+                            }));
+                        }
+                        ruleflowgroupsdefs.commitChanges();
+
+                        var gridId = Ext.id();
+                        var grid = new Ext.grid.EditorGridPanel({
+                            autoScroll: true,
+                            autoHeight: true,
+                            store: ruleflowgroupsdefs,
+                            id: gridId,
+                            stripeRows: true,
+                            cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
+                                id: 'rfgname',
+                                header: 'RuleFlow Group Name',
+                                width: 200,
+                                dataIndex: 'name',
+                                editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
+                            },
+                            {
+                                id: 'rfname',
+                                header: 'Rule File Name',
+                                width: 200,
+                                dataIndex: 'drlname',
+                                editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
+                            }]),
+                            autoHeight: true
+                        });
+
+                        grid.on('afterrender', function(e) {
+                            if(this.value.length > 0) {
+                                var index = 0;
+                                var val = this.value;
+                                var mygrid = grid;
+                                ruleflowgroupsdefs.data.each(function() {
+                                    if(this.data['name'] == val) {
+                                        mygrid.getSelectionModel().select(index, 1);
+                                    }
+                                    index++;
+                                });
+                            }
+                        }.bind(this));
+
+                        var ruleFlowGroupsPanel = new Ext.Panel({
+                            id: 'ruleFlowGroupsPanel',
+                            title: '<center>'+'Select RuleFlow Group name and click on Save.'+'</center>',
+                            layout:'column',
+                            items:[
+                                grid
+                            ],
+                            layoutConfig: {
+                                columns: 1
+                            },
+                            defaults: {
+                                columnWidth: 1.0
+                            }
+                        });
+
+                        var dialog = new Ext.Window({
+                            layout		: 'anchor',
+                            autoCreate	: true,
+                            title		: 'Editor for RuleFlow Groups',
+                            height		: 350,
+                            width		: 480,
+                            modal		: true,
+                            collapsible	: false,
+                            fixedcenter	: true,
+                            shadow		: true,
+                            resizable   : true,
+                            proxyDrag	: true,
+                            autoScroll  : true,
+                            keys:[{
+                                key	: 27,
+                                fn	: function(){
+                                    dialog.hide()
+                                }.bind(this)
+                            }],
+                            items		:[ruleFlowGroupsPanel],
+                            listeners	:{
+                                hide: function(){
+                                    this.fireEvent('dialogClosed', this.value);
+                                    dialog.destroy();
+                                }.bind(this)
+                            },
+                            buttons		: [{
+                                text: ORYX.I18N.Save.save,
+                                handler: function(){
+                                    if(grid.getSelectionModel().getSelectedCell() != null) {
+                                        var selectedIndex = grid.getSelectionModel().getSelectedCell()[0];
+                                        var outValue = ruleflowgroupsdefs.getAt(selectedIndex).data['name'];
+                                        grid.stopEditing();
+                                        grid.getView().refresh();
+                                        this.setValue(outValue);
+                                        this.dataSource.getAt(this.row).set('value', outValue)
+                                        this.dataSource.commitChanges()
+                                        dialog.hide()
+                                    } else {
+                                        this.facade.raiseEvent({
+                                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                            ntype		: 'error',
+                                            msg         : 'No data selected.',
+                                            title       : ''
+
+                                        });
+                                    }
+                                }.bind(this)
+                            }, {
+                                text: ORYX.I18N.PropertyWindow.cancel,
+                                handler: function(){
+                                    this.setValue(this.value);
+                                    dialog.hide()
+                                }.bind(this)
+                            }]
+                        });
+
+                        dialog.show();
+                        grid.render();
+                        grid.fireEvent('afterrender');
+                        this.grid.stopEditing();
+                        grid.focus( false, 100 );
+                    } else {
+                        this.facade.raiseEvent({
+                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                            ntype		: 'error',
+                            msg         : 'Unable to find RuleFlow Groups.',
+                            title       : ''
+
+                        });
+                    }
+                } catch(e) {
+                    this.facade.raiseEvent({
+                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                        ntype		: 'error',
+                        msg         : 'Error retrieving RuleFlow Groups info '+' :\n' + e,
+                        title       : ''
+
+                    });
+                }
+            }.bind(this),
+            failure: function(){
+                this.facade.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'error',
+                    msg         : 'Error retrieving RuleFlow Groups info.',
+                    title       : ''
+
+                });
+            },
+            params: {
+                profile: ORYX.PROFILE,
+                uuid : ORYX.UUID,
+                ppackage: processPackage,
+                pid: processId,
+                action: 'showruleflowgroups'
+            }
+        });
 
         this.grid.stopEditing();
     }

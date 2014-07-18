@@ -2579,7 +2579,7 @@
 				},
 				{
 					"id":"ruleFlowGroup",
-					"type":"String",
+					"type":"RuleflowGroup",
 					"title":"Ruleflow Group",
 					"value":"",
 					"description":"ruleFlowGroup",

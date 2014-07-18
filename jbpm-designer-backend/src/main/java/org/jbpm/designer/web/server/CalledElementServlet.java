@@ -2,9 +2,7 @@ package org.jbpm.designer.web.server;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,6 +21,14 @@ import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.json.JSONObject;
+import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueIndexTerm;
+import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueRuleAttributeIndexTerm;
+import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueRuleAttributeValueIndexTerm;
+import org.kie.workbench.common.services.refactoring.model.query.RefactoringPageRequest;
+import org.kie.workbench.common.services.refactoring.model.query.RefactoringPageRow;
+import org.kie.workbench.common.services.refactoring.service.RefactoringQueryService;
+import org.uberfire.backend.vfs.PathFactory;
+import org.uberfire.paging.PageResponse;
 
 /**
  * Sevlet for resolving called elements.
@@ -35,6 +41,9 @@ public class CalledElementServlet extends HttpServlet {
 
     @Inject
     private IDiagramProfileService _profileService = null;
+
+    @Inject
+    private RefactoringQueryService queryService;
 	
 	@Override
     public void init(ServletConfig config) throws ServletException {
@@ -87,6 +96,24 @@ public class CalledElementServlet extends HttpServlet {
         	resp.setCharacterEncoding("UTF-8");
 	        resp.setContentType("text/plain");
 	        resp.getWriter().write(retValue);
+        } else if(action != null && action.equals("showruleflowgroups")) {
+            //Query for RuleFlowGroups
+            final List<RefactoringPageRow> results = queryService.query( "FundRuleFlowNamesQuery",
+                    new HashSet<ValueIndexTerm>() {{
+                        add( new ValueRuleAttributeIndexTerm( "ruleflow-group" ) );
+                        add( new ValueRuleAttributeValueIndexTerm( "*" ) );
+                    }},
+                    true );
+
+            final List<String> ruleFlowGroupNames = new ArrayList<String>();
+            for ( RefactoringPageRow row : results ) {
+                ruleFlowGroupNames.add( (String) row.getValue() );
+            }
+            Collections.sort( ruleFlowGroupNames );
+
+            resp.setCharacterEncoding("UTF-8");
+            resp.setContentType("application/json");
+            resp.getWriter().write(getRuleFlowGroupsInfoAsJSON(ruleFlowGroupNames).toString());
         } else {
 	        String retValue = "false";
 	        List<String> allPackageNames = ServletUtil.getPackageNamesFromRepository(profile);
@@ -117,7 +144,19 @@ public class CalledElementServlet extends HttpServlet {
 	        resp.getWriter().write(retValue);
         }
 	}
-	
+
+    public JSONObject getRuleFlowGroupsInfoAsJSON(List<String> ruleFlowGroupsInfo) {
+        JSONObject jsonObject = new JSONObject();
+        for(String infoEntry : ruleFlowGroupsInfo) {
+            try {
+                jsonObject.put(infoEntry, infoEntry);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return jsonObject;
+    }
+
 	public JSONObject getProcessInfoAsJSON(Map<String, String> processInfo) {
 		JSONObject jsonObject = new JSONObject();
 		for (Entry<String,String> error: processInfo.entrySet()) {

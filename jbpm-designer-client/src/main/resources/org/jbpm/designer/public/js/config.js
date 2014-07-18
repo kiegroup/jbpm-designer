@@ -211,6 +211,7 @@ ORYX.CONFIG.TYPE_DTYPE_VARDEF =         "vardef";
 ORYX.CONFIG.TYPE_DTYPE_DINPUT =         "dinput";
 ORYX.CONFIG.TYPE_DTYPE_DOUTPUT =        "doutput";
 ORYX.CONFIG.TYPE_DTYPE_GLOBAL =         "global";
+ORYX.CONFIG.TYPE_RULEFLOW_GROUP =       "ruleflowgroup";
 
 /* Vertical line distance of multiline labels */
 ORYX.CONFIG.LABEL_LINE_DISTANCE =		2;
