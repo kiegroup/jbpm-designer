@@ -52,6 +52,7 @@ import org.stringtemplate.v4.ST;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.VFSService;
 import org.uberfire.io.IOService;
+import org.uberfire.java.nio.file.FileSystem;
 
 /**
  * JbpmPreprocessingUnit - preprocessing unit for the jbpm profile
@@ -130,7 +131,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     public void preprocess(HttpServletRequest req, HttpServletResponse res, IDiagramProfile profile, ServletContext serlvetContext, boolean readOnly, IOService ioService, RepositoryDescriptor descriptor) {
         try {
             if(ioService != null) {
-                ioService.startBatch( descriptor.getFileSystem() );
+                ioService.startBatch(new FileSystem[]{ descriptor.getFileSystem() });
             }
             if(readOnly) {
                 _logger.info("Performing preprocessing steps in readonly mode.");
@@ -278,7 +279,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             _logger.error(e.getMessage());
         } finally {
             if(ioService != null) {
-                ioService.endBatch( descriptor.getFileSystem() );
+                ioService.endBatch();
             }
         }
     }
