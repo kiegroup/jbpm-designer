@@ -3009,7 +3009,7 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
     }
 });
 
-Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
+ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
     editable: false,
     readOnly: true,
     /**
@@ -3205,7 +3205,10 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                                 hasErrors = true;
                             }
                             if( dataInputsOnlyVals.indexOf(fromPart) >= 0 && variableDefsOnlyVals.indexOf(innerParts[1]) >= 0 ){
-                                hasErrors = true;
+                                // if its also a data output - pass
+                                if(dataOutputsOnlyVals.indexOf(fromPart) < 0) {
+                                    hasErrors = true;
+                                }
                             }
                             if( variableDefsOnlyVals.indexOf(fromPart) >= 0 && variableDefsOnlyVals.indexOf(innerParts[1]) >= 0 ){
                                 hasErrors = true;
@@ -3215,8 +3218,20 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                             }
 
                             if(!hasErrors) {
+                                var outType = "";
+                                if(variableDefsOnlyVals.indexOf(fromPart) >= 0) {
+                                    outType = "DataInput";
+                                } else if(dataInputsOnlyVals.indexOf(fromPart) >= 0) {
+                                    if(dataOutputsOnlyVals.indexOf(fromPart) >= 0) {
+                                        outType = "DataOutput";
+                                    } else {
+                                        outType = "DataInput";
+                                    }
+                                } else {
+                                    outType = "DataOutput";
+                                }
                                 dataassignments.add(new DataAssignment({
-                                    atype: ( variableDefsOnlyVals.indexOf(fromPart) >= 0 || dataInputsOnlyVals.indexOf(fromPart) >= 0 ) ? "DataInput" : "DataOutput",
+                                    atype: outType,
                                     from: innerParts[0],
                                     type: "is mapped to",
                                     to: innerParts[1],
@@ -3575,14 +3590,19 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
 
                                         });
                                     } else  if(dataInputsOnlyVals.indexOf(this.data['from']) >= 0 && variableDefsOnly.indexOf(this.data['to']) >= 0) {
-                                        ORYX.EDITOR._pluginFacade.raiseEvent({
-                                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                            ntype		: 'warning',
-                                            msg         : "Assignment for " + this.data['from'] + " is invalid",
-                                            title       : ''
+                                        // if its also  data output - pass
+                                        if(dataOutputsOnlyVals.indexOf(this.data['from']) < 0) {
+                                            ORYX.EDITOR._pluginFacade.raiseEvent({
+                                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                                ntype		: 'warning',
+                                                msg         : "Assignment for " + this.data['from'] + " is invalid",
+                                                title       : ''
 
-                                        });
-                                    } else if(variableDefsOnly.indexOf(this.data['from']) >= 0 && variableDefsOnly.indexOf(this.data['to']) >= 0) {
+                                            });
+                                        } else {
+                                            outValue += this.data['from'] + "->" + this.data['to'] + ",";
+                                        }
+                                    } else if(variableDefsOnlyVals.indexOf(this.data['from']) >= 0 && variableDefsOnly.indexOf(this.data['to']) >= 0) {
                                         ORYX.EDITOR._pluginFacade.raiseEvent({
                                             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                             ntype		: 'warning',
