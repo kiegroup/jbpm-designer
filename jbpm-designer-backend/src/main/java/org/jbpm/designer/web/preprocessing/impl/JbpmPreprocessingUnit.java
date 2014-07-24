@@ -130,9 +130,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
     public void preprocess(HttpServletRequest req, HttpServletResponse res, IDiagramProfile profile, ServletContext serlvetContext, boolean readOnly, IOService ioService, RepositoryDescriptor descriptor) {
         try {
-            if(ioService != null) {
-                ioService.startBatch(new FileSystem[]{ descriptor.getFileSystem() });
-            }
+
             if(readOnly) {
                 _logger.info("Performing preprocessing steps in readonly mode.");
                 ST workItemTemplate = new ST(readFile(origStencilFilePath), '$', '$');
@@ -162,6 +160,9 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 createAndParseViewSVGForReadOnly(workDefinitions, readOnlyIconEncoded);
 
                 return;
+            }
+            if(ioService != null) {
+                ioService.startBatch(new FileSystem[]{ descriptor.getFileSystem() });
             }
 
             Repository repository = profile.getRepository();
@@ -278,7 +279,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         } catch ( final Exception e ) {
             _logger.error(e.getMessage());
         } finally {
-            if(ioService != null) {
+            if(!readOnly && ioService != null) {
                 ioService.endBatch();
             }
         }
