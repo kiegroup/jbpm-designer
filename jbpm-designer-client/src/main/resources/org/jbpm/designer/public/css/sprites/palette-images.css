@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+/** sprite: palette-images-sprite; sprite-image: url('../../images/sprites/palette-images-sprite.png'); sprite-layout: vertical */
 
 /*
  * ********************************************************************************************************************
@@ -34,8 +35,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -0px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/activity/list/type.user.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_icons_activity_list_type_send,
@@ -43,8 +43,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -16px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/activity/list/type.send.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_icons_activity_list_type_receive,
@@ -52,8 +51,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -32px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/activity/list/type.receive.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_icons_activity_list_type_manual,
@@ -61,8 +59,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -48px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/activity/list/type.manual.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_icons_activity_list_type_service,
@@ -70,8 +67,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -64px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/activity/list/type.service.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_icons_activity_list_type_business_rule,
@@ -79,8 +75,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -80px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/activity/list/type.business.rule.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_icons_activity_list_type_script,
@@ -88,8 +83,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -96px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/activity/list/type.script.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 /* task icon used for 'None' activity */
@@ -99,8 +93,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -112px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/activity/task.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 /* Subprocesses group */
@@ -109,8 +102,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -128px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/activity/subprocess.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_activity_expanded_subprocess,
@@ -118,8 +110,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -144px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/activity/expanded.subprocess.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_activity_event_subprocess,
@@ -127,8 +118,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -160px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/activity/event.subprocess.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 /* Start Events group */
@@ -137,8 +127,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -176px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/startevent/none.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_startevent_message,
@@ -146,8 +135,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -192px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/startevent/message.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_startevent_timer,
@@ -155,8 +143,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -208px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/startevent/timer.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_startevent_escalation,
@@ -164,8 +151,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -224px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/startevent/escalation.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_startevent_conditional,
@@ -173,8 +159,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -240px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/startevent/conditional.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_startevent_error,
@@ -182,8 +167,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -256px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/startevent/error.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_startevent_compensation,
@@ -191,8 +175,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -272px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/startevent/compensation.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_startevent_signal,
@@ -200,8 +183,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -288px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/startevent/signal.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 /* End Events group */
@@ -211,8 +193,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -304px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/endevent/none.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_endevent_message,
@@ -220,8 +201,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -320px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/endevent/message.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_endevent_escalation,
@@ -229,8 +209,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -336px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/endevent/escalation.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_endevent_error,
@@ -238,8 +217,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -352px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/endevent/error.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_endevent_cancel,
@@ -247,8 +225,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -368px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/endevent/cancel.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_endevent_compensation,
@@ -256,8 +233,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -384px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/endevent/compensation.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_endevent_signal,
@@ -265,8 +241,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -400px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/endevent/signal.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_endevent_terminate,
@@ -274,8 +249,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -416px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/endevent/terminate.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 /* Catching Intermediate Events group */
@@ -285,8 +259,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -432px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/catching/message.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_catching_timer,
@@ -294,8 +267,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -448px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/catching/timer.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_catching_escalation,
@@ -303,8 +275,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -464px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/catching/escalation.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_catching_conditional,
@@ -312,8 +283,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -480px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/catching/conditional.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_catching_error,
@@ -321,8 +291,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -496px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/catching/error.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_catching_compensation,
@@ -330,8 +299,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -512px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/catching/compensation.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_catching_signal,
@@ -339,8 +307,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -528px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/catching/signal.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 /* Throwing Intermediate Events group */
@@ -350,8 +317,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -544px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/throwing/message.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_throwing_escalation,
@@ -359,8 +325,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -560px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/throwing/escalation.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_throwing_signal,
@@ -368,8 +333,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -576px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/throwing/signal.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 /* Gateways group */
@@ -379,8 +343,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -592px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/gateway/exclusive.databased.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_gateway_eventbased,
@@ -388,8 +351,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -608px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/gateway/eventbased.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_gateway_parallel,
@@ -397,8 +359,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -624px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/gateway/parallel.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_gateway_inclusive,
@@ -406,8 +367,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -640px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/gateway/inclusive.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 /* Service Tasks group */
@@ -422,8 +382,7 @@ These don't have a static icon
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -656px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/dataobject/data.object.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 /* Swimlanes group */
@@ -433,8 +392,7 @@ These don't have a static icon
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -672px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/swimlane/lane.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 /* Artifacts group */
@@ -444,8 +402,7 @@ These don't have a static icon
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -688px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/artifact/group.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_artifact_text_annotation,
@@ -453,8 +410,7 @@ These don't have a static icon
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -704px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/artifact/text.annotation.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 /* Workflow Patterns group */
@@ -464,8 +420,7 @@ These don't have a static icon
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -720px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/patterns/pattern.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 
@@ -480,8 +435,7 @@ These don't have a static icon
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -736px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/activity/list/looptype.standard.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_activity_list_mi_parallel,
@@ -489,8 +443,7 @@ These don't have a static icon
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -752px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/activity/list/mi.parallel.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_activity_list_mi_sequential,
@@ -498,8 +451,7 @@ These don't have a static icon
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -768px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/activity/list/mi.sequential.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 /* task - not in palette */
@@ -512,8 +464,7 @@ These don't have a static icon
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -784px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/diagram.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 /* Event type - not in palette */
@@ -523,8 +474,7 @@ These don't have a static icon
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -800px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/gateway/list/eventbased.exclusive.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_gateway_list_eventbased_parallel,
@@ -532,8 +482,7 @@ These don't have a static icon
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -816px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/gateway/list/eventbased.parallel.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 /* dataobject/list - not in palette */
@@ -543,8 +492,7 @@ These don't have a static icon
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -832px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/dataobject/list/input.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_dataobject_list_output,
@@ -552,8 +500,7 @@ These don't have a static icon
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -848px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/dataobject/list/output.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 /* connector - not in palette */
@@ -563,8 +510,7 @@ These don't have a static icon
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -864px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/connector/sequenceflow.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_connector_list_type_expression,
@@ -572,8 +518,7 @@ These don't have a static icon
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -880px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/connector/list/type.expression.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_connector_list_type_default,
@@ -581,8 +526,7 @@ These don't have a static icon
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -896px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/connector/list/type.default.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 /* Connecting objects (edges) - not in palette */
@@ -592,8 +536,7 @@ These don't have a static icon
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -912px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/connector/association.undirected.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_connector_association_unidirectional,
@@ -601,8 +544,7 @@ These don't have a static icon
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -928px;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/connector/association.unidirectional.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 /* Morph menu images */
@@ -610,30 +552,26 @@ These don't have a static icon
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -944px;
+    background-image: url(../../images/wrench_orange.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .images_dictionary {
     width: 17px;
     height: 17px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -960px;
+    background-image: url(../../images/dictionary.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .images_processforms {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -977px;
+    background-image: url(../../images/processforms.png);  /** sprite-ref: palette-images-sprite; */
 }
 
 .images_view {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -993px;
+    background-image: url(../../images/view.png);  /** sprite-ref: palette-images-sprite; */
 }

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+/** sprite: toolbar-images-sprite; sprite-image: url('../../images/sprites/toolbar-images-sprite.png'); sprite-layout: vertical */
 
 /*!
  * ********************************************************************************************************************
@@ -33,40 +34,35 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -0px;
+    background-image: url(../../images/disk.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 .images_disk {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -0px;
+    background-image: url(../../images/disk.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 .images_page_copy {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -16px;
+    background-image: url(../../images/page_copy.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 .images_rename {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -32px;
+    background-image: url(../../images/rename.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 .images_delete2 {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -48px;
+    background-image: url(../../images/delete2.gif);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 /* Cut button */
@@ -74,8 +70,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -64px;
+    background-image: url(../../images/cut.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 /* Page copy button */
@@ -83,8 +78,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -16px;
+    background-image: url(../../images/page_copy.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 /* Page paste button */
@@ -92,8 +86,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -80px;
+    background-image: url(../../images/page_paste.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 /* Delete all selected button */
@@ -101,8 +94,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -96px;
+    background-image: url(../../images/cross.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 /* Undo button */
@@ -110,8 +102,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -112px;
+    background-image: url(../../images/arrow_undo.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 /* Redo button */
@@ -119,8 +110,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -128px;
+    background-image: url(../../images/arrow_redo.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 /* Local history (pic of clock) drop-down and menu items */
@@ -128,48 +118,42 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -144px;
+    background-image: url(../../images/localhistory.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 .images_view {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -160px;
+    background-image: url(../../images/view.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 .images_clear {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -176px;
+    background-image: url(../../images/clear.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 .images_clock {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -192px;
+    background-image: url(../../images/clock.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 .images_enable {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -208px;
+    background-image: url(../../images/enable.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 .images_disable {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -224px;
+    background-image: url(../../images/disable.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 /* Move front/back drop-down and menu items */
@@ -177,40 +161,35 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -240px;
+    background-image: url(../../images/shape_move_backwards.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 .images_shape_move_front {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -256px;
+    background-image: url(../../images/shape_move_front.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 .images_shape_move_back {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -272px;
+    background-image: url(../../images/shape_move_back.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 .images_shape_move_forwards {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -288px;
+    background-image: url(../../images/shape_move_forwards.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 .images_shape_move_backwards {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -240px;
+    background-image: url(../../images/shape_move_backwards.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 /* Alignment drop-down and menu items */
@@ -218,64 +197,56 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -304px;
+    background-image: url(../../images/shape_align_center.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 .images_shape_align_bottom {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -320px;
+    background-image: url(../../images/shape_align_bottom.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 .images_shape_align_middle {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -336px;
+    background-image: url(../../images/shape_align_middle.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 .images_shape_align_top {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -352px;
+    background-image: url(../../images/shape_align_top.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 .images_shape_align_left {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -368px;
+    background-image: url(../../images/shape_align_left.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 .images_shape_align_center {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -304px;
+    background-image: url(../../images/shape_align_center.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 .images_shape_align_right {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -384px;
+    background-image: url(../../images/shape_align_right.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 .images_shape_align_size {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -400px;
+    background-image: url(../../images/shape_align_size.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 /* Group button */
@@ -283,8 +254,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -416px;
+    background-image: url(../../images/shape_group.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 /* Ungroup button */
@@ -292,8 +262,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -432px;
+    background-image: url(../../images/shape_ungroup.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 /* Lock button */
@@ -301,8 +270,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -448px;
+    background-image: url(../../images/lock.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 /* Unlock button */
@@ -310,8 +278,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -464px;
+    background-image: url(../../images/unlock.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 /* Add docker button */
@@ -319,8 +286,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -480px;
+    background-image: url(../../images/vector_add.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 
@@ -329,8 +295,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -496px;
+    background-image: url(../../images/vector_delete.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 /* Color picker drop-down and menu items */
@@ -338,16 +303,14 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -512px;
+    background-image: url(../../images/colorpicker.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 .images_colorize {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -528px;
+    background-image: url(../../images/colorize.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 /* Process forms drop-down and menu items */
@@ -355,16 +318,14 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -544px;
+    background-image: url(../../images/processforms.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 .images_processforms {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -544px;
+    background-image: url(../../images/processforms.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 /* Share drop-down and menu items */
@@ -372,16 +333,14 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -560px;
+    background-image: url(../../images/share.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 .images_share {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -560px;
+    background-image: url(../../images/share.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 /* Import drop-down and menu items */
@@ -389,24 +348,21 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -576px;
+    background-image: url(../../images/import.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 .images_import {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -576px;
+    background-image: url(../../images/import.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 .images_jpdl_import_icon {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -592px;
+    background-image: url(../../images/jpdl_import_icon.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 /* Validate drop-down and menu items */
@@ -414,8 +370,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -608px;
+    background-image: url(../../images/visualvalidation.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 /* Simulation drop-down and menu items */
@@ -423,24 +378,21 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -624px;
+    background-image: url(../../images/simulation.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 .images_path {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -640px;
+    background-image: url(../../images/path.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 .images_control_play {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -656px;
+    background-image: url(../../images/control_play.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 /* Repository button */
@@ -448,8 +400,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -672px;
+    background-image: url(../../images/repository_rep.gif);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 /* Paint button */
@@ -457,8 +408,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -688px;
+    background-image: url(../../images/paint.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 /* Full screen mode button */
@@ -466,8 +416,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -704px;
+    background-image: url(../../images/fullscreen.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 /* Process dictionary mode button */
@@ -475,8 +424,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -720px;
+    background-image: url(../../images/dictionary.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 /* Zoom in button */
@@ -484,8 +432,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -737px;
+    background-image: url(../../images/magnifier_zoom_in.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 /* Zoom out button */
@@ -493,8 +440,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -753px;
+    background-image: url(../../images/magnifier_zoom_out.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 /* Zoom standard button */
@@ -502,8 +448,7 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -769px;
+    background-image: url(../../images/zoom_standard.png);  /** sprite-ref: toolbar-images-sprite; */
 }
 
 /* Zoom to fit model size button */
@@ -511,6 +456,5 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/toolbar-images-sprite.png');
-  background-position: left -785px;
+    background-image: url(../../images/image.png);  /** sprite-ref: toolbar-images-sprite; */
 }

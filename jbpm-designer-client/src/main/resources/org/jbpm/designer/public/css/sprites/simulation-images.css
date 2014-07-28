@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+/** sprite: simulation-images-sprite; sprite-image: url('../../images/sprites/simulation-images-sprite.png'); sprite-layout: vertical */
 
 /*
  * ********************************************************************************************************************
@@ -28,72 +29,63 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/simulation-images-sprite.png');
-  background-position: left -0px;
+    background-image: url(../../images/simulation/activities/BusinessRule.png);  /** sprite-ref: simulation-images-sprite; */
 }
 
 .x-tree-node-leaf .images_simulation_activities_Email {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/simulation-images-sprite.png');
-  background-position: left -12px;
+    background-image: url(../../images/simulation/activities/Email.png);  /** sprite-ref: simulation-images-sprite; */
 }
 
 .x-tree-node-leaf .images_simulation_activities_Log {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/simulation-images-sprite.png');
-  background-position: left -24px;
+    background-image: url(../../images/simulation/activities/Log.png);  /** sprite-ref: simulation-images-sprite; */
 }
 
 .x-tree-node-leaf .images_simulation_activities_Manual {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/simulation-images-sprite.png');
-  background-position: left -36px;
+    background-image: url(../../images/simulation/activities/Manual.png);  /** sprite-ref: simulation-images-sprite; */
 }
 
 .x-tree-node-leaf .images_simulation_activities_None {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/simulation-images-sprite.png');
-  background-position: left -48px;
+    background-image: url(../../images/simulation/activities/None.png);  /** sprite-ref: simulation-images-sprite; */
 }
 
 .x-tree-node-leaf .images_simulation_activities_Receive {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/simulation-images-sprite.png');
-  background-position: left -64px;
+    background-image: url(../../images/simulation/activities/Receive.png);  /** sprite-ref: simulation-images-sprite; */
 }
 
 .x-tree-node-leaf .images_simulation_activities_Script {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/simulation-images-sprite.png');
-  background-position: left -75px;
+    background-image: url(../../images/simulation/activities/Script.png);  /** sprite-ref: simulation-images-sprite; */
 }
 
 .x-tree-node-leaf .images_simulation_activities_Send {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/simulation-images-sprite.png');
-  background-position: left -86px;
+    background-image: url(../../images/simulation/activities/Send.png);  /** sprite-ref: simulation-images-sprite; */
 }
 
 .x-tree-node-leaf .images_simulation_activities_Service {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/simulation-images-sprite.png');
-  background-position: left -97px;
+    background-image: url(../../images/simulation/activities/Service.png);  /** sprite-ref: simulation-images-sprite; */
 }
 
 .x-tree-node-leaf .images_simulation_activities_User
@@ -101,6 +93,5 @@
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-  background-image: url('../../images/sprites/simulation-images-sprite.png');
-  background-position: left -109px;
+    background-image: url(../../images/simulation/activities/User.png);  /** sprite-ref: simulation-images-sprite; */
 }
