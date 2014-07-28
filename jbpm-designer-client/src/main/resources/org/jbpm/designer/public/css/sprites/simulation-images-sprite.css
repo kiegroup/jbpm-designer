@@ -1,0 +1,88 @@
+
+/*
+ * ********************************************************************************************************************
+ * Stylesheet for simulation images
+ *
+ * ********************************************************************************************************************
+ */
+
+.x-tree-node-leaf .images_simulation_activities_BusinessRule {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../../images/sprites/simulation-images-sprite.png');
+  background-position: left -0px;
+}
+
+.x-tree-node-leaf .images_simulation_activities_Email {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../../images/sprites/simulation-images-sprite.png');
+  background-position: left -12px;
+}
+
+.x-tree-node-leaf .images_simulation_activities_Log {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../../images/sprites/simulation-images-sprite.png');
+  background-position: left -24px;
+}
+
+.x-tree-node-leaf .images_simulation_activities_Manual {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../../images/sprites/simulation-images-sprite.png');
+  background-position: left -36px;
+}
+
+.x-tree-node-leaf .images_simulation_activities_None {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../../images/sprites/simulation-images-sprite.png');
+  background-position: left -48px;
+}
+
+.x-tree-node-leaf .images_simulation_activities_Receive {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../../images/sprites/simulation-images-sprite.png');
+  background-position: left -64px;
+}
+
+.x-tree-node-leaf .images_simulation_activities_Script {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../../images/sprites/simulation-images-sprite.png');
+  background-position: left -75px;
+}
+
+.x-tree-node-leaf .images_simulation_activities_Send {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../../images/sprites/simulation-images-sprite.png');
+  background-position: left -86px;
+}
+
+.x-tree-node-leaf .images_simulation_activities_Service {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../../images/sprites/simulation-images-sprite.png');
+  background-position: left -97px;
+}
+
+.x-tree-node-leaf .images_simulation_activities_User
+{
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../../images/sprites/simulation-images-sprite.png');
+  background-position: left -109px;
+}

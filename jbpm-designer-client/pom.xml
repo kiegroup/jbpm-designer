@@ -244,11 +244,19 @@
                 <include>${project.build.directory}/classes/org/jbpm/designer/public/css/theme-default.css</include>
                 <include>${project.build.directory}/classes/org/jbpm/designer/public/css/xtheme-gray-colors.css</include>
                 <include>${project.build.directory}/classes/org/jbpm/designer/public/css/xtheme-gray.css</include>
-
-                <include>${project.build.directory}/classes/org/jbpm/designer/public/css/toolbar-images-sprite.css</include>
-                <include>${project.build.directory}/classes/org/jbpm/designer/public/css/palette-images-sprite.css</include>
              </includes>
               <output>${project.build.directory}/classes/org/jbpm/designer/public/css/designer-compressed-stylesheets.css</output>
+            </aggregation>
+
+            <aggregation>
+              <removeIncluded>false</removeIncluded>
+              <insertNewLine>true</insertNewLine>
+              <includes>
+                <include>${project.build.directory}/classes/org/jbpm/designer/public/css/sprites/toolbar-images-sprite.css</include>
+                <include>${project.build.directory}/classes/org/jbpm/designer/public/css/sprites/palette-images-sprite.css</include>
+                <include>${project.build.directory}/classes/org/jbpm/designer/public/css/sprites/simulation-images-sprite.css</include>
+              </includes>
+              <output>${project.build.directory}/classes/org/jbpm/designer/public/css/sprites/sprite-stylesheets.css</output>
             </aggregation>
 
             <aggregation>

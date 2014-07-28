@@ -153,8 +153,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 			    		allowDrop:false,           
 			            expanded: true,
 			            isLeaf: true,
-			            iconCls: 'xnd-icon',
-			            icon: ORYX.BASE_FILE_PATH + 'images/simulation/activities/User.png',
+                        iconCls: window.SpriteUtils.toUniqueId(ORYX.BASE_FILE_PATH + 'images/simulation/activities/User.png'),
 						singleClickExpand:true});
 				    graphType.appendChild(graphTypeChild);
 			}
@@ -171,8 +170,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 		    		allowDrop:false,           
 		            expanded: true,
 		            isLeaf: true,
-		            iconCls: 'xnd-icon',
-		            icon: ORYX.BASE_FILE_PATH + 'images/simulation/activities/' + this.taskType + '.png',
+                    iconCls: window.SpriteUtils.toUniqueId(ORYX.BASE_FILE_PATH + 'images/simulation/activities/' + this.taskType + '.png'),
 					singleClickExpand:true});
 			    
 			    graphType.appendChild(graphTypeChild);

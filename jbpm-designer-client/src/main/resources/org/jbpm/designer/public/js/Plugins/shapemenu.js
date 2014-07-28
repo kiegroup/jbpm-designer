@@ -450,7 +450,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
             if(elements[0].properties["oryx-tasktype"] != "User" && !isRuleflow) {
                 var menuItem = new Ext.menu.Item({
                     text: ORYX.I18N.ShapeMenuPlugin.userTask,
-                    icon: ORYX.BASE_FILE_PATH + 'stencilsets/bpmn2.0jbpm/icons/activity/list/type.user.png',
+                    iconCls : window.SpriteUtils.toUniqueId('stencilsets/bpmn2.0jbpm/icons/activity/list/type.user.png'),
                     disabled: false,
                     disabledClass: ORYX.CONFIG.MORPHITEM_DISABLED,
                     handler: (function() { this.updateTaskType(elements[0], 'User'); }).bind(this)
@@ -460,7 +460,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
             if(elements[0].properties["oryx-tasktype"] != "Send" && !isRuleflow) {
                 var menuItem = new Ext.menu.Item({
                     text: ORYX.I18N.ShapeMenuPlugin.sendTask,
-                    icon: ORYX.BASE_FILE_PATH + 'stencilsets/bpmn2.0jbpm/icons/activity/list/type.send.png',
+                    iconCls : window.SpriteUtils.toUniqueId('stencilsets/bpmn2.0jbpm/icons/activity/list/type.send.png'),
                     disabled: false,
                     disabledClass: ORYX.CONFIG.MORPHITEM_DISABLED,
                     handler: (function() { this.updateTaskType(elements[0], 'Send'); }).bind(this)
@@ -470,7 +470,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
             if(elements[0].properties["oryx-tasktype"] != "Receive" && !isRuleflow) {
                 var menuItem = new Ext.menu.Item({
                     text: ORYX.I18N.ShapeMenuPlugin.receiveTask,
-                    icon: ORYX.BASE_FILE_PATH + 'stencilsets/bpmn2.0jbpm/icons/activity/list/type.receive.png',
+                    iconCls : window.SpriteUtils.toUniqueId('stencilsets/bpmn2.0jbpm/icons/activity/list/type.receive.png'),
                     disabled: false,
                     disabledClass: ORYX.CONFIG.MORPHITEM_DISABLED,
                     handler: (function() { this.updateTaskType(elements[0], 'Receive'); }).bind(this)
@@ -480,7 +480,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
             if(elements[0].properties["oryx-tasktype"] != "Manual" && !isRuleflow) {
                 var menuItem = new Ext.menu.Item({
                     text: ORYX.I18N.ShapeMenuPlugin.manualTask,
-                    icon: ORYX.BASE_FILE_PATH + 'stencilsets/bpmn2.0jbpm/icons/activity/list/type.manual.png',
+                    iconCls : window.SpriteUtils.toUniqueId('stencilsets/bpmn2.0jbpm/icons/activity/list/type.manual.png'),
                     disabled: false,
                     disabledClass: ORYX.CONFIG.MORPHITEM_DISABLED,
                     handler: (function() { this.updateTaskType(elements[0], 'Manual'); }).bind(this)
@@ -490,7 +490,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
             if(elements[0].properties["oryx-tasktype"] != "Service" && !isRuleflow) {
                 var menuItem = new Ext.menu.Item({
                     text: ORYX.I18N.ShapeMenuPlugin.serviceTask,
-                    icon: ORYX.BASE_FILE_PATH + 'stencilsets/bpmn2.0jbpm/icons/activity/list/type.service.png',
+                    iconCls : window.SpriteUtils.toUniqueId('stencilsets/bpmn2.0jbpm/icons/activity/list/type.service.png'),
                     disabled: false,
                     disabledClass: ORYX.CONFIG.MORPHITEM_DISABLED,
                     handler: (function() { this.updateTaskType(elements[0], 'Service'); }).bind(this)
@@ -500,7 +500,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
             if(elements[0].properties["oryx-tasktype"] != "Business Rule") {
                 var menuItem = new Ext.menu.Item({
                     text: ORYX.I18N.ShapeMenuPlugin.businessRuleTask,
-                    icon: ORYX.BASE_FILE_PATH + 'stencilsets/bpmn2.0jbpm/icons/activity/list/type.business.rule.png',
+                    iconCls : window.SpriteUtils.toUniqueId('stencilsets/bpmn2.0jbpm/icons/activity/list/type.business.rule.png'),
                     disabled: false,
                     disabledClass: ORYX.CONFIG.MORPHITEM_DISABLED,
                     handler: (function() { this.updateTaskType(elements[0], 'Business Rule'); }).bind(this)
@@ -510,7 +510,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
             if(elements[0].properties["oryx-tasktype"] != "Script") {
                 var menuItem = new Ext.menu.Item({
                     text: ORYX.I18N.ShapeMenuPlugin.scriptTask,
-                    icon: ORYX.BASE_FILE_PATH + 'stencilsets/bpmn2.0jbpm/icons/activity/list/type.script.png',
+                    iconCls : window.SpriteUtils.toUniqueId('stencilsets/bpmn2.0jbpm/icons/activity/list/type.script.png'),
                     disabled: false,
                     disabledClass: ORYX.CONFIG.MORPHITEM_DISABLED,
                     handler: (function() { this.updateTaskType(elements[0], 'Script'); }).bind(this)
@@ -526,7 +526,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
             if(!(elements[0].properties["oryx-nomorph"] && elements[0].properties["oryx-nomorph"] == "true")) {
                 var menuItem = new Ext.menu.Item({
                     text: morph.title(),
-                    icon: morph.icon(),
+                    iconCls : window.SpriteUtils.toUniqueId('stencilsets/bpmn2.0jbpm/icons/activity/list/type.script.png'),
                     disabled: morph.id()==elements[0].getStencil().id(),
                     disabledClass: ORYX.CONFIG.MORPHITEM_DISABLED,
                     handler: (function() { this.morphShape(elements[0], morph); }).bind(this)
@@ -1420,9 +1420,16 @@ ORYX.Plugins.ShapeMenuButton = {
 		// graft and update icon (not in grafting for ns reasons).
 		//TODO Enrich graft()-function to do this in one of the above steps.
 		if(this.option.icon)
-			ORYX.Editor.graft("http://www.w3.org/1999/xhtml", this.node,
-				['img', imgOptions]);
-		
+        {
+            if (this.option.icon.startsWith("data")) {
+			    ORYX.Editor.graft("http://www.w3.org/1999/xhtml", this.node, ['img', imgOptions]);
+            }
+            else {
+                var imgIconCls = window.SpriteUtils.toUniqueId(this.option.icon);
+                ORYX.Editor.graft("http://www.w3.org/1999/xhtml", this.node, ["img", {"src": ORYX.BASE_FILE_PATH + "lib/ext-2.0.2/resources/images/default/s.gif", "class": imgIconCls, "title": this.option.msg}]);
+            }
+        }
+
 		if(this.option.caption) {
 			var captionNode = ORYX.Editor.graft("http://www.w3.org/1999/xhtml", this.node, ['span']);
 			ORYX.Editor.graft("http://www.w3.org/1999/xhtml", captionNode, this.option.caption);
