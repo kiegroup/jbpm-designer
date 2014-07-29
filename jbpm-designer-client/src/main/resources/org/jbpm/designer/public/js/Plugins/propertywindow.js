@@ -3607,6 +3607,7 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
                                     if(dataInputsOnlyVals.indexOf(this.data['from']) >= 0 && dataInputsOnlyVals.indexOf(this.data['to']) >= 0) {
                                         // if its also vardef -- pass
                                         if(variableDefsOnlyVals.indexOf(this.data['from']) < 0) {
+                                            alert("a");
                                             ORYX.EDITOR._pluginFacade.raiseEvent({
                                                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                                 ntype		: 'warning',
@@ -3615,11 +3616,13 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
 
                                             });
                                         } else {
+                                            alert("a - adding");
                                             outValue += this.data['from'] + "->" + this.data['to'] + ",";
                                         }
                                     } else  if(dataInputsOnlyVals.indexOf(this.data['from']) >= 0 && variableDefsOnly.indexOf(this.data['to']) >= 0) {
                                         // if its also  data output - pass
                                         if(dataOutputsOnlyVals.indexOf(this.data['from']) < 0) {
+                                            alert("b");
                                             ORYX.EDITOR._pluginFacade.raiseEvent({
                                                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                                 ntype		: 'warning',
@@ -3628,16 +3631,23 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
 
                                             });
                                         } else {
+                                            alert("b - adding");
                                             outValue += this.data['from'] + "->" + this.data['to'] + ",";
                                         }
-                                    } else if(variableDefsOnlyVals.indexOf(this.data['from']) >= 0 && variableDefsOnly.indexOf(this.data['to']) >= 0) {
-                                        ORYX.EDITOR._pluginFacade.raiseEvent({
-                                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                            ntype		: 'warning',
-                                            msg         : "Assignment for " + this.data['from'] + " is invalid",
-                                            title       : ''
+                                    } else if(variableDefsOnlyVals.indexOf(this.data['from']) >= 0 && variableDefsOnlyVals.indexOf(this.data['to']) >= 0) {
+                                        if(dataInputsOnlyVals.indexOf(this.data['from']) < 0) {
+                                            alert("c");
+                                            ORYX.EDITOR._pluginFacade.raiseEvent({
+                                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                                ntype		: 'warning',
+                                                msg         : "Assignment for " + this.data['from'] + " is invalid",
+                                                title       : ''
 
-                                        });
+                                            });
+                                        } else {
+                                            alert("bc - adding");
+                                            outValue += this.data['from'] + "->" + this.data['to'] + ",";
+                                        }
                                     } else if(dataOutputsOnlyVals.indexOf(this.data['from']) >= 0 && dataInputsOnlyVals.indexOf(this.data['to']) >= 0) {
                                         ORYX.EDITOR._pluginFacade.raiseEvent({
                                             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
