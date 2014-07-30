@@ -154,6 +154,12 @@ public class DesignerPresenter {
                 changeTitleNotification.fire( new ChangeTitleWidgetEvent( place, getName(), null ) );
             }
         } );
+        this.path.onDelete( new Command() {
+            @Override
+            public void execute() {
+                placeManager.forceClosePlace( place );
+            }
+        } );
 
         this.path.onConcurrentUpdate( new ParameterizedCommand<ObservablePath.OnConcurrentUpdateEvent>() {
             @Override
