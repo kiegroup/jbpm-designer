@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
 import javax.inject.Inject;
 
 import com.google.gwt.animation.client.Animation;
@@ -14,11 +15,17 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.RootPanel;
+import org.jboss.errai.common.client.api.Caller;
+import org.jboss.errai.common.client.api.RemoteCallback;
 import org.jboss.errai.ioc.client.api.AfterInitialization;
 import org.jboss.errai.ioc.client.api.EntryPoint;
 import org.jboss.errai.ioc.client.container.IOCBeanDef;
 import org.jboss.errai.ioc.client.container.SyncBeanManager;
 import org.jbpm.designer.client.resources.StandaloneResources;
+import org.kie.workbench.common.services.security.KieWorkbenchACL;
+import org.kie.workbench.common.services.security.KieWorkbenchPolicy;
+import org.kie.workbench.common.services.shared.security.KieWorkbenchSecurityService;
+import org.uberfire.client.UberFirePreferences;
 import org.uberfire.client.mvp.AbstractWorkbenchPerspectiveActivity;
 import org.uberfire.client.mvp.ActivityManager;
 import org.uberfire.client.mvp.PlaceManager;
@@ -44,13 +51,26 @@ public class StandaloneEntryPoint {
     @Inject
     private ActivityManager activityManager;
 
+    @Inject
+    private KieWorkbenchACL kieACL;
+
+    @Inject
+    private Caller<KieWorkbenchSecurityService> kieSecurityService;
+    
     private String[] menuItems = new String[]{ "FileExplorer", "jbpm.designer" };
 
     @AfterInitialization
     public void startApp() {
-        loadStyles();
-        setupMenu();
-        hideLoadingPopup();
+        UberFirePreferences.setProperty( "org.uberfire.client.workbench.widgets.listbar.context.disable", true );
+        kieSecurityService.call(new RemoteCallback<String>() {
+            public void callback(final String str) {
+                KieWorkbenchPolicy policy = new KieWorkbenchPolicy(str);
+                kieACL.activatePolicy(policy);
+                loadStyles();
+                setupMenu();
+                hideLoadingPopup();
+            }
+        }).loadPolicy();
     }
 
     private void loadStyles() {
