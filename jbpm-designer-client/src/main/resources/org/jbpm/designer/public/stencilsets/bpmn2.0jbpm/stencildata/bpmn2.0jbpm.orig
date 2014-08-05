@@ -4151,26 +4151,46 @@
 						}
 					]
 				},
- 				{
-					"id":"collectionexpression",
-					"type":"String",
-					"title":"CollectionExpression",
-					"value":"",
-					"description":"Name of a variable that represents the collection of elements that should be iterated over.",
-					"description_ja":"繰り返しを実行させる要素のコレクションを表す変数の名前。",
-					"readonly":false,
-					"optional":false
-				},
 				{
-					"id":"variablename",
-					"type":"String",
-					"title":"Variable Name",
-					"value":"",
-					"description":"Name of the variable to contain the current element from the collection.",
-					"description_ja":"コレクションの現在の要素を含む変数の名前。",
-					"readonly":false,
-					"optional":false
-				},
+                    "id":"multipleinstancecollectioninput",
+                    "type":"String",
+                    "title":"MI collection input",
+                    "value":"",
+                    "description":"Sets the multiple instances collection input.",
+                    "description_ja":"複数インスタンスコレクション入力を指定",
+                    "readonly":false,
+                    "optional":false
+                },
+                {
+                    "id":"multipleinstancecollectionoutput",
+                    "type":"String",
+                    "title":"MI collection output",
+                    "value":"",
+                    "description":"Sets the multiple instances collection output.",
+                    "description_ja":"複数インスタンスコレクション出力を指定",
+                    "readonly":false,
+                    "optional":true
+                },
+                {
+                    "id":"multipleinstancedatainput",
+                    "type":"String",
+                    "title":"MI data input",
+                    "value":"",
+                    "description":"Sets a data input for MI.",
+                    "description_ja":"複数インスタンスへのデータ入力を指定",
+                    "readonly":false,
+                    "optional":false
+                },
+                {
+                    "id":"multipleinstancedataoutput",
+                    "type":"String",
+                    "title":"MI data output",
+                    "value":"",
+                    "description":"Sets a data output for MI.",
+                    "description_ja":"複数インスタンスへのデータ出力を指定",
+                    "readonly":false,
+                    "optional":true
+                },
 				{
 					"id":"onEntryActions",
 					"type":"Action",

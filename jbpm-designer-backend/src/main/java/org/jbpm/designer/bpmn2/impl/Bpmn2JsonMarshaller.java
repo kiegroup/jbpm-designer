@@ -2443,18 +2443,57 @@ public class Bpmn2JsonMarshaller {
         // loop characteristics
         boolean haveValidLoopCharacteristics = false;
         if(subProcess.getLoopCharacteristics() != null && subProcess.getLoopCharacteristics() instanceof MultiInstanceLoopCharacteristics) {
-        	MultiInstanceLoopCharacteristics lc = (MultiInstanceLoopCharacteristics) subProcess.getLoopCharacteristics();
-        	if(lc.getLoopDataInputRef() != null &&  lc.getInputDataItem() != null) {
-        		properties.put("variablename", lc.getInputDataItem().getId());
-        		if(subProcess.getDataInputAssociations() != null && 
-        				subProcess.getDataInputAssociations().size() == 1) {
-        			DataInputAssociation dia = subProcess.getDataInputAssociations().get(0);
-        			if(dia.getSourceRef() != null) {
-        				properties.put("collectionexpression", dia.getSourceRef().get(0).getId());
-        				haveValidLoopCharacteristics = true;
-        			}
-        		}
-        	}
+
+            MultiInstanceLoopCharacteristics taskmi = (MultiInstanceLoopCharacteristics) subProcess.getLoopCharacteristics();
+            if(taskmi.getLoopDataInputRef() != null) {
+                ItemAwareElement iedatainput = taskmi.getLoopDataInputRef();
+
+                List<DataInputAssociation> taskInputAssociations = subProcess.getDataInputAssociations();
+                for(DataInputAssociation dia : taskInputAssociations) {
+                    if(dia.getTargetRef().equals(iedatainput)) {
+                        properties.put("multipleinstancecollectioninput", dia.getSourceRef().get(0).getId());
+                        break;
+                    }
+                }
+            }
+            if(taskmi.getLoopDataOutputRef() != null) {
+                ItemAwareElement iedataoutput = taskmi.getLoopDataOutputRef();
+
+                List<DataOutputAssociation> taskOutputAssociations = subProcess.getDataOutputAssociations();
+                for(DataOutputAssociation dout : taskOutputAssociations) {
+                    if(dout.getSourceRef().get(0).equals(iedataoutput)) {
+                        properties.put("multipleinstancecollectionoutput", dout.getTargetRef().getId());
+                        break;
+                    }
+                }
+            }
+
+            if(taskmi.getInputDataItem() != null) {
+                List<DataInput> taskDataInputs = subProcess.getIoSpecification().getDataInputs();
+                for(DataInput din: taskDataInputs) {
+
+                    if (din.getItemSubjectRef() == null) {
+                        // for backward compatibility as the where only input supported
+                        properties.put("multipleinstancedatainput", taskmi.getInputDataItem().getId());
+                        haveValidLoopCharacteristics = true;
+                    }
+                    if(din.getItemSubjectRef() != null && din.getItemSubjectRef().getId().equals(taskmi.getInputDataItem().getItemSubjectRef().getId())) {
+                        properties.put("multipleinstancedatainput", din.getName());
+                        haveValidLoopCharacteristics = true;
+                        break;
+                    }
+                }
+            }
+
+            if(taskmi.getOutputDataItem() != null) {
+                List<DataOutput> taskDataOutputs = subProcess.getIoSpecification().getDataOutputs();
+                for(DataOutput dout : taskDataOutputs) {
+                    if(dout.getItemSubjectRef().getId().equals(taskmi.getOutputDataItem().getItemSubjectRef().getId())) {
+                        properties.put("multipleinstancedataoutput", dout.getName());
+                        break;
+                    }
+                }
+            }
         }
         
         // properties
