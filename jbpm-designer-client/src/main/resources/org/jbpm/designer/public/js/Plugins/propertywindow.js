@@ -3050,9 +3050,52 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
         var dataOutputsOnlyVals = new Array();
 
         varDataTitle.push("");
-        varDataTitle.push("** Variable Definitions **");
-        varData.push(varDataTitle);
-        variableDefsOnly.push(varDataTitle);
+
+        // for MIsub children add MIsub vardefs
+        var addedTitle = false;
+        var selection = ORYX.EDITOR._pluginFacade.getSelection();
+        if(selection) {
+            var selected = selection.first();
+            if(selected && selected.parent) {
+                if(selected.parent._stencil._jsonStencil.id == "http://b3mn.org/stencilset/bpmn2.0#MultipleInstanceSubprocess") {
+
+                    varDataTitle.push("** Process/MI Subprocess Vars **");
+                    varData.push(varDataTitle);
+                    variableDefsOnly.push(varDataTitle);
+                    addedTitle = true;
+
+                    var vardefsprop = selected.parent.properties["oryx-vardefs"];
+                    if(vardefsprop && vardefsprop.length > 0) {
+                        var vardefspropParts = vardefsprop.split(",");
+                        for(var k=0; k < vardefspropParts.length; k++) {
+                            var nextPart = vardefspropParts[k];
+                            var innerVal = new Array();
+                            if(nextPart.indexOf(":") > 0) {
+                                var innerParts = nextPart.split(":");
+                                innerVal.push(innerParts[0]);
+                                innerVal.push(innerParts[0]);
+                                dataTypeMap[innerParts[0]] = innerParts[1];
+                                variableDefsOnlyVals.push(innerParts[0]);
+                            } else {
+                                innerVal.push(nextPart);
+                                innerVal.push(nextPart);
+                                dataTypeMap[nextPart] = "java.lang.String";
+                                variableDefsOnlyVals.push(nextPart);
+                            }
+                            varData.push(innerVal);
+                            variableDefsOnly.push(innerVal);
+                        }
+                    }
+                }
+            }
+        }
+
+        if(!addedTitle) {
+            varDataTitle.push("** Variable Definitions **");
+            varData.push(varDataTitle);
+            variableDefsOnly.push(varDataTitle);
+        }
+
         if(processVars) {
         	processVars.forEach(function(item){
             	if(item.length > 0) {
@@ -3078,6 +3121,7 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
         	    }
         	});
         }
+
 
         var dataInputsTitle = new Array();
         dataInputsTitle.push("");
