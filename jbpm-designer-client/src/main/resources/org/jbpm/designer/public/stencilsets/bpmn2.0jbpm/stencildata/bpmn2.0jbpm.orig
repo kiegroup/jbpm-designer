@@ -4151,25 +4151,39 @@
 						}
 					]
 				},
-				{
+		{
                     "id":"multipleinstancecollectioninput",
-                    "type":"String",
+                    "type":"Dynamicchoice",
                     "title":"MI collection input",
                     "value":"",
                     "description":"Sets the multiple instances collection input.",
                     "description_ja":"複数インスタンスコレクション入力を指定",
                     "readonly":false,
-                    "optional":false
+                    "optional":false,
+                    "items": [
+                        {
+                            "id": "c1",
+                            "title":"vardefs",
+                            "value":"\$.properties.vardefs"
+                        }
+                    ]
                 },
-                {
+		{
                     "id":"multipleinstancecollectionoutput",
-                    "type":"String",
+                    "type":"Dynamicchoice",
                     "title":"MI collection output",
                     "value":"",
                     "description":"Sets the multiple instances collection output.",
                     "description_ja":"複数インスタンスコレクション出力を指定",
                     "readonly":false,
-                    "optional":true
+                    "optional":false,
+                    "items": [
+                        {
+                            "id": "c1",
+                            "title":"vardefs",
+                            "value":"\$.properties.vardefs"
+                        }
+                    ]
                 },
                 {
                     "id":"multipleinstancedatainput",
