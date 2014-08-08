@@ -2493,8 +2493,15 @@ public class Bpmn2JsonMarshaller {
             if(taskmi.getOutputDataItem() != null) {
                 List<DataOutput> taskDataOutputs = subProcess.getIoSpecification().getDataOutputs();
                 for(DataOutput dout : taskDataOutputs) {
-                    if(dout.getItemSubjectRef().getId().equals(taskmi.getOutputDataItem().getItemSubjectRef().getId())) {
+                    if(dout.getItemSubjectRef() == null) {
+                        properties.put("multipleinstancedataoutput", taskmi.getOutputDataItem().getId());
+                        haveValidLoopCharacteristics = true;
+                        break;
+                    }
+
+                    if(dout.getItemSubjectRef()!= null && dout.getItemSubjectRef().getId().equals(taskmi.getOutputDataItem().getItemSubjectRef().getId())) {
                         properties.put("multipleinstancedataoutput", dout.getName());
+                        haveValidLoopCharacteristics = true;
                         break;
                     }
                 }
