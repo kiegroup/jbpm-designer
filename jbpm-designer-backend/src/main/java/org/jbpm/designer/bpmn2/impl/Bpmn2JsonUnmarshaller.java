@@ -3072,14 +3072,14 @@ public class Bpmn2JsonUnmarshaller {
 
             DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
             ItemAwareElement ie = Bpmn2Factory.eINSTANCE.createItemAwareElement();
-            ie.setId(properties.get("multipleinstancecollectioninput") + "_MultiInputAssocX");
+            ie.setId(properties.get("multipleinstancecollectioninput"));
             dia.getSourceRef().add(ie);
             dia.setTargetRef(multiInput);
             sp.getDataInputAssociations().add(dia);
             MultiInstanceLoopCharacteristics loopCharacteristics = Bpmn2Factory.eINSTANCE.createMultiInstanceLoopCharacteristics();
             loopCharacteristics.setLoopDataInputRef(multiInput);
             DataInput din = Bpmn2Factory.eINSTANCE.createDataInput();
-            din.setId(properties.get("multipleinstancedatainput") + "_MultiDataInputX");
+            din.setId(properties.get("multipleinstancedatainput"));
             ItemDefinition itemDef = Bpmn2Factory.eINSTANCE.createItemDefinition();
             itemDef.setId(sp.getId() + "_" + "multiInstanceItemType");
             din.setItemSubjectRef(itemDef);
@@ -3101,14 +3101,14 @@ public class Bpmn2JsonUnmarshaller {
 
                 DataOutputAssociation doa = Bpmn2Factory.eINSTANCE.createDataOutputAssociation();
                 ItemAwareElement ie2 = Bpmn2Factory.eINSTANCE.createItemAwareElement();
-                ie2.setId(properties.get("multipleinstancecollectionoutput") + "_MultiDataOutputAssocX");
+                ie2.setId(properties.get("multipleinstancecollectionoutput"));
                 doa.getSourceRef().add(multiOutput);
                 doa.setTargetRef(ie2);
                 sp.getDataOutputAssociations().add(doa);
 
                 loopCharacteristics.setLoopDataOutputRef(multiOutput);
                 DataOutput don = Bpmn2Factory.eINSTANCE.createDataOutput();
-                don.setId(properties.get("multipleinstancedataoutput") + "_MultiDataOutputX");
+                don.setId(properties.get("multipleinstancedataoutput"));
                 ItemDefinition itemDef2 = Bpmn2Factory.eINSTANCE.createItemDefinition();
                 itemDef2.setId(sp.getId() + "_" + "multiInstanceItemType");
                 don.setItemSubjectRef(itemDef2);
