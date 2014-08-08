@@ -5001,7 +5001,7 @@ public class Bpmn2JsonUnmarshaller {
         	for(DataInputAssociation da : inputAssociations) {
         		if(da.getTargetRef().getId().equals(foundInput.getId())) {
         			foundGroupIdAssociation = true;
-        			((FormalExpression) da.getAssignment().get(0).getFrom()).setBody(properties.get("groupid"));
+        			((FormalExpression) da.getAssignment().get(0).getFrom()).setBody(wrapInCDATABlock(properties.get("groupid")));
         		}
         	}
         	
@@ -5011,7 +5011,7 @@ public class Bpmn2JsonUnmarshaller {
         		
         		Assignment a = Bpmn2Factory.eINSTANCE.createAssignment();
                 FormalExpression groupFromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
-                groupFromExpression.setBody(properties.get("groupid"));
+                groupFromExpression.setBody(wrapInCDATABlock(properties.get("groupid")));
                 
                 FormalExpression groupToExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
                 groupToExpression.setBody(foundInput.getId());
