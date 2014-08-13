@@ -2285,9 +2285,6 @@ public class Bpmn2JsonUnmarshaller {
         if (baseElement instanceof SequenceFlow) {
             applySequenceFlowProperties((SequenceFlow) baseElement, properties);
         }
-        if (baseElement instanceof Task) {
-            applyTaskProperties((Task) baseElement, properties, preProcessingData);
-        }
         if (baseElement instanceof UserTask) {
             applyUserTaskProperties((UserTask) baseElement, properties);
         }  
@@ -2305,6 +2302,9 @@ public class Bpmn2JsonUnmarshaller {
         }
         if(baseElement instanceof SendTask) {
         	applySendTaskProperties((SendTask) baseElement, properties);
+        }
+        if (baseElement instanceof Task) {
+            applyTaskProperties((Task) baseElement, properties, preProcessingData);
         }
         if (baseElement instanceof Gateway) {
             applyGatewayProperties((Gateway) baseElement, properties);
