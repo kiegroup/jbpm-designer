@@ -114,7 +114,6 @@ public class DesignerPresenter {
     @Inject
     private Caller<MetadataService> metadataService;
 
-    @Inject
     private MetadataWidget metadataWidget;
 
     @Inject
@@ -136,6 +135,11 @@ public class DesignerPresenter {
     private String version;
 
     private boolean passedProcessSources;
+
+    @Inject
+    public DesignerPresenter(BusyIndicatorView busyIndicatorView) {
+        this.metadataWidget = new MetadataWidget(busyIndicatorView);
+    }
 
     @OnStartup
     public void onStartup( final ObservablePath path,
