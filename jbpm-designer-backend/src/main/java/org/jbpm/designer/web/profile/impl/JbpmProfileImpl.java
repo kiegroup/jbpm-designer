@@ -227,11 +227,10 @@ public class JbpmProfileImpl implements IDiagramProfile {
                     JBPMBpmn2ResourceImpl res = (JBPMBpmn2ResourceImpl) unmarshaller.unmarshall(jsonModel, preProcessingData);
                     return (Definitions) res.getContents().get(0);
                 } catch (JsonParseException e) {
-                    _logger.error(e.getMessage(), e);
+                    return getDefaultDefinitions();
                 } catch (IOException e) {
-                    _logger.error(e.getMessage(), e);
+                    return getDefaultDefinitions();
                 }
-                return null;
             }
 
             public Resource getResource(String jsonModel, String preProcessingData) throws Exception {
@@ -331,11 +330,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
 
             return ((DocumentRoot) resource.getContents().get(0)).getDefinitions();
         } catch(Exception e) {
-            _logger.error(e.getMessage());
-            String defaultProcessContent = DefaultDesignerAssetService.PROCESS_STUB.replaceAll( "\\$\\{processid\\}", "defaultprocessid" );
-            String errorMessages = "Unable to load process content due to errors. Displaying default process instead. Check logs for error details.";
-            notification.fire( new DesignerNotificationEvent( errorMessages, NotificationEvent.NotificationType.ERROR ) );
-            return getDefinitions(defaultProcessContent);
+            return getDefaultDefinitions();
         }
     }
 
@@ -361,5 +356,17 @@ public class JbpmProfileImpl implements IDiagramProfile {
             }
         }
         return true;
+    }
+
+    private Definitions getDefaultDefinitions() {
+        try {
+            String defaultProcessContent = DefaultDesignerAssetService.PROCESS_STUB.replaceAll( "\\$\\{processid\\}", "defaultprocessid" );
+            String errorMessages = "Unable to load process content due to errors. Displaying default process instead. Check logs for error details.";
+            notification.fire( new DesignerNotificationEvent( errorMessages, NotificationEvent.NotificationType.ERROR ) );
+            return getDefinitions(defaultProcessContent);
+        } catch(Exception e) {
+            _logger.error(e.getMessage());
+            return null;
+        }
     }
 }
