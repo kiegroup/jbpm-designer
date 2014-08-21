@@ -81,9 +81,8 @@
     </dependency>
 
     <dependency>
-      <groupId>org.uberfire</groupId>
-      <artifactId>uberfire-panel-manager-nswe</artifactId>
-      <scope>provided</scope>
+      <groupId>org.jboss.errai</groupId>
+      <artifactId>errai-security-picketlink</artifactId>
     </dependency>
 
     <!-- Errai AS -->
@@ -95,11 +94,6 @@
     <dependency>
       <groupId>org.jboss.errai</groupId>
       <artifactId>errai-weld-integration</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.jboss.errai</groupId>
-      <artifactId>errai-cdi-jetty</artifactId>
     </dependency>
 
     <dependency>
@@ -155,6 +149,11 @@
     <dependency>
       <groupId>com.github.gwtbootstrap</groupId>
       <artifactId>gwt-bootstrap</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.owasp.encoder</groupId>
+      <artifactId>encoder</artifactId>
     </dependency>
 
     <!-- Rouge imports to avoid OSGi errors -->
@@ -390,6 +389,15 @@
       <artifactId>org.eclipse.bpmn2</artifactId>
     </dependency>
 
+    <!-- PicketLink has a hard dependency on JBoss Logging.
+ Since this app deploys to Jetty, we include this as a runtime-scoped dependency.
+ If deploying to JBoss AS or WildFly, you would set this to provided scope. -->
+    <dependency>
+      <groupId>org.jboss.logging</groupId>
+      <artifactId>jboss-logging</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
   </dependencies>
 
   <build>
@@ -465,10 +473,9 @@
             <compileSourcesArtifact>org.jbpm:jbpm-form-modeler-renderer-client</compileSourcesArtifact>
 
           </compileSourcesArtifacts>
-          <runTarget>org.jbpm.designer.jBPMDesigner/designer.html</runTarget>
+          <runTarget>designer.html</runTarget>
           <extraJvmArgs>-Xmx2048m -XX:MaxPermSize=256m</extraJvmArgs>
           <soyc>false</soyc>
-          <server>org.jboss.errai.cdi.server.gwt.JettyLauncher</server>
           <!-- drools-compiler has dependency on org.eclipse.jdt.core.compiler:ecj:jar:3.5.1:compile, see http://code.google.com/p/google-web-toolkit/issues/detail?id=4479 -->
           <gwtSdkFirstInClasspath>true</gwtSdkFirstInClasspath>
         </configuration>

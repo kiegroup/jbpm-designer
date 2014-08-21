@@ -21,15 +21,13 @@ import org.uberfire.commons.services.cdi.Startup;
 import org.uberfire.commons.services.cdi.StartupType;
 import org.uberfire.io.IOClusteredService;
 import org.uberfire.io.IOService;
-import org.uberfire.security.impl.authz.RuntimeAuthorizationManager;
-import org.uberfire.security.server.cdi.SecurityFactory;
 
 @ApplicationScoped
 @Startup(StartupType.BOOTSTRAP)
 public class AppSetup {
 
     private static final String JBPM_REPO_PLAYGROUND = "jbpm-playground";
-//    private static final String GUVNOR_REPO_PLAYGROUND = "uf-playground";
+    //    private static final String GUVNOR_REPO_PLAYGROUND = "uf-playground";
     // default repository section - start
     private static final String JBPM_URL = "https://github.com/guvnorngtestuser1/jbpm-console-ng-playground-kjar.git";
 //    private static final String GUVNOR_URL = "https://github.com/guvnorngtestuser1/guvnorng-playground.git";
@@ -58,8 +56,6 @@ public class AppSetup {
     @PostConstruct
     public void onStartup() {
         try {
-            SecurityFactory.setAuthzManager( new RuntimeAuthorizationManager() );
-
             Repository jbpmRepo = repositoryService.getRepository( JBPM_REPO_PLAYGROUND );
             if ( jbpmRepo == null ) {
                 jbpmRepo = repositoryService.createRepository( "git",
@@ -91,7 +87,7 @@ public class AppSetup {
 //                repositories.add( guvnorRepo );
 
                 organizationalUnitService.createOrganizationalUnit( "demo",
-                                                                     "demo@jbpm.org",
+                                                                    "demo@jbpm.org",
                                                                     repositories );
             }
 
@@ -109,8 +105,8 @@ public class AppSetup {
             }
 
             // notify cluster service that bootstrap is completed to start synchronization
-            if (ioService instanceof IOClusteredService) {
-                ((IOClusteredService) ioService).start();
+            if ( ioService instanceof IOClusteredService ) {
+                ( (IOClusteredService) ioService ).start();
             }
         } catch ( Exception e ) {
             throw new RuntimeException( "Error when starting designer " + e.getMessage(), e );

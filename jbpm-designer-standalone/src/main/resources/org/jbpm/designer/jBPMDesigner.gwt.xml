@@ -8,11 +8,7 @@
   <inherits name="com.google.gwt.xml.XML"/>
 
   <!-- Uberfire dependencies -->
-  <inherits name="org.uberfire.UberfireJS"/>
-  <inherits name="org.uberfire.UberfireWorkbench"/>
-  <inherits name="org.uberfire.UberfireBackend"/>
-  <inherits name="org.uberfire.security.UberfireSecurityClient"/>
-  <inherits name="org.uberfire.UberfireNSWEManager"/>
+  <inherits name="org.uberfire.UberfireClientAll"/>
 
   <!-- Uberfire Extensions - Core Widgets -->
   <inherits name="org.kie.uberfire.KIEUberfireWidgetsCore"/>
@@ -63,5 +59,7 @@
 
   <!-- Specify the paths for translatable code -->
   <source path='client'/>
+
+  <set-property name="gwt.logging.popupHandler" value="DISABLED"/>
 
 </module>
