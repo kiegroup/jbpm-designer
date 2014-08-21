@@ -17,19 +17,34 @@
 
   <!-- UF -->
   <filter>
-    <filter-name>UberFire Security Filter</filter-name>
-    <filter-class>
-      org.uberfire.security.server.UberFireSecurityFilter
-    </filter-class>
+    <filter-name>UI Security Filter</filter-name>
+
+    <filter-class>org.picketlink.authentication.web.AuthenticationFilter</filter-class>
+
     <init-param>
-      <param-name>org.uberfire.cookie.id</param-name>
-      <param-value>designer.standalone</param-value>
+      <param-name>authType</param-name>
+      <param-value>org.jboss.errai.security.server.FormAuthenticationScheme</param-value>
+    </init-param>
+    <init-param>
+      <param-name>form-login-page</param-name>
+      <param-value>/login.jsp</param-value>
+    </init-param>
+    <init-param>
+      <param-name>host-page</param-name>
+      <param-value>/designer.html</param-value>
+    </init-param>
+    <init-param>
+      <param-name>forceReAuthentication</param-name>
+      <param-value>true</param-value>
     </init-param>
   </filter>
 
   <filter-mapping>
-    <filter-name>UberFire Security Filter</filter-name>
-    <url-pattern>/*</url-pattern>
+    <filter-name>UI Security Filter</filter-name>
+    <url-pattern>/designer.html</url-pattern>
+    <url-pattern>/uf_security_check</url-pattern>
+    <url-pattern>*.erraiBus</url-pattern>
+    <url-pattern>/org.jbpm.designer.jBPMDesigner/*</url-pattern>
   </filter-mapping>
 
   <!-- Designer Injection Filter -->
@@ -41,18 +56,6 @@
     <filter-name>Designer Injection Filter</filter-name>
     <url-pattern>*.html</url-pattern>
   </filter-mapping>
-
-  <servlet>
-    <servlet-name>UberFireServlet</servlet-name>
-    <servlet-class>org.uberfire.server.UberfireServlet</servlet-class>
-
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>UberFireServlet</servlet-name>
-    <url-pattern>/org.jbpm.designer.jBPMDesigner/designer.html</url-pattern>
-  </servlet-mapping>
 
   <servlet>
     <servlet-name>ErraiServlet</servlet-name>
@@ -82,23 +85,8 @@
     <resource-env-ref-type>org.jboss.errai.bus.server.service.ErraiService</resource-env-ref-type>
   </resource-env-ref>
 
-  <context-param>
-    <param-name>errai.properties</param-name>
-    <param-value>/WEB-INF/errai.properties</param-value>
-  </context-param>
-
-  <context-param>
-    <param-name>login.config</param-name>
-    <param-value>/WEB-INF/login.config</param-value>
-  </context-param>
-
-  <context-param>
-    <param-name>users.properties</param-name>
-    <param-value>/WEB-INF/users.properties</param-value>
-  </context-param>
-
   <welcome-file-list>
-    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>login.jsp</welcome-file>
   </welcome-file-list>
   <!-- END UF -->
 
@@ -352,21 +340,21 @@ minutes. it is now 24 hours. -->
     <session-timeout>1440</session-timeout>
   </session-config>
 
-    <!-- start form-modeler component -->
-    <servlet>
-        <servlet-name>Controller</servlet-name>
-        <servlet-class>org.jbpm.formModeler.service.bb.mvc.controller.ControllerServlet</servlet-class>
-        <init-param>
-            <param-name>base.app.dir</param-name>
-            <param-value>${project.basedir}/target/${project.artifactId}-${project.version}</param-value>
-        </init-param>
-    </servlet>
+  <!-- start form-modeler component -->
+  <servlet>
+    <servlet-name>Controller</servlet-name>
+    <servlet-class>org.jbpm.formModeler.service.bb.mvc.controller.ControllerServlet</servlet-class>
+    <init-param>
+      <param-name>base.app.dir</param-name>
+      <param-value>${project.basedir}/target/${project.artifactId}-${project.version}</param-value>
+    </init-param>
+  </servlet>
 
-    <servlet-mapping>
-        <servlet-name>Controller</servlet-name>
-        <url-pattern>/org.jbpm.designer.jBPMDesigner/Controller</url-pattern>
-    </servlet-mapping>
-    <!-- end form-modeler component -->
+  <servlet-mapping>
+    <servlet-name>Controller</servlet-name>
+    <url-pattern>/org.jbpm.designer.jBPMDesigner/Controller</url-pattern>
+  </servlet-mapping>
+  <!-- end form-modeler component -->
   <!-- jBoss' default mapping is to "image/svg", which causes the client
 not to parse the SVG content as XML. However, the Oryx Editor client relies
 on that behaviour. The mimetype as per W3C specification must be "image/svg+xml".
