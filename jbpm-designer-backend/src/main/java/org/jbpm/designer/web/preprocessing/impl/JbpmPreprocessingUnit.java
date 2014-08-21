@@ -279,8 +279,11 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         } catch ( final Exception e ) {
             _logger.error(e.getMessage());
         } finally {
-            if(!readOnly && ioService != null) {
-                ioService.endBatch();
+            try {
+                if(!readOnly && ioService != null) {
+                    ioService.endBatch();
+                }
+            } catch ( final Exception ignore ) {
             }
         }
     }

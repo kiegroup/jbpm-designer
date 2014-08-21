@@ -15,6 +15,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.codec.binary.Base64;
+import org.jboss.errai.security.shared.api.identity.User;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.AssetNotFoundException;
@@ -39,7 +40,6 @@ import org.uberfire.java.nio.file.SimpleFileVisitor;
 import org.uberfire.java.nio.file.StandardCopyOption;
 import org.uberfire.java.nio.file.StandardOpenOption;
 import org.uberfire.java.nio.file.attribute.BasicFileAttributes;
-import org.uberfire.security.Identity;
 
 @ApplicationScoped
 public class VFSRepository implements Repository {
@@ -54,7 +54,7 @@ public class VFSRepository implements Repository {
     private Event<PathEvent> pathEvent;
 
     @Inject
-    Identity identity;
+    User identity;
 
     public VFSRepository() {
 
@@ -553,8 +553,8 @@ public class VFSRepository implements Repository {
     }
 
     private String getIdentity() {
-        if(this.identity != null && this.identity.getName() != null) {
-            return identity.getName();
+        if(this.identity != null && this.identity.getIdentifier() != null) {
+            return identity.getIdentifier();
         } else {
             return "admin";
         }

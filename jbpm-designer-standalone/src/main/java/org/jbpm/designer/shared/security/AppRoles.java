@@ -1,12 +1,9 @@
 package org.jbpm.designer.shared.security;
 
-import org.uberfire.security.Role;
-
-public enum AppRoles implements Role {
+public enum AppRoles {
     ADMIN, SUDO, MANAGER, DIRECTOR;
 
-    @Override
     public String getName() {
-        return toString();
+        return toString().toLowerCase();
     }
 }

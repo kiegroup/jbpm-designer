@@ -2,11 +2,14 @@ package org.jbpm.designer.uberfire.backend.server.impl;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.guvnor.common.services.backend.metadata.attribute.OtherMetaView;
+import org.jboss.errai.security.shared.api.identity.User;
+import org.jboss.errai.security.shared.service.AuthenticationService;
 import org.kie.uberfire.metadata.backend.lucene.LuceneConfig;
 import org.kie.uberfire.metadata.io.IOSearchIndex;
 import org.kie.uberfire.metadata.io.IOServiceIndexedImpl;
@@ -19,6 +22,8 @@ import org.uberfire.io.IOService;
 import org.uberfire.io.attribute.DublinCoreView;
 import org.uberfire.io.impl.cluster.IOServiceClusterImpl;
 import org.uberfire.java.nio.base.version.VersionAttributeView;
+import org.uberfire.security.authz.AuthorizationManager;
+import org.uberfire.security.impl.authz.RuntimeAuthorizationManager;
 
 /**
  * This class should contain all ApplicationScoped producers
@@ -42,6 +47,9 @@ public class ApplicationScopedProvider {
     @Named("luceneConfig")
     private LuceneConfig config;
 
+    @Inject
+    private AuthenticationService authenticationService;
+
     @PostConstruct
     public void setup() {
 
@@ -60,6 +68,17 @@ public class ApplicationScopedProvider {
         }
         this.ioSearchService = new IOSearchIndex( config.getSearchIndex(),
                                                   ioService );
+    }
+
+    @Produces
+    @RequestScoped
+    public User getIdentity() {
+        return authenticationService.getUser();
+    }
+
+    @Produces
+    public AuthorizationManager getAuthManager() {
+        return new RuntimeAuthorizationManager();
     }
 
     @Produces
