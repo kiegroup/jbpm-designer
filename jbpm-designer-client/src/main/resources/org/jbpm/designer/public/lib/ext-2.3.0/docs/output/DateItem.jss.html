@@ -1,0 +1,31 @@
+<html><head><title>DateItem.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>DateItem.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.menu.DateItem
+ * @extends Ext.menu.Adapter
+ * A menu item that wraps the {@link Ext.DatePicker} component.
+ * @constructor
+ * Creates a <b>new</b> DateItem
+ * @param {Object} config Configuration options
+ */</i>
+Ext.menu.DateItem = <b>function</b>(config){
+    Ext.menu.DateItem.superclass.constructor.call(<b>this</b>, <b>new</b> Ext.DatePicker(config), config);
+    <i>/** The Ext.DatePicker object @type Ext.DatePicker */</i>
+    <b>this</b>.picker = <b>this</b>.component;
+    <b>this</b>.picker.purgeListeners();
+    <b>this</b>.addEvents(<em>'select'</em>);
+    
+    <b>this</b>.picker.on(&quot;render&quot;, <b>function</b>(picker){
+        picker.getEl().swallowEvent(&quot;click&quot;);
+        picker.container.addClass(&quot;x-menu-date-item&quot;);
+    });
+
+    <b>this</b>.picker.on(&quot;select&quot;, <b>this</b>.onSelect, <b>this</b>);
+};
+
+Ext.extend(Ext.menu.DateItem, Ext.menu.Adapter, {
+    <i>// private</i>
+    onSelect : <b>function</b>(picker, date){
+        <b>this</b>.fireEvent(&quot;select&quot;, <b>this</b>, date, picker);
+        Ext.menu.DateItem.superclass.handleClick.call(<b>this</b>);
+    }
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

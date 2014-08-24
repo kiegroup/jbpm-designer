@@ -1,0 +1,378 @@
+<html><head><title>BoxComponent.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>BoxComponent.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.BoxComponent
+ * @extends Ext.Component
+ * &lt;p&gt;Base class <b>for</b> any visual {@link Ext.Component} that uses a box container.  BoxComponent provides automatic box
+ * model adjustments <b>for</b> sizing and positioning and will work correctly withnin the Component rendering model.  All
+ * container classes should subclass BoxComponent so that they will work consistently when nested within other Ext
+ * layout containers.&lt;/p&gt;
+ * &lt;p&gt;A BoxComponent may be created as a custom Component which encapsulates any HTML element, either a pre-existing
+ * element, or one that is created to your specifications at render time. Usually, to participate <b>in</b> layouts,
+ * a Component will need to be a &lt;b&gt;Box&lt;/b&gt;Component <b>in</b> order to have its width and height managed.&lt;/p&gt;
+ * &lt;p&gt;To use a pre-existing element as a BoxComponent, configure it so that you preset the &lt;b&gt;el&lt;/b&gt; property to the
+ * element to reference:&lt;pre&gt;&lt;code&gt;
+<b>var</b> pageHeader = <b>new</b> Ext.BoxComponent({
+    el: <em>'my-header-div'</em>
+});&lt;/code&gt;&lt;/pre&gt;
+ * This may then be {@link Ext.Container#add added} to a {@link Ext.Container Container} as a child item.&lt;/p&gt;
+ * &lt;p&gt;To create a BoxComponent based around a HTML element to be created at render time, use the
+ * {@link Ext.Component#autoEl autoEl} config option which takes the form of a
+ * {@link Ext.DomHelper DomHelper} specification:&lt;pre&gt;&lt;code&gt;
+<b>var</b> myImage = <b>new</b> Ext.BoxComponent({
+    autoEl: {
+        tag: <em>'img'</em>,
+        src: <em>'/images/my-image.jpg'</em>
+    }
+});&lt;/code&gt;&lt;/pre&gt;&lt;/p&gt;
+ * @constructor
+ * @param {Ext.Element/String/Object} config The configuration options.
+ */</i>
+Ext.BoxComponent = Ext.extend(Ext.Component, {
+    <i>/**
+     * @cfg {Number} x
+     * The local x (left) coordinate <b>for</b> this component <b>if</b> contained within a positioning container.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Number} y
+     * The local y (top) coordinate <b>for</b> this component <b>if</b> contained within a positioning container.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Number} pageX
+     * The page level x coordinate <b>for</b> this component <b>if</b> contained within a positioning container.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Number} pageY
+     * The page level y coordinate <b>for</b> this component <b>if</b> contained within a positioning container.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Number} height
+     * The height of <b>this</b> component <b>in</b> pixels (defaults to auto).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Number} width
+     * The width of <b>this</b> component <b>in</b> pixels (defaults to auto).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} autoHeight
+     * True to use height:<em>'auto'</em>, false to use fixed height (defaults to false). &lt;b&gt;Note&lt;/b&gt;: Although many components 
+     * inherit <b>this</b> config option, not all will <b>function</b> as expected <b>with</b> a height of <em>'auto'</em>. Setting autoHeight:true 
+     * means that the browser will manage height based on the element's contents, and that Ext will not manage it at all.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} autoWidth
+     * True to use width:<em>'auto'</em>, false to use fixed width (defaults to false). &lt;b&gt;Note&lt;/b&gt;: Although many components 
+     * inherit <b>this</b> config option, not all will <b>function</b> as expected <b>with</b> a width of <em>'auto'</em>. Setting autoWidth:true 
+     * means that the browser will manage width based on the element's contents, and that Ext will not manage it at all.
+     */</i>
+<i>// holder</i>
+<i>/** <i>// private internal config</i>
+     * {Boolean} deferHeight
+     * True to defer height calculations to an external component, false to allow <b>this</b> component to set its own
+     * height (defaults to false).
+     */</i>
+
+	<i>// private</i>
+    initComponent : <b>function</b>(){
+        Ext.BoxComponent.superclass.initComponent.call(<b>this</b>);
+        <b>this</b>.addEvents(
+            <i>/**
+             * @event resize
+             * Fires after the component is resized.
+             * @param {Ext.Component} <b>this</b>
+             * @param {Number} adjWidth The box-adjusted width that was set
+             * @param {Number} adjHeight The box-adjusted height that was set
+             * @param {Number} rawWidth The width that was originally specified
+             * @param {Number} rawHeight The height that was originally specified
+             */</i>
+            <em>'resize'</em>,
+            <i>/**
+             * @event move
+             * Fires after the component is moved.
+             * @param {Ext.Component} <b>this</b>
+             * @param {Number} x The <b>new</b> x position
+             * @param {Number} y The <b>new</b> y position
+             */</i>
+            <em>'move'</em>
+        );
+    },
+
+    <i>// private, set <b>in</b> afterRender to signify that the component has been rendered</i>
+    boxReady : false,
+    <i>// private, used to defer height settings to subclasses</i>
+    deferHeight: false,
+
+    <i>/**
+     * Sets the width and height of <b>this</b> BoxComponent. This method fires the {@link #resize} event. This method can accept
+     * either width and height as separate arguments, or you can pass a size object like &lt;code&gt;{width:10, height:20}&lt;/code&gt;.
+     * @param {Mixed} width The <b>new</b> width to set. This may be one of:&lt;div class=&quot;mdetail-params&quot;&gt;&lt;ul&gt;
+     * &lt;li&gt;A Number specifying the <b>new</b> width <b>in</b> the {@link #getEl Element}'s {@link Ext.Element#defaultUnit}s (by <b>default</b>, pixels).&lt;/li&gt;
+     * &lt;li&gt;A String used to set the CSS width style.&lt;/li&gt;
+     * &lt;li&gt;A size object <b>in</b> the format &lt;code&gt;{width: widthValue, height: heightValue}&lt;/code&gt;.&lt;/li&gt;
+     * &lt;li&gt;&lt;code&gt;undefined&lt;/code&gt; to leave the width unchanged.&lt;/li&gt;
+     * &lt;/ul&gt;&lt;/div&gt;
+     * @param {Mixed} height The <b>new</b> height to set (not required <b>if</b> a size object is passed as the first arg).
+     * This may be one of:&lt;div class=&quot;mdetail-params&quot;&gt;&lt;ul&gt;
+     * &lt;li&gt;A Number specifying the <b>new</b> height <b>in</b> the {@link #getEl Element}'s {@link Ext.Element#defaultUnit}s (by <b>default</b>, pixels).&lt;/li&gt;
+     * &lt;li&gt;A String used to set the CSS height style. Animation may &lt;b&gt;not&lt;/b&gt; be used.&lt;/li&gt;
+     * &lt;li&gt;&lt;code&gt;undefined&lt;/code&gt; to leave the height unchanged.&lt;/li&gt;
+     * &lt;/ul&gt;&lt;/div&gt;
+     * @<b>return</b> {Ext.BoxComponent} <b>this</b>
+     */</i>
+    setSize : <b>function</b>(w, h){
+        <i>// support <b>for</b> standard size objects</i>
+        <b>if</b>(typeof w == <em>'object'</em>){
+            h = w.height;
+            w = w.width;
+        }
+        <i>// not rendered</i>
+        <b>if</b>(!<b>this</b>.boxReady){
+            <b>this</b>.width = w;
+            <b>this</b>.height = h;
+            <b>return</b> this;
+        }
+
+        <i>// prevent recalcs when not needed</i>
+        <b>if</b>(this.lastSize &amp;&amp; <b>this</b>.lastSize.width == w &amp;&amp; <b>this</b>.lastSize.height == h){
+            <b>return</b> this;
+        }
+        <b>this</b>.lastSize = {width: w, height: h};
+        <b>var</b> adj = <b>this</b>.adjustSize(w, h);
+        <b>var</b> aw = adj.width, ah = adj.height;
+        <b>if</b>(aw !== undefined || ah !== undefined){ <i>// <b>this</b> code is nasty but performs better <b>with</b> floaters</i>
+            <b>var</b> rz = <b>this</b>.getResizeEl();
+            <b>if</b>(!<b>this</b>.deferHeight &amp;&amp; aw !== undefined &amp;&amp; ah !== undefined){
+                rz.setSize(aw, ah);
+            }<b>else</b> if(!<b>this</b>.deferHeight &amp;&amp; ah !== undefined){
+                rz.setHeight(ah);
+            }<b>else</b> if(aw !== undefined){
+                rz.setWidth(aw);
+            }
+            <b>this</b>.onResize(aw, ah, w, h);
+            <b>this</b>.fireEvent(<em>'resize'</em>, <b>this</b>, aw, ah, w, h);
+        }
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Sets the width of the component.  This method fires the {@link #resize} event.
+     * @param {Number} width The <b>new</b> width to setThis may be one of:&lt;div class=&quot;mdetail-params&quot;&gt;&lt;ul&gt;
+     * &lt;li&gt;A Number specifying the <b>new</b> width <b>in</b> the {@link #getEl Element}'s {@link Ext.Element#defaultUnit}s (by <b>default</b>, pixels).&lt;/li&gt;
+     * &lt;li&gt;A String used to set the CSS width style.&lt;/li&gt;
+     * &lt;/ul&gt;&lt;/div&gt;
+     * @<b>return</b> {Ext.BoxComponent} <b>this</b>
+     */</i>
+    setWidth : <b>function</b>(width){
+        <b>return</b> this.setSize(width);
+    },
+
+    <i>/**
+     * Sets the height of the component.  This method fires the {@link #resize} event.
+     * @param {Number} height The <b>new</b> height to set. This may be one of:&lt;div class=&quot;mdetail-params&quot;&gt;&lt;ul&gt;
+     * &lt;li&gt;A Number specifying the <b>new</b> height <b>in</b> the {@link #getEl Element}'s {@link Ext.Element#defaultUnit}s (by <b>default</b>, pixels).&lt;/li&gt;
+     * &lt;li&gt;A String used to set the CSS height style.&lt;/li&gt;
+     * &lt;li&gt;&lt;i&gt;undefined&lt;/i&gt; to leave the height unchanged.&lt;/li&gt;
+     * &lt;/ul&gt;&lt;/div&gt;
+     * @<b>return</b> {Ext.BoxComponent} <b>this</b>
+     */</i>
+    setHeight : <b>function</b>(height){
+        <b>return</b> this.setSize(undefined, height);
+    },
+
+    <i>/**
+     * Gets the current size of the component's underlying element.
+     * @<b>return</b> {Object} An object containing the element's size {width: (element width), height: (element height)}
+     */</i>
+    getSize : <b>function</b>(){
+        <b>return</b> this.el.getSize();
+    },
+
+    <i>/**
+     * Gets the current XY position of the component's underlying element.
+     * @param {Boolean} local (optional) If true the element's left and top are returned instead of page XY (defaults to false)
+     * @<b>return</b> {Array} The XY position of the element (e.g., [100, 200])
+     */</i>
+    getPosition : <b>function</b>(local){
+        <b>if</b>(local === true){
+            <b>return</b> [<b>this</b>.el.getLeft(true), <b>this</b>.el.getTop(true)];
+        }
+        <b>return</b> this.xy || <b>this</b>.el.getXY();
+    },
+
+    <i>/**
+     * Gets the current box measurements of the component's underlying element.
+     * @param {Boolean} local (optional) If true the element's left and top are returned instead of page XY (defaults to false)
+     * @<b>return</b> {Object} box An object <b>in</b> the format {x, y, width, height}
+     */</i>
+    getBox : <b>function</b>(local){
+        <b>var</b> s = <b>this</b>.el.getSize();
+        <b>if</b>(local === true){
+            s.x = <b>this</b>.el.getLeft(true);
+            s.y = <b>this</b>.el.getTop(true);
+        }<b>else</b>{
+            <b>var</b> xy = <b>this</b>.xy || <b>this</b>.el.getXY();
+            s.x = xy[0];
+            s.y = xy[1];
+        }
+        <b>return</b> s;
+    },
+
+    <i>/**
+     * Sets the current box measurements of the component's underlying element.
+     * @param {Object} box An object <b>in</b> the format {x, y, width, height}
+     * @<b>return</b> {Ext.BoxComponent} <b>this</b>
+     */</i>
+    updateBox : <b>function</b>(box){
+        <b>this</b>.setSize(box.width, box.height);
+        <b>this</b>.setPagePosition(box.x, box.y);
+        <b>return</b> this;
+    },
+
+    <i>// protected</i>
+    getResizeEl : <b>function</b>(){
+        <b>return</b> this.resizeEl || <b>this</b>.el;
+    },
+
+    <i>// protected</i>
+    getPositionEl : <b>function</b>(){
+        <b>return</b> this.positionEl || <b>this</b>.el;
+    },
+
+    <i>/**
+     * Sets the left and top of the component.  To set the page XY position instead, use {@link #setPagePosition}.
+     * This method fires the {@link #move} event.
+     * @param {Number} left The <b>new</b> left
+     * @param {Number} top The <b>new</b> top
+     * @<b>return</b> {Ext.BoxComponent} <b>this</b>
+     */</i>
+    setPosition : <b>function</b>(x, y){
+        <b>if</b>(x &amp;&amp; <b>typeof</b> x[1] == <em>'number'</em>){
+            y = x[1];
+            x = x[0];
+        }
+        <b>this</b>.x = x;
+        <b>this</b>.y = y;
+        <b>if</b>(!<b>this</b>.boxReady){
+            <b>return</b> this;
+        }
+        <b>var</b> adj = <b>this</b>.adjustPosition(x, y);
+        <b>var</b> ax = adj.x, ay = adj.y;
+
+        <b>var</b> el = <b>this</b>.getPositionEl();
+        <b>if</b>(ax !== undefined || ay !== undefined){
+            <b>if</b>(ax !== undefined &amp;&amp; ay !== undefined){
+                el.setLeftTop(ax, ay);
+            }<b>else</b> if(ax !== undefined){
+                el.setLeft(ax);
+            }<b>else</b> if(ay !== undefined){
+                el.setTop(ay);
+            }
+            <b>this</b>.onPosition(ax, ay);
+            <b>this</b>.fireEvent(<em>'move'</em>, <b>this</b>, ax, ay);
+        }
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Sets the page XY position of the component.  To set the left and top instead, use {@link #setPosition}.
+     * This method fires the {@link #move} event.
+     * @param {Number} x The <b>new</b> x position
+     * @param {Number} y The <b>new</b> y position
+     * @<b>return</b> {Ext.BoxComponent} <b>this</b>
+     */</i>
+    setPagePosition : <b>function</b>(x, y){
+        <b>if</b>(x &amp;&amp; <b>typeof</b> x[1] == <em>'number'</em>){
+            y = x[1];
+            x = x[0];
+        }
+        <b>this</b>.pageX = x;
+        <b>this</b>.pageY = y;
+        <b>if</b>(!<b>this</b>.boxReady){
+            <b>return</b>;
+        }
+        <b>if</b>(x === undefined || y === undefined){ <i>// cannot translate undefined points</i>
+            <b>return</b>;
+        }
+        <b>var</b> p = <b>this</b>.el.translatePoints(x, y);
+        <b>this</b>.setPosition(p.left, p.top);
+        <b>return</b> this;
+    },
+
+    <i>// private</i>
+    onRender : <b>function</b>(ct, position){
+        Ext.BoxComponent.superclass.onRender.call(<b>this</b>, ct, position);
+        <b>if</b>(this.resizeEl){
+            <b>this</b>.resizeEl = Ext.get(<b>this</b>.resizeEl);
+        }
+        <b>if</b>(this.positionEl){
+            <b>this</b>.positionEl = Ext.get(<b>this</b>.positionEl);
+        }
+    },
+
+    <i>// private</i>
+    afterRender : <b>function</b>(){
+        Ext.BoxComponent.superclass.afterRender.call(<b>this</b>);
+        <b>this</b>.boxReady = true;
+        <b>this</b>.setSize(<b>this</b>.width, <b>this</b>.height);
+        <b>if</b>(this.x || <b>this</b>.y){
+            <b>this</b>.setPosition(<b>this</b>.x, <b>this</b>.y);
+        }<b>else</b> if(<b>this</b>.pageX || <b>this</b>.pageY){
+            <b>this</b>.setPagePosition(<b>this</b>.pageX, <b>this</b>.pageY);
+        }
+    },
+
+    <i>/**
+     * Force the component<em>'s size to recalculate based on the underlying element'</em>s current height and width.
+     * @<b>return</b> {Ext.BoxComponent} <b>this</b>
+     */</i>
+    syncSize : <b>function</b>(){
+        <b>delete</b> this.lastSize;
+        <b>this</b>.setSize(<b>this</b>.autoWidth ? undefined : <b>this</b>.el.getWidth(), <b>this</b>.autoHeight ? undefined : <b>this</b>.el.getHeight());
+        <b>return</b> this;
+    },
+
+    <i>/* <i>// protected</i>
+     * Called after the component is resized, <b>this</b> method is empty by <b>default</b> but can be implemented by any
+     * subclass that needs to perform custom logic after a resize occurs.
+     * @param {Number} adjWidth The box-adjusted width that was set
+     * @param {Number} adjHeight The box-adjusted height that was set
+     * @param {Number} rawWidth The width that was originally specified
+     * @param {Number} rawHeight The height that was originally specified
+     */</i>
+    onResize : <b>function</b>(adjWidth, adjHeight, rawWidth, rawHeight){
+
+    },
+
+    <i>/* <i>// protected</i>
+     * Called after the component is moved, <b>this</b> method is empty by <b>default</b> but can be implemented by any
+     * subclass that needs to perform custom logic after a move occurs.
+     * @param {Number} x The <b>new</b> x position
+     * @param {Number} y The <b>new</b> y position
+     */</i>
+    onPosition : <b>function</b>(x, y){
+
+    },
+
+    <i>// private</i>
+    adjustSize : <b>function</b>(w, h){
+        <b>if</b>(this.autoWidth){
+            w = <em>'auto'</em>;
+        }
+        <b>if</b>(this.autoHeight){
+            h = <em>'auto'</em>;
+        }
+        <b>return</b> {width : w, height: h};
+    },
+
+    <i>// private</i>
+    adjustPosition : <b>function</b>(x, y){
+        <b>return</b> {x : x, y: y};
+    }
+});
+Ext.reg(<em>'box'</em>, Ext.BoxComponent);</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

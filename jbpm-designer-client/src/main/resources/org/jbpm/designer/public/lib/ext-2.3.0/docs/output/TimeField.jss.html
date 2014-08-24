@@ -1,0 +1,154 @@
+<html><head><title>TimeField.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>TimeField.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.form.TimeField
+ * @extends Ext.form.ComboBox
+ * Provides a time input field <b>with</b> a time dropdown and automatic time validation.  Example usage:
+ * &lt;pre&gt;&lt;code&gt;
+<b>new</b> Ext.form.TimeField({
+    minValue: <em>'9:00 AM'</em>,
+    maxValue: <em>'6:00 PM'</em>,
+    increment: 30
+});
+&lt;/code&gt;&lt;/pre&gt;
+ * @constructor
+ * Create a <b>new</b> TimeField
+ * @param {Object} config
+ */</i>
+Ext.form.TimeField = Ext.extend(Ext.form.ComboBox, {
+    <i>/**
+     * @cfg {Date/String} minValue
+     * The minimum allowed time. Can be either a Javascript date object <b>with</b> a valid time value or a string 
+     * time <b>in</b> a valid format -- see {@link #format} and {@link #altFormats} (defaults to null).
+     */</i>
+    minValue : null,
+    <i>/**
+     * @cfg {Date/String} maxValue
+     * The maximum allowed time. Can be either a Javascript date object <b>with</b> a valid time value or a string 
+     * time <b>in</b> a valid format -- see {@link #format} and {@link #altFormats} (defaults to null).
+     */</i>
+    maxValue : null,
+    <i>/**
+     * @cfg {String} minText
+     * The error text to display when the date <b>in</b> the cell is before minValue (defaults to
+     * <em>'The time <b>in</b> this field must be equal to or after {0}'</em>).
+     */</i>
+    minText : &quot;The time <b>in</b> this field must be equal to or after {0}&quot;,
+    <i>/**
+     * @cfg {String} maxText
+     * The error text to display when the time is after maxValue (defaults to
+     * <em>'The time <b>in</b> this field must be equal to or before {0}'</em>).
+     */</i>
+    maxText : &quot;The time <b>in</b> this field must be equal to or before {0}&quot;,
+    <i>/**
+     * @cfg {String} invalidText
+     * The error text to display when the time <b>in</b> the field is invalid (defaults to
+     * <em>'{value} is not a valid time'</em>).
+     */</i>
+    invalidText : &quot;{0} is not a valid time&quot;,
+    <i>/**
+     * @cfg {String} format
+     * The <b>default</b> time format string which can be overriden <b>for</b> localization support.  The format must be
+     * valid according to {@link Date#parseDate} (defaults to <em>'g:i A'</em>, e.g., <em>'3:15 PM'</em>).  For 24-hour time
+     * format try <em>'H:i'</em> instead.
+     */</i>
+    format : &quot;g:i A&quot;,
+    <i>/**
+     * @cfg {String} altFormats
+     * Multiple date formats separated by &quot;|&quot; to try when parsing a user input value and it doesn't match the defined
+     * format (defaults to <em>'g:ia|g:iA|g:i a|g:i A|h:i|g:i|H:i|ga|ha|gA|h a|g a|g A|gi|hi|gia|hia|g|H'</em>).
+     */</i>
+    altFormats : &quot;g:ia|g:iA|g:i a|g:i A|h:i|g:i|H:i|ga|ha|gA|h a|g a|g A|gi|hi|gia|hia|g|H&quot;,
+    <i>/**
+     * @cfg {Number} increment
+     * The number of minutes between each time value <b>in</b> the list (defaults to 15).
+     */</i>
+    increment: 15,
+
+    <i>// private override</i>
+    mode: <em>'local'</em>,
+    <i>// private override</i>
+    triggerAction: <em>'all'</em>,
+    <i>// private override</i>
+    typeAhead: false,
+    
+    <i>// private - This is the date to use when generating time values <b>in</b> the absence of either minValue</i>
+    <i>// or maxValue.  Using the current date causes DST issues on DST boundary dates, so <b>this</b> is an </i>
+    <i>// arbitrary &quot;safe&quot; date that can be any date aside from DST boundary dates.</i>
+    initDate: <em>'1/1/2008'</em>,
+
+    <i>// private</i>
+    initComponent : <b>function</b>(){
+        Ext.form.TimeField.superclass.initComponent.call(<b>this</b>);
+
+        <b>if</b>(typeof <b>this</b>.minValue == &quot;string&quot;){
+            <b>this</b>.minValue = <b>this</b>.parseDate(<b>this</b>.minValue);
+        }
+        <b>if</b>(typeof <b>this</b>.maxValue == &quot;string&quot;){
+            <b>this</b>.maxValue = <b>this</b>.parseDate(<b>this</b>.maxValue);
+        }
+
+        <b>if</b>(!<b>this</b>.store){
+            <b>var</b> min = <b>this</b>.parseDate(<b>this</b>.minValue);
+            <b>if</b>(!min){
+                min = <b>new</b> Date(<b>this</b>.initDate).clearTime();
+            }
+            <b>var</b> max = <b>this</b>.parseDate(<b>this</b>.maxValue);
+            <b>if</b>(!max){
+                max = <b>new</b> Date(<b>this</b>.initDate).clearTime().add(<em>'mi'</em>, (24 * 60) - 1);
+            }
+            <b>var</b> times = [];
+            <b>while</b>(min &lt;= max){
+                times.push([min.dateFormat(<b>this</b>.format)]);
+                min = min.add(<em>'mi'</em>, <b>this</b>.increment);
+            }
+            <b>this</b>.store = <b>new</b> Ext.data.SimpleStore({
+                fields: [<em>'text'</em>],
+                data : times
+            });
+            <b>this</b>.displayField = <em>'text'</em>;
+        }
+    },
+
+    <i>// inherited docs</i>
+    getValue : <b>function</b>(){
+        <b>var</b> v = Ext.form.TimeField.superclass.getValue.call(<b>this</b>);
+        <b>return</b> this.formatDate(<b>this</b>.parseDate(v)) || <em>''</em>;
+    },
+
+    <i>// inherited docs</i>
+    setValue : <b>function</b>(value){
+        Ext.form.TimeField.superclass.setValue.call(<b>this</b>, <b>this</b>.formatDate(<b>this</b>.parseDate(value)));
+    },
+
+    <i>// private overrides</i>
+    validateValue : Ext.form.DateField.prototype.validateValue,
+    parseDate : Ext.form.DateField.prototype.parseDate,
+    formatDate : Ext.form.DateField.prototype.formatDate,
+
+    <i>// private</i>
+    beforeBlur : <b>function</b>(){
+        <b>var</b> v = <b>this</b>.parseDate(<b>this</b>.getRawValue());
+        <b>if</b>(v){
+            <b>this</b>.setValue(v.dateFormat(<b>this</b>.format));
+        }
+        Ext.form.TimeField.superclass.beforeBlur.call(<b>this</b>);
+    }
+
+    <i>/**
+     * @cfg {Boolean} grow @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Number} growMin @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Number} growMax @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @hide
+     * @method autoSize
+     */</i>
+});
+Ext.reg(<em>'timefield'</em>, Ext.form.TimeField);</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

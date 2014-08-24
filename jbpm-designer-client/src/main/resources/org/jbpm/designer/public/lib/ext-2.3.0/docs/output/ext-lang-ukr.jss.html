@@ -1,0 +1,254 @@
+<html><head><title>ext-lang-ukr.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ext-lang-ukr.js</h1><pre class="highlighted"><code>&iuml;&raquo;&iquest;<i>/*
+ * Ukrainian translation
+ * By zlatko (utf-8 encoding)
+ * 3 October 2007
+ */</i>
+
+Ext.UpdateManager.defaults.indicatorText = <em>'&lt;div class=&quot;loading-indicator&quot;&gt;&ETH;&cent;&Ntilde;Ä&ETH;&cedil;&ETH;&sup2;&ETH;&deg;&Ntilde;î &ETH;&middot;&ETH;&deg;&ETH;&sup2;&ETH;&deg;&ETH;&frac12;&Ntilde;Ç&ETH;&deg;&ETH;&para;&ETH;&micro;&ETH;&frac12;&ETH;&frac12;&Ntilde;è...&lt;/div&gt;'</em>;
+
+<b>if</b>(Ext.View){
+   Ext.View.prototype.emptyText = &quot;&quot;;
+}
+
+<b>if</b>(Ext.grid.GridPanel){
+   Ext.grid.GridPanel.prototype.ddText = &quot;{0} &ETH;&sup2;&ETH;&cedil;&ETH;&plusmn;&Ntilde;Ä&ETH;&deg;&ETH;&frac12;&ETH;&cedil;&Ntilde;Ö &Ntilde;Å&Ntilde;Ç&Ntilde;Ä&Ntilde;ñ&Ntilde;á&ETH;&frac34;&ETH;&ordm;&quot;;
+}
+
+<b>if</b>(Ext.TabPanelItem){
+   Ext.TabPanelItem.prototype.closeText = &quot;&ETH;ó&ETH;&deg;&ETH;&ordm;&Ntilde;Ä&ETH;&cedil;&Ntilde;Ç&ETH;&cedil; &Ntilde;Ü&Ntilde;é &ETH;&sup2;&ETH;&ordm;&ETH;&raquo;&ETH;&deg;&ETH;&acute;&ETH;&ordm;&Ntilde;É&quot;;
+}
+
+<b>if</b>(Ext.form.Field){
+   Ext.form.Field.prototype.invalidText = &quot;&ETH;ó&ETH;&frac12;&ETH;&deg;&Ntilde;á&ETH;&micro;&ETH;&frac12;&ETH;&frac12;&Ntilde;è &Ntilde;É &Ntilde;Ü&Ntilde;å&ETH;&frac34;&ETH;&frac14;&Ntilde;É &ETH;&iquest;&ETH;&frac34;&ETH;&raquo;&Ntilde;ñ &ETH;&frac12;&ETH;&micro;&ETH;&sup2;&Ntilde;ñ&Ntilde;Ä&ETH;&frac12;&ETH;&micro;&quot;;
+}
+
+<b>if</b>(Ext.LoadMask){
+   Ext.LoadMask.prototype.msg = &quot;&ETH;ó&ETH;&deg;&ETH;&sup2;&ETH;&deg;&ETH;&frac12;&Ntilde;Ç&ETH;&deg;&ETH;&para;&ETH;&micro;&ETH;&frac12;&ETH;&frac12;&Ntilde;è...&quot;;
+}
+
+Date.monthNames = [
+   &quot;&ETH;&iexcl;&Ntilde;ñ&Ntilde;á&ETH;&micro;&ETH;&frac12;&Ntilde;å&quot;,
+   &quot;&ETH;õ&Ntilde;é&Ntilde;Ç&ETH;&cedil;&ETH;&sup1;&quot;,
+   &quot;&ETH;ë&ETH;&micro;&Ntilde;Ä&ETH;&micro;&ETH;&middot;&ETH;&micro;&ETH;&frac12;&Ntilde;å&quot;,
+   &quot;&ETH;ö&ETH;&sup2;&Ntilde;ñ&Ntilde;Ç&ETH;&micro;&ETH;&frac12;&Ntilde;å&quot;,
+   &quot;&ETH;&cent;&Ntilde;Ä&ETH;&deg;&ETH;&sup2;&ETH;&micro;&ETH;&frac12;&Ntilde;å&quot;,
+   &quot;&ETH;&sect;&ETH;&micro;&Ntilde;Ä&ETH;&sup2;&ETH;&micro;&ETH;&frac12;&Ntilde;å&quot;,
+   &quot;&ETH;õ&ETH;&cedil;&ETH;&iquest;&ETH;&micro;&ETH;&frac12;&Ntilde;å&quot;,
+   &quot;&ETH;&iexcl;&ETH;&micro;&Ntilde;Ä&ETH;&iquest;&ETH;&micro;&ETH;&frac12;&Ntilde;å&quot;,
+   &quot;&ETH;í&ETH;&micro;&Ntilde;Ä&ETH;&micro;&Ntilde;Å&ETH;&micro;&ETH;&frac12;&Ntilde;å&quot;,
+   &quot;&ETH;ñ&ETH;&frac34;&ETH;&sup2;&Ntilde;Ç&ETH;&micro;&ETH;&frac12;&Ntilde;å&quot;,
+   &quot;&ETH;õ&ETH;&cedil;&Ntilde;Å&Ntilde;Ç&ETH;&frac34;&ETH;&iquest;&ETH;&deg;&ETH;&acute;&quot;,
+   &quot;&ETH;ì&Ntilde;Ä&Ntilde;É&ETH;&acute;&ETH;&micro;&ETH;&frac12;&Ntilde;å&quot;
+];
+
+Date.dayNames = [
+   &quot;&ETH;ù&ETH;&micro;&ETH;&acute;&Ntilde;ñ&ETH;&raquo;&Ntilde;è&quot;,
+   &quot;&ETH;ü&ETH;&frac34;&ETH;&frac12;&ETH;&micro;&ETH;&acute;&Ntilde;ñ&ETH;&raquo;&ETH;&frac34;&ETH;&ordm;&quot;,
+   &quot;&ETH;í&Ntilde;ñ&ETH;&sup2;&Ntilde;Ç&ETH;&frac34;&Ntilde;Ä&ETH;&frac34;&ETH;&ordm;&quot;,
+   &quot;&ETH;&iexcl;&ETH;&micro;&Ntilde;Ä&ETH;&micro;&ETH;&acute;&ETH;&deg;&quot;,
+   &quot;&ETH;&sect;&ETH;&micro;&Ntilde;Ç&ETH;&sup2;&ETH;&micro;&Ntilde;Ä&quot;,
+   &quot;&ETH;ü&Ntilde;è&Ntilde;Ç&ETH;&frac12;&ETH;&cedil;&Ntilde;Ü&Ntilde;è&quot;,
+   &quot;&ETH;&iexcl;&Ntilde;É&ETH;&plusmn;&ETH;&frac34;&Ntilde;Ç&ETH;&deg;&quot;
+];
+
+<b>if</b>(Ext.MessageBox){
+   Ext.MessageBox.buttonText = {
+      ok     : &quot;OK&quot;,
+      cancel : &quot;&ETH;í&Ntilde;ñ&ETH;&acute;&ETH;&frac14;&Ntilde;ñ&ETH;&frac12;&ETH;&deg;&quot;,
+      yes    : &quot;&ETH;&cent;&ETH;&deg;&ETH;&ordm;&quot;,
+      no     : &quot;&ETH;ù&Ntilde;ñ&quot;
+   };
+}
+
+<b>if</b>(Ext.util.Format){
+   Ext.util.Format.date = <b>function</b>(v, format){
+      <b>if</b>(!v) <b>return</b> &quot;&quot;;
+      <b>if</b>(!(v instanceof Date)) v = <b>new</b> Date(Date.parse(v));
+      <b>return</b> v.dateFormat(format || &quot;d.m.Y&quot;);
+   };
+}
+
+<b>if</b>(Ext.DatePicker){
+   Ext.apply(Ext.DatePicker.prototype, {
+      todayText         : &quot;&ETH;&iexcl;&Ntilde;å&ETH;&frac34;&ETH;&sup3;&ETH;&frac34;&ETH;&acute;&ETH;&frac12;&Ntilde;ñ&quot;,
+      minText           : &quot;&ETH;&brvbar;&Ntilde;è &ETH;&acute;&ETH;&deg;&Ntilde;Ç&ETH;&deg; &ETH;&frac14;&ETH;&micro;&ETH;&frac12;&Ntilde;à&ETH;&micro; &ETH;&frac14;&Ntilde;ñ&ETH;&frac12;&Ntilde;ñ&ETH;&frac14;&ETH;&deg;&ETH;&raquo;&Ntilde;å&ETH;&frac12;&ETH;&frac34;&Ntilde;ó &ETH;&acute;&ETH;&deg;&Ntilde;Ç&ETH;&cedil;&quot;,
+      maxText           : &quot;&ETH;&brvbar;&Ntilde;è &ETH;&acute;&ETH;&deg;&Ntilde;Ç&ETH;&deg; &ETH;&plusmn;&Ntilde;ñ&ETH;&raquo;&Ntilde;å&Ntilde;à&ETH;&micro; &ETH;&frac14;&ETH;&deg;&ETH;&ordm;&Ntilde;Å&ETH;&cedil;&ETH;&frac14;&ETH;&deg;&ETH;&raquo;&Ntilde;å&ETH;&frac12;&ETH;&frac34;&Ntilde;ó &ETH;&acute;&ETH;&deg;&Ntilde;Ç&ETH;&cedil;&quot;,
+      disabledDaysText  : &quot;&quot;,
+      disabledDatesText : &quot;&quot;,
+      monthNames        : Date.monthNames,
+      dayNames	        : Date.dayNames,
+      nextText          : <em>'&ETH;ù&ETH;&deg;&Ntilde;Å&Ntilde;Ç&Ntilde;É&ETH;&iquest;&ETH;&frac12;&ETH;&cedil;&ETH;&sup1; &ETH;&frac14;&Ntilde;ñ&Ntilde;Å&Ntilde;è&Ntilde;Ü&Ntilde;å (Control+&ETH;í&ETH;&iquest;&Ntilde;Ä&ETH;&deg;&ETH;&sup2;&ETH;&frac34;)'</em>,
+      prevText          : <em>'&ETH;ü&ETH;&frac34;&ETH;&iquest;&ETH;&micro;&Ntilde;Ä&ETH;&micro;&ETH;&acute;&ETH;&frac12;&Ntilde;ñ&ETH;&sup1; &ETH;&frac14;&Ntilde;ñ&Ntilde;Å&Ntilde;è&Ntilde;Ü&Ntilde;å (Control+&ETH;í&ETH;&raquo;&Ntilde;ñ&ETH;&sup2;&ETH;&frac34;)'</em>,
+      monthYearText     : <em>'&ETH;í&ETH;&cedil;&ETH;&plusmn;&Ntilde;ñ&Ntilde;Ä &ETH;&frac14;&Ntilde;ñ&Ntilde;Å&Ntilde;è&Ntilde;Ü&Ntilde;è (Control+&ETH;í&ETH;&sup2;&ETH;&micro;&Ntilde;Ä&Ntilde;Ö/&ETH;í&ETH;&frac12;&ETH;&cedil;&ETH;&middot; &ETH;&acute;&ETH;&raquo;&Ntilde;è &ETH;&sup2;&ETH;&cedil;&ETH;&plusmn;&ETH;&frac34;&Ntilde;Ä&Ntilde;É &Ntilde;Ä&ETH;&frac34;&ETH;&ordm;&Ntilde;É)'</em>,
+      todayTip          : &quot;{0} (&ETH;ü&Ntilde;Ä&ETH;&frac34;&ETH;&plusmn;&Ntilde;ñ&ETH;&raquo;)&quot;,
+      format            : &quot;d.m.y&quot;,
+      okText            : &quot;&amp;#160;OK&amp;#160;&quot;,
+      cancelText        : &quot;&ETH;í&Ntilde;ñ&ETH;&acute;&ETH;&frac14;&Ntilde;ñ&ETH;&frac12;&ETH;&deg;&quot;,
+      startDay          : 1
+   });
+}
+
+<b>if</b>(Ext.PagingToolbar){
+   Ext.apply(Ext.PagingToolbar.prototype, {
+      beforePageText : &quot;&ETH;&iexcl;&Ntilde;Ç&ETH;&frac34;&Ntilde;Ä&Ntilde;ñ&ETH;&frac12;&ETH;&ordm;&ETH;&deg;&quot;,
+      afterPageText  : &quot;&ETH;&middot; {0}&quot;,
+      firstText      : &quot;&ETH;ü&ETH;&micro;&Ntilde;Ä&Ntilde;à&ETH;&deg; &Ntilde;Å&Ntilde;Ç&ETH;&frac34;&Ntilde;Ä&Ntilde;ñ&ETH;&frac12;&ETH;&ordm;&ETH;&deg;&quot;,
+      prevText       : &quot;&ETH;ü&ETH;&frac34;&ETH;&iquest;&ETH;&micro;&Ntilde;Ä&ETH;&micro;&ETH;&acute;&ETH;&frac12;&Ntilde;è &Ntilde;Å&Ntilde;Ç&ETH;&frac34;&Ntilde;Ä&Ntilde;ñ&ETH;&frac12;&ETH;&ordm;&ETH;&deg;&quot;,
+      nextText       : &quot;&ETH;ù&ETH;&deg;&Ntilde;Å&Ntilde;Ç&Ntilde;É&ETH;&iquest;&ETH;&frac12;&ETH;&deg; &Ntilde;Å&Ntilde;Ç&ETH;&frac34;&Ntilde;Ä&Ntilde;ñ&ETH;&frac12;&ETH;&ordm;&ETH;&deg;&quot;,
+      lastText       : &quot;&ETH;û&Ntilde;Å&Ntilde;Ç&ETH;&deg;&ETH;&frac12;&ETH;&frac12;&Ntilde;è &Ntilde;Å&Ntilde;Ç&ETH;&frac34;&Ntilde;Ä&Ntilde;ñ&ETH;&frac12;&ETH;&ordm;&ETH;&deg;&quot;,
+      refreshText    : &quot;&ETH;û&ETH;&plusmn;&ETH;&frac12;&ETH;&frac34;&ETH;&sup2;&ETH;&cedil;&Ntilde;Ç&ETH;&cedil;&quot;,
+      displayMsg     : &quot;&ETH;í&Ntilde;ñ&ETH;&acute;&ETH;&frac34;&ETH;&plusmn;&Ntilde;Ä&ETH;&deg;&ETH;&para;&ETH;&deg;&Ntilde;é&Ntilde;Ç&Ntilde;å&Ntilde;Å&Ntilde;è &ETH;&middot;&ETH;&deg;&ETH;&iquest;&ETH;&cedil;&Ntilde;Å&ETH;&cedil; &ETH;&middot; {0} &ETH;&iquest;&ETH;&frac34; {1}, &ETH;&sup2;&Ntilde;Å&Ntilde;å&ETH;&frac34;&ETH;&sup3;&ETH;&frac34; {2}&quot;,
+      emptyMsg       : <em>'&ETH;î&ETH;&deg;&ETH;&frac12;&Ntilde;ñ &ETH;&acute;&ETH;&raquo;&Ntilde;è &ETH;&sup2;&Ntilde;ñ&ETH;&acute;&ETH;&frac34;&ETH;&plusmn;&Ntilde;Ä&ETH;&deg;&ETH;&para;&ETH;&micro;&ETH;&frac12;&ETH;&frac12;&Ntilde;è &ETH;&sup2;&Ntilde;ñ&ETH;&acute;&Ntilde;Å&Ntilde;É&Ntilde;Ç&ETH;&frac12;&Ntilde;ñ'</em>
+   });
+}
+
+<b>if</b>(Ext.form.TextField){
+   Ext.apply(Ext.form.TextField.prototype, {
+      minLengthText : &quot;&ETH;ú&Ntilde;ñ&ETH;&frac12;&Ntilde;ñ&ETH;&frac14;&ETH;&deg;&ETH;&raquo;&Ntilde;å&ETH;&frac12;&ETH;&deg; &ETH;&acute;&ETH;&frac34;&ETH;&sup2;&ETH;&para;&ETH;&cedil;&ETH;&frac12;&ETH;&deg; &Ntilde;Ü&Ntilde;å&ETH;&frac34;&ETH;&sup3;&ETH;&frac34; &ETH;&iquest;&ETH;&frac34;&ETH;&raquo;&Ntilde;è {0}&quot;,
+      maxLengthText : &quot;&ETH;ú&ETH;&deg;&ETH;&ordm;&Ntilde;Å&ETH;&cedil;&ETH;&frac14;&ETH;&deg;&ETH;&raquo;&Ntilde;å&ETH;&frac12;&ETH;&deg; &ETH;&acute;&ETH;&frac34;&ETH;&sup2;&ETH;&para;&ETH;&cedil;&ETH;&frac12;&ETH;&deg; &Ntilde;Ü&Ntilde;å&ETH;&frac34;&ETH;&sup3;&ETH;&frac34; &ETH;&iquest;&ETH;&frac34;&ETH;&raquo;&Ntilde;è {0}&quot;,
+      blankText     : &quot;&ETH;&brvbar;&ETH;&micro; &ETH;&iquest;&ETH;&frac34;&ETH;&raquo;&ETH;&micro; &Ntilde;î &ETH;&frac34;&ETH;&plusmn;&ETH;&frac34;&ETH;&sup2;&acirc;Äô&Ntilde;è&ETH;&middot;&ETH;&ordm;&ETH;&frac34;&ETH;&sup2;&ETH;&cedil;&ETH;&frac14; &ETH;&acute;&ETH;&raquo;&Ntilde;è &ETH;&middot;&ETH;&deg;&ETH;&iquest;&ETH;&frac34;&ETH;&sup2;&ETH;&frac12;&ETH;&micro;&ETH;&frac12;&ETH;&frac12;&Ntilde;è&quot;,
+      regexText     : &quot;&quot;,
+      emptyText     : null
+   });
+}
+
+<b>if</b>(Ext.form.NumberField){
+   Ext.apply(Ext.form.NumberField.prototype, {
+      minText : &quot;&ETH;ó&ETH;&frac12;&ETH;&deg;&Ntilde;á&ETH;&micro;&ETH;&frac12;&ETH;&frac12;&Ntilde;è &Ntilde;Ü&Ntilde;å&ETH;&frac34;&ETH;&sup3;&ETH;&frac34; &ETH;&iquest;&ETH;&frac34;&ETH;&raquo;&Ntilde;è &ETH;&frac12;&ETH;&micro; &ETH;&frac14;&ETH;&frac34;&ETH;&para;&ETH;&micro; &ETH;&plusmn;&Ntilde;É&Ntilde;Ç&ETH;&cedil; &ETH;&frac14;&ETH;&micro;&ETH;&frac12;&Ntilde;à&ETH;&micro; {0}&quot;,
+      maxText : &quot;&ETH;ó&ETH;&frac12;&ETH;&deg;&Ntilde;á&ETH;&micro;&ETH;&frac12;&ETH;&frac12;&Ntilde;è &Ntilde;Ü&Ntilde;å&ETH;&frac34;&ETH;&sup3;&ETH;&frac34; &ETH;&iquest;&ETH;&frac34;&ETH;&raquo;&Ntilde;è &ETH;&frac12;&ETH;&micro; &ETH;&frac14;&ETH;&frac34;&ETH;&para;&ETH;&micro; &ETH;&plusmn;&Ntilde;É&Ntilde;Ç&ETH;&cedil; &ETH;&plusmn;&Ntilde;ñ&ETH;&raquo;&Ntilde;å&Ntilde;à&ETH;&micro; {0}&quot;,
+      nanText : &quot;{0} &ETH;&frac12;&ETH;&micro; &Ntilde;è&ETH;&sup2;&ETH;&raquo;&Ntilde;è&Ntilde;î&Ntilde;Ç&Ntilde;å&Ntilde;Å&Ntilde;è &Ntilde;á&ETH;&cedil;&Ntilde;Å&ETH;&raquo;&ETH;&frac34;&ETH;&frac14;&quot;
+   });
+}
+
+<b>if</b>(Ext.form.DateField){
+   Ext.apply(Ext.form.DateField.prototype, {
+      disabledDaysText  : &quot;&ETH;ù&ETH;&micro; &ETH;&acute;&ETH;&frac34;&Ntilde;Å&Ntilde;Ç&Ntilde;É&ETH;&iquest;&ETH;&frac12;&ETH;&frac34;&quot;,
+      disabledDatesText : &quot;&ETH;ù&ETH;&micro; &ETH;&acute;&ETH;&frac34;&Ntilde;Å&Ntilde;Ç&Ntilde;É&ETH;&iquest;&ETH;&frac12;&ETH;&frac34;&quot;,
+      minText           : &quot;&ETH;î&ETH;&deg;&Ntilde;Ç&ETH;&deg; &ETH;&sup2; &Ntilde;Ü&Ntilde;å&ETH;&frac34;&ETH;&frac14;&Ntilde;É &ETH;&iquest;&ETH;&frac34;&ETH;&raquo;&Ntilde;ñ &ETH;&iquest;&ETH;&frac34;&ETH;&sup2;&ETH;&cedil;&ETH;&frac12;&ETH;&frac12;&ETH;&deg; &ETH;&plusmn;&Ntilde;É&Ntilde;Ç&ETH;&cedil; &ETH;&plusmn;&Ntilde;ñ&ETH;&raquo;&Ntilde;å&Ntilde;à&ETH;&micro; {0}&quot;,
+      maxText           : &quot;&ETH;î&ETH;&deg;&Ntilde;Ç&ETH;&deg; &ETH;&sup2; &Ntilde;Ü&Ntilde;å&ETH;&frac34;&ETH;&frac14;&Ntilde;É &ETH;&iquest;&ETH;&frac34;&ETH;&raquo;&Ntilde;ñ &ETH;&iquest;&ETH;&frac34;&ETH;&sup2;&ETH;&cedil;&ETH;&frac12;&ETH;&frac12;&ETH;&deg; &ETH;&plusmn;&Ntilde;É&Ntilde;Ç&ETH;&cedil; &ETH;&frac14;&ETH;&micro;&ETH;&frac12;&Ntilde;à&ETH;&micro; {0}&quot;,
+      invalidText       : &quot;{0} &ETH;&frac12;&ETH;&micro;&ETH;&iquest;&Ntilde;Ä&ETH;&deg;&ETH;&sup2;&ETH;&cedil;&ETH;&raquo;&Ntilde;å&ETH;&frac12;&ETH;&deg; &ETH;&acute;&ETH;&deg;&Ntilde;Ç&ETH;&deg; - &ETH;&acute;&ETH;&deg;&Ntilde;Ç&ETH;&deg; &ETH;&iquest;&ETH;&frac34;&ETH;&sup2;&ETH;&cedil;&ETH;&frac12;&ETH;&frac12;&ETH;&deg; &ETH;&plusmn;&Ntilde;É&Ntilde;Ç&ETH;&cedil; &ETH;&sup2;&ETH;&ordm;&ETH;&deg;&ETH;&middot;&ETH;&deg;&ETH;&frac12;&ETH;&deg; &Ntilde;É  &Ntilde;Ñ&ETH;&frac34;&Ntilde;Ä&ETH;&frac14;&ETH;&deg;&Ntilde;Ç&Ntilde;ñ {1}&quot;,
+      format            : &quot;d.m.y&quot;
+   });
+}
+
+<b>if</b>(Ext.form.ComboBox){
+   Ext.apply(Ext.form.ComboBox.prototype, {
+      loadingText       : &quot;&ETH;ó&ETH;&deg;&ETH;&sup2;&ETH;&deg;&ETH;&frac12;&Ntilde;Ç&ETH;&deg;&ETH;&para;&ETH;&micro;&ETH;&frac12;&ETH;&frac12;&Ntilde;è...&quot;,
+      valueNotFoundText : undefined
+   });
+}
+
+<b>if</b>(Ext.form.VTypes){
+   Ext.apply(Ext.form.VTypes, {
+      emailText    : <em>'&ETH;&brvbar;&ETH;&micro; &ETH;&iquest;&ETH;&frac34;&ETH;&raquo;&ETH;&micro; &ETH;&iquest;&ETH;&frac34;&ETH;&sup2;&ETH;&cedil;&ETH;&frac12;&ETH;&frac12;&ETH;&frac34; &ETH;&frac14;&Ntilde;ñ&Ntilde;Å&Ntilde;Ç&ETH;&cedil;&Ntilde;Ç&ETH;&cedil; &ETH;&deg;&ETH;&acute;&Ntilde;Ä&ETH;&micro;&Ntilde;Å&Ntilde;É &ETH;&micro;&ETH;&raquo;&ETH;&micro;&ETH;&ordm;&Ntilde;Ç&Ntilde;Ä&ETH;&frac34;&ETH;&frac12;&ETH;&frac12;&ETH;&frac34;&Ntilde;ó &ETH;&iquest;&ETH;&frac34;&Ntilde;á&Ntilde;Ç&ETH;&cedil; &Ntilde;É &Ntilde;Ñ&ETH;&frac34;&Ntilde;Ä&ETH;&frac14;&ETH;&deg;&Ntilde;Ç&Ntilde;ñ &quot;user@domain.com&quot;'</em>,
+      urlText      : <em>'&ETH;&brvbar;&ETH;&micro; &ETH;&iquest;&ETH;&frac34;&ETH;&raquo;&ETH;&micro; &ETH;&iquest;&ETH;&frac34;&ETH;&sup2;&ETH;&cedil;&ETH;&frac12;&ETH;&frac12;&ETH;&frac34; &ETH;&frac14;&Ntilde;ñ&Ntilde;Å&Ntilde;Ç&ETH;&cedil;&Ntilde;Ç&ETH;&cedil; URL &Ntilde;É &Ntilde;Ñ&ETH;&frac34;&Ntilde;Ä&ETH;&frac14;&ETH;&deg;&Ntilde;Ç&Ntilde;ñ &quot;http:/'</em>+<em>'/www.domain.com&quot;'</em>,
+      alphaText    : <em>'&ETH;&brvbar;&ETH;&micro; &ETH;&iquest;&ETH;&frac34;&ETH;&raquo;&ETH;&micro; &ETH;&iquest;&ETH;&frac34;&ETH;&sup2;&ETH;&cedil;&ETH;&frac12;&ETH;&frac12;&ETH;&frac34; &ETH;&frac14;&Ntilde;ñ&Ntilde;Å&Ntilde;Ç&ETH;&cedil;&Ntilde;Ç&ETH;&cedil; &ETH;&sup2;&ETH;&cedil;&ETH;&ordm;&ETH;&raquo;&Ntilde;é&Ntilde;á&ETH;&frac12;&ETH;&frac34; &ETH;&raquo;&ETH;&deg;&Ntilde;Ç&ETH;&cedil;&ETH;&frac12;&Ntilde;Å&Ntilde;å&ETH;&ordm;&Ntilde;ñ &ETH;&raquo;&Ntilde;ñ&Ntilde;Ç&ETH;&micro;&Ntilde;Ä&ETH;&cedil; &Ntilde;Ç&ETH;&deg; &Ntilde;Å&ETH;&cedil;&ETH;&frac14;&ETH;&sup2;&ETH;&frac34;&ETH;&raquo; &ETH;&iquest;&Ntilde;ñ&ETH;&acute;&ETH;&ordm;&Ntilde;Ä&ETH;&micro;&Ntilde;Å&ETH;&raquo;&ETH;&micro;&ETH;&frac12;&ETH;&frac12;&Ntilde;è &quot;_&quot;'</em>,
+      alphanumText : <em>'&ETH;&brvbar;&ETH;&micro; &ETH;&iquest;&ETH;&frac34;&ETH;&raquo;&ETH;&micro; &ETH;&iquest;&ETH;&frac34;&ETH;&sup2;&ETH;&cedil;&ETH;&frac12;&ETH;&frac12;&ETH;&frac34; &ETH;&frac14;&Ntilde;ñ&Ntilde;Å&Ntilde;Ç&ETH;&cedil;&Ntilde;Ç&ETH;&cedil; &ETH;&sup2;&ETH;&cedil;&ETH;&ordm;&ETH;&raquo;&Ntilde;é&Ntilde;á&ETH;&frac12;&ETH;&frac34; &ETH;&raquo;&ETH;&deg;&Ntilde;Ç&ETH;&cedil;&ETH;&frac12;&Ntilde;Å&Ntilde;å&ETH;&ordm;&Ntilde;ñ &ETH;&raquo;&Ntilde;ñ&Ntilde;Ç&ETH;&micro;&Ntilde;Ä&ETH;&cedil;, &Ntilde;Ü&ETH;&cedil;&Ntilde;Ñ&Ntilde;Ä&ETH;&cedil; &Ntilde;Ç&ETH;&deg; &Ntilde;Å&ETH;&cedil;&ETH;&frac14;&ETH;&sup2;&ETH;&frac34;&ETH;&raquo; &ETH;&iquest;&Ntilde;ñ&ETH;&acute;&ETH;&ordm;&Ntilde;Ä&ETH;&micro;&Ntilde;Å&ETH;&raquo;&ETH;&micro;&ETH;&frac12;&ETH;&frac12;&Ntilde;è &quot;_&quot;'</em>
+   });
+}
+
+<b>if</b>(Ext.form.HtmlEditor){
+   Ext.apply(Ext.form.HtmlEditor.prototype, {
+     createLinkText : <em>'&ETH;ë&Ntilde;É&ETH;&acute;&Ntilde;å-&ETH;&raquo;&ETH;&deg;&Ntilde;Å&ETH;&ordm;&ETH;&deg; &ETH;&sup2;&ETH;&sup2;&ETH;&micro;&ETH;&acute;&Ntilde;ñ&Ntilde;Ç&Ntilde;å &ETH;&deg;&ETH;&acute;&Ntilde;Ä&ETH;&micro;&Ntilde;Å&Ntilde;É:'</em>,
+     buttonTips : {
+            bold : {
+               title: <em>'&ETH;ù&ETH;&deg;&ETH;&iquest;&Ntilde;ñ&ETH;&sup2;&ETH;&para;&ETH;&cedil;&Ntilde;Ä&ETH;&frac12;&ETH;&cedil;&ETH;&sup1; (Ctrl+B)'</em>,
+               text: <em>'&ETH;ó&ETH;&deg;&Ntilde;Å&Ntilde;Ç&ETH;&frac34;&Ntilde;Å&Ntilde;É&ETH;&sup2;&ETH;&deg;&ETH;&frac12;&ETH;&frac12;&Ntilde;è &ETH;&frac12;&ETH;&deg;&ETH;&iquest;&Ntilde;ñ&ETH;&sup2;&ETH;&para;&ETH;&cedil;&Ntilde;Ä&ETH;&frac12;&ETH;&frac34;&ETH;&sup3;&ETH;&frac34; &ETH;&acute;&ETH;&frac34; &ETH;&sup2;&ETH;&cedil;&ETH;&acute;&Ntilde;ñ&ETH;&raquo;&ETH;&micro;&ETH;&frac12;&ETH;&frac34;&ETH;&sup3;&ETH;&frac34; &Ntilde;Ç&ETH;&micro;&ETH;&ordm;&Ntilde;Å&Ntilde;Ç&Ntilde;É.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+            },
+            italic : {
+               title: <em>'&ETH;ö&Ntilde;É&Ntilde;Ä&Ntilde;Å&ETH;&cedil;&ETH;&sup2; (Ctrl+I)'</em>,
+               text: <em>' &ETH;ó&ETH;&deg;&Ntilde;Å&Ntilde;Ç&ETH;&frac34;&Ntilde;Å&Ntilde;É&ETH;&sup2;&ETH;&deg;&ETH;&frac12;&ETH;&frac12;&Ntilde;è &ETH;&ordm;&Ntilde;É&Ntilde;Ä&Ntilde;Å&ETH;&cedil;&ETH;&sup2;&Ntilde;É &ETH;&acute;&ETH;&frac34; &ETH;&sup2;&ETH;&cedil;&ETH;&acute;&Ntilde;ñ&ETH;&raquo;&ETH;&micro;&ETH;&frac12;&ETH;&frac34;&ETH;&sup3;&ETH;&frac34; &Ntilde;Ç&ETH;&micro;&ETH;&ordm;&Ntilde;Å&Ntilde;Ç&Ntilde;É.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+            },
+            underline : {
+               title: <em>'&ETH;ü&Ntilde;ñ&ETH;&acute;&ETH;&ordm;&Ntilde;Ä&ETH;&micro;&Ntilde;Å&ETH;&raquo;&ETH;&micro;&ETH;&frac12;&ETH;&cedil;&ETH;&sup1; (Ctrl+U)'</em>,
+               text: <em>' &ETH;ó&ETH;&deg;&Ntilde;Å&Ntilde;Ç&ETH;&frac34;&Ntilde;Å&Ntilde;É&ETH;&sup2;&ETH;&deg;&ETH;&frac12;&ETH;&frac12;&Ntilde;è &ETH;&iquest;&Ntilde;ñ&ETH;&acute;&ETH;&ordm;&Ntilde;Ä&ETH;&micro;&Ntilde;Å&ETH;&raquo;&ETH;&micro;&ETH;&frac12;&ETH;&frac12;&Ntilde;è &ETH;&acute;&ETH;&frac34; &ETH;&sup2;&ETH;&cedil;&ETH;&acute;&Ntilde;ñ&ETH;&raquo;&ETH;&micro;&ETH;&frac12;&ETH;&frac12;&ETH;&frac34;&ETH;&sup3;&ETH;&frac34; &Ntilde;Ç&ETH;&micro;&ETH;&ordm;&Ntilde;Å&Ntilde;Ç&Ntilde;É.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           increasefontsize : {
+               title: <em>'&ETH;ó&ETH;&plusmn;&Ntilde;ñ&ETH;&raquo;&Ntilde;å&Ntilde;à&ETH;&cedil;&Ntilde;Ç&ETH;&cedil; &Ntilde;Ä&ETH;&frac34;&ETH;&middot;&ETH;&frac14;&Ntilde;ñ&Ntilde;Ä'</em>,
+               text: <em>'&ETH;ó&ETH;&plusmn;&Ntilde;ñ&ETH;&raquo;&Ntilde;å&Ntilde;à&ETH;&micro;&ETH;&frac12;&ETH;&frac12;&Ntilde;è &Ntilde;Ä&ETH;&frac34;&ETH;&middot;&ETH;&frac14;&Ntilde;ñ&Ntilde;Ä&Ntilde;É &Ntilde;à&Ntilde;Ä&ETH;&cedil;&Ntilde;Ñ&Ntilde;Ç&ETH;&deg;.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           decreasefontsize : {
+               title: <em>'&ETH;ó&ETH;&frac14;&ETH;&micro;&ETH;&frac12;&Ntilde;à&ETH;&cedil;&Ntilde;Ç&ETH;&cedil; &Ntilde;Ä&ETH;&frac34;&ETH;&middot;&ETH;&frac14;&Ntilde;ñ&Ntilde;Ä'</em>,
+               text: <em>'&ETH;ó&ETH;&frac14;&ETH;&micro;&ETH;&frac12;&Ntilde;à&ETH;&micro;&ETH;&frac12;&ETH;&frac12;&Ntilde;è &Ntilde;Ä&ETH;&frac34;&ETH;&middot;&ETH;&frac14;&Ntilde;ñ&Ntilde;Ä&Ntilde;É &Ntilde;à&Ntilde;Ä&ETH;&cedil;&Ntilde;Ñ&Ntilde;Ç&ETH;&deg;.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           backcolor : {
+               title: <em>'&ETH;ó&ETH;&deg;&ETH;&raquo;&ETH;&cedil;&ETH;&sup2;&ETH;&ordm;&ETH;&deg;'</em>,
+               text: <em>'&ETH;ó&ETH;&frac14;&Ntilde;ñ&ETH;&frac12;&ETH;&deg; &ETH;&ordm;&ETH;&frac34;&ETH;&raquo;&Ntilde;å&ETH;&frac34;&Ntilde;Ä&Ntilde;É &Ntilde;Ñ&ETH;&frac34;&ETH;&frac12;&Ntilde;É &ETH;&acute;&ETH;&raquo;&Ntilde;è &ETH;&sup2;&ETH;&cedil;&ETH;&acute;&Ntilde;ñ&ETH;&raquo;&ETH;&micro;&ETH;&frac12;&ETH;&frac34;&ETH;&sup3;&ETH;&frac34; &Ntilde;Ç&ETH;&micro;&ETH;&ordm;&Ntilde;Å&Ntilde;Ç&Ntilde;É &ETH;&deg;&ETH;&plusmn;&ETH;&frac34; &ETH;&deg;&ETH;&plusmn;&ETH;&middot;&ETH;&deg;&Ntilde;Ü&Ntilde;É.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           forecolor : {
+               title: <em>'&ETH;ö&ETH;&frac34;&ETH;&raquo;&Ntilde;ñ&Ntilde;Ä &Ntilde;Ç&ETH;&micro;&ETH;&ordm;&Ntilde;Å&Ntilde;Ç&Ntilde;É'</em>,
+               text: <em>'&ETH;ó&ETH;&frac14;&Ntilde;ñ&ETH;&frac12;&ETH;&deg; &ETH;&ordm;&ETH;&frac34;&ETH;&raquo;&Ntilde;å&ETH;&frac34;&Ntilde;Ä&Ntilde;É &Ntilde;Ç&ETH;&micro;&ETH;&ordm;&Ntilde;Å&Ntilde;Ç&Ntilde;É.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           justifyleft : {
+               title: <em>'&ETH;í&ETH;&cedil;&Ntilde;Ä&Ntilde;ñ&ETH;&sup2;&ETH;&frac12;&Ntilde;è&Ntilde;Ç&ETH;&cedil; &Ntilde;Ç&ETH;&micro;&ETH;&ordm;&Ntilde;Å&Ntilde;Ç &ETH;&iquest;&ETH;&frac34; &ETH;&raquo;&Ntilde;ñ&ETH;&sup2;&Ntilde;ñ&ETH;&sup1; &ETH;&sup3;&Ntilde;Ä&ETH;&deg;&ETH;&frac12;&ETH;&cedil;&Ntilde;Ü&Ntilde;ñ'</em>,
+               text: <em>'&ETH;í&ETH;&cedil;&Ntilde;Ä&Ntilde;ñ&ETH;&sup2;&ETH;&frac12;&Ntilde;é&ETH;&sup2;&ETH;&deg;&ETH;&frac12;&ETH;&frac12;&Ntilde;è &Ntilde;Ç&ETH;&micro;&ETH;&ordm;&Ntilde;Å&Ntilde;Ç&Ntilde;É &ETH;&iquest;&ETH;&frac34; &ETH;&raquo;&Ntilde;ñ&ETH;&sup2;&Ntilde;ñ&ETH;&sup1; &ETH;&sup3;&Ntilde;Ä&ETH;&deg;&ETH;&frac12;&ETH;&cedil;&Ntilde;Ü&Ntilde;ñ.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           justifycenter : {
+               title: <em>'&ETH;í&ETH;&cedil;&Ntilde;Ä&Ntilde;ñ&ETH;&sup2;&ETH;&frac12;&Ntilde;è&Ntilde;Ç&ETH;&cedil; &Ntilde;Ç&ETH;&micro;&ETH;&ordm;&Ntilde;Å&Ntilde;Ç &ETH;&iquest;&ETH;&frac34; &Ntilde;Ü&ETH;&micro;&ETH;&frac12;&Ntilde;Ç&Ntilde;Ä&Ntilde;É'</em>,
+               text: <em>'&ETH;í&ETH;&cedil;&Ntilde;Ä&Ntilde;ñ&ETH;&sup2;&ETH;&frac12;&Ntilde;é&ETH;&sup2;&ETH;&deg;&ETH;&frac12;&ETH;&frac12;&Ntilde;è &Ntilde;Ç&ETH;&micro;&ETH;&ordm;&Ntilde;Å&Ntilde;Ç&Ntilde;É &ETH;&iquest;&ETH;&frac34; &Ntilde;Ü&ETH;&micro;&ETH;&frac12;&Ntilde;Ç&Ntilde;Ä&Ntilde;É.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           justifyright : {
+               title: <em>'&ETH;í&ETH;&cedil;&Ntilde;Ä&Ntilde;ñ&ETH;&sup2;&ETH;&frac12;&Ntilde;è&Ntilde;Ç&ETH;&cedil; &Ntilde;Ç&ETH;&micro;&ETH;&ordm;&Ntilde;Å&Ntilde;Ç &ETH;&iquest;&ETH;&frac34; &ETH;&iquest;&Ntilde;Ä&ETH;&deg;&ETH;&sup2;&Ntilde;ñ&ETH;&sup1; &ETH;&sup3;&Ntilde;Ä&ETH;&deg;&ETH;&frac12;&ETH;&cedil;&Ntilde;Ü&Ntilde;ñ'</em>,
+               text: <em>'&ETH;í&ETH;&cedil;&Ntilde;Ä&Ntilde;ñ&ETH;&sup2;&ETH;&frac12;&Ntilde;é&ETH;&sup2;&ETH;&deg;&ETH;&frac12;&ETH;&frac12;&Ntilde;è &Ntilde;Ç&ETH;&micro;&ETH;&ordm;&Ntilde;Å&Ntilde;Ç&Ntilde;É &ETH;&iquest;&ETH;&frac34; &ETH;&iquest;&Ntilde;Ä&ETH;&deg;&ETH;&sup2;&Ntilde;ñ&ETH;&sup1; &ETH;&sup3;&Ntilde;Ä&ETH;&deg;&ETH;&frac12;&ETH;&cedil;&Ntilde;Ü&Ntilde;ñ.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           insertunorderedlist : {
+               title: <em>'&ETH;ú&ETH;&deg;&Ntilde;Ä&ETH;&ordm;&ETH;&micro;&Ntilde;Ä&ETH;&cedil;'</em>,
+               text: <em>'&ETH;ü&ETH;&frac34;&Ntilde;á&ETH;&deg;&Ntilde;Ç&ETH;&cedil; &ETH;&frac14;&ETH;&deg;&Ntilde;Ä&ETH;&ordm;&ETH;&frac34;&ETH;&sup2;&ETH;&deg;&ETH;&frac12;&ETH;&cedil;&ETH;&sup1; &Ntilde;Å&ETH;&iquest;&ETH;&cedil;&Ntilde;Å&ETH;&frac34;&ETH;&ordm;.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           insertorderedlist : {
+               title: <em>'&ETH;ù&Ntilde;É&ETH;&frac14;&ETH;&micro;&Ntilde;Ä&ETH;&deg;&Ntilde;Ü&Ntilde;ñ&Ntilde;è'</em>,
+               text: <em>'&ETH;ü&ETH;&frac34;&Ntilde;á&ETH;&deg;&Ntilde;Ç&ETH;&cedil; &ETH;&frac12;&Ntilde;É&ETH;&frac14;&ETH;&micro;&Ntilde;Ä&ETH;&frac12;&ETH;&frac34;&ETH;&sup2;&ETH;&deg;&ETH;&frac12;&ETH;&cedil;&ETH;&sup1; &Ntilde;Å&ETH;&iquest;&ETH;&cedil;&Ntilde;Å&ETH;&frac34;&ETH;&ordm;.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           createlink : {
+               title: <em>'&ETH;í&Ntilde;Å&Ntilde;Ç&ETH;&deg;&ETH;&sup2;&ETH;&cedil;&Ntilde;Ç&ETH;&cedil; &ETH;&sup3;&Ntilde;ñ&ETH;&iquest;&ETH;&micro;&Ntilde;Ä&ETH;&iquest;&ETH;&frac34;&Ntilde;Å&ETH;&cedil;&ETH;&raquo;&ETH;&deg;&ETH;&frac12;&ETH;&frac12;&Ntilde;è'</em>,
+               text: <em>'&ETH;&iexcl;&Ntilde;Ç&ETH;&sup2;&ETH;&frac34;&Ntilde;Ä&ETH;&micro;&ETH;&frac12;&ETH;&frac12;&Ntilde;è &ETH;&iquest;&ETH;&frac34;&Ntilde;Å&ETH;&cedil;&ETH;&raquo;&ETH;&deg;&ETH;&frac12;&ETH;&frac12;&Ntilde;è &Ntilde;ñ&ETH;&middot; &ETH;&sup2;&ETH;&cedil;&ETH;&acute;&Ntilde;ñ&ETH;&raquo;&ETH;&micro;&ETH;&frac12;&ETH;&frac34;&ETH;&sup3;&ETH;&frac34; &Ntilde;Ç&ETH;&micro;&ETH;&ordm;&Ntilde;Å&Ntilde;Ç&Ntilde;É.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           sourceedit : {
+               title: <em>'&ETH;í&ETH;&cedil;&Ntilde;Ö&Ntilde;ñ&ETH;&acute;&ETH;&frac12;&ETH;&cedil;&ETH;&sup1; &ETH;&ordm;&ETH;&frac34;&ETH;&acute;'</em>,
+               text: <em>'&ETH;ü&ETH;&micro;&Ntilde;Ä&ETH;&micro;&ETH;&ordm;&ETH;&raquo;&Ntilde;é&Ntilde;á&ETH;&cedil;&Ntilde;Ç&ETH;&cedil;&Ntilde;Å&Ntilde;å &ETH;&frac12;&ETH;&deg; &ETH;&sup2;&ETH;&cedil;&Ntilde;Ö&Ntilde;ñ&ETH;&acute;&ETH;&frac12;&ETH;&cedil;&ETH;&sup1; &ETH;&ordm;&ETH;&frac34;&ETH;&acute;.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           }
+        }
+   });
+}
+
+<b>if</b>(Ext.grid.GridView){
+   Ext.apply(Ext.grid.GridView.prototype, {
+      sortAscText  : &quot;&ETH;&iexcl;&ETH;&frac34;&Ntilde;Ä&Ntilde;Ç&Ntilde;É&ETH;&sup2;&ETH;&deg;&Ntilde;Ç&ETH;&cedil; &ETH;&iquest;&ETH;&frac34; &ETH;&middot;&Ntilde;Ä&ETH;&frac34;&Ntilde;Å&Ntilde;Ç&ETH;&deg;&ETH;&frac12;&ETH;&frac12;&Ntilde;é&quot;,
+      sortDescText : &quot;&ETH;&iexcl;&ETH;&frac34;&Ntilde;Ä&Ntilde;Ç&Ntilde;É&ETH;&sup2;&ETH;&deg;&Ntilde;Ç&ETH;&cedil; &ETH;&iquest;&ETH;&frac34; &Ntilde;Å&ETH;&iquest;&ETH;&deg;&ETH;&acute;&ETH;&deg;&ETH;&frac12;&ETH;&frac12;&Ntilde;é&quot;,
+      lockText     : &quot;&ETH;ó&ETH;&deg;&ETH;&ordm;&Ntilde;Ä&Ntilde;ñ&ETH;&iquest;&ETH;&cedil;&Ntilde;Ç&ETH;&cedil; &ETH;&ordm;&ETH;&frac34;&ETH;&raquo;&ETH;&frac34;&ETH;&frac12;&ETH;&ordm;&Ntilde;É&quot;,
+      unlockText   : &quot;&ETH;ó&ETH;&frac12;&Ntilde;è&Ntilde;Ç&ETH;&cedil; &ETH;&middot;&ETH;&deg;&ETH;&ordm;&Ntilde;Ä&Ntilde;ñ&ETH;&iquest;&ETH;&raquo;&ETH;&micro;&ETH;&frac12;&ETH;&frac12;&Ntilde;è &ETH;&ordm;&ETH;&frac34;&ETH;&raquo;&ETH;&frac34;&ETH;&frac12;&ETH;&ordm;&ETH;&cedil;&quot;,
+      columnsText  : &quot;&ETH;ö&ETH;&frac34;&ETH;&raquo;&ETH;&frac34;&ETH;&frac12;&ETH;&ordm;&ETH;&cedil;&quot;
+   });
+}
+
+<b>if</b>(Ext.grid.PropertyColumnModel){
+   Ext.apply(Ext.grid.PropertyColumnModel.prototype, {
+      nameText   : &quot;&ETH;ù&ETH;&deg;&ETH;&middot;&ETH;&sup2;&ETH;&deg;&quot;,
+      valueText  : &quot;&ETH;ó&ETH;&frac12;&ETH;&deg;&Ntilde;á&ETH;&micro;&ETH;&frac12;&ETH;&frac12;&Ntilde;è&quot;,
+      dateFormat : &quot;j.m.Y&quot;
+   });
+}
+
+<b>if</b>(Ext.layout.BorderLayout &amp;&amp; Ext.layout.BorderLayout.SplitRegion){
+   Ext.apply(Ext.layout.BorderLayout.SplitRegion.prototype, {
+      splitTip            : &quot;&ETH;&cent;&Ntilde;è&ETH;&sup3;&ETH;&frac12;&Ntilde;ñ&Ntilde;Ç&Ntilde;å &ETH;&acute;&ETH;&raquo;&Ntilde;è &ETH;&middot;&ETH;&frac14;&Ntilde;ñ&ETH;&frac12;&ETH;&cedil; &Ntilde;Ä&ETH;&frac34;&ETH;&middot;&ETH;&frac14;&Ntilde;ñ&Ntilde;Ä&Ntilde;É.&quot;,
+      collapsibleSplitTip : &quot;&ETH;&cent;&Ntilde;è&ETH;&sup3;&ETH;&frac12;&Ntilde;ñ&Ntilde;Ç&Ntilde;å &ETH;&acute;&ETH;&raquo;&Ntilde;è &ETH;&middot;&ETH;&frac14;&Ntilde;ñ&ETH;&frac12;&ETH;&cedil; &Ntilde;Ä&ETH;&frac34;&ETH;&middot;&ETH;&frac14;&Ntilde;ñ&Ntilde;Ä&Ntilde;É. &ETH;ü&ETH;&frac34;&ETH;&acute;&ETH;&sup2;&Ntilde;ñ&ETH;&sup1;&ETH;&frac12;&ETH;&cedil;&ETH;&sup1; &ETH;&ordm;&ETH;&raquo;&Ntilde;ñ&ETH;&ordm; &Ntilde;Å&Ntilde;Ö&ETH;&frac34;&ETH;&sup2;&ETH;&deg;&Ntilde;î &ETH;&iquest;&ETH;&deg;&ETH;&frac12;&ETH;&micro;&ETH;&raquo;&Ntilde;å.&quot;
+   });
+}
+
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

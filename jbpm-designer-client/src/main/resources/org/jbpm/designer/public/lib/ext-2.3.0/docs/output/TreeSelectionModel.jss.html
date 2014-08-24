@@ -1,0 +1,310 @@
+<html><head><title>TreeSelectionModel.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>TreeSelectionModel.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.tree.DefaultSelectionModel
+ * @extends Ext.util.Observable
+ * The <b>default</b> single selection <b>for</b> a TreePanel.
+ */</i>
+Ext.tree.DefaultSelectionModel = <b>function</b>(config){
+   <b>this</b>.selNode = null;
+   
+   <b>this</b>.addEvents(
+       <i>/**
+        * @event selectionchange
+        * Fires when the selected node changes
+        * @param {DefaultSelectionModel} <b>this</b>
+        * @param {TreeNode} node the <b>new</b> selection
+        */</i>
+       &quot;selectionchange&quot;,
+
+       <i>/**
+        * @event beforeselect
+        * Fires before the selected node changes, <b>return</b> false to cancel the change
+        * @param {DefaultSelectionModel} <b>this</b>
+        * @param {TreeNode} node the <b>new</b> selection
+        * @param {TreeNode} node the old selection
+        */</i>
+       &quot;beforeselect&quot;
+   );
+
+    Ext.apply(<b>this</b>, config);
+    Ext.tree.DefaultSelectionModel.superclass.constructor.call(<b>this</b>);
+};
+
+Ext.extend(Ext.tree.DefaultSelectionModel, Ext.util.Observable, {
+    init : <b>function</b>(tree){
+        <b>this</b>.tree = tree;
+        tree.getTreeEl().on(&quot;keydown&quot;, <b>this</b>.onKeyDown, <b>this</b>);
+        tree.on(&quot;click&quot;, <b>this</b>.onNodeClick, <b>this</b>);
+    },
+    
+    onNodeClick : <b>function</b>(node, e){
+        <b>this</b>.select(node);
+    },
+    
+    <i>/**
+     * Select a node.
+     * @param {TreeNode} node The node to select
+     * @<b>return</b> {TreeNode} The selected node
+     */</i>
+    select : <b>function</b>(node){
+        <b>var</b> last = <b>this</b>.selNode;
+        <b>if</b>(node == last){
+            node.ui.onSelectedChange(true);
+        }<b>else</b> if(<b>this</b>.fireEvent(<em>'beforeselect'</em>, <b>this</b>, node, last) !== false){
+            <b>if</b>(last){
+                last.ui.onSelectedChange(false);
+            }
+            <b>this</b>.selNode = node;
+            node.ui.onSelectedChange(true);
+            <b>this</b>.fireEvent(&quot;selectionchange&quot;, <b>this</b>, node, last);
+        }
+        <b>return</b> node;
+    },
+    
+    <i>/**
+     * Deselect a node.
+     * @param {TreeNode} node The node to unselect
+     */</i>
+    unselect : <b>function</b>(node){
+        <b>if</b>(this.selNode == node){
+            <b>this</b>.clearSelections();
+        }    
+    },
+    
+    <i>/**
+     * Clear all selections
+     */</i>
+    clearSelections : <b>function</b>(){
+        <b>var</b> n = <b>this</b>.selNode;
+        <b>if</b>(n){
+            n.ui.onSelectedChange(false);
+            <b>this</b>.selNode = null;
+            <b>this</b>.fireEvent(&quot;selectionchange&quot;, <b>this</b>, null);
+        }
+        <b>return</b> n;
+    },
+    
+    <i>/**
+     * Get the selected node
+     * @<b>return</b> {TreeNode} The selected node
+     */</i>
+    getSelectedNode : <b>function</b>(){
+        <b>return</b> this.selNode;    
+    },
+    
+    <i>/**
+     * Returns true <b>if</b> the node is selected
+     * @param {TreeNode} node The node to check
+     * @<b>return</b> {Boolean}
+     */</i>
+    isSelected : <b>function</b>(node){
+        <b>return</b> this.selNode == node;  
+    },
+
+    <i>/**
+     * Selects the node above the selected node <b>in</b> the tree, intelligently walking the nodes
+     * @<b>return</b> TreeNode The <b>new</b> selection
+     */</i>
+    selectPrevious : <b>function</b>(){
+        <b>var</b> s = <b>this</b>.selNode || <b>this</b>.lastSelNode;
+        <b>if</b>(!s){
+            <b>return</b> null;
+        }
+        <b>var</b> ps = s.previousSibling;
+        <b>if</b>(ps){
+            <b>if</b>(!ps.isExpanded() || ps.childNodes.length &lt; 1){
+                <b>return</b> this.select(ps);
+            } <b>else</b>{
+                <b>var</b> lc = ps.lastChild;
+                <b>while</b>(lc &amp;&amp; lc.isExpanded() &amp;&amp; lc.childNodes.length &gt; 0){
+                    lc = lc.lastChild;
+                }
+                <b>return</b> this.select(lc);
+            }
+        } <b>else</b> if(s.parentNode &amp;&amp; (<b>this</b>.tree.rootVisible || !s.parentNode.isRoot)){
+            <b>return</b> this.select(s.parentNode);
+        }
+        <b>return</b> null;
+    },
+
+    <i>/**
+     * Selects the node above the selected node <b>in</b> the tree, intelligently walking the nodes
+     * @<b>return</b> TreeNode The <b>new</b> selection
+     */</i>
+    selectNext : <b>function</b>(){
+        <b>var</b> s = <b>this</b>.selNode || <b>this</b>.lastSelNode;
+        <b>if</b>(!s){
+            <b>return</b> null;
+        }
+        <b>if</b>(s.firstChild &amp;&amp; s.isExpanded()){
+             <b>return</b> this.select(s.firstChild);
+         }<b>else</b> if(s.nextSibling){
+             <b>return</b> this.select(s.nextSibling);
+         }<b>else</b> if(s.parentNode){
+            <b>var</b> newS = null;
+            s.parentNode.bubble(<b>function</b>(){
+                <b>if</b>(this.nextSibling){
+                    newS = <b>this</b>.getOwnerTree().selModel.select(<b>this</b>.nextSibling);
+                    <b>return</b> false;
+                }
+            });
+            <b>return</b> newS;
+         }
+        <b>return</b> null;
+    },
+
+    onKeyDown : <b>function</b>(e){
+        <b>var</b> s = <b>this</b>.selNode || <b>this</b>.lastSelNode;
+        <i>// undesirable, but required</i>
+        <b>var</b> sm = <b>this</b>;
+        <b>if</b>(!s){
+            <b>return</b>;
+        }
+        <b>var</b> k = e.getKey();
+        <b>switch</b>(k){
+             <b>case</b> e.DOWN:
+                 e.stopEvent();
+                 <b>this</b>.selectNext();
+             <b>break</b>;
+             <b>case</b> e.UP:
+                 e.stopEvent();
+                 <b>this</b>.selectPrevious();
+             <b>break</b>;
+             <b>case</b> e.RIGHT:
+                 e.preventDefault();
+                 <b>if</b>(s.hasChildNodes()){
+                     <b>if</b>(!s.isExpanded()){
+                         s.expand();
+                     }<b>else</b> if(s.firstChild){
+                         <b>this</b>.select(s.firstChild, e);
+                     }
+                 }
+             <b>break</b>;
+             <b>case</b> e.LEFT:
+                 e.preventDefault();
+                 <b>if</b>(s.hasChildNodes() &amp;&amp; s.isExpanded()){
+                     s.collapse();
+                 }<b>else</b> if(s.parentNode &amp;&amp; (<b>this</b>.tree.rootVisible || s.parentNode != <b>this</b>.tree.getRootNode())){
+                     <b>this</b>.select(s.parentNode, e);
+                 }
+             <b>break</b>;
+        };
+    }
+});
+
+<i>/**
+ * @class Ext.tree.MultiSelectionModel
+ * @extends Ext.util.Observable
+ * Multi selection <b>for</b> a TreePanel.
+ */</i>
+Ext.tree.MultiSelectionModel = <b>function</b>(config){
+   <b>this</b>.selNodes = [];
+   <b>this</b>.selMap = {};
+   <b>this</b>.addEvents(
+       <i>/**
+        * @event selectionchange
+        * Fires when the selected nodes change
+        * @param {MultiSelectionModel} <b>this</b>
+        * @param {Array} nodes Array of the selected nodes
+        */</i>
+       &quot;selectionchange&quot;
+   );
+    Ext.apply(<b>this</b>, config);
+    Ext.tree.MultiSelectionModel.superclass.constructor.call(<b>this</b>);
+};
+
+Ext.extend(Ext.tree.MultiSelectionModel, Ext.util.Observable, {
+    init : <b>function</b>(tree){
+        <b>this</b>.tree = tree;
+        tree.getTreeEl().on(&quot;keydown&quot;, <b>this</b>.onKeyDown, <b>this</b>);
+        tree.on(&quot;click&quot;, <b>this</b>.onNodeClick, <b>this</b>);
+    },
+    
+    onNodeClick : <b>function</b>(node, e){
+        <b>if</b>(e.ctrlKey &amp;&amp; <b>this</b>.isSelected(node)){
+            <b>this</b>.unselect(node);
+        }<b>else</b>{
+            <b>this</b>.select(node, e, e.ctrlKey);
+        }
+    },
+    
+    <i>/**
+     * Select a node.
+     * @param {TreeNode} node The node to select
+     * @param {EventObject} e (optional) An event associated <b>with</b> the selection
+     * @param {Boolean} keepExisting True to retain existing selections
+     * @<b>return</b> {TreeNode} The selected node
+     */</i>
+    select : <b>function</b>(node, e, keepExisting){
+        <b>if</b>(keepExisting !== true){
+            <b>this</b>.clearSelections(true);
+        }
+        <b>if</b>(this.isSelected(node)){
+            <b>this</b>.lastSelNode = node;
+            <b>return</b> node;
+        }
+        <b>this</b>.selNodes.push(node);
+        <b>this</b>.selMap[node.id] = node;
+        <b>this</b>.lastSelNode = node;
+        node.ui.onSelectedChange(true);
+        <b>this</b>.fireEvent(&quot;selectionchange&quot;, <b>this</b>, <b>this</b>.selNodes);
+        <b>return</b> node;
+    },
+    
+    <i>/**
+     * Deselect a node.
+     * @param {TreeNode} node The node to unselect
+     */</i>
+    unselect : <b>function</b>(node){
+        <b>if</b>(this.selMap[node.id]){
+            node.ui.onSelectedChange(false);
+            <b>var</b> sn = <b>this</b>.selNodes;
+            <b>var</b> index = sn.indexOf(node);
+            <b>if</b>(index != -1){
+                <b>this</b>.selNodes.splice(index, 1);
+            }
+            <b>delete</b> this.selMap[node.id];
+            <b>this</b>.fireEvent(&quot;selectionchange&quot;, <b>this</b>, <b>this</b>.selNodes);
+        }
+    },
+    
+    <i>/**
+     * Clear all selections
+     */</i>
+    clearSelections : <b>function</b>(suppressEvent){
+        <b>var</b> sn = <b>this</b>.selNodes;
+        <b>if</b>(sn.length &gt; 0){
+            <b>for</b>(var i = 0, len = sn.length; i &lt; len; i++){
+                sn[i].ui.onSelectedChange(false);
+            }
+            <b>this</b>.selNodes = [];
+            <b>this</b>.selMap = {};
+            <b>if</b>(suppressEvent !== true){
+                <b>this</b>.fireEvent(&quot;selectionchange&quot;, <b>this</b>, <b>this</b>.selNodes);
+            }
+        }
+    },
+    
+    <i>/**
+     * Returns true <b>if</b> the node is selected
+     * @param {TreeNode} node The node to check
+     * @<b>return</b> {Boolean}
+     */</i>
+    isSelected : <b>function</b>(node){
+        <b>return</b> this.selMap[node.id] ? true : false;  
+    },
+    
+    <i>/**
+     * Returns an array of the selected nodes
+     * @<b>return</b> {Array}
+     */</i>
+    getSelectedNodes : <b>function</b>(){
+        <b>return</b> this.selNodes;    
+    },
+
+    onKeyDown : Ext.tree.DefaultSelectionModel.prototype.onKeyDown,
+
+    selectNext : Ext.tree.DefaultSelectionModel.prototype.selectNext,
+
+    selectPrevious : Ext.tree.DefaultSelectionModel.prototype.selectPrevious
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

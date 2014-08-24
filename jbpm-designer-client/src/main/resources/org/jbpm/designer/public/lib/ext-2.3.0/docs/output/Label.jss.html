@@ -1,0 +1,60 @@
+<html><head><title>Label.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>Label.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.form.Label
+ * @extends Ext.BoxComponent
+ * Basic Label field.
+ * @constructor
+ * Creates a <b>new</b> Label
+ * @param {Ext.Element/String/Object} config The configuration options.  If an element is passed, it is set as the internal
+ * element and its id used as the component id.  If a string is passed, it is assumed to be the id of an existing element
+ * and is used as the component id.  Otherwise, it is assumed to be a standard config object and is applied to the component.
+ */</i>
+Ext.form.Label = Ext.extend(Ext.BoxComponent, {
+    <i>/**
+     * @cfg {String} text The plain text to display within the label (defaults to <em>''</em>). If you need to include HTML 
+     * tags within the label's innerHTML, use the {@link #html} config instead.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} forId The id of the input element to which <b>this</b> label will be bound via the standard HTML <em>'<b>for</b>'</em>
+     * attribute. If not specified, the attribute will not be added to the label.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} html An HTML fragment that will be used as the label<em>'s innerHTML (defaults to '</em>'). 
+     * Note that <b>if</b> {@link #text} is specified it will take precedence and <b>this</b> value will be ignored.
+     */</i>
+
+    <i>// private</i>
+    onRender : <b>function</b>(ct, position){
+        <b>if</b>(!<b>this</b>.el){
+            <b>this</b>.el = document.createElement(<em>'label'</em>);
+            <b>this</b>.el.id = <b>this</b>.getId();
+            <b>this</b>.el.innerHTML = <b>this</b>.text ? Ext.util.Format.htmlEncode(<b>this</b>.text) : (<b>this</b>.html || <em>''</em>);
+            <b>if</b>(this.forId){
+                <b>this</b>.el.setAttribute(<em>'<b>for</b>'</em>, <b>this</b>.forId);
+            }
+        }
+        Ext.form.Label.superclass.onRender.call(<b>this</b>, ct, position);
+    },
+    
+    <i>/**
+     * Updates the label's innerHTML <b>with</b> the specified string.
+     * @param {String} text The <b>new</b> label text
+     * @param {Boolean} encode (optional) False to skip HTML-encoding the text when rendering it
+     * to the label (defaults to true which encodes the value). This might be useful <b>if</b> you want to include 
+     * tags <b>in</b> the label's innerHTML rather than rendering them as string literals per the <b>default</b> logic.
+     * @<b>return</b> {Label} <b>this</b>
+     */</i>
+    setText: <b>function</b>(t, encode){
+        <b>var</b> e = encode === false;
+        <b>this</b>[!e ? <em>'text'</em> : <em>'html'</em>] = t;
+        <b>delete</b> this[e ? <em>'text'</em> : <em>'html'</em>];
+        <b>if</b>(this.rendered){
+            <b>this</b>.el.dom.innerHTML = encode !== false ? Ext.util.Format.htmlEncode(t) : t;
+        }
+        <b>return</b> this;
+    }
+});
+
+Ext.reg(<em>'label'</em>, Ext.form.Label);</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

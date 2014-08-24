@@ -1,0 +1,610 @@
+<html><head><title>ColumnModel.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ColumnModel.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.grid.ColumnModel
+ * @extends Ext.util.Observable
+ * This is the <b>default</b> implementation of a ColumnModel used by the Grid. This class is initialized
+ * <b>with</b> an Array of column config objects.
+ * &lt;br&gt;&lt;br&gt;
+ * An individual column's config object defines the header string, the {@link Ext.data.Record}
+ * field the column draws its data from, an optional rendering <b>function</b> to provide customized
+ * data formatting, and the ability to apply a CSS class to all cells <b>in</b> a column through its
+ * {@link #id} config option.&lt;br&gt;
+ * &lt;br&gt;Usage:&lt;br&gt;
+&lt;pre&gt;&lt;code&gt;
+ <b>var</b> colModel = <b>new</b> Ext.grid.ColumnModel([
+    { header: &quot;Ticker&quot;, width: 60, sortable: true},
+    { header: &quot;Company Name&quot;, width: 150, sortable: true},
+    { header: &quot;Market Cap.&quot;, width: 100, sortable: true},
+    { header: &quot;$ Sales&quot;, width: 100, sortable: true, renderer: money},
+    { header: &quot;Employees&quot;, width: 100, sortable: true, resizable: false}
+ ]);
+ &lt;/code&gt;&lt;/pre&gt;
+ * &lt;p&gt;
+ * The config options &lt;b&gt;defined by&lt;/b&gt; <b>this</b> class are options which may appear <b>in</b> each
+ * individual column definition. In order to use configuration options from the superclass,
+ * specify the column configuration Array <b>in</b> the &lt;tt&gt;&lt;b&gt;columns&lt;/b&gt;&lt;/tt&gt; config property. eg:&lt;pre&gt;&lt;code&gt;
+ <b>var</b> colModel = <b>new</b> Ext.grid.ColumnModel({
+    listeners: {
+        widthchange: <b>function</b>(cm, colIndex, width) {
+            saveConfig(colIndex, width);
+        }
+    },
+    columns: [
+        { header: &quot;Ticker&quot;, width: 60, sortable: true},
+        { header: &quot;Company Name&quot;, width: 150, sortable: true},
+        { header: &quot;Market Cap.&quot;, width: 100, sortable: true},
+        { header: &quot;$ Sales&quot;, width: 100, sortable: true, renderer: money},
+        { header: &quot;Employees&quot;, width: 100, sortable: true, resizable: false}
+     ]
+});
+ &lt;/code&gt;&lt;/pre&gt;
+ * @constructor
+ * @param {Object} config An Array of column config objects. See <b>this</b> class's
+ * config objects <b>for</b> details.
+ */</i>
+Ext.grid.ColumnModel = <b>function</b>(config){
+    <i>/**
+     * The width of columns which have no width specified (defaults to 100)
+     * @type Number
+     */</i>
+    <b>this</b>.defaultWidth = 100;
+
+    <i>/**
+     * Default sortable of columns which have no sortable specified (defaults to false)
+     * @type Boolean
+     */</i>
+    <b>this</b>.defaultSortable = false;
+
+    <i>/**
+     * The column configuration Array passed into the constructor.
+     * @property config
+     * @type Array
+     */</i>
+    <b>if</b>(config.columns){
+        Ext.apply(<b>this</b>, config);
+        <b>this</b>.setConfig(config.columns, true);
+    }<b>else</b>{
+        <b>this</b>.setConfig(config, true);
+    }
+    <b>this</b>.addEvents(
+        <i>/**
+         * @event widthchange
+         * Fires when the width of a column changes.
+         * @param {ColumnModel} <b>this</b>
+         * @param {Number} columnIndex The column index
+         * @param {Number} newWidth The <b>new</b> width
+         */</i>
+        &quot;widthchange&quot;,
+        <i>/**
+         * @event headerchange
+         * Fires when the text of a header changes.
+         * @param {ColumnModel} <b>this</b>
+         * @param {Number} columnIndex The column index
+         * @param {String} newText The <b>new</b> header text
+         */</i>
+        &quot;headerchange&quot;,
+        <i>/**
+         * @event hiddenchange
+         * Fires when a column is hidden or &quot;unhidden&quot;.
+         * @param {ColumnModel} <b>this</b>
+         * @param {Number} columnIndex The column index
+         * @param {Boolean} hidden true <b>if</b> hidden, false otherwise
+         */</i>
+        &quot;hiddenchange&quot;,
+        <i>/**
+         * @event columnmoved
+         * Fires when a column is moved.
+         * @param {ColumnModel} <b>this</b>
+         * @param {Number} oldIndex
+         * @param {Number} newIndex
+         */</i>
+        &quot;columnmoved&quot;,
+        <i>// deprecated - to be removed</i>
+        &quot;columnlockchange&quot;,
+        <i>/**
+         * @event configchange
+         * Fires when the configuration is changed
+         * @param {ColumnModel} <b>this</b>
+         */</i>
+        &quot;configchange&quot;
+    );
+    Ext.grid.ColumnModel.superclass.constructor.call(<b>this</b>);
+};
+Ext.extend(Ext.grid.ColumnModel, Ext.util.Observable, {
+    <i>/**
+     * @cfg {String} id (optional) Defaults to the column's initial ordinal position.
+     * A name which identifies <b>this</b> column. The id is used to create a CSS class name which
+     * is applied to all table cells (including headers) <b>in</b> that column. The class name
+     * takes the form of &lt;pre&gt;x-grid3-td-&lt;b&gt;id&lt;/b&gt;&lt;/pre&gt;
+     * &lt;br&gt;&lt;br&gt;
+     * Header cells will also recieve <b>this</b> class name, but will also have the class &lt;pr&gt;x-grid3-hd&lt;/pre&gt;,
+     * so to target header cells, use CSS selectors such as:&lt;pre&gt;.x-grid3-hd.x-grid3-td-&lt;b&gt;id&lt;/b&gt;&lt;/pre&gt;
+     * The {@link Ext.grid.GridPanel#autoExpandColumn} grid config option references the column
+     * via <b>this</b> identifier.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} header The header text to display <b>in</b> the Grid view.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} dataIndex (optional) The name of the field <b>in</b> the grid<em>'s {@link Ext.data.Store}'</em>s
+     * {@link Ext.data.Record} definition from which to draw the column's value. If not
+     * specified, the column<em>'s index is used as an index into the Record'</em>s data Array.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Number} width (optional) The initial width <b>in</b> pixels of the column. This is ignored <b>if</b> the
+     * Grid's {@link Ext.grid.GridView view} is configured <b>with</b> {@link Ext.grid.GridView#forceFit forceFit} true.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} sortable (optional) True <b>if</b> sorting is to be allowed on <b>this</b> column.
+     * Defaults to the value of the {@link #defaultSortable} property.
+     * Whether local/remote sorting is used is specified <b>in</b> {@link Ext.data.Store#remoteSort}.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} fixed (optional) True <b>if</b> the column width cannot be changed.  Defaults to false.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} resizable (optional) False to disable column resizing. Defaults to true.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} menuDisabled (optional) True to disable the column menu. Defaults to false.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} hidden (optional) True to hide the column. Defaults to false.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} tooltip (optional) A text string to use as the column header's tooltip.  If Quicktips are enabled, <b>this</b>
+     * value will be used as the text of the quick tip, otherwise it will be set as the header's HTML title attribute.
+     * Defaults to <em>''</em>.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Function} renderer (optional) A <b>function</b> used to generate HTML markup <b>for</b> a cell
+     * given the cell's data value. See {@link #setRenderer}. If not specified, the
+     * <b>default</b> renderer uses the raw data value.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} align (optional) Set the CSS text-align property of the column.  Defaults to undefined.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} css (optional) Set custom CSS <b>for</b> all table cells <b>in</b> the column (excluding headers).  Defaults to undefined.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} hideable (optional) Specify as &lt;tt&gt;false&lt;/tt&gt; to prevent the user from hiding <b>this</b> column
+     * (defaults to true).  To disallow column hiding globally <b>for</b> all columns <b>in</b> the grid, use
+     * {@link Ext.grid.GridPanel#enableColumnHide} instead.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Ext.form.Field} editor (optional) The {@link Ext.form.Field} to use when editing values <b>in</b> this column <b>if</b>
+     * editing is supported by the grid.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * Returns the id of the column at the specified index.
+     * @param {Number} index The column index
+     * @<b>return</b> {String} the id
+     */</i>
+    getColumnId : <b>function</b>(index){
+        <b>return</b> this.config[index].id;
+    },
+
+    <i>/**
+     * &lt;p&gt;Reconfigures <b>this</b> column model according to the passed Array of column definition objects. For a description of
+     * the individual properties of a column definition object, see the &lt;a href=&quot;#Ext.grid.ColumnModel-configs&quot;&gt;Config Options&lt;/a&gt;.&lt;/p&gt;
+     * &lt;p&gt;Causes the {@link #configchange} event to be fired. A {@link Ext.grid.GridPanel GridPanel} using
+     * <b>this</b> ColumnModel will listen <b>for</b> this event and refresh its UI automatically.&lt;/p&gt;
+     * @param {Array} config Array of Column definition objects.
+     */</i>
+    setConfig : <b>function</b>(config, initial){
+        <b>if</b>(!initial){ <i>// cleanup</i>
+            <b>delete</b> this.totalWidth;
+            <b>for</b>(var i = 0, len = <b>this</b>.config.length; i &lt; len; i++){
+                <b>var</b> c = <b>this</b>.config[i];
+                <b>if</b>(c.editor){
+                    c.editor.destroy();
+                }
+            }
+        }
+        <b>this</b>.config = config;
+        <b>this</b>.lookup = {};
+        <i>// <b>if</b> no id, create one</i>
+        <b>for</b>(var i = 0, len = config.length; i &lt; len; i++){
+            <b>var</b> c = config[i];
+            <b>if</b>(typeof c.renderer == &quot;string&quot;){
+                c.renderer = Ext.util.Format[c.renderer];
+            }
+            <b>if</b>(typeof c.id == &quot;undefined&quot;){
+                c.id = i;
+            }
+            <b>if</b>(c.editor &amp;&amp; c.editor.isFormField){
+                c.editor = <b>new</b> Ext.grid.GridEditor(c.editor);
+            }
+            <b>this</b>.lookup[c.id] = c;
+        }
+        <b>if</b>(!initial){
+            <b>this</b>.fireEvent(<em>'configchange'</em>, <b>this</b>);
+        }
+    },
+
+    <i>/**
+     * Returns the column <b>for</b> a specified id.
+     * @param {String} id The column id
+     * @<b>return</b> {Object} the column
+     */</i>
+    getColumnById : <b>function</b>(id){
+        <b>return</b> this.lookup[id];
+    },
+
+    <i>/**
+     * Returns the index <b>for</b> a specified column id.
+     * @param {String} id The column id
+     * @<b>return</b> {Number} the index, or -1 <b>if</b> not found
+     */</i>
+    getIndexById : <b>function</b>(id){
+        <b>for</b>(var i = 0, len = <b>this</b>.config.length; i &lt; len; i++){
+            <b>if</b>(this.config[i].id == id){
+                <b>return</b> i;
+            }
+        }
+        <b>return</b> -1;
+    },
+
+    <i>/**
+     * Moves a column from one position to another.
+     * @param {Number} oldIndex The index of the column to move.
+     * @param {Number} newIndex The position at which to reinsert the coolumn.
+     */</i>
+    moveColumn : <b>function</b>(oldIndex, newIndex){
+        <b>var</b> c = <b>this</b>.config[oldIndex];
+        <b>this</b>.config.splice(oldIndex, 1);
+        <b>this</b>.config.splice(newIndex, 0, c);
+        <b>this</b>.dataMap = null;
+        <b>this</b>.fireEvent(&quot;columnmoved&quot;, <b>this</b>, oldIndex, newIndex);
+    },
+
+    <i>// deprecated - to be removed</i>
+    isLocked : <b>function</b>(colIndex){
+        <b>return</b> this.config[colIndex].locked === true;
+    },
+
+    <i>// deprecated - to be removed</i>
+    setLocked : <b>function</b>(colIndex, value, suppressEvent){
+        <b>if</b>(this.isLocked(colIndex) == value){
+            <b>return</b>;
+        }
+        <b>this</b>.config[colIndex].locked = value;
+        <b>if</b>(!suppressEvent){
+            <b>this</b>.fireEvent(&quot;columnlockchange&quot;, <b>this</b>, colIndex, value);
+        }
+    },
+
+    <i>// deprecated - to be removed</i>
+    getTotalLockedWidth : <b>function</b>(){
+        <b>var</b> totalWidth = 0;
+        <b>for</b>(var i = 0; i &lt; <b>this</b>.config.length; i++){
+            <b>if</b>(this.isLocked(i) &amp;&amp; !<b>this</b>.isHidden(i)){
+                <b>this</b>.totalWidth += <b>this</b>.getColumnWidth(i);
+            }
+        }
+        <b>return</b> totalWidth;
+    },
+
+    <i>// deprecated - to be removed</i>
+    getLockedCount : <b>function</b>(){
+        <b>for</b>(var i = 0, len = <b>this</b>.config.length; i &lt; len; i++){
+            <b>if</b>(!<b>this</b>.isLocked(i)){
+                <b>return</b> i;
+            }
+        }
+    },
+
+    <i>/**
+     * Returns the number of columns.
+     * @param {Boolean} visibleOnly Optional. Pass as true to only include visible columns.
+     * @<b>return</b> {Number}
+     */</i>
+    getColumnCount : <b>function</b>(visibleOnly){
+        <b>if</b>(visibleOnly === true){
+            <b>var</b> c = 0;
+            <b>for</b>(var i = 0, len = <b>this</b>.config.length; i &lt; len; i++){
+                <b>if</b>(!<b>this</b>.isHidden(i)){
+                    c++;
+                }
+            }
+            <b>return</b> c;
+        }
+        <b>return</b> this.config.length;
+    },
+
+    <i>/**
+     * Returns the column configs that <b>return</b> true by the passed <b>function</b> that is called <b>with</b> (columnConfig, index)
+     * @param {Function} fn
+     * @param {Object} scope (optional)
+     * @<b>return</b> {Array} result
+     */</i>
+    getColumnsBy : <b>function</b>(fn, scope){
+        <b>var</b> r = [];
+        <b>for</b>(var i = 0, len = <b>this</b>.config.length; i &lt; len; i++){
+            <b>var</b> c = <b>this</b>.config[i];
+            <b>if</b>(fn.call(scope||<b>this</b>, c, i) === true){
+                r[r.length] = c;
+            }
+        }
+        <b>return</b> r;
+    },
+
+    <i>/**
+     * Returns true <b>if</b> the specified column is sortable.
+     * @param {Number} col The column index
+     * @<b>return</b> {Boolean}
+     */</i>
+    isSortable : <b>function</b>(col){
+        <b>if</b>(typeof <b>this</b>.config[col].sortable == &quot;undefined&quot;){
+            <b>return</b> this.defaultSortable;
+        }
+        <b>return</b> this.config[col].sortable;
+    },
+
+    <i>/**
+     * Returns true <b>if</b> the specified column menu is disabled.
+     * @param {Number} col The column index
+     * @<b>return</b> {Boolean}
+     */</i>
+    isMenuDisabled : <b>function</b>(col){
+        <b>return</b> !!<b>this</b>.config[col].menuDisabled;
+    },
+
+    <i>/**
+     * Returns the rendering (formatting) <b>function</b> defined <b>for</b> the column.
+     * @param {Number} col The column index.
+     * @<b>return</b> {Function} The <b>function</b> used to render the cell. See {@link #setRenderer}.
+     */</i>
+    getRenderer : <b>function</b>(col){
+        <b>if</b>(!<b>this</b>.config[col].renderer){
+            <b>return</b> Ext.grid.ColumnModel.defaultRenderer;
+        }
+        <b>return</b> this.config[col].renderer;
+    },
+
+    <i>/**
+     * Sets the rendering (formatting) <b>function</b> for a column.  See {@link Ext.util.Format} <b>for</b> some
+     * <b>default</b> formatting functions.
+     * @param {Number} col The column index
+     * @param {Function} fn The <b>function</b> to use to process the cell's raw data
+     * to <b>return</b> HTML markup <b>for</b> the grid view. The render <b>function</b> is called <b>with</b>
+     * the following parameters:&lt;ul&gt;
+     * &lt;li&gt;&lt;b&gt;value&lt;/b&gt; : Object&lt;p class=&quot;sub-desc&quot;&gt;The data value <b>for</b> the cell.&lt;/p&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;metadata&lt;/b&gt; : Object&lt;p class=&quot;sub-desc&quot;&gt;An object <b>in</b> which you may set the following attributes:&lt;ul&gt;
+     * &lt;li&gt;&lt;b&gt;css&lt;/b&gt; : String&lt;p class=&quot;sub-desc&quot;&gt;A CSS class name to add to the cell's TD element.&lt;/p&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;attr&lt;/b&gt; : String&lt;p class=&quot;sub-desc&quot;&gt;An HTML attribute definition string to apply to the data container element &lt;i&gt;within&lt;/i&gt; the table cell
+     * (e.g. <em>'style=&quot;color:red;&quot;'</em>).&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;record&lt;/b&gt; : Ext.data.record&lt;p class=&quot;sub-desc&quot;&gt;The {@link Ext.data.Record} from which the data was extracted.&lt;/p&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;rowIndex&lt;/b&gt; : Number&lt;p class=&quot;sub-desc&quot;&gt;Row index&lt;/p&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;colIndex&lt;/b&gt; : Number&lt;p class=&quot;sub-desc&quot;&gt;Column index&lt;/p&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;store&lt;/b&gt; : Ext.data.Store&lt;p class=&quot;sub-desc&quot;&gt;The {@link Ext.data.Store} object from which the Record was extracted.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;
+     */</i>
+    setRenderer : <b>function</b>(col, fn){
+        <b>this</b>.config[col].renderer = fn;
+    },
+
+    <i>/**
+     * Returns the width <b>for</b> the specified column.
+     * @param {Number} col The column index
+     * @<b>return</b> {Number}
+     */</i>
+    getColumnWidth : <b>function</b>(col){
+        <b>return</b> this.config[col].width || <b>this</b>.defaultWidth;
+    },
+
+    <i>/**
+     * Sets the width <b>for</b> a column.
+     * @param {Number} col The column index
+     * @param {Number} width The <b>new</b> width
+     */</i>
+    setColumnWidth : <b>function</b>(col, width, suppressEvent){
+        <b>this</b>.config[col].width = width;
+        <b>this</b>.totalWidth = null;
+        <b>if</b>(!suppressEvent){
+             <b>this</b>.fireEvent(&quot;widthchange&quot;, <b>this</b>, col, width);
+        }
+    },
+
+    <i>/**
+     * Returns the total width of all columns.
+     * @param {Boolean} includeHidden True to include hidden column widths
+     * @<b>return</b> {Number}
+     */</i>
+    getTotalWidth : <b>function</b>(includeHidden){
+        <b>if</b>(!<b>this</b>.totalWidth){
+            <b>this</b>.totalWidth = 0;
+            <b>for</b>(var i = 0, len = <b>this</b>.config.length; i &lt; len; i++){
+                <b>if</b>(includeHidden || !<b>this</b>.isHidden(i)){
+                    <b>this</b>.totalWidth += <b>this</b>.getColumnWidth(i);
+                }
+            }
+        }
+        <b>return</b> this.totalWidth;
+    },
+
+    <i>/**
+     * Returns the header <b>for</b> the specified column.
+     * @param {Number} col The column index
+     * @<b>return</b> {String}
+     */</i>
+    getColumnHeader : <b>function</b>(col){
+        <b>return</b> this.config[col].header;
+    },
+
+    <i>/**
+     * Sets the header <b>for</b> a column.
+     * @param {Number} col The column index
+     * @param {String} header The <b>new</b> header
+     */</i>
+    setColumnHeader : <b>function</b>(col, header){
+        <b>this</b>.config[col].header = header;
+        <b>this</b>.fireEvent(&quot;headerchange&quot;, <b>this</b>, col, header);
+    },
+
+    <i>/**
+     * Returns the tooltip <b>for</b> the specified column.
+     * @param {Number} col The column index
+     * @<b>return</b> {String}
+     */</i>
+    getColumnTooltip : <b>function</b>(col){
+            <b>return</b> this.config[col].tooltip;
+    },
+    <i>/**
+     * Sets the tooltip <b>for</b> a column.
+     * @param {Number} col The column index
+     * @param {String} tooltip The <b>new</b> tooltip
+     */</i>
+    setColumnTooltip : <b>function</b>(col, tooltip){
+            <b>this</b>.config[col].tooltip = tooltip;
+    },
+
+    <i>/**
+     * Returns the dataIndex <b>for</b> the specified column.
+     * @param {Number} col The column index
+     * @<b>return</b> {String} The column's dataIndex
+     */</i>
+    getDataIndex : <b>function</b>(col){
+        <b>return</b> this.config[col].dataIndex;
+    },
+
+    <i>/**
+     * Sets the dataIndex <b>for</b> a column.
+     * @param {Number} col The column index
+     * @param {String} dataIndex The <b>new</b> dataIndex
+     */</i>
+    setDataIndex : <b>function</b>(col, dataIndex){
+        <b>this</b>.config[col].dataIndex = dataIndex;
+    },
+
+    <i>/**
+     * Finds the index of the first matching column <b>for</b> the given dataIndex.
+     * @param {String} col The dataIndex to find
+     * @<b>return</b> {Number} The column index, or -1 <b>if</b> no match was found
+     */</i>
+    findColumnIndex : <b>function</b>(dataIndex){
+        <b>var</b> c = <b>this</b>.config;
+        <b>for</b>(var i = 0, len = c.length; i &lt; len; i++){
+            <b>if</b>(c[i].dataIndex == dataIndex){
+                <b>return</b> i;
+            }
+        }
+        <b>return</b> -1;
+    },
+
+    <i>/**
+     * Returns true <b>if</b> the cell is editable.
+     * @param {Number} colIndex The column index
+     * @param {Number} rowIndex The row index
+     * @<b>return</b> {Boolean}
+     */</i>
+    isCellEditable : <b>function</b>(colIndex, rowIndex){
+        <b>return</b> (<b>this</b>.config[colIndex].editable || (<b>typeof</b> this.config[colIndex].editable == &quot;undefined&quot; &amp;&amp; <b>this</b>.config[colIndex].editor)) ? true : false;
+    },
+
+    <i>/**
+     * Returns the editor defined <b>for</b> the cell/column.
+     * @param {Number} colIndex The column index
+     * @param {Number} rowIndex The row index
+     * @<b>return</b> {Ext.Editor} The {@link Ext.Editor Editor} that was created to wrap
+     * the {@link Ext.form.Field Field} used to edit the cell.
+     */</i>
+    getCellEditor : <b>function</b>(colIndex, rowIndex){
+        <b>return</b> this.config[colIndex].editor;
+    },
+
+    <i>/**
+     * Sets <b>if</b> a column is editable.
+     * @param {Number} col The column index
+     * @param {Boolean} editable True <b>if</b> the column is editable
+     */</i>
+    setEditable : <b>function</b>(col, editable){
+        <b>this</b>.config[col].editable = editable;
+    },
+
+
+    <i>/**
+     * Returns true <b>if</b> the column is hidden.
+     * @param {Number} colIndex The column index
+     * @<b>return</b> {Boolean}
+     */</i>
+    isHidden : <b>function</b>(colIndex){
+        <b>return</b> this.config[colIndex].hidden;
+    },
+
+
+    <i>/**
+     * Returns true <b>if</b> the column width cannot be changed
+     */</i>
+    isFixed : <b>function</b>(colIndex){
+        <b>return</b> this.config[colIndex].fixed;
+    },
+
+    <i>/**
+     * Returns true <b>if</b> the column can be resized
+     * @<b>return</b> {Boolean}
+     */</i>
+    isResizable : <b>function</b>(colIndex){
+        <b>return</b> colIndex &gt;= 0 &amp;&amp; <b>this</b>.config[colIndex].resizable !== false &amp;&amp; <b>this</b>.config[colIndex].fixed !== true;
+    },
+    <i>/**
+     * Sets <b>if</b> a column is hidden.
+     * @param {Number} colIndex The column index
+     * @param {Boolean} hidden True <b>if</b> the column is hidden
+     */</i>
+    setHidden : <b>function</b>(colIndex, hidden){
+        <b>var</b> c = <b>this</b>.config[colIndex];
+        <b>if</b>(c.hidden !== hidden){
+            c.hidden = hidden;
+            <b>this</b>.totalWidth = null;
+            <b>this</b>.fireEvent(&quot;hiddenchange&quot;, <b>this</b>, colIndex, hidden);
+        }
+    },
+
+    <i>/**
+     * Sets the editor <b>for</b> a column.
+     * @param {Number} col The column index
+     * @param {Object} editor The editor object
+     */</i>
+    setEditor : <b>function</b>(col, editor){
+        Ext.destroy(<b>this</b>.config[col].editor);
+        <b>this</b>.config[col].editor = editor;
+    },
+    
+    <i>/**
+     * Destroys <b>this</b> the column model by purging any event listeners, and removing any editors.
+     */</i>
+    destroy : <b>function</b>(){
+        <b>var</b> c = <b>this</b>.config;
+        <b>for</b>(var i = 0, c = <b>this</b>.config, len = c.length; i &lt; len; i++){
+            Ext.destroy(c[i].editor);
+        }
+        <b>this</b>.purgeListeners();
+    }
+});
+
+<i>// private</i>
+Ext.grid.ColumnModel.defaultRenderer = <b>function</b>(value){
+    <b>if</b>(typeof value == &quot;string&quot; &amp;&amp; value.length &lt; 1){
+        <b>return</b> &quot;&amp;#160;&quot;;
+    }
+    <b>return</b> value;
+};
+
+<i>// Alias <b>for</b> backwards compatibility</i>
+Ext.grid.DefaultColumnModel = Ext.grid.ColumnModel;</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

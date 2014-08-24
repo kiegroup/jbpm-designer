@@ -1,0 +1,288 @@
+<html><head><title>ext-lang-he.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ext-lang-he.js</h1><pre class="highlighted"><code><i>/**
+ * Hebrew Translations
+ * By spartacus (from forums) 06-12-2007
+ */</i>
+
+Ext.UpdateManager.defaults.indicatorText = <em>'&lt;div class=&quot;loading-indicator&quot;&gt;...&egrave;&aring;&ograve;&iuml;&lt;/div&gt;'</em>;
+
+<b>if</b>(Ext.View){
+  Ext.View.prototype.emptyText = &quot;&quot;;
+}
+
+<b>if</b>(Ext.grid.GridPanel){
+  Ext.grid.GridPanel.prototype.ddText = &quot;&ugrave;&aring;&oslash;&aring;&uacute; &eth;&aacute;&ccedil;&oslash;&aring;&uacute; {0}&quot;;
+}
+
+<b>if</b>(Ext.TabPanelItem){
+  Ext.TabPanelItem.prototype.closeText = &quot;&ntilde;&acirc;&aring;&oslash; &igrave;&ugrave;&aring;&eth;&eacute;&uacute;&quot;;
+}
+
+<b>if</b>(Ext.form.Field){
+  Ext.form.Field.prototype.invalidText = &quot;&auml;&ograve;&oslash;&ecirc; &aacute;&ugrave;&atilde;&auml; &aelig;&auml; &ugrave;&acirc;&aring;&eacute;&quot;;
+}
+
+<b>if</b>(Ext.LoadMask){
+  Ext.LoadMask.prototype.msg = &quot;...&egrave;&aring;&ograve;&iuml;&quot;;
+}
+
+Date.monthNames = [
+  &quot;&eacute;&eth;&aring;&agrave;&oslash;&quot;,
+  &quot;&ocirc;&aacute;&oslash;&aring;&agrave;&oslash;&quot;,
+  &quot;&icirc;&oslash;&otilde;&quot;,
+  &quot;&agrave;&ocirc;&oslash;&eacute;&igrave;&quot;,
+  &quot;&icirc;&agrave;&eacute;&quot;,
+  &quot;&eacute;&aring;&eth;&eacute;&quot;,
+  &quot;&eacute;&aring;&igrave;&eacute;&quot;,
+  &quot;&agrave;&aring;&acirc;&aring;&ntilde;&egrave;&quot;,
+  &quot;&ntilde;&ocirc;&egrave;&icirc;&aacute;&oslash;&quot;,
+  &quot;&agrave;&aring;&divide;&egrave;&aring;&aacute;&oslash;&quot;,
+  &quot;&eth;&aring;&aacute;&icirc;&aacute;&oslash;&quot;,
+  &quot;&atilde;&ouml;&icirc;&aacute;&oslash;&quot;
+];
+
+Date.getShortMonthName = <b>function</b>(month) {
+  <b>return</b> Date.monthNames[month].substring(0, 3);
+};
+
+Date.monthNumbers = {
+  Jan : 0,
+  Feb : 1,
+  Mar : 2,
+  Apr : 3,
+  May : 4,
+  Jun : 5,
+  Jul : 6,
+  Aug : 7,
+  Sep : 8,
+  Oct : 9,
+  Nov : 10,
+  Dec : 11
+};
+
+Date.getMonthNumber = <b>function</b>(name) {
+  <b>return</b> Date.monthNumbers[name.substring(0, 1).toUpperCase() + name.substring(1, 3).toLowerCase()];
+};
+
+Date.dayNames = [
+  &quot;&agrave;&quot;,
+  &quot;&aacute;&quot;,
+  &quot;&acirc;&quot;,
+  &quot;&atilde;&quot;,
+  &quot;&auml;&quot;,
+  &quot;&aring;&quot;,
+  &quot;&ugrave;&quot;
+];
+
+Date.getShortDayName = <b>function</b>(day) {
+  <b>return</b> Date.dayNames[day].substring(0, 3);
+};
+
+<b>if</b>(Ext.MessageBox){
+  Ext.MessageBox.buttonText = {
+    ok     : &quot;&agrave;&eacute;&ugrave;&aring;&oslash;&quot;,
+    cancel : &quot;&aacute;&eacute;&egrave;&aring;&igrave;&quot;,
+    yes    : &quot;&euml;&iuml;&quot;,
+    no     : &quot;&igrave;&agrave;&quot;
+  };
+}
+
+<b>if</b>(Ext.util.Format){
+  Ext.util.Format.date = <b>function</b>(v, format){
+    <b>if</b>(!v) <b>return</b> &quot;&quot;;
+    <b>if</b>(!(v instanceof Date)) v = <b>new</b> Date(Date.parse(v));
+    <b>return</b> v.dateFormat(format || &quot;d/m/Y&quot;);
+  };
+}
+
+<b>if</b>(Ext.DatePicker){
+  Ext.apply(Ext.DatePicker.prototype, {
+    todayText         : &quot;&auml;&eacute;&aring;&iacute;&quot;,
+    minText           : &quot;.&uacute;&agrave;&oslash;&eacute;&ecirc; &aelig;&auml; &ccedil;&igrave; &divide;&aring;&atilde;&iacute; &igrave;&uacute;&agrave;&oslash;&eacute;&ecirc; &auml;&auml;&uacute;&ccedil;&igrave;&uacute;&eacute; &ugrave;&eth;&divide;&aacute;&ograve;&quot;,
+    maxText           : &quot;.&uacute;&agrave;&oslash;&eacute;&ecirc; &aelig;&auml; &ccedil;&igrave; &igrave;&agrave;&ccedil;&oslash; &auml;&uacute;&agrave;&oslash;&eacute;&ecirc; &auml;&ntilde;&aring;&ocirc;&eacute; &ugrave;&eth;&divide;&aacute;&ograve;&quot;,
+    disabledDaysText  : &quot;&quot;,
+    disabledDatesText : &quot;&quot;,
+    monthNames        : Date.monthNames,
+    dayNames          : Date.dayNames,
+    nextText          : <em>'(Control+Right) &auml;&ccedil;&aring;&atilde;&ugrave; &auml;&aacute;&agrave;'</em>,
+    prevText          : <em>'(Control+Left) &auml;&ccedil;&aring;&atilde;&ugrave; &auml;&divide;&aring;&atilde;&iacute;'</em>,
+    monthYearText     : <em>'(&igrave;&aacute;&ccedil;&eacute;&oslash;&uacute; &ugrave;&eth;&auml; Control+Up/Down) &aacute;&ccedil;&oslash; &ccedil;&aring;&atilde;&ugrave;'</em>,
+    todayTip          : &quot;&icirc;&divide;&ugrave; &oslash;&aring;&aring;&ccedil;) {0})&quot;,
+    format            : &quot;d/m/Y&quot;,
+    okText            : &quot;&amp;#160;&agrave;&eacute;&ugrave;&aring;&oslash;&amp;#160;&quot;,
+    cancelText        : &quot;&aacute;&eacute;&egrave;&aring;&igrave;&quot;,
+    startDay          : 0
+  });
+}
+
+<b>if</b>(Ext.PagingToolbar){
+  Ext.apply(Ext.PagingToolbar.prototype, {
+    beforePageText : &quot;&ograve;&icirc;&aring;&atilde;&quot;,
+    afterPageText  : &quot;{0} &icirc;&uacute;&aring;&ecirc;&quot;,
+    firstText      : &quot;&ograve;&icirc;&aring;&atilde; &oslash;&agrave;&ugrave;&aring;&iuml;&quot;,
+    prevText       : &quot;&ograve;&icirc;&aring;&atilde; &divide;&aring;&atilde;&iacute;&quot;,
+    nextText       : &quot;&ograve;&icirc;&aring;&atilde; &auml;&aacute;&agrave;&quot;,
+    lastText       : &quot;&ograve;&icirc;&aring;&atilde; &agrave;&ccedil;&oslash;&aring;&iuml;&quot;,
+    refreshText    : &quot;&oslash;&ograve;&eth;&iuml;&quot;,
+    displayMsg     : &quot;&icirc;&ouml;&eacute;&acirc; {0} - {1} &icirc;&uacute;&aring;&ecirc; {2}&quot;,
+    emptyMsg       : <em>'&agrave;&eacute;&iuml; &icirc;&eacute;&atilde;&ograve; &igrave;&auml;&ouml;&acirc;&auml;'</em>
+  });
+}
+
+<b>if</b>(Ext.form.TextField){
+  Ext.apply(Ext.form.TextField.prototype, {
+    minLengthText : &quot;{0} &auml;&agrave;&aring;&oslash;&ecirc; &auml;&icirc;&eacute;&eth;&eacute;&icirc;&agrave;&igrave;&eacute; &igrave;&ugrave;&atilde;&auml; &aelig;&auml; &auml;&aring;&agrave;&quot;,
+    maxLengthText : &quot;{0} &auml;&agrave;&aring;&oslash;&ecirc; &auml;&icirc;&eacute;&oslash;&aacute;&eacute; &igrave;&ugrave;&atilde;&auml; &aelig;&auml; &auml;&aring;&agrave;&quot;,
+    blankText     : &quot;&ugrave;&atilde;&auml; &aelig;&auml; &auml;&euml;&oslash;&ccedil;&eacute;&quot;,
+    regexText     : &quot;&quot;,
+    emptyText     : null
+  });
+}
+
+<b>if</b>(Ext.form.NumberField){
+  Ext.apply(Ext.form.NumberField.prototype, {
+    minText : &quot;{0} &auml;&ograve;&oslash;&ecirc; &auml;&icirc;&eacute;&eth;&eacute;&icirc;&agrave;&igrave;&eacute; &igrave;&ugrave;&atilde;&auml; &aelig;&auml; &auml;&aring;&agrave;&quot;,
+    maxText : &quot;{0} &auml;&ograve;&oslash;&ecirc; &auml;&icirc;&eacute;&oslash;&aacute;&eacute; &igrave;&ugrave;&atilde;&auml; &aelig;&auml; &auml;&aring;&agrave;&quot;,
+    nanText : &quot;&auml;&aring;&agrave; &igrave;&agrave; &icirc;&ntilde;&ocirc;&oslash; {0}&quot;
+  });
+}
+
+<b>if</b>(Ext.form.DateField){
+  Ext.apply(Ext.form.DateField.prototype, {
+    disabledDaysText  : &quot;&icirc;&eth;&aring;&egrave;&oslash;&igrave;&quot;,
+    disabledDatesText : &quot;&icirc;&eth;&aring;&egrave;&oslash;&igrave;&quot;,
+    minText           : &quot;{0} &auml;&uacute;&agrave;&oslash;&eacute;&ecirc; &aacute;&ugrave;&atilde;&auml; &aelig;&auml; &ccedil;&eacute;&eacute;&aacute; &igrave;&auml;&eacute;&aring;&uacute; &igrave;&agrave;&ccedil;&oslash;&quot;,
+    maxText           : &quot;{0} &auml;&uacute;&agrave;&oslash;&eacute;&ecirc; &aacute;&ugrave;&atilde;&auml; &aelig;&auml; &ccedil;&eacute;&eacute;&aacute; &igrave;&auml;&eacute;&aring;&uacute; &igrave;&ocirc;&eth;&eacute;&quot;,
+    invalidText       : &quot;{1} &auml;&aring;&agrave; &igrave;&agrave; &uacute;&agrave;&oslash;&eacute;&ecirc; &uacute;&divide;&eth;&eacute; - &ccedil;&eacute;&eacute;&aacute; &igrave;&auml;&eacute;&aring;&uacute; &aacute;&ocirc;&aring;&oslash;&icirc;&egrave; {0}&quot;,
+    format            : &quot;m/d/y&quot;,
+    altFormats        : &quot;m/d/Y|m-d-y|m-d-Y|m/d|m-d|md|mdy|mdY|d|Y-m-d&quot;
+  });
+}
+
+<b>if</b>(Ext.form.ComboBox){
+  Ext.apply(Ext.form.ComboBox.prototype, {
+    loadingText       : &quot;...&egrave;&aring;&ograve;&iuml;&quot;,
+    valueNotFoundText : undefined
+  });
+}
+
+<b>if</b>(Ext.form.VTypes){
+  Ext.apply(Ext.form.VTypes, {
+    emailText    : <em>'&quot;user@domain.com&quot; &ugrave;&atilde;&auml; &aelig;&auml; &ouml;&oslash;&eacute;&ecirc; &igrave;&auml;&eacute;&aring;&uacute; &euml;&uacute;&aring;&aacute;&uacute; &atilde;&aring;&agrave;&oslash; &agrave;&igrave;&divide;&egrave;&oslash;&aring;&eth;&eacute; &aacute;&ocirc;&aring;&oslash;&icirc;&egrave;'</em>,
+    urlText      : <em>'&quot;http:/'</em>+<em>'/www.domain.com&quot; &ugrave;&atilde;&auml; &aelig;&auml; &ouml;&oslash;&eacute;&ecirc; &igrave;&auml;&eacute;&aring;&uacute; &euml;&uacute;&aring;&aacute;&uacute; &agrave;&eacute;&eth;&egrave;&oslash;&eth;&egrave; &aacute;&ocirc;&aring;&oslash;&icirc;&egrave;'</em>,
+    alphaText    : <em>'_&ugrave;&atilde;&auml; &aelig;&auml; &eacute;&euml;&aring;&igrave; &igrave;&auml;&euml;&eacute;&igrave; &oslash;&divide; &agrave;&aring;&uacute;&eacute;&aring;&uacute; &aring;'</em>,
+    alphanumText : <em>'_&ugrave;&atilde;&auml; &aelig;&auml; &eacute;&euml;&aring;&igrave; &igrave;&auml;&euml;&eacute;&igrave; &oslash;&divide; &agrave;&aring;&uacute;&eacute;&aring;&uacute;, &icirc;&ntilde;&ocirc;&oslash;&eacute;&iacute; &aring;'</em>
+  });
+}
+
+<b>if</b>(Ext.form.HtmlEditor){
+  Ext.apply(Ext.form.HtmlEditor.prototype, {
+    createLinkText : <em>':&agrave;&eth;&agrave; &auml;&divide;&igrave;&atilde; &agrave;&uacute; &euml;&uacute;&aring;&aacute;&uacute; &auml;&agrave;&eacute;&eth;&egrave;&oslash;&eth;&egrave; &ograve;&aacute;&aring;&oslash; &auml;&divide;&eacute;&ugrave;&aring;&oslash;'</em>,
+    buttonTips : {
+      bold : {
+        title: <em>'(Ctrl+B) &icirc;&aring;&atilde;&acirc;&ugrave;'</em>,
+        text: <em>'.&auml;&atilde;&acirc;&ugrave; &agrave;&uacute; &auml;&egrave;&divide;&ntilde;&egrave; &auml;&eth;&aacute;&ccedil;&oslash;'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      italic : {
+        title: <em>'(Ctrl+I) &eth;&egrave;&aring;&eacute;'</em>,
+        text: <em>'.&auml;&egrave;&auml; &agrave;&uacute; &auml;&egrave;&divide;&ntilde;&egrave; &auml;&eth;&aacute;&ccedil;&oslash;'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      underline : {
+        title: <em>'(Ctrl+U) &divide;&aring; &uacute;&ccedil;&uacute;&eacute;'</em>,
+        text: <em>'.&auml;&aring;&ntilde;&oacute; &divide;&iuml; &uacute;&ccedil;&uacute;&eacute; &ograve;&aacute;&aring;&oslash; &auml;&egrave;&divide;&ntilde;&egrave; &auml;&eth;&aacute;&ccedil;&oslash;'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      increasefontsize : {
+        title: <em>'&auml;&acirc;&atilde;&igrave; &egrave;&divide;&ntilde;&egrave;'</em>,
+        text: <em>'.&auml;&acirc;&atilde;&igrave; &acirc;&aring;&ocirc;&iuml; &ograve;&aacute;&aring;&oslash; &auml;&egrave;&divide;&ntilde;&egrave; &auml;&eth;&aacute;&ccedil;&oslash;'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      decreasefontsize : {
+        title: <em>'&auml;&divide;&egrave;&iuml; &egrave;&divide;&ntilde;&egrave;'</em>,
+        text: <em>'.&auml;&divide;&egrave;&iuml; &acirc;&aring;&ocirc;&iuml; &ograve;&aacute;&aring;&oslash; &auml;&egrave;&divide;&ntilde;&egrave; &auml;&eth;&aacute;&ccedil;&oslash;'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      backcolor : {
+        title: <em>'&ouml;&aacute;&ograve; &oslash;&divide;&ograve; &igrave;&egrave;&divide;&ntilde;&egrave;'</em>,
+        text: <em>'.&ugrave;&eth;&auml; &agrave;&uacute; &ouml;&aacute;&ograve; &auml;&oslash;&divide;&ograve; &ograve;&aacute;&aring;&oslash; &auml;&egrave;&divide;&ntilde;&egrave; &auml;&eth;&aacute;&ccedil;&oslash;'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      forecolor : {
+        title: <em>'&ouml;&aacute;&ograve; &acirc;&aring;&ocirc;&iuml;'</em>,
+        text: <em>'.&ugrave;&eth;&auml; &agrave;&uacute; &ouml;&aacute;&ograve; &auml;&acirc;&aring;&ocirc;&iuml; &ograve;&aacute;&aring;&oslash; &auml;&egrave;&divide;&ntilde;&egrave; &auml;&eth;&aacute;&ccedil;&oslash;'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifyleft : {
+        title: <em>'&eacute;&ugrave;&aring;&oslash; &igrave;&ugrave;&icirc;&agrave;&igrave;'</em>,
+        text: <em>'.&eacute;&ugrave;&oslash; &ugrave;&icirc;&agrave;&igrave;&auml; &agrave;&uacute; &auml;&egrave;&divide;&ntilde;&egrave; &auml;&eth;&aacute;&ccedil;&oslash;'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifycenter : {
+        title: <em>'&eacute;&ugrave;&aring;&oslash; &igrave;&icirc;&oslash;&euml;&aelig;'</em>,
+        text: <em>'.&eacute;&ugrave;&oslash; &igrave;&icirc;&oslash;&euml;&aelig; &agrave;&uacute; &auml;&egrave;&divide;&ntilde;&egrave; &auml;&eth;&aacute;&ccedil;&oslash;'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifyright : {
+        title: <em>'&eacute;&ugrave;&aring;&oslash; &igrave;&eacute;&icirc;&eacute;&iuml;'</em>,
+        text: <em>'.&eacute;&ugrave;&oslash; &eacute;&icirc;&eacute;&eth;&auml; &agrave;&uacute; &auml;&egrave;&divide;&ntilde;&egrave; &auml;&eth;&aacute;&ccedil;&oslash;'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      insertunorderedlist : {
+        title: <em>'&oslash;&ugrave;&eacute;&icirc;&uacute; &eth;&divide;&aring;&atilde;&aring;&uacute;'</em>,
+        text: <em>'.&auml;&uacute;&ccedil;&igrave; &oslash;&ugrave;&eacute;&icirc;&uacute; &eth;&divide;&aring;&atilde;&aring;&uacute;'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      insertorderedlist : {
+        title: <em>'&oslash;&ugrave;&eacute;&icirc;&auml; &icirc;&icirc;&aring;&ntilde;&ocirc;&oslash;&uacute;'</em>,
+        text: <em>'.&auml;&uacute;&ccedil;&igrave; &oslash;&ugrave;&eacute;&icirc;&auml; &icirc;&icirc;&aring;&ntilde;&ocirc;&oslash;&uacute;'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      createlink : {
+        title: <em>'&divide;&eacute;&ugrave;&aring;&oslash;'</em>,
+        text: <em>'.&auml;&ocirc;&aring;&ecirc; &agrave;&uacute; &auml;&egrave;&divide;&ntilde;&egrave; &auml;&eth;&aacute;&ccedil;&oslash; &igrave;&divide;&eacute;&ugrave;&aring;&oslash;'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      sourceedit : {
+        title: <em>'&ograve;&oslash;&eacute;&euml;&uacute; &divide;&aring;&atilde; &icirc;&divide;&aring;&oslash;'</em>,
+        text: <em>'.&auml;&ouml;&acirc; &divide;&aring;&atilde; &icirc;&divide;&aring;&oslash;'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      }
+    }
+  });
+}
+
+<b>if</b>(Ext.grid.GridView){
+  Ext.apply(Ext.grid.GridView.prototype, {
+    sortAscText  : &quot;&icirc;&eacute;&eacute;&iuml; &aacute;&ntilde;&atilde;&oslash; &ograve;&aring;&igrave;&auml;&quot;,
+    sortDescText : &quot;&icirc;&eacute;&eacute;&iuml; &aacute;&ntilde;&atilde;&oslash; &eacute;&aring;&oslash;&atilde;&quot;,
+    lockText     : &quot;&eth;&ograve;&igrave; &ograve;&icirc;&aring;&atilde;&auml;&quot;,
+    unlockText   : &quot;&ugrave;&ccedil;&oslash;&oslash; &ograve;&icirc;&aring;&atilde;&auml;&quot;,
+    columnsText  : &quot;&ograve;&icirc;&aring;&atilde;&aring;&uacute;&quot;
+  });
+}
+
+<b>if</b>(Ext.grid.GroupingView){
+  Ext.apply(Ext.grid.GroupingView.prototype, {
+    emptyGroupText : <em>'(&oslash;&eacute;&divide;)'</em>,
+    groupByText    : <em>'&auml;&ouml;&acirc; &aacute;&divide;&aacute;&aring;&ouml;&aring;&uacute; &igrave;&ocirc;&eacute; &ugrave;&atilde;&auml; &aelig;&auml;'</em>,
+    showGroupsText : <em>'&auml;&ouml;&acirc; &aacute;&divide;&aacute;&aring;&ouml;&aring;&uacute;'</em>
+  });
+}
+
+<b>if</b>(Ext.grid.PropertyColumnModel){
+  Ext.apply(Ext.grid.PropertyColumnModel.prototype, {
+    nameText   : &quot;&ugrave;&iacute;&quot;,
+    valueText  : &quot;&ograve;&oslash;&ecirc;&quot;,
+    dateFormat : &quot;m/j/Y&quot;
+  });
+}
+
+<b>if</b>(Ext.layout.BorderLayout &amp;&amp; Ext.layout.BorderLayout.SplitRegion){
+  Ext.apply(Ext.layout.BorderLayout.SplitRegion.prototype, {
+    splitTip            : &quot;.&icirc;&ugrave;&aring;&ecirc; &igrave;&ugrave;&eacute;&eth;&aring;&eacute; &acirc;&aring;&atilde;&igrave;&quot;,
+    collapsibleSplitTip : &quot;.&icirc;&ugrave;&aring;&ecirc; &igrave;&ugrave;&eacute;&eth;&aring;&eacute; &acirc;&aring;&atilde;&igrave;. &igrave;&ccedil;&eacute;&ouml;&auml; &euml;&ocirc;&aring;&igrave;&auml; &igrave;&auml;&ntilde;&uacute;&oslash;&auml;&quot;
+  });
+}
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

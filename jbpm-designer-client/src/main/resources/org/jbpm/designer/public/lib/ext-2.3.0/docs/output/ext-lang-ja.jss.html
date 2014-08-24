@@ -1,0 +1,314 @@
+<html><head><title>ext-lang-ja.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ext-lang-ja.js</h1><pre class="highlighted"><code><i>/*
+ * Japanese translation
+ * By tyama
+ * 04-08-2007, 05:49 AM
+ *
+ * update based on English Translations by Condor (8 Aug 2008)
+ * By sakuro (30 Aug 2008)
+ */</i>
+
+Ext.UpdateManager.defaults.indicatorText = <em>'&lt;div class=&quot;loading-indicator&quot;&gt;&egrave;&ordf;&shy;&atilde;&iquest;&egrave;&frac34;&frac14;&atilde;&iquest;&auml;&cedil;&shy;...&lt;/div&gt;'</em>;
+
+<b>if</b>(Ext.DataView){
+  Ext.DataView.prototype.emptyText = &quot;&quot;;
+}
+
+<b>if</b>(Ext.grid.GridPanel){
+  Ext.grid.GridPanel.prototype.ddText = &quot;{0} &egrave;&iexcl;Œ&eacute;&cedil;&aelig;Š&quot;;
+}
+
+<b>if</b>(Ext.LoadMask){
+  Ext.LoadMask.prototype.msg = &quot;&egrave;&ordf;&shy;&atilde;&iquest;&egrave;&frac34;&frac14;&atilde;&iquest;&auml;&cedil;&shy;...&quot;;
+}
+
+Date.monthNames = [
+  <em>'1&aelig;œˆ'</em>,
+  <em>'2&aelig;œˆ'</em>,
+  <em>'3&aelig;œˆ'</em>,
+  <em>'4&aelig;œˆ'</em>,
+  <em>'5&aelig;œˆ'</em>,
+  <em>'6&aelig;œˆ'</em>,
+  <em>'7&aelig;œˆ'</em>,
+  <em>'8&aelig;œˆ'</em>,
+  <em>'9&aelig;œˆ'</em>,
+  <em>'10&aelig;œˆ'</em>,
+  <em>'11&aelig;œˆ'</em>,
+  <em>'12&aelig;œˆ'</em>
+];
+
+Date.getShortMonthName = <b>function</b>(month) {
+  <b>return</b> &quot;&quot; + (month + 1);
+};
+
+Date.monthNumbers = {
+  &quot;1&quot; : 0,
+  &quot;2&quot; : 1,
+  &quot;3&quot; : 2,
+  &quot;4&quot; : 3,
+  &quot;5&quot; : 4,
+  &quot;6&quot; : 5,
+  &quot;7&quot; : 6,
+  &quot;8&quot; : 7,
+  &quot;9&quot; : 8,
+  &quot;10&quot; : 9,
+  &quot;11&quot; : 10,
+  &quot;12&quot; : 11
+};
+
+Date.getMonthNumber = <b>function</b>(name) {
+  <b>return</b> Date.monthNumbers[name.substring(0, name.length - 1)];
+  <i>// or simply parseInt(name.substring(0, name.length - 1)) - 1</i>
+};
+
+Date.dayNames = [
+  &quot;&aelig;—&yen;&aelig;›œ&aelig;—&yen;&quot;,
+  &quot;&aelig;œˆ&aelig;›œ&aelig;—&yen;&quot;,
+  &quot;&ccedil;&laquo;&aelig;›œ&aelig;—&yen;&quot;,
+  &quot;&aelig;&deg;&acute;&aelig;›œ&aelig;—&yen;&quot;,
+  &quot;&aelig;œ&uml;&aelig;›œ&aelig;—&yen;&quot;,
+  &quot;&eacute;‡‘&aelig;›œ&aelig;—&yen;&quot;,
+  &quot;&aring;œŸ&aelig;›œ&aelig;—&yen;&quot;
+];
+
+Date.getShortDayName = <b>function</b>(day) {
+  <b>return</b> Date.dayNames[day].substring(0, 1); <i>// just remove &quot;&aelig;›œ&aelig;—&yen;&quot; suffix</i>
+};
+
+Date.formatCodes.a = &quot;(<b>this</b>.getHours() &lt; 12 ? <em>'&aring;ˆ&aring;‰'</em> : <em>'&aring;ˆ&aring;&frac34;Œ'</em>)&quot;;
+Date.formatCodes.A = &quot;(<b>this</b>.getHours() &lt; 12 ? <em>'&aring;ˆ&aring;‰'</em> : <em>'&aring;ˆ&aring;&frac34;Œ'</em>)&quot;; <i>// no <b>case</b> difference</i>
+
+<b>if</b>(Ext.MessageBox){
+  Ext.MessageBox.buttonText = {
+    ok     : &quot;OK&quot;,
+    cancel : &quot;&atilde;‚&shy;&atilde;ƒ&pound;&atilde;ƒ&sup3;&atilde;‚&raquo;&atilde;ƒ&laquo;&quot;,
+    yes    : &quot;&atilde;&macr;&atilde;„&quot;,
+    no     : &quot;&atilde;„&atilde;„&atilde;ˆ&quot;
+  };
+}
+
+<b>if</b>(Ext.util.Format){
+  Ext.util.Format.date = <b>function</b>(v, format){
+    <b>if</b>(!v) <b>return</b> &quot;&quot;;
+    <b>if</b>(!(v instanceof Date)) v = <b>new</b> Date(Date.parse(v));
+    <b>return</b> v.dateFormat(format || &quot;Y/m/d&quot;);
+  };
+}
+
+<b>if</b>(Ext.DatePicker){
+  Ext.apply(Ext.DatePicker.prototype, {
+    todayText         : &quot;&auml;&raquo;Š&aelig;—&yen;&quot;,
+    minText           : &quot;&eacute;&cedil;&aelig;Š&atilde;—&atilde;Ÿ&aelig;—&yen;&auml;&raquo;˜&atilde;&macr;&aelig;œ€&aring;&deg;&aring;€&curren;&auml;&raquo;&yen;&auml;&cedil;‹&atilde;&sect;&atilde;™&atilde;€‚&quot;,
+    maxText           : &quot;&eacute;&cedil;&aelig;Š&atilde;—&atilde;Ÿ&aelig;—&yen;&auml;&raquo;˜&atilde;&macr;&aelig;œ€&aring;&curren;&sect;&aring;€&curren;&auml;&raquo;&yen;&auml;&cedil;Š&atilde;&sect;&atilde;™&atilde;€‚&quot;,
+    disabledDaysText  : &quot;&quot;,
+    disabledDatesText : &quot;&quot;,
+    monthNames        : Date.monthNames,
+    dayNames          : Date.dayNames,
+    nextText          : <em>'&aelig;&not;&iexcl;&aelig;œˆ&atilde;&cedil; (&atilde;‚&sup3;&atilde;ƒ&sup3;&atilde;ƒˆ&atilde;ƒ&shy;&atilde;ƒ&frac14;&atilde;ƒ&laquo;+&aring;&sup3;)'</em>,
+    prevText          : <em>'&aring;‰&aelig;œˆ&atilde;&cedil; (&atilde;‚&sup3;&atilde;ƒ&sup3;&atilde;ƒˆ&atilde;ƒ&shy;&atilde;ƒ&frac14;&atilde;ƒ&laquo;+&aring;&middot;&brvbar;)'</em>,
+    monthYearText     : <em>'&aelig;œˆ&eacute;&cedil;&aelig;Š (&atilde;‚&sup3;&atilde;ƒ&sup3;&atilde;ƒˆ&atilde;ƒ&shy;&atilde;ƒ&frac14;&atilde;ƒ&laquo;+&auml;&cedil;Š/&auml;&cedil;‹&atilde;&sect;&aring;&sup1;&acute;&ccedil;&sect;&raquo;&aring;‹•)'</em>,
+    todayTip          : &quot;{0} (&atilde;‚&sup1;&atilde;ƒš&atilde;ƒ&frac14;&atilde;‚&sup1;&atilde;‚&shy;&atilde;ƒ&frac14;)&quot;,
+    format            : &quot;Y/m/d&quot;,
+    okText            : &quot;OK&quot;,
+    cancelText        : &quot;&atilde;‚&shy;&atilde;ƒ&pound;&atilde;ƒ&sup3;&atilde;‚&raquo;&atilde;ƒ&laquo;&quot;,
+    startDay          : 0
+  });
+}
+
+<b>if</b>(Ext.PagingToolbar){
+  Ext.apply(Ext.PagingToolbar.prototype, {
+    beforePageText : &quot;&atilde;ƒš&atilde;ƒ&frac14;&atilde;‚&cedil;&quot;,
+    afterPageText  : &quot;/ {0}&quot;,
+    firstText      : &quot;&aelig;œ€&aring;ˆ&atilde;&reg;&atilde;ƒš&atilde;ƒ&frac14;&atilde;‚&cedil;&quot;,
+    prevText       : &quot;&aring;‰&atilde;&reg;&atilde;ƒš&atilde;ƒ&frac14;&atilde;‚&cedil;&quot;,
+    nextText       : &quot;&aelig;&not;&iexcl;&atilde;&reg;&atilde;ƒš&atilde;ƒ&frac14;&atilde;‚&cedil;&quot;,
+    lastText       : &quot;&aelig;œ€&aring;&frac34;Œ&atilde;&reg;&atilde;ƒš&atilde;ƒ&frac14;&atilde;‚&cedil;&quot;,
+    refreshText    : &quot;&aelig;›&acute;&aelig;–&deg;&quot;,
+    displayMsg     : &quot;{2} &auml;&raquo;&para;&auml;&cedil;&shy; {0} - {1} &atilde;‚’&egrave;&iexcl;&uml;&ccedil;&curren;&ordm;&quot;,
+    emptyMsg       : <em>'&egrave;&iexcl;&uml;&ccedil;&curren;&ordm;&atilde;™&atilde;‚‹&atilde;ƒ‡&atilde;ƒ&frac14;&atilde;‚&iquest;&atilde;Œ&atilde;‚&atilde;‚Š&atilde;&frac34;&atilde;›&atilde;‚“&atilde;€‚'</em>
+  });
+}
+
+<b>if</b>(Ext.form.Field){
+  Ext.form.Field.prototype.invalidText = &quot;&atilde;ƒ•&atilde;‚&pound;&atilde;ƒ&frac14;&atilde;ƒ&laquo;&atilde;ƒ‰&atilde;&reg;&aring;€&curren;&atilde;Œ&auml;&cedil;&aelig;&shy;&pound;&atilde;&sect;&atilde;™&atilde;€‚&quot;;
+}
+
+<b>if</b>(Ext.form.TextField){
+  Ext.apply(Ext.form.TextField.prototype, {
+    minLengthText : &quot;&atilde;“&atilde;&reg;&atilde;ƒ•&atilde;‚&pound;&atilde;ƒ&frac14;&atilde;ƒ&laquo;&atilde;ƒ‰&atilde;&reg;&aelig;œ€&aring;&deg;&aring;€&curren;&atilde;&macr; {0} &atilde;&sect;&atilde;™&atilde;€‚&quot;,
+    maxLengthText : &quot;&atilde;“&atilde;&reg;&atilde;ƒ•&atilde;‚&pound;&atilde;ƒ&frac14;&atilde;ƒ&laquo;&atilde;ƒ‰&atilde;&reg;&aelig;œ€&aring;&curren;&sect;&aring;€&curren;&atilde;&macr; {0} &atilde;&sect;&atilde;™&atilde;€‚&quot;,
+    blankText     : &quot;&aring;&iquest;…&eacute;&nbsp;ˆ&eacute;&nbsp;…&ccedil;›&reg;&atilde;&sect;&atilde;™&atilde;€‚&quot;,
+    regexText     : &quot;&quot;,
+    emptyText     : null
+  });
+}
+
+<b>if</b>(Ext.form.NumberField){
+  Ext.apply(Ext.form.NumberField.prototype, {
+    decimalSeparator : &quot;.&quot;,
+    decimalPrecision : 2,
+    minText : &quot;&atilde;“&atilde;&reg;&atilde;ƒ•&atilde;‚&pound;&atilde;ƒ&frac14;&atilde;ƒ&laquo;&atilde;ƒ‰&atilde;&reg;&aelig;œ€&aring;&deg;&aring;€&curren;&atilde;&macr; {0} &atilde;&sect;&atilde;™&atilde;€‚&quot;,
+    maxText : &quot;&atilde;“&atilde;&reg;&atilde;ƒ•&atilde;‚&pound;&atilde;ƒ&frac14;&atilde;ƒ&laquo;&atilde;ƒ‰&atilde;&reg;&aelig;œ€&aring;&curren;&sect;&aring;€&curren;&atilde;&macr; {0} &atilde;&sect;&atilde;™&atilde;€‚&quot;,
+    nanText : &quot;{0} &atilde;&macr;&aelig;•&deg;&aring;€&curren;&atilde;&sect;&atilde;&macr;&atilde;‚&atilde;‚Š&atilde;&frac34;&atilde;›&atilde;‚“&atilde;€‚&quot;
+  });
+}
+
+<b>if</b>(Ext.form.DateField){
+  Ext.apply(Ext.form.DateField.prototype, {
+    disabledDaysText  : &quot;&ccedil;„&iexcl;&aring;Š&sup1;&quot;,
+    disabledDatesText : &quot;&ccedil;„&iexcl;&aring;Š&sup1;&quot;,
+    minText           : &quot;&atilde;“&atilde;&reg;&atilde;ƒ•&atilde;‚&pound;&atilde;ƒ&frac14;&atilde;ƒ&laquo;&atilde;ƒ‰&atilde;&reg;&aelig;—&yen;&auml;&raquo;˜&atilde;&macr;&atilde;€ {0} &auml;&raquo;&yen;&eacute;™&atilde;&reg;&aelig;—&yen;&auml;&raquo;˜&atilde;&laquo;&egrave;&uml;&shy;&aring;&reg;š&atilde;—&atilde;&brvbar;&atilde;&atilde;&nbsp;&atilde;•&atilde;„&atilde;€‚&quot;,
+    maxText           : &quot;&atilde;“&atilde;&reg;&atilde;ƒ•&atilde;‚&pound;&atilde;ƒ&frac14;&atilde;ƒ&laquo;&atilde;ƒ‰&atilde;&reg;&aelig;—&yen;&auml;&raquo;˜&atilde;&macr;&atilde;€ {0} &auml;&raquo;&yen;&aring;‰&atilde;&reg;&aelig;—&yen;&auml;&raquo;˜&atilde;&laquo;&egrave;&uml;&shy;&aring;&reg;š&atilde;—&atilde;&brvbar;&atilde;&atilde;&nbsp;&atilde;•&atilde;„&atilde;€‚&quot;,
+    invalidText       : &quot;{0} &atilde;&macr;&eacute;–“&eacute;•&atilde;&pound;&atilde;Ÿ&aelig;—&yen;&auml;&raquo;˜&aring;…&yen;&aring;Š›&atilde;&sect;&atilde;™&atilde;€‚ - &aring;…&yen;&aring;Š›&aring;&frac12;&cent;&aring;&frac14;&atilde;&macr;&atilde;€Œ{1}&atilde;€&atilde;&sect;&atilde;™&atilde;€‚&quot;,
+    format            : &quot;Y/m/d&quot;,
+    altFormats        : &quot;y/m/d|m/d/y|m/d/Y|m-d-y|m-d-Y|m/d|m-d|md|mdy|mdY|d|Y-m-d&quot;
+  });
+}
+
+<b>if</b>(Ext.form.ComboBox){
+  Ext.apply(Ext.form.ComboBox.prototype, {
+    loadingText       : &quot;&egrave;&ordf;&shy;&atilde;&iquest;&egrave;&frac34;&frac14;&atilde;&iquest;&auml;&cedil;&shy;...&quot;,
+    valueNotFoundText : undefined
+  });
+}
+
+<b>if</b>(Ext.form.VTypes){
+  Ext.apply(Ext.form.VTypes, {
+    emailText    : <em>'&atilde;ƒ&iexcl;&atilde;ƒ&frac14;&atilde;ƒ&laquo;&atilde;‚&cent;&atilde;ƒ‰&atilde;ƒ&not;&atilde;‚&sup1;&atilde;‚’&quot;user@domain.com&quot;&atilde;&reg;&aring;&frac12;&cent;&aring;&frac14;&atilde;&sect;&aring;…&yen;&aring;Š›&atilde;—&atilde;&brvbar;&atilde;&atilde;&nbsp;&atilde;•&atilde;„&atilde;€‚'</em>,
+    urlText      : <em>'URL&atilde;‚’&quot;http:/'</em>+<em>'/www.domain.com&quot;&atilde;&reg;&aring;&frac12;&cent;&aring;&frac14;&atilde;&sect;&aring;…&yen;&aring;Š›&atilde;—&atilde;&brvbar;&atilde;&atilde;&nbsp;&atilde;•&atilde;„&atilde;€‚'</em>,
+    alphaText    : <em>'&aring;Š&egrave;&sect;’&egrave;‹&plusmn;&aring;&shy;—&atilde;&uml;&quot;_&quot;&atilde;&reg;&atilde;&iquest;&atilde;&sect;&atilde;™&atilde;€‚'</em>,
+    alphanumText : <em>'&aring;Š&egrave;&sect;’&egrave;‹&plusmn;&aelig;•&deg;&atilde;&uml;&quot;_&quot;&atilde;&reg;&atilde;&iquest;&atilde;&sect;&atilde;™&atilde;€‚'</em>
+  });
+}
+
+<b>if</b>(Ext.form.HtmlEditor){
+  Ext.apply(Ext.form.HtmlEditor.prototype, {
+    createLinkText : <em>'&atilde;ƒ&ordf;&atilde;ƒ&sup3;&atilde;‚&macr;&atilde;&reg;URL&atilde;‚’&aring;…&yen;&aring;Š›&atilde;—&atilde;&brvbar;&atilde;&atilde;&nbsp;&atilde;•&atilde;„:'</em>,
+    buttonTips : {
+      bold : {
+        title: <em>'&aring;&curren;&ordf;&aring;&shy;— (&atilde;‚&sup3;&atilde;ƒ&sup3;&atilde;ƒˆ&atilde;ƒ&shy;&atilde;ƒ&frac14;&atilde;ƒ&laquo;+B)'</em>,
+        text: <em>'&eacute;&cedil;&aelig;Š&atilde;ƒ†&atilde;‚&shy;&atilde;‚&sup1;&atilde;ƒˆ&atilde;‚’&aring;&curren;&ordf;&aring;&shy;—&atilde;&laquo;&atilde;—&atilde;&frac34;&atilde;™&atilde;€‚'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      italic : {
+        title: <em>'&aelig;–œ&auml;&frac12;“ (&atilde;‚&sup3;&atilde;ƒ&sup3;&atilde;ƒˆ&atilde;ƒ&shy;&atilde;ƒ&frac14;&atilde;ƒ&laquo;+I)'</em>,
+        text: <em>'&eacute;&cedil;&aelig;Š&atilde;ƒ†&atilde;‚&shy;&atilde;‚&sup1;&atilde;ƒˆ&atilde;‚’&aelig;–œ&auml;&frac12;“&atilde;&laquo;&atilde;—&atilde;&frac34;&atilde;™&atilde;€‚'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      underline : {
+        title: <em>'&auml;&cedil;‹&ccedil;&middot;š (&atilde;‚&sup3;&atilde;ƒ&sup3;&atilde;ƒˆ&atilde;ƒ&shy;&atilde;ƒ&frac14;&atilde;ƒ&laquo;+U)'</em>,
+        text: <em>'&eacute;&cedil;&aelig;Š&atilde;ƒ†&atilde;‚&shy;&atilde;‚&sup1;&atilde;ƒˆ&atilde;&laquo;&auml;&cedil;‹&ccedil;&middot;š&atilde;‚’&aring;&frac14;•&atilde;&atilde;&frac34;&atilde;™&atilde;€‚'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      increasefontsize : {
+        title: <em>'&aelig;–‡&aring;&shy;—&atilde;‚’&aring;&curren;&sect;&atilde;&atilde;'</em>,
+        text: <em>'&atilde;ƒ•&atilde;‚&copy;&atilde;ƒ&sup3;&atilde;ƒˆ&atilde;‚&micro;&atilde;‚&curren;&atilde;‚&ordm;&atilde;‚’&aring;&curren;&sect;&atilde;&atilde;&atilde;—&atilde;&frac34;&atilde;™&atilde;€‚'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      decreasefontsize : {
+        title: <em>'&aelig;–‡&aring;&shy;—&atilde;‚’&aring;&deg;&atilde;•&atilde;'</em>,
+        text: <em>'&atilde;ƒ•&atilde;‚&copy;&atilde;ƒ&sup3;&atilde;ƒˆ&atilde;‚&micro;&atilde;‚&curren;&atilde;‚&ordm;&atilde;‚’&aring;&deg;&atilde;•&atilde;&atilde;—&atilde;&frac34;&atilde;™&atilde;€‚'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      backcolor : {
+        title: <em>'&aelig;–‡&aring;&shy;—&atilde;&reg;&atilde;ƒ&atilde;‚&curren;&atilde;ƒ&copy;&atilde;‚&curren;&atilde;ƒˆ'</em>,
+        text: <em>'&eacute;&cedil;&aelig;Š&atilde;ƒ†&atilde;‚&shy;&atilde;‚&sup1;&atilde;ƒˆ&atilde;&reg;&egrave;ƒŒ&aelig;™&macr;&egrave;‰&sup2;&atilde;‚’&aring;&curren;‰&aelig;›&acute;&atilde;—&atilde;&frac34;&atilde;™&atilde;€‚'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      forecolor : {
+        title: <em>'&aelig;–‡&aring;&shy;—&atilde;&reg;&egrave;‰&sup2;'</em>,
+        text: <em>'&eacute;&cedil;&aelig;Š&atilde;ƒ†&atilde;‚&shy;&atilde;‚&sup1;&atilde;ƒˆ&atilde;&reg;&egrave;‰&sup2;&atilde;‚’&aring;&curren;‰&aelig;›&acute;&atilde;—&atilde;&frac34;&atilde;™&atilde;€‚'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifyleft : {
+        title: <em>'&aring;&middot;&brvbar;&aelig;ƒ&atilde;ˆ'</em>,
+        text: <em>'&atilde;ƒ†&atilde;‚&shy;&atilde;‚&sup1;&atilde;ƒˆ&atilde;‚’&aring;&middot;&brvbar;&aelig;ƒ&atilde;ˆ&atilde;&laquo;&atilde;—&atilde;&frac34;&atilde;™&atilde;€‚'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifycenter : {
+        title: <em>'&auml;&cedil;&shy;&aring;&curren;&reg;&aelig;ƒ&atilde;ˆ'</em>,
+        text: <em>'&atilde;ƒ†&atilde;‚&shy;&atilde;‚&sup1;&atilde;ƒˆ&atilde;‚’&auml;&cedil;&shy;&aring;&curren;&reg;&aelig;ƒ&atilde;ˆ&atilde;&laquo;&atilde;—&atilde;&frac34;&atilde;™&atilde;€‚'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifyright : {
+        title: <em>'&aring;&sup3;&aelig;ƒ&atilde;ˆ'</em>,
+        text: <em>'&atilde;ƒ†&atilde;‚&shy;&atilde;‚&sup1;&atilde;ƒˆ&atilde;‚’&aring;&sup3;&aelig;ƒ&atilde;ˆ&atilde;&laquo;&atilde;—&atilde;&frac34;&atilde;™&atilde;€‚'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      insertunorderedlist : {
+        title: <em>'&ccedil;•&ordf;&aring;&middot;&atilde;&ordf;&atilde;—&ccedil;&reg;‡&aelig;&iexcl;&aelig;›&cedil;&atilde;'</em>,
+        text: <em>'&ccedil;•&ordf;&aring;&middot;&atilde;&ordf;&atilde;—&ccedil;&reg;‡&aelig;&iexcl;&aelig;›&cedil;&atilde;&atilde;‚’&eacute;–‹&aring;&sect;‹&atilde;—&atilde;&frac34;&atilde;™&atilde;€‚'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      insertorderedlist : {
+        title: <em>'&ccedil;•&ordf;&aring;&middot;&auml;&raquo;˜&atilde;&ccedil;&reg;‡&aelig;&iexcl;&aelig;›&cedil;&atilde;'</em>,
+        text: <em>'&ccedil;•&ordf;&aring;&middot;&auml;&raquo;˜&atilde;&ccedil;&reg;‡&aelig;&iexcl;&aelig;›&cedil;&atilde;&atilde;‚’&eacute;–‹&aring;&sect;‹&atilde;—&atilde;&frac34;&atilde;™&atilde;€‚'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      createlink : {
+        title: <em>'&atilde;ƒ&atilde;‚&curren;&atilde;ƒ‘&atilde;ƒ&frac14;&atilde;ƒ&ordf;&atilde;ƒ&sup3;&atilde;‚&macr;'</em>,
+        text: <em>'&eacute;&cedil;&aelig;Š&atilde;ƒ†&atilde;‚&shy;&atilde;‚&sup1;&atilde;ƒˆ&atilde;‚’&atilde;ƒ&atilde;‚&curren;&atilde;ƒ‘&atilde;ƒ&frac14;&atilde;ƒ&ordf;&atilde;ƒ&sup3;&atilde;‚&macr;&atilde;&laquo;&atilde;—&atilde;&frac34;&atilde;™&atilde;€‚'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      sourceedit : {
+        title: <em>'&atilde;‚&frac12;&atilde;ƒ&frac14;&atilde;‚&sup1;&ccedil;&middot;&uml;&eacute;›†'</em>,
+        text: <em>'&atilde;‚&frac12;&atilde;ƒ&frac14;&atilde;‚&sup1;&ccedil;&middot;&uml;&eacute;›†&atilde;ƒ&cent;&atilde;ƒ&frac14;&atilde;ƒ‰&atilde;&laquo;&aring;ˆ‡&atilde;‚Š&aelig;›&iquest;&atilde;ˆ&atilde;&frac34;&atilde;™&atilde;€‚'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      }
+    }
+  });
+}
+
+<b>if</b>(Ext.grid.GridView){
+  Ext.apply(Ext.grid.GridView.prototype, {
+    sortAscText  : &quot;&aelig;˜‡&eacute;&nbsp;†&quot;,
+    sortDescText : &quot;&eacute;™&eacute;&nbsp;†&quot;,
+    columnsText  : &quot;&atilde;‚&laquo;&atilde;ƒ&copy;&atilde;ƒ&nbsp;&quot;
+  });
+}
+
+<b>if</b>(Ext.grid.GroupingView){
+  Ext.apply(Ext.grid.GroupingView.prototype, {
+    emptyGroupText : <em>'(&atilde;&ordf;&atilde;—)'</em>,
+    groupByText    : <em>'&atilde;“&atilde;&reg;&atilde;‚&laquo;&atilde;ƒ&copy;&atilde;ƒ&nbsp;&atilde;&sect;&atilde;‚&deg;&atilde;ƒ&laquo;&atilde;ƒ&frac14;&atilde;ƒ”&atilde;ƒ&sup3;&atilde;‚&deg;'</em>,
+    showGroupsText : <em>'&atilde;‚&deg;&atilde;ƒ&laquo;&atilde;ƒ&frac14;&atilde;ƒ”&atilde;ƒ&sup3;&atilde;‚&deg;'</em>
+  });
+}
+
+<b>if</b>(Ext.grid.PropertyColumnModel){
+  Ext.apply(Ext.grid.PropertyColumnModel.prototype, {
+    nameText   : &quot;&aring;&ccedil;&sect;&deg;&quot;,
+    valueText  : &quot;&aring;€&curren;&quot;,
+    dateFormat : &quot;Y/m/d&quot;
+  });
+}
+
+<b>if</b>(Ext.layout.BorderLayout &amp;&amp; Ext.layout.BorderLayout.SplitRegion){
+  Ext.apply(Ext.layout.BorderLayout.SplitRegion.prototype, {
+    splitTip            : &quot;&atilde;ƒ‰&atilde;ƒ&copy;&atilde;ƒƒ&atilde;‚&deg;&atilde;™&atilde;‚‹&atilde;&uml;&atilde;ƒ&ordf;&atilde;‚&micro;&atilde;‚&curren;&atilde;‚&ordm;&atilde;&sect;&atilde;&atilde;&frac34;&atilde;™&atilde;€‚&quot;,
+    collapsibleSplitTip : &quot;&atilde;ƒ‰&atilde;ƒ&copy;&atilde;ƒƒ&atilde;‚&deg;&atilde;&sect;&atilde;ƒ&ordf;&atilde;‚&micro;&atilde;‚&curren;&atilde;‚&ordm;&atilde;€‚ &atilde;ƒ€&atilde;ƒ–&atilde;ƒ&laquo;&atilde;‚&macr;&atilde;ƒ&ordf;&atilde;ƒƒ&atilde;‚&macr;&atilde;&sect;&eacute;š&nbsp;&atilde;™&atilde;€‚&quot;
+  });
+}
+
+<b>if</b>(Ext.form.TimeField){
+  Ext.apply(Ext.form.TimeField.prototype, {
+    minText : &quot;&atilde;“&atilde;&reg;&atilde;ƒ•&atilde;‚&pound;&atilde;ƒ&frac14;&atilde;ƒ&laquo;&atilde;ƒ‰&atilde;&reg;&aelig;™‚&aring;ˆ&raquo;&atilde;&macr;&atilde;€ {0} &auml;&raquo;&yen;&eacute;™&atilde;&reg;&aelig;™‚&aring;ˆ&raquo;&atilde;&laquo;&egrave;&uml;&shy;&aring;&reg;š&atilde;—&atilde;&brvbar;&atilde;&atilde;&nbsp;&atilde;•&atilde;„&atilde;€‚&quot;,
+    maxText : &quot;&atilde;“&atilde;&reg;&atilde;ƒ•&atilde;‚&pound;&atilde;ƒ&frac14;&atilde;ƒ&laquo;&atilde;ƒ‰&atilde;&reg;&aelig;™‚&aring;ˆ&raquo;&atilde;&macr;&atilde;€ {0} &auml;&raquo;&yen;&aring;‰&atilde;&reg;&aelig;™‚&aring;ˆ&raquo;&atilde;&laquo;&egrave;&uml;&shy;&aring;&reg;š&atilde;—&atilde;&brvbar;&atilde;&atilde;&nbsp;&atilde;•&atilde;„&atilde;€‚&quot;,
+    invalidText : &quot;{0} &atilde;&macr;&eacute;–“&eacute;•&atilde;&pound;&atilde;Ÿ&aelig;™‚&aring;ˆ&raquo;&aring;…&yen;&aring;Š›&atilde;&sect;&atilde;™&atilde;€‚&quot;,
+    format : &quot;g:i A&quot;,
+    altFormats : &quot;g:ia|g:iA|g:i a|g:i A|h:i|g:i|H:i|ga|ha|gA|h a|g a|g A|gi|hi|gia|hia|g|H&quot;
+  });
+}
+
+<b>if</b>(Ext.form.CheckboxGroup){
+  Ext.apply(Ext.form.CheckboxGroup.prototype, {
+    blankText : &quot;&atilde;“&atilde;&reg;&atilde;‚&deg;&atilde;ƒ&laquo;&atilde;ƒ&frac14;&atilde;ƒ—&atilde;‹&atilde;‚‰&aelig;œ€&auml;&frac12;&iuml;&frac14;‘&atilde;&curren;&atilde;&reg;&atilde;‚&cent;&atilde;‚&curren;&atilde;ƒ†&atilde;ƒ&nbsp;&atilde;‚’&eacute;&cedil;&aelig;Š&atilde;—&atilde;&ordf;&atilde;‘&atilde;‚Œ&atilde;&deg;&atilde;&ordf;&atilde;‚Š&atilde;&frac34;&atilde;›&atilde;‚“&atilde;€‚&quot;
+  });
+}
+
+<b>if</b>(Ext.form.RadioGroup){
+  Ext.apply(Ext.form.RadioGroup.prototype, {
+    blankText : &quot;&atilde;“&atilde;&reg;&atilde;‚&deg;&atilde;ƒ&laquo;&atilde;ƒ&frac14;&atilde;ƒ—&atilde;‹&atilde;‚‰&iuml;&frac14;‘&atilde;&curren;&atilde;&reg;&atilde;‚&cent;&atilde;‚&curren;&atilde;ƒ†&atilde;ƒ&nbsp;&atilde;‚’&eacute;&cedil;&aelig;Š&atilde;—&atilde;&ordf;&atilde;‘&atilde;‚Œ&atilde;&deg;&atilde;&ordf;&atilde;‚Š&atilde;&frac34;&atilde;›&atilde;‚“&atilde;€‚&quot;
+  });
+}
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

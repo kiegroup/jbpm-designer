@@ -1,0 +1,485 @@
+<html><head><title>debug.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>debug.js</h1><pre class="highlighted"><code>Ext.debug = {};
+
+(<b>function</b>(){
+
+<b>var</b> cp;
+
+<b>function</b> createConsole(){
+
+    <b>var</b> scriptPanel = <b>new</b> Ext.debug.ScriptsPanel();
+    <b>var</b> logView = <b>new</b> Ext.debug.LogPanel();
+    <b>var</b> tree = <b>new</b> Ext.debug.DomTree();
+
+    <b>var</b> tabs = <b>new</b> Ext.TabPanel({
+        activeTab: 0,
+        border: false,
+        tabPosition: <em>'bottom'</em>,
+        items: [{
+            title: <em>'Debug Console'</em>,
+            layout:<em>'border'</em>,
+            items: [logView, scriptPanel]
+        },{
+            title: <em>'DOM Inspector'</em>,
+            layout:<em>'border'</em>,
+            items: [tree]
+        }]
+    });
+
+    cp = <b>new</b> Ext.Panel({
+        id: <em>'x-debug-browser'</em>,
+        title: <em>'Console'</em>,
+        collapsible: true,
+        animCollapse: false,
+        style: <em>'position:absolute;left:0;bottom:0;'</em>,
+        height:200,
+        logView: logView,
+        layout: <em>'fit'</em>,
+        
+        tools:[{
+            id: <em>'close'</em>,
+            handler: <b>function</b>(){
+                cp.destroy();
+                cp = null;
+                Ext.EventManager.removeResizeListener(handleResize);
+            }
+        }],
+
+        items: tabs
+    });
+
+    cp.render(document.body);
+
+    cp.resizer = <b>new</b> Ext.Resizable(cp.el, {
+        minHeight:50,
+        handles: &quot;n&quot;,
+        pinned: true,
+        transparent:true,
+        resizeElement : <b>function</b>(){
+            <b>var</b> box = <b>this</b>.proxy.getBox();
+            <b>this</b>.proxy.hide();
+            cp.setHeight(box.height);
+            <b>return</b> box;
+        }
+    });
+
+    <b>function</b> handleResize(){
+        cp.setWidth(Ext.getBody().getViewSize().width);
+    }
+    Ext.EventManager.onWindowResize(handleResize);
+
+    handleResize();
+}
+
+
+Ext.apply(Ext, {
+    log : <b>function</b>(){
+        <b>if</b>(!cp){
+            createConsole();
+        }
+        cp.logView.log.apply(cp.logView, arguments);
+    },
+
+    logf : <b>function</b>(format, arg1, arg2, etc){
+        Ext.log(String.format.apply(String, arguments));
+    },
+
+    dump : <b>function</b>(o){
+        <b>if</b>(typeof o == <em>'string'</em> || <b>typeof</b> o == <em>'number'</em> || <b>typeof</b> o == <em>'undefined'</em> || Ext.isDate(o)){
+            Ext.log(o);
+        }<b>else</b> if(!o){
+            Ext.log(&quot;null&quot;);
+        }<b>else</b> if(<b>typeof</b> o != &quot;object&quot;){
+            Ext.log(<em>'Unknown <b>return</b> type'</em>);
+        }<b>else</b> if(Ext.isArray(o)){
+            Ext.log(<em>'['</em>+o.join(<em>','</em>)+<em>']'</em>);
+        }<b>else</b>{
+            <b>var</b> b = [&quot;{\n&quot;];
+            <b>for</b>(var key <b>in</b> o){
+                <b>var</b> to = <b>typeof</b> o[key];
+                <b>if</b>(to != &quot;<b>function</b>&quot; &amp;&amp; to != &quot;object&quot;){
+                    b.push(String.format(&quot;  {0}: {1},\n&quot;, key, o[key]));
+                }
+            }
+            <b>var</b> s = b.join(&quot;&quot;);
+            <b>if</b>(s.length &gt; 3){
+                s = s.substr(0, s.length-2);
+            }
+            Ext.log(s + &quot;\n}&quot;);
+        }
+    },
+
+    _timers : {},
+
+    time : <b>function</b>(name){
+        name = name || &quot;def&quot;;
+        Ext._timers[name] = <b>new</b> Date().getTime();
+    },
+
+    timeEnd : <b>function</b>(name, printResults){
+        <b>var</b> t = <b>new</b> Date().getTime();
+        name = name || &quot;def&quot;;
+        <b>var</b> v = String.format(&quot;{0} ms&quot;, t-Ext._timers[name]);
+        Ext._timers[name] = <b>new</b> Date().getTime();
+        <b>if</b>(printResults !== false){
+            Ext.log(<em>'Timer '</em> + (name == &quot;def&quot; ? v : name + &quot;: &quot; + v));
+        }
+        <b>return</b> v;
+    }
+});
+
+})();
+
+
+Ext.debug.ScriptsPanel = Ext.extend(Ext.Panel, {
+    id:<em>'x-debug-scripts'</em>,
+    region: <em>'east'</em>,
+    minWidth: 200,
+    split: true,
+    width: 350,
+    border: false,
+    layout:<em>'anchor'</em>,
+    style:<em>'border-width:0 0 0 1px;'</em>,
+
+    initComponent : <b>function</b>(){
+
+        <b>this</b>.scriptField = <b>new</b> Ext.form.TextArea({
+            anchor: <em>'100% -26'</em>,
+            style:<em>'border-width:0;'</em>
+        });
+
+        <b>this</b>.trapBox = <b>new</b> Ext.form.Checkbox({
+            id: <em>'console-trap'</em>,
+            boxLabel: <em>'Trap Errors'</em>,
+            checked: true
+        });
+
+        <b>this</b>.toolbar = <b>new</b> Ext.Toolbar([{
+                text: <em>'Run'</em>,
+                scope: <b>this</b>,
+                handler: <b>this</b>.evalScript
+            },{
+                text: <em>'Clear'</em>,
+                scope: <b>this</b>,
+                handler: <b>this</b>.clear
+            },
+            <em>'-&gt;'</em>,
+            <b>this</b>.trapBox,
+            <em>' '</em>, <em>' '</em>
+        ]);
+
+        <b>this</b>.items = [<b>this</b>.toolbar, <b>this</b>.scriptField];
+
+        Ext.debug.ScriptsPanel.superclass.initComponent.call(<b>this</b>);
+    },
+
+    evalScript : <b>function</b>(){
+        <b>var</b> s = <b>this</b>.scriptField.getValue();
+        <b>if</b>(this.trapBox.getValue()){
+            try{
+                <b>var</b> rt = eval(s);
+                Ext.dump(rt === undefined? <em>'(no <b>return</b>)'</em> : rt);
+            }catch(e){
+                Ext.log(e.message || e.descript);
+            }
+        }<b>else</b>{
+            <b>var</b> rt = eval(s);
+            Ext.dump(rt === undefined? <em>'(no <b>return</b>)'</em> : rt);
+        }
+    },
+
+    clear : <b>function</b>(){
+        <b>this</b>.scriptField.setValue(<em>''</em>);
+        <b>this</b>.scriptField.focus();
+    }
+
+});
+
+Ext.debug.LogPanel = Ext.extend(Ext.Panel, {
+    autoScroll: true,
+    region: <em>'center'</em>,
+    border: false,
+    style:<em>'border-width:0 1px 0 0'</em>,
+
+    log : <b>function</b>(){
+        <b>var</b> markup = [  <em>'&lt;div style=&quot;padding:5px !important;border-bottom:1px solid #ccc;&quot;&gt;'</em>,
+                    Ext.util.Format.htmlEncode(Array.prototype.join.call(arguments, <em>', '</em>)).replace(/\n/g, <em>'&lt;br /&gt;'</em>).replace(/\s/g, <em>'&amp;#160;'</em>),
+                    <em>'&lt;/div&gt;'</em>].join(<em>''</em>);
+
+        <b>this</b>.body.insertHtml(<em>'beforeend'</em>, markup);
+        <b>this</b>.body.scrollTo(<em>'top'</em>, 100000);
+    },
+
+    clear : <b>function</b>(){
+        <b>this</b>.body.update(<em>''</em>);
+        <b>this</b>.body.dom.scrollTop = 0;
+    }
+});
+
+Ext.debug.DomTree = Ext.extend(Ext.tree.TreePanel, {
+    enableDD:false ,
+    lines:false,
+    rootVisible:false,
+    animate:false,
+    hlColor:<em>'ffff9c'</em>,
+    autoScroll: true,
+    region:<em>'center'</em>,
+    border:false,
+
+    initComponent : <b>function</b>(){
+
+
+        Ext.debug.DomTree.superclass.initComponent.call(<b>this</b>);
+        
+        <i>// tree related stuff</i>
+        <b>var</b> styles = false, hnode;
+        <b>var</b> nonSpace = /^\s*$/;
+        <b>var</b> html = Ext.util.Format.htmlEncode;
+        <b>var</b> ellipsis = Ext.util.Format.ellipsis;
+        <b>var</b> styleRe = /\s?([a-z\-]*)\:([^;]*)(?:[;\s\n\r]*)/gi;
+
+        <b>function</b> findNode(n){
+            <b>if</b>(!n || n.nodeType != 1 || n == document.body || n == document){
+                <b>return</b> false;
+            }
+            <b>var</b> pn = [n], p = n;
+            <b>while</b>((p = p.parentNode) &amp;&amp; p.nodeType == 1 &amp;&amp; p.tagName.toUpperCase() != <em>'HTML'</em>){
+                pn.unshift(p);
+            }
+            <b>var</b> cn = hnode;
+            <b>for</b>(var i = 0, len = pn.length; i &lt; len; i++){
+                cn.expand();
+                cn = cn.findChild(<em>'htmlNode'</em>, pn[i]);
+                <b>if</b>(!cn){ <i>// <b>in</b> this dialog?</i>
+                    <b>return</b> false;
+                }
+            }
+            cn.select();
+            <b>var</b> a = cn.ui.anchor;
+            treeEl.dom.scrollTop = Math.max(0 ,a.offsetTop-10);
+            <i>//treeEl.dom.scrollLeft = Math.max(0 ,a.offsetLeft-10); no likey</i>
+            cn.highlight();
+            <b>return</b> true;
+        }
+
+        <b>function</b> nodeTitle(n){
+            <b>var</b> s = n.tagName;
+            <b>if</b>(n.id){
+                s += <em>'#'</em>+n.id;
+            }<b>else</b> if(n.className){
+                s += <em>'.'</em>+n.className;
+            }
+            <b>return</b> s;
+        }
+
+        <b>function</b> onNodeSelect(t, n, last){
+            <b>return</b>;
+            <b>if</b>(last &amp;&amp; last.unframe){
+                last.unframe();
+            }
+            <b>var</b> props = {};
+            <b>if</b>(n &amp;&amp; n.htmlNode){
+                <b>if</b>(frameEl.pressed){
+                    n.frame();
+                }
+                <b>if</b>(inspecting){
+                    <b>return</b>;
+                }
+                addStyle.enable();
+                reload.setDisabled(n.leaf);
+                <b>var</b> dom = n.htmlNode;
+                stylePanel.setTitle(nodeTitle(dom));
+                <b>if</b>(styles &amp;&amp; !showAll.pressed){
+                    <b>var</b> s = dom.style ? dom.style.cssText : <em>''</em>;
+                    <b>if</b>(s){
+                        <b>var</b> m;
+                        <b>while</b> ((m = styleRe.exec(s)) != null){
+                            props[m[1].toLowerCase()] = m[2];
+                        }
+                    }
+                }<b>else</b> if(styles){
+                    <b>var</b> cl = Ext.debug.cssList;
+                    <b>var</b> s = dom.style, fly = Ext.fly(dom);
+                    <b>if</b>(s){
+                        <b>for</b>(var i = 0, len = cl.length; i&lt;len; i++){
+                            <b>var</b> st = cl[i];
+                            <b>var</b> v = s[st] || fly.getStyle(st);
+                            <b>if</b>(v != undefined &amp;&amp; v !== null &amp;&amp; v !== <em>''</em>){
+                                props[st] = v;
+                            }
+                        }
+                    }
+                }<b>else</b>{
+                    <b>for</b>(var a <b>in</b> dom){
+                        <b>var</b> v = dom[a];
+                        <b>if</b>((isNaN(a+10)) &amp;&amp; v != undefined &amp;&amp; v !== null &amp;&amp; v !== <em>''</em> &amp;&amp; !(Ext.isGecko &amp;&amp; a[0] == a[0].toUpperCase())){
+                            props[a] = v;
+                        }
+                    }
+                }
+            }<b>else</b>{
+                <b>if</b>(inspecting){
+                    <b>return</b>;
+                }
+                addStyle.disable();
+                reload.disabled();
+            }
+            stylesGrid.setSource(props);
+            stylesGrid.treeNode = n;
+            stylesGrid.view.fitColumns();
+        }
+
+        <b>this</b>.loader = <b>new</b> Ext.tree.TreeLoader();
+        <b>this</b>.loader.load = <b>function</b>(n, cb){
+            <b>var</b> isBody = n.htmlNode == document.body;
+            <b>var</b> cn = n.htmlNode.childNodes;
+            <b>for</b>(var i = 0, c; c = cn[i]; i++){
+                <b>if</b>(isBody &amp;&amp; c.id == <em>'x-debug-browser'</em>){
+                    <b>continue</b>;
+                }
+                <b>if</b>(c.nodeType == 1){
+                    n.appendChild(<b>new</b> Ext.debug.HtmlNode(c));
+                }<b>else</b> if(c.nodeType == 3 &amp;&amp; !nonSpace.test(c.nodeValue)){
+                    n.appendChild(<b>new</b> Ext.tree.TreeNode({
+                        text:<em>'&lt;em&gt;'</em> + ellipsis(html(String(c.nodeValue)), 35) + <em>'&lt;/em&gt;'</em>,
+                        cls: <em>'x-tree-noicon'</em>
+                    }));
+                }
+            }
+            cb();
+        };
+
+        <i>//tree.getSelectionModel().on(<em>'selectionchange'</em>, onNodeSelect, null, {buffer:250});</i>
+
+        <b>this</b>.root = <b>this</b>.setRootNode(<b>new</b> Ext.tree.TreeNode(<em>'Ext'</em>));
+
+        hnode = <b>this</b>.root.appendChild(<b>new</b> Ext.debug.HtmlNode(
+                document.getElementsByTagName(<em>'html'</em>)[0]
+        ));
+
+    }
+});
+
+
+<i>// highly unusual class declaration</i>
+Ext.debug.HtmlNode = <b>function</b>(){
+    <b>var</b> html = Ext.util.Format.htmlEncode;
+    <b>var</b> ellipsis = Ext.util.Format.ellipsis;
+    <b>var</b> nonSpace = /^\s*$/;
+
+    <b>var</b> attrs = [
+        {n: <em>'id'</em>, v: <em>'id'</em>},
+        {n: <em>'className'</em>, v: <em>'class'</em>},
+        {n: <em>'name'</em>, v: <em>'name'</em>},
+        {n: <em>'type'</em>, v: <em>'type'</em>},
+        {n: <em>'src'</em>, v: <em>'src'</em>},
+        {n: <em>'href'</em>, v: <em>'href'</em>}
+    ];
+
+    <b>function</b> hasChild(n){
+        <b>for</b>(var i = 0, c; c = n.childNodes[i]; i++){
+            <b>if</b>(c.nodeType == 1){
+                <b>return</b> true;
+            }
+        }
+        <b>return</b> false;
+    }
+
+    <b>function</b> renderNode(n, leaf){
+        <b>var</b> tag = n.tagName.toLowerCase();
+        <b>var</b> s = <em>'&amp;lt;'</em> + tag;
+        <b>for</b>(var i = 0, len = attrs.length; i &lt; len; i++){
+            <b>var</b> a = attrs[i];
+            <b>var</b> v = n[a.n];
+            <b>if</b>(v &amp;&amp; !nonSpace.test(v)){
+                s += <em>' '</em> + a.v + <em>'=&amp;quot;&lt;i&gt;'</em> + html(v) +<em>'&lt;/i&gt;&amp;quot;'</em>;
+            }
+        }
+        <b>var</b> style = n.style ? n.style.cssText : <em>''</em>;
+        <b>if</b>(style){
+            s += <em>' style=&amp;quot;&lt;i&gt;'</em> + html(style.toLowerCase()) +<em>'&lt;/i&gt;&amp;quot;'</em>;
+        }
+        <b>if</b>(leaf &amp;&amp; n.childNodes.length &gt; 0){
+            s+=<em>'&amp;gt;&lt;em&gt;'</em> + ellipsis(html(String(n.innerHTML)), 35) + <em>'&lt;/em&gt;&amp;lt;/'</em>+tag+<em>'&amp;gt;'</em>;
+        }<b>else</b> if(leaf){
+            s += <em>' /&amp;gt;'</em>;
+        }<b>else</b>{
+            s += <em>'&amp;gt;'</em>;
+        }
+        <b>return</b> s;
+    }
+
+    <b>var</b> HtmlNode = <b>function</b>(n){
+        <b>var</b> leaf = !hasChild(n);
+        <b>this</b>.htmlNode = n;
+        <b>this</b>.tagName = n.tagName.toLowerCase();
+        <b>var</b> attr = {
+            text : renderNode(n, leaf),
+            leaf : leaf,
+            cls: <em>'x-tree-noicon'</em>
+        };
+        HtmlNode.superclass.constructor.call(<b>this</b>, attr);
+        <b>this</b>.attributes.htmlNode = n; <i>// <b>for</b> searching</i>
+        <b>if</b>(!leaf){
+            <b>this</b>.on(<em>'expand'</em>, <b>this</b>.onExpand,  <b>this</b>);
+            <b>this</b>.on(<em>'collapse'</em>, <b>this</b>.onCollapse,  <b>this</b>);
+        }
+    };
+
+
+    Ext.extend(HtmlNode, Ext.tree.AsyncTreeNode, {
+        cls: <em>'x-tree-noicon'</em>,
+        preventHScroll: true,
+        refresh : <b>function</b>(highlight){
+            <b>var</b> leaf = !hasChild(<b>this</b>.htmlNode);
+            <b>this</b>.setText(renderNode(<b>this</b>.htmlNode, leaf));
+            <b>if</b>(highlight){
+                Ext.fly(<b>this</b>.ui.textNode).highlight();
+            }
+        },
+
+        onExpand : <b>function</b>(){
+            <b>if</b>(!<b>this</b>.closeNode &amp;&amp; <b>this</b>.parentNode){
+                <b>this</b>.closeNode = <b>this</b>.parentNode.insertBefore(<b>new</b> Ext.tree.TreeNode({
+                    text:<em>'&amp;lt;/'</em> + <b>this</b>.tagName + <em>'&amp;gt;'</em>,
+                    cls: <em>'x-tree-noicon'</em>
+                }), <b>this</b>.nextSibling);
+            }<b>else</b> if(<b>this</b>.closeNode){
+                <b>this</b>.closeNode.ui.show();
+            }
+        },
+
+        onCollapse : <b>function</b>(){
+            <b>if</b>(this.closeNode){
+                <b>this</b>.closeNode.ui.hide();
+            }
+        },
+
+        render : <b>function</b>(bulkRender){
+            HtmlNode.superclass.render.call(<b>this</b>, bulkRender);
+        },
+
+        highlightNode : <b>function</b>(){
+            <i>//Ext.fly(<b>this</b>.htmlNode).highlight();</i>
+        },
+
+        highlight : <b>function</b>(){
+            <i>//Ext.fly(<b>this</b>.ui.textNode).highlight();</i>
+        },
+
+        frame : <b>function</b>(){
+            <b>this</b>.htmlNode.style.border = <em>'1px solid #0000ff'</em>;
+            <i>//<b>this</b>.highlightNode();</i>
+        },
+
+        unframe : <b>function</b>(){
+            <i>//Ext.fly(<b>this</b>.htmlNode).removeClass(<em>'x-debug-frame'</em>);</i>
+            <b>this</b>.htmlNode.style.border = <em>''</em>;
+        }
+    });
+
+    <b>return</b> HtmlNode;
+}();
+
+
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

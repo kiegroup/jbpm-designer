@@ -1,0 +1,300 @@
+<html><head><title>ext-lang-pl.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ext-lang-pl.js</h1><pre class="highlighted"><code><i>/**
+ * Polish Translations
+ * By vbert 17-April-2007
+ * Updated by mmar 16-November-2007
+ * Encoding: utf-8
+ */</i>
+
+Ext.UpdateManager.defaults.indicatorText = <em>'&lt;div class=&quot;loading-indicator&quot;&gt;Wczytywanie danych...&lt;/div&gt;'</em>;
+
+<b>if</b>(Ext.View){
+   Ext.View.prototype.emptyText = &quot;&quot;;
+}
+
+<b>if</b>(Ext.grid.GridPanel){
+   Ext.grid.GridPanel.prototype.ddText = &quot;{0} wybrano wiersze(y)&quot;;
+}
+
+<b>if</b>(Ext.TabPanelItem){
+   Ext.TabPanelItem.prototype.closeText = &quot;Zamknij zak&Aring;‚adk&Auml;™&quot;;
+}
+
+<b>if</b>(Ext.form.Field){
+   Ext.form.Field.prototype.invalidText = &quot;Warto&Aring;›&Auml;‡ tego pola jest niew&Aring;‚a&Aring;›ciwa&quot;;
+}
+
+<b>if</b>(Ext.LoadMask){
+    Ext.LoadMask.prototype.msg = &quot;Wczytywanie danych...&quot;;
+}
+
+Date.monthNames = [
+    &quot;Stycze&Aring;„&quot;,
+    &quot;Luty&quot;,
+    &quot;Marzec&quot;,
+    &quot;Kwiecie&Aring;„&quot;,
+    &quot;Maj&quot;,
+    &quot;Czerwiec&quot;,
+    &quot;Lipiec&quot;,
+    &quot;Sierpie&Aring;„&quot;,
+    &quot;Wrzesie&Aring;„&quot;,
+    &quot;Pa&Aring;&ordm;dziernik&quot;,
+    &quot;Listopad&quot;,
+    &quot;Grudzie&Aring;„&quot;
+];
+
+Date.getShortMonthName = <b>function</b>(month) {
+  <b>return</b> Date.monthNames[month].substring(0, 3);
+};
+
+Date.monthNumbers = {
+  Sty : 0,
+  Lut : 1,
+  Mar : 2,
+  Kwi : 3,
+  Maj : 4,
+  Cze : 5,
+  Lip : 6,
+  Sie : 7,
+  Wrz : 8,
+  Pa&Aring;&ordm; : 9,
+  Lis : 10,
+  Gru : 11
+};
+
+Date.getMonthNumber = <b>function</b>(name) {
+  <b>return</b> Date.monthNumbers[name.substring(0, 1).toUpperCase() + name.substring(1, 3).toLowerCase()];
+};
+
+Date.dayNames = [
+    &quot;Niedziela&quot;,
+    &quot;Poniedzia&Aring;‚ek&quot;,
+    &quot;Wtorek&quot;,
+    &quot;&Aring;šroda&quot;,
+    &quot;Czwartek&quot;,
+    &quot;Pi&Auml;…tek&quot;,
+    &quot;Sobota&quot;
+];
+
+Date.getShortDayName = <b>function</b>(day) {
+	<b>switch</b>(day) {
+		<b>case</b> 0: <b>return</b> <em>'ndz'</em>;
+		<b>case</b> 1: <b>return</b> <em>'pon'</em>;
+		<b>case</b> 2: <b>return</b> <em>'wt'</em>;
+		<b>case</b> 3: <b>return</b> <em>'&Aring;›r'</em>;
+		<b>case</b> 4: <b>return</b> <em>'czw'</em>;
+		<b>case</b> 5: <b>return</b> <em>'pt'</em>;				
+		<b>case</b> 6: <b>return</b> <em>'sob'</em>;
+                <b>default</b>: <b>return</b> <em>''</em>;
+	}
+};
+
+<b>if</b>(Ext.MessageBox){
+   Ext.MessageBox.buttonText = {
+      ok     : &quot;OK&quot;,
+      cancel : &quot;Anuluj&quot;,
+      yes    : &quot;Tak&quot;,
+      no     : &quot;Nie&quot;
+   };
+}
+
+<b>if</b>(Ext.util.Format){
+   Ext.util.Format.date = <b>function</b>(v, format){
+      <b>if</b>(!v) <b>return</b> &quot;&quot;;
+      <b>if</b>(!(v instanceof Date)) v = <b>new</b> Date(Date.parse(v));
+      <b>return</b> v.dateFormat(format || &quot;Y-m-d&quot;);
+   };
+}
+
+<b>if</b>(Ext.DatePicker){
+	Ext.apply(Ext.DatePicker.prototype, {
+		startDay			: 1,
+		todayText			: &quot;Dzisiaj&quot;,
+		minText				: &quot;Data jest wcze&Aring;›niejsza od daty minimalnej&quot;,
+		maxText				: &quot;Data jest p&Atilde;&sup3;&Aring;&ordm;niejsza od daty maksymalnej&quot;,
+		disabledDaysText	: &quot;&quot;,
+		disabledDatesText	: &quot;&quot;,
+		monthNames			: Date.monthNames,
+		dayNames			: Date.dayNames,
+		nextText			: &quot;Nast&Auml;™pny miesi&Auml;…c (Control+Strza&Aring;‚kaWPrawo)&quot;,
+		prevText			: &quot;Poprzedni miesi&Auml;…c (Control+Strza&Aring;‚kaWLewo)&quot;,
+		monthYearText		: &quot;Wybierz miesi&Auml;…c (Control+Up/Down aby zmieni&Auml;‡ rok)&quot;,
+		todayTip			: &quot;{0} (Spacja)&quot;,
+		format				: &quot;Y-m-d&quot;,
+		okText            	: &quot;&amp;#160;OK&amp;#160;&quot;,
+    	cancelText        	: &quot;Anuluj&quot;,
+    	startDay          	: 1
+	});
+}
+
+<b>if</b>(Ext.PagingToolbar){
+	Ext.apply(Ext.PagingToolbar.prototype, {
+		beforePageText	: &quot;Strona&quot;,
+		afterPageText	: &quot;z {0}&quot;,
+		firstText		: &quot;Pierwsza strona&quot;,
+	    prevText		: &quot;Poprzednia strona&quot;,
+		nextText		: &quot;Nast&Auml;™pna strona&quot;,
+	    lastText		: &quot;Ostatnia strona&quot;,
+		refreshText		: &quot;Od&Aring;›wie&Aring;&frac14;&quot;,
+	    displayMsg		: &quot;Wy&Aring;›wietlono {0} - {1} z {2}&quot;,
+		emptyMsg		: &quot;Brak danych <b>do</b> wy&Aring;›wietlenia&quot;
+	});
+}
+
+<b>if</b>(Ext.form.TextField){
+	Ext.apply(Ext.form.TextField.prototype, {
+	    minLengthText	: &quot;Minimalna ilo&Aring;›&Auml;‡ znak&Atilde;&sup3;w dla tego pola to {0}&quot;,
+		maxLengthText	: &quot;Maksymalna ilo&Aring;›&Auml;‡ znak&Atilde;&sup3;w dla tego pola to {0}&quot;,
+	    blankText		: &quot;To pole jest wymagane&quot;,
+		regexText		: &quot;&quot;,
+	    emptyText		: null
+	});
+}
+
+<b>if</b>(Ext.form.NumberField){
+	Ext.apply(Ext.form.NumberField.prototype, {
+	    minText	: &quot;Minimalna warto&Aring;›&Auml;‡ dla tego pola to {0}&quot;,
+	    maxText	: &quot;Maksymalna warto&Aring;›&Auml;‡ dla tego pola to {0}&quot;,
+		nanText	: &quot;{0} to nie jest w&Aring;‚a&Aring;›ciwa warto&Aring;›&Auml;‡&quot;
+	});
+}
+
+<b>if</b>(Ext.form.DateField){
+	Ext.apply(Ext.form.DateField.prototype, {
+	    disabledDaysText	: &quot;Wy&Aring;‚&Auml;…czony&quot;,
+	    disabledDatesText	: &quot;Wy&Aring;‚&Auml;…czony&quot;,
+		minText				: &quot;Data w tym polu musi by&Auml;‡ p&Atilde;&sup3;&Aring;&ordm;niejsza od {0}&quot;,
+	    maxText				: &quot;Data w tym polu musi by&Auml;‡ wcze&Aring;›niejsza od {0}&quot;,
+		invalidText			: &quot;{0} to nie jest prawid&Aring;‚owa data - prawid&Aring;‚owy format daty {1}&quot;,
+	    format				: &quot;Y-m-d&quot;,
+    	altFormats    	    : &quot;m/d/Y|m-d-y|m-d-Y|m/d|m-d|md|mdy|mdY|d|Y-m-d&quot;
+	});
+}
+
+<b>if</b>(Ext.form.ComboBox){
+	Ext.apply(Ext.form.ComboBox.prototype, {
+		loadingText       : &quot;Wczytuj&Auml;™...&quot;,
+		valueNotFoundText : undefined
+	});
+}
+
+<b>if</b>(Ext.form.VTypes){
+	Ext.apply(Ext.form.VTypes, {
+	    emailText		: <em>'To pole wymaga podania adresu e-mail w formacie: &quot;nazwa@domena.pl&quot;'</em>,
+	    urlText			: <em>'To pole wymaga podania adresu strony www w formacie: &quot;http:/'</em>+<em>'/www.domena.pl&quot;'</em>,
+		alphaText		: <em>'To pole wymaga podania tylko liter i _'</em>,
+		alphanumText	: <em>'To pole wymaga podania tylko liter, cyfr i _'</em>
+	});
+}
+
+<b>if</b>(Ext.form.HtmlEditor){
+  Ext.apply(Ext.form.HtmlEditor.prototype, {
+    createLinkText : <em>'Wprowad&Aring;&ordm; adres URL strony:'</em>,
+    buttonTips : {
+      bold : {
+        title: <em>'Pogrubienie (Ctrl+B)'</em>,
+        text: <em>'Ustaw styl zaznaczonego tekstu na pogrubiony.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      italic : {
+        title: <em>'Kursywa (Ctrl+I)'</em>,
+        text: <em>'Ustaw styl zaznaczonego tekstu na kursyw&Auml;™.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      underline : {
+        title: <em>'Podkre&Aring;›lenie (Ctrl+U)'</em>,
+        text: <em>'Podkre&Aring;›l zaznaczony tekst.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      increasefontsize : {
+        title: <em>'Zwi&Auml;™ksz czcionk&Auml;™'</em>,
+        text: <em>'Zwi&Auml;™ksz rozmiar czcionki.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      decreasefontsize : {
+        title: <em>'Zmniejsz czcionk&Auml;™'</em>,
+        text: <em>'Zmniejsz rozmiar czcionki.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      backcolor : {
+        title: <em>'Wyr&Atilde;&sup3;&Aring;&frac14;nienie'</em>,
+        text: <em>'Zmie&Aring;„ kolor wyr&Atilde;&sup3;&Aring;&frac14;nienia zaznaczonego tekstu.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      forecolor : {
+        title: <em>'Kolor czcionki'</em>,
+        text: <em>'Zmie&Aring;„ kolor zaznaczonego tekstu.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifyleft : {
+        title: <em>'Do lewej'</em>,
+        text: <em>'Wyr&Atilde;&sup3;wnaj tekst <b>do</b> lewej.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifycenter : {
+        title: <em>'Wy&Aring;›rodkuj'</em>,
+        text: <em>'Wyr&Atilde;&sup3;wnaj tekst <b>do</b> &Aring;›rodka.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifyright : {
+        title: <em>'Do prawej'</em>,
+        text: <em>'Wyr&Atilde;&sup3;wnaj tekst <b>do</b> prawej.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      insertunorderedlist : {
+        title: <em>'Lista wypunktowana'</em>,
+        text: <em>'Rozpocznij list&Auml;™ wypunktowan&Auml;….'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      insertorderedlist : {
+        title: <em>'Lista numerowana'</em>,
+        text: <em>'Rozpocznij list&Auml;™ numerowan&Auml;….'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      createlink : {
+        title: <em>'Hiper&Aring;‚&Auml;…cze'</em>,
+        text: <em>'Przekszta&Aring;‚&Auml;‡ zaznaczony tekst w hiper&Aring;‚&Auml;…cze.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      sourceedit : {
+        title: <em>'Edycja &Aring;&ordm;r&Atilde;&sup3;d&Aring;‚a'</em>,
+        text: <em>'Prze&Aring;‚&Auml;…cz w tryb edycji &Aring;&ordm;r&Atilde;&sup3;d&Aring;‚a.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      }
+    }
+  });
+}
+
+<b>if</b>(Ext.grid.GridView){
+	Ext.apply(Ext.grid.GridView.prototype, {
+	    sortAscText		: &quot;Sortuj rosn&Auml;…co&quot;,
+	    sortDescText	: &quot;Sortuj malej&Auml;…co&quot;,
+		lockText		: &quot;Zablokuj kolumn&Auml;™&quot;,
+	    unlockText		: &quot;Odblokuj kolumn&Auml;™&quot;,
+		columnsText		: &quot;Kolumny&quot;
+	});
+}
+
+<b>if</b>(Ext.grid.GroupingView){
+  Ext.apply(Ext.grid.GroupingView.prototype, {
+    emptyGroupText : <em>'(None)'</em>,
+    groupByText    : <em>'Grupuj po tym polu'</em>,
+    showGroupsText : <em>'Poka&Aring;&frac14; w grupach'</em>
+  });
+}
+
+<b>if</b>(Ext.grid.PropertyColumnModel){
+	Ext.apply(Ext.grid.PropertyColumnModel.prototype, {
+	    nameText	: &quot;Nazwa&quot;,
+	    valueText	: &quot;Warto&Aring;›&Auml;‡&quot;,
+		dateFormat	: &quot;Y-m-d&quot;
+	});
+}
+
+<b>if</b>(Ext.layout.BorderLayout &amp;&amp; Ext.layout.BorderLayout.SplitRegion){
+	Ext.apply(Ext.layout.BorderLayout.SplitRegion.prototype, {
+	    splitTip			: &quot;Przeci&Auml;…gnij aby zmieni&Auml;‡ rozmiar.&quot;,
+		collapsibleSplitTip	: &quot;Przeci&Auml;…gnij aby zmieni&Auml;‡ rozmiar. Kliknij dwukrotnie aby ukry&Auml;‡.&quot;
+	});
+}
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

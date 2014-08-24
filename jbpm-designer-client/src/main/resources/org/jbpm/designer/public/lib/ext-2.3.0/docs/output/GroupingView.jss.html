@@ -1,0 +1,494 @@
+<html><head><title>GroupingView.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>GroupingView.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.grid.GroupingView
+ * @extends Ext.grid.GridView
+ * Adds the ability <b>for</b> single level grouping to the grid.
+ *&lt;pre&gt;&lt;code&gt;<b>var</b> grid = <b>new</b> Ext.grid.GridPanel({
+    <i>// A groupingStore is required <b>for</b> a GroupingView</i>
+    store: <b>new</b> Ext.data.GroupingStore({
+        reader: reader,
+        data: xg.dummyData,
+        sortInfo:{field: <em>'company'</em>, direction: &quot;ASC&quot;},
+        groupField:<em>'industry'</em>
+    }),
+
+    columns: [
+        {id:<em>'company'</em>,header: &quot;Company&quot;, width: 60, sortable: true, dataIndex: <em>'company'</em>},
+        {header: &quot;Price&quot;, width: 20, sortable: true, renderer: Ext.util.Format.usMoney, dataIndex: <em>'price'</em>},
+        {header: &quot;Change&quot;, width: 20, sortable: true, dataIndex: <em>'change'</em>, renderer: Ext.util.Format.usMoney},
+        {header: &quot;Industry&quot;, width: 20, sortable: true, dataIndex: <em>'industry'</em>},
+        {header: &quot;Last Updated&quot;, width: 20, sortable: true, renderer: Ext.util.Format.dateRenderer(<em>'m/d/Y'</em>), dataIndex: <em>'lastChange'</em>}
+    ],
+
+    view: <b>new</b> Ext.grid.GroupingView({
+        forceFit:true,
+        <i>// custom grouping text template to display the number of items per group</i>
+        groupTextTpl: <em>'{text} ({[values.rs.length]} {[values.rs.length &gt; 1 ? &quot;Items&quot; : &quot;Item&quot;]})'</em>
+    }),
+
+    frame:true,
+    width: 700,
+    height: 450,
+    collapsible: true,
+    animCollapse: false,
+    title: <em>'Grouping Example'</em>,
+    iconCls: <em>'icon-grid'</em>,
+    renderTo: document.body
+});&lt;/code&gt;&lt;/pre&gt;
+ * @constructor
+ * @param {Object} config
+ */</i>
+Ext.grid.GroupingView = Ext.extend(Ext.grid.GridView, {
+    <i>/**
+     * @cfg {Boolean} hideGroupedColumn True to hide the column that is currently grouped
+     */</i>
+    hideGroupedColumn:false,
+    <i>/**
+     * @cfg {Boolean} showGroupName True to display the name <b>for</b> each set of grouped rows (defaults to true)
+     */</i>
+    showGroupName:true,
+    <i>/**
+     * @cfg {Boolean} startCollapsed True to start all groups collapsed
+     */</i>
+    startCollapsed:false,
+    <i>/**
+     * @cfg {Boolean} enableGrouping False to disable grouping functionality (defaults to true)
+     */</i>
+    enableGrouping:true,
+    <i>/**
+     * @cfg {Boolean} enableGroupingMenu True to enable the grouping control <b>in</b> the column menu
+     */</i>
+    enableGroupingMenu:true,
+    <i>/**
+     * @cfg {Boolean} enableNoGroups True to allow the user to turn off grouping
+     */</i>
+    enableNoGroups:true,
+    <i>/**
+     * @cfg {String} emptyGroupText The text to display when there is an empty group value
+     */</i>
+    emptyGroupText : <em>'(None)'</em>,
+    <i>/**
+     * @cfg {Boolean} ignoreAdd True to skip refreshing the view when <b>new</b> rows are added (defaults to false)
+     */</i>
+    ignoreAdd: false,
+    <i>/**
+     * @cfg {String} groupTextTpl The template used to render the group header. This is used to
+     * format an object which contains the following properties:
+     * &lt;div class=&quot;mdetail-params&quot;&gt;&lt;ul&gt;
+     * &lt;li&gt;&lt;b&gt;group&lt;/b&gt; : String&lt;p class=&quot;sub-desc&quot;&gt;The &lt;i&gt;rendered&lt;/i&gt; value of the group field.
+     * By <b>default</b> this is the unchanged value of the group field. If a {@link #groupRenderer}
+     * is specified, it is the result of a call to that.&lt;/p&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;gvalue&lt;/b&gt; : Object&lt;p class=&quot;sub-desc&quot;&gt;The &lt;i&gt;raw&lt;/i&gt; value of the group field.&lt;/p&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;text&lt;/b&gt; : String&lt;p class=&quot;sub-desc&quot;&gt;The configured {@link #header} (If
+     * {@link #showGroupName} is true) plus the &lt;i&gt;rendered&lt;/i&gt;group field value.&lt;/p&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;groupId&lt;/b&gt; : String&lt;p class=&quot;sub-desc&quot;&gt;A unique, generated ID which is applied to the
+     * View Element which contains the group.&lt;/p&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;startRow&lt;/b&gt; : Number&lt;p class=&quot;sub-desc&quot;&gt;The row index of the Record which caused group change.&lt;/p&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;rs&lt;/b&gt; : Array&lt;p class=&quot;sub-desc&quot;&gt;.Contains a single element: The Record providing the data
+     * <b>for</b> the row which caused group change.&lt;/p&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;cls&lt;/b&gt; : String&lt;p class=&quot;sub-desc&quot;&gt;The generated class name string to apply to the group header Element.&lt;/p&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;style&lt;/b&gt; : String&lt;p class=&quot;sub-desc&quot;&gt;The inline style rules to apply to the group header Element.&lt;/p&gt;&lt;/li&gt;
+     * &lt;/ul&gt;&lt;/div&gt;&lt;/p&gt;
+     * See {@link Ext.XTemplate} <b>for</b> information on how to format data using a template.
+     */</i>
+    groupTextTpl : <em>'{text}'</em>,
+    <i>/**
+     * @cfg {Function} groupRenderer The <b>function</b> used to format the grouping field value <b>for</b>
+     * display <b>in</b> the group header. Should <b>return</b> a string value. This takes the following parameters:
+     * &lt;div class=&quot;mdetail-params&quot;&gt;&lt;ul&gt;
+     * &lt;li&gt;&lt;b&gt;v&lt;/b&gt; : Object&lt;p class=&quot;sub-desc&quot;&gt;The <b>new</b> value of the group field.&lt;/p&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;unused&lt;/b&gt; : undefined&lt;p class=&quot;sub-desc&quot;&gt;Unused parameter.&lt;/p&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;r&lt;/b&gt; : Ext.data.Record&lt;p class=&quot;sub-desc&quot;&gt;The Record providing the data
+     * <b>for</b> the row which caused group change.&lt;/p&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;rowIndex&lt;/b&gt; : Number&lt;p class=&quot;sub-desc&quot;&gt;The row index of the Record which caused group change.&lt;/p&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;colIndex&lt;/b&gt; : Number&lt;p class=&quot;sub-desc&quot;&gt;The column index of the group field.&lt;/p&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;ds&lt;/b&gt; : Ext.data.Store&lt;p class=&quot;sub-desc&quot;&gt;The Store which is providing the data Model.&lt;/p&gt;&lt;/li&gt;
+     * &lt;/ul&gt;&lt;/div&gt;&lt;/p&gt;
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} header The text <b>with</b> which to prefix the group field value <b>in</b> the group header line.
+     */</i>
+
+    <i>// private</i>
+    gidSeed : 1000,
+
+    <i>// private</i>
+    initTemplates : <b>function</b>(){
+        Ext.grid.GroupingView.superclass.initTemplates.call(<b>this</b>);
+        <b>this</b>.state = {};
+
+        <b>var</b> sm = <b>this</b>.grid.getSelectionModel();
+        sm.on(sm.selectRow ? <em>'beforerowselect'</em> : <em>'beforecellselect'</em>,
+                <b>this</b>.onBeforeRowSelect, <b>this</b>);
+
+        <b>if</b>(!<b>this</b>.startGroup){
+            <b>this</b>.startGroup = <b>new</b> Ext.XTemplate(
+                <em>'&lt;div id=&quot;{groupId}&quot; class=&quot;x-grid-group {cls}&quot;&gt;'</em>,
+                    <em>'&lt;div id=&quot;{groupId}-hd&quot; class=&quot;x-grid-group-hd&quot; style=&quot;{style}&quot;&gt;&lt;div&gt;'</em>, <b>this</b>.groupTextTpl ,<em>'&lt;/div&gt;&lt;/div&gt;'</em>,
+                    <em>'&lt;div id=&quot;{groupId}-bd&quot; class=&quot;x-grid-group-body&quot;&gt;'</em>
+            );
+        }
+        <b>this</b>.startGroup.compile();
+        <b>this</b>.endGroup = <em>'&lt;/div&gt;&lt;/div&gt;'</em>;
+    },
+
+    <i>// private</i>
+    findGroup : <b>function</b>(el){
+        <b>return</b> Ext.fly(el).up(<em>'.x-grid-group'</em>, <b>this</b>.mainBody.dom);
+    },
+
+    <i>// private</i>
+    getGroups : <b>function</b>(){
+        <b>return</b> this.hasRows() ? <b>this</b>.mainBody.dom.childNodes : [];
+    },
+
+    <i>// private</i>
+    onAdd : <b>function</b>(){
+        <b>if</b>(this.enableGrouping &amp;&amp; !<b>this</b>.ignoreAdd){
+            <b>var</b> ss = <b>this</b>.getScrollState();
+            <b>this</b>.refresh();
+            <b>this</b>.restoreScroll(ss);
+        }<b>else</b> if(!<b>this</b>.enableGrouping){
+            Ext.grid.GroupingView.superclass.onAdd.apply(<b>this</b>, arguments);
+        }
+    },
+
+    <i>// private</i>
+    onRemove : <b>function</b>(ds, record, index, isUpdate){
+        Ext.grid.GroupingView.superclass.onRemove.apply(<b>this</b>, arguments);
+        <b>var</b> g = document.getElementById(record._groupId);
+        <b>if</b>(g &amp;&amp; g.childNodes[1].childNodes.length &lt; 1){
+            Ext.removeNode(g);
+        }
+        <b>this</b>.applyEmptyText();
+    },
+
+    <i>// private</i>
+    refreshRow : <b>function</b>(record){
+        <b>if</b>(this.ds.getCount()==1){
+            <b>this</b>.refresh();
+        }<b>else</b>{
+            <b>this</b>.isUpdating = true;
+            Ext.grid.GroupingView.superclass.refreshRow.apply(<b>this</b>, arguments);
+            <b>this</b>.isUpdating = false;
+        }
+    },
+
+    <i>// private</i>
+    beforeMenuShow : <b>function</b>(){
+        <b>var</b> field = <b>this</b>.getGroupField();
+        <b>var</b> g = <b>this</b>.hmenu.items.get(<em>'groupBy'</em>);
+        <b>if</b>(g){
+            g.setDisabled(<b>this</b>.cm.config[<b>this</b>.hdCtxIndex].groupable === false);
+        }
+        <b>var</b> s = <b>this</b>.hmenu.items.get(<em>'showGroups'</em>);
+        <b>if</b>(s){
+           s.setDisabled(!field &amp;&amp; <b>this</b>.cm.config[<b>this</b>.hdCtxIndex].groupable === false);
+			s.setChecked(!!field, true);
+        }
+    },
+
+    <i>// private</i>
+    renderUI : <b>function</b>(){
+        Ext.grid.GroupingView.superclass.renderUI.call(<b>this</b>);
+        <b>this</b>.mainBody.on(<em>'mousedown'</em>, <b>this</b>.interceptMouse, <b>this</b>);
+
+        <b>if</b>(this.enableGroupingMenu &amp;&amp; <b>this</b>.hmenu){
+            <b>this</b>.hmenu.add(<em>'-'</em>,{
+                id:<em>'groupBy'</em>,
+                text: <b>this</b>.groupByText,
+                handler: <b>this</b>.onGroupByClick,
+                scope: <b>this</b>,
+                iconCls:<em>'x-group-by-icon'</em>
+            });
+            <b>if</b>(this.enableNoGroups){
+                <b>this</b>.hmenu.add({
+                    id:<em>'showGroups'</em>,
+                    text: <b>this</b>.showGroupsText,
+                    checked: true,
+                    checkHandler: <b>this</b>.onShowGroupsClick,
+                    scope: <b>this</b>
+                });
+            }
+            <b>this</b>.hmenu.on(<em>'beforeshow'</em>, <b>this</b>.beforeMenuShow, <b>this</b>);
+        }
+    },
+
+    <i>// private</i>
+    onGroupByClick : <b>function</b>(){
+        <b>this</b>.grid.store.groupBy(<b>this</b>.cm.getDataIndex(<b>this</b>.hdCtxIndex));
+        <b>this</b>.beforeMenuShow(); <i>// Make sure the checkboxes get properly set when changing groups</i>
+    },
+
+    <i>// private</i>
+    onShowGroupsClick : <b>function</b>(mi, checked){
+        <b>if</b>(checked){
+            <b>this</b>.onGroupByClick();
+        }<b>else</b>{
+            <b>this</b>.grid.store.clearGrouping();
+        }
+    },
+
+    <i>/**
+     * Toggles the specified group <b>if</b> no value is passed, otherwise sets the expanded state of the group to the value passed.
+     * @param {String} groupId The groupId assigned to the group (see getGroupId)
+     * @param {Boolean} expanded (optional)
+     */</i>
+    toggleGroup : <b>function</b>(group, expanded){
+        <b>this</b>.grid.stopEditing(true);
+        group = Ext.getDom(group);
+        <b>var</b> gel = Ext.fly(group);
+        expanded = expanded !== undefined ?
+                expanded : gel.hasClass(<em>'x-grid-group-collapsed'</em>);
+
+        <b>this</b>.state[gel.dom.id] = expanded;
+        gel[expanded ? <em>'removeClass'</em> : <em>'addClass'</em>](<em>'x-grid-group-collapsed'</em>);
+    },
+
+    <i>/**
+     * Toggles all groups <b>if</b> no value is passed, otherwise sets the expanded state of all groups to the value passed.
+     * @param {Boolean} expanded (optional)
+     */</i>
+    toggleAllGroups : <b>function</b>(expanded){
+        <b>var</b> groups = <b>this</b>.getGroups();
+        <b>for</b>(var i = 0, len = groups.length; i &lt; len; i++){
+            <b>this</b>.toggleGroup(groups[i], expanded);
+        }
+    },
+
+    <i>/**
+     * Expands all grouped rows.
+     */</i>
+    expandAllGroups : <b>function</b>(){
+        <b>this</b>.toggleAllGroups(true);
+    },
+
+    <i>/**
+     * Collapses all grouped rows.
+     */</i>
+    collapseAllGroups : <b>function</b>(){
+        <b>this</b>.toggleAllGroups(false);
+    },
+
+    <i>// private</i>
+    interceptMouse : <b>function</b>(e){
+        <b>var</b> hd = e.getTarget(<em>'.x-grid-group-hd'</em>, <b>this</b>.mainBody);
+        <b>if</b>(hd){
+            e.stopEvent();
+            <b>this</b>.toggleGroup(hd.parentNode);
+        }
+    },
+
+    <i>// private</i>
+    getGroup : <b>function</b>(v, r, groupRenderer, rowIndex, colIndex, ds){
+        <b>var</b> g = groupRenderer ? groupRenderer(v, {}, r, rowIndex, colIndex, ds) : String(v);
+        <b>if</b>(g === <em>''</em>){
+            g = <b>this</b>.cm.config[colIndex].emptyGroupText || <b>this</b>.emptyGroupText;
+        }
+        <b>return</b> g;
+    },
+
+    <i>// private</i>
+    getGroupField : <b>function</b>(){
+        <b>return</b> this.grid.store.getGroupState();
+    },
+    
+    <i>// private</i>
+    afterRender: <b>function</b>(){
+        Ext.grid.GroupingView.superclass.afterRender.call(<b>this</b>);
+        <b>if</b>(this.grid.deferRowRender){
+            <b>this</b>.updateGroupWidths();
+        }
+    },
+
+    <i>// private</i>
+    renderRows : <b>function</b>(){
+        <b>var</b> groupField = <b>this</b>.getGroupField();
+        <b>var</b> eg = !!groupField;
+        <i>// <b>if</b> they turned off grouping and the last grouped field is hidden</i>
+        <b>if</b>(this.hideGroupedColumn) {
+            <b>var</b> colIndex = <b>this</b>.cm.findColumnIndex(groupField);
+            <b>if</b>(!eg &amp;&amp; <b>this</b>.lastGroupField !== undefined) {
+                <b>this</b>.mainBody.update(<em>''</em>);
+                <b>this</b>.cm.setHidden(<b>this</b>.cm.findColumnIndex(<b>this</b>.lastGroupField), false);
+                <b>delete</b> this.lastGroupField;
+            }<b>else</b> if (eg &amp;&amp; <b>this</b>.lastGroupField === undefined) {
+                <b>this</b>.lastGroupField = groupField;
+                <b>this</b>.cm.setHidden(colIndex, true);
+            }<b>else</b> if (eg &amp;&amp; <b>this</b>.lastGroupField !== undefined &amp;&amp; groupField !== <b>this</b>.lastGroupField) {
+                <b>this</b>.mainBody.update(<em>''</em>);
+                <b>var</b> oldIndex = <b>this</b>.cm.findColumnIndex(<b>this</b>.lastGroupField);
+                <b>this</b>.cm.setHidden(oldIndex, false);
+                <b>this</b>.lastGroupField = groupField;
+                <b>this</b>.cm.setHidden(colIndex, true);
+            }
+        }
+        <b>return</b> Ext.grid.GroupingView.superclass.renderRows.apply(
+                    <b>this</b>, arguments);
+    },
+
+    <i>// private</i>
+    doRender : <b>function</b>(cs, rs, ds, startRow, colCount, stripe){
+        <b>if</b>(rs.length &lt; 1){
+            <b>return</b> <em>''</em>;
+        }
+        <b>var</b> groupField = <b>this</b>.getGroupField();
+        <b>var</b> colIndex = <b>this</b>.cm.findColumnIndex(groupField);
+
+        <b>this</b>.enableGrouping = !!groupField;
+
+        <b>if</b>(!<b>this</b>.enableGrouping || <b>this</b>.isUpdating){
+            <b>return</b> Ext.grid.GroupingView.superclass.doRender.apply(
+                    <b>this</b>, arguments);
+        }
+        <b>var</b> gstyle = <em>'width:'</em>+<b>this</b>.getTotalWidth()+<em>';'</em>;
+
+        <b>var</b> gidPrefix = <b>this</b>.grid.getGridEl().id;
+        <b>var</b> cfg = <b>this</b>.cm.config[colIndex];
+        <b>var</b> groupRenderer = cfg.groupRenderer || cfg.renderer;
+        <b>var</b> prefix = <b>this</b>.showGroupName ?
+                     (cfg.groupName || cfg.header)+<em>': '</em> : <em>''</em>;
+
+        <b>var</b> groups = [], curGroup, i, len, gid;
+        <b>for</b>(i = 0, len = rs.length; i &lt; len; i++){
+            <b>var</b> rowIndex = startRow + i;
+            <b>var</b> r = rs[i],
+                gvalue = r.data[groupField],
+                g = <b>this</b>.getGroup(gvalue, r, groupRenderer, rowIndex, colIndex, ds);
+            <b>if</b>(!curGroup || curGroup.group != g){
+                gid = gidPrefix + <em>'-gp-'</em> + groupField + <em>'-'</em> + Ext.util.Format.htmlEncode(g);
+               	<i>// <b>if</b> state is defined use it, however state is <b>in</b> terms of expanded</i>
+				<i>// so negate it, otherwise use the <b>default</b>.</i>
+				<b>var</b> isCollapsed  = <b>typeof</b> this.state[gid] !== <em>'undefined'</em> ? !<b>this</b>.state[gid] : <b>this</b>.startCollapsed;
+				<b>var</b> gcls = isCollapsed ? <em>'x-grid-group-collapsed'</em> : <em>''</em>;	
+                curGroup = {
+                    group: g,
+                    gvalue: gvalue,
+                    text: prefix + g,
+                    groupId: gid,
+                    startRow: rowIndex,
+                    rs: [r],
+                    cls: gcls,
+                    style: gstyle
+                };
+                groups.push(curGroup);
+            }<b>else</b>{
+                curGroup.rs.push(r);
+            }
+            r._groupId = gid;
+        }
+
+        <b>var</b> buf = [];
+        <b>for</b>(i = 0, len = groups.length; i &lt; len; i++){
+            <b>var</b> g = groups[i];
+            <b>this</b>.doGroupStart(buf, g, cs, ds, colCount);
+            buf[buf.length] = Ext.grid.GroupingView.superclass.doRender.call(
+                    <b>this</b>, cs, g.rs, ds, g.startRow, colCount, stripe);
+
+            <b>this</b>.doGroupEnd(buf, g, cs, ds, colCount);
+        }
+        <b>return</b> buf.join(<em>''</em>);
+    },
+
+    <i>/**
+     * Dynamically tries to determine the groupId of a specific value
+     * @param {String} value
+     * @<b>return</b> {String} The group id
+     */</i>
+    getGroupId : <b>function</b>(value){
+        <b>var</b> gidPrefix = <b>this</b>.grid.getGridEl().id;
+        <b>var</b> groupField = <b>this</b>.getGroupField();
+        <b>var</b> colIndex = <b>this</b>.cm.findColumnIndex(groupField);
+        <b>var</b> cfg = <b>this</b>.cm.config[colIndex];
+        <b>var</b> groupRenderer = cfg.groupRenderer || cfg.renderer;
+        <b>var</b> gtext = <b>this</b>.getGroup(value, {data:{}}, groupRenderer, 0, colIndex, <b>this</b>.ds);
+        <b>return</b> gidPrefix + <em>'-gp-'</em> + groupField + <em>'-'</em> + Ext.util.Format.htmlEncode(value);
+    },
+
+    <i>// private</i>
+    doGroupStart : <b>function</b>(buf, g, cs, ds, colCount){
+        buf[buf.length] = <b>this</b>.startGroup.apply(g);
+    },
+
+    <i>// private</i>
+    doGroupEnd : <b>function</b>(buf, g, cs, ds, colCount){
+        buf[buf.length] = <b>this</b>.endGroup;
+    },
+
+    <i>// private</i>
+    getRows : <b>function</b>(){
+        <b>if</b>(!<b>this</b>.enableGrouping){
+            <b>return</b> Ext.grid.GroupingView.superclass.getRows.call(<b>this</b>);
+        }
+        <b>var</b> r = [];
+        <b>var</b> g, gs = <b>this</b>.getGroups();
+        <b>for</b>(var i = 0, len = gs.length; i &lt; len; i++){
+            g = gs[i].childNodes[1].childNodes;
+            <b>for</b>(var j = 0, jlen = g.length; j &lt; jlen; j++){
+                r[r.length] = g[j];
+            }
+        }
+        <b>return</b> r;
+    },
+
+    <i>// private</i>
+    updateGroupWidths : <b>function</b>(){
+        <b>if</b>(!<b>this</b>.enableGrouping || !<b>this</b>.hasRows()){
+            <b>return</b>;
+        }
+        <b>var</b> tw = Math.max(<b>this</b>.cm.getTotalWidth(), <b>this</b>.el.dom.offsetWidth-<b>this</b>.scrollOffset) +<em>'px'</em>;
+        <b>var</b> gs = <b>this</b>.getGroups();
+        <b>for</b>(var i = 0, len = gs.length; i &lt; len; i++){
+            gs[i].firstChild.style.width = tw;
+        }
+    },
+
+    <i>// private</i>
+    onColumnWidthUpdated : <b>function</b>(col, w, tw){
+        Ext.grid.GroupingView.superclass.onColumnWidthUpdated.call(<b>this</b>, col, w, tw);
+        <b>this</b>.updateGroupWidths();
+    },
+
+    <i>// private</i>
+    onAllColumnWidthsUpdated : <b>function</b>(ws, tw){
+        Ext.grid.GroupingView.superclass.onAllColumnWidthsUpdated.call(<b>this</b>, ws, tw);
+        <b>this</b>.updateGroupWidths();
+    },
+
+    <i>// private</i>
+    onColumnHiddenUpdated : <b>function</b>(col, hidden, tw){
+        Ext.grid.GroupingView.superclass.onColumnHiddenUpdated.call(<b>this</b>, col, hidden, tw);
+        <b>this</b>.updateGroupWidths();
+    },
+
+    <i>// private</i>
+    onLayout : <b>function</b>(){
+        <b>this</b>.updateGroupWidths();
+    },
+
+    <i>// private</i>
+    onBeforeRowSelect : <b>function</b>(sm, rowIndex){
+        <b>if</b>(!<b>this</b>.enableGrouping){
+            <b>return</b>;
+        }
+        <b>var</b> row = <b>this</b>.getRow(rowIndex);
+        <b>if</b>(row &amp;&amp; !row.offsetParent){
+            <b>var</b> g = <b>this</b>.findGroup(row);
+            <b>this</b>.toggleGroup(g, true);
+        }
+    },
+
+    <i>/**
+     * @cfg {String} groupByText Text displayed <b>in</b> the grid header menu <b>for</b> grouping by a column
+     * (defaults to <em>'Group By This Field'</em>).
+     */</i>
+    groupByText: <em>'Group By This Field'</em>,
+    <i>/**
+     * @cfg {String} showGroupsText Text displayed <b>in</b> the grid header <b>for</b> enabling/disabling grouping
+     * (defaults to <em>'Show <b>in</b> Groups'</em>).
+     */</i>
+    showGroupsText: <em>'Show <b>in</b> Groups'</em>
+});
+<i>// private</i>
+Ext.grid.GroupingView.GROUP_ID = 1000;</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

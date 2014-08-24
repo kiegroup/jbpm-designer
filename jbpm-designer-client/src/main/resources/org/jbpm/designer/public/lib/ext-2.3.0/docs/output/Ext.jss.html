@@ -1,0 +1,1071 @@
+<html><head><title>Ext.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>Ext.js</h1><pre class="highlighted"><code>
+Ext = {version: <em>'2.3.0'</em>};
+
+<i>// <b>for</b> old browsers</i>
+window[&quot;undefined&quot;] = window[&quot;undefined&quot;];
+
+<i>/**
+ * @class Ext
+ * Ext core utilities and functions.
+ * @singleton
+ */</i>
+<i>// holder</i>
+<i>/***
+ * Copies all the properties of config to obj.
+ * @param {Object} obj The receiver of the properties
+ * @param {Object} config The source of the properties
+ * @param {Object} defaults A different object that will also be applied <b>for</b> default values
+ * @<b>return</b> {Object} returns obj
+ * @member Ext apply
+ */</i>
+Ext.apply = <b>function</b>(o, c, defaults){
+    <b>if</b>(defaults){
+        <i>// no &quot;<b>this</b>&quot; reference <b>for</b> friendly out of scope calls</i>
+        Ext.apply(o, defaults);
+    }
+    <b>if</b>(o &amp;&amp; c &amp;&amp; <b>typeof</b> c == <em>'object'</em>){
+        <b>for</b>(var p <b>in</b> c){
+            o[p] = c[p];
+        }
+    }
+    <b>return</b> o;
+};
+
+(<b>function</b>(){
+    <b>var</b> idSeed = 0;
+    <b>var</b> ua = navigator.userAgent.toLowerCase(),
+        check = <b>function</b>(r){
+            <b>return</b> r.test(ua);
+        },
+        isStrict = document.compatMode == &quot;CSS1Compat&quot;,
+        isOpera = check(/opera/),
+        isChrome = check(/chrome/),
+        isWebKit = check(/webkit/),
+        isSafari = !isChrome &amp;&amp; check(/safari/),
+        isSafari2 = isSafari &amp;&amp; check(/applewebkit\/4/), <i>// unique to Safari 2</i>
+        isSafari3 = isSafari &amp;&amp; check(/version\/3/),
+        isSafari4 = isSafari &amp;&amp; check(/version\/4/),
+        isIE = !isOpera &amp;&amp; check(/msie/),
+        isIE7 = isIE &amp;&amp; check(/msie 7/),
+        isIE8 = isIE &amp;&amp; check(/msie 8/),
+        isIE6 = isIE &amp;&amp; !isIE7 &amp;&amp; !isIE8,
+        isGecko = !isWebKit &amp;&amp; check(/gecko/),
+        isGecko2 = isGecko &amp;&amp; check(/rv:1\.8/),
+        isGecko3 = isGecko &amp;&amp; check(/rv:1\.9/),
+        isBorderBox = isIE &amp;&amp; !isStrict,
+        isWindows = check(/windows|win32/),
+        isMac = check(/macintosh|mac os x/),
+        isAir = check(/adobeair/),
+        isLinux = check(/linux/),
+        isSecure = /^https/i.test(window.location.protocol);
+
+    <i>// remove css image flicker</i>
+    <b>if</b>(isIE6){
+        try{
+            document.execCommand(&quot;BackgroundImageCache&quot;, false, true);
+        }catch(e){}
+    }
+
+    Ext.apply(Ext, {
+        <i>/**
+         * True <b>if</b> the browser is <b>in</b> strict (standards-compliant) mode, as opposed to quirks mode
+         * @type Boolean
+         */</i>
+        isStrict : isStrict,
+        <i>/**
+         * True <b>if</b> the page is running over SSL
+         * @type Boolean
+         */</i>
+        isSecure : isSecure,
+        <i>/**
+         * True when the document is fully initialized and ready <b>for</b> action
+         * @type Boolean
+         */</i>
+        isReady : false,
+
+        <i>/**
+         * True to automatically uncache orphaned Ext.Elements periodically (defaults to true)
+         * @type Boolean
+         */</i>
+        enableGarbageCollector : true,
+
+        <i>/**
+         * True to automatically purge event listeners after uncaching an element (defaults to false).
+         * Note: <b>this</b> only happens <b>if</b> enableGarbageCollector is true.
+         * @type Boolean
+         */</i>
+        enableListenerCollection:false,
+
+
+        <i>/**
+         * URL to a blank file used by Ext when <b>in</b> secure mode <b>for</b> iframe src and onReady src to prevent
+         * the IE insecure content warning (defaults to javascript:false).
+         * @type String
+         */</i>
+        SSL_SECURE_URL : &quot;javascript:false&quot;,
+
+        <i>/**
+         * URL to a 1x1 transparent gif image used by Ext to create inline icons <b>with</b> CSS background images. (Defaults to
+         * &quot;http:<i>//extjs.com/s.gif&quot; and you should change <b>this</b> to a URL on your server).</i>
+         * @type String
+         */</i>
+        BLANK_IMAGE_URL : &quot;http:/&quot;+&quot;/extjs.com/s.gif&quot;,
+
+        <i>/**
+        * A reusable empty <b>function</b>
+        * @property
+         * @type Function
+        */</i>
+        emptyFn : <b>function</b>(){},
+
+        <i>/**
+         * Copies all the properties of config to obj <b>if</b> they don't already exist.
+         * @param {Object} obj The receiver of the properties
+         * @param {Object} config The source of the properties
+         * @<b>return</b> {Object} returns obj
+         */</i>
+        applyIf : <b>function</b>(o, c){
+            <b>if</b>(o &amp;&amp; c){
+                <b>for</b>(var p <b>in</b> c){
+                    <b>if</b>(typeof o[p] == &quot;undefined&quot;){ o[p] = c[p]; }
+                }
+            }
+            <b>return</b> o;
+        },
+
+        <i>/**
+         * Applies event listeners to elements by selectors when the document is ready.
+         * The event name is specified <b>with</b> an @ suffix.
+&lt;pre&gt;&lt;code&gt;
+Ext.addBehaviors({
+   <i>// add a listener <b>for</b> click on all anchors <b>in</b> element <b>with</b> id foo</i>
+   <em>'#foo a@click'</em> : <b>function</b>(e, t){
+       <i>// <b>do</b> something</i>
+   },
+
+   <i>// add the same listener to multiple selectors (separated by comma BEFORE the @)</i>
+   <em>'#foo a, #bar span.some-class@mouseover'</em> : <b>function</b>(){
+       <i>// <b>do</b> something</i>
+   }
+});
+&lt;/code&gt;&lt;/pre&gt;
+         * @param {Object} obj The list of behaviors to apply
+         */</i>
+        addBehaviors : <b>function</b>(o){
+            <b>if</b>(!Ext.isReady){
+                Ext.onReady(<b>function</b>(){
+                    Ext.addBehaviors(o);
+                });
+                <b>return</b>;
+            }
+            <b>var</b> cache = {}; <i>// simple cache <b>for</b> applying multiple behaviors to same selector does query multiple times</i>
+            <b>for</b>(var b <b>in</b> o){
+                <b>var</b> parts = b.split(<em>'@'</em>);
+                <b>if</b>(parts[1]){ <i>// <b>for</b> Object prototype breakers</i>
+                    <b>var</b> s = parts[0];
+                    <b>if</b>(!cache[s]){
+                        cache[s] = Ext.select(s);
+                    }
+                    cache[s].on(parts[1], o[b]);
+                }
+            }
+            cache = null;
+        },
+
+        <i>/**
+         * Generates unique ids. If the element already has an id, it is unchanged
+         * @param {Mixed} el (optional) The element to generate an id <b>for</b>
+         * @param {String} prefix (optional) Id prefix (defaults &quot;ext-gen&quot;)
+         * @<b>return</b> {String} The generated Id.
+         */</i>
+        id : <b>function</b>(el, prefix){
+            prefix = prefix || &quot;ext-gen&quot;;
+            el = Ext.getDom(el);
+            <b>var</b> id = prefix + (++idSeed);
+            <b>return</b> el ? (el.id ? el.id : (el.id = id)) : id;
+        },
+
+        <i>/**
+         * Extends one class <b>with</b> another class and optionally overrides members <b>with</b> the passed literal. This class
+         * also adds the <b>function</b> &quot;override()&quot; to the class that can be used to override
+         * members on an instance.
+         * * &lt;p&gt;
+         * This <b>function</b> also supports a 2-argument call <b>in</b> which the subclass's constructor is
+         * not passed as an argument. In <b>this</b> form, the parameters are as follows:&lt;/p&gt;&lt;p&gt;
+         * &lt;div class=&quot;mdetail-params&quot;&gt;&lt;ul&gt;
+         * &lt;li&gt;&lt;code&gt;superclass&lt;/code&gt;
+         * &lt;div class=&quot;sub-desc&quot;&gt;The class being extended&lt;/div&gt;&lt;/li&gt;
+         * &lt;li&gt;&lt;code&gt;overrides&lt;/code&gt;
+         * &lt;div class=&quot;sub-desc&quot;&gt;A literal <b>with</b> members which are copied into the subclass's
+         * prototype, and are therefore shared among all instances of the <b>new</b> class.&lt;p&gt;
+         * This may contain a special member named &lt;tt&gt;&lt;b&gt;constructor&lt;/b&gt;&lt;/tt&gt;. This is used
+         * to define the constructor of the <b>new</b> class, and is returned. If <b>this</b> property is
+         * &lt;i&gt;not&lt;/i&gt; specified, a constructor is generated and returned which just calls the
+         * superclass's constructor passing on its parameters.&lt;/p&gt;&lt;/div&gt;&lt;/li&gt;
+         * &lt;/ul&gt;&lt;/div&gt;&lt;/p&gt;&lt;p&gt;
+         * For example, to create a subclass of the Ext GridPanel:
+         * &lt;pre&gt;&lt;code&gt;
+    MyGridPanel = Ext.extend(Ext.grid.GridPanel, {
+        constructor: <b>function</b>(config) {
+            <i>// Your preprocessing here</i>
+            MyGridPanel.superclass.constructor.apply(<b>this</b>, arguments);
+            <i>// Your postprocessing here</i>
+        },
+
+        yourMethod: <b>function</b>() {
+            <i>// etc.</i>
+        }
+    });
+&lt;/code&gt;&lt;/pre&gt;
+         * &lt;/p&gt;
+         * @param {Function} subclass The class inheriting the functionality
+         * @param {Function} superclass The class being extended
+         * @param {Object} overrides (optional) A literal <b>with</b> members which are copied into the subclass's
+         * prototype, and are therefore shared between all instances of the <b>new</b> class.
+         * @<b>return</b> {Function} The subclass constructor.
+         * @method extend
+         */</i>
+        extend : <b>function</b>(){
+            <i>// inline overrides</i>
+            <b>var</b> io = <b>function</b>(o){
+                <b>for</b>(var m <b>in</b> o){
+                    <b>this</b>[m] = o[m];
+                }
+            };
+            <b>var</b> oc = Object.prototype.constructor;
+
+            <b>return</b> function(sb, sp, overrides){
+                <b>if</b>(typeof sp == <em>'object'</em>){
+                    overrides = sp;
+                    sp = sb;
+                    sb = overrides.constructor != oc ? overrides.constructor : <b>function</b>(){sp.apply(<b>this</b>, arguments);};
+                }
+                <b>var</b> F = <b>function</b>(){}, sbp, spp = sp.prototype;
+                F.prototype = spp;
+                sbp = sb.prototype = <b>new</b> F();
+                sbp.constructor=sb;
+                sb.superclass=spp;
+                <b>if</b>(spp.constructor == oc){
+                    spp.constructor=sp;
+                }
+                sb.override = <b>function</b>(o){
+                    Ext.override(sb, o);
+                };
+                sbp.override = io;
+                Ext.override(sb, overrides);
+                sb.extend = <b>function</b>(o){<b>return</b> Ext.extend(sb, o);};
+                <b>return</b> sb;
+            };
+        }(),
+
+        <i>/**
+         * Adds a list of functions to the prototype of an existing class, overwriting any existing methods <b>with</b> the same name.
+         * Usage:&lt;pre&gt;&lt;code&gt;
+Ext.override(MyClass, {
+    newMethod1: <b>function</b>(){
+        <i>// etc.</i>
+    },
+    newMethod2: <b>function</b>(foo){
+        <i>// etc.</i>
+    }
+});
+ &lt;/code&gt;&lt;/pre&gt;
+         * @param {Object} origclass The class to override
+         * @param {Object} overrides The list of functions to add to origClass.  This should be specified as an object literal
+         * containing one or more methods.
+         * @method override
+         */</i>
+        override : <b>function</b>(origclass, overrides){
+            <b>if</b>(overrides){
+                <b>var</b> p = origclass.prototype;
+                <b>for</b>(var method <b>in</b> overrides){
+                    p[method] = overrides[method];
+                }
+                <b>if</b>(Ext.isIE &amp;&amp; overrides.toString != origclass.toString){
+                    p.toString = overrides.toString;
+                }
+            }
+        },
+
+        <i>/**
+         * Creates namespaces to be used <b>for</b> scoping variables and classes so that they are not global.  Usage:
+         * &lt;pre&gt;&lt;code&gt;
+Ext.namespace(<em>'Company'</em>, <em>'Company.data'</em>);
+Company.Widget = <b>function</b>() { ... }
+Company.data.CustomStore = <b>function</b>(config) { ... }
+&lt;/code&gt;&lt;/pre&gt;
+         * @param {String} namespace1
+         * @param {String} namespace2
+         * @param {String} etc
+         * @method namespace
+         */</i>
+        namespace : <b>function</b>(){
+            <b>var</b> a=arguments, o=null, i, j, d, rt;
+            <b>for</b> (i=0; i&lt;a.length; ++i) {
+                d=a[i].split(&quot;.&quot;);
+                rt = d[0];
+                eval(<em>'<b>if</b> (<b>typeof</b> '</em> + rt + <em>' == &quot;undefined&quot;){'</em> + rt + <em>' = {};} o = '</em> + rt + <em>';'</em>);
+                <b>for</b> (j=1; j&lt;d.length; ++j) {
+                    o[d[j]]=o[d[j]] || {};
+                    o=o[d[j]];
+                }
+            }
+        },
+
+        <i>/**
+         * Takes an object and converts it to an encoded URL. e.g. Ext.urlEncode({foo: 1, bar: 2}); would <b>return</b> &quot;foo=1&amp;bar=2&quot;.  Optionally, property values can be arrays, instead of keys and the resulting string that's returned will contain a name/value pair <b>for</b> each array value.
+         * @param {Object} o
+         * @<b>return</b> {String}
+         */</i>
+        urlEncode : <b>function</b>(o){
+            <b>if</b>(!o){
+                <b>return</b> &quot;&quot;;
+            }
+            <b>var</b> buf = [];
+            <b>for</b>(var key <b>in</b> o){
+                <b>var</b> ov = o[key], k = encodeURIComponent(key);
+                <b>var</b> type = <b>typeof</b> ov;
+                <b>if</b>(type == <em>'undefined'</em>){
+                    buf.push(k, &quot;=&amp;&quot;);
+                }<b>else</b> if(type != &quot;<b>function</b>&quot; &amp;&amp; type != &quot;object&quot;){
+                    buf.push(k, &quot;=&quot;, encodeURIComponent(ov), &quot;&amp;&quot;);
+                }<b>else</b> if(Ext.isDate(ov)){
+                    <b>var</b> s = Ext.encode(ov).replace(/&quot;/g, <em>''</em>);
+                    buf.push(k, &quot;=&quot;, s, &quot;&amp;&quot;);
+                }<b>else</b> if(Ext.isArray(ov)){
+                    <b>if</b> (ov.length) {
+                        <b>for</b>(var i = 0, len = ov.length; i &lt; len; i++) {
+                            buf.push(k, &quot;=&quot;, encodeURIComponent(ov[i] === undefined ? <em>''</em> : ov[i]), &quot;&amp;&quot;);
+                        }
+                    } <b>else</b> {
+                        buf.push(k, &quot;=&amp;&quot;);
+                    }
+                }
+            }
+            buf.pop();
+            <b>return</b> buf.join(&quot;&quot;);
+        },
+
+        <i>/**
+         * Takes an encoded URL and and converts it to an object. Example: &lt;pre&gt;&lt;code&gt;
+Ext.urlDecode(&quot;foo=1&amp;bar=2&quot;); <i>// returns {foo: &quot;1&quot;, bar: &quot;2&quot;}</i>
+Ext.urlDecode(&quot;foo=1&amp;bar=2&amp;bar=3&amp;bar=4&quot;, false); <i>// returns {foo: &quot;1&quot;, bar: [&quot;2&quot;, &quot;3&quot;, &quot;4&quot;]}</i>
+         * &lt;/code&gt;&lt;/pre&gt;
+         * @param {String} string
+         * @param {Boolean} overwrite (optional) Items of the same name will overwrite previous values instead of creating an an array (Defaults to false).
+         * @<b>return</b> {Object} A literal <b>with</b> members
+         */</i>
+        urlDecode : <b>function</b>(string, overwrite){
+            <b>if</b>(!string || !string.length){
+                <b>return</b> {};
+            }
+            <b>var</b> obj = {};
+            <b>var</b> pairs = string.split(<em>'&amp;'</em>);
+            <b>var</b> pair, name, value;
+            <b>for</b>(var i = 0, len = pairs.length; i &lt; len; i++){
+                pair = pairs[i].split(<em>'='</em>);
+                name = decodeURIComponent(pair[0]);
+                value = decodeURIComponent(pair[1]);
+                <b>if</b>(overwrite !== true){
+                    <b>if</b>(typeof obj[name] == &quot;undefined&quot;){
+                        obj[name] = value;
+                    }<b>else</b> if(<b>typeof</b> obj[name] == &quot;string&quot;){
+                        obj[name] = [obj[name]];
+                        obj[name].push(value);
+                    }<b>else</b>{
+                        obj[name].push(value);
+                    }
+                }<b>else</b>{
+                    obj[name] = value;
+                }
+            }
+            <b>return</b> obj;
+        },
+
+        <i>/**
+         * Iterates an array calling the passed <b>function</b> with each item, stopping <b>if</b> your <b>function</b> returns false. If the
+         * passed array is not really an array, your <b>function</b> is called once <b>with</b> it.
+         * The supplied <b>function</b> is called <b>with</b> (Object item, Number index, Array allItems).
+         * @param {Array/NodeList/Mixed} array
+         * @param {Function} fn
+         * @param {Object} scope
+         */</i>
+        each : <b>function</b>(array, fn, scope){
+            <b>if</b>(typeof array.length == &quot;undefined&quot; || <b>typeof</b> array == &quot;string&quot;){
+                array = [array];
+            }
+            <b>for</b>(var i = 0, len = array.length; i &lt; len; i++){
+                <b>if</b>(fn.call(scope || array[i], array[i], i, array) === false){ <b>return</b> i; };
+            }
+        },
+
+        <i>// deprecated</i>
+        combine : <b>function</b>(){
+            <b>var</b> as = arguments, l = as.length, r = [];
+            <b>for</b>(var i = 0; i &lt; l; i++){
+                <b>var</b> a = as[i];
+                <b>if</b>(Ext.isArray(a)){
+                    r = r.concat(a);
+                }<b>else</b> if(a.length !== undefined &amp;&amp; !a.substr){
+                    r = r.concat(Array.prototype.slice.call(a, 0));
+                }<b>else</b>{
+                    r.push(a);
+                }
+            }
+            <b>return</b> r;
+        },
+
+        <i>/**
+         * Escapes the passed string <b>for</b> use <b>in</b> a regular expression
+         * @param {String} str
+         * @<b>return</b> {String}
+         */</i>
+        escapeRe : <b>function</b>(s) {
+            <b>return</b> s.replace(/([.*+?^${}()|[\]\/\\])/g, &quot;\\$1&quot;);
+        },
+
+        <i>// internal</i>
+        callback : <b>function</b>(cb, scope, args, delay){
+            <b>if</b>(typeof cb == &quot;<b>function</b>&quot;){
+                <b>if</b>(delay){
+                    cb.defer(delay, scope, args || []);
+                }<b>else</b>{
+                    cb.apply(scope, args || []);
+                }
+            }
+        },
+
+        <i>/**
+         * Return the dom node <b>for</b> the passed string (id), dom node, or Ext.Element
+         * @param {Mixed} el
+         * @<b>return</b> HTMLElement
+         */</i>
+        getDom : <b>function</b>(el){
+            <b>if</b>(!el || !document){
+                <b>return</b> null;
+            }
+            <b>return</b> el.dom ? el.dom : (<b>typeof</b> el == <em>'string'</em> ? document.getElementById(el) : el);
+        },
+
+        <i>/**
+        * Returns the current HTML document object as an {@link Ext.Element}.
+        * @<b>return</b> Ext.Element The document
+        */</i>
+        getDoc : <b>function</b>(){
+            <b>return</b> Ext.get(document);
+        },
+
+        <i>/**
+        * Returns the current document body as an {@link Ext.Element}.
+        * @<b>return</b> Ext.Element The document body
+        */</i>
+        getBody : <b>function</b>(){
+            <b>return</b> Ext.get(document.body || document.documentElement);
+        },
+
+        <i>/**
+        * Shorthand <b>for</b> {@link Ext.ComponentMgr#get}
+        * @param {String} id
+        * @<b>return</b> Ext.Component
+        */</i>
+        getCmp : <b>function</b>(id){
+            <b>return</b> Ext.ComponentMgr.get(id);
+        },
+
+        <i>/**
+         * Utility method <b>for</b> validating that a value is numeric, returning the specified <b>default</b> value <b>if</b> it is not.
+         * @param {Mixed} value Should be a number, but any type will be handled appropriately
+         * @param {Number} defaultValue The value to <b>return</b> if the original value is non-numeric
+         * @<b>return</b> {Number} Value, <b>if</b> numeric, <b>else</b> defaultValue
+         */</i>
+        num : <b>function</b>(v, defaultValue){
+            v = Number(v == null || <b>typeof</b> v == <em>'boolean'</em>? NaN : v);
+            <b>return</b> isNaN(v)? defaultValue : v;
+        },
+
+        <i>/**
+         * Attempts to destroy any objects passed to it by removing all event listeners, removing them from the
+         * DOM (<b>if</b> applicable) and calling their destroy functions (<b>if</b> available).  This method is primarily
+         * intended <b>for</b> arguments of type {@link Ext.Element} and {@link Ext.Component}, but any subclass of
+         * {@link Ext.util.Observable} can be passed <b>in</b>.  Any number of elements and/or components can be
+         * passed into <b>this</b> function <b>in</b> a single call as separate arguments.
+         * @param {Mixed} arg1 An {@link Ext.Element} or {@link Ext.Component} to destroy
+         * @param {Mixed} arg2 (optional)
+         * @param {Mixed} etc... (optional)
+         */</i>
+        destroy : <b>function</b>(){
+            <b>for</b>(var i = 0, a = arguments, len = a.length; i &lt; len; i++) {
+                <b>var</b> as = a[i];
+                <b>if</b>(as){
+                    <b>if</b>(typeof as.destroy == <em>'<b>function</b>'</em>){
+                        as.destroy();
+                    }
+                    <b>else</b> if(as.dom){
+                        as.removeAllListeners();
+                        as.remove();
+                    }
+                }
+            }
+        },
+
+        <i>/**
+         * Removes a DOM node from the document.  The body node will be ignored <b>if</b> passed <b>in</b>.
+         * @param {HTMLElement} node The node to remove
+         */</i>
+        removeNode : isIE ? <b>function</b>(){
+            <b>var</b> d;
+            <b>return</b> function(n){
+                <b>if</b>(n &amp;&amp; n.tagName != <em>'BODY'</em>){
+                    d = d || document.createElement(<em>'div'</em>);
+                    d.appendChild(n);
+                    d.innerHTML = <em>''</em>;
+                }
+            }
+        }() : <b>function</b>(n){
+            <b>if</b>(n &amp;&amp; n.parentNode &amp;&amp; n.tagName != <em>'BODY'</em>){
+                n.parentNode.removeChild(n);
+            }
+        },
+
+        <i>// inpired by a similar <b>function</b> in mootools library</i>
+        <i>/**
+         * Returns the type of object that is passed <b>in</b>. If the object passed <b>in</b> is null or undefined it
+         * <b>return</b> false otherwise it returns one of the following values:&lt;ul&gt;
+         * &lt;li&gt;&lt;b&gt;string&lt;/b&gt;: If the object passed is a string&lt;/li&gt;
+         * &lt;li&gt;&lt;b&gt;number&lt;/b&gt;: If the object passed is a number&lt;/li&gt;
+         * &lt;li&gt;&lt;b&gt;boolean&lt;/b&gt;: If the object passed is a boolean value&lt;/li&gt;
+         * &lt;li&gt;&lt;b&gt;date&lt;/b&gt;: If the object passed is a Date object&lt;/li&gt;
+         * &lt;li&gt;&lt;b&gt;<b>function</b>&lt;/b&gt;: If the object passed is a <b>function</b> reference&lt;/li&gt;
+         * &lt;li&gt;&lt;b&gt;object&lt;/b&gt;: If the object passed is an object&lt;/li&gt;
+         * &lt;li&gt;&lt;b&gt;array&lt;/b&gt;: If the object passed is an array&lt;/li&gt;
+         * &lt;li&gt;&lt;b&gt;regexp&lt;/b&gt;: If the object passed is a regular expression&lt;/li&gt;
+         * &lt;li&gt;&lt;b&gt;element&lt;/b&gt;: If the object passed is a DOM Element&lt;/li&gt;
+         * &lt;li&gt;&lt;b&gt;nodelist&lt;/b&gt;: If the object passed is a DOM NodeList&lt;/li&gt;
+         * &lt;li&gt;&lt;b&gt;textnode&lt;/b&gt;: If the object passed is a DOM text node and contains something other than whitespace&lt;/li&gt;
+         * &lt;li&gt;&lt;b&gt;whitespace&lt;/b&gt;: If the object passed is a DOM text node and contains only whitespace&lt;/li&gt;
+         * @param {Mixed} object
+         * @<b>return</b> {String}
+         */</i>
+        type : <b>function</b>(o){
+            <b>if</b>(o === undefined || o === null){
+                <b>return</b> false;
+            }
+            <b>if</b>(o.htmlElement){
+                <b>return</b> <em>'element'</em>;
+            }
+            <b>var</b> t = <b>typeof</b> o;
+            <b>if</b>(t == <em>'object'</em> &amp;&amp; o.nodeName) {
+                <b>switch</b>(o.nodeType) {
+                    <b>case</b> 1: <b>return</b> <em>'element'</em>;
+                    <b>case</b> 3: <b>return</b> (/\S/).test(o.nodeValue) ? <em>'textnode'</em> : <em>'whitespace'</em>;
+                }
+            }
+            <b>if</b>(t == <em>'object'</em> || t == <em>'<b>function</b>'</em>) {
+                <b>switch</b>(o.constructor) {
+                    <b>case</b> Array: <b>return</b> <em>'array'</em>;
+                    <b>case</b> RegExp: <b>return</b> <em>'regexp'</em>;
+                    <b>case</b> Date: <b>return</b> <em>'date'</em>;
+                }
+                <b>if</b>(typeof o.length == <em>'number'</em> &amp;&amp; <b>typeof</b> o.item == <em>'<b>function</b>'</em>) {
+                    <b>return</b> <em>'nodelist'</em>;
+                }
+            }
+            <b>return</b> t;
+        },
+
+        <i>/**
+         * Returns true <b>if</b> the passed value is null, undefined or an empty string.
+         * @param {Mixed} value The value to test
+         * @param {Boolean} allowBlank (optional) true to allow empty strings (defaults to false)
+         * @<b>return</b> {Boolean}
+         */</i>
+        isEmpty : <b>function</b>(v, allowBlank){
+            <b>return</b> v === null || v === undefined || (!allowBlank ? v === <em>''</em> : false);
+        },
+
+        <i>/**
+         * Utility method <b>for</b> validating that a value is non-empty (i.e. i) not null, ii) not undefined, and iii) not an empty string),
+         * returning the specified <b>default</b> value <b>if</b> it is.
+         * @param {Mixed} value The value to test
+         * @param {Mixed} defaultValue The value to <b>return</b> if the original value is empty
+         * @param {Boolean} allowBlank (optional) true to allow empty strings (defaults to false)
+         * @<b>return</b> {Mixed} value, <b>if</b> non-empty, <b>else</b> defaultValue
+         */</i>
+        value : <b>function</b>(v, defaultValue, allowBlank){
+            <b>return</b> Ext.isEmpty(v, allowBlank) ? defaultValue : v;
+        },
+
+        <i>/**
+         * Returns true <b>if</b> the passed object is a JavaScript array, otherwise false.
+         * @param {Object} object The object to test
+         * @<b>return</b> {Boolean}
+         */</i>
+        isArray : <b>function</b>(v){
+            <b>return</b> v &amp;&amp; <b>typeof</b> v.length == <em>'number'</em> &amp;&amp; <b>typeof</b> v.splice == <em>'<b>function</b>'</em>;
+        },
+
+        <i>/**
+         * Returns true <b>if</b> the passed object is a JavaScript date object, otherwise false.
+         * @param {Object} object The object to test
+         * @<b>return</b> {Boolean}
+         */</i>
+        isDate : <b>function</b>(v){
+            <b>return</b> v &amp;&amp; <b>typeof</b> v.getFullYear == <em>'<b>function</b>'</em>;
+        },
+
+        <i>/**
+         * True <b>if</b> the detected browser is Opera.
+         * @type Boolean
+         */</i>
+        isOpera : isOpera,
+        <i>/**
+         * True <b>if</b> the detected browser uses WebKit.
+         * @type Boolean
+         */</i>
+        isWebKit: isWebKit,
+        <i>/**
+         * True <b>if</b> the detected browser is Chrome.
+         * @type Boolean
+         */</i>
+        isChrome : isChrome,
+        <i>/**
+         * True <b>if</b> the detected browser is Safari.
+         * @type Boolean
+         */</i>
+        isSafari : isSafari,
+        <i>/**
+         * True <b>if</b> the detected browser is Safari 4.x.
+         * @type Boolean
+         */</i>
+        isSafari4 : isSafari4,
+        <i>/**
+         * True <b>if</b> the detected browser is Safari 3.x.
+         * @type Boolean
+         */</i>
+        isSafari3 : isSafari3,
+        <i>/**
+         * True <b>if</b> the detected browser is Safari 2.x.
+         * @type Boolean
+         */</i>
+        isSafari2 : isSafari2,
+        <i>/**
+         * True <b>if</b> the detected browser is Internet Explorer.
+         * @type Boolean
+         */</i>
+        isIE : isIE,
+        <i>/**
+         * True <b>if</b> the detected browser is Internet Explorer 6.x.
+         * @type Boolean
+         */</i>
+        isIE6 : isIE6,
+        <i>/**
+         * True <b>if</b> the detected browser is Internet Explorer 7.x.
+         * @type Boolean
+         */</i>
+        isIE7 : isIE7,
+        <i>/**
+         * True <b>if</b> the detected browser is Internet Explorer 8.x.
+         * @type Boolean
+         */</i>
+        isIE8 : isIE8,
+        <i>/**
+         * True <b>if</b> the detected browser uses the Gecko layout engine (e.g. Mozilla, Firefox).
+         * @type Boolean
+         */</i>
+        isGecko : isGecko,
+        <i>/**
+         * True <b>if</b> the detected browser uses a pre-Gecko 1.9 layout engine (e.g. Firefox 2.x).
+         * @type Boolean
+         */</i>
+        isGecko2 : isGecko2,
+        <i>/**
+         * True <b>if</b> the detected browser uses a Gecko 1.9+ layout engine (e.g. Firefox 3.x).
+         * @type Boolean
+         */</i>
+        isGecko3 : isGecko3,
+        <i>/**
+         * True <b>if</b> the detected browser is Internet Explorer running <b>in</b> non-strict mode.
+         * @type Boolean
+         */</i>
+        isBorderBox : isBorderBox,
+        <i>/**
+         * True <b>if</b> the detected platform is Linux.
+         * @type Boolean
+         */</i>
+        isLinux : isLinux,
+        <i>/**
+         * True <b>if</b> the detected platform is Windows.
+         * @type Boolean
+         */</i>
+        isWindows : isWindows,
+        <i>/**
+         * True <b>if</b> the detected platform is Mac OS.
+         * @type Boolean
+         */</i>
+        isMac : isMac,
+        <i>/**
+         * True <b>if</b> the detected platform is Adobe Air.
+         * @type Boolean
+         */</i>
+        isAir : isAir,
+
+        <i>/**
+         * By <b>default</b>, Ext intelligently decides whether floating elements should be shimmed. If you are using flash,
+         * you may want to set <b>this</b> to true.
+         * @type Boolean
+         */</i>
+        useShims : ((isIE &amp;&amp; !(isIE7 || isIE8)) || (isMac &amp;&amp; isGecko &amp;&amp; !isGecko3))
+    });
+
+    <i>// <b>in</b> intellij using keyword &quot;namespace&quot; causes parsing errors</i>
+    Ext.ns = Ext.namespace;
+})();
+
+Ext.ns(&quot;Ext&quot;, &quot;Ext.util&quot;, &quot;Ext.grid&quot;, &quot;Ext.dd&quot;, &quot;Ext.tree&quot;, &quot;Ext.data&quot;,
+                &quot;Ext.form&quot;, &quot;Ext.menu&quot;, &quot;Ext.state&quot;, &quot;Ext.lib&quot;, &quot;Ext.layout&quot;, &quot;Ext.app&quot;, &quot;Ext.ux&quot;);
+
+
+<i>/**
+ * @class Function
+ * These functions are available on every Function object (any JavaScript <b>function</b>).
+ */</i>
+Ext.apply(Function.prototype, {
+     <i>/**
+     * Creates a callback that passes arguments[0], arguments[1], arguments[2], ...
+     * Call directly on any <b>function</b>. Example: &lt;code&gt;myFunction.createCallback(arg1, arg2)&lt;/code&gt;
+     * Will create a <b>function</b> that is bound to those 2 args. &lt;b&gt;If a specific scope is required <b>in</b> the
+     * callback, use {@link #createDelegate} instead.&lt;/b&gt; The <b>function</b> returned by createCallback always
+     * executes <b>in</b> the window scope.
+     * &lt;p&gt;This method is required when you want to pass arguments to a callback <b>function</b>.  If no arguments
+     * are needed, you can simply pass a reference to the <b>function</b> as a callback (e.g., callback: myFn).
+     * However, <b>if</b> you tried to pass a <b>function</b> with arguments (e.g., callback: myFn(arg1, arg2)) the <b>function</b>
+     * would simply execute immediately when the code is parsed. Example usage:
+     * &lt;pre&gt;&lt;code&gt;
+<b>var</b> sayHi = <b>function</b>(name){
+    alert(<em>'Hi, '</em> + name);
+}
+
+<i>// clicking the button alerts &quot;Hi, Fred&quot;</i>
+<b>new</b> Ext.Button({
+    text: <em>'Say Hi'</em>,
+    renderTo: Ext.getBody(),
+    handler: sayHi.createCallback(<em>'Fred'</em>)
+});
+&lt;/code&gt;&lt;/pre&gt;
+     * @<b>return</b> {Function} The <b>new</b> function
+    */</i>
+    createCallback : <b>function</b>(<i>/*args...*/</i>){
+        <i>// make args available, <b>in</b> function below</i>
+        <b>var</b> args = arguments;
+        <b>var</b> method = <b>this</b>;
+        <b>return</b> function() {
+            <b>return</b> method.apply(window, args);
+        };
+    },
+
+    <i>/**
+     * Creates a delegate (callback) that sets the scope to obj.
+     * Call directly on any <b>function</b>. Example: &lt;code&gt;<b>this</b>.myFunction.createDelegate(<b>this</b>, [arg1, arg2])&lt;/code&gt;
+     * Will create a <b>function</b> that is automatically scoped to obj so that the &lt;tt&gt;<b>this</b>&lt;/tt&gt; variable inside the
+     * callback points to obj. Example usage:
+     * &lt;pre&gt;&lt;code&gt;
+<b>var</b> sayHi = <b>function</b>(name){
+    <i>// Note <b>this</b> use of &quot;<b>this</b>.text&quot; here.  This <b>function</b> expects to</i>
+    <i>// execute within a scope that contains a text property.  In <b>this</b></i>
+    <i>// example, the &quot;<b>this</b>&quot; variable is pointing to the btn object that</i>
+    <i>// was passed <b>in</b> createDelegate below.</i>
+    alert(<em>'Hi, '</em> + name + <em>'. You clicked the &quot;'</em> + <b>this</b>.text + <em>'&quot; button.'</em>);
+}
+
+<b>var</b> btn = <b>new</b> Ext.Button({
+    text: <em>'Say Hi'</em>,
+    renderTo: Ext.getBody()
+});
+
+<i>// This callback will execute <b>in</b> the scope of the</i>
+<i>// button instance. Clicking the button alerts</i>
+<i>// &quot;Hi, Fred. You clicked the &quot;Say Hi&quot; button.&quot;</i>
+btn.on(<em>'click'</em>, sayHi.createDelegate(btn, [<em>'Fred'</em>]));
+&lt;/code&gt;&lt;/pre&gt;
+     * @param {Object} obj (optional) The object <b>for</b> which the scope is set
+     * @param {Array} args (optional) Overrides arguments <b>for</b> the call. (Defaults to the arguments passed by the caller)
+     * @param {Boolean/Number} appendArgs (optional) <b>if</b> True args are appended to call args instead of overriding,
+     *                                             <b>if</b> a number the args are inserted at the specified position
+     * @<b>return</b> {Function} The <b>new</b> function
+     */</i>
+    createDelegate : <b>function</b>(obj, args, appendArgs){
+        <b>var</b> method = <b>this</b>;
+        <b>return</b> function() {
+            <b>var</b> callArgs = args || arguments;
+            <b>if</b>(appendArgs === true){
+                callArgs = Array.prototype.slice.call(arguments, 0);
+                callArgs = callArgs.concat(args);
+            }<b>else</b> if(<b>typeof</b> appendArgs == &quot;number&quot;){
+                callArgs = Array.prototype.slice.call(arguments, 0); <i>// copy arguments first</i>
+                <b>var</b> applyArgs = [appendArgs, 0].concat(args); <i>// create method call params</i>
+                Array.prototype.splice.apply(callArgs, applyArgs); <i>// splice them <b>in</b></i>
+            }
+            <b>return</b> method.apply(obj || window, callArgs);
+        };
+    },
+
+    <i>/**
+     * Calls <b>this</b> function after the number of millseconds specified, optionally <b>in</b> a specific scope. Example usage:
+     * &lt;pre&gt;&lt;code&gt;
+<b>var</b> sayHi = <b>function</b>(name){
+    alert(<em>'Hi, '</em> + name);
+}
+
+<i>// executes immediately:</i>
+sayHi(<em>'Fred'</em>);
+
+<i>// executes after 2 seconds:</i>
+sayHi.defer(2000, <b>this</b>, [<em>'Fred'</em>]);
+
+<i>// <b>this</b> syntax is sometimes useful <b>for</b> deferring</i>
+<i>// execution of an anonymous <b>function</b>:</i>
+(<b>function</b>(){
+    alert(<em>'Anonymous'</em>);
+}).defer(100);
+&lt;/code&gt;&lt;/pre&gt;
+     * @param {Number} millis The number of milliseconds <b>for</b> the setTimeout call (<b>if</b> 0 the <b>function</b> is executed immediately)
+     * @param {Object} obj (optional) The object <b>for</b> which the scope is set
+     * @param {Array} args (optional) Overrides arguments <b>for</b> the call. (Defaults to the arguments passed by the caller)
+     * @param {Boolean/Number} appendArgs (optional) <b>if</b> True args are appended to call args instead of overriding,
+     *                                             <b>if</b> a number the args are inserted at the specified position
+     * @<b>return</b> {Number} The timeout id that can be used <b>with</b> clearTimeout
+     */</i>
+    defer : <b>function</b>(millis, obj, args, appendArgs){
+        <b>var</b> fn = <b>this</b>.createDelegate(obj, args, appendArgs);
+        <b>if</b>(millis){
+            <b>return</b> setTimeout(fn, millis);
+        }
+        fn();
+        <b>return</b> 0;
+    },
+
+    <i>/**
+     * Create a combined <b>function</b> call sequence of the original <b>function</b> + the passed <b>function</b>.
+     * The resulting <b>function</b> returns the results of the original <b>function</b>.
+     * The passed fcn is called <b>with</b> the parameters of the original <b>function</b>. Example usage:
+     * &lt;pre&gt;&lt;code&gt;
+<b>var</b> sayHi = <b>function</b>(name){
+    alert(<em>'Hi, '</em> + name);
+}
+
+sayHi(<em>'Fred'</em>); <i>// alerts &quot;Hi, Fred&quot;</i>
+
+<b>var</b> sayGoodbye = sayHi.createSequence(<b>function</b>(name){
+    alert(<em>'Bye, '</em> + name);
+});
+
+sayGoodbye(<em>'Fred'</em>); <i>// both alerts show</i>
+&lt;/code&gt;&lt;/pre&gt;
+     * @param {Function} fcn The <b>function</b> to sequence
+     * @param {Object} scope (optional) The scope of the passed fcn (Defaults to scope of original <b>function</b> or window)
+     * @<b>return</b> {Function} The <b>new</b> function
+     */</i>
+    createSequence : <b>function</b>(fcn, scope){
+        <b>if</b>(typeof fcn != &quot;<b>function</b>&quot;){
+            <b>return</b> this;
+        }
+        <b>var</b> method = <b>this</b>;
+        <b>return</b> function() {
+            <b>var</b> retval = method.apply(<b>this</b> || window, arguments);
+            fcn.apply(scope || <b>this</b> || window, arguments);
+            <b>return</b> retval;
+        };
+    },
+
+    <i>/**
+     * Creates an interceptor <b>function</b>. The passed fcn is called before the original one. If it returns false,
+     * the original one is not called. The resulting <b>function</b> returns the results of the original <b>function</b>.
+     * The passed fcn is called <b>with</b> the parameters of the original <b>function</b>. Example usage:
+     * &lt;pre&gt;&lt;code&gt;
+<b>var</b> sayHi = <b>function</b>(name){
+    alert(<em>'Hi, '</em> + name);
+}
+
+sayHi(<em>'Fred'</em>); <i>// alerts &quot;Hi, Fred&quot;</i>
+
+<i>// create a <b>new</b> function that validates input without</i>
+<i>// directly modifying the original <b>function</b>:</i>
+<b>var</b> sayHiToFriend = sayHi.createInterceptor(<b>function</b>(name){
+    <b>return</b> name == <em>'Brian'</em>;
+});
+
+sayHiToFriend(<em>'Fred'</em>);  <i>// no alert</i>
+sayHiToFriend(<em>'Brian'</em>); <i>// alerts &quot;Hi, Brian&quot;</i>
+&lt;/code&gt;&lt;/pre&gt;
+     * @param {Function} fcn The <b>function</b> to call before the original
+     * @param {Object} scope (optional) The scope of the passed fcn (Defaults to scope of original <b>function</b> or window)
+     * @<b>return</b> {Function} The <b>new</b> function
+     */</i>
+    createInterceptor : <b>function</b>(fcn, scope){
+        <b>if</b>(typeof fcn != &quot;<b>function</b>&quot;){
+            <b>return</b> this;
+        }
+        <b>var</b> method = <b>this</b>;
+        <b>return</b> function() {
+            fcn.target = <b>this</b>;
+            fcn.method = method;
+            <b>if</b>(fcn.apply(scope || <b>this</b> || window, arguments) === false){
+                <b>return</b>;
+            }
+            <b>return</b> method.apply(<b>this</b> || window, arguments);
+        };
+    }
+});
+
+<i>/**
+ * @class String
+ * These functions are available as static methods on the JavaScript String object.
+ */</i>
+Ext.applyIf(String, {
+
+    <i>/**
+     * Escapes the passed string <b>for</b> ' and \
+     * @param {String} string The string to escape
+     * @<b>return</b> {String} The escaped string
+     * @static
+     */</i>
+    escape : <b>function</b>(string) {
+        <b>return</b> string.replace(/('|\\)/g, &quot;\\$1&quot;);
+    },
+
+    <i>/**
+     * Pads the left side of a string <b>with</b> a specified character.  This is especially useful
+     * <b>for</b> normalizing number and date strings.  Example usage:
+     * &lt;pre&gt;&lt;code&gt;
+<b>var</b> s = String.leftPad(<em>'123'</em>, 5, <em>'0'</em>);
+<i>// s now contains the string: <em>'00123'</em></i>
+&lt;/code&gt;&lt;/pre&gt;
+     * @param {String} string The original string
+     * @param {Number} size The total length of the output string
+     * @param {String} char (optional) The character <b>with</b> which to pad the original string (defaults to empty string &quot; &quot;)
+     * @<b>return</b> {String} The padded string
+     * @static
+     */</i>
+    leftPad : <b>function</b> (val, size, ch) {
+        <b>var</b> result = <b>new</b> String(val);
+        <b>if</b>(!ch) {
+            ch = &quot; &quot;;
+        }
+        <b>while</b> (result.length &lt; size) {
+            result = ch + result;
+        }
+        <b>return</b> result.toString();
+    },
+
+    <i>/**
+     * Allows you to define a tokenized string and pass an arbitrary number of arguments to replace the tokens.  Each
+     * token must be unique, and must increment <b>in</b> the format {0}, {1}, etc.  Example usage:
+     * &lt;pre&gt;&lt;code&gt;
+<b>var</b> cls = <em>'my-class'</em>, text = <em>'Some text'</em>;
+<b>var</b> s = String.format(<em>'&amp;lt;div class=&quot;{0}&quot;&gt;{1}&amp;lt;/div&gt;'</em>, cls, text);
+<i>// s now contains the string: <em>'&amp;lt;div class=&quot;my-class&quot;&gt;Some text&amp;lt;/div&gt;'</em></i>
+&lt;/code&gt;&lt;/pre&gt;
+     * @param {String} string The tokenized string to be formatted
+     * @param {String} value1 The value to replace token {0}
+     * @param {String} value2 Etc...
+     * @<b>return</b> {String} The formatted string
+     * @static
+     */</i>
+    format : <b>function</b>(format){
+        <b>var</b> args = Array.prototype.slice.call(arguments, 1);
+        <b>return</b> format.replace(/\{(\d+)\}/g, <b>function</b>(m, i){
+            <b>return</b> args[i];
+        });
+    }
+});
+
+<i>/**
+ * Utility <b>function</b> that allows you to easily <b>switch</b> a string between two alternating values.  The passed value
+ * is compared to the current string, and <b>if</b> they are equal, the other value that was passed <b>in</b> is returned.  If
+ * they are already different, the first value passed <b>in</b> is returned.  Note that <b>this</b> method returns the <b>new</b> value
+ * but does not change the current string.
+ * &lt;pre&gt;&lt;code&gt;
+<i>// alternate sort directions</i>
+sort = sort.toggle(<em>'ASC'</em>, <em>'DESC'</em>);
+
+<i>// instead of conditional logic:</i>
+sort = (sort == <em>'ASC'</em> ? <em>'DESC'</em> : <em>'ASC'</em>);
+&lt;/code&gt;&lt;/pre&gt;
+ * @param {String} value The value to compare to the current string
+ * @param {String} other The <b>new</b> value to use <b>if</b> the string already equals the first value passed <b>in</b>
+ * @<b>return</b> {String} The <b>new</b> value
+ */</i>
+String.prototype.toggle = <b>function</b>(value, other){
+    <b>return</b> this == value ? other : value;
+};
+
+<i>/**
+ * Trims whitespace from either end of a string, leaving spaces within the string intact.  Example:
+ * &lt;pre&gt;&lt;code&gt;
+<b>var</b> s = <em>'  foo bar  '</em>;
+alert(<em>'-'</em> + s + <em>'-'</em>);         <i>//alerts &quot;- foo bar -&quot;</i>
+alert(<em>'-'</em> + s.trim() + <em>'-'</em>);  <i>//alerts &quot;-foo bar-&quot;</i>
+&lt;/code&gt;&lt;/pre&gt;
+ * @<b>return</b> {String} The trimmed string
+ */</i>
+String.prototype.trim = <b>function</b>(){
+    <b>var</b> re = /^\s+|\s+$/g;
+    <b>return</b> function(){ <b>return</b> this.replace(re, &quot;&quot;); };
+}();
+<i>/**
+ * @class Number
+ */</i>
+Ext.applyIf(Number.prototype, {
+    <i>/**
+     * Checks whether or not the current number is within a desired range.  If the number is already within the
+     * range it is returned, otherwise the min or max value is returned depending on which side of the range is
+     * exceeded.  Note that <b>this</b> method returns the constrained value but does not change the current number.
+     * @param {Number} min The minimum number <b>in</b> the range
+     * @param {Number} max The maximum number <b>in</b> the range
+     * @<b>return</b> {Number} The constrained value <b>if</b> outside the range, otherwise the current value
+     */</i>
+    constrain : <b>function</b>(min, max){
+        <b>return</b> Math.min(Math.max(<b>this</b>, min), max);
+    }
+});
+<i>/**
+ * @class Array
+ */</i>
+Ext.applyIf(Array.prototype, {
+    <i>/**
+     * Checks whether or not the specified object exists <b>in</b> the array.
+     * @param {Object} o The object to check <b>for</b>
+     * @<b>return</b> {Number} The index of o <b>in</b> the array (or -1 <b>if</b> it is not found)
+     */</i>
+    indexOf : <b>function</b>(o){
+       <b>for</b> (<b>var</b> i = 0, len = <b>this</b>.length; i &lt; len; i++){
+          <b>if</b>(this[i] == o) <b>return</b> i;
+       }
+       <b>return</b> -1;
+    },
+
+    <i>/**
+     * Removes the specified object from the array.  If the object is not found nothing happens.
+     * @param {Object} o The object to remove
+     * @<b>return</b> {Array} <b>this</b> array
+     */</i>
+    remove : <b>function</b>(o){
+       <b>var</b> index = <b>this</b>.indexOf(o);
+       <b>if</b>(index != -1){
+           <b>this</b>.splice(index, 1);
+       }
+       <b>return</b> this;
+    }
+});
+
+<i>/**
+ Returns the number of milliseconds between <b>this</b> date and date
+ @param {Date} date (optional) Defaults to now
+ @<b>return</b> {Number} The diff <b>in</b> milliseconds
+ @member Date getElapsed
+ */</i>
+Date.prototype.getElapsed = <b>function</b>(date) {
+    <b>return</b> Math.abs((date || <b>new</b> Date()).getTime()-<b>this</b>.getTime());
+};
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

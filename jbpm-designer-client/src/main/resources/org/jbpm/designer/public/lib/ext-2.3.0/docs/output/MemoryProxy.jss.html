@@ -1,0 +1,60 @@
+<html><head><title>MemoryProxy.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>MemoryProxy.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.data.MemoryProxy
+ * @extends Ext.data.DataProxy
+ * An implementation of Ext.data.DataProxy that simply passes the data specified <b>in</b> its constructor
+ * to the Reader when its load method is called.
+ * @constructor
+ * @param {Object} data The data object which the Reader uses to construct a block of Ext.data.Records.
+ */</i>
+Ext.data.MemoryProxy = <b>function</b>(data){
+    Ext.data.MemoryProxy.superclass.constructor.call(<b>this</b>);
+    <b>this</b>.data = data;
+};
+
+Ext.extend(Ext.data.MemoryProxy, Ext.data.DataProxy, {
+    <i>/**
+     * @event loadexception
+     * Fires <b>if</b> an exception occurs <b>in</b> the Proxy during data loading. Note that <b>this</b> event is also relayed 
+     * through {@link Ext.data.Store}, so you can listen <b>for</b> it directly on any Store instance.
+     * @param {Object} <b>this</b>
+     * @param {Object} arg The callback's arg object passed to the {@link #load} <b>function</b>
+     * @param {Object} null This parameter does not apply and will always be null <b>for</b> MemoryProxy
+     * @param {Error} e The JavaScript Error object caught <b>if</b> the configured Reader could not read the data
+     */</i>
+<i>// holder</i>
+<i>/***
+     * Load data from the requested source (<b>in</b> this <b>case</b> an <b>in</b>-memory
+     * data object passed to the constructor), read the data object into
+     * a block of Ext.data.Records using the passed Ext.data.DataReader implementation, and
+     * process that block using the passed callback.
+     * @param {Object} params This parameter is not used by the MemoryProxy class.
+     * @param {Ext.data.DataReader} reader The Reader object which converts the data
+     * object into a block of Ext.data.Records.
+     * @param {Function} callback The <b>function</b> into which to pass the block of Ext.data.records.
+     * The <b>function</b> must be passed &lt;ul&gt;
+     * &lt;li&gt;The Record block object&lt;/li&gt;
+     * &lt;li&gt;The &quot;arg&quot; argument from the load <b>function</b>&lt;/li&gt;
+     * &lt;li&gt;A boolean success indicator&lt;/li&gt;
+     * &lt;/ul&gt;
+     * @param {Object} scope The scope <b>in</b> which to call the callback
+     * @param {Object} arg An optional argument which is passed to the callback as its second parameter.
+     */</i>
+    load : <b>function</b>(params, reader, callback, scope, arg){
+        params = params || {};
+        <b>var</b> result;
+        try {
+            result = reader.readRecords(<b>this</b>.data);
+        }catch(e){
+            <b>this</b>.fireEvent(&quot;loadexception&quot;, <b>this</b>, arg, null, e);
+            callback.call(scope, null, arg, false);
+            <b>return</b>;
+        }
+        callback.call(scope, result, arg, true);
+    },
+    
+    <i>// private</i>
+    update : <b>function</b>(params, records){
+        
+    }
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

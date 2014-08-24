@@ -1,0 +1,290 @@
+<html><head><title>ext-lang-no_NN.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ext-lang-no_NN.js</h1><pre class="highlighted"><code><i>/**
+ *
+ * Norwegian translation (Nynorsk: no-NN)
+ * By Tore Kj&Atilde;&cedil;rsvik 21-January-2008
+ *  
+ */</i>
+
+Ext.UpdateManager.defaults.indicatorText = <em>'&lt;div class=&quot;loading-indicator&quot;&gt;Lastar...&lt;/div&gt;'</em>;
+
+<b>if</b>(Ext.View){
+  Ext.View.prototype.emptyText = &quot;&quot;;
+}
+
+<b>if</b>(Ext.grid.GridPanel){
+  Ext.grid.GridPanel.prototype.ddText = &quot;{0} markert(e) rad(er)&quot;;
+}
+
+<b>if</b>(Ext.TabPanelItem){
+  Ext.TabPanelItem.prototype.closeText = &quot;Lukk denne fana&quot;;
+}
+
+<b>if</b>(Ext.form.Field){
+  Ext.form.Field.prototype.invalidText = &quot;Verdien i dette feltet er ugyldig&quot;;
+}
+
+<b>if</b>(Ext.LoadMask){
+  Ext.LoadMask.prototype.msg = &quot;Lastar...&quot;;
+}
+
+Date.monthNames = [
+  &quot;Januar&quot;,
+  &quot;Februar&quot;,
+  &quot;Mars&quot;,
+  &quot;April&quot;,
+  &quot;Mai&quot;,
+  &quot;Juni&quot;,
+  &quot;Juli&quot;,
+  &quot;August&quot;,
+  &quot;September&quot;,
+  &quot;Oktober&quot;,
+  &quot;November&quot;,
+  &quot;Desember&quot;
+];
+
+Date.getShortMonthName = <b>function</b>(month) {
+  <b>return</b> Date.monthNames[month].substring(0, 3);
+};
+
+Date.monthNumbers = {
+  Jan : 0,
+  Feb : 1,
+  Mar : 2,
+  Apr : 3,
+  Mai : 4,
+  Jun : 5,
+  Jul : 6,
+  Aug : 7,
+  Sep : 8,
+  Okt : 9,
+  Nov : 10,
+  Des : 11
+};
+
+Date.getMonthNumber = <b>function</b>(name) {
+  <b>return</b> Date.monthNumbers[name.substring(0, 1).toUpperCase() + name.substring(1, 3).toLowerCase()];
+};
+
+Date.dayNames = [
+  &quot;S&Atilde;&cedil;ndag&quot;,
+  &quot;M&Atilde;&yen;ndag&quot;,
+  &quot;Tysdag&quot;,
+  &quot;Onsdag&quot;,
+  &quot;Torsdag&quot;,
+  &quot;Fredag&quot;,
+  &quot;Laurdag&quot;
+];
+
+Date.getShortDayName = <b>function</b>(day) {
+  <b>return</b> Date.dayNames[day].substring(0, 3);
+};
+
+<b>if</b>(Ext.MessageBox){
+  Ext.MessageBox.buttonText = {
+    ok     : &quot;OK&quot;,
+    cancel : &quot;Avbryt&quot;,
+    yes    : &quot;Ja&quot;,
+    no     : &quot;Nei&quot;
+  };
+}
+
+<b>if</b>(Ext.util.Format){
+  Ext.util.Format.date = <b>function</b>(v, format){
+    <b>if</b>(!v) <b>return</b> &quot;&quot;;
+    <b>if</b>(!(v instanceof Date)) v = <b>new</b> Date(Date.parse(v));
+    <b>return</b> v.dateFormat(format || &quot;d.m.Y&quot;);
+  };
+}
+
+<b>if</b>(Ext.DatePicker){
+  Ext.apply(Ext.DatePicker.prototype, {
+    todayText         : &quot;I dag&quot;,
+    minText           : &quot;Denne datoen er f&Atilde;&cedil;r tidlegaste tillatne dato&quot;,
+    maxText           : &quot;Denne datoen er etter seinaste tillatne dato&quot;,
+    disabledDaysText  : &quot;&quot;,
+    disabledDatesText : &quot;&quot;,
+    monthNames	      : Date.monthNames,
+    dayNames		      : Date.dayNames,
+    nextText          : <em>'Neste m&Atilde;&yen;nad (Control+Pil H&Atilde;&cedil;gre)'</em>,
+    prevText          : <em>'F&Atilde;&cedil;rre m&Atilde;&yen;nad (Control+Pil Venstre)'</em>,
+    monthYearText     : <em>'Velj ein m&Atilde;&yen;nad (Control+Pil Opp/Ned <b>for</b> &Atilde;&yen; skifte &Atilde;&yen;r)'</em>,
+    todayTip          : &quot;{0} (Mellomrom)&quot;,
+    format            : &quot;d.m.y&quot;,
+    okText            : &quot;&amp;#160;OK&amp;#160;&quot;,
+    cancelText        : &quot;Avbryt&quot;,
+    startDay          : 1
+  });
+}
+
+<b>if</b>(Ext.PagingToolbar){
+  Ext.apply(Ext.PagingToolbar.prototype, {
+    beforePageText : &quot;Side&quot;,
+    afterPageText  : &quot;av {0}&quot;,
+    firstText      : &quot;F&Atilde;&cedil;rste sida&quot;,
+    prevText       : &quot;F&Atilde;&cedil;rre sida&quot;,
+    nextText       : &quot;Neste sida&quot;,
+    lastText       : &quot;Siste sida&quot;,
+    refreshText    : &quot;Oppdater&quot;,
+    displayMsg     : &quot;Viser {0} - {1} av {2}&quot;,
+    emptyMsg       : <em>'Ingen data &Atilde;&yen; vise'</em>
+  });
+}
+
+<b>if</b>(Ext.form.TextField){
+  Ext.apply(Ext.form.TextField.prototype, {
+    minLengthText : &quot;Den minste lengda <b>for</b> dette feltet er {0}&quot;,
+    maxLengthText : &quot;Den st&Atilde;&cedil;rste lengda <b>for</b> dette feltet er {0}&quot;,
+    blankText     : &quot;Dette feltet er p&Atilde;&yen;kravd&quot;,
+    regexText     : &quot;&quot;,
+    emptyText     : null
+  });
+}
+
+<b>if</b>(Ext.form.NumberField){
+  Ext.apply(Ext.form.NumberField.prototype, {
+    minText : &quot;Den minste verdien <b>for</b> dette feltet er {0}&quot;,
+    maxText : &quot;Den st&Atilde;&cedil;rste verdien <b>for</b> dette feltet er {0}&quot;,
+    nanText : &quot;{0} er ikkje eit gyldig nummer&quot;
+  });
+}
+
+<b>if</b>(Ext.form.DateField){
+  Ext.apply(Ext.form.DateField.prototype, {
+    disabledDaysText  : &quot;Deaktivert&quot;,
+    disabledDatesText : &quot;Deaktivert&quot;,
+    minText           : &quot;Datoen i dette feltet m&Atilde;&yen; vere etter {0}&quot;,
+    maxText           : &quot;Datoen i dette feltet m&Atilde;&yen; vere f&Atilde;&cedil;r {0}&quot;,
+    invalidText       : &quot;{0} er ikkje ein gyldig dato - han m&Atilde;&yen; vere p&Atilde;&yen; formatet {1}&quot;,
+    format            : &quot;d.m.y&quot;,
+    altFormats        : &quot;d.m.Y|d/m/y|d/m/Y|d-m-y|d-m-Y|d.m|d/m|d-m|dm|dmy|dmY|Y-m-d|d&quot;
+  });
+}
+
+<b>if</b>(Ext.form.ComboBox){
+  Ext.apply(Ext.form.ComboBox.prototype, {
+    loadingText       : &quot;Lastar...&quot;,
+    valueNotFoundText : undefined
+  });
+}
+
+<b>if</b>(Ext.form.VTypes){
+   Ext.apply(Ext.form.VTypes, {
+      emailText    : <em>'Dette feltet skal vere ei epost adresse p&Atilde;&yen; formatet &quot;bruker@domene.no&quot;'</em>,
+      urlText      : <em>'Dette feltet skal vere ein link (URL) p&Atilde;&yen; formatet &quot;http:/'</em>+<em>'/www.domene.no&quot;'</em>,
+      alphaText    : <em>'Dette feltet skal berre innehalde bokstavar og _'</em>,
+      alphanumText : <em>'Dette feltet skal berre innehalde bokstavar, tal og _'</em>
+   });
+}
+
+<b>if</b>(Ext.form.HtmlEditor){
+  Ext.apply(Ext.form.HtmlEditor.prototype, {
+    createLinkText : <em>'Ver venleg og skriv inn URL <b>for</b> lenken:'</em>,
+    buttonTips : {
+      bold : {
+        title: <em>'Feit (Ctrl+B)'</em>,
+        text: <em>'Gjer den valde teksten feit.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      italic : {
+        title: <em>'Kursiv (Ctrl+I)'</em>,
+        text: <em>'Gjer den valde teksten kursiv.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      underline : {
+        title: <em>'Understrek (Ctrl+U)'</em>,
+        text: <em>'Understrek den valde teksten.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      increasefontsize : {
+        title: <em>'Forst&Atilde;&cedil;rr tekst'</em>,
+        text: <em>'Gjer fontstorleik st&Atilde;&cedil;rre.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      decreasefontsize : {
+        title: <em>'Forminsk tekst'</em>,
+        text: <em>'Gjer fontstorleik mindre.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      backcolor : {
+        title: <em>'Tekst markeringsfarge'</em>,
+        text: <em>'Endre bakgrunnsfarge til den valde teksten.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      forecolor : {
+        title: <em>'Font farge'</em>,
+        text: <em>'Endre farge p&Atilde;&yen; den valde teksten.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifyleft : {
+        title: <em>'Venstrejuster tekst'</em>,
+        text: <em>'Venstrejuster teksten.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifycenter : {
+        title: <em>'Sentrer tekst'</em>,
+        text: <em>'Sentrer teksten.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifyright : {
+        title: <em>'H&Atilde;&cedil;grejuster tekst'</em>,
+        text: <em>'H&Atilde;&cedil;grejuster teksten.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      insertunorderedlist : {
+        title: <em>'Punktliste'</em>,
+        text: <em>'Start ei punktliste.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      insertorderedlist : {
+        title: <em>'Nummerert liste'</em>,
+        text: <em>'Start ei nummerert liste.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      createlink : {
+        title: <em>'Lenke'</em>,
+        text: <em>'Gjer den valde teksten til ei lenke.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      sourceedit : {
+        title: <em>'Rediger kjelde'</em>,
+        text: <em>'Bytt til kjelderedigeringsvising.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      }
+    }
+  });
+}
+
+<b>if</b>(Ext.grid.GridView){
+  Ext.apply(Ext.grid.GridView.prototype, {
+    sortAscText  : &quot;Sorter stigande&quot;,
+    sortDescText : &quot;Sorter fallande&quot;,
+    lockText     : &quot;L&Atilde;&yen;s kolonne&quot;,
+    unlockText   : &quot;L&Atilde;&yen;s opp kolonne&quot;,
+    columnsText  : &quot;Kolonner&quot;
+  });
+}
+
+<b>if</b>(Ext.grid.GroupingView){
+  Ext.apply(Ext.grid.GroupingView.prototype, {
+    emptyGroupText : <em>'(Ingen)'</em>,
+    groupByText    : <em>'Grupper etter dette feltet'</em>,
+    showGroupsText : <em>'Vis i grupper'</em>
+  });
+}
+
+<b>if</b>(Ext.grid.PropertyColumnModel){
+  Ext.apply(Ext.grid.PropertyColumnModel.prototype, {
+    nameText   : &quot;Namn&quot;,
+    valueText  : &quot;Verdi&quot;,
+    dateFormat : &quot;d.m.Y&quot;
+  });
+}
+
+<b>if</b>(Ext.layout.BorderLayout &amp;&amp; Ext.layout.BorderLayout.SplitRegion){
+  Ext.apply(Ext.layout.BorderLayout.SplitRegion.prototype, {
+    splitTip            : &quot;Dra <b>for</b> &Atilde;&yen; endre storleik.&quot;,
+    collapsibleSplitTip : &quot;Dra <b>for</b> &Atilde;&yen; endre storleik. Dobbelklikk <b>for</b> &Atilde;&yen; skjule.&quot;
+  });
+}
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

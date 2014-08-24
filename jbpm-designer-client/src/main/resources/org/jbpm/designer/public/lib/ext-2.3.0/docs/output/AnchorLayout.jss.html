@@ -1,0 +1,141 @@
+<html><head><title>AnchorLayout.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>AnchorLayout.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.layout.AnchorLayout
+ * @extends Ext.layout.ContainerLayout
+ * &lt;p&gt;This is a layout that enables anchoring of contained elements relative to the container's dimensions.  If
+ * the container is resized, all anchored items are automatically rerendered according to their anchor rules.
+ * This class is intended to be extended or created via the layout:<em>'anchor'</em> {@link Ext.Container#layout} config,
+ * and should generally not need to be created directly via the <b>new</b> keyword.&lt;/p&gt;
+ * &lt;p&gt;AnchorLayout does not have any direct config options (other than inherited ones).  However, the container
+ * using the AnchorLayout can supply an anchoring-specific config property of &lt;b&gt;anchorSize&lt;/b&gt;.  By <b>default</b>,
+ * AnchorLayout will calculate anchor measurements based on the size of the container itself.  However, <b>if</b>
+ * anchorSize is specifed, the layout will use it as a virtual container <b>for</b> the purposes of calculating anchor
+ * measurements based on it instead, allowing the container to be sized independently of the anchoring logic <b>if</b> necessary.&lt;/p&gt;
+ * &lt;p&gt;The items added to an AnchorLayout can also supply an anchoring-specific config property of &lt;b&gt;anchor&lt;/b&gt; which
+ * is a string containing two values: the horizontal anchor value and the vertical anchor value (<b>for</b> example, <em>'100% 50%'</em>).
+ * This value is what tells the layout how the item should be anchored to the container.  The following types of
+ * anchor values are supported:
+ * &lt;ul&gt;
+ * &lt;li&gt;&lt;b&gt;Percentage&lt;/b&gt;: Any value between 1 and 100, expressed as a percentage.  The first anchor is the percentage
+ * width that the item should take up within the container, and the second is the percentage height.  Example: <em>'100% 50%'</em>
+ * would render an item the complete width of the container and 1/2 its height.  If only one anchor value is supplied
+ * it is assumed to be the width value and the height will <b>default</b> to auto.&lt;/li&gt;
+ * &lt;li&gt;&lt;b&gt;Offsets&lt;/b&gt;: Any positive or negative integer value.  The first anchor is the offset from the right edge of
+ * the container, and the second is the offset from the bottom edge.  Example: <em>'-50 -100'</em> would render an item the
+ * complete width of the container minus 50 pixels and the complete height minus 100 pixels.  If only one anchor value
+ * is supplied it is assumed to be the right offset value and the bottom offset will <b>default</b> to 0.&lt;/li&gt;
+ * &lt;li&gt;&lt;b&gt;Sides&lt;/b&gt;: Valid values are <em>'right'</em> (or <em>'r'</em>) and <em>'bottom'</em> (or <em>'b'</em>).  Either the container must have a fixed
+ * size or an anchorSize config value defined at render time <b>in</b> order <b>for</b> these to have any effect.&lt;/li&gt;
+ * &lt;/ul&gt;
+ * &lt;p&gt;Anchor values can also be mixed as needed.  For example, <em>'-50 75%'</em> would render the width offset from the
+ * container right edge by 50 pixels and 75% of the container's height.&lt;/p&gt;
+ */</i>
+Ext.layout.AnchorLayout = Ext.extend(Ext.layout.ContainerLayout, {
+    <i>// private</i>
+    monitorResize:true,
+
+    <i>// private</i>
+    getAnchorViewSize : <b>function</b>(ct, target){
+        <b>return</b> target.dom == document.body ?
+                   target.getViewSize() : target.getStyleSize();
+    },
+
+    <i>// private</i>
+    onLayout : <b>function</b>(ct, target){
+        Ext.layout.AnchorLayout.superclass.onLayout.call(<b>this</b>, ct, target);
+
+        <b>var</b> size = <b>this</b>.getAnchorViewSize(ct, target);
+
+        <b>var</b> w = size.width, h = size.height;
+
+        <b>if</b>(w &lt; 20 || h &lt; 20){
+            <b>return</b>;
+        }
+
+        <i>// find the container anchoring size</i>
+        <b>var</b> aw, ah;
+        <b>if</b>(ct.anchorSize){
+            <b>if</b>(typeof ct.anchorSize == <em>'number'</em>){
+                aw = ct.anchorSize;
+            }<b>else</b>{
+                aw = ct.anchorSize.width;
+                ah = ct.anchorSize.height;
+            }
+        }<b>else</b>{
+            aw = ct.initialConfig.width;
+            ah = ct.initialConfig.height;
+        }
+
+        <b>var</b> cs = ct.items.items, len = cs.length, i, c, a, cw, ch;
+        <b>for</b>(i = 0; i &lt; len; i++){
+            c = cs[i];
+            <b>if</b>(c.anchor){
+                a = c.anchorSpec;
+                <b>if</b>(!a){ <i>// cache all anchor values</i>
+                    <b>var</b> vs = c.anchor.split(<em>' '</em>);
+                    c.anchorSpec = a = {
+                        right: <b>this</b>.parseAnchor(vs[0], c.initialConfig.width, aw),
+                        bottom: <b>this</b>.parseAnchor(vs[1], c.initialConfig.height, ah)
+                    };
+                }
+                cw = a.right ? <b>this</b>.adjustWidthAnchor(a.right(w), c) : undefined;
+                ch = a.bottom ? <b>this</b>.adjustHeightAnchor(a.bottom(h), c) : undefined;
+
+                <b>if</b>(cw || ch){
+                    c.setSize(cw || undefined, ch || undefined);
+                }
+            }
+        }
+    },
+
+    <i>// private</i>
+    parseAnchor : <b>function</b>(a, start, cstart){
+        <b>if</b>(a &amp;&amp; a != <em>'none'</em>){
+            <b>var</b> last;
+            <b>if</b>(/^(r|right|b|bottom)$/i.test(a)){   <i>// standard anchor</i>
+                <b>var</b> diff = cstart - start;
+                <b>return</b> function(v){
+                    <b>if</b>(v !== last){
+                        last = v;
+                        <b>return</b> v - diff;
+                    }
+                }
+            }<b>else</b> if(a.indexOf(<em>'%'</em>) != -1){
+                <b>var</b> ratio = parseFloat(a.replace(<em>'%'</em>, <em>''</em>))*.01;   <i>// percentage</i>
+                <b>return</b> function(v){
+                    <b>if</b>(v !== last){
+                        last = v;
+                        <b>return</b> Math.floor(v*ratio);
+                    }
+                }
+            }<b>else</b>{
+                a = parseInt(a, 10);
+                <b>if</b>(!isNaN(a)){                            <i>// simple offset adjustment</i>
+                    <b>return</b> function(v){
+                        <b>if</b>(v !== last){
+                            last = v;
+                            <b>return</b> v + a;
+                        }
+                    }
+                }
+            }
+        }
+        <b>return</b> false;
+    },
+
+    <i>// private</i>
+    adjustWidthAnchor : <b>function</b>(value, comp){
+        <b>return</b> value;
+    },
+
+    <i>// private</i>
+    adjustHeightAnchor : <b>function</b>(value, comp){
+        <b>return</b> value;
+    }
+    
+    <i>/**
+     * @property activeItem
+     * @hide
+     */</i>
+});
+Ext.Container.LAYOUTS[<em>'anchor'</em>] = Ext.layout.AnchorLayout;</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

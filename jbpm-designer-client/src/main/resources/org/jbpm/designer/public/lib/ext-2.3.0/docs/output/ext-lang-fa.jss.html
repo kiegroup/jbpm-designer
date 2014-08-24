@@ -1,0 +1,268 @@
+<html><head><title>ext-lang-fa.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ext-lang-fa.js</h1><pre class="highlighted"><code><i>/*
+ * Farsi (Persian) translation
+ * By Mohaqa
+ * 03-10-2007, 06:23 PM
+ */</i>
+
+Ext.UpdateManager.defaults.indicatorText = <em>'&lt;div class=&quot;loading-indicator&quot;&gt;&Oslash;&macr;&Oslash;&plusmn; &Oslash;&shy;&Oslash;&sect;&Ugrave;Ñ &Oslash;&uml;&Oslash;&sect;&Oslash;&plusmn;&Uacute;&macr;&Oslash;&deg;&Oslash;&sect;&Oslash;&plusmn;&Ucirc;å ...&lt;/div&gt;'</em>;
+
+<b>if</b>(Ext.View){
+   Ext.View.prototype.emptyText = &quot;&quot;;
+}
+
+<b>if</b>(Ext.grid.GridPanel){
+   Ext.grid.GridPanel.prototype.ddText = &quot;{0} &Oslash;&plusmn;&Uacute;&copy;&Ugrave;à&Oslash;&plusmn;&Oslash;&macr; &Oslash;&sect;&Ugrave;Ü&Oslash;&ordf;&Oslash;&reg;&Oslash;&sect;&Oslash;&uml; &Oslash;&acute;&Oslash;&macr;&Ugrave;á&quot;;
+}
+
+<b>if</b>(Ext.TabPanelItem){
+   Ext.TabPanelItem.prototype.closeText = &quot;&Oslash;&uml;&Oslash;&sup3;&Oslash;&ordf;&Ugrave;Ü&quot;;
+}
+
+<b>if</b>(Ext.form.Field){
+   Ext.form.Field.prototype.invalidText = &quot;&Ugrave;Ö&Ugrave;Ç&Oslash;&macr;&Oslash;&sect;&Oslash;&plusmn; &Ugrave;Å&Ucirc;å&Ugrave;Ñ&Oslash;&macr; &Oslash;&micro;&Oslash;&shy;&Ucirc;å&Oslash;&shy; &Ugrave;Ü&Ucirc;å&Oslash;&sup3;&Oslash;&ordf;&quot;;
+}
+
+<b>if</b>(Ext.LoadMask){
+    Ext.LoadMask.prototype.msg = &quot;&Oslash;&macr;&Oslash;&plusmn; &Oslash;&shy;&Oslash;&sect;&Ugrave;Ñ &Oslash;&uml;&Oslash;&sect;&Oslash;&plusmn;&Uacute;&macr;&Oslash;&deg;&Oslash;&sect;&Oslash;&plusmn;&Ucirc;å ...&quot;;
+}
+
+Date.monthNames = [
+   &quot;&Uacute;ò&Oslash;&sect;&Ugrave;Ü&Ugrave;à&Ucirc;å&Ugrave;á&quot;,
+   &quot;&Ugrave;Å&Ugrave;à&Oslash;&plusmn;&Ucirc;å&Ugrave;á&quot;,
+   &quot;&Ugrave;Ö&Oslash;&sect;&Oslash;&plusmn;&Oslash;&sup3;&quot;,
+   &quot;&Oslash;&cent;&Ugrave;&frac34;&Oslash;&plusmn;&Ucirc;å&Ugrave;Ñ&quot;,
+   &quot;&Ugrave;Ö&Ucirc;å&quot;,
+   &quot;&Uacute;ò&Ugrave;à&Oslash;&brvbar;&Ugrave;Ü&quot;,
+   &quot;&Oslash;&not;&Ugrave;à&Ugrave;Ñ&Oslash;&sect;&Ucirc;å&quot;,
+   &quot;&Oslash;&cent;&Uacute;&macr;&Ugrave;à&Oslash;&sup3;&Oslash;&ordf;&quot;,
+   &quot;&Oslash;&sup3;&Ugrave;&frac34;&Oslash;&ordf;&Oslash;&sect;&Ugrave;Ö&Oslash;&uml;&Oslash;&plusmn;&quot;,
+   &quot;&Oslash;&sect;&Uacute;&copy;&Oslash;&ordf;&Oslash;&uml;&Oslash;&plusmn;&quot;,
+   &quot;&Ugrave;Ü&Ugrave;à&Oslash;&sect;&Ugrave;Ö&Oslash;&uml;&Oslash;&plusmn;&quot;,
+   &quot;&Oslash;&macr;&Oslash;&sup3;&Oslash;&sect;&Ugrave;Ö&Oslash;&uml;&Oslash;&plusmn;&quot;
+];
+
+Date.monthNumbers = {
+  Jan : 0,
+  Feb : 1,
+  Mar : 2,
+  Apr : 3,
+  May : 4,
+  Jun : 5,
+  Jul : 6,
+  Aug : 7,
+  Sep : 8,
+  Oct : 9,
+  Nov : 10,
+  Dec : 11
+};
+
+Date.dayNames = [
+   &quot;&Ucirc;å&Uacute;&copy;&Oslash;&acute;&Ugrave;Ü&Oslash;&uml;&Ugrave;á&quot;,
+   &quot;&Oslash;&macr;&Ugrave;à&Oslash;&acute;&Ugrave;Ü&Oslash;&uml;&Ugrave;á&quot;,
+   &quot;&Oslash;&sup3;&Ugrave;á &Oslash;&acute;&Ugrave;Ü&Oslash;&uml;&Ugrave;á&quot;,
+   &quot;&Uacute;Ü&Ugrave;á&Oslash;&sect;&Oslash;&plusmn;&Oslash;&acute;&Ugrave;Ü&Oslash;&uml;&Ugrave;á&quot;,
+   &quot;&Ugrave;&frac34;&Ugrave;Ü&Oslash;&not;&Oslash;&acute;&Ugrave;Ü&Oslash;&uml;&Ugrave;á&quot;,
+   &quot;&Oslash;&not;&Ugrave;Ö&Oslash;&sup1;&Ugrave;á&quot;,
+   &quot;&Oslash;&acute;&Ugrave;Ü&Oslash;&uml;&Ugrave;á&quot;
+];
+
+<b>if</b>(Ext.MessageBox){
+   Ext.MessageBox.buttonText = {
+      ok     : &quot;&Oslash;&ordf;&Oslash;&sect;&Ucirc;å&Ucirc;å&Oslash;&macr;&quot;,
+      cancel : &quot;&Oslash;&uml;&Oslash;&sect;&Oslash;&sup2;&Uacute;&macr;&Oslash;&acute;&Oslash;&ordf;&quot;,
+      yes    : &quot;&Oslash;&uml;&Ugrave;Ñ&Ugrave;á&quot;,
+      no     : &quot;&Oslash;&reg;&Ucirc;å&Oslash;&plusmn;&quot;
+   };
+}
+
+<b>if</b>(Ext.util.Format){
+   Ext.util.Format.date = <b>function</b>(v, format){
+      <b>if</b>(!v) <b>return</b> &quot;&quot;;
+      <b>if</b>(!(v instanceof Date)) v = <b>new</b> Date(Date.parse(v));
+      <b>return</b> v.dateFormat(format || &quot;Y/m/d&quot;);
+   };
+}
+
+<b>if</b>(Ext.DatePicker){
+  Ext.apply(Ext.DatePicker.prototype, {
+    todayText         : &quot;&Oslash;&sect;&Ugrave;Ö&Oslash;&plusmn;&Ugrave;à&Oslash;&sup2;&quot;,
+    minText           : &quot;&Oslash;&sect;&Ucirc;å&Ugrave;Ü &Oslash;&ordf;&Oslash;&sect;&Oslash;&plusmn;&Ucirc;å&Oslash;&reg; &Ugrave;Ç&Oslash;&uml;&Ugrave;Ñ &Oslash;&sect;&Oslash;&sup2; &Ugrave;Ö&Oslash;&shy;&Oslash;&macr;&Ugrave;à&Oslash;&macr;&Ugrave;á &Ugrave;Ö&Oslash;&not;&Oslash;&sect;&Oslash;&sup2; &Oslash;&sect;&Oslash;&sup3;&Oslash;&ordf;&quot;,
+    maxText           : &quot;&Oslash;&sect;&Ucirc;å&Ugrave;Ü &Oslash;&ordf;&Oslash;&sect;&Oslash;&plusmn;&Ucirc;å&Oslash;&reg; &Ugrave;&frac34;&Oslash;&sup3; &Oslash;&sect;&Oslash;&sup2; &Ugrave;Ö&Oslash;&shy;&Oslash;&macr;&Ugrave;à&Oslash;&macr;&Ugrave;á &Ugrave;Ö&Oslash;&not;&Oslash;&sect;&Oslash;&sup2; &Oslash;&sect;&Oslash;&sup3;&Oslash;&ordf;&quot;,
+    disabledDaysText  : &quot;&quot;,
+    disabledDatesText : &quot;&quot;,
+    monthNames        : Date.monthNames,
+    dayNames          : Date.dayNames,
+    nextText          : <em>'&Ugrave;Ö&Oslash;&sect;&Ugrave;á &Oslash;&uml;&Oslash;&sup1;&Oslash;&macr; (Control + Right)'</em>,
+    prevText          : <em>'&Ugrave;Ö&Oslash;&sect;&Ugrave;á &Ugrave;Ç&Oslash;&uml;&Ugrave;Ñ (Control+Left)'</em>,
+    monthYearText     : <em>'&Ucirc;å&Uacute;&copy; &Ugrave;Ö&Oslash;&sect;&Ugrave;á &Oslash;&plusmn;&Oslash;&sect; &Oslash;&sect;&Ugrave;Ü&Oslash;&ordf;&Oslash;&reg;&Oslash;&sect;&Oslash;&uml; &Uacute;&copy;&Ugrave;Ü&Ucirc;å&Oslash;&macr; (Control+Up/Down &Oslash;&uml;&Oslash;&plusmn;&Oslash;&sect;&Ucirc;å &Oslash;&sect;&Ugrave;Ü&Oslash;&ordf;&Ugrave;Ç&Oslash;&sect;&Ugrave;Ñ &Oslash;&macr;&Oslash;&plusmn; &Oslash;&sup3;&Oslash;&sect;&Ugrave;Ñ)'</em>,
+    todayTip          : &quot;{0} (Spacebar)&quot;,
+    format            : &quot;y/m/d&quot;,
+    okText            : &quot;&amp;#160;OK&amp;#160;&quot;,
+    cancelText        : &quot;Cancel&quot;,
+    startDay          : 0
+   });
+}
+
+<b>if</b>(Ext.PagingToolbar){
+   Ext.apply(Ext.PagingToolbar.prototype, {
+      beforePageText : &quot;&Oslash;&micro;&Ugrave;Å&Oslash;&shy;&Ugrave;á&quot;,
+      afterPageText  : &quot;&Oslash;&sect;&Oslash;&sup2; {0}&quot;,
+      firstText      : &quot;&Oslash;&micro;&Ugrave;Å&Oslash;&shy;&Ugrave;á &Oslash;&sect;&Ugrave;à&Ugrave;Ñ&quot;,
+      prevText       : &quot;&Oslash;&micro;&Ugrave;Å&Oslash;&shy;&Ugrave;á &Ugrave;Ç&Oslash;&uml;&Ugrave;Ñ&quot;,
+      nextText       : &quot;&Oslash;&micro;&Ugrave;Å&Oslash;&shy;&Ugrave;á &Oslash;&uml;&Oslash;&sup1;&Oslash;&macr;&quot;,
+      lastText       : &quot;&Oslash;&micro;&Ugrave;Å&Oslash;&shy;&Ugrave;á &Oslash;&cent;&Oslash;&reg;&Oslash;&plusmn;&quot;,
+      refreshText    : &quot;&Oslash;&uml;&Oslash;&sect;&Oslash;&sup2;&Oslash;&reg;&Ugrave;à&Oslash;&sect;&Ugrave;Ü&Ucirc;å&quot;,
+      displayMsg     : &quot;&Ugrave;Ü&Ugrave;Ö&Oslash;&sect;&Ucirc;å&Oslash;&acute; {0} - {1} of {2}&quot;,
+      emptyMsg       : <em>'&Oslash;&macr;&Oslash;&sect;&Oslash;&macr;&Ugrave;á &Oslash;&sect;&Ucirc;å &Oslash;&uml;&Oslash;&plusmn;&Oslash;&sect;&Ucirc;å &Ugrave;Ü&Ugrave;Ö&Oslash;&sect;&Ucirc;å&Oslash;&acute; &Ugrave;à&Oslash;&not;&Ugrave;à&Oslash;&macr; &Ugrave;Ü&Oslash;&macr;&Oslash;&sect;&Oslash;&plusmn;&Oslash;&macr;'</em>
+   });
+}
+
+<b>if</b>(Ext.form.TextField){
+   Ext.apply(Ext.form.TextField.prototype, {
+      minLengthText : &quot;&Oslash;&shy;&Oslash;&macr;&Oslash;&sect;&Ugrave;Ç&Ugrave;Ñ &Oslash;&middot;&Ugrave;à&Ugrave;Ñ &Oslash;&sect;&Ucirc;å&Ugrave;Ü &Ugrave;Å&Ucirc;å&Ugrave;Ñ&Oslash;&macr; &Oslash;&uml;&Oslash;&plusmn;&Oslash;&sect;&Oslash;&uml;&Oslash;&plusmn; &Oslash;&sect;&Oslash;&sup3;&Oslash;&ordf; &Oslash;&uml;&Oslash;&sect; {0}&quot;,
+      maxLengthText : &quot;&Oslash;&shy;&Oslash;&macr;&Oslash;&sect;&Uacute;&copy;&Oslash;&laquo;&Oslash;&plusmn; &Oslash;&middot;&Ugrave;à&Ugrave;Ñ &Oslash;&sect;&Ucirc;å&Ugrave;Ü &Ugrave;Å&Ucirc;å&Ugrave;Ñ&Oslash;&macr; &Oslash;&uml;&Oslash;&plusmn;&Oslash;&sect;&Oslash;&uml;&Oslash;&plusmn; &Oslash;&sect;&Oslash;&sup3;&Oslash;&ordf; &Oslash;&uml;&Oslash;&sect; {0}&quot;,
+      blankText     : &quot;&Oslash;&sect;&Ucirc;å&Ugrave;Ü &Ugrave;Å&Ucirc;å&Ugrave;Ñ&Oslash;&macr; &Oslash;&uml;&Oslash;&sect;&Ucirc;å&Oslash;&macr; &Ugrave;Ö&Ugrave;Ç&Oslash;&macr;&Oslash;&sect;&Oslash;&plusmn;&Ucirc;å &Oslash;&macr;&Oslash;&sect;&Oslash;&acute;&Oslash;&ordf;&Ugrave;á &Oslash;&uml;&Oslash;&sect;&Oslash;&acute;&Oslash;&macr;&quot;,
+      regexText     : &quot;&quot;,
+      emptyText     : null
+   });
+}
+
+<b>if</b>(Ext.form.NumberField){
+   Ext.apply(Ext.form.NumberField.prototype, {
+      minText : &quot;&Oslash;&shy;&Oslash;&macr;&Oslash;&sect;&Ugrave;Ç&Ugrave;Ñ &Ugrave;Ö&Ugrave;Ç&Oslash;&macr;&Oslash;&sect;&Oslash;&plusmn; &Oslash;&sect;&Ucirc;å&Ugrave;Ü &Ugrave;Å&Ucirc;å&Ugrave;Ñ&Oslash;&macr; &Oslash;&uml;&Oslash;&plusmn;&Oslash;&sect;&Oslash;&uml;&Oslash;&plusmn; &Oslash;&sect;&Oslash;&sup3;&Oslash;&ordf; &Oslash;&uml;&Oslash;&sect; {0}&quot;,
+      maxText : &quot;&Oslash;&shy;&Oslash;&macr;&Oslash;&sect;&Uacute;&copy;&Oslash;&laquo;&Oslash;&plusmn; &Ugrave;Ö&Ugrave;Ç&Oslash;&macr;&Oslash;&sect;&Oslash;&plusmn; &Oslash;&sect;&Ucirc;å&Ugrave;Ü &Ugrave;Å&Ucirc;å&Ugrave;Ñ&Oslash;&macr; &Oslash;&uml;&Oslash;&plusmn;&Oslash;&sect;&Oslash;&uml;&Oslash;&plusmn; &Oslash;&sect;&Oslash;&sup3;&Oslash;&ordf; &Oslash;&uml;&Oslash;&sect; {0}&quot;,
+      nanText : &quot;{0} &Ucirc;å&Uacute;&copy; &Oslash;&sup1;&Oslash;&macr;&Oslash;&macr; &Ugrave;Ü&Ucirc;å&Oslash;&sup3;&Oslash;&ordf;&quot;
+   });
+}
+
+<b>if</b>(Ext.form.DateField){
+   Ext.apply(Ext.form.DateField.prototype, {
+      disabledDaysText  : &quot;&Oslash;&ordm;&Ucirc;å&Oslash;&plusmn;&Ugrave;Å&Oslash;&sup1;&Oslash;&sect;&Ugrave;Ñ&quot;,
+      disabledDatesText : &quot;&Oslash;&ordm;&Ucirc;å&Oslash;&plusmn;&Ugrave;Å&Oslash;&sup1;&Oslash;&sect;&Ugrave;Ñ&quot;,
+      minText           : &quot;&Oslash;&ordf;&Oslash;&sect;&Oslash;&plusmn;&Ucirc;å&Oslash;&reg; &Oslash;&uml;&Oslash;&sect;&Ucirc;å&Oslash;&macr; &Ugrave;&frac34;&Oslash;&sup3; &Oslash;&sect;&Oslash;&sup2; {0} &Oslash;&uml;&Oslash;&sect;&Oslash;&acute;&Oslash;&macr;&quot;,
+      maxText           : &quot;&Oslash;&ordf;&Oslash;&sect;&Oslash;&plusmn;&Ucirc;å&Oslash;&reg; &Oslash;&uml;&Oslash;&sect;&Ucirc;å&Oslash;&macr; &Ugrave;&frac34;&Oslash;&sup3; &Oslash;&sect;&Oslash;&sup2; {0} &Oslash;&uml;&Oslash;&sect;&Oslash;&acute;&Oslash;&macr;&quot;,
+      invalidText       : &quot;{0} &Oslash;&ordf;&Oslash;&sect;&Oslash;&plusmn;&Ucirc;å&Oslash;&reg; &Oslash;&micro;&Oslash;&shy;&Ucirc;å&Oslash;&shy;&Ucirc;å &Ugrave;Ü&Ucirc;å&Oslash;&sup3;&Oslash;&ordf; - &Ugrave;Å&Oslash;&plusmn;&Ugrave;Ö&Oslash;&ordf; &Oslash;&micro;&Oslash;&shy;&Ucirc;å&Oslash;&shy; {1}&quot;,
+      format            : &quot;y/m/d&quot;
+   });
+}
+
+<b>if</b>(Ext.form.ComboBox){
+   Ext.apply(Ext.form.ComboBox.prototype, {
+      loadingText       : &quot;&Oslash;&macr;&Oslash;&plusmn; &Oslash;&shy;&Oslash;&sect;&Ugrave;Ñ &Oslash;&uml;&Oslash;&sect;&Oslash;&plusmn;&Uacute;&macr;&Oslash;&deg;&Oslash;&sect;&Oslash;&plusmn;&Ucirc;å ...&quot;,
+      valueNotFoundText : undefined
+   });
+}
+
+<b>if</b>(Ext.form.VTypes){
+   Ext.apply(Ext.form.VTypes, {
+      emailText    : <em>'&Ugrave;Ö&Ugrave;Ç&Oslash;&macr;&Oslash;&sect;&Oslash;&plusmn; &Oslash;&sect;&Ucirc;å&Ugrave;Ü &Ugrave;Å&Ucirc;å&Ugrave;Ñ&Oslash;&macr; &Oslash;&uml;&Oslash;&sect;&Ucirc;å&Oslash;&macr; &Ucirc;å&Uacute;&copy; &Oslash;&sect;&Ucirc;å&Ugrave;Ö&Ucirc;å&Ugrave;Ñ &Oslash;&uml;&Oslash;&sect; &Oslash;&sect;&Ucirc;å&Ugrave;Ü &Ugrave;Å&Oslash;&plusmn;&Ugrave;Ö&Oslash;&ordf; &Oslash;&uml;&Oslash;&sect;&Oslash;&acute;&Oslash;&macr; &quot;user@domain.com&quot;'</em>,
+      urlText      : <em>'&Ugrave;Ö&Ugrave;Ç&Oslash;&macr;&Oslash;&sect;&Oslash;&plusmn; &Oslash;&sect;&Ucirc;å&Ugrave;Ü &Oslash;&cent;&Oslash;&macr;&Oslash;&plusmn;&Oslash;&sup3; &Oslash;&uml;&Oslash;&sect;&Ucirc;å&Oslash;&macr; &Ucirc;å&Uacute;&copy; &Oslash;&cent;&Oslash;&macr;&Oslash;&plusmn;&Oslash;&sup3; &Oslash;&sup3;&Oslash;&sect;&Ucirc;å&Oslash;&ordf; &Oslash;&uml;&Oslash;&sect; &Oslash;&sect;&Ucirc;å&Ugrave;Ü &Ugrave;Å&Oslash;&plusmn;&Ugrave;Ö&Oslash;&ordf; &Oslash;&uml;&Oslash;&sect;&Oslash;&acute;&Oslash;&macr; &quot;http:/'</em>+<em>'/www.domain.com&quot;'</em>,
+      alphaText    : <em>'&Ugrave;Ö&Ugrave;Ç&Oslash;&macr;&Oslash;&sect;&Oslash;&plusmn; &Oslash;&sect;&Ucirc;å&Ugrave;Ü &Ugrave;Å&Ucirc;å&Ugrave;Ñ&Oslash;&macr; &Oslash;&uml;&Oslash;&sect;&Ucirc;å&Oslash;&macr; &Ugrave;Å&Ugrave;Ç&Oslash;&middot; &Oslash;&sect;&Oslash;&sup2; &Oslash;&shy;&Oslash;&plusmn;&Ugrave;à&Ugrave;Å &Oslash;&sect;&Ugrave;Ñ&Ugrave;Å&Oslash;&uml;&Oslash;&sect; &Ugrave;à _ &Oslash;&ordf;&Oslash;&acute;&Uacute;&copy;&Ucirc;å&Ugrave;Ñ &Oslash;&acute;&Oslash;&macr;&Ugrave;á &Oslash;&uml;&Oslash;&sect;&Oslash;&acute;&Oslash;&macr; '</em>,
+      alphanumText : <em>'&Ugrave;Ö&Ugrave;Ç&Oslash;&macr;&Oslash;&sect;&Oslash;&plusmn; &Oslash;&sect;&Ucirc;å&Ugrave;Ü &Ugrave;Å&Ucirc;å&Ugrave;Ñ&Oslash;&macr; &Oslash;&uml;&Oslash;&sect;&Ucirc;å&Oslash;&macr; &Ugrave;Å&Ugrave;Ç&Oslash;&middot; &Oslash;&sect;&Oslash;&sup2; &Oslash;&shy;&Oslash;&plusmn;&Ugrave;à&Ugrave;Å &Oslash;&sect;&Ugrave;Ñ&Ugrave;Å&Oslash;&uml;&Oslash;&sect;&Oslash;å &Oslash;&sect;&Oslash;&sup1;&Oslash;&macr;&Oslash;&sect;&Oslash;&macr; &Ugrave;à _ &Oslash;&ordf;&Oslash;&acute;&Uacute;&copy;&Ucirc;å&Ugrave;Ñ &Oslash;&acute;&Oslash;&macr;&Ugrave;á &Oslash;&uml;&Oslash;&sect;&Oslash;&acute;&Oslash;&macr;'</em>
+   });
+}
+
+<b>if</b>(Ext.form.HtmlEditor){
+  Ext.apply(Ext.form.HtmlEditor.prototype, {
+    createLinkText : <em>'&Ugrave;Ñ&Oslash;&middot;&Ugrave;Å&Oslash;&sect; &Oslash;&cent;&Oslash;&macr;&Oslash;&plusmn;&Oslash;&sup3; &Ugrave;Ñ&Ucirc;å&Ugrave;Ü&Uacute;&copy; &Oslash;&plusmn;&Oslash;&sect; &Ugrave;à&Oslash;&sect;&Oslash;&plusmn;&Oslash;&macr; &Uacute;&copy;&Ugrave;Ü&Ucirc;å&Oslash;&macr;:'</em>,
+    buttonTips : {
+      bold : {
+        title: <em>'&Oslash;&ordf;&Ucirc;å&Oslash;&plusmn;&Ugrave;á (Ctrl+B)'</em>,
+        text: <em>'&Ugrave;Ö&Oslash;&ordf;&Ugrave;Ü &Oslash;&sect;&Ugrave;Ü&Oslash;&ordf;&Oslash;&reg;&Oslash;&sect;&Oslash;&uml; &Oslash;&acute;&Oslash;&macr;&Ugrave;á &Oslash;&plusmn;&Oslash;&sect; &Oslash;&ordf;&Ucirc;å&Oslash;&plusmn;&Ugrave;á &Ugrave;Ö&Ucirc;å &Uacute;&copy;&Ugrave;Ü&Oslash;&macr;.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      italic : {
+        title: <em>'&Oslash;&sect;&Ucirc;å&Oslash;&ordf;&Oslash;&sect;&Ugrave;Ñ&Ucirc;å&Uacute;&copy; (Ctrl+I)'</em>,
+        text: <em>'&Ugrave;Ö&Oslash;&ordf;&Ugrave;Ü &Oslash;&sect;&Ugrave;Ü&Oslash;&ordf;&Oslash;&reg;&Oslash;&sect;&Oslash;&uml; &Oslash;&acute;&Oslash;&macr;&Ugrave;á &Oslash;&plusmn;&Oslash;&sect; &Oslash;&sect;&Ucirc;å&Oslash;&ordf;&Oslash;&sect;&Ugrave;Ñ&Ucirc;å&Uacute;&copy; &Ugrave;Ö&Ucirc;å &Uacute;&copy;&Ugrave;Ü&Oslash;&macr;.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      underline : {
+        title: <em>'&Oslash;&sup2;&Ucirc;å&Oslash;&plusmn;&Oslash;&reg;&Oslash;&middot; (Ctrl+U)'</em>,
+        text: <em>'&Oslash;&sup2;&Ucirc;å&Oslash;&plusmn; &Ugrave;á&Oslash;&plusmn; &Ugrave;Ü&Ugrave;à&Oslash;&acute;&Oslash;&ordf;&Ugrave;á &Ucirc;å&Uacute;&copy; &Oslash;&reg;&Oslash;&middot; &Ugrave;Ü&Ugrave;Ö&Oslash;&sect;&Ucirc;å&Oslash;&acute; &Ugrave;Ö&Ucirc;å &Oslash;&macr;&Ugrave;á&Oslash;&macr;.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      increasefontsize : {
+        title: <em>'&Oslash;&sect;&Ugrave;Å&Oslash;&sup2;&Oslash;&sect;&Ucirc;å&Oslash;&acute; &Oslash;&sect;&Ugrave;Ü&Oslash;&macr;&Oslash;&sect;&Oslash;&sup2;&Ugrave;á'</em>,
+        text: <em>'&Oslash;&sect;&Ugrave;Ü&Oslash;&macr;&Oslash;&sect;&Oslash;&sup2;&Ugrave;á &Ugrave;Å&Ugrave;à&Ugrave;Ü&Oslash;&ordf; &Oslash;&plusmn;&Oslash;&sect; &Oslash;&sect;&Ugrave;Å&Oslash;&sup2;&Oslash;&sect;&Ucirc;å&Oslash;&acute; &Ugrave;Ö&Ucirc;å &Oslash;&macr;&Ugrave;á&Oslash;&macr;.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      decreasefontsize : {
+        title: <em>'&Uacute;&copy;&Oslash;&sect;&Ugrave;á&Oslash;&acute; &Oslash;&sect;&Ugrave;Ü&Oslash;&macr;&Oslash;&sect;&Oslash;&sup2;&Ugrave;á'</em>,
+        text: <em>'&Oslash;&sect;&Ugrave;Ü&Oslash;&macr;&Oslash;&sect;&Oslash;&sup2;&Ugrave;á &Ugrave;Ö&Oslash;&ordf;&Ugrave;Ü &Oslash;&plusmn;&Oslash;&sect; &Uacute;&copy;&Oslash;&sect;&Ugrave;á&Oslash;&acute; &Ugrave;Ö&Ucirc;å &Oslash;&macr;&Ugrave;á&Oslash;&macr;.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      backcolor : {
+        title: <em>'&Oslash;&plusmn;&Ugrave;Ü&Uacute;&macr; &Oslash;&sup2;&Ugrave;Ö&Ucirc;å&Ugrave;Ü&Ugrave;á &Ugrave;Ö&Oslash;&ordf;&Ugrave;Ü'</em>,
+        text: <em>'&Oslash;&uml;&Oslash;&plusmn;&Oslash;&sect;&Ucirc;å &Oslash;&ordf;&Oslash;&ordm;&Ucirc;å&Ucirc;å&Oslash;&plusmn; &Oslash;&plusmn;&Ugrave;Ü&Uacute;&macr; &Oslash;&sup2;&Ugrave;Ö&Ucirc;å&Ugrave;Ü&Ugrave;á &Ugrave;Ö&Oslash;&ordf;&Ugrave;Ü &Oslash;&sect;&Oslash;&sup3;&Oslash;&ordf;&Ugrave;Å&Oslash;&sect;&Oslash;&macr;&Ugrave;á &Ugrave;Ö&Ucirc;å &Oslash;&acute;&Ugrave;à&Oslash;&macr;.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      forecolor : {
+        title: <em>'&Oslash;&plusmn;&Ugrave;Ü&Uacute;&macr; &Ugrave;Ç&Ugrave;Ñ&Ugrave;Ö'</em>,
+        text: <em>'&Oslash;&plusmn;&Ugrave;Ü&Uacute;&macr;  &Ugrave;Ç&Ugrave;Ñ&Ugrave;Ö &Ugrave;Ö&Oslash;&ordf;&Ugrave;Ü &Oslash;&plusmn;&Oslash;&sect; &Oslash;&ordf;&Oslash;&ordm;&Ucirc;å&Ucirc;å&Oslash;&plusmn; &Ugrave;Ö&Ucirc;å &Oslash;&macr;&Ugrave;á&Oslash;&macr;.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifyleft : {
+        title: <em>'&Uacute;Ü&Ucirc;å&Oslash;&macr;&Ugrave;Ü &Ugrave;Ö&Oslash;&ordf;&Ugrave;Ü &Oslash;&sect;&Oslash;&sup2; &Oslash;&sup3;&Ugrave;Ö&Oslash;&ordf; &Uacute;Ü&Ugrave;&frac34;'</em>,
+        text: <em>'&Ugrave;Ö&Oslash;&ordf;&Ugrave;Ü &Oslash;&sect;&Oslash;&sup2; &Oslash;&sup3;&Ugrave;Ö&Oslash;&ordf; &Uacute;Ü&Ugrave;&frac34; &Uacute;Ü&Ucirc;å&Oslash;&macr;&Ugrave;á &Oslash;&acute;&Oslash;&macr;&Ugrave;á &Ugrave;Ö&Ucirc;å &Oslash;&acute;&Ugrave;à&Oslash;&macr;.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifycenter : {
+        title: <em>'&Ugrave;Ö&Oslash;&ordf;&Ugrave;Ü &Oslash;&macr;&Oslash;&plusmn; &Ugrave;à&Oslash;&sup3;&Oslash;&middot; '</em>,
+        text: <em>'&Ugrave;Ü&Ugrave;Ö&Oslash;&sect;&Ucirc;å&Oslash;&acute; &Ugrave;Ö&Oslash;&ordf;&Ugrave;Ü &Oslash;&macr;&Oslash;&plusmn; &Ugrave;Ç&Oslash;&sup3;&Ugrave;Ö&Oslash;&ordf; &Ugrave;à&Oslash;&sup3;&Oslash;&middot; &Oslash;&micro;&Ugrave;Å&Oslash;&shy;&Ugrave;á &Ugrave;à &Oslash;&plusmn;&Oslash;&sup1;&Oslash;&sect;&Oslash;&uml;&Oslash;&ordf; &Oslash;&sup3;&Ugrave;Ö&Oslash;&ordf; &Uacute;Ü&Ugrave;&frac34; &Ugrave;à &Oslash;&plusmn;&Oslash;&sect;&Oslash;&sup3;&Oslash;&ordf;.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifyright : {
+        title: <em>'&Uacute;Ü&Ucirc;å&Oslash;&macr;&Ugrave;Ü &Ugrave;Ö&Oslash;&ordf;&Ugrave;Ü &Oslash;&sect;&Oslash;&sup2; &Oslash;&sup3;&Ugrave;Ö&Oslash;&ordf; &Oslash;&plusmn;&Oslash;&sect;&Oslash;&sup3;&Oslash;&ordf;'</em>,
+        text: <em>'&Ugrave;Ö&Oslash;&ordf;&Ugrave;Ü &Oslash;&sect;&Oslash;&sup2; &Oslash;&sup3;&Ugrave;Ö&Oslash;&ordf; &Oslash;&plusmn;&Oslash;&sect;&Oslash;&sup3;&Oslash;&ordf; &Ugrave;&frac34;&Ucirc;å&Oslash;&macr;&Ugrave;á &Oslash;&reg;&Ugrave;à&Oslash;&sect;&Ugrave;á&Oslash;&macr; &Oslash;&acute;&Oslash;&macr;.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      insertunorderedlist : {
+        title: <em>'&Ugrave;Ñ&Ucirc;å&Oslash;&sup3;&Oslash;&ordf; &Ugrave;á&Ugrave;Ö&Oslash;&plusmn;&Oslash;&sect;&Ugrave;á &Oslash;&uml;&Oslash;&sect; &Oslash;&sup1;&Ugrave;Ñ&Oslash;&sect;&Ugrave;Ö&Oslash;&ordf;'</em>,
+        text: <em>'&Ucirc;å&Uacute;&copy; &Ugrave;Ñ&Ucirc;å&Oslash;&sup3;&Oslash;&ordf; &Oslash;&not;&Oslash;&macr;&Ucirc;å&Oslash;&macr; &Oslash;&sect;&Ucirc;å&Oslash;&not;&Oslash;&sect;&Oslash;&macr; &Ugrave;Ö&Ucirc;å &Uacute;&copy;&Ugrave;Ü&Oslash;&macr;.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      insertorderedlist : {
+        title: <em>'&Ugrave;Ñ&Ucirc;å&Oslash;&sup3;&Oslash;&ordf; &Oslash;&sup1;&Oslash;&macr;&Oslash;&macr;&Ucirc;å'</em>,
+        text: <em>'&Ucirc;å&Uacute;&copy; &Ugrave;Ñ&Ucirc;å&Oslash;&sup3;&Oslash;&ordf; &Oslash;&sup1;&Oslash;&macr;&Oslash;&macr;&Ucirc;å &Oslash;&sect;&Ucirc;å&Oslash;&not;&Oslash;&sect;&Oslash;&macr; &Ugrave;Ö&Ucirc;å &Uacute;&copy;&Ugrave;Ü&Oslash;&macr;. '</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      createlink : {
+        title: <em>'&Ugrave;Ñ&Ucirc;å&Ugrave;Ü&Uacute;&copy;'</em>,
+        text: <em>'&Ugrave;Ö&Oslash;&ordf;&Ugrave;Ü &Oslash;&sect;&Ugrave;Ü&Oslash;&ordf;&Oslash;&reg;&Oslash;&sect;&Oslash;&uml; &Oslash;&acute;&Oslash;&macr;&Ugrave;á &Oslash;&plusmn;&Oslash;&sect; &Oslash;&uml;&Ugrave;á &Ugrave;Ñ&Ucirc;å&Ugrave;Ü&Uacute;&copy; &Oslash;&ordf;&Oslash;&uml;&Oslash;&macr;&Ucirc;å&Ugrave;Ñ &Uacute;&copy;&Ugrave;Ü&Ucirc;å&Oslash;&macr;.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      sourceedit : {
+        title: <em>'&Ugrave;à&Ucirc;å&Oslash;&plusmn;&Oslash;&sect;&Ucirc;å&Oslash;&acute; &Oslash;&sup3;&Ugrave;à&Oslash;&plusmn;&Oslash;&sup3;'</em>,
+        text: <em>'&Oslash;&plusmn;&Ugrave;Å&Oslash;&ordf;&Ugrave;Ü &Oslash;&uml;&Ugrave;á &Oslash;&shy;&Oslash;&sect;&Ugrave;Ñ&Oslash;&ordf; &Ugrave;à&Ucirc;å&Oslash;&plusmn;&Oslash;&sect;&Ucirc;å&Oslash;&acute; &Oslash;&sup3;&Ugrave;à&Oslash;&plusmn;&Oslash;&sup3;.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      }
+    }
+  });
+}
+
+<b>if</b>(Ext.grid.GridView){
+   Ext.apply(Ext.grid.GridView.prototype, {
+      sortAscText  : &quot;&Ugrave;Ö&Oslash;&plusmn;&Oslash;&ordf;&Oslash;&uml; &Oslash;&sup3;&Oslash;&sect;&Oslash;&sup2;&Ucirc;å &Oslash;&sect;&Ugrave;Å&Oslash;&sup2;&Oslash;&sect;&Ucirc;å&Oslash;&acute;&Ucirc;å&quot;,
+      sortDescText : &quot;&Ugrave;Ö&Oslash;&plusmn;&Oslash;&ordf;&Oslash;&uml; &Oslash;&sup3;&Oslash;&sect;&Oslash;&sup2;&Ucirc;å &Uacute;&copy;&Oslash;&sect;&Ugrave;á&Oslash;&acute;&Ucirc;å&quot;,
+      lockText     : &quot;&Ugrave;Ç&Ugrave;Å&Ugrave;Ñ &Oslash;&sup3;&Oslash;&ordf;&Ugrave;à&Ugrave;Ü &Ugrave;á&Oslash;&sect;&quot;,
+      unlockText   : &quot;&Oslash;&uml;&Oslash;&sect;&Oslash;&sup2;&Uacute;&copy;&Oslash;&plusmn;&Oslash;&macr;&Ugrave;Ü &Oslash;&sup3;&Oslash;&ordf;&Ugrave;à&Ugrave;Ü &Ugrave;á&Oslash;&sect;&quot;,
+      columnsText  : &quot;&Oslash;&sup3;&Oslash;&ordf;&Ugrave;à&Ugrave;Ü &Ugrave;á&Oslash;&sect;&quot;
+   });
+}
+
+<b>if</b>(Ext.grid.PropertyColumnModel){
+   Ext.apply(Ext.grid.PropertyColumnModel.prototype, {
+      nameText   : &quot;&Ugrave;Ü&Oslash;&sect;&Ugrave;Ö&quot;,
+      valueText  : &quot;&Ugrave;Ö&Ugrave;Ç&Oslash;&macr;&Oslash;&sect;&Oslash;&plusmn;&quot;,
+      dateFormat : &quot;Y/m/d&quot;
+   });
+}
+
+<b>if</b>(Ext.layout.BorderLayout &amp;&amp; Ext.layout.BorderLayout.SplitRegion){
+   Ext.apply(Ext.layout.BorderLayout.SplitRegion.prototype, {
+      splitTip            : &quot;&Oslash;&macr;&Oslash;&plusmn;&Uacute;&macr; &Oslash;&uml;&Oslash;&plusmn;&Oslash;&sect;&Ucirc;å &Oslash;&ordf;&Oslash;&ordm;&Ucirc;å&Ucirc;å&Oslash;&plusmn; &Oslash;&sect;&Ugrave;Ü&Oslash;&macr;&Oslash;&sect;&Oslash;&sup2;&Ugrave;á.&quot;,
+      collapsibleSplitTip : &quot;&Oslash;&uml;&Oslash;&plusmn;&Oslash;&sect;&Ucirc;å &Oslash;&ordf;&Oslash;&ordm;&Ucirc;å&Ucirc;å&Oslash;&plusmn; &Oslash;&sect;&Ugrave;Ü&Oslash;&macr;&Oslash;&sect;&Oslash;&sup2;&Ugrave;á &Oslash;&macr;&Oslash;&plusmn;&Uacute;&macr; &Uacute;&copy;&Ugrave;Ü&Ucirc;å&Oslash;&macr;.&quot;
+   });
+}
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

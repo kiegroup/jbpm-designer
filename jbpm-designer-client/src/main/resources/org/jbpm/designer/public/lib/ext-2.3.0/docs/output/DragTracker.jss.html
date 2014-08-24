@@ -1,0 +1,158 @@
+<html><head><title>DragTracker.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>DragTracker.js</h1><pre class="highlighted"><code>Ext.dd.DragTracker = <b>function</b>(config){
+    Ext.apply(<b>this</b>, config);
+    <b>this</b>.addEvents(
+        <em>'mousedown'</em>,
+        <em>'mouseup'</em>,
+        <em>'mousemove'</em>,
+        <em>'dragstart'</em>,
+        <em>'dragend'</em>,
+        <em>'drag'</em>
+    );
+
+    <b>this</b>.dragRegion = <b>new</b> Ext.lib.Region(0,0,0,0);
+
+    <b>if</b>(this.el){
+        <b>this</b>.initEl(<b>this</b>.el);
+    }
+}
+
+Ext.extend(Ext.dd.DragTracker, Ext.util.Observable,  {
+    active: false,
+    tolerance: 5,
+    autoStart: false,
+
+    initEl: <b>function</b>(el){
+        <b>this</b>.el = Ext.get(el);
+        el.on(<em>'mousedown'</em>, <b>this</b>.onMouseDown, <b>this</b>,
+                <b>this</b>.delegate ? {delegate: <b>this</b>.delegate} : undefined);
+    },
+
+    destroy : <b>function</b>(){
+        <b>this</b>.el.un(<em>'mousedown'</em>, <b>this</b>.onMouseDown, <b>this</b>);
+    },
+
+    onMouseDown: <b>function</b>(e, target){
+        <b>if</b>(this.fireEvent(<em>'mousedown'</em>, <b>this</b>, e) !== false &amp;&amp; <b>this</b>.onBeforeStart(e) !== false){
+            <b>this</b>.startXY = <b>this</b>.lastXY = e.getXY();
+            <b>this</b>.dragTarget = <b>this</b>.delegate ? target : <b>this</b>.el.dom;
+            e.preventDefault();
+            <b>var</b> doc = Ext.getDoc();
+            doc.on(<em>'mouseup'</em>, <b>this</b>.onMouseUp, <b>this</b>);
+            doc.on(<em>'mousemove'</em>, <b>this</b>.onMouseMove, <b>this</b>);
+            doc.on(<em>'selectstart'</em>, <b>this</b>.stopSelect, <b>this</b>);
+            <b>if</b>(this.autoStart){
+                <b>this</b>.timer = <b>this</b>.triggerStart.defer(<b>this</b>.autoStart === true ? 1000 : <b>this</b>.autoStart, <b>this</b>);
+            }
+        }
+    },
+
+    onMouseMove: <b>function</b>(e, target){
+        <b>if</b>(this.active &amp;&amp; Ext.isIE &amp;&amp; !e.browserEvent.button){
+            e.preventDefault();
+            <b>this</b>.onMouseUp(e);
+            <b>return</b>;
+        }
+        e.preventDefault();
+        <b>var</b> xy = e.getXY(), s = <b>this</b>.startXY;
+        <b>this</b>.lastXY = xy;
+        <b>if</b>(!<b>this</b>.active){
+            <b>if</b>(Math.abs(s[0]-xy[0]) &gt; <b>this</b>.tolerance || Math.abs(s[1]-xy[1]) &gt; <b>this</b>.tolerance){
+                <b>this</b>.triggerStart();
+            }<b>else</b>{
+                <b>return</b>;
+            }
+        }
+        <b>this</b>.fireEvent(<em>'mousemove'</em>, <b>this</b>, e);
+        <b>this</b>.onDrag(e);
+        <b>this</b>.fireEvent(<em>'drag'</em>, <b>this</b>, e);
+    },
+
+    onMouseUp: <b>function</b>(e){
+        <b>var</b> doc = Ext.getDoc();
+        doc.un(<em>'mousemove'</em>, <b>this</b>.onMouseMove, <b>this</b>);
+        doc.un(<em>'mouseup'</em>, <b>this</b>.onMouseUp, <b>this</b>);
+        doc.un(<em>'selectstart'</em>, <b>this</b>.stopSelect, <b>this</b>);
+        e.preventDefault();
+        <b>this</b>.clearStart();
+        <b>this</b>.active = false;
+        <b>delete</b> this.elRegion;
+        <b>this</b>.fireEvent(<em>'mouseup'</em>, <b>this</b>, e);
+        <b>this</b>.onEnd(e);
+        <b>this</b>.fireEvent(<em>'dragend'</em>, <b>this</b>, e);
+    },
+
+    triggerStart: <b>function</b>(isTimer){
+        <b>this</b>.clearStart();
+        <b>this</b>.active = true;
+        <b>this</b>.onStart(<b>this</b>.startXY);
+        <b>this</b>.fireEvent(<em>'dragstart'</em>, <b>this</b>, <b>this</b>.startXY);
+    },
+
+    clearStart : <b>function</b>(){
+        <b>if</b>(this.timer){
+            clearTimeout(<b>this</b>.timer);
+            <b>delete</b> this.timer;
+        }
+    },
+
+    stopSelect : <b>function</b>(e){
+        e.stopEvent();
+        <b>return</b> false;
+    },
+
+    onBeforeStart : <b>function</b>(e){
+
+    },
+
+    onStart : <b>function</b>(xy){
+
+    },
+
+    onDrag : <b>function</b>(e){
+
+    },
+
+    onEnd : <b>function</b>(e){
+
+    },
+
+    getDragTarget : <b>function</b>(){
+        <b>return</b> this.dragTarget;
+    },
+
+    getDragCt : <b>function</b>(){
+        <b>return</b> this.el;
+    },
+
+    getXY : <b>function</b>(constrain){
+        <b>return</b> constrain ?
+               <b>this</b>.constrainModes[constrain].call(<b>this</b>, <b>this</b>.lastXY) : <b>this</b>.lastXY;
+    },
+
+    getOffset : <b>function</b>(constrain){
+        <b>var</b> xy = <b>this</b>.getXY(constrain);
+        <b>var</b> s = <b>this</b>.startXY;
+        <b>return</b> [s[0]-xy[0], s[1]-xy[1]];
+    },
+
+    constrainModes: {
+        <em>'point'</em> : <b>function</b>(xy){
+
+            <b>if</b>(!<b>this</b>.elRegion){
+                <b>this</b>.elRegion = <b>this</b>.getDragCt().getRegion();
+            }
+
+            <b>var</b> dr = <b>this</b>.dragRegion;
+
+            dr.left = xy[0];
+            dr.top = xy[1];
+            dr.right = xy[0];
+            dr.bottom = xy[1];
+
+            dr.constrainTo(<b>this</b>.elRegion);
+
+            <b>return</b> [dr.left, dr.top];
+        }
+    }
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

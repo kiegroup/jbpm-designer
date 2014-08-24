@@ -1,0 +1,110 @@
+<html><head><title>TreeFilter.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>TreeFilter.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.tree.TreeFilter
+ * Note <b>this</b> class is experimental and doesn't update the indent (lines) or expand collapse icons of the nodes
+ * @param {TreePanel} tree
+ * @param {Object} config (optional)
+ */</i>
+Ext.tree.TreeFilter = <b>function</b>(tree, config){
+    <b>this</b>.tree = tree;
+    <b>this</b>.filtered = {};
+    Ext.apply(<b>this</b>, config);
+};
+
+Ext.tree.TreeFilter.prototype = {
+    clearBlank:false,
+    reverse:false,
+    autoClear:false,
+    remove:false,
+
+     <i>/**
+     * Filter the data by a specific attribute.
+     * @param {String/RegExp} value Either string that the attribute value
+     * should start <b>with</b> or a RegExp to test against the attribute
+     * @param {String} attr (optional) The attribute passed <b>in</b> your node's attributes collection. Defaults to &quot;text&quot;.
+     * @param {TreeNode} startNode (optional) The node to start the filter at.
+     */</i>
+    filter : <b>function</b>(value, attr, startNode){
+        attr = attr || &quot;text&quot;;
+        <b>var</b> f;
+        <b>if</b>(typeof value == &quot;string&quot;){
+            <b>var</b> vlen = value.length;
+            <i>// auto clear empty filter</i>
+            <b>if</b>(vlen == 0 &amp;&amp; <b>this</b>.clearBlank){
+                <b>this</b>.clear();
+                <b>return</b>;
+            }
+            value = value.toLowerCase();
+            f = <b>function</b>(n){
+                <b>return</b> n.attributes[attr].substr(0, vlen).toLowerCase() == value;
+            };
+        }<b>else</b> if(value.exec){ <i>// regex?</i>
+            f = <b>function</b>(n){
+                <b>return</b> value.test(n.attributes[attr]);
+            };
+        }<b>else</b>{
+            throw <em>'Illegal filter type, must be string or regex'</em>;
+        }
+        <b>this</b>.filterBy(f, null, startNode);
+	},
+
+    <i>/**
+     * Filter by a <b>function</b>. The passed <b>function</b> will be called <b>with</b> each
+     * node <b>in</b> the tree (or from the startNode). If the <b>function</b> returns true, the node is kept
+     * otherwise it is filtered. If a node is filtered, its children are also filtered.
+     * @param {Function} fn The filter <b>function</b>
+     * @param {Object} scope (optional) The scope of the <b>function</b> (defaults to the current node)
+     */</i>
+    filterBy : <b>function</b>(fn, scope, startNode){
+        startNode = startNode || <b>this</b>.tree.root;
+        <b>if</b>(this.autoClear){
+            <b>this</b>.clear();
+        }
+        <b>var</b> af = <b>this</b>.filtered, rv = <b>this</b>.reverse;
+        <b>var</b> f = <b>function</b>(n){
+            <b>if</b>(n == startNode){
+                <b>return</b> true;
+            }
+            <b>if</b>(af[n.id]){
+                <b>return</b> false;
+            }
+            <b>var</b> m = fn.call(scope || n, n);
+            <b>if</b>(!m || rv){
+                af[n.id] = n;
+                n.ui.hide();
+                <b>return</b> false;
+            }
+            <b>return</b> true;
+        };
+        startNode.cascade(f);
+        <b>if</b>(this.remove){
+           <b>for</b>(var id <b>in</b> af){
+               <b>if</b>(typeof id != &quot;<b>function</b>&quot;){
+                   <b>var</b> n = af[id];
+                   <b>if</b>(n &amp;&amp; n.parentNode){
+                       n.parentNode.removeChild(n);
+                   }
+               }
+           }
+        }
+    },
+
+    <i>/**
+     * Clears the current filter. Note: <b>with</b> the &quot;remove&quot; option
+     * set a filter cannot be cleared.
+     */</i>
+    clear : <b>function</b>(){
+        <b>var</b> t = <b>this</b>.tree;
+        <b>var</b> af = <b>this</b>.filtered;
+        <b>for</b>(var id <b>in</b> af){
+            <b>if</b>(typeof id != &quot;<b>function</b>&quot;){
+                <b>var</b> n = af[id];
+                <b>if</b>(n){
+                    n.ui.show();
+                }
+            }
+        }
+        <b>this</b>.filtered = {};
+    }
+};
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

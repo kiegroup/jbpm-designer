@@ -1,0 +1,728 @@
+<html><head><title>DataView.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>DataView.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.DataView
+ * @extends Ext.BoxComponent
+ * A mechanism <b>for</b> displaying data using custom layout templates and formatting. DataView uses an {@link Ext.XTemplate}
+ * as its internal templating mechanism, and is bound to an {@link Ext.data.Store}
+ * so that as the data <b>in</b> the store changes the view is automatically updated to reflect the changes.  The view also
+ * provides built-<b>in</b> behavior <b>for</b> many common events that can occur <b>for</b> its contained items including click, doubleclick,
+ * mouseover, mouseout, etc. as well as a built-<b>in</b> selection model. &lt;b&gt;In order to use these features, an {@link #itemSelector}
+ * config must be provided <b>for</b> the DataView to determine what nodes it will be working <b>with</b>.&lt;/b&gt;
+ *
+ * &lt;p&gt;The example below binds a DataView to a {@link Ext.data.Store} and renders it into an {@link Ext.Panel}.&lt;/p&gt;
+ * &lt;pre&gt;&lt;code&gt;
+<b>var</b> store = <b>new</b> Ext.data.JsonStore({
+    url: <em>'get-images.php'</em>,
+    root: <em>'images'</em>,
+    fields: [
+        <em>'name'</em>, <em>'url'</em>,
+        {name:<em>'size'</em>, type: <em>'float'</em>},
+        {name:<em>'lastmod'</em>, type:<em>'date'</em>, dateFormat:<em>'timestamp'</em>}
+    ]
+});
+store.load();
+
+<b>var</b> tpl = <b>new</b> Ext.XTemplate(
+    <em>'&amp;lt;tpl <b>for</b>=&quot;.&quot;&amp;gt;'</em>,
+        <em>'&amp;lt;div class=&quot;thumb-wrap&quot; id=&quot;{name}&quot;&amp;gt;'</em>,
+        <em>'&amp;lt;div class=&quot;thumb&quot;&amp;gt;&amp;lt;img src=&quot;{url}&quot; title=&quot;{name}&quot;&amp;gt;&amp;lt;/div&amp;gt;'</em>,
+        <em>'&amp;lt;span class=&quot;x-editable&quot;&amp;gt;{shortName}&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;'</em>,
+    <em>'&amp;lt;/tpl&amp;gt;'</em>,
+    <em>'&amp;lt;div class=&quot;x-clear&quot;&amp;gt;&amp;lt;/div&amp;gt;'</em>
+);
+
+<b>var</b> panel = <b>new</b> Ext.Panel({
+    id:<em>'images-view'</em>,
+    frame:true,
+    width:535,
+    autoHeight:true,
+    collapsible:true,
+    layout:<em>'fit'</em>,
+    title:<em>'Simple DataView'</em>,
+
+    items: <b>new</b> Ext.DataView({
+        store: store,
+        tpl: tpl,
+        autoHeight:true,
+        multiSelect: true,
+        overClass:<em>'x-view-over'</em>,
+        itemSelector:<em>'div.thumb-wrap'</em>,
+        emptyText: <em>'No images to display'</em>
+    })
+});
+panel.render(document.body);
+&lt;/code&gt;&lt;/pre&gt;
+ * @constructor
+ * Create a <b>new</b> DataView
+ * @param {Object} config The config object
+ */</i>
+Ext.DataView = Ext.extend(Ext.BoxComponent, {
+    <i>/**
+     * @cfg {String/Array} tpl
+     * The HTML fragment or an array of fragments that will make up the template used by <b>this</b> DataView.  This should
+     * be specified <b>in</b> the same format expected by the constructor of {@link Ext.XTemplate}.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Ext.data.Store} store
+     * The {@link Ext.data.Store} to bind <b>this</b> DataView to.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} itemSelector
+     * &lt;b&gt;This is a required setting&lt;/b&gt;. A simple CSS selector (e.g. div.some-class or span:first-child) that will be 
+     * used to determine what nodes <b>this</b> DataView will be working <b>with</b>.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} multiSelect
+     * True to allow selection of more than one item at a time, false to allow selection of only a single item
+     * at a time or no selection at all, depending on the value of {@link #singleSelect} (defaults to false).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} singleSelect
+     * True to allow selection of exactly one item at a time, false to allow no selection at all (defaults to false).
+     * Note that <b>if</b> {@link #multiSelect} = true, <b>this</b> value will be ignored.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} simpleSelect
+     * True to enable multiselection by clicking on multiple items without requiring the user to hold Shift or Ctrl,
+     * false to force the user to hold Ctrl or Shift to select more than on item (defaults to false).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} overClass
+     * A CSS class to apply to each item <b>in</b> the view on mouseover (defaults to undefined).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} loadingText
+     * A string to display during data load operations (defaults to undefined).  If specified, <b>this</b> text will be
+     * displayed <b>in</b> a loading div and the view<em>'s contents will be cleared <b>while</b> loading, otherwise the view'</em>s
+     * contents will <b>continue</b> to display normally until the <b>new</b> data is loaded and the contents are replaced.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} selectedClass
+     * A CSS class to apply to each selected item <b>in</b> the view (defaults to <em>'x-view-selected'</em>).
+     */</i>
+    selectedClass : &quot;x-view-selected&quot;,
+    <i>/**
+     * @cfg {String} emptyText
+     * The text to display <b>in</b> the view when there is no data to display (defaults to <em>''</em>).
+     */</i>
+    emptyText : &quot;&quot;,
+
+    <i>/**
+     * @cfg {Boolean} deferEmptyText True to defer emptyText being applied until the store's first load
+     */</i>
+    deferEmptyText: true,
+    <i>/**
+     * @cfg {Boolean} trackOver True to enable mouseenter and mouseleave events
+     */</i>
+    trackOver: false,
+
+    <i>//private</i>
+    last: false,
+
+
+    <i>// private</i>
+    initComponent : <b>function</b>(){
+        Ext.DataView.superclass.initComponent.call(<b>this</b>);
+        <b>if</b>(typeof <b>this</b>.tpl == &quot;string&quot; || Ext.isArray(<b>this</b>.tpl)){
+            <b>this</b>.tpl = <b>new</b> Ext.XTemplate(<b>this</b>.tpl);
+        }
+
+        <b>this</b>.addEvents(
+            <i>/**
+             * @event beforeclick
+             * Fires before a click is processed. Returns false to cancel the <b>default</b> action.
+             * @param {Ext.DataView} <b>this</b>
+             * @param {Number} index The index of the target node
+             * @param {HTMLElement} node The target node
+             * @param {Ext.EventObject} e The raw event object
+             */</i>
+            &quot;beforeclick&quot;,
+            <i>/**
+             * @event click
+             * Fires when a template node is clicked.
+             * @param {Ext.DataView} <b>this</b>
+             * @param {Number} index The index of the target node
+             * @param {HTMLElement} node The target node
+             * @param {Ext.EventObject} e The raw event object
+             */</i>
+            &quot;click&quot;,
+            <i>/**
+             * @event mouseenter
+             * Fires when the mouse enters a template node. trackOver:true or an overCls must be set to enable <b>this</b> event.
+             * @param {Ext.DataView} <b>this</b>
+             * @param {Number} index The index of the target node
+             * @param {HTMLElement} node The target node
+             * @param {Ext.EventObject} e The raw event object
+             */</i>
+            &quot;mouseenter&quot;,
+            <i>/**
+             * @event mouseleave
+             * Fires when the mouse leaves a template node. trackOver:true or an overCls must be set to enable <b>this</b> event.
+             * @param {Ext.DataView} <b>this</b>
+             * @param {Number} index The index of the target node
+             * @param {HTMLElement} node The target node
+             * @param {Ext.EventObject} e The raw event object
+             */</i>
+            &quot;mouseleave&quot;,
+            <i>/**
+             * @event containerclick
+             * Fires when a click occurs and it is not on a template node.
+             * @param {Ext.DataView} <b>this</b>
+             * @param {Ext.EventObject} e The raw event object
+             */</i>
+            &quot;containerclick&quot;,
+            <i>/**
+             * @event dblclick
+             * Fires when a template node is double clicked.
+             * @param {Ext.DataView} <b>this</b>
+             * @param {Number} index The index of the target node
+             * @param {HTMLElement} node The target node
+             * @param {Ext.EventObject} e The raw event object
+             */</i>
+            &quot;dblclick&quot;,
+            <i>/**
+             * @event contextmenu
+             * Fires when a template node is right clicked.
+             * @param {Ext.DataView} <b>this</b>
+             * @param {Number} index The index of the target node
+             * @param {HTMLElement} node The target node
+             * @param {Ext.EventObject} e The raw event object
+             */</i>
+            &quot;contextmenu&quot;,
+            <i>/**
+             * @event selectionchange
+             * Fires when the selected nodes change.
+             * @param {Ext.DataView} <b>this</b>
+             * @param {Array} selections Array of the selected nodes
+             */</i>
+            &quot;selectionchange&quot;,
+
+            <i>/**
+             * @event beforeselect
+             * Fires before a selection is made. If any handlers <b>return</b> false, the selection is cancelled.
+             * @param {Ext.DataView} <b>this</b>
+             * @param {HTMLElement} node The node to be selected
+             * @param {Array} selections Array of currently selected nodes
+             */</i>
+            &quot;beforeselect&quot;
+        );
+
+        <b>this</b>.all = <b>new</b> Ext.CompositeElementLite();
+        <b>this</b>.selected = <b>new</b> Ext.CompositeElementLite();
+    },
+
+    <i>// private</i>
+    onRender : <b>function</b>(){
+        <b>if</b>(!<b>this</b>.el){
+            <b>this</b>.el = document.createElement(<em>'div'</em>);
+            <b>this</b>.el.id = <b>this</b>.id;
+        }
+        Ext.DataView.superclass.onRender.apply(<b>this</b>, arguments);
+    },
+
+    <i>// private</i>
+    afterRender : <b>function</b>(){
+        Ext.DataView.superclass.afterRender.call(<b>this</b>);
+
+        <b>this</b>.el.on({
+            &quot;click&quot;: <b>this</b>.onClick,
+            &quot;dblclick&quot;: <b>this</b>.onDblClick,
+            &quot;contextmenu&quot;: <b>this</b>.onContextMenu,
+            scope:<b>this</b>
+        });
+
+        <b>if</b>(this.overClass || <b>this</b>.trackOver){
+            <b>this</b>.el.on({
+                &quot;mouseover&quot;: <b>this</b>.onMouseOver,
+                &quot;mouseout&quot;: <b>this</b>.onMouseOut,
+                scope:<b>this</b>
+            });
+        }
+
+        <b>if</b>(this.store){
+            <b>this</b>.setStore(<b>this</b>.store, true);
+        }
+    },
+
+    <i>/**
+     * Refreshes the view by reloading the data from the store and re-rendering the template.
+     */</i>
+    refresh : <b>function</b>(){
+        <b>this</b>.clearSelections(false, true);
+        <b>this</b>.el.update(&quot;&quot;);
+        <b>var</b> records = <b>this</b>.store.getRange();
+        <b>if</b>(records.length &lt; 1){
+            <b>if</b>(!<b>this</b>.deferEmptyText || <b>this</b>.hasSkippedEmptyText){
+                <b>this</b>.el.update(<b>this</b>.emptyText);
+            }
+            <b>this</b>.all.clear();
+        }<b>else</b>{
+            <b>this</b>.tpl.overwrite(<b>this</b>.el, <b>this</b>.collectData(records, 0));
+            <b>this</b>.all.fill(Ext.query(<b>this</b>.itemSelector, <b>this</b>.el.dom));
+            <b>this</b>.updateIndexes(0);
+        }
+        <b>this</b>.hasSkippedEmptyText = true;
+    },
+
+    <i>/**
+     * Function which can be overridden to provide custom formatting <b>for</b> each Record that is used by <b>this</b>
+     * DataView's {@link #tpl template} to render each node.
+     * @param {Array/Object} data The raw data object that was used to create the Record.
+     * @param {Number} recordIndex the index number of the Record being prepared <b>for</b> rendering.
+     * @param {Record} record The Record being prepared <b>for</b> rendering.
+     * @<b>return</b> {Array/Object} The formatted data <b>in</b> a format expected by the internal {@link #tpl template}'s overwrite() method.
+     * (either an array <b>if</b> your params are numeric (i.e. {0}) or an object (i.e. {foo: <em>'bar'</em>}))
+     */</i>
+    prepareData : <b>function</b>(data){
+        <b>return</b> data;
+    },
+
+    <i>/**
+     * &lt;p&gt;Function which can be overridden which returns the data object passed to <b>this</b>
+     * DataView's {@link #tpl template} to render the whole DataView.&lt;/p&gt;
+     * &lt;p&gt;This is usually an Array of data objects, each element of which is processed by an
+     * {@link Ext.XTemplate XTemplate} which uses &lt;tt&gt;<em>'&amp;lt;tpl <b>for</b>=&quot;.&quot;&amp;gt;'</em>&lt;/tt&gt; to iterate over its supplied
+     * data object as an Array. However, &lt;i&gt;named&lt;/i&gt; properties may be placed into the data object to
+     * provide non-repeating data such as headings, totals etc.&lt;/p&gt;
+     * @param records {Array} An Array of {@link Ext.data.Record}s to be rendered into the DataView.
+     * @<b>return</b> {Array} An Array of data objects to be processed by a repeating XTemplate. May also
+     * contain &lt;i&gt;named&lt;/i&gt; properties.
+     */</i>
+    collectData : <b>function</b>(records, startIndex){
+        <b>var</b> r = [];
+        <b>for</b>(var i = 0, len = records.length; i &lt; len; i++){
+            r[r.length] = <b>this</b>.prepareData(records[i].data, startIndex+i, records[i]);
+        }
+        <b>return</b> r;
+    },
+
+    <i>// private</i>
+    bufferRender : <b>function</b>(records){
+        <b>var</b> div = document.createElement(<em>'div'</em>);
+        <b>this</b>.tpl.overwrite(div, <b>this</b>.collectData(records));
+        <b>return</b> Ext.query(<b>this</b>.itemSelector, div);
+    },
+
+    <i>// private</i>
+    onUpdate : <b>function</b>(ds, record){
+        <b>var</b> index = <b>this</b>.store.indexOf(record);
+        <b>var</b> sel = <b>this</b>.isSelected(index);
+        <b>var</b> original = <b>this</b>.all.elements[index];
+        <b>var</b> node = <b>this</b>.bufferRender([record], index)[0];
+
+        <b>this</b>.all.replaceElement(index, node, true);
+        <b>if</b>(sel){
+            <b>this</b>.selected.replaceElement(original, node);
+            <b>this</b>.all.item(index).addClass(<b>this</b>.selectedClass);
+        }
+        <b>this</b>.updateIndexes(index, index);
+    },
+
+    <i>// private</i>
+    onAdd : <b>function</b>(ds, records, index){
+        <b>if</b>(this.all.getCount() == 0){
+            <b>this</b>.refresh();
+            <b>return</b>;
+        }
+        <b>var</b> nodes = <b>this</b>.bufferRender(records, index), n, a = <b>this</b>.all.elements;
+        <b>if</b>(index &lt; <b>this</b>.all.getCount()){
+            n = <b>this</b>.all.item(index).insertSibling(nodes, <em>'before'</em>, true);
+            a.splice.apply(a, [index, 0].concat(nodes));
+        }<b>else</b>{
+            n = <b>this</b>.all.last().insertSibling(nodes, <em>'after'</em>, true);
+            a.push.apply(a, nodes);
+        }
+        <b>this</b>.updateIndexes(index);
+    },
+
+    <i>// private</i>
+    onRemove : <b>function</b>(ds, record, index){
+        <b>this</b>.deselect(index);
+        <b>this</b>.all.removeElement(index, true);
+        <b>this</b>.updateIndexes(index);
+        <b>if</b> (<b>this</b>.store.getCount() == 0){
+            <b>this</b>.refresh();
+        }
+    },
+
+    <i>/**
+     * Refreshes an individual node's data from the store.
+     * @param {Number} index The item's data index <b>in</b> the store
+     */</i>
+    refreshNode : <b>function</b>(index){
+        <b>this</b>.onUpdate(<b>this</b>.store, <b>this</b>.store.getAt(index));
+    },
+
+    <i>// private</i>
+    updateIndexes : <b>function</b>(startIndex, endIndex){
+        <b>var</b> ns = <b>this</b>.all.elements;
+        startIndex = startIndex || 0;
+        endIndex = endIndex || ((endIndex === 0) ? 0 : (ns.length - 1));
+        <b>for</b>(var i = startIndex; i &lt;= endIndex; i++){
+            ns[i].viewIndex = i;
+        }
+    },
+    
+    <i>/**
+     * Returns the store associated <b>with</b> this DataView.
+     * @<b>return</b> {Ext.data.Store} The store
+     */</i>
+    getStore : <b>function</b>(){
+        <b>return</b> this.store;
+    },
+
+    <i>/**
+     * Changes the data store bound to <b>this</b> view and refreshes it.
+     * @param {Store} store The store to bind to <b>this</b> view
+     */</i>
+    setStore : <b>function</b>(store, initial){
+        <b>if</b>(!initial &amp;&amp; <b>this</b>.store){
+            <b>this</b>.store.un(&quot;beforeload&quot;, <b>this</b>.onBeforeLoad, <b>this</b>);
+            <b>this</b>.store.un(&quot;datachanged&quot;, <b>this</b>.refresh, <b>this</b>);
+            <b>this</b>.store.un(&quot;add&quot;, <b>this</b>.onAdd, <b>this</b>);
+            <b>this</b>.store.un(&quot;remove&quot;, <b>this</b>.onRemove, <b>this</b>);
+            <b>this</b>.store.un(&quot;update&quot;, <b>this</b>.onUpdate, <b>this</b>);
+            <b>this</b>.store.un(&quot;clear&quot;, <b>this</b>.refresh, <b>this</b>);
+        }
+        <b>if</b>(store){
+            store = Ext.StoreMgr.lookup(store);
+            store.on(&quot;beforeload&quot;, <b>this</b>.onBeforeLoad, <b>this</b>);
+            store.on(&quot;datachanged&quot;, <b>this</b>.refresh, <b>this</b>);
+            store.on(&quot;add&quot;, <b>this</b>.onAdd, <b>this</b>);
+            store.on(&quot;remove&quot;, <b>this</b>.onRemove, <b>this</b>);
+            store.on(&quot;update&quot;, <b>this</b>.onUpdate, <b>this</b>);
+            store.on(&quot;clear&quot;, <b>this</b>.refresh, <b>this</b>);
+        }
+        <b>this</b>.store = store;
+        <b>if</b>(store){
+            <b>this</b>.refresh();
+        }
+    },
+
+    <i>/**
+     * Returns the template node the passed child belongs to, or null <b>if</b> it doesn't belong to one.
+     * @param {HTMLElement} node
+     * @<b>return</b> {HTMLElement} The template node
+     */</i>
+    findItemFromChild : <b>function</b>(node){
+        <b>return</b> Ext.fly(node).findParent(<b>this</b>.itemSelector, <b>this</b>.el);
+    },
+
+    <i>// private</i>
+    onClick : <b>function</b>(e){
+        <b>var</b> item = e.getTarget(<b>this</b>.itemSelector, <b>this</b>.el);
+        <b>if</b>(item){
+            <b>var</b> index = <b>this</b>.indexOf(item);
+            <b>if</b>(this.onItemClick(item, index, e) !== false){
+                <b>this</b>.fireEvent(&quot;click&quot;, <b>this</b>, index, item, e);
+            }
+        }<b>else</b>{
+            <b>if</b>(this.fireEvent(&quot;containerclick&quot;, <b>this</b>, e) !== false){
+                <b>this</b>.clearSelections();
+            }
+        }
+    },
+
+    <i>// private</i>
+    onContextMenu : <b>function</b>(e){
+        <b>var</b> item = e.getTarget(<b>this</b>.itemSelector, <b>this</b>.el);
+        <b>if</b>(item){
+            <b>this</b>.fireEvent(&quot;contextmenu&quot;, <b>this</b>, <b>this</b>.indexOf(item), item, e);
+        }
+    },
+
+    <i>// private</i>
+    onDblClick : <b>function</b>(e){
+        <b>var</b> item = e.getTarget(<b>this</b>.itemSelector, <b>this</b>.el);
+        <b>if</b>(item){
+            <b>this</b>.fireEvent(&quot;dblclick&quot;, <b>this</b>, <b>this</b>.indexOf(item), item, e);
+        }
+    },
+
+    <i>// private</i>
+    onMouseOver : <b>function</b>(e){
+        <b>var</b> item = e.getTarget(<b>this</b>.itemSelector, <b>this</b>.el);
+        <b>if</b>(item &amp;&amp; item !== <b>this</b>.lastItem){
+            <b>this</b>.lastItem = item;
+            Ext.fly(item).addClass(<b>this</b>.overClass);
+            <b>this</b>.fireEvent(&quot;mouseenter&quot;, <b>this</b>, <b>this</b>.indexOf(item), item, e);
+        }
+    },
+
+    <i>// private</i>
+    onMouseOut : <b>function</b>(e){
+        <b>if</b>(this.lastItem){
+            <b>if</b>(!e.within(<b>this</b>.lastItem, true, true)){
+                Ext.fly(<b>this</b>.lastItem).removeClass(<b>this</b>.overClass);
+                <b>this</b>.fireEvent(&quot;mouseleave&quot;, <b>this</b>, <b>this</b>.indexOf(<b>this</b>.lastItem), <b>this</b>.lastItem, e);
+                <b>delete</b> this.lastItem;
+            }
+        }
+    },
+
+    <i>// private</i>
+    onItemClick : <b>function</b>(item, index, e){
+        <b>if</b>(this.fireEvent(&quot;beforeclick&quot;, <b>this</b>, index, item, e) === false){
+            <b>return</b> false;
+        }
+        <b>if</b>(this.multiSelect){
+            <b>this</b>.doMultiSelection(item, index, e);
+            e.preventDefault();
+        }<b>else</b> if(<b>this</b>.singleSelect){
+            <b>this</b>.doSingleSelection(item, index, e);
+            e.preventDefault();
+        }
+        <b>return</b> true;
+    },
+
+    <i>// private</i>
+    doSingleSelection : <b>function</b>(item, index, e){
+        <b>if</b>(e.ctrlKey &amp;&amp; <b>this</b>.isSelected(index)){
+            <b>this</b>.deselect(index);
+        }<b>else</b>{
+            <b>this</b>.select(index, false);
+        }
+    },
+
+    <i>// private</i>
+    doMultiSelection : <b>function</b>(item, index, e){
+        <b>if</b>(e.shiftKey &amp;&amp; <b>this</b>.last !== false){
+            <b>var</b> last = <b>this</b>.last;
+            <b>this</b>.selectRange(last, index, e.ctrlKey);
+            <b>this</b>.last = last; <i>// reset the last</i>
+        }<b>else</b>{
+            <b>if</b>((e.ctrlKey||<b>this</b>.simpleSelect) &amp;&amp; <b>this</b>.isSelected(index)){
+                <b>this</b>.deselect(index);
+            }<b>else</b>{
+                <b>this</b>.select(index, e.ctrlKey || e.shiftKey || <b>this</b>.simpleSelect);
+            }
+        }
+    },
+
+    <i>/**
+     * Gets the number of selected nodes.
+     * @<b>return</b> {Number} The node count
+     */</i>
+    getSelectionCount : <b>function</b>(){
+        <b>return</b> this.selected.getCount()
+    },
+
+    <i>/**
+     * Gets the currently selected nodes.
+     * @<b>return</b> {Array} An array of HTMLElements
+     */</i>
+    getSelectedNodes : <b>function</b>(){
+        <b>return</b> this.selected.elements;
+    },
+
+    <i>/**
+     * Gets the indexes of the selected nodes.
+     * @<b>return</b> {Array} An array of numeric indexes
+     */</i>
+    getSelectedIndexes : <b>function</b>(){
+        <b>var</b> indexes = [], s = <b>this</b>.selected.elements;
+        <b>for</b>(var i = 0, len = s.length; i &lt; len; i++){
+            indexes.push(s[i].viewIndex);
+        }
+        <b>return</b> indexes;
+    },
+
+    <i>/**
+     * Gets an array of the selected records
+     * @<b>return</b> {Array} An array of {@link Ext.data.Record} objects
+     */</i>
+    getSelectedRecords : <b>function</b>(){
+        <b>var</b> r = [], s = <b>this</b>.selected.elements;
+        <b>for</b>(var i = 0, len = s.length; i &lt; len; i++){
+            r[r.length] = <b>this</b>.store.getAt(s[i].viewIndex);
+        }
+        <b>return</b> r;
+    },
+
+    <i>/**
+     * Gets an array of the records from an array of nodes
+     * @param {Array} nodes The nodes to evaluate
+     * @<b>return</b> {Array} records The {@link Ext.data.Record} objects
+     */</i>
+    getRecords : <b>function</b>(nodes){
+        <b>var</b> r = [], s = nodes;
+        <b>for</b>(var i = 0, len = s.length; i &lt; len; i++){
+            r[r.length] = <b>this</b>.store.getAt(s[i].viewIndex);
+        }
+        <b>return</b> r;
+    },
+
+    <i>/**
+     * Gets a record from a node
+     * @param {HTMLElement} node The node to evaluate
+     * @<b>return</b> {Record} record The {@link Ext.data.Record} object
+     */</i>
+    getRecord : <b>function</b>(node){
+        <b>return</b> this.store.getAt(node.viewIndex);
+    },
+
+    <i>/**
+     * Clears all selections.
+     * @param {Boolean} suppressEvent (optional) True to skip firing of the selectionchange event
+     */</i>
+    clearSelections : <b>function</b>(suppressEvent, skipUpdate){
+        <b>if</b>((<b>this</b>.multiSelect || <b>this</b>.singleSelect) &amp;&amp; <b>this</b>.selected.getCount() &gt; 0){
+            <b>if</b>(!skipUpdate){
+                <b>this</b>.selected.removeClass(<b>this</b>.selectedClass);
+            }
+            <b>this</b>.selected.clear();
+            <b>this</b>.last = false;
+            <b>if</b>(!suppressEvent){
+                <b>this</b>.fireEvent(&quot;selectionchange&quot;, <b>this</b>, <b>this</b>.selected.elements);
+            }
+        }
+    },
+
+    <i>/**
+     * Returns true <b>if</b> the passed node is selected, <b>else</b> false.
+     * @param {HTMLElement/Number} node The node or node index to check
+     * @<b>return</b> {Boolean} True <b>if</b> selected, <b>else</b> false
+     */</i>
+    isSelected : <b>function</b>(node){
+        <b>return</b> this.selected.contains(<b>this</b>.getNode(node));
+    },
+
+    <i>/**
+     * Deselects a node.
+     * @param {HTMLElement/Number} node The node to deselect
+     */</i>
+    deselect : <b>function</b>(node){
+        <b>if</b>(this.isSelected(node)){
+            node = <b>this</b>.getNode(node);
+            <b>this</b>.selected.removeElement(node);
+            <b>if</b>(this.last == node.viewIndex){
+                <b>this</b>.last = false;
+            }
+            Ext.fly(node).removeClass(<b>this</b>.selectedClass);
+            <b>this</b>.fireEvent(&quot;selectionchange&quot;, <b>this</b>, <b>this</b>.selected.elements);
+        }
+    },
+
+    <i>/**
+     * Selects a set of nodes.
+     * @param {Array/HTMLElement/String/Number} nodeInfo An HTMLElement template node, index of a template node,
+     * id of a template node or an array of any of those to select
+     * @param {Boolean} keepExisting (optional) true to keep existing selections
+     * @param {Boolean} suppressEvent (optional) true to skip firing of the selectionchange vent
+     */</i>
+    select : <b>function</b>(nodeInfo, keepExisting, suppressEvent){
+        <b>if</b>(Ext.isArray(nodeInfo)){
+            <b>if</b>(!keepExisting){
+                <b>this</b>.clearSelections(true);
+            }
+            <b>for</b>(var i = 0, len = nodeInfo.length; i &lt; len; i++){
+                <b>this</b>.select(nodeInfo[i], true, true);
+            }
+	        <b>if</b>(!suppressEvent){
+	            <b>this</b>.fireEvent(&quot;selectionchange&quot;, <b>this</b>, <b>this</b>.selected.elements);
+	        }
+        } <b>else</b>{
+            <b>var</b> node = <b>this</b>.getNode(nodeInfo);
+            <b>if</b>(!keepExisting){
+                <b>this</b>.clearSelections(true);
+            }
+            <b>if</b>(node &amp;&amp; !<b>this</b>.isSelected(node)){
+                <b>if</b>(this.fireEvent(&quot;beforeselect&quot;, <b>this</b>, node, <b>this</b>.selected.elements) !== false){
+                    Ext.fly(node).addClass(<b>this</b>.selectedClass);
+                    <b>this</b>.selected.add(node);
+                    <b>this</b>.last = node.viewIndex;
+                    <b>if</b>(!suppressEvent){
+                        <b>this</b>.fireEvent(&quot;selectionchange&quot;, <b>this</b>, <b>this</b>.selected.elements);
+                    }
+                }
+            }
+        }
+    },
+
+    <i>/**
+     * Selects a range of nodes. All nodes between start and end are selected.
+     * @param {Number} start The index of the first node <b>in</b> the range
+     * @param {Number} end The index of the last node <b>in</b> the range
+     * @param {Boolean} keepExisting (optional) True to retain existing selections
+     */</i>
+    selectRange : <b>function</b>(start, end, keepExisting){
+        <b>if</b>(!keepExisting){
+            <b>this</b>.clearSelections(true);
+        }
+        <b>this</b>.select(<b>this</b>.getNodes(start, end), true);
+    },
+
+    <i>/**
+     * Gets a template node.
+     * @param {HTMLElement/String/Number} nodeInfo An HTMLElement template node, index of a template node or the id of a template node
+     * @<b>return</b> {HTMLElement} The node or null <b>if</b> it wasn't found
+     */</i>
+    getNode : <b>function</b>(nodeInfo){
+        <b>if</b>(typeof nodeInfo == &quot;string&quot;){
+            <b>return</b> document.getElementById(nodeInfo);
+        }<b>else</b> if(<b>typeof</b> nodeInfo == &quot;number&quot;){
+            <b>return</b> this.all.elements[nodeInfo];
+        }
+        <b>return</b> nodeInfo;
+    },
+
+    <i>/**
+     * Gets a range nodes.
+     * @param {Number} start (optional) The index of the first node <b>in</b> the range
+     * @param {Number} end (optional) The index of the last node <b>in</b> the range
+     * @<b>return</b> {Array} An array of nodes
+     */</i>
+    getNodes : <b>function</b>(start, end){
+        <b>var</b> ns = <b>this</b>.all.elements;
+        start = start || 0;
+        end = <b>typeof</b> end == &quot;undefined&quot; ? Math.max(ns.length - 1, 0) : end;
+        <b>var</b> nodes = [], i;
+        <b>if</b>(start &lt;= end){
+            <b>for</b>(i = start; i &lt;= end &amp;&amp; ns[i]; i++){
+                nodes.push(ns[i]);
+            }
+        } <b>else</b>{
+            <b>for</b>(i = start; i &gt;= end &amp;&amp; ns[i]; i--){
+                nodes.push(ns[i]);
+            }
+        }
+        <b>return</b> nodes;
+    },
+
+    <i>/**
+     * Finds the index of the passed node.
+     * @param {HTMLElement/String/Number} nodeInfo An HTMLElement template node, index of a template node or the id of a template node
+     * @<b>return</b> {Number} The index of the node or -1
+     */</i>
+    indexOf : <b>function</b>(node){
+        node = <b>this</b>.getNode(node);
+        <b>if</b>(typeof node.viewIndex == &quot;number&quot;){
+            <b>return</b> node.viewIndex;
+        }
+        <b>return</b> this.all.indexOf(node);
+    },
+
+    <i>// private</i>
+    onBeforeLoad : <b>function</b>(){
+        <b>if</b>(this.loadingText){
+            <b>this</b>.clearSelections(false, true);
+            <b>this</b>.el.update(<em>'&lt;div class=&quot;loading-indicator&quot;&gt;'</em>+<b>this</b>.loadingText+<em>'&lt;/div&gt;'</em>);
+            <b>this</b>.all.clear();
+        }
+    },
+
+    onDestroy : <b>function</b>(){
+        Ext.DataView.superclass.onDestroy.call(<b>this</b>);
+        <b>this</b>.setStore(null);
+    }
+});
+
+Ext.reg(<em>'dataview'</em>, Ext.DataView);</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

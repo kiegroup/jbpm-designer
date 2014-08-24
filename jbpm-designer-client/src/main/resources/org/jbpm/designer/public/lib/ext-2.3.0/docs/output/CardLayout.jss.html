@@ -1,0 +1,105 @@
+<html><head><title>CardLayout.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>CardLayout.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.layout.CardLayout
+ * @extends Ext.layout.FitLayout
+ * &lt;p&gt;This layout manages multiple child Components, each fitted to the Container, where only a single child Component can be
+ * visible at any given time.  This layout style is most commonly used <b>for</b> wizards, tab implementations, etc.
+ * This class is intended to be extended or created via the layout:<em>'card'</em> {@link Ext.Container#layout} config,
+ * and should generally not need to be created directly via the <b>new</b> keyword.&lt;/p&gt;
+ * &lt;p&gt;The CardLayout's focal method is {@link #setActiveItem}.  Since only one panel is displayed at a time,
+ * the only way to move from one Component to the next is by calling setActiveItem, passing the id or index of
+ * the next panel to display.  The layout itself does not provide a user interface <b>for</b> handling <b>this</b> navigation,
+ * so that functionality must be provided by the developer.&lt;/p&gt;
+ * &lt;p&gt;In the following example, a simplistic wizard setup is demonstrated.  A button bar is added
+ * to the footer of the containing panel to provide navigation buttons.  The buttons will be handled by a
+ * common navigation routine -- <b>for</b> this example, the implementation of that routine has been ommitted since
+ * it can be any type of custom logic.  Note that other uses of a CardLayout (like a tab control) would require a
+ * completely different implementation.  For serious implementations, a better approach would be to extend
+ * CardLayout to provide the custom functionality needed.  Example usage:&lt;/p&gt;
+ * &lt;pre&gt;&lt;code&gt;
+<b>var</b> navHandler = <b>function</b>(direction){
+    <i>// This routine could contain business logic required to manage the navigation steps.</i>
+    <i>// It would call setActiveItem as needed, manage navigation button state, handle any</i>
+    <i>// branching logic that might be required, handle alternate actions like cancellation</i>
+    <i>// or finalization, etc.  A complete wizard implementation could get pretty</i>
+    <i>// sophisticated depending on the complexity required, and should probably be</i>
+    <i>// done as a subclass of CardLayout <b>in</b> a real-world implementation.</i>
+};
+
+<b>var</b> card = <b>new</b> Ext.Panel({
+    title: <em>'Example Wizard'</em>,
+    layout:<em>'card'</em>,
+    activeItem: 0, <i>// make sure the active item is set on the container config!</i>
+    bodyStyle: <em>'padding:15px'</em>,
+    defaults: {
+        <i>// applied to each contained panel</i>
+        border:false
+    },
+    <i>// just an example of one possible navigation scheme, using buttons</i>
+    bbar: [
+        {
+            id: <em>'move-prev'</em>,
+            text: <em>'Back'</em>,
+            handler: navHandler.createDelegate(<b>this</b>, [-1]),
+            disabled: true
+        },
+        <em>'-&gt;'</em>, <i>// greedy spacer so that the buttons are aligned to each side</i>
+        {
+            id: <em>'move-next'</em>,
+            text: <em>'Next'</em>,
+            handler: navHandler.createDelegate(<b>this</b>, [1])
+        }
+    ],
+    <i>// the panels (or &quot;cards&quot;) within the layout</i>
+    items: [{
+        id: <em>'card-0'</em>,
+        html: <em>'&amp;lt;h1&amp;gt;Welcome to the Wizard!&amp;lt;/h1&amp;gt;&amp;lt;p&amp;gt;Step 1 of 3&amp;lt;/p&amp;gt;'</em>
+    },{
+        id: <em>'card-1'</em>,
+        html: <em>'&amp;lt;p&amp;gt;Step 2 of 3&amp;lt;/p&amp;gt;'</em>
+    },{
+        id: <em>'card-2'</em>,
+        html: <em>'&amp;lt;h1&amp;gt;Congratulations!&amp;lt;/h1&amp;gt;&amp;lt;p&amp;gt;Step 3 of 3 - Complete&amp;lt;/p&amp;gt;'</em>
+    }]
+});
+&lt;/code&gt;&lt;/pre&gt;
+ */</i>
+Ext.layout.CardLayout = Ext.extend(Ext.layout.FitLayout, {
+    <i>/**
+     * @cfg {Boolean} deferredRender
+     * True to render each contained item at the time it becomes active, false to render all contained items
+     * as soon as the layout is rendered (defaults to false).  If there is a significant amount of content or
+     * a lot of heavy controls being rendered into panels that are not displayed by <b>default</b>, setting <b>this</b> to
+     * true might improve performance.
+     */</i>
+    deferredRender : false,
+
+    <i>// private</i>
+    renderHidden : true,
+
+    <i>/**
+     * Sets the active (visible) item <b>in</b> the layout.
+     * @param {String/Number} item The string component id or numeric index of the item to activate
+     */</i>
+    setActiveItem : <b>function</b>(item){
+        item = <b>this</b>.container.getComponent(item);
+        <b>if</b>(this.activeItem != item){
+            <b>if</b>(this.activeItem){
+                <b>this</b>.activeItem.hide();
+            }
+            <b>this</b>.activeItem = item;
+            item.show();
+            <b>this</b>.layout();
+        }
+    },
+
+    <i>// private</i>
+    renderAll : <b>function</b>(ct, target){
+        <b>if</b>(this.deferredRender){
+            <b>this</b>.renderItem(<b>this</b>.activeItem, undefined, target);
+        }<b>else</b>{
+            Ext.layout.CardLayout.superclass.renderAll.call(<b>this</b>, ct, target);
+        }
+    }
+});
+Ext.Container.LAYOUTS[<em>'card'</em>] = Ext.layout.CardLayout;</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

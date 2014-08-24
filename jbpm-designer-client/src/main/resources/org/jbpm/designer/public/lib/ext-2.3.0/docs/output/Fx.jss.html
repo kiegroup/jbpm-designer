@@ -1,0 +1,1050 @@
+<html><head><title>Fx.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>Fx.js</h1><pre class="highlighted"><code>
+<i>//Notifies Element that fx methods are available</i>
+Ext.enableFx = true;
+
+<i>/**
+ * @class Ext.Fx
+ * &lt;p&gt;A class to provide basic animation and visual effects support.  &lt;b&gt;Note:&lt;/b&gt; This class is automatically applied
+ * to the {@link Ext.Element} interface when included, so all effects calls should be performed via Element.
+ * Conversely, since the effects are not actually defined <b>in</b> Element, Ext.Fx &lt;b&gt;must&lt;/b&gt; be included <b>in</b> order <b>for</b> the 
+ * Element effects to work.&lt;/p&gt;&lt;br/&gt;
+ *
+ * &lt;p&gt;It is important to note that although the Fx methods and many non-Fx Element methods support &quot;method chaining&quot; <b>in</b> that
+ * they <b>return</b> the Element object itself as the method <b>return</b> value, it is not always possible to mix the two <b>in</b> a single
+ * method chain.  The Fx methods use an internal effects queue so that each effect can be properly timed and sequenced.
+ * Non-Fx methods, on the other hand, have no such internal queueing and will always execute immediately.  For <b>this</b> reason,
+ * <b>while</b> it may be possible to mix certain Fx and non-Fx method calls <b>in</b> a single chain, it may not always provide the
+ * expected results and should be done <b>with</b> care.&lt;/p&gt;&lt;br/&gt;
+ *
+ * &lt;p&gt;Motion effects support 8-way anchoring, meaning that you can choose one of 8 different anchor points on the Element
+ * that will serve as either the start or end point of the animation.  Following are all of the supported anchor positions:&lt;/p&gt;
+&lt;pre&gt;
+Value  Description
+-----  -----------------------------
+tl     The top left corner
+t      The center of the top edge
+tr     The top right corner
+l      The center of the left edge
+r      The center of the right edge
+bl     The bottom left corner
+b      The center of the bottom edge
+br     The bottom right corner
+&lt;/pre&gt;
+ * &lt;b&gt;Although some Fx methods accept specific custom config parameters, the ones shown <b>in</b> the Config Options section
+ * below are common options that can be passed to any Fx method.&lt;/b&gt;
+ * 
+ * @cfg {Function} callback A <b>function</b> called when the effect is finished.  Note that effects are queued internally by the
+ * Fx class, so <b>do</b> not need to use the callback parameter to specify another effect -- effects can simply be chained together
+ * and called <b>in</b> sequence (e.g., el.slideIn().highlight();).  The callback is intended <b>for</b> any additional code that should
+ * run once a particular effect has completed. The Element being operated upon is passed as the first parameter.
+ * @cfg {Object} scope The scope of the effect <b>function</b>
+ * @cfg {String} easing A valid Easing value <b>for</b> the effect
+ * @cfg {String} afterCls A css class to apply after the effect
+ * @cfg {Number} duration The length of time (<b>in</b> seconds) that the effect should last
+ * @cfg {Boolean} remove Whether the Element should be removed from the DOM and destroyed after the effect finishes
+ * @cfg {Boolean} useDisplay Whether to use the &lt;i&gt;display&lt;/i&gt; CSS property instead of &lt;i&gt;visibility&lt;/i&gt; when hiding Elements (only applies to 
+ * effects that end <b>with</b> the element being visually hidden, ignored otherwise)
+ * @cfg {String/Object/Function} afterStyle A style specification string, e.g. &quot;width:100px&quot;, or an object <b>in</b> the form {width:&quot;100px&quot;}, or
+ * a <b>function</b> which returns such a specification that will be applied to the Element after the effect finishes
+ * @cfg {Boolean} block Whether the effect should block other effects from queueing <b>while</b> it runs
+ * @cfg {Boolean} concurrent Whether to allow subsequently-queued effects to run at the same time as the current effect, or to ensure that they run <b>in</b> sequence
+ * @cfg {Boolean} stopFx Whether subsequent effects should be stopped and removed after the current effect finishes
+ */</i>
+Ext.Fx = {
+	<i>/**
+	 * Slides the element into view.  An anchor point can be optionally passed to set the point of
+	 * origin <b>for</b> the slide effect.  This <b>function</b> automatically handles wrapping the element <b>with</b>
+	 * a fixed-size container <b>if</b> needed.  See the Fx class overview <b>for</b> valid anchor point options.
+	 * Usage:
+	 *&lt;pre&gt;&lt;code&gt;
+<i>// <b>default</b>: slide the element <b>in</b> from the top</i>
+el.slideIn();
+
+<i>// custom: slide the element <b>in</b> from the right <b>with</b> a 2-second duration</i>
+el.slideIn(<em>'r'</em>, { duration: 2 });
+
+<i>// common config options shown <b>with</b> default values</i>
+el.slideIn(<em>'t'</em>, {
+    easing: <em>'easeOut'</em>,
+    duration: .5
+});
+&lt;/code&gt;&lt;/pre&gt;
+	 * @param {String} anchor (optional) One of the valid Fx anchor positions (defaults to top: <em>'t'</em>)
+	 * @param {Object} options (optional) Object literal <b>with</b> any of the Fx config options
+	 * @<b>return</b> {Ext.Element} The Element
+	 */</i>
+    slideIn : <b>function</b>(anchor, o){
+        <b>var</b> el = <b>this</b>.getFxEl();
+        o = o || {};
+
+        el.queueFx(o, <b>function</b>(){
+
+            anchor = anchor || &quot;t&quot;;
+
+            <i>// fix display to visibility</i>
+            <b>this</b>.fixDisplay();
+
+            <i>// restore values after effect</i>
+            <b>var</b> r = <b>this</b>.getFxRestore();
+            <b>var</b> b = <b>this</b>.getBox();
+            <i>// fixed size <b>for</b> slide</i>
+            <b>this</b>.setSize(b);
+
+            <i>// wrap <b>if</b> needed</i>
+            <b>var</b> wrap = <b>this</b>.fxWrap(r.pos, o, &quot;hidden&quot;);
+
+            <b>var</b> st = <b>this</b>.dom.style;
+            st.visibility = &quot;visible&quot;;
+            st.position = &quot;absolute&quot;;
+
+            <i>// clear out temp styles after slide and unwrap</i>
+            <b>var</b> after = <b>function</b>(){
+                el.fxUnwrap(wrap, r.pos, o);
+                st.width = r.width;
+                st.height = r.height;
+                el.afterFx(o);
+            };
+            <i>// time to calc the positions</i>
+            <b>var</b> a, pt = {to: [b.x, b.y]}, bw = {to: b.width}, bh = {to: b.height};
+
+            <b>switch</b>(anchor.toLowerCase()){
+                <b>case</b> &quot;t&quot;:
+                    wrap.setSize(b.width, 0);
+                    st.left = st.bottom = &quot;0&quot;;
+                    a = {height: bh};
+                <b>break</b>;
+                <b>case</b> &quot;l&quot;:
+                    wrap.setSize(0, b.height);
+                    st.right = st.top = &quot;0&quot;;
+                    a = {width: bw};
+                <b>break</b>;
+                <b>case</b> &quot;r&quot;:
+                    wrap.setSize(0, b.height);
+                    wrap.setX(b.right);
+                    st.left = st.top = &quot;0&quot;;
+                    a = {width: bw, points: pt};
+                <b>break</b>;
+                <b>case</b> &quot;b&quot;:
+                    wrap.setSize(b.width, 0);
+                    wrap.setY(b.bottom);
+                    st.left = st.top = &quot;0&quot;;
+                    a = {height: bh, points: pt};
+                <b>break</b>;
+                <b>case</b> &quot;tl&quot;:
+                    wrap.setSize(0, 0);
+                    st.right = st.bottom = &quot;0&quot;;
+                    a = {width: bw, height: bh};
+                <b>break</b>;
+                <b>case</b> &quot;bl&quot;:
+                    wrap.setSize(0, 0);
+                    wrap.setY(b.y+b.height);
+                    st.right = st.top = &quot;0&quot;;
+                    a = {width: bw, height: bh, points: pt};
+                <b>break</b>;
+                <b>case</b> &quot;br&quot;:
+                    wrap.setSize(0, 0);
+                    wrap.setXY([b.right, b.bottom]);
+                    st.left = st.top = &quot;0&quot;;
+                    a = {width: bw, height: bh, points: pt};
+                <b>break</b>;
+                <b>case</b> &quot;tr&quot;:
+                    wrap.setSize(0, 0);
+                    wrap.setX(b.x+b.width);
+                    st.left = st.bottom = &quot;0&quot;;
+                    a = {width: bw, height: bh, points: pt};
+                <b>break</b>;
+            }
+            <b>this</b>.dom.style.visibility = &quot;visible&quot;;
+            wrap.show();
+
+            arguments.callee.anim = wrap.fxanim(a,
+                o,
+                <em>'motion'</em>,
+                .5,
+                <em>'easeOut'</em>, after);
+        });
+        <b>return</b> this;
+    },
+    
+	<i>/**
+	 * Slides the element out of view.  An anchor point can be optionally passed to set the end point
+	 * <b>for</b> the slide effect.  When the effect is completed, the element will be hidden (visibility = 
+	 * <em>'hidden'</em>) but block elements will still take up space <b>in</b> the document.  The element must be removed
+	 * from the DOM using the <em>'remove'</em> config option <b>if</b> desired.  This <b>function</b> automatically handles 
+	 * wrapping the element <b>with</b> a fixed-size container <b>if</b> needed.  See the Fx class overview <b>for</b> valid anchor point options.
+	 * Usage:
+	 *&lt;pre&gt;&lt;code&gt;
+<i>// <b>default</b>: slide the element out to the top</i>
+el.slideOut();
+
+<i>// custom: slide the element out to the right <b>with</b> a 2-second duration</i>
+el.slideOut(<em>'r'</em>, { duration: 2 });
+
+<i>// common config options shown <b>with</b> default values</i>
+el.slideOut(<em>'t'</em>, {
+    easing: <em>'easeOut'</em>,
+    duration: .5,
+    remove: false,
+    useDisplay: false
+});
+&lt;/code&gt;&lt;/pre&gt;
+	 * @param {String} anchor (optional) One of the valid Fx anchor positions (defaults to top: <em>'t'</em>)
+	 * @param {Object} options (optional) Object literal <b>with</b> any of the Fx config options
+	 * @<b>return</b> {Ext.Element} The Element
+	 */</i>
+    slideOut : <b>function</b>(anchor, o){
+        <b>var</b> el = <b>this</b>.getFxEl();
+        o = o || {};
+
+        el.queueFx(o, <b>function</b>(){
+
+            anchor = anchor || &quot;t&quot;;
+
+            <i>// restore values after effect</i>
+            <b>var</b> r = <b>this</b>.getFxRestore();
+            
+            <b>var</b> b = <b>this</b>.getBox();
+            <i>// fixed size <b>for</b> slide</i>
+            <b>this</b>.setSize(b);
+
+            <i>// wrap <b>if</b> needed</i>
+            <b>var</b> wrap = <b>this</b>.fxWrap(r.pos, o, &quot;visible&quot;);
+
+            <b>var</b> st = <b>this</b>.dom.style;
+            st.visibility = &quot;visible&quot;;
+            st.position = &quot;absolute&quot;;
+
+            wrap.setSize(b);
+
+            <b>var</b> after = <b>function</b>(){
+                <b>if</b>(o.useDisplay){
+                    el.setDisplayed(false);
+                }<b>else</b>{
+                    el.hide();
+                }
+
+                el.fxUnwrap(wrap, r.pos, o);
+
+                st.width = r.width;
+                st.height = r.height;
+
+                el.afterFx(o);
+            };
+
+            <b>var</b> a, zero = {to: 0};
+            <b>switch</b>(anchor.toLowerCase()){
+                <b>case</b> &quot;t&quot;:
+                    st.left = st.bottom = &quot;0&quot;;
+                    a = {height: zero};
+                <b>break</b>;
+                <b>case</b> &quot;l&quot;:
+                    st.right = st.top = &quot;0&quot;;
+                    a = {width: zero};
+                <b>break</b>;
+                <b>case</b> &quot;r&quot;:
+                    st.left = st.top = &quot;0&quot;;
+                    a = {width: zero, points: {to:[b.right, b.y]}};
+                <b>break</b>;
+                <b>case</b> &quot;b&quot;:
+                    st.left = st.top = &quot;0&quot;;
+                    a = {height: zero, points: {to:[b.x, b.bottom]}};
+                <b>break</b>;
+                <b>case</b> &quot;tl&quot;:
+                    st.right = st.bottom = &quot;0&quot;;
+                    a = {width: zero, height: zero};
+                <b>break</b>;
+                <b>case</b> &quot;bl&quot;:
+                    st.right = st.top = &quot;0&quot;;
+                    a = {width: zero, height: zero, points: {to:[b.x, b.bottom]}};
+                <b>break</b>;
+                <b>case</b> &quot;br&quot;:
+                    st.left = st.top = &quot;0&quot;;
+                    a = {width: zero, height: zero, points: {to:[b.x+b.width, b.bottom]}};
+                <b>break</b>;
+                <b>case</b> &quot;tr&quot;:
+                    st.left = st.bottom = &quot;0&quot;;
+                    a = {width: zero, height: zero, points: {to:[b.right, b.y]}};
+                <b>break</b>;
+            }
+
+            arguments.callee.anim = wrap.fxanim(a,
+                o,
+                <em>'motion'</em>,
+                .5,
+                &quot;easeOut&quot;, after);
+        });
+        <b>return</b> this;
+    },
+
+	<i>/**
+	 * Fades the element out <b>while</b> slowly expanding it <b>in</b> all directions.  When the effect is completed, the 
+	 * element will be hidden (visibility = <em>'hidden'</em>) but block elements will still take up space <b>in</b> the document. 
+	 * The element must be removed from the DOM using the <em>'remove'</em> config option <b>if</b> desired.
+	 * Usage:
+	 *&lt;pre&gt;&lt;code&gt;
+<i>// <b>default</b></i>
+el.puff();
+
+<i>// common config options shown <b>with</b> default values</i>
+el.puff({
+    easing: <em>'easeOut'</em>,
+    duration: .5,
+    remove: false,
+    useDisplay: false
+});
+&lt;/code&gt;&lt;/pre&gt;
+	 * @param {Object} options (optional) Object literal <b>with</b> any of the Fx config options
+	 * @<b>return</b> {Ext.Element} The Element
+	 */</i>
+    puff : <b>function</b>(o){
+        <b>var</b> el = <b>this</b>.getFxEl();
+        o = o || {};
+
+        el.queueFx(o, <b>function</b>(){
+            <b>this</b>.clearOpacity();
+            <b>this</b>.show();
+
+            <i>// restore values after effect</i>
+            <b>var</b> r = <b>this</b>.getFxRestore();
+            <b>var</b> st = <b>this</b>.dom.style;
+
+            <b>var</b> after = <b>function</b>(){
+                <b>if</b>(o.useDisplay){
+                    el.setDisplayed(false);
+                }<b>else</b>{
+                    el.hide();
+                }
+
+                el.clearOpacity();
+
+                el.setPositioning(r.pos);
+                st.width = r.width;
+                st.height = r.height;
+                st.fontSize = <em>''</em>;
+                el.afterFx(o);
+            };
+
+            <b>var</b> width = <b>this</b>.getWidth();
+            <b>var</b> height = <b>this</b>.getHeight();
+
+            arguments.callee.anim = <b>this</b>.fxanim({
+                    width : {to: <b>this</b>.adjustWidth(width * 2)},
+                    height : {to: <b>this</b>.adjustHeight(height * 2)},
+                    points : {by: [-(width * .5), -(height * .5)]},
+                    opacity : {to: 0},
+                    fontSize: {to:200, unit: &quot;%&quot;}
+                },
+                o,
+                <em>'motion'</em>,
+                .5,
+                &quot;easeOut&quot;, after);
+        });
+        <b>return</b> this;
+    },
+
+	<i>/**
+	 * Blinks the element as <b>if</b> it was clicked and then collapses on its center (similar to switching off a television).
+	 * When the effect is completed, the element will be hidden (visibility = <em>'hidden'</em>) but block elements will still 
+	 * take up space <b>in</b> the document. The element must be removed from the DOM using the <em>'remove'</em> config option <b>if</b> desired.
+	 * Usage:
+	 *&lt;pre&gt;&lt;code&gt;
+<i>// <b>default</b></i>
+el.switchOff();
+
+<i>// all config options shown <b>with</b> default values</i>
+el.switchOff({
+    easing: <em>'easeIn'</em>,
+    duration: .3,
+    remove: false,
+    useDisplay: false
+});
+&lt;/code&gt;&lt;/pre&gt;
+	 * @param {Object} options (optional) Object literal <b>with</b> any of the Fx config options
+	 * @<b>return</b> {Ext.Element} The Element
+	 */</i>
+    switchOff : <b>function</b>(o){
+        <b>var</b> el = <b>this</b>.getFxEl();
+        o = o || {};
+
+        el.queueFx(o, <b>function</b>(){
+            <b>this</b>.clearOpacity();
+            <b>this</b>.clip();
+
+            <i>// restore values after effect</i>
+            <b>var</b> r = <b>this</b>.getFxRestore();
+            <b>var</b> st = <b>this</b>.dom.style;
+
+            <b>var</b> after = <b>function</b>(){
+                <b>if</b>(o.useDisplay){
+                    el.setDisplayed(false);
+                }<b>else</b>{
+                    el.hide();
+                }
+
+                el.clearOpacity();
+                el.setPositioning(r.pos);
+                st.width = r.width;
+                st.height = r.height;
+
+                el.afterFx(o);
+            };
+
+            <b>this</b>.fxanim({opacity:{to:0.3}}, null, null, .1, null, <b>function</b>(){
+                <b>this</b>.clearOpacity();
+                (<b>function</b>(){
+                    <b>this</b>.fxanim({
+                        height:{to:1},
+                        points:{by:[0, <b>this</b>.getHeight() * .5]}
+                    }, o, <em>'motion'</em>, 0.3, <em>'easeIn'</em>, after);
+                }).defer(100, <b>this</b>);
+            });
+        });
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Highlights the Element by setting a color (applies to the background-color by <b>default</b>, but can be
+     * changed using the &quot;attr&quot; config option) and then fading back to the original color. If no original
+     * color is available, you should provide the &quot;endColor&quot; config option which will be cleared after the animation.
+     * Usage:
+&lt;pre&gt;&lt;code&gt;
+<i>// <b>default</b>: highlight background to yellow</i>
+el.highlight();
+
+<i>// custom: highlight foreground text to blue <b>for</b> 2 seconds</i>
+el.highlight(&quot;0000ff&quot;, { attr: <em>'color'</em>, duration: 2 });
+
+<i>// common config options shown <b>with</b> default values</i>
+el.highlight(&quot;ffff9c&quot;, {
+    attr: &quot;background-color&quot;, <i>//can be any valid CSS property (attribute) that supports a color value</i>
+    endColor: (current color) or &quot;ffffff&quot;,
+    easing: <em>'easeIn'</em>,
+    duration: 1
+});
+&lt;/code&gt;&lt;/pre&gt;
+     * @param {String} color (optional) The highlight color. Should be a 6 char hex color without the leading # (defaults to yellow: <em>'ffff9c'</em>)
+     * @param {Object} options (optional) Object literal <b>with</b> any of the Fx config options
+     * @<b>return</b> {Ext.Element} The Element
+     */</i>	
+    highlight : <b>function</b>(color, o){
+        <b>var</b> el = <b>this</b>.getFxEl();
+        o = o || {};
+
+        el.queueFx(o, <b>function</b>(){
+            color = color || &quot;ffff9c&quot;;
+            <b>var</b> attr = o.attr || &quot;backgroundColor&quot;;
+
+            <b>this</b>.clearOpacity();
+            <b>this</b>.show();
+
+            <b>var</b> origColor = <b>this</b>.getColor(attr);
+            <b>var</b> restoreColor = <b>this</b>.dom.style[attr];
+            <b>var</b> endColor = (o.endColor || origColor) || &quot;ffffff&quot;;
+
+            <b>var</b> after = <b>function</b>(){
+                el.dom.style[attr] = restoreColor;
+                el.afterFx(o);
+            };
+
+            <b>var</b> a = {};
+            a[attr] = {from: color, to: endColor};
+            arguments.callee.anim = <b>this</b>.fxanim(a,
+                o,
+                <em>'color'</em>,
+                1,
+                <em>'easeIn'</em>, after);
+        });
+        <b>return</b> this;
+    },
+
+   <i>/**
+    * Shows a ripple of exploding, attenuating borders to draw attention to an Element.
+    * Usage:
+&lt;pre&gt;&lt;code&gt;
+<i>// <b>default</b>: a single light blue ripple</i>
+el.frame();
+
+<i>// custom: 3 red ripples lasting 3 seconds total</i>
+el.frame(&quot;ff0000&quot;, 3, { duration: 3 });
+
+<i>// common config options shown <b>with</b> default values</i>
+el.frame(&quot;C3DAF9&quot;, 1, {
+    duration: 1 <i>//duration of each individual ripple.</i>
+    <i>// Note: Easing is not configurable and will be ignored <b>if</b> included</i>
+});
+&lt;/code&gt;&lt;/pre&gt;
+    * @param {String} color (optional) The color of the border.  Should be a 6 char hex color without the leading # (defaults to light blue: <em>'C3DAF9'</em>).
+    * @param {Number} count (optional) The number of ripples to display (defaults to 1)
+    * @param {Object} options (optional) Object literal <b>with</b> any of the Fx config options
+    * @<b>return</b> {Ext.Element} The Element
+    */</i>
+    frame : <b>function</b>(color, count, o){
+        <b>var</b> el = <b>this</b>.getFxEl(),
+            proxy,
+            active;
+            
+        o = o || {};
+
+        el.queueFx(o, <b>function</b>(){
+            color = color || &quot;#C3DAF9&quot;
+            <b>if</b>(color.length == 6){
+                color = &quot;#&quot; + color;
+            }            
+            count = count || 1;
+            <b>this</b>.show();
+
+            <b>var</b> xy = <b>this</b>.getXY(),
+                dom = <b>this</b>.dom,
+                b = {x: xy[0], y: xy[1], 0: xy[0], 1: xy[1], width: dom.offsetWidth, height: dom.offsetHeight},
+                proxy,
+                queue = <b>function</b>(){
+                    proxy = Ext.get(document.body || document.documentElement).createChild({
+                        style:{
+                            visbility: <em>'hidden'</em>,
+                            position : <em>'absolute'</em>,
+                            &quot;z-index&quot;: 35000, <i>// yee haw</i>
+                            border : &quot;0px solid &quot; + color
+                        }
+                    });
+                    <b>return</b> proxy.queueFx({}, animFn);
+                };
+            
+            
+            arguments.callee.anim = {
+                isAnimated: <b>function</b>(){
+                    <b>return</b> true;
+                },
+                stop: <b>function</b>() {
+                    count = 0;
+                    proxy.stopFx();
+                }
+            };
+            
+            <b>function</b> animFn(){
+                <b>var</b> scale = Ext.isBorderBox ? 2 : 1;
+                active = proxy.anim({
+                    top : {from : b.y, to : b.y - 20},
+                    left : {from : b.x, to : b.x - 20},
+                    borderWidth : {from : 0, to : 10},
+                    opacity : {from : 1, to : 0},
+                    height : {from : b.height, to : b.height + 20 * scale},
+                    width : {from : b.width, to : b.width + 20 * scale}
+                },{
+                    duration: o.duration || 1,
+                    callback: <b>function</b>() {
+                        proxy.remove();
+                        --count &gt; 0 ? queue() : el.afterFx(o);
+                    }
+                });
+                arguments.callee.anim = {
+                    isAnimated: <b>function</b>(){
+                        <b>return</b> true;
+                    },
+                    stop: <b>function</b>(){
+                        active.stop();
+                    }
+                };
+            };
+            queue();
+        });
+        <b>return</b> this;
+    },
+
+   <i>/**
+    * Creates a pause before any subsequent queued effects begin.  If there are
+    * no effects queued after the pause it will have no effect.
+    * Usage:
+&lt;pre&gt;&lt;code&gt;
+el.pause(1);
+&lt;/code&gt;&lt;/pre&gt;
+    * @param {Number} seconds The length of time to pause (<b>in</b> seconds)
+    * @<b>return</b> {Ext.Element} The Element
+    */</i>
+    pause : <b>function</b>(seconds){
+        <b>var</b> el = <b>this</b>.getFxEl(),
+            t;
+
+        el.queueFx({}, <b>function</b>(){
+            t = setTimeout(<b>function</b>(){
+                el.afterFx({});
+            }, seconds * 1000);
+            arguments.callee.anim = {
+                isAnimated: <b>function</b>(){
+                    <b>return</b> true;
+                },
+                stop: <b>function</b>(){
+                    clearTimeout(t);
+                    el.afterFx({});
+                }
+            };
+        });
+        <b>return</b> this;
+    },
+
+   <i>/**
+    * Fade an element <b>in</b> (from transparent to opaque).  The ending opacity can be specified
+    * using the &quot;endOpacity&quot; config option.
+    * Usage:
+&lt;pre&gt;&lt;code&gt;
+<i>// <b>default</b>: fade <b>in</b> from opacity 0 to 100%</i>
+el.fadeIn();
+
+<i>// custom: fade <b>in</b> from opacity 0 to 75% over 2 seconds</i>
+el.fadeIn({ endOpacity: .75, duration: 2});
+
+<i>// common config options shown <b>with</b> default values</i>
+el.fadeIn({
+    endOpacity: 1, <i>//can be any value between 0 and 1 (e.g. .5)</i>
+    easing: <em>'easeOut'</em>,
+    duration: .5
+});
+&lt;/code&gt;&lt;/pre&gt;
+    * @param {Object} options (optional) Object literal <b>with</b> any of the Fx config options
+    * @<b>return</b> {Ext.Element} The Element
+    */</i>
+    fadeIn : <b>function</b>(o){
+        <b>var</b> el = <b>this</b>.getFxEl();
+        o = o || {};
+        el.queueFx(o, <b>function</b>(){
+            <b>this</b>.setOpacity(0);
+            <b>this</b>.fixDisplay();
+            <b>this</b>.dom.style.visibility = <em>'visible'</em>;
+            <b>var</b> to = o.endOpacity || 1;
+            arguments.callee.anim = <b>this</b>.fxanim({opacity:{to:to}},
+                o, null, .5, &quot;easeOut&quot;, <b>function</b>(){
+                <b>if</b>(to == 1){
+                    <b>this</b>.clearOpacity();
+                }
+                el.afterFx(o);
+            });
+        });
+        <b>return</b> this;
+    },
+
+   <i>/**
+    * Fade an element out (from opaque to transparent).  The ending opacity can be specified
+    * using the &quot;endOpacity&quot; config option.  Note that IE may require useDisplay:true <b>in</b> order
+    * to redisplay correctly.
+    * Usage:
+&lt;pre&gt;&lt;code&gt;
+<i>// <b>default</b>: fade out from the element's current opacity to 0</i>
+el.fadeOut();
+
+<i>// custom: fade out from the element's current opacity to 25% over 2 seconds</i>
+el.fadeOut({ endOpacity: .25, duration: 2});
+
+<i>// common config options shown <b>with</b> default values</i>
+el.fadeOut({
+    endOpacity: 0, <i>//can be any value between 0 and 1 (e.g. .5)</i>
+    easing: <em>'easeOut'</em>,
+    duration: .5,
+    remove: false,
+    useDisplay: false
+});
+&lt;/code&gt;&lt;/pre&gt;
+    * @param {Object} options (optional) Object literal <b>with</b> any of the Fx config options
+    * @<b>return</b> {Ext.Element} The Element
+    */</i>
+    fadeOut : <b>function</b>(o){
+        <b>var</b> el = <b>this</b>.getFxEl();
+        o = o || {};
+        el.queueFx(o, <b>function</b>(){
+            <b>var</b> to = o.endOpacity || 0;
+            arguments.callee.anim = <b>this</b>.fxanim({opacity:{to:to}},
+                o, null, .5, &quot;easeOut&quot;, <b>function</b>(){
+                <b>if</b>(to === 0){
+                    <b>if</b>(this.visibilityMode == Ext.Element.DISPLAY || o.useDisplay){
+                         <b>this</b>.dom.style.display = &quot;none&quot;;
+                    }<b>else</b>{
+                         <b>this</b>.dom.style.visibility = &quot;hidden&quot;;
+                    }
+                    <b>this</b>.clearOpacity();
+                }
+                el.afterFx(o);
+            });
+        });
+        <b>return</b> this;
+    },
+
+   <i>/**
+    * Animates the transition of an element's dimensions from a starting height/width
+    * to an ending height/width.
+    * Usage:
+&lt;pre&gt;&lt;code&gt;
+<i>// change height and width to 100x100 pixels</i>
+el.scale(100, 100);
+
+<i>// common config options shown <b>with</b> default values.  The height and width will <b>default</b> to</i>
+<i>// the element's existing values <b>if</b> passed as null.</i>
+el.scale(
+    [element's width],
+    [element's height], {
+	    easing: <em>'easeOut'</em>,
+	    duration: .35
+	}
+);
+&lt;/code&gt;&lt;/pre&gt;
+    * @param {Number} width  The <b>new</b> width (pass undefined to keep the original width)
+    * @param {Number} height  The <b>new</b> height (pass undefined to keep the original height)
+    * @param {Object} options (optional) Object literal <b>with</b> any of the Fx config options
+    * @<b>return</b> {Ext.Element} The Element
+    */</i>
+    scale : <b>function</b>(w, h, o){
+        <b>this</b>.shift(Ext.apply({}, o, {
+            width: w,
+            height: h
+        }));
+        <b>return</b> this;
+    },
+
+   <i>/**
+    * Animates the transition of any combination of an element's dimensions, xy position and/or opacity.
+    * Any of these properties not specified <b>in</b> the config object will not be changed.  This effect 
+    * requires that at least one <b>new</b> dimension, position or opacity setting must be passed <b>in</b> on
+    * the config object <b>in</b> order <b>for</b> the <b>function</b> to have any effect.
+    * Usage:
+&lt;pre&gt;&lt;code&gt;
+<i>// slide the element horizontally to x position 200 <b>while</b> changing the height and opacity</i>
+el.shift({ x: 200, height: 50, opacity: .8 });
+
+<i>// common config options shown <b>with</b> default values.</i>
+el.shift({
+    width: [element's width],
+    height: [element's height],
+    x: [element's x position],
+    y: [element's y position],
+    opacity: [element's opacity],
+    easing: <em>'easeOut'</em>,
+    duration: .35
+});
+&lt;/code&gt;&lt;/pre&gt;
+    * @param {Object} options  Object literal <b>with</b> any of the Fx config options
+    * @<b>return</b> {Ext.Element} The Element
+    */</i>
+    shift : <b>function</b>(o){
+        <b>var</b> el = <b>this</b>.getFxEl();
+        o = o || {};
+        el.queueFx(o, <b>function</b>(){
+            <b>var</b> a = {}, w = o.width, h = o.height, x = o.x, y = o.y,  op = o.opacity;
+            <b>if</b>(w !== undefined){
+                a.width = {to: <b>this</b>.adjustWidth(w)};
+            }
+            <b>if</b>(h !== undefined){
+                a.height = {to: <b>this</b>.adjustHeight(h)};
+            }
+            <b>if</b>(o.left !== undefined){
+                a.left = {to: o.left};
+            }
+            <b>if</b>(o.top !== undefined){
+                a.top = {to: o.top};
+            }
+            <b>if</b>(o.right !== undefined){
+                a.right = {to: o.right};
+            }
+            <b>if</b>(o.bottom !== undefined){
+                a.bottom = {to: o.bottom};
+            }
+            <b>if</b>(x !== undefined || y !== undefined){
+                a.points = {to: [
+                    x !== undefined ? x : <b>this</b>.getX(),
+                    y !== undefined ? y : <b>this</b>.getY()
+                ]};
+            }
+            <b>if</b>(op !== undefined){
+                a.opacity = {to: op};
+            }
+            <b>if</b>(o.xy !== undefined){
+                a.points = {to: o.xy};
+            }
+            arguments.callee.anim = <b>this</b>.fxanim(a,
+                o, <em>'motion'</em>, .35, &quot;easeOut&quot;, <b>function</b>(){
+                el.afterFx(o);
+            });
+        });
+        <b>return</b> this;
+    },
+
+	<i>/**
+	 * Slides the element <b>while</b> fading it out of view.  An anchor point can be optionally passed to set the 
+	 * ending point of the effect.
+	 * Usage:
+	 *&lt;pre&gt;&lt;code&gt;
+<i>// <b>default</b>: slide the element downward <b>while</b> fading out</i>
+el.ghost();
+
+<i>// custom: slide the element out to the right <b>with</b> a 2-second duration</i>
+el.ghost(<em>'r'</em>, { duration: 2 });
+
+<i>// common config options shown <b>with</b> default values</i>
+el.ghost(<em>'b'</em>, {
+    easing: <em>'easeOut'</em>,
+    duration: .5,
+    remove: false,
+    useDisplay: false
+});
+&lt;/code&gt;&lt;/pre&gt;
+	 * @param {String} anchor (optional) One of the valid Fx anchor positions (defaults to bottom: <em>'b'</em>)
+	 * @param {Object} options (optional) Object literal <b>with</b> any of the Fx config options
+	 * @<b>return</b> {Ext.Element} The Element
+	 */</i>
+    ghost : <b>function</b>(anchor, o){
+        <b>var</b> el = <b>this</b>.getFxEl();
+        o = o || {};
+
+        el.queueFx(o, <b>function</b>(){
+            anchor = anchor || &quot;b&quot;;
+
+            <i>// restore values after effect</i>
+            <b>var</b> r = <b>this</b>.getFxRestore();
+            <b>var</b> w = <b>this</b>.getWidth(),
+                h = <b>this</b>.getHeight();
+
+            <b>var</b> st = <b>this</b>.dom.style;
+
+            <b>var</b> after = <b>function</b>(){
+                <b>if</b>(o.useDisplay){
+                    el.setDisplayed(false);
+                }<b>else</b>{
+                    el.hide();
+                }
+
+                el.clearOpacity();
+                el.setPositioning(r.pos);
+                st.width = r.width;
+                st.height = r.height;
+
+                el.afterFx(o);
+            };
+
+            <b>var</b> a = {opacity: {to: 0}, points: {}}, pt = a.points;
+            <b>switch</b>(anchor.toLowerCase()){
+                <b>case</b> &quot;t&quot;:
+                    pt.by = [0, -h];
+                <b>break</b>;
+                <b>case</b> &quot;l&quot;:
+                    pt.by = [-w, 0];
+                <b>break</b>;
+                <b>case</b> &quot;r&quot;:
+                    pt.by = [w, 0];
+                <b>break</b>;
+                <b>case</b> &quot;b&quot;:
+                    pt.by = [0, h];
+                <b>break</b>;
+                <b>case</b> &quot;tl&quot;:
+                    pt.by = [-w, -h];
+                <b>break</b>;
+                <b>case</b> &quot;bl&quot;:
+                    pt.by = [-w, h];
+                <b>break</b>;
+                <b>case</b> &quot;br&quot;:
+                    pt.by = [w, h];
+                <b>break</b>;
+                <b>case</b> &quot;tr&quot;:
+                    pt.by = [w, -h];
+                <b>break</b>;
+            }
+
+            arguments.callee.anim = <b>this</b>.fxanim(a,
+                o,
+                <em>'motion'</em>,
+                .5,
+                &quot;easeOut&quot;, after);
+        });
+        <b>return</b> this;
+    },
+
+	<i>/**
+	 * Ensures that all effects queued after syncFx is called on the element are
+	 * run concurrently.  This is the opposite of {@link #sequenceFx}.
+	 * @<b>return</b> {Ext.Element} The Element
+	 */</i>
+    syncFx : <b>function</b>(){
+        <b>this</b>.fxDefaults = Ext.apply(<b>this</b>.fxDefaults || {}, {
+            block : false,
+            concurrent : true,
+            stopFx : false
+        });
+        <b>return</b> this;
+    },
+
+	<i>/**
+	 * Ensures that all effects queued after sequenceFx is called on the element are
+	 * run <b>in</b> sequence.  This is the opposite of {@link #syncFx}.
+	 * @<b>return</b> {Ext.Element} The Element
+	 */</i>
+    sequenceFx : <b>function</b>(){
+        <b>this</b>.fxDefaults = Ext.apply(<b>this</b>.fxDefaults || {}, {
+            block : false,
+            concurrent : false,
+            stopFx : false
+        });
+        <b>return</b> this;
+    },
+
+	<i>/* @private */</i>
+    nextFx : <b>function</b>(){
+        <b>var</b> ef = <b>this</b>.fxQueue[0];
+        <b>if</b>(ef){
+            ef.call(<b>this</b>);
+        }
+    },
+
+	<i>/**
+	 * Returns true <b>if</b> the element has any effects actively running or queued, <b>else</b> returns false.
+	 * @<b>return</b> {Boolean} True <b>if</b> element has active effects, <b>else</b> false
+	 */</i>
+    hasActiveFx : <b>function</b>(){
+        <b>return</b> this.fxQueue &amp;&amp; <b>this</b>.fxQueue[0];
+    },
+
+	<i>/**
+	 * Stops any running effects and clears the element's internal effects queue <b>if</b> it contains
+	 * any additional effects that haven't started yet.
+	 * @<b>return</b> {Ext.Element} The Element
+	 */</i>
+    stopFx : <b>function</b>(){
+        <b>if</b>(this.hasActiveFx()){
+            <b>var</b> cur = <b>this</b>.fxQueue[0];
+            <b>if</b>(cur &amp;&amp; cur.anim &amp;&amp; cur.anim.isAnimated()){
+                <b>this</b>.fxQueue = [cur]; <i>// clear out others</i>
+                cur.anim.stop(true);
+            }
+        }
+        <b>return</b> this;
+    },
+
+	<i>/* @private */</i>
+    beforeFx : <b>function</b>(o){
+        <b>if</b>(this.hasActiveFx() &amp;&amp; !o.concurrent){
+           <b>if</b>(o.stopFx){
+               <b>this</b>.stopFx();
+               <b>return</b> true;
+           }
+           <b>return</b> false;
+        }
+        <b>return</b> true;
+    },
+
+	<i>/**
+	 * Returns true <b>if</b> the element is currently blocking so that no other effect can be queued
+	 * until <b>this</b> effect is finished, <b>else</b> returns false <b>if</b> blocking is not set.  This is commonly
+	 * used to ensure that an effect initiated by a user action runs to completion prior to the
+	 * same effect being restarted (e.g., firing only one effect even <b>if</b> the user clicks several times).
+	 * @<b>return</b> {Boolean} True <b>if</b> blocking, <b>else</b> false
+	 */</i>
+    hasFxBlock : <b>function</b>(){
+        <b>var</b> q = <b>this</b>.fxQueue;
+        <b>return</b> q &amp;&amp; q[0] &amp;&amp; q[0].block;
+    },
+
+	<i>/* @private */</i>
+    queueFx : <b>function</b>(o, fn){
+        <b>if</b>(!<b>this</b>.fxQueue){
+            <b>this</b>.fxQueue = [];
+        }
+        <b>if</b>(!<b>this</b>.hasFxBlock()){
+            Ext.applyIf(o, <b>this</b>.fxDefaults);
+            <b>if</b>(!o.concurrent){
+                <b>var</b> run = <b>this</b>.beforeFx(o);
+                fn.block = o.block;
+                <b>this</b>.fxQueue.push(fn);
+                <b>if</b>(run){
+                    <b>this</b>.nextFx();
+                }
+            }<b>else</b>{
+                fn.call(<b>this</b>);
+            }
+        }
+        <b>return</b> this;
+    },
+
+	<i>/* @private */</i>
+    fxWrap : <b>function</b>(pos, o, vis){
+        <b>var</b> wrap;
+        <b>if</b>(!o.wrap || !(wrap = Ext.get(o.wrap))){
+            <b>var</b> wrapXY;
+            <b>if</b>(o.fixPosition){
+                wrapXY = <b>this</b>.getXY();
+            }
+            <b>var</b> div = document.createElement(&quot;div&quot;);
+            div.style.visibility = vis;
+            wrap = Ext.get(<b>this</b>.dom.parentNode.insertBefore(div, <b>this</b>.dom));
+            wrap.setPositioning(pos);
+            <b>if</b>(wrap.getStyle(&quot;position&quot;) == &quot;static&quot;){
+                wrap.position(&quot;relative&quot;);
+            }
+            <b>this</b>.clearPositioning(<em>'auto'</em>);
+            wrap.clip();
+            wrap.dom.appendChild(<b>this</b>.dom);
+            <b>if</b>(wrapXY){
+                wrap.setXY(wrapXY);
+            }
+        }
+        <b>return</b> wrap;
+    },
+
+	<i>/* @private */</i>
+    fxUnwrap : <b>function</b>(wrap, pos, o){
+        <b>this</b>.clearPositioning();
+        <b>this</b>.setPositioning(pos);
+        <b>if</b>(!o.wrap){
+            wrap.dom.parentNode.insertBefore(<b>this</b>.dom, wrap.dom);
+            wrap.remove();
+        }
+    },
+
+	<i>/* @private */</i>
+    getFxRestore : <b>function</b>(){
+        <b>var</b> st = <b>this</b>.dom.style;
+        <b>return</b> {pos: <b>this</b>.getPositioning(), width: st.width, height : st.height};
+    },
+
+	<i>/* @private */</i>
+    afterFx : <b>function</b>(o){
+        <b>if</b>(o.afterStyle){
+            <b>this</b>.applyStyles(o.afterStyle);
+        }
+        <b>if</b>(o.afterCls){
+            <b>this</b>.addClass(o.afterCls);
+        }
+        <b>if</b>(o.remove === true){
+            <b>this</b>.remove();
+        }
+        Ext.callback(o.callback, o.scope, [<b>this</b>]);
+        <b>if</b>(!o.concurrent){
+            <b>this</b>.fxQueue.shift();
+            <b>this</b>.nextFx();
+        }
+    },
+
+	<i>/* @private */</i>
+    getFxEl : <b>function</b>(){ <i>// support <b>for</b> composite element fx</i>
+        <b>return</b> Ext.get(<b>this</b>.dom);
+    },
+
+	<i>/* @private */</i>
+    fxanim : <b>function</b>(args, opt, animType, defaultDur, defaultEase, cb){
+        animType = animType || <em>'run'</em>;
+        opt = opt || {};
+        <b>var</b> anim = Ext.lib.Anim[animType](
+            <b>this</b>.dom, args,
+            (opt.duration || defaultDur) || .35,
+            (opt.easing || defaultEase) || <em>'easeOut'</em>,
+            <b>function</b>(){
+                Ext.callback(cb, <b>this</b>);
+            },
+            <b>this</b>
+        );
+        opt.anim = anim;
+        <b>return</b> anim;
+    }
+};
+
+<i>// backwords compat</i>
+Ext.Fx.resize = Ext.Fx.scale;
+
+<i>//When included, Ext.Fx is automatically applied to Element so that all basic</i>
+<i>//effects are available directly via the Element API</i>
+Ext.apply(Ext.Element.prototype, Ext.Fx);
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

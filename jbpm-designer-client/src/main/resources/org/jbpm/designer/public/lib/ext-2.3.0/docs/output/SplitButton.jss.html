@@ -1,0 +1,175 @@
+<html><head><title>SplitButton.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>SplitButton.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.SplitButton
+ * @extends Ext.Button
+ * A split button that provides a built-<b>in</b> dropdown arrow that can fire an event separately from the <b>default</b>
+ * click event of the button.  Typically <b>this</b> would be used to display a dropdown menu that provides additional
+ * options to the primary button action, but any custom handler can provide the arrowclick implementation.  Example usage:
+ * &lt;pre&gt;&lt;code&gt;
+<i>// display a dropdown menu:</i>
+<b>new</b> Ext.SplitButton({
+	renderTo: <em>'button-ct'</em>, <i>// the container id</i>
+   	text: <em>'Options'</em>,
+   	handler: optionsHandler, <i>// handle a click on the button itself</i>
+   	menu: <b>new</b> Ext.menu.Menu({
+        items: [
+        	<i>// these items will render as dropdown menu items when the arrow is clicked:</i>
+	        {text: <em>'Item 1'</em>, handler: item1Handler},
+	        {text: <em>'Item 2'</em>, handler: item2Handler}
+        ]
+   	})
+});
+
+<i>// Instead of showing a menu, you provide any type of custom</i>
+<i>// functionality you want when the dropdown arrow is clicked:</i>
+<b>new</b> Ext.SplitButton({
+	renderTo: <em>'button-ct'</em>,
+   	text: <em>'Options'</em>,
+   	handler: optionsHandler,
+   	arrowHandler: myCustomHandler
+});
+&lt;/code&gt;&lt;/pre&gt;
+ * @cfg {Function} arrowHandler A <b>function</b> called when the arrow button is clicked (can be used instead of click event)
+ * @cfg {String} arrowTooltip The title attribute of the arrow
+ * @constructor
+ * Create a <b>new</b> menu button
+ * @param {Object} config The config object
+ */</i>
+Ext.SplitButton = Ext.extend(Ext.Button, {
+	<i>// private</i>
+    arrowSelector : <em>'button:last'</em>,
+
+    <i>// private</i>
+    initComponent : <b>function</b>(){
+        Ext.SplitButton.superclass.initComponent.call(<b>this</b>);
+        <i>/**
+         * @event arrowclick
+         * Fires when <b>this</b> button's arrow is clicked
+         * @param {MenuButton} <b>this</b>
+         * @param {EventObject} e The click event
+         */</i>
+        <b>this</b>.addEvents(&quot;arrowclick&quot;);
+    },
+
+    <i>// private</i>
+    onRender : <b>function</b>(ct, position){
+        <i>// <b>this</b> is one sweet looking template!</i>
+        <b>var</b> tpl = <b>new</b> Ext.Template(
+            <em>'&lt;table cellspacing=&quot;0&quot; class=&quot;x-btn-menu-wrap x-btn&quot;&gt;&lt;tr&gt;&lt;td&gt;'</em>,
+            <em>'&lt;table cellspacing=&quot;0&quot; class=&quot;x-btn-wrap x-btn-menu-text-wrap&quot;&gt;&lt;tbody&gt;'</em>,
+            <em>'&lt;tr&gt;&lt;td class=&quot;x-btn-left&quot;&gt;&lt;i&gt;&amp;#160;&lt;/i&gt;&lt;/td&gt;&lt;td class=&quot;x-btn-center&quot;&gt;&lt;button class=&quot;x-btn-text&quot; type=&quot;{1}&quot;&gt;{0}&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;'</em>,
+            &quot;&lt;/tbody&gt;&lt;/table&gt;&lt;/td&gt;&lt;td&gt;&quot;,
+            <em>'&lt;table cellspacing=&quot;0&quot; class=&quot;x-btn-wrap x-btn-menu-arrow-wrap&quot;&gt;&lt;tbody&gt;'</em>,
+            <em>'&lt;tr&gt;&lt;td class=&quot;x-btn-center&quot;&gt;&lt;button class=&quot;x-btn-menu-arrow-el&quot; type=&quot;button&quot;&gt;&amp;#160;&lt;/button&gt;&lt;/td&gt;&lt;td class=&quot;x-btn-right&quot;&gt;&lt;i&gt;&amp;#160;&lt;/i&gt;&lt;/td&gt;&lt;/tr&gt;'</em>,
+            &quot;&lt;/tbody&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&quot;
+        );
+        <b>var</b> btn, targs = [<b>this</b>.text || <em>'&amp;#160;'</em>, <b>this</b>.type];
+        <b>if</b>(position){
+            btn = tpl.insertBefore(position, targs, true);
+        }<b>else</b>{
+            btn = tpl.append(ct, targs, true);
+        }
+        <b>var</b> btnEl = <b>this</b>.btnEl = btn.child(<b>this</b>.buttonSelector);
+
+        <b>this</b>.initButtonEl(btn, btnEl);
+        <b>this</b>.arrowBtnTable = btn.child(&quot;table:last&quot;);
+        <b>this</b>.arrowEl = btn.child(<b>this</b>.arrowSelector);
+        <b>if</b>(this.arrowTooltip){
+            <b>this</b>.arrowEl.dom[<b>this</b>.tooltipType] = <b>this</b>.arrowTooltip;
+        }
+    },
+
+    <i>// private</i>
+    autoWidth : <b>function</b>(){
+        <b>if</b>(this.el){
+            <b>var</b> tbl = <b>this</b>.el.child(&quot;table:first&quot;);
+            <b>var</b> tbl2 = <b>this</b>.el.child(&quot;table:last&quot;);
+            <b>this</b>.el.setWidth(&quot;auto&quot;);
+            tbl.setWidth(&quot;auto&quot;);
+            <b>if</b>(Ext.isIE7 &amp;&amp; Ext.isStrict){
+                <b>var</b> ib = <b>this</b>.btnEl;
+                <b>if</b>(ib &amp;&amp; ib.getWidth() &gt; 20){
+                    ib.clip();
+                    ib.setWidth(Ext.util.TextMetrics.measure(ib, <b>this</b>.text).width+ib.getFrameWidth(<em>'lr'</em>));
+                }
+            }
+            <b>if</b>(this.minWidth){
+                <b>if</b>((tbl.getWidth()+tbl2.getWidth()) &lt; <b>this</b>.minWidth){
+                    tbl.setWidth(<b>this</b>.minWidth-tbl2.getWidth());
+                }
+            }
+            <b>this</b>.el.setWidth(tbl.getWidth()+tbl2.getWidth());
+        } 
+    },
+
+    <i>/**
+     * Sets <b>this</b> button's arrow click handler.
+     * @param {Function} handler The <b>function</b> to call when the arrow is clicked
+     * @param {Object} scope (optional) Scope <b>for</b> the <b>function</b> passed above
+     */</i>
+    setArrowHandler : <b>function</b>(handler, scope){
+        <b>this</b>.arrowHandler = handler;
+        <b>this</b>.scope = scope;  
+    },
+
+    <i>// private</i>
+    onClick : <b>function</b>(e){
+        e.preventDefault();
+        <b>if</b>(!<b>this</b>.disabled){
+            <b>if</b>(e.getTarget(&quot;.x-btn-menu-arrow-wrap&quot;)){
+                <b>if</b>(this.menu &amp;&amp; !<b>this</b>.menu.isVisible() &amp;&amp; !<b>this</b>.ignoreNextClick){
+                    <b>this</b>.showMenu();
+                }
+                <b>this</b>.fireEvent(&quot;arrowclick&quot;, <b>this</b>, e);
+                <b>if</b>(this.arrowHandler){
+                    <b>this</b>.arrowHandler.call(<b>this</b>.scope || <b>this</b>, <b>this</b>, e);
+                }
+            }<b>else</b>{
+                <b>if</b>(this.enableToggle){
+                    <b>this</b>.toggle();
+                }
+                <b>this</b>.fireEvent(&quot;click&quot;, <b>this</b>, e);
+                <b>if</b>(this.handler){
+                    <b>this</b>.handler.call(<b>this</b>.scope || <b>this</b>, <b>this</b>, e);
+                }
+            }
+        }
+    },
+
+    <i>// private</i>
+    getClickEl : <b>function</b>(e, isUp){
+        <b>if</b>(!isUp){
+            <b>return</b> (<b>this</b>.lastClickEl = e.getTarget(&quot;table&quot;, 10, true));
+        }
+        <b>return</b> this.lastClickEl;
+    },
+    
+    onDisableChange: <b>function</b>(disabled){
+        Ext.SplitButton.superclass.onDisableChange.call(<b>this</b>, disabled);
+        <b>if</b>(this.arrowEl){
+            <b>this</b>.arrowEl.dom.disabled = disabled;
+        }
+    },
+
+    <i>// private</i>
+    isMenuTriggerOver : <b>function</b>(e){
+        <b>return</b> this.menu &amp;&amp; e.within(<b>this</b>.arrowBtnTable) &amp;&amp; !e.within(<b>this</b>.arrowBtnTable, true);
+    },
+
+    <i>// private</i>
+    isMenuTriggerOut : <b>function</b>(e, internal){
+        <b>return</b> this.menu &amp;&amp; !e.within(<b>this</b>.arrowBtnTable);
+    },
+
+    <i>// private</i>
+    onDestroy : <b>function</b>(){
+        Ext.destroy(<b>this</b>.arrowBtnTable);
+        Ext.SplitButton.superclass.onDestroy.call(<b>this</b>);
+    }
+});
+
+<i>// backwards compat</i>
+Ext.MenuButton = Ext.SplitButton;
+
+
+Ext.reg(<em>'splitbutton'</em>, Ext.SplitButton);</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

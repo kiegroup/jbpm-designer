@@ -1,0 +1,171 @@
+<html><head><title>ext-lang-gr.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ext-lang-gr.js</h1><pre class="highlighted"><code><i>/**
+ * Greek (Old Version) Translations by Vagelis
+ * 03-June-2007
+ */</i>
+
+Ext.UpdateManager.defaults.indicatorText = <em>'&lt;div class=&quot;loading-indicator&quot;&gt;&Atilde;ñ&Atilde;&frac14;&Atilde;&plusmn;&Atilde;&acute;&Atilde;&sup1;&Atilde;&sup3;&Atilde;&sect;...&lt;/div&gt;'</em>;
+
+<b>if</b>(Ext.View){
+   Ext.View.prototype.emptyText = &quot;&quot;;
+}
+
+<b>if</b>(Ext.grid.GridPanel){
+   Ext.grid.GridPanel.prototype.ddText = &quot;{0} &Atilde;&yen;&Atilde;&deg;&Atilde;&copy;&Atilde;&laquo;&Atilde;&yen;&Atilde;&pound;&Atilde;&not;&Atilde;ù&Atilde;&shy;&Atilde;&sect;(&Atilde;&yen;&Atilde;&sup2;) &Atilde;&pound;&Atilde;&plusmn;&Atilde;&iexcl;&Atilde;&not;&Atilde;&not;&Atilde;û(&Atilde;ù&Atilde;&sup2;)&quot;;
+}
+
+<b>if</b>(Ext.TabPanelItem){
+   Ext.TabPanelItem.prototype.closeText = &quot;&Atilde;ä&Atilde;&laquo;&Atilde;&yen;&Atilde;ü&Atilde;&sup3;&Atilde;&acute;&Atilde;&yen; &Atilde;&iexcl;&Atilde;&micro;&Atilde;&acute;&Atilde;û &Atilde;&acute;&Atilde;&sect;&Atilde;&shy; &Atilde;&ordf;&Atilde;&iexcl;&Atilde;&plusmn;&Atilde;&acute;&Atilde;ù&Atilde;&laquo;&Atilde;&iexcl;&quot;;
+}
+
+<b>if</b>(Ext.form.Field){
+   Ext.form.Field.prototype.invalidText = &quot;&Atilde;á &Atilde;&acute;&Atilde;&copy;&Atilde;&not;&Atilde;û &Atilde;&sup3;&Atilde;&acute;&Atilde;&macr; &Atilde;&deg;&Atilde;&yen;&Atilde;&curren;&Atilde;ü&Atilde;&macr; &Atilde;&curren;&Atilde;&yen;&Atilde;&shy; &Atilde;&yen;&Atilde;ü&Atilde;&shy;&Atilde;&iexcl;&Atilde;&copy; &Atilde;ù&Atilde;&pound;&Atilde;&ordf;&Atilde;&micro;&Atilde;&plusmn;&Atilde;&sect;&quot;;
+}
+
+<b>if</b>(Ext.LoadMask){
+    Ext.LoadMask.prototype.msg = &quot;&Atilde;ñ&Atilde;&frac14;&Atilde;&plusmn;&Atilde;&acute;&Atilde;&sup1;&Atilde;&sup3;&Atilde;&sect;...&quot;;
+}
+
+Date.monthNames = [
+   &quot;&Atilde;â&Atilde;&iexcl;&Atilde;&shy;&Atilde;&macr;&Atilde;&micro;&Atilde;ú&Atilde;&plusmn;&Atilde;&copy;&Atilde;&macr;&Atilde;&sup2;&quot;,
+   &quot;&Atilde;ñ&Atilde;&yen;&Atilde;&cent;&Atilde;&plusmn;&Atilde;&macr;&Atilde;&micro;&Atilde;ú&Atilde;&plusmn;&Atilde;&copy;&Atilde;&macr;&Atilde;&sup2;&quot;,
+   &quot;&Atilde;å&Atilde;ú&Atilde;&plusmn;&Atilde;&acute;&Atilde;&copy;&Atilde;&macr;&Atilde;&sup2;&quot;,
+   &quot;&Atilde;Å&Atilde;&deg;&Atilde;&plusmn;&Atilde;ü&Atilde;&laquo;&Atilde;&copy;&Atilde;&macr;&Atilde;&sup2;&quot;,
+   &quot;&Atilde;å&Atilde;ú&Atilde;&copy;&Atilde;&macr;&Atilde;&sup2;&quot;,
+   &quot;&Atilde;â&Atilde;&macr;&Atilde;&frac12;&Atilde;&shy;&Atilde;&copy;&Atilde;&macr;&Atilde;&sup2;&quot;,
+   &quot;&Atilde;â&Atilde;&macr;&Atilde;&frac12;&Atilde;&laquo;&Atilde;&copy;&Atilde;&macr;&Atilde;&sup2;&quot;,
+   &quot;&Atilde;Å&Atilde;&frac12;&Atilde;&pound;&Atilde;&macr;&Atilde;&micro;&Atilde;&sup3;&Atilde;&acute;&Atilde;&macr;&Atilde;&sup2;&quot;,
+   &quot;&Atilde;ì&Atilde;&yen;&Atilde;&deg;&Atilde;&acute;&Atilde;ù&Atilde;&not;&Atilde;&cent;&Atilde;&plusmn;&Atilde;&copy;&Atilde;&macr;&Atilde;&sup2;&quot;,
+   &quot;&Atilde;è&Atilde;&ordf;&Atilde;&acute;&Atilde;&frac34;&Atilde;&cent;&Atilde;&plusmn;&Atilde;&copy;&Atilde;&macr;&Atilde;&sup2;&quot;,
+   &quot;&Atilde;ç&Atilde;&macr;&Atilde;ù&Atilde;&not;&Atilde;&cent;&Atilde;&plusmn;&Atilde;&copy;&Atilde;&macr;&Atilde;&sup2;&quot;,
+   &quot;&Atilde;Ñ&Atilde;&yen;&Atilde;&ordf;&Atilde;ù&Atilde;&not;&Atilde;&cent;&Atilde;&plusmn;&Atilde;&copy;&Atilde;&macr;&Atilde;&sup2;&quot;
+];
+
+Date.dayNames = [
+   &quot;&Atilde;ä&Atilde;&micro;&Atilde;&plusmn;&Atilde;&copy;&Atilde;&iexcl;&Atilde;&ordf;&Atilde;û&quot;,
+   &quot;&Atilde;Ñ&Atilde;&yen;&Atilde;&micro;&Atilde;&acute;&Atilde;ù&Atilde;&plusmn;&Atilde;&iexcl;&quot;,
+   &quot;&Atilde;î&Atilde;&plusmn;&Atilde;ü&Atilde;&acute;&Atilde;&sect;&quot;,
+   &quot;&Atilde;î&Atilde;&yen;&Atilde;&acute;&Atilde;ú&Atilde;&plusmn;&Atilde;&acute;&Atilde;&sect;&quot;,
+   &quot;&Atilde;ê&Atilde;ù&Atilde;&not;&Atilde;&deg;&Atilde;&acute;&Atilde;&sect;&quot;,
+   &quot;&Atilde;ê&Atilde;&iexcl;&Atilde;&plusmn;&Atilde;&iexcl;&Atilde;&sup3;&Atilde;&ordf;&Atilde;&yen;&Atilde;&micro;&Atilde;û&quot;,
+   &quot;&Atilde;ì&Atilde;ú&Atilde;&cent;&Atilde;&cent;&Atilde;&iexcl;&Atilde;&acute;&Atilde;&macr;&quot;
+];
+
+<b>if</b>(Ext.MessageBox){
+   Ext.MessageBox.buttonText = {
+      ok     : &quot;&Atilde;Ö&Atilde;&shy;&Atilde;&acute;&Atilde;ú&Atilde;&reg;&Atilde;&yen;&Atilde;&copy;&quot;,
+      cancel : &quot;&Atilde;Å&Atilde;&ordf;&Atilde;&frac12;&Atilde;&plusmn;&Atilde;&sup1;&Atilde;&sup3;&Atilde;&sect;&quot;,
+      yes    : &quot;&Atilde;ç&Atilde;&iexcl;&Atilde;&copy;&quot;,
+      no     : &quot;&Acirc;&frac14;&Atilde;&middot;&Atilde;&copy;&quot;
+   };
+}
+
+<b>if</b>(Ext.util.Format){
+   Ext.util.Format.date = <b>function</b>(v, format){
+      <b>if</b>(!v) <b>return</b> &quot;&quot;;
+      <b>if</b>(!(v instanceof Date)) v = <b>new</b> Date(Date.parse(v));
+      <b>return</b> v.dateFormat(format || &quot;&Atilde;&not;/&Atilde;&sect;/&Atilde;Ö&quot;);
+   };
+}
+
+<b>if</b>(Ext.DatePicker){
+   Ext.apply(Ext.DatePicker.prototype, {
+      todayText         : &quot;&Atilde;ì&Atilde;û&Atilde;&not;&Atilde;&yen;&Atilde;&plusmn;&Atilde;&iexcl;&quot;,
+      minText           : &quot;&Atilde;á &Atilde;&sect;&Atilde;&not;&Atilde;&yen;&Atilde;&plusmn;&Atilde;&macr;&Atilde;&not;&Atilde;&sect;&Atilde;&shy;&Atilde;ü&Atilde;&iexcl; &Atilde;&iexcl;&Atilde;&micro;&Atilde;&acute;&Atilde;û &Atilde;&yen;&Atilde;ü&Atilde;&shy;&Atilde;&iexcl;&Atilde;&copy; &Atilde;&deg;&Atilde;&plusmn;&Atilde;&copy;&Atilde;&shy; &Atilde;&acute;&Atilde;&sect;&Atilde;&shy; &Atilde;&not;&Atilde;&copy;&Atilde;&ordf;&Atilde;&plusmn;&Atilde;&frac14;&Atilde;&acute;&Atilde;&yen;&Atilde;&plusmn;&Atilde;&sect; &Atilde;&sect;&Atilde;&not;&Atilde;&yen;&Atilde;&plusmn;&Atilde;&macr;&Atilde;&not;&Atilde;&sect;&Atilde;&shy;&Atilde;ü&Atilde;&iexcl;&quot;,
+      maxText           : &quot;&Atilde;á &Atilde;&sect;&Atilde;&not;&Atilde;&yen;&Atilde;&plusmn;&Atilde;&macr;&Atilde;&not;&Atilde;&sect;&Atilde;&shy;&Atilde;ü&Atilde;&iexcl; &Atilde;&iexcl;&Atilde;&micro;&Atilde;&acute;&Atilde;û &Atilde;&yen;&Atilde;ü&Atilde;&shy;&Atilde;&iexcl;&Atilde;&copy; &Atilde;&not;&Atilde;&yen;&Atilde;&acute;&Atilde;ú &Atilde;&acute;&Atilde;&sect;&Atilde;&shy; &Atilde;&not;&Atilde;&yen;&Atilde;&pound;&Atilde;&iexcl;&Atilde;&laquo;&Atilde;&frac12;&Atilde;&acute;&Atilde;&yen;&Atilde;&plusmn;&Atilde;&sect; &Atilde;&sect;&Atilde;&not;&Atilde;&yen;&Atilde;&plusmn;&Atilde;&macr;&Atilde;&not;&Atilde;&sect;&Atilde;&shy;&Atilde;ü&Atilde;&iexcl;&quot;,
+      disabledDaysText  : &quot;&quot;,
+      disabledDatesText : &quot;&quot;,
+      monthNames	: Date.monthNames,
+      dayNames		: Date.dayNames,
+      nextText          : <em>'&Atilde;Ö&Atilde;&deg;&Atilde;&frac14;&Atilde;&not;&Atilde;&yen;&Atilde;&shy;&Atilde;&macr;&Atilde;&sup2; &Atilde;å&Atilde;û&Atilde;&shy;&Atilde;&iexcl;&Atilde;&sup2; (Control+Right)'</em>,
+      prevText          : <em>'&Atilde;ê&Atilde;&plusmn;&Atilde;&macr;&Atilde;&sect;&Atilde;&pound;&Atilde;&macr;&Atilde;&frac12;&Atilde;&not;&Atilde;&yen;&Atilde;&shy;&Atilde;&macr;&Atilde;&sup2; &Atilde;å&Atilde;û&Atilde;&shy;&Atilde;&iexcl;&Atilde;&sup2; (Control+Left)'</em>,
+      monthYearText     : <em>'&Atilde;Ö&Atilde;&deg;&Atilde;&copy;&Atilde;&laquo;&Atilde;ù&Atilde;&reg;&Atilde;&acute;&Atilde;&yen; &Atilde;å&Atilde;û&Atilde;&shy;&Atilde;&iexcl; (Control+Up/Down &Atilde;&pound;&Atilde;&copy;&Atilde;&iexcl; &Atilde;&not;&Atilde;&yen;&Atilde;&acute;&Atilde;&iexcl;&Atilde;&ordf;&Atilde;ü&Atilde;&shy;&Atilde;&sect;&Atilde;&sup3;&Atilde;&sect; &Atilde;&sup3;&Atilde;&acute;&Atilde;&iexcl; &Atilde;ù&Atilde;&acute;&Atilde;&sect;)'</em>,
+      todayTip          : &quot;{0} (Spacebar)&quot;,
+      format            : &quot;&Atilde;&not;/&Atilde;&sect;/&Atilde;Ö&quot;
+   });
+}
+
+<b>if</b>(Ext.PagingToolbar){
+   Ext.apply(Ext.PagingToolbar.prototype, {
+      beforePageText : &quot;&Atilde;ì&Atilde;&yen;&Atilde;&laquo;&Atilde;ü&Atilde;&curren;&Atilde;&iexcl;&quot;,
+      afterPageText  : &quot;&Atilde;&iexcl;&Atilde;&deg;&Atilde;&frac14; {0}&quot;,
+      firstText      : &quot;&Atilde;ê&Atilde;&plusmn;&Atilde;&frac34;&Atilde;&acute;&Atilde;&sect; &Atilde;&sup3;&Atilde;&yen;&Atilde;&laquo;&Atilde;ü&Atilde;&curren;&Atilde;&iexcl;&quot;,
+      prevText       : &quot;&Atilde;ê&Atilde;&plusmn;&Atilde;&macr;&Atilde;&sect;&Atilde;&pound;&Atilde;&macr;&Atilde;&frac12;&Atilde;&not;&Atilde;&yen;&Atilde;&shy;&Atilde;&sect; &Atilde;&sup3;&Atilde;&yen;&Atilde;&laquo;&Atilde;ü&Atilde;&curren;&Atilde;&iexcl;&quot;,
+      nextText       : &quot;&Atilde;Ö&Atilde;&deg;&Atilde;&frac14;&Atilde;&not;&Atilde;&yen;&Atilde;&shy;&Atilde;&sect; &Atilde;&sup3;&Atilde;&yen;&Atilde;&laquo;&Atilde;ü&Atilde;&curren;&Atilde;&iexcl;&quot;,
+      lastText       : &quot;&Atilde;î&Atilde;&yen;&Atilde;&laquo;&Atilde;&yen;&Atilde;&micro;&Atilde;&acute;&Atilde;&iexcl;&Atilde;ü&Atilde;&iexcl; &Atilde;&sup3;&Atilde;&yen;&Atilde;&laquo;&Atilde;ü&Atilde;&curren;&Atilde;&iexcl;&quot;,
+      refreshText    : &quot;&Atilde;Å&Atilde;&shy;&Atilde;&iexcl;&Atilde;&shy;&Atilde;ù&Atilde;&sup1;&Atilde;&sup3;&Atilde;&sect;&quot;,
+      displayMsg     : &quot;&Atilde;Ö&Atilde;&not;&Atilde;&para;&Atilde;ú&Atilde;&shy;&Atilde;&copy;&Atilde;&sup3;&Atilde;&sect; {0} - {1} &Atilde;&iexcl;&Atilde;&deg;&Atilde;&frac14; {2}&quot;,
+      emptyMsg       : <em>'&Atilde;Ñ&Atilde;&yen;&Atilde;&shy; &Atilde;&cent;&Atilde;&plusmn;&Atilde;ù&Atilde;&uml;&Atilde;&sect;&Atilde;&ordf;&Atilde;&iexcl;&Atilde;&shy; &Atilde;&yen;&Atilde;&pound;&Atilde;&pound;&Atilde;&plusmn;&Atilde;&iexcl;&Atilde;&para;&Atilde;ù&Atilde;&sup2; &Atilde;&pound;&Atilde;&copy;&Atilde;&iexcl; &Atilde;&yen;&Atilde;&not;&Atilde;&para;&Atilde;ú&Atilde;&shy;&Atilde;&copy;&Atilde;&sup3;&Atilde;&sect;'</em>
+   });
+}
+
+<b>if</b>(Ext.form.TextField){
+   Ext.apply(Ext.form.TextField.prototype, {
+      minLengthText : &quot;&Atilde;î&Atilde;&macr; &Atilde;&yen;&Atilde;&laquo;&Atilde;ú&Atilde;&middot;&Atilde;&copy;&Atilde;&sup3;&Atilde;&acute;&Atilde;&macr; &Atilde;&not;&Atilde;ù&Atilde;&pound;&Atilde;&yen;&Atilde;&uml;&Atilde;&macr;&Atilde;&sup2; &Atilde;&pound;&Atilde;&copy;&Atilde;&iexcl; &Atilde;&iexcl;&Atilde;&micro;&Atilde;&acute;&Atilde;&frac14; &Atilde;&acute;&Atilde;&macr; &Atilde;&deg;&Atilde;&yen;&Atilde;&curren;&Atilde;ü&Atilde;&macr; &Atilde;&yen;&Atilde;ü&Atilde;&shy;&Atilde;&iexcl;&Atilde;&copy; {0}&quot;,
+      maxLengthText : &quot;&Atilde;î&Atilde;&macr; &Atilde;&not;&Atilde;ù&Atilde;&pound;&Atilde;&copy;&Atilde;&sup3;&Atilde;&acute;&Atilde;&macr; &Atilde;&not;&Atilde;ù&Atilde;&pound;&Atilde;&yen;&Atilde;&uml;&Atilde;&macr;&Atilde;&sup2; &Atilde;&pound;&Atilde;&copy;&Atilde;&iexcl; &Atilde;&iexcl;&Atilde;&micro;&Atilde;&acute;&Atilde;&frac14; &Atilde;&acute;&Atilde;&macr; &Atilde;&deg;&Atilde;&yen;&Atilde;&curren;&Atilde;ü&Atilde;&macr; &Atilde;&yen;&Atilde;ü&Atilde;&shy;&Atilde;&iexcl;&Atilde;&copy; {0}&quot;,
+      blankText     : &quot;&Atilde;î&Atilde;&macr; &Atilde;&deg;&Atilde;&yen;&Atilde;&curren;&Atilde;ü&Atilde;&macr; &Atilde;&iexcl;&Atilde;&micro;&Atilde;&acute;&Atilde;&frac14; &Atilde;&yen;&Atilde;ü&Atilde;&shy;&Atilde;&iexcl;&Atilde;&copy; &Atilde;&micro;&Atilde;&deg;&Atilde;&macr;&Atilde;&middot;&Atilde;&plusmn;&Atilde;&yen;&Atilde;&sup1;&Atilde;&acute;&Atilde;&macr;&Atilde;&ordf;&Atilde;&frac14;&quot;,
+      regexText     : &quot;&quot;,
+      emptyText     : null
+   });
+}
+
+<b>if</b>(Ext.form.NumberField){
+   Ext.apply(Ext.form.NumberField.prototype, {
+      minText : &quot;&Atilde;á &Atilde;&yen;&Atilde;&laquo;&Atilde;ú&Atilde;&middot;&Atilde;&copy;&Atilde;&sup3;&Atilde;&acute;&Atilde;&sect; &Atilde;&acute;&Atilde;&copy;&Atilde;&not;&Atilde;û &Atilde;&pound;&Atilde;&copy;&Atilde;&iexcl; &Atilde;&iexcl;&Atilde;&micro;&Atilde;&acute;&Atilde;&frac14; &Atilde;&acute;&Atilde;&macr; &Atilde;&deg;&Atilde;&yen;&Atilde;&curren;&Atilde;ü&Atilde;&macr; &Atilde;&yen;&Atilde;ü&Atilde;&shy;&Atilde;&iexcl;&Atilde;&copy; {0}&quot;,
+      maxText : &quot;&Atilde;á &Atilde;&not;&Atilde;ù&Atilde;&pound;&Atilde;&copy;&Atilde;&sup3;&Atilde;&acute;&Atilde;&sect; &Atilde;&acute;&Atilde;&copy;&Atilde;&not;&Atilde;û &Atilde;&pound;&Atilde;&copy;&Atilde;&iexcl; &Atilde;&iexcl;&Atilde;&micro;&Atilde;&acute;&Atilde;&frac14; &Atilde;&acute;&Atilde;&macr; &Atilde;&deg;&Atilde;&yen;&Atilde;&curren;&Atilde;ü&Atilde;&macr; &Atilde;&yen;&Atilde;ü&Atilde;&shy;&Atilde;&iexcl;&Atilde;&copy; {0}&quot;,
+      nanText : &quot;{0} &Atilde;&curren;&Atilde;&yen;&Atilde;&shy; &Atilde;&yen;&Atilde;ü&Atilde;&shy;&Atilde;&iexcl;&Atilde;&copy; &Atilde;ù&Atilde;&pound;&Atilde;&ordf;&Atilde;&micro;&Atilde;&plusmn;&Atilde;&macr;&Atilde;&sup2; &Atilde;&iexcl;&Atilde;&plusmn;&Atilde;&copy;&Atilde;&uml;&Atilde;&not;&Atilde;&frac14;&Atilde;&sup2;&quot;
+   });
+}
+
+<b>if</b>(Ext.form.DateField){
+   Ext.apply(Ext.form.DateField.prototype, {
+      disabledDaysText  : &quot;&Atilde;Å&Atilde;&deg;&Atilde;&yen;&Atilde;&shy;&Atilde;&yen;&Atilde;&plusmn;&Atilde;&pound;&Atilde;&macr;&Atilde;&deg;&Atilde;&macr;&Atilde;&copy;&Atilde;&sect;&Atilde;&not;&Atilde;ù&Atilde;&shy;&Atilde;&macr;&quot;,
+      disabledDatesText : &quot;&Atilde;Å&Atilde;&deg;&Atilde;&yen;&Atilde;&shy;&Atilde;&yen;&Atilde;&plusmn;&Atilde;&pound;&Atilde;&macr;&Atilde;&deg;&Atilde;&macr;&Atilde;&copy;&Atilde;&sect;&Atilde;&not;&Atilde;ù&Atilde;&shy;&Atilde;&macr;&quot;,
+      minText           : &quot;&Atilde;á &Atilde;&sect;&Atilde;&not;&Atilde;&yen;&Atilde;&plusmn;&Atilde;&macr;&Atilde;&not;&Atilde;&sect;&Atilde;&shy;&Atilde;ü&Atilde;&iexcl; &Atilde;&sup3;' &Atilde;&iexcl;&Atilde;&micro;&Atilde;&acute;&Atilde;&frac14; &Atilde;&acute;&Atilde;&macr; &Atilde;&deg;&Atilde;&yen;&Atilde;&curren;&Atilde;ü&Atilde;&macr; &Atilde;&deg;&Atilde;&plusmn;&Atilde;ù&Atilde;&deg;&Atilde;&yen;&Atilde;&copy; &Atilde;&shy;&Atilde;&iexcl; &Atilde;&yen;&Atilde;ü&Atilde;&shy;&Atilde;&iexcl;&Atilde;&copy; &Atilde;&not;&Atilde;&yen;&Atilde;&acute;&Atilde;ú &Atilde;&iexcl;&Atilde;&deg;&Atilde;&frac14; {0}&quot;,
+      maxText           : &quot;&Atilde;á &Atilde;&sect;&Atilde;&not;&Atilde;&yen;&Atilde;&plusmn;&Atilde;&macr;&Atilde;&not;&Atilde;&sect;&Atilde;&shy;&Atilde;ü&Atilde;&iexcl; &Atilde;&sup3;' &Atilde;&iexcl;&Atilde;&micro;&Atilde;&acute;&Atilde;&frac14; &Atilde;&acute;&Atilde;&macr; &Atilde;&deg;&Atilde;&yen;&Atilde;&curren;&Atilde;ü&Atilde;&macr; &Atilde;&deg;&Atilde;&plusmn;&Atilde;ù&Atilde;&deg;&Atilde;&yen;&Atilde;&copy; &Atilde;&shy;&Atilde;&iexcl; &Atilde;&yen;&Atilde;ü&Atilde;&shy;&Atilde;&iexcl;&Atilde;&copy; &Atilde;&deg;&Atilde;&plusmn;&Atilde;&copy;&Atilde;&shy; &Atilde;&iexcl;&Atilde;&deg;&Atilde;&frac14; {0}&quot;,
+      invalidText       : &quot;{0} &Atilde;&curren;&Atilde;&yen;&Atilde;&shy; &Atilde;&yen;&Atilde;ü&Atilde;&shy;&Atilde;&iexcl;&Atilde;&copy; &Atilde;ù&Atilde;&pound;&Atilde;&ordf;&Atilde;&micro;&Atilde;&plusmn;&Atilde;&sect; &Atilde;&sect;&Atilde;&not;&Atilde;&yen;&Atilde;&plusmn;&Atilde;&macr;&Atilde;&not;&Atilde;&sect;&Atilde;&shy;&Atilde;ü&Atilde;&iexcl; - &Atilde;&deg;&Atilde;&plusmn;&Atilde;ù&Atilde;&deg;&Atilde;&yen;&Atilde;&copy; &Atilde;&shy;&Atilde;&iexcl; &Atilde;&yen;&Atilde;ü&Atilde;&shy;&Atilde;&iexcl;&Atilde;&copy; &Atilde;&acute;&Atilde;&sect;&Atilde;&sup2; &Atilde;&not;&Atilde;&macr;&Atilde;&plusmn;&Atilde;&para;&Atilde;û&Atilde;&sup2; {1}&quot;,
+      format            : &quot;&Atilde;&not;/&Atilde;&sect;/&Atilde;Ö&quot;
+   });
+}
+
+<b>if</b>(Ext.form.ComboBox){
+   Ext.apply(Ext.form.ComboBox.prototype, {
+      loadingText       : &quot;&Atilde;ñ&Atilde;&frac14;&Atilde;&plusmn;&Atilde;&acute;&Atilde;&sup1;&Atilde;&sup3;&Atilde;&sect;...&quot;,
+      valueNotFoundText : undefined
+   });
+}
+
+<b>if</b>(Ext.form.VTypes){
+   Ext.apply(Ext.form.VTypes, {
+      emailText    : <em>'&Atilde;Å&Atilde;&micro;&Atilde;&acute;&Atilde;&frac14; &Atilde;&acute;&Atilde;&macr; &Atilde;&deg;&Atilde;&yen;&Atilde;&curren;&Atilde;ü&Atilde;&macr; &Atilde;&deg;&Atilde;&plusmn;&Atilde;ù&Atilde;&deg;&Atilde;&yen;&Atilde;&copy; &Atilde;&shy;&Atilde;&iexcl; &Atilde;&yen;&Atilde;ü&Atilde;&shy;&Atilde;&iexcl;&Atilde;&copy; e-mail address &Atilde;&acute;&Atilde;&sect;&Atilde;&sup2; &Atilde;&not;&Atilde;&macr;&Atilde;&plusmn;&Atilde;&para;&Atilde;û&Atilde;&sup2; &quot;user@domain.com&quot;'</em>,
+      urlText      : <em>'&Atilde;Å&Atilde;&micro;&Atilde;&acute;&Atilde;&frac14; &Atilde;&acute;&Atilde;&macr; &Atilde;&deg;&Atilde;&yen;&Atilde;&curren;&Atilde;ü&Atilde;&macr; &Atilde;&deg;&Atilde;&plusmn;&Atilde;ù&Atilde;&deg;&Atilde;&yen;&Atilde;&copy; &Atilde;&shy;&Atilde;&iexcl; &Atilde;&yen;&Atilde;ü&Atilde;&shy;&Atilde;&iexcl;&Atilde;&copy; &Atilde;&not;&Atilde;&copy;&Atilde;&iexcl; &Atilde;&curren;&Atilde;&copy;&Atilde;&yen;&Atilde;&frac12;&Atilde;&uml;&Atilde;&micro;&Atilde;&shy;&Atilde;&sup3;&Atilde;&sect; URL &Atilde;&acute;&Atilde;&sect;&Atilde;&sup2; &Atilde;&not;&Atilde;&macr;&Atilde;&plusmn;&Atilde;&para;&Atilde;û&Atilde;&sup2; &quot;http:/'</em>+<em>'/www.domain.com&quot;'</em>,
+      alphaText    : <em>'&Atilde;Å&Atilde;&micro;&Atilde;&acute;&Atilde;&frac14; &Atilde;&acute;&Atilde;&macr; &Atilde;&deg;&Atilde;&yen;&Atilde;&curren;&Atilde;ü&Atilde;&macr; &Atilde;&deg;&Atilde;&plusmn;&Atilde;ù&Atilde;&deg;&Atilde;&yen;&Atilde;&copy; &Atilde;&shy;&Atilde;&iexcl; &Atilde;&deg;&Atilde;&yen;&Atilde;&plusmn;&Atilde;&copy;&Atilde;ù&Atilde;&middot;&Atilde;&yen;&Atilde;&copy; &Atilde;&pound;&Atilde;&plusmn;&Atilde;ú&Atilde;&not;&Atilde;&not;&Atilde;&iexcl;&Atilde;&acute;&Atilde;&iexcl; &Atilde;&ordf;&Atilde;&iexcl;&Atilde;&copy; _'</em>,
+      alphanumText : <em>'&Atilde;Å&Atilde;&micro;&Atilde;&acute;&Atilde;&frac14; &Atilde;&acute;&Atilde;&macr; &Atilde;&deg;&Atilde;&yen;&Atilde;&curren;&Atilde;ü&Atilde;&macr; &Atilde;&deg;&Atilde;&plusmn;&Atilde;ù&Atilde;&deg;&Atilde;&yen;&Atilde;&copy; &Atilde;&shy;&Atilde;&iexcl; &Atilde;&deg;&Atilde;&yen;&Atilde;&plusmn;&Atilde;&copy;&Atilde;ù&Atilde;&middot;&Atilde;&yen;&Atilde;&copy; &Atilde;&pound;&Atilde;&plusmn;&Atilde;ú&Atilde;&not;&Atilde;&not;&Atilde;&iexcl;&Atilde;&acute;&Atilde;&iexcl;, &Atilde;&iexcl;&Atilde;&plusmn;&Atilde;&copy;&Atilde;&uml;&Atilde;&not;&Atilde;&macr;&Atilde;&frac12;&Atilde;&sup2; &Atilde;&ordf;&Atilde;&iexcl;&Atilde;&copy; _'</em>
+   });
+}
+
+<b>if</b>(Ext.grid.GridView){
+   Ext.apply(Ext.grid.GridView.prototype, {
+      sortAscText  : &quot;&Atilde;Å&Atilde;&frac12;&Atilde;&reg;&Atilde;&macr;&Atilde;&micro;&Atilde;&sup3;&Atilde;&iexcl; &Atilde;î&Atilde;&iexcl;&Atilde;&reg;&Atilde;&copy;&Atilde;&shy;&Atilde;&frac14;&Atilde;&not;&Atilde;&sect;&Atilde;&sup3;&Atilde;&sect;&quot;,
+      sortDescText : &quot;&Atilde;ñ&Atilde;&uml;&Atilde;ü&Atilde;&shy;&Atilde;&macr;&Atilde;&micro;&Atilde;&sup3;&Atilde;&iexcl; &Atilde;î&Atilde;&iexcl;&Atilde;&reg;&Atilde;&copy;&Atilde;&shy;&Atilde;&frac14;&Atilde;&not;&Atilde;&sect;&Atilde;&sup3;&Atilde;&sect;&quot;,
+      lockText     : &quot;&Atilde;ä&Atilde;&laquo;&Atilde;&yen;&Atilde;ü&Atilde;&curren;&Atilde;&sup1;&Atilde;&not;&Atilde;&iexcl; &Atilde;&sup3;&Atilde;&acute;&Atilde;û&Atilde;&laquo;&Atilde;&sect;&Atilde;&sup2;&quot;,
+      unlockText   : &quot;&Atilde;é&Atilde;&yen;&Atilde;&ordf;&Atilde;&laquo;&Atilde;&yen;&Atilde;ü&Atilde;&curren;&Atilde;&sup1;&Atilde;&not;&Atilde;&iexcl; &Atilde;&sup3;&Atilde;&acute;&Atilde;û&Atilde;&laquo;&Atilde;&sect;&Atilde;&sup2;&quot;,
+      columnsText  : &quot;&Atilde;ì&Atilde;&acute;&Atilde;û&Atilde;&laquo;&Atilde;&yen;&Atilde;&sup2;&quot;
+   });
+}
+
+<b>if</b>(Ext.grid.PropertyColumnModel){
+   Ext.apply(Ext.grid.PropertyColumnModel.prototype, {
+      nameText   : &quot;&Acirc;&frac14;&Atilde;&shy;&Atilde;&macr;&Atilde;&not;&Atilde;&iexcl;&quot;,
+      valueText  : &quot;&Atilde;î&Atilde;&copy;&Atilde;&not;&Atilde;û&quot;,
+      dateFormat : &quot;&Atilde;&not;/&Atilde;&sect;/&Atilde;Ö&quot;
+   });
+}
+
+<b>if</b>(Ext.layout.BorderLayout &amp;&amp; Ext.layout.BorderLayout.SplitRegion){
+   Ext.apply(Ext.layout.BorderLayout.SplitRegion.prototype, {
+      splitTip            : &quot;&Atilde;ì&Atilde;&frac12;&Atilde;&plusmn;&Atilde;&yen;&Atilde;&acute;&Atilde;&yen; &Atilde;&pound;&Atilde;&copy;&Atilde;&iexcl; &Atilde;&iexcl;&Atilde;&laquo;&Atilde;&laquo;&Atilde;&iexcl;&Atilde;&pound;&Atilde;û &Atilde;&not;&Atilde;&yen;&Atilde;&pound;&Atilde;ù&Atilde;&uml;&Atilde;&macr;&Atilde;&micro;&Atilde;&sup2;.&quot;,
+      collapsibleSplitTip : &quot;&Atilde;ì&Atilde;&frac12;&Atilde;&plusmn;&Atilde;&yen;&Atilde;&acute;&Atilde;&yen; &Atilde;&pound;&Atilde;&copy;&Atilde;&iexcl; &Atilde;&iexcl;&Atilde;&laquo;&Atilde;&laquo;&Atilde;&iexcl;&Atilde;&pound;&Atilde;û &Atilde;&not;&Atilde;&yen;&Atilde;&pound;&Atilde;ù&Atilde;&uml;&Atilde;&macr;&Atilde;&micro;&Atilde;&sup2;. Double click &Atilde;&pound;&Atilde;&copy;&Atilde;&iexcl; &Atilde;&iexcl;&Atilde;&deg;&Atilde;&frac14;&Atilde;&ordf;&Atilde;&plusmn;&Atilde;&micro;&Atilde;&cedil;&Atilde;&sect;.&quot;
+   });
+}
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

@@ -1,0 +1,361 @@
+<html><head><title>DragSource.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>DragSource.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.dd.DragSource
+ * @extends Ext.dd.DDProxy
+ * A simple class that provides the basic implementation needed to make any element draggable.
+ * @constructor
+ * @param {Mixed} el The container element
+ * @param {Object} config
+ */</i>
+Ext.dd.DragSource = <b>function</b>(el, config){
+    <b>this</b>.el = Ext.get(el);
+    <b>if</b>(!<b>this</b>.dragData){
+        <b>this</b>.dragData = {};
+    }
+    
+    Ext.apply(<b>this</b>, config);
+    
+    <b>if</b>(!<b>this</b>.proxy){
+        <b>this</b>.proxy = <b>new</b> Ext.dd.StatusProxy();
+    }
+    Ext.dd.DragSource.superclass.constructor.call(<b>this</b>, <b>this</b>.el.dom, <b>this</b>.ddGroup || <b>this</b>.group, 
+          {dragElId : <b>this</b>.proxy.id, resizeFrame: false, isTarget: false, scroll: <b>this</b>.scroll === true});
+    
+    <b>this</b>.dragging = false;
+};
+
+Ext.extend(Ext.dd.DragSource, Ext.dd.DDProxy, {
+    <i>/**
+     * @cfg {String} ddGroup
+     * A named drag drop group to which <b>this</b> object belongs.  If a group is specified, then <b>this</b> object will only
+     * interact <b>with</b> other drag drop objects <b>in</b> the same group (defaults to undefined).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} dropAllowed
+     * The CSS class returned to the drag source when drop is allowed (defaults to &quot;x-dd-drop-ok&quot;).
+     */</i>
+    dropAllowed : &quot;x-dd-drop-ok&quot;,
+    <i>/**
+     * @cfg {String} dropNotAllowed
+     * The CSS class returned to the drag source when drop is not allowed (defaults to &quot;x-dd-drop-nodrop&quot;).
+     */</i>
+    dropNotAllowed : &quot;x-dd-drop-nodrop&quot;,
+
+    <i>/**
+     * Returns the data object associated <b>with</b> this drag source
+     * @<b>return</b> {Object} data An object containing arbitrary data
+     */</i>
+    getDragData : <b>function</b>(e){
+        <b>return</b> this.dragData;
+    },
+
+    <i>// private</i>
+    onDragEnter : <b>function</b>(e, id){
+        <b>var</b> target = Ext.dd.DragDropMgr.getDDById(id);
+        <b>this</b>.cachedTarget = target;
+        <b>if</b>(this.beforeDragEnter(target, e, id) !== false){
+            <b>if</b>(target.isNotifyTarget){
+                <b>var</b> status = target.notifyEnter(<b>this</b>, e, <b>this</b>.dragData);
+                <b>this</b>.proxy.setStatus(status);
+            }<b>else</b>{
+                <b>this</b>.proxy.setStatus(<b>this</b>.dropAllowed);
+            }
+            
+            <b>if</b>(this.afterDragEnter){
+                <i>/**
+                 * An empty <b>function</b> by <b>default</b>, but provided so that you can perform a custom action
+                 * when the dragged item enters the drop target by providing an implementation.
+                 * @param {Ext.dd.DragDrop} target The drop target
+                 * @param {Event} e The event object
+                 * @param {String} id The id of the dragged element
+                 * @method afterDragEnter
+                 */</i>
+                <b>this</b>.afterDragEnter(target, e, id);
+            }
+        }
+    },
+
+    <i>/**
+     * An empty <b>function</b> by <b>default</b>, but provided so that you can perform a custom action
+     * before the dragged item enters the drop target and optionally cancel the onDragEnter.
+     * @param {Ext.dd.DragDrop} target The drop target
+     * @param {Event} e The event object
+     * @param {String} id The id of the dragged element
+     * @<b>return</b> {Boolean} isValid True <b>if</b> the drag event is valid, <b>else</b> false to cancel
+     */</i>
+    beforeDragEnter : <b>function</b>(target, e, id){
+        <b>return</b> true;
+    },
+
+    <i>// private</i>
+    alignElWithMouse: <b>function</b>() {
+        Ext.dd.DragSource.superclass.alignElWithMouse.apply(<b>this</b>, arguments);
+        <b>this</b>.proxy.sync();
+    },
+
+    <i>// private</i>
+    onDragOver : <b>function</b>(e, id){
+        <b>var</b> target = <b>this</b>.cachedTarget || Ext.dd.DragDropMgr.getDDById(id);
+        <b>if</b>(this.beforeDragOver(target, e, id) !== false){
+            <b>if</b>(target.isNotifyTarget){
+                <b>var</b> status = target.notifyOver(<b>this</b>, e, <b>this</b>.dragData);
+                <b>this</b>.proxy.setStatus(status);
+            }
+
+            <b>if</b>(this.afterDragOver){
+                <i>/**
+                 * An empty <b>function</b> by <b>default</b>, but provided so that you can perform a custom action
+                 * <b>while</b> the dragged item is over the drop target by providing an implementation.
+                 * @param {Ext.dd.DragDrop} target The drop target
+                 * @param {Event} e The event object
+                 * @param {String} id The id of the dragged element
+                 * @method afterDragOver
+                 */</i>
+                <b>this</b>.afterDragOver(target, e, id);
+            }
+        }
+    },
+
+    <i>/**
+     * An empty <b>function</b> by <b>default</b>, but provided so that you can perform a custom action
+     * <b>while</b> the dragged item is over the drop target and optionally cancel the onDragOver.
+     * @param {Ext.dd.DragDrop} target The drop target
+     * @param {Event} e The event object
+     * @param {String} id The id of the dragged element
+     * @<b>return</b> {Boolean} isValid True <b>if</b> the drag event is valid, <b>else</b> false to cancel
+     */</i>
+    beforeDragOver : <b>function</b>(target, e, id){
+        <b>return</b> true;
+    },
+
+    <i>// private</i>
+    onDragOut : <b>function</b>(e, id){
+        <b>var</b> target = <b>this</b>.cachedTarget || Ext.dd.DragDropMgr.getDDById(id);
+        <b>if</b>(this.beforeDragOut(target, e, id) !== false){
+            <b>if</b>(target.isNotifyTarget){
+                target.notifyOut(<b>this</b>, e, <b>this</b>.dragData);
+            }
+            <b>this</b>.proxy.reset();
+            <b>if</b>(this.afterDragOut){
+                <i>/**
+                 * An empty <b>function</b> by <b>default</b>, but provided so that you can perform a custom action
+                 * after the dragged item is dragged out of the target without dropping.
+                 * @param {Ext.dd.DragDrop} target The drop target
+                 * @param {Event} e The event object
+                 * @param {String} id The id of the dragged element
+                 * @method afterDragOut
+                 */</i>
+                <b>this</b>.afterDragOut(target, e, id);
+            }
+        }
+        <b>this</b>.cachedTarget = null;
+    },
+
+    <i>/**
+     * An empty <b>function</b> by <b>default</b>, but provided so that you can perform a custom action before the dragged
+     * item is dragged out of the target without dropping, and optionally cancel the onDragOut.
+     * @param {Ext.dd.DragDrop} target The drop target
+     * @param {Event} e The event object
+     * @param {String} id The id of the dragged element
+     * @<b>return</b> {Boolean} isValid True <b>if</b> the drag event is valid, <b>else</b> false to cancel
+     */</i>
+    beforeDragOut : <b>function</b>(target, e, id){
+        <b>return</b> true;
+    },
+    
+    <i>// private</i>
+    onDragDrop : <b>function</b>(e, id){
+        <b>var</b> target = <b>this</b>.cachedTarget || Ext.dd.DragDropMgr.getDDById(id);
+        <b>if</b>(this.beforeDragDrop(target, e, id) !== false){
+            <b>if</b>(target.isNotifyTarget){
+                <b>if</b>(target.notifyDrop(<b>this</b>, e, <b>this</b>.dragData)){ <i>// valid drop?</i>
+                    <b>this</b>.onValidDrop(target, e, id);
+                }<b>else</b>{
+                    <b>this</b>.onInvalidDrop(target, e, id);
+                }
+            }<b>else</b>{
+                <b>this</b>.onValidDrop(target, e, id);
+            }
+            
+            <b>if</b>(this.afterDragDrop){
+                <i>/**
+                 * An empty <b>function</b> by <b>default</b>, but provided so that you can perform a custom action
+                 * after a valid drag drop has occurred by providing an implementation.
+                 * @param {Ext.dd.DragDrop} target The drop target
+                 * @param {Event} e The event object
+                 * @param {String} id The id of the dropped element
+                 * @method afterDragDrop
+                 */</i>
+                <b>this</b>.afterDragDrop(target, e, id);
+            }
+        }
+        <b>delete</b> this.cachedTarget;
+    },
+
+    <i>/**
+     * An empty <b>function</b> by <b>default</b>, but provided so that you can perform a custom action before the dragged
+     * item is dropped onto the target and optionally cancel the onDragDrop.
+     * @param {Ext.dd.DragDrop} target The drop target
+     * @param {Event} e The event object
+     * @param {String} id The id of the dragged element
+     * @<b>return</b> {Boolean} isValid True <b>if</b> the drag drop event is valid, <b>else</b> false to cancel
+     */</i>
+    beforeDragDrop : <b>function</b>(target, e, id){
+        <b>return</b> true;
+    },
+
+    <i>// private</i>
+    onValidDrop : <b>function</b>(target, e, id){
+        <b>this</b>.hideProxy();
+        <b>if</b>(this.afterValidDrop){
+            <i>/**
+             * An empty <b>function</b> by <b>default</b>, but provided so that you can perform a custom action
+             * after a valid drop has occurred by providing an implementation.
+             * @param {Object} target The target DD 
+             * @param {Event} e The event object
+             * @param {String} id The id of the dropped element
+             * @method afterInvalidDrop
+             */</i>
+            <b>this</b>.afterValidDrop(target, e, id);
+        }
+    },
+
+    <i>// private</i>
+    getRepairXY : <b>function</b>(e, data){
+        <b>return</b> this.el.getXY();  
+    },
+
+    <i>// private</i>
+    onInvalidDrop : <b>function</b>(target, e, id){
+        <b>this</b>.beforeInvalidDrop(target, e, id);
+        <b>if</b>(this.cachedTarget){
+            <b>if</b>(this.cachedTarget.isNotifyTarget){
+                <b>this</b>.cachedTarget.notifyOut(<b>this</b>, e, <b>this</b>.dragData);
+            }
+            <b>this</b>.cacheTarget = null;
+        }
+        <b>this</b>.proxy.repair(<b>this</b>.getRepairXY(e, <b>this</b>.dragData), <b>this</b>.afterRepair, <b>this</b>);
+
+        <b>if</b>(this.afterInvalidDrop){
+            <i>/**
+             * An empty <b>function</b> by <b>default</b>, but provided so that you can perform a custom action
+             * after an invalid drop has occurred by providing an implementation.
+             * @param {Event} e The event object
+             * @param {String} id The id of the dropped element
+             * @method afterInvalidDrop
+             */</i>
+            <b>this</b>.afterInvalidDrop(e, id);
+        }
+    },
+
+    <i>// private</i>
+    afterRepair : <b>function</b>(){
+        <b>if</b>(Ext.enableFx){
+            <b>this</b>.el.highlight(<b>this</b>.hlColor || &quot;c3daf9&quot;);
+        }
+        <b>this</b>.dragging = false;
+    },
+
+    <i>/**
+     * An empty <b>function</b> by <b>default</b>, but provided so that you can perform a custom action after an invalid
+     * drop has occurred.
+     * @param {Ext.dd.DragDrop} target The drop target
+     * @param {Event} e The event object
+     * @param {String} id The id of the dragged element
+     * @<b>return</b> {Boolean} isValid True <b>if</b> the invalid drop should proceed, <b>else</b> false to cancel
+     */</i>
+    beforeInvalidDrop : <b>function</b>(target, e, id){
+        <b>return</b> true;
+    },
+
+    <i>// private</i>
+    handleMouseDown : <b>function</b>(e){
+        <b>if</b>(this.dragging) {
+            <b>return</b>;
+        }
+        <b>var</b> data = <b>this</b>.getDragData(e);
+        <b>if</b>(data &amp;&amp; <b>this</b>.onBeforeDrag(data, e) !== false){
+            <b>this</b>.dragData = data;
+            <b>this</b>.proxy.stop();
+            Ext.dd.DragSource.superclass.handleMouseDown.apply(<b>this</b>, arguments);
+        } 
+    },
+
+    <i>/**
+     * An empty <b>function</b> by <b>default</b>, but provided so that you can perform a custom action before the initial
+     * drag event begins and optionally cancel it.
+     * @param {Object} data An object containing arbitrary data to be shared <b>with</b> drop targets
+     * @param {Event} e The event object
+     * @<b>return</b> {Boolean} isValid True <b>if</b> the drag event is valid, <b>else</b> false to cancel
+     */</i>
+    onBeforeDrag : <b>function</b>(data, e){
+        <b>return</b> true;
+    },
+
+    <i>/**
+     * An empty <b>function</b> by <b>default</b>, but provided so that you can perform a custom action once the initial
+     * drag event has begun.  The drag cannot be canceled from <b>this</b> function.
+     * @param {Number} x The x position of the click on the dragged object
+     * @param {Number} y The y position of the click on the dragged object
+     */</i>
+    onStartDrag : Ext.emptyFn,
+
+    <i>// private override</i>
+    startDrag : <b>function</b>(x, y){
+        <b>this</b>.proxy.reset();
+        <b>this</b>.dragging = true;
+        <b>this</b>.proxy.update(&quot;&quot;);
+        <b>this</b>.onInitDrag(x, y);
+        <b>this</b>.proxy.show();
+    },
+
+    <i>// private</i>
+    onInitDrag : <b>function</b>(x, y){
+        <b>var</b> clone = <b>this</b>.el.dom.cloneNode(true);
+        clone.id = Ext.id(); <i>// prevent duplicate ids</i>
+        <b>this</b>.proxy.update(clone);
+        <b>this</b>.onStartDrag(x, y);
+        <b>return</b> true;
+    },
+
+    <i>/**
+     * Returns the drag source's underlying {@link Ext.dd.StatusProxy}
+     * @<b>return</b> {Ext.dd.StatusProxy} proxy The StatusProxy
+     */</i>
+    getProxy : <b>function</b>(){
+        <b>return</b> this.proxy;  
+    },
+
+    <i>/**
+     * Hides the drag source's {@link Ext.dd.StatusProxy}
+     */</i>
+    hideProxy : <b>function</b>(){
+        <b>this</b>.proxy.hide();  
+        <b>this</b>.proxy.reset(true);
+        <b>this</b>.dragging = false;
+    },
+
+    <i>// private</i>
+    triggerCacheRefresh : <b>function</b>(){
+        Ext.dd.DDM.refreshCache(<b>this</b>.groups);
+    },
+
+    <i>// private - override to prevent hiding</i>
+    b4EndDrag: <b>function</b>(e) {
+    },
+
+    <i>// private - override to prevent moving</i>
+    endDrag : <b>function</b>(e){
+        <b>this</b>.onEndDrag(<b>this</b>.dragData, e);
+    },
+
+    <i>// private</i>
+    onEndDrag : <b>function</b>(data, e){
+    },
+    
+    <i>// private - pin to cursor</i>
+    autoOffset : <b>function</b>(x, y) {
+        <b>this</b>.setDelta(-12, -20);
+    }    
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

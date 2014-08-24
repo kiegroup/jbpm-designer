@@ -1,0 +1,150 @@
+<html><head><title>TreeEventModel.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>TreeEventModel.js</h1><pre class="highlighted"><code>Ext.tree.TreeEventModel = <b>function</b>(tree){
+    <b>this</b>.tree = tree;
+    <b>this</b>.tree.on(<em>'render'</em>, <b>this</b>.initEvents, <b>this</b>);
+}
+
+Ext.tree.TreeEventModel.prototype = {
+    initEvents : <b>function</b>(){
+        <b>var</b> el = <b>this</b>.tree.getTreeEl();
+        el.on(<em>'click'</em>, <b>this</b>.delegateClick, <b>this</b>);
+        <b>if</b>(this.tree.trackMouseOver !== false){
+            el.on(<em>'mouseover'</em>, <b>this</b>.delegateOver, <b>this</b>);
+            el.on(<em>'mouseout'</em>, <b>this</b>.delegateOut, <b>this</b>);
+        }
+        el.on(<em>'dblclick'</em>, <b>this</b>.delegateDblClick, <b>this</b>);
+        el.on(<em>'contextmenu'</em>, <b>this</b>.delegateContextMenu, <b>this</b>);
+    },
+
+    getNode : <b>function</b>(e){
+        <b>var</b> t;
+        <b>if</b>(t = e.getTarget(<em>'.x-tree-node-el'</em>, 10)){
+            <b>var</b> id = Ext.fly(t, <em>'_treeEvents'</em>).getAttributeNS(<em>'ext'</em>, <em>'tree-node-id'</em>);
+            <b>if</b>(id){
+                <b>return</b> this.tree.getNodeById(id);
+            }
+        }
+        <b>return</b> null;
+    },
+
+    getNodeTarget : <b>function</b>(e){
+        <b>var</b> t = e.getTarget(<em>'.x-tree-node-icon'</em>, 1);
+        <b>if</b>(!t){
+            t = e.getTarget(<em>'.x-tree-node-el'</em>, 6);
+        }
+        <b>return</b> t;
+    },
+
+    delegateOut : <b>function</b>(e, t){
+        <b>if</b>(!<b>this</b>.beforeEvent(e)){
+            <b>return</b>;
+        }
+        <b>if</b>(e.getTarget(<em>'.x-tree-ec-icon'</em>, 1)){
+            <b>var</b> n = <b>this</b>.getNode(e);
+            <b>this</b>.onIconOut(e, n);
+            <b>if</b>(n == <b>this</b>.lastEcOver){
+                <b>delete</b> this.lastEcOver;
+            }
+        }
+        <b>if</b>((t = <b>this</b>.getNodeTarget(e)) &amp;&amp; !e.within(t, true)){
+            <b>this</b>.onNodeOut(e, <b>this</b>.getNode(e));
+        }
+    },
+
+    delegateOver : <b>function</b>(e, t){
+        <b>if</b>(!<b>this</b>.beforeEvent(e)){
+            <b>return</b>;
+        }
+        <b>if</b>(this.lastEcOver){ <i>// prevent hung highlight</i>
+            <b>this</b>.onIconOut(e, <b>this</b>.lastEcOver);
+            <b>delete</b> this.lastEcOver;
+        }
+        <b>if</b>(e.getTarget(<em>'.x-tree-ec-icon'</em>, 1)){
+            <b>this</b>.lastEcOver = <b>this</b>.getNode(e);
+            <b>this</b>.onIconOver(e, <b>this</b>.lastEcOver);
+        }
+        <b>if</b>(t = <b>this</b>.getNodeTarget(e)){
+            <b>this</b>.onNodeOver(e, <b>this</b>.getNode(e));
+        }
+    },
+
+    delegateClick : <b>function</b>(e, t){
+        <b>if</b>(!<b>this</b>.beforeEvent(e)){
+            <b>return</b>;
+        }
+
+        <b>if</b>(e.getTarget(<em>'input[type=checkbox]'</em>, 1)){
+            <b>this</b>.onCheckboxClick(e, <b>this</b>.getNode(e));
+        }
+        <b>else</b> if(e.getTarget(<em>'.x-tree-ec-icon'</em>, 1)){
+            <b>this</b>.onIconClick(e, <b>this</b>.getNode(e));
+        }
+        <b>else</b> if(<b>this</b>.getNodeTarget(e)){
+            <b>this</b>.onNodeClick(e, <b>this</b>.getNode(e));
+        }
+    },
+
+    delegateDblClick : <b>function</b>(e, t){
+        <b>if</b>(this.beforeEvent(e) &amp;&amp; <b>this</b>.getNodeTarget(e)){
+            <b>this</b>.onNodeDblClick(e, <b>this</b>.getNode(e));
+        }
+    },
+
+    delegateContextMenu : <b>function</b>(e, t){
+        <b>if</b>(this.beforeEvent(e) &amp;&amp; <b>this</b>.getNodeTarget(e)){
+            <b>this</b>.onNodeContextMenu(e, <b>this</b>.getNode(e));
+        }
+    },
+
+    onNodeClick : <b>function</b>(e, node){
+        node.ui.onClick(e);
+    },
+
+    onNodeOver : <b>function</b>(e, node){
+        node.ui.onOver(e);
+    },
+
+    onNodeOut : <b>function</b>(e, node){
+        node.ui.onOut(e);
+    },
+
+    onIconOver : <b>function</b>(e, node){
+        node.ui.addClass(<em>'x-tree-ec-over'</em>);
+    },
+
+    onIconOut : <b>function</b>(e, node){
+        node.ui.removeClass(<em>'x-tree-ec-over'</em>);
+    },
+
+    onIconClick : <b>function</b>(e, node){
+        node.ui.ecClick(e);
+    },
+
+    onCheckboxClick : <b>function</b>(e, node){
+        node.ui.onCheckChange(e);
+    },
+
+    onNodeDblClick : <b>function</b>(e, node){
+        node.ui.onDblClick(e);
+    },
+
+    onNodeContextMenu : <b>function</b>(e, node){
+        node.ui.onContextMenu(e);
+    },
+
+    beforeEvent : <b>function</b>(e){
+        <b>if</b>(this.disabled){
+            e.stopEvent();
+            <b>return</b> false;
+        }
+        <b>return</b> true;
+    },
+
+    disable: <b>function</b>(){
+        <b>this</b>.disabled = true;
+    },
+
+    enable: <b>function</b>(){
+        <b>this</b>.disabled = false;
+    }
+};</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

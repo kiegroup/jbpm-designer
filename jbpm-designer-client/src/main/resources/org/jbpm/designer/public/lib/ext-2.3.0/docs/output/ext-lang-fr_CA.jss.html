@@ -1,0 +1,214 @@
+<html><head><title>ext-lang-fr_CA.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ext-lang-fr_CA.js</h1><pre class="highlighted"><code>&iuml;&raquo;&iquest;<i>/*
+ * France (Canadian) translation
+ * By BernardChhun
+ * 04-08-2007, 03:07 AM
+ */</i>
+
+Ext.UpdateManager.defaults.indicatorText = <em>'&lt;div class=&quot;loading-indicator&quot;&gt;En cours de chargement...&lt;/div&gt;'</em>;
+
+<b>if</b>(Ext.View){
+   Ext.View.prototype.emptyText = &quot;&quot;;
+}
+
+<b>if</b>(Ext.grid.GridPanel){
+   Ext.grid.GridPanel.prototype.ddText = &quot;{0} ligne(s) s&Atilde;&copy;lectionn&Atilde;&copy;(s)&quot;;
+}
+
+<b>if</b>(Ext.TabPanelItem){
+   Ext.TabPanelItem.prototype.closeText = &quot;Fermer cette onglet&quot;;
+}
+
+<b>if</b>(Ext.form.Field){
+   Ext.form.Field.prototype.invalidText = &quot;La valeur de ce champ est invalide&quot;;
+}
+
+<b>if</b>(Ext.LoadMask){
+    Ext.LoadMask.prototype.msg = &quot;En cours de chargement...&quot;;
+}
+
+Date.shortMonthNames = [
+   &quot;Janv&quot;,
+   &quot;F&Atilde;&copy;vr&quot;,
+   &quot;Mars&quot;,
+   &quot;Avr&quot;,
+   &quot;Mai&quot;,
+   &quot;Juin&quot;,
+   &quot;Juil&quot;,
+   &quot;Ao&Atilde;&raquo;t&quot;,
+   &quot;Sept&quot;,
+   &quot;Oct&quot;,
+   &quot;Nov&quot;,
+   &quot;D&Atilde;&copy;c&quot;
+];
+
+Date.getShortMonthName = <b>function</b>(month) {
+  <b>return</b> Date.shortMonthNames[month];
+};
+
+Date.monthNames = [
+   &quot;Janvier&quot;,
+   &quot;F&Atilde;&copy;vrier&quot;,
+   &quot;Mars&quot;,
+   &quot;Avril&quot;,
+   &quot;Mai&quot;,
+   &quot;Juin&quot;,
+   &quot;Juillet&quot;,
+   &quot;Ao&Atilde;&raquo;t&quot;,
+   &quot;Septembre&quot;,
+   &quot;Octobre&quot;,
+   &quot;Novembre&quot;,
+   &quot;D&Atilde;&copy;cembre&quot;
+];
+
+Date.monthNumbers = {
+  &quot;Janvier&quot; : 0,
+  &quot;F&Atilde;&copy;vrier&quot; : 1,
+  &quot;Mars&quot; : 2,
+  &quot;Avril&quot; : 3,
+  &quot;Mai&quot; : 4,
+  &quot;Juin&quot; : 5,
+  &quot;Juillet&quot; : 6,
+  &quot;Ao&Atilde;&raquo;t&quot; : 7,
+  &quot;Septembre&quot; : 8,
+  &quot;Octobre&quot; : 9,
+  &quot;Novembre&quot; : 10,
+  &quot;D&Atilde;&copy;cembre&quot; : 11
+};
+
+Date.getMonthNumber = <b>function</b>(name) {
+  <b>return</b> Date.monthNumbers[Ext.util.Format.capitalize(name)];
+};
+
+Date.dayNames = [
+   &quot;Dimanche&quot;,
+   &quot;Lundi&quot;,
+   &quot;Mardi&quot;,
+   &quot;Mercredi&quot;,
+   &quot;Jeudi&quot;,
+   &quot;Vendredi&quot;,
+   &quot;Samedi&quot;
+];
+
+Date.getShortDayName = <b>function</b>(day) {
+  <b>return</b> Date.dayNames[day].substring(0, 3);
+};
+
+<b>if</b>(Ext.MessageBox){
+   Ext.MessageBox.buttonText = {
+      ok     : &quot;OK&quot;,
+      cancel : &quot;Annuler&quot;,
+      yes    : &quot;Oui&quot;,
+      no     : &quot;Non&quot;
+   };
+}
+
+<b>if</b>(Ext.util.Format){
+   Ext.util.Format.date = <b>function</b>(v, format){
+      <b>if</b>(!v) <b>return</b> &quot;&quot;;
+      <b>if</b>(!(v instanceof Date)) v = <b>new</b> Date(Date.parse(v));
+      <b>return</b> v.dateFormat(format || &quot;d/m/Y&quot;);
+   };
+}
+
+<b>if</b>(Ext.DatePicker){
+   Ext.apply(Ext.DatePicker.prototype, {
+      todayText         : &quot;Aujourd'hui&quot;,
+      minText           : &quot;Cette date est plus petite que la date minimum&quot;,
+      maxText           : &quot;Cette date est plus grande que la date maximum&quot;,
+      disabledDaysText  : &quot;&quot;,
+      disabledDatesText : &quot;&quot;,
+      monthNames	: Date.monthNames,
+      dayNames		: Date.dayNames,
+      nextText          : <em>'Prochain mois (CTRL+Fl&Atilde;&copy;che droite)'</em>,
+      prevText          : <em>'Mois pr&Atilde;&copy;c&Atilde;&copy;dent (CTRL+Fl&Atilde;&copy;che gauche)'</em>,
+      monthYearText     : <em>'Choissisez un mois (CTRL+Fl&Atilde;&copy;che haut ou bas pour changer d\'</em>ann&Atilde;&copy;e.)',
+      todayTip          : &quot;{0} (Barre d'espace)&quot;,
+      format            : &quot;d/m/y&quot;
+   });
+}
+
+<b>if</b>(Ext.PagingToolbar){
+   Ext.apply(Ext.PagingToolbar.prototype, {
+      beforePageText : &quot;Page&quot;,
+      afterPageText  : &quot;de {0}&quot;,
+      firstText      : &quot;Premi&Atilde;&uml;re page&quot;,
+      prevText       : &quot;Page pr&Atilde;&copy;c&Atilde;&copy;dente&quot;,
+      nextText       : &quot;Prochaine page&quot;,
+      lastText       : &quot;Derni&Atilde;&uml;re page&quot;,
+      refreshText    : &quot;Recharger la page&quot;,
+      displayMsg     : &quot;Page courante {0} - {1} de {2}&quot;,
+      emptyMsg       : <em>'Aucune donn&Atilde;&copy;e &Atilde;&nbsp; afficher'</em>
+   });
+}
+
+<b>if</b>(Ext.form.TextField){
+   Ext.apply(Ext.form.TextField.prototype, {
+      minLengthText : &quot;La longueur minimum de ce champ est de {0} caract&Atilde;&uml;res&quot;,
+      maxLengthText : &quot;La longueur maximum de ce champ est de {0} caract&Atilde;&uml;res&quot;,
+      blankText     : &quot;Ce champ est obligatoire&quot;,
+      regexText     : &quot;&quot;,
+      emptyText     : null
+   });
+}
+
+<b>if</b>(Ext.form.NumberField){
+   Ext.apply(Ext.form.NumberField.prototype, {
+      minText : &quot;La valeur minimum de ce champ doit &Atilde;&ordf;tre de {0}&quot;,
+      maxText : &quot;La valeur maximum de ce champ doit &Atilde;&ordf;tre de {0}&quot;,
+      nanText : &quot;{0} n'est pas un nombre valide&quot;
+   });
+}
+
+<b>if</b>(Ext.form.DateField){
+   Ext.apply(Ext.form.DateField.prototype, {
+      disabledDaysText  : &quot;D&Atilde;&copy;sactiv&Atilde;&copy;&quot;,
+      disabledDatesText : &quot;D&Atilde;&copy;sactiv&Atilde;&copy;&quot;,
+      minText           : &quot;La date de ce champ doit &Atilde;&ordf;tre avant le {0}&quot;,
+      maxText           : &quot;La date de ce champ doit &Atilde;&ordf;tre apr&Atilde;&uml;s le {0}&quot;,
+      invalidText       : &quot;{0} n'est pas une date valide - il doit &Atilde;&ordf;tre au format suivant: {1}&quot;,
+      format            : &quot;d/m/y&quot;
+   });
+}
+
+<b>if</b>(Ext.form.ComboBox){
+   Ext.apply(Ext.form.ComboBox.prototype, {
+      loadingText       : &quot;En cours de chargement...&quot;,
+      valueNotFoundText : undefined
+   });
+}
+
+<b>if</b>(Ext.form.VTypes){
+   Ext.apply(Ext.form.VTypes, {
+      emailText    : <em>'Ce champ doit contenir un courriel et doit &Atilde;&ordf;tre sous ce format: &quot;usager@domaine.com&quot;'</em>,
+      urlText      : <em>'Ce champ doit contenir une URL sous le format suivant: &quot;http:/'</em>+<em>'/www.domaine.com&quot;'</em>,
+      alphaText    : <em>'Ce champ ne peut contenir que des lettres et le caract&Atilde;&uml;re soulign&Atilde;&copy; (_)'</em>,
+      alphanumText : <em>'Ce champ ne peut contenir que des caract&Atilde;&uml;res alphanum&Atilde;&copy;riques ainsi que le caract&Atilde;&uml;re soulign&Atilde;&copy; (_)'</em>
+   });
+}
+
+<b>if</b>(Ext.grid.GridView){
+   Ext.apply(Ext.grid.GridView.prototype, {
+      sortAscText  : &quot;Tri ascendant&quot;,
+      sortDescText : &quot;Tri descendant&quot;,
+      lockText     : &quot;Verrouill&Atilde;&copy; la colonne&quot;,
+      unlockText   : &quot;D&Atilde;&copy;verrouill&Atilde;&copy; la colonne&quot;,
+      columnsText  : &quot;Colonnes&quot;
+   });
+}
+
+<b>if</b>(Ext.grid.PropertyColumnModel){
+   Ext.apply(Ext.grid.PropertyColumnModel.prototype, {
+      nameText   : &quot;Propri&Atilde;&copy;t&Atilde;&copy;&quot;,
+      valueText  : &quot;Valeur&quot;,
+      dateFormat : &quot;d/m/Y&quot;
+   });
+}
+
+<b>if</b>(Ext.layout.BorderLayout &amp;&amp; Ext.layout.BorderLayout.SplitRegion){
+   Ext.apply(Ext.layout.BorderLayout.SplitRegion.prototype, {
+      splitTip            : &quot;Cliquer et glisser pour redimensionner le panneau.&quot;,
+      collapsibleSplitTip : &quot;Cliquer et glisser pour redimensionner le panneau. Double-cliquer pour cacher le panneau.&quot;
+   });
+}
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

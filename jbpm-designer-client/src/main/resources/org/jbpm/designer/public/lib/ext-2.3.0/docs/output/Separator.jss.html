@@ -1,0 +1,33 @@
+<html><head><title>Separator.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>Separator.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.menu.Separator
+ * @extends Ext.menu.BaseItem
+ * Adds a separator bar to a menu, used to divide logical groups of menu items. Generally you will
+ * add one of these by using &quot;-&quot; <b>in</b> you call to add() or <b>in</b> your items config rather than creating one directly.
+ * @constructor
+ * @param {Object} config Configuration options
+ */</i>
+Ext.menu.Separator = <b>function</b>(config){
+    Ext.menu.Separator.superclass.constructor.call(<b>this</b>, config);
+};
+
+Ext.extend(Ext.menu.Separator, Ext.menu.BaseItem, {
+    <i>/**
+     * @cfg {String} itemCls The <b>default</b> CSS class to use <b>for</b> separators (defaults to &quot;x-menu-sep&quot;)
+     */</i>
+    itemCls : &quot;x-menu-sep&quot;,
+    <i>/**
+     * @cfg {Boolean} hideOnClick True to hide the containing menu after <b>this</b> item is clicked (defaults to false)
+     */</i>
+    hideOnClick : false,
+
+    <i>// private</i>
+    onRender : <b>function</b>(li){
+        <b>var</b> s = document.createElement(&quot;span&quot;);
+        s.className = <b>this</b>.itemCls;
+        s.innerHTML = &quot;&amp;#160;&quot;;
+        <b>this</b>.el = s;
+        li.addClass(&quot;x-menu-sep-li&quot;);
+        Ext.menu.Separator.superclass.onRender.apply(<b>this</b>, arguments);
+    }
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

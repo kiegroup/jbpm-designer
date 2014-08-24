@@ -1,0 +1,149 @@
+<html><head><title>PanelDD.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>PanelDD.js</h1><pre class="highlighted"><code><i>/* <i>// Internal developer documentation -- will not show up <b>in</b> API docs</i>
+ * @class Ext.dd.PanelProxy
+ * A custom drag proxy implementation specific to {@link Ext.Panel}s. This class is primarily used internally
+ * <b>for</b> the Panel's drag drop implementation, and should never need to be created directly.
+ * @constructor
+ * @param panel The {@link Ext.Panel} to proxy <b>for</b>
+ * @param config Configuration options
+ */</i>
+Ext.dd.PanelProxy = <b>function</b>(panel, config){
+    <b>this</b>.panel = panel;
+    <b>this</b>.id = <b>this</b>.panel.id +<em>'-ddproxy'</em>;
+    Ext.apply(<b>this</b>, config);
+};
+
+Ext.dd.PanelProxy.prototype = {
+    <i>/**
+     * @cfg {Boolean} insertProxy True to insert a placeholder proxy element <b>while</b> dragging the panel,
+      * false to drag <b>with</b> no proxy (defaults to true).
+     */</i>
+    insertProxy : true,
+
+    <i>// private overrides</i>
+    setStatus : Ext.emptyFn,
+    reset : Ext.emptyFn,
+    update : Ext.emptyFn,
+    stop : Ext.emptyFn,
+    sync: Ext.emptyFn,
+
+    <i>/**
+     * Gets the proxy's element
+     * @<b>return</b> {Element} The proxy's element
+     */</i>
+    getEl : <b>function</b>(){
+        <b>return</b> this.ghost;
+    },
+
+    <i>/**
+     * Gets the proxy's ghost element
+     * @<b>return</b> {Element} The proxy's ghost element
+     */</i>
+    getGhost : <b>function</b>(){
+        <b>return</b> this.ghost;
+    },
+
+    <i>/**
+     * Gets the proxy's element
+     * @<b>return</b> {Element} The proxy's element
+     */</i>
+    getProxy : <b>function</b>(){
+        <b>return</b> this.proxy;
+    },
+
+    <i>/**
+     * Hides the proxy
+     */</i>
+    hide : <b>function</b>(){
+        <b>if</b>(this.ghost){
+            <b>if</b>(this.proxy){
+                <b>this</b>.proxy.remove();
+                <b>delete</b> this.proxy;
+            }
+            <b>this</b>.panel.el.dom.style.display = <em>''</em>;
+            <b>this</b>.ghost.remove();
+            <b>delete</b> this.ghost;
+        }
+    },
+
+    <i>/**
+     * Shows the proxy
+     */</i>
+    show : <b>function</b>(){
+        <b>if</b>(!<b>this</b>.ghost){
+            <b>this</b>.ghost = <b>this</b>.panel.createGhost(undefined, undefined, Ext.getBody());
+            <b>this</b>.ghost.setXY(<b>this</b>.panel.el.getXY())
+            <b>if</b>(this.insertProxy){
+                <b>this</b>.proxy = <b>this</b>.panel.el.insertSibling({cls:<em>'x-panel-dd-spacer'</em>});
+                <b>this</b>.proxy.setSize(<b>this</b>.panel.getSize());
+            }
+            <b>this</b>.panel.el.dom.style.display = <em>'none'</em>;
+        }
+    },
+
+    <i>// private</i>
+    repair : <b>function</b>(xy, callback, scope){
+        <b>this</b>.hide();
+        <b>if</b>(typeof callback == &quot;<b>function</b>&quot;){
+            callback.call(scope || <b>this</b>);
+        }
+    },
+
+    <i>/**
+     * Moves the proxy to a different position <b>in</b> the DOM.  This is typically called <b>while</b> dragging the Panel
+     * to keep the proxy sync<em>'d to the Panel'</em>s location.
+     * @param {HTMLElement} parentNode The proxy's parent DOM node
+     * @param {HTMLElement} before (optional) The sibling node before which the proxy should be inserted (defaults
+     * to the parent's last child <b>if</b> not specified)
+     */</i>
+    moveProxy : <b>function</b>(parentNode, before){
+        <b>if</b>(this.proxy){
+            parentNode.insertBefore(<b>this</b>.proxy.dom, before);
+        }
+    }
+};
+
+<i>// private - DD implementation <b>for</b> Panels</i>
+Ext.Panel.DD = <b>function</b>(panel, cfg){
+    <b>this</b>.panel = panel;
+    <b>this</b>.dragData = {panel: panel};
+    <b>this</b>.proxy = <b>new</b> Ext.dd.PanelProxy(panel, cfg);
+    Ext.Panel.DD.superclass.constructor.call(<b>this</b>, panel.el, cfg);
+    <b>var</b> h = panel.header;
+    <b>if</b>(h){
+        <b>this</b>.setHandleElId(h.id);
+    }
+    (h ? h : <b>this</b>.panel.body).setStyle(<em>'cursor'</em>, <em>'move'</em>);
+    <b>this</b>.scroll = false;
+};
+
+Ext.extend(Ext.Panel.DD, Ext.dd.DragSource, {
+    showFrame: Ext.emptyFn,
+    startDrag: Ext.emptyFn,
+    b4StartDrag: <b>function</b>(x, y) {
+        <b>this</b>.proxy.show();
+    },
+    b4MouseDown: <b>function</b>(e) {
+        <b>var</b> x = e.getPageX();
+        <b>var</b> y = e.getPageY();
+        <b>this</b>.autoOffset(x, y);
+    },
+    onInitDrag : <b>function</b>(x, y){
+        <b>this</b>.onStartDrag(x, y);
+        <b>return</b> true;
+    },
+    createFrame : Ext.emptyFn,
+    getDragEl : <b>function</b>(e){
+        <b>return</b> this.proxy.ghost.dom;
+    },
+    endDrag : <b>function</b>(e){
+        <b>this</b>.proxy.hide();
+        <b>this</b>.panel.saveState();
+    },
+
+    autoOffset : <b>function</b>(x, y) {
+        x -= <b>this</b>.startPageX;
+        y -= <b>this</b>.startPageY;
+        <b>this</b>.setDelta(x, y);
+    }
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

@@ -1,0 +1,280 @@
+<html><head><title>TreeLoader.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>TreeLoader.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.tree.TreeLoader
+ * @extends Ext.util.Observable
+ * A TreeLoader provides <b>for</b> lazy loading of an {@link Ext.tree.TreeNode}'s child
+ * nodes from a specified URL. The response must be a JavaScript Array definition
+ * whose elements are node definition objects. eg:
+ * &lt;pre&gt;&lt;code&gt;
+    [{
+        id: 1,
+        text: <em>'A leaf Node'</em>,
+        leaf: true
+    },{
+        id: 2,
+        text: <em>'A folder Node'</em>,
+        children: [{
+            id: 3,
+            text: <em>'A child Node'</em>,
+            leaf: true
+        }]
+   }]
+&lt;/code&gt;&lt;/pre&gt;
+ * &lt;br&gt;&lt;br&gt;
+ * A server request is sent, and child nodes are loaded only when a node is expanded.
+ * The loading node's id is passed to the server under the parameter name &quot;node&quot; to
+ * enable the server to produce the correct child nodes.
+ * &lt;br&gt;&lt;br&gt;
+ * To pass extra parameters, an event handler may be attached to the &quot;beforeload&quot;
+ * event, and the parameters specified <b>in</b> the TreeLoader's baseParams property:
+ * &lt;pre&gt;&lt;code&gt;
+    myTreeLoader.on(&quot;beforeload&quot;, <b>function</b>(treeLoader, node) {
+        <b>this</b>.baseParams.category = node.attributes.category;
+    }, <b>this</b>);
+&lt;/code&gt;&lt;/pre&gt;
+ * This would pass an HTTP parameter called &quot;category&quot; to the server containing
+ * the value of the Node's &quot;category&quot; attribute.
+ * @constructor
+ * Creates a <b>new</b> Treeloader.
+ * @param {Object} config A config object containing config properties.
+ */</i>
+Ext.tree.TreeLoader = <b>function</b>(config){
+    <b>this</b>.baseParams = {};
+    Ext.apply(<b>this</b>, config);
+
+    <b>this</b>.addEvents(
+        <i>/**
+         * @event beforeload
+         * Fires before a network request is made to retrieve the Json text which specifies a node's children.
+         * @param {Object} This TreeLoader object.
+         * @param {Object} node The {@link Ext.tree.TreeNode} object being loaded.
+         * @param {Object} callback The callback <b>function</b> specified <b>in</b> the {@link #load} call.
+         */</i>
+        &quot;beforeload&quot;,
+        <i>/**
+         * @event load
+         * Fires when the node has been successfuly loaded.
+         * @param {Object} This TreeLoader object.
+         * @param {Object} node The {@link Ext.tree.TreeNode} object being loaded.
+         * @param {Object} response The response object containing the data from the server.
+         */</i>
+        &quot;load&quot;,
+        <i>/**
+         * @event loadexception
+         * Fires <b>if</b> the network request failed.
+         * @param {Object} This TreeLoader object.
+         * @param {Object} node The {@link Ext.tree.TreeNode} object being loaded.
+         * @param {Object} response The response object containing the data from the server.
+         */</i>
+        &quot;loadexception&quot;
+    );
+
+    Ext.tree.TreeLoader.superclass.constructor.call(<b>this</b>);
+};
+
+Ext.extend(Ext.tree.TreeLoader, Ext.util.Observable, {
+    <i>/**
+    * @cfg {String} dataUrl The URL from which to request a Json string which
+    * specifies an array of node definition objects representing the child nodes
+    * to be loaded.
+    */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} requestMethod The HTTP request method <b>for</b> loading data (defaults to the value of {@link Ext.Ajax#method}).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} url Equivalent to {@link #dataUrl}.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} preloadChildren If set to true, the loader recursively loads &quot;children&quot; attributes when doing the first load on nodes.
+     */</i>
+<i>// holder</i>
+<i>/***
+    * @cfg {Object} baseParams (optional) An object containing properties which
+    * specify HTTP parameters to be passed to each request <b>for</b> child nodes.
+    */</i>
+<i>// holder</i>
+<i>/***
+    * @cfg {Object} baseAttrs (optional) An object containing attributes to be added to all nodes
+    * created by <b>this</b> loader. If the attributes sent by the server have an attribute <b>in</b> this object,
+    * they take priority.
+    */</i>
+<i>// holder</i>
+<i>/***
+    * @cfg {Object} uiProviders (optional) An object containing properties which
+    * specify custom {@link Ext.tree.TreeNodeUI} implementations. If the optional
+    * &lt;i&gt;uiProvider&lt;/i&gt; attribute of a returned child node is a string rather
+    * than a reference to a TreeNodeUI implementation, then that string value
+    * is used as a property name <b>in</b> the uiProviders object.
+    */</i>
+    uiProviders : {},
+
+    <i>/**
+    * @cfg {Boolean} clearOnLoad (optional) Default to true. Remove previously existing
+    * child nodes before loading.
+    */</i>
+    clearOnLoad : true,
+
+    <i>/**
+     * Load an {@link Ext.tree.TreeNode} from the URL specified <b>in</b> the constructor.
+     * This is called automatically when a node is expanded, but may be used to reload
+     * a node (or append <b>new</b> children <b>if</b> the {@link #clearOnLoad} option is false.)
+     * @param {Ext.tree.TreeNode} node
+     * @param {Function} callback
+     */</i>
+    load : <b>function</b>(node, callback){
+        <b>if</b>(this.clearOnLoad){
+            <b>while</b>(node.firstChild){
+                node.removeChild(node.firstChild);
+            }
+        }
+        <b>if</b>(this.doPreload(node)){ <i>// preloaded json children</i>
+            <b>if</b>(typeof callback == &quot;<b>function</b>&quot;){
+                callback();
+            }
+        }<b>else</b> if(<b>this</b>.dataUrl||<b>this</b>.url){
+            <b>this</b>.requestData(node, callback);
+        }
+    },
+
+    doPreload : <b>function</b>(node){
+        <b>if</b>(node.attributes.children){
+            <b>if</b>(node.childNodes.length &lt; 1){ <i>// preloaded?</i>
+                <b>var</b> cs = node.attributes.children;
+                node.beginUpdate();
+                <b>for</b>(var i = 0, len = cs.length; i &lt; len; i++){
+                    <b>var</b> cn = node.appendChild(<b>this</b>.createNode(cs[i]));
+                    <b>if</b>(this.preloadChildren){
+                        <b>this</b>.doPreload(cn);
+                    }
+                }
+                node.endUpdate();
+            }
+            <b>return</b> true;
+        }<b>else</b> {
+            <b>return</b> false;
+        }
+    },
+
+    getParams: <b>function</b>(node){
+        <b>var</b> buf = [], bp = <b>this</b>.baseParams;
+        <b>for</b>(var key <b>in</b> bp){
+            <b>if</b>(typeof bp[key] != &quot;<b>function</b>&quot;){
+                buf.push(encodeURIComponent(key), &quot;=&quot;, encodeURIComponent(bp[key]), &quot;&amp;&quot;);
+            }
+        }
+        buf.push(&quot;node=&quot;, encodeURIComponent(node.id));
+        <b>return</b> buf.join(&quot;&quot;);
+    },
+
+    requestData : <b>function</b>(node, callback){
+        <b>if</b>(this.fireEvent(&quot;beforeload&quot;, <b>this</b>, node, callback) !== false){
+            <b>this</b>.transId = Ext.Ajax.request({
+                method:<b>this</b>.requestMethod,
+                url: <b>this</b>.dataUrl||<b>this</b>.url,
+                success: <b>this</b>.handleResponse,
+                failure: <b>this</b>.handleFailure,
+                scope: <b>this</b>,
+                argument: {callback: callback, node: node},
+                params: <b>this</b>.getParams(node)
+            });
+        }<b>else</b>{
+            <i>// <b>if</b> the load is cancelled, make sure we notify</i>
+            <i>// the node that we are done</i>
+            <b>if</b>(typeof callback == &quot;<b>function</b>&quot;){
+                callback();
+            }
+        }
+    },
+
+    isLoading : <b>function</b>(){
+        <b>return</b> !!<b>this</b>.transId;
+    },
+
+    abort : <b>function</b>(){
+        <b>if</b>(this.isLoading()){
+            Ext.Ajax.abort(<b>this</b>.transId);
+        }
+    },
+
+    <i>/**
+    * &lt;p&gt;Override <b>this</b> function <b>for</b> custom TreeNode node implementation, or to
+    * modify the attributes at creation time.&lt;/p&gt;
+    * Example:&lt;code&gt;&lt;pre&gt;
+<b>new</b> Ext.tree.TreePanel({
+    ...
+    loader: <b>new</b> Ext.tree.TreeLoader({
+        url: <em>'dataUrl'</em>,
+        createNode: <b>function</b>(attr) {
+<i>//          Allow consolidation consignments to have</i>
+<i>//          consignments dropped into them.</i>
+            <b>if</b> (attr.isConsolidation) {
+                attr.iconCls = <em>'x-consol'</em>,
+                attr.allowDrop = true;
+            }
+            <b>return</b> Ext.tree.TreeLoader.prototype.createNode.call(<b>this</b>, attr);
+        }
+    }),
+    ...
+}); 
+&lt;/pre&gt;&lt;/code&gt;
+    * @param attr {Object} The attributes from which to create the <b>new</b> node.
+    */</i>
+    createNode : <b>function</b>(attr){
+        <i>// apply baseAttrs, nice idea Corey!</i>
+        <b>if</b>(this.baseAttrs){
+            Ext.applyIf(attr, <b>this</b>.baseAttrs);
+        }
+        <b>if</b>(this.applyLoader !== false){
+            attr.loader = <b>this</b>;
+        }
+        <b>if</b>(typeof attr.uiProvider == <em>'string'</em>){
+           attr.uiProvider = <b>this</b>.uiProviders[attr.uiProvider] || eval(attr.uiProvider);
+        }
+        <b>if</b>(attr.nodeType){
+            <b>return</b> new Ext.tree.TreePanel.nodeTypes[attr.nodeType](attr);
+        }<b>else</b>{
+            <b>return</b> attr.leaf ?
+                        <b>new</b> Ext.tree.TreeNode(attr) :
+                        <b>new</b> Ext.tree.AsyncTreeNode(attr);
+        }
+    },
+
+    processResponse : <b>function</b>(response, node, callback){
+        <b>var</b> json = response.responseText;
+        try {
+            <b>var</b> o = eval(&quot;(&quot;+json+&quot;)&quot;);
+            node.beginUpdate();
+            <b>for</b>(var i = 0, len = o.length; i &lt; len; i++){
+                <b>var</b> n = <b>this</b>.createNode(o[i]);
+                <b>if</b>(n){
+                    node.appendChild(n);
+                }
+            }
+            node.endUpdate();
+            <b>if</b>(typeof callback == &quot;<b>function</b>&quot;){
+                callback(<b>this</b>, node);
+            }
+        }catch(e){
+            <b>this</b>.handleFailure(response);
+        }
+    },
+
+    handleResponse : <b>function</b>(response){
+        <b>this</b>.transId = false;
+        <b>var</b> a = response.argument;
+        <b>this</b>.processResponse(response, a.node, a.callback);
+        <b>this</b>.fireEvent(&quot;load&quot;, <b>this</b>, a.node, response);
+    },
+
+    handleFailure : <b>function</b>(response){
+        <b>this</b>.transId = false;
+        <b>var</b> a = response.argument;
+        <b>this</b>.fireEvent(&quot;loadexception&quot;, <b>this</b>, a.node, response);
+        <b>if</b>(typeof a.callback == &quot;<b>function</b>&quot;){
+            a.callback(<b>this</b>, a.node);
+        }
+    }
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

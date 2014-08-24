@@ -1,0 +1,109 @@
+<html><head><title>AsyncTreeNode.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>AsyncTreeNode.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.tree.AsyncTreeNode
+ * @extends Ext.tree.TreeNode
+ * @cfg {TreeLoader} loader A TreeLoader to be used by <b>this</b> node (defaults to the loader defined on the tree)
+ * @constructor
+ * @param {Object/String} attributes The attributes/config <b>for</b> the node or just a string <b>with</b> the text <b>for</b> the node 
+ */</i>
+ Ext.tree.AsyncTreeNode = <b>function</b>(config){
+    <b>this</b>.loaded = config &amp;&amp; config.loaded === true;
+    <b>this</b>.loading = false;
+    Ext.tree.AsyncTreeNode.superclass.constructor.apply(<b>this</b>, arguments);
+    <i>/**
+    * @event beforeload
+    * Fires before <b>this</b> node is loaded, <b>return</b> false to cancel
+    * @param {Node} <b>this</b> This node
+    */</i>
+    <b>this</b>.addEvents(<em>'beforeload'</em>, <em>'load'</em>);
+    <i>/**
+    * @event load
+    * Fires when <b>this</b> node is loaded
+    * @param {Node} <b>this</b> This node
+    */</i>
+<i>// holder</i>
+<i>/***
+     * The loader used by <b>this</b> node (defaults to using the tree's defined loader)
+     * @type TreeLoader
+     * @property loader
+     */</i>
+};
+Ext.extend(Ext.tree.AsyncTreeNode, Ext.tree.TreeNode, {
+    expand : <b>function</b>(deep, anim, callback){
+        <b>if</b>(this.loading){ <i>// <b>if</b> an async load is already running, waiting til it's done</i>
+            <b>var</b> timer;
+            <b>var</b> f = <b>function</b>(){
+                <b>if</b>(!<b>this</b>.loading){ <i>// done loading</i>
+                    clearInterval(timer);
+                    <b>this</b>.expand(deep, anim, callback);
+                }
+            }.createDelegate(<b>this</b>);
+            timer = setInterval(f, 200);
+            <b>return</b>;
+        }
+        <b>if</b>(!<b>this</b>.loaded){
+            <b>if</b>(this.fireEvent(&quot;beforeload&quot;, <b>this</b>) === false){
+                <b>return</b>;
+            }
+            <b>this</b>.loading = true;
+            <b>this</b>.ui.beforeLoad(<b>this</b>);
+            <b>var</b> loader = <b>this</b>.loader || <b>this</b>.attributes.loader || <b>this</b>.getOwnerTree().getLoader();
+            <b>if</b>(loader){
+                loader.load(<b>this</b>, <b>this</b>.loadComplete.createDelegate(<b>this</b>, [deep, anim, callback]));
+                <b>return</b>;
+            }
+        }
+        Ext.tree.AsyncTreeNode.superclass.expand.call(<b>this</b>, deep, anim, callback);
+    },
+    
+    <i>/**
+     * Returns true <b>if</b> this node is currently loading
+     * @<b>return</b> {Boolean}
+     */</i>
+    isLoading : <b>function</b>(){
+        <b>return</b> this.loading;  
+    },
+    
+    loadComplete : <b>function</b>(deep, anim, callback){
+        <b>this</b>.loading = false;
+        <b>this</b>.loaded = true;
+        <b>this</b>.ui.afterLoad(<b>this</b>);
+        <b>this</b>.fireEvent(&quot;load&quot;, <b>this</b>);
+        <b>this</b>.expand(deep, anim, callback);
+    },
+    
+    <i>/**
+     * Returns true <b>if</b> this node has been loaded
+     * @<b>return</b> {Boolean}
+     */</i>
+    isLoaded : <b>function</b>(){
+        <b>return</b> this.loaded;
+    },
+    
+    hasChildNodes : <b>function</b>(){
+        <b>if</b>(!<b>this</b>.isLeaf() &amp;&amp; !<b>this</b>.loaded){
+            <b>return</b> true;
+        }<b>else</b>{
+            <b>return</b> Ext.tree.AsyncTreeNode.superclass.hasChildNodes.call(<b>this</b>);
+        }
+    },
+
+    <i>/**
+     * Trigger a reload <b>for</b> this node
+     * @param {Function} callback
+     */</i>
+    reload : <b>function</b>(callback){
+        <b>this</b>.collapse(false, false);
+        <b>while</b>(this.firstChild){
+            <b>this</b>.removeChild(<b>this</b>.firstChild).destroy();
+        }
+        <b>this</b>.childrenRendered = false;
+        <b>this</b>.loaded = false;
+        <b>if</b>(this.isHiddenRoot()){
+            <b>this</b>.expanded = false;
+        }
+        <b>this</b>.expand(false, false, callback);
+    }
+});
+
+Ext.tree.TreePanel.nodeTypes.async = Ext.tree.AsyncTreeNode;</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

@@ -1,0 +1,198 @@
+<html><head><title>FormLayout.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>FormLayout.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.layout.FormLayout
+ * @extends Ext.layout.AnchorLayout
+ * &lt;p&gt;This layout manager is specifically designed <b>for</b> rendering and managing child Components of forms.
+ * It is responsible <b>for</b> rendering the labels of {@link Ext.form.Field Field}s.&lt;/p&gt;
+ * &lt;p&gt;This layout manager is used when a Container is configured <b>with</b> the layout:<em>'form'</em> {@link Ext.Container#layout layout} config,
+ * and should generally not need to be created directly via the <b>new</b> keyword. In an application,
+ * it will usually be preferrable to use a {@link Ext.form.FormPanel FormPanel} (which automatically uses FormLayout as its layout
+ * class) since it also provides built-<b>in</b> functionality <b>for</b> loading, validating and submitting the form.&lt;/p&gt;
+ * &lt;p&gt;Note that when creating a layout via config, the layout-specific config properties must be passed <b>in</b> via
+ * the {@link Ext.Container#layoutConfig layoutConfig} object which will then be applied internally to the layout.&lt;/p&gt;
+ * &lt;p&gt;The {@link Ext.Container Container} &lt;i&gt;using&lt;/i&gt; the FormLayout can also accept the following layout-specific config
+ * properties:
+ * &lt;div class=&quot;mdetail-params&quot;&gt;&lt;ul&gt;
+ * &lt;li&gt;&lt;b&gt;hideLabels&lt;/b&gt;: (Boolean)&lt;div class=&quot;sub-desc&quot;&gt;True to hide field labels by <b>default</b> (defaults to false)&lt;/div&gt;&lt;/li&gt;
+ * &lt;li&gt;&lt;b&gt;labelAlign&lt;/b&gt;: (String)&lt;div class=&quot;sub-desc&quot;&gt;The <b>default</b> label alignment.  The <b>default</b> value is empty string <em>''</em>
+ * <b>for</b> left alignment, but specifying <em>'top'</em> will align the labels above the fields.&lt;/div&gt;&lt;/li&gt;
+ * &lt;li&gt;&lt;b&gt;labelPad&lt;/b&gt;: (Number)&lt;div class=&quot;sub-desc&quot;&gt;The <b>default</b> padding <b>in</b> pixels <b>for</b> field labels (defaults to 5).  labelPad only
+ * applies <b>if</b> labelWidth is also specified, otherwise it will be ignored.&lt;/div&gt;&lt;/li&gt;
+ * &lt;li&gt;&lt;b&gt;labelWidth&lt;/b&gt;: (Number)&lt;div class=&quot;sub-desc&quot;&gt;The <b>default</b> width <b>in</b> pixels of field labels (defaults to 100)&lt;/div&gt;&lt;/li&gt;
+ * &lt;/ul&gt;&lt;/div&gt;&lt;/p&gt;
+ * &lt;p&gt;Any type of components can be added to a FormLayout, but items that inherit from {@link Ext.form.Field}
+ * can also supply the following field-specific config properties:
+ * &lt;div class=&quot;mdetail-params&quot;&gt;&lt;ul&gt;
+ * &lt;li&gt;&lt;b&gt;clearCls&lt;/b&gt;: (String)&lt;div class=&quot;sub-desc&quot;&gt;The CSS class to apply to the special clearing div rendered directly after each
+ * form field wrapper (defaults to <em>'x-form-clear-left'</em>)&lt;/div&gt;&lt;/li&gt;
+ * &lt;li&gt;&lt;b&gt;fieldLabel&lt;/b&gt;: (String)&lt;div class=&quot;sub-desc&quot;&gt;The text to display as the label <b>for</b> this field (defaults to <em>''</em>)&lt;/div&gt;&lt;/li&gt;
+ * &lt;li&gt;&lt;b&gt;hideLabel&lt;/b&gt;: (Boolean)&lt;div class=&quot;sub-desc&quot;&gt;True to hide the label and separator <b>for</b> this field (defaults to false).&lt;/div&gt;&lt;/li&gt;
+ * &lt;li&gt;&lt;b&gt;itemCls&lt;/b&gt;: (String)&lt;div class=&quot;sub-desc&quot;&gt;A CSS class to add to the div wrapper that contains <b>this</b> field label
+ * and field element (the <b>default</b> class is <em>'x-form-item'</em> and itemCls will be added to that).  If supplied,
+ * itemCls at the field level will override the <b>default</b> itemCls supplied at the container level.&lt;/div&gt;&lt;/li&gt;
+ * &lt;li&gt;&lt;b&gt;labelSeparator&lt;/b&gt;: (String)&lt;div class=&quot;sub-desc&quot;&gt;The separator to display after the text of the label <b>for</b> this field
+ * (defaults to a colon <em>':'</em> or the layout<em>'s value <b>for</b> {@link #labelSeparator}).  To hide the separator use empty string '</em>'.&lt;/div&gt;&lt;/li&gt;
+ * &lt;li&gt;&lt;b&gt;labelStyle&lt;/b&gt;: (String)&lt;div class=&quot;sub-desc&quot;&gt;A CSS style specification string to add to the field label <b>for</b> this field
+ * (defaults to <em>''</em> or the layout's value <b>for</b> {@link #labelStyle}).&lt;/div&gt;&lt;/li&gt;
+ * &lt;/ul&gt;&lt;/div&gt;&lt;/p&gt;
+ * Example usage:&lt;/p&gt;
+ * &lt;pre&gt;&lt;code&gt;
+<i>// Required <b>if</b> showing validation messages</i>
+Ext.QuickTips.init();
+
+<i>// While you can create a basic Panel <b>with</b> layout:<em>'form'</em>, practically</i>
+<i>// you should usually use a FormPanel to also get its form functionality</i>
+<i>// since it already creates a FormLayout internally.</i>
+<b>var</b> form = <b>new</b> Ext.form.FormPanel({
+    labelWidth: 75,
+    title: <em>'Form Layout'</em>,
+    bodyStyle:<em>'padding:15px'</em>,
+    width: 350,
+    labelPad: 10,
+    defaultType: <em>'textfield'</em>,
+    defaults: {
+        <i>// applied to each contained item</i>
+        width: 230,
+        msgTarget: <em>'side'</em>
+    },
+    layoutConfig: {
+        <i>// layout-specific configs go here</i>
+        labelSeparator: <em>''</em>
+    },
+    items: [{
+            fieldLabel: <em>'First Name'</em>,
+            name: <em>'first'</em>,
+            allowBlank: false
+        },{
+            fieldLabel: <em>'Last Name'</em>,
+            name: <em>'last'</em>
+        },{
+            fieldLabel: <em>'Company'</em>,
+            name: <em>'company'</em>
+        },{
+            fieldLabel: <em>'Email'</em>,
+            name: <em>'email'</em>,
+            vtype:<em>'email'</em>
+        }
+    ],
+    buttons: [{
+        text: <em>'Save'</em>
+    },{
+        text: <em>'Cancel'</em>
+    }]
+});
+&lt;/code&gt;&lt;/pre&gt;
+ */</i>
+Ext.layout.FormLayout = Ext.extend(Ext.layout.AnchorLayout, {
+    <i>/**
+     * @cfg {String} labelSeparator
+     * The standard separator to display after the text of each form label (defaults to a colon <em>':'</em>).  To turn off
+     * separators <b>for</b> all fields <b>in</b> this layout by <b>default</b> specify empty string <em>''</em> (<b>if</b> the labelSeparator value is
+     * explicitly set at the field level, those will still be displayed).
+     */</i>
+    labelSeparator : <em>':'</em>,
+
+    <i>// private</i>
+    getAnchorViewSize : <b>function</b>(ct, target){
+        <b>return</b> (ct.body||ct.el).getStyleSize();
+    },
+
+    <i>// private</i>
+    setContainer : <b>function</b>(ct){
+        Ext.layout.FormLayout.superclass.setContainer.call(<b>this</b>, ct);
+
+        <b>if</b>(ct.labelAlign){
+            ct.addClass(<em>'x-form-label-'</em>+ct.labelAlign);
+        }
+
+        <b>if</b>(ct.hideLabels){
+            <b>this</b>.labelStyle = &quot;display:none&quot;;
+            <b>this</b>.elementStyle = &quot;padding-left:0;&quot;;
+            <b>this</b>.labelAdjust = 0;
+        }<b>else</b>{
+            <b>this</b>.labelSeparator = ct.labelSeparator || <b>this</b>.labelSeparator;
+            ct.labelWidth = ct.labelWidth || 100;
+            <b>if</b>(typeof ct.labelWidth == <em>'number'</em>){
+                <b>var</b> pad = (<b>typeof</b> ct.labelPad == <em>'number'</em> ? ct.labelPad : 5);
+                <b>this</b>.labelAdjust = ct.labelWidth+pad;
+                <b>this</b>.labelStyle = &quot;width:&quot;+ct.labelWidth+&quot;px;&quot;;
+                <b>this</b>.elementStyle = &quot;padding-left:&quot;+(ct.labelWidth+pad)+<em>'px'</em>;
+            }
+            <b>if</b>(ct.labelAlign == <em>'top'</em>){
+                <b>this</b>.labelStyle = &quot;width:auto;&quot;;
+                <b>this</b>.labelAdjust = 0;
+                <b>this</b>.elementStyle = &quot;padding-left:0;&quot;;
+            }
+        }
+
+        <b>if</b>(!<b>this</b>.fieldTpl){
+            <i>// the <b>default</b> field template used by all form layouts</i>
+            <b>var</b> t = <b>new</b> Ext.Template(
+                <em>'&lt;div class=&quot;x-form-item {5}&quot; tabIndex=&quot;-1&quot;&gt;'</em>,
+                    <em>'&lt;label <b>for</b>=&quot;{0}&quot; style=&quot;{2}&quot; class=&quot;x-form-item-label&quot;&gt;{1}{4}&lt;/label&gt;'</em>,
+                    <em>'&lt;div class=&quot;x-form-element&quot; id=&quot;x-form-el-{0}&quot; style=&quot;{3}&quot;&gt;'</em>,
+                    <em>'&lt;/div&gt;&lt;div class=&quot;{6}&quot;&gt;&lt;/div&gt;'</em>,
+                <em>'&lt;/div&gt;'</em>
+            );
+            t.disableFormats = true;
+            t.compile();
+            Ext.layout.FormLayout.prototype.fieldTpl = t;
+        }
+    },
+    
+    <i>//private</i>
+    getLabelStyle: <b>function</b>(s){
+        <b>var</b> ls = <em>''</em>, items = [<b>this</b>.labelStyle, s];
+        <b>for</b> (<b>var</b> i = 0, len = items.length; i &lt; len; ++i){
+            <b>if</b> (items[i]){
+                ls += items[i];
+                <b>if</b> (ls.substr(-1, 1) != <em>';'</em>){
+                    ls += <em>';'</em>
+                }
+            }
+        }
+        <b>return</b> ls;
+    },
+
+    <i>// private</i>
+    renderItem : <b>function</b>(c, position, target){
+        <b>if</b>(c &amp;&amp; !c.rendered &amp;&amp; c.isFormField &amp;&amp; c.inputType != <em>'hidden'</em>){
+            <b>var</b> args = [
+                   c.id, c.fieldLabel,
+                   <b>this</b>.getLabelStyle(c.labelStyle),
+                   <b>this</b>.elementStyle||<em>''</em>,
+                   <b>typeof</b> c.labelSeparator == <em>'undefined'</em> ? <b>this</b>.labelSeparator : c.labelSeparator,
+                   (c.itemCls||<b>this</b>.container.itemCls||<em>''</em>) + (c.hideLabel ? <em>' x-hide-label'</em> : <em>''</em>),
+                   c.clearCls || <em>'x-form-clear-left'</em> 
+            ];
+            <b>if</b>(typeof position == <em>'number'</em>){
+                position = target.dom.childNodes[position] || null;
+            }
+            <b>if</b>(position){
+                <b>this</b>.fieldTpl.insertBefore(position, args);
+            }<b>else</b>{
+                <b>this</b>.fieldTpl.append(target, args);
+            }
+            c.render(<em>'x-form-el-'</em>+c.id);
+        }<b>else</b> {
+            Ext.layout.FormLayout.superclass.renderItem.apply(<b>this</b>, arguments);
+        }
+    },
+
+    <i>// private</i>
+    adjustWidthAnchor : <b>function</b>(value, comp){
+        <b>return</b> value - (comp.isFormField  ? (comp.hideLabel ? 0 : <b>this</b>.labelAdjust) : 0);
+    },
+
+    <i>// private</i>
+    isValidParent : <b>function</b>(c, target){
+        <b>return</b> true;
+    }
+
+    <i>/**
+     * @property activeItem
+     * @hide
+     */</i>
+});
+
+Ext.Container.LAYOUTS[<em>'form'</em>] = Ext.layout.FormLayout;</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

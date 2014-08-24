@@ -1,0 +1,166 @@
+<html><head><title>StatusProxy.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>StatusProxy.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.dd.StatusProxy
+ * A specialized drag proxy that supports a drop status icon, {@link Ext.Layer} styles and auto-repair.  This is the
+ * <b>default</b> drag proxy used by all Ext.dd components.
+ * @constructor
+ * @param {Object} config
+ */</i>
+Ext.dd.StatusProxy = <b>function</b>(config){
+    Ext.apply(<b>this</b>, config);
+    <b>this</b>.id = <b>this</b>.id || Ext.id();
+    <b>this</b>.el = <b>new</b> Ext.Layer({
+        dh: {
+            id: <b>this</b>.id, tag: &quot;div&quot;, cls: &quot;x-dd-drag-proxy &quot;+<b>this</b>.dropNotAllowed, children: [
+                {tag: &quot;div&quot;, cls: &quot;x-dd-drop-icon&quot;},
+                {tag: &quot;div&quot;, cls: &quot;x-dd-drag-ghost&quot;}
+            ]
+        }, 
+        shadow: !config || config.shadow !== false
+    });
+    <b>this</b>.ghost = Ext.get(<b>this</b>.el.dom.childNodes[1]);
+    <b>this</b>.dropStatus = <b>this</b>.dropNotAllowed;
+};
+
+Ext.dd.StatusProxy.prototype = {
+    <i>/**
+     * @cfg {String} dropAllowed
+     * The CSS class to apply to the status element when drop is allowed (defaults to &quot;x-dd-drop-ok&quot;).
+     */</i>
+    dropAllowed : &quot;x-dd-drop-ok&quot;,
+    <i>/**
+     * @cfg {String} dropNotAllowed
+     * The CSS class to apply to the status element when drop is not allowed (defaults to &quot;x-dd-drop-nodrop&quot;).
+     */</i>
+    dropNotAllowed : &quot;x-dd-drop-nodrop&quot;,
+
+    <i>/**
+     * Updates the proxy's visual element to indicate the status of whether or not drop is allowed
+     * over the current target element.
+     * @param {String} cssClass The css class <b>for</b> the <b>new</b> drop status indicator image
+     */</i>
+    setStatus : <b>function</b>(cssClass){
+        cssClass = cssClass || <b>this</b>.dropNotAllowed;
+        <b>if</b>(this.dropStatus != cssClass){
+            <b>this</b>.el.replaceClass(<b>this</b>.dropStatus, cssClass);
+            <b>this</b>.dropStatus = cssClass;
+        }
+    },
+
+    <i>/**
+     * Resets the status indicator to the <b>default</b> dropNotAllowed value
+     * @param {Boolean} clearGhost True to also remove all content from the ghost, false to preserve it
+     */</i>
+    reset : <b>function</b>(clearGhost){
+        <b>this</b>.el.dom.className = &quot;x-dd-drag-proxy &quot; + <b>this</b>.dropNotAllowed;
+        <b>this</b>.dropStatus = <b>this</b>.dropNotAllowed;
+        <b>if</b>(clearGhost){
+            <b>this</b>.ghost.update(&quot;&quot;);
+        }
+    },
+
+    <i>/**
+     * Updates the contents of the ghost element
+     * @param {String/HTMLElement} html The html that will replace the current innerHTML of the ghost element, or a
+     * DOM node to append as the child of the ghost element (<b>in</b> which <b>case</b> the innerHTML will be cleared first).
+     */</i>
+    update : <b>function</b>(html){
+        <b>if</b>(typeof html == &quot;string&quot;){
+            <b>this</b>.ghost.update(html);
+        }<b>else</b>{
+            <b>this</b>.ghost.update(&quot;&quot;);
+            html.style.margin = &quot;0&quot;;
+            <b>this</b>.ghost.dom.appendChild(html);
+        }
+        <b>var</b> el = <b>this</b>.ghost.dom.firstChild; 
+        <b>if</b>(el){
+            Ext.fly(el).setStyle(Ext.isIE ? <em>'styleFloat'</em> : <em>'cssFloat'</em>, <em>'none'</em>);
+        }
+    },
+
+    <i>/**
+     * Returns the underlying proxy {@link Ext.Layer}
+     * @<b>return</b> {Ext.Layer} el
+    */</i>
+    getEl : <b>function</b>(){
+        <b>return</b> this.el;
+    },
+
+    <i>/**
+     * Returns the ghost element
+     * @<b>return</b> {Ext.Element} el
+     */</i>
+    getGhost : <b>function</b>(){
+        <b>return</b> this.ghost;
+    },
+
+    <i>/**
+     * Hides the proxy
+     * @param {Boolean} clear True to reset the status and clear the ghost contents, false to preserve them
+     */</i>
+    hide : <b>function</b>(clear){
+        <b>this</b>.el.hide();
+        <b>if</b>(clear){
+            <b>this</b>.reset(true);
+        }
+    },
+
+    <i>/**
+     * Stops the repair animation <b>if</b> it's currently running
+     */</i>
+    stop : <b>function</b>(){
+        <b>if</b>(this.anim &amp;&amp; <b>this</b>.anim.isAnimated &amp;&amp; <b>this</b>.anim.isAnimated()){
+            <b>this</b>.anim.stop();
+        }
+    },
+
+    <i>/**
+     * Displays <b>this</b> proxy
+     */</i>
+    show : <b>function</b>(){
+        <b>this</b>.el.show();
+    },
+
+    <i>/**
+     * Force the Layer to sync its shadow and shim positions to the element
+     */</i>
+    sync : <b>function</b>(){
+        <b>this</b>.el.sync();
+    },
+
+    <i>/**
+     * Causes the proxy to <b>return</b> to its position of origin via an animation.  Should be called after an
+     * invalid drop operation by the item being dragged.
+     * @param {Array} xy The XY position of the element ([x, y])
+     * @param {Function} callback The <b>function</b> to call after the repair is complete
+     * @param {Object} scope The scope <b>in</b> which to execute the callback
+     */</i>
+    repair : <b>function</b>(xy, callback, scope){
+        <b>this</b>.callback = callback;
+        <b>this</b>.scope = scope;
+        <b>if</b>(xy &amp;&amp; <b>this</b>.animRepair !== false){
+            <b>this</b>.el.addClass(&quot;x-dd-drag-repair&quot;);
+            <b>this</b>.el.hideUnders(true);
+            <b>this</b>.anim = <b>this</b>.el.shift({
+                duration: <b>this</b>.repairDuration || .5,
+                easing: <em>'easeOut'</em>,
+                xy: xy,
+                stopFx: true,
+                callback: <b>this</b>.afterRepair,
+                scope: <b>this</b>
+            });
+        }<b>else</b>{
+            <b>this</b>.afterRepair();
+        }
+    },
+
+    <i>// private</i>
+    afterRepair : <b>function</b>(){
+        <b>this</b>.hide(true);
+        <b>if</b>(typeof <b>this</b>.callback == &quot;<b>function</b>&quot;){
+            <b>this</b>.callback.call(<b>this</b>.scope || <b>this</b>);
+        }
+        <b>this</b>.callback = null;
+        <b>this</b>.scope = null;
+    }
+};</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

@@ -1,0 +1,106 @@
+<html><head><title>ComponentMgr.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ComponentMgr.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.ComponentMgr
+ * &lt;p&gt;Provides a registry of all Components (instances of {@link Ext.Component} or any subclass
+ * thereof) on a page so that they can be easily accessed by component id (see {@link #get}, or
+ * the convenience method {@link Ext#getCmp Ext.getCmp}).&lt;/p&gt;
+ * &lt;p&gt;This object also provides a registry of available Component &lt;i&gt;classes&lt;/i&gt;
+ * indexed by a mnemonic code known as the Component's {@link Ext.Component#xtype xtype}.
+ * The &lt;tt&gt;xtype&lt;/tt&gt; provides a way to avoid instantiating child Components
+ * when creating a full, nested config object <b>for</b> a complete Ext page.&lt;/p&gt;
+ * &lt;p&gt;A child Component may be specified simply as a &lt;i&gt;config object&lt;/i&gt;
+ * as long as the correct xtype is specified so that <b>if</b> and when the Component
+ * needs rendering, the correct type can be looked up <b>for</b> lazy instantiation.&lt;/p&gt;
+ * &lt;p&gt;For a list of all available xtypes, see {@link Ext.Component}.&lt;/p&gt;
+ * @singleton
+ */</i>
+Ext.ComponentMgr = <b>function</b>(){
+    <b>var</b> all = <b>new</b> Ext.util.MixedCollection();
+    <b>var</b> types = {};
+
+    <b>return</b> {
+        <i>/**
+         * Registers a component.
+         * @param {Ext.Component} c The component
+         */</i>
+        register : <b>function</b>(c){
+            all.add(c);
+        },
+
+        <i>/**
+         * Unregisters a component.
+         * @param {Ext.Component} c The component
+         */</i>
+        unregister : <b>function</b>(c){
+            all.remove(c);
+        },
+
+        <i>/**
+         * Returns a component by id
+         * @param {String} id The component id
+         * @<b>return</b> Ext.Component
+         */</i>
+        get : <b>function</b>(id){
+            <b>return</b> all.get(id);
+        },
+
+        <i>/**
+         * Registers a <b>function</b> that will be called when a specified component is added to ComponentMgr
+         * @param {String} id The component id
+         * @param {Function} fn The callback <b>function</b>
+         * @param {Object} scope The scope of the callback
+         */</i>
+        onAvailable : <b>function</b>(id, fn, scope){
+            all.on(&quot;add&quot;, <b>function</b>(index, o){
+                <b>if</b>(o.id == id){
+                    fn.call(scope || o, o);
+                    all.un(&quot;add&quot;, fn, scope);
+                }
+            });
+        },
+
+        <i>/**
+         * The MixedCollection used internally <b>for</b> the component cache. An example usage may be subscribing to
+         * events on the MixedCollection to monitor addition or removal.  Read-only.
+         * @type {MixedCollection}
+         */</i>
+        all : all,
+
+        <i>/**
+         * &lt;p&gt;Registers a <b>new</b> Component constructor, keyed by a <b>new</b>
+         * {@link Ext.Component#xtype}.&lt;/p&gt;
+         * &lt;p&gt;Use <b>this</b> method to register <b>new</b> subclasses of {@link Ext.Component} so
+         * that lazy instantiation may be used when specifying child Components.
+         * see {@link Ext.Container#items}&lt;/p&gt;
+         * @param {String} xtype The mnemonic string by which the Component class
+         * may be looked up.
+         * @param {Constructor} cls The <b>new</b> Component class.
+         */</i>
+        registerType : <b>function</b>(xtype, cls){
+            types[xtype] = cls;
+            cls.xtype = xtype;
+        },
+
+        <i>/**
+         * Creates a <b>new</b> Component from the specified config object using the
+         * config object's {@link Ext.component#xtype xtype} to determine the class to instantiate.
+         * @param {Object} config A configuration object <b>for</b> the Component you wish to create.
+         * @param {Constructor} defaultType The constructor to provide the <b>default</b> Component type <b>if</b>
+         * the config object does not contain an xtype. (Optional <b>if</b> the config contains an xtype).
+         * @<b>return</b> {Ext.Component} The newly instantiated Component.
+         */</i>
+        create : <b>function</b>(config, defaultType){
+            <b>return</b> new types[config.xtype || defaultType](config);
+        }
+    };
+}();
+
+<i>/**
+ * Shorthand <b>for</b> {@link Ext.ComponentMgr#registerType}
+ * @param {String} xtype The mnemonic string by which the Component class
+ * may be looked up.
+ * @param {Constructor} cls The <b>new</b> Component class.
+ * @member Ext
+ * @method reg
+ */</i>
+Ext.reg = Ext.ComponentMgr.registerType; // <b>this</b> will be called a lot internally, shorthand to keep the bytes down</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

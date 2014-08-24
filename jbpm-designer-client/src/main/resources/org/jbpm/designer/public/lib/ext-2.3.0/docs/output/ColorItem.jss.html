@@ -1,0 +1,20 @@
+<html><head><title>ColorItem.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ColorItem.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.menu.ColorItem
+ * @extends Ext.menu.Adapter
+ * A menu item that wraps the {@link Ext.ColorPalette} component.
+ * @constructor
+ * Creates a <b>new</b> ColorItem
+ * @param {Object} config Configuration options
+ */</i>
+Ext.menu.ColorItem = <b>function</b>(config){
+    Ext.menu.ColorItem.superclass.constructor.call(<b>this</b>, <b>new</b> Ext.ColorPalette(config), config);
+    <i>/** The Ext.ColorPalette object @type Ext.ColorPalette */</i>
+    <b>this</b>.palette = <b>this</b>.component;
+    <b>this</b>.palette.purgeListeners();
+    <b>this</b>.relayEvents(<b>this</b>.palette, [&quot;select&quot;]);
+    <b>if</b>(this.selectHandler){
+        <b>this</b>.on(<em>'select'</em>, <b>this</b>.selectHandler, <b>this</b>.scope);
+    }
+};
+Ext.extend(Ext.menu.ColorItem, Ext.menu.Adapter);</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

@@ -1,0 +1,191 @@
+<html><head><title>Item.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>Item.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.menu.Item
+ * @extends Ext.menu.BaseItem
+ * A base class <b>for</b> all menu items that require menu-related functionality (like sub-menus) and are not static
+ * display items.  Item extends the base functionality of {@link Ext.menu.BaseItem} by adding menu-specific
+ * activation and click handling.
+ * @constructor
+ * Creates a <b>new</b> Item
+ * @param {Object} config Configuration options
+ */</i>
+Ext.menu.Item = <b>function</b>(config){
+    Ext.menu.Item.superclass.constructor.call(<b>this</b>, config);
+    <b>if</b>(this.menu){
+        <b>this</b>.menu = Ext.menu.MenuMgr.get(<b>this</b>.menu);
+    }
+};
+Ext.extend(Ext.menu.Item, Ext.menu.BaseItem, {
+    <i>/**
+     * @cfg {Mixed} menu Either an instance of {@link Ext.menu.Menu} or the config object <b>for</b> an
+     * {@link Ext.menu.Menu} which acts as the submenu when <b>this</b> item is activated.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} icon The path to an icon to display <b>in</b> this item (defaults to Ext.BLANK_IMAGE_URL).  If
+     * icon is specified {@link #iconCls} should not be.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} iconCls A CSS class that specifies a background image that will be used as the icon <b>for</b>
+     * <b>this</b> item (defaults to <em>''</em>).  If iconCls is specified {@link #icon} should not be.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} text The text to display <b>in</b> this item (defaults to <em>''</em>).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} href The href attribute to use <b>for</b> the underlying anchor link (defaults to <em>'#'</em>).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} hrefTarget The target attribute to use <b>for</b> the underlying anchor link (defaults to <em>''</em>).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} itemCls The <b>default</b> CSS class to use <b>for</b> menu items (defaults to <em>'x-menu-item'</em>)
+     */</i>
+    itemCls : &quot;x-menu-item&quot;,
+    <i>/**
+     * @cfg {Boolean} canActivate True <b>if</b> this item can be visually activated (defaults to true)
+     */</i>
+    canActivate : true,
+    <i>/**
+     * @cfg {Number} showDelay Length of time <b>in</b> milliseconds to wait before showing <b>this</b> item (defaults to 200)
+     */</i>
+    showDelay: 200,
+    <i>// doc'd <b>in</b> BaseItem</i>
+    hideDelay: 200,
+
+    <i>// private</i>
+    ctype: &quot;Ext.menu.Item&quot;,
+
+    <i>// private</i>
+    onRender : <b>function</b>(container, position){
+        <b>var</b> el = document.createElement(&quot;a&quot;);
+        el.hideFocus = true;
+        el.unselectable = &quot;on&quot;;
+        el.href = <b>this</b>.href || &quot;#&quot;;
+        <b>if</b>(this.hrefTarget){
+            el.target = <b>this</b>.hrefTarget;
+        }
+        el.className = <b>this</b>.itemCls + (<b>this</b>.menu ?  &quot; x-menu-item-arrow&quot; : &quot;&quot;) + (<b>this</b>.cls ?  &quot; &quot; + <b>this</b>.cls : &quot;&quot;);
+        el.innerHTML = String.format(
+                <em>'&lt;img src=&quot;{0}&quot; class=&quot;x-menu-item-icon {2}&quot; /&gt;{1}'</em>,
+                <b>this</b>.icon || Ext.BLANK_IMAGE_URL, <b>this</b>.itemText||<b>this</b>.text, <b>this</b>.iconCls || <em>''</em>);
+        <b>this</b>.el = el;
+        Ext.menu.Item.superclass.onRender.call(<b>this</b>, container, position);
+    },
+
+    <i>/**
+     * Sets the text to display <b>in</b> this menu item
+     * @param {String} text The text to display
+     */</i>
+    setText : <b>function</b>(text){
+        <b>this</b>.text = text;
+        <b>if</b>(this.rendered){
+            <b>this</b>.el.update(String.format(
+                <em>'&lt;img src=&quot;{0}&quot; class=&quot;x-menu-item-icon {2}&quot;&gt;{1}'</em>,
+                <b>this</b>.icon || Ext.BLANK_IMAGE_URL, <b>this</b>.text, <b>this</b>.iconCls || <em>''</em>));
+            <b>this</b>.parentMenu.autoWidth();
+        }
+    },
+
+    <i>/**
+     * Sets the CSS class to apply to the item's icon element
+     * @param {String} cls The CSS class to apply
+     */</i>
+    setIconClass : <b>function</b>(cls){
+        <b>var</b> oldCls = <b>this</b>.iconCls;
+        <b>this</b>.iconCls = cls;
+        <b>if</b>(this.rendered){
+            <b>this</b>.el.child(<em>'img.x-menu-item-icon'</em>).replaceClass(oldCls, <b>this</b>.iconCls);
+        }
+    },
+    
+    <i>//private</i>
+    beforeDestroy: <b>function</b>(){
+        <b>if</b> (<b>this</b>.menu){
+            <b>this</b>.menu.destroy();
+        }
+        Ext.menu.Item.superclass.beforeDestroy.call(<b>this</b>);
+    },
+
+    <i>// private</i>
+    handleClick : <b>function</b>(e){
+        <b>if</b>(!<b>this</b>.href){ <i>// <b>if</b> no link defined, stop the event automatically</i>
+            e.stopEvent();
+        }
+        Ext.menu.Item.superclass.handleClick.apply(<b>this</b>, arguments);
+    },
+
+    <i>// private</i>
+    activate : <b>function</b>(autoExpand){
+        <b>if</b>(Ext.menu.Item.superclass.activate.apply(<b>this</b>, arguments)){
+            <b>this</b>.focus();
+            <b>if</b>(autoExpand){
+                <b>this</b>.expandMenu();
+            }
+        }
+        <b>return</b> true;
+    },
+
+    <i>// private</i>
+    shouldDeactivate : <b>function</b>(e){
+        <b>if</b>(Ext.menu.Item.superclass.shouldDeactivate.call(<b>this</b>, e)){
+            <b>if</b>(this.menu &amp;&amp; <b>this</b>.menu.isVisible()){
+                <b>return</b> !<b>this</b>.menu.getEl().getRegion().contains(e.getPoint());
+            }
+            <b>return</b> true;
+        }
+        <b>return</b> false;
+    },
+
+    <i>// private</i>
+    deactivate : <b>function</b>(){
+        Ext.menu.Item.superclass.deactivate.apply(<b>this</b>, arguments);
+        <b>this</b>.hideMenu();
+    },
+
+    <i>// private</i>
+    expandMenu : <b>function</b>(autoActivate){
+        <b>if</b>(!<b>this</b>.disabled &amp;&amp; <b>this</b>.menu){
+            clearTimeout(<b>this</b>.hideTimer);
+            <b>delete</b> this.hideTimer;
+            <b>if</b>(!<b>this</b>.menu.isVisible() &amp;&amp; !<b>this</b>.showTimer){
+                <b>this</b>.showTimer = <b>this</b>.deferExpand.defer(<b>this</b>.showDelay, <b>this</b>, [autoActivate]);
+            }<b>else</b> if (<b>this</b>.menu.isVisible() &amp;&amp; autoActivate){
+                <b>this</b>.menu.tryActivate(0, 1);
+            }
+        }
+    },
+
+    <i>// private</i>
+    deferExpand : <b>function</b>(autoActivate){
+        <b>delete</b> this.showTimer;
+        <b>this</b>.menu.show(<b>this</b>.container, <b>this</b>.parentMenu.subMenuAlign || &quot;tl-tr?&quot;, <b>this</b>.parentMenu);
+        <b>if</b>(autoActivate){
+            <b>this</b>.menu.tryActivate(0, 1);
+        }
+    },
+
+    <i>// private</i>
+    hideMenu : <b>function</b>(){
+        clearTimeout(<b>this</b>.showTimer);
+        <b>delete</b> this.showTimer;
+        <b>if</b>(!<b>this</b>.hideTimer &amp;&amp; <b>this</b>.menu &amp;&amp; <b>this</b>.menu.isVisible()){
+            <b>this</b>.hideTimer = <b>this</b>.deferHide.defer(<b>this</b>.hideDelay, <b>this</b>);
+        }
+    },
+
+    <i>// private</i>
+    deferHide : <b>function</b>(){
+        <b>delete</b> this.hideTimer;
+        <b>if</b>(this.menu.over){
+            <b>this</b>.parentMenu.setActiveItem(<b>this</b>, false);
+        }<b>else</b>{
+            <b>this</b>.menu.hide();
+        }
+    }
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

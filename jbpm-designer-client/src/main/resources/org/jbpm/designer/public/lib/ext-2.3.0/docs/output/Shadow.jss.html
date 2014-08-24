@@ -1,0 +1,187 @@
+<html><head><title>Shadow.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>Shadow.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.Shadow
+ * Simple class that can provide a shadow effect <b>for</b> any element.  Note that the element MUST be absolutely positioned,
+ * and the shadow does not provide any shimming.  This should be used only <b>in</b> simple cases -- <b>for</b> more advanced
+ * functionality that can also provide the same shadow effect, see the {@link Ext.Layer} class.
+ * @constructor
+ * Create a <b>new</b> Shadow
+ * @param {Object} config The config object
+ */</i>
+Ext.Shadow = <b>function</b>(config){
+    Ext.apply(<b>this</b>, config);
+    <b>if</b>(typeof <b>this</b>.mode != &quot;string&quot;){
+        <b>this</b>.mode = <b>this</b>.defaultMode;
+    }
+    <b>var</b> o = <b>this</b>.offset, a = {h: 0};
+    <b>var</b> rad = Math.floor(<b>this</b>.offset/2);
+    <b>switch</b>(this.mode.toLowerCase()){ <i>// all <b>this</b> hideous nonsense calculates the various offsets <b>for</b> shadows</i>
+        <b>case</b> &quot;drop&quot;:
+            a.w = 0;
+            a.l = a.t = o;
+            a.t -= 1;
+            <b>if</b>(Ext.isIE){
+                a.l -= <b>this</b>.offset + rad;
+                a.t -= <b>this</b>.offset + rad;
+                a.w -= rad;
+                a.h -= rad;
+                a.t += 1;
+            }
+        <b>break</b>;
+        <b>case</b> &quot;sides&quot;:
+            a.w = (o*2);
+            a.l = -o;
+            a.t = o-1;
+            <b>if</b>(Ext.isIE){
+                a.l -= (<b>this</b>.offset - rad);
+                a.t -= <b>this</b>.offset + rad;
+                a.l += 1;
+                a.w -= (<b>this</b>.offset - rad)*2;
+                a.w -= rad + 1;
+                a.h -= 1;
+            }
+        <b>break</b>;
+        <b>case</b> &quot;frame&quot;:
+            a.w = a.h = (o*2);
+            a.l = a.t = -o;
+            a.t += 1;
+            a.h -= 2;
+            <b>if</b>(Ext.isIE){
+                a.l -= (<b>this</b>.offset - rad);
+                a.t -= (<b>this</b>.offset - rad);
+                a.l += 1;
+                a.w -= (<b>this</b>.offset + rad + 1);
+                a.h -= (<b>this</b>.offset + rad);
+                a.h += 1;
+            }
+        <b>break</b>;
+    };
+
+    <b>this</b>.adjusts = a;
+};
+
+Ext.Shadow.prototype = {
+    <i>/**
+     * @cfg {String} mode
+     * The shadow display mode.  Supports the following options:&lt;br /&gt;
+     * sides: Shadow displays on both sides and bottom only&lt;br /&gt;
+     * frame: Shadow displays equally on all four sides&lt;br /&gt;
+     * drop: Traditional bottom-right drop shadow (<b>default</b>)
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} offset
+     * The number of pixels to offset the shadow from the element (defaults to 4)
+     */</i>
+    offset: 4,
+
+    <i>// private</i>
+    defaultMode: &quot;drop&quot;,
+
+    <i>/**
+     * Displays the shadow under the target element
+     * @param {Mixed} targetEl The id or element under which the shadow should display
+     */</i>
+    show : <b>function</b>(target){
+        target = Ext.get(target);
+        <b>if</b>(!<b>this</b>.el){
+            <b>this</b>.el = Ext.Shadow.Pool.pull();
+            <b>if</b>(this.el.dom.nextSibling != target.dom){
+                <b>this</b>.el.insertBefore(target);
+            }
+        }
+        <b>this</b>.el.setStyle(&quot;z-index&quot;, <b>this</b>.zIndex || parseInt(target.getStyle(&quot;z-index&quot;), 10)-1);
+        <b>if</b>(Ext.isIE){
+            <b>this</b>.el.dom.style.filter=&quot;progid:DXImageTransform.Microsoft.alpha(opacity=50) progid:DXImageTransform.Microsoft.Blur(pixelradius=&quot;+(<b>this</b>.offset)+&quot;)&quot;;
+        }
+        <b>this</b>.realign(
+            target.getLeft(true),
+            target.getTop(true),
+            target.getWidth(),
+            target.getHeight()
+        );
+        <b>this</b>.el.dom.style.display = &quot;block&quot;;
+    },
+
+    <i>/**
+     * Returns true <b>if</b> the shadow is visible, <b>else</b> false
+     */</i>
+    isVisible : <b>function</b>(){
+        <b>return</b> this.el ? true : false;  
+    },
+
+    <i>/**
+     * Direct alignment when values are already available. Show must be called at least once before
+     * calling <b>this</b> method to ensure it is initialized.
+     * @param {Number} left The target element left position
+     * @param {Number} top The target element top position
+     * @param {Number} width The target element width
+     * @param {Number} height The target element height
+     */</i>
+    realign : <b>function</b>(l, t, w, h){
+        <b>if</b>(!<b>this</b>.el){
+            <b>return</b>;
+        }
+        <b>var</b> a = <b>this</b>.adjusts, d = <b>this</b>.el.dom, s = d.style;
+        <b>var</b> iea = 0;
+        s.left = (l+a.l)+&quot;px&quot;;
+        s.top = (t+a.t)+&quot;px&quot;;
+        <b>var</b> sw = (w+a.w), sh = (h+a.h), sws = sw +&quot;px&quot;, shs = sh + &quot;px&quot;;
+        <b>if</b>(s.width != sws || s.height != shs){
+            s.width = sws;
+            s.height = shs;
+            <b>if</b>(!Ext.isIE){
+                <b>var</b> cn = d.childNodes;
+                <b>var</b> sww = Math.max(0, (sw-12))+&quot;px&quot;;
+                cn[0].childNodes[1].style.width = sww;
+                cn[1].childNodes[1].style.width = sww;
+                cn[2].childNodes[1].style.width = sww;
+                cn[1].style.height = Math.max(0, (sh-12))+&quot;px&quot;;
+            }
+        }
+    },
+
+    <i>/**
+     * Hides <b>this</b> shadow
+     */</i>
+    hide : <b>function</b>(){
+        <b>if</b>(this.el){
+            <b>this</b>.el.dom.style.display = &quot;none&quot;;
+            Ext.Shadow.Pool.push(<b>this</b>.el);
+            <b>delete</b> this.el;
+        }
+    },
+
+    <i>/**
+     * Adjust the z-index of <b>this</b> shadow
+     * @param {Number} zindex The <b>new</b> z-index
+     */</i>
+    setZIndex : <b>function</b>(z){
+        <b>this</b>.zIndex = z;
+        <b>if</b>(this.el){
+            <b>this</b>.el.setStyle(&quot;z-index&quot;, z);
+        }
+    }
+};
+
+<i>// Private utility class that manages the internal Shadow cache</i>
+Ext.Shadow.Pool = <b>function</b>(){
+    <b>var</b> p = [];
+    <b>var</b> markup = Ext.isIE ?
+                 <em>'&lt;div class=&quot;x-ie-shadow&quot;&gt;&lt;/div&gt;'</em> :
+                 <em>'&lt;div class=&quot;x-shadow&quot;&gt;&lt;div class=&quot;xst&quot;&gt;&lt;div class=&quot;xstl&quot;&gt;&lt;/div&gt;&lt;div class=&quot;xstc&quot;&gt;&lt;/div&gt;&lt;div class=&quot;xstr&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;xsc&quot;&gt;&lt;div class=&quot;xsml&quot;&gt;&lt;/div&gt;&lt;div class=&quot;xsmc&quot;&gt;&lt;/div&gt;&lt;div class=&quot;xsmr&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;xsb&quot;&gt;&lt;div class=&quot;xsbl&quot;&gt;&lt;/div&gt;&lt;div class=&quot;xsbc&quot;&gt;&lt;/div&gt;&lt;div class=&quot;xsbr&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;'</em>;
+    <b>return</b> {
+        pull : <b>function</b>(){
+            <b>var</b> sh = p.shift();
+            <b>if</b>(!sh){
+                sh = Ext.get(Ext.DomHelper.insertHtml(&quot;beforeBegin&quot;, document.body.firstChild, markup));
+                sh.autoBoxAdjust = false;
+            }
+            <b>return</b> sh;
+        },
+
+        push : <b>function</b>(sh){
+            p.push(sh);
+        }
+    };
+}();</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

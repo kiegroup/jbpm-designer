@@ -1,0 +1,817 @@
+<html><head><title>DomQuery.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>DomQuery.js</h1><pre class="highlighted"><code><i>/*
+ * This is code is also distributed under MIT license <b>for</b> use
+ * <b>with</b> jQuery and prototype JavaScript libraries.
+ */</i>
+<i>// holder</i>
+<i>/***
+ * @class Ext.DomQuery
+Provides high performance selector/xpath processing by compiling queries into reusable functions. New pseudo classes and matchers can be plugged. It works on HTML and XML documents (<b>if</b> a content node is passed <b>in</b>).
+&lt;p&gt;
+DomQuery supports most of the &lt;a href=&quot;http:<i>//www.w3.org/TR/2005/WD-css3-selectors-20051215/#selectors&quot;&gt;CSS3 selectors spec&lt;/a&gt;, along <b>with</b> some custom selectors and basic XPath.&lt;/p&gt;</i>
+
+&lt;p&gt;
+All selectors, attribute filters and pseudos below can be combined infinitely <b>in</b> any order. For example &quot;div.foo:nth-child(odd)[@foo=bar].bar:first&quot; would be a perfectly valid selector. Node filters are processed <b>in</b> the order <b>in</b> which they appear, which allows you to optimize your queries <b>for</b> your document structure.
+&lt;/p&gt;
+&lt;h4&gt;Element Selectors:&lt;/h4&gt;
+&lt;ul class=&quot;list&quot;&gt;
+    &lt;li&gt; &lt;b&gt;*&lt;/b&gt; any element&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E&lt;/b&gt; an element <b>with</b> the tag E&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E F&lt;/b&gt; All descendent elements of E that have the tag F&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E &gt; F&lt;/b&gt; or &lt;b&gt;E/F&lt;/b&gt; all direct children elements of E that have the tag F&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E + F&lt;/b&gt; all elements <b>with</b> the tag F that are immediately preceded by an element <b>with</b> the tag E&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E ~ F&lt;/b&gt; all elements <b>with</b> the tag F that are preceded by a sibling element <b>with</b> the tag E&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;Attribute Selectors:&lt;/h4&gt;
+&lt;p&gt;The use of @ and quotes are optional. For example, div[@foo=<em>'bar'</em>] is also a valid attribute selector.&lt;/p&gt;
+&lt;ul class=&quot;list&quot;&gt;
+    &lt;li&gt; &lt;b&gt;E[foo]&lt;/b&gt; has an attribute &quot;foo&quot;&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E[foo=bar]&lt;/b&gt; has an attribute &quot;foo&quot; that equals &quot;bar&quot;&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E[foo^=bar]&lt;/b&gt; has an attribute &quot;foo&quot; that starts <b>with</b> &quot;bar&quot;&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E[foo$=bar]&lt;/b&gt; has an attribute &quot;foo&quot; that ends <b>with</b> &quot;bar&quot;&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E[foo*=bar]&lt;/b&gt; has an attribute &quot;foo&quot; that contains the substring &quot;bar&quot;&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E[foo%=2]&lt;/b&gt; has an attribute &quot;foo&quot; that is evenly divisible by 2&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E[foo!=bar]&lt;/b&gt; has an attribute &quot;foo&quot; that does not equal &quot;bar&quot;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;Pseudo Classes:&lt;/h4&gt;
+&lt;ul class=&quot;list&quot;&gt;
+    &lt;li&gt; &lt;b&gt;E:first-child&lt;/b&gt; E is the first child of its parent&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E:last-child&lt;/b&gt; E is the last child of its parent&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E:nth-child(&lt;i&gt;n&lt;/i&gt;)&lt;/b&gt; E is the &lt;i&gt;n&lt;/i&gt;th child of its parent (1 based as per the spec)&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E:nth-child(odd)&lt;/b&gt; E is an odd child of its parent&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E:nth-child(even)&lt;/b&gt; E is an even child of its parent&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E:only-child&lt;/b&gt; E is the only child of its parent&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E:checked&lt;/b&gt; E is an element that is has a checked attribute that is true (e.g. a radio or checkbox) &lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E:first&lt;/b&gt; the first E <b>in</b> the resultset&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E:last&lt;/b&gt; the last E <b>in</b> the resultset&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E:nth(&lt;i&gt;n&lt;/i&gt;)&lt;/b&gt; the &lt;i&gt;n&lt;/i&gt;th E <b>in</b> the resultset (1 based)&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E:odd&lt;/b&gt; shortcut <b>for</b> :nth-child(odd)&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E:even&lt;/b&gt; shortcut <b>for</b> :nth-child(even)&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E:contains(foo)&lt;/b&gt; E's innerHTML contains the substring &quot;foo&quot;&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E:nodeValue(foo)&lt;/b&gt; E contains a textNode <b>with</b> a nodeValue that equals &quot;foo&quot;&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E:not(S)&lt;/b&gt; an E element that does not match simple selector S&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E:has(S)&lt;/b&gt; an E element that has a descendent that matches simple selector S&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E:next(S)&lt;/b&gt; an E element whose next sibling matches simple selector S&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E:prev(S)&lt;/b&gt; an E element whose previous sibling matches simple selector S&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;CSS Value Selectors:&lt;/h4&gt;
+&lt;ul class=&quot;list&quot;&gt;
+    &lt;li&gt; &lt;b&gt;E{display=none}&lt;/b&gt; css value &quot;display&quot; that equals &quot;none&quot;&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E{display^=none}&lt;/b&gt; css value &quot;display&quot; that starts <b>with</b> &quot;none&quot;&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E{display$=none}&lt;/b&gt; css value &quot;display&quot; that ends <b>with</b> &quot;none&quot;&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E{display*=none}&lt;/b&gt; css value &quot;display&quot; that contains the substring &quot;none&quot;&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E{display%=2}&lt;/b&gt; css value &quot;display&quot; that is evenly divisible by 2&lt;/li&gt;
+    &lt;li&gt; &lt;b&gt;E{display!=none}&lt;/b&gt; css value &quot;display&quot; that does not equal &quot;none&quot;&lt;/li&gt;
+&lt;/ul&gt;
+ * @singleton
+ */</i>
+Ext.DomQuery = <b>function</b>(){
+    <b>var</b> cache = {}, simpleCache = {}, valueCache = {};
+    <b>var</b> nonSpace = /\S/;
+    <b>var</b> trimRe = /^\s+|\s+$/g;
+    <b>var</b> tplRe = /\{(\d+)\}/g;
+    <b>var</b> modeRe = /^(\s?[\/&gt;+~]\s?|\s|$)/;
+    <b>var</b> tagTokenRe = /^(#)?([\w-\*]+)/;
+    <b>var</b> nthRe = /(\d*)n\+?(\d*)/, nthRe2 = /\D/;
+    <b>var</b> opera = Ext.isOpera;
+
+    <b>function</b> child(p, index){
+        <b>var</b> i = 0;
+        <b>var</b> n = p.firstChild;
+        <b>while</b>(n){
+            <b>if</b>(n.nodeType == 1){
+               <b>if</b>(++i == index){
+                   <b>return</b> n;
+               }
+            }
+            n = n.nextSibling;
+        }
+        <b>return</b> null;
+    };
+
+    <b>function</b> next(n){
+        <b>while</b>((n = n.nextSibling) &amp;&amp; n.nodeType != 1);
+        <b>return</b> n;
+    };
+
+    <b>function</b> prev(n){
+        <b>while</b>((n = n.previousSibling) &amp;&amp; n.nodeType != 1);
+        <b>return</b> n;
+    };
+
+    <b>function</b> children(d){
+        <b>var</b> n = d.firstChild, ni = -1;
+ 	    <b>while</b>(n){
+ 	        <b>var</b> nx = n.nextSibling;
+ 	        <b>if</b>(n.nodeType == 3 &amp;&amp; !nonSpace.test(n.nodeValue)){
+ 	            d.removeChild(n);
+ 	        }<b>else</b>{
+ 	            n.nodeIndex = ++ni;
+ 	        }
+ 	        n = nx;
+ 	    }
+ 	    <b>return</b> this;
+ 	};
+
+    <b>function</b> byClassName(c, a, v){
+        <b>if</b>(!v){
+            <b>return</b> c;
+        }
+        <b>var</b> r = [], ri = -1, cn;
+        <b>for</b>(var i = 0, ci; ci = c[i]; i++){
+            <b>if</b>((<em>' '</em>+ci.className+<em>' '</em>).indexOf(v) != -1){
+                r[++ri] = ci;
+            }
+        }
+        <b>return</b> r;
+    };
+
+    <b>function</b> attrValue(n, attr){
+        <b>if</b>(!n.tagName &amp;&amp; <b>typeof</b> n.length != &quot;undefined&quot;){
+            n = n[0];
+        }
+        <b>if</b>(!n){
+            <b>return</b> null;
+        }
+        <b>if</b>(attr == &quot;<b>for</b>&quot;){
+            <b>return</b> n.htmlFor;
+        }
+        <b>if</b>(attr == &quot;class&quot; || attr == &quot;className&quot;){
+            <b>return</b> n.className;
+        }
+        <b>return</b> n.getAttribute(attr) || n[attr];
+
+    };
+
+    <b>function</b> getNodes(ns, mode, tagName){
+        <b>var</b> result = [], ri = -1, cs;
+        <b>if</b>(!ns){
+            <b>return</b> result;
+        }
+        tagName = tagName || &quot;*&quot;;
+        <b>if</b>(typeof ns.getElementsByTagName != &quot;undefined&quot;){
+            ns = [ns];
+        }
+        <b>if</b>(!mode){
+            <b>for</b>(var i = 0, ni; ni = ns[i]; i++){
+                cs = ni.getElementsByTagName(tagName);
+                <b>for</b>(var j = 0, ci; ci = cs[j]; j++){
+                    result[++ri] = ci;
+                }
+            }
+        }<b>else</b> if(mode == &quot;/&quot; || mode == &quot;&gt;&quot;){
+            <b>var</b> utag = tagName.toUpperCase();
+            <b>for</b>(var i = 0, ni, cn; ni = ns[i]; i++){
+                cn = opera ? ni.childNodes : (ni.children || ni.childNodes);
+                <b>for</b>(var j = 0, cj; cj = cn[j]; j++){
+                    <b>if</b>(cj.nodeName == utag || cj.nodeName == tagName  || tagName == <em>'*'</em>){
+                        result[++ri] = cj;
+                    }
+                }
+            }
+        }<b>else</b> if(mode == &quot;+&quot;){
+            <b>var</b> utag = tagName.toUpperCase();
+            <b>for</b>(var i = 0, n; n = ns[i]; i++){
+                <b>while</b>((n = n.nextSibling) &amp;&amp; n.nodeType != 1);
+                <b>if</b>(n &amp;&amp; (n.nodeName == utag || n.nodeName == tagName || tagName == <em>'*'</em>)){
+                    result[++ri] = n;
+                }
+            }
+        }<b>else</b> if(mode == &quot;~&quot;){
+            <b>var</b> utag = tagName.toUpperCase();
+            <b>for</b>(var i = 0, n; n = ns[i]; i++){
+                <b>while</b>((n = n.nextSibling)){
+                    <b>if</b> (n.nodeName == utag || n.nodeName == tagName || tagName == <em>'*'</em>){
+                        result[++ri] = n;
+                    }
+                }
+            }
+        }
+        <b>return</b> result;
+    };
+
+    <b>function</b> concat(a, b){
+        <b>if</b>(b.slice){
+            <b>return</b> a.concat(b);
+        }
+        <b>for</b>(var i = 0, l = b.length; i &lt; l; i++){
+            a[a.length] = b[i];
+        }
+        <b>return</b> a;
+    }
+
+    <b>function</b> byTag(cs, tagName){
+        <b>if</b>(cs.tagName || cs == document){
+            cs = [cs];
+        }
+        <b>if</b>(!tagName){
+            <b>return</b> cs;
+        }
+        <b>var</b> r = [], ri = -1;
+        tagName = tagName.toLowerCase();
+        <b>for</b>(var i = 0, ci; ci = cs[i]; i++){
+            <b>if</b>(ci.nodeType == 1 &amp;&amp; ci.tagName.toLowerCase()==tagName){
+                r[++ri] = ci;
+            }
+        }
+        <b>return</b> r;
+    };
+
+    <b>function</b> byId(cs, attr, id){
+        <b>if</b>(cs.tagName || cs == document){
+            cs = [cs];
+        }
+        <b>if</b>(!id){
+            <b>return</b> cs;
+        }
+        <b>var</b> r = [], ri = -1;
+        <b>for</b>(var i = 0,ci; ci = cs[i]; i++){
+            <b>if</b>(ci &amp;&amp; ci.id == id){
+                r[++ri] = ci;
+                <b>return</b> r;
+            }
+        }
+        <b>return</b> r;
+    };
+
+    <b>function</b> byAttribute(cs, attr, value, op, custom){
+        <b>var</b> r = [], ri = -1, st = custom==&quot;{&quot;;
+        <b>var</b> f = Ext.DomQuery.operators[op];
+        <b>for</b>(var i = 0, ci; ci = cs[i]; i++){
+            <b>if</b>(ci.nodeType != 1){
+                <b>continue</b>;
+            }
+            <b>var</b> a;
+            <b>if</b>(st){
+                a = Ext.DomQuery.getStyle(ci, attr);
+            }
+            <b>else</b> if(attr == &quot;class&quot; || attr == &quot;className&quot;){
+                a = ci.className;
+            }<b>else</b> if(attr == &quot;<b>for</b>&quot;){
+                a = ci.htmlFor;
+            }<b>else</b> if(attr == &quot;href&quot;){
+                a = ci.getAttribute(&quot;href&quot;, 2);
+            }<b>else</b>{
+                a = ci.getAttribute(attr);
+            }
+            <b>if</b>((f &amp;&amp; f(a, value)) || (!f &amp;&amp; a)){
+                r[++ri] = ci;
+            }
+        }
+        <b>return</b> r;
+    };
+
+    <b>function</b> byPseudo(cs, name, value){
+        <b>return</b> Ext.DomQuery.pseudos[name](cs, value);
+    };
+
+    <i>// This is <b>for</b> IE MSXML which does not support expandos.</i>
+    <i>// IE runs the same speed using setAttribute, however FF slows way down</i>
+    <i>// and Safari completely fails so they need to <b>continue</b> to use expandos.</i>
+    <b>var</b> isIE = window.ActiveXObject ? true : false;
+
+    <i>// <b>this</b> eval is stop the compressor from</i>
+    <i>// renaming the variable to something shorter</i>
+    eval(&quot;<b>var</b> batch = 30803;&quot;);
+
+    <b>var</b> key = 30803;
+
+    <b>function</b> nodupIEXml(cs){
+        <b>var</b> d = ++key;
+        cs[0].setAttribute(&quot;_nodup&quot;, d);
+        <b>var</b> r = [cs[0]];
+        <b>for</b>(var i = 1, len = cs.length; i &lt; len; i++){
+            <b>var</b> c = cs[i];
+            <b>if</b>(!c.getAttribute(&quot;_nodup&quot;) != d){
+                c.setAttribute(&quot;_nodup&quot;, d);
+                r[r.length] = c;
+            }
+        }
+        <b>for</b>(var i = 0, len = cs.length; i &lt; len; i++){
+            cs[i].removeAttribute(&quot;_nodup&quot;);
+        }
+        <b>return</b> r;
+    }
+
+    <b>function</b> nodup(cs){
+        <b>if</b>(!cs){
+            <b>return</b> [];
+        }
+        <b>var</b> len = cs.length, c, i, r = cs, cj, ri = -1;
+        <b>if</b>(!len || <b>typeof</b> cs.nodeType != &quot;undefined&quot; || len == 1){
+            <b>return</b> cs;
+        }
+        <b>if</b>(isIE &amp;&amp; <b>typeof</b> cs[0].selectSingleNode != &quot;undefined&quot;){
+            <b>return</b> nodupIEXml(cs);
+        }
+        <b>var</b> d = ++key;
+        cs[0]._nodup = d;
+        <b>for</b>(i = 1; c = cs[i]; i++){
+            <b>if</b>(c._nodup != d){
+                c._nodup = d;
+            }<b>else</b>{
+                r = [];
+                <b>for</b>(var j = 0; j &lt; i; j++){
+                    r[++ri] = cs[j];
+                }
+                <b>for</b>(j = i+1; cj = cs[j]; j++){
+                    <b>if</b>(cj._nodup != d){
+                        cj._nodup = d;
+                        r[++ri] = cj;
+                    }
+                }
+                <b>return</b> r;
+            }
+        }
+        <b>return</b> r;
+    }
+
+    <b>function</b> quickDiffIEXml(c1, c2){
+        <b>var</b> d = ++key;
+        <b>for</b>(var i = 0, len = c1.length; i &lt; len; i++){
+            c1[i].setAttribute(&quot;_qdiff&quot;, d);
+        }
+        <b>var</b> r = [];
+        <b>for</b>(var i = 0, len = c2.length; i &lt; len; i++){
+            <b>if</b>(c2[i].getAttribute(&quot;_qdiff&quot;) != d){
+                r[r.length] = c2[i];
+            }
+        }
+        <b>for</b>(var i = 0, len = c1.length; i &lt; len; i++){
+           c1[i].removeAttribute(&quot;_qdiff&quot;);
+        }
+        <b>return</b> r;
+    }
+
+    <b>function</b> quickDiff(c1, c2){
+        <b>var</b> len1 = c1.length;
+        <b>if</b>(!len1){
+            <b>return</b> c2;
+        }
+        <b>if</b>(isIE &amp;&amp; c1[0].selectSingleNode){
+            <b>return</b> quickDiffIEXml(c1, c2);
+        }
+        <b>var</b> d = ++key;
+        <b>for</b>(var i = 0; i &lt; len1; i++){
+            c1[i]._qdiff = d;
+        }
+        <b>var</b> r = [];
+        <b>for</b>(var i = 0, len = c2.length; i &lt; len; i++){
+            <b>if</b>(c2[i]._qdiff != d){
+                r[r.length] = c2[i];
+            }
+        }
+        <b>return</b> r;
+    }
+
+    <b>function</b> quickId(ns, mode, root, id){
+        <b>if</b>(ns == root){
+           <b>var</b> d = root.ownerDocument || root;
+           <b>return</b> d.getElementById(id);
+        }
+        ns = getNodes(ns, mode, &quot;*&quot;);
+        <b>return</b> byId(ns, null, id);
+    }
+
+    <b>return</b> {
+        getStyle : <b>function</b>(el, name){
+            <b>return</b> Ext.fly(el).getStyle(name);
+        },
+        <i>/**
+         * Compiles a selector/xpath query into a reusable <b>function</b>. The returned <b>function</b>
+         * takes one parameter &quot;root&quot; (optional), which is the context node from where the query should start.
+         * @param {String} selector The selector/xpath query
+         * @param {String} type (optional) Either &quot;select&quot; (the <b>default</b>) or &quot;simple&quot; <b>for</b> a simple selector match
+         * @<b>return</b> {Function}
+         */</i>
+        compile : <b>function</b>(path, type){
+            type = type || &quot;select&quot;;
+
+            <b>var</b> fn = [&quot;<b>var</b> f = <b>function</b>(root){\n <b>var</b> mode; ++batch; <b>var</b> n = root || document;\n&quot;];
+            <b>var</b> q = path, mode, lq;
+            <b>var</b> tk = Ext.DomQuery.matchers;
+            <b>var</b> tklen = tk.length;
+            <b>var</b> mm;
+
+            <i>// accept leading mode <b>switch</b></i>
+            <b>var</b> lmode = q.match(modeRe);
+            <b>if</b>(lmode &amp;&amp; lmode[1]){
+                fn[fn.length] = <em>'mode=&quot;'</em>+lmode[1].replace(trimRe, &quot;&quot;)+<em>'&quot;;'</em>;
+                q = q.replace(lmode[1], &quot;&quot;);
+            }
+            <i>// strip leading slashes</i>
+            <b>while</b>(path.substr(0, 1)==&quot;/&quot;){
+                path = path.substr(1);
+            }
+
+            <b>while</b>(q &amp;&amp; lq != q){
+                lq = q;
+                <b>var</b> tm = q.match(tagTokenRe);
+                <b>if</b>(type == &quot;select&quot;){
+                    <b>if</b>(tm){
+                        <b>if</b>(tm[1] == &quot;#&quot;){
+                            fn[fn.length] = <em>'n = quickId(n, mode, root, &quot;'</em>+tm[2]+<em>'&quot;);'</em>;
+                        }<b>else</b>{
+                            fn[fn.length] = <em>'n = getNodes(n, mode, &quot;'</em>+tm[2]+<em>'&quot;);'</em>;
+                        }
+                        q = q.replace(tm[0], &quot;&quot;);
+                    }<b>else</b> if(q.substr(0, 1) != <em>'@'</em>){
+                        fn[fn.length] = <em>'n = getNodes(n, mode, &quot;*&quot;);'</em>;
+                    }
+                }<b>else</b>{
+                    <b>if</b>(tm){
+                        <b>if</b>(tm[1] == &quot;#&quot;){
+                            fn[fn.length] = <em>'n = byId(n, null, &quot;'</em>+tm[2]+<em>'&quot;);'</em>;
+                        }<b>else</b>{
+                            fn[fn.length] = <em>'n = byTag(n, &quot;'</em>+tm[2]+<em>'&quot;);'</em>;
+                        }
+                        q = q.replace(tm[0], &quot;&quot;);
+                    }
+                }
+                <b>while</b>(!(mm = q.match(modeRe))){
+                    <b>var</b> matched = false;
+                    <b>for</b>(var j = 0; j &lt; tklen; j++){
+                        <b>var</b> t = tk[j];
+                        <b>var</b> m = q.match(t.re);
+                        <b>if</b>(m){
+                            fn[fn.length] = t.select.replace(tplRe, <b>function</b>(x, i){
+                                                    <b>return</b> m[i];
+                                                });
+                            q = q.replace(m[0], &quot;&quot;);
+                            matched = true;
+                            <b>break</b>;
+                        }
+                    }
+                    <i>// prevent infinite loop on bad selector</i>
+                    <b>if</b>(!matched){
+                        throw <em>'Error parsing selector, parsing failed at &quot;'</em> + q + <em>'&quot;'</em>;
+                    }
+                }
+                <b>if</b>(mm[1]){
+                    fn[fn.length] = <em>'mode=&quot;'</em>+mm[1].replace(trimRe, &quot;&quot;)+<em>'&quot;;'</em>;
+                    q = q.replace(mm[1], &quot;&quot;);
+                }
+            }
+            fn[fn.length] = &quot;<b>return</b> nodup(n);\n}&quot;;
+            eval(fn.join(&quot;&quot;));
+            <b>return</b> f;
+        },
+
+        <i>/**
+         * Selects a group of elements.
+         * @param {String} selector The selector/xpath query (can be a comma separated list of selectors)
+         * @param {Node} root (optional) The start of the query (defaults to document).
+         * @<b>return</b> {Array} An Array of DOM elements which match the selector. If there are
+         * no matches, and empty Array is returned.
+         */</i>
+        select : <b>function</b>(path, root, type){
+            <b>if</b>(!root || root == document){
+                root = document;
+            }
+            <b>if</b>(typeof root == &quot;string&quot;){
+                root = document.getElementById(root);
+            }
+            <b>var</b> paths = path.split(&quot;,&quot;);
+            <b>var</b> results = [];
+            <b>for</b>(var i = 0, len = paths.length; i &lt; len; i++){
+                <b>var</b> p = paths[i].replace(trimRe, &quot;&quot;);
+                <b>if</b>(!cache[p]){
+                    cache[p] = Ext.DomQuery.compile(p);
+                    <b>if</b>(!cache[p]){
+                        throw p + &quot; is not a valid selector&quot;;
+                    }
+                }
+                <b>var</b> result = cache[p](root);
+                <b>if</b>(result &amp;&amp; result != document){
+                    results = results.concat(result);
+                }
+            }
+            <b>if</b>(paths.length &gt; 1){
+                <b>return</b> nodup(results);
+            }
+            <b>return</b> results;
+        },
+
+        <i>/**
+         * Selects a single element.
+         * @param {String} selector The selector/xpath query
+         * @param {Node} root (optional) The start of the query (defaults to document).
+         * @<b>return</b> {Element} The DOM element which matched the selector.
+         */</i>
+        selectNode : <b>function</b>(path, root){
+            <b>return</b> Ext.DomQuery.select(path, root)[0];
+        },
+
+        <i>/**
+         * Selects the value of a node, optionally replacing null <b>with</b> the defaultValue.
+         * @param {String} selector The selector/xpath query
+         * @param {Node} root (optional) The start of the query (defaults to document).
+         * @param {String} defaultValue
+         * @<b>return</b> {String}
+         */</i>
+        selectValue : <b>function</b>(path, root, defaultValue){
+            path = path.replace(trimRe, &quot;&quot;);
+            <b>if</b>(!valueCache[path]){
+                valueCache[path] = Ext.DomQuery.compile(path, &quot;select&quot;);
+            }
+            <b>var</b> n = valueCache[path](root);
+            n = n[0] ? n[0] : n;
+            <b>var</b> v = (n &amp;&amp; n.firstChild ? n.firstChild.nodeValue : null);
+            <b>return</b> ((v === null||v === undefined||v===<em>''</em>) ? defaultValue : v);
+        },
+
+        <i>/**
+         * Selects the value of a node, parsing integers and floats. Returns the defaultValue, or 0 <b>if</b> none is specified.
+         * @param {String} selector The selector/xpath query
+         * @param {Node} root (optional) The start of the query (defaults to document).
+         * @param {Number} defaultValue
+         * @<b>return</b> {Number}
+         */</i>
+        selectNumber : <b>function</b>(path, root, defaultValue){
+            <b>var</b> v = Ext.DomQuery.selectValue(path, root, defaultValue || 0);
+            <b>return</b> parseFloat(v);
+        },
+
+        <i>/**
+         * Returns true <b>if</b> the passed element(s) match the passed simple selector (e.g. div.some-class or span:first-child)
+         * @param {String/HTMLElement/Array} el An element id, element or array of elements
+         * @param {String} selector The simple selector to test
+         * @<b>return</b> {Boolean}
+         */</i>
+        is : <b>function</b>(el, ss){
+            <b>if</b>(typeof el == &quot;string&quot;){
+                el = document.getElementById(el);
+            }
+            <b>var</b> isArray = Ext.isArray(el);
+            <b>var</b> result = Ext.DomQuery.filter(isArray ? el : [el], ss);
+            <b>return</b> isArray ? (result.length == el.length) : (result.length &gt; 0);
+        },
+
+        <i>/**
+         * Filters an array of elements to only include matches of a simple selector (e.g. div.some-class or span:first-child)
+         * @param {Array} el An array of elements to filter
+         * @param {String} selector The simple selector to test
+         * @param {Boolean} nonMatches If true, it returns the elements that DON'T match
+         * the selector instead of the ones that match
+         * @<b>return</b> {Array} An Array of DOM elements which match the selector. If there are
+         * no matches, and empty Array is returned.
+         */</i>
+        filter : <b>function</b>(els, ss, nonMatches){
+            ss = ss.replace(trimRe, &quot;&quot;);
+            <b>if</b>(!simpleCache[ss]){
+                simpleCache[ss] = Ext.DomQuery.compile(ss, &quot;simple&quot;);
+            }
+            <b>var</b> result = simpleCache[ss](els);
+            <b>return</b> nonMatches ? quickDiff(result, els) : result;
+        },
+
+        <i>/**
+         * Collection of matching regular expressions and code snippets.
+         */</i>
+        matchers : [{
+                re: /^\.([\w-]+)/,
+                select: <em>'n = byClassName(n, null, &quot; {1} &quot;);'</em>
+            }, {
+                re: /^\:([\w-]+)(?:\(((?:[^\s&gt;\/]*|.*?))\))?/,
+                select: <em>'n = byPseudo(n, &quot;{1}&quot;, &quot;{2}&quot;);'</em>
+            },{
+                re: /^(?:([\[\{])(?:@)?([\w-]+)\s?(?:(=|.=)\s?[<em>'&quot;]?(.*?)[&quot;'</em>]?)?[\]\}])/,
+                select: <em>'n = byAttribute(n, &quot;{2}&quot;, &quot;{4}&quot;, &quot;{3}&quot;, &quot;{1}&quot;);'</em>
+            }, {
+                re: /^#([\w-]+)/,
+                select: <em>'n = byId(n, null, &quot;{1}&quot;);'</em>
+            },{
+                re: /^@([\w-]+)/,
+                select: <em>'<b>return</b> {firstChild:{nodeValue:attrValue(n, &quot;{1}&quot;)}};'</em>
+            }
+        ],
+
+        <i>/**
+         * Collection of operator comparison functions. The <b>default</b> operators are =, !=, ^=, $=, *=, %=, |= and ~=.
+         * New operators can be added as long as the match the format &lt;i&gt;c&lt;/i&gt;= where &lt;i&gt;c&lt;/i&gt; is any character other than space, &amp;gt; &amp;lt;.
+         */</i>
+        operators : {
+            &quot;=&quot; : <b>function</b>(a, v){
+                <b>return</b> a == v;
+            },
+            &quot;!=&quot; : <b>function</b>(a, v){
+                <b>return</b> a != v;
+            },
+            &quot;^=&quot; : <b>function</b>(a, v){
+                <b>return</b> a &amp;&amp; a.substr(0, v.length) == v;
+            },
+            &quot;$=&quot; : <b>function</b>(a, v){
+                <b>return</b> a &amp;&amp; a.substr(a.length-v.length) == v;
+            },
+            &quot;*=&quot; : <b>function</b>(a, v){
+                <b>return</b> a &amp;&amp; a.indexOf(v) !== -1;
+            },
+            &quot;%=&quot; : <b>function</b>(a, v){
+                <b>return</b> (a % v) == 0;
+            },
+            &quot;|=&quot; : <b>function</b>(a, v){
+                <b>return</b> a &amp;&amp; (a == v || a.substr(0, v.length+1) == v+<em>'-'</em>);
+            },
+            &quot;~=&quot; : <b>function</b>(a, v){
+                <b>return</b> a &amp;&amp; (<em>' '</em>+a+<em>' '</em>).indexOf(<em>' '</em>+v+<em>' '</em>) != -1;
+            }
+        },
+
+        <i>/**
+         * Collection of &quot;pseudo class&quot; processors. Each processor is passed the current nodeset (array)
+         * and the argument (<b>if</b> any) supplied <b>in</b> the selector.
+         */</i>
+        pseudos : {
+            &quot;first-child&quot; : <b>function</b>(c){
+                <b>var</b> r = [], ri = -1, n;
+                <b>for</b>(var i = 0, ci; ci = n = c[i]; i++){
+                    <b>while</b>((n = n.previousSibling) &amp;&amp; n.nodeType != 1);
+                    <b>if</b>(!n){
+                        r[++ri] = ci;
+                    }
+                }
+                <b>return</b> r;
+            },
+
+            &quot;last-child&quot; : <b>function</b>(c){
+                <b>var</b> r = [], ri = -1, n;
+                <b>for</b>(var i = 0, ci; ci = n = c[i]; i++){
+                    <b>while</b>((n = n.nextSibling) &amp;&amp; n.nodeType != 1);
+                    <b>if</b>(!n){
+                        r[++ri] = ci;
+                    }
+                }
+                <b>return</b> r;
+            },
+
+            &quot;nth-child&quot; : <b>function</b>(c, a) {
+                <b>var</b> r = [], ri = -1;
+                <b>var</b> m = nthRe.exec(a == &quot;even&quot; &amp;&amp; &quot;2n&quot; || a == &quot;odd&quot; &amp;&amp; &quot;2n+1&quot; || !nthRe2.test(a) &amp;&amp; &quot;n+&quot; + a || a);
+                <b>var</b> f = (m[1] || 1) - 0, l = m[2] - 0;
+                <b>for</b>(var i = 0, n; n = c[i]; i++){
+                    <b>var</b> pn = n.parentNode;
+                    <b>if</b> (batch != pn._batch) {
+                        <b>var</b> j = 0;
+                        <b>for</b>(var cn = pn.firstChild; cn; cn = cn.nextSibling){
+                            <b>if</b>(cn.nodeType == 1){
+                               cn.nodeIndex = ++j;
+                            }
+                        }
+                        pn._batch = batch;
+                    }
+                    <b>if</b> (f == 1) {
+                        <b>if</b> (l == 0 || n.nodeIndex == l){
+                            r[++ri] = n;
+                        }
+                    } <b>else</b> if ((n.nodeIndex + l) % f == 0){
+                        r[++ri] = n;
+                    }
+                }
+
+                <b>return</b> r;
+            },
+
+            &quot;only-child&quot; : <b>function</b>(c){
+                <b>var</b> r = [], ri = -1;;
+                <b>for</b>(var i = 0, ci; ci = c[i]; i++){
+                    <b>if</b>(!prev(ci) &amp;&amp; !next(ci)){
+                        r[++ri] = ci;
+                    }
+                }
+                <b>return</b> r;
+            },
+
+            &quot;empty&quot; : <b>function</b>(c){
+                <b>var</b> r = [], ri = -1;
+                <b>for</b>(var i = 0, ci; ci = c[i]; i++){
+                    <b>var</b> cns = ci.childNodes, j = 0, cn, empty = true;
+                    <b>while</b>(cn = cns[j]){
+                        ++j;
+                        <b>if</b>(cn.nodeType == 1 || cn.nodeType == 3){
+                            empty = false;
+                            <b>break</b>;
+                        }
+                    }
+                    <b>if</b>(empty){
+                        r[++ri] = ci;
+                    }
+                }
+                <b>return</b> r;
+            },
+
+            &quot;contains&quot; : <b>function</b>(c, v){
+                <b>var</b> r = [], ri = -1;
+                <b>for</b>(var i = 0, ci; ci = c[i]; i++){
+                    <b>if</b>((ci.textContent||ci.innerText||<em>''</em>).indexOf(v) != -1){
+                        r[++ri] = ci;
+                    }
+                }
+                <b>return</b> r;
+            },
+
+            &quot;nodeValue&quot; : <b>function</b>(c, v){
+                <b>var</b> r = [], ri = -1;
+                <b>for</b>(var i = 0, ci; ci = c[i]; i++){
+                    <b>if</b>(ci.firstChild &amp;&amp; ci.firstChild.nodeValue == v){
+                        r[++ri] = ci;
+                    }
+                }
+                <b>return</b> r;
+            },
+
+            &quot;checked&quot; : <b>function</b>(c){
+                <b>var</b> r = [], ri = -1;
+                <b>for</b>(var i = 0, ci; ci = c[i]; i++){
+                    <b>if</b>(ci.checked == true){
+                        r[++ri] = ci;
+                    }
+                }
+                <b>return</b> r;
+            },
+
+            &quot;not&quot; : <b>function</b>(c, ss){
+                <b>return</b> Ext.DomQuery.filter(c, ss, true);
+            },
+
+            &quot;any&quot; : <b>function</b>(c, selectors){
+                <b>var</b> ss = selectors.split(<em>'|'</em>);
+                <b>var</b> r = [], ri = -1, s;
+                <b>for</b>(var i = 0, ci; ci = c[i]; i++){
+                    <b>for</b>(var j = 0; s = ss[j]; j++){
+                        <b>if</b>(Ext.DomQuery.is(ci, s)){
+                            r[++ri] = ci;
+                            <b>break</b>;
+                        }
+                    }
+                }
+                <b>return</b> r;
+            },
+
+            &quot;odd&quot; : <b>function</b>(c){
+                <b>return</b> this[&quot;nth-child&quot;](c, &quot;odd&quot;);
+            },
+
+            &quot;even&quot; : <b>function</b>(c){
+                <b>return</b> this[&quot;nth-child&quot;](c, &quot;even&quot;);
+            },
+
+            &quot;nth&quot; : <b>function</b>(c, a){
+                <b>return</b> c[a-1] || [];
+            },
+
+            &quot;first&quot; : <b>function</b>(c){
+                <b>return</b> c[0] || [];
+            },
+
+            &quot;last&quot; : <b>function</b>(c){
+                <b>return</b> c[c.length-1] || [];
+            },
+
+            &quot;has&quot; : <b>function</b>(c, ss){
+                <b>var</b> s = Ext.DomQuery.select;
+                <b>var</b> r = [], ri = -1;
+                <b>for</b>(var i = 0, ci; ci = c[i]; i++){
+                    <b>if</b>(s(ss, ci).length &gt; 0){
+                        r[++ri] = ci;
+                    }
+                }
+                <b>return</b> r;
+            },
+
+            &quot;next&quot; : <b>function</b>(c, ss){
+                <b>var</b> is = Ext.DomQuery.is;
+                <b>var</b> r = [], ri = -1;
+                <b>for</b>(var i = 0, ci; ci = c[i]; i++){
+                    <b>var</b> n = next(ci);
+                    <b>if</b>(n &amp;&amp; is(n, ss)){
+                        r[++ri] = ci;
+                    }
+                }
+                <b>return</b> r;
+            },
+
+            &quot;prev&quot; : <b>function</b>(c, ss){
+                <b>var</b> is = Ext.DomQuery.is;
+                <b>var</b> r = [], ri = -1;
+                <b>for</b>(var i = 0, ci; ci = c[i]; i++){
+                    <b>var</b> n = prev(ci);
+                    <b>if</b>(n &amp;&amp; is(n, ss)){
+                        r[++ri] = ci;
+                    }
+                }
+                <b>return</b> r;
+            }
+        }
+    };
+}();
+
+<i>/**
+ * Selects an array of DOM nodes by CSS/XPath selector. Shorthand of {@link Ext.DomQuery#select}
+ * @param {String} path The selector/xpath query
+ * @param {Node} root (optional) The start of the query (defaults to document).
+ * @<b>return</b> {Array}
+ * @member Ext
+ * @method query
+ */</i>
+Ext.query = Ext.DomQuery.select;
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

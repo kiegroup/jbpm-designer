@@ -1,0 +1,598 @@
+<html><head><title>Toolbar.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>Toolbar.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.Toolbar
+ * @extends Ext.BoxComponent
+ * Basic Toolbar class. Toolbar elements can be created explicitly via their constructors, or implicitly
+ * via their xtypes.  Some items also have shortcut strings <b>for</b> creation (see &lt;tt&gt;{@link #add}&lt;/tt&gt;).
+ * @constructor
+ * Creates a <b>new</b> Toolbar
+ * @param {Object/Array} config A config object or an array of buttons to &lt;tt&gt;{@link #add}&lt;/tt&gt;
+ */</i> 
+ Ext.Toolbar = <b>function</b>(config){
+    <b>if</b>(Ext.isArray(config)){
+        config = {buttons:config};
+    }
+    Ext.Toolbar.superclass.constructor.call(<b>this</b>, config);
+};
+
+(<b>function</b>(){
+
+<b>var</b> T = Ext.Toolbar;
+
+Ext.extend(T, Ext.BoxComponent, {
+
+    trackMenus : true,
+
+    <i>// private</i>
+    initComponent : <b>function</b>(){
+        T.superclass.initComponent.call(<b>this</b>);
+
+        <b>if</b>(this.items){
+            <b>this</b>.buttons = <b>this</b>.items;
+        }
+        <i>/**
+         * A MixedCollection of <b>this</b> Toolbar's items
+         * @property items
+         * @type Ext.util.MixedCollection
+         */</i>
+        <b>this</b>.items = <b>new</b> Ext.util.MixedCollection(false, <b>function</b>(o){
+            <b>return</b> o.itemId || o.id || Ext.id();
+        });
+    },
+
+    <i>// private</i>
+    autoCreate: {
+        cls:<em>'x-toolbar x-small-editor'</em>,
+        html:<em>'&lt;table cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;/tr&gt;&lt;/table&gt;'</em>
+    },
+
+    <i>// private</i>
+    onRender : <b>function</b>(ct, position){
+        <b>this</b>.el = ct.createChild(Ext.apply({ id: <b>this</b>.id },<b>this</b>.autoCreate), position);
+        <b>this</b>.tr = <b>this</b>.el.child(&quot;tr&quot;, true);
+    },
+
+    <i>// private</i>
+    afterRender : <b>function</b>(){
+        T.superclass.afterRender.call(<b>this</b>);
+        <b>if</b>(this.buttons){
+            <b>this</b>.add.apply(<b>this</b>, <b>this</b>.buttons);
+            <b>delete</b> this.buttons;
+        }
+    },
+
+    <i>/**
+     * Adds element(s) to the toolbar -- <b>this</b> function takes a variable number of
+     * arguments of mixed type and adds them to the toolbar.
+     * @param {Mixed} arg1 The following types of arguments are all valid:&lt;br /&gt;
+     * &lt;ul&gt;
+     * &lt;li&gt;{@link Ext.Toolbar.Button} config: A valid button config object (equivalent to {@link #addButton})&lt;/li&gt;
+     * &lt;li&gt;HtmlElement: Any standard HTML element (equivalent to {@link #addElement})&lt;/li&gt;
+     * &lt;li&gt;Field: Any form field (equivalent to {@link #addField})&lt;/li&gt;
+     * &lt;li&gt;Item: Any subclass of {@link Ext.Toolbar.Item} (equivalent to {@link #addItem})&lt;/li&gt;
+     * &lt;li&gt;String: Any generic string (gets wrapped <b>in</b> a {@link Ext.Toolbar.TextItem}, equivalent to {@link #addText}).
+     * Note that there are a few special strings that are treated differently as explained next.&lt;/li&gt;
+     * &lt;li&gt;<em>'separator'</em> or <em>'-'</em>: Creates a separator element (equivalent to {@link #addSeparator})&lt;/li&gt;
+     * &lt;li&gt;<em>' '</em>: Creates a spacer element (equivalent to {@link #addSpacer})&lt;/li&gt;
+     * &lt;li&gt;<em>'-&gt;'</em>: Creates a fill element (equivalent to {@link #addFill})&lt;/li&gt;
+     * &lt;/ul&gt;
+     * @param {Mixed} arg2
+     * @param {Mixed} etc.
+     */</i>
+    add : <b>function</b>(){
+        <b>var</b> a = arguments, l = a.length;
+        <b>for</b>(var i = 0; i &lt; l; i++){
+            <b>var</b> el = a[i];
+            <b>if</b>(el.isFormField){ <i>// some kind of form field</i>
+                <b>this</b>.addField(el);
+            }<b>else</b> if(el.render){ <i>// some kind of Toolbar.Item</i>
+                <b>this</b>.addItem(el);
+            }<b>else</b> if(<b>typeof</b> el == &quot;string&quot;){ <i>// string</i>
+                <b>if</b>(el == &quot;separator&quot; || el == &quot;-&quot;){
+                    <b>this</b>.addSeparator();
+                }<b>else</b> if(el == &quot; &quot;){
+                    <b>this</b>.addSpacer();
+                }<b>else</b> if(el == &quot;-&gt;&quot;){
+                    <b>this</b>.addFill();
+                }<b>else</b>{
+                    <b>this</b>.addText(el);
+                }
+            }<b>else</b> if(el.tagName){ <i>// element</i>
+                <b>this</b>.addElement(el);
+            }<b>else</b> if(<b>typeof</b> el == &quot;object&quot;){ <i>// must be button config?</i>
+                <b>if</b>(el.xtype){
+                    <b>this</b>.addField(Ext.ComponentMgr.create(el, <em>'button'</em>));
+                }<b>else</b>{
+                    <b>this</b>.addButton(el);
+                }
+            }
+        }
+    },
+    
+    <i>/**
+     * Adds a separator
+     * @<b>return</b> {Ext.Toolbar.Item} The separator item
+     */</i>
+    addSeparator : <b>function</b>(){
+        <b>return</b> this.addItem(<b>new</b> T.Separator());
+    },
+
+    <i>/**
+     * Adds a spacer element
+     * @<b>return</b> {Ext.Toolbar.Spacer} The spacer item
+     */</i>
+    addSpacer : <b>function</b>(){
+        <b>return</b> this.addItem(<b>new</b> T.Spacer());
+    },
+
+    <i>/**
+     * Adds a fill element that forces subsequent additions to the right side of the toolbar
+     * @<b>return</b> {Ext.Toolbar.Fill} The fill item
+     */</i>
+    addFill : <b>function</b>(){
+        <b>return</b> this.addItem(<b>new</b> T.Fill());
+    },
+
+    <i>/**
+     * Adds any standard HTML element to the toolbar
+     * @param {Mixed} el The element or id of the element to add
+     * @<b>return</b> {Ext.Toolbar.Item} The element's item
+     */</i>
+    addElement : <b>function</b>(el){
+        <b>return</b> this.addItem(<b>new</b> T.Item(el));
+    },
+    
+    <i>/**
+     * Adds any Toolbar.Item or subclass
+     * @param {Ext.Toolbar.Item} item
+     * @<b>return</b> {Ext.Toolbar.Item} The item
+     */</i>
+    addItem : <b>function</b>(item){
+        <b>var</b> td = <b>this</b>.nextBlock();
+        <b>this</b>.initMenuTracking(item);
+        item.render(td);
+        <b>this</b>.items.add(item);
+        <b>return</b> item;
+    },
+    
+    <i>/**
+     * Adds a button (or buttons). See {@link Ext.Toolbar.Button} <b>for</b> more info on the config.
+     * @param {Object/Array} config A button config or array of configs
+     * @<b>return</b> {Ext.Toolbar.Button/Array}
+     */</i>
+    addButton : <b>function</b>(config){
+        <b>if</b>(Ext.isArray(config)){
+            <b>var</b> buttons = [];
+            <b>for</b>(var i = 0, len = config.length; i &lt; len; i++) {
+                buttons.push(<b>this</b>.addButton(config[i]));
+            }
+            <b>return</b> buttons;
+        }
+        <b>var</b> b = config;
+        <b>if</b>(!(config instanceof T.Button)){
+            b = config.split ? 
+                <b>new</b> T.SplitButton(config) :
+                <b>new</b> T.Button(config);
+        }
+        <b>var</b> td = <b>this</b>.nextBlock();
+        <b>this</b>.initMenuTracking(b);
+        b.render(td);
+        <b>this</b>.items.add(b);
+        <b>return</b> b;
+    },
+
+    <i>// private</i>
+    initMenuTracking : <b>function</b>(item){
+        <b>if</b>(this.trackMenus &amp;&amp; item.menu){
+            item.on({
+                <em>'menutriggerover'</em> : <b>this</b>.onButtonTriggerOver,
+                <em>'menushow'</em> : <b>this</b>.onButtonMenuShow,
+                <em>'menuhide'</em> : <b>this</b>.onButtonMenuHide,
+                scope: <b>this</b>
+            })
+        }
+    },
+
+    <i>/**
+     * Adds text to the toolbar
+     * @param {String} text The text to add
+     * @<b>return</b> {Ext.Toolbar.Item} The element's item
+     */</i>
+    addText : <b>function</b>(text){
+        <b>return</b> this.addItem(<b>new</b> T.TextItem(text));
+    },
+    
+    <i>/**
+     * Inserts any {@link Ext.Toolbar.Item}/{@link Ext.Toolbar.Button} at the specified index.
+     * @param {Number} index The index where the item is to be inserted
+     * @param {Object/Ext.Toolbar.Item/Ext.Toolbar.Button/Array} item The button, or button config object to be
+     * inserted, or an array of buttons/configs.
+     * @<b>return</b> {Ext.Toolbar.Button/Item}
+     */</i>
+    insertButton : <b>function</b>(index, item){
+        <b>if</b>(Ext.isArray(item)){
+            <b>var</b> buttons = [];
+            <b>for</b>(var i = 0, len = item.length; i &lt; len; i++) {
+               buttons.push(<b>this</b>.insertButton(index + i, item[i]));
+            }
+            <b>return</b> buttons;
+        }
+        <b>if</b> (!(item instanceof T.Button)){
+           item = <b>new</b> T.Button(item);
+        }
+        <b>var</b> td = document.createElement(&quot;td&quot;);
+        <b>this</b>.tr.insertBefore(td, <b>this</b>.tr.childNodes[index]);
+        <b>this</b>.initMenuTracking(item);
+        item.render(td);
+        <b>this</b>.items.insert(index, item);
+        <b>return</b> item;
+    },
+    
+    <i>/**
+     * Adds a <b>new</b> element to the toolbar from the passed {@link Ext.DomHelper} config
+     * @param {Object} config
+     * @<b>return</b> {Ext.Toolbar.Item} The element's item
+     */</i>
+    addDom : <b>function</b>(config, returnEl){
+        <b>var</b> td = <b>this</b>.nextBlock();
+        Ext.DomHelper.overwrite(td, config);
+        <b>var</b> ti = <b>new</b> T.Item(td.firstChild);
+        ti.render(td);
+        <b>this</b>.items.add(ti);
+        <b>return</b> ti;
+    },
+
+    <i>/**
+     * Adds a dynamically rendered Ext.form field (TextField, ComboBox, etc). Note: the field should not have
+     * been rendered yet. For a field that has already been rendered, use {@link #addElement}.
+     * @param {Ext.form.Field} field
+     * @<b>return</b> {Ext.Toolbar.Item}
+     */</i>
+    addField : <b>function</b>(field){
+        <b>var</b> td = <b>this</b>.nextBlock();
+        field.render(td);
+        <b>var</b> ti = <b>new</b> T.Item(td.firstChild);
+        ti.render(td);
+        <b>this</b>.items.add(field);
+        <b>return</b> ti;
+    },
+
+    <i>// private</i>
+    nextBlock : <b>function</b>(){
+        <b>var</b> td = document.createElement(&quot;td&quot;);
+        <b>this</b>.tr.appendChild(td);
+        <b>return</b> td;
+    },
+
+    <i>// private</i>
+    onDestroy : <b>function</b>(){
+        Ext.Toolbar.superclass.onDestroy.call(<b>this</b>);
+        <b>if</b>(this.rendered){
+            <b>if</b>(this.items){ <i>// rendered?</i>
+                Ext.destroy.apply(Ext, <b>this</b>.items.items);
+            }
+            Ext.Element.uncache(<b>this</b>.tr);
+        }
+    },
+
+    <i>// private</i>
+    onDisable : <b>function</b>(){
+        <b>this</b>.items.each(<b>function</b>(item){
+             <b>if</b>(item.disable){
+                 item.disable();
+             }
+        });
+    },
+
+    <i>// private</i>
+    onEnable : <b>function</b>(){
+        <b>this</b>.items.each(<b>function</b>(item){
+             <b>if</b>(item.enable){
+                 item.enable();
+             }
+        });
+    },
+
+    <i>// private</i>
+    onButtonTriggerOver : <b>function</b>(btn){
+        <b>if</b>(this.activeMenuBtn &amp;&amp; <b>this</b>.activeMenuBtn != btn){
+            <b>this</b>.activeMenuBtn.hideMenu();
+            btn.showMenu();
+            <b>this</b>.activeMenuBtn = btn;
+        }
+    },
+
+    <i>// private</i>
+    onButtonMenuShow : <b>function</b>(btn){
+        <b>this</b>.activeMenuBtn = btn;
+    },
+
+    <i>// private</i>
+    onButtonMenuHide : <b>function</b>(btn){
+        <b>delete</b> this.activeMenuBtn;
+    }
+
+    <i>/**
+     * @cfg {String} autoEl @hide
+     */</i>
+});
+Ext.reg(<em>'toolbar'</em>, Ext.Toolbar);
+
+<i>/**
+ * @class Ext.Toolbar.Item
+ * The base class that other classes should extend <b>in</b> order to get some basic common toolbar item functionality.
+ * @constructor
+ * Creates a <b>new</b> Item
+ * @param {HTMLElement} el 
+ */</i>
+T.Item = <b>function</b>(el){
+    <b>this</b>.el = Ext.getDom(el);
+    <b>this</b>.id = Ext.id(<b>this</b>.el);
+    <b>this</b>.hidden = false;
+};
+
+T.Item.prototype = {
+    
+    <i>/**
+     * Get <b>this</b> item's HTML Element
+     * @<b>return</b> {HTMLElement}
+     */</i>
+    getEl : <b>function</b>(){
+       <b>return</b> this.el;  
+    },
+
+    <i>// private</i>
+    render : <b>function</b>(td){
+        <b>this</b>.td = td;
+        td.appendChild(<b>this</b>.el);
+    },
+    
+    <i>/**
+     * Removes and destroys <b>this</b> item.
+     */</i>
+    destroy : <b>function</b>(){
+        <b>if</b>(this.el){
+            <b>var</b> el = Ext.get(<b>this</b>.el);
+            Ext.destroy(el);
+        }
+        Ext.removeNode(<b>this</b>.td);
+    },
+    
+    <i>/**
+     * Shows <b>this</b> item.
+     */</i>
+    show: <b>function</b>(){
+        <b>this</b>.hidden = false;
+        <b>this</b>.td.style.display = &quot;&quot;;
+    },
+    
+    <i>/**
+     * Hides <b>this</b> item.
+     */</i>
+    hide: <b>function</b>(){
+        <b>this</b>.hidden = true;
+        <b>this</b>.td.style.display = &quot;none&quot;;
+    },
+    
+    <i>/**
+     * Convenience <b>function</b> for boolean show/hide.
+     * @param {Boolean} visible true to show/false to hide
+     */</i>
+    setVisible: <b>function</b>(visible){
+        <b>if</b>(visible) {
+            <b>this</b>.show();
+        }<b>else</b>{
+            <b>this</b>.hide();
+        }
+    },
+    
+    <i>/**
+     * Try to focus <b>this</b> item
+     */</i>
+    focus : <b>function</b>(){
+        Ext.fly(<b>this</b>.el).focus();
+    },
+    
+    <i>/**
+     * Disables <b>this</b> item.
+     */</i>
+    disable : <b>function</b>(){
+        Ext.fly(<b>this</b>.td).addClass(&quot;x-item-disabled&quot;);
+        <b>this</b>.disabled = true;
+        <b>this</b>.el.disabled = true;
+    },
+    
+    <i>/**
+     * Enables <b>this</b> item.
+     */</i>
+    enable : <b>function</b>(){
+        Ext.fly(<b>this</b>.td).removeClass(&quot;x-item-disabled&quot;);
+        <b>this</b>.disabled = false;
+        <b>this</b>.el.disabled = false;
+    }
+};
+Ext.reg(<em>'tbitem'</em>, T.Item);
+
+
+<i>/**
+ * @class Ext.Toolbar.Separator
+ * @extends Ext.Toolbar.Item
+ * A simple class that adds a vertical separator bar between toolbar items.  Example usage:
+ * &lt;pre&gt;&lt;code&gt;
+<b>new</b> Ext.Panel({
+	tbar : [
+		<em>'Item 1'</em>,
+		{xtype: <em>'tbseparator'</em>}, <i>// or <em>'-'</em></i>
+		<em>'Item 2'</em>
+	]
+});
+&lt;/code&gt;&lt;/pre&gt;
+ * @constructor
+ * Creates a <b>new</b> Separator
+ */</i>
+T.Separator = <b>function</b>(){
+    <b>var</b> s = document.createElement(&quot;span&quot;);
+    s.className = &quot;ytb-sep&quot;;
+    T.Separator.superclass.constructor.call(<b>this</b>, s);
+};
+Ext.extend(T.Separator, T.Item, {
+    enable:Ext.emptyFn,
+    disable:Ext.emptyFn,
+    focus:Ext.emptyFn
+});
+Ext.reg(<em>'tbseparator'</em>, T.Separator);
+
+<i>/**
+ * @class Ext.Toolbar.Spacer
+ * @extends Ext.Toolbar.Item
+ * A simple element that adds extra horizontal space between items <b>in</b> a toolbar.
+ * &lt;pre&gt;&lt;code&gt;
+<b>new</b> Ext.Panel({
+	tbar : [
+		<em>'Item 1'</em>,
+		{xtype: <em>'tbspacer'</em>}, <i>// or <em>' '</em></i>
+		<em>'Item 2'</em>
+	]
+});
+&lt;/code&gt;&lt;/pre&gt;
+ * @constructor
+ * Creates a <b>new</b> Spacer
+ */</i>
+T.Spacer = <b>function</b>(){
+    <b>var</b> s = document.createElement(&quot;div&quot;);
+    s.className = &quot;ytb-spacer&quot;;
+    T.Spacer.superclass.constructor.call(<b>this</b>, s);
+};
+Ext.extend(T.Spacer, T.Item, {
+    enable:Ext.emptyFn,
+    disable:Ext.emptyFn,
+    focus:Ext.emptyFn
+});
+
+Ext.reg(<em>'tbspacer'</em>, T.Spacer);
+
+<i>/**
+ * @class Ext.Toolbar.Fill
+ * @extends Ext.Toolbar.Spacer
+ * A simple element that adds a greedy (100% width) horizontal space between items <b>in</b> a toolbar.
+ * &lt;pre&gt;&lt;code&gt;
+<b>new</b> Ext.Panel({
+	tbar : [
+		<em>'Item 1'</em>,
+		{xtype: <em>'tbfill'</em>}, <i>// or <em>'-&gt;'</em></i>
+		<em>'Item 2'</em>
+	]
+});
+&lt;/code&gt;&lt;/pre&gt;
+ * @constructor
+ * Creates a <b>new</b> Spacer
+ */</i>
+T.Fill = Ext.extend(T.Spacer, {
+    <i>// private</i>
+    render : <b>function</b>(td){
+        td.style.width = <em>'100%'</em>;
+        T.Fill.superclass.render.call(<b>this</b>, td);
+    }
+});
+Ext.reg(<em>'tbfill'</em>, T.Fill);
+
+<i>/**
+ * @class Ext.Toolbar.TextItem
+ * @extends Ext.Toolbar.Item
+ * A simple class that renders text directly into a toolbar.
+ * &lt;pre&gt;&lt;code&gt;
+<b>new</b> Ext.Panel({
+	tbar : [
+		{xtype: <em>'tbtext'</em>, text: <em>'Item 1'</em>} <i>// or simply <em>'Item 1'</em></i>
+	]
+});
+&lt;/code&gt;&lt;/pre&gt;
+ * @constructor
+ * Creates a <b>new</b> TextItem
+ * @param {String/Object} text A text string, or a config object containing a &lt;tt&gt;text&lt;/tt&gt; property
+ */</i>
+T.TextItem = <b>function</b>(t){
+    <b>var</b> s = document.createElement(&quot;span&quot;);
+    s.className = &quot;ytb-text&quot;;
+    s.innerHTML = t.text ? t.text : t;
+    T.TextItem.superclass.constructor.call(<b>this</b>, s);
+};
+Ext.extend(T.TextItem, T.Item, {
+    enable:Ext.emptyFn,
+    disable:Ext.emptyFn,
+    focus:Ext.emptyFn
+});
+Ext.reg(<em>'tbtext'</em>, T.TextItem);
+
+
+<i>/**
+ * @class Ext.Toolbar.Button
+ * @extends Ext.Button
+ * A button that renders into a toolbar. Use the &lt;tt&gt;handler&lt;/tt&gt; config to specify a callback <b>function</b>
+ * to handle the button's click event.
+ * &lt;pre&gt;&lt;code&gt;
+<b>new</b> Ext.Panel({
+	tbar : [
+		{text: <em>'OK'</em>, handler: okHandler} <i>// tbbutton is the <b>default</b> xtype <b>if</b> not specified</i>
+	]
+});
+&lt;/code&gt;&lt;/pre&gt;
+ * @constructor
+ * Creates a <b>new</b> Button
+ * @param {Object} config A standard {@link Ext.Button} config object
+ */</i>
+T.Button = Ext.extend(Ext.Button, {
+    hideParent : true,
+
+    onDestroy : <b>function</b>(){
+        T.Button.superclass.onDestroy.call(<b>this</b>);
+        <b>if</b>(this.container){
+            <b>this</b>.container.remove();
+        }
+    }
+});
+Ext.reg(<em>'tbbutton'</em>, T.Button);
+
+<i>/**
+ * @class Ext.Toolbar.SplitButton
+ * @extends Ext.SplitButton
+ * A split button that renders into a toolbar.
+ * &lt;pre&gt;&lt;code&gt;
+<b>new</b> Ext.Panel({
+	tbar : [
+		{
+			xtype: <em>'tbsplit'</em>,
+		   	text: <em>'Options'</em>,
+		   	handler: optionsHandler, <i>// handle a click on the button itself</i>
+		   	menu: <b>new</b> Ext.menu.Menu({
+		        items: [
+		        	<i>// These items will display <b>in</b> a dropdown menu when the split arrow is clicked</i>
+			        {text: <em>'Item 1'</em>, handler: item1Handler},
+			        {text: <em>'Item 2'</em>, handler: item2Handler}
+		        ]
+		   	})
+		}
+	]
+});
+&lt;/code&gt;&lt;/pre&gt;
+ * @constructor
+ * Creates a <b>new</b> SplitButton
+ * @param {Object} config A standard {@link Ext.SplitButton} config object
+ */</i>
+T.SplitButton = Ext.extend(Ext.SplitButton, {
+    hideParent : true,
+
+    onDestroy : <b>function</b>(){
+        T.SplitButton.superclass.onDestroy.call(<b>this</b>);
+        <b>if</b>(this.container){
+            <b>this</b>.container.remove();
+        }
+    }
+});
+
+Ext.reg(<em>'tbsplit'</em>, T.SplitButton);
+<i>// backwards compat</i>
+T.MenuButton = T.SplitButton;
+
+})();
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

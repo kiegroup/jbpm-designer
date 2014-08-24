@@ -1,0 +1,526 @@
+<html><head><title>TreeNode.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>TreeNode.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.tree.TreeNode
+ * @extends Ext.data.Node
+ * @cfg {String} text The text <b>for</b> this node
+ * @cfg {Boolean} expanded true to start the node expanded
+ * @cfg {Boolean} allowDrag False to make <b>this</b> node undraggable <b>if</b> {@link #draggable} = true (defaults to true)
+ * @cfg {Boolean} allowDrop False <b>if</b> this node cannot have child nodes dropped on it (defaults to true)
+ * @cfg {Boolean} disabled true to start the node disabled
+ * @cfg {String} icon The path to an icon <b>for</b> the node. The preferred way to <b>do</b> this
+ * is to use the cls or iconCls attributes and add the icon via a CSS background image.
+ * @cfg {String} cls A css class to be added to the node
+ * @cfg {String} iconCls A css class to be added to the nodes icon element <b>for</b> applying css background images
+ * @cfg {String} href URL of the link used <b>for</b> the node (defaults to #)
+ * @cfg {String} hrefTarget target frame <b>for</b> the link
+ * @cfg {Boolean} hidden True to render hidden. (Defaults to false).
+ * @cfg {String} qtip An Ext QuickTip <b>for</b> the node
+ * @cfg {Boolean} expandable If set to true, the node will always show a plus/minus icon, even when empty
+ * @cfg {String} qtipCfg An Ext QuickTip config <b>for</b> the node (used instead of qtip)
+ * @cfg {Boolean} singleClickExpand True <b>for</b> single click expand on <b>this</b> node
+ * @cfg {Function} uiProvider A UI &lt;b&gt;class&lt;/b&gt; to use <b>for</b> this node (defaults to Ext.tree.TreeNodeUI)
+ * @cfg {Boolean} checked True to render a checked checkbox <b>for</b> this node, false to render an unchecked checkbox
+ * (defaults to undefined <b>with</b> no checkbox rendered)
+ * @cfg {Boolean} draggable True to make <b>this</b> node draggable (defaults to false)
+ * @cfg {Boolean} isTarget False to not allow <b>this</b> node to act as a drop target (defaults to true)
+ * @cfg {Boolean} allowChildren False to not allow <b>this</b> node to have child nodes (defaults to true)
+ * @cfg {Boolean} editable False to not allow <b>this</b> node to be edited by an (@link Ext.tree.TreeEditor} (defaults to true)
+ * @constructor
+ * @param {Object/String} attributes The attributes/config <b>for</b> the node or just a string <b>with</b> the text <b>for</b> the node
+ */</i>
+Ext.tree.TreeNode = <b>function</b>(attributes){
+    attributes = attributes || {};
+    <b>if</b>(typeof attributes == &quot;string&quot;){
+        attributes = {text: attributes};
+    }
+    <b>this</b>.childrenRendered = false;
+    <b>this</b>.rendered = false;
+    Ext.tree.TreeNode.superclass.constructor.call(<b>this</b>, attributes);
+    <b>this</b>.expanded = attributes.expanded === true;
+    <b>this</b>.isTarget = attributes.isTarget !== false;
+    <b>this</b>.draggable = attributes.draggable !== false &amp;&amp; attributes.allowDrag !== false;
+    <b>this</b>.allowChildren = attributes.allowChildren !== false &amp;&amp; attributes.allowDrop !== false;
+
+    <i>/**
+     * Read-only. The text <b>for</b> this node. To change it use setText().
+     * @type String
+     */</i>
+    <b>this</b>.text = attributes.text;
+    <i>/**
+     * True <b>if</b> this node is disabled.
+     * @type Boolean
+     */</i>
+    <b>this</b>.disabled = attributes.disabled === true;
+    <i>/**
+     * True <b>if</b> this node is hidden.
+     * @type Boolean
+     */</i>
+    <b>this</b>.hidden = attributes.hidden === true;
+
+    <b>this</b>.addEvents(
+        <i>/**
+        * @event textchange
+        * Fires when the text <b>for</b> this node is changed
+        * @param {Node} <b>this</b> This node
+        * @param {String} text The <b>new</b> text
+        * @param {String} oldText The old text
+        */</i>
+        &quot;textchange&quot;,
+        <i>/**
+        * @event beforeexpand
+        * Fires before <b>this</b> node is expanded, <b>return</b> false to cancel.
+        * @param {Node} <b>this</b> This node
+        * @param {Boolean} deep
+        * @param {Boolean} anim
+        */</i>
+        &quot;beforeexpand&quot;,
+        <i>/**
+        * @event beforecollapse
+        * Fires before <b>this</b> node is collapsed, <b>return</b> false to cancel.
+        * @param {Node} <b>this</b> This node
+        * @param {Boolean} deep
+        * @param {Boolean} anim
+        */</i>
+        &quot;beforecollapse&quot;,
+        <i>/**
+        * @event expand
+        * Fires when <b>this</b> node is expanded
+        * @param {Node} <b>this</b> This node
+        */</i>
+        &quot;expand&quot;,
+        <i>/**
+        * @event disabledchange
+        * Fires when the disabled status of <b>this</b> node changes
+        * @param {Node} <b>this</b> This node
+        * @param {Boolean} disabled
+        */</i>
+        &quot;disabledchange&quot;,
+        <i>/**
+        * @event collapse
+        * Fires when <b>this</b> node is collapsed
+        * @param {Node} <b>this</b> This node
+        */</i>
+        &quot;collapse&quot;,
+        <i>/**
+        * @event beforeclick
+        * Fires before click processing. Return false to cancel the <b>default</b> action.
+        * @param {Node} <b>this</b> This node
+        * @param {Ext.EventObject} e The event object
+        */</i>
+        &quot;beforeclick&quot;,
+        <i>/**
+        * @event click
+        * Fires when <b>this</b> node is clicked
+        * @param {Node} <b>this</b> This node
+        * @param {Ext.EventObject} e The event object
+        */</i>
+        &quot;click&quot;,
+        <i>/**
+        * @event checkchange
+        * Fires when a node <b>with</b> a checkbox's checked property changes
+        * @param {Node} <b>this</b> This node
+        * @param {Boolean} checked
+        */</i>
+        &quot;checkchange&quot;,
+        <i>/**
+        * @event dblclick
+        * Fires when <b>this</b> node is double clicked
+        * @param {Node} <b>this</b> This node
+        * @param {Ext.EventObject} e The event object
+        */</i>
+        &quot;dblclick&quot;,
+        <i>/**
+        * @event contextmenu
+        * Fires when <b>this</b> node is right clicked
+        * @param {Node} <b>this</b> This node
+        * @param {Ext.EventObject} e The event object
+        */</i>
+        &quot;contextmenu&quot;,
+        <i>/**
+        * @event beforechildrenrendered
+        * Fires right before the child nodes <b>for</b> this node are rendered
+        * @param {Node} <b>this</b> This node
+        */</i>
+        &quot;beforechildrenrendered&quot;
+    );
+
+    <b>var</b> uiClass = <b>this</b>.attributes.uiProvider || <b>this</b>.defaultUI || Ext.tree.TreeNodeUI;
+
+    <i>/**
+     * Read-only. The UI <b>for</b> this node
+     * @type TreeNodeUI
+     */</i>
+    <b>this</b>.ui = <b>new</b> uiClass(<b>this</b>);
+};
+Ext.extend(Ext.tree.TreeNode, Ext.data.Node, {
+    preventHScroll: true,
+    <i>/**
+     * Returns true <b>if</b> this node is expanded
+     * @<b>return</b> {Boolean}
+     */</i>
+    isExpanded : <b>function</b>(){
+        <b>return</b> this.expanded;
+    },
+
+<i>/**
+ * Returns the UI object <b>for</b> this node.
+ * @<b>return</b> {TreeNodeUI} The object which is providing the user interface <b>for</b> this tree
+ * node. Unless otherwise specified <b>in</b> the {@link #uiProvider}, <b>this</b> will be an instance
+ * of {@link Ext.tree.TreeNodeUI}
+ */</i>
+    getUI : <b>function</b>(){
+        <b>return</b> this.ui;
+    },
+
+    getLoader : <b>function</b>(){
+        <b>var</b> owner;
+        <b>return</b> this.loader || ((owner = <b>this</b>.getOwnerTree()) &amp;&amp; owner.loader ? owner.loader : <b>new</b> Ext.tree.TreeLoader());
+    },
+
+    <i>// private override</i>
+    setFirstChild : <b>function</b>(node){
+        <b>var</b> of = <b>this</b>.firstChild;
+        Ext.tree.TreeNode.superclass.setFirstChild.call(<b>this</b>, node);
+        <b>if</b>(this.childrenRendered &amp;&amp; of &amp;&amp; node != of){
+            of.renderIndent(true, true);
+        }
+        <b>if</b>(this.rendered){
+            <b>this</b>.renderIndent(true, true);
+        }
+    },
+
+    <i>// private override</i>
+    setLastChild : <b>function</b>(node){
+        <b>var</b> ol = <b>this</b>.lastChild;
+        Ext.tree.TreeNode.superclass.setLastChild.call(<b>this</b>, node);
+        <b>if</b>(this.childrenRendered &amp;&amp; ol &amp;&amp; node != ol){
+            ol.renderIndent(true, true);
+        }
+        <b>if</b>(this.rendered){
+            <b>this</b>.renderIndent(true, true);
+        }
+    },
+
+    <i>// these methods are overridden to provide lazy rendering support</i>
+    <i>// private override</i>
+    appendChild : <b>function</b>(n){
+        <b>if</b>(!n.render &amp;&amp; !Ext.isArray(n)){
+            n = <b>this</b>.getLoader().createNode(n);
+        }
+        <b>var</b> node = Ext.tree.TreeNode.superclass.appendChild.call(<b>this</b>, n);
+        <b>if</b>(node &amp;&amp; <b>this</b>.childrenRendered){
+            node.render();
+        }
+        <b>this</b>.ui.updateExpandIcon();
+        <b>return</b> node;
+    },
+
+    <i>// private override</i>
+    removeChild : <b>function</b>(node){
+        <b>this</b>.ownerTree.getSelectionModel().unselect(node);
+        Ext.tree.TreeNode.superclass.removeChild.apply(<b>this</b>, arguments);
+        <i>// <b>if</b> it's been rendered remove dom node</i>
+        <b>if</b>(this.childrenRendered){
+            node.ui.remove();
+        }
+        <b>if</b>(this.childNodes.length &lt; 1){
+            <b>this</b>.collapse(false, false);
+        }<b>else</b>{
+            <b>this</b>.ui.updateExpandIcon();
+        }
+        <b>if</b>(!<b>this</b>.firstChild &amp;&amp; !<b>this</b>.isHiddenRoot()) {
+            <b>this</b>.childrenRendered = false;
+        }
+        <b>return</b> node;
+    },
+
+    <i>// private override</i>
+    insertBefore : <b>function</b>(node, refNode){
+        <b>if</b>(!node.render){ 
+            node = <b>this</b>.getLoader().createNode(node);
+        }
+        <b>var</b> newNode = Ext.tree.TreeNode.superclass.insertBefore.apply(<b>this</b>, arguments);
+        <b>if</b>(newNode &amp;&amp; refNode &amp;&amp; <b>this</b>.childrenRendered){
+            node.render();
+        }
+        <b>this</b>.ui.updateExpandIcon();
+        <b>return</b> newNode;
+    },
+
+    <i>/**
+     * Sets the text <b>for</b> this node
+     * @param {String} text
+     */</i>
+    setText : <b>function</b>(text){
+        <b>var</b> oldText = <b>this</b>.text;
+        <b>this</b>.text = text;
+        <b>this</b>.attributes.text = text;
+        <b>if</b>(this.rendered){ <i>// event without subscribing</i>
+            <b>this</b>.ui.onTextChange(<b>this</b>, text, oldText);
+        }
+        <b>this</b>.fireEvent(&quot;textchange&quot;, <b>this</b>, text, oldText);
+    },
+
+    <i>/**
+     * Triggers selection of <b>this</b> node
+     */</i>
+    select : <b>function</b>(){
+        <b>this</b>.getOwnerTree().getSelectionModel().select(<b>this</b>);
+    },
+
+    <i>/**
+     * Triggers deselection of <b>this</b> node
+     */</i>
+    unselect : <b>function</b>(){
+        <b>this</b>.getOwnerTree().getSelectionModel().unselect(<b>this</b>);
+    },
+
+    <i>/**
+     * Returns true <b>if</b> this node is selected
+     * @<b>return</b> {Boolean}
+     */</i>
+    isSelected : <b>function</b>(){
+        <b>return</b> this.getOwnerTree().getSelectionModel().isSelected(<b>this</b>);
+    },
+
+    <i>/**
+     * Expand <b>this</b> node.
+     * @param {Boolean} deep (optional) True to expand all children as well
+     * @param {Boolean} anim (optional) false to cancel the <b>default</b> animation
+     * @param {Function} callback (optional) A callback to be called when
+     * expanding <b>this</b> node completes (does not wait <b>for</b> deep expand to complete).
+     * Called <b>with</b> 1 parameter, <b>this</b> node.
+     */</i>
+    expand : <b>function</b>(deep, anim, callback){
+        <b>if</b>(!<b>this</b>.expanded){
+            <b>if</b>(this.fireEvent(&quot;beforeexpand&quot;, <b>this</b>, deep, anim) === false){
+                <b>return</b>;
+            }
+            <b>if</b>(!<b>this</b>.childrenRendered){
+                <b>this</b>.renderChildren();
+            }
+            <b>this</b>.expanded = true;
+            <b>if</b>(!<b>this</b>.isHiddenRoot() &amp;&amp; (<b>this</b>.getOwnerTree().animate &amp;&amp; anim !== false) || anim){
+                <b>this</b>.ui.animExpand(<b>function</b>(){
+                    <b>this</b>.fireEvent(&quot;expand&quot;, <b>this</b>);
+                    <b>if</b>(typeof callback == &quot;<b>function</b>&quot;){
+                        callback(<b>this</b>);
+                    }
+                    <b>if</b>(deep === true){
+                        <b>this</b>.expandChildNodes(true);
+                    }
+                }.createDelegate(<b>this</b>));
+                <b>return</b>;
+            }<b>else</b>{
+                <b>this</b>.ui.expand();
+                <b>this</b>.fireEvent(&quot;expand&quot;, <b>this</b>);
+                <b>if</b>(typeof callback == &quot;<b>function</b>&quot;){
+                    callback(<b>this</b>);
+                }
+            }
+        }<b>else</b>{
+           <b>if</b>(typeof callback == &quot;<b>function</b>&quot;){
+               callback(<b>this</b>);
+           }
+        }
+        <b>if</b>(deep === true){
+            <b>this</b>.expandChildNodes(true);
+        }
+    },
+
+    isHiddenRoot : <b>function</b>(){
+        <b>return</b> this.isRoot &amp;&amp; !<b>this</b>.getOwnerTree().rootVisible;
+    },
+
+    <i>/**
+     * Collapse <b>this</b> node.
+     * @param {Boolean} deep (optional) True to collapse all children as well
+     * @param {Boolean} anim (optional) false to cancel the <b>default</b> animation
+     */</i>
+    collapse : <b>function</b>(deep, anim){
+        <b>if</b>(this.expanded &amp;&amp; !<b>this</b>.isHiddenRoot()){
+            <b>if</b>(this.fireEvent(&quot;beforecollapse&quot;, <b>this</b>, deep, anim) === false){
+                <b>return</b>;
+            }
+            <b>this</b>.expanded = false;
+            <b>if</b>((<b>this</b>.getOwnerTree().animate &amp;&amp; anim !== false) || anim){
+                <b>this</b>.ui.animCollapse(<b>function</b>(){
+                    <b>this</b>.fireEvent(&quot;collapse&quot;, <b>this</b>);
+                    <b>if</b>(deep === true){
+                        <b>this</b>.collapseChildNodes(true);
+                    }
+                }.createDelegate(<b>this</b>));
+                <b>return</b>;
+            }<b>else</b>{
+                <b>this</b>.ui.collapse();
+                <b>this</b>.fireEvent(&quot;collapse&quot;, <b>this</b>);
+            }
+        }
+        <b>if</b>(deep === true){
+            <b>var</b> cs = <b>this</b>.childNodes;
+            <b>for</b>(var i = 0, len = cs.length; i &lt; len; i++) {
+            	cs[i].collapse(true, false);
+            }
+        }
+    },
+
+    <i>// private</i>
+    delayedExpand : <b>function</b>(delay){
+        <b>if</b>(!<b>this</b>.expandProcId){
+            <b>this</b>.expandProcId = <b>this</b>.expand.defer(delay, <b>this</b>);
+        }
+    },
+
+    <i>// private</i>
+    cancelExpand : <b>function</b>(){
+        <b>if</b>(this.expandProcId){
+            clearTimeout(<b>this</b>.expandProcId);
+        }
+        <b>this</b>.expandProcId = false;
+    },
+
+    <i>/**
+     * Toggles expanded/collapsed state of the node
+     */</i>
+    toggle : <b>function</b>(){
+        <b>if</b>(this.expanded){
+            <b>this</b>.collapse();
+        }<b>else</b>{
+            <b>this</b>.expand();
+        }
+    },
+
+    <i>/**
+     * Ensures all parent nodes are expanded, and <b>if</b> necessary, scrolls
+     * the node into view.
+     * @param {Function} callback (optional) A <b>function</b> to call when the node has been made visible.
+     */</i>
+    ensureVisible : <b>function</b>(callback){
+        <b>var</b> tree = <b>this</b>.getOwnerTree();
+        tree.expandPath(<b>this</b>.parentNode ? <b>this</b>.parentNode.getPath() : <b>this</b>.getPath(), false, <b>function</b>(){
+            <b>var</b> node = tree.getNodeById(<b>this</b>.id);  <i>// Somehow <b>if</b> we don't <b>do</b> this, we lose changes that happened to node <b>in</b> the meantime</i>
+            tree.getTreeEl().scrollChildIntoView(node.ui.anchor);
+            Ext.callback(callback);
+        }.createDelegate(<b>this</b>));
+    },
+
+    <i>/**
+     * Expand all child nodes
+     * @param {Boolean} deep (optional) true <b>if</b> the child nodes should also expand their child nodes
+     */</i>
+    expandChildNodes : <b>function</b>(deep){
+        <b>var</b> cs = <b>this</b>.childNodes;
+        <b>for</b>(var i = 0, len = cs.length; i &lt; len; i++) {
+        	cs[i].expand(deep);
+        }
+    },
+
+    <i>/**
+     * Collapse all child nodes
+     * @param {Boolean} deep (optional) true <b>if</b> the child nodes should also collapse their child nodes
+     */</i>
+    collapseChildNodes : <b>function</b>(deep){
+        <b>var</b> cs = <b>this</b>.childNodes;
+        <b>for</b>(var i = 0, len = cs.length; i &lt; len; i++) {
+        	cs[i].collapse(deep);
+        }
+    },
+
+    <i>/**
+     * Disables <b>this</b> node
+     */</i>
+    disable : <b>function</b>(){
+        <b>this</b>.disabled = true;
+        <b>this</b>.unselect();
+        <b>if</b>(this.rendered &amp;&amp; <b>this</b>.ui.onDisableChange){ <i>// event without subscribing</i>
+            <b>this</b>.ui.onDisableChange(<b>this</b>, true);
+        }
+        <b>this</b>.fireEvent(&quot;disabledchange&quot;, <b>this</b>, true);
+    },
+
+    <i>/**
+     * Enables <b>this</b> node
+     */</i>
+    enable : <b>function</b>(){
+        <b>this</b>.disabled = false;
+        <b>if</b>(this.rendered &amp;&amp; <b>this</b>.ui.onDisableChange){ <i>// event without subscribing</i>
+            <b>this</b>.ui.onDisableChange(<b>this</b>, false);
+        }
+        <b>this</b>.fireEvent(&quot;disabledchange&quot;, <b>this</b>, false);
+    },
+
+    <i>// private</i>
+    renderChildren : <b>function</b>(suppressEvent){
+        <b>if</b>(suppressEvent !== false){
+            <b>this</b>.fireEvent(&quot;beforechildrenrendered&quot;, <b>this</b>);
+        }
+        <b>var</b> cs = <b>this</b>.childNodes;
+        <b>for</b>(var i = 0, len = cs.length; i &lt; len; i++){
+            cs[i].render(true);
+        }
+        <b>this</b>.childrenRendered = true;
+    },
+
+    <i>// private</i>
+    sort : <b>function</b>(fn, scope){
+        Ext.tree.TreeNode.superclass.sort.apply(<b>this</b>, arguments);
+        <b>if</b>(this.childrenRendered){
+            <b>var</b> cs = <b>this</b>.childNodes;
+            <b>for</b>(var i = 0, len = cs.length; i &lt; len; i++){
+                cs[i].render(true);
+            }
+        }
+    },
+
+    <i>// private</i>
+    render : <b>function</b>(bulkRender){
+        <b>this</b>.ui.render(bulkRender);
+        <b>if</b>(!<b>this</b>.rendered){
+            <i>// make sure it is registered</i>
+            <b>this</b>.getOwnerTree().registerNode(<b>this</b>);
+            <b>this</b>.rendered = true;
+            <b>if</b>(this.expanded){
+                <b>this</b>.expanded = false;
+                <b>this</b>.expand(false, false);
+            }
+        }
+    },
+
+    <i>// private</i>
+    renderIndent : <b>function</b>(deep, refresh){
+        <b>if</b>(refresh){
+            <b>this</b>.ui.childIndent = null;
+        }
+        <b>this</b>.ui.renderIndent();
+        <b>if</b>(deep === true &amp;&amp; <b>this</b>.childrenRendered){
+            <b>var</b> cs = <b>this</b>.childNodes;
+            <b>for</b>(var i = 0, len = cs.length; i &lt; len; i++){
+                cs[i].renderIndent(true, refresh);
+            }
+        }
+    },
+
+    beginUpdate : <b>function</b>(){
+        <b>this</b>.childrenRendered = false;
+    },
+
+    endUpdate : <b>function</b>(){
+        <b>if</b>(this.expanded &amp;&amp; <b>this</b>.rendered){
+            <b>this</b>.renderChildren();
+        }
+    },
+
+    destroy : <b>function</b>(){
+        <b>if</b>(this.childNodes){
+	        <b>for</b>(var i = 0,l = <b>this</b>.childNodes.length; i &lt; l; i++){
+	            <b>this</b>.childNodes[i].destroy();
+	        }
+            <b>this</b>.childNodes = null;
+        }
+        <b>if</b>(this.ui.destroy){
+            <b>this</b>.ui.destroy();
+        }
+    }
+});
+
+Ext.tree.TreePanel.nodeTypes.node = Ext.tree.TreeNode;</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

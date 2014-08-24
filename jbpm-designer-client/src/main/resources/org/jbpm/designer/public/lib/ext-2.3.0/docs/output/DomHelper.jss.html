@@ -1,0 +1,413 @@
+<html><head><title>DomHelper.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>DomHelper.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.DomHelper
+ * Utility class <b>for</b> working <b>with</b> DOM and/or Templates. It transparently supports using HTML fragments or DOM.&lt;br&gt;
+ * This is an example, where an unordered list <b>with</b> 5 children items is appended to an existing element <b>with</b> id <em>'my-div'</em>:&lt;br&gt;
+ &lt;pre&gt;&lt;code&gt;
+<b>var</b> dh = Ext.DomHelper;
+<b>var</b> list = dh.append(<em>'my-div'</em>, {
+    id: <em>'my-ul'</em>, tag: <em>'ul'</em>, cls: <em>'my-list'</em>, children: [
+        {tag: <em>'li'</em>, id: <em>'item0'</em>, html: <em>'List Item 0'</em>},
+        {tag: <em>'li'</em>, id: <em>'item1'</em>, html: <em>'List Item 1'</em>},
+        {tag: <em>'li'</em>, id: <em>'item2'</em>, html: <em>'List Item 2'</em>},
+        {tag: <em>'li'</em>, id: <em>'item3'</em>, html: <em>'List Item 3'</em>},
+        {tag: <em>'li'</em>, id: <em>'item4'</em>, html: <em>'List Item 4'</em>}
+    ]
+});
+ &lt;/code&gt;&lt;/pre&gt;
+ * &lt;p&gt;Element creation specification parameters <b>in</b> this class may also be passed as an Array of
+ * specification objects. This can be used to insert multiple sibling nodes into an existing
+ * container very efficiently. For example, to add more list items to the example above:&lt;pre&gt;&lt;code&gt;
+dh.append(<em>'my-ul'</em>, [
+    {tag: <em>'li'</em>, id: <em>'item5'</em>, html: <em>'List Item 5'</em>},
+    {tag: <em>'li'</em>, id: <em>'item6'</em>, html: <em>'List Item 6'</em>} ]);
+&lt;/code&gt;&lt;/pre&gt;&lt;/p&gt;
+ * &lt;p&gt;Element creation specification parameters may also be strings. If {@link useDom} is false, then the string is used
+ * as innerHTML. If {@link useDom} is true, a string specification results <b>in</b> the creation of a text node.&lt;/p&gt;
+ * For more information and examples, see &lt;a href=&quot;http:<i>//extjs.com/learn/Tutorial:DomHelper_Blog/&quot;&gt;the ExtJs tutorial page&lt;/a&gt;.</i>
+ * @singleton
+ */</i>
+Ext.DomHelper = <b>function</b>(){
+    <b>var</b> tempTableEl = null;
+    <b>var</b> emptyTags = /^(?:br|frame|hr|img|input|link|meta|range|spacer|wbr|area|param|col)$/i;
+    <b>var</b> tableRe = /^table|tbody|tr|td$/i;
+
+    <i>// build as innerHTML where available</i>
+    <b>var</b> createHtml = <b>function</b>(o){
+        <b>if</b>(typeof o == <em>'string'</em>){
+            <b>return</b> o;
+        }
+        <b>var</b> b = &quot;&quot;;
+        <b>if</b> (Ext.isArray(o)) {
+            <b>for</b> (<b>var</b> i = 0, l = o.length; i &lt; l; i++) {
+                b += createHtml(o[i]);
+            }
+            <b>return</b> b;
+        }
+        <b>if</b>(!o.tag){
+            o.tag = &quot;div&quot;;
+        }
+        b += &quot;&lt;&quot; + o.tag;
+        <b>for</b>(var attr <b>in</b> o){
+            <b>if</b>(attr == &quot;tag&quot; || attr == &quot;children&quot; || attr == &quot;cn&quot; || attr == &quot;html&quot; || <b>typeof</b> o[attr] == &quot;<b>function</b>&quot;) <b>continue</b>;
+            <b>if</b>(attr == &quot;style&quot;){
+                <b>var</b> s = o[&quot;style&quot;];
+                <b>if</b>(typeof s == &quot;<b>function</b>&quot;){
+                    s = s.call();
+                }
+                <b>if</b>(typeof s == &quot;string&quot;){
+                    b += <em>' style=&quot;'</em> + s + <em>'&quot;'</em>;
+                }<b>else</b> if(<b>typeof</b> s == &quot;object&quot;){
+                    b += <em>' style=&quot;'</em>;
+                    <b>for</b>(var key <b>in</b> s){
+                        <b>if</b>(typeof s[key] != &quot;<b>function</b>&quot;){
+                            b += key + &quot;:&quot; + s[key] + &quot;;&quot;;
+                        }
+                    }
+                    b += <em>'&quot;'</em>;
+                }
+            }<b>else</b>{
+                <b>if</b>(attr == &quot;cls&quot;){
+                    b += <em>' class=&quot;'</em> + o[&quot;cls&quot;] + <em>'&quot;'</em>;
+                }<b>else</b> if(attr == &quot;htmlFor&quot;){
+                    b += <em>' <b>for</b>=&quot;'</em> + o[&quot;htmlFor&quot;] + <em>'&quot;'</em>;
+                }<b>else</b>{
+                    b += &quot; &quot; + attr + <em>'=&quot;'</em> + o[attr] + <em>'&quot;'</em>;
+                }
+            }
+        }
+        <b>if</b>(emptyTags.test(o.tag)){
+            b += &quot;/&gt;&quot;;
+        }<b>else</b>{
+            b += &quot;&gt;&quot;;
+            <b>var</b> cn = o.children || o.cn;
+            <b>if</b>(cn){
+                b += createHtml(cn);
+            } <b>else</b> if(o.html){
+                b += o.html;
+            }
+            b += &quot;&lt;/&quot; + o.tag + &quot;&gt;&quot;;
+        }
+        <b>return</b> b;
+    };
+
+    <i>// build as dom</i>
+    <i>/** @ignore */</i>
+    <b>var</b> createDom = <b>function</b>(o, parentNode){
+        <b>var</b> el;
+        <b>if</b> (Ext.isArray(o)) {                       <i>// Allow Arrays of siblings to be inserted</i>
+            el = document.createDocumentFragment(); <i>// <b>in</b> one shot using a DocumentFragment</i>
+            <b>for</b>(var i = 0, l = o.length; i &lt; l; i++) {
+                createDom(o[i], el);
+            }
+        } <b>else</b> if (<b>typeof</b> o == &quot;string&quot;) {         <i>// Allow a string as a child spec.</i>
+            el = document.createTextNode(o);
+        } <b>else</b> {
+            el = document.createElement(o.tag||<em>'div'</em>);
+            <b>var</b> useSet = !!el.setAttribute; <i>// In IE some elements don't have setAttribute</i>
+            <b>for</b>(var attr <b>in</b> o){
+                <b>if</b>(attr == &quot;tag&quot; || attr == &quot;children&quot; || attr == &quot;cn&quot; || attr == &quot;html&quot; || attr == &quot;style&quot; || <b>typeof</b> o[attr] == &quot;<b>function</b>&quot;) <b>continue</b>;
+                <b>if</b>(attr==&quot;cls&quot;){
+                    el.className = o[&quot;cls&quot;];
+                }<b>else</b>{
+                    <b>if</b>(useSet) el.setAttribute(attr, o[attr]);
+                    <b>else</b> el[attr] = o[attr];
+                }
+            }
+            Ext.DomHelper.applyStyles(el, o.style);
+            <b>var</b> cn = o.children || o.cn;
+            <b>if</b>(cn){
+                createDom(cn, el);
+            } <b>else</b> if(o.html){
+                el.innerHTML = o.html;
+            }
+        }
+        <b>if</b>(parentNode){
+           parentNode.appendChild(el);
+        }
+        <b>return</b> el;
+    };
+
+    <b>var</b> ieTable = <b>function</b>(depth, s, h, e){
+        tempTableEl.innerHTML = [s, h, e].join(<em>''</em>);
+        <b>var</b> i = -1, el = tempTableEl;
+        <b>while</b>(++i &lt; depth){
+            el = el.firstChild;
+        }
+        <b>return</b> el;
+    };
+
+    <i>// kill repeat to save bytes</i>
+    <b>var</b> ts = <em>'&lt;table&gt;'</em>,
+        te = <em>'&lt;/table&gt;'</em>,
+        tbs = ts+<em>'&lt;tbody&gt;'</em>,
+        tbe = <em>'&lt;/tbody&gt;'</em>+te,
+        trs = tbs + <em>'&lt;tr&gt;'</em>,
+        tre = <em>'&lt;/tr&gt;'</em>+tbe;
+
+    <i>/**
+     * @ignore
+     * Nasty code <b>for</b> IE's broken table implementation
+     */</i>
+    <b>var</b> insertIntoTable = <b>function</b>(tag, where, el, html){
+        <b>if</b>(!tempTableEl){
+            tempTableEl = document.createElement(<em>'div'</em>);
+        }
+        <b>var</b> node;
+        <b>var</b> before = null;
+        <b>if</b>(tag == <em>'td'</em>){
+            <b>if</b>(where == <em>'afterbegin'</em> || where == <em>'beforeend'</em>){ <i>// INTO a TD</i>
+                <b>return</b>;
+            }
+            <b>if</b>(where == <em>'beforebegin'</em>){
+                before = el;
+                el = el.parentNode;
+            } <b>else</b>{
+                before = el.nextSibling;
+                el = el.parentNode;
+            }
+            node = ieTable(4, trs, html, tre);
+        }
+        <b>else</b> if(tag == <em>'tr'</em>){
+            <b>if</b>(where == <em>'beforebegin'</em>){
+                before = el;
+                el = el.parentNode;
+                node = ieTable(3, tbs, html, tbe);
+            } <b>else</b> if(where == <em>'afterend'</em>){
+                before = el.nextSibling;
+                el = el.parentNode;
+                node = ieTable(3, tbs, html, tbe);
+            } <b>else</b>{ <i>// INTO a TR</i>
+                <b>if</b>(where == <em>'afterbegin'</em>){
+                    before = el.firstChild;
+                }
+                node = ieTable(4, trs, html, tre);
+            }
+        } <b>else</b> if(tag == <em>'tbody'</em>){
+            <b>if</b>(where == <em>'beforebegin'</em>){
+                before = el;
+                el = el.parentNode;
+                node = ieTable(2, ts, html, te);
+            } <b>else</b> if(where == <em>'afterend'</em>){
+                before = el.nextSibling;
+                el = el.parentNode;
+                node = ieTable(2, ts, html, te);
+            } <b>else</b>{
+                <b>if</b>(where == <em>'afterbegin'</em>){
+                    before = el.firstChild;
+                }
+                node = ieTable(3, tbs, html, tbe);
+            }
+        } <b>else</b>{ <i>// TABLE</i>
+            <b>if</b>(where == <em>'beforebegin'</em> || where == <em>'afterend'</em>){ <i>// OUTSIDE the table</i>
+                <b>return</b>;
+            }
+            <b>if</b>(where == <em>'afterbegin'</em>){
+                before = el.firstChild;
+            }
+            node = ieTable(2, ts, html, te);
+        }
+        el.insertBefore(node, before);
+        <b>return</b> node;
+    };
+
+
+    <b>return</b> {
+    <i>/** True to force the use of DOM instead of html fragments @type Boolean */</i>
+    useDom : false,
+
+    <i>/**
+     * Returns the markup <b>for</b> the passed Element(s) config.
+     * @param {Object} o The DOM object spec (and children)
+     * @<b>return</b> {String}
+     */</i>
+    markup : <b>function</b>(o){
+        <b>return</b> createHtml(o);
+    },
+
+    <i>/**
+     * Applies a style specification to an element.
+     * @param {String/HTMLElement} el The element to apply styles to
+     * @param {String/Object/Function} styles A style specification string eg &quot;width:100px&quot;, or object <b>in</b> the form {width:&quot;100px&quot;}, or
+     * a <b>function</b> which returns such a specification.
+     */</i>
+    applyStyles : <b>function</b>(el, styles){
+        <b>if</b>(styles){
+           el = Ext.fly(el);
+           <b>if</b>(typeof styles == &quot;string&quot;){
+               <b>var</b> re = /\s?([a-z\-]*)\:\s?([^;]*);?/gi;
+               <b>var</b> matches;
+               <b>while</b> ((matches = re.exec(styles)) != null){
+                   el.setStyle(matches[1], matches[2]);
+               }
+           }<b>else</b> if (<b>typeof</b> styles == &quot;object&quot;){
+               <b>for</b> (<b>var</b> style <b>in</b> styles){
+                  el.setStyle(style, styles[style]);
+               }
+           }<b>else</b> if (<b>typeof</b> styles == &quot;<b>function</b>&quot;){
+                Ext.DomHelper.applyStyles(el, styles.call());
+           }
+        }
+    },
+
+    <i>/**
+     * Inserts an HTML fragment into the DOM.
+     * @param {String} where Where to insert the html <b>in</b> relation to el - beforeBegin, afterBegin, beforeEnd, afterEnd.
+     * @param {HTMLElement} el The context element
+     * @param {String} html The HTML fragmenet
+     * @<b>return</b> {HTMLElement} The <b>new</b> node
+     */</i>
+    insertHtml : <b>function</b>(where, el, html){
+        where = where.toLowerCase();
+        <b>if</b>(el.insertAdjacentHTML){
+            <b>if</b>(tableRe.test(el.tagName)){
+                <b>var</b> rs;
+                <b>if</b>(rs = insertIntoTable(el.tagName.toLowerCase(), where, el, html)){
+                    <b>return</b> rs;
+                }
+            }
+            <b>switch</b>(where){
+                <b>case</b> &quot;beforebegin&quot;:
+                    el.insertAdjacentHTML(<em>'BeforeBegin'</em>, html);
+                    <b>return</b> el.previousSibling;
+                <b>case</b> &quot;afterbegin&quot;:
+                    el.insertAdjacentHTML(<em>'AfterBegin'</em>, html);
+                    <b>return</b> el.firstChild;
+                <b>case</b> &quot;beforeend&quot;:
+                    el.insertAdjacentHTML(<em>'BeforeEnd'</em>, html);
+                    <b>return</b> el.lastChild;
+                <b>case</b> &quot;afterend&quot;:
+                    el.insertAdjacentHTML(<em>'AfterEnd'</em>, html);
+                    <b>return</b> el.nextSibling;
+            }
+            throw <em>'Illegal insertion point -&gt; &quot;'</em> + where + <em>'&quot;'</em>;
+        }
+        <b>var</b> range = el.ownerDocument.createRange();
+        <b>var</b> frag;
+        <b>switch</b>(where){
+             <b>case</b> &quot;beforebegin&quot;:
+                range.setStartBefore(el);
+                frag = range.createContextualFragment(html);
+                el.parentNode.insertBefore(frag, el);
+                <b>return</b> el.previousSibling;
+             <b>case</b> &quot;afterbegin&quot;:
+                <b>if</b>(el.firstChild){
+                    range.setStartBefore(el.firstChild);
+                    frag = range.createContextualFragment(html);
+                    el.insertBefore(frag, el.firstChild);
+                    <b>return</b> el.firstChild;
+                }<b>else</b>{
+                    el.innerHTML = html;
+                    <b>return</b> el.firstChild;
+                }
+            <b>case</b> &quot;beforeend&quot;:
+                <b>if</b>(el.lastChild){
+                    range.setStartAfter(el.lastChild);
+                    frag = range.createContextualFragment(html);
+                    el.appendChild(frag);
+                    <b>return</b> el.lastChild;
+                }<b>else</b>{
+                    el.innerHTML = html;
+                    <b>return</b> el.lastChild;
+                }
+            <b>case</b> &quot;afterend&quot;:
+                range.setStartAfter(el);
+                frag = range.createContextualFragment(html);
+                el.parentNode.insertBefore(frag, el.nextSibling);
+                <b>return</b> el.nextSibling;
+            }
+            throw <em>'Illegal insertion point -&gt; &quot;'</em> + where + <em>'&quot;'</em>;
+    },
+
+    <i>/**
+     * Creates <b>new</b> DOM element(s) and inserts them before el.
+     * @param {Mixed} el The context element
+     * @param {Object/String} o The DOM object spec (and children) or raw HTML blob
+     * @param {Boolean} returnElement (optional) true to <b>return</b> a Ext.Element
+     * @<b>return</b> {HTMLElement/Ext.Element} The <b>new</b> node
+     */</i>
+    insertBefore : <b>function</b>(el, o, returnElement){
+        <b>return</b> this.doInsert(el, o, returnElement, &quot;beforeBegin&quot;);
+    },
+
+    <i>/**
+     * Creates <b>new</b> DOM element(s) and inserts them after el.
+     * @param {Mixed} el The context element
+     * @param {Object} o The DOM object spec (and children)
+     * @param {Boolean} returnElement (optional) true to <b>return</b> a Ext.Element
+     * @<b>return</b> {HTMLElement/Ext.Element} The <b>new</b> node
+     */</i>
+    insertAfter : <b>function</b>(el, o, returnElement){
+        <b>return</b> this.doInsert(el, o, returnElement, &quot;afterEnd&quot;, &quot;nextSibling&quot;);
+    },
+
+    <i>/**
+     * Creates <b>new</b> DOM element(s) and inserts them as the first child of el.
+     * @param {Mixed} el The context element
+     * @param {Object/String} o The DOM object spec (and children) or raw HTML blob
+     * @param {Boolean} returnElement (optional) true to <b>return</b> a Ext.Element
+     * @<b>return</b> {HTMLElement/Ext.Element} The <b>new</b> node
+     */</i>
+    insertFirst : <b>function</b>(el, o, returnElement){
+        <b>return</b> this.doInsert(el, o, returnElement, &quot;afterBegin&quot;, &quot;firstChild&quot;);
+    },
+
+    <i>// private</i>
+    doInsert : <b>function</b>(el, o, returnElement, pos, sibling){
+        el = Ext.getDom(el);
+        <b>var</b> newNode;
+        <b>if</b>(this.useDom){
+            newNode = createDom(o, null);
+            (sibling === &quot;firstChild&quot; ? el : el.parentNode).insertBefore(newNode, sibling ? el[sibling] : el);
+        }<b>else</b>{
+            <b>var</b> html = createHtml(o);
+            newNode = <b>this</b>.insertHtml(pos, el, html);
+        }
+        <b>return</b> returnElement ? Ext.get(newNode, true) : newNode;
+    },
+
+    <i>/**
+     * Creates <b>new</b> DOM element(s) and appends them to el.
+     * @param {Mixed} el The context element
+     * @param {Object/String} o The DOM object spec (and children) or raw HTML blob
+     * @param {Boolean} returnElement (optional) true to <b>return</b> a Ext.Element
+     * @<b>return</b> {HTMLElement/Ext.Element} The <b>new</b> node
+     */</i>
+    append : <b>function</b>(el, o, returnElement){
+        el = Ext.getDom(el);
+        <b>var</b> newNode;
+        <b>if</b>(this.useDom){
+            newNode = createDom(o, null);
+            el.appendChild(newNode);
+        }<b>else</b>{
+            <b>var</b> html = createHtml(o);
+            newNode = <b>this</b>.insertHtml(&quot;beforeEnd&quot;, el, html);
+        }
+        <b>return</b> returnElement ? Ext.get(newNode, true) : newNode;
+    },
+
+    <i>/**
+     * Creates <b>new</b> DOM element(s) and overwrites the contents of el <b>with</b> them.
+     * @param {Mixed} el The context element
+     * @param {Object/String} o The DOM object spec (and children) or raw HTML blob
+     * @param {Boolean} returnElement (optional) true to <b>return</b> a Ext.Element
+     * @<b>return</b> {HTMLElement/Ext.Element} The <b>new</b> node
+     */</i>
+    overwrite : <b>function</b>(el, o, returnElement){
+        el = Ext.getDom(el);
+        el.innerHTML = createHtml(o);
+        <b>return</b> returnElement ? Ext.get(el.firstChild, true) : el.firstChild;
+    },
+
+    <i>/**
+     * Creates a <b>new</b> Ext.Template from the DOM object spec.
+     * @param {Object} o The DOM object spec (and children)
+     * @<b>return</b> {Ext.Template} The <b>new</b> template
+     */</i>
+    createTemplate : <b>function</b>(o){
+        <b>var</b> html = createHtml(o);
+        <b>return</b> new Ext.Template(html);
+    }
+    };
+}();
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

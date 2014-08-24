@@ -1,0 +1,154 @@
+<html><head><title>QuickTips.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>QuickTips.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.QuickTips
+ * &lt;p&gt;Provides attractive and customizable tooltips <b>for</b> any element. The QuickTips
+ * singleton is used to configure and manage tooltips globally <b>for</b> multiple elements
+ * <b>in</b> a generic manner.  To create individual tooltips <b>with</b> maximum customizability,
+ * you should consider either {@link Ext.Tip} or {@link Ext.ToolTip}.&lt;/p&gt;
+ * &lt;p&gt;Quicktips can be configured via tag attributes directly <b>in</b> markup, or by
+ * registering quick tips programmatically via the {@link #register} method.&lt;/p&gt;
+ * &lt;p&gt;The singleton's instance of {@link Ext.QuickTip} is available via
+ * {@link #getQuickTip}, and supports all the methods, and all the all the
+ * configuration properties of Ext.QuickTip. These settings will apply to all
+ * tooltips shown by the singleton.&lt;/p&gt;
+ * &lt;p&gt;Below is the summary of the configuration properties which can be used.
+ * For detailed descriptions see {@link #getQuickTip}&lt;/p&gt;
+ * &lt;p&gt;&lt;b&gt;QuickTips singleton configs (all are optional)&lt;/b&gt;&lt;/p&gt;
+ * &lt;div class=&quot;mdetail-params&quot;&gt;&lt;ul&gt;&lt;li&gt;dismissDelay&lt;/li&gt;
+ * &lt;li&gt;hideDelay&lt;/li&gt;
+ * &lt;li&gt;maxWidth&lt;/li&gt;
+ * &lt;li&gt;minWidth&lt;/li&gt;
+ * &lt;li&gt;showDelay&lt;/li&gt;
+ * &lt;li&gt;trackMouse&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;
+ * &lt;p&gt;&lt;b&gt;Target element configs (optional unless otherwise noted)&lt;/b&gt;&lt;/p&gt;
+ * &lt;div class=&quot;mdetail-params&quot;&gt;&lt;ul&gt;&lt;li&gt;autoHide&lt;/li&gt;
+ * &lt;li&gt;cls&lt;/li&gt;
+ * &lt;li&gt;dismissDelay (overrides singleton value)&lt;/li&gt;
+ * &lt;li&gt;target (required)&lt;/li&gt;
+ * &lt;li&gt;text (required)&lt;/li&gt;
+ * &lt;li&gt;title&lt;/li&gt;
+ * &lt;li&gt;width&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;
+ * &lt;p&gt;Here is an example showing how some of these config options could be used:&lt;/p&gt;
+ * &lt;pre&gt;&lt;code&gt;
+<i>// Init the singleton.  Any tag-based quick tips will start working.</i>
+Ext.QuickTips.init();
+
+<i>// Apply a set of config properties to the singleton</i>
+Ext.apply(Ext.QuickTips.getQuickTip(), {
+    maxWidth: 200,
+    minWidth: 100,
+    showDelay: 50,
+    trackMouse: true
+});
+
+<i>// Manually register a quick tip <b>for</b> a specific element</i>
+Ext.QuickTips.register({
+    target: <em>'my-div'</em>,
+    title: <em>'My Tooltip'</em>,
+    text: <em>'This tooltip was added <b>in</b> code'</em>,
+    width: 100,
+    dismissDelay: 20
+});
+&lt;/code&gt;&lt;/pre&gt;
+ * &lt;p&gt;To register a quick tip <b>in</b> markup, you simply add one or more of the valid QuickTip attributes prefixed <b>with</b>
+ * the &lt;b&gt;ext:&lt;/b&gt; namespace.  The HTML element itself is automatically set as the quick tip target. Here is the summary
+ * of supported attributes (optional unless otherwise noted):&lt;/p&gt;
+ * &lt;ul&gt;&lt;li&gt;&lt;b&gt;hide&lt;/b&gt;: Specifying &quot;user&quot; is equivalent to setting autoHide = false.  Any other value will be the
+ * same as autoHide = true.&lt;/li&gt;
+ * &lt;li&gt;&lt;b&gt;qclass&lt;/b&gt;: A CSS class to be applied to the quick tip (equivalent to the <em>'cls'</em> target element config).&lt;/li&gt;
+ * &lt;li&gt;&lt;b&gt;qtip (required)&lt;/b&gt;: The quick tip text (equivalent to the <em>'text'</em> target element config).&lt;/li&gt;
+ * &lt;li&gt;&lt;b&gt;qtitle&lt;/b&gt;: The quick tip title (equivalent to the <em>'title'</em> target element config).&lt;/li&gt;
+ * &lt;li&gt;&lt;b&gt;qwidth&lt;/b&gt;: The quick tip width (equivalent to the <em>'width'</em> target element config).&lt;/li&gt;&lt;/ul&gt;
+ * &lt;p&gt;Here is an example of configuring an HTML element to display a tooltip from markup:&lt;/p&gt;
+ * &lt;pre&gt;&lt;code&gt;
+<i>// Add a quick tip to an HTML button</i>
+&amp;lt;input type=&quot;button&quot; value=&quot;OK&quot; ext:qtitle=&quot;OK Button&quot; ext:qwidth=&quot;100&quot;
+     ext:qtip=&quot;This is a quick tip from markup!&quot;&gt;&amp;lt;/input&gt;
+&lt;/code&gt;&lt;/pre&gt;
+ * @singleton
+ */</i>
+Ext.QuickTips = <b>function</b>(){
+    <b>var</b> tip, locks = [];
+    <b>return</b> {
+        <i>/**
+         * Initialize the global QuickTips instance and prepare any quick tips.
+         * @param {Boolean} autoRender True to render the QuickTips container immediately to preload images. (Defaults to true) 
+         */</i>
+        init : <b>function</b>(autoRender){
+		    <b>if</b>(!tip){
+		        <b>if</b>(!Ext.isReady){
+		            Ext.onReady(<b>function</b>(){
+		                Ext.QuickTips.init(autoRender);
+		            });
+		            <b>return</b>;
+		        }
+		        tip = <b>new</b> Ext.QuickTip({elements:<em>'header,body'</em>});
+		        <b>if</b>(autoRender !== false){
+		            tip.render(Ext.getBody());
+		        }
+		    }
+        },
+
+        <i>/**
+         * Enable quick tips globally.
+         */</i>
+        enable : <b>function</b>(){
+            <b>if</b>(tip){
+                locks.pop();
+                <b>if</b>(locks.length &lt; 1){
+                    tip.enable();
+                }
+            }
+        },
+
+        <i>/**
+         * Disable quick tips globally.
+         */</i>
+        disable : <b>function</b>(){
+            <b>if</b>(tip){
+                tip.disable();
+            }
+            locks.push(1);
+        },
+
+        <i>/**
+         * Returns true <b>if</b> quick tips are enabled, <b>else</b> false.
+         * @<b>return</b> {Boolean}
+         */</i>
+        isEnabled : <b>function</b>(){
+            <b>return</b> tip !== undefined &amp;&amp; !tip.disabled;
+        },
+
+        <i>/**
+         * Gets the global QuickTips instance.
+         */</i>
+        getQuickTip : <b>function</b>(){
+            <b>return</b> tip;
+        },
+
+        <i>/**
+         * Configures a <b>new</b> quick tip instance and assigns it to a target element.  See
+         * {@link Ext.QuickTip#register} <b>for</b> details.
+         * @param {Object} config The config object
+         */</i>
+        register : <b>function</b>(){
+            tip.register.apply(tip, arguments);
+        },
+
+        <i>/**
+         * Removes any registered quick tip from the target element and destroys it.
+         * @param {String/HTMLElement/Element} el The element from which the quick tip is to be removed.
+         */</i>
+        unregister : <b>function</b>(){
+            tip.unregister.apply(tip, arguments);
+        },
+
+        <i>/**
+         * Alias of {@link #register}.
+         * @param {Object} config The config object
+         */</i>
+        tips :<b>function</b>(){
+            tip.register.apply(tip, arguments);
+        }
+    }
+}();</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

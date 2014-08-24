@@ -1,0 +1,56 @@
+<html><head><title>RowNumberer.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>RowNumberer.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.grid.RowNumberer
+ * This is a utility class that can be passed into a {@link Ext.grid.ColumnModel} as a column config that provides
+ * an automatic row numbering column.
+ * &lt;br&gt;Usage:&lt;br&gt;
+ &lt;pre&gt;&lt;code&gt;
+ <i>// This is a typical column config <b>with</b> the first column providing row numbers</i>
+ <b>var</b> colModel = <b>new</b> Ext.grid.ColumnModel([
+    <b>new</b> Ext.grid.RowNumberer(),
+    {header: &quot;Name&quot;, width: 80, sortable: true},
+    {header: &quot;Code&quot;, width: 50, sortable: true},
+    {header: &quot;Description&quot;, width: 200, sortable: true}
+ ]);
+ &lt;/code&gt;&lt;/pre&gt;
+ * @constructor
+ * @param {Object} config The configuration options
+ */</i>
+Ext.grid.RowNumberer = <b>function</b>(config){
+    Ext.apply(<b>this</b>, config);
+    <b>if</b>(this.rowspan){
+        <b>this</b>.renderer = <b>this</b>.renderer.createDelegate(<b>this</b>);
+    }
+};
+
+Ext.grid.RowNumberer.prototype = {
+    <i>/**
+     * @cfg {String} header Any valid text or HTML fragment to display <b>in</b> the header cell <b>for</b> the row
+     * number column (defaults to <em>''</em>).
+     */</i>
+    header: &quot;&quot;,
+    <i>/**
+     * @cfg {Number} width The <b>default</b> width <b>in</b> pixels of the row number column (defaults to 23).
+     */</i>
+    width: 23,
+    <i>/**
+     * @cfg {Boolean} sortable True <b>if</b> the row number column is sortable (defaults to false).
+     * @hide
+     */</i>
+    sortable: false,
+
+    <i>// private</i>
+    fixed:true,
+    menuDisabled:true,
+    dataIndex: <em>''</em>,
+    id: <em>'numberer'</em>,
+    rowspan: undefined,
+
+    <i>// private</i>
+    renderer : <b>function</b>(v, p, record, rowIndex){
+        <b>if</b>(this.rowspan){
+            p.cellAttr = <em>'rowspan=&quot;'</em>+<b>this</b>.rowspan+<em>'&quot;'</em>;
+        }
+        <b>return</b> rowIndex+1;
+    }
+};</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

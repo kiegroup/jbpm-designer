@@ -1,0 +1,203 @@
+<html><head><title>ToolTip.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ToolTip.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.ToolTip
+ * @extends Ext.Tip
+ * A standard tooltip implementation <b>for</b> providing additional information when hovering over a target element.
+ * @constructor
+ * Create a <b>new</b> Tooltip
+ * @param {Object} config The configuration options
+ */</i>
+Ext.ToolTip = Ext.extend(Ext.Tip, {
+    <i>/**
+     * @cfg {Mixed} target The target HTMLElement, Ext.Element or id to associate <b>with</b> this tooltip.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} autoHide True to automatically hide the tooltip after the mouse exits the target element
+     * or after the {@link #dismissDelay} has expired <b>if</b> set (defaults to true).  If {@link closable} = true a close
+     * tool button will be rendered into the tooltip header.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Number} showDelay Delay <b>in</b> milliseconds before the tooltip displays after the mouse enters the
+     * target element (defaults to 500)
+     */</i>
+    showDelay: 500,
+    <i>/**
+     * @cfg {Number} hideDelay Delay <b>in</b> milliseconds after the mouse exits the target element but before the
+     * tooltip actually hides (defaults to 200).  Set to 0 <b>for</b> the tooltip to hide immediately.
+     */</i>
+    hideDelay: 200,
+    <i>/**
+     * @cfg {Number} dismissDelay Delay <b>in</b> milliseconds before the tooltip automatically hides (defaults to 5000).
+     * To disable automatic hiding, set dismissDelay = 0.
+     */</i>
+    dismissDelay: 5000,
+    <i>/**
+     * @cfg {Array} mouseOffset An XY offset from the mouse position where the tooltip should be shown (defaults to [15,18]).
+     */</i>
+    mouseOffset: [15,18],
+    <i>/**
+     * @cfg {Boolean} trackMouse True to have the tooltip follow the mouse as it moves over the target element (defaults to false).
+     */</i>
+    trackMouse : false,
+    constrainPosition: true,
+
+    <i>// private</i>
+    initComponent: <b>function</b>(){
+        Ext.ToolTip.superclass.initComponent.call(<b>this</b>);
+        <b>this</b>.lastActive = <b>new</b> Date();
+        <b>this</b>.initTarget();
+    },
+
+    <i>// private</i>
+    initTarget : <b>function</b>(){
+        <b>if</b>(this.target){
+            <b>this</b>.target = Ext.get(<b>this</b>.target);
+            <b>this</b>.target.on(<em>'mouseover'</em>, <b>this</b>.onTargetOver, <b>this</b>);
+            <b>this</b>.target.on(<em>'mouseout'</em>, <b>this</b>.onTargetOut, <b>this</b>);
+            <b>this</b>.target.on(<em>'mousemove'</em>, <b>this</b>.onMouseMove, <b>this</b>);
+        }
+    },
+
+    <i>// private</i>
+    onMouseMove : <b>function</b>(e){
+        <b>this</b>.targetXY = e.getXY();
+        <b>if</b>(!<b>this</b>.hidden &amp;&amp; <b>this</b>.trackMouse){
+            <b>this</b>.setPagePosition(<b>this</b>.getTargetXY());
+        }
+    },
+
+    <i>// private</i>
+    getTargetXY : <b>function</b>(){
+        <b>return</b> [<b>this</b>.targetXY[0]+<b>this</b>.mouseOffset[0], <b>this</b>.targetXY[1]+<b>this</b>.mouseOffset[1]];
+    },
+
+    <i>// private</i>
+    onTargetOver : <b>function</b>(e){
+        <b>if</b>(this.disabled || e.within(<b>this</b>.target.dom, true)){
+            <b>return</b>;
+        }
+        <b>this</b>.clearTimer(<em>'hide'</em>);
+        <b>this</b>.targetXY = e.getXY();
+        <b>this</b>.delayShow();
+    },
+
+    <i>// private</i>
+    delayShow : <b>function</b>(){
+        <b>if</b>(this.hidden &amp;&amp; !<b>this</b>.showTimer){
+            <b>if</b>(this.lastActive.getElapsed() &lt; <b>this</b>.quickShowInterval){
+                <b>this</b>.show();
+            }<b>else</b>{
+                <b>this</b>.showTimer = <b>this</b>.show.defer(<b>this</b>.showDelay, <b>this</b>);
+            }
+        }<b>else</b> if(!<b>this</b>.hidden &amp;&amp; <b>this</b>.autoHide !== false){
+            <b>this</b>.show();
+        }
+    },
+
+    <i>// private</i>
+    onTargetOut : <b>function</b>(e){
+        <b>if</b>(this.disabled || e.within(<b>this</b>.target.dom, true)){
+            <b>return</b>;
+        }
+        <b>this</b>.clearTimer(<em>'show'</em>);
+        <b>if</b>(this.autoHide !== false){
+            <b>this</b>.delayHide();
+        }
+    },
+
+    <i>// private</i>
+    delayHide : <b>function</b>(){
+        <b>if</b>(!<b>this</b>.hidden &amp;&amp; !<b>this</b>.hideTimer){
+            <b>this</b>.hideTimer = <b>this</b>.hide.defer(<b>this</b>.hideDelay, <b>this</b>);
+        }
+    },
+
+    <i>/**
+     * Hides <b>this</b> tooltip <b>if</b> visible.
+     */</i>
+    hide: <b>function</b>(){
+        <b>this</b>.clearTimer(<em>'dismiss'</em>);
+        <b>this</b>.lastActive = <b>new</b> Date();
+        Ext.ToolTip.superclass.hide.call(<b>this</b>);
+    },
+
+    <i>/**
+     * Shows <b>this</b> tooltip at the current event target XY position.
+     */</i>
+    show : <b>function</b>(){
+        <b>this</b>.showAt(<b>this</b>.getTargetXY());
+    },
+
+    <i>// inherit docs</i>
+    showAt : <b>function</b>(xy){
+        <b>this</b>.lastActive = <b>new</b> Date();
+        <b>this</b>.clearTimers();
+        Ext.ToolTip.superclass.showAt.call(<b>this</b>, xy);
+        <b>if</b>(this.dismissDelay &amp;&amp; <b>this</b>.autoHide !== false){
+            <b>this</b>.dismissTimer = <b>this</b>.hide.defer(<b>this</b>.dismissDelay, <b>this</b>);
+        }
+    },
+
+    <i>// private</i>
+    clearTimer : <b>function</b>(name){
+        name = name + <em>'Timer'</em>;
+        clearTimeout(<b>this</b>[name]);
+        <b>delete</b> this[name];
+    },
+
+    <i>// private</i>
+    clearTimers : <b>function</b>(){
+        <b>this</b>.clearTimer(<em>'show'</em>);
+        <b>this</b>.clearTimer(<em>'dismiss'</em>);
+        <b>this</b>.clearTimer(<em>'hide'</em>);
+    },
+
+    <i>// private</i>
+    onShow : <b>function</b>(){
+        Ext.ToolTip.superclass.onShow.call(<b>this</b>);
+        Ext.getDoc().on(<em>'mousedown'</em>, <b>this</b>.onDocMouseDown, <b>this</b>);
+    },
+
+    <i>// private</i>
+    onHide : <b>function</b>(){
+        Ext.ToolTip.superclass.onHide.call(<b>this</b>);
+        Ext.getDoc().un(<em>'mousedown'</em>, <b>this</b>.onDocMouseDown, <b>this</b>);
+    },
+
+    <i>// private</i>
+    onDocMouseDown : <b>function</b>(e){
+        <b>if</b>(this.autoHide !== true &amp;&amp; !e.within(<b>this</b>.el.dom)){
+            <b>this</b>.disable();
+            <b>this</b>.enable.defer(100, <b>this</b>);
+        }
+    },
+
+    <i>// private</i>
+    onDisable : <b>function</b>(){
+        <b>this</b>.clearTimers();
+        <b>this</b>.hide();
+    },
+
+    <i>// private</i>
+    adjustPosition : <b>function</b>(x, y){
+        <i>// keep the position from being under the mouse</i>
+        <b>var</b> ay = <b>this</b>.targetXY[1], h = <b>this</b>.getSize().height;
+        <b>if</b>(this.constrainPosition &amp;&amp; y &lt;= ay &amp;&amp; (y+h) &gt;= ay){
+            y = ay-h-5;
+        }
+        <b>return</b> {x : x, y: y};
+    },
+
+    <i>// private</i>
+    onDestroy : <b>function</b>(){
+        Ext.ToolTip.superclass.onDestroy.call(<b>this</b>);
+        Ext.getDoc().un(<em>'mousedown'</em>, <b>this</b>.onDocMouseDown, <b>this</b>);
+        <b>if</b>(this.target){
+            <b>this</b>.target.un(<em>'mouseover'</em>, <b>this</b>.onTargetOver, <b>this</b>);
+            <b>this</b>.target.un(<em>'mouseout'</em>, <b>this</b>.onTargetOut, <b>this</b>);
+            <b>this</b>.target.un(<em>'mousemove'</em>, <b>this</b>.onMouseMove, <b>this</b>);
+        }
+    }
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

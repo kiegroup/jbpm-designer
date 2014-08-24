@@ -1,0 +1,52 @@
+<html><head><title>AbstractSelectionModel.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>AbstractSelectionModel.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.grid.AbstractSelectionModel
+ * @extends Ext.util.Observable
+ * Abstract base class <b>for</b> grid SelectionModels.  It provides the interface that should be
+ * implemented by descendant classes.  This class should not be directly instantiated.
+ * @constructor
+ */</i>
+Ext.grid.AbstractSelectionModel = <b>function</b>(){
+    <b>this</b>.locked = false;
+    Ext.grid.AbstractSelectionModel.superclass.constructor.call(<b>this</b>);
+};
+
+Ext.extend(Ext.grid.AbstractSelectionModel, Ext.util.Observable,  {
+    <i>/**
+     * The GridPanel <b>for</b> which <b>this</b> SelectionModel is handling selection. Read-only.
+     * @type Object
+     * @property grid
+     */</i>
+<i>// holder</i>
+<i>/*** @ignore Called by the grid automatically. Do not call directly. */</i>
+    init : <b>function</b>(grid){
+        <b>this</b>.grid = grid;
+        <b>this</b>.initEvents();
+    },
+
+    <i>/**
+     * Locks the selections.
+     */</i>
+    lock : <b>function</b>(){
+        <b>this</b>.locked = true;
+    },
+
+    <i>/**
+     * Unlocks the selections.
+     */</i>
+    unlock : <b>function</b>(){
+        <b>this</b>.locked = false;
+    },
+
+    <i>/**
+     * Returns true <b>if</b> the selections are locked.
+     * @<b>return</b> {Boolean}
+     */</i>
+    isLocked : <b>function</b>(){
+        <b>return</b> this.locked;
+    },
+    
+    destroy: <b>function</b>(){
+        <b>this</b>.purgeListeners();
+    }
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

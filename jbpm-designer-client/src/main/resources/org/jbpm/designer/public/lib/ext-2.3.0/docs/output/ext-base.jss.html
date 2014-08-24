@@ -1,0 +1,2179 @@
+<html><head><title>ext-base.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ext-base.js</h1><pre class="highlighted"><code>(<b>function</b>() {
+    <b>var</b> libFlyweight;
+
+    Ext.lib.Dom = {
+        getViewWidth : <b>function</b>(full) {
+            <b>return</b> full ? <b>this</b>.getDocumentWidth() : <b>this</b>.getViewportWidth();
+        },
+
+        getViewHeight : <b>function</b>(full) {
+            <b>return</b> full ? <b>this</b>.getDocumentHeight() : <b>this</b>.getViewportHeight();
+        },
+
+        getDocumentHeight: <b>function</b>() {
+            <b>var</b> scrollHeight = (document.compatMode != &quot;CSS1Compat&quot;) ? document.body.scrollHeight : document.documentElement.scrollHeight;
+            <b>return</b> Math.max(scrollHeight, <b>this</b>.getViewportHeight());
+        },
+
+        getDocumentWidth: <b>function</b>() {
+            <b>var</b> scrollWidth = (document.compatMode != &quot;CSS1Compat&quot;) ? document.body.scrollWidth : document.documentElement.scrollWidth;
+            <b>return</b> Math.max(scrollWidth, <b>this</b>.getViewportWidth());
+        },
+
+        getViewportHeight: <b>function</b>(){
+            <b>if</b>(Ext.isIE){
+                <b>return</b> Ext.isStrict ? document.documentElement.clientHeight :
+                         document.body.clientHeight;
+            }<b>else</b>{
+                <b>return</b> self.innerHeight;
+            }
+        },
+
+        getViewportWidth: <b>function</b>() {
+            <b>if</b>(Ext.isIE){
+                <b>return</b> Ext.isStrict ? document.documentElement.clientWidth :
+                         document.body.clientWidth;
+            }<b>else</b>{
+                <b>return</b> self.innerWidth;
+            }
+        },
+
+        isAncestor : <b>function</b>(p, c) {
+            p = Ext.getDom(p);
+            c = Ext.getDom(c);
+            <b>if</b> (!p || !c) {
+                <b>return</b> false;
+            }
+
+            <b>if</b> (p.contains &amp;&amp; !Ext.isWebKit) {
+                <b>return</b> p.contains(c);
+            } <b>else</b> if (p.compareDocumentPosition) {
+                <b>return</b> !!(p.compareDocumentPosition(c) &amp; 16);
+            } <b>else</b> {
+                <b>var</b> parent = c.parentNode;
+                <b>while</b> (parent) {
+                    <b>if</b> (parent == p) {
+                        <b>return</b> true;
+                    }
+                    <b>else</b> if (!parent.tagName || parent.tagName.toUpperCase() == &quot;HTML&quot;) {
+                        <b>return</b> false;
+                    }
+                    parent = parent.parentNode;
+                }
+                <b>return</b> false;
+            }
+        },
+
+        getRegion : <b>function</b>(el) {
+            <b>return</b> Ext.lib.Region.getRegion(el);
+        },
+
+        getY : <b>function</b>(el) {
+            <b>return</b> this.getXY(el)[1];
+        },
+
+        getX : <b>function</b>(el) {
+            <b>return</b> this.getXY(el)[0];
+        },
+
+
+        getXY : <b>function</b>(el) {
+            <b>var</b> p, pe, b, scroll, bd = (document.body || document.documentElement);
+            el = Ext.getDom(el);
+
+            <b>if</b>(el == bd){
+                <b>return</b> [0, 0];
+            }
+
+            <b>if</b> (el.getBoundingClientRect) {
+                b = el.getBoundingClientRect();
+                scroll = fly(document).getScroll();
+                <b>return</b> [b.left + scroll.left, b.top + scroll.top];
+            }
+            <b>var</b> x = 0, y = 0;
+
+            p = el;
+
+            <b>var</b> hasAbsolute = fly(el).getStyle(&quot;position&quot;) == &quot;absolute&quot;;
+
+            <b>while</b> (p) {
+
+                x += p.offsetLeft;
+                y += p.offsetTop;
+
+                <b>if</b> (!hasAbsolute &amp;&amp; fly(p).getStyle(&quot;position&quot;) == &quot;absolute&quot;) {
+                    hasAbsolute = true;
+                }
+
+                <b>if</b> (Ext.isGecko) {
+                    pe = fly(p);
+
+                    <b>var</b> bt = parseInt(pe.getStyle(&quot;borderTopWidth&quot;), 10) || 0;
+                    <b>var</b> bl = parseInt(pe.getStyle(&quot;borderLeftWidth&quot;), 10) || 0;
+
+
+                    x += bl;
+                    y += bt;
+
+
+                    <b>if</b> (p != el &amp;&amp; pe.getStyle(<em>'overflow'</em>) != <em>'visible'</em>) {
+                        x += bl;
+                        y += bt;
+                    }
+                }
+                p = p.offsetParent;
+            }
+
+            <b>if</b> (Ext.isWebKit &amp;&amp; hasAbsolute) {
+                x -= bd.offsetLeft;
+                y -= bd.offsetTop;
+            }
+
+            <b>if</b> (Ext.isGecko &amp;&amp; !hasAbsolute) {
+                <b>var</b> dbd = fly(bd);
+                x += parseInt(dbd.getStyle(&quot;borderLeftWidth&quot;), 10) || 0;
+                y += parseInt(dbd.getStyle(&quot;borderTopWidth&quot;), 10) || 0;
+            }
+
+            p = el.parentNode;
+            <b>while</b> (p &amp;&amp; p != bd) {
+                <b>if</b> (!Ext.isOpera || (p.tagName != <em>'TR'</em> &amp;&amp; fly(p).getStyle(&quot;display&quot;) != &quot;inline&quot;)) {
+                    x -= p.scrollLeft;
+                    y -= p.scrollTop;
+                }
+                p = p.parentNode;
+            }
+            <b>return</b> [x, y];
+        },
+
+        setXY : <b>function</b>(el, xy) {
+            el = Ext.fly(el, <em>'_setXY'</em>);
+            el.position();
+            <b>var</b> pts = el.translatePoints(xy);
+            <b>if</b> (xy[0] !== false) {
+                el.dom.style.left = pts.left + &quot;px&quot;;
+            }
+            <b>if</b> (xy[1] !== false) {
+                el.dom.style.top = pts.top + &quot;px&quot;;
+            }
+        },
+
+        setX : <b>function</b>(el, x) {
+            <b>this</b>.setXY(el, [x, false]);
+        },
+
+        setY : <b>function</b>(el, y) {
+            <b>this</b>.setXY(el, [false, y]);
+        }
+    };
+
+<i>/*
+ * Portions of <b>this</b> file are based on pieces of Yahoo User Interface Library
+ * Copyright (c) 2007, Yahoo! Inc. All rights reserved.
+ * YUI licensed under the BSD License:
+ * http:<i>//developer.yahoo.net/yui/license.txt</i>
+ */</i>
+    Ext.lib.Event = <b>function</b>() {
+        <b>var</b> loadComplete = false;
+        <b>var</b> listeners = [];
+        <b>var</b> unloadListeners = [];
+        <b>var</b> retryCount = 0;
+        <b>var</b> onAvailStack = [];
+        <b>var</b> counter = 0;
+        <b>var</b> lastError = null;
+
+        <b>return</b> {
+            POLL_RETRYS: 200,
+            POLL_INTERVAL: 20,
+            EL: 0,
+            TYPE: 1,
+            FN: 2,
+            WFN: 3,
+            OBJ: 3,
+            ADJ_SCOPE: 4,
+            _interval: null,
+
+            startInterval: <b>function</b>() {
+                <b>if</b> (!<b>this</b>._interval) {
+                    <b>var</b> self = <b>this</b>;
+                    <b>var</b> callback = <b>function</b>() {
+                        self._tryPreloadAttach();
+                    };
+                    <b>this</b>._interval = setInterval(callback, <b>this</b>.POLL_INTERVAL);
+
+                }
+            },
+
+            onAvailable: <b>function</b>(p_id, p_fn, p_obj, p_override) {
+                onAvailStack.push({ id:         p_id,
+                    fn:         p_fn,
+                    obj:        p_obj,
+                    override:   p_override,
+                    checkReady: false    });
+
+                retryCount = <b>this</b>.POLL_RETRYS;
+                <b>this</b>.startInterval();
+            },
+
+
+            addListener: <b>function</b>(el, eventName, fn) {
+                el = Ext.getDom(el);
+                <b>if</b> (!el || !fn) {
+                    <b>return</b> false;
+                }
+
+                <b>if</b> (&quot;unload&quot; == eventName) {
+                    unloadListeners[unloadListeners.length] =
+                    [el, eventName, fn];
+                    <b>return</b> true;
+                }
+
+                <i>// prevent unload errors <b>with</b> simple check</i>
+                <b>var</b> wrappedFn = <b>function</b>(e) {
+                    <b>return</b> typeof Ext != <em>'undefined'</em> ? fn(Ext.lib.Event.getEvent(e)) : false;
+                };
+
+                <b>var</b> li = [el, eventName, fn, wrappedFn];
+
+                <b>var</b> index = listeners.length;
+                listeners[index] = li;
+
+                <b>this</b>.doAdd(el, eventName, wrappedFn, false);
+                <b>return</b> true;
+
+            },
+
+
+            removeListener: <b>function</b>(el, eventName, fn) {
+                <b>var</b> i, len;
+
+                el = Ext.getDom(el);
+
+                <b>if</b>(!fn) {
+                    <b>return</b> this.purgeElement(el, false, eventName);
+                }
+
+
+                <b>if</b> (&quot;unload&quot; == eventName) {
+
+                    <b>for</b> (i = 0,len = unloadListeners.length; i &lt; len; i++) {
+                        <b>var</b> li = unloadListeners[i];
+                        <b>if</b> (li &amp;&amp;
+                            li[0] == el &amp;&amp;
+                            li[1] == eventName &amp;&amp;
+                            li[2] == fn) {
+                            unloadListeners.splice(i, 1);
+                            <b>return</b> true;
+                        }
+                    }
+
+                    <b>return</b> false;
+                }
+
+                <b>var</b> cacheItem = null;
+
+
+                <b>var</b> index = arguments[3];
+
+                <b>if</b> (&quot;undefined&quot; == <b>typeof</b> index) {
+                    index = <b>this</b>._getCacheIndex(el, eventName, fn);
+                }
+
+                <b>if</b> (index &gt;= 0) {
+                    cacheItem = listeners[index];
+                }
+
+                <b>if</b> (!el || !cacheItem) {
+                    <b>return</b> false;
+                }
+
+                <b>this</b>.doRemove(el, eventName, cacheItem[<b>this</b>.WFN], false);
+
+                <b>delete</b> listeners[index][<b>this</b>.WFN];
+                <b>delete</b> listeners[index][<b>this</b>.FN];
+                listeners.splice(index, 1);
+
+                <b>return</b> true;
+
+            },
+
+
+            getTarget: <b>function</b>(ev, resolveTextNode) {
+                ev = ev.browserEvent || ev;
+                <b>var</b> t = ev.target || ev.srcElement;
+                <b>return</b> this.resolveTextNode(t);
+            },
+
+
+            resolveTextNode: <b>function</b>(node) {
+                <b>if</b> (Ext.isWebKit &amp;&amp; node &amp;&amp; 3 == node.nodeType) {
+                    <b>return</b> node.parentNode;
+                } <b>else</b> {
+                    <b>return</b> node;
+                }
+            },
+
+
+            getPageX: <b>function</b>(ev) {
+                ev = ev.browserEvent || ev;
+                <b>var</b> x = ev.pageX;
+                <b>if</b> (!x &amp;&amp; 0 !== x) {
+                    x = ev.clientX || 0;
+
+                    <b>if</b> (Ext.isIE) {
+                        x += <b>this</b>.getScroll()[1];
+                    }
+                }
+
+                <b>return</b> x;
+            },
+
+
+            getPageY: <b>function</b>(ev) {
+                ev = ev.browserEvent || ev;
+                <b>var</b> y = ev.pageY;
+                <b>if</b> (!y &amp;&amp; 0 !== y) {
+                    y = ev.clientY || 0;
+
+                    <b>if</b> (Ext.isIE) {
+                        y += <b>this</b>.getScroll()[0];
+                    }
+                }
+
+
+                <b>return</b> y;
+            },
+
+
+            getXY: <b>function</b>(ev) {
+                ev = ev.browserEvent || ev;
+                <b>return</b> [<b>this</b>.getPageX(ev), <b>this</b>.getPageY(ev)];
+            },
+
+
+            getRelatedTarget: <b>function</b>(ev) {
+                ev = ev.browserEvent || ev;
+                <b>var</b> t = ev.relatedTarget;
+                <b>if</b> (!t) {
+                    <b>if</b> (ev.type == &quot;mouseout&quot;) {
+                        t = ev.toElement;
+                    } <b>else</b> if (ev.type == &quot;mouseover&quot;) {
+                        t = ev.fromElement;
+                    }
+                }
+
+                <b>return</b> this.resolveTextNode(t);
+            },
+
+
+            getTime: <b>function</b>(ev) {
+                ev = ev.browserEvent || ev;
+                <b>if</b> (!ev.time) {
+                    <b>var</b> t = <b>new</b> Date().getTime();
+                    try {
+                        ev.time = t;
+                    } catch(ex) {
+                        <b>this</b>.lastError = ex;
+                        <b>return</b> t;
+                    }
+                }
+
+                <b>return</b> ev.time;
+            },
+
+
+            stopEvent: <b>function</b>(ev) {
+                <b>this</b>.stopPropagation(ev);
+                <b>this</b>.preventDefault(ev);
+            },
+
+
+            stopPropagation: <b>function</b>(ev) {
+                ev = ev.browserEvent || ev;
+                <b>if</b> (ev.stopPropagation) {
+                    ev.stopPropagation();
+                } <b>else</b> {
+                    ev.cancelBubble = true;
+                }
+            },
+
+
+            preventDefault: <b>function</b>(ev) {
+                ev = ev.browserEvent || ev;
+                <b>if</b>(ev.preventDefault) {
+                    ev.preventDefault();
+                } <b>else</b> {
+                    ev.returnValue = false;
+                }
+            },
+
+
+            getEvent: <b>function</b>(e) {
+                <b>var</b> ev = e || window.event;
+                <b>if</b> (!ev) {
+                    <b>var</b> c = <b>this</b>.getEvent.caller;
+                    <b>while</b> (c) {
+                        ev = c.arguments[0];
+                        <b>if</b> (ev &amp;&amp; Event == ev.constructor) {
+                            <b>break</b>;
+                        }
+                        c = c.caller;
+                    }
+                }
+                <b>return</b> ev;
+            },
+
+
+            getCharCode: <b>function</b>(ev) {
+                ev = ev.browserEvent || ev;
+                <b>return</b> ev.charCode || ev.keyCode || 0;
+            },
+
+
+            _getCacheIndex: <b>function</b>(el, eventName, fn) {
+                <b>for</b> (<b>var</b> i = 0,len = listeners.length; i &lt; len; ++i) {
+                    <b>var</b> li = listeners[i];
+                    <b>if</b> (li &amp;&amp;
+                        li[<b>this</b>.FN] == fn &amp;&amp;
+                        li[<b>this</b>.EL] == el &amp;&amp;
+                        li[<b>this</b>.TYPE] == eventName) {
+                        <b>return</b> i;
+                    }
+                }
+
+                <b>return</b> -1;
+            },
+
+
+            elCache: {},
+
+
+            getEl: <b>function</b>(id) {
+                <b>return</b> document.getElementById(id);
+            },
+
+
+            clearCache: <b>function</b>() {
+            },
+
+
+            _load: <b>function</b>(e) {
+                loadComplete = true;
+                <b>var</b> EU = Ext.lib.Event;
+
+
+                <b>if</b> (Ext.isIE) {
+                    EU.doRemove(window, &quot;load&quot;, EU._load);
+                }
+            },
+
+
+            _tryPreloadAttach: <b>function</b>() {
+
+                <b>if</b> (<b>this</b>.locked) {
+                    <b>return</b> false;
+                }
+
+                <b>this</b>.locked = true;
+
+
+                <b>var</b> tryAgain = !loadComplete;
+                <b>if</b> (!tryAgain) {
+                    tryAgain = (retryCount &gt; 0);
+                }
+
+
+                <b>var</b> notAvail = [];
+                <b>for</b> (<b>var</b> i = 0,len = onAvailStack.length; i &lt; len; ++i) {
+                    <b>var</b> item = onAvailStack[i];
+                    <b>if</b> (item) {
+                        <b>var</b> el = <b>this</b>.getEl(item.id);
+
+                        <b>if</b> (el) {
+                            <b>if</b> (!item.checkReady ||
+                                loadComplete ||
+                                el.nextSibling ||
+                                (document &amp;&amp; document.body)) {
+
+                                <b>var</b> scope = el;
+                                <b>if</b> (item.override) {
+                                    <b>if</b> (item.override === true) {
+                                        scope = item.obj;
+                                    } <b>else</b> {
+                                        scope = item.override;
+                                    }
+                                }
+                                item.fn.call(scope, item.obj);
+                                onAvailStack[i] = null;
+                            }
+                        } <b>else</b> {
+                            notAvail.push(item);
+                        }
+                    }
+                }
+
+                retryCount = (notAvail.length === 0) ? 0 : retryCount - 1;
+
+                <b>if</b> (tryAgain) {
+
+                    <b>this</b>.startInterval();
+                } <b>else</b> {
+                    clearInterval(<b>this</b>._interval);
+                    <b>this</b>._interval = null;
+                }
+
+                <b>this</b>.locked = false;
+
+                <b>return</b> true;
+
+            },
+
+
+            purgeElement: <b>function</b>(el, recurse, eventName) {
+                <b>var</b> elListeners = <b>this</b>.getListeners(el, eventName);
+                <b>if</b> (elListeners) {
+                    <b>for</b> (<b>var</b> i = 0,len = elListeners.length; i &lt; len; ++i) {
+                        <b>var</b> l = elListeners[i];
+                        <b>this</b>.removeListener(el, l.type, l.fn);
+                    }
+                }
+
+                <b>if</b> (recurse &amp;&amp; el &amp;&amp; el.childNodes) {
+                    <b>for</b> (i = 0,len = el.childNodes.length; i &lt; len; ++i) {
+                        <b>this</b>.purgeElement(el.childNodes[i], recurse, eventName);
+                    }
+                }
+            },
+
+
+            getListeners: <b>function</b>(el, eventName) {
+                <b>var</b> results = [], searchLists;
+                <b>if</b> (!eventName) {
+                    searchLists = [listeners, unloadListeners];
+                } <b>else</b> if (eventName == &quot;unload&quot;) {
+                    searchLists = [unloadListeners];
+                } <b>else</b> {
+                    searchLists = [listeners];
+                }
+
+                <b>for</b> (<b>var</b> j = 0; j &lt; searchLists.length; ++j) {
+                    <b>var</b> searchList = searchLists[j];
+                    <b>if</b> (searchList &amp;&amp; searchList.length &gt; 0) {
+                        <b>for</b> (<b>var</b> i = 0,len = searchList.length; i &lt; len; ++i) {
+                            <b>var</b> l = searchList[i];
+                            <b>if</b> (l &amp;&amp; l[<b>this</b>.EL] === el &amp;&amp;
+                                (!eventName || eventName === l[<b>this</b>.TYPE])) {
+                                results.push({
+                                    type:   l[<b>this</b>.TYPE],
+                                    fn:     l[<b>this</b>.FN],
+                                    obj:    l[<b>this</b>.OBJ],
+                                    adjust: l[<b>this</b>.ADJ_SCOPE],
+                                    index:  i
+                                });
+                            }
+                        }
+                    }
+                }
+
+                <b>return</b> (results.length) ? results : null;
+            },
+
+
+            _unload: <b>function</b>(e) {
+
+                <b>var</b> EU = Ext.lib.Event, i, j, l, len, index;
+
+                <b>for</b> (i = 0,len = unloadListeners.length; i &lt; len; ++i) {
+                    l = unloadListeners[i];
+                    <b>if</b> (l) {
+                        <b>var</b> scope = window;
+                        <b>if</b> (l[EU.ADJ_SCOPE]) {
+                            <b>if</b> (l[EU.ADJ_SCOPE] === true) {
+                                scope = l[EU.OBJ];
+                            } <b>else</b> {
+                                scope = l[EU.ADJ_SCOPE];
+                            }
+                        }
+                        l[EU.FN].call(scope, EU.getEvent(e), l[EU.OBJ]);
+                        unloadListeners[i] = null;
+                        l = null;
+                        scope = null;
+                    }
+                }
+
+                unloadListeners = null;
+
+                <b>if</b> (listeners &amp;&amp; listeners.length &gt; 0) {
+                    j = listeners.length;
+                    <b>while</b> (j) {
+                        index = j - 1;
+                        l = listeners[index];
+                        <b>if</b> (l) {
+                            EU.removeListener(l[EU.EL], l[EU.TYPE],
+                                    l[EU.FN], index);
+                        }
+                        j = j - 1;
+                    }
+                    l = null;
+
+                    EU.clearCache();
+                }
+
+                EU.doRemove(window, &quot;unload&quot;, EU._unload);
+
+            },
+
+
+            getScroll: <b>function</b>() {
+                <b>var</b> dd = document.documentElement, db = document.body;
+                <b>if</b> (dd &amp;&amp; (dd.scrollTop || dd.scrollLeft)) {
+                    <b>return</b> [dd.scrollTop, dd.scrollLeft];
+                } <b>else</b> if (db) {
+                    <b>return</b> [db.scrollTop, db.scrollLeft];
+                } <b>else</b> {
+                    <b>return</b> [0, 0];
+                }
+            },
+
+
+            doAdd: <b>function</b> () {
+                <b>if</b> (window.addEventListener) {
+                    <b>return</b> function(el, eventName, fn, capture) {
+                        el.addEventListener(eventName, fn, (capture));
+                    };
+                } <b>else</b> if (window.attachEvent) {
+                    <b>return</b> function(el, eventName, fn, capture) {
+                        el.attachEvent(&quot;on&quot; + eventName, fn);
+                    };
+                } <b>else</b> {
+                    <b>return</b> function() {
+                    };
+                }
+            }(),
+
+
+            doRemove: <b>function</b>() {
+                <b>if</b> (window.removeEventListener) {
+                    <b>return</b> function (el, eventName, fn, capture) {
+                        el.removeEventListener(eventName, fn, (capture));
+                    };
+                } <b>else</b> if (window.detachEvent) {
+                    <b>return</b> function (el, eventName, fn) {
+                        el.detachEvent(&quot;on&quot; + eventName, fn);
+                    };
+                } <b>else</b> {
+                    <b>return</b> function() {
+                    };
+                }
+            }()
+        };
+
+    }();
+
+    <b>var</b> E = Ext.lib.Event;
+    E.on = E.addListener;
+    E.un = E.removeListener;
+    <b>if</b>(document &amp;&amp; document.body) {
+        E._load();
+    } <b>else</b> {
+        E.doAdd(window, &quot;load&quot;, E._load);
+    }
+    E.doAdd(window, &quot;unload&quot;, E._unload);
+    E._tryPreloadAttach();
+
+    Ext.lib.Ajax = {
+        request : <b>function</b>(method, uri, cb, data, options) {
+            <b>if</b>(options){
+                <b>var</b> hs = options.headers;
+                <b>if</b>(hs){
+                    <b>for</b>(var h <b>in</b> hs){
+                        <b>if</b>(hs.hasOwnProperty(h)){
+                            <b>this</b>.initHeader(h, hs[h], false);
+                        }
+                    }
+                }
+                <b>if</b>(options.xmlData){
+                    <b>if</b> (!hs || !hs[<em>'Content-Type'</em>]){
+                        <b>this</b>.initHeader(<em>'Content-Type'</em>, <em>'text/xml'</em>, false);
+                    }
+                    method = (method ? method : (options.method ? options.method : <em>'POST'</em>));
+                    data = options.xmlData;
+                }<b>else</b> if(options.jsonData){
+                    <b>if</b> (!hs || !hs[<em>'Content-Type'</em>]){
+                        <b>this</b>.initHeader(<em>'Content-Type'</em>, <em>'application/json'</em>, false);
+                    }
+                    method = (method ? method : (options.method ? options.method : <em>'POST'</em>));
+                    data = <b>typeof</b> options.jsonData == <em>'object'</em> ? Ext.encode(options.jsonData) : options.jsonData;
+                }
+            }
+
+            <b>return</b> this.asyncRequest(method, uri, cb, data);
+        },
+
+        serializeForm : <b>function</b>(form) {
+            <b>if</b>(typeof form == <em>'string'</em>) {
+                form = (document.getElementById(form) || document.forms[form]);
+            }
+
+            <b>var</b> el, name, val, disabled, data = <em>''</em>, hasSubmit = false;
+            <b>for</b> (<b>var</b> i = 0; i &lt; form.elements.length; i++) {
+                el = form.elements[i];
+                disabled = form.elements[i].disabled;
+                name = form.elements[i].name;
+                val = form.elements[i].value;
+
+                <b>if</b> (!disabled &amp;&amp; name){
+                    <b>switch</b> (el.type)
+                            {
+                        <b>case</b> <em>'select-one'</em>:
+                        <b>case</b> <em>'select-multiple'</em>:
+                            <b>for</b> (<b>var</b> j = 0; j &lt; el.options.length; j++) {
+                                <b>if</b> (el.options[j].selected) {
+                                    <b>var</b> opt = el.options[j],
+                                        sel = (opt.hasAttribute ? opt.hasAttribute(<em>'value'</em>) : opt.getAttributeNode(<em>'value'</em>).specified) ? opt.value : opt.text;
+                                    data += encodeURIComponent(name) + <em>'='</em> + encodeURIComponent(sel) + <em>'&amp;'</em>;
+                                }
+                            }
+                            <b>break</b>;
+                        <b>case</b> <em>'radio'</em>:
+                        <b>case</b> <em>'checkbox'</em>:
+                            <b>if</b> (el.checked) {
+                                data += encodeURIComponent(name) + <em>'='</em> + encodeURIComponent(val) + <em>'&amp;'</em>;
+                            }
+                            <b>break</b>;
+                        <b>case</b> <em>'file'</em>:
+
+                        <b>case</b> undefined:
+
+                        <b>case</b> <em>'reset'</em>:
+
+                        <b>case</b> <em>'button'</em>:
+
+                            <b>break</b>;
+                        <b>case</b> <em>'submit'</em>:
+                            <b>if</b>(hasSubmit == false) {
+                                data += encodeURIComponent(name) + <em>'='</em> + encodeURIComponent(val) + <em>'&amp;'</em>;
+                                hasSubmit = true;
+                            }
+                            <b>break</b>;
+                        <b>default</b>:
+                            data += encodeURIComponent(name) + <em>'='</em> + encodeURIComponent(val) + <em>'&amp;'</em>;
+                            <b>break</b>;
+                    }
+                }
+            }
+            data = data.substr(0, data.length - 1);
+            <b>return</b> data;
+        },
+
+        headers:{},
+
+        hasHeaders:false,
+
+        useDefaultHeader:true,
+
+        defaultPostHeader:<em>'application/x-www-form-urlencoded; charset=UTF-8'</em>,
+
+        useDefaultXhrHeader:true,
+
+        defaultXhrHeader:<em>'XMLHttpRequest'</em>,
+
+        hasDefaultHeaders:true,
+
+        defaultHeaders:{},
+
+        poll:{},
+
+        timeout:{},
+
+        pollInterval:50,
+
+        transactionId:0,
+
+        setProgId:<b>function</b>(id)
+        {
+            <b>this</b>.activeX.unshift(id);
+        },
+
+        setDefaultPostHeader:<b>function</b>(b)
+        {
+            <b>this</b>.useDefaultHeader = b;
+        },
+
+        setDefaultXhrHeader:<b>function</b>(b)
+        {
+            <b>this</b>.useDefaultXhrHeader = b;
+        },
+
+        setPollingInterval:<b>function</b>(i)
+        {
+            <b>if</b> (<b>typeof</b> i == <em>'number'</em> &amp;&amp; isFinite(i)) {
+                <b>this</b>.pollInterval = i;
+            }
+        },
+
+        createXhrObject:<b>function</b>(transactionId)
+        {
+            <b>var</b> obj,http;
+            try
+            {
+
+                http = <b>new</b> XMLHttpRequest();
+
+                obj = { conn:http, tId:transactionId };
+            }
+            catch(e)
+            {
+                <b>for</b> (<b>var</b> i = 0; i &lt; <b>this</b>.activeX.length; ++i) {
+                    try
+                    {
+
+                        http = <b>new</b> ActiveXObject(<b>this</b>.activeX[i]);
+
+                        obj = { conn:http, tId:transactionId };
+                        <b>break</b>;
+                    }
+                    catch(e) {
+                    }
+                }
+            }
+            finally
+            {
+                <b>return</b> obj;
+            }
+        },
+
+        getConnectionObject:<b>function</b>()
+        {
+            <b>var</b> o;
+            <b>var</b> tId = <b>this</b>.transactionId;
+
+            try
+            {
+                o = <b>this</b>.createXhrObject(tId);
+                <b>if</b> (o) {
+                    <b>this</b>.transactionId++;
+                }
+            }
+            catch(e) {
+            }
+            finally
+            {
+                <b>return</b> o;
+            }
+        },
+
+        asyncRequest:<b>function</b>(method, uri, callback, postData)
+        {
+            <b>var</b> o = <b>this</b>.getConnectionObject();
+
+            <b>if</b> (!o) {
+                <b>return</b> null;
+            }
+            <b>else</b> {
+                o.conn.open(method, uri, true);
+
+                <b>if</b> (<b>this</b>.useDefaultXhrHeader) {
+                    <b>if</b> (!<b>this</b>.defaultHeaders[<em>'X-Requested-With'</em>]) {
+                        <b>this</b>.initHeader(<em>'X-Requested-With'</em>, <b>this</b>.defaultXhrHeader, true);
+                    }
+                }
+
+                <b>if</b>(postData &amp;&amp; <b>this</b>.useDefaultHeader &amp;&amp; (!<b>this</b>.hasHeaders || !<b>this</b>.headers[<em>'Content-Type'</em>])){
+                    <b>this</b>.initHeader(<em>'Content-Type'</em>, <b>this</b>.defaultPostHeader);
+                }
+
+                 <b>if</b> (<b>this</b>.hasDefaultHeaders || <b>this</b>.hasHeaders) {
+                    <b>this</b>.setHeader(o);
+                }
+
+                <b>this</b>.handleReadyState(o, callback);
+                o.conn.send(postData || null);
+
+                <b>return</b> o;
+            }
+        },
+
+        handleReadyState:<b>function</b>(o, callback)
+        {
+            <b>var</b> oConn = <b>this</b>;
+
+            <b>if</b> (callback &amp;&amp; callback.timeout) {
+                <b>this</b>.timeout[o.tId] = window.setTimeout(<b>function</b>() {
+                    oConn.abort(o, callback, true);
+                }, callback.timeout);
+            }
+
+            <b>this</b>.poll[o.tId] = window.setInterval(
+                    <b>function</b>() {
+                        <b>if</b> (o.conn &amp;&amp; o.conn.readyState == 4) {
+                            window.clearInterval(oConn.poll[o.tId]);
+                            <b>delete</b> oConn.poll[o.tId];
+
+                            <b>if</b> (callback &amp;&amp; callback.timeout) {
+                                window.clearTimeout(oConn.timeout[o.tId]);
+                                <b>delete</b> oConn.timeout[o.tId];
+                            }
+
+                            oConn.handleTransactionResponse(o, callback);
+                        }
+                    }
+                    , <b>this</b>.pollInterval);
+        },
+
+        handleTransactionResponse:<b>function</b>(o, callback, isAbort)
+        {
+
+            <b>if</b> (!callback) {
+                <b>this</b>.releaseObject(o);
+                <b>return</b>;
+            }
+
+            <b>var</b> httpStatus, responseObject;
+
+            try
+            {
+                <b>if</b> (o.conn.status !== undefined &amp;&amp; o.conn.status != 0) {
+                    httpStatus = o.conn.status;
+                }
+                <b>else</b> {
+                    httpStatus = 13030;
+                }
+            }
+            catch(e) {
+
+
+                httpStatus = 13030;
+            }
+
+            <b>if</b> ((httpStatus &gt;= 200 &amp;&amp; httpStatus &lt; 300) || (Ext.isIE &amp;&amp; httpStatus == 1223)) {
+                responseObject = <b>this</b>.createResponseObject(o, callback.argument);
+                <b>if</b> (callback.success) {
+                    <b>if</b> (!callback.scope) {
+                        callback.success(responseObject);
+                    }
+                    <b>else</b> {
+
+
+                        callback.success.apply(callback.scope, [responseObject]);
+                    }
+                }
+            }
+            <b>else</b> {
+                <b>switch</b> (httpStatus) {
+
+                    <b>case</b> 12002:
+                    <b>case</b> 12029:
+                    <b>case</b> 12030:
+                    <b>case</b> 12031:
+                    <b>case</b> 12152:
+                    <b>case</b> 13030:
+                        responseObject = <b>this</b>.createExceptionObject(o.tId, callback.argument, (isAbort ? isAbort : false));
+                        <b>if</b> (callback.failure) {
+                            <b>if</b> (!callback.scope) {
+                                callback.failure(responseObject);
+                            }
+                            <b>else</b> {
+                                callback.failure.apply(callback.scope, [responseObject]);
+                            }
+                        }
+                        <b>break</b>;
+                    <b>default</b>:
+                        responseObject = <b>this</b>.createResponseObject(o, callback.argument);
+                        <b>if</b> (callback.failure) {
+                            <b>if</b> (!callback.scope) {
+                                callback.failure(responseObject);
+                            }
+                            <b>else</b> {
+                                callback.failure.apply(callback.scope, [responseObject]);
+                            }
+                        }
+                }
+            }
+
+            <b>this</b>.releaseObject(o);
+            responseObject = null;
+        },
+
+        createResponseObject:<b>function</b>(o, callbackArg)
+        {
+            <b>var</b> obj = {};
+            <b>var</b> headerObj = {};
+
+            try
+            {
+                <b>var</b> headerStr = o.conn.getAllResponseHeaders();
+                <b>var</b> header = headerStr.split(<em>'\n'</em>);
+                <b>for</b> (<b>var</b> i = 0; i &lt; header.length; i++) {
+                    <b>var</b> delimitPos = header[i].indexOf(<em>':'</em>);
+                    <b>if</b> (delimitPos != -1) {
+                        headerObj[header[i].substring(0, delimitPos)] = header[i].substring(delimitPos + 2);
+                    }
+                }
+            }
+            catch(e) {
+            }
+
+            obj.tId = o.tId;
+            obj.status = o.conn.status;
+            obj.statusText = o.conn.statusText;
+            obj.getResponseHeader = <b>function</b>(header){<b>return</b> headerObj[header];};
+            obj.getAllResponseHeaders = <b>function</b>(){<b>return</b> headerStr};
+            obj.responseText = o.conn.responseText;
+            obj.responseXML = o.conn.responseXML;
+
+            <b>if</b> (<b>typeof</b> callbackArg !== undefined) {
+                obj.argument = callbackArg;
+            }
+
+            <b>return</b> obj;
+        },
+
+        createExceptionObject:<b>function</b>(tId, callbackArg, isAbort)
+        {
+            <b>var</b> COMM_CODE = 0;
+            <b>var</b> COMM_ERROR = <em>'communication failure'</em>;
+            <b>var</b> ABORT_CODE = -1;
+            <b>var</b> ABORT_ERROR = <em>'transaction aborted'</em>;
+
+            <b>var</b> obj = {};
+
+            obj.tId = tId;
+            <b>if</b> (isAbort) {
+                obj.status = ABORT_CODE;
+                obj.statusText = ABORT_ERROR;
+            }
+            <b>else</b> {
+                obj.status = COMM_CODE;
+                obj.statusText = COMM_ERROR;
+            }
+
+            <b>if</b> (callbackArg) {
+                obj.argument = callbackArg;
+            }
+
+            <b>return</b> obj;
+        },
+
+        initHeader:<b>function</b>(label, value, isDefault)
+        {
+            <b>var</b> headerObj = (isDefault) ? <b>this</b>.defaultHeaders : <b>this</b>.headers;
+
+            <b>if</b> (headerObj[label] === undefined) {
+                headerObj[label] = value;
+            }
+            <b>else</b> {
+
+
+                headerObj[label] = value + &quot;,&quot; + headerObj[label];
+            }
+
+            <b>if</b> (isDefault) {
+                <b>this</b>.hasDefaultHeaders = true;
+            }
+            <b>else</b> {
+                <b>this</b>.hasHeaders = true;
+            }
+        },
+
+
+        setHeader:<b>function</b>(o)
+        {
+            <b>if</b> (<b>this</b>.hasDefaultHeaders) {
+                <b>for</b> (<b>var</b> prop <b>in</b> this.defaultHeaders) {
+                    <b>if</b> (<b>this</b>.defaultHeaders.hasOwnProperty(prop)) {
+                        o.conn.setRequestHeader(prop, <b>this</b>.defaultHeaders[prop]);
+                    }
+                }
+            }
+
+            <b>if</b> (<b>this</b>.hasHeaders) {
+                <b>for</b> (<b>var</b> prop <b>in</b> this.headers) {
+                    <b>if</b> (<b>this</b>.headers.hasOwnProperty(prop)) {
+                        o.conn.setRequestHeader(prop, <b>this</b>.headers[prop]);
+                    }
+                }
+                <b>this</b>.headers = {};
+                <b>this</b>.hasHeaders = false;
+            }
+        },
+
+        resetDefaultHeaders:<b>function</b>() {
+            <b>delete</b> this.defaultHeaders;
+            <b>this</b>.defaultHeaders = {};
+            <b>this</b>.hasDefaultHeaders = false;
+        },
+
+        abort:<b>function</b>(o, callback, isTimeout)
+        {
+            <b>if</b> (<b>this</b>.isCallInProgress(o)) {
+                o.conn.abort();
+                window.clearInterval(<b>this</b>.poll[o.tId]);
+                <b>delete</b> this.poll[o.tId];
+                <b>if</b> (isTimeout) {
+                    <b>delete</b> this.timeout[o.tId];
+                }
+
+                <b>this</b>.handleTransactionResponse(o, callback, true);
+
+                <b>return</b> true;
+            }
+            <b>else</b> {
+                <b>return</b> false;
+            }
+        },
+
+
+        isCallInProgress:<b>function</b>(o)
+        {
+
+
+            <b>if</b> (o.conn) {
+                <b>return</b> o.conn.readyState != 4 &amp;&amp; o.conn.readyState != 0;
+            }
+            <b>else</b> {
+
+                <b>return</b> false;
+            }
+        },
+
+
+        releaseObject:<b>function</b>(o)
+        {
+
+            o.conn = null;
+
+            o = null;
+        },
+
+        activeX:[
+        <em>'MSXML2.XMLHTTP.3.0'</em>,
+        <em>'MSXML2.XMLHTTP'</em>,
+        <em>'Microsoft.XMLHTTP'</em>
+        ]
+
+
+    };
+
+
+    Ext.lib.Region = <b>function</b>(t, r, b, l) {
+        <b>this</b>.top = t;
+        <b>this</b>[1] = t;
+        <b>this</b>.right = r;
+        <b>this</b>.bottom = b;
+        <b>this</b>.left = l;
+        <b>this</b>[0] = l;
+    };
+
+    Ext.lib.Region.prototype = {
+        contains : <b>function</b>(region) {
+            <b>return</b> ( region.left &gt;= <b>this</b>.left &amp;&amp;
+                     region.right &lt;= <b>this</b>.right &amp;&amp;
+                     region.top &gt;= <b>this</b>.top &amp;&amp;
+                     region.bottom &lt;= <b>this</b>.bottom    );
+
+        },
+
+        getArea : <b>function</b>() {
+            <b>return</b> ( (<b>this</b>.bottom - <b>this</b>.top) * (<b>this</b>.right - <b>this</b>.left) );
+        },
+
+        intersect : <b>function</b>(region) {
+            <b>var</b> t = Math.max(<b>this</b>.top, region.top);
+            <b>var</b> r = Math.min(<b>this</b>.right, region.right);
+            <b>var</b> b = Math.min(<b>this</b>.bottom, region.bottom);
+            <b>var</b> l = Math.max(<b>this</b>.left, region.left);
+
+            <b>if</b> (b &gt;= t &amp;&amp; r &gt;= l) {
+                <b>return</b> new Ext.lib.Region(t, r, b, l);
+            } <b>else</b> {
+                <b>return</b> null;
+            }
+        },
+        union : <b>function</b>(region) {
+            <b>var</b> t = Math.min(<b>this</b>.top, region.top);
+            <b>var</b> r = Math.max(<b>this</b>.right, region.right);
+            <b>var</b> b = Math.max(<b>this</b>.bottom, region.bottom);
+            <b>var</b> l = Math.min(<b>this</b>.left, region.left);
+
+            <b>return</b> new Ext.lib.Region(t, r, b, l);
+        },
+
+        constrainTo : <b>function</b>(r) {
+            <b>this</b>.top = <b>this</b>.top.constrain(r.top, r.bottom);
+            <b>this</b>.bottom = <b>this</b>.bottom.constrain(r.top, r.bottom);
+            <b>this</b>.left = <b>this</b>.left.constrain(r.left, r.right);
+            <b>this</b>.right = <b>this</b>.right.constrain(r.left, r.right);
+            <b>return</b> this;
+        },
+
+        adjust : <b>function</b>(t, l, b, r) {
+            <b>this</b>.top += t;
+            <b>this</b>.left += l;
+            <b>this</b>.right += r;
+            <b>this</b>.bottom += b;
+            <b>return</b> this;
+        }
+    };
+
+    Ext.lib.Region.getRegion = <b>function</b>(el) {
+        <b>var</b> p = Ext.lib.Dom.getXY(el);
+
+        <b>var</b> t = p[1];
+        <b>var</b> r = p[0] + el.offsetWidth;
+        <b>var</b> b = p[1] + el.offsetHeight;
+        <b>var</b> l = p[0];
+
+        <b>return</b> new Ext.lib.Region(t, r, b, l);
+    };
+
+    Ext.lib.Point = <b>function</b>(x, y) {
+        <b>if</b> (Ext.isArray(x)) {
+            y = x[1];
+            x = x[0];
+        }
+        <b>this</b>.x = <b>this</b>.right = <b>this</b>.left = <b>this</b>[0] = x;
+        <b>this</b>.y = <b>this</b>.top = <b>this</b>.bottom = <b>this</b>[1] = y;
+    };
+
+    Ext.lib.Point.prototype = <b>new</b> Ext.lib.Region();
+
+
+    Ext.lib.Anim = {
+        scroll : <b>function</b>(el, args, duration, easing, cb, scope) {
+            <b>return</b> this.run(el, args, duration, easing, cb, scope, Ext.lib.Scroll);
+        },
+
+        motion : <b>function</b>(el, args, duration, easing, cb, scope) {
+            <b>return</b> this.run(el, args, duration, easing, cb, scope, Ext.lib.Motion);
+        },
+
+        color : <b>function</b>(el, args, duration, easing, cb, scope) {
+            <b>return</b> this.run(el, args, duration, easing, cb, scope, Ext.lib.ColorAnim);
+        },
+
+        run : <b>function</b>(el, args, duration, easing, cb, scope, type) {
+            type = type || Ext.lib.AnimBase;
+            <b>if</b> (<b>typeof</b> easing == &quot;string&quot;) {
+                easing = Ext.lib.Easing[easing];
+            }
+            <b>var</b> anim = <b>new</b> type(el, args, duration, easing);
+            anim.animateX(<b>function</b>() {
+                Ext.callback(cb, scope);
+            });
+            <b>return</b> anim;
+        }
+    };
+
+
+    <b>function</b> fly(el) {
+        <b>if</b> (!libFlyweight) {
+            libFlyweight = <b>new</b> Ext.Element.Flyweight();
+        }
+        libFlyweight.dom = el;
+        <b>return</b> libFlyweight;
+    }
+
+
+    <b>if</b>(Ext.isIE) {
+        <b>function</b> fnCleanUp() {
+            <b>var</b> p = Function.prototype;
+            <b>delete</b> p.createSequence;
+            <b>delete</b> p.defer;
+            <b>delete</b> p.createDelegate;
+            <b>delete</b> p.createCallback;
+            <b>delete</b> p.createInterceptor;
+
+            window.detachEvent(&quot;onunload&quot;, fnCleanUp);
+        }
+        window.attachEvent(&quot;onunload&quot;, fnCleanUp);
+    }
+
+    Ext.lib.AnimBase = <b>function</b>(el, attributes, duration, method) {
+        <b>if</b> (el) {
+            <b>this</b>.init(el, attributes, duration, method);
+        }
+    };
+
+    Ext.lib.AnimBase.prototype = {
+
+        toString: <b>function</b>() {
+            <b>var</b> el = <b>this</b>.getEl();
+            <b>var</b> id = el.id || el.tagName;
+            <b>return</b> (&quot;Anim &quot; + id);
+        },
+
+        patterns: {
+            noNegatives:        /width|height|opacity|padding/i,
+            offsetAttribute:  /^((width|height)|(top|left))$/,
+            defaultUnit:        /width|height|top$|bottom$|left$|right$/i,
+            offsetUnit:         /\d+(em|%|en|ex|pt|<b>in</b>|cm|mm|pc)$/i
+        },
+
+
+        doMethod: <b>function</b>(attr, start, end) {
+            <b>return</b> this.method(<b>this</b>.currentFrame, start, end - start, <b>this</b>.totalFrames);
+        },
+
+
+        setAttribute: <b>function</b>(attr, val, unit) {
+            <b>if</b> (<b>this</b>.patterns.noNegatives.test(attr)) {
+                val = (val &gt; 0) ? val : 0;
+            }
+
+            Ext.fly(<b>this</b>.getEl(), <em>'_anim'</em>).setStyle(attr, val + unit);
+        },
+
+
+        getAttribute: <b>function</b>(attr) {
+            <b>var</b> el = <b>this</b>.getEl();
+            <b>var</b> val = fly(el).getStyle(attr);
+
+            <b>if</b> (val !== <em>'auto'</em> &amp;&amp; !<b>this</b>.patterns.offsetUnit.test(val)) {
+                <b>return</b> parseFloat(val);
+            }
+
+            <b>var</b> a = <b>this</b>.patterns.offsetAttribute.exec(attr) || [];
+            <b>var</b> pos = !!( a[3] );
+            <b>var</b> box = !!( a[2] );
+
+
+            <b>if</b> (box || (fly(el).getStyle(<em>'position'</em>) == <em>'absolute'</em> &amp;&amp; pos)) {
+                val = el[<em>'offset'</em> + a[0].charAt(0).toUpperCase() + a[0].substr(1)];
+            } <b>else</b> {
+                val = 0;
+            }
+
+            <b>return</b> val;
+        },
+
+
+        getDefaultUnit: <b>function</b>(attr) {
+            <b>if</b> (<b>this</b>.patterns.defaultUnit.test(attr)) {
+                <b>return</b> <em>'px'</em>;
+            }
+
+            <b>return</b> <em>''</em>;
+        },
+
+        animateX : <b>function</b>(callback, scope) {
+            <b>var</b> f = <b>function</b>() {
+                <b>this</b>.onComplete.removeListener(f);
+                <b>if</b> (<b>typeof</b> callback == &quot;<b>function</b>&quot;) {
+                    callback.call(scope || <b>this</b>, <b>this</b>);
+                }
+            };
+            <b>this</b>.onComplete.addListener(f, <b>this</b>);
+            <b>this</b>.animate();
+        },
+
+
+        setRuntimeAttribute: <b>function</b>(attr) {
+            <b>var</b> start;
+            <b>var</b> end;
+            <b>var</b> attributes = <b>this</b>.attributes;
+
+            <b>this</b>.runtimeAttributes[attr] = {};
+
+            <b>var</b> isset = <b>function</b>(prop) {
+                <b>return</b> (<b>typeof</b> prop !== <em>'undefined'</em>);
+            };
+
+            <b>if</b> (!isset(attributes[attr][<em>'to'</em>]) &amp;&amp; !isset(attributes[attr][<em>'by'</em>])) {
+                <b>return</b> false;
+            }
+
+            start = ( isset(attributes[attr][<em>'from'</em>]) ) ? attributes[attr][<em>'from'</em>] : <b>this</b>.getAttribute(attr);
+
+
+            <b>if</b> (isset(attributes[attr][<em>'to'</em>])) {
+                end = attributes[attr][<em>'to'</em>];
+            } <b>else</b> if (isset(attributes[attr][<em>'by'</em>])) {
+                <b>if</b> (start.constructor == Array) {
+                    end = [];
+                    <b>for</b> (<b>var</b> i = 0, len = start.length; i &lt; len; ++i) {
+                        end[i] = start[i] + attributes[attr][<em>'by'</em>][i];
+                    }
+                } <b>else</b> {
+                    end = start + attributes[attr][<em>'by'</em>];
+                }
+            }
+
+            <b>this</b>.runtimeAttributes[attr].start = start;
+            <b>this</b>.runtimeAttributes[attr].end = end;
+
+
+            <b>this</b>.runtimeAttributes[attr].unit = ( isset(attributes[attr].unit) ) ? attributes[attr][<em>'unit'</em>] : <b>this</b>.getDefaultUnit(attr);
+        },
+
+
+        init: <b>function</b>(el, attributes, duration, method) {
+
+            <b>var</b> isAnimated = false;
+
+
+            <b>var</b> startTime = null;
+
+
+            <b>var</b> actualFrames = 0;
+
+
+            el = Ext.getDom(el);
+
+
+            <b>this</b>.attributes = attributes || {};
+
+
+            <b>this</b>.duration = duration || 1;
+
+
+            <b>this</b>.method = method || Ext.lib.Easing.easeNone;
+
+
+            <b>this</b>.useSeconds = true;
+
+
+            <b>this</b>.currentFrame = 0;
+
+
+            <b>this</b>.totalFrames = Ext.lib.AnimMgr.fps;
+
+
+            <b>this</b>.getEl = <b>function</b>() {
+                <b>return</b> el;
+            };
+
+
+            <b>this</b>.isAnimated = <b>function</b>() {
+                <b>return</b> isAnimated;
+            };
+
+
+            <b>this</b>.getStartTime = <b>function</b>() {
+                <b>return</b> startTime;
+            };
+
+            <b>this</b>.runtimeAttributes = {};
+
+
+            <b>this</b>.animate = <b>function</b>() {
+                <b>if</b> (<b>this</b>.isAnimated()) {
+                    <b>return</b> false;
+                }
+
+                <b>this</b>.currentFrame = 0;
+
+                <b>this</b>.totalFrames = ( <b>this</b>.useSeconds ) ? Math.ceil(Ext.lib.AnimMgr.fps * <b>this</b>.duration) : <b>this</b>.duration;
+
+                Ext.lib.AnimMgr.registerElement(<b>this</b>);
+            };
+
+
+            <b>this</b>.stop = <b>function</b>(finish) {
+                <b>if</b> (finish) {
+                    <b>this</b>.currentFrame = <b>this</b>.totalFrames;
+                    <b>this</b>._onTween.fire();
+                }
+                Ext.lib.AnimMgr.stop(<b>this</b>);
+            };
+
+            <b>var</b> onStart = <b>function</b>() {
+                <b>this</b>.onStart.fire();
+
+                <b>this</b>.runtimeAttributes = {};
+                <b>for</b> (<b>var</b> attr <b>in</b> this.attributes) {
+                    <b>this</b>.setRuntimeAttribute(attr);
+                }
+
+                isAnimated = true;
+                actualFrames = 0;
+                startTime = <b>new</b> Date();
+            };
+
+
+            <b>var</b> onTween = <b>function</b>() {
+                <b>var</b> data = {
+                    duration: <b>new</b> Date() - <b>this</b>.getStartTime(),
+                    currentFrame: <b>this</b>.currentFrame
+                };
+
+                data.toString = <b>function</b>() {
+                    <b>return</b> (
+                            <em>'duration: '</em> + data.duration +
+                            <em>', currentFrame: '</em> + data.currentFrame
+                            );
+                };
+
+                <b>this</b>.onTween.fire(data);
+
+                <b>var</b> runtimeAttributes = <b>this</b>.runtimeAttributes;
+
+                <b>for</b> (<b>var</b> attr <b>in</b> runtimeAttributes) {
+                    <b>this</b>.setAttribute(attr, <b>this</b>.doMethod(attr, runtimeAttributes[attr].start, runtimeAttributes[attr].end), runtimeAttributes[attr].unit);
+                }
+
+                actualFrames += 1;
+            };
+
+            <b>var</b> onComplete = <b>function</b>() {
+                <b>var</b> actual_duration = (<b>new</b> Date() - startTime) / 1000 ;
+
+                <b>var</b> data = {
+                    duration: actual_duration,
+                    frames: actualFrames,
+                    fps: actualFrames / actual_duration
+                };
+
+                data.toString = <b>function</b>() {
+                    <b>return</b> (
+                            <em>'duration: '</em> + data.duration +
+                            <em>', frames: '</em> + data.frames +
+                            <em>', fps: '</em> + data.fps
+                            );
+                };
+
+                isAnimated = false;
+                actualFrames = 0;
+                <b>this</b>.onComplete.fire(data);
+            };
+
+
+            <b>this</b>._onStart = <b>new</b> Ext.util.Event(<b>this</b>);
+            <b>this</b>.onStart = <b>new</b> Ext.util.Event(<b>this</b>);
+            <b>this</b>.onTween = <b>new</b> Ext.util.Event(<b>this</b>);
+            <b>this</b>._onTween = <b>new</b> Ext.util.Event(<b>this</b>);
+            <b>this</b>.onComplete = <b>new</b> Ext.util.Event(<b>this</b>);
+            <b>this</b>._onComplete = <b>new</b> Ext.util.Event(<b>this</b>);
+            <b>this</b>._onStart.addListener(onStart);
+            <b>this</b>._onTween.addListener(onTween);
+            <b>this</b>._onComplete.addListener(onComplete);
+        }
+    };
+
+
+    Ext.lib.AnimMgr = <b>new</b> function() {
+
+        <b>var</b> thread = null;
+
+
+        <b>var</b> queue = [];
+
+
+        <b>var</b> tweenCount = 0;
+
+
+        <b>this</b>.fps = 1000;
+
+
+        <b>this</b>.delay = 1;
+
+
+        <b>this</b>.registerElement = <b>function</b>(tween) {
+            queue[queue.length] = tween;
+            tweenCount += 1;
+            tween._onStart.fire();
+            <b>this</b>.start();
+        };
+
+
+        <b>this</b>.unRegister = <b>function</b>(tween, index) {
+            tween._onComplete.fire();
+            index = index || getIndex(tween);
+            <b>if</b> (index != -1) {
+                queue.splice(index, 1);
+            }
+
+            tweenCount -= 1;
+            <b>if</b> (tweenCount &lt;= 0) {
+                <b>this</b>.stop();
+            }
+        };
+
+
+        <b>this</b>.start = <b>function</b>() {
+            <b>if</b> (thread === null) {
+                thread = setInterval(<b>this</b>.run, <b>this</b>.delay);
+            }
+        };
+
+
+        <b>this</b>.stop = <b>function</b>(tween) {
+            <b>if</b> (!tween) {
+                clearInterval(thread);
+
+                <b>for</b> (<b>var</b> i = 0, len = queue.length; i &lt; len; ++i) {
+                    <b>if</b> (queue[0].isAnimated()) {
+                        <b>this</b>.unRegister(queue[0], 0);
+                    }
+                }
+
+                queue = [];
+                thread = null;
+                tweenCount = 0;
+            }
+            <b>else</b> {
+                <b>this</b>.unRegister(tween);
+            }
+        };
+
+
+        <b>this</b>.run = <b>function</b>() {
+            <b>for</b> (<b>var</b> i = 0, len = queue.length; i &lt; len; ++i) {
+                <b>var</b> tween = queue[i];
+                <b>if</b> (!tween || !tween.isAnimated()) {
+                    <b>continue</b>;
+                }
+
+                <b>if</b> (tween.currentFrame &lt; tween.totalFrames || tween.totalFrames === null)
+                {
+                    tween.currentFrame += 1;
+
+                    <b>if</b> (tween.useSeconds) {
+                        correctFrame(tween);
+                    }
+                    tween._onTween.fire();
+                }
+                <b>else</b> {
+                    Ext.lib.AnimMgr.stop(tween, i);
+                }
+            }
+        };
+
+        <b>var</b> getIndex = <b>function</b>(anim) {
+            <b>for</b> (<b>var</b> i = 0, len = queue.length; i &lt; len; ++i) {
+                <b>if</b> (queue[i] == anim) {
+                    <b>return</b> i;
+                }
+            }
+            <b>return</b> -1;
+        };
+
+
+        <b>var</b> correctFrame = <b>function</b>(tween) {
+            <b>var</b> frames = tween.totalFrames;
+            <b>var</b> frame = tween.currentFrame;
+            <b>var</b> expected = (tween.currentFrame * tween.duration * 1000 / tween.totalFrames);
+            <b>var</b> elapsed = (<b>new</b> Date() - tween.getStartTime());
+            <b>var</b> tweak = 0;
+
+            <b>if</b> (elapsed &lt; tween.duration * 1000) {
+                tweak = Math.round((elapsed / expected - 1) * tween.currentFrame);
+            } <b>else</b> {
+                tweak = frames - (frame + 1);
+            }
+            <b>if</b> (tweak &gt; 0 &amp;&amp; isFinite(tweak)) {
+                <b>if</b> (tween.currentFrame + tweak &gt;= frames) {
+                    tweak = frames - (frame + 1);
+                }
+
+                tween.currentFrame += tweak;
+            }
+        };
+    };
+
+    Ext.lib.Bezier = <b>new</b> function() {
+
+        <b>this</b>.getPosition = <b>function</b>(points, t) {
+            <b>var</b> n = points.length;
+            <b>var</b> tmp = [];
+
+            <b>for</b> (<b>var</b> i = 0; i &lt; n; ++i) {
+                tmp[i] = [points[i][0], points[i][1]];
+            }
+
+            <b>for</b> (<b>var</b> j = 1; j &lt; n; ++j) {
+                <b>for</b> (i = 0; i &lt; n - j; ++i) {
+                    tmp[i][0] = (1 - t) * tmp[i][0] + t * tmp[parseInt(i + 1, 10)][0];
+                    tmp[i][1] = (1 - t) * tmp[i][1] + t * tmp[parseInt(i + 1, 10)][1];
+                }
+            }
+
+            <b>return</b> [ tmp[0][0], tmp[0][1] ];
+
+        };
+    };
+    (<b>function</b>() {
+
+        Ext.lib.ColorAnim = <b>function</b>(el, attributes, duration, method) {
+            Ext.lib.ColorAnim.superclass.constructor.call(<b>this</b>, el, attributes, duration, method);
+        };
+
+        Ext.extend(Ext.lib.ColorAnim, Ext.lib.AnimBase);
+
+
+        <b>var</b> Y = Ext.lib;
+        <b>var</b> superclass = Y.ColorAnim.superclass;
+        <b>var</b> proto = Y.ColorAnim.prototype;
+
+        proto.toString = <b>function</b>() {
+            <b>var</b> el = <b>this</b>.getEl();
+            <b>var</b> id = el.id || el.tagName;
+            <b>return</b> (&quot;ColorAnim &quot; + id);
+        };
+
+        proto.patterns.color = /color$/i;
+        proto.patterns.rgb = /^rgb\(([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\)$/i;
+        proto.patterns.hex = /^#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})$/i;
+        proto.patterns.hex3 = /^#?([0-9A-F]{1})([0-9A-F]{1})([0-9A-F]{1})$/i;
+        proto.patterns.transparent = /^transparent|rgba\(0, 0, 0, 0\)$/;
+
+
+        proto.parseColor = <b>function</b>(s) {
+            <b>if</b> (s.length == 3) {
+                <b>return</b> s;
+            }
+
+            <b>var</b> c = <b>this</b>.patterns.hex.exec(s);
+            <b>if</b> (c &amp;&amp; c.length == 4) {
+                <b>return</b> [ parseInt(c[1], 16), parseInt(c[2], 16), parseInt(c[3], 16) ];
+            }
+
+            c = <b>this</b>.patterns.rgb.exec(s);
+            <b>if</b> (c &amp;&amp; c.length == 4) {
+                <b>return</b> [ parseInt(c[1], 10), parseInt(c[2], 10), parseInt(c[3], 10) ];
+            }
+
+            c = <b>this</b>.patterns.hex3.exec(s);
+            <b>if</b> (c &amp;&amp; c.length == 4) {
+                <b>return</b> [ parseInt(c[1] + c[1], 16), parseInt(c[2] + c[2], 16), parseInt(c[3] + c[3], 16) ];
+            }
+
+            <b>return</b> null;
+        };
+
+        proto.getAttribute = <b>function</b>(attr) {
+            <b>var</b> el = <b>this</b>.getEl();
+            <b>if</b> (<b>this</b>.patterns.color.test(attr)) {
+                <b>var</b> val = fly(el).getStyle(attr);
+
+                <b>if</b> (<b>this</b>.patterns.transparent.test(val)) {
+                    <b>var</b> parent = el.parentNode;
+                    val = fly(parent).getStyle(attr);
+
+                    <b>while</b> (parent &amp;&amp; <b>this</b>.patterns.transparent.test(val)) {
+                        parent = parent.parentNode;
+                        val = fly(parent).getStyle(attr);
+                        <b>if</b> (parent.tagName.toUpperCase() == <em>'HTML'</em>) {
+                            val = <em>'#fff'</em>;
+                        }
+                    }
+                }
+            } <b>else</b> {
+                val = superclass.getAttribute.call(<b>this</b>, attr);
+            }
+
+            <b>return</b> val;
+        };
+
+        proto.doMethod = <b>function</b>(attr, start, end) {
+            <b>var</b> val;
+
+            <b>if</b> (<b>this</b>.patterns.color.test(attr)) {
+                val = [];
+                <b>for</b> (<b>var</b> i = 0, len = start.length; i &lt; len; ++i) {
+                    val[i] = superclass.doMethod.call(<b>this</b>, attr, start[i], end[i]);
+                }
+
+                val = <em>'rgb('</em> + Math.floor(val[0]) + <em>','</em> + Math.floor(val[1]) + <em>','</em> + Math.floor(val[2]) + <em>')'</em>;
+            }
+            <b>else</b> {
+                val = superclass.doMethod.call(<b>this</b>, attr, start, end);
+            }
+
+            <b>return</b> val;
+        };
+
+        proto.setRuntimeAttribute = <b>function</b>(attr) {
+            superclass.setRuntimeAttribute.call(<b>this</b>, attr);
+
+            <b>if</b> (<b>this</b>.patterns.color.test(attr)) {
+                <b>var</b> attributes = <b>this</b>.attributes;
+                <b>var</b> start = <b>this</b>.parseColor(<b>this</b>.runtimeAttributes[attr].start);
+                <b>var</b> end = <b>this</b>.parseColor(<b>this</b>.runtimeAttributes[attr].end);
+
+                <b>if</b> (<b>typeof</b> attributes[attr][<em>'to'</em>] === <em>'undefined'</em> &amp;&amp; <b>typeof</b> attributes[attr][<em>'by'</em>] !== <em>'undefined'</em>) {
+                    end = <b>this</b>.parseColor(attributes[attr].by);
+
+                    <b>for</b> (<b>var</b> i = 0, len = start.length; i &lt; len; ++i) {
+                        end[i] = start[i] + end[i];
+                    }
+                }
+
+                <b>this</b>.runtimeAttributes[attr].start = start;
+                <b>this</b>.runtimeAttributes[attr].end = end;
+            }
+        };
+    })();
+
+
+    Ext.lib.Easing = {
+
+
+        easeNone: <b>function</b> (t, b, c, d) {
+            <b>return</b> c * t / d + b;
+        },
+
+
+        easeIn: <b>function</b> (t, b, c, d) {
+            <b>return</b> c * (t /= d) * t + b;
+        },
+
+
+        easeOut: <b>function</b> (t, b, c, d) {
+            <b>return</b> -c * (t /= d) * (t - 2) + b;
+        },
+
+
+        easeBoth: <b>function</b> (t, b, c, d) {
+            <b>if</b> ((t /= d / 2) &lt; 1) {
+                <b>return</b> c / 2 * t * t + b;
+            }
+
+            <b>return</b> -c / 2 * ((--t) * (t - 2) - 1) + b;
+        },
+
+
+        easeInStrong: <b>function</b> (t, b, c, d) {
+            <b>return</b> c * (t /= d) * t * t * t + b;
+        },
+
+
+        easeOutStrong: <b>function</b> (t, b, c, d) {
+            <b>return</b> -c * ((t = t / d - 1) * t * t * t - 1) + b;
+        },
+
+
+        easeBothStrong: <b>function</b> (t, b, c, d) {
+            <b>if</b> ((t /= d / 2) &lt; 1) {
+                <b>return</b> c / 2 * t * t * t * t + b;
+            }
+
+            <b>return</b> -c / 2 * ((t -= 2) * t * t * t - 2) + b;
+        },
+
+
+
+        elasticIn: <b>function</b> (t, b, c, d, a, p) {
+            <b>if</b> (t == 0) {
+                <b>return</b> b;
+            }
+            <b>if</b> ((t /= d) == 1) {
+                <b>return</b> b + c;
+            }
+            <b>if</b> (!p) {
+                p = d * .3;
+            }
+
+            <b>if</b> (!a || a &lt; Math.abs(c)) {
+                a = c;
+                <b>var</b> s = p / 4;
+            }
+            <b>else</b> {
+                <b>var</b> s = p / (2 * Math.PI) * Math.asin(c / a);
+            }
+
+            <b>return</b> -(a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
+        },
+
+
+        elasticOut: <b>function</b> (t, b, c, d, a, p) {
+            <b>if</b> (t == 0) {
+                <b>return</b> b;
+            }
+            <b>if</b> ((t /= d) == 1) {
+                <b>return</b> b + c;
+            }
+            <b>if</b> (!p) {
+                p = d * .3;
+            }
+
+            <b>if</b> (!a || a &lt; Math.abs(c)) {
+                a = c;
+                <b>var</b> s = p / 4;
+            }
+            <b>else</b> {
+                <b>var</b> s = p / (2 * Math.PI) * Math.asin(c / a);
+            }
+
+            <b>return</b> a * Math.pow(2, -10 * t) * Math.sin((t * d - s) * (2 * Math.PI) / p) + c + b;
+        },
+
+
+        elasticBoth: <b>function</b> (t, b, c, d, a, p) {
+            <b>if</b> (t == 0) {
+                <b>return</b> b;
+            }
+
+            <b>if</b> ((t /= d / 2) == 2) {
+                <b>return</b> b + c;
+            }
+
+            <b>if</b> (!p) {
+                p = d * (.3 * 1.5);
+            }
+
+            <b>if</b> (!a || a &lt; Math.abs(c)) {
+                a = c;
+                <b>var</b> s = p / 4;
+            }
+            <b>else</b> {
+                <b>var</b> s = p / (2 * Math.PI) * Math.asin(c / a);
+            }
+
+            <b>if</b> (t &lt; 1) {
+                <b>return</b> -.5 * (a * Math.pow(2, 10 * (t -= 1)) *
+                              Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
+            }
+            <b>return</b> a * Math.pow(2, -10 * (t -= 1)) *
+                   Math.sin((t * d - s) * (2 * Math.PI) / p) * .5 + c + b;
+        },
+
+
+
+        backIn: <b>function</b> (t, b, c, d, s) {
+            <b>if</b> (<b>typeof</b> s == <em>'undefined'</em>) {
+                s = 1.70158;
+            }
+            <b>return</b> c * (t /= d) * t * ((s + 1) * t - s) + b;
+        },
+
+
+        backOut: <b>function</b> (t, b, c, d, s) {
+            <b>if</b> (<b>typeof</b> s == <em>'undefined'</em>) {
+                s = 1.70158;
+            }
+            <b>return</b> c * ((t = t / d - 1) * t * ((s + 1) * t + s) + 1) + b;
+        },
+
+
+        backBoth: <b>function</b> (t, b, c, d, s) {
+            <b>if</b> (<b>typeof</b> s == <em>'undefined'</em>) {
+                s = 1.70158;
+            }
+
+            <b>if</b> ((t /= d / 2 ) &lt; 1) {
+                <b>return</b> c / 2 * (t * t * (((s *= (1.525)) + 1) * t - s)) + b;
+            }
+            <b>return</b> c / 2 * ((t -= 2) * t * (((s *= (1.525)) + 1) * t + s) + 2) + b;
+        },
+
+
+        bounceIn: <b>function</b> (t, b, c, d) {
+            <b>return</b> c - Ext.lib.Easing.bounceOut(d - t, 0, c, d) + b;
+        },
+
+
+        bounceOut: <b>function</b> (t, b, c, d) {
+            <b>if</b> ((t /= d) &lt; (1 / 2.75)) {
+                <b>return</b> c * (7.5625 * t * t) + b;
+            } <b>else</b> if (t &lt; (2 / 2.75)) {
+                <b>return</b> c * (7.5625 * (t -= (1.5 / 2.75)) * t + .75) + b;
+            } <b>else</b> if (t &lt; (2.5 / 2.75)) {
+                <b>return</b> c * (7.5625 * (t -= (2.25 / 2.75)) * t + .9375) + b;
+            }
+            <b>return</b> c * (7.5625 * (t -= (2.625 / 2.75)) * t + .984375) + b;
+        },
+
+
+        bounceBoth: <b>function</b> (t, b, c, d) {
+            <b>if</b> (t &lt; d / 2) {
+                <b>return</b> Ext.lib.Easing.bounceIn(t * 2, 0, c, d) * .5 + b;
+            }
+            <b>return</b> Ext.lib.Easing.bounceOut(t * 2 - d, 0, c, d) * .5 + c * .5 + b;
+        }
+    };
+
+    (<b>function</b>() {
+        Ext.lib.Motion = <b>function</b>(el, attributes, duration, method) {
+            <b>if</b> (el) {
+                Ext.lib.Motion.superclass.constructor.call(<b>this</b>, el, attributes, duration, method);
+            }
+        };
+
+        Ext.extend(Ext.lib.Motion, Ext.lib.ColorAnim);
+
+
+        <b>var</b> Y = Ext.lib;
+        <b>var</b> superclass = Y.Motion.superclass;
+        <b>var</b> proto = Y.Motion.prototype;
+
+        proto.toString = <b>function</b>() {
+            <b>var</b> el = <b>this</b>.getEl();
+            <b>var</b> id = el.id || el.tagName;
+            <b>return</b> (&quot;Motion &quot; + id);
+        };
+
+        proto.patterns.points = /^points$/i;
+
+        proto.setAttribute = <b>function</b>(attr, val, unit) {
+            <b>if</b> (<b>this</b>.patterns.points.test(attr)) {
+                unit = unit || <em>'px'</em>;
+                superclass.setAttribute.call(<b>this</b>, <em>'left'</em>, val[0], unit);
+                superclass.setAttribute.call(<b>this</b>, <em>'top'</em>, val[1], unit);
+            } <b>else</b> {
+                superclass.setAttribute.call(<b>this</b>, attr, val, unit);
+            }
+        };
+
+        proto.getAttribute = <b>function</b>(attr) {
+            <b>if</b> (<b>this</b>.patterns.points.test(attr)) {
+                <b>var</b> val = [
+                        superclass.getAttribute.call(<b>this</b>, <em>'left'</em>),
+                        superclass.getAttribute.call(<b>this</b>, <em>'top'</em>)
+                        ];
+            } <b>else</b> {
+                val = superclass.getAttribute.call(<b>this</b>, attr);
+            }
+
+            <b>return</b> val;
+        };
+
+        proto.doMethod = <b>function</b>(attr, start, end) {
+            <b>var</b> val = null;
+
+            <b>if</b> (<b>this</b>.patterns.points.test(attr)) {
+                <b>var</b> t = <b>this</b>.method(<b>this</b>.currentFrame, 0, 100, <b>this</b>.totalFrames) / 100;
+                val = Y.Bezier.getPosition(<b>this</b>.runtimeAttributes[attr], t);
+            } <b>else</b> {
+                val = superclass.doMethod.call(<b>this</b>, attr, start, end);
+            }
+            <b>return</b> val;
+        };
+
+        proto.setRuntimeAttribute = <b>function</b>(attr) {
+            <b>if</b> (<b>this</b>.patterns.points.test(attr)) {
+                <b>var</b> el = <b>this</b>.getEl();
+                <b>var</b> attributes = <b>this</b>.attributes;
+                <b>var</b> start;
+                <b>var</b> control = attributes[<em>'points'</em>][<em>'control'</em>] || [];
+                <b>var</b> end;
+                <b>var</b> i, len;
+
+                <b>if</b> (control.length &gt; 0 &amp;&amp; !Ext.isArray(control[0])) {
+                    control = [control];
+                } <b>else</b> {
+                    <b>var</b> tmp = [];
+                    <b>for</b> (i = 0,len = control.length; i &lt; len; ++i) {
+                        tmp[i] = control[i];
+                    }
+                    control = tmp;
+                }
+
+                Ext.fly(el, <em>'_anim'</em>).position();
+
+                <b>if</b> (isset(attributes[<em>'points'</em>][<em>'from'</em>])) {
+                    Ext.lib.Dom.setXY(el, attributes[<em>'points'</em>][<em>'from'</em>]);
+                }
+                <b>else</b> {
+                    Ext.lib.Dom.setXY(el, Ext.lib.Dom.getXY(el));
+                }
+
+                start = <b>this</b>.getAttribute(<em>'points'</em>);
+
+
+                <b>if</b> (isset(attributes[<em>'points'</em>][<em>'to'</em>])) {
+                    end = translateValues.call(<b>this</b>, attributes[<em>'points'</em>][<em>'to'</em>], start);
+
+                    <b>var</b> pageXY = Ext.lib.Dom.getXY(<b>this</b>.getEl());
+                    <b>for</b> (i = 0,len = control.length; i &lt; len; ++i) {
+                        control[i] = translateValues.call(<b>this</b>, control[i], start);
+                    }
+
+
+                } <b>else</b> if (isset(attributes[<em>'points'</em>][<em>'by'</em>])) {
+                    end = [ start[0] + attributes[<em>'points'</em>][<em>'by'</em>][0], start[1] + attributes[<em>'points'</em>][<em>'by'</em>][1] ];
+
+                    <b>for</b> (i = 0,len = control.length; i &lt; len; ++i) {
+                        control[i] = [ start[0] + control[i][0], start[1] + control[i][1] ];
+                    }
+                }
+
+                <b>this</b>.runtimeAttributes[attr] = [start];
+
+                <b>if</b> (control.length &gt; 0) {
+                    <b>this</b>.runtimeAttributes[attr] = <b>this</b>.runtimeAttributes[attr].concat(control);
+                }
+
+                <b>this</b>.runtimeAttributes[attr][<b>this</b>.runtimeAttributes[attr].length] = end;
+            }
+            <b>else</b> {
+                superclass.setRuntimeAttribute.call(<b>this</b>, attr);
+            }
+        };
+
+        <b>var</b> translateValues = <b>function</b>(val, start) {
+            <b>var</b> pageXY = Ext.lib.Dom.getXY(<b>this</b>.getEl());
+            val = [ val[0] - pageXY[0] + start[0], val[1] - pageXY[1] + start[1] ];
+
+            <b>return</b> val;
+        };
+
+        <b>var</b> isset = <b>function</b>(prop) {
+            <b>return</b> (<b>typeof</b> prop !== <em>'undefined'</em>);
+        };
+    })();
+
+
+    (<b>function</b>() {
+        Ext.lib.Scroll = <b>function</b>(el, attributes, duration, method) {
+            <b>if</b> (el) {
+                Ext.lib.Scroll.superclass.constructor.call(<b>this</b>, el, attributes, duration, method);
+            }
+        };
+
+        Ext.extend(Ext.lib.Scroll, Ext.lib.ColorAnim);
+
+
+        <b>var</b> Y = Ext.lib;
+        <b>var</b> superclass = Y.Scroll.superclass;
+        <b>var</b> proto = Y.Scroll.prototype;
+
+        proto.toString = <b>function</b>() {
+            <b>var</b> el = <b>this</b>.getEl();
+            <b>var</b> id = el.id || el.tagName;
+            <b>return</b> (&quot;Scroll &quot; + id);
+        };
+
+        proto.doMethod = <b>function</b>(attr, start, end) {
+            <b>var</b> val = null;
+
+            <b>if</b> (attr == <em>'scroll'</em>) {
+                val = [
+                        <b>this</b>.method(<b>this</b>.currentFrame, start[0], end[0] - start[0], <b>this</b>.totalFrames),
+                        <b>this</b>.method(<b>this</b>.currentFrame, start[1], end[1] - start[1], <b>this</b>.totalFrames)
+                        ];
+
+            } <b>else</b> {
+                val = superclass.doMethod.call(<b>this</b>, attr, start, end);
+            }
+            <b>return</b> val;
+        };
+
+        proto.getAttribute = <b>function</b>(attr) {
+            <b>var</b> val = null;
+            <b>var</b> el = <b>this</b>.getEl();
+
+            <b>if</b> (attr == <em>'scroll'</em>) {
+                val = [ el.scrollLeft, el.scrollTop ];
+            } <b>else</b> {
+                val = superclass.getAttribute.call(<b>this</b>, attr);
+            }
+
+            <b>return</b> val;
+        };
+
+        proto.setAttribute = <b>function</b>(attr, val, unit) {
+            <b>var</b> el = <b>this</b>.getEl();
+
+            <b>if</b> (attr == <em>'scroll'</em>) {
+                el.scrollLeft = val[0];
+                el.scrollTop = val[1];
+            } <b>else</b> {
+                superclass.setAttribute.call(<b>this</b>, attr, val, unit);
+            }
+        };
+    })();
+
+
+})();</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

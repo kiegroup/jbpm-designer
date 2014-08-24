@@ -1,0 +1,364 @@
+<html><head><title>CompositeElement.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>CompositeElement.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.CompositeElement
+ * Standard composite class. Creates a Ext.Element <b>for</b> every element <b>in</b> the collection.
+ * &lt;br&gt;&lt;br&gt;
+ * &lt;b&gt;NOTE: Although they are not listed, <b>this</b> class supports all of the set/update methods of Ext.Element. All Ext.Element
+ * actions will be performed on all the elements <b>in</b> this collection.&lt;/b&gt;
+ * &lt;br&gt;&lt;br&gt;
+ * All methods <b>return</b> &lt;i&gt;<b>this</b>&lt;/i&gt; and can be chained.
+ &lt;pre&gt;&lt;code&gt;
+ <b>var</b> els = Ext.select(&quot;#some-el div.some-class&quot;, true);
+ <i>// or select directly from an existing element</i>
+ <b>var</b> el = Ext.get(<em>'some-el'</em>);
+ el.select(<em>'div.some-class'</em>, true);
+
+ els.setWidth(100); <i>// all elements become 100 width</i>
+ els.hide(true); <i>// all elements fade out and hide</i>
+ <i>// or</i>
+ els.setWidth(100).hide(true);
+ &lt;/code&gt;&lt;/pre&gt;
+ */</i>
+Ext.CompositeElement = <b>function</b>(els){
+    <b>this</b>.elements = [];
+    <b>this</b>.addElements(els);
+};
+Ext.CompositeElement.prototype = {
+    isComposite: true,
+    addElements : <b>function</b>(els){
+        <b>if</b>(!els) <b>return</b> this;
+        <b>if</b>(typeof els == &quot;string&quot;){
+            els = Ext.Element.selectorFunction(els);
+        }
+        <b>var</b> yels = <b>this</b>.elements;
+        <b>var</b> index = yels.length-1;
+        <b>for</b>(var i = 0, len = els.length; i &lt; len; i++) {
+        	yels[++index] = Ext.get(els[i]);
+        }
+        <b>return</b> this;
+    },
+
+    <i>/**
+    * Clears <b>this</b> composite and adds the elements returned by the passed selector.
+    * @param {String/Array} els A string CSS selector, an array of elements or an element
+    * @<b>return</b> {CompositeElement} <b>this</b>
+    */</i>
+    fill : <b>function</b>(els){
+        <b>this</b>.elements = [];
+        <b>this</b>.add(els);
+        <b>return</b> this;
+    },
+
+    <i>/**
+    * Filters <b>this</b> composite to only elements that match the passed selector.
+    * @param {String} selector A string CSS selector
+    * @<b>return</b> {CompositeElement} <b>this</b>
+    */</i>
+    filter : <b>function</b>(selector){
+        <b>var</b> els = [];
+        <b>this</b>.each(<b>function</b>(el){
+            <b>if</b>(el.is(selector)){
+                els[els.length] = el.dom;
+            }
+        });
+        <b>this</b>.fill(els);
+        <b>return</b> this;
+    },
+
+    invoke : <b>function</b>(fn, args){
+        <b>var</b> els = <b>this</b>.elements;
+        <b>for</b>(var i = 0, len = els.length; i &lt; len; i++) {
+        	Ext.Element.prototype[fn].apply(els[i], args);
+        }
+        <b>return</b> this;
+    },
+    <i>/**
+    * Adds elements to <b>this</b> composite.
+    * @param {String/Array} els A string CSS selector, an array of elements or an element
+    * @<b>return</b> {CompositeElement} <b>this</b>
+    */</i>
+    add : <b>function</b>(els){
+        <b>if</b>(typeof els == &quot;string&quot;){
+            <b>this</b>.addElements(Ext.Element.selectorFunction(els));
+        }<b>else</b> if(els.length !== undefined){
+            <b>this</b>.addElements(els);
+        }<b>else</b>{
+            <b>this</b>.addElements([els]);
+        }
+        <b>return</b> this;
+    },
+    <i>/**
+    * Calls the passed <b>function</b> passing (el, <b>this</b>, index) <b>for</b> each element <b>in</b> this composite.
+    * @param {Function} fn The <b>function</b> to call
+    * @param {Object} scope (optional) The &lt;i&gt;<b>this</b>&lt;/i&gt; object (defaults to the element)
+    * @<b>return</b> {CompositeElement} <b>this</b>
+    */</i>
+    each : <b>function</b>(fn, scope){
+        <b>var</b> els = <b>this</b>.elements;
+        <b>for</b>(var i = 0, len = els.length; i &lt; len; i++){
+            <b>if</b>(fn.call(scope || els[i], els[i], <b>this</b>, i) === false) {
+                <b>break</b>;
+            }
+        }
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Returns the Element object at the specified index
+     * @param {Number} index
+     * @<b>return</b> {Ext.Element}
+     */</i>
+    item : <b>function</b>(index){
+        <b>return</b> this.elements[index] || null;
+    },
+
+    <i>/**
+     * Returns the first Element
+     * @<b>return</b> {Ext.Element}
+     */</i>
+    first : <b>function</b>(){
+        <b>return</b> this.item(0);
+    },
+
+    <i>/**
+     * Returns the last Element
+     * @<b>return</b> {Ext.Element}
+     */</i>
+    last : <b>function</b>(){
+        <b>return</b> this.item(<b>this</b>.elements.length-1);
+    },
+
+    <i>/**
+     * Returns the number of elements <b>in</b> this composite
+     * @<b>return</b> Number
+     */</i>
+    getCount : <b>function</b>(){
+        <b>return</b> this.elements.length;
+    },
+
+    <i>/**
+     * Returns true <b>if</b> this composite contains the passed element
+     * @param el {Mixed} The id of an element, or an Ext.Element, or an HtmlElement to find within the composite collection.
+     * @<b>return</b> Boolean
+     */</i>
+    contains : <b>function</b>(el){
+        <b>return</b> this.indexOf(el) !== -1;
+    },
+
+    <i>/**
+     * Find the index of the passed element within the composite collection.
+     * @param el {Mixed} The id of an element, or an Ext.Element, or an HtmlElement to find within the composite collection.
+     * @<b>return</b> Number The index of the passed Ext.Element <b>in</b> the composite collection, or -1 <b>if</b> not found.
+     */</i>
+    indexOf : <b>function</b>(el){
+        <b>return</b> this.elements.indexOf(Ext.get(el));
+    },
+
+
+    <i>/**
+    * Removes the specified element(s).
+    * @param {Mixed} el The id of an element, the Element itself, the index of the element <b>in</b> this composite
+    * or an array of any of those.
+    * @param {Boolean} removeDom (optional) True to also remove the element from the document
+    * @<b>return</b> {CompositeElement} <b>this</b>
+    */</i>
+    removeElement : <b>function</b>(el, removeDom){
+        <b>if</b>(Ext.isArray(el)){
+            <b>for</b>(var i = 0, len = el.length; i &lt; len; i++){
+                <b>this</b>.removeElement(el[i]);
+            }
+            <b>return</b> this;
+        }
+        <b>var</b> index = <b>typeof</b> el == <em>'number'</em> ? el : <b>this</b>.indexOf(el);
+        <b>if</b>(index !== -1 &amp;&amp; <b>this</b>.elements[index]){
+            <b>if</b>(removeDom){
+                <b>var</b> d = <b>this</b>.elements[index];
+                <b>if</b>(d.dom){
+                    d.remove();
+                }<b>else</b>{
+                    Ext.removeNode(d);
+                }
+            }
+            <b>this</b>.elements.splice(index, 1);
+        }
+        <b>return</b> this;
+    },
+
+    <i>/**
+    * Replaces the specified element <b>with</b> the passed element.
+    * @param {Mixed} el The id of an element, the Element itself, the index of the element <b>in</b> this composite
+    * to replace.
+    * @param {Mixed} replacement The id of an element or the Element itself.
+    * @param {Boolean} domReplace (Optional) True to remove and replace the element <b>in</b> the document too.
+    * @<b>return</b> {CompositeElement} <b>this</b>
+    */</i>
+    replaceElement : <b>function</b>(el, replacement, domReplace){
+        <b>var</b> index = <b>typeof</b> el == <em>'number'</em> ? el : <b>this</b>.indexOf(el);
+        <b>if</b>(index !== -1){
+            <b>if</b>(domReplace){
+                <b>this</b>.elements[index].replaceWith(replacement);
+            }<b>else</b>{
+                <b>this</b>.elements.splice(index, 1, Ext.get(replacement))
+            }
+        }
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Removes all elements.
+     */</i>
+    clear : <b>function</b>(){
+        <b>this</b>.elements = [];
+    }
+};
+(<b>function</b>(){
+Ext.CompositeElement.createCall = <b>function</b>(proto, fnName){
+    <b>if</b>(!proto[fnName]){
+        proto[fnName] = <b>function</b>(){
+            <b>return</b> this.invoke(fnName, arguments);
+        };
+    }
+};
+<b>for</b>(var fnName <b>in</b> Ext.Element.prototype){
+    <b>if</b>(typeof Ext.Element.prototype[fnName] == &quot;<b>function</b>&quot;){
+        Ext.CompositeElement.createCall(Ext.CompositeElement.prototype, fnName);
+    }
+};
+})();
+
+<i>/**
+ * @class Ext.CompositeElementLite
+ * @extends Ext.CompositeElement
+ * Flyweight composite class. Reuses the same Ext.Element <b>for</b> element operations.
+ &lt;pre&gt;&lt;code&gt;
+ <b>var</b> els = Ext.select(&quot;#some-el div.some-class&quot;);
+ <i>// or select directly from an existing element</i>
+ <b>var</b> el = Ext.get(<em>'some-el'</em>);
+ el.select(<em>'div.some-class'</em>);
+
+ els.setWidth(100); <i>// all elements become 100 width</i>
+ els.hide(true); <i>// all elements fade out and hide</i>
+ <i>// or</i>
+ els.setWidth(100).hide(true);
+ &lt;/code&gt;&lt;/pre&gt;&lt;br&gt;&lt;br&gt;
+ * &lt;b&gt;NOTE: Although they are not listed, <b>this</b> class supports all of the set/update methods of Ext.Element. All Ext.Element
+ * actions will be performed on all the elements <b>in</b> this collection.&lt;/b&gt;
+ */</i>
+Ext.CompositeElementLite = <b>function</b>(els){
+    Ext.CompositeElementLite.superclass.constructor.call(<b>this</b>, els);
+    <b>this</b>.el = <b>new</b> Ext.Element.Flyweight();
+};
+Ext.extend(Ext.CompositeElementLite, Ext.CompositeElement, {
+    addElements : <b>function</b>(els){
+        <b>if</b>(els){
+            <b>if</b>(Ext.isArray(els)){
+                <b>this</b>.elements = <b>this</b>.elements.concat(els);
+            }<b>else</b>{
+                <b>var</b> yels = <b>this</b>.elements;
+                <b>var</b> index = yels.length-1;
+                <b>for</b>(var i = 0, len = els.length; i &lt; len; i++) {
+                    yels[++index] = els[i];
+                }
+            }
+        }
+        <b>return</b> this;
+    },
+    invoke : <b>function</b>(fn, args){
+        <b>var</b> els = <b>this</b>.elements;
+        <b>var</b> el = <b>this</b>.el;
+        <b>for</b>(var i = 0, len = els.length; i &lt; len; i++) {
+            el.dom = els[i];
+        	Ext.Element.prototype[fn].apply(el, args);
+        }
+        <b>return</b> this;
+    },
+    <i>/**
+     * Returns a flyweight Element of the dom element object at the specified index
+     * @param {Number} index
+     * @<b>return</b> {Ext.Element}
+     */</i>
+    item : <b>function</b>(index){
+        <b>if</b>(!<b>this</b>.elements[index]){
+            <b>return</b> null;
+        }
+        <b>this</b>.el.dom = <b>this</b>.elements[index];
+        <b>return</b> this.el;
+    },
+
+    <i>// fixes scope <b>with</b> flyweight</i>
+    addListener : <b>function</b>(eventName, handler, scope, opt){
+        <b>var</b> els = <b>this</b>.elements;
+        <b>for</b>(var i = 0, len = els.length; i &lt; len; i++) {
+            Ext.EventManager.on(els[i], eventName, handler, scope || els[i], opt);
+        }
+        <b>return</b> this;
+    },
+
+    <i>/**
+    * Calls the passed <b>function</b> passing (el, <b>this</b>, index) <b>for</b> each element <b>in</b> this composite. &lt;b&gt;The element
+    * passed is the flyweight (shared) Ext.Element instance, so <b>if</b> you require a
+    * a reference to the dom node, use el.dom.&lt;/b&gt;
+    * @param {Function} fn The <b>function</b> to call
+    * @param {Object} scope (optional) The &lt;i&gt;<b>this</b>&lt;/i&gt; object (defaults to the element)
+    * @<b>return</b> {CompositeElement} <b>this</b>
+    */</i>
+    each : <b>function</b>(fn, scope){
+        <b>var</b> els = <b>this</b>.elements;
+        <b>var</b> el = <b>this</b>.el;
+        <b>for</b>(var i = 0, len = els.length; i &lt; len; i++){
+            el.dom = els[i];
+        	<b>if</b>(fn.call(scope || el, el, <b>this</b>, i) === false){
+                <b>break</b>;
+            }
+        }
+        <b>return</b> this;
+    },
+
+    indexOf : <b>function</b>(el){
+        <b>return</b> this.elements.indexOf(Ext.getDom(el));
+    },
+
+    replaceElement : <b>function</b>(el, replacement, domReplace){
+        <b>var</b> index = <b>typeof</b> el == <em>'number'</em> ? el : <b>this</b>.indexOf(el);
+        <b>if</b>(index !== -1){
+            replacement = Ext.getDom(replacement);
+            <b>if</b>(domReplace){
+                <b>var</b> d = <b>this</b>.elements[index];
+                d.parentNode.insertBefore(replacement, d);
+                Ext.removeNode(d);
+            }
+            <b>this</b>.elements.splice(index, 1, replacement);
+        }
+        <b>return</b> this;
+    }
+});
+Ext.CompositeElementLite.prototype.on = Ext.CompositeElementLite.prototype.addListener;
+<b>if</b>(Ext.DomQuery){
+    Ext.Element.selectorFunction = Ext.DomQuery.select;
+}
+
+Ext.Element.select = <b>function</b>(selector, unique, root){
+    <b>var</b> els;
+    <b>if</b>(typeof selector == &quot;string&quot;){
+        els = Ext.Element.selectorFunction(selector, root);
+    }<b>else</b> if(selector.length !== undefined){
+        els = selector;
+    }<b>else</b>{
+        throw &quot;Invalid selector&quot;;
+    }
+    <b>if</b>(unique === true){
+        <b>return</b> new Ext.CompositeElement(els);
+    }<b>else</b>{
+        <b>return</b> new Ext.CompositeElementLite(els);
+    }
+};
+<i>/**
+ * Selects elements based on the passed CSS selector to enable working on them as 1.
+ * @param {String/Array} selector The CSS selector or an array of elements
+ * @param {Boolean} unique (optional) true to create a unique Ext.Element <b>for</b> each element (defaults to a shared flyweight object)
+ * @param {HTMLElement/String} root (optional) The root element of the query or id of the root
+ * @<b>return</b> {CompositeElementLite/CompositeElement}
+ * @member Ext
+ * @method select
+ */</i>
+Ext.select = Ext.Element.select;</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

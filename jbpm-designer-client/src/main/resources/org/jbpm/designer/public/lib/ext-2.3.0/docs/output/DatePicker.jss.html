@@ -1,0 +1,765 @@
+<html><head><title>DatePicker.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>DatePicker.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.DatePicker
+ * @extends Ext.Component
+ * Simple date picker class.
+ * @constructor
+ * Create a <b>new</b> DatePicker
+ * @param {Object} config The config object
+ */</i>
+Ext.DatePicker = Ext.extend(Ext.Component, {
+    <i>/**
+     * @cfg {String} todayText
+     * The text to display on the button that selects the current date (defaults to &quot;Today&quot;)
+     */</i>
+    todayText : &quot;Today&quot;,
+    <i>/**
+     * @cfg {String} okText
+     * The text to display on the ok button
+     */</i>
+    okText : &quot;&amp;#160;OK&amp;#160;&quot;, <i>// &amp;#160; to give the user extra clicking room</i>
+    <i>/**
+     * @cfg {String} cancelText
+     * The text to display on the cancel button
+     */</i>
+    cancelText : &quot;Cancel&quot;,
+    <i>/**
+     * @cfg {String} todayTip
+     * The tooltip to display <b>for</b> the button that selects the current date (defaults to &quot;{current date} (Spacebar)&quot;)
+     */</i>
+    todayTip : &quot;{0} (Spacebar)&quot;,
+    <i>/**
+     * @cfg {String} minText
+     * The error text to display <b>if</b> the minDate validation fails (defaults to &quot;This date is before the minimum date&quot;)
+     */</i>
+    minText : &quot;This date is before the minimum date&quot;,
+    <i>/**
+     * @cfg {String} maxText
+     * The error text to display <b>if</b> the maxDate validation fails (defaults to &quot;This date is after the maximum date&quot;)
+     */</i>
+    maxText : &quot;This date is after the maximum date&quot;,
+    <i>/**
+     * @cfg {String} format
+     * The <b>default</b> date format string which can be overriden <b>for</b> localization support.  The format must be
+     * valid according to {@link Date#parseDate} (defaults to <em>'m/d/y'</em>).
+     */</i>
+    format : &quot;m/d/y&quot;,
+    <i>/**
+     * @cfg {String} disabledDaysText
+     * The tooltip to display when the date falls on a disabled day (defaults to &quot;Disabled&quot;)
+     */</i>
+    disabledDaysText : &quot;Disabled&quot;,
+    <i>/**
+     * @cfg {String} disabledDatesText
+     * The tooltip text to display when the date falls on a disabled date (defaults to &quot;Disabled&quot;)
+     */</i>
+    disabledDatesText : &quot;Disabled&quot;,
+    <i>/**
+     * @cfg {Array} monthNames
+     * An array of textual month names which can be overriden <b>for</b> localization support (defaults to Date.monthNames)
+     */</i>
+    monthNames : Date.monthNames,
+    <i>/**
+     * @cfg {Array} dayNames
+     * An array of textual day names which can be overriden <b>for</b> localization support (defaults to Date.dayNames)
+     */</i>
+    dayNames : Date.dayNames,
+    <i>/**
+     * @cfg {String} nextText
+     * The next month navigation button tooltip (defaults to <em>'Next Month (Control+Right)'</em>)
+     */</i>
+    nextText: <em>'Next Month (Control+Right)'</em>,
+    <i>/**
+     * @cfg {String} prevText
+     * The previous month navigation button tooltip (defaults to <em>'Previous Month (Control+Left)'</em>)
+     */</i>
+    prevText: <em>'Previous Month (Control+Left)'</em>,
+    <i>/**
+     * @cfg {String} monthYearText
+     * The header month selector tooltip (defaults to <em>'Choose a month (Control+Up/Down to move years)'</em>)
+     */</i>
+    monthYearText: <em>'Choose a month (Control+Up/Down to move years)'</em>,
+    <i>/**
+     * @cfg {Number} startDay
+     * Day index at which the week should begin, 0-based (defaults to 0, which is Sunday)
+     */</i>
+    startDay : 0,
+    <i>/**
+     * @cfg {Boolean} showToday
+     * False to hide the footer area containing the Today button and disable the keyboard handler <b>for</b> spacebar
+     * that selects the current date (defaults to true).
+     */</i>
+    showToday : true,
+    <i>/**
+     * @cfg {Date} minDate
+     * Minimum allowable date (JavaScript date object, defaults to null)
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Date} maxDate
+     * Maximum allowable date (JavaScript date object, defaults to null)
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Array} disabledDays
+     * An array of days to disable, 0-based. For example, [0, 6] disables Sunday and Saturday (defaults to null).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {RegExp} disabledDatesRE
+     * JavaScript regular expression used to disable a pattern of dates (defaults to null).  The {@link #disabledDates}
+     * config will generate <b>this</b> regex internally, but <b>if</b> you specify disabledDatesRE it will take precedence over the 
+     * disabledDates value.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Array} disabledDates
+     * An array of &quot;dates&quot; to disable, as strings. These strings will be used to build a dynamic regular
+     * expression so they are very powerful. Some examples:
+     * &lt;ul&gt;
+     * &lt;li&gt;[&quot;03/08/2003&quot;, &quot;09/16/2003&quot;] would disable those exact dates&lt;/li&gt;
+     * &lt;li&gt;[&quot;03/08&quot;, &quot;09/16&quot;] would disable those days <b>for</b> every year&lt;/li&gt;
+     * &lt;li&gt;[&quot;^03/08&quot;] would only match the beginning (useful <b>if</b> you are using short years)&lt;/li&gt;
+     * &lt;li&gt;[&quot;03/../2006&quot;] would disable every day <b>in</b> March 2006&lt;/li&gt;
+     * &lt;li&gt;[&quot;^03&quot;] would disable every day <b>in</b> every March&lt;/li&gt;
+     * &lt;/ul&gt;
+     * Note that the format of the dates included <b>in</b> the array should exactly match the {@link #format} config.
+     * In order to support regular expressions, <b>if</b> you are using a date format that has &quot;.&quot; <b>in</b> it, you will have to
+     * escape the dot when restricting dates. For example: [&quot;03\\.08\\.03&quot;].
+     */</i>
+
+    <i>// private</i>
+    initComponent : <b>function</b>(){
+        Ext.DatePicker.superclass.initComponent.call(<b>this</b>);
+
+        <b>this</b>.value = <b>this</b>.value ?
+                 <b>this</b>.value.clearTime() : <b>new</b> Date().clearTime();
+
+        <b>this</b>.addEvents(
+            <i>/**
+             * @event select
+             * Fires when a date is selected
+             * @param {DatePicker} <b>this</b>
+             * @param {Date} date The selected date
+             */</i>
+            <em>'select'</em>
+        );
+
+        <b>if</b>(this.handler){
+            <b>this</b>.on(&quot;select&quot;, <b>this</b>.handler,  <b>this</b>.scope || <b>this</b>);
+        }
+
+        <b>this</b>.initDisabledDays();
+    },
+
+    <i>// private</i>
+    initDisabledDays : <b>function</b>(){
+        <b>if</b>(!<b>this</b>.disabledDatesRE &amp;&amp; <b>this</b>.disabledDates){
+            <b>var</b> dd = <b>this</b>.disabledDates;
+            <b>var</b> re = &quot;(?:&quot;;
+            <b>for</b>(var i = 0; i &lt; dd.length; i++){
+                re += dd[i];
+                <b>if</b>(i != dd.length-1) re += &quot;|&quot;;
+            }
+            <b>this</b>.disabledDatesRE = <b>new</b> RegExp(re + &quot;)&quot;);
+        }
+    },
+    
+    <i>/**
+     * Replaces any existing disabled dates <b>with</b> new values and refreshes the DatePicker.
+     * @param {Array/RegExp} disabledDates An array of date strings (see the {@link #disabledDates} config
+     * <b>for</b> details on supported values), or a JavaScript regular expression used to disable a pattern of dates.
+     */</i>
+    setDisabledDates : <b>function</b>(dd){
+        <b>if</b>(Ext.isArray(dd)){
+            <b>this</b>.disabledDates = dd;
+            <b>this</b>.disabledDatesRE = null;
+        }<b>else</b>{
+            <b>this</b>.disabledDatesRE = dd;
+        }
+        <b>this</b>.initDisabledDays();
+        <b>this</b>.update(<b>this</b>.value, true);
+    },
+    
+    <i>/**
+     * Replaces any existing disabled days (by index, 0-6) <b>with</b> new values and refreshes the DatePicker.
+     * @param {Array} disabledDays An array of disabled day indexes. See the {@link #disabledDays} config
+     * <b>for</b> details on supported values.
+     */</i>
+    setDisabledDays : <b>function</b>(dd){
+        <b>this</b>.disabledDays = dd;
+        <b>this</b>.update(<b>this</b>.value, true);
+    },
+    
+    <i>/**
+     * Replaces any existing {@link #minDate} <b>with</b> the <b>new</b> value and refreshes the DatePicker.
+     * @param {Date} value The minimum date that can be selected
+     */</i>
+    setMinDate : <b>function</b>(dt){
+        <b>this</b>.minDate = dt;
+        <b>this</b>.update(<b>this</b>.value, true);
+    },
+    
+    <i>/**
+     * Replaces any existing {@link #maxDate} <b>with</b> the <b>new</b> value and refreshes the DatePicker.
+     * @param {Date} value The maximum date that can be selected
+     */</i>
+    setMaxDate : <b>function</b>(dt){
+        <b>this</b>.maxDate = dt;
+        <b>this</b>.update(<b>this</b>.value, true);
+    },
+
+    <i>/**
+     * Sets the value of the date field
+     * @param {Date} value The date to set
+     */</i>
+    setValue : <b>function</b>(value){
+        <b>var</b> old = <b>this</b>.value;
+        <b>this</b>.value = value.clearTime(true);
+        <b>if</b>(this.el){
+            <b>this</b>.update(<b>this</b>.value);
+        }
+    },
+
+    <i>/**
+     * Gets the current selected value of the date field
+     * @<b>return</b> {Date} The selected date
+     */</i>
+    getValue : <b>function</b>(){
+        <b>return</b> this.value;
+    },
+
+    <i>// private</i>
+    focus : <b>function</b>(){
+        <b>if</b>(this.el){
+            <b>this</b>.update(<b>this</b>.activeDate);
+        }
+    },
+    
+    <i>// private</i>
+    onEnable: <b>function</b>(initial){
+        Ext.DatePicker.superclass.onEnable.call(<b>this</b>);    
+        <b>this</b>.doDisabled(false);
+        <b>this</b>.update(initial ? <b>this</b>.value : <b>this</b>.activeDate);
+        <b>if</b>(Ext.isIE){
+            <b>this</b>.el.repaint();
+        }
+        
+    },
+    
+    <i>// private</i>
+    onDisable: <b>function</b>(){
+        Ext.DatePicker.superclass.onDisable.call(<b>this</b>);   
+        <b>this</b>.doDisabled(true);
+        <b>if</b>(Ext.isIE &amp;&amp; !Ext.isIE8){
+            <i>/* Really strange problem <b>in</b> IE6/7, when disabled, have to explicitly
+             * repaint each of the nodes to get them to display correctly, simply
+             * calling repaint on the main element doesn't appear to be enough.
+             */</i>
+             Ext.each([].concat(<b>this</b>.textNodes, <b>this</b>.el.query(<em>'th span'</em>)), <b>function</b>(el){
+                 Ext.fly(el).repaint();
+             });
+        }
+    },
+    
+    <i>// private</i>
+    doDisabled: <b>function</b>(disabled){
+        <b>this</b>.keyNav[disabled ? <em>'disable'</em> : <em>'enable'</em>](disabled);
+        <b>this</b>.leftClickRpt.setDisabled(disabled);
+        <b>this</b>.rightClickRpt.setDisabled(disabled);
+        <b>if</b>(this.showToday){
+            <b>this</b>.todayKeyListener[disabled ? <em>'disable'</em> : <em>'enable'</em>](disabled);
+            <b>this</b>.todayBtn.setDisabled(disabled);
+        }
+    },
+
+    <i>// private</i>
+    onRender : <b>function</b>(container, position){
+        <b>var</b> m = [
+             <em>'&lt;table cellspacing=&quot;0&quot;&gt;'</em>,
+                <em>'&lt;tr&gt;&lt;td class=&quot;x-date-left&quot;&gt;&lt;a href=&quot;#&quot; title=&quot;'</em>, <b>this</b>.prevText ,<em>'&quot;&gt;&amp;#160;&lt;/a&gt;&lt;/td&gt;&lt;td class=&quot;x-date-middle&quot; align=&quot;center&quot;&gt;&lt;/td&gt;&lt;td class=&quot;x-date-right&quot;&gt;&lt;a href=&quot;#&quot; title=&quot;'</em>, <b>this</b>.nextText ,<em>'&quot;&gt;&amp;#160;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;'</em>,
+                <em>'&lt;tr&gt;&lt;td colspan=&quot;3&quot;&gt;&lt;table class=&quot;x-date-inner&quot; cellspacing=&quot;0&quot;&gt;&lt;thead&gt;&lt;tr&gt;'</em>];
+        <b>var</b> dn = <b>this</b>.dayNames;
+        <b>for</b>(var i = 0; i &lt; 7; i++){
+            <b>var</b> d = <b>this</b>.startDay+i;
+            <b>if</b>(d &gt; 6){
+                d = d-7;
+            }
+            m.push(&quot;&lt;th&gt;&lt;span&gt;&quot;, dn[d].substr(0,1), &quot;&lt;/span&gt;&lt;/th&gt;&quot;);
+        }
+        m[m.length] = &quot;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&quot;;
+        <b>for</b>(var i = 0; i &lt; 42; i++) {
+            <b>if</b>(i % 7 == 0 &amp;&amp; i != 0){
+                m[m.length] = &quot;&lt;/tr&gt;&lt;tr&gt;&quot;;
+            }
+            m[m.length] = <em>'&lt;td&gt;&lt;a href=&quot;#&quot; hidefocus=&quot;on&quot; class=&quot;x-date-date&quot; tabIndex=&quot;1&quot;&gt;&lt;em&gt;&lt;span&gt;&lt;/span&gt;&lt;/em&gt;&lt;/a&gt;&lt;/td&gt;'</em>;
+        }
+        m.push(<em>'&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;'</em>, 
+                <b>this</b>.showToday ? <em>'&lt;tr&gt;&lt;td colspan=&quot;3&quot; class=&quot;x-date-bottom&quot; align=&quot;center&quot;&gt;&lt;/td&gt;&lt;/tr&gt;'</em> : <em>''</em>, 
+                <em>'&lt;/table&gt;&lt;div class=&quot;x-date-mp&quot;&gt;&lt;/div&gt;'</em>);
+
+        <b>var</b> el = document.createElement(&quot;div&quot;);
+        el.className = &quot;x-date-picker&quot;;
+        el.innerHTML = m.join(&quot;&quot;);
+
+        container.dom.insertBefore(el, position);
+
+        <b>this</b>.el = Ext.get(el);
+        <b>this</b>.eventEl = Ext.get(el.firstChild);
+
+        <b>this</b>.leftClickRpt = <b>new</b> Ext.util.ClickRepeater(<b>this</b>.el.child(&quot;td.x-date-left a&quot;), {
+            handler: <b>this</b>.showPrevMonth,
+            scope: <b>this</b>,
+            preventDefault:true,
+            stopDefault:true
+        });
+
+        <b>this</b>.rightClickRpt = <b>new</b> Ext.util.ClickRepeater(<b>this</b>.el.child(&quot;td.x-date-right a&quot;), {
+            handler: <b>this</b>.showNextMonth,
+            scope: <b>this</b>,
+            preventDefault:true,
+            stopDefault:true
+        });
+
+        <b>this</b>.eventEl.on(&quot;mousewheel&quot;, <b>this</b>.handleMouseWheel,  <b>this</b>);
+
+        <b>this</b>.monthPicker = <b>this</b>.el.down(<em>'div.x-date-mp'</em>);
+        <b>this</b>.monthPicker.enableDisplayMode(<em>'block'</em>);
+        
+        <b>this</b>.keyNav = <b>new</b> Ext.KeyNav(<b>this</b>.eventEl, {
+            &quot;left&quot; : <b>function</b>(e){
+                e.ctrlKey ?
+                    <b>this</b>.showPrevMonth() :
+                    <b>this</b>.update(<b>this</b>.activeDate.add(&quot;d&quot;, -1));
+            },
+
+            &quot;right&quot; : <b>function</b>(e){
+                e.ctrlKey ?
+                    <b>this</b>.showNextMonth() :
+                    <b>this</b>.update(<b>this</b>.activeDate.add(&quot;d&quot;, 1));
+            },
+
+            &quot;up&quot; : <b>function</b>(e){
+                e.ctrlKey ?
+                    <b>this</b>.showNextYear() :
+                    <b>this</b>.update(<b>this</b>.activeDate.add(&quot;d&quot;, -7));
+            },
+
+            &quot;down&quot; : <b>function</b>(e){
+                e.ctrlKey ?
+                    <b>this</b>.showPrevYear() :
+                    <b>this</b>.update(<b>this</b>.activeDate.add(&quot;d&quot;, 7));
+            },
+
+            &quot;pageUp&quot; : <b>function</b>(e){
+                <b>this</b>.showNextMonth();
+            },
+
+            &quot;pageDown&quot; : <b>function</b>(e){
+                <b>this</b>.showPrevMonth();
+            },
+
+            &quot;enter&quot; : <b>function</b>(e){
+                e.stopPropagation();
+                <b>return</b> true;
+            },
+
+            scope : <b>this</b>
+        });
+
+        <b>this</b>.eventEl.on(&quot;click&quot;, <b>this</b>.handleDateClick,  <b>this</b>, {delegate: &quot;a.x-date-date&quot;});
+
+        <b>this</b>.el.unselectable();
+        
+        <b>this</b>.cells = <b>this</b>.el.select(&quot;table.x-date-inner tbody td&quot;);
+        <b>this</b>.textNodes = <b>this</b>.el.query(&quot;table.x-date-inner tbody span&quot;);
+
+        <b>this</b>.mbtn = <b>new</b> Ext.Button({
+            text: &quot;&amp;#160;&quot;,
+            tooltip: <b>this</b>.monthYearText,
+            renderTo: <b>this</b>.el.child(&quot;td.x-date-middle&quot;, true)
+        });
+
+        <b>this</b>.mbtn.on(<em>'click'</em>, <b>this</b>.showMonthPicker, <b>this</b>);
+        <b>this</b>.mbtn.el.child(<b>this</b>.mbtn.menuClassTarget).addClass(&quot;x-btn-<b>with</b>-menu&quot;);
+
+        <b>if</b>(this.showToday){
+            <b>this</b>.todayKeyListener = <b>this</b>.eventEl.addKeyListener(Ext.EventObject.SPACE, <b>this</b>.selectToday,  <b>this</b>);
+            <b>var</b> today = (<b>new</b> Date()).dateFormat(<b>this</b>.format);
+            <b>this</b>.todayBtn = <b>new</b> Ext.Button({
+                renderTo: <b>this</b>.el.child(&quot;td.x-date-bottom&quot;, true),
+                text: String.format(<b>this</b>.todayText, today),
+                tooltip: String.format(<b>this</b>.todayTip, today),
+                handler: <b>this</b>.selectToday,
+                scope: <b>this</b>
+            });
+        }
+        
+        <b>if</b>(Ext.isIE){
+            <b>this</b>.el.repaint();
+        }
+        <b>this</b>.onEnable(true);
+    },
+
+    <i>// private</i>
+    createMonthPicker : <b>function</b>(){
+        <b>if</b>(!<b>this</b>.monthPicker.dom.firstChild){
+            <b>var</b> buf = [<em>'&lt;table border=&quot;0&quot; cellspacing=&quot;0&quot;&gt;'</em>];
+            <b>for</b>(var i = 0; i &lt; 6; i++){
+                buf.push(
+                    <em>'&lt;tr&gt;&lt;td class=&quot;x-date-mp-month&quot;&gt;&lt;a href=&quot;#&quot;&gt;'</em>, Date.getShortMonthName(i), <em>'&lt;/a&gt;&lt;/td&gt;'</em>,
+                    <em>'&lt;td class=&quot;x-date-mp-month x-date-mp-sep&quot;&gt;&lt;a href=&quot;#&quot;&gt;'</em>, Date.getShortMonthName(i + 6), <em>'&lt;/a&gt;&lt;/td&gt;'</em>,
+                    i == 0 ?
+                    <em>'&lt;td class=&quot;x-date-mp-ybtn&quot; align=&quot;center&quot;&gt;&lt;a class=&quot;x-date-mp-prev&quot;&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class=&quot;x-date-mp-ybtn&quot; align=&quot;center&quot;&gt;&lt;a class=&quot;x-date-mp-next&quot;&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;'</em> :
+                    <em>'&lt;td class=&quot;x-date-mp-year&quot;&gt;&lt;a href=&quot;#&quot;&gt;&lt;/a&gt;&lt;/td&gt;&lt;td class=&quot;x-date-mp-year&quot;&gt;&lt;a href=&quot;#&quot;&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;'</em>
+                );
+            }
+            buf.push(
+                <em>'&lt;tr class=&quot;x-date-mp-btns&quot;&gt;&lt;td colspan=&quot;4&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;x-date-mp-ok&quot;&gt;'</em>,
+                    <b>this</b>.okText,
+                    <em>'&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;x-date-mp-cancel&quot;&gt;'</em>,
+                    <b>this</b>.cancelText,
+                    <em>'&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;'</em>,
+                <em>'&lt;/table&gt;'</em>
+            );
+            <b>this</b>.monthPicker.update(buf.join(<em>''</em>));
+            <b>this</b>.monthPicker.on(<em>'click'</em>, <b>this</b>.onMonthClick, <b>this</b>);
+            <b>this</b>.monthPicker.on(<em>'dblclick'</em>, <b>this</b>.onMonthDblClick, <b>this</b>);
+
+            <b>this</b>.mpMonths = <b>this</b>.monthPicker.select(<em>'td.x-date-mp-month'</em>);
+            <b>this</b>.mpYears = <b>this</b>.monthPicker.select(<em>'td.x-date-mp-year'</em>);
+
+            <b>this</b>.mpMonths.each(<b>function</b>(m, a, i){
+                i += 1;
+                <b>if</b>((i%2) == 0){
+                    m.dom.xmonth = 5 + Math.round(i * .5);
+                }<b>else</b>{
+                    m.dom.xmonth = Math.round((i-1) * .5);
+                }
+            });
+        }
+    },
+
+    <i>// private</i>
+    showMonthPicker : <b>function</b>(){
+        <b>if</b>(!<b>this</b>.disabled){
+            <b>this</b>.createMonthPicker();
+            <b>var</b> size = <b>this</b>.el.getSize();
+            <b>this</b>.monthPicker.setSize(size);
+            <b>this</b>.monthPicker.child(<em>'table'</em>).setSize(size);
+
+            <b>this</b>.mpSelMonth = (<b>this</b>.activeDate || <b>this</b>.value).getMonth();
+            <b>this</b>.updateMPMonth(<b>this</b>.mpSelMonth);
+            <b>this</b>.mpSelYear = (<b>this</b>.activeDate || <b>this</b>.value).getFullYear();
+            <b>this</b>.updateMPYear(<b>this</b>.mpSelYear);
+
+            <b>this</b>.monthPicker.slideIn(<em>'t'</em>, {duration:.2});
+        }
+    },
+
+    <i>// private</i>
+    updateMPYear : <b>function</b>(y){
+        <b>this</b>.mpyear = y;
+        <b>var</b> ys = <b>this</b>.mpYears.elements;
+        <b>for</b>(var i = 1; i &lt;= 10; i++){
+            <b>var</b> td = ys[i-1], y2;
+            <b>if</b>((i%2) == 0){
+                y2 = y + Math.round(i * .5);
+                td.firstChild.innerHTML = y2;
+                td.xyear = y2;
+            }<b>else</b>{
+                y2 = y - (5-Math.round(i * .5));
+                td.firstChild.innerHTML = y2;
+                td.xyear = y2;
+            }
+            <b>this</b>.mpYears.item(i-1)[y2 == <b>this</b>.mpSelYear ? <em>'addClass'</em> : <em>'removeClass'</em>](<em>'x-date-mp-sel'</em>);
+        }
+    },
+
+    <i>// private</i>
+    updateMPMonth : <b>function</b>(sm){
+        <b>this</b>.mpMonths.each(<b>function</b>(m, a, i){
+            m[m.dom.xmonth == sm ? <em>'addClass'</em> : <em>'removeClass'</em>](<em>'x-date-mp-sel'</em>);
+        });
+    },
+
+    <i>// private</i>
+    selectMPMonth: <b>function</b>(m){
+        
+    },
+
+    <i>// private</i>
+    onMonthClick : <b>function</b>(e, t){
+        e.stopEvent();
+        <b>var</b> el = <b>new</b> Ext.Element(t), pn;
+        <b>if</b>(el.is(<em>'button.x-date-mp-cancel'</em>)){
+            <b>this</b>.hideMonthPicker();
+        }
+        <b>else</b> if(el.is(<em>'button.x-date-mp-ok'</em>)){
+            <b>var</b> d = <b>new</b> Date(<b>this</b>.mpSelYear, <b>this</b>.mpSelMonth, (<b>this</b>.activeDate || <b>this</b>.value).getDate());
+            <b>if</b>(d.getMonth() != <b>this</b>.mpSelMonth){
+                <i>// &quot;fix&quot; the JS rolling date conversion <b>if</b> needed</i>
+                d = <b>new</b> Date(<b>this</b>.mpSelYear, <b>this</b>.mpSelMonth, 1).getLastDateOfMonth();
+            }
+            <b>this</b>.update(d);
+            <b>this</b>.hideMonthPicker();
+        }
+        <b>else</b> if(pn = el.up(<em>'td.x-date-mp-month'</em>, 2)){
+            <b>this</b>.mpMonths.removeClass(<em>'x-date-mp-sel'</em>);
+            pn.addClass(<em>'x-date-mp-sel'</em>);
+            <b>this</b>.mpSelMonth = pn.dom.xmonth;
+        }
+        <b>else</b> if(pn = el.up(<em>'td.x-date-mp-year'</em>, 2)){
+            <b>this</b>.mpYears.removeClass(<em>'x-date-mp-sel'</em>);
+            pn.addClass(<em>'x-date-mp-sel'</em>);
+            <b>this</b>.mpSelYear = pn.dom.xyear;
+        }
+        <b>else</b> if(el.is(<em>'a.x-date-mp-prev'</em>)){
+            <b>this</b>.updateMPYear(<b>this</b>.mpyear-10);
+        }
+        <b>else</b> if(el.is(<em>'a.x-date-mp-next'</em>)){
+            <b>this</b>.updateMPYear(<b>this</b>.mpyear+10);
+        }
+    },
+
+    <i>// private</i>
+    onMonthDblClick : <b>function</b>(e, t){
+        e.stopEvent();
+        <b>var</b> el = <b>new</b> Ext.Element(t), pn;
+        <b>if</b>(pn = el.up(<em>'td.x-date-mp-month'</em>, 2)){
+            <b>this</b>.update(<b>new</b> Date(<b>this</b>.mpSelYear, pn.dom.xmonth, (<b>this</b>.activeDate || <b>this</b>.value).getDate()));
+            <b>this</b>.hideMonthPicker();
+        }
+        <b>else</b> if(pn = el.up(<em>'td.x-date-mp-year'</em>, 2)){
+            <b>this</b>.update(<b>new</b> Date(pn.dom.xyear, <b>this</b>.mpSelMonth, (<b>this</b>.activeDate || <b>this</b>.value).getDate()));
+            <b>this</b>.hideMonthPicker();
+        }
+    },
+
+    <i>// private</i>
+    hideMonthPicker : <b>function</b>(disableAnim){
+        <b>if</b>(this.monthPicker){
+            <b>if</b>(disableAnim === true){
+                <b>this</b>.monthPicker.hide();
+            }<b>else</b>{
+                <b>this</b>.monthPicker.slideOut(<em>'t'</em>, {duration:.2});
+            }
+        }
+    },
+
+    <i>// private</i>
+    showPrevMonth : <b>function</b>(e){
+        <b>this</b>.update(<b>this</b>.activeDate.add(&quot;mo&quot;, -1));
+    },
+
+    <i>// private</i>
+    showNextMonth : <b>function</b>(e){
+        <b>this</b>.update(<b>this</b>.activeDate.add(&quot;mo&quot;, 1));
+    },
+
+    <i>// private</i>
+    showPrevYear : <b>function</b>(){
+        <b>this</b>.update(<b>this</b>.activeDate.add(&quot;y&quot;, -1));
+    },
+
+    <i>// private</i>
+    showNextYear : <b>function</b>(){
+        <b>this</b>.update(<b>this</b>.activeDate.add(&quot;y&quot;, 1));
+    },
+
+    <i>// private</i>
+    handleMouseWheel : <b>function</b>(e){
+        e.stopEvent();
+        <b>if</b>(!<b>this</b>.disabled){
+            <b>var</b> delta = e.getWheelDelta();
+            <b>if</b>(delta &gt; 0){
+                <b>this</b>.showPrevMonth();
+            } <b>else</b> if(delta &lt; 0){
+                <b>this</b>.showNextMonth();
+            }
+        }
+    },
+
+    <i>// private</i>
+    handleDateClick : <b>function</b>(e, t){
+        e.stopEvent();
+        <b>if</b>(!<b>this</b>.disabled &amp;&amp; t.dateValue &amp;&amp; !Ext.fly(t.parentNode).hasClass(&quot;x-date-disabled&quot;)){
+            <b>this</b>.setValue(<b>new</b> Date(t.dateValue));
+            <b>this</b>.fireEvent(&quot;select&quot;, <b>this</b>, <b>this</b>.value);
+        }
+    },
+
+    <i>// private</i>
+    selectToday : <b>function</b>(){
+        <b>if</b>(this.todayBtn &amp;&amp; !<b>this</b>.todayBtn.disabled){
+	        <b>this</b>.setValue(<b>new</b> Date().clearTime());
+	        <b>this</b>.fireEvent(&quot;select&quot;, <b>this</b>, <b>this</b>.value);
+        }
+    },
+
+    <i>// private</i>
+    update : <b>function</b>(date, forceRefresh){
+        <b>var</b> vd = <b>this</b>.activeDate, vis = <b>this</b>.isVisible();
+        <b>this</b>.activeDate = date;
+        <b>if</b>(!forceRefresh &amp;&amp; vd &amp;&amp; <b>this</b>.el){
+            <b>var</b> t = date.getTime();
+            <b>if</b>(vd.getMonth() == date.getMonth() &amp;&amp; vd.getFullYear() == date.getFullYear()){
+                <b>this</b>.cells.removeClass(&quot;x-date-selected&quot;);
+                <b>this</b>.cells.each(<b>function</b>(c){
+                   <b>if</b>(c.dom.firstChild.dateValue == t){
+                       c.addClass(&quot;x-date-selected&quot;);
+                       <b>if</b>(vis){
+                           setTimeout(<b>function</b>(){
+                               try{c.dom.firstChild.focus();}catch(e){}
+                           }, 50);
+                       }
+                       <b>return</b> false;
+                   }
+                });
+                <b>return</b>;
+            }
+        }
+        <b>var</b> days = date.getDaysInMonth();
+        <b>var</b> firstOfMonth = date.getFirstDateOfMonth();
+        <b>var</b> startingPos = firstOfMonth.getDay()-<b>this</b>.startDay;
+
+        <b>if</b>(startingPos &lt; 0){
+            startingPos += 7;
+        }
+
+        <b>var</b> pm = date.add(&quot;mo&quot;, -1);
+        <b>var</b> prevStart = pm.getDaysInMonth()-startingPos;
+
+        <b>var</b> cells = <b>this</b>.cells.elements;
+        <b>var</b> textEls = <b>this</b>.textNodes;
+        days += startingPos;
+
+        <i>// convert everything to numbers so it's fast</i>
+        <b>var</b> day = 86400000;
+        <b>var</b> d = (<b>new</b> Date(pm.getFullYear(), pm.getMonth(), prevStart)).clearTime();
+        <b>var</b> today = <b>new</b> Date().clearTime().getTime();
+        <b>var</b> sel = date.clearTime().getTime();
+        <b>var</b> min = <b>this</b>.minDate ? <b>this</b>.minDate.clearTime() : Number.NEGATIVE_INFINITY;
+        <b>var</b> max = <b>this</b>.maxDate ? <b>this</b>.maxDate.clearTime() : Number.POSITIVE_INFINITY;
+        <b>var</b> ddMatch = <b>this</b>.disabledDatesRE;
+        <b>var</b> ddText = <b>this</b>.disabledDatesText;
+        <b>var</b> ddays = <b>this</b>.disabledDays ? <b>this</b>.disabledDays.join(&quot;&quot;) : false;
+        <b>var</b> ddaysText = <b>this</b>.disabledDaysText;
+        <b>var</b> format = <b>this</b>.format;
+        
+        <b>if</b>(this.showToday){
+            <b>var</b> td = <b>new</b> Date().clearTime();
+            <b>var</b> disable = (td &lt; min || td &gt; max || 
+                (ddMatch &amp;&amp; format &amp;&amp; ddMatch.test(td.dateFormat(format))) || 
+                (ddays &amp;&amp; ddays.indexOf(td.getDay()) != -1));
+                        
+            <b>if</b>(!<b>this</b>.disabled){
+                <b>this</b>.todayBtn.setDisabled(disable);
+                <b>this</b>.todayKeyListener[disable ? <em>'disable'</em> : <em>'enable'</em>]();
+            }
+        }
+
+        <b>var</b> setCellClass = <b>function</b>(cal, cell){
+            cell.title = &quot;&quot;;
+            <b>var</b> t = d.getTime();
+            cell.firstChild.dateValue = t;
+            <b>if</b>(t == today){
+                cell.className += &quot; x-date-today&quot;;
+                cell.title = cal.todayText;
+            }
+            <b>if</b>(t == sel){
+                cell.className += &quot; x-date-selected&quot;;
+                <b>if</b>(vis){
+                    setTimeout(<b>function</b>(){
+                        try{cell.firstChild.focus();}catch(e){}
+                    }, 50);
+                }
+            }
+            <i>// disabling</i>
+            <b>if</b>(t &lt; min) {
+                cell.className = &quot; x-date-disabled&quot;;
+                cell.title = cal.minText;
+                <b>return</b>;
+            }
+            <b>if</b>(t &gt; max) {
+                cell.className = &quot; x-date-disabled&quot;;
+                cell.title = cal.maxText;
+                <b>return</b>;
+            }
+            <b>if</b>(ddays){
+                <b>if</b>(ddays.indexOf(d.getDay()) != -1){
+                    cell.title = ddaysText;
+                    cell.className = &quot; x-date-disabled&quot;;
+                }
+            }
+            <b>if</b>(ddMatch &amp;&amp; format){
+                <b>var</b> fvalue = d.dateFormat(format);
+                <b>if</b>(ddMatch.test(fvalue)){
+                    cell.title = ddText.replace(&quot;%0&quot;, fvalue);
+                    cell.className = &quot; x-date-disabled&quot;;
+                }
+            }
+        };
+
+        <b>var</b> i = 0;
+        <b>for</b>(; i &lt; startingPos; i++) {
+            textEls[i].innerHTML = (++prevStart);
+            d.setDate(d.getDate()+1);
+            cells[i].className = &quot;x-date-prevday&quot;;
+            setCellClass(<b>this</b>, cells[i]);
+        }
+        <b>for</b>(; i &lt; days; i++){
+            <b>var</b> intDay = i - startingPos + 1;
+            textEls[i].innerHTML = (intDay);
+            d.setDate(d.getDate()+1);
+            cells[i].className = &quot;x-date-active&quot;;
+            setCellClass(<b>this</b>, cells[i]);
+        }
+        <b>var</b> extraDays = 0;
+        <b>for</b>(; i &lt; 42; i++) {
+             textEls[i].innerHTML = (++extraDays);
+             d.setDate(d.getDate()+1);
+             cells[i].className = &quot;x-date-nextday&quot;;
+             setCellClass(<b>this</b>, cells[i]);
+        }
+
+        <b>this</b>.mbtn.setText(<b>this</b>.monthNames[date.getMonth()] + &quot; &quot; + date.getFullYear());
+
+        <b>if</b>(!<b>this</b>.internalRender){
+            <b>var</b> main = <b>this</b>.el.dom.firstChild;
+            <b>var</b> w = main.offsetWidth;
+            <b>this</b>.el.setWidth(w + <b>this</b>.el.getBorderWidth(&quot;lr&quot;));
+            Ext.fly(main).setWidth(w);
+            <b>this</b>.internalRender = true;
+            <i>// opera does not respect the auto grow header center column</i>
+            <i>// then, after it gets a width opera refuses to recalculate</i>
+            <i>// without a second pass</i>
+            <b>if</b>(Ext.isOpera &amp;&amp; !<b>this</b>.secondPass){
+                main.rows[0].cells[1].style.width = (w - (main.rows[0].cells[0].offsetWidth+main.rows[0].cells[2].offsetWidth)) + &quot;px&quot;;
+                <b>this</b>.secondPass = true;
+                <b>this</b>.update.defer(10, <b>this</b>, [date]);
+            }
+        }
+    },
+
+    <i>// private</i>
+    beforeDestroy : <b>function</b>() {
+        <b>if</b>(this.rendered){
+            <b>this</b>.keyNav.disable();
+            <b>this</b>.keyNav = null;
+            Ext.destroy(
+                <b>this</b>.leftClickRpt,
+                <b>this</b>.rightClickRpt,
+                <b>this</b>.monthPicker,
+                <b>this</b>.eventEl,
+                <b>this</b>.mbtn,
+                <b>this</b>.todayBtn
+            );
+        }
+    }
+
+    <i>/**
+     * @cfg {String} autoEl @hide
+     */</i>
+});
+Ext.reg(<em>'datepicker'</em>, Ext.DatePicker);</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

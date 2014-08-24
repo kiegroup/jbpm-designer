@@ -1,0 +1,256 @@
+<html><head><title>ext-lang-pt.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ext-lang-pt.js</h1><pre class="highlighted"><code><i>/*
+ * Portuguese/Brazil Translation by Weber Souza
+ * 08 April 2007
+ * Updated by Allan Brazute Alves (EthraZa)
+ * 06 September 2007
+ * Adapted to European Portuguese by Helder Batista (hbatista)
+ * 31 January 2008
+ */</i>
+
+Ext.UpdateManager.defaults.indicatorText = <em>'&lt;div class=&quot;loading-indicator&quot;&gt;Carregando...&lt;/div&gt;'</em>;
+
+<b>if</b>(Ext.View){
+   Ext.View.prototype.emptyText = &quot;&quot;;
+}
+
+<b>if</b>(Ext.grid.GridPanel){
+   Ext.grid.GridPanel.prototype.ddText = &quot;{0} linha(s) seleccionada(s)&quot;;
+}
+
+<b>if</b>(Ext.TabPanelItem){
+   Ext.TabPanelItem.prototype.closeText = &quot;Fechar&quot;;
+}
+
+<b>if</b>(Ext.form.Field){
+   Ext.form.Field.prototype.invalidText = &quot;O valor para este campo &amp;eacute; inv&amp;aacute;lido&quot;;
+}
+
+<b>if</b>(Ext.LoadMask){
+    Ext.LoadMask.prototype.msg = &quot;Carregando...&quot;;
+}
+
+Date.monthNames = [
+   &quot;Janeiro&quot;,
+   &quot;Fevereiro&quot;,
+   &quot;Mar&amp;ccedil;o&quot;,
+   &quot;Abril&quot;,
+   &quot;Maio&quot;,
+   &quot;Junho&quot;,
+   &quot;Julho&quot;,
+   &quot;Agosto&quot;,
+   &quot;Setembro&quot;,
+   &quot;Outubro&quot;,
+   &quot;Novembro&quot;,
+   &quot;Dezembro&quot;
+];
+
+Date.dayNames = [
+   &quot;Domingo&quot;,
+   &quot;Segunda&quot;,
+   &quot;Ter&amp;ccedil;a&quot;,
+   &quot;Quarta&quot;,
+   &quot;Quinta&quot;,
+   &quot;Sexta&quot;,
+   &quot;S&amp;aacute;bado&quot;
+];
+
+<b>if</b>(Ext.MessageBox){
+   Ext.MessageBox.buttonText = {
+      ok     : &quot;OK&quot;,
+      cancel : &quot;Cancelar&quot;,
+      yes    : &quot;Sim&quot;,
+      no     : &quot;N&amp;atilde;o&quot;
+   };
+}
+
+<b>if</b>(Ext.util.Format){
+   Ext.util.Format.date = <b>function</b>(v, format){
+      <b>if</b>(!v) <b>return</b> &quot;&quot;;
+      <b>if</b>(!(v instanceof Date)) v = <b>new</b> Date(Date.parse(v));
+      <b>return</b> v.dateFormat(format || &quot;d/m/Y&quot;);
+   };
+}
+
+<b>if</b>(Ext.DatePicker){
+   Ext.apply(Ext.DatePicker.prototype, {
+      todayText         : &quot;Hoje&quot;,
+      minText           : &quot;Esta data &amp;eacute; anterior &amp;agrave; menor data&quot;,
+      maxText           : &quot;Esta data &amp;eacute; posterior &amp;agrave; maior data&quot;,
+      disabledDaysText  : &quot;&quot;,
+      disabledDatesText : &quot;&quot;,
+      monthNames        : Date.monthNames,
+      dayNames          : Date.dayNames,
+      nextText          : <em>'Pr&amp;oacute;ximo M&amp;ecirc;s (Control+Direita)'</em>,
+      prevText          : <em>'M&amp;ecirc;s Anterior (Control+Esquerda)'</em>,
+      monthYearText     : <em>'Escolha um M&amp;ecirc;s (Control+Cima/Baixo para mover entre os anos)'</em>,
+      todayTip          : &quot;{0} (Espa&amp;ccedil;o)&quot;,
+      format            : &quot;d/m/Y&quot;,
+      okText            : &quot;&amp;#160;OK&amp;#160;&quot;,
+      cancelText        : &quot;Cancelar&quot;,
+      startDay          : 0
+   });
+}
+
+<b>if</b>(Ext.PagingToolbar){
+   Ext.apply(Ext.PagingToolbar.prototype, {
+      beforePageText : &quot;P&amp;aacute;gina&quot;,
+      afterPageText  : &quot;de {0}&quot;,
+      firstText      : &quot;Primeira P&amp;aacute;gina&quot;,
+      prevText       : &quot;P&amp;aacute;gina Anterior&quot;,
+      nextText       : &quot;Pr&amp;oacute;xima P&amp;aacute;gina&quot;,
+      lastText       : &quot;&amp;Uacute;ltima P&amp;aacute;gina&quot;,
+      refreshText    : &quot;Atualizar&quot;,
+      displayMsg     : &quot;&lt;b&gt;{0} &amp;agrave; {1} de {2} registo(s)&lt;/b&gt;&quot;,
+      emptyMsg       : <em>'Sem registos para exibir'</em>
+   });
+}
+
+<b>if</b>(Ext.form.TextField){
+   Ext.apply(Ext.form.TextField.prototype, {
+      minLengthText : &quot;O tamanho m&amp;iacute;nimo para este campo &amp;eacute; {0}&quot;,
+      maxLengthText : &quot;O tamanho m&amp;aacute;ximo para este campo &amp;eacute; {0}&quot;,
+      blankText     : &quot;Este campo &amp;eacute; obrigat&amp;oacute;rio.&quot;,
+      regexText     : &quot;&quot;,
+      emptyText     : null
+   });
+}
+
+<b>if</b>(Ext.form.NumberField){
+   Ext.apply(Ext.form.NumberField.prototype, {
+      minText : &quot;O valor m&amp;iacute;nimo para este campo &amp;eacute; {0}&quot;,
+      maxText : &quot;O valor m&amp;aacute;ximo para este campo &amp;eacute; {0}&quot;,
+      nanText : &quot;{0} n&amp;atilde;o &amp;eacute; um n&amp;uacute;mero v&amp;aacute;lido&quot;
+   });
+}
+
+<b>if</b>(Ext.form.DateField){
+   Ext.apply(Ext.form.DateField.prototype, {
+      disabledDaysText  : &quot;Desabilitado&quot;,
+      disabledDatesText : &quot;Desabilitado&quot;,
+      minText           : &quot;A data deste campo deve ser posterior a {0}&quot;,
+      maxText           : &quot;A data deste campo deve ser anterior a {0}&quot;,
+      invalidText       : &quot;{0} n&amp;atilde;o &amp;eacute; uma data v&amp;aacute;lida - deve ser usado o formato {1}&quot;,
+      format            : &quot;d/m/Y&quot;
+   });
+}
+
+<b>if</b>(Ext.form.ComboBox){
+   Ext.apply(Ext.form.ComboBox.prototype, {
+      loadingText       : &quot;Carregando...&quot;,
+      valueNotFoundText : undefined
+   });
+}
+
+<b>if</b>(Ext.form.VTypes){
+   Ext.apply(Ext.form.VTypes, {
+      emailText    : <em>'Este campo deve ser um endere&amp;ccedil;o de e-mail v&amp;aacute;lido, no formato &quot;utilizador@dominio.com&quot;'</em>,
+      urlText      : <em>'Este campo deve ser um URL no formato &quot;http:/'</em>+<em>'/www.dominio.com&quot;'</em>,
+      alphaText    : <em>'Este campo deve conter apenas letras e _'</em>,
+      alphanumText : <em>'Este campo deve conter apenas letras, n&amp;uacute;meros e _'</em>
+   });
+}
+
+<b>if</b>(Ext.form.HtmlEditor){
+   Ext.apply(Ext.form.HtmlEditor.prototype, {
+	 createLinkText : <em>'Por favor, entre com o URL <b>do</b> link:'</em>,
+	 buttonTips : {
+            bold : {
+               title: <em>'Negrito (Ctrl+B)'</em>,
+               text: <em>'Deixa o texto seleccionado em negrito.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+            },
+            italic : {
+               title: <em>'Italico (Ctrl+I)'</em>,
+               text: <em>'Deixa o texto seleccionado em italico.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+            },
+            underline : {
+               title: <em>'Sublinhado (Ctrl+U)'</em>,
+               text: <em>'Sublinha o texto seleccionado.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           increasefontsize : {
+               title: <em>'Aumentar Texto'</em>,
+               text: <em>'Aumenta o tamanho da fonte.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           decreasefontsize : {
+               title: <em>'Diminuir Texto'</em>,
+               text: <em>'Diminui o tamanho da fonte.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           backcolor : {
+               title: <em>'Cor de Fundo'</em>,
+               text: <em>'Muda a cor <b>do</b> fundo <b>do</b> texto seleccionado.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           forecolor : {
+               title: <em>'Cor da Fonte'</em>,
+               text: <em>'Muda a cor <b>do</b> texto seleccionado.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           justifyleft : {
+               title: <em>'Alinhar &amp;agrave; Esquerda'</em>,
+               text: <em>'Alinha o texto &amp;agrave; esquerda.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           justifycenter : {
+               title: <em>'Centrar Texto'</em>,
+               text: <em>'Centra o texto no editor.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           justifyright : {
+               title: <em>'Alinhar &amp;agrave; Direita'</em>,
+               text: <em>'Alinha o texto &amp;agrave; direita.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           insertunorderedlist : {
+               title: <em>'Lista com Marcadores'</em>,
+               text: <em>'Inicia uma lista com marcadores.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           insertorderedlist : {
+               title: <em>'Lista Numerada'</em>,
+               text: <em>'Inicia uma lista numerada.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           createlink : {
+               title: <em>'Hyperliga&amp;ccedil;&amp;atilde;o'</em>,
+               text: <em>'Transforma o texto selecionado num hyperlink.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           sourceedit : {
+               title: <em>'Editar Fonte'</em>,
+               text: <em>'Troca para o modo de edi&amp;ccedil;&amp;atilde;o de c&amp;oacute;digo fonte.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           }
+        }
+   });
+}
+
+<b>if</b>(Ext.grid.GridView){
+   Ext.apply(Ext.grid.GridView.prototype, {
+      sortAscText  : &quot;Ordem Ascendente&quot;,
+      sortDescText : &quot;Ordem Descendente&quot;,
+      lockText     : &quot;Bloquear Coluna&quot;,
+      unlockText   : &quot;Desbloquear Coluna&quot;,
+      columnsText  : &quot;Colunas&quot;
+   });
+}
+
+<b>if</b>(Ext.grid.PropertyColumnModel){
+   Ext.apply(Ext.grid.PropertyColumnModel.prototype, {
+      nameText   : &quot;Nome&quot;,
+      valueText  : &quot;Valor&quot;,
+      dateFormat : &quot;d/m/Y&quot;
+   });
+}
+
+<b>if</b>(Ext.layout.BorderLayout &amp;&amp; Ext.layout.BorderLayout.SplitRegion){
+   Ext.apply(Ext.layout.BorderLayout.SplitRegion.prototype, {
+      splitTip            : &quot;Arraste para redimensionar.&quot;,
+      collapsibleSplitTip : &quot;Arraste para redimensionar. Duplo clique para esconder.&quot;
+   });
+}
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

@@ -1,0 +1,187 @@
+<html><head><title>CycleButton.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>CycleButton.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.CycleButton
+ * @extends Ext.SplitButton
+ * A specialized SplitButton that contains a menu of {@link Ext.menu.CheckItem} elements.  The button automatically
+ * cycles through each menu item on click, raising the button<em>'s {@link #change} event (or calling the button'</em>s
+ * {@link #changeHandler} <b>function</b>, <b>if</b> supplied) <b>for</b> the active menu item. Clicking on the arrow section of the
+ * button displays the dropdown menu just like a normal SplitButton.  Example usage:
+ * &lt;pre&gt;&lt;code&gt;
+<b>var</b> btn = <b>new</b> Ext.CycleButton({
+    showText: true,
+    prependText: <em>'View as '</em>,
+    items: [{
+        text:<em>'text only'</em>,
+        iconCls:<em>'view-text'</em>,
+        checked:true
+    },{
+        text:<em>'HTML'</em>,
+        iconCls:<em>'view-html'</em>
+    }],
+    changeHandler:<b>function</b>(btn, item){
+        Ext.Msg.alert(<em>'Change View'</em>, item.text);
+    }
+});
+&lt;/code&gt;&lt;/pre&gt;
+ * @constructor
+ * Create a <b>new</b> split button
+ * @param {Object} config The config object
+ */</i>
+Ext.CycleButton = Ext.extend(Ext.SplitButton, {
+    <i>/**
+     * @cfg {Array} items An array of {@link Ext.menu.CheckItem} &lt;b&gt;config&lt;/b&gt; objects to be used when creating the
+     * button<em>'s menu items (e.g., {text:'</em>Foo<em>', iconCls:'</em>foo-icon'})
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} showText True to display the active item's text as the button text (defaults to false)
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} prependText A static string to prepend before the active item's text when displayed as the
+     * button<em>'s text (only applies when showText = true, defaults to '</em>')
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Function} changeHandler A callback <b>function</b> that will be invoked each time the active menu
+     * item <b>in</b> the button's menu has changed.  If <b>this</b> callback is not supplied, the SplitButton will instead
+     * fire the {@link #change} event on active item change.  The changeHandler <b>function</b> will be called <b>with</b> the
+     * following argument list: (SplitButton <b>this</b>, Ext.menu.CheckItem item)
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} forceIcon A css class which sets an image to be used as the static icon <b>for</b> this button.  This
+     * icon will always be displayed regardless of which item is selected <b>in</b> the dropdown list.  This overrides the 
+     * <b>default</b> behavior of changing the button<em>'s icon to match the selected item'</em>s icon on change.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @property menu
+     * @type Menu
+     * The {@link Ext.menu.Menu Menu} object used to display the {@link Ext.menu.CheckItem CheckItems} representing the available choices.
+     */</i>
+
+    <i>// private</i>
+    getItemText : <b>function</b>(item){
+        <b>if</b>(item &amp;&amp; <b>this</b>.showText === true){
+            <b>var</b> text = <em>''</em>;
+            <b>if</b>(this.prependText){
+                text += <b>this</b>.prependText;
+            }
+            text += item.text;
+            <b>return</b> text;
+        }
+        <b>return</b> undefined;
+    },
+
+    <i>/**
+     * Sets the button's active menu item.
+     * @param {Ext.menu.CheckItem} item The item to activate
+     * @param {Boolean} suppressEvent True to prevent the button's change event from firing (defaults to false)
+     */</i>
+    setActiveItem : <b>function</b>(item, suppressEvent){
+        <b>if</b>(typeof item != <em>'object'</em>){
+            item = <b>this</b>.menu.items.get(item);
+        }
+        <b>if</b>(item){
+            <b>if</b>(!<b>this</b>.rendered){
+                <b>this</b>.text = <b>this</b>.getItemText(item);
+                <b>this</b>.iconCls = item.iconCls;
+            }<b>else</b>{
+                <b>var</b> t = <b>this</b>.getItemText(item);
+                <b>if</b>(t){
+                    <b>this</b>.setText(t);
+                }
+                <b>this</b>.setIconClass(item.iconCls);
+            }
+            <b>this</b>.activeItem = item;
+            <b>if</b>(!item.checked){
+                item.setChecked(true, true);
+            }
+            <b>if</b>(this.forceIcon){
+                <b>this</b>.setIconClass(<b>this</b>.forceIcon);
+            }
+            <b>if</b>(!suppressEvent){
+                <b>this</b>.fireEvent(<em>'change'</em>, <b>this</b>, item);
+            }
+        }
+    },
+
+    <i>/**
+     * Gets the currently active menu item.
+     * @<b>return</b> {Ext.menu.CheckItem} The active item
+     */</i>
+    getActiveItem : <b>function</b>(){
+        <b>return</b> this.activeItem;
+    },
+
+    <i>// private</i>
+    initComponent : <b>function</b>(){
+        <b>this</b>.addEvents(
+            <i>/**
+             * @event change
+             * Fires after the button's active menu item has changed.  Note that <b>if</b> a {@link #changeHandler} <b>function</b>
+             * is set on <b>this</b> CycleButton, it will be called instead on active item change and <b>this</b> change event will
+             * not be fired.
+             * @param {Ext.CycleButton} <b>this</b>
+             * @param {Ext.menu.CheckItem} item The menu item that was selected
+             */</i>
+            &quot;change&quot;
+        );
+
+        <b>if</b>(this.changeHandler){
+            <b>this</b>.on(<em>'change'</em>, <b>this</b>.changeHandler, <b>this</b>.scope||<b>this</b>);
+            <b>delete</b> this.changeHandler;
+        }
+
+        <b>this</b>.itemCount = <b>this</b>.items.length;
+
+        <b>this</b>.menu = {cls:<em>'x-cycle-menu'</em>, items:[]};
+        <b>var</b> checked;
+        <b>for</b>(var i = 0, len = <b>this</b>.itemCount; i &lt; len; i++){
+            <b>var</b> item = <b>this</b>.items[i];
+            item.group = item.group || <b>this</b>.id;
+            item.itemIndex = i;
+            item.checkHandler = <b>this</b>.checkHandler;
+            item.scope = <b>this</b>;
+            item.checked = item.checked || false;
+            <b>this</b>.menu.items.push(item);
+            <b>if</b>(item.checked){
+                checked = item;
+            }
+        }
+        <b>this</b>.setActiveItem(checked, true);
+        Ext.CycleButton.superclass.initComponent.call(<b>this</b>);
+
+        <b>this</b>.on(<em>'click'</em>, <b>this</b>.toggleSelected, <b>this</b>);
+    },
+
+    <i>// private</i>
+    checkHandler : <b>function</b>(item, pressed){
+        <b>if</b>(pressed){
+            <b>this</b>.setActiveItem(item);
+        }
+    },
+
+    <i>/**
+     * This is normally called internally on button click, but can be called externally to advance the button's
+     * active item programmatically to the next one <b>in</b> the menu.  If the current item is the last one <b>in</b> the menu
+     * the active item will be set to the first item <b>in</b> the menu.
+     */</i>
+    toggleSelected : <b>function</b>(){
+        <b>this</b>.menu.render();
+        
+        <b>var</b> nextIdx, checkItem;
+        <b>for</b> (<b>var</b> i = 1; i &lt; <b>this</b>.itemCount; i++) {
+            nextIdx = (<b>this</b>.activeItem.itemIndex + i) % <b>this</b>.itemCount;
+            <i>// check the potential item</i>
+            checkItem = <b>this</b>.menu.items.itemAt(nextIdx);
+            <i>// <b>if</b> its not disabled then check it.</i>
+            <b>if</b> (!checkItem.disabled) {
+                checkItem.setChecked(true);
+                <b>break</b>;
+            }
+        }
+    }
+});
+Ext.reg(<em>'cycle'</em>, Ext.CycleButton);</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

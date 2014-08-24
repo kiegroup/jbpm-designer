@@ -1,0 +1,245 @@
+<html><head><title>CellSelectionModel.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>CellSelectionModel.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.grid.CellSelectionModel
+ * @extends Ext.grid.AbstractSelectionModel
+ * This class provides the basic implementation <b>for</b> single cell selection <b>in</b> a grid. The object stored
+ * as the selection and returned by {@link getSelectedCell} contains the following properties:
+ * &lt;div class=&quot;mdetail-params&quot;&gt;&lt;ul&gt;
+ * &lt;li&gt;&lt;b&gt;record&lt;/b&gt; : Ext.data.record&lt;p class=&quot;sub-desc&quot;&gt;The {@link Ext.data.Record Record}
+ * which provides the data <b>for</b> the row containing the selection&lt;/p&gt;&lt;/li&gt;
+ * &lt;li&gt;&lt;b&gt;cell&lt;/b&gt; : Ext.data.record&lt;p class=&quot;sub-desc&quot;&gt;An object containing the
+ * following properties:
+ * &lt;div class=&quot;mdetail-params&quot;&gt;&lt;ul&gt;
+ * &lt;li&gt;&lt;b&gt;rowIndex&lt;/b&gt; : Number&lt;p class=&quot;sub-desc&quot;&gt;The index of the selected row&lt;/p&gt;&lt;/li&gt;
+ * &lt;li&gt;&lt;b&gt;cellIndex&lt;/b&gt; : Number&lt;p class=&quot;sub-desc&quot;&gt;The index of the selected cell&lt;br&gt;
+ * &lt;b&gt;Note that due to possible column reordering, the cellIndex should not be used as an index into
+ * the Record's data. Instead, the &lt;i&gt;name&lt;/i&gt; of the selected field should be determined
+ * <b>in</b> order to retrieve the data value from the record by name:&lt;/b&gt;&lt;pre&gt;&lt;code&gt;
+    <b>var</b> fieldName = grid.getColumnModel().getDataIndex(cellIndex);
+    <b>var</b> data = record.get(fieldName);
+&lt;/code&gt;&lt;/pre&gt;&lt;/p&gt;&lt;/li&gt;
+ * &lt;/ul&gt;&lt;/div&gt;&lt;/p&gt;&lt;/li&gt;
+ * &lt;/ul&gt;&lt;/div&gt;
+ * @constructor
+ * @param {Object} config The object containing the configuration of <b>this</b> model.
+ */</i>
+Ext.grid.CellSelectionModel = <b>function</b>(config){
+    Ext.apply(<b>this</b>, config);
+
+    <b>this</b>.selection = null;
+
+    <b>this</b>.addEvents(
+        <i>/**
+	     * @event beforecellselect
+	     * Fires before a cell is selected.
+	     * @param {SelectionModel} <b>this</b>
+	     * @param {Number} rowIndex The selected row index
+	     * @param {Number} colIndex The selected cell index
+	     */</i>
+	    &quot;beforecellselect&quot;,
+        <i>/**
+	     * @event cellselect
+	     * Fires when a cell is selected.
+	     * @param {SelectionModel} <b>this</b>
+	     * @param {Number} rowIndex The selected row index
+	     * @param {Number} colIndex The selected cell index
+	     */</i>
+	    &quot;cellselect&quot;,
+        <i>/**
+	     * @event selectionchange
+	     * Fires when the active selection changes.
+	     * @param {SelectionModel} <b>this</b>
+	     * @param {Object} selection null <b>for</b> no selection or an object (o) <b>with</b> two properties
+	        &lt;ul&gt;
+	        &lt;li&gt;o.record: the record object <b>for</b> the row the selection is <b>in</b>&lt;/li&gt;
+	        &lt;li&gt;o.cell: An array of [rowIndex, columnIndex]&lt;/li&gt;
+	        &lt;/ul&gt;
+	     */</i>
+	    &quot;selectionchange&quot;
+    );
+
+    Ext.grid.CellSelectionModel.superclass.constructor.call(<b>this</b>);
+};
+
+Ext.extend(Ext.grid.CellSelectionModel, Ext.grid.AbstractSelectionModel,  {
+
+    <i>/** @ignore */</i>
+    initEvents : <b>function</b>(){
+        <b>this</b>.grid.on(&quot;cellmousedown&quot;, <b>this</b>.handleMouseDown, <b>this</b>);
+        <b>this</b>.grid.getGridEl().on(Ext.isIE || (Ext.isWebKit &amp;&amp; !Ext.isSafari2) ? &quot;keydown&quot; : &quot;keypress&quot;, <b>this</b>.handleKeyDown, <b>this</b>);
+        <b>var</b> view = <b>this</b>.grid.view;
+        view.on(&quot;refresh&quot;, <b>this</b>.onViewChange, <b>this</b>);
+        view.on(&quot;rowupdated&quot;, <b>this</b>.onRowUpdated, <b>this</b>);
+        view.on(&quot;beforerowremoved&quot;, <b>this</b>.clearSelections, <b>this</b>);
+        view.on(&quot;beforerowsinserted&quot;, <b>this</b>.clearSelections, <b>this</b>);
+        <b>if</b>(this.grid.isEditor){
+            <b>this</b>.grid.on(&quot;beforeedit&quot;, <b>this</b>.beforeEdit,  <b>this</b>);
+        }
+    },
+
+	<i>//private</i>
+    beforeEdit : <b>function</b>(e){
+        <b>this</b>.select(e.row, e.column, false, true, e.record);
+    },
+
+	<i>//private</i>
+    onRowUpdated : <b>function</b>(v, index, r){
+        <b>if</b>(this.selection &amp;&amp; <b>this</b>.selection.record == r){
+            v.onCellSelect(index, <b>this</b>.selection.cell[1]);
+        }
+    },
+
+	<i>//private</i>
+    onViewChange : <b>function</b>(){
+        <b>this</b>.clearSelections(true);
+    },
+
+	<i>/**
+	 * Returns the currently selected cell's row and column indexes as an array (e.g., [0, 0]).
+	 * @<b>return</b> {Array} An array containing the row and column indexes of the selected cell, or null <b>if</b> none selected.
+	 */</i>
+    getSelectedCell : <b>function</b>(){
+        <b>return</b> this.selection ? <b>this</b>.selection.cell : null;
+    },
+
+    <i>/**
+     * Clears all selections.
+     * @param {Boolean} true to prevent the gridview from being notified about the change.
+     */</i>
+    clearSelections : <b>function</b>(preventNotify){
+        <b>var</b> s = <b>this</b>.selection;
+        <b>if</b>(s){
+            <b>if</b>(preventNotify !== true){
+                <b>this</b>.grid.view.onCellDeselect(s.cell[0], s.cell[1]);
+            }
+            <b>this</b>.selection = null;
+            <b>this</b>.fireEvent(&quot;selectionchange&quot;, <b>this</b>, null);
+        }
+    },
+
+    <i>/**
+     * Returns true <b>if</b> there is a selection.
+     * @<b>return</b> {Boolean}
+     */</i>
+    hasSelection : <b>function</b>(){
+        <b>return</b> this.selection ? true : false;
+    },
+
+    <i>/** @ignore */</i>
+    handleMouseDown : <b>function</b>(g, row, cell, e){
+        <b>if</b>(e.button !== 0 || <b>this</b>.isLocked()){
+            <b>return</b>;
+        };
+        <b>this</b>.select(row, cell);
+    },
+
+    <i>/**
+     * Selects a cell.
+     * @param {Number} rowIndex
+     * @param {Number} collIndex
+     */</i>
+    select : <b>function</b>(rowIndex, colIndex, preventViewNotify, preventFocus, <i>/*internal*/</i> r){
+        <b>if</b>(this.fireEvent(&quot;beforecellselect&quot;, <b>this</b>, rowIndex, colIndex) !== false){
+            <b>this</b>.clearSelections();
+            r = r || <b>this</b>.grid.store.getAt(rowIndex);
+            <b>this</b>.selection = {
+                record : r,
+                cell : [rowIndex, colIndex]
+            };
+            <b>if</b>(!preventViewNotify){
+                <b>var</b> v = <b>this</b>.grid.getView();
+                v.onCellSelect(rowIndex, colIndex);
+                <b>if</b>(preventFocus !== true){
+                    v.focusCell(rowIndex, colIndex);
+                }
+            }
+            <b>this</b>.fireEvent(&quot;cellselect&quot;, <b>this</b>, rowIndex, colIndex);
+            <b>this</b>.fireEvent(&quot;selectionchange&quot;, <b>this</b>, <b>this</b>.selection);
+        }
+    },
+
+	<i>//private</i>
+    isSelectable : <b>function</b>(rowIndex, colIndex, cm){
+        <b>return</b> !cm.isHidden(colIndex);
+    },
+
+    <i>/** @ignore */</i>
+    handleKeyDown : <b>function</b>(e){
+        <b>if</b>(!e.isNavKeyPress()){
+            <b>return</b>;
+        }
+        <b>var</b> g = <b>this</b>.grid, s = <b>this</b>.selection;
+        <b>if</b>(!s){
+            e.stopEvent();
+            <b>var</b> cell = g.walkCells(0, 0, 1, <b>this</b>.isSelectable,  <b>this</b>);
+            <b>if</b>(cell){
+                <b>this</b>.select(cell[0], cell[1]);
+            }
+            <b>return</b>;
+        }
+        <b>var</b> sm = <b>this</b>;
+        <b>var</b> walk = <b>function</b>(row, col, step){
+            <b>return</b> g.walkCells(row, col, step, sm.isSelectable,  sm);
+        };
+        <b>var</b> k = e.getKey(), r = s.cell[0], c = s.cell[1];
+        <b>var</b> newCell;
+
+        <b>switch</b>(k){
+             <b>case</b> e.TAB:
+                 <b>if</b>(e.shiftKey){
+                     newCell = walk(r, c-1, -1);
+                 }<b>else</b>{
+                     newCell = walk(r, c+1, 1);
+                 }
+             <b>break</b>;
+             <b>case</b> e.DOWN:
+                 newCell = walk(r+1, c, 1);
+             <b>break</b>;
+             <b>case</b> e.UP:
+                 newCell = walk(r-1, c, -1);
+             <b>break</b>;
+             <b>case</b> e.RIGHT:
+                 newCell = walk(r, c+1, 1);
+             <b>break</b>;
+             <b>case</b> e.LEFT:
+                 newCell = walk(r, c-1, -1);
+             <b>break</b>;
+             <b>case</b> e.ENTER:
+                 <b>if</b>(g.isEditor &amp;&amp; !g.editing){
+                    g.startEditing(r, c);
+                    e.stopEvent();
+                    <b>return</b>;
+                }
+             <b>break</b>;
+        };
+        <b>if</b>(newCell){
+            <b>this</b>.select(newCell[0], newCell[1]);
+            e.stopEvent();
+        }
+    },
+
+    acceptsNav : <b>function</b>(row, col, cm){
+        <b>return</b> !cm.isHidden(col) &amp;&amp; cm.isCellEditable(col, row);
+    },
+
+    onEditorKey : <b>function</b>(field, e){
+        <b>var</b> k = e.getKey(), newCell, g = <b>this</b>.grid, ed = g.activeEditor;
+        <b>if</b>(k == e.TAB){
+            <b>if</b>(e.shiftKey){
+                newCell = g.walkCells(ed.row, ed.col-1, -1, <b>this</b>.acceptsNav, <b>this</b>);
+            }<b>else</b>{
+                newCell = g.walkCells(ed.row, ed.col+1, 1, <b>this</b>.acceptsNav, <b>this</b>);
+            }
+            e.stopEvent();
+        }<b>else</b> if(k == e.ENTER){
+            ed.completeEdit();
+            e.stopEvent();
+        }<b>else</b> if(k == e.ESC){
+        	e.stopEvent();
+            ed.cancelEdit();
+        }
+        <b>if</b>(newCell){
+            g.startEditing(newCell[0], newCell[1]);
+        }
+    }
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

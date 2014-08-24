@@ -1,0 +1,196 @@
+<html><head><title>ScrollManager.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ScrollManager.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.dd.ScrollManager
+ * &lt;p&gt;Provides automatic scrolling of overflow regions <b>in</b> the page during drag operations.&lt;/p&gt;
+ * &lt;p&gt;The ScrollManager configs will be used as the defaults <b>for</b> any scroll container registered <b>with</b> it,
+ * but you can also override most of the configs per scroll container by adding a 
+ * &lt;tt&gt;ddScrollConfig&lt;/tt&gt; object to the target element that contains these properties: {@link #hthresh},
+ * {@link #vthresh}, {@link #increment} and {@link #frequency}.  Example usage:
+ * &lt;pre&gt;&lt;code&gt;
+<b>var</b> el = Ext.get(<em>'scroll-ct'</em>);
+el.ddScrollConfig = {
+    vthresh: 50,
+    hthresh: -1,
+    frequency: 100,
+    increment: 200
+};
+Ext.dd.ScrollManager.register(el);
+&lt;/code&gt;&lt;/pre&gt;
+ * &lt;b&gt;Note: This class uses &quot;Point Mode&quot; and is untested <b>in</b> &quot;Intersect Mode&quot;.&lt;/b&gt;
+ * @singleton
+ */</i>
+Ext.dd.ScrollManager = <b>function</b>(){
+    <b>var</b> ddm = Ext.dd.DragDropMgr;
+    <b>var</b> els = {};
+    <b>var</b> dragEl = null;
+    <b>var</b> proc = {};
+    
+    <b>var</b> onStop = <b>function</b>(e){
+        dragEl = null;
+        clearProc();
+    };
+    
+    <b>var</b> triggerRefresh = <b>function</b>(){
+        <b>if</b>(ddm.dragCurrent){
+             ddm.refreshCache(ddm.dragCurrent.groups);
+        }
+    };
+    
+    <b>var</b> doScroll = <b>function</b>(){
+        <b>if</b>(ddm.dragCurrent){
+            <b>var</b> dds = Ext.dd.ScrollManager;
+            <b>var</b> inc = proc.el.ddScrollConfig ?
+                      proc.el.ddScrollConfig.increment : dds.increment;
+            <b>if</b>(!dds.animate){
+                <b>if</b>(proc.el.scroll(proc.dir, inc)){
+                    triggerRefresh();
+                }
+            }<b>else</b>{
+                proc.el.scroll(proc.dir, inc, true, dds.animDuration, triggerRefresh);
+            }
+        }
+    };
+    
+    <b>var</b> clearProc = <b>function</b>(){
+        <b>if</b>(proc.id){
+            clearInterval(proc.id);
+        }
+        proc.id = 0;
+        proc.el = null;
+        proc.dir = &quot;&quot;;
+    };
+    
+    <b>var</b> startProc = <b>function</b>(el, dir){
+        clearProc();
+        proc.el = el;
+        proc.dir = dir;
+        <b>var</b> freq = (el.ddScrollConfig &amp;&amp; el.ddScrollConfig.frequency) ? 
+                el.ddScrollConfig.frequency : Ext.dd.ScrollManager.frequency;
+        proc.id = setInterval(doScroll, freq);
+    };
+    
+    <b>var</b> onFire = <b>function</b>(e, isDrop){
+        <b>if</b>(isDrop || !ddm.dragCurrent){ <b>return</b>; }
+        <b>var</b> dds = Ext.dd.ScrollManager;
+        <b>if</b>(!dragEl || dragEl != ddm.dragCurrent){
+            dragEl = ddm.dragCurrent;
+            <i>// refresh regions on drag start</i>
+            dds.refreshCache();
+        }
+        
+        <b>var</b> xy = Ext.lib.Event.getXY(e);
+        <b>var</b> pt = <b>new</b> Ext.lib.Point(xy[0], xy[1]);
+        <b>for</b>(var id <b>in</b> els){
+            <b>var</b> el = els[id], r = el._region;
+            <b>var</b> c = el.ddScrollConfig ? el.ddScrollConfig : dds;
+            <b>if</b>(r &amp;&amp; r.contains(pt) &amp;&amp; el.isScrollable()){
+                <b>if</b>(r.bottom - pt.y &lt;= c.vthresh){
+                    <b>if</b>(proc.el != el){
+                        startProc(el, &quot;down&quot;);
+                    }
+                    <b>return</b>;
+                }<b>else</b> if(r.right - pt.x &lt;= c.hthresh){
+                    <b>if</b>(proc.el != el){
+                        startProc(el, &quot;left&quot;);
+                    }
+                    <b>return</b>;
+                }<b>else</b> if(pt.y - r.top &lt;= c.vthresh){
+                    <b>if</b>(proc.el != el){
+                        startProc(el, &quot;up&quot;);
+                    }
+                    <b>return</b>;
+                }<b>else</b> if(pt.x - r.left &lt;= c.hthresh){
+                    <b>if</b>(proc.el != el){
+                        startProc(el, &quot;right&quot;);
+                    }
+                    <b>return</b>;
+                }
+            }
+        }
+        clearProc();
+    };
+    
+    ddm.fireEvents = ddm.fireEvents.createSequence(onFire, ddm);
+    ddm.stopDrag = ddm.stopDrag.createSequence(onStop, ddm);
+    
+    <b>return</b> {
+        <i>/**
+         * Registers <b>new</b> overflow element(s) to auto scroll
+         * @param {Mixed/Array} el The id of or the element to be scrolled or an array of either
+         */</i>
+        register : <b>function</b>(el){
+            <b>if</b>(Ext.isArray(el)){
+                <b>for</b>(var i = 0, len = el.length; i &lt; len; i++) {
+                	<b>this</b>.register(el[i]);
+                }
+            }<b>else</b>{
+                el = Ext.get(el);
+                els[el.id] = el;
+            }
+        },
+        
+        <i>/**
+         * Unregisters overflow element(s) so they are no longer scrolled
+         * @param {Mixed/Array} el The id of or the element to be removed or an array of either
+         */</i>
+        unregister : <b>function</b>(el){
+            <b>if</b>(Ext.isArray(el)){
+                <b>for</b>(var i = 0, len = el.length; i &lt; len; i++) {
+                	<b>this</b>.unregister(el[i]);
+                }
+            }<b>else</b>{
+                el = Ext.get(el);
+                <b>delete</b> els[el.id];
+            }
+        },
+        
+        <i>/**
+         * The number of pixels from the top or bottom edge of a container the pointer needs to be to
+         * trigger scrolling (defaults to 25)
+         * @type Number
+         */</i>
+        vthresh : 25,
+        <i>/**
+         * The number of pixels from the right or left edge of a container the pointer needs to be to
+         * trigger scrolling (defaults to 25)
+         * @type Number
+         */</i>
+        hthresh : 25,
+
+        <i>/**
+         * The number of pixels to scroll <b>in</b> each scroll increment (defaults to 50)
+         * @type Number
+         */</i>
+        increment : 100,
+        
+        <i>/**
+         * The frequency of scrolls <b>in</b> milliseconds (defaults to 500)
+         * @type Number
+         */</i>
+        frequency : 500,
+        
+        <i>/**
+         * True to animate the scroll (defaults to true)
+         * @type Boolean
+         */</i>
+        animate: true,
+        
+        <i>/**
+         * The animation duration <b>in</b> seconds - 
+         * MUST BE less than Ext.dd.ScrollManager.frequency! (defaults to .4)
+         * @type Number
+         */</i>
+        animDuration: .4,
+        
+        <i>/**
+         * Manually trigger a cache refresh.
+         */</i>
+        refreshCache : <b>function</b>(){
+            <b>for</b>(var id <b>in</b> els){
+                <b>if</b>(typeof els[id] == <em>'object'</em>){ <i>// <b>for</b> people extending the object prototype</i>
+                    els[id]._region = els[id].getRegion();
+                }
+            }
+        }
+    };
+}();</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

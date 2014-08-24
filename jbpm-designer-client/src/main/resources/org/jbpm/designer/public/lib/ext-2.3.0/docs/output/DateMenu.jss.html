@@ -1,0 +1,40 @@
+<html><head><title>DateMenu.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>DateMenu.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.menu.DateMenu
+ * @extends Ext.menu.Menu
+ * A menu containing a {@link Ext.menu.DateItem} component (which provides a date picker).
+ * @constructor
+ * Creates a <b>new</b> DateMenu
+ * @param {Object} config Configuration options
+ */</i>
+Ext.menu.DateMenu = <b>function</b>(config){
+    Ext.menu.DateMenu.superclass.constructor.call(<b>this</b>, config);
+    <b>this</b>.plain = true;
+    <b>var</b> di = <b>new</b> Ext.menu.DateItem(config);
+    <b>this</b>.add(di);
+    <i>/**
+     * The {@link Ext.DatePicker} instance <b>for</b> this DateMenu
+     * @type DatePicker
+     */</i>
+    <b>this</b>.picker = di.picker;
+    <i>/**
+     * @event select
+     * @param {DatePicker} picker
+     * @param {Date} date
+     */</i>
+    <b>this</b>.relayEvents(di, [&quot;select&quot;]);
+
+    <b>this</b>.on(<em>'beforeshow'</em>, <b>function</b>(){
+        <b>if</b>(this.picker){
+            <b>this</b>.picker.hideMonthPicker(true);
+        }
+    }, <b>this</b>);
+};
+Ext.extend(Ext.menu.DateMenu, Ext.menu.Menu, {
+    cls:<em>'x-date-menu'</em>,
+
+    <i>// private</i>
+    beforeDestroy : <b>function</b>() {
+        <b>this</b>.picker.destroy();
+    }
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

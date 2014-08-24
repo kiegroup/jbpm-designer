@@ -1,0 +1,122 @@
+<html><head><title>Registry.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>Registry.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.dd.Registry
+ * Provides easy access to all drag drop components that are registered on a page.  Items can be retrieved either
+ * directly by DOM node id, or by passing <b>in</b> the drag drop event that occurred and looking up the event target.
+ * @singleton
+ */</i>
+Ext.dd.Registry = <b>function</b>(){
+    <b>var</b> elements = {}; 
+    <b>var</b> handles = {}; 
+    <b>var</b> autoIdSeed = 0;
+
+    <b>var</b> getId = <b>function</b>(el, autogen){
+        <b>if</b>(typeof el == &quot;string&quot;){
+            <b>return</b> el;
+        }
+        <b>var</b> id = el.id;
+        <b>if</b>(!id &amp;&amp; autogen !== false){
+            id = &quot;extdd-&quot; + (++autoIdSeed);
+            el.id = id;
+        }
+        <b>return</b> id;
+    };
+    
+    <b>return</b> {
+    <i>/**
+     * Resgister a drag drop element
+     * @param {String/HTMLElement) element The id or DOM node to register
+     * @param {Object} data (optional) An custom data object that will be passed between the elements that are involved
+     * <b>in</b> drag drop operations.  You can populate <b>this</b> object <b>with</b> any arbitrary properties that your own code
+     * knows how to interpret, plus there are some specific properties known to the Registry that should be
+     * populated <b>in</b> the data object (<b>if</b> applicable):
+     * &lt;pre&gt;
+Value      Description&lt;br /&gt;
+---------  ------------------------------------------&lt;br /&gt;
+handles    Array of DOM nodes that trigger dragging&lt;br /&gt;
+           <b>for</b> the element being registered&lt;br /&gt;
+isHandle   True <b>if</b> the element passed <b>in</b> triggers&lt;br /&gt;
+           dragging itself, <b>else</b> false
+&lt;/pre&gt;
+     */</i>
+        register : <b>function</b>(el, data){
+            data = data || {};
+            <b>if</b>(typeof el == &quot;string&quot;){
+                el = document.getElementById(el);
+            }
+            data.ddel = el;
+            elements[getId(el)] = data;
+            <b>if</b>(data.isHandle !== false){
+                handles[data.ddel.id] = data;
+            }
+            <b>if</b>(data.handles){
+                <b>var</b> hs = data.handles;
+                <b>for</b>(var i = 0, len = hs.length; i &lt; len; i++){
+                	handles[getId(hs[i])] = data;
+                }
+            }
+        },
+
+    <i>/**
+     * Unregister a drag drop element
+     * @param {String/HTMLElement) element The id or DOM node to unregister
+     */</i>
+        unregister : <b>function</b>(el){
+            <b>var</b> id = getId(el, false);
+            <b>var</b> data = elements[id];
+            <b>if</b>(data){
+                <b>delete</b> elements[id];
+                <b>if</b>(data.handles){
+                    <b>var</b> hs = data.handles;
+                    <b>for</b>(var i = 0, len = hs.length; i &lt; len; i++){
+                    	<b>delete</b> handles[getId(hs[i], false)];
+                    }
+                }
+            }
+        },
+
+    <i>/**
+     * Returns the handle registered <b>for</b> a DOM Node by id
+     * @param {String/HTMLElement} id The DOM node or id to look up
+     * @<b>return</b> {Object} handle The custom handle data
+     */</i>
+        getHandle : <b>function</b>(id){
+            <b>if</b>(typeof id != &quot;string&quot;){ <i>// must be element?</i>
+                id = id.id;
+            }
+            <b>return</b> handles[id];
+        },
+
+    <i>/**
+     * Returns the handle that is registered <b>for</b> the DOM node that is the target of the event
+     * @param {Event} e The event
+     * @<b>return</b> {Object} handle The custom handle data
+     */</i>
+        getHandleFromEvent : <b>function</b>(e){
+            <b>var</b> t = Ext.lib.Event.getTarget(e);
+            <b>return</b> t ? handles[t.id] : null;
+        },
+
+    <i>/**
+     * Returns a custom data object that is registered <b>for</b> a DOM node by id
+     * @param {String/HTMLElement} id The DOM node or id to look up
+     * @<b>return</b> {Object} data The custom data
+     */</i>
+        getTarget : <b>function</b>(id){
+            <b>if</b>(typeof id != &quot;string&quot;){ <i>// must be element?</i>
+                id = id.id;
+            }
+            <b>return</b> elements[id];
+        },
+
+    <i>/**
+     * Returns a custom data object that is registered <b>for</b> the DOM node that is the target of the event
+     * @param {Event} e The event
+     * @<b>return</b> {Object} data The custom data
+     */</i>
+        getTargetFromEvent : <b>function</b>(e){
+            <b>var</b> t = Ext.lib.Event.getTarget(e);
+            <b>return</b> t ? elements[t.id] || handles[t.id] : null;
+        }
+    };
+}();</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

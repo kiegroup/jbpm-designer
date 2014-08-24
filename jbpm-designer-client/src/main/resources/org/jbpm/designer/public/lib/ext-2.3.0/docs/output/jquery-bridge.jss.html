@@ -1,0 +1,541 @@
+<html><head><title>jquery-bridge.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>jquery-bridge.js</h1><pre class="highlighted"><code>if(<b>typeof</b> jQuery == &quot;undefined&quot;){
+    throw &quot;Unable to load Ext, jQuery not found.&quot;;
+}
+
+(<b>function</b>(){
+<b>var</b> libFlyweight;
+
+Ext.lib.Dom = {
+    getViewWidth : <b>function</b>(full){
+        <i>// jQuery doesn't report full window size on document query, so max both</i>
+        <b>return</b> full ? Math.max(jQuery(document).width(),jQuery(window).width()) : jQuery(window).width();
+    },
+
+    getViewHeight : <b>function</b>(full){
+        <i>// jQuery doesn't report full window size on document query, so max both</i>
+        <b>return</b> full ? Math.max(jQuery(document).height(),jQuery(window).height()) : jQuery(window).height();
+    },
+
+    isAncestor : <b>function</b>(p, c){
+        p = Ext.getDom(p);
+        c = Ext.getDom(c);
+        <b>if</b> (!p || !c) {<b>return</b> false;}
+
+        <b>if</b>(p.contains &amp;&amp; !Ext.isWebKit) {
+            <b>return</b> p.contains(c);
+        }<b>else</b> if(p.compareDocumentPosition) {
+            <b>return</b> !!(p.compareDocumentPosition(c) &amp; 16);
+        }<b>else</b>{
+            <b>var</b> parent = c.parentNode;
+            <b>while</b> (parent) {
+                <b>if</b> (parent == p) {
+                    <b>return</b> true;
+                }
+                <b>else</b> if (!parent.tagName || parent.tagName.toUpperCase() == &quot;HTML&quot;) {
+                    <b>return</b> false;
+                }
+                parent = parent.parentNode;
+            }
+            <b>return</b> false;
+        }
+    },
+
+    getRegion : <b>function</b>(el){
+        <b>return</b> Ext.lib.Region.getRegion(el);
+    },
+
+    <i>//////////////////////////////////////////////////////////////////////////////////////</i>
+    <i>// Use of jQuery.offset() removed to promote consistent behavior across libs.</i>
+    <i>// JVS 05/23/07</i>
+    <i>//////////////////////////////////////////////////////////////////////////////////////</i>
+
+    getY : <b>function</b>(el){
+        <b>return</b> this.getXY(el)[1];
+    },
+
+    getX : <b>function</b>(el){
+        <b>return</b> this.getXY(el)[0];
+    },
+
+    getXY : <b>function</b>(el) {
+        <b>var</b> p, pe, b, scroll, bd = (document.body || document.documentElement);
+        el = Ext.getDom(el);
+
+        <b>if</b>(el == bd){
+            <b>return</b> [0, 0];
+        }
+
+        <b>if</b> (el.getBoundingClientRect) {
+            b = el.getBoundingClientRect();
+            scroll = fly(document).getScroll();
+            <b>return</b> [b.left + scroll.left, b.top + scroll.top];
+        }
+        <b>var</b> x = 0, y = 0;
+
+        p = el;
+
+        <b>var</b> hasAbsolute = fly(el).getStyle(&quot;position&quot;) == &quot;absolute&quot;;
+
+        <b>while</b> (p) {
+
+            x += p.offsetLeft;
+            y += p.offsetTop;
+
+            <b>if</b> (!hasAbsolute &amp;&amp; fly(p).getStyle(&quot;position&quot;) == &quot;absolute&quot;) {
+                hasAbsolute = true;
+            }
+
+            <b>if</b> (Ext.isGecko) {
+                pe = fly(p);
+
+                <b>var</b> bt = parseInt(pe.getStyle(&quot;borderTopWidth&quot;), 10) || 0;
+                <b>var</b> bl = parseInt(pe.getStyle(&quot;borderLeftWidth&quot;), 10) || 0;
+
+
+                x += bl;
+                y += bt;
+
+
+                <b>if</b> (p != el &amp;&amp; pe.getStyle(<em>'overflow'</em>) != <em>'visible'</em>) {
+                    x += bl;
+                    y += bt;
+                }
+            }
+            p = p.offsetParent;
+        }
+
+        <b>if</b> (Ext.isWebKit &amp;&amp; hasAbsolute) {
+            x -= bd.offsetLeft;
+            y -= bd.offsetTop;
+        }
+
+        <b>if</b> (Ext.isGecko &amp;&amp; !hasAbsolute) {
+            <b>var</b> dbd = fly(bd);
+            x += parseInt(dbd.getStyle(&quot;borderLeftWidth&quot;), 10) || 0;
+            y += parseInt(dbd.getStyle(&quot;borderTopWidth&quot;), 10) || 0;
+        }
+
+        p = el.parentNode;
+        <b>while</b> (p &amp;&amp; p != bd) {
+            <b>if</b> (!Ext.isOpera || (p.tagName != <em>'TR'</em> &amp;&amp; fly(p).getStyle(&quot;display&quot;) != &quot;inline&quot;)) {
+                x -= p.scrollLeft;
+                y -= p.scrollTop;
+            }
+            p = p.parentNode;
+        }
+        <b>return</b> [x, y];
+    },
+
+    setXY : <b>function</b>(el, xy){
+        el = Ext.fly(el, <em>'_setXY'</em>);
+        el.position();
+        <b>var</b> pts = el.translatePoints(xy);
+        <b>if</b>(xy[0] !== false){
+            el.dom.style.left = pts.left + &quot;px&quot;;
+        }
+        <b>if</b>(xy[1] !== false){
+            el.dom.style.top = pts.top + &quot;px&quot;;
+        }
+    },
+
+    setX : <b>function</b>(el, x){
+        <b>this</b>.setXY(el, [x, false]);
+    },
+
+    setY : <b>function</b>(el, y){
+        <b>this</b>.setXY(el, [false, y]);
+    }
+};
+
+<i>// all lib flyweight calls use their own flyweight to prevent collisions <b>with</b> developer flyweights</i>
+<b>function</b> fly(el){
+    <b>if</b>(!libFlyweight){
+        libFlyweight = <b>new</b> Ext.Element.Flyweight();
+    }
+    libFlyweight.dom = el;
+    <b>return</b> libFlyweight;
+}
+Ext.lib.Event = {
+    getPageX : <b>function</b>(e){
+        e = e.browserEvent || e;
+        <b>return</b> e.pageX;
+    },
+
+    getPageY : <b>function</b>(e){
+        e = e.browserEvent || e;
+        <b>return</b> e.pageY;
+    },
+
+    getXY : <b>function</b>(e){
+        e = e.browserEvent || e;
+        <b>return</b> [e.pageX, e.pageY];
+    },
+
+    getTarget : <b>function</b>(e){
+        <b>return</b> e.target;
+    },
+
+    <i>// all Ext events will go through event manager which provides scoping</i>
+    on : <b>function</b>(el, eventName, fn, scope, override){
+        jQuery(el).bind(eventName, fn);
+    },
+
+    un : <b>function</b>(el, eventName, fn){
+        jQuery(el).unbind(eventName, fn);
+    },
+
+    purgeElement : <b>function</b>(el){
+        jQuery(el).unbind();
+    },
+
+    preventDefault : <b>function</b>(e){
+        e = e.browserEvent || e;
+        <b>if</b>(e.preventDefault){
+            e.preventDefault();
+        }<b>else</b>{
+            e.returnValue = false;
+        }
+    },
+
+    stopPropagation : <b>function</b>(e){
+        e = e.browserEvent || e;
+        <b>if</b>(e.stopPropagation){
+            e.stopPropagation();
+        }<b>else</b>{
+            e.cancelBubble = true;
+        }
+    },
+
+    stopEvent : <b>function</b>(e){
+        <b>this</b>.preventDefault(e);
+        <b>this</b>.stopPropagation(e);
+    },
+
+    onAvailable : <b>function</b>(id, fn, scope){
+        <b>var</b> start = <b>new</b> Date();
+        <b>var</b> f = <b>function</b>(){
+            <b>if</b>(start.getElapsed() &gt; 10000){
+                clearInterval(iid);
+            }
+            <b>var</b> el = document.getElementById(id);
+            <b>if</b>(el){
+                clearInterval(iid);
+                fn.call(scope||window, el);
+            }
+        };
+        <b>var</b> iid = setInterval(f, 50);
+    },
+
+    resolveTextNode: <b>function</b>(node) {
+        <b>if</b> (node &amp;&amp; 3 == node.nodeType) {
+            <b>return</b> node.parentNode;
+        } <b>else</b> {
+            <b>return</b> node;
+        }
+    },
+
+    getRelatedTarget: <b>function</b>(ev) {
+        ev = ev.browserEvent || ev;
+        <b>var</b> t = ev.relatedTarget;
+        <b>if</b> (!t) {
+            <b>if</b> (ev.type == &quot;mouseout&quot;) {
+                t = ev.toElement;
+            } <b>else</b> if (ev.type == &quot;mouseover&quot;) {
+                t = ev.fromElement;
+            }
+        }
+
+        <b>return</b> this.resolveTextNode(t);
+    }
+};
+
+Ext.lib.Ajax = <b>function</b>(){
+    <b>var</b> createComplete = <b>function</b>(cb){
+         <b>return</b> function(xhr, status){
+            <b>if</b>((status == <em>'error'</em> || status == <em>'timeout'</em>) &amp;&amp; cb.failure){
+                cb.failure.call(cb.scope||window, {
+                    responseText: xhr.responseText,
+                    responseXML : xhr.responseXML,
+                    argument: cb.argument
+                });
+            }<b>else</b> if(cb.success){
+                cb.success.call(cb.scope||window, {
+                    responseText: xhr.responseText,
+                    responseXML : xhr.responseXML,
+                    argument: cb.argument
+                });
+            }
+         };
+    };
+    <b>return</b> {
+        request : <b>function</b>(method, uri, cb, data, options){
+            <b>var</b> o = {
+                type: method,
+                url: uri,
+                data: data,
+                timeout: cb.timeout,
+                complete: createComplete(cb)
+            };
+
+            <b>if</b>(options){
+                <b>var</b> hs = options.headers;
+                <b>if</b>(options.xmlData){
+                    o.data = options.xmlData;
+                    o.processData = false;
+                    o.type = (method ? method : (options.method ? options.method : <em>'POST'</em>));
+                    <b>if</b> (!hs || !hs[<em>'Content-Type'</em>]){
+                        o.contentType = <em>'text/xml'</em>;
+                    }
+                }<b>else</b> if(options.jsonData){
+                    o.data = <b>typeof</b> options.jsonData == <em>'object'</em> ? Ext.encode(options.jsonData) : options.jsonData;
+                    o.processData = false;
+                    o.type = (method ? method : (options.method ? options.method : <em>'POST'</em>));
+                    <b>if</b> (!hs || !hs[<em>'Content-Type'</em>]){
+                        o.contentType = <em>'application/json'</em>;
+                    }
+                }
+                <b>if</b>(hs){
+                    o.beforeSend = <b>function</b>(xhr){
+                        <b>for</b>(var h <b>in</b> hs){
+                            <b>if</b>(hs.hasOwnProperty(h)){
+                                xhr.setRequestHeader(h, hs[h]);
+                            }
+                        }
+                    }
+                }
+            }
+            jQuery.ajax(o);
+        },
+
+        formRequest : <b>function</b>(form, uri, cb, data, isUpload, sslUri){
+            jQuery.ajax({
+                type: Ext.getDom(form).method ||<em>'POST'</em>,
+                url: uri,
+                data: jQuery(form).serialize()+(data?<em>'&amp;'</em>+data:<em>''</em>),
+                timeout: cb.timeout,
+                complete: createComplete(cb)
+            });
+        },
+
+        isCallInProgress : <b>function</b>(trans){
+            <b>return</b> false;
+        },
+
+        abort : <b>function</b>(trans){
+            <b>return</b> false;
+        },
+
+        serializeForm : <b>function</b>(form){
+            <b>return</b> jQuery(form.dom||form).serialize();
+        }
+    };
+}();
+
+Ext.lib.Anim = <b>function</b>(){
+    <b>var</b> createAnim = <b>function</b>(cb, scope){
+        <b>var</b> animated = true;
+        <b>return</b> {
+            stop : <b>function</b>(skipToLast){
+                <i>// <b>do</b> nothing</i>
+            },
+
+            isAnimated : <b>function</b>(){
+                <b>return</b> animated;
+            },
+
+            proxyCallback : <b>function</b>(){
+                animated = false;
+                Ext.callback(cb, scope);
+            }
+        };
+    };
+    <b>return</b> {
+        scroll : <b>function</b>(el, args, duration, easing, cb, scope){
+            <i>// scroll anim not supported so just scroll immediately</i>
+            <b>var</b> anim = createAnim(cb, scope);
+            el = Ext.getDom(el);
+            <b>if</b>(typeof args.scroll.to[0] == <em>'number'</em>){
+                el.scrollLeft = args.scroll.to[0];
+            }
+            <b>if</b>(typeof args.scroll.to[1] == <em>'number'</em>){
+                el.scrollTop = args.scroll.to[1];
+            }
+            anim.proxyCallback();
+            <b>return</b> anim;
+        },
+
+        motion : <b>function</b>(el, args, duration, easing, cb, scope){
+            <b>return</b> this.run(el, args, duration, easing, cb, scope);
+        },
+
+        color : <b>function</b>(el, args, duration, easing, cb, scope){
+            <i>// color anim not supported, so execute callback immediately</i>
+            <b>var</b> anim = createAnim(cb, scope);
+            anim.proxyCallback();
+            <b>return</b> anim;
+        },
+
+        run : <b>function</b>(el, args, duration, easing, cb, scope, type){
+            <b>var</b> anim = createAnim(cb, scope), e = Ext.fly(el, <em>'_animrun'</em>);
+            <b>var</b> o = {};
+            <b>for</b>(var k <b>in</b> args){
+                <b>switch</b>(k){   <i>// jquery doesn't support, so convert</i>
+                    <b>case</b> <em>'points'</em>:
+                        <b>var</b> by, pts;
+                        e.position();
+                        <b>if</b>(by = args.points.by){
+                            <b>var</b> xy = e.getXY();
+                            pts = e.translatePoints([xy[0]+by[0], xy[1]+by[1]]);
+                        }<b>else</b>{
+                            pts = e.translatePoints(args.points.to);
+                        }
+                        o.left = pts.left;
+                        o.top = pts.top;
+                        <b>if</b>(!parseInt(e.getStyle(<em>'left'</em>), 10)){ <i>// auto bug</i>
+                            e.setLeft(0);
+                        }
+                        <b>if</b>(!parseInt(e.getStyle(<em>'top'</em>), 10)){
+                            e.setTop(0);
+                        }
+                        <b>if</b>(args.points.from){
+                            e.setXY(args.points.from);
+                        }
+                    <b>break</b>;
+                    <b>case</b> <em>'width'</em>:
+                        o.width = args.width.to;
+                        <b>if</b> (args.width.from)
+                            e.setWidth(args.width.from);
+                    <b>break</b>;
+                    <b>case</b> <em>'height'</em>:
+                        o.height = args.height.to;
+                        <b>if</b> (args.height.from)
+                            e.setHeight(args.height.from);
+                    <b>break</b>;
+                    <b>case</b> <em>'opacity'</em>:
+                        o.opacity = args.opacity.to;
+                        <b>if</b> (args.opacity.from)
+                            e.setOpacity(args.opacity.from);
+                    <b>break</b>;
+                    <b>case</b> <em>'left'</em>:
+                        o.left = args.left.to;
+                        <b>if</b> (args.left.from)
+                            e.setLeft(args.left.from);
+                    <b>break</b>;
+                    <b>case</b> <em>'top'</em>:
+                        o.top = args.top.to;
+                        <b>if</b> (args.top.from)
+                            e.setTop(args.top.from);
+                    <b>break</b>;
+                    <b>default</b>:
+                        o[k] = args[k].to;
+                        <b>if</b> (args[k].from)
+                            e.setStyle(k, args[k].from);
+                    <b>break</b>;
+                }
+            }
+            <i>// TODO: find out about easing plug <b>in</b>?</i>
+            jQuery(el).animate(o, duration*1000, undefined, anim.proxyCallback);
+            <b>return</b> anim;
+        }
+    };
+}();
+
+
+Ext.lib.Region = <b>function</b>(t, r, b, l) {
+    <b>this</b>.top = t;
+    <b>this</b>[1] = t;
+    <b>this</b>.right = r;
+    <b>this</b>.bottom = b;
+    <b>this</b>.left = l;
+    <b>this</b>[0] = l;
+};
+
+Ext.lib.Region.prototype = {
+    contains : <b>function</b>(region) {
+        <b>return</b> ( region.left   &gt;= <b>this</b>.left   &amp;&amp;
+                 region.right  &lt;= <b>this</b>.right  &amp;&amp;
+                 region.top    &gt;= <b>this</b>.top    &amp;&amp;
+                 region.bottom &lt;= <b>this</b>.bottom    );
+
+    },
+
+    getArea : <b>function</b>() {
+        <b>return</b> ( (<b>this</b>.bottom - <b>this</b>.top) * (<b>this</b>.right - <b>this</b>.left) );
+    },
+
+    intersect : <b>function</b>(region) {
+        <b>var</b> t = Math.max( <b>this</b>.top,    region.top    );
+        <b>var</b> r = Math.min( <b>this</b>.right,  region.right  );
+        <b>var</b> b = Math.min( <b>this</b>.bottom, region.bottom );
+        <b>var</b> l = Math.max( <b>this</b>.left,   region.left   );
+
+        <b>if</b> (b &gt;= t &amp;&amp; r &gt;= l) {
+            <b>return</b> new Ext.lib.Region(t, r, b, l);
+        } <b>else</b> {
+            <b>return</b> null;
+        }
+    },
+    union : <b>function</b>(region) {
+        <b>var</b> t = Math.min( <b>this</b>.top,    region.top    );
+        <b>var</b> r = Math.max( <b>this</b>.right,  region.right  );
+        <b>var</b> b = Math.max( <b>this</b>.bottom, region.bottom );
+        <b>var</b> l = Math.min( <b>this</b>.left,   region.left   );
+
+        <b>return</b> new Ext.lib.Region(t, r, b, l);
+    },
+
+    constrainTo : <b>function</b>(r) {
+            <b>this</b>.top = <b>this</b>.top.constrain(r.top, r.bottom);
+            <b>this</b>.bottom = <b>this</b>.bottom.constrain(r.top, r.bottom);
+            <b>this</b>.left = <b>this</b>.left.constrain(r.left, r.right);
+            <b>this</b>.right = <b>this</b>.right.constrain(r.left, r.right);
+            <b>return</b> this;
+    },
+
+    adjust : <b>function</b>(t, l, b, r){
+        <b>this</b>.top += t;
+        <b>this</b>.left += l;
+        <b>this</b>.right += r;
+        <b>this</b>.bottom += b;
+        <b>return</b> this;
+    }
+};
+
+Ext.lib.Region.getRegion = <b>function</b>(el) {
+    <b>var</b> p = Ext.lib.Dom.getXY(el);
+
+    <b>var</b> t = p[1];
+    <b>var</b> r = p[0] + el.offsetWidth;
+    <b>var</b> b = p[1] + el.offsetHeight;
+    <b>var</b> l = p[0];
+
+    <b>return</b> new Ext.lib.Region(t, r, b, l);
+};
+
+Ext.lib.Point = <b>function</b>(x, y) {
+   <b>if</b> (Ext.isArray(x)) {
+      y = x[1];
+      x = x[0];
+   }
+    <b>this</b>.x = <b>this</b>.right = <b>this</b>.left = <b>this</b>[0] = x;
+    <b>this</b>.y = <b>this</b>.top = <b>this</b>.bottom = <b>this</b>[1] = y;
+};
+
+Ext.lib.Point.prototype = <b>new</b> Ext.lib.Region();
+
+<i>// prevent IE leaks</i>
+<b>if</b>(Ext.isIE) {
+    <b>function</b> fnCleanUp() {
+        <b>var</b> p = Function.prototype;
+        <b>delete</b> p.createSequence;
+        <b>delete</b> p.defer;
+        <b>delete</b> p.createDelegate;
+        <b>delete</b> p.createCallback;
+        <b>delete</b> p.createInterceptor;
+
+        window.detachEvent(&quot;onunload&quot;, fnCleanUp);
+    }
+    window.attachEvent(&quot;onunload&quot;, fnCleanUp);
+}
+})();</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

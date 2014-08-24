@@ -1,0 +1,263 @@
+<html><head><title>ext-lang-ko.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ext-lang-ko.js</h1><pre class="highlighted"><code><i>/**
+ * Korean Translations By nicetip
+ * 05 September 2007
+ * Modify by techbug / 25 February 2008
+ */</i>
+
+Ext.UpdateManager.defaults.indicatorText = <em>'&lt;div class=&quot;loading-indicator&quot;&gt;&euml;&iexcl;œ&euml;”&copy;&igrave;&curren;‘...&lt;/div&gt;'</em>;
+
+<b>if</b>(Ext.View){
+   Ext.View.prototype.emptyText = &quot;&quot;;
+}
+
+<b>if</b>(Ext.grid.GridPanel){
+   Ext.grid.GridPanel.prototype.ddText = &quot;{0} &ecirc;&deg;œ&ecirc;&deg;€ &igrave;„&nbsp;&iacute;ƒ&euml;˜&igrave;—ˆ&igrave;Š&micro;&euml;‹ˆ&euml;‹&curren;.&quot;;
+}
+
+<b>if</b>(Ext.TabPanelItem){
+   Ext.TabPanelItem.prototype.closeText = &quot;&euml;‹&laquo;&ecirc;&cedil;&deg;&quot;;
+}
+
+<b>if</b>(Ext.form.Field){
+   Ext.form.Field.prototype.invalidText = &quot;&igrave;˜&not;&euml;&deg;”&euml;&yen;&cedil; &ecirc;&deg;’&igrave;&acute; &igrave;•„&euml;‹™&euml;‹ˆ&euml;‹&curren;.&quot;;
+}
+
+<b>if</b>(Ext.LoadMask){
+    Ext.LoadMask.prototype.msg = &quot;&euml;&iexcl;œ&euml;”&copy;&igrave;&curren;‘...&quot;;
+}
+
+Date.monthNames = [
+   &quot;1&igrave;›”&quot;,
+   &quot;2&igrave;›”&quot;,
+   &quot;3&igrave;›”&quot;,
+   &quot;4&igrave;›”&quot;,
+   &quot;5&igrave;›”&quot;,
+   &quot;6&igrave;›”&quot;,
+   &quot;7&igrave;›”&quot;,
+   &quot;8&igrave;›”&quot;,
+   &quot;9&igrave;›”&quot;,
+   &quot;10&igrave;›”&quot;,
+   &quot;11&igrave;›”&quot;,
+   &quot;12&igrave;›”&quot;
+];
+
+Date.dayNames = [
+   &quot;&igrave;&frac14;&quot;,
+   &quot;&igrave;›”&quot;,
+   &quot;&iacute;™”&quot;,
+   &quot;&igrave;ˆ˜&quot;,
+   &quot;&euml;&ordf;&copy;&quot;,
+   &quot;&ecirc;&cedil;ˆ&quot;,
+   &quot;&iacute;†&nbsp;&quot;
+];
+
+<b>if</b>(Ext.MessageBox){
+   Ext.MessageBox.buttonText = {
+      ok     : &quot;&iacute;™•&igrave;&cedil;&quot;,
+      cancel : &quot;&igrave;&middot;&uml;&igrave;†Œ&quot;,
+      yes    : &quot;&igrave;˜ˆ&quot;,
+      no     : &quot;&igrave;•„&euml;‹ˆ&igrave;˜&curren;&quot;
+   };
+}
+
+<b>if</b>(Ext.util.Format){
+   Ext.util.Format.date = <b>function</b>(v, format){
+      <b>if</b>(!v) <b>return</b> &quot;&quot;;
+      <b>if</b>(!(v instanceof Date)) v = <b>new</b> Date(Date.parse(v));
+      <b>return</b> v.dateFormat(format || &quot;m/d/Y&quot;);
+   };
+}
+
+<b>if</b>(Ext.DatePicker){
+   Ext.apply(Ext.DatePicker.prototype, {
+      todayText         : &quot;&igrave;˜&curren;&euml;Š˜&quot;,
+      minText           : &quot;&igrave;&micro;œ&igrave;†Œ &euml;‚&nbsp;&igrave;&sect;œ&euml;&sup2;”&igrave;œ„&euml;&yen;&frac14; &euml;„˜&igrave;—ˆ&igrave;Š&micro;&euml;‹ˆ&euml;‹&curren;.&quot;,
+      maxText           : &quot;&igrave;&micro;œ&euml;Œ€ &euml;‚&nbsp;&igrave;&sect;œ&euml;&sup2;”&igrave;œ„&euml;&yen;&frac14; &euml;„˜&igrave;—ˆ&igrave;Š&micro;&euml;‹ˆ&euml;‹&curren;.&quot;,
+      disabledDaysText  : &quot;&quot;,
+      disabledDatesText : &quot;&quot;,
+      monthNames        : Date.monthNames,
+      dayNames          : Date.dayNames,
+      nextText          : <em>'&euml;‹&curren;&igrave;Œ&euml;‹&not;(&igrave;&raquo;&uml;&iacute;Š&cedil;&euml;&iexcl;&curren;&iacute;‚&curren;+&igrave;˜&curren;&euml;&yen;&cedil;&igrave;&ordf;&frac12; &iacute;™”&igrave;‚&acute;&iacute;‘œ)'</em>,
+      prevText          : <em>'&igrave;&acute;&igrave;&nbsp;„&euml;‹&not; (&igrave;&raquo;&uml;&iacute;Š&cedil;&euml;&iexcl;&curren;&iacute;‚&curren;+&igrave;™&frac14;&igrave;&iexcl;&plusmn; &iacute;™”&igrave;‚&acute;&iacute;‘œ)'</em>,
+      monthYearText     : <em>'&igrave;›”&igrave;„ &igrave;„&nbsp;&iacute;ƒ&iacute;•&acute;&igrave;&pound;&frac14;&igrave;„&cedil;&igrave;š”. (&igrave;&raquo;&uml;&iacute;Š&cedil;&euml;&iexcl;&curren;&iacute;‚&curren;+&igrave;œ„/&igrave;•„&euml;˜ &iacute;™”&igrave;‚&acute;&iacute;‘œ)'</em>,
+      todayTip          : &quot;{0} (&igrave;Š&curren;&iacute;˜&igrave;&acute;&igrave;Š&curren;&euml;&deg;”)&quot;,
+      format            : &quot;m/d/y&quot;,
+      okText            : &quot;&iacute;™•&igrave;&cedil;&quot;,
+      cancelText        : &quot;&igrave;&middot;&uml;&igrave;†Œ&quot;,
+      startDay          : 0
+   });
+}
+
+<b>if</b>(Ext.PagingToolbar){
+   Ext.apply(Ext.PagingToolbar.prototype, {
+      beforePageText : &quot;&iacute;˜&igrave;&acute;&igrave;&sect;€&quot;,
+      afterPageText  : &quot;/ {0}&quot;,
+      firstText      : &quot;&igrave;&sup2;&laquo; &iacute;˜&igrave;&acute;&igrave;&sect;€&quot;,
+      prevText       : &quot;&igrave;&acute;&igrave;&nbsp;„ &iacute;˜&igrave;&acute;&igrave;&sect;€&quot;,
+      nextText       : &quot;&euml;‹&curren;&igrave;Œ &iacute;˜&igrave;&acute;&igrave;&sect;€&quot;,
+      lastText       : &quot;&euml;&sect;ˆ&igrave;&sect;€&euml;&sect;‰ &iacute;˜&igrave;&acute;&igrave;&sect;€&quot;,
+      refreshText    : &quot;&igrave;ƒˆ&euml;&iexcl;œ&ecirc;&sup3;&nbsp;&igrave;&sup1;&uml;&quot;,
+      displayMsg     : &quot;&igrave;&nbsp;„&igrave;&sup2;&acute; {2} &igrave;&curren;‘ {0} - {1}&quot;,
+      emptyMsg       : <em>'&iacute;‘œ&igrave;‹œ&iacute;•&nbsp; &euml;&deg;&igrave;&acute;&iacute;„&deg;&ecirc;&deg;€ &igrave;—†&igrave;Š&micro;&euml;‹ˆ&euml;‹&curren;.'</em>
+   });
+}
+
+<b>if</b>(Ext.form.TextField){
+   Ext.apply(Ext.form.TextField.prototype, {
+      minLengthText : &quot;&igrave;&micro;œ&igrave;†Œ&ecirc;&cedil;&cedil;&igrave;&acute;&euml;Š” {0}&igrave;…&euml;‹ˆ&euml;‹&curren;.&quot;,
+      maxLengthText : &quot;&igrave;&micro;œ&euml;Œ€&ecirc;&cedil;&cedil;&igrave;&acute;&euml;Š” {0}&igrave;…&euml;‹ˆ&euml;‹&curren;.&quot;,
+      blankText     : &quot;&ecirc;&deg;’&igrave;„ &igrave;…&euml;&nbsp;&yen;&iacute;•&acute;&igrave;&pound;&frac14;&igrave;„&cedil;&igrave;š”.&quot;,
+      regexText     : &quot;&quot;,
+      emptyText     : null
+   });
+}
+
+<b>if</b>(Ext.form.NumberField){
+   Ext.apply(Ext.form.NumberField.prototype, {
+      minText : &quot;&igrave;&micro;œ&igrave;†Œ&ecirc;&deg;’&igrave;€ {0}&igrave;…&euml;‹ˆ&euml;‹&curren;.&quot;,
+      maxText : &quot;&igrave;&micro;œ&euml;Œ€&ecirc;&deg;’&igrave;€ {0}&igrave;…&euml;‹ˆ&euml;‹&curren;.&quot;,
+      nanText : &quot;{0}&euml;Š” &igrave;˜&not;&euml;&deg;”&euml;&yen;&cedil; &igrave;ˆ&laquo;&igrave;&ecirc;&deg;€ &igrave;•„&euml;‹™&euml;‹ˆ&euml;‹&curren;.&quot;
+   });
+}
+
+<b>if</b>(Ext.form.DateField){
+   Ext.apply(Ext.form.DateField.prototype, {
+      disabledDaysText  : &quot;&euml;&sup1;„&iacute;™œ&igrave;„&plusmn;&quot;,
+      disabledDatesText : &quot;&euml;&sup1;„&iacute;™œ&igrave;„&plusmn;&quot;,
+      minText           : &quot;{0}&igrave;&frac14; &igrave;&acute;&iacute;›„&igrave;—&not;&igrave;•&frac14; &iacute;•&copy;&euml;‹ˆ&euml;‹&curren;.&quot;,
+      maxText           : &quot;{0}&igrave;&frac14; &igrave;&acute;&igrave;&nbsp;„&igrave;&acute;&igrave;–&acute;&igrave;•&frac14; &iacute;•&copy;&euml;‹ˆ&euml;‹&curren;.&quot;,
+      invalidText       : &quot;{0}&euml;Š” &igrave;˜&not;&euml;&deg;”&euml;&yen;&cedil; &euml;‚&nbsp;&igrave;&sect;œ&iacute;˜•&igrave;‹&igrave;&acute; &igrave;•„&euml;‹™&euml;‹ˆ&euml;‹&curren;. - &euml;‹&curren;&igrave;Œ&ecirc;&sup3;&frac14; &ecirc;&deg;™&igrave;€ &iacute;˜•&igrave;‹&igrave;&acute;&igrave;–&acute;&igrave;•&frac14; &iacute;•&copy;&euml;‹ˆ&euml;‹&curren;. {1}&quot;,
+      format            : &quot;m/d/y&quot;
+   });
+}
+
+<b>if</b>(Ext.form.ComboBox){
+   Ext.apply(Ext.form.ComboBox.prototype, {
+      loadingText       : &quot;&euml;&iexcl;œ&euml;”&copy;&igrave;&curren;‘...&quot;,
+      valueNotFoundText : undefined
+   });
+}
+
+<b>if</b>(Ext.form.VTypes){
+   Ext.apply(Ext.form.VTypes, {
+      emailText    : <em>'&igrave;&acute;&euml;&copy;”&igrave;&frac14; &igrave;&pound;&frac14;&igrave;†Œ &iacute;˜•&igrave;‹&igrave;— &euml;&sect;&ecirc;&sup2;Œ &igrave;…&euml;&nbsp;&yen;&iacute;•&acute;&igrave;•&frac14;&iacute;•&copy;&euml;‹ˆ&euml;‹&curren;. (&igrave;˜ˆ: &quot;user@domain.com&quot;)'</em>,
+      urlText      : <em>'URL &iacute;˜•&igrave;‹&igrave;— &euml;&sect;&ecirc;&sup2;Œ &igrave;…&euml;&nbsp;&yen;&iacute;•&acute;&igrave;•&frac14;&iacute;•&copy;&euml;‹ˆ&euml;‹&curren;. (&igrave;˜ˆ: &quot;http:/'</em>+<em>'/www.domain.com&quot;)'</em>,
+      alphaText    : <em>'&igrave;˜&euml;&not;&cedil;, &euml;&deg;‘&igrave;&curren;„(_)&euml;&sect;Œ &igrave;…&euml;&nbsp;&yen;&iacute;•&nbsp; &igrave;ˆ˜ &igrave;ˆ&igrave;Š&micro;&euml;‹ˆ&euml;‹&curren;.'</em>,
+      alphanumText : <em>'&igrave;˜&euml;&not;&cedil;, &igrave;ˆ&laquo;&igrave;, &euml;&deg;‘&igrave;&curren;„(_)&euml;&sect;Œ &igrave;…&euml;&nbsp;&yen;&iacute;•&nbsp; &igrave;ˆ˜ &igrave;ˆ&igrave;Š&micro;&euml;‹ˆ&euml;‹&curren;.'</em>
+   });
+}
+
+<b>if</b>(Ext.form.HtmlEditor){
+   Ext.apply(Ext.form.HtmlEditor.prototype, {
+   createLinkText : <em>'URL&igrave;„ &igrave;…&euml;&nbsp;&yen;&iacute;•&acute;&igrave;&pound;&frac14;&igrave;„&cedil;&igrave;š”:'</em>,
+   buttonTips : {
+            bold : {
+               title: <em>'&ecirc;&micro;&micro;&ecirc;&sup2;Œ (Ctrl+B)'</em>,
+               text: <em>'&igrave;„&nbsp;&iacute;ƒ&iacute;•œ &iacute;…&igrave;Š&curren;&iacute;Š&cedil;&euml;&yen;&frac14; &ecirc;&micro;&micro;&ecirc;&sup2;Œ &iacute;‘œ&igrave;‹œ&iacute;•&copy;&euml;‹ˆ&euml;‹&curren;.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+            },
+            italic : {
+               title: <em>'&ecirc;&cedil;&deg;&igrave;š&cedil;&igrave;„&ecirc;&frac14;&acute; (Ctrl+I)'</em>,
+               text: <em>'&igrave;„&nbsp;&iacute;ƒ&iacute;•œ &iacute;…&igrave;Š&curren;&iacute;Š&cedil;&euml;&yen;&frac14; &ecirc;&cedil;&deg;&igrave;š&cedil;&igrave;„&ecirc;&frac14;&acute;&euml;&iexcl;œ &iacute;‘œ&igrave;‹œ&iacute;•&copy;&euml;‹ˆ&euml;‹&curren;.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+            },
+            underline : {
+               title: <em>'&euml;&deg;‘&igrave;&curren;„ (Ctrl+U)'</em>,
+               text: <em>'&igrave;„&nbsp;&iacute;ƒ&iacute;•œ &iacute;…&igrave;Š&curren;&iacute;Š&cedil;&igrave;— &euml;&deg;‘&igrave;&curren;„&igrave;„ &iacute;‘œ&igrave;‹œ&iacute;•&copy;&euml;‹ˆ&euml;‹&curren;.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           increasefontsize : {
+               title: <em>'&ecirc;&cedil;€&ecirc;&frac14;&acute;&iacute;&not;&ecirc;&cedil;&deg; &euml;Š˜&euml;&brvbar;&frac14;'</em>,
+               text: <em>'&ecirc;&cedil;€&ecirc;&frac14;&acute; &iacute;&not;&ecirc;&cedil;&deg;&euml;&yen;&frac14; &iacute;&not;&ecirc;&sup2;Œ &iacute;•&copy;&euml;‹ˆ&euml;‹&curren;.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           decreasefontsize : {
+               title: <em>'&ecirc;&cedil;€&ecirc;&frac14;&acute;&iacute;&not;&ecirc;&cedil;&deg; &igrave;&curren;„&igrave;„'</em>,
+               text: <em>'&ecirc;&cedil;€&ecirc;&frac14;&acute; &iacute;&not;&ecirc;&cedil;&deg;&euml;&yen;&frac14; &igrave;‘&ecirc;&sup2;Œ &iacute;•&copy;&euml;‹ˆ&euml;‹&curren;.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           backcolor : {
+               title: <em>'&iacute;…&igrave;Š&curren;&iacute;Š&cedil; &ecirc;&deg;•&igrave;&iexcl;&deg; &igrave;ƒ‰'</em>,
+               text: <em>'&igrave;„&nbsp;&iacute;ƒ&iacute;•œ &iacute;…&igrave;Š&curren;&iacute;Š&cedil;&igrave;˜ &euml;&deg;&deg;&ecirc;&sup2;&frac12;&igrave;ƒ‰&igrave;„ &euml;&sup3;€&ecirc;&sup2;&frac12;&iacute;•&copy;&euml;‹ˆ&euml;‹&curren;.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           forecolor : {
+               title: <em>'&ecirc;&cedil;€&ecirc;&frac14;&acute;&igrave;ƒ‰'</em>,
+               text: <em>'&igrave;„&nbsp;&iacute;ƒ&iacute;•œ &iacute;…&igrave;Š&curren;&iacute;Š&cedil;&igrave;˜ &igrave;ƒ‰&igrave;„ &euml;&sup3;€&ecirc;&sup2;&frac12;&iacute;•&copy;&euml;‹ˆ&euml;‹&curren;.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           justifyleft : {
+               title: <em>'&iacute;…&igrave;Š&curren;&iacute;Š&cedil; &igrave;™&frac14;&igrave;&ordf;&frac12; &euml;&sect;&igrave;&para;&curren;'</em>,
+               text: <em>'&igrave;™&frac14;&igrave;&ordf;&frac12;&igrave;— &iacute;…&igrave;Š&curren;&iacute;Š&cedil;&euml;&yen;&frac14; &euml;&sect;&igrave;&para;&yen;&euml;‹ˆ&euml;‹&curren;.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           justifycenter : {
+               title: <em>'&ecirc;&deg;€&igrave;š&acute;&euml;&deg; &euml;&sect;&igrave;&para;&curren;'</em>,
+               text: <em>'&ecirc;&deg;€&igrave;š&acute;&euml;&deg;&igrave;— &iacute;…&igrave;Š&curren;&iacute;Š&cedil;&euml;&yen;&frac14; &euml;&sect;&igrave;&para;&yen;&euml;‹ˆ&euml;‹&curren;.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           justifyright : {
+               title: <em>'&iacute;…&igrave;Š&curren;&iacute;Š&cedil; &igrave;˜&curren;&euml;&yen;&cedil;&igrave;&ordf;&frac12; &euml;&sect;&igrave;&para;&curren;'</em>,
+               text: <em>'&igrave;˜&curren;&euml;&yen;&cedil;&igrave;&ordf;&frac12;&igrave;— &iacute;…&igrave;Š&curren;&iacute;Š&cedil;&euml;&yen;&frac14; &euml;&sect;&igrave;&para;&yen;&euml;‹ˆ&euml;‹&curren;.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           insertunorderedlist : {
+               title: <em>'&ecirc;&cedil;€&euml;&uml;&cedil;&euml;&brvbar;&not; &ecirc;&cedil;&deg;&iacute;˜&cedil;'</em>,
+               text: <em>'&ecirc;&cedil;€&euml;&uml;&cedil;&euml;&brvbar;&not; &ecirc;&cedil;&deg;&iacute;˜&cedil; &euml;&ordf;&copy;&euml;&iexcl;&igrave;„ &igrave;‹œ&igrave;‘&iacute;•&copy;&euml;‹ˆ&euml;‹&curren;.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           insertorderedlist : {
+               title: <em>'&euml;&sup2;ˆ&iacute;˜&cedil; &euml;&sect;&curren;&ecirc;&cedil;&deg;&ecirc;&cedil;&deg;'</em>,
+               text: <em>'&euml;&sup2;ˆ&iacute;˜&cedil; &euml;&sect;&curren;&ecirc;&cedil;&deg;&ecirc;&cedil;&deg; &euml;&ordf;&copy;&euml;&iexcl;&igrave;„ &igrave;‹œ&igrave;‘&iacute;•&copy;&euml;‹ˆ&euml;‹&curren;.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           createlink : {
+               title: <em>'&iacute;•˜&igrave;&acute;&iacute;&frac14;&euml;&sect;&iacute;&not;'</em>,
+               text: <em>'&igrave;„&nbsp;&iacute;ƒ&iacute;•œ &iacute;…&igrave;Š&curren;&iacute;Š&cedil;&igrave;— &iacute;•˜&igrave;&acute;&iacute;&frac14;&euml;&sect;&iacute;&not;&euml;&yen;&frac14; &euml;&sect;Œ&euml;“&shy;&euml;‹ˆ&euml;‹&curren;.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           },
+           sourceedit : {
+               title: <em>'&igrave;†Œ&igrave;Š&curren;&iacute;&cedil;&igrave;&sect;‘'</em>,
+               text: <em>'&igrave;†Œ&igrave;Š&curren;&iacute;&cedil;&igrave;&sect;‘ &euml;&ordf;&uml;&euml;“œ&euml;&iexcl;œ &euml;&sup3;€&iacute;™˜&iacute;•&copy;&euml;‹ˆ&euml;‹&curren;.'</em>,
+               cls: <em>'x-html-editor-tip'</em>
+           }
+        }
+   });
+}
+
+<b>if</b>(Ext.grid.GridView){
+   Ext.apply(Ext.grid.GridView.prototype, {
+      sortAscText  : &quot;&igrave;˜&curren;&euml;&brvbar;„&igrave;&deg;&uml;&igrave;ˆœ &igrave;&nbsp;•&euml;&nbsp;&not;&quot;,
+      sortDescText : &quot;&euml;‚&acute;&euml;&brvbar;&frac14;&igrave;&deg;&uml;&igrave;ˆœ &igrave;&nbsp;•&euml;&nbsp;&not;&quot;,
+      lockText     : &quot;&igrave;&sup1;&frac14;&euml;Ÿ&frac14; &igrave;&nbsp;&ecirc;&cedil;ˆ&quot;,
+      unlockText   : &quot;&igrave;&sup1;&frac14;&euml;Ÿ&frac14; &igrave;&nbsp;&ecirc;&cedil;ˆ&iacute;•&acute;&igrave;&nbsp;œ&quot;,
+      columnsText  : &quot;&igrave;&sup1;&frac14;&euml;Ÿ&frac14; &euml;&ordf;&copy;&euml;&iexcl;&quot;
+   });
+}
+
+<b>if</b>(Ext.grid.GroupingView){
+  Ext.apply(Ext.grid.GroupingView.prototype, {
+    emptyGroupText : <em>'(None)'</em>,
+    groupByText    : <em>'&iacute;˜„&igrave;&not; &iacute;•„&euml;“œ&euml;&iexcl;œ &ecirc;&middot;&cedil;&euml;&pound;&sup1;&iacute;•‘&iacute;•&copy;&euml;‹ˆ&euml;‹&curren;.'</em>,
+    showGroupsText : <em>'&ecirc;&middot;&cedil;&euml;&pound;&sup1;&igrave;œ&frac14;&euml;&iexcl;œ &euml;&sup3;&acute;&igrave;—&not;&igrave;&pound;&frac14;&ecirc;&cedil;&deg;'</em>
+
+  });
+}
+
+<b>if</b>(Ext.grid.PropertyColumnModel){
+   Ext.apply(Ext.grid.PropertyColumnModel.prototype, {
+      nameText   : &quot;&iacute;•&shy;&euml;&ordf;&copy;&quot;,
+      valueText  : &quot;&ecirc;&deg;’&quot;,
+      dateFormat : &quot;m/j/Y&quot;
+   });
+}
+
+<b>if</b>(Ext.layout.BorderLayout &amp;&amp; Ext.layout.BorderLayout.SplitRegion){
+   Ext.apply(Ext.layout.BorderLayout.SplitRegion.prototype, {
+      splitTip            : &quot;&iacute;&not;&ecirc;&cedil;&deg;&euml;&sup3;€&ecirc;&sup2;&frac12;&igrave;„ &igrave;œ„&iacute;•&acute; &euml;“œ&euml;˜&ecirc;&middot;&cedil;&iacute;•˜&igrave;„&cedil;&igrave;š”.&quot;,
+      collapsibleSplitTip : &quot;&iacute;&not;&ecirc;&cedil;&deg;&euml;&sup3;€&ecirc;&sup2;&frac12;&igrave;„ &igrave;œ„&iacute;•&acute; &euml;“œ&euml;˜&ecirc;&middot;&cedil;, &igrave;ˆ&uml;&ecirc;&cedil;&deg;&ecirc;&cedil;&deg; &igrave;œ„&iacute;•&acute; &euml;”&euml;&cedil;”&iacute;&acute;&euml;&brvbar;&shy; &iacute;•˜&igrave;„&cedil;&igrave;š”.&quot;
+   });
+}
+
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

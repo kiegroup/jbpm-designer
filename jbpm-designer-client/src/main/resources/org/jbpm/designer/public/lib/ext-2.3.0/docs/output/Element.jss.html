@@ -1,0 +1,3289 @@
+<html><head><title>Element.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>Element.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.Element
+ * &lt;p&gt;Encapsulates a DOM element, adding simple DOM manipulation facilities, normalizing <b>for</b> browser differences.&lt;/p&gt;
+ * &lt;p&gt;All instances of <b>this</b> class inherit the methods of {@link Ext.Fx} making visual effects easily available to all DOM elements.&lt;/p&gt;
+ * &lt;p&gt;Note that the events documented <b>in</b> this class are not Ext events, they encapsulate browser events. To
+ * access the underlying browser event, see {@link Ext.EventObject#browserEvent}. Some older
+ * browsers may not support the full range of events. Which events are supported is beyond the control of ExtJs.&lt;/p&gt;
+ * &lt;p&gt;Usage:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+<i>// by id</i>
+<b>var</b> el = Ext.get(&quot;my-div&quot;);
+
+<i>// by DOM element reference</i>
+<b>var</b> el = Ext.get(myDivElement);
+&lt;/code&gt;&lt;/pre&gt;
+ * &lt;b&gt;Animations&lt;/b&gt;&lt;br /&gt;
+ * Many of the functions <b>for</b> manipulating an element have an optional &quot;animate&quot; parameter. The animate parameter
+ * should either be a boolean (true) or an object literal <b>with</b> animation options. Note that the supported Element animation
+ * options are a subset of the {@link Ext.Fx} animation options specific to Fx effects.  The Element animation options are:
+&lt;pre&gt;
+Option    Default   Description
+--------- --------  ---------------------------------------------
+duration  .35       The duration of the animation <b>in</b> seconds
+easing    easeOut   The easing method
+callback  none      A <b>function</b> to execute when the anim completes
+scope     <b>this</b>      The scope (<b>this</b>) of the callback <b>function</b>
+&lt;/pre&gt;
+ * Also, the Anim object being used <b>for</b> the animation will be set on your options object as &quot;anim&quot;, which allows you to stop or
+ * manipulate the animation. Here's an example:
+&lt;pre&gt;&lt;code&gt;
+<b>var</b> el = Ext.get(&quot;my-div&quot;);
+
+<i>// no animation</i>
+el.setWidth(100);
+
+<i>// <b>default</b> animation</i>
+el.setWidth(100, true);
+
+<i>// animation <b>with</b> some options set</i>
+el.setWidth(100, {
+    duration: 1,
+    callback: <b>this</b>.foo,
+    scope: <b>this</b>
+});
+
+<i>// using the &quot;anim&quot; property to get the Anim object</i>
+<b>var</b> opt = {
+    duration: 1,
+    callback: <b>this</b>.foo,
+    scope: <b>this</b>
+};
+el.setWidth(100, opt);
+...
+<b>if</b>(opt.anim.isAnimated()){
+    opt.anim.stop();
+}
+&lt;/code&gt;&lt;/pre&gt;
+ * &lt;b&gt; Composite (Collections of) Elements&lt;/b&gt;&lt;br /&gt;
+ * For working <b>with</b> collections of Elements, see {@link Ext.CompositeElement}
+ * @constructor Create a <b>new</b> Element directly.
+ * @param {String/HTMLElement} element
+ * @param {Boolean} forceNew (optional) By <b>default</b> the constructor checks to see <b>if</b> there is already an instance of <b>this</b> element <b>in</b> the cache and <b>if</b> there is it returns the same instance. This will skip that check (useful <b>for</b> extending <b>this</b> class).
+ */</i>
+(<b>function</b>(){
+<b>var</b> D = Ext.lib.Dom;
+<b>var</b> E = Ext.lib.Event;
+<b>var</b> A = Ext.lib.Anim;
+
+<i>// local style camelizing <b>for</b> speed</i>
+<b>var</b> propCache = {};
+<b>var</b> camelRe = /(-[a-z])/gi;
+<b>var</b> camelFn = <b>function</b>(m, a){ <b>return</b> a.charAt(1).toUpperCase(); };
+<b>var</b> view = document.defaultView;
+
+Ext.Element = <b>function</b>(element, forceNew){
+    <b>var</b> dom = <b>typeof</b> element == &quot;string&quot; ?
+            document.getElementById(element) : element;
+    <b>if</b>(!dom){ <i>// invalid id/element</i>
+        <b>return</b> null;
+    }
+    <b>var</b> id = dom.id;
+    <b>if</b>(forceNew !== true &amp;&amp; id &amp;&amp; Ext.Element.cache[id]){ <i>// element object already exists</i>
+        <b>return</b> Ext.Element.cache[id];
+    }
+
+    <i>/**
+     * The DOM element
+     * @type HTMLElement
+     */</i>
+    <b>this</b>.dom = dom;
+
+    <i>/**
+     * The DOM element ID
+     * @type String
+     */</i>
+    <b>this</b>.id = id || Ext.id(dom);
+};
+
+<b>var</b> El = Ext.Element;
+
+El.prototype = {
+<i>//  Mouse events</i>
+    <i>/**
+     * @event click
+     * Fires when a mouse click is detected <b>with</b> the element.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event dblclick
+     * Fires when a mouse double click is detected <b>with</b> the element.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event mousedown
+     * Fires when a mousedown is detected <b>with</b> the element.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event mouseup
+     * Fires when a mouseup is detected <b>with</b> the element.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event mouseover
+     * Fires when a mouseover is detected <b>with</b> the element.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event mousemove
+     * Fires when a mousemove is detected <b>with</b> the element.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event mouseout
+     * Fires when a mouseout is detected <b>with</b> the element.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+
+<i>//  Keyboard events</i>
+    <i>/**
+     * @event keypress
+     * Fires when a keypress is detected <b>with</b> the element.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event keydown
+     * Fires when a keydown is detected <b>with</b> the element.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event keyup
+     * Fires when a keyup is detected <b>with</b> the element.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+
+
+<i>//  HTML frame/object events</i>
+    <i>/**
+     * @event load
+     * Fires when the user agent finishes loading all content within the element. Only supported by window, frames, objects and images.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event unload
+     * Fires when the user agent removes all content from a window or frame. For elements, it fires when the target element or any of its content has been removed.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event abort
+     * Fires when an object/image is stopped from loading before completely loaded.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event error
+     * Fires when an object/image/frame cannot be loaded properly.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event resize
+     * Fires when a document view is resized.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event scroll
+     * Fires when a document view is scrolled.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+
+<i>//  Form events</i>
+    <i>/**
+     * @event select
+     * Fires when a user selects some text <b>in</b> a text field, including input and textarea.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event change
+     * Fires when a control loses the input focus and its value has been modified since gaining focus.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event submit
+     * Fires when a form is submitted.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event reset
+     * Fires when a form is reset.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event focus
+     * Fires when an element receives focus either via the pointing device or by tab navigation.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event blur
+     * Fires when an element loses focus either via the pointing device or by tabbing navigation.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+
+<i>//  User Interface events</i>
+    <i>/**
+     * @event DOMFocusIn
+     * Where supported. Similar to HTML focus event, but can be applied to any focusable element.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event DOMFocusOut
+     * Where supported. Similar to HTML blur event, but can be applied to any focusable element.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event DOMActivate
+     * Where supported. Fires when an element is activated, <b>for</b> instance, through a mouse click or a keypress.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+
+<i>//  DOM Mutation events</i>
+    <i>/**
+     * @event DOMSubtreeModified
+     * Where supported. Fires when the subtree is modified.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event DOMNodeInserted
+     * Where supported. Fires when a node has been added as a child of another node.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event DOMNodeRemoved
+     * Where supported. Fires when a descendant node of the element is removed.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event DOMNodeRemovedFromDocument
+     * Where supported. Fires when a node is being removed from a document.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event DOMNodeInsertedIntoDocument
+     * Where supported. Fires when a node is being inserted into a document.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event DOMAttrModified
+     * Where supported. Fires when an attribute has been modified.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event DOMCharacterDataModified
+     * Where supported. Fires when the character data has been modified.
+     * @param {Ext.EventObject} e The {@link Ext.EventObject} encapsulating the DOM event
+     */</i>
+<i>// holder</i>
+<i>/***
+     * The element's <b>default</b> display mode  (defaults to &quot;&quot;)
+     * @type String
+     */</i>
+    originalDisplay : &quot;&quot;,
+
+    visibilityMode : 1,
+    <i>/**
+     * The <b>default</b> unit to append to CSS values where a unit isn't provided (defaults to px).
+     * @type String
+     */</i>
+    defaultUnit : &quot;px&quot;,
+    <i>/**
+     * Sets the element's visibility mode. When setVisible() is called it
+     * will use <b>this</b> to determine whether to set the visibility or the display property.
+     * @param visMode Ext.Element.VISIBILITY or Ext.Element.DISPLAY
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    setVisibilityMode : <b>function</b>(visMode){
+        <b>this</b>.visibilityMode = visMode;
+        <b>return</b> this;
+    },
+    <i>/**
+     * Convenience method <b>for</b> setVisibilityMode(Element.DISPLAY)
+     * @param {String} display (optional) What to set display to when visible
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    enableDisplayMode : <b>function</b>(display){
+        <b>this</b>.setVisibilityMode(El.DISPLAY);
+        <b>if</b>(typeof display != &quot;undefined&quot;) <b>this</b>.originalDisplay = display;
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Looks at <b>this</b> node and then at parent nodes <b>for</b> a match of the passed simple selector (e.g. div.some-class or span:first-child)
+     * @param {String} selector The simple selector to test
+     * @param {Number/Mixed} maxDepth (optional) The max depth to search as a number or element (defaults to 50 || document.body)
+     * @param {Boolean} returnEl (optional) True to <b>return</b> a Ext.Element object instead of DOM node
+     * @<b>return</b> {HTMLElement} The matching DOM node (or null <b>if</b> no match was found)
+     */</i>
+    findParent : <b>function</b>(simpleSelector, maxDepth, returnEl){
+        <b>var</b> p = <b>this</b>.dom, b = document.body, depth = 0, dq = Ext.DomQuery, stopEl;
+        maxDepth = maxDepth || 50;
+        <b>if</b>(typeof maxDepth != &quot;number&quot;){
+            stopEl = Ext.getDom(maxDepth);
+            maxDepth = Number.MAX_VALUE;
+        }
+        <b>while</b>(p &amp;&amp; p.nodeType == 1 &amp;&amp; depth &lt; maxDepth &amp;&amp; p != b &amp;&amp; p != stopEl){
+            <b>if</b>(dq.is(p, simpleSelector)){
+                <b>return</b> returnEl ? Ext.get(p) : p;
+            }
+            depth++;
+            p = p.parentNode;
+        }
+        <b>return</b> null;
+    },
+
+
+    <i>/**
+     * Looks at parent nodes <b>for</b> a match of the passed simple selector (e.g. div.some-class or span:first-child)
+     * @param {String} selector The simple selector to test
+     * @param {Number/Mixed} maxDepth (optional) The max depth to
+            search as a number or element (defaults to 10 || document.body)
+     * @param {Boolean} returnEl (optional) True to <b>return</b> a Ext.Element object instead of DOM node
+     * @<b>return</b> {HTMLElement} The matching DOM node (or null <b>if</b> no match was found)
+     */</i>
+    findParentNode : <b>function</b>(simpleSelector, maxDepth, returnEl){
+        <b>var</b> p = Ext.fly(<b>this</b>.dom.parentNode, <em>'_internal'</em>);
+        <b>return</b> p ? p.findParent(simpleSelector, maxDepth, returnEl) : null;
+    },
+
+    <i>/**
+     * Walks up the dom looking <b>for</b> a parent node that matches the passed simple selector (e.g. div.some-class or span:first-child).
+     * This is a shortcut <b>for</b> findParentNode() that always returns an Ext.Element.
+     * @param {String} selector The simple selector to test
+     * @param {Number/Mixed} maxDepth (optional) The max depth to
+            search as a number or element (defaults to 10 || document.body)
+     * @<b>return</b> {Ext.Element} The matching DOM node (or null <b>if</b> no match was found)
+     */</i>
+    up : <b>function</b>(simpleSelector, maxDepth){
+        <b>return</b> this.findParentNode(simpleSelector, maxDepth, true);
+    },
+
+
+
+    <i>/**
+     * Returns true <b>if</b> this element matches the passed simple selector (e.g. div.some-class or span:first-child)
+     * @param {String} selector The simple selector to test
+     * @<b>return</b> {Boolean} True <b>if</b> this element matches the selector, <b>else</b> false
+     */</i>
+    is : <b>function</b>(simpleSelector){
+        <b>return</b> Ext.DomQuery.is(<b>this</b>.dom, simpleSelector);
+    },
+
+    <i>/**
+     * Perform animation on <b>this</b> element.
+     * @param {Object} args The animation control args
+     * @param {Float} duration (optional) How long the animation lasts <b>in</b> seconds (defaults to .35)
+     * @param {Function} onComplete (optional) Function to call when animation completes
+     * @param {String} easing (optional) Easing method to use (defaults to <em>'easeOut'</em>)
+     * @param {String} animType (optional) <em>'run'</em> is the <b>default</b>. Can also be <em>'color'</em>, <em>'motion'</em>, or <em>'scroll'</em>
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    animate : <b>function</b>(args, duration, onComplete, easing, animType){
+        <b>this</b>.anim(args, {duration: duration, callback: onComplete, easing: easing}, animType);
+        <b>return</b> this;
+    },
+
+    <i>/*
+     * @private Internal animation call
+     */</i>
+    anim : <b>function</b>(args, opt, animType, defaultDur, defaultEase, cb){
+        animType = animType || <em>'run'</em>;
+        opt = opt || {};
+        <b>var</b> anim = Ext.lib.Anim[animType](
+            <b>this</b>.dom, args,
+            (opt.duration || defaultDur) || .35,
+            (opt.easing || defaultEase) || <em>'easeOut'</em>,
+            <b>function</b>(){
+                Ext.callback(cb, <b>this</b>);
+                Ext.callback(opt.callback, opt.scope || <b>this</b>, [<b>this</b>, opt]);
+            },
+            <b>this</b>
+        );
+        opt.anim = anim;
+        <b>return</b> anim;
+    },
+
+    <i>// private legacy anim prep</i>
+    preanim : <b>function</b>(a, i){
+        <b>return</b> !a[i] ? false : (<b>typeof</b> a[i] == &quot;object&quot; ? a[i]: {duration: a[i+1], callback: a[i+2], easing: a[i+3]});
+    },
+
+    <i>/**
+     * Removes worthless text nodes
+     * @param {Boolean} forceReclean (optional) By <b>default</b> the element
+     * keeps track <b>if</b> it has been cleaned already so
+     * you can call <b>this</b> over and over. However, <b>if</b> you update the element and
+     * need to force a reclean, you can pass true.
+     */</i>
+    clean : <b>function</b>(forceReclean){
+        <b>if</b>(this.isCleaned &amp;&amp; forceReclean !== true){
+            <b>return</b> this;
+        }
+        <b>var</b> ns = /\S/;
+        <b>var</b> d = <b>this</b>.dom, n = d.firstChild, ni = -1;
+ 	    <b>while</b>(n){
+ 	        <b>var</b> nx = n.nextSibling;
+ 	        <b>if</b>(n.nodeType == 3 &amp;&amp; !ns.test(n.nodeValue)){
+ 	            d.removeChild(n);
+ 	        }<b>else</b>{
+ 	            n.nodeIndex = ++ni;
+ 	        }
+ 	        n = nx;
+ 	    }
+ 	    <b>this</b>.isCleaned = true;
+ 	    <b>return</b> this;
+ 	},
+
+    <i>/**
+     * Scrolls <b>this</b> element into view within the passed container.
+     * @param {Mixed} container (optional) The container element to scroll (defaults to document.body).  Should be a
+     * string (id), dom node, or Ext.Element.
+     * @param {Boolean} hscroll (optional) False to disable horizontal scroll (defaults to true)
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    scrollIntoView : <b>function</b>(container, hscroll){
+        <b>var</b> c = Ext.getDom(container) || Ext.getBody().dom;
+        <b>var</b> el = <b>this</b>.dom;
+
+        <b>var</b> o = <b>this</b>.getOffsetsTo(c),
+            l = o[0] + c.scrollLeft,
+            t = o[1] + c.scrollTop,
+            b = t+el.offsetHeight,
+            r = l+el.offsetWidth;
+
+        <b>var</b> ch = c.clientHeight;
+        <b>var</b> ct = parseInt(c.scrollTop, 10);
+        <b>var</b> cl = parseInt(c.scrollLeft, 10);
+        <b>var</b> cb = ct + ch;
+        <b>var</b> cr = cl + c.clientWidth;
+
+        <b>if</b>(el.offsetHeight &gt; ch || t &lt; ct){
+        	c.scrollTop = t;
+        }<b>else</b> if(b &gt; cb){
+            c.scrollTop = b-ch;
+        }
+        c.scrollTop = c.scrollTop; <i>// corrects IE, other browsers will ignore</i>
+
+        <b>if</b>(hscroll !== false){
+			<b>if</b>(el.offsetWidth &gt; c.clientWidth || l &lt; cl){
+                c.scrollLeft = l;
+            }<b>else</b> if(r &gt; cr){
+                c.scrollLeft = r-c.clientWidth;
+            }
+            c.scrollLeft = c.scrollLeft;
+        }
+        <b>return</b> this;
+    },
+
+    <i>// private</i>
+    scrollChildIntoView : <b>function</b>(child, hscroll){
+        Ext.fly(child, <em>'_scrollChildIntoView'</em>).scrollIntoView(<b>this</b>, hscroll);
+    },
+
+    <i>/**
+     * Measures the element's content height and updates height to match. Note: <b>this</b> function uses setTimeout so
+     * the <b>new</b> height may not be available immediately.
+     * @param {Boolean} animate (optional) Animate the transition (defaults to false)
+     * @param {Float} duration (optional) Length of the animation <b>in</b> seconds (defaults to .35)
+     * @param {Function} onComplete (optional) Function to call when animation completes
+     * @param {String} easing (optional) Easing method to use (defaults to easeOut)
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    autoHeight : <b>function</b>(animate, duration, onComplete, easing){
+        <b>var</b> oldHeight = <b>this</b>.getHeight();
+        <b>this</b>.clip();
+        <b>this</b>.setHeight(1); <i>// force clipping</i>
+        setTimeout(<b>function</b>(){
+            <b>var</b> height = parseInt(<b>this</b>.dom.scrollHeight, 10); <i>// parseInt <b>for</b> Safari</i>
+            <b>if</b>(!animate){
+                <b>this</b>.setHeight(height);
+                <b>this</b>.unclip();
+                <b>if</b>(typeof onComplete == &quot;<b>function</b>&quot;){
+                    onComplete();
+                }
+            }<b>else</b>{
+                <b>this</b>.setHeight(oldHeight); <i>// restore original height</i>
+                <b>this</b>.setHeight(height, animate, duration, <b>function</b>(){
+                    <b>this</b>.unclip();
+                    <b>if</b>(typeof onComplete == &quot;<b>function</b>&quot;) onComplete();
+                }.createDelegate(<b>this</b>), easing);
+            }
+        }.createDelegate(<b>this</b>), 0);
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Returns true <b>if</b> this element is an ancestor of the passed element
+     * @param {HTMLElement/String} el The element to check
+     * @<b>return</b> {Boolean} True <b>if</b> this element is an ancestor of el, <b>else</b> false
+     */</i>
+    contains : <b>function</b>(el){
+        <b>if</b>(!el){<b>return</b> false;}
+        <b>return</b> D.isAncestor(<b>this</b>.dom, el.dom ? el.dom : el);
+    },
+
+    <i>/**
+     * Checks whether the element is currently visible using both visibility and display properties.
+     * @param {Boolean} deep (optional) True to walk the dom and see <b>if</b> parent elements are hidden (defaults to false)
+     * @<b>return</b> {Boolean} True <b>if</b> the element is currently visible, <b>else</b> false
+     */</i>
+    isVisible : <b>function</b>(deep) {
+        <b>var</b> vis = !(<b>this</b>.getStyle(&quot;visibility&quot;) == &quot;hidden&quot; || <b>this</b>.getStyle(&quot;display&quot;) == &quot;none&quot;);
+        <b>if</b>(deep !== true || !vis){
+            <b>return</b> vis;
+        }
+        <b>var</b> p = <b>this</b>.dom.parentNode;
+        <b>while</b>(p &amp;&amp; p.tagName.toLowerCase() != &quot;body&quot;){
+            <b>if</b>(!Ext.fly(p, <em>'_isVisible'</em>).isVisible()){
+                <b>return</b> false;
+            }
+            p = p.parentNode;
+        }
+        <b>return</b> true;
+    },
+
+    <i>/**
+     * Creates a {@link Ext.CompositeElement} <b>for</b> child nodes based on the passed CSS selector (the selector should not contain an id).
+     * @param {String} selector The CSS selector
+     * @param {Boolean} unique (optional) True to create a unique Ext.Element <b>for</b> each child (defaults to false, which creates a single shared flyweight object)
+     * @<b>return</b> {CompositeElement/CompositeElementLite} The composite element
+     */</i>
+    select : <b>function</b>(selector, unique){
+        <b>return</b> El.select(selector, unique, <b>this</b>.dom);
+    },
+
+    <i>/**
+     * Selects child nodes based on the passed CSS selector (the selector should not contain an id).
+     * @param {String} selector The CSS selector
+     * @<b>return</b> {Array} An array of the matched nodes
+     */</i>
+    query : <b>function</b>(selector){
+        <b>return</b> Ext.DomQuery.select(selector, <b>this</b>.dom);
+    },
+
+    <i>/**
+     * Selects a single child at any depth below <b>this</b> element based on the passed CSS selector (the selector should not contain an id).
+     * @param {String} selector The CSS selector
+     * @param {Boolean} returnDom (optional) True to <b>return</b> the DOM node instead of Ext.Element (defaults to false)
+     * @<b>return</b> {HTMLElement/Ext.Element} The child Ext.Element (or DOM node <b>if</b> returnDom = true)
+     */</i>
+    child : <b>function</b>(selector, returnDom){
+        <b>var</b> n = Ext.DomQuery.selectNode(selector, <b>this</b>.dom);
+        <b>return</b> returnDom ? n : Ext.get(n);
+    },
+
+    <i>/**
+     * Selects a single *direct* child based on the passed CSS selector (the selector should not contain an id).
+     * @param {String} selector The CSS selector
+     * @param {Boolean} returnDom (optional) True to <b>return</b> the DOM node instead of Ext.Element (defaults to false)
+     * @<b>return</b> {HTMLElement/Ext.Element} The child Ext.Element (or DOM node <b>if</b> returnDom = true)
+     */</i>
+    down : <b>function</b>(selector, returnDom){
+        <b>var</b> n = Ext.DomQuery.selectNode(&quot; &gt; &quot; + selector, <b>this</b>.dom);
+        <b>return</b> returnDom ? n : Ext.get(n);
+    },
+
+    <i>/**
+     * Initializes a {@link Ext.dd.DD} drag drop object <b>for</b> this element.
+     * @param {String} group The group the DD object is member of
+     * @param {Object} config The DD config object
+     * @param {Object} overrides An object containing methods to override/implement on the DD object
+     * @<b>return</b> {Ext.dd.DD} The DD object
+     */</i>
+    initDD : <b>function</b>(group, config, overrides){
+        <b>var</b> dd = <b>new</b> Ext.dd.DD(Ext.id(<b>this</b>.dom), group, config);
+        <b>return</b> Ext.apply(dd, overrides);
+    },
+
+    <i>/**
+     * Initializes a {@link Ext.dd.DDProxy} object <b>for</b> this element.
+     * @param {String} group The group the DDProxy object is member of
+     * @param {Object} config The DDProxy config object
+     * @param {Object} overrides An object containing methods to override/implement on the DDProxy object
+     * @<b>return</b> {Ext.dd.DDProxy} The DDProxy object
+     */</i>
+    initDDProxy : <b>function</b>(group, config, overrides){
+        <b>var</b> dd = <b>new</b> Ext.dd.DDProxy(Ext.id(<b>this</b>.dom), group, config);
+        <b>return</b> Ext.apply(dd, overrides);
+    },
+
+    <i>/**
+     * Initializes a {@link Ext.dd.DDTarget} object <b>for</b> this element.
+     * @param {String} group The group the DDTarget object is member of
+     * @param {Object} config The DDTarget config object
+     * @param {Object} overrides An object containing methods to override/implement on the DDTarget object
+     * @<b>return</b> {Ext.dd.DDTarget} The DDTarget object
+     */</i>
+    initDDTarget : <b>function</b>(group, config, overrides){
+        <b>var</b> dd = <b>new</b> Ext.dd.DDTarget(Ext.id(<b>this</b>.dom), group, config);
+        <b>return</b> Ext.apply(dd, overrides);
+    },
+
+    <i>/**
+     * Sets the visibility of the element (see details). If the visibilityMode is set to Element.DISPLAY, it will use
+     * the display property to hide the element, otherwise it uses visibility. The <b>default</b> is to hide and show using the visibility property.
+     * @param {Boolean} visible Whether the element is visible
+     * @param {Boolean/Object} animate (optional) True <b>for</b> the <b>default</b> animation, or a standard Element animation config object
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+     setVisible : <b>function</b>(visible, animate){
+        <b>if</b>(!animate || !A){
+            <b>if</b>(this.visibilityMode == El.DISPLAY){
+                <b>this</b>.setDisplayed(visible);
+            }<b>else</b>{
+                <b>this</b>.fixDisplay();
+                <b>this</b>.dom.style.visibility = visible ? &quot;visible&quot; : &quot;hidden&quot;;
+            }
+        }<b>else</b>{
+            <i>// closure <b>for</b> composites</i>
+            <b>var</b> dom = <b>this</b>.dom;
+            <b>var</b> visMode = <b>this</b>.visibilityMode;
+            <b>if</b>(visible){
+                <b>this</b>.setOpacity(.01);
+                <b>this</b>.setVisible(true);
+            }
+            <b>this</b>.anim({opacity: { to: (visible?1:0) }},
+                  <b>this</b>.preanim(arguments, 1),
+                  null, .35, <em>'easeIn'</em>, <b>function</b>(){
+                     <b>if</b>(!visible){
+                         <b>if</b>(visMode == El.DISPLAY){
+                             dom.style.display = &quot;none&quot;;
+                         }<b>else</b>{
+                             dom.style.visibility = &quot;hidden&quot;;
+                         }
+                         Ext.get(dom).setOpacity(1);
+                     }
+                 });
+        }
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Returns true <b>if</b> display is not &quot;none&quot;
+     * @<b>return</b> {Boolean}
+     */</i>
+    isDisplayed : <b>function</b>() {
+        <b>return</b> this.getStyle(&quot;display&quot;) != &quot;none&quot;;
+    },
+
+    <i>/**
+     * Toggles the element's visibility or display, depending on visibility mode.
+     * @param {Boolean/Object} animate (optional) True <b>for</b> the <b>default</b> animation, or a standard Element animation config object
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    toggle : <b>function</b>(animate){
+        <b>this</b>.setVisible(!<b>this</b>.isVisible(), <b>this</b>.preanim(arguments, 0));
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Sets the CSS display property. Uses originalDisplay <b>if</b> the specified value is a boolean true.
+     * @param {Mixed} value Boolean value to display the element using its <b>default</b> display, or a string to set the display directly.
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    setDisplayed : <b>function</b>(value) {
+        <b>if</b>(typeof value == &quot;boolean&quot;){
+           value = value ? <b>this</b>.originalDisplay : &quot;none&quot;;
+        }
+        <b>this</b>.setStyle(&quot;display&quot;, value);
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Tries to focus the element. Any exceptions are caught and ignored.
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    focus : <b>function</b>() {
+        try{
+            <b>this</b>.dom.focus();
+        }catch(e){}
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Tries to blur the element. Any exceptions are caught and ignored.
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    blur : <b>function</b>() {
+        try{
+            <b>this</b>.dom.blur();
+        }catch(e){}
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Adds one or more CSS classes to the element. Duplicate classes are automatically filtered out.
+     * @param {String/Array} className The CSS class to add, or an array of classes
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    addClass : <b>function</b>(className){
+        <b>if</b>(Ext.isArray(className)){
+            <b>for</b>(var i = 0, len = className.length; i &lt; len; i++) {
+            	<b>this</b>.addClass(className[i]);
+            }
+        }<b>else</b>{
+            <b>if</b>(className &amp;&amp; !<b>this</b>.hasClass(className)){
+                <b>this</b>.dom.className = <b>this</b>.dom.className + &quot; &quot; + className;
+            }
+        }
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Adds one or more CSS classes to <b>this</b> element and removes the same class(es) from all siblings.
+     * @param {String/Array} className The CSS class to add, or an array of classes
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    radioClass : <b>function</b>(className){
+        <b>var</b> siblings = <b>this</b>.dom.parentNode.childNodes;
+        <b>for</b>(var i = 0; i &lt; siblings.length; i++) {
+        	<b>var</b> s = siblings[i];
+        	<b>if</b>(s.nodeType == 1){
+        	    Ext.get(s).removeClass(className);
+        	}
+        }
+        <b>this</b>.addClass(className);
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Removes one or more CSS classes from the element.
+     * @param {String/Array} className The CSS class to remove, or an array of classes
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    removeClass : <b>function</b>(className){
+        <b>if</b>(!className || !<b>this</b>.dom.className){
+            <b>return</b> this;
+        }
+        <b>if</b>(Ext.isArray(className)){
+            <b>for</b>(var i = 0, len = className.length; i &lt; len; i++) {
+            	<b>this</b>.removeClass(className[i]);
+            }
+        }<b>else</b>{
+            <b>if</b>(this.hasClass(className)){
+                <b>var</b> re = <b>this</b>.classReCache[className];
+                <b>if</b> (!re) {
+                   re = <b>new</b> RegExp(<em>'(?:^|\\s+)'</em> + className + <em>'(?:\\s+|$)'</em>, &quot;g&quot;);
+                   <b>this</b>.classReCache[className] = re;
+                }
+                <b>this</b>.dom.className =
+                    <b>this</b>.dom.className.replace(re, &quot; &quot;);
+            }
+        }
+        <b>return</b> this;
+    },
+
+    <i>// private</i>
+    classReCache: {},
+
+    <i>/**
+     * Toggles the specified CSS class on <b>this</b> element (removes it <b>if</b> it already exists, otherwise adds it).
+     * @param {String} className The CSS class to toggle
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    toggleClass : <b>function</b>(className){
+        <b>if</b>(this.hasClass(className)){
+            <b>this</b>.removeClass(className);
+        }<b>else</b>{
+            <b>this</b>.addClass(className);
+        }
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Checks <b>if</b> the specified CSS class exists on <b>this</b> element's DOM node.
+     * @param {String} className The CSS class to check <b>for</b>
+     * @<b>return</b> {Boolean} True <b>if</b> the class exists, <b>else</b> false
+     */</i>
+    hasClass : <b>function</b>(className){
+        <b>return</b> className &amp;&amp; (<em>' '</em>+<b>this</b>.dom.className+<em>' '</em>).indexOf(<em>' '</em>+className+<em>' '</em>) != -1;
+    },
+
+    <i>/**
+     * Replaces a CSS class on the element <b>with</b> another.  If the old name does not exist, the <b>new</b> name will simply be added.
+     * @param {String} oldClassName The CSS class to replace
+     * @param {String} newClassName The replacement CSS class
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    replaceClass : <b>function</b>(oldClassName, newClassName){
+        <b>this</b>.removeClass(oldClassName);
+        <b>this</b>.addClass(newClassName);
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Returns an object <b>with</b> properties matching the styles requested.
+     * For example, el.getStyles(<em>'color'</em>, <em>'font-size'</em>, <em>'width'</em>) might <b>return</b>
+     * {<em>'color'</em>: <em>'#FFFFFF'</em>, <em>'font-size'</em>: <em>'13px'</em>, <em>'width'</em>: <em>'100px'</em>}.
+     * @param {String} style1 A style name
+     * @param {String} style2 A style name
+     * @param {String} etc.
+     * @<b>return</b> {Object} The style object
+     */</i>
+    getStyles : <b>function</b>(){
+        <b>var</b> a = arguments, len = a.length, r = {};
+        <b>for</b>(var i = 0; i &lt; len; i++){
+            r[a[i]] = <b>this</b>.getStyle(a[i]);
+        }
+        <b>return</b> r;
+    },
+
+    <i>/**
+     * Normalizes currentStyle and computedStyle.
+     * @param {String} property The style property whose value is returned.
+     * @<b>return</b> {String} The current value of the style property <b>for</b> this element.
+     */</i>
+    getStyle : <b>function</b>(){
+        <b>return</b> view &amp;&amp; view.getComputedStyle ?
+            <b>function</b>(prop){
+                <b>var</b> el = <b>this</b>.dom, v, cs, camel;
+                <b>if</b>(prop == <em>'float'</em>){
+                    prop = &quot;cssFloat&quot;;
+                }
+                <b>if</b>(v = el.style[prop]){
+                    <b>return</b> v;
+                }
+                <b>if</b>(cs = view.getComputedStyle(el, &quot;&quot;)){
+                    <b>if</b>(!(camel = propCache[prop])){
+                        camel = propCache[prop] = prop.replace(camelRe, camelFn);
+                    }
+                    <b>return</b> cs[camel];
+                }
+                <b>return</b> null;
+            } :
+            <b>function</b>(prop){
+                <b>var</b> el = <b>this</b>.dom, v, cs, camel;
+                <b>if</b>(prop == <em>'opacity'</em>){
+                    <b>if</b>(typeof el.style.filter == <em>'string'</em>){
+                        <b>var</b> m = el.style.filter.match(/alpha\(opacity=(.*)\)/i);
+                        <b>if</b>(m){
+                            <b>var</b> fv = parseFloat(m[1]);
+                            <b>if</b>(!isNaN(fv)){
+                                <b>return</b> fv ? fv / 100 : 0;
+                            }
+                        }
+                    }
+                    <b>return</b> 1;
+                }<b>else</b> if(prop == <em>'float'</em>){
+                    prop = &quot;styleFloat&quot;;
+                }
+                <b>if</b>(!(camel = propCache[prop])){
+                    camel = propCache[prop] = prop.replace(camelRe, camelFn);
+                }
+                <b>if</b>(v = el.style[camel]){
+                    <b>return</b> v;
+                }
+                <b>if</b>(cs = el.currentStyle){
+                    <b>return</b> cs[camel];
+                }
+                <b>return</b> null;
+            };
+    }(),
+
+    <i>/**
+     * Wrapper <b>for</b> setting style properties, also takes single object parameter of multiple styles.
+     * @param {String/Object} property The style property to be set, or an object of multiple styles.
+     * @param {String} value (optional) The value to apply to the given property, or null <b>if</b> an object was passed.
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    setStyle : <b>function</b>(prop, value){
+        <b>if</b>(typeof prop == &quot;string&quot;){
+            <b>var</b> camel;
+            <b>if</b>(!(camel = propCache[prop])){
+                camel = propCache[prop] = prop.replace(camelRe, camelFn);
+            }
+            <b>if</b>(camel == <em>'opacity'</em>) {
+                <b>this</b>.setOpacity(value);
+            }<b>else</b>{
+                <b>this</b>.dom.style[camel] = value;
+            }
+        }<b>else</b>{
+            <b>for</b>(var style <b>in</b> prop){
+                <b>if</b>(typeof prop[style] != &quot;<b>function</b>&quot;){
+                   <b>this</b>.setStyle(style, prop[style]);
+                }
+            }
+        }
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * More flexible version of {@link #setStyle} <b>for</b> setting style properties.
+     * @param {String/Object/Function} styles A style specification string, e.g. &quot;width:100px&quot;, or object <b>in</b> the form {width:&quot;100px&quot;}, or
+     * a <b>function</b> which returns such a specification.
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    applyStyles : <b>function</b>(style){
+        Ext.DomHelper.applyStyles(<b>this</b>.dom, style);
+        <b>return</b> this;
+    },
+
+    <i>/**
+      * Gets the current X position of the element based on page coordinates.  Element must be part of the DOM tree to have page coordinates (display:none or elements not appended <b>return</b> false).
+      * @<b>return</b> {Number} The X position of the element
+      */</i>
+    getX : <b>function</b>(){
+        <b>return</b> D.getX(<b>this</b>.dom);
+    },
+
+    <i>/**
+      * Gets the current Y position of the element based on page coordinates.  Element must be part of the DOM tree to have page coordinates (display:none or elements not appended <b>return</b> false).
+      * @<b>return</b> {Number} The Y position of the element
+      */</i>
+    getY : <b>function</b>(){
+        <b>return</b> D.getY(<b>this</b>.dom);
+    },
+
+    <i>/**
+      * Gets the current position of the element based on page coordinates.  Element must be part of the DOM tree to have page coordinates (display:none or elements not appended <b>return</b> false).
+      * @<b>return</b> {Array} The XY position of the element
+      */</i>
+    getXY : <b>function</b>(){
+        <b>return</b> D.getXY(<b>this</b>.dom);
+    },
+
+    <i>/**
+      * Returns the offsets of <b>this</b> element from the passed element. Both element must be part of the DOM tree and not have display:none to have page coordinates.
+      * @param {Mixed} element The element to get the offsets from.
+      * @<b>return</b> {Array} The XY page offsets (e.g. [100, -200])
+      */</i>
+    getOffsetsTo : <b>function</b>(el){
+        <b>var</b> o = <b>this</b>.getXY();
+        <b>var</b> e = Ext.fly(el, <em>'_internal'</em>).getXY();
+        <b>return</b> [o[0]-e[0],o[1]-e[1]];
+    },
+
+    <i>/**
+     * Sets the X position of the element based on page coordinates.  Element must be part of the DOM tree to have page coordinates (display:none or elements not appended <b>return</b> false).
+     * @param {Number} The X position of the element
+     * @param {Boolean/Object} animate (optional) True <b>for</b> the <b>default</b> animation, or a standard Element animation config object
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    setX : <b>function</b>(x, animate){
+        <b>if</b>(!animate || !A){
+            D.setX(<b>this</b>.dom, x);
+        }<b>else</b>{
+            <b>this</b>.setXY([x, <b>this</b>.getY()], <b>this</b>.preanim(arguments, 1));
+        }
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Sets the Y position of the element based on page coordinates.  Element must be part of the DOM tree to have page coordinates (display:none or elements not appended <b>return</b> false).
+     * @param {Number} The Y position of the element
+     * @param {Boolean/Object} animate (optional) True <b>for</b> the <b>default</b> animation, or a standard Element animation config object
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    setY : <b>function</b>(y, animate){
+        <b>if</b>(!animate || !A){
+            D.setY(<b>this</b>.dom, y);
+        }<b>else</b>{
+            <b>this</b>.setXY([<b>this</b>.getX(), y], <b>this</b>.preanim(arguments, 1));
+        }
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Sets the element's left position directly using CSS style (instead of {@link #setX}).
+     * @param {String} left The left CSS property value
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    setLeft : <b>function</b>(left){
+        <b>this</b>.setStyle(&quot;left&quot;, <b>this</b>.addUnits(left));
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Sets the element's top position directly using CSS style (instead of {@link #setY}).
+     * @param {String} top The top CSS property value
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    setTop : <b>function</b>(top){
+        <b>this</b>.setStyle(&quot;top&quot;, <b>this</b>.addUnits(top));
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Sets the element's CSS right style.
+     * @param {String} right The right CSS property value
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    setRight : <b>function</b>(right){
+        <b>this</b>.setStyle(&quot;right&quot;, <b>this</b>.addUnits(right));
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Sets the element's CSS bottom style.
+     * @param {String} bottom The bottom CSS property value
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    setBottom : <b>function</b>(bottom){
+        <b>this</b>.setStyle(&quot;bottom&quot;, <b>this</b>.addUnits(bottom));
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Sets the position of the element <b>in</b> page coordinates, regardless of how the element is positioned.
+     * The element must be part of the DOM tree to have page coordinates (display:none or elements not appended <b>return</b> false).
+     * @param {Array} pos Contains X &amp; Y [x, y] values <b>for</b> new position (coordinates are page-based)
+     * @param {Boolean/Object} animate (optional) True <b>for</b> the <b>default</b> animation, or a standard Element animation config object
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    setXY : <b>function</b>(pos, animate){
+        <b>if</b>(!animate || !A){
+            D.setXY(<b>this</b>.dom, pos);
+        }<b>else</b>{
+            <b>this</b>.anim({points: {to: pos}}, <b>this</b>.preanim(arguments, 1), <em>'motion'</em>);
+        }
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Sets the position of the element <b>in</b> page coordinates, regardless of how the element is positioned.
+     * The element must be part of the DOM tree to have page coordinates (display:none or elements not appended <b>return</b> false).
+     * @param {Number} x X value <b>for</b> new position (coordinates are page-based)
+     * @param {Number} y Y value <b>for</b> new position (coordinates are page-based)
+     * @param {Boolean/Object} animate (optional) True <b>for</b> the <b>default</b> animation, or a standard Element animation config object
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    setLocation : <b>function</b>(x, y, animate){
+        <b>this</b>.setXY([x, y], <b>this</b>.preanim(arguments, 2));
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Sets the position of the element <b>in</b> page coordinates, regardless of how the element is positioned.
+     * The element must be part of the DOM tree to have page coordinates (display:none or elements not appended <b>return</b> false).
+     * @param {Number} x X value <b>for</b> new position (coordinates are page-based)
+     * @param {Number} y Y value <b>for</b> new position (coordinates are page-based)
+     * @param {Boolean/Object} animate (optional) True <b>for</b> the <b>default</b> animation, or a standard Element animation config object
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    moveTo : <b>function</b>(x, y, animate){
+        <b>this</b>.setXY([x, y], <b>this</b>.preanim(arguments, 2));
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Returns the region of the given element.
+     * The element must be part of the DOM tree to have a region (display:none or elements not appended <b>return</b> false).
+     * @<b>return</b> {Region} A Ext.lib.Region containing &quot;top, left, bottom, right&quot; member data.
+     */</i>
+    getRegion : <b>function</b>(){
+        <b>return</b> D.getRegion(<b>this</b>.dom);
+    },
+
+    <i>/**
+     * Returns the offset height of the element
+     * @param {Boolean} contentHeight (optional) true to get the height minus borders and padding
+     * @<b>return</b> {Number} The element's height
+     */</i>
+    getHeight : <b>function</b>(contentHeight){
+        <b>var</b> h = Math.max(<b>this</b>.dom.offsetHeight, <b>this</b>.dom.clientHeight) || 0;
+        h = contentHeight !== true ? h : h-<b>this</b>.getBorderWidth(&quot;tb&quot;)-<b>this</b>.getPadding(&quot;tb&quot;);
+        <b>return</b> h &lt; 0 ? 0 : h;
+    },
+
+    <i>/**
+     * Returns the offset width of the element
+     * @param {Boolean} contentWidth (optional) true to get the width minus borders and padding
+     * @<b>return</b> {Number} The element's width
+     */</i>
+    getWidth : <b>function</b>(contentWidth){
+        <b>var</b> w = Math.max(<b>this</b>.dom.offsetWidth, <b>this</b>.dom.clientWidth) || 0;
+        w = contentWidth !== true ? w : w-<b>this</b>.getBorderWidth(&quot;lr&quot;)-<b>this</b>.getPadding(&quot;lr&quot;);
+        <b>return</b> w &lt; 0 ? 0 : w;
+    },
+
+    <i>/**
+     * Returns either the offsetHeight or the height of <b>this</b> element based on CSS height adjusted by padding or borders
+     * when needed to simulate offsetHeight when offsets aren't available. This may not work on display:none elements
+     * <b>if</b> a height has not been set using CSS.
+     * @<b>return</b> {Number}
+     */</i>
+    getComputedHeight : <b>function</b>(){
+        <b>var</b> h = Math.max(<b>this</b>.dom.offsetHeight, <b>this</b>.dom.clientHeight);
+        <b>if</b>(!h){
+            h = parseInt(<b>this</b>.getStyle(<em>'height'</em>), 10) || 0;
+            <b>if</b>(!<b>this</b>.isBorderBox()){
+                h += <b>this</b>.getFrameWidth(<em>'tb'</em>);
+            }
+        }
+        <b>return</b> h;
+    },
+
+    <i>/**
+     * Returns either the offsetWidth or the width of <b>this</b> element based on CSS width adjusted by padding or borders
+     * when needed to simulate offsetWidth when offsets aren't available. This may not work on display:none elements
+     * <b>if</b> a width has not been set using CSS.
+     * @<b>return</b> {Number}
+     */</i>
+    getComputedWidth : <b>function</b>(){
+        <b>var</b> w = Math.max(<b>this</b>.dom.offsetWidth, <b>this</b>.dom.clientWidth);
+        <b>if</b>(!w){
+            w = parseInt(<b>this</b>.getStyle(<em>'width'</em>), 10) || 0;
+            <b>if</b>(!<b>this</b>.isBorderBox()){
+                w += <b>this</b>.getFrameWidth(<em>'lr'</em>);
+            }
+        }
+        <b>return</b> w;
+    },
+
+    <i>/**
+     * Returns the size of the element.
+     * @param {Boolean} contentSize (optional) true to get the width/size minus borders and padding
+     * @<b>return</b> {Object} An object containing the element's size {width: (element width), height: (element height)}
+     */</i>
+    getSize : <b>function</b>(contentSize){
+        <b>return</b> {width: <b>this</b>.getWidth(contentSize), height: <b>this</b>.getHeight(contentSize)};
+    },
+
+    getStyleSize : <b>function</b>(){
+        <b>var</b> w, h, d = <b>this</b>.dom, s = d.style;
+        <b>if</b>(s.width &amp;&amp; s.width != <em>'auto'</em>){
+            w = parseInt(s.width, 10);
+            <b>if</b>(Ext.isBorderBox){
+               w -= <b>this</b>.getFrameWidth(<em>'lr'</em>);
+            }
+        }
+        <b>if</b>(s.height &amp;&amp; s.height != <em>'auto'</em>){
+            h = parseInt(s.height, 10);
+            <b>if</b>(Ext.isBorderBox){
+               h -= <b>this</b>.getFrameWidth(<em>'tb'</em>);
+            }
+        }
+        <b>return</b> {width: w || <b>this</b>.getWidth(true), height: h || <b>this</b>.getHeight(true)};
+
+    },
+
+    <i>/**
+     * Returns the width and height of the viewport.
+     * @<b>return</b> {Object} An object containing the viewport's size {width: (viewport width), height: (viewport height)}
+     */</i>
+    getViewSize : <b>function</b>(){
+        <b>var</b> d = <b>this</b>.dom, doc = document, aw = 0, ah = 0;
+        <b>if</b>(d == doc || d == doc.body){
+            <b>return</b> {width : D.getViewWidth(), height: D.getViewHeight()};
+        }<b>else</b>{
+            <b>return</b> {
+                width : d.clientWidth,
+                height: d.clientHeight
+            };
+        }
+    },
+
+    <i>/**
+     * Returns the value of the &quot;value&quot; attribute
+     * @param {Boolean} asNumber true to parse the value as a number
+     * @<b>return</b> {String/Number}
+     */</i>
+    getValue : <b>function</b>(asNumber){
+        <b>return</b> asNumber ? parseInt(<b>this</b>.dom.value, 10) : <b>this</b>.dom.value;
+    },
+
+    <i>// private</i>
+    adjustWidth : <b>function</b>(width){
+        <b>if</b>(typeof width == &quot;number&quot;){
+            <b>if</b>(this.autoBoxAdjust &amp;&amp; !<b>this</b>.isBorderBox()){
+               width -= (<b>this</b>.getBorderWidth(&quot;lr&quot;) + <b>this</b>.getPadding(&quot;lr&quot;));
+            }
+            <b>if</b>(width &lt; 0){
+                width = 0;
+            }
+        }
+        <b>return</b> width;
+    },
+
+    <i>// private</i>
+    adjustHeight : <b>function</b>(height){
+        <b>if</b>(typeof height == &quot;number&quot;){
+           <b>if</b>(this.autoBoxAdjust &amp;&amp; !<b>this</b>.isBorderBox()){
+               height -= (<b>this</b>.getBorderWidth(&quot;tb&quot;) + <b>this</b>.getPadding(&quot;tb&quot;));
+           }
+           <b>if</b>(height &lt; 0){
+               height = 0;
+           }
+        }
+        <b>return</b> height;
+    },
+
+    <i>/**
+     * Set the width of <b>this</b> Element.
+     * @param {Mixed} width The <b>new</b> width. This may be one of&lt;div class=&quot;mdetail-params&quot;&gt;&lt;ul&gt;
+     * &lt;li&gt;A Number specifying the <b>new</b> width <b>in</b> this Element's {@link #defaultUnit}s (by <b>default</b>, pixels).&lt;/li&gt;
+     * &lt;li&gt;A String used to set the CSS width style. Animation may &lt;b&gt;not&lt;/b&gt; be used.
+     * &lt;/ul&gt;&lt;/div&gt;
+     * @param {Boolean/Object} animate (optional) true <b>for</b> the <b>default</b> animation or a standard Element animation config object
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    setWidth : <b>function</b>(width, animate){
+        width = <b>this</b>.adjustWidth(width);
+        <b>if</b>(!animate || !A){
+            <b>this</b>.dom.style.width = <b>this</b>.addUnits(width);
+        }<b>else</b>{
+            <b>this</b>.anim({width: {to: width}}, <b>this</b>.preanim(arguments, 1));
+        }
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Set the height of <b>this</b> Element.
+     * @param {Mixed} height The <b>new</b> height. This may be one of:&lt;div class=&quot;mdetail-params&quot;&gt;&lt;ul&gt;
+     * &lt;li&gt;A Number specifying the <b>new</b> height <b>in</b> this Element's {@link #defaultUnit}s (by <b>default</b>, pixels.)&lt;/li&gt;
+     * &lt;li&gt;A String used to set the CSS height style. Animation may &lt;b&gt;not&lt;/b&gt; be used.&lt;/li&gt;
+     * &lt;/ul&gt;&lt;/div&gt;
+     * @param {Boolean/Object} animate (optional) true <b>for</b> the <b>default</b> animation or a standard Element animation config object
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+     setHeight : <b>function</b>(height, animate){
+        height = <b>this</b>.adjustHeight(height);
+        <b>if</b>(!animate || !A){
+            <b>this</b>.dom.style.height = <b>this</b>.addUnits(height);
+        }<b>else</b>{
+            <b>this</b>.anim({height: {to: height}}, <b>this</b>.preanim(arguments, 1));
+        }
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Set the size of <b>this</b> Element. If animation is true, both width an height will be animated concurrently.
+     * @param {Mixed} width The <b>new</b> width. This may be one of:&lt;div class=&quot;mdetail-params&quot;&gt;&lt;ul&gt;
+     * &lt;li&gt;A Number specifying the <b>new</b> width <b>in</b> this Element's {@link #defaultUnit}s (by <b>default</b>, pixels).&lt;/li&gt;
+     * &lt;li&gt;A String used to set the CSS width style. Animation may &lt;b&gt;not&lt;/b&gt; be used.
+     * &lt;li&gt;A size object <b>in</b> the format &lt;code&gt;{width: widthValue, height: heightValue}&lt;/code&gt;.&lt;/li&gt;
+     * &lt;/ul&gt;&lt;/div&gt;
+     * @param {Mixed} height The <b>new</b> height. This may be one of:&lt;div class=&quot;mdetail-params&quot;&gt;&lt;ul&gt;
+     * &lt;li&gt;A Number specifying the <b>new</b> height <b>in</b> this Element's {@link #defaultUnit}s (by <b>default</b>, pixels).&lt;/li&gt;
+     * &lt;li&gt;A String used to set the CSS height style. Animation may &lt;b&gt;not&lt;/b&gt; be used.&lt;/li&gt;
+     * &lt;/ul&gt;&lt;/div&gt;
+     * @param {Boolean/Object} animate (optional) true <b>for</b> the <b>default</b> animation or a standard Element animation config object
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+     setSize : <b>function</b>(width, height, animate){
+        <b>if</b>(typeof width == &quot;object&quot;){ <i>// <b>in</b> case of object from getSize()</i>
+            height = width.height; width = width.width;
+        }
+        width = <b>this</b>.adjustWidth(width); height = <b>this</b>.adjustHeight(height);
+        <b>if</b>(!animate || !A){
+            <b>this</b>.dom.style.width = <b>this</b>.addUnits(width);
+            <b>this</b>.dom.style.height = <b>this</b>.addUnits(height);
+        }<b>else</b>{
+            <b>this</b>.anim({width: {to: width}, height: {to: height}}, <b>this</b>.preanim(arguments, 2));
+        }
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Sets the element's position and size <b>in</b> one shot. If animation is true then width, height, x and y will be animated concurrently.
+     * @param {Number} x X value <b>for</b> new position (coordinates are page-based)
+     * @param {Number} y Y value <b>for</b> new position (coordinates are page-based)
+     * @param {Mixed} width The <b>new</b> width. This may be one of:&lt;div class=&quot;mdetail-params&quot;&gt;&lt;ul&gt;
+     * &lt;li&gt;A Number specifying the <b>new</b> width <b>in</b> this Element's {@link #defaultUnit}s (by <b>default</b>, pixels)&lt;/li&gt;
+     * &lt;li&gt;A String used to set the CSS width style. Animation may &lt;b&gt;not&lt;/b&gt; be used.
+     * &lt;/ul&gt;&lt;/div&gt;
+     * @param {Mixed} height The <b>new</b> height. This may be one of:&lt;div class=&quot;mdetail-params&quot;&gt;&lt;ul&gt;
+     * &lt;li&gt;A Number specifying the <b>new</b> height <b>in</b> this Element's {@link #defaultUnit}s (by <b>default</b>, pixels)&lt;/li&gt;
+     * &lt;li&gt;A String used to set the CSS height style. Animation may &lt;b&gt;not&lt;/b&gt; be used.&lt;/li&gt;
+     * &lt;/ul&gt;&lt;/div&gt;
+     * @param {Boolean/Object} animate (optional) true <b>for</b> the <b>default</b> animation or a standard Element animation config object
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    setBounds : <b>function</b>(x, y, width, height, animate){
+        <b>if</b>(!animate || !A){
+            <b>this</b>.setSize(width, height);
+            <b>this</b>.setLocation(x, y);
+        }<b>else</b>{
+            width = <b>this</b>.adjustWidth(width); height = <b>this</b>.adjustHeight(height);
+            <b>this</b>.anim({points: {to: [x, y]}, width: {to: width}, height: {to: height}},
+                          <b>this</b>.preanim(arguments, 4), <em>'motion'</em>);
+        }
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Sets the element's position and size the specified region. If animation is true then width, height, x and y will be animated concurrently.
+     * @param {Ext.lib.Region} region The region to fill
+     * @param {Boolean/Object} animate (optional) true <b>for</b> the <b>default</b> animation or a standard Element animation config object
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    setRegion : <b>function</b>(region, animate){
+        <b>this</b>.setBounds(region.left, region.top, region.right-region.left, region.bottom-region.top, <b>this</b>.preanim(arguments, 1));
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Appends an event handler to <b>this</b> element.  The shorthand version {@link #on} is equivalent.
+     * @param {String} eventName The type of event to handle
+     * @param {Function} fn The handler <b>function</b> the event invokes. This <b>function</b> is passed
+     * the following parameters:&lt;ul&gt;
+     * &lt;li&gt;&lt;b&gt;evt&lt;/b&gt; : EventObject&lt;div class=&quot;sub-desc&quot;&gt;The {@link Ext.EventObject EventObject} describing the event.&lt;/div&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;el&lt;/b&gt; : Element&lt;div class=&quot;sub-desc&quot;&gt;The {@link Ext.Element Element} which was the target of the event.
+     * Note that <b>this</b> may be filtered by using the &lt;tt&gt;delegate&lt;/tt&gt; option.&lt;/div&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;o&lt;/b&gt; : Object&lt;div class=&quot;sub-desc&quot;&gt;The options object from the addListener call.&lt;/div&gt;&lt;/li&gt;
+     * &lt;/ul&gt;
+     * @param {Object} scope (optional) The scope (&lt;code&gt;&lt;b&gt;<b>this</b>&lt;/b&gt;&lt;/code&gt; reference) <b>in</b> which the handler <b>function</b> is executed.
+     * &lt;b&gt;If omitted, defaults to <b>this</b> Element.&lt;/b&gt;.
+     * @param {Object} options (optional) An object containing handler configuration properties.
+     * This may contain any of the following properties:&lt;ul&gt;
+     * &lt;li&gt;&lt;b&gt;scope&lt;/b&gt; Object : &lt;div class=&quot;sub-desc&quot;&gt;The scope (&lt;code&gt;&lt;b&gt;<b>this</b>&lt;/b&gt;&lt;/code&gt; reference) <b>in</b> which the handler <b>function</b> is executed.
+     * &lt;b&gt;If omitted, defaults to <b>this</b> Element.&lt;/b&gt;&lt;/div&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;delegate&lt;/b&gt; String: &lt;div class=&quot;sub-desc&quot;&gt;A simple selector to filter the target or look <b>for</b> a descendant of the target&lt;/div&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;stopEvent&lt;/b&gt; Boolean: &lt;div class=&quot;sub-desc&quot;&gt;True to stop the event. That is stop propagation, and prevent the <b>default</b> action.&lt;/div&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;preventDefault&lt;/b&gt; Boolean: &lt;div class=&quot;sub-desc&quot;&gt;True to prevent the <b>default</b> action&lt;/div&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;stopPropagation&lt;/b&gt; Boolean: &lt;div class=&quot;sub-desc&quot;&gt;True to prevent event propagation&lt;/div&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;normalized&lt;/b&gt; Boolean: &lt;div class=&quot;sub-desc&quot;&gt;False to pass a browser event to the handler <b>function</b> instead of an Ext.EventObject&lt;/div&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;delay&lt;/b&gt; Number: &lt;div class=&quot;sub-desc&quot;&gt;The number of milliseconds to delay the invocation of the handler after te event fires.&lt;/div&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;single&lt;/b&gt; Boolean: &lt;div class=&quot;sub-desc&quot;&gt;True to add a handler to handle just the next firing of the event, and then remove itself.&lt;/div&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;buffer&lt;/b&gt; Number: &lt;div class=&quot;sub-desc&quot;&gt;Causes the handler to be scheduled to run <b>in</b> an {@link Ext.util.DelayedTask} delayed
+     * by the specified number of milliseconds. If the event fires again within that time, the original
+     * handler is &lt;em&gt;not&lt;/em&gt; invoked, but the <b>new</b> handler is scheduled <b>in</b> its place.&lt;/div&gt;&lt;/li&gt;
+     * &lt;/ul&gt;&lt;br&gt;
+     * &lt;p&gt;
+     * &lt;b&gt;Combining Options&lt;/b&gt;&lt;br&gt;
+     * In the following examples, the shorthand form {@link #on} is used rather than the more verbose
+     * addListener.  The two are equivalent.  Using the options argument, it is possible to combine different
+     * types of listeners:&lt;br&gt;
+     * &lt;br&gt;
+     * A delayed, one-time listener that auto stops the event and adds a custom argument (forumId) to the
+     * options object. The options object is available as the third parameter <b>in</b> the handler <b>function</b>.&lt;div style=&quot;margin: 5px 20px 20px;&quot;&gt;
+     * Code:&lt;pre&gt;&lt;code&gt;
+el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
+    single: true,
+    delay: 100,
+    stopEvent : true,
+    forumId: 4
+});&lt;/code&gt;&lt;/pre&gt;&lt;/p&gt;
+     * &lt;p&gt;
+     * &lt;b&gt;Attaching multiple handlers <b>in</b> 1 call&lt;/b&gt;&lt;br&gt;
+      * The method also allows <b>for</b> a single argument to be passed which is a config object containing properties
+     * which specify multiple handlers.&lt;/p&gt;
+     * &lt;p&gt;
+     * Code:&lt;pre&gt;&lt;code&gt;&lt;/p&gt;
+el.on({
+    <em>'click'</em> : {
+        fn: <b>this</b>.onClick,
+        scope: <b>this</b>,
+        delay: 100
+    },
+    <em>'mouseover'</em> : {
+        fn: <b>this</b>.onMouseOver,
+        scope: <b>this</b>
+    },
+    <em>'mouseout'</em> : {
+        fn: <b>this</b>.onMouseOut,
+        scope: <b>this</b>
+    }
+});&lt;/code&gt;&lt;/pre&gt;
+     * &lt;p&gt;
+     * Or a shorthand syntax:&lt;br&gt;
+     * Code:&lt;pre&gt;&lt;code&gt;&lt;/p&gt;
+el.on({
+    <em>'click'</em> : <b>this</b>.onClick,
+    <em>'mouseover'</em> : <b>this</b>.onMouseOver,
+    <em>'mouseout'</em> : <b>this</b>.onMouseOut,
+    scope: <b>this</b>
+});&lt;/code&gt;&lt;/pre&gt;
+     */</i>
+    addListener : <b>function</b>(eventName, fn, scope, options){
+        Ext.EventManager.on(<b>this</b>.dom,  eventName, fn, scope || <b>this</b>, options);
+    },
+
+    <i>/**
+     * Removes an event handler from <b>this</b> element.  The shorthand version {@link #un} is equivalent.  Example:
+     * &lt;pre&gt;&lt;code&gt;
+el.removeListener(<em>'click'</em>, <b>this</b>.handlerFn);
+<i>// or</i>
+el.un(<em>'click'</em>, <b>this</b>.handlerFn);
+&lt;/code&gt;&lt;/pre&gt;
+     * @param {String} eventName the type of event to remove
+     * @param {Function} fn the method the event invokes
+     * @param {Object} scope (optional) The scope (The &lt;tt&gt;<b>this</b>&lt;/tt&gt; reference) of the handler <b>function</b>. Defaults
+     * to <b>this</b> Element.
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    removeListener : <b>function</b>(eventName, fn, scope){
+        Ext.EventManager.removeListener(<b>this</b>.dom,  eventName, fn, scope || <b>this</b>);
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Removes all previous added listeners from <b>this</b> element
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    removeAllListeners : <b>function</b>(){
+        Ext.EventManager.removeAll(<b>this</b>.dom);
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Create an event handler on <b>this</b> element such that when the event fires and is handled by <b>this</b> element,
+     * it will be relayed to another object (i.e., fired again as <b>if</b> it originated from that object instead).
+     * @param {String} eventName The type of event to relay
+     * @param {Object} object Any object that extends {@link Ext.util.Observable} that will provide the context
+     * <b>for</b> firing the relayed event
+     */</i>
+    relayEvent : <b>function</b>(eventName, observable){
+        <b>this</b>.on(eventName, <b>function</b>(e){
+            observable.fireEvent(eventName, e);
+        });
+    },
+
+    <i>/**
+     * Set the opacity of the element
+     * @param {Float} opacity The <b>new</b> opacity. 0 = transparent, .5 = 50% visibile, 1 = fully visible, etc
+     * @param {Boolean/Object} animate (optional) true <b>for</b> the <b>default</b> animation or a standard Element animation config object
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+     setOpacity : <b>function</b>(opacity, animate){
+        <b>if</b>(!animate || !A){
+            <b>var</b> s = <b>this</b>.dom.style;
+            <b>if</b>(Ext.isIE){
+                s.zoom = 1;
+                s.filter = (s.filter || <em>''</em>).replace(/alpha\([^\)]*\)/gi,&quot;&quot;) +
+                           (opacity == 1 ? &quot;&quot; : &quot; alpha(opacity=&quot; + opacity * 100 + &quot;)&quot;);
+            }<b>else</b>{
+                s.opacity = opacity;
+            }
+        }<b>else</b>{
+            <b>this</b>.anim({opacity: {to: opacity}}, <b>this</b>.preanim(arguments, 1), null, .35, <em>'easeIn'</em>);
+        }
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Gets the left X coordinate
+     * @param {Boolean} local True to get the local css position instead of page coordinate
+     * @<b>return</b> {Number}
+     */</i>
+    getLeft : <b>function</b>(local){
+        <b>if</b>(!local){
+            <b>return</b> this.getX();
+        }<b>else</b>{
+            <b>return</b> parseInt(<b>this</b>.getStyle(&quot;left&quot;), 10) || 0;
+        }
+    },
+
+    <i>/**
+     * Gets the right X coordinate of the element (element X position + element width)
+     * @param {Boolean} local True to get the local css position instead of page coordinate
+     * @<b>return</b> {Number}
+     */</i>
+    getRight : <b>function</b>(local){
+        <b>if</b>(!local){
+            <b>return</b> this.getX() + <b>this</b>.getWidth();
+        }<b>else</b>{
+            <b>return</b> (<b>this</b>.getLeft(true) + <b>this</b>.getWidth()) || 0;
+        }
+    },
+
+    <i>/**
+     * Gets the top Y coordinate
+     * @param {Boolean} local True to get the local css position instead of page coordinate
+     * @<b>return</b> {Number}
+     */</i>
+    getTop : <b>function</b>(local) {
+        <b>if</b>(!local){
+            <b>return</b> this.getY();
+        }<b>else</b>{
+            <b>return</b> parseInt(<b>this</b>.getStyle(&quot;top&quot;), 10) || 0;
+        }
+    },
+
+    <i>/**
+     * Gets the bottom Y coordinate of the element (element Y position + element height)
+     * @param {Boolean} local True to get the local css position instead of page coordinate
+     * @<b>return</b> {Number}
+     */</i>
+    getBottom : <b>function</b>(local){
+        <b>if</b>(!local){
+            <b>return</b> this.getY() + <b>this</b>.getHeight();
+        }<b>else</b>{
+            <b>return</b> (<b>this</b>.getTop(true) + <b>this</b>.getHeight()) || 0;
+        }
+    },
+
+    <i>/**
+    * Initializes positioning on <b>this</b> element. If a desired position is not passed, it will make the
+    * the element positioned relative IF it is not already positioned.
+    * @param {String} pos (optional) Positioning to use &quot;relative&quot;, &quot;absolute&quot; or &quot;fixed&quot;
+    * @param {Number} zIndex (optional) The zIndex to apply
+    * @param {Number} x (optional) Set the page X position
+    * @param {Number} y (optional) Set the page Y position
+    */</i>
+    position : <b>function</b>(pos, zIndex, x, y){
+        <b>if</b>(!pos){
+           <b>if</b>(this.getStyle(<em>'position'</em>) == <em>'static'</em>){
+               <b>this</b>.setStyle(<em>'position'</em>, <em>'relative'</em>);
+           }
+        }<b>else</b>{
+            <b>this</b>.setStyle(&quot;position&quot;, pos);
+        }
+        <b>if</b>(zIndex){
+            <b>this</b>.setStyle(&quot;z-index&quot;, zIndex);
+        }
+        <b>if</b>(x !== undefined &amp;&amp; y !== undefined){
+            <b>this</b>.setXY([x, y]);
+        }<b>else</b> if(x !== undefined){
+            <b>this</b>.setX(x);
+        }<b>else</b> if(y !== undefined){
+            <b>this</b>.setY(y);
+        }
+    },
+
+    <i>/**
+    * Clear positioning back to the <b>default</b> when the document was loaded
+    * @param {String} value (optional) The value to use <b>for</b> the left,right,top,bottom, defaults to <em>''</em> (empty string). You could use <em>'auto'</em>.
+    * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    clearPositioning : <b>function</b>(value){
+        value = value ||<em>''</em>;
+        <b>this</b>.setStyle({
+            &quot;left&quot;: value,
+            &quot;right&quot;: value,
+            &quot;top&quot;: value,
+            &quot;bottom&quot;: value,
+            &quot;z-index&quot;: &quot;&quot;,
+            &quot;position&quot; : &quot;static&quot;
+        });
+        <b>return</b> this;
+    },
+
+    <i>/**
+    * Gets an object <b>with</b> all CSS positioning properties. Useful along <b>with</b> setPostioning to get
+    * snapshot before performing an update and then restoring the element.
+    * @<b>return</b> {Object}
+    */</i>
+    getPositioning : <b>function</b>(){
+        <b>var</b> l = <b>this</b>.getStyle(&quot;left&quot;);
+        <b>var</b> t = <b>this</b>.getStyle(&quot;top&quot;);
+        <b>return</b> {
+            &quot;position&quot; : <b>this</b>.getStyle(&quot;position&quot;),
+            &quot;left&quot; : l,
+            &quot;right&quot; : l ? &quot;&quot; : <b>this</b>.getStyle(&quot;right&quot;),
+            &quot;top&quot; : t,
+            &quot;bottom&quot; : t ? &quot;&quot; : <b>this</b>.getStyle(&quot;bottom&quot;),
+            &quot;z-index&quot; : <b>this</b>.getStyle(&quot;z-index&quot;)
+        };
+    },
+
+    <i>/**
+     * Gets the width of the border(s) <b>for</b> the specified side(s)
+     * @param {String} side Can be t, l, r, b or any combination of those to add multiple values. For example,
+     * passing lr would get the border (l)eft width + the border (r)ight width.
+     * @<b>return</b> {Number} The width of the sides passed added together
+     */</i>
+    getBorderWidth : <b>function</b>(side){
+        <b>return</b> this.addStyles(side, El.borders);
+    },
+
+    <i>/**
+     * Gets the width of the padding(s) <b>for</b> the specified side(s)
+     * @param {String} side Can be t, l, r, b or any combination of those to add multiple values. For example,
+     * passing lr would get the padding (l)eft + the padding (r)ight.
+     * @<b>return</b> {Number} The padding of the sides passed added together
+     */</i>
+    getPadding : <b>function</b>(side){
+        <b>return</b> this.addStyles(side, El.paddings);
+    },
+
+    <i>/**
+    * Set positioning <b>with</b> an object returned by getPositioning().
+    * @param {Object} posCfg
+    * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    setPositioning : <b>function</b>(pc){
+        <b>this</b>.applyStyles(pc);
+        <b>if</b>(pc.right == &quot;auto&quot;){
+            <b>this</b>.dom.style.right = &quot;&quot;;
+        }
+        <b>if</b>(pc.bottom == &quot;auto&quot;){
+            <b>this</b>.dom.style.bottom = &quot;&quot;;
+        }
+        <b>return</b> this;
+    },
+
+    <i>// private</i>
+    fixDisplay : <b>function</b>(){
+        <b>if</b>(this.getStyle(&quot;display&quot;) == &quot;none&quot;){
+            <b>this</b>.setStyle(&quot;visibility&quot;, &quot;hidden&quot;);
+            <b>this</b>.setStyle(&quot;display&quot;, <b>this</b>.originalDisplay); <i>// first try reverting to <b>default</b></i>
+            <b>if</b>(this.getStyle(&quot;display&quot;) == &quot;none&quot;){ <i>// <b>if</b> that fails, <b>default</b> to block</i>
+                <b>this</b>.setStyle(&quot;display&quot;, &quot;block&quot;);
+            }
+        }
+    },
+
+    <i>// private</i>
+	setOverflow : <b>function</b>(v){
+    	<b>if</b>(v==<em>'auto'</em> &amp;&amp; Ext.isMac &amp;&amp; Ext.isGecko2){ <i>// work around stupid FF 2.0/Mac scroll bar bug</i>
+    		<b>this</b>.dom.style.overflow = <em>'hidden'</em>;
+        	(<b>function</b>(){<b>this</b>.dom.style.overflow = <em>'auto'</em>;}).defer(1, <b>this</b>);
+    	}<b>else</b>{
+    		<b>this</b>.dom.style.overflow = v;
+    	}
+	},
+
+    <i>/**
+     * Quick set left and top adding <b>default</b> units
+     * @param {String} left The left CSS property value
+     * @param {String} top The top CSS property value
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+     setLeftTop : <b>function</b>(left, top){
+        <b>this</b>.dom.style.left = <b>this</b>.addUnits(left);
+        <b>this</b>.dom.style.top = <b>this</b>.addUnits(top);
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Move <b>this</b> element relative to its current position.
+     * @param {String} direction Possible values are: &quot;l&quot; (or &quot;left&quot;), &quot;r&quot; (or &quot;right&quot;), &quot;t&quot; (or &quot;top&quot;, or &quot;up&quot;), &quot;b&quot; (or &quot;bottom&quot;, or &quot;down&quot;).
+     * @param {Number} distance How far to move the element <b>in</b> pixels
+     * @param {Boolean/Object} animate (optional) true <b>for</b> the <b>default</b> animation or a standard Element animation config object
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+     move : <b>function</b>(direction, distance, animate){
+        <b>var</b> xy = <b>this</b>.getXY();
+        direction = direction.toLowerCase();
+        <b>switch</b>(direction){
+            <b>case</b> &quot;l&quot;:
+            <b>case</b> &quot;left&quot;:
+                <b>this</b>.moveTo(xy[0]-distance, xy[1], <b>this</b>.preanim(arguments, 2));
+                <b>break</b>;
+           <b>case</b> &quot;r&quot;:
+           <b>case</b> &quot;right&quot;:
+                <b>this</b>.moveTo(xy[0]+distance, xy[1], <b>this</b>.preanim(arguments, 2));
+                <b>break</b>;
+           <b>case</b> &quot;t&quot;:
+           <b>case</b> &quot;top&quot;:
+           <b>case</b> &quot;up&quot;:
+                <b>this</b>.moveTo(xy[0], xy[1]-distance, <b>this</b>.preanim(arguments, 2));
+                <b>break</b>;
+           <b>case</b> &quot;b&quot;:
+           <b>case</b> &quot;bottom&quot;:
+           <b>case</b> &quot;down&quot;:
+                <b>this</b>.moveTo(xy[0], xy[1]+distance, <b>this</b>.preanim(arguments, 2));
+                <b>break</b>;
+        }
+        <b>return</b> this;
+    },
+
+    <i>/**
+     *  Store the current overflow setting and clip overflow on the element - use {@link #unclip} to remove
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    clip : <b>function</b>(){
+        <b>if</b>(!<b>this</b>.isClipped){
+           <b>this</b>.isClipped = true;
+           <b>this</b>.originalClip = {
+               &quot;o&quot;: <b>this</b>.getStyle(&quot;overflow&quot;),
+               &quot;x&quot;: <b>this</b>.getStyle(&quot;overflow-x&quot;),
+               &quot;y&quot;: <b>this</b>.getStyle(&quot;overflow-y&quot;)
+           };
+           <b>this</b>.setStyle(&quot;overflow&quot;, &quot;hidden&quot;);
+           <b>this</b>.setStyle(&quot;overflow-x&quot;, &quot;hidden&quot;);
+           <b>this</b>.setStyle(&quot;overflow-y&quot;, &quot;hidden&quot;);
+        }
+        <b>return</b> this;
+    },
+
+    <i>/**
+     *  Return clipping (overflow) to original clipping before clip() was called
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    unclip : <b>function</b>(){
+        <b>if</b>(this.isClipped){
+            <b>this</b>.isClipped = false;
+            <b>var</b> o = <b>this</b>.originalClip;
+            <b>if</b>(o.o){<b>this</b>.setStyle(&quot;overflow&quot;, o.o);}
+            <b>if</b>(o.x){<b>this</b>.setStyle(&quot;overflow-x&quot;, o.x);}
+            <b>if</b>(o.y){<b>this</b>.setStyle(&quot;overflow-y&quot;, o.y);}
+        }
+        <b>return</b> this;
+    },
+
+
+    <i>/**
+     * Gets the x,y coordinates specified by the anchor position on the element.
+     * @param {String} anchor (optional) The specified anchor position (defaults to &quot;c&quot;).  See {@link #alignTo}
+     * <b>for</b> details on supported anchor positions.
+     * @param {Boolean} local (optional) True to get the local (element top/left-relative) anchor position instead
+     * of page coordinates
+     * @param {Object} size (optional) An object containing the size to use <b>for</b> calculating anchor position
+     * {width: (target width), height: (target height)} (defaults to the element's current size)
+     * @<b>return</b> {Array} [x, y] An array containing the element's x and y coordinates
+     */</i>
+    getAnchorXY : <b>function</b>(anchor, local, s){
+        <i>//Passing a different size is useful <b>for</b> pre-calculating anchors,</i>
+        <i>//especially <b>for</b> anchored animations that change the el size.</i>
+
+        <b>var</b> w, h, vp = false;
+        <b>if</b>(!s){
+            <b>var</b> d = <b>this</b>.dom;
+            <b>if</b>(d == document.body || d == document){
+                vp = true;
+                w = D.getViewWidth(); h = D.getViewHeight();
+            }<b>else</b>{
+                w = <b>this</b>.getWidth(); h = <b>this</b>.getHeight();
+            }
+        }<b>else</b>{
+            w = s.width;  h = s.height;
+        }
+        <b>var</b> x = 0, y = 0, r = Math.round;
+        <b>switch</b>((anchor || &quot;tl&quot;).toLowerCase()){
+            <b>case</b> &quot;c&quot;:
+                x = r(w*.5);
+                y = r(h*.5);
+            <b>break</b>;
+            <b>case</b> &quot;t&quot;:
+                x = r(w*.5);
+                y = 0;
+            <b>break</b>;
+            <b>case</b> &quot;l&quot;:
+                x = 0;
+                y = r(h*.5);
+            <b>break</b>;
+            <b>case</b> &quot;r&quot;:
+                x = w;
+                y = r(h*.5);
+            <b>break</b>;
+            <b>case</b> &quot;b&quot;:
+                x = r(w*.5);
+                y = h;
+            <b>break</b>;
+            <b>case</b> &quot;tl&quot;:
+                x = 0;
+                y = 0;
+            <b>break</b>;
+            <b>case</b> &quot;bl&quot;:
+                x = 0;
+                y = h;
+            <b>break</b>;
+            <b>case</b> &quot;br&quot;:
+                x = w;
+                y = h;
+            <b>break</b>;
+            <b>case</b> &quot;tr&quot;:
+                x = w;
+                y = 0;
+            <b>break</b>;
+        }
+        <b>if</b>(local === true){
+            <b>return</b> [x, y];
+        }
+        <b>if</b>(vp){
+            <b>var</b> sc = <b>this</b>.getScroll();
+            <b>return</b> [x + sc.left, y + sc.top];
+        }
+        <i>//Add the element's offset xy</i>
+        <b>var</b> o = <b>this</b>.getXY();
+        <b>return</b> [x+o[0], y+o[1]];
+    },
+
+    <i>/**
+     * Gets the x,y coordinates to align <b>this</b> element <b>with</b> another element. See {@link #alignTo} <b>for</b> more info on the
+     * supported position values.
+     * @param {Mixed} element The element to align to.
+     * @param {String} position The position to align to.
+     * @param {Array} offsets (optional) Offset the positioning by [x, y]
+     * @<b>return</b> {Array} [x, y]
+     */</i>
+    getAlignToXY : <b>function</b>(el, p, o){
+        el = Ext.get(el);
+        <b>if</b>(!el || !el.dom){
+            throw &quot;Element.alignToXY <b>with</b> an element that doesn't exist&quot;;
+        }
+        <b>var</b> d = <b>this</b>.dom;
+        <b>var</b> c = false; <i>//constrain to viewport</i>
+        <b>var</b> p1 = &quot;&quot;, p2 = &quot;&quot;;
+        o = o || [0,0];
+
+        <b>if</b>(!p){
+            p = &quot;tl-bl&quot;;
+        }<b>else</b> if(p == &quot;?&quot;){
+            p = &quot;tl-bl?&quot;;
+        }<b>else</b> if(p.indexOf(&quot;-&quot;) == -1){
+            p = &quot;tl-&quot; + p;
+        }
+        p = p.toLowerCase();
+        <b>var</b> m = p.match(/^([a-z]+)-([a-z]+)(\?)?$/);
+        <b>if</b>(!m){
+           throw &quot;Element.alignTo <b>with</b> an invalid alignment &quot; + p;
+        }
+        p1 = m[1]; p2 = m[2]; c = !!m[3];
+
+        <i>//Subtract the aligned el<em>'s internal xy from the target'</em>s offset xy</i>
+        <i>//plus custom offset to get the aligned el's <b>new</b> offset xy</i>
+        <b>var</b> a1 = <b>this</b>.getAnchorXY(p1, true);
+        <b>var</b> a2 = el.getAnchorXY(p2, false);
+
+        <b>var</b> x = a2[0] - a1[0] + o[0];
+        <b>var</b> y = a2[1] - a1[1] + o[1];
+
+        <b>if</b>(c){
+            <i>//constrain the aligned el to viewport <b>if</b> necessary</i>
+            <b>var</b> w = <b>this</b>.getWidth(), h = <b>this</b>.getHeight(), r = el.getRegion();
+            <i>// 5px of margin <b>for</b> ie</i>
+            <b>var</b> dw = D.getViewWidth()-5, dh = D.getViewHeight()-5;
+
+            <i>//If we are at a viewport boundary and the aligned el is anchored on a target border that is</i>
+            <i>//perpendicular to the vp border, allow the aligned el to slide on that border,</i>
+            <i>//otherwise swap the aligned el to the opposite border of the target.</i>
+            <b>var</b> p1y = p1.charAt(0), p1x = p1.charAt(p1.length-1);
+           <b>var</b> p2y = p2.charAt(0), p2x = p2.charAt(p2.length-1);
+           <b>var</b> swapY = ((p1y==&quot;t&quot; &amp;&amp; p2y==&quot;b&quot;) || (p1y==&quot;b&quot; &amp;&amp; p2y==&quot;t&quot;));
+           <b>var</b> swapX = ((p1x==&quot;r&quot; &amp;&amp; p2x==&quot;l&quot;) || (p1x==&quot;l&quot; &amp;&amp; p2x==&quot;r&quot;));
+
+           <b>var</b> doc = document;
+           <b>var</b> scrollX = (doc.documentElement.scrollLeft || doc.body.scrollLeft || 0)+5;
+           <b>var</b> scrollY = (doc.documentElement.scrollTop || doc.body.scrollTop || 0)+5;
+
+           <b>if</b>((x+w) &gt; dw + scrollX){
+                x = swapX ? r.left-w : dw+scrollX-w;
+            }
+           <b>if</b>(x &lt; scrollX){
+               x = swapX ? r.right : scrollX;
+           }
+           <b>if</b>((y+h) &gt; dh + scrollY){
+                y = swapY ? r.top-h : dh+scrollY-h;
+            }
+           <b>if</b> (y &lt; scrollY){
+               y = swapY ? r.bottom : scrollY;
+           }
+        }
+        <b>return</b> [x,y];
+    },
+
+    <i>// private</i>
+    getConstrainToXY : <b>function</b>(){
+        <b>var</b> os = {top:0, left:0, bottom:0, right: 0};
+
+        <b>return</b> function(el, local, offsets, proposedXY){
+            el = Ext.get(el);
+            offsets = offsets ? Ext.applyIf(offsets, os) : os;
+
+            <b>var</b> vw, vh, vx = 0, vy = 0;
+            <b>if</b>(el.dom == document.body || el.dom == document){
+                vw = Ext.lib.Dom.getViewWidth();
+                vh = Ext.lib.Dom.getViewHeight();
+            }<b>else</b>{
+                vw = el.dom.clientWidth;
+                vh = el.dom.clientHeight;
+                <b>if</b>(!local){
+                    <b>var</b> vxy = el.getXY();
+                    vx = vxy[0];
+                    vy = vxy[1];
+                }
+            }
+
+            <b>var</b> s = el.getScroll();
+
+            vx += offsets.left + s.left;
+            vy += offsets.top + s.top;
+
+            vw -= offsets.right;
+            vh -= offsets.bottom;
+
+            <b>var</b> vr = vx+vw;
+            <b>var</b> vb = vy+vh;
+
+            <b>var</b> xy = proposedXY || (!local ? <b>this</b>.getXY() : [<b>this</b>.getLeft(true), <b>this</b>.getTop(true)]);
+            <b>var</b> x = xy[0], y = xy[1];
+            <b>var</b> w = <b>this</b>.dom.offsetWidth, h = <b>this</b>.dom.offsetHeight;
+
+            <i>// only move it <b>if</b> it needs it</i>
+            <b>var</b> moved = false;
+
+            <i>// first validate right/bottom</i>
+            <b>if</b>((x + w) &gt; vr){
+                x = vr - w;
+                moved = true;
+            }
+            <b>if</b>((y + h) &gt; vb){
+                y = vb - h;
+                moved = true;
+            }
+            <i>// then make sure top/left isn't negative</i>
+            <b>if</b>(x &lt; vx){
+                x = vx;
+                moved = true;
+            }
+            <b>if</b>(y &lt; vy){
+                y = vy;
+                moved = true;
+            }
+            <b>return</b> moved ? [x, y] : false;
+        };
+    }(),
+
+    <i>// private</i>
+    adjustForConstraints : <b>function</b>(xy, parent, offsets){
+        <b>return</b> this.getConstrainToXY(parent || document, false, offsets, xy) ||  xy;
+    },
+
+    <i>/**
+     * Aligns <b>this</b> element <b>with</b> another element relative to the specified anchor points. If the other element is the
+     * document it aligns it to the viewport.
+     * The position parameter is optional, and can be specified <b>in</b> any one of the following formats:
+     * &lt;ul&gt;
+     *   &lt;li&gt;&lt;b&gt;Blank&lt;/b&gt;: Defaults to aligning the element<em>'s top-left corner to the target'</em>s bottom-left corner (&quot;tl-bl&quot;).&lt;/li&gt;
+     *   &lt;li&gt;&lt;b&gt;One anchor (deprecated)&lt;/b&gt;: The passed anchor position is used as the target element's anchor point.
+     *       The element being aligned will position its top-left corner (tl) to that point.  &lt;i&gt;This method has been
+     *       deprecated <b>in</b> favor of the newer two anchor syntax below&lt;/i&gt;.&lt;/li&gt;
+     *   &lt;li&gt;&lt;b&gt;Two anchors&lt;/b&gt;: If two values from the table below are passed separated by a dash, the first value is used as the
+     *       element<em>'s anchor point, and the second value is used as the target'</em>s anchor point.&lt;/li&gt;
+     * &lt;/ul&gt;
+     * In addition to the anchor points, the position parameter also supports the &quot;?&quot; character.  If &quot;?&quot; is passed at the end of
+     * the position string, the element will attempt to align as specified, but the position will be adjusted to constrain to
+     * the viewport <b>if</b> necessary.  Note that the element being aligned might be swapped to align to a different position than
+     * that specified <b>in</b> order to enforce the viewport constraints.
+     * Following are all of the supported anchor positions:
+&lt;pre&gt;
+Value  Description
+-----  -----------------------------
+tl     The top left corner (<b>default</b>)
+t      The center of the top edge
+tr     The top right corner
+l      The center of the left edge
+c      In the center of the element
+r      The center of the right edge
+bl     The bottom left corner
+b      The center of the bottom edge
+br     The bottom right corner
+&lt;/pre&gt;
+Example Usage:
+&lt;pre&gt;&lt;code&gt;
+<i>// align el to other-el using the <b>default</b> positioning (&quot;tl-bl&quot;, non-constrained)</i>
+el.alignTo(&quot;other-el&quot;);
+
+<i>// align the top left corner of el <b>with</b> the top right corner of other-el (constrained to viewport)</i>
+el.alignTo(&quot;other-el&quot;, &quot;tr?&quot;);
+
+<i>// align the bottom right corner of el <b>with</b> the center left edge of other-el</i>
+el.alignTo(&quot;other-el&quot;, &quot;br-l?&quot;);
+
+<i>// align the center of el <b>with</b> the bottom left corner of other-el and</i>
+<i>// adjust the x position by -6 pixels (and the y position by 0)</i>
+el.alignTo(&quot;other-el&quot;, &quot;c-bl&quot;, [-6, 0]);
+&lt;/code&gt;&lt;/pre&gt;
+     * @param {Mixed} element The element to align to.
+     * @param {String} position The position to align to.
+     * @param {Array} offsets (optional) Offset the positioning by [x, y]
+     * @param {Boolean/Object} animate (optional) true <b>for</b> the <b>default</b> animation or a standard Element animation config object
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    alignTo : <b>function</b>(element, position, offsets, animate){
+        <b>var</b> xy = <b>this</b>.getAlignToXY(element, position, offsets);
+        <b>this</b>.setXY(xy, <b>this</b>.preanim(arguments, 3));
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Anchors an element to another element and realigns it when the window is resized.
+     * @param {Mixed} element The element to align to.
+     * @param {String} position The position to align to.
+     * @param {Array} offsets (optional) Offset the positioning by [x, y]
+     * @param {Boolean/Object} animate (optional) True <b>for</b> the <b>default</b> animation or a standard Element animation config object
+     * @param {Boolean/Number} monitorScroll (optional) True to monitor body scroll and reposition. If <b>this</b> parameter
+     * is a number, it is used as the buffer delay (defaults to 50ms).
+     * @param {Function} callback The <b>function</b> to call after the animation finishes
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    anchorTo : <b>function</b>(el, alignment, offsets, animate, monitorScroll, callback){
+        <b>var</b> action = <b>function</b>(){
+            <b>this</b>.alignTo(el, alignment, offsets, animate);
+            Ext.callback(callback, <b>this</b>);
+        };
+        Ext.EventManager.onWindowResize(action, <b>this</b>);
+        <b>var</b> tm = <b>typeof</b> monitorScroll;
+        <b>if</b>(tm != <em>'undefined'</em>){
+            Ext.EventManager.on(window, <em>'scroll'</em>, action, <b>this</b>,
+                {buffer: tm == <em>'number'</em> ? monitorScroll : 50});
+        }
+        action.call(<b>this</b>); <i>// align immediately</i>
+        <b>return</b> this;
+    },
+    <i>/**
+     * Clears any opacity settings from <b>this</b> element. Required <b>in</b> some cases <b>for</b> IE.
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    clearOpacity : <b>function</b>(){
+        <b>if</b> (window.ActiveXObject) {
+            <b>if</b>(typeof <b>this</b>.dom.style.filter == <em>'string'</em> &amp;&amp; (/alpha/i).test(<b>this</b>.dom.style.filter)){
+                <b>this</b>.dom.style.filter = &quot;&quot;;
+            }
+        } <b>else</b> {
+            <b>this</b>.dom.style.opacity = &quot;&quot;;
+            <b>this</b>.dom.style[&quot;-moz-opacity&quot;] = &quot;&quot;;
+            <b>this</b>.dom.style[&quot;-khtml-opacity&quot;] = &quot;&quot;;
+        }
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Hide <b>this</b> element - Uses display mode to determine whether to use &quot;display&quot; or &quot;visibility&quot;. See {@link #setVisible}.
+     * @param {Boolean/Object} animate (optional) true <b>for</b> the <b>default</b> animation or a standard Element animation config object
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    hide : <b>function</b>(animate){
+        <b>this</b>.setVisible(false, <b>this</b>.preanim(arguments, 0));
+        <b>return</b> this;
+    },
+
+    <i>/**
+    * Show <b>this</b> element - Uses display mode to determine whether to use &quot;display&quot; or &quot;visibility&quot;. See {@link #setVisible}.
+    * @param {Boolean/Object} animate (optional) true <b>for</b> the <b>default</b> animation or a standard Element animation config object
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    show : <b>function</b>(animate){
+        <b>this</b>.setVisible(true, <b>this</b>.preanim(arguments, 0));
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * @private Test <b>if</b> size has a unit, otherwise appends the <b>default</b>
+     */</i>
+    addUnits : <b>function</b>(size){
+        <b>return</b> Ext.Element.addUnits(size, <b>this</b>.defaultUnit);
+    },
+
+    <i>/**
+    * Update the innerHTML of <b>this</b> element, optionally searching <b>for</b> and processing scripts
+    * @param {String} html The <b>new</b> HTML
+    * @param {Boolean} loadScripts (optional) True to look <b>for</b> and process scripts (defaults to false)
+    * @param {Function} callback (optional) For async script loading you can be notified when the update completes
+    * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    update : <b>function</b>(html, loadScripts, callback){
+        <b>if</b>(typeof html == &quot;undefined&quot;){
+            html = &quot;&quot;;
+        }
+        <b>if</b>(loadScripts !== true){
+            <b>this</b>.dom.innerHTML = html;
+            <b>if</b>(typeof callback == &quot;<b>function</b>&quot;){
+                callback();
+            }
+            <b>return</b> this;
+        }
+        <b>var</b> id = Ext.id();
+        <b>var</b> dom = <b>this</b>.dom;
+
+        html += <em>'&lt;span id=&quot;'</em> + id + <em>'&quot;&gt;&lt;/span&gt;'</em>;
+
+        E.onAvailable(id, <b>function</b>(){
+            <b>var</b> hd = document.getElementsByTagName(&quot;head&quot;)[0];
+            <b>var</b> re = /(?:&lt;script([^&gt;]*)?&gt;)((\n|\r|.)*?)(?:&lt;\/script&gt;)/ig;
+            <b>var</b> srcRe = /\ssrc=([\'\&quot;])(.*?)\1/i;
+            <b>var</b> typeRe = /\stype=([\'\&quot;])(.*?)\1/i;
+
+            <b>var</b> match;
+            <b>while</b>(match = re.exec(html)){
+                <b>var</b> attrs = match[1];
+                <b>var</b> srcMatch = attrs ? attrs.match(srcRe) : false;
+                <b>if</b>(srcMatch &amp;&amp; srcMatch[2]){
+                   <b>var</b> s = document.createElement(&quot;script&quot;);
+                   s.src = srcMatch[2];
+                   <b>var</b> typeMatch = attrs.match(typeRe);
+                   <b>if</b>(typeMatch &amp;&amp; typeMatch[2]){
+                       s.type = typeMatch[2];
+                   }
+                   hd.appendChild(s);
+                }<b>else</b> if(match[2] &amp;&amp; match[2].length &gt; 0){
+                    <b>if</b>(window.execScript) {
+                       window.execScript(match[2]);
+                    } <b>else</b> {
+                       window.eval(match[2]);
+                    }
+                }
+            }
+            <b>var</b> el = document.getElementById(id);
+            <b>if</b>(el){Ext.removeNode(el);}
+            <b>if</b>(typeof callback == &quot;<b>function</b>&quot;){
+                callback();
+            }
+        });
+        dom.innerHTML = html.replace(/(?:&lt;script.*?&gt;)((\n|\r|.)*?)(?:&lt;\/script&gt;)/ig, &quot;&quot;);
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Direct access to the Updater {@link Ext.Updater#update} method. The method takes the same object
+     * parameter as {@link Ext.Updater#update}
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    load : <b>function</b>(){
+        <b>var</b> um = <b>this</b>.getUpdater();
+        um.update.apply(um, arguments);
+        <b>return</b> this;
+    },
+
+    <i>/**
+    * Gets <b>this</b> element's Updater
+    * @<b>return</b> {Ext.Updater} The Updater
+    */</i>
+    getUpdater : <b>function</b>(){
+        <b>if</b>(!<b>this</b>.updateManager){
+            <b>this</b>.updateManager = <b>new</b> Ext.Updater(<b>this</b>);
+        }
+        <b>return</b> this.updateManager;
+    },
+
+    <i>/**
+     * Disables text selection <b>for</b> this element (normalized across browsers)
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    unselectable : <b>function</b>(){
+        <b>this</b>.dom.unselectable = &quot;on&quot;;
+        <b>this</b>.swallowEvent(&quot;selectstart&quot;, true);
+        <b>this</b>.applyStyles(&quot;-moz-user-select:none;-khtml-user-select:none;&quot;);
+        <b>this</b>.addClass(&quot;x-unselectable&quot;);
+        <b>return</b> this;
+    },
+
+    <i>/**
+    * Calculates the x, y to center <b>this</b> element on the screen
+    * @<b>return</b> {Array} The x, y values [x, y]
+    */</i>
+    getCenterXY : <b>function</b>(){
+        <b>return</b> this.getAlignToXY(document, <em>'c-c'</em>);
+    },
+
+    <i>/**
+    * Centers the Element <b>in</b> either the viewport, or another Element.
+    * @param {Mixed} centerIn (optional) The element <b>in</b> which to center the element.
+    */</i>
+    center : <b>function</b>(centerIn){
+        <b>this</b>.alignTo(centerIn || document, <em>'c-c'</em>);
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Tests various css rules/browsers to determine <b>if</b> this element uses a border box
+     * @<b>return</b> {Boolean}
+     */</i>
+    isBorderBox : <b>function</b>(){
+        <b>return</b> noBoxAdjust[<b>this</b>.dom.tagName.toLowerCase()] || Ext.isBorderBox;
+    },
+
+    <i>/**
+     * Return a box {x, y, width, height} that can be used to set another elements
+     * size/location to match <b>this</b> element.
+     * @param {Boolean} contentBox (optional) If true a box <b>for</b> the content of the element is returned.
+     * @param {Boolean} local (optional) If true the element's left and top are returned instead of page x/y.
+     * @<b>return</b> {Object} box An object <b>in</b> the format {x, y, width, height}
+     */</i>
+    getBox : <b>function</b>(contentBox, local){
+        <b>var</b> xy;
+        <b>if</b>(!local){
+            xy = <b>this</b>.getXY();
+        }<b>else</b>{
+            <b>var</b> left = parseInt(<b>this</b>.getStyle(&quot;left&quot;), 10) || 0;
+            <b>var</b> top = parseInt(<b>this</b>.getStyle(&quot;top&quot;), 10) || 0;
+            xy = [left, top];
+        }
+        <b>var</b> el = <b>this</b>.dom, w = el.offsetWidth, h = el.offsetHeight, bx;
+        <b>if</b>(!contentBox){
+            bx = {x: xy[0], y: xy[1], 0: xy[0], 1: xy[1], width: w, height: h};
+        }<b>else</b>{
+            <b>var</b> l = <b>this</b>.getBorderWidth(&quot;l&quot;)+<b>this</b>.getPadding(&quot;l&quot;);
+            <b>var</b> r = <b>this</b>.getBorderWidth(&quot;r&quot;)+<b>this</b>.getPadding(&quot;r&quot;);
+            <b>var</b> t = <b>this</b>.getBorderWidth(&quot;t&quot;)+<b>this</b>.getPadding(&quot;t&quot;);
+            <b>var</b> b = <b>this</b>.getBorderWidth(&quot;b&quot;)+<b>this</b>.getPadding(&quot;b&quot;);
+            bx = {x: xy[0]+l, y: xy[1]+t, 0: xy[0]+l, 1: xy[1]+t, width: w-(l+r), height: h-(t+b)};
+        }
+        bx.right = bx.x + bx.width;
+        bx.bottom = bx.y + bx.height;
+        <b>return</b> bx;
+    },
+
+    <i>/**
+     * Returns the sum width of the padding and borders <b>for</b> the passed &quot;sides&quot;. See getBorderWidth()
+     <b>for</b> more information about the sides.
+     * @param {String} sides
+     * @<b>return</b> {Number}
+     */</i>
+    getFrameWidth : <b>function</b>(sides, onlyContentBox){
+        <b>return</b> onlyContentBox &amp;&amp; Ext.isBorderBox ? 0 : (<b>this</b>.getPadding(sides) + <b>this</b>.getBorderWidth(sides));
+    },
+
+    <i>/**
+     * Sets the element's box. Use getBox() on another element to get a box obj. If animate is true then width, height, x and y will be animated concurrently.
+     * @param {Object} box The box to fill {x, y, width, height}
+     * @param {Boolean} adjust (optional) Whether to adjust <b>for</b> box-model issues automatically
+     * @param {Boolean/Object} animate (optional) true <b>for</b> the <b>default</b> animation or a standard Element animation config object
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    setBox : <b>function</b>(box, adjust, animate){
+        <b>var</b> w = box.width, h = box.height;
+        <b>if</b>((adjust &amp;&amp; !<b>this</b>.autoBoxAdjust) &amp;&amp; !<b>this</b>.isBorderBox()){
+           w -= (<b>this</b>.getBorderWidth(&quot;lr&quot;) + <b>this</b>.getPadding(&quot;lr&quot;));
+           h -= (<b>this</b>.getBorderWidth(&quot;tb&quot;) + <b>this</b>.getPadding(&quot;tb&quot;));
+        }
+        <b>this</b>.setBounds(box.x, box.y, w, h, <b>this</b>.preanim(arguments, 2));
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Forces the browser to repaint <b>this</b> element
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+     repaint : <b>function</b>(){
+        <b>var</b> dom = <b>this</b>.dom;
+        <b>this</b>.addClass(&quot;x-repaint&quot;);
+        setTimeout(<b>function</b>(){
+            Ext.get(dom).removeClass(&quot;x-repaint&quot;);
+        }, 1);
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Returns an object <b>with</b> properties top, left, right and bottom representing the margins of <b>this</b> element unless sides is passed,
+     * then it returns the calculated width of the sides (see getPadding)
+     * @param {String} sides (optional) Any combination of l, r, t, b to get the sum of those sides
+     * @<b>return</b> {Object/Number}
+     */</i>
+    getMargins : <b>function</b>(side){
+        <b>if</b>(!side){
+            <b>return</b> {
+                top: parseInt(<b>this</b>.getStyle(&quot;margin-top&quot;), 10) || 0,
+                left: parseInt(<b>this</b>.getStyle(&quot;margin-left&quot;), 10) || 0,
+                bottom: parseInt(<b>this</b>.getStyle(&quot;margin-bottom&quot;), 10) || 0,
+                right: parseInt(<b>this</b>.getStyle(&quot;margin-right&quot;), 10) || 0
+            };
+        }<b>else</b>{
+            <b>return</b> this.addStyles(side, El.margins);
+         }
+    },
+
+    <i>// private</i>
+    addStyles : <b>function</b>(sides, styles){
+        <b>var</b> val = 0, v, w;
+        <b>for</b>(var i = 0, len = sides.length; i &lt; len; i++){
+            v = <b>this</b>.getStyle(styles[sides.charAt(i)]);
+            <b>if</b>(v){
+                 w = parseInt(v, 10);
+                 <b>if</b>(w){ val += (w &gt;= 0 ? w : -1 * w); }
+            }
+        }
+        <b>return</b> val;
+    },
+
+    <i>/**
+     * Creates a proxy element of <b>this</b> element
+     * @param {String/Object} config The class name of the proxy element or a DomHelper config object
+     * @param {String/HTMLElement} renderTo (optional) The element or element id to render the proxy to (defaults to document.body)
+     * @param {Boolean} matchBox (optional) True to align and size the proxy to <b>this</b> element now (defaults to false)
+     * @<b>return</b> {Ext.Element} The <b>new</b> proxy element
+     */</i>
+    createProxy : <b>function</b>(config, renderTo, matchBox){
+        config = <b>typeof</b> config == &quot;object&quot; ?
+            config : {tag : &quot;div&quot;, cls: config};
+
+        <b>var</b> proxy;
+        <b>if</b>(renderTo){
+            proxy = Ext.DomHelper.append(renderTo, config, true);
+        }<b>else</b> {
+            proxy = Ext.DomHelper.insertBefore(<b>this</b>.dom, config, true);
+        }
+        <b>if</b>(matchBox){
+           proxy.setBox(<b>this</b>.getBox());
+        }
+        <b>return</b> proxy;
+    },
+
+    <i>/**
+     * Puts a mask over <b>this</b> element to disable user interaction. Requires core.css.
+     * This method can only be applied to elements which accept child nodes.
+     * @param {String} msg (optional) A message to display <b>in</b> the mask
+     * @param {String} msgCls (optional) A css class to apply to the msg element
+     * @<b>return</b> {Element} The mask element
+     */</i>
+    mask : <b>function</b>(msg, msgCls){
+        <b>if</b>(this.getStyle(&quot;position&quot;) == &quot;static&quot;){
+            <b>this</b>.addClass(&quot;x-masked-relative&quot;);
+        }
+        <b>if</b>(this._maskMsg){
+            <b>this</b>._maskMsg.remove();
+        }
+        <b>if</b>(this._mask){
+            <b>this</b>._mask.remove();
+        }
+
+        <b>this</b>._mask = Ext.DomHelper.append(<b>this</b>.dom, {cls:&quot;ext-el-mask&quot;}, true);
+
+        <b>this</b>.addClass(&quot;x-masked&quot;);
+        <b>this</b>._mask.setDisplayed(true);
+        <b>if</b>(typeof msg == <em>'string'</em>){
+            <b>this</b>._maskMsg = Ext.DomHelper.append(<b>this</b>.dom, {cls:&quot;ext-el-mask-msg&quot;, cn:{tag:<em>'div'</em>}}, true);
+            <b>var</b> mm = <b>this</b>._maskMsg;
+            mm.dom.className = msgCls ? &quot;ext-el-mask-msg &quot; + msgCls : &quot;ext-el-mask-msg&quot;;
+            mm.dom.firstChild.innerHTML = msg;
+            mm.setDisplayed(true);
+            mm.center(<b>this</b>);
+        }
+        <b>if</b>(Ext.isIE &amp;&amp; !(Ext.isIE7 &amp;&amp; Ext.isStrict) &amp;&amp; <b>this</b>.getStyle(<em>'height'</em>) == <em>'auto'</em>){ <i>// ie will not expand full height automatically</i>
+            <b>this</b>._mask.setSize(<b>this</b>.getWidth(), <b>this</b>.getHeight());
+        }
+        <b>return</b> this._mask;
+    },
+
+    <i>/**
+     * Removes a previously applied mask.
+     */</i>
+    unmask : <b>function</b>(){
+        <b>if</b>(this._mask){
+            <b>if</b>(this._maskMsg){
+                <b>this</b>._maskMsg.remove();
+                <b>delete</b> this._maskMsg;
+            }
+            <b>this</b>._mask.remove();
+            <b>delete</b> this._mask;
+        }
+        <b>this</b>.removeClass([&quot;x-masked&quot;, &quot;x-masked-relative&quot;]);
+    },
+
+    <i>/**
+     * Returns true <b>if</b> this element is masked
+     * @<b>return</b> {Boolean}
+     */</i>
+    isMasked : <b>function</b>(){
+        <b>return</b> this._mask &amp;&amp; <b>this</b>._mask.isVisible();
+    },
+
+    <i>/**
+     * Creates an iframe shim <b>for</b> this element to keep selects and other windowed objects from
+     * showing through.
+     * @<b>return</b> {Ext.Element} The <b>new</b> shim element
+     */</i>
+    createShim : <b>function</b>(){
+        <b>var</b> el = document.createElement(<em>'iframe'</em>);
+        el.frameBorder = <em>'0'</em>;
+        el.className = <em>'ext-shim'</em>;
+        <b>if</b>(Ext.isIE &amp;&amp; Ext.isSecure){
+            el.src = Ext.SSL_SECURE_URL;
+        }
+        <b>var</b> shim = Ext.get(<b>this</b>.dom.parentNode.insertBefore(el, <b>this</b>.dom));
+        shim.autoBoxAdjust = false;
+        <b>return</b> shim;
+    },
+
+    <i>/**
+     * Removes <b>this</b> element from the DOM and deletes it from the cache
+     */</i>
+    remove : <b>function</b>(){
+        Ext.removeNode(<b>this</b>.dom);
+        <b>delete</b> El.cache[<b>this</b>.dom.id];
+    },
+
+    <i>/**
+     * Sets up event handlers to call the passed functions when the mouse is moved into and out of the Element.
+     * @param {Function} overFn The <b>function</b> to call when the mouse enters the Element.
+     * @param {Function} outFn The <b>function</b> to call when the mouse leaves the Element.
+     * @param {Object} scope (optional) The scope (&lt;tt&gt;<b>this</b>&lt;/tt&gt; reference) <b>in</b> which the functions are executed. Defaults to <b>this</b> Element.
+     */</i>
+    hover : <b>function</b>(overFn, outFn, scope){
+        <b>var</b> preOverFn = <b>function</b>(e){
+            <b>if</b>(!e.within(<b>this</b>, true)){
+                overFn.apply(scope || <b>this</b>, arguments);
+            }
+        };
+        <b>var</b> preOutFn = <b>function</b>(e){
+            <b>if</b>(!e.within(<b>this</b>, true)){
+                outFn.apply(scope || <b>this</b>, arguments);
+            }
+        };
+        <b>this</b>.on(&quot;mouseover&quot;, preOverFn, <b>this</b>.dom);
+        <b>this</b>.on(&quot;mouseout&quot;, preOutFn, <b>this</b>.dom);
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Sets up event handlers to add and remove a css class when the mouse is over <b>this</b> element
+     * @param {String} className
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    addClassOnOver : <b>function</b>(className){
+        <b>this</b>.hover(
+            <b>function</b>(){
+                Ext.fly(<b>this</b>, <em>'_internal'</em>).addClass(className);
+            },
+            <b>function</b>(){
+                Ext.fly(<b>this</b>, <em>'_internal'</em>).removeClass(className);
+            }
+        );
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Sets up event handlers to add and remove a css class when <b>this</b> element has the focus
+     * @param {String} className
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    addClassOnFocus : <b>function</b>(className){
+        <b>this</b>.on(&quot;focus&quot;, <b>function</b>(){
+            Ext.fly(<b>this</b>, <em>'_internal'</em>).addClass(className);
+        }, <b>this</b>.dom);
+        <b>this</b>.on(&quot;blur&quot;, <b>function</b>(){
+            Ext.fly(<b>this</b>, <em>'_internal'</em>).removeClass(className);
+        }, <b>this</b>.dom);
+        <b>return</b> this;
+    },
+    <i>/**
+     * Sets up event handlers to add and remove a css class when the mouse is down and then up on <b>this</b> element (a click effect)
+     * @param {String} className
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    addClassOnClick : <b>function</b>(className){
+        <b>var</b> dom = <b>this</b>.dom;
+        <b>this</b>.on(&quot;mousedown&quot;, <b>function</b>(){
+            Ext.fly(dom, <em>'_internal'</em>).addClass(className);
+            <b>var</b> d = Ext.getDoc();
+            <b>var</b> fn = <b>function</b>(){
+                Ext.fly(dom, <em>'_internal'</em>).removeClass(className);
+                d.removeListener(&quot;mouseup&quot;, fn);
+            };
+            d.on(&quot;mouseup&quot;, fn);
+        });
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Stops the specified event(s) from bubbling and optionally prevents the <b>default</b> action
+     * @param {String/Array} eventName an event / array of events to stop from bubbling
+     * @param {Boolean} preventDefault (optional) true to prevent the <b>default</b> action too
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    swallowEvent : <b>function</b>(eventName, preventDefault){
+        <b>var</b> fn = <b>function</b>(e){
+            e.stopPropagation();
+            <b>if</b>(preventDefault){
+                e.preventDefault();
+            }
+        };
+        <b>if</b>(Ext.isArray(eventName)){
+            <b>for</b>(var i = 0, len = eventName.length; i &lt; len; i++){
+                 <b>this</b>.on(eventName[i], fn);
+            }
+            <b>return</b> this;
+        }
+        <b>this</b>.on(eventName, fn);
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Gets the parent node <b>for</b> this element, optionally chaining up trying to match a selector
+     * @param {String} selector (optional) Find a parent node that matches the passed simple selector
+     * @param {Boolean} returnDom (optional) True to <b>return</b> a raw dom node instead of an Ext.Element
+     * @<b>return</b> {Ext.Element/HTMLElement} The parent node or null
+	 */</i>
+    parent : <b>function</b>(selector, returnDom){
+        <b>return</b> this.matchNode(<em>'parentNode'</em>, <em>'parentNode'</em>, selector, returnDom);
+    },
+
+     <i>/**
+     * Gets the next sibling, skipping text nodes
+     * @param {String} selector (optional) Find the next sibling that matches the passed simple selector
+     * @param {Boolean} returnDom (optional) True to <b>return</b> a raw dom node instead of an Ext.Element
+     * @<b>return</b> {Ext.Element/HTMLElement} The next sibling or null
+	 */</i>
+    next : <b>function</b>(selector, returnDom){
+        <b>return</b> this.matchNode(<em>'nextSibling'</em>, <em>'nextSibling'</em>, selector, returnDom);
+    },
+
+    <i>/**
+     * Gets the previous sibling, skipping text nodes
+     * @param {String} selector (optional) Find the previous sibling that matches the passed simple selector
+     * @param {Boolean} returnDom (optional) True to <b>return</b> a raw dom node instead of an Ext.Element
+     * @<b>return</b> {Ext.Element/HTMLElement} The previous sibling or null
+	 */</i>
+    prev : <b>function</b>(selector, returnDom){
+        <b>return</b> this.matchNode(<em>'previousSibling'</em>, <em>'previousSibling'</em>, selector, returnDom);
+    },
+
+
+    <i>/**
+     * Gets the first child, skipping text nodes
+     * @param {String} selector (optional) Find the next sibling that matches the passed simple selector
+     * @param {Boolean} returnDom (optional) True to <b>return</b> a raw dom node instead of an Ext.Element
+     * @<b>return</b> {Ext.Element/HTMLElement} The first child or null
+	 */</i>
+    first : <b>function</b>(selector, returnDom){
+        <b>return</b> this.matchNode(<em>'nextSibling'</em>, <em>'firstChild'</em>, selector, returnDom);
+    },
+
+    <i>/**
+     * Gets the last child, skipping text nodes
+     * @param {String} selector (optional) Find the previous sibling that matches the passed simple selector
+     * @param {Boolean} returnDom (optional) True to <b>return</b> a raw dom node instead of an Ext.Element
+     * @<b>return</b> {Ext.Element/HTMLElement} The last child or null
+	 */</i>
+    last : <b>function</b>(selector, returnDom){
+        <b>return</b> this.matchNode(<em>'previousSibling'</em>, <em>'lastChild'</em>, selector, returnDom);
+    },
+
+    matchNode : <b>function</b>(dir, start, selector, returnDom){
+        <b>var</b> n = <b>this</b>.dom[start];
+        <b>while</b>(n){
+            <b>if</b>(n.nodeType == 1 &amp;&amp; (!selector || Ext.DomQuery.is(n, selector))){
+                <b>return</b> !returnDom ? Ext.get(n) : n;
+            }
+            n = n[dir];
+        }
+        <b>return</b> null;
+    },
+
+    <i>/**
+     * Appends the passed element(s) to <b>this</b> element
+     * @param {String/HTMLElement/Array/Element/CompositeElement} el
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    appendChild: <b>function</b>(el){
+        el = Ext.get(el);
+        el.appendTo(<b>this</b>);
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Creates the passed DomHelper config and appends it to <b>this</b> element or optionally inserts it before the passed child element.
+     * @param {Object} config DomHelper element config object.  If no tag is specified (e.g., {tag:<em>'input'</em>}) then a div will be
+     * automatically generated <b>with</b> the specified attributes.
+     * @param {HTMLElement} insertBefore (optional) a child element of <b>this</b> element
+     * @param {Boolean} returnDom (optional) true to <b>return</b> the dom node instead of creating an Element
+     * @<b>return</b> {Ext.Element} The <b>new</b> child element
+     */</i>
+    createChild: <b>function</b>(config, insertBefore, returnDom){
+        config = config || {tag:<em>'div'</em>};
+        <b>if</b>(insertBefore){
+            <b>return</b> Ext.DomHelper.insertBefore(insertBefore, config, returnDom !== true);
+        }
+        <b>return</b> Ext.DomHelper[!<b>this</b>.dom.firstChild ? <em>'overwrite'</em> : <em>'append'</em>](<b>this</b>.dom, config,  returnDom !== true);
+    },
+
+    <i>/**
+     * Appends <b>this</b> element to the passed element
+     * @param {Mixed} el The <b>new</b> parent element
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    appendTo: <b>function</b>(el){
+        el = Ext.getDom(el);
+        el.appendChild(<b>this</b>.dom);
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Inserts <b>this</b> element before the passed element <b>in</b> the DOM
+     * @param {Mixed} el The element before which <b>this</b> element will be inserted
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    insertBefore: <b>function</b>(el){
+        el = Ext.getDom(el);
+        el.parentNode.insertBefore(<b>this</b>.dom, el);
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Inserts <b>this</b> element after the passed element <b>in</b> the DOM
+     * @param {Mixed} el The element to insert after
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    insertAfter: <b>function</b>(el){
+        el = Ext.getDom(el);
+        el.parentNode.insertBefore(<b>this</b>.dom, el.nextSibling);
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Inserts (or creates) an element (or DomHelper config) as the first child of <b>this</b> element
+     * @param {Mixed/Object} el The id or element to insert or a DomHelper config to create and insert
+     * @<b>return</b> {Ext.Element} The <b>new</b> child
+     */</i>
+    insertFirst: <b>function</b>(el, returnDom){
+        el = el || {};
+        <b>if</b>(el.nodeType || el.dom){ <i>// dh config</i>
+            el = Ext.getDom(el);
+            <b>this</b>.dom.insertBefore(el, <b>this</b>.dom.firstChild);
+            <b>return</b> !returnDom ? Ext.get(el) : el;
+        }<b>else</b>{
+            <b>return</b> this.createChild(el, <b>this</b>.dom.firstChild, returnDom);
+        }
+    },
+
+    <i>/**
+     * Inserts (or creates) the passed element (or DomHelper config) as a sibling of <b>this</b> element
+     * @param {Mixed/Object/Array} el The id, element to insert or a DomHelper config to create and insert *or* an array of any of those.
+     * @param {String} where (optional) <em>'before'</em> or <em>'after'</em> defaults to before
+     * @param {Boolean} returnDom (optional) True to <b>return</b> the raw DOM element instead of Ext.Element
+     * @<b>return</b> {Ext.Element} the inserted Element
+     */</i>
+    insertSibling: <b>function</b>(el, where, returnDom){
+        <b>var</b> rt;
+        <b>if</b>(Ext.isArray(el)){
+            <b>for</b>(var i = 0, len = el.length; i &lt; len; i++){
+                rt = <b>this</b>.insertSibling(el[i], where, returnDom);
+            }
+            <b>return</b> rt;
+        }
+        where = where ? where.toLowerCase() : <em>'before'</em>;
+        el = el || {};
+        <b>var</b> refNode = where == <em>'before'</em> ? <b>this</b>.dom : <b>this</b>.dom.nextSibling;
+
+        <b>if</b>(el.nodeType || el.dom){ <i>// dh config</i>
+            rt = <b>this</b>.dom.parentNode.insertBefore(Ext.getDom(el), refNode);
+            <b>if</b>(!returnDom){
+                rt = Ext.get(rt);
+            }
+        }<b>else</b>{
+            <b>if</b>(where == <em>'after'</em> &amp;&amp; !<b>this</b>.dom.nextSibling){
+                rt = Ext.DomHelper.append(<b>this</b>.dom.parentNode, el, !returnDom);
+            }<b>else</b>{
+                rt = Ext.DomHelper[where == <em>'after'</em> ? <em>'insertAfter'</em> : <em>'insertBefore'</em>](<b>this</b>.dom, el, !returnDom);
+            }
+        }
+        <b>return</b> rt;
+    },
+
+    <i>/**
+     * Creates and wraps <b>this</b> element <b>with</b> another element
+     * @param {Object} config (optional) DomHelper element config object <b>for</b> the wrapper element or null <b>for</b> an empty div
+     * @param {Boolean} returnDom (optional) True to <b>return</b> the raw DOM element instead of Ext.Element
+     * @<b>return</b> {HTMLElement/Element} The newly created wrapper element
+     */</i>
+    wrap: <b>function</b>(config, returnDom){
+        <b>if</b>(!config){
+            config = {tag: &quot;div&quot;};
+        }
+        <b>var</b> newEl = Ext.DomHelper.insertBefore(<b>this</b>.dom, config, !returnDom);
+        newEl.dom ? newEl.dom.appendChild(<b>this</b>.dom) : newEl.appendChild(<b>this</b>.dom);
+        <b>return</b> newEl;
+    },
+
+    <i>/**
+     * Replaces the passed element <b>with</b> this element
+     * @param {Mixed} el The element to replace
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    replace: <b>function</b>(el){
+        el = Ext.get(el);
+        <b>this</b>.insertBefore(el);
+        el.remove();
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Replaces <b>this</b> element <b>with</b> the passed element
+     * @param {Mixed/Object} el The <b>new</b> element or a DomHelper config of an element to create
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    replaceWith: <b>function</b>(el){
+        <b>if</b>(el.nodeType || el.dom){ <i>// dh config</i>
+            el = Ext.getDom(el);
+            <b>this</b>.dom.parentNode.insertBefore(el, <b>this</b>.dom);
+        }<b>else</b>{
+            el = <b>this</b>.insertSibling(el, <em>'before'</em>);
+        }
+        El.uncache(<b>this</b>.id);
+        Ext.removeNode(<b>this</b>.dom);
+        <b>this</b>.dom = el;
+        <b>this</b>.id = Ext.id(el);
+        El.cache[<b>this</b>.id] = <b>this</b>;
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Inserts an html fragment into <b>this</b> element
+     * @param {String} where Where to insert the html <b>in</b> relation to <b>this</b> element - beforeBegin, afterBegin, beforeEnd, afterEnd.
+     * @param {String} html The HTML fragment
+     * @param {Boolean} returnEl (optional) True to <b>return</b> an Ext.Element (defaults to false)
+     * @<b>return</b> {HTMLElement/Ext.Element} The inserted node (or nearest related <b>if</b> more than 1 inserted)
+     */</i>
+    insertHtml : <b>function</b>(where, html, returnEl){
+        <b>var</b> el = Ext.DomHelper.insertHtml(where, <b>this</b>.dom, html);
+        <b>return</b> returnEl ? Ext.get(el) : el;
+    },
+
+    <i>/**
+     * Sets the passed attributes as attributes of <b>this</b> element (a style attribute can be a string, object or <b>function</b>)
+     * @param {Object} o The object <b>with</b> the attributes
+     * @param {Boolean} useSet (optional) false to override the <b>default</b> setAttribute to use expandos.
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    set : <b>function</b>(o, useSet){
+        <b>var</b> el = <b>this</b>.dom;
+        useSet = <b>typeof</b> useSet == <em>'undefined'</em> ? (el.setAttribute ? true : false) : useSet;
+        <b>for</b>(var attr <b>in</b> o){
+            <b>if</b>(attr == &quot;style&quot; || <b>typeof</b> o[attr] == &quot;<b>function</b>&quot;) <b>continue</b>;
+            <b>if</b>(attr==&quot;cls&quot;){
+                el.className = o[&quot;cls&quot;];
+            }<b>else</b> if(o.hasOwnProperty(attr)){
+                <b>if</b>(useSet) el.setAttribute(attr, o[attr]);
+                <b>else</b> el[attr] = o[attr];
+            }
+        }
+        <b>if</b>(o.style){
+            Ext.DomHelper.applyStyles(el, o.style);
+        }
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Convenience method <b>for</b> constructing a KeyMap
+     * @param {Number/Array/Object/String} key Either a string <b>with</b> the keys to listen <b>for</b>, the numeric key code, array of key codes or an object <b>with</b> the following options:
+     *                                  {key: (number or array), shift: (true/false), ctrl: (true/false), alt: (true/false)}
+     * @param {Function} fn The <b>function</b> to call
+     * @param {Object} scope (optional) The scope of the <b>function</b>
+     * @<b>return</b> {Ext.KeyMap} The KeyMap created
+     */</i>
+    addKeyListener : <b>function</b>(key, fn, scope){
+        <b>var</b> config;
+        <b>if</b>(typeof key != &quot;object&quot; || Ext.isArray(key)){
+            config = {
+                key: key,
+                fn: fn,
+                scope: scope
+            };
+        }<b>else</b>{
+            config = {
+                key : key.key,
+                shift : key.shift,
+                ctrl : key.ctrl,
+                alt : key.alt,
+                fn: fn,
+                scope: scope
+            };
+        }
+        <b>return</b> new Ext.KeyMap(<b>this</b>, config);
+    },
+
+    <i>/**
+     * Creates a KeyMap <b>for</b> this element
+     * @param {Object} config The KeyMap config. See {@link Ext.KeyMap} <b>for</b> more details
+     * @<b>return</b> {Ext.KeyMap} The KeyMap created
+     */</i>
+    addKeyMap : <b>function</b>(config){
+        <b>return</b> new Ext.KeyMap(<b>this</b>, config);
+    },
+
+    <i>/**
+     * Returns true <b>if</b> this element is scrollable.
+     * @<b>return</b> {Boolean}
+     */</i>
+     isScrollable : <b>function</b>(){
+        <b>var</b> dom = <b>this</b>.dom;
+        <b>return</b> dom.scrollHeight &gt; dom.clientHeight || dom.scrollWidth &gt; dom.clientWidth;
+    },
+
+    <i>/**
+     * Scrolls <b>this</b> element the specified scroll point. It does NOT <b>do</b> bounds checking so <b>if</b> you scroll to a weird value it will try to <b>do</b> it. For auto bounds checking, use scroll().
+     * @param {String} side Either &quot;left&quot; <b>for</b> scrollLeft values or &quot;top&quot; <b>for</b> scrollTop values.
+     * @param {Number} value The <b>new</b> scroll value
+     * @param {Boolean/Object} animate (optional) true <b>for</b> the <b>default</b> animation or a standard Element animation config object
+     * @<b>return</b> {Element} <b>this</b>
+     */</i>
+    scrollTo : <b>function</b>(side, value, animate){
+        <b>var</b> prop = side.toLowerCase() == &quot;left&quot; ? &quot;scrollLeft&quot; : &quot;scrollTop&quot;;
+        <b>if</b>(!animate || !A){
+            <b>this</b>.dom[prop] = value;
+        }<b>else</b>{
+            <b>var</b> to = prop == &quot;scrollLeft&quot; ? [value, <b>this</b>.dom.scrollTop] : [<b>this</b>.dom.scrollLeft, value];
+            <b>this</b>.anim({scroll: {&quot;to&quot;: to}}, <b>this</b>.preanim(arguments, 2), <em>'scroll'</em>);
+        }
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Scrolls <b>this</b> element the specified direction. Does bounds checking to make sure the scroll is
+     * within <b>this</b> element's scrollable range.
+     * @param {String} direction Possible values are: &quot;l&quot; (or &quot;left&quot;), &quot;r&quot; (or &quot;right&quot;), &quot;t&quot; (or &quot;top&quot;, or &quot;up&quot;), &quot;b&quot; (or &quot;bottom&quot;, or &quot;down&quot;).
+     * @param {Number} distance How far to scroll the element <b>in</b> pixels
+     * @param {Boolean/Object} animate (optional) true <b>for</b> the <b>default</b> animation or a standard Element animation config object
+     * @<b>return</b> {Boolean} Returns true <b>if</b> a scroll was triggered or false <b>if</b> the element
+     * was scrolled as far as it could go.
+     */</i>
+     scroll : <b>function</b>(direction, distance, animate){
+         <b>if</b>(!<b>this</b>.isScrollable()){
+             <b>return</b>;
+         }
+         <b>var</b> el = <b>this</b>.dom;
+         <b>var</b> l = el.scrollLeft, t = el.scrollTop;
+         <b>var</b> w = el.scrollWidth, h = el.scrollHeight;
+         <b>var</b> cw = el.clientWidth, ch = el.clientHeight;
+         direction = direction.toLowerCase();
+         <b>var</b> scrolled = false;
+         <b>var</b> a = <b>this</b>.preanim(arguments, 2);
+         <b>switch</b>(direction){
+             <b>case</b> &quot;l&quot;:
+             <b>case</b> &quot;left&quot;:
+                 <b>if</b>(w - l &gt; cw){
+                     <b>var</b> v = Math.min(l + distance, w-cw);
+                     <b>this</b>.scrollTo(&quot;left&quot;, v, a);
+                     scrolled = true;
+                 }
+                 <b>break</b>;
+            <b>case</b> &quot;r&quot;:
+            <b>case</b> &quot;right&quot;:
+                 <b>if</b>(l &gt; 0){
+                     <b>var</b> v = Math.max(l - distance, 0);
+                     <b>this</b>.scrollTo(&quot;left&quot;, v, a);
+                     scrolled = true;
+                 }
+                 <b>break</b>;
+            <b>case</b> &quot;t&quot;:
+            <b>case</b> &quot;top&quot;:
+            <b>case</b> &quot;up&quot;:
+                 <b>if</b>(t &gt; 0){
+                     <b>var</b> v = Math.max(t - distance, 0);
+                     <b>this</b>.scrollTo(&quot;top&quot;, v, a);
+                     scrolled = true;
+                 }
+                 <b>break</b>;
+            <b>case</b> &quot;b&quot;:
+            <b>case</b> &quot;bottom&quot;:
+            <b>case</b> &quot;down&quot;:
+                 <b>if</b>(h - t &gt; ch){
+                     <b>var</b> v = Math.min(t + distance, h-ch);
+                     <b>this</b>.scrollTo(&quot;top&quot;, v, a);
+                     scrolled = true;
+                 }
+                 <b>break</b>;
+         }
+         <b>return</b> scrolled;
+    },
+
+    <i>/**
+     * Translates the passed page coordinates into left/top css values <b>for</b> this element
+     * @param {Number/Array} x The page x or an array containing [x, y]
+     * @param {Number} y (optional) The page y, required <b>if</b> x is not an array
+     * @<b>return</b> {Object} An object <b>with</b> left and top properties. e.g. {left: (value), top: (value)}
+     */</i>
+    translatePoints : <b>function</b>(x, y){
+        <b>if</b>(typeof x == <em>'object'</em> || Ext.isArray(x)){
+            y = x[1]; x = x[0];
+        }
+        <b>var</b> p = <b>this</b>.getStyle(<em>'position'</em>);
+        <b>var</b> o = <b>this</b>.getXY();
+
+        <b>var</b> l = parseInt(<b>this</b>.getStyle(<em>'left'</em>), 10);
+        <b>var</b> t = parseInt(<b>this</b>.getStyle(<em>'top'</em>), 10);
+
+        <b>if</b>(isNaN(l)){
+            l = (p == &quot;relative&quot;) ? 0 : <b>this</b>.dom.offsetLeft;
+        }
+        <b>if</b>(isNaN(t)){
+            t = (p == &quot;relative&quot;) ? 0 : <b>this</b>.dom.offsetTop;
+        }
+
+        <b>return</b> {left: (x - o[0] + l), top: (y - o[1] + t)};
+    },
+
+    <i>/**
+     * Returns the current scroll position of the element.
+     * @<b>return</b> {Object} An object containing the scroll position <b>in</b> the format {left: (scrollLeft), top: (scrollTop)}
+     */</i>
+    getScroll : <b>function</b>(){
+        <b>var</b> d = <b>this</b>.dom, doc = document;
+        <b>if</b>(d == doc || d == doc.body){
+            <b>var</b> l, t;
+            <b>if</b>(Ext.isIE &amp;&amp; Ext.isStrict){
+                l = doc.documentElement.scrollLeft || (doc.body.scrollLeft || 0);
+                t = doc.documentElement.scrollTop || (doc.body.scrollTop || 0);
+            }<b>else</b>{
+                l = window.pageXOffset || (doc.body.scrollLeft || 0);
+                t = window.pageYOffset || (doc.body.scrollTop || 0);
+            }
+            <b>return</b> {left: l, top: t};
+        }<b>else</b>{
+            <b>return</b> {left: d.scrollLeft, top: d.scrollTop};
+        }
+    },
+
+    <i>/**
+     * Return the CSS color <b>for</b> the specified CSS attribute. rgb, 3 digit (like #fff) and valid values
+     * are convert to standard 6 digit hex color.
+     * @param {String} attr The css attribute
+     * @param {String} defaultValue The <b>default</b> value to use when a valid color isn't found
+     * @param {String} prefix (optional) defaults to #. Use an empty string when working <b>with</b>
+     * color anims.
+     */</i>
+    getColor : <b>function</b>(attr, defaultValue, prefix){
+        <b>var</b> v = <b>this</b>.getStyle(attr);
+        <b>if</b>(!v || v == &quot;transparent&quot; || v == &quot;inherit&quot;) {
+            <b>return</b> defaultValue;
+        }
+        <b>var</b> color = <b>typeof</b> prefix == &quot;undefined&quot; ? &quot;#&quot; : prefix;
+        <b>if</b>(v.substr(0, 4) == &quot;rgb(&quot;){
+            <b>var</b> rvs = v.slice(4, v.length -1).split(&quot;,&quot;);
+            <b>for</b>(var i = 0; i &lt; 3; i++){
+                <b>var</b> h = parseInt(rvs[i]);
+                <b>var</b> s = h.toString(16);
+                <b>if</b>(h &lt; 16){
+                    s = &quot;0&quot; + s;
+                }
+                color += s;
+            }
+        } <b>else</b> {
+            <b>if</b>(v.substr(0, 1) == &quot;#&quot;){
+                <b>if</b>(v.length == 4) {
+                    <b>for</b>(var i = 1; i &lt; 4; i++){
+                        <b>var</b> c = v.charAt(i);
+                        color +=  c + c;
+                    }
+                }<b>else</b> if(v.length == 7){
+                    color += v.substr(1);
+                }
+            }
+        }
+        <b>return</b>(color.length &gt; 5 ? color.toLowerCase() : defaultValue);
+    },
+
+    <i>/**
+     * Wraps the specified element <b>with</b> a special markup/CSS block that renders by <b>default</b> as a gray container <b>with</b> a
+     * gradient background, rounded corners and a 4-way shadow.  Example usage:
+     * &lt;pre&gt;&lt;code&gt;
+<i>// Basic box wrap</i>
+Ext.get(&quot;foo&quot;).boxWrap();
+
+<i>// You can also add a custom class and use CSS inheritance rules to customize the box look.</i>
+<i>// <em>'x-box-blue'</em> is a built-<b>in</b> alternative -- look at the related CSS definitions as an example</i>
+<i>// <b>for</b> how to create a custom box wrap style.</i>
+Ext.get(&quot;foo&quot;).boxWrap().addClass(&quot;x-box-blue&quot;);
+&lt;/pre&gt;&lt;/code&gt;
+     * @param {String} class (optional) A base CSS class to apply to the containing wrapper element (defaults to <em>'x-box'</em>).
+     * Note that there are a number of CSS rules that are dependent on <b>this</b> name to make the overall effect work,
+     * so <b>if</b> you supply an alternate base class, make sure you also supply all of the necessary rules.
+     * @<b>return</b> {Ext.Element} <b>this</b>
+     */</i>
+    boxWrap : <b>function</b>(cls){
+        cls = cls || <em>'x-box'</em>;
+        <b>var</b> el = Ext.get(<b>this</b>.insertHtml(<em>'beforeBegin'</em>, String.format(<em>'&lt;div class=&quot;{0}&quot;&gt;'</em>+El.boxMarkup+<em>'&lt;/div&gt;'</em>, cls)));
+        el.child(<em>'.'</em>+cls+<em>'-mc'</em>).dom.appendChild(<b>this</b>.dom);
+        <b>return</b> el;
+    },
+
+    <i>/**
+     * Returns the value of a namespaced attribute from the element's underlying DOM node.
+     * @param {String} namespace The namespace <b>in</b> which to look <b>for</b> the attribute
+     * @param {String} name The attribute name
+     * @<b>return</b> {String} The attribute value
+     */</i>
+    getAttributeNS : Ext.isIE ? <b>function</b>(ns, name){
+        <b>var</b> d = <b>this</b>.dom;
+        <b>var</b> type = <b>typeof</b> d[ns+&quot;:&quot;+name];
+        <b>if</b>(type != <em>'undefined'</em> &amp;&amp; type != <em>'unknown'</em>){
+            <b>return</b> d[ns+&quot;:&quot;+name];
+        }
+        <b>return</b> d[name];
+    } : <b>function</b>(ns, name){
+        <b>var</b> d = <b>this</b>.dom;
+        <b>return</b> d.getAttributeNS(ns, name) || d.getAttribute(ns+&quot;:&quot;+name) || d.getAttribute(name) || d[name];
+    },
+
+    <i>/**
+     * Returns the width <b>in</b> pixels of the passed text, or the width of the text <b>in</b> this Element.
+     * @param {String} text The text to measure. Defaults to the innerHTML of the element.
+     * @param {Number} min (Optional) The minumum value to <b>return</b>.
+     * @param {Number} max (Optional) The maximum value to <b>return</b>.
+     * @<b>return</b> {Number} The text width <b>in</b> pixels.
+     */</i>
+    getTextWidth : <b>function</b>(text, min, max){
+        <b>return</b> (Ext.util.TextMetrics.measure(<b>this</b>.dom, Ext.value(text, <b>this</b>.dom.innerHTML, true)).width).constrain(min || 0, max || 1000000);
+    }
+};
+
+<b>var</b> ep = El.prototype;
+
+<i>/**
+ * Appends an event handler (shorthand <b>for</b> {@link #addListener}).
+ * @param {String} eventName The type of event to handle
+ * @param {Function} fn The handler <b>function</b> the event invokes
+ * @param {Object} scope (optional) The scope (<b>this</b> element) of the handler <b>function</b>
+ * @param {Object} options (optional) An object containing standard {@link #addListener} options
+ * @member Ext.Element
+ * @method on
+ */</i>
+ep.on = ep.addListener;
+    <i>// backwards compat</i>
+ep.mon = ep.addListener;
+
+ep.getUpdateManager = ep.getUpdater;
+
+<i>/**
+ * Removes an event handler from <b>this</b> element (shorthand <b>for</b> {@link #removeListener}).
+ * @param {String} eventName the type of event to remove
+ * @param {Function} fn the method the event invokes
+ * @param {Object} scope (optional) The scope (The &lt;tt&gt;<b>this</b>&lt;/tt&gt; reference) of the handler <b>function</b>. Defaults
+ * to <b>this</b> Element.
+ * @<b>return</b> {Ext.Element} <b>this</b>
+ * @member Ext.Element
+ * @method un
+ */</i>
+ep.un = ep.removeListener;
+
+<i>/**
+ * true to automatically adjust width and height settings <b>for</b> box-model issues (<b>default</b> to true)
+ */</i>
+ep.autoBoxAdjust = true;
+
+<i>// private</i>
+El.unitPattern = /\d+(px|em|%|en|ex|pt|<b>in</b>|cm|mm|pc)$/i;
+
+<i>// private</i>
+El.addUnits = <b>function</b>(v, defaultUnit){
+    <b>if</b>(v === &quot;&quot; || v == &quot;auto&quot;){
+        <b>return</b> v;
+    }
+    <b>if</b>(v === undefined){
+        <b>return</b> <em>''</em>;
+    }
+    <b>if</b>(typeof v == &quot;number&quot; || !El.unitPattern.test(v)){
+        <b>return</b> v + (defaultUnit || <em>'px'</em>);
+    }
+    <b>return</b> v;
+};
+
+<i>// special markup used throughout Ext when box wrapping elements</i>
+El.boxMarkup = <em>'&lt;div class=&quot;{0}-tl&quot;&gt;&lt;div class=&quot;{0}-tr&quot;&gt;&lt;div class=&quot;{0}-tc&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;{0}-ml&quot;&gt;&lt;div class=&quot;{0}-mr&quot;&gt;&lt;div class=&quot;{0}-mc&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;{0}-bl&quot;&gt;&lt;div class=&quot;{0}-br&quot;&gt;&lt;div class=&quot;{0}-bc&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;'</em>;
+<i>/**
+ * Visibility mode constant <b>for</b> use <b>with</b> {@link #setVisibilityMode}. Use visibility to hide element
+ * @property VISIBILITY
+ * @member Ext.Element
+ * @static
+ * @type Number
+ */</i>
+El.VISIBILITY = 1;
+<i>/**
+ * Visibility mode constant <b>for</b> use <b>with</b> {@link #setVisibilityMode}. Use display to hide element
+ * @property DISPLAY
+ * @member Ext.Element
+ * @static
+ * @type Number
+ */</i>
+El.DISPLAY = 2;
+
+El.borders = {l: &quot;border-left-width&quot;, r: &quot;border-right-width&quot;, t: &quot;border-top-width&quot;, b: &quot;border-bottom-width&quot;};
+El.paddings = {l: &quot;padding-left&quot;, r: &quot;padding-right&quot;, t: &quot;padding-top&quot;, b: &quot;padding-bottom&quot;};
+El.margins = {l: &quot;margin-left&quot;, r: &quot;margin-right&quot;, t: &quot;margin-top&quot;, b: &quot;margin-bottom&quot;};
+
+
+
+<i>/**
+ * @private
+ */</i>
+El.cache = {};
+
+<b>var</b> docEl;
+
+<i>/**
+ * Retrieves Ext.Element objects.
+ * &lt;p&gt;&lt;b&gt;This method does not retrieve {@link Ext.Component Component}s.&lt;/b&gt; This method
+ * retrieves Ext.Element objects which encapsulate DOM elements. To retrieve a Component by
+ * its ID, use {@link Ext.ComponentMgr#get}.&lt;/p&gt;
+ * &lt;p&gt;Uses simple caching to consistently <b>return</b> the same object. Automatically fixes <b>if</b> an
+ * object was recreated <b>with</b> the same id via AJAX or DOM.&lt;/p&gt;
+ * @param {Mixed} el The id of the node, a DOM Node or an existing Element.
+ * @<b>return</b> {Element} The Element object (or null <b>if</b> no matching element was found)
+ * @static
+ * @member Ext.Element
+ * @method get
+ */</i>
+El.get = <b>function</b>(el){
+    <b>var</b> ex, elm, id;
+    <b>if</b>(!el){ <b>return</b> null; }
+    <b>if</b>(typeof el == &quot;string&quot;){ <i>// element id</i>
+        <b>if</b>(!(elm = document.getElementById(el))){
+            <b>return</b> null;
+        }
+        <b>if</b>(ex = El.cache[el]){
+            ex.dom = elm;
+        }<b>else</b>{
+            ex = El.cache[el] = <b>new</b> El(elm);
+        }
+        <b>return</b> ex;
+    }<b>else</b> if(el.tagName){ <i>// dom element</i>
+        <b>if</b>(!(id = el.id)){
+            id = Ext.id(el);
+        }
+        <b>if</b>(ex = El.cache[id]){
+            ex.dom = el;
+        }<b>else</b>{
+            ex = El.cache[id] = <b>new</b> El(el);
+        }
+        <b>return</b> ex;
+    }<b>else</b> if(el instanceof El){
+        <b>if</b>(el != docEl){
+            el.dom = document.getElementById(el.id) || el.dom; <i>// refresh dom element <b>in</b> case no longer valid,</i>
+                                                          <i>// catch <b>case</b> where it hasn't been appended</i>
+            El.cache[el.id] = el; <i>// <b>in</b> case it was created directly <b>with</b> Element(), let's cache it</i>
+        }
+        <b>return</b> el;
+    }<b>else</b> if(el.isComposite){
+        <b>return</b> el;
+    }<b>else</b> if(Ext.isArray(el)){
+        <b>return</b> El.select(el);
+    }<b>else</b> if(el == document){
+        <i>// create a bogus element object representing the document object</i>
+        <b>if</b>(!docEl){
+            <b>var</b> f = <b>function</b>(){};
+            f.prototype = El.prototype;
+            docEl = <b>new</b> f();
+            docEl.dom = document;
+        }
+        <b>return</b> docEl;
+    }
+    <b>return</b> null;
+};
+
+<i>// private</i>
+El.uncache = <b>function</b>(el){
+    <b>for</b>(var i = 0, a = arguments, len = a.length; i &lt; len; i++) {
+        <b>if</b>(a[i]){
+            <b>delete</b> El.cache[a[i].id || a[i]];
+        }
+    }
+};
+
+<i>// private</i>
+<i>// Garbage collection - uncache elements/purge listeners on orphaned elements</i>
+<i>// so we don't hold a reference and cause the browser to retain them</i>
+El.garbageCollect = <b>function</b>(){
+    <b>if</b>(!Ext.enableGarbageCollector){
+        clearInterval(El.collectorThread);
+        <b>return</b>;
+    }
+    <b>for</b>(var eid <b>in</b> El.cache){
+        <b>var</b> el = El.cache[eid], d = el.dom;
+        <i>// -------------------------------------------------------</i>
+        <i>// Determining what is garbage:</i>
+        <i>// -------------------------------------------------------</i>
+        <i>// !d</i>
+        <i>// dom node is null, definitely garbage</i>
+        <i>// -------------------------------------------------------</i>
+        <i>// !d.parentNode</i>
+        <i>// no parentNode == direct orphan, definitely garbage</i>
+        <i>// -------------------------------------------------------</i>
+        <i>// !d.offsetParent &amp;&amp; !document.getElementById(eid)</i>
+        <i>// display none elements have no offsetParent so we will</i>
+        <i>// also try to look it up by it's id. However, check</i>
+        <i>// offsetParent first so we don't <b>do</b> unneeded lookups.</i>
+        <i>// This enables collection of elements that are not orphans</i>
+        <i>// directly, but somewhere up the line they have an orphan</i>
+        <i>// parent.</i>
+        <i>// -------------------------------------------------------</i>
+        <b>if</b>(!d || !d.parentNode || (!d.offsetParent &amp;&amp; !document.getElementById(eid))){
+            <b>delete</b> El.cache[eid];
+            <b>if</b>(d &amp;&amp; Ext.enableListenerCollection){
+                Ext.EventManager.removeAll(d);
+            }
+        }
+    }
+}
+El.collectorThreadId = setInterval(El.garbageCollect, 30000);
+
+<b>var</b> flyFn = <b>function</b>(){};
+flyFn.prototype = El.prototype;
+<b>var</b> _cls = <b>new</b> flyFn();
+
+<i>// dom is optional</i>
+El.Flyweight = <b>function</b>(dom){
+    <b>this</b>.dom = dom;
+};
+
+El.Flyweight.prototype = _cls;
+El.Flyweight.prototype.isFlyweight = true;
+
+El._flyweights = {};
+<i>/**
+ * &lt;p&gt;Gets the globally shared flyweight Element, <b>with</b> the passed node as the active element. Do not store a reference to <b>this</b> element -
+ * the dom node can be overwritten by other code. Shorthand of {@link Ext.Element#fly}&lt;/p&gt;
+ * &lt;p&gt;Use <b>this</b> to make one-time references to DOM elements which are not going to be accessed again either by
+ * application code, or by Ext's classes. If accessing an element which will be processed regularly, then {@link Ext#get}
+ * will be more appropriate to take advantage of the caching provided by the Ext.Element class.&lt;/p&gt;
+ * @param {String/HTMLElement} el The dom node or id
+ * @param {String} named (optional) Allows <b>for</b> creation of named reusable flyweights to prevent conflicts
+ * (e.g. internally Ext uses &quot;_global&quot;)
+ * @<b>return</b> {Element} The shared Element object (or null <b>if</b> no matching element was found)
+ * @member Ext.Element
+ * @method fly
+ */</i>
+El.fly = <b>function</b>(el, named){
+    named = named || <em>'_global'</em>;
+    el = Ext.getDom(el);
+    <b>if</b>(!el){
+        <b>return</b> null;
+    }
+    <b>if</b>(!El._flyweights[named]){
+        El._flyweights[named] = <b>new</b> El.Flyweight();
+    }
+    El._flyweights[named].dom = el;
+    <b>return</b> El._flyweights[named];
+};
+
+<i>/**
+ * Retrieves Ext.Element objects.
+ * &lt;p&gt;&lt;b&gt;This method does not retrieve {@link Ext.Component Component}s.&lt;/b&gt; This method
+ * retrieves Ext.Element objects which encapsulate DOM elements. To retrieve a Component by
+ * its ID, use {@link Ext.ComponentMgr#get}.&lt;/p&gt;
+ * &lt;p&gt;Uses simple caching to consistently <b>return</b> the same object. Automatically fixes <b>if</b> an
+ * object was recreated <b>with</b> the same id via AJAX or DOM.&lt;/p&gt;
+ * Shorthand of {@link Ext.Element#get}
+ * @param {Mixed} el The id of the node, a DOM Node or an existing Element.
+ * @<b>return</b> {Element} The Element object (or null <b>if</b> no matching element was found)
+ * @member Ext
+ * @method get
+ */</i>
+Ext.get = El.get;
+<i>/**
+ * &lt;p&gt;Gets the globally shared flyweight Element, <b>with</b> the passed node as the active element. Do not store a reference to <b>this</b> element -
+ * the dom node can be overwritten by other code. Shorthand of {@link Ext.Element#fly}&lt;/p&gt;
+ * &lt;p&gt;Use <b>this</b> to make one-time references to DOM elements which are not going to be accessed again either by
+ * application code, or by Ext's classes. If accessing an element which will be processed regularly, then {@link Ext#get}
+ * will be more appropriate to take advantage of the caching provided by the Ext.Element class.&lt;/p&gt;
+ * @param {String/HTMLElement} el The dom node or id
+ * @param {String} named (optional) Allows <b>for</b> creation of named reusable flyweights to prevent conflicts
+ * (e.g. internally Ext uses &quot;_global&quot;)
+ * @<b>return</b> {Element} The shared Element object (or null <b>if</b> no matching element was found)
+ * @member Ext
+ * @method fly
+ */</i>
+Ext.fly = El.fly;
+
+<i>// speedy lookup <b>for</b> elements never to box adjust</i>
+<b>var</b> noBoxAdjust = Ext.isStrict ? {
+    select:1
+} : {
+    input:1, select:1, textarea:1
+};
+<b>if</b>(Ext.isIE || Ext.isGecko){
+    noBoxAdjust[<em>'button'</em>] = 1;
+}
+
+
+Ext.EventManager.on(window, <em>'unload'</em>, <b>function</b>(){
+    <b>delete</b> El.cache;
+    <b>delete</b> El._flyweights;
+});
+})();</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

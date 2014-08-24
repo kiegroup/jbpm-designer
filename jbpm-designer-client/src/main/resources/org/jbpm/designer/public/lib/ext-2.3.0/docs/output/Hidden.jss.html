@@ -1,0 +1,33 @@
+<html><head><title>Hidden.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>Hidden.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.form.Hidden
+ * @extends Ext.form.Field
+ * A basic hidden field <b>for</b> storing hidden values <b>in</b> forms that need to be passed <b>in</b> the form submit.
+ * @constructor
+ * Create a <b>new</b> Hidden field.
+ * @param {Object} config Configuration options
+ */</i>
+Ext.form.Hidden = Ext.extend(Ext.form.Field, {
+    <i>// private</i>
+    inputType : <em>'hidden'</em>,
+
+    <i>// private</i>
+    onRender : <b>function</b>(){
+        Ext.form.Hidden.superclass.onRender.apply(<b>this</b>, arguments);
+    },
+
+    <i>// private</i>
+    initEvents : <b>function</b>(){
+        <b>this</b>.originalValue = <b>this</b>.getValue();
+    },
+
+    <i>// These are all private overrides</i>
+    setSize : Ext.emptyFn,
+    setWidth : Ext.emptyFn,
+    setHeight : Ext.emptyFn,
+    setPosition : Ext.emptyFn,
+    setPagePosition : Ext.emptyFn,
+    markInvalid : Ext.emptyFn,
+    clearInvalid : Ext.emptyFn
+});
+Ext.reg(<em>'hidden'</em>, Ext.form.Hidden);</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

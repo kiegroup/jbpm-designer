@@ -1,0 +1,40 @@
+<html><head><title>TextItem.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>TextItem.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.menu.TextItem
+ * @extends Ext.menu.BaseItem
+ * Adds a static text string to a menu, usually used as either a heading or group separator.
+ * @constructor
+ * Creates a <b>new</b> TextItem
+ * @param {Object/String} config If config is a string, it is used as the text to display, otherwise it
+ * is applied as a config object (and should contain a &lt;tt&gt;text&lt;/tt&gt; property).
+ */</i>
+Ext.menu.TextItem = <b>function</b>(cfg){
+    <b>if</b>(typeof cfg == <em>'string'</em>){
+        cfg = {text: cfg}
+    }
+    Ext.menu.TextItem.superclass.constructor.call(<b>this</b>, cfg);
+};
+
+Ext.extend(Ext.menu.TextItem, Ext.menu.BaseItem, {
+    <i>/**
+     * @cfg {String} text The text to display <b>for</b> this item (defaults to <em>''</em>)
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} hideOnClick True to hide the containing menu after <b>this</b> item is clicked (defaults to false)
+     */</i>
+    hideOnClick : false,
+    <i>/**
+     * @cfg {String} itemCls The <b>default</b> CSS class to use <b>for</b> text items (defaults to &quot;x-menu-text&quot;)
+     */</i>
+    itemCls : &quot;x-menu-text&quot;,
+
+    <i>// private</i>
+    onRender : <b>function</b>(){
+        <b>var</b> s = document.createElement(&quot;span&quot;);
+        s.className = <b>this</b>.itemCls;
+        s.innerHTML = <b>this</b>.text;
+        <b>this</b>.el = s;
+        Ext.menu.TextItem.superclass.onRender.apply(<b>this</b>, arguments);
+    }
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

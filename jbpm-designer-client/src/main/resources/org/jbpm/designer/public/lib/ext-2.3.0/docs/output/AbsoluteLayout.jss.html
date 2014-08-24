@@ -1,0 +1,53 @@
+<html><head><title>AbsoluteLayout.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>AbsoluteLayout.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.layout.AbsoluteLayout
+ * @extends Ext.layout.AnchorLayout
+ * &lt;p&gt;Inherits the anchoring of {@link Ext.layout.AnchorLayout} and adds the ability <b>for</b> x/y positioning using the
+ * standard x and y component config options.&lt;/p&gt;
+ */</i>
+Ext.layout.AbsoluteLayout = Ext.extend(Ext.layout.AnchorLayout, {
+    <i>/**
+     * @cfg {String} extraCls
+     * An optional extra CSS class that will be added to the container (defaults to <em>'x-abs-layout-item'</em>).  This can be useful <b>for</b>
+     * adding customized styles to the container or any of its children using standard CSS rules.
+     */</i>
+    extraCls: <em>'x-abs-layout-item'</em>,
+    isForm: false,
+    <i>// private</i>
+    setContainer : <b>function</b>(ct){
+        Ext.layout.AbsoluteLayout.superclass.setContainer.call(<b>this</b>, ct);
+        <b>if</b>(ct.isXType(<em>'form'</em>)){
+            <b>this</b>.isForm = true;
+        }
+    },
+
+    onLayout : <b>function</b>(ct, target){
+        <b>if</b>(this.isForm){ ct.body.position(); } <b>else</b> { target.position(); }
+        Ext.layout.AbsoluteLayout.superclass.onLayout.call(<b>this</b>, ct, target);
+    },
+
+    <i>// private</i>
+    getAnchorViewSize : <b>function</b>(ct, target){
+        <b>return</b> this.isForm ? ct.body.getStyleSize() : Ext.layout.AbsoluteLayout.superclass.getAnchorViewSize.call(<b>this</b>, ct, target);
+    },
+
+    <i>// private</i>
+    isValidParent : <b>function</b>(c, target){
+        <b>return</b> this.isForm ? true : Ext.layout.AbsoluteLayout.superclass.isValidParent.call(<b>this</b>, c, target);
+    },
+
+    <i>// private</i>
+    adjustWidthAnchor : <b>function</b>(value, comp){
+        <b>return</b> value ? value - comp.getPosition(true)[0] : value;
+    },
+
+    <i>// private</i>
+    adjustHeightAnchor : <b>function</b>(value, comp){
+        <b>return</b>  value ? value - comp.getPosition(true)[1] : value;
+    }
+    <i>/**
+     * @property activeItem
+     * @hide
+     */</i>
+});
+Ext.Container.LAYOUTS[<em>'absolute'</em>] = Ext.layout.AbsoluteLayout;</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>
