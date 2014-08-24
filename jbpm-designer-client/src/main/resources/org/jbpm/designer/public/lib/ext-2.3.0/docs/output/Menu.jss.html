@@ -1,0 +1,591 @@
+<html><head><title>Menu.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>Menu.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.menu.Menu
+ * @extends Ext.util.Observable
+ * A menu object.  This is the container to which you add all other menu items.  Menu can also serve as a base class
+ * when you want a specialized menu based off of another component (like {@link Ext.menu.DateMenu} <b>for</b> example).
+ * @constructor
+ * Creates a <b>new</b> Menu
+ * @param {Object} config Configuration options
+ */</i>
+Ext.menu.Menu = <b>function</b>(config){
+    <b>if</b>(Ext.isArray(config)){
+        config = {items:config};
+    }
+    Ext.apply(<b>this</b>, config);
+    <b>this</b>.id = <b>this</b>.id || Ext.id();
+    <b>this</b>.addEvents(
+        <i>/**
+         * @event beforeshow
+         * Fires before <b>this</b> menu is displayed
+         * @param {Ext.menu.Menu} <b>this</b>
+         */</i>
+        <em>'beforeshow'</em>,
+        <i>/**
+         * @event beforehide
+         * Fires before <b>this</b> menu is hidden
+         * @param {Ext.menu.Menu} <b>this</b>
+         */</i>
+        <em>'beforehide'</em>,
+        <i>/**
+         * @event show
+         * Fires after <b>this</b> menu is displayed
+         * @param {Ext.menu.Menu} <b>this</b>
+         */</i>
+        <em>'show'</em>,
+        <i>/**
+         * @event hide
+         * Fires after <b>this</b> menu is hidden
+         * @param {Ext.menu.Menu} <b>this</b>
+         */</i>
+        <em>'hide'</em>,
+        <i>/**
+         * @event click
+         * Fires when <b>this</b> menu is clicked (or when the enter key is pressed <b>while</b> it is active)
+         * @param {Ext.menu.Menu} <b>this</b>
+         * @param {Ext.menu.Item} menuItem The menu item that was clicked
+         * @param {Ext.EventObject} e
+         */</i>
+        <em>'click'</em>,
+        <i>/**
+         * @event mouseover
+         * Fires when the mouse is hovering over <b>this</b> menu
+         * @param {Ext.menu.Menu} <b>this</b>
+         * @param {Ext.EventObject} e
+         * @param {Ext.menu.Item} menuItem The menu item that was clicked
+         */</i>
+        <em>'mouseover'</em>,
+        <i>/**
+         * @event mouseout
+         * Fires when the mouse exits <b>this</b> menu
+         * @param {Ext.menu.Menu} <b>this</b>
+         * @param {Ext.EventObject} e
+         * @param {Ext.menu.Item} menuItem The menu item that was clicked
+         */</i>
+        <em>'mouseout'</em>,
+        <i>/**
+         * @event itemclick
+         * Fires when a menu item contained <b>in</b> this menu is clicked
+         * @param {Ext.menu.BaseItem} baseItem The BaseItem that was clicked
+         * @param {Ext.EventObject} e
+         */</i>
+        <em>'itemclick'</em>
+    );
+    Ext.menu.MenuMgr.register(<b>this</b>);
+    Ext.menu.Menu.superclass.constructor.call(<b>this</b>);
+    <b>var</b> mis = <b>this</b>.items;
+    <i>/**
+     * A MixedCollection of <b>this</b> Menu's items
+     * @property items
+     * @type Ext.util.MixedCollection
+     */</i>
+
+    <b>this</b>.items = <b>new</b> Ext.util.MixedCollection();
+    <b>if</b>(mis){
+        <b>this</b>.add.apply(<b>this</b>, mis);
+    }
+};
+
+Ext.extend(Ext.menu.Menu, Ext.util.Observable, {
+    <i>/**
+     * @cfg {Object} defaults
+     * A config object that will be applied to all items added to <b>this</b> container either via the {@link #items}
+     * config or via the {@link #add} method.  The defaults config can contain any number of
+     * name/value property pairs to be added to each item, and should be valid <b>for</b> the types of items
+     * being added to the menu.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Mixed} items
+     * An array of items to be added to <b>this</b> menu.  See {@link #add} <b>for</b> a list of valid item types.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Number} minWidth The minimum width of the menu <b>in</b> pixels (defaults to 120)
+     */</i>
+    minWidth : 120,
+    <i>/**
+     * @cfg {Boolean/String} shadow True or &quot;sides&quot; <b>for</b> the <b>default</b> effect, &quot;frame&quot; <b>for</b> 4-way shadow, and &quot;drop&quot;
+     * <b>for</b> bottom-right shadow (defaults to &quot;sides&quot;)
+     */</i>
+    shadow : &quot;sides&quot;,
+    <i>/**
+     * @cfg {String} subMenuAlign The {@link Ext.Element#alignTo} anchor position value to use <b>for</b> submenus of
+     * <b>this</b> menu (defaults to &quot;tl-tr?&quot;)
+     */</i>
+    subMenuAlign : &quot;tl-tr?&quot;,
+    <i>/**
+     * @cfg {String} defaultAlign The <b>default</b> {@link Ext.Element#alignTo} anchor position value <b>for</b> this menu
+     * relative to its element of origin (defaults to &quot;tl-bl?&quot;)
+     */</i>
+    defaultAlign : &quot;tl-bl?&quot;,
+    <i>/**
+     * @cfg {Boolean} allowOtherMenus True to allow multiple menus to be displayed at the same time (defaults to false)
+     */</i>
+    allowOtherMenus : false,
+    <i>/**
+     * @cfg {Boolean} ignoreParentClicks True to ignore clicks on any item <b>in</b> this menu that is a parent item (displays
+     * a submenu) so that the submenu is not dismissed when clicking the parent item (defaults to false).
+     */</i>
+    ignoreParentClicks : false,
+
+    <i>// private</i>
+    hidden:true,
+
+    <i>// private</i>
+    createEl : <b>function</b>(){
+        <b>return</b> new Ext.Layer({
+            cls: &quot;x-menu&quot;,
+            shadow:<b>this</b>.shadow,
+            constrain: false,
+            parentEl: <b>this</b>.parentEl || document.body,
+            zindex:15000
+        });
+    },
+
+    <i>// private</i>
+    render : <b>function</b>(){
+        <b>if</b>(this.el){
+            <b>return</b>;
+        }
+        <b>var</b> el = <b>this</b>.el = <b>this</b>.createEl();
+
+        <b>if</b>(!<b>this</b>.keyNav){
+            <b>this</b>.keyNav = <b>new</b> Ext.menu.MenuNav(<b>this</b>);
+        }
+        <b>if</b>(this.plain){
+            el.addClass(&quot;x-menu-plain&quot;);
+        }
+        <b>if</b>(this.cls){
+            el.addClass(<b>this</b>.cls);
+        }
+        <i>// generic focus element</i>
+        <b>this</b>.focusEl = el.createChild({
+            tag: &quot;a&quot;, cls: &quot;x-menu-focus&quot;, href: &quot;#&quot;, onclick: &quot;<b>return</b> false;&quot;, tabIndex:&quot;-1&quot;
+        });
+        <b>var</b> ul = el.createChild({tag: &quot;ul&quot;, cls: &quot;x-menu-list&quot;});
+        ul.on(&quot;click&quot;, <b>this</b>.onClick, <b>this</b>);
+        ul.on(&quot;mouseover&quot;, <b>this</b>.onMouseOver, <b>this</b>);
+        ul.on(&quot;mouseout&quot;, <b>this</b>.onMouseOut, <b>this</b>);
+        <b>this</b>.items.each(<b>function</b>(item){
+            <b>var</b> li = document.createElement(&quot;li&quot;);
+            li.className = &quot;x-menu-list-item&quot;;
+            ul.dom.appendChild(li);
+            item.render(li, <b>this</b>);
+        }, <b>this</b>);
+        <b>this</b>.ul = ul;
+        <b>this</b>.autoWidth();
+    },
+
+    <i>// private</i>
+    autoWidth : <b>function</b>(){
+        <b>var</b> el = <b>this</b>.el, ul = <b>this</b>.ul;
+        <b>if</b>(!el){
+            <b>return</b>;
+        }
+        <b>var</b> w = <b>this</b>.width;
+        <b>if</b>(w){
+            el.setWidth(w);
+        }<b>else</b> if(Ext.isIE &amp;&amp; !Ext.isIE8){
+            el.setWidth(<b>this</b>.minWidth);
+            <b>var</b> t = el.dom.offsetWidth; <i>// force recalc</i>
+            el.setWidth(ul.getWidth()+el.getFrameWidth(&quot;lr&quot;));
+        }
+    },
+
+    <i>// private</i>
+    delayAutoWidth : <b>function</b>(){
+        <b>if</b>(this.el){
+            <b>if</b>(!<b>this</b>.awTask){
+                <b>this</b>.awTask = <b>new</b> Ext.util.DelayedTask(<b>this</b>.autoWidth, <b>this</b>);
+            }
+            <b>this</b>.awTask.delay(20);
+        }
+    },
+
+    <i>// private</i>
+    findTargetItem : <b>function</b>(e){
+        <b>var</b> t = e.getTarget(&quot;.x-menu-list-item&quot;, <b>this</b>.ul,  true);
+        <b>if</b>(t &amp;&amp; t.menuItemId){
+            <b>return</b> this.items.get(t.menuItemId);
+        }
+    },
+
+    <i>// private</i>
+    onClick : <b>function</b>(e){
+        <b>var</b> t;
+        <b>if</b>(t = <b>this</b>.findTargetItem(e)){
+            <b>if</b>(t.menu &amp;&amp; <b>this</b>.ignoreParentClicks){
+                t.expandMenu();
+            }<b>else</b>{
+                t.onClick(e);
+                <b>this</b>.fireEvent(&quot;click&quot;, <b>this</b>, t, e);
+            }
+        }
+    },
+
+    <i>// private</i>
+    setActiveItem : <b>function</b>(item, autoExpand){
+        <b>if</b>(item != <b>this</b>.activeItem){
+            <b>if</b>(this.activeItem){
+                <b>this</b>.activeItem.deactivate();
+            }
+            <b>this</b>.activeItem = item;
+            item.activate(autoExpand);
+        }<b>else</b> if(autoExpand){
+            item.expandMenu();
+        }
+    },
+
+    <i>// private</i>
+    tryActivate : <b>function</b>(start, step){
+        <b>var</b> items = <b>this</b>.items;
+        <b>for</b>(var i = start, len = items.length; i &gt;= 0 &amp;&amp; i &lt; len; i+= step){
+            <b>var</b> item = items.get(i);
+            <b>if</b>(!item.disabled &amp;&amp; item.canActivate){
+                <b>this</b>.setActiveItem(item, false);
+                <b>return</b> item;
+            }
+        }
+        <b>return</b> false;
+    },
+
+    <i>// private</i>
+    onMouseOver : <b>function</b>(e){
+        <b>var</b> t;
+        <b>if</b>(t = <b>this</b>.findTargetItem(e)){
+            <b>if</b>(t.canActivate &amp;&amp; !t.disabled){
+                <b>this</b>.setActiveItem(t, true);
+            }
+        }
+        <b>this</b>.over = true;
+        <b>this</b>.fireEvent(&quot;mouseover&quot;, <b>this</b>, e, t);
+    },
+
+    <i>// private</i>
+    onMouseOut : <b>function</b>(e){
+        <b>var</b> t;
+        <b>if</b>(t = <b>this</b>.findTargetItem(e)){
+            <b>if</b>(t == <b>this</b>.activeItem &amp;&amp; t.shouldDeactivate(e)){
+                <b>this</b>.activeItem.deactivate();
+                <b>delete</b> this.activeItem;
+            }
+        }
+        <b>this</b>.over = false;
+        <b>this</b>.fireEvent(&quot;mouseout&quot;, <b>this</b>, e, t);
+    },
+
+    <i>/**
+     * Read-only.  Returns true <b>if</b> the menu is currently displayed, <b>else</b> false.
+     * @type Boolean
+     */</i>
+    isVisible : <b>function</b>(){
+        <b>return</b> this.el &amp;&amp; !<b>this</b>.hidden;
+    },
+
+    <i>/**
+     * Displays <b>this</b> menu relative to another element
+     * @param {Mixed} element The element to align to
+     * @param {String} position (optional) The {@link Ext.Element#alignTo} anchor position to use <b>in</b> aligning to
+     * the element (defaults to <b>this</b>.defaultAlign)
+     * @param {Ext.menu.Menu} parentMenu (optional) This menu's parent menu, <b>if</b> applicable (defaults to undefined)
+     */</i>
+    show : <b>function</b>(el, pos, parentMenu){
+        <b>this</b>.parentMenu = parentMenu;
+        <b>if</b>(!<b>this</b>.el){
+            <b>this</b>.render();
+        }
+        <b>this</b>.fireEvent(&quot;beforeshow&quot;, <b>this</b>);
+        <b>this</b>.showAt(<b>this</b>.el.getAlignToXY(el, pos || <b>this</b>.defaultAlign), parentMenu, false);
+    },
+
+    <i>/**
+     * Displays <b>this</b> menu at a specific xy position
+     * @param {Array} xyPosition Contains X &amp; Y [x, y] values <b>for</b> the position at which to show the menu (coordinates are page-based)
+     * @param {Ext.menu.Menu} parentMenu (optional) This menu's parent menu, <b>if</b> applicable (defaults to undefined)
+     */</i>
+    showAt : <b>function</b>(xy, parentMenu, <i>/* private: */</i>_e){
+        <b>this</b>.parentMenu = parentMenu;
+        <b>if</b>(!<b>this</b>.el){
+            <b>this</b>.render();
+        }
+        <b>if</b>(_e !== false){
+            <b>this</b>.fireEvent(&quot;beforeshow&quot;, <b>this</b>);
+            xy = <b>this</b>.el.adjustForConstraints(xy);
+        }
+        <b>this</b>.el.setXY(xy);
+        <b>this</b>.el.show();
+        <b>this</b>.hidden = false;
+        <b>this</b>.focus();
+        <b>this</b>.fireEvent(&quot;show&quot;, <b>this</b>);
+    },
+
+
+
+    focus : <b>function</b>(){
+        <b>if</b>(!<b>this</b>.hidden){
+            <b>this</b>.doFocus.defer(50, <b>this</b>);
+        }
+    },
+
+    doFocus : <b>function</b>(){
+        <b>if</b>(!<b>this</b>.hidden){
+            <b>this</b>.focusEl.focus();
+        }
+    },
+
+    <i>/**
+     * Hides <b>this</b> menu and optionally all parent menus
+     * @param {Boolean} deep (optional) True to hide all parent menus recursively, <b>if</b> any (defaults to false)
+     */</i>
+    hide : <b>function</b>(deep){
+        <b>if</b>(this.el &amp;&amp; <b>this</b>.isVisible()){
+            <b>this</b>.fireEvent(&quot;beforehide&quot;, <b>this</b>);
+            <b>if</b>(this.activeItem){
+                <b>this</b>.activeItem.deactivate();
+                <b>this</b>.activeItem = null;
+            }
+            <b>this</b>.el.hide();
+            <b>this</b>.hidden = true;
+            <b>this</b>.fireEvent(&quot;hide&quot;, <b>this</b>);
+        }
+        <b>if</b>(deep === true &amp;&amp; <b>this</b>.parentMenu){
+            <b>this</b>.parentMenu.hide(true);
+        }
+    },
+
+    <i>/**
+     * Adds one or more items of any type supported by the Menu class, or that can be converted into menu items.
+     * Any of the following are valid:
+     * &lt;ul&gt;
+     * &lt;li&gt;Any menu item object based on {@link Ext.menu.BaseItem}&lt;/li&gt;
+     * &lt;li&gt;An HTMLElement object which will be converted to a menu item&lt;/li&gt;
+     * &lt;li&gt;A menu item config object that will be created as a <b>new</b> menu item&lt;/li&gt;
+     * &lt;li&gt;A string, which can either be <em>'-'</em> or <em>'separator'</em> to add a menu separator, otherwise
+     * it will be converted into a {@link Ext.menu.TextItem} and added&lt;/li&gt;
+     * &lt;/ul&gt;
+     * Usage:
+     * &lt;pre&gt;&lt;code&gt;
+<i>// Create the menu</i>
+<b>var</b> menu = <b>new</b> Ext.menu.Menu();
+
+<i>// Create a menu item to add by reference</i>
+<b>var</b> menuItem = <b>new</b> Ext.menu.Item({ text: <em>'New Item!'</em> });
+
+<i>// Add a bunch of items at once using different methods.</i>
+<i>// Only the last item added will be returned.</i>
+<b>var</b> item = menu.add(
+    menuItem,                <i>// add existing item by ref</i>
+    <em>'Dynamic Item'</em>,          <i>// <b>new</b> TextItem</i>
+    <em>'-'</em>,                     <i>// <b>new</b> separator</i>
+    { text: <em>'Config Item'</em> }  <i>// <b>new</b> item by config</i>
+);
+&lt;/code&gt;&lt;/pre&gt;
+     * @param {Mixed} args One or more menu items, menu item configs or other objects that can be converted to menu items
+     * @<b>return</b> {Ext.menu.Item} The menu item that was added, or the last one <b>if</b> multiple items were added
+     */</i>
+    add : <b>function</b>(){
+        <b>var</b> a = arguments, l = a.length, item;
+        <b>for</b>(var i = 0; i &lt; l; i++){
+            <b>var</b> el = a[i];
+            <b>if</b>(el.render){ <i>// some kind of Item</i>
+                item = <b>this</b>.addItem(el);
+            }<b>else</b> if(<b>typeof</b> el == &quot;string&quot;){ <i>// string</i>
+                <b>if</b>(el == &quot;separator&quot; || el == &quot;-&quot;){
+                    item = <b>this</b>.addSeparator();
+                }<b>else</b>{
+                    item = <b>this</b>.addText(el);
+                }
+            }<b>else</b> if(el.tagName || el.el){ <i>// element</i>
+                item = <b>this</b>.addElement(el);
+            }<b>else</b> if(<b>typeof</b> el == &quot;object&quot;){ <i>// must be menu item config?</i>
+                Ext.applyIf(el, <b>this</b>.defaults);
+                item = <b>this</b>.addMenuItem(el);
+            }
+        }
+        <b>return</b> item;
+    },
+
+    <i>/**
+     * Returns <b>this</b> menu's underlying {@link Ext.Element} object
+     * @<b>return</b> {Ext.Element} The element
+     */</i>
+    getEl : <b>function</b>(){
+        <b>if</b>(!<b>this</b>.el){
+            <b>this</b>.render();
+        }
+        <b>return</b> this.el;
+    },
+
+    <i>/**
+     * Adds a separator bar to the menu
+     * @<b>return</b> {Ext.menu.Item} The menu item that was added
+     */</i>
+    addSeparator : <b>function</b>(){
+        <b>return</b> this.addItem(<b>new</b> Ext.menu.Separator());
+    },
+
+    <i>/**
+     * Adds an {@link Ext.Element} object to the menu
+     * @param {Mixed} el The element or DOM node to add, or its id
+     * @<b>return</b> {Ext.menu.Item} The menu item that was added
+     */</i>
+    addElement : <b>function</b>(el){
+        <b>return</b> this.addItem(<b>new</b> Ext.menu.BaseItem(el));
+    },
+
+    <i>/**
+     * Adds an existing object based on {@link Ext.menu.BaseItem} to the menu
+     * @param {Ext.menu.Item} item The menu item to add
+     * @<b>return</b> {Ext.menu.Item} The menu item that was added
+     */</i>
+    addItem : <b>function</b>(item){
+        <b>this</b>.items.add(item);
+        <b>if</b>(this.ul){
+            <b>var</b> li = document.createElement(&quot;li&quot;);
+            li.className = &quot;x-menu-list-item&quot;;
+            <b>this</b>.ul.dom.appendChild(li);
+            item.render(li, <b>this</b>);
+            <b>this</b>.delayAutoWidth();
+        }
+        <b>return</b> item;
+    },
+
+    <i>/**
+     * Creates a <b>new</b> {@link Ext.menu.Item} based an the supplied config object and adds it to the menu
+     * @param {Object} config A MenuItem config object
+     * @<b>return</b> {Ext.menu.Item} The menu item that was added
+     */</i>
+    addMenuItem : <b>function</b>(config){
+        <b>if</b>(!(config instanceof Ext.menu.Item)){
+            <b>if</b>(typeof config.checked == &quot;boolean&quot;){ <i>// must be check menu item config?</i>
+                config = <b>new</b> Ext.menu.CheckItem(config);
+            }<b>else</b>{
+                config = <b>new</b> Ext.menu.Item(config);
+            }
+        }
+        <b>return</b> this.addItem(config);
+    },
+
+    <i>/**
+     * Creates a <b>new</b> {@link Ext.menu.TextItem} <b>with</b> the supplied text and adds it to the menu
+     * @param {String} text The text to display <b>in</b> the menu item
+     * @<b>return</b> {Ext.menu.Item} The menu item that was added
+     */</i>
+    addText : <b>function</b>(text){
+        <b>return</b> this.addItem(<b>new</b> Ext.menu.TextItem(text));
+    },
+
+    <i>/**
+     * Inserts an existing object based on {@link Ext.menu.BaseItem} to the menu at a specified index
+     * @param {Number} index The index <b>in</b> the menu's list of current items where the <b>new</b> item should be inserted
+     * @param {Ext.menu.Item} item The menu item to add
+     * @<b>return</b> {Ext.menu.Item} The menu item that was added
+     */</i>
+    insert : <b>function</b>(index, item){
+        <b>this</b>.items.insert(index, item);
+        <b>if</b>(this.ul){
+            <b>var</b> li = document.createElement(&quot;li&quot;);
+            li.className = &quot;x-menu-list-item&quot;;
+            <b>this</b>.ul.dom.insertBefore(li, <b>this</b>.ul.dom.childNodes[index]);
+            item.render(li, <b>this</b>);
+            <b>this</b>.delayAutoWidth();
+        }
+        <b>return</b> item;
+    },
+
+    <i>/**
+     * Removes an {@link Ext.menu.Item} from the menu and destroys the object
+     * @param {Ext.menu.Item} item The menu item to remove
+     */</i>
+    remove : <b>function</b>(item){
+        <b>this</b>.items.removeKey(item.id);
+        item.destroy();
+    },
+
+    <i>/**
+     * Removes and destroys all items <b>in</b> the menu
+     */</i>
+    removeAll : <b>function</b>(){
+    	<b>if</b>(this.items){
+	        <b>var</b> f;
+	        <b>while</b>(f = <b>this</b>.items.first()){
+	            <b>this</b>.remove(f);
+	        }
+    	}
+    },
+
+    <i>/**
+     * Destroys the menu by  unregistering it from {@link Ext.menu.MenuMgr}, purging event listeners,
+     * removing all of the menus items, then destroying the underlying {@link Ext.Element}
+     */</i>
+    destroy : <b>function</b>(){
+        <b>this</b>.beforeDestroy();
+        Ext.menu.MenuMgr.unregister(<b>this</b>);
+        <b>if</b> (<b>this</b>.keyNav) {
+        	<b>this</b>.keyNav.disable();
+        }
+        <b>this</b>.removeAll();
+        <b>if</b> (<b>this</b>.ul) {
+        	<b>this</b>.ul.removeAllListeners();
+        }
+        <b>if</b> (<b>this</b>.el) {
+        	<b>this</b>.el.destroy();
+        }
+    },
+
+	<i>// private</i>
+    beforeDestroy : Ext.emptyFn
+
+});
+
+<i>// MenuNav is a private utility class used internally by the Menu</i>
+Ext.menu.MenuNav = <b>function</b>(menu){
+    Ext.menu.MenuNav.superclass.constructor.call(<b>this</b>, menu.el);
+    <b>this</b>.scope = <b>this</b>.menu = menu;
+};
+
+Ext.extend(Ext.menu.MenuNav, Ext.KeyNav, {
+    doRelay : <b>function</b>(e, h){
+        <b>var</b> k = e.getKey();
+        <b>if</b>(!<b>this</b>.menu.activeItem &amp;&amp; e.isNavKeyPress() &amp;&amp; k != e.SPACE &amp;&amp; k != e.RETURN){
+            <b>this</b>.menu.tryActivate(0, 1);
+            <b>return</b> false;
+        }
+        <b>return</b> h.call(<b>this</b>.scope || <b>this</b>, e, <b>this</b>.menu);
+    },
+
+    up : <b>function</b>(e, m){
+        <b>if</b>(!m.tryActivate(m.items.indexOf(m.activeItem)-1, -1)){
+            m.tryActivate(m.items.length-1, -1);
+        }
+    },
+
+    down : <b>function</b>(e, m){
+        <b>if</b>(!m.tryActivate(m.items.indexOf(m.activeItem)+1, 1)){
+            m.tryActivate(0, 1);
+        }
+    },
+
+    right : <b>function</b>(e, m){
+        <b>if</b>(m.activeItem){
+            m.activeItem.expandMenu(true);
+        }
+    },
+
+    left : <b>function</b>(e, m){
+        m.hide();
+        <b>if</b>(m.parentMenu &amp;&amp; m.parentMenu.activeItem){
+            m.parentMenu.activeItem.activate();
+        }
+    },
+
+    enter : <b>function</b>(e, m){
+        <b>if</b>(m.activeItem){
+            e.stopPropagation();
+            m.activeItem.onClick(e);
+            m.fireEvent(&quot;click&quot;, <b>this</b>, m.activeItem);
+            <b>return</b> true;
+        }
+    }
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

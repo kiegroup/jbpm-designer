@@ -1,0 +1,16 @@
+<html><head><title>GridEditor.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>GridEditor.js</h1><pre class="highlighted"><code><i>// private</i>
+<i>// This is a support class used internally by the Grid components</i>
+Ext.grid.GridEditor = <b>function</b>(field, config){
+    Ext.grid.GridEditor.superclass.constructor.call(<b>this</b>, field, config);
+    field.monitorTab = false;
+};
+
+Ext.extend(Ext.grid.GridEditor, Ext.Editor, {
+    alignment: &quot;tl-tl&quot;,
+    autoSize: &quot;width&quot;,
+    hideEl : false,
+    cls: &quot;x-small-editor x-grid-editor&quot;,
+    shim:false,
+    shadow:false
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

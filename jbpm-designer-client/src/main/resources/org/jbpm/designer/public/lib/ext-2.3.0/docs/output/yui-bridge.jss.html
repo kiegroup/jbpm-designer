@@ -1,0 +1,335 @@
+<html><head><title>yui-bridge.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>yui-bridge.js</h1><pre class="highlighted"><code>if(<b>typeof</b> YAHOO == &quot;undefined&quot;){
+    throw &quot;Unable to load Ext, core YUI utilities (yahoo, dom, event) not found.&quot;;
+}
+
+(<b>function</b>(){
+<b>var</b> E = YAHOO.util.Event;
+<b>var</b> D = YAHOO.util.Dom;
+<b>var</b> CN = YAHOO.util.Connect;
+
+<b>var</b> ES = YAHOO.util.Easing;
+<b>var</b> A = YAHOO.util.Anim;
+<b>var</b> libFlyweight;
+
+Ext.lib.Dom = {
+    getViewWidth : <b>function</b>(full){
+        <b>return</b> full ? D.getDocumentWidth() : D.getViewportWidth();
+    },
+
+    getViewHeight : <b>function</b>(full){
+        <b>return</b> full ? D.getDocumentHeight() : D.getViewportHeight();
+    },
+
+    isAncestor : <b>function</b>(haystack, needle){
+        <b>return</b> D.isAncestor(haystack, needle);
+    },
+
+    getRegion : <b>function</b>(el){
+        <b>return</b> D.getRegion(el);
+    },
+
+    getY : <b>function</b>(el){
+        <b>return</b> this.getXY(el)[1];
+    },
+
+    getX : <b>function</b>(el){
+        <b>return</b> this.getXY(el)[0];
+    },
+
+    <i>// original version based on YahooUI getXY</i>
+    <i>// <b>this</b> version fixes several issues <b>in</b> Safari and FF</i>
+    <i>// and boosts performance by removing the batch overhead, repetitive dom lookups and array index calls</i>
+    getXY : <b>function</b>(el){
+        <b>var</b> p, pe, b, scroll, bd = (document.body || document.documentElement);
+        el = Ext.getDom(el);
+
+        <b>if</b>(el == bd){
+            <b>return</b> [0, 0];
+        }
+
+        <b>if</b> (el.getBoundingClientRect) {
+            b = el.getBoundingClientRect();
+            scroll = fly(document).getScroll();
+            <b>return</b> [b.left + scroll.left, b.top + scroll.top];
+        }
+        <b>var</b> x = 0, y = 0;
+
+        p = el;
+
+        <b>var</b> hasAbsolute = fly(el).getStyle(&quot;position&quot;) == &quot;absolute&quot;;
+
+        <b>while</b> (p) {
+
+            x += p.offsetLeft;
+            y += p.offsetTop;
+
+            <b>if</b> (!hasAbsolute &amp;&amp; fly(p).getStyle(&quot;position&quot;) == &quot;absolute&quot;) {
+                hasAbsolute = true;
+            }
+
+            <b>if</b> (Ext.isGecko) {
+                pe = fly(p);
+
+                <b>var</b> bt = parseInt(pe.getStyle(&quot;borderTopWidth&quot;), 10) || 0;
+                <b>var</b> bl = parseInt(pe.getStyle(&quot;borderLeftWidth&quot;), 10) || 0;
+
+
+                x += bl;
+                y += bt;
+
+
+                <b>if</b> (p != el &amp;&amp; pe.getStyle(<em>'overflow'</em>) != <em>'visible'</em>) {
+                    x += bl;
+                    y += bt;
+                }
+            }
+            p = p.offsetParent;
+        }
+
+        <b>if</b> (Ext.isWebKit &amp;&amp; hasAbsolute) {
+            x -= bd.offsetLeft;
+            y -= bd.offsetTop;
+        }
+
+        <b>if</b> (Ext.isGecko &amp;&amp; !hasAbsolute) {
+            <b>var</b> dbd = fly(bd);
+            x += parseInt(dbd.getStyle(&quot;borderLeftWidth&quot;), 10) || 0;
+            y += parseInt(dbd.getStyle(&quot;borderTopWidth&quot;), 10) || 0;
+        }
+
+        p = el.parentNode;
+        <b>while</b> (p &amp;&amp; p != bd) {
+            <b>if</b> (!Ext.isOpera || (p.tagName != <em>'TR'</em> &amp;&amp; fly(p).getStyle(&quot;display&quot;) != &quot;inline&quot;)) {
+                x -= p.scrollLeft;
+                y -= p.scrollTop;
+            }
+            p = p.parentNode;
+        }
+        <b>return</b> [x, y];
+    },
+
+    setXY : <b>function</b>(el, xy){
+        el = Ext.fly(el, <em>'_setXY'</em>);
+        el.position();
+        <b>var</b> pts = el.translatePoints(xy);
+        <b>if</b>(xy[0] !== false){
+            el.dom.style.left = pts.left + &quot;px&quot;;
+        }
+        <b>if</b>(xy[1] !== false){
+            el.dom.style.top = pts.top + &quot;px&quot;;
+        }
+    },
+
+    setX : <b>function</b>(el, x){
+        <b>this</b>.setXY(el, [x, false]);
+    },
+
+    setY : <b>function</b>(el, y){
+        <b>this</b>.setXY(el, [false, y]);
+    }
+};
+
+Ext.lib.Event = {
+    getPageX : <b>function</b>(e){
+        <b>return</b> E.getPageX(e.browserEvent || e);
+    },
+
+    getPageY : <b>function</b>(e){
+        <b>return</b> E.getPageY(e.browserEvent || e);
+    },
+
+    getXY : <b>function</b>(e){
+        <b>return</b> E.getXY(e.browserEvent || e);
+    },
+
+    getTarget : <b>function</b>(e){
+        <b>return</b> E.getTarget(e.browserEvent || e);
+    },
+
+    getRelatedTarget : <b>function</b>(e){
+        <b>return</b> E.getRelatedTarget(e.browserEvent || e);
+    },
+
+    on : <b>function</b>(el, eventName, fn, scope, override){
+        E.on(el, eventName, fn, scope, override);
+    },
+
+    un : <b>function</b>(el, eventName, fn){
+        E.removeListener(el, eventName, fn);
+    },
+
+    purgeElement : <b>function</b>(el){
+        E.purgeElement(el);
+    },
+
+    preventDefault : <b>function</b>(e){
+        E.preventDefault(e.browserEvent || e);
+    },
+
+    stopPropagation : <b>function</b>(e){
+        E.stopPropagation(e.browserEvent || e);
+    },
+
+    stopEvent : <b>function</b>(e){
+        E.stopEvent(e.browserEvent || e);
+    },
+
+    onAvailable : <b>function</b>(el, fn, scope, override){
+        <b>return</b> E.onAvailable(el, fn, scope, override);
+    }
+};
+
+Ext.lib.Ajax = {
+    request : <b>function</b>(method, uri, cb, data, options){
+        <b>if</b>(options){
+            <b>var</b> hs = options.headers;
+            <b>if</b>(hs){
+                <b>for</b>(var h <b>in</b> hs){
+                    <b>if</b>(hs.hasOwnProperty(h)){
+                        CN.initHeader(h, hs[h], false);
+                    }
+                }
+            }
+            <b>if</b>(options.xmlData){
+                <b>if</b> (!hs || !hs[<em>'Content-Type'</em>]){
+                    CN.initHeader(<em>'Content-Type'</em>, <em>'text/xml'</em>, false);
+                }
+                method = (method ? method : (options.method ? options.method : <em>'POST'</em>));
+                data = options.xmlData;
+            }<b>else</b> if(options.jsonData){
+                <b>if</b> (!hs || !hs[<em>'Content-Type'</em>]){
+                    CN.initHeader(<em>'Content-Type'</em>, <em>'application/json'</em>, false);
+                }
+                method = (method ? method : (options.method ? options.method : <em>'POST'</em>));
+                data = <b>typeof</b> options.jsonData == <em>'object'</em> ? Ext.encode(options.jsonData) : options.jsonData;
+            }
+        }
+        <b>return</b> CN.asyncRequest(method, uri, cb, data);
+    },
+
+    formRequest : <b>function</b>(form, uri, cb, data, isUpload, sslUri){
+        CN.setForm(form, isUpload, sslUri);
+        <b>return</b> CN.asyncRequest(Ext.getDom(form).method ||<em>'POST'</em>, uri, cb, data);
+    },
+
+    isCallInProgress : <b>function</b>(trans){
+        <b>return</b> CN.isCallInProgress(trans);
+    },
+
+    abort : <b>function</b>(trans){
+        <b>return</b> CN.abort(trans);
+    },
+
+    serializeForm : <b>function</b>(form){
+        <b>var</b> d = CN.setForm(form.dom || form);
+        CN.resetFormState();
+        <b>return</b> d;
+    }
+};
+
+Ext.lib.Region = YAHOO.util.Region;
+Ext.lib.Point = YAHOO.util.Point;
+
+
+Ext.lib.Anim = {
+    scroll : <b>function</b>(el, args, duration, easing, cb, scope){
+        <b>this</b>.run(el, args, duration, easing, cb, scope, YAHOO.util.Scroll);
+    },
+
+    motion : <b>function</b>(el, args, duration, easing, cb, scope){
+        <b>this</b>.run(el, args, duration, easing, cb, scope, YAHOO.util.Motion);
+    },
+
+    color : <b>function</b>(el, args, duration, easing, cb, scope){
+        <b>this</b>.run(el, args, duration, easing, cb, scope, YAHOO.util.ColorAnim);
+    },
+
+    run : <b>function</b>(el, args, duration, easing, cb, scope, type){
+        type = type || YAHOO.util.Anim;
+        <b>if</b>(typeof easing == &quot;string&quot;){
+            easing = YAHOO.util.Easing[easing];
+        }
+        <b>var</b> anim = <b>new</b> type(el, args, duration, easing);
+        anim.animateX(<b>function</b>(){
+            Ext.callback(cb, scope);
+        });
+        <b>return</b> anim;
+    }
+};
+
+<i>// all lib flyweight calls use their own flyweight to prevent collisions <b>with</b> developer flyweights</i>
+<b>function</b> fly(el){
+    <b>if</b>(!libFlyweight){
+        libFlyweight = <b>new</b> Ext.Element.Flyweight();
+    }
+    libFlyweight.dom = el;
+    <b>return</b> libFlyweight;
+}
+
+<i>// prevent IE leaks</i>
+<b>if</b>(Ext.isIE) {
+    <b>function</b> fnCleanUp() {
+        <b>var</b> p = Function.prototype;
+        <b>delete</b> p.createSequence;
+        <b>delete</b> p.defer;
+        <b>delete</b> p.createDelegate;
+        <b>delete</b> p.createCallback;
+        <b>delete</b> p.createInterceptor;
+
+        window.detachEvent(&quot;onunload&quot;, fnCleanUp);
+    }
+    window.attachEvent(&quot;onunload&quot;, fnCleanUp);
+}
+<i>// various overrides</i>
+
+<i>// add ability <b>for</b> callbacks <b>with</b> animations</i>
+<b>if</b>(YAHOO.util.Anim){
+    YAHOO.util.Anim.prototype.animateX = <b>function</b>(callback, scope){
+        <b>var</b> f = <b>function</b>(){
+            <b>this</b>.onComplete.unsubscribe(f);
+            <b>if</b>(typeof callback == &quot;<b>function</b>&quot;){
+                callback.call(scope || <b>this</b>, <b>this</b>);
+            }
+        };
+        <b>this</b>.onComplete.subscribe(f, <b>this</b>, true);
+        <b>this</b>.animate();
+    };
+}
+
+<b>if</b>(YAHOO.util.DragDrop &amp;&amp; Ext.dd.DragDrop){
+    YAHOO.util.DragDrop.defaultPadding = Ext.dd.DragDrop.defaultPadding;
+    YAHOO.util.DragDrop.constrainTo = Ext.dd.DragDrop.constrainTo;
+}
+
+YAHOO.util.Dom.getXY = <b>function</b>(el) {
+    <b>var</b> f = <b>function</b>(el) {
+        <b>return</b> Ext.lib.Dom.getXY(el);
+    };
+    <b>return</b> YAHOO.util.Dom.batch(el, f, YAHOO.util.Dom, true);
+};
+
+
+<i>// workaround <b>for</b> Safari anim duration speed problems</i>
+<b>if</b>(YAHOO.util.AnimMgr){
+    YAHOO.util.AnimMgr.fps = 1000;
+}
+
+YAHOO.util.Region.prototype.adjust = <b>function</b>(t, l, b, r){
+    <b>this</b>.top += t;
+    <b>this</b>.left += l;
+    <b>this</b>.right += r;
+    <b>this</b>.bottom += b;
+    <b>return</b> this;
+};
+    
+YAHOO.util.Region.prototype.constrainTo = <b>function</b>(r) {
+    <b>this</b>.top = <b>this</b>.top.constrain(r.top, r.bottom);
+    <b>this</b>.bottom = <b>this</b>.bottom.constrain(r.top, r.bottom);
+    <b>this</b>.left = <b>this</b>.left.constrain(r.left, r.right);
+    <b>this</b>.right = <b>this</b>.right.constrain(r.left, r.right);
+    <b>return</b> this;
+};
+
+
+})();</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

@@ -1,0 +1,298 @@
+<html><head><title>ext-lang-fi.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ext-lang-fi.js</h1><pre class="highlighted"><code><i>/**
+ * Finnish Translations
+ * &lt;tuomas.salo (at) iki.fi&gt;
+ * <em>'&Atilde;&curren;'</em> should read as lowercase <em>'a'</em> <b>with</b> two dots on top (&amp;auml;)
+ */</i>
+
+Ext.UpdateManager.defaults.indicatorText = <em>'&lt;div class=&quot;loading-indicator&quot;&gt;Ladataan...&lt;/div&gt;'</em>;
+
+<b>if</b>(Ext.View){
+  Ext.View.prototype.emptyText = &quot;&quot;;
+}
+
+<b>if</b>(Ext.grid.GridPanel){
+  Ext.grid.GridPanel.prototype.ddText = &quot;{0} rivi(&Atilde;&curren;) valittu&quot;;
+}
+
+<b>if</b>(Ext.TabPanelItem){
+  Ext.TabPanelItem.prototype.closeText = &quot;Sulje t&Atilde;&curren;m&Atilde;&curren; v&Atilde;&curren;lilehti&quot;;
+}
+
+<b>if</b>(Ext.LoadMask){
+  Ext.LoadMask.prototype.msg = &quot;Ladataan...&quot;;
+}
+
+Date.monthNames = [
+  &quot;tammikuu&quot;,
+  &quot;helmikuu&quot;,
+  &quot;maaliskuu&quot;,
+  &quot;huhtikuu&quot;,
+  &quot;toukokuu&quot;,
+  &quot;kes&Atilde;&curren;kuu&quot;,
+  &quot;hein&Atilde;&curren;kuu&quot;,
+  &quot;elokuu&quot;,
+  &quot;syyskuu&quot;,
+  &quot;lokakuu&quot;,
+  &quot;marraskuu&quot;,
+  &quot;joulukuu&quot;
+];
+
+Date.getShortMonthName = <b>function</b>(month) {
+  <i>//<b>return</b> Date.monthNames[month].substring(0, 3);</i>
+  <b>return</b> (month+1) + &quot;.&quot;;
+};
+
+Date.monthNumbers = {
+  Jan : 0,
+  Feb : 1,
+  Mar : 2,
+  Apr : 3,
+  May : 4,
+  Jun : 5,
+  Jul : 6,
+  Aug : 7,
+  Sep : 8,
+  Oct : 9,
+  Nov : 10,
+  Dec : 11
+};
+
+Date.getMonthNumber = <b>function</b>(name) {
+  <b>if</b>(name.match(/^(1?\d)\./)) {
+	<b>return</b> -1+RegExp.$1;
+  } <b>else</b> {
+	<b>return</b> Date.monthNumbers[name.substring(0, 1).toUpperCase() + name.substring(1, 3).toLowerCase()];
+  }
+};
+
+Date.dayNames = [
+  &quot;sunnuntai&quot;,
+  &quot;maanantai&quot;,
+  &quot;tiistai&quot;,
+  &quot;keskiviikko&quot;,
+  &quot;torstai&quot;,
+  &quot;perjantai&quot;,
+  &quot;lauantai&quot;
+];
+
+Date.getShortDayName = <b>function</b>(day) {
+  <b>return</b> Date.dayNames[day].substring(0, 2);
+};
+
+<b>if</b>(Ext.MessageBox){
+  Ext.MessageBox.buttonText = {
+    ok     : &quot;OK&quot;,
+    cancel : &quot;Peruuta&quot;,
+    yes    : &quot;Kyll&Atilde;&curren;&quot;,
+    no     : &quot;Ei&quot;
+  };
+}
+
+<b>if</b>(Ext.util.Format){
+  Ext.util.Format.date = <b>function</b>(v, format){
+    <b>if</b>(!v) <b>return</b> &quot;&quot;;
+    <b>if</b>(!(v instanceof Date)) v = <b>new</b> Date(Date.parse(v));
+    <b>return</b> v.dateFormat(format || &quot;j.n.Y&quot;);
+  };
+}
+
+<b>if</b>(Ext.DatePicker){
+  Ext.apply(Ext.DatePicker.prototype, {
+    todayText         : &quot;T&Atilde;&curren;n&Atilde;&curren;&Atilde;&curren;n&quot;,
+    minText           : &quot;T&Atilde;&curren;m&Atilde;&curren; p&Atilde;&curren;iv&Atilde;&curren;m&Atilde;&curren;&Atilde;&curren;r&Atilde;&curren; on aikaisempi kuin ensimm&Atilde;&curren;inen sallittu&quot;,
+    maxText           : &quot;T&Atilde;&curren;m&Atilde;&curren; p&Atilde;&curren;iv&Atilde;&curren;m&Atilde;&curren;&Atilde;&curren;r&Atilde;&curren; on my&Atilde;&para;h&Atilde;&curren;isempi kuin viimeinen sallittu&quot;,
+    disabledDaysText  : &quot;&quot;,
+    disabledDatesText : &quot;&quot;,
+    monthNames        : Date.monthNames,
+    dayNames          : Date.dayNames,
+    nextText          : <em>'Seuraava kuukausi (Control+oikealle)'</em>,
+    prevText          : <em>'Edellinen kuukausi (Control+vasemmalle)'</em>,
+    monthYearText     : <em>'Valitse kuukausi (vaihda vuotta painamalla Control+yl&Atilde;&para;s/alas)'</em>,
+    todayTip          : &quot;{0} (v&Atilde;&curren;lily&Atilde;&para;nti)&quot;,
+    format            : &quot;j.n.Y&quot;,
+    okText            : &quot;&amp;#160;OK&amp;#160;&quot;,
+    cancelText        : &quot;Peruuta&quot;,
+    startDay          : 1 <i>// viikko alkaa maanantaista</i>
+  });
+}
+
+<b>if</b>(Ext.PagingToolbar){
+  Ext.apply(Ext.PagingToolbar.prototype, {
+    beforePageText : &quot;Sivu&quot;,
+    afterPageText  : &quot;/ {0}&quot;,
+    firstText      : &quot;Ensimm&Atilde;&curren;inen sivu&quot;,
+    prevText       : &quot;Edellinen sivu&quot;,
+    nextText       : &quot;Seuraava sivu&quot;,
+    lastText       : &quot;Viimeinen sivu&quot;,
+    refreshText    : &quot;P&Atilde;&curren;ivit&Atilde;&curren;&quot;,
+    displayMsg     : &quot;N&Atilde;&curren;ytet&Atilde;&curren;&Atilde;&curren;n {0} - {1} / {2}&quot;,
+    emptyMsg       : <em>'Ei tietoja'</em>
+  });
+}
+
+<b>if</b>(Ext.form.Field){
+  Ext.form.Field.prototype.invalidText = &quot;T&Atilde;&curren;m&Atilde;&curren;n kent&Atilde;&curren;n arvo ei kelpaa&quot;;
+}
+
+<b>if</b>(Ext.form.TextField){
+  Ext.apply(Ext.form.TextField.prototype, {
+    minLengthText : &quot;T&Atilde;&curren;m&Atilde;&curren;n kent&Atilde;&curren;n minimipituus on {0}&quot;,
+    maxLengthText : &quot;T&Atilde;&curren;m&Atilde;&curren;n kent&Atilde;&curren;n maksimipituus on {0}&quot;,
+    blankText     : &quot;T&Atilde;&curren;m&Atilde;&curren; kentt&Atilde;&curren; on pakollinen&quot;,
+    regexText     : &quot;&quot;,
+    emptyText     : null
+  });
+}
+
+<b>if</b>(Ext.form.NumberField){
+  Ext.apply(Ext.form.NumberField.prototype, {
+    minText : &quot;T&Atilde;&curren;m&Atilde;&curren;n kent&Atilde;&curren;n pienin sallittu arvo on {0}&quot;,
+    maxText : &quot;T&Atilde;&curren;m&Atilde;&curren;n kent&Atilde;&curren;n suurin sallittu arvo on {0}&quot;,
+    nanText : &quot;{0} ei ole numero&quot;
+  });
+}
+
+<b>if</b>(Ext.form.DateField){
+  Ext.apply(Ext.form.DateField.prototype, {
+    disabledDaysText  : &quot;Ei k&Atilde;&curren;yt&Atilde;&para;ss&Atilde;&curren;&quot;,
+    disabledDatesText : &quot;Ei k&Atilde;&curren;yt&Atilde;&para;ss&Atilde;&curren;&quot;,
+    minText           : &quot;T&Atilde;&curren;m&Atilde;&curren;n kent&Atilde;&curren;n p&Atilde;&curren;iv&Atilde;&curren;m&Atilde;&curren;&Atilde;&curren;r&Atilde;&curren;n tulee olla {0} j&Atilde;&curren;lkeen&quot;,
+    maxText           : &quot;T&Atilde;&curren;m&Atilde;&curren;n kent&Atilde;&curren;n p&Atilde;&curren;iv&Atilde;&curren;m&Atilde;&curren;&Atilde;&curren;r&Atilde;&curren;n tulee olla ennen {0}&quot;,
+    invalidText       : &quot;P&Atilde;&curren;iv&Atilde;&curren;m&Atilde;&curren;&Atilde;&curren;r&Atilde;&curren; {0} ei ole oikeassa muodossa - kirjoita p&Atilde;&curren;iv&Atilde;&curren;m&Atilde;&curren;&Atilde;&curren;r&Atilde;&curren; muodossa {1}&quot;,
+    format            : &quot;j.n.Y&quot;,
+    altFormats        : &quot;j.n.|d.m.|mdy|mdY|d|Y-m-d|Y/m/d&quot;
+  });
+}
+
+<b>if</b>(Ext.form.ComboBox){
+  Ext.apply(Ext.form.ComboBox.prototype, {
+    loadingText       : &quot;Ladataan...&quot;,
+    valueNotFoundText : undefined
+  });
+}
+
+<b>if</b>(Ext.form.VTypes){
+  Ext.apply(Ext.form.VTypes, {
+    emailText    : <em>'Sy&Atilde;&para;t&Atilde;&curren; t&Atilde;&curren;h&Atilde;&curren;n kentt&Atilde;&curren;&Atilde;&curren;n s&Atilde;&curren;hk&Atilde;&para;postiosoite, esim. &quot;etunimi.sukunimi@osoite.fi&quot;'</em>,
+    urlText      : <em>'Sy&Atilde;&para;t&Atilde;&curren; t&Atilde;&curren;h&Atilde;&curren;n kentt&Atilde;&curren;&Atilde;&curren;n URL-osoite, esim. &quot;http:/'</em>+<em>'/www.osoite.fi&quot;'</em>,
+    alphaText    : <em>'Sy&Atilde;&para;t&Atilde;&curren; t&Atilde;&curren;h&Atilde;&curren;n kentt&Atilde;&curren;&Atilde;&curren;n vain kirjaimia (a-z, A-Z) ja alaviivoja (_)'</em>,
+    alphanumText : <em>'Sy&Atilde;&para;t&Atilde;&curren; t&Atilde;&curren;h&Atilde;&curren;n kentt&Atilde;&curren;&Atilde;&curren;n vain kirjaimia (a-z, A-Z), numeroita (0-9) ja alaviivoja (_)'</em>
+  });
+}
+
+<b>if</b>(Ext.form.HtmlEditor){
+  Ext.apply(Ext.form.HtmlEditor.prototype, {
+    createLinkText : <em>'Anna linkin URL-osoite:'</em>,
+    buttonTips : {
+      bold : {
+        title: <em>'Lihavoi (Ctrl+B)'</em>,
+        text: <em>'Lihavoi valittu teksti.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      italic : {
+        title: <em>'Kursivoi (Ctrl+I)'</em>,
+        text: <em>'Kursivoi valittu teksti.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      underline : {
+        title: <em>'Alleviivaa (Ctrl+U)'</em>,
+        text: <em>'Alleviivaa valittu teksti.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      increasefontsize : {
+        title: <em>'Suurenna teksti&Atilde;&curren;'</em>,
+        text: <em>'Kasvata tekstin kirjasinkokoa.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      decreasefontsize : {
+        title: <em>'Pienenn&Atilde;&curren; teksti&Atilde;&curren;'</em>,
+        text: <em>'Pienenn&Atilde;&curren; tekstin kirjasinkokoa.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      backcolor : {
+        title: <em>'Tekstin korostusv&Atilde;&curren;ri'</em>,
+        text: <em>'Vaihda valitun tekstin taustav&Atilde;&curren;ri&Atilde;&curren;.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      forecolor : {
+        title: <em>'Tekstin v&Atilde;&curren;ri'</em>,
+        text: <em>'Vaihda valitun tekstin v&Atilde;&curren;ri&Atilde;&curren;.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifyleft : {
+        title: <em>'Tasaa vasemmalle'</em>,
+        text: <em>'Tasaa teksti vasempaan reunaan.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifycenter : {
+        title: <em>'Keskit&Atilde;&curren;'</em>,
+        text: <em>'Keskit&Atilde;&curren; teksti.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifyright : {
+        title: <em>'Tasaa oikealle'</em>,
+        text: <em>'Tasaa teksti oikeaan reunaan.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      insertunorderedlist : {
+        title: <em>'Luettelo'</em>,
+        text: <em>'Luo luettelo.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      insertorderedlist : {
+        title: <em>'Numeroitu luettelo'</em>,
+        text: <em>'Luo numeroitu luettelo.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      createlink : {
+        title: <em>'Linkki'</em>,
+        text: <em>'Tee valitusta tekstist&Atilde;&curren; hyperlinkki.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      sourceedit : {
+        title: <em>'L&Atilde;&curren;hdekoodin muokkaus'</em>,
+        text: <em>'Vaihda l&Atilde;&curren;hdekoodin muokkausn&Atilde;&curren;kym&Atilde;&curren;&Atilde;&curren;n.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      }
+    }
+  });
+}
+
+<b>if</b>(Ext.form.BasicForm){
+  Ext.form.BasicForm.prototype.waitTitle = &quot;Odota...&quot;;
+}
+
+<b>if</b>(Ext.grid.GridView){
+  Ext.apply(Ext.grid.GridView.prototype, {
+    sortAscText  : &quot;J&Atilde;&curren;rjest&Atilde;&curren; A-&Atilde;–&quot;,
+    sortDescText : &quot;J&Atilde;&curren;rjest&Atilde;&curren; &Atilde;–-A&quot;,
+    lockText     : &quot;Lukitse sarake&quot;,
+    unlockText   : &quot;Vapauta sarakkeen lukitus&quot;,
+    columnsText  : &quot;Sarakkeet&quot;
+  });
+}
+
+<b>if</b>(Ext.grid.GroupingView){
+  Ext.apply(Ext.grid.GroupingView.prototype, {
+    emptyGroupText : <em>'(ei mit&Atilde;&curren;&Atilde;&curren;n)'</em>,
+    groupByText    : <em>'Ryhmittele t&Atilde;&curren;m&Atilde;&curren;n kent&Atilde;&curren;n mukaan'</em>,
+    showGroupsText : <em>'N&Atilde;&curren;yt&Atilde;&curren; ryhmiss&Atilde;&curren;'</em>
+  });
+}
+
+<b>if</b>(Ext.grid.PropertyColumnModel){
+  Ext.apply(Ext.grid.PropertyColumnModel.prototype, {
+    nameText   : &quot;Nimi&quot;,
+    valueText  : &quot;Arvo&quot;,
+    dateFormat : &quot;j.m.Y&quot;
+  });
+}
+
+<b>if</b>(Ext.layout.BorderLayout &amp;&amp; Ext.layout.BorderLayout.SplitRegion){
+  Ext.apply(Ext.layout.BorderLayout.SplitRegion.prototype, {
+    splitTip            : &quot;Muuta kokoa vet&Atilde;&curren;m&Atilde;&curren;ll&Atilde;&curren;.&quot;,
+    collapsibleSplitTip : &quot;Muuta kokoa vet&Atilde;&curren;m&Atilde;&curren;ll&Atilde;&curren;. Piilota kaksoisklikkauksella.&quot;
+  });
+}
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

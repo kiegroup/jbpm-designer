@@ -1,0 +1,310 @@
+<html><head><title>ext-lang-ca.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ext-lang-ca.js</h1><pre class="highlighted"><code><i>/**
+ * Catalonian Translation by halkon_polako 6-12-2007
+ * December correction halkon_polako 11-12-2007
+ *
+ * Synchronized <b>with</b> 2.2 version of ext-lang-en.js (provided by Condor 8 aug 2008) 
+ *     by halkon_polako 14-aug-2008
+ */</i>
+
+Ext.UpdateManager.defaults.indicatorText = <em>'&lt;div class=&quot;loading-indicator&quot;&gt;Carregant...&lt;/div&gt;'</em>;
+
+<b>if</b>(Ext.DataView){
+  Ext.DataView.prototype.emptyText = &quot;&quot;;
+}
+
+<b>if</b>(Ext.grid.GridPanel){
+  Ext.grid.GridPanel.prototype.ddText = &quot;{0} fila(es) seleccionada(es)&quot;;
+}
+
+<b>if</b>(Ext.LoadMask){
+  Ext.LoadMask.prototype.msg = &quot;Carregant...&quot;;
+}
+
+Date.monthNames = [
+  &quot;Gener&quot;,
+  &quot;Febrer&quot;,
+  &quot;Mar&amp;#231;&quot;,
+  &quot;Abril&quot;,
+  &quot;Maig&quot;,
+  &quot;Juny&quot;,
+  &quot;Juliol&quot;,
+  &quot;Agost&quot;,
+  &quot;Setembre&quot;,
+  &quot;Octubre&quot;,
+  &quot;Novembre&quot;,
+  &quot;Desembre&quot;
+];
+
+Date.getShortMonthName = <b>function</b>(month) {
+  <b>return</b> Date.monthNames[month].substring(0, 3);
+};
+
+Date.monthNumbers = {
+  Gen : 0,
+  Feb : 1,
+  Mar : 2,
+  Abr : 3,
+  Mai : 4,
+  Jun : 5,
+  Jul : 6,
+  Ago : 7,
+  Set : 8,
+  Oct : 9,
+  Nov : 10,
+  Dec : 11
+};
+
+Date.getMonthNumber = <b>function</b>(name) {
+  <b>return</b> Date.monthNumbers[name.substring(0, 1).toUpperCase() + name.substring(1, 3).toLowerCase()];
+};
+
+Date.dayNames = [
+  &quot;Diumenge&quot;,
+  &quot;Dilluns&quot;,
+  &quot;Dimarts&quot;,
+  &quot;Dimecres&quot;,
+  &quot;Dijous&quot;,
+  &quot;Divendres&quot;,
+  &quot;Dissabte&quot;
+];
+
+Date.getShortDayName = <b>function</b>(day) {
+  <b>return</b> Date.dayNames[day].substring(0, 3);
+};
+
+Date.parseCodes.S.s = &quot;(?:st|nd|rd|th)&quot;;
+
+<b>if</b>(Ext.MessageBox){
+  Ext.MessageBox.buttonText = {
+    ok     : &quot;Acceptar&quot;,
+    cancel : &quot;Cancel&amp;#183;lar&quot;,
+    yes    : &quot;S&amp;#237;&quot;,
+    no     : &quot;No&quot;
+  };
+}
+
+<b>if</b>(Ext.util.Format){
+  Ext.util.Format.date = <b>function</b>(v, format){
+    <b>if</b>(!v) <b>return</b> &quot;&quot;;
+    <b>if</b>(!(v instanceof Date)) v = <b>new</b> Date(Date.parse(v));
+    <b>return</b> v.dateFormat(format || &quot;d/m/Y&quot;);
+  };
+}
+
+<b>if</b>(Ext.DatePicker){
+  Ext.apply(Ext.DatePicker.prototype, {
+    todayText         : &quot;Avui&quot;,
+    minText           : &quot;Aquesta data &amp;#233;s anterior a la data m&amp;#237;nima&quot;,
+    maxText           : &quot;Aquesta data &amp;#233;s posterior a la data m&amp;#224;xima&quot;,
+    disabledDaysText  : &quot;&quot;,
+    disabledDatesText : &quot;&quot;,
+    monthNames        : Date.monthNames,
+    dayNames          : Date.dayNames,
+    nextText          : <em>'Mes Seg&amp;#252;ent (Control+Fletxa Dreta)'</em>,
+    prevText          : <em>'Mes Anterior (Control+Fletxa Esquerra)'</em>,
+    monthYearText     : <em>'Seleccioni un mes (Control+Fletxa a Dalt o Abaix per canviar els anys)'</em>,
+    todayTip          : &quot;{0} (Barra d&amp;#39;espai)&quot;,
+    format            : &quot;d/m/Y&quot;,
+    okText            : &quot;&amp;#160;Acceptar&amp;#160;&quot;,
+    cancelText        : &quot;Cancel&amp;#183;lar&quot;,
+    startDay          : 1
+  });
+}
+
+<b>if</b>(Ext.PagingToolbar){
+  Ext.apply(Ext.PagingToolbar.prototype, {
+    beforePageText : &quot;P&amp;#224;gina&quot;,
+    afterPageText  : &quot;de {0}&quot;,
+    firstText      : &quot;Primera P&amp;#224;gina&quot;,
+    prevText       : &quot;P&amp;#224;gina Anterior&quot;,
+    nextText       : &quot;P&amp;#224;gina Seg&amp;#252;ent&quot;,
+    lastText       : &quot;Darrera P&amp;#224;gina&quot;,
+    refreshText    : &quot;Refrescar&quot;,
+    displayMsg     : &quot;Mostrant {0} - {1} de {2}&quot;,
+    emptyMsg       : <em>'Sense dades per mostrar'</em>
+  });
+}
+
+<b>if</b>(Ext.form.Field){
+  Ext.form.Field.prototype.invalidText = &quot;El valor d&amp;#39;aquest camp &amp;#233;s inv&amp;#224;lid&quot;;
+}
+
+<b>if</b>(Ext.form.TextField){
+  Ext.apply(Ext.form.TextField.prototype, {
+    minLengthText : &quot;El tamany m&amp;#237;nim per aquest camp &amp;#233;s {0}&quot;,
+    maxLengthText : &quot;El tamany m&amp;#224;xim per aquest camp &amp;#233;s {0}&quot;,
+    blankText     : &quot;Aquest camp &amp;#233;s obligatori&quot;,
+    regexText     : &quot;&quot;,
+    emptyText     : null
+  });
+}
+
+<b>if</b>(Ext.form.NumberField){
+  Ext.apply(Ext.form.NumberField.prototype, {
+    decimalSeparator : &quot;,&quot;,
+    decimalPrecision : 2,
+    minText : &quot;El valor m&amp;#237;nim per aquest camp &amp;#233;s {0}&quot;,
+    maxText : &quot;El valor m&amp;#224;xim per aquest camp &amp;#233;s {0}&quot;,
+    nanText : &quot;{0} no &amp;#233;s un nombre v&amp;#224;lid&quot;
+  });
+}
+
+<b>if</b>(Ext.form.DateField){
+  Ext.apply(Ext.form.DateField.prototype, {
+    disabledDaysText  : &quot;Deshabilitat&quot;,
+    disabledDatesText : &quot;Deshabilitat&quot;,
+    minText           : &quot;La data en aquest camp ha de ser posterior a {0}&quot;,
+    maxText           : &quot;La data en aquest camp ha de ser inferior a {0}&quot;,
+    invalidText       : &quot;{0} no &amp;#233;s una data v&amp;#224;lida - ha de tenir el format {1}&quot;,
+    format            : &quot;d/m/Y&quot;,
+    altFormats        : &quot;d/m/Y|d-m-y|d-m-Y|d/m|d-m|dm|dmy|dmY|d|Y-m-d&quot;
+  });
+}
+
+<b>if</b>(Ext.form.ComboBox){
+  Ext.apply(Ext.form.ComboBox.prototype, {
+    loadingText       : &quot;Carregant...&quot;,
+    valueNotFoundText : undefined
+  });
+}
+
+<b>if</b>(Ext.form.VTypes){
+  Ext.apply(Ext.form.VTypes, {
+    emailText    : <em>'Aquest camp ha de ser una adre&amp;#231;a de e-mail amb el format &quot;user@domain.com&quot;'</em>,
+    urlText      : <em>'Aquest camp ha de ser una URL amb el format &quot;http:/'</em>+<em>'/www.domain.com&quot;'</em>,
+    alphaText    : <em>'Aquest camp nom&amp;#233;s pot contenir lletres i _'</em>,
+    alphanumText : <em>'Aquest camp nom&amp;#233;s por contenir lletres, nombres i _'</em>
+  });
+}
+
+<b>if</b>(Ext.form.HtmlEditor){
+  Ext.apply(Ext.form.HtmlEditor.prototype, {
+    createLinkText : <em>'Si us plau, tecleixi la URL per l\'</em>enlla&amp;#231;:',
+    buttonTips : {
+      bold : {
+        title: <em>'Negreta (Ctrl+B)'</em>,
+        text: <em>'Posa el text seleccionat en negreta.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      italic : {
+        title: <em>'It&amp;#224;lica (Ctrl+I)'</em>,
+        text: <em>'Posa el text seleccionat en it&amp;#224;lica.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      underline : {
+        title: <em>'Subratllat (Ctrl+U)'</em>,
+        text: <em>'Subratlla el text seleccionat.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      increasefontsize : {
+        title: <em>'Augmentar Text'</em>,
+        text: <em>'Augmenta el tamany de la font de text.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      decreasefontsize : {
+        title: <em>'Disminuir Text'</em>,
+        text: <em>'Disminueix el tamany de la font de text.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      backcolor : {
+        title: <em>'Color de fons'</em>,
+        text: <em>'Canvia el color de fons del text seleccionat.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      forecolor : {
+        title: <em>'Color de la font de text'</em>,
+        text: <em>'Canvia el color del text seleccionat.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifyleft : {
+        title: <em>'Alinear a la esquerra'</em>,
+        text: <em>'Alinea el text a la esquerra.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifycenter : {
+        title: <em>'Centrar el text'</em>,
+        text: <em>'Centra el text a l\'</em>editor',
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifyright : {
+        title: <em>'Alinear a la dreta'</em>,
+        text: <em>'Alinea el text a la dreta.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      insertunorderedlist : {
+        title: <em>'Llista amb vinyetes'</em>,
+        text: <em>'Comen&amp;#231;a una llista amb vinyetes.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      insertorderedlist : {
+        title: <em>'Llista numerada'</em>,
+        text: <em>'Comen&amp;#231;a una llista numerada.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      createlink : {
+        title: <em>'Enlla&amp;#231;'</em>,
+        text: <em>'Transforma el text seleccionat en un enlla&amp;#231;.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      sourceedit : {
+        title: <em>'Editar Codi'</em>,
+        text: <em>'Canvia al mode d\'</em>edici&amp;#243; de codi.',
+        cls: <em>'x-html-editor-tip'</em>
+      }
+    }
+  });
+}
+
+<b>if</b>(Ext.grid.GridView){
+  Ext.apply(Ext.grid.GridView.prototype, {
+    sortAscText  : &quot;Ordenaci&amp;#243; Ascendent&quot;,
+    sortDescText : &quot;Ordenaci&amp;#243; Descendent&quot;,
+    columnsText  : &quot;Columnes&quot;
+  });
+}
+
+<b>if</b>(Ext.grid.GroupingView){
+  Ext.apply(Ext.grid.GroupingView.prototype, {
+    emptyGroupText : <em>'(Buit)'</em>,
+    groupByText    : <em>'Agrupar Per Aquest Camp'</em>,
+    showGroupsText : <em>'Mostrar en Grups'</em>
+  });
+}
+
+<b>if</b>(Ext.grid.PropertyColumnModel){
+  Ext.apply(Ext.grid.PropertyColumnModel.prototype, {
+    nameText   : &quot;Nom&quot;,
+    valueText  : &quot;Valor&quot;,
+    dateFormat : &quot;d/m/Y&quot;
+  });
+}
+
+<b>if</b>(Ext.layout.BorderLayout &amp;&amp; Ext.layout.BorderLayout.SplitRegion){
+  Ext.apply(Ext.layout.BorderLayout.SplitRegion.prototype, {
+    splitTip            : &quot;Cliqueu i arrossegueu per canviar el tamany del panell.&quot;,
+    collapsibleSplitTip : &quot;Cliqueu i arrossegueu per canviar el tamany del panell. Doble clic per ocultar-ho.&quot;
+  });
+}
+
+<b>if</b>(Ext.form.TimeField){
+  Ext.apply(Ext.form.TimeField.prototype, {
+    minText : &quot;L\'hora en aquest camp ha de ser igual o posterior a {0}&quot;,
+    maxText : &quot;L\'hora en aquest camp ha de ser igual o anterior {0}&quot;,
+    invalidText : &quot;{0} no &amp;#233;s un hora v&amp;#224;lida&quot;,
+    format : &quot;g:i A&quot;,
+    altFormats : &quot;g:ia|g:iA|g:i a|g:i A|h:i|g:i|H:i|ga|ha|gA|h a|g a|g A|gi|hi|gia|hia|g|H&quot;
+  });
+}
+
+<b>if</b>(Ext.form.CheckboxGroup){
+  Ext.apply(Ext.form.CheckboxGroup.prototype, {
+    blankText : &quot;Ha de seleccionar almenys un &amp;#233;tem d\'aquest group&quot;
+  });
+}
+
+<b>if</b>(Ext.form.RadioGroup){
+  Ext.apply(Ext.form.RadioGroup.prototype, {
+    blankText : &quot;Ha de seleccionar un &amp;#233;tem d\'aquest grup&quot;
+  });
+}</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

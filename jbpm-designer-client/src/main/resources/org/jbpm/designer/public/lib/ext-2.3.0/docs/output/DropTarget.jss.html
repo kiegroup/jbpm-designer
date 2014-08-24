@@ -1,0 +1,112 @@
+<html><head><title>DropTarget.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>DropTarget.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.dd.DropTarget
+ * @extends Ext.dd.DDTarget
+ * A simple class that provides the basic implementation needed to make any element a drop target that can have
+ * draggable items dropped onto it.  The drop has no effect until an implementation of notifyDrop is provided.
+ * @constructor
+ * @param {Mixed} el The container element
+ * @param {Object} config
+ */</i>
+Ext.dd.DropTarget = <b>function</b>(el, config){
+    <b>this</b>.el = Ext.get(el);
+    
+    Ext.apply(<b>this</b>, config);
+    
+    <b>if</b>(this.containerScroll){
+        Ext.dd.ScrollManager.register(<b>this</b>.el);
+    }
+    
+    Ext.dd.DropTarget.superclass.constructor.call(<b>this</b>, <b>this</b>.el.dom, <b>this</b>.ddGroup || <b>this</b>.group, 
+          {isTarget: true});
+
+};
+
+Ext.extend(Ext.dd.DropTarget, Ext.dd.DDTarget, {
+    <i>/**
+     * @cfg {String} ddGroup
+     * A named drag drop group to which <b>this</b> object belongs.  If a group is specified, then <b>this</b> object will only
+     * interact <b>with</b> other drag drop objects <b>in</b> the same group (defaults to undefined).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} overClass
+     * The CSS class applied to the drop target element <b>while</b> the drag source is over it (defaults to &quot;&quot;).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} dropAllowed
+     * The CSS class returned to the drag source when drop is allowed (defaults to &quot;x-dd-drop-ok&quot;).
+     */</i>
+    dropAllowed : &quot;x-dd-drop-ok&quot;,
+    <i>/**
+     * @cfg {String} dropNotAllowed
+     * The CSS class returned to the drag source when drop is not allowed (defaults to &quot;x-dd-drop-nodrop&quot;).
+     */</i>
+    dropNotAllowed : &quot;x-dd-drop-nodrop&quot;,
+
+    <i>// private</i>
+    isTarget : true,
+
+    <i>// private</i>
+    isNotifyTarget : true,
+
+    <i>/**
+     * The <b>function</b> a {@link Ext.dd.DragSource} calls once to notify <b>this</b> drop target that the source is now over the
+     * target.  This <b>default</b> implementation adds the CSS class specified by overClass (<b>if</b> any) to the drop element
+     * and returns the dropAllowed config value.  This method should be overridden <b>if</b> drop validation is required.
+     * @param {Ext.dd.DragSource} source The drag source that was dragged over <b>this</b> drop target
+     * @param {Event} e The event
+     * @param {Object} data An object containing arbitrary data supplied by the drag source
+     * @<b>return</b> {String} status The CSS class that communicates the drop status back to the source so that the
+     * underlying {@link Ext.dd.StatusProxy} can be updated
+     */</i>
+    notifyEnter : <b>function</b>(dd, e, data){
+        <b>if</b>(this.overClass){
+            <b>this</b>.el.addClass(<b>this</b>.overClass);
+        }
+        <b>return</b> this.dropAllowed;
+    },
+
+    <i>/**
+     * The <b>function</b> a {@link Ext.dd.DragSource} calls continuously <b>while</b> it is being dragged over the target.
+     * This method will be called on every mouse movement <b>while</b> the drag source is over the drop target.
+     * This <b>default</b> implementation simply returns the dropAllowed config value.
+     * @param {Ext.dd.DragSource} source The drag source that was dragged over <b>this</b> drop target
+     * @param {Event} e The event
+     * @param {Object} data An object containing arbitrary data supplied by the drag source
+     * @<b>return</b> {String} status The CSS class that communicates the drop status back to the source so that the
+     * underlying {@link Ext.dd.StatusProxy} can be updated
+     */</i>
+    notifyOver : <b>function</b>(dd, e, data){
+        <b>return</b> this.dropAllowed;
+    },
+
+    <i>/**
+     * The <b>function</b> a {@link Ext.dd.DragSource} calls once to notify <b>this</b> drop target that the source has been dragged
+     * out of the target without dropping.  This <b>default</b> implementation simply removes the CSS class specified by
+     * overClass (<b>if</b> any) from the drop element.
+     * @param {Ext.dd.DragSource} source The drag source that was dragged over <b>this</b> drop target
+     * @param {Event} e The event
+     * @param {Object} data An object containing arbitrary data supplied by the drag source
+     */</i>
+    notifyOut : <b>function</b>(dd, e, data){
+        <b>if</b>(this.overClass){
+            <b>this</b>.el.removeClass(<b>this</b>.overClass);
+        }
+    },
+
+    <i>/**
+     * The <b>function</b> a {@link Ext.dd.DragSource} calls once to notify <b>this</b> drop target that the dragged item has
+     * been dropped on it.  This method has no <b>default</b> implementation and returns false, so you must provide an
+     * implementation that does something to process the drop event and returns true so that the drag source's
+     * repair action does not run.
+     * @param {Ext.dd.DragSource} source The drag source that was dragged over <b>this</b> drop target
+     * @param {Event} e The event
+     * @param {Object} data An object containing arbitrary data supplied by the drag source
+     * @<b>return</b> {Boolean} True <b>if</b> the drop was valid, <b>else</b> false
+     */</i>
+    notifyDrop : <b>function</b>(dd, e, data){
+        <b>return</b> false;
+    }
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

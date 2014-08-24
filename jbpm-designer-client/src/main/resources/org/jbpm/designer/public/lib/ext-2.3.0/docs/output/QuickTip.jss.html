@@ -1,0 +1,174 @@
+<html><head><title>QuickTip.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>QuickTip.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.QuickTip
+ * @extends Ext.ToolTip
+ * A specialized tooltip class <b>for</b> tooltips that can be specified <b>in</b> markup and automatically managed by the global
+ * {@link Ext.QuickTips} instance.  See the QuickTips class header <b>for</b> additional usage details and examples.
+ * @constructor
+ * Create a <b>new</b> Tip
+ * @param {Object} config The configuration options
+ */</i>
+Ext.QuickTip = Ext.extend(Ext.ToolTip, {
+    <i>/**
+     * @cfg {Mixed} target The target HTMLElement, Ext.Element or id to associate <b>with</b> this quicktip (defaults to the document).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} interceptTitles True to automatically use the element's DOM title value <b>if</b> available (defaults to false).
+     */</i>
+    interceptTitles : false,
+
+    <i>// private</i>
+    tagConfig : {
+        namespace : &quot;ext&quot;,
+        attribute : &quot;qtip&quot;,
+        width : &quot;qwidth&quot;,
+        target : &quot;target&quot;,
+        title : &quot;qtitle&quot;,
+        hide : &quot;hide&quot;,
+        cls : &quot;qclass&quot;,
+        align : &quot;qalign&quot;
+    },
+
+    <i>// private</i>
+    initComponent : <b>function</b>(){
+        <b>this</b>.target = <b>this</b>.target || Ext.getDoc();
+        <b>this</b>.targets = <b>this</b>.targets || {};
+        Ext.QuickTip.superclass.initComponent.call(<b>this</b>);
+    },
+
+    <i>/**
+     * Configures a <b>new</b> quick tip instance and assigns it to a target element.  The following config values are
+     * supported (<b>for</b> example usage, see the {@link Ext.QuickTips} class header):
+     * &lt;div class=&quot;mdetail-params&quot;&gt;&lt;ul&gt;
+     * &lt;li&gt;autoHide&lt;/li&gt;
+     * &lt;li&gt;cls&lt;/li&gt;
+     * &lt;li&gt;dismissDelay (overrides the singleton value)&lt;/li&gt;
+     * &lt;li&gt;target (required)&lt;/li&gt;
+     * &lt;li&gt;text (required)&lt;/li&gt;
+     * &lt;li&gt;title&lt;/li&gt;
+     * &lt;li&gt;width&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;
+     * @param {Object} config The config object
+     */</i>
+    register : <b>function</b>(config){
+        <b>var</b> cs = Ext.isArray(config) ? config : arguments;
+        <b>for</b>(var i = 0, len = cs.length; i &lt; len; i++){
+            <b>var</b> c = cs[i];
+            <b>var</b> target = c.target;
+            <b>if</b>(target){
+                <b>if</b>(Ext.isArray(target)){
+                    <b>for</b>(var j = 0, jlen = target.length; j &lt; jlen; j++){
+                        <b>this</b>.targets[Ext.id(target[j])] = c;
+                    }
+                } <b>else</b>{
+                    <b>this</b>.targets[Ext.id(target)] = c;
+                }
+            }
+        }
+    },
+
+    <i>/**
+     * Removes <b>this</b> quick tip from its element and destroys it.
+     * @param {String/HTMLElement/Element} el The element from which the quick tip is to be removed.
+     */</i>
+    unregister : <b>function</b>(el){
+        <b>delete</b> this.targets[Ext.id(el)];
+    },
+
+    <i>// private</i>
+    onTargetOver : <b>function</b>(e){
+        <b>if</b>(this.disabled){
+            <b>return</b>;
+        }
+        <b>this</b>.targetXY = e.getXY();
+        <b>var</b> t = e.getTarget();
+        <b>if</b>(!t || t.nodeType !== 1 || t == document || t == document.body){
+            <b>return</b>;
+        }
+        <b>if</b>(this.activeTarget &amp;&amp; t == <b>this</b>.activeTarget.el){
+            <b>this</b>.clearTimer(<em>'hide'</em>);
+            <b>this</b>.show();
+            <b>return</b>;
+        }
+        <b>if</b>(t &amp;&amp; <b>this</b>.targets[t.id]){
+            <b>this</b>.activeTarget = <b>this</b>.targets[t.id];
+            <b>this</b>.activeTarget.el = t;
+            <b>this</b>.delayShow();
+            <b>return</b>;
+        }
+        <b>var</b> ttp, et = Ext.fly(t), cfg = <b>this</b>.tagConfig;
+        <b>var</b> ns = cfg.namespace;
+        <b>if</b>(this.interceptTitles &amp;&amp; t.title){
+            ttp = t.title;
+            t.qtip = ttp;
+            t.removeAttribute(&quot;title&quot;);
+            e.preventDefault();
+        } <b>else</b>{
+            ttp = t.qtip || et.getAttributeNS(ns, cfg.attribute);
+        }
+        <b>if</b>(ttp){
+            <b>var</b> autoHide = et.getAttributeNS(ns, cfg.hide);
+            <b>this</b>.activeTarget = {
+                el: t,
+                text: ttp,
+                width: et.getAttributeNS(ns, cfg.width),
+                autoHide: autoHide != &quot;user&quot; &amp;&amp; autoHide !== <em>'false'</em>,
+                title: et.getAttributeNS(ns, cfg.title),
+                cls: et.getAttributeNS(ns, cfg.cls),
+                align: et.getAttributeNS(ns, cfg.align)
+            };
+            <b>this</b>.delayShow();
+        }
+    },
+
+    <i>// private</i>
+    onTargetOut : <b>function</b>(e){
+        <b>this</b>.clearTimer(<em>'show'</em>);
+        <b>if</b>(this.autoHide !== false){
+            <b>this</b>.delayHide();
+        }
+    },
+
+    <i>// inherit docs</i>
+    showAt : <b>function</b>(xy){
+        <b>var</b> t = <b>this</b>.activeTarget;
+        <b>if</b>(t){
+            <b>if</b>(!<b>this</b>.rendered){
+                <b>this</b>.render(Ext.getBody());
+                <b>this</b>.activeTarget = t;
+            }
+            <b>if</b>(t.width){
+                <b>this</b>.setWidth(t.width);
+                <b>this</b>.body.setWidth(<b>this</b>.adjustBodyWidth(t.width - <b>this</b>.getFrameWidth()));
+                <b>this</b>.measureWidth = false;
+            } <b>else</b>{
+                <b>this</b>.measureWidth = true;
+            }
+            <b>this</b>.setTitle(t.title || <em>''</em>);
+            <b>this</b>.body.update(t.text);
+            <b>this</b>.autoHide = t.autoHide;
+            <b>this</b>.dismissDelay = t.dismissDelay || <b>this</b>.dismissDelay;
+            <b>if</b>(this.lastCls){
+                <b>this</b>.el.removeClass(<b>this</b>.lastCls);
+                <b>delete</b> this.lastCls;
+            }
+            <b>if</b>(t.cls){
+                <b>this</b>.el.addClass(t.cls);
+                <b>this</b>.lastCls = t.cls;
+            }
+            <b>if</b>(t.align){ <i>// TODO: <b>this</b> doesn't seem to work consistently</i>
+                xy = <b>this</b>.el.getAlignToXY(t.el, t.align);
+                <b>this</b>.constrainPosition = false;
+            } <b>else</b>{
+                <b>this</b>.constrainPosition = true;
+            }
+        }
+        Ext.QuickTip.superclass.showAt.call(<b>this</b>, xy);
+    },
+
+    <i>// inherit docs</i>
+    hide: <b>function</b>(){
+        <b>delete</b> this.activeTarget;
+        Ext.QuickTip.superclass.hide.call(<b>this</b>);
+    }
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

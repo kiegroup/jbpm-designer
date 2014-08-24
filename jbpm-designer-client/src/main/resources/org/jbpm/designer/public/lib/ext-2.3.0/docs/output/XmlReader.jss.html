@@ -1,0 +1,122 @@
+<html><head><title>XmlReader.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>XmlReader.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.data.XmlReader
+ * @extends Ext.data.DataReader
+ * Data reader class to create an Array of {@link Ext.data.Record} objects from an XML document
+ * based on mappings <b>in</b> a provided {@link Ext.data.Record} constructor.&lt;br&gt;&lt;br&gt;
+ * &lt;p&gt;
+ * &lt;em&gt;Note that <b>in</b> order <b>for</b> the browser to parse a returned XML document, the Content-Type
+ * header <b>in</b> the HTTP response must be set to &quot;text/xml&quot; or &quot;application/xml&quot;.&lt;/em&gt;
+ * &lt;p&gt;
+ * Example code:
+ * &lt;pre&gt;&lt;code&gt;
+<b>var</b> Employee = Ext.data.Record.create([
+   {name: <em>'name'</em>, mapping: <em>'name'</em>},     <i>// &quot;mapping&quot; property not needed <b>if</b> it's the same as &quot;name&quot;</i>
+   {name: <em>'occupation'</em>}                 <i>// This field will use &quot;occupation&quot; as the mapping.</i>
+]);
+<b>var</b> myReader = <b>new</b> Ext.data.XmlReader({
+   totalRecords: &quot;results&quot;, <i>// The element which contains the total dataset size (optional)</i>
+   record: &quot;row&quot;,           <i>// The repeated element which contains row information</i>
+   id: &quot;id&quot;                 <i>// The element within the row that provides an ID <b>for</b> the record (optional)</i>
+}, Employee);
+&lt;/code&gt;&lt;/pre&gt;
+ * &lt;p&gt;
+ * This would consume an XML file like <b>this</b>:
+ * &lt;pre&gt;&lt;code&gt;
+&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&amp;lt;dataset&gt;
+ &amp;lt;results&gt;2&amp;lt;/results&gt;
+ &amp;lt;row&gt;
+   &amp;lt;id&gt;1&amp;lt;/id&gt;
+   &amp;lt;name&gt;Bill&amp;lt;/name&gt;
+   &amp;lt;occupation&gt;Gardener&amp;lt;/occupation&gt;
+ &amp;lt;/row&gt;
+ &amp;lt;row&gt;
+   &amp;lt;id&gt;2&amp;lt;/id&gt;
+   &amp;lt;name&gt;Ben&amp;lt;/name&gt;
+   &amp;lt;occupation&gt;Horticulturalist&amp;lt;/occupation&gt;
+ &amp;lt;/row&gt;
+&amp;lt;/dataset&gt;
+&lt;/code&gt;&lt;/pre&gt;
+ * @cfg {String} totalRecords The DomQuery path from which to retrieve the total number of records
+ * <b>in</b> the dataset. This is only needed <b>if</b> the whole dataset is not passed <b>in</b> one go, but is being
+ * paged from the remote server.
+ * @cfg {String} record The DomQuery path to the repeated element which contains record information.
+ * @cfg {String} success The DomQuery path to the success attribute used by forms.
+ * @cfg {String} id The DomQuery path relative from the record element to the element that contains
+ * a record identifier value.
+ * @constructor
+ * Create a <b>new</b> XmlReader.
+ * @param {Object} meta Metadata configuration options
+ * @param {Object} recordType Either an Array of field definition objects as passed to
+ * {@link Ext.data.Record#create}, or a Record constructor object created using {@link Ext.data.Record#create}.
+ */</i>
+Ext.data.XmlReader = <b>function</b>(meta, recordType){
+    meta = meta || {};
+    Ext.data.XmlReader.superclass.constructor.call(<b>this</b>, meta, recordType || meta.fields);
+};
+Ext.extend(Ext.data.XmlReader, Ext.data.DataReader, {
+    <i>/**
+     * This method is only used by a DataProxy which has retrieved data from a remote server.
+	 * @param {Object} response The XHR object which contains the parsed XML document.  The response is expected
+	 * to contain a property called &lt;tt&gt;responseXML&lt;/tt&gt; which refers to an XML document object.
+     * @<b>return</b> {Object} records A data block which is used by an {@link Ext.data.Store} as
+     * a cache of Ext.data.Records.
+     */</i>
+    read : <b>function</b>(response){
+        <b>var</b> doc = response.responseXML;
+        <b>if</b>(!doc) {
+            throw {message: &quot;XmlReader.read: XML Document not available&quot;};
+        }
+        <b>return</b> this.readRecords(doc);
+    },
+
+    <i>/**
+     * Create a data block containing Ext.data.Records from an XML document.
+	 * @param {Object} doc A parsed XML document.
+     * @<b>return</b> {Object} records A data block which is used by an {@link Ext.data.Store} as
+     * a cache of Ext.data.Records.
+     */</i>
+    readRecords : <b>function</b>(doc){
+        <i>/**
+         * After any data loads/reads, the raw XML Document is available <b>for</b> further custom processing.
+         * @type XMLDocument
+         */</i>
+        <b>this</b>.xmlData = doc;
+        <b>var</b> root = doc.documentElement || doc;
+    	<b>var</b> q = Ext.DomQuery;
+    	<b>var</b> recordType = <b>this</b>.recordType, fields = recordType.prototype.fields;
+    	<b>var</b> sid = <b>this</b>.meta.id;
+    	<b>var</b> totalRecords = 0, success = true;
+    	<b>if</b>(this.meta.totalRecords){
+    	    totalRecords = q.selectNumber(<b>this</b>.meta.totalRecords, root, 0);
+    	}
+
+        <b>if</b>(this.meta.success){
+            <b>var</b> sv = q.selectValue(<b>this</b>.meta.success, root, true);
+            success = sv !== false &amp;&amp; sv !== <em>'false'</em>;
+    	}
+    	<b>var</b> records = [];
+    	<b>var</b> ns = q.select(<b>this</b>.meta.record, root);
+        <b>for</b>(var i = 0, len = ns.length; i &lt; len; i++) {
+	        <b>var</b> n = ns[i];
+	        <b>var</b> values = {};
+	        <b>var</b> id = sid ? q.selectValue(sid, n) : undefined;
+	        <b>for</b>(var j = 0, jlen = fields.length; j &lt; jlen; j++){
+	            <b>var</b> f = fields.items[j];
+                <b>var</b> v = q.selectValue(Ext.isEmpty(f.mapping, true) ? f.name : f.mapping, n, f.defaultValue);
+	            v = f.convert(v, n);
+	            values[f.name] = v;
+	        }
+	        <b>var</b> record = <b>new</b> recordType(values, id);
+	        record.node = n;
+	        records[records.length] = record;
+	    }
+
+	    <b>return</b> {
+	        success : success,
+	        records : records,
+	        totalRecords : totalRecords || records.length
+	    };
+    }
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

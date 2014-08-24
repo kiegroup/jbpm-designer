@@ -1,0 +1,374 @@
+<html><head><title>DateField.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>DateField.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.form.DateField
+ * @extends Ext.form.TriggerField
+ * Provides a date input field <b>with</b> a {@link Ext.DatePicker} dropdown and automatic date validation.
+ * @constructor
+ * Create a <b>new</b> DateField
+ * @param {Object} config
+ */</i>
+Ext.form.DateField = Ext.extend(Ext.form.TriggerField,  {
+    <i>/**
+     * @cfg {String} format
+     * The <b>default</b> date format string which can be overriden <b>for</b> localization support.  The format must be
+     * valid according to {@link Date#parseDate} (defaults to <em>'m/d/Y'</em>).
+     */</i>
+    format : &quot;m/d/Y&quot;,
+    <i>/**
+     * @cfg {String} altFormats
+     * Multiple date formats separated by &quot;|&quot; to try when parsing a user input value and it doesn't match the defined
+     * format (defaults to <em>'m/d/Y|n/j/Y|n/j/y|m/j/y|n/d/y|m/j/Y|n/d/Y|m-d-y|m-d-Y|m/d|m-d|md|mdy|mdY|d|Y-m-d'</em>).
+     */</i>
+    altFormats : &quot;m/d/Y|n/j/Y|n/j/y|m/j/y|n/d/y|m/j/Y|n/d/Y|m-d-y|m-d-Y|m/d|m-d|md|mdy|mdY|d|Y-m-d&quot;,
+    <i>/**
+     * @cfg {String} disabledDaysText
+     * The tooltip to display when the date falls on a disabled day (defaults to <em>'Disabled'</em>)
+     */</i>
+    disabledDaysText : &quot;Disabled&quot;,
+    <i>/**
+     * @cfg {String} disabledDatesText
+     * The tooltip text to display when the date falls on a disabled date (defaults to <em>'Disabled'</em>)
+     */</i>
+    disabledDatesText : &quot;Disabled&quot;,
+    <i>/**
+     * @cfg {String} minText
+     * The error text to display when the date <b>in</b> the cell is before minValue (defaults to
+     * <em>'The date <b>in</b> this field must be after {minValue}'</em>).
+     */</i>
+    minText : &quot;The date <b>in</b> this field must be equal to or after {0}&quot;,
+    <i>/**
+     * @cfg {String} maxText
+     * The error text to display when the date <b>in</b> the cell is after maxValue (defaults to
+     * <em>'The date <b>in</b> this field must be before {maxValue}'</em>).
+     */</i>
+    maxText : &quot;The date <b>in</b> this field must be equal to or before {0}&quot;,
+    <i>/**
+     * @cfg {String} invalidText
+     * The error text to display when the date <b>in</b> the field is invalid (defaults to
+     * <em>'{value} is not a valid date - it must be <b>in</b> the format {format}'</em>).
+     */</i>
+    invalidText : &quot;{0} is not a valid date - it must be <b>in</b> the format {1}&quot;,
+    <i>/**
+     * @cfg {String} triggerClass
+     * An additional CSS class used to style the trigger button.  The trigger will always get the
+     * class <em>'x-form-trigger'</em> and triggerClass will be &lt;b&gt;appended&lt;/b&gt; <b>if</b> specified (defaults to <em>'x-form-date-trigger'</em>
+     * which displays a calendar icon).
+     */</i>
+    triggerClass : <em>'x-form-date-trigger'</em>,
+    <i>/**
+     * @cfg {Boolean} showToday
+     * False to hide the footer area of the DatePicker containing the Today button and disable the keyboard
+     * handler <b>for</b> spacebar that selects the current date (defaults to true).
+     */</i>
+    showToday : true,
+    <i>/**
+     * @cfg {Date/String} minValue
+     * The minimum allowed date. Can be either a Javascript date object or a string date <b>in</b> a
+     * valid format (defaults to null).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Date/String} maxValue
+     * The maximum allowed date. Can be either a Javascript date object or a string date <b>in</b> a
+     * valid format (defaults to null).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Array} disabledDays
+     * An array of days to disable, 0 based. For example, [0, 6] disables Sunday and Saturday (defaults to null).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Array} disabledDates
+     * An array of &quot;dates&quot; to disable, as strings. These strings will be used to build a dynamic regular
+     * expression so they are very powerful. Some examples:
+     * &lt;ul&gt;
+     * &lt;li&gt;[&quot;03/08/2003&quot;, &quot;09/16/2003&quot;] would disable those exact dates&lt;/li&gt;
+     * &lt;li&gt;[&quot;03/08&quot;, &quot;09/16&quot;] would disable those days <b>for</b> every year&lt;/li&gt;
+     * &lt;li&gt;[&quot;^03/08&quot;] would only match the beginning (useful <b>if</b> you are using short years)&lt;/li&gt;
+     * &lt;li&gt;[&quot;03/../2006&quot;] would disable every day <b>in</b> March 2006&lt;/li&gt;
+     * &lt;li&gt;[&quot;^03&quot;] would disable every day <b>in</b> every March&lt;/li&gt;
+     * &lt;/ul&gt;
+     * Note that the format of the dates included <b>in</b> the array should exactly match the {@link #format} config.
+     * In order to support regular expressions, <b>if</b> you are using a date format that has &quot;.&quot; <b>in</b> it, you will have to
+     * escape the dot when restricting dates. For example: [&quot;03\\.08\\.03&quot;].
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String/Object} autoCreate
+     * A DomHelper element spec, or true <b>for</b> a <b>default</b> element spec (defaults to
+     * {tag: &quot;input&quot;, type: &quot;text&quot;, size: &quot;10&quot;, autocomplete: &quot;off&quot;})
+     */</i>
+
+    <i>// private</i>
+    defaultAutoCreate : {tag: &quot;input&quot;, type: &quot;text&quot;, size: &quot;10&quot;, autocomplete: &quot;off&quot;},
+
+    initComponent : <b>function</b>(){
+        Ext.form.DateField.superclass.initComponent.call(<b>this</b>);
+
+        <b>this</b>.addEvents(
+            <i>/**
+             * @event select
+             * Fires when a date is selected via the date picker.
+             * @param {Ext.form.DateField} <b>this</b>
+             * @param {Date} date The date that was selected
+             */</i>
+            <em>'select'</em>
+        );
+
+        <b>if</b>(typeof <b>this</b>.minValue == &quot;string&quot;){
+            <b>this</b>.minValue = <b>this</b>.parseDate(<b>this</b>.minValue);
+        }
+        <b>if</b>(typeof <b>this</b>.maxValue == &quot;string&quot;){
+            <b>this</b>.maxValue = <b>this</b>.parseDate(<b>this</b>.maxValue);
+        }
+        <b>this</b>.disabledDatesRE = null;
+        <b>this</b>.initDisabledDays();
+    },
+
+    <i>// private</i>
+    initDisabledDays : <b>function</b>(){
+        <b>if</b>(this.disabledDates){
+            <b>var</b> dd = <b>this</b>.disabledDates;
+            <b>var</b> re = &quot;(?:&quot;;
+            <b>for</b>(var i = 0; i &lt; dd.length; i++){
+                re += dd[i];
+                <b>if</b>(i != dd.length-1) re += &quot;|&quot;;
+            }
+            <b>this</b>.disabledDatesRE = <b>new</b> RegExp(re + &quot;)&quot;);
+        }
+    },
+
+    <i>/**
+     * Replaces any existing disabled dates <b>with</b> new values and refreshes the DatePicker.
+     * @param {Array} disabledDates An array of date strings (see the {@link #disabledDates} config
+     * <b>for</b> details on supported values) used to disable a pattern of dates.
+     */</i>
+    setDisabledDates : <b>function</b>(dd){
+        <b>this</b>.disabledDates = dd;
+        <b>this</b>.initDisabledDays();
+        <b>if</b>(this.menu){
+            <b>this</b>.menu.picker.setDisabledDates(<b>this</b>.disabledDatesRE);
+        }
+    },
+
+    <i>/**
+     * Replaces any existing disabled days (by index, 0-6) <b>with</b> new values and refreshes the DatePicker.
+     * @param {Array} disabledDays An array of disabled day indexes. See the {@link #disabledDays} config
+     * <b>for</b> details on supported values.
+     */</i>
+    setDisabledDays : <b>function</b>(dd){
+        <b>this</b>.disabledDays = dd;
+        <b>if</b>(this.menu){
+            <b>this</b>.menu.picker.setDisabledDays(dd);
+        }
+    },
+
+    <i>/**
+     * Replaces any existing {@link #minValue} <b>with</b> the <b>new</b> value and refreshes the DatePicker.
+     * @param {Date} value The minimum date that can be selected
+     */</i>
+    setMinValue : <b>function</b>(dt){
+        <b>this</b>.minValue = (<b>typeof</b> dt == &quot;string&quot; ? <b>this</b>.parseDate(dt) : dt);
+        <b>if</b>(this.menu){
+            <b>this</b>.menu.picker.setMinDate(<b>this</b>.minValue);
+        }
+    },
+
+    <i>/**
+     * Replaces any existing {@link #maxValue} <b>with</b> the <b>new</b> value and refreshes the DatePicker.
+     * @param {Date} value The maximum date that can be selected
+     */</i>
+    setMaxValue : <b>function</b>(dt){
+        <b>this</b>.maxValue = (<b>typeof</b> dt == &quot;string&quot; ? <b>this</b>.parseDate(dt) : dt);
+        <b>if</b>(this.menu){
+            <b>this</b>.menu.picker.setMaxDate(<b>this</b>.maxValue);
+        }
+    },
+
+    <i>// private</i>
+    validateValue : <b>function</b>(value){
+        value = <b>this</b>.formatDate(value);
+        <b>if</b>(!Ext.form.DateField.superclass.validateValue.call(<b>this</b>, value)){
+            <b>return</b> false;
+        }
+        <b>if</b>(value.length &lt; 1){ <i>// <b>if</b> it<em>'s blank and textfield didn'</em>t flag it then it's valid</i>
+             <b>return</b> true;
+        }
+        <b>var</b> svalue = value;
+        value = <b>this</b>.parseDate(value);
+        <b>if</b>(!value){
+            <b>this</b>.markInvalid(String.format(<b>this</b>.invalidText, svalue, <b>this</b>.format));
+            <b>return</b> false;
+        }
+        <b>var</b> time = value.getTime();
+        <b>if</b>(this.minValue &amp;&amp; time &lt; <b>this</b>.minValue.getTime()){
+            <b>this</b>.markInvalid(String.format(<b>this</b>.minText, <b>this</b>.formatDate(<b>this</b>.minValue)));
+            <b>return</b> false;
+        }
+        <b>if</b>(this.maxValue &amp;&amp; time &gt; <b>this</b>.maxValue.getTime()){
+            <b>this</b>.markInvalid(String.format(<b>this</b>.maxText, <b>this</b>.formatDate(<b>this</b>.maxValue)));
+            <b>return</b> false;
+        }
+        <b>if</b>(this.disabledDays){
+            <b>var</b> day = value.getDay();
+            <b>for</b>(var i = 0; i &lt; <b>this</b>.disabledDays.length; i++) {
+            	<b>if</b>(day === <b>this</b>.disabledDays[i]){
+            	    <b>this</b>.markInvalid(<b>this</b>.disabledDaysText);
+                    <b>return</b> false;
+            	}
+            }
+        }
+        <b>var</b> fvalue = <b>this</b>.formatDate(value);
+        <b>if</b>(this.disabledDatesRE &amp;&amp; <b>this</b>.disabledDatesRE.test(fvalue)){
+            <b>this</b>.markInvalid(String.format(<b>this</b>.disabledDatesText, fvalue));
+            <b>return</b> false;
+        }
+        <b>return</b> true;
+    },
+
+    <i>// private</i>
+    <i>// Provides logic to override the <b>default</b> TriggerField.validateBlur which just returns true</i>
+    validateBlur : <b>function</b>(){
+        <b>return</b> !<b>this</b>.menu || !<b>this</b>.menu.isVisible();
+    },
+
+    <i>/**
+     * Returns the current date value of the date field.
+     * @<b>return</b> {Date} The date value
+     */</i>
+    getValue : <b>function</b>(){
+        <b>return</b> this.parseDate(Ext.form.DateField.superclass.getValue.call(<b>this</b>)) || &quot;&quot;;
+    },
+
+    <i>/**
+     * Sets the value of the date field.  You can pass a date object or any string that can be parsed into a valid
+     * date, using DateField.format as the date format, according to the same rules as {@link Date#parseDate}
+     * (the <b>default</b> format used is &quot;m/d/Y&quot;).
+     * &lt;br /&gt;Usage:
+     * &lt;pre&gt;&lt;code&gt;
+<i>//All of these calls set the same date value (May 4, 2006)</i>
+
+<i>//Pass a date object:</i>
+<b>var</b> dt = <b>new</b> Date(<em>'5/4/2006'</em>);
+dateField.setValue(dt);
+
+<i>//Pass a date string (<b>default</b> format):</i>
+dateField.setValue(<em>'05/04/2006'</em>);
+
+<i>//Pass a date string (custom format):</i>
+dateField.format = <em>'Y-m-d'</em>;
+dateField.setValue(<em>'2006-05-04'</em>);
+&lt;/code&gt;&lt;/pre&gt;
+     * @param {String/Date} date The date or valid date string
+     */</i>
+    setValue : <b>function</b>(date){
+        Ext.form.DateField.superclass.setValue.call(<b>this</b>, <b>this</b>.formatDate(<b>this</b>.parseDate(date)));
+    },
+
+    <i>// private</i>
+    parseDate : <b>function</b>(value){
+        <b>if</b>(!value || Ext.isDate(value)){
+            <b>return</b> value;
+        }
+        <b>var</b> v = Date.parseDate(value, <b>this</b>.format);
+        <b>if</b>(!v &amp;&amp; <b>this</b>.altFormats){
+            <b>if</b>(!<b>this</b>.altFormatsArray){
+                <b>this</b>.altFormatsArray = <b>this</b>.altFormats.split(&quot;|&quot;);
+            }
+            <b>for</b>(var i = 0, len = <b>this</b>.altFormatsArray.length; i &lt; len &amp;&amp; !v; i++){
+                v = Date.parseDate(value, <b>this</b>.altFormatsArray[i]);
+            }
+        }
+        <b>return</b> v;
+    },
+
+    <i>// private</i>
+    onDestroy : <b>function</b>(){
+        <b>if</b>(this.menu) {
+            <b>this</b>.menu.destroy();
+        }
+        Ext.form.DateField.superclass.onDestroy.call(<b>this</b>);
+    },
+
+    <i>// private</i>
+    formatDate : <b>function</b>(date){
+        <b>return</b> Ext.isDate(date) ? date.dateFormat(<b>this</b>.format) : date;
+    },
+
+    <i>// private</i>
+    menuListeners : {
+        select: <b>function</b>(m, d){
+            <b>this</b>.setValue(d);
+            <b>this</b>.fireEvent(<em>'select'</em>, <b>this</b>, d);
+        },
+        show : <b>function</b>(){ <i>// retain focus styling</i>
+            <b>this</b>.onFocus();
+        },
+        hide : <b>function</b>(){
+            <b>this</b>.focus.defer(10, <b>this</b>);
+            <b>var</b> ml = <b>this</b>.menuListeners;
+            <b>this</b>.menu.un(&quot;select&quot;, ml.select,  <b>this</b>);
+            <b>this</b>.menu.un(&quot;show&quot;, ml.show,  <b>this</b>);
+            <b>this</b>.menu.un(&quot;hide&quot;, ml.hide,  <b>this</b>);
+        }
+    },
+
+    <i>/**
+     * @method onTriggerClick
+     * @hide
+     */</i>
+    <i>// private</i>
+    <i>// Implements the <b>default</b> empty TriggerField.onTriggerClick <b>function</b> to display the DatePicker</i>
+    onTriggerClick : <b>function</b>(){
+        <b>if</b>(this.disabled){
+            <b>return</b>;
+        }
+        <b>if</b>(this.menu == null){
+            <b>this</b>.menu = <b>new</b> Ext.menu.DateMenu();
+        }
+        Ext.apply(<b>this</b>.menu.picker,  {
+            minDate : <b>this</b>.minValue,
+            maxDate : <b>this</b>.maxValue,
+            disabledDatesRE : <b>this</b>.disabledDatesRE,
+            disabledDatesText : <b>this</b>.disabledDatesText,
+            disabledDays : <b>this</b>.disabledDays,
+            disabledDaysText : <b>this</b>.disabledDaysText,
+            format : <b>this</b>.format,
+            showToday : <b>this</b>.showToday,
+            minText : String.format(<b>this</b>.minText, <b>this</b>.formatDate(<b>this</b>.minValue)),
+            maxText : String.format(<b>this</b>.maxText, <b>this</b>.formatDate(<b>this</b>.maxValue))
+        });
+        <b>this</b>.menu.on(Ext.apply({}, <b>this</b>.menuListeners, {
+            scope:<b>this</b>
+        }));
+        <b>this</b>.menu.picker.setValue(<b>this</b>.getValue() || <b>new</b> Date());
+        <b>this</b>.menu.show(<b>this</b>.el, &quot;tl-bl?&quot;);
+    },
+
+    <i>// private</i>
+    beforeBlur : <b>function</b>(){
+        <b>var</b> v = <b>this</b>.parseDate(<b>this</b>.getRawValue());
+        <b>if</b>(v){
+            <b>this</b>.setValue(v);
+        }
+    }
+
+    <i>/**
+     * @cfg {Boolean} grow @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Number} growMin @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Number} growMax @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @hide
+     * @method autoSize
+     */</i>
+});
+Ext.reg(<em>'datefield'</em>, Ext.form.DateField);</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

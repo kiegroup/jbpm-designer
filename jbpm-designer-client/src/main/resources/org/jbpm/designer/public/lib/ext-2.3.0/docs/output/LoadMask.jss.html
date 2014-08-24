@@ -1,0 +1,120 @@
+<html><head><title>LoadMask.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>LoadMask.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.LoadMask
+ * A simple utility class <b>for</b> generically masking elements <b>while</b> loading data.  If the {@link #store}
+ * config option is specified, the masking will be automatically synchronized <b>with</b> the store's loading
+ * process and the mask element will be cached <b>for</b> reuse.  For all other elements, <b>this</b> mask will replace the
+ * element's Updater load indicator and will be destroyed after the initial load.
+ * &lt;p&gt;Example usage:&lt;/p&gt;
+ *&lt;pre&gt;&lt;code&gt;
+<i>// Basic mask:</i>
+<b>var</b> myMask = <b>new</b> Ext.LoadMask(Ext.getBody(), {msg:&quot;Please wait...&quot;});
+myMask.show();
+&lt;/code&gt;&lt;/pre&gt;
+ * @constructor
+ * Create a <b>new</b> LoadMask
+ * @param {Mixed} el The element or DOM node, or its id
+ * @param {Object} config The config object
+ */</i>
+Ext.LoadMask = <b>function</b>(el, config){
+    <b>this</b>.el = Ext.get(el);
+    Ext.apply(<b>this</b>, config);
+    <b>if</b>(this.store){
+        <b>this</b>.store.on(<em>'beforeload'</em>, <b>this</b>.onBeforeLoad, <b>this</b>);
+        <b>this</b>.store.on(<em>'load'</em>, <b>this</b>.onLoad, <b>this</b>);
+        <b>this</b>.store.on(<em>'loadexception'</em>, <b>this</b>.onLoad, <b>this</b>);
+        <b>this</b>.removeMask = Ext.value(<b>this</b>.removeMask, false);
+    }<b>else</b>{
+        <b>var</b> um = <b>this</b>.el.getUpdater();
+        um.showLoadIndicator = false; <i>// disable the <b>default</b> indicator</i>
+        um.on(<em>'beforeupdate'</em>, <b>this</b>.onBeforeLoad, <b>this</b>);
+        um.on(<em>'update'</em>, <b>this</b>.onLoad, <b>this</b>);
+        um.on(<em>'failure'</em>, <b>this</b>.onLoad, <b>this</b>);
+        <b>this</b>.removeMask = Ext.value(<b>this</b>.removeMask, true);
+    }
+};
+
+Ext.LoadMask.prototype = {
+    <i>/**
+     * @cfg {Ext.data.Store} store
+     * Optional Store to which the mask is bound. The mask is displayed when a load request is issued, and
+     * hidden on either load sucess, or load fail.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} removeMask
+     * True to create a single-use mask that is automatically destroyed after loading (useful <b>for</b> page loads),
+     * False to persist the mask element reference <b>for</b> multiple uses (e.g., <b>for</b> paged data widgets).  Defaults to false.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} msg
+     * The text to display <b>in</b> a centered loading message box (defaults to <em>'Loading...'</em>)
+     */</i>
+    msg : <em>'Loading...'</em>,
+    <i>/**
+     * @cfg {String} msgCls
+     * The CSS class to apply to the loading message element (defaults to &quot;x-mask-loading&quot;)
+     */</i>
+    msgCls : <em>'x-mask-loading'</em>,
+
+    <i>/**
+     * Read-only. True <b>if</b> the mask is currently disabled so that it will not be displayed (defaults to false)
+     * @type Boolean
+     */</i>
+    disabled: false,
+
+    <i>/**
+     * Disables the mask to prevent it from being displayed
+     */</i>
+    disable : <b>function</b>(){
+       <b>this</b>.disabled = true;
+    },
+
+    <i>/**
+     * Enables the mask so that it can be displayed
+     */</i>
+    enable : <b>function</b>(){
+        <b>this</b>.disabled = false;
+    },
+
+    <i>// private</i>
+    onLoad : <b>function</b>(){
+        <b>this</b>.el.unmask(<b>this</b>.removeMask);
+    },
+
+    <i>// private</i>
+    onBeforeLoad : <b>function</b>(){
+        <b>if</b>(!<b>this</b>.disabled){
+            <b>this</b>.el.mask(<b>this</b>.msg, <b>this</b>.msgCls);
+        }
+    },
+
+    <i>/**
+     * Show <b>this</b> LoadMask over the configured Element.
+     */</i>
+    show: <b>function</b>(){
+        <b>this</b>.onBeforeLoad();
+    },
+
+    <i>/**
+     * Hide <b>this</b> LoadMask.
+     */</i>
+    hide: <b>function</b>(){
+        <b>this</b>.onLoad();    
+    },
+
+    <i>// private</i>
+    destroy : <b>function</b>(){
+        <b>if</b>(this.store){
+            <b>this</b>.store.un(<em>'beforeload'</em>, <b>this</b>.onBeforeLoad, <b>this</b>);
+            <b>this</b>.store.un(<em>'load'</em>, <b>this</b>.onLoad, <b>this</b>);
+            <b>this</b>.store.un(<em>'loadexception'</em>, <b>this</b>.onLoad, <b>this</b>);
+        }<b>else</b>{
+            <b>var</b> um = <b>this</b>.el.getUpdater();
+            um.un(<em>'beforeupdate'</em>, <b>this</b>.onBeforeLoad, <b>this</b>);
+            um.un(<em>'update'</em>, <b>this</b>.onLoad, <b>this</b>);
+            um.un(<em>'failure'</em>, <b>this</b>.onLoad, <b>this</b>);
+        }
+    }
+};</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

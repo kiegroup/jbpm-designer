@@ -1,0 +1,316 @@
+<html><head><title>TreeDropZone.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>TreeDropZone.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.tree.TreeDropZone
+ * @extends Ext.dd.DropZone
+ * @constructor
+ * @param {String/HTMLElement/Element} tree The {@link Ext.tree.TreePanel} <b>for</b> which to enable dropping
+ * @param {Object} config
+ */</i>
+<b>if</b>(Ext.dd.DropZone){
+    
+Ext.tree.TreeDropZone = <b>function</b>(tree, config){
+    <i>/**
+     * @cfg {Boolean} allowParentInsert
+     * Allow inserting a dragged node between an expanded parent node and its first child that will become a
+     * sibling of the parent when dropped (defaults to false)
+     */</i>
+    <b>this</b>.allowParentInsert = config.allowParentInsert || false;
+    <i>/**
+     * @cfg {String} allowContainerDrop
+     * True <b>if</b> drops on the tree container (outside of a specific tree node) are allowed (defaults to false)
+     */</i>
+    <b>this</b>.allowContainerDrop = config.allowContainerDrop || false;
+    <i>/**
+     * @cfg {String} appendOnly
+     * True <b>if</b> the tree should only allow append drops (use <b>for</b> trees which are sorted, defaults to false)
+     */</i>
+    <b>this</b>.appendOnly = config.appendOnly || false;
+
+    Ext.tree.TreeDropZone.superclass.constructor.call(<b>this</b>, tree.getTreeEl(), config);
+    <i>/**
+    * The TreePanel <b>for</b> this drop zone
+    * @type Ext.tree.TreePanel
+    * @property
+    */</i>
+    <b>this</b>.tree = tree;
+    <i>/**
+    * Arbitrary data that can be associated <b>with</b> this tree and will be included <b>in</b> the event object that gets
+    * passed to any nodedragover event handler (defaults to {})
+    * @type Ext.tree.TreePanel
+    * @property
+    */</i>
+    <b>this</b>.dragOverData = {};
+    <i>// private</i>
+    <b>this</b>.lastInsertClass = &quot;x-tree-no-status&quot;;
+};
+
+Ext.extend(Ext.tree.TreeDropZone, Ext.dd.DropZone, {
+    <i>/**
+     * @cfg {String} ddGroup
+     * A named drag drop group to which <b>this</b> object belongs.  If a group is specified, then <b>this</b> object will only
+     * interact <b>with</b> other drag drop objects <b>in</b> the same group (defaults to <em>'TreeDD'</em>).
+     */</i>
+    ddGroup : &quot;TreeDD&quot;,
+
+    <i>/**
+     * @cfg {String} expandDelay
+     * The delay <b>in</b> milliseconds to wait before expanding a target tree node <b>while</b> dragging a droppable node
+     * over the target (defaults to 1000)
+     */</i>
+    expandDelay : 1000,
+
+    <i>// private</i>
+    expandNode : <b>function</b>(node){
+        <b>if</b>(node.hasChildNodes() &amp;&amp; !node.isExpanded()){
+            node.expand(false, null, <b>this</b>.triggerCacheRefresh.createDelegate(<b>this</b>));
+        }
+    },
+
+    <i>// private</i>
+    queueExpand : <b>function</b>(node){
+        <b>this</b>.expandProcId = <b>this</b>.expandNode.defer(<b>this</b>.expandDelay, <b>this</b>, [node]);
+    },
+
+    <i>// private</i>
+    cancelExpand : <b>function</b>(){
+        <b>if</b>(this.expandProcId){
+            clearTimeout(<b>this</b>.expandProcId);
+            <b>this</b>.expandProcId = false;
+        }
+    },
+
+    <i>// private</i>
+    isValidDropPoint : <b>function</b>(n, pt, dd, e, data){
+        <b>if</b>(!n || !data){ <b>return</b> false; }
+        <b>var</b> targetNode = n.node;
+        <b>var</b> dropNode = data.node;
+        <i>// <b>default</b> drop rules</i>
+        <b>if</b>(!(targetNode &amp;&amp; targetNode.isTarget &amp;&amp; pt)){
+            <b>return</b> false;
+        }
+        <b>if</b>(pt == &quot;append&quot; &amp;&amp; targetNode.allowChildren === false){
+            <b>return</b> false;
+        }
+        <b>if</b>((pt == &quot;above&quot; || pt == &quot;below&quot;) &amp;&amp; (targetNode.parentNode &amp;&amp; targetNode.parentNode.allowChildren === false)){
+            <b>return</b> false;
+        }
+        <b>if</b>(dropNode &amp;&amp; (targetNode == dropNode || dropNode.contains(targetNode))){
+            <b>return</b> false;
+        }
+        <i>// reuse the object</i>
+        <b>var</b> overEvent = <b>this</b>.dragOverData;
+        overEvent.tree = <b>this</b>.tree;
+        overEvent.target = targetNode;
+        overEvent.data = data;
+        overEvent.point = pt;
+        overEvent.source = dd;
+        overEvent.rawEvent = e;
+        overEvent.dropNode = dropNode;
+        overEvent.cancel = false;  
+        <b>var</b> result = <b>this</b>.tree.fireEvent(&quot;nodedragover&quot;, overEvent);
+        <b>return</b> overEvent.cancel === false &amp;&amp; result !== false;
+    },
+
+    <i>// private</i>
+    getDropPoint : <b>function</b>(e, n, dd){
+        <b>var</b> tn = n.node;
+        <b>if</b>(tn.isRoot){
+            <b>return</b> tn.allowChildren !== false ? &quot;append&quot; : false; <i>// always append <b>for</b> root</i>
+        }
+        <b>var</b> dragEl = n.ddel;
+        <b>var</b> t = Ext.lib.Dom.getY(dragEl), b = t + dragEl.offsetHeight;
+        <b>var</b> y = Ext.lib.Event.getPageY(e);
+        <b>var</b> noAppend = tn.allowChildren === false || tn.isLeaf();
+        <b>if</b>(this.appendOnly || tn.parentNode.allowChildren === false){
+            <b>return</b> noAppend ? false : &quot;append&quot;;
+        }
+        <b>var</b> noBelow = false;
+        <b>if</b>(!<b>this</b>.allowParentInsert){
+            noBelow = tn.hasChildNodes() &amp;&amp; tn.isExpanded();
+        }
+        <b>var</b> q = (b - t) / (noAppend ? 2 : 3);
+        <b>if</b>(y &gt;= t &amp;&amp; y &lt; (t + q)){
+            <b>return</b> &quot;above&quot;;
+        }<b>else</b> if(!noBelow &amp;&amp; (noAppend || y &gt;= b-q &amp;&amp; y &lt;= b)){
+            <b>return</b> &quot;below&quot;;
+        }<b>else</b>{
+            <b>return</b> &quot;append&quot;;
+        }
+    },
+
+    <i>// private</i>
+    onNodeEnter : <b>function</b>(n, dd, e, data){
+        <b>this</b>.cancelExpand();
+    },
+    
+    onContainerOver : <b>function</b>(dd, e, data) {
+        <b>if</b> (<b>this</b>.allowContainerDrop &amp;&amp; <b>this</b>.isValidDropPoint({ ddel: <b>this</b>.tree.getRootNode().ui.elNode, node: <b>this</b>.tree.getRootNode() }, &quot;append&quot;, dd, e, data)) {
+            <b>return</b> this.dropAllowed;
+        }
+        <b>return</b> this.dropNotAllowed;
+    },
+
+    <i>// private</i>
+    onNodeOver : <b>function</b>(n, dd, e, data){
+        <b>var</b> pt = <b>this</b>.getDropPoint(e, n, dd);
+        <b>var</b> node = n.node;
+        
+        <i>// auto node expand check</i>
+        <b>if</b>(!<b>this</b>.expandProcId &amp;&amp; pt == &quot;append&quot; &amp;&amp; node.hasChildNodes() &amp;&amp; !n.node.isExpanded()){
+            <b>this</b>.queueExpand(node);
+        }<b>else</b> if(pt != &quot;append&quot;){
+            <b>this</b>.cancelExpand();
+        }
+        
+        <i>// set the insert point style on the target node</i>
+        <b>var</b> returnCls = <b>this</b>.dropNotAllowed;
+        <b>if</b>(this.isValidDropPoint(n, pt, dd, e, data)){
+           <b>if</b>(pt){
+               <b>var</b> el = n.ddel;
+               <b>var</b> cls;
+               <b>if</b>(pt == &quot;above&quot;){
+                   returnCls = n.node.isFirst() ? &quot;x-tree-drop-ok-above&quot; : &quot;x-tree-drop-ok-between&quot;;
+                   cls = &quot;x-tree-drag-insert-above&quot;;
+               }<b>else</b> if(pt == &quot;below&quot;){
+                   returnCls = n.node.isLast() ? &quot;x-tree-drop-ok-below&quot; : &quot;x-tree-drop-ok-between&quot;;
+                   cls = &quot;x-tree-drag-insert-below&quot;;
+               }<b>else</b>{
+                   returnCls = &quot;x-tree-drop-ok-append&quot;;
+                   cls = &quot;x-tree-drag-append&quot;;
+               }
+               <b>if</b>(this.lastInsertClass != cls){
+                   Ext.fly(el).replaceClass(<b>this</b>.lastInsertClass, cls);
+                   <b>this</b>.lastInsertClass = cls;
+               }
+           }
+       }
+       <b>return</b> returnCls;
+    },
+
+    <i>// private</i>
+    onNodeOut : <b>function</b>(n, dd, e, data){
+        <b>this</b>.cancelExpand();
+        <b>this</b>.removeDropIndicators(n);
+    },
+
+    <i>// private</i>
+    onNodeDrop : <b>function</b>(n, dd, e, data){
+        <b>var</b> point = <b>this</b>.getDropPoint(e, n, dd);
+        <b>var</b> targetNode = n.node;
+        targetNode.ui.startDrop();
+        <b>if</b>(!<b>this</b>.isValidDropPoint(n, point, dd, e, data)){
+            targetNode.ui.endDrop();
+            <b>return</b> false;
+        }
+        <i>// first try to find the drop node</i>
+        <b>var</b> dropNode = data.node || (dd.getTreeNode ? dd.getTreeNode(data, targetNode, point, e) : null);
+        <b>return</b> this.processDrop(targetNode, data, point, dd, e, dropNode);
+    },
+    
+    onContainerDrop : <b>function</b>(dd, e, data){
+        <b>if</b> (<b>this</b>.allowContainerDrop &amp;&amp; <b>this</b>.isValidDropPoint({ ddel: <b>this</b>.tree.getRootNode().ui.elNode, node: <b>this</b>.tree.getRootNode() }, &quot;append&quot;, dd, e, data)) {
+            <b>var</b> targetNode = <b>this</b>.tree.getRootNode();       
+            targetNode.ui.startDrop();
+            <b>var</b> dropNode = data.node || (dd.getTreeNode ? dd.getTreeNode(data, targetNode, <em>'append'</em>, e) : null);
+            <b>return</b> this.processDrop(targetNode, data, <em>'append'</em>, dd, e, dropNode);
+        }
+        <b>return</b> false;
+    },
+    
+    <i>// private</i>
+    processDrop: <b>function</b>(target, data, point, dd, e, dropNode){
+        <b>var</b> dropEvent = {
+            tree : <b>this</b>.tree,
+            target: target,
+            data: data,
+            point: point,
+            source: dd,
+            rawEvent: e,
+            dropNode: dropNode,
+            cancel: !dropNode,
+            dropStatus: false
+        };
+        <b>var</b> retval = <b>this</b>.tree.fireEvent(&quot;beforenodedrop&quot;, dropEvent);
+        <b>if</b>(retval === false || dropEvent.cancel === true || !dropEvent.dropNode){
+            target.ui.endDrop();
+            <b>return</b> dropEvent.dropStatus;
+        }
+    
+        target = dropEvent.target;
+        <b>if</b>(point == <em>'append'</em> &amp;&amp; !target.isExpanded()){
+            target.expand(false, null, <b>function</b>(){
+                <b>this</b>.completeDrop(dropEvent);
+            }.createDelegate(<b>this</b>));
+        }<b>else</b>{
+            <b>this</b>.completeDrop(dropEvent);
+        }
+        <b>return</b> true;
+    },
+
+    <i>// private</i>
+    completeDrop : <b>function</b>(de){
+        <b>var</b> ns = de.dropNode, p = de.point, t = de.target;
+        <b>if</b>(!Ext.isArray(ns)){
+            ns = [ns];
+        }
+        <b>var</b> n;
+        <b>for</b>(var i = 0, len = ns.length; i &lt; len; i++){
+            n = ns[i];
+            <b>if</b>(p == &quot;above&quot;){
+                t.parentNode.insertBefore(n, t);
+            }<b>else</b> if(p == &quot;below&quot;){
+                t.parentNode.insertBefore(n, t.nextSibling);
+            }<b>else</b>{
+                t.appendChild(n);
+            }
+        }
+        n.ui.focus();
+        <b>if</b>(Ext.enableFx &amp;&amp; <b>this</b>.tree.hlDrop){
+            n.ui.highlight();
+        }
+        t.ui.endDrop();
+        <b>this</b>.tree.fireEvent(&quot;nodedrop&quot;, de);
+    },
+
+    <i>// private</i>
+    afterNodeMoved : <b>function</b>(dd, data, e, targetNode, dropNode){
+        <b>if</b>(Ext.enableFx &amp;&amp; <b>this</b>.tree.hlDrop){
+            dropNode.ui.focus();
+            dropNode.ui.highlight();
+        }
+        <b>this</b>.tree.fireEvent(&quot;nodedrop&quot;, <b>this</b>.tree, targetNode, data, dd, e);
+    },
+
+    <i>// private</i>
+    getTree : <b>function</b>(){
+        <b>return</b> this.tree;
+    },
+
+    <i>// private</i>
+    removeDropIndicators : <b>function</b>(n){
+        <b>if</b>(n &amp;&amp; n.ddel){
+            <b>var</b> el = n.ddel;
+            Ext.fly(el).removeClass([
+                    &quot;x-tree-drag-insert-above&quot;,
+                    &quot;x-tree-drag-insert-below&quot;,
+                    &quot;x-tree-drag-append&quot;]);
+            <b>this</b>.lastInsertClass = &quot;_noclass&quot;;
+        }
+    },
+
+    <i>// private</i>
+    beforeDragDrop : <b>function</b>(target, e, id){
+        <b>this</b>.cancelExpand();
+        <b>return</b> true;
+    },
+
+    <i>// private</i>
+    afterRepair : <b>function</b>(data){
+        <b>if</b>(data &amp;&amp; Ext.enableFx){
+            data.node.ui.highlight();
+        }
+        <b>this</b>.hideProxy();
+    }    
+});
+
+}</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

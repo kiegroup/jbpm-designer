@@ -1,0 +1,298 @@
+<html><head><title>ext-lang-id.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ext-lang-id.js</h1><pre class="highlighted"><code><i>/**
+ * Pedoman translasi:
+ * http:<i>//id.wikisource.org/wiki/Panduan_Pembakuan_Istilah,_Pelaksanaan_Instruksi_Presiden_Nomor_2_Tahun_2001_Tentang_Penggunaan_Komputer_Dengan_Aplikasi_Komputer_Berbahasa_Indonesia</i>
+ * Original source: http:<i>//vlsm.org/etc/baku-0.txt</i>
+ * by Farid GS
+ * farid [at] pulen.net
+ * 10:13 04 Desember 2007
+ * Indonesian Translations
+ */</i>
+
+Ext.UpdateManager.defaults.indicatorText = <em>'&lt;div class=&quot;loading-indicator&quot;&gt;Pemuatan...&lt;/div&gt;'</em>;
+
+<b>if</b>(Ext.View){
+  Ext.View.prototype.emptyText = &quot;&quot;;
+}
+
+<b>if</b>(Ext.grid.GridPanel){
+  Ext.grid.GridPanel.prototype.ddText = &quot;{0} selected row(s)&quot;;
+  Ext.grid.GridPanel.prototype.ddText = &quot;{0} baris terpilih&quot;;
+}
+
+<b>if</b>(Ext.TabPanelItem){
+  Ext.TabPanelItem.prototype.closeText = &quot;Close <b>this</b> tab&quot;;
+  Ext.TabPanelItem.prototype.closeText = &quot;Tutup tab ini&quot;;
+}
+
+<b>if</b>(Ext.form.Field){
+  Ext.form.Field.prototype.invalidText = &quot;The value <b>in</b> this field is invalid&quot;;
+  Ext.form.Field.prototype.invalidText = &quot;Isian belum benar&quot;;
+}
+
+<b>if</b>(Ext.LoadMask){
+  Ext.LoadMask.prototype.msg = &quot;Loading...&quot;;
+  Ext.LoadMask.prototype.msg = &quot;Pemuatan...&quot;;
+}
+
+Date.monthNames = [
+  &quot;Januari&quot;,
+  &quot;Februari&quot;,
+  &quot;Maret&quot;,
+  &quot;April&quot;,
+  &quot;Mei&quot;,
+  &quot;Juni&quot;,
+  &quot;Juli&quot;,
+  &quot;Agustus&quot;,
+  &quot;September&quot;,
+  &quot;Oktober&quot;,
+  &quot;November&quot;,
+  &quot;Desember&quot;
+];
+
+Date.getShortMonthName = <b>function</b>(month) {
+  <b>return</b> Date.monthNames[month].substring(0, 3);
+};
+
+Date.monthNumbers = {
+  Jan : 0,
+  Feb : 1,
+  Mar : 2,
+  Apr : 3,
+  Mei : 4,
+  Jun : 5,
+  Jul : 6,
+  Agu : 7,
+  Sep : 8,
+  Okt : 9,
+  Nov : 10,
+  Des : 11
+};
+
+Date.getMonthNumber = <b>function</b>(name) {
+  <b>return</b> Date.monthNumbers[name.substring(0, 1).toUpperCase() + name.substring(1, 3).toLowerCase()];
+};
+
+Date.dayNames = [
+  &quot;Minggu&quot;,
+  &quot;Senin&quot;,
+  &quot;Selasa&quot;,
+  &quot;Rabu&quot;,
+  &quot;Kamis&quot;,
+  &quot;Jumat&quot;,
+  &quot;Sabtu&quot;
+];
+
+Date.getShortDayName = <b>function</b>(day) {
+  <b>return</b> Date.dayNames[day].substring(0, 3);
+};
+
+<b>if</b>(Ext.MessageBox){
+  Ext.MessageBox.buttonText = {
+    ok     : &quot;OK&quot;,
+    cancel : &quot;Batal&quot;,
+    yes    : &quot;Ya&quot;,
+    no     : &quot;Tidak&quot;
+  };
+}
+
+<b>if</b>(Ext.util.Format){
+  Ext.util.Format.date = <b>function</b>(v, format){
+    <b>if</b>(!v) <b>return</b> &quot;&quot;;
+    <b>if</b>(!(v instanceof Date)) v = <b>new</b> Date(Date.parse(v));
+    <b>return</b> v.dateFormat(format || &quot;d/m/Y&quot;);
+  };
+}
+
+<b>if</b>(Ext.DatePicker){
+  Ext.apply(Ext.DatePicker.prototype, {
+    todayText         : &quot;Hari ini&quot;,
+    minText           : &quot;Tanggal ini sebelum batas tanggal minimal&quot;, 
+    maxText           : &quot;Tanggal ini setelah batas tanggal maksimal&quot;, 
+    disabledDaysText  : &quot;&quot;,
+    disabledDatesText : &quot;&quot;,
+    monthNames        : Date.monthNames,
+    dayNames          : Date.dayNames,
+    nextText          : <em>'Bulan Berikut (Kontrol+Kanan)'</em>, 
+    prevText          : <em>'Bulan Sebelum (Kontrol+Kiri)'</em>, 
+    monthYearText     : <em>'Pilih bulan (Kontrol+Atas/Bawah untuk pindah tahun)'</em>, 
+    todayTip          : &quot;{0} (Spacebar)&quot;,
+    format            : &quot;d/m/y&quot;,
+    okText            : &quot;&amp;#160;OK&amp;#160;&quot;,
+    cancelText        : &quot;Batal&quot;,
+    startDay          : 1
+  });
+}
+
+<b>if</b>(Ext.PagingToolbar){
+  Ext.apply(Ext.PagingToolbar.prototype, {
+    beforePageText : &quot;Hal&quot;,
+    afterPageText  : &quot;dari {0}&quot;,
+    firstText      : &quot;Hal. Pertama&quot;,
+    prevText       : &quot;Hal. Sebelum&quot;,
+    nextText       : &quot;Hal. Berikut&quot;,
+    lastText       : &quot;Hal. Akhir&quot;,
+    refreshText    : &quot;Segarkan&quot;, 
+    displayMsg     : &quot;Menampilkan {0} - {1} dari {2}&quot;,
+    emptyMsg       : <em>'Data tidak ditemukan'</em> 
+  });
+}
+
+<b>if</b>(Ext.form.TextField){
+  Ext.apply(Ext.form.TextField.prototype, {
+    minLengthText : &quot;Panjang minimal untuk field ini adalah {0}&quot;,  
+    maxLengthText : &quot;Panjang maksimal untuk field ini adalah {0}&quot;, 
+    blankText     : &quot;Field ini wajib diisi&quot;, 
+    regexText     : &quot;&quot;,
+    emptyText     : null
+  });
+}
+
+<b>if</b>(Ext.form.NumberField){
+  Ext.apply(Ext.form.NumberField.prototype, {
+    minText : &quot;Nilai minimal untuk field ini adalah {0}&quot;,  
+    maxText : &quot;Nilai maksimal untuk field ini adalah {0}&quot;,  
+    nanText : &quot;{0} bukan angka&quot; 
+  });
+}
+
+<b>if</b>(Ext.form.DateField){
+  Ext.apply(Ext.form.DateField.prototype, {
+    disabledDaysText  : &quot;Disfungsi&quot;,  
+    disabledDatesText : &quot;Disfungsi&quot;,  
+    minText           : &quot;Tanggal dalam field ini harus setelah {0}&quot;, 
+    maxText           : &quot;Tanggal dalam field ini harus sebelum {0}&quot;, 
+    invalidText       : &quot;{0} tanggal salah - Harus dalam format {1}&quot;, 
+    format            : &quot;d/m/y&quot;, 
+    <i>//altFormats        : &quot;m/d/Y|m-d-y|m-d-Y|m/d|m-d|md|mdy|mdY|d|Y-m-d&quot;</i>
+    altFormats        : &quot;d/m/Y|d-m-y|d-m-Y|m/d|m-d|md|mdy|mdY|d|Y-m-d&quot;
+  });
+}
+
+<b>if</b>(Ext.form.ComboBox){
+  Ext.apply(Ext.form.ComboBox.prototype, {
+    loadingText       : &quot;Pemuatan...&quot;,  
+    valueNotFoundText : undefined
+  });
+}
+
+<b>if</b>(Ext.form.VTypes){
+  Ext.apply(Ext.form.VTypes, {
+    emailText    : <em>'Field ini harus dalam format email seperti &quot;user@domain.com&quot;'</em>, 
+    urlText      : <em>'Field ini harus dalam format URL seperti &quot;http:/'</em>+<em>'/www.domain.com&quot;'</em>, 
+    alphaText    : <em>'Field ini harus terdiri dari huruf dan _'</em>, 
+    alphanumText : <em>'Field ini haris terdiri dari huruf, angka dan _'</em>  
+  });
+}
+
+<b>if</b>(Ext.form.HtmlEditor){
+  Ext.apply(Ext.form.HtmlEditor.prototype, {
+    createLinkText : <em>'Silakan masukkan URL untuk tautan:'</em>, 
+    buttonTips : {
+      bold : {
+        title: <em>'Tebal (Ctrl+B)'</em>, 
+        text: <em>'Buat tebal teks terpilih'</em>, 
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      italic : {
+        title: <em>'Miring (CTRL+I)'</em>, 
+        text: <em>'Buat miring teks terpilih'</em>, 
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      underline : {
+        title: <em>'Garisbawah (CTRl+U)'</em>, 
+        text: <em>'Garisbawahi teks terpilih'</em>, 
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      increasefontsize : {
+        title: <em>'Perbesar teks'</em>, 
+        text: <em>'Perbesar ukuran fonta'</em>, 
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      decreasefontsize : {
+        title: <em>'Perkecil teks'</em>,  
+        text: <em>'Perkecil ukuran fonta'</em>, 
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      backcolor : {
+        title: <em>'Sorot Warna Teks'</em>,  
+        text: <em>'Ubah warna latar teks terpilih'</em>, 
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      forecolor : {
+        title: <em>'Warna Fonta'</em>, 
+        text: <em>'Ubah warna teks terpilih'</em>,  
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifyleft : {
+        title: <em>'Rata Kiri'</em>, 
+        text: <em>'Ratakan teks ke kiri'</em>, 
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifycenter : {
+        title: <em>'Rata Tengah'</em>, 
+        text: <em>'Ratakan teks ke tengah editor'</em>, 
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifyright : {
+        title: <em>'Rata Kanan'</em>, 
+        text: <em>'Ratakan teks ke kanan'</em>, 
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      insertunorderedlist : {
+        title: <em>'Daftar Bulet'</em>, 
+        text: <em>'Membuat daftar berbasis bulet'</em>, 
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      insertorderedlist : {
+        title: <em>'Daftar Angka'</em>, 
+        text: <em>'Membuat daftar berbasis angka'</em>, 
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      createlink : {
+        title: <em>'Hipertaut'</em>, 
+        text: <em>'Buat teks terpilih sebagai Hipertaut'</em>, 
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      sourceedit : {
+        title: <em>'Edit Kode Sumber'</em>, 
+        text: <em>'Pindah dalam mode kode sumber'</em>, 
+        cls: <em>'x-html-editor-tip'</em>
+      }
+    }
+  });
+}
+
+<b>if</b>(Ext.grid.GridView){
+  Ext.apply(Ext.grid.GridView.prototype, {
+    sortAscText  : &quot;Urut Naik&quot;, 
+    sortDescText : &quot;Urut Turun&quot;, 
+    lockText     : &quot;Kancing Kolom&quot;, 
+    unlockText   : &quot;Lepas Kunci Kolom&quot;, 
+    columnsText  : &quot;Kolom&quot;
+  });
+}
+
+<b>if</b>(Ext.grid.GroupingView){
+  Ext.apply(Ext.grid.GroupingView.prototype, {
+    emptyGroupText : <em>'(Kosong)'</em>, 
+    groupByText    : <em>'Kelompokkan Berdasar Field Ini'</em>, 
+    showGroupsText : <em>'Tampil Dalam Kelompok'</em> 
+  });
+}
+
+<b>if</b>(Ext.grid.PropertyColumnModel){
+  Ext.apply(Ext.grid.PropertyColumnModel.prototype, {
+    nameText   : &quot;Nama&quot;, 
+    valueText  : &quot;Nilai&quot;, 
+    dateFormat : &quot;d/m/Y&quot; 
+  });
+}
+
+<b>if</b>(Ext.layout.BorderLayout &amp;&amp; Ext.layout.BorderLayout.SplitRegion){
+  Ext.apply(Ext.layout.BorderLayout.SplitRegion.prototype, {
+    splitTip            : &quot;Seret untuk ubah ukuran.&quot;, 
+    collapsibleSplitTip : &quot;Seret untuk ubah ukuran, Dobel klik untuk sembunyikan.&quot; 
+  });
+}
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

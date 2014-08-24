@@ -1,0 +1,72 @@
+<html><head><title>RadioGroup.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>RadioGroup.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.form.RadioGroup
+ * @extends Ext.form.CheckboxGroup
+ * A grouping container <b>for</b> {@link Ext.form.Radio} controls.
+ * @constructor
+ * Creates a <b>new</b> RadioGroup
+ * @param {Object} config Configuration options
+ */</i>
+Ext.form.RadioGroup = Ext.extend(Ext.form.CheckboxGroup, {
+    <i>/**
+     * @cfg {Boolean} allowBlank True to allow every item <b>in</b> the group to be blank (defaults to false). If allowBlank = 
+     * false and no items are selected at validation time, {@link @blankText} will be used as the error text.
+     */</i>
+    allowBlank : true,
+    <i>/**
+     * @cfg {String} blankText Error text to display <b>if</b> the {@link #allowBlank} validation fails (defaults to &quot;You must 
+     * select one item <b>in</b> this group&quot;)
+     */</i>
+    blankText : &quot;You must select one item <b>in</b> this group&quot;,
+    
+    <i>// private</i>
+    defaultType : <em>'radio'</em>,
+    
+    <i>// private</i>
+    groupCls: <em>'x-form-radio-group'</em>,
+    
+    <i>// private</i>
+    initComponent: <b>function</b>(){
+        <b>this</b>.addEvents(
+            <i>/**
+             * @event change
+             * Fires when the state of a child radio changes.
+             * @param {Ext.form.RadioGroup} <b>this</b>
+             * @param {Ext.form.Radio} checked The checked radio
+             */</i>
+            <em>'change'</em>
+        );   
+        Ext.form.RadioGroup.superclass.initComponent.call(<b>this</b>);
+    },
+    
+    <i>// private</i>
+    fireChecked: <b>function</b>(){
+        <b>if</b>(!<b>this</b>.checkTask){
+            <b>this</b>.checkTask = <b>new</b> Ext.util.DelayedTask(<b>this</b>.bufferChecked, <b>this</b>);
+        }
+        <b>this</b>.checkTask.delay(10);
+    },
+    
+    <i>// private</i>
+    bufferChecked: <b>function</b>(){
+        <b>var</b> out = null;
+        <b>this</b>.items.each(<b>function</b>(item){
+            <b>if</b>(item.checked){
+                out = item;
+                <b>return</b> false;
+            }
+        });
+        <b>this</b>.fireEvent(<em>'change'</em>, <b>this</b>, out);
+    },
+    
+    onDestroy: <b>function</b>(){
+        <b>if</b>(this.checkTask){
+            <b>this</b>.checkTask.cancel();
+            <b>this</b>.checkTask = null;
+        }
+        Ext.form.RadioGroup.superclass.onDestroy.call(<b>this</b>);
+    }
+});
+
+Ext.reg(<em>'radiogroup'</em>, Ext.form.RadioGroup);
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

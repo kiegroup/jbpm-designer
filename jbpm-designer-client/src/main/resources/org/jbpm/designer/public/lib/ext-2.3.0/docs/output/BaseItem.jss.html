@@ -1,0 +1,174 @@
+<html><head><title>BaseItem.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>BaseItem.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.menu.BaseItem
+ * @extends Ext.Component
+ * The base class <b>for</b> all items that render into menus.  BaseItem provides <b>default</b> rendering, activated state
+ * management and base configuration options shared by all menu components.
+ * @constructor
+ * Creates a <b>new</b> BaseItem
+ * @param {Object} config Configuration options
+ */</i>
+Ext.menu.BaseItem = <b>function</b>(config){
+    Ext.menu.BaseItem.superclass.constructor.call(<b>this</b>, config);
+
+    <b>this</b>.addEvents(
+        <i>/**
+         * @event click
+         * Fires when <b>this</b> item is clicked
+         * @param {Ext.menu.BaseItem} <b>this</b>
+         * @param {Ext.EventObject} e
+         */</i>
+        <em>'click'</em>,
+        <i>/**
+         * @event activate
+         * Fires when <b>this</b> item is activated
+         * @param {Ext.menu.BaseItem} <b>this</b>
+         */</i>
+        <em>'activate'</em>,
+        <i>/**
+         * @event deactivate
+         * Fires when <b>this</b> item is deactivated
+         * @param {Ext.menu.BaseItem} <b>this</b>
+         */</i>
+        <em>'deactivate'</em>
+    );
+
+    <b>if</b>(this.handler){
+        <b>this</b>.on(&quot;click&quot;, <b>this</b>.handler, <b>this</b>.scope);
+    }
+};
+
+Ext.extend(Ext.menu.BaseItem, Ext.Component, {
+    <i>/**
+     * @cfg {Function} handler
+     * A <b>function</b> that will handle the click event of <b>this</b> menu item (optional).
+     * The handler is passed the following parameters:&lt;div class=&quot;mdetail-params&quot;&gt;&lt;ul&gt;
+     * &lt;li&gt;&lt;code&gt;b&lt;/code&gt; : Item&lt;div class=&quot;sub-desc&quot;&gt;This menu Item.&lt;/div&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;code&gt;e&lt;/code&gt; : EventObject&lt;div class=&quot;sub-desc&quot;&gt;The click event.&lt;/div&gt;&lt;/li&gt;
+     * &lt;/ul&gt;&lt;/div&gt;
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Object} scope
+     * The scope (&lt;tt&gt;&lt;b&gt;<b>this</b>&lt;/b&gt;&lt;/tt&gt; reference) <b>in</b> which the handler <b>function</b> will be called.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} canActivate True <b>if</b> this item can be visually activated (defaults to false)
+     */</i>
+    canActivate : false,
+    <i>/**
+     * @cfg {String} activeClass The CSS class to use when the item becomes activated (defaults to &quot;x-menu-item-active&quot;)
+     */</i>
+    activeClass : &quot;x-menu-item-active&quot;,
+    <i>/**
+     * @cfg {Boolean} hideOnClick True to hide the containing menu after <b>this</b> item is clicked (defaults to true)
+     */</i>
+    hideOnClick : true,
+    <i>/**
+     * @cfg {Number} hideDelay Length of time <b>in</b> milliseconds to wait before hiding after a click (defaults to 100)
+     */</i>
+    hideDelay : 100,
+
+    <i>// private</i>
+    ctype: &quot;Ext.menu.BaseItem&quot;,
+
+    <i>// private</i>
+    actionMode : &quot;container&quot;,
+
+    <i>// private</i>
+    <i>/**
+     * Cascade destroy to subMenus <b>if</b> they exist
+     */</i>
+    destroy : <b>function</b>(){
+        <b>if</b> (<b>this</b>.menu) {
+            <b>this</b>.menu.destroy();
+        }
+        Ext.menu.BaseItem.superclass.destroy.call(<b>this</b>);
+    },
+
+    <i>// private</i>
+    render : <b>function</b>(container, parentMenu){
+        <i>/**
+         * The parent Menu of <b>this</b> Item.
+         * @property parentMenu
+         * @type Ext.menu.Menu
+         */</i>
+        <b>this</b>.parentMenu = parentMenu;
+        Ext.menu.BaseItem.superclass.render.call(<b>this</b>, container);
+        <b>this</b>.container.menuItemId = <b>this</b>.id;
+    },
+
+    <i>// private</i>
+    onRender : <b>function</b>(container, position){
+        <b>this</b>.el = Ext.get(<b>this</b>.el);
+        <b>if</b>(this.id){
+            <b>this</b>.el.id = <b>this</b>.id;
+        }
+        container.dom.appendChild(<b>this</b>.el.dom);
+    },
+
+    <i>/**
+     * Sets the <b>function</b> that will handle click events <b>for</b> this item (equivalent to passing <b>in</b> the {@link #handler}
+     * config property).  If an existing handler is already registered, it will be unregistered <b>for</b> you.
+     * @param {Function} handler The <b>function</b> that should be called on click
+     * @param {Object} scope The scope that should be passed to the handler
+     */</i>
+    setHandler : <b>function</b>(handler, scope){
+        <b>if</b>(this.handler){
+            <b>this</b>.un(&quot;click&quot;, <b>this</b>.handler, <b>this</b>.scope);
+        }
+        <b>this</b>.on(&quot;click&quot;, <b>this</b>.handler = handler, <b>this</b>.scope = scope);
+    },
+
+    <i>// private</i>
+    onClick : <b>function</b>(e){
+        <b>if</b>(!<b>this</b>.disabled &amp;&amp; <b>this</b>.fireEvent(&quot;click&quot;, <b>this</b>, e) !== false
+                &amp;&amp; <b>this</b>.parentMenu.fireEvent(&quot;itemclick&quot;, <b>this</b>, e) !== false){
+            <b>this</b>.handleClick(e);
+        }<b>else</b>{
+            e.stopEvent();
+        }
+    },
+
+    <i>// private</i>
+    activate : <b>function</b>(){
+        <b>if</b>(this.disabled){
+            <b>return</b> false;
+        }
+        <b>var</b> li = <b>this</b>.container;
+        li.addClass(<b>this</b>.activeClass);
+        <b>this</b>.region = li.getRegion().adjust(2, 2, -2, -2);
+        <b>this</b>.fireEvent(&quot;activate&quot;, <b>this</b>);
+        <b>return</b> true;
+    },
+
+    <i>// private</i>
+    deactivate : <b>function</b>(){
+        <b>this</b>.container.removeClass(<b>this</b>.activeClass);
+        <b>this</b>.fireEvent(&quot;deactivate&quot;, <b>this</b>);
+    },
+
+    <i>// private</i>
+    shouldDeactivate : <b>function</b>(e){
+        <b>return</b> !<b>this</b>.region || !<b>this</b>.region.contains(e.getPoint());
+    },
+
+    <i>// private</i>
+    handleClick : <b>function</b>(e){
+        <b>if</b>(this.hideOnClick){
+            <b>this</b>.parentMenu.hide.defer(<b>this</b>.hideDelay, <b>this</b>.parentMenu, [true]);
+        }
+    },
+
+    <i>// private</i>
+    expandMenu : <b>function</b>(autoActivate){
+        <i>// <b>do</b> nothing</i>
+    },
+
+    <i>// private</i>
+    hideMenu : <b>function</b>(){
+        <i>// <b>do</b> nothing</i>
+    }
+});
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

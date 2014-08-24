@@ -1,0 +1,418 @@
+<html><head><title>Action.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>Action.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.form.Action
+ * &lt;p&gt;The subclasses of <b>this</b> class provide actions to perform upon {@link Ext.form.BasicForm Form}s.&lt;/p&gt;
+ * &lt;p&gt;Instances of <b>this</b> class are only created by a {@link Ext.form.BasicForm Form} when
+ * the Form needs to perform an action such as submit or load. The Configuration options
+ * listed <b>for</b> this class are set through the Form's action methods: {@link Ext.form.BasicForm#submit submit},
+ * {@link Ext.form.BasicForm#load load} and {@link Ext.form.BasicForm#doAction doAction}&lt;/p&gt;
+ * &lt;p&gt;The instance of Action which performed the action is passed to the success
+ * and failure callbacks of the Form's action methods ({@link Ext.form.BasicForm#submit submit},
+ * {@link Ext.form.BasicForm#load load} and {@link Ext.form.BasicForm#doAction doAction}),
+ * and to the {@link Ext.form.BasicForm#actioncomplete actioncomplete} and
+ * {@link Ext.form.BasicForm#actionfailed actionfailed} event handlers.&lt;/p&gt;
+ */</i>
+Ext.form.Action = <b>function</b>(form, options){
+    <b>this</b>.form = form;
+    <b>this</b>.options = options || {};
+};
+
+<i>/**
+ * Failure type returned when client side validation of the Form fails
+ * thus aborting a submit action.
+ * @type {String}
+ * @static
+ */</i>
+Ext.form.Action.CLIENT_INVALID = <em>'client'</em>;
+<i>/**
+ * Failure type returned when server side validation of the Form fails
+ * indicating that field-specific error messages have been returned <b>in</b> the
+ * response's &lt;tt style=&quot;font-weight:bold&quot;&gt;errors&lt;/tt&gt; property.
+ * @type {String}
+ * @static
+ */</i>
+Ext.form.Action.SERVER_INVALID = <em>'server'</em>;
+<i>/**
+ * Failure type returned when a communication error happens when attempting
+ * to send a request to the remote server.
+ * @type {String}
+ * @static
+ */</i>
+Ext.form.Action.CONNECT_FAILURE = <em>'connect'</em>;
+<i>/**
+ * Failure type returned when no field values are returned <b>in</b> the response's
+ * &lt;tt style=&quot;font-weight:bold&quot;&gt;data&lt;/tt&gt; property.
+ * @type {String}
+ * @static
+ */</i>
+Ext.form.Action.LOAD_FAILURE = <em>'load'</em>;
+
+Ext.form.Action.prototype = {
+<i>/**
+ * @cfg {String} url The URL that the Action is to invoke.
+ */</i>
+<i>// holder</i>
+<i>/***
+ * @cfg {Boolean} reset When set to &lt;tt&gt;&lt;b&gt;true&lt;/b&gt;&lt;/tt&gt;, causes the Form to be
+ * {@link Ext.form.BasicForm.reset reset} on Action success. If specified, <b>this</b> happens
+ * &lt;b&gt;before&lt;/b&gt; the {@link #success} callback is called and before the Form's
+ * {@link Ext.form.BasicForm.actioncomplete actioncomplete} event fires.
+ */</i>
+<i>// holder</i>
+<i>/***
+ * @cfg {String} method The HTTP method to use to access the requested URL. Defaults to the
+ * {@link Ext.form.BasicForm}<em>'s method, or <b>if</b> that is not specified, the underlying DOM form'</em>s method.
+ */</i>
+<i>// holder</i>
+<i>/***
+ * @cfg {Mixed} params&lt;p&gt;Extra parameter values to pass. These are added to the Form's
+ * {@link Ext.form.BasicForm#baseParams} and passed to the specified URL along <b>with</b> the Form's
+ * input fields.&lt;/p&gt;
+ * &lt;p&gt;Parameters are encoded as standard HTTP parameters using {@link Ext#urlEncode}.&lt;/p&gt;
+ */</i>
+<i>// holder</i>
+<i>/***
+ * @cfg {Number} timeout The number of milliseconds to wait <b>for</b> a server response before
+ * failing <b>with</b> the {@link #failureType} as {@link #Action.CONNECT_FAILURE}.
+ */</i>
+<i>// holder</i>
+<i>/***
+ * @cfg {Function} success The <b>function</b> to call when a valid success <b>return</b> packet is recieved.
+ * The <b>function</b> is passed the following parameters:&lt;ul class=&quot;mdetail-params&quot;&gt;
+ * &lt;li&gt;&lt;b&gt;form&lt;/b&gt; : Ext.form.BasicForm&lt;div class=&quot;sub-desc&quot;&gt;The form that requested the action&lt;/div&gt;&lt;/li&gt;
+ * &lt;li&gt;&lt;b&gt;action&lt;/b&gt; : Ext.form.Action&lt;div class=&quot;sub-desc&quot;&gt;The Action class. The {@link #result}
+ * property of <b>this</b> object may be examined to perform custom postprocessing.&lt;/div&gt;&lt;/li&gt;
+ * &lt;/ul&gt;
+ */</i>
+<i>// holder</i>
+<i>/***
+ * @cfg {Function} failure The <b>function</b> to call when a failure packet was recieved, or when an
+ * error ocurred <b>in</b> the Ajax communication.
+ * The <b>function</b> is passed the following parameters:&lt;ul class=&quot;mdetail-params&quot;&gt;
+ * &lt;li&gt;&lt;b&gt;form&lt;/b&gt; : Ext.form.BasicForm&lt;div class=&quot;sub-desc&quot;&gt;The form that requested the action&lt;/div&gt;&lt;/li&gt;
+ * &lt;li&gt;&lt;b&gt;action&lt;/b&gt; : Ext.form.Action&lt;div class=&quot;sub-desc&quot;&gt;The Action class. If an Ajax
+ * error ocurred, the failure type will be <b>in</b> {@link #failureType}. The {@link #result}
+ * property of <b>this</b> object may be examined to perform custom postprocessing.&lt;/div&gt;&lt;/li&gt;
+ * &lt;/ul&gt;
+ */</i>
+<i>// holder</i>
+<i>/***
+ * @cfg {Object} scope The scope <b>in</b> which to call the callback functions (The &lt;tt&gt;<b>this</b>&lt;/tt&gt; reference
+ * <b>for</b> the callback functions).
+ */</i>
+<i>// holder</i>
+<i>/***
+ * @cfg {String} waitMsg The message to be displayed by a call to {@link Ext.MessageBox#wait}
+ * during the time the action is being processed.
+ */</i>
+<i>// holder</i>
+<i>/***
+ * @cfg {String} waitTitle The title to be displayed by a call to {@link Ext.MessageBox#wait}
+ * during the time the action is being processed.
+ */</i>
+<i>// holder</i>
+<i>/***
+ * The type of action <b>this</b> Action instance performs.
+ * Currently only &quot;submit&quot; and &quot;load&quot; are supported.
+ * @type {String}
+ */</i>
+    type : <em>'<b>default</b>'</em>,
+<i>/**
+ * The type of failure detected. See {@link link Ext.form.Action#Action.CLIENT_INVALID CLIENT_INVALID},
+ * {@link link Ext.form.Action#Action.SERVER_INVALID SERVER_INVALID},
+ * {@link #link Ext.form.ActionAction.CONNECT_FAILURE CONNECT_FAILURE}, {@link Ext.form.Action#Action.LOAD_FAILURE LOAD_FAILURE}
+ * @property failureType
+ * @type {String}
+ */</i>
+<i>// holder</i>
+<i>/***
+ * The XMLHttpRequest object used to perform the action.
+ * @property response
+ * @type {Object}
+ */</i>
+<i>// holder</i>
+<i>/***
+ * The decoded response object containing a boolean &lt;tt style=&quot;font-weight:bold&quot;&gt;success&lt;/tt&gt; property and
+ * other, action-specific properties.
+ * @property result
+ * @type {Object}
+ */</i>
+
+    <i>// interface method</i>
+    run : <b>function</b>(options){
+
+    },
+
+    <i>// interface method</i>
+    success : <b>function</b>(response){
+
+    },
+
+    <i>// interface method</i>
+    handleResponse : <b>function</b>(response){
+
+    },
+
+    <i>// <b>default</b> connection failure</i>
+    failure : <b>function</b>(response){
+        <b>this</b>.response = response;
+        <b>this</b>.failureType = Ext.form.Action.CONNECT_FAILURE;
+        <b>this</b>.form.afterAction(<b>this</b>, false);
+    },
+
+    <i>// private</i>
+    processResponse : <b>function</b>(response){
+        <b>this</b>.response = response;
+        <b>if</b>(!response.responseText &amp;&amp; !response.responseXML){
+            <b>return</b> true;
+        }
+        <b>this</b>.result = <b>this</b>.handleResponse(response);
+        <b>return</b> this.result;
+    },
+
+    <i>// utility functions used internally</i>
+    getUrl : <b>function</b>(appendParams){
+        <b>var</b> url = <b>this</b>.options.url || <b>this</b>.form.url || <b>this</b>.form.el.dom.action;
+        <b>if</b>(appendParams){
+            <b>var</b> p = <b>this</b>.getParams();
+            <b>if</b>(p){
+                url += (url.indexOf(<em>'?'</em>) != -1 ? <em>'&amp;'</em> : <em>'?'</em>) + p;
+            }
+        }
+        <b>return</b> url;
+    },
+
+    <i>// private</i>
+    getMethod : <b>function</b>(){
+        <b>return</b> (<b>this</b>.options.method || <b>this</b>.form.method || <b>this</b>.form.el.dom.method || <em>'POST'</em>).toUpperCase();
+    },
+
+    <i>// private</i>
+    getParams : <b>function</b>(){
+        <b>var</b> bp = <b>this</b>.form.baseParams;
+        <b>var</b> p = <b>this</b>.options.params;
+        <b>if</b>(p){
+            <b>if</b>(typeof p == &quot;object&quot;){
+                p = Ext.urlEncode(Ext.applyIf(p, bp));
+            }<b>else</b> if(<b>typeof</b> p == <em>'string'</em> &amp;&amp; bp){
+                p += <em>'&amp;'</em> + Ext.urlEncode(bp);
+            }
+        }<b>else</b> if(bp){
+            p = Ext.urlEncode(bp);
+        }
+        <b>return</b> p;
+    },
+
+    <i>// private</i>
+    createCallback : <b>function</b>(opts){
+		<b>var</b> opts = opts || {};
+        <b>return</b> {
+            success: <b>this</b>.success,
+            failure: <b>this</b>.failure,
+            scope: <b>this</b>,
+            timeout: (opts.timeout*1000) || (<b>this</b>.form.timeout*1000),
+            upload: <b>this</b>.form.fileUpload ? <b>this</b>.success : undefined
+        };
+    }
+};
+
+<i>/**
+ * @class Ext.form.Action.Submit
+ * @extends Ext.form.Action
+ * &lt;p&gt;A class which handles submission of data from {@link Ext.form.BasicForm Form}s
+ * and processes the returned response.&lt;/p&gt;
+ * &lt;p&gt;Instances of <b>this</b> class are only created by a {@link Ext.form.BasicForm Form} when
+ * {@link Ext.form.BasicForm#submit submit}ting.&lt;/p&gt;
+ * &lt;p&gt;A response packet must contain a boolean &lt;tt style=&quot;font-weight:bold&quot;&gt;success&lt;/tt&gt; property, and, optionally
+ * an &lt;tt style=&quot;font-weight:bold&quot;&gt;errors&lt;/tt&gt; property. The &lt;tt style=&quot;font-weight:bold&quot;&gt;errors&lt;/tt&gt; property contains error
+ * messages <b>for</b> invalid fields.&lt;/p&gt;
+ * &lt;p&gt;By <b>default</b>, response packets are assumed to be JSON, so a typical response
+ * packet may look like <b>this</b>:&lt;/p&gt;&lt;pre&gt;&lt;code&gt;
+{
+    success: false,
+    errors: {
+        clientCode: &quot;Client not found&quot;,
+        portOfLoading: &quot;This field must not be null&quot;
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+ * &lt;p&gt;Other data may be placed into the response <b>for</b> processing by the {@link Ext.form.BasicForm}'s callback
+ * or event handler methods. The object decoded from <b>this</b> JSON is available <b>in</b> the {@link #result} property.&lt;/p&gt;
+ * &lt;p&gt;Alternatively, <b>if</b> an {@link #errorReader} is specified as an {@link Ext.data.XmlReader XmlReader}:&lt;/p&gt;&lt;pre&gt;&lt;code&gt;
+    errorReader: <b>new</b> Ext.data.XmlReader({
+            record : <em>'field'</em>,
+            success: <em>'@success'</em>
+        }, [
+            <em>'id'</em>, <em>'msg'</em>
+        ]
+    )
+&lt;/code&gt;&lt;/pre&gt;
+ * &lt;p&gt;then the results may be sent back <b>in</b> XML format:&lt;/p&gt;&lt;pre&gt;&lt;code&gt;
+&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;
+&amp;lt;message success=&quot;false&quot;&amp;gt;
+&amp;lt;errors&amp;gt;
+    &amp;lt;field&amp;gt;
+        &amp;lt;id&amp;gt;clientCode&amp;lt;/id&amp;gt;
+        &amp;lt;msg&amp;gt;&amp;lt;![CDATA[Code not found. &amp;lt;br /&amp;gt;&amp;lt;i&amp;gt;This is a test validation message from the server &amp;lt;/i&amp;gt;]]&amp;gt;&amp;lt;/msg&amp;gt;
+    &amp;lt;/field&amp;gt;
+    &amp;lt;field&amp;gt;
+        &amp;lt;id&amp;gt;portOfLoading&amp;lt;/id&amp;gt;
+        &amp;lt;msg&amp;gt;&amp;lt;![CDATA[Port not found. &amp;lt;br /&amp;gt;&amp;lt;i&amp;gt;This is a test validation message from the server &amp;lt;/i&amp;gt;]]&amp;gt;&amp;lt;/msg&amp;gt;
+    &amp;lt;/field&amp;gt;
+&amp;lt;/errors&amp;gt;
+&amp;lt;/message&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+ * &lt;p&gt;Other elements may be placed into the response XML <b>for</b> processing by the {@link Ext.form.BasicForm}'s callback
+ * or event handler methods. The XML document is available <b>in</b> the {@link #errorReader}'s {@link Ext.data.XmlReader#xmlData xmlData} property.&lt;/p&gt;
+ */</i>
+Ext.form.Action.Submit = <b>function</b>(form, options){
+    Ext.form.Action.Submit.superclass.constructor.call(<b>this</b>, form, options);
+};
+
+Ext.extend(Ext.form.Action.Submit, Ext.form.Action, {
+    <i>/**
+    * @cfg {Ext.data.DataReader} errorReader &lt;b&gt;Optional. JSON is interpreted <b>with</b> no need <b>for</b> an errorReader.&lt;/b&gt;
+    * &lt;p&gt;A Reader which reads a single record from the returned data. The DataReader's &lt;b&gt;success&lt;/b&gt; property specifies
+    * how submission success is determined. The Record's data provides the error messages to apply to any invalid form Fields.&lt;/p&gt;.
+    */</i>
+<i>// holder</i>
+<i>/***
+    * @cfg {boolean} clientValidation Determines whether a Form's fields are validated
+    * <b>in</b> a final call to {@link Ext.form.BasicForm#isValid isValid} prior to submission.
+    * Pass &lt;tt&gt;false&lt;/tt&gt; <b>in</b> the Form's submit options to prevent <b>this</b>. If not defined, pre-submission field validation
+    * is performed.
+    */</i>
+    type : <em>'submit'</em>,
+
+    <i>// private</i>
+    run : <b>function</b>(){
+        <b>var</b> o = <b>this</b>.options;
+        <b>var</b> method = <b>this</b>.getMethod();
+        <b>var</b> isGet = method == <em>'GET'</em>;
+        <b>if</b>(o.clientValidation === false || <b>this</b>.form.isValid()){
+            Ext.Ajax.request(Ext.apply(<b>this</b>.createCallback(o), {
+                form:<b>this</b>.form.el.dom,
+                url:<b>this</b>.getUrl(isGet),
+                method: method,
+                headers: o.headers,
+                params:!isGet ? <b>this</b>.getParams() : null,
+                isUpload: <b>this</b>.form.fileUpload
+            }));
+        }<b>else</b> if (o.clientValidation !== false){ <i>// client validation failed</i>
+            <b>this</b>.failureType = Ext.form.Action.CLIENT_INVALID;
+            <b>this</b>.form.afterAction(<b>this</b>, false);
+        }
+    },
+
+    <i>// private</i>
+    success : <b>function</b>(response){
+        <b>var</b> result = <b>this</b>.processResponse(response);
+        <b>if</b>(result === true || result.success){
+            <b>this</b>.form.afterAction(<b>this</b>, true);
+            <b>return</b>;
+        }
+        <b>if</b>(result.errors){
+            <b>this</b>.form.markInvalid(result.errors);
+            <b>this</b>.failureType = Ext.form.Action.SERVER_INVALID;
+        }
+        <b>this</b>.form.afterAction(<b>this</b>, false);
+    },
+
+    <i>// private</i>
+    handleResponse : <b>function</b>(response){
+        <b>if</b>(this.form.errorReader){
+            <b>var</b> rs = <b>this</b>.form.errorReader.read(response);
+            <b>var</b> errors = [];
+            <b>if</b>(rs.records){
+                <b>for</b>(var i = 0, len = rs.records.length; i &lt; len; i++) {
+                    <b>var</b> r = rs.records[i];
+                    errors[i] = r.data;
+                }
+            }
+            <b>if</b>(errors.length &lt; 1){
+                errors = null;
+            }
+            <b>return</b> {
+                success : rs.success,
+                errors : errors
+            };
+        }
+        <b>return</b> Ext.decode(response.responseText);
+    }
+});
+
+
+<i>/**
+ * @class Ext.form.Action.Load
+ * @extends Ext.form.Action
+ * &lt;p&gt;A class which handles loading of data from a server into the Fields of an {@link Ext.form.BasicForm}.&lt;/p&gt;
+ * &lt;p&gt;Instances of <b>this</b> class are only created by a {@link Ext.form.BasicForm Form} when
+ * {@link Ext.form.BasicForm#load load}ing.&lt;/p&gt;
+ * &lt;p&gt;A response packet &lt;b&gt;must&lt;/b&gt; contain a boolean &lt;tt style=&quot;font-weight:bold&quot;&gt;success&lt;/tt&gt; property, and
+ * a &lt;tt style=&quot;font-weight:bold&quot;&gt;data&lt;/tt&gt; property. The &lt;tt style=&quot;font-weight:bold&quot;&gt;data&lt;/tt&gt; property
+ * contains the values of Fields to load. The individual value object <b>for</b> each Field
+ * is passed to the Field's {@link Ext.form.Field#setValue setValue} method.&lt;/p&gt;
+ * &lt;p&gt;By <b>default</b>, response packets are assumed to be JSON, so a typical response
+ * packet may look like <b>this</b>:&lt;/p&gt;&lt;pre&gt;&lt;code&gt;
+{
+    success: true,
+    data: {
+        clientName: &quot;Fred. Olsen Lines&quot;,
+        portOfLoading: &quot;FXT&quot;,
+        portOfDischarge: &quot;OSL&quot;
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+ * &lt;p&gt;Other data may be placed into the response <b>for</b> processing the {@link Ext.form.BasicForm Form}'s callback
+ * or event handler methods. The object decoded from <b>this</b> JSON is available <b>in</b> the {@link #result} property.&lt;/p&gt;
+ */</i>
+Ext.form.Action.Load = <b>function</b>(form, options){
+    Ext.form.Action.Load.superclass.constructor.call(<b>this</b>, form, options);
+    <b>this</b>.reader = <b>this</b>.form.reader;
+};
+
+Ext.extend(Ext.form.Action.Load, Ext.form.Action, {
+    <i>// private</i>
+    type : <em>'load'</em>,
+
+    <i>// private</i>
+    run : <b>function</b>(){
+        Ext.Ajax.request(Ext.apply(
+                <b>this</b>.createCallback(<b>this</b>.options), {
+                    method:<b>this</b>.getMethod(),
+                    url:<b>this</b>.getUrl(false),
+                    headers: <b>this</b>.options.headers,
+                    params:<b>this</b>.getParams()
+        }));
+    },
+
+    <i>// private</i>
+    success : <b>function</b>(response){
+        <b>var</b> result = <b>this</b>.processResponse(response);
+        <b>if</b>(result === true || !result.success || !result.data){
+            <b>this</b>.failureType = Ext.form.Action.LOAD_FAILURE;
+            <b>this</b>.form.afterAction(<b>this</b>, false);
+            <b>return</b>;
+        }
+        <b>this</b>.form.clearInvalid();
+        <b>this</b>.form.setValues(result.data);
+        <b>this</b>.form.afterAction(<b>this</b>, true);
+    },
+
+    <i>// private</i>
+    handleResponse : <b>function</b>(response){
+        <b>if</b>(this.form.reader){
+            <b>var</b> rs = <b>this</b>.form.reader.read(response);
+            <b>var</b> data = rs.records &amp;&amp; rs.records[0] ? rs.records[0].data : null;
+            <b>return</b> {
+                success : rs.success,
+                data : data
+            };
+        }
+        <b>return</b> Ext.decode(response.responseText);
+    }
+});
+
+Ext.form.Action.ACTION_TYPES = {
+    <em>'load'</em> : Ext.form.Action.Load,
+    <em>'submit'</em> : Ext.form.Action.Submit
+};
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

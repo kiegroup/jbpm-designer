@@ -1,0 +1,283 @@
+<html><head><title>Checkbox.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>Checkbox.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.form.Checkbox
+ * @extends Ext.form.Field
+ * Single checkbox field.  Can be used as a direct replacement <b>for</b> traditional checkbox fields.
+ * @constructor
+ * Creates a <b>new</b> Checkbox
+ * @param {Object} config Configuration options
+ */</i>
+Ext.form.Checkbox = Ext.extend(Ext.form.Field,  {
+    <i>/**
+     * @cfg {String} checkedCls The CSS class to use when the control is checked (defaults to <em>'x-form-check-checked'</em>).
+     * Note that <b>this</b> class applies to both checkboxes and radio buttons and is added to the control's wrapper element.
+     */</i>
+    checkedCls: <em>'x-form-check-checked'</em>,
+    <i>/**
+     * @cfg {String} focusCls The CSS class to use when the control receives input focus (defaults to <em>'x-form-check-focus'</em>).
+     * Note that <b>this</b> class applies to both checkboxes and radio buttons and is added to the control's wrapper element.
+     */</i>
+    focusCls: <em>'x-form-check-focus'</em>,
+    <i>/**
+     * @cfg {String} overCls The CSS class to use when the control is hovered over (defaults to <em>'x-form-check-over'</em>).
+     * Note that <b>this</b> class applies to both checkboxes and radio buttons and is added to the control's wrapper element.
+     */</i>
+    overCls: <em>'x-form-check-over'</em>,
+    <i>/**
+     * @cfg {String} mouseDownCls The CSS class to use when the control is being actively clicked (defaults to <em>'x-form-check-down'</em>).
+     * Note that <b>this</b> class applies to both checkboxes and radio buttons and is added to the control's wrapper element.
+     */</i>
+    mouseDownCls: <em>'x-form-check-down'</em>,
+    <i>/**
+     * @cfg {Number} tabIndex The tabIndex <b>for</b> this field. Note <b>this</b> only applies to fields that are rendered,
+     * not those which are built via applyTo (defaults to 0, which allows the browser to manage the tab index).
+     */</i>
+    tabIndex: 0,
+    <i>/**
+     * @cfg {Boolean} checked True <b>if</b> the checkbox should render already checked (defaults to false)
+     */</i>
+    checked: false,
+    <i>/**
+     * @cfg {String/Object} autoCreate A DomHelper element spec, or true <b>for</b> a <b>default</b> element spec (defaults to
+     * {tag: &quot;input&quot;, type: &quot;checkbox&quot;, autocomplete: &quot;off&quot;}).
+     */</i>
+    defaultAutoCreate: {tag: <em>'input'</em>, type: <em>'checkbox'</em>, autocomplete: <em>'off'</em>},
+    <i>/**
+     * @cfg {String} boxLabel The text that appears beside the checkbox (defaults to <em>''</em>)
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} inputValue The value that should go into the generated input element's value attribute
+     * (defaults to undefined, <b>with</b> no value attribute)
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Function} handler A <b>function</b> called when the {@link #checked} value changes (can be used instead of 
+     * handling the check event). The handler is passed the following parameters:
+     * &lt;div class=&quot;mdetail-params&quot;&gt;&lt;ul&gt;
+     * &lt;li&gt;&lt;b&gt;checkbox&lt;/b&gt; : Ext.form.Checkbox&lt;div class=&quot;sub-desc&quot;&gt;The Checkbox being toggled.&lt;/div&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;checked&lt;/b&gt; : Boolean&lt;div class=&quot;sub-desc&quot;&gt;The <b>new</b> checked state of the checkbox.&lt;/div&gt;&lt;/li&gt;
+     * &lt;/ul&gt;&lt;/div&gt;
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Object} scope An object to use as the scope (&quot;<b>this</b>&quot; reference) of the {@link #handler} <b>function</b>
+     * (defaults to <b>this</b> Checkbox).
+     */</i>
+
+    <i>// private</i>
+    actionMode: <em>'wrap'</em>,
+    
+    <i>// private</i>
+    baseCls: <em>'x-form-check'</em>,
+
+    <i>// private</i>
+    initComponent : <b>function</b>(){
+        Ext.form.Checkbox.superclass.initComponent.call(<b>this</b>);
+        <b>this</b>.addEvents(
+            <i>/**
+             * @event check
+             * Fires when the checkbox is checked or unchecked.
+             * @param {Ext.form.Checkbox} <b>this</b> This checkbox
+             * @param {Boolean} checked The <b>new</b> checked value
+             */</i>
+            <em>'check'</em>
+        );
+    },
+
+    <i>// private</i>
+    initEvents : <b>function</b>(){
+        Ext.form.Checkbox.superclass.initEvents.call(<b>this</b>);
+        <b>this</b>.initCheckEvents();
+    },
+
+    <i>// private</i>
+    initCheckEvents : <b>function</b>(){
+        <b>this</b>.innerWrap.removeAllListeners();
+        <b>this</b>.innerWrap.addClassOnOver(<b>this</b>.overCls);
+        <b>this</b>.innerWrap.addClassOnClick(<b>this</b>.mouseDownCls);
+        <b>this</b>.innerWrap.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>);
+        <b>this</b>.innerWrap.on(<em>'keyup'</em>, <b>this</b>.onKeyUp, <b>this</b>);
+    },
+
+    <i>// private</i>
+    onRender : <b>function</b>(ct, position){
+        Ext.form.Checkbox.superclass.onRender.call(<b>this</b>, ct, position);
+        <b>if</b>(this.inputValue !== undefined){
+            <b>this</b>.el.dom.value = <b>this</b>.inputValue;
+        }
+        <b>this</b>.el.addClass(<em>'x-hidden'</em>);
+
+        <b>this</b>.innerWrap = <b>this</b>.el.wrap({
+            tabIndex: <b>this</b>.tabIndex,
+            cls: <b>this</b>.baseCls+<em>'-wrap-inner'</em>
+        });
+        <b>this</b>.wrap = <b>this</b>.innerWrap.wrap({cls: <b>this</b>.baseCls+<em>'-wrap'</em>});
+
+        <b>if</b>(this.boxLabel){
+            <b>this</b>.labelEl = <b>this</b>.innerWrap.createChild({
+                tag: <em>'label'</em>,
+                htmlFor: <b>this</b>.el.id,
+                cls: <em>'x-form-cb-label'</em>,
+                html: <b>this</b>.boxLabel
+            });
+        }
+
+        <b>this</b>.imageEl = <b>this</b>.innerWrap.createChild({
+            tag: <em>'img'</em>,
+            src: Ext.BLANK_IMAGE_URL,
+            cls: <b>this</b>.baseCls
+        }, <b>this</b>.el);
+
+        <b>if</b>(this.checked){
+            <b>this</b>.setValue(true);
+        }<b>else</b>{
+            <b>this</b>.checked = <b>this</b>.el.dom.checked;
+        }
+        <b>this</b>.originalValue = <b>this</b>.checked;
+    },
+    
+    <i>// private</i>
+    afterRender : <b>function</b>(){
+        Ext.form.Checkbox.superclass.afterRender.call(<b>this</b>);
+        <b>this</b>.wrap[<b>this</b>.checked? <em>'addClass'</em> : <em>'removeClass'</em>](<b>this</b>.checkedCls);
+    },
+
+    <i>// private</i>
+    onDestroy : <b>function</b>(){
+        <b>if</b>(this.rendered){
+            Ext.destroy(<b>this</b>.imageEl, <b>this</b>.labelEl, <b>this</b>.innerWrap, <b>this</b>.wrap);
+        }
+        Ext.form.Checkbox.superclass.onDestroy.call(<b>this</b>);
+    },
+
+    <i>// private</i>
+    onFocus: <b>function</b>(e) {
+        Ext.form.Checkbox.superclass.onFocus.call(<b>this</b>, e);
+        <b>this</b>.el.addClass(<b>this</b>.focusCls);
+    },
+
+    <i>// private</i>
+    onBlur: <b>function</b>(e) {
+        Ext.form.Checkbox.superclass.onBlur.call(<b>this</b>, e);
+        <b>this</b>.el.removeClass(<b>this</b>.focusCls);
+    },
+
+    <i>// private</i>
+    onResize : <b>function</b>(){
+        Ext.form.Checkbox.superclass.onResize.apply(<b>this</b>, arguments);
+        <b>if</b>(!<b>this</b>.boxLabel &amp;&amp; !<b>this</b>.fieldLabel){
+            <b>this</b>.el.alignTo(<b>this</b>.wrap, <em>'c-c'</em>);
+        }
+    },
+
+    <i>// private</i>
+    onKeyUp : <b>function</b>(e){
+        <b>if</b>(e.getKey() == Ext.EventObject.SPACE){
+            <b>this</b>.onClick(e);
+        }
+    },
+
+    <i>// private</i>
+    onClick : <b>function</b>(e){
+        <b>if</b> (!<b>this</b>.disabled &amp;&amp; !<b>this</b>.readOnly) {
+            <b>this</b>.toggleValue();
+        }
+        e.stopEvent();
+    },
+
+    <i>// private</i>
+    onEnable : <b>function</b>(){
+        Ext.form.Checkbox.superclass.onEnable.call(<b>this</b>);
+        <b>this</b>.initCheckEvents();
+    },
+
+    <i>// private</i>
+    onDisable : <b>function</b>(){
+        Ext.form.Checkbox.superclass.onDisable.call(<b>this</b>);
+        <b>this</b>.innerWrap.removeAllListeners();
+    },
+
+    toggleValue : <b>function</b>(){
+        <b>this</b>.setValue(!<b>this</b>.checked);
+    },
+
+    <i>// private</i>
+    getResizeEl : <b>function</b>(){
+        <b>if</b>(!<b>this</b>.resizeEl){
+            <b>this</b>.resizeEl = Ext.isWebKit ? <b>this</b>.wrap : (<b>this</b>.wrap.up(<em>'.x-form-element'</em>, 5) || <b>this</b>.wrap);
+        }
+        <b>return</b> this.resizeEl;
+    },
+
+    <i>// private</i>
+    getPositionEl : <b>function</b>(){
+        <b>return</b> this.wrap;
+    },
+
+    <i>/**
+     * Overridden and disabled. The editor element does not support standard valid/invalid marking. @hide
+     * @method
+     */</i>
+    markInvalid : Ext.emptyFn,
+    <i>/**
+     * Overridden and disabled. The editor element does not support standard valid/invalid marking. @hide
+     * @method
+     */</i>
+    clearInvalid : Ext.emptyFn,
+
+    <i>// private</i>
+    initValue: <b>function</b>(){
+        <b>this</b>.originalValue = <b>this</b>.getValue();
+    },
+
+    <i>/**
+     * Returns the checked state of the checkbox.
+     * @<b>return</b> {Boolean} True <b>if</b> checked, <b>else</b> false
+     */</i>
+    getValue : <b>function</b>(){
+        <b>if</b>(this.rendered){
+            <b>return</b> this.el.dom.checked;
+        }
+        <b>return</b> this.checked;
+    },
+
+    <i>/**
+     * Sets the checked state of the checkbox.
+     * @param {Boolean/String} checked True, <em>'true'</em>, <em>'1'</em>, or <em>'on'</em> to check the checkbox, any other value will uncheck it.
+     */</i>
+    setValue : <b>function</b>(v) {
+        <b>var</b> checked = <b>this</b>.checked;
+        <b>this</b>.checked = (v === true || v === <em>'true'</em> || v == <em>'1'</em> || String(v).toLowerCase() == <em>'on'</em>);
+        
+        <b>if</b>(this.rendered){
+            <b>this</b>.el.dom.checked = <b>this</b>.checked;
+            <b>this</b>.el.dom.defaultChecked = <b>this</b>.checked;
+            <b>this</b>.wrap[<b>this</b>.checked? <em>'addClass'</em> : <em>'removeClass'</em>](<b>this</b>.checkedCls);
+        }
+
+        <b>if</b>(checked != <b>this</b>.checked){
+            <b>this</b>.fireEvent(&quot;check&quot;, <b>this</b>, <b>this</b>.checked);
+            <b>if</b>(this.handler){
+                <b>this</b>.handler.call(<b>this</b>.scope || <b>this</b>, <b>this</b>, <b>this</b>.checked);
+            }
+        }
+    }
+
+    <i>/**
+     * @cfg {Mixed} value
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} disabledClass
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} focusClass
+     * @hide
+     */</i>
+});
+Ext.reg(<em>'checkbox'</em>, Ext.form.Checkbox);
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

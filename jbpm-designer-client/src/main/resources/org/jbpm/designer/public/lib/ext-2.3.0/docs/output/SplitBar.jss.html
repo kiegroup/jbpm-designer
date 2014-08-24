@@ -1,0 +1,427 @@
+<html><head><title>SplitBar.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>SplitBar.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.SplitBar
+ * @extends Ext.util.Observable
+ * Creates draggable splitter bar functionality from two elements (element to be dragged and element to be resized).
+ * &lt;br&gt;&lt;br&gt;
+ * Usage:
+ * &lt;pre&gt;&lt;code&gt;
+<b>var</b> split = <b>new</b> Ext.SplitBar(&quot;elementToDrag&quot;, &quot;elementToSize&quot;,
+                   Ext.SplitBar.HORIZONTAL, Ext.SplitBar.LEFT);
+split.setAdapter(<b>new</b> Ext.SplitBar.AbsoluteLayoutAdapter(&quot;container&quot;));
+split.minSize = 100;
+split.maxSize = 600;
+split.animate = true;
+split.on(<em>'moved'</em>, splitterMoved);
+&lt;/code&gt;&lt;/pre&gt;
+ * @constructor
+ * Create a <b>new</b> SplitBar
+ * @param {Mixed} dragElement The element to be dragged and act as the SplitBar.
+ * @param {Mixed} resizingElement The element to be resized based on where the SplitBar element is dragged
+ * @param {Number} orientation (optional) Either Ext.SplitBar.HORIZONTAL or Ext.SplitBar.VERTICAL. (Defaults to HORIZONTAL)
+ * @param {Number} placement (optional) Either Ext.SplitBar.LEFT or Ext.SplitBar.RIGHT <b>for</b> horizontal or  
+                        Ext.SplitBar.TOP or Ext.SplitBar.BOTTOM <b>for</b> vertical. (By <b>default</b>, <b>this</b> is determined automatically by the initial
+                        position of the SplitBar).
+ */</i>
+Ext.SplitBar = <b>function</b>(dragElement, resizingElement, orientation, placement, existingProxy){
+    
+    <i>/** @private */</i>
+    <b>this</b>.el = Ext.get(dragElement, true);
+    <b>this</b>.el.dom.unselectable = &quot;on&quot;;
+    <i>/** @private */</i>
+    <b>this</b>.resizingEl = Ext.get(resizingElement, true);
+
+    <i>/**
+     * @private
+     * The orientation of the split. Either Ext.SplitBar.HORIZONTAL or Ext.SplitBar.VERTICAL. (Defaults to HORIZONTAL)
+     * Note: If <b>this</b> is changed after creating the SplitBar, the placement property must be manually updated
+     * @type Number
+     */</i>
+    <b>this</b>.orientation = orientation || Ext.SplitBar.HORIZONTAL;
+    
+    <i>/**
+     * The minimum size of the resizing element. (Defaults to 0)
+     * @type Number
+     */</i>
+    <b>this</b>.minSize = 0;
+    
+    <i>/**
+     * The maximum size of the resizing element. (Defaults to 2000)
+     * @type Number
+     */</i>
+    <b>this</b>.maxSize = 2000;
+    
+    <i>/**
+     * Whether to animate the transition to the <b>new</b> size
+     * @type Boolean
+     */</i>
+    <b>this</b>.animate = false;
+    
+    <i>/**
+     * Whether to create a transparent shim that overlays the page when dragging, enables dragging across iframes.
+     * @type Boolean
+     */</i>
+    <b>this</b>.useShim = false;
+    
+    <i>/** @private */</i>
+    <b>this</b>.shim = null;
+    
+    <b>if</b>(!existingProxy){
+        <i>/** @private */</i>
+        <b>this</b>.proxy = Ext.SplitBar.createProxy(<b>this</b>.orientation);
+    }<b>else</b>{
+        <b>this</b>.proxy = Ext.get(existingProxy).dom;
+    }
+    <i>/** @private */</i>
+    <b>this</b>.dd = <b>new</b> Ext.dd.DDProxy(<b>this</b>.el.dom.id, &quot;XSplitBars&quot;, {dragElId : <b>this</b>.proxy.id});
+    
+    <i>/** @private */</i>
+    <b>this</b>.dd.b4StartDrag = <b>this</b>.onStartProxyDrag.createDelegate(<b>this</b>);
+    
+    <i>/** @private */</i>
+    <b>this</b>.dd.endDrag = <b>this</b>.onEndProxyDrag.createDelegate(<b>this</b>);
+    
+    <i>/** @private */</i>
+    <b>this</b>.dragSpecs = {};
+    
+    <i>/**
+     * @private The adapter to use to positon and resize elements
+     */</i>
+    <b>this</b>.adapter = <b>new</b> Ext.SplitBar.BasicLayoutAdapter();
+    <b>this</b>.adapter.init(<b>this</b>);
+    
+    <b>if</b>(this.orientation == Ext.SplitBar.HORIZONTAL){
+        <i>/** @private */</i>
+        <b>this</b>.placement = placement || (<b>this</b>.el.getX() &gt; <b>this</b>.resizingEl.getX() ? Ext.SplitBar.LEFT : Ext.SplitBar.RIGHT);
+        <b>this</b>.el.addClass(&quot;x-splitbar-h&quot;);
+    }<b>else</b>{
+        <i>/** @private */</i>
+        <b>this</b>.placement = placement || (<b>this</b>.el.getY() &gt; <b>this</b>.resizingEl.getY() ? Ext.SplitBar.TOP : Ext.SplitBar.BOTTOM);
+        <b>this</b>.el.addClass(&quot;x-splitbar-v&quot;);
+    }
+    
+    <b>this</b>.addEvents(
+        <i>/**
+         * @event resize
+         * Fires when the splitter is moved (alias <b>for</b> {@link #moved})
+         * @param {Ext.SplitBar} <b>this</b>
+         * @param {Number} newSize the <b>new</b> width or height
+         */</i>
+        &quot;resize&quot;,
+        <i>/**
+         * @event moved
+         * Fires when the splitter is moved
+         * @param {Ext.SplitBar} <b>this</b>
+         * @param {Number} newSize the <b>new</b> width or height
+         */</i>
+        &quot;moved&quot;,
+        <i>/**
+         * @event beforeresize
+         * Fires before the splitter is dragged
+         * @param {Ext.SplitBar} <b>this</b>
+         */</i>
+        &quot;beforeresize&quot;,
+
+        &quot;beforeapply&quot;
+    );
+
+    Ext.SplitBar.superclass.constructor.call(<b>this</b>);
+};
+
+Ext.extend(Ext.SplitBar, Ext.util.Observable, {
+    onStartProxyDrag : <b>function</b>(x, y){
+        <b>this</b>.fireEvent(&quot;beforeresize&quot;, <b>this</b>);
+        <b>this</b>.overlay =  Ext.DomHelper.append(document.body,  {cls: &quot;x-drag-overlay&quot;, html: &quot;&amp;#160;&quot;}, true);
+        <b>this</b>.overlay.unselectable();
+        <b>this</b>.overlay.setSize(Ext.lib.Dom.getViewWidth(true), Ext.lib.Dom.getViewHeight(true));
+        <b>this</b>.overlay.show();
+        Ext.get(<b>this</b>.proxy).setDisplayed(&quot;block&quot;);
+        <b>var</b> size = <b>this</b>.adapter.getElementSize(<b>this</b>);
+        <b>this</b>.activeMinSize = <b>this</b>.getMinimumSize();
+        <b>this</b>.activeMaxSize = <b>this</b>.getMaximumSize();
+        <b>var</b> c1 = size - <b>this</b>.activeMinSize;
+        <b>var</b> c2 = Math.max(<b>this</b>.activeMaxSize - size, 0);
+        <b>if</b>(this.orientation == Ext.SplitBar.HORIZONTAL){
+            <b>this</b>.dd.resetConstraints();
+            <b>this</b>.dd.setXConstraint(
+                <b>this</b>.placement == Ext.SplitBar.LEFT ? c1 : c2, 
+                <b>this</b>.placement == Ext.SplitBar.LEFT ? c2 : c1
+            );
+            <b>this</b>.dd.setYConstraint(0, 0);
+        }<b>else</b>{
+            <b>this</b>.dd.resetConstraints();
+            <b>this</b>.dd.setXConstraint(0, 0);
+            <b>this</b>.dd.setYConstraint(
+                <b>this</b>.placement == Ext.SplitBar.TOP ? c1 : c2, 
+                <b>this</b>.placement == Ext.SplitBar.TOP ? c2 : c1
+            );
+         }
+        <b>this</b>.dragSpecs.startSize = size;
+        <b>this</b>.dragSpecs.startPoint = [x, y];
+        Ext.dd.DDProxy.prototype.b4StartDrag.call(<b>this</b>.dd, x, y);
+    },
+    
+    <i>/** 
+     * @private Called after the drag operation by the DDProxy
+     */</i>
+    onEndProxyDrag : <b>function</b>(e){
+        Ext.get(<b>this</b>.proxy).setDisplayed(false);
+        <b>var</b> endPoint = Ext.lib.Event.getXY(e);
+        <b>if</b>(this.overlay){
+            Ext.destroy(<b>this</b>.overlay);
+            <b>delete</b> this.overlay;
+        }
+        <b>var</b> newSize;
+        <b>if</b>(this.orientation == Ext.SplitBar.HORIZONTAL){
+            newSize = <b>this</b>.dragSpecs.startSize + 
+                (<b>this</b>.placement == Ext.SplitBar.LEFT ?
+                    endPoint[0] - <b>this</b>.dragSpecs.startPoint[0] :
+                    <b>this</b>.dragSpecs.startPoint[0] - endPoint[0]
+                );
+        }<b>else</b>{
+            newSize = <b>this</b>.dragSpecs.startSize + 
+                (<b>this</b>.placement == Ext.SplitBar.TOP ?
+                    endPoint[1] - <b>this</b>.dragSpecs.startPoint[1] :
+                    <b>this</b>.dragSpecs.startPoint[1] - endPoint[1]
+                );
+        }
+        newSize = Math.min(Math.max(newSize, <b>this</b>.activeMinSize), <b>this</b>.activeMaxSize);
+        <b>if</b>(newSize != <b>this</b>.dragSpecs.startSize){
+            <b>if</b>(this.fireEvent(<em>'beforeapply'</em>, <b>this</b>, newSize) !== false){
+                <b>this</b>.adapter.setElementSize(<b>this</b>, newSize);
+                <b>this</b>.fireEvent(&quot;moved&quot;, <b>this</b>, newSize);
+                <b>this</b>.fireEvent(&quot;resize&quot;, <b>this</b>, newSize);
+            }
+        }
+    },
+    
+    <i>/**
+     * Get the adapter <b>this</b> SplitBar uses
+     * @<b>return</b> The adapter object
+     */</i>
+    getAdapter : <b>function</b>(){
+        <b>return</b> this.adapter;
+    },
+    
+    <i>/**
+     * Set the adapter <b>this</b> SplitBar uses
+     * @param {Object} adapter A SplitBar adapter object
+     */</i>
+    setAdapter : <b>function</b>(adapter){
+        <b>this</b>.adapter = adapter;
+        <b>this</b>.adapter.init(<b>this</b>);
+    },
+    
+    <i>/**
+     * Gets the minimum size <b>for</b> the resizing element
+     * @<b>return</b> {Number} The minimum size
+     */</i>
+    getMinimumSize : <b>function</b>(){
+        <b>return</b> this.minSize;
+    },
+    
+    <i>/**
+     * Sets the minimum size <b>for</b> the resizing element
+     * @param {Number} minSize The minimum size
+     */</i>
+    setMinimumSize : <b>function</b>(minSize){
+        <b>this</b>.minSize = minSize;
+    },
+    
+    <i>/**
+     * Gets the maximum size <b>for</b> the resizing element
+     * @<b>return</b> {Number} The maximum size
+     */</i>
+    getMaximumSize : <b>function</b>(){
+        <b>return</b> this.maxSize;
+    },
+    
+    <i>/**
+     * Sets the maximum size <b>for</b> the resizing element
+     * @param {Number} maxSize The maximum size
+     */</i>
+    setMaximumSize : <b>function</b>(maxSize){
+        <b>this</b>.maxSize = maxSize;
+    },
+    
+    <i>/**
+     * Sets the initialize size <b>for</b> the resizing element
+     * @param {Number} size The initial size
+     */</i>
+    setCurrentSize : <b>function</b>(size){
+        <b>var</b> oldAnimate = <b>this</b>.animate;
+        <b>this</b>.animate = false;
+        <b>this</b>.adapter.setElementSize(<b>this</b>, size);
+        <b>this</b>.animate = oldAnimate;
+    },
+    
+    <i>/**
+     * Destroy <b>this</b> splitbar. 
+     * @param {Boolean} removeEl True to remove the element
+     */</i>
+    destroy : <b>function</b>(removeEl){
+        <b>if</b>(this.shim){
+            <b>this</b>.shim.remove();
+        }
+        <b>this</b>.dd.unreg();
+        Ext.destroy(Ext.get(<b>this</b>.proxy));
+        <b>if</b>(removeEl){
+            <b>this</b>.el.remove();
+        }
+    }
+});
+
+<i>/**
+ * @private static Create our own proxy element element. So it will be the same same size on all browsers, we won't use borders. Instead we use a background color.
+ */</i>
+Ext.SplitBar.createProxy = <b>function</b>(dir){
+    <b>var</b> proxy = <b>new</b> Ext.Element(document.createElement(&quot;div&quot;));
+    proxy.unselectable();
+    <b>var</b> cls = <em>'x-splitbar-proxy'</em>;
+    proxy.addClass(cls + <em>' '</em> + (dir == Ext.SplitBar.HORIZONTAL ? cls +<em>'-h'</em> : cls + <em>'-v'</em>));
+    document.body.appendChild(proxy.dom);
+    <b>return</b> proxy.dom;
+};
+
+<i>/** 
+ * @class Ext.SplitBar.BasicLayoutAdapter
+ * Default Adapter. It assumes the splitter and resizing element are not positioned
+ * elements and only gets/sets the width of the element. Generally used <b>for</b> table based layouts.
+ */</i>
+Ext.SplitBar.BasicLayoutAdapter = <b>function</b>(){
+};
+
+Ext.SplitBar.BasicLayoutAdapter.prototype = {
+    <i>// <b>do</b> nothing <b>for</b> now</i>
+    init : <b>function</b>(s){
+    
+    },
+    <i>/**
+     * Called before drag operations to get the current size of the resizing element. 
+     * @param {Ext.SplitBar} s The SplitBar using <b>this</b> adapter
+     */</i>
+     getElementSize : <b>function</b>(s){
+        <b>if</b>(s.orientation == Ext.SplitBar.HORIZONTAL){
+            <b>return</b> s.resizingEl.getWidth();
+        }<b>else</b>{
+            <b>return</b> s.resizingEl.getHeight();
+        }
+    },
+    
+    <i>/**
+     * Called after drag operations to set the size of the resizing element.
+     * @param {Ext.SplitBar} s The SplitBar using <b>this</b> adapter
+     * @param {Number} newSize The <b>new</b> size to set
+     * @param {Function} onComplete A <b>function</b> to be invoked when resizing is complete
+     */</i>
+    setElementSize : <b>function</b>(s, newSize, onComplete){
+        <b>if</b>(s.orientation == Ext.SplitBar.HORIZONTAL){
+            <b>if</b>(!s.animate){
+                s.resizingEl.setWidth(newSize);
+                <b>if</b>(onComplete){
+                    onComplete(s, newSize);
+                }
+            }<b>else</b>{
+                s.resizingEl.setWidth(newSize, true, .1, onComplete, <em>'easeOut'</em>);
+            }
+        }<b>else</b>{
+            
+            <b>if</b>(!s.animate){
+                s.resizingEl.setHeight(newSize);
+                <b>if</b>(onComplete){
+                    onComplete(s, newSize);
+                }
+            }<b>else</b>{
+                s.resizingEl.setHeight(newSize, true, .1, onComplete, <em>'easeOut'</em>);
+            }
+        }
+    }
+};
+
+<i>/** 
+ *@class Ext.SplitBar.AbsoluteLayoutAdapter
+ * @extends Ext.SplitBar.BasicLayoutAdapter
+ * Adapter that  moves the splitter element to align <b>with</b> the resized sizing element. 
+ * Used <b>with</b> an absolute positioned SplitBar.
+ * @param {Mixed} container The container that wraps around the absolute positioned content. If it's
+ * document.body, make sure you assign an id to the body element.
+ */</i>
+Ext.SplitBar.AbsoluteLayoutAdapter = <b>function</b>(container){
+    <b>this</b>.basic = <b>new</b> Ext.SplitBar.BasicLayoutAdapter();
+    <b>this</b>.container = Ext.get(container);
+};
+
+Ext.SplitBar.AbsoluteLayoutAdapter.prototype = {
+    init : <b>function</b>(s){
+        <b>this</b>.basic.init(s);
+    },
+    
+    getElementSize : <b>function</b>(s){
+        <b>return</b> this.basic.getElementSize(s);
+    },
+    
+    setElementSize : <b>function</b>(s, newSize, onComplete){
+        <b>this</b>.basic.setElementSize(s, newSize, <b>this</b>.moveSplitter.createDelegate(<b>this</b>, [s]));
+    },
+    
+    moveSplitter : <b>function</b>(s){
+        <b>var</b> yes = Ext.SplitBar;
+        <b>switch</b>(s.placement){
+            <b>case</b> yes.LEFT:
+                s.el.setX(s.resizingEl.getRight());
+                <b>break</b>;
+            <b>case</b> yes.RIGHT:
+                s.el.setStyle(&quot;right&quot;, (<b>this</b>.container.getWidth() - s.resizingEl.getLeft()) + &quot;px&quot;);
+                <b>break</b>;
+            <b>case</b> yes.TOP:
+                s.el.setY(s.resizingEl.getBottom());
+                <b>break</b>;
+            <b>case</b> yes.BOTTOM:
+                s.el.setY(s.resizingEl.getTop() - s.el.getHeight());
+                <b>break</b>;
+        }
+    }
+};
+
+<i>/**
+ * Orientation constant - Create a vertical SplitBar
+ * @static
+ * @type Number
+ */</i>
+Ext.SplitBar.VERTICAL = 1;
+
+<i>/**
+ * Orientation constant - Create a horizontal SplitBar
+ * @static
+ * @type Number
+ */</i>
+Ext.SplitBar.HORIZONTAL = 2;
+
+<i>/**
+ * Placement constant - The resizing element is to the left of the splitter element
+ * @static
+ * @type Number
+ */</i>
+Ext.SplitBar.LEFT = 1;
+
+<i>/**
+ * Placement constant - The resizing element is to the right of the splitter element
+ * @static
+ * @type Number
+ */</i>
+Ext.SplitBar.RIGHT = 2;
+
+<i>/**
+ * Placement constant - The resizing element is positioned above the splitter element
+ * @static
+ * @type Number
+ */</i>
+Ext.SplitBar.TOP = 3;
+
+<i>/**
+ * Placement constant - The resizing element is positioned under splitter element
+ * @static
+ * @type Number
+ */</i>
+Ext.SplitBar.BOTTOM = 4;
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

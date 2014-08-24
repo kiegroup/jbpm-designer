@@ -1,0 +1,404 @@
+<html><head><title>StatusBar.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>StatusBar.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.StatusBar
+ * &lt;p&gt;Basic status bar component that can be used as the bottom toolbar of any {@link Ext.Panel}.  In addition to
+ * supporting the standard {@link Ext.Toolbar} interface <b>for</b> adding buttons, menus and other items, the StatusBar
+ * provides a greedy status element that can be aligned to either side and has convenient methods <b>for</b> setting the
+ * status text and icon.  You can also indicate that something is processing using the {@link #showBusy} method.&lt;/p&gt;
+ * &lt;p&gt;&lt;b&gt;Note:&lt;/b&gt; Although StatusBar supports xtype:<em>'statusbar'</em>, at <b>this</b> time Ext.Toolbar (the base class) does
+ * not support xtype.  For <b>this</b> reason, <b>if</b> you are adding Toolbar items into the StatusBar you must declare it
+ * using the &quot;<b>new</b> StatusBar()&quot; syntax <b>for</b> the items to render correctly.&lt;/p&gt; 
+ * &lt;pre&gt;&lt;code&gt;
+<b>new</b> Ext.Panel({
+    title: <em>'StatusBar'</em>,
+    <i>// etc.</i>
+    bbar: <b>new</b> Ext.StatusBar({
+        id: <em>'my-status'</em>,
+        
+        <i>// defaults to use when the status is cleared:</i>
+        defaultText: <em>'Default status text'</em>,
+        defaultIconCls: <em>'<b>default</b>-icon'</em>,
+        
+        <i>// values to set initially:</i>
+        text: <em>'Ready'</em>,
+        iconCls: <em>'ready-icon'</em>,
+        
+        <i>// any standard Toolbar items:</i>
+        items: [{
+            text: <em>'A Button'</em>
+        }, <em>'-'</em>, <em>'Plain Text'</em>]
+    })
+});
+
+<i>// Update the status bar later <b>in</b> code:</i>
+<b>var</b> sb = Ext.getCmp(<em>'my-status'</em>);
+sb.setStatus({
+    text: <em>'OK'</em>,
+    iconCls: <em>'ok-icon'</em>,
+    clear: true <i>// auto-clear after a set interval</i>
+});
+
+<i>// Set the status bar to show that something is processing:</i>
+sb.showBusy();
+
+<i>// processing....</i>
+ 
+sb.clearStatus(); <i>// once completeed</i>
+&lt;/code&gt;&lt;/pre&gt;
+ * @extends Ext.Toolbar
+ * @constructor
+ * Creates a <b>new</b> StatusBar
+ * @param {Object/Array} config A config object
+ */</i>
+Ext.StatusBar = Ext.extend(Ext.Toolbar, {
+    <i>/**
+     * @cfg {String} statusAlign
+     * The alignment of the status element within the overall StatusBar layout.  When the StatusBar is rendered,
+     * it creates an internal div containing the status text and icon.  Any additional Toolbar items added <b>in</b> the
+     * StatusBar's {@link #items} config, or added via {@link #add} or any of the supported add* methods, will be
+     * rendered, <b>in</b> added order, to the opposite side.  The status element is greedy, so it will automatically
+     * expand to take up all sapce left over by any other items.  Example usage:
+     * &lt;pre&gt;&lt;code&gt;
+<i>// Create a left-aligned status bar containing a button,</i>
+<i>// separator and text item that will be right-aligned (<b>default</b>):</i>
+<b>new</b> Ext.Panel({
+    title: <em>'StatusBar'</em>,
+    <i>// etc.</i>
+    bbar: <b>new</b> Ext.StatusBar({
+        defaultText: <em>'Default status text'</em>,
+        id: <em>'status-id'</em>,
+        items: [{
+            text: <em>'A Button'</em>
+        }, <em>'-'</em>, <em>'Plain Text'</em>]
+    })
+});
+
+<i>// By adding the statusAlign config, <b>this</b> will create the</i>
+<i>// exact same toolbar, except the status and toolbar item</i>
+<i>// layout will be reversed from the previous example:</i>
+<b>new</b> Ext.Panel({
+    title: <em>'StatusBar'</em>,
+    <i>// etc.</i>
+    bbar: <b>new</b> Ext.StatusBar({
+        defaultText: <em>'Default status text'</em>,
+        id: <em>'status-id'</em>,
+        statusAlign: <em>'right'</em>,
+        items: [{
+            text: <em>'A Button'</em>
+        }, <em>'-'</em>, <em>'Plain Text'</em>]
+    })
+});
+&lt;/code&gt;&lt;/pre&gt;
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} defaultText
+     * The <b>default</b> {@link #text} value.  This will be used anytime the status bar is cleared <b>with</b> the 
+     * &lt;tt&gt;useDefaults:true&lt;/tt&gt; option (defaults to <em>''</em>).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} defaultIconCls
+     * The <b>default</b> {@link #iconCls} value (see the iconCls docs <b>for</b> additional details about customizing the icon).  
+     * This will be used anytime the status bar is cleared <b>with</b> the &lt;tt&gt;useDefaults:true&lt;/tt&gt; option (defaults to <em>''</em>).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} text
+     * A string that will be rendered into the status element as the status message (defaults to <em>''</em>);
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} iconCls
+     * A CSS class that will be applied to the status element and is expected to provide a background image that will
+     * serve as the status bar icon (defaults to <em>''</em>).  The class is applied directly to the div that also contains the
+     * status text, so the rule should provide the appropriate padding on the div to make room <b>for</b> the image. 
+     * Example usage:&lt;pre&gt;&lt;code&gt;
+<i>// Example CSS rule:</i>
+.x-statusbar .x-status-custom {
+    padding-left: 25px;
+    background: transparent url(images/custom-icon.gif) no-repeat 3px 3px;
+}
+
+<i>// Initializing the status bar:</i>
+<b>var</b> sb = <b>new</b> Ext.StatusBar({
+    defaultIconCls: <em>'x-status-custom'</em>
+});
+
+<i>// Setting it <b>in</b> code:</i>
+sb.setStatus({
+    text: <em>'New status'</em>,
+    iconCls: <em>'x-status-custom'</em>
+});
+&lt;/code&gt;&lt;/pre&gt;
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} cls
+     * The base class applied to the containing element <b>for</b> this component on render (defaults to <em>'x-statusbar'</em>)
+     */</i>
+    cls : <em>'x-statusbar'</em>,
+    <i>/**
+     * @cfg {String} busyIconCls
+     * The <b>default</b> {@link #iconCls} applied when calling {@link #showBusy} (defaults to <em>'x-status-busy'</em>). It can be
+     * overridden at any time by passing the &lt;tt&gt;iconCls&lt;/tt&gt; argument into &lt;tt&gt;showBusy&lt;/tt&gt;. See the 
+     * iconCls docs <b>for</b> additional details about customizing the icon.
+     */</i>
+    busyIconCls : <em>'x-status-busy'</em>,
+    <i>/**
+     * @cfg {String} busyText
+     * The <b>default</b> {@link #text} applied when calling {@link #showBusy} (defaults to <em>'Loading...'</em>). It can be
+     * overridden at any time by passing the &lt;tt&gt;text&lt;/tt&gt; argument into &lt;tt&gt;showBusy&lt;/tt&gt;.
+     */</i>
+    busyText : <em>'Loading...'</em>,
+    <i>/**
+     * @cfg {Number} autoClear
+     * The number of milliseconds to wait after setting the status via {@link #setStatus} before automatically
+     * clearing the status text and icon (defaults to 5000).  Note that <b>this</b> only applies when passing the 
+     * &lt;tt&gt;clear&lt;/tt&gt; argument to setStatus since that is the only way to defer clearing the status.  This can
+     * be overridden by specifying a different &lt;tt&gt;wait&lt;/tt&gt; value <b>in</b> setStatus. Calls to {@link #clearStatus} 
+     * always clear the status bar immediately and ignore <b>this</b> value.
+     */</i>
+    autoClear : 5000,
+    
+    <i>// private</i>
+    activeThreadId : 0,
+    
+    <i>// private</i>
+    initComponent : <b>function</b>(){
+        <b>if</b>(this.statusAlign==<em>'right'</em>){
+            <b>this</b>.cls += <em>' x-status-right'</em>;
+        }
+        Ext.StatusBar.superclass.initComponent.call(<b>this</b>);
+    },
+    
+    <i>// private</i>
+    afterRender : <b>function</b>(){
+        Ext.StatusBar.superclass.afterRender.call(<b>this</b>);
+        
+        <b>var</b> right = <b>this</b>.statusAlign==<em>'right'</em>,
+            td = Ext.get(<b>this</b>.nextBlock());
+        
+        <b>if</b>(right){
+            <b>this</b>.tr.appendChild(td.dom);
+        }<b>else</b>{
+            td.insertBefore(<b>this</b>.tr.firstChild);
+        }
+        
+        <b>this</b>.statusEl = td.createChild({
+            cls: <em>'x-status-text '</em> + (<b>this</b>.iconCls || <b>this</b>.defaultIconCls || <em>''</em>),
+            html: <b>this</b>.text || <b>this</b>.defaultText || <em>''</em>
+        });
+        <b>this</b>.statusEl.unselectable();
+        
+        <b>this</b>.spacerEl = td.insertSibling({
+            tag: <em>'td'</em>,
+            style: <em>'width:100%'</em>,
+            cn: [{cls:<em>'ytb-spacer'</em>}]
+        }, right ? <em>'before'</em> : <em>'after'</em>);
+    },
+
+    <i>/**
+     * Sets the status {@link #text} and/or {@link #iconCls}. Also supports automatically clearing the 
+     * status that was set after a specified interval.
+     * @param {Object/String} config A config object specifying what status to set, or a string assumed 
+     * to be the status text (and all other options are defaulted as explained below). A config
+     * object containing any or all of the following properties can be passed:&lt;ul&gt;
+     * &lt;li&gt;&lt;tt&gt;text&lt;/tt&gt; {String} : (optional) The status text to display.  If not specified, any current 
+     * status text will remain unchanged.&lt;/li&gt;
+     * &lt;li&gt;&lt;tt&gt;iconCls&lt;/tt&gt; {String} : (optional) The CSS class used to customize the status icon (see 
+     * {@link #iconCls} <b>for</b> details). If not specified, any current iconCls will remain unchanged.&lt;/li&gt;
+     * &lt;li&gt;&lt;tt&gt;clear&lt;/tt&gt; {Boolean/Number/Object} : (optional) Allows you to set an internal callback that will 
+     * automatically clear the status text and iconCls after a specified amount of time has passed. If clear is not 
+     * specified, the <b>new</b> status will not be auto-cleared and will stay until updated again or cleared using 
+     * {@link #clearStatus}. If &lt;tt&gt;true&lt;/tt&gt; is passed, the status will be cleared using {@link #autoClear}, 
+     * {@link #defaultText} and {@link #defaultIconCls} via a fade out animation. If a numeric value is passed, 
+     * it will be used as the callback interval (<b>in</b> milliseconds), overriding the {@link #autoClear} value. 
+     * All other options will be defaulted as <b>with</b> the boolean option.  To customize any other options, 
+     * you can pass an object <b>in</b> the format:&lt;ul&gt;
+     *    &lt;li&gt;&lt;tt&gt;wait&lt;/tt&gt; {Number} : (optional) The number of milliseconds to wait before clearing 
+     *    (defaults to {@link #autoClear}).&lt;/li&gt;
+     *    &lt;li&gt;&lt;tt&gt;anim&lt;/tt&gt; {Number} : (optional) False to clear the status immediately once the callback 
+     *    executes (defaults to true which fades the status out).&lt;/li&gt;
+     *    &lt;li&gt;&lt;tt&gt;useDefaults&lt;/tt&gt; {Number} : (optional) False to completely clear the status text and iconCls
+     *    (defaults to true which uses {@link #defaultText} and {@link #defaultIconCls}).&lt;/li&gt;
+     * &lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;
+     * Example usage:&lt;pre&gt;&lt;code&gt;
+<i>// Simple call to update the text</i>
+statusBar.setStatus(<em>'New status'</em>);
+
+<i>// Set the status and icon, auto-clearing <b>with</b> default options:</i>
+statusBar.setStatus({
+    text: <em>'New status'</em>,
+    iconCls: <em>'x-status-custom'</em>,
+    clear: true
+});
+
+<i>// Auto-clear <b>with</b> custom options:</i>
+statusBar.setStatus({
+    text: <em>'New status'</em>,
+    iconCls: <em>'x-status-custom'</em>,
+    clear: {
+        wait: 8000,
+        anim: false,
+        useDefaults: false
+    }
+});
+&lt;/code&gt;&lt;/pre&gt;
+     * @<b>return</b> {Ext.StatusBar} <b>this</b>
+     */</i>
+    setStatus : <b>function</b>(o){
+        o = o || {};
+        
+        <b>if</b>(typeof o == <em>'string'</em>){
+            o = {text:o};
+        }
+        <b>if</b>(o.text !== undefined){
+            <b>this</b>.setText(o.text);
+        }
+        <b>if</b>(o.iconCls !== undefined){
+            <b>this</b>.setIcon(o.iconCls);
+        }
+        
+        <b>if</b>(o.clear){
+            <b>var</b> c = o.clear,
+                wait = <b>this</b>.autoClear,
+                defaults = {useDefaults: true, anim: true};
+            
+            <b>if</b>(typeof c == <em>'object'</em>){
+                c = Ext.applyIf(c, defaults);
+                <b>if</b>(c.wait){
+                    wait = c.wait;
+                }
+            }<b>else</b> if(<b>typeof</b> c == <em>'number'</em>){
+                wait = c;
+                c = defaults;
+            }<b>else</b> if(<b>typeof</b> c == <em>'boolean'</em>){
+                c = defaults;
+            }
+            
+            c.threadId = <b>this</b>.activeThreadId;
+            <b>this</b>.clearStatus.defer(wait, <b>this</b>, [c]);
+        }
+        <b>return</b> this;
+    },
+     
+    <i>/**
+     * Clears the status {@link #text} and {@link #iconCls}. Also supports clearing via an optional fade out animation.
+     * @param {Object} config (optional) A config object containing any or all of the following properties.  If <b>this</b> 
+     * object is not specified the status will be cleared using the defaults below:&lt;ul&gt;
+     * &lt;li&gt;&lt;tt&gt;anim&lt;/tt&gt; {Boolean} : (optional) True to clear the status by fading out the status element (defaults
+     * to false which clears immediately).&lt;/li&gt;
+     * &lt;li&gt;&lt;tt&gt;useDefaults&lt;/tt&gt; {Boolean} : (optional) True to reset the text and icon using {@link #defaultText} and 
+     * {@link #defaultIconCls} (defaults to false which sets the text to <em>''</em> and removes any existing icon class).&lt;/li&gt;
+     * &lt;/ul&gt;
+     * @<b>return</b> {Ext.StatusBar} <b>this</b>
+     */</i>
+    clearStatus : <b>function</b>(o){
+        o = o || {};
+        
+        <b>if</b>(o.threadId &amp;&amp; o.threadId !== <b>this</b>.activeThreadId){
+            <i>// <b>this</b> means the current call was made internally, but a newer</i>
+            <i>// thread has set a message since <b>this</b> call was deferred.  Since</i>
+            <i>// we don't want to overwrite a newer message just ignore.</i>
+            <b>return</b> this;
+        }
+        
+        <b>var</b> text = o.useDefaults ? <b>this</b>.defaultText : <em>''</em>,
+            iconCls = o.useDefaults ? (<b>this</b>.defaultIconCls ? <b>this</b>.defaultIconCls : <em>''</em>) : <em>''</em>;
+            
+        <b>if</b>(o.anim){
+            <b>this</b>.statusEl.fadeOut({
+                remove: false,
+                useDisplay: true,
+                scope: <b>this</b>,
+                callback: <b>function</b>(){
+                    <b>this</b>.setStatus({
+	                    text: text, 
+	                    iconCls: iconCls
+	                });
+                    <b>this</b>.statusEl.show();
+                }
+            });
+        }<b>else</b>{
+            <i>// hide/show the el to avoid jumpy text or icon</i>
+            <b>this</b>.statusEl.hide();
+	        <b>this</b>.setStatus({
+	            text: text,
+	            iconCls: iconCls
+	        });
+            <b>this</b>.statusEl.show();
+        }
+        <b>return</b> this;
+    },
+    
+    <i>/**
+     * Convenience method <b>for</b> setting the status text directly.  For more flexible options see {@link #setStatus}.
+     * @param {String} text (optional) The text to set (defaults to <em>''</em>)
+     * @<b>return</b> {Ext.StatusBar} <b>this</b>
+     */</i>
+    setText : <b>function</b>(text){
+        <b>this</b>.activeThreadId++;
+        <b>this</b>.text = text || <em>''</em>;
+        <b>if</b>(this.rendered){
+            <b>this</b>.statusEl.update(<b>this</b>.text);
+        }
+        <b>return</b> this;
+    },
+    
+    <i>/**
+     * Returns the current status text.
+     * @<b>return</b> {String} The status text
+     */</i>
+    getText : <b>function</b>(){
+        <b>return</b> this.text;
+    },
+
+    <i>/**
+     * Convenience method <b>for</b> setting the status icon directly.  For more flexible options see {@link #setStatus}.
+     * See {@link #iconCls} <b>for</b> complete details about customizing the icon.
+     * @param {String} iconCls (optional) The icon class to set (defaults to <em>''</em>, and any current icon class is removed)
+     * @<b>return</b> {Ext.StatusBar} <b>this</b>
+     */</i>
+    setIcon : <b>function</b>(cls){
+        <b>this</b>.activeThreadId++;
+        cls = cls || <em>''</em>;
+        
+        <b>if</b>(this.rendered){
+	        <b>if</b>(this.currIconCls){
+	            <b>this</b>.statusEl.removeClass(<b>this</b>.currIconCls);
+	            <b>this</b>.currIconCls = null;
+	        }
+	        <b>if</b>(cls.length &gt; 0){
+	            <b>this</b>.statusEl.addClass(cls);
+	            <b>this</b>.currIconCls = cls;
+	        }
+        }<b>else</b>{
+            <b>this</b>.currIconCls = cls;
+        }
+        <b>return</b> this;
+    },
+    
+    <i>/**
+     * Convenience method <b>for</b> setting the status text and icon to special values that are pre-configured to indicate
+     * a &quot;busy&quot; state, usually <b>for</b> loading or processing activities.
+     * @param {Object/String} config (optional) A config object <b>in</b> the same format supported by {@link #setStatus}, or a
+     * string to use as the status text (<b>in</b> which <b>case</b> all other options <b>for</b> setStatus will be defaulted).  Use the 
+     * &lt;tt&gt;text&lt;/tt&gt; and/or &lt;tt&gt;iconCls&lt;/tt&gt; properties on the config to override the <b>default</b> {@link #busyText} 
+     * and {@link #busyIconCls} settings. If the config argument is not specified, {@link #busyText} and 
+     * {@link #busyIconCls} will be used <b>in</b> conjunction <b>with</b> all of the <b>default</b> options <b>for</b> {@link #setStatus}.
+     * @<b>return</b> {Ext.StatusBar} <b>this</b>
+     */</i>
+    showBusy : <b>function</b>(o){
+        <b>if</b>(typeof o == <em>'string'</em>){
+            o = {text:o};
+        }
+        o = Ext.applyIf(o || {}, {
+            text: <b>this</b>.busyText,
+            iconCls: <b>this</b>.busyIconCls
+        });
+        <b>return</b> this.setStatus(o);
+    }
+});
+Ext.reg(<em>'statusbar'</em>, Ext.StatusBar);
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

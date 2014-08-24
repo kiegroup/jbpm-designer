@@ -1,0 +1,174 @@
+<html><head><title>ext-lang-sv_SE.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ext-lang-sv_SE.js</h1><pre class="highlighted"><code><i>/**
+ * Swedish translation (utf8-encoding)
+ * By Erik Andersson, Monator Technologies
+ * 24 April 2007
+ * Changed by Cariad, 29 July 2007
+ */</i>
+
+Ext.UpdateManager.defaults.indicatorText = <em>'&lt;div class=&quot;loading-indicator&quot;&gt;Laddar...&lt;/div&gt;'</em>;
+
+<b>if</b>(Ext.View){
+   Ext.View.prototype.emptyText = &quot;&quot;;
+}
+
+<b>if</b>(Ext.grid.GridPanel){
+   Ext.grid.GridPanel.prototype.ddText = &quot;{0} markerade rad(er)&quot;;
+}
+
+<b>if</b>(Ext.TabPanelItem){
+   Ext.TabPanelItem.prototype.closeText = &quot;St&Atilde;&curren;ng denna flik&quot;;
+}
+
+<b>if</b>(Ext.form.Field){
+   Ext.form.Field.prototype.invalidText = &quot;V&Atilde;&curren;rdet i detta f&Atilde;&curren;lt &Atilde;&curren;r inte till&Atilde;&yen;tet&quot;;
+}
+
+<b>if</b>(Ext.LoadMask){
+   Ext.LoadMask.prototype.msg = &quot;Laddar...&quot;;
+}
+
+Date.monthNames = [
+   &quot;januari&quot;,
+   &quot;februari&quot;,
+   &quot;mars&quot;,
+   &quot;april&quot;,
+   &quot;maj&quot;,
+   &quot;juni&quot;,
+   &quot;juli&quot;,
+   &quot;augusti&quot;,
+   &quot;september&quot;,
+   &quot;oktober&quot;,
+   &quot;november&quot;,
+   &quot;december&quot;
+];
+
+Date.dayNames = [
+   &quot;s&Atilde;&para;ndag&quot;,
+   &quot;m&Atilde;&yen;ndag&quot;,
+   &quot;tisdag&quot;,
+   &quot;onsdag&quot;,
+   &quot;torsdag&quot;,
+   &quot;fredag&quot;,
+   &quot;l&Atilde;&para;rdag&quot;
+];
+
+<b>if</b>(Ext.MessageBox){
+   Ext.MessageBox.buttonText = {
+      ok     : &quot;OK&quot;,
+      cancel : &quot;Avbryt&quot;,
+      yes    : &quot;Ja&quot;,
+      no     : &quot;Nej&quot;
+   };
+}
+
+<b>if</b>(Ext.util.Format){
+   Ext.util.Format.date = <b>function</b>(v, format){
+      <b>if</b>(!v) <b>return</b> &quot;&quot;;
+      <b>if</b>(!(v instanceof Date)) v = <b>new</b> Date(Date.parse(v));
+      <b>return</b> v.dateFormat(format || &quot;Y-m-d&quot;);
+   };
+}
+
+<b>if</b>(Ext.DatePicker){
+   Ext.apply(Ext.DatePicker.prototype, {
+      todayText         : &quot;Idag&quot;,
+      minText           : &quot;Detta datum intr&Atilde;&curren;ffar f&Atilde;&para;re det tidigast till&Atilde;&yen;tna&quot;,
+      maxText           : &quot;Detta datum intr&Atilde;&curren;ffar efter det senast till&Atilde;&yen;tna&quot;,
+      disabledDaysText  : &quot;&quot;,
+      disabledDatesText : &quot;&quot;,
+      monthNames	: Date.monthNames,
+      dayNames		: Date.dayNames,
+      nextText          : <em>'N&Atilde;&curren;sta m&Atilde;&yen;nad (Ctrl + h&Atilde;&para;gerpil)'</em>,
+      prevText          : <em>'F&Atilde;&para;reg&Atilde;&yen;ende m&Atilde;&yen;nad (Ctrl + v&Atilde;&curren;nsterpil)'</em>,
+      monthYearText     : <em>'V&Atilde;&curren;lj en m&Atilde;&yen;nad (Ctrl + upp&Atilde;&yen;tpil/ner&Atilde;&yen;tpil f&Atilde;&para;r att &Atilde;&curren;ndra &Atilde;&yen;rtal)'</em>,
+      todayTip          : &quot;{0} (mellanslag)&quot;,
+      format            : &quot;Y-m-d&quot;,
+      startDay          : 1
+   });
+}
+
+<b>if</b>(Ext.PagingToolbar){
+   Ext.apply(Ext.PagingToolbar.prototype, {
+      beforePageText : &quot;Sida&quot;,
+      afterPageText  : &quot;av {0}&quot;,
+      firstText      : &quot;F&Atilde;&para;rsta sidan&quot;,
+      prevText       : &quot;F&Atilde;&para;reg&Atilde;&yen;ende sida&quot;,
+      nextText       : &quot;N&Atilde;&curren;sta sida&quot;,
+      lastText       : &quot;Sista sidan&quot;,
+      refreshText    : &quot;Uppdatera&quot;,
+      displayMsg     : &quot;Visar {0} - {1} av {2}&quot;,
+      emptyMsg       : <em>'Det finns ingen data att visa'</em>
+   });
+}
+
+<b>if</b>(Ext.form.TextField){
+   Ext.apply(Ext.form.TextField.prototype, {
+      minLengthText : &quot;Minsta till&Atilde;&yen;tna l&Atilde;&curren;ngd f&Atilde;&para;r detta f&Atilde;&curren;lt &Atilde;&curren;r {0}&quot;,
+      maxLengthText : &quot;St&Atilde;&para;rsta till&Atilde;&yen;tna l&Atilde;&curren;ngd f&Atilde;&para;r detta f&Atilde;&curren;lt &Atilde;&curren;r {0}&quot;,
+      blankText     : &quot;Detta f&Atilde;&curren;lt &Atilde;&curren;r obligatoriskt&quot;,
+      regexText     : &quot;&quot;,
+      emptyText     : null
+   });
+}
+
+<b>if</b>(Ext.form.NumberField){
+   Ext.apply(Ext.form.NumberField.prototype, {
+      minText : &quot;Minsta till&Atilde;&yen;tna v&Atilde;&curren;rde f&Atilde;&para;r detta f&Atilde;&curren;lt &Atilde;&curren;r {0}&quot;,
+      maxText : &quot;St&Atilde;&para;rsta till&Atilde;&yen;tna v&Atilde;&curren;rde f&Atilde;&para;r detta f&Atilde;&curren;lt &Atilde;&curren;r {0}&quot;,
+      nanText : &quot;{0} &Atilde;&curren;r inte ett till&Atilde;&yen;tet nummer&quot;
+   });
+}
+
+<b>if</b>(Ext.form.DateField){
+   Ext.apply(Ext.form.DateField.prototype, {
+      disabledDaysText  : &quot;Inaktiverad&quot;,
+      disabledDatesText : &quot;Inaktiverad&quot;,
+      minText           : &quot;Datumet i detta f&Atilde;&curren;lt m&Atilde;&yen;ste intr&Atilde;&curren;ffa efter {0}&quot;,
+      maxText           : &quot;Datumet i detta f&Atilde;&curren;lt m&Atilde;&yen;ste intr&Atilde;&curren;ffa f&Atilde;&para;re {0}&quot;,
+      invalidText       : &quot;{0} &Atilde;&curren;r inte ett till&Atilde;&yen;tet datum - datum ska anges i formatet {1}&quot;,
+      format            : &quot;Y-m-d&quot;
+   });
+}
+
+<b>if</b>(Ext.form.ComboBox){
+   Ext.apply(Ext.form.ComboBox.prototype, {
+      loadingText       : &quot;Laddar...&quot;,
+      valueNotFoundText : undefined
+   });
+}
+
+<b>if</b>(Ext.form.VTypes){
+   Ext.apply(Ext.form.VTypes, {
+      emailText    : <em>'Detta f&Atilde;&curren;lt ska inneh&Atilde;&yen;lla en e-post adress i formatet &quot;anv&Atilde;&curren;ndare@dom&Atilde;&curren;n.se&quot;'</em>,
+      urlText      : <em>'Detta f&Atilde;&curren;lt ska inneh&Atilde;&yen;lla en l&Atilde;&curren;nk (URL) i formatet &quot;http:/'</em>+<em>'/www.dom&Atilde;&curren;n.se&quot;'</em>,
+      alphaText    : <em>'Detta f&Atilde;&curren;lt f&Atilde;&yen;r bara inneh&Atilde;&yen;lla bokst&Atilde;&curren;ver och &quot;_&quot;'</em>,
+      alphanumText : <em>'Detta f&Atilde;&curren;lt f&Atilde;&yen;r bara inneh&Atilde;&yen;lla bokst&Atilde;&curren;ver, nummer och &quot;_&quot;'</em>
+   });
+}
+
+<b>if</b>(Ext.grid.GridView){
+   Ext.apply(Ext.grid.GridView.prototype, {
+      sortAscText  : &quot;Sortera stigande&quot;,
+      sortDescText : &quot;Sortera fallande&quot;,
+      lockText     : &quot;L&Atilde;&yen;s kolumn&quot;,
+      unlockText   : &quot;L&Atilde;&yen;s upp kolumn&quot;,
+      columnsText  : &quot;Kolumner&quot;
+   });
+}
+
+<b>if</b>(Ext.grid.PropertyColumnModel){
+   Ext.apply(Ext.grid.PropertyColumnModel.prototype, {
+      nameText   : &quot;Namn&quot;,
+      valueText  : &quot;V&Atilde;&curren;rde&quot;,
+      dateFormat : &quot;Y-m-d&quot;
+   });
+}
+
+<b>if</b>(Ext.layout.BorderLayout &amp;&amp; Ext.layout.BorderLayout.SplitRegion){
+   Ext.apply(Ext.layout.BorderLayout.SplitRegion.prototype, {
+      splitTip            : &quot;Dra f&Atilde;&para;r att &Atilde;&curren;ndra storleken.&quot;,
+      collapsibleSplitTip : &quot;Dra f&Atilde;&para;r att &Atilde;&curren;ndra storleken. Dubbelklicka f&Atilde;&para;r att g&Atilde;&para;mma.&quot;
+   });
+}
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

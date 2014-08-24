@@ -1,0 +1,300 @@
+<html><head><title>CheckboxGroup.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>CheckboxGroup.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.form.CheckboxGroup
+ * @extends Ext.form.Field
+ * A grouping container <b>for</b> {@link Ext.form.Checkbox} controls.
+ * @constructor
+ * Creates a <b>new</b> CheckboxGroup
+ * @param {Object} config Configuration options
+ */</i>
+Ext.form.CheckboxGroup = Ext.extend(Ext.form.Field, {
+    <i>/**
+     * @cfg {Array} items An Array of {@link Ext.form.Checkbox Checkbox}es or Checkbox config objects
+     * to arrange <b>in</b> the group.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String/Number/Array} columns Specifies the number of columns to use when displaying grouped
+     * checkbox/radio controls using automatic layout.  This config can take several types of values:
+     * &lt;ul&gt;&lt;li&gt;&lt;b&gt;<em>'auto'</em>&lt;/b&gt; : &lt;p class=&quot;sub-desc&quot;&gt;The controls will be rendered one per column on one row and the width
+     * of each column will be evenly distributed based on the width of the overall field container. This is the <b>default</b>.&lt;/p&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;Number&lt;/b&gt; : &lt;p class=&quot;sub-desc&quot;&gt;If you specific a number (e.g., 3) that number of columns will be 
+     * created and the contained controls will be automatically distributed based on the value of {@link #vertical}.&lt;/p&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;Array&lt;/b&gt; : Object&lt;p class=&quot;sub-desc&quot;&gt;You can also specify an array of column widths, mixing integer
+     * (fixed width) and float (percentage width) values as needed (e.g., [100, .25, .75]). Any integer values will
+     * be rendered first, then any float values will be calculated as a percentage of the remaining space. Float
+     * values <b>do</b> not have to add up to 1 (100%) although <b>if</b> you want the controls to take up the entire field
+     * container you should <b>do</b> so.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;
+     */</i>
+    columns : <em>'auto'</em>,
+    <i>/**
+     * @cfg {Boolean} vertical True to distribute contained controls across columns, completely filling each column 
+     * top to bottom before starting on the next column.  The number of controls <b>in</b> each column will be automatically
+     * calculated to keep columns as even as possible.  The <b>default</b> value is false, so that controls will be added
+     * to columns one at a time, completely filling each row left to right before starting on the next row.
+     */</i>
+    vertical : false,
+    <i>/**
+     * @cfg {Boolean} allowBlank False to validate that at least one item <b>in</b> the group is checked (defaults to true).
+     * If no items are selected at validation time, {@link @blankText} will be used as the error text.
+     */</i>
+    allowBlank : true,
+    <i>/**
+     * @cfg {String} blankText Error text to display <b>if</b> the {@link #allowBlank} validation fails (defaults to &quot;You must 
+     * select at least one item <b>in</b> this group&quot;)
+     */</i>
+    blankText : &quot;You must select at least one item <b>in</b> this group&quot;,
+    
+    <i>// private</i>
+    defaultType : <em>'checkbox'</em>,
+    
+    <i>// private</i>
+    groupCls: <em>'x-form-check-group'</em>,
+    
+    <i>// private</i>
+    initComponent: <b>function</b>(){
+        <b>this</b>.addEvents(
+            <i>/**
+             * @event change
+             * Fires when the state of a child checkbox changes.
+             * @param {Ext.form.CheckboxGroup} <b>this</b>
+             * @param {Array} checked An array containing the checked boxes.
+             */</i>
+            <em>'change'</em>
+        );   
+        Ext.form.CheckboxGroup.superclass.initComponent.call(<b>this</b>);
+    },
+    
+    <i>// private</i>
+    onRender : <b>function</b>(ct, position){
+        <b>if</b>(!<b>this</b>.el){
+            <b>var</b> panelCfg = {
+                cls: <b>this</b>.groupCls,
+                layout: <em>'column'</em>,
+                border: false,
+                renderTo: ct
+            };
+            <b>var</b> colCfg = {
+                defaultType: <b>this</b>.defaultType,
+                layout: <em>'form'</em>,
+                border: false,
+                defaults: {
+                    hideLabel: true,
+                    anchor: <em>'100%'</em>
+                }
+            }
+            
+            <b>if</b>(this.items[0].items){
+                
+                <i>// The container has standard ColumnLayout configs, so pass them <b>in</b> directly</i>
+                
+                Ext.apply(panelCfg, {
+                    layoutConfig: {columns: <b>this</b>.items.length},
+                    defaults: <b>this</b>.defaults,
+                    items: <b>this</b>.items
+                })
+                <b>for</b>(var i=0, len=<b>this</b>.items.length; i&lt;len; i++){
+                    Ext.applyIf(<b>this</b>.items[i], colCfg);
+                };
+                
+            }<b>else</b>{
+                
+                <i>// The container has field item configs, so we have to generate the column</i>
+                <i>// panels first then move the items into the columns as needed.</i>
+                
+                <b>var</b> numCols, cols = [];
+                
+                <b>if</b>(typeof <b>this</b>.columns == <em>'string'</em>){ <i>// <em>'auto'</em> so create a col per item</i>
+                    <b>this</b>.columns = <b>this</b>.items.length;
+                }
+                <b>if</b>(!Ext.isArray(<b>this</b>.columns)){
+                    <b>var</b> cs = [];
+                    <b>for</b>(var i=0; i&lt;<b>this</b>.columns; i++){
+                        cs.push((100/<b>this</b>.columns)*.01); <i>// distribute by even %</i>
+                    }
+                    <b>this</b>.columns = cs;
+                }
+                
+                numCols = <b>this</b>.columns.length;
+                
+                <i>// Generate the column configs <b>with</b> the correct width setting</i>
+                <b>for</b>(var i=0; i&lt;numCols; i++){
+                    <b>var</b> cc = Ext.apply({items:[]}, colCfg);
+                    cc[<b>this</b>.columns[i] &lt;= 1 ? <em>'columnWidth'</em> : <em>'width'</em>] = <b>this</b>.columns[i];
+                    <b>if</b>(this.defaults){
+                        cc.defaults = Ext.apply(cc.defaults || {}, <b>this</b>.defaults)
+                    }
+                    cols.push(cc);
+                };
+                
+                <i>// Distribute the original items into the columns</i>
+                <b>if</b>(this.vertical){
+                    <b>var</b> rows = Math.ceil(<b>this</b>.items.length / numCols), ri = 0;
+                    <b>for</b>(var i=0, len=<b>this</b>.items.length; i&lt;len; i++){
+                        <b>if</b>(i&gt;0 &amp;&amp; i%rows==0){
+                            ri++;
+                        }
+                        <b>if</b>(this.items[i].fieldLabel){
+                            <b>this</b>.items[i].hideLabel = false;
+                        }
+                        cols[ri].items.push(<b>this</b>.items[i]);
+                    };
+                }<b>else</b>{
+                    <b>for</b>(var i=0, len=<b>this</b>.items.length; i&lt;len; i++){
+                        <b>var</b> ci = i % numCols;
+                        <b>if</b>(this.items[i].fieldLabel){
+                            <b>this</b>.items[i].hideLabel = false;
+                        }
+                        cols[ci].items.push(<b>this</b>.items[i]);
+                    };
+                }
+                
+                Ext.apply(panelCfg, {
+                    layoutConfig: {columns: numCols},
+                    items: cols
+                });
+            }
+            
+            <b>this</b>.panel = <b>new</b> Ext.Panel(panelCfg);
+            <b>this</b>.panel.ownerCt = <b>this</b>;
+            <b>this</b>.el = <b>this</b>.panel.getEl();
+            
+            <b>if</b>(this.forId &amp;&amp; <b>this</b>.itemCls){
+                <b>var</b> l = <b>this</b>.el.up(<b>this</b>.itemCls).child(<em>'label'</em>, true);
+                <b>if</b>(l){
+                    l.setAttribute(<em>'htmlFor'</em>, <b>this</b>.forId);
+                }
+            }
+            
+            <b>var</b> fields = <b>this</b>.panel.findBy(<b>function</b>(c){
+                <b>return</b> c.isFormField;
+            }, <b>this</b>);
+            
+            <b>this</b>.items = <b>new</b> Ext.util.MixedCollection();
+            <b>this</b>.items.addAll(fields);
+        }
+        Ext.form.CheckboxGroup.superclass.onRender.call(<b>this</b>, ct, position);
+    },
+    
+    afterRender : <b>function</b>(){
+        Ext.form.CheckboxGroup.superclass.afterRender.call(<b>this</b>);
+        <b>this</b>.items.each(<b>function</b>(item){
+            item.on(<em>'check'</em>, <b>this</b>.fireChecked, <b>this</b>);
+        }, <b>this</b>);
+    },
+    
+    <i>// private</i>
+    fireChecked: <b>function</b>(){
+        <b>var</b> arr = [];
+        <b>this</b>.items.each(<b>function</b>(item){
+            <b>if</b>(item.checked){
+                arr.push(item);
+            }
+        });
+        <b>this</b>.fireEvent(<em>'change'</em>, <b>this</b>, arr);
+    },
+    
+    <i>// private</i>
+    validateValue : <b>function</b>(value){
+        <b>if</b>(!<b>this</b>.allowBlank){
+            <b>var</b> blank = true;
+            <b>this</b>.items.each(<b>function</b>(f){
+                <b>if</b>(f.checked){
+                    <b>return</b> blank = false;
+                }
+            }, <b>this</b>);
+            <b>if</b>(blank){
+                <b>this</b>.markInvalid(<b>this</b>.blankText);
+                <b>return</b> false;
+            }
+        }
+        <b>return</b> true;
+    },
+    
+    <i>// private</i>
+    onDestroy: <b>function</b>() {
+        Ext.destroy(<b>this</b>.panel);
+        Ext.form.CheckboxGroup.superclass.onDestroy.call(<b>this</b>);
+    },
+    
+    <i>// private</i>
+    onDisable : <b>function</b>(){
+        <b>this</b>.items.each(<b>function</b>(item){
+            item.disable();
+        })
+    },
+
+    <i>// private</i>
+    onEnable : <b>function</b>(){
+        <b>this</b>.items.each(<b>function</b>(item){
+            item.enable();
+        })
+    },
+    
+    isDirty: <b>function</b>(){
+        <i>//override the behaviour to check sub items.</i>
+        <b>if</b> (<b>this</b>.disabled || !<b>this</b>.rendered) {
+            <b>return</b> false;
+        }
+
+        <b>var</b> dirty = false;
+        <b>this</b>.items.each(<b>function</b>(item){
+            <b>if</b>(item.isDirty()){
+                dirty = true;
+                <b>return</b> false;
+            }
+        });
+        <b>return</b> dirty;
+    },
+    
+    <i>// private</i>
+    onResize : <b>function</b>(w, h){
+        <b>this</b>.panel.setSize(w, h);
+        <b>this</b>.panel.doLayout();
+    },
+    
+    <i>// inherit docs from Field</i>
+    reset : <b>function</b>(){
+        Ext.form.CheckboxGroup.superclass.reset.call(<b>this</b>);
+        <b>this</b>.items.each(<b>function</b>(c){
+            <b>if</b>(c.reset){
+                c.reset();
+            }
+        }, <b>this</b>);
+    },
+    
+    <i>/**
+     * @cfg {String} name
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @method initValue
+     * @hide
+     */</i>
+    initValue : Ext.emptyFn,
+    <i>/**
+     * @method getValue
+     * @hide
+     */</i>
+    getValue : Ext.emptyFn,
+    <i>/**
+     * @method getRawValue
+     * @hide
+     */</i>
+    getRawValue : Ext.emptyFn,
+    <i>/**
+     * @method setValue
+     * @hide
+     */</i>
+    setValue : Ext.emptyFn,
+    <i>/**
+     * @method setRawValue
+     * @hide
+     */</i>
+    setRawValue : Ext.emptyFn
+    
+});
+
+Ext.reg(<em>'checkboxgroup'</em>, Ext.form.CheckboxGroup);
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

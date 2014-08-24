@@ -1,0 +1,141 @@
+<html><head><title>Viewport.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>Viewport.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.Viewport
+ * @extends Ext.Container
+ * A specialized container representing the viewable application area (the browser viewport).
+ * &lt;p&gt; The Viewport renders itself to the document body, and automatically sizes itself to the size of
+ * the browser viewport and manages window resizing. There may only be one Viewport created
+ * <b>in</b> a page. Inner layouts are available by virtue of the fact that all {@link Ext.Panel Panel}s
+ * added to the Viewport, either through its {@link #items}, or through the items, or the {@link #add}
+ * method of any of its child Panels may themselves have a layout.&lt;/p&gt;
+ * &lt;p&gt;The Viewport does not provide scrolling, so child Panels within the Viewport should provide
+ * <b>for</b> scrolling <b>if</b> needed using the {@link #autoScroll} config.&lt;/p&gt;
+ * Example showing a classic application border layout :&lt;pre&gt;&lt;code&gt;
+<b>new</b> Ext.Viewport({
+    layout: <em>'border'</em>,
+    items: [{
+        region: <em>'north'</em>,
+        html: <em>'&amp;lt;h1 class=&quot;x-panel-header&quot;&gt;Page Title&amp;lt;/h1&gt;'</em>,
+        autoHeight: true,
+        border: false,
+        margins: <em>'0 0 5 0'</em>
+    }, {
+        region: <em>'west'</em>,
+        collapsible: true,
+        title: <em>'Navigation'</em>,
+        xtype: <em>'treepanel'</em>,
+        width: 200,
+        autoScroll: true,
+        split: true,
+        loader: <b>new</b> Ext.tree.TreeLoader(),
+        root: <b>new</b> Ext.tree.AsyncTreeNode({
+            expanded: true,
+            children: [{
+                text: <em>'Menu Option 1'</em>,
+                leaf: true
+            }, {
+                text: <em>'Menu Option 2'</em>,
+                leaf: true
+            }, {
+                text: <em>'Menu Option 3'</em>,
+                leaf: true
+            }]
+        }),
+        rootVisible: false,
+        listeners: {
+            click: <b>function</b>(n) {
+                Ext.Msg.alert(<em>'Navigation Tree Click'</em>, <em>'You clicked: &quot;'</em> + n.attributes.text + <em>'&quot;'</em>);
+            }
+        }
+    }, {
+        region: <em>'center'</em>,
+        xtype: <em>'tabpanel'</em>,
+        items: {
+            title: <em>'Default Tab'</em>,
+            html: <em>'The first tab\'</em>s content. Others may be added dynamically'
+        }
+    }, {
+        region: <em>'south'</em>,
+        title: <em>'Information'</em>,
+        collapsible: true,
+        html: <em>'Information goes here'</em>,
+        split: true,
+        height: 100,
+        minHeight: 100
+    }]
+});
+&lt;/code&gt;&lt;/pre&gt;
+ * @constructor
+ * Create a <b>new</b> Viewport
+ * @param {Object} config The config object
+ */</i>
+Ext.Viewport = Ext.extend(Ext.Container, {
+	<i>/*
+	 * Privatize config options which, <b>if</b> used, would interfere <b>with</b> the
+	 * correct operation of the Viewport as the sole manager of the
+	 * layout of the document body.
+	 */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Mixed} applyTo @hide
+	 */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} allowDomMove @hide
+	 */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} hideParent @hide
+	 */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Mixed} renderTo @hide
+	 */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} hideParent @hide
+	 */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Number} height @hide
+	 */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Number} width @hide
+	 */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} autoHeight @hide
+	 */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} autoWidth @hide
+	 */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} deferHeight @hide
+	 */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} monitorResize @hide
+	 */</i>
+    initComponent : <b>function</b>() {
+        Ext.Viewport.superclass.initComponent.call(<b>this</b>);
+        document.getElementsByTagName(<em>'html'</em>)[0].className += <em>' x-viewport'</em>;
+        <b>this</b>.el = Ext.getBody();
+        <b>this</b>.el.setHeight = Ext.emptyFn;
+        <b>this</b>.el.setWidth = Ext.emptyFn;
+        <b>this</b>.el.setSize = Ext.emptyFn;
+        <b>this</b>.el.dom.scroll = <em>'no'</em>;
+        <b>this</b>.allowDomMove = false;
+        <b>this</b>.autoWidth = true;
+        <b>this</b>.autoHeight = true;
+        Ext.EventManager.onWindowResize(<b>this</b>.fireResize, <b>this</b>);
+        <b>this</b>.renderTo = <b>this</b>.el;
+    },
+
+    fireResize : <b>function</b>(w, h){
+        <b>this</b>.fireEvent(<em>'resize'</em>, <b>this</b>, w, h, w, h);
+    }
+});
+Ext.reg(<em>'viewport'</em>, Ext.Viewport);</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

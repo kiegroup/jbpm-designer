@@ -1,0 +1,319 @@
+<html><head><title>ext-lang-nl.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ext-lang-nl.js</h1><pre class="highlighted"><code><i>/**
+ * List compiled by mystix on the extjs.com forums.
+ * Thank you Mystix!
+ *
+ * Dutch Translations
+ * by Ido Sebastiaan Bas van Oostveen (12 Oct 2007)
+ * updated to 2.2 by Condor (8 Aug 2008)
+ */</i>
+
+Ext.UpdateManager.defaults.indicatorText = <em>'&lt;div class=&quot;loading-indicator&quot;&gt;Bezig met laden...&lt;/div&gt;'</em>;
+
+<b>if</b>(Ext.DataView){
+  Ext.DataView.prototype.emptyText = <em>''</em>;
+}
+
+<b>if</b>(Ext.grid.GridPanel){
+  Ext.grid.GridPanel.prototype.ddText = <em>'{0} geselecteerde rij(en)'</em>;
+}
+
+<b>if</b>(Ext.LoadMask){
+  Ext.LoadMask.prototype.msg = <em>'Bezig met laden...'</em>;
+}
+
+Date.monthNames = [
+  <em>'januari'</em>,
+  <em>'februari'</em>,
+  <em>'maart'</em>,
+  <em>'april'</em>,
+  <em>'mei'</em>,
+  <em>'juni'</em>,
+  <em>'juli'</em>,
+  <em>'augustus'</em>,
+  <em>'september'</em>,
+  <em>'oktober'</em>,
+  <em>'november'</em>,
+  <em>'december'</em>
+];
+
+Date.getShortMonthName = <b>function</b>(month) {
+  <b>if</b> (month == 2) {
+    <b>return</b> <em>'mrt'</em>;
+  }
+  <b>return</b> Date.monthNames[month].substring(0, 3);
+};
+
+Date.monthNumbers = {
+  jan: 0,
+  feb: 1,
+  mrt: 2,
+  apr: 3,
+  mei: 4,
+  jun: 5,
+  jul: 6,
+  aug: 7,
+  sep: 8,
+  okt: 9,
+  nov: 10,
+  dec: 11
+};
+
+Date.getMonthNumber = <b>function</b>(name) {
+  <b>var</b> sname = name.substring(0, 3).toLowerCase();
+  <b>if</b> (sname == <em>'maa'</em>) {
+    <b>return</b> 2;
+  }
+  <b>return</b> Date.monthNumbers[sname];
+};
+
+Date.dayNames = [
+  <em>'zondag'</em>,
+  <em>'maandag'</em>,
+  <em>'dinsdag'</em>,
+  <em>'woensdag'</em>,
+  <em>'donderdag'</em>,
+  <em>'vrijdag'</em>,
+  <em>'zaterdag'</em>
+];
+
+Date.getShortDayName = <b>function</b>(day) {
+  <b>return</b> Date.dayNames[day].substring(0, 3);
+};
+
+Date.parseCodes.S.s = &quot;(?:ste|e)&quot;;
+
+<b>if</b>(Ext.MessageBox){
+  Ext.MessageBox.buttonText = {
+    ok: <em>'OK'</em>,
+    cancel: <em>'Annuleren'</em>,
+    yes: <em>'Ja'</em>,
+    no: <em>'Nee'</em>
+  };
+}
+
+<b>if</b>(Ext.util.Format){
+  Ext.util.Format.date = <b>function</b>(v, format){
+    <b>if</b> (!v) <b>return</b> <em>''</em>;
+    <b>if</b> (!(v instanceof Date)) v = <b>new</b> Date(Date.parse(v));
+    <b>return</b> v.dateFormat(format || <em>'j-m-y'</em>);
+  };
+}
+
+<b>if</b>(Ext.DatePicker){
+  Ext.apply(Ext.DatePicker.prototype, {
+    todayText: <em>'Vandaag'</em>,
+    minText: <em>'Deze datum is eerder dan de minimale datum'</em>,
+    maxText: <em>'Deze datum is later dan de maximale datum'</em>,
+    disabledDaysText: <em>''</em>,
+    disabledDatesText: <em>''</em>,
+    monthNames: Date.monthNames,
+    dayNames: Date.dayNames,
+    nextText: <em>'Volgende maand (Ctrl+rechts)'</em>,
+    prevText: <em>'Vorige maand (Ctrl+links)'</em>,
+    monthYearText: <em>'Kies een maand (Ctrl+omhoog/omlaag volgend/vorig jaar)'</em>,
+    todayTip: <em>'{0} (spatie)'</em>,
+    format: <em>'j-m-y'</em>,
+    okText: <em>'&amp;#160;OK&amp;#160;'</em>,
+    cancelText: <em>'Annuleren'</em>,
+    startDay: 1
+  });
+}
+
+<b>if</b>(Ext.PagingToolbar){
+  Ext.apply(Ext.PagingToolbar.prototype, {
+    beforePageText: <em>'Pagina'</em>,
+    afterPageText: <em>'van {0}'</em>,
+    firstText: <em>'Eerste pagina'</em>,
+    prevText: <em>'Vorige pagina'</em>,
+    nextText: <em>'Volgende pagina'</em>,
+    lastText: <em>'Laatste pagina'</em>,
+    refreshText: <em>'Ververs'</em>,
+    displayMsg: <em>'Getoond {0} - {1} van {2}'</em>,
+    emptyMsg: <em>'Geen gegevens om weer te geven'</em>
+  });
+}
+
+<b>if</b>(Ext.form.Field){
+  Ext.form.Field.prototype.invalidText = <em>'De waarde van dit veld is ongeldig'</em>;
+}
+
+<b>if</b>(Ext.form.TextField){
+  Ext.apply(Ext.form.TextField.prototype, {
+    minLengthText: <em>'De minimale lengte van dit veld is {0}'</em>,
+    maxLengthText: <em>'De maximale lengte van dit veld is {0}'</em>,
+    blankText: <em>'Dit veld is verplicht'</em>,
+    regexText: <em>''</em>,
+    emptyText: null
+  });
+}
+
+<b>if</b>(Ext.form.NumberField){
+  Ext.apply(Ext.form.NumberField.prototype, {
+    decimalSeparator : &quot;,&quot;,
+    decimalPrecision : 2,
+    minText: <em>'De minimale waarde van dit veld is {0}'</em>,
+    maxText: <em>'De maximale waarde van dit veld is {0}'</em>,
+    nanText: <em>'{0} is geen geldig getal'</em>
+  });
+}
+
+<b>if</b>(Ext.form.DateField){
+  Ext.apply(Ext.form.DateField.prototype, {
+    disabledDaysText: <em>'Uitgeschakeld'</em>,
+    disabledDatesText: <em>'Uitgeschakeld'</em>,
+    minText: <em>'De datum <b>in</b> dit veld moet na {0} liggen'</em>,
+    maxText: <em>'De datum <b>in</b> dit veld moet voor {0} liggen'</em>,
+    invalidText: <em>'{0} is geen geldige datum - formaat voor datum is {1}'</em>,
+    format: <em>'j-m-y'</em>,
+    altFormats: <em>'d/m/Y|d-m-y|d-m-Y|d/m|d-m|dm|dmy|dmY|d|Y-m-d'</em>
+  });
+}
+
+<b>if</b>(Ext.form.ComboBox){
+  Ext.apply(Ext.form.ComboBox.prototype, {
+    loadingText: <em>'Bezig met laden...'</em>,
+    valueNotFoundText: undefined
+  });
+}
+
+<b>if</b>(Ext.form.VTypes){
+  Ext.apply(Ext.form.VTypes, {
+    emailText: <em>'Dit veld moet een e-mail adres bevatten <b>in</b> het formaat &quot;gebruiker@domein.nl&quot;'</em>,
+    urlText: <em>'Dit veld moet een URL bevatten <b>in</b> het formaat &quot;http:/'</em>+<em>'/www.domein.nl&quot;'</em>,
+    alphaText: <em>'Dit veld mag alleen letters en _ bevatten'</em>,
+    alphanumText: <em>'Dit veld mag alleen letters, cijfers en _ bevatten'</em>
+  });
+}
+
+<b>if</b>(Ext.form.HtmlEditor){
+  Ext.apply(Ext.form.HtmlEditor.prototype, {
+    createLinkText: <em>'Vul hier de URL voor de hyperlink <b>in</b>:'</em>,
+    buttonTips: {
+      bold: {
+        title: <em>'Vet (Ctrl+B)'</em>,
+        text: <em>'Maak de geselecteerde tekst vet.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      italic: {
+        title: <em>'Cursief (Ctrl+I)'</em>,
+        text: <em>'Maak de geselecteerde tekst cursief.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      underline: {
+        title: <em>'Onderstrepen (Ctrl+U)'</em>,
+        text: <em>'Onderstreep de geselecteerde tekst.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      increasefontsize: {
+        title: <em>'Tekst vergroten'</em>,
+        text: <em>'Vergroot het lettertype.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      decreasefontsize: {
+        title: <em>'Tekst verkleinen'</em>,
+        text: <em>'Verklein het lettertype.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      backcolor: {
+        title: <em>'Tekst achtergrondkleur'</em>,
+        text: <em>'Verander de achtergrondkleur van de geselecteerde tekst.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      forecolor: {
+        title: <em>'Tekst kleur'</em>,
+        text: <em>'Verander de kleur van de geselecteerde tekst.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifyleft: {
+        title: <em>'Tekst links uitlijnen'</em>,
+        text: <em>'Lijn de tekst links uit.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifycenter: {
+        title: <em>'Tekst centreren'</em>,
+        text: <em>'Centreer de tekst.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifyright: {
+        title: <em>'Tekst rechts uitlijnen'</em>,
+        text: <em>'Lijn de tekst rechts uit.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      insertunorderedlist: {
+        title: <em>'Opsommingstekens'</em>,
+        text: <em>'Begin een ongenummerde lijst.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      insertorderedlist: {
+        title: <em>'Genummerde lijst'</em>,
+        text: <em>'Begin een genummerde lijst.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      createlink: {
+        title: <em>'Hyperlink'</em>,
+        text: <em>'Maak van de geselecteerde tekst een hyperlink.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      sourceedit: {
+        title: <em>'Bron aanpassen'</em>,
+        text: <em>'Schakel modus over naar bron aanpassen.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      }
+    }
+  });
+}
+
+<b>if</b>(Ext.grid.GridView){
+  Ext.apply(Ext.grid.GridView.prototype, {
+    sortAscText: <em>'Sorteer oplopend'</em>,
+    sortDescText: <em>'Sorteer aflopend'</em>,
+    columnsText: <em>'Kolommen'</em>
+  });
+}
+
+<b>if</b>(Ext.grid.GroupingView){
+  Ext.apply(Ext.grid.GroupingView.prototype, {
+  emptyGroupText: <em>'(Geen)'</em>,
+  groupByText: <em>'Dit veld groeperen'</em>,
+  showGroupsText: <em>'Toon <b>in</b> groepen'</em>
+  });
+}
+
+<b>if</b>(Ext.grid.PropertyColumnModel){
+  Ext.apply(Ext.grid.PropertyColumnModel.prototype, {
+    nameText: <em>'Naam'</em>,
+    valueText: <em>'Waarde'</em>,
+    dateFormat: <em>'j-m-Y'</em>
+  });
+}
+
+<b>if</b>(Ext.layout.BorderLayout &amp;&amp; Ext.layout.BorderLayout.SplitRegion){
+  Ext.apply(Ext.layout.BorderLayout.SplitRegion.prototype, {
+    splitTip: <em>'Sleep om grootte aan te passen.'</em>,
+    collapsibleSplitTip: <em>'Sleep om grootte aan te passen. Dubbel klikken om te verbergen.'</em>
+  });
+}
+
+<b>if</b>(Ext.form.TimeField){
+  Ext.apply(Ext.form.TimeField.prototype, {
+    minText: <em>'De tijd <b>in</b> dit veld moet op of na {0} liggen'</em>,
+    maxText: <em>'De tijd <b>in</b> dit veld moet op of voor {0} liggen'</em>,
+    invalidText: <em>'{0} is geen geldig tijdstip'</em>,
+    format: <em>'G:i'</em>,
+    altFormats: <em>'g:ia|g:iA|g:i a|g:i A|h:i|g:i|H:i|ga|ha|gA|h a|g a|g A|gi|hi|gia|hia|g|H'</em>
+  });
+}
+
+<b>if</b>(Ext.form.CheckboxGroup){
+  Ext.apply(Ext.form.CheckboxGroup.prototype, {
+    blankText : <em>'Selecteer minimaal een element <b>in</b> deze groep'</em>
+  });
+}
+
+<b>if</b>(Ext.form.RadioGroup){
+  Ext.apply(Ext.form.RadioGroup.prototype, {
+    blankText : <em>'Selecteer een element <b>in</b> deze groep'</em>
+  });
+}
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

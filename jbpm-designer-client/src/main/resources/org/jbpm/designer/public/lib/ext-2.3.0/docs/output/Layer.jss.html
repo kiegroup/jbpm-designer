@@ -1,0 +1,445 @@
+<html><head><title>Layer.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>Layer.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.Layer
+ * @extends Ext.Element
+ * An extended {@link Ext.Element} object that supports a shadow and shim, constrain to viewport and
+ * automatic maintaining of shadow/shim positions.
+ * @cfg {Boolean} shim False to disable the iframe shim <b>in</b> browsers which need one (defaults to true)
+ * @cfg {String/Boolean} shadow True to automatically create an {@link Ext.Shadow}, or a string indicating the 
+ * shadow's display {@link Ext.Shadow#mode}. False to disable the shadow. (defaults to false)
+ * @cfg {Object} dh DomHelper object config to create element <b>with</b> (defaults to {tag: &quot;div&quot;, cls: &quot;x-layer&quot;}).
+ * @cfg {Boolean} constrain False to disable constrain to viewport (defaults to true)
+ * @cfg {String} cls CSS class to add to the element
+ * @cfg {Number} zindex Starting z-index (defaults to 11000)
+ * @cfg {Number} shadowOffset Number of pixels to offset the shadow (defaults to 3)
+ * @constructor
+ * @param {Object} config An object <b>with</b> config options.
+ * @param {String/HTMLElement} existingEl (optional) Uses an existing DOM element. If the element is not found it creates it.
+ */</i>
+(<b>function</b>(){
+Ext.Layer = <b>function</b>(config, existingEl){
+    config = config || {};
+    <b>var</b> dh = Ext.DomHelper;
+    <b>var</b> cp = config.parentEl, pel = cp ? Ext.getDom(cp) : document.body;
+    <b>if</b>(existingEl){
+        <b>this</b>.dom = Ext.getDom(existingEl);
+    }
+    <b>if</b>(!<b>this</b>.dom){
+        <b>var</b> o = config.dh || {tag: &quot;div&quot;, cls: &quot;x-layer&quot;};
+        <b>this</b>.dom = dh.append(pel, o);
+    }
+    <b>if</b>(config.cls){
+        <b>this</b>.addClass(config.cls);
+    }
+    <b>this</b>.constrain = config.constrain !== false;
+    <b>this</b>.visibilityMode = Ext.Element.VISIBILITY;
+    <b>if</b>(config.id){
+        <b>this</b>.id = <b>this</b>.dom.id = config.id;
+    }<b>else</b>{
+        <b>this</b>.id = Ext.id(<b>this</b>.dom);
+    }
+    <b>this</b>.zindex = config.zindex || <b>this</b>.getZIndex();
+    <b>this</b>.position(&quot;absolute&quot;, <b>this</b>.zindex);
+    <b>if</b>(config.shadow){
+        <b>this</b>.shadowOffset = config.shadowOffset || 4;
+        <b>this</b>.shadow = <b>new</b> Ext.Shadow({
+            offset : <b>this</b>.shadowOffset,
+            mode : config.shadow
+        });
+    }<b>else</b>{
+        <b>this</b>.shadowOffset = 0;
+    }
+    <b>this</b>.useShim = config.shim !== false &amp;&amp; Ext.useShims;
+    <b>this</b>.useDisplay = config.useDisplay;
+    <b>this</b>.hide();
+};
+
+<b>var</b> supr = Ext.Element.prototype;
+
+<i>// shims are shared among layer to keep from having 100 iframes</i>
+<b>var</b> shims = [];
+
+Ext.extend(Ext.Layer, Ext.Element, {
+
+    getZIndex : <b>function</b>(){
+        <b>return</b> this.zindex || parseInt((<b>this</b>.getShim() || <b>this</b>).getStyle(&quot;z-index&quot;), 10) || 11000;
+    },
+
+    getShim : <b>function</b>(){
+        <b>if</b>(!<b>this</b>.useShim){
+            <b>return</b> null;
+        }
+        <b>if</b>(this.shim){
+            <b>return</b> this.shim;
+        }
+        <b>var</b> shim = shims.shift();
+        <b>if</b>(!shim){
+            shim = <b>this</b>.createShim();
+            shim.enableDisplayMode(<em>'block'</em>);
+            shim.dom.style.display = <em>'none'</em>;
+            shim.dom.style.visibility = <em>'visible'</em>;
+        }
+        <b>var</b> pn = <b>this</b>.dom.parentNode;
+        <b>if</b>(shim.dom.parentNode != pn){
+            pn.insertBefore(shim.dom, <b>this</b>.dom);
+        }
+        shim.setStyle(<em>'z-index'</em>, <b>this</b>.getZIndex()-2);
+        <b>this</b>.shim = shim;
+        <b>return</b> shim;
+    },
+
+    hideShim : <b>function</b>(){
+        <b>if</b>(this.shim){
+            <b>this</b>.shim.setDisplayed(false);
+            shims.push(<b>this</b>.shim);
+            <b>delete</b> this.shim;
+        }
+    },
+
+    disableShadow : <b>function</b>(){
+        <b>if</b>(this.shadow){
+            <b>this</b>.shadowDisabled = true;
+            <b>this</b>.shadow.hide();
+            <b>this</b>.lastShadowOffset = <b>this</b>.shadowOffset;
+            <b>this</b>.shadowOffset = 0;
+        }
+    },
+
+    enableShadow : <b>function</b>(show){
+        <b>if</b>(this.shadow){
+            <b>this</b>.shadowDisabled = false;
+            <b>this</b>.shadowOffset = <b>this</b>.lastShadowOffset;
+            <b>delete</b> this.lastShadowOffset;
+            <b>if</b>(show){
+                <b>this</b>.sync(true);
+            }
+        }
+    },
+
+    <i>// private</i>
+    <i>// <b>this</b> code can execute repeatedly <b>in</b> milliseconds (i.e. during a drag) so</i>
+    <i>// code size was sacrificed <b>for</b> effeciency (e.g. no getBox/setBox, no XY calls)</i>
+    sync : <b>function</b>(doShow){
+        <b>var</b> sw = <b>this</b>.shadow;
+        <b>if</b>(!<b>this</b>.updating &amp;&amp; <b>this</b>.isVisible() &amp;&amp; (sw || <b>this</b>.useShim)){
+            <b>var</b> sh = <b>this</b>.getShim();
+
+            <b>var</b> w = <b>this</b>.getWidth(),
+                h = <b>this</b>.getHeight();
+
+            <b>var</b> l = <b>this</b>.getLeft(true),
+                t = <b>this</b>.getTop(true);
+
+            <b>if</b>(sw &amp;&amp; !<b>this</b>.shadowDisabled){
+                <b>if</b>(doShow &amp;&amp; !sw.isVisible()){
+                    sw.show(<b>this</b>);
+                }<b>else</b>{
+                    sw.realign(l, t, w, h);
+                }
+                <b>if</b>(sh){
+                    <b>if</b>(doShow){
+                       sh.show();
+                    }
+                    <i>// fit the shim behind the shadow, so it is shimmed too</i>
+                    <b>var</b> a = sw.adjusts, s = sh.dom.style;
+                    s.left = (Math.min(l, l+a.l))+&quot;px&quot;;
+                    s.top = (Math.min(t, t+a.t))+&quot;px&quot;;
+                    s.width = (w+a.w)+&quot;px&quot;;
+                    s.height = (h+a.h)+&quot;px&quot;;
+                }
+            }<b>else</b> if(sh){
+                <b>if</b>(doShow){
+                   sh.show();
+                }
+                sh.setSize(w, h);
+                sh.setLeftTop(l, t);
+            }
+
+        }
+    },
+
+    <i>// private</i>
+    destroy : <b>function</b>(){
+        <b>this</b>.hideShim();
+        <b>if</b>(this.shadow){
+            <b>this</b>.shadow.hide();
+        }
+        <b>this</b>.removeAllListeners();
+        Ext.removeNode(<b>this</b>.dom);
+        Ext.Element.uncache(<b>this</b>.id);
+    },
+
+    remove : <b>function</b>(){
+        <b>this</b>.destroy();
+    },
+
+    <i>// private</i>
+    beginUpdate : <b>function</b>(){
+        <b>this</b>.updating = true;
+    },
+
+    <i>// private</i>
+    endUpdate : <b>function</b>(){
+        <b>this</b>.updating = false;
+        <b>this</b>.sync(true);
+    },
+
+    <i>// private</i>
+    hideUnders : <b>function</b>(negOffset){
+        <b>if</b>(this.shadow){
+            <b>this</b>.shadow.hide();
+        }
+        <b>this</b>.hideShim();
+    },
+
+    <i>// private</i>
+    constrainXY : <b>function</b>(){
+        <b>if</b>(this.constrain){
+            <b>var</b> vw = Ext.lib.Dom.getViewWidth(),
+                vh = Ext.lib.Dom.getViewHeight();
+            <b>var</b> s = Ext.getDoc().getScroll();
+
+            <b>var</b> xy = <b>this</b>.getXY();
+            <b>var</b> x = xy[0], y = xy[1];
+            <b>var</b> w = <b>this</b>.dom.offsetWidth+<b>this</b>.shadowOffset, h = <b>this</b>.dom.offsetHeight+<b>this</b>.shadowOffset;
+            <i>// only move it <b>if</b> it needs it</i>
+            <b>var</b> moved = false;
+            <i>// first validate right/bottom</i>
+            <b>if</b>((x + w) &gt; vw+s.left){
+                x = vw - w - <b>this</b>.shadowOffset;
+                moved = true;
+            }
+            <b>if</b>((y + h) &gt; vh+s.top){
+                y = vh - h - <b>this</b>.shadowOffset;
+                moved = true;
+            }
+            <i>// then make sure top/left isn't negative</i>
+            <b>if</b>(x &lt; s.left){
+                x = s.left;
+                moved = true;
+            }
+            <b>if</b>(y &lt; s.top){
+                y = s.top;
+                moved = true;
+            }
+            <b>if</b>(moved){
+                <b>if</b>(this.avoidY){
+                    <b>var</b> ay = <b>this</b>.avoidY;
+                    <b>if</b>(y &lt;= ay &amp;&amp; (y+h) &gt;= ay){
+                        y = ay-h-5;
+                    }
+                }
+                xy = [x, y];
+                <b>this</b>.storeXY(xy);
+                supr.setXY.call(<b>this</b>, xy);
+                <b>this</b>.sync();
+            }
+        }
+    },
+
+    isVisible : <b>function</b>(){
+        <b>return</b> this.visible;
+    },
+
+    <i>// private</i>
+    showAction : <b>function</b>(){
+        <b>this</b>.visible = true; <i>// track visibility to prevent getStyle calls</i>
+        <b>if</b>(this.useDisplay === true){
+            <b>this</b>.setDisplayed(&quot;&quot;);
+        }<b>else</b> if(<b>this</b>.lastXY){
+            supr.setXY.call(<b>this</b>, <b>this</b>.lastXY);
+        }<b>else</b> if(<b>this</b>.lastLT){
+            supr.setLeftTop.call(<b>this</b>, <b>this</b>.lastLT[0], <b>this</b>.lastLT[1]);
+        }
+    },
+
+    <i>// private</i>
+    hideAction : <b>function</b>(){
+        <b>this</b>.visible = false;
+        <b>if</b>(this.useDisplay === true){
+            <b>this</b>.setDisplayed(false);
+        }<b>else</b>{
+            <b>this</b>.setLeftTop(-10000,-10000);
+        }
+    },
+
+    <i>// overridden Element method</i>
+    setVisible : <b>function</b>(v, a, d, c, e){
+        <b>if</b>(v){
+            <b>this</b>.showAction();
+        }
+        <b>if</b>(a &amp;&amp; v){
+            <b>var</b> cb = <b>function</b>(){
+                <b>this</b>.sync(true);
+                <b>if</b>(c){
+                    c();
+                }
+            }.createDelegate(<b>this</b>);
+            supr.setVisible.call(<b>this</b>, true, true, d, cb, e);
+        }<b>else</b>{
+            <b>if</b>(!v){
+                <b>this</b>.hideUnders(true);
+            }
+            <b>var</b> cb = c;
+            <b>if</b>(a){
+                cb = <b>function</b>(){
+                    <b>this</b>.hideAction();
+                    <b>if</b>(c){
+                        c();
+                    }
+                }.createDelegate(<b>this</b>);
+            }
+            supr.setVisible.call(<b>this</b>, v, a, d, cb, e);
+            <b>if</b>(v){
+                <b>this</b>.sync(true);
+            }<b>else</b> if(!a){
+                <b>this</b>.hideAction();
+            }
+        }
+    },
+
+    storeXY : <b>function</b>(xy){
+        <b>delete</b> this.lastLT;
+        <b>this</b>.lastXY = xy;
+    },
+
+    storeLeftTop : <b>function</b>(left, top){
+        <b>delete</b> this.lastXY;
+        <b>this</b>.lastLT = [left, top];
+    },
+
+    <i>// private</i>
+    beforeFx : <b>function</b>(){
+        <b>this</b>.beforeAction();
+        <b>return</b> Ext.Layer.superclass.beforeFx.apply(<b>this</b>, arguments);
+    },
+
+    <i>// private</i>
+    afterFx : <b>function</b>(){
+        Ext.Layer.superclass.afterFx.apply(<b>this</b>, arguments);
+        <b>this</b>.sync(<b>this</b>.isVisible());
+    },
+
+    <i>// private</i>
+    beforeAction : <b>function</b>(){
+        <b>if</b>(!<b>this</b>.updating &amp;&amp; <b>this</b>.shadow){
+            <b>this</b>.shadow.hide();
+        }
+    },
+
+    <i>// overridden Element method</i>
+    setLeft : <b>function</b>(left){
+        <b>this</b>.storeLeftTop(left, <b>this</b>.getTop(true));
+        supr.setLeft.apply(<b>this</b>, arguments);
+        <b>this</b>.sync();
+    },
+
+    setTop : <b>function</b>(top){
+        <b>this</b>.storeLeftTop(<b>this</b>.getLeft(true), top);
+        supr.setTop.apply(<b>this</b>, arguments);
+        <b>this</b>.sync();
+    },
+
+    setLeftTop : <b>function</b>(left, top){
+        <b>this</b>.storeLeftTop(left, top);
+        supr.setLeftTop.apply(<b>this</b>, arguments);
+        <b>this</b>.sync();
+    },
+
+    setXY : <b>function</b>(xy, a, d, c, e){
+        <b>this</b>.fixDisplay();
+        <b>this</b>.beforeAction();
+        <b>this</b>.storeXY(xy);
+        <b>var</b> cb = <b>this</b>.createCB(c);
+        supr.setXY.call(<b>this</b>, xy, a, d, cb, e);
+        <b>if</b>(!a){
+            cb();
+        }
+    },
+
+    <i>// private</i>
+    createCB : <b>function</b>(c){
+        <b>var</b> el = <b>this</b>;
+        <b>return</b> function(){
+            el.constrainXY();
+            el.sync(true);
+            <b>if</b>(c){
+                c();
+            }
+        };
+    },
+
+    <i>// overridden Element method</i>
+    setX : <b>function</b>(x, a, d, c, e){
+        <b>this</b>.setXY([x, <b>this</b>.getY()], a, d, c, e);
+    },
+
+    <i>// overridden Element method</i>
+    setY : <b>function</b>(y, a, d, c, e){
+        <b>this</b>.setXY([<b>this</b>.getX(), y], a, d, c, e);
+    },
+
+    <i>// overridden Element method</i>
+    setSize : <b>function</b>(w, h, a, d, c, e){
+        <b>this</b>.beforeAction();
+        <b>var</b> cb = <b>this</b>.createCB(c);
+        supr.setSize.call(<b>this</b>, w, h, a, d, cb, e);
+        <b>if</b>(!a){
+            cb();
+        }
+    },
+
+    <i>// overridden Element method</i>
+    setWidth : <b>function</b>(w, a, d, c, e){
+        <b>this</b>.beforeAction();
+        <b>var</b> cb = <b>this</b>.createCB(c);
+        supr.setWidth.call(<b>this</b>, w, a, d, cb, e);
+        <b>if</b>(!a){
+            cb();
+        }
+    },
+
+    <i>// overridden Element method</i>
+    setHeight : <b>function</b>(h, a, d, c, e){
+        <b>this</b>.beforeAction();
+        <b>var</b> cb = <b>this</b>.createCB(c);
+        supr.setHeight.call(<b>this</b>, h, a, d, cb, e);
+        <b>if</b>(!a){
+            cb();
+        }
+    },
+
+    <i>// overridden Element method</i>
+    setBounds : <b>function</b>(x, y, w, h, a, d, c, e){
+        <b>this</b>.beforeAction();
+        <b>var</b> cb = <b>this</b>.createCB(c);
+        <b>if</b>(!a){
+            <b>this</b>.storeXY([x, y]);
+            supr.setXY.call(<b>this</b>, [x, y]);
+            supr.setSize.call(<b>this</b>, w, h, a, d, cb, e);
+            cb();
+        }<b>else</b>{
+            supr.setBounds.call(<b>this</b>, x, y, w, h, a, d, cb, e);
+        }
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Sets the z-index of <b>this</b> layer and adjusts any shadow and shim z-indexes. The layer z-index is automatically
+     * incremented by two more than the value passed <b>in</b> so that it always shows above any shadow or shim (the shadow
+     * element, <b>if</b> any, will be assigned z-index + 1, and the shim element, <b>if</b> any, will be assigned the unmodified z-index).
+     * @param {Number} zindex The <b>new</b> z-index to set
+     * @<b>return</b> {<b>this</b>} The Layer
+     */</i>
+    setZIndex : <b>function</b>(zindex){
+        <b>this</b>.zindex = zindex;
+        <b>this</b>.setStyle(&quot;z-index&quot;, zindex + 2);
+        <b>if</b>(this.shadow){
+            <b>this</b>.shadow.setZIndex(zindex + 1);
+        }
+        <b>if</b>(this.shim){
+            <b>this</b>.shim.setStyle(&quot;z-index&quot;, zindex);
+        }
+    }
+});
+})();</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

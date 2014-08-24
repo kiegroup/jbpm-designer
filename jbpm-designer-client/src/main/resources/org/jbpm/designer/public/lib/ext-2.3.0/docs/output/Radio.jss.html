@@ -1,0 +1,74 @@
+<html><head><title>Radio.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>Radio.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.form.Radio
+ * @extends Ext.form.Checkbox
+ * Single radio field.  Same as Checkbox, but provided as a convenience <b>for</b> automatically setting the input type.
+ * Radio grouping is handled automatically by the browser <b>if</b> you give each radio <b>in</b> a group the same name.
+ * @constructor
+ * Creates a <b>new</b> Radio
+ * @param {Object} config Configuration options
+ */</i>
+Ext.form.Radio = Ext.extend(Ext.form.Checkbox, {
+    <i>// private</i>
+    inputType: <em>'radio'</em>,
+    <i>// private</i>
+    baseCls: <em>'x-form-radio'</em>,
+    
+    <i>/**
+     * If <b>this</b> radio is part of a group, it will <b>return</b> the selected value
+     * @<b>return</b> {String}
+     */</i>
+    getGroupValue : <b>function</b>(){
+        <b>var</b> c = <b>this</b>.getParent().child(<em>'input[name='</em>+<b>this</b>.el.dom.name+<em>']:checked'</em>, true);
+        <b>return</b> c ? c.value : null;
+    },
+    
+    <i>// private</i>
+    getParent : <b>function</b>(){
+        <b>return</b> this.el.up(<em>'form'</em>) || Ext.getBody();
+    },
+
+    <i>// private</i>
+    toggleValue : <b>function</b>() {
+        <b>if</b>(!<b>this</b>.checked){
+            <b>var</b> els = <b>this</b>.getParent().select(<em>'input[name='</em>+<b>this</b>.el.dom.name+<em>']'</em>);
+            els.each(<b>function</b>(el){
+                <b>if</b>(el.dom.id == <b>this</b>.id){
+                    <b>this</b>.setValue(true);
+                }<b>else</b>{
+                    Ext.getCmp(el.dom.id).setValue(false);
+                }
+            }, <b>this</b>);
+        }
+    },
+    
+    <i>/**
+     * Sets either the checked/unchecked status of <b>this</b> Radio, or, <b>if</b> a string value
+     * is passed, checks a sibling Radio of the same name whose value is the value specified.
+     * @param value {String/Boolean} Checked value, or the value of the sibling radio button to check.
+     */</i>
+    setValue : <b>function</b>(v){
+        <b>if</b>(typeof v==<em>'boolean'</em>) {
+            Ext.form.Radio.superclass.setValue.call(<b>this</b>, v);
+        }<b>else</b>{
+            <b>var</b> r = <b>this</b>.getParent().child(<em>'input[name='</em>+<b>this</b>.el.dom.name+<em>'][value='</em>+v+<em>']'</em>, true);
+            <b>if</b>(r &amp;&amp; !r.checked){
+                Ext.getCmp(r.id).toggleValue();
+            };
+        }
+    },
+    
+    <i>/**
+     * Overridden and disabled. The editor element does not support standard valid/invalid marking. @hide
+     * @method
+     */</i>
+    markInvalid : Ext.emptyFn,
+    <i>/**
+     * Overridden and disabled. The editor element does not support standard valid/invalid marking. @hide
+     * @method
+     */</i>
+    clearInvalid : Ext.emptyFn
+    
+});
+Ext.reg(<em>'radio'</em>, Ext.form.Radio);
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

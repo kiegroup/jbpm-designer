@@ -1,0 +1,106 @@
+<html><head><title>TreeSorter.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>TreeSorter.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.tree.TreeSorter
+ * Provides sorting of nodes <b>in</b> a {@link Ext.tree.TreePanel}.  The TreeSorter automatically monitors events on the 
+ * associated TreePanel that might affect the tree's sort order (beforechildrenrendered, append, insert and textchange).
+ * Example usage:&lt;br /&gt;
+ * &lt;pre&gt;&lt;code&gt;
+<b>new</b> Ext.tree.TreeSorter(myTree, {
+    folderSort: true,
+    dir: &quot;desc&quot;,
+    sortType: <b>function</b>(node) {
+        <i>// sort by a custom, typed attribute:</i>
+        <b>return</b> parseInt(node.id, 10);
+    }
+});
+&lt;/code&gt;&lt;/pre&gt;
+ * @constructor
+ * @param {TreePanel} tree
+ * @param {Object} config
+ */</i>
+Ext.tree.TreeSorter = <b>function</b>(tree, config){
+    <i>/**
+	 * @cfg {Boolean} folderSort True to sort leaf nodes under non-leaf nodes (defaults to false)
+     */</i>
+<i>// holder</i>
+<i>/*** 
+     * @cfg {String} property The named attribute on the node to sort by (defaults to &quot;text&quot;).  Note that <b>this</b> 
+     * property is only used <b>if</b> no {@link #sortType} <b>function</b> is specified, otherwise it is ignored.
+     */</i>
+<i>// holder</i>
+<i>/*** 
+	 * @cfg {String} dir The direction to sort (&quot;asc&quot; or &quot;desc,&quot; <b>case</b>-insensitive, defaults to &quot;asc&quot;)
+     */</i>
+<i>// holder</i>
+<i>/*** 
+	 * @cfg {String} leafAttr The attribute used to determine leaf nodes when {@link #folderSort} = true (defaults to &quot;leaf&quot;)
+     */</i>
+<i>// holder</i>
+<i>/*** 
+	 * @cfg {Boolean} caseSensitive true <b>for</b> case-sensitive sort (defaults to false)
+     */</i>
+<i>// holder</i>
+<i>/*** 
+	 * @cfg {Function} sortType A custom &quot;casting&quot; <b>function</b> used to convert node values before sorting.  The <b>function</b>
+     * will be called <b>with</b> a single parameter (the {@link Ext.tree.TreeNode} being evaluated) and is expected to <b>return</b>
+     * the node's sort value cast to the specific data type required <b>for</b> sorting.  This could be used, <b>for</b> example, when
+     * a node's text (or other attribute) should be sorted as a date or numeric value.  See the class description <b>for</b> 
+     * example usage.  Note that <b>if</b> a sortType is specified, any {@link #property} config will be ignored.
+     */</i>
+    
+    Ext.apply(<b>this</b>, config);
+    tree.on(&quot;beforechildrenrendered&quot;, <b>this</b>.doSort, <b>this</b>);
+    tree.on(&quot;append&quot;, <b>this</b>.updateSort, <b>this</b>);
+    tree.on(&quot;insert&quot;, <b>this</b>.updateSort, <b>this</b>);
+    tree.on(&quot;textchange&quot;, <b>this</b>.updateSortParent, <b>this</b>);
+    
+    <b>var</b> dsc = <b>this</b>.dir &amp;&amp; <b>this</b>.dir.toLowerCase() == &quot;desc&quot;;
+    <b>var</b> p = <b>this</b>.property || &quot;text&quot;;
+    <b>var</b> sortType = <b>this</b>.sortType;
+    <b>var</b> fs = <b>this</b>.folderSort;
+    <b>var</b> cs = <b>this</b>.caseSensitive === true;
+    <b>var</b> leafAttr = <b>this</b>.leafAttr || <em>'leaf'</em>;
+
+    <b>this</b>.sortFn = <b>function</b>(n1, n2){
+        <b>if</b>(fs){
+            <b>if</b>(n1.attributes[leafAttr] &amp;&amp; !n2.attributes[leafAttr]){
+                <b>return</b> 1;
+            }
+            <b>if</b>(!n1.attributes[leafAttr] &amp;&amp; n2.attributes[leafAttr]){
+                <b>return</b> -1;
+            }
+        }
+    	<b>var</b> v1 = sortType ? sortType(n1) : (cs ? n1.attributes[p] : n1.attributes[p].toUpperCase());
+    	<b>var</b> v2 = sortType ? sortType(n2) : (cs ? n2.attributes[p] : n2.attributes[p].toUpperCase());
+    	<b>if</b>(v1 &lt; v2){
+			<b>return</b> dsc ? +1 : -1;
+		}<b>else</b> if(v1 &gt; v2){
+			<b>return</b> dsc ? -1 : +1;
+        }<b>else</b>{
+	    	<b>return</b> 0;
+        }
+    };
+};
+
+Ext.tree.TreeSorter.prototype = {
+    doSort : <b>function</b>(node){
+        node.sort(<b>this</b>.sortFn);
+    },
+    
+    compareNodes : <b>function</b>(n1, n2){
+        <b>return</b> (n1.text.toUpperCase() &gt; n2.text.toUpperCase() ? 1 : -1);
+    },
+    
+    updateSort : <b>function</b>(tree, node){
+        <b>if</b>(node.childrenRendered){
+            <b>this</b>.doSort.defer(1, <b>this</b>, [node]);
+        }
+    },
+    
+    updateSortParent : <b>function</b>(node){
+		<b>var</b> p = node.parentNode;
+		<b>if</b>(p &amp;&amp; p.childrenRendered){
+            <b>this</b>.doSort.defer(1, <b>this</b>, [p]);
+        }
+    }
+};</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

@@ -1,0 +1,155 @@
+<html><head><title>TreeEditor.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>TreeEditor.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.tree.TreeEditor
+ * @extends Ext.Editor
+ * Provides editor functionality <b>for</b> inline tree node editing.  Any valid {@link Ext.form.Field} subclass can be used
+ * as the editor field.
+ * @constructor
+ * @param {TreePanel} tree
+ * @param {Object} fieldConfig (optional) Either a prebuilt {@link Ext.form.Field} instance or a Field config object
+ * that will be applied to the <b>default</b> field instance (defaults to a {@link Ext.form.TextField}).
+ * @param {Object} config (optional) A TreeEditor config object
+ */</i>
+Ext.tree.TreeEditor = <b>function</b>(tree, fc, config){
+    fc = fc || {};
+    <b>var</b> field = fc.events ? fc : <b>new</b> Ext.form.TextField(fc);
+    Ext.tree.TreeEditor.superclass.constructor.call(<b>this</b>, field, config);
+
+    <b>this</b>.tree = tree;
+
+    <b>if</b>(!tree.rendered){
+        tree.on(<em>'render'</em>, <b>this</b>.initEditor, <b>this</b>);
+    }<b>else</b>{
+        <b>this</b>.initEditor(tree);
+    }
+};
+
+Ext.extend(Ext.tree.TreeEditor, Ext.Editor, {
+    <i>/**
+     * @cfg {String} alignment
+     * The position to align to (see {@link Ext.Element#alignTo} <b>for</b> more details, defaults to &quot;l-l&quot;).
+     */</i>
+    alignment: &quot;l-l&quot;,
+    <i>// inherit</i>
+    autoSize: false,
+    <i>/**
+     * @cfg {Boolean} hideEl
+     * True to hide the bound element <b>while</b> the editor is displayed (defaults to false)
+     */</i>
+    hideEl : false,
+    <i>/**
+     * @cfg {String} cls
+     * CSS class to apply to the editor (defaults to &quot;x-small-editor x-tree-editor&quot;)
+     */</i>
+    cls: &quot;x-small-editor x-tree-editor&quot;,
+    <i>/**
+     * @cfg {Boolean} shim
+     * True to shim the editor <b>if</b> selects/iframes could be displayed beneath it (defaults to false)
+     */</i>
+    shim:false,
+    <i>// inherit</i>
+    shadow:&quot;frame&quot;,
+    <i>/**
+     * @cfg {Number} maxWidth
+     * The maximum width <b>in</b> pixels of the editor field (defaults to 250).  Note that <b>if</b> the maxWidth would exceed
+     * the containing tree element's size, it will be automatically limited <b>for</b> you to the container width, taking
+     * scroll and client offsets into account prior to each edit.
+     */</i>
+    maxWidth: 250,
+    <i>/**
+     * @cfg {Number} editDelay The number of milliseconds between clicks to register a double-click that will trigger
+     * editing on the current node (defaults to 350).  If two clicks occur on the same node within <b>this</b> time span,
+     * the editor <b>for</b> the node will display, otherwise it will be processed as a regular click.
+     */</i>
+    editDelay : 350,
+
+    initEditor : <b>function</b>(tree){
+        tree.on(<em>'beforeclick'</em>, <b>this</b>.beforeNodeClick, <b>this</b>);
+        tree.on(<em>'dblclick'</em>, <b>this</b>.onNodeDblClick, <b>this</b>);
+        <b>this</b>.on(<em>'complete'</em>, <b>this</b>.updateNode, <b>this</b>);
+        <b>this</b>.on(<em>'beforestartedit'</em>, <b>this</b>.fitToTree, <b>this</b>);
+        <b>this</b>.on(<em>'startedit'</em>, <b>this</b>.bindScroll, <b>this</b>, {delay:10});
+        <b>this</b>.on(<em>'specialkey'</em>, <b>this</b>.onSpecialKey, <b>this</b>);
+    },
+
+    <i>// private</i>
+    fitToTree : <b>function</b>(ed, el){
+        <b>var</b> td = <b>this</b>.tree.getTreeEl().dom, nd = el.dom;
+        <b>if</b>(td.scrollLeft &gt;  nd.offsetLeft){ <i>// ensure the node left point is visible</i>
+            td.scrollLeft = nd.offsetLeft;
+        }
+        <b>var</b> w = Math.min(
+                <b>this</b>.maxWidth,
+                (td.clientWidth &gt; 20 ? td.clientWidth : td.offsetWidth) - Math.max(0, nd.offsetLeft-td.scrollLeft) - <i>/*cushion*/</i>5);
+        <b>this</b>.setSize(w, <em>''</em>);
+    },
+
+    <i>/**
+     * Edit the text of the passed {@link Ext.tree.TreeNode TreeNode}.
+     * @param node {Ext.tree.TreeNode} The TreeNode to edit. The TreeNode must be {@link Ext.tree.TreeNode#editable editable}.
+     */</i>
+    triggerEdit : <b>function</b>(node, defer){
+        <b>this</b>.completeEdit();
+		<b>if</b>(node.attributes.editable !== false){
+           <i>/**
+            * The {@link Ext.tree.TreeNode TreeNode} <b>this</b> editor is bound to. Read-only.
+            * @type Ext.tree.TreeNode
+            * @property editNode
+            */</i>
+			<b>this</b>.editNode = node;
+            <b>if</b>(this.tree.autoScroll){
+                Ext.fly(node.ui.getEl()).scrollIntoView(<b>this</b>.tree.body);
+            }
+            <b>var</b> value = node.text || <em>''</em>;
+            <b>if</b> (!Ext.isGecko &amp;&amp; Ext.isEmpty(node.text)){
+                node.setText(<em>'&amp;nbsp;'</em>);
+            }
+            <b>this</b>.autoEditTimer = <b>this</b>.startEdit.defer(<b>this</b>.editDelay, <b>this</b>, [node.ui.textNode, value]);
+            <b>return</b> false;
+        }
+    },
+
+    <i>// private</i>
+    bindScroll : <b>function</b>(){
+        <b>this</b>.tree.getTreeEl().on(<em>'scroll'</em>, <b>this</b>.cancelEdit, <b>this</b>);
+    },
+
+    <i>// private</i>
+    beforeNodeClick : <b>function</b>(node, e){
+        clearTimeout(<b>this</b>.autoEditTimer);
+        <b>if</b>(this.tree.getSelectionModel().isSelected(node)){
+            e.stopEvent();
+            <b>return</b> this.triggerEdit(node);
+        }
+    },
+
+    onNodeDblClick : <b>function</b>(node, e){
+        clearTimeout(<b>this</b>.autoEditTimer);
+    },
+
+    <i>// private</i>
+    updateNode : <b>function</b>(ed, value){
+        <b>this</b>.tree.getTreeEl().un(<em>'scroll'</em>, <b>this</b>.cancelEdit, <b>this</b>);
+        <b>this</b>.editNode.setText(value);
+    },
+
+    <i>// private</i>
+    onHide : <b>function</b>(){
+        Ext.tree.TreeEditor.superclass.onHide.call(<b>this</b>);
+        <b>if</b>(this.editNode){
+            <b>this</b>.editNode.ui.focus.defer(50, <b>this</b>.editNode.ui);
+        }
+    },
+
+    <i>// private</i>
+    onSpecialKey : <b>function</b>(field, e){
+        <b>var</b> k = e.getKey();
+        <b>if</b>(k == e.ESC){
+            e.stopEvent();
+            <b>this</b>.cancelEdit();
+        }<b>else</b> if(k == e.ENTER &amp;&amp; !e.hasModifier()){
+            e.stopEvent();
+            <b>this</b>.completeEdit();
+        }
+    }
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

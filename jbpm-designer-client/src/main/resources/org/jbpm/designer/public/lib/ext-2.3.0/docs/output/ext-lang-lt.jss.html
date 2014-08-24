@@ -1,0 +1,301 @@
+<html><head><title>ext-lang-lt.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ext-lang-lt.js</h1><pre class="highlighted"><code><i>/**
+ * Lithuanian Translations (UTF-8)
+ * By Vladas Saulis, October 18, 2007
+ */</i>
+
+Ext.UpdateManager.defaults.indicatorText = <em>'&lt;div class=&quot;loading-indicator&quot;&gt;Kraunasi...&lt;/div&gt;'</em>;
+
+<b>if</b>(Ext.View){
+  Ext.View.prototype.emptyText = &quot;&quot;;
+}
+
+<b>if</b>(Ext.grid.GridPanel){
+  Ext.grid.GridPanel.prototype.ddText = &quot;{0} pa&Aring;&frac34;ym&Auml;óta&quot;;
+}
+
+<b>if</b>(Ext.TabPanelItem){
+  Ext.TabPanelItem.prototype.closeText = &quot;U&Aring;&frac34;daryti &Aring;&iexcl;i&Auml;Ö u&Aring;&frac34;skland&Auml;Ö&quot;;
+}
+
+<b>if</b>(Ext.form.Field){
+  Ext.form.Field.prototype.invalidText = &quot;&Aring;&nbsp;io lauko reik&Aring;&iexcl;m&Auml;ó neteisinga&quot;;
+}
+
+<b>if</b>(Ext.LoadMask){
+  Ext.LoadMask.prototype.msg = &quot;Kraunasi...&quot;;
+}
+
+Date.monthNames = [
+  &quot;Saulis&quot;,
+  &quot;Vasaris&quot;,
+  &quot;Kovas&quot;,
+  &quot;Balandis&quot;,
+  &quot;Gegu&Aring;&frac34;&Auml;ó&quot;,
+  &quot;Bir&Aring;&frac34;elis&quot;,
+  &quot;Liepa&quot;,
+  &quot;Rugpj&Aring;&laquo;tis&quot;,
+  &quot;Rugs&Auml;ójis&quot;,
+  &quot;Spalis&quot;,
+  &quot;Lapkritis&quot;,
+  &quot;Gruodis&quot;
+];
+
+Date.getShortMonthName = <b>function</b>(month) {
+  <b>return</b> [
+    &quot;Sau&quot;,
+    &quot;Vas&quot;,
+    &quot;Kov&quot;,
+    &quot;Bal&quot;,
+    &quot;Geg&quot;,
+    &quot;Bir&quot;,
+    &quot;Lie&quot;,
+    &quot;Rgp&quot;,
+    &quot;Rgs&quot;,
+    &quot;Spa&quot;,
+    &quot;Lap&quot;,
+    &quot;Grd&quot;
+    ];
+};
+
+Date.monthNumbers = {
+  Jan : 0,
+  Feb : 1,
+  Mar : 2,
+  Apr : 3,
+  May : 4,
+  Jun : 5,
+  Jul : 6,
+  Aug : 7,
+  Sep : 8,
+  Oct : 9,
+  Nov : 10,
+  Dec : 11
+};
+
+Date.getMonthNumber = <b>function</b>(name) {
+  <b>return</b> Date.monthNumbers[name.substring(0, 1).toUpperCase() + name.substring(1, 3).toLowerCase()];
+};
+
+Date.dayNames = [
+  &quot;Pirmadienis&quot;,
+  &quot;Antradienis&quot;,
+  &quot;Tre&Auml;çiadienis&quot;,
+  &quot;Ketvirtadienis&quot;,
+  &quot;Penktadienis&quot;,
+  &quot;&Aring;&nbsp;e&Aring;&iexcl;tadienis&quot;,
+  &quot;Sekmadienis&quot;
+];
+
+Date.getShortDayName = <b>function</b>(day) {
+  <b>return</b> Date.dayNames[day].substring(0, 3);
+};
+
+<b>if</b>(Ext.MessageBox){
+  Ext.MessageBox.buttonText = {
+    ok     : &quot;Gerai&quot;,
+    cancel : &quot;Atsisakyti&quot;,
+    yes    : &quot;Taip&quot;,
+    no     : &quot;Ne&quot;
+  };
+}
+
+<b>if</b>(Ext.util.Format){
+  Ext.util.Format.date = <b>function</b>(v, format){
+    <b>if</b>(!v) <b>return</b> &quot;&quot;;
+    <b>if</b>(!(v instanceof Date)) v = <b>new</b> Date(Date.parse(v));
+    <b>return</b> v.dateFormat(format || &quot;Y-m-d&quot;);
+  };
+}
+
+<b>if</b>(Ext.DatePicker){
+  Ext.apply(Ext.DatePicker.prototype, {
+    todayText         : &quot;&Aring;&nbsp;iandien&quot;,
+    minText           : &quot;&Aring;&nbsp;i data yra ma&Aring;&frac34;esn&Auml;ó u&Aring;&frac34; leistin&Auml;Ö&quot;,
+    maxText           : &quot;&Aring;&nbsp;i data yra didesn&Auml;ó u&Aring;&frac34; leistin&Auml;Ö&quot;,
+    disabledDaysText  : &quot;&quot;,
+    disabledDatesText : &quot;&quot;,
+    monthNames        : Date.monthNames,
+    dayNames          : Date.dayNames,
+    nextText          : <em>'Next Month (Control+Right)'</em>,
+    prevText          : <em>'Previous Month (Control+Left)'</em>,
+    monthYearText     : <em>'Choose a month (Control+Up/Down per&Auml;ójimui tarp met&Aring;&sup3;)'</em>,
+    todayTip          : &quot;{0} (Spacebar)&quot;,
+    format            : &quot;y-m-d&quot;,
+    okText            : &quot;&amp;#160;Gerai&amp;#160;&quot;,
+    cancelText        : &quot;Atsisaktyi&quot;,
+    startDay          : 1
+  });
+}
+
+<b>if</b>(Ext.PagingToolbar){
+  Ext.apply(Ext.PagingToolbar.prototype, {
+    beforePageText : &quot;Puslapis&quot;,
+    afterPageText  : &quot;i&Aring;&iexcl; {0}&quot;,
+    firstText      : &quot;Pirmas puslapis&quot;,
+    prevText       : &quot;Ankstesnis pusl.&quot;,
+    nextText       : &quot;Kitas puslapis&quot;,
+    lastText       : &quot;Pakutinis pusl.&quot;,
+    refreshText    : &quot;Atnaujinti&quot;,
+    displayMsg     : &quot;Rodomi &Auml;&macr;ra&Aring;&iexcl;ai {0} - {1} i&Aring;&iexcl; {2}&quot;,
+    emptyMsg       : <em>'N&Auml;óra duomen&Aring;&sup3;'</em>
+  });
+}
+
+<b>if</b>(Ext.form.TextField){
+  Ext.apply(Ext.form.TextField.prototype, {
+    minLengthText : &quot;Minimalus &Aring;&iexcl;io lauko ilgis yra {0}&quot;,
+    maxLengthText : &quot;Maksimalus &Aring;&iexcl;io lauko ilgis yra {0}&quot;,
+    blankText     : &quot;&Aring;&nbsp;is laukas yra reikalingas&quot;,
+    regexText     : &quot;&quot;,
+    emptyText     : null
+  });
+}
+
+<b>if</b>(Ext.form.NumberField){
+  Ext.apply(Ext.form.NumberField.prototype, {
+    minText : &quot;Minimalus &Aring;&iexcl;io lauko ilgis yra {0}&quot;,
+    maxText : &quot;Maksimalus &Aring;&iexcl;io lauko ilgis yra {0}&quot;,
+    nanText : &quot;{0} yra neleistina reik&Aring;&iexcl;m&Auml;ó&quot;
+  });
+}
+
+<b>if</b>(Ext.form.DateField){
+  Ext.apply(Ext.form.DateField.prototype, {
+    disabledDaysText  : &quot;Neprieinama&quot;,
+    disabledDatesText : &quot;Neprieinama&quot;,
+    minText           : &quot;&Aring;&nbsp;iame lauke data turi b&Aring;&laquo;ti didesn&Auml;ó u&Aring;&frac34; {0}&quot;,
+    maxText           : &quot;&Aring;&nbsp;iame lauke data turi b&Aring;&laquo;ti ma&Aring;&frac34;esn&Auml;ó&Auml;ó u&Aring;&frac34; {0}&quot;,
+    invalidText       : &quot;{0} yra neteisinga data - ji turi b&Aring;&laquo;ti &Auml;&macr;vesta formatu {1}&quot;,
+    format            : &quot;y-m-d&quot;,
+    altFormats        : &quot;y-m-d|y/m/d|Y-m-d|m/d|m-d|md|ymd|Ymd|d|Y-m-d&quot;
+  });
+}
+
+<b>if</b>(Ext.form.ComboBox){
+  Ext.apply(Ext.form.ComboBox.prototype, {
+    loadingText       : &quot;Kraunasi...&quot;,
+    valueNotFoundText : undefined
+  });
+}
+
+<b>if</b>(Ext.form.VTypes){
+  Ext.apply(Ext.form.VTypes, {
+    emailText    : <em>'&Aring;&nbsp;iame lauke turi b&Aring;&laquo;ti el.pa&Aring;&iexcl;to adresas formatu &quot;user@domain.com&quot;'</em>,
+    urlText      : <em>'&Aring;&nbsp;iame lauke turi b&Aring;&laquo;ti nuoroda (URL) formatu &quot;http:/'</em>+<em>'/www.domain.com&quot;'</em>,
+    alphaText    : <em>'&Aring;&nbsp;iame lauke gali b&Aring;&laquo;ti tik raid&Auml;ós ir &Aring;&frac34;enklas &quot;_&quot;'</em>,
+    alphanumText : <em>'&Aring;&nbsp;iame lauke gali b&Aring;&laquo;ti tik raid&Auml;ós, skai&Auml;çiai ir &Aring;&frac34;enklas &quot;_&quot;'</em>
+  });
+}
+
+<b>if</b>(Ext.form.HtmlEditor){
+  Ext.apply(Ext.form.HtmlEditor.prototype, {
+    createLinkText : <em>'&Auml;&reg;veskite URL &Aring;&iexcl;iai nuorodai:'</em>,
+    buttonTips : {
+      bold : {
+        title: <em>'Bold (Ctrl+B)'</em>,
+        text: <em>'Teksto pary&Aring;&iexcl;kinimas.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      italic : {
+        title: <em>'Italic (Ctrl+I)'</em>,
+        text: <em>'Kursyvinis tekstas.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      underline : {
+        title: <em>'Underline (Ctrl+U)'</em>,
+        text: <em>'Teksto pabraukimas.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      increasefontsize : {
+        title: <em>'Padidinti &Aring;&iexcl;rift&Auml;Ö'</em>,
+        text: <em>'Padidinti &Aring;&iexcl;rifto dyd&Auml;&macr;.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      decreasefontsize : {
+        title: <em>'Suma&Aring;&frac34;inti &Aring;&iexcl;rift&Auml;Ö'</em>,
+        text: <em>'Suma&Aring;&frac34;inti &Aring;&iexcl;rifto dyd&Auml;&macr;.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      backcolor : {
+        title: <em>'Nuspalvinti teksto fon&Auml;Ö'</em>,
+        text: <em>'Pakeisti teksto fono spalv&Auml;Ö.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      forecolor : {
+        title: <em>'Teksto spalva'</em>,
+        text: <em>'Pakeisti pa&Aring;&frac34;ym&Auml;óto teksto spalv&Auml;Ö.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifyleft : {
+        title: <em>'I&Aring;&iexcl;lyginti kairen'</em>,
+        text: <em>'I&Aring;&iexcl;lyginti tekst&Auml;Ö &Auml;&macr; kair&Auml;ô.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifycenter : {
+        title: <em>'Centruoti tekst&Auml;Ö'</em>,
+        text: <em>'Centruoti tekt&Auml;Ö redaktoriaus lange.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifyright : {
+        title: <em>'I&Aring;&iexcl;lyginti de&Aring;&iexcl;<b>in</b>&Auml;ón'</em>,
+        text: <em>'I&Aring;&iexcl;lyginti tekst&Auml;Ö &Auml;&macr; de&Aring;&iexcl;<b>in</b>&Auml;ô.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      insertunorderedlist : {
+        title: <em>'Paprastas s&Auml;Öra&Aring;&iexcl;as'</em>,
+        text: <em>'Prad&Auml;óti neorganizuot&Auml;Ö s&Auml;Öra&Aring;&iexcl;&Auml;Ö.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      insertorderedlist : {
+        title: <em>'Numeruotas s&Auml;Öra&Aring;&iexcl;as'</em>,
+        text: <em>'Prad&Auml;óti numeruot&Auml;Ö s&Auml;Öra&Aring;&iexcl;&Auml;Ö.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      createlink : {
+        title: <em>'Nuoroda'</em>,
+        text: <em>'Padaryti pa&Aring;&frac34;ym&Auml;óta tekst&Auml;Ö nuoroda.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      sourceedit : {
+        title: <em>'I&Aring;&iexcl;eities tekstas'</em>,
+        text: <em>'Persijungti &Auml;&macr; i&Aring;&iexcl;eities teksto koregavimo re&Aring;&frac34;im&Auml;Ö.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      }
+    }
+  });
+}
+
+<b>if</b>(Ext.grid.GridView){
+  Ext.apply(Ext.grid.GridView.prototype, {
+    sortAscText  : &quot;R&Aring;&laquo;&Aring;&iexcl;iuoti did&Auml;ójan&Auml;çia tvarka&quot;,
+    sortDescText : &quot;R&Aring;&laquo;&Aring;&iexcl;iuoti ma&Aring;&frac34;&Auml;ójan&Auml;çia tvarka&quot;,
+    lockText     : &quot;U&Aring;&frac34;fiksuoti stulpel&Auml;&macr;&quot;,
+    unlockText   : &quot;Atlaisvinti stulpel&Auml;&macr;&quot;,
+    columnsText  : &quot;Stulpeliai&quot;
+  });
+}
+
+<b>if</b>(Ext.grid.GroupingView){
+  Ext.apply(Ext.grid.GroupingView.prototype, {
+    emptyGroupText : <em>'(N&Auml;óra)'</em>,
+    groupByText    : <em>'Grupuoti pagal &Aring;&iexcl;&Auml;&macr; lauk&Auml;Ö'</em>,
+    showGroupsText : <em>'Rodyti grup&Auml;óse'</em>
+  });
+}
+
+<b>if</b>(Ext.grid.PropertyColumnModel){
+  Ext.apply(Ext.grid.PropertyColumnModel.prototype, {
+    nameText   : &quot;Pavadinimas&quot;,
+    valueText  : &quot;Reik&Aring;&iexcl;m&Auml;ó&quot;,
+    dateFormat : &quot;Y-m-d&quot;
+  });
+}
+
+<b>if</b>(Ext.layout.BorderLayout &amp;&amp; Ext.layout.BorderLayout.SplitRegion){
+  Ext.apply(Ext.layout.BorderLayout.SplitRegion.prototype, {
+    splitTip            : &quot;Patraukite juostel&Auml;ô.&quot;,
+    collapsibleSplitTip : &quot;Patraukite juostel&Auml;ô arba Paspauskite dvigubai kad pasl&Auml;ópti.&quot;
+  });
+}
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

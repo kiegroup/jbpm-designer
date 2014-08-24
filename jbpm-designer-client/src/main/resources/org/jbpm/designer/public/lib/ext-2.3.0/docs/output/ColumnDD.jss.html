@@ -1,0 +1,212 @@
+<html><head><title>ColumnDD.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ColumnDD.js</h1><pre class="highlighted"><code><i>// private</i>
+<i>// This is a support class used internally by the Grid components</i>
+Ext.grid.HeaderDragZone = <b>function</b>(grid, hd, hd2){
+    <b>this</b>.grid = grid;
+    <b>this</b>.view = grid.getView();
+    <b>this</b>.ddGroup = &quot;gridHeader&quot; + <b>this</b>.grid.getGridEl().id;
+    Ext.grid.HeaderDragZone.superclass.constructor.call(<b>this</b>, hd);
+    <b>if</b>(hd2){
+        <b>this</b>.setHandleElId(Ext.id(hd));
+        <b>this</b>.setOuterHandleElId(Ext.id(hd2));
+    }
+    <b>this</b>.scroll = false;
+};
+Ext.extend(Ext.grid.HeaderDragZone, Ext.dd.DragZone, {
+    maxDragWidth: 120,
+    getDragData : <b>function</b>(e){
+        <b>var</b> t = Ext.lib.Event.getTarget(e);
+        <b>var</b> h = <b>this</b>.view.findHeaderCell(t);
+        <b>if</b>(h){
+            <b>return</b> {ddel: h.firstChild, header:h};
+        }
+        <b>return</b> false;
+    },
+
+    onInitDrag : <b>function</b>(e){
+        <b>this</b>.view.headersDisabled = true;
+        <b>var</b> clone = <b>this</b>.dragData.ddel.cloneNode(true);
+        clone.id = Ext.id();
+        clone.style.width = Math.min(<b>this</b>.dragData.header.offsetWidth,<b>this</b>.maxDragWidth) + &quot;px&quot;;
+        <b>this</b>.proxy.update(clone);
+        <b>return</b> true;
+    },
+
+    afterValidDrop : <b>function</b>(){
+        <b>var</b> v = <b>this</b>.view;
+        setTimeout(<b>function</b>(){
+            v.headersDisabled = false;
+        }, 50);
+    },
+
+    afterInvalidDrop : <b>function</b>(){
+        <b>var</b> v = <b>this</b>.view;
+        setTimeout(<b>function</b>(){
+            v.headersDisabled = false;
+        }, 50);
+    }
+});
+
+<i>// private</i>
+<i>// This is a support class used internally by the Grid components</i>
+Ext.grid.HeaderDropZone = <b>function</b>(grid, hd, hd2){
+    <b>this</b>.grid = grid;
+    <b>this</b>.view = grid.getView();
+    <i>// split the proxies so they don't interfere <b>with</b> mouse events</i>
+    <b>this</b>.proxyTop = Ext.DomHelper.append(document.body, {
+        cls:&quot;col-move-top&quot;, html:&quot;&amp;#160;&quot;
+    }, true);
+    <b>this</b>.proxyBottom = Ext.DomHelper.append(document.body, {
+        cls:&quot;col-move-bottom&quot;, html:&quot;&amp;#160;&quot;
+    }, true);
+    <b>this</b>.proxyTop.hide = <b>this</b>.proxyBottom.hide = <b>function</b>(){
+        <b>this</b>.setLeftTop(-100,-100);
+        <b>this</b>.setStyle(&quot;visibility&quot;, &quot;hidden&quot;);
+    };
+    <b>this</b>.ddGroup = &quot;gridHeader&quot; + <b>this</b>.grid.getGridEl().id;
+    <i>// temporarily disabled</i>
+    <i>//Ext.dd.ScrollManager.register(<b>this</b>.view.scroller.dom);</i>
+    Ext.grid.HeaderDropZone.superclass.constructor.call(<b>this</b>, grid.getGridEl().dom);
+};
+Ext.extend(Ext.grid.HeaderDropZone, Ext.dd.DropZone, {
+    proxyOffsets : [-4, -9],
+    fly: Ext.Element.fly,
+
+    getTargetFromEvent : <b>function</b>(e){
+        <b>var</b> t = Ext.lib.Event.getTarget(e);
+        <b>var</b> cindex = <b>this</b>.view.findCellIndex(t);
+        <b>if</b>(cindex !== false){
+            <b>return</b> this.view.getHeaderCell(cindex);
+        }
+    },
+
+    nextVisible : <b>function</b>(h){
+        <b>var</b> v = <b>this</b>.view, cm = <b>this</b>.grid.colModel;
+        h = h.nextSibling;
+        <b>while</b>(h){
+            <b>if</b>(!cm.isHidden(v.getCellIndex(h))){
+                <b>return</b> h;
+            }
+            h = h.nextSibling;
+        }
+        <b>return</b> null;
+    },
+
+    prevVisible : <b>function</b>(h){
+        <b>var</b> v = <b>this</b>.view, cm = <b>this</b>.grid.colModel;
+        h = h.prevSibling;
+        <b>while</b>(h){
+            <b>if</b>(!cm.isHidden(v.getCellIndex(h))){
+                <b>return</b> h;
+            }
+            h = h.prevSibling;
+        }
+        <b>return</b> null;
+    },
+
+    positionIndicator : <b>function</b>(h, n, e){
+        <b>var</b> x = Ext.lib.Event.getPageX(e);
+        <b>var</b> r = Ext.lib.Dom.getRegion(n.firstChild);
+        <b>var</b> px, pt, py = r.top + <b>this</b>.proxyOffsets[1];
+        <b>if</b>((r.right - x) &lt;= (r.right-r.left)/2){
+            px = r.right+<b>this</b>.view.borderWidth;
+            pt = &quot;after&quot;;
+        }<b>else</b>{
+            px = r.left;
+            pt = &quot;before&quot;;
+        }
+        <b>var</b> oldIndex = <b>this</b>.view.getCellIndex(h);
+        <b>var</b> newIndex = <b>this</b>.view.getCellIndex(n);
+
+        <b>if</b>(this.grid.colModel.isFixed(newIndex)){
+            <b>return</b> false;
+        }
+
+        <b>var</b> locked = <b>this</b>.grid.colModel.isLocked(newIndex);
+
+        <b>if</b>(pt == &quot;after&quot;){
+            newIndex++;
+        }
+        <b>if</b>(oldIndex &lt; newIndex){
+            newIndex--;
+        }
+        <b>if</b>(oldIndex == newIndex &amp;&amp; (locked == <b>this</b>.grid.colModel.isLocked(oldIndex))){
+            <b>return</b> false;
+        }
+        px +=  <b>this</b>.proxyOffsets[0];
+        <b>this</b>.proxyTop.setLeftTop(px, py);
+        <b>this</b>.proxyTop.show();
+        <b>if</b>(!<b>this</b>.bottomOffset){
+            <b>this</b>.bottomOffset = <b>this</b>.view.mainHd.getHeight();
+        }
+        <b>this</b>.proxyBottom.setLeftTop(px, py+<b>this</b>.proxyTop.dom.offsetHeight+<b>this</b>.bottomOffset);
+        <b>this</b>.proxyBottom.show();
+        <b>return</b> pt;
+    },
+
+    onNodeEnter : <b>function</b>(n, dd, e, data){
+        <b>if</b>(data.header != n){
+            <b>this</b>.positionIndicator(data.header, n, e);
+        }
+    },
+
+    onNodeOver : <b>function</b>(n, dd, e, data){
+        <b>var</b> result = false;
+        <b>if</b>(data.header != n){
+            result = <b>this</b>.positionIndicator(data.header, n, e);
+        }
+        <b>if</b>(!result){
+            <b>this</b>.proxyTop.hide();
+            <b>this</b>.proxyBottom.hide();
+        }
+        <b>return</b> result ? <b>this</b>.dropAllowed : <b>this</b>.dropNotAllowed;
+    },
+
+    onNodeOut : <b>function</b>(n, dd, e, data){
+        <b>this</b>.proxyTop.hide();
+        <b>this</b>.proxyBottom.hide();
+    },
+
+    onNodeDrop : <b>function</b>(n, dd, e, data){
+        <b>var</b> h = data.header;
+        <b>if</b>(h != n){
+            <b>var</b> cm = <b>this</b>.grid.colModel;
+            <b>var</b> x = Ext.lib.Event.getPageX(e);
+            <b>var</b> r = Ext.lib.Dom.getRegion(n.firstChild);
+            <b>var</b> pt = (r.right - x) &lt;= ((r.right-r.left)/2) ? &quot;after&quot; : &quot;before&quot;;
+            <b>var</b> oldIndex = <b>this</b>.view.getCellIndex(h);
+            <b>var</b> newIndex = <b>this</b>.view.getCellIndex(n);
+            <b>var</b> locked = cm.isLocked(newIndex);
+            <b>if</b>(pt == &quot;after&quot;){
+                newIndex++;
+            }
+            <b>if</b>(oldIndex &lt; newIndex){
+                newIndex--;
+            }
+            <b>if</b>(oldIndex == newIndex &amp;&amp; (locked == cm.isLocked(oldIndex))){
+                <b>return</b> false;
+            }
+            cm.setLocked(oldIndex, locked, true);
+            cm.moveColumn(oldIndex, newIndex);
+            <b>this</b>.grid.fireEvent(&quot;columnmove&quot;, oldIndex, newIndex);
+            <b>return</b> true;
+        }
+        <b>return</b> false;
+    }
+});
+
+
+Ext.grid.GridView.ColumnDragZone = <b>function</b>(grid, hd){
+    Ext.grid.GridView.ColumnDragZone.superclass.constructor.call(<b>this</b>, grid, hd, null);
+    <b>this</b>.proxy.el.addClass(<em>'x-grid3-col-dd'</em>);
+};
+
+Ext.extend(Ext.grid.GridView.ColumnDragZone, Ext.grid.HeaderDragZone, {
+    handleMouseDown : <b>function</b>(e){
+
+    },
+
+    callHandleMouseDown : <b>function</b>(e){
+        Ext.grid.GridView.ColumnDragZone.superclass.handleMouseDown.call(<b>this</b>, e);
+    }
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

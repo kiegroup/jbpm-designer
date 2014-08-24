@@ -1,0 +1,179 @@
+<html><head><title>ext-lang-af.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ext-lang-af.js</h1><pre class="highlighted"><code><i>/*
+ * List compiled by mystix on the extjs.com forums.
+ * Thank you Mystix!
+ *
+ * Afrikaans Translations
+ * by Thys Meintjes (20 July 2007)
+ */</i>
+<i>// holder</i>
+<i>/** Ext Core translations */</i>
+Ext.UpdateManager.defaults.indicatorText = <em>'&lt;div class=&quot;loading-indicator&quot;&gt;Besig om te laai...&lt;/div&gt;'</em>;
+
+<i>/* Ext single string translations */</i>
+<b>if</b>(Ext.View){
+    Ext.View.prototype.emptyText = &quot;&quot;;
+}
+
+<b>if</b>(Ext.grid.GridPanel){
+    Ext.grid.GridPanel.prototype.ddText = &quot;{0} geselekteerde ry(e)&quot;;
+}
+
+<b>if</b>(Ext.TabPanelItem){
+    Ext.TabPanelItem.prototype.closeText = &quot;Maak die oortjie toe&quot;;
+}
+
+<b>if</b>(Ext.form.Field){
+    Ext.form.Field.prototype.invalidText = &quot;Die waarde <b>in</b> hierdie veld is foutief&quot;;
+}
+
+<b>if</b>(Ext.LoadMask){
+    Ext.LoadMask.prototype.msg = &quot;Besig om te laai...&quot;;
+}
+
+<i>/* Javascript month and days translations */</i>
+Date.monthNames = [
+   &quot;Januarie&quot;,
+   &quot;Februarie&quot;,
+   &quot;Maart&quot;,
+   &quot;April&quot;,
+   &quot;Mei&quot;,
+   &quot;Junie&quot;,
+   &quot;Julie&quot;,
+   &quot;Augustus&quot;,
+   &quot;September&quot;,
+   &quot;Oktober&quot;,
+   &quot;November&quot;,
+   &quot;Desember&quot;
+];
+
+Date.dayNames = [
+   &quot;Sondag&quot;,
+   &quot;Maandag&quot;,
+   &quot;Dinsdag&quot;,
+   &quot;Woensdag&quot;,
+   &quot;Donderdag&quot;,
+   &quot;Vrydag&quot;,
+   &quot;Saterdag&quot;
+];
+
+<i>/* Ext components translations */</i>
+<b>if</b>(Ext.MessageBox){
+    Ext.MessageBox.buttonText = {
+       ok     : &quot;OK&quot;,
+       cancel : &quot;Kanselleer&quot;,
+       yes    : &quot;Ja&quot;,
+       no     : &quot;Nee&quot;
+    };
+}
+
+<b>if</b>(Ext.util.Format){
+    Ext.util.Format.date = <b>function</b>(v, format){
+       <b>if</b>(!v) <b>return</b> &quot;&quot;;
+       <b>if</b>(!(v instanceof Date)) v = <b>new</b> Date(Date.parse(v));
+       <b>return</b> v.dateFormat(format || &quot;d-m-y&quot;);
+    };
+}
+
+<b>if</b>(Ext.DatePicker){
+    Ext.apply(Ext.DatePicker.prototype, {
+       todayText         : &quot;Vandag&quot;,
+       minText           : &quot;Hierdie datum is vro&Atilde;&laquo;r as die minimum datum&quot;,
+       maxText           : &quot;Hierdie dataum is later as die maximum datum&quot;,
+       disabledDaysText  : &quot;&quot;,
+       disabledDatesText : &quot;&quot;,
+       monthNames	 : Date.monthNames,
+       dayNames		 : Date.dayNames,
+       nextText          : <em>'Volgende Maand (Beheer+Regs)'</em>,
+       prevText          : <em>'Vorige Maand (Beheer+Links)'</em>,
+       monthYearText     : &quot;Kies 'n maand (Beheer+Op/Af volgende/vorige jaar)&quot;,
+       todayTip          : &quot;{0} (Spasie)&quot;,
+       format            : &quot;d-m-y&quot;,
+       startDay          : 0
+    });
+}
+
+<b>if</b>(Ext.PagingToolbar){
+    Ext.apply(Ext.PagingToolbar.prototype, {
+       beforePageText : &quot;Bladsy&quot;,
+       afterPageText  : &quot;van {0}&quot;,
+       firstText      : &quot;Eerste Bladsy&quot;,
+       prevText       : &quot;Vorige Bladsy&quot;,
+       nextText       : &quot;Volgende Bladsy&quot;,
+       lastText       : &quot;Laatste Bladsy&quot;,
+       refreshText    : &quot;Verfris&quot;,
+       displayMsg     : &quot;Wys {0} - {1} van {2}&quot;,
+       emptyMsg       : <em>'Geen data om te wys nie'</em>
+    });
+}
+
+<b>if</b>(Ext.form.TextField){
+    Ext.apply(Ext.form.TextField.prototype, {
+       minLengthText : &quot;Die minimum lengte van die veld is {0}&quot;,
+       maxLengthText : &quot;Die maximum lengte van die veld is {0}&quot;,
+       blankText     : &quot;Die veld is verpligtend&quot;,
+       regexText     : &quot;&quot;,
+       emptyText     : null
+    });
+}
+
+<b>if</b>(Ext.form.NumberField){
+    Ext.apply(Ext.form.NumberField.prototype, {
+       minText : &quot;Die minimum waarde vir die veld is {0}&quot;,
+       maxText : &quot;Die maximum waarde vir die veld is {0}&quot;,
+       nanText : &quot;{0} is nie 'n geldige waarde nie&quot;
+    });
+}
+
+<b>if</b>(Ext.form.DateField){
+    Ext.apply(Ext.form.DateField.prototype, {
+       disabledDaysText  : &quot;Afgeskakel&quot;,
+       disabledDatesText : &quot;Afgeskakel&quot;,
+       minText           : &quot;Die datum <b>in</b> hierdie veld moet na {0} wees&quot;,
+       maxText           : &quot;Die datum <b>in</b> hierdie veld moet voor {0} wees&quot;,
+       invalidText       : &quot;{0} is nie 'n geldige datum nie - datumformaat is {1}&quot;,
+       format            : &quot;d/m/y&quot;,
+       altFormats        : &quot;d/m/Y|d-m-y|d-m-Y|d/m|d-m|dm|dmy|dmY|d|Y-m-d&quot;
+    });
+}
+
+<b>if</b>(Ext.form.ComboBox){
+    Ext.apply(Ext.form.ComboBox.prototype, {
+       loadingText       : &quot;Besig om te laai...&quot;,
+       valueNotFoundText : undefined
+    });
+}
+
+<b>if</b>(Ext.form.VTypes){
+    Ext.apply(Ext.form.VTypes, {
+       emailText    : &quot;Hierdie veld moet <em>'n e-pos adres wees met die formaat '</em>gebruiker@domein.za'&quot;,
+       urlText      : &quot;Hierdie veld moet <em>'n URL wees me die formaat '</em>http:/<em>'+'</em>/www.domein.za'&quot;,
+       alphaText    : <em>'Die veld mag alleenlik letters en _ bevat'</em>,
+       alphanumText : <em>'Die veld mag alleenlik letters, syfers en _ bevat'</em>
+    });
+}
+
+<b>if</b>(Ext.grid.GridView){
+    Ext.apply(Ext.grid.GridView.prototype, {
+       sortAscText  : &quot;Sorteer Oplopend&quot;,
+       sortDescText : &quot;Sorteer Aflopend&quot;,
+       lockText     : &quot;Vries Kolom&quot;,
+       unlockText   : &quot;Ontvries Kolom&quot;,
+       columnsText  : &quot;Kolomme&quot;
+    });
+}
+
+<b>if</b>(Ext.grid.PropertyColumnModel){
+    Ext.apply(Ext.grid.PropertyColumnModel.prototype, {
+       nameText   : &quot;Naam&quot;,
+       valueText  : &quot;Waarde&quot;,
+       dateFormat : &quot;Y-m-j&quot;
+    });
+}
+
+<b>if</b>(Ext.layout.BorderLayout &amp;&amp; Ext.layout.BorderLayout.SplitRegion){
+    Ext.apply(Ext.layout.BorderLayout.SplitRegion.prototype, {
+       splitTip            : &quot;Trek om grootte aan te pas.&quot;,
+       collapsibleSplitTip : &quot;Trek om grootte aan te pas. Dubbel-klik om weg te steek.&quot;
+    });
+}</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

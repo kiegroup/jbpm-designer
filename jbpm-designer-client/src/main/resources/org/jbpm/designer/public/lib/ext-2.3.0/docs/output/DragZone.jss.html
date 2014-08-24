@@ -1,0 +1,73 @@
+<html><head><title>DragZone.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>DragZone.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.dd.DragZone
+ * @extends Ext.dd.DragSource
+ * This class provides a container DD instance that proxies <b>for</b> multiple child node sources.&lt;br /&gt;
+ * By <b>default</b>, <b>this</b> class requires that draggable child nodes are registered <b>with</b> {@link Ext.dd.Registry}.
+ * @constructor
+ * @param {Mixed} el The container element
+ * @param {Object} config
+ */</i>
+Ext.dd.DragZone = <b>function</b>(el, config){
+    Ext.dd.DragZone.superclass.constructor.call(<b>this</b>, el, config);
+    <b>if</b>(this.containerScroll){
+        Ext.dd.ScrollManager.register(<b>this</b>.el);
+    }
+};
+
+Ext.extend(Ext.dd.DragZone, Ext.dd.DragSource, {
+    <i>/**
+     * @cfg {Boolean} containerScroll True to register <b>this</b> container <b>with</b> the Scrollmanager
+     * <b>for</b> auto scrolling during drag operations.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} hlColor The color to use when visually highlighting the drag source <b>in</b> the afterRepair
+     * method after a failed drop (defaults to &quot;c3daf9&quot; - light blue)
+     */</i>
+<i>// holder</i>
+<i>/***
+     * Called when a mousedown occurs <b>in</b> this container. Looks <b>in</b> {@link Ext.dd.Registry}
+     * <b>for</b> a valid target to drag based on the mouse down. Override <b>this</b> method
+     * to provide your own lookup logic (e.g. finding a child by class name). Make sure your returned
+     * object has a &quot;ddel&quot; attribute (<b>with</b> an HTML Element) <b>for</b> other functions to work.
+     * @param {EventObject} e The mouse down event
+     * @<b>return</b> {Object} The dragData
+     */</i>
+    getDragData : <b>function</b>(e){
+        <b>return</b> Ext.dd.Registry.getHandleFromEvent(e);
+    },
+    
+    <i>/**
+     * Called once drag threshold has been reached to initialize the proxy element. By <b>default</b>, it clones the
+     * <b>this</b>.dragData.ddel
+     * @param {Number} x The x position of the click on the dragged object
+     * @param {Number} y The y position of the click on the dragged object
+     * @<b>return</b> {Boolean} true to <b>continue</b> the drag, false to cancel
+     */</i>
+    onInitDrag : <b>function</b>(x, y){
+        <b>this</b>.proxy.update(<b>this</b>.dragData.ddel.cloneNode(true));
+        <b>this</b>.onStartDrag(x, y);
+        <b>return</b> true;
+    },
+    
+    <i>/**
+     * Called after a repair of an invalid drop. By <b>default</b>, highlights <b>this</b>.dragData.ddel 
+     */</i>
+    afterRepair : <b>function</b>(){
+        <b>if</b>(Ext.enableFx){
+            Ext.Element.fly(<b>this</b>.dragData.ddel).highlight(<b>this</b>.hlColor || &quot;c3daf9&quot;);
+        }
+        <b>this</b>.dragging = false;
+    },
+
+    <i>/**
+     * Called before a repair of an invalid drop to get the XY to animate to. By <b>default</b> returns
+     * the XY of <b>this</b>.dragData.ddel
+     * @param {EventObject} e The mouse up event
+     * @<b>return</b> {Array} The xy location (e.g. [100, 200])
+     */</i>
+    getRepairXY : <b>function</b>(e){
+        <b>return</b> Ext.Element.fly(<b>this</b>.dragData.ddel).getXY();  
+    }
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

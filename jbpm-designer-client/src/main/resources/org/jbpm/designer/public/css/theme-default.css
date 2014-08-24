@@ -108,7 +108,7 @@ table-layout:fixed;
 }
 
 .LoadingIndicator {
-	background-image: url('../lib/ext-2.0.2/resources/images/default/grid/loading.gif');
+	background-image: url('../lib/ext-2.3.0/resources/images/default/grid/loading.gif');
 }
 
 .StatusIndicator {
@@ -136,12 +136,12 @@ table-layout:fixed;
 }
 
 .x-form-field-wrap .x-form-color-trigger {
-	background:transparent url("../lib/ext-2.0.2/resources/images/default/form/color-trigger.png") no-repeat 0 0;
+	background:transparent url("../lib/ext-2.3.0/resources/images/default/form/color-trigger.png") no-repeat 0 0;
     cursor:pointer; 
 }
 
 .ie6 .x-form-field-wrap .x-form-color-trigger {
-	background:transparent url("../lib/ext-2.0.2/resources/images/default/form/color-trigger.gif") no-repeat 0 0;
+	background:transparent url("../lib/ext-2.3.0/resources/images/default/form/color-trigger.gif") no-repeat 0 0;
 }
 
 .x-form-field-wrap .x-form-complex-trigger {
@@ -394,7 +394,7 @@ table-layout:fixed;
 
 .resizer_southeast {
 	position:relative;
-	background:url(../lib/ext-2.0.2/resources/images/default/sizer/se-handle-dark.gif);
+	background:url(../lib/ext-2.3.0/resources/images/default/sizer/se-handle-dark.gif);
 	width:10px; 
 	height:10px; 
 	cursor: se-resize;
@@ -402,7 +402,7 @@ table-layout:fixed;
 
 .resizer_northwest {
 	position:relative;
-	background:url(../lib/ext-2.0.2/resources/images/default/sizer/nw-handle-dark.gif);
+	background:url(../lib/ext-2.3.0/resources/images/default/sizer/nw-handle-dark.gif);
 	width:10px; 
 	height:10px; 
 	cursor: nw-resize;
@@ -649,7 +649,7 @@ input.text.disabled:hover, input.disabled:hover, select.disabled:hover, textarea
 
 
 .transform-epc-bpmn-window .transform-epc-bpmn-group-button .x-btn-center {
-	background:transparent url(../lib/ext-2.0.2/resources/images/default/grid/group-expand-sprite.gif) no-repeat scroll 0px 0px;
+	background:transparent url(../lib/ext-2.3.0/resources/images/default/grid/group-expand-sprite.gif) no-repeat scroll 0px 0px;
 	padding-left:15px;
 	border-bottom:1px solid #CCCCCC;
 	text-align:left;

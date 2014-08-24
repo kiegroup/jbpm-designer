@@ -1,0 +1,483 @@
+<html><head><title>RowSelectionModel.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>RowSelectionModel.js</h1><pre class="highlighted"><code><i>/**
+ @class Ext.grid.RowSelectionModel
+ * @extends Ext.grid.AbstractSelectionModel
+ * The <b>default</b> SelectionModel used by {@link Ext.grid.GridPanel}.
+ * It supports multiple selections and keyboard selection/navigation. The objects stored
+ * as selections and returned by {@link #getSelected}, and {@link #getSelections} are
+ * the {@link Ext.data.Record Record}s which provide the data <b>for</b> the selected rows.
+ * @constructor
+ * @param {Object} config
+ */</i>
+Ext.grid.RowSelectionModel = <b>function</b>(config){
+    Ext.apply(<b>this</b>, config);
+    <b>this</b>.selections = <b>new</b> Ext.util.MixedCollection(false, <b>function</b>(o){
+        <b>return</b> o.id;
+    });
+
+    <b>this</b>.last = false;
+    <b>this</b>.lastActive = false;
+
+    <b>this</b>.addEvents(
+        <i>/**
+	     * @event selectionchange
+	     * Fires when the selection changes
+	     * @param {SelectionModel} <b>this</b>
+	     */</i>
+	    &quot;selectionchange&quot;,
+        <i>/**
+	     * @event beforerowselect
+	     * Fires when a row is being selected, <b>return</b> false to cancel.
+	     * @param {SelectionModel} <b>this</b>
+	     * @param {Number} rowIndex The index to be selected
+	     * @param {Boolean} keepExisting False <b>if</b> other selections will be cleared
+	     * @param {Record} record The record to be selected
+	     */</i>
+	    &quot;beforerowselect&quot;,
+        <i>/**
+	     * @event rowselect
+	     * Fires when a row is selected.
+	     * @param {SelectionModel} <b>this</b>
+	     * @param {Number} rowIndex The selected index
+	     * @param {Ext.data.Record} r The selected record
+	     */</i>
+	    &quot;rowselect&quot;,
+        <i>/**
+	     * @event rowdeselect
+	     * Fires when a row is deselected.
+	     * @param {SelectionModel} <b>this</b>
+	     * @param {Number} rowIndex
+	     * @param {Record} record
+	     */</i>
+	    &quot;rowdeselect&quot;
+    );
+
+    Ext.grid.RowSelectionModel.superclass.constructor.call(<b>this</b>);
+};
+
+Ext.extend(Ext.grid.RowSelectionModel, Ext.grid.AbstractSelectionModel,  {
+    <i>/**
+     * @cfg {Boolean} singleSelect
+     * True to allow selection of only one row at a time (defaults to false)
+     */</i>
+    singleSelect : false,
+
+	<i>/**
+	 * @cfg {Boolean} moveEditorOnEnter
+	 * False to turn off moving the editor to the next cell when the enter key is pressed
+	 */</i>
+    <i>// private</i>
+    initEvents : <b>function</b>(){
+
+        <b>if</b>(!<b>this</b>.grid.enableDragDrop &amp;&amp; !<b>this</b>.grid.enableDrag){
+            <b>this</b>.grid.on(&quot;rowmousedown&quot;, <b>this</b>.handleMouseDown, <b>this</b>);
+        }
+
+        <b>this</b>.rowNav = <b>new</b> Ext.KeyNav(<b>this</b>.grid.getGridEl(), {
+            &quot;up&quot; : <b>function</b>(e){
+                <b>if</b>(!e.shiftKey || <b>this</b>.singleSelect){
+                    <b>this</b>.selectPrevious(false);
+                }<b>else</b> if(<b>this</b>.last !== false &amp;&amp; <b>this</b>.lastActive !== false){
+                    <b>var</b> last = <b>this</b>.last;
+                    <b>this</b>.selectRange(<b>this</b>.last,  <b>this</b>.lastActive-1);
+                    <b>this</b>.grid.getView().focusRow(<b>this</b>.lastActive);
+                    <b>if</b>(last !== false){
+                        <b>this</b>.last = last;
+                    }
+                }<b>else</b>{
+                    <b>this</b>.selectFirstRow();
+                }
+            },
+            &quot;down&quot; : <b>function</b>(e){
+                <b>if</b>(!e.shiftKey || <b>this</b>.singleSelect){
+                    <b>this</b>.selectNext(false);
+                }<b>else</b> if(<b>this</b>.last !== false &amp;&amp; <b>this</b>.lastActive !== false){
+                    <b>var</b> last = <b>this</b>.last;
+                    <b>this</b>.selectRange(<b>this</b>.last,  <b>this</b>.lastActive+1);
+                    <b>this</b>.grid.getView().focusRow(<b>this</b>.lastActive);
+                    <b>if</b>(last !== false){
+                        <b>this</b>.last = last;
+                    }
+                }<b>else</b>{
+                    <b>this</b>.selectFirstRow();
+                }
+            },
+            scope: <b>this</b>
+        });
+
+        <b>var</b> view = <b>this</b>.grid.view;
+        view.on(&quot;refresh&quot;, <b>this</b>.onRefresh, <b>this</b>);
+        view.on(&quot;rowupdated&quot;, <b>this</b>.onRowUpdated, <b>this</b>);
+        view.on(&quot;rowremoved&quot;, <b>this</b>.onRemove, <b>this</b>);
+    },
+
+    <i>// private</i>
+    onRefresh : <b>function</b>(){
+        <b>var</b> ds = <b>this</b>.grid.store, index;
+        <b>var</b> s = <b>this</b>.getSelections();
+        <b>this</b>.clearSelections(true);
+        <b>for</b>(var i = 0, len = s.length; i &lt; len; i++){
+            <b>var</b> r = s[i];
+            <b>if</b>((index = ds.indexOfId(r.id)) != -1){
+                <b>this</b>.selectRow(index, true);
+            }
+        }
+        <b>if</b>(s.length != <b>this</b>.selections.getCount()){
+            <b>this</b>.fireEvent(&quot;selectionchange&quot;, <b>this</b>);
+        }
+    },
+
+    <i>// private</i>
+    onRemove : <b>function</b>(v, index, r){
+        <b>if</b>(this.selections.remove(r) !== false){
+            <b>this</b>.fireEvent(<em>'selectionchange'</em>, <b>this</b>);
+        }
+    },
+
+    <i>// private</i>
+    onRowUpdated : <b>function</b>(v, index, r){
+        <b>if</b>(this.isSelected(r)){
+            v.onRowSelect(index);
+        }
+    },
+
+    <i>/**
+     * Select records.
+     * @param {Array} records The records to select
+     * @param {Boolean} keepExisting (optional) True to keep existing selections
+     */</i>
+    selectRecords : <b>function</b>(records, keepExisting){
+        <b>if</b>(!keepExisting){
+            <b>this</b>.clearSelections();
+        }
+        <b>var</b> ds = <b>this</b>.grid.store;
+        <b>for</b>(var i = 0, len = records.length; i &lt; len; i++){
+            <b>this</b>.selectRow(ds.indexOf(records[i]), true);
+        }
+    },
+
+    <i>/**
+     * Gets the number of selected rows.
+     * @<b>return</b> {Number}
+     */</i>
+    getCount : <b>function</b>(){
+        <b>return</b> this.selections.length;
+    },
+
+    <i>/**
+     * Selects the first row <b>in</b> the grid.
+     */</i>
+    selectFirstRow : <b>function</b>(){
+        <b>this</b>.selectRow(0);
+    },
+
+    <i>/**
+     * Select the last row.
+     * @param {Boolean} keepExisting (optional) True to keep existing selections
+     */</i>
+    selectLastRow : <b>function</b>(keepExisting){
+        <b>this</b>.selectRow(<b>this</b>.grid.store.getCount() - 1, keepExisting);
+    },
+
+    <i>/**
+     * Selects the row immediately following the last selected row.
+     * @param {Boolean} keepExisting (optional) True to keep existing selections
+     * @<b>return</b> {Boolean} True <b>if</b> there is a next row, <b>else</b> false
+     */</i>
+    selectNext : <b>function</b>(keepExisting){
+        <b>if</b>(this.hasNext()){
+            <b>this</b>.selectRow(<b>this</b>.last+1, keepExisting);
+            <b>this</b>.grid.getView().focusRow(<b>this</b>.last);
+			<b>return</b> true;
+        }
+		<b>return</b> false;
+    },
+
+    <i>/**
+     * Selects the row that precedes the last selected row.
+     * @param {Boolean} keepExisting (optional) True to keep existing selections
+     * @<b>return</b> {Boolean} True <b>if</b> there is a previous row, <b>else</b> false
+     */</i>
+    selectPrevious : <b>function</b>(keepExisting){
+        <b>if</b>(this.hasPrevious()){
+            <b>this</b>.selectRow(<b>this</b>.last-1, keepExisting);
+            <b>this</b>.grid.getView().focusRow(<b>this</b>.last);
+			<b>return</b> true;
+        }
+		<b>return</b> false;
+    },
+
+    <i>/**
+     * Returns true <b>if</b> there is a next record to select
+     * @<b>return</b> {Boolean}
+     */</i>
+    hasNext : <b>function</b>(){
+        <b>return</b> this.last !== false &amp;&amp; (<b>this</b>.last+1) &lt; <b>this</b>.grid.store.getCount();
+    },
+
+    <i>/**
+     * Returns true <b>if</b> there is a previous record to select
+     * @<b>return</b> {Boolean}
+     */</i>
+    hasPrevious : <b>function</b>(){
+        <b>return</b> !!<b>this</b>.last;
+    },
+
+
+    <i>/**
+     * Returns the selected records
+     * @<b>return</b> {Array} Array of selected records
+     */</i>
+    getSelections : <b>function</b>(){
+        <b>return</b> [].concat(<b>this</b>.selections.items);
+    },
+
+    <i>/**
+     * Returns the first selected record.
+     * @<b>return</b> {Record}
+     */</i>
+    getSelected : <b>function</b>(){
+        <b>return</b> this.selections.itemAt(0);
+    },
+
+    <i>/**
+     * Calls the passed <b>function</b> with each selection. If the <b>function</b> returns false, iteration is
+     * stopped and <b>this</b> function returns false. Otherwise it returns true.
+     * @param {Function} fn
+     * @param {Object} scope (optional)
+     * @<b>return</b> {Boolean} true <b>if</b> all selections were iterated
+     */</i>
+    each : <b>function</b>(fn, scope){
+        <b>var</b> s = <b>this</b>.getSelections();
+        <b>for</b>(var i = 0, len = s.length; i &lt; len; i++){
+            <b>if</b>(fn.call(scope || <b>this</b>, s[i], i) === false){
+                <b>return</b> false;
+            }
+        }
+        <b>return</b> true;
+    },
+
+    <i>/**
+     * Clears all selections.
+     */</i>
+    clearSelections : <b>function</b>(fast){
+        <b>if</b>(this.isLocked()) <b>return</b>;
+        <b>if</b>(fast !== true){
+            <b>var</b> ds = <b>this</b>.grid.store;
+            <b>var</b> s = <b>this</b>.selections;
+            s.each(<b>function</b>(r){
+                <b>this</b>.deselectRow(ds.indexOfId(r.id));
+            }, <b>this</b>);
+            s.clear();
+        }<b>else</b>{
+            <b>this</b>.selections.clear();
+        }
+        <b>this</b>.last = false;
+    },
+
+
+    <i>/**
+     * Selects all rows.
+     */</i>
+    selectAll : <b>function</b>(){
+        <b>if</b>(this.isLocked()) <b>return</b>;
+        <b>this</b>.selections.clear();
+        <b>for</b>(var i = 0, len = <b>this</b>.grid.store.getCount(); i &lt; len; i++){
+            <b>this</b>.selectRow(i, true);
+        }
+    },
+
+    <i>/**
+     * Returns True <b>if</b> there is a selection.
+     * @<b>return</b> {Boolean}
+     */</i>
+    hasSelection : <b>function</b>(){
+        <b>return</b> this.selections.length &gt; 0;
+    },
+
+    <i>/**
+     * Returns True <b>if</b> the specified row is selected.
+     * @param {Number/Record} record The record or index of the record to check
+     * @<b>return</b> {Boolean}
+     */</i>
+    isSelected : <b>function</b>(index){
+        <b>var</b> r = <b>typeof</b> index == &quot;number&quot; ? <b>this</b>.grid.store.getAt(index) : index;
+        <b>return</b> (r &amp;&amp; <b>this</b>.selections.key(r.id) ? true : false);
+    },
+
+    <i>/**
+     * Returns True <b>if</b> the specified record id is selected.
+     * @param {String} id The id of record to check
+     * @<b>return</b> {Boolean}
+     */</i>
+    isIdSelected : <b>function</b>(id){
+        <b>return</b> (<b>this</b>.selections.key(id) ? true : false);
+    },
+
+    <i>// private</i>
+    handleMouseDown : <b>function</b>(g, rowIndex, e){
+        <b>if</b>(e.button !== 0 || <b>this</b>.isLocked()){
+            <b>return</b>;
+        };
+        <b>var</b> view = <b>this</b>.grid.getView();
+        <b>if</b>(e.shiftKey &amp;&amp; !<b>this</b>.singleSelect &amp;&amp; <b>this</b>.last !== false){
+            <b>var</b> last = <b>this</b>.last;
+            <b>this</b>.selectRange(last, rowIndex, e.ctrlKey);
+            <b>this</b>.last = last; <i>// reset the last</i>
+            view.focusRow(rowIndex);
+        }<b>else</b>{
+            <b>var</b> isSelected = <b>this</b>.isSelected(rowIndex);
+            <b>if</b>(e.ctrlKey &amp;&amp; isSelected){
+                <b>this</b>.deselectRow(rowIndex);
+            }<b>else</b> if(!isSelected || <b>this</b>.getCount() &gt; 1){
+                <b>this</b>.selectRow(rowIndex, e.ctrlKey || e.shiftKey);
+                view.focusRow(rowIndex);
+            }
+        }
+    },
+
+    <i>/**
+     * Selects multiple rows.
+     * @param {Array} rows Array of the indexes of the row to select
+     * @param {Boolean} keepExisting (optional) True to keep existing selections (defaults to false)
+     */</i>
+    selectRows : <b>function</b>(rows, keepExisting){
+        <b>if</b>(!keepExisting){
+            <b>this</b>.clearSelections();
+        }
+        <b>for</b>(var i = 0, len = rows.length; i &lt; len; i++){
+            <b>this</b>.selectRow(rows[i], true);
+        }
+    },
+
+    <i>/**
+     * Selects a range of rows. All rows <b>in</b> between startRow and endRow are also selected.
+     * @param {Number} startRow The index of the first row <b>in</b> the range
+     * @param {Number} endRow The index of the last row <b>in</b> the range
+     * @param {Boolean} keepExisting (optional) True to retain existing selections
+     */</i>
+    selectRange : <b>function</b>(startRow, endRow, keepExisting){
+        <b>if</b>(this.isLocked()) <b>return</b>;
+        <b>if</b>(!keepExisting){
+            <b>this</b>.clearSelections();
+        }
+        <b>if</b>(startRow &lt;= endRow){
+            <b>for</b>(var i = startRow; i &lt;= endRow; i++){
+                <b>this</b>.selectRow(i, true);
+            }
+        }<b>else</b>{
+            <b>for</b>(var i = startRow; i &gt;= endRow; i--){
+                <b>this</b>.selectRow(i, true);
+            }
+        }
+    },
+
+    <i>/**
+     * Deselects a range of rows. All rows <b>in</b> between startRow and endRow are also deselected.
+     * @param {Number} startRow The index of the first row <b>in</b> the range
+     * @param {Number} endRow The index of the last row <b>in</b> the range
+     */</i>
+    deselectRange : <b>function</b>(startRow, endRow, preventViewNotify){
+        <b>if</b>(this.isLocked()) <b>return</b>;
+        <b>for</b>(var i = startRow; i &lt;= endRow; i++){
+            <b>this</b>.deselectRow(i, preventViewNotify);
+        }
+    },
+
+    <i>/**
+     * Selects a row.
+     * @param {Number} row The index of the row to select
+     * @param {Boolean} keepExisting (optional) True to keep existing selections
+     */</i>
+    selectRow : <b>function</b>(index, keepExisting, preventViewNotify){
+        <b>if</b>(this.isLocked() || (index &lt; 0 || index &gt;= <b>this</b>.grid.store.getCount()) || (keepExisting &amp;&amp; <b>this</b>.isSelected(index))){
+            <b>return</b>;
+        }
+        <b>var</b> r = <b>this</b>.grid.store.getAt(index);
+        <b>if</b>(r &amp;&amp; <b>this</b>.fireEvent(&quot;beforerowselect&quot;, <b>this</b>, index, keepExisting, r) !== false){
+            <b>if</b>(!keepExisting || <b>this</b>.singleSelect){
+                <b>this</b>.clearSelections();
+            }
+            <b>this</b>.selections.add(r);
+            <b>this</b>.last = <b>this</b>.lastActive = index;
+            <b>if</b>(!preventViewNotify){
+                <b>this</b>.grid.getView().onRowSelect(index);
+            }
+            <b>this</b>.fireEvent(&quot;rowselect&quot;, <b>this</b>, index, r);
+            <b>this</b>.fireEvent(&quot;selectionchange&quot;, <b>this</b>);
+        }
+    },
+
+    <i>/**
+     * Deselects a row.
+     * @param {Number} row The index of the row to deselect
+     */</i>
+    deselectRow : <b>function</b>(index, preventViewNotify){
+        <b>if</b>(this.isLocked()) <b>return</b>;
+        <b>if</b>(this.last == index){
+            <b>this</b>.last = false;
+        }
+        <b>if</b>(this.lastActive == index){
+            <b>this</b>.lastActive = false;
+        }
+        <b>var</b> r = <b>this</b>.grid.store.getAt(index);
+        <b>if</b>(r){
+            <b>this</b>.selections.remove(r);
+            <b>if</b>(!preventViewNotify){
+                <b>this</b>.grid.getView().onRowDeselect(index);
+            }
+            <b>this</b>.fireEvent(&quot;rowdeselect&quot;, <b>this</b>, index, r);
+            <b>this</b>.fireEvent(&quot;selectionchange&quot;, <b>this</b>);
+        }
+    },
+
+    <i>// private</i>
+    restoreLast : <b>function</b>(){
+        <b>if</b>(this._last){
+            <b>this</b>.last = <b>this</b>._last;
+        }
+    },
+
+    <i>// private</i>
+    acceptsNav : <b>function</b>(row, col, cm){
+        <b>return</b> !cm.isHidden(col) &amp;&amp; cm.isCellEditable(col, row);
+    },
+
+    <i>// private</i>
+    onEditorKey : <b>function</b>(field, e){
+        <b>var</b> k = e.getKey(), newCell, g = <b>this</b>.grid, ed = g.activeEditor;
+        <b>var</b> shift = e.shiftKey;
+        <b>if</b>(k == e.TAB){
+            e.stopEvent();
+            ed.completeEdit();
+            <b>if</b>(shift){
+                newCell = g.walkCells(ed.row, ed.col-1, -1, <b>this</b>.acceptsNav, <b>this</b>);
+            }<b>else</b>{
+                newCell = g.walkCells(ed.row, ed.col+1, 1, <b>this</b>.acceptsNav, <b>this</b>);
+            }
+        }<b>else</b> if(k == e.ENTER){
+            e.stopEvent();
+            ed.completeEdit();
+			<b>if</b>(this.moveEditorOnEnter !== false){
+				<b>if</b>(shift){
+					newCell = g.walkCells(ed.row - 1, ed.col, -1, <b>this</b>.acceptsNav, <b>this</b>);
+				}<b>else</b>{
+					newCell = g.walkCells(ed.row + 1, ed.col, 1, <b>this</b>.acceptsNav, <b>this</b>);
+				}
+			}
+        }<b>else</b> if(k == e.ESC){
+            ed.cancelEdit();
+        }
+        <b>if</b>(newCell){
+            g.startEditing(newCell[0], newCell[1]);
+        }
+    },
+    
+    destroy: <b>function</b>(){
+        <b>if</b>(this.rowNav){
+            <b>this</b>.rowNav.disable();
+            <b>this</b>.rowNav = null;
+        }
+        Ext.grid.RowSelectionModel.superclass.destroy.call(<b>this</b>);
+    }
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

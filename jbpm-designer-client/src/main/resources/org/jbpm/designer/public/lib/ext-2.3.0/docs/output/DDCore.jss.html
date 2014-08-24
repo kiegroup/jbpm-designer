@@ -1,0 +1,2981 @@
+<html><head><title>DDCore.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>DDCore.js</h1><pre class="highlighted"><code><i>/*
+ * These classes are derivatives of the similarly named classes <b>in</b> the YUI Library.
+ * The original license:
+ * Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+ * Code licensed under the BSD License:
+ * http:<i>//developer.yahoo.net/yui/license.txt</i>
+ */</i>
+
+(<b>function</b>() {
+
+<b>var</b> Event=Ext.EventManager;
+<b>var</b> Dom=Ext.lib.Dom;
+
+<i>/**
+ * @class Ext.dd.DragDrop
+ * Defines the interface and base operation of items that that can be
+ * dragged or can be drop targets.  It was designed to be extended, overriding
+ * the event handlers <b>for</b> startDrag, onDrag, onDragOver and onDragOut.
+ * Up to three html elements can be associated <b>with</b> a DragDrop instance:
+ * &lt;ul&gt;
+ * &lt;li&gt;linked element: the element that is passed into the constructor.
+ * This is the element which defines the boundaries <b>for</b> interaction <b>with</b>
+ * other DragDrop objects.&lt;/li&gt;
+ * &lt;li&gt;handle element(s): The drag operation only occurs <b>if</b> the element that
+ * was clicked matches a handle element.  By <b>default</b> this is the linked
+ * element, but there are times that you will want only a portion of the
+ * linked element to initiate the drag operation, and the setHandleElId()
+ * method provides a way to define <b>this</b>.&lt;/li&gt;
+ * &lt;li&gt;drag element: <b>this</b> represents the element that would be moved along
+ * <b>with</b> the cursor during a drag operation.  By <b>default</b>, <b>this</b> is the linked
+ * element itself as <b>in</b> {@link Ext.dd.DD}.  setDragElId() lets you define
+ * a separate element that would be moved, as <b>in</b> {@link Ext.dd.DDProxy}.
+ * &lt;/li&gt;
+ * &lt;/ul&gt;
+ * This class should not be instantiated until the onload event to ensure that
+ * the associated elements are available.
+ * The following would define a DragDrop obj that would interact <b>with</b> any
+ * other DragDrop obj <b>in</b> the &quot;group1&quot; group:
+ * &lt;pre&gt;
+ *  dd = <b>new</b> Ext.dd.DragDrop(&quot;div1&quot;, &quot;group1&quot;);
+ * &lt;/pre&gt;
+ * Since none of the event handlers have been implemented, nothing would
+ * actually happen <b>if</b> you were to run the code above.  Normally you would
+ * override <b>this</b> class or one of the <b>default</b> implementations, but you can
+ * also override the methods you want on an instance of the class...
+ * &lt;pre&gt;
+ *  dd.onDragDrop = <b>function</b>(e, id) {
+ *  &amp;nbsp;&amp;nbsp;alert(&quot;dd was dropped on &quot; + id);
+ *  }
+ * &lt;/pre&gt;
+ * @constructor
+ * @param {String} id of the element that is linked to <b>this</b> instance
+ * @param {String} sGroup the group of related DragDrop objects
+ * @param {object} config an object containing configurable attributes
+ *                Valid properties <b>for</b> DragDrop:
+ *                    padding, isTarget, maintainOffset, primaryButtonOnly
+ */</i>
+Ext.dd.DragDrop = <b>function</b>(id, sGroup, config) {
+    <b>if</b>(id) {
+        <b>this</b>.init(id, sGroup, config);
+    }
+};
+
+Ext.dd.DragDrop.prototype = {
+
+    <i>/**
+     * The id of the element associated <b>with</b> this object.  This is what we
+     * refer to as the &quot;linked element&quot; because the size and position of
+     * <b>this</b> element is used to determine when the drag and drop objects have
+     * interacted.
+     * @property id
+     * @type String
+     */</i>
+    id: null,
+
+    <i>/**
+     * Configuration attributes passed into the constructor
+     * @property config
+     * @type object
+     */</i>
+    config: null,
+
+    <i>/**
+     * The id of the element that will be dragged.  By <b>default</b> this is same
+     * as the linked element , but could be changed to another element. Ex:
+     * Ext.dd.DDProxy
+     * @property dragElId
+     * @type String
+     * @private
+     */</i>
+    dragElId: null,
+
+    <i>/**
+     * The ID of the element that initiates the drag operation.  By <b>default</b>
+     * <b>this</b> is the linked element, but could be changed to be a child of <b>this</b>
+     * element.  This lets us <b>do</b> things like only starting the drag when the
+     * header element within the linked html element is clicked.
+     * @property handleElId
+     * @type String
+     * @private
+     */</i>
+    handleElId: null,
+
+    <i>/**
+     * An object who's property names identify HTML tags to be considered invalid as drag handles.
+     * A non-null property value identifies the tag as invalid. Defaults to the 
+     * following value which prevents drag operations from being initiated by &amp;lt;a&gt; elements:&lt;pre&gt;&lt;code&gt;
+{
+    A: &quot;A&quot;
+}&lt;/code&gt;&lt;/pre&gt;
+     * @property invalidHandleTypes
+     * @type Object
+     */</i>
+    invalidHandleTypes: null,
+
+    <i>/**
+     * An object who's property names identify the IDs of elements to be considered invalid as drag handles.
+     * A non-null property value identifies the ID as invalid. For example, to prevent
+     * dragging from being initiated on element ID &quot;foo&quot;, use:&lt;pre&gt;&lt;code&gt;
+{
+    foo: true
+}&lt;/code&gt;&lt;/pre&gt;
+     * @property invalidHandleIds
+     * @type Object
+     */</i>
+    invalidHandleIds: null,
+
+    <i>/**
+     * An Array of CSS class names <b>for</b> elements to be considered <b>in</b> valid as drag handles.
+     * @property invalidHandleClasses
+     * @type Array
+     */</i>
+    invalidHandleClasses: null,
+
+    <i>/**
+     * The linked element's absolute X position at the time the drag was
+     * started
+     * @property startPageX
+     * @type int
+     * @private
+     */</i>
+    startPageX: 0,
+
+    <i>/**
+     * The linked element's absolute X position at the time the drag was
+     * started
+     * @property startPageY
+     * @type int
+     * @private
+     */</i>
+    startPageY: 0,
+
+    <i>/**
+     * The group defines a logical collection of DragDrop objects that are
+     * related.  Instances only get events when interacting <b>with</b> other
+     * DragDrop object <b>in</b> the same group.  This lets us define multiple
+     * groups using a single DragDrop subclass <b>if</b> we want.
+     * @property groups
+     * @type object An object <b>in</b> the format {<em>'group1'</em>:true, <em>'group2'</em>:true}
+     */</i>
+    groups: null,
+
+    <i>/**
+     * Individual drag/drop instances can be locked.  This will prevent
+     * onmousedown start drag.
+     * @property locked
+     * @type boolean
+     * @private
+     */</i>
+    locked: false,
+
+    <i>/**
+     * Lock <b>this</b> instance
+     * @method lock
+     */</i>
+    lock: <b>function</b>() { <b>this</b>.locked = true; },
+
+    <i>/**
+     * When set to true, other DD objects <b>in</b> cooperating DDGroups <b>do</b> not receive
+     * notification events when <b>this</b> DD object is dragged over them. Defaults to false.
+     * @property moveOnly
+     * @type boolean
+     */</i>
+    moveOnly: false,
+
+    <i>/**
+     * Unlock <b>this</b> instace
+     * @method unlock
+     */</i>
+    unlock: <b>function</b>() { <b>this</b>.locked = false; },
+
+    <i>/**
+     * By <b>default</b>, all instances can be a drop target.  This can be disabled by
+     * setting isTarget to false.
+     * @property isTarget
+     * @type boolean
+     */</i>
+    isTarget: true,
+
+    <i>/**
+     * The padding configured <b>for</b> this drag and drop object <b>for</b> calculating
+     * the drop zone intersection <b>with</b> this object.
+     * @property padding
+     * @type int[] An array containing the 4 padding values: [top, right, bottom, left]
+     */</i>
+    padding: null,
+
+    <i>/**
+     * Cached reference to the linked element
+     * @property _domRef
+     * @private
+     */</i>
+    _domRef: null,
+
+    <i>/**
+     * Internal <b>typeof</b> flag
+     * @property __ygDragDrop
+     * @private
+     */</i>
+    __ygDragDrop: true,
+
+    <i>/**
+     * Set to true when horizontal contraints are applied
+     * @property constrainX
+     * @type boolean
+     * @private
+     */</i>
+    constrainX: false,
+
+    <i>/**
+     * Set to true when vertical contraints are applied
+     * @property constrainY
+     * @type boolean
+     * @private
+     */</i>
+    constrainY: false,
+
+    <i>/**
+     * The left constraint
+     * @property minX
+     * @type int
+     * @private
+     */</i>
+    minX: 0,
+
+    <i>/**
+     * The right constraint
+     * @property maxX
+     * @type int
+     * @private
+     */</i>
+    maxX: 0,
+
+    <i>/**
+     * The up constraint
+     * @property minY
+     * @type int
+     * @type int
+     * @private
+     */</i>
+    minY: 0,
+
+    <i>/**
+     * The down constraint
+     * @property maxY
+     * @type int
+     * @private
+     */</i>
+    maxY: 0,
+
+    <i>/**
+     * Maintain offsets when we resetconstraints.  Set to true when you want
+     * the position of the element relative to its parent to stay the same
+     * when the page changes
+     *
+     * @property maintainOffset
+     * @type boolean
+     */</i>
+    maintainOffset: false,
+
+    <i>/**
+     * Array of pixel locations the element will snap to <b>if</b> we specified a
+     * horizontal graduation/interval.  This array is generated automatically
+     * when you define a tick interval.
+     * @property xTicks
+     * @type int[]
+     */</i>
+    xTicks: null,
+
+    <i>/**
+     * Array of pixel locations the element will snap to <b>if</b> we specified a
+     * vertical graduation/interval.  This array is generated automatically
+     * when you define a tick interval.
+     * @property yTicks
+     * @type int[]
+     */</i>
+    yTicks: null,
+
+    <i>/**
+     * By <b>default</b> the drag and drop instance will only respond to the primary
+     * button click (left button <b>for</b> a right-handed mouse).  Set to true to
+     * allow drag and drop to start <b>with</b> any mouse click that is propogated
+     * by the browser
+     * @property primaryButtonOnly
+     * @type boolean
+     */</i>
+    primaryButtonOnly: true,
+
+    <i>/**
+     * The availabe property is false until the linked dom element is accessible.
+     * @property available
+     * @type boolean
+     */</i>
+    available: false,
+
+    <i>/**
+     * By <b>default</b>, drags can only be initiated <b>if</b> the mousedown occurs <b>in</b> the
+     * region the linked element is.  This is done <b>in</b> part to work around a
+     * bug <b>in</b> some browsers that mis-report the mousedown <b>if</b> the previous
+     * mouseup happened outside of the window.  This property is set to true
+     * <b>if</b> outer handles are defined.
+     *
+     * @property hasOuterHandles
+     * @type boolean
+     * @<b>default</b> false
+     */</i>
+    hasOuterHandles: false,
+
+    <i>/**
+     * Code that executes immediately before the startDrag event
+     * @method b4StartDrag
+     * @private
+     */</i>
+    b4StartDrag: <b>function</b>(x, y) { },
+
+    <i>/**
+     * Abstract method called after a drag/drop object is clicked
+     * and the drag or mousedown time thresholds have beeen met.
+     * @method startDrag
+     * @param {int} X click location
+     * @param {int} Y click location
+     */</i>
+    startDrag: <b>function</b>(x, y) { <i>/* override <b>this</b> */</i> },
+
+    <i>/**
+     * Code that executes immediately before the onDrag event
+     * @method b4Drag
+     * @private
+     */</i>
+    b4Drag: <b>function</b>(e) { },
+
+    <i>/**
+     * Abstract method called during the onMouseMove event <b>while</b> dragging an
+     * object.
+     * @method onDrag
+     * @param {Event} e the mousemove event
+     */</i>
+    onDrag: <b>function</b>(e) { <i>/* override <b>this</b> */</i> },
+
+    <i>/**
+     * Abstract method called when <b>this</b> element fist begins hovering over
+     * another DragDrop obj
+     * @method onDragEnter
+     * @param {Event} e the mousemove event
+     * @param {String|DragDrop[]} id In POINT mode, the element
+     * id <b>this</b> is hovering over.  In INTERSECT mode, an array of one or more
+     * dragdrop items being hovered over.
+     */</i>
+    onDragEnter: <b>function</b>(e, id) { <i>/* override <b>this</b> */</i> },
+
+    <i>/**
+     * Code that executes immediately before the onDragOver event
+     * @method b4DragOver
+     * @private
+     */</i>
+    b4DragOver: <b>function</b>(e) { },
+
+    <i>/**
+     * Abstract method called when <b>this</b> element is hovering over another
+     * DragDrop obj
+     * @method onDragOver
+     * @param {Event} e the mousemove event
+     * @param {String|DragDrop[]} id In POINT mode, the element
+     * id <b>this</b> is hovering over.  In INTERSECT mode, an array of dd items
+     * being hovered over.
+     */</i>
+    onDragOver: <b>function</b>(e, id) { <i>/* override <b>this</b> */</i> },
+
+    <i>/**
+     * Code that executes immediately before the onDragOut event
+     * @method b4DragOut
+     * @private
+     */</i>
+    b4DragOut: <b>function</b>(e) { },
+
+    <i>/**
+     * Abstract method called when we are no longer hovering over an element
+     * @method onDragOut
+     * @param {Event} e the mousemove event
+     * @param {String|DragDrop[]} id In POINT mode, the element
+     * id <b>this</b> was hovering over.  In INTERSECT mode, an array of dd items
+     * that the mouse is no longer over.
+     */</i>
+    onDragOut: <b>function</b>(e, id) { <i>/* override <b>this</b> */</i> },
+
+    <i>/**
+     * Code that executes immediately before the onDragDrop event
+     * @method b4DragDrop
+     * @private
+     */</i>
+    b4DragDrop: <b>function</b>(e) { },
+
+    <i>/**
+     * Abstract method called when <b>this</b> item is dropped on another DragDrop
+     * obj
+     * @method onDragDrop
+     * @param {Event} e the mouseup event
+     * @param {String|DragDrop[]} id In POINT mode, the element
+     * id <b>this</b> was dropped on.  In INTERSECT mode, an array of dd items <b>this</b>
+     * was dropped on.
+     */</i>
+    onDragDrop: <b>function</b>(e, id) { <i>/* override <b>this</b> */</i> },
+
+    <i>/**
+     * Abstract method called when <b>this</b> item is dropped on an area <b>with</b> no
+     * drop target
+     * @method onInvalidDrop
+     * @param {Event} e the mouseup event
+     */</i>
+    onInvalidDrop: <b>function</b>(e) { <i>/* override <b>this</b> */</i> },
+
+    <i>/**
+     * Code that executes immediately before the endDrag event
+     * @method b4EndDrag
+     * @private
+     */</i>
+    b4EndDrag: <b>function</b>(e) { },
+
+    <i>/**
+     * Fired when we are done dragging the object
+     * @method endDrag
+     * @param {Event} e the mouseup event
+     */</i>
+    endDrag: <b>function</b>(e) { <i>/* override <b>this</b> */</i> },
+
+    <i>/**
+     * Code executed immediately before the onMouseDown event
+     * @method b4MouseDown
+     * @param {Event} e the mousedown event
+     * @private
+     */</i>
+    b4MouseDown: <b>function</b>(e) {  },
+
+    <i>/**
+     * Event handler that fires when a drag/drop obj gets a mousedown
+     * @method onMouseDown
+     * @param {Event} e the mousedown event
+     */</i>
+    onMouseDown: <b>function</b>(e) { <i>/* override <b>this</b> */</i> },
+
+    <i>/**
+     * Event handler that fires when a drag/drop obj gets a mouseup
+     * @method onMouseUp
+     * @param {Event} e the mouseup event
+     */</i>
+    onMouseUp: <b>function</b>(e) { <i>/* override <b>this</b> */</i> },
+
+    <i>/**
+     * Override the onAvailable method to <b>do</b> what is needed after the initial
+     * position was determined.
+     * @method onAvailable
+     */</i>
+    onAvailable: <b>function</b> () {
+    },
+
+    <i>/**
+     * Provides <b>default</b> constraint padding to &quot;constrainTo&quot; elements (defaults to {left: 0, right:0, top:0, bottom:0}).
+     * @type Object
+     */</i>
+    defaultPadding : {left:0, right:0, top:0, bottom:0},
+
+    <i>/**
+     * Initializes the drag drop object's constraints to restrict movement to a certain element.
+ *
+ * Usage:
+ &lt;pre&gt;&lt;code&gt;
+ <b>var</b> dd = <b>new</b> Ext.dd.DDProxy(&quot;dragDiv1&quot;, &quot;proxytest&quot;,
+                { dragElId: &quot;existingProxyDiv&quot; });
+ dd.startDrag = <b>function</b>(){
+     <b>this</b>.constrainTo(&quot;parent-id&quot;);
+ };
+ &lt;/code&gt;&lt;/pre&gt;
+ * Or you can initalize it using the {@link Ext.Element} object:
+ &lt;pre&gt;&lt;code&gt;
+ Ext.get(&quot;dragDiv1&quot;).initDDProxy(&quot;proxytest&quot;, {dragElId: &quot;existingProxyDiv&quot;}, {
+     startDrag : <b>function</b>(){
+         <b>this</b>.constrainTo(&quot;parent-id&quot;);
+     }
+ });
+ &lt;/code&gt;&lt;/pre&gt;
+     * @param {Mixed} constrainTo The element to constrain to.
+     * @param {Object/Number} pad (optional) Pad provides a way to specify &quot;padding&quot; of the constraints,
+     * and can be either a number <b>for</b> symmetrical padding (4 would be equal to {left:4, right:4, top:4, bottom:4}) or
+     * an object containing the sides to pad. For example: {right:10, bottom:10}
+     * @param {Boolean} inContent (optional) Constrain the draggable <b>in</b> the content box of the element (inside padding and borders)
+     */</i>
+    constrainTo : <b>function</b>(constrainTo, pad, inContent){
+        <b>if</b>(typeof pad == &quot;number&quot;){
+            pad = {left: pad, right:pad, top:pad, bottom:pad};
+        }
+        pad = pad || <b>this</b>.defaultPadding;
+        <b>var</b> b = Ext.get(<b>this</b>.getEl()).getBox();
+        <b>var</b> ce = Ext.get(constrainTo);
+        <b>var</b> s = ce.getScroll();
+        <b>var</b> c, cd = ce.dom;
+        <b>if</b>(cd == document.body){
+            c = { x: s.left, y: s.top, width: Ext.lib.Dom.getViewWidth(), height: Ext.lib.Dom.getViewHeight()};
+        }<b>else</b>{
+            <b>var</b> xy = ce.getXY();
+            c = {x : xy[0]+s.left, y: xy[1]+s.top, width: cd.clientWidth, height: cd.clientHeight};
+        }
+
+
+        <b>var</b> topSpace = b.y - c.y;
+        <b>var</b> leftSpace = b.x - c.x;
+
+        <b>this</b>.resetConstraints();
+        <b>this</b>.setXConstraint(leftSpace - (pad.left||0), <i>// left</i>
+                c.width - leftSpace - b.width - (pad.right||0), <i>//right</i>
+				<b>this</b>.xTickSize
+        );
+        <b>this</b>.setYConstraint(topSpace - (pad.top||0), <i>//top</i>
+                c.height - topSpace - b.height - (pad.bottom||0), <i>//bottom</i>
+				<b>this</b>.yTickSize
+        );
+    },
+
+    <i>/**
+     * Returns a reference to the linked element
+     * @method getEl
+     * @<b>return</b> {HTMLElement} the html element
+     */</i>
+    getEl: <b>function</b>() {
+        <b>if</b> (!<b>this</b>._domRef) {
+            <b>this</b>._domRef = Ext.getDom(<b>this</b>.id);
+        }
+
+        <b>return</b> this._domRef;
+    },
+
+    <i>/**
+     * Returns a reference to the actual element to drag.  By <b>default</b> this is
+     * the same as the html element, but it can be assigned to another
+     * element. An example of <b>this</b> can be found <b>in</b> Ext.dd.DDProxy
+     * @method getDragEl
+     * @<b>return</b> {HTMLElement} the html element
+     */</i>
+    getDragEl: <b>function</b>() {
+        <b>return</b> Ext.getDom(<b>this</b>.dragElId);
+    },
+
+    <i>/**
+     * Sets up the DragDrop object.  Must be called <b>in</b> the constructor of any
+     * Ext.dd.DragDrop subclass
+     * @method init
+     * @param id the id of the linked element
+     * @param {String} sGroup the group of related items
+     * @param {object} config configuration attributes
+     */</i>
+    init: <b>function</b>(id, sGroup, config) {
+        <b>this</b>.initTarget(id, sGroup, config);
+        Event.on(<b>this</b>.id, &quot;mousedown&quot;, <b>this</b>.handleMouseDown, <b>this</b>);
+        <i>// Event.on(<b>this</b>.id, &quot;selectstart&quot;, Event.preventDefault);</i>
+    },
+
+    <i>/**
+     * Initializes Targeting functionality only... the object does not
+     * get a mousedown handler.
+     * @method initTarget
+     * @param id the id of the linked element
+     * @param {String} sGroup the group of related items
+     * @param {object} config configuration attributes
+     */</i>
+    initTarget: <b>function</b>(id, sGroup, config) {
+
+        <i>// configuration attributes</i>
+        <b>this</b>.config = config || {};
+
+        <i>// create a local reference to the drag and drop manager</i>
+        <b>this</b>.DDM = Ext.dd.DDM;
+        <i>// initialize the groups array</i>
+        <b>this</b>.groups = {};
+
+        <i>// assume that we have an element reference instead of an id <b>if</b> the</i>
+        <i>// parameter is not a string</i>
+        <b>if</b> (<b>typeof</b> id !== &quot;string&quot;) {
+            id = Ext.id(id);
+        }
+
+        <i>// set the id</i>
+        <b>this</b>.id = id;
+
+        <i>// add to an interaction group</i>
+        <b>this</b>.addToGroup((sGroup) ? sGroup : &quot;<b>default</b>&quot;);
+
+        <i>// We don't want to register <b>this</b> as the handle <b>with</b> the manager</i>
+        <i>// so we just set the id rather than calling the setter.</i>
+        <b>this</b>.handleElId = id;
+
+        <i>// the linked element is the element that gets dragged by <b>default</b></i>
+        <b>this</b>.setDragElId(id);
+
+        <i>// by <b>default</b>, clicked anchors will not start drag operations.</i>
+        <b>this</b>.invalidHandleTypes = { A: &quot;A&quot; };
+        <b>this</b>.invalidHandleIds = {};
+        <b>this</b>.invalidHandleClasses = [];
+
+        <b>this</b>.applyConfig();
+
+        <b>this</b>.handleOnAvailable();
+    },
+
+    <i>/**
+     * Applies the configuration parameters that were passed into the constructor.
+     * This is supposed to happen at each level through the inheritance chain.  So
+     * a DDProxy implentation will execute apply config on DDProxy, DD, and
+     * DragDrop <b>in</b> order to get all of the parameters that are available <b>in</b>
+     * each object.
+     * @method applyConfig
+     */</i>
+    applyConfig: <b>function</b>() {
+
+        <i>// configurable properties:</i>
+        <i>//    padding, isTarget, maintainOffset, primaryButtonOnly</i>
+        <b>this</b>.padding           = <b>this</b>.config.padding || [0, 0, 0, 0];
+        <b>this</b>.isTarget          = (<b>this</b>.config.isTarget !== false);
+        <b>this</b>.maintainOffset    = (<b>this</b>.config.maintainOffset);
+        <b>this</b>.primaryButtonOnly = (<b>this</b>.config.primaryButtonOnly !== false);
+
+    },
+
+    <i>/**
+     * Executed when the linked element is available
+     * @method handleOnAvailable
+     * @private
+     */</i>
+    handleOnAvailable: <b>function</b>() {
+        <b>this</b>.available = true;
+        <b>this</b>.resetConstraints();
+        <b>this</b>.onAvailable();
+    },
+
+     <i>/**
+     * Configures the padding <b>for</b> the target zone <b>in</b> px.  Effectively expands
+     * (or reduces) the virtual object size <b>for</b> targeting calculations.
+     * Supports css-style shorthand; <b>if</b> only one parameter is passed, all sides
+     * will have that padding, and <b>if</b> only two are passed, the top and bottom
+     * will have the first param, the left and right the second.
+     * @method setPadding
+     * @param {int} iTop    Top pad
+     * @param {int} iRight  Right pad
+     * @param {int} iBot    Bot pad
+     * @param {int} iLeft   Left pad
+     */</i>
+    setPadding: <b>function</b>(iTop, iRight, iBot, iLeft) {
+        <i>// <b>this</b>.padding = [iLeft, iRight, iTop, iBot];</i>
+        <b>if</b> (!iRight &amp;&amp; 0 !== iRight) {
+            <b>this</b>.padding = [iTop, iTop, iTop, iTop];
+        } <b>else</b> if (!iBot &amp;&amp; 0 !== iBot) {
+            <b>this</b>.padding = [iTop, iRight, iTop, iRight];
+        } <b>else</b> {
+            <b>this</b>.padding = [iTop, iRight, iBot, iLeft];
+        }
+    },
+
+    <i>/**
+     * Stores the initial placement of the linked element.
+     * @method setInitPosition
+     * @param {int} diffX   the X offset, <b>default</b> 0
+     * @param {int} diffY   the Y offset, <b>default</b> 0
+     */</i>
+    setInitPosition: <b>function</b>(diffX, diffY) {
+        <b>var</b> el = <b>this</b>.getEl();
+
+        <b>if</b> (!<b>this</b>.DDM.verifyEl(el)) {
+            <b>return</b>;
+        }
+
+        <b>var</b> dx = diffX || 0;
+        <b>var</b> dy = diffY || 0;
+
+        <b>var</b> p = Dom.getXY( el );
+
+        <b>this</b>.initPageX = p[0] - dx;
+        <b>this</b>.initPageY = p[1] - dy;
+
+        <b>this</b>.lastPageX = p[0];
+        <b>this</b>.lastPageY = p[1];
+
+
+        <b>this</b>.setStartPosition(p);
+    },
+
+    <i>/**
+     * Sets the start position of the element.  This is set when the obj
+     * is initialized, the reset when a drag is started.
+     * @method setStartPosition
+     * @param pos current position (from previous lookup)
+     * @private
+     */</i>
+    setStartPosition: <b>function</b>(pos) {
+        <b>var</b> p = pos || Dom.getXY( <b>this</b>.getEl() );
+        <b>this</b>.deltaSetXY = null;
+
+        <b>this</b>.startPageX = p[0];
+        <b>this</b>.startPageY = p[1];
+    },
+
+    <i>/**
+     * Add <b>this</b> instance to a group of related drag/drop objects.  All
+     * instances belong to at least one group, and can belong to as many
+     * groups as needed.
+     * @method addToGroup
+     * @param sGroup {string} the name of the group
+     */</i>
+    addToGroup: <b>function</b>(sGroup) {
+        <b>this</b>.groups[sGroup] = true;
+        <b>this</b>.DDM.regDragDrop(<b>this</b>, sGroup);
+    },
+
+    <i>/**
+     * Remove's <b>this</b> instance from the supplied interaction group
+     * @method removeFromGroup
+     * @param {string}  sGroup  The group to drop
+     */</i>
+    removeFromGroup: <b>function</b>(sGroup) {
+        <b>if</b> (<b>this</b>.groups[sGroup]) {
+            <b>delete</b> this.groups[sGroup];
+        }
+
+        <b>this</b>.DDM.removeDDFromGroup(<b>this</b>, sGroup);
+    },
+
+    <i>/**
+     * Allows you to specify that an element other than the linked element
+     * will be moved <b>with</b> the cursor during a drag
+     * @method setDragElId
+     * @param id {string} the id of the element that will be used to initiate the drag
+     */</i>
+    setDragElId: <b>function</b>(id) {
+        <b>this</b>.dragElId = id;
+    },
+
+    <i>/**
+     * Allows you to specify a child of the linked element that should be
+     * used to initiate the drag operation.  An example of <b>this</b> would be <b>if</b>
+     * you have a content div <b>with</b> text and links.  Clicking anywhere <b>in</b> the
+     * content area would normally start the drag operation.  Use <b>this</b> method
+     * to specify that an element inside of the content div is the element
+     * that starts the drag operation.
+     * @method setHandleElId
+     * @param id {string} the id of the element that will be used to
+     * initiate the drag.
+     */</i>
+    setHandleElId: <b>function</b>(id) {
+        <b>if</b> (<b>typeof</b> id !== &quot;string&quot;) {
+            id = Ext.id(id);
+        }
+        <b>this</b>.handleElId = id;
+        <b>this</b>.DDM.regHandle(<b>this</b>.id, id);
+    },
+
+    <i>/**
+     * Allows you to set an element outside of the linked element as a drag
+     * handle
+     * @method setOuterHandleElId
+     * @param id the id of the element that will be used to initiate the drag
+     */</i>
+    setOuterHandleElId: <b>function</b>(id) {
+        <b>if</b> (<b>typeof</b> id !== &quot;string&quot;) {
+            id = Ext.id(id);
+        }
+        Event.on(id, &quot;mousedown&quot;,
+                <b>this</b>.handleMouseDown, <b>this</b>);
+        <b>this</b>.setHandleElId(id);
+
+        <b>this</b>.hasOuterHandles = true;
+    },
+
+    <i>/**
+     * Remove all drag and drop hooks <b>for</b> this element
+     * @method unreg
+     */</i>
+    unreg: <b>function</b>() {
+        Event.un(<b>this</b>.id, &quot;mousedown&quot;,
+                <b>this</b>.handleMouseDown);
+        <b>this</b>._domRef = null;
+        <b>this</b>.DDM._remove(<b>this</b>);
+    },
+
+    destroy : <b>function</b>(){
+        <b>this</b>.unreg();
+    },
+
+    <i>/**
+     * Returns true <b>if</b> this instance is locked, or the drag drop mgr is locked
+     * (meaning that all drag/drop is disabled on the page.)
+     * @method isLocked
+     * @<b>return</b> {boolean} true <b>if</b> this obj or all drag/drop is locked, <b>else</b>
+     * false
+     */</i>
+    isLocked: <b>function</b>() {
+        <b>return</b> (<b>this</b>.DDM.isLocked() || <b>this</b>.locked);
+    },
+
+    <i>/**
+     * Fired when <b>this</b> object is clicked
+     * @method handleMouseDown
+     * @param {Event} e
+     * @param {Ext.dd.DragDrop} oDD the clicked dd object (<b>this</b> dd obj)
+     * @private
+     */</i>
+    handleMouseDown: <b>function</b>(e, oDD){
+        <b>if</b> (<b>this</b>.primaryButtonOnly &amp;&amp; e.button != 0) {
+            <b>return</b>;
+        }
+
+        <b>if</b> (<b>this</b>.isLocked()) {
+            <b>return</b>;
+        }
+
+        <b>this</b>.DDM.refreshCache(<b>this</b>.groups);
+
+        <b>var</b> pt = <b>new</b> Ext.lib.Point(Ext.lib.Event.getPageX(e), Ext.lib.Event.getPageY(e));
+        <b>if</b> (!<b>this</b>.hasOuterHandles &amp;&amp; !<b>this</b>.DDM.isOverTarget(pt, <b>this</b>) )  {
+        } <b>else</b> {
+            <b>if</b> (<b>this</b>.clickValidator(e)) {
+
+                <i>// set the initial element position</i>
+                <b>this</b>.setStartPosition();
+
+
+                <b>this</b>.b4MouseDown(e);
+                <b>this</b>.onMouseDown(e);
+
+                <b>this</b>.DDM.handleMouseDown(e, <b>this</b>);
+
+                <b>this</b>.DDM.stopEvent(e);
+            } <b>else</b> {
+
+
+            }
+        }
+    },
+
+    clickValidator: <b>function</b>(e) {
+        <b>var</b> target = e.getTarget();
+        <b>return</b> ( <b>this</b>.isValidHandleChild(target) &amp;&amp;
+                    (<b>this</b>.id == <b>this</b>.handleElId ||
+                        <b>this</b>.DDM.handleWasClicked(target, <b>this</b>.id)) );
+    },
+
+    <i>/**
+     * Allows you to specify a tag name that should not start a drag operation
+     * when clicked.  This is designed to facilitate embedding links within a
+     * drag handle that <b>do</b> something other than start the drag.
+     * @method addInvalidHandleType
+     * @param {string} tagName the type of element to exclude
+     */</i>
+    addInvalidHandleType: <b>function</b>(tagName) {
+        <b>var</b> type = tagName.toUpperCase();
+        <b>this</b>.invalidHandleTypes[type] = type;
+    },
+
+    <i>/**
+     * Lets you to specify an element id <b>for</b> a child of a drag handle
+     * that should not initiate a drag
+     * @method addInvalidHandleId
+     * @param {string} id the element id of the element you wish to ignore
+     */</i>
+    addInvalidHandleId: <b>function</b>(id) {
+        <b>if</b> (<b>typeof</b> id !== &quot;string&quot;) {
+            id = Ext.id(id);
+        }
+        <b>this</b>.invalidHandleIds[id] = id;
+    },
+
+    <i>/**
+     * Lets you specify a css class of elements that will not initiate a drag
+     * @method addInvalidHandleClass
+     * @param {string} cssClass the class of the elements you wish to ignore
+     */</i>
+    addInvalidHandleClass: <b>function</b>(cssClass) {
+        <b>this</b>.invalidHandleClasses.push(cssClass);
+    },
+
+    <i>/**
+     * Unsets an excluded tag name set by addInvalidHandleType
+     * @method removeInvalidHandleType
+     * @param {string} tagName the type of element to unexclude
+     */</i>
+    removeInvalidHandleType: <b>function</b>(tagName) {
+        <b>var</b> type = tagName.toUpperCase();
+        <i>// <b>this</b>.invalidHandleTypes[type] = null;</i>
+        <b>delete</b> this.invalidHandleTypes[type];
+    },
+
+    <i>/**
+     * Unsets an invalid handle id
+     * @method removeInvalidHandleId
+     * @param {string} id the id of the element to re-enable
+     */</i>
+    removeInvalidHandleId: <b>function</b>(id) {
+        <b>if</b> (<b>typeof</b> id !== &quot;string&quot;) {
+            id = Ext.id(id);
+        }
+        <b>delete</b> this.invalidHandleIds[id];
+    },
+
+    <i>/**
+     * Unsets an invalid css class
+     * @method removeInvalidHandleClass
+     * @param {string} cssClass the class of the element(s) you wish to
+     * re-enable
+     */</i>
+    removeInvalidHandleClass: <b>function</b>(cssClass) {
+        <b>for</b> (<b>var</b> i=0, len=<b>this</b>.invalidHandleClasses.length; i&lt;len; ++i) {
+            <b>if</b> (<b>this</b>.invalidHandleClasses[i] == cssClass) {
+                <b>delete</b> this.invalidHandleClasses[i];
+            }
+        }
+    },
+
+    <i>/**
+     * Checks the tag exclusion list to see <b>if</b> this click should be ignored
+     * @method isValidHandleChild
+     * @param {HTMLElement} node the HTMLElement to evaluate
+     * @<b>return</b> {boolean} true <b>if</b> this is a valid tag type, false <b>if</b> not
+     */</i>
+    isValidHandleChild: <b>function</b>(node) {
+
+        <b>var</b> valid = true;
+        <i>// <b>var</b> n = (node.nodeName == &quot;#text&quot;) ? node.parentNode : node;</i>
+        <b>var</b> nodeName;
+        try {
+            nodeName = node.nodeName.toUpperCase();
+        } catch(e) {
+            nodeName = node.nodeName;
+        }
+        valid = valid &amp;&amp; !<b>this</b>.invalidHandleTypes[nodeName];
+        valid = valid &amp;&amp; !<b>this</b>.invalidHandleIds[node.id];
+
+        <b>for</b> (<b>var</b> i=0, len=<b>this</b>.invalidHandleClasses.length; valid &amp;&amp; i&lt;len; ++i) {
+            valid = !Ext.fly(node).hasClass(<b>this</b>.invalidHandleClasses[i]);
+        }
+
+
+        <b>return</b> valid;
+
+    },
+
+    <i>/**
+     * Create the array of horizontal tick marks <b>if</b> an interval was specified
+     * <b>in</b> setXConstraint().
+     * @method setXTicks
+     * @private
+     */</i>
+    setXTicks: <b>function</b>(iStartX, iTickSize) {
+        <b>this</b>.xTicks = [];
+        <b>this</b>.xTickSize = iTickSize;
+
+        <b>var</b> tickMap = {};
+
+        <b>for</b> (<b>var</b> i = <b>this</b>.initPageX; i &gt;= <b>this</b>.minX; i = i - iTickSize) {
+            <b>if</b> (!tickMap[i]) {
+                <b>this</b>.xTicks[<b>this</b>.xTicks.length] = i;
+                tickMap[i] = true;
+            }
+        }
+
+        <b>for</b> (i = <b>this</b>.initPageX; i &lt;= <b>this</b>.maxX; i = i + iTickSize) {
+            <b>if</b> (!tickMap[i]) {
+                <b>this</b>.xTicks[<b>this</b>.xTicks.length] = i;
+                tickMap[i] = true;
+            }
+        }
+
+        <b>this</b>.xTicks.sort(<b>this</b>.DDM.numericSort) ;
+    },
+
+    <i>/**
+     * Create the array of vertical tick marks <b>if</b> an interval was specified <b>in</b>
+     * setYConstraint().
+     * @method setYTicks
+     * @private
+     */</i>
+    setYTicks: <b>function</b>(iStartY, iTickSize) {
+        <b>this</b>.yTicks = [];
+        <b>this</b>.yTickSize = iTickSize;
+
+        <b>var</b> tickMap = {};
+
+        <b>for</b> (<b>var</b> i = <b>this</b>.initPageY; i &gt;= <b>this</b>.minY; i = i - iTickSize) {
+            <b>if</b> (!tickMap[i]) {
+                <b>this</b>.yTicks[<b>this</b>.yTicks.length] = i;
+                tickMap[i] = true;
+            }
+        }
+
+        <b>for</b> (i = <b>this</b>.initPageY; i &lt;= <b>this</b>.maxY; i = i + iTickSize) {
+            <b>if</b> (!tickMap[i]) {
+                <b>this</b>.yTicks[<b>this</b>.yTicks.length] = i;
+                tickMap[i] = true;
+            }
+        }
+
+        <b>this</b>.yTicks.sort(<b>this</b>.DDM.numericSort) ;
+    },
+
+    <i>/**
+     * By <b>default</b>, the element can be dragged any place on the screen.  Use
+     * <b>this</b> method to limit the horizontal travel of the element.  Pass <b>in</b>
+     * 0,0 <b>for</b> the parameters <b>if</b> you want to lock the drag to the y axis.
+     * @method setXConstraint
+     * @param {int} iLeft the number of pixels the element can move to the left
+     * @param {int} iRight the number of pixels the element can move to the
+     * right
+     * @param {int} iTickSize optional parameter <b>for</b> specifying that the
+     * element
+     * should move iTickSize pixels at a time.
+     */</i>
+    setXConstraint: <b>function</b>(iLeft, iRight, iTickSize) {
+        <b>this</b>.leftConstraint = iLeft;
+        <b>this</b>.rightConstraint = iRight;
+
+        <b>this</b>.minX = <b>this</b>.initPageX - iLeft;
+        <b>this</b>.maxX = <b>this</b>.initPageX + iRight;
+        <b>if</b> (iTickSize) { <b>this</b>.setXTicks(<b>this</b>.initPageX, iTickSize); }
+
+        <b>this</b>.constrainX = true;
+    },
+
+    <i>/**
+     * Clears any constraints applied to <b>this</b> instance.  Also clears ticks
+     * since they can't exist independent of a constraint at <b>this</b> time.
+     * @method clearConstraints
+     */</i>
+    clearConstraints: <b>function</b>() {
+        <b>this</b>.constrainX = false;
+        <b>this</b>.constrainY = false;
+        <b>this</b>.clearTicks();
+    },
+
+    <i>/**
+     * Clears any tick interval defined <b>for</b> this instance
+     * @method clearTicks
+     */</i>
+    clearTicks: <b>function</b>() {
+        <b>this</b>.xTicks = null;
+        <b>this</b>.yTicks = null;
+        <b>this</b>.xTickSize = 0;
+        <b>this</b>.yTickSize = 0;
+    },
+
+    <i>/**
+     * By <b>default</b>, the element can be dragged any place on the screen.  Set
+     * <b>this</b> to limit the vertical travel of the element.  Pass <b>in</b> 0,0 <b>for</b> the
+     * parameters <b>if</b> you want to lock the drag to the x axis.
+     * @method setYConstraint
+     * @param {int} iUp the number of pixels the element can move up
+     * @param {int} iDown the number of pixels the element can move down
+     * @param {int} iTickSize optional parameter <b>for</b> specifying that the
+     * element should move iTickSize pixels at a time.
+     */</i>
+    setYConstraint: <b>function</b>(iUp, iDown, iTickSize) {
+        <b>this</b>.topConstraint = iUp;
+        <b>this</b>.bottomConstraint = iDown;
+
+        <b>this</b>.minY = <b>this</b>.initPageY - iUp;
+        <b>this</b>.maxY = <b>this</b>.initPageY + iDown;
+        <b>if</b> (iTickSize) { <b>this</b>.setYTicks(<b>this</b>.initPageY, iTickSize); }
+
+        <b>this</b>.constrainY = true;
+
+    },
+
+    <i>/**
+     * resetConstraints must be called <b>if</b> you manually reposition a dd element.
+     * @method resetConstraints
+     * @param {boolean} maintainOffset
+     */</i>
+    resetConstraints: <b>function</b>() {
+
+
+        <i>// Maintain offsets <b>if</b> necessary</i>
+        <b>if</b> (<b>this</b>.initPageX || <b>this</b>.initPageX === 0) {
+            <i>// figure out how much <b>this</b> thing has moved</i>
+            <b>var</b> dx = (<b>this</b>.maintainOffset) ? <b>this</b>.lastPageX - <b>this</b>.initPageX : 0;
+            <b>var</b> dy = (<b>this</b>.maintainOffset) ? <b>this</b>.lastPageY - <b>this</b>.initPageY : 0;
+
+            <b>this</b>.setInitPosition(dx, dy);
+
+        <i>// This is the first time we have detected the element's position</i>
+        } <b>else</b> {
+            <b>this</b>.setInitPosition();
+        }
+
+        <b>if</b> (<b>this</b>.constrainX) {
+            <b>this</b>.setXConstraint( <b>this</b>.leftConstraint,
+                                 <b>this</b>.rightConstraint,
+                                 <b>this</b>.xTickSize        );
+        }
+
+        <b>if</b> (<b>this</b>.constrainY) {
+            <b>this</b>.setYConstraint( <b>this</b>.topConstraint,
+                                 <b>this</b>.bottomConstraint,
+                                 <b>this</b>.yTickSize         );
+        }
+    },
+
+    <i>/**
+     * Normally the drag element is moved pixel by pixel, but we can specify
+     * that it move a number of pixels at a time.  This method resolves the
+     * location when we have it set up like <b>this</b>.
+     * @method getTick
+     * @param {int} val where we want to place the object
+     * @param {int[]} tickArray sorted array of valid points
+     * @<b>return</b> {int} the closest tick
+     * @private
+     */</i>
+    getTick: <b>function</b>(val, tickArray) {
+
+        <b>if</b> (!tickArray) {
+            <i>// If tick interval is not defined, it is effectively 1 pixel,</i>
+            <i>// so we <b>return</b> the value passed to us.</i>
+            <b>return</b> val;
+        } <b>else</b> if (tickArray[0] &gt;= val) {
+            <i>// The value is lower than the first tick, so we <b>return</b> the first</i>
+            <i>// tick.</i>
+            <b>return</b> tickArray[0];
+        } <b>else</b> {
+            <b>for</b> (<b>var</b> i=0, len=tickArray.length; i&lt;len; ++i) {
+                <b>var</b> next = i + 1;
+                <b>if</b> (tickArray[next] &amp;&amp; tickArray[next] &gt;= val) {
+                    <b>var</b> diff1 = val - tickArray[i];
+                    <b>var</b> diff2 = tickArray[next] - val;
+                    <b>return</b> (diff2 &gt; diff1) ? tickArray[i] : tickArray[next];
+                }
+            }
+
+            <i>// The value is larger than the last tick, so we <b>return</b> the last</i>
+            <i>// tick.</i>
+            <b>return</b> tickArray[tickArray.length - 1];
+        }
+    },
+
+    <i>/**
+     * toString method
+     * @method toString
+     * @<b>return</b> {string} string representation of the dd obj
+     */</i>
+    toString: <b>function</b>() {
+        <b>return</b> (&quot;DragDrop &quot; + <b>this</b>.id);
+    }
+
+};
+
+})();
+<i>/**
+ * The drag and drop utility provides a framework <b>for</b> building drag and drop
+ * applications.  In addition to enabling drag and drop <b>for</b> specific elements,
+ * the drag and drop elements are tracked by the manager class, and the
+ * interactions between the various elements are tracked during the drag and
+ * the implementing code is notified about these important moments.
+ */</i>
+
+<i>// Only load the library once.  Rewriting the manager class would orphan</i>
+<i>// existing drag and drop instances.</i>
+<b>if</b> (!Ext.dd.DragDropMgr) {
+
+<i>/**
+ * @class Ext.dd.DragDropMgr
+ * DragDropMgr is a singleton that tracks the element interaction <b>for</b>
+ * all DragDrop items <b>in</b> the window.  Generally, you will not call
+ * <b>this</b> class directly, but it does have helper methods that could
+ * be useful <b>in</b> your DragDrop implementations.
+ * @singleton
+ */</i>
+Ext.dd.DragDropMgr = <b>function</b>() {
+
+    <b>var</b> Event = Ext.EventManager;
+
+    <b>return</b> {
+
+        <i>/**
+         * Two dimensional Array of registered DragDrop objects.  The first
+         * dimension is the DragDrop item group, the second the DragDrop
+         * object.
+         * @property ids
+         * @type {string: string}
+         * @private
+         * @static
+         */</i>
+        ids: {},
+
+        <i>/**
+         * Array of element ids defined as drag handles.  Used to determine
+         * <b>if</b> the element that generated the mousedown event is actually the
+         * handle and not the html element itself.
+         * @property handleIds
+         * @type {string: string}
+         * @private
+         * @static
+         */</i>
+        handleIds: {},
+
+        <i>/**
+         * the DragDrop object that is currently being dragged
+         * @property dragCurrent
+         * @type DragDrop
+         * @private
+         * @static
+         **/</i>
+        dragCurrent: null,
+
+        <i>/**
+         * the DragDrop object(s) that are being hovered over
+         * @property dragOvers
+         * @type Array
+         * @private
+         * @static
+         */</i>
+        dragOvers: {},
+
+        <i>/**
+         * the X distance between the cursor and the object being dragged
+         * @property deltaX
+         * @type int
+         * @private
+         * @static
+         */</i>
+        deltaX: 0,
+
+        <i>/**
+         * the Y distance between the cursor and the object being dragged
+         * @property deltaY
+         * @type int
+         * @private
+         * @static
+         */</i>
+        deltaY: 0,
+
+        <i>/**
+         * Flag to determine <b>if</b> we should prevent the <b>default</b> behavior of the
+         * events we define. By <b>default</b> this is true, but <b>this</b> can be set to
+         * false <b>if</b> you need the <b>default</b> behavior (not recommended)
+         * @property preventDefault
+         * @type boolean
+         * @static
+         */</i>
+        preventDefault: true,
+
+        <i>/**
+         * Flag to determine <b>if</b> we should stop the propagation of the events
+         * we generate. This is true by <b>default</b> but you may want to set it to
+         * false <b>if</b> the html element contains other features that require the
+         * mouse click.
+         * @property stopPropagation
+         * @type boolean
+         * @static
+         */</i>
+        stopPropagation: true,
+
+        <i>/**
+         * Internal flag that is set to true when drag and drop has been
+         * intialized
+         * @property initialized
+         * @private
+         * @static
+         */</i>
+        initialized: false,
+
+        <i>/**
+         * All drag and drop can be disabled.
+         * @property locked
+         * @private
+         * @static
+         */</i>
+        locked: false,
+
+        <i>/**
+         * Called the first time an element is registered.
+         * @method init
+         * @private
+         * @static
+         */</i>
+        init: <b>function</b>() {
+            <b>this</b>.initialized = true;
+        },
+
+        <i>/**
+         * In point mode, drag and drop interaction is defined by the
+         * location of the cursor during the drag/drop
+         * @property POINT
+         * @type int
+         * @static
+         */</i>
+        POINT: 0,
+
+        <i>/**
+         * In intersect mode, drag and drop interaction is defined by the
+         * overlap of two or more drag and drop objects.
+         * @property INTERSECT
+         * @type int
+         * @static
+         */</i>
+        INTERSECT: 1,
+
+        <i>/**
+         * The current drag and drop mode.  Default: POINT
+         * @property mode
+         * @type int
+         * @static
+         */</i>
+        mode: 0,
+
+        <i>/**
+         * Runs method on all drag and drop objects
+         * @method _execOnAll
+         * @private
+         * @static
+         */</i>
+        _execOnAll: <b>function</b>(sMethod, args) {
+            <b>for</b> (<b>var</b> i <b>in</b> this.ids) {
+                <b>for</b> (<b>var</b> j <b>in</b> this.ids[i]) {
+                    <b>var</b> oDD = <b>this</b>.ids[i][j];
+                    <b>if</b> (! <b>this</b>.isTypeOfDD(oDD)) {
+                        <b>continue</b>;
+                    }
+                    oDD[sMethod].apply(oDD, args);
+                }
+            }
+        },
+
+        <i>/**
+         * Drag and drop initialization.  Sets up the global event handlers
+         * @method _onLoad
+         * @private
+         * @static
+         */</i>
+        _onLoad: <b>function</b>() {
+
+            <b>this</b>.init();
+
+
+            Event.on(document, &quot;mouseup&quot;,   <b>this</b>.handleMouseUp, <b>this</b>, true);
+            Event.on(document, &quot;mousemove&quot;, <b>this</b>.handleMouseMove, <b>this</b>, true);
+            Event.on(window,   &quot;unload&quot;,    <b>this</b>._onUnload, <b>this</b>, true);
+            Event.on(window,   &quot;resize&quot;,    <b>this</b>._onResize, <b>this</b>, true);
+            <i>// Event.on(window,   &quot;mouseout&quot;,    <b>this</b>._test);</i>
+
+        },
+
+        <i>/**
+         * Reset constraints on all drag and drop objs
+         * @method _onResize
+         * @private
+         * @static
+         */</i>
+        _onResize: <b>function</b>(e) {
+            <b>this</b>._execOnAll(&quot;resetConstraints&quot;, []);
+        },
+
+        <i>/**
+         * Lock all drag and drop functionality
+         * @method lock
+         * @static
+         */</i>
+        lock: <b>function</b>() { <b>this</b>.locked = true; },
+
+        <i>/**
+         * Unlock all drag and drop functionality
+         * @method unlock
+         * @static
+         */</i>
+        unlock: <b>function</b>() { <b>this</b>.locked = false; },
+
+        <i>/**
+         * Is drag and drop locked?
+         * @method isLocked
+         * @<b>return</b> {boolean} True <b>if</b> drag and drop is locked, false otherwise.
+         * @static
+         */</i>
+        isLocked: <b>function</b>() { <b>return</b> this.locked; },
+
+        <i>/**
+         * Location cache that is set <b>for</b> all drag drop objects when a drag is
+         * initiated, cleared when the drag is finished.
+         * @property locationCache
+         * @private
+         * @static
+         */</i>
+        locationCache: {},
+
+        <i>/**
+         * Set useCache to false <b>if</b> you want to force object the lookup of each
+         * drag and drop linked element constantly during a drag.
+         * @property useCache
+         * @type boolean
+         * @static
+         */</i>
+        useCache: true,
+
+        <i>/**
+         * The number of pixels that the mouse needs to move after the
+         * mousedown before the drag is initiated.  Default=3;
+         * @property clickPixelThresh
+         * @type int
+         * @static
+         */</i>
+        clickPixelThresh: 3,
+
+        <i>/**
+         * The number of milliseconds after the mousedown event to initiate the
+         * drag <b>if</b> we don't get a mouseup event. Default=1000
+         * @property clickTimeThresh
+         * @type int
+         * @static
+         */</i>
+        clickTimeThresh: 350,
+
+        <i>/**
+         * Flag that indicates that either the drag pixel threshold or the
+         * mousdown time threshold has been met
+         * @property dragThreshMet
+         * @type boolean
+         * @private
+         * @static
+         */</i>
+        dragThreshMet: false,
+
+        <i>/**
+         * Timeout used <b>for</b> the click time threshold
+         * @property clickTimeout
+         * @type Object
+         * @private
+         * @static
+         */</i>
+        clickTimeout: null,
+
+        <i>/**
+         * The X position of the mousedown event stored <b>for</b> later use when a
+         * drag threshold is met.
+         * @property startX
+         * @type int
+         * @private
+         * @static
+         */</i>
+        startX: 0,
+
+        <i>/**
+         * The Y position of the mousedown event stored <b>for</b> later use when a
+         * drag threshold is met.
+         * @property startY
+         * @type int
+         * @private
+         * @static
+         */</i>
+        startY: 0,
+
+        <i>/**
+         * Each DragDrop instance must be registered <b>with</b> the DragDropMgr.
+         * This is executed <b>in</b> DragDrop.init()
+         * @method regDragDrop
+         * @param {DragDrop} oDD the DragDrop object to register
+         * @param {String} sGroup the name of the group <b>this</b> element belongs to
+         * @static
+         */</i>
+        regDragDrop: <b>function</b>(oDD, sGroup) {
+            <b>if</b> (!<b>this</b>.initialized) { <b>this</b>.init(); }
+
+            <b>if</b> (!<b>this</b>.ids[sGroup]) {
+                <b>this</b>.ids[sGroup] = {};
+            }
+            <b>this</b>.ids[sGroup][oDD.id] = oDD;
+        },
+
+        <i>/**
+         * Removes the supplied dd instance from the supplied group. Executed
+         * by DragDrop.removeFromGroup, so don't call <b>this</b> function directly.
+         * @method removeDDFromGroup
+         * @private
+         * @static
+         */</i>
+        removeDDFromGroup: <b>function</b>(oDD, sGroup) {
+            <b>if</b> (!<b>this</b>.ids[sGroup]) {
+                <b>this</b>.ids[sGroup] = {};
+            }
+
+            <b>var</b> obj = <b>this</b>.ids[sGroup];
+            <b>if</b> (obj &amp;&amp; obj[oDD.id]) {
+                <b>delete</b> obj[oDD.id];
+            }
+        },
+
+        <i>/**
+         * Unregisters a drag and drop item.  This is executed <b>in</b>
+         * DragDrop.unreg, use that method instead of calling <b>this</b> directly.
+         * @method _remove
+         * @private
+         * @static
+         */</i>
+        _remove: <b>function</b>(oDD) {
+            <b>for</b> (<b>var</b> g <b>in</b> oDD.groups) {
+                <b>if</b> (g &amp;&amp; <b>this</b>.ids[g] &amp;&amp; <b>this</b>.ids[g][oDD.id]) {
+                    <b>delete</b> this.ids[g][oDD.id];
+                }
+            }
+            <b>delete</b> this.handleIds[oDD.id];
+        },
+
+        <i>/**
+         * Each DragDrop handle element must be registered.  This is done
+         * automatically when executing DragDrop.setHandleElId()
+         * @method regHandle
+         * @param {String} sDDId the DragDrop id <b>this</b> element is a handle <b>for</b>
+         * @param {String} sHandleId the id of the element that is the drag
+         * handle
+         * @static
+         */</i>
+        regHandle: <b>function</b>(sDDId, sHandleId) {
+            <b>if</b> (!<b>this</b>.handleIds[sDDId]) {
+                <b>this</b>.handleIds[sDDId] = {};
+            }
+            <b>this</b>.handleIds[sDDId][sHandleId] = sHandleId;
+        },
+
+        <i>/**
+         * Utility <b>function</b> to determine <b>if</b> a given element has been
+         * registered as a drag drop item.
+         * @method isDragDrop
+         * @param {String} id the element id to check
+         * @<b>return</b> {boolean} true <b>if</b> this element is a DragDrop item,
+         * false otherwise
+         * @static
+         */</i>
+        isDragDrop: <b>function</b>(id) {
+            <b>return</b> ( <b>this</b>.getDDById(id) ) ? true : false;
+        },
+
+        <i>/**
+         * Returns the drag and drop instances that are <b>in</b> all groups the
+         * passed <b>in</b> instance belongs to.
+         * @method getRelated
+         * @param {DragDrop} p_oDD the obj to get related data <b>for</b>
+         * @param {boolean} bTargetsOnly <b>if</b> true, only <b>return</b> targetable objs
+         * @<b>return</b> {DragDrop[]} the related instances
+         * @static
+         */</i>
+        getRelated: <b>function</b>(p_oDD, bTargetsOnly) {
+            <b>var</b> oDDs = [];
+            <b>for</b> (<b>var</b> i <b>in</b> p_oDD.groups) {
+                <b>for</b> (<b>var</b> j <b>in</b> this.ids[i]) {
+                    <b>var</b> dd = <b>this</b>.ids[i][j];
+                    <b>if</b> (! <b>this</b>.isTypeOfDD(dd)) {
+                        <b>continue</b>;
+                    }
+                    <b>if</b> (!bTargetsOnly || dd.isTarget) {
+                        oDDs[oDDs.length] = dd;
+                    }
+                }
+            }
+
+            <b>return</b> oDDs;
+        },
+
+        <i>/**
+         * Returns true <b>if</b> the specified dd target is a legal target <b>for</b>
+         * the specifice drag obj
+         * @method isLegalTarget
+         * @param {DragDrop} the drag obj
+         * @param {DragDrop} the target
+         * @<b>return</b> {boolean} true <b>if</b> the target is a legal target <b>for</b> the
+         * dd obj
+         * @static
+         */</i>
+        isLegalTarget: <b>function</b> (oDD, oTargetDD) {
+            <b>var</b> targets = <b>this</b>.getRelated(oDD, true);
+            <b>for</b> (<b>var</b> i=0, len=targets.length;i&lt;len;++i) {
+                <b>if</b> (targets[i].id == oTargetDD.id) {
+                    <b>return</b> true;
+                }
+            }
+
+            <b>return</b> false;
+        },
+
+        <i>/**
+         * My goal is to be able to transparently determine <b>if</b> an object is
+         * <b>typeof</b> DragDrop, and the exact subclass of DragDrop.  <b>typeof</b>
+         * returns &quot;object&quot;, oDD.constructor.toString() always returns
+         * &quot;DragDrop&quot; and not the name of the subclass.  So <b>for</b> now it just
+         * evaluates a well-known variable <b>in</b> DragDrop.
+         * @method isTypeOfDD
+         * @param {Object} the object to evaluate
+         * @<b>return</b> {boolean} true <b>if</b> typeof oDD = DragDrop
+         * @static
+         */</i>
+        isTypeOfDD: <b>function</b> (oDD) {
+            <b>return</b> (oDD &amp;&amp; oDD.__ygDragDrop);
+        },
+
+        <i>/**
+         * Utility <b>function</b> to determine <b>if</b> a given element has been
+         * registered as a drag drop handle <b>for</b> the given Drag Drop object.
+         * @method isHandle
+         * @param {String} id the element id to check
+         * @<b>return</b> {boolean} true <b>if</b> this element is a DragDrop handle, false
+         * otherwise
+         * @static
+         */</i>
+        isHandle: <b>function</b>(sDDId, sHandleId) {
+            <b>return</b> ( <b>this</b>.handleIds[sDDId] &amp;&amp;
+                            <b>this</b>.handleIds[sDDId][sHandleId] );
+        },
+
+        <i>/**
+         * Returns the DragDrop instance <b>for</b> a given id
+         * @method getDDById
+         * @param {String} id the id of the DragDrop object
+         * @<b>return</b> {DragDrop} the drag drop object, null <b>if</b> it is not found
+         * @static
+         */</i>
+        getDDById: <b>function</b>(id) {
+            <b>for</b> (<b>var</b> i <b>in</b> this.ids) {
+                <b>if</b> (<b>this</b>.ids[i][id]) {
+                    <b>return</b> this.ids[i][id];
+                }
+            }
+            <b>return</b> null;
+        },
+
+        <i>/**
+         * Fired after a registered DragDrop object gets the mousedown event.
+         * Sets up the events required to track the object being dragged
+         * @method handleMouseDown
+         * @param {Event} e the event
+         * @param oDD the DragDrop object being dragged
+         * @private
+         * @static
+         */</i>
+        handleMouseDown: <b>function</b>(e, oDD) {
+            <b>if</b>(Ext.QuickTips){
+                Ext.QuickTips.disable();
+            }
+            <b>if</b>(this.dragCurrent){
+                <i>// the original browser mouseup wasn't handled (e.g. outside FF browser window)</i>
+                <i>// so clean up first to avoid breaking the next drag</i>
+                <b>this</b>.handleMouseUp(e);
+            }
+            
+            <b>this</b>.currentTarget = e.getTarget();
+            <b>this</b>.dragCurrent = oDD;
+
+            <b>var</b> el = oDD.getEl();
+
+            <i>// track start position</i>
+            <b>this</b>.startX = e.getPageX();
+            <b>this</b>.startY = e.getPageY();
+
+            <b>this</b>.deltaX = <b>this</b>.startX - el.offsetLeft;
+            <b>this</b>.deltaY = <b>this</b>.startY - el.offsetTop;
+
+            <b>this</b>.dragThreshMet = false;
+
+            <b>this</b>.clickTimeout = setTimeout(
+                    <b>function</b>() {
+                        <b>var</b> DDM = Ext.dd.DDM;
+                        DDM.startDrag(DDM.startX, DDM.startY);
+                    },
+                    <b>this</b>.clickTimeThresh );
+        },
+
+        <i>/**
+         * Fired when either the drag pixel threshol or the mousedown hold
+         * time threshold has been met.
+         * @method startDrag
+         * @param x {int} the X position of the original mousedown
+         * @param y {int} the Y position of the original mousedown
+         * @static
+         */</i>
+        startDrag: <b>function</b>(x, y) {
+            clearTimeout(<b>this</b>.clickTimeout);
+            <b>if</b> (<b>this</b>.dragCurrent) {
+                <b>this</b>.dragCurrent.b4StartDrag(x, y);
+                <b>this</b>.dragCurrent.startDrag(x, y);
+            }
+            <b>this</b>.dragThreshMet = true;
+        },
+
+        <i>/**
+         * Internal <b>function</b> to handle the mouseup event.  Will be invoked
+         * from the context of the document.
+         * @method handleMouseUp
+         * @param {Event} e the event
+         * @private
+         * @static
+         */</i>
+        handleMouseUp: <b>function</b>(e) {
+
+            <b>if</b>(Ext.QuickTips){
+                Ext.QuickTips.enable();
+            }
+            <b>if</b> (! <b>this</b>.dragCurrent) {
+                <b>return</b>;
+            }
+
+            clearTimeout(<b>this</b>.clickTimeout);
+
+            <b>if</b> (<b>this</b>.dragThreshMet) {
+                <b>this</b>.fireEvents(e, true);
+            } <b>else</b> {
+            }
+
+            <b>this</b>.stopDrag(e);
+
+            <b>this</b>.stopEvent(e);
+        },
+
+        <i>/**
+         * Utility to stop event propagation and event <b>default</b>, <b>if</b> these
+         * features are turned on.
+         * @method stopEvent
+         * @param {Event} e the event as returned by <b>this</b>.getEvent()
+         * @static
+         */</i>
+        stopEvent: <b>function</b>(e){
+            <b>if</b>(this.stopPropagation) {
+                e.stopPropagation();
+            }
+
+            <b>if</b> (<b>this</b>.preventDefault) {
+                e.preventDefault();
+            }
+        },
+
+        <i>/**
+         * Internal <b>function</b> to clean up event handlers after the drag
+         * operation is complete
+         * @method stopDrag
+         * @param {Event} e the event
+         * @private
+         * @static
+         */</i>
+        stopDrag: <b>function</b>(e) {
+            <i>// Fire the drag end event <b>for</b> the item that was dragged</i>
+            <b>if</b> (<b>this</b>.dragCurrent) {
+                <b>if</b> (<b>this</b>.dragThreshMet) {
+                    <b>this</b>.dragCurrent.b4EndDrag(e);
+                    <b>this</b>.dragCurrent.endDrag(e);
+                }
+
+                <b>this</b>.dragCurrent.onMouseUp(e);
+            }
+
+            <b>this</b>.dragCurrent = null;
+            <b>this</b>.dragOvers = {};
+        },
+
+        <i>/**
+         * Internal <b>function</b> to handle the mousemove event.  Will be invoked
+         * from the context of the html element.
+         *
+         * @TODO figure out what we can <b>do</b> about mouse events lost when the
+         * user drags objects beyond the window boundary.  Currently we can
+         * detect <b>this</b> in internet explorer by verifying that the mouse is
+         * down during the mousemove event.  Firefox doesn't give us the
+         * button state on the mousemove event.
+         * @method handleMouseMove
+         * @param {Event} e the event
+         * @private
+         * @static
+         */</i>
+        handleMouseMove: <b>function</b>(e) {
+            <b>if</b> (! <b>this</b>.dragCurrent) {
+                <b>return</b> true;
+            }
+
+            <i>// <b>var</b> button = e.which || e.button;</i>
+
+            <i>// check <b>for</b> IE mouseup outside of page boundary</i>
+            <b>if</b> (Ext.isIE &amp;&amp; (e.button !== 0 &amp;&amp; e.button !== 1 &amp;&amp; e.button !== 2)) {
+                <b>this</b>.stopEvent(e);
+                <b>return</b> this.handleMouseUp(e);
+            }
+
+            <b>if</b> (!<b>this</b>.dragThreshMet) {
+                <b>var</b> diffX = Math.abs(<b>this</b>.startX - e.getPageX());
+                <b>var</b> diffY = Math.abs(<b>this</b>.startY - e.getPageY());
+                <b>if</b> (diffX &gt; <b>this</b>.clickPixelThresh ||
+                            diffY &gt; <b>this</b>.clickPixelThresh) {
+                    <b>this</b>.startDrag(<b>this</b>.startX, <b>this</b>.startY);
+                }
+            }
+
+            <b>if</b> (<b>this</b>.dragThreshMet) {
+                <b>this</b>.dragCurrent.b4Drag(e);
+                <b>this</b>.dragCurrent.onDrag(e);
+                <b>if</b>(!<b>this</b>.dragCurrent.moveOnly){
+                    <b>this</b>.fireEvents(e, false);
+                }
+            }
+
+            <b>this</b>.stopEvent(e);
+
+            <b>return</b> true;
+        },
+
+        <i>/**
+         * Iterates over all of the DragDrop elements to find ones we are
+         * hovering over or dropping on
+         * @method fireEvents
+         * @param {Event} e the event
+         * @param {boolean} isDrop is <b>this</b> a drop op or a mouseover op?
+         * @private
+         * @static
+         */</i>
+        fireEvents: <b>function</b>(e, isDrop) {
+            <b>var</b> dc = <b>this</b>.dragCurrent;
+
+            <i>// If the user did the mouse up outside of the window, we could</i>
+            <i>// get here even though we have ended the drag.</i>
+            <b>if</b> (!dc || dc.isLocked()) {
+                <b>return</b>;
+            }
+
+            <b>var</b> pt = e.getPoint();
+
+            <i>// cache the previous dragOver array</i>
+            <b>var</b> oldOvers = [];
+
+            <b>var</b> outEvts   = [];
+            <b>var</b> overEvts  = [];
+            <b>var</b> dropEvts  = [];
+            <b>var</b> enterEvts = [];
+
+            <i>// Check to see <b>if</b> the object(s) we were hovering over is no longer</i>
+            <i>// being hovered over so we can fire the onDragOut event</i>
+            <b>for</b> (<b>var</b> i <b>in</b> this.dragOvers) {
+
+                <b>var</b> ddo = <b>this</b>.dragOvers[i];
+
+                <b>if</b> (! <b>this</b>.isTypeOfDD(ddo)) {
+                    <b>continue</b>;
+                }
+
+                <b>if</b> (! <b>this</b>.isOverTarget(pt, ddo, <b>this</b>.mode)) {
+                    outEvts.push( ddo );
+                }
+
+                oldOvers[i] = true;
+                <b>delete</b> this.dragOvers[i];
+            }
+
+            <b>for</b> (<b>var</b> sGroup <b>in</b> dc.groups) {
+
+                <b>if</b> (&quot;string&quot; != <b>typeof</b> sGroup) {
+                    <b>continue</b>;
+                }
+
+                <b>for</b> (i <b>in</b> this.ids[sGroup]) {
+                    <b>var</b> oDD = <b>this</b>.ids[sGroup][i];
+                    <b>if</b> (! <b>this</b>.isTypeOfDD(oDD)) {
+                        <b>continue</b>;
+                    }
+
+                    <b>if</b> (oDD.isTarget &amp;&amp; !oDD.isLocked() &amp;&amp; oDD != dc) {
+                        <b>if</b> (<b>this</b>.isOverTarget(pt, oDD, <b>this</b>.mode)) {
+                            <i>// look <b>for</b> drop interactions</i>
+                            <b>if</b> (isDrop) {
+                                dropEvts.push( oDD );
+                            <i>// look <b>for</b> drag enter and drag over interactions</i>
+                            } <b>else</b> {
+
+                                <i>// initial drag over: dragEnter fires</i>
+                                <b>if</b> (!oldOvers[oDD.id]) {
+                                    enterEvts.push( oDD );
+                                <i>// subsequent drag overs: dragOver fires</i>
+                                } <b>else</b> {
+                                    overEvts.push( oDD );
+                                }
+
+                                <b>this</b>.dragOvers[oDD.id] = oDD;
+                            }
+                        }
+                    }
+                }
+            }
+
+            <b>if</b> (<b>this</b>.mode) {
+                <b>if</b> (outEvts.length) {
+                    dc.b4DragOut(e, outEvts);
+                    dc.onDragOut(e, outEvts);
+                }
+
+                <b>if</b> (enterEvts.length) {
+                    dc.onDragEnter(e, enterEvts);
+                }
+
+                <b>if</b> (overEvts.length) {
+                    dc.b4DragOver(e, overEvts);
+                    dc.onDragOver(e, overEvts);
+                }
+
+                <b>if</b> (dropEvts.length) {
+                    dc.b4DragDrop(e, dropEvts);
+                    dc.onDragDrop(e, dropEvts);
+                }
+
+            } <b>else</b> {
+                <i>// fire dragout events</i>
+                <b>var</b> len = 0;
+                <b>for</b> (i=0, len=outEvts.length; i&lt;len; ++i) {
+                    dc.b4DragOut(e, outEvts[i].id);
+                    dc.onDragOut(e, outEvts[i].id);
+                }
+
+                <i>// fire enter events</i>
+                <b>for</b> (i=0,len=enterEvts.length; i&lt;len; ++i) {
+                    <i>// dc.b4DragEnter(e, oDD.id);</i>
+                    dc.onDragEnter(e, enterEvts[i].id);
+                }
+
+                <i>// fire over events</i>
+                <b>for</b> (i=0,len=overEvts.length; i&lt;len; ++i) {
+                    dc.b4DragOver(e, overEvts[i].id);
+                    dc.onDragOver(e, overEvts[i].id);
+                }
+
+                <i>// fire drop events</i>
+                <b>for</b> (i=0, len=dropEvts.length; i&lt;len; ++i) {
+                    dc.b4DragDrop(e, dropEvts[i].id);
+                    dc.onDragDrop(e, dropEvts[i].id);
+                }
+
+            }
+
+            <i>// notify about a drop that did not find a target</i>
+            <b>if</b> (isDrop &amp;&amp; !dropEvts.length) {
+                dc.onInvalidDrop(e);
+            }
+
+        },
+
+        <i>/**
+         * Helper <b>function</b> for getting the best match from the list of drag
+         * and drop objects returned by the drag and drop events when we are
+         * <b>in</b> INTERSECT mode.  It returns either the first object that the
+         * cursor is over, or the object that has the greatest overlap <b>with</b>
+         * the dragged element.
+         * @method getBestMatch
+         * @param  {DragDrop[]} dds The array of drag and drop objects
+         * targeted
+         * @<b>return</b> {DragDrop}       The best single match
+         * @static
+         */</i>
+        getBestMatch: <b>function</b>(dds) {
+            <b>var</b> winner = null;
+            <i>// Return null <b>if</b> the input is not what we expect</i>
+            <i>//<b>if</b> (!dds || !dds.length || dds.length == 0) {</i>
+               <i>// winner = null;</i>
+            <i>// If there is only one item, it wins</i>
+            <i>//} <b>else</b> if (dds.length == 1) {</i>
+
+            <b>var</b> len = dds.length;
+
+            <b>if</b> (len == 1) {
+                winner = dds[0];
+            } <b>else</b> {
+                <i>// Loop through the targeted items</i>
+                <b>for</b> (<b>var</b> i=0; i&lt;len; ++i) {
+                    <b>var</b> dd = dds[i];
+                    <i>// If the cursor is over the object, it wins.  If the</i>
+                    <i>// cursor is over multiple matches, the first one we come</i>
+                    <i>// to wins.</i>
+                    <b>if</b> (dd.cursorIsOver) {
+                        winner = dd;
+                        <b>break</b>;
+                    <i>// Otherwise the object <b>with</b> the most overlap wins</i>
+                    } <b>else</b> {
+                        <b>if</b> (!winner ||
+                            winner.overlap.getArea() &lt; dd.overlap.getArea()) {
+                            winner = dd;
+                        }
+                    }
+                }
+            }
+
+            <b>return</b> winner;
+        },
+
+        <i>/**
+         * Refreshes the cache of the top-left and bottom-right points of the
+         * drag and drop objects <b>in</b> the specified group(s).  This is <b>in</b> the
+         * format that is stored <b>in</b> the drag and drop instance, so typical
+         * usage is:
+         * &lt;code&gt;
+         * Ext.dd.DragDropMgr.refreshCache(ddinstance.groups);
+         * &lt;/code&gt;
+         * Alternatively:
+         * &lt;code&gt;
+         * Ext.dd.DragDropMgr.refreshCache({group1:true, group2:true});
+         * &lt;/code&gt;
+         * @TODO <b>this</b> really should be an indexed array.  Alternatively <b>this</b>
+         * method could accept both.
+         * @method refreshCache
+         * @param {Object} groups an associative array of groups to refresh
+         * @static
+         */</i>
+        refreshCache: <b>function</b>(groups) {
+            <b>for</b> (<b>var</b> sGroup <b>in</b> groups) {
+                <b>if</b> (&quot;string&quot; != <b>typeof</b> sGroup) {
+                    <b>continue</b>;
+                }
+                <b>for</b> (<b>var</b> i <b>in</b> this.ids[sGroup]) {
+                    <b>var</b> oDD = <b>this</b>.ids[sGroup][i];
+
+                    <b>if</b> (<b>this</b>.isTypeOfDD(oDD)) {
+                    <i>// <b>if</b> (<b>this</b>.isTypeOfDD(oDD) &amp;&amp; oDD.isTarget) {</i>
+                        <b>var</b> loc = <b>this</b>.getLocation(oDD);
+                        <b>if</b> (loc) {
+                            <b>this</b>.locationCache[oDD.id] = loc;
+                        } <b>else</b> {
+                            <b>delete</b> this.locationCache[oDD.id];
+                            <i>// <b>this</b> will unregister the drag and drop object <b>if</b></i>
+                            <i>// the element is not <b>in</b> a usable state</i>
+                            <i>// oDD.unreg();</i>
+                        }
+                    }
+                }
+            }
+        },
+
+        <i>/**
+         * This checks to make sure an element exists and is <b>in</b> the DOM.  The
+         * main purpose is to handle cases where innerHTML is used to remove
+         * drag and drop objects from the DOM.  IE provides an 'unspecified
+         * error' when trying to access the offsetParent of such an element
+         * @method verifyEl
+         * @param {HTMLElement} el the element to check
+         * @<b>return</b> {boolean} true <b>if</b> the element looks usable
+         * @static
+         */</i>
+        verifyEl: <b>function</b>(el) {
+            <b>if</b> (el) {
+                <b>var</b> parent;
+                <b>if</b>(Ext.isIE){
+                    try{
+                        parent = el.offsetParent;
+                    }catch(e){}
+                }<b>else</b>{
+                    parent = el.offsetParent;
+                }
+                <b>if</b> (parent) {
+                    <b>return</b> true;
+                }
+            }
+
+            <b>return</b> false;
+        },
+
+        <i>/**
+         * Returns a Region object containing the drag and drop element's position
+         * and size, including the padding configured <b>for</b> it
+         * @method getLocation
+         * @param {DragDrop} oDD the drag and drop object to get the
+         *                       location <b>for</b>
+         * @<b>return</b> {Ext.lib.Region} a Region object representing the total area
+         *                             the element occupies, including any padding
+         *                             the instance is configured <b>for</b>.
+         * @static
+         */</i>
+        getLocation: <b>function</b>(oDD) {
+            <b>if</b> (! <b>this</b>.isTypeOfDD(oDD)) {
+                <b>return</b> null;
+            }
+
+            <b>var</b> el = oDD.getEl(), pos, x1, x2, y1, y2, t, r, b, l;
+
+            try {
+                pos= Ext.lib.Dom.getXY(el);
+            } catch (e) { }
+
+            <b>if</b> (!pos) {
+                <b>return</b> null;
+            }
+
+            x1 = pos[0];
+            x2 = x1 + el.offsetWidth;
+            y1 = pos[1];
+            y2 = y1 + el.offsetHeight;
+
+            t = y1 - oDD.padding[0];
+            r = x2 + oDD.padding[1];
+            b = y2 + oDD.padding[2];
+            l = x1 - oDD.padding[3];
+
+            <b>return</b> new Ext.lib.Region( t, r, b, l );
+        },
+
+        <i>/**
+         * Checks the cursor location to see <b>if</b> it over the target
+         * @method isOverTarget
+         * @param {Ext.lib.Point} pt The point to evaluate
+         * @param {DragDrop} oTarget the DragDrop object we are inspecting
+         * @<b>return</b> {boolean} true <b>if</b> the mouse is over the target
+         * @private
+         * @static
+         */</i>
+        isOverTarget: <b>function</b>(pt, oTarget, intersect) {
+            <i>// use cache <b>if</b> available</i>
+            <b>var</b> loc = <b>this</b>.locationCache[oTarget.id];
+            <b>if</b> (!loc || !<b>this</b>.useCache) {
+                loc = <b>this</b>.getLocation(oTarget);
+                <b>this</b>.locationCache[oTarget.id] = loc;
+
+            }
+
+            <b>if</b> (!loc) {
+                <b>return</b> false;
+            }
+
+            oTarget.cursorIsOver = loc.contains( pt );
+
+            <i>// DragDrop is using <b>this</b> as a sanity check <b>for</b> the initial mousedown</i>
+            <i>// <b>in</b> this <b>case</b> we are done.  In POINT mode, <b>if</b> the drag obj has no</i>
+            <i>// contraints, we are also done. Otherwise we need to evaluate the</i>
+            <i>// location of the target as related to the actual location of the</i>
+            <i>// dragged element.</i>
+            <b>var</b> dc = <b>this</b>.dragCurrent;
+            <b>if</b> (!dc || !dc.getTargetCoord ||
+                    (!intersect &amp;&amp; !dc.constrainX &amp;&amp; !dc.constrainY)) {
+                <b>return</b> oTarget.cursorIsOver;
+            }
+
+            oTarget.overlap = null;
+
+            <i>// Get the current location of the drag element, <b>this</b> is the</i>
+            <i>// location of the mouse event less the delta that represents</i>
+            <i>// where the original mousedown happened on the element.  We</i>
+            <i>// need to consider constraints and ticks as well.</i>
+            <b>var</b> pos = dc.getTargetCoord(pt.x, pt.y);
+
+            <b>var</b> el = dc.getDragEl();
+            <b>var</b> curRegion = <b>new</b> Ext.lib.Region( pos.y,
+                                                   pos.x + el.offsetWidth,
+                                                   pos.y + el.offsetHeight,
+                                                   pos.x );
+
+            <b>var</b> overlap = curRegion.intersect(loc);
+
+            <b>if</b> (overlap) {
+                oTarget.overlap = overlap;
+                <b>return</b> (intersect) ? true : oTarget.cursorIsOver;
+            } <b>else</b> {
+                <b>return</b> false;
+            }
+        },
+
+        <i>/**
+         * unload event handler
+         * @method _onUnload
+         * @private
+         * @static
+         */</i>
+        _onUnload: <b>function</b>(e, me) {
+            Ext.dd.DragDropMgr.unregAll();
+        },
+
+        <i>/**
+         * Cleans up the drag and drop events and objects.
+         * @method unregAll
+         * @private
+         * @static
+         */</i>
+        unregAll: <b>function</b>() {
+
+            <b>if</b> (<b>this</b>.dragCurrent) {
+                <b>this</b>.stopDrag();
+                <b>this</b>.dragCurrent = null;
+            }
+
+            <b>this</b>._execOnAll(&quot;unreg&quot;, []);
+
+            <b>for</b> (<b>var</b> i <b>in</b> this.elementCache) {
+                <b>delete</b> this.elementCache[i];
+            }
+
+            <b>this</b>.elementCache = {};
+            <b>this</b>.ids = {};
+        },
+
+        <i>/**
+         * A cache of DOM elements
+         * @property elementCache
+         * @private
+         * @static
+         */</i>
+        elementCache: {},
+
+        <i>/**
+         * Get the wrapper <b>for</b> the DOM element specified
+         * @method getElWrapper
+         * @param {String} id the id of the element to get
+         * @<b>return</b> {Ext.dd.DDM.ElementWrapper} the wrapped element
+         * @private
+         * @deprecated This wrapper isn't that useful
+         * @static
+         */</i>
+        getElWrapper: <b>function</b>(id) {
+            <b>var</b> oWrapper = <b>this</b>.elementCache[id];
+            <b>if</b> (!oWrapper || !oWrapper.el) {
+                oWrapper = <b>this</b>.elementCache[id] =
+                    <b>new</b> this.ElementWrapper(Ext.getDom(id));
+            }
+            <b>return</b> oWrapper;
+        },
+
+        <i>/**
+         * Returns the actual DOM element
+         * @method getElement
+         * @param {String} id the id of the elment to get
+         * @<b>return</b> {Object} The element
+         * @deprecated use Ext.lib.Ext.getDom instead
+         * @static
+         */</i>
+        getElement: <b>function</b>(id) {
+            <b>return</b> Ext.getDom(id);
+        },
+
+        <i>/**
+         * Returns the style property <b>for</b> the DOM element (i.e.,
+         * document.getElById(id).style)
+         * @method getCss
+         * @param {String} id the id of the elment to get
+         * @<b>return</b> {Object} The style property of the element
+         * @deprecated use Ext.lib.Dom instead
+         * @static
+         */</i>
+        getCss: <b>function</b>(id) {
+            <b>var</b> el = Ext.getDom(id);
+            <b>return</b> (el) ? el.style : null;
+        },
+
+        <i>/**
+         * Inner class <b>for</b> cached elements
+         * @class DragDropMgr.ElementWrapper
+         * @<b>for</b> DragDropMgr
+         * @private
+         * @deprecated
+         */</i>
+        ElementWrapper: <b>function</b>(el) {
+                <i>/**
+                 * The element
+                 * @property el
+                 */</i>
+                <b>this</b>.el = el || null;
+                <i>/**
+                 * The element id
+                 * @property id
+                 */</i>
+                <b>this</b>.id = <b>this</b>.el &amp;&amp; el.id;
+                <i>/**
+                 * A reference to the style property
+                 * @property css
+                 */</i>
+                <b>this</b>.css = <b>this</b>.el &amp;&amp; el.style;
+            },
+
+        <i>/**
+         * Returns the X position of an html element
+         * @method getPosX
+         * @param el the element <b>for</b> which to get the position
+         * @<b>return</b> {int} the X coordinate
+         * @<b>for</b> DragDropMgr
+         * @deprecated use Ext.lib.Dom.getX instead
+         * @static
+         */</i>
+        getPosX: <b>function</b>(el) {
+            <b>return</b> Ext.lib.Dom.getX(el);
+        },
+
+        <i>/**
+         * Returns the Y position of an html element
+         * @method getPosY
+         * @param el the element <b>for</b> which to get the position
+         * @<b>return</b> {int} the Y coordinate
+         * @deprecated use Ext.lib.Dom.getY instead
+         * @static
+         */</i>
+        getPosY: <b>function</b>(el) {
+            <b>return</b> Ext.lib.Dom.getY(el);
+        },
+
+        <i>/**
+         * Swap two nodes.  In IE, we use the native method, <b>for</b> others we
+         * emulate the IE behavior
+         * @method swapNode
+         * @param n1 the first node to swap
+         * @param n2 the other node to swap
+         * @static
+         */</i>
+        swapNode: <b>function</b>(n1, n2) {
+            <b>if</b> (n1.swapNode) {
+                n1.swapNode(n2);
+            } <b>else</b> {
+                <b>var</b> p = n2.parentNode;
+                <b>var</b> s = n2.nextSibling;
+
+                <b>if</b> (s == n1) {
+                    p.insertBefore(n1, n2);
+                } <b>else</b> if (n2 == n1.nextSibling) {
+                    p.insertBefore(n2, n1);
+                } <b>else</b> {
+                    n1.parentNode.replaceChild(n2, n1);
+                    p.insertBefore(n1, s);
+                }
+            }
+        },
+
+        <i>/**
+         * Returns the current scroll position
+         * @method getScroll
+         * @private
+         * @static
+         */</i>
+        getScroll: <b>function</b> () {
+            <b>var</b> t, l, dde=document.documentElement, db=document.body;
+            <b>if</b> (dde &amp;&amp; (dde.scrollTop || dde.scrollLeft)) {
+                t = dde.scrollTop;
+                l = dde.scrollLeft;
+            } <b>else</b> if (db) {
+                t = db.scrollTop;
+                l = db.scrollLeft;
+            } <b>else</b> {
+
+            }
+            <b>return</b> { top: t, left: l };
+        },
+
+        <i>/**
+         * Returns the specified element style property
+         * @method getStyle
+         * @param {HTMLElement} el          the element
+         * @param {string}      styleProp   the style property
+         * @<b>return</b> {string} The value of the style property
+         * @deprecated use Ext.lib.Dom.getStyle
+         * @static
+         */</i>
+        getStyle: <b>function</b>(el, styleProp) {
+            <b>return</b> Ext.fly(el).getStyle(styleProp);
+        },
+
+        <i>/**
+         * Gets the scrollTop
+         * @method getScrollTop
+         * @<b>return</b> {int} the document's scrollTop
+         * @static
+         */</i>
+        getScrollTop: <b>function</b> () { <b>return</b> this.getScroll().top; },
+
+        <i>/**
+         * Gets the scrollLeft
+         * @method getScrollLeft
+         * @<b>return</b> {int} the document's scrollTop
+         * @static
+         */</i>
+        getScrollLeft: <b>function</b> () { <b>return</b> this.getScroll().left; },
+
+        <i>/**
+         * Sets the x/y position of an element to the location of the
+         * target element.
+         * @method moveToEl
+         * @param {HTMLElement} moveEl      The element to move
+         * @param {HTMLElement} targetEl    The position reference element
+         * @static
+         */</i>
+        moveToEl: <b>function</b> (moveEl, targetEl) {
+            <b>var</b> aCoord = Ext.lib.Dom.getXY(targetEl);
+            Ext.lib.Dom.setXY(moveEl, aCoord);
+        },
+
+        <i>/**
+         * Numeric array sort <b>function</b>
+         * @method numericSort
+         * @static
+         */</i>
+        numericSort: <b>function</b>(a, b) { <b>return</b> (a - b); },
+
+        <i>/**
+         * Internal counter
+         * @property _timeoutCount
+         * @private
+         * @static
+         */</i>
+        _timeoutCount: 0,
+
+        <i>/**
+         * Trying to make the load order less important.  Without <b>this</b> we get
+         * an error <b>if</b> this file is loaded before the Event Utility.
+         * @method _addListeners
+         * @private
+         * @static
+         */</i>
+        _addListeners: <b>function</b>() {
+            <b>var</b> DDM = Ext.dd.DDM;
+            <b>if</b> ( Ext.lib.Event &amp;&amp; document ) {
+                DDM._onLoad();
+            } <b>else</b> {
+                <b>if</b> (DDM._timeoutCount &gt; 2000) {
+                } <b>else</b> {
+                    setTimeout(DDM._addListeners, 10);
+                    <b>if</b> (document &amp;&amp; document.body) {
+                        DDM._timeoutCount += 1;
+                    }
+                }
+            }
+        },
+
+        <i>/**
+         * Recursively searches the immediate parent and all child nodes <b>for</b>
+         * the handle element <b>in</b> order to determine wheter or not it was
+         * clicked.
+         * @method handleWasClicked
+         * @param node the html element to inspect
+         * @static
+         */</i>
+        handleWasClicked: <b>function</b>(node, id) {
+            <b>if</b> (<b>this</b>.isHandle(id, node.id)) {
+                <b>return</b> true;
+            } <b>else</b> {
+                <i>// check to see <b>if</b> this is a text node child of the one we want</i>
+                <b>var</b> p = node.parentNode;
+
+                <b>while</b> (p) {
+                    <b>if</b> (<b>this</b>.isHandle(id, p.id)) {
+                        <b>return</b> true;
+                    } <b>else</b> {
+                        p = p.parentNode;
+                    }
+                }
+            }
+
+            <b>return</b> false;
+        }
+
+    };
+
+}();
+
+<i>// shorter alias, save a few bytes</i>
+Ext.dd.DDM = Ext.dd.DragDropMgr;
+Ext.dd.DDM._addListeners();
+
+}
+
+<i>/**
+ * @class Ext.dd.DD
+ * A DragDrop implementation where the linked element follows the
+ * mouse cursor during a drag.
+ * @extends Ext.dd.DragDrop
+ * @constructor
+ * @param {String} id the id of the linked element
+ * @param {String} sGroup the group of related DragDrop items
+ * @param {object} config an object containing configurable attributes
+ *                Valid properties <b>for</b> DD:
+ *                    scroll
+ */</i>
+Ext.dd.DD = <b>function</b>(id, sGroup, config) {
+    <b>if</b> (id) {
+        <b>this</b>.init(id, sGroup, config);
+    }
+};
+
+Ext.extend(Ext.dd.DD, Ext.dd.DragDrop, {
+
+    <i>/**
+     * When set to true, the utility automatically tries to scroll the browser
+     * window when a drag and drop element is dragged near the viewport boundary.
+     * Defaults to true.
+     * @property scroll
+     * @type boolean
+     */</i>
+    scroll: true,
+
+    <i>/**
+     * Sets the pointer offset to the distance between the linked element's top
+     * left corner and the location the element was clicked
+     * @method autoOffset
+     * @param {int} iPageX the X coordinate of the click
+     * @param {int} iPageY the Y coordinate of the click
+     */</i>
+    autoOffset: <b>function</b>(iPageX, iPageY) {
+        <b>var</b> x = iPageX - <b>this</b>.startPageX;
+        <b>var</b> y = iPageY - <b>this</b>.startPageY;
+        <b>this</b>.setDelta(x, y);
+    },
+
+    <i>/**
+     * Sets the pointer offset.  You can call <b>this</b> directly to force the
+     * offset to be <b>in</b> a particular location (e.g., pass <b>in</b> 0,0 to set it
+     * to the center of the object)
+     * @method setDelta
+     * @param {int} iDeltaX the distance from the left
+     * @param {int} iDeltaY the distance from the top
+     */</i>
+    setDelta: <b>function</b>(iDeltaX, iDeltaY) {
+        <b>this</b>.deltaX = iDeltaX;
+        <b>this</b>.deltaY = iDeltaY;
+    },
+
+    <i>/**
+     * Sets the drag element to the location of the mousedown or click event,
+     * maintaining the cursor location relative to the location on the element
+     * that was clicked.  Override <b>this</b> if you want to place the element <b>in</b> a
+     * location other than where the cursor is.
+     * @method setDragElPos
+     * @param {int} iPageX the X coordinate of the mousedown or drag event
+     * @param {int} iPageY the Y coordinate of the mousedown or drag event
+     */</i>
+    setDragElPos: <b>function</b>(iPageX, iPageY) {
+        <i>// the first time we <b>do</b> this, we are going to check to make sure</i>
+        <i>// the element has css positioning</i>
+
+        <b>var</b> el = <b>this</b>.getDragEl();
+        <b>this</b>.alignElWithMouse(el, iPageX, iPageY);
+    },
+
+    <i>/**
+     * Sets the element to the location of the mousedown or click event,
+     * maintaining the cursor location relative to the location on the element
+     * that was clicked.  Override <b>this</b> if you want to place the element <b>in</b> a
+     * location other than where the cursor is.
+     * @method alignElWithMouse
+     * @param {HTMLElement} el the element to move
+     * @param {int} iPageX the X coordinate of the mousedown or drag event
+     * @param {int} iPageY the Y coordinate of the mousedown or drag event
+     */</i>
+    alignElWithMouse: <b>function</b>(el, iPageX, iPageY) {
+        <b>var</b> oCoord = <b>this</b>.getTargetCoord(iPageX, iPageY);
+        <b>var</b> fly = el.dom ? el : Ext.fly(el, <em>'_dd'</em>);
+        <b>if</b> (!<b>this</b>.deltaSetXY) {
+            <b>var</b> aCoord = [oCoord.x, oCoord.y];
+            fly.setXY(aCoord);
+            <b>var</b> newLeft = fly.getLeft(true);
+            <b>var</b> newTop  = fly.getTop(true);
+            <b>this</b>.deltaSetXY = [ newLeft - oCoord.x, newTop - oCoord.y ];
+        } <b>else</b> {
+            fly.setLeftTop(oCoord.x + <b>this</b>.deltaSetXY[0], oCoord.y + <b>this</b>.deltaSetXY[1]);
+        }
+
+        <b>this</b>.cachePosition(oCoord.x, oCoord.y);
+        <b>this</b>.autoScroll(oCoord.x, oCoord.y, el.offsetHeight, el.offsetWidth);
+        <b>return</b> oCoord;
+    },
+
+    <i>/**
+     * Saves the most recent position so that we can reset the constraints and
+     * tick marks on-demand.  We need to know <b>this</b> so that we can calculate the
+     * number of pixels the element is offset from its original position.
+     * @method cachePosition
+     * @param iPageX the current x position (optional, <b>this</b> just makes it so we
+     * don't have to look it up again)
+     * @param iPageY the current y position (optional, <b>this</b> just makes it so we
+     * don't have to look it up again)
+     */</i>
+    cachePosition: <b>function</b>(iPageX, iPageY) {
+        <b>if</b> (iPageX) {
+            <b>this</b>.lastPageX = iPageX;
+            <b>this</b>.lastPageY = iPageY;
+        } <b>else</b> {
+            <b>var</b> aCoord = Ext.lib.Dom.getXY(<b>this</b>.getEl());
+            <b>this</b>.lastPageX = aCoord[0];
+            <b>this</b>.lastPageY = aCoord[1];
+        }
+    },
+
+    <i>/**
+     * Auto-scroll the window <b>if</b> the dragged object has been moved beyond the
+     * visible window boundary.
+     * @method autoScroll
+     * @param {int} x the drag element's x position
+     * @param {int} y the drag element's y position
+     * @param {int} h the height of the drag element
+     * @param {int} w the width of the drag element
+     * @private
+     */</i>
+    autoScroll: <b>function</b>(x, y, h, w) {
+
+        <b>if</b> (<b>this</b>.scroll) {
+            <i>// The client height</i>
+            <b>var</b> clientH = Ext.lib.Dom.getViewHeight();
+
+            <i>// The client width</i>
+            <b>var</b> clientW = Ext.lib.Dom.getViewWidth();
+
+            <i>// The amt scrolled down</i>
+            <b>var</b> st = <b>this</b>.DDM.getScrollTop();
+
+            <i>// The amt scrolled right</i>
+            <b>var</b> sl = <b>this</b>.DDM.getScrollLeft();
+
+            <i>// Location of the bottom of the element</i>
+            <b>var</b> bot = h + y;
+
+            <i>// Location of the right of the element</i>
+            <b>var</b> right = w + x;
+
+            <i>// The distance from the cursor to the bottom of the visible area,</i>
+            <i>// adjusted so that we don't scroll <b>if</b> the cursor is beyond the</i>
+            <i>// element drag constraints</i>
+            <b>var</b> toBot = (clientH + st - y - <b>this</b>.deltaY);
+
+            <i>// The distance from the cursor to the right of the visible area</i>
+            <b>var</b> toRight = (clientW + sl - x - <b>this</b>.deltaX);
+
+
+            <i>// How close to the edge the cursor must be before we scroll</i>
+            <i>// <b>var</b> thresh = (document.all) ? 100 : 40;</i>
+            <b>var</b> thresh = 40;
+
+            <i>// How many pixels to scroll per autoscroll op.  This helps to reduce</i>
+            <i>// clunky scrolling. IE is more sensitive about <b>this</b> ... it needs <b>this</b></i>
+            <i>// value to be higher.</i>
+            <b>var</b> scrAmt = (document.all) ? 80 : 30;
+
+            <i>// Scroll down <b>if</b> we are near the bottom of the visible page and the</i>
+            <i>// obj extends below the crease</i>
+            <b>if</b> ( bot &gt; clientH &amp;&amp; toBot &lt; thresh ) {
+                window.scrollTo(sl, st + scrAmt);
+            }
+
+            <i>// Scroll up <b>if</b> the window is scrolled down and the top of the object</i>
+            <i>// goes above the top border</i>
+            <b>if</b> ( y &lt; st &amp;&amp; st &gt; 0 &amp;&amp; y - st &lt; thresh ) {
+                window.scrollTo(sl, st - scrAmt);
+            }
+
+            <i>// Scroll right <b>if</b> the obj is beyond the right border and the cursor is</i>
+            <i>// near the border.</i>
+            <b>if</b> ( right &gt; clientW &amp;&amp; toRight &lt; thresh ) {
+                window.scrollTo(sl + scrAmt, st);
+            }
+
+            <i>// Scroll left <b>if</b> the window has been scrolled to the right and the obj</i>
+            <i>// extends past the left border</i>
+            <b>if</b> ( x &lt; sl &amp;&amp; sl &gt; 0 &amp;&amp; x - sl &lt; thresh ) {
+                window.scrollTo(sl - scrAmt, st);
+            }
+        }
+    },
+
+    <i>/**
+     * Finds the location the element should be placed <b>if</b> we want to move
+     * it to where the mouse location less the click offset would place us.
+     * @method getTargetCoord
+     * @param {int} iPageX the X coordinate of the click
+     * @param {int} iPageY the Y coordinate of the click
+     * @<b>return</b> an object that contains the coordinates (Object.x and Object.y)
+     * @private
+     */</i>
+    getTargetCoord: <b>function</b>(iPageX, iPageY) {
+
+
+        <b>var</b> x = iPageX - <b>this</b>.deltaX;
+        <b>var</b> y = iPageY - <b>this</b>.deltaY;
+
+        <b>if</b> (<b>this</b>.constrainX) {
+            <b>if</b> (x &lt; <b>this</b>.minX) { x = <b>this</b>.minX; }
+            <b>if</b> (x &gt; <b>this</b>.maxX) { x = <b>this</b>.maxX; }
+        }
+
+        <b>if</b> (<b>this</b>.constrainY) {
+            <b>if</b> (y &lt; <b>this</b>.minY) { y = <b>this</b>.minY; }
+            <b>if</b> (y &gt; <b>this</b>.maxY) { y = <b>this</b>.maxY; }
+        }
+
+        x = <b>this</b>.getTick(x, <b>this</b>.xTicks);
+        y = <b>this</b>.getTick(y, <b>this</b>.yTicks);
+
+
+        <b>return</b> {x:x, y:y};
+    },
+
+    <i>/**
+     * Sets up config options specific to <b>this</b> class. Overrides
+     * Ext.dd.DragDrop, but all versions of <b>this</b> method through the
+     * inheritance chain are called
+     */</i>
+    applyConfig: <b>function</b>() {
+        Ext.dd.DD.superclass.applyConfig.call(<b>this</b>);
+        <b>this</b>.scroll = (<b>this</b>.config.scroll !== false);
+    },
+
+    <i>/**
+     * Event that fires prior to the onMouseDown event.  Overrides
+     * Ext.dd.DragDrop.
+     */</i>
+    b4MouseDown: <b>function</b>(e) {
+        <i>// <b>this</b>.resetConstraints();</i>
+        <b>this</b>.autoOffset(e.getPageX(),
+                            e.getPageY());
+    },
+
+    <i>/**
+     * Event that fires prior to the onDrag event.  Overrides
+     * Ext.dd.DragDrop.
+     */</i>
+    b4Drag: <b>function</b>(e) {
+        <b>this</b>.setDragElPos(e.getPageX(),
+                            e.getPageY());
+    },
+
+    toString: <b>function</b>() {
+        <b>return</b> (&quot;DD &quot; + <b>this</b>.id);
+    }
+
+    <i>//////////////////////////////////////////////////////////////////////////</i>
+    <i>// Debugging ygDragDrop events that can be overridden</i>
+    <i>//////////////////////////////////////////////////////////////////////////</i>
+    <i>/*
+    startDrag: <b>function</b>(x, y) {
+    },
+
+    onDrag: <b>function</b>(e) {
+    },
+
+    onDragEnter: <b>function</b>(e, id) {
+    },
+
+    onDragOver: <b>function</b>(e, id) {
+    },
+
+    onDragOut: <b>function</b>(e, id) {
+    },
+
+    onDragDrop: <b>function</b>(e, id) {
+    },
+
+    endDrag: <b>function</b>(e) {
+    }
+
+    */</i>
+
+});
+<i>/**
+ * @class Ext.dd.DDProxy
+ * A DragDrop implementation that inserts an empty, bordered div into
+ * the document that follows the cursor during drag operations.  At the time of
+ * the click, the frame div is resized to the dimensions of the linked html
+ * element, and moved to the exact location of the linked element.
+ *
+ * References to the &quot;frame&quot; element refer to the single proxy element that
+ * was created to be dragged <b>in</b> place of all DDProxy elements on the
+ * page.
+ *
+ * @extends Ext.dd.DD
+ * @constructor
+ * @param {String} id the id of the linked html element
+ * @param {String} sGroup the group of related DragDrop objects
+ * @param {object} config an object containing configurable attributes
+ *                Valid properties <b>for</b> DDProxy <b>in</b> addition to those <b>in</b> DragDrop:
+ *                   resizeFrame, centerFrame, dragElId
+ */</i>
+Ext.dd.DDProxy = <b>function</b>(id, sGroup, config) {
+    <b>if</b> (id) {
+        <b>this</b>.init(id, sGroup, config);
+        <b>this</b>.initFrame();
+    }
+};
+
+<i>/**
+ * The <b>default</b> drag frame div id
+ * @property Ext.dd.DDProxy.dragElId
+ * @type String
+ * @static
+ */</i>
+Ext.dd.DDProxy.dragElId = &quot;ygddfdiv&quot;;
+
+Ext.extend(Ext.dd.DDProxy, Ext.dd.DD, {
+
+    <i>/**
+     * By <b>default</b> we resize the drag frame to be the same size as the element
+     * we want to drag (<b>this</b> is to get the frame effect).  We can turn it off
+     * <b>if</b> we want a different behavior.
+     * @property resizeFrame
+     * @type boolean
+     */</i>
+    resizeFrame: true,
+
+    <i>/**
+     * By <b>default</b> the frame is positioned exactly where the drag element is, so
+     * we use the cursor offset provided by Ext.dd.DD.  Another option that works only <b>if</b>
+     * you <b>do</b> not have constraints on the obj is to have the drag frame centered
+     * around the cursor.  Set centerFrame to true <b>for</b> this effect.
+     * @property centerFrame
+     * @type boolean
+     */</i>
+    centerFrame: false,
+
+    <i>/**
+     * Creates the proxy element <b>if</b> it does not yet exist
+     * @method createFrame
+     */</i>
+    createFrame: <b>function</b>() {
+        <b>var</b> self = <b>this</b>;
+        <b>var</b> body = document.body;
+
+        <b>if</b> (!body || !body.firstChild) {
+            setTimeout( <b>function</b>() { self.createFrame(); }, 50 );
+            <b>return</b>;
+        }
+
+        <b>var</b> div = <b>this</b>.getDragEl();
+
+        <b>if</b> (!div) {
+            div    = document.createElement(&quot;div&quot;);
+            div.id = <b>this</b>.dragElId;
+            <b>var</b> s  = div.style;
+
+            s.position   = &quot;absolute&quot;;
+            s.visibility = &quot;hidden&quot;;
+            s.cursor     = &quot;move&quot;;
+            s.border     = &quot;2px solid #aaa&quot;;
+            s.zIndex     = 999;
+
+            <i>// appendChild can blow up IE <b>if</b> invoked prior to the window load event</i>
+            <i>// <b>while</b> rendering a table.  It is possible there are other scenarios</i>
+            <i>// that would cause <b>this</b> to happen as well.</i>
+            body.insertBefore(div, body.firstChild);
+        }
+    },
+
+    <i>/**
+     * Initialization <b>for</b> the drag frame element.  Must be called <b>in</b> the
+     * constructor of all subclasses
+     * @method initFrame
+     */</i>
+    initFrame: <b>function</b>() {
+        <b>this</b>.createFrame();
+    },
+
+    applyConfig: <b>function</b>() {
+        Ext.dd.DDProxy.superclass.applyConfig.call(<b>this</b>);
+
+        <b>this</b>.resizeFrame = (<b>this</b>.config.resizeFrame !== false);
+        <b>this</b>.centerFrame = (<b>this</b>.config.centerFrame);
+        <b>this</b>.setDragElId(<b>this</b>.config.dragElId || Ext.dd.DDProxy.dragElId);
+    },
+
+    <i>/**
+     * Resizes the drag frame to the dimensions of the clicked object, positions
+     * it over the object, and finally displays it
+     * @method showFrame
+     * @param {int} iPageX X click position
+     * @param {int} iPageY Y click position
+     * @private
+     */</i>
+    showFrame: <b>function</b>(iPageX, iPageY) {
+        <b>var</b> el = <b>this</b>.getEl();
+        <b>var</b> dragEl = <b>this</b>.getDragEl();
+        <b>var</b> s = dragEl.style;
+
+        <b>this</b>._resizeProxy();
+
+        <b>if</b> (<b>this</b>.centerFrame) {
+            <b>this</b>.setDelta( Math.round(parseInt(s.width,  10)/2),
+                           Math.round(parseInt(s.height, 10)/2) );
+        }
+
+        <b>this</b>.setDragElPos(iPageX, iPageY);
+
+        Ext.fly(dragEl).show();
+    },
+
+    <i>/**
+     * The proxy is automatically resized to the dimensions of the linked
+     * element when a drag is initiated, unless resizeFrame is set to false
+     * @method _resizeProxy
+     * @private
+     */</i>
+    _resizeProxy: <b>function</b>() {
+        <b>if</b> (<b>this</b>.resizeFrame) {
+            <b>var</b> el = <b>this</b>.getEl();
+            Ext.fly(<b>this</b>.getDragEl()).setSize(el.offsetWidth, el.offsetHeight);
+        }
+    },
+
+    <i>// overrides Ext.dd.DragDrop</i>
+    b4MouseDown: <b>function</b>(e) {
+        <b>var</b> x = e.getPageX();
+        <b>var</b> y = e.getPageY();
+        <b>this</b>.autoOffset(x, y);
+        <b>this</b>.setDragElPos(x, y);
+    },
+
+    <i>// overrides Ext.dd.DragDrop</i>
+    b4StartDrag: <b>function</b>(x, y) {
+        <i>// show the drag frame</i>
+        <b>this</b>.showFrame(x, y);
+    },
+
+    <i>// overrides Ext.dd.DragDrop</i>
+    b4EndDrag: <b>function</b>(e) {
+        Ext.fly(<b>this</b>.getDragEl()).hide();
+    },
+
+    <i>// overrides Ext.dd.DragDrop</i>
+    <i>// By <b>default</b> we try to move the element to the last location of the frame.</i>
+    <i>// This is so that the <b>default</b> behavior mirrors that of Ext.dd.DD.</i>
+    endDrag: <b>function</b>(e) {
+
+        <b>var</b> lel = <b>this</b>.getEl();
+        <b>var</b> del = <b>this</b>.getDragEl();
+
+        <i>// Show the drag frame briefly so we can get its position</i>
+        del.style.visibility = &quot;&quot;;
+
+        <b>this</b>.beforeMove();
+        <i>// Hide the linked element before the move to get around a Safari</i>
+        <i>// rendering bug.</i>
+        lel.style.visibility = &quot;hidden&quot;;
+        Ext.dd.DDM.moveToEl(lel, del);
+        del.style.visibility = &quot;hidden&quot;;
+        lel.style.visibility = &quot;&quot;;
+
+        <b>this</b>.afterDrag();
+    },
+
+    beforeMove : <b>function</b>(){
+
+    },
+
+    afterDrag : <b>function</b>(){
+
+    },
+
+    toString: <b>function</b>() {
+        <b>return</b> (&quot;DDProxy &quot; + <b>this</b>.id);
+    }
+
+});
+<i>/**
+ * @class Ext.dd.DDTarget
+ * A DragDrop implementation that does not move, but can be a drop
+ * target.  You would get the same result by simply omitting implementation
+ * <b>for</b> the event callbacks, but <b>this</b> way we reduce the processing cost of the
+ * event listener and the callbacks.
+ * @extends Ext.dd.DragDrop
+ * @constructor
+ * @param {String} id the id of the element that is a drop target
+ * @param {String} sGroup the group of related DragDrop objects
+ * @param {object} config an object containing configurable attributes
+ *                 Valid properties <b>for</b> DDTarget <b>in</b> addition to those <b>in</b>
+ *                 DragDrop:
+ *                    none
+ */</i>
+Ext.dd.DDTarget = <b>function</b>(id, sGroup, config) {
+    <b>if</b> (id) {
+        <b>this</b>.initTarget(id, sGroup, config);
+    }
+};
+
+<i>// Ext.dd.DDTarget.prototype = <b>new</b> Ext.dd.DragDrop();</i>
+Ext.extend(Ext.dd.DDTarget, Ext.dd.DragDrop, {
+    toString: <b>function</b>() {
+        <b>return</b> (&quot;DDTarget &quot; + <b>this</b>.id);
+    }
+});
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

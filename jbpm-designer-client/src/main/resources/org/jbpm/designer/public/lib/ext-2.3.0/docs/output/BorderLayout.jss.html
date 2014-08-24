@@ -1,0 +1,1024 @@
+<html><head><title>BorderLayout.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>BorderLayout.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.layout.BorderLayout
+ * @extends Ext.layout.ContainerLayout
+ * &lt;p&gt;This is a multi-pane, application-oriented UI layout style that supports multiple nested panels, automatic
+ * split bars between regions and built-<b>in</b> expanding and collapsing of regions.
+ * This class is intended to be extended or created via the layout:<em>'border'</em> {@link Ext.Container#layout} config,
+ * and should generally not need to be created directly via the <b>new</b> keyword.&lt;/p&gt;
+ * &lt;p&gt;BorderLayout does not have any direct config options (other than inherited ones).  All configs available
+ * <b>for</b> customizing the BorderLayout are at the {@link Ext.layout.BorderLayout.Region} and
+ * {@link Ext.layout.BorderLayout.SplitRegion} levels.&lt;/p&gt;
+ * &lt;p&gt;&lt;b&gt;The regions of a BorderLayout are fixed at render time and thereafter, no regions may be removed or
+ * added. The BorderLayout must have a center region, which will always fill the remaining space not used by
+ * the other regions <b>in</b> the layout.&lt;/b&gt;&lt;/p&gt;
+ * &lt;p&gt;Example usage:&lt;/p&gt;
+ * &lt;pre&gt;&lt;code&gt;
+<b>var</b> border = <b>new</b> Ext.Panel({
+    title: <em>'Border Layout'</em>,
+    layout:<em>'border'</em>,
+    items: [{
+        title: <em>'South Panel'</em>,
+        region: <em>'south'</em>,
+        height: 100,
+        minSize: 75,
+        maxSize: 250,
+        margins: <em>'0 5 5 5'</em>
+    },{
+        title: <em>'West Panel'</em>,
+        region:<em>'west'</em>,
+        margins: <em>'5 0 0 5'</em>,
+        cmargins: <em>'5 5 0 5'</em>,
+        width: 200,
+        minSize: 100,
+        maxSize: 300
+    },{
+        title: <em>'Main Content'</em>,
+        region:<em>'center'</em>,
+        margins: <em>'5 5 0 0'</em>
+    }]
+});
+&lt;/code&gt;&lt;/pre&gt;
+ */</i>
+Ext.layout.BorderLayout = Ext.extend(Ext.layout.ContainerLayout, {
+    <i>// private</i>
+    monitorResize:true,
+    <i>// private</i>
+    rendered : false,
+
+    <i>// private</i>
+    onLayout : <b>function</b>(ct, target){
+        <b>var</b> collapsed;
+        <b>if</b>(!<b>this</b>.rendered){
+            target.addClass(<em>'x-border-layout-ct'</em>);
+            <b>var</b> items = ct.items.items;
+            collapsed = [];
+            <b>for</b>(var i = 0, len = items.length; i &lt; len; i++) {
+                <b>var</b> c = items[i];
+                <b>var</b> pos = c.region;
+                <b>if</b>(c.collapsed){
+                    collapsed.push(c);
+                }
+                c.collapsed = false;
+                <b>if</b>(!c.rendered){
+                    c.cls = c.cls ? c.cls +<em>' x-border-panel'</em> : <em>'x-border-panel'</em>;
+                    c.render(target, i);
+                }
+                <b>this</b>[pos] = pos != <em>'center'</em> &amp;&amp; c.split ?
+                    <b>new</b> Ext.layout.BorderLayout.SplitRegion(<b>this</b>, c.initialConfig, pos) :
+                    <b>new</b> Ext.layout.BorderLayout.Region(<b>this</b>, c.initialConfig, pos);
+                <b>this</b>[pos].render(target, c);
+            }
+            <b>this</b>.rendered = true;
+        }
+
+        <b>var</b> size = target.getViewSize();
+        <b>if</b>(size.width &lt; 20 || size.height &lt; 20){ <i>// display none?</i>
+            <b>if</b>(collapsed){
+                <b>this</b>.restoreCollapsed = collapsed;
+            }
+            <b>return</b>;
+        }<b>else</b> if(<b>this</b>.restoreCollapsed){
+            collapsed = <b>this</b>.restoreCollapsed;
+            <b>delete</b> this.restoreCollapsed;
+        }
+
+        <b>var</b> w = size.width, h = size.height;
+        <b>var</b> centerW = w, centerH = h, centerY = 0, centerX = 0;
+
+        <b>var</b> n = <b>this</b>.north, s = <b>this</b>.south, west = <b>this</b>.west, e = <b>this</b>.east, c = <b>this</b>.center;
+        <b>if</b>(!c &amp;&amp; Ext.layout.BorderLayout.WARN !== false){
+            throw <em>'No center region defined <b>in</b> BorderLayout '</em> + ct.id;
+        }
+
+        <b>if</b>(n &amp;&amp; n.isVisible()){
+            <b>var</b> b = n.getSize();
+            <b>var</b> m = n.getMargins();
+            b.width = w - (m.left+m.right);
+            b.x = m.left;
+            b.y = m.top;
+            centerY = b.height + b.y + m.bottom;
+            centerH -= centerY;
+            n.applyLayout(b);
+        }
+        <b>if</b>(s &amp;&amp; s.isVisible()){
+            <b>var</b> b = s.getSize();
+            <b>var</b> m = s.getMargins();
+            b.width = w - (m.left+m.right);
+            b.x = m.left;
+            <b>var</b> totalHeight = (b.height + m.top + m.bottom);
+            b.y = h - totalHeight + m.top;
+            centerH -= totalHeight;
+            s.applyLayout(b);
+        }
+        <b>if</b>(west &amp;&amp; west.isVisible()){
+            <b>var</b> b = west.getSize();
+            <b>var</b> m = west.getMargins();
+            b.height = centerH - (m.top+m.bottom);
+            b.x = m.left;
+            b.y = centerY + m.top;
+            <b>var</b> totalWidth = (b.width + m.left + m.right);
+            centerX += totalWidth;
+            centerW -= totalWidth;
+            west.applyLayout(b);
+        }
+        <b>if</b>(e &amp;&amp; e.isVisible()){
+            <b>var</b> b = e.getSize();
+            <b>var</b> m = e.getMargins();
+            b.height = centerH - (m.top+m.bottom);
+            <b>var</b> totalWidth = (b.width + m.left + m.right);
+            b.x = w - totalWidth + m.left;
+            b.y = centerY + m.top;
+            centerW -= totalWidth;
+            e.applyLayout(b);
+        }
+
+        <b>if</b>(c){
+            <b>var</b> m = c.getMargins();
+            <b>var</b> centerBox = {
+                x: centerX + m.left,
+                y: centerY + m.top,
+                width: centerW - (m.left+m.right),
+                height: centerH - (m.top+m.bottom)
+            };
+            c.applyLayout(centerBox);
+        }
+        <b>if</b>(collapsed){
+            <b>for</b>(var i = 0, len = collapsed.length; i &lt; len; i++){
+                collapsed[i].collapse(false);
+            }
+        }
+
+        <b>if</b>(Ext.isIE &amp;&amp; Ext.isStrict){ <i>// workaround IE strict repainting issue</i>
+            target.repaint();
+        }
+    },
+
+    <i>// inherit docs</i>
+    destroy: <b>function</b>() {
+        <b>var</b> r = [<em>'north'</em>, <em>'south'</em>, <em>'east'</em>, <em>'west'</em>];
+        <b>for</b> (<b>var</b> i = 0; i &lt; r.length; i++) {
+            <b>var</b> region = <b>this</b>[r[i]];
+            <b>if</b>(region){
+                <b>if</b>(region.destroy){
+	                region.destroy();
+	            }<b>else</b> if (region.split){
+	                region.split.destroy(true);
+	            }
+            }
+        }
+        Ext.layout.BorderLayout.superclass.destroy.call(<b>this</b>);
+    }
+
+    <i>/**
+     * @property activeItem
+     * @hide
+     */</i>
+});
+
+<i>/**
+ * @class Ext.layout.BorderLayout.Region
+ * This is a region of a BorderLayout that acts as a subcontainer within the layout.  Each region has its own
+ * layout that is independent of other regions and the containing BorderLayout, and can be any of the valid
+ * Ext layout types.  Region size is managed automatically and cannot be changed by the user -- <b>for</b> resizable
+ * regions, see {@link Ext.layout.BorderLayout.SplitRegion}.
+ * @constructor
+ * Create a <b>new</b> Region.
+ * @param {Layout} layout The {@link Ext.layout.BorderLayout BorderLayout} instance that is managing <b>this</b> Region.
+ * @param {Object} config The configuration options
+ * @param {String} position The region position.  Valid values are: north, south, east, west and center.  Every
+ * BorderLayout must have a center region <b>for</b> the primary content -- all other regions are optional.
+ */</i>
+Ext.layout.BorderLayout.Region = <b>function</b>(layout, config, pos){
+    Ext.apply(<b>this</b>, config);
+    <b>this</b>.layout = layout;
+    <b>this</b>.position = pos;
+    <b>this</b>.state = {};
+    <b>if</b>(typeof <b>this</b>.margins == <em>'string'</em>){
+        <b>this</b>.margins = <b>this</b>.layout.parseMargins(<b>this</b>.margins);
+    }
+    <b>this</b>.margins = Ext.applyIf(<b>this</b>.margins || {}, <b>this</b>.defaultMargins);
+    <b>if</b>(this.collapsible){
+        <b>if</b>(typeof <b>this</b>.cmargins == <em>'string'</em>){
+            <b>this</b>.cmargins = <b>this</b>.layout.parseMargins(<b>this</b>.cmargins);
+        }
+        <b>if</b>(this.collapseMode == <em>'mini'</em> &amp;&amp; !<b>this</b>.cmargins){
+            <b>this</b>.cmargins = {left:0,top:0,right:0,bottom:0};
+        }<b>else</b>{
+            <b>this</b>.cmargins = Ext.applyIf(<b>this</b>.cmargins || {},
+                pos == <em>'north'</em> || pos == <em>'south'</em> ? <b>this</b>.defaultNSCMargins : <b>this</b>.defaultEWCMargins);
+        }
+    }
+};
+
+Ext.layout.BorderLayout.Region.prototype = {
+    <i>/**
+     * @cfg {Boolean} animFloat
+     * When a collapsed region<em>'s bar is clicked, the region'</em>s panel will be displayed as a floated panel that will
+     * close again once the user mouses out of that panel (or clicks out <b>if</b> autoHide = false).  Setting animFloat
+     * to false will prevent the open and close of these floated panels from being animated (defaults to true).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} autoHide
+     * When a collapsed region<em>'s bar is clicked, the region'</em>s panel will be displayed as a floated panel.  If
+     * autoHide is true, the panel will automatically hide after the user mouses out of the panel.  If autoHide
+     * is false, the panel will <b>continue</b> to display until the user clicks outside of the panel (defaults to true).
+     */</i>
+<i>// holder</i>
+<i>/***
+	 * @cfg {Boolean} collapsed
+	 * By <b>default</b>, collapsible regions will be visible when rendered. Set the collapsed config to true to render
+	 * the region as collapsed.
+	 */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} collapseMode
+     * By <b>default</b>, collapsible regions are collapsed by clicking the expand/collapse tool button that renders into
+     * the region<em>'s title bar.  Optionally, when collapseMode is set to '</em>mini<em>' the region'</em>s split bar will also
+     * display a small collapse button <b>in</b> the center of the bar.  In <em>'mini'</em> mode the region will collapse to a
+     * thinner bar than <b>in</b> normal mode.  By <b>default</b> collapseMode is undefined, and the only two supported values
+     * are undefined and <em>'mini'</em>.  Note that <b>if</b> a collapsible region does not have a title bar, then collapseMode
+     * must be set to <em>'mini'</em> <b>in</b> order <b>for</b> the region to be collapsible by the user as the tool button will not
+     * be rendered.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Object} margins
+     * An object containing margins to apply to the region when <b>in</b> the expanded state <b>in</b> the format:&lt;pre&gt;&lt;code&gt;
+{
+    top: (top margin),
+    right: (right margin),
+    bottom: (bottom margin),
+    left: (left margin)
+}&lt;/code&gt;&lt;/pre&gt;
+     * &lt;p&gt;May also be a string containing space-separated, numeric margin values. The order of the sides associated
+     * <b>with</b> each value matches the way CSS processes margin values:&lt;/p&gt;
+     * &lt;p&gt;&lt;ul&gt;
+     * &lt;li&gt;If there is only one value, it applies to all sides.&lt;/li&gt;
+     * &lt;li&gt;If there are two values, the top and bottom borders are set to the first value and the right
+     * and left are set to the second.&lt;/li&gt;
+     * &lt;li&gt;If there are three values, the top is set to the first value, the left and right are set to the second, and the bottom
+     * is set to the third.&lt;/li&gt;
+     * &lt;li&gt;If there are four values, they apply to the top, right, bottom, and left, respectively.&lt;/li&gt;
+     * &lt;/ul&gt;&lt;/p&gt;
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Object} cmargins
+     * An object containing margins to apply to the region when <b>in</b> the collapsed state <b>in</b> the format:&lt;pre&gt;&lt;code&gt;
+{
+    top: (top margin),
+    right: (right margin),
+    bottom: (bottom margin),
+    left: (left margin)
+}&lt;/code&gt;&lt;/pre&gt;
+     * &lt;p&gt;May also be a string containing space-separated, numeric margin values. The order of the sides associated
+     * <b>with</b> each value matches the way CSS processes margin values.&lt;/p&gt;
+     * &lt;p&gt;&lt;ul&gt;
+     * &lt;li&gt;If there is only one value, it applies to all sides.&lt;/li&gt;
+     * &lt;li&gt;If there are two values, the top and bottom borders are set to the first value and the right
+     * and left are set to the second.&lt;/li&gt;
+     * &lt;li&gt;If there are three values, the top is set to the first value, the left and right are set to the second, and the bottom
+     * is set to the third.&lt;/li&gt;
+     * &lt;li&gt;If there are four values, they apply to the top, right, bottom, and left, respectively.&lt;/li&gt;
+     * &lt;/ul&gt;&lt;/p&gt;
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} collapsible
+     * True to allow the user to collapse <b>this</b> region (defaults to false).  If true, an expand/collapse tool button
+     * will automatically be rendered into the title bar of the region, otherwise the button will not be shown.
+     * Note that a title bar is required to display the toggle button -- <b>if</b> no region title is specified, the
+     * region will only be collapsible <b>if</b> {@link #collapseMode} is set to <em>'mini'</em>.
+     */</i>
+    collapsible : false,
+    <i>/**
+     * @cfg {Boolean} split
+     * True to display a {@link Ext.SplitBar} between <b>this</b> region and its neighbor, allowing the user to resize
+     * the regions dynamically (defaults to false).  When split == true, it is common to specify a minSize
+     * and maxSize <b>for</b> the BoxComponent representing the region. These are not native configs of BoxComponent, and
+     * are used only by <b>this</b> class.
+     */</i>
+    split:false,
+    <i>/**
+     * @cfg {Boolean} floatable
+     * True to allow clicking a collapsed region<em>'s bar to display the region'</em>s panel floated above the layout,
+     * false to force the user to fully expand a collapsed region by clicking the expand button to see it again
+     * (defaults to true).
+     */</i>
+    floatable: true,
+    <i>/**
+     * @cfg {Number} minWidth
+     * The minimum allowable width <b>in</b> pixels <b>for</b> this region (defaults to 50)
+     */</i>
+    minWidth:50,
+    <i>/**
+     * @cfg {Number} minHeight
+     * The minimum allowable height <b>in</b> pixels <b>for</b> this region (defaults to 50)
+     */</i>
+    minHeight:50,
+
+    <i>// private</i>
+    defaultMargins : {left:0,top:0,right:0,bottom:0},
+    <i>// private</i>
+    defaultNSCMargins : {left:5,top:5,right:5,bottom:5},
+    <i>// private</i>
+    defaultEWCMargins : {left:5,top:0,right:5,bottom:0},
+
+    <i>/**
+     * True <b>if</b> this region is collapsed. Read-only.
+     * @type Boolean
+     * @property
+     */</i>
+    isCollapsed : false,
+
+    <i>/**
+     * This region's panel.  Read-only.
+     * @type Ext.Panel
+     * @property panel
+     */</i>
+<i>// holder</i>
+<i>/***
+     * This region's layout.  Read-only.
+     * @type Layout
+     * @property layout
+     */</i>
+<i>// holder</i>
+<i>/***
+     * This region's layout position (north, south, east, west or center).  Read-only.
+     * @type String
+     * @property position
+     */</i>
+
+    <i>// private</i>
+    render : <b>function</b>(ct, p){
+        <b>this</b>.panel = p;
+        p.el.enableDisplayMode();
+        <b>this</b>.targetEl = ct;
+        <b>this</b>.el = p.el;
+
+        <b>var</b> gs = p.getState, ps = <b>this</b>.position;
+        p.getState = <b>function</b>(){
+            <b>return</b> Ext.apply(gs.call(p) || {}, <b>this</b>.state);
+        }.createDelegate(<b>this</b>);
+
+        <b>if</b>(ps != <em>'center'</em>){
+            p.allowQueuedExpand = false;
+            p.on({
+                beforecollapse: <b>this</b>.beforeCollapse,
+                collapse: <b>this</b>.onCollapse,
+                beforeexpand: <b>this</b>.beforeExpand,
+                expand: <b>this</b>.onExpand,
+                hide: <b>this</b>.onHide,
+                show: <b>this</b>.onShow,
+                scope: <b>this</b>
+            });
+            <b>if</b>(this.collapsible || <b>this</b>.floatable){
+                p.collapseEl = <em>'el'</em>;
+                p.slideAnchor = <b>this</b>.getSlideAnchor();
+            }
+            <b>if</b>(p.tools &amp;&amp; p.tools.toggle){
+                p.tools.toggle.addClass(<em>'x-tool-collapse-'</em>+ps);
+                p.tools.toggle.addClassOnOver(<em>'x-tool-collapse-'</em>+ps+<em>'-over'</em>);
+            }
+        }
+    },
+
+    <i>// private</i>
+    getCollapsedEl : <b>function</b>(){
+        <b>if</b>(!<b>this</b>.collapsedEl){
+            <b>if</b>(!<b>this</b>.toolTemplate){
+                <b>var</b> tt = <b>new</b> Ext.Template(
+                     <em>'&lt;div class=&quot;x-tool x-tool-{id}&quot;&gt;&amp;#160;&lt;/div&gt;'</em>
+                );
+                tt.disableFormats = true;
+                tt.compile();
+                Ext.layout.BorderLayout.Region.prototype.toolTemplate = tt;
+            }
+            <b>this</b>.collapsedEl = <b>this</b>.targetEl.createChild({
+                cls: &quot;x-layout-collapsed x-layout-collapsed-&quot;+<b>this</b>.position,
+                id: <b>this</b>.panel.id + <em>'-xcollapsed'</em>
+            });
+            <b>this</b>.collapsedEl.enableDisplayMode(<em>'block'</em>);
+
+            <b>if</b>(this.collapseMode == <em>'mini'</em>){
+                <b>this</b>.collapsedEl.addClass(<em>'x-layout-cmini-'</em>+<b>this</b>.position);
+                <b>this</b>.miniCollapsedEl = <b>this</b>.collapsedEl.createChild({
+                    cls: &quot;x-layout-mini x-layout-mini-&quot;+<b>this</b>.position, html: &quot;&amp;#160;&quot;
+                });
+                <b>this</b>.miniCollapsedEl.addClassOnOver(<em>'x-layout-mini-over'</em>);
+                <b>this</b>.collapsedEl.addClassOnOver(&quot;x-layout-collapsed-over&quot;);
+                <b>this</b>.collapsedEl.on(<em>'click'</em>, <b>this</b>.onExpandClick, <b>this</b>, {stopEvent:true});
+            }<b>else</b> {
+                <b>if</b>(this.collapsible !== false &amp;&amp; !<b>this</b>.hideCollapseTool) {
+                    <b>var</b> t = <b>this</b>.toolTemplate.append(
+                            <b>this</b>.collapsedEl.dom,
+                            {id:<em>'expand-'</em>+<b>this</b>.position}, true);
+                    t.addClassOnOver(<em>'x-tool-expand-'</em>+<b>this</b>.position+<em>'-over'</em>);
+                    t.on(<em>'click'</em>, <b>this</b>.onExpandClick, <b>this</b>, {stopEvent:true});
+                }
+                <b>if</b>(this.floatable !== false || <b>this</b>.titleCollapse){
+                   <b>this</b>.collapsedEl.addClassOnOver(&quot;x-layout-collapsed-over&quot;);
+                   <b>this</b>.collapsedEl.on(&quot;click&quot;, <b>this</b>[this.floatable ? <em>'collapseClick'</em> : <em>'onExpandClick'</em>], <b>this</b>);
+                }
+            }
+        }
+        <b>return</b> this.collapsedEl;
+    },
+
+    <i>// private</i>
+    onExpandClick : <b>function</b>(e){
+        <b>if</b>(this.isSlid){
+            <b>this</b>.afterSlideIn();
+            <b>this</b>.panel.expand(false);
+        }<b>else</b>{
+            <b>this</b>.panel.expand();
+        }
+    },
+
+    <i>// private</i>
+    onCollapseClick : <b>function</b>(e){
+        <b>this</b>.panel.collapse();
+    },
+
+    <i>// private</i>
+    beforeCollapse : <b>function</b>(p, animate){
+        <b>this</b>.lastAnim = animate;
+        <b>if</b>(this.splitEl){
+            <b>this</b>.splitEl.hide();
+        }
+        <b>this</b>.getCollapsedEl().show();
+        <b>this</b>.panel.el.setStyle(<em>'z-index'</em>, 100);
+        <b>this</b>.isCollapsed = true;
+        <b>this</b>.layout.layout();
+    },
+
+    <i>// private</i>
+    onCollapse : <b>function</b>(animate){
+        <b>this</b>.panel.el.setStyle(<em>'z-index'</em>, 1);
+        <b>if</b>(this.lastAnim === false || <b>this</b>.panel.animCollapse === false){
+            <b>this</b>.getCollapsedEl().dom.style.visibility = <em>'visible'</em>;
+        }<b>else</b>{
+            <b>this</b>.getCollapsedEl().slideIn(<b>this</b>.panel.slideAnchor, {duration:.2});
+        }
+        <b>this</b>.state.collapsed = true;
+        <b>this</b>.panel.saveState();
+    },
+
+    <i>// private</i>
+    beforeExpand : <b>function</b>(animate){
+        <b>var</b> c = <b>this</b>.getCollapsedEl();
+        <b>this</b>.el.show();
+        <b>if</b>(this.position == <em>'east'</em> || <b>this</b>.position == <em>'west'</em>){
+            <b>this</b>.panel.setSize(undefined, c.getHeight());
+        }<b>else</b>{
+            <b>this</b>.panel.setSize(c.getWidth(), undefined);
+        }
+        c.hide();
+        c.dom.style.visibility = <em>'hidden'</em>;
+        <b>this</b>.panel.el.setStyle(<em>'z-index'</em>, 100);
+    },
+
+    <i>// private</i>
+    onExpand : <b>function</b>(){
+        <b>this</b>.isCollapsed = false;
+        <b>if</b>(this.splitEl){
+            <b>this</b>.splitEl.show();
+        }
+        <b>this</b>.layout.layout();
+        <b>this</b>.panel.el.setStyle(<em>'z-index'</em>, 1);
+        <b>this</b>.state.collapsed = false;
+        <b>this</b>.panel.saveState();
+    },
+
+    <i>// private</i>
+    collapseClick : <b>function</b>(e){
+        <b>if</b>(this.isSlid){
+           e.stopPropagation();
+           <b>this</b>.slideIn();
+        }<b>else</b>{
+           e.stopPropagation();
+           <b>this</b>.slideOut();
+        }
+    },
+
+    <i>// private</i>
+    onHide : <b>function</b>(){
+        <b>if</b>(this.isCollapsed){
+            <b>this</b>.getCollapsedEl().hide();
+        }<b>else</b> if(<b>this</b>.splitEl){
+            <b>this</b>.splitEl.hide();
+        }
+    },
+
+    <i>// private</i>
+    onShow : <b>function</b>(){
+        <b>if</b>(this.isCollapsed){
+            <b>this</b>.getCollapsedEl().show();
+        }<b>else</b> if(<b>this</b>.splitEl){
+            <b>this</b>.splitEl.show();
+        }
+    },
+
+    <i>/**
+     * True <b>if</b> this region is currently visible, <b>else</b> false.
+     * @<b>return</b> {Boolean}
+     */</i>
+    isVisible : <b>function</b>(){
+        <b>return</b> !<b>this</b>.panel.hidden;
+    },
+
+    <i>/**
+     * Returns the current margins <b>for</b> this region.  If the region is collapsed, the cmargins (collapsed
+     * margins) value will be returned, otherwise the margins value will be returned.
+     * @<b>return</b> {Object} An object containing the element's margins: {left: (left margin), top: (top margin),
+     * right: (right margin), bottom: (bottom margin)}
+     */</i>
+    getMargins : <b>function</b>(){
+        <b>return</b> this.isCollapsed &amp;&amp; <b>this</b>.cmargins ? <b>this</b>.cmargins : <b>this</b>.margins;
+    },
+
+    <i>/**
+     * Returns the current size of <b>this</b> region.  If the region is collapsed, the size of the collapsedEl will
+     * be returned, otherwise the size of the region's panel will be returned.
+     * @<b>return</b> {Object} An object containing the element's size: {width: (element width), height: (element height)}
+     */</i>
+    getSize : <b>function</b>(){
+        <b>return</b> this.isCollapsed ? <b>this</b>.getCollapsedEl().getSize() : <b>this</b>.panel.getSize();
+    },
+
+    <i>/**
+     * Sets the specified panel as the container element <b>for</b> this region.
+     * @param {Ext.Panel} panel The <b>new</b> panel
+     */</i>
+    setPanel : <b>function</b>(panel){
+        <b>this</b>.panel = panel;
+    },
+
+    <i>/**
+     * Returns the minimum allowable width <b>for</b> this region.
+     * @<b>return</b> {Number} The minimum width
+     */</i>
+    getMinWidth: <b>function</b>(){
+        <b>return</b> this.minWidth;
+    },
+
+    <i>/**
+     * Returns the minimum allowable height <b>for</b> this region.
+     * @<b>return</b> {Number} The minimum height
+     */</i>
+    getMinHeight: <b>function</b>(){
+        <b>return</b> this.minHeight;
+    },
+
+    <i>// private</i>
+    applyLayoutCollapsed : <b>function</b>(box){
+        <b>var</b> ce = <b>this</b>.getCollapsedEl();
+        ce.setLeftTop(box.x, box.y);
+        ce.setSize(box.width, box.height);
+    },
+
+    <i>// private</i>
+    applyLayout : <b>function</b>(box){
+        <b>if</b>(this.isCollapsed){
+            <b>this</b>.applyLayoutCollapsed(box);
+        }<b>else</b>{
+            <b>this</b>.panel.setPosition(box.x, box.y);
+            <b>this</b>.panel.setSize(box.width, box.height);
+        }
+    },
+
+    <i>// private</i>
+    beforeSlide: <b>function</b>(){
+        <b>this</b>.panel.beforeEffect();
+    },
+
+    <i>// private</i>
+    afterSlide : <b>function</b>(){
+        <b>this</b>.panel.afterEffect();
+    },
+
+    <i>// private</i>
+    initAutoHide : <b>function</b>(){
+        <b>if</b>(this.autoHide !== false){
+            <b>if</b>(!<b>this</b>.autoHideHd){
+                <b>var</b> st = <b>new</b> Ext.util.DelayedTask(<b>this</b>.slideIn, <b>this</b>);
+                <b>this</b>.autoHideHd = {
+                    &quot;mouseout&quot;: <b>function</b>(e){
+                        <b>if</b>(!e.within(<b>this</b>.el, true)){
+                            st.delay(500);
+                        }
+                    },
+                    &quot;mouseover&quot; : <b>function</b>(e){
+                        st.cancel();
+                    },
+                    scope : <b>this</b>
+                };
+            }
+            <b>this</b>.el.on(<b>this</b>.autoHideHd);
+        }
+    },
+
+    <i>// private</i>
+    clearAutoHide : <b>function</b>(){
+        <b>if</b>(this.autoHide !== false){
+            <b>this</b>.el.un(&quot;mouseout&quot;, <b>this</b>.autoHideHd.mouseout);
+            <b>this</b>.el.un(&quot;mouseover&quot;, <b>this</b>.autoHideHd.mouseover);
+        }
+    },
+
+    <i>// private</i>
+    clearMonitor : <b>function</b>(){
+        Ext.getDoc().un(&quot;click&quot;, <b>this</b>.slideInIf, <b>this</b>);
+    },
+
+    <i>// these names are backwards but not changed <b>for</b> compat</i>
+    <i>// private</i>
+    slideOut : <b>function</b>(){
+        <b>if</b>(this.isSlid || <b>this</b>.el.hasActiveFx()){
+            <b>return</b>;
+        }
+        <b>this</b>.isSlid = true;
+        <b>var</b> ts = <b>this</b>.panel.tools;
+        <b>if</b>(ts &amp;&amp; ts.toggle){
+            ts.toggle.hide();
+        }
+        <b>this</b>.el.show();
+        <b>if</b>(this.position == <em>'east'</em> || <b>this</b>.position == <em>'west'</em>){
+            <b>this</b>.panel.setSize(undefined, <b>this</b>.collapsedEl.getHeight());
+        }<b>else</b>{
+            <b>this</b>.panel.setSize(<b>this</b>.collapsedEl.getWidth(), undefined);
+        }
+        <b>this</b>.restoreLT = [<b>this</b>.el.dom.style.left, <b>this</b>.el.dom.style.top];
+        <b>this</b>.el.alignTo(<b>this</b>.collapsedEl, <b>this</b>.getCollapseAnchor());
+        <b>this</b>.el.setStyle(&quot;z-index&quot;, 102);
+        <b>this</b>.panel.el.replaceClass(<em>'x-panel-collapsed'</em>, <em>'x-panel-floating'</em>);
+        <b>if</b>(this.animFloat !== false){
+            <b>this</b>.beforeSlide();
+            <b>this</b>.el.slideIn(<b>this</b>.getSlideAnchor(), {
+                callback: <b>function</b>(){
+                    <b>this</b>.afterSlide();
+                    <b>this</b>.initAutoHide();
+                    Ext.getDoc().on(&quot;click&quot;, <b>this</b>.slideInIf, <b>this</b>);
+                },
+                scope: <b>this</b>,
+                block: true
+            });
+        }<b>else</b>{
+            <b>this</b>.initAutoHide();
+             Ext.getDoc().on(&quot;click&quot;, <b>this</b>.slideInIf, <b>this</b>);
+        }
+    },
+
+    <i>// private</i>
+    afterSlideIn : <b>function</b>(){
+        <b>this</b>.clearAutoHide();
+        <b>this</b>.isSlid = false;
+        <b>this</b>.clearMonitor();
+        <b>this</b>.el.setStyle(&quot;z-index&quot;, &quot;&quot;);
+        <b>this</b>.panel.el.replaceClass(<em>'x-panel-floating'</em>, <em>'x-panel-collapsed'</em>);
+        <b>this</b>.el.dom.style.left = <b>this</b>.restoreLT[0];
+        <b>this</b>.el.dom.style.top = <b>this</b>.restoreLT[1];
+
+        <b>var</b> ts = <b>this</b>.panel.tools;
+        <b>if</b>(ts &amp;&amp; ts.toggle){
+            ts.toggle.show();
+        }
+    },
+
+    <i>// private</i>
+    slideIn : <b>function</b>(cb){
+        <b>if</b>(!<b>this</b>.isSlid || <b>this</b>.el.hasActiveFx()){
+            Ext.callback(cb);
+            <b>return</b>;
+        }
+        <b>this</b>.isSlid = false;
+        <b>if</b>(this.animFloat !== false){
+            <b>this</b>.beforeSlide();
+            <b>this</b>.el.slideOut(<b>this</b>.getSlideAnchor(), {
+                callback: <b>function</b>(){
+                    <b>this</b>.el.hide();
+                    <b>this</b>.afterSlide();
+                    <b>this</b>.afterSlideIn();
+                    Ext.callback(cb);
+                },
+                scope: <b>this</b>,
+                block: true
+            });
+        }<b>else</b>{
+            <b>this</b>.el.hide();
+            <b>this</b>.afterSlideIn();
+        }
+    },
+
+    <i>// private</i>
+    slideInIf : <b>function</b>(e){
+        <b>if</b>(!e.within(<b>this</b>.el)){
+            <b>this</b>.slideIn();
+        }
+    },
+
+    <i>// private</i>
+    anchors : {
+        &quot;west&quot; : &quot;left&quot;,
+        &quot;east&quot; : &quot;right&quot;,
+        &quot;north&quot; : &quot;top&quot;,
+        &quot;south&quot; : &quot;bottom&quot;
+    },
+
+    <i>// private</i>
+    sanchors : {
+        &quot;west&quot; : &quot;l&quot;,
+        &quot;east&quot; : &quot;r&quot;,
+        &quot;north&quot; : &quot;t&quot;,
+        &quot;south&quot; : &quot;b&quot;
+    },
+
+    <i>// private</i>
+    canchors : {
+        &quot;west&quot; : &quot;tl-tr&quot;,
+        &quot;east&quot; : &quot;tr-tl&quot;,
+        &quot;north&quot; : &quot;tl-bl&quot;,
+        &quot;south&quot; : &quot;bl-tl&quot;
+    },
+
+    <i>// private</i>
+    getAnchor : <b>function</b>(){
+        <b>return</b> this.anchors[<b>this</b>.position];
+    },
+
+    <i>// private</i>
+    getCollapseAnchor : <b>function</b>(){
+        <b>return</b> this.canchors[<b>this</b>.position];
+    },
+
+    <i>// private</i>
+    getSlideAnchor : <b>function</b>(){
+        <b>return</b> this.sanchors[<b>this</b>.position];
+    },
+
+    <i>// private</i>
+    getAlignAdj : <b>function</b>(){
+        <b>var</b> cm = <b>this</b>.cmargins;
+        <b>switch</b>(this.position){
+            <b>case</b> &quot;west&quot;:
+                <b>return</b> [0, 0];
+            <b>break</b>;
+            <b>case</b> &quot;east&quot;:
+                <b>return</b> [0, 0];
+            <b>break</b>;
+            <b>case</b> &quot;north&quot;:
+                <b>return</b> [0, 0];
+            <b>break</b>;
+            <b>case</b> &quot;south&quot;:
+                <b>return</b> [0, 0];
+            <b>break</b>;
+        }
+    },
+
+    <i>// private</i>
+    getExpandAdj : <b>function</b>(){
+        <b>var</b> c = <b>this</b>.collapsedEl, cm = <b>this</b>.cmargins;
+        <b>switch</b>(this.position){
+            <b>case</b> &quot;west&quot;:
+                <b>return</b> [-(cm.right+c.getWidth()+cm.left), 0];
+            <b>break</b>;
+            <b>case</b> &quot;east&quot;:
+                <b>return</b> [cm.right+c.getWidth()+cm.left, 0];
+            <b>break</b>;
+            <b>case</b> &quot;north&quot;:
+                <b>return</b> [0, -(cm.top+cm.bottom+c.getHeight())];
+            <b>break</b>;
+            <b>case</b> &quot;south&quot;:
+                <b>return</b> [0, cm.top+cm.bottom+c.getHeight()];
+            <b>break</b>;
+        }
+    }
+};
+
+<i>/**
+ * @class Ext.layout.BorderLayout.SplitRegion
+ * @extends Ext.layout.BorderLayout.Region
+ * This is a specialized type of BorderLayout region that has a built-<b>in</b> {@link Ext.SplitBar} <b>for</b> user resizing of regions.
+ * @constructor
+ * Create a <b>new</b> SplitRegion.
+ * @param {Layout} layout The {@link Ext.layout.BorderLayout BorderLayout} instance that is managing <b>this</b> Region.
+ * @param {Object} config The configuration options
+ * @param {String} position The region position.  Valid values are: north, south, east, west and center.  Every
+ * BorderLayout must have a center region <b>for</b> the primary content -- all other regions are optional.
+ */</i>
+Ext.layout.BorderLayout.SplitRegion = <b>function</b>(layout, config, pos){
+    Ext.layout.BorderLayout.SplitRegion.superclass.constructor.call(<b>this</b>, layout, config, pos);
+    <i>// prevent <b>switch</b></i>
+    <b>this</b>.applyLayout = <b>this</b>.applyFns[pos];
+};
+
+Ext.extend(Ext.layout.BorderLayout.SplitRegion, Ext.layout.BorderLayout.Region, {
+    <i>/**
+     * @cfg {String} splitTip
+     * The tooltip to display when the user hovers over a non-collapsible region's split bar (defaults to &quot;Drag
+     * to resize.&quot;).  Only applies <b>if</b> {@link #useSplitTips} = true.
+     */</i>
+    splitTip : &quot;Drag to resize.&quot;,
+    <i>/**
+     * @cfg {String} collapsibleSplitTip
+     * The tooltip to display when the user hovers over a collapsible region's split bar (defaults to &quot;Drag
+     * to resize. Double click to hide.&quot;).  Only applies <b>if</b> {@link #useSplitTips} = true.
+     */</i>
+    collapsibleSplitTip : &quot;Drag to resize. Double click to hide.&quot;,
+    <i>/**
+     * @cfg {Boolean} useSplitTips
+     * True to display a tooltip when the user hovers over a region's split bar (defaults to false).  The tooltip
+     * text will be the value of either {@link #splitTip} or {@link #collapsibleSplitTip} as appropriate.
+     */</i>
+    useSplitTips : false,
+
+    <i>// private</i>
+    splitSettings : {
+        north : {
+            orientation: Ext.SplitBar.VERTICAL,
+            placement: Ext.SplitBar.TOP,
+            maxFn : <em>'getVMaxSize'</em>,
+            minProp: <em>'minHeight'</em>,
+            maxProp: <em>'maxHeight'</em>
+        },
+        south : {
+            orientation: Ext.SplitBar.VERTICAL,
+            placement: Ext.SplitBar.BOTTOM,
+            maxFn : <em>'getVMaxSize'</em>,
+            minProp: <em>'minHeight'</em>,
+            maxProp: <em>'maxHeight'</em>
+        },
+        east : {
+            orientation: Ext.SplitBar.HORIZONTAL,
+            placement: Ext.SplitBar.RIGHT,
+            maxFn : <em>'getHMaxSize'</em>,
+            minProp: <em>'minWidth'</em>,
+            maxProp: <em>'maxWidth'</em>
+        },
+        west : {
+            orientation: Ext.SplitBar.HORIZONTAL,
+            placement: Ext.SplitBar.LEFT,
+            maxFn : <em>'getHMaxSize'</em>,
+            minProp: <em>'minWidth'</em>,
+            maxProp: <em>'maxWidth'</em>
+        }
+    },
+
+    <i>// private</i>
+    applyFns : {
+        west : <b>function</b>(box){
+            <b>if</b>(this.isCollapsed){
+                <b>return</b> this.applyLayoutCollapsed(box);
+            }
+            <b>var</b> sd = <b>this</b>.splitEl.dom, s = sd.style;
+            <b>this</b>.panel.setPosition(box.x, box.y);
+            <b>var</b> sw = sd.offsetWidth;
+            s.left = (box.x+box.width-sw)+<em>'px'</em>;
+            s.top = (box.y)+<em>'px'</em>;
+            s.height = Math.max(0, box.height)+<em>'px'</em>;
+            <b>this</b>.panel.setSize(box.width-sw, box.height);
+        },
+        east : <b>function</b>(box){
+            <b>if</b>(this.isCollapsed){
+                <b>return</b> this.applyLayoutCollapsed(box);
+            }
+            <b>var</b> sd = <b>this</b>.splitEl.dom, s = sd.style;
+            <b>var</b> sw = sd.offsetWidth;
+            <b>this</b>.panel.setPosition(box.x+sw, box.y);
+            s.left = (box.x)+<em>'px'</em>;
+            s.top = (box.y)+<em>'px'</em>;
+            s.height = Math.max(0, box.height)+<em>'px'</em>;
+            <b>this</b>.panel.setSize(box.width-sw, box.height);
+        },
+        north : <b>function</b>(box){
+            <b>if</b>(this.isCollapsed){
+                <b>return</b> this.applyLayoutCollapsed(box);
+            }
+            <b>var</b> sd = <b>this</b>.splitEl.dom, s = sd.style;
+            <b>var</b> sh = sd.offsetHeight;
+            <b>this</b>.panel.setPosition(box.x, box.y);
+            s.left = (box.x)+<em>'px'</em>;
+            s.top = (box.y+box.height-sh)+<em>'px'</em>;
+            s.width = Math.max(0, box.width)+<em>'px'</em>;
+            <b>this</b>.panel.setSize(box.width, box.height-sh);
+        },
+        south : <b>function</b>(box){
+            <b>if</b>(this.isCollapsed){
+                <b>return</b> this.applyLayoutCollapsed(box);
+            }
+            <b>var</b> sd = <b>this</b>.splitEl.dom, s = sd.style;
+            <b>var</b> sh = sd.offsetHeight;
+            <b>this</b>.panel.setPosition(box.x, box.y+sh);
+            s.left = (box.x)+<em>'px'</em>;
+            s.top = (box.y)+<em>'px'</em>;
+            s.width = Math.max(0, box.width)+<em>'px'</em>;
+            <b>this</b>.panel.setSize(box.width, box.height-sh);
+        }
+    },
+
+    <i>// private</i>
+    render : <b>function</b>(ct, p){
+        Ext.layout.BorderLayout.SplitRegion.superclass.render.call(<b>this</b>, ct, p);
+
+        <b>var</b> ps = <b>this</b>.position;
+
+        <b>this</b>.splitEl = ct.createChild({
+            cls: &quot;x-layout-split x-layout-split-&quot;+ps, html: &quot;&amp;#160;&quot;,
+            id: <b>this</b>.panel.id + <em>'-xsplit'</em>
+        });
+
+        <b>if</b>(this.collapseMode == <em>'mini'</em>){
+            <b>this</b>.miniSplitEl = <b>this</b>.splitEl.createChild({
+                cls: &quot;x-layout-mini x-layout-mini-&quot;+ps, html: &quot;&amp;#160;&quot;
+            });
+            <b>this</b>.miniSplitEl.addClassOnOver(<em>'x-layout-mini-over'</em>);
+            <b>this</b>.miniSplitEl.on(<em>'click'</em>, <b>this</b>.onCollapseClick, <b>this</b>, {stopEvent:true});
+        }
+
+        <b>var</b> s = <b>this</b>.splitSettings[ps];
+
+        <b>this</b>.split = <b>new</b> Ext.SplitBar(<b>this</b>.splitEl.dom, p.el, s.orientation);
+        <b>this</b>.split.placement = s.placement;
+        <b>this</b>.split.getMaximumSize = <b>this</b>[s.maxFn].createDelegate(<b>this</b>);
+        <b>this</b>.split.minSize = <b>this</b>.minSize || <b>this</b>[s.minProp];
+        <b>this</b>.split.on(&quot;beforeapply&quot;, <b>this</b>.onSplitMove, <b>this</b>);
+        <b>this</b>.split.useShim = <b>this</b>.useShim === true;
+        <b>this</b>.maxSize = <b>this</b>.maxSize || <b>this</b>[s.maxProp];
+
+        <b>if</b>(p.hidden){
+            <b>this</b>.splitEl.hide();
+        }
+
+        <b>if</b>(this.useSplitTips){
+            <b>this</b>.splitEl.dom.title = <b>this</b>.collapsible ? <b>this</b>.collapsibleSplitTip : <b>this</b>.splitTip;
+        }
+        <b>if</b>(this.collapsible){
+            <b>this</b>.splitEl.on(&quot;dblclick&quot;, <b>this</b>.onCollapseClick,  <b>this</b>);
+        }
+    },
+
+    <i>//docs inherit from superclass</i>
+    getSize : <b>function</b>(){
+        <b>if</b>(this.isCollapsed){
+            <b>return</b> this.collapsedEl.getSize();
+        }
+        <b>var</b> s = <b>this</b>.panel.getSize();
+        <b>if</b>(this.position == <em>'north'</em> || <b>this</b>.position == <em>'south'</em>){
+            s.height += <b>this</b>.splitEl.dom.offsetHeight;
+        }<b>else</b>{
+            s.width += <b>this</b>.splitEl.dom.offsetWidth;
+        }
+        <b>return</b> s;
+    },
+
+    <i>// private</i>
+    getHMaxSize : <b>function</b>(){
+         <b>var</b> cmax = <b>this</b>.maxSize || 10000;
+         <b>var</b> center = <b>this</b>.layout.center;
+         <b>return</b> Math.min(cmax, (<b>this</b>.el.getWidth()+center.el.getWidth())-center.getMinWidth());
+    },
+
+    <i>// private</i>
+    getVMaxSize : <b>function</b>(){
+        <b>var</b> cmax = <b>this</b>.maxSize || 10000;
+        <b>var</b> center = <b>this</b>.layout.center;
+        <b>return</b> Math.min(cmax, (<b>this</b>.el.getHeight()+center.el.getHeight())-center.getMinHeight());
+    },
+
+    <i>// private</i>
+    onSplitMove : <b>function</b>(split, newSize){
+        <b>var</b> s = <b>this</b>.panel.getSize();
+        <b>this</b>.lastSplitSize = newSize;
+        <b>if</b>(this.position == <em>'north'</em> || <b>this</b>.position == <em>'south'</em>){
+            <b>this</b>.panel.setSize(s.width, newSize);
+            <b>this</b>.state.height = newSize;
+        }<b>else</b>{
+            <b>this</b>.panel.setSize(newSize, s.height);
+            <b>this</b>.state.width = newSize;
+        }
+        <b>this</b>.layout.layout();
+        <b>this</b>.panel.saveState();
+        <b>return</b> false;
+    },
+
+    <i>/**
+     * Returns a reference to the split bar <b>in</b> use by <b>this</b> region.
+     * @<b>return</b> {Ext.SplitBar} The split bar
+     */</i>
+    getSplitBar : <b>function</b>(){
+        <b>return</b> this.split;
+    },
+
+    <i>// inherit docs</i>
+    destroy : <b>function</b>() {
+        Ext.destroy(
+            <b>this</b>.miniSplitEl,
+            <b>this</b>.split,
+            <b>this</b>.splitEl
+        );
+    }
+});
+
+Ext.Container.LAYOUTS[<em>'border'</em>] = Ext.layout.BorderLayout;</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

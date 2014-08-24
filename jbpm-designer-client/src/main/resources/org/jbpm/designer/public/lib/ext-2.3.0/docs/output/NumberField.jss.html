@@ -1,0 +1,135 @@
+<html><head><title>NumberField.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>NumberField.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.form.NumberField
+ * @extends Ext.form.TextField
+ * Numeric text field that provides automatic keystroke filtering and numeric validation.
+ * @constructor
+ * Creates a <b>new</b> NumberField
+ * @param {Object} config Configuration options
+ */</i>
+Ext.form.NumberField = Ext.extend(Ext.form.TextField,  {
+    <i>/**
+     * @cfg {RegExp} stripCharsRe @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {RegExp} maskRe @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} fieldClass The <b>default</b> CSS class <b>for</b> the field (defaults to &quot;x-form-field x-form-num-field&quot;)
+     */</i>
+    fieldClass: &quot;x-form-field x-form-num-field&quot;,
+    <i>/**
+     * @cfg {Boolean} allowDecimals False to disallow decimal values (defaults to true)
+     */</i>
+    allowDecimals : true,
+    <i>/**
+     * @cfg {String} decimalSeparator Character(s) to allow as the decimal separator (defaults to <em>'.'</em>)
+     */</i>
+    decimalSeparator : &quot;.&quot;,
+    <i>/**
+     * @cfg {Number} decimalPrecision The maximum precision to display after the decimal separator (defaults to 2)
+     */</i>
+    decimalPrecision : 2,
+    <i>/**
+     * @cfg {Boolean} allowNegative False to prevent entering a negative sign (defaults to true)
+     */</i>
+    allowNegative : true,
+    <i>/**
+     * @cfg {Number} minValue The minimum allowed value (defaults to Number.NEGATIVE_INFINITY)
+     */</i>
+    minValue : Number.NEGATIVE_INFINITY,
+    <i>/**
+     * @cfg {Number} maxValue The maximum allowed value (defaults to Number.MAX_VALUE)
+     */</i>
+    maxValue : Number.MAX_VALUE,
+    <i>/**
+     * @cfg {String} minText Error text to display <b>if</b> the minimum value validation fails (defaults to &quot;The minimum value <b>for</b> this field is {minValue}&quot;)
+     */</i>
+    minText : &quot;The minimum value <b>for</b> this field is {0}&quot;,
+    <i>/**
+     * @cfg {String} maxText Error text to display <b>if</b> the maximum value validation fails (defaults to &quot;The maximum value <b>for</b> this field is {maxValue}&quot;)
+     */</i>
+    maxText : &quot;The maximum value <b>for</b> this field is {0}&quot;,
+    <i>/**
+     * @cfg {String} nanText Error text to display <b>if</b> the value is not a valid number.  For example, <b>this</b> can happen
+     * <b>if</b> a valid character like <em>'.'</em> or <em>'-'</em> is left <b>in</b> the field <b>with</b> no number (defaults to &quot;{value} is not a valid number&quot;)
+     */</i>
+    nanText : &quot;{0} is not a valid number&quot;,
+    <i>/**
+     * @cfg {String} baseChars The base set of characters to evaluate as valid numbers (defaults to <em>'0123456789'</em>).
+     */</i>
+    baseChars : &quot;0123456789&quot;,
+
+    <i>// private</i>
+    initEvents : <b>function</b>(){
+        <b>var</b> allowed = <b>this</b>.baseChars + <em>''</em>;
+        <b>if</b> (<b>this</b>.allowDecimals) {
+            allowed += <b>this</b>.decimalSeparator;
+        }
+        <b>if</b> (<b>this</b>.allowNegative) {
+            allowed += <em>'-'</em>;
+        }
+        <b>this</b>.maskRe = <b>new</b> RegExp(<em>'['</em> + Ext.escapeRe(allowed) + <em>']'</em>);
+        Ext.form.NumberField.superclass.initEvents.call(<b>this</b>);
+    },
+
+    <i>// private</i>
+    validateValue : <b>function</b>(value){
+        <b>if</b>(!Ext.form.NumberField.superclass.validateValue.call(<b>this</b>, value)){
+            <b>return</b> false;
+        }
+        <b>if</b>(value.length &lt; 1){ <i>// <b>if</b> it<em>'s blank and textfield didn'</em>t flag it then it's valid</i>
+             <b>return</b> true;
+        }
+        value = String(value).replace(<b>this</b>.decimalSeparator, &quot;.&quot;);
+        <b>if</b>(isNaN(value)){
+            <b>this</b>.markInvalid(String.format(<b>this</b>.nanText, value));
+            <b>return</b> false;
+        }
+        <b>var</b> num = <b>this</b>.parseValue(value);
+        <b>if</b>(num &lt; <b>this</b>.minValue){
+            <b>this</b>.markInvalid(String.format(<b>this</b>.minText, <b>this</b>.minValue));
+            <b>return</b> false;
+        }
+        <b>if</b>(num &gt; <b>this</b>.maxValue){
+            <b>this</b>.markInvalid(String.format(<b>this</b>.maxText, <b>this</b>.maxValue));
+            <b>return</b> false;
+        }
+        <b>return</b> true;
+    },
+
+    getValue : <b>function</b>(){
+        <b>return</b> this.fixPrecision(<b>this</b>.parseValue(Ext.form.NumberField.superclass.getValue.call(<b>this</b>)));
+    },
+
+    setValue : <b>function</b>(v){
+    	v = <b>typeof</b> v == <em>'number'</em> ? v : parseFloat(String(v).replace(<b>this</b>.decimalSeparator, &quot;.&quot;));
+        v = isNaN(v) ? <em>''</em> : String(v).replace(&quot;.&quot;, <b>this</b>.decimalSeparator);
+        Ext.form.NumberField.superclass.setValue.call(<b>this</b>, v);
+    },
+
+    <i>// private</i>
+    parseValue : <b>function</b>(value){
+        value = parseFloat(String(value).replace(<b>this</b>.decimalSeparator, &quot;.&quot;));
+        <b>return</b> isNaN(value) ? <em>''</em> : value;
+    },
+
+    <i>// private</i>
+    fixPrecision : <b>function</b>(value){
+        <b>var</b> nan = isNaN(value);
+        <b>if</b>(!<b>this</b>.allowDecimals || <b>this</b>.decimalPrecision == -1 || nan || !value){
+           <b>return</b> nan ? <em>''</em> : value;
+        }
+        <b>return</b> parseFloat(parseFloat(value).toFixed(<b>this</b>.decimalPrecision));
+    },
+
+    beforeBlur : <b>function</b>(){
+        <b>var</b> v = <b>this</b>.parseValue(<b>this</b>.getRawValue());
+        <b>if</b>(!Ext.isEmpty(v)){
+            <b>this</b>.setValue(<b>this</b>.fixPrecision(v));
+        }
+    }
+});
+Ext.reg(<em>'numberfield'</em>, Ext.form.NumberField);</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

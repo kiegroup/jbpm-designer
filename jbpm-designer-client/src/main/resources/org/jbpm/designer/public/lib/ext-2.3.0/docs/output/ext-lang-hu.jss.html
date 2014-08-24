@@ -1,0 +1,292 @@
+<html><head><title>ext-lang-hu.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ext-lang-hu.js</h1><pre class="highlighted"><code>&iuml;&raquo;&iquest;<i>/**
+ * List compiled by mystix on the extjs.com forums.
+ * Thank you Mystix!
+ *
+ * Hungarian Translations (utf-8 encoded)
+ * by Amon &lt;amon@theba.hu&gt; (27 Apr 2008)
+ * encoding fixed by Vili (17 Feb 2009)
+ */</i>
+
+Ext.UpdateManager.defaults.indicatorText = <em>'&lt;div class=&quot;loading-indicator&quot;&gt;Bet&Atilde;&para;lt&Atilde;&copy;s...&lt;/div&gt;'</em>;
+
+<b>if</b>(Ext.View){
+  Ext.View.prototype.emptyText = &quot;&quot;;
+}
+
+<b>if</b>(Ext.grid.GridPanel){
+  Ext.grid.GridPanel.prototype.ddText = &quot;{0} kiv&Atilde;&iexcl;lasztott sor&quot;;
+}
+
+<b>if</b>(Ext.TabPanelItem){
+  Ext.TabPanelItem.prototype.closeText = &quot;F&Atilde;&frac14;l bez&Atilde;&iexcl;r&Atilde;&iexcl;sa&quot;;
+}
+
+<b>if</b>(Ext.form.Field){
+  Ext.form.Field.prototype.invalidText = &quot;Hib&Atilde;&iexcl;s &Atilde;&copy;rt&Atilde;&copy;k!&quot;;
+}
+
+<b>if</b>(Ext.LoadMask){
+  Ext.LoadMask.prototype.msg = &quot;Bet&Atilde;&para;lt&Atilde;&copy;s...&quot;;
+}
+
+Date.monthNames = [
+  &quot;Janu&Atilde;&iexcl;r&quot;,
+  &quot;Febru&Atilde;&iexcl;r&quot;,
+  &quot;M&Atilde;&iexcl;rcius&quot;,
+  &quot;&Atilde;Åprilis&quot;,
+  &quot;M&Atilde;&iexcl;jus&quot;,
+  &quot;J&Atilde;&ordm;nius&quot;,
+  &quot;J&Atilde;&ordm;lius&quot;,
+  &quot;Augusztus&quot;,
+  &quot;Szeptember&quot;,
+  &quot;Okt&Atilde;&sup3;ber&quot;,
+  &quot;November&quot;,
+  &quot;December&quot;
+];
+
+Date.getShortMonthName = <b>function</b>(month) {
+  <b>return</b> Date.monthNames[month].substring(0, 3);
+};
+
+Date.monthNumbers = {
+  <em>'Jan'</em> : 0,
+  <em>'Feb'</em> : 1,
+  <em>'M&Atilde;&iexcl;r'</em> : 2,
+  <em>'&Atilde;Åpr'</em> : 3,
+  <em>'M&Atilde;&iexcl;j'</em> : 4,
+  <em>'J&Atilde;&ordm;n'</em> : 5,
+  <em>'J&Atilde;&ordm;l'</em> : 6,
+  <em>'Aug'</em> : 7,
+  <em>'Sze'</em> : 8,
+  <em>'Okt'</em> : 9,
+  <em>'Nov'</em> : 10,
+  <em>'Dec'</em> : 11
+};
+
+Date.getMonthNumber = <b>function</b>(name) {
+  <b>return</b> Date.monthNumbers[name.substring(0, 1).toUpperCase() + name.substring(1, 3).toLowerCase()];
+};
+
+Date.dayNames = [
+  &quot;Vas&Atilde;&iexcl;rnap&quot;,
+  &quot;H&Atilde;&copy;tf&Aring;ë&quot;,
+  &quot;Kedd&quot;,
+  &quot;Szerda&quot;,
+  &quot;Cs&Atilde;&frac14;t&Atilde;&para;rt&Atilde;&para;k&quot;,
+  &quot;P&Atilde;&copy;ntek&quot;,
+  &quot;Szombat&quot;
+];
+
+Date.getShortDayName = <b>function</b>(day) {
+  <b>return</b> Date.dayNames[day].substring(0, 3);
+};
+
+<b>if</b>(Ext.MessageBox){
+  Ext.MessageBox.buttonText = {
+    ok     : &quot;OK&quot;,
+    cancel : &quot;M&Atilde;&copy;gsem&quot;,
+    yes    : &quot;Igen&quot;,
+    no     : &quot;Nem&quot;
+  };
+}
+
+<b>if</b>(Ext.util.Format){
+  Ext.util.Format.date = <b>function</b>(v, format){
+    <b>if</b>(!v) <b>return</b> &quot;&quot;;
+    <b>if</b>(!(v instanceof Date)) v = <b>new</b> Date(Date.parse(v));
+    <b>return</b> v.dateFormat(format || &quot;Y m d&quot;);
+  };
+}
+
+<b>if</b>(Ext.DatePicker){
+  Ext.apply(Ext.DatePicker.prototype, {
+    todayText         : &quot;Mai nap&quot;,
+    minText           : &quot;A d&Atilde;&iexcl;tum kor&Atilde;&iexcl;bbi a megengedettn&Atilde;&copy;l&quot;,
+    maxText           : &quot;A d&Atilde;&iexcl;tum k&Atilde;&copy;s&Aring;ëbbi a megengedettn&Atilde;&copy;l&quot;,
+    disabledDaysText  : &quot;&quot;,
+    disabledDatesText : &quot;&quot;,
+    monthNames        : Date.monthNames,
+    dayNames          : Date.dayNames,
+    nextText          : <em>'K&Atilde;&para;v. h&Atilde;&sup3;nap (CTRL+Jobbra)'</em>,
+    prevText          : <em>'El&Aring;ëz&Aring;ë h&Atilde;&sup3;nap (CTRL+Balra)'</em>,
+    monthYearText     : <em>'V&Atilde;&iexcl;lassz h&Atilde;&sup3;napot (&Atilde;âvv&Atilde;&iexcl;laszt&Atilde;&iexcl;s: CTRL+Fel/Le)'</em>,
+    todayTip          : &quot;{0} (Sz&Atilde;&sup3;k&Atilde;&para;z)&quot;,
+    format            : &quot;y-m-d&quot;,
+    okText            : &quot;&amp;#160;OK&amp;#160;&quot;,
+    cancelText        : &quot;M&Atilde;&copy;gsem&quot;,
+    startDay          : 0
+  });
+}
+
+<b>if</b>(Ext.PagingToolbar){
+  Ext.apply(Ext.PagingToolbar.prototype, {
+    beforePageText : &quot;Oldal&quot;,
+    afterPageText  : &quot;a {0}-b&Atilde;&sup3;l/b&Aring;ël&quot;,
+    firstText      : &quot;Els&Aring;ë oldal&quot;,
+    prevText       : &quot;El&Aring;ëz&Aring;ë oldal&quot;,
+    nextText       : &quot;K&Atilde;&para;vetkez&Aring;ë oldal&quot;,
+    lastText       : &quot;Utols&Atilde;&sup3; oldal&quot;,
+    refreshText    : &quot;Friss&Atilde;&shy;t&Atilde;&copy;s&quot;,
+    displayMsg     : &quot;{0} - {1} sorok l&Atilde;&iexcl;that&Atilde;&sup3;k a {2}-b&Atilde;&sup3;l/b&Aring;ël&quot;,
+    emptyMsg       : <em>'Nincs megjelen&Atilde;&shy;thet&Aring;ë adat'</em>
+  });
+}
+
+<b>if</b>(Ext.form.TextField){
+  Ext.apply(Ext.form.TextField.prototype, {
+    minLengthText : &quot;A mez&Aring;ë tartalma legal&Atilde;&iexcl;bb {0} hossz&Atilde;&ordm; kell legyen&quot;,
+    maxLengthText : &quot;A mez&Aring;ë tartalma legfeljebb {0} hossz&Atilde;&ordm; lehet&quot;,
+    blankText     : &quot;K&Atilde;&para;telez&Aring;ëen kit&Atilde;&para;ltend&Aring;ë mez&Aring;ë&quot;,
+    regexText     : &quot;&quot;,
+    emptyText     : null
+  });
+}
+
+<b>if</b>(Ext.form.NumberField){
+  Ext.apply(Ext.form.NumberField.prototype, {
+    minText : &quot;A mez&Aring;ë tartalma nem lehet kissebb, mint {0}&quot;,
+    maxText : &quot;A mez&Aring;ë tartalma nem lehet nagyobb, mint {0}&quot;,
+    nanText : &quot;{0} nem sz&Atilde;&iexcl;m&quot;
+  });
+}
+
+<b>if</b>(Ext.form.DateField){
+  Ext.apply(Ext.form.DateField.prototype, {
+    disabledDaysText  : &quot;Nem v&Atilde;&iexcl;laszthat&Atilde;&sup3;&quot;,
+    disabledDatesText : &quot;Nem v&Atilde;&iexcl;laszthat&Atilde;&sup3;&quot;,
+    minText           : &quot;A d&Atilde;&iexcl;tum nem lehet kor&Atilde;&iexcl;bbi, mint {0}&quot;,
+    maxText           : &quot;A d&Atilde;&iexcl;tum nem lehet k&Atilde;&copy;s&Aring;ëbbi, mint {0}&quot;,
+    invalidText       : &quot;{0} nem megfelel&Aring;ë d&Atilde;&iexcl;tum - a helyes form&Atilde;&iexcl;tum: {1}&quot;,
+    format            : &quot;Y m d&quot;,
+    altFormats        : &quot;Y-m-d|y-m-d|y/m/d|m/d|m-d|md|ymd|Ymd|d&quot;
+  });
+}
+
+<b>if</b>(Ext.form.ComboBox){
+  Ext.apply(Ext.form.ComboBox.prototype, {
+    loadingText       : &quot;Bet&Atilde;&para;lt&Atilde;&copy;s...&quot;,
+    valueNotFoundText : undefined
+  });
+}
+
+<b>if</b>(Ext.form.VTypes){
+  Ext.apply(Ext.form.VTypes, {
+    emailText    : <em>'A mez&Aring;ë email c&Atilde;&shy;met tartalmazhat, melynek form&Atilde;&iexcl;tuma &quot;felhaszn&Atilde;&iexcl;l&Atilde;&sup3;@szolg&Atilde;&iexcl;ltat&Atilde;&sup3;.hu&quot;'</em>,
+    urlText      : <em>'A mez&Aring;ë webc&Atilde;&shy;met tartalmazhat, melynek form&Atilde;&iexcl;tuma &quot;http:/'</em>+<em>'/www.weboldal.hu&quot;'</em>,
+    alphaText    : <em>'A mez&Aring;ë csak bet&Aring;&plusmn;ket &Atilde;&copy;s al&Atilde;&iexcl;h&Atilde;&ordm;z&Atilde;&iexcl;st (_) tartalmazhat'</em>,
+    alphanumText : <em>'A mez&Aring;ë csak bet&Aring;&plusmn;ket, sz&Atilde;&iexcl;mokat &Atilde;&copy;s al&Atilde;&iexcl;h&Atilde;&ordm;z&Atilde;&iexcl;st (_) tartalmazhat'</em>
+  });
+}
+
+<b>if</b>(Ext.form.HtmlEditor){
+  Ext.apply(Ext.form.HtmlEditor.prototype, {
+    createLinkText : <em>'Add meg a webc&Atilde;&shy;met:'</em>,
+    buttonTips : {
+      bold : {
+        title: <em>'F&Atilde;&copy;lk&Atilde;&para;v&Atilde;&copy;r (Ctrl+B)'</em>,
+        text: <em>'F&Atilde;&copy;lk&Atilde;&para;v&Atilde;&copy;rr&Atilde;&copy; teszi a kijel&Atilde;&para;lt sz&Atilde;&para;veget.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      italic : {
+        title: <em>'D&Aring;ëlt (Ctrl+I)'</em>,
+        text: <em>'D&Aring;ëlt&Atilde;&copy; teszi a kijel&Atilde;&para;lt sz&Atilde;&para;veget.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      underline : {
+        title: <em>'Al&Atilde;&iexcl;h&Atilde;&ordm;z&Atilde;&iexcl;s (Ctrl+U)'</em>,
+        text: <em>'Al&Atilde;&iexcl;h&Atilde;&ordm;zza a kijel&Atilde;&para;lt sz&Atilde;&para;veget.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      increasefontsize : {
+        title: <em>'Sz&Atilde;&para;veg nagy&Atilde;&shy;t&Atilde;&iexcl;s'</em>,
+        text: <em>'N&Atilde;&para;veli a sz&Atilde;&para;vegm&Atilde;&copy;retet.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      decreasefontsize : {
+        title: <em>'Sz&Atilde;&para;veg kicsiny&Atilde;&shy;t&Atilde;&copy;s'</em>,
+        text: <em>'Cs&Atilde;&para;kkenti a sz&Atilde;&para;vegm&Atilde;&copy;retet.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      backcolor : {
+        title: <em>'H&Atilde;&iexcl;tt&Atilde;&copy;rsz&Atilde;&shy;n'</em>,
+        text: <em>'A kijel&Atilde;&para;lt sz&Atilde;&para;veg h&Atilde;&iexcl;tt&Atilde;&copy;rsz&Atilde;&shy;n&Atilde;&copy;t m&Atilde;&sup3;dos&Atilde;&shy;tja.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      forecolor : {
+        title: <em>'Sz&Atilde;&para;vegsz&Atilde;&shy;n'</em>,
+        text: <em>'A kijel&Atilde;&para;lt sz&Atilde;&para;veg sz&Atilde;&shy;n&Atilde;&copy;t m&Atilde;&sup3;dos&Atilde;&shy;tja.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifyleft : {
+        title: <em>'Balra z&Atilde;&iexcl;rt'</em>,
+        text: <em>'Balra z&Atilde;&iexcl;rja a sz&Atilde;&para;veget.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifycenter : {
+        title: <em>'K&Atilde;&para;z&Atilde;&copy;pre z&Atilde;&iexcl;rt'</em>,
+        text: <em>'K&Atilde;&para;z&Atilde;&copy;pre z&Atilde;&iexcl;rja a sz&Atilde;&para;veget.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifyright : {
+        title: <em>'Jobbra z&Atilde;&iexcl;rt'</em>,
+        text: <em>'Jobbra z&Atilde;&iexcl;rja a sz&Atilde;&para;veget.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      insertunorderedlist : {
+        title: <em>'Felsorol&Atilde;&iexcl;s'</em>,
+        text: <em>'Felsorol&Atilde;&iexcl;st kezd.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      insertorderedlist : {
+        title: <em>'Sz&Atilde;&iexcl;moz&Atilde;&iexcl;s'</em>,
+        text: <em>'Sz&Atilde;&iexcl;mozott list&Atilde;&iexcl;t kezd.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      createlink : {
+        title: <em>'Hiperlink'</em>,
+        text: <em>'A kijel&Atilde;&para;lt sz&Atilde;&para;veget linkk&Atilde;&copy; teszi.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      sourceedit : {
+        title: <em>'Forr&Atilde;&iexcl;s n&Atilde;&copy;zet'</em>,
+        text: <em>'Forr&Atilde;&iexcl;s n&Atilde;&copy;zetbe kapcsol.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      }
+    }
+  });
+}
+
+<b>if</b>(Ext.grid.GridView){
+  Ext.apply(Ext.grid.GridView.prototype, {
+    sortAscText  : &quot;N&Atilde;&para;vekv&Aring;ë rendez&Atilde;&copy;s&quot;,
+    sortDescText : &quot;Cs&Atilde;&para;kken&Aring;ë rendez&Atilde;&copy;s&quot;,
+    lockText     : &quot;Oszlop z&Atilde;&iexcl;rol&Atilde;&iexcl;s&quot;,
+    unlockText   : &quot;Oszlop felold&Atilde;&iexcl;s&quot;,
+    columnsText  : &quot;Oszlopok&quot;
+  });
+}
+
+<b>if</b>(Ext.grid.GroupingView){
+  Ext.apply(Ext.grid.GroupingView.prototype, {
+    emptyGroupText : <em>'(Nincs)'</em>,
+    groupByText    : <em>'Oszlop szerint csoportos&Atilde;&shy;t&Atilde;&iexcl;s'</em>,
+    showGroupsText : <em>'Csoportos n&Atilde;&copy;zet'</em>
+  });
+}
+
+<b>if</b>(Ext.grid.PropertyColumnModel){
+  Ext.apply(Ext.grid.PropertyColumnModel.prototype, {
+    nameText   : &quot;N&Atilde;&copy;v&quot;,
+    valueText  : &quot;&Atilde;ârt&Atilde;&copy;k&quot;,
+    dateFormat : &quot;Y m j&quot;
+  });
+}
+
+<b>if</b>(Ext.layout.BorderLayout &amp;&amp; Ext.layout.BorderLayout.SplitRegion){
+  Ext.apply(Ext.layout.BorderLayout.SplitRegion.prototype, {
+    splitTip            : &quot;&Atilde;Åtm&Atilde;&copy;retez&Atilde;&copy;s h&Atilde;&ordm;z&Atilde;&iexcl;sra.&quot;,
+    collapsibleSplitTip : &quot;&Atilde;Åtm&Atilde;&copy;retez&Atilde;&copy;s h&Atilde;&ordm;z&Atilde;&iexcl;sra. Elt&Atilde;&frac14;ntet&Atilde;&copy;s duplaklikk.&quot;
+  });
+}
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

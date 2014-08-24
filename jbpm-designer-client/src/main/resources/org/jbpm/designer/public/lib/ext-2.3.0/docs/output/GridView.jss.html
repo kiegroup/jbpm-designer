@@ -1,0 +1,1687 @@
+<html><head><title>GridView.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>GridView.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.grid.GridView
+ * @extends Ext.util.Observable
+ * &lt;p&gt;This class encapsulates the user interface of an {@link Ext.grid.GridPanel}.
+ * Methods of <b>this</b> class may be used to access user interface elements to enable
+ * special display effects. Do not change the DOM structure of the user interface.&lt;/p&gt;
+ * &lt;p&gt;This class does not provide ways to manipulate the underlying data. The data
+ * model of a Grid is held <b>in</b> an {@link Ext.data.Store}.&lt;/p&gt;
+ * @constructor
+ * @param {Object} config
+ */</i>
+Ext.grid.GridView = <b>function</b>(config){
+    Ext.apply(<b>this</b>, config);
+    <i>// These events are only used internally by the grid components</i>
+    <b>this</b>.addEvents(
+      <i>/**
+         * @event beforerowremoved
+         * Internal UI Event. Fired before a row is removed.
+         * @param {Ext.grid.GridView} view
+         * @param {Number} rowIndex The index of the row to be removed.
+         * @param {Ext.data.Record} record The Record to be removed
+       */</i>
+      &quot;beforerowremoved&quot;,
+      <i>/**
+         * @event beforerowsinserted
+         * Internal UI Event. Fired before rows are inserted.
+         * @param {Ext.grid.GridView} view
+         * @param {Number} firstRow The index of the first row to be inserted.
+         * @param {Number} lastRow The index of the last row to be inserted.
+       */</i>
+      &quot;beforerowsinserted&quot;,
+      <i>/**
+         * @event beforerefresh
+         * Internal UI Event. Fired before the view is refreshed.
+         * @param {Ext.grid.GridView} view
+       */</i>
+      &quot;beforerefresh&quot;,
+      <i>/**
+         * @event rowremoved
+         * Internal UI Event. Fired after a row is removed.
+         * @param {Ext.grid.GridView} view
+         * @param {Number} rowIndex The index of the row that was removed.
+         * @param {Ext.data.Record} record The Record that was removed
+       */</i>
+      &quot;rowremoved&quot;,
+      <i>/**
+         * @event rowsinserted
+         * Internal UI Event. Fired after rows are inserted.
+         * @param {Ext.grid.GridView} view
+         * @param {Number} firstRow The index of the first inserted.
+         * @param {Number} lastRow The index of the last row inserted.
+       */</i>
+      &quot;rowsinserted&quot;,
+      <i>/**
+         * @event rowupdated
+         * Internal UI Event. Fired after a row has been updated.
+         * @param {Ext.grid.GridView} view
+         * @param {Number} firstRow The index of the row updated.
+         * @param {Ext.data.record} record The Record backing the row updated.
+       */</i>
+      &quot;rowupdated&quot;,
+      <i>/**
+         * @event refresh
+         * Internal UI Event. Fired after the GridView's body has been refreshed.
+         * @param {Ext.grid.GridView} view
+       */</i>
+      &quot;refresh&quot;
+  );
+    Ext.grid.GridView.superclass.constructor.call(<b>this</b>);
+};
+
+Ext.extend(Ext.grid.GridView, Ext.util.Observable, {
+    <i>/**
+     * Override <b>this</b> function to apply custom CSS classes to rows during rendering.  You can also supply custom
+     * parameters to the row template <b>for</b> the current row to customize how it is rendered using the &lt;b&gt;rowParams&lt;/b&gt;
+     * parameter.  This <b>function</b> should <b>return</b> the CSS class name (or empty string <em>''</em> <b>for</b> none) that will be added
+     * to the row's wrapping div.  To apply multiple class names, simply <b>return</b> them space-delimited within the string
+     * (e.g., <em>'my-class another-class'</em>).
+     * @param {Record} record The {@link Ext.data.Record} corresponding to the current row
+     * @param {Number} index The row index
+     * @param {Object} rowParams A config object that is passed to the row template during rendering that allows
+     * customization of various aspects of a body row, <b>if</b> applicable.  Note that <b>this</b> object will only be applied <b>if</b>
+     * {@link #enableRowBody} = true, otherwise it will be ignored. The object may contain any of these properties:&lt;ul&gt;
+     * &lt;li&gt;&lt;code&gt;body&lt;/code&gt; : String &lt;div class=&quot;sub-desc&quot;&gt;An HTML fragment to be rendered as the cell<em>'s body content (defaults to '</em>').&lt;/div&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;code&gt;bodyStyle&lt;/code&gt; : String &lt;div class=&quot;sub-desc&quot;&gt;A CSS style string that will be applied to the row<em>'s TR style attribute (defaults to '</em>').&lt;/div&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;code&gt;cols&lt;/code&gt; : Number &lt;div class=&quot;sub-desc&quot;&gt;The column count to apply to the body row's TD colspan attribute (defaults to the current
+     * column count of the grid).&lt;/div&gt;&lt;/li&gt;
+     * &lt;/ul&gt;
+     * @param {Store} store The {@link Ext.data.Store} <b>this</b> grid is bound to
+     * @method getRowClass
+     * @<b>return</b> {String} a CSS class name to add to the row.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} enableRowBody True to add a second TR element per row that can be used to provide a row body
+     * that spans beneath the data row.  Use the {@link #getRowClass} method's rowParams config to customize the row body.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} emptyText Default text to display <b>in</b> the grid body when no rows are available (defaults to <em>''</em>).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @property {Ext.grid.GridDragZone} dragZone
+     * &lt;p&gt;&lt;b&gt;This will only be present <b>if</b> the owning GridPanel was configured <b>with</b> {@link Ext.grid.GridPanel#enableDragDrop enableDragDrop} &lt;tt&gt;true&lt;/tt&gt;.&lt;/b&gt;&lt;/p&gt;
+     * &lt;p&gt;&lt;b&gt;This will only be present after the owning GridPanel has been rendered&lt;/b&gt;.&lt;/p&gt;
+     * &lt;p&gt;A customized implementation of a {@link Ext.dd.DragZone DragZone} which provides <b>default</b> implementations of the
+     * template methods of DragZone to enable dragging of the selected rows of a GridPanel. See {@link Ext.grid.GridDragZone} <b>for</b> details.&lt;/p&gt;
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} deferEmptyText True to defer emptyText being applied until the store's first load
+     */</i>
+    deferEmptyText: true,
+    <i>/**
+     * The amount of space to reserve <b>for</b> the scrollbar (defaults to 19 pixels)
+     * @type Number
+     */</i>
+    scrollOffset: 19,
+    <i>/**
+     * @cfg {Boolean} autoFill True to auto expand the columns to fit the grid &lt;b&gt;when the grid is created&lt;/b&gt;.
+     */</i>
+    autoFill: false,
+    <i>/**
+     * @cfg {Boolean} forceFit True to auto expand/contract the size of the columns to fit the grid width and prevent horizontal scrolling.
+     * This option overrides any (@link Ext.grid.ColumnModel#width width} settings <b>in</b> the ColumnModel.
+     */</i>
+    forceFit: false,
+    <i>/**
+     * The CSS classes applied to a header when it is sorted. (defaults to [&quot;sort-asc&quot;, &quot;sort-desc&quot;])
+     * @type Array
+     */</i>
+    sortClasses : [&quot;sort-asc&quot;, &quot;sort-desc&quot;],
+    <i>/**
+     * The text displayed <b>in</b> the &quot;Sort Ascending&quot; menu item
+     * @type String
+     */</i>
+    sortAscText : &quot;Sort Ascending&quot;,
+    <i>/**
+     * The text displayed <b>in</b> the &quot;Sort Descending&quot; menu item
+     * @type String
+     */</i>
+    sortDescText : &quot;Sort Descending&quot;,
+    <i>/**
+     * The text displayed <b>in</b> the &quot;Columns&quot; menu item
+     * @type String
+     */</i>
+    columnsText : &quot;Columns&quot;,
+
+    <i>// private</i>
+    borderWidth: 2,
+    tdClass: <em>'x-grid3-cell'</em>,
+    hdCls: <em>'x-grid3-hd'</em>,
+
+    <i>/**
+     * @cfg {Number} cellSelectorDepth The number of levels to search <b>for</b> cells <b>in</b> event delegation (defaults to 4)
+     */</i>
+    cellSelectorDepth: 4,
+    <i>/**
+     * @cfg {Number} rowSelectorDepth The number of levels to search <b>for</b> rows <b>in</b> event delegation (defaults to 10)
+     */</i>
+    rowSelectorDepth: 10,
+
+    <i>/**
+     * @cfg {String} cellSelector The selector used to find cells internally
+     */</i>
+    cellSelector: <em>'td.x-grid3-cell'</em>,
+    <i>/**
+     * @cfg {String} rowSelector The selector used to find rows internally
+     */</i>
+    rowSelector: <em>'div.x-grid3-row'</em>,
+    
+    <i>// private</i>
+    firstRowCls: <em>'x-grid3-row-first'</em>,
+    lastRowCls: <em>'x-grid3-row-last'</em>,
+    rowClsRe: /(?:^|\s+)x-grid3-row-(first|last|alt)(?:\s+|$)/g,
+
+    <i>/* -------------------------------- UI Specific ----------------------------- */</i>
+
+    <i>// private</i>
+    initTemplates : <b>function</b>(){
+        <b>var</b> ts = <b>this</b>.templates || {};
+        <b>if</b>(!ts.master){
+            ts.master = <b>new</b> Ext.Template(
+                    <em>'&lt;div class=&quot;x-grid3&quot; hidefocus=&quot;true&quot;&gt;'</em>,
+                        <em>'&lt;div class=&quot;x-grid3-viewport&quot;&gt;'</em>,
+                            <em>'&lt;div class=&quot;x-grid3-header&quot;&gt;&lt;div class=&quot;x-grid3-header-inner&quot;&gt;&lt;div class=&quot;x-grid3-header-offset&quot; style=&quot;{ostyle}&quot;&gt;{header}&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;x-clear&quot;&gt;&lt;/div&gt;&lt;/div&gt;'</em>,
+                            <em>'&lt;div class=&quot;x-grid3-scroller&quot;&gt;&lt;div class=&quot;x-grid3-body&quot; style=&quot;{bstyle}&quot;&gt;{body}&lt;/div&gt;&lt;a href=&quot;#&quot; class=&quot;x-grid3-focus&quot; tabIndex=&quot;-1&quot;&gt;&lt;/a&gt;&lt;/div&gt;'</em>,
+                        <em>'&lt;/div&gt;'</em>,
+                        <em>'&lt;div class=&quot;x-grid3-resize-marker&quot;&gt;&amp;#160;&lt;/div&gt;'</em>,
+                        <em>'&lt;div class=&quot;x-grid3-resize-proxy&quot;&gt;&amp;#160;&lt;/div&gt;'</em>,
+                    <em>'&lt;/div&gt;'</em>
+                    );
+        }
+
+        <b>if</b>(!ts.header){
+            ts.header = <b>new</b> Ext.Template(
+                    <em>'&lt;table border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot; style=&quot;{tstyle}&quot;&gt;'</em>,
+                    <em>'&lt;thead&gt;&lt;tr class=&quot;x-grid3-hd-row&quot;&gt;{cells}&lt;/tr&gt;&lt;/thead&gt;'</em>,
+                    <em>'&lt;/table&gt;'</em>
+                    );
+        }
+
+        <b>if</b>(!ts.hcell){
+            ts.hcell = <b>new</b> Ext.Template(
+                    <em>'&lt;td class=&quot;x-grid3-hd x-grid3-cell x-grid3-td-{id} {css}&quot; style=&quot;{style}&quot;&gt;&lt;div {tooltip} {attr} class=&quot;x-grid3-hd-inner x-grid3-hd-{id}&quot; unselectable=&quot;on&quot; style=&quot;{istyle}&quot;&gt;'</em>, <b>this</b>.grid.enableHdMenu ? <em>'&lt;a class=&quot;x-grid3-hd-btn&quot; href=&quot;#&quot;&gt;&lt;/a&gt;'</em> : <em>''</em>,
+                    <em>'{value}&lt;img class=&quot;x-grid3-sort-icon&quot; src=&quot;'</em>, Ext.BLANK_IMAGE_URL, <em>'&quot; /&gt;'</em>,
+                    <em>'&lt;/div&gt;&lt;/td&gt;'</em>
+                    );
+        }
+
+        <b>if</b>(!ts.body){
+            ts.body = <b>new</b> Ext.Template(<em>'{rows}'</em>);
+        }
+
+        <b>if</b>(!ts.row){
+            ts.row = <b>new</b> Ext.Template(
+                    <em>'&lt;div class=&quot;x-grid3-row {alt}&quot; style=&quot;{tstyle}&quot;&gt;&lt;table class=&quot;x-grid3-row-table&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot; style=&quot;{tstyle}&quot;&gt;'</em>,
+                    <em>'&lt;tbody&gt;&lt;tr&gt;{cells}&lt;/tr&gt;'</em>,
+                    (<b>this</b>.enableRowBody ? <em>'&lt;tr class=&quot;x-grid3-row-body-tr&quot; style=&quot;{bodyStyle}&quot;&gt;&lt;td colspan=&quot;{cols}&quot; class=&quot;x-grid3-body-cell&quot; tabIndex=&quot;0&quot; hidefocus=&quot;on&quot;&gt;&lt;div class=&quot;x-grid3-row-body&quot;&gt;{body}&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;'</em> : <em>''</em>),
+                    <em>'&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;'</em>
+                    );
+        }
+
+        <b>if</b>(!ts.cell){
+            ts.cell = <b>new</b> Ext.Template(
+                    <em>'&lt;td class=&quot;x-grid3-col x-grid3-cell x-grid3-td-{id} {css}&quot; style=&quot;{style}&quot; tabIndex=&quot;0&quot; {cellAttr}&gt;'</em>,
+                    <em>'&lt;div class=&quot;x-grid3-cell-inner x-grid3-col-{id}&quot; unselectable=&quot;on&quot; {attr}&gt;{value}&lt;/div&gt;'</em>,
+                    <em>'&lt;/td&gt;'</em>
+                    );
+        }
+
+        <b>for</b>(var k <b>in</b> ts){
+            <b>var</b> t = ts[k];
+            <b>if</b>(t &amp;&amp; <b>typeof</b> t.compile == <em>'<b>function</b>'</em> &amp;&amp; !t.compiled){
+                t.disableFormats = true;
+                t.compile();
+            }
+        }
+
+        <b>this</b>.templates = ts;
+        <b>this</b>.colRe = <b>new</b> RegExp(&quot;x-grid3-td-([^\\s]+)&quot;, &quot;&quot;);
+    },
+
+    <i>// private</i>
+    fly : <b>function</b>(el){
+        <b>if</b>(!<b>this</b>._flyweight){
+            <b>this</b>._flyweight = <b>new</b> Ext.Element.Flyweight(document.body);
+        }
+        <b>this</b>._flyweight.dom = el;
+        <b>return</b> this._flyweight;
+    },
+
+    <i>// private</i>
+    getEditorParent : <b>function</b>(){
+        <b>return</b> this.scroller.dom;
+    },
+
+    <i>// private</i>
+    initElements : <b>function</b>(){
+        <b>var</b> E = Ext.Element;
+
+        <b>var</b> el = <b>this</b>.grid.getGridEl().dom.firstChild;
+        <b>var</b> cs = el.childNodes;
+
+        <b>this</b>.el = <b>new</b> E(el);
+
+        <b>this</b>.mainWrap = <b>new</b> E(cs[0]);
+        <b>this</b>.mainHd = <b>new</b> E(<b>this</b>.mainWrap.dom.firstChild);
+
+        <b>if</b>(this.grid.hideHeaders){
+            <b>this</b>.mainHd.setDisplayed(false);
+        }
+
+        <b>this</b>.innerHd = <b>this</b>.mainHd.dom.firstChild;
+        <b>this</b>.scroller = <b>new</b> E(<b>this</b>.mainWrap.dom.childNodes[1]);
+        <b>if</b>(this.forceFit){
+            <b>this</b>.scroller.setStyle(<em>'overflow-x'</em>, <em>'hidden'</em>);
+        }
+        <i>/**
+         * The GridView's body Element which encapsulates all rows <b>in</b> the Grid. {@link Ext.Element Element}. Read-only.
+         * &lt;p&gt;This Element is only available after the GridPanel has been rendered.&lt;/p&gt;
+         * @type Ext.Element
+         * @property mainBody
+         */</i>
+        <b>this</b>.mainBody = <b>new</b> E(<b>this</b>.scroller.dom.firstChild);
+
+        <b>this</b>.focusEl = <b>new</b> E(<b>this</b>.scroller.dom.childNodes[1]);
+        <b>this</b>.focusEl.swallowEvent(&quot;click&quot;, true);
+
+        <b>this</b>.resizeMarker = <b>new</b> E(cs[1]);
+        <b>this</b>.resizeProxy = <b>new</b> E(cs[2]);
+    },
+
+    <i>// private</i>
+    getRows : <b>function</b>(){
+        <b>return</b> this.hasRows() ? <b>this</b>.mainBody.dom.childNodes : [];
+    },
+
+    <i>// finder methods, used <b>with</b> delegation</i>
+
+    <i>// private</i>
+    findCell : <b>function</b>(el){
+        <b>if</b>(!el){
+            <b>return</b> false;
+        }
+        <b>return</b> this.fly(el).findParent(<b>this</b>.cellSelector, <b>this</b>.cellSelectorDepth);
+    },
+
+    <i>// private</i>
+    findCellIndex : <b>function</b>(el, requiredCls){
+        <b>var</b> cell = <b>this</b>.findCell(el);
+        <b>if</b>(cell &amp;&amp; (!requiredCls || <b>this</b>.fly(cell).hasClass(requiredCls))){
+            <b>return</b> this.getCellIndex(cell);
+        }
+        <b>return</b> false;
+    },
+
+    <i>// private</i>
+    getCellIndex : <b>function</b>(el){
+        <b>if</b>(el){
+            <b>var</b> m = el.className.match(<b>this</b>.colRe);
+            <b>if</b>(m &amp;&amp; m[1]){
+                <b>return</b> this.cm.getIndexById(m[1]);
+            }
+        }
+        <b>return</b> false;
+    },
+
+    <i>// private</i>
+    findHeaderCell : <b>function</b>(el){
+        <b>var</b> cell = <b>this</b>.findCell(el);
+        <b>return</b> cell &amp;&amp; <b>this</b>.fly(cell).hasClass(<b>this</b>.hdCls) ? cell : null;
+    },
+
+    <i>// private</i>
+    findHeaderIndex : <b>function</b>(el){
+        <b>return</b> this.findCellIndex(el, <b>this</b>.hdCls);
+    },
+
+<i>/**
+ * Return the HtmlElement representing the grid row which contains the passed element.
+ * @param {Element} el The target element
+ * @<b>return</b> The row element, or null <b>if</b> the target element is not within a row of <b>this</b> GridView.
+ */</i>
+    findRow : <b>function</b>(el){
+        <b>if</b>(!el){
+            <b>return</b> false;
+        }
+        <b>return</b> this.fly(el).findParent(<b>this</b>.rowSelector, <b>this</b>.rowSelectorDepth);
+    },
+
+<i>/**
+ * Return the index of the grid row which contains the passed element.
+ * @param {Element} el The target element
+ * @<b>return</b> The row index, or &lt;b&gt;false&lt;/b&gt; <b>if</b> the target element is not within a row of <b>this</b> GridView.
+ */</i>
+    findRowIndex : <b>function</b>(el){
+        <b>var</b> r = <b>this</b>.findRow(el);
+        <b>return</b> r ? r.rowIndex : false;
+    },
+
+    <i>// getter methods <b>for</b> fetching elements dynamically <b>in</b> the grid</i>
+
+<i>/**
+ * Return the &amp;lt;TR&gt; HtmlElement which represents a Grid row <b>for</b> the specified index.
+ * @param {Number} index The row index
+ * @<b>return</b> {HtmlElement} The &amp;lt;TR&gt; element.
+ */</i>
+    getRow : <b>function</b>(row){
+        <b>return</b> this.getRows()[row];
+    },
+
+<i>/**
+ * Returns the grid's &amp;lt;TD&gt; HtmlElement at the specified coordinates.
+ * @param {Number} row The row index <b>in</b> which to find the cell.
+ * @param {Number} col The column index of the cell.
+ * @<b>return</b> {HtmlElement} The &amp;lt;TD&gt; at the specified coordinates.
+ */</i>
+    getCell : <b>function</b>(row, col){
+        <b>return</b> this.getRow(row).getElementsByTagName(<em>'td'</em>)[col];
+    },
+
+<i>/**
+ * Return the &amp;lt;TD&gt; HtmlElement which represents the Grid's header cell <b>for</b> the specified column index.
+ * @param {Number} index The column index
+ * @<b>return</b> {HtmlElement} The &amp;lt;TD&gt; element.
+ */</i>
+    getHeaderCell : <b>function</b>(index){
+      <b>return</b> this.mainHd.dom.getElementsByTagName(<em>'td'</em>)[index];
+    },
+
+    <i>// manipulating elements</i>
+
+    <i>// private - use getRowClass to apply custom row classes</i>
+    addRowClass : <b>function</b>(row, cls){
+        <b>var</b> r = <b>this</b>.getRow(row);
+        <b>if</b>(r){
+            <b>this</b>.fly(r).addClass(cls);
+        }
+    },
+
+    <i>// private</i>
+    removeRowClass : <b>function</b>(row, cls){
+        <b>var</b> r = <b>this</b>.getRow(row);
+        <b>if</b>(r){
+            <b>this</b>.fly(r).removeClass(cls);
+        }
+    },
+
+    <i>// private</i>
+    removeRow : <b>function</b>(row){
+        Ext.removeNode(<b>this</b>.getRow(row));
+        <b>this</b>.syncFocusEl(row);
+    },
+    
+    <i>// private</i>
+    removeRows : <b>function</b>(firstRow, lastRow){
+        <b>var</b> bd = <b>this</b>.mainBody.dom;
+        <b>for</b>(var rowIndex = firstRow; rowIndex &lt;= lastRow; rowIndex++){
+            Ext.removeNode(bd.childNodes[firstRow]);
+        }
+        <b>this</b>.syncFocusEl(firstRow);
+    },
+
+    <i>// scrolling stuff</i>
+
+    <i>// private</i>
+    getScrollState : <b>function</b>(){
+        <b>var</b> sb = <b>this</b>.scroller.dom;
+        <b>return</b> {left: sb.scrollLeft, top: sb.scrollTop};
+    },
+
+    <i>// private</i>
+    restoreScroll : <b>function</b>(state){
+        <b>var</b> sb = <b>this</b>.scroller.dom;
+        sb.scrollLeft = state.left;
+        sb.scrollTop = state.top;
+    },
+
+    <i>/**
+     * Scrolls the grid to the top
+     */</i>
+    scrollToTop : <b>function</b>(){
+        <b>this</b>.scroller.dom.scrollTop = 0;
+        <b>this</b>.scroller.dom.scrollLeft = 0;
+    },
+
+    <i>// private</i>
+    syncScroll : <b>function</b>(){
+      <b>this</b>.syncHeaderScroll();
+      <b>var</b> mb = <b>this</b>.scroller.dom;
+        <b>this</b>.grid.fireEvent(&quot;bodyscroll&quot;, mb.scrollLeft, mb.scrollTop);
+    },
+
+    <i>// private</i>
+    syncHeaderScroll : <b>function</b>(){
+        <b>var</b> mb = <b>this</b>.scroller.dom;
+        <b>this</b>.innerHd.scrollLeft = mb.scrollLeft;
+        <b>this</b>.innerHd.scrollLeft = mb.scrollLeft; <i>// second time <b>for</b> IE (1/2 time first fails, other browsers ignore)</i>
+    },
+
+    <i>// private</i>
+    updateSortIcon : <b>function</b>(col, dir){
+        <b>var</b> sc = <b>this</b>.sortClasses;
+        <b>var</b> hds = <b>this</b>.mainHd.select(<em>'td'</em>).removeClass(sc);
+        hds.item(col).addClass(sc[dir == &quot;DESC&quot; ? 1 : 0]);
+    },
+
+    <i>// private</i>
+    updateAllColumnWidths : <b>function</b>(){
+        <b>var</b> tw = <b>this</b>.getTotalWidth();
+        <b>var</b> clen = <b>this</b>.cm.getColumnCount();
+        <b>var</b> ws = [];
+        <b>for</b>(var i = 0; i &lt; clen; i++){
+            ws[i] = <b>this</b>.getColumnWidth(i);
+        }
+        <b>this</b>.innerHd.firstChild.style.width = <b>this</b>.getOffsetWidth();
+        <b>this</b>.innerHd.firstChild.firstChild.style.width = tw;
+        <b>this</b>.mainBody.dom.style.width = tw;
+        <b>for</b>(var i = 0; i &lt; clen; i++){
+            <b>var</b> hd = <b>this</b>.getHeaderCell(i);
+            hd.style.width = ws[i];
+        }
+
+        <b>var</b> ns = <b>this</b>.getRows(), row, trow;
+        <b>for</b>(var i = 0, len = ns.length; i &lt; len; i++){
+            row = ns[i];
+            row.style.width = tw;
+            <b>if</b>(row.firstChild){
+                row.firstChild.style.width = tw;
+                trow = row.firstChild.rows[0];
+                <b>for</b> (<b>var</b> j = 0; j &lt; clen; j++) {
+                   trow.childNodes[j].style.width = ws[j];
+                }
+            }
+        }
+
+        <b>this</b>.onAllColumnWidthsUpdated(ws, tw);
+    },
+
+    <i>// private</i>
+    updateColumnWidth : <b>function</b>(col, width){
+        <b>var</b> w = <b>this</b>.getColumnWidth(col);
+        <b>var</b> tw = <b>this</b>.getTotalWidth();
+        <b>this</b>.innerHd.firstChild.style.width = <b>this</b>.getOffsetWidth();
+        <b>this</b>.innerHd.firstChild.firstChild.style.width = tw;
+        <b>this</b>.mainBody.dom.style.width = tw;
+        <b>var</b> hd = <b>this</b>.getHeaderCell(col);
+        hd.style.width = w;
+
+        <b>var</b> ns = <b>this</b>.getRows(), row;
+        <b>for</b>(var i = 0, len = ns.length; i &lt; len; i++){
+            row = ns[i];
+            row.style.width = tw;
+            <b>if</b>(row.firstChild){
+                row.firstChild.style.width = tw;
+                row.firstChild.rows[0].childNodes[col].style.width = w;
+            }
+        }
+
+        <b>this</b>.onColumnWidthUpdated(col, w, tw);
+    },
+
+    <i>// private</i>
+    updateColumnHidden : <b>function</b>(col, hidden){
+        <b>var</b> tw = <b>this</b>.getTotalWidth();
+        <b>this</b>.innerHd.firstChild.style.width = <b>this</b>.getOffsetWidth();
+        <b>this</b>.innerHd.firstChild.firstChild.style.width = tw;
+        <b>this</b>.mainBody.dom.style.width = tw;
+        <b>var</b> display = hidden ? <em>'none'</em> : <em>''</em>;
+
+        <b>var</b> hd = <b>this</b>.getHeaderCell(col);
+        hd.style.display = display;
+
+        <b>var</b> ns = <b>this</b>.getRows(), row;
+        <b>for</b>(var i = 0, len = ns.length; i &lt; len; i++){
+            row = ns[i];
+            row.style.width = tw;
+            <b>if</b>(row.firstChild){
+                row.firstChild.style.width = tw;
+                row.firstChild.rows[0].childNodes[col].style.display = display;
+            }
+        }
+
+        <b>this</b>.onColumnHiddenUpdated(col, hidden, tw);
+        <b>delete</b> this.lastViewWidth; <i>// force recalc</i>
+        <b>this</b>.layout();
+    },
+
+    <i>// private</i>
+    doRender : <b>function</b>(cs, rs, ds, startRow, colCount, stripe){
+        <b>var</b> ts = <b>this</b>.templates, ct = ts.cell, rt = ts.row, last = colCount-1;
+        <b>var</b> tstyle = <em>'width:'</em>+<b>this</b>.getTotalWidth()+<em>';'</em>;
+        <i>// buffers</i>
+        <b>var</b> buf = [], cb, c, p = {}, rp = {tstyle: tstyle}, r;
+        <b>for</b>(var j = 0, len = rs.length; j &lt; len; j++){
+            r = rs[j]; cb = [];
+            <b>var</b> rowIndex = (j+startRow);
+            <b>for</b>(var i = 0; i &lt; colCount; i++){
+                c = cs[i];
+                p.id = c.id;
+                p.css = i == 0 ? <em>'x-grid3-cell-first '</em> : (i == last ? <em>'x-grid3-cell-last '</em> : <em>''</em>);
+                p.attr = p.cellAttr = &quot;&quot;;
+                p.value = c.renderer(r.data[c.name], p, r, rowIndex, i, ds);
+                p.style = c.style;
+                <b>if</b>(p.value == undefined || p.value === &quot;&quot;) p.value = &quot;&amp;#160;&quot;;
+                <b>if</b>(r.dirty &amp;&amp; <b>typeof</b> r.modified[c.name] !== <em>'undefined'</em>){
+                    p.css += <em>' x-grid3-dirty-cell'</em>;
+                }
+                cb[cb.length] = ct.apply(p);
+            }
+            <b>var</b> alt = [];
+            <b>if</b>(stripe &amp;&amp; ((rowIndex+1) % 2 == 0)){
+                alt[0] = &quot;x-grid3-row-alt&quot;;
+            }
+            <b>if</b>(r.dirty){
+                alt[1] = &quot; x-grid3-dirty-row&quot;;
+            }
+            rp.cols = colCount;
+            <b>if</b>(this.getRowClass){
+                alt[2] = <b>this</b>.getRowClass(r, rowIndex, rp, ds);
+            }
+            rp.alt = alt.join(&quot; &quot;);
+            rp.cells = cb.join(&quot;&quot;);
+            buf[buf.length] =  rt.apply(rp);
+        }
+        <b>return</b> buf.join(&quot;&quot;);
+    },
+
+    <i>// private</i>
+    processRows : <b>function</b>(startRow, skipStripe){
+        <b>if</b>(!<b>this</b>.ds || <b>this</b>.ds.getCount() &lt; 1){
+            <b>return</b>;
+        }
+        <b>var</b> rows = <b>this</b>.getRows();
+        skipStripe = skipStripe || !<b>this</b>.grid.stripeRows;
+        startRow = startRow || 0;
+        Ext.each(rows, <b>function</b>(row, idx){
+            row.rowIndex = idx;
+            row.className = row.className.replace(<b>this</b>.rowClsRe, <em>' '</em>);
+            <b>if</b> (!skipStripe &amp;&amp; (idx + 1) % 2 === 0) {
+                row.className += <em>' x-grid3-row-alt'</em>;
+            }
+        });
+        <i>// add first/last-row classes</i>
+        <b>if</b>(startRow === 0){
+            Ext.fly(rows[0]).addClass(<b>this</b>.firstRowCls);
+        }
+        Ext.fly(rows[rows.length - 1]).addClass(<b>this</b>.lastRowCls);
+    },
+
+    afterRender: <b>function</b>(){
+        <b>this</b>.mainBody.dom.innerHTML = <b>this</b>.renderRows() || <em>'&amp;nbsp;'</em>;
+        <b>this</b>.processRows(0, true);
+
+        <b>if</b>(this.deferEmptyText !== true){
+            <b>this</b>.applyEmptyText();
+        }
+    },
+
+    <i>// private</i>
+    renderUI : <b>function</b>(){
+
+        <b>var</b> header = <b>this</b>.renderHeaders();
+        <b>var</b> body = <b>this</b>.templates.body.apply({rows: <em>'&amp;nbsp;'</em>});
+        <b>var</b> html = <b>this</b>.templates.master.apply({
+            body: body,
+            header: header,
+            ostyle: <em>'width:'</em>+<b>this</b>.getOffsetWidth()+<em>';'</em>,
+            bstyle: <em>'width:'</em>+<b>this</b>.getTotalWidth()+<em>';'</em>
+        });
+
+        <b>var</b> g = <b>this</b>.grid;
+
+        g.getGridEl().dom.innerHTML = html;
+
+        <b>this</b>.initElements();
+
+        <i>// get mousedowns early</i>
+        Ext.fly(<b>this</b>.innerHd).on(&quot;click&quot;, <b>this</b>.handleHdDown, <b>this</b>);
+        <b>this</b>.mainHd.on(&quot;mouseover&quot;, <b>this</b>.handleHdOver, <b>this</b>);
+        <b>this</b>.mainHd.on(&quot;mouseout&quot;, <b>this</b>.handleHdOut, <b>this</b>);
+        <b>this</b>.mainHd.on(&quot;mousemove&quot;, <b>this</b>.handleHdMove, <b>this</b>);
+
+        <b>this</b>.scroller.on(<em>'scroll'</em>, <b>this</b>.syncScroll,  <b>this</b>);
+        <b>if</b>(g.enableColumnResize !== false){
+            <b>this</b>.splitZone = <b>new</b> Ext.grid.GridView.SplitDragZone(g, <b>this</b>.mainHd.dom);
+        }
+
+        <b>if</b>(g.enableColumnMove){
+            <b>this</b>.columnDrag = <b>new</b> Ext.grid.GridView.ColumnDragZone(g, <b>this</b>.innerHd);
+            <b>this</b>.columnDrop = <b>new</b> Ext.grid.HeaderDropZone(g, <b>this</b>.mainHd.dom);
+        }
+
+        <b>if</b>(g.enableHdMenu !== false){
+            <b>if</b>(g.enableColumnHide !== false){
+                <b>this</b>.colMenu = <b>new</b> Ext.menu.Menu({id:g.id + &quot;-hcols-menu&quot;});
+                <b>this</b>.colMenu.on(&quot;beforeshow&quot;, <b>this</b>.beforeColMenuShow, <b>this</b>);
+                <b>this</b>.colMenu.on(&quot;itemclick&quot;, <b>this</b>.handleHdMenuClick, <b>this</b>);
+            }
+            <b>this</b>.hmenu = <b>new</b> Ext.menu.Menu({id: g.id + &quot;-hctx&quot;});
+            <b>this</b>.hmenu.add(
+                {id:&quot;asc&quot;, text: <b>this</b>.sortAscText, cls: &quot;xg-hmenu-sort-asc&quot;},
+                {id:&quot;desc&quot;, text: <b>this</b>.sortDescText, cls: &quot;xg-hmenu-sort-desc&quot;}
+            );
+            <b>if</b>(g.enableColumnHide !== false){
+                <b>this</b>.hmenu.add(<em>'-'</em>, {
+                    id:&quot;columns&quot;,
+                    hideOnClick: false,
+                    text: <b>this</b>.columnsText,
+                    menu: <b>this</b>.colMenu,
+                    iconCls: <em>'x-cols-icon'</em>
+                });
+            }
+            <b>this</b>.hmenu.on(&quot;itemclick&quot;, <b>this</b>.handleHdMenuClick, <b>this</b>);
+
+            <i>//g.on(&quot;headercontextmenu&quot;, <b>this</b>.handleHdCtx, <b>this</b>);</i>
+        }
+
+        <b>if</b>(g.trackMouseOver){
+            <b>this</b>.mainBody.on(&quot;mouseover&quot;, <b>this</b>.onRowOver, <b>this</b>);
+            <b>this</b>.mainBody.on(&quot;mouseout&quot;, <b>this</b>.onRowOut, <b>this</b>);
+        }
+        <b>if</b>(g.enableDragDrop || g.enableDrag){
+            <b>this</b>.dragZone = <b>new</b> Ext.grid.GridDragZone(g, {
+                ddGroup : g.ddGroup || <em>'GridDD'</em>
+            });
+        }
+
+        <b>this</b>.updateHeaderSortState();
+
+    },
+
+    <i>// private</i>
+    layout : <b>function</b>(){
+        <b>if</b>(!<b>this</b>.mainBody){
+            <b>return</b>; <i>// not rendered</i>
+        }
+        <b>var</b> g = <b>this</b>.grid;
+        <b>var</b> c = g.getGridEl();
+        <b>var</b> csize = c.getSize(true);
+        <b>var</b> vw = csize.width;
+
+        <b>if</b>(vw &lt; 20 || csize.height &lt; 20){ <i>// display: none?</i>
+            <b>return</b>;
+        }
+
+        <b>if</b>(g.autoHeight){
+            <b>this</b>.scroller.dom.style.overflow = <em>'visible'</em>;
+            <b>if</b>(Ext.isWebKit){
+                <b>this</b>.scroller.dom.style.position = <em>'static'</em>;
+            }
+        }<b>else</b>{
+            <b>this</b>.el.setSize(csize.width, csize.height);
+
+            <b>var</b> hdHeight = <b>this</b>.mainHd.getHeight();
+            <b>var</b> vh = csize.height - (hdHeight);
+
+            <b>this</b>.scroller.setSize(vw, vh);
+            <b>if</b>(this.innerHd){
+                <b>this</b>.innerHd.style.width = (vw)+<em>'px'</em>;
+            }
+        }
+        <b>if</b>(this.forceFit){
+            <b>if</b>(this.lastViewWidth != vw){
+                <b>this</b>.fitColumns(false, false);
+                <b>this</b>.lastViewWidth = vw;
+            }
+        }<b>else</b> {
+            <b>this</b>.autoExpand();
+            <b>this</b>.syncHeaderScroll();
+        }
+        <b>this</b>.onLayout(vw, vh);
+    },
+
+    <i>// template functions <b>for</b> subclasses and plugins</i>
+    <i>// these functions include precalculated values</i>
+    onLayout : <b>function</b>(vw, vh){
+        <i>// <b>do</b> nothing</i>
+    },
+
+    onColumnWidthUpdated : <b>function</b>(col, w, tw){
+        <i>//template method</i>
+    },
+
+    onAllColumnWidthsUpdated : <b>function</b>(ws, tw){
+        <i>//template method</i>
+    },
+
+    onColumnHiddenUpdated : <b>function</b>(col, hidden, tw){
+        <i>// template method</i>
+    },
+
+    updateColumnText : <b>function</b>(col, text){
+        <i>// template method</i>
+    },
+
+    afterMove : <b>function</b>(colIndex){
+        <i>// template method</i>
+    },
+
+    <i>/* ----------------------------------- Core Specific -------------------------------------------*/</i>
+    <i>// private</i>
+    init: <b>function</b>(grid){
+        <b>this</b>.grid = grid;
+
+        <b>this</b>.initTemplates();
+        <b>this</b>.initData(grid.store, grid.colModel);
+        <b>this</b>.initUI(grid);
+    },
+
+    <i>// private</i>
+    getColumnId : <b>function</b>(index){
+      <b>return</b> this.cm.getColumnId(index);
+    },
+    
+    <i>// private </i>
+    getOffsetWidth: <b>function</b>() {
+        <b>return</b> (<b>this</b>.cm.getTotalWidth() + <b>this</b>.scrollOffset) + <em>'px'</em>;
+    },
+
+
+    <i>// private</i>
+    renderHeaders : <b>function</b>(){
+        <b>var</b> cm = <b>this</b>.cm, ts = <b>this</b>.templates;
+        <b>var</b> ct = ts.hcell;
+
+        <b>var</b> cb = [], sb = [], p = {};
+        <b>var</b> len = cm.getColumnCount();
+        <b>var</b> last = len - 1;
+        <b>for</b>(var i = 0; i &lt; len; i++){
+            p.id = cm.getColumnId(i);
+            p.value = cm.getColumnHeader(i) || &quot;&quot;;
+            p.style = <b>this</b>.getColumnStyle(i, true);
+            p.tooltip = <b>this</b>.getColumnTooltip(i);
+            p.css = i == 0 ? <em>'x-grid3-cell-first '</em> : (i == last ? <em>'x-grid3-cell-last '</em> : <em>''</em>);
+            <b>if</b>(cm.config[i].align == <em>'right'</em>){
+                p.istyle = <em>'padding-right:16px'</em>;
+            } <b>else</b> {
+                <b>delete</b> p.istyle;
+            }
+            cb[cb.length] = ct.apply(p);
+        }
+        <b>return</b> ts.header.apply({cells: cb.join(&quot;&quot;), tstyle:<em>'width:'</em>+<b>this</b>.getTotalWidth()+<em>';'</em>});
+    },
+
+    <i>// private</i>
+    getColumnTooltip : <b>function</b>(i){
+        <b>var</b> tt = <b>this</b>.cm.getColumnTooltip(i);
+        <b>if</b>(tt){
+            <b>if</b>(Ext.QuickTips.isEnabled()){
+                <b>return</b> <em>'ext:qtip=&quot;'</em>+tt+<em>'&quot;'</em>;
+            }<b>else</b>{
+                <b>return</b> <em>'title=&quot;'</em>+tt+<em>'&quot;'</em>;
+            }
+        }
+        <b>return</b> &quot;&quot;;
+    },
+
+    <i>// private</i>
+    beforeUpdate : <b>function</b>(){
+        <b>this</b>.grid.stopEditing(true);
+    },
+
+    <i>// private</i>
+    updateHeaders : <b>function</b>(){
+        <b>this</b>.innerHd.firstChild.innerHTML = <b>this</b>.renderHeaders();
+        <b>this</b>.innerHd.firstChild.style.width = <b>this</b>.getOffsetWidth();
+        <b>this</b>.innerHd.firstChild.firstChild.style.width = <b>this</b>.getTotalWidth();
+    },
+
+    <i>/**
+     * Focuses the specified row.
+     * @param {Number} row The row index
+     */</i>
+    focusRow : <b>function</b>(row){
+        <b>this</b>.focusCell(row, 0, false);
+    },
+
+    <i>/**
+     * Focuses the specified cell.
+     * @param {Number} row The row index
+     * @param {Number} col The column index
+     */</i>
+    focusCell : <b>function</b>(row, col, hscroll){
+		<b>this</b>.syncFocusEl(<b>this</b>.ensureVisible(row, col, hscroll));
+        <b>if</b>(Ext.isGecko){
+            <b>this</b>.focusEl.focus();
+        }<b>else</b>{
+            <b>this</b>.focusEl.focus.defer(1, <b>this</b>.focusEl);
+        }
+    },
+
+	resolveCell : <b>function</b>(row, col, hscroll){
+		<b>if</b>(typeof row != &quot;number&quot;){
+            row = row.rowIndex;
+        }
+        <b>if</b>(!<b>this</b>.ds){
+            <b>return</b> null;
+        }
+        <b>if</b>(row &lt; 0 || row &gt;= <b>this</b>.ds.getCount()){
+            <b>return</b> null;
+        }
+        col = (col !== undefined ? col : 0);
+
+        <b>var</b> rowEl = <b>this</b>.getRow(row),
+            cm = <b>this</b>.cm,
+            colCount = cm.getColumnCount(),
+            cellEl;
+        <b>if</b>(!(hscroll === false &amp;&amp; col === 0)){
+            <b>while</b>(col &lt; colCount &amp;&amp; cm.isHidden(col)){
+                col++;
+            }
+            cellEl = <b>this</b>.getCell(row, col);
+        }
+
+		<b>return</b> {row: rowEl, cell: cellEl};
+	},
+
+	getResolvedXY : <b>function</b>(resolved){
+		<b>if</b>(!resolved){
+			<b>return</b> null;
+		}
+		<b>var</b> s = <b>this</b>.scroller.dom, c = resolved.cell, r = resolved.row;
+		<b>return</b> c ? Ext.fly(c).getXY() : [<b>this</b>.el.getX(), Ext.fly(r).getY()];
+	},
+
+	syncFocusEl : <b>function</b>(row, col, hscroll){
+		<b>var</b> xy = row;
+		<b>if</b>(!Ext.isArray(xy)){
+			row = Math.min(row, Math.max(0, <b>this</b>.getRows().length-1));
+        	xy = <b>this</b>.getResolvedXY(<b>this</b>.resolveCell(row, col, hscroll));
+		}
+        <b>this</b>.focusEl.setXY(xy||<b>this</b>.scroller.getXY());
+    },
+
+	ensureVisible : <b>function</b>(row, col, hscroll){
+        <b>var</b> resolved = <b>this</b>.resolveCell(row, col, hscroll);
+		<b>if</b>(!resolved || !resolved.row){
+			<b>return</b>;
+		}
+
+		<b>var</b> rowEl = resolved.row, cellEl = resolved.cell;
+
+		<b>var</b> c = <b>this</b>.scroller.dom;
+
+        <b>var</b> ctop = 0;
+        <b>var</b> p = rowEl, stop = <b>this</b>.el.dom;
+        <b>while</b>(p &amp;&amp; p != stop){
+            ctop += p.offsetTop;
+            p = p.offsetParent;
+        }
+        ctop -= <b>this</b>.mainHd.dom.offsetHeight;
+
+        <b>var</b> cbot = ctop + rowEl.offsetHeight;
+
+        <b>var</b> ch = c.clientHeight;
+        <b>var</b> stop = parseInt(c.scrollTop, 10);
+        <b>var</b> sbot = stop + ch;
+
+		<b>if</b>(ctop &lt; stop){
+          c.scrollTop = ctop;
+        }<b>else</b> if(cbot &gt; sbot){
+            c.scrollTop = cbot-ch;
+        }
+
+        <b>if</b>(hscroll !== false){
+            <b>var</b> cleft = parseInt(cellEl.offsetLeft, 10);
+            <b>var</b> cright = cleft + cellEl.offsetWidth;
+
+            <b>var</b> sleft = parseInt(c.scrollLeft, 10);
+            <b>var</b> sright = sleft + c.clientWidth;
+            <b>if</b>(cleft &lt; sleft){
+                c.scrollLeft = cleft;
+            }<b>else</b> if(cright &gt; sright){
+                c.scrollLeft = cright-c.clientWidth;
+            }
+        }
+        <b>return</b> this.getResolvedXY(resolved);
+    },
+
+    <i>// private</i>
+    insertRows : <b>function</b>(dm, firstRow, lastRow, isUpdate){
+        <b>var</b> last = dm.getCount() - 1;
+        <b>if</b>(!isUpdate &amp;&amp; firstRow === 0 &amp;&amp; lastRow &gt;= last){
+            <b>this</b>.refresh();
+        }<b>else</b>{
+            <b>if</b>(!isUpdate){
+                <b>this</b>.fireEvent(&quot;beforerowsinserted&quot;, <b>this</b>, firstRow, lastRow);
+            }
+            <b>var</b> html = <b>this</b>.renderRows(firstRow, lastRow);
+            <b>var</b> before = <b>this</b>.getRow(firstRow);
+            <b>if</b>(before){
+                <b>if</b>(firstRow === 0){
+                    Ext.fly(<b>this</b>.getRow(0)).removeClass(<b>this</b>.firstRowCls);
+                }
+                Ext.DomHelper.insertHtml(<em>'beforeBegin'</em>, before, html);
+            }<b>else</b>{
+                <b>var</b> r = <b>this</b>.getRow(last - 1);
+                <b>if</b>(r){
+                    Ext.fly(r).removeClass(<b>this</b>.lastRowCls);
+                }
+                Ext.DomHelper.insertHtml(<em>'beforeEnd'</em>, <b>this</b>.mainBody.dom, html);
+            }
+            <b>if</b>(!isUpdate){
+                <b>this</b>.fireEvent(&quot;rowsinserted&quot;, <b>this</b>, firstRow, lastRow);
+                <b>this</b>.processRows(firstRow);
+            }<b>else</b> if(firstRow === 0 || firstRow &gt;= last){
+                <i>//ensure first/last row is kept after an update.</i>
+                Ext.fly(<b>this</b>.getRow(firstRow)).addClass(firstRow === 0 ? <b>this</b>.firstRowCls : <b>this</b>.lastRowCls);
+            }
+        }
+        <b>this</b>.syncFocusEl(firstRow);
+    },
+
+    <i>// private</i>
+    deleteRows : <b>function</b>(dm, firstRow, lastRow){
+        <b>if</b>(dm.getRowCount()&lt;1){
+            <b>this</b>.refresh();
+        }<b>else</b>{
+            <b>this</b>.fireEvent(&quot;beforerowsdeleted&quot;, <b>this</b>, firstRow, lastRow);
+
+            <b>this</b>.removeRows(firstRow, lastRow);
+
+            <b>this</b>.processRows(firstRow);
+            <b>this</b>.fireEvent(&quot;rowsdeleted&quot;, <b>this</b>, firstRow, lastRow);
+        }
+    },
+
+    <i>// private</i>
+    getColumnStyle : <b>function</b>(col, isHeader){
+        <b>var</b> style = !isHeader ? (<b>this</b>.cm.config[col].css || <em>''</em>) : <em>''</em>;
+        style += <em>'width:'</em>+<b>this</b>.getColumnWidth(col)+<em>';'</em>;
+        <b>if</b>(this.cm.isHidden(col)){
+            style += <em>'display:none;'</em>;
+        }
+        <b>var</b> align = <b>this</b>.cm.config[col].align;
+        <b>if</b>(align){
+            style += <em>'text-align:'</em>+align+<em>';'</em>;
+        }
+        <b>return</b> style;
+    },
+
+    <i>// private</i>
+    getColumnWidth : <b>function</b>(col){
+        <b>var</b> w = <b>this</b>.cm.getColumnWidth(col);
+        <b>if</b>(typeof w == <em>'number'</em>){
+            <b>return</b> (Ext.isBorderBox || (Ext.isWebKit &amp;&amp; !Ext.isSafari2) ? w : (w-<b>this</b>.borderWidth &gt; 0 ? w-<b>this</b>.borderWidth:0)) + <em>'px'</em>;
+        }
+        <b>return</b> w;
+    },
+
+    <i>// private</i>
+    getTotalWidth : <b>function</b>(){
+        <b>return</b> this.cm.getTotalWidth()+<em>'px'</em>;
+    },
+
+    <i>// private</i>
+    fitColumns : <b>function</b>(preventRefresh, onlyExpand, omitColumn){
+        <b>var</b> cm = <b>this</b>.cm, leftOver, dist, i;
+        <b>var</b> tw = cm.getTotalWidth(false);
+        <b>var</b> aw = <b>this</b>.grid.getGridEl().getWidth(true)-<b>this</b>.scrollOffset;
+
+        <b>if</b>(aw &lt; 20){ <i>// not initialized, so don't screw up the <b>default</b> widths</i>
+            <b>return</b>;
+        }
+        <b>var</b> extra = aw - tw;
+
+        <b>if</b>(extra === 0){
+            <b>return</b> false;
+        }
+
+        <b>var</b> vc = cm.getColumnCount(true);
+        <b>var</b> ac = vc-(<b>typeof</b> omitColumn == <em>'number'</em> ? 1 : 0);
+        <b>if</b>(ac === 0){
+            ac = 1;
+            omitColumn = undefined;
+        }
+        <b>var</b> colCount = cm.getColumnCount();
+        <b>var</b> cols = [];
+        <b>var</b> extraCol = 0;
+        <b>var</b> width = 0;
+        <b>var</b> w;
+        <b>for</b> (i = 0; i &lt; colCount; i++){
+            <b>if</b>(!cm.isHidden(i) &amp;&amp; !cm.isFixed(i) &amp;&amp; i !== omitColumn){
+                w = cm.getColumnWidth(i);
+                cols.push(i);
+                extraCol = i;
+                cols.push(w);
+                width += w;
+            }
+        }
+        <b>var</b> frac = (aw - cm.getTotalWidth())/width;
+        <b>while</b> (cols.length){
+            w = cols.pop();
+            i = cols.pop();
+            cm.setColumnWidth(i, Math.max(<b>this</b>.grid.minColumnWidth, Math.floor(w + w*frac)), true);
+        }
+
+        <b>if</b>((tw = cm.getTotalWidth(false)) &gt; aw){
+            <b>var</b> adjustCol = ac != vc ? omitColumn : extraCol;
+             cm.setColumnWidth(adjustCol, Math.max(1,
+                     cm.getColumnWidth(adjustCol)- (tw-aw)), true);
+        }
+
+        <b>if</b>(preventRefresh !== true){
+            <b>this</b>.updateAllColumnWidths();
+        }
+
+
+        <b>return</b> true;
+    },
+
+    <i>// private</i>
+    autoExpand : <b>function</b>(preventUpdate){
+        <b>var</b> g = <b>this</b>.grid, cm = <b>this</b>.cm;
+        <b>if</b>(!<b>this</b>.userResized &amp;&amp; g.autoExpandColumn){
+            <b>var</b> tw = cm.getTotalWidth(false);
+            <b>var</b> aw = <b>this</b>.grid.getGridEl().getWidth(true)-<b>this</b>.scrollOffset;
+            <b>if</b>(tw != aw){
+                <b>var</b> ci = cm.getIndexById(g.autoExpandColumn);
+                <b>var</b> currentWidth = cm.getColumnWidth(ci);
+                <b>var</b> cw = Math.min(Math.max(((aw-tw)+currentWidth), g.autoExpandMin), g.autoExpandMax);
+                <b>if</b>(cw != currentWidth){
+                    cm.setColumnWidth(ci, cw, true);
+                    <b>if</b>(preventUpdate !== true){
+                        <b>this</b>.updateColumnWidth(ci, cw);
+                    }
+                }
+            }
+        }
+    },
+
+    <i>// private</i>
+    getColumnData : <b>function</b>(){
+        <i>// build a map <b>for</b> all the columns</i>
+        <b>var</b> cs = [], cm = <b>this</b>.cm, colCount = cm.getColumnCount();
+        <b>for</b>(var i = 0; i &lt; colCount; i++){
+            <b>var</b> name = cm.getDataIndex(i);
+            cs[i] = {
+                name : (<b>typeof</b> name == <em>'undefined'</em> ? <b>this</b>.ds.fields.get(i).name : name),
+                renderer : cm.getRenderer(i),
+                id : cm.getColumnId(i),
+                style : <b>this</b>.getColumnStyle(i)
+            };
+        }
+        <b>return</b> cs;
+    },
+
+    <i>// private</i>
+    renderRows : <b>function</b>(startRow, endRow){
+        <i>// pull <b>in</b> all the crap needed to render rows</i>
+        <b>var</b> g = <b>this</b>.grid, cm = g.colModel, ds = g.store, stripe = g.stripeRows;
+        <b>var</b> colCount = cm.getColumnCount();
+
+        <b>if</b>(ds.getCount() &lt; 1){
+            <b>return</b> &quot;&quot;;
+        }
+
+        <b>var</b> cs = <b>this</b>.getColumnData();
+
+        startRow = startRow || 0;
+        endRow = <b>typeof</b> endRow == &quot;undefined&quot;? ds.getCount()-1 : endRow;
+
+        <i>// records to render</i>
+        <b>var</b> rs = ds.getRange(startRow, endRow);
+
+        <b>return</b> this.doRender(cs, rs, ds, startRow, colCount, stripe);
+    },
+
+    <i>// private</i>
+    renderBody : <b>function</b>(){
+        <b>var</b> markup = <b>this</b>.renderRows() || <em>'&amp;nbsp;'</em>;
+        <b>return</b> this.templates.body.apply({rows: markup});
+    },
+
+    <i>// private</i>
+    refreshRow : <b>function</b>(record){
+        <b>var</b> ds = <b>this</b>.ds, index;
+        <b>if</b>(typeof record == <em>'number'</em>){
+            index = record;
+            record = ds.getAt(index);
+            <b>if</b>(!record){
+                <b>return</b>;
+            }
+        }<b>else</b>{
+            index = ds.indexOf(record);
+            <b>if</b>(index &lt; 0){
+                <b>return</b>;
+            }
+        }
+        <b>var</b> cls = [];
+        <b>this</b>.insertRows(ds, index, index, true);
+        <b>this</b>.getRow(index).rowIndex = index;
+        <b>this</b>.onRemove(ds, record, index+1, true);
+        <b>this</b>.fireEvent(&quot;rowupdated&quot;, <b>this</b>, index, record);
+    },
+
+    <i>/**
+     * Refreshs the grid UI
+     * @param {Boolean} headersToo (optional) True to also refresh the headers
+     */</i>
+    refresh : <b>function</b>(headersToo){
+        <b>this</b>.fireEvent(&quot;beforerefresh&quot;, <b>this</b>);
+        <b>this</b>.grid.stopEditing(true);
+
+        <b>var</b> result = <b>this</b>.renderBody();
+        <b>this</b>.mainBody.update(result).setWidth(<b>this</b>.getTotalWidth());
+
+        <b>if</b>(headersToo === true){
+            <b>this</b>.updateHeaders();
+            <b>this</b>.updateHeaderSortState();
+        }
+        <b>this</b>.processRows(0, true);
+        <b>this</b>.layout();
+        <b>this</b>.applyEmptyText();
+        <b>this</b>.fireEvent(&quot;refresh&quot;, <b>this</b>);
+    },
+
+    <i>// private</i>
+    applyEmptyText : <b>function</b>(){
+        <b>if</b>(this.emptyText &amp;&amp; !<b>this</b>.hasRows()){
+            <b>this</b>.mainBody.update(<em>'&lt;div class=&quot;x-grid-empty&quot;&gt;'</em> + <b>this</b>.emptyText + <em>'&lt;/div&gt;'</em>);
+        }
+    },
+
+    <i>// private</i>
+    updateHeaderSortState : <b>function</b>(){
+        <b>var</b> state = <b>this</b>.ds.getSortState();
+        <b>if</b>(!state){
+            <b>return</b>;
+        }
+        <b>if</b>(!<b>this</b>.sortState || (<b>this</b>.sortState.field != state.field || <b>this</b>.sortState.direction != state.direction)){
+            <b>this</b>.grid.fireEvent(<em>'sortchange'</em>, <b>this</b>.grid, state);
+        }
+        <b>this</b>.sortState = state;
+        <b>var</b> sortColumn = <b>this</b>.cm.findColumnIndex(state.field);
+        <b>if</b>(sortColumn != -1){
+            <b>var</b> sortDir = state.direction;
+            <b>this</b>.updateSortIcon(sortColumn, sortDir);
+        }
+    },
+
+    <i>// private</i>
+    destroy : <b>function</b>(){
+        <b>if</b>(this.colMenu){
+            Ext.menu.MenuMgr.unregister(<b>this</b>.colMenu);
+            <b>this</b>.colMenu.destroy();
+            <b>delete</b> this.colMenu;
+        }
+        <b>if</b>(this.hmenu){
+            Ext.menu.MenuMgr.unregister(<b>this</b>.hmenu);
+            <b>this</b>.hmenu.destroy();
+            <b>delete</b> this.hmenu;
+        }
+        <b>if</b>(this.grid.enableColumnMove){
+            <b>var</b> dds = Ext.dd.DDM.ids[<em>'gridHeader'</em> + <b>this</b>.grid.getGridEl().id];
+            <b>if</b>(dds){
+                <b>for</b>(var dd <b>in</b> dds){
+                    <b>if</b>(!dds[dd].config.isTarget &amp;&amp; dds[dd].dragElId){
+                        <b>var</b> elid = dds[dd].dragElId;
+                        dds[dd].unreg();
+                        Ext.get(elid).remove();
+                    } <b>else</b> if(dds[dd].config.isTarget){
+                        dds[dd].proxyTop.remove();
+                        dds[dd].proxyBottom.remove();
+                        dds[dd].unreg();
+                    }
+                    <b>if</b>(Ext.dd.DDM.locationCache[dd]){
+                        <b>delete</b> Ext.dd.DDM.locationCache[dd];
+                    }
+                }
+                <b>delete</b> Ext.dd.DDM.ids[<em>'gridHeader'</em> + <b>this</b>.grid.getGridEl().id];
+            }
+        }
+        
+        <b>if</b>(this.dragZone){
+            <b>this</b>.dragZone.unreg();
+        }
+        
+        Ext.fly(<b>this</b>.innerHd).removeAllListeners();
+        Ext.removeNode(<b>this</b>.innerHd);
+        
+        Ext.destroy(<b>this</b>.resizeMarker, <b>this</b>.resizeProxy, <b>this</b>.focusEl, <b>this</b>.mainBody, 
+                    <b>this</b>.scroller, <b>this</b>.mainHd, <b>this</b>.mainWrap, <b>this</b>.dragZone, 
+                    <b>this</b>.splitZone, <b>this</b>.columnDrag, <b>this</b>.columnDrop);
+
+        <b>this</b>.initData(null, null);
+        Ext.EventManager.removeResizeListener(<b>this</b>.onWindowResize, <b>this</b>);
+        <b>this</b>.purgeListeners();
+    },
+
+    <i>// private</i>
+    onDenyColumnHide : <b>function</b>(){
+
+    },
+
+    <i>// private</i>
+    render : <b>function</b>(){
+        <b>if</b>(this.autoFill){
+            <b>var</b> ct = <b>this</b>.grid.ownerCt;
+            <b>if</b> (ct &amp;&amp; ct.getLayout()){
+                ct.on(<em>'afterlayout'</em>, <b>function</b>(){ 
+                    <b>this</b>.fitColumns(true, true);
+                    <b>this</b>.updateHeaders(); 
+                }, <b>this</b>, {single: true}); 
+            }<b>else</b>{ 
+                <b>this</b>.fitColumns(true, true); 
+            }
+        }<b>else</b> if(<b>this</b>.forceFit){
+            <b>this</b>.fitColumns(true, false);
+        }<b>else</b> if(<b>this</b>.grid.autoExpandColumn){
+            <b>this</b>.autoExpand(true);
+        }
+
+        <b>this</b>.renderUI();
+    },
+
+    <i>/* --------------------------------- Model Events and Handlers --------------------------------*/</i>
+    <i>// private</i>
+    initData : <b>function</b>(ds, cm){
+        <b>if</b>(this.ds){
+            <b>this</b>.ds.un(&quot;load&quot;, <b>this</b>.onLoad, <b>this</b>);
+            <b>this</b>.ds.un(&quot;datachanged&quot;, <b>this</b>.onDataChange, <b>this</b>);
+            <b>this</b>.ds.un(&quot;add&quot;, <b>this</b>.onAdd, <b>this</b>);
+            <b>this</b>.ds.un(&quot;remove&quot;, <b>this</b>.onRemove, <b>this</b>);
+            <b>this</b>.ds.un(&quot;update&quot;, <b>this</b>.onUpdate, <b>this</b>);
+            <b>this</b>.ds.un(&quot;clear&quot;, <b>this</b>.onClear, <b>this</b>);
+        }
+        <b>if</b>(ds){
+            ds.on(&quot;load&quot;, <b>this</b>.onLoad, <b>this</b>);
+            ds.on(&quot;datachanged&quot;, <b>this</b>.onDataChange, <b>this</b>);
+            ds.on(&quot;add&quot;, <b>this</b>.onAdd, <b>this</b>);
+            ds.on(&quot;remove&quot;, <b>this</b>.onRemove, <b>this</b>);
+            ds.on(&quot;update&quot;, <b>this</b>.onUpdate, <b>this</b>);
+            ds.on(&quot;clear&quot;, <b>this</b>.onClear, <b>this</b>);
+        }
+        <b>this</b>.ds = ds;
+
+        <b>if</b>(this.cm){
+            <b>this</b>.cm.un(&quot;configchange&quot;, <b>this</b>.onColConfigChange, <b>this</b>);
+            <b>this</b>.cm.un(&quot;widthchange&quot;, <b>this</b>.onColWidthChange, <b>this</b>);
+            <b>this</b>.cm.un(&quot;headerchange&quot;, <b>this</b>.onHeaderChange, <b>this</b>);
+            <b>this</b>.cm.un(&quot;hiddenchange&quot;, <b>this</b>.onHiddenChange, <b>this</b>);
+            <b>this</b>.cm.un(&quot;columnmoved&quot;, <b>this</b>.onColumnMove, <b>this</b>);
+            <b>this</b>.cm.un(&quot;columnlockchange&quot;, <b>this</b>.onColumnLock, <b>this</b>);
+        }
+        <b>if</b>(cm){
+            <b>delete</b> this.lastViewWidth;
+            cm.on(&quot;configchange&quot;, <b>this</b>.onColConfigChange, <b>this</b>);
+            cm.on(&quot;widthchange&quot;, <b>this</b>.onColWidthChange, <b>this</b>);
+            cm.on(&quot;headerchange&quot;, <b>this</b>.onHeaderChange, <b>this</b>);
+            cm.on(&quot;hiddenchange&quot;, <b>this</b>.onHiddenChange, <b>this</b>);
+            cm.on(&quot;columnmoved&quot;, <b>this</b>.onColumnMove, <b>this</b>);
+            cm.on(&quot;columnlockchange&quot;, <b>this</b>.onColumnLock, <b>this</b>);
+        }
+        <b>this</b>.cm = cm;
+    },
+
+    <i>// private</i>
+    onDataChange : <b>function</b>(){
+        <b>this</b>.refresh();
+        <b>this</b>.updateHeaderSortState();
+        <b>this</b>.syncFocusEl(0);
+    },
+
+    <i>// private</i>
+    onClear : <b>function</b>(){
+        <b>this</b>.refresh();
+        <b>this</b>.syncFocusEl(0);
+    },
+
+    <i>// private</i>
+    onUpdate : <b>function</b>(ds, record){
+        <b>this</b>.refreshRow(record);
+    },
+
+    <i>// private</i>
+    onAdd : <b>function</b>(ds, records, index){
+        <b>this</b>.insertRows(ds, index, index + (records.length-1));
+    },
+
+    <i>// private</i>
+    onRemove : <b>function</b>(ds, record, index, isUpdate){
+        <b>if</b>(isUpdate !== true){
+            <b>this</b>.fireEvent(&quot;beforerowremoved&quot;, <b>this</b>, index, record);
+        }
+        <b>this</b>.removeRow(index);
+        <b>if</b>(isUpdate !== true){
+            <b>this</b>.processRows(index);
+            <b>this</b>.applyEmptyText();
+            <b>this</b>.fireEvent(&quot;rowremoved&quot;, <b>this</b>, index, record);
+        }
+    },
+
+    <i>// private</i>
+    onLoad : <b>function</b>(){
+        <b>this</b>.scrollToTop();
+    },
+
+    <i>// private</i>
+    onColWidthChange : <b>function</b>(cm, col, width){
+        <b>this</b>.updateColumnWidth(col, width);
+    },
+
+    <i>// private</i>
+    onHeaderChange : <b>function</b>(cm, col, text){
+        <b>this</b>.updateHeaders();
+    },
+
+    <i>// private</i>
+    onHiddenChange : <b>function</b>(cm, col, hidden){
+        <b>this</b>.updateColumnHidden(col, hidden);
+    },
+
+    <i>// private</i>
+    onColumnMove : <b>function</b>(cm, oldIndex, newIndex){
+        <b>this</b>.indexMap = null;
+        <b>var</b> s = <b>this</b>.getScrollState();
+        <b>this</b>.refresh(true);
+        <b>this</b>.restoreScroll(s);
+        <b>this</b>.afterMove(newIndex);
+        <b>this</b>.grid.fireEvent(<em>'columnmove'</em>, oldIndex, newIndex);
+    },
+
+    <i>// private</i>
+    onColConfigChange : <b>function</b>(){
+        <b>delete</b> this.lastViewWidth;
+        <b>this</b>.indexMap = null;
+        <b>this</b>.refresh(true);
+    },
+
+    <i>/* -------------------- UI Events and Handlers ------------------------------ */</i>
+    <i>// private</i>
+    initUI : <b>function</b>(grid){
+        grid.on(&quot;headerclick&quot;, <b>this</b>.onHeaderClick, <b>this</b>);
+    },
+
+    <i>// private</i>
+    initEvents : <b>function</b>(){
+
+    },
+
+    <i>// private</i>
+    onHeaderClick : <b>function</b>(g, index){
+        <b>if</b>(this.headersDisabled || !<b>this</b>.cm.isSortable(index)){
+            <b>return</b>;
+        }
+        g.stopEditing(true);
+        g.store.sort(<b>this</b>.cm.getDataIndex(index));
+    },
+
+    <i>// private</i>
+    onRowOver : <b>function</b>(e, t){
+        <b>var</b> row;
+        <b>if</b>((row = <b>this</b>.findRowIndex(t)) !== false){
+            <b>this</b>.addRowClass(row, &quot;x-grid3-row-over&quot;);
+        }
+    },
+
+    <i>// private</i>
+    onRowOut : <b>function</b>(e, t){
+        <b>var</b> row;
+        <b>if</b>((row = <b>this</b>.findRowIndex(t)) !== false &amp;&amp; !e.within(<b>this</b>.getRow(row), true)){
+            <b>this</b>.removeRowClass(row, &quot;x-grid3-row-over&quot;);
+        }
+    },
+
+    <i>// private</i>
+    handleWheel : <b>function</b>(e){
+        e.stopPropagation();
+    },
+
+    <i>// private</i>
+    onRowSelect : <b>function</b>(row){
+        <b>this</b>.addRowClass(row, &quot;x-grid3-row-selected&quot;);
+    },
+
+    <i>// private</i>
+    onRowDeselect : <b>function</b>(row){
+        <b>this</b>.removeRowClass(row, &quot;x-grid3-row-selected&quot;);
+    },
+
+    <i>// private</i>
+    onCellSelect : <b>function</b>(row, col){
+        <b>var</b> cell = <b>this</b>.getCell(row, col);
+        <b>if</b>(cell){
+            <b>this</b>.fly(cell).addClass(&quot;x-grid3-cell-selected&quot;);
+        }
+    },
+
+    <i>// private</i>
+    onCellDeselect : <b>function</b>(row, col){
+        <b>var</b> cell = <b>this</b>.getCell(row, col);
+        <b>if</b>(cell){
+            <b>this</b>.fly(cell).removeClass(&quot;x-grid3-cell-selected&quot;);
+        }
+    },
+
+    <i>// private</i>
+    onColumnSplitterMoved : <b>function</b>(i, w){
+        <b>this</b>.userResized = true;
+        <b>var</b> cm = <b>this</b>.grid.colModel;
+        cm.setColumnWidth(i, w, true);
+
+        <b>if</b>(this.forceFit){
+            <b>this</b>.fitColumns(true, false, i);
+            <b>this</b>.updateAllColumnWidths();
+        }<b>else</b>{
+            <b>this</b>.updateColumnWidth(i, w);
+            <b>this</b>.syncHeaderScroll();
+        }
+
+        <b>this</b>.grid.fireEvent(&quot;columnresize&quot;, i, w);
+    },
+
+    <i>// private</i>
+    handleHdMenuClick : <b>function</b>(item){
+        <b>var</b> index = <b>this</b>.hdCtxIndex;
+        <b>var</b> cm = <b>this</b>.cm, ds = <b>this</b>.ds;
+        <b>switch</b>(item.id){
+            <b>case</b> &quot;asc&quot;:
+                ds.sort(cm.getDataIndex(index), &quot;ASC&quot;);
+                <b>break</b>;
+            <b>case</b> &quot;desc&quot;:
+                ds.sort(cm.getDataIndex(index), &quot;DESC&quot;);
+                <b>break</b>;
+            <b>default</b>:
+                index = cm.getIndexById(item.id.substr(4));
+                <b>if</b>(index != -1){
+                    <b>if</b>(item.checked &amp;&amp; cm.getColumnsBy(<b>this</b>.isHideableColumn, <b>this</b>).length &lt;= 1){
+                        <b>this</b>.onDenyColumnHide();
+                        <b>return</b> false;
+                    }
+                    cm.setHidden(index, item.checked);
+                }
+        }
+        <b>return</b> true;
+    },
+
+    <i>// private</i>
+    isHideableColumn : <b>function</b>(c){
+        <b>return</b> !c.hidden &amp;&amp; !c.fixed;
+    },
+
+    <i>// private</i>
+    beforeColMenuShow : <b>function</b>(){
+        <b>var</b> cm = <b>this</b>.cm,  colCount = cm.getColumnCount();
+        <b>this</b>.colMenu.removeAll();
+        <b>for</b>(var i = 0; i &lt; colCount; i++){
+            <b>if</b>(cm.config[i].fixed !== true &amp;&amp; cm.config[i].hideable !== false){
+                <b>this</b>.colMenu.add(<b>new</b> Ext.menu.CheckItem({
+                    id: &quot;col-&quot;+cm.getColumnId(i),
+                    text: cm.getColumnHeader(i),
+                    checked: !cm.isHidden(i),
+                    hideOnClick:false,
+                    disabled: cm.config[i].hideable === false
+                }));
+            }
+        }
+    },
+
+    <i>// private</i>
+    handleHdDown : <b>function</b>(e, t){
+        <b>if</b>(Ext.fly(t).hasClass(<em>'x-grid3-hd-btn'</em>)){
+            e.stopEvent();
+            <b>var</b> hd = <b>this</b>.findHeaderCell(t);
+            Ext.fly(hd).addClass(<em>'x-grid3-hd-menu-open'</em>);
+            <b>var</b> index = <b>this</b>.getCellIndex(hd);
+            <b>this</b>.hdCtxIndex = index;
+            <b>var</b> ms = <b>this</b>.hmenu.items, cm = <b>this</b>.cm;
+            ms.get(&quot;asc&quot;).setDisabled(!cm.isSortable(index));
+            ms.get(&quot;desc&quot;).setDisabled(!cm.isSortable(index));
+            <b>this</b>.hmenu.on(&quot;hide&quot;, <b>function</b>(){
+                Ext.fly(hd).removeClass(<em>'x-grid3-hd-menu-open'</em>);
+            }, <b>this</b>, {single:true});
+            <b>this</b>.hmenu.show(t, &quot;tl-bl?&quot;);
+        }
+    },
+
+    <i>// private</i>
+    handleHdOver : <b>function</b>(e, t){
+        <b>var</b> hd = <b>this</b>.findHeaderCell(t);
+        <b>if</b>(hd &amp;&amp; !<b>this</b>.headersDisabled){
+            <b>this</b>.activeHd = hd;
+            <b>this</b>.activeHdIndex = <b>this</b>.getCellIndex(hd);
+            <b>var</b> fly = <b>this</b>.fly(hd);
+            <b>this</b>.activeHdRegion = fly.getRegion();
+            <b>if</b>(!<b>this</b>.cm.isMenuDisabled(<b>this</b>.activeHdIndex)){
+                fly.addClass(&quot;x-grid3-hd-over&quot;);
+                <b>this</b>.activeHdBtn = fly.child(<em>'.x-grid3-hd-btn'</em>);
+                <b>if</b>(this.activeHdBtn){
+                    <b>this</b>.activeHdBtn.dom.style.height = (hd.firstChild.offsetHeight-1)+<em>'px'</em>;
+                }
+            }
+        }
+    },
+
+    <i>// private</i>
+    handleHdMove : <b>function</b>(e, t){
+        <b>if</b>(this.activeHd &amp;&amp; !<b>this</b>.headersDisabled){
+            <b>var</b> hw = <b>this</b>.splitHandleWidth || 5;
+            <b>var</b> r = <b>this</b>.activeHdRegion;
+            <b>var</b> x = e.getPageX();
+            <b>var</b> ss = <b>this</b>.activeHd.style;
+            <b>if</b>(x - r.left &lt;= hw &amp;&amp; <b>this</b>.cm.isResizable(<b>this</b>.activeHdIndex-1)){
+                ss.cursor = Ext.isAir ? <em>'move'</em> : Ext.isWebKit ? <em>'e-resize'</em> : <em>'col-resize'</em>; <i>// col-resize not always supported</i>
+            }<b>else</b> if(r.right - x &lt;= (!<b>this</b>.activeHdBtn ? hw : 2) &amp;&amp; <b>this</b>.cm.isResizable(<b>this</b>.activeHdIndex)){
+                ss.cursor = Ext.isAir ? <em>'move'</em> : Ext.isWebKit ? <em>'w-resize'</em> : <em>'col-resize'</em>;
+            }<b>else</b>{
+                ss.cursor = <em>''</em>;
+            }
+        }
+    },
+
+    <i>// private</i>
+    handleHdOut : <b>function</b>(e, t){
+        <b>var</b> hd = <b>this</b>.findHeaderCell(t);
+        <b>if</b>(hd &amp;&amp; (!Ext.isIE || !e.within(hd, true))){
+            <b>this</b>.activeHd = null;
+            <b>this</b>.fly(hd).removeClass(&quot;x-grid3-hd-over&quot;);
+            hd.style.cursor = <em>''</em>;
+        }
+    },
+
+    <i>// private</i>
+    hasRows : <b>function</b>(){
+        <b>var</b> fc = <b>this</b>.mainBody.dom.firstChild;
+        <b>return</b> fc &amp;&amp; fc.nodeType == 1 &amp;&amp; fc.className != <em>'x-grid-empty'</em>;
+    },
+
+    <i>// back compat</i>
+    bind : <b>function</b>(d, c){
+        <b>this</b>.initData(d, c);
+    }
+});
+
+
+<i>// private</i>
+<i>// This is a support class used internally by the Grid components</i>
+Ext.grid.GridView.SplitDragZone = <b>function</b>(grid, hd){
+    <b>this</b>.grid = grid;
+    <b>this</b>.view = grid.getView();
+    <b>this</b>.marker = <b>this</b>.view.resizeMarker;
+    <b>this</b>.proxy = <b>this</b>.view.resizeProxy;
+    Ext.grid.GridView.SplitDragZone.superclass.constructor.call(<b>this</b>, hd,
+        &quot;gridSplitters&quot; + <b>this</b>.grid.getGridEl().id, {
+        dragElId : Ext.id(<b>this</b>.proxy.dom), resizeFrame:false
+    });
+    <b>this</b>.scroll = false;
+    <b>this</b>.hw = <b>this</b>.view.splitHandleWidth || 5;
+};
+Ext.extend(Ext.grid.GridView.SplitDragZone, Ext.dd.DDProxy, {
+
+    b4StartDrag : <b>function</b>(x, y){
+        <b>this</b>.view.headersDisabled = true;
+        <b>var</b> h = <b>this</b>.view.mainWrap.getHeight();
+        <b>this</b>.marker.setHeight(h);
+        <b>this</b>.marker.show();
+        <b>this</b>.marker.alignTo(<b>this</b>.view.getHeaderCell(<b>this</b>.cellIndex), <em>'tl-tl'</em>, [-2, 0]);
+        <b>this</b>.proxy.setHeight(h);
+        <b>var</b> w = <b>this</b>.cm.getColumnWidth(<b>this</b>.cellIndex);
+        <b>var</b> minw = Math.max(w-<b>this</b>.grid.minColumnWidth, 0);
+        <b>this</b>.resetConstraints();
+        <b>this</b>.setXConstraint(minw, 1000);
+        <b>this</b>.setYConstraint(0, 0);
+        <b>this</b>.minX = x - minw;
+        <b>this</b>.maxX = x + 1000;
+        <b>this</b>.startPos = x;
+        Ext.dd.DDProxy.prototype.b4StartDrag.call(<b>this</b>, x, y);
+    },
+
+
+    handleMouseDown : <b>function</b>(e){
+        <b>var</b> t = <b>this</b>.view.findHeaderCell(e.getTarget());
+        <b>if</b>(t){
+            <b>var</b> xy = <b>this</b>.view.fly(t).getXY(), x = xy[0], y = xy[1];
+            <b>var</b> exy = e.getXY(), ex = exy[0], ey = exy[1];
+            <b>var</b> w = t.offsetWidth, adjust = false;
+            <b>if</b>((ex - x) &lt;= <b>this</b>.hw){
+                adjust = -1;
+            }<b>else</b> if((x+w) - ex &lt;= <b>this</b>.hw){
+                adjust = 0;
+            }
+            <b>if</b>(adjust !== false){
+                <b>this</b>.cm = <b>this</b>.grid.colModel;
+                <b>var</b> ci = <b>this</b>.view.getCellIndex(t);
+                <b>if</b>(adjust == -1){
+                  <b>if</b> (ci + adjust &lt; 0) {
+                    <b>return</b>;
+                  }
+                    <b>while</b>(this.cm.isHidden(ci+adjust)){
+                        --adjust;
+                        <b>if</b>(ci+adjust &lt; 0){
+                            <b>return</b>;
+                        }
+                    }
+                }
+                <b>this</b>.cellIndex = ci+adjust;
+                <b>this</b>.split = t.dom;
+                <b>if</b>(this.cm.isResizable(<b>this</b>.cellIndex) &amp;&amp; !<b>this</b>.cm.isFixed(<b>this</b>.cellIndex)){
+                    Ext.grid.GridView.SplitDragZone.superclass.handleMouseDown.apply(<b>this</b>, arguments);
+                }
+            }<b>else</b> if(<b>this</b>.view.columnDrag){
+                <b>this</b>.view.columnDrag.callHandleMouseDown(e);
+            }
+        }
+    },
+
+    endDrag : <b>function</b>(e){
+        <b>this</b>.marker.hide();
+        <b>var</b> v = <b>this</b>.view;
+        <b>var</b> endX = Math.max(<b>this</b>.minX, e.getPageX());
+        <b>var</b> diff = endX - <b>this</b>.startPos;
+        v.onColumnSplitterMoved(<b>this</b>.cellIndex, <b>this</b>.cm.getColumnWidth(<b>this</b>.cellIndex)+diff);
+        setTimeout(<b>function</b>(){
+            v.headersDisabled = false;
+        }, 50);
+    },
+
+    autoOffset : <b>function</b>(){
+        <b>this</b>.setDelta(0,0);
+    }
+});
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

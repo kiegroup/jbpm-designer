@@ -1,0 +1,1057 @@
+<html><head><title>Combo.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>Combo.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.form.ComboBox
+ * @extends Ext.form.TriggerField
+ * &lt;p&gt;A combobox control <b>with</b> support <b>for</b> autocomplete, remote-loading, paging and many other features.&lt;/p&gt;
+ * A ComboBox works <b>in</b> a similar manner to a traditional HTML &amp;lt;select&gt; field. The difference is that to submit the
+ * {@link #valueField}, you must specify a {@link #hiddenName} to create a hidden input field to hold the
+ * value of the valueField. The &lt;i&gt;{@link #displayField}&lt;/i&gt; is shown <b>in</b> the text field which is named
+ * according to the {@link #name}.
+ * @constructor
+ * Create a <b>new</b> ComboBox.
+ * @param {Object} config Configuration options
+ */</i>
+Ext.form.ComboBox = Ext.extend(Ext.form.TriggerField, {
+    <i>/**
+     * @cfg {Mixed} transform The id, DOM node or element of an existing HTML SELECT to convert to a ComboBox.
+     * Note that <b>if</b> you specify <b>this</b> and the combo is going to be <b>in</b> a {@link Ext.form.BasicForm} or
+     * {@link Ext.form.FormPanel}, you must also set {@link #lazyRender} = true.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} lazyRender True to prevent the ComboBox from rendering until requested (should always be used when
+     * rendering into an Ext.Editor, defaults to false).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean/Object} autoCreate A DomHelper element spec, or true <b>for</b> a <b>default</b> element spec (defaults to:
+     * {tag: &quot;input&quot;, type: &quot;text&quot;, size: &quot;24&quot;, autocomplete: &quot;off&quot;})
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Ext.data.Store/Array} store The data source to which <b>this</b> combo is bound (defaults to undefined).  This can be
+     * any {@link Ext.data.Store} subclass, a 1-dimensional array (e.g., [<em>'Foo'</em>,<em>'Bar'</em>]) or a 2-dimensional array (e.g.,
+     * [[<em>'f'</em>,<em>'Foo'</em>],[<em>'b'</em>,<em>'Bar'</em>]]).  Arrays will be converted to a {@link Ext.data.SimpleStore} internally.
+     * 1-dimensional arrays will automatically be expanded (each array item will be the combo value and text) and
+     * <b>for</b> multi-dimensional arrays, the value <b>in</b> index 0 of each item will be assumed to be the combo value, <b>while</b>
+     * the value at index 1 is assumed to be the combo text.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} title If supplied, a header element is created containing <b>this</b> text and added into the top of
+     * the dropdown list (defaults to undefined, <b>with</b> no header element)
+     */</i>
+
+    <i>// private</i>
+    defaultAutoCreate : {tag: &quot;input&quot;, type: &quot;text&quot;, size: &quot;24&quot;, autocomplete: &quot;off&quot;},
+    <i>/**
+     * @cfg {Number} listWidth The width (used as a parameter to {@link Ext.Element#setWidth}) of the dropdown list (defaults to the width of the ComboBox field)
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} displayField The underlying data field name to bind to <b>this</b> ComboBox (defaults to undefined <b>if</b>
+     * mode = <em>'remote'</em> or <em>'text'</em> <b>if</b> transforming a select)
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} valueField The underlying data value name to bind to <b>this</b> ComboBox (defaults to undefined <b>if</b>
+     * mode = <em>'remote'</em> or <em>'value'</em> <b>if</b> transforming a select) Note: use of a valueField requires the user to make a selection
+     * <b>in</b> order <b>for</b> a value to be mapped.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} hiddenName If specified, a hidden form field <b>with</b> this name is dynamically generated to store the
+     * field<em>'s data value (defaults to the underlying DOM element'</em>s name). Required <b>for</b> the combo's value to automatically
+     * post during a form submission.  Note that the hidden field's id will also <b>default</b> to <b>this</b> name <b>if</b> {@link #hiddenId}
+     * is not specified.  The combo<em>'s id and the hidden field'</em>s ids should be different, since no two DOM nodes should
+     * share the same id, so <b>if</b> the combo and hidden names are the same, you should specify a unique hiddenId.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} hiddenId If {@link #hiddenName} is specified, hiddenId can also be provided to give the hidden field
+     * a unique id (defaults to the hiddenName).  The hiddenId and combo {@link #id} should be different, since no two DOM
+     * nodes should share the same id.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} listClass CSS class to apply to the dropdown list element (defaults to <em>''</em>)
+     */</i>
+    listClass: <em>''</em>,
+    <i>/**
+     * @cfg {String} selectedClass CSS class to apply to the selected item <b>in</b> the dropdown list (defaults to <em>'x-combo-selected'</em>)
+     */</i>
+    selectedClass: <em>'x-combo-selected'</em>,
+    <i>/**
+     * @cfg {String} triggerClass An additional CSS class used to style the trigger button.  The trigger will always get the
+     * class <em>'x-form-trigger'</em> and triggerClass will be &lt;b&gt;appended&lt;/b&gt; <b>if</b> specified (defaults to <em>'x-form-arrow-trigger'</em>
+     * which displays a downward arrow icon).
+     */</i>
+    triggerClass : <em>'x-form-arrow-trigger'</em>,
+    <i>/**
+     * @cfg {Boolean/String} shadow True or &quot;sides&quot; <b>for</b> the <b>default</b> effect, &quot;frame&quot; <b>for</b> 4-way shadow, and &quot;drop&quot; <b>for</b> bottom-right
+     */</i>
+    shadow:<em>'sides'</em>,
+    <i>/**
+     * @cfg {String} listAlign A valid anchor position value. See {@link Ext.Element#alignTo} <b>for</b> details on supported
+     * anchor positions (defaults to <em>'tl-bl'</em>)
+     */</i>
+    listAlign: <em>'tl-bl?'</em>,
+    <i>/**
+     * @cfg {Number} maxHeight The maximum height <b>in</b> pixels of the dropdown list before scrollbars are shown (defaults to 300)
+     */</i>
+    maxHeight: 300,
+    <i>/**
+     * @cfg {Number} minHeight The minimum height <b>in</b> pixels of the dropdown list when the list is constrained by its
+     * distance to the viewport edges (defaults to 90)
+     */</i>
+    minHeight: 90,
+    <i>/**
+     * @cfg {String} triggerAction The action to execute when the trigger is clicked.  Use <em>'all'</em> to run the
+     * query specified by the allQuery config option (defaults to <em>'query'</em>)
+     */</i>
+    triggerAction: <em>'query'</em>,
+    <i>/**
+     * @cfg {Number} minChars The minimum number of characters the user must type before autocomplete and typeahead activate
+     * (defaults to 4 <b>if</b> remote or 0 <b>if</b> local, does not apply <b>if</b> editable = false)
+     */</i>
+    minChars : 4,
+    <i>/**
+     * @cfg {Boolean} typeAhead True to populate and autoselect the remainder of the text being typed after a configurable
+     * delay ({@link #typeAheadDelay}) <b>if</b> it matches a known value (defaults to false)
+     */</i>
+    typeAhead: false,
+    <i>/**
+     * @cfg {Number} queryDelay The length of time <b>in</b> milliseconds to delay between the start of typing and sending the
+     * query to filter the dropdown list (defaults to 500 <b>if</b> mode = <em>'remote'</em> or 10 <b>if</b> mode = <em>'local'</em>)
+     */</i>
+    queryDelay: 500,
+    <i>/**
+     * @cfg {Number} pageSize If greater than 0, a paging toolbar is displayed <b>in</b> the footer of the dropdown list and the
+     * filter queries will execute <b>with</b> page start and limit parameters.  Only applies when mode = <em>'remote'</em> (defaults to 0)
+     */</i>
+    pageSize: 0,
+    <i>/**
+     * @cfg {Boolean} selectOnFocus True to select any existing text <b>in</b> the field immediately on focus.  Only applies
+     * when editable = true (defaults to false)
+     */</i>
+    selectOnFocus:false,
+    <i>/**
+     * @cfg {String} queryParam Name of the query as it will be passed on the querystring (defaults to <em>'query'</em>)
+     */</i>
+    queryParam: <em>'query'</em>,
+    <i>/**
+     * @cfg {String} loadingText The text to display <b>in</b> the dropdown list <b>while</b> data is loading.  Only applies
+     * when mode = <em>'remote'</em> (defaults to <em>'Loading...'</em>)
+     */</i>
+    loadingText: <em>'Loading...'</em>,
+    <i>/**
+     * @cfg {Boolean} resizable True to add a resize handle to the bottom of the dropdown list (defaults to false)
+     */</i>
+    resizable: false,
+    <i>/**
+     * @cfg {Number} handleHeight The height <b>in</b> pixels of the dropdown list resize handle <b>if</b> resizable = true (defaults to 8)
+     */</i>
+    handleHeight : 8,
+    <i>/**
+     * @cfg {Boolean} editable False to prevent the user from typing text directly into the field, just like a
+     * traditional select (defaults to true)
+     */</i>
+    editable: true,
+    <i>/**
+     * @cfg {String} allQuery The text query to send to the server to <b>return</b> all records <b>for</b> the list <b>with</b> no filtering (defaults to <em>''</em>)
+     */</i>
+    allQuery: <em>''</em>,
+    <i>/**
+     * @cfg {String} mode Set to <em>'local'</em> <b>if</b> the ComboBox loads local data (defaults to <em>'remote'</em> which loads from the server)
+     */</i>
+    mode: <em>'remote'</em>,
+    <i>/**
+     * @cfg {Number} minListWidth The minimum width of the dropdown list <b>in</b> pixels (defaults to 70, will be ignored <b>if</b>
+     * listWidth has a higher value)
+     */</i>
+    minListWidth : 70,
+    <i>/**
+     * @cfg {Boolean} forceSelection True to restrict the selected value to one of the values <b>in</b> the list, false to
+     * allow the user to set arbitrary text into the field (defaults to false)
+     */</i>
+    forceSelection:false,
+    <i>/**
+     * @cfg {Number} typeAheadDelay The length of time <b>in</b> milliseconds to wait until the typeahead text is displayed
+     * <b>if</b> typeAhead = true (defaults to 250)
+     */</i>
+    typeAheadDelay : 250,
+    <i>/**
+     * @cfg {String} valueNotFoundText When using a name/value combo, <b>if</b> the value passed to setValue is not found <b>in</b>
+     * the store, valueNotFoundText will be displayed as the field text <b>if</b> defined (defaults to undefined). If <b>this</b>
+     * defaut text is used, it means there is no value set and no validation will occur on <b>this</b> field.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} lazyInit True to not initialize the list <b>for</b> this combo until the field is focused (defaults to true)
+     */</i>
+    lazyInit : true,
+
+    <i>/**
+     * The value of the match string used to filter the store. Delete <b>this</b> property to force a requery.
+     * Example use:&lt;pre&gt;&lt;code&gt;
+<b>var</b> combo = <b>new</b> Ext.form.ComboBox({
+    ...
+    mode: <em>'remote'</em>,
+    ...
+    listeners: {
+        <i>// <b>delete</b> the previous query <b>in</b> the beforequery event or set </i>
+        <i>// combo.lastQuery = null (<b>this</b> will reload the store the next time it expands)</i>
+        beforequery: <b>function</b>(qe){
+            <b>delete</b> qe.combo.lastQuery;
+        }
+    }
+});
+&lt;/code&gt;&lt;/pre&gt;
+     * @property lastQuery
+     * @type String
+     */</i>
+
+    <i>// private</i>
+    initComponent : <b>function</b>(){
+        Ext.form.ComboBox.superclass.initComponent.call(<b>this</b>);
+        <b>this</b>.addEvents(
+            <i>/**
+             * @event expand
+             * Fires when the dropdown list is expanded
+             * @param {Ext.form.ComboBox} combo This combo box
+             */</i>
+            <em>'expand'</em>,
+            <i>/**
+             * @event collapse
+             * Fires when the dropdown list is collapsed
+             * @param {Ext.form.ComboBox} combo This combo box
+             */</i>
+            <em>'collapse'</em>,
+            <i>/**
+             * @event beforeselect
+             * Fires before a list item is selected. Return false to cancel the selection.
+             * @param {Ext.form.ComboBox} combo This combo box
+             * @param {Ext.data.Record} record The data record returned from the underlying store
+             * @param {Number} index The index of the selected item <b>in</b> the dropdown list
+             */</i>
+            <em>'beforeselect'</em>,
+            <i>/**
+             * @event select
+             * Fires when a list item is selected
+             * @param {Ext.form.ComboBox} combo This combo box
+             * @param {Ext.data.Record} record The data record returned from the underlying store
+             * @param {Number} index The index of the selected item <b>in</b> the dropdown list
+             */</i>
+            <em>'select'</em>,
+            <i>/**
+             * @event beforequery
+             * Fires before all queries are processed. Return false to cancel the query or set the queryEvent's
+             * cancel property to true.
+             * @param {Object} queryEvent An object that has these properties:&lt;ul&gt;
+             * &lt;li&gt;&lt;code&gt;combo&lt;/code&gt; : Ext.form.ComboBox &lt;div class=&quot;sub-desc&quot;&gt;This combo box&lt;/div&gt;&lt;/li&gt;
+             * &lt;li&gt;&lt;code&gt;query&lt;/code&gt; : String &lt;div class=&quot;sub-desc&quot;&gt;The query&lt;/div&gt;&lt;/li&gt;
+             * &lt;li&gt;&lt;code&gt;forceAll&lt;/code&gt; : Boolean &lt;div class=&quot;sub-desc&quot;&gt;True to force &quot;all&quot; query&lt;/div&gt;&lt;/li&gt;
+             * &lt;li&gt;&lt;code&gt;cancel&lt;/code&gt; : Boolean &lt;div class=&quot;sub-desc&quot;&gt;Set to true to cancel the query&lt;/div&gt;&lt;/li&gt;
+             * &lt;/ul&gt;
+             */</i>
+            <em>'beforequery'</em>
+        );
+        <b>if</b>(this.transform){
+            <b>this</b>.allowDomMove = false;
+            <b>var</b> s = Ext.getDom(<b>this</b>.transform);
+            <b>if</b>(!<b>this</b>.hiddenName){
+                <b>this</b>.hiddenName = s.name;
+            }
+            <b>if</b>(!<b>this</b>.store){
+                <b>this</b>.mode = <em>'local'</em>;
+                <b>var</b> d = [], opts = s.options;
+                <b>for</b>(var i = 0, len = opts.length;i &lt; len; i++){
+                    <b>var</b> o = opts[i],
+                        value = (o.hasAttribute ? o.hasAttribute(<em>'value'</em>) : o.getAttributeNode(<em>'value'</em>).specified) ? o.value : o.text;
+                    <b>if</b>(o.selected) {
+                        <b>this</b>.value = value;
+                    }
+                    d.push([value, o.text]);
+                }
+                <b>this</b>.store = <b>new</b> Ext.data.SimpleStore({
+                    <em>'id'</em>: 0,
+                    fields: [<em>'value'</em>, <em>'text'</em>],
+                    data : d
+                });
+                <b>this</b>.valueField = <em>'value'</em>;
+                <b>this</b>.displayField = <em>'text'</em>;
+            }
+            s.name = Ext.id(); <i>// wipe out the name <b>in</b> case somewhere <b>else</b> they have a reference</i>
+            <b>if</b>(!<b>this</b>.lazyRender){
+                <b>this</b>.target = true;
+                <b>this</b>.el = Ext.DomHelper.insertBefore(s, <b>this</b>.autoCreate || <b>this</b>.defaultAutoCreate);
+                Ext.removeNode(s); <i>// remove it</i>
+                <b>this</b>.render(<b>this</b>.el.parentNode);
+            }<b>else</b>{
+                Ext.removeNode(s); <i>// remove it</i>
+            }
+        }
+        <i>//auto-configure store from local array data</i>
+        <b>else</b> if(Ext.isArray(<b>this</b>.store)){
+            <b>if</b> (Ext.isArray(<b>this</b>.store[0])){
+                <b>this</b>.store = <b>new</b> Ext.data.SimpleStore({
+                    fields: [<em>'value'</em>,<em>'text'</em>],
+                    data: <b>this</b>.store
+                });
+                <b>this</b>.valueField = <em>'value'</em>;
+            }<b>else</b>{
+                <b>this</b>.store = <b>new</b> Ext.data.SimpleStore({
+                    fields: [<em>'text'</em>],
+                    data: <b>this</b>.store,
+                    expandData: true
+                });
+                <b>this</b>.valueField = <em>'text'</em>;
+            }
+            <b>this</b>.displayField = <em>'text'</em>;
+            <b>this</b>.mode = <em>'local'</em>;
+        }
+
+        <b>this</b>.selectedIndex = -1;
+        <b>if</b>(this.mode == <em>'local'</em>){
+            <b>if</b>(this.initialConfig.queryDelay === undefined){
+                <b>this</b>.queryDelay = 10;
+            }
+            <b>if</b>(this.initialConfig.minChars === undefined){
+                <b>this</b>.minChars = 0;
+            }
+        }
+    },
+
+    <i>// private</i>
+    onRender : <b>function</b>(ct, position){
+        Ext.form.ComboBox.superclass.onRender.call(<b>this</b>, ct, position);
+        <b>if</b>(this.hiddenName){
+            <b>this</b>.hiddenField = <b>this</b>.el.insertSibling({tag:<em>'input'</em>, type:<em>'hidden'</em>, name: <b>this</b>.hiddenName,
+                    id: (<b>this</b>.hiddenId||<b>this</b>.hiddenName)}, <em>'before'</em>, true);
+
+            <i>// prevent input submission</i>
+            <b>this</b>.el.dom.removeAttribute(<em>'name'</em>);
+        }
+        <b>if</b>(Ext.isGecko){
+            <b>this</b>.el.dom.setAttribute(<em>'autocomplete'</em>, <em>'off'</em>);
+        }
+
+        <b>if</b>(!<b>this</b>.lazyInit){
+            <b>this</b>.initList();
+        }<b>else</b>{
+            <b>this</b>.on(<em>'focus'</em>, <b>this</b>.initList, <b>this</b>, {single: true});
+        }
+
+        <b>if</b>(!<b>this</b>.editable){
+            <b>this</b>.editable = true;
+            <b>this</b>.setEditable(false);
+        }
+    },
+
+    <i>// private</i>
+    initValue : <b>function</b>(){
+        Ext.form.ComboBox.superclass.initValue.call(<b>this</b>);
+        <b>if</b>(this.hiddenField){
+            <b>this</b>.hiddenField.value =
+                <b>this</b>.hiddenValue !== undefined ? <b>this</b>.hiddenValue :
+                <b>this</b>.value !== undefined ? <b>this</b>.value : <em>''</em>;
+        }
+    },
+
+    <i>// private</i>
+    initList : <b>function</b>(){
+        <b>if</b>(!<b>this</b>.list){
+            <b>var</b> cls = <em>'x-combo-list'</em>;
+
+            <b>this</b>.list = <b>new</b> Ext.Layer({
+                shadow: <b>this</b>.shadow, cls: [cls, <b>this</b>.listClass].join(<em>' '</em>), constrain:false
+            });
+
+            <b>var</b> lw = <b>this</b>.listWidth || Math.max(<b>this</b>.wrap.getWidth(), <b>this</b>.minListWidth);
+            <b>this</b>.list.setWidth(lw);
+            <b>this</b>.list.swallowEvent(<em>'mousewheel'</em>);
+            <b>this</b>.assetHeight = 0;
+
+            <b>if</b>(this.title){
+                <b>this</b>.header = <b>this</b>.list.createChild({cls:cls+<em>'-hd'</em>, html: <b>this</b>.title});
+                <b>this</b>.assetHeight += <b>this</b>.header.getHeight();
+            }
+
+            <b>this</b>.innerList = <b>this</b>.list.createChild({cls:cls+<em>'-inner'</em>});
+            <b>this</b>.innerList.on(<em>'mouseover'</em>, <b>this</b>.onViewOver, <b>this</b>);
+            <b>this</b>.innerList.on(<em>'mousemove'</em>, <b>this</b>.onViewMove, <b>this</b>);
+            <b>this</b>.innerList.setWidth(lw - <b>this</b>.list.getFrameWidth(<em>'lr'</em>));
+
+            <b>if</b>(this.pageSize){
+                <b>this</b>.footer = <b>this</b>.list.createChild({cls:cls+<em>'-ft'</em>});
+                <b>this</b>.pageTb = <b>new</b> Ext.PagingToolbar({
+                    store:<b>this</b>.store,
+                    pageSize: <b>this</b>.pageSize,
+                    renderTo:<b>this</b>.footer
+                });
+                <b>this</b>.assetHeight += <b>this</b>.footer.getHeight();
+            }
+
+            <b>if</b>(!<b>this</b>.tpl){
+                <i>/**
+                * @cfg {String/Ext.XTemplate} tpl The template string, or {@link Ext.XTemplate}
+                * instance to use to display each item <b>in</b> the dropdown list. Use
+                * <b>this</b> to create custom UI layouts <b>for</b> items <b>in</b> the list.
+                * &lt;p&gt;
+                * If you wish to preserve the <b>default</b> visual look of list items, add the CSS
+                * class name &lt;pre&gt;x-combo-list-item&lt;/pre&gt; to the template's container element.
+                * &lt;p&gt;
+                * &lt;b&gt;The template must contain one or more substitution parameters using field
+                * names from the Combo's&lt;/b&gt; {@link #store Store}. An example of a custom template
+                * would be adding an &lt;pre&gt;ext:qtip&lt;/pre&gt; attribute which might display other fields
+                * from the Store.
+                * &lt;p&gt;
+                * The dropdown list is displayed <b>in</b> a DataView. See {@link Ext.DataView} <b>for</b> details.
+                */</i>
+                <b>this</b>.tpl = <em>'&lt;tpl <b>for</b>=&quot;.&quot;&gt;&lt;div class=&quot;'</em>+cls+<em>'-item&quot;&gt;{'</em> + <b>this</b>.displayField + <em>'}&lt;/div&gt;&lt;/tpl&gt;'</em>;
+                <i>/**
+                 * @cfg {String} itemSelector
+                 * &lt;b&gt;This setting is required <b>if</b> a custom XTemplate has been specified <b>in</b> {@link #tpl}
+                 * which assigns a class other than &lt;pre&gt;<em>'x-combo-list-item'</em>&lt;/pre&gt; to dropdown list items&lt;/b&gt;.
+                 * A simple CSS selector (e.g. div.some-class or span:first-child) that will be
+                 * used to determine what nodes the DataView which handles the dropdown display will
+                 * be working <b>with</b>.
+                 */</i>
+            }
+
+            <i>/**
+            * The {@link Ext.DataView DataView} used to display the ComboBox's options.
+            * @type Ext.DataView
+            */</i>
+            <b>this</b>.view = <b>new</b> Ext.DataView({
+                applyTo: <b>this</b>.innerList,
+                tpl: <b>this</b>.tpl,
+                singleSelect: true,
+                selectedClass: <b>this</b>.selectedClass,
+                itemSelector: <b>this</b>.itemSelector || <em>'.'</em> + cls + <em>'-item'</em>
+            });
+
+            <b>this</b>.view.on(<em>'click'</em>, <b>this</b>.onViewClick, <b>this</b>);
+
+            <b>this</b>.bindStore(<b>this</b>.store, true);
+
+            <b>if</b>(this.resizable){
+                <b>this</b>.resizer = <b>new</b> Ext.Resizable(<b>this</b>.list,  {
+                   pinned:true, handles:<em>'se'</em>
+                });
+                <b>this</b>.resizer.on(<em>'resize'</em>, <b>function</b>(r, w, h){
+                    <b>this</b>.maxHeight = h-<b>this</b>.handleHeight-<b>this</b>.list.getFrameWidth(<em>'tb'</em>)-<b>this</b>.assetHeight;
+                    <b>this</b>.listWidth = w;
+                    <b>this</b>.innerList.setWidth(w - <b>this</b>.list.getFrameWidth(<em>'lr'</em>));
+                    <b>this</b>.restrictHeight();
+                }, <b>this</b>);
+                <b>this</b>[this.pageSize?<em>'footer'</em>:<em>'innerList'</em>].setStyle(<em>'margin-bottom'</em>, <b>this</b>.handleHeight+<em>'px'</em>);
+            }
+        }
+    },
+    
+    <i>/**
+     * Returns the store associated <b>with</b> this combo.
+     * @<b>return</b> {Ext.data.Store} The store
+     */</i>
+    getStore : <b>function</b>(){
+        <b>return</b> this.store;
+    },
+
+    <i>// private</i>
+    bindStore : <b>function</b>(store, initial){
+        <b>if</b>(this.store &amp;&amp; !initial){
+            <b>this</b>.store.un(<em>'beforeload'</em>, <b>this</b>.onBeforeLoad, <b>this</b>);
+            <b>this</b>.store.un(<em>'load'</em>, <b>this</b>.onLoad, <b>this</b>);
+            <b>this</b>.store.un(<em>'loadexception'</em>, <b>this</b>.collapse, <b>this</b>);
+            <b>if</b>(!store){
+                <b>this</b>.store = null;
+                <b>if</b>(this.view){
+                    <b>this</b>.view.setStore(null);
+                }
+            }
+        }
+        <b>if</b>(store){
+            <b>this</b>.store = Ext.StoreMgr.lookup(store);
+
+            <b>this</b>.store.on(<em>'beforeload'</em>, <b>this</b>.onBeforeLoad, <b>this</b>);
+            <b>this</b>.store.on(<em>'load'</em>, <b>this</b>.onLoad, <b>this</b>);
+            <b>this</b>.store.on(<em>'loadexception'</em>, <b>this</b>.collapse, <b>this</b>);
+
+            <b>if</b>(this.view){
+                <b>this</b>.view.setStore(store);
+            }
+        }
+    },
+
+    <i>// private</i>
+    initEvents : <b>function</b>(){
+        Ext.form.ComboBox.superclass.initEvents.call(<b>this</b>);
+
+        <b>this</b>.keyNav = <b>new</b> Ext.KeyNav(<b>this</b>.el, {
+            &quot;up&quot; : <b>function</b>(e){
+                <b>this</b>.inKeyMode = true;
+                <b>this</b>.selectPrev();
+            },
+
+            &quot;down&quot; : <b>function</b>(e){
+                <b>if</b>(!<b>this</b>.isExpanded()){
+                    <b>this</b>.onTriggerClick();
+                }<b>else</b>{
+                    <b>this</b>.inKeyMode = true;
+                    <b>this</b>.selectNext();
+                }
+            },
+
+            &quot;enter&quot; : <b>function</b>(e){
+                <b>this</b>.onViewClick();
+                <b>this</b>.delayedCheck = true;
+                <b>this</b>.unsetDelayCheck.defer(10, <b>this</b>);
+            },
+
+            &quot;esc&quot; : <b>function</b>(e){
+                <b>this</b>.collapse();
+            },
+
+            &quot;tab&quot; : <b>function</b>(e){
+                <b>this</b>.onViewClick(false);
+                <b>return</b> true;
+            },
+
+            scope : <b>this</b>,
+
+            doRelay : <b>function</b>(foo, bar, hname){
+                <b>if</b>(hname == <em>'down'</em> || <b>this</b>.scope.isExpanded()){
+                   <b>return</b> Ext.KeyNav.prototype.doRelay.apply(<b>this</b>, arguments);
+                }
+                <b>return</b> true;
+            },
+
+            forceKeyDown : true
+        });
+        <b>this</b>.queryDelay = Math.max(<b>this</b>.queryDelay || 10,
+                <b>this</b>.mode == <em>'local'</em> ? 10 : 250);
+        <b>this</b>.dqTask = <b>new</b> Ext.util.DelayedTask(<b>this</b>.initQuery, <b>this</b>);
+        <b>if</b>(this.typeAhead){
+            <b>this</b>.taTask = <b>new</b> Ext.util.DelayedTask(<b>this</b>.onTypeAhead, <b>this</b>);
+        }
+        <b>if</b>(this.editable !== false &amp;&amp; !<b>this</b>.enableKeyEvents){
+            <b>this</b>.el.on(&quot;keyup&quot;, <b>this</b>.onKeyUp, <b>this</b>);
+        }
+    },
+
+    <i>// private</i>
+    onDestroy : <b>function</b>(){
+        <b>if</b> (<b>this</b>.dqTask){
+            <b>this</b>.dqTask.cancel();
+            <b>this</b>.dqTask = null;
+        }
+        <b>this</b>.bindStore(null);
+        Ext.destroy(
+            <b>this</b>.resizer,
+            <b>this</b>.view,
+            <b>this</b>.pageTb,
+            <b>this</b>.innerList,
+            <b>this</b>.list
+        );
+        Ext.form.ComboBox.superclass.onDestroy.call(<b>this</b>);
+    },
+
+    <i>// private</i>
+    unsetDelayCheck : <b>function</b>(){
+        <b>delete</b> this.delayedCheck;
+    },
+
+    <i>// private</i>
+    fireKey : <b>function</b>(e){
+        <b>var</b> fn = <b>function</b>(ev){
+            <b>if</b> (ev.isNavKeyPress() &amp;&amp; !<b>this</b>.isExpanded() &amp;&amp; !<b>this</b>.delayedCheck) {
+                <b>this</b>.fireEvent(&quot;specialkey&quot;, <b>this</b>, ev);
+            }
+        };
+        <i>//For some reason I can't track down, the events fire <b>in</b> a different order <b>in</b> webkit.</i>
+        <i>//Need a slight delay here</i>
+        <b>if</b>(this.inEditor &amp;&amp; Ext.isWebKit &amp;&amp; e.getKey() == e.TAB){
+            fn.defer(10, <b>this</b>, [<b>new</b> Ext.EventObjectImpl(e)]);
+        }<b>else</b>{
+            fn.call(<b>this</b>, e);
+        }
+    },
+
+    <i>// private</i>
+    onResize: <b>function</b>(w, h){
+        Ext.form.ComboBox.superclass.onResize.apply(<b>this</b>, arguments);
+        <b>if</b>(this.list &amp;&amp; <b>this</b>.listWidth === undefined){
+            <b>var</b> lw = Math.max(w, <b>this</b>.minListWidth);
+            <b>this</b>.list.setWidth(lw);
+            <b>this</b>.innerList.setWidth(lw - <b>this</b>.list.getFrameWidth(<em>'lr'</em>));
+        }
+    },
+
+    <i>// private</i>
+    onEnable: <b>function</b>(){
+        Ext.form.ComboBox.superclass.onEnable.apply(<b>this</b>, arguments);
+        <b>if</b>(this.hiddenField){
+            <b>this</b>.hiddenField.disabled = false;
+        }
+    },
+
+    <i>// private</i>
+    onDisable: <b>function</b>(){
+        Ext.form.ComboBox.superclass.onDisable.apply(<b>this</b>, arguments);
+        <b>if</b>(this.hiddenField){
+            <b>this</b>.hiddenField.disabled = true;
+        }
+    },
+
+    <i>/**
+     * Allow or prevent the user from directly editing the field text.  If false is passed,
+     * the user will only be able to select from the items defined <b>in</b> the dropdown list.  This method
+     * is the runtime equivalent of setting the <em>'editable'</em> config option at config time.
+     * @param {Boolean} value True to allow the user to directly edit the field text
+     */</i>
+    setEditable : <b>function</b>(value){
+        <b>if</b>(value == <b>this</b>.editable){
+            <b>return</b>;
+        }
+        <b>this</b>.editable = value;
+        <b>if</b>(!value){
+            <b>this</b>.el.dom.setAttribute(<em>'readOnly'</em>, true);
+            <b>this</b>.el.on(<em>'mousedown'</em>, <b>this</b>.onTriggerClick,  <b>this</b>);
+            <b>this</b>.el.addClass(<em>'x-combo-noedit'</em>);
+        }<b>else</b>{
+            <b>this</b>.el.dom.removeAttribute(<em>'readOnly'</em>);
+            <b>this</b>.el.un(<em>'mousedown'</em>, <b>this</b>.onTriggerClick,  <b>this</b>);
+            <b>this</b>.el.removeClass(<em>'x-combo-noedit'</em>);
+        }
+    },
+
+    <i>// private</i>
+    onBeforeLoad : <b>function</b>(){
+        <b>if</b>(!<b>this</b>.hasFocus){
+            <b>return</b>;
+        }
+        <b>this</b>.innerList.update(<b>this</b>.loadingText ?
+               <em>'&lt;div class=&quot;loading-indicator&quot;&gt;'</em>+<b>this</b>.loadingText+<em>'&lt;/div&gt;'</em> : <em>''</em>);
+        <b>this</b>.restrictHeight();
+        <b>this</b>.selectedIndex = -1;
+    },
+
+    <i>// private</i>
+    onLoad : <b>function</b>(){
+        <b>if</b>(!<b>this</b>.hasFocus){
+            <b>return</b>;
+        }
+        <b>if</b>(this.store.getCount() &gt; 0){
+            <b>this</b>.expand();
+            <b>this</b>.restrictHeight();
+            <b>if</b>(this.lastQuery == <b>this</b>.allQuery){
+                <b>if</b>(this.editable){
+                    <b>this</b>.el.dom.select();
+                }
+                <b>if</b>(!<b>this</b>.selectByValue(<b>this</b>.value, true)){
+                    <b>this</b>.select(0, true);
+                }
+            }<b>else</b>{
+                <b>this</b>.selectNext();
+                <b>if</b>(this.typeAhead &amp;&amp; <b>this</b>.lastKey != Ext.EventObject.BACKSPACE &amp;&amp; <b>this</b>.lastKey != Ext.EventObject.DELETE){
+                    <b>this</b>.taTask.delay(<b>this</b>.typeAheadDelay);
+                }
+            }
+        }<b>else</b>{
+            <b>this</b>.onEmptyResults();
+        }
+        <i>//<b>this</b>.el.focus();</i>
+    },
+
+    <i>// private</i>
+    onTypeAhead : <b>function</b>(){
+        <b>if</b>(this.store.getCount() &gt; 0){
+            <b>var</b> r = <b>this</b>.store.getAt(0);
+            <b>var</b> newValue = r.data[<b>this</b>.displayField];
+            <b>var</b> len = newValue.length;
+            <b>var</b> selStart = <b>this</b>.getRawValue().length;
+            <b>if</b>(selStart != len){
+                <b>this</b>.setRawValue(newValue);
+                <b>this</b>.selectText(selStart, newValue.length);
+            }
+        }
+    },
+
+    <i>// private</i>
+    onSelect : <b>function</b>(record, index){
+        <b>if</b>(this.fireEvent(<em>'beforeselect'</em>, <b>this</b>, record, index) !== false){
+            <b>this</b>.setValue(record.data[<b>this</b>.valueField || <b>this</b>.displayField]);
+            <b>this</b>.collapse();
+            <b>this</b>.fireEvent(<em>'select'</em>, <b>this</b>, record, index);
+        }
+    },
+    
+    <i>// inherit docs</i>
+    getName: <b>function</b>(){
+        <b>var</b> hf = <b>this</b>.hiddenField;
+        <b>return</b> hf &amp;&amp; hf.name ? hf.name : <b>this</b>.hiddenName || Ext.form.ComboBox.superclass.getName.call(<b>this</b>);    
+    },
+
+    <i>/**
+     * Returns the currently selected field value or empty string <b>if</b> no value is set.
+     * @<b>return</b> {String} value The selected value
+     */</i>
+    getValue : <b>function</b>(){
+        <b>if</b>(this.valueField){
+            <b>return</b> typeof <b>this</b>.value != <em>'undefined'</em> ? <b>this</b>.value : <em>''</em>;
+        }<b>else</b>{
+            <b>return</b> Ext.form.ComboBox.superclass.getValue.call(<b>this</b>);
+        }
+    },
+
+    <i>/**
+     * Clears any text/value currently set <b>in</b> the field
+     */</i>
+    clearValue : <b>function</b>(){
+        <b>if</b>(this.hiddenField){
+            <b>this</b>.hiddenField.value = <em>''</em>;
+        }
+        <b>this</b>.setRawValue(<em>''</em>);
+        <b>this</b>.lastSelectionText = <em>''</em>;
+        <b>this</b>.applyEmptyText();
+        <b>this</b>.value = <em>''</em>;
+    },
+
+    <i>/**
+     * Sets the specified value into the field.  If the value finds a match, the corresponding record text
+     * will be displayed <b>in</b> the field.  If the value does not match the data value of an existing item,
+     * and the valueNotFoundText config option is defined, it will be displayed as the <b>default</b> field text.
+     * Otherwise the field will be blank (although the value will still be set).
+     * @param {String} value The value to match
+     */</i>
+    setValue : <b>function</b>(v){
+        <b>var</b> text = v;
+        <b>if</b>(this.valueField){
+            <b>var</b> r = <b>this</b>.findRecord(<b>this</b>.valueField, v);
+            <b>if</b>(r){
+                text = r.data[<b>this</b>.displayField];
+            }<b>else</b> if(<b>this</b>.valueNotFoundText !== undefined){
+                text = <b>this</b>.valueNotFoundText;
+            }
+        }
+        <b>this</b>.lastSelectionText = text;
+        <b>if</b>(this.hiddenField){
+            <b>this</b>.hiddenField.value = v;
+        }
+        Ext.form.ComboBox.superclass.setValue.call(<b>this</b>, text);
+        <b>this</b>.value = v;
+    },
+
+    <i>// private</i>
+    findRecord : <b>function</b>(prop, value){
+        <b>var</b> record;
+        <b>if</b>(this.store.getCount() &gt; 0){
+            <b>this</b>.store.each(<b>function</b>(r){
+                <b>if</b>(r.data[prop] == value){
+                    record = r;
+                    <b>return</b> false;
+                }
+            });
+        }
+        <b>return</b> record;
+    },
+
+    <i>// private</i>
+    onViewMove : <b>function</b>(e, t){
+        <b>this</b>.inKeyMode = false;
+    },
+
+    <i>// private</i>
+    onViewOver : <b>function</b>(e, t){
+        <b>if</b>(this.inKeyMode){ <i>// prevent key nav and mouse over conflicts</i>
+            <b>return</b>;
+        }
+        <b>var</b> item = <b>this</b>.view.findItemFromChild(t);
+        <b>if</b>(item){
+            <b>var</b> index = <b>this</b>.view.indexOf(item);
+            <b>this</b>.select(index, false);
+        }
+    },
+
+    <i>// private</i>
+    onViewClick : <b>function</b>(doFocus){
+        <b>var</b> index = <b>this</b>.view.getSelectedIndexes()[0];
+        <b>var</b> r = <b>this</b>.store.getAt(index);
+        <b>if</b>(r){
+            <b>this</b>.onSelect(r, index);
+        }
+        <b>if</b>(doFocus !== false){
+            <b>this</b>.el.focus();
+        }
+    },
+
+    <i>// private</i>
+    restrictHeight : <b>function</b>(){
+        <b>this</b>.innerList.dom.style.height = <em>''</em>;
+        <b>var</b> inner = <b>this</b>.innerList.dom;
+        <b>var</b> pad = <b>this</b>.list.getFrameWidth(<em>'tb'</em>)+(<b>this</b>.resizable?<b>this</b>.handleHeight:0)+<b>this</b>.assetHeight;
+        <b>var</b> h = Math.max(inner.clientHeight, inner.offsetHeight, inner.scrollHeight);
+        <b>var</b> ha = <b>this</b>.getPosition()[1]-Ext.getBody().getScroll().top;
+        <b>var</b> hb = Ext.lib.Dom.getViewHeight()-ha-<b>this</b>.getSize().height;
+        <b>var</b> space = Math.max(ha, hb, <b>this</b>.minHeight || 0)-<b>this</b>.list.shadowOffset-pad-5;
+        h = Math.min(h, space, <b>this</b>.maxHeight);
+
+        <b>this</b>.innerList.setHeight(h);
+        <b>this</b>.list.beginUpdate();
+        <b>this</b>.list.setHeight(h+pad);
+        <b>this</b>.list.alignTo(<b>this</b>.wrap, <b>this</b>.listAlign);
+        <b>this</b>.list.endUpdate();
+    },
+
+    <i>// private</i>
+    onEmptyResults : <b>function</b>(){
+        <b>this</b>.collapse();
+    },
+
+    <i>/**
+     * Returns true <b>if</b> the dropdown list is expanded, <b>else</b> false.
+     */</i>
+    isExpanded : <b>function</b>(){
+        <b>return</b> this.list &amp;&amp; <b>this</b>.list.isVisible();
+    },
+
+    <i>/**
+     * Select an item <b>in</b> the dropdown list by its data value. This <b>function</b> does NOT cause the select event to fire.
+     * The store must be loaded and the list expanded <b>for</b> this <b>function</b> to work, otherwise use setValue.
+     * @param {String} value The data value of the item to select
+     * @param {Boolean} scrollIntoView False to prevent the dropdown list from autoscrolling to display the
+     * selected item <b>if</b> it is not currently <b>in</b> view (defaults to true)
+     * @<b>return</b> {Boolean} True <b>if</b> the value matched an item <b>in</b> the list, <b>else</b> false
+     */</i>
+    selectByValue : <b>function</b>(v, scrollIntoView){
+        <b>if</b>(v !== undefined &amp;&amp; v !== null){
+            <b>var</b> r = <b>this</b>.findRecord(<b>this</b>.valueField || <b>this</b>.displayField, v);
+            <b>if</b>(r){
+                <b>this</b>.select(<b>this</b>.store.indexOf(r), scrollIntoView);
+                <b>return</b> true;
+            }
+        }
+        <b>return</b> false;
+    },
+
+    <i>/**
+     * Select an item <b>in</b> the dropdown list by its numeric index <b>in</b> the list. This <b>function</b> does NOT cause the select event to fire.
+     * The store must be loaded and the list expanded <b>for</b> this <b>function</b> to work, otherwise use setValue.
+     * @param {Number} index The zero-based index of the list item to select
+     * @param {Boolean} scrollIntoView False to prevent the dropdown list from autoscrolling to display the
+     * selected item <b>if</b> it is not currently <b>in</b> view (defaults to true)
+     */</i>
+    select : <b>function</b>(index, scrollIntoView){
+        <b>this</b>.selectedIndex = index;
+        <b>this</b>.view.select(index);
+        <b>if</b>(scrollIntoView !== false){
+            <b>var</b> el = <b>this</b>.view.getNode(index);
+            <b>if</b>(el){
+                <b>this</b>.innerList.scrollChildIntoView(el, false);
+            }
+        }
+    },
+
+    <i>// private</i>
+    selectNext : <b>function</b>(){
+        <b>var</b> ct = <b>this</b>.store.getCount();
+        <b>if</b>(ct &gt; 0){
+            <b>if</b>(this.selectedIndex == -1){
+                <b>this</b>.select(0);
+            }<b>else</b> if(<b>this</b>.selectedIndex &lt; ct-1){
+                <b>this</b>.select(<b>this</b>.selectedIndex+1);
+            }
+        }
+    },
+
+    <i>// private</i>
+    selectPrev : <b>function</b>(){
+        <b>var</b> ct = <b>this</b>.store.getCount();
+        <b>if</b>(ct &gt; 0){
+            <b>if</b>(this.selectedIndex == -1){
+                <b>this</b>.select(0);
+            }<b>else</b> if(<b>this</b>.selectedIndex != 0){
+                <b>this</b>.select(<b>this</b>.selectedIndex-1);
+            }
+        }
+    },
+
+    <i>// private</i>
+    onKeyUp : <b>function</b>(e){
+        <b>var</b> k = e.getKey();
+        <b>if</b>(this.editable !== false &amp;&amp; (k == e.BACKSPACE || !e.isSpecialKey())){
+            <b>this</b>.lastKey = k;
+            <b>this</b>.dqTask.delay(<b>this</b>.queryDelay);
+        }
+        Ext.form.ComboBox.superclass.onKeyUp.call(<b>this</b>, e);
+    },
+
+    <i>// private</i>
+    validateBlur : <b>function</b>(){
+        <b>return</b> !<b>this</b>.list || !<b>this</b>.list.isVisible();
+    },
+
+    <i>// private</i>
+    initQuery : <b>function</b>(){
+        <b>this</b>.doQuery(<b>this</b>.getRawValue());
+    },
+
+    <i>// private</i>
+    beforeBlur : <b>function</b>(){
+        <b>var</b> val = <b>this</b>.getRawValue();
+        <b>if</b>(this.forceSelection){
+            <b>if</b>(val.length &gt; 0 &amp;&amp; val != <b>this</b>.emptyText){
+               <b>this</b>.el.dom.value = <b>this</b>.lastSelectionText === undefined ? <em>''</em> : <b>this</b>.lastSelectionText;
+                <b>this</b>.applyEmptyText();
+            }<b>else</b>{
+                <b>this</b>.clearValue();
+            }
+        }<b>else</b>{
+            <b>var</b> rec = <b>this</b>.findRecord(<b>this</b>.displayField, val);
+            <b>if</b>(rec){
+                val = rec.get(<b>this</b>.valueField || <b>this</b>.displayField);
+            }
+            <b>this</b>.setValue(val);
+        }
+    },
+
+    <i>/**
+     * Execute a query to filter the dropdown list.  Fires the {@link #beforequery} event prior to performing the
+     * query allowing the query action to be canceled <b>if</b> needed.
+     * @param {String} query The SQL query to execute
+     * @param {Boolean} forceAll True to force the query to execute even <b>if</b> there are currently fewer characters
+     * <b>in</b> the field than the minimum specified by the minChars config option.  It also clears any filter previously
+     * saved <b>in</b> the current store (defaults to false)
+     */</i>
+    doQuery : <b>function</b>(q, forceAll){
+        <b>if</b>(q === undefined || q === null){
+            q = <em>''</em>;
+        }
+        <b>var</b> qe = {
+            query: q,
+            forceAll: forceAll,
+            combo: <b>this</b>,
+            cancel:false
+        };
+        <b>if</b>(this.fireEvent(<em>'beforequery'</em>, qe)===false || qe.cancel){
+            <b>return</b> false;
+        }
+        q = qe.query;
+        forceAll = qe.forceAll;
+        <b>if</b>(forceAll === true || (q.length &gt;= <b>this</b>.minChars)){
+            <b>if</b>(this.lastQuery !== q){
+                <b>this</b>.lastQuery = q;
+                <b>if</b>(this.mode == <em>'local'</em>){
+                    <b>this</b>.selectedIndex = -1;
+                    <b>if</b>(forceAll){
+                        <b>this</b>.store.clearFilter();
+                    }<b>else</b>{
+                        <b>this</b>.store.filter(<b>this</b>.displayField, q);
+                    }
+                    <b>this</b>.onLoad();
+                }<b>else</b>{
+                    <b>this</b>.store.baseParams[<b>this</b>.queryParam] = q;
+                    <b>this</b>.store.load({
+                        params: <b>this</b>.getParams(q)
+                    });
+                    <b>this</b>.expand();
+                }
+            }<b>else</b>{
+                <b>this</b>.selectedIndex = -1;
+                <b>this</b>.onLoad();
+            }
+        }
+    },
+
+    <i>// private</i>
+    getParams : <b>function</b>(q){
+        <b>var</b> p = {};
+        <i>//p[<b>this</b>.queryParam] = q;</i>
+        <b>if</b>(this.pageSize){
+            p.start = 0;
+            p.limit = <b>this</b>.pageSize;
+        }
+        <b>return</b> p;
+    },
+
+    <i>/**
+     * Hides the dropdown list <b>if</b> it is currently expanded. Fires the {@link #collapse} event on completion.
+     */</i>
+    collapse : <b>function</b>(){
+        <b>if</b>(!<b>this</b>.isExpanded()){
+            <b>return</b>;
+        }
+        <b>this</b>.list.hide();
+        Ext.getDoc().un(<em>'mousewheel'</em>, <b>this</b>.collapseIf, <b>this</b>);
+        Ext.getDoc().un(<em>'mousedown'</em>, <b>this</b>.collapseIf, <b>this</b>);
+        <b>this</b>.fireEvent(<em>'collapse'</em>, <b>this</b>);
+    },
+
+    <i>// private</i>
+    collapseIf : <b>function</b>(e){
+        <b>if</b>(!e.within(<b>this</b>.wrap) &amp;&amp; !e.within(<b>this</b>.list)){
+            <b>this</b>.collapse();
+        }
+    },
+
+    <i>/**
+     * Expands the dropdown list <b>if</b> it is currently hidden. Fires the {@link #expand} event on completion.
+     */</i>
+    expand : <b>function</b>(){
+        <b>if</b>(this.isExpanded() || !<b>this</b>.hasFocus){
+            <b>return</b>;
+        }
+        <b>this</b>.list.alignTo(<b>this</b>.wrap, <b>this</b>.listAlign);
+        <b>this</b>.list.show();
+        <b>if</b>(Ext.isGecko2){
+            <b>this</b>.innerList.setOverflow(<em>'auto'</em>); <i>// necessary <b>for</b> FF 2.0/Mac</i>
+        }
+        Ext.getDoc().on(<em>'mousewheel'</em>, <b>this</b>.collapseIf, <b>this</b>);
+        Ext.getDoc().on(<em>'mousedown'</em>, <b>this</b>.collapseIf, <b>this</b>);
+        <b>this</b>.fireEvent(<em>'expand'</em>, <b>this</b>);
+    },
+
+    <i>/**
+     * @method onTriggerClick
+     * @hide
+     */</i>
+    <i>// private</i>
+    <i>// Implements the <b>default</b> empty TriggerField.onTriggerClick <b>function</b></i>
+    onTriggerClick : <b>function</b>(){
+        <b>if</b>(this.disabled){
+            <b>return</b>;
+        }
+        <b>if</b>(this.isExpanded()){
+            <b>this</b>.collapse();
+            <b>this</b>.el.focus();
+        }<b>else</b> {
+            <b>this</b>.onFocus({});
+            <b>if</b>(this.triggerAction == <em>'all'</em>) {
+                <b>this</b>.doQuery(<b>this</b>.allQuery, true);
+            } <b>else</b> {
+                <b>this</b>.doQuery(<b>this</b>.getRawValue());
+            }
+            <b>this</b>.el.focus();
+        }
+    }
+
+    <i>/**
+     * @hide
+     * @method autoSize
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} grow @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Number} growMin @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Number} growMax @hide
+     */</i>
+
+});
+Ext.reg(<em>'combo'</em>, Ext.form.ComboBox);</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

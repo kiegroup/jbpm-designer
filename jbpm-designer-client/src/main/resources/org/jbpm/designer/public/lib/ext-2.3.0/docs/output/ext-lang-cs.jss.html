@@ -1,0 +1,289 @@
+<html><head><title>ext-lang-cs.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ext-lang-cs.js</h1><pre class="highlighted"><code><i>/**
+ * Czech Translations
+ * Translated by Tom&Atilde;&iexcl;&Aring;&iexcl; Kor&Auml;ç&Atilde;&iexcl;k (72)
+ * 2008/02/08 18:02, Ext-2.0.1
+ */</i>
+
+Ext.UpdateManager.defaults.indicatorText = <em>'&lt;div class=&quot;loading-indicator&quot;&gt;Pros&Atilde;&shy;m &Auml;çekejte...&lt;/div&gt;'</em>;
+
+<b>if</b>(Ext.View){
+   Ext.View.prototype.emptyText = &quot;&quot;;
+}
+
+<b>if</b>(Ext.grid.GridPanel){
+   Ext.grid.GridPanel.prototype.ddText = &quot;{0} vybran&Atilde;&frac12;ch &Aring;ô&Atilde;&iexcl;dk&Aring;&macr;&quot;;
+}
+
+<b>if</b>(Ext.TabPanelItem){
+   Ext.TabPanelItem.prototype.closeText = &quot;Zav&Aring;ô&Atilde;&shy;t z&Atilde;&iexcl;lo&Aring;&frac34;ku&quot;;
+}
+
+<b>if</b>(Ext.form.Field){
+   Ext.form.Field.prototype.invalidText = &quot;Hodnota v tomto poli je neplatn&Atilde;&iexcl;&quot;;
+}
+
+<b>if</b>(Ext.LoadMask){
+    Ext.LoadMask.prototype.msg = &quot;Pros&Atilde;&shy;m &Auml;çekejte...&quot;;
+}
+
+Date.monthNames = [
+   &quot;Leden&quot;,
+   &quot;&Atilde;önor&quot;,
+   &quot;B&Aring;ôezen&quot;,
+   &quot;Duben&quot;,
+   &quot;Kv&Auml;õten&quot;,
+   &quot;&Auml;åerven&quot;,
+   &quot;&Auml;åervenec&quot;,
+   &quot;Srpen&quot;,
+   &quot;Z&Atilde;&iexcl;&Aring;ô&Atilde;&shy;&quot;,
+   &quot;&Aring;ò&Atilde;&shy;jen&quot;,
+   &quot;Listopad&quot;,
+   &quot;Prosinec&quot;
+];
+
+Date.getShortMonthName = <b>function</b>(month) {
+  <b>return</b> Date.monthNames[month].substring(0, 3);
+};
+
+Date.monthNumbers = {
+  Jan : 0,
+  Feb : 1,
+  Mar : 2,
+  Apr : 3,
+  May : 4,
+  Jun : 5,
+  Jul : 6,
+  Aug : 7,
+  Sep : 8,
+  Oct : 9,
+  Nov : 10,
+  Dec : 11
+};
+
+Date.getMonthNumber = <b>function</b>(name) {
+  <b>return</b> Date.monthNumbers[name.substring(0, 1).toUpperCase() + name.substring(1, 3).toLowerCase()];
+};
+
+Date.dayNames = [
+   &quot;Ned&Auml;õle&quot;,
+   &quot;Pond&Auml;õl&Atilde;&shy;&quot;,
+   &quot;&Atilde;öter&Atilde;&frac12;&quot;,
+   &quot;St&Aring;ôeda&quot;,
+   &quot;&Auml;åtvrtek&quot;,
+   &quot;P&Atilde;&iexcl;tek&quot;,
+   &quot;Sobota&quot;
+];
+
+Date.getShortDayName = <b>function</b>(day) {
+  <b>return</b> Date.dayNames[day].substring(0, 3);
+};
+
+<b>if</b>(Ext.MessageBox){
+   Ext.MessageBox.buttonText = {
+      ok     : &quot;OK&quot;,
+      cancel : &quot;Storno&quot;,
+      yes    : &quot;Ano&quot;,
+      no     : &quot;Ne&quot;
+   };
+}
+
+<b>if</b>(Ext.util.Format){
+   Ext.util.Format.date = <b>function</b>(v, format){
+      <b>if</b>(!v) <b>return</b> &quot;&quot;;
+      <b>if</b>(!(v instanceof Date)) v = <b>new</b> Date(Date.parse(v));
+      <b>return</b> v.dateFormat(format || &quot;d.m.Y&quot;);
+   };
+}
+
+<b>if</b>(Ext.DatePicker){
+   Ext.apply(Ext.DatePicker.prototype, {
+      todayText         : &quot;Dnes&quot;,
+      minText           : &quot;Datum nesm&Atilde;&shy; b&Atilde;&frac12;t star&Aring;&iexcl;&Atilde;&shy; ne&Aring;&frac34; je minim&Atilde;&iexcl;ln&Atilde;&shy;&quot;,
+      maxText           : &quot;Datum nesm&Atilde;&shy; b&Atilde;&frac12;t d&Aring;ô&Atilde;&shy;v&Auml;õj&Aring;&iexcl;&Atilde;&shy; ne&Aring;&frac34; je maxim&Atilde;&iexcl;ln&Atilde;&shy;&quot;,
+      disabledDaysText  : &quot;&quot;,
+      disabledDatesText : &quot;&quot;,
+      monthNames	: Date.monthNames,
+      dayNames		: Date.dayNames,
+      nextText          : <em>'N&Atilde;&iexcl;sleduj&Atilde;&shy;c&Atilde;&shy; m&Auml;õs&Atilde;&shy;c (Control+Right)'</em>,
+      prevText          : <em>'P&Aring;ôedch&Atilde;&iexcl;zej&Atilde;&shy;c&Atilde;&shy; m&Auml;õs&Atilde;&shy;c (Control+Left)'</em>,
+      monthYearText     : <em>'Zvolte m&Auml;õs&Atilde;&shy;c (ke zm&Auml;õn&Auml;õ let pou&Aring;&frac34;ijte Control+Up/Down)'</em>,
+      todayTip          : &quot;{0} (Spacebar)&quot;,
+      format            : &quot;d.m.Y&quot;,
+      okText            : &quot;&amp;#160;OK&amp;#160;&quot;,
+      cancelText        : &quot;Storno&quot;,
+      startDay          : 1
+   });
+}
+
+<b>if</b>(Ext.PagingToolbar){
+   Ext.apply(Ext.PagingToolbar.prototype, {
+      beforePageText : &quot;Strana&quot;,
+      afterPageText  : &quot;z {0}&quot;,
+      firstText      : &quot;Prvn&Atilde;&shy; strana&quot;,
+      prevText       : &quot;P&Aring;ôech&Atilde;&iexcl;zej&Atilde;&shy;c&Atilde;&shy; strana&quot;,
+      nextText       : &quot;N&Atilde;&iexcl;sleduj&Atilde;&shy;c&Atilde;&shy; strana&quot;,
+      lastText       : &quot;Posledn&Atilde;&shy; strana&quot;,
+      refreshText    : &quot;Aktualizovat&quot;,
+      displayMsg     : &quot;Zobrazeno {0} - {1} z celkov&Atilde;&frac12;ch {2}&quot;,
+      emptyMsg       : <em>'&Aring;&frac12;&Atilde;&iexcl;dn&Atilde;&copy; z&Atilde;&iexcl;znamy nebyly nalezeny'</em>
+   });
+}
+
+<b>if</b>(Ext.form.TextField){
+   Ext.apply(Ext.form.TextField.prototype, {
+      minLengthText : &quot;Pole nesm&Atilde;&shy; m&Atilde;&shy;t m&Atilde;&copy;n&Auml;õ {0} znak&Aring;&macr;&quot;,
+      maxLengthText : &quot;Pole nesm&Atilde;&shy; b&Atilde;&frac12;t del&Aring;&iexcl;&Atilde;&shy; ne&Aring;&frac34; {0} znak&Aring;&macr;&quot;,
+      blankText     : &quot;This field is required&quot;,
+      regexText     : &quot;&quot;,
+      emptyText     : null
+   });
+}
+
+<b>if</b>(Ext.form.NumberField){
+   Ext.apply(Ext.form.NumberField.prototype, {
+      minText : &quot;Hodnota v tomto poli nesm&Atilde;&shy; b&Atilde;&frac12;t men&Aring;&iexcl;&Atilde;&shy; ne&Aring;&frac34; {0}&quot;,
+      maxText : &quot;Hodnota v tomto poli nesm&Atilde;&shy; b&Atilde;&frac12;t v&Auml;õt&Aring;&iexcl;&Atilde;&shy; ne&Aring;&frac34; {0}&quot;,
+      nanText : &quot;{0} nen&Atilde;&shy; platn&Atilde;&copy; &Auml;ç&Atilde;&shy;slo&quot;
+   });
+}
+
+<b>if</b>(Ext.form.DateField){
+   Ext.apply(Ext.form.DateField.prototype, {
+      disabledDaysText  : &quot;Neaktivn&Atilde;&shy;&quot;,
+      disabledDatesText : &quot;Neaktivn&Atilde;&shy;&quot;,
+      minText           : &quot;Datum v tomto poli nesm&Atilde;&shy; b&Atilde;&frac12;t star&Aring;&iexcl;&Atilde;&shy; ne&Aring;&frac34; {0}&quot;,
+      maxText           : &quot;Datum v tomto poli nesm&Atilde;&shy; b&Atilde;&frac12;t nov&Auml;õj&Aring;&iexcl;&Atilde;&shy; ne&Aring;&frac34; {0}&quot;,
+      invalidText       : &quot;{0} nen&Atilde;&shy; platn&Atilde;&frac12;m datem - zkontrolujte zda-li je ve form&Atilde;&iexcl;tu {1}&quot;,
+      format            : &quot;d.m.Y&quot;,
+      altFormats        : &quot;d/m/Y|d-m-y|d-m-Y|d/m|d-m|dm|dmy|dmY|d|Y-m-d&quot;
+   });
+}
+
+<b>if</b>(Ext.form.ComboBox){
+   Ext.apply(Ext.form.ComboBox.prototype, {
+      loadingText       : &quot;Pros&Atilde;&shy;m &Auml;çekejte...&quot;,
+      valueNotFoundText : undefined
+   });
+}
+
+<b>if</b>(Ext.form.VTypes){
+   Ext.apply(Ext.form.VTypes, {
+      emailText    : <em>'V tomto poli m&Aring;&macr;&Aring;&frac34;e b&Atilde;&frac12;t vypln&Auml;õna pouze emailov&Atilde;&iexcl; adresa ve form&Atilde;&iexcl;tu &quot;u&Aring;&frac34;ivatel@dom&Atilde;&copy;na.cz&quot;'</em>,
+      urlText      : <em>'V tomto poli m&Aring;&macr;&Aring;&frac34;e b&Atilde;&frac12;t vypln&Auml;õna pouze URL (adresa internetov&Atilde;&copy; str&Atilde;&iexcl;nky) ve form&Atilde;&iexcl;tu &quot;http:/'</em>+<em>'/www.dom&Atilde;&copy;na.cz&quot;'</em>,
+      alphaText    : <em>'Toto pole m&Aring;&macr;&Aring;&frac34;e obsahovat pouze p&Atilde;&shy;smena abecedy a znak _'</em>,
+      alphanumText : <em>'Toto pole m&Aring;&macr;&Aring;&frac34;e obsahovat pouze p&Atilde;&shy;smena abecedy, &Auml;ç&Atilde;&shy;sla a znak _'</em>
+   });
+}
+
+<b>if</b>(Ext.form.HtmlEditor){
+  Ext.apply(Ext.form.HtmlEditor.prototype, {
+    createLinkText : <em>'Zadejte URL adresu odkazu:'</em>,
+    buttonTips : {
+      bold : {
+        title: <em>'Tu&Auml;çn&Atilde;&copy; (Ctrl+B)'</em>,
+        text: <em>'Ozna&Auml;ç&Atilde;&shy; vybran&Atilde;&frac12; text tu&Auml;çn&Auml;õ.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      italic : {
+        title: <em>'Kurz&Atilde;&shy;va (Ctrl+I)'</em>,
+        text: <em>'Ozna&Auml;ç&Atilde;&shy; vybran&Atilde;&frac12; text kurz&Atilde;&shy;vou.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      underline : {
+        title: <em>'Podtr&Aring;&frac34;en&Atilde;&shy; (Ctrl+U)'</em>,
+        text: <em>'Podtrhne vybran&Atilde;&frac12; text.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      increasefontsize : {
+        title: <em>'Zv&Auml;õt&Aring;&iexcl;it p&Atilde;&shy;smo'</em>,
+        text: <em>'Zv&Auml;õt&Aring;&iexcl;&Atilde;&shy; velikost p&Atilde;&shy;sma.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      decreasefontsize : {
+        title: <em>'Z&Atilde;&ordm;&Aring;&frac34;it p&Atilde;&shy;smo'</em>,
+        text: <em>'Zmen&Aring;&iexcl;&Atilde;&shy; velikost p&Atilde;&shy;sma.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      backcolor : {
+        title: <em>'Barva zv&Atilde;&frac12;razn&Auml;õn&Atilde;&shy; textu'</em>,
+        text: <em>'Ozna&Auml;ç&Atilde;&shy; vybran&Atilde;&frac12; text tak, aby vypadal jako ozna&Auml;çen&Atilde;&frac12; zv&Atilde;&frac12;raz&Aring;àova&Auml;çem.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      forecolor : {
+        title: <em>'Barva p&Atilde;&shy;sma'</em>,
+        text: <em>'Zm&Auml;õn&Atilde;&shy; barvu textu.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifyleft : {
+        title: <em>'Zarovnat text vlevo'</em>,
+        text: <em>'Zarovn&Atilde;&iexcl; text doleva.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifycenter : {
+        title: <em>'Zarovnat na st&Aring;ôed'</em>,
+        text: <em>'Zarovn&Atilde;&iexcl; text na st&Aring;ôed.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifyright : {
+        title: <em>'Zarovnat text vpravo'</em>,
+        text: <em>'Zarovn&Atilde;&iexcl; text doprava.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      insertunorderedlist : {
+        title: <em>'Odr&Atilde;&iexcl;&Aring;&frac34;ky'</em>,
+        text: <em>'Za&Auml;çne seznam s odr&Atilde;&iexcl;&Aring;&frac34;kami.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      insertorderedlist : {
+        title: <em>'&Auml;å&Atilde;&shy;slov&Atilde;&iexcl;n&Atilde;&shy;'</em>,
+        text: <em>'Za&Auml;çne &Auml;ç&Atilde;&shy;slovan&Atilde;&frac12; seznam.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      createlink : {
+        title: <em>'Internetov&Atilde;&frac12; odkaz'</em>,
+        text: <em>'Z vybran&Atilde;&copy;ho textu vytvo&Aring;ô&Atilde;&shy; internetov&Atilde;&frac12; odkaz.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      sourceedit : {
+        title: <em>'Zdrojov&Atilde;&frac12; k&Atilde;&sup3;d'</em>,
+        text: <em>'P&Aring;ôepne <b>do</b> m&Atilde;&sup3;du &Atilde;&ordm;pravy zdrojov&Atilde;&copy;ho k&Atilde;&sup3;du.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      }
+    }
+  });
+}
+
+<b>if</b>(Ext.grid.GridView){
+   Ext.apply(Ext.grid.GridView.prototype, {
+      sortAscText  : &quot;&Aring;òadit vzestupn&Auml;õ&quot;,
+      sortDescText : &quot;&Aring;òadit sestupn&Auml;õ&quot;,
+      lockText     : &quot;Ukotvit sloupec&quot;,
+      unlockText   : &quot;Uvolnit sloupec&quot;,
+      columnsText  : &quot;Sloupce&quot;
+   });
+}
+
+<b>if</b>(Ext.grid.GroupingView){
+  Ext.apply(Ext.grid.GroupingView.prototype, {
+    emptyGroupText : <em>'(&Aring;&frac12;&Atilde;&iexcl;dn&Atilde;&iexcl; data)'</em>,
+    groupByText    : <em>'Seskupit dle tohoto pole'</em>,
+    showGroupsText : <em>'Zobrazit ve skupin&Auml;õ'</em>
+  });
+}
+
+<b>if</b>(Ext.grid.PropertyColumnModel){
+   Ext.apply(Ext.grid.PropertyColumnModel.prototype, {
+      nameText   : &quot;N&Atilde;&iexcl;zev&quot;,
+      valueText  : &quot;Hodnota&quot;,
+      dateFormat : &quot;j.m.Y&quot;
+   });
+}
+
+<b>if</b>(Ext.layout.BorderLayout &amp;&amp; Ext.layout.BorderLayout.SplitRegion){
+   Ext.apply(Ext.layout.BorderLayout.SplitRegion.prototype, {
+      splitTip            : &quot;Tahem zm&Auml;õnit velikost.&quot;,
+      collapsibleSplitTip : &quot;Tahem zm&Auml;õnit velikost. Dvojklikem skr&Atilde;&frac12;t.&quot;
+   });
+}
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

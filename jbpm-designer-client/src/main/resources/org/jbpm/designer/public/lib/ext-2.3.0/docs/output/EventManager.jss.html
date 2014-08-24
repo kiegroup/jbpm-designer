@@ -1,0 +1,932 @@
+<html><head><title>EventManager.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>EventManager.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.EventManager
+ * Registers event handlers that want to receive a normalized EventObject instead of the standard browser event and provides
+ * several useful events directly.
+ * See {@link Ext.EventObject} <b>for</b> more details on normalized event objects.
+ * @singleton
+ */</i>
+Ext.EventManager = <b>function</b>(){
+    <b>var</b> docReadyEvent, docReadyProcId, docReadyState = false;
+    <b>var</b> resizeEvent, resizeTask, textEvent, textSize;
+    <b>var</b> E = Ext.lib.Event;
+    <b>var</b> D = Ext.lib.Dom;
+    <i>// fix parser confusion</i>
+    <b>var</b> xname = <em>'Ex'</em> + <em>'t'</em>;
+
+    <b>var</b> elHash = {};
+
+    <b>var</b> addListener = <b>function</b>(el, ename, fn, wrap, scope){
+        <b>var</b> id = Ext.id(el);
+        <b>if</b>(!elHash[id]){
+            elHash[id] = {};
+        }
+        <b>var</b> es = elHash[id];
+        <b>if</b>(!es[ename]){
+            es[ename] = [];
+        }
+        <b>var</b> ls = es[ename];
+        ls.push({
+            id: id,
+            ename: ename,
+            fn: fn,
+            wrap: wrap,
+            scope: scope
+        });
+
+         E.on(el, ename, wrap);
+
+        <b>if</b>(ename == &quot;mousewheel&quot; &amp;&amp; el.addEventListener){ <i>// workaround <b>for</b> jQuery</i>
+            el.addEventListener(&quot;DOMMouseScroll&quot;, wrap, false);
+            E.on(window, <em>'unload'</em>, <b>function</b>(){
+                el.removeEventListener(&quot;DOMMouseScroll&quot;, wrap, false);
+            });
+        }
+        <b>if</b>(ename == &quot;mousedown&quot; &amp;&amp; el == document){ <i>// fix stopped mousedowns on the document</i>
+            Ext.EventManager.stoppedMouseDownEvent.addListener(wrap);
+        }
+    }
+
+    <b>var</b> removeListener = <b>function</b>(el, ename, fn, scope){
+        el = Ext.getDom(el);
+
+        <b>var</b> id = Ext.id(el), es = elHash[id], wrap;
+        <b>if</b>(es){
+            <b>var</b> ls = es[ename], l;
+            <b>if</b>(ls){
+                <b>for</b>(var i = 0, len = ls.length; i &lt; len; i++){
+                    l = ls[i];
+                    <b>if</b>(l.fn == fn &amp;&amp; (!scope || l.scope == scope)){
+                        wrap = l.wrap;
+                        E.un(el, ename, wrap);
+                        ls.splice(i, 1);
+                        <b>break</b>;
+                    }
+                }
+            }
+        }
+        <b>if</b>(ename == &quot;mousewheel&quot; &amp;&amp; el.addEventListener &amp;&amp; wrap){
+            el.removeEventListener(&quot;DOMMouseScroll&quot;, wrap, false);
+        }
+        <b>if</b>(ename == &quot;mousedown&quot; &amp;&amp; el == document &amp;&amp; wrap){ <i>// fix stopped mousedowns on the document</i>
+            Ext.EventManager.stoppedMouseDownEvent.removeListener(wrap);
+        }
+    }
+
+    <b>var</b> removeAll = <b>function</b>(el){
+        el = Ext.getDom(el);
+        <b>var</b> id = Ext.id(el), es = elHash[id], ls;
+        <b>if</b>(es){
+            <b>for</b>(var ename <b>in</b> es){
+                <b>if</b>(es.hasOwnProperty(ename)){
+                    ls = es[ename];
+                    <b>for</b>(var i = 0, len = ls.length; i &lt; len; i++){
+                        E.un(el, ename, ls[i].wrap);
+                        ls[i] = null;
+                    }
+                }
+                es[ename] = null;
+            }
+            <b>delete</b> elHash[id];
+        }
+    }
+
+
+    <b>var</b> fireDocReady = <b>function</b>(){
+        <b>if</b>(!docReadyState){
+            docReadyState = true;
+            Ext.isReady = true;
+            <b>if</b>(docReadyProcId){
+                clearInterval(docReadyProcId);
+            }
+            <b>if</b>(Ext.isGecko || Ext.isOpera) {
+                document.removeEventListener(&quot;DOMContentLoaded&quot;, fireDocReady, false);
+            }
+            <b>if</b>(Ext.isIE){
+                <b>var</b> defer = document.getElementById(&quot;ie-deferred-loader&quot;);
+                <b>if</b>(defer){
+                    defer.onreadystatechange = null;
+                    defer.parentNode.removeChild(defer);
+                }
+            }
+            <b>if</b>(docReadyEvent){
+                docReadyEvent.fire();
+                docReadyEvent.clearListeners();
+            }
+        }
+    };
+
+    <b>var</b> initDocReady = <b>function</b>(){
+        docReadyEvent = <b>new</b> Ext.util.Event();
+        <b>if</b>(Ext.isGecko || Ext.isOpera) {
+            document.addEventListener(&quot;DOMContentLoaded&quot;, fireDocReady, false);
+        }<b>else</b> if(Ext.isIE){
+            document.write(&quot;&lt;s&quot;+<em>'cript id=&quot;ie-deferred-loader&quot; defer=&quot;defer&quot; src=&quot;/'</em>+<em>'/:&quot;&gt;&lt;/s'</em>+&quot;cript&gt;&quot;);
+            <b>var</b> defer = document.getElementById(&quot;ie-deferred-loader&quot;);
+            defer.onreadystatechange = <b>function</b>(){
+                <b>if</b>(this.readyState == &quot;complete&quot;){
+                    fireDocReady();
+                }
+            };
+        }<b>else</b> if(Ext.isWebKit){
+            docReadyProcId = setInterval(<b>function</b>(){
+                <b>var</b> rs = document.readyState;
+                <b>if</b>(rs == &quot;complete&quot;) {
+                    fireDocReady();
+                 }
+            }, 10);
+        }
+        <i>// no matter what, make sure it fires on load</i>
+        E.on(window, &quot;load&quot;, fireDocReady);
+    };
+
+    <b>var</b> createBuffered = <b>function</b>(h, o){
+        <b>var</b> task = <b>new</b> Ext.util.DelayedTask(h);
+        <b>return</b> function(e){
+            <i>// create <b>new</b> event object impl so <b>new</b> events don't wipe out properties</i>
+            e = <b>new</b> Ext.EventObjectImpl(e);
+            task.delay(o.buffer, h, null, [e]);
+        };
+    };
+
+    <b>var</b> createSingle = <b>function</b>(h, el, ename, fn, scope){
+        <b>return</b> function(e){
+            Ext.EventManager.removeListener(el, ename, fn, scope);
+            h(e);
+        };
+    };
+
+    <b>var</b> createDelayed = <b>function</b>(h, o){
+        <b>return</b> function(e){
+            <i>// create <b>new</b> event object impl so <b>new</b> events don't wipe out properties</i>
+            e = <b>new</b> Ext.EventObjectImpl(e);
+            setTimeout(<b>function</b>(){
+                h(e);
+            }, o.delay || 10);
+        };
+    };
+
+    <b>var</b> listen = <b>function</b>(element, ename, opt, fn, scope){
+        <b>var</b> o = (!opt || <b>typeof</b> opt == &quot;boolean&quot;) ? {} : opt;
+        fn = fn || o.fn; scope = scope || o.scope;
+        <b>var</b> el = Ext.getDom(element);
+        <b>if</b>(!el){
+            throw &quot;Error listening <b>for</b> \&quot;&quot; + ename + <em>'\&quot;. Element &quot;'</em> + element + <em>'&quot; doesn\'</em>t exist.';
+        }
+        <b>var</b> h = <b>function</b>(e){
+            <i>// prevent errors <b>while</b> unload occurring</i>
+            <b>if</b>(!window[xname]){
+                <b>return</b>;
+            }
+            e = Ext.EventObject.setEvent(e);
+            <b>var</b> t;
+            <b>if</b>(o.delegate){
+                t = e.getTarget(o.delegate, el);
+                <b>if</b>(!t){
+                    <b>return</b>;
+                }
+            }<b>else</b>{
+                t = e.target;
+            }
+            <b>if</b>(o.stopEvent === true){
+                e.stopEvent();
+            }
+            <b>if</b>(o.preventDefault === true){
+               e.preventDefault();
+            }
+            <b>if</b>(o.stopPropagation === true){
+                e.stopPropagation();
+            }
+
+            <b>if</b>(o.normalized === false){
+                e = e.browserEvent;
+            }
+
+            fn.call(scope || el, e, t, o);
+        };
+        <b>if</b>(o.delay){
+            h = createDelayed(h, o);
+        }
+        <b>if</b>(o.single){
+            h = createSingle(h, el, ename, fn, scope);
+        }
+        <b>if</b>(o.buffer){
+            h = createBuffered(h, o);
+        }
+
+        addListener(el, ename, fn, h, scope);
+        <b>return</b> h;
+    };
+
+    <b>var</b> propRe = /^(?:scope|delay|buffer|single|stopEvent|preventDefault|stopPropagation|normalized|args|delegate)$/,
+        curWidth = 0,
+        curHeight = 0;
+    <b>var</b> pub = {
+
+    <i>/**
+     * Appends an event handler to an element.  The shorthand version {@link #on} is equivalent.  Typically you will
+     * use {@link Ext.Element#addListener} directly on an Element <b>in</b> favor of calling <b>this</b> version.
+     * @param {String/HTMLElement} el The html element or id to assign the event handler to
+     * @param {String} eventName The type of event to listen <b>for</b>
+     * @param {Function} handler The handler <b>function</b> the event invokes This <b>function</b> is passed
+     * the following parameters:&lt;ul&gt;
+     * &lt;li&gt;evt : EventObject&lt;div class=&quot;sub-desc&quot;&gt;The {@link Ext.EventObject EventObject} describing the event.&lt;/div&gt;&lt;/li&gt;
+     * &lt;li&gt;t : Element&lt;div class=&quot;sub-desc&quot;&gt;The {@link Ext.Element Element} which was the target of the event.
+     * Note that <b>this</b> may be filtered by using the &lt;tt&gt;delegate&lt;/tt&gt; option.&lt;/div&gt;&lt;/li&gt;
+     * &lt;li&gt;o : Object&lt;div class=&quot;sub-desc&quot;&gt;The options object from the addListener call.&lt;/div&gt;&lt;/li&gt;
+     * &lt;/ul&gt;
+     * @param {Object} scope (optional) The scope <b>in</b> which to execute the handler
+     * <b>function</b> (the handler <b>function</b>'s &quot;<b>this</b>&quot; context)
+     * @param {Object} options (optional) An object containing handler configuration properties.
+     * This may contain any of the following properties:&lt;ul&gt;
+     * &lt;li&gt;scope {Object} : The scope <b>in</b> which to execute the handler <b>function</b>. The handler <b>function</b>'s &quot;<b>this</b>&quot; context.&lt;/li&gt;
+     * &lt;li&gt;delegate {String} : A simple selector to filter the target or look <b>for</b> a descendant of the target&lt;/li&gt;
+     * &lt;li&gt;stopEvent {Boolean} : True to stop the event. That is stop propagation, and prevent the <b>default</b> action.&lt;/li&gt;
+     * &lt;li&gt;preventDefault {Boolean} : True to prevent the <b>default</b> action&lt;/li&gt;
+     * &lt;li&gt;stopPropagation {Boolean} : True to prevent event propagation&lt;/li&gt;
+     * &lt;li&gt;normalized {Boolean} : False to pass a browser event to the handler <b>function</b> instead of an Ext.EventObject&lt;/li&gt;
+     * &lt;li&gt;delay {Number} : The number of milliseconds to delay the invocation of the handler after te event fires.&lt;/li&gt;
+     * &lt;li&gt;single {Boolean} : True to add a handler to handle just the next firing of the event, and then remove itself.&lt;/li&gt;
+     * &lt;li&gt;buffer {Number} : Causes the handler to be scheduled to run <b>in</b> an {@link Ext.util.DelayedTask} delayed
+     * by the specified number of milliseconds. If the event fires again within that time, the original
+     * handler is &lt;em&gt;not&lt;/em&gt; invoked, but the <b>new</b> handler is scheduled <b>in</b> its place.&lt;/li&gt;
+     * &lt;/ul&gt;&lt;br&gt;
+     * &lt;p&gt;See {@link Ext.Element#addListener} <b>for</b> examples of how to use these options.&lt;/p&gt;
+     */</i>
+        addListener : <b>function</b>(element, eventName, fn, scope, options){
+            <b>if</b>(typeof eventName == &quot;object&quot;){
+                <b>var</b> o = eventName;
+                <b>for</b>(var e <b>in</b> o){
+                    <b>if</b>(propRe.test(e)){
+                        <b>continue</b>;
+                    }
+                    <b>if</b>(typeof o[e] == &quot;<b>function</b>&quot;){
+                        <i>// shared options</i>
+                        listen(element, e, o, o[e], o.scope);
+                    }<b>else</b>{
+                        <i>// individual options</i>
+                        listen(element, e, o[e]);
+                    }
+                }
+                <b>return</b>;
+            }
+            <b>return</b> listen(element, eventName, options, fn, scope);
+        },
+
+        <i>/**
+         * Removes an event handler from an element.  The shorthand version {@link #un} is equivalent.  Typically
+         * you will use {@link Ext.Element#removeListener} directly on an Element <b>in</b> favor of calling <b>this</b> version.
+         * @param {String/HTMLElement} el The id or html element from which to remove the event
+         * @param {String} eventName The type of event
+         * @param {Function} fn The handler <b>function</b> to remove
+         */</i>
+        removeListener : <b>function</b>(element, eventName, fn, scope){
+            <b>return</b> removeListener(element, eventName, fn, scope);
+        },
+
+        <i>/**
+         * Removes all event handers from an element.  Typically you will use {@link Ext.Element#removeAllListeners}
+         * directly on an Element <b>in</b> favor of calling <b>this</b> version.
+         * @param {String/HTMLElement} el The id or html element from which to remove the event
+         */</i>
+        removeAll : <b>function</b>(element){
+            <b>return</b> removeAll(element);
+        },
+
+        <i>/**
+         * Fires when the document is ready (before onload and before images are loaded). Can be
+         * accessed shorthanded as Ext.onReady().
+         * @param {Function} fn The method the event invokes
+         * @param {Object} scope (optional) An object that becomes the scope of the handler
+         * @param {boolean} options (optional) An object containing standard {@link #addListener} options
+         */</i>
+        onDocumentReady : <b>function</b>(fn, scope, options){
+            <b>if</b>(docReadyState){ <i>// <b>if</b> it already fired</i>
+                docReadyEvent.addListener(fn, scope, options);
+                docReadyEvent.fire();
+                docReadyEvent.clearListeners();
+                <b>return</b>;
+            }
+            <b>if</b>(!docReadyEvent){
+                initDocReady();
+            }
+            options = options || {};
+            <b>if</b>(!options.delay){
+                options.delay = 1;
+            }
+            docReadyEvent.addListener(fn, scope, options);
+        },
+        
+        <i>// private</i>
+        doResizeEvent: <b>function</b>(){
+            <b>var</b> h = D.getViewHeight(),
+                w = D.getViewWidth();
+            
+            <i>//whacky problem <b>in</b> IE where the resize event will fire even though the w/h are the same.</i>
+            <b>if</b>(curHeight != h || curWidth != w){
+                resizeEvent.fire(curWidth = w, curHeight = h);
+            }
+        },
+
+        <i>/**
+         * Fires when the window is resized and provides resize event buffering (50 milliseconds), passes <b>new</b> viewport width and height to handlers.
+         * @param {Function} fn        The method the event invokes
+         * @param {Object}   scope    An object that becomes the scope of the handler
+         * @param {boolean}  options
+         */</i>
+        onWindowResize : <b>function</b>(fn, scope, options){
+            <b>if</b>(!resizeEvent){
+                resizeEvent = <b>new</b> Ext.util.Event();
+                resizeTask = <b>new</b> Ext.util.DelayedTask(<b>this</b>.doResizeEvent);
+                E.on(window, &quot;resize&quot;, <b>this</b>.fireWindowResize, <b>this</b>);
+            }
+            resizeEvent.addListener(fn, scope, options);
+        },
+
+        <i>// exposed only to allow manual firing</i>
+        fireWindowResize : <b>function</b>(){
+            <b>if</b>(resizeEvent){
+                <b>if</b>((Ext.isIE||Ext.isAir) &amp;&amp; resizeTask){
+                    resizeTask.delay(50);
+                }<b>else</b>{
+                    resizeEvent.fire(D.getViewWidth(), D.getViewHeight());
+                }
+            }
+        },
+
+        <i>/**
+         * Fires when the user changes the active text size. Handler gets called <b>with</b> 2 params, the old size and the <b>new</b> size.
+         * @param {Function} fn        The method the event invokes
+         * @param {Object}   scope    An object that becomes the scope of the handler
+         * @param {boolean}  options
+         */</i>
+        onTextResize : <b>function</b>(fn, scope, options){
+            <b>if</b>(!textEvent){
+                textEvent = <b>new</b> Ext.util.Event();
+                <b>var</b> textEl = <b>new</b> Ext.Element(document.createElement(<em>'div'</em>));
+                textEl.dom.className = <em>'x-text-resize'</em>;
+                textEl.dom.innerHTML = <em>'X'</em>;
+                textEl.appendTo(document.body);
+                textSize = textEl.dom.offsetHeight;
+                setInterval(<b>function</b>(){
+                    <b>if</b>(textEl.dom.offsetHeight != textSize){
+                        textEvent.fire(textSize, textSize = textEl.dom.offsetHeight);
+                    }
+                }, <b>this</b>.textResizeInterval);
+            }
+            textEvent.addListener(fn, scope, options);
+        },
+
+        <i>/**
+         * Removes the passed window resize listener.
+         * @param {Function} fn        The method the event invokes
+         * @param {Object}   scope    The scope of handler
+         */</i>
+        removeResizeListener : <b>function</b>(fn, scope){
+            <b>if</b>(resizeEvent){
+                resizeEvent.removeListener(fn, scope);
+            }
+        },
+
+        <i>// private</i>
+        fireResize : <b>function</b>(){
+            <b>if</b>(resizeEvent){
+                resizeEvent.fire(D.getViewWidth(), D.getViewHeight());
+            }
+        },
+        <i>/**
+         * Url used <b>for</b> onDocumentReady <b>with</b> using SSL (defaults to Ext.SSL_SECURE_URL)
+         */</i>
+        ieDeferSrc : false,
+        <i>/**
+         * The frequency, <b>in</b> milliseconds, to check <b>for</b> text resize events (defaults to 50)
+         */</i>
+        textResizeInterval : 50
+    };
+     <i>/**
+     * Appends an event handler to an element.  Shorthand <b>for</b> {@link #addListener}.
+     * @param {String/HTMLElement} el The html element or id to assign the event handler to
+     * @param {String} eventName The type of event to listen <b>for</b>
+     * @param {Function} handler The handler <b>function</b> the event invokes
+     * @param {Object} scope (optional) The scope <b>in</b> which to execute the handler
+     * <b>function</b> (the handler <b>function</b>'s &quot;<b>this</b>&quot; context)
+     * @param {Object} options (optional) An object containing standard {@link #addListener} options
+     * @member Ext.EventManager
+     * @method on
+     */</i>
+    pub.on = pub.addListener;
+    <i>/**
+     * Removes an event handler from an element.  Shorthand <b>for</b> {@link #removeListener}.
+     * @param {String/HTMLElement} el The id or html element from which to remove the event
+     * @param {String} eventName The type of event
+     * @param {Function} fn The handler <b>function</b> to remove
+     * @<b>return</b> {Boolean} True <b>if</b> a listener was actually removed, <b>else</b> false
+     * @member Ext.EventManager
+     * @method un
+     */</i>
+    pub.un = pub.removeListener;
+
+    pub.stoppedMouseDownEvent = <b>new</b> Ext.util.Event();
+    <b>return</b> pub;
+}();
+<i>/**
+  * Fires when the document is ready (before onload and before images are loaded).  Shorthand of {@link Ext.EventManager#onDocumentReady}.
+  * @param {Function} fn The method the event invokes
+  * @param {Object} scope An object that becomes the scope of the handler
+  * @param {boolean} options (optional) An object containing standard {@link #addListener} options
+  * @member Ext
+  * @method onReady
+ */</i>
+Ext.onReady = Ext.EventManager.onDocumentReady;
+
+
+<i>// Initialize doc classes</i>
+(<b>function</b>(){
+    <b>var</b> initExtCss = <b>function</b>(){
+        <i>// find the body element</i>
+        <b>var</b> bd = document.body || document.getElementsByTagName(<em>'body'</em>)[0];
+        <b>if</b>(!bd){ <b>return</b> false; }
+        <b>var</b> cls = [<em>' '</em>,
+                Ext.isIE ? &quot;ext-ie &quot; + (Ext.isIE6 ? <em>'ext-ie6'</em> : (Ext.isIE7 ? <em>'ext-ie7'</em> : <em>'ext-ie8'</em>))
+                : Ext.isGecko ? &quot;ext-gecko &quot; + (Ext.isGecko2 ? <em>'ext-gecko2'</em> : <em>'ext-gecko3'</em>)
+                : Ext.isOpera ? &quot;ext-opera&quot;
+                : Ext.isSafari ? &quot;ext-safari&quot;
+                : Ext.isChrome ? &quot;ext-chrome&quot; : &quot;&quot;];
+
+        <b>if</b>(Ext.isMac){
+            cls.push(&quot;ext-mac&quot;);
+        }
+        <b>if</b>(Ext.isLinux){
+            cls.push(&quot;ext-linux&quot;);
+        }
+
+        <b>if</b>(Ext.isStrict || Ext.isBorderBox){ <i>// add to the parent to allow <b>for</b> selectors like &quot;.ext-strict .ext-ie&quot;</i>
+            <b>var</b> p = bd.parentNode;
+            <b>if</b>(p){
+                p.className += Ext.isStrict ? <em>' ext-strict'</em> : <em>' ext-border-box'</em>;
+            }
+        }
+        bd.className += cls.join(<em>' '</em>);
+        <b>return</b> true;
+    }
+
+    <b>if</b>(!initExtCss()){
+        Ext.onReady(initExtCss);
+    }
+})();
+
+<i>/**
+ * @class Ext.EventObject
+ * EventObject encapsulates a DOM event adjusting <b>for</b> browser differences.
+ * Example:
+ * &lt;pre&gt;&lt;code&gt;
+ <b>function</b> handleClick(e){ <i>// e is not a standard event object, it is a Ext.EventObject</i>
+    e.preventDefault();
+    <b>var</b> target = e.getTarget();
+    ...
+ }
+ <b>var</b> myDiv = Ext.get(&quot;myDiv&quot;);
+ myDiv.on(&quot;click&quot;, handleClick);
+ <i>//or</i>
+ Ext.EventManager.on(&quot;myDiv&quot;, <em>'click'</em>, handleClick);
+ Ext.EventManager.addListener(&quot;myDiv&quot;, <em>'click'</em>, handleClick);
+ &lt;/code&gt;&lt;/pre&gt;
+ * @singleton
+ */</i>
+Ext.EventObject = <b>function</b>(){
+
+    <b>var</b> E = Ext.lib.Event;
+
+    <i>// safari keypress events <b>for</b> special keys <b>return</b> bad keycodes</i>
+    <b>var</b> safariKeys = {
+        3 : 13, <i>// enter</i>
+        63234 : 37, <i>// left</i>
+        63235 : 39, <i>// right</i>
+        63232 : 38, <i>// up</i>
+        63233 : 40, <i>// down</i>
+        63276 : 33, <i>// page up</i>
+        63277 : 34, <i>// page down</i>
+        63272 : 46, <i>// <b>delete</b></i>
+        63273 : 36, <i>// home</i>
+        63275 : 35  <i>// end</i>
+    };
+
+    <i>// normalize button clicks</i>
+    <b>var</b> btnMap = Ext.isIE ? {1:0,4:1,2:2} :
+                (Ext.isWebKit ? {1:0,2:1,3:2} : {0:0,1:1,2:2});
+
+    Ext.EventObjectImpl = <b>function</b>(e){
+        <b>if</b>(e){
+            <b>this</b>.setEvent(e.browserEvent || e);
+        }
+    };
+
+    Ext.EventObjectImpl.prototype = {
+        <i>/** The encapsulated browser event */</i>
+        browserEvent : null,
+        <i>/** The button pressed <b>in</b> a mouse event */</i>
+        button : -1,
+        <i>/** True <b>if</b> the shift key was down during the event */</i>
+        shiftKey : false,
+        <i>/** True <b>if</b> the control key was down during the event */</i>
+        ctrlKey : false,
+        <i>/** True <b>if</b> the alt key was down during the event */</i>
+        altKey : false,
+
+        <i>/** Key constant @type Number */</i>
+        BACKSPACE: 8,
+        <i>/** Key constant @type Number */</i>
+        TAB: 9,
+        <i>/** Key constant @type Number */</i>
+        NUM_CENTER: 12,
+        <i>/** Key constant @type Number */</i>
+        ENTER: 13,
+        <i>/** Key constant @type Number */</i>
+        RETURN: 13,
+        <i>/** Key constant @type Number */</i>
+        SHIFT: 16,
+        <i>/** Key constant @type Number */</i>
+        CTRL: 17,
+        CONTROL : 17, <i>// legacy</i>
+        <i>/** Key constant @type Number */</i>
+        ALT: 18,
+        <i>/** Key constant @type Number */</i>
+        PAUSE: 19,
+        <i>/** Key constant @type Number */</i>
+        CAPS_LOCK: 20,
+        <i>/** Key constant @type Number */</i>
+        ESC: 27,
+        <i>/** Key constant @type Number */</i>
+        SPACE: 32,
+        <i>/** Key constant @type Number */</i>
+        PAGE_UP: 33,
+        PAGEUP : 33, <i>// legacy</i>
+        <i>/** Key constant @type Number */</i>
+        PAGE_DOWN: 34,
+        PAGEDOWN : 34, <i>// legacy</i>
+        <i>/** Key constant @type Number */</i>
+        END: 35,
+        <i>/** Key constant @type Number */</i>
+        HOME: 36,
+        <i>/** Key constant @type Number */</i>
+        LEFT: 37,
+        <i>/** Key constant @type Number */</i>
+        UP: 38,
+        <i>/** Key constant @type Number */</i>
+        RIGHT: 39,
+        <i>/** Key constant @type Number */</i>
+        DOWN: 40,
+        <i>/** Key constant @type Number */</i>
+        PRINT_SCREEN: 44,
+        <i>/** Key constant @type Number */</i>
+        INSERT: 45,
+        <i>/** Key constant @type Number */</i>
+        DELETE: 46,
+        <i>/** Key constant @type Number */</i>
+        ZERO: 48,
+        <i>/** Key constant @type Number */</i>
+        ONE: 49,
+        <i>/** Key constant @type Number */</i>
+        TWO: 50,
+        <i>/** Key constant @type Number */</i>
+        THREE: 51,
+        <i>/** Key constant @type Number */</i>
+        FOUR: 52,
+        <i>/** Key constant @type Number */</i>
+        FIVE: 53,
+        <i>/** Key constant @type Number */</i>
+        SIX: 54,
+        <i>/** Key constant @type Number */</i>
+        SEVEN: 55,
+        <i>/** Key constant @type Number */</i>
+        EIGHT: 56,
+        <i>/** Key constant @type Number */</i>
+        NINE: 57,
+        <i>/** Key constant @type Number */</i>
+        A: 65,
+        <i>/** Key constant @type Number */</i>
+        B: 66,
+        <i>/** Key constant @type Number */</i>
+        C: 67,
+        <i>/** Key constant @type Number */</i>
+        D: 68,
+        <i>/** Key constant @type Number */</i>
+        E: 69,
+        <i>/** Key constant @type Number */</i>
+        F: 70,
+        <i>/** Key constant @type Number */</i>
+        G: 71,
+        <i>/** Key constant @type Number */</i>
+        H: 72,
+        <i>/** Key constant @type Number */</i>
+        I: 73,
+        <i>/** Key constant @type Number */</i>
+        J: 74,
+        <i>/** Key constant @type Number */</i>
+        K: 75,
+        <i>/** Key constant @type Number */</i>
+        L: 76,
+        <i>/** Key constant @type Number */</i>
+        M: 77,
+        <i>/** Key constant @type Number */</i>
+        N: 78,
+        <i>/** Key constant @type Number */</i>
+        O: 79,
+        <i>/** Key constant @type Number */</i>
+        P: 80,
+        <i>/** Key constant @type Number */</i>
+        Q: 81,
+        <i>/** Key constant @type Number */</i>
+        R: 82,
+        <i>/** Key constant @type Number */</i>
+        S: 83,
+        <i>/** Key constant @type Number */</i>
+        T: 84,
+        <i>/** Key constant @type Number */</i>
+        U: 85,
+        <i>/** Key constant @type Number */</i>
+        V: 86,
+        <i>/** Key constant @type Number */</i>
+        W: 87,
+        <i>/** Key constant @type Number */</i>
+        X: 88,
+        <i>/** Key constant @type Number */</i>
+        Y: 89,
+        <i>/** Key constant @type Number */</i>
+        Z: 90,
+        <i>/** Key constant @type Number */</i>
+        CONTEXT_MENU: 93,
+        <i>/** Key constant @type Number */</i>
+        NUM_ZERO: 96,
+        <i>/** Key constant @type Number */</i>
+        NUM_ONE: 97,
+        <i>/** Key constant @type Number */</i>
+        NUM_TWO: 98,
+        <i>/** Key constant @type Number */</i>
+        NUM_THREE: 99,
+        <i>/** Key constant @type Number */</i>
+        NUM_FOUR: 100,
+        <i>/** Key constant @type Number */</i>
+        NUM_FIVE: 101,
+        <i>/** Key constant @type Number */</i>
+        NUM_SIX: 102,
+        <i>/** Key constant @type Number */</i>
+        NUM_SEVEN: 103,
+        <i>/** Key constant @type Number */</i>
+        NUM_EIGHT: 104,
+        <i>/** Key constant @type Number */</i>
+        NUM_NINE: 105,
+        <i>/** Key constant @type Number */</i>
+        NUM_MULTIPLY: 106,
+        <i>/** Key constant @type Number */</i>
+        NUM_PLUS: 107,
+        <i>/** Key constant @type Number */</i>
+        NUM_MINUS: 109,
+        <i>/** Key constant @type Number */</i>
+        NUM_PERIOD: 110,
+        <i>/** Key constant @type Number */</i>
+        NUM_DIVISION: 111,
+        <i>/** Key constant @type Number */</i>
+        F1: 112,
+        <i>/** Key constant @type Number */</i>
+        F2: 113,
+        <i>/** Key constant @type Number */</i>
+        F3: 114,
+        <i>/** Key constant @type Number */</i>
+        F4: 115,
+        <i>/** Key constant @type Number */</i>
+        F5: 116,
+        <i>/** Key constant @type Number */</i>
+        F6: 117,
+        <i>/** Key constant @type Number */</i>
+        F7: 118,
+        <i>/** Key constant @type Number */</i>
+        F8: 119,
+        <i>/** Key constant @type Number */</i>
+        F9: 120,
+        <i>/** Key constant @type Number */</i>
+        F10: 121,
+        <i>/** Key constant @type Number */</i>
+        F11: 122,
+        <i>/** Key constant @type Number */</i>
+        F12: 123,
+
+           <i>/** @private */</i>
+        setEvent : <b>function</b>(e){
+            <b>if</b>(e == <b>this</b> || (e &amp;&amp; e.browserEvent)){ <i>// already wrapped</i>
+                <b>return</b> e;
+            }
+            <b>this</b>.browserEvent = e;
+            <b>if</b>(e){
+                <i>// normalize buttons</i>
+                <b>this</b>.button = e.button ? btnMap[e.button] : (e.which ? e.which-1 : -1);
+                <b>if</b>(e.type == <em>'click'</em> &amp;&amp; <b>this</b>.button == -1){
+                    <b>this</b>.button = 0;
+                }
+                <b>this</b>.type = e.type;
+                <b>this</b>.shiftKey = e.shiftKey;
+                <i>// mac metaKey behaves like ctrlKey</i>
+                <b>this</b>.ctrlKey = e.ctrlKey || e.metaKey;
+                <b>this</b>.altKey = e.altKey;
+                <i>// <b>in</b> getKey these will be normalized <b>for</b> the mac</i>
+                <b>this</b>.keyCode = e.keyCode;
+                <b>this</b>.charCode = e.charCode;
+                <i>// cache the target <b>for</b> the delayed and or buffered events</i>
+                <b>this</b>.target = E.getTarget(e);
+                <i>// same <b>for</b> XY</i>
+                <b>this</b>.xy = E.getXY(e);
+            }<b>else</b>{
+                <b>this</b>.button = -1;
+                <b>this</b>.shiftKey = false;
+                <b>this</b>.ctrlKey = false;
+                <b>this</b>.altKey = false;
+                <b>this</b>.keyCode = 0;
+                <b>this</b>.charCode = 0;
+                <b>this</b>.target = null;
+                <b>this</b>.xy = [0, 0];
+            }
+            <b>return</b> this;
+        },
+
+        <i>/**
+         * Stop the event (preventDefault and stopPropagation)
+         */</i>
+        stopEvent : <b>function</b>(){
+            <b>if</b>(this.browserEvent){
+                <b>if</b>(this.browserEvent.type == <em>'mousedown'</em>){
+                    Ext.EventManager.stoppedMouseDownEvent.fire(<b>this</b>);
+                }
+                E.stopEvent(<b>this</b>.browserEvent);
+            }
+        },
+
+        <i>/**
+         * Prevents the browsers <b>default</b> handling of the event.
+         */</i>
+        preventDefault : <b>function</b>(){
+            <b>if</b>(this.browserEvent){
+                E.preventDefault(<b>this</b>.browserEvent);
+            }
+        },
+
+        <i>/** @private */</i>
+        isNavKeyPress : <b>function</b>(){
+            <b>var</b> k = <b>this</b>.keyCode;
+            k = Ext.isSafari ? (safariKeys[k] || k) : k;
+            <b>return</b> (k &gt;= 33 &amp;&amp; k &lt;= 40) || k == <b>this</b>.RETURN || k == <b>this</b>.TAB || k == <b>this</b>.ESC;
+        },
+
+        isSpecialKey : <b>function</b>(){
+            <b>var</b> k = <b>this</b>.keyCode;
+            k = Ext.isSafari ? (safariKeys[k] || k) : k;
+            <b>return</b> (<b>this</b>.type == <em>'keypress'</em> &amp;&amp; <b>this</b>.ctrlKey) ||
+		<b>this</b>.isNavKeyPress() ||
+        (k == <b>this</b>.BACKSPACE) || <i>// Backspace</i>
+		(k &gt;= 16 &amp;&amp; k &lt;= 20) || <i>// Shift, Ctrl, Alt, Pause, Caps Lock</i>
+		(k &gt;= 44 &amp;&amp; k &lt;= 45);   <i>// Print Screen, Insert</i>
+        },
+
+        <i>/**
+         * Cancels bubbling of the event.
+         */</i>
+        stopPropagation : <b>function</b>(){
+            <b>if</b>(this.browserEvent){
+                <b>if</b>(this.browserEvent.type == <em>'mousedown'</em>){
+                    Ext.EventManager.stoppedMouseDownEvent.fire(<b>this</b>);
+                }
+                E.stopPropagation(<b>this</b>.browserEvent);
+            }
+        },
+
+        <i>/**
+         * Gets the character code <b>for</b> the event.
+         * @<b>return</b> {Number}
+         */</i>
+        getCharCode : <b>function</b>(){
+            <b>return</b> this.charCode || <b>this</b>.keyCode;
+        },
+
+        <i>/**
+         * Returns a normalized keyCode <b>for</b> the event.
+         * @<b>return</b> {Number} The key code
+         */</i>
+        getKey : <b>function</b>(){
+            <b>var</b> k = <b>this</b>.keyCode || <b>this</b>.charCode;
+            <b>return</b> Ext.isSafari ? (safariKeys[k] || k) : k;
+        },
+
+        <i>/**
+         * Gets the x coordinate of the event.
+         * @<b>return</b> {Number}
+         */</i>
+        getPageX : <b>function</b>(){
+            <b>return</b> this.xy[0];
+        },
+
+        <i>/**
+         * Gets the y coordinate of the event.
+         * @<b>return</b> {Number}
+         */</i>
+        getPageY : <b>function</b>(){
+            <b>return</b> this.xy[1];
+        },
+
+        <i>/**
+         * Gets the time of the event.
+         * @<b>return</b> {Number}
+         */</i>
+        getTime : <b>function</b>(){
+            <b>if</b>(this.browserEvent){
+                <b>return</b> E.getTime(<b>this</b>.browserEvent);
+            }
+            <b>return</b> null;
+        },
+
+        <i>/**
+         * Gets the page coordinates of the event.
+         * @<b>return</b> {Array} The xy values like [x, y]
+         */</i>
+        getXY : <b>function</b>(){
+            <b>return</b> this.xy;
+        },
+
+        <i>/**
+         * Gets the target <b>for</b> the event.
+         * @param {String} selector (optional) A simple selector to filter the target or look <b>for</b> an ancestor of the target
+         * @param {Number/Mixed} maxDepth (optional) The max depth to
+                search as a number or element (defaults to 10 || document.body)
+         * @param {Boolean} returnEl (optional) True to <b>return</b> a Ext.Element object instead of DOM node
+         * @<b>return</b> {HTMLelement}
+         */</i>
+        getTarget : <b>function</b>(selector, maxDepth, returnEl){
+            <b>return</b> selector ? Ext.fly(<b>this</b>.target).findParent(selector, maxDepth, returnEl) : (returnEl ? Ext.get(<b>this</b>.target) : <b>this</b>.target);
+        },
+
+        <i>/**
+         * Gets the related target.
+         * @<b>return</b> {HTMLElement}
+         */</i>
+        getRelatedTarget : <b>function</b>(){
+            <b>if</b>(this.browserEvent){
+                <b>return</b> E.getRelatedTarget(<b>this</b>.browserEvent);
+            }
+            <b>return</b> null;
+        },
+
+        <i>/**
+         * Normalizes mouse wheel delta across browsers
+         * @<b>return</b> {Number} The delta
+         */</i>
+        getWheelDelta : <b>function</b>(){
+            <b>var</b> e = <b>this</b>.browserEvent;
+            <b>var</b> delta = 0;
+            <b>if</b>(e.wheelDelta){ <i>/* IE/Opera. */</i>
+                delta = e.wheelDelta/120;
+            }<b>else</b> if(e.detail){ <i>/* Mozilla <b>case</b>. */</i>
+                delta = -e.detail/3;
+            }
+            <b>return</b> delta;
+        },
+
+        <i>/**
+         * Returns true <b>if</b> the control, meta, shift or alt key was pressed during <b>this</b> event.
+         * @<b>return</b> {Boolean}
+         */</i>
+        hasModifier : <b>function</b>(){
+            <b>return</b> ((<b>this</b>.ctrlKey || <b>this</b>.altKey) || <b>this</b>.shiftKey) ? true : false;
+        },
+
+        <i>/**
+         * Returns true <b>if</b> the target of <b>this</b> event is a child of el.  Unless the allowEl parameter is set, it will <b>return</b> false <b>if</b> if the target is el.
+         * Example usage:&lt;pre&gt;&lt;code&gt;
+<i>// Handle click on any child of an element</i>
+Ext.getBody().on(<em>'click'</em>, <b>function</b>(e){
+    <b>if</b>(e.within(<em>'some-el'</em>)){
+        alert(<em>'Clicked on a child of some-el!'</em>);
+    }
+});
+
+<i>// Handle click directly on an element, ignoring clicks on child nodes</i>
+Ext.getBody().on(<em>'click'</em>, <b>function</b>(e,t){
+    <b>if</b>((t.id == <em>'some-el'</em>) &amp;&amp; !e.within(t, true)){
+        alert(<em>'Clicked directly on some-el!'</em>);
+    }
+});
+&lt;/code&gt;&lt;/pre&gt;
+         * @param {Mixed} el The id, DOM element or Ext.Element to check
+         * @param {Boolean} related (optional) true to test <b>if</b> the related target is within el instead of the target
+         * @param {Boolean} allowEl {optional} true to also check <b>if</b> the passed element is the target or related target
+         * @<b>return</b> {Boolean}
+         */</i>
+        within : <b>function</b>(el, related, allowEl){
+            <b>var</b> t = <b>this</b>[related ? &quot;getRelatedTarget&quot; : &quot;getTarget&quot;]();
+            <b>return</b> t &amp;&amp; ((allowEl ? (t === Ext.getDom(el)) : false) || Ext.fly(el).contains(t));
+        },
+
+        getPoint : <b>function</b>(){
+            <b>return</b> new Ext.lib.Point(<b>this</b>.xy[0], <b>this</b>.xy[1]);
+        }
+    };
+
+    <b>return</b> new Ext.EventObjectImpl();
+}();</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

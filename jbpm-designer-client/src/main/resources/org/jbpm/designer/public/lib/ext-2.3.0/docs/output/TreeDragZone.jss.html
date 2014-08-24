@@ -1,0 +1,77 @@
+<html><head><title>TreeDragZone.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>TreeDragZone.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.tree.TreeDragZone
+ * @extends Ext.dd.DragZone
+ * @constructor
+ * @param {String/HTMLElement/Element} tree The {@link Ext.tree.TreePanel} <b>for</b> which to enable dragging
+ * @param {Object} config
+ */</i>
+<b>if</b>(Ext.dd.DragZone){
+Ext.tree.TreeDragZone = <b>function</b>(tree, config){
+    Ext.tree.TreeDragZone.superclass.constructor.call(<b>this</b>, tree.innerCt, config);
+    <i>/**
+    * The TreePanel <b>for</b> this drag zone
+    * @type Ext.tree.TreePanel
+    * @property
+    */</i>
+    <b>this</b>.tree = tree;
+};
+
+Ext.extend(Ext.tree.TreeDragZone, Ext.dd.DragZone, {
+    <i>/**
+     * @cfg {String} ddGroup
+     * A named drag drop group to which <b>this</b> object belongs.  If a group is specified, then <b>this</b> object will only
+     * interact <b>with</b> other drag drop objects <b>in</b> the same group (defaults to <em>'TreeDD'</em>).
+     */</i>
+    ddGroup : &quot;TreeDD&quot;,
+
+    <i>// private</i>
+    onBeforeDrag : <b>function</b>(data, e){
+        <b>var</b> n = data.node;
+        <b>return</b> n &amp;&amp; n.draggable &amp;&amp; !n.disabled;
+    },
+
+    <i>// private</i>
+    onInitDrag : <b>function</b>(e){
+        <b>var</b> data = <b>this</b>.dragData;
+        <b>this</b>.tree.getSelectionModel().select(data.node);
+        <b>this</b>.tree.eventModel.disable();
+        <b>this</b>.proxy.update(&quot;&quot;);
+        data.node.ui.appendDDGhost(<b>this</b>.proxy.ghost.dom);
+        <b>this</b>.tree.fireEvent(&quot;startdrag&quot;, <b>this</b>.tree, data.node, e);
+    },
+
+    <i>// private</i>
+    getRepairXY : <b>function</b>(e, data){
+        <b>return</b> data.node.ui.getDDRepairXY();
+    },
+
+    <i>// private</i>
+    onEndDrag : <b>function</b>(data, e){
+        <b>this</b>.tree.eventModel.enable.defer(100, <b>this</b>.tree.eventModel);
+        <b>this</b>.tree.fireEvent(&quot;enddrag&quot;, <b>this</b>.tree, data.node, e);
+    },
+
+    <i>// private</i>
+    onValidDrop : <b>function</b>(dd, e, id){
+        <b>this</b>.tree.fireEvent(&quot;dragdrop&quot;, <b>this</b>.tree, <b>this</b>.dragData.node, dd, e);
+        <b>this</b>.hideProxy();
+    },
+
+    <i>// private</i>
+    beforeInvalidDrop : <b>function</b>(e, id){
+        <i>// <b>this</b> scrolls the original position back into view</i>
+        <b>var</b> sm = <b>this</b>.tree.getSelectionModel();
+        sm.clearSelections();
+        sm.select(<b>this</b>.dragData.node);
+    },
+    
+    <i>// private</i>
+    afterRepair : <b>function</b>(){
+        <b>if</b> (Ext.enableFx &amp;&amp; <b>this</b>.tree.hlDrop) {
+            Ext.Element.fly(<b>this</b>.dragData.ddel).highlight(<b>this</b>.hlColor || &quot;c3daf9&quot;);
+        }
+        <b>this</b>.dragging = false;
+    }
+});
+}</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

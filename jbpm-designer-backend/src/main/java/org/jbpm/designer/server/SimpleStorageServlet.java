@@ -211,17 +211,17 @@ public class SimpleStorageServlet extends HttpServlet {
 	out
 		.println("<script src=\"lib/path_parser.js\" type=\"text/javascript\" />");
 	out
-		.println("<script src=\"lib/ext-2.0.2/adapter/yui/yui-utilities.js\" type=\"text/javascript\" />");
+		.println("<script src=\"lib/ext-2.3.0/adapter/yui/yui-utilities.js\" type=\"text/javascript\" />");
 	out
-		.println("<script src=\"lib/ext-2.0.2/adapter/yui/ext-yui-adapter.js\" type=\"text/javascript\" />");
+		.println("<script src=\"lib/ext-2.3.0/adapter/yui/ext-yui-adapter.js\" type=\"text/javascript\" />");
 	out
-		.println("<script src=\"lib/ext-2.0.2/ext-all.js\" type=\"text/javascript\" />");
+		.println("<script src=\"lib/ext-2.3.0/ext-all.js\" type=\"text/javascript\" />");
 	out
-		.println("<script src=\"lib/ext-2.0.2/color-field.js\" type=\"text/javascript\" />");
+		.println("<script src=\"lib/ext-2.3.0/color-field.js\" type=\"text/javascript\" />");
 	out.println("<style media=\"screen\" type=\"text/css\">");
-	out.println("@import url(\"lib/ext-2.0.2/resources/css/ext-all.css\");");
+	out.println("@import url(\"lib/ext-2.3.0/resources/css/ext-all.css\");");
 	out
-		.println("@import url(\"lib/ext-2.0.2/resources/css/xtheme-gray.css\");");
+		.println("@import url(\"lib/ext-2.3.0/resources/css/xtheme-gray.css\");");
 	out.println("</style>");
 
 	out

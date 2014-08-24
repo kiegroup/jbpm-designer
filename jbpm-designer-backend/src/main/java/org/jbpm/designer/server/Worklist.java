@@ -118,13 +118,13 @@ public class Worklist extends HttpServlet {
 		out.println("<html><head>");
 		out.println("<title>Worklist</title>");
 		out
-				.println("<script type=\"text/javascript\" src=\"lib/ext-2.0.2/adapter/ext/ext-base.js\"></script>");
+				.println("<script type=\"text/javascript\" src=\"lib/ext-2.3.0/adapter/ext/ext-base.js\"></script>");
 		out
-				.println("<script type=\"text/javascript\" src=\"lib/ext-2.0.2/adapter/yui/yui-utilities.js\"></script>");
+				.println("<script type=\"text/javascript\" src=\"lib/ext-2.3.0/adapter/yui/yui-utilities.js\"></script>");
 		out
-				.println("<script type=\"text/javascript\" src=\"lib/ext-2.0.2/adapter/yui/ext-yui-adapter.js\"></script>");
+				.println("<script type=\"text/javascript\" src=\"lib/ext-2.3.0/adapter/yui/ext-yui-adapter.js\"></script>");
 		out
-				.println("<script type=\"text/javascript\" src=\"lib/ext-2.0.2/ext-all-debug.js\"></script>");
+				.println("<script type=\"text/javascript\" src=\"lib/ext-2.3.0/ext-all-debug.js\"></script>");
 
 		// define data for grid and load model code from external file
 		//			out.println("<script type=\"text/javascript\">Ext.grid.dummyData = [" + jsString + " ]</script>");
@@ -135,8 +135,8 @@ public class Worklist extends HttpServlet {
 
 		out
 				.println("<style type=\"text/css\">\n"
-						+ "@import url(\"lib/ext-2.0.2/resources/css/ext-all.css\");\n"
-						+ "@import url(\"lib/ext-2.0.2/resources/css/xtheme-gray.css\");\n"
+						+ "@import url(\"lib/ext-2.3.0/resources/css/ext-all.css\");\n"
+						+ "@import url(\"lib/ext-2.3.0/resources/css/xtheme-gray.css\");\n"
 						+ "</style>\n");
 		out.println("</head>");
 

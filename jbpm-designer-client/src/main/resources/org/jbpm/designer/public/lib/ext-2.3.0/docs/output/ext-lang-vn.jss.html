@@ -1,0 +1,177 @@
+<html><head><title>ext-lang-vn.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ext-lang-vn.js</h1><pre class="highlighted"><code>&iuml;&raquo;&iquest;<i>/**
+ * List compiled by mystix on the extjs.com forums.
+ * Thank you Mystix!
+ */</i>
+<i>// holder</i>
+<i>/***
+ * Vietnamese translation
+ * By bpmtri
+ * 12-April-2007 04:06PM
+ */</i>
+
+Ext.UpdateManager.defaults.indicatorText = <em>'&lt;div class=&quot;loading-indicator&quot;&gt;&Auml;êang t&aacute;&ordm;&pound;i...&lt;/div&gt;'</em>;
+
+<b>if</b>(Ext.View){
+   Ext.View.prototype.emptyText = &quot;&quot;;
+}
+
+<b>if</b>(Ext.grid.GridPanel){
+   Ext.grid.GridPanel.prototype.ddText = &quot;{0} d&Atilde;&sup2;ng &Auml;ë&AElig;&deg;&aacute;&raquo;&pound;c ch&aacute;&raquo;çn&quot;;
+}
+
+<b>if</b>(Ext.TabPanelItem){
+   Ext.TabPanelItem.prototype.closeText = &quot;&Auml;ê&Atilde;&sup3;ng th&aacute;&ordm;&raquo; n&Atilde;&nbsp;y&quot;;
+}
+
+<b>if</b>(Ext.form.Field){
+   Ext.form.Field.prototype.invalidText = &quot;Gi&Atilde;&iexcl; tr&aacute;&raquo;ã c&aacute;&raquo;&sect;a &Atilde;&acute; n&Atilde;&nbsp;y kh&Atilde;&acute;ng h&aacute;&raquo;&pound;p l&aacute;&raquo;á.&quot;;
+}
+
+<b>if</b>(Ext.LoadMask){
+    Ext.LoadMask.prototype.msg = &quot;&Auml;êang t&aacute;&ordm;&pound;i...&quot;;
+}
+
+Date.monthNames = [
+   &quot;Th&Atilde;&iexcl;ng 1&quot;,
+   &quot;Th&Atilde;&iexcl;ng 2&quot;,
+   &quot;Th&Atilde;&iexcl;ng 3&quot;,
+   &quot;Th&Atilde;&iexcl;ng 4&quot;,
+   &quot;Th&Atilde;&iexcl;ng 5&quot;,
+   &quot;Th&Atilde;&iexcl;ng 6&quot;,
+   &quot;Th&Atilde;&iexcl;ng 7&quot;,
+   &quot;Th&Atilde;&iexcl;ng 8&quot;,
+   &quot;Th&Atilde;&iexcl;ng 9&quot;,
+   &quot;Th&Atilde;&iexcl;ng 10&quot;,
+   &quot;Th&Atilde;&iexcl;ng 11&quot;,
+   &quot;Th&Atilde;&iexcl;ng 12&quot;
+];
+
+Date.dayNames = [
+   &quot;Ch&aacute;&raquo;&sect; nh&aacute;&ordm;&shy;t&quot;,
+   &quot;Th&aacute;&raquo;&copy; hai&quot;,
+   &quot;Th&aacute;&raquo;&copy; ba&quot;,
+   &quot;Th&aacute;&raquo;&copy; t&AElig;&deg;&quot;,
+   &quot;Th&aacute;&raquo;&copy; n&Auml;Ém&quot;,
+   &quot;Th&aacute;&raquo;&copy; s&Atilde;&iexcl;u&quot;,
+   &quot;Th&aacute;&raquo;&copy; b&aacute;&ordm;&pound;y&quot;
+];
+
+<b>if</b>(Ext.MessageBox){
+   Ext.MessageBox.buttonText = {
+      ok     : &quot;&Auml;ê&aacute;&raquo;ìng &Atilde;&frac12;&quot;,
+      cancel : &quot;H&aacute;&raquo;&sect;y b&aacute;&raquo;è&quot;,
+      yes    : &quot;C&Atilde;&sup3;&quot;,
+      no     : &quot;Kh&Atilde;&acute;ng&quot;
+   };
+}
+
+<b>if</b>(Ext.util.Format){
+   Ext.util.Format.date = <b>function</b>(v, format){
+      <b>if</b>(!v) <b>return</b> &quot;&quot;;
+      <b>if</b>(!(v instanceof Date)) v = <b>new</b> Date(Date.parse(v));
+      <b>return</b> v.dateFormat(format || &quot;d/m/Y&quot;);
+   };
+}
+
+<b>if</b>(Ext.DatePicker){
+   Ext.apply(Ext.DatePicker.prototype, {
+      todayText         : &quot;H&Atilde;&acute;m nay&quot;,
+      minText           : &quot;Ng&Atilde;&nbsp;y n&Atilde;&nbsp;y nh&aacute;&raquo;è h&AElig;&iexcl;n ng&Atilde;&nbsp;y nh&aacute;&raquo;è nh&aacute;&ordm;&yen;t&quot;,
+      maxText           : &quot;Ng&Atilde;&nbsp;y n&Atilde;&nbsp;y l&aacute;&raquo;õn h&AElig;&iexcl;n ng&Atilde;&nbsp;y l&aacute;&raquo;õn nh&aacute;&ordm;&yen;t&quot;,
+      disabledDaysText  : &quot;&quot;,
+      disabledDatesText : &quot;&quot;,
+      monthNames	: Date.monthNames,
+      dayNames		: Date.dayNames,
+      nextText          : <em>'Th&Atilde;&iexcl;ng sau (Control+Right)'</em>,
+      prevText          : <em>'Th&Atilde;&iexcl;ng tr&AElig;&deg;&aacute;&raquo;õc (Control+Left)'</em>,
+      monthYearText     : <em>'Ch&aacute;&raquo;çn m&aacute;&raquo;ôt th&Atilde;&iexcl;ng (Control+Up/Down &Auml;ë&aacute;&raquo;É thay &Auml;ë&aacute;&raquo;ïi n&Auml;Ém)'</em>,
+      todayTip          : &quot;{0} (Spacebar - Ph&Atilde;&shy;m tr&aacute;&ordm;&macr;ng)&quot;,
+      format            : &quot;d/m/y&quot;
+   });
+}
+
+<b>if</b>(Ext.PagingToolbar){
+   Ext.apply(Ext.PagingToolbar.prototype, {
+      beforePageText : &quot;Trang&quot;,
+      afterPageText  : &quot;of {0}&quot;,
+      firstText      : &quot;Trang &Auml;ë&aacute;&ordm;&sect;u&quot;,
+      prevText       : &quot;Trang tr&AElig;&deg;&aacute;&raquo;õc&quot;,
+      nextText       : &quot;Trang sau&quot;,
+      lastText       : &quot;Trang cu&aacute;&raquo;ëi&quot;,
+      refreshText    : &quot;T&aacute;&ordm;&pound;i l&aacute;&ordm;&iexcl;i&quot;,
+      displayMsg     : &quot;Hi&aacute;&raquo;Én th&aacute;&raquo;ã {0} - {1} c&aacute;&raquo;&sect;a {2}&quot;,
+      emptyMsg       : <em>'Kh&Atilde;&acute;ng c&Atilde;&sup3; d&aacute;&raquo;&macr; li&aacute;&raquo;áu &Auml;ë&aacute;&raquo;É hi&aacute;&raquo;Én th&aacute;&raquo;ã'</em>
+   });
+}
+
+<b>if</b>(Ext.form.TextField){
+   Ext.apply(Ext.form.TextField.prototype, {
+      minLengthText : &quot;Chi&aacute;&raquo;Åu d&Atilde;&nbsp;i t&aacute;&raquo;ëi thi&aacute;&raquo;Éu c&aacute;&raquo;&sect;a &Atilde;&acute; n&Atilde;&nbsp;y l&Atilde;&nbsp; {0}&quot;,
+      maxLengthText : &quot;Chi&aacute;&raquo;Åu d&Atilde;&nbsp;i t&aacute;&raquo;ëi &Auml;ëa c&aacute;&raquo;&sect;a &Atilde;&acute; n&Atilde;&nbsp;y l&Atilde;&nbsp; {0}&quot;,
+      blankText     : &quot;&Atilde;î n&Atilde;&nbsp;y c&aacute;&ordm;&sect;n ph&aacute;&ordm;&pound;i nh&aacute;&ordm;&shy;p gi&Atilde;&iexcl; tr&aacute;&raquo;ã&quot;,
+      regexText     : &quot;&quot;,
+      emptyText     : null
+   });
+}
+
+<b>if</b>(Ext.form.NumberField){
+   Ext.apply(Ext.form.NumberField.prototype, {
+      minText : &quot;Gi&Atilde;&iexcl; tr&aacute;&raquo;ã nh&aacute;&raquo;è nh&aacute;&ordm;&yen;t c&aacute;&raquo;&sect;a &Atilde;&acute; n&Atilde;&nbsp;y l&Atilde;&nbsp; {0}&quot;,
+      maxText : &quot;Gi&Atilde;&iexcl; tr&aacute;&raquo;ã l&aacute;&raquo;õn nh&aacute;&ordm;&yen;t c&aacute;&raquo;&sect;a &Atilde;&acute; n&Atilde;&nbsp;y l&Atilde;&nbsp;  {0}&quot;,
+      nanText : &quot;{0} h&Atilde;&acute;ng ph&aacute;&ordm;&pound;i l&Atilde;&nbsp; m&aacute;&raquo;ôt s&aacute;&raquo;ë h&aacute;&raquo;&pound;p l&aacute;&raquo;á&quot;
+   });
+}
+
+<b>if</b>(Ext.form.DateField){
+   Ext.apply(Ext.form.DateField.prototype, {
+      disabledDaysText  : &quot;V&Atilde;&acute; hi&aacute;&raquo;áu&quot;,
+      disabledDatesText : &quot;V&Atilde;&acute; hi&aacute;&raquo;áu&quot;,
+      minText           : &quot;Ng&Atilde;&nbsp;y nh&aacute;&ordm;&shy;p trong &Atilde;&acute; n&Atilde;&nbsp;y ph&aacute;&ordm;&pound;i sau ng&Atilde;&nbsp;y {0}&quot;,
+      maxText           : &quot;Ng&Atilde;&nbsp;y nh&aacute;&ordm;&shy;p trong &Atilde;&acute; n&Atilde;&nbsp;y ph&aacute;&ordm;&pound;i tr&AElig;&deg;&aacute;&raquo;õc ng&Atilde;&nbsp;y {0}&quot;,
+      invalidText       : &quot;{0} kh&Atilde;&acute;ng ph&aacute;&ordm;&pound;i l&Atilde;&nbsp; m&aacute;&raquo;ôt ng&Atilde;&nbsp;y h&aacute;&raquo;&pound;p l&aacute;&raquo;á - ph&aacute;&ordm;&pound;i c&Atilde;&sup3; d&aacute;&ordm;&iexcl;ng {1}&quot;,
+      format            : &quot;d/m/y&quot;
+   });
+}
+
+<b>if</b>(Ext.form.ComboBox){
+   Ext.apply(Ext.form.ComboBox.prototype, {
+      loadingText       : &quot;&Auml;êang t&aacute;&ordm;&pound;i...&quot;,
+      valueNotFoundText : undefined
+   });
+}
+
+<b>if</b>(Ext.form.VTypes){
+   Ext.apply(Ext.form.VTypes, {
+      emailText    : <em>'Gi&Atilde;&iexcl; tr&aacute;&raquo;ã c&aacute;&raquo;&sect;a &Atilde;&acute; n&Atilde;&nbsp;y ph&aacute;&ordm;&pound;i l&Atilde;&nbsp; m&aacute;&raquo;ôt &Auml;ë&aacute;&raquo;ãa ch&aacute;&raquo;â email c&Atilde;&sup3; d&aacute;&ordm;&iexcl;ng nh&AElig;&deg; &quot;ten@abc.com&quot;'</em>,
+      urlText      : <em>'Gi&Atilde;&iexcl; tr&aacute;&raquo;ã c&aacute;&raquo;&sect;a &Atilde;&acute; n&Atilde;&nbsp;y ph&aacute;&ordm;&pound;i l&Atilde;&nbsp; m&aacute;&raquo;ôt &Auml;ë&aacute;&raquo;ãa ch&aacute;&raquo;â web(URL) h&aacute;&raquo;&pound;p l&aacute;&raquo;á, c&Atilde;&sup3; d&aacute;&ordm;&iexcl;ng nh&AElig;&deg; &quot;http:/'</em>+<em>'/www.domain.com&quot;'</em>,
+      alphaText    : <em>'&Atilde;î n&Atilde;&nbsp;y ch&aacute;&raquo;â &Auml;ë&AElig;&deg;&aacute;&raquo;&pound;c nh&aacute;&ordm;&shy;p c&Atilde;&iexcl;c k&Atilde;&shy; t&aacute;&raquo;&plusmn; v&Atilde;&nbsp; g&aacute;&ordm;&iexcl;ch d&AElig;&deg;&aacute;&raquo;õi(_)'</em>,
+      alphanumText : <em>'&Atilde;î n&Atilde;&nbsp;y ch&aacute;&raquo;â &Auml;ë&AElig;&deg;&aacute;&raquo;&pound;c nh&aacute;&ordm;&shy;p c&Atilde;&iexcl;c k&Atilde;&shy; t&aacute;&raquo;&plusmn;, s&aacute;&raquo;ë v&Atilde;&nbsp; g&aacute;&ordm;&iexcl;ch d&AElig;&deg;&aacute;&raquo;õi(_)'</em>
+   });
+}
+
+<b>if</b>(Ext.grid.GridView){
+   Ext.apply(Ext.grid.GridView.prototype, {
+      sortAscText  : &quot;T&Auml;Éng d&aacute;&ordm;&sect;n&quot;,
+      sortDescText : &quot;Gi&aacute;&ordm;&pound;m d&aacute;&ordm;&sect;n&quot;,
+      lockText     : &quot;Kh&Atilde;&sup3;a c&aacute;&raquo;ôt&quot;,
+      unlockText   : &quot;B&aacute;&raquo;è kh&Atilde;&sup3;a c&aacute;&raquo;ôt&quot;,
+      columnsText  : &quot;C&Atilde;&iexcl;c c&aacute;&raquo;ôt&quot;
+   });
+}
+
+<b>if</b>(Ext.grid.PropertyColumnModel){
+   Ext.apply(Ext.grid.PropertyColumnModel.prototype, {
+      nameText   : &quot;T&Atilde;&ordf;n&quot;,
+      valueText  : &quot;Gi&Atilde;&iexcl; tr&aacute;&raquo;ã&quot;,
+      dateFormat : &quot;j/m/Y&quot;
+   });
+}
+
+<b>if</b>(Ext.layout.BorderLayout &amp;&amp; Ext.layout.BorderLayout.SplitRegion){
+   Ext.apply(Ext.layout.BorderLayout.SplitRegion.prototype, {
+      splitTip            : &quot;K&Atilde;&copy;o gi&aacute;&raquo;&macr; chu&aacute;&raquo;ôt &Auml;ë&aacute;&raquo;É thay &Auml;ë&aacute;&raquo;ïi k&Atilde;&shy;ch th&AElig;&deg;&aacute;&raquo;õc.&quot;,
+      collapsibleSplitTip : &quot;K&Atilde;&copy;o gi&aacute;&raquo;&macr; chu&aacute;&raquo;ôt &Auml;ë&aacute;&raquo;É thay &Auml;ë&aacute;&raquo;ïi k&Atilde;&shy;ch th&AElig;&deg;&aacute;&raquo;õc. Nh&aacute;&ordm;&yen;p &Auml;ë&Atilde;&ordm;p &Auml;ë&aacute;&raquo;É &aacute;&ordm;&copy;n &Auml;ëi.&quot;
+   });
+}
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

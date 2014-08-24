@@ -1,0 +1,152 @@
+<html><head><title>Tip.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>Tip.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.Tip
+ * @extends Ext.Panel
+ * This is the base class <b>for</b> {@link Ext.QuickTip} and {@link Ext.Tooltip} that provides the basic layout and
+ * positioning that all tip-based classes require. This class can be used directly <b>for</b> simple, statically-positioned
+ * tips that are displayed programmatically, or it can be extended to provide custom tip implementations.
+ * @constructor
+ * Create a <b>new</b> Tip
+ * @param {Object} config The configuration options
+ */</i>
+Ext.Tip = Ext.extend(Ext.Panel, {
+    <i>/**
+     * @cfg {Boolean} closable True to render a close tool button into the tooltip header (defaults to false).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Number} width
+     * Width <b>in</b> pixels of the tip (defaults to auto).  Width will be ignored <b>if</b> it exceeds the bounds of
+     * {@link #minWidth} or {@link #maxWidth}.  The maximum supported value is 500.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Number} minWidth The minimum width of the tip <b>in</b> pixels (defaults to 40).
+     */</i>
+    minWidth : 40,
+    <i>/**
+     * @cfg {Number} maxWidth The maximum width of the tip <b>in</b> pixels (defaults to 300).  The maximum supported value is 500.
+     */</i>
+    maxWidth : 300,
+    <i>/**
+     * @cfg {Boolean/String} shadow True or &quot;sides&quot; <b>for</b> the <b>default</b> effect, &quot;frame&quot; <b>for</b> 4-way shadow, and &quot;drop&quot;
+     * <b>for</b> bottom-right shadow (defaults to &quot;sides&quot;).
+     */</i>
+    shadow : &quot;sides&quot;,
+    <i>/**
+     * @cfg {String} defaultAlign &lt;b&gt;Experimental&lt;/b&gt;. The <b>default</b> {@link Ext.Element#alignTo} anchor position value
+     * <b>for</b> this tip relative to its element of origin (defaults to &quot;tl-bl?&quot;).
+     */</i>
+    defaultAlign : &quot;tl-bl?&quot;,
+    autoRender: true,
+    quickShowInterval : 250,
+
+    <i>// private panel overrides</i>
+    frame:true,
+    hidden:true,
+    baseCls: <em>'x-tip'</em>,
+    floating:{shadow:true,shim:true,useDisplay:true,constrain:false},
+    autoHeight:true,
+
+    <i>// private</i>
+    initComponent : <b>function</b>(){
+        Ext.Tip.superclass.initComponent.call(<b>this</b>);
+        <b>if</b>(this.closable &amp;&amp; !<b>this</b>.title){
+            <b>this</b>.elements += <em>',header'</em>;
+        }
+    },
+
+    <i>// private</i>
+    afterRender : <b>function</b>(){
+        Ext.Tip.superclass.afterRender.call(<b>this</b>);
+        <b>if</b>(this.closable){
+            <b>this</b>.addTool({
+                id: <em>'close'</em>,
+                handler: <b>this</b>.hide,
+                scope: <b>this</b>
+            });
+        }
+    },
+
+    <i>/**
+     * Shows <b>this</b> tip at the specified XY position.  Example usage:
+     * &lt;pre&gt;&lt;code&gt;
+<i>// Show the tip at x:50 and y:100</i>
+tip.showAt([50,100]);
+&lt;/code&gt;&lt;/pre&gt;
+     * @param {Array} xy An array containing the x and y coordinates
+     */</i>
+    showAt : <b>function</b>(xy){
+        Ext.Tip.superclass.show.call(<b>this</b>);
+        <b>if</b>(this.measureWidth !== false &amp;&amp; (!<b>this</b>.initialConfig || <b>typeof</b> this.initialConfig.width != <em>'number'</em>)){
+            <b>this</b>.doAutoWidth();
+        }
+        <b>if</b>(this.constrainPosition){
+            xy = <b>this</b>.el.adjustForConstraints(xy);
+        }
+        <b>this</b>.setPagePosition(xy[0], xy[1]);
+    },
+
+    <i>// protected</i>
+    doAutoWidth : <b>function</b>(){
+        <b>var</b> bw = <b>this</b>.body.getTextWidth();
+        <b>if</b>(this.title){
+            bw = Math.max(bw, <b>this</b>.header.child(<em>'span'</em>).getTextWidth(<b>this</b>.title));
+        }
+        bw += <b>this</b>.getFrameWidth() + (<b>this</b>.closable ? 20 : 0) + <b>this</b>.body.getPadding(&quot;lr&quot;);
+        <b>this</b>.setWidth(bw.constrain(<b>this</b>.minWidth, <b>this</b>.maxWidth));
+        
+        <i>// IE7 repaint bug on initial show</i>
+        <b>if</b>(Ext.isIE7 &amp;&amp; !<b>this</b>.repainted){
+            <b>this</b>.el.repaint();
+            <b>this</b>.repainted = true;
+        }
+    },
+
+    <i>/**
+     * &lt;b&gt;Experimental&lt;/b&gt;. Shows <b>this</b> tip at a position relative to another element using a standard {@link Ext.Element#alignTo}
+     * anchor position value.  Example usage:
+     * &lt;pre&gt;&lt;code&gt;
+<i>// Show the tip at the <b>default</b> position (<em>'tl-br?'</em>)</i>
+tip.showBy(<em>'my-el'</em>);
+
+<i>// Show the tip<em>'s top-left corner anchored to the element'</em>s top-right corner</i>
+tip.showBy(<em>'my-el'</em>, <em>'tl-tr'</em>);
+&lt;/code&gt;&lt;/pre&gt;
+     * @param {Mixed} el An HTMLElement, Ext.Element or string id of the target element to align to
+     * @param {String} position (optional) A valid {@link Ext.Element#alignTo} anchor position (defaults to <em>'tl-br?'</em> or
+     * {@link #defaultAlign} <b>if</b> specified).
+     */</i>
+    showBy : <b>function</b>(el, pos){
+        <b>if</b>(!<b>this</b>.rendered){
+            <b>this</b>.render(Ext.getBody());
+        }
+        <b>this</b>.showAt(<b>this</b>.el.getAlignToXY(el, pos || <b>this</b>.defaultAlign));
+    },
+
+    initDraggable : <b>function</b>(){
+        <b>this</b>.dd = <b>new</b> Ext.Tip.DD(<b>this</b>, <b>typeof</b> this.draggable == <em>'boolean'</em> ? null : <b>this</b>.draggable);
+        <b>this</b>.header.addClass(<em>'x-tip-draggable'</em>);
+    }
+});
+
+<i>// private - custom Tip DD implementation</i>
+Ext.Tip.DD = <b>function</b>(tip, config){
+    Ext.apply(<b>this</b>, config);
+    <b>this</b>.tip = tip;
+    Ext.Tip.DD.superclass.constructor.call(<b>this</b>, tip.el.id, <em>'WindowDD-'</em>+tip.id);
+    <b>this</b>.setHandleElId(tip.header.id);
+    <b>this</b>.scroll = false;
+};
+
+Ext.extend(Ext.Tip.DD, Ext.dd.DD, {
+    moveOnly:true,
+    scroll:false,
+    headerOffsets:[100, 25],
+    startDrag : <b>function</b>(){
+        <b>this</b>.tip.el.disableShadow();
+    },
+    endDrag : <b>function</b>(e){
+        <b>this</b>.tip.el.enableShadow(true);
+    }
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

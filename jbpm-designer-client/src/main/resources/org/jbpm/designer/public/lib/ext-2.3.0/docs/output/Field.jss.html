@@ -1,0 +1,690 @@
+<html><head><title>Field.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>Field.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.form.Field
+ * @extends Ext.BoxComponent
+ * Base class <b>for</b> form fields that provides <b>default</b> event handling, sizing, value handling and other functionality.
+ * @constructor
+ * Creates a <b>new</b> Field
+ * @param {Object} config Configuration options
+ */</i>
+Ext.form.Field = Ext.extend(Ext.BoxComponent,  {
+    <i>/**
+     * @cfg {String} fieldLabel The label text to display next to <b>this</b> field (defaults to <em>''</em>)
+     * &lt;p&gt;&lt;b&gt;A Field<em>'s label is not by <b>default</b> rendered as part of the Field'</em>s structure.
+     * The label is rendered by the {@link Ext.layout.FormLayout form layout} layout manager
+     * of the {@link Ext.form.Container Container} to which the Field is added.&lt;/b&gt;&lt;/p&gt;
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} labelStyle A CSS style specification to apply directly to <b>this</b> field's label (defaults to the
+     * container<em>'s labelStyle value <b>if</b> set, or '</em><em>'). For example, &lt;code&gt;labelStyle: '</em>font-weight:bold;'&lt;/code&gt;.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} labelSeparator The standard separator to display after the text of each form label (defaults
+     * to the value of {@link Ext.layout.FormLayout#labelSeparator}, which is a colon <em>':'</em> by <b>default</b>).  To display
+     * no separator <b>for</b> this field<em>'s label specify empty string '</em>'.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} hideLabel True to completely hide the label element (defaults to false)
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} clearCls The CSS class used to provide field clearing (defaults to <em>'x-form-clear-left'</em>)
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} itemCls An additional CSS class to apply to the wrapper's form item element of <b>this</b> field (defaults
+     * to the container<em>'s itemCls value <b>if</b> set, or '</em>').  Since it is applied to the item wrapper, it allows you to write
+     * standard CSS rules that can apply to the field, the label (<b>if</b> specified) or any other element within the markup <b>for</b>
+     * the field. NOTE: <b>this</b> will not have any effect on fields that are not part of a form. Example use:
+     * &lt;pre&gt;&lt;code&gt;
+<i>// Apply a style to the field's label:</i>
+&amp;lt;style&gt;
+    .required .x-form-item-label {font-weight:bold;color:red;}
+&amp;lt;/style&gt;
+
+<b>new</b> Ext.FormPanel({
+	height: 100,
+	renderTo: document.body,
+	items: [{
+		xtype: <em>'textfield'</em>,
+		fieldLabel: <em>'Name'</em>,
+		itemCls: <em>'required'</em> <i>//<b>this</b> label will be styled</i>
+	},{
+		xtype: <em>'textfield'</em>,
+		fieldLabel: <em>'Favorite Color'</em>
+	}]
+});
+&lt;/code&gt;&lt;/pre&gt;
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} inputType The type attribute <b>for</b> input fields -- e.g. radio, text, password, file (defaults
+     * to &quot;text&quot;). The types &quot;file&quot; and &quot;password&quot; must be used to render those field types currently -- there are
+     * no separate Ext components <b>for</b> those. Note that <b>if</b> you use &lt;tt&gt;inputType:<em>'file'</em>&lt;/tt&gt;, {@link #emptyText}
+     * is not supported and should be avoided.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Number} tabIndex The tabIndex <b>for</b> this field. Note <b>this</b> only applies to fields that are rendered,
+     * not those which are built via applyTo (defaults to undefined).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Mixed} value A value to initialize <b>this</b> field <b>with</b> (defaults to undefined).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} name The field's HTML name attribute (defaults to &quot;&quot;).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} cls A custom CSS class to apply to the field's underlying element (defaults to &quot;&quot;).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} invalidClass The CSS class to use when marking a field invalid (defaults to &quot;x-form-invalid&quot;)
+     */</i>
+    invalidClass : &quot;x-form-invalid&quot;,
+    <i>/**
+     * @cfg {String} invalidText The error text to use when marking a field invalid and no message is provided
+     * (defaults to &quot;The value <b>in</b> this field is invalid&quot;)
+     */</i>
+    invalidText : &quot;The value <b>in</b> this field is invalid&quot;,
+    <i>/**
+     * @cfg {String} focusClass The CSS class to use when the field receives focus (defaults to &quot;x-form-focus&quot;)
+     */</i>
+    focusClass : &quot;x-form-focus&quot;,
+    <i>/**
+     * @cfg {String/Boolean} validationEvent The event that should initiate field validation. Set to false to disable
+      automatic validation (defaults to &quot;keyup&quot;).
+     */</i>
+    validationEvent : &quot;keyup&quot;,
+    <i>/**
+     * @cfg {Boolean} validateOnBlur Whether the field should validate when it loses focus (defaults to true).
+     */</i>
+    validateOnBlur : true,
+    <i>/**
+     * @cfg {Number} validationDelay The length of time <b>in</b> milliseconds after user input begins until validation
+     * is initiated (defaults to 250)
+     */</i>
+    validationDelay : 250,
+    <i>/**
+     * @cfg {String/Object} autoCreate A DomHelper element spec, or true <b>for</b> a <b>default</b> element spec (defaults to
+     * {tag: &quot;input&quot;, type: &quot;text&quot;, size: &quot;20&quot;, autocomplete: &quot;off&quot;})
+     */</i>
+    defaultAutoCreate : {tag: &quot;input&quot;, type: &quot;text&quot;, size: &quot;20&quot;, autocomplete: &quot;off&quot;},
+    <i>/**
+     * @cfg {String} fieldClass The <b>default</b> CSS class <b>for</b> the field (defaults to &quot;x-form-field&quot;)
+     */</i>
+    fieldClass : &quot;x-form-field&quot;,
+    <i>/**
+     * @cfg {String} msgTarget The location where error text should display.  Should be one of the following values
+     * (defaults to <em>'qtip'</em>):
+     *&lt;pre&gt;
+Value         Description
+-----------   ----------------------------------------------------------------------
+qtip          Display a quick tip when the user hovers over the field
+title         Display a <b>default</b> browser title attribute popup
+under         Add a block div beneath the field containing the error text
+side          Add an error icon to the right of the field <b>with</b> a popup on hover
+[element id]  Add the error text directly to the innerHTML of the specified element
+&lt;/pre&gt;
+     */</i>
+    msgTarget : <em>'qtip'</em>,
+    <i>/**
+     * @cfg {String} msgFx &lt;b&gt;Experimental&lt;/b&gt; The effect used when displaying a validation message under the field
+     * (defaults to <em>'normal'</em>).
+     */</i>
+    msgFx : <em>'normal'</em>,
+    <i>/**
+     * @cfg {Boolean} readOnly True to mark the field as readOnly <b>in</b> HTML (defaults to false) -- Note: <b>this</b> only
+     * sets the element's readOnly DOM attribute.
+     */</i>
+    readOnly : false,
+    <i>/**
+     * @cfg {Boolean} disabled True to disable the field (defaults to false).
+     * &lt;p&gt;Be aware that conformant <b>with</b> the &lt;a href=&quot;http:<i>//www.w3.org/TR/html401/interact/forms.html#h-17.12.1&quot;&gt;HTML specification&lt;/a&gt;,</i>
+     * disabled Fields will not be {@link Ext.form.BasicForm#submit submitted}.&lt;/p&gt;
+     */</i>
+    disabled : false,
+
+    <i>// private</i>
+    isFormField : true,
+
+    <i>// private</i>
+    hasFocus : false,
+
+	<i>// private</i>
+	initComponent : <b>function</b>(){
+        Ext.form.Field.superclass.initComponent.call(<b>this</b>);
+        <b>this</b>.addEvents(
+            <i>/**
+             * @event focus
+             * Fires when <b>this</b> field receives input focus.
+             * @param {Ext.form.Field} <b>this</b>
+             */</i>
+            <em>'focus'</em>,
+            <i>/**
+             * @event blur
+             * Fires when <b>this</b> field loses input focus.
+             * @param {Ext.form.Field} <b>this</b>
+             */</i>
+            <em>'blur'</em>,
+            <i>/**
+             * @event specialkey
+             * Fires when any key related to navigation (arrows, tab, enter, esc, etc.) is pressed.  You can check
+             * {@link Ext.EventObject#getKey} to determine which key was pressed.
+             * @param {Ext.form.Field} <b>this</b>
+             * @param {Ext.EventObject} e The event object
+             */</i>
+            <em>'specialkey'</em>,
+            <i>/**
+             * @event change
+             * Fires just before the field blurs <b>if</b> the field value has changed.
+             * @param {Ext.form.Field} <b>this</b>
+             * @param {Mixed} newValue The <b>new</b> value
+             * @param {Mixed} oldValue The original value
+             */</i>
+            <em>'change'</em>,
+            <i>/**
+             * @event invalid
+             * Fires after the field has been marked as invalid.
+             * @param {Ext.form.Field} <b>this</b>
+             * @param {String} msg The validation message
+             */</i>
+            <em>'invalid'</em>,
+            <i>/**
+             * @event valid
+             * Fires after the field has been validated <b>with</b> no errors.
+             * @param {Ext.form.Field} <b>this</b>
+             */</i>
+            <em>'valid'</em>
+        );
+    },
+
+    <i>/**
+     * Returns the name attribute of the field <b>if</b> available
+     * @<b>return</b> {String} name The field name
+     */</i>
+    getName: <b>function</b>(){
+        <b>return</b> this.rendered &amp;&amp; <b>this</b>.el.dom.name ? <b>this</b>.el.dom.name : <b>this</b>.name || <b>this</b>.id || <em>''</em>;
+    },
+
+    <i>// private</i>
+    onRender : <b>function</b>(ct, position){
+        Ext.form.Field.superclass.onRender.call(<b>this</b>, ct, position);
+        <b>if</b>(!<b>this</b>.el){
+            <b>var</b> cfg = <b>this</b>.getAutoCreate();
+            <b>if</b>(!cfg.name){
+                cfg.name = <b>this</b>.name || <b>this</b>.id;
+            }
+            <b>if</b>(this.inputType){
+                cfg.type = <b>this</b>.inputType;
+            }
+            <b>this</b>.el = ct.createChild(cfg, position);
+        }
+        <b>var</b> type = <b>this</b>.el.dom.type;
+        <b>if</b>(type){
+            <b>if</b>(type == <em>'password'</em>){
+                type = <em>'text'</em>;
+            }
+            <b>this</b>.el.addClass(<em>'x-form-'</em>+type);
+        }
+        <b>if</b>(this.readOnly){
+            <b>this</b>.el.dom.readOnly = true;
+        }
+        <b>if</b>(this.tabIndex !== undefined){
+            <b>this</b>.el.dom.setAttribute(<em>'tabIndex'</em>, <b>this</b>.tabIndex);
+        }
+
+        <b>this</b>.el.addClass([<b>this</b>.fieldClass, <b>this</b>.cls]);
+    },
+
+    <i>// private</i>
+    initValue : <b>function</b>(){
+        <b>if</b>(this.value !== undefined){
+            <b>this</b>.setValue(<b>this</b>.value);
+        }<b>else</b> if(!Ext.isEmpty(<b>this</b>.el.dom.value) &amp;&amp; <b>this</b>.el.dom.value != <b>this</b>.emptyText){
+            <b>this</b>.setValue(<b>this</b>.el.dom.value);
+        }
+        <i>// reference to original value <b>for</b> reset</i>
+        <b>this</b>.originalValue = <b>this</b>.getValue();
+    },
+
+    <i>/**
+     * &lt;p&gt;Returns true <b>if</b> the value of <b>this</b> Field has been changed from its original value.
+     * Will <b>return</b> false <b>if</b> the field is disabled or has not been rendered yet.&lt;/p&gt;
+     * &lt;p&gt;Note that <b>if</b> the owning {@link Ext.form.BasicForm form} was configured <b>with</b> {@link Ext.form.BasicForm#trackResetOnLoad}
+     * then the &lt;i&gt;original value&lt;/i&gt; is updated when the values are loaded by {@link Ext.form.BasicForm#setValues}.&lt;/p&gt;
+     * @<b>return</b> {Boolean} True <b>if</b> this field has been changed from its original value (and is not disabled), false otherwise.
+     */</i>
+    isDirty : <b>function</b>() {
+        <b>if</b>(this.disabled || !<b>this</b>.rendered) {
+            <b>return</b> false;
+        }
+        <b>return</b> String(<b>this</b>.getValue()) !== String(<b>this</b>.originalValue);
+    },
+
+    <i>// private</i>
+    afterRender : <b>function</b>(){
+        Ext.form.Field.superclass.afterRender.call(<b>this</b>);
+        <b>this</b>.initEvents();
+        <b>this</b>.initValue();
+    },
+
+    <i>// private</i>
+    fireKey : <b>function</b>(e){
+        <b>if</b>(e.isSpecialKey()){
+            <b>this</b>.fireEvent(&quot;specialkey&quot;, <b>this</b>, e);
+        }
+    },
+
+    <i>/**
+     * Resets the current field value to the originally loaded value and clears any validation messages
+     */</i>
+    reset : <b>function</b>(){
+        <b>this</b>.setValue(<b>this</b>.originalValue);
+        <b>this</b>.clearInvalid();
+    },
+
+    <i>// private</i>
+    initEvents : <b>function</b>(){
+        <b>this</b>.el.on(Ext.isIE || (Ext.isWebKit &amp;&amp; !Ext.isSafari2) ? &quot;keydown&quot; : &quot;keypress&quot;, <b>this</b>.fireKey,  <b>this</b>);
+        <b>this</b>.el.on(&quot;focus&quot;, <b>this</b>.onFocus,  <b>this</b>);
+
+        <i>// fix weird FF/Win editor issue when changing OS window focus</i>
+        <b>var</b> o = <b>this</b>.inEditor &amp;&amp; Ext.isWindows &amp;&amp; Ext.isGecko ? {buffer:10} : null;
+        <b>this</b>.el.on(&quot;blur&quot;, <b>this</b>.onBlur,  <b>this</b>, o);
+    },
+
+    <i>// private</i>
+    onFocus : <b>function</b>(){
+        <b>if</b>(this.focusClass){
+            <b>this</b>.el.addClass(<b>this</b>.focusClass);
+        }
+        <b>if</b>(!<b>this</b>.hasFocus){
+            <b>this</b>.hasFocus = true;
+            <b>this</b>.startValue = <b>this</b>.getValue();
+            <b>this</b>.fireEvent(&quot;focus&quot;, <b>this</b>);
+        }
+    },
+
+    <i>// private</i>
+    beforeBlur : Ext.emptyFn,
+
+    <i>// private</i>
+    onBlur : <b>function</b>(){
+        <b>this</b>.beforeBlur();
+        <b>if</b>(this.focusClass){
+            <b>this</b>.el.removeClass(<b>this</b>.focusClass);
+        }
+        <b>this</b>.hasFocus = false;
+        <b>if</b>(this.validationEvent !== false &amp;&amp; <b>this</b>.validateOnBlur &amp;&amp; <b>this</b>.validationEvent != &quot;blur&quot;){
+            <b>this</b>.validate();
+        }
+        <b>var</b> v = <b>this</b>.getValue();
+        <b>if</b>(String(v) !== String(<b>this</b>.startValue)){
+            <b>this</b>.fireEvent(<em>'change'</em>, <b>this</b>, v, <b>this</b>.startValue);
+        }
+        <b>this</b>.fireEvent(&quot;blur&quot;, <b>this</b>);
+    },
+
+    <i>/**
+     * Returns whether or not the field value is currently valid
+     * @param {Boolean} preventMark True to disable marking the field invalid
+     * @<b>return</b> {Boolean} True <b>if</b> the value is valid, <b>else</b> false
+     */</i>
+    isValid : <b>function</b>(preventMark){
+        <b>if</b>(this.disabled){
+            <b>return</b> true;
+        }
+        <b>var</b> restore = <b>this</b>.preventMark;
+        <b>this</b>.preventMark = preventMark === true;
+        <b>var</b> v = <b>this</b>.validateValue(<b>this</b>.processValue(<b>this</b>.getRawValue()));
+        <b>this</b>.preventMark = restore;
+        <b>return</b> v;
+    },
+
+    <i>/**
+     * Validates the field value
+     * @<b>return</b> {Boolean} True <b>if</b> the value is valid, <b>else</b> false
+     */</i>
+    validate : <b>function</b>(){
+        <b>if</b>(this.disabled || <b>this</b>.validateValue(<b>this</b>.processValue(<b>this</b>.getRawValue()))){
+            <b>this</b>.clearInvalid();
+            <b>return</b> true;
+        }
+        <b>return</b> false;
+    },
+
+    <i>// protected - should be overridden by subclasses <b>if</b> necessary to prepare raw values <b>for</b> validation</i>
+    processValue : <b>function</b>(value){
+        <b>return</b> value;
+    },
+
+    <i>// private</i>
+    <i>// Subclasses should provide the validation implementation by overriding <b>this</b></i>
+    validateValue : <b>function</b>(value){
+        <b>return</b> true;
+    },
+
+    <i>/**
+     * Mark <b>this</b> field as invalid, using {@link #msgTarget} to determine how to display the error and
+     * applying {@link #invalidClass} to the field's element.
+     * @param {String} msg (optional) The validation message (defaults to {@link #invalidText})
+     */</i>
+    markInvalid : <b>function</b>(msg){
+        <b>if</b>(!<b>this</b>.rendered || <b>this</b>.preventMark){ <i>// not rendered</i>
+            <b>return</b>;
+        }
+        <b>this</b>.el.addClass(<b>this</b>.invalidClass);
+        msg = msg || <b>this</b>.invalidText;
+
+        <b>switch</b>(this.msgTarget){
+            <b>case</b> <em>'qtip'</em>:
+                <b>this</b>.el.dom.qtip = msg;
+                <b>this</b>.el.dom.qclass = <em>'x-form-invalid-tip'</em>;
+                <b>if</b>(Ext.QuickTips){ <i>// fix <b>for</b> floating editors interacting <b>with</b> DND</i>
+                    Ext.QuickTips.enable();
+                }
+                <b>break</b>;
+            <b>case</b> <em>'title'</em>:
+                <b>this</b>.el.dom.title = msg;
+                <b>break</b>;
+            <b>case</b> <em>'under'</em>:
+                <b>if</b>(!<b>this</b>.errorEl){
+                    <b>var</b> elp = <b>this</b>.getErrorCt();
+                    <b>if</b>(!elp){ <i>// field has no container el</i>
+                        <b>this</b>.el.dom.title = msg;
+                        <b>break</b>;
+                    }
+                    <b>this</b>.errorEl = elp.createChild({cls:<em>'x-form-invalid-msg'</em>});
+                    <b>this</b>.errorEl.setWidth(elp.getWidth(true)-20);
+                }
+                <b>this</b>.errorEl.update(msg);
+                Ext.form.Field.msgFx[<b>this</b>.msgFx].show(<b>this</b>.errorEl, <b>this</b>);
+                <b>break</b>;
+            <b>case</b> <em>'side'</em>:
+                <b>if</b>(!<b>this</b>.errorIcon){
+                    <b>var</b> elp = <b>this</b>.getErrorCt();
+                    <b>if</b>(!elp){ <i>// field has no container el</i>
+                        <b>this</b>.el.dom.title = msg;
+                        <b>break</b>;
+                    }
+                    <b>this</b>.errorIcon = elp.createChild({cls:<em>'x-form-invalid-icon'</em>});
+                }
+                <b>this</b>.alignErrorIcon();
+                <b>this</b>.errorIcon.dom.qtip = msg;
+                <b>this</b>.errorIcon.dom.qclass = <em>'x-form-invalid-tip'</em>;
+                <b>this</b>.errorIcon.show();
+                <b>this</b>.on(<em>'resize'</em>, <b>this</b>.alignErrorIcon, <b>this</b>);
+                <b>break</b>;
+            <b>default</b>:
+                <b>var</b> t = Ext.getDom(<b>this</b>.msgTarget);
+                t.innerHTML = msg;
+                t.style.display = <b>this</b>.msgDisplay;
+                <b>break</b>;
+        }
+        <b>this</b>.fireEvent(<em>'invalid'</em>, <b>this</b>, msg);
+    },
+
+    <i>// private</i>
+    getErrorCt : <b>function</b>(){
+        <b>return</b> this.el.findParent(<em>'.x-form-element'</em>, 5, true) || <i>// use form element wrap <b>if</b> available</i>
+            <b>this</b>.el.findParent(<em>'.x-form-field-wrap'</em>, 5, true);   <i>// <b>else</b> direct field wrap</i>
+    },
+
+    <i>// private</i>
+    alignErrorIcon : <b>function</b>(){
+        <b>this</b>.errorIcon.alignTo(<b>this</b>.el, <em>'tl-tr'</em>, [2, 0]);
+    },
+
+    <i>/**
+     * Clear any invalid styles/messages <b>for</b> this field
+     */</i>
+    clearInvalid : <b>function</b>(){
+        <b>if</b>(!<b>this</b>.rendered || <b>this</b>.preventMark){ <i>// not rendered</i>
+            <b>return</b>;
+        }
+        <b>this</b>.el.removeClass(<b>this</b>.invalidClass);
+        <b>switch</b>(this.msgTarget){
+            <b>case</b> <em>'qtip'</em>:
+                <b>this</b>.el.dom.qtip = <em>''</em>;
+                <b>break</b>;
+            <b>case</b> <em>'title'</em>:
+                <b>this</b>.el.dom.title = <em>''</em>;
+                <b>break</b>;
+            <b>case</b> <em>'under'</em>:
+                <b>if</b>(this.errorEl){
+                    Ext.form.Field.msgFx[<b>this</b>.msgFx].hide(<b>this</b>.errorEl, <b>this</b>);
+                }
+                <b>break</b>;
+            <b>case</b> <em>'side'</em>:
+                <b>if</b>(this.errorIcon){
+                    <b>this</b>.errorIcon.dom.qtip = <em>''</em>;
+                    <b>this</b>.errorIcon.hide();
+                    <b>this</b>.un(<em>'resize'</em>, <b>this</b>.alignErrorIcon, <b>this</b>);
+                }
+                <b>break</b>;
+            <b>default</b>:
+                <b>var</b> t = Ext.getDom(<b>this</b>.msgTarget);
+                t.innerHTML = <em>''</em>;
+                t.style.display = <em>'none'</em>;
+                <b>break</b>;
+        }
+        <b>this</b>.fireEvent(<em>'valid'</em>, <b>this</b>);
+    },
+
+    <i>/**
+     * Returns the raw data value which may or may not be a valid, defined value.  To <b>return</b> a normalized value see {@link #getValue}.
+     * @<b>return</b> {Mixed} value The field value
+     */</i>
+    getRawValue : <b>function</b>(){
+        <b>var</b> v = <b>this</b>.rendered ? <b>this</b>.el.getValue() : Ext.value(<b>this</b>.value, <em>''</em>);
+        <b>if</b>(v === <b>this</b>.emptyText){
+            v = <em>''</em>;
+        }
+        <b>return</b> v;
+    },
+
+    <i>/**
+     * Returns the normalized data value (undefined or emptyText will be returned as <em>''</em>).  To <b>return</b> the raw value see {@link #getRawValue}.
+     * @<b>return</b> {Mixed} value The field value
+     */</i>
+    getValue : <b>function</b>(){
+        <b>if</b>(!<b>this</b>.rendered) {
+            <b>return</b> this.value;
+        }
+        <b>var</b> v = <b>this</b>.el.getValue();
+        <b>if</b>(v === <b>this</b>.emptyText || v === undefined){
+            v = <em>''</em>;
+        }
+        <b>return</b> v;
+    },
+
+    <i>/**
+     * Sets the underlying DOM field's value directly, bypassing validation.  To set the value <b>with</b> validation see {@link #setValue}.
+     * @param {Mixed} value The value to set
+     * @<b>return</b> {Mixed} value The field value that is set
+     */</i>
+    setRawValue : <b>function</b>(v){
+        <b>return</b> this.el.dom.value = (v === null || v === undefined ? <em>''</em> : v);
+    },
+
+    <i>/**
+     * Sets a data value into the field and validates it.  To set the value directly without validation see {@link #setRawValue}.
+     * @param {Mixed} value The value to set
+     */</i>
+    setValue : <b>function</b>(v){
+        <b>this</b>.value = v;
+        <b>if</b>(this.rendered){
+            <b>this</b>.el.dom.value = (v === null || v === undefined ? <em>''</em> : v);
+            <b>this</b>.validate();
+        }
+    },
+
+    <i>// private</i>
+    adjustSize : <b>function</b>(w, h){
+        <b>var</b> s = Ext.form.Field.superclass.adjustSize.call(<b>this</b>, w, h);
+        s.width = <b>this</b>.adjustWidth(<b>this</b>.el.dom.tagName, s.width);
+        <b>return</b> s;
+    },
+
+    <i>// private</i>
+    adjustWidth : <b>function</b>(tag, w){
+        tag = tag.toLowerCase();
+        <b>if</b>(typeof w == <em>'number'</em> &amp;&amp; !Ext.isWebKit){
+            <b>if</b>(Ext.isIE &amp;&amp; (tag == <em>'input'</em> || tag == <em>'textarea'</em>)){
+                <b>if</b>(tag == <em>'input'</em> &amp;&amp; !Ext.isStrict){
+                    <b>return</b> this.inEditor ? w : w - 3;
+                }
+                <b>if</b>(tag == <em>'input'</em> &amp;&amp; Ext.isStrict){
+                    <b>return</b> w - (Ext.isIE6 ? 4 : 1);
+                }
+                <b>if</b>(tag == <em>'textarea'</em> &amp;&amp; Ext.isStrict){
+                    <b>return</b> w-2;
+                }
+            }<b>else</b> if(Ext.isOpera &amp;&amp; Ext.isStrict){
+                <b>if</b>(tag == <em>'input'</em>){
+                    <b>return</b> w + 2;
+                }
+                <b>if</b>(tag == <em>'textarea'</em>){
+                    <b>return</b> w-2;
+                }
+            }
+        }
+        <b>return</b> w;
+    }
+
+    <i>/**
+     * @cfg {Boolean} autoWidth @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} autoHeight @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} autoEl @hide
+     */</i>
+});
+
+Ext.form.MessageTargets = {
+    <em>'qtip'</em> : {
+        mark: <b>function</b>(f){
+            <b>this</b>.el.dom.qtip = msg;
+            <b>this</b>.el.dom.qclass = <em>'x-form-invalid-tip'</em>;
+            <b>if</b>(Ext.QuickTips){ <i>// fix <b>for</b> floating editors interacting <b>with</b> DND</i>
+                Ext.QuickTips.enable();
+            }
+        },
+        clear: <b>function</b>(f){
+            <b>this</b>.el.dom.qtip = <em>''</em>;
+        }
+    },
+    <em>'title'</em> : {
+        mark: <b>function</b>(f){
+            <b>this</b>.el.dom.title = msg;
+        },
+        clear: <b>function</b>(f){
+            <b>this</b>.el.dom.title = <em>''</em>;
+        }
+    },
+    <em>'under'</em> : {
+        mark: <b>function</b>(f){
+            <b>if</b>(!<b>this</b>.errorEl){
+                <b>var</b> elp = <b>this</b>.getErrorCt();
+                <b>if</b>(!elp){ <i>// field has no container el</i>
+                    <b>this</b>.el.dom.title = msg;
+                    <b>return</b>;
+                }
+                <b>this</b>.errorEl = elp.createChild({cls:<em>'x-form-invalid-msg'</em>});
+                <b>this</b>.errorEl.setWidth(elp.getWidth(true)-20);
+            }
+            <b>this</b>.errorEl.update(msg);
+            Ext.form.Field.msgFx[<b>this</b>.msgFx].show(<b>this</b>.errorEl, <b>this</b>);
+        },
+        clear: <b>function</b>(f){
+            <b>if</b>(this.errorEl){
+                Ext.form.Field.msgFx[<b>this</b>.msgFx].hide(<b>this</b>.errorEl, <b>this</b>);
+            }<b>else</b>{
+                <b>this</b>.el.dom.title = <em>''</em>;
+            }
+        }
+    },
+    <em>'side'</em> : {
+        mark: <b>function</b>(f){
+            <b>if</b>(!<b>this</b>.errorIcon){
+                <b>var</b> elp = <b>this</b>.getErrorCt();
+                <b>if</b>(!elp){ <i>// field has no container el</i>
+                    <b>this</b>.el.dom.title = msg;
+                    <b>return</b>;
+                }
+                <b>this</b>.errorIcon = elp.createChild({cls:<em>'x-form-invalid-icon'</em>});
+            }
+            <b>this</b>.alignErrorIcon();
+            <b>this</b>.errorIcon.dom.qtip = msg;
+            <b>this</b>.errorIcon.dom.qclass = <em>'x-form-invalid-tip'</em>;
+            <b>this</b>.errorIcon.show();
+            <b>this</b>.on(<em>'resize'</em>, <b>this</b>.alignErrorIcon, <b>this</b>);
+        },
+        clear: <b>function</b>(f){
+            <b>if</b>(this.errorIcon){
+                <b>this</b>.errorIcon.dom.qtip = <em>''</em>;
+                <b>this</b>.errorIcon.hide();
+                <b>this</b>.un(<em>'resize'</em>, <b>this</b>.alignErrorIcon, <b>this</b>);
+            }<b>else</b>{
+                <b>this</b>.el.dom.title = <em>''</em>;
+            }
+        }
+    },
+    <em>'around'</em> : {
+        mark: <b>function</b>(f){
+
+        },
+        clear: <b>function</b>(f){
+
+        }
+    }
+};
+
+
+<i>// anything other than normal should be considered experimental</i>
+Ext.form.Field.msgFx = {
+    normal : {
+        show: <b>function</b>(msgEl, f){
+            msgEl.setDisplayed(<em>'block'</em>);
+        },
+
+        hide : <b>function</b>(msgEl, f){
+            msgEl.setDisplayed(false).update(<em>''</em>);
+        }
+    },
+
+    slide : {
+        show: <b>function</b>(msgEl, f){
+            msgEl.slideIn(<em>'t'</em>, {stopFx:true});
+        },
+
+        hide : <b>function</b>(msgEl, f){
+            msgEl.slideOut(<em>'t'</em>, {stopFx:true,useDisplay:true});
+        }
+    },
+
+    slideRight : {
+        show: <b>function</b>(msgEl, f){
+            msgEl.fixDisplay();
+            msgEl.alignTo(f.el, <em>'tl-tr'</em>);
+            msgEl.slideIn(<em>'l'</em>, {stopFx:true});
+        },
+
+        hide : <b>function</b>(msgEl, f){
+            msgEl.slideOut(<em>'l'</em>, {stopFx:true,useDisplay:true});
+        }
+    }
+};
+Ext.reg(<em>'field'</em>, Ext.form.Field);
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

@@ -1,0 +1,1125 @@
+<html><head><title>Component.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>Component.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.Component
+ * @extends Ext.util.Observable
+ * &lt;p&gt;Base class <b>for</b> all Ext components.  All subclasses of Component may participate <b>in</b> the automated
+ * Ext component lifecycle of creation, rendering and destruction which is provided by the {@link Ext.Container Container} class.
+ * Components may be added to a Container through the {@link Ext.Container#items items} config option at the time the Container is created,
+ * or they may be added dynamically via the {@link Ext.Container#add add} method.&lt;/p&gt;
+ * &lt;p&gt;The Component base class has built-<b>in</b> support <b>for</b> basic hide/show and enable/disable behavior.&lt;/p&gt;
+ * &lt;p&gt;All Components are registered <b>with</b> the {@link Ext.ComponentMgr} on construction so that they can be referenced at any time via
+ * {@link Ext#getCmp}, passing the {@link #id}.&lt;/p&gt;
+ * &lt;p&gt;All user-developed visual widgets that are required to participate <b>in</b> automated lifecycle and size management should subclass Component (or
+ * {@link Ext.BoxComponent} <b>if</b> managed box model handling is required, ie height and width management).&lt;/p&gt;
+ * &lt;p&gt;See the &lt;a href=&quot;http:<i>//extjs.com/learn/Tutorial:Creating_new_UI_controls&quot;&gt;Creating <b>new</b> UI controls&lt;/a&gt; tutorial <b>for</b> details on how</i>
+ * and to either extend or augment ExtJs base classes to create custom Components.&lt;/p&gt;
+ * &lt;p&gt;Every component has a specific xtype, which is its Ext-specific type name, along <b>with</b> methods <b>for</b> checking the
+ * xtype like {@link #getXType} and {@link #isXType}. This is the list of all valid xtypes:&lt;/p&gt;
+ * &lt;pre&gt;
+xtype            Class
+-------------    ------------------
+box              Ext.BoxComponent
+button           Ext.Button
+colorpalette     Ext.ColorPalette
+component        Ext.Component
+container        Ext.Container
+cycle            Ext.CycleButton
+dataview         Ext.DataView
+datepicker       Ext.DatePicker
+editor           Ext.Editor
+editorgrid       Ext.grid.EditorGridPanel
+grid             Ext.grid.GridPanel
+paging           Ext.PagingToolbar
+panel            Ext.Panel
+progress         Ext.ProgressBar
+propertygrid     Ext.grid.PropertyGrid
+slider           Ext.Slider
+splitbutton      Ext.SplitButton
+statusbar        Ext.StatusBar
+tabpanel         Ext.TabPanel
+treepanel        Ext.tree.TreePanel
+viewport         Ext.Viewport
+window           Ext.Window
+
+Toolbar components
+---------------------------------------
+toolbar          Ext.Toolbar
+tbbutton         Ext.Toolbar.Button
+tbfill           Ext.Toolbar.Fill
+tbitem           Ext.Toolbar.Item
+tbseparator      Ext.Toolbar.Separator
+tbspacer         Ext.Toolbar.Spacer
+tbsplit          Ext.Toolbar.SplitButton
+tbtext           Ext.Toolbar.TextItem
+
+Form components
+---------------------------------------
+form             Ext.FormPanel
+checkbox         Ext.form.Checkbox
+combo            Ext.form.ComboBox
+datefield        Ext.form.DateField
+field            Ext.form.Field
+fieldset         Ext.form.FieldSet
+hidden           Ext.form.Hidden
+htmleditor       Ext.form.HtmlEditor
+label            Ext.form.Label
+numberfield      Ext.form.NumberField
+radio            Ext.form.Radio
+textarea         Ext.form.TextArea
+textfield        Ext.form.TextField
+timefield        Ext.form.TimeField
+trigger          Ext.form.TriggerField
+&lt;/pre&gt;
+ * @constructor
+ * @param {Ext.Element/String/Object} config The configuration options.  If an element is passed, it is set as the internal
+ * element and its id used as the component id.  If a string is passed, it is assumed to be the id of an existing element
+ * and is used as the component id.  Otherwise, it is assumed to be a standard config object and is applied to the component.
+ */</i>
+Ext.Component = <b>function</b>(config){
+    config = config || {};
+    <b>if</b>(config.initialConfig){
+        <b>if</b>(config.isAction){           <i>// actions</i>
+            <b>this</b>.baseAction = config;
+        }
+        config = config.initialConfig; <i>// component cloning / action set up</i>
+    }<b>else</b> if(config.tagName || config.dom || <b>typeof</b> config == &quot;string&quot;){ <i>// element object</i>
+        config = {applyTo: config, id: config.id || config};
+    }
+
+    <i>/**
+     * This Component's initial configuration specification. Read-only.
+     * @type Object
+     * @property initialConfig
+     */</i>
+    <b>this</b>.initialConfig = config;
+
+    Ext.apply(<b>this</b>, config);
+    <b>this</b>.addEvents(
+        <i>/**
+         * @event disable
+         * Fires after the component is disabled.
+	     * @param {Ext.Component} <b>this</b>
+	     */</i>
+        <em>'disable'</em>,
+        <i>/**
+         * @event enable
+         * Fires after the component is enabled.
+	     * @param {Ext.Component} <b>this</b>
+	     */</i>
+        <em>'enable'</em>,
+        <i>/**
+         * @event beforeshow
+         * Fires before the component is shown. Return false to stop the show.
+	     * @param {Ext.Component} <b>this</b>
+	     */</i>
+        <em>'beforeshow'</em>,
+        <i>/**
+         * @event show
+         * Fires after the component is shown.
+	     * @param {Ext.Component} <b>this</b>
+	     */</i>
+        <em>'show'</em>,
+        <i>/**
+         * @event beforehide
+         * Fires before the component is hidden. Return false to stop the hide.
+	     * @param {Ext.Component} <b>this</b>
+	     */</i>
+        <em>'beforehide'</em>,
+        <i>/**
+         * @event hide
+         * Fires after the component is hidden.
+	     * @param {Ext.Component} <b>this</b>
+	     */</i>
+        <em>'hide'</em>,
+        <i>/**
+         * @event beforerender
+         * Fires before the component is rendered. Return false to stop the render.
+	     * @param {Ext.Component} <b>this</b>
+	     */</i>
+        <em>'beforerender'</em>,
+        <i>/**
+         * @event render
+         * Fires after the component is rendered.
+	     * @param {Ext.Component} <b>this</b>
+	     */</i>
+        <em>'render'</em>,
+        <i>/**
+         * @event beforedestroy
+         * Fires before the component is destroyed. Return false to stop the destroy.
+	     * @param {Ext.Component} <b>this</b>
+	     */</i>
+        <em>'beforedestroy'</em>,
+        <i>/**
+         * @event destroy
+         * Fires after the component is destroyed.
+	     * @param {Ext.Component} <b>this</b>
+	     */</i>
+        <em>'destroy'</em>,
+        <i>/**
+         * @event beforestaterestore
+         * Fires before the state of the component is restored. Return false to stop the restore.
+	     * @param {Ext.Component} <b>this</b>
+	     * @param {Object} state The hash of state values
+	     */</i>
+        <em>'beforestaterestore'</em>,
+        <i>/**
+         * @event staterestore
+         * Fires after the state of the component is restored.
+	     * @param {Ext.Component} <b>this</b>
+	     * @param {Object} state The hash of state values
+	     */</i>
+        <em>'staterestore'</em>,
+        <i>/**
+         * @event beforestatesave
+         * Fires before the state of the component is saved to the configured state provider. Return false to stop the save.
+	     * @param {Ext.Component} <b>this</b>
+	     * @param {Object} state The hash of state values
+	     */</i>
+        <em>'beforestatesave'</em>,
+        <i>/**
+         * @event statesave
+         * Fires after the state of the component is saved to the configured state provider.
+	     * @param {Ext.Component} <b>this</b>
+	     * @param {Object} state The hash of state values
+	     */</i>
+        <em>'statesave'</em>
+    );
+    <b>this</b>.getId();
+    Ext.ComponentMgr.register(<b>this</b>);
+    Ext.Component.superclass.constructor.call(<b>this</b>);
+
+    <b>if</b>(this.baseAction){
+        <b>this</b>.baseAction.addComponent(<b>this</b>);
+    }
+
+    <b>this</b>.initComponent();
+
+    <b>if</b>(this.plugins){
+        <b>if</b>(Ext.isArray(<b>this</b>.plugins)){
+            <b>for</b>(var i = 0, len = <b>this</b>.plugins.length; i &lt; len; i++){
+                <b>this</b>.plugins[i] = <b>this</b>.initPlugin(<b>this</b>.plugins[i]);
+            }
+        }<b>else</b>{
+            <b>this</b>.plugins = <b>this</b>.initPlugin(<b>this</b>.plugins);
+        }
+    }
+
+    <b>if</b>(this.stateful !== false){
+        <b>this</b>.initState(config);
+    }
+
+    <b>if</b>(this.applyTo){
+        <b>this</b>.applyToMarkup(<b>this</b>.applyTo);
+        <b>delete</b> this.applyTo;
+    }<b>else</b> if(<b>this</b>.renderTo){
+        <b>this</b>.render(<b>this</b>.renderTo);
+        <b>delete</b> this.renderTo;
+    }
+};
+
+<i>// private</i>
+Ext.Component.AUTO_ID = 1000;
+
+Ext.extend(Ext.Component, Ext.util.Observable, {
+    <i>// Configs below are used <b>for</b> all Components when rendered by FormLayout.</i>
+    <i>/**
+     * @cfg {String} fieldLabel The label text to display next to <b>this</b> Component (defaults to <em>''</em>)
+     * &lt;p&gt;&lt;b&gt;This config is only used when <b>this</b> Component is rendered by a Container which has been
+     * configured to use the {@link Ext.form.FormLayout FormLayout} layout manager.&lt;/b&gt;&lt;/p&gt;
+     * Example use:&lt;pre&gt;&lt;code&gt;
+<b>new</b> Ext.FormPanel({
+    height: 100,
+    renderTo: Ext.getBody(),
+    items: [{
+        xtype: <em>'textfield'</em>,
+        fieldLabel: <em>'Name'</em>
+    }]
+});
+&lt;/code&gt;&lt;/pre&gt;
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} labelStyle A CSS style specification to apply directly to <b>this</b> field's label (defaults to the
+     * container<em>'s labelStyle value <b>if</b> set, or '</em>').&lt;code&gt;&lt;/code&gt;.
+     * &lt;p&gt;&lt;b&gt;This config is only used when <b>this</b> Component is rendered by a Container which has been
+     * configured to use the {@link Ext.form.FormLayout FormLayout} layout manager.&lt;/b&gt;&lt;/p&gt;
+     * Example use:&lt;pre&gt;&lt;code&gt;
+<b>new</b> Ext.FormPanel({
+    height: 100,
+    renderTo: Ext.getBody(),
+    items: [{
+        xtype: <em>'textfield'</em>,
+        fieldLabel: <em>'Name'</em>,
+        labelStyle: <em>'font-weight:bold;'</em>
+    }]
+});
+&lt;/code&gt;&lt;/pre&gt;
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} labelSeparator The standard separator to display after the text of each form label (defaults
+     * to the value of {@link Ext.layout.FormLayout#labelSeparator}, which is a colon <em>':'</em> by <b>default</b>).  To display
+     * no separator <b>for</b> this field<em>'s label specify empty string '</em>'.
+     * &lt;p&gt;&lt;b&gt;This config is only used when <b>this</b> Component is rendered by a Container which has been
+     * configured to use the {@link Ext.form.FormLayout FormLayout} layout manager.&lt;/b&gt;&lt;/p&gt;
+     * Example use:&lt;pre&gt;&lt;code&gt;
+<b>new</b> Ext.FormPanel({
+    height: 100,
+    renderTo: Ext.getBody(),
+    items: [{
+        xtype: <em>'textfield'</em>,
+        fieldLabel: <em>'Name'</em>,
+        labelSeparator: <em>'...'</em>
+    }]
+});
+&lt;/code&gt;&lt;/pre&gt;
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} hideLabel True to completely hide the label element (defaults to false).  By <b>default</b>, even <b>if</b>
+     * you <b>do</b> not specify a {@link fieldLabel} the space will still be reserved so that the field will line up <b>with</b>
+     * other fields that <b>do</b> have labels. Setting <b>this</b> to true will cause the field to not reserve that space.
+     * &lt;p&gt;&lt;b&gt;This config is only used when <b>this</b> Component is rendered by a Container which has been
+     * configured to use the {@link Ext.form.FormLayout FormLayout} layout manager.&lt;/b&gt;&lt;/p&gt;
+     * Example use:&lt;pre&gt;&lt;code&gt;
+<b>new</b> Ext.FormPanel({
+    height: 100,
+    renderTo: Ext.getBody(),
+    items: [{
+        xtype: <em>'textfield'</em>
+        hideLabel: true
+    }]
+});
+&lt;/code&gt;&lt;/pre&gt;
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} clearCls The CSS class used to provide field clearing (defaults to <em>'x-form-clear-left'</em>).
+     * &lt;p&gt;&lt;b&gt;This config is only used when <b>this</b> Component is rendered by a Container which has been
+     * configured to use the {@link Ext.form.FormLayout FormLayout} layout manager.&lt;/b&gt;&lt;/p&gt;
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} itemCls An additional CSS class to apply to the wrapper's form item element of <b>this</b> field (defaults
+     * to the container<em>'s itemCls value <b>if</b> set, or '</em>').  Since it is applied to the item wrapper, it allows you to write
+     * standard CSS rules that can apply to the field, the label (<b>if</b> specified) or any other element within the markup <b>for</b>
+     * the field.
+     * &lt;p&gt;&lt;b&gt;This config is only used when <b>this</b> Component is rendered by a Container which has been
+     * configured to use the {@link Ext.form.FormLayout FormLayout} layout manager.&lt;/b&gt;&lt;/p&gt;
+     * Example use:&lt;pre&gt;&lt;code&gt;
+<i>// Apply a style to the field's label:</i>
+&amp;lt;style&gt;
+    .required .x-form-item-label {font-weight:bold;color:red;}
+&amp;lt;/style&gt;
+
+<b>new</b> Ext.FormPanel({
+    height: 100,
+    renderTo: Ext.getBody(),
+    items: [{
+        xtype: <em>'textfield'</em>,
+        fieldLabel: <em>'Name'</em>,
+        itemCls: <em>'required'</em> <i>//<b>this</b> label will be styled</i>
+    },{
+        xtype: <em>'textfield'</em>,
+        fieldLabel: <em>'Favorite Color'</em>
+    }]
+});
+&lt;/code&gt;&lt;/pre&gt;
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} id
+     * The unique id of <b>this</b> component (defaults to an auto-assigned id). You should assign an id <b>if</b> you need to
+     * be able to access the component later and you <b>do</b> not have an object reference available (e.g., using
+     * {@link Ext.ComponentMgr#getCmp}). Note that <b>this</b> id will also be used as the element id <b>for</b> the containing
+     * HTML element that is rendered to the page <b>for</b> this component. This allows you to write id-based CSS rules to
+     * style the specific instance of <b>this</b> component uniquely, and also to select sub-elements using <b>this</b>
+     * component's id as the parent.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Mixed} autoEl
+     * &lt;p&gt;A tag name or {@link Ext.DomHelper DomHelper} spec used to create the {@link #getEl Element} which will
+     * encapsulate <b>this</b> Component.&lt;/p&gt;
+     * &lt;p&gt;You only need to specify <b>this</b> when creating or subclassing the base classes {@link Ext.Component}, {@link Ext.BoxComponent},
+     * and {@link Ext.Container}. The more complex Ext classes use a more complex DOM structure created by their own
+     * onRender methods.&lt;/p&gt;
+     * &lt;p&gt;This is intended to allow the developer to create application-specific utility Components encapsulated by
+     * different DOM elements. Example usage:&lt;/p&gt;&lt;pre&gt;&lt;code&gt;
+{
+    xtype: <em>'box'</em>,
+    autoEl: {
+        tag: <em>'img'</em>,
+        src: <em>'http:<i>//www.example.com/example.jpg'</em></i>
+    }
+}, {
+    xtype: <em>'box'</em>,
+    autoEl: {
+        tag: <em>'blockquote'</em>,
+        html: <em>'autoEl is cool!'</em>
+    }
+}, {
+    xtype: <em>'container'</em>,
+    autoEl: <em>'ul'</em>,
+    cls: <em>'ux-unordered-list'</em>,
+    items: {
+        xtype: <em>'box'</em>,
+        autoEl: <em>'li'</em>,
+        html: <em>'First list item'</em>
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} xtype
+     * The registered xtype to create. This config option is not used when passing
+     * a config object into a constructor. This config option is used only when
+     * lazy instantiation is being used, and a child item of a Container is being
+     * specified not as a fully instantiated Component, but as a &lt;i&gt;Component config
+     * object&lt;/i&gt;. The xtype will be looked up at render time up to determine what
+     * type of child Component to create.&lt;br&gt;&lt;br&gt;
+     * The predefined xtypes are listed {@link Ext.Component here}.
+     * &lt;br&gt;&lt;br&gt;
+     * If you subclass Components to create your own Components, you may register
+     * them using {@link Ext.ComponentMgr#registerType} <b>in</b> order to be able to
+     * take advantage of lazy instantiation and rendering.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} cls
+     * An optional extra CSS class that will be added to <b>this</b> component<em>'s Element (defaults to '</em>').  This can be
+     * useful <b>for</b> adding customized styles to the component or any of its children using standard CSS rules.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} overCls
+     * An optional extra CSS class that will be added to <b>this</b> component's Element when the mouse moves
+     * over the Element, and removed when the mouse moves out. (defaults to <em>''</em>).  This can be
+     * useful <b>for</b> adding customized &quot;active&quot; or &quot;hover&quot; styles to the component or any of its children using standard CSS rules.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} style
+     * A custom style specification to be applied to <b>this</b> component's Element.  Should be a valid argument to
+     * {@link Ext.Element#applyStyles}.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} ctCls
+     * An optional extra CSS class that will be added to <b>this</b> component<em>'s container (defaults to '</em>').  This can be
+     * useful <b>for</b> adding customized styles to the container or any of its children using standard CSS rules.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} disabled
+     * Render <b>this</b> component disabled (<b>default</b> is false).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} hidden
+     * Render <b>this</b> component hidden (<b>default</b> is false).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Object/Array} plugins
+     * An object or array of objects that will provide custom functionality <b>for</b> this component.  The only
+     * requirement <b>for</b> a valid plugin is that it contain an init method that accepts a reference of type Ext.Component.
+     * When a component is created, <b>if</b> any plugins are available, the component will call the init method on each
+     * plugin, passing a reference to itself.  Each plugin can then call methods or respond to events on the
+     * component as needed to provide its functionality.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Mixed} applyTo
+     * The id of the element, a DOM element or an existing Element corresponding to a DIV that is already present <b>in</b>
+     * the document that specifies some structural markup <b>for</b> this component.  When applyTo is used, constituent parts of
+     * the component can also be specified by id or CSS class name within the main element, and the component being created
+     * may attempt to create its subcomponents from that markup <b>if</b> applicable. Using <b>this</b> config, a call to render() is
+     * not required.  If applyTo is specified, any value passed <b>for</b> {@link #renderTo} will be ignored and the target
+     * element<em>'s parent node will automatically be used as the component'</em>s container.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Mixed} renderTo
+     * &lt;p&gt;The id of the element, a DOM element or an existing Element that <b>this</b> component will be rendered into.
+     * When using <b>this</b> config, a call to render() is not required.&lt;p&gt;
+     * &lt;p&gt;If <b>this</b> Component needs to be managed by a {@link Ext.Container Container}'s
+     * {@link Ext.Component#layout layout manager}, <b>do</b> not use <b>this</b> option. It is the responsiblity
+     * of the Container's layout manager to perform rendering. See {@link #render}.&lt;/p&gt;
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} stateful
+     * &lt;p&gt;A flag which causes the Component to attempt to restore the state of internal properties
+     * from a saved state on startup. The component must have either a {@link #stateId} or {@link #id}
+     * assigned <b>for</b> state to be managed.  Auto-generated ids are not guaranteed to be stable across page
+     * loads and cannot be relied upon to save and restore the same state <b>for</b> a component.&lt;p&gt;
+     * For state saving to work, the state manager's provider must have been set to an implementation
+     * of {@link Ext.state.Provider} which overrides the {@link Ext.state.Provider#set set}
+     * and {@link Ext.state.Provider#get get} methods to save and recall name/value pairs.
+     * A built-<b>in</b> implementation, {@link Ext.state.CookieProvider} is available.&lt;/p&gt;
+     * &lt;p&gt;To set the state provider <b>for</b> the current page:&lt;/p&gt;
+     * &lt;pre&gt;&lt;code&gt;
+Ext.state.Manager.setProvider(<b>new</b> Ext.state.CookieProvider());
+&lt;/code&gt;&lt;/pre&gt;
+     * &lt;p&gt;Components attempt to save state when one of the events listed <b>in</b> the {@link #stateEvents}
+     * configuration fires.&lt;/p&gt;
+     * &lt;p&gt;You can perform extra processing on state save and restore by attaching handlers to the
+     * {@link #beforestaterestore}, {@link #staterestore}, {@link #beforestatesave} and {@link #statesave} events&lt;/p&gt;
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} stateId
+     * The unique id <b>for</b> this component to use <b>for</b> state management purposes (defaults to the component id <b>if</b> one was
+     * set, otherwise null <b>if</b> the component is using a generated id).
+     * &lt;p&gt;See {@link #stateful} <b>for</b> an explanation of saving and restoring Component state.&lt;/p&gt;
+     */</i>
+<i>// holder</i>
+<i>/** <i>//internal - to be set by subclasses</i>
+     * @cfg {Array} stateEvents
+     * An array of events that, when fired, should trigger <b>this</b> component to save its state (defaults to none).
+     * These can be any types of events supported by <b>this</b> component, including browser or custom events (e.g.,
+     * [<em>'click'</em>, <em>'customerchange'</em>]).
+     * &lt;p&gt;See {@link #stateful} <b>for</b> an explanation of saving and restoring Component state.&lt;/p&gt;
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} disabledClass
+     * CSS class added to the component when it is disabled (defaults to &quot;x-item-disabled&quot;).
+     */</i>
+    disabledClass : &quot;x-item-disabled&quot;,
+	<i>/**
+	 * @cfg {Boolean} allowDomMove
+	 * Whether the component can move the Dom node when rendering (defaults to true).
+	 */</i>
+    allowDomMove : true,
+	<i>/**
+	 * @cfg {Boolean} autoShow
+	 * True <b>if</b> the component should check <b>for</b> hidden classes (e.g. <em>'x-hidden'</em> or <em>'x-hide-display'</em>) and remove
+	 * them on render (defaults to false).
+	 */</i>
+    autoShow : false,
+    <i>/**
+     * @cfg {String} hideMode
+     * &lt;p&gt;How <b>this</b> component should be hidden. Supported values are &quot;visibility&quot; (css visibility), &quot;offsets&quot; (negative
+     * offset position) and &quot;display&quot; (css display) - defaults to &quot;display&quot;.&lt;/p&gt;
+     * &lt;p&gt;For Containers which may be hidden and shown as part of a {@link Ext.layout.CardLayout card layout} Container such as a
+     * {@link Ext.TabPanel TabPanel}, it is recommended that hideMode is configured as &quot;offsets&quot;. This ensures
+     * that hidden Components still have height and width so that layout managers can perform measurements when
+     * calculating layouts.&lt;/p&gt;
+     */</i>
+    hideMode: <em>'display'</em>,
+    <i>/**
+     * @cfg {Boolean} hideParent
+     * True to hide and show the component's container when hide/show is called on the component, false to hide
+     * and show the component itself (defaults to false).  For example, <b>this</b> can be used as a shortcut <b>for</b> a hide
+     * button on a window by setting hide:true on the button when adding it to its parent container.
+     */</i>
+    hideParent: false,
+
+    <i>/**
+     * The component's owner {@link Ext.Container} (defaults to undefined, and is set automatically when
+     * the component is added to a container).  Read-only.
+     * @type Ext.Container
+     * @property ownerCt
+     */</i>
+<i>// holder</i>
+<i>/***
+     * True <b>if</b> this component is hidden. Read-only.
+     * @type Boolean
+     * @property
+     */</i>
+    hidden : false,
+    <i>/**
+     * True <b>if</b> this component is disabled. Read-only.
+     * @type Boolean
+     * @property
+     */</i>
+    disabled : false,
+    <i>/**
+     * True <b>if</b> this component has been rendered. Read-only.
+     * @type Boolean
+     * @property
+     */</i>
+    rendered : false,
+
+    <i>// private</i>
+    ctype : &quot;Ext.Component&quot;,
+
+    <i>// private</i>
+    actionMode : &quot;el&quot;,
+
+    <i>// private</i>
+    getActionEl : <b>function</b>(){
+        <b>return</b> this[<b>this</b>.actionMode];
+    },
+
+    initPlugin : <b>function</b>(p){
+        p.init(<b>this</b>);
+        <b>return</b> p;
+    },
+
+    <i>/* <i>// protected</i>
+     * Function to be implemented by Component subclasses to be part of standard component initialization flow (it is empty by <b>default</b>).
+     * &lt;pre&gt;&lt;code&gt;
+<i>// Traditional constructor:</i>
+Ext.Foo = <b>function</b>(config){
+	<i>// call superclass constructor:</i>
+    Ext.Foo.superclass.constructor.call(<b>this</b>, config);
+
+    <b>this</b>.addEvents({
+		<i>// add events</i>
+    });
+};
+Ext.extend(Ext.Foo, Ext.Bar, {
+   <i>// class body</i>
+}
+
+<i>// initComponent replaces the constructor:</i>
+Ext.Foo = Ext.extend(Ext.Bar, {
+    initComponent : <b>function</b>(){
+		<i>// call superclass initComponent</i>
+        Ext.Container.superclass.initComponent.call(<b>this</b>);
+
+        <b>this</b>.addEvents({
+            <i>// add events</i>
+        });
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+     */</i>
+    initComponent : Ext.emptyFn,
+
+    <i>/**
+     * &lt;p&gt;Render <b>this</b> Component into the passed HTML element.&lt;/p&gt;
+     * &lt;p&gt;&lt;b&gt;If you are using a {@link Ext.Container Container} object to house <b>this</b> Component, then
+     * <b>do</b> not use the render method.&lt;/b&gt;&lt;/p&gt;
+     * &lt;p&gt;A Container<em>'s child Components are rendered by that Container'</em>s
+     * {@link Ext.Container#layout layout} manager when the Container is first rendered.&lt;/p&gt;
+     * &lt;p&gt;Certain layout managers allow dynamic addition of child components. Those that <b>do</b>
+     * include {@link Ext.layout.CardLayout}, {@link Ext.layout.AnchorLayout},
+     * {@link Ext.layout.FormLayout}, {@link Ext.layout.TableLayout}.&lt;/p&gt;
+     * &lt;p&gt;If the Container is already rendered when a <b>new</b> child Component is added, you may need to call
+     * the Container's {@link Ext.Container#doLayout doLayout} to refresh the view which causes any
+     * unrendered child Components to be rendered. This is required so that you can add multiple
+     * child components <b>if</b> needed <b>while</b> only refreshing the layout once.&lt;/p&gt;
+     * &lt;p&gt;When creating complex UIs, it is important to remember that sizing and positioning
+     * of child items is the responsibility of the Container's {@link Ext.Container#layout layout} manager.
+     * If you expect child items to be sized <b>in</b> response to user interactions, you must
+     * configure the Container <b>with</b> a layout manager which creates and manages the type of layout you
+     * have <b>in</b> mind.&lt;/p&gt;
+     * &lt;p&gt;&lt;b&gt;Omitting the Container's {@link Ext.Container#layout layout} config means that a basic
+     * layout manager is used which does nothing but render child components sequentially into the
+     * Container. No sizing or positioning will be performed <b>in</b> this situation.&lt;/b&gt;&lt;/p&gt;
+     * @param {Element/HTMLElement/String} container (optional) The element <b>this</b> Component should be
+     * rendered into. If it is being created from existing markup, <b>this</b> should be omitted.
+     * @param {String/Number} position (optional) The element ID or DOM node index within the container &lt;b&gt;before&lt;/b&gt;
+     * which <b>this</b> component will be inserted (defaults to appending to the end of the container)
+     */</i>
+    render : <b>function</b>(container, position){
+        <b>if</b>(!<b>this</b>.rendered &amp;&amp; <b>this</b>.fireEvent(&quot;beforerender&quot;, <b>this</b>) !== false){
+            <b>if</b>(!container &amp;&amp; <b>this</b>.el){
+                <b>this</b>.el = Ext.get(<b>this</b>.el);
+                container = <b>this</b>.el.dom.parentNode;
+                <b>this</b>.allowDomMove = false;
+            }
+            <b>this</b>.container = Ext.get(container);
+            <b>if</b>(this.ctCls){
+                <b>this</b>.container.addClass(<b>this</b>.ctCls);
+            }
+            <b>this</b>.rendered = true;
+            <b>if</b>(position !== undefined){
+                <b>if</b>(typeof position == <em>'number'</em>){
+                    position = <b>this</b>.container.dom.childNodes[position];
+                }<b>else</b>{
+                    position = Ext.getDom(position);
+                }
+            }
+            <b>this</b>.onRender(<b>this</b>.container, position || null);
+            <b>if</b>(this.autoShow){
+                <b>this</b>.el.removeClass([<em>'x-hidden'</em>,<em>'x-hide-'</em> + <b>this</b>.hideMode]);
+            }
+            <b>if</b>(this.cls){
+                <b>this</b>.el.addClass(<b>this</b>.cls);
+                <b>delete</b> this.cls;
+            }
+            <b>if</b>(this.style){
+                <b>this</b>.el.applyStyles(<b>this</b>.style);
+                <b>delete</b> this.style;
+            }
+            <b>if</b>(this.overCls){
+                <b>this</b>.el.addClassOnOver(<b>this</b>.overCls);
+            }
+            <b>this</b>.fireEvent(&quot;render&quot;, <b>this</b>);
+            <b>this</b>.afterRender(<b>this</b>.container);
+            <b>if</b>(this.hidden){
+                <b>this</b>.hide();
+            }
+            <b>if</b>(this.disabled){
+                <b>this</b>.disable();
+            }
+
+            <b>if</b>(this.stateful !== false){
+                <b>this</b>.initStateEvents();
+            }
+        }
+        <b>return</b> this;
+    },
+
+    <i>// private</i>
+    initState : <b>function</b>(config){
+        <b>if</b>(Ext.state.Manager){
+            <b>var</b> id = <b>this</b>.getStateId();
+            <b>if</b>(id){
+                <b>var</b> state = Ext.state.Manager.get(id);
+                <b>if</b>(state){
+                    <b>if</b>(this.fireEvent(<em>'beforestaterestore'</em>, <b>this</b>, state) !== false){
+                        <b>this</b>.applyState(state);
+                        <b>this</b>.fireEvent(<em>'staterestore'</em>, <b>this</b>, state);
+                    }
+                }
+            }
+        }
+    },
+
+    <i>// private</i>
+    getStateId : <b>function</b>(){
+        <b>return</b> this.stateId || ((<b>this</b>.id.indexOf(<em>'ext-comp-'</em>) == 0 || <b>this</b>.id.indexOf(<em>'ext-gen'</em>) == 0) ? null : <b>this</b>.id);
+    },
+
+    <i>// private</i>
+    initStateEvents : <b>function</b>(){
+        <b>if</b>(this.stateEvents){
+            <b>for</b>(var i = 0, e; e = <b>this</b>.stateEvents[i]; i++){
+                <b>this</b>.on(e, <b>this</b>.saveState, <b>this</b>, {delay:100});
+            }
+        }
+    },
+
+    <i>// private</i>
+    applyState : <b>function</b>(state, config){
+        <b>if</b>(state){
+            Ext.apply(<b>this</b>, state);
+        }
+    },
+
+    <i>// private</i>
+    getState : <b>function</b>(){
+        <b>return</b> null;
+    },
+
+    <i>// private</i>
+    saveState : <b>function</b>(){
+        <b>if</b>(Ext.state.Manager &amp;&amp; <b>this</b>.stateful !== false){
+            <b>var</b> id = <b>this</b>.getStateId();
+            <b>if</b>(id){
+                <b>var</b> state = <b>this</b>.getState();
+                <b>if</b>(this.fireEvent(<em>'beforestatesave'</em>, <b>this</b>, state) !== false){
+                    Ext.state.Manager.set(id, state);
+                    <b>this</b>.fireEvent(<em>'statesave'</em>, <b>this</b>, state);
+                }
+            }
+        }
+    },
+
+    <i>/**
+     * Apply <b>this</b> component to existing markup that is valid. With <b>this</b> function, no call to render() is required.
+     * @param {String/HTMLElement} el
+     */</i>
+    applyToMarkup : <b>function</b>(el){
+        <b>this</b>.allowDomMove = false;
+        <b>this</b>.el = Ext.get(el);
+        <b>this</b>.render(<b>this</b>.el.dom.parentNode);
+    },
+
+    <i>/**
+     * Adds a CSS class to the component's underlying element.
+     * @param {string} cls The CSS class name to add
+     */</i>
+    addClass : <b>function</b>(cls){
+        <b>if</b>(this.el){
+            <b>this</b>.el.addClass(cls);
+        }<b>else</b>{
+            <b>this</b>.cls = <b>this</b>.cls ? <b>this</b>.cls + <em>' '</em> + cls : cls;
+        }
+    },
+
+    <i>/**
+     * Removes a CSS class from the component's underlying element.
+     * @param {string} cls The CSS class name to remove
+     */</i>
+    removeClass : <b>function</b>(cls){
+        <b>if</b>(this.el){
+            <b>this</b>.el.removeClass(cls);
+        }<b>else</b> if(<b>this</b>.cls){
+            <b>this</b>.cls = <b>this</b>.cls.split(<em>' '</em>).remove(cls).join(<em>' '</em>);
+        }
+    },
+
+    <i>// private</i>
+    <i>// <b>default</b> function is not really useful</i>
+    onRender : <b>function</b>(ct, position){
+        <b>if</b>(this.autoEl){
+            <b>if</b>(typeof <b>this</b>.autoEl == <em>'string'</em>){
+                <b>this</b>.el = document.createElement(<b>this</b>.autoEl);
+            }<b>else</b>{
+                <b>var</b> div = document.createElement(<em>'div'</em>);
+                Ext.DomHelper.overwrite(div, <b>this</b>.autoEl);
+                <b>this</b>.el = div.firstChild;
+            }
+            <b>if</b> (!<b>this</b>.el.id) {
+            	<b>this</b>.el.id = <b>this</b>.getId();
+            }
+        }
+        <b>if</b>(this.el){
+            <b>this</b>.el = Ext.get(<b>this</b>.el);
+            <b>if</b>(this.allowDomMove !== false){
+                ct.dom.insertBefore(<b>this</b>.el.dom, position);
+            }
+        }
+    },
+
+    <i>// private</i>
+    getAutoCreate : <b>function</b>(){
+        <b>var</b> cfg = <b>typeof</b> this.autoCreate == &quot;object&quot; ?
+                      <b>this</b>.autoCreate : Ext.apply({}, <b>this</b>.defaultAutoCreate);
+        <b>if</b>(this.id &amp;&amp; !cfg.id){
+            cfg.id = <b>this</b>.id;
+        }
+        <b>return</b> cfg;
+    },
+
+    <i>// private</i>
+    afterRender : Ext.emptyFn,
+
+    <i>/**
+     * Destroys <b>this</b> component by purging any event listeners, removing the component's element from the DOM,
+     * removing the component from its {@link Ext.Container} (<b>if</b> applicable) and unregistering it from
+     * {@link Ext.ComponentMgr}.  Destruction is generally handled automatically by the framework and <b>this</b> method
+     * should usually not need to be called directly.
+     */</i>
+    destroy : <b>function</b>(){
+        <b>if</b>(this.fireEvent(&quot;beforedestroy&quot;, <b>this</b>) !== false){
+            <b>this</b>.beforeDestroy();
+            <b>if</b>(this.rendered){
+                <b>this</b>.el.removeAllListeners();
+                <b>this</b>.el.remove();
+                <b>if</b>(this.actionMode == &quot;container&quot;){
+                    <b>this</b>.container.remove();
+                }
+            }
+            <b>this</b>.onDestroy();
+            Ext.ComponentMgr.unregister(<b>this</b>);
+            <b>this</b>.fireEvent(&quot;destroy&quot;, <b>this</b>);
+            <b>this</b>.purgeListeners();
+        }
+    },
+
+	<i>// private</i>
+    beforeDestroy : Ext.emptyFn,
+
+	<i>// private</i>
+    onDestroy  : Ext.emptyFn,
+
+    <i>/**
+     * Returns the underlying {@link Ext.Element}.
+     * @<b>return</b> {Ext.Element} The element
+     */</i>
+    getEl : <b>function</b>(){
+        <b>return</b> this.el;
+    },
+
+    <i>/**
+     * Returns the id of <b>this</b> component.
+     * @<b>return</b> {String}
+     */</i>
+    getId : <b>function</b>(){
+        <b>return</b> this.id || (<b>this</b>.id = &quot;ext-comp-&quot; + (++Ext.Component.AUTO_ID));
+    },
+
+    <i>/**
+     * Returns the item id of <b>this</b> component.
+     * @<b>return</b> {String}
+     */</i>
+    getItemId : <b>function</b>(){
+        <b>return</b> this.itemId || <b>this</b>.getId();
+    },
+
+    <i>/**
+     * Try to focus <b>this</b> component.
+     * @param {Boolean} selectText (optional) If applicable, true to also select the text <b>in</b> this component
+     * @param {Boolean/Number} delay (optional) Delay the focus <b>this</b> number of milliseconds (true <b>for</b> 10 milliseconds)
+     * @<b>return</b> {Ext.Component} <b>this</b>
+     */</i>
+    focus : <b>function</b>(selectText, delay){
+        <b>if</b>(delay){
+            <b>this</b>.focus.defer(<b>typeof</b> delay == <em>'number'</em> ? delay : 10, <b>this</b>, [selectText, false]);
+            <b>return</b>;
+        }
+        <b>if</b>(this.rendered){
+            <b>this</b>.el.focus();
+            <b>if</b>(selectText === true){
+                <b>this</b>.el.dom.select();
+            }
+        }
+        <b>return</b> this;
+    },
+
+    <i>// private</i>
+    blur : <b>function</b>(){
+        <b>if</b>(this.rendered){
+            <b>this</b>.el.blur();
+        }
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Disable <b>this</b> component.
+     * @<b>return</b> {Ext.Component} <b>this</b>
+     */</i>
+    disable : <b>function</b>(){
+        <b>if</b>(this.rendered){
+            <b>this</b>.onDisable();
+        }
+        <b>this</b>.disabled = true;
+        <b>this</b>.fireEvent(&quot;disable&quot;, <b>this</b>);
+        <b>return</b> this;
+    },
+
+	<i>// private</i>
+    onDisable : <b>function</b>(){
+        <b>this</b>.getActionEl().addClass(<b>this</b>.disabledClass);
+        <b>this</b>.el.dom.disabled = true;
+    },
+
+    <i>/**
+     * Enable <b>this</b> component.
+     * @<b>return</b> {Ext.Component} <b>this</b>
+     */</i>
+    enable : <b>function</b>(){
+        <b>if</b>(this.rendered){
+            <b>this</b>.onEnable();
+        }
+        <b>this</b>.disabled = false;
+        <b>this</b>.fireEvent(&quot;enable&quot;, <b>this</b>);
+        <b>return</b> this;
+    },
+
+	<i>// private</i>
+    onEnable : <b>function</b>(){
+        <b>this</b>.getActionEl().removeClass(<b>this</b>.disabledClass);
+        <b>this</b>.el.dom.disabled = false;
+    },
+
+    <i>/**
+     * Convenience <b>function</b> for setting disabled/enabled by boolean.
+     * @param {Boolean} disabled
+     */</i>
+    setDisabled : <b>function</b>(disabled){
+        <b>this</b>[disabled ? &quot;disable&quot; : &quot;enable&quot;]();
+    },
+
+    <i>/**
+     * Show <b>this</b> component.
+     * @<b>return</b> {Ext.Component} <b>this</b>
+     */</i>
+    show: <b>function</b>(){
+        <b>if</b>(this.fireEvent(&quot;beforeshow&quot;, <b>this</b>) !== false){
+            <b>this</b>.hidden = false;
+            <b>if</b>(this.autoRender){
+                <b>this</b>.render(<b>typeof</b> this.autoRender == <em>'boolean'</em> ? Ext.getBody() : <b>this</b>.autoRender);
+            }
+            <b>if</b>(this.rendered){
+                <b>this</b>.onShow();
+            }
+            <b>this</b>.fireEvent(&quot;show&quot;, <b>this</b>);
+        }
+        <b>return</b> this;
+    },
+
+    <i>// private</i>
+    onShow : <b>function</b>(){
+        <b>if</b>(this.hideParent){
+            <b>this</b>.container.removeClass(<em>'x-hide-'</em> + <b>this</b>.hideMode);
+        }<b>else</b>{
+            <b>this</b>.getActionEl().removeClass(<em>'x-hide-'</em> + <b>this</b>.hideMode);
+        }
+
+    },
+
+    <i>/**
+     * Hide <b>this</b> component.
+     * @<b>return</b> {Ext.Component} <b>this</b>
+     */</i>
+    hide: <b>function</b>(){
+        <b>if</b>(this.fireEvent(&quot;beforehide&quot;, <b>this</b>) !== false){
+            <b>this</b>.hidden = true;
+            <b>if</b>(this.rendered){
+                <b>this</b>.onHide();
+            }
+            <b>this</b>.fireEvent(&quot;hide&quot;, <b>this</b>);
+        }
+        <b>return</b> this;
+    },
+
+    <i>// private</i>
+    onHide : <b>function</b>(){
+        <b>if</b>(this.hideParent){
+            <b>this</b>.container.addClass(<em>'x-hide-'</em> + <b>this</b>.hideMode);
+        }<b>else</b>{
+            <b>this</b>.getActionEl().addClass(<em>'x-hide-'</em> + <b>this</b>.hideMode);
+        }
+    },
+
+    <i>/**
+     * Convenience <b>function</b> to hide or show <b>this</b> component by boolean.
+     * @param {Boolean} visible True to show, false to hide
+     * @<b>return</b> {Ext.Component} <b>this</b>
+     */</i>
+    setVisible: <b>function</b>(visible){
+        <b>if</b>(visible) {
+            <b>this</b>.show();
+        }<b>else</b>{
+            <b>this</b>.hide();
+        }
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Returns true <b>if</b> this component is visible.
+     * @<b>return</b> {Boolean} True <b>if</b> this component is visible, false otherwise.
+     */</i>
+    isVisible : <b>function</b>(){
+        <b>return</b> this.rendered &amp;&amp; <b>this</b>.getActionEl().isVisible();
+    },
+
+    <i>/**
+     * Clone the current component using the original config values passed into <b>this</b> instance by <b>default</b>.
+     * @param {Object} overrides A <b>new</b> config containing any properties to override <b>in</b> the cloned version.
+     * An id property can be passed on <b>this</b> object, otherwise one will be generated to avoid duplicates.
+     * @<b>return</b> {Ext.Component} clone The cloned copy of <b>this</b> component
+     */</i>
+    cloneConfig : <b>function</b>(overrides){
+        overrides = overrides || {};
+        <b>var</b> id = overrides.id || Ext.id();
+        <b>var</b> cfg = Ext.applyIf(overrides, <b>this</b>.initialConfig);
+        cfg.id = id; <i>// prevent dup id</i>
+        <b>return</b> new <b>this</b>.constructor(cfg);
+    },
+
+    <i>/**
+     * Gets the xtype <b>for</b> this component as registered <b>with</b> {@link Ext.ComponentMgr}. For a list of all
+     * available xtypes, see the {@link Ext.Component} header. Example usage:
+     * &lt;pre&gt;&lt;code&gt;
+<b>var</b> t = <b>new</b> Ext.form.TextField();
+alert(t.getXType());  <i>// alerts <em>'textfield'</em></i>
+&lt;/code&gt;&lt;/pre&gt;
+     * @<b>return</b> {String} The xtype
+     */</i>
+    getXType : <b>function</b>(){
+        <b>return</b> this.constructor.xtype;
+    },
+
+    <i>/**
+     * &lt;p&gt;Tests whether or not <b>this</b> Component is of a specific xtype. This can test whether <b>this</b> Component is descended
+     * from the xtype (<b>default</b>) or whether it is directly of the xtype specified (shallow = true).&lt;/p&gt;
+     * &lt;p&gt;&lt;b&gt;If using your own subclasses, be aware that a Component must register its own xtype
+     * to participate <b>in</b> determination of inherited xtypes.&lt;/b&gt;&lt;/p&gt;
+     * &lt;p&gt;For a list of all available xtypes, see the {@link Ext.Component} header.&lt;/p&gt;
+     * &lt;p&gt;Example usage:&lt;/p&gt;
+     * &lt;pre&gt;&lt;code&gt;
+<b>var</b> t = <b>new</b> Ext.form.TextField();
+<b>var</b> isText = t.isXType(<em>'textfield'</em>);        <i>// true</i>
+<b>var</b> isBoxSubclass = t.isXType(<em>'box'</em>);       <i>// true, descended from BoxComponent</i>
+<b>var</b> isBoxInstance = t.isXType(<em>'box'</em>, true); <i>// false, not a direct BoxComponent instance</i>
+&lt;/code&gt;&lt;/pre&gt;
+     * @param {String} xtype The xtype to check <b>for</b> this Component
+     * @param {Boolean} shallow (optional) False to check whether <b>this</b> Component is descended from the xtype (<b>this</b> is
+     * the <b>default</b>), or true to check whether <b>this</b> Component is directly of the specified xtype.
+     * @<b>return</b> {Boolean} True <b>if</b> this component descends from the specified xtype, false otherwise.
+     */</i>
+    isXType : <b>function</b>(xtype, shallow){
+        <i>//assume a string by <b>default</b></i>
+        <b>if</b> (<b>typeof</b> xtype == <em>'<b>function</b>'</em>){
+            xtype = xtype.xtype; <i>//handle being passed the class, eg. Ext.Component</i>
+        }<b>else</b> if (<b>typeof</b> xtype == <em>'object'</em>){
+            xtype = xtype.constructor.xtype; <i>//handle being passed an instance</i>
+        }
+            
+        <b>return</b> !shallow ? (<em>'/'</em> + <b>this</b>.getXTypes() + <em>'/'</em>).indexOf(<em>'/'</em> + xtype + <em>'/'</em>) != -1 : <b>this</b>.constructor.xtype == xtype;
+    },
+
+    <i>/**
+     * &lt;p&gt;Returns <b>this</b> Component's xtype hierarchy as a slash-delimited string. For a list of all
+     * available xtypes, see the {@link Ext.Component} header.&lt;/p&gt;
+     * &lt;p&gt;&lt;b&gt;If using your own subclasses, be aware that a Component must register its own xtype
+     * to participate <b>in</b> determination of inherited xtypes.&lt;/b&gt;&lt;/p&gt;
+     * &lt;p&gt;Example usage:&lt;/p&gt;
+     * &lt;pre&gt;&lt;code&gt;
+<b>var</b> t = <b>new</b> Ext.form.TextField();
+alert(t.getXTypes());  <i>// alerts <em>'component/box/field/textfield'</em></i>
+&lt;/pre&gt;&lt;/code&gt;
+     * @<b>return</b> {String} The xtype hierarchy string
+     */</i>
+    getXTypes : <b>function</b>(){
+        <b>var</b> tc = <b>this</b>.constructor;
+        <b>if</b>(!tc.xtypes){
+            <b>var</b> c = [], sc = <b>this</b>;
+            <b>while</b>(sc &amp;&amp; sc.constructor.xtype){
+                c.unshift(sc.constructor.xtype);
+                sc = sc.constructor.superclass;
+            }
+            tc.xtypeChain = c;
+            tc.xtypes = c.join(<em>'/'</em>);
+        }
+        <b>return</b> tc.xtypes;
+    },
+
+    <i>/**
+     * Find a container above <b>this</b> component at any level by a custom <b>function</b>. If the passed <b>function</b> returns
+     * true, the container will be returned. The passed <b>function</b> is called <b>with</b> the arguments (container, <b>this</b> component).
+     * @param {Function} fcn
+     * @param {Object} scope (optional)
+     * @<b>return</b> {Ext.Container} The first Container <b>for</b> which the custom <b>function</b> returns true
+     */</i>
+    findParentBy: <b>function</b>(fn) {
+        <b>for</b> (<b>var</b> p = <b>this</b>.ownerCt; (p != null) &amp;&amp; !fn(p, <b>this</b>); p = p.ownerCt);
+        <b>return</b> p || null;
+    },
+
+    <i>/**
+     * Find a container above <b>this</b> component at any level by xtype or class
+     * @param {String/Class} xtype The xtype string <b>for</b> a component, or the class of the component directly
+     * @<b>return</b> {Ext.Container} The first Container which matches the given xtype or class
+     */</i>
+    findParentByType: <b>function</b>(xtype) {
+        <b>return</b> typeof xtype == <em>'<b>function</b>'</em> ?
+            <b>this</b>.findParentBy(<b>function</b>(p){
+                <b>return</b> p.constructor === xtype;
+            }) :
+            <b>this</b>.findParentBy(<b>function</b>(p){
+                <b>return</b> p.constructor.xtype === xtype;
+            });
+    },
+
+    <i>// internal <b>function</b> for auto removal of assigned event handlers on destruction</i>
+    mon : <b>function</b>(item, ename, fn, scope, opt){
+        <b>if</b>(!<b>this</b>.mons){
+            <b>this</b>.mons = [];
+            <b>this</b>.on(<em>'beforedestroy'</em>, <b>function</b>(){
+                <b>for</b>(var i= 0, len = <b>this</b>.mons.length; i &lt; len; i++){
+                    <b>var</b> m = <b>this</b>.mons[i];
+                    m.item.un(m.ename, m.fn, m.scope);
+                }
+            }, <b>this</b>);
+        }
+        <b>this</b>.mons.push({
+            item: item, ename: ename, fn: fn, scope: scope
+        });
+        item.on(ename, fn, scope, opt);
+    }
+});
+
+Ext.reg(<em>'component'</em>, Ext.Component);
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

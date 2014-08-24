@@ -1,0 +1,171 @@
+<html><head><title>ext-lang-lv.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ext-lang-lv.js</h1><pre class="highlighted"><code><i>/**
+ * Latvian Translations
+ * By salix 17 April 2007
+ */</i>
+
+Ext.UpdateManager.defaults.indicatorText = <em>'&lt;div class=&quot;loading-indicator&quot;&gt;Notiek iel&Auml;Åde...&lt;/div&gt;'</em>;
+
+<b>if</b>(Ext.View){
+   Ext.View.prototype.emptyText = &quot;&quot;;
+}
+
+<b>if</b>(Ext.grid.GridPanel){
+   Ext.grid.GridPanel.prototype.ddText = &quot;{0} iez&Auml;&laquo;m&Auml;ìtu rindu&quot;;
+}
+
+<b>if</b>(Ext.TabPanelItem){
+   Ext.TabPanelItem.prototype.closeText = &quot;Aizver &Aring;&iexcl;o z&Auml;&laquo;mni&quot;;
+}
+
+<b>if</b>(Ext.form.Field){
+   Ext.form.Field.prototype.invalidText = &quot;V&Auml;ìrt&Auml;&laquo;ba &Aring;&iexcl;aj&Auml;Å lauk&Auml;Å nav pareiza&quot;;
+}
+
+<b>if</b>(Ext.LoadMask){
+    Ext.LoadMask.prototype.msg = &quot;Iel&Auml;Åd&Auml;ì...&quot;;
+}
+
+Date.monthNames = [
+   &quot;Janv&Auml;Åris&quot;,
+   &quot;Febru&Auml;Åris&quot;,
+   &quot;Marts&quot;,
+   &quot;Apr&Auml;&laquo;lis&quot;,
+   &quot;Maijs&quot;,
+   &quot;J&Aring;&laquo;nijs&quot;,
+   &quot;J&Aring;&laquo;lijs&quot;,
+   &quot;Augusts&quot;,
+   &quot;Septembris&quot;,
+   &quot;Oktobris&quot;,
+   &quot;Novembris&quot;,
+   &quot;Decembris&quot;
+];
+
+Date.dayNames = [
+   &quot;Sv&Auml;ìtdiena&quot;,
+   &quot;Pirmdiena&quot;,
+   &quot;Otrdiena&quot;,
+   &quot;Tre&Aring;&iexcl;diena&quot;,
+   &quot;Ceturtdiena&quot;,
+   &quot;Piektdiena&quot;,
+   &quot;Sestdiena&quot;
+];
+
+<b>if</b>(Ext.MessageBox){
+   Ext.MessageBox.buttonText = {
+      ok     : &quot;Labi&quot;,
+      cancel : &quot;Atcelt&quot;,
+      yes    : &quot;J&Auml;Å&quot;,
+      no     : &quot;N&Auml;ì&quot;
+   };
+}
+
+<b>if</b>(Ext.util.Format){
+   Ext.util.Format.date = <b>function</b>(v, format){
+      <b>if</b>(!v) <b>return</b> &quot;&quot;;
+      <b>if</b>(!(v instanceof Date)) v = <b>new</b> Date(Date.parse(v));
+      <b>return</b> v.dateFormat(format || &quot;d.m.Y&quot;);
+   };
+}
+
+<b>if</b>(Ext.DatePicker){
+   Ext.apply(Ext.DatePicker.prototype, {
+      todayText         : &quot;&Aring;&nbsp;odiena&quot;,
+      minText           : &quot;Nor&Auml;Åd&Auml;&laquo;tais datums ir maz&Auml;Åks par minim&Auml;Ålo datumu&quot;,
+      maxText           : &quot;Nor&Auml;Åd&Auml;&laquo;tais datums ir liel&Auml;Åks par maksim&Auml;Ålo datumu&quot;,
+      disabledDaysText  : &quot;&quot;,
+      disabledDatesText : &quot;&quot;,
+      monthNames	: Date.monthNames,
+      dayNames		: Date.dayNames,
+      nextText          : <em>'N&Auml;Åkamais m&Auml;ìnesis (Control+pa labi)'</em>,
+      prevText          : <em>'Iepriek&Aring;&iexcl;&Auml;ìjais m&Auml;ìnesis (Control+pa kreisi)'</em>,
+      monthYearText     : <em>'M&Auml;ìne&Aring;&iexcl;a izv&Auml;ìle (Control+uz aug&Aring;&iexcl;u/uz leju lai p&Auml;Årsl&Auml;ìgtu gadus)'</em>,
+      todayTip          : &quot;{0} (Tuk&Aring;&iexcl;umz&Auml;&laquo;me)&quot;,
+      format            : &quot;d.m.Y&quot;,
+      startDay          : 1
+   });
+}
+
+<b>if</b>(Ext.PagingToolbar){
+   Ext.apply(Ext.PagingToolbar.prototype, {
+      beforePageText : &quot;Lapa&quot;,
+      afterPageText  : &quot;no {0}&quot;,
+      firstText      : &quot;Pirm&Auml;Å lapa&quot;,
+      prevText       : &quot;iepriek&Aring;&iexcl;&Auml;ìj&Auml;Å lapa&quot;,
+      nextText       : &quot;N&Auml;Åkam&Auml;Å lapa&quot;,
+      lastText       : &quot;P&Auml;ìd&Auml;ìj&Auml;Å lapa&quot;,
+      refreshText    : &quot;Atsvaidzin&Auml;Åt&quot;,
+      displayMsg     : &quot;R&Auml;Åda no {0} l&Auml;&laquo;dz {1} ierakstiem, kop&Auml;Å {2}&quot;,
+      emptyMsg       : <em>'Nav datu, ko par&Auml;Åd&Auml;&laquo;t'</em>
+   });
+}
+
+<b>if</b>(Ext.form.TextField){
+   Ext.apply(Ext.form.TextField.prototype, {
+      minLengthText : &quot;Minim&Auml;Ålais garums &Aring;&iexcl;im laukam ir {0}&quot;,
+      maxLengthText : &quot;Maksim&Auml;Ålais garums &Aring;&iexcl;im laukam ir {0}&quot;,
+      blankText     : &quot;&Aring;&nbsp;is ir oblig&Auml;Åts lauks&quot;,
+      regexText     : &quot;&quot;,
+      emptyText     : null
+   });
+}
+
+<b>if</b>(Ext.form.NumberField){
+   Ext.apply(Ext.form.NumberField.prototype, {
+      minText : &quot;Minim&Auml;Ålais garums &Aring;&iexcl;im laukam ir  {0}&quot;,
+      maxText : &quot;Maksim&Auml;Ålais garums &Aring;&iexcl;im laukam ir  {0}&quot;,
+      nanText : &quot;{0} nav pareizs skaitlis&quot;
+   });
+}
+
+<b>if</b>(Ext.form.DateField){
+   Ext.apply(Ext.form.DateField.prototype, {
+      disabledDaysText  : &quot;Atsp&Auml;ìjots&quot;,
+      disabledDatesText : &quot;Atsp&Auml;ìjots&quot;,
+      minText           : &quot;Datumam &Aring;&iexcl;aj&Auml;Å lauk&Auml;Å j&Auml;Åb&Aring;&laquo;t liel&Auml;Åkam k&Auml;Å {0}&quot;,
+      maxText           : &quot;Datumam &Aring;&iexcl;aj&Auml;Å lauk&Auml;Å j&Auml;Åb&Aring;&laquo;t maz&Auml;Åkam k&Auml;Å {0}&quot;,
+      invalidText       : &quot;{0} nav pareizs datums - tam j&Auml;Åb&Aring;&laquo;t &Aring;&iexcl;&Auml;Åd&Auml;Å form&Auml;Åt&Auml;Å: {1}&quot;,
+      format            : &quot;d.m.Y&quot;
+   });
+}
+
+<b>if</b>(Ext.form.ComboBox){
+   Ext.apply(Ext.form.ComboBox.prototype, {
+      loadingText       : &quot;Iel&Auml;Åd&Auml;ì...&quot;,
+      valueNotFoundText : undefined
+   });
+}
+
+<b>if</b>(Ext.form.VTypes){
+   Ext.apply(Ext.form.VTypes, {
+      emailText    : <em>'&Aring;&nbsp;aj&Auml;Å lauk&Auml;Å j&Auml;Åieraksta e-pasta adrese form&Auml;Åt&Auml;Å &quot;lietot&Auml;Ås@dom&Auml;ìns.lv&quot;'</em>,
+      urlText      : <em>'&Aring;&nbsp;aj&Auml;Å lauk&Auml;Å j&Auml;Åieraksta URL form&Auml;Åt&Auml;Å &quot;http:/'</em>+<em>'/www.dom&Auml;ìns.lv&quot;'</em>,
+      alphaText    : <em>'&Aring;&nbsp;is lauks dr&Auml;&laquo;kst satur&Auml;ìt tikai burtus un _ z&Auml;&laquo;mi'</em>,
+      alphanumText : <em>'&Aring;&nbsp;is lauks dr&Auml;&laquo;kst satur&Auml;ìt tikai burtus, ciparus un _ z&Auml;&laquo;mi'</em>
+   });
+}
+
+<b>if</b>(Ext.grid.GridView){
+   Ext.apply(Ext.grid.GridView.prototype, {
+      sortAscText  : &quot;K&Auml;Årtot pieaugo&Aring;&iexcl;&Auml;Å sec&Auml;&laquo;b&Auml;Å&quot;,
+      sortDescText : &quot;K&Auml;Årtot dilsto&Aring;&iexcl;&Auml;Å sec&Auml;&laquo;b&Auml;Å&quot;,
+      lockText     : &quot;Nosl&Auml;ìgt kolonnu&quot;,
+      unlockText   : &quot;Atsl&Auml;ìgt kolonnu&quot;,
+      columnsText  : &quot;Kolonnas&quot;
+   });
+}
+
+<b>if</b>(Ext.grid.PropertyColumnModel){
+   Ext.apply(Ext.grid.PropertyColumnModel.prototype, {
+      nameText   : &quot;Nosaukums&quot;,
+      valueText  : &quot;V&Auml;ìrt&Auml;&laquo;ba&quot;,
+      dateFormat : &quot;j.m.Y&quot;
+   });
+}
+
+<b>if</b>(Ext.layout.BorderLayout &amp;&amp; Ext.layout.BorderLayout.SplitRegion){
+   Ext.apply(Ext.layout.BorderLayout.SplitRegion.prototype, {
+      splitTip            : &quot;Velc, lai main&Auml;&laquo;tu izm&Auml;ìru.&quot;,
+      collapsibleSplitTip : &quot;Velc, lai main&Auml;&laquo;tu izm&Auml;ìru. Dubultklik&Aring;&iexcl;&Auml;&middot;is nosl&Auml;ìpj apgabalu.&quot;
+   });
+}</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

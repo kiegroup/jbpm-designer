@@ -1,0 +1,207 @@
+<html><head><title>MenuMgr.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>MenuMgr.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.menu.MenuMgr
+ * Provides a common registry of all menu items on a page so that they can be easily accessed by id.
+ * @singleton
+ */</i>
+Ext.menu.MenuMgr = <b>function</b>(){
+   <b>var</b> menus, active, groups = {}, attached = false, lastShow = <b>new</b> Date();
+
+   <i>// private - called when first menu is created</i>
+   <b>function</b> init(){
+       menus = {};
+       active = <b>new</b> Ext.util.MixedCollection();
+       Ext.getDoc().addKeyListener(27, <b>function</b>(){
+           <b>if</b>(active.length &gt; 0){
+               hideAll();
+           }
+       });
+   }
+
+   <i>// private</i>
+   <b>function</b> hideAll(){
+       <b>if</b>(active &amp;&amp; active.length &gt; 0){
+           <b>var</b> c = active.clone();
+           c.each(<b>function</b>(m){
+               m.hide();
+           });
+       }
+   }
+
+   <i>// private</i>
+   <b>function</b> onHide(m){
+       active.remove(m);
+       <b>if</b>(active.length &lt; 1){
+           Ext.getDoc().un(&quot;mousedown&quot;, onMouseDown);
+           attached = false;
+       }
+   }
+
+   <i>// private</i>
+   <b>function</b> onShow(m){
+       <b>var</b> last = active.last();
+       lastShow = <b>new</b> Date();
+       active.add(m);
+       <b>if</b>(!attached){
+           Ext.getDoc().on(&quot;mousedown&quot;, onMouseDown);
+           attached = true;
+       }
+       <b>if</b>(m.parentMenu){
+          m.getEl().setZIndex(parseInt(m.parentMenu.getEl().getStyle(&quot;z-index&quot;), 10) + 3);
+          m.parentMenu.activeChild = m;
+       }<b>else</b> if(last &amp;&amp; last.isVisible()){
+          m.getEl().setZIndex(parseInt(last.getEl().getStyle(&quot;z-index&quot;), 10) + 3);
+       }
+   }
+
+   <i>// private</i>
+   <b>function</b> onBeforeHide(m){
+       <b>if</b>(m.activeChild){
+           m.activeChild.hide();
+       }
+       <b>if</b>(m.autoHideTimer){
+           clearTimeout(m.autoHideTimer);
+           <b>delete</b> m.autoHideTimer;
+       }
+   }
+
+   <i>// private</i>
+   <b>function</b> onBeforeShow(m){
+       <b>var</b> pm = m.parentMenu;
+       <b>if</b>(!pm &amp;&amp; !m.allowOtherMenus){
+           hideAll();
+       }<b>else</b> if(pm &amp;&amp; pm.activeChild){
+           pm.activeChild.hide();
+       }
+   }
+
+   <i>// private</i>
+   <b>function</b> onMouseDown(e){
+       <b>if</b>(lastShow.getElapsed() &gt; 50 &amp;&amp; active.length &gt; 0 &amp;&amp; !e.getTarget(&quot;.x-menu&quot;)){
+           hideAll();
+       }
+   }
+
+   <i>// private</i>
+   <b>function</b> onBeforeCheck(mi, state){
+       <b>if</b>(state){
+           <b>var</b> g = groups[mi.group];
+           <b>for</b>(var i = 0, l = g.length; i &lt; l; i++){
+               <b>if</b>(g[i] != mi){
+                   g[i].setChecked(false);
+               }
+           }
+       }
+   }
+
+   <b>return</b> {
+
+       <i>/**
+        * Hides all menus that are currently visible
+        */</i>
+       hideAll : <b>function</b>(){
+            hideAll();  
+       },
+
+       <i>// private</i>
+       register : <b>function</b>(menu){
+           <b>if</b>(!menus){
+               init();
+           }
+           menus[menu.id] = menu;
+           menu.on(&quot;beforehide&quot;, onBeforeHide);
+           menu.on(&quot;hide&quot;, onHide);
+           menu.on(&quot;beforeshow&quot;, onBeforeShow);
+           menu.on(&quot;show&quot;, onShow);
+           <b>var</b> g = menu.group;
+           <b>if</b>(g &amp;&amp; menu.events[&quot;checkchange&quot;]){
+               <b>if</b>(!groups[g]){
+                   groups[g] = [];
+               }
+               groups[g].push(menu);
+               menu.on(&quot;checkchange&quot;, onCheck);
+           }
+       },
+
+        <i>/**
+         * Returns a {@link Ext.menu.Menu} object
+         * @param {String/Object} menu The string menu id, an existing menu object reference, or a Menu config that will
+         * be used to generate and <b>return</b> a <b>new</b> Menu instance.
+         * @<b>return</b> {Ext.menu.Menu} The specified menu, or null <b>if</b> none are found
+         */</i>
+       get : <b>function</b>(menu){
+           <b>if</b>(typeof menu == &quot;string&quot;){ <i>// menu id</i>
+               <b>if</b>(!menus){  <i>// not initialized, no menus to <b>return</b></i>
+                   <b>return</b> null;
+               }
+               <b>return</b> menus[menu];
+           }<b>else</b> if(menu.events){  <i>// menu instance</i>
+               <b>return</b> menu;
+           }<b>else</b> if(<b>typeof</b> menu.length == <em>'number'</em>){ <i>// array of menu items?</i>
+               <b>return</b> new Ext.menu.Menu({items:menu});
+           }<b>else</b>{ <i>// otherwise, must be a config</i>
+               <b>return</b> new Ext.menu.Menu(menu);
+           }
+       },
+
+       <i>// private</i>
+       unregister : <b>function</b>(menu){
+           <b>delete</b> menus[menu.id];
+           menu.un(&quot;beforehide&quot;, onBeforeHide);
+           menu.un(&quot;hide&quot;, onHide);
+           menu.un(&quot;beforeshow&quot;, onBeforeShow);
+           menu.un(&quot;show&quot;, onShow);
+           <b>var</b> g = menu.group;
+           <b>if</b>(g &amp;&amp; menu.events[&quot;checkchange&quot;]){
+               groups[g].remove(menu);
+               menu.un(&quot;checkchange&quot;, onCheck);
+           }
+       },
+
+       <i>// private</i>
+       registerCheckable : <b>function</b>(menuItem){
+           <b>var</b> g = menuItem.group;
+           <b>if</b>(g){
+               <b>if</b>(!groups[g]){
+                   groups[g] = [];
+               }
+               groups[g].push(menuItem);
+               menuItem.on(&quot;beforecheckchange&quot;, onBeforeCheck);
+           }
+       },
+
+       <i>// private</i>
+       unregisterCheckable : <b>function</b>(menuItem){
+           <b>var</b> g = menuItem.group;
+           <b>if</b>(g){
+               groups[g].remove(menuItem);
+               menuItem.un(&quot;beforecheckchange&quot;, onBeforeCheck);
+           }
+       },
+
+       getCheckedItem : <b>function</b>(groupId){
+           <b>var</b> g = groups[groupId];
+           <b>if</b>(g){
+               <b>for</b>(var i = 0, l = g.length; i &lt; l; i++){
+                   <b>if</b>(g[i].checked){
+                       <b>return</b> g[i];
+                   }
+               }
+           }
+           <b>return</b> null;
+       },
+
+       setCheckedItem : <b>function</b>(groupId, itemId){
+           <b>var</b> g = groups[groupId];
+           <b>if</b>(g){
+               <b>for</b>(var i = 0, l = g.length; i &lt; l; i++){
+                   <b>if</b>(g[i].id == itemId){
+                       g[i].setChecked(true);
+                   }
+               }
+           }
+           <b>return</b> null;
+       }
+   };
+}();
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

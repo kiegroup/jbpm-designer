@@ -1,0 +1,182 @@
+<html><head><title>WindowManager.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>WindowManager.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.WindowGroup
+ * An object that represents a group of {@link Ext.Window} instances and provides z-order management
+ * and window activation behavior.
+ * @constructor
+ */</i>
+Ext.WindowGroup = <b>function</b>(){
+    <b>var</b> list = {};
+    <b>var</b> accessList = [];
+    <b>var</b> front = null;
+
+    <i>// private</i>
+    <b>var</b> sortWindows = <b>function</b>(d1, d2){
+        <b>return</b> (!d1._lastAccess || d1._lastAccess &lt; d2._lastAccess) ? -1 : 1;
+    };
+
+    <i>// private</i>
+    <b>var</b> orderWindows = <b>function</b>(){
+        <b>var</b> a = accessList, len = a.length;
+        <b>if</b>(len &gt; 0){
+            a.sort(sortWindows);
+            <b>var</b> seed = a[0].manager.zseed;
+            <b>for</b>(var i = 0; i &lt; len; i++){
+                <b>var</b> win = a[i];
+                <b>if</b>(win &amp;&amp; !win.hidden){
+                    win.setZIndex(seed + (i*10));
+                }
+            }
+        }
+        activateLast();
+    };
+
+    <i>// private</i>
+    <b>var</b> setActiveWin = <b>function</b>(win){
+        <b>if</b>(win != front){
+            <b>if</b>(front){
+                front.setActive(false);
+            }
+            front = win;
+            <b>if</b>(win){
+                win.setActive(true);
+            }
+        }
+    };
+
+    <i>// private</i>
+    <b>var</b> activateLast = <b>function</b>(){
+        <b>for</b>(var i = accessList.length-1; i &gt;=0; --i) {
+            <b>if</b>(!accessList[i].hidden){
+                setActiveWin(accessList[i]);
+                <b>return</b>;
+            }
+        }
+        <i>// none to activate</i>
+        setActiveWin(null);
+    };
+
+    <b>return</b> {
+        <i>/**
+         * The starting z-index <b>for</b> windows (defaults to 9000)
+         * @type Number The z-index value
+         */</i>
+        zseed : 9000,
+
+        <i>// private</i>
+        register : <b>function</b>(win){
+            list[win.id] = win;
+            accessList.push(win);
+            win.on(<em>'hide'</em>, activateLast);
+        },
+
+        <i>// private</i>
+        unregister : <b>function</b>(win){
+            <b>delete</b> list[win.id];
+            win.un(<em>'hide'</em>, activateLast);
+            accessList.remove(win);
+        },
+
+        <i>/**
+         * Gets a registered window by id.
+         * @param {String/Object} id The id of the window or a {@link Ext.Window} instance
+         * @<b>return</b> {Ext.Window}
+         */</i>
+        get : <b>function</b>(id){
+            <b>return</b> typeof id == &quot;object&quot; ? id : list[id];
+        },
+
+        <i>/**
+         * Brings the specified window to the front of any other active windows.
+         * @param {String/Object} win The id of the window or a {@link Ext.Window} instance
+         * @<b>return</b> {Boolean} True <b>if</b> the dialog was brought to the front, <b>else</b> false
+         * <b>if</b> it was already <b>in</b> front
+         */</i>
+        bringToFront : <b>function</b>(win){
+            win = <b>this</b>.get(win);
+            <b>if</b>(win != front){
+                win._lastAccess = <b>new</b> Date().getTime();
+                orderWindows();
+                <b>return</b> true;
+            }
+            <b>return</b> false;
+        },
+
+        <i>/**
+         * Sends the specified window to the back of other active windows.
+         * @param {String/Object} win The id of the window or a {@link Ext.Window} instance
+         * @<b>return</b> {Ext.Window} The window
+         */</i>
+        sendToBack : <b>function</b>(win){
+            win = <b>this</b>.get(win);
+            win._lastAccess = -(<b>new</b> Date().getTime());
+            orderWindows();
+            <b>return</b> win;
+        },
+
+        <i>/**
+         * Hides all windows <b>in</b> the group.
+         */</i>
+        hideAll : <b>function</b>(){
+            <b>for</b>(var id <b>in</b> list){
+                <b>if</b>(list[id] &amp;&amp; <b>typeof</b> list[id] != &quot;<b>function</b>&quot; &amp;&amp; list[id].isVisible()){
+                    list[id].hide();
+                }
+            }
+        },
+
+        <i>/**
+         * Gets the currently-active window <b>in</b> the group.
+         * @<b>return</b> {Ext.Window} The active window
+         */</i>
+        getActive : <b>function</b>(){
+            <b>return</b> front;
+        },
+
+        <i>/**
+         * Returns zero or more windows <b>in</b> the group using the custom search <b>function</b> passed to <b>this</b> method.
+         * The <b>function</b> should accept a single {@link Ext.Window} reference as its only argument and should
+         * <b>return</b> true <b>if</b> the window matches the search criteria, otherwise it should <b>return</b> false.
+         * @param {Function} fn The search <b>function</b>
+         * @param {Object} scope (optional) The scope <b>in</b> which to execute the <b>function</b> (defaults to the window
+         * that gets passed to the <b>function</b> if not specified)
+         * @<b>return</b> {Array} An array of zero or more matching windows
+         */</i>
+        getBy : <b>function</b>(fn, scope){
+            <b>var</b> r = [];
+            <b>for</b>(var i = accessList.length-1; i &gt;=0; --i) {
+                <b>var</b> win = accessList[i];
+                <b>if</b>(fn.call(scope||win, win) !== false){
+                    r.push(win);
+                }
+            }
+            <b>return</b> r;
+        },
+
+        <i>/**
+         * Executes the specified <b>function</b> once <b>for</b> every window <b>in</b> the group, passing each
+         * window as the only parameter. Returning false from the <b>function</b> will stop the iteration.
+         * @param {Function} fn The <b>function</b> to execute <b>for</b> each item
+         * @param {Object} scope (optional) The scope <b>in</b> which to execute the <b>function</b>
+         */</i>
+        each : <b>function</b>(fn, scope){
+            <b>for</b>(var id <b>in</b> list){
+                <b>if</b>(list[id] &amp;&amp; <b>typeof</b> list[id] != &quot;<b>function</b>&quot;){
+                    <b>if</b>(fn.call(scope || list[id], list[id]) === false){
+                        <b>return</b>;
+                    }
+                }
+            }
+        }
+    };
+};
+
+
+<i>/**
+ * @class Ext.WindowMgr
+ * @extends Ext.WindowGroup
+ * The <b>default</b> global window group that is available automatically.  To have more than one group of windows
+ * <b>with</b> separate z-order stacks, create additional instances of {@link Ext.WindowGroup} as needed.
+ * @singleton
+ */</i>
+Ext.WindowMgr = <b>new</b> Ext.WindowGroup();</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

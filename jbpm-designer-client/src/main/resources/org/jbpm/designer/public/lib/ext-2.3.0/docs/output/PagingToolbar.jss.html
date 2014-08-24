@@ -1,0 +1,356 @@
+<html><head><title>PagingToolbar.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>PagingToolbar.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.PagingToolbar
+ * @extends Ext.Toolbar
+ * &lt;p&gt;A specialized toolbar that is bound to a {@link Ext.data.Store} and provides automatic paging control. This
+ * Component {@link Ext.data.Store#load load}s blocks of data into the Store passing parameters who's names are
+ * specified by the store's {@link Ext.data.Store#paramNames paramNames} property.&lt;/p&gt;
+ * @constructor
+ * Create a <b>new</b> PagingToolbar
+ * @param {Object} config The config object
+ */</i>
+Ext.PagingToolbar = Ext.extend(Ext.Toolbar, {
+    <i>/**
+     * @cfg {Ext.data.Store} store The {@link Ext.data.Store} the paging toolbar should use as its data source (required).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} displayInfo
+     * True to display the displayMsg (defaults to false)
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Number} pageSize
+     * The number of records to display per page (defaults to 20)
+     */</i>
+    pageSize: 20,
+    <i>/**
+     * @cfg {String} displayMsg
+     * The paging status message to display (defaults to &quot;Displaying {0} - {1} of {2}&quot;).  Note that <b>this</b> string is
+     * formatted using the braced numbers 0-2 as tokens that are replaced by the values <b>for</b> start, end and total
+     * respectively. These tokens should be preserved when overriding <b>this</b> string <b>if</b> showing those values is desired.
+     */</i>
+    displayMsg : <em>'Displaying {0} - {1} of {2}'</em>,
+    <i>/**
+     * @cfg {String} emptyMsg
+     * The message to display when no records are found (defaults to &quot;No data to display&quot;)
+     */</i>
+    emptyMsg : <em>'No data to display'</em>,
+    <i>/**
+     * Customizable piece of the <b>default</b> paging text (defaults to &quot;Page&quot;)
+     * @type String
+     */</i>
+    beforePageText : &quot;Page&quot;,
+    <i>/**
+     * Customizable piece of the <b>default</b> paging text (defaults to &quot;of {0}&quot;). Note that <b>this</b> string is
+     * formatted using {0} as a token that is replaced by the number of total pages. This token should be
+     * preserved when overriding <b>this</b> string <b>if</b> showing the total page count is desired.
+     * @type String
+     */</i>
+    afterPageText : &quot;of {0}&quot;,
+    <i>/**
+     * Customizable piece of the <b>default</b> paging text (defaults to &quot;First Page&quot;)
+     * @type String
+     */</i>
+    firstText : &quot;First Page&quot;,
+    <i>/**
+     * Customizable piece of the <b>default</b> paging text (defaults to &quot;Previous Page&quot;)
+     * @type String
+     */</i>
+    prevText : &quot;Previous Page&quot;,
+    <i>/**
+     * Customizable piece of the <b>default</b> paging text (defaults to &quot;Next Page&quot;)
+     * @type String
+     */</i>
+    nextText : &quot;Next Page&quot;,
+    <i>/**
+     * Customizable piece of the <b>default</b> paging text (defaults to &quot;Last Page&quot;)
+     * @type String
+     */</i>
+    lastText : &quot;Last Page&quot;,
+    <i>/**
+     * Customizable piece of the <b>default</b> paging text (defaults to &quot;Refresh&quot;)
+     * @type String
+     */</i>
+    refreshText : &quot;Refresh&quot;,
+
+    <i>/**
+     * Object mapping of parameter names <b>for</b> load calls (defaults to {start: <em>'start'</em>, limit: <em>'limit'</em>})
+     */</i>
+    paramNames : {start: <em>'start'</em>, limit: <em>'limit'</em>},
+
+    <i>// private</i>
+    initComponent : <b>function</b>(){
+        <b>this</b>.addEvents(
+            <i>/**
+             * @event change
+             * Fires after the active page has been changed.
+             * @param {Ext.PagingToolbar} <b>this</b>
+             * @param {Object} changeEvent An object that has these properties:&lt;ul&gt;
+             * &lt;li&gt;&lt;code&gt;total&lt;/code&gt; : Number &lt;div class=&quot;sub-desc&quot;&gt;The total number of records <b>in</b> the dataset as
+             * returned by the server&lt;/div&gt;&lt;/li&gt;
+             * &lt;li&gt;&lt;code&gt;activePage&lt;/code&gt; : Number &lt;div class=&quot;sub-desc&quot;&gt;The current page number&lt;/div&gt;&lt;/li&gt;
+             * &lt;li&gt;&lt;code&gt;pages&lt;/code&gt; : Number &lt;div class=&quot;sub-desc&quot;&gt;The total number of pages (calculated from
+             * the total number of records <b>in</b> the dataset as returned by the server and the current {@link #pageSize})&lt;/div&gt;&lt;/li&gt;
+             * &lt;/ul&gt;
+             */</i>
+            <em>'change'</em>,
+            <i>/**
+             * @event beforechange
+             * Fires just before the active page is changed.
+             * Return false to prevent the active page from being changed.
+             * @param {Ext.PagingToolbar} <b>this</b>
+             * @param {Object} beforeChangeEvent An object that has these properties:&lt;ul&gt;
+             * &lt;li&gt;&lt;code&gt;start&lt;/code&gt; : Number &lt;div class=&quot;sub-desc&quot;&gt;The starting row number <b>for</b> the next page of records to
+             * be retrieved from the server&lt;/div&gt;&lt;/li&gt;
+             * &lt;li&gt;&lt;code&gt;limit&lt;/code&gt; : Number &lt;div class=&quot;sub-desc&quot;&gt;The number of records to be retrieved from the server&lt;/div&gt;&lt;/li&gt;
+             * &lt;/ul&gt;
+             * (note: the names of the &lt;b&gt;start&lt;/b&gt; and &lt;b&gt;limit&lt;/b&gt; properties are determined
+             * by the store's {@link Ext.data.Store#paramNames paramNames} property.)
+             */</i>
+            <em>'beforechange'</em>
+        );
+        Ext.PagingToolbar.superclass.initComponent.call(<b>this</b>);
+        <b>this</b>.cursor = 0;
+        <b>this</b>.bind(<b>this</b>.store);
+    },
+
+    <i>// private</i>
+    onRender : <b>function</b>(ct, position){
+        Ext.PagingToolbar.superclass.onRender.call(<b>this</b>, ct, position);
+        <b>this</b>.first = <b>this</b>.addButton({
+            tooltip: <b>this</b>.firstText,
+            iconCls: &quot;x-tbar-page-first&quot;,
+            disabled: true,
+            handler: <b>this</b>.onClick.createDelegate(<b>this</b>, [&quot;first&quot;])
+        });
+        <b>this</b>.prev = <b>this</b>.addButton({
+            tooltip: <b>this</b>.prevText,
+            iconCls: &quot;x-tbar-page-prev&quot;,
+            disabled: true,
+            handler: <b>this</b>.onClick.createDelegate(<b>this</b>, [&quot;prev&quot;])
+        });
+        <b>this</b>.addSeparator();
+        <b>this</b>.add(<b>this</b>.beforePageText);
+        <b>this</b>.field = Ext.get(<b>this</b>.addDom({
+           tag: &quot;input&quot;,
+           type: &quot;text&quot;,
+           size: &quot;3&quot;,
+           value: &quot;1&quot;,
+           cls: &quot;x-tbar-page-number&quot;
+        }).el);
+        <b>this</b>.field.on(&quot;keydown&quot;, <b>this</b>.onPagingKeydown, <b>this</b>);
+        <b>this</b>.field.on(&quot;focus&quot;, <b>function</b>(){<b>this</b>.dom.select();});
+        <b>this</b>.field.on(&quot;blur&quot;, <b>this</b>.onPagingBlur, <b>this</b>);
+        <b>this</b>.afterTextEl = <b>this</b>.addText(String.format(<b>this</b>.afterPageText, 1));
+        <b>this</b>.field.setHeight(18);
+        <b>this</b>.addSeparator();
+        <b>this</b>.next = <b>this</b>.addButton({
+            tooltip: <b>this</b>.nextText,
+            iconCls: &quot;x-tbar-page-next&quot;,
+            disabled: true,
+            handler: <b>this</b>.onClick.createDelegate(<b>this</b>, [&quot;next&quot;])
+        });
+        <b>this</b>.last = <b>this</b>.addButton({
+            tooltip: <b>this</b>.lastText,
+            iconCls: &quot;x-tbar-page-last&quot;,
+            disabled: true,
+            handler: <b>this</b>.onClick.createDelegate(<b>this</b>, [&quot;last&quot;])
+        });
+        <b>this</b>.addSeparator();
+        <b>this</b>.loading = <b>this</b>.addButton({
+            tooltip: <b>this</b>.refreshText,
+            iconCls: &quot;x-tbar-loading&quot;,
+            handler: <b>this</b>.onClick.createDelegate(<b>this</b>, [&quot;refresh&quot;])
+        });
+
+        <b>if</b>(this.displayInfo){
+            <b>this</b>.displayEl = Ext.fly(<b>this</b>.el.dom).createChild({cls:<em>'x-paging-info'</em>});
+        }
+        <b>if</b>(this.dsLoaded){
+            <b>this</b>.onLoad.apply(<b>this</b>, <b>this</b>.dsLoaded);
+        }
+    },
+
+    <i>// private</i>
+    updateInfo : <b>function</b>(){
+        <b>if</b>(this.displayEl){
+            <b>var</b> count = <b>this</b>.store.getCount();
+            <b>var</b> msg = count == 0 ?
+                <b>this</b>.emptyMsg :
+                String.format(
+                    <b>this</b>.displayMsg,
+                    <b>this</b>.cursor+1, <b>this</b>.cursor+count, <b>this</b>.store.getTotalCount()
+                );
+            <b>this</b>.displayEl.update(msg);
+        }
+    },
+
+    <i>// private</i>
+    onLoad : <b>function</b>(store, r, o){
+        <b>if</b>(!<b>this</b>.rendered){
+            <b>this</b>.dsLoaded = [store, r, o];
+            <b>return</b>;
+        }
+       <b>this</b>.cursor = o.params ? o.params[<b>this</b>.paramNames.start] : 0;
+       <b>var</b> d = <b>this</b>.getPageData(), ap = d.activePage, ps = d.pages;
+
+        <b>this</b>.afterTextEl.el.innerHTML = String.format(<b>this</b>.afterPageText, d.pages);
+        <b>this</b>.field.dom.value = ap;
+        <b>this</b>.first.setDisabled(ap == 1);
+        <b>this</b>.prev.setDisabled(ap == 1);
+        <b>this</b>.next.setDisabled(ap == ps);
+        <b>this</b>.last.setDisabled(ap == ps);
+        <b>this</b>.loading.enable();
+        <b>this</b>.updateInfo();
+        <b>this</b>.fireEvent(<em>'change'</em>, <b>this</b>, d);
+    },
+
+    <i>// private</i>
+    getPageData : <b>function</b>(){
+        <b>var</b> total = <b>this</b>.store.getTotalCount();
+        <b>return</b> {
+            total : total,
+            activePage : Math.ceil((<b>this</b>.cursor+<b>this</b>.pageSize)/<b>this</b>.pageSize),
+            pages :  total &lt; <b>this</b>.pageSize ? 1 : Math.ceil(total/<b>this</b>.pageSize)
+        };
+    },
+
+    <i>// private</i>
+    onLoadError : <b>function</b>(){
+        <b>if</b>(!<b>this</b>.rendered){
+            <b>return</b>;
+        }
+        <b>this</b>.loading.enable();
+    },
+
+    <i>// private</i>
+    readPage : <b>function</b>(d){
+        <b>var</b> v = <b>this</b>.field.dom.value, pageNum;
+        <b>if</b> (!v || isNaN(pageNum = parseInt(v, 10))) {
+            <b>this</b>.field.dom.value = d.activePage;
+            <b>return</b> false;
+        }
+        <b>return</b> pageNum;
+    },
+
+    <i>//private</i>
+    onPagingBlur: <b>function</b>(e){
+        <b>this</b>.field.dom.value = <b>this</b>.getPageData().activePage;
+    },
+
+    <i>// private</i>
+    onPagingKeydown : <b>function</b>(e){
+        <b>var</b> k = e.getKey(), d = <b>this</b>.getPageData(), pageNum;
+        <b>if</b> (k == e.RETURN) {
+            e.stopEvent();
+            pageNum = <b>this</b>.readPage(d);
+            <b>if</b>(pageNum !== false){
+                pageNum = Math.min(Math.max(1, pageNum), d.pages) - 1;
+                <b>this</b>.doLoad(pageNum * <b>this</b>.pageSize);
+            }
+        }<b>else</b> if (k == e.HOME || k == e.END){
+            e.stopEvent();
+            pageNum = k == e.HOME ? 1 : d.pages;
+            <b>this</b>.field.dom.value = pageNum;
+        }<b>else</b> if (k == e.UP || k == e.PAGEUP || k == e.DOWN || k == e.PAGEDOWN){
+            e.stopEvent();
+            <b>if</b>(pageNum = <b>this</b>.readPage(d)){
+                <b>var</b> increment = e.shiftKey ? 10 : 1;
+                <b>if</b>(k == e.DOWN || k == e.PAGEDOWN){
+                    increment *= -1;
+                }
+                pageNum += increment;
+                <b>if</b>(pageNum &gt;= 1 &amp; pageNum &lt;= d.pages){
+                    <b>this</b>.field.dom.value = pageNum;
+                }
+            }
+        }
+    },
+
+    <i>// private</i>
+    beforeLoad : <b>function</b>(){
+        <b>if</b>(this.rendered &amp;&amp; <b>this</b>.loading){
+            <b>this</b>.loading.disable();
+        }
+    },
+
+    <i>// private</i>
+    doLoad : <b>function</b>(start){
+        <b>var</b> o = {}, pn = <b>this</b>.paramNames;
+        o[pn.start] = start;
+        o[pn.limit] = <b>this</b>.pageSize;
+        <b>if</b>(this.fireEvent(<em>'beforechange'</em>, <b>this</b>, o) !== false){
+            <b>this</b>.store.load({params:o});
+        }
+    },
+
+    <i>/**
+     * Change the active page
+     * @param {Integer} page The page to display
+     */</i>
+    changePage: <b>function</b>(page){
+        <b>this</b>.doLoad(((page-1) * <b>this</b>.pageSize).constrain(0, <b>this</b>.store.getTotalCount()));
+    },
+
+    <i>// private</i>
+    onClick : <b>function</b>(which){
+        <b>var</b> store = <b>this</b>.store;
+        <b>switch</b>(which){
+            <b>case</b> &quot;first&quot;:
+                <b>this</b>.doLoad(0);
+            <b>break</b>;
+            <b>case</b> &quot;prev&quot;:
+                <b>this</b>.doLoad(Math.max(0, <b>this</b>.cursor-<b>this</b>.pageSize));
+            <b>break</b>;
+            <b>case</b> &quot;next&quot;:
+                <b>this</b>.doLoad(<b>this</b>.cursor+<b>this</b>.pageSize);
+            <b>break</b>;
+            <b>case</b> &quot;last&quot;:
+                <b>var</b> total = store.getTotalCount();
+                <b>var</b> extra = total % <b>this</b>.pageSize;
+                <b>var</b> lastStart = extra ? (total - extra) : total-<b>this</b>.pageSize;
+                <b>this</b>.doLoad(lastStart);
+            <b>break</b>;
+            <b>case</b> &quot;refresh&quot;:
+                <b>this</b>.doLoad(<b>this</b>.cursor);
+            <b>break</b>;
+        }
+    },
+
+    <i>/**
+     * Unbinds the paging toolbar from the specified {@link Ext.data.Store}
+     * @param {Ext.data.Store} store The data store to unbind
+     */</i>
+    unbind : <b>function</b>(store){
+        store = Ext.StoreMgr.lookup(store);
+        store.un(&quot;beforeload&quot;, <b>this</b>.beforeLoad, <b>this</b>);
+        store.un(&quot;load&quot;, <b>this</b>.onLoad, <b>this</b>);
+        store.un(&quot;loadexception&quot;, <b>this</b>.onLoadError, <b>this</b>);
+        <b>this</b>.store = undefined;
+    },
+
+    <i>/**
+     * Binds the paging toolbar to the specified {@link Ext.data.Store}
+     * @param {Ext.data.Store} store The data store to bind
+     */</i>
+    bind : <b>function</b>(store){
+        store = Ext.StoreMgr.lookup(store);
+        store.on(&quot;beforeload&quot;, <b>this</b>.beforeLoad, <b>this</b>);
+        store.on(&quot;load&quot;, <b>this</b>.onLoad, <b>this</b>);
+        store.on(&quot;loadexception&quot;, <b>this</b>.onLoadError, <b>this</b>);
+        <b>this</b>.store = store;
+        <b>if</b> (store.getCount() &gt; 0){
+            <b>this</b>.onLoad(store, null, {});
+        }
+    },
+
+    <i>// private</i>
+    onDestroy : <b>function</b>(){
+        <b>if</b>(this.store){
+            <b>this</b>.unbind(<b>this</b>.store);
+        }
+        Ext.PagingToolbar.superclass.onDestroy.call(<b>this</b>);
+    }
+});
+Ext.reg(<em>'paging'</em>, Ext.PagingToolbar);</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

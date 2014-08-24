@@ -1,0 +1,32 @@
+<html><head><title>ColorMenu.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ColorMenu.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.menu.ColorMenu
+ * @extends Ext.menu.Menu
+ * A menu containing a {@link Ext.menu.ColorItem} component (which provides a basic color picker).
+ * @constructor
+ * Creates a <b>new</b> ColorMenu
+ * @param {Object} config Configuration options
+ */</i>
+Ext.menu.ColorMenu = <b>function</b>(config){
+    Ext.menu.ColorMenu.superclass.constructor.call(<b>this</b>, config);
+    <b>this</b>.plain = true;
+    <b>var</b> ci = <b>new</b> Ext.menu.ColorItem(config);
+    <b>this</b>.add(ci);
+    <i>/**
+     * The {@link Ext.ColorPalette} instance <b>for</b> this ColorMenu
+     * @type ColorPalette
+     */</i>
+    <b>this</b>.palette = ci.palette;
+    <i>/**
+     * @event select
+     * @param {ColorPalette} palette
+     * @param {String} color
+     */</i>
+    <b>this</b>.relayEvents(ci, [&quot;select&quot;]);
+};
+Ext.extend(Ext.menu.ColorMenu, Ext.menu.Menu, {
+    <i>//private</i>
+    beforeDestroy: <b>function</b>(){
+        <b>this</b>.palette.destroy();
+    }
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

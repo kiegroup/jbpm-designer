@@ -1,0 +1,286 @@
+<html><head><title>FieldSet.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>FieldSet.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.form.FieldSet
+ * @extends Ext.Panel
+ * Standard container used <b>for</b> grouping form fields.
+ * @constructor
+ * @param {Object} config Configuration options
+ */</i>
+Ext.form.FieldSet = Ext.extend(Ext.Panel, {
+    <i>/**
+     * @cfg {Mixed} checkboxToggle True to render a checkbox into the fieldset frame just <b>in</b> front of the legend,
+     * or a DomHelper config object to create the checkbox.  (defaults to false).
+     * The fieldset will be expanded or collapsed when the checkbox is toggled.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} checkboxName The name to assign to the fieldset's checkbox <b>if</b> {@link #checkboxToggle} = true
+     * (defaults to <em>'[checkbox id]-checkbox'</em>).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Number} labelWidth The width of labels. This property cascades to child containers.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} itemCls A css class to apply to the x-form-item of fields. This property cascades to child containers.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} baseCls The base CSS class applied to the fieldset (defaults to <em>'x-fieldset'</em>).
+     */</i>
+    baseCls:<em>'x-fieldset'</em>,
+    <i>/**
+     * @cfg {String} layout The {@link Ext.Container#layout} to use inside the fieldset (defaults to <em>'form'</em>).
+     */</i>
+    layout: <em>'form'</em>,
+    <i>/**
+     * @cfg {Boolean} animCollapse
+     * True to animate the transition when the panel is collapsed, false to skip the animation (defaults to false).
+     */</i>
+    animCollapse: false,
+
+    <i>// private</i>
+    onRender : <b>function</b>(ct, position){
+        <b>if</b>(!<b>this</b>.el){
+            <b>this</b>.el = document.createElement(<em>'fieldset'</em>);
+            <b>this</b>.el.id = <b>this</b>.id;
+            <b>if</b> (<b>this</b>.title || <b>this</b>.header || <b>this</b>.checkboxToggle) {
+                <b>this</b>.el.appendChild(document.createElement(<em>'legend'</em>)).className = <em>'x-fieldset-header'</em>;
+            }
+        }
+
+        Ext.form.FieldSet.superclass.onRender.call(<b>this</b>, ct, position);
+
+        <b>if</b>(this.checkboxToggle){
+            <b>var</b> o = <b>typeof</b> this.checkboxToggle == <em>'object'</em> ?
+                    <b>this</b>.checkboxToggle :
+                    {tag: <em>'input'</em>, type: <em>'checkbox'</em>, name: <b>this</b>.checkboxName || <b>this</b>.id+<em>'-checkbox'</em>};
+            <b>this</b>.checkbox = <b>this</b>.header.insertFirst(o);
+            <b>this</b>.checkbox.dom.checked = !<b>this</b>.collapsed;
+            <b>this</b>.checkbox.on(<em>'click'</em>, <b>this</b>.onCheckClick, <b>this</b>);
+        }
+    },
+
+    <i>// private</i>
+    onCollapse : <b>function</b>(doAnim, animArg){
+        <b>if</b>(this.checkbox){
+            <b>this</b>.checkbox.dom.checked = false;
+        }
+        Ext.form.FieldSet.superclass.onCollapse.call(<b>this</b>, doAnim, animArg);
+
+    },
+
+    <i>// private</i>
+    onExpand : <b>function</b>(doAnim, animArg){
+        <b>if</b>(this.checkbox){
+            <b>this</b>.checkbox.dom.checked = true;
+        }
+        Ext.form.FieldSet.superclass.onExpand.call(<b>this</b>, doAnim, animArg);
+    },
+
+    <i>/* <i>//protected</i>
+     * This <b>function</b> is called by the fieldset's checkbox when it is toggled (only applies when
+     * checkboxToggle = true).  This method should never be called externally, but can be
+     * overridden to provide custom behavior when the checkbox is toggled <b>if</b> needed.
+     */</i>
+    onCheckClick : <b>function</b>(){
+        <b>this</b>[this.checkbox.dom.checked ? <em>'expand'</em> : <em>'collapse'</em>]();
+    },
+    
+    <i>// private</i>
+    beforeDestroy : <b>function</b>(){
+        <b>if</b>(this.checkbox){
+            <b>this</b>.checkbox.un(<em>'click'</em>, <b>this</b>.onCheckClick, <b>this</b>);
+        }
+        Ext.form.FieldSet.superclass.beforeDestroy.call(<b>this</b>);
+    }
+
+    <i>/**
+     * @cfg {String/Number} activeItem
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Mixed} applyTo
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Object/Array} bbar
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} bodyBorder
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} border
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean/Number} bufferResize
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} buttonAlign
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Array} buttons
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} collapseFirst
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} defaultType
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} disabledClass
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} elements
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} floating
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} footer
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} frame
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} header
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} headerAsText
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} hideCollapseTool
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} iconCls
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean/String} shadow
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Number} shadowOffset
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} shim
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Object/Array} tbar
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} titleCollapse
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Array} tools
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} xtype
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @property header
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @property footer
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @method focus
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @method getBottomToolbar
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @method getTopToolbar
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @method setIconClass
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event activate
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event beforeclose
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event bodyresize
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event close
+     * @hide
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @event deactivate
+     * @hide
+     */</i>
+});
+Ext.reg(<em>'fieldset'</em>, Ext.form.FieldSet);
+
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

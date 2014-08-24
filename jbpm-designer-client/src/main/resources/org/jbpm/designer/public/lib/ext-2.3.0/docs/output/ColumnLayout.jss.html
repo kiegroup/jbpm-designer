@@ -1,0 +1,130 @@
+<html><head><title>ColumnLayout.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ColumnLayout.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.layout.ColumnLayout
+ * @extends Ext.layout.ContainerLayout
+ * &lt;p&gt;This is the layout style of choice <b>for</b> creating structural layouts <b>in</b> a multi-column format where the width of
+ * each column can be specified as a percentage or fixed width, but the height is allowed to vary based on the content.
+ * This class is intended to be extended or created via the layout:<em>'column'</em> {@link Ext.Container#layout} config,
+ * and should generally not need to be created directly via the <b>new</b> keyword.&lt;/p&gt;
+ * &lt;p&gt;ColumnLayout does not have any direct config options (other than inherited ones), but it does support a
+ * specific config property of &lt;b&gt;&lt;tt&gt;columnWidth&lt;/tt&gt;&lt;/b&gt; that can be included <b>in</b> the config of any panel added to it.  The
+ * layout will use the columnWidth (<b>if</b> present) or width of each panel during layout to determine how to size each panel.
+ * If width or columnWidth is not specified <b>for</b> a given panel, its width will <b>default</b> to the panel's width (or auto).&lt;/p&gt;
+ * &lt;p&gt;The width property is always evaluated as pixels, and must be a number greater than or equal to 1.
+ * The columnWidth property is always evaluated as a percentage, and must be a decimal value greater than 0 and
+ * less than 1 (e.g., .25).&lt;/p&gt;
+ * &lt;p&gt;The basic rules <b>for</b> specifying column widths are pretty simple.  The logic makes two passes through the
+ * set of contained panels.  During the first layout pass, all panels that either have a fixed width or none
+ * specified (auto) are skipped, but their widths are subtracted from the overall container width.  During the second
+ * pass, all panels <b>with</b> columnWidths are assigned pixel widths <b>in</b> proportion to their percentages based on
+ * the total &lt;b&gt;remaining&lt;/b&gt; container width.  In other words, percentage width panels are designed to fill the space
+ * left over by all the fixed-width and/or auto-width panels.  Because of <b>this</b>, <b>while</b> you can specify any number of columns
+ * <b>with</b> different percentages, the columnWidths must always add up to 1 (or 100%) when added together, otherwise your
+ * layout may not render as expected.  Example usage:&lt;/p&gt;
+ * &lt;pre&gt;&lt;code&gt;
+<i>// All columns are percentages -- they must add up to 1</i>
+<b>var</b> p = <b>new</b> Ext.Panel({
+    title: <em>'Column Layout - Percentage Only'</em>,
+    layout:<em>'column'</em>,
+    items: [{
+        title: <em>'Column 1'</em>,
+        columnWidth: .25 
+    },{
+        title: <em>'Column 2'</em>,
+        columnWidth: .6
+    },{
+        title: <em>'Column 3'</em>,
+        columnWidth: .15
+    }]
+});
+
+<i>// Mix of width and columnWidth -- all columnWidth values must add up</i>
+<i>// to 1. The first column will take up exactly 120px, and the last two</i>
+<i>// columns will fill the remaining container width.</i>
+<b>var</b> p = <b>new</b> Ext.Panel({
+    title: <em>'Column Layout - Mixed'</em>,
+    layout:<em>'column'</em>,
+    items: [{
+        title: <em>'Column 1'</em>,
+        width: 120
+    },{
+        title: <em>'Column 2'</em>,
+        columnWidth: .8
+    },{
+        title: <em>'Column 3'</em>,
+        columnWidth: .2
+    }]
+});
+&lt;/code&gt;&lt;/pre&gt;
+ */</i>
+Ext.layout.ColumnLayout = Ext.extend(Ext.layout.ContainerLayout, {
+    <i>// private</i>
+    monitorResize:true,
+    
+    <i>/**
+     * @cfg {String} extraCls
+     * An optional extra CSS class that will be added to the container (defaults to <em>'x-column'</em>).  This can be useful <b>for</b>
+     * adding customized styles to the container or any of its children using standard CSS rules.
+     */</i>
+    extraCls: <em>'x-column'</em>,
+
+    scrollOffset : 0,
+
+    <i>// private</i>
+    isValidParent : <b>function</b>(c, target){
+        <b>return</b> (c.getPositionEl ? c.getPositionEl() : c.getEl()).dom.parentNode == <b>this</b>.innerCt.dom;
+    },
+
+    <i>// private</i>
+    onLayout : <b>function</b>(ct, target){
+        <b>var</b> cs = ct.items.items, len = cs.length, c, i;
+
+        <b>if</b>(!<b>this</b>.innerCt){
+            target.addClass(<em>'x-column-layout-ct'</em>);
+
+            <i>// the innerCt prevents wrapping and shuffling <b>while</b></i>
+            <i>// the container is resizing</i>
+            <b>this</b>.innerCt = target.createChild({cls:<em>'x-column-inner'</em>});
+            <b>this</b>.innerCt.createChild({cls:<em>'x-clear'</em>});
+        }
+        <b>this</b>.renderAll(ct, <b>this</b>.innerCt);
+
+        <b>var</b> size = Ext.isIE &amp;&amp; target.dom != Ext.getBody().dom ? target.getStyleSize() : target.getViewSize();
+
+        <b>if</b>(size.width &lt; 1 &amp;&amp; size.height &lt; 1){ <i>// display none?</i>
+            <b>return</b>;
+        }
+
+        <b>var</b> w = size.width - target.getPadding(<em>'lr'</em>) - <b>this</b>.scrollOffset,
+            h = size.height - target.getPadding(<em>'tb'</em>),
+            pw = w;
+
+        <b>this</b>.innerCt.setWidth(w);
+        
+        <i>// some columns can be percentages <b>while</b> others are fixed</i>
+        <i>// so we need to make 2 passes</i>
+
+        <b>for</b>(i = 0; i &lt; len; i++){
+            c = cs[i];
+            <b>if</b>(!c.columnWidth){
+                pw -= (c.getSize().width + c.getEl().getMargins(<em>'lr'</em>));
+            }
+        }
+
+        pw = pw &lt; 0 ? 0 : pw;
+
+        <b>for</b>(i = 0; i &lt; len; i++){
+            c = cs[i];
+            <b>if</b>(c.columnWidth){
+                c.setSize(Math.floor(c.columnWidth*pw) - c.getEl().getMargins(<em>'lr'</em>));
+            }
+        }
+    }
+    
+    <i>/**
+     * @property activeItem
+     * @hide
+     */</i>
+});
+
+Ext.Container.LAYOUTS[<em>'column'</em>] = Ext.layout.ColumnLayout;</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

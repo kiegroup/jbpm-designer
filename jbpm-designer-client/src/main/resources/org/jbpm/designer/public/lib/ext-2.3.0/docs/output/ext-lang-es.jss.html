@@ -1,0 +1,314 @@
+<html><head><title>ext-lang-es.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ext-lang-es.js</h1><pre class="highlighted"><code><i>/*
+ * Spanish/Latin American Translation by genius551v 04-08-2007
+ * Revised by efege, 2007-04-15.
+ * Revised by Rafaga2k 10-01-2007 (mm/dd/yyyy)
+ * Revised by FeDe 12-13-2007 (mm/dd/yyyy)
+ * Synchronized <b>with</b> 2.2 version of ext-lang-en.js (provided by Condor 8 aug 2008) 
+ *     by halkon_polako 14-aug-2008
+ */</i>
+
+Ext.UpdateManager.defaults.indicatorText = <em>'&lt;div class=&quot;loading-indicator&quot;&gt;Cargando...&lt;/div&gt;'</em>;
+
+<b>if</b>(Ext.DataView){
+  Ext.DataView.prototype.emptyText = &quot;&quot;;
+}
+
+<b>if</b>(Ext.grid.GridPanel){
+  Ext.grid.GridPanel.prototype.ddText = &quot;{0} fila(s) seleccionada(s)&quot;;
+}
+
+<b>if</b>(Ext.LoadMask){
+  Ext.LoadMask.prototype.msg = &quot;Cargando...&quot;;
+}
+
+Date.monthNames = [
+  &quot;Enero&quot;,
+  &quot;Febrero&quot;,
+  &quot;Marzo&quot;,
+  &quot;Abril&quot;,
+  &quot;Mayo&quot;,
+  &quot;Junio&quot;,
+  &quot;Julio&quot;,
+  &quot;Agosto&quot;,
+  &quot;Septiembre&quot;,
+  &quot;Octubre&quot;,
+  &quot;Noviembre&quot;,
+  &quot;Diciembre&quot;
+];
+
+Date.getShortMonthName = <b>function</b>(month) {
+  <b>return</b> Date.monthNames[month].substring(0, 3);
+};
+
+Date.monthNumbers = {
+  Ene : 0,
+  Feb : 1,
+  Mar : 2,
+  Abr : 3,
+  May : 4,
+  Jun : 5,
+  Jul : 6,
+  Ago : 7,
+  Sep : 8,
+  Oct : 9,
+  Nov : 10,
+  Dic : 11
+};
+
+Date.getMonthNumber = <b>function</b>(name) {
+  <b>return</b> Date.monthNumbers[name.substring(0, 1).toUpperCase() + name.substring(1, 3).toLowerCase()];
+};
+
+Date.dayNames = [
+  &quot;Domingo&quot;,
+  &quot;Lunes&quot;,
+  &quot;Martes&quot;,
+  &quot;Mi&amp;#233;rcoles&quot;,
+  &quot;Jueves&quot;,
+  &quot;Viernes&quot;,
+  &quot;S&amp;#225;bado&quot;
+];
+
+Date.getShortDayName = <b>function</b>(day) {
+  <b>if</b> (day==3) <b>return</b> &quot;Mi&Atilde;&copy;&quot;;
+  <b>if</b> (day==6) <b>return</b> &quot;S&Atilde;&iexcl;b&quot;;
+  <b>return</b> Date.dayNames[day].substring(0, 3);
+};
+
+Date.parseCodes.S.s = &quot;(?:st|nd|rd|th)&quot;;
+
+<b>if</b>(Ext.MessageBox){
+  Ext.MessageBox.buttonText = {
+    ok     : &quot;Aceptar&quot;,
+    cancel : &quot;Cancelar&quot;,
+    yes    : &quot;S&amp;#237;&quot;,
+    no     : &quot;No&quot;
+  };
+}
+
+<b>if</b>(Ext.util.Format){
+  Ext.util.Format.date = <b>function</b>(v, format){
+    <b>if</b>(!v) <b>return</b> &quot;&quot;;
+    <b>if</b>(!(v instanceof Date)) v = <b>new</b> Date(Date.parse(v));
+    <b>return</b> v.dateFormat(format || &quot;d/m/Y&quot;);
+  };
+}
+
+<b>if</b>(Ext.DatePicker){
+  Ext.apply(Ext.DatePicker.prototype, {
+    todayText         : &quot;Hoy&quot;,
+    minText           : &quot;Esta fecha es anterior a la fecha m&amp;#237;nima&quot;,
+    maxText           : &quot;Esta fecha es posterior a la fecha m&amp;#225;xima&quot;,
+    disabledDaysText  : &quot;&quot;,
+    disabledDatesText : &quot;&quot;,
+    monthNames	      : Date.monthNames,
+    dayNames		  : Date.dayNames,
+    nextText          : <em>'Mes Siguiente (Control+Right)'</em>,
+    prevText          : <em>'Mes Anterior (Control+Left)'</em>,
+    monthYearText     : <em>'Seleccione un mes (Control+Up/Down para desplazar el a&amp;#241;o)'</em>,
+    todayTip          : &quot;{0} (Barra espaciadora)&quot;,
+    format            : &quot;d/m/Y&quot;,
+    okText            : &quot;&amp;#160;Ok&amp;#160;&quot;,
+    cancelText        : &quot;Cancelar&quot;,
+    startDay          : 1
+  });
+}
+
+<b>if</b>(Ext.PagingToolbar){
+  Ext.apply(Ext.PagingToolbar.prototype, {
+    beforePageText : &quot;P&amp;#225;gina&quot;,
+    afterPageText  : &quot;de {0}&quot;,
+    firstText      : &quot;Primera p&amp;#225;gina&quot;,
+    prevText       : &quot;P&amp;#225;gina anterior&quot;,
+    nextText       : &quot;P&amp;#225;gina siguiente&quot;,
+    lastText       : &quot;&Atilde;šltima p&amp;#225;gina&quot;,
+    refreshText    : &quot;Actualizar&quot;,
+    displayMsg     : &quot;Mostrando {0} - {1} de {2}&quot;,
+    emptyMsg       : <em>'Sin datos para mostrar'</em>
+  });
+}
+
+<b>if</b>(Ext.form.Field){
+  Ext.form.Field.prototype.invalidText = &quot;El valor en este campo es inv&amp;#225;lido&quot;;
+}
+
+<b>if</b>(Ext.form.TextField){
+  Ext.apply(Ext.form.TextField.prototype, {
+    minLengthText : &quot;El tama&amp;#241;o m&amp;#237;nimo para este campo es de {0}&quot;,
+    maxLengthText : &quot;El tama&amp;#241;o m&amp;#225;ximo para este campo es de {0}&quot;,
+    blankText     : &quot;Este campo es obligatorio&quot;,
+    regexText     : &quot;&quot;,
+    emptyText     : null
+  });
+}
+
+<b>if</b>(Ext.form.NumberField){
+  Ext.apply(Ext.form.NumberField.prototype, {
+    decimalSeparator : &quot;.&quot;,
+    decimalPrecision : 2,
+    minText : &quot;El valor m&amp;#237;nimo para este campo es de {0}&quot;,
+    maxText : &quot;El valor m&amp;#225;ximo para este campo es de {0}&quot;,
+    nanText : &quot;{0} no es un n&amp;#250;mero v&amp;#225;lido&quot;
+  });
+}
+
+<b>if</b>(Ext.form.DateField){
+  Ext.apply(Ext.form.DateField.prototype, {
+    disabledDaysText  : &quot;Deshabilitado&quot;,
+    disabledDatesText : &quot;Deshabilitado&quot;,
+    minText           : &quot;La fecha para este campo debe ser posterior a {0}&quot;,
+    maxText           : &quot;La fecha para este campo debe ser anterior a {0}&quot;,
+    invalidText       : &quot;{0} no es una fecha v&amp;#225;lida - debe tener el formato {1}&quot;,
+    format            : &quot;d/m/Y&quot;,
+    altFormats        : &quot;d/m/Y|d-m-y|d-m-Y|d/m|d-m|dm|dmy|dmY|d|Y-m-d&quot;
+  });
+}
+
+<b>if</b>(Ext.form.ComboBox){
+  Ext.apply(Ext.form.ComboBox.prototype, {
+    loadingText       : &quot;Cargando...&quot;,
+    valueNotFoundText : undefined
+  });
+}
+
+<b>if</b>(Ext.form.VTypes){
+  Ext.apply(Ext.form.VTypes, {
+    emailText    : <em>'Este campo debe ser una direcci&amp;#243;n de correo electr&amp;#243;nico con el formato &quot;usuario@dominio.com&quot;'</em>,
+    urlText      : <em>'Este campo debe ser una URL con el formato &quot;http:/'</em>+<em>'/www.dominio.com&quot;'</em>,
+    alphaText    : <em>'Este campo s&amp;#243;lo debe contener letras y _'</em>,
+    alphanumText : <em>'Este campo s&amp;#243;lo debe contener letras, n&amp;#250;meros y _'</em>
+  });
+}
+
+<b>if</b>(Ext.form.HtmlEditor){
+  Ext.apply(Ext.form.HtmlEditor.prototype, {
+    createLinkText : &quot;Por favor proporcione la URL para el enlace:&quot;,
+    buttonTips : {
+      bold : {
+        title: <em>'Negritas (Ctrl+B)'</em>,
+	    text: <em>'Transforma el texto seleccionado en Negritas.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      italic : {
+        title: <em>'It&amp;#225;lica (Ctrl+I)'</em>,
+        text: <em>'Transforma el texto seleccionado en It&amp;#225;licas.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      underline : {
+        title: <em>'Subrayado (Ctrl+U)'</em>,
+        text: <em>'Subraya el texto seleccionado.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      increasefontsize : {
+        title: <em>'Aumentar la fuente'</em>,
+        text: <em>'Aumenta el tama&amp;#241;o de la fuente'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      decreasefontsize : {
+        title: <em>'Reducir la fuente'</em>,
+        text: <em>'Reduce el tama&amp;#241;o de la fuente.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      backcolor : {
+        title: <em>'Color de fondo'</em>,
+        text: <em>'Modifica el color de fondo del texto seleccionado.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      forecolor : {
+        title: <em>'Color de la fuente'</em>,
+        text: <em>'Modifica el color del texto seleccionado.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifyleft : {
+        title: <em>'Alinear a la izquierda'</em>,
+        text: <em>'Alinea el texto a la izquierda.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifycenter : {
+        title: <em>'Centrar'</em>,
+        text: <em>'Centrar el texto.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      justifyright : {
+        title: <em>'Alinear a la derecha'</em>,
+        text: <em>'Alinea el texto a la derecha.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      insertunorderedlist : {
+        title: <em>'Lista de vi&amp;#241;etas'</em>,
+        text: <em>'Inicia una lista con vi&amp;#241;etas.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      insertorderedlist : {
+        title: <em>'Lista numerada'</em>,
+        text: <em>'Inicia una lista numerada.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      createlink : {
+        title: <em>'Enlace'</em>,
+        text: <em>'Inserta un enlace de hipertexto.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      },
+      sourceedit : {
+        title: <em>'C&amp;#243;digo Fuente'</em>,
+        text: <em>'Pasar al modo de edici&amp;#243;n de c&amp;#243;digo fuente.'</em>,
+        cls: <em>'x-html-editor-tip'</em>
+      }
+    }
+  });
+}
+
+<b>if</b>(Ext.grid.GridView){
+  Ext.apply(Ext.grid.GridView.prototype, {
+    sortAscText  : &quot;Ordenar en forma ascendente&quot;,
+    sortDescText : &quot;Ordenar en forma descendente&quot;,
+    columnsText  : &quot;Columnas&quot;
+  });
+}
+
+<b>if</b>(Ext.grid.GroupingView){
+  Ext.apply(Ext.grid.GroupingView.prototype, {
+    emptyGroupText : <em>'(Ninguno)'</em>,
+    groupByText    : <em>'Agrupar por este campo'</em>,
+    showGroupsText : <em>'Mostrar en grupos'</em>
+  });
+}
+
+<b>if</b>(Ext.grid.PropertyColumnModel){
+  Ext.apply(Ext.grid.PropertyColumnModel.prototype, {
+    nameText   : &quot;Nombre&quot;,
+    valueText  : &quot;Valor&quot;,
+    dateFormat : &quot;j/m/Y&quot;
+  });
+}
+
+<b>if</b>(Ext.layout.BorderLayout &amp;&amp; Ext.layout.BorderLayout.SplitRegion){
+  Ext.apply(Ext.layout.BorderLayout.SplitRegion.prototype, {
+    splitTip            : &quot;Arrastre para redimensionar.&quot;,
+    collapsibleSplitTip : &quot;Arrastre para redimensionar. Doble clic para ocultar.&quot;
+  });
+}
+
+<b>if</b>(Ext.form.TimeField){
+  Ext.apply(Ext.form.TimeField.prototype, {
+    minText : &quot;La hora en este campo debe ser igual o posterior a {0}&quot;,
+    maxText : &quot;La hora en este campo debe ser igual o anterior a {0}&quot;,
+    invalidText : &quot;{0} no es una hora v&amp;#225;lida&quot;,
+    format : &quot;g:i A&quot;,
+    altFormats : &quot;g:ia|g:iA|g:i a|g:i A|h:i|g:i|H:i|ga|ha|gA|h a|g a|g A|gi|hi|gia|hia|g|H&quot;
+  });
+}
+
+<b>if</b>(Ext.form.CheckboxGroup){
+  Ext.apply(Ext.form.CheckboxGroup.prototype, {
+    blankText : &quot;Debe seleccionar al menos un &amp;#233;tem de este grupo&quot;
+  });
+}
+
+<b>if</b>(Ext.form.RadioGroup){
+  Ext.apply(Ext.form.RadioGroup.prototype, {
+    blankText : &quot;Debe seleccionar un &amp;#233;tem de este grupo&quot;
+  });
+}
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

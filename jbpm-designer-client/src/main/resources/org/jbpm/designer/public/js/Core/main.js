@@ -33,7 +33,7 @@ function init() {
 	 * representation, a spacer gif on the site of ext is loaded from the
 	 * internet. This causes problems when internet or the ext site are not
 	 * available. */
-	Ext.BLANK_IMAGE_URL = ORYX.BASE_FILE_PATH + 'lib/ext-2.0.2/resources/images/default/s.gif';
+	Ext.BLANK_IMAGE_URL = ORYX.BASE_FILE_PATH + 'lib/ext-2.3.0/resources/images/default/s.gif';
 
 	ORYX.Log.debug("Querying editor instances");
 

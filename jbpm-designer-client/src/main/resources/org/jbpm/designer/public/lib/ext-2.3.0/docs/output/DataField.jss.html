@@ -1,0 +1,161 @@
+<html><head><title>DataField.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>DataField.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.data.Field
+ * &lt;p&gt;This class encpasulates the field definition information specified <b>in</b> the field definition objects
+ * passed to {@link Ext.data.Record#create}.&lt;/p&gt;
+ * &lt;p&gt;Developers <b>do</b> not need to instantiate <b>this</b> class. Instances are created by {@link Ext.data.Record.create}
+ * and cached <b>in</b> the {@link Ext.data.Record#fields fields} property of the created Record constructor's &lt;b&gt;prototype.&lt;/b&gt;&lt;/p&gt;
+ */</i>
+Ext.data.Field = <b>function</b>(config){
+    <b>if</b>(typeof config == &quot;string&quot;){
+        config = {name: config};
+    }
+    Ext.apply(<b>this</b>, config);
+
+    <b>if</b>(!<b>this</b>.type){
+        <b>this</b>.type = &quot;auto&quot;;
+    }
+
+    <b>var</b> st = Ext.data.SortTypes;
+    <i>// named sortTypes are supported, here we look them up</i>
+    <b>if</b>(typeof <b>this</b>.sortType == &quot;string&quot;){
+        <b>this</b>.sortType = st[<b>this</b>.sortType];
+    }
+
+    <i>// set <b>default</b> sortType <b>for</b> strings and dates</i>
+    <b>if</b>(!<b>this</b>.sortType){
+        <b>switch</b>(this.type){
+            <b>case</b> &quot;string&quot;:
+                <b>this</b>.sortType = st.asUCString;
+                <b>break</b>;
+            <b>case</b> &quot;date&quot;:
+                <b>this</b>.sortType = st.asDate;
+                <b>break</b>;
+            <b>default</b>:
+                <b>this</b>.sortType = st.none;
+        }
+    }
+
+    <i>// define once</i>
+    <b>var</b> stripRe = /[\$,%]/g;
+
+    <i>// prebuilt conversion <b>function</b> for <b>this</b> field, instead of</i>
+    <i>// switching every time we're reading a value</i>
+    <b>if</b>(!<b>this</b>.convert){
+        <b>var</b> cv, dateFormat = <b>this</b>.dateFormat;
+        <b>switch</b>(this.type){
+            <b>case</b> &quot;&quot;:
+            <b>case</b> &quot;auto&quot;:
+            <b>case</b> undefined:
+                cv = <b>function</b>(v){ <b>return</b> v; };
+                <b>break</b>;
+            <b>case</b> &quot;string&quot;:
+                cv = <b>function</b>(v){ <b>return</b> (v === undefined || v === null) ? <em>''</em> : String(v); };
+                <b>break</b>;
+            <b>case</b> &quot;int&quot;:
+                cv = <b>function</b>(v){
+                    <b>return</b> v !== undefined &amp;&amp; v !== null &amp;&amp; v !== <em>''</em> ?
+                           parseInt(String(v).replace(stripRe, &quot;&quot;), 10) : <em>''</em>;
+                    };
+                <b>break</b>;
+            <b>case</b> &quot;float&quot;:
+                cv = <b>function</b>(v){
+                    <b>return</b> v !== undefined &amp;&amp; v !== null &amp;&amp; v !== <em>''</em> ?
+                           parseFloat(String(v).replace(stripRe, &quot;&quot;), 10) : <em>''</em>;
+                    };
+                <b>break</b>;
+            <b>case</b> &quot;bool&quot;:
+            <b>case</b> &quot;boolean&quot;:
+                cv = <b>function</b>(v){ <b>return</b> v === true || v === &quot;true&quot; || v == 1; };
+                <b>break</b>;
+            <b>case</b> &quot;date&quot;:
+                cv = <b>function</b>(v){
+                    <b>if</b>(!v){
+                        <b>return</b> <em>''</em>;
+                    }
+                    <b>if</b>(Ext.isDate(v)){
+                        <b>return</b> v;
+                    }
+                    <b>if</b>(dateFormat){
+                        <b>if</b>(dateFormat == &quot;timestamp&quot;){
+                            <b>return</b> new Date(v*1000);
+                        }
+                        <b>if</b>(dateFormat == &quot;time&quot;){
+                            <b>return</b> new Date(parseInt(v, 10));
+                        }
+                        <b>return</b> Date.parseDate(v, dateFormat);
+                    }
+                    <b>var</b> parsed = Date.parse(v);
+                    <b>return</b> parsed ? <b>new</b> Date(parsed) : null;
+                };
+             <b>break</b>;
+
+        }
+        <b>this</b>.convert = cv;
+    }
+};
+
+Ext.data.Field.prototype = {
+    <i>/**
+     * @cfg {String} name
+     * The name by which the field is referenced within the Record. This is referenced by,
+     * <b>for</b> example, the &lt;em&gt;dataIndex&lt;/em&gt; property <b>in</b> column definition objects passed to {@link Ext.grid.ColumnModel}
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} type
+     * (Optional) The data type <b>for</b> conversion to displayable value. Possible values are
+     * &lt;div class=&quot;mdetail-params&quot;&gt;&lt;ul&gt;&lt;li&gt;auto (Default, implies no conversion)&lt;/li&gt;
+     * &lt;li&gt;string&lt;/li&gt;
+     * &lt;li&gt;int&lt;/li&gt;
+     * &lt;li&gt;float&lt;/li&gt;
+     * &lt;li&gt;boolean&lt;/li&gt;
+     * &lt;li&gt;date&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Function} convert
+     * (Optional) A <b>function</b> which converts the value provided by the Reader into an object that will be stored
+     * <b>in</b> the Record. It is passed the following parameters:&lt;ul&gt;
+     * &lt;li&gt;&lt;b&gt;v&lt;/b&gt; : Mixed&lt;div class=&quot;sub-desc&quot;&gt;The data value as read by the Reader.&lt;/div&gt;&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;rec&lt;/b&gt; : Mixed&lt;div class=&quot;sub-desc&quot;&gt;The data object containing the row as read by the Reader.
+     * Depending on Reader type, <b>this</b> could be an Array, an object, or an XML element.&lt;/div&gt;&lt;/li&gt;
+     * &lt;/ul&gt;
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} dateFormat
+     * (Optional) A format string <b>for</b> the {@link Date#parseDate Date.parseDate} <b>function</b>, or &quot;timestamp&quot; <b>if</b> the
+     * value provided by the Reader is a UNIX timestamp, or &quot;time&quot; <b>if</b> the value provided by the Reader is a
+     * javascript millisecond timestamp.
+     */</i>
+    dateFormat: null,
+    <i>/**
+     * @cfg {Mixed} defaultValue
+     * (Optional) The <b>default</b> value used &lt;b&gt;when a Record is being created by a
+     * {@link Ext.data.Reader Reader}&lt;/b&gt; when the item referenced by the &lt;b&gt;&lt;tt&gt;mapping&lt;/tt&gt;&lt;/b&gt; does not exist <b>in</b> the data object
+     * (i.e. undefined). (defaults to &quot;&quot;)
+     */</i>
+    defaultValue: &quot;&quot;,
+    <i>/**
+     * @cfg {String} mapping
+     * (Optional) A path specification <b>for</b> use by the {@link Ext.data.Reader} implementation
+     * that is creating the Record to access the data value from the data object. If an {@link Ext.data.JsonReader}
+     * is being used, then <b>this</b> is a string containing the javascript expression to reference the data relative to
+     * the Record item's root. If an {@link Ext.data.XmlReader} is being used, <b>this</b> is an {@link Ext.DomQuery} path
+     * to the data item relative to the Record element. If the mapping expression is the same as the field name,
+     * <b>this</b> may be omitted.
+     */</i>
+    mapping: null,
+    <i>/**
+     * @cfg {Function} sortType
+     * (Optional) A <b>function</b> which converts a Field's value to a comparable value <b>in</b> order to ensure correct
+     * sort ordering. Predefined functions are provided <b>in</b> {@link Ext.data.SortTypes}
+     */</i>
+    sortType : null,
+    <i>/**
+     * @cfg {String} sortDir
+     * (Optional) Initial direction to sort. &quot;ASC&quot; or &quot;DESC&quot;
+     */</i>
+    sortDir : &quot;ASC&quot;
+};</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

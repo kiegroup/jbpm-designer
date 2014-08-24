@@ -1,0 +1,908 @@
+<html><head><title>Window.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>Window.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.Window
+ * @extends Ext.Panel
+ * A specialized panel intended <b>for</b> use as an application window.  Windows are floated and draggable by <b>default</b>, and
+ * also provide specific behavior like the ability to maximize and restore (<b>with</b> an event <b>for</b> minimizing, since the
+ * minimize behavior is application-specific).  Windows can also be linked to a {@link Ext.WindowGroup} or managed
+ * by the {@link Ext.WindowMgr} to provide grouping, activation, to front/back and other application-specific behavior.
+ * @constructor
+ * @param {Object} config The config object
+ */</i>
+Ext.Window = Ext.extend(Ext.Panel, {
+    <i>/**
+     * @cfg {Number} x
+     * The X position of the left edge of the Window on initial showing. Defaults to centering the Window within
+     * the width of the Window's container {@link Ext.Element Element) (The Element that the Window is rendered to).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Number} y
+     * The Y position of the top edge of the Window on initial showing. Defaults to centering the Window within
+     * the height of the Window's container {@link Ext.Element Element) (The Element that the Window is rendered to).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} modal
+     * True to make the window modal and mask everything behind it when displayed, false to display it without
+     * restricting access to other UI elements (defaults to false).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String/Element} animateTarget
+     * Id or element from which the window should animate <b>while</b> opening (defaults to null <b>with</b> no animation).
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {String} resizeHandles
+     * A valid {@link Ext.Resizable} handles config string (defaults to <em>'all'</em>).  Only applies when resizable = true.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Ext.WindowGroup} manager
+     * A reference to the WindowGroup that should manage <b>this</b> window (defaults to {@link Ext.WindowMgr}).
+     */</i>
+<i>// holder</i>
+<i>/***
+    * @cfg {String/Number/Button} defaultButton
+    * The id / index of a button or a button instance to focus when <b>this</b> window received the focus.
+    */</i>
+<i>// holder</i>
+<i>/***
+    * @cfg {Function} onEsc
+    * Allows override of the built-<b>in</b> processing <b>for</b> the escape key. Default action
+    * is to close the Window (performing whatever action is specified <b>in</b> {@link #closeAction}.
+    * To prevent the Window closing when the escape key is pressed, specify <b>this</b> as
+    * Ext.emptyFn (See {@link Ext#emptyFn}).
+    */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} collapsed
+     * True to render the window collapsed, false to render it expanded (defaults to false). Note that <b>if</b> 
+     * {@link #expandOnShow} is true (the <b>default</b>) it will override the &lt;tt&gt;collapsed&lt;/tt&gt; config and the window 
+     * will always be expanded when shown.
+     */</i>
+<i>// holder</i>
+<i>/***
+     * @cfg {Boolean} maximized
+     * True to initially display the window <b>in</b> a maximized state. (Defaults to false).
+     */</i>
+<i>// holder</i>
+<i>/***
+    * @cfg {String} baseCls
+    * The base CSS class to apply to <b>this</b> panel<em>'s element (defaults to '</em>x-window').
+    */</i>
+    baseCls : <em>'x-window'</em>,
+    <i>/**
+     * @cfg {Boolean} resizable
+     * True to allow user resizing at each edge and corner of the window, false to disable resizing (defaults to true).
+     */</i>
+    resizable:true,
+    <i>/**
+     * @cfg {Boolean} draggable
+     * True to allow the window to be dragged by the header bar, false to disable dragging (defaults to true).  Note
+     * that by <b>default</b> the window will be centered <b>in</b> the viewport, so <b>if</b> dragging is disabled the window may need
+     * to be positioned programmatically after render (e.g., myWindow.setPosition(100, 100);).
+     */</i>
+    draggable:true,
+    <i>/**
+     * @cfg {Boolean} closable
+     * &lt;p&gt;True to display the <em>'close'</em> tool button and allow the user to close the window, false to
+     * hide the button and disallow closing the window (<b>default</b> to true).&lt;/p&gt;
+     * &lt;p&gt;By <b>default</b>, when close is requested by either clicking the close button <b>in</b> the header
+     * or pressing ESC when the Window has focus, the {@link #close} method will be called. This
+     * will &lt;i&gt;destroy&lt;/i&gt; the Window and its content meaning that it may not be reused.&lt;/p&gt;
+     * &lt;p&gt;To make closing a Window &lt;i&gt;hide&lt;/i&gt; the Window so that it may be reused, set
+     * {@link #closeAction} to <em>'hide'</em>.
+     */</i>
+    closable : true,
+    <i>/**
+     * @cfg {Boolean} constrain
+     * True to constrain the window to the viewport, false to allow it to fall outside of the viewport
+     * (defaults to false).  Optionally the header only can be constrained using {@link #constrainHeader}.
+     */</i>
+    constrain:false,
+    <i>/**
+     * @cfg {Boolean} constrainHeader
+     * True to constrain the window header to the viewport, allowing the window body to fall outside of the viewport,
+     * false to allow the header to fall outside the viewport (defaults to false).  Optionally the entire window
+     * can be constrained using {@link #constrain}.
+     */</i>
+    constrainHeader:false,
+    <i>/**
+     * @cfg {Boolean} plain
+     * True to render the window body <b>with</b> a transparent background so that it will blend into the framing
+     * elements, false to add a lighter background color to visually highlight the body element and separate it
+     * more distinctly from the surrounding frame (defaults to false).
+     */</i>
+    plain:false,
+    <i>/**
+     * @cfg {Boolean} minimizable
+     * True to display the <em>'minimize'</em> tool button and allow the user to minimize the window, false to hide the button
+     * and disallow minimizing the window (defaults to false).  Note that <b>this</b> button provides no implementation --
+     * the behavior of minimizing a window is implementation-specific, so the minimize event must be handled and a
+     * custom minimize behavior implemented <b>for</b> this option to be useful.
+     */</i>
+    minimizable : false,
+    <i>/**
+     * @cfg {Boolean} maximizable
+     * True to display the <em>'maximize'</em> tool button and allow the user to maximize the window, false to hide the button
+     * and disallow maximizing the window (defaults to false).  Note that when a window is maximized, the tool button
+     * will automatically change to a <em>'restore'</em> button <b>with</b> the appropriate behavior already built-<b>in</b> that will
+     * restore the window to its previous size.
+     */</i>
+    maximizable : false,
+    <i>/**
+     * @cfg {Number} minHeight
+     * The minimum height <b>in</b> pixels allowed <b>for</b> this window (defaults to 100).  Only applies when resizable = true.
+     */</i>
+    minHeight: 100,
+    <i>/**
+     * @cfg {Number} minWidth
+     * The minimum width <b>in</b> pixels allowed <b>for</b> this window (defaults to 200).  Only applies when resizable = true.
+     */</i>
+    minWidth: 200,
+    <i>/**
+     * @cfg {Boolean} expandOnShow
+     * True to always expand the window when it is displayed, false to keep it <b>in</b> its current state (which may be
+     * {@link #collapsed}) when displayed (defaults to true).
+     */</i>
+    expandOnShow: true,
+    <i>/**
+     * @cfg {String} closeAction
+     * The action to take when the close button is clicked.  The <b>default</b> action is <em>'close'</em> which will actually remove
+     * the window from the DOM and destroy it.  The other valid option is <em>'hide'</em> which will simply hide the window
+     * by setting visibility to hidden and applying negative offsets, keeping the window available to be redisplayed
+     * via the {@link #show} method.
+     */</i>
+    closeAction: <em>'close'</em>,
+    <i>/**
+     * @cfg {String} elements
+     * A comma-delimited list of panel elements to initialize when the window is rendered.  Normally, <b>this</b> list will be
+     * generated automatically based on the items added to the window at config time, but sometimes it might be useful to
+     * make sure a structural element is rendered even <b>if</b> not specified at config time (<b>for</b> example, you may want
+     * to add a button or toolbar dynamically after the window has been rendered).  Adding those elements to <b>this</b>
+     * list will allocate the required placeholders <b>in</b> the window when it is rendered.  Valid values are&lt;ul&gt;
+     * &lt;li&gt;&lt;b&gt;header&lt;/b&gt; (required)&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;tbar&lt;/b&gt; (top bar)&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;body&lt;/b&gt; (required)&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;bbar&lt;/b&gt; (bottom bar)&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;footer&lt;/b&gt;&lt;li&gt;
+     * &lt;/ul&gt;
+     * Defaults to <em>'header,body'</em>.
+     */</i>
+    elements: <em>'header,body'</em>,
+
+    <i>// inherited docs, same <b>default</b></i>
+    collapsible:false,
+
+    <i>// private</i>
+    initHidden : true,
+    <i>/**
+    * @cfg {Boolean} monitorResize @hide
+    * This is automatically managed based on the value of constrain and constrainToHeader
+    */</i>
+    monitorResize : true,
+    <i>/** @cfg {Boolean} frame @hide */</i>
+    frame:true,
+    <i>/** @cfg {Boolean} floating @hide */</i>
+    floating:true,
+
+    <i>// private</i>
+    initComponent : <b>function</b>(){
+        Ext.Window.superclass.initComponent.call(<b>this</b>);
+        <b>this</b>.addEvents(
+            <i>/**
+             * @event activate
+             * Fires after the window has been visually activated via {@link setActive}.
+             * @param {Ext.Window} <b>this</b>
+             */</i>
+<i>// holder</i>
+<i>/***
+             * @event deactivate
+             * Fires after the window has been visually deactivated via {@link setActive}.
+             * @param {Ext.Window} <b>this</b>
+             */</i>
+<i>// holder</i>
+<i>/***
+             * @event resize
+             * Fires after the window has been resized.
+             * @param {Ext.Window} <b>this</b>
+             * @param {Number} width The window's <b>new</b> width
+             * @param {Number} height The window's <b>new</b> height
+             */</i>
+            <em>'resize'</em>,
+            <i>/**
+             * @event maximize
+             * Fires after the window has been maximized.
+             * @param {Ext.Window} <b>this</b>
+             */</i>
+            <em>'maximize'</em>,
+            <i>/**
+             * @event minimize
+             * Fires after the window has been minimized.
+             * @param {Ext.Window} <b>this</b>
+             */</i>
+            <em>'minimize'</em>,
+            <i>/**
+             * @event restore
+             * Fires after the window has been restored to its original size after being maximized.
+             * @param {Ext.Window} <b>this</b>
+             */</i>
+            <em>'restore'</em>
+        );
+    },
+
+    <i>// private</i>
+    getState : <b>function</b>(){
+        <b>return</b> Ext.apply(Ext.Window.superclass.getState.call(<b>this</b>) || {}, <b>this</b>.getBox(true));
+    },
+
+    <i>// private</i>
+    onRender : <b>function</b>(ct, position){
+        Ext.Window.superclass.onRender.call(<b>this</b>, ct, position);
+
+        <b>if</b>(this.plain){
+            <b>this</b>.el.addClass(<em>'x-window-plain'</em>);
+        }
+
+        <i>// <b>this</b> element allows the Window to be focused <b>for</b> keyboard events</i>
+        <b>this</b>.focusEl = <b>this</b>.el.createChild({
+                    tag: &quot;a&quot;, href:&quot;#&quot;, cls:&quot;x-dlg-focus&quot;,
+                    tabIndex:&quot;-1&quot;, html: &quot;&amp;#160;&quot;});
+        <b>this</b>.focusEl.swallowEvent(<em>'click'</em>, true);
+
+        <b>this</b>.proxy = <b>this</b>.el.createProxy(&quot;x-window-proxy&quot;);
+        <b>this</b>.proxy.enableDisplayMode(<em>'block'</em>);
+
+        <b>if</b>(this.modal){
+            <b>this</b>.mask = <b>this</b>.container.createChild({cls:&quot;ext-el-mask&quot;}, <b>this</b>.el.dom);
+            <b>this</b>.mask.enableDisplayMode(&quot;block&quot;);
+            <b>this</b>.mask.hide();
+            <b>this</b>.mask.on(<em>'click'</em>, <b>this</b>.focus, <b>this</b>);
+        }
+        <b>this</b>.initTools();
+    },
+
+    <i>// private</i>
+    initEvents : <b>function</b>(){
+        Ext.Window.superclass.initEvents.call(<b>this</b>);
+        <b>if</b>(this.animateTarget){
+            <b>this</b>.setAnimateTarget(<b>this</b>.animateTarget);
+        }
+
+        <b>if</b>(this.resizable){
+            <b>this</b>.resizer = <b>new</b> Ext.Resizable(<b>this</b>.el, {
+                minWidth: <b>this</b>.minWidth,
+                minHeight:<b>this</b>.minHeight,
+                handles: <b>this</b>.resizeHandles || &quot;all&quot;,
+                pinned: true,
+                resizeElement : <b>this</b>.resizerAction
+            });
+            <b>this</b>.resizer.window = <b>this</b>;
+            <b>this</b>.resizer.on(&quot;beforeresize&quot;, <b>this</b>.beforeResize, <b>this</b>);
+        }
+
+        <b>if</b>(this.draggable){
+            <b>this</b>.header.addClass(&quot;x-window-draggable&quot;);
+        }
+        <b>this</b>.el.on(&quot;mousedown&quot;, <b>this</b>.toFront, <b>this</b>);
+        <b>this</b>.manager = <b>this</b>.manager || Ext.WindowMgr;
+        <b>this</b>.manager.register(<b>this</b>);
+        <b>this</b>.hidden = true;
+        <b>if</b>(this.maximized){
+            <b>this</b>.maximized = false;
+            <b>this</b>.maximize();
+        }
+        <b>if</b>(this.closable){
+            <b>var</b> km = <b>this</b>.getKeyMap();
+            km.on(27, <b>this</b>.onEsc, <b>this</b>);
+            km.disable();
+        }
+    },
+
+    initDraggable : <b>function</b>(){
+        <i>/**
+         * If <b>this</b> Window is configured {@link #draggable}, <b>this</b> property will contain
+         * an instance of {@link Ext.dd.DD} which handles dragging the Window's DOM Element.
+         * @type Ext.dd.DD
+         * @property dd
+         */</i>
+        <b>this</b>.dd = <b>new</b> Ext.Window.DD(<b>this</b>);
+    },
+
+   <i>// private</i>
+    onEsc : <b>function</b>(){
+        <b>this</b>[this.closeAction]();
+    },
+
+    <i>// private</i>
+    beforeDestroy : <b>function</b>(){
+        <b>if</b> (<b>this</b>.rendered){
+            <b>this</b>.hide();
+            <b>if</b>(this.doAnchor){
+                Ext.EventManager.removeResizeListener(<b>this</b>.doAnchor, <b>this</b>);
+                Ext.EventManager.un(window, <em>'scroll'</em>, <b>this</b>.doAnchor, <b>this</b>);
+            }
+            Ext.destroy(
+                <b>this</b>.focusEl,
+                <b>this</b>.resizer,
+                <b>this</b>.dd,
+                <b>this</b>.proxy,
+                <b>this</b>.mask
+            );
+        }
+        Ext.Window.superclass.beforeDestroy.call(<b>this</b>);
+    },
+
+    <i>// private</i>
+    onDestroy : <b>function</b>(){
+        <b>if</b>(this.manager){
+            <b>this</b>.manager.unregister(<b>this</b>);
+        }
+        Ext.Window.superclass.onDestroy.call(<b>this</b>);
+    },
+
+    <i>// private</i>
+    initTools : <b>function</b>(){
+        <b>if</b>(this.minimizable){
+            <b>this</b>.addTool({
+                id: <em>'minimize'</em>,
+                handler: <b>this</b>.minimize.createDelegate(<b>this</b>, [])
+            });
+        }
+        <b>if</b>(this.maximizable){
+            <b>this</b>.addTool({
+                id: <em>'maximize'</em>,
+                handler: <b>this</b>.maximize.createDelegate(<b>this</b>, [])
+            });
+            <b>this</b>.addTool({
+                id: <em>'restore'</em>,
+                handler: <b>this</b>.restore.createDelegate(<b>this</b>, []),
+                hidden:true
+            });
+            <b>this</b>.header.on(<em>'dblclick'</em>, <b>this</b>.toggleMaximize, <b>this</b>);
+        }
+        <b>if</b>(this.closable){
+            <b>this</b>.addTool({
+                id: <em>'close'</em>,
+                handler: <b>this</b>[this.closeAction].createDelegate(<b>this</b>, [])
+            });
+        }
+    },
+
+    <i>// private</i>
+    resizerAction : <b>function</b>(){
+        <b>var</b> box = <b>this</b>.proxy.getBox();
+        <b>this</b>.proxy.hide();
+        <b>this</b>.window.handleResize(box);
+        <b>return</b> box;
+    },
+
+    <i>// private</i>
+    beforeResize : <b>function</b>(){
+        <b>this</b>.resizer.minHeight = Math.max(<b>this</b>.minHeight, <b>this</b>.getFrameHeight() + 40); <i>// 40 is a magic minimum content size?</i>
+        <b>this</b>.resizer.minWidth = Math.max(<b>this</b>.minWidth, <b>this</b>.getFrameWidth() + 40);
+        <b>this</b>.resizeBox = <b>this</b>.el.getBox();
+    },
+
+    <i>// private</i>
+    updateHandles : <b>function</b>(){
+        <b>if</b>(Ext.isIE &amp;&amp; <b>this</b>.resizer){
+            <b>this</b>.resizer.syncHandleHeight();
+            <b>this</b>.el.repaint();
+        }
+    },
+
+    <i>// private</i>
+    handleResize : <b>function</b>(box){
+        <b>var</b> rz = <b>this</b>.resizeBox;
+        <b>if</b>(rz.x != box.x || rz.y != box.y){
+            <b>this</b>.updateBox(box);
+        }<b>else</b>{
+            <b>this</b>.setSize(box);
+        }
+        <b>this</b>.focus();
+        <b>this</b>.updateHandles();
+        <b>this</b>.saveState();
+        <b>if</b>(this.layout){
+            <b>this</b>.doLayout();
+        }
+        <b>this</b>.fireEvent(&quot;resize&quot;, <b>this</b>, box.width, box.height);
+    },
+
+    <i>/**
+     * Focuses the window.  If a defaultButton is set, it will receive focus, otherwise the
+     * window itself will receive focus.
+     */</i>
+    focus : <b>function</b>(){
+        <b>var</b> f = <b>this</b>.focusEl, db = <b>this</b>.defaultButton, t = <b>typeof</b> db;
+        <b>if</b>(t != <em>'undefined'</em>){
+            <b>if</b>(t == <em>'number'</em>){
+                f = <b>this</b>.buttons[db];
+            }<b>else</b> if(t == <em>'string'</em>){
+                f = Ext.getCmp(db);
+            }<b>else</b>{
+                f = db;
+            }
+        }
+        f.focus.defer(10, f);
+    },
+
+    <i>/**
+     * Sets the target element from which the window should animate <b>while</b> opening.
+     * @param {String/Element} el The target element or id
+     */</i>
+    setAnimateTarget : <b>function</b>(el){
+        el = Ext.get(el);
+        <b>this</b>.animateTarget = el;
+    },
+
+    <i>// private</i>
+    beforeShow : <b>function</b>(){
+        <b>delete</b> this.el.lastXY;
+        <b>delete</b> this.el.lastLT;
+        <b>if</b>(this.x === undefined || <b>this</b>.y === undefined){
+            <b>var</b> xy = <b>this</b>.el.getAlignToXY(<b>this</b>.container, <em>'c-c'</em>);
+            <b>var</b> pos = <b>this</b>.el.translatePoints(xy[0], xy[1]);
+            <b>this</b>.x = <b>this</b>.x === undefined? pos.left : <b>this</b>.x;
+            <b>this</b>.y = <b>this</b>.y === undefined? pos.top : <b>this</b>.y;
+        }
+        <b>this</b>.el.setLeftTop(<b>this</b>.x, <b>this</b>.y);
+
+        <b>if</b>(this.expandOnShow){
+            <b>this</b>.expand(false);
+        }
+
+        <b>if</b>(this.modal){
+            Ext.getBody().addClass(&quot;x-body-masked&quot;);
+            <b>this</b>.mask.setSize(Ext.lib.Dom.getViewWidth(true), Ext.lib.Dom.getViewHeight(true));
+            <b>this</b>.mask.show();
+        }
+    },
+
+    <i>/**
+     * Shows the window, rendering it first <b>if</b> necessary, or activates it and brings it to front <b>if</b> hidden.
+     * @param {String/Element} animateTarget (optional) The target element or id from which the window should
+     * animate <b>while</b> opening (defaults to undefined <b>with</b> no animation)
+     * @param {Function} callback (optional) A callback <b>function</b> to call after the window is displayed
+     * @param {Object} scope (optional) The scope <b>in</b> which to execute the callback
+     */</i>
+    show : <b>function</b>(animateTarget, cb, scope){
+        <b>if</b>(!<b>this</b>.rendered){
+            <b>this</b>.render(Ext.getBody());
+        }
+        <b>if</b>(this.hidden === false){
+            <b>this</b>.toFront();
+            <b>return</b>;
+        }
+        <b>if</b>(this.fireEvent(&quot;beforeshow&quot;, <b>this</b>) === false){
+            <b>return</b>;
+        }
+        <b>if</b>(cb){
+            <b>this</b>.on(<em>'show'</em>, cb, scope, {single:true});
+        }
+        <b>this</b>.hidden = false;
+        <b>if</b>(animateTarget !== undefined){
+            <b>this</b>.setAnimateTarget(animateTarget);
+        }
+        <b>this</b>.beforeShow();
+        <b>if</b>(this.animateTarget){
+            <b>this</b>.animShow();
+        }<b>else</b>{
+            <b>this</b>.afterShow();
+        }
+    },
+
+    <i>// private</i>
+    afterShow : <b>function</b>(){
+        <b>this</b>.proxy.hide();
+        <b>this</b>.el.setStyle(<em>'display'</em>, <em>'block'</em>);
+        <b>this</b>.el.show();
+        <b>if</b>(this.maximized){
+            <b>this</b>.fitContainer();
+        }
+        <b>if</b>(Ext.isMac &amp;&amp; Ext.isGecko){ <i>// work around stupid FF 2.0/Mac scroll bar bug</i>
+        	<b>this</b>.cascade(<b>this</b>.setAutoScroll);
+        }
+
+        <b>if</b>(this.monitorResize || <b>this</b>.modal || <b>this</b>.constrain || <b>this</b>.constrainHeader){
+            Ext.EventManager.onWindowResize(<b>this</b>.onWindowResize, <b>this</b>);
+        }
+        <b>this</b>.doConstrain();
+        <b>if</b>(this.layout){
+            <b>this</b>.doLayout();
+        }
+        <b>if</b>(this.keyMap){
+            <b>this</b>.keyMap.enable();
+        }
+        <b>this</b>.toFront();
+        <b>this</b>.updateHandles();
+        <b>this</b>.fireEvent(&quot;show&quot;, <b>this</b>);
+    },
+
+    <i>// private</i>
+    animShow : <b>function</b>(){
+        <b>this</b>.proxy.show();
+        <b>this</b>.proxy.setBox(<b>this</b>.animateTarget.getBox());
+        <b>this</b>.proxy.setOpacity(0);
+        <b>var</b> b = <b>this</b>.getBox(false);
+        b.callback = <b>this</b>.afterShow;
+        b.scope = <b>this</b>;
+        b.duration = .25;
+        b.easing = <em>'easeNone'</em>;
+        b.opacity = .5;
+        <b>this</b>.el.setStyle(<em>'display'</em>, <em>'none'</em>);
+        <b>this</b>.proxy.shift(b);
+    },
+
+    <i>/**
+     * Hides the window, setting it to invisible and applying negative offsets.
+     * @param {String/Element} animateTarget (optional) The target element or id to which the window should
+     * animate <b>while</b> hiding (defaults to null <b>with</b> no animation)
+     * @param {Function} callback (optional) A callback <b>function</b> to call after the window is hidden
+     * @param {Object} scope (optional) The scope <b>in</b> which to execute the callback
+     */</i>
+    hide : <b>function</b>(animateTarget, cb, scope){
+        <b>if</b>(this.activeGhost){ <i>// drag active?</i>
+            <b>this</b>.hide.defer(100, <b>this</b>, [animateTarget, cb, scope]);
+            <b>return</b>;
+        }
+        <b>if</b>(this.hidden || <b>this</b>.fireEvent(&quot;beforehide&quot;, <b>this</b>) === false){
+            <b>return</b>;
+        }
+        <b>if</b>(cb){
+            <b>this</b>.on(<em>'hide'</em>, cb, scope, {single:true});
+        }
+        <b>this</b>.hidden = true;
+        <b>if</b>(animateTarget !== undefined){
+            <b>this</b>.setAnimateTarget(animateTarget);
+        }
+        <b>if</b>(this.animateTarget){
+            <b>this</b>.animHide();
+        }<b>else</b>{
+            <b>this</b>.el.hide();
+            <b>this</b>.afterHide();
+        }
+    },
+
+    <i>// private</i>
+    afterHide : <b>function</b>(){
+        <b>this</b>.proxy.hide();
+        <b>if</b>(this.monitorResize || <b>this</b>.modal || <b>this</b>.constrain || <b>this</b>.constrainHeader){
+            Ext.EventManager.removeResizeListener(<b>this</b>.onWindowResize, <b>this</b>);
+        }
+        <b>if</b>(this.modal){
+            <b>this</b>.mask.hide();
+            Ext.getBody().removeClass(&quot;x-body-masked&quot;);
+        }
+        <b>if</b>(this.keyMap){
+            <b>this</b>.keyMap.disable();
+        }
+        <b>this</b>.fireEvent(&quot;hide&quot;, <b>this</b>);
+    },
+
+    <i>// private</i>
+    animHide : <b>function</b>(){
+        <b>this</b>.proxy.setOpacity(.5);
+        <b>this</b>.proxy.show();
+        <b>var</b> tb = <b>this</b>.getBox(false);
+        <b>this</b>.proxy.setBox(tb);
+        <b>this</b>.el.hide();
+        <b>var</b> b = <b>this</b>.animateTarget.getBox();
+        b.callback = <b>this</b>.afterHide;
+        b.scope = <b>this</b>;
+        b.duration = .25;
+        b.easing = <em>'easeNone'</em>;
+        b.opacity = 0;
+        <b>this</b>.proxy.shift(b);
+    },
+
+    <i>// private</i>
+    onWindowResize : <b>function</b>(){
+        <b>if</b>(this.maximized){
+            <b>this</b>.fitContainer();
+        }
+        <b>if</b>(this.modal){
+            <b>this</b>.mask.setSize(<em>'100%'</em>, <em>'100%'</em>);
+            <b>var</b> force = <b>this</b>.mask.dom.offsetHeight;
+            <b>this</b>.mask.setSize(Ext.lib.Dom.getViewWidth(true), Ext.lib.Dom.getViewHeight(true));
+        }
+        <b>this</b>.doConstrain();
+    },
+
+    <i>// private</i>
+    doConstrain : <b>function</b>(){
+        <b>if</b>(this.constrain || <b>this</b>.constrainHeader){
+            <b>var</b> offsets;
+            <b>if</b>(this.constrain){
+                offsets = {
+                    right:<b>this</b>.el.shadowOffset,
+                    left:<b>this</b>.el.shadowOffset,
+                    bottom:<b>this</b>.el.shadowOffset
+                };
+            }<b>else</b> {
+                <b>var</b> s = <b>this</b>.getSize();
+                offsets = {
+                    right:-(s.width - 100),
+                    bottom:-(s.height - 25)
+                };
+            }
+
+            <b>var</b> xy = <b>this</b>.el.getConstrainToXY(<b>this</b>.container, true, offsets);
+            <b>if</b>(xy){
+                <b>this</b>.setPosition(xy[0], xy[1]);
+            }
+        }
+    },
+
+    <i>// private - used <b>for</b> dragging</i>
+    ghost : <b>function</b>(cls){
+        <b>var</b> ghost = <b>this</b>.createGhost(cls);
+        <b>var</b> box = <b>this</b>.getBox(true);
+        ghost.setLeftTop(box.x, box.y);
+        ghost.setWidth(box.width);
+        <b>this</b>.el.hide();
+        <b>this</b>.activeGhost = ghost;
+        <b>return</b> ghost;
+    },
+
+    <i>// private</i>
+    unghost : <b>function</b>(show, matchPosition){
+        <b>if</b>(show !== false){
+            <b>this</b>.el.show();
+            <b>this</b>.focus();
+	        <b>if</b>(Ext.isMac &amp;&amp; Ext.isGecko){ <i>// work around stupid FF 2.0/Mac scroll bar bug</i>
+	        	<b>this</b>.cascade(<b>this</b>.setAutoScroll);
+	        }
+        }
+        <b>if</b>(matchPosition !== false){
+            <b>this</b>.setPosition(<b>this</b>.activeGhost.getLeft(true), <b>this</b>.activeGhost.getTop(true));
+        }
+        <b>this</b>.activeGhost.hide();
+        <b>this</b>.activeGhost.remove();
+        <b>delete</b> this.activeGhost;
+    },
+
+    <i>/**
+     * Placeholder method <b>for</b> minimizing the window.  By <b>default</b>, <b>this</b> method simply fires the {@link #minimize} event
+     * since the behavior of minimizing a window is application-specific.  To implement custom minimize behavior,
+     * either the minimize event can be handled or <b>this</b> method can be overridden.
+     */</i>
+    minimize : <b>function</b>(){
+        <b>this</b>.fireEvent(<em>'minimize'</em>, <b>this</b>);
+    },
+
+    <i>/**
+     * Closes the window, removes it from the DOM and destroys the window object.  The beforeclose event is fired
+     * before the close happens and will cancel the close action <b>if</b> it returns false.
+     */</i>
+    close : <b>function</b>(){
+        <b>if</b>(this.fireEvent(&quot;beforeclose&quot;, <b>this</b>) !== false){
+            <b>this</b>.hide(null, <b>function</b>(){
+                <b>this</b>.fireEvent(<em>'close'</em>, <b>this</b>);
+                <b>this</b>.destroy();
+            }, <b>this</b>);
+        }
+    },
+
+    <i>/**
+     * Fits the window within its current container and automatically replaces the <em>'maximize'</em> tool button <b>with</b>
+     * the <em>'restore'</em> tool button.
+     */</i>
+    maximize : <b>function</b>(){
+        <b>if</b>(!<b>this</b>.maximized){
+            <b>this</b>.expand(false);
+            <b>this</b>.restoreSize = <b>this</b>.getSize();
+            <b>this</b>.restorePos = <b>this</b>.getPosition(true);
+            <b>if</b> (<b>this</b>.maximizable){
+                <b>this</b>.tools.maximize.hide();
+                <b>this</b>.tools.restore.show();
+            }
+            <b>this</b>.maximized = true;
+            <b>this</b>.el.disableShadow();
+
+            <b>if</b>(this.dd){
+                <b>this</b>.dd.lock();
+            }
+            <b>if</b>(this.collapsible){
+                <b>this</b>.tools.toggle.hide();
+            }
+            <b>this</b>.el.addClass(<em>'x-window-maximized'</em>);
+            <b>this</b>.container.addClass(<em>'x-window-maximized-ct'</em>);
+
+            <b>this</b>.setPosition(0, 0);
+            <b>this</b>.fitContainer();
+            <b>this</b>.fireEvent(<em>'maximize'</em>, <b>this</b>);
+        }
+    },
+
+    <i>/**
+     * Restores a maximized window back to its original size and position prior to being maximized and also replaces
+     * the <em>'restore'</em> tool button <b>with</b> the <em>'maximize'</em> tool button.
+     */</i>
+    restore : <b>function</b>(){
+        <b>if</b>(this.maximized){
+            <b>this</b>.el.removeClass(<em>'x-window-maximized'</em>);
+            <b>this</b>.tools.restore.hide();
+            <b>this</b>.tools.maximize.show();
+            <b>this</b>.setPosition(<b>this</b>.restorePos[0], <b>this</b>.restorePos[1]);
+            <b>this</b>.setSize(<b>this</b>.restoreSize.width, <b>this</b>.restoreSize.height);
+            <b>delete</b> this.restorePos;
+            <b>delete</b> this.restoreSize;
+            <b>this</b>.maximized = false;
+            <b>this</b>.el.enableShadow(true);
+
+            <b>if</b>(this.dd){
+                <b>this</b>.dd.unlock();
+            }
+            <b>if</b>(this.collapsible){
+                <b>this</b>.tools.toggle.show();
+            }
+            <b>this</b>.container.removeClass(<em>'x-window-maximized-ct'</em>);
+
+            <b>this</b>.doConstrain();
+            <b>this</b>.fireEvent(<em>'restore'</em>, <b>this</b>);
+        }
+    },
+
+    <i>/**
+     * A shortcut method <b>for</b> toggling between {@link #maximize} and {@link #restore} based on the current maximized
+     * state of the window.
+     */</i>
+    toggleMaximize : <b>function</b>(){
+        <b>this</b>[this.maximized ? <em>'restore'</em> : <em>'maximize'</em>]();
+    },
+
+    <i>// private</i>
+    fitContainer : <b>function</b>(){
+        <b>var</b> vs = <b>this</b>.container.getViewSize();
+        <b>this</b>.setSize(vs.width, vs.height);
+    },
+
+    <i>// private</i>
+    <i>// z-index is managed by the WindowManager and may be overwritten at any time</i>
+    setZIndex : <b>function</b>(index){
+        <b>if</b>(this.modal){
+            <b>this</b>.mask.setStyle(&quot;z-index&quot;, index);
+        }
+        <b>this</b>.el.setZIndex(++index);
+        index += 5;
+
+        <b>if</b>(this.resizer){
+            <b>this</b>.resizer.proxy.setStyle(&quot;z-index&quot;, ++index);
+        }
+
+        <b>this</b>.lastZIndex = index;
+    },
+
+    <i>/**
+     * Aligns the window to the specified element
+     * @param {Mixed} element The element to align to.
+     * @param {String} position The position to align to (see {@link Ext.Element#alignTo} <b>for</b> more details).
+     * @param {Array} offsets (optional) Offset the positioning by [x, y]
+     * @<b>return</b> {Ext.Window} <b>this</b>
+     */</i>
+    alignTo : <b>function</b>(element, position, offsets){
+        <b>var</b> xy = <b>this</b>.el.getAlignToXY(element, position, offsets);
+        <b>this</b>.setPagePosition(xy[0], xy[1]);
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Anchors <b>this</b> window to another element and realigns it when the window is resized or scrolled.
+     * @param {Mixed} element The element to align to.
+     * @param {String} position The position to align to (see {@link Ext.Element#alignTo} <b>for</b> more details)
+     * @param {Array} offsets (optional) Offset the positioning by [x, y]
+     * @param {Boolean/Number} monitorScroll (optional) true to monitor body scroll and reposition. If <b>this</b> parameter
+     * is a number, it is used as the buffer delay (defaults to 50ms).
+     * @<b>return</b> {Ext.Window} <b>this</b>
+     */</i>
+    anchorTo : <b>function</b>(el, alignment, offsets, monitorScroll){
+      <b>if</b>(this.doAnchor){
+          Ext.EventManager.removeResizeListener(<b>this</b>.doAnchor, <b>this</b>);
+          Ext.EventManager.un(window, <em>'scroll'</em>, <b>this</b>.doAnchor, <b>this</b>);
+      }
+      <b>this</b>.doAnchor = <b>function</b>(){
+          <b>this</b>.alignTo(el, alignment, offsets);
+      };
+      Ext.EventManager.onWindowResize(<b>this</b>.doAnchor, <b>this</b>);
+      
+      <b>var</b> tm = <b>typeof</b> monitorScroll;
+      <b>if</b>(tm != <em>'undefined'</em>){
+          Ext.EventManager.on(window, <em>'scroll'</em>, <b>this</b>.doAnchor, <b>this</b>,
+              {buffer: tm == <em>'number'</em> ? monitorScroll : 50});
+      }
+      <b>this</b>.doAnchor();
+      <b>return</b> this;
+    },
+
+    <i>/**
+     * Brings <b>this</b> window to the front of any other visible windows
+     * @<b>return</b> {Ext.Window} <b>this</b>
+     */</i>
+    toFront : <b>function</b>(e){
+        <b>if</b>(this.manager.bringToFront(<b>this</b>)){
+            <b>if</b>(!e || !e.getTarget().focus){
+                <b>this</b>.focus();
+            }
+        }
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Makes <b>this</b> the active window by showing its shadow, or deactivates it by hiding its shadow.  This method also
+     * fires the {@link #activate} or {@link #deactivate} event depending on which action occurred.
+     * @param {Boolean} active True to activate the window, false to deactivate it (defaults to false)
+     */</i>
+    setActive : <b>function</b>(active){
+        <b>if</b>(active){
+            <b>if</b>(!<b>this</b>.maximized){
+                <b>this</b>.el.enableShadow(true);
+            }
+            <b>this</b>.fireEvent(<em>'activate'</em>, <b>this</b>);
+        }<b>else</b>{
+            <b>this</b>.el.disableShadow();
+            <b>this</b>.fireEvent(<em>'deactivate'</em>, <b>this</b>);
+        }
+    },
+
+    <i>/**
+     * Sends <b>this</b> window to the back of (lower z-index than) any other visible windows
+     * @<b>return</b> {Ext.Window} <b>this</b>
+     */</i>
+    toBack : <b>function</b>(){
+        <b>this</b>.manager.sendToBack(<b>this</b>);
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Centers <b>this</b> window <b>in</b> the viewport
+     * @<b>return</b> {Ext.Window} <b>this</b>
+     */</i>
+    center : <b>function</b>(){
+        <b>var</b> xy = <b>this</b>.el.getAlignToXY(<b>this</b>.container, <em>'c-c'</em>);
+        <b>this</b>.setPagePosition(xy[0], xy[1]);
+        <b>return</b> this;
+    }
+
+    <i>/**
+     * @cfg {Boolean} autoWidth @hide
+     **/</i>
+});
+Ext.reg(<em>'window'</em>, Ext.Window);
+
+<i>// private - custom Window DD implementation</i>
+Ext.Window.DD = <b>function</b>(win){
+    <b>this</b>.win = win;
+    Ext.Window.DD.superclass.constructor.call(<b>this</b>, win.el.id, <em>'WindowDD-'</em>+win.id);
+    <b>this</b>.setHandleElId(win.header.id);
+    <b>this</b>.scroll = false;
+};
+
+Ext.extend(Ext.Window.DD, Ext.dd.DD, {
+    moveOnly:true,
+    headerOffsets:[100, 25],
+    startDrag : <b>function</b>(){
+        <b>var</b> w = <b>this</b>.win;
+        <b>this</b>.proxy = w.ghost();
+        <b>if</b>(w.constrain !== false){
+            <b>var</b> so = w.el.shadowOffset;
+            <b>this</b>.constrainTo(w.container, {right: so, left: so, bottom: so});
+        }<b>else</b> if(w.constrainHeader !== false){
+            <b>var</b> s = <b>this</b>.proxy.getSize();
+            <b>this</b>.constrainTo(w.container, {right: -(s.width-<b>this</b>.headerOffsets[0]), bottom: -(s.height-<b>this</b>.headerOffsets[1])});
+        }
+    },
+    b4Drag : Ext.emptyFn,
+
+    onDrag : <b>function</b>(e){
+        <b>this</b>.alignElWithMouse(<b>this</b>.proxy, e.getPageX(), e.getPageY());
+    },
+
+    endDrag : <b>function</b>(e){
+        <b>this</b>.win.unghost();
+        <b>this</b>.win.saveState();
+    }
+});
+</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

@@ -1,0 +1,57 @@
+<html><head><title>ColumnSplitDD.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ColumnSplitDD.js</h1><pre class="highlighted"><code><i>// private</i>
+<i>// This is a support class used internally by the Grid components</i>
+Ext.grid.SplitDragZone = <b>function</b>(grid, hd, hd2){
+    <b>this</b>.grid = grid;
+    <b>this</b>.view = grid.getView();
+    <b>this</b>.proxy = <b>this</b>.view.resizeProxy;
+    Ext.grid.SplitDragZone.superclass.constructor.call(<b>this</b>, hd,
+        &quot;gridSplitters&quot; + <b>this</b>.grid.getGridEl().id, {
+        dragElId : Ext.id(<b>this</b>.proxy.dom), resizeFrame:false
+    });
+    <b>this</b>.setHandleElId(Ext.id(hd));
+    <b>this</b>.setOuterHandleElId(Ext.id(hd2));
+    <b>this</b>.scroll = false;
+};
+Ext.extend(Ext.grid.SplitDragZone, Ext.dd.DDProxy, {
+    fly: Ext.Element.fly,
+
+    b4StartDrag : <b>function</b>(x, y){
+        <b>this</b>.view.headersDisabled = true;
+        <b>this</b>.proxy.setHeight(<b>this</b>.view.mainWrap.getHeight());
+        <b>var</b> w = <b>this</b>.cm.getColumnWidth(<b>this</b>.cellIndex);
+        <b>var</b> minw = Math.max(w-<b>this</b>.grid.minColumnWidth, 0);
+        <b>this</b>.resetConstraints();
+        <b>this</b>.setXConstraint(minw, 1000);
+        <b>this</b>.setYConstraint(0, 0);
+        <b>this</b>.minX = x - minw;
+        <b>this</b>.maxX = x + 1000;
+        <b>this</b>.startPos = x;
+        Ext.dd.DDProxy.prototype.b4StartDrag.call(<b>this</b>, x, y);
+    },
+
+
+    handleMouseDown : <b>function</b>(e){
+        ev = Ext.EventObject.setEvent(e);
+        <b>var</b> t = <b>this</b>.fly(ev.getTarget());
+        <b>if</b>(t.hasClass(&quot;x-grid-split&quot;)){
+            <b>this</b>.cellIndex = <b>this</b>.view.getCellIndex(t.dom);
+            <b>this</b>.split = t.dom;
+            <b>this</b>.cm = <b>this</b>.grid.colModel;
+            <b>if</b>(this.cm.isResizable(<b>this</b>.cellIndex) &amp;&amp; !<b>this</b>.cm.isFixed(<b>this</b>.cellIndex)){
+                Ext.grid.SplitDragZone.superclass.handleMouseDown.apply(<b>this</b>, arguments);
+            }
+        }
+    },
+
+    endDrag : <b>function</b>(e){
+        <b>this</b>.view.headersDisabled = false;
+        <b>var</b> endX = Math.max(<b>this</b>.minX, Ext.lib.Event.getPageX(e));
+        <b>var</b> diff = endX - <b>this</b>.startPos;
+        <b>this</b>.view.onColumnSplitterMoved(<b>this</b>.cellIndex, <b>this</b>.cm.getColumnWidth(<b>this</b>.cellIndex)+diff);
+    },
+
+    autoOffset : <b>function</b>(){
+        <b>this</b>.setDelta(0,0);
+    }
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>

@@ -1,0 +1,416 @@
+<html><head><title>Slider.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>Slider.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.Slider
+ * @extends Ext.BoxComponent
+ * Slider which supports vertical or horizontal orientation, keyboard adjustments, 
+ * configurable snapping, axis clicking and animation. Can be added as an item to
+ * any container. Example usage:
+&lt;pre&gt;&lt;code&gt;
+<b>new</b> Ext.Slider({
+    renderTo: Ext.getBody(),
+    width: 200,
+    value: 50,
+    increment: 10,
+    minValue: 0,
+    maxValue: 100
+});
+&lt;/code&gt;&lt;/pre&gt;
+ */</i>
+Ext.Slider = Ext.extend(Ext.BoxComponent, {
+	<i>/**
+	 * @cfg {Number} value The value to initialize the slider <b>with</b>. Defaults to minValue.
+	 */</i>
+<i>// holder</i>
+<i>/***
+	 * @cfg {Boolean} vertical Orient the Slider vertically rather than horizontally, defaults to false.
+	 */</i>
+    vertical: false,
+	<i>/**
+	 * @cfg {Number} minValue The minimum value <b>for</b> the Slider. Defaults to 0.
+	 */</i>
+    minValue: 0,
+	<i>/**
+	 * @cfg {Number} maxValue The maximum value <b>for</b> the Slider. Defaults to 100.
+	 */</i>	
+    maxValue: 100,
+	<i>/**
+	 * @cfg {Number} keyIncrement How many units to change the Slider when adjusting <b>with</b> keyboard navigation. Defaults to 1. If the increment config is larger, it will be used instead.
+	 */</i>
+    keyIncrement: 1,
+	<i>/**
+	 * @cfg {Number} increment How many units to change the slider when adjusting by drag and drop. Use <b>this</b> option to enable <em>'snapping'</em>.
+	 */</i>
+    increment: 0,
+	<i>// private</i>
+    clickRange: [5,15],
+	<i>/**
+	 * @cfg {Boolean} clickToChange Determines whether or not clicking on the Slider axis will change the slider. Defaults to true
+	 */</i>
+    clickToChange : true,
+	<i>/**
+	 * @cfg {Boolean} animate Turn on or off animation. Defaults to true
+	 */</i>
+    animate: true,
+
+    <i>/**
+     * True <b>while</b> the thumb is <b>in</b> a drag operation
+     * @type boolean
+     */</i>
+    dragging: false,
+
+    <i>// private override</i>
+    initComponent : <b>function</b>(){
+        <b>if</b>(this.value === undefined){
+            <b>this</b>.value = <b>this</b>.minValue;
+        }
+        Ext.Slider.superclass.initComponent.call(<b>this</b>);
+        <b>this</b>.keyIncrement = Math.max(<b>this</b>.increment, <b>this</b>.keyIncrement); 
+        <b>this</b>.addEvents(
+            <i>/**
+             * @event beforechange
+             * Fires before the slider value is changed. By returning false from an event handler, 
+             * you can cancel the event and prevent the slider from changing.
+			 * @param {Ext.Slider} slider The slider
+			 * @param {Number} newValue The <b>new</b> value which the slider is being changed to.
+			 * @param {Number} oldValue The old value which the slider was previously.
+             */</i>		
+			<em>'beforechange'</em>, 
+			<i>/**
+			 * @event change
+			 * Fires when the slider value is changed.
+			 * @param {Ext.Slider} slider The slider
+			 * @param {Number} newValue The <b>new</b> value which the slider has been changed to.
+			 */</i>
+			<em>'change'</em>,
+			<i>/**
+			 * @event changecomplete
+			 * Fires when the slider value is changed by the user and any drag operations have completed.
+			 * @param {Ext.Slider} slider The slider
+			 * @param {Number} newValue The <b>new</b> value which the slider has been changed to.
+			 */</i>
+			<em>'changecomplete'</em>,
+			<i>/**
+			 * @event dragstart
+             * Fires after a drag operation has started.
+			 * @param {Ext.Slider} slider The slider
+			 * @param {Ext.EventObject} e The event fired from Ext.dd.DragTracker
+			 */</i>
+			<em>'dragstart'</em>, 
+			<i>/**
+			 * @event drag
+             * Fires continuously during the drag operation <b>while</b> the mouse is moving.
+			 * @param {Ext.Slider} slider The slider
+			 * @param {Ext.EventObject} e The event fired from Ext.dd.DragTracker
+			 */</i>
+			<em>'drag'</em>, 
+			<i>/**
+			 * @event dragend
+             * Fires after the drag operation has completed.
+			 * @param {Ext.Slider} slider The slider
+			 * @param {Ext.EventObject} e The event fired from Ext.dd.DragTracker
+			 */</i>
+			<em>'dragend'</em>
+		);
+
+        <b>if</b>(this.vertical){
+            Ext.apply(<b>this</b>, Ext.Slider.Vertical);
+        }
+    },
+
+	<i>// private override</i>
+    onRender : <b>function</b>(){
+        <b>this</b>.autoEl = {
+            cls: <em>'x-slider '</em> + (<b>this</b>.vertical ? <em>'x-slider-vert'</em> : <em>'x-slider-horz'</em>),
+            cn:{cls:<em>'x-slider-end'</em>,cn:{cls:<em>'x-slider-inner'</em>,cn:[{cls:<em>'x-slider-thumb'</em>},{tag:<em>'a'</em>, cls:<em>'x-slider-focus'</em>, href:&quot;#&quot;, tabIndex: <em>'-1'</em>, hidefocus:<em>'on'</em>}]}}
+        };
+        Ext.Slider.superclass.onRender.apply(<b>this</b>, arguments);
+        <b>this</b>.endEl = <b>this</b>.el.first();
+        <b>this</b>.innerEl = <b>this</b>.endEl.first();
+        <b>this</b>.thumb = <b>this</b>.innerEl.first();
+        <b>this</b>.halfThumb = (<b>this</b>.vertical ? <b>this</b>.thumb.getHeight() : <b>this</b>.thumb.getWidth())/2;
+        <b>this</b>.focusEl = <b>this</b>.thumb.next();
+        <b>this</b>.initEvents();
+    },
+
+	<i>// private override</i>
+    initEvents : <b>function</b>(){
+        <b>this</b>.thumb.addClassOnOver(<em>'x-slider-thumb-over'</em>);
+        <b>this</b>.el.on(<em>'mousedown'</em>, <b>this</b>.onMouseDown, <b>this</b>);
+        <b>this</b>.el.on(<em>'keydown'</em>, <b>this</b>.onKeyDown, <b>this</b>);
+
+        <b>this</b>.focusEl.swallowEvent(&quot;click&quot;, true);
+
+        <b>this</b>.tracker = <b>new</b> Ext.dd.DragTracker({
+            onBeforeStart: <b>this</b>.onBeforeDragStart.createDelegate(<b>this</b>),
+            onStart: <b>this</b>.onDragStart.createDelegate(<b>this</b>),
+            onDrag: <b>this</b>.onDrag.createDelegate(<b>this</b>),
+            onEnd: <b>this</b>.onDragEnd.createDelegate(<b>this</b>),
+            tolerance: 3,
+            autoStart: 300
+        });
+        <b>this</b>.tracker.initEl(<b>this</b>.thumb);
+        <b>this</b>.on(<em>'beforedestroy'</em>, <b>this</b>.tracker.destroy, <b>this</b>.tracker);
+    },
+
+	<i>// private override</i>
+    onMouseDown : <b>function</b>(e){
+        <b>if</b>(this.disabled) {<b>return</b>;}
+        <b>if</b>(this.clickToChange &amp;&amp; e.target != <b>this</b>.thumb.dom){
+            <b>var</b> local = <b>this</b>.innerEl.translatePoints(e.getXY());
+            <b>this</b>.onClickChange(local);
+        }
+        <b>this</b>.focus();
+    },
+
+	<i>// private</i>
+    onClickChange : <b>function</b>(local){
+        <b>if</b>(local.top &gt; <b>this</b>.clickRange[0] &amp;&amp; local.top &lt; <b>this</b>.clickRange[1]){
+            <b>this</b>.setValue(Math.round(<b>this</b>.reverseValue(local.left)), undefined, true);
+        }
+    },
+	
+	<i>// private</i>
+    onKeyDown : <b>function</b>(e){
+        <b>if</b>(this.disabled){e.preventDefault();<b>return</b>;}
+        <b>var</b> k = e.getKey();
+        <b>switch</b>(k){
+            <b>case</b> e.UP:
+            <b>case</b> e.RIGHT:
+                e.stopEvent();
+                <b>if</b>(e.ctrlKey){
+                    <b>this</b>.setValue(<b>this</b>.maxValue, undefined, true);
+                }<b>else</b>{
+                    <b>this</b>.setValue(<b>this</b>.value+<b>this</b>.keyIncrement, undefined, true);
+                }
+            <b>break</b>;
+            <b>case</b> e.DOWN:
+            <b>case</b> e.LEFT:
+                e.stopEvent();
+                <b>if</b>(e.ctrlKey){
+                    <b>this</b>.setValue(<b>this</b>.minValue, undefined, true);
+                }<b>else</b>{
+                    <b>this</b>.setValue(<b>this</b>.value-<b>this</b>.keyIncrement, undefined, true);
+                }
+            <b>break</b>;
+            <b>default</b>:
+                e.preventDefault();
+        }
+    },
+	
+	<i>// private</i>
+    doSnap : <b>function</b>(value){
+        <b>if</b>(!<b>this</b>.increment || <b>this</b>.increment == 1 || !value) {
+            <b>return</b> value;
+        }
+        <b>var</b> newValue = value, inc = <b>this</b>.increment;
+        <b>var</b> m = value % inc;
+        <b>if</b>(m != 0){
+            newValue -= m;
+            <b>if</b>(m * 2 &gt; inc){
+                newValue += inc;
+            }<b>else</b> if(m * 2 &lt; -inc){
+                newValue -= inc;
+            }
+        }
+        <b>return</b> newValue.constrain(<b>this</b>.minValue,  <b>this</b>.maxValue);
+    },
+	
+	<i>// private</i>
+    afterRender : <b>function</b>(){
+        Ext.Slider.superclass.afterRender.apply(<b>this</b>, arguments);
+        <b>if</b>(this.value !== undefined){
+            <b>var</b> v = <b>this</b>.normalizeValue(<b>this</b>.value);
+            <b>if</b>(v !== <b>this</b>.value){
+                <b>delete</b> this.value;
+                <b>this</b>.setValue(v, false);
+            }<b>else</b>{
+                <b>this</b>.moveThumb(<b>this</b>.translateValue(v), false);
+            }
+        }
+    },
+
+	<i>// private</i>
+    getRatio : <b>function</b>(){
+        <b>var</b> w = <b>this</b>.innerEl.getWidth();
+        <b>var</b> v = <b>this</b>.maxValue - <b>this</b>.minValue;
+        <b>return</b> v == 0 ? w : (w/v);
+    },
+
+	<i>// private</i>
+    normalizeValue : <b>function</b>(v){
+       <b>if</b>(typeof v != <em>'number'</em>){
+            v = parseInt(v);
+        }
+        v = Math.round(v);
+        v = <b>this</b>.doSnap(v);
+        v = v.constrain(<b>this</b>.minValue, <b>this</b>.maxValue);
+        <b>return</b> v;
+    },
+
+	<i>/**
+	 * Programmatically sets the value of the Slider. Ensures that the value is constrained within
+	 * the minValue and maxValue.
+	 * @param {Number} value The value to set the slider to. (This will be constrained within minValue and maxValue)
+	 * @param {Boolean} animate Turn on or off animation, defaults to true
+	 */</i>
+    setValue : <b>function</b>(v, animate, changeComplete){
+        v = <b>this</b>.normalizeValue(v);
+        <b>if</b>(v !== <b>this</b>.value &amp;&amp; <b>this</b>.fireEvent(<em>'beforechange'</em>, <b>this</b>, v, <b>this</b>.value) !== false){
+            <b>this</b>.value = v;
+            <b>this</b>.moveThumb(<b>this</b>.translateValue(v), animate !== false);
+            <b>this</b>.fireEvent(<em>'change'</em>, <b>this</b>, v);
+            <b>if</b>(changeComplete){
+                <b>this</b>.fireEvent(<em>'changecomplete'</em>, <b>this</b>, v);
+            }
+        }
+    },
+
+	<i>// private</i>
+    translateValue : <b>function</b>(v){
+        <b>var</b> ratio = <b>this</b>.getRatio();
+        <b>return</b> (v * ratio)-(<b>this</b>.minValue * ratio)-<b>this</b>.halfThumb;
+    },
+
+	reverseValue : <b>function</b>(pos){
+        <b>var</b> ratio = <b>this</b>.getRatio();
+        <b>return</b> (pos+<b>this</b>.halfThumb+(<b>this</b>.minValue * ratio))/ratio;
+    },
+
+	<i>// private</i>
+    moveThumb: <b>function</b>(v, animate){
+        <b>if</b>(!animate || <b>this</b>.animate === false){
+            <b>this</b>.thumb.setLeft(v);
+        }<b>else</b>{
+            <b>this</b>.thumb.shift({left: v, stopFx: true, duration:.35});
+        }
+    },
+
+	<i>// private</i>
+    focus : <b>function</b>(){
+        <b>this</b>.focusEl.focus(10);
+    },
+
+	<i>// private</i>
+    onBeforeDragStart : <b>function</b>(e){
+        <b>return</b> !<b>this</b>.disabled;
+    },
+
+	<i>// private</i>
+    onDragStart: <b>function</b>(e){
+        <b>this</b>.thumb.addClass(<em>'x-slider-thumb-drag'</em>);
+        <b>this</b>.dragging = true;
+        <b>this</b>.dragStartValue = <b>this</b>.value;
+        <b>this</b>.fireEvent(<em>'dragstart'</em>, <b>this</b>, e);
+    },
+
+	<i>// private</i>
+    onDrag: <b>function</b>(e){
+        <b>var</b> pos = <b>this</b>.innerEl.translatePoints(<b>this</b>.tracker.getXY());
+        <b>this</b>.setValue(Math.round(<b>this</b>.reverseValue(pos.left)), false);
+        <b>this</b>.fireEvent(<em>'drag'</em>, <b>this</b>, e);
+    },
+	
+	<i>// private</i>
+    onDragEnd: <b>function</b>(e){
+        <b>this</b>.thumb.removeClass(<em>'x-slider-thumb-drag'</em>);
+        <b>this</b>.dragging = false;
+        <b>this</b>.fireEvent(<em>'dragend'</em>, <b>this</b>, e);
+        <b>if</b>(this.dragStartValue != <b>this</b>.value){
+            <b>this</b>.fireEvent(<em>'changecomplete'</em>, <b>this</b>, <b>this</b>.value);
+        }
+    },
+    
+    <i>//private</i>
+    onDisable: <b>function</b>(){
+        Ext.Slider.superclass.onDisable.call(<b>this</b>);
+        <b>this</b>.thumb.addClass(<b>this</b>.disabledClass);
+        <b>if</b>(Ext.isIE){
+            <i>//IE breaks when using overflow visible and opacity other than 1.</i>
+            <i>//Create a place holder <b>for</b> the thumb and display it.</i>
+            <b>var</b> xy = <b>this</b>.thumb.getXY();
+            <b>this</b>.thumb.hide();
+            <b>this</b>.innerEl.addClass(<b>this</b>.disabledClass).dom.disabled = true;
+            <b>if</b> (!<b>this</b>.thumbHolder){
+                <b>this</b>.thumbHolder = <b>this</b>.endEl.createChild({cls: <em>'x-slider-thumb '</em> + <b>this</b>.disabledClass});    
+            }
+            <b>this</b>.thumbHolder.show().setXY(xy);
+        }
+    },
+    
+    <i>//private</i>
+    onEnable: <b>function</b>(){
+        Ext.Slider.superclass.onEnable.call(<b>this</b>);
+        <b>this</b>.thumb.removeClass(<b>this</b>.disabledClass);
+        <b>if</b>(Ext.isIE){
+            <b>this</b>.innerEl.removeClass(<b>this</b>.disabledClass).dom.disabled = false;
+            <b>if</b> (<b>this</b>.thumbHolder){
+                <b>this</b>.thumbHolder.hide();
+            }
+            <b>this</b>.thumb.show();
+            <b>this</b>.syncThumb();
+        }
+    },
+
+    <i>// private</i>
+    onResize : <b>function</b>(w, h){
+        <b>this</b>.innerEl.setWidth(w - (<b>this</b>.el.getPadding(<em>'l'</em>) + <b>this</b>.endEl.getPadding(<em>'r'</em>)));
+        <b>this</b>.syncThumb();
+    },
+    
+    <i>/**
+     * Synchronizes the thumb position to the proper proportion of the total component width based
+     * on the current slider {@link #value}.  This will be called automatically when the Slider
+     * is resized by a layout, but <b>if</b> it is rendered auto width, <b>this</b> method can be called from
+     * another resize handler to sync the Slider <b>if</b> necessary.
+     */</i>
+    syncThumb : <b>function</b>(){
+        <b>if</b>(this.rendered){
+            <b>this</b>.moveThumb(<b>this</b>.translateValue(<b>this</b>.value));
+        }
+    },
+	
+	<i>/**
+	 * Returns the current value of the slider
+	 * @<b>return</b> {Number} The current value of the slider
+	 */</i>
+    getValue : <b>function</b>(){
+        <b>return</b> this.value;
+    }
+});
+Ext.reg(<em>'slider'</em>, Ext.Slider);
+
+<i>// private class to support vertical sliders</i>
+Ext.Slider.Vertical = {
+    onResize : <b>function</b>(w, h){
+        <b>this</b>.innerEl.setHeight(h - (<b>this</b>.el.getPadding(<em>'t'</em>) + <b>this</b>.endEl.getPadding(<em>'b'</em>)));
+        <b>this</b>.syncThumb();
+    },
+
+    getRatio : <b>function</b>(){
+        <b>var</b> h = <b>this</b>.innerEl.getHeight();
+        <b>var</b> v = <b>this</b>.maxValue - <b>this</b>.minValue;
+        <b>return</b> h/v;
+    },
+
+    moveThumb: <b>function</b>(v, animate){
+        <b>if</b>(!animate || <b>this</b>.animate === false){
+            <b>this</b>.thumb.setBottom(v);
+        }<b>else</b>{
+            <b>this</b>.thumb.shift({bottom: v, stopFx: true, duration:.35});
+        }
+    },
+
+    onDrag: <b>function</b>(e){
+        <b>var</b> pos = <b>this</b>.innerEl.translatePoints(<b>this</b>.tracker.getXY());
+        <b>var</b> bottom = <b>this</b>.innerEl.getHeight()-pos.top;
+        <b>this</b>.setValue(<b>this</b>.minValue + Math.round(bottom/<b>this</b>.getRatio()), false);
+        <b>this</b>.fireEvent(<em>'drag'</em>, <b>this</b>, e);
+    },
+
+    onClickChange : <b>function</b>(local){
+        <b>if</b>(local.left &gt; <b>this</b>.clickRange[0] &amp;&amp; local.left &lt; <b>this</b>.clickRange[1]){
+            <b>var</b> bottom = <b>this</b>.innerEl.getHeight()-local.top;
+            <b>this</b>.setValue(<b>this</b>.minValue + Math.round(bottom/<b>this</b>.getRatio()), undefined, true);
+        }
+    }
+};</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>
