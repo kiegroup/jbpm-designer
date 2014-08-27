@@ -555,51 +555,61 @@ ORYX.Plugins.View = {
                             title       : ''
 
                         });
-
-                        var bpmn2string =  form.items.items[2].getValue();
-                        Ext.Ajax.request({
-                            url: ORYX.PATH + "transformer",
-                            method: 'POST',
-                            success: function(request) {
-                                if(request.responseText.length < 1) {
-                                    this.facade.raiseEvent({
-                                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                        ntype		: 'error',
-                                        msg         : ORYX.I18N.view.importFromBPMN2Error+ ORYX.I18N.view.importFromBPMN2ErrorCheckLogs,
-                                        title       : ''
-                                    });
-                                    dialog.hide();
-                                } else {
-                                    try {
-                                        this._loadJSON( request.responseText, "BPMN2" );
-                                    } catch(e) {
+                        var filename = form.items.items[1].getValue();
+                        if(filename.endsWith(".bpmn") || filename.endsWith(".bpmn2")) {
+                            var bpmn2string =  form.items.items[2].getValue();
+                            Ext.Ajax.request({
+                                url: ORYX.PATH + "transformer",
+                                method: 'POST',
+                                success: function(request) {
+                                    if(request.responseText.length < 1) {
                                         this.facade.raiseEvent({
                                             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                             ntype		: 'error',
-                                            msg         : ORYX.I18N.view.importFromBPMN2Error+'<p>' + e + '</p>',
+                                            msg         : ORYX.I18N.view.importFromBPMN2Error+ ORYX.I18N.view.importFromBPMN2ErrorCheckLogs,
                                             title       : ''
                                         });
+                                        dialog.hide();
+                                    } else {
+                                        try {
+                                            this._loadJSON( request.responseText, "BPMN2" );
+                                        } catch(e) {
+                                            this.facade.raiseEvent({
+                                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                                ntype		: 'error',
+                                                msg         : ORYX.I18N.view.importFromBPMN2Error+'<p>' + e + '</p>',
+                                                title       : ''
+                                            });
+                                        }
+                                        dialog.hide();
                                     }
+                                }.createDelegate(this),
+                                failure: function(){
+                                    this.facade.raiseEvent({
+                                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                        ntype		: 'error',
+                                        msg         :  ORYX.I18N.view.importFromBPMN2Error+ ORYX.I18N.view.importFromBPMN2ErrorCheckLogs,
+                                        title       : ''
+                                    });
                                     dialog.hide();
+                                }.createDelegate(this),
+                                params: {
+                                    profile: ORYX.PROFILE,
+                                    uuid :  window.btoa(encodeURI(ORYX.UUID)),
+                                    pp: ORYX.PREPROCESSING,
+                                    bpmn2 : bpmn2string,
+                                    transformto : "bpmn2json"
                                 }
-                            }.createDelegate(this),
-                            failure: function(){
-                                this.facade.raiseEvent({
-                                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                    ntype		: 'error',
-                                    msg         :  ORYX.I18N.view.importFromBPMN2Error+ ORYX.I18N.view.importFromBPMN2ErrorCheckLogs,
-                                    title       : ''
-                                });
-                                dialog.hide();
-                            }.createDelegate(this),
-                            params: {
-                                profile: ORYX.PROFILE,
-                                uuid :  window.btoa(encodeURI(ORYX.UUID)),
-                                pp: ORYX.PREPROCESSING,
-                                bpmn2 : bpmn2string,
-                                transformto : "bpmn2json"
-                            }
-                        });
+                            });
+                        } else {
+                            this.facade.raiseEvent({
+                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                ntype		: 'error',
+                                msg         : "Invalid file type. Must be .bpmn or .bpmn2",
+                                title       : ''
+
+                            });
+                        }
                     }.bind(this)
                 },{
                     text: ORYX.I18N.Save.close,
@@ -682,19 +692,30 @@ ORYX.Plugins.View = {
 
                         });
 
-                        var jsonString =  form.items.items[2].getValue();
-                        try {
-                            this._loadJSON( jsonString, "JSON" );
-                        } catch(e) {
+                        var filename = form.items.items[1].getValue();
+                        if(filename.endsWith(".json")) {
+                            var jsonString =  form.items.items[2].getValue();
+                            try {
+                                this._loadJSON( jsonString, "JSON" );
+                            } catch(e) {
+                                this.facade.raiseEvent({
+                                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                    ntype		: 'error',
+                                    msg         : ORYX.I18N.view.importFromJSONError+'\n' + e,
+                                    title       : ''
+
+                                });
+                            }
+                            dialog.hide();
+                        } else {
                             this.facade.raiseEvent({
                                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                 ntype		: 'error',
-                                msg         : ORYX.I18N.view.importFromJSONError+'\n' + e,
+                                msg         : "Invalid file type. Must be .bpmn or .json",
                                 title       : ''
 
                             });
                         }
-                        dialog.hide();
                     }.bind(this)
                 },{
                     text: ORYX.I18N.Save.close,
