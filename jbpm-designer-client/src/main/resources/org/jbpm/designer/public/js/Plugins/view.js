@@ -711,7 +711,7 @@ ORYX.Plugins.View = {
                             this.facade.raiseEvent({
                                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                 ntype		: 'error',
-                                msg         : "Invalid file type. Must be .bpmn or .json",
+                                msg         : "Invalid file type. Must be .json",
                                 title       : ''
 
                             });
