@@ -14,8 +14,49 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
 	
 	construct: function(facade){
 		this.facade = facade;
-		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_TASKFORM_EDIT, this.showTaskFormEditor.bind(this));
+		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_TASKFORM_EDIT, this.openFormDesigner.bind(this));
 	},
+    openFormDesigner: function(options) {
+      var processJSON = ORYX.EDITOR.getSerializedJSON();
+      var fileName = ORYX.CONFIG.PROCESS_DEF_ID + ".xml";
+
+      Ext.Ajax.request({
+        url: window.location.protocol + '//' + ORYX.CONFIG.STUDIO_API_URL + 'rest/properties/procDefFolder',
+        method: 'GET',
+        headers: {
+          'X-Auth-Token': ORYX.CONFIG.TOKEN,
+          'ProjectId': ORYX.CONFIG.PROJECT_ID
+        },
+        success: function(response) {
+          if(response.responseText && response.responseText.length > 0) {
+
+            Ext.Ajax.request({
+              url: ORYX.PATH + "savebpmn",
+              method: 'POST',
+              success: function() {
+                window.parent.postMessage(options.taskId, ORYX.CONFIG.STUDIO_CLIENT_URL);
+              },
+              failure: function() {
+                Ext.Msg.minWidth = 400;
+                Ext.Msg.alert("Error save BPMN2 configuration");
+              },
+              params: {
+                pp: ORYX.PREPROCESSING,
+                profile: ORYX.PROFILE,
+                data: processJSON,
+                fileName: fileName,
+                procDefId: ORYX.CONFIG.PROCESS_DEF_ID,
+                procDefFolderPath: response.responseText
+              }
+            });
+          }
+        }.bind(this),
+        failure: function(){
+          Ext.Msg.minWidth = 400;
+          Ext.Msg.alert("Error save BPMN2 configuration");
+        }
+      });
+    },
 	showTaskFormEditor: function(options) {
 		if(options && options.tn) {
 			// load form widgets first

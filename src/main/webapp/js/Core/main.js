@@ -189,7 +189,9 @@ ORYX.Editor = {
                 uuid : ORYX.UUID
               },
               onSuccess: function(request) {
-                this.importJSON(request.responseText);
+                if (request.responseText !== "") {
+                  this.importJSON(request.responseText);
+                }
                 this._finishedLoading();
               }.bind(this),
               onFailure: (function() {
@@ -1382,7 +1384,7 @@ ORYX.Editor = {
 	getRules: function() {
 		return ORYX.Core.StencilSet.rules(this.id);
 	},
-	
+
 	loadStencilSet: function(source) {
 		try {
 			ORYX.Core.StencilSet.loadStencilSet(source, this.id);
