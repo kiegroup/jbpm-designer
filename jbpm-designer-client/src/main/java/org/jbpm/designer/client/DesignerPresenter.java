@@ -19,7 +19,6 @@ import org.jbpm.designer.client.type.Bpmn2Type;
 import org.jbpm.designer.service.DesignerAssetService;
 import org.kie.uberfire.client.callbacks.HasBusyIndicatorDefaultErrorCallback;
 import org.kie.uberfire.client.common.BusyIndicatorView;
-import org.kie.uberfire.client.common.HasBusyIndicator;
 import org.kie.uberfire.client.common.MultiPageEditor;
 import org.kie.uberfire.client.common.Page;
 import org.kie.workbench.common.widgets.client.menu.FileMenuBuilder;
@@ -40,7 +39,6 @@ import org.uberfire.client.annotations.WorkbenchMenu;
 import org.uberfire.client.annotations.WorkbenchPartTitle;
 import org.uberfire.client.annotations.WorkbenchPartView;
 import org.uberfire.client.mvp.PlaceManager;
-import org.uberfire.client.mvp.UberView;
 import org.uberfire.client.workbench.events.ChangeTitleWidgetEvent;
 import org.uberfire.lifecycle.OnClose;
 import org.uberfire.lifecycle.OnMayClose;
@@ -61,22 +59,8 @@ import static org.kie.uberfire.client.common.ConcurrentChangePopup.*;
 @WorkbenchEditor(identifier = "jbpm.designer", supportedTypes = { Bpmn2Type.class })
 public class DesignerPresenter {
 
-    public interface View
-            extends
-            HasBusyIndicator,
-            UberView<DesignerPresenter> {
-
-        void setEditorID( final String id );
-
-        void setEditorParamters( final Map<String, String> editorParameters );
-
-        String getEditorID();
-
-        boolean confirmClose();
-    }
-
     @Inject
-    private DesignerView view;
+    private DesignerWidgetPresenter designerWidget;
 
     @Inject
     private Caller<DesignerAssetService> assetService;
@@ -137,8 +121,8 @@ public class DesignerPresenter {
     private boolean passedProcessSources;
 
     @Inject
-    public DesignerPresenter(BusyIndicatorView busyIndicatorView) {
-        this.metadataWidget = new MetadataWidget(busyIndicatorView);
+    public DesignerPresenter( BusyIndicatorView busyIndicatorView ) {
+        this.metadataWidget = new MetadataWidget( busyIndicatorView );
     }
 
     @OnStartup
@@ -222,22 +206,21 @@ public class DesignerPresenter {
         this.publishSignalOnAssetUpdate( this );
         this.publishClosePlace( this );
 
-        multiPage.addWidget( view,
+        multiPage.addWidget( designerWidget.getView(),
                              DesignerEditorConstants.INSTANCE.businessProcess() );
 
         if ( path != null ) {
             assetService.call( new RemoteCallback<String>() {
                 @Override
                 public void callback( final String editorID ) {
-                    view.setEditorID( editorID );
                     String url = GWT.getHostPageBaseURL().replaceFirst( "/" + GWT.getModuleName() + "/", "" );
                     assetService.call( new RemoteCallback<Map<String, String>>() {
                         @Override
                         public void callback( Map<String, String> editorParameters ) {
                             if ( editorParameters != null ) {
                                 if ( editorParameters.containsKey( "readonly" ) ) {
-                                    isReadOnly = Boolean.valueOf(editorParameters.get( "readonly" ));
-                                    if (isReadOnly) {
+                                    isReadOnly = Boolean.valueOf( editorParameters.get( "readonly" ) );
+                                    if ( isReadOnly ) {
                                         passedProcessSources = true;
                                     }
                                 }
@@ -265,7 +248,7 @@ public class DesignerPresenter {
                                     editorParameters.remove( "completednodes" );
                                 }
                                 editorParameters.put( "ts", Long.toString( System.currentTimeMillis() ) );
-                                view.setEditorParamters( editorParameters );
+                                designerWidget.setup( editorID, editorParameters );
 
                                 // dont add in instance details view
                                 if ( !passedProcessSources ) {
@@ -273,10 +256,10 @@ public class DesignerPresenter {
                                                                  CommonConstants.INSTANCE.MetadataTabTitle() ) {
                                         @Override
                                         public void onFocus() {
-                                                metadataWidget.showBusyIndicator( CommonConstants.INSTANCE.Loading() );
-                                                metadataService.call( new MetadataSuccessCallback( metadataWidget,
-                                                                                                   isReadOnly ),
-                                                                      new HasBusyIndicatorDefaultErrorCallback( metadataWidget ) ).getMetadata( path );
+                                            metadataWidget.showBusyIndicator( CommonConstants.INSTANCE.Loading() );
+                                            metadataService.call( new MetadataSuccessCallback( metadataWidget,
+                                                                                               isReadOnly ),
+                                                                  new HasBusyIndicatorDefaultErrorCallback( metadataWidget ) ).getMetadata( path );
                                         }
 
                                         @Override
@@ -297,13 +280,13 @@ public class DesignerPresenter {
 
     @OnMayClose
     public boolean canClose() {
-        if ( !view.canSaveDesignerModel( view.getEditorID() ) ) {
-            boolean canClose = view.confirmClose();
+        if ( !designerWidget.canSaveDesignerModel( designerWidget.getEditorID() ) ) {
+            boolean canClose = designerWidget.confirmClose();
             if ( canClose ) {
-                view.setProcessSaved( view.getEditorID() );
+                designerWidget.setProcessSaved( designerWidget.getEditorID() );
                 return canClose;
             } else {
-                view.setProcessUnSaved( view.getEditorID() );
+                designerWidget.setProcessUnSaved( designerWidget.getEditorID() );
                 return canClose;
             }
         } else {
@@ -320,7 +303,7 @@ public class DesignerPresenter {
     }
 
     private void makeMenuBar() {
-        if ( isReadOnly && version != null) {
+        if ( isReadOnly && version != null ) {
             menus = menuBuilder.addRestoreVersion( path ).build();
         } else {
             menus = menuBuilder.build();
@@ -333,7 +316,7 @@ public class DesignerPresenter {
 
     @WorkbenchPartTitle
     public String getName() {
-        String fileName = FileNameUtil.removeExtension(this.path, resourceType);
+        String fileName = FileNameUtil.removeExtension( this.path, resourceType );
 
         if ( version != null ) {
             fileName = fileName + " v" + version;
@@ -402,7 +385,7 @@ public class DesignerPresenter {
     }-*/;
 
     public void closePlace() {
-        if ( view.getIsReadOnly( view.getEditorID() ) ) {
+        if ( designerWidget.getIsReadOnly( designerWidget.getEditorID() ) ) {
             placeManager.forceClosePlace( this.place );
         }
     }
@@ -469,19 +452,19 @@ public class DesignerPresenter {
                                  new Command() {
                                      @Override
                                      public void execute() {
-                                         view.raiseEventSave( view.getEditorID() );
+                                         designerWidget.raiseEventSave( designerWidget.getEditorID() );
                                      }
                                  },
                                  new Command() {
                                      @Override
                                      public void execute() {
-                                         view.raiseEventSaveCancel( view.getEditorID() );
+                                         designerWidget.raiseEventSaveCancel( designerWidget.getEditorID() );
                                      }
                                  },
                                  new Command() {
                                      @Override
                                      public void execute() {
-                                         view.raiseEventReload( view.getEditorID() );
+                                         designerWidget.raiseEventReload( designerWidget.getEditorID() );
                                      }
                                  }
                                ).show();
@@ -540,10 +523,10 @@ public class DesignerPresenter {
     }
 
     private void save() {
-        view.setProcessUnSaved( view.getEditorID() );
+        designerWidget.setProcessUnSaved( designerWidget.getEditorID() );
     }
 
     private void reload() {
-        view.raiseEventReload( view.getEditorID() );
+        designerWidget.raiseEventReload( designerWidget.getEditorID() );
     }
 }
