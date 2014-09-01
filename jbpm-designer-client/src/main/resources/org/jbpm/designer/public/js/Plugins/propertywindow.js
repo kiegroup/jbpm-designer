@@ -4723,6 +4723,10 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
             sorters: [{
                 property: 'name',
                 direction:'ASC'
+            },
+            {
+                property: 'fpath',
+                direction:'ASC'
             }]
         });
         ruleflowgroupsdefs.load();
@@ -4764,7 +4768,8 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                             store: ruleflowgroupsdefs,
                             id: gridId,
                             stripeRows: true,
-                            cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
+                            cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(),
+                            {
                                 id: 'rfgname',
                                 header: 'RuleFlow Group Name',
                                 width: 200,
@@ -4790,7 +4795,15 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                                     createGridButton.defer(1, this, [store.getAt(rowIndex).get("drlname"), store.getAt(rowIndex).get("fpath"), id, record]);
                                     return('<div id="' + id + '"></div>');
                                 }
-                            }]),
+                            },
+                            {
+                                id: 'rfproject',
+                                header: 'Full Path',
+                                width: 200,
+                                dataIndex: 'fpath',
+                                editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
+                            },
+                            ]),
                             autoHeight: true
                         });
 
@@ -4828,7 +4841,7 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                             autoCreate	: true,
                             title		: 'Editor for RuleFlow Groups',
                             height		: 350,
-                            width		: 480,
+                            width		: 680,
                             modal		: true,
                             collapsible	: false,
                             fixedcenter	: true,
