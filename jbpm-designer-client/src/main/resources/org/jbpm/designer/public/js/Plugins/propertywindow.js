@@ -4706,6 +4706,8 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
             name: 'name'
         }, {
             name: 'drlname'
+        }, {
+            fpath: 'fpath'
         }]);
 
         var ruleflowgroupsProxy = new Ext.data.MemoryProxy({
@@ -4744,9 +4746,13 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                         for(var key in responseJson){
                             var keyVal = responseJson[key];
                             var keyValParts = keyVal.split("||");
+                            var fulldrlandpath = keyValParts[1].substring(1, keyValParts[1].length - 1);
+                            var fulldrlandpathParts = fulldrlandpath.split("^^");
+
                             ruleflowgroupsdefs.add(new RuleFlowGroupDef({
                                 name: keyValParts[0],
-                                drlname : keyValParts[1].substring(1, keyValParts[1].length - 1)
+                                drlname : fulldrlandpathParts[0],
+                                fpath : fulldrlandpathParts[1]
                             }));
                         }
                         ruleflowgroupsdefs.commitChanges();
@@ -4767,10 +4773,23 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                             },
                             {
                                 id: 'rfname',
-                                header: 'Rule File Name',
+                                header: 'Edit Rule File',
                                 width: 200,
-                                dataIndex: 'drlname',
-                                editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
+                                //dataIndex: 'drlname',
+                               // editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
+                                renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+                                    function createGridButton(value, valueurl, id, record) {
+                                        new Ext.Button({
+                                            text: value,
+                                            handler : function(btn, e) {
+                                                parent.designeropenintab(value, valueurl);
+                                            }
+                                        }).render(document.body, id);
+                                    }
+                                    var id= 'x-btn-container-' + rowIndex;
+                                    createGridButton.defer(1, this, [store.getAt(rowIndex).get("drlname"), store.getAt(rowIndex).get("fpath"), id, record]);
+                                    return('<div id="' + id + '"></div>');
+                                }
                             }]),
                             autoHeight: true
                         });

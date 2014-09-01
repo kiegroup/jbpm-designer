@@ -89,11 +89,11 @@ public class FindRuleFlowNamesQuery extends FindRuleAttributesQuery {
                 if ( property.getName().equals( "rule_attribute:ruleflow-group:rule_attribute_value" ) ) {
                     if(ruleFlowGroupNames.containsKey(property.getValue().toString())) {
                         final Path path = Paths.convert(ioService.get(URI.create(kObject.getKey())));
-                        ruleFlowGroupNames.get(property.getValue().toString()).add(path.getFileName());
+                        ruleFlowGroupNames.get(property.getValue().toString()).add(path.getFileName() + "^^" + path.toURI());
                     } else {
                         final Path path = Paths.convert(ioService.get(URI.create(kObject.getKey())));
                         List<String> pathsList = new ArrayList<String>();
-                        pathsList.add(path.getFileName());
+                        pathsList.add(path.getFileName() + "^^" + path.toURI());
                         ruleFlowGroupNames.put(property.getValue().toString(), pathsList);
                     }
                 }
