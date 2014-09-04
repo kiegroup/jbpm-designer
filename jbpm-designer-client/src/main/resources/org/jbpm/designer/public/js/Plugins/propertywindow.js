@@ -2666,221 +2666,301 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
     	if(this.disabled){
             return;
         }
-    	var ImportDef = Ext.data.Record.create([
-            {
-                name: 'type'
-            },
-            {
-                name: 'classname'
-            },
-            {
-                name: 'wsdllocation'
-            },
-            {
-                name: 'wsdlnamespace'
-            }
-        ]);
-    	
-    	var importsProxy = new Ext.data.MemoryProxy({
-            root: []
-        });
-    	
-    	var imports = new Ext.data.Store({
-    		autoDestroy: true,
-            reader: new Ext.data.JsonReader({
-                root: "root"
-            }, ImportDef),
-            proxy: importsProxy,
-            sorters: [{
-                property: 'type',
-                direction:'ASC'
-            }]
-        });
-    	imports.load();
 
-        // sample 'com.sample.Myclass|default,location|namespace|wsdl
-    	if(this.value.length > 0) {
-    		var valueParts = this.value.split(",");
-            for(var i=0; i < valueParts.length; i++) {
-                var type = "";
-                var classname, location, namespace;
-    			var nextPart = valueParts[i];
+        var processJSON = ORYX.EDITOR.getSerializedJSON();
+        var processPackage = jsonPath(processJSON.evalJSON(), "$.properties.package");
+        var processId = jsonPath(processJSON.evalJSON(), "$.properties.id");
 
-                var innerParts = nextPart.split("|");
-                if(innerParts[1] == "default") {
-                    type = "default";
-                    classname = innerParts[0];
-                    location = "";
-                    namespace = "";
-                } else {
-                    type = "wsdl";
-                    classname = "";
-                    location = innerParts[0];
-                    namespace = innerParts[1];
-                }
-    			imports.add(new ImportDef({
-                    'type': type,
-                    'classname': classname,
-                    'wsdllocation': location,
-                    'wsdlnamespace': namespace
-                }));
-    		}
-    	}
-    	
-    	var itemDeleter = new Extensive.grid.ItemDeleter();
-        var impordata = new Array();
-        var defaultType = new Array();
-        defaultType.push("default");
-        defaultType.push("default");
-        impordata.push(defaultType);
+        Ext.Ajax.request({
+            url: ORYX.PATH + 'calledelement',
+            method: 'POST',
+            success: function(response) {
+                try {
+                    if(response.responseText.length >= 0 && response.responseText != "false") {
+                        var responseJson = Ext.decode(response.responseText);
+                        var customTypeData = new Array();
+                        for(var key in responseJson){
+                            var keyVal = responseJson[key];
+                            var newCustomType = new Array();
+                            newCustomType.push(keyVal);
+                            newCustomType.push(keyVal);
+                            customTypeData.push(newCustomType);
+                        }
 
-        var wsdlType = new Array();
-        wsdlType.push("wsdl");
-        wsdlType.push("wsdl");
-        impordata.push(wsdlType);
+                        var ImportDef = Ext.data.Record.create([
+                            {
+                                name: 'type'
+                            },
+                            {
+                                name: 'classname'
+                            },
+                            {
+                                name: 'wsdllocation'
+                            },
+                            {
+                                name: 'wsdlnamespace'
+                            }
+                        ]);
 
-    	var gridId = Ext.id();
-    	var grid = new Ext.grid.EditorGridPanel({
-            autoScroll: true,
-            autoHeight: true,
-            store: imports,
-            id: gridId,
-            stripeRows: true,
-            cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(),
-                {
-                    id: 'imptype',
-                    header: ORYX.I18N.PropertyWindow.importType,
-                    width: 100,
-                    dataIndex: 'type',
-                    editor: new Ext.form.ComboBox({
-                        id: 'importTypeCombo',
-                        valueField:'name',
-                        displayField:'value',
-                        labelStyle:'display:none',
-                        submitValue : true,
-                        typeAhead: false,
-                        queryMode: 'local',
-                        mode: 'local',
-                        triggerAction: 'all',
-                        selectOnFocus:true,
-                        hideTrigger: false,
-                        forceSelection: false,
-                        selectOnFocus:true,
-                        autoSelect:false,
-                        store: new Ext.data.SimpleStore({
-                            fields: [
-                                'name',
-                                'value'
-                            ],
-                            data: impordata
-                        })
-                    })
-                },
-                {
-                    id: 'classname',
-                    header: ORYX.I18N.PropertyWindow.className,
-                    width: 200,
-                    dataIndex: 'classname',
-                    editor: new Ext.form.TextField({ allowBlank: true })
-                },
-                {
-                    id: 'wsdllocation',
-                    header: ORYX.I18N.PropertyWindow.wsdlLocation,
-                    width: 200,
-                    dataIndex: 'wsdllocation',
-                    editor: new Ext.form.TextField({ allowBlank: true })
-                },
-                {
-                    id: 'wsdlnamespace',
-                    header: ORYX.I18N.PropertyWindow.wsdlNamespace,
-                    width: 200,
-                    dataIndex: 'wsdlnamespace',
-                    editor: new Ext.form.TextField({ allowBlank: true })
-                },
-                itemDeleter]),
-    		selModel: itemDeleter,
-            autoHeight: true,
-            tbar: [{
-                text: ORYX.I18N.PropertyWindow.addImport,
-                handler : function(){
-                	imports.add(new ImportDef({
-                        'type': 'default',
-                        'classname': '',
-                        'wsdllocation' : '',
-                        'wsdlnamespace' : ''
-                    }));
-                    grid.fireEvent('cellclick', grid, imports.getCount()-1, 1, null);
-                }
-            }],
-            clicksToEdit: 1
-        });
-    	
-    	var dialog = new Ext.Window({ 
-			layout		: 'anchor',
-			autoCreate	: true, 
-			title		: ORYX.I18N.PropertyWindow.editorForImports,
-			height		: 400,
-			width		: 800,
-			modal		: true,
-			collapsible	: false,
-			fixedcenter	: true, 
-			shadow		: true, 
-			resizable   : true,
-			proxyDrag	: true,
-			autoScroll  : true,
-			keys:[{
-				key	: 27,
-				fn	: function(){
-						dialog.hide()
-				}.bind(this)
-			}],
-			items		:[grid],
-			listeners	:{
-				hide: function(){
-					this.fireEvent('dialogClosed', this.value);
-					//this.focus.defer(10, this);
-					dialog.destroy();
-				}.bind(this)				
-			},
-			buttons		: [{
-                text: ORYX.I18N.PropertyWindow.ok,
-                handler: function(){	 
-                	var outValue = "";
-                	grid.getView().refresh();
-                	grid.stopEditing();
-                	imports.data.each(function() {
+                        var importsProxy = new Ext.data.MemoryProxy({
+                            root: []
+                        });
+
+                        var imports = new Ext.data.Store({
+                            autoDestroy: true,
+                            reader: new Ext.data.JsonReader({
+                                root: "root"
+                            }, ImportDef),
+                            proxy: importsProxy,
+                            sorters: [{
+                                property: 'type',
+                                direction:'ASC'
+                            }]
+                        });
+                        imports.load();
+
                         // sample 'com.sample.Myclass|default,location|namespace|wsdl
-                        if(this.data['type'] == "default") {
-                            outValue += this.data['classname'] + "|" + this.data['type'] + ",";
+                        if(this.value.length > 0) {
+                            var valueParts = this.value.split(",");
+                            for(var i=0; i < valueParts.length; i++) {
+                                var type = "";
+                                var classname, location, namespace;
+                                var nextPart = valueParts[i];
+
+                                var innerParts = nextPart.split("|");
+                                if(innerParts[1] == "default") {
+                                    type = "default";
+                                    classname = innerParts[0];
+                                    location = "";
+                                    namespace = "";
+                                } else {
+                                    type = "wsdl";
+                                    classname = "";
+                                    location = innerParts[0];
+                                    namespace = innerParts[1];
+                                }
+                                imports.add(new ImportDef({
+                                    'type': type,
+                                    'classname': classname,
+                                    'wsdllocation': location,
+                                    'wsdlnamespace': namespace
+                                }));
+                            }
                         }
-                        if(this.data['type'] == "wsdl") {
-                            outValue += this.data['wsdllocation'] + "|" + this.data['wsdlnamespace'] + "|" + this.data['type'] + ",";
-                        }
+
+                        var itemDeleter = new Extensive.grid.ItemDeleter();
+                        var impordata = new Array();
+                        var defaultType = new Array();
+                        defaultType.push("default");
+                        defaultType.push("default");
+                        impordata.push(defaultType);
+
+                        var wsdlType = new Array();
+                        wsdlType.push("wsdl");
+                        wsdlType.push("wsdl");
+                        impordata.push(wsdlType);
+
+                        var gridId = Ext.id();
+                        var grid = new Ext.grid.EditorGridPanel({
+                            autoScroll: true,
+                            autoHeight: true,
+                            store: imports,
+                            id: gridId,
+                            stripeRows: true,
+                            cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(),
+                                {
+                                    id: 'imptype',
+                                    header: ORYX.I18N.PropertyWindow.importType,
+                                    width: 100,
+                                    dataIndex: 'type',
+                                    editor: new Ext.form.ComboBox({
+                                        id: 'importTypeCombo',
+                                        valueField:'name',
+                                        displayField:'value',
+                                        labelStyle:'display:none',
+                                        submitValue : true,
+                                        typeAhead: false,
+                                        queryMode: 'local',
+                                        mode: 'local',
+                                        triggerAction: 'all',
+                                        selectOnFocus:true,
+                                        hideTrigger: false,
+                                        forceSelection: false,
+                                        selectOnFocus:true,
+                                        autoSelect:false,
+                                        store: new Ext.data.SimpleStore({
+                                            fields: [
+                                                'name',
+                                                'value'
+                                            ],
+                                            data: impordata
+                                        })
+                                    })
+                                },
+                                {
+                                    id: 'classname',
+                                    header: ORYX.I18N.PropertyWindow.className,
+                                    width: 200,
+                                    dataIndex: 'classname',
+                                    editor: new Ext.form.ComboBox({
+                                        id: 'customTypeCombo',
+                                        valueField:'name',
+                                        displayField:'value',
+                                        labelStyle:'display:none',
+                                        submitValue : true,
+                                        typeAhead: false,
+                                        queryMode: 'local',
+                                        mode: 'local',
+                                        triggerAction: 'all',
+                                        selectOnFocus:true,
+                                        hideTrigger: false,
+                                        forceSelection: false,
+                                        selectOnFocus:true,
+                                        autoSelect:false,
+                                        store: new Ext.data.SimpleStore({
+                                            fields: [
+                                                'name',
+                                                'value'
+                                            ],
+                                            data: customTypeData
+                                        })
+                                    })
+                                },
+                                {
+                                    id: 'wsdllocation',
+                                    header: ORYX.I18N.PropertyWindow.wsdlLocation,
+                                    width: 200,
+                                    dataIndex: 'wsdllocation',
+                                    editor: new Ext.form.TextField({ allowBlank: true })
+                                },
+                                {
+                                    id: 'wsdlnamespace',
+                                    header: ORYX.I18N.PropertyWindow.wsdlNamespace,
+                                    width: 200,
+                                    dataIndex: 'wsdlnamespace',
+                                    editor: new Ext.form.TextField({ allowBlank: true })
+                                },
+                                itemDeleter]),
+                            selModel: itemDeleter,
+                            autoHeight: true,
+                            tbar: [{
+                                text: ORYX.I18N.PropertyWindow.addImport,
+                                handler : function(){
+                                    imports.add(new ImportDef({
+                                        'type': 'default',
+                                        'classname': '',
+                                        'wsdllocation' : '',
+                                        'wsdlnamespace' : ''
+                                    }));
+                                    grid.fireEvent('cellclick', grid, imports.getCount()-1, 1, null);
+                                }
+                            }],
+                            clicksToEdit: 1
+                        });
+
+                        var dialog = new Ext.Window({
+                            layout		: 'anchor',
+                            autoCreate	: true,
+                            title		: ORYX.I18N.PropertyWindow.editorForImports,
+                            height		: 400,
+                            width		: 800,
+                            modal		: true,
+                            collapsible	: false,
+                            fixedcenter	: true,
+                            shadow		: true,
+                            resizable   : true,
+                            proxyDrag	: true,
+                            autoScroll  : true,
+                            keys:[{
+                                key	: 27,
+                                fn	: function(){
+                                    dialog.hide()
+                                }.bind(this)
+                            }],
+                            items		:[grid],
+                            listeners	:{
+                                hide: function(){
+                                    this.fireEvent('dialogClosed', this.value);
+                                    //this.focus.defer(10, this);
+                                    dialog.destroy();
+                                }.bind(this)
+                            },
+                            buttons		: [{
+                                text: ORYX.I18N.PropertyWindow.ok,
+                                handler: function(){
+                                    var outValue = "";
+                                    grid.getView().refresh();
+                                    grid.stopEditing();
+                                    imports.data.each(function() {
+                                        // sample 'com.sample.Myclass|default,location|namespace|wsdl
+                                        if(this.data['type'] == "default") {
+                                            outValue += this.data['classname'] + "|" + this.data['type'] + ",";
+                                        }
+                                        if(this.data['type'] == "wsdl") {
+                                            outValue += this.data['wsdllocation'] + "|" + this.data['wsdlnamespace'] + "|" + this.data['type'] + ",";
+                                        }
+                                    });
+                                    if(outValue.length > 0) {
+                                        outValue = outValue.slice(0, -1)
+                                    }
+                                    this.setValue(outValue);
+                                    this.dataSource.getAt(this.row).set('value', outValue)
+                                    this.dataSource.commitChanges()
+
+                                    dialog.hide()
+                                }.bind(this)
+                            }, {
+                                text: ORYX.I18N.PropertyWindow.cancel,
+                                handler: function(){
+                                    this.setValue(this.value);
+                                    dialog.hide()
+                                }.bind(this)
+                            }]
+                        });
+
+                        dialog.show();
+                        grid.render();
+
+                        this.grid.stopEditing();
+                        grid.focus( false, 100 );
+
+
+                    } else {
+                        this.facade.raiseEvent({
+                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                            ntype		: 'error',
+                            msg         : 'Unable to find Data Types.',
+                            title       : ''
+
+                        });
+                    }
+                } catch(e) {
+                    this.facade.raiseEvent({
+                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                        ntype		: 'error',
+                        msg         : 'Error retrieving Data Types info '+' :\n' + e,
+                        title       : ''
+
                     });
-                	if(outValue.length > 0) {
-                		outValue = outValue.slice(0, -1)
-                	}
-					this.setValue(outValue);
-					this.dataSource.getAt(this.row).set('value', outValue)
-					this.dataSource.commitChanges()
+                }
+            }.bind(this),
+            failure: function(){
+                this.facade.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'error',
+                    msg         : 'Error retrieving Data Types info.',
+                    title       : ''
 
-					dialog.hide()
-                }.bind(this)
-            }, {
-                text: ORYX.I18N.PropertyWindow.cancel,
-                handler: function(){
-					this.setValue(this.value);
-                	dialog.hide()
-                }.bind(this)
-            }]
-		});		
-				
-		dialog.show();		
-		grid.render();
-
-		this.grid.stopEditing();
-		grid.focus( false, 100 );
-    	
+                });
+            },
+            params: {
+                profile: ORYX.PROFILE,
+                uuid : ORYX.UUID,
+                ppackage: processPackage,
+                pid: processId,
+                action: 'showdatatypes'
+            }
+        });
     }
 });
 
@@ -3781,247 +3861,306 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
             return;
         }
 
-    	var VarDef = Ext.data.Record.create([{
-            name: 'name'
-        }, {
-            name: 'stype'
-        }, {
-            name: 'ctype'
-        }]);
+        var processJSON = ORYX.EDITOR.getSerializedJSON();
+        var processPackage = jsonPath(processJSON.evalJSON(), "$.properties.package");
+        var processId = jsonPath(processJSON.evalJSON(), "$.properties.id");
 
-    	var vardefsProxy = new Ext.data.MemoryProxy({
-            root: []
-        });
+        Ext.Ajax.request({
+            url: ORYX.PATH + 'calledelement',
+            method: 'POST',
+            success: function(response) {
+                try {
+                    if(response.responseText.length >= 0 && response.responseText != "false") {
+                        var responseJson = Ext.decode(response.responseText);
+                        var customTypeData = new Array();
+                        for(var key in responseJson){
+                            var keyVal = responseJson[key];
+                            var newCustomType = new Array();
+                            newCustomType.push(keyVal);
+                            newCustomType.push(keyVal);
+                            customTypeData.push(newCustomType);
+                        }
 
-    	var vardefs = new Ext.data.Store({
-    		autoDestroy: true,
-            reader: new Ext.data.JsonReader({
-                root: "root"
-            }, VarDef),
-            proxy: vardefsProxy,
-            sorters: [{
-                property: 'name',
-                direction:'ASC'
-            }]
-        });
-    	vardefs.load();
+                        var VarDef = Ext.data.Record.create([{
+                            name: 'name'
+                        }, {
+                            name: 'stype'
+                        }, {
+                            name: 'ctype'
+                        }]);
 
-    	if(this.value.length > 0) {
-    		var valueParts = this.value.split(",");
-    		for(var i=0; i < valueParts.length; i++) {
-    			var nextPart = valueParts[i];
-    			if(nextPart.indexOf(":") > 0) {
-    				var innerParts = nextPart.split(":");
-    				if(innerParts[1] == "String" || innerParts[1] == "Integer" || innerParts[1] == "Boolean" || innerParts[1] == "Float") {
-    					vardefs.add(new VarDef({
-                            name: innerParts[0],
-                            stype: innerParts[1],
-                            ctype: ''
-                        }));
-    				} else {
-    					if(innerParts[1] != "Object") {
-    						vardefs.add(new VarDef({
-                                name: innerParts[0],
-                                stype: 'Object',
-                                ctype: innerParts[1]
-                            }));
-    					} else {
-    						vardefs.add(new VarDef({
-                                name: innerParts[0],
-                                stype: innerParts[1],
-                                ctype: ''
-                            }));
-    					}
-    				}
-    			} else {
-    				vardefs.add(new VarDef({
-                        name: nextPart,
-                        stype: '',
-                        ctype: ''
-                    }));
-    			}
-    		}
+                        var vardefsProxy = new Ext.data.MemoryProxy({
+                            root: []
+                        });
 
-    	}
+                        var vardefs = new Ext.data.Store({
+                            autoDestroy: true,
+                            reader: new Ext.data.JsonReader({
+                                root: "root"
+                            }, VarDef),
+                            proxy: vardefsProxy,
+                            sorters: [{
+                                property: 'name',
+                                direction:'ASC'
+                            }]
+                        });
+                        vardefs.load();
 
-    	var itemDeleter = new Extensive.grid.ItemDeleter();
-        itemDeleter.setDType(this.dtype);
+                        if(this.value.length > 0) {
+                            var valueParts = this.value.split(",");
+                            for(var i=0; i < valueParts.length; i++) {
+                                var nextPart = valueParts[i];
+                                if(nextPart.indexOf(":") > 0) {
+                                    var innerParts = nextPart.split(":");
 
-    	var typeData = new Array();
-    	var stringType = new Array();
-    	stringType.push("String");
-    	stringType.push("String");
-    	typeData.push(stringType);
-    	var integerType = new Array();
-    	integerType.push("Integer");
-    	integerType.push("Integer");
-    	typeData.push(integerType);
-    	var booleanType = new Array();
-    	booleanType.push("Boolean");
-    	booleanType.push("Boolean");
-    	typeData.push(booleanType);
-    	var floatType = new Array();
-    	floatType.push("Float");
-    	floatType.push("Float");
-    	typeData.push(floatType);
-    	var objectType = new Array();
-    	objectType.push("Object");
-    	objectType.push("Object");
-    	typeData.push(objectType);
+                                    var foundCustom = false;
+                                    for(var j=0; j < customTypeData.length; j++) {
+                                        var innerar = customTypeData[j];
+                                        for(var k = 0; k < innerar.length; k++) {
+                                            var inneror = innerar[k];
+                                            if(inneror == innerParts[1]) {
+                                                foundCustom = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    if(foundCustom == true) {
+                                        vardefs.add(new VarDef({
+                                            name: innerParts[0],
+                                            stype: innerParts[1],
+                                            ctype: ''
+                                        }));
+                                    } else {
+                                        vardefs.add(new VarDef({
+                                            name: innerParts[0],
+                                            stype: '',
+                                            ctype: innerParts[1]
+                                        }));
+                                    }
+                                } else {
+                                    vardefs.add(new VarDef({
+                                        name: nextPart,
+                                        stype: '',
+                                        ctype: ''
+                                    }));
+                                }
+                            }
 
-    	var gridId = Ext.id();
-    	Ext.form.VTypes["inputNameVal"] = /^[a-z0-9\-\.\_]*$/i;
-        Ext.form.VTypes["inputNameText"] = 'Invalid name';
-        Ext.form.VTypes["inputName"] = function(v){
-        	return Ext.form.VTypes["inputNameVal"].test(v);
-        };
-    	var grid = new Ext.grid.EditorGridPanel({
-            autoScroll: true,
-            autoHeight: true,
-            store: vardefs,
-            id: gridId,
-            stripeRows: true,
-            cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
-            	id: 'name',
-                header: ORYX.I18N.PropertyWindow.name,
-                width: 100,
-                dataIndex: 'name',
-                editor: new Ext.form.TextField({ allowBlank: true, vtype: 'inputName', regex: /^[a-z0-9\-\.\_]*$/i }),
-                renderer: Ext.util.Format.htmlEncode
-            }, {
-            	id: 'stype',
-                header: ORYX.I18N.PropertyWindow.standardType,
-                width: 100,
-                dataIndex: 'stype',
-                editor: new Ext.form.ComboBox({
-                	id: 'typeCombo',
-                	valueField:'name',
-                	displayField:'value',
-                	labelStyle:'display:none',
-                	submitValue : true,
-                	typeAhead: false,
-                	queryMode: 'local',
-                	mode: 'local',
-					triggerAction: 'all',
-					selectOnFocus:true,
-					hideTrigger: false,
-					forceSelection: false,
-					selectOnFocus:true,
-					autoSelect:false,
-					store: new Ext.data.SimpleStore({
-				        fields: [
-				                  'name',
-				                  'value'
-				                ],
-				        data: typeData
-				    })
-                })
-            },{
-            	id: 'ctype',
-                header: ORYX.I18N.PropertyWindow.customType,
-                width: 200,
-                dataIndex: 'ctype',
-                editor: new Ext.form.TextField({ allowBlank: true }),
-                renderer: Ext.util.Format.htmlEncode
-            }, itemDeleter]),
-    		selModel: itemDeleter,
-            autoHeight: true,
-            tbar: [{
-                text: this.addButtonLabel,
-                handler : function(){
-                	if(this.single && vardefs.getCount() > 0) {
+                        }
+
+                        var itemDeleter = new Extensive.grid.ItemDeleter();
+                        itemDeleter.setDType(this.dtype);
+
+                        var typeData = new Array();
+                        var stringType = new Array();
+                        stringType.push("String");
+                        stringType.push("String");
+                        typeData.push(stringType);
+                        var integerType = new Array();
+                        integerType.push("Integer");
+                        integerType.push("Integer");
+                        typeData.push(integerType);
+                        var booleanType = new Array();
+                        booleanType.push("Boolean");
+                        booleanType.push("Boolean");
+                        typeData.push(booleanType);
+                        var floatType = new Array();
+                        floatType.push("Float");
+                        floatType.push("Float");
+                        typeData.push(floatType);
+                        var objectType = new Array();
+                        objectType.push("Object");
+                        objectType.push("Object");
+                        typeData.push(objectType);
+
+                        var gridId = Ext.id();
+                        Ext.form.VTypes["inputNameVal"] = /^[a-z0-9\-\.\_]*$/i;
+                        Ext.form.VTypes["inputNameText"] = 'Invalid name';
+                        Ext.form.VTypes["inputName"] = function(v){
+                            return Ext.form.VTypes["inputNameVal"].test(v);
+                        };
+                        var grid = new Ext.grid.EditorGridPanel({
+                            autoScroll: true,
+                            autoHeight: true,
+                            store: vardefs,
+                            id: gridId,
+                            stripeRows: true,
+                            cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
+                                id: 'name',
+                                header: ORYX.I18N.PropertyWindow.name,
+                                width: 100,
+                                dataIndex: 'name',
+                                editor: new Ext.form.TextField({ allowBlank: true, vtype: 'inputName', regex: /^[a-z0-9\-\.\_]*$/i }),
+                                renderer: Ext.util.Format.htmlEncode
+                            }, {
+                                id: 'stype',
+                                header: "Defined Types",
+                                width: 200,
+                                dataIndex: 'stype',
+                                editor: new Ext.form.ComboBox({
+                                    id: 'customTypeCombo',
+                                    valueField:'name',
+                                    displayField:'value',
+                                    labelStyle:'display:none',
+                                    submitValue : true,
+                                    typeAhead: false,
+                                    queryMode: 'local',
+                                    mode: 'local',
+                                    triggerAction: 'all',
+                                    selectOnFocus:true,
+                                    hideTrigger: false,
+                                    forceSelection: false,
+                                    selectOnFocus:true,
+                                    autoSelect:false,
+                                    store: new Ext.data.SimpleStore({
+                                        fields: [
+                                            'name',
+                                            'value'
+                                        ],
+                                        data: customTypeData
+                                    })
+                                })
+                            }, {
+                                id: 'ctype',
+                                header: ORYX.I18N.PropertyWindow.customType,
+                                width: 200,
+                                dataIndex: 'ctype',
+                                editor: new Ext.form.TextField({ allowBlank: true }),
+                                renderer: Ext.util.Format.htmlEncode
+                            }, itemDeleter]),
+                            selModel: itemDeleter,
+                            autoHeight: true,
+                            tbar: [{
+                                text: this.addButtonLabel,
+                                handler : function(){
+                                    if(this.single && vardefs.getCount() > 0) {
+                                        this.facade.raiseEvent({
+                                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                            ntype		: 'error',
+                                            msg         : ORYX.I18N.PropertyWindow.OnlySingleEntry,
+                                            title       : ''
+
+                                        });
+                                    } else {
+                                        vardefs.add(new VarDef({
+                                            name: '',
+                                            stype: '',
+                                            ctype: ''
+                                        }));
+                                        grid.fireEvent('cellclick', grid, vardefs.getCount()-1, 1, null);
+                                    }
+                                }.bind(this)
+                            }],
+                            clicksToEdit: 1
+                        });
+
+                        var dialog = new Ext.Window({
+                            layout		: 'anchor',
+                            autoCreate	: true,
+                            title		: this.windowTitle,
+                            height		: 300,
+                            width		: 600,
+                            modal		: true,
+                            collapsible	: false,
+                            fixedcenter	: true,
+                            shadow		: true,
+                            resizable   : true,
+                            proxyDrag	: true,
+                            autoScroll  : true,
+                            keys:[{
+                                key	: 27,
+                                fn	: function(){
+                                    dialog.hide()
+                                }.bind(this)
+                            }],
+                            items		:[grid],
+                            listeners	:{
+                                hide: function(){
+                                    this.fireEvent('dialogClosed', this.value);
+                                    //this.focus.defer(10, this);
+                                    dialog.destroy();
+                                }.bind(this)
+                            },
+                            buttons		: [{
+                                text: ORYX.I18N.PropertyWindow.ok,
+                                handler: function(){
+                                    var outValue = "";
+                                    grid.stopEditing();
+                                    grid.getView().refresh();
+                                    vardefs.data.each(function() {
+                                        if(this.data['name'].length > 0) {
+                                            if(this.data['stype'].length > 0) {
+                                                if(this.data['stype'] == "Object" && this.data['ctype'].length > 0) {
+                                                    outValue += this.data['name'] + ":" + this.data['ctype'] + ",";
+                                                } else {
+                                                    outValue += this.data['name'] + ":" + this.data['stype'] + ",";
+                                                }
+                                            } else if(this.data['ctype'].length > 0) {
+                                                outValue += this.data['name'] + ":" + this.data['ctype'] + ",";
+                                            } else {
+                                                outValue += this.data['name'] + ",";
+                                            }
+                                        }
+                                    });
+                                    if(outValue.length > 0) {
+                                        outValue = outValue.slice(0, -1)
+                                    }
+                                    this.setValue(outValue);
+                                    this.dataSource.getAt(this.row).set('value', outValue)
+                                    this.dataSource.commitChanges()
+
+                                    dialog.hide()
+                                }.bind(this)
+                            }, {
+                                text: ORYX.I18N.PropertyWindow.cancel,
+                                handler: function(){
+                                    this.setValue(this.value);
+                                    dialog.hide()
+                                }.bind(this)
+                            }]
+                        });
+
+                        dialog.show();
+                        grid.render();
+
+                        this.grid.stopEditing();
+                        grid.focus( false, 100 );
+                    } else {
                         this.facade.raiseEvent({
                             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                             ntype		: 'error',
-                            msg         : ORYX.I18N.PropertyWindow.OnlySingleEntry,
+                            msg         : 'Unable to find Data Types.',
                             title       : ''
 
                         });
-                	} else {
-                		vardefs.add(new VarDef({
-                            name: '',
-                            stype: '',
-                            ctype: ''
-                        }));
-                        grid.fireEvent('cellclick', grid, vardefs.getCount()-1, 1, null);
-                	}
-                }.bind(this)
-            }],
-            clicksToEdit: 1
-        });
+                    }
+                } catch(e) {
+                    this.facade.raiseEvent({
+                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                        ntype		: 'error',
+                        msg         : 'Error retrieving Data Types info '+' :\n' + e,
+                        title       : ''
 
-		var dialog = new Ext.Window({
-			layout		: 'anchor',
-			autoCreate	: true,
-			title		: this.windowTitle,
-			height		: 300,
-			width		: 500,
-			modal		: true,
-			collapsible	: false,
-			fixedcenter	: true,
-			shadow		: true,
-			resizable   : true,
-			proxyDrag	: true,
-			autoScroll  : true,
-			keys:[{
-				key	: 27,
-				fn	: function(){
-						dialog.hide()
-				}.bind(this)
-			}],
-			items		:[grid],
-			listeners	:{
-				hide: function(){
-					this.fireEvent('dialogClosed', this.value);
-					//this.focus.defer(10, this);
-					dialog.destroy();
-				}.bind(this)
-			},
-			buttons		: [{
-                text: ORYX.I18N.PropertyWindow.ok,
-                handler: function(){
-                	var outValue = "";
-                	grid.stopEditing();
-                	grid.getView().refresh();
-                	vardefs.data.each(function() {
-                		if(this.data['name'].length > 0) {
-                			if(this.data['stype'].length > 0) {
-                				if(this.data['stype'] == "Object" && this.data['ctype'].length > 0) {
-                					outValue += this.data['name'] + ":" + this.data['ctype'] + ",";
-                				} else {
-                					outValue += this.data['name'] + ":" + this.data['stype'] + ",";
-                				}
-                			} else if(this.data['ctype'].length > 0) {
-                				outValue += this.data['name'] + ":" + this.data['ctype'] + ",";
-                			} else {
-                				outValue += this.data['name'] + ",";
-                			}
-                		}
                     });
-                	if(outValue.length > 0) {
-                		outValue = outValue.slice(0, -1)
-                	}
-					this.setValue(outValue);
-					this.dataSource.getAt(this.row).set('value', outValue)
-					this.dataSource.commitChanges()
+                }
+            }.bind(this),
+            failure: function(){
+                this.facade.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'error',
+                    msg         : 'Error retrieving Data Types info.',
+                    title       : ''
 
-					dialog.hide()
-                }.bind(this)
-            }, {
-                text: ORYX.I18N.PropertyWindow.cancel,
-                handler: function(){
-					this.setValue(this.value);
-                	dialog.hide()
-                }.bind(this)
-            }]
-		});
-
-		dialog.show();
-		grid.render();
-
-		this.grid.stopEditing();
-		grid.focus( false, 100 );
-		
+                });
+            },
+            params: {
+                profile: ORYX.PROFILE,
+                uuid : ORYX.UUID,
+                ppackage: processPackage,
+                pid: processId,
+                action: 'showdatatypes'
+            }
+        });
 	}
 });
 

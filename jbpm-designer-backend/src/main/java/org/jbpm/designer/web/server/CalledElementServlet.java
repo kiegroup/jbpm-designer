@@ -24,6 +24,7 @@ import org.json.JSONObject;
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueRuleAttributeIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueRuleAttributeValueIndexTerm;
+import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueTypeIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.query.RefactoringPageRequest;
 import org.kie.workbench.common.services.refactoring.model.query.RefactoringPageRow;
 import org.kie.workbench.common.services.refactoring.service.RefactoringQueryService;
@@ -98,12 +99,12 @@ public class CalledElementServlet extends HttpServlet {
 	        resp.getWriter().write(retValue);
         } else if(action != null && action.equals("showruleflowgroups")) {
             //Query for RuleFlowGroups
-            final List<RefactoringPageRow> results = queryService.query( "FindRuleFlowNamesQuery",
+            final List<RefactoringPageRow> results = queryService.query("FindRuleFlowNamesQuery",
                     new HashSet<ValueIndexTerm>() {{
-                        add( new ValueRuleAttributeIndexTerm( "ruleflow-group" ) );
-                        add( new ValueRuleAttributeValueIndexTerm( "*" ) );
+                        add(new ValueRuleAttributeIndexTerm("ruleflow-group"));
+                        add(new ValueRuleAttributeValueIndexTerm("*"));
                     }},
-                    true );
+                    true);
 
             final List<String> ruleFlowGroupNames = new ArrayList<String>();
             for ( RefactoringPageRow row : results ) {
@@ -114,6 +115,21 @@ public class CalledElementServlet extends HttpServlet {
             resp.setCharacterEncoding("UTF-8");
             resp.setContentType("application/json");
             resp.getWriter().write(getRuleFlowGroupsInfoAsJSON(ruleFlowGroupNames).toString());
+
+        } else if(action != null && action.equals("showdatatypes")) {
+            final List<RefactoringPageRow> results2 = queryService.query("DesignerFindTypesQuery",
+                    new HashSet<ValueIndexTerm>() {{
+                        add(new ValueTypeIndexTerm("*"));
+                    }},
+                    true);
+            final List<String> dataTypeNames = new ArrayList<String>();
+            for ( RefactoringPageRow row : results2 ) {
+                dataTypeNames.add( (String) row.getValue() );
+            }
+            Collections.sort( dataTypeNames );
+            resp.setCharacterEncoding("UTF-8");
+            resp.setContentType("application/json");
+            resp.getWriter().write(getDataTypesInfoAsJSON(dataTypeNames).toString());
         } else {
 	        String retValue = "false";
 	        List<String> allPackageNames = ServletUtil.getPackageNamesFromRepository(profile);
@@ -146,6 +162,18 @@ public class CalledElementServlet extends HttpServlet {
 	}
 
     public JSONObject getRuleFlowGroupsInfoAsJSON(List<String> ruleFlowGroupsInfo) {
+        JSONObject jsonObject = new JSONObject();
+        for(String infoEntry : ruleFlowGroupsInfo) {
+            try {
+                jsonObject.put(infoEntry, infoEntry);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return jsonObject;
+    }
+
+    public JSONObject getDataTypesInfoAsJSON(List<String> ruleFlowGroupsInfo) {
         JSONObject jsonObject = new JSONObject();
         for(String infoEntry : ruleFlowGroupsInfo) {
             try {
