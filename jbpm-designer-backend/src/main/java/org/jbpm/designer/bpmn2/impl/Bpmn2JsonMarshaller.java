@@ -184,6 +184,10 @@ public class Bpmn2JsonMarshaller {
 	        props.put("name",unescapeXML(def.getName()));
 	        props.put("id", def.getId());
 	        props.put("expressionlanguage", def.getExpressionLanguage());
+            // backwards compat for BZ 1048191
+            if( def.getDocumentation() != null && def.getDocumentation().size() > 0 ) {
+                props.put("documentation", def.getDocumentation().get(0).getText());
+            }
 
 	        for (RootElement rootElement : def.getRootElements()) {
 	            if (rootElement instanceof Process) {
