@@ -2590,7 +2590,7 @@
 				},
 				{
 					"id":"onEntryActions",
-					"type":"Action",
+					"type":"Expression",
 					"title":"On Entry Actions",
 					"value":"",
 					"description":"on entry actions",
@@ -2602,7 +2602,7 @@
 				},
 				{
 					"id":"onExitActions",
-					"type":"Action",
+					"type":"Expression",
 					"title":"On Exit Actions",
 					"value":"",
 					"description":"on exit actions",
@@ -3438,7 +3438,7 @@
 				$bclose$,
 				$bopen$
 					"id":"onEntryActions",
-					"type":"Action",
+					"type":"Expression",
 					"title":"On Entry Actions",
 					"value":"",
 					"description":"on entry actions",
@@ -3448,7 +3448,7 @@
 				$bclose$,
 				$bopen$
 					"id":"onExitActions",
-					"type":"Action",
+					"type":"Expression",
 					"title":"On Exit Actions",
 					"value":"",
 					"description":"on exit actions",
@@ -3799,7 +3799,7 @@
 				},	
 				{
 					"id":"onEntryActions",
-					"type":"Action",
+					"type":"Expression",
 					"title":"On Entry Actions",
 					"value":"",
 					"description":"on entry actions",
@@ -3809,7 +3809,7 @@
 				},
 				{
 					"id":"onExitActions",
-					"type":"Action",
+					"type":"Expression",
 					"title":"On Exit Actions",
 					"value":"",
 					"description":"on exit actions",
@@ -4207,7 +4207,7 @@
                 },
 				{
 					"id":"onEntryActions",
-					"type":"Action",
+					"type":"Expression",
 					"title":"On Entry Actions",
 					"value":"",
 					"description":"on entry actions",
@@ -4217,7 +4217,7 @@
 				},
 				{
 					"id":"onExitActions",
-					"type":"Action",
+					"type":"Expression",
 					"title":"On Exit Actions",
 					"value":"",
 					"description":"on exit actions",
@@ -4542,7 +4542,7 @@
 				},
 				{
 					"id":"onEntryActions",
-					"type":"Action",
+					"type":"Expression",
 					"title":"On Entry Actions",
 					"value":"",
 					"description":"on entry actions",
@@ -4552,7 +4552,7 @@
 				},
 				{
 					"id":"onExitActions",
-					"type":"Action",
+					"type":"Expression",
 					"title":"On Exit Actions",
 					"value":"",
 					"description":"on exit actions",
@@ -4879,7 +4879,7 @@
 				},
 				{
 					"id":"onEntryActions",
-					"type":"Action",
+					"type":"Expression",
 					"title":"On Entry Actions",
 					"value":"",
 					"description":"on entry actions",
@@ -4889,7 +4889,7 @@
 				},
 				{
 					"id":"onExitActions",
-					"type":"Action",
+					"type":"Expression",
 					"title":"On Exit Actions",
 					"value":"",
 					"description":"on exit actions",
