@@ -3803,13 +3803,8 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
                                         outValue += this.data['from'] + "=" + escapedc + ",";
                                     }
                                 } else {
-                                    ORYX.EDITOR._pluginFacade.raiseEvent({
-                                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                        ntype		: 'warning',
-                                        msg         : "Assignment for " + this.data['from'] + " does not contain a proper mapping.",
-                                        title       : ''
-
-                                    });
+                                    // allow blank tostr values (e.g service tasks)
+                                    outValue += this.data['from'] + "=" + "" + ",";
                                 }
                 			}
                 		}
