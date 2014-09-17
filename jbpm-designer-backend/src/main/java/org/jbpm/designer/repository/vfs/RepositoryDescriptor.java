@@ -125,14 +125,4 @@ public class  RepositoryDescriptor {
         }
     }
 
-    public static void main(String[] args) {
-        String text = "default://dev-1.0.0@jbpm-playground/Evaluation/src/main/resources/evaluation.bpmn2";
-        text = text.replaceFirst("://(.*?)@", "maciek");
-        Pattern pattern = Pattern.compile("(://)(.*?)@(.*?)/");
-        Matcher matcher = pattern.matcher(text);
-        if (matcher.find()) {
-            System.out.println(matcher.group(2));
-            System.out.println(matcher.group(3));
-        }
-    }
 }
