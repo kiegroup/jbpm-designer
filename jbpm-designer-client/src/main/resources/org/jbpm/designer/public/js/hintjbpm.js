@@ -17,45 +17,83 @@
   }
 
   function scriptHint(editor, keywords, hintType, getToken) {
-    // Find the token at the cursor
-    var cur = editor.getCursor(), token = getToken(editor, cur), tprop = token;
-    // If it's not a 'word-style' token, ignore the token.
-		if (!/^[\w$_]*$/.test(token.string)) {
-      token = tprop = {start: cur.ch, end: cur.ch, string: "", state: token.state,
-                       className: token.string == "." ? "property" : null};
-    }
-    // If it is a property, find out what it is a property of.
-    while (tprop.className == "property") {
-      tprop = getToken(editor, {line: cur.line, ch: tprop.start});
-      if (tprop.string != ".") return;
-      tprop = getToken(editor, {line: cur.line, ch: tprop.start});
-      if (tprop.string == ')') {
-        var level = 1;
-        do {
-          tprop = getToken(editor, {line: cur.line, ch: tprop.start});
-          switch (tprop.string) {
-          case ')': level++; break;
-          case '(': level--; break;
-          default: break;
+
+      var processJSON = ORYX.EDITOR.getSerializedJSON();
+      var processPackage = jsonPath(processJSON.evalJSON(), "$.properties.package");
+      var processId = jsonPath(processJSON.evalJSON(), "$.properties.id");
+      var dataAjaxObj = new XMLHttpRequest;
+      var dataURL = ORYX.PATH + 'calledelement';
+      var dataParams  = "action=showdatatypes&profile=" + ORYX.PROFILE + "&uuid=" + window.btoa(encodeURI(ORYX.UUID)) + "&ppackage=" + processPackage + "&pid=" + processId;
+      dataAjaxObj.open("POST",dataURL,false);
+      dataAjaxObj.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      dataAjaxObj.send(dataParams);
+      if(dataAjaxObj.status == 200) {
+          if(dataAjaxObj.responseText && dataAjaxObj.responseText.length > 0) {
+              try {
+                  var responseJson =  dataAjaxObj.responseText.evalJSON();
+                  var customdataobjectsstr = "";
+                  for(var key in responseJson){
+                      var keyVal = responseJson[key];
+                      customdataobjectsstr += keyVal;
+                      customdataobjectsstr += ",";
+                  }
+                  if (customdataobjectsstr.endsWith(",")) {
+                      customdataobjectsstr = customdataobjectsstr.substr(0, customdataobjectsstr.length - 1);
+                  }
+
+                  // Find the token at the cursor
+                  var cur = editor.getCursor(), token = getToken(editor, cur), tprop = token;
+                  // If it's not a 'word-style' token, ignore the token.
+                  if (!/^[\w$_]*$/.test(token.string)) {
+                      token = tprop = {start: cur.ch, end: cur.ch, string: "", state: token.state,
+                          className: token.string == "." ? "property" : null};
+                  }
+                  // If it is a property, find out what it is a property of.
+                  while (tprop.className == "property") {
+                      tprop = getToken(editor, {line: cur.line, ch: tprop.start});
+                      if (tprop.string != ".") return;
+                      tprop = getToken(editor, {line: cur.line, ch: tprop.start});
+                      if (tprop.string == ')') {
+                          var level = 1;
+                          do {
+                              tprop = getToken(editor, {line: cur.line, ch: tprop.start});
+                              switch (tprop.string) {
+                                  case ')': level++; break;
+                                  case '(': level--; break;
+                                  default: break;
+                              }
+                          } while (level > 0)
+                          tprop = getToken(editor, {line: cur.line, ch: tprop.start});
+                          if (tprop.className == 'variable')
+                              tprop.className = 'function';
+                          else return; // no clue
+                      }
+                      if (!context) var context = [];
+                      context.push(tprop);
+                  }
+                  if(hintType && hintType == "form") {
+                      return {list: getCompletionsForForms(token, context, keywords),
+                          from: {line: cur.line, ch: token.start},
+                          to: {line: cur.line, ch: token.end}};
+                  } else {
+                      return {list: getCompletions(token, context, keywords, customdataobjectsstr),
+                          from: {line: cur.line, ch: token.start},
+                          to: {line: cur.line, ch: token.end}};
+                  }
+
+
+
+              } catch(e) {
+                  ORYX.EDITOR._pluginFacade.raiseEvent({
+                      type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                      ntype		: 'error',
+                      msg         : 'Error retrieving Data Types info '+' :\n' + e,
+                      title       : ''
+
+                  });
+              }
           }
-        } while (level > 0)
-        tprop = getToken(editor, {line: cur.line, ch: tprop.start});
-				if (tprop.className == 'variable')
-					tprop.className = 'function';
-				else return; // no clue
       }
-      if (!context) var context = [];
-      context.push(tprop);
-    }
-    if(hintType && hintType == "form") {
-    	return {list: getCompletionsForForms(token, context, keywords),
-            from: {line: cur.line, ch: token.start},
-            to: {line: cur.line, ch: token.end}};
-    } else {
-    	return {list: getCompletions(token, context, keywords),
-            from: {line: cur.line, ch: token.start},
-            to: {line: cur.line, ch: token.end}};
-    }
   }
 
   CodeMirror.jbpmHint = function(editor) {
@@ -71,7 +109,7 @@
   var kcontextMethods = ("getProcessInstance() getNodeInstance() getVariable(variableName) setVariable(variableName,value) getKnowledgeRuntime()").split(" ");
   var genericProps = ("return kcontext").split(" ");
   
-  function getCompletions(token, context, keywords) {
+  function getCompletions(token, context, keywords, customdataobjectsstr) {
     var found = [], start = token.string;
     
     function maybeAdd(str) {
@@ -115,6 +153,8 @@
               processdataobjectstr = processdataobjectstr.substr(0, processdataobjectstr.length - 1);
           }
           forEach(processdataobjectstr.toString().split(","), maybeAdd);
+
+          forEach(customdataobjectsstr.toString().split(","), maybeAdd);
     }
     return found;
   }
