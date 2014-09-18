@@ -23,6 +23,7 @@ if (!window.SpriteUtils) {
 
         /** The context path for jbpm-designer resources. */
         designerContextPath: "org.jbpm.designer.jBPMDesigner",
+        stencilsetsFolder: "stencilsets",
 
         /**
          * Return the basename for a given URL.
@@ -42,16 +43,18 @@ if (!window.SpriteUtils) {
 
         /**
          * Given a input URL string:
-         *  - Substring from "org.jbpm.designer.jBPMDesigner"
+         *  - Substring from "org.jbpm.designer.jBPMDesigner"  or "stencilsets" folder name
          *  - Replaces
          *      - "/" for "_"
          *      - "." for "_"
          *  - Removes URL file extension.
          *
-         *  Example:
+         *  Examples:
          *  Input: "http://localhost:8080/designer/org.jbpm.designer.jBPMDesigner/activity/list/type.business.rule.png"
          *  Output: "activity_list_type_business_rule"
          *
+         *  Input: "http://kie-eap-distributions-bpms-webapp-6_2_0-SNAPSHOT-kie-wb/stencilset//org.kie.workbench.KIEWebapp/stencilsets/bpmn2.0jbpm/bpmn2.0jbpm.json/icons/activity/list/type.script"
+         *  Output: "stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_activity_list_type_script"
          * @param str The input URL string.
          */
         toUniqueId: function (str) {
@@ -63,6 +66,13 @@ if (!window.SpriteUtils) {
                 if (designerIndex != -1) {
                     base = base.substring(designerIndex + this.designerContextPath.length + 1, base.length);
                 }
+                else {
+                    var stencilsetsIndex = str.lastIndexOf(this.stencilsetsFolder);
+                    if (stencilsetsIndex != -1) {
+                        base = base.substring(stencilsetsIndex, base.length);
+                    }
+                }
+
 
                 // Remove the URL file extension.
                 var lastDot = base.lastIndexOf(".");
