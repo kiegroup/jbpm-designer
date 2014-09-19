@@ -29,8 +29,12 @@ import java.util.Map;
 import java.util.Scanner;
 
 /**
- * Takes a stencilset StringTemplate and replaces values of "view" properties of
- * nodes with the contents of the referenced .svg files
+ * When run for the first time on a stencilset, takes a stencilset StringTemplate
+ * and replaces view="<file>.svg" properties of nodes with the contents of the
+ * referenced .svg files and adds a _view_file="<file>.svg" property.
+ *
+ * When run again, updates the svg xml in view="..." properties by reading the svg
+ * file in the previous _view_file="<file>.svg" property.
  */
 
 public class SvgInline {
@@ -39,6 +43,7 @@ public class SvgInline {
     private static final String VIEW_FOLDER = "view";
     private static final String VIEW_PROPERTY_NAME_PATTERN = "\\\"view\\\"\\s*:.*$";
     private static final String VIEW_PROPERTY_VALUE_SUFFIX = ".svg\",";
+    private static final String VIEW_FILE_PROPERTY_NAME_PATTERN = "\\\"_view_file\\\"\\s*:.*$";
     private static final String SVG_FILE_SUFFIX = ".svg";
     private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
@@ -63,20 +68,38 @@ public class SvgInline {
         return inFile.getParentFile().getParentFile().getCanonicalPath() + File.separator + VIEW_FOLDER + File.separator;
     }
 
+    /**
+     * Processes a stencilset template file
+     *
+     * @throws IOException
+     */
     public void processStencilSet() throws IOException {
         StringBuilder stencilSetFileContents = new StringBuilder();
 
         Scanner scanner = null;
         try {
             scanner = new Scanner(new File(ssInFile), "UTF-8");
+            String currentLine = "";
+            String prevLine = "";
             while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                String trimmedLine = line.trim();
-                if (trimmedLine.matches(VIEW_PROPERTY_NAME_PATTERN) && trimmedLine.endsWith(VIEW_PROPERTY_VALUE_SUFFIX)) {
-                    String newLines = processSvgReference(line);
+                prevLine = currentLine;
+                currentLine = scanner.nextLine();
+
+                String trimmedPrevLine = prevLine.trim();
+                String trimmedCurrentLine = currentLine.trim();
+
+                // First time processing - replace view="<file>.svg" with _view_file="<file>.svg" + view="<svg_xml>"
+                if (trimmedCurrentLine.matches(VIEW_PROPERTY_NAME_PATTERN) && trimmedCurrentLine.endsWith(VIEW_PROPERTY_VALUE_SUFFIX)) {
+                    String newLines = processViewPropertySvgReference(currentLine);
+                    stencilSetFileContents.append(newLines);
+                }
+                // Second time processing - replace view="<svg_xml>" with refreshed contents of file referenced by previous line
+                else if (trimmedPrevLine.matches(VIEW_FILE_PROPERTY_NAME_PATTERN) && trimmedPrevLine.endsWith(VIEW_PROPERTY_VALUE_SUFFIX)
+                        && trimmedCurrentLine.matches(VIEW_PROPERTY_NAME_PATTERN)) {
+                    String newLines = processViewFilePropertySvgReference(prevLine, currentLine);
                     stencilSetFileContents.append(newLines);
                 } else {
-                    stencilSetFileContents.append(line + LINE_SEPARATOR);
+                    stencilSetFileContents.append(currentLine + LINE_SEPARATOR);
                 }
             }
         } finally {
@@ -111,7 +134,15 @@ public class SvgInline {
 
     }
 
-    private String processSvgReference(final String viewProperty) throws IOException {
+    /**
+     * Replaces view="<file>.svg" properties of nodes with the contents of the
+     * referenced .svg files and adds a _view_file="<file>.svg" property.
+     *
+     * @param viewProperty
+     * @return
+     * @throws IOException
+     */
+    private String processViewPropertySvgReference(final String viewProperty) throws IOException {
         // find start of value
         int indexOfColon = viewProperty.indexOf(':');
         if (indexOfColon > -1) {
@@ -151,6 +182,74 @@ public class SvgInline {
                 }
             }
 
+        }
+
+        // property not changed, return original property
+        return viewProperty + LINE_SEPARATOR;
+
+    }
+
+    /**
+     * Updates the svg xml in view="..." properties by reading the svg
+     * file in the previous _view_file="<file>.svg" property.
+     *
+     * @param viewFileProperty
+     * @param viewProperty
+     * @return
+     * @throws IOException
+     */
+    private String processViewFilePropertySvgReference(final String viewFileProperty, final String viewProperty) throws IOException {
+        // find start of _view_file value
+        int indexOfViewFileValueStart = -1;
+        int indexOfViewFileColon = viewFileProperty.indexOf(':');
+        if (indexOfViewFileColon > -1) {
+            int indexOfSQ = viewFileProperty.indexOf('\'', indexOfViewFileColon + 1);
+            int indexOfDQ = viewFileProperty.indexOf('"', indexOfViewFileColon + 1);
+            if (indexOfSQ > -1) {
+                indexOfViewFileValueStart = indexOfSQ;
+            } else {
+                indexOfViewFileValueStart = indexOfDQ;
+            }
+        }
+
+        // find start of view value
+        int indexOfViewValueStart = -1;
+        int indexOfViewColon = viewProperty.indexOf(':');
+        if (indexOfViewColon > -1) {
+            int indexOfSQ = viewProperty.indexOf('\'', indexOfViewColon + 1);
+            int indexOfDQ = viewProperty.indexOf('"', indexOfViewColon + 1);
+            if (indexOfSQ > -1) {
+                indexOfViewValueStart = indexOfSQ;
+            } else {
+                indexOfViewValueStart = indexOfDQ;
+            }
+        }
+
+        if (indexOfViewFileValueStart > -1 && indexOfViewValueStart > -1) {
+            String viewFileValue = viewFileProperty.substring(indexOfViewFileValueStart + 1);
+
+            // find end of value
+            int indexOfViewFileValueEnd = -1;
+            int indexOfSQ = viewFileValue.lastIndexOf('\'');
+            int indexOfDQ = viewFileValue.lastIndexOf('"');
+            if (indexOfSQ > -1) {
+                indexOfViewFileValueEnd = indexOfSQ;
+            } else {
+                indexOfViewFileValueEnd = indexOfDQ;
+            }
+            if (indexOfViewFileValueEnd > -1) {
+                viewFileValue = viewFileValue.substring(0, indexOfViewFileValueEnd);
+                if (viewFileValue.endsWith(SVG_FILE_SUFFIX)) {
+                    // read svg file
+                    String svgContents = getReferencedSvgFileContents(viewFileValue);
+                    if (svgContents != null) {
+                        StringBuilder newViewProperty = new StringBuilder("");
+                        newViewProperty.append(viewProperty.substring(0, indexOfViewValueStart));
+                        newViewProperty.append("\"").append(svgContents).append("\",").append(LINE_SEPARATOR);
+                        return newViewProperty.toString();
+                    }
+                }
+            }
         }
 
         // property not changed, return original property
