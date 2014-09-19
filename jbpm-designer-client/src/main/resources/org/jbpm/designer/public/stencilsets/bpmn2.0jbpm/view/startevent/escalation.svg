@@ -27,10 +27,10 @@
     	fill="url(#background) white" 
     	stroke-width="1"
     	style="stroke-dasharray: 5.5, 3" />
-    	
+
     <circle id="frame" cx="16" cy="16" r="15" stroke="black" fill="none" stroke-width="1"/>
     
-    <path id="frame2"
+    <path id="body"
        d="M 16,8.75 L22,23.75 L16,17 L10,23.75z " stroke="black"
        style="fill:none;stroke-width:1" />
        

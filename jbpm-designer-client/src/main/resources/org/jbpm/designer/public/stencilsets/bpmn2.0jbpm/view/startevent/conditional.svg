@@ -30,8 +30,8 @@
     
     <circle id="frame" cx="16" cy="16" r="15" stroke="black" fill="none" stroke-width="1"/>
 
-    <rect id="frame2" x="8" y="8" width="16" height="16" stroke="black" stroke-width="1" fill="none" />
-    <path id="frame3" d="	M 10 10 L 22 10
+    <rect id="body1" x="8" y="8" width="16" height="16" stroke="black" stroke-width="1" fill="none" />
+    <path id="body2" d="	M 10 10 L 22 10
     		M 10 14 L 22 14
     		M 10 18 L 22 18
     		M 10 22 L 22 22" fill="none" stroke="black" />
