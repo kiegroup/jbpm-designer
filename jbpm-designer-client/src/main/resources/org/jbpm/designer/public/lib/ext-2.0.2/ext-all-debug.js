@@ -13252,22 +13252,23 @@ Ext.Shadow.prototype = {
     }
 };
 
-Ext.Shadow.Pool = function(){
-    var p = [];
-    var markup = Ext.isIE ?
-                 '<div class="x-ie-shadow"></div>' :
-                 '<div class="x-shadow"><div class="xst"><div class="xstl"></div><div class="xstc"></div><div class="xstr"></div></div><div class="xsc"><div class="xsml"></div><div class="xsmc"></div><div class="xsmr"></div></div><div class="xsb"><div class="xsbl"></div><div class="xsbc"></div><div class="xsbr"></div></div></div>';
+Ext.Shadow.Pool = function() {
+    var p = [],
+        markup = Ext.isIE ?
+            '<div class="x-ie-shadow"></div>':
+            '<div class="x-shadow"><div class="xst"><div class="xstl"></div><div class="xstc"></div><div class="xstr"></div></div><div class="xsc"><div class="xsml"></div><div class="xsmc"></div><div class="xsmr"></div></div><div class="xsb"><div class="xsbl"></div><div class="xsbc"></div><div class="xsbr"></div></div></div>';
     return {
-        pull : function(){
+        pull: function() {
             var sh = p.shift();
-            if(!sh){
-                sh = Ext.get(Ext.DomHelper.insertHtml("beforeBegin", document.body.firstChild, markup));
+            if (!sh) {
+                //fix for IE9 - replace document.body.firstChild with Ext.getBody().first() - gets the first child skipping text nodes
+                sh = Ext.get(Ext.DomHelper.insertHtml("beforeBegin", Ext.getBody().first().dom, markup));
                 sh.autoBoxAdjust = false;
             }
             return sh;
         },
 
-        push : function(sh){
+        push: function(sh) {
             p.push(sh);
         }
     };
