@@ -3,7 +3,7 @@
   <url>https://translate.jboss.org/</url>
   <project>jbpm-designer</project>
   <project-version>6.2.0</project-version>
-  <project-type>utf8properties</project-type>
+  <project-type>properties</project-type>
 
   <locales>
       <locale map-from="zh_CN">zh-Hans</locale>
