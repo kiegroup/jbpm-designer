@@ -225,7 +225,7 @@
               <insertNewLine>true</insertNewLine>
               <includes>
                 <include>${project.build.directory}/classes/org/jbpm/designer/public/lib/ext-2.0.2/adapter/ext/ext-base.js</include>
-                <include>${project.build.directory}/classes/org/jbpm/designer/public/lib/ext-2.0.2/ext-all.js</include>
+                <include>${project.build.directory}/classes/org/jbpm/designer/public/lib/ext-2.0.2/ext-all-debug.js</include>
                 <include>${project.build.directory}/classes/org/jbpm/designer/public/lib/ext-2.0.2/color-field.js</include>
               </includes>
               <output>${project.build.directory}/classes/org/jbpm/designer/public/js/compressed/designer-ext.js</output>
