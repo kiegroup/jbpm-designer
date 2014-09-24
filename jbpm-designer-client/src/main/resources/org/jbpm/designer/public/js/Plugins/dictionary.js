@@ -347,12 +347,12 @@ ORYX.Plugins.Dictionary = Clazz.extend({
     	          ]
     	});
 
-		var dialog = new Ext.Window({
-			layout		: 'anchor',
+        var dialog = new Ext.Window({
+			layout		: 'fit',
 			autoCreate	: true, 
 			title		: ORYX.I18N.Dictionary.procDicEditor,
-			height		: 530, 
-			width		: 960, 
+			height		: 400,
+			width		: 700,
 			modal		: true,
 			collapsible	: false,
 			fixedcenter	: true, 
