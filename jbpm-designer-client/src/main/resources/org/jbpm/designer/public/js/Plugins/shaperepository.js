@@ -37,9 +37,12 @@ ORYX.Plugins.ShapeRepository = {
 		this._canAttach  = undefined;
         this._patternData;
 
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_STENCIL_SET_LOADED, this.setStencilSets.bind(this));
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_STENCIL_SET_RELOAD, this.setStencilSets.bind(this));
+
 		this.shapeList = new Ext.tree.TreeNode({
 			
-		})
+		});
 
 		var panel = new Ext.tree.TreePanel({
             cls:'shaperepository',
@@ -60,7 +63,7 @@ ORYX.Plugins.ShapeRepository = {
 //		});
 		
 		var region = this.facade.addToRegion("west", panel, ORYX.I18N.ShapeRepository.title);
-		
+
 //		Ext.Ajax.request({
 //            url: ORYX.PATH + "processinfo",
 //            method: 'POST',
@@ -114,7 +117,6 @@ ORYX.Plugins.ShapeRepository = {
 		
 		// Load all Stencilssets
 		this.setStencilSets();
-		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_STENCIL_SET_LOADED, this.setStencilSets.bind(this));
 	},
 	
 	
@@ -220,13 +222,13 @@ ORYX.Plugins.ShapeRepository = {
 
 			}).bind(this));
 		}).bind(this));
-			
 		//if (this.shapeList.firstChild.firstChild) {
 		//	this.shapeList.firstChild.firstChild.expand(false, true);
 		//}	
 	},
 
 	createStencilTreeNode: function(parentTreeNode, stencil) {
+        try {
 		// Create and add the Stencil to the Group
         var IdParts = stencil.id().split("#");
         var textTitle = ORYX.I18N.propertyNames[IdParts[1]];
@@ -244,7 +246,7 @@ ORYX.Plugins.ShapeRepository = {
                 text: textTitle, 		// Text of the stencil
                 iconCls: window.SpriteUtils.toUniqueId(stencil.icon()), // set iconCls to sprite css class
                 allowDrag: false,					// Don't use the Drag and Drop of Ext-Tree
-                allowDrop: false,
+                allowDrop: false
             });
         }
         else {
@@ -258,9 +260,12 @@ ORYX.Plugins.ShapeRepository = {
             });
         }
 
-		parentTreeNode.appendChild(newElement);		
-		newElement.render();	
-				
+        if(parentTreeNode === undefined) {
+        } else {
+            parentTreeNode.appendChild(newElement);
+            newElement.render();
+        }
+
 		var ui = newElement.getUI();
 		
 		// Set the tooltip
@@ -275,7 +280,10 @@ ORYX.Plugins.ShapeRepository = {
                 title:      stencil.title(),
 				namespace:	stencil.namespace()		// Set Namespace of stencil
 				});
-								
+
+        }catch(e) {
+            // ignore errrors for now
+        }
 	},
 	
 	drop: function(dragZone, target, event) {
