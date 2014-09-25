@@ -326,10 +326,10 @@ public class JbpmProfileImpl implements IDiagramProfile {
 
             return ((DocumentRoot) resource.getContents().get(0)).getDefinitions();
         } catch(IOException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             return null;
         } catch (Throwable t) {
-            t.printStackTrace();
+//            t.printStackTrace();
             return null;
         }
     }
