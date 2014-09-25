@@ -64,7 +64,7 @@ public class AssetServiceServlet extends HttpServlet {
         String assetId = Utils.getEncodedParam(req, "assetid");
         String assetType = req.getParameter("assettype");
         String assetName = req.getParameter("assetname");
-        String assetContent = req.getParameter("assetcontent");
+        String assetContent = UriUtils.decode(Utils.getEncodedParam(req, "assetcontent"));
         String assetContentTransform = req.getParameter("assetcontenttransform");
         String assetLocation = req.getParameter("assetlocation");
         String loadoption = req.getParameter("loadoption");
