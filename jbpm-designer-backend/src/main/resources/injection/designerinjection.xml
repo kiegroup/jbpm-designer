@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<injectionrules>
+    <rule enabled="true" name="headerincludes" url-pattern="/.*" insert-at="head-end">
+        <![CDATA[
+
+		]]>
+    </rule>
+</injectionrules>

@@ -1,9 +1,0 @@
-Required Ruby-Extensions
-	Libs:
-		- rena 0.0.4 - http://raa.ruby-lang.org/project/rena
-
-Requires executable of dot layouting-program, which is included in graphviz.
-Available at http://www.graphviz.org/
-
-For unix systems, install dot and register it in ./src/constants. Also, there
-you will find default configurations for windows and OS X.

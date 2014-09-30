@@ -1,0 +1,5 @@
+        return      KieFunctions.between(a,  "o\"ne"   , "two" ) ;
+      return     KieFunctions.isNull(variable1)  ;
+return     KieFunctions.greaterThan(variable2, " the value ");
+return KieFunctions.isNull(   a);
+ return KieFunctions.greaterOrEqualThan(v, "one");
