@@ -1,0 +1,46 @@
+{
+    "title" : "Simple",
+    "namespace":"http://b3mn.org/stencilset/bpmn2.0simple#",
+    "description":"A subset of JBPM BPMN2",
+    "extends":"http://b3mn.org/stencilset/bpmn2.0#",
+    "stencils":[],
+    "properties":[],
+    "rules": {
+        "connectionRules": [],
+        "cardinalityRules": [],
+        "containmentRules": []
+    },
+    "removestencilgroups": [
+        "Throwing Intermediate Events",
+        "Data Objects",
+        "Swimlanes",
+        "Artifacts"
+    ],
+    "removestencils": [
+        "StartMessageEvent",
+        "StartTimerEvent",
+        "StartEscalationEvent",
+        "StartConditionalEvent",
+        "StartCompensationEvent",
+        "StartErrorEvent",
+        "StartConditionalEvent",
+        "IntermediateMessageEventCatching",
+        "IntermediateEscalationEvent",
+        "IntermediateConditionalEvent",
+        "EndMessageEvent",
+        "EndEscalationEvent",
+        "EndCompensationEvent",
+        "EndCancelEvent",
+        "EndSignalEvent",
+        "EventbasedGateway",
+        "IntermediateEvent",
+        "InclusiveGateway",
+        "EventSubprocess",
+        "MultipleInstanceSubprocess",
+        "AdHocSubprocess",
+        "Association_Undirected",
+        "Association_Unidirectional",
+        "StartSignalEvent"
+    ],
+    "removeproperties": []
+}

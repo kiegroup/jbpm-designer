@@ -1,0 +1,598 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.jbpm</groupId>
+    <artifactId>jbpm-designer</artifactId>
+    <version>6.1.0.Final</version>
+  </parent>
+  <artifactId>jbpm-designer-standalone</artifactId>
+  <name>jBPM Designer - Standalone</name>
+  <packaging>war</packaging>
+
+  <dependencies>
+
+    <!-- Hack: ANT bundled with kie-ci needs to be excluded when running on Jetty -->
+    <!-- It is added back for other Application Servers in their respective assemblies -->
+    <dependency>
+      <groupId>org.kie</groupId>
+      <artifactId>kie-ci</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.ant</groupId>
+          <artifactId>ant</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- jBPM Designer -->
+    <dependency>
+      <groupId>org.jbpm</groupId>
+      <artifactId>jbpm-designer-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jbpm</groupId>
+      <artifactId>jbpm-designer-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jbpm</groupId>
+      <artifactId>jbpm-designer-backend</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>org.drools</groupId>
+        <artifactId>drools-wb-workitems-editor-client</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.drools</groupId>
+        <artifactId>drools-wb-workitems-editor-backend</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.kie.workbench.screens</groupId>
+        <artifactId>kie-wb-common-default-editor-client</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.kie.workbench.screens</groupId>
+        <artifactId>kie-wb-common-default-editor-backend</artifactId>
+    </dependency>
+
+    <!-- UberFire -->
+    <dependency>
+      <groupId>org.uberfire</groupId>
+      <artifactId>uberfire-all</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.uberfire</groupId>
+      <artifactId>uberfire-workbench-processors</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.uberfire</groupId>
+      <artifactId>uberfire-panel-manager-nswe</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- Errai AS -->
+    <dependency>
+      <groupId>org.jboss.errai</groupId>
+      <artifactId>errai-jboss-as-support</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jboss.errai</groupId>
+      <artifactId>errai-weld-integration</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jboss.errai</groupId>
+      <artifactId>errai-cdi-jetty</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jboss.errai</groupId>
+      <artifactId>errai-ui</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jboss.errai</groupId>
+      <artifactId>errai-data-binding</artifactId>
+    </dependency>
+
+    <!-- CDI Development Utils -->
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-entitymanager</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-validator</artifactId>
+    </dependency>
+    <!-- This must be placed above com.google.gwt:gwt-dev to override the
+      Jetty that is present there -->
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>jetty</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>jetty-plus</artifactId>
+      <exclusions>
+        <exclusion>
+          <artifactId>geronimo-spec-jta</artifactId>
+          <groupId>geronimo-spec</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>jetty-naming</artifactId>
+    </dependency>
+
+    <!-- Weld Modules -->
+    <dependency>
+      <groupId>org.jboss.weld.se</groupId>
+      <artifactId>weld-se-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jboss.weld.servlet</groupId>
+      <artifactId>weld-servlet-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jboss.solder</groupId>
+      <artifactId>solder-impl</artifactId>
+    </dependency>
+
+    <!-- GWT and GWT Extensions -->
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-user</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.gwtbootstrap</groupId>
+      <artifactId>gwt-bootstrap</artifactId>
+    </dependency>
+
+    <!-- Rouge imports to avoid OSGi errors -->
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-impl</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-xjc</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.transaction</groupId>
+      <artifactId>jta</artifactId>
+    </dependency>
+
+    <!--Miscellaneous -->
+    <dependency>
+      <groupId>org.quartz-scheduler</groupId>
+      <artifactId>quartz</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jbpm</groupId>
+      <artifactId>jbpm-bpmn2-emfextmodel</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse</groupId>
+      <artifactId>org.eclipse.bpmn2</artifactId>
+    </dependency>
+    <dependency>
+       <groupId>org.jdom</groupId>
+       <artifactId>jdom</artifactId>
+    </dependency>
+
+    <!-- Guvnor -->
+    <dependency>
+      <groupId>org.guvnor</groupId>
+      <artifactId>guvnor-services-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.guvnor</groupId>
+      <artifactId>guvnor-m2repo-editor-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.guvnor</groupId>
+      <artifactId>guvnor-m2repo-editor-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.guvnor</groupId>
+      <artifactId>guvnor-m2repo-editor-backend</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.guvnor</groupId>
+      <artifactId>guvnor-project-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.guvnor</groupId>
+      <artifactId>guvnor-project-backend</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.guvnor</groupId>
+      <artifactId>guvnor-workingset-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.guvnor</groupId>
+      <artifactId>guvnor-workingset-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.guvnor</groupId>
+      <artifactId>guvnor-project-builder</artifactId>
+    </dependency>
+
+    <!-- Kie Workbench -->
+    <dependency>
+      <groupId>org.kie.workbench.screens</groupId>
+      <artifactId>kie-wb-common-project-explorer-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.workbench.screens</groupId>
+      <artifactId>kie-wb-common-project-explorer-backend</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.workbench.screens</groupId>
+      <artifactId>kie-wb-common-project-editor-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.workbench.screens</groupId>
+      <artifactId>kie-wb-common-project-editor-backend</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.workbench.screens</groupId>
+      <artifactId>kie-wb-common-project-imports-editor-client</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.kie.workbench.screens</groupId>
+        <artifactId>kie-wb-common-project-explorer-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.workbench.services</groupId>
+      <artifactId>kie-wb-common-security</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.workbench.widgets</groupId>
+      <artifactId>kie-wb-common-ui</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.workbench.services</groupId>
+      <artifactId>kie-wb-common-services-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.workbench.services</groupId>
+      <artifactId>kie-wb-common-services-backend</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.workbench.widgets</groupId>
+      <artifactId>kie-wb-metadata-widget</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.workbench.widgets</groupId>
+      <artifactId>kie-wb-config-resource-widget</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>org.kie.workbench.screens</groupId>
+        <artifactId>kie-wb-common-message-console-api</artifactId>
+      </dependency>
+    <dependency>
+      <groupId>org.kie.workbench.screens</groupId>
+      <artifactId>kie-wb-common-message-console-backend</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.workbench.screens</groupId>
+      <artifactId>kie-wb-common-message-console-client</artifactId>
+    </dependency>
+
+      <!-- formModeler dependencies -->
+      <dependency>
+          <groupId>org.jbpm</groupId>
+          <artifactId>jbpm-form-modeler-app</artifactId>
+          <type>war</type>
+      </dependency>
+
+      <dependency>
+          <groupId>org.jbpm</groupId>
+          <artifactId>jbpm-form-modeler-renderer-api</artifactId>
+      </dependency>
+
+      <dependency>
+          <groupId>org.jbpm</groupId>
+          <artifactId>jbpm-form-modeler-renderer-client</artifactId>
+      </dependency>
+
+      <dependency>
+          <groupId>org.jbpm</groupId>
+          <artifactId>jbpm-form-modeler-renderer-backend</artifactId>
+      </dependency>
+
+      <dependency>
+          <groupId>org.jbpm</groupId>
+          <artifactId>jbpm-form-modeler-editor-api</artifactId>
+      </dependency>
+
+      <dependency>
+          <groupId>org.jbpm</groupId>
+          <artifactId>jbpm-form-modeler-editor-client</artifactId>
+      </dependency>
+
+      <dependency>
+          <groupId>org.jbpm</groupId>
+          <artifactId>jbpm-form-modeler-editor-backend</artifactId>
+      </dependency>
+
+      <dependency>
+          <groupId>org.jbpm</groupId>
+          <artifactId>jbpm-form-modeler-data-modeler</artifactId>
+        <exclusions>
+          <exclusion>
+            <groupId>org.jbpm</groupId>
+            <artifactId>jbpm-kie-services</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+
+      <dependency>
+          <groupId>org.jbpm</groupId>
+          <artifactId>jbpm-form-modeler-bpmn-form-builder</artifactId>
+      </dependency>
+
+      <!-- Data Modeller -->
+      <dependency>
+          <groupId>org.kie.workbench.screens</groupId>
+          <artifactId>kie-wb-common-data-modeller-api</artifactId>
+      </dependency>
+
+      <dependency>
+          <groupId>org.kie.workbench.screens</groupId>
+          <artifactId>kie-wb-common-data-modeller-backend</artifactId>
+      </dependency>
+
+      <dependency>
+          <groupId>org.kie.workbench.screens</groupId>
+          <artifactId>kie-wb-common-data-modeller-client</artifactId>
+      </dependency>
+
+      <!-- Message console -->
+      <dependency>
+        <groupId>org.kie.workbench.screens</groupId>
+        <artifactId>kie-wb-common-message-console-api</artifactId>
+      </dependency>
+
+      <dependency>
+        <groupId>org.kie.workbench.screens</groupId>
+        <artifactId>kie-wb-common-message-console-backend</artifactId>
+      </dependency>
+
+      <dependency>
+        <groupId>org.kie.workbench.screens</groupId>
+        <artifactId>kie-wb-common-message-console-client</artifactId>
+      </dependency>
+
+    <!-- Logging -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+
+    <resources>
+      <!-- Include src/main/java in order not to break the Eclipse GWT plug-in -->
+      <resource>
+        <directory>src/main/java</directory>
+      </resource>
+      <!-- Include module descriptors from src/main/resources in order not to break the Intellij GWT plug-in -->
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+    </resources>
+
+    <plugins>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>gwt-maven-plugin</artifactId>
+        <configuration>
+          <deploy>${project.build.directory}/gwt-symbols-deploy</deploy>
+          <localWorkers>4</localWorkers>
+          <module>org.jbpm.designer.FastCompiledjBPMDesigner</module>
+          <logLevel>INFO</logLevel>
+          <compileSourcesArtifacts>
+
+            <!-- Guvnor -->
+            <compileSourcesArtifact>org.guvnor:guvnor-m2repo-editor-api</compileSourcesArtifact>
+            <compileSourcesArtifact>org.guvnor:guvnor-m2repo-editor-client</compileSourcesArtifact>
+            <compileSourcesArtifact>org.guvnor:guvnor-workingset-api</compileSourcesArtifact>
+            <compileSourcesArtifact>org.guvnor:guvnor-workingset-client</compileSourcesArtifact>
+            <compileSourcesArtifact>org.guvnor:guvnor-services-api</compileSourcesArtifact>
+            <compileSourcesArtifact>org.guvnor:guvnor-project-api</compileSourcesArtifact>
+
+            <!-- Common dependencies -->
+            <compileSourcesArtifact>org.kie.workbench.screens:kie-wb-common-project-editor-api</compileSourcesArtifact>
+            <compileSourcesArtifact>org.kie.workbench.screens:kie-wb-common-project-editor-client</compileSourcesArtifact>
+            <compileSourcesArtifact>org.kie.workbench.screens:kie-wb-common-project-imports-editor-api</compileSourcesArtifact>
+            <compileSourcesArtifact>org.kie.workbench.screens:kie-wb-common-project-imports-editor-client</compileSourcesArtifact>
+            <compileSourcesArtifact>org.kie.workbench.screens:kie-wb-common-project-explorer-api</compileSourcesArtifact>
+            <compileSourcesArtifact>org.kie.workbench.screens:kie-wb-common-project-explorer-client</compileSourcesArtifact>
+            <compileSourcesArtifact>org.kie.workbench.widgets:kie-wb-common-ui</compileSourcesArtifact>
+            <compileSourcesArtifact>org.kie.workbench.widgets:kie-wb-metadata-widget</compileSourcesArtifact>
+            <compileSourcesArtifact>org.kie.workbench.widgets:kie-wb-config-resource-widget</compileSourcesArtifact>
+            <compileSourcesArtifact>org.kie.workbench.services:kie-wb-common-services-api</compileSourcesArtifact>
+            <compileSourcesArtifact>org.kie.workbench.services:kie-wb-common-security</compileSourcesArtifact>
+            <compileSourcesArtifact>org.drools:drools-wb-workitems-editor-api</compileSourcesArtifact>
+            <compileSourcesArtifact>org.drools:drools-wb-workitems-editor-client</compileSourcesArtifact>
+            <compileSourcesArtifact>org.kie.workbench.screens:kie-wb-common-message-console-api</compileSourcesArtifact>
+            <compileSourcesArtifact>org.kie.workbench.screens:kie-wb-common-message-console-client</compileSourcesArtifact>
+
+            <!-- UberFire -->
+            <compileSourcesArtifact>org.uberfire:uberfire-commons</compileSourcesArtifact>
+            <compileSourcesArtifact>org.uberfire:uberfire-nio2-model</compileSourcesArtifact>
+            <compileSourcesArtifact>org.uberfire:uberfire-api</compileSourcesArtifact>
+            <compileSourcesArtifact>org.uberfire:uberfire-js</compileSourcesArtifact>
+            <compileSourcesArtifact>org.uberfire:uberfire-security-api</compileSourcesArtifact>
+            <compileSourcesArtifact>org.uberfire:uberfire-security-client</compileSourcesArtifact>
+            <compileSourcesArtifact>org.uberfire:uberfire-client-api</compileSourcesArtifact>
+            <compileSourcesArtifact>org.uberfire:uberfire-widgets-core-client</compileSourcesArtifact>
+            <compileSourcesArtifact>org.uberfire:uberfire-widgets-commons</compileSourcesArtifact>
+            <compileSourcesArtifact>org.uberfire:uberfire-workbench-client</compileSourcesArtifact>
+            <compileSourcesArtifact>org.uberfire:uberfire-workbench-client-backend</compileSourcesArtifact>
+            <compileSourcesArtifact>org.uberfire:uberfire-backend-api</compileSourcesArtifact>
+
+            <!-- designer -->
+            <compileSourcesArtifact>org.jbpm:jbpm-designer-api</compileSourcesArtifact>
+            <compileSourcesArtifact>org.jbpm:jbpm-designer-client</compileSourcesArtifact>
+
+            <compileSourcesArtifact>org.jbpm:jbpm-form-modeler-editor-api</compileSourcesArtifact>
+            <compileSourcesArtifact>org.jbpm:jbpm-form-modeler-editor-client</compileSourcesArtifact>
+            <compileSourcesArtifact>org.jbpm:jbpm-form-modeler-renderer-api</compileSourcesArtifact>
+            <compileSourcesArtifact>org.jbpm:jbpm-form-modeler-renderer-client</compileSourcesArtifact>
+
+            <compileSourcesArtifact>org.kie.workbench.screens:kie-wb-common-message-console-api</compileSourcesArtifact>
+            <compileSourcesArtifact>org.kie.workbench.screens:kie-wb-common-message-console-client</compileSourcesArtifact>
+
+          </compileSourcesArtifacts>
+          <runTarget>org.jbpm.designer.jBPMDesigner/designer.html</runTarget>
+          <extraJvmArgs>-Xmx2048m -XX:MaxPermSize=256m</extraJvmArgs>
+          <soyc>false</soyc>
+          <server>org.jboss.errai.cdi.server.gwt.JettyLauncher</server>
+          <!-- drools-compiler has dependency on org.eclipse.jdt.core.compiler:ecj:jar:3.5.1:compile, see http://code.google.com/p/google-web-toolkit/issues/detail?id=4479 -->
+          <gwtSdkFirstInClasspath>true</gwtSdkFirstInClasspath>
+        </configuration>
+        <executions>
+          <execution>
+            <id>gwt-clean</id>
+            <phase>clean</phase>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>gwt-compile</id>
+            <goals>
+              <goal>resources</goal>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-war-plugin</artifactId>
+        <configuration>
+          <warName>${project.artifactId}</warName>
+          <outputFileNameMapping>@{artifactId}@-@{baseVersion}@@{dashClassifier?}@.@{extension}@
+          </outputFileNameMapping>
+          <packagingExcludes>**/javax/**/*.*,**/client/**/*.class,**/*.symbolMap</packagingExcludes>
+          <archive>
+            <addMavenDescriptor>false</addMavenDescriptor>
+          </archive>
+            <overlays>
+                <overlay>
+                    <groupId>org.jbpm</groupId>
+                    <artifactId>jbpm-form-modeler-app</artifactId>
+                </overlay>
+            </overlays>
+            <webResources>
+                <resource>
+                    <directory>${basedir}/src/main/webapp/WEB-INF</directory>
+                    <filtering>true</filtering>
+                    <targetPath>WEB-INF</targetPath>
+                    <includes>
+                        <include>**/web.xml</include>
+                    </includes>
+                </resource>
+            </webResources>
+            <dependentWarExcludes>
+                WEB-INF/lib/jbpm-form-modeler-*.war,
+            </dependentWarExcludes>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <skipTests>true</skipTests>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>${basedir}</directory>
+              <includes>
+                <include>.errai/**</include>
+                <include>.vfsgit/**</include>
+              </includes>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+    </plugins>
+
+  </build>
+  <profiles>
+    <profile>
+      <id>fullProfile</id>
+      <activation>
+        <property>
+          <name>full</name>
+        </property>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>org.apache.ant</groupId>
+          <artifactId>ant</artifactId>
+          <scope>runtime</scope>
+        </dependency>
+      </dependencies>
+      <build>
+        <plugins>
+          <plugin><!-- Keep in sync with soa profile -->
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>gwt-maven-plugin</artifactId>
+            <configuration>
+              <!-- Build all GWT permutations and optimize them -->
+              <module>org.jbpm.designer.jBPMDesigner</module>
+              <draftCompile>false</draftCompile>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>

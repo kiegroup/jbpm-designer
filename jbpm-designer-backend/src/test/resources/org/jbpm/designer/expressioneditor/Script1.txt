@@ -1,0 +1,32 @@
+
+
+
+
+
+
+
+ return
+KieFunctions.greaterOrEqualThan(
+variable
+,
+
+ "o\\náéö great! \"\n   áéíóúñÑ @|#~!·$%&/()=?¿"
+
+)
+
+;
+
+
+
+   
+   
+
+   
+
+
+ 
+ 
+ 
+
+
+
