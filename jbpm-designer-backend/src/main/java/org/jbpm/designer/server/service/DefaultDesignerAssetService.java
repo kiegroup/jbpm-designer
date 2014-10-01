@@ -23,6 +23,7 @@ import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.service.BPMN2DataServices;
 import org.jbpm.designer.service.DesignerAssetService;
 import org.jbpm.designer.util.OSProtocolSocketFactory;
+import org.jbpm.designer.util.Utils;
 import org.json.JSONArray;
 import org.uberfire.backend.server.util.Paths;
 import org.uberfire.backend.vfs.Path;
@@ -206,8 +207,8 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
         }
 
         name = name.substring( 0, name.lastIndexOf( "." ) );
-
-        return location + "." + name.replaceAll("\\s", "");
+        name = Utils.toBPMNIdentifier(name);
+        return location + "." + name;
     }
 
 }
