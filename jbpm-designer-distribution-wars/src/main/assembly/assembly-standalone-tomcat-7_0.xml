@@ -35,6 +35,7 @@
                     <exclude>META-INF/context.xml</exclude>
                     <exclude>WEB-INF/jetty-env.xml</exclude>
                     <exclude>WEB-INF/web.xml</exclude>
+                    <exclude>WEB-INF/classes/org/jbpm/designer/wildfly/</exclude>
 
                     <!-- UF Client Related -->
                     <exclude>WEB-INF/lib/uberfire-js-*.jar</exclude>
