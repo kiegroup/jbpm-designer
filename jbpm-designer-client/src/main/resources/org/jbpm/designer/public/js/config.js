@@ -18,6 +18,8 @@ if(!ORYX) var ORYX = {};
 if(!ORYX.CONFIG) ORYX.CONFIG = {};
 
 ORYX.CONFIG.WEB_URL = "org.jbpm.designer.jBPMDesigner";
+ORYX.CONFIG.STUDIO_API_URL = "";
+ORYX.CONFIG.STUDIO_CLIENT_URL = "";
 
 
 
@@ -75,6 +77,10 @@ ORYX.CONFIG.TASKFORMS_URL = function(uuid, profile) {
 	}
 	return ORYX.PATH + "taskforms?uuid="+ window.btoa(encodeURI(uuid)) + "&profile=" + profile;
 };
+ORYX.CONFIG.PROJECT_ID = "";
+ORYX.CONFIG.PROCESS_DEF_ID = "";
+ORYX.CONFIG.TOKEN = "";
+
 ORYX.CONFIG.UUID_AUTOSAVE_INTERVAL = 120000;
 ORYX.CONFIG.UUID_AUTOSAVE_DEFAULT = false;
 	
@@ -206,6 +212,7 @@ ORYX.CONFIG.TYPE_VISUALDATAASSIGNMENTS = "visualdataassignment";
 ORYX.CONFIG.TYPE_CALLEDELEMENT  =       "calledelement";
 ORYX.CONFIG.TYPE_CUSTOM =               "custom";
 ORYX.CONFIG.TYPE_REASSIGNMENT =         "reassignment";
+ORYX.CONFIG.TYPE_GROUPS_EDITOR =        "groupseditor";
 ORYX.CONFIG.TYPE_NOTIFICATIONS =        "notifications";
 ORYX.CONFIG.TYPE_DTYPE_VARDEF =         "vardef";
 ORYX.CONFIG.TYPE_DTYPE_DINPUT =         "dinput";

@@ -3424,10 +3424,10 @@
 				},
 				{
 					"id":"groupid",
-					"type":"String",
-					"title":"GroupID",
+					"type":"Groupseditor",
+					"title":"Groups",
 					"value":"",
-					"description":"he group id that is responsible for executing the human task",
+					"description":"The groups that is responsible for executing the human task",
 					"description_ja":"ヒューマンタスクを担当するグループID",
 					"readonly":false,
 					"optional":true,

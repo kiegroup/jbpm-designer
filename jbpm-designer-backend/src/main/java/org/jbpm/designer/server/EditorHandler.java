@@ -15,19 +15,8 @@
  */
 package org.jbpm.designer.server;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.WeakHashMap;
+import java.io.*;
+import java.util.*;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletConfig;
@@ -38,7 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bpsim.impl.BpsimFactoryImpl;
-import org.apache.commons.codec.binary.Base64;
 import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.util.Utils;
@@ -192,6 +180,11 @@ public class EditorHandler extends HttpServlet {
                          HttpServletResponse response)
             throws ServletException, IOException {
         String profileName = request.getParameter("profile");
+        String projectId = request.getParameter("projectId");
+        String procDefId = request.getParameter("procDefId");
+        String studioApiUrl = request.getParameter("studioApiUrl");
+        String studioClientUrl = request.getParameter("studioClientUrl");
+        String token = request.getParameter("token");
         String uuid = Utils.getUUID(request);
 
         String editorID = request.getParameter("editorid");
@@ -302,6 +295,11 @@ public class EditorHandler extends HttpServlet {
         editorTemplate.add("title", profile.getTitle());
         editorTemplate.add("stencilset", profile.getStencilSet());
         editorTemplate.add("debug", _devMode);
+        editorTemplate.add("projectId", projectId);
+        editorTemplate.add("procDefId", procDefId);
+        editorTemplate.add("token", token);
+        editorTemplate.add("studioApiUrl", studioApiUrl);
+        editorTemplate.add("studioClientUrl", studioClientUrl);
         editorTemplate.add("preprocessing", preprocessingUnit == null ? "" : preprocessingUnit.getOutData());
         editorTemplate.add("externalprotocol", RepositoryInfo.getRepositoryProtocol(profile) == null ? "" : RepositoryInfo.getRepositoryProtocol(profile));
         editorTemplate.add("externalhost", RepositoryInfo.getRepositoryHost(profile));
