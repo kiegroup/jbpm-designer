@@ -34,6 +34,7 @@
           <descriptors>
             <descriptor>src/main/assembly/assembly-standalone-tomcat-7_0.xml</descriptor>
             <descriptor>src/main/assembly/assembly-standalone-jboss-as-7_0.xml</descriptor>
+            <descriptor>src/main/assembly/assembly-standalone-jboss-wildfly-8.xml</descriptor>
           </descriptors>
           <archive>
             <addMavenDescriptor>false</addMavenDescriptor>
