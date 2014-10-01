@@ -31,6 +31,7 @@
 
   <properties>
     <port>8888</port>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <build>
