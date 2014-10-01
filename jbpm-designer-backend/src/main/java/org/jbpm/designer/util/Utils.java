@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.httpclient.URIException;
 import org.jbpm.designer.repository.UriUtils;
 
 public class Utils {
@@ -25,5 +26,66 @@ public class Utils {
         }
 
         return uniqueId;
+    }
+
+    /**
+     * Converts a string to a valid BPMN Identifier,
+     * replacing invalid characters, e.g. Unicode chars
+     * with their URL encoded equivalents, without the '%'. For example
+     * "BP日" -> "BPE697A5"
+     * @param str - input string
+     * @return - valid BPMN id created from input string
+     */
+    public static String toBPMNIdentifier(String str) {
+
+        str = str.replace(" ", "");
+        StringBuilder sb = new StringBuilder(str.length());
+
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            if (i == 0) {
+                if (isNCNameStart(c)) {
+                    sb.append(c);
+                } else {
+                    sb.append(convertNonNCNameChar(c));
+                }
+            } else {
+                if (isNCNamePart(c)) {
+                    sb.append(c);
+                } else {
+                    sb.append(convertNonNCNameChar(c));
+                }
+            }
+        }
+        return sb.toString();
+    }
+
+    /*
+     * Tests whether a character is a valid start character in xsd:NCName
+     */
+    protected static boolean isNCNameStart(char c) {
+        return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_');
+    }
+
+    /*
+     * Tests whether a character is a valid character in xsd:NCName
+     */
+    protected static boolean isNCNamePart(char c) {
+        return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || Character.isDigit(c) || c == '-' || c == '_' || c == '.');
+    }
+
+    /*
+     * Convert character to hex representation by representing each byte's
+     * value as upper-cased hex string, as in URL-encoding.
+     */
+    protected static String convertNonNCNameChar(char c) {
+        String str = "" + c;
+        byte[] bytes = str.getBytes();
+        StringBuilder sb = new StringBuilder(4);
+
+        for (int i = 0; i < bytes.length; i++) {
+            sb.append(String.format("%x", bytes[i]));
+        }
+        return sb.toString().toUpperCase();
     }
 }
