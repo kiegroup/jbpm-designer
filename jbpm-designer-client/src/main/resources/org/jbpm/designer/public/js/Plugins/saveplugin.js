@@ -164,13 +164,15 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         if(hasConcurrentUpdate && hasConcurrentUpdate == true) {
             // let the gwt code handle this from here on....
         } else {
-            this.save(true);
+//            this.save(true);
+            this.saveToWorkspace();
         }
     },
 
     handleEventDoSave: function() {
         this.setUnsaved();
-        this.save(true);
+//        this.save(true);
+        this.saveToWorkspace();
     },
 
     handleEventCancelSave: function() {
@@ -230,6 +232,49 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         });
 
         ORYX.PROCESS_SAVED = false;
+    },
+
+    saveToWorkspace: function () {
+      var processJSON = ORYX.EDITOR.getSerializedJSON();
+      var fileName = ORYX.CONFIG.PROCESS_DEF_ID + ".xml";
+
+      Ext.Ajax.request({
+        url: window.location.protocol + '//' + ORYX.CONFIG.STUDIO_API_URL,
+        method: 'GET',
+        headers: {
+          'X-Auth-Token': ORYX.CONFIG.TOKEN,
+          'ProjectId': ORYX.CONFIG.PROJECT_ID
+        },
+        success: function(response) {
+          if(response.responseText && response.responseText.length > 0) {
+
+            Ext.Ajax.request({
+              url: ORYX.PATH + "savebpmn",
+              method: 'POST',
+              success: function() {
+                Ext.Msg.minWidth = 400;
+                Ext.Msg.alert("Process Definition xml successfully saved");
+              },
+              failure: function() {
+                Ext.Msg.minWidth = 400;
+                Ext.Msg.alert("Converting to BPMN2 Failed");
+              },
+              params: {
+                pp: ORYX.PREPROCESSING,
+                profile: ORYX.PROFILE,
+                data: processJSON,
+                fileName: fileName,
+                procDefId: ORYX.CONFIG.PROCESS_DEF_ID,
+                procDefPath: response.responseText
+              }
+            });
+          }
+        }.bind(this),
+        failure: function(){
+          Ext.Msg.minWidth = 400;
+          Ext.Msg.alert("Converting to BPMN2 Failed");
+        }
+      });
     },
 
     save : function(showCommit) {
@@ -419,7 +464,8 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         ORYX.AUTOSAVE_ENABLED = true;
         this.facade.raiseEvent({type: ORYX.CONFIG.EVENT_STENCIL_SET_LOADED});
         this.vt = window.setInterval((function(){
-            this.save(false);
+//            this.save(false);
+            this.saveToWorkspace();
         }).bind(this), 30000);
         this.facade.raiseEvent({
             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
@@ -461,7 +507,8 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
             ORYX.I18N.Save.copyConfirm_msg,
             function(btn){
                 if (btn == 'yes') {
-                    this.save(true);
+//                    this.save(true);
+                    this.saveToWorkspace();
                     parent.designersignalassetcopy(ORYX.UUID);
                 } else {
                     parent.designersignalassetcopy(ORYX.UUID);
@@ -479,7 +526,8 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                 ORYX.I18N.Save.renameConfirm_msg,
                 function(btn){
                     if (btn == 'yes') {
-                        this.save(true);
+//                        this.save(true);
+                        this.saveToWorkspace();
                         parent.designersignalassetrename(ORYX.UUID);
                     } else {
                         parent.designersignalassetrename(ORYX.UUID);
