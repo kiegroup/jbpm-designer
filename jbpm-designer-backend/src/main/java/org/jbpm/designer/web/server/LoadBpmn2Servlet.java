@@ -53,8 +53,11 @@ public class LoadBpmn2Servlet extends HttpServlet {
 
       IDiagramProfile profile = _profileService.findProfile(req, profileParam);
       // fix package name if needed
-      String[] packageAssetName = ServletUtil.findPackageAndAssetInfo(uuid, profile);
-      String packageName = packageAssetName[0];
+      String packageName = null;
+      if (uuid != null && !uuid.isEmpty()) {
+        String[] packageAssetName = ServletUtil.findPackageAndAssetInfo(uuid, profile);
+        packageName = packageAssetName[0];
+      }
       Definitions def = ((JbpmProfileImpl) profile).getDefinitions(bpmnXmlStr);
       if (def != null) {
         List<RootElement> rootElements = def.getRootElements();
