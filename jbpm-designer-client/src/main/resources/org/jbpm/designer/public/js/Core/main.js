@@ -209,12 +209,17 @@ ORYX.Editor = {
     var loadPluginFinished 	= false;
     var loadContentFinished = false;
 
-    var loadBpmnDiagram = function () {
-      if (!loadPluginFinished || !loadContentFinished) {
-        return
-      }
-//      this._loadBpmnDiagram();
+    var initFinished = function(){
+      if( !loadPluginFinished || !loadContentFinished ){ return }
+      this._finishedLoading();
     }.bind(this);
+
+//    var loadBpmnDiagram = function () {
+//      if (!loadPluginFinished || !loadContentFinished) {
+//        return
+//      }
+//      this._loadBpmnDiagram();
+//    }.bind(this);
 
     // disable key events when Ext modal window is active
     ORYX.Editor.makeExtModalWindowKeysave(this._getPluginFacade());
@@ -223,7 +228,8 @@ ORYX.Editor = {
     window.setTimeout(function(){
       this.loadPlugins();
       loadPluginFinished = true;
-      loadBpmnDiagram();
+      initFinished();
+//      loadBpmnDiagram();
     }.bind(this), 100);
 
     // LOAD the content of the current editor instance
@@ -231,7 +237,8 @@ ORYX.Editor = {
       this.loadSerialized(model);
       this.getCanvas().update();
       loadContentFinished = true;
-      loadBpmnDiagram();
+      initFinished();
+//      loadBpmnDiagram();
     }.bind(this), 200);
   },
 
