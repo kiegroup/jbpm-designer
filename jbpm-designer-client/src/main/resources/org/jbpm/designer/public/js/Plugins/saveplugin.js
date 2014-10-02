@@ -160,13 +160,13 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
 
     saveWithMessage: function() {
         // check with presenter if we can save
-        var hasConcurrentUpdate = parent.designersignalassetupdate(ORYX.UUID);
-        if(hasConcurrentUpdate && hasConcurrentUpdate == true) {
+//        var hasConcurrentUpdate = parent.designersignalassetupdate(ORYX.UUID);
+//        if(hasConcurrentUpdate && hasConcurrentUpdate == true) {
             // let the gwt code handle this from here on....
-        } else {
+//        } else {
 //            this.save(true);
             this.saveToWorkspace();
-        }
+//        }
     },
 
     handleEventDoSave: function() {

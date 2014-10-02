@@ -116,7 +116,6 @@
                                        editor_parameters.model = model;
                                    }
                               } else {
-                                   editor_parameters.error = "Server returned no response.";
                                    model = ORYX.DEFAULT_JSON_MODEL;
                                    editor_parameters.model = model;
                               }
