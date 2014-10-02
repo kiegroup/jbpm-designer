@@ -96,85 +96,8 @@
                }
            };
 
-           if(typeof parent.designeractivenodes == 'function') {
-              try {
-                ORYX.ACTIVENODES = parent.designeractivenodes().evalJSON();
-                parent.designeractivenodes = function (){ return ""; }
-              } catch(err) {
-                parent.designersignalcloseplace();
-              }
-           }
 
-           if(typeof parent.designercompletednodes == 'function') {
-             try {
-                ORYX.COMPLETEDNODES = parent.designercompletednodes().evalJSON();
-                parent.designercompletednodes = function (){ return ""; }
-             } catch(err) {
-                parent.designersignalcloseplace();
-             }
-           }
 
-           if(typeof parent.designerprocesssources == 'function') {
-               var dps = parent.designerprocesssources();
-               parent.designerprocesssources = function (){ return ""; }
-               if(dps && dps.length > 0) {
-                    ORYX.PREPROCESSING = "ReadOnlyService";
-                    new Ajax.Request(ORYX.PATH + "transformer", {
-                                   encoding: 'UTF-8',
-                                   method: 'POST',
-                                   parameters: {uuid: ORYX.UUID, profile: ORYX.PROFILE, pp: ORYX.PREPROCESSING, bpmn2: dps, transformto: 'bpmn2json', enc: 'true', convertservicetasks: 'true', ts: new Date().getTime()},
-                                   onSuccess: function(transport) {
-                                       response = transport.responseText;
-                                       model = response.evalJSON();
-                                       if (model) {
-                                           try {
-                                               editor_parameters.model = model;
-                                               ORYX.EDITOR = new ORYX.Editor(editor_parameters);
-                                           } catch(err) {
-                                               ORYX.LOG.error(err);
-                                           }
-                                       }
-
-                                   },
-                                   onFailure: function(transport) {
-                                       ORYX.LOG.error("Could not load the model");
-                                   }
-                     });
-               } else {
-                    if(!(ORYX.UUID === undefined)) {
-                       //load the model from the repository from its uuid
-                       new Ajax.Request(ORYX.CONFIG.UUID_URL(), {
-                           encoding: 'UTF-8',
-                           method: 'GET',
-                           onSuccess: function(transport) {
-                               response = transport.responseText;
-                               try {
-                                   if (response.length != 0) {
-                                        if(response.startsWith("error:")) {
-                                            editor_parameters.error = response.substr(7, response.length);
-                                            model = ORYX.DEFAULT_JSON_MODEL;
-                                            editor_parameters.model = model;
-                                        } else {
-                                            model = response.evalJSON();
-                                            editor_parameters.model = model;
-                                        }
-                                   } else {
-                                        editor_parameters.error = "Server returned no response.";
-                                        model = ORYX.DEFAULT_JSON_MODEL;
-                                        editor_parameters.model = model;
-                                   }
-                                   ORYX.EDITOR = new ORYX.Editor(editor_parameters);
-                               } catch(err) {
-                                    ORYX.LOG.error(err);
-                               }
-                           },
-                           onFailure: function(transport) {
-                               ORYX.LOG.error("Could not load the model for uuid " + ORYX.UUID);
-                           }
-                       });
-                   }
-               }
-           } else {
                if(!(ORYX.UUID === undefined)) {
                    //load the model from the repository from its uuid
                    new Ajax.Request(ORYX.CONFIG.UUID_URL(), {
@@ -207,7 +130,7 @@
                        }
                    });
                }
-           }
+
        }
 
     function startit() {
