@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
@@ -46,7 +47,7 @@ public class SaveBpmn2Servlet extends HttpServlet {
       String preProcessingParam = req.getParameter("pp");
       String profileParam = req.getParameter("profile");
       String procDefPath = req.getParameter("procDefPath");
-      File bpmnXml = new File(procDefPath);
+      File bpmnXml = new File(new String(Base64.decodeBase64(procDefPath), "UTF-8"));
       IDiagramProfile profile = _profileService.findProfile(req, profileParam);
       String xml = _repository.toXML(json, profile, preProcessingParam);
       FileUtils.writeStringToFile(bpmnXml, xml);

@@ -236,17 +236,17 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
 
     saveToWorkspace: function () {
       var processJSON = ORYX.EDITOR.getSerializedJSON();
-      var fileName = ORYX.CONFIG.PROCESS_DEF_ID + ".xml";
+//      var fileName = ORYX.CONFIG.PROCESS_DEF_ID + ".xml";
 
-      Ext.Ajax.request({
-        url: window.location.protocol + '//' + ORYX.CONFIG.STUDIO_API_URL,
-        method: 'GET',
-        headers: {
-          'X-Auth-Token': ORYX.CONFIG.TOKEN,
-          'ProjectId': ORYX.CONFIG.PROJECT_ID
-        },
-        success: function(response) {
-          if(response.responseText && response.responseText.length > 0) {
+//      Ext.Ajax.request({
+//        url: window.location.protocol + '//' + ORYX.CONFIG.STUDIO_API_URL,
+//        method: 'GET',
+//        headers: {
+//          'X-Auth-Token': ORYX.CONFIG.TOKEN,
+//          'ProjectId': ORYX.CONFIG.PROJECT_ID
+//        },
+//        success: function(response) {
+//          if(response.responseText && response.responseText.length > 0) {
 
             Ext.Ajax.request({
               url: ORYX.PATH + "savebpmn",
@@ -263,18 +263,16 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                 pp: ORYX.PREPROCESSING,
                 profile: ORYX.PROFILE,
                 data: processJSON,
-                fileName: fileName,
-                procDefId: ORYX.CONFIG.PROCESS_DEF_ID,
-                procDefPath: response.responseText
+                procDefPath: ORYX.UUID
               }
             });
-          }
-        }.bind(this),
-        failure: function(){
-          Ext.Msg.minWidth = 400;
-          Ext.Msg.alert("Converting to BPMN2 Failed");
-        }
-      });
+//          }
+//        }.bind(this),
+//        failure: function(){
+//          Ext.Msg.minWidth = 400;
+//          Ext.Msg.alert("Converting to BPMN2 Failed");
+//        }
+//      });
     },
 
     save : function(showCommit) {
