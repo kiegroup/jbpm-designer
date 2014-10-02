@@ -29,7 +29,6 @@ import javax.servlet.http.HttpServletResponse;
 import bpsim.impl.BpsimFactoryImpl;
 import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.designer.util.ConfigurationProvider;
-import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.plugin.IDiagramPlugin;
 import org.jbpm.designer.web.plugin.IDiagramPluginService;
 import org.jbpm.designer.web.plugin.impl.PluginServiceImpl;
@@ -185,7 +184,8 @@ public class EditorHandler extends HttpServlet {
         String studioApiUrl = request.getParameter("studioApiUrl");
         String studioClientUrl = request.getParameter("studioClientUrl");
         String token = request.getParameter("token");
-        String uuid = Utils.getUUID(request);
+//        String uuid = Utils.getUUID(request);TODO
+        String uuid = request.getParameter("uuid");
 
         String editorID = request.getParameter("editorid");
 

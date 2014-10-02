@@ -3,6 +3,7 @@ package org.jbpm.designer.repository.vfs;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import javax.enterprise.context.ApplicationScoped;
 
@@ -45,7 +46,7 @@ public class CGFSRepository extends VFSRepository {
 
   @Override
   public Collection<Asset> listAssets(String location, Filter filter) {
-    return null;
+    return Collections.EMPTY_LIST;
   }
 
   @Override

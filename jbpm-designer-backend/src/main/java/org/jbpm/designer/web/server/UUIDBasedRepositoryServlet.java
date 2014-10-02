@@ -21,7 +21,6 @@ import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -29,10 +28,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.jbpm.designer.util.Utils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.designer.web.repository.IUUIDBasedRepository;
@@ -42,6 +40,8 @@ import org.jbpm.designer.web.repository.impl.UUIDBasedFileRepository;
 import org.jbpm.designer.web.repository.impl.UUIDBasedJbpmRepository;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Antoine Toulme
@@ -108,10 +108,11 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("application/json");
         String uuid = Utils.getUUID(req);
+        uuid = new String(Base64.decodeBase64(uuid), "UTF-8");//TODO КОСТЫЛЬ!!!!!
         String preProcessingParam = req.getParameter("pp");
         if (uuid == null) {
             throw new ServletException("uuid parameter required");
-        }
+    }
         IDiagramProfile profile = _profileService.findProfile(req, req.getParameter("profile"));
 		try {
 			String response =  new String(_repository.load(req, uuid, profile, getServletContext()), Charset.forName("UTF-8"));
