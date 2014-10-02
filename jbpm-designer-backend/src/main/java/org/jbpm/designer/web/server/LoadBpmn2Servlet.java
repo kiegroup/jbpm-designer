@@ -89,7 +89,7 @@ public class LoadBpmn2Servlet extends HttpServlet {
       }
     }
     catch (Exception ex) {
-      throw new ServletException();
+      throw new ServletException(ex);
     }
   }
 

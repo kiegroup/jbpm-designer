@@ -213,7 +213,7 @@ ORYX.Editor = {
       if (!loadPluginFinished || !loadContentFinished) {
         return
       }
-      this._loadBpmnDiagram();
+//      this._loadBpmnDiagram();
     }.bind(this);
 
     // disable key events when Ext modal window is active
