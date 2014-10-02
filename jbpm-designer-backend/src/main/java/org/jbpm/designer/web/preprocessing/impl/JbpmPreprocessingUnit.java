@@ -169,7 +169,8 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             //createAssetIfNotExisting(repository, "/defaultPackage", "BPMN2-SampleProcess", "bpmn2", getBytesFromFile(new File(sampleBpmn2)));
 
             Asset<String> asset = repository.loadAsset(uuid);
-            this.globalDir = profile.getRepositoryGlobalDir( uuid );
+//            this.globalDir = profile.getRepositoryGlobalDir( uuid );TODO
+            this.globalDir = "/global";
             outData = "";
             Map<String, ThemeInfo> themeData = setupThemes(req, repository, profile);
             setupCustomEditors(repository, profile);

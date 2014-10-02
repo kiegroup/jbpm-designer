@@ -2,6 +2,7 @@ package org.jbpm.designer.repository.vfs;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Date;
 import javax.enterprise.context.ApplicationScoped;
 
@@ -9,6 +10,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetNotFoundException;
+import org.jbpm.designer.repository.Filter;
 import org.jbpm.designer.repository.impl.TextAsset;
 
 /**
@@ -39,6 +41,11 @@ public class CGFSRepository extends VFSRepository {
       throw new RuntimeException(e);
     }
     return asset;
+  }
+
+  @Override
+  public Collection<Asset> listAssets(String location, Filter filter) {
+    return null;
   }
 
   @Override

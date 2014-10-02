@@ -54,10 +54,10 @@
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/gestures/gesture.js" type="text/javascript"></script>
     -->
 
-    <script>
-        if(parent.document.getElementById(ORYX.EDITORID) && parent.document.getElementById(ORYX.EDITORID).parentNode && parent.document.getElementById(ORYX.EDITORID).parentNode.parentNode) {
-            parent.document.getElementById(ORYX.EDITORID).parentNode.parentNode.style.overflow = 'hidden';
-        }
-    </script>
+    <%--<script>--%>
+        <%--if(parent.document.getElementById(ORYX.EDITORID) && parent.document.getElementById(ORYX.EDITORID).parentNode && parent.document.getElementById(ORYX.EDITORID).parentNode.parentNode) {--%>
+            <%--parent.document.getElementById(ORYX.EDITORID).parentNode.parentNode.style.overflow = 'hidden';--%>
+        <%--}--%>
+    <%--</script>--%>
 </body>
 </html>
