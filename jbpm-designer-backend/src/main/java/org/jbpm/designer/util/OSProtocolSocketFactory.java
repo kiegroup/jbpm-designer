@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 public class OSProtocolSocketFactory implements ProtocolSocketFactory {
 
-    private static Log log = LogFactory.getLog(OSProtocolSocketFactory.class);
+    private static Logger log = LoggerFactory.getLogger(OSProtocolSocketFactory.class);
 
     public OSProtocolSocketFactory() {
     }
