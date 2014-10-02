@@ -2755,14 +2755,14 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
                                     imports.add(new ImportDef({
                                         'type': type,
                                         'classname': classname,
-                                        'customclassname': '',
+                                        'customclassname': "",
                                         'wsdllocation': location,
                                         'wsdlnamespace': namespace
                                     }));
                                 } else {
                                     imports.add(new ImportDef({
                                         'type': type,
-                                        'classname': '',
+                                        'classname': "",
                                         'customclassname': classname,
                                         'wsdllocation': location,
                                         'wsdlnamespace': namespace
@@ -2823,7 +2823,7 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
                                 {
                                     id: 'classname',
                                     header: "Defined Class Name",
-                                    width: 200,
+                                    width: 180,
                                     dataIndex: 'classname',
                                     editor: new Ext.form.ComboBox({
                                         id: 'customTypeCombo',
@@ -2852,22 +2852,21 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
                                 {
                                     id: 'customclassname',
                                     header: "Custom Class Name",
-                                    width: 200,
+                                    width: 180,
                                     dataIndex: 'customclassname',
                                     editor: new Ext.form.TextField({ allowBlank: true }),
-                                    renderer: Ext.util.Format.htmlEncode
                                 },
                                 {
                                     id: 'wsdllocation',
                                     header: ORYX.I18N.PropertyWindow.wsdlLocation,
-                                    width: 200,
+                                    width: 180,
                                     dataIndex: 'wsdllocation',
                                     editor: new Ext.form.TextField({ allowBlank: true })
                                 },
                                 {
                                     id: 'wsdlnamespace',
                                     header: ORYX.I18N.PropertyWindow.wsdlNamespace,
-                                    width: 200,
+                                    width: 180,
                                     dataIndex: 'wsdlnamespace',
                                     editor: new Ext.form.TextField({ allowBlank: true })
                                 },
@@ -2880,6 +2879,7 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
                                     imports.add(new ImportDef({
                                         'type': 'default',
                                         'classname': '',
+                                        'customclassname': '',
                                         'wsdllocation' : '',
                                         'wsdlnamespace' : ''
                                     }));
@@ -2894,7 +2894,7 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
                             autoCreate	: true,
                             title		: ORYX.I18N.PropertyWindow.editorForImports,
                             height		: 400,
-                            width		: 940,
+                            width		: 900,
                             modal		: true,
                             collapsible	: false,
                             fixedcenter	: true,
@@ -2925,7 +2925,7 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
                                     imports.data.each(function() {
                                         // sample 'com.sample.Myclass|default,location|namespace|wsdl
                                         if(this.data['type'] == "default") {
-                                            if(this.data['classname'].length >=0) {
+                                            if(this.data['classname'].length > 0) {
                                                 outValue += this.data['classname'] + "|" + this.data['type'] + ",";
                                             } else {
                                                 outValue += this.data['customclassname'] + "|" + this.data['type'] + ",";
