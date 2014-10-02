@@ -556,7 +556,17 @@ ORYX.Plugins.View = {
 
                         });
                         var filename = form.items.items[1].getValue();
-                        if(filename.endsWith(".bpmn") || filename.endsWith(".bpmn2")) {
+                        var canimport = false;
+                        if(filename === undefined || filename.length <= 0) {
+                            canimport = true; // no file selected - cut/paste only
+                        } else {
+                            if(filename.endsWith(".bpmn") || filename.endsWith(".bpmn2")) {
+                                canimport = true;
+                            }
+                        }
+
+
+                        if(canimport) {
                             var bpmn2string =  form.items.items[2].getValue();
                             Ext.Ajax.request({
                                 url: ORYX.PATH + "transformer",
@@ -693,7 +703,17 @@ ORYX.Plugins.View = {
                         });
 
                         var filename = form.items.items[1].getValue();
-                        if(filename.endsWith(".json")) {
+                        var canimport = false;
+                        if(filename === undefined || filename.length <= 0) {
+                            canimport = true; // no file selected - cut/paste only
+                        } else {
+                            if(filename.endsWith(".json")) {
+                                canimport = true;
+                            }
+                        }
+
+
+                        if(canimport) {
                             var jsonString =  form.items.items[2].getValue();
                             try {
                                 this._loadJSON( jsonString, "JSON" );
