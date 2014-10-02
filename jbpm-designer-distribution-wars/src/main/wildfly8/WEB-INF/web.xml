@@ -270,6 +270,11 @@
     <servlet-name>LoadBpmn2Servlet</servlet-name>
     <servlet-class>org.jbpm.designer.web.server.LoadBpmn2Servlet</servlet-class>
   </servlet>
+  <servlet>
+    <display-name>SaveBpmn2</display-name>
+    <servlet-name>SaveBpmn2Servlet</servlet-name>
+    <servlet-class>org.jbpm.designer.web.server.SaveBpmn2Servlet</servlet-class>
+  </servlet>
   <servlet-mapping>
     <servlet-name>ResourceList</servlet-name>
     <url-pattern>/resourceList</url-pattern>
@@ -377,6 +382,10 @@
   <servlet-mapping>
     <servlet-name>LoadBpmn2Servlet</servlet-name>
     <url-pattern>/loadBpmnDiagram</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>SaveBpmn2Servlet</servlet-name>
+    <url-pattern>/savebpmn</url-pattern>
   </servlet-mapping>
   <!-- the number within the session-timout element must be expressed in
 minutes. it is now 24 hours. -->
