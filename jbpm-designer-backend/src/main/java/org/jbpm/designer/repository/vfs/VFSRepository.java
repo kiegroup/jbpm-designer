@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.Iterator;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Event;
+import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -27,6 +28,7 @@ import org.uberfire.java.nio.file.attribute.BasicFileAttributes;
 import org.uberfire.security.Identity;
 
 
+@Alternative
 public class VFSRepository implements Repository {
 
     private IOService ioService;
