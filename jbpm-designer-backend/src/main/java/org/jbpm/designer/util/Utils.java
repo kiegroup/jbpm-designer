@@ -4,8 +4,6 @@ import java.io.UnsupportedEncodingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.httpclient.URIException;
-import org.jbpm.designer.repository.UriUtils;
 
 public class Utils {
 
