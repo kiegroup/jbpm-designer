@@ -18,17 +18,17 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
 
   openFormDesigner: function(options) {
     var processJSON = ORYX.EDITOR.getSerializedJSON();
-    var fileName = ORYX.CONFIG.PROCESS_DEF_ID + ".xml";
+//    var fileName = ORYX.CONFIG.PROCESS_DEF_ID + ".xml";
 
-    Ext.Ajax.request({
-      url: window.location.protocol + '//' + ORYX.CONFIG.STUDIO_API_URL,
-      method: 'GET',
-      headers: {
-        'X-Auth-Token': ORYX.CONFIG.TOKEN,
-        'ProjectId': ORYX.CONFIG.PROJECT_ID
-      },
-      success: function(response) {
-        if(response.responseText && response.responseText.length > 0) {
+//    Ext.Ajax.request({
+//      url: window.location.protocol + '//' + ORYX.CONFIG.STUDIO_API_URL,
+//      method: 'GET',
+//      headers: {
+//        'X-Auth-Token': ORYX.CONFIG.TOKEN,
+//        'ProjectId': ORYX.CONFIG.PROJECT_ID
+//      },
+//      success: function(response) {
+//        if(response.responseText && response.responseText.length > 0) {
 
           Ext.Ajax.request({
             url: ORYX.PATH + "savebpmn",
@@ -43,18 +43,16 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
             params: {
               profile: ORYX.PROFILE,
               data: processJSON,
-              fileName: fileName,
-              procDefId: ORYX.CONFIG.PROCESS_DEF_ID,
               procDefFolderPath: response.responseText
             }
           });
-        }
-      }.bind(this),
-      failure: function(){
-        Ext.Msg.minWidth = 400;
-        Ext.Msg.alert("Error save BPMN2 configuration");
-      }
-    });
+//        }
+//      }.bind(this),
+//      failure: function(){
+//        Ext.Msg.minWidth = 400;
+//        Ext.Msg.alert("Error save BPMN2 configuration");
+//      }
+//    });
   },
 
     chooseFormEditor: function(options) {
