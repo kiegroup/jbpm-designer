@@ -43,7 +43,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
             params: {
               profile: ORYX.PROFILE,
               data: processJSON,
-              procDefFolderPath: response.responseText
+              procDefPath: ORYX.UUID
             }
           });
 //        }

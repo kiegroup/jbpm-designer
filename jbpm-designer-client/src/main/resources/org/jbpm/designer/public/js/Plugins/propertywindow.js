@@ -2035,7 +2035,7 @@ Ext.form.GroupsEditorField = Ext.extend(Ext.form.TriggerField, {
   onTriggerClick : function() {
 
     Ext.Ajax.request({
-      url: window.location.protocol + '//' + ORYX.CONFIG.STUDIO_API_URL + '/rest/project/' + ORYX.CONFIG.PROJECT_ID + '/roles',
+      url: window.location.protocol + '//' + ORYX.CONFIG.STUDIO_API_URL + 'getProjectRoles/' + ORYX.CONFIG.PROJECT_ID,
       method: 'GET',
       headers: {
         'X-Auth-Token': ORYX.CONFIG.TOKEN,
