@@ -85,8 +85,11 @@ ORYX.Plugins.ShapeMenuPlugin = {
 			this.timer = window.setTimeout(function(){
 
                 if(this.currentShapes && this.currentShapes.length==1){
-                    var id=this.currentShapes[0].id;
-                    window.parent.postMessage(id,ORYX.CONFIG.STUDIO_CLIENT_URL);
+                  var data = [];
+                  data["taskId"]= this.currentShapes[0].resourceId;
+                  data["taskType"]= this.currentShapes[0].properties['oryx-tasktype'];
+                  data["taskName"]= this.currentShapes[0].properties['oryx-taskname'];
+                  window.parent.postMessage(data, ORYX.CONFIG.STUDIO_CLIENT_URL);
                 }
 
 					// Close all Buttons
