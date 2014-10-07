@@ -4247,6 +4247,55 @@ Ext.form.ConditionExpressionEditorField = Ext.extend(Ext.form.TriggerField,  {
             dialog.hide()
         }
 
+        // Converts "\\n" in Java to '\n', except those in string literals
+        function convertJavaNewLines(str) {
+            var result = new String("");
+            var c = '\0';
+            var prevC = '\0';
+            var atEscape = false;
+            var inQuote = false;
+            for (i = 0; i < str.length; i++) {
+                prevC = c;
+                c = str.charAt(i);
+                // set atEscape flag
+                if (c === '\\') {
+                    if (!atEscape) {
+                        atEscape = true;
+                    }
+                    else {
+                        atEscape = false;
+                    }
+                }
+                // set inQuote flag
+                if (c === '"' && !atEscape) {
+                    if (!inQuote) {
+                        inQuote = true;
+                    }
+                    else {
+                        inQuote = false;
+                    }
+                }
+                if (atEscape && c === 'n') {
+                    if (inQuote) {
+                        result = result + c;
+                    }
+                    else {
+                        result = result.substring(0, result.length - 1) + '\n';
+                    }
+                }
+                else {
+                    result = result + c;
+                }
+                // unset atEscape flag if required
+                if (prevC === '\\') {
+                    if (atEscape) {
+                        atEscape = false;
+                    }
+                }
+            }
+            return result;
+        }
+
         var isJavaCondition = false;
 
         Ext.each(this.dataSource.data.items, function(item){
@@ -4263,6 +4312,7 @@ Ext.form.ConditionExpressionEditorField = Ext.extend(Ext.form.TriggerField,  {
             id: Ext.id(),
             fieldLabel: ORYX.I18N.PropertyWindow.expressionEditor,
             value: this.value.replace(/\\n/g,"\n"),
+            value: convertJavaNewLines(this.value),
             autoScroll: true
         });
         var sourceEditor;
