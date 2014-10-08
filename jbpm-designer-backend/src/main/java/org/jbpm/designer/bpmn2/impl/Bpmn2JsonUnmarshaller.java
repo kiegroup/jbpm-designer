@@ -49,12 +49,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.util.FeatureMap;
-import org.jboss.drools.DroolsFactory;
-import org.jboss.drools.DroolsPackage;
-import org.jboss.drools.GlobalType;
-import org.jboss.drools.ImportType;
-import org.jboss.drools.OnEntryScriptType;
-import org.jboss.drools.OnExitScriptType;
+import org.jboss.drools.*;
 import org.jboss.drools.impl.DroolsPackageImpl;
 import org.jbpm.designer.bpmn2.BpmnMarshallerHelper;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceFactoryImpl;
@@ -2470,6 +2465,7 @@ public class Bpmn2JsonUnmarshaller {
                             ((Definitions) baseElt).getRootElements().add(itemdef);
                         }
                     }
+
                     if(properties.get("adhocprocess") != null && properties.get("adhocprocess").equals("true")) {
                     	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
                         EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
@@ -2478,6 +2474,21 @@ public class Bpmn2JsonUnmarshaller {
                             properties.get("adhocprocess"));
                         rootLevelProcess.getAnyAttribute().add(extensionEntry);
                     }
+
+                    if(properties.get("customdescription") != null && properties.get("customdescription").length() > 0) {
+                        MetaDataType metadata = DroolsFactory.eINSTANCE.createMetaDataType();
+                        metadata.setName("customDescription");
+                        metadata.setMetaValue(wrapInCDATABlock(properties.get("customdescription")));
+
+                        if(rootLevelProcess.getExtensionValues() == null || rootLevelProcess.getExtensionValues().size() < 1) {
+                            ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                            rootLevelProcess.getExtensionValues().add(extensionElement);
+                        }
+                        FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                                (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, metadata);
+                        rootLevelProcess.getExtensionValues().get(0).getValue().add(extensionElementEntry);
+                    }
+
                     rootLevelProcess.setId(properties.get("id"));
                     applyProcessProperties(rootLevelProcess, properties);
                     ((Definitions) baseElt).getRootElements().add(rootLevelProcess);
@@ -2574,6 +2585,19 @@ public class Bpmn2JsonUnmarshaller {
 	                                    properties.get("adhocprocess"));
 	                                rootLevelProcess.getAnyAttribute().add(extensionEntry);
 	                            }
+                                if(properties.get("customdescription") != null && properties.get("customdescription").length() > 0) {
+                                    MetaDataType metadata = DroolsFactory.eINSTANCE.createMetaDataType();
+                                    metadata.setName("customDescription");
+                                    metadata.setMetaValue(wrapInCDATABlock(properties.get("customdescription")));
+
+                                    if(rootLevelProcess.getExtensionValues() == null || rootLevelProcess.getExtensionValues().size() < 1) {
+                                        ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                                        rootLevelProcess.getExtensionValues().add(extensionElement);
+                                    }
+                                    FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                                            (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, metadata);
+                                    rootLevelProcess.getExtensionValues().get(0).getValue().add(extensionElementEntry);
+                                }
 	                            rootLevelProcess.setId(properties.get("id"));
 	                            applyProcessProperties(rootLevelProcess, properties);
 	                            ((Definitions) baseElt).getRootElements().add(rootLevelProcess);

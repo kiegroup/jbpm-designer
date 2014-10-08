@@ -684,6 +684,16 @@
 					"optional":true
 				},
 				{
+                                          "id":"customdescription",
+                                          "type":"Expression",
+                                          "title":"Process Instance Description",
+                                          "value":"",
+                                          "description":"Process Instance Description",
+                                          "description_ja":"",
+                                          "readonly":false,
+                                          "optional":true
+                                },
+				{
 					"id":"adhocprocess",
 					"type":"Choice",
 					"title":"AdHoc",

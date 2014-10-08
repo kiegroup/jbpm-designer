@@ -22,6 +22,7 @@ import java.util.Map.Entry;
 
 import bpsim.*;
 import bpsim.impl.BpsimPackageImpl;
+import org.jboss.drools.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.codehaus.jackson.JsonEncoding;
@@ -39,11 +40,6 @@ import org.eclipse.dd.dc.Bounds;
 import org.eclipse.dd.dc.Point;
 import org.eclipse.dd.di.DiagramElement;
 import org.eclipse.emf.ecore.util.FeatureMap;
-import org.jboss.drools.DroolsPackage;
-import org.jboss.drools.GlobalType;
-import org.jboss.drools.ImportType;
-import org.jboss.drools.OnEntryScriptType;
-import org.jboss.drools.OnExitScriptType;
 import org.jboss.drools.impl.DroolsPackageImpl;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 
@@ -236,11 +232,12 @@ public class Bpmn2JsonMarshaller {
 	                    }
 	                }
 	                
-	                // process imports and globals extension elements
+	                // process imports, custom description and globals extension elements
                     String allImports = "";
 	                if((rootElement).getExtensionValues() != null && (rootElement).getExtensionValues().size() > 0) {
 	                    String importsStr = "";
 	                    String globalsStr = "";
+
 	                    for(ExtensionAttributeValue extattrval : rootElement.getExtensionValues()) {
 	                        FeatureMap extensionElements = extattrval.getValue();
 	                        
@@ -250,6 +247,9 @@ public class Bpmn2JsonMarshaller {
 	                        @SuppressWarnings("unchecked")
 	                        List<GlobalType> globalExtensions = (List<GlobalType>) extensionElements
 	                                                          .get(DroolsPackage.Literals.DOCUMENT_ROOT__GLOBAL, true);
+
+                            List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
+                                    .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
 	                    
 	                        for(ImportType importType : importExtensions) {
 	                            importsStr += importType.getName();
@@ -260,6 +260,10 @@ public class Bpmn2JsonMarshaller {
 	                            globalsStr += (globalType.getIdentifier() + ":" + globalType.getType());
 	                            globalsStr += ",";
 	                        }
+
+                            for(MetaDataType metaType : metadataExtensions) {
+                                props.put("customdescription", metaType.getMetaValue());
+                            }
 	                    }
                         allImports += importsStr;
 	                    if(globalsStr.length() > 0) {
