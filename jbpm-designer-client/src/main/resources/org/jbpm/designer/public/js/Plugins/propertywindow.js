@@ -3166,7 +3166,7 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
 
         varDataTitle.push("");
 
-        // for MIsub children add MIsub vardefs
+        // for MIsub children add MIsub vardefs and mid data inputs and outputs
         var addedTitle = false;
         var selection = ORYX.EDITOR._pluginFacade.getSelection();
         if(selection) {
@@ -3174,7 +3174,7 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
             if(selected && selected.parent) {
                 if(selected.parent._stencil._jsonStencil.id == "http://b3mn.org/stencilset/bpmn2.0#MultipleInstanceSubprocess") {
 
-                    varDataTitle.push("** Process/MI Subprocess Vars **");
+                    varDataTitle.push("** Process/MI Subprocess Info **");
                     varData.push(varDataTitle);
                     variableDefsOnly.push(varDataTitle);
                     addedTitle = true;
@@ -3200,6 +3200,31 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
                             varData.push(innerVal);
                             variableDefsOnly.push(innerVal);
                         }
+                    }
+
+                    var midatainputsprop = selected.parent.properties["oryx-multipleinstancedatainput"];
+                    if(midatainputsprop && midatainputsprop.length > 0) {
+                        var innerVal = new Array();
+                        innerVal.push(midatainputsprop);
+                        innerVal.push(midatainputsprop);
+                        dataTypeMap[midatainputsprop] = "java.lang.String";
+                        variableDefsOnlyVals.push(innerVal);
+
+                        varData.push(innerVal);
+                        variableDefsOnly.push(innerVal);
+                    }
+
+
+                    var midataOutputsprop = selected.parent.properties["oryx-multipleinstancedataoutput"];
+                    if(midataOutputsprop && midataOutputsprop.length > 0) {
+                        var innerVal = new Array();
+                        innerVal.push(midataOutputsprop);
+                        innerVal.push(midataOutputsprop);
+                        dataTypeMap[midataOutputsprop] = "java.lang.String";
+                        variableDefsOnlyVals.push(innerVal);
+
+                        varData.push(innerVal);
+                        variableDefsOnly.push(innerVal);
                     }
                 }
             }
