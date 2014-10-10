@@ -253,6 +253,14 @@
       <groupId>org.guvnor</groupId>
       <artifactId>guvnor-message-console-client</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.guvnor</groupId>
+      <artifactId>guvnor-asset-mgmt-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.guvnor</groupId>
+      <artifactId>guvnor-asset-mgmt-backend</artifactId>
+    </dependency>
 
     <!-- Kie Workbench -->
     <dependency>
@@ -435,6 +443,8 @@
             <compileSourcesArtifact>org.guvnor:guvnor-project-api</compileSourcesArtifact>
             <compileSourcesArtifact>org.guvnor:guvnor-message-console-api</compileSourcesArtifact>
             <compileSourcesArtifact>org.guvnor:guvnor-message-console-client</compileSourcesArtifact>
+            <compileSourcesArtifact>org.guvnor:guvnor-asset-mgmt-api</compileSourcesArtifact>
+            <compileSourcesArtifact>org.guvnor:guvnor-asset-mgmt-client</compileSourcesArtifact>
 
             <!-- Common dependencies -->
             <compileSourcesArtifact>org.kie.workbench.screens:kie-wb-common-project-editor-api</compileSourcesArtifact>
