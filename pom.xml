@@ -58,20 +58,20 @@
       </plugin>
 
 
-      <!--Fix translations from Zanata -->
+      <!--Fix translations from Zanata for JS i18n -->
       <plugin>
         <groupId>com.google.code.maven-replacer-plugin</groupId>
         <artifactId>replacer</artifactId>
         <configuration>
           <includes>
-            <include>**/*Constants.properties</include>
-            <include>**/*Constants_de.properties</include>
-            <include>**/*Constants_es.properties</include>
-            <include>**/*Constants_fr.properties</include>
-            <include>**/*Constants_ja.properties</include>
-            <include>**/*Constants_BR.properties</include>
-            <include>**/*Constants_zh_CN.properties</include>
-            <include>**/*Constants_ru.properties</include>
+            <include>**/DesignerConstants.properties</include>
+            <include>**/DesignerConstants_de.properties</include>
+            <include>**/DesignerConstants_es.properties</include>
+            <include>**/DesignerConstants_fr.properties</include>
+            <include>**/DesignerConstants_ja.properties</include>
+            <include>**/DesignerConstants_BR.properties</include>
+            <include>**/DesignerConstants_zh_CN.properties</include>
+            <include>**/DesignerConstants_ru.properties</include>
           </includes>
           <excludes>
             <exclude>**/ErraiApp.properties</exclude>
