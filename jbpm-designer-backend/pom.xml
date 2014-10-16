@@ -417,10 +417,6 @@
       <groupId>org.uberfire</groupId>
       <artifactId>uberfire-backend-server</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.jboss.solder</groupId>
-      <artifactId>solder-api</artifactId>
-    </dependency>
 
     <!-- Common services -->
     <dependency>
