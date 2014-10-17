@@ -10,9 +10,6 @@
   <listener>
     <listener-class>org.jboss.weld.environment.servlet.Listener</listener-class>
   </listener>
-  <listener>
-    <listener-class>org.jboss.solder.servlet.event.ServletEventBridgeListener</listener-class>
-  </listener>
   <!-- UF -->
   <filter>
     <filter-name>UberFire Security Filter</filter-name>

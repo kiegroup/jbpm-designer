@@ -9,21 +9,29 @@
   <display-name>jBPM Designer</display-name>
 
     <!-- UF -->
-    <filter>
-        <filter-name>UberFire Security Filter</filter-name>
-        <filter-class>
-            org.uberfire.security.server.UberFireSecurityFilter
-        </filter-class>
-        <init-param>
-            <param-name>org.uberfire.cookie.id</param-name>
-            <param-value>designer.standalone</param-value>
-        </init-param>
-    </filter>
+  <filter>
+    <filter-name>request-capture</filter-name>
+    <filter-class>org.kie.uberfire.security.server.SecurityIntegrationFilter</filter-class>
+  </filter>
 
-    <filter-mapping>
-        <filter-name>UberFire Security Filter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
+  <filter-mapping>
+    <filter-name>request-capture</filter-name>
+    <url-pattern>*</url-pattern>
+  </filter-mapping>
+
+  <servlet>
+    <servlet-name>LoginRedirectServlet</servlet-name>
+    <servlet-class>org.kie.uberfire.security.server.LoginRedirectServlet</servlet-class>
+    <init-param>
+      <param-name>display-after-login</param-name>
+      <param-value>/designer.html</param-value>
+    </init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>LoginRedirectServlet</servlet-name>
+    <url-pattern>/login</url-pattern>
+  </servlet-mapping>
 
     <!-- Designer Injection Filter -->
     <filter>
@@ -35,57 +43,21 @@
         <url-pattern>*.html</url-pattern>
     </filter-mapping>
 
-    <servlet>
-        <servlet-name>UberFireServlet</servlet-name>
-        <servlet-class>org.uberfire.server.UberfireServlet</servlet-class>
+  <!-- Errai servlets -->
+  <servlet>
+    <!-- NOTE: the integration-test profile uses this web.xml. Integration tests only work properly
+with the DefaultBlockingServlet. If you change this setting, make a backup of this web.xml
+(perhaps under src/integration-test-settings/web.xml and alter the integration-test
+profile in pom.xml to use that. -->
+    <servlet-name>ErraiServlet</servlet-name>
+    <servlet-class>org.jboss.errai.bus.server.servlet.DefaultBlockingServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
 
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>UberFireServlet</servlet-name>
-        <url-pattern>/org.jbpm.designer.jBPMDesigner/designer.html</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>ErraiServlet</servlet-name>
-        <servlet-class>org.jboss.errai.bus.server.servlet.DefaultBlockingServlet</servlet-class>
-        <init-param>
-            <param-name>service-locator</param-name>
-            <param-value>org.jboss.errai.cdi.server.CDIServiceLocator</param-value>
-        </init-param>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>ErraiServlet</servlet-name>
-        <url-pattern>*.erraiBus</url-pattern>
-    </servlet-mapping>
-
-    <!--<listener>-->
-        <!--<listener-class>org.jboss.weld.environment.servlet.Listener</listener-class>-->
-    <!--</listener>-->
-
-    <resource-env-ref>
-        <description>Object factory for the CDI Bean Manager</description>
-        <resource-env-ref-name>BeanManager</resource-env-ref-name>
-        <resource-env-ref-type>javax.enterprise.inject.spi.BeanManager</resource-env-ref-type>
-    </resource-env-ref>
-
-    <context-param>
-        <param-name>errai.properties</param-name>
-        <param-value>/WEB-INF/errai.properties</param-value>
-    </context-param>
-
-    <context-param>
-        <param-name>login.config</param-name>
-        <param-value>/WEB-INF/login.config</param-value>
-    </context-param>
-
-    <context-param>
-        <param-name>users.properties</param-name>
-        <param-value>/WEB-INF/users.properties</param-value>
-    </context-param>
+  <servlet-mapping>
+    <servlet-name>ErraiServlet</servlet-name>
+    <url-pattern>*.erraiBus</url-pattern>
+  </servlet-mapping>
 
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
@@ -377,4 +349,77 @@ minutes. it is now 24 hours. -->
         <extension>ico</extension>
         <mime-type>image/x-icon</mime-type>
     </mime-mapping>
+
+  <!-- security settings -->
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>console</web-resource-name>
+      <url-pattern>/designer.html</url-pattern>
+      <url-pattern>*.erraiBus</url-pattern>
+      <url-pattern>/org.jbpm.designer.jBPMDesigner/*</url-pattern>
+      <url-pattern>/login</url-pattern>
+      <url-pattern>/resourceList</url-pattern>
+      <url-pattern>/editor</url-pattern>
+      <url-pattern>/editor/*</url-pattern>
+      <url-pattern>/menuconnector/*</url-pattern>
+      <url-pattern>/menu/*</url-pattern>
+      <url-pattern>/uuidRepository</url-pattern>
+      <url-pattern>/transformer</url-pattern>
+      <url-pattern>/assetservice</url-pattern>
+      <url-pattern>/filestore</url-pattern>
+      <url-pattern>/dictionary</url-pattern>
+      <url-pattern>/themes</url-pattern>
+      <url-pattern>/customeditors</url-pattern>
+      <url-pattern>/simulation</url-pattern>
+      <url-pattern>/formwidget</url-pattern>
+      <url-pattern>/calledelement</url-pattern>
+      <url-pattern>/stencilpatterns</url-pattern>
+      <url-pattern>/jbpmservicerepo</url-pattern>
+      <url-pattern>/processdiff</url-pattern>
+      <url-pattern>/taskforms</url-pattern>
+      <url-pattern>/taskformseditor</url-pattern>
+      <url-pattern>/processinfo</url-pattern>
+      <url-pattern>/syntaxcheck</url-pattern>
+      <url-pattern>/plugins</url-pattern>
+      <url-pattern>/plugin</url-pattern>
+      <url-pattern>/plugin/*</url-pattern>
+      <url-pattern>/stencilset/*</url-pattern>
+      <url-pattern>/plugins/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>admin</role-name>
+      <role-name>user</role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <login-config>
+    <auth-method>FORM</auth-method>
+    <form-login-config>
+      <form-login-page>/login.jsp</form-login-page>
+      <form-error-page>/login.jsp?message=Login failed: Invalid UserName or Password</form-error-page>
+    </form-login-config>
+  </login-config>
+
+  <security-role>
+    <description>Administrator - Administrates the BPMS system. Has full access
+      rights to make any changes necessary. Also has the
+      ability to add and remove users from the system.
+    </description>
+    <role-name>admin</role-name>
+  </security-role>
+
+  <security-role>
+    <description>Business user - Daily user of the system to take actions on business tasks
+      that are required for the processes to continue forward. Works
+      primarily with the task lists.
+    </description>
+    <role-name>user</role-name>
+  </security-role>
+
+  <error-page>
+    <error-code>403</error-code>
+    <location>/not_authorized.jsp</location>
+  </error-page>
+
 </web-app>
