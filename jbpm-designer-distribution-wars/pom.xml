@@ -32,9 +32,9 @@
         <configuration>
           <finalName>jbpm-designer-standalone</finalName>
           <descriptors>
-            <descriptor>src/main/assembly/assembly-standalone-tomcat-7_0.xml</descriptor>
+            <!-- <descriptor>src/main/assembly/assembly-standalone-tomcat-7_0.xml</descriptor> -->
             <descriptor>src/main/assembly/assembly-standalone-jboss-as-7_0.xml</descriptor>
-            <descriptor>src/main/assembly/assembly-standalone-jboss-wildfly-8.xml</descriptor>
+            <!-- <descriptor>src/main/assembly/assembly-standalone-jboss-wildfly-8.xml</descriptor> -->
           </descriptors>
           <archive>
             <addMavenDescriptor>false</addMavenDescriptor>
@@ -49,6 +49,11 @@
       <groupId>org.jbpm</groupId>
       <artifactId>jbpm-designer-standalone</artifactId>
       <type>war</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.kie.uberfire</groupId>
+      <artifactId>kie-uberfire-servlet-security</artifactId>
     </dependency>
     <!-- External dependencies -->
     <dependency>
