@@ -4076,7 +4076,8 @@ public class Bpmn2JsonUnmarshaller {
         }
         
         if(properties.get("script") != null && properties.get("script").length() > 0) {
-            String scriptStr = properties.get("script").replaceAll("\\\\n", "\n");
+            //String scriptStr = properties.get("script").replaceAll("\\\\n", "\n");
+            String scriptStr = replaceScriptEscapeAndNewLines(properties.get("script"));
         	scriptTask.setScript(wrapInCDATABlock(scriptStr));
         }
         
@@ -5937,5 +5938,52 @@ public class Bpmn2JsonUnmarshaller {
 
         return wrapInCDATABlock(ret);
     }
+
+    /*
+     * Converts \\ to \ and \n in Script  to '\n'
+     */
+    private String replaceScriptEscapeAndNewLines(String str) {
+        StringBuilder result = new StringBuilder(str.length());
+        char c = '\0';
+        char prevC = '\0';
+        boolean atEscape = false;
+        for (int i = 0; i < str.length(); i++) {
+            prevC = c;
+            c = str.charAt(i);
+            // set atEscape flag
+            if (c == '\\') {
+                // deal with 2nd '\\' char
+                if (atEscape) {
+                    result.append(c);
+                    atEscape = false;
+                    // set c to '\0' so that prevC doesn't match '\\'
+                    // the next time round
+                    c = '\0';
+                }
+                else {
+                    atEscape = true;
+                }
+            }
+            else if (atEscape) {
+                if (c == 'n') {
+                    result.append("\n");
+                }
+                else {
+                    result.append(c);
+                }
+            }
+            else {
+                result.append(c);
+            }
+            // unset atEscape flag if required
+            if (prevC == '\\') {
+                if (atEscape) {
+                    atEscape = false;
+                }
+            }
+        }
+        return result.toString();
+    }
+
 }
 
