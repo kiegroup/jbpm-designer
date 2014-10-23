@@ -4272,6 +4272,52 @@ Ext.form.ConditionExpressionEditorField = Ext.extend(Ext.form.TriggerField,  {
             dialog.hide()
         }
 
+
+        // Converts \\ to \ and \n in Java  to '\n'
+        function replaceScriptEscapeAndNewLines(str) {
+            var result = new String("");
+            var c = '\0';
+            var prevC = '\0';
+            var atEscape = false;
+            for (i = 0; i < str.length; i++) {
+                prevC = c;
+                c = str.charAt(i);
+                // set atEscape flag
+                if (c === '\\') {
+                    // deal with 2nd '\\' char
+                    if (atEscape) {
+                        result = result + c;
+                        atEscape = false;
+                        // set c to '\0' so that prevC doesn't match '\\'
+                        // the next time round
+                        c = '\0';
+                    }
+                    else {
+                        atEscape = true;
+                    }
+                }
+                else if (atEscape) {
+                    if (c === 'n') {
+                        result = result + "\n";
+                    }
+                    else {
+                        result = result + c;
+                    }
+                }
+                else {
+                    result = result + c;
+                }
+                // unset atEscape flag if required
+                if (prevC === '\\') {
+                    if (atEscape) {
+                        atEscape = false;
+                    }
+                }
+            }
+            return result;
+        }
+
+
         var isJavaCondition = false;
 
         Ext.each(this.dataSource.data.items, function(item){
@@ -4287,7 +4333,8 @@ Ext.form.ConditionExpressionEditorField = Ext.extend(Ext.form.TriggerField,  {
         var scriptEditor = new Ext.form.TextArea({
             id: Ext.id(),
             fieldLabel: ORYX.I18N.PropertyWindow.expressionEditor,
-            value: this.value.replace(/\\n/g,"\n"),
+            //value: this.value.replace(/\\n/g,"\n"),
+            value: replaceScriptEscapeAndNewLines(this.value),
             autoScroll: true
         });
         var sourceEditor;
@@ -4832,10 +4879,12 @@ Ext.form.ConditionExpressionEditorField = Ext.extend(Ext.form.TriggerField,  {
                         if (isSimpleEditor) {
                             generateScript(onsuccessSave, onfailureSave);
                         } else {
-                            setFieldValueAndClose(sourceEditor.getValue().replace(/\r\n|\r|\n/g,"\\n"));
+                            var newValue =  sourceEditor.getValue().replace(/\\/g, "\\\\").replace(/\r\n|\r|\n/g,"\\n");
+                            setFieldValueAndClose(newValue);
                         }
                     } else {
-                        setFieldValueAndClose(sourceEditor.getValue().replace(/\r\n|\r|\n/g,"\\n"));
+                        var newValue =  sourceEditor.getValue().replace(/\\/g, "\\\\").replace(/\r\n|\r|\n/g,"\\n");
+                        setFieldValueAndClose(newValue);
                     }
                 }.bind(this)
             }, {

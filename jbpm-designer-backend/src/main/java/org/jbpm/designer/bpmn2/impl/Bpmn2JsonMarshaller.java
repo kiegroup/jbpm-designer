@@ -1386,7 +1386,7 @@ public class Bpmn2JsonMarshaller {
             }
     	} else if (task instanceof ScriptTask) {
     		ScriptTask scriptTask = (ScriptTask) task;
-    		properties.put("script", scriptTask.getScript() != null ? scriptTask.getScript().replaceAll("\n", "\\\\n") : "");
+    		properties.put("script", scriptTask.getScript() != null ? scriptTask.getScript().replace("\\", "\\\\").replace("\n", "\\n") : "");
     		String format = scriptTask.getScriptFormat();
     		if(format != null && format.length() > 0) {
     			String formatToWrite = "";
