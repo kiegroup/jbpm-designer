@@ -93,6 +93,7 @@ public class Bpmn2JsonUnmarshaller {
     private List<Artifact> _artifacts = new ArrayList<Artifact>();
     private Map<String, ItemDefinition> _subprocessItemDefs = new HashMap<String, ItemDefinition>();
     private List<Import> _wsdlImports = new ArrayList<Import>();
+    private Map<String, List<String>> _elementColors = new HashMap<String, List<String>>();
     private List<BpmnMarshallerHelper> _helpers;
     private String processDocs;
 
@@ -183,10 +184,14 @@ public class Bpmn2JsonUnmarshaller {
             addSimulation(def);
             revisitItemDefinitions(def);
             revisitProcessDoc(def);
+            revisitDIColors(def);
             //revisitDI(def);
 
             // return def;
             _currentResource.getContents().add(def);
+            return _currentResource;
+        } catch(Exception e) {
+            _logger.error(e.getMessage());
             return _currentResource;
         } finally {
             parser.close();
@@ -235,6 +240,21 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
 
+    public void revisitDIColors(Definitions def) {
+        BPMNPlane plane = def.getDiagrams().get(0).getPlane();
+        List<DiagramElement> diagramElements = plane.getPlaneElement();
+        for(DiagramElement dia : diagramElements) {
+            if(dia instanceof BPMNShape) {
+                BPMNShape shape = (BPMNShape) dia;
+                updateShapeColors(shape);
+            }
+            if(dia instanceof BPMNEdge) {
+                BPMNEdge edge = (BPMNEdge) dia;
+                updateEdgeColors(edge);
+            }
+        }
+    }
+
     public void revisitProcessDoc(Definitions def) {
         List<RootElement> rootElements =  def.getRootElements();
         for(RootElement root : rootElements) {
@@ -244,6 +264,95 @@ public class Bpmn2JsonUnmarshaller {
                     process.getDocumentation().add(createDocumentation(wrapInCDATABlock(this.processDocs)));
                 }
             }
+        }
+    }
+
+    public void updateShapeColors(BPMNShape shape) {
+        List<String> eleColorsForShape = _elementColors.get(shape.getBpmnElement().getId());
+        if(eleColorsForShape != null) {
+            String backgroundColor = "";
+            String borderColor = "";
+            String fontColor = "";
+
+            for(String shapeColor : eleColorsForShape) {
+                String[] shapeColorParts = shapeColor.split(":");
+                if(shapeColorParts[0].equals("bgcolor")) {
+                    backgroundColor = shapeColorParts[1];
+                }
+                if(shapeColorParts[0].equals("bordercolor")) {
+                    borderColor = shapeColorParts[1];
+                }
+                if(shapeColorParts[0].equals("fontcolor")) {
+                    fontColor = shapeColorParts[1];
+                }
+            }
+
+            ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+
+            EAttributeImpl extensionAttributeBgColor = (EAttributeImpl) metadata .demandFeature(
+                    "http://www.omg.org/spec/BPMN/non-normative/color", "background-color", false, false);
+            SimpleFeatureMapEntry extensionEntryBgColor = new SimpleFeatureMapEntry(extensionAttributeBgColor,
+                    backgroundColor);
+            shape.getBpmnElement().getAnyAttribute().add(extensionEntryBgColor);
+
+            EAttributeImpl extensionAttributeBorderColor = (EAttributeImpl) metadata .demandFeature(
+                    "http://www.omg.org/spec/BPMN/non-normative/color", "border-color", false, false);
+            SimpleFeatureMapEntry extensionEntryBorderColor = new SimpleFeatureMapEntry(extensionAttributeBorderColor,
+                    borderColor);
+            shape.getBpmnElement().getAnyAttribute().add(extensionEntryBorderColor);
+
+            EAttributeImpl extensionAttributeColor = (EAttributeImpl) metadata .demandFeature(
+                    "http://www.omg.org/spec/BPMN/non-normative/color", "color", false, false);
+            SimpleFeatureMapEntry extensionEntryColor = new SimpleFeatureMapEntry(extensionAttributeColor,
+                    fontColor);
+            shape.getBpmnElement().getAnyAttribute().add(extensionEntryColor);
+        } else {
+            _logger.warn("Unable to find color information for shape: " + shape.getBpmnElement().getId());
+        }
+
+    }
+
+    public void updateEdgeColors(BPMNEdge edge) {
+        List<String> eleColorsForEdge = _elementColors.get(edge.getBpmnElement().getId());
+
+        if(eleColorsForEdge != null) {
+            String backgroundColor = "";
+            String borderColor = "";
+            String fontColor = "";
+
+            for(String edgeColor : eleColorsForEdge) {
+                String[] shapeColorParts = edgeColor.split(":");
+                if(shapeColorParts[0].equals("bgcolor")) {
+                    backgroundColor = shapeColorParts[1];
+                }
+                if(shapeColorParts[0].equals("bordercolor")) {
+                    borderColor = shapeColorParts[1];
+                }
+                if(shapeColorParts[0].equals("fontcolor")) {
+                    fontColor = shapeColorParts[1];
+                }
+            }
+
+            ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+            EAttributeImpl extensionAttributeBgColor = (EAttributeImpl) metadata .demandFeature(
+                    "http://www.omg.org/spec/BPMN/non-normative/color", "background-color", false, false);
+            SimpleFeatureMapEntry extensionEntryBgColor = new SimpleFeatureMapEntry(extensionAttributeBgColor,
+                    backgroundColor);
+            edge.getBpmnElement().getAnyAttribute().add(extensionEntryBgColor);
+
+            EAttributeImpl extensionAttributeBorderColor = (EAttributeImpl) metadata .demandFeature(
+                    "http://www.omg.org/spec/BPMN/non-normative/color", "border-color", false, false);
+            SimpleFeatureMapEntry extensionEntryBorderColor = new SimpleFeatureMapEntry(extensionAttributeBorderColor,
+                    borderColor);
+            edge.getBpmnElement().getAnyAttribute().add(extensionEntryBorderColor);
+
+            EAttributeImpl extensionAttributeColor = (EAttributeImpl) metadata .demandFeature(
+                    "http://www.omg.org/spec/BPMN/non-normative/color", "color", false, false);
+            SimpleFeatureMapEntry extensionEntryColor = new SimpleFeatureMapEntry(extensionAttributeColor,
+                    fontColor);
+            edge.getBpmnElement().getAnyAttribute().add(extensionEntryColor);
+        } else {
+            _logger.warn("Unable to find color information for shape: " + edge.getBpmnElement().getId());
         }
     }
 
@@ -3294,14 +3403,13 @@ public class Bpmn2JsonUnmarshaller {
             association.getAnyAttribute().add(extensionEntry);
     	}
     	if(properties.get("bordercolor") != null && properties.get("bordercolor").length() > 0) {
-        	if(!properties.get("bordercolor").equals(defaultBrColor)) {
-        		ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
-        		EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
-                        	"http://www.jboss.org/drools", "bordercolor", false, false);
-        		SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
-        				properties.get("bordercolor"));
-        		association.getAnyAttribute().add(extensionEntry);
-        	}
+            if(!(_elementColors.containsKey(association.getId()))) {
+                List<String> colorsList = new ArrayList<String>();
+                colorsList.add("bordercolor:" + properties.get("bordercolor"));
+                _elementColors.put(association.getId(), colorsList);
+            } else {
+                _elementColors.get(association.getId()).add("bordercolor:" + properties.get("bordercolor"));
+            }
         }
     }
     
@@ -3372,14 +3480,13 @@ public class Bpmn2JsonUnmarshaller {
         ta.setTextFormat("text/plain");
         
         if(properties.get("bordercolor") != null && properties.get("bordercolor").length() > 0) {
-        	if(!properties.get("bordercolor").equals(defaultBrColor)) {
-        		ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
-        		EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
-                        	"http://www.jboss.org/drools", "bordercolor", false, false);
-        		SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
-        				properties.get("bordercolor"));
-        		ta.getAnyAttribute().add(extensionEntry);
-        	}
+            if(!(_elementColors.containsKey(ta.getId()))) {
+                List<String> colorsList = new ArrayList<String>();
+                colorsList.add("bordercolor:" + properties.get("bordercolor"));
+                _elementColors.put(ta.getId(), colorsList);
+            } else {
+                _elementColors.get(ta.getId()).add("bordercolor:" + properties.get("bordercolor"));
+            }
         }
         
         if(properties.get("fontsize") != null && properties.get("fontsize").length() > 0) {
@@ -3392,16 +3499,14 @@ public class Bpmn2JsonUnmarshaller {
         }
         
         if(properties.get("fontcolor") != null && properties.get("fontcolor").length() > 0) {
-        	if(!properties.get("fontcolor").equals(defaultFontColor)) {
-        		ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
-        		EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
-                        	"http://www.jboss.org/drools", "fontcolor", false, false);
-        		SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
-        				properties.get("fontcolor"));
-        		ta.getAnyAttribute().add(extensionEntry);
-        	}
+            if(!(_elementColors.containsKey(ta.getId()))) {
+                List<String> colorsList = new ArrayList<String>();
+                colorsList.add("fontcolor:" + properties.get("fontcolor"));
+                _elementColors.put(ta.getId(), colorsList);
+            } else {
+                _elementColors.get(ta.getId()).add("fontcolor:" + properties.get("fontcolor"));
+            }
         }
-        
     }
     
     protected void applyGroupProperties(Group group, Map<String, String> properties) {
@@ -3846,14 +3951,14 @@ public class Bpmn2JsonUnmarshaller {
             baseElement.setId(properties.get("resourceId"));
         }
         if(properties.get("bgcolor") != null && properties.get("bgcolor").length() > 0) {
-        	if(!properties.get("bgcolor").equals(defaultBgColor)) {
-        		ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
-        		EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
-                        	"http://www.jboss.org/drools", "bgcolor", false, false);
-        		SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
-        				properties.get("bgcolor"));
-        		baseElement.getAnyAttribute().add(extensionEntry);
-        	}
+            if(!(_elementColors.containsKey(baseElement.getId()))) {
+                List<String> colorsList = new ArrayList<String>();
+                colorsList.add("bgcolor:" + properties.get("bgcolor"));
+                _elementColors.put(baseElement.getId(), colorsList);
+            } else {
+                _elementColors.get(baseElement.getId()).add("bgcolor:" + properties.get("bgcolor"));
+            }
+
         }
         
         if(properties.get("isselectable") != null && properties.get("isselectable").length() > 0) {
@@ -3866,14 +3971,13 @@ public class Bpmn2JsonUnmarshaller {
         }
         
         if(properties.get("bordercolor") != null && properties.get("bordercolor").length() > 0) {
-        	if(!properties.get("bordercolor").equals(defaultBrColor)) {
-        		ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
-        		EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
-                        	"http://www.jboss.org/drools", "bordercolor", false, false);
-        		SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
-        				properties.get("bordercolor"));
-        		baseElement.getAnyAttribute().add(extensionEntry);
-        	}
+            if(!(_elementColors.containsKey(baseElement.getId()))) {
+                List<String> colorsList = new ArrayList<String>();
+                colorsList.add("bordercolor:" + properties.get("bordercolor"));
+                _elementColors.put(baseElement.getId(), colorsList);
+            } else {
+                _elementColors.get(baseElement.getId()).add("bordercolor:" + properties.get("bordercolor"));
+            }
         }
         
         if(properties.get("fontsize") != null && properties.get("fontsize").length() > 0) {
@@ -3886,14 +3990,14 @@ public class Bpmn2JsonUnmarshaller {
         }
         
         if(properties.get("fontcolor") != null && properties.get("fontcolor").length() > 0) {
-        	if(!properties.get("fontcolor").equals(defaultFontColor)) {
-        		ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
-        		EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
-                        	"http://www.jboss.org/drools", "fontcolor", false, false);
-        		SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
-        				properties.get("fontcolor"));
-        		baseElement.getAnyAttribute().add(extensionEntry);
-        	}
+            if(!(_elementColors.containsKey(baseElement.getId()))) {
+                List<String> colorsList = new ArrayList<String>();
+                colorsList.add("fontcolor:" + properties.get("fontcolor"));
+                _elementColors.put(baseElement.getId(), colorsList);
+            } else {
+                _elementColors.get(baseElement.getId()).add("fontcolor:" + properties.get("fontcolor"));
+            }
+
         }
     }
 
@@ -5734,26 +5838,27 @@ public class Bpmn2JsonUnmarshaller {
         if(properties.get("name") != null && !"".equals(properties.get("name"))) {
             sequenceFlow.setName(escapeXmlString(properties.get("name")));
         }
+
         if(properties.get("bgcolor") != null && properties.get("bgcolor").length() > 0) {
-        	if(!properties.get("bgcolor").equals(defaultSequenceflowColor)) {
-        		ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
-        		EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
-                        	"http://www.jboss.org/drools", "bgcolor", false, false);
-        		SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
-        				properties.get("bgcolor"));
-        		sequenceFlow.getAnyAttribute().add(extensionEntry);
-        	}
+            if(!(_elementColors.containsKey(sequenceFlow.getId()))) {
+                List<String> colorsList = new ArrayList<String>();
+                colorsList.add("bgcolor:" + properties.get("bgcolor"));
+                _elementColors.put(sequenceFlow.getId(), colorsList);
+            } else {
+                _elementColors.get(sequenceFlow.getId()).add("bgcolor:" + properties.get("bgcolor"));
+            }
         }
+
         if(properties.get("bordercolor") != null && properties.get("bordercolor").length() > 0) {
-        	if(!properties.get("bordercolor").equals(defaultSequenceflowColor)) {
-        		ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
-        		EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
-                        	"http://www.jboss.org/drools", "bordercolor", false, false);
-        		SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
-        				properties.get("bordercolor"));
-        		sequenceFlow.getAnyAttribute().add(extensionEntry);
-        	}
-        } 
+            if(!(_elementColors.containsKey(sequenceFlow.getId()))) {
+                List<String> colorsList = new ArrayList<String>();
+                colorsList.add("bordercolor:" + properties.get("bordercolor"));
+                _elementColors.put(sequenceFlow.getId(), colorsList);
+            } else {
+                _elementColors.get(sequenceFlow.getId()).add("bordercolor:" + properties.get("bordercolor"));
+            }
+        }
+
         if(properties.get("fontsize") != null && properties.get("fontsize").length() > 0) {
         	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
         	EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
@@ -5761,17 +5866,19 @@ public class Bpmn2JsonUnmarshaller {
         	SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
         			properties.get("fontsize"));
         	sequenceFlow.getAnyAttribute().add(extensionEntry);
+
         }
+
         if(properties.get("fontcolor") != null && properties.get("fontcolor").length() > 0) {
-        	if(!properties.get("fontcolor").equals(defaultSequenceflowColor)) {
-        		ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
-        		EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
-                        	"http://www.jboss.org/drools", "fontcolor", false, false);
-        		SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
-        				properties.get("fontcolor"));
-        		sequenceFlow.getAnyAttribute().add(extensionEntry);
-        	}
+            if(!(_elementColors.containsKey(sequenceFlow.getId()))) {
+                List<String> colorsList = new ArrayList<String>();
+                colorsList.add("fontcolor:" + properties.get("fontcolor"));
+                _elementColors.put(sequenceFlow.getId(), colorsList);
+            } else {
+                _elementColors.get(sequenceFlow.getId()).add("fontcolor:" + properties.get("fontcolor"));
+            }
         }
+
         if(properties.get("isselectable") != null && properties.get("isselectable").length() > 0) {
         	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
         	EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
@@ -5780,11 +5887,13 @@ public class Bpmn2JsonUnmarshaller {
         			properties.get("isselectable"));
         	sequenceFlow.getAnyAttribute().add(extensionEntry);
         }
+
         if (properties.get("auditing") != null && !"".equals(properties.get("auditing"))) {
             Auditing audit = Bpmn2Factory.eINSTANCE.createAuditing();
             audit.getDocumentation().add(createDocumentation(properties.get("auditing")));
             sequenceFlow.setAuditing(audit);
         }
+
         if (properties.get("conditionexpression") != null && !"".equals(properties.get("conditionexpression"))) {
             FormalExpression expr = Bpmn2Factory.eINSTANCE.createFormalExpression();
             String scriptStr = properties.get("conditionexpression").replaceAll("\\\\n", "\n");
