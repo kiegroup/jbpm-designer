@@ -2854,7 +2854,7 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
                                     header: "Custom Class Name",
                                     width: 180,
                                     dataIndex: 'customclassname',
-                                    editor: new Ext.form.TextField({ allowBlank: true }),
+                                    editor: new Ext.form.TextField({ allowBlank: true })
                                 },
                                 {
                                     id: 'wsdllocation',
@@ -3928,11 +3928,51 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                     if(response.responseText.length >= 0 && response.responseText != "false") {
                         var responseJson = Ext.decode(response.responseText);
                         var customTypeData = new Array();
+
+                        // set some predefined defaults
+                        var stringType = new Array();
+                        stringType.push("String");
+                        stringType.push("String");
+                        customTypeData.push(stringType);
+                        var integerType = new Array();
+                        integerType.push("Integer");
+                        integerType.push("Integer");
+                        customTypeData.push(integerType);
+                        var booleanType = new Array();
+                        booleanType.push("Boolean");
+                        booleanType.push("Boolean");
+                        customTypeData.push(booleanType);
+                        var floatType = new Array();
+                        floatType.push("Float");
+                        floatType.push("Float");
+                        customTypeData.push(floatType);
+                        var objectType = new Array();
+                        objectType.push("Object");
+                        objectType.push("Object");
+                        customTypeData.push(objectType);
+                        var dividerType = new Array();
+                        dividerType.push("**********");
+                        dividerType.push("**********");
+                        customTypeData.push(dividerType);
+
+                        var unsortedData= new Array();
                         for(var key in responseJson){
                             var keyVal = responseJson[key];
+                            unsortedData.push(keyVal);
+                        }
+                        unsortedData.sort();
+                        for(var t = 0 ; t < unsortedData.length; t++ ) {
                             var newCustomType = new Array();
-                            newCustomType.push(keyVal);
-                            newCustomType.push(keyVal);
+
+                            var presStr = unsortedData[t];
+                            var presStrParts = presStr.split(".");
+
+                            var classPart = presStrParts[presStrParts.length-1];
+                            var pathPart = presStr.substring(0, presStr.length - (classPart.length + 1));
+
+
+                            newCustomType.push(classPart + " [" + pathPart + "]");
+                            newCustomType.push(unsortedData[t]);
                             customTypeData.push(newCustomType);
                         }
 
@@ -4006,28 +4046,6 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                         var itemDeleter = new Extensive.grid.ItemDeleter();
                         itemDeleter.setDType(this.dtype);
 
-                        var typeData = new Array();
-                        var stringType = new Array();
-                        stringType.push("String");
-                        stringType.push("String");
-                        typeData.push(stringType);
-                        var integerType = new Array();
-                        integerType.push("Integer");
-                        integerType.push("Integer");
-                        typeData.push(integerType);
-                        var booleanType = new Array();
-                        booleanType.push("Boolean");
-                        booleanType.push("Boolean");
-                        typeData.push(booleanType);
-                        var floatType = new Array();
-                        floatType.push("Float");
-                        floatType.push("Float");
-                        typeData.push(floatType);
-                        var objectType = new Array();
-                        objectType.push("Object");
-                        objectType.push("Object");
-                        typeData.push(objectType);
-
                         var gridId = Ext.id();
                         Ext.form.VTypes["inputNameVal"] = /^[a-z0-9\-\.\_]*$/i;
                         Ext.form.VTypes["inputNameText"] = 'Invalid name';
@@ -4054,11 +4072,11 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                                 dataIndex: 'stype',
                                 editor: new Ext.form.ComboBox({
                                     id: 'customTypeCombo',
-                                    valueField:'name',
-                                    displayField:'value',
+                                    valueField:'value',
+                                    displayField:'name',
                                     labelStyle:'display:none',
                                     submitValue : true,
-                                    typeAhead: false,
+                                    typeAhead: true,
                                     queryMode: 'local',
                                     mode: 'local',
                                     triggerAction: 'all',
@@ -4067,6 +4085,7 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                                     forceSelection: false,
                                     selectOnFocus:true,
                                     autoSelect:false,
+                                    editable: true,
                                     store: new Ext.data.SimpleStore({
                                         fields: [
                                             'name',
@@ -5045,7 +5064,7 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                                 width: 200,
                                 dataIndex: 'fpath',
                                 editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
-                            },
+                            }
                             ]),
                             autoHeight: true
                         });
