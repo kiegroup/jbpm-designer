@@ -625,11 +625,11 @@ public class Bpmn2JsonMarshaller {
 	    	boolean foundSelectable = false;
 	        while(iter.hasNext()) {
 	            FeatureMap.Entry entry = iter.next();
-	            if(entry.getEStructuralFeature().getName().equals("bgcolor")) {
+	            if(entry.getEStructuralFeature().getName().equals("background-color")) {
 	            	laneProperties.put("bgcolor", entry.getValue());
 	            	foundBgColor = true;
 	            }
-	            if(entry.getEStructuralFeature().getName().equals("bordercolor")) {
+	            if(entry.getEStructuralFeature().getName().equals("border-color")) {
 	            	laneProperties.put("bordercolor", entry.getValue());
 	            	foundBrColor = true;
 	            }
@@ -637,7 +637,7 @@ public class Bpmn2JsonMarshaller {
 	            	laneProperties.put("fontsize", entry.getValue());
 	            	foundBrColor = true;
 	            }
-	            if(entry.getEStructuralFeature().getName().equals("fontcolor")) {
+	            if(entry.getEStructuralFeature().getName().equals("color")) {
 	            	laneProperties.put("fontcolor", entry.getValue());
 	            	foundFontColor = true;
 	            }
@@ -710,11 +710,11 @@ public class Bpmn2JsonMarshaller {
     	boolean foundSelectable = false;
         while(iter.hasNext()) {
             FeatureMap.Entry entry = iter.next();
-            if(entry.getEStructuralFeature().getName().equals("bgcolor")) {
+            if(entry.getEStructuralFeature().getName().equals("background-color")) {
             	flowElementProperties.put("bgcolor", entry.getValue());
             	foundBgColor = true;
             }
-            if(entry.getEStructuralFeature().getName().equals("bordercolor")) {
+            if(entry.getEStructuralFeature().getName().equals("border-color")) {
             	flowElementProperties.put("bordercolor", entry.getValue());
             	foundBrColor = true;
             }
@@ -722,7 +722,7 @@ public class Bpmn2JsonMarshaller {
             	flowElementProperties.put("fontsize", entry.getValue());
             	foundBrColor = true;
             }
-            if(entry.getEStructuralFeature().getName().equals("fontcolor")) {
+            if(entry.getEStructuralFeature().getName().equals("color")) {
             	flowElementProperties.put("fontcolor", entry.getValue());
             	foundFontColor = true;
             }
@@ -2714,11 +2714,11 @@ public class Bpmn2JsonMarshaller {
                     }
                 }
             }
-            if(entry.getEStructuralFeature().getName().equals("bgcolor")) {
+            if(entry.getEStructuralFeature().getName().equals("background-color")) {
             	properties.put("bgcolor", entry.getValue());
             	foundBgColor = true;
             }
-            if(entry.getEStructuralFeature().getName().equals("bordercolor")) {
+            if(entry.getEStructuralFeature().getName().equals("border-color")) {
             	properties.put("bordercolor", entry.getValue());
             	foundBrColor = true;
             }
@@ -2726,7 +2726,7 @@ public class Bpmn2JsonMarshaller {
             	properties.put("fontsize", entry.getValue());
             	foundBrColor = true;
             }
-            if(entry.getEStructuralFeature().getName().equals("fontcolor")) {
+            if(entry.getEStructuralFeature().getName().equals("color")) {
             	properties.put("fontcolor", entry.getValue());
             	foundFontColor = true;
             }
@@ -2956,7 +2956,7 @@ public class Bpmn2JsonMarshaller {
     	boolean foundFontColor = false;
         while(iter.hasNext()) {
             FeatureMap.Entry entry = iter.next();
-            if(entry.getEStructuralFeature().getName().equals("bordercolor")) {
+            if(entry.getEStructuralFeature().getName().equals("border-color")) {
             	properties.put("bordercolor", entry.getValue());
             	foundBrColor = true;
             }
@@ -2964,7 +2964,7 @@ public class Bpmn2JsonMarshaller {
             	properties.put("fontsize", entry.getValue());
             	foundBrColor = true;
             }
-            if(entry.getEStructuralFeature().getName().equals("fontcolor")) {
+            if(entry.getEStructuralFeature().getName().equals("color")) {
             	properties.put("fontcolor", entry.getValue());
             	foundFontColor = true;
             }
