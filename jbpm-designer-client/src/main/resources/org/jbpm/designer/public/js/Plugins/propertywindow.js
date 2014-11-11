@@ -3208,119 +3208,115 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
                 name: 'dataType'
         }
         ]);
-    	
-    	var dataassignmentProxy = new Ext.data.MemoryProxy({
-            root: []
-        });
-    	
-    	var dataassignments = new Ext.data.Store({
-    		autoDestroy: true,
+
+        var dataassignments = new Ext.data.Store({
+            autoDestroy: true,
             reader: new Ext.data.JsonReader({
                 root: "root"
             }, DataAssignment),
             proxy: dataassignmentProxy,
             sorters: [
-            {
-                property: 'atype',
-                direction: 'ASC'
-            }, {
-                property: 'from',
-                direction:'ASC'
-            }, {
-            	property: 'to',
-            	direction: 'ASC'
-            }, {
-            	property: 'tostr',
-            	direction: 'ASC'
-            }
+                {
+                    property: 'atype',
+                    direction: 'ASC'
+                }, {
+                    property: 'from',
+                    direction:'ASC'
+                }, {
+                    property: 'to',
+                    direction: 'ASC'
+                }, {
+                    property: 'tostr',
+                    direction: 'ASC'
+                }
             ]
         });
-    	dataassignments.load();
-    	
-    	if(this.value.length > 0) {
-    		var valueParts = this.value.split(",");
-    		for(var i=0; i < valueParts.length; i++) {
-    			var nextPart = valueParts[i];
-    			if(nextPart.indexOf("=") > 0) {
-                            var innerParts = nextPart.split("=");
-                            var dataType = dataTypeMap[innerParts[0]];
-                            if (!dataType){
-                                dataType = "java.lang.String";
-                            }
-                            var fromPart = innerParts[0];
-                            innerParts.shift(); // removes the first item from the array
-            				var escapedp = innerParts.join('=').replace(/\#\#/g , ",");
-                            escapedp = escapedp.replace(/\|\|/g , "=");
+        dataassignments.load();
 
-                            if(variableDefsOnlyVals.indexOf(fromPart) < 0) {
-                                dataassignments.add(new DataAssignment({
-                                    atype: ( dataInputsOnlyVals.indexOf(fromPart) >= 0 ) ? "DataInput" : "DataOutput",
-                                    from: fromPart,
-                                    type: "is equal to",
-                                    to: "",
-                                    tostr: escapedp,
-                                    dataType: dataType
-                                }));
-                            }
-    			} else if(nextPart.indexOf("->") > 0) {
-                            var innerParts = nextPart.split("->");
-                            var dataType = dataTypeMap[innerParts[0]];
-                            if (!dataType){
-                                dataType = "java.lang.String";
-                            }
-                            var fromPart = innerParts[0];
-                            var hasErrors = false;
-                            if( dataInputsOnlyVals.indexOf(fromPart) >= 0 && dataInputsOnlyVals.indexOf(innerParts[1]) >= 0 ){
-                                // if its also process var - pass
-                                if(variableDefsOnlyVals.indexOf(fromPart) < 0) {
-                                    hasErrors = true;
-                                }
-                            }
-                            if( dataInputsOnlyVals.indexOf(fromPart) >= 0 && variableDefsOnlyVals.indexOf(innerParts[1]) >= 0 ){
-                                // if its also a vardef - pass
-                                if(variableDefsOnlyVals.indexOf(fromPart) < 0) {
-                                    hasErrors = true;
-                                }
-                            }
-                            if( variableDefsOnlyVals.indexOf(fromPart) >= 0 && variableDefsOnlyVals.indexOf(innerParts[1]) >= 0 ){
-                                // if its also a data input - pass
-                                if( dataInputsOnlyVals.indexOf(innerParts[1]) < 0 && dataOutputsOnlyVals.indexOf(innerParts[1]) ) {
-                                    hasErrors = true;
-                                }
-                            }
-                            if( dataOutputsOnlyVals.indexOf(fromPart) >= 0 && dataInputsOnlyVals.indexOf(innerParts[1]) >= 0 ){
-                                hasErrors = true;
-                            }
+        if(this.value.length > 0) {
+            var valueParts = this.value.split(",");
+            for(var i=0; i < valueParts.length; i++) {
+                var nextPart = valueParts[i];
+                if(nextPart.indexOf("=") > 0) {
+                    var innerParts = nextPart.split("=");
+                    var dataType = dataTypeMap[innerParts[0]];
+                    if (!dataType){
+                        dataType = "java.lang.String";
+                    }
+                    var fromPart = innerParts[0];
+                    innerParts.shift(); // removes the first item from the array
+                    var escapedp = innerParts.join('=').replace(/\#\#/g , ",");
+                    escapedp = escapedp.replace(/\|\|/g , "=");
 
-                            if(!hasErrors) {
-                                var outType = "";
-                                if(variableDefsOnlyVals.indexOf(fromPart) >= 0) {
-                                    if(dataOutputsOnlyVals.indexOf(fromPart) >= 0) {
-                                        outType = "DataOutput";
-                                    } else {
-                                        outType = "DataInput";
-                                    }
-                                } else if(dataInputsOnlyVals.indexOf(fromPart) >= 0) {
-                                    if(dataOutputsOnlyVals.indexOf(fromPart) >= 0) {
-                                        outType = "DataOutput";
-                                    } else {
-                                        outType = "DataInput";
-                                    }
-                                } else {
-                                    outType = "DataOutput";
-                                }
-                                dataassignments.add(new DataAssignment({
-                                    atype: outType,
-                                    from: innerParts[0],
-                                    type: "is mapped to",
-                                    to: innerParts[1],
-                                    tostr: "",
-                                    dataType: dataType
-                                }));
+                    if(variableDefsOnlyVals.indexOf(fromPart) < 0) {
+                        dataassignments.add(new DataAssignment({
+                            atype: ( dataInputsOnlyVals.indexOf(fromPart) >= 0 ) ? "DataInput" : "DataOutput",
+                            from: fromPart,
+                            type: "is equal to",
+                            to: "",
+                            tostr: escapedp,
+                            dataType: dataType
+                        }));
+                    }
+                } else if(nextPart.indexOf("->") > 0) {
+                    var innerParts = nextPart.split("->");
+                    var dataType = dataTypeMap[innerParts[0]];
+                    if (!dataType){
+                        dataType = "java.lang.String";
+                    }
+                    var fromPart = innerParts[0];
+                    var hasErrors = false;
+                    if( dataInputsOnlyVals.indexOf(fromPart) >= 0 && dataInputsOnlyVals.indexOf(innerParts[1]) >= 0 ){
+                        // if its also process var - pass
+                        if(variableDefsOnlyVals.indexOf(fromPart) < 0) {
+                            hasErrors = true;
+                        }
+                    }
+                    if( dataInputsOnlyVals.indexOf(fromPart) >= 0 && variableDefsOnlyVals.indexOf(innerParts[1]) >= 0 ){
+                        // if its also a data output - pass
+                        if(dataOutputsOnlyVals.indexOf(fromPart) < 0) {
+                            hasErrors = true;
+                        }
+                    }
+                    if( variableDefsOnlyVals.indexOf(fromPart) >= 0 && variableDefsOnlyVals.indexOf(innerParts[1]) >= 0 ){
+                        // if its also a data input - pass
+                        if( dataInputsOnlyVals.indexOf(innerParts[1]) < 0 && dataOutputsOnlyVals.indexOf(innerParts[1]) ) {
+                            hasErrors = true;
+                        }
+                    }
+                    if( dataOutputsOnlyVals.indexOf(fromPart) >= 0 && dataInputsOnlyVals.indexOf(innerParts[1]) >= 0 ){
+                        hasErrors = true;
+                    }
+
+                    if(!hasErrors) {
+                        var outType = "";
+                        if(variableDefsOnlyVals.indexOf(fromPart) >= 0) {
+                            if(dataOutputsOnlyVals.indexOf(fromPart) >= 0) {
+                                outType = "DataOutput";
+                            } else {
+                                outType = "DataInput";
                             }
-    			} else {
-    				// default to equality
-    				var dataType = dataTypeMap[nextPart];
+                        } else if(dataInputsOnlyVals.indexOf(fromPart) >= 0) {
+                            if(dataOutputsOnlyVals.indexOf(fromPart) >= 0) {
+                                outType = "DataOutput";
+                            } else {
+                                outType = "DataInput";
+                            }
+                        } else {
+                            outType = "DataOutput";
+                        }
+                        dataassignments.add(new DataAssignment({
+                            atype: outType,
+                            from: innerParts[0],
+                            type: "is mapped to",
+                            to: innerParts[1],
+                            tostr: "",
+                            dataType: dataType
+                        }));
+                    }
+                } else {
+                    // default to equality
+                    var dataType = dataTypeMap[nextPart];
                     if (!dataType){
                         dataType = "java.lang.String";
                     }
@@ -3334,9 +3330,9 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
                             dataType: dataType
                         }));
                     }
-    			}
-    		}
-    	}
+                }
+            }
+        }
         
         //keep sync between from and dataType
         dataassignments.on('update', function(store, record, operation){
