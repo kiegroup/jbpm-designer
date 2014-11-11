@@ -11,7 +11,7 @@
     <!-- UF -->
   <filter>
     <filter-name>request-capture</filter-name>
-    <filter-class>org.kie.uberfire.security.server.SecurityIntegrationFilter</filter-class>
+    <filter-class>org.uberfire.ext.security.server.SecurityIntegrationFilter</filter-class>
   </filter>
 
   <filter-mapping>
@@ -21,7 +21,7 @@
 
   <servlet>
     <servlet-name>LoginRedirectServlet</servlet-name>
-    <servlet-class>org.kie.uberfire.security.server.LoginRedirectServlet</servlet-class>
+    <servlet-class>org.uberfire.ext.security.server.LoginRedirectServlet</servlet-class>
     <init-param>
       <param-name>display-after-login</param-name>
       <param-value>/designer.html</param-value>

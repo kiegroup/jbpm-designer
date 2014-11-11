@@ -1,8 +1,17 @@
 package org.jbpm.designer.query;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.apache.lucene.search.Query;
-import org.kie.uberfire.metadata.model.KObject;
-import org.kie.uberfire.metadata.model.KProperty;
 import org.kie.workbench.common.services.refactoring.backend.server.query.NamedQuery;
 import org.kie.workbench.common.services.refactoring.backend.server.query.QueryBuilder;
 import org.kie.workbench.common.services.refactoring.backend.server.query.response.ResponseBuilder;
@@ -11,13 +20,10 @@ import org.kie.workbench.common.services.refactoring.model.index.terms.TypeIndex
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.query.RefactoringPageRow;
 import org.kie.workbench.common.services.refactoring.model.query.RefactoringStringPageRow;
+import org.uberfire.ext.metadata.model.KObject;
+import org.uberfire.ext.metadata.model.KProperty;
 import org.uberfire.io.IOService;
 import org.uberfire.paging.PageResponse;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.*;
 
 @ApplicationScoped
 public class FindDataTypesQuery implements NamedQuery {
