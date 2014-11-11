@@ -3311,8 +3311,8 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                         }
                     }
                     if( dataInputsOnlyVals.indexOf(fromPart) >= 0 && variableDefsOnlyVals.indexOf(innerParts[1]) >= 0 ){
-                        // if its also a vardef - pass
-                        if(variableDefsOnlyVals.indexOf(fromPart) < 0) {
+                        // if its also a data output - pass
+                        if(dataOutputsOnlyVals.indexOf(fromPart) < 0) {
                             hasErrors = true;
                         }
                     }
