@@ -204,6 +204,7 @@ public class DesignerPresenter {
         this.publishSignalOnAssetCopy( this );
         this.publishSignalOnAssetRename( this );
         this.publishSignalOnAssetUpdate( this );
+        this.publishSignalOnAssetSaveComplete( this );
         this.publishClosePlace( this );
 
         multiPage.addWidget( designerWidget.getView(),
@@ -378,6 +379,12 @@ public class DesignerPresenter {
         }
     }-*/;
 
+    private native void publishSignalOnAssetSaveComplete( DesignerPresenter dp )/*-{
+        $wnd.designersignalsavecomplete = function () {
+            return dp.@org.jbpm.designer.client.DesignerPresenter::saveCompleteEvent()();
+        }
+    }-*/;
+
     private native void publishClosePlace( DesignerPresenter dp )/*-{
         $wnd.designersignalcloseplace = function () {
             dp.@org.jbpm.designer.client.DesignerPresenter::closePlace()();
@@ -468,10 +475,17 @@ public class DesignerPresenter {
                                      }
                                  }
                                ).show();
+
+            concurrentUpdateSessionInfo = null;
             return true;
         } else {
             return false;
         }
+    }
+
+    public boolean saveCompleteEvent() {
+        concurrentUpdateSessionInfo = null;
+        return true;
     }
 
     private RemoteCallback<Void> getDeleteSuccessCallback( final Path path ) {
@@ -527,6 +541,7 @@ public class DesignerPresenter {
     }
 
     private void reload() {
+        concurrentUpdateSessionInfo = null;
         designerWidget.raiseEventReload( designerWidget.getEditorID() );
     }
 }

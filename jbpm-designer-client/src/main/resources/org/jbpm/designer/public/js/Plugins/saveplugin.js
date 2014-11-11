@@ -256,7 +256,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                     try {
                         if(response.responseText && response.responseText.length > 0) {
                             var saveResponse = response.responseText.evalJSON();
-                            if(saveResponse.errors && saveResponse.errors.lengt > 0) {
+                            if(saveResponse.errors && saveResponse.errors.length > 0) {
                                 var errors = saveResponse.errors;
                                 for(var j=0; j < errors.length; j++) {
                                     var errormessageobj = errors[j];
@@ -276,6 +276,8 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                                     timeOut: 1000,
                                     extendedTimeOut: 1000
                                 });
+
+                                parent.designersignalsavecomplete(ORYX.UUID);
 
                                 // set the designer flag
                                 ORYX.PROCESS_SAVED = true;
