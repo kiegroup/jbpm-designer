@@ -45,7 +45,7 @@
 
     <dependencySet>
       <includes>
-        <include>org.kie.uberfire:kie-uberfire-servlet-security:jar</include>
+        <include>org.uberfire:uberfire-servlet-security:jar</include>
       </includes>
       <unpack>false</unpack>
       <outputDirectory>WEB-INF/lib</outputDirectory>
