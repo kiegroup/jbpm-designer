@@ -743,7 +743,7 @@
 					"description":"ID",
 					"description_ja":"ID",
 					"readonly":false,
-					"optional":true
+					"optional":false
 				},
 				{
 					"id":"version",
