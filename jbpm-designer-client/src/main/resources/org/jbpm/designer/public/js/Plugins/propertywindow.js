@@ -3277,8 +3277,10 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                         }
                     }
                     if( dataInputsOnlyVals.indexOf(fromPart) >= 0 && variableDefsOnlyVals.indexOf(innerParts[1]) >= 0 ){
-                        // if its also a data output - pass
-                        if(dataOutputsOnlyVals.indexOf(fromPart) < 0) {
+                        var noVars = (variableDefsOnlyVals.indexOf(fromPart) < 0);
+                        var noDOuts = (dataOutputsOnlyVals.indexOf(fromPart) < 0);
+
+                        if(noVars && noDOuts) {
                             hasErrors = true;
                         }
                     }
@@ -3674,8 +3676,9 @@ Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
                                             outValue += this.data['from'] + "->" + this.data['to'] + ",";
                                         }
                                     } else  if(dataInputsOnlyVals.indexOf(this.data['from']) >= 0 && variableDefsOnly.indexOf(this.data['to']) >= 0) {
-                                        // if its also  data output - pass
-                                        if(dataOutputsOnlyVals.indexOf(this.data['from']) < 0) {
+                                        var noVars = (variableDefsOnlyVals.indexOf(this.data['from']) < 0);
+                                        var noDOuts = (dataOutputsOnlyVals.indexOf(this.data['from']) < 0);
+                                        if(noVars && noDOuts) {
                                             ORYX.EDITOR._pluginFacade.raiseEvent({
                                                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                                 ntype		: 'warning',
