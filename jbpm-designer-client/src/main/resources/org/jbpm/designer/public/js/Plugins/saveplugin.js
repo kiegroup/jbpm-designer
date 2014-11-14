@@ -249,6 +249,8 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                 }
             }
 
+            parent.designersignalexpectconcurrentupdate(ORYX.UUID);
+
             Ext.Ajax.request({
                 url: ORYX.PATH + 'assetservice',
                 method: 'POST',
@@ -276,8 +278,6 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                                     timeOut: 1000,
                                     extendedTimeOut: 1000
                                 });
-
-                                parent.designersignalsavecomplete(ORYX.UUID);
 
                                 // set the designer flag
                                 ORYX.PROCESS_SAVED = true;
