@@ -109,6 +109,8 @@ public class DesignerPresenter {
     private ObservablePath path;
     private PlaceRequest place;
     private ObservablePath.OnConcurrentUpdateEvent concurrentUpdateSessionInfo = null;
+    // Flag to signal that an ConcurrentUpdateEvent is expected because the current user saving the BP
+    private boolean expectConcurrentUpdate = false;
 
     @Inject
     @New
@@ -152,7 +154,13 @@ public class DesignerPresenter {
         this.path.onConcurrentUpdate( new ParameterizedCommand<ObservablePath.OnConcurrentUpdateEvent>() {
             @Override
             public void execute( final ObservablePath.OnConcurrentUpdateEvent eventInfo ) {
-                concurrentUpdateSessionInfo = eventInfo;
+                if (expectConcurrentUpdate) {
+                    // ignore the event because it's caused by current save
+                    expectConcurrentUpdate = false;
+                }
+                else {
+                    concurrentUpdateSessionInfo = eventInfo;
+                }
             }
         } );
 
@@ -204,7 +212,7 @@ public class DesignerPresenter {
         this.publishSignalOnAssetCopy( this );
         this.publishSignalOnAssetRename( this );
         this.publishSignalOnAssetUpdate( this );
-        this.publishSignalOnAssetSaveComplete( this );
+        this.publishSignalOnAssetExpectConcurrentUpdate( this );
         this.publishClosePlace( this );
 
         multiPage.addWidget( designerWidget.getView(),
@@ -379,9 +387,9 @@ public class DesignerPresenter {
         }
     }-*/;
 
-    private native void publishSignalOnAssetSaveComplete( DesignerPresenter dp )/*-{
-        $wnd.designersignalsavecomplete = function () {
-            return dp.@org.jbpm.designer.client.DesignerPresenter::saveCompleteEvent()();
+    private native void publishSignalOnAssetExpectConcurrentUpdate( DesignerPresenter dp )/*-{
+        $wnd.designersignalexpectconcurrentupdate = function () {
+            return dp.@org.jbpm.designer.client.DesignerPresenter::expectConcurrentUpdateEvent()();
         }
     }-*/;
 
@@ -408,9 +416,9 @@ public class DesignerPresenter {
                                                            public void execute( final FileNameAndCommitMessage details ) {
                                                                busyIndicatorView.showBusyIndicator( CommonConstants.INSTANCE.Copying() );
                                                                copyService.call( getCopySuccessCallback(),
-                                                                                 new HasBusyIndicatorDefaultErrorCallback( busyIndicatorView ) ).copy( path,
-                                                                                                                                                       details.getNewFileName(),
-                                                                                                                                                       details.getCommitMessage() );
+                                                                                 new HasBusyIndicatorDefaultErrorCallback( busyIndicatorView ) ).copy(path,
+                                                                       details.getNewFileName(),
+                                                                       details.getCommitMessage());
                                                            }
                                                        } );
                 popup.show();
@@ -430,8 +438,8 @@ public class DesignerPresenter {
                                                                    busyIndicatorView.showBusyIndicator( CommonConstants.INSTANCE.Renaming() );
                                                                    renameService.call( getRenameSuccessCallback(),
                                                                                        new HasBusyIndicatorDefaultErrorCallback( busyIndicatorView ) ).rename( path,
-                                                                                                                                                               details.getNewFileName(),
-                                                                                                                                                               details.getCommitMessage() );
+                                                                                                                                 details.getNewFileName(),
+                                                                                                                                 details.getCommitMessage() );
                                                                }
                                                            } );
 
@@ -483,8 +491,8 @@ public class DesignerPresenter {
         }
     }
 
-    public boolean saveCompleteEvent() {
-        concurrentUpdateSessionInfo = null;
+    public boolean expectConcurrentUpdateEvent() {
+        expectConcurrentUpdate = true;
         return true;
     }
 
