@@ -1,8 +1,8 @@
 package org.jbpm.designer.query;
 
 import org.apache.lucene.search.Query;
-import org.kie.uberfire.metadata.model.KObject;
-import org.kie.uberfire.metadata.model.KProperty;
+import org.uberfire.ext.metadata.model.KObject;
+import org.uberfire.ext.metadata.model.KProperty;
 import org.kie.workbench.common.services.refactoring.backend.server.query.NamedQuery;
 import org.kie.workbench.common.services.refactoring.backend.server.query.QueryBuilder;
 import org.kie.workbench.common.services.refactoring.backend.server.query.response.ResponseBuilder;

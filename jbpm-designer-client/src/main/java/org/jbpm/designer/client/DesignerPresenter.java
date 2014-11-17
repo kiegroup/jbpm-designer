@@ -17,10 +17,10 @@ import org.jboss.errai.common.client.api.RemoteCallback;
 import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.jbpm.designer.client.type.Bpmn2Type;
 import org.jbpm.designer.service.DesignerAssetService;
-import org.kie.uberfire.client.callbacks.HasBusyIndicatorDefaultErrorCallback;
-import org.kie.uberfire.client.common.BusyIndicatorView;
-import org.kie.uberfire.client.common.MultiPageEditor;
-import org.kie.uberfire.client.common.Page;
+import org.uberfire.ext.widgets.common.client.callbacks.HasBusyIndicatorDefaultErrorCallback;
+import org.uberfire.ext.widgets.common.client.common.BusyIndicatorView;
+import org.uberfire.ext.widgets.common.client.common.MultiPageEditor;
+import org.uberfire.ext.widgets.common.client.common.Page;
 import org.kie.workbench.common.widgets.client.menu.FileMenuBuilder;
 import org.kie.workbench.common.widgets.client.popups.file.CommandWithFileNameAndCommitMessage;
 import org.kie.workbench.common.widgets.client.popups.file.CopyPopup;
@@ -53,7 +53,7 @@ import org.uberfire.workbench.events.ResourceUpdatedEvent;
 import org.uberfire.workbench.model.menu.Menus;
 import org.uberfire.workbench.type.FileNameUtil;
 
-import static org.kie.uberfire.client.common.ConcurrentChangePopup.*;
+import static org.uberfire.ext.widgets.common.client.common.ConcurrentChangePopup.*;
 
 @Dependent
 @WorkbenchEditor(identifier = "jbpm.designer", supportedTypes = { Bpmn2Type.class })

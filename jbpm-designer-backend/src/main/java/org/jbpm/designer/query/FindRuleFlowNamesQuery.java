@@ -1,7 +1,7 @@
 package org.jbpm.designer.query;
 
-import org.kie.uberfire.metadata.model.KObject;
-import org.kie.uberfire.metadata.model.KProperty;
+import org.uberfire.ext.metadata.model.KObject;
+import org.uberfire.ext.metadata.model.KProperty;
 import org.kie.workbench.common.services.refactoring.backend.server.query.response.ResponseBuilder;
 import org.kie.workbench.common.services.refactoring.backend.server.query.standard.FindRuleAttributesQuery;
 import org.kie.workbench.common.services.refactoring.model.index.terms.RuleIndexTerm;

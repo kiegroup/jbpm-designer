@@ -11,7 +11,7 @@
   <inherits name="org.uberfire.UberfireClientAll"/>
 
   <!-- Uberfire Extensions - Core Widgets -->
-  <inherits name="org.kie.uberfire.KIEUberfireWidgetsCore"/>
+  <inherits name="org.uberfire.ext.widgets.core.UberfireWidgetsCore"/>
 
   <!-- Drools dependencies -->
   <inherits name="org.drools.workbench.models.datamodel.DroolsWorkbenchDataModelAPI"/>
