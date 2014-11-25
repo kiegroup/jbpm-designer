@@ -3695,7 +3695,22 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
     		selModel: itemDeleter,
             autoHeight: true,
             tbar: [{
-                text: "[ Input Assignment ]",
+                    text: "[ Input Assignment ]",
+                    handler : function(){
+                        dataassignments.add(new DataAssignment({
+                            atype: 'DataInput',
+                            from: '',
+                            type: '',
+                            to: '',
+                            tostr: '',
+                            assignment: "false"
+                        }));
+                        newAssignmentType = "datainput";
+                        grid.fireEvent('cellclick', grid, dataassignments.getCount()-1, 1, null);
+                    }
+                },
+                {
+                text: "[ Input Mapping ]",
                 handler : function(){
                 	dataassignments.add(new DataAssignment({
                         atype: 'DataInput',
@@ -3710,7 +3725,7 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
                 }
                 },
                 {
-                    text: "[ Output Assignment ]",
+                    text: "[ Output Mapping ]",
                     handler : function(){
                         dataassignments.add(new DataAssignment({
                             atype: 'DataOutput',
@@ -3719,21 +3734,6 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
                             to: '',
                             tostr: '',
                             assignment: "true"
-                        }));
-                        newAssignmentType = "dataoutput";
-                        grid.fireEvent('cellclick', grid, dataassignments.getCount()-1, 1, null);
-                    }
-                },
-                {
-                    text: "[ Input Equality ]",
-                    handler : function(){
-                        dataassignments.add(new DataAssignment({
-                            atype: 'DataOutput',
-                            from: '',
-                            type: '',
-                            to: '',
-                            tostr: '',
-                            assignment: "false"
                         }));
                         newAssignmentType = "dataoutput";
                         grid.fireEvent('cellclick', grid, dataassignments.getCount()-1, 1, null);
@@ -3783,7 +3783,7 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
                                             'value'
                                         ],
                                         data: [
-                                            ['is mapped to',ORYX.I18N.PropertyWindow.isEqualTo]
+                                            ['is equal to',ORYX.I18N.PropertyWindow.isEqualTo]
                                         ]
                                     })
                                 });

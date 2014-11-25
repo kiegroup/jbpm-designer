@@ -430,7 +430,7 @@ public class Bpmn2JsonMarshaller {
             for(DataOutputAssociation doa : outputAssociations) {
                 String doaName = ((DataOutput)doa.getSourceRef().get(0)).getName();
                 if(doaName != null && doaName.length() > 0) {
-                    doutassociationbuff.append(((DataOutput)doa.getSourceRef().get(0)).getName());
+                    doutassociationbuff.append("[dout]" + ((DataOutput)doa.getSourceRef().get(0)).getName());
                     doutassociationbuff.append("->");
                     doutassociationbuff.append(doa.getTargetRef().getId());
                     doutassociationbuff.append(",");
@@ -526,7 +526,7 @@ public class Bpmn2JsonMarshaller {
             StringBuffer dinassociationbuff = new StringBuffer();
             for(DataInputAssociation din : inputAssociations) {
                 if(din.getSourceRef().get(0).getId() != null && din.getSourceRef().get(0).getId().length() > 0) {
-                    dinassociationbuff.append(din.getSourceRef().get(0).getId());
+                    dinassociationbuff.append("[din]" + din.getSourceRef().get(0).getId());
                     dinassociationbuff.append("->");
                     dinassociationbuff.append( ((DataInput)din.getTargetRef()).getName());
                     dinassociationbuff.append(",");
@@ -1208,7 +1208,7 @@ public class Bpmn2JsonMarshaller {
 //            } 
             else {
                 if(lhsAssociation != null && lhsAssociation.length() > 0) {
-                    associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
+                    associationBuff.append("[din]" + lhsAssociation).append("->").append(rhsAssociation);
                     associationBuff.append(",");
                     uniDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
                 }
@@ -1236,7 +1236,7 @@ public class Bpmn2JsonMarshaller {
                 
                 if(!wasBiDirectional) {
                     if(lhsAssociation != null && lhsAssociation.length() > 0) {
-                        associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
+                        associationBuff.append("[dout]" + lhsAssociation).append("->").append(rhsAssociation);
                         associationBuff.append(",");
                     }
                 }
@@ -1782,7 +1782,7 @@ public class Bpmn2JsonMarshaller {
     //            }
                 else {
                     if(lhsAssociation != null && lhsAssociation.length() > 0) {
-                        associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
+                        associationBuff.append("[din]" + lhsAssociation).append("->").append(rhsAssociation);
                         associationBuff.append(",");
                         uniDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
                     }
@@ -1848,7 +1848,7 @@ public class Bpmn2JsonMarshaller {
 
                     if(!wasBiDirectional) {
                         if(lhsAssociation != null && lhsAssociation.length() > 0) {
-                            associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
+                            associationBuff.append("[dout]" + lhsAssociation).append("->").append(rhsAssociation);
                             associationBuff.append(",");
                         }
                     }
@@ -2343,7 +2343,7 @@ public class Bpmn2JsonMarshaller {
 //            } 
             else {
                 if(lhsAssociation != null && lhsAssociation.length() > 0) {
-                    associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
+                    associationBuff.append("[din]" + lhsAssociation).append("->").append(rhsAssociation);
                     associationBuff.append(",");
                     uniDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
                 }
@@ -2371,7 +2371,7 @@ public class Bpmn2JsonMarshaller {
                 
                 if(!wasBiDirectional) {
                     if(lhsAssociation != null && lhsAssociation.length() > 0) {
-                        associationBuff.append(lhsAssociation).append("->").append(rhsAssociation);
+                        associationBuff.append("[dout]" + lhsAssociation).append("->").append(rhsAssociation);
                         associationBuff.append(",");
                     }
                 }
