@@ -42,6 +42,7 @@ import org.eclipse.dd.dc.Point;
 import org.eclipse.dd.di.DiagramElement;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EStructuralFeature.Internal;
 import org.eclipse.emf.ecore.impl.EAttributeImpl;
 import org.eclipse.emf.ecore.impl.EStructuralFeatureImpl.SimpleFeatureMapEntry;
@@ -1951,6 +1952,8 @@ public class Bpmn2JsonUnmarshaller {
                         String  serviceImplementation = null;
                         String serviceInterface = null;
                         String serviceOperation = null;
+                        EStructuralFeature serviceInterfaceFeature = null;
+                        EStructuralFeature serviceOperationFeature = null;
                         while(iter.hasNext()) {
                             FeatureMap.Entry entry = iter.next();
                             if(entry.getEStructuralFeature().getName().equals("serviceimplementation")) {
@@ -1958,9 +1961,11 @@ public class Bpmn2JsonUnmarshaller {
                             }
                             if(entry.getEStructuralFeature().getName().equals("serviceoperation")) {
                                 serviceOperation = (String) entry.getValue();
+                                serviceOperationFeature = entry.getEStructuralFeature();
                             }
                             if(entry.getEStructuralFeature().getName().equals("serviceinterface")) {
                                 serviceInterface = (String) entry.getValue();
+                                serviceInterfaceFeature = entry.getEStructuralFeature();
                             }
                         }
 
@@ -2003,6 +2008,12 @@ public class Bpmn2JsonUnmarshaller {
                         }
                         if(!foundInterface) {
                             touseInterface = Bpmn2Factory.eINSTANCE.createInterface();
+                            if (serviceInterface == null || serviceInterface.length() == 0) {
+                                serviceInterface = fe.getId() + "_ServiceInterface";
+                                if (serviceInterfaceFeature != null) {
+                                    fe.getAnyAttribute().set(serviceInterfaceFeature, serviceInterface);
+                                }
+                            }
                             touseInterface.setName(serviceInterface);
                             touseInterface.setImplementationRef(serviceInterface);
                             touseInterface.setId(fe.getId() + "_ServiceInterface");
@@ -2026,6 +2037,12 @@ public class Bpmn2JsonUnmarshaller {
                             }
                             if(!foundOperation) {
                                 Operation touseOperation = Bpmn2Factory.eINSTANCE.createOperation();
+                                if (serviceOperation == null || serviceOperation.length() == 0) {
+                                    serviceOperation = fe.getId() + "_ServiceOperation";
+                                    if (serviceOperationFeature != null) {
+                                        fe.getAnyAttribute().set(serviceOperationFeature, serviceOperation);
+                                    }
+                                }
                                 touseOperation.setId(fe.getId() + "_ServiceOperation");
                                 touseOperation.setName(serviceOperation);
                                 touseOperation.setImplementationRef(serviceOperation);
