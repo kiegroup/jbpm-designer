@@ -3333,7 +3333,9 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
         }, {
         	name: 'tostr'
         }, {
-                name: 'dataType'
+            name: 'dataType'
+        }, {
+            name: 'assignment'
         }
         ]);
     	
@@ -3371,99 +3373,211 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
     			var nextPart = valueParts[i];
     			if(nextPart.indexOf("=") > 0) {
                             var innerParts = nextPart.split("=");
-                            var dataType = dataTypeMap[innerParts[0]];
-                            if (!dataType){
-                                dataType = "java.lang.String";
-                            }
-                            var fromPart = innerParts[0];
-                            innerParts.shift(); // removes the first item from the array
-            				var escapedp = innerParts.join('=').replace(/\#\#/g , ",");
-                            escapedp = escapedp.replace(/\|\|/g , "=");
 
-                            if(variableDefsOnlyVals.indexOf(fromPart) < 0) {
+                            if(innerParts[0].startsWith("[din]")) {
+                                var fromPart = innerParts[0].slice(5, innerParts[0].length);
+                                var dataType = dataTypeMap[fromPart];
+                                if (!dataType){
+                                    dataType = "java.lang.String";
+                                }
+                                innerParts.shift(); // removes the first item from the array
+                                var escapedp = innerParts.join('=').replace(/\#\#/g , ",");
+                                escapedp = escapedp.replace(/\|\|/g , "=");
                                 dataassignments.add(new DataAssignment({
-                                    atype: ( dataInputsOnlyVals.indexOf(fromPart) >= 0 ) ? "DataInput" : "DataOutput",
+                                    atype: "DataInput",
                                     from: fromPart,
                                     type: "is equal to",
                                     to: "",
                                     tostr: escapedp,
-                                    dataType: dataType
+                                    dataType: dataType,
+                                    assignment: "false"
+                                }));
+
+                            } else if(innerParts[0].startsWith("[dout]")) {
+                                var fromPart = innerParts[0].slice(6, innerParts[0].length);
+                                var dataType = dataTypeMap[fromPart];
+                                if (!dataType){
+                                    dataType = "java.lang.String";
+                                }
+                                innerParts.shift(); // removes the first item from the array
+                                var escapedp = innerParts.join('=').replace(/\#\#/g , ",");
+                                escapedp = escapedp.replace(/\|\|/g , "=");
+                                dataassignments.add(new DataAssignment({
+                                    atype: "DataOutput",
+                                    from: fromPart,
+                                    type: "is equal to",
+                                    to: "",
+                                    tostr: escapedp,
+                                    dataType: dataType,
+                                    assignment: "false"
                                 }));
                             }
+
+//                            var dataType = dataTypeMap[innerParts[0]];
+//                            if (!dataType){
+//                                dataType = "java.lang.String";
+//                            }
+//                            var fromPart = innerParts[0];
+//                            innerParts.shift(); // removes the first item from the array
+//            				var escapedp = innerParts.join('=').replace(/\#\#/g , ",");
+//                            escapedp = escapedp.replace(/\|\|/g , "=");
+//
+//                            if(variableDefsOnlyVals.indexOf(fromPart) < 0) {
+//                                dataassignments.add(new DataAssignment({
+//                                    atype: ( dataInputsOnlyVals.indexOf(fromPart) >= 0 ) ? "DataInput" : "DataOutput",
+//                                    from: fromPart,
+//                                    type: "is equal to",
+//                                    to: "",
+//                                    tostr: escapedp,
+//                                    dataType: dataType
+//                                }));
+//                            }
     			} else if(nextPart.indexOf("->") > 0) {
                             var innerParts = nextPart.split("->");
-                            var dataType = dataTypeMap[innerParts[0]];
-                            if (!dataType){
-                                dataType = "java.lang.String";
-                            }
-                            var fromPart = innerParts[0];
-                            var hasErrors = false;
-                            if( dataInputsOnlyVals.indexOf(fromPart) >= 0 && dataInputsOnlyVals.indexOf(innerParts[1]) >= 0 ){
-                                // if its also process var - pass
-                                if(variableDefsOnlyVals.indexOf(fromPart) < 0) {
-                                    hasErrors = true;
-                                }
-                            }
-                            if( dataInputsOnlyVals.indexOf(fromPart) >= 0 && variableDefsOnlyVals.indexOf(innerParts[1]) >= 0 ){
-                                var noVars = (variableDefsOnlyVals.indexOf(fromPart) < 0);
-                                var noDOuts = (dataOutputsOnlyVals.indexOf(fromPart) < 0);
 
-                                if(noVars && noDOuts) {
-                                    hasErrors = true;
+                            if(innerParts[0].startsWith("[din]")) {
+                                var fromPart = innerParts[0].slice(5, innerParts[0].length);
+                                var dataType = dataTypeMap[fromPart];
+                                if (!dataType){
+                                    dataType = "java.lang.String";
                                 }
-                            }
-                            if( variableDefsOnlyVals.indexOf(fromPart) >= 0 && variableDefsOnlyVals.indexOf(innerParts[1]) >= 0 ){
-                                // if its also a data input - pass
-                                if( dataInputsOnlyVals.indexOf(innerParts[1]) < 0 && dataOutputsOnlyVals.indexOf(innerParts[1]) ) {
-                                    hasErrors = true;
-                                }
-                            }
-                            if( dataOutputsOnlyVals.indexOf(fromPart) >= 0 && dataInputsOnlyVals.indexOf(innerParts[1]) >= 0 ){
-                                hasErrors = true;
-                            }
-
-                            if(!hasErrors) {
-                                var outType = "";
-                                if(variableDefsOnlyVals.indexOf(fromPart) >= 0) {
-                                    if(dataOutputsOnlyVals.indexOf(fromPart) >= 0) {
-                                        outType = "DataOutput";
-                                    } else {
-                                        outType = "DataInput";
-                                    }
-                                } else if(dataInputsOnlyVals.indexOf(fromPart) >= 0) {
-                                    if(dataOutputsOnlyVals.indexOf(fromPart) >= 0) {
-                                        outType = "DataOutput";
-                                    } else {
-                                        outType = "DataInput";
-                                    }
-                                } else {
-                                    outType = "DataOutput";
-                                }
+                                var outType = "DataInput";
                                 dataassignments.add(new DataAssignment({
                                     atype: outType,
-                                    from: innerParts[0],
+                                    from: fromPart,
                                     type: "is mapped to",
                                     to: innerParts[1],
                                     tostr: "",
-                                    dataType: dataType
+                                    dataType: dataType,
+                                    assignment: "true"
+                                }));
+                            } else if(innerParts[0].startsWith("[dout]")) {
+                                var fromPart = innerParts[0].slice(6, innerParts[0].length);
+                                var dataType = dataTypeMap[fromPart];
+                                if (!dataType){
+                                    dataType = "java.lang.String";
+                                }
+                                var outType = "DataOutput";
+                                dataassignments.add(new DataAssignment({
+                                    atype: outType,
+                                    from: fromPart,
+                                    type: "is mapped to",
+                                    to: innerParts[1],
+                                    tostr: "",
+                                    dataType: dataType,
+                                    assignment: "true"
                                 }));
                             }
+
+//                            var dataType = dataTypeMap[innerParts[0]];
+//                            if (!dataType){
+//                                dataType = "java.lang.String";
+//                            }
+//                            var fromPart = innerParts[0];
+//                            var hasErrors = false;
+//                            if( dataInputsOnlyVals.indexOf(fromPart) >= 0 && dataInputsOnlyVals.indexOf(innerParts[1]) >= 0 ){
+//                                // if its also process var - pass
+//                                if(variableDefsOnlyVals.indexOf(fromPart) < 0) {
+//                                    hasErrors = true;
+//                                }
+//                            }
+//                            if( dataInputsOnlyVals.indexOf(fromPart) >= 0 && variableDefsOnlyVals.indexOf(innerParts[1]) >= 0 ){
+//                                var noVars = (variableDefsOnlyVals.indexOf(fromPart) < 0);
+//                                var noDOuts = (dataOutputsOnlyVals.indexOf(fromPart) < 0);
+//
+//                                if(noVars && noDOuts) {
+//                                    hasErrors = true;
+//                                }
+//                            }
+//                            if( variableDefsOnlyVals.indexOf(fromPart) >= 0 && variableDefsOnlyVals.indexOf(innerParts[1]) >= 0 ){
+//                                // if its also a data input - pass
+//                                if( dataInputsOnlyVals.indexOf(innerParts[1]) < 0 && dataOutputsOnlyVals.indexOf(innerParts[1]) ) {
+//                                    hasErrors = true;
+//                                }
+//                            }
+//                            if( dataOutputsOnlyVals.indexOf(fromPart) >= 0 && dataInputsOnlyVals.indexOf(innerParts[1]) >= 0 ){
+//                                if(variableDefsOnlyVals.indexOf(fromPart) < 0) {
+//                                    hasErrors = true;
+//                                }
+//                            }
+//
+//                            if(!hasErrors) {
+//                                var outType = "";
+//                                if(variableDefsOnlyVals.indexOf(fromPart) >= 0) {
+//                                    if(dataOutputsOnlyVals.indexOf(fromPart) >= 0) {
+//                                        if(dataInputsOnlyVals.indexOf(innerParts[1]) >= 0) {
+//                                            outType = "DataInput";
+//                                        } else {
+//                                            outType = "DataOutput";
+//                                        }
+//                                    } else {
+//                                        outType = "DataInput";
+//                                    }
+//                                } else if(dataInputsOnlyVals.indexOf(fromPart) >= 0) {
+//                                    if(dataOutputsOnlyVals.indexOf(fromPart) >= 0) {
+//                                        outType = "DataOutput";
+//                                    } else {
+//                                        outType = "DataInput";
+//                                    }
+//                                } else {
+//                                    outType = "DataOutput";
+//                                }
+//                                dataassignments.add(new DataAssignment({
+//                                    atype: outType,
+//                                    from: innerParts[0],
+//                                    type: "is mapped to",
+//                                    to: innerParts[1],
+//                                    tostr: "",
+//                                    dataType: dataType
+//                                }));
+//                            }
     			} else {
     				// default to equality
-    				var dataType = dataTypeMap[nextPart];
-                    if (!dataType){
-                        dataType = "java.lang.String";
-                    }
-                    if(variableDefsOnlyVals.indexOf(nextPart) < 0) {
+                    if(innerParts[0].startsWith("[din]")) {
+                        var fromPart = innerParts[0].slice(5, innerParts[0].length);
+                        var dataType = dataTypeMap[fromPart];
+                        if (!dataType){
+                            dataType = "java.lang.String";
+                        }
                         dataassignments.add(new DataAssignment({
-                            atype: ( variableDefsOnlyVals.indexOf(nextPart) >= 0 || dataInputsOnlyVals.indexOf(nextPart) >= 0 ) ? "DataInput" : "DataOutput",
-                            from: nextPart,
+                            atype: "DataInput",
+                            from: fromPart,
                             type: "is equal to",
                             to: "",
                             tostr: "",
-                            dataType: dataType
+                            dataType: dataType,
+                            assignment: "false"
+                        }));
+                    } else if(innerParts[0].startsWith("[dout]")) {
+                        var fromPart = innerParts[0].slice(5, innerParts[0].length);
+                        var dataType = dataTypeMap[fromPart];
+                        if (!dataType){
+                            dataType = "java.lang.String";
+                        }
+                        dataassignments.add(new DataAssignment({
+                            atype: "DataInput",
+                            from: fromPart,
+                            type: "is equal to",
+                            to: "",
+                            tostr: "",
+                            dataType: dataType,
+                            assignment: "false"
                         }));
                     }
+    				var dataType = dataTypeMap[nextPart];
+//                    if (!dataType){
+//                        dataType = "java.lang.String";
+//                    }
+//                    if(variableDefsOnlyVals.indexOf(nextPart) < 0) {
+//                        dataassignments.add(new DataAssignment({
+//                            atype: ( variableDefsOnlyVals.indexOf(nextPart) >= 0 || dataInputsOnlyVals.indexOf(nextPart) >= 0 ) ? "DataInput" : "DataOutput",
+//                            from: nextPart,
+//                            type: "is equal to",
+//                            to: "",
+//                            tostr: "",
+//                            dataType: dataType
+//                        }));
+//                    }
     			}
     		}
     	}
@@ -3575,34 +3689,51 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
                 header: ORYX.I18N.PropertyWindow.toValue,
                 width: 180,
                 dataIndex: 'tostr',
-                editor: new Ext.form.TextField({ allowBlank: true }),
+                editor: new Ext.form.TextField({ name: "tostrTxt", allowBlank: true }),
                 renderer: Ext.util.Format.htmlEncode
     		}, itemDeleter]),
     		selModel: itemDeleter,
             autoHeight: true,
             tbar: [{
-                text: "[ New Data Input Assignment ]",
+                text: "[ Input Assignment ]",
                 handler : function(){
                 	dataassignments.add(new DataAssignment({
                         atype: 'DataInput',
                         from: '',
                         type: '',
                         to: '',
-                        tostr: ''
+                        tostr: '',
+                        assignment: "true"
                     }));
                     newAssignmentType = "datainput";
                     grid.fireEvent('cellclick', grid, dataassignments.getCount()-1, 1, null);
                 }
                 },
                 {
-                    text: "[ New Data Output Assignment ]",
+                    text: "[ Output Assignment ]",
                     handler : function(){
                         dataassignments.add(new DataAssignment({
                             atype: 'DataOutput',
                             from: '',
                             type: '',
                             to: '',
-                            tostr: ''
+                            tostr: '',
+                            assignment: "true"
+                        }));
+                        newAssignmentType = "dataoutput";
+                        grid.fireEvent('cellclick', grid, dataassignments.getCount()-1, 1, null);
+                    }
+                },
+                {
+                    text: "[ Input Equality ]",
+                    handler : function(){
+                        dataassignments.add(new DataAssignment({
+                            atype: 'DataOutput',
+                            from: '',
+                            type: '',
+                            to: '',
+                            tostr: '',
+                            assignment: "false"
                         }));
                         newAssignmentType = "dataoutput";
                         grid.fireEvent('cellclick', grid, dataassignments.getCount()-1, 1, null);
@@ -3616,138 +3747,302 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
                         ed = ed.field || {};
                         if(ed.name == "typeCombo") {
                             ed.destroy();
-                            var newTypeCombo = new Ext.form.ComboBox({
-                                name: 'typeCombo',
-                                valueField:'name',
-                                displayField:'value',
-                                typeAhead: true,
-                                mode: 'local',
-                                triggerAction: 'all',
-                                selectOnFocus:true,
-                                store: new Ext.data.SimpleStore({
-                                    fields: [
-                                        'name',
-                                        'value'
-                                    ],
-                                    data: [
-                                        ['is mapped to',ORYX.I18N.PropertyWindow.isMappedTo],
-                                        ['is equal to',ORYX.I18N.PropertyWindow.isEqualTo]
-                                    ]
-                                })
-                            });
+
+                            var newTypeCombo;
+                            if(e.record.data.assignment == "true") {
+                                newTypeCombo = new Ext.form.ComboBox({
+                                    name: 'typeCombo',
+                                    valueField:'name',
+                                    displayField:'value',
+                                    typeAhead: true,
+                                    mode: 'local',
+                                    triggerAction: 'all',
+                                    selectOnFocus:true,
+                                    store: new Ext.data.SimpleStore({
+                                        fields: [
+                                            'name',
+                                            'value'
+                                        ],
+                                        data: [
+                                            ['is mapped to',ORYX.I18N.PropertyWindow.isMappedTo]
+                                        ]
+                                    })
+                                });
+                            } else {
+                                newTypeCombo = new Ext.form.ComboBox({
+                                    name: 'typeCombo',
+                                    valueField:'name',
+                                    displayField:'value',
+                                    typeAhead: true,
+                                    mode: 'local',
+                                    triggerAction: 'all',
+                                    selectOnFocus:true,
+                                    store: new Ext.data.SimpleStore({
+                                        fields: [
+                                            'name',
+                                            'value'
+                                        ],
+                                        data: [
+                                            ['is mapped to',ORYX.I18N.PropertyWindow.isEqualTo]
+                                        ]
+                                    })
+                                });
+                            }
                             e.grid.getColumnModel().setEditor(e.column, new Ext.grid.GridEditor(newTypeCombo));
                         }
                         if(ed.name == "fromCombo") {
                             ed.destroy();
 
-                            var newFromCombo = new Ext.form.ComboBox({
-                                name: 'fromCombo',
-                                valueField:'name',
-                                displayField:'value',
-                                typeAhead: true,
-                                mode: 'local',
-                                triggerAction: 'all',
-                                selectOnFocus:true,
-                                store: new Ext.data.SimpleStore({
-                                    fields: [
-                                        'name',
-                                        'value'
-                                    ],
-                                    data: variableDefsOnly.concat(dataInputsOnly)
-                                })
-                            });
+                            var newFromCombo;
+                            if(e.record.data.assignment == "true") {
+                                newFromCombo = new Ext.form.ComboBox({
+                                    name: 'fromCombo',
+                                    valueField:'name',
+                                    displayField:'value',
+                                    typeAhead: true,
+                                    mode: 'local',
+                                    triggerAction: 'all',
+                                    selectOnFocus:true,
+                                    store: new Ext.data.SimpleStore({
+                                        fields: [
+                                            'name',
+                                            'value'
+                                        ],
+                                        data: variableDefsOnly
+                                    })
+                                });
+                            } else {
+                                newFromCombo = new Ext.form.ComboBox({
+                                    name: 'fromCombo',
+                                    valueField:'name',
+                                    displayField:'value',
+                                    typeAhead: true,
+                                    mode: 'local',
+                                    triggerAction: 'all',
+                                    selectOnFocus:true,
+                                    store: new Ext.data.SimpleStore({
+                                        fields: [
+                                            'name',
+                                            'value'
+                                        ],
+                                        data: dataInputsOnly
+                                    })
+                                });
+                            }
                             e.grid.getColumnModel().setEditor(e.column, new Ext.grid.GridEditor(newFromCombo));
                         }
 
                         if(ed.name == "toCombo") {
                             ed.destroy();
-                            var newToCombo = new Ext.form.ComboBox({
-                                name: 'toCombo',
-                                valueField:'name',
-                                displayField:'value',
-                                typeAhead: true,
-                                mode: 'local',
-                                triggerAction: 'all',
-                                selectOnFocus:true,
-                                store: new Ext.data.SimpleStore({
-                                    fields: [
-                                        'name',
-                                        'value'
-                                    ],
-                                    data: dataInputsOnly
-                                })
-                            });
+
+                            var newToCombo;
+                            if(e.record.data.assignment == "true") {
+                                newToCombo = new Ext.form.ComboBox({
+                                    name: 'toCombo',
+                                    valueField:'name',
+                                    displayField:'value',
+                                    typeAhead: true,
+                                    mode: 'local',
+                                    triggerAction: 'all',
+                                    selectOnFocus:true,
+                                    store: new Ext.data.SimpleStore({
+                                        fields: [
+                                            'name',
+                                            'value'
+                                        ],
+                                        data: dataInputsOnly
+                                    })
+                                });
+                            } else {
+                                newToCombo = new Ext.form.ComboBox({
+                                    name: 'toCombo',
+                                    disabled: true,
+                                    valueField:'name',
+                                    displayField:'value',
+                                    typeAhead: true,
+                                    mode: 'local',
+                                    triggerAction: 'all',
+                                    selectOnFocus:true,
+                                    store: new Ext.data.SimpleStore({
+                                        fields: [
+                                            'name',
+                                            'value'
+                                        ],
+                                        data: dataInputsOnly
+                                    })
+                                });
+                                //newToCombo.disable();
+                            }
+
                             e.grid.getColumnModel().setEditor(e.column, new Ext.grid.GridEditor(newToCombo));
                         }
+
+                        if(ed.name == "tostrTxt") {
+                            ed.destroy();
+                            var newToStrField;
+
+                            if(e.record.data.assignment == "true") {
+                                newToStrField = new Ext.form.TextField({ name: "tostrTxt", allowBlank: true, disabled: true })
+                            } else {
+                                newToStrField = new Ext.form.TextField({ name: "tostrTxt", allowBlank: true })
+                            }
+
+                            e.grid.getColumnModel().setEditor(e.column, new Ext.grid.GridEditor(newToStrField));
+
+                        }
+
                     }
                     if(e.record.data.atype == "DataOutput") {
                         var ed = e.grid.getColumnModel().getCellEditor(e.column, e.row) || {};
                         ed = ed.field || {};
                         if(ed.name == "typeCombo") {
                             ed.destroy();
-                            var newTypeCombo = new Ext.form.ComboBox({
-                                name: 'typeCombo',
-                                valueField:'name',
-                                displayField:'value',
-                                typeAhead: true,
-                                mode: 'local',
-                                triggerAction: 'all',
-                                selectOnFocus:true,
-                                store: new Ext.data.SimpleStore({
-                                    fields: [
-                                        'name',
-                                        'value'
-                                    ],
-                                    data: [
-                                        ['is mapped to',ORYX.I18N.PropertyWindow.isMappedTo],
-                                        ['is equal to',ORYX.I18N.PropertyWindow.isEqualTo]
-                                    ]
-                                })
-                            });
+
+                            var newTypeCombo;
+                            if(e.record.data.assignment == "true") {
+                                newTypeCombo = new Ext.form.ComboBox({
+                                    name: 'typeCombo',
+                                    valueField:'name',
+                                    displayField:'value',
+                                    typeAhead: true,
+                                    mode: 'local',
+                                    triggerAction: 'all',
+                                    selectOnFocus:true,
+                                    store: new Ext.data.SimpleStore({
+                                        fields: [
+                                            'name',
+                                            'value'
+                                        ],
+                                        data: [
+                                            ['is mapped to',ORYX.I18N.PropertyWindow.isMappedTo]
+                                        ]
+                                    })
+                                });
+                            } else {
+                                newTypeCombo = new Ext.form.ComboBox({
+                                    name: 'typeCombo',
+                                    valueField:'name',
+                                    displayField:'value',
+                                    typeAhead: true,
+                                    mode: 'local',
+                                    triggerAction: 'all',
+                                    selectOnFocus:true,
+                                    store: new Ext.data.SimpleStore({
+                                        fields: [
+                                            'name',
+                                            'value'
+                                        ],
+                                        data: [
+                                            ['is equal to',ORYX.I18N.PropertyWindow.isEqualTo]
+                                        ]
+                                    })
+                                });
+                            }
+
                             e.grid.getColumnModel().setEditor(e.column, new Ext.grid.GridEditor(newTypeCombo));
                         }
                         if(ed.name == "fromCombo") {
                             ed.destroy();
 
-                            var newFromCombo = new Ext.form.ComboBox({
-                                name: 'fromCombo',
-                                valueField:'name',
-                                displayField:'value',
-                                typeAhead: true,
-                                mode: 'local',
-                                triggerAction: 'all',
-                                selectOnFocus:true,
-                                store: new Ext.data.SimpleStore({
-                                    fields: [
-                                        'name',
-                                        'value'
-                                    ],
-                                    data: dataOutputsOnly
-                                })
-                            });
+                            var newFromCombo;
+                            if(e.record.data.assignment == "true") {
+                                newFromCombo = new Ext.form.ComboBox({
+                                    name: 'fromCombo',
+                                    valueField:'name',
+                                    displayField:'value',
+                                    typeAhead: true,
+                                    mode: 'local',
+                                    triggerAction: 'all',
+                                    selectOnFocus:true,
+                                    store: new Ext.data.SimpleStore({
+                                        fields: [
+                                            'name',
+                                            'value'
+                                        ],
+                                        data: dataOutputsOnly
+                                    })
+                                });
+                            } else {
+                                newFromCombo = new Ext.form.ComboBox({
+                                    name: 'fromCombo',
+                                    disabled: true,
+                                    valueField:'name',
+                                    displayField:'value',
+                                    typeAhead: true,
+                                    mode: 'local',
+                                    triggerAction: 'all',
+                                    selectOnFocus:true,
+                                    store: new Ext.data.SimpleStore({
+                                        fields: [
+                                            'name',
+                                            'value'
+                                        ],
+                                        data: dataOutputsOnly
+                                    })
+                                });
+                            }
+
                             e.grid.getColumnModel().setEditor(e.column, new Ext.grid.GridEditor(newFromCombo));
                         }
 
                         if(ed.name == "toCombo") {
                             ed.destroy();
-                            var newToCombo = new Ext.form.ComboBox({
-                                name: 'toCombo',
-                                valueField:'name',
-                                displayField:'value',
-                                typeAhead: true,
-                                mode: 'local',
-                                triggerAction: 'all',
-                                selectOnFocus:true,
-                                store: new Ext.data.SimpleStore({
-                                    fields: [
-                                        'name',
-                                        'value'
-                                    ],
-                                    data: variableDefsOnly
-                                })
-                            });
+
+                            var newToCombo;
+                            if(e.record.data.assignment == "true") {
+                                newToCombo = new Ext.form.ComboBox({
+                                    name: 'toCombo',
+                                    valueField:'name',
+                                    displayField:'value',
+                                    typeAhead: true,
+                                    mode: 'local',
+                                    triggerAction: 'all',
+                                    selectOnFocus:true,
+                                    store: new Ext.data.SimpleStore({
+                                        fields: [
+                                            'name',
+                                            'value'
+                                        ],
+                                        data: variableDefsOnly
+                                    })
+                                });
+                            } else {
+                                newToCombo = new Ext.form.ComboBox({
+                                    name: 'toCombo',
+                                    disabled: true,
+                                    valueField:'name',
+                                    displayField:'value',
+                                    typeAhead: true,
+                                    mode: 'local',
+                                    triggerAction: 'all',
+                                    selectOnFocus:true,
+                                    store: new Ext.data.SimpleStore({
+                                        fields: [
+                                            'name',
+                                            'value'
+                                        ],
+                                        data: variableDefsOnly
+                                    })
+                                });
+                            }
+
                             e.grid.getColumnModel().setEditor(e.column, new Ext.grid.GridEditor(newToCombo));
                         }
+
+                        if(ed.name == "tostrTxt") {
+                            ed.destroy();
+                            var newToStrField;
+
+                            if(e.record.data.assignment == "true") {
+                                newToStrField = new Ext.form.TextField({ name: "tostrTxt", allowBlank: true, disabled: true })
+                            } else {
+                                newToStrField = new Ext.form.TextField({ name: "tostrTxt", allowBlank: true })
+                            }
+
+                            e.grid.getColumnModel().setEditor(e.column, new Ext.grid.GridEditor(newToStrField));
+
+                        }
+
                     }
                 }
             }
@@ -3787,86 +4082,112 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
                 	grid.stopEditing();
                 	dataassignments.data.each(function() {
                 		if(this.data['from'].length > 0 && this.data["type"].length > 0) {
+                            var daType = this.data['atype'];
                 			if(this.data["type"] == "is mapped to") {
-                                if(this.data['to'].length > 0) {
-                                    // type specific checks
-                                    if(dataInputsOnlyVals.indexOf(this.data['from']) >= 0 && dataInputsOnlyVals.indexOf(this.data['to']) >= 0) {
-                                        // if its also vardef -- pass
-                                        if(variableDefsOnlyVals.indexOf(this.data['from']) < 0) {
-                                            ORYX.EDITOR._pluginFacade.raiseEvent({
-                                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                                ntype		: 'warning',
-                                                msg         : "Assignment for " + this.data['from'] + " is invalid",
-                                                title       : ''
-
-                                            });
-                                        } else {
-                                            outValue += this.data['from'] + "->" + this.data['to'] + ",";
-                                        }
-                                    } else  if(dataInputsOnlyVals.indexOf(this.data['from']) >= 0 && variableDefsOnly.indexOf(this.data['to']) >= 0) {
-                                        // if its also  data output - pass
-                                        if(dataOutputsOnlyVals.indexOf(this.data['from']) < 0) {
-                                            ORYX.EDITOR._pluginFacade.raiseEvent({
-                                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                                ntype		: 'warning',
-                                                msg         : "Assignment for " + this.data['from'] + " is invalid",
-                                                title       : ''
-
-                                            });
-                                        } else {
-                                            outValue += this.data['from'] + "->" + this.data['to'] + ",";
-                                        }
-                                    } else if(variableDefsOnlyVals.indexOf(this.data['from']) >= 0 && variableDefsOnlyVals.indexOf(this.data['to']) >= 0) {
-                                        if( (dataInputsOnlyVals.indexOf(this.data['from']) < 0) && (dataOutputsOnlyVals.indexOf(this.data['from']) < 0)) {
-                                            ORYX.EDITOR._pluginFacade.raiseEvent({
-                                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                                ntype		: 'warning',
-                                                msg         : "Assignment for " + this.data['from'] + " is invalid",
-                                                title       : ''
-
-                                            });
-                                        } else {
-                                            outValue += this.data['from'] + "->" + this.data['to'] + ",";
-                                        }
-                                    } else if(dataOutputsOnlyVals.indexOf(this.data['from']) >= 0 && dataInputsOnlyVals.indexOf(this.data['to']) >= 0) {
-                                        ORYX.EDITOR._pluginFacade.raiseEvent({
-                                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                            ntype		: 'warning',
-                                            msg         : "Assignment for " + this.data['from'] + " is invalid",
-                                            title       : ''
-
-                                        });
-                                    } else {
-                                        outValue += this.data['from'] + "->" + this.data['to'] + ",";
-                                    }
-                                } else {
-                                    ORYX.EDITOR._pluginFacade.raiseEvent({
-                                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                        ntype		: 'warning',
-                                        msg         : "Assignment for " + this.data['from'] + " does not contain a proper mapping",
-                                        title       : ''
-
-                                    });
+                                if(daType == "DataInput") {
+                                    outValue += "[din]" + this.data['from'] + "->" + this.data['to'] + ",";
+                                } else if(daType == "DataOutput") {
+                                    outValue += "[dout]" + this.data['from'] + "->" + this.data['to'] + ",";
                                 }
+
+
+//                                if(this.data['to'].length > 0) {
+//                                    // type specific checks
+//                                    if(dataInputsOnlyVals.indexOf(this.data['from']) >= 0 && dataInputsOnlyVals.indexOf(this.data['to']) >= 0) {
+//                                        // if its also vardef -- pass
+//                                        if(variableDefsOnlyVals.indexOf(this.data['from']) < 0) {
+//                                            ORYX.EDITOR._pluginFacade.raiseEvent({
+//                                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+//                                                ntype		: 'warning',
+//                                                msg         : "1Assignment for " + this.data['from'] + " is invalid",
+//                                                title       : ''
+//
+//                                            });
+//                                        } else {
+//                                            outValue += this.data['from'] + "->" + this.data['to'] + ",";
+//                                        }
+//                                    } else  if(dataInputsOnlyVals.indexOf(this.data['from']) >= 0 && variableDefsOnly.indexOf(this.data['to']) >= 0) {
+//                                        var noVars = (variableDefsOnlyVals.indexOf(this.data['from']) < 0);
+//                                        var noDOuts = (dataOutputsOnlyVals.indexOf(this.data['from']) < 0);
+//                                        if(noVars && noDOuts) {
+//                                            ORYX.EDITOR._pluginFacade.raiseEvent({
+//                                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+//                                                ntype		: 'warning',
+//                                                msg         : "2Assignment for " + this.data['from'] + " is invalid",
+//                                                title       : ''
+//
+//                                            });
+//                                        } else {
+//                                            outValue += this.data['from'] + "->" + this.data['to'] + ",";
+//                                        }
+//                                    } else if(variableDefsOnlyVals.indexOf(this.data['from']) >= 0 && variableDefsOnlyVals.indexOf(this.data['to']) >= 0) {
+//                                        if( (dataInputsOnlyVals.indexOf(this.data['from']) < 0) && (dataOutputsOnlyVals.indexOf(this.data['from']) < 0)) {
+//                                            ORYX.EDITOR._pluginFacade.raiseEvent({
+//                                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+//                                                ntype		: 'warning',
+//                                                msg         : "3Assignment for " + this.data['from'] + " is invalid",
+//                                                title       : ''
+//
+//                                            });
+//                                        } else {
+//                                            outValue += this.data['from'] + "->" + this.data['to'] + ",";
+//                                        }
+//                                    } else if(dataOutputsOnlyVals.indexOf(this.data['from']) >= 0 && dataInputsOnlyVals.indexOf(this.data['to']) >= 0) {
+//                                        if(variableDefsOnlyVals.indexOf(this.data['from']) < 0) {
+//                                            ORYX.EDITOR._pluginFacade.raiseEvent({
+//                                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+//                                                ntype		: 'warning',
+//                                                msg         : "4Assignment for " + this.data['from'] + " is invalid",
+//                                                title       : ''
+//
+//                                            });
+//                                        } else {
+//                                            outValue += this.data['from'] + "->" + this.data['to'] + ",";
+//                                        }
+//                                    } else {
+//                                        outValue += this.data['from'] + "->" + this.data['to'] + ",";
+//                                    }
+//                                } else {
+//                                    ORYX.EDITOR._pluginFacade.raiseEvent({
+//                                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+//                                        ntype		: 'warning',
+//                                        msg         : "5Assignment for " + this.data['from'] + " does not contain a proper mapping",
+//                                        title       : ''
+//
+//                                    });
+//                                }
                 			} else if(this.data["type"] == "is equal to") {
                                 if(this.data['tostr'].length > 0) {
-                                    // type specific checks
-                                    if(variableDefsOnlyVals.indexOf(this.data['from']) >= 0) {
-                                        ORYX.EDITOR._pluginFacade.raiseEvent({
-                                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                            ntype		: 'warning',
-                                            msg         : "Assignment for " + this.data['from'] + " is invalid",
-                                            title       : ''
-
-                                        });
-                                    }  else {
-                                        var escapedc = this.data['tostr'].replace(/,/g , "##");
-                                        escapedc = escapedc.replace(/=/g, '||');
-                                        outValue += this.data['from'] + "=" + escapedc + ",";
+                                    var escapedc = this.data['tostr'].replace(/,/g , "##");
+                                    escapedc = escapedc.replace(/=/g, '||');
+                                    if(daType == "DataInput") {
+                                        outValue += "[din]" + this.data['from'] + "=" + escapedc + ",";
+                                    } else if(daType == "DataOutput") {
+                                        outValue += "[dout]" + this.data['from'] + "=" + escapedc + ",";
                                     }
+
+
+                                    // type specific checks
+//                                    if(variableDefsOnlyVals.indexOf(this.data['from']) >= 0) {
+//                                        ORYX.EDITOR._pluginFacade.raiseEvent({
+//                                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+//                                            ntype		: 'warning',
+//                                            msg         : "Assignment for " + this.data['from'] + " is invalid",
+//                                            title       : ''
+//
+//                                        });
+//                                    }  else {
+//                                        var escapedc = this.data['tostr'].replace(/,/g , "##");
+//                                        escapedc = escapedc.replace(/=/g, '||');
+//                                        outValue += this.data['from'] + "=" + escapedc + ",";
+//                                    }
                                 } else {
                                     // allow blank tostr values (e.g service tasks)
-                                    outValue += this.data['from'] + "=" + "" + ",";
+                                    if(daType == "DataInput") {
+                                        outValue += "[din]" + this.data['from'] + "=" + "" + ",";
+                                    } else if(daType == "DataOutput") {
+                                        outValue += "[dout]" + this.data['from'] + "=" + "" + ",";
+                                    }
                                 }
                 			}
                 		}
