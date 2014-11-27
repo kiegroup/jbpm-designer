@@ -2679,11 +2679,53 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
                     if(response.responseText.length >= 0 && response.responseText != "false") {
                         var responseJson = Ext.decode(response.responseText);
                         var customTypeData = new Array();
+
+                        // set some predefined defaults
+                        var stringType = new Array();
+                        stringType.push("String");
+                        stringType.push("String");
+                        customTypeData.push(stringType);
+                        var integerType = new Array();
+                        integerType.push("Integer");
+                        integerType.push("Integer");
+                        customTypeData.push(integerType);
+                        var booleanType = new Array();
+                        booleanType.push("Boolean");
+                        booleanType.push("Boolean");
+                        customTypeData.push(booleanType);
+                        var floatType = new Array();
+                        floatType.push("Float");
+                        floatType.push("Float");
+                        customTypeData.push(floatType);
+                        var objectType = new Array();
+                        objectType.push("Object");
+                        objectType.push("Object");
+                        customTypeData.push(objectType);
+                        var dividerType = new Array();
+                        dividerType.push("**********");
+                        dividerType.push("**********");
+                        customTypeData.push(dividerType);
+
+
+                        var unsortedData= new Array();
                         for(var key in responseJson){
                             var keyVal = responseJson[key];
+                            unsortedData.push(keyVal);
+                        }
+                        unsortedData.sort();
+
+                        for(var t = 0 ; t < unsortedData.length; t++ ) {
                             var newCustomType = new Array();
-                            newCustomType.push(keyVal);
-                            newCustomType.push(keyVal);
+
+                            var presStr = unsortedData[t];
+                            var presStrParts = presStr.split(".");
+
+                            var classPart = presStrParts[presStrParts.length-1];
+                            var pathPart = presStr.substring(0, presStr.length - (classPart.length + 1));
+
+
+                            newCustomType.push(classPart + " [" + pathPart + "]");
+                            newCustomType.push(unsortedData[t]);
                             customTypeData.push(newCustomType);
                         }
 
@@ -2827,8 +2869,8 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
                                     dataIndex: 'classname',
                                     editor: new Ext.form.ComboBox({
                                         id: 'customTypeCombo',
-                                        valueField:'name',
-                                        displayField:'value',
+                                        valueField:'value',
+                                        displayField:'name',
                                         labelStyle:'display:none',
                                         submitValue : true,
                                         typeAhead: false,
