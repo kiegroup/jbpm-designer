@@ -2291,36 +2291,50 @@ public class Bpmn2JsonUnmarshaller {
 				plane.getPlaneElement().add(edge);
 			}
 		}
-		for (Artifact artifact : sp.getArtifacts()) {
-            if (artifact instanceof TextAnnotation || artifact instanceof Group) {
-            	Bounds ba = _bounds.get(artifact.getId());
-            	if (ba != null) {
-            		BPMNShape shape = factory.createBPMNShape();
-            		shape.setBpmnElement(artifact);
-            		shape.setBounds(ba);
-            		plane.getPlaneElement().add(shape);
-            	}
-            }
-            if (artifact instanceof Association){
-                Association association = (Association)artifact;
-                BPMNEdge edge = factory.createBPMNEdge();
-                edge.setBpmnElement(association);
-                DcFactory dcFactory = DcFactory.eINSTANCE;
-                Point point = dcFactory.createPoint();
-                Bounds sourceBounds = _bounds.get(association.getSourceRef().getId());
-                point.setX(sourceBounds.getX() + (sourceBounds.getWidth()/2));
-                point.setY(sourceBounds.getY() + (sourceBounds.getHeight()/2));
-                edge.getWaypoint().add(point);
-                List<Point> dockers = _dockers.get(association.getId());
-                for (int i = 1; i < dockers.size() - 1; i++) {
-                        edge.getWaypoint().add(dockers.get(i));
+        if (sp.getArtifacts() != null) {
+            List<Association> incompleteAssociations = new ArrayList<Association>();
+            for (Artifact artifact : sp.getArtifacts()) {
+                if (artifact instanceof TextAnnotation || artifact instanceof Group) {
+                    Bounds ba = _bounds.get(artifact.getId());
+                    if (ba != null) {
+                        BPMNShape shape = factory.createBPMNShape();
+                        shape.setBpmnElement(artifact);
+                        shape.setBounds(ba);
+                        plane.getPlaneElement().add(shape);
+                    }
                 }
-                point = dcFactory.createPoint();
-                Bounds targetBounds = _bounds.get(association.getTargetRef().getId());
-                point.setX(targetBounds.getX() + (targetBounds.getWidth()/2));
-                point.setY(targetBounds.getY() + (targetBounds.getHeight()/2));
-                edge.getWaypoint().add(point);
-                plane.getPlaneElement().add(edge);
+                if (artifact instanceof Association) {
+                    Association association = (Association) artifact;
+                    if (association.getSourceRef() != null && association.getTargetRef() != null) {
+
+                        BPMNEdge edge = factory.createBPMNEdge();
+                        edge.setBpmnElement(association);
+                        DcFactory dcFactory = DcFactory.eINSTANCE;
+                        Point point = dcFactory.createPoint();
+                        Bounds sourceBounds = _bounds.get(association.getSourceRef().getId());
+                        point.setX(sourceBounds.getX() + (sourceBounds.getWidth() / 2));
+                        point.setY(sourceBounds.getY() + (sourceBounds.getHeight() / 2));
+                        edge.getWaypoint().add(point);
+                        List<Point> dockers = _dockers.get(association.getId());
+                        for (int i = 1; i < dockers.size() - 1; i++) {
+                            edge.getWaypoint().add(dockers.get(i));
+                        }
+                        point = dcFactory.createPoint();
+                        Bounds targetBounds = _bounds.get(association.getTargetRef().getId());
+                        point.setX(targetBounds.getX() + (targetBounds.getWidth() / 2));
+                        point.setY(targetBounds.getY() + (targetBounds.getHeight() / 2));
+                        edge.getWaypoint().add(point);
+                        plane.getPlaneElement().add(edge);
+                    }
+                    else {
+                        incompleteAssociations.add(association);
+                    }
+                }
+            }
+            if (!incompleteAssociations.isEmpty()) {
+                for (Association incompleteAssociation: incompleteAssociations) {
+                    sp.getArtifacts().remove(incompleteAssociation);
+                }
             }
         }
     }
@@ -2403,6 +2417,7 @@ public class Bpmn2JsonUnmarshaller {
         		}
         		// artifacts
                 if (process.getArtifacts() != null){
+                    List<Association> incompleteAssociations = new ArrayList<Association>();
                     for (Artifact artifact : process.getArtifacts()) {
                         if (artifact instanceof TextAnnotation || artifact instanceof Group) {
                         	Bounds b = _bounds.get(artifact.getId());
@@ -2415,24 +2430,35 @@ public class Bpmn2JsonUnmarshaller {
                         }
                         if (artifact instanceof Association){
                             Association association = (Association)artifact;
-                            BPMNEdge edge = factory.createBPMNEdge();
-                            edge.setBpmnElement(association);
-                            DcFactory dcFactory = DcFactory.eINSTANCE;
-                            Point point = dcFactory.createPoint();
-                            Bounds sourceBounds = _bounds.get(association.getSourceRef().getId());
-                            point.setX(sourceBounds.getX() + (sourceBounds.getWidth()/2));
-                            point.setY(sourceBounds.getY() + (sourceBounds.getHeight()/2));
-                            edge.getWaypoint().add(point);
-                            List<Point> dockers = _dockers.get(association.getId());
-                            for (int i = 1; i < dockers.size() - 1; i++) {
+                            if (association.getSourceRef() != null && association.getTargetRef() != null) {
+                                BPMNEdge edge = factory.createBPMNEdge();
+                                edge.setBpmnElement(association);
+                                DcFactory dcFactory = DcFactory.eINSTANCE;
+                                Point point = dcFactory.createPoint();
+                                Bounds sourceBounds = _bounds.get(association.getSourceRef().getId());
+                                point.setX(sourceBounds.getX() + (sourceBounds.getWidth() / 2));
+                                point.setY(sourceBounds.getY() + (sourceBounds.getHeight() / 2));
+                                edge.getWaypoint().add(point);
+                                List<Point> dockers = _dockers.get(association.getId());
+                                for (int i = 1; i < dockers.size() - 1; i++) {
                                     edge.getWaypoint().add(dockers.get(i));
+                                }
+                                point = dcFactory.createPoint();
+
+                                Bounds targetBounds = _bounds.get(association.getTargetRef().getId());
+                                point.setX(targetBounds.getX()); // TODO check
+                                point.setY(targetBounds.getY() + (targetBounds.getHeight() / 2));
+                                edge.getWaypoint().add(point);
+                                plane.getPlaneElement().add(edge);
                             }
-                            point = dcFactory.createPoint();
-                            Bounds targetBounds = _bounds.get(association.getTargetRef().getId());
-                            point.setX(targetBounds.getX()); // TODO check
-                            point.setY(targetBounds.getY() + (targetBounds.getHeight()/2));
-                            edge.getWaypoint().add(point);
-                            plane.getPlaneElement().add(edge);
+                            else {
+                                incompleteAssociations.add(association);
+                            }
+                        }
+                    }
+                    if (!incompleteAssociations.isEmpty()) {
+                        for (Association incompleteAssociation: incompleteAssociations) {
+                            process.getArtifacts().remove(incompleteAssociation);
                         }
                     }
                 }
@@ -5773,37 +5799,37 @@ public class Bpmn2JsonUnmarshaller {
         // revisit data assignments
         if(task.getDataInputAssociations() != null) {
         	List<DataInputAssociation> dataInputAssociations = task.getDataInputAssociations();
-        	List<DataInputAssociation> toRemoveAssociations = new ArrayList<DataInputAssociation>();
+        	List<DataInputAssociation> incompleteAssociations = new ArrayList<DataInputAssociation>();
         	for(DataInputAssociation dia : dataInputAssociations) {
         		DataInput targetInput = (DataInput) dia.getTargetRef();
         		if(targetInput != null && targetInput.getName() != null) {
         			if(targetInput.getName().equals("GroupId") && (properties.get("groupid") == null  || properties.get("groupid").length() == 0)) {
-        				toRemoveAssociations.add(dia);
+        				incompleteAssociations.add(dia);
         			} else if(targetInput.getName().equalsIgnoreCase("Skippable") && (properties.get("skippable") == null  || properties.get("skippable").length() == 0)) {
-        				toRemoveAssociations.add(dia);
+        				incompleteAssociations.add(dia);
         			} else if(targetInput.getName().equalsIgnoreCase("Comment") && (properties.get("comment") == null  || properties.get("comment").length() == 0)) {
-        				toRemoveAssociations.add(dia);
+        				incompleteAssociations.add(dia);
         			} else if(targetInput.getName().equalsIgnoreCase("Priority") && (properties.get("priority") == null  || properties.get("priority").length() == 0)) {
-        				toRemoveAssociations.add(dia);
+        				incompleteAssociations.add(dia);
         			} else if(targetInput.getName().equalsIgnoreCase("Content") && (properties.get("content") == null  || properties.get("content").length() == 0)) {
-        				toRemoveAssociations.add(dia);
+        				incompleteAssociations.add(dia);
         			} else if(targetInput.getName().equalsIgnoreCase("Locale") && (properties.get("locale") == null  || properties.get("locale").length() == 0)) {
-                        toRemoveAssociations.add(dia);
+                        incompleteAssociations.add(dia);
                     } else if(targetInput.getName().equalsIgnoreCase("CreatedBy") && (properties.get("createdby") == null  || properties.get("createdby").length() == 0)) {
-                        toRemoveAssociations.add(dia);
+                        incompleteAssociations.add(dia);
                     } else if(targetInput.getName().equalsIgnoreCase("NotCompletedReassign") && (properties.get("reassignment") == null  || properties.get("reassignment").length() == 0)) {
-                        toRemoveAssociations.add(dia);
+                        incompleteAssociations.add(dia);
                     } else if(targetInput.getName().equalsIgnoreCase("NotStartedReassign") && (properties.get("reassignment") == null  || properties.get("reassignment").length() == 0)) {
-                        toRemoveAssociations.add(dia);
+                        incompleteAssociations.add(dia);
                     } else if(targetInput.getName().equalsIgnoreCase("NotCompletedNotify") && (properties.get("notifications") == null  || properties.get("notifications").length() == 0)) {
-                        toRemoveAssociations.add(dia);
+                        incompleteAssociations.add(dia);
                     } else if(targetInput.getName().equalsIgnoreCase("NotStartedNotify") && (properties.get("notifications") == null  || properties.get("notifications").length() == 0)) {
-                        toRemoveAssociations.add(dia);
+                        incompleteAssociations.add(dia);
                     }
         		}
         	}
         	
-        	for(DataInputAssociation tr : toRemoveAssociations) {
+        	for(DataInputAssociation tr : incompleteAssociations) {
         		if(task.getDataInputAssociations() != null) 
         			task.getDataInputAssociations().remove(tr);
         	}
