@@ -1710,7 +1710,7 @@ public class Bpmn2JsonMarshaller {
                            rhsAssociation.equals("NotStartedNotify")
                            )) {
                             String replacer = associationValue.replaceAll(",", "##");
-                            associationBuff.append(rhsAssociation).append("=").append(replacer);
+                            associationBuff.append("[din]" + rhsAssociation).append("=").append(replacer);
                             associationBuff.append(",");
                         }
 
@@ -2332,7 +2332,7 @@ public class Bpmn2JsonMarshaller {
             			associationValue = "";
             		}
             		String replacer = associationValue.replaceAll(",", "##");
-            		associationBuff.append(rhsAssociation).append("=").append(replacer);
+            		associationBuff.append("[din]" + rhsAssociation).append("=").append(replacer);
                 	associationBuff.append(",");
             	}
             } 

@@ -3453,6 +3453,26 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
                                     dataType: dataType,
                                     assignment: "false"
                                 }));
+                            } else {
+                                // for custom tasks we need to deal with no definition
+                                var fromPart = innerParts[0];
+                                var dataType = dataTypeMap[fromPart];
+                                if (!dataType){
+                                    dataType = "java.lang.String";
+                                }
+                                innerParts.shift(); // removes the first item from the array
+                                var escapedp = innerParts.join('=').replace(/\#\#/g , ",");
+                                escapedp = escapedp.replace(/\|\|/g , "=");
+                                dataassignments.add(new DataAssignment({
+                                    atype: "DataInput",
+                                    from: fromPart,
+                                    type: "is equal to",
+                                    to: "",
+                                    tostr: escapedp,
+                                    dataType: dataType,
+                                    assignment: "false"
+                                }));
+
                             }
 
 //                            var dataType = dataTypeMap[innerParts[0]];
