@@ -174,7 +174,7 @@ ORYX.Plugins.ShapeRepository = {
                         groupText = ORYX.I18N.propertyNames[group];
                     }
 					// If there is a new group
-					if(!treeGroups[group] && group != "Connecting Objects") {
+                    if(!treeGroups[group]) {
                         if(Ext.isIE) {
                             // Create a new group
                             treeGroups[group] = new Ext.tree.TreeNode({
