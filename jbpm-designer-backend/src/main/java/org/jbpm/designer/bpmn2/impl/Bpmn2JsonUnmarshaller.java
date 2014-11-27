@@ -1155,6 +1155,7 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
 
+
 	public void setThrowEventsInfo(FlowElementsContainer container,
 			Definitions def,
 			List<RootElement> rootElements, List<Signal> toAddSignals,
@@ -2089,126 +2090,12 @@ public class Bpmn2JsonUnmarshaller {
         List<ItemDefinition> toAddDefinitions = new ArrayList<ItemDefinition>();
         for(RootElement root : rootElements) {
             if(root instanceof Process) {
-                Process process = (Process) root;
-                List<FlowElement> flowElements =  process.getFlowElements();
-                for(FlowElement fe : flowElements) {
-                    if(fe instanceof ServiceTask) {
-                        Iterator<FeatureMap.Entry> iter = fe.getAnyAttribute().iterator();
-                        String  serviceImplementation = null;
-                        String serviceInterface = null;
-                        String serviceOperation = null;
-                        EStructuralFeature serviceInterfaceFeature = null;
-                        EStructuralFeature serviceOperationFeature = null;
-                        while(iter.hasNext()) {
-                            FeatureMap.Entry entry = iter.next();
-                            if(entry.getEStructuralFeature().getName().equals("serviceimplementation")) {
-                                serviceImplementation = (String) entry.getValue();
-                            }
-                            if(entry.getEStructuralFeature().getName().equals("serviceoperation")) {
-                                serviceOperation = (String) entry.getValue();
-                                serviceOperationFeature = entry.getEStructuralFeature();
-                            }
-                            if(entry.getEStructuralFeature().getName().equals("serviceinterface")) {
-                                serviceInterface = (String) entry.getValue();
-                                serviceInterfaceFeature = entry.getEStructuralFeature();
-                            }
-                        }
-
-                        boolean foundInterface = false;
-                        Interface touseInterface = null;
-                        if(serviceImplementation != null && serviceImplementation.equals("Java")) {
-                            for(RootElement iroot : rootElements) {
-                                if(iroot instanceof Interface && ((Interface)iroot).getName().equals(serviceInterface)) {
-                                    foundInterface = true;
-                                    touseInterface = (Interface) iroot;
-                                    break;
-                                }
-                            }
-                            if(!foundInterface) {
-                                for(Interface toadd : toAddInterfaces) {
-                                    if(toadd.getName() != null && toadd.getName().equals(serviceInterface)) {
-                                        foundInterface = true;
-                                        touseInterface = toadd;
-                                        break;
-                                    }
-                                }
-                            }
-                        } else if(serviceImplementation != null && serviceImplementation.equals("##WebService")) {
-                            for(RootElement iroot : rootElements) {
-                                if(iroot instanceof Interface && ((Interface)iroot).getImplementationRef().equals(serviceInterface)) {
-                                    foundInterface = true;
-                                    touseInterface = (Interface) iroot;
-                                    break;
-                                }
-                            }
-                            if(!foundInterface) {
-                                for(Interface toadd : toAddInterfaces) {
-                                    if(toadd.getImplementationRef().equals(serviceInterface)) {
-                                        foundInterface = true;
-                                        touseInterface = toadd;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                        if(!foundInterface) {
-                            touseInterface = Bpmn2Factory.eINSTANCE.createInterface();
-                            if (serviceInterface == null || serviceInterface.length() == 0) {
-                                serviceInterface = fe.getId() + "_ServiceInterface";
-                                if (serviceInterfaceFeature != null) {
-                                    fe.getAnyAttribute().set(serviceInterfaceFeature, serviceInterface);
-                                }
-                            }
-                            touseInterface.setName(serviceInterface);
-                            touseInterface.setImplementationRef(serviceInterface);
-                            touseInterface.setId(fe.getId() + "_ServiceInterface");
-                            toAddInterfaces.add(touseInterface);
-                        }
-
-                        if(serviceOperation != null) {
-                            boolean foundOperation = false;
-                            for(Operation oper : touseInterface.getOperations()) {
-                                if(serviceImplementation != null && serviceImplementation.equals("Java")) {
-                                    if(oper.getName().equals(serviceOperation)) {
-                                        foundOperation = true;
-                                        break;
-                                    }
-                                } else if(serviceImplementation != null && serviceImplementation.equals("##WebService")) {
-                                    if(oper.getImplementationRef().equals(serviceOperation)) {
-                                        foundOperation = true;
-                                        break;
-                                    }
-                                }
-                            }
-                            if(!foundOperation) {
-                                Operation touseOperation = Bpmn2Factory.eINSTANCE.createOperation();
-                                if (serviceOperation == null || serviceOperation.length() == 0) {
-                                    serviceOperation = fe.getId() + "_ServiceOperation";
-                                    if (serviceOperationFeature != null) {
-                                        fe.getAnyAttribute().set(serviceOperationFeature, serviceOperation);
-                                    }
-                                }
-                                touseOperation.setId(fe.getId() + "_ServiceOperation");
-                                touseOperation.setName(serviceOperation);
-                                touseOperation.setImplementationRef(serviceOperation);
-
-                                Message message = Bpmn2Factory.eINSTANCE.createMessage();
-                                message.setId(fe.getId() + "_InMessage");
-
-                                ItemDefinition itemdef =  Bpmn2Factory.eINSTANCE.createItemDefinition();
-                                itemdef.setId(message.getId() + "Type");
-                                message.setItemRef(itemdef);
-                                toAddDefinitions.add(itemdef);
-                                toAddMessages.add(message);
-                                touseOperation.setInMessageRef(message);
-
-                                touseInterface.getOperations().add(touseOperation);
-                                ((ServiceTask) fe).setOperationRef(touseOperation);
-                            }
-                        }
-                    }
-                }
+                revisitServiceTasksExecute((Process) root, rootElements, toAddInterfaces, toAddMessages, toAddDefinitions);
             }
+        }
+
+        for(Lane lane : _lanes) {
+            revisitServiceTasksExecuteForLanes(lane, def, rootElements, toAddInterfaces, toAddMessages, toAddDefinitions);
         }
         
         for(ItemDefinition id : toAddDefinitions) {
@@ -2220,6 +2107,255 @@ public class Bpmn2JsonUnmarshaller {
         for(Interface i : toAddInterfaces) {
             def.getRootElements().add(i);
         }
+    }
+
+    private void revisitServiceTasksExecuteForLanes(Lane lane, Definitions def, List<RootElement> rootElements, List<Interface> toAddInterfaces, List<Message> toAddMessages, List<ItemDefinition> toAddDefinitions) {
+        List<FlowNode> laneFlowNodes = lane.getFlowNodeRefs();
+        for(FlowElement fe : laneFlowNodes) {
+            if(fe instanceof ServiceTask) {
+                Iterator<FeatureMap.Entry> iter = fe.getAnyAttribute().iterator();
+                String  serviceImplementation = null;
+                String serviceInterface = null;
+                String serviceOperation = null;
+                EStructuralFeature serviceInterfaceFeature = null;
+                EStructuralFeature serviceOperationFeature = null;
+                while(iter.hasNext()) {
+                    FeatureMap.Entry entry = iter.next();
+                    if(entry.getEStructuralFeature().getName().equals("serviceimplementation")) {
+                        serviceImplementation = (String) entry.getValue();
+                    }
+                    if(entry.getEStructuralFeature().getName().equals("serviceoperation")) {
+                        serviceOperation = (String) entry.getValue();
+                        serviceOperationFeature = entry.getEStructuralFeature();
+                    }
+                    if(entry.getEStructuralFeature().getName().equals("serviceinterface")) {
+                        serviceInterface = (String) entry.getValue();
+                        serviceInterfaceFeature = entry.getEStructuralFeature();
+                    }
+                }
+
+                boolean foundInterface = false;
+                Interface touseInterface = null;
+                if(serviceImplementation != null && serviceImplementation.equals("Java")) {
+                    for(RootElement iroot : rootElements) {
+                        if(iroot instanceof Interface && ((Interface)iroot).getName().equals(serviceInterface)) {
+                            foundInterface = true;
+                            touseInterface = (Interface) iroot;
+                            break;
+                        }
+                    }
+                    if(!foundInterface) {
+                        for(Interface toadd : toAddInterfaces) {
+                            if(toadd.getName() != null && toadd.getName().equals(serviceInterface)) {
+                                foundInterface = true;
+                                touseInterface = toadd;
+                                break;
+                            }
+                        }
+                    }
+                } else if(serviceImplementation != null && serviceImplementation.equals("##WebService")) {
+                    for(RootElement iroot : rootElements) {
+                        if(iroot instanceof Interface && ((Interface)iroot).getImplementationRef().equals(serviceInterface)) {
+                            foundInterface = true;
+                            touseInterface = (Interface) iroot;
+                            break;
+                        }
+                    }
+                    if(!foundInterface) {
+                        for(Interface toadd : toAddInterfaces) {
+                            if(toadd.getImplementationRef().equals(serviceInterface)) {
+                                foundInterface = true;
+                                touseInterface = toadd;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if(!foundInterface) {
+                    touseInterface = Bpmn2Factory.eINSTANCE.createInterface();
+                    if (serviceInterface == null || serviceInterface.length() == 0) {
+                        serviceInterface = fe.getId() + "_ServiceInterface";
+                        if (serviceInterfaceFeature != null) {
+                            fe.getAnyAttribute().set(serviceInterfaceFeature, serviceInterface);
+                        }
+                    }
+                    touseInterface.setName(serviceInterface);
+                    touseInterface.setImplementationRef(serviceInterface);
+                    touseInterface.setId(fe.getId() + "_ServiceInterface");
+                    toAddInterfaces.add(touseInterface);
+                }
+
+                if(serviceOperation != null) {
+                    boolean foundOperation = false;
+                    for(Operation oper : touseInterface.getOperations()) {
+                        if(serviceImplementation != null && serviceImplementation.equals("Java")) {
+                            if(oper.getName().equals(serviceOperation)) {
+                                foundOperation = true;
+                                break;
+                            }
+                        } else if(serviceImplementation != null && serviceImplementation.equals("##WebService")) {
+                            if(oper.getImplementationRef().equals(serviceOperation)) {
+                                foundOperation = true;
+                                break;
+                            }
+                        }
+                    }
+                    if(!foundOperation) {
+                        Operation touseOperation = Bpmn2Factory.eINSTANCE.createOperation();
+                        if (serviceOperation == null || serviceOperation.length() == 0) {
+                            serviceOperation = fe.getId() + "_ServiceOperation";
+                            if (serviceOperationFeature != null) {
+                                fe.getAnyAttribute().set(serviceOperationFeature, serviceOperation);
+                            }
+                        }
+                        touseOperation.setId(fe.getId() + "_ServiceOperation");
+                        touseOperation.setName(serviceOperation);
+                        touseOperation.setImplementationRef(serviceOperation);
+
+                        Message message = Bpmn2Factory.eINSTANCE.createMessage();
+                        message.setId(fe.getId() + "_InMessage");
+
+                        ItemDefinition itemdef =  Bpmn2Factory.eINSTANCE.createItemDefinition();
+                        itemdef.setId(message.getId() + "Type");
+                        message.setItemRef(itemdef);
+                        toAddDefinitions.add(itemdef);
+                        toAddMessages.add(message);
+                        touseOperation.setInMessageRef(message);
+
+                        touseInterface.getOperations().add(touseOperation);
+                        ((ServiceTask) fe).setOperationRef(touseOperation);
+                    }
+                }
+
+            } else if(fe instanceof FlowElementsContainer) {
+                revisitServiceTasksExecute((FlowElementsContainer) fe, rootElements, toAddInterfaces, toAddMessages, toAddDefinitions);
+            }
+        }
+    }
+
+    private void revisitServiceTasksExecute(FlowElementsContainer container, List<RootElement> rootElements, List<Interface> toAddInterfaces, List<Message> toAddMessages, List<ItemDefinition> toAddDefinitions) {
+        List<FlowElement> flowElements =  container.getFlowElements();
+        for(FlowElement fe : flowElements) {
+            if(fe instanceof ServiceTask) {
+                Iterator<FeatureMap.Entry> iter = fe.getAnyAttribute().iterator();
+                String  serviceImplementation = null;
+                String serviceInterface = null;
+                String serviceOperation = null;
+                EStructuralFeature serviceInterfaceFeature = null;
+                EStructuralFeature serviceOperationFeature = null;
+                while(iter.hasNext()) {
+                    FeatureMap.Entry entry = iter.next();
+                    if(entry.getEStructuralFeature().getName().equals("serviceimplementation")) {
+                        serviceImplementation = (String) entry.getValue();
+                    }
+                    if(entry.getEStructuralFeature().getName().equals("serviceoperation")) {
+                        serviceOperation = (String) entry.getValue();
+                        serviceOperationFeature = entry.getEStructuralFeature();
+                    }
+                    if(entry.getEStructuralFeature().getName().equals("serviceinterface")) {
+                        serviceInterface = (String) entry.getValue();
+                        serviceInterfaceFeature = entry.getEStructuralFeature();
+                    }
+                }
+
+                boolean foundInterface = false;
+                Interface touseInterface = null;
+                if(serviceImplementation != null && serviceImplementation.equals("Java")) {
+                    for(RootElement iroot : rootElements) {
+                        if(iroot instanceof Interface && ((Interface)iroot).getName().equals(serviceInterface)) {
+                            foundInterface = true;
+                            touseInterface = (Interface) iroot;
+                            break;
+                        }
+                    }
+                    if(!foundInterface) {
+                        for(Interface toadd : toAddInterfaces) {
+                            if(toadd.getName() != null && toadd.getName().equals(serviceInterface)) {
+                                foundInterface = true;
+                                touseInterface = toadd;
+                                break;
+                            }
+                        }
+                    }
+                } else if(serviceImplementation != null && serviceImplementation.equals("##WebService")) {
+                    for(RootElement iroot : rootElements) {
+                        if(iroot instanceof Interface && ((Interface)iroot).getImplementationRef().equals(serviceInterface)) {
+                            foundInterface = true;
+                            touseInterface = (Interface) iroot;
+                            break;
+                        }
+                    }
+                    if(!foundInterface) {
+                        for(Interface toadd : toAddInterfaces) {
+                            if(toadd.getImplementationRef().equals(serviceInterface)) {
+                                foundInterface = true;
+                                touseInterface = toadd;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if(!foundInterface) {
+                    touseInterface = Bpmn2Factory.eINSTANCE.createInterface();
+                    if (serviceInterface == null || serviceInterface.length() == 0) {
+                        serviceInterface = fe.getId() + "_ServiceInterface";
+                        if (serviceInterfaceFeature != null) {
+                            fe.getAnyAttribute().set(serviceInterfaceFeature, serviceInterface);
+                        }
+                    }
+                    touseInterface.setName(serviceInterface);
+                    touseInterface.setImplementationRef(serviceInterface);
+                    touseInterface.setId(fe.getId() + "_ServiceInterface");
+                    toAddInterfaces.add(touseInterface);
+                }
+
+                if(serviceOperation != null) {
+                    boolean foundOperation = false;
+                    for(Operation oper : touseInterface.getOperations()) {
+                        if(serviceImplementation != null && serviceImplementation.equals("Java")) {
+                            if(oper.getName().equals(serviceOperation)) {
+                                foundOperation = true;
+                                break;
+                            }
+                        } else if(serviceImplementation != null && serviceImplementation.equals("##WebService")) {
+                            if(oper.getImplementationRef().equals(serviceOperation)) {
+                                foundOperation = true;
+                                break;
+                            }
+                        }
+                    }
+                    if(!foundOperation) {
+                        Operation touseOperation = Bpmn2Factory.eINSTANCE.createOperation();
+                        if (serviceOperation == null || serviceOperation.length() == 0) {
+                            serviceOperation = fe.getId() + "_ServiceOperation";
+                            if (serviceOperationFeature != null) {
+                                fe.getAnyAttribute().set(serviceOperationFeature, serviceOperation);
+                            }
+                        }
+                        touseOperation.setId(fe.getId() + "_ServiceOperation");
+                        touseOperation.setName(serviceOperation);
+                        touseOperation.setImplementationRef(serviceOperation);
+
+                        Message message = Bpmn2Factory.eINSTANCE.createMessage();
+                        message.setId(fe.getId() + "_InMessage");
+
+                        ItemDefinition itemdef =  Bpmn2Factory.eINSTANCE.createItemDefinition();
+                        itemdef.setId(message.getId() + "Type");
+                        message.setItemRef(itemdef);
+                        toAddDefinitions.add(itemdef);
+                        toAddMessages.add(message);
+                        touseOperation.setInMessageRef(message);
+
+                        touseInterface.getOperations().add(touseOperation);
+                        ((ServiceTask) fe).setOperationRef(touseOperation);
+                    }
+                }
+
+            } else if(fe instanceof FlowElementsContainer) {
+                revisitServiceTasksExecute((FlowElementsContainer) fe, rootElements, toAddInterfaces, toAddMessages, toAddDefinitions);
+            }
+        }
+
     }
     
     /**
