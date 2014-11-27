@@ -5371,6 +5371,7 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                                 id: 'rfgname',
                                 header: 'RuleFlow Group Name',
                                 width: 200,
+                                sortable: true,
                                 dataIndex: 'name',
                                 editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
                             },
@@ -5378,6 +5379,7 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                                 id: 'rfname',
                                 header: 'Edit Rule File',
                                 width: 200,
+                                sortable: true,
                                 //dataIndex: 'drlname',
                                // editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
                                 renderer: function(value, metaData, record, rowIndex, colIndex, store) {
@@ -5398,6 +5400,7 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                                 id: 'rfproject',
                                 header: 'Full Path',
                                 width: 200,
+                                sortable: true,
                                 dataIndex: 'fpath',
                                 editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
                             }
