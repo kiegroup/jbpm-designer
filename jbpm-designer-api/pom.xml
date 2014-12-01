@@ -86,6 +86,67 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+            <groupId>com.google.code.maven-replacer-plugin</groupId>
+            <artifactId>replacer</artifactId>
+            <configuration>
+                <includes>
+                    <include>**/DesignerConstants.properties</include>
+                    <include>**/DesignerConstants_de.properties</include>
+                    <include>**/DesignerConstants_es.properties</include>
+                    <include>**/DesignerConstants_fr.properties</include>
+                    <include>**/DesignerConstants_ja.properties</include>
+                    <include>**/DesignerConstants_pt_BR.properties</include>
+                    <include>**/DesignerConstants_zh_CN.properties</include>
+                    <include>**/DesignerConstants_ru.properties</include>
+                </includes>
+                <excludes>
+                    <exclude>**/ErraiApp.properties</exclude>
+                </excludes>
+                <replacements>
+                    <replacement>
+                        <token>\\\\"</token>
+                        <value>"</value>
+                    </replacement>
+                    <replacement>
+                        <token>\\"</token>
+                        <value>"</value>
+                    </replacement>
+                    <replacement>
+                        <token>"</token>
+                        <value>\\\\"</value>
+                    </replacement>
+                    <replacement>
+                        <token>\\\\'</token>
+                        <value>'</value>
+                    </replacement>
+                    <replacement>
+                        <token>\\'</token>
+                        <value>'</value>
+                    </replacement>
+                    <replacement>
+                        <token>'</token>
+                        <value>\\\\'</value>
+                    </replacement>
+                    <replacement>
+                        <token>'</token>
+                        <value>\\'</value>
+                    </replacement>
+                    <replacement>
+                        <token>"</token>
+                        <value>\\"</value>
+                    </replacement>
+                    <replacement>
+                        <token>\\\\n</token>
+                        <value>\\n</value>
+                    </replacement>
+                    <replacement>
+                        <token>\\n</token>
+                        <value>\\\\n</value>
+                    </replacement>
+                </replacements>
+            </configuration>
+        </plugin>
 
     </plugins>
 
