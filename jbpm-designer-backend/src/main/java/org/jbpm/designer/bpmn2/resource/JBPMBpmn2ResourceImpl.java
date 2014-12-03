@@ -31,6 +31,7 @@ public class JBPMBpmn2ResourceImpl extends Bpmn2ResourceImpl {
         // Switch off DTD external entity processing
         Map parserFeatures = new HashMap();
         parserFeatures.put("http://xml.org/sax/features/external-general-entities", false);
+        parserFeatures.put("http://xml.org/sax/features/external-parameter-entities", false);
         this.getDefaultLoadOptions().put(XMLResource.OPTION_PARSER_FEATURES, parserFeatures);
 
         this.getDefaultSaveOptions().put(XMLResource.OPTION_ENCODING, "UTF-8");
