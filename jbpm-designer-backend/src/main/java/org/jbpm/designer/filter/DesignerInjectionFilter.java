@@ -1,23 +1,27 @@
 package org.jbpm.designer.filter;
 
-import org.apache.commons.httpclient.HttpClient;
-
-import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 public class DesignerInjectionFilter implements Filter {
+
     private FilterConfig fc = null;
     private ServletContext sc = null;
     private InjectionConfig cf;
     private InjectionRules rules;
-    public static HttpClient client;
 
     public void init(FilterConfig filterConfig) throws ServletException {
         fc = filterConfig;

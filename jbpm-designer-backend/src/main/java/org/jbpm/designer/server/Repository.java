@@ -34,12 +34,11 @@ package org.jbpm.designer.server;
  **/
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -47,7 +46,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -55,16 +53,25 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
 public class Repository {
 
+    private static final Logger logger = LoggerFactory.getLogger(Repository.class);
+    
 	public static final String NEW_MODEL_SVG_STRING = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:oryx=\"http://oryx-editor.org\" id=\"oryx_98F1C176-75F8-4C0A-899E-0F5E352A5F58\" width=\"10\" height=\"10\" xlink=\"http://www.w3.org/1999/xlink\" svg=\"http://www.w3.org/2000/svg\"><defs/><g stroke=\"none\" font-family=\"Verdana\" font-size=\"12\"><g class=\"stencils\" transform=\"translate(0)\"><g class=\"me\"/><g class=\"children\"/><g class=\"edge\"/></g></g></svg>";
 	public static final String DEFAULT_STENCILSET = "/stencilsets/bpmn1.1/bpmn1.1.json";
 	public static final String DEFAULT_TYPE = "http://b3mn.org/stencilset/bpmn1.1#";
@@ -127,17 +134,21 @@ public class Repository {
 
 	public String getModel(String path, String representationType) {
 		String result = "";
+		
+		String urlString = baseUrl + path + "/" + representationType;
 		try {
-		    HttpClient client = new HttpClient();
-		    GetMethod method = new GetMethod( baseUrl + path + "/" + representationType);
-		    int statusCode = client.executeMethod( method );
-			if( statusCode != -1 ) {
-				result = method.getResponseBodyAsString();
+		    HttpClient client = HttpClientBuilder.create().build();
+		    HttpGet get = new HttpGet( urlString);
+		    HttpResponse response = client.execute( get );
+		    int statusCode = response.getStatusLine().getStatusCode();
+			if( statusCode != -1 ) { 
+			    HttpEntity entity = response.getEntity();
+				result = EntityUtils.toString(entity);
 			} else {
-				 // TODO handle error
+				 logger.error("GET to '{}' failed with status {}", urlString, statusCode );
 			}
 		} catch( Exception e ) {
-			// TODO handle exception
+		    logger.error("GET to '{}' failed:" + e.getMessage(), e );
 		}
 		return result;
 	}
@@ -332,34 +343,56 @@ public class Repository {
 	}
 
 	public String saveNewModel(String newModel, String name, String summary, String type, String stencilset, String svg){
-		String result = "";
-		String url = baseUrl + "backend/poem/repository/new?stencilset=" + stencilset;
-		try {
-		    HttpClient client = new HttpClient();
-		    PostMethod method = new PostMethod(url);
-			// configure the form parameters
-			method.addParameter("data", newModel);
-			method.addParameter("title", name);
-			method.addParameter("summary", summary);
-			method.addParameter("type", type);
-			method.addParameter("svg", svg);
-			// execute the POST method
-			int statusCode = client.executeMethod(method);
-			if(statusCode != -1) {
-				Header header = method.getResponseHeader("location");
-				result = header.getValue();
-				// hack for reverse proxies:
-				result = result.substring(result.lastIndexOf("http://"));
+	    String result = "";
 
-				if (result.startsWith(baseUrl)){
-					result = result.substring(baseUrl.length());
+	    // setup 
+	    String url = baseUrl + "backend/poem/repository/new?stencilset=" + stencilset;
+	    HttpClient client = HttpClientBuilder.create().build();
+
+	    // configure the form parameters
+	    List<NameValuePair> formParams = new ArrayList<NameValuePair>(2);
+	    formParams.add(new BasicNameValuePair("data", newModel));
+	    formParams.add(new BasicNameValuePair("title", name));
+	    formParams.add(new BasicNameValuePair("summary", summary));
+	    formParams.add(new BasicNameValuePair("type", type));
+	    formParams.add(new BasicNameValuePair("svg", svg));
+	    UrlEncodedFormEntity formEntity;
+
+	    try {
+	        formEntity = new UrlEncodedFormEntity(formParams);
+	    } catch( UnsupportedEncodingException uee ) {
+	        logger.error("Could not encode authentication parameters into request body", uee);
+	        return result;
+	    }
+
+	    // create POST method and add form 
+	    HttpPost post = new HttpPost( url);
+	    post.setEntity(formEntity);
+	    
+	    try {
+	        // execute the POST method
+	        HttpResponse response = client.execute( post );
+            int statusCode = response.getStatusLine().getStatusCode();
+            if( statusCode != -1 ) { 
+                Header [] headers = response.getHeaders("location");
+				if( headers.length > 0 ) { 
+				    result = headers[0].getValue();
+				    // hack for reverse proxies:
+				    result = result.substring(result.lastIndexOf("http://"));
+				    if (result.startsWith(baseUrl)){
+				        result = result.substring(baseUrl.length());
+				    }
+				} else {
+				    logger.error("GET to '{}' failed with status {}", url, statusCode );
 				}
-			} else {
-				// TODO handle error
-			}
-		} catch( Exception e ) {
-			e.printStackTrace();
-		}
+            } 
+            else { 
+               logger.error( "POST to [{}] resulted in status code {} ", url, statusCode);
+            }
+		} catch( Exception e ) { 
+		    logger.error("POST to [" + url + "] failed: " + e.getMessage(), e );
+		} 
+			
 		return result;
 	}
 	
@@ -390,27 +423,33 @@ public class Repository {
 		}
 		String modelTagsUrl = modelUrl + "/tags";
 
-		HttpClient client = new HttpClient();
-	    PostMethod method = new PostMethod(modelTagsUrl);
+		HttpClient client = HttpClientBuilder.create().build();
+		HttpPost post = new HttpPost(modelTagsUrl);
 	    
 		// configure the form parameters
-		method.addParameter("tag_name", tagName);
+        List<NameValuePair> formParams = new ArrayList<NameValuePair>(2);
+        formParams.add(new BasicNameValuePair("tag_name", tagName));
+        UrlEncodedFormEntity formEntity;
+
+        try {
+            formEntity = new UrlEncodedFormEntity(formParams);
+        } catch( UnsupportedEncodingException uee ) {
+            logger.error("Could not encode authentication parameters into request body", uee);
+            return;
+        }
 
 		// execute the POST method
 		int statusCode;
 		try {
-			statusCode = client.executeMethod(method);
+			HttpResponse response = client.execute(post);
+			statusCode = response.getStatusLine().getStatusCode();
 			if (statusCode != -1) {
-				// TODO return result
+				// TODO return result 
 			} else {
-				// TODO handle error
+			    logger.error( "POST to [" + modelTagsUrl + "] failed with status code " + statusCode );
 			}
-		} catch (HttpException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			logger.error( "POST to [" + modelTagsUrl + "] failed: " + e.getMessage(), e );
 		}
 	}
 	

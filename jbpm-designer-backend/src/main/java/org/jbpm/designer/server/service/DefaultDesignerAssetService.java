@@ -2,18 +2,33 @@ package org.jbpm.designer.server.service;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.*;
-import javax.annotation.PostConstruct;
+import java.net.MalformedURLException;
+import java.net.Socket;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.protocol.Protocol;
+import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.DefaultBHttpClientConnection;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.util.EntityUtils;
 import org.jboss.errai.bus.server.annotations.Service;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
@@ -22,9 +37,10 @@ import org.jbpm.designer.repository.UriUtils;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.service.BPMN2DataServices;
 import org.jbpm.designer.service.DesignerAssetService;
-import org.jbpm.designer.util.OSProtocolSocketFactory;
 import org.jbpm.designer.util.Utils;
 import org.json.JSONArray;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.uberfire.backend.server.util.Paths;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.mvp.PlaceRequest;
@@ -34,6 +50,8 @@ import org.uberfire.workbench.events.ResourceOpenedEvent;
 @Service
 @ApplicationScoped
 public class DefaultDesignerAssetService implements DesignerAssetService {
+
+    private static Logger logger = LoggerFactory.getLogger(DefaultDesignerAssetService.class);
 
     @Inject
     private Repository repository;
@@ -46,6 +64,9 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
 
     @Inject
     private Event<ResourceOpenedEvent> resourceOpenedEvent;
+   
+    // socket buffer size in bytes: can be tuned for performance
+    private final static int socketBufferSize = 8 * 1024;
 
     public static final String PROCESS_STUB = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \n" +
     "<bpmn2:definitions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.omg.org/bpmn20\" xmlns:bpmn2=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\" xmlns:bpsim=\"http://www.bpsim.org/schemas/1.0\" xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\" xmlns:drools=\"http://www.jboss.org/drools\" \n" +
@@ -62,11 +83,6 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
     "   </bpmndi:BPMNDiagram> \n" +
     "</bpmn2:definitions>";
 
-
-    @PostConstruct
-    public void configure() {
-        Protocol.registerProtocol("http", new Protocol("http", new OSProtocolSocketFactory(), 80));
-    }
 
     @Override
     public Map<String, String> getEditorParameters( final Path path,
@@ -132,9 +148,6 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
         resourceOpenedEvent.fire(new ResourceOpenedEvent( path, sessionInfo ));
 
         return editorParamsMap;
-//        String editorURL = hostInfo + "/editor/?uuid=" + path.toURI() + "&profile=jbpm&pp=&editorid=" + editorID + "&readonly=" + readOnly +
-//                "&activenodes=" + encodedActiveNodesParam + "&completednodes=" + encodedCompletedNodesParam;
-//        return getEditorResponse( editorURL, encodedProcessSource );
     }
 
     @Override
@@ -163,31 +176,74 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
 
     private String getEditorResponse( String urlpath,
                                       String encProcessSrc ) {
-        HttpClient httpclient = new HttpClient();
-
-        PostMethod authMethod = new PostMethod( urlpath );
-        NameValuePair[] data = { new NameValuePair( "j_username", "admin" ),
-                new NameValuePair( "j_password", "admin" ) };
-        authMethod.setRequestBody( data );
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+    
+        // convert string to url in order to get host and port
+        URL url;
+        try { 
+            url = new URL(urlpath);
+        } catch( MalformedURLException murle ) { 
+            logger.error( "Incorrect URL: " + murle.getMessage(), murle );
+            return null;
+        }
+       
+        // configure socket to ignore local addresses (this constructur instead of full constructor)
+        Socket socket;
         try {
-            httpclient.executeMethod( authMethod );
-        } catch ( IOException e ) {
+            socket = new Socket(url.getHost(), url.getPort());
+        DefaultBHttpClientConnection conn = new DefaultBHttpClientConnection(socketBufferSize);
+        conn.bind(socket);
+        } catch( Exception  e ) {
             e.printStackTrace();
+        }
+      
+        // TODO: tiho, if it's possible to do preemptive basic authentication here (which it is?, I think?), please let me know. 
+        // Then you can do everything in one request, which will improve performance.. :) -- mriet
+       
+        // setup form authentication
+        List<NameValuePair> formParams = new ArrayList<NameValuePair>(2);
+        formParams.add(new BasicNameValuePair("j_username", "admin"));
+        formParams.add(new BasicNameValuePair("j_password", "admin"));
+        UrlEncodedFormEntity formEntity;
+        try {
+            formEntity = new UrlEncodedFormEntity(formParams);
+        } catch( UnsupportedEncodingException uee ) {
+            logger.error("Could not encode authentication parameters into request body", uee);
+            return null;
+        }
+       
+        // do form authentication
+        HttpPost authMethod = new HttpPost(urlpath);
+        authMethod.setEntity(formEntity);
+        try {
+            httpClient.execute(authMethod);
+        } catch (IOException ioe) {
+            logger.error("Could not initialize form-based authentication", ioe);
             return null;
         } finally {
             authMethod.releaseConnection();
         }
-
-        PostMethod theMethod = new PostMethod( urlpath );
-        theMethod.setParameter( "processsource", encProcessSrc );
-        StringBuffer sb = new StringBuffer();
+       
+        // create post method and add query parameter
+        HttpPost theMethod = new HttpPost( urlpath );
+        BasicHttpParams params = new BasicHttpParams();
+        params.setParameter( "processsource", encProcessSrc );
+        theMethod.setParams(params);
+        
+        // execute post method and return response content
         try {
-            httpclient.executeMethod( theMethod );
-            sb.append( theMethod.getResponseBodyAsString() );
-            return sb.toString();
-
+            // post
+            CloseableHttpResponse response = httpClient.execute( theMethod );
+            
+            // extract content
+            HttpEntity respEntity = response.getEntity();
+            String responseBody = null;
+            if( respEntity != null ) { 
+                responseBody = EntityUtils.toString(respEntity);
+            }
+            return responseBody;
         } catch ( Exception e ) {
-            e.printStackTrace();
+            logger.error("Could not do POST method and retrieve content: " + e.getMessage(), e);
             return null;
         } finally {
             theMethod.releaseConnection();
@@ -200,9 +256,9 @@ public class DefaultDesignerAssetService implements DesignerAssetService {
             location = location.replaceFirst( "/", "" );
         }
         location = location.replaceAll( "/", "." );
-
+            
         if(location.length() > 0) {
-            String[] locationParts = location.split("\\.");
+       String[] locationParts = location.split("\\.");
             location = locationParts[0];
         }
 
