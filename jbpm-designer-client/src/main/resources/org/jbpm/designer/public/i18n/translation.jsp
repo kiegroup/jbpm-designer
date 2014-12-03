@@ -1203,7 +1203,9 @@ ORYX.I18N.LocalHistory.LocalHistoryView.restore='<i18n:message key="ORYX.I18N.Lo
 ORYX.I18N.LocalHistory.LocalHistoryView.invalidProcessInfo='<i18n:message key="ORYX.I18N.LocalHistory.LocalHistoryView.invalidProcessInfo">Invalid Process info. Unable to restore.</i18n:message>';
 ORYX.I18N.LocalHistory.LocalHistoryView.msg='<i18n:message key="ORYX.I18N.LocalHistory.LocalHistoryView.msg">Please select a process id.</i18n:message>';
 
-ORYX.I18N.LocalHistory.clearLocalHistoryMsg='<i18n:message key="ORYX.I18N.LocalHistory.clearLocalHistory.msg">Local History has been cleared.</i18n:message>';
+if(!ORYX.I18N.LocalHistory.clearLocalHistory) ORYX.I18N.LocalHistory.clearLocalHistory = {};
+ORYX.I18N.LocalHistory.clearLocalHistory.msg='<i18n:message key="ORYX.I18N.LocalHistory.clearLocalHistory.msg">Local History has been cleared.</i18n:message>';
+
 ORYX.I18N.LocalHistory.addQuotaexceed='<i18n:message key="ORYX.I18N.LocalHistory.addQuotaexceed">Local History quota exceeded. Clearing local history.</i18n:message>';
 ORYX.I18N.LocalHistory.historyDisabled='<i18n:message key="ORYX.I18N.LocalHistory.historyDisabled">Local History has been disabled.</i18n:message>';
 ORYX.I18N.LocalHistory.historyEnabled='<i18n:message key="ORYX.I18N.LocalHistory.historyEnabled">Local History has been enabled.</i18n:message>';
