@@ -3214,9 +3214,12 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
         if(selection) {
             var selected = selection.first();
             if(selected && selected.parent) {
-                if(selected.parent._stencil._jsonStencil.id == "http://b3mn.org/stencilset/bpmn2.0#MultipleInstanceSubprocess") {
+                if(selected.parent._stencil._jsonStencil.id == "http://b3mn.org/stencilset/bpmn2.0#MultipleInstanceSubprocess"
+                    || selected.parent._stencil._jsonStencil.id == "http://b3mn.org/stencilset/bpmn2.0#Subprocess"
+                    || selected.parent._stencil._jsonStencil.id == "http://b3mn.org/stencilset/bpmn2.0#AdHocSubprocess") {
 
-                    varDataTitle.push("** Process/MI Subprocess Info **");
+
+                    varDataTitle.push("** Process/Subprocess Definitions **");
                     varData.push(varDataTitle);
                     variableDefsOnly.push(varDataTitle);
                     addedTitle = true;
@@ -3244,29 +3247,31 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
                         }
                     }
 
-                    var midatainputsprop = selected.parent.properties["oryx-multipleinstancedatainput"];
-                    if(midatainputsprop && midatainputsprop.length > 0) {
-                        var innerVal = new Array();
-                        innerVal.push(midatainputsprop);
-                        innerVal.push(midatainputsprop);
-                        dataTypeMap[midatainputsprop] = "java.lang.String";
-                        variableDefsOnlyVals.push(innerVal);
+                    if(selected.parent._stencil._jsonStencil.id == "http://b3mn.org/stencilset/bpmn2.0#MultipleInstanceSubprocess") {
+                        var midatainputsprop = selected.parent.properties["oryx-multipleinstancedatainput"];
+                        if(midatainputsprop && midatainputsprop.length > 0) {
+                            var innerVal = new Array();
+                            innerVal.push(midatainputsprop);
+                            innerVal.push(midatainputsprop);
+                            dataTypeMap[midatainputsprop] = "java.lang.String";
+                            variableDefsOnlyVals.push(innerVal);
 
-                        varData.push(innerVal);
-                        variableDefsOnly.push(innerVal);
-                    }
+                            varData.push(innerVal);
+                            variableDefsOnly.push(innerVal);
+                        }
 
 
-                    var midataOutputsprop = selected.parent.properties["oryx-multipleinstancedataoutput"];
-                    if(midataOutputsprop && midataOutputsprop.length > 0) {
-                        var innerVal = new Array();
-                        innerVal.push(midataOutputsprop);
-                        innerVal.push(midataOutputsprop);
-                        dataTypeMap[midataOutputsprop] = "java.lang.String";
-                        variableDefsOnlyVals.push(innerVal);
+                        var midataOutputsprop = selected.parent.properties["oryx-multipleinstancedataoutput"];
+                        if(midataOutputsprop && midataOutputsprop.length > 0) {
+                            var innerVal = new Array();
+                            innerVal.push(midataOutputsprop);
+                            innerVal.push(midataOutputsprop);
+                            dataTypeMap[midataOutputsprop] = "java.lang.String";
+                            variableDefsOnlyVals.push(innerVal);
 
-                        varData.push(innerVal);
-                        variableDefsOnly.push(innerVal);
+                            varData.push(innerVal);
+                            variableDefsOnly.push(innerVal);
+                        }
                     }
                 }
             }
