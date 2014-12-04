@@ -1255,8 +1255,6 @@ ORYX.Plugins.View = {
 
                             });
                         } catch(err) {
-                            var currentJSON = ORYX.EDITOR.getSerializedJSON();
-                            this.facade.importJSON(currentJSON);
                             this.facade.raiseEvent({
                                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                 ntype		: 'error',
