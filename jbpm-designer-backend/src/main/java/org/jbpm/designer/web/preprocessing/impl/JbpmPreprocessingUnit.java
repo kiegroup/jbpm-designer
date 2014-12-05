@@ -172,7 +172,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 //            this.globalDir = profile.getRepositoryGlobalDir( uuid );TODO
             this.globalDir = "/global";
             outData = "";
-            Map<String, ThemeInfo> themeData = setupThemes(req, repository, profile);
+            Map<String, ThemeInfo> themeData = setupThemes(req, repository, profile, serlvetContext);
             setupCustomEditors(repository, profile);
             setupFormWidgets(repository, profile);
             setupDefaultIcons(globalDir, repository);
@@ -485,33 +485,33 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         }
     }
 
-    private Map<String, ThemeInfo> setupThemes(HttpServletRequest req, Repository repository, IDiagramProfile profile) {
+    private Map<String, ThemeInfo> setupThemes(HttpServletRequest req, Repository repository, IDiagramProfile profile, ServletContext serlvetContext) {
         Map<String, ThemeInfo> themeData = new HashMap<String, ThemeInfo>();
         Asset<String> themeAsset = null;
         try {
-            boolean themeExists = repository.assetExists(this.globalDir + "/" + THEME_NAME + THEME_EXT);
-            if (!themeExists) {
-                // create theme asset
-                AssetBuilder assetBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
-                assetBuilder.content(new String(getBytesFromFile(new File(themeInfo)), "UTF-8"))
-                        .location(this.globalDir)
-                        .name(THEME_NAME)
-                        .type("json")
-                        .version("1.0");
+//            boolean themeExists = repository.assetExists(this.globalDir + "/" + THEME_NAME + THEME_EXT);
+//            if (!themeExists) {
+//                // create theme asset
+//                AssetBuilder assetBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+//                assetBuilder.content(new String(getBytesFromFile(new File(themeInfo)), "UTF-8"))
+//                        .location(this.globalDir)
+//                        .name(THEME_NAME)
+//                        .type("json")
+//                        .version("1.0");
+//
+//                themeAsset = assetBuilder.getAsset();
+//
+//                repository.createAsset(themeAsset);
+//
+//            } else {
+//                themeAsset = repository.loadAssetFromPath(this.globalDir + "/" + THEME_NAME + THEME_EXT);
+//            }
+//
+//
+//            String themesStr = themeAsset.getAssetContent();
 
-                themeAsset = assetBuilder.getAsset();
 
-                repository.createAsset(themeAsset);
-
-            } else {
-                themeAsset = repository.loadAssetFromPath(this.globalDir + "/" + THEME_NAME + THEME_EXT);
-            }
-
-
-            String themesStr = themeAsset.getAssetContent();
-
-
-            JSONObject themesObject =  new JSONObject(themesStr);
+            JSONObject themesObject =  new JSONObject(FileUtils.readFileToString(new File(serlvetContext.getRealPath(ConfigurationProvider.getInstance().getDesignerContext() + "defaults/" + THEME_NAME+THEME_EXT))));
 
             // get the theme name from cookie if exists or default
             String themeName = DEFAULT_THEME_NAME;
