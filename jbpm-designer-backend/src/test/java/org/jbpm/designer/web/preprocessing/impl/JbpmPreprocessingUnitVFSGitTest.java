@@ -1,22 +1,22 @@
 package org.jbpm.designer.web.preprocessing.impl;
 
+import java.io.File;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jbpm.designer.helper.TestHttpServletRequest;
 import org.jbpm.designer.helper.TestIDiagramProfile;
 import org.jbpm.designer.helper.TestServletContext;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
-import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.repository.VFSFileSystemProducer;
+import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
 import org.jbpm.designer.repository.vfs.VFSRepository;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.junit.*;
-
-import java.io.File;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -116,7 +116,7 @@ public class JbpmPreprocessingUnitVFSGitTest {
         // validate results
         Collection<Asset> globalAssets = repository.listAssets("/global");
         assertNotNull(globalAssets);
-        assertEquals(30, globalAssets.size());
+        assertEquals(29, globalAssets.size());
         repository.assetExists("/global/backboneformsinclude.fw");
         repository.assetExists("/global/backbonejsinclude.fw");
         repository.assetExists("/global/cancelbutton.fw");
