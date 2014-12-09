@@ -94,6 +94,7 @@ public class TransformerServlet extends HttpServlet {
     private static final String TO_SVG = "svg";
     private static final String JPDL_TO_BPMN2 = "jpdl2bpmn2";
     private static final String BPMN2_TO_JSON = "bpmn2json";
+    private static final String JSON_TO_BPMN2 = "json2bpmn2";
     private static final String RESPACTION_SHOWURL = "showurl";
     private static final String RESPACTION_SHOWEMBEDDABLE = "showembeddable";
 
@@ -117,6 +118,8 @@ public class TransformerServlet extends HttpServlet {
         String jpdl = req.getParameter("jpdl");
         String gpd = req.getParameter("gpd");
         String bpmn2in = req.getParameter("bpmn2");
+        String jsonin = req.getParameter("json");
+        String preprocessingData = req.getParameter("pp");
         String respaction = req.getParameter("respaction");
         String pp = req.getParameter("pp");
         String processid = req.getParameter("processid");
@@ -254,7 +257,6 @@ public class TransformerServlet extends HttpServlet {
                     }
                 }
 
-
                 // get the xml from Definitions
                 ResourceSet rSet = new ResourceSetImpl();
                 rSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("bpmn2", new JBPMBpmn2ResourceFactoryImpl());
@@ -279,6 +281,23 @@ public class TransformerServlet extends HttpServlet {
                 resp.setContentType("application/json");
                 resp.getWriter().print("{}");
             }
+        } else if (transformto != null && transformto.equals(JSON_TO_BPMN2)) {
+            try {
+                DroolsFactoryImpl.init();
+                BpsimFactoryImpl.init();
+                if(preprocessingData == null) {
+                    preprocessingData = "";
+                }
+                String processXML = profile.createMarshaller().parseModel(jsonin, preprocessingData);
+                resp.setContentType("application/xml");
+                resp.getWriter().print(processXML);
+            } catch(Exception e) {
+                e.printStackTrace();
+                _logger.error(e.getMessage());
+                resp.setContentType("application/xml");
+                resp.getWriter().print("");
+            }
+
         }
     }
 
