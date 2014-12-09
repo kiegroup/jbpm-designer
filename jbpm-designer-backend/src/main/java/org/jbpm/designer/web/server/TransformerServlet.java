@@ -226,6 +226,7 @@ public class TransformerServlet extends HttpServlet {
                 String fullXmlModel =  outputStream.toString();
                 // convert to json and write response
                 String json = profile.createUnmarshaller().parseModel(fullXmlModel, profile, pp);
+                resp.setCharacterEncoding("UTF-8");
                 resp.setContentType("application/json");
                 resp.getWriter().print(json);
             } catch(Exception e) {
@@ -269,6 +270,7 @@ public class TransformerServlet extends HttpServlet {
                 bpmn2resource.save(outputStream, new HashMap<Object, Object>());
                 String revisedXmlModel =  outputStream.toString();
                 String json = profile.createUnmarshaller().parseModel(revisedXmlModel, profile, pp);
+                resp.setCharacterEncoding("UTF-8");
                 resp.setContentType("application/json");
                 resp.getWriter().print(json);
             } catch(Exception e) {
