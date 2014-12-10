@@ -343,12 +343,12 @@ ORYX.Plugins.Simulation = Clazz.extend({
 		var colors = ["#3399FF", "#FFCC33", "#FF99FF", "#6666CC", "#CCCCCC", "#66FF00", "#FFCCFF", "#0099CC", "#CC66FF", "#FFFF00", "#993300", "#0000CC", "#3300FF","#990000","#33CC00"];
 		return colors[cindex];
 	},
-	resetNodeColors : function() {
+	setDefaultColors : function() {
 		ORYX.EDITOR._canvas.getChildren().each((function(child) {
-				this.setOriginalValues(child);
+				this.setDefaultValues(child);
 		}).bind(this));
 	},
-	setOriginalValues : function(shape) {
+	setDefaultValues : function(shape) {
 		if(shape instanceof ORYX.Core.Node || shape instanceof ORYX.Core.Edge) {
     		shape.setProperty("oryx-bordercolor", shape.properties["oryx-origbordercolor"]);
     		shape.setProperty("oryx-bgcolor", shape.properties["oryx-origbgcolor"]);
@@ -357,13 +357,61 @@ ORYX.Plugins.Simulation = Clazz.extend({
 		if(shape.getChildren().size() > 0) {
 			for (var i = 0; i < shape.getChildren().size(); i++) {
 				if(shape.getChildren()[i] instanceof ORYX.Core.Node || shape.getChildren()[i] instanceof ORYX.Core.Edge) {
-					this.setOriginalValues(shape.getChildren()[i]);
+					this.setDefaultValues(shape.getChildren()[i]);
 				}
 			}
 		}
 	},
+    resetNodeColors : function() {
+        ORYX.EDITOR._canvas.getChildren().each((function(child) {
+            this.setOriginalValues(child);
+        }).bind(this));
+    },
+    setOriginalValues : function(shape) {
+        if(shape instanceof ORYX.Core.Node || shape instanceof ORYX.Core.Edge) {
+            if (shape.savedbordercolor !== undefined) {
+                shape.setProperty("oryx-bordercolor", shape.savedbordercolor);
+                delete shape.savedbordercolor;
+            }
+            if (shape.savedbgcolor !== undefined) {
+                shape.setProperty("oryx-bgcolor", shape.savedbgcolor);
+                delete shape.savedbgcolor;
+            }
+        }
+        shape.refresh();
+        if(shape.getChildren().size() > 0) {
+            for (var i = 0; i < shape.getChildren().size(); i++) {
+                if(shape.getChildren()[i] instanceof ORYX.Core.Node || shape.getChildren()[i] instanceof ORYX.Core.Edge) {
+                    this.setOriginalValues(shape.getChildren()[i]);
+                }
+            }
+        }
+    },
+    saveNodeColors : function() {
+        ORYX.EDITOR._canvas.getChildren().each((function(child) {
+            this.saveOriginalValues(child);
+        }).bind(this));
+    },
+    saveOriginalValues : function(shape) {
+        if(shape instanceof ORYX.Core.Node || shape instanceof ORYX.Core.Edge) {
+            if (shape.savedbordercolor === undefined) {
+                shape.savedbordercolor = shape.properties["oryx-bordercolor"];
+            }
+            if (shape.savedbgcolor === undefined) {
+                shape.savedbgcolor = shape.properties["oryx-bgcolor"];
+            }
+        }
+        if(shape.getChildren().size() > 0) {
+            for (var i = 0; i < shape.getChildren().size(); i++) {
+                if(shape.getChildren()[i] instanceof ORYX.Core.Node || shape.getChildren()[i] instanceof ORYX.Core.Edge) {
+                    this.saveOriginalValues(shape.getChildren()[i]);
+                }
+            }
+        }
+    },
 	setNodeColors : function(pathid, pathcolor, pathelements) {
-		this.resetNodeColors();
+        this.saveNodeColors();
+		this.setDefaultColors();
 		ORYX.EDITOR._canvas.getChildren().each((function(child) {
 				this.applyPathColors(child, pathcolor, pathelements);
 		}).bind(this));
