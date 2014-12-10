@@ -24,13 +24,20 @@ public class DesignerWidgetPresenter {
         boolean confirmClose();
     }
 
-    @Inject
-    private DesignerView view;
+    private DesignerWidgetView view;
 
-    public void setup( final String editorID,
-                       final Map<String, String> editorParameters ) {
-        view.setEditorID( editorID );
-        view.setEditorParamters( editorParameters );
+    public DesignerWidgetPresenter() {
+    }
+
+    @Inject
+    public DesignerWidgetPresenter(DesignerWidgetView view) {
+        this.view = view;
+    }
+
+    public void setup(final String editorID,
+                      final Map<String, String> editorParameters) {
+        view.setEditorID(editorID);
+        view.setEditorParamters(editorParameters);
     }
 
     public String getEditorID() {
@@ -41,7 +48,7 @@ public class DesignerWidgetPresenter {
         return view.confirmClose();
     }
 
-    public void raiseEventReload( final String editorID ) {
+    public void raiseEventReload(final String editorID) {
         view.raiseEventReload( editorID );
     }
 
