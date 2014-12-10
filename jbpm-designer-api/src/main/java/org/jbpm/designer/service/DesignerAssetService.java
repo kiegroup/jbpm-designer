@@ -1,5 +1,6 @@
 package org.jbpm.designer.service;
 
+import org.guvnor.common.services.shared.metadata.model.Overview;
 import org.jboss.errai.bus.server.annotations.Remote;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.mvp.PlaceRequest;
@@ -11,6 +12,8 @@ import java.util.Map;
  */
 @Remote
 public interface DesignerAssetService {
+
+    public Overview loadOverview( final Path path );
 
     public Map<String, String> getEditorParameters( final Path path,
                                   final String editorID,

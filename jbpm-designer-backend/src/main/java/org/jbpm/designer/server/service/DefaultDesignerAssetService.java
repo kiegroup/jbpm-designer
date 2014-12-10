@@ -29,6 +29,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.util.EntityUtils;
+import org.guvnor.common.services.shared.metadata.model.Overview;
 import org.jboss.errai.bus.server.annotations.Service;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
@@ -39,6 +40,7 @@ import org.jbpm.designer.service.BPMN2DataServices;
 import org.jbpm.designer.service.DesignerAssetService;
 import org.jbpm.designer.util.Utils;
 import org.json.JSONArray;
+import org.kie.workbench.common.services.backend.service.KieService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.uberfire.backend.server.util.Paths;
@@ -49,7 +51,9 @@ import org.uberfire.workbench.events.ResourceOpenedEvent;
 
 @Service
 @ApplicationScoped
-public class DefaultDesignerAssetService implements DesignerAssetService {
+public class DefaultDesignerAssetService
+        extends KieService
+        implements DesignerAssetService {
 
     private static Logger logger = LoggerFactory.getLogger(DefaultDesignerAssetService.class);
 
