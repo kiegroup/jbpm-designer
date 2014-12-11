@@ -227,7 +227,7 @@
 					"id":"boundarycancelactivity",
 					"type":"Boolean",
 					"title":"CancelActivity",
-					"value":true,
+					"value":false,
 					"description":"Denotes whether the activity should be cancelled or not, i.e., whether the boundary catch event acts as an error or an escalation. If the activity is not cancelled, multiple instances of that handler can run concurrently.",
 					"description_ja":"アクティビティをキャンセルするかどうか、つまり、Boundaryキャッチイベントがエラーになるかエスカレーションになるかを示します。 アクティビティがキャンセルされない場合、そのハンドラの複数のインスタンスを同時に実行できます。",
 					"readonly":false,
