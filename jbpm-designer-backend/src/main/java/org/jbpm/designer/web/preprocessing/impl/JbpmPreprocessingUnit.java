@@ -10,14 +10,7 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -211,8 +204,12 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 }
 
             }
+
+            // sort work defs
+            Map<String, WorkDefinitionImpl> workDefinitionsTree = new TreeMap<String, WorkDefinitionImpl>(workDefinitions);
+
             // set the out parameter
-            for(Map.Entry<String, WorkDefinitionImpl> definition : workDefinitions.entrySet()) {
+            for(Map.Entry<String, WorkDefinitionImpl> definition : workDefinitionsTree.entrySet()) {
                 outData += definition.getValue().getName() + ",";
             }
             // parse the profile json to include config data
@@ -229,7 +226,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             ST workItemTemplate = new ST(readFile(origStencilFilePath), '$', '$');
             workItemTemplate.add("bopen", "{");
             workItemTemplate.add("bclose", "}");
-            workItemTemplate.add("workitemDefs", workDefinitions);
+            workItemTemplate.add("workitemDefs", workDefinitionsTree);
             workItemTemplate.add("patternData", patternInfoMap);
             workItemTemplate.add("includedo", includeDataObjects);
 
@@ -274,7 +271,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             // copy our results as the stencil json data
             createAndWriteToFile(stencilFilePath, workItemTemplate.render());
             // create and parse the view svg to include config data
-            createAndParseViewSVG(workDefinitions, repository);
+            createAndParseViewSVG(workDefinitionsTree, repository);
 
         } catch ( final Exception e ) {
             _logger.error(e.getMessage());
