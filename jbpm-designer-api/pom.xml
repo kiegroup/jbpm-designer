@@ -13,7 +13,7 @@
   <artifactId>jbpm-designer-api</artifactId>
   <packaging>jar</packaging>
 
-  <name>jBPM Designer- API</name>
+  <name>jBPM Designer - API</name>
 
   <dependencies>
     <dependency>
