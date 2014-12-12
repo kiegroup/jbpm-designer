@@ -1523,7 +1523,8 @@ public class Bpmn2JsonMarshaller {
                 }
             }
 
-            if(taskmi.getInputDataItem() != null) {
+
+            if(taskmi.getInputDataItem() != null && taskmi.getInputDataItem().getItemSubjectRef() != null) {
                 List<DataInput> taskDataInputs = task.getIoSpecification().getDataInputs();
                 for(DataInput din: taskDataInputs) {
                     if(din.getItemSubjectRef().getId().equals(taskmi.getInputDataItem().getItemSubjectRef().getId())) {
@@ -1532,7 +1533,7 @@ public class Bpmn2JsonMarshaller {
                 }
             }
 
-            if(taskmi.getOutputDataItem() != null) {
+            if(taskmi.getOutputDataItem() != null && taskmi.getOutputDataItem().getItemSubjectRef() != null) {
                 List<DataOutput> taskDataOutputs = task.getIoSpecification().getDataOutputs();
                 for(DataOutput dout : taskDataOutputs) {
                     if(dout.getItemSubjectRef().getId().equals(taskmi.getOutputDataItem().getItemSubjectRef().getId())) {
