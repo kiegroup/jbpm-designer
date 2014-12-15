@@ -2119,19 +2119,20 @@ public class Bpmn2JsonMarshaller {
     private void correctEventNodeSize(BPMNShape shape) {
     	BaseElement element = shape.getBpmnElement();
 		if (element instanceof Event) {
-			Bounds bounds = shape.getBounds();
-			float width = bounds.getWidth();
-			float height = bounds.getHeight();
-			if (width != 30 || height != 30) {
-				bounds.setWidth(30);
-				bounds.setHeight(30);
-				float x = bounds.getX();
-				float y = bounds.getY();
-    			x = x - ((30 - width)/2);
-    			y = y - ((30 - height)/2);
-				bounds.setX(x);
-				bounds.setY(y);
-			}
+//			// do not "fix" events as they shape is circle - leave bounds as is
+//          Bounds bounds = shape.getBounds();
+//			float width = bounds.getWidth();
+//			float height = bounds.getHeight();
+//			if (width != 30 || height != 30) {
+//				bounds.setWidth(30);
+//				bounds.setHeight(30);
+//				float x = bounds.getX();
+//				float y = bounds.getY();
+//    			x = x - ((30 - width)/2);
+//    			y = y - ((30 - height)/2);
+//				bounds.setX(x);
+//				bounds.setY(y);
+//			}
 		} else if (element instanceof Gateway) {
 			Bounds bounds = shape.getBounds();
 			float width = bounds.getWidth();
