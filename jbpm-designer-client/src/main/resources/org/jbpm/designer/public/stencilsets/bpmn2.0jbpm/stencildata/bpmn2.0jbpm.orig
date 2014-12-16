@@ -5093,6 +5093,17 @@
 					"display" : true
 				},
 				{
+                                        "id":"origbgcolor",
+                                        "type":"Color",
+                                        "title":"Original Background Color",
+                                        "value":"#ffffff",
+                                        "description":"",
+                                        "readonly":false,
+                                        "optional":true,
+                                        "hidden":true,
+                                        "visible":false
+                                },
+				{
 					"id":"bordercolor",
 					"type":"Color",
 					"title":"Border Color",
@@ -5105,6 +5116,17 @@
 					"stroke":true,
 					"display" : true
 				},
+				{
+                                	"id":"origbordercolor",
+                                        "type":"Color",
+                                        "title":"Original Border Color",
+                                        "value":"#000000",
+                                        "description":"",
+                                        "readonly":false,
+                                        "optional":true,
+                                        "hidden":true,
+                                        "visible":false
+                                },
 				{
 					"id":"fontcolor",
 					"type":"Color",

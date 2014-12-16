@@ -84,7 +84,7 @@ public class SimulationServlet extends HttpServlet {
             Definitions def = ((Definitions) unmarshaller.unmarshall(json, preprocessingData).getContents().get(0));
             PathFinder pfinder = null;
             if(selectionId != null && selectionId.length() > 0) {
-            	// find the embedded subprocess
+            	// find the embedded, event subprocess
             	SubProcess selectedContainer = null;
             	List<RootElement> rootElements =  def.getRootElements();
                 for(RootElement root : rootElements) {
@@ -178,7 +178,7 @@ public class SimulationServlet extends HttpServlet {
 				wmRepo.getSession().execute(new InsertElementsCommand((Collection)wmRepo.getAggregatedEvents()));
 		        wmRepo.fireAllRules();
 		        List<AggregatedSimulationEvent> aggEvents = (List<AggregatedSimulationEvent>) wmRepo.getGlobal("summary");
-                SimulationInfo simInfo = wmRepo.getSimulationInfo(); // TODO add siminfo to json
+                SimulationInfo simInfo = wmRepo.getSimulationInfo();
 				wmRepo.close();
 
 				Map<String, Double> numInstanceData = new HashMap<String, Double>();

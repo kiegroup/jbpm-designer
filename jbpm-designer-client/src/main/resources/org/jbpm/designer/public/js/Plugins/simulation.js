@@ -146,7 +146,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
 		var wintitle = ORYX.I18N.View.sim.processPathsTitle;
 		if(selection.length == 1) {
 			selection.each(function(shape) {
-				if(shape.getStencil().title() == "Embedded Subprocess") {
+				if(shape.getStencil().title() == "Embedded" || shape.getStencil().title() == "Event") {
 					selectedId = shape.resourceId;
 					wintitle = ORYX.I18N.View.sim.subProcessPathsTitle;
 				}
