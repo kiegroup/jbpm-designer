@@ -39,6 +39,49 @@ if (!ORYX.LabelProviders) {
 }
 
 
+Ext.override(Ext.form.ComboBox, {
+    anyMatch: false,
+    caseSensitive: false,
+    doQuery: function(q, forceAll){
+        if(q === undefined || q === null){
+            q = '';
+        }
+        var qe = {
+            query: q,
+            forceAll: forceAll,
+            combo: this,
+            cancel:false
+        };
+        if(this.fireEvent('beforequery', qe)===false || qe.cancel){
+            return false;
+        }
+        q = qe.query;
+        forceAll = qe.forceAll;
+        if(forceAll === true || (q.length >= this.minChars)){
+            if(this.lastQuery !== q){
+                this.lastQuery = q;
+                if(this.mode == 'local'){
+                    this.selectedIndex = -1;
+                    if(forceAll){
+                        this.store.clearFilter();
+                    }else{
+                        this.store.filter(this.displayField, q, this.anyMatch, this.caseSensitive);
+                    }
+                    this.onLoad();
+                }else{
+                    this.store.baseParams[this.queryParam] = q;
+                    this.store.load({
+                        params: this.getParams(q)
+                    });
+                    this.expand();
+                }
+            }else{
+                this.selectedIndex = -1;
+                this.onLoad();
+            }
+        }
+    }
+});
 
 ORYX.Plugins.PropertyWindow = {
 
@@ -2840,6 +2883,8 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
                                     dataIndex: 'type',
                                     editor: new Ext.form.ComboBox({
                                         id: 'importTypeCombo',
+                                        typeAhead: true,
+                                        anyMatch: true,
                                         valueField:'name',
                                         displayField:'value',
                                         labelStyle:'display:none',
@@ -4461,6 +4506,8 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                                 width: 200,
                                 dataIndex: 'stype',
                                 editor: new Ext.form.ComboBox({
+                                    typeAhead: true,
+                                    anyMatch: true,
                                     id: 'customTypeCombo',
                                     valueField:'value',
                                     displayField:'name',
