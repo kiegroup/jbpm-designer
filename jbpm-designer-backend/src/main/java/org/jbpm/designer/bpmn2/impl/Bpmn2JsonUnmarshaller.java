@@ -444,6 +444,7 @@ public class Bpmn2JsonUnmarshaller {
                                     String miCollectionOutput = (multiValueParts[1].equals(" ") ? "" : multiValueParts[1]);
                                     String miDataInput = (multiValueParts[2].equals(" ") ? "" : multiValueParts[2]);
                                     String miDataOutput = (multiValueParts[3].equals(" ") ? "" : multiValueParts[3]);
+                                    String miCompletionCondition = (multiValueParts[4].equals(" ") ? "" : multiValueParts[4]);
 
                                     MultiInstanceLoopCharacteristics loopCharacteristics = Bpmn2Factory.eINSTANCE.createMultiInstanceLoopCharacteristics();
 
@@ -549,6 +550,13 @@ public class Bpmn2JsonUnmarshaller {
                                             }
                                         }
                                     }
+
+                                    if (miCompletionCondition != null && !miCompletionCondition.isEmpty()) {
+                                        FormalExpression  expr = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                                        expr.setBody(miCompletionCondition);
+                                        loopCharacteristics.setCompletionCondition(expr);
+                                    }
+
                                     task.setLoopCharacteristics(loopCharacteristics);
 
                                     if(miDataInput != null && miDataInput.length() > 0 && ((MultiInstanceLoopCharacteristics) task.getLoopCharacteristics()).getInputDataItem() != null) {
@@ -3471,6 +3479,13 @@ public class Bpmn2JsonUnmarshaller {
                 loopCharacteristics.setOutputDataItem(don);
 
             }
+            // loop characteristics completion condition
+            if(properties.get("multipleinstancecompletioncondition") != null && !properties.get("multipleinstancecompletioncondition").isEmpty()) {
+                FormalExpression  expr = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                expr.setBody(properties.get("multipleinstancecompletioncondition"));
+                loopCharacteristics.setCompletionCondition(expr);
+            }
+
             sp.setLoopCharacteristics(loopCharacteristics);
         }
 
@@ -5242,6 +5257,8 @@ public class Bpmn2JsonUnmarshaller {
             buff.append((properties.get("multipleinstancedatainput") != null && properties.get("multipleinstancedatainput").length() > 0) ? properties.get("multipleinstancedatainput") : " ");
             buff.append("@");
             buff.append((properties.get("multipleinstancedataoutput") != null  && properties.get("multipleinstancedataoutput").length() > 0) ? properties.get("multipleinstancedataoutput") : " ");
+            buff.append("@");
+            buff.append((properties.get("multipleinstancecompletioncondition") != null  && properties.get("multipleinstancecompletioncondition").length() > 0) ? properties.get("multipleinstancecompletioncondition") : " ");
 
             SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
                    buff.toString());
