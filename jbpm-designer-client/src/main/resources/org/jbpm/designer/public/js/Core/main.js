@@ -342,7 +342,8 @@ ORYX.Editor = {
             id: "siminfopanel",
             title: ORYX.I18N.View.sim.resultsInfo,
             autoScroll: true,
-            autoheight: true,
+            autoheight: false,
+            height: 300,
             border: false,
             html: ""
         });
@@ -350,14 +351,15 @@ ORYX.Editor = {
 		this.simResultsTree = new Ext.tree.TreePanel({
 			id: "simresultscharts",
 			title: ORYX.I18N.View.sim.resultsGraphs,
-            layout: 'fit',
+            //layout: 'fit',
 			animate:true,
 			loader: new Ext.tree.TreeLoader(),
 			rootVisible: false,
-			autoScroll:true,
-            scroll:true,
+            scroll: true,
+            autoScroll: true,
+            autoheight: true,
             viewConfig : {
-                style : { overflow: 'auto' }
+                style : { overflow: 'scroll', overflowY: 'scroll', overflowX: 'scroll' }
             },
 			lines: true,
 			listeners: {
@@ -374,28 +376,32 @@ ORYX.Editor = {
 
 		this.simResultsContentPanelLayout = new Ext.Panel({
 		    width: "100%",
-            height: 1000,
+            autoscroll: true,
+            //sheight: 1000,
+            //autoheight: true,
 		    layout: 'border',
 		    items: [{
 		    	xtype:'panel',
 		        region:'east',
 		        margins: '5 0 0 5',
-		        layout	: 'anchor',
+		        layout	: 'fit',
 		        anchor:'100%',
 		        width: 300,
 		        border: false,
 		        collapsible: true,  
 		        autoscroll: true,
 		        split: false,
-		        minSize: 100,
-		        maxSize: 500,
-		        autoheight: true,
-		        cmargins: '5 5 0 5', 
-		        items: [this.simInfoPanel, this.simResultsTree]
+		        //minSize: 100,
+		        //maxSize: 500,
+		        //autoheight: true,
+		        cmargins: '5 5 0 5',
+                bodyCfg : { style: {'overflow':'auto'} },
+                autoScroll : true,
+		        items: [this.simResultsTree, this.simInfoPanel]
 		    },{
 		    	xtype:'panel',
 		        region: 'center',  
-		        layout	: 'anchor',
+		        layout	: 'fit',
 		        anchor:'100%',
 		        border: false,
 		        autoscroll: true,
