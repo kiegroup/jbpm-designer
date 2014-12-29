@@ -741,9 +741,29 @@ ORYX.Plugins.PropertyWindow = {
 								selectOnFocus:true
 							});
 
-							editorCombo.on('select', function(combo, record, index) {
-								this.editDirectly(key, combo.getValue());
-							}.bind(this))
+
+                            if (pair.id() == "tasktype") {
+                                editorCombo.on('select', function(combo, record, index) {
+                                    this.editDirectly(key, combo.getValue());
+
+                                    var currentSelection = this.facade.getSelection();
+                                    var currentSelectionFirst = currentSelection.first();
+                                    this.facade.setSelection([]);
+                                    this.facade.getCanvas().update();
+                                    this.facade.updateSelection();
+                                    this.facade.setSelection([currentSelectionFirst]);
+                                    this.facade.getCanvas().update();
+                                    this.facade.updateSelection();
+                                    this.facade.raiseEvent({
+                                        type: ORYX.CONFIG.EVENT_LOADED,
+                                        elements: [currentSelectionFirst]
+                                    });
+                                }.bind(this));
+                            } else {
+                                editorCombo.on('select', function(combo, record, index) {
+                                    this.editDirectly(key, combo.getValue());
+                                }.bind(this));
+                            }
 
 							editorGrid = new Ext.Editor(editorCombo);
 
