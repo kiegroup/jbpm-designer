@@ -20,9 +20,13 @@ import org.uberfire.ext.metadata.model.KObject;
 import org.uberfire.ext.metadata.model.KProperty;
 import org.uberfire.io.IOService;
 import org.uberfire.paging.PageResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
 public class FindRuleFlowNamesQuery extends FindRuleAttributesQuery {
+
+    private static final Logger logger = LoggerFactory.getLogger(FindRuleFlowNamesQuery.class);
 
     @Inject
     @Named("ioStrategy")
@@ -70,16 +74,32 @@ public class FindRuleFlowNamesQuery extends FindRuleAttributesQuery {
             final Map<String, List<String>> uniqueRuleFlowNames = new HashMap<String, List<String>>();
             for ( final KObject kObject : kObjects ) {
                 final Map<String, List<String>> ruleFlowGroupNames = getRuleFlowGroupNamesNamesFromKObject(kObject);
-                uniqueRuleFlowNames.putAll(ruleFlowGroupNames);
+                for(String rkey : ruleFlowGroupNames.keySet()) {
+                    if(uniqueRuleFlowNames.containsKey(rkey)) {
+                        List<String> rvalList = ruleFlowGroupNames.get(rkey);
+                        for(String rvalKey : rvalList) {
+                            uniqueRuleFlowNames.get(rkey).add(rvalKey);
+                        }
+                    } else {
+                        uniqueRuleFlowNames.put(rkey, ruleFlowGroupNames.get(rkey));
+                    }
+                }
             }
 
-            Iterator<Map.Entry<String, List<String>>> ruleFlorGroupsIterator = uniqueRuleFlowNames.entrySet().iterator();
-            while(ruleFlorGroupsIterator.hasNext()) {
-                Map.Entry<String, List<String>> entry = ruleFlorGroupsIterator.next();
+            for(String uniqueKey : uniqueRuleFlowNames.keySet()) {
+                List<String> uniqueValueList = uniqueRuleFlowNames.get(uniqueKey);
+                String fstr = "";
+                for(String val : uniqueValueList) {
+                    fstr += val + "<<";
+                }
+
+                fstr = fstr.substring(0, fstr.length() - 2);
+
                 final RefactoringStringPageRow row = new RefactoringStringPageRow();
-                row.setValue(entry.getKey() + "||" + entry.getValue().toString());
+                row.setValue(uniqueKey + "||" + fstr);
                 result.add(row);
             }
+
             return result;
         }
 
@@ -101,6 +121,7 @@ public class FindRuleFlowNamesQuery extends FindRuleAttributesQuery {
                     }
                 }
             }
+
             return ruleFlowGroupNames;
         }
 
