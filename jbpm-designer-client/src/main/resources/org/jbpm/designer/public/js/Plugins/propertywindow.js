@@ -5375,10 +5375,18 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
         var RuleFlowGroupDef = Ext.data.Record.create([{
             name: 'name'
         }, {
-            name: 'drlname'
+            name: 'rules'
         }, {
-            fpath: 'fpath'
-        }]);
+            name: 'repo'
+        }, {
+            name: 'project'
+        }, {
+            name: 'branch'
+        }, {
+            name: 'fullpath'
+        }
+        ]);
+
 
         var ruleflowgroupsProxy = new Ext.data.MemoryProxy({
             root: []
@@ -5392,10 +5400,6 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
             proxy: ruleflowgroupsProxy,
             sorters: [{
                 property: 'name',
-                direction:'ASC'
-            },
-            {
-                property: 'fpath',
                 direction:'ASC'
             }]
         });
@@ -5417,16 +5421,48 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                 try {
                     if(response.responseText.length > 0 && response.responseText != "false") {
                         var responseJson = Ext.decode(response.responseText);
+
                         for(var key in responseJson){
                             var keyVal = responseJson[key];
+                            var containedRulesComboInfo = new Array();
+                            // example:
+                            //"mygroup1||test1.drl^^default://master@jbpm-playground/Evaluation/src/main/resources/test1.drl<<test2.drl^^default://master@jbpm-playground/Evaluation/src/main/resources/test2.drl"
                             var keyValParts = keyVal.split("||");
-                            var fulldrlandpath = keyValParts[1].substring(1, keyValParts[1].length - 1);
-                            var fulldrlandpathParts = fulldrlandpath.split("^^");
+                            var ruleFlowName = keyValParts[0];
+                            var ruleFlowInfo = keyValParts[1];
+
+                            var ruleFlowInfoParts = ruleFlowInfo.split("<<");
+                            for(var i = 0; i < ruleFlowInfoParts.length; i++) {
+                                var ruleFlowInfoInnerParts = ruleFlowInfoParts[i].split("^^");
+                                var ruleFlowInfoInnerArray = new Array();
+                                ruleFlowInfoInnerArray.push(ruleFlowInfoInnerParts[0]);
+                                ruleFlowInfoInnerArray.push(ruleFlowInfoInnerParts[1]);
+                                containedRulesComboInfo.push(ruleFlowInfoInnerArray);
+                            }
+
+                            var firstInfoPart = ruleFlowInfoParts[0];
+                            // test1.drl^^default://master@jbpm-playground/Evaluation/src/main/resources/test1.drl
+                            var firstInfoPartParts = firstInfoPart.split("^^");
+                            var firstInfoPartPath = firstInfoPartParts[1];
+                            // default://master@jbpm-playground/Evaluation/src/main/resources/test1.drl
+                            var firstInfoPartPathParts = firstInfoPartPath.split("://");
+                            var finalInfo = firstInfoPartPathParts[1];
+                            // master@jbpm-playground/Evaluation/src/main/resources/test1.drl
+                            var finalInfoParts = finalInfo.split("@");
+
+                            var finalBranch = finalInfoParts[0];
+                            var finalPathParts = finalInfoParts[1];
+
+                            var finalRepository = finalPathParts.split("/")[0];
+                            var finalProject = finalPathParts.split("/")[1];
 
                             ruleflowgroupsdefs.add(new RuleFlowGroupDef({
-                                name: keyValParts[0],
-                                drlname : fulldrlandpathParts[0],
-                                fpath : fulldrlandpathParts[1]
+                                name: ruleFlowName,
+                                rules : containedRulesComboInfo,
+                                repo : finalRepository,
+                                project : finalProject,
+                                branch : finalBranch,
+                                fullpath : firstInfoPartPath
                             }));
                         }
                         ruleflowgroupsdefs.commitChanges();
@@ -5448,36 +5484,65 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                                 editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
                             },
                             {
-                                id: 'rfname',
-                                header: 'Edit Rule File',
+                                id: 'rfrulenames',
+                                header: 'Rules',
                                 width: 200,
-                                sortable: true,
-                                //dataIndex: 'drlname',
-                               // editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
+                                sortable: false,
                                 renderer: function(value, metaData, record, rowIndex, colIndex, store) {
-                                    function createGridButton(value, valueurl, id, record) {
-                                        new Ext.Button({
-                                            text: value,
-                                            handler : function(btn, e) {
-                                                parent.designeropenintab(value, valueurl);
+                                    function createGridCombo(value, id, record) {
+                                        new Ext.form.ComboBox({
+                                            name: 'ruleflowscombo',
+                                            valueField:'value',
+                                            displayField:'name',
+                                            typeAhead: true,
+                                            mode: 'local',
+                                            triggerAction: 'all',
+                                            selectOnFocus:true,
+                                            store: new Ext.data.SimpleStore({
+                                                fields: [
+                                                    'name',
+                                                    'value'
+                                                ],
+                                                data: value
+                                            }),
+                                            listeners: {
+                                                select: function(combo, record, index) {
+                                                    parent.designeropenintab(combo.getRawValue(), combo.getValue());
+                                                }
                                             }
                                         }).render(document.body, id);
-                                    }
-                                    var id= 'x-btn-container-' + rowIndex;
-                                    createGridButton.defer(1, this, [store.getAt(rowIndex).get("drlname"), store.getAt(rowIndex).get("fpath"), id, record]);
+                                   }
+
+                                    var id = 'rulenamescombodiv-' + rowIndex;
+                                    createGridCombo.defer(1, this, [store.getAt(rowIndex).get("rules"), id, record]);
                                     return('<div id="' + id + '"></div>');
                                 }
                             },
                             {
-                                id: 'rfproject',
-                                header: 'Full Path',
-                                width: 200,
+                                id: 'rfrepository',
+                                header: 'Repository',
+                                width: 100,
                                 sortable: true,
-                                dataIndex: 'fpath',
+                                dataIndex: 'repo',
+                                editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
+                            },
+                            {
+                                id: 'rfproject',
+                                header: 'Project',
+                                width: 100,
+                                sortable: true,
+                                dataIndex: 'project',
+                                editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
+                            },
+                            {
+                                id: 'rfbranch',
+                                header: "Branch",
+                                width: 100,
+                                sortable: true,
+                                dataIndex: "branch",
                                 editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
                             }
-                            ]),
-                            autoHeight: true
+                            ])
                         });
 
                         grid.on('afterrender', function(e) {
@@ -5496,7 +5561,7 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
 
                         var ruleFlowGroupsPanel = new Ext.Panel({
                             id: 'ruleFlowGroupsPanel',
-                            title: '<center>'+'Select RuleFlow Group name and click on Save.'+'</center>',
+                            title: '<center><p style="font-size:11px"><i>Select RuleFlow Group Name and click on Save</i></p></center>',
                             layout:'column',
                             items:[
                                 grid
@@ -5514,7 +5579,7 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                             autoCreate	: true,
                             title		: 'Editor for RuleFlow Groups',
                             height		: 350,
-                            width		: 680,
+                            width		: 720,
                             modal		: true,
                             collapsible	: false,
                             fixedcenter	: true,
@@ -5568,7 +5633,7 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
 
                         dialog.show();
                         grid.render();
-                        grid.fireEvent('afterrender');
+                        //grid.fireEvent('afterrender');
                         this.grid.stopEditing();
                         grid.focus( false, 100 );
                     } else {

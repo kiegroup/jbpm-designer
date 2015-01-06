@@ -25,11 +25,10 @@ import org.kie.workbench.common.services.refactoring.model.index.terms.valueterm
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueRuleAttributeIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueRuleAttributeValueIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueTypeIndexTerm;
-import org.kie.workbench.common.services.refactoring.model.query.RefactoringPageRequest;
 import org.kie.workbench.common.services.refactoring.model.query.RefactoringPageRow;
 import org.kie.workbench.common.services.refactoring.service.RefactoringQueryService;
-import org.uberfire.backend.vfs.PathFactory;
-import org.uberfire.paging.PageResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Sevlet for resolving called elements.
@@ -38,6 +37,7 @@ import org.uberfire.paging.PageResponse;
  */
 public class CalledElementServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+    private static final Logger logger = LoggerFactory.getLogger(CalledElementServlet.class);
 	private ServletConfig config;
 
     @Inject
