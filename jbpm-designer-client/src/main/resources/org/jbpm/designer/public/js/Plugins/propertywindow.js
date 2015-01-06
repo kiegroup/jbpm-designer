@@ -5510,7 +5510,7 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                                                     parent.designeropenintab(combo.getRawValue(), combo.getValue());
                                                 }
                                             }
-                                        }).render(document.body, id);
+                                        }).render(document.getElementById(gridId), id);
                                    }
 
                                     var id = 'rulenamescombodiv-' + rowIndex;
@@ -5587,17 +5587,13 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                             resizable   : true,
                             proxyDrag	: true,
                             autoScroll  : true,
-                            keys:[{
-                                key	: 27,
-                                fn	: function(){
-                                    dialog.hide()
-                                }.bind(this)
-                            }],
                             items		:[ruleFlowGroupsPanel],
                             listeners	:{
                                 hide: function(){
+
                                     this.fireEvent('dialogClosed', this.value);
                                     dialog.destroy();
+
                                 }.bind(this)
                             },
                             buttons		: [{
@@ -5611,7 +5607,7 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                                         this.setValue(outValue);
                                         this.dataSource.getAt(this.row).set('value', outValue)
                                         this.dataSource.commitChanges()
-                                        dialog.hide()
+                                        dialog.hide();
                                     } else {
                                         this.facade.raiseEvent({
                                             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
@@ -5626,14 +5622,14 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                                 text: ORYX.I18N.PropertyWindow.cancel,
                                 handler: function(){
                                     this.setValue(this.value);
-                                    dialog.hide()
+                                    dialog.hide();
                                 }.bind(this)
                             }]
                         });
 
                         dialog.show();
                         grid.render();
-                        //grid.fireEvent('afterrender');
+                        grid.fireEvent('afterrender');
                         this.grid.stopEditing();
                         grid.focus( false, 100 );
                     } else {
