@@ -5489,9 +5489,11 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                                 width: 200,
                                 sortable: false,
                                 renderer: function(value, metaData, record, rowIndex, colIndex, store) {
-                                    function createGridCombo(value, id, record) {
+
+                                    function createGridCombo(value, id, record, comboid) {
                                         new Ext.form.ComboBox({
                                             name: 'ruleflowscombo',
+                                            id: comboid,
                                             valueField:'value',
                                             displayField:'name',
                                             typeAhead: true,
@@ -5504,17 +5506,34 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                                                     'value'
                                                 ],
                                                 data: value
-                                            }),
-                                            listeners: {
-                                                select: function(combo, record, index) {
-                                                    parent.designeropenintab(combo.getRawValue(), combo.getValue());
-                                                }
-                                            }
+                                            })
+//                                            ,
+//                                            listeners: {
+//                                                select: function(combo, record, index) {
+//                                                    parent.designeropenintab(combo.getRawValue(), combo.getValue());
+//                                                }
+//                                            }
                                         }).render(document.getElementById(gridId), id);
                                    }
 
+                                   function createGridButton(value, id, record, comboid) {
+                                       new Ext.Button({
+                                           text: 'view',
+                                           handler : function(btn, e) {
+                                               var rawValue =  Ext.getCmp(comboid).getRawValue();
+                                               var backValue =  Ext.getCmp(comboid).getValue();
+
+                                               if(rawValue && rawValue.length > 0 && backValue && backValue.length > 0) {
+                                                   parent.designeropenintab(rawValue, backValue);
+                                               }
+                                           }
+                                       }).render(document.getElementById(gridId), id);
+                                   }
+
                                     var id = 'rulenamescombodiv-' + rowIndex;
-                                    createGridCombo.defer(1, this, [store.getAt(rowIndex).get("rules"), id, record]);
+                                    var comboid = "rncombo-" + rowIndex;
+                                    createGridCombo.defer(1, this, [store.getAt(rowIndex).get("rules"), id, record, comboid]);
+                                    createGridButton.defer(1, this, [store.getAt(rowIndex).get("rules"), id, record, comboid]);
                                     return('<div id="' + id + '"></div>');
                                 }
                             },
@@ -5579,7 +5598,7 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                             autoCreate	: true,
                             title		: 'Editor for RuleFlow Groups',
                             height		: 350,
-                            width		: 720,
+                            width		: 760,
                             modal		: true,
                             collapsible	: false,
                             fixedcenter	: true,
