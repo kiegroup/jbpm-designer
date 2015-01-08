@@ -4283,6 +4283,18 @@
 					"optional":true
 				},
 				{
+					"id":"mitrigger",
+                                        "type":"String",
+                                        "title":"",
+                                        "value":"true",
+                                        "description":"",
+                                        "description_ja":"",
+                                        "readonly":true,
+                                        "optional":true,
+					"hidden":true,
+                                        "visible":false
+				},
+				{
         "id":"unitcost",
         "type":"Float",
         "title":"Cost per time unit",
