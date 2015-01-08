@@ -3404,83 +3404,87 @@ public class Bpmn2JsonUnmarshaller {
         }
         
         // loop characteristics input
-        if(properties.get("multipleinstancecollectioninput") != null && properties.get("multipleinstancecollectioninput").length() > 0) {
-            String miDataInputStr = properties.get("multipleinstancedatainput");
-            if(miDataInputStr == null || miDataInputStr.length() < 1) {
-                miDataInputStr = "defaultDataInput";
-            }
-        	if(sp.getIoSpecification() == null) {
-                InputOutputSpecification iospec = Bpmn2Factory.eINSTANCE.createInputOutputSpecification();
-                sp.setIoSpecification(iospec);
-            } else {
-            	sp.getIoSpecification().getDataInputs().clear();
-            	sp.getIoSpecification().getDataOutputs().clear();
-            	sp.getIoSpecification().getInputSets().clear();
-            	sp.getIoSpecification().getOutputSets().clear();
-            	sp.getDataInputAssociations().clear();
-            	sp.getDataOutputAssociations().clear();
-            }
-        	InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
-        	DataInput multiInput = Bpmn2Factory.eINSTANCE.createDataInput();
-        	multiInput.setId(sp.getId() + "_" + "input");
-        	multiInput.setName(properties.get("multipleinstancecollectioninput"));
-            sp.getIoSpecification().getDataInputs().add(multiInput);
-            inset.getDataInputRefs().add(multiInput);
-            sp.getIoSpecification().getInputSets().add(inset);
-
-            DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
-            ItemAwareElement ie = Bpmn2Factory.eINSTANCE.createItemAwareElement();
-            ie.setId(properties.get("multipleinstancecollectioninput"));
-            dia.getSourceRef().add(ie);
-            dia.setTargetRef(multiInput);
-            sp.getDataInputAssociations().add(dia);
-            MultiInstanceLoopCharacteristics loopCharacteristics = Bpmn2Factory.eINSTANCE.createMultiInstanceLoopCharacteristics();
-            loopCharacteristics.setLoopDataInputRef(multiInput);
-            DataInput din = Bpmn2Factory.eINSTANCE.createDataInput();
-            din.setId(miDataInputStr);
-            ItemDefinition itemDef = Bpmn2Factory.eINSTANCE.createItemDefinition();
-            itemDef.setId(sp.getId() + "_" + "multiInstanceItemType");
-            din.setItemSubjectRef(itemDef);
-            _subprocessItemDefs.put(itemDef.getId(), itemDef);
-            loopCharacteristics.setInputDataItem(din);
-
-
-            // loop characteristics output
-            if(properties.get("multipleinstancecollectionoutput") != null && properties.get("multipleinstancecollectionoutput").length() > 0) {
-                String miDataOutputStr = properties.get("multipleinstancedataoutput");
-                if(miDataOutputStr == null || miDataOutputStr.length() < 1) {
-                    miDataOutputStr = "defaultDataOutput";
+        if(properties.get("mitrigger") != null && properties.get("mitrigger").equals("true")) {
+            if(properties.get("multipleinstancecollectioninput") != null && properties.get("multipleinstancecollectioninput").length() > 0) {
+                String miDataInputStr = properties.get("multipleinstancedatainput");
+                if(miDataInputStr == null || miDataInputStr.length() < 1) {
+                    miDataInputStr = "defaultDataInput";
                 }
-                OutputSet outset = Bpmn2Factory.eINSTANCE.createOutputSet();
-                DataOutput multiOutput = Bpmn2Factory.eINSTANCE.createDataOutput();
-                multiOutput.setId(sp.getId() + "_" + "output");
-                multiOutput.setName(properties.get("multipleinstancecollectionoutput"));
-                sp.getIoSpecification().getDataOutputs().add(multiOutput);
-                outset.getDataOutputRefs().add(multiOutput);
-                sp.getIoSpecification().getOutputSets().add(outset);
+                if(sp.getIoSpecification() == null) {
+                    InputOutputSpecification iospec = Bpmn2Factory.eINSTANCE.createInputOutputSpecification();
+                    sp.setIoSpecification(iospec);
+                } else {
+                    sp.getIoSpecification().getDataInputs().clear();
+                    sp.getIoSpecification().getDataOutputs().clear();
+                    sp.getIoSpecification().getInputSets().clear();
+                    sp.getIoSpecification().getOutputSets().clear();
+                    sp.getDataInputAssociations().clear();
+                    sp.getDataOutputAssociations().clear();
+                }
+                InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
+                DataInput multiInput = Bpmn2Factory.eINSTANCE.createDataInput();
+                multiInput.setId(sp.getId() + "_" + "input");
+                multiInput.setName(properties.get("multipleinstancecollectioninput"));
+                sp.getIoSpecification().getDataInputs().add(multiInput);
+                inset.getDataInputRefs().add(multiInput);
+                sp.getIoSpecification().getInputSets().add(inset);
 
-                DataOutputAssociation doa = Bpmn2Factory.eINSTANCE.createDataOutputAssociation();
-                ItemAwareElement ie2 = Bpmn2Factory.eINSTANCE.createItemAwareElement();
-                ie2.setId(properties.get("multipleinstancecollectionoutput"));
-                doa.getSourceRef().add(multiOutput);
-                doa.setTargetRef(ie2);
-                sp.getDataOutputAssociations().add(doa);
+                DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
+                ItemAwareElement ie = Bpmn2Factory.eINSTANCE.createItemAwareElement();
+                ie.setId(properties.get("multipleinstancecollectioninput"));
+                dia.getSourceRef().add(ie);
+                dia.setTargetRef(multiInput);
+                sp.getDataInputAssociations().add(dia);
+                MultiInstanceLoopCharacteristics loopCharacteristics = Bpmn2Factory.eINSTANCE.createMultiInstanceLoopCharacteristics();
+                loopCharacteristics.setLoopDataInputRef(multiInput);
+                DataInput din = Bpmn2Factory.eINSTANCE.createDataInput();
+                din.setId(miDataInputStr);
+                ItemDefinition itemDef = Bpmn2Factory.eINSTANCE.createItemDefinition();
+                itemDef.setId(sp.getId() + "_" + "multiInstanceItemType");
+                din.setItemSubjectRef(itemDef);
+                _subprocessItemDefs.put(itemDef.getId(), itemDef);
+                loopCharacteristics.setInputDataItem(din);
 
-                loopCharacteristics.setLoopDataOutputRef(multiOutput);
-                DataOutput don = Bpmn2Factory.eINSTANCE.createDataOutput();
-                don.setId(miDataOutputStr);
-                ItemDefinition itemDef2 = Bpmn2Factory.eINSTANCE.createItemDefinition();
-                itemDef2.setId(sp.getId() + "_" + "multiInstanceItemType");
-                don.setItemSubjectRef(itemDef2);
-                _subprocessItemDefs.put(itemDef2.getId(), itemDef2);
-                loopCharacteristics.setOutputDataItem(don);
 
+                // loop characteristics output
+                if(properties.get("multipleinstancecollectionoutput") != null && properties.get("multipleinstancecollectionoutput").length() > 0) {
+                    String miDataOutputStr = properties.get("multipleinstancedataoutput");
+                    if(miDataOutputStr == null || miDataOutputStr.length() < 1) {
+                        miDataOutputStr = "defaultDataOutput";
+                    }
+                    OutputSet outset = Bpmn2Factory.eINSTANCE.createOutputSet();
+                    DataOutput multiOutput = Bpmn2Factory.eINSTANCE.createDataOutput();
+                    multiOutput.setId(sp.getId() + "_" + "output");
+                    multiOutput.setName(properties.get("multipleinstancecollectionoutput"));
+                    sp.getIoSpecification().getDataOutputs().add(multiOutput);
+                    outset.getDataOutputRefs().add(multiOutput);
+                    sp.getIoSpecification().getOutputSets().add(outset);
+
+                    DataOutputAssociation doa = Bpmn2Factory.eINSTANCE.createDataOutputAssociation();
+                    ItemAwareElement ie2 = Bpmn2Factory.eINSTANCE.createItemAwareElement();
+                    ie2.setId(properties.get("multipleinstancecollectionoutput"));
+                    doa.getSourceRef().add(multiOutput);
+                    doa.setTargetRef(ie2);
+                    sp.getDataOutputAssociations().add(doa);
+
+                    loopCharacteristics.setLoopDataOutputRef(multiOutput);
+                    DataOutput don = Bpmn2Factory.eINSTANCE.createDataOutput();
+                    don.setId(miDataOutputStr);
+                    ItemDefinition itemDef2 = Bpmn2Factory.eINSTANCE.createItemDefinition();
+                    itemDef2.setId(sp.getId() + "_" + "multiInstanceItemType");
+                    don.setItemSubjectRef(itemDef2);
+                    _subprocessItemDefs.put(itemDef2.getId(), itemDef2);
+                    loopCharacteristics.setOutputDataItem(don);
+
+                }
+                sp.setLoopCharacteristics(loopCharacteristics);
+            } else {
+                MultiInstanceLoopCharacteristics loopCharacteristics = Bpmn2Factory.eINSTANCE.createMultiInstanceLoopCharacteristics();
+                sp.setLoopCharacteristics(loopCharacteristics);
             }
-            sp.setLoopCharacteristics(loopCharacteristics);
         }
 
 
-        
         // properties
         if(properties.get("vardefs") != null && properties.get("vardefs").length() > 0) {
             String[] vardefs = properties.get("vardefs").split( ",\\s*" );

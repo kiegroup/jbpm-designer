@@ -2458,7 +2458,8 @@ public class Bpmn2JsonMarshaller {
         // loop characteristics
         boolean haveValidLoopCharacteristics = false;
         if(subProcess.getLoopCharacteristics() != null && subProcess.getLoopCharacteristics() instanceof MultiInstanceLoopCharacteristics) {
-
+            haveValidLoopCharacteristics = true;
+            properties.put("mitrigger", "true");
             MultiInstanceLoopCharacteristics taskmi = (MultiInstanceLoopCharacteristics) subProcess.getLoopCharacteristics();
             if(taskmi.getLoopDataInputRef() != null) {
                 ItemAwareElement iedatainput = taskmi.getLoopDataInputRef();
@@ -2490,11 +2491,9 @@ public class Bpmn2JsonMarshaller {
                     if (din.getItemSubjectRef() == null) {
                         // for backward compatibility as the where only input supported
                         properties.put("multipleinstancedatainput", taskmi.getInputDataItem().getId());
-                        haveValidLoopCharacteristics = true;
                     }
                     if(din.getItemSubjectRef() != null && din.getItemSubjectRef().getId().equals(taskmi.getInputDataItem().getItemSubjectRef().getId())) {
                         properties.put("multipleinstancedatainput", din.getName());
-                        haveValidLoopCharacteristics = true;
                         break;
                     }
                 }
@@ -2505,13 +2504,11 @@ public class Bpmn2JsonMarshaller {
                 for(DataOutput dout : taskDataOutputs) {
                     if(dout.getItemSubjectRef() == null) {
                         properties.put("multipleinstancedataoutput", taskmi.getOutputDataItem().getId());
-                        haveValidLoopCharacteristics = true;
                         break;
                     }
 
                     if(dout.getItemSubjectRef()!= null && dout.getItemSubjectRef().getId().equals(taskmi.getOutputDataItem().getItemSubjectRef().getId())) {
                         properties.put("multipleinstancedataoutput", dout.getName());
-                        haveValidLoopCharacteristics = true;
                         break;
                     }
                 }
