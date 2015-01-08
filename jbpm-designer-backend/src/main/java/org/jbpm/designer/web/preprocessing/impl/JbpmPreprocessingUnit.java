@@ -198,7 +198,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             for(Asset entry : workItemsContent) {
 
                 try {
-                    evaluateWorkDefinitions(workDefinitions, entry, repository, profile);
+                    evaluateWorkDefinitions(workDefinitions, entry, asset.getAssetLocation(), repository, profile);
                 } catch(Exception e) {
                     _logger.error("Unable to parse a workitem definition: " + e.getMessage());
                 }
@@ -330,7 +330,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    private void evaluateWorkDefinitions(Map<String, WorkDefinitionImpl> workDefinitions, Asset<String> widAsset, Repository repository, IDiagramProfile profile) throws Exception {
+    private void evaluateWorkDefinitions(Map<String, WorkDefinitionImpl> workDefinitions, Asset<String> widAsset, String assetLocation, Repository repository, IDiagramProfile profile) throws Exception {
         List<Map<String, Object>> workDefinitionsMaps;
 
         try {
@@ -355,11 +355,27 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
                 Asset<byte[]> iconAsset = null;
 
-                if(!icon.startsWith(this.globalDir)) {
-                    if(icon.startsWith("/")) {
-                        icon = this.globalDir + icon;
-                    } else {
-                        icon = this.globalDir + "/" + icon;
+                boolean iconFound = false;
+                // Look for icon located relative to the asset
+                String relativeIcon;
+                if (icon.startsWith("/")) {
+                    relativeIcon = assetLocation + icon;
+                } else {
+                    relativeIcon = assetLocation + "/" + icon;
+                }
+                if (repository.assetExists(relativeIcon)) {
+                    icon = relativeIcon;
+                    iconFound = true;
+                }
+
+                // Icon not found relative to asset, look for it relative to globalDir
+                if (!iconFound) {
+                    if(!icon.startsWith(this.globalDir)) {
+                        if (icon.startsWith("/")) {
+                            icon = this.globalDir + icon;
+                        } else {
+                            icon = this.globalDir + "/" + icon;
+                        }
                     }
                 }
 
