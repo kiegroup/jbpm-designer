@@ -3404,8 +3404,11 @@ public class Bpmn2JsonUnmarshaller {
         }
         
         // loop characteristics input
-        if(properties.get("multipleinstancecollectioninput") != null && properties.get("multipleinstancecollectioninput").length() > 0
-        		&& properties.get("multipleinstancedatainput") != null && properties.get("multipleinstancedatainput").length() > 0) {
+        if(properties.get("multipleinstancecollectioninput") != null && properties.get("multipleinstancecollectioninput").length() > 0) {
+            String miDataInputStr = properties.get("multipleinstancedatainput");
+            if(miDataInputStr == null || miDataInputStr.length() < 1) {
+                miDataInputStr = "defaultDataInput";
+            }
         	if(sp.getIoSpecification() == null) {
                 InputOutputSpecification iospec = Bpmn2Factory.eINSTANCE.createInputOutputSpecification();
                 sp.setIoSpecification(iospec);
@@ -3434,7 +3437,7 @@ public class Bpmn2JsonUnmarshaller {
             MultiInstanceLoopCharacteristics loopCharacteristics = Bpmn2Factory.eINSTANCE.createMultiInstanceLoopCharacteristics();
             loopCharacteristics.setLoopDataInputRef(multiInput);
             DataInput din = Bpmn2Factory.eINSTANCE.createDataInput();
-            din.setId(properties.get("multipleinstancedatainput"));
+            din.setId(miDataInputStr);
             ItemDefinition itemDef = Bpmn2Factory.eINSTANCE.createItemDefinition();
             itemDef.setId(sp.getId() + "_" + "multiInstanceItemType");
             din.setItemSubjectRef(itemDef);
@@ -3443,9 +3446,11 @@ public class Bpmn2JsonUnmarshaller {
 
 
             // loop characteristics output
-            if(properties.get("multipleinstancecollectionoutput") != null && properties.get("multipleinstancecollectionoutput").length() > 0
-                    && properties.get("multipleinstancedataoutput") != null && properties.get("multipleinstancedataoutput").length() > 0) {
-
+            if(properties.get("multipleinstancecollectionoutput") != null && properties.get("multipleinstancecollectionoutput").length() > 0) {
+                String miDataOutputStr = properties.get("multipleinstancedataoutput");
+                if(miDataOutputStr == null || miDataOutputStr.length() < 1) {
+                    miDataOutputStr = "defaultDataOutput";
+                }
                 OutputSet outset = Bpmn2Factory.eINSTANCE.createOutputSet();
                 DataOutput multiOutput = Bpmn2Factory.eINSTANCE.createDataOutput();
                 multiOutput.setId(sp.getId() + "_" + "output");
@@ -3463,7 +3468,7 @@ public class Bpmn2JsonUnmarshaller {
 
                 loopCharacteristics.setLoopDataOutputRef(multiOutput);
                 DataOutput don = Bpmn2Factory.eINSTANCE.createDataOutput();
-                don.setId(properties.get("multipleinstancedataoutput"));
+                don.setId(miDataOutputStr);
                 ItemDefinition itemDef2 = Bpmn2Factory.eINSTANCE.createItemDefinition();
                 itemDef2.setId(sp.getId() + "_" + "multiInstanceItemType");
                 don.setItemSubjectRef(itemDef2);
