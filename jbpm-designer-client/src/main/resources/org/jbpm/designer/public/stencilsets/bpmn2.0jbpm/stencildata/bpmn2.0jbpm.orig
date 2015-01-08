@@ -2851,12 +2851,14 @@
                         {
                             "id": "c1",
                             "title":"vardefs",
-                            "value":"\$.properties.vardefs"
+                            "value":"\$.properties.vardefs",
+			    "needsprop": "multipleinstancedatainput"
                         },
                         {
                             "id": "c2",
                             "title": "globals",
-                            "value": "\$.properties.globals"
+                            "value": "\$.properties.globals",
+			    "needsprop": "multipleinstancedatainput"
                         }
                     ]
                 },
@@ -2875,12 +2877,14 @@
                         {
                             "id": "c1",
                             "title":"vardefs",
-                            "value":"\$.properties.vardefs"
+                            "value":"\$.properties.vardefs",
+			    "needsprop": "multipleinstancedataoutput"
                         },
                         {
                             "id": "c2",
                             "title": "globals",
-                            "value": "\$.properties.globals"
+                            "value": "\$.properties.globals",
+			    "needsprop": "multipleinstancedataoutput"
                         }
                     ]
                 },
@@ -3302,12 +3306,14 @@
                         $bopen$
                             "id": "c1",
                             "title":"vardefs",
-                            "value":"\$.properties.vardefs"
+                            "value":"\$.properties.vardefs",
+			    "needsprop": "multipleinstancedatainput"
                         $bclose$,
                         $bopen$
                             "id": "c2",
                             "title": "globals",
-                            "value": "\$.properties.globals"
+                            "value": "\$.properties.globals",
+			    "needsprop": "multipleinstancedatainput"
                         $bclose$
                     ]
                 $bclose$,
@@ -3326,12 +3332,14 @@
                         $bopen$
                             "id": "c1",
                             "title":"vardefs",
-                            "value":"\$.properties.vardefs"
+                            "value":"\$.properties.vardefs",
+			    "needsprop": "multipleinstancedataoutput"
                         $bclose$,
                         $bopen$
                             "id": "c2",
                             "title": "globals",
-                            "value": "\$.properties.globals"
+                            "value": "\$.properties.globals",
+			    "needsprop": "multipleinstancedataoutput"
                         $bclose$
                     ]
                 $bclose$,
@@ -4179,7 +4187,8 @@
                         {
                             "id": "c1",
                             "title":"vardefs",
-                            "value":"\$.properties.vardefs"
+                            "value":"\$.properties.vardefs",
+			    "needsprop": "multipleinstancedatainput"
                         }
                     ]
                 },
@@ -4196,7 +4205,8 @@
                         {
                             "id": "c1",
                             "title":"vardefs",
-                            "value":"\$.properties.vardefs"
+                            "value":"\$.properties.vardefs",
+			    "needsprop": "multipleinstancedataoutput"
                         }
                     ]
                 },

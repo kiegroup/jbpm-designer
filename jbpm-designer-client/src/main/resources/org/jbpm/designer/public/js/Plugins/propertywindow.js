@@ -770,15 +770,25 @@ ORYX.Plugins.PropertyWindow = {
 							break;
 
                             case ORYX.CONFIG.TYPE_DYNAMICCHOICE:
+
                             var items = pair.items();
 
                             var options = [];
+                            var doAlert = false;
+                            var doAlertOnProp = "";
+
                             items.each(function(value) {
                                 if(value.value() == attribute)
                                     attribute = value.title();
 
                                 if(value.refToView()[0])
                                     refToViewFlag = true;
+
+
+                                if(value.needsprop().length > 0) {
+                                    doAlert = true;
+                                    doAlertOnProp = value.needsprop();
+                                }
 
                                 // add first blank for reset possiblity
                                 options.push(["", "", ""]);
@@ -823,7 +833,6 @@ ORYX.Plugins.PropertyWindow = {
                             });
 
                             // Set the grid Editor
-
                             var editorCombo = new Ext.form.ComboBox({
                                 editable: false,
                                 tpl: '<tpl for="."><div class="x-combo-list-item">{[(values.icon) ? "<img src=\'" + values.icon + "\' />" : ""]} {title}</div></tpl>',
@@ -837,8 +846,25 @@ ORYX.Plugins.PropertyWindow = {
                             });
 
                             editorCombo.on('select', function(combo, record, index) {
+                                if(doAlert == true && doAlertOnProp.length > 0) {
+                                    var selection = ORYX.EDITOR._pluginFacade.getSelection();
+                                    if(selection) {
+                                        var shape = selection.first();
+                                        var alertPropName = "oryx-" + doAlertOnProp;
+                                        var alertPropVal = shape.properties[alertPropName];
+                                        if(alertPropVal != undefined && alertPropVal.length < 1) {
+                                            ORYX.EDITOR._pluginFacade.raiseEvent({
+                                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                                ntype		: 'warning',
+                                                msg         : "This property needs the associated property '"+ doAlertOnProp + "' to be set.",
+                                                title       : ''
+
+                                            });
+                                        }
+                                    }
+                                }
                                 this.editDirectly(key, combo.getValue());
-                            }.bind(this))
+                            }.bind(this));
 
                             editorGrid = new Ext.Editor(editorCombo);
 
@@ -1639,11 +1665,21 @@ Ext.extend(Ext.form.ComplexListField, Ext.form.TriggerField,  {
 				editor = new Ext.form.ComboBox(
 					{ editable: false, typeAhead: true, triggerAction: 'all', transform:select, lazyRender:true,  msgTarget:'title', width : width});
             } else if(type == ORYX.CONFIG.TYPE_DYNAMICCHOICE) {
+
                 var items = this.items[i].items();
                 var select = ORYX.Editor.graft("http://www.w3.org/1999/xhtml", parent, ['select', {style:'display:none'}]);
                 var optionTmpl = new Ext.Template('<option value="{value}">{value}</option>');
+
+                var doAlert = false;
+                var doAlertOnProp = "";
                 items.each(function(value){
                     // evaluate each value expression
+
+                    if(value.needsprop() && value.needsprop().length > 0) {
+                        doAlert = true;
+                        doAlertOnProp = value.needsprop();
+                    }
+
                     var processJSON = ORYX.EDITOR.getSerializedJSON();
                     var expressionresults = jsonPath(processJSON.evalJSON(), value.value());
                     if(expressionresults) {
@@ -1672,7 +1708,36 @@ Ext.extend(Ext.form.ComplexListField, Ext.form.TriggerField,  {
                 });
 
                 editor = new Ext.form.ComboBox(
-                    { editable: false, typeAhead: true, triggerAction: 'all', transform:select, lazyRender:true,  msgTarget:'title', width : width});
+                    {
+                        editable: false,
+                        typeAhead: true,
+                        triggerAction: 'all',
+                        transform:select,
+                        lazyRender:true,
+                        msgTarget:'title',
+                        width : width
+                    });
+
+                editor.on('select', function(combo, record, index) {
+                    if(doAlert == true && doAlertOnProp.length > 0) {
+                        var selection = ORYX.EDITOR._pluginFacade.getSelection();
+                        if(selection && selection.length == 1) {
+                            var shape = selection.first();
+                            var alertPropName = "oryx-" + doAlertOnProp;
+                            var alertPropVal = shape.properties[alertPropName];
+                            if(alertPropVal && alertPropVal.length < 1) {
+                                this.facade.raiseEvent({
+                                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                    ntype		: 'warning',
+                                    msg         : "This property needs the associated property '"+ doAlertOnProp + "' to be set.",
+                                    title       : ''
+
+                                });
+                            }
+                        }
+                    }
+                }.bind(this));
+
             } else if (type == ORYX.CONFIG.TYPE_BOOLEAN) {
 				editor = new Ext.form.Checkbox( { width : width } );
 			} else if (type == "xpath") {
