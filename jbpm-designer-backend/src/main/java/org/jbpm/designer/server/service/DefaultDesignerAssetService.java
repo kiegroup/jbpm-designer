@@ -38,6 +38,7 @@ import org.jbpm.designer.repository.UriUtils;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.service.BPMN2DataServices;
 import org.jbpm.designer.service.DesignerAssetService;
+import org.jbpm.designer.service.DesignerContent;
 import org.jbpm.designer.util.Utils;
 import org.json.JSONArray;
 import org.kie.workbench.common.services.backend.service.KieService;
@@ -52,7 +53,7 @@ import org.uberfire.workbench.events.ResourceOpenedEvent;
 @Service
 @ApplicationScoped
 public class DefaultDesignerAssetService
-        extends KieService
+        extends KieService<DesignerContent>
         implements DesignerAssetService {
 
     private static Logger logger = LoggerFactory.getLogger(DefaultDesignerAssetService.class);
@@ -271,4 +272,8 @@ public class DefaultDesignerAssetService
         return location + "." + name;
     }
 
+    @Override
+    protected DesignerContent constructContent(Path path, Overview overview) {
+        return new DesignerContent(overview);
+    }
 }
