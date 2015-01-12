@@ -1541,6 +1541,12 @@ public class Bpmn2JsonMarshaller {
                     }
                 }
             }
+
+            if(taskmi.getCompletionCondition() != null) {
+                if (taskmi.getCompletionCondition() instanceof FormalExpression) {
+                    properties.put("multipleinstancecompletioncondition", ((FormalExpression)taskmi.getCompletionCondition()).getBody());
+                }
+            }
         } else {
             properties.put("multipleinstance", "false");
         }
@@ -2511,6 +2517,12 @@ public class Bpmn2JsonMarshaller {
                         properties.put("multipleinstancedataoutput", dout.getName());
                         break;
                     }
+                }
+            }
+
+            if(taskmi.getCompletionCondition() != null) {
+                if (taskmi.getCompletionCondition() instanceof FormalExpression) {
+                    properties.put("multipleinstancecompletioncondition", ((FormalExpression)taskmi.getCompletionCondition()).getBody());
                 }
             }
         }
