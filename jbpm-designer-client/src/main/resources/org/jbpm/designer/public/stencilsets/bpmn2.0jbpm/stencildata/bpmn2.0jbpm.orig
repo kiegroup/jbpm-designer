@@ -2912,6 +2912,18 @@
                     "fortasktypes":"None|Send|Receive|User|Manual|Service",
                     "ifproptrue":"multipleinstance"
                 },
+		{
+                    "id":"multipleinstancecompletioncondition",
+                    "type":"Expression",
+                    "title":"MI completion condition",
+                    "value":"",
+                    "description":"Sets a completion condition for MI.",
+                    "description_ja":"複数インスタンスへのデータ出力を指定",
+                    "readonly":false,
+                    "optional":true,
+                    "fortasktypes":"None|Send|Receive|User|Manual|Service",
+                    "ifproptrue":"multipleinstance"
+                },
 				{
 					"id":"min",
 					"type":"Float",
@@ -3361,6 +3373,18 @@
                     "title":"MI data output",
                     "value":"",
                     "description":"Sets a data output for MI.",
+                    "description_ja":"複数インスタンスへのデータ出力を指定",
+                    "readonly":false,
+                    "optional":true,
+                    "fortasktypes":"None|Send|Receive|User|Manual|Service",
+                    "ifproptrue":"multipleinstance"
+                $bclose$,
+		$bopen$
+                    "id":"multipleinstancecompletioncondition",
+                    "type":"Expression",
+                    "title":"MI completion condition",
+                    "value":"",
+                    "description":"Sets a completion condition for MI.",
                     "description_ja":"複数インスタンスへのデータ出力を指定",
                     "readonly":false,
                     "optional":true,
@@ -4226,6 +4250,16 @@
                     "title":"MI data output",
                     "value":"",
                     "description":"Sets a data output for MI.",
+                    "description_ja":"複数インスタンスへのデータ出力を指定",
+                    "readonly":false,
+                    "optional":true
+                },
+		{
+                    "id":"multipleinstancecompletioncondition",
+                    "type":"Expression",
+                    "title":"MI completion condition",
+                    "value":"",
+                    "description":"Sets a completion condition for MI.",
                     "description_ja":"複数インスタンスへのデータ出力を指定",
                     "readonly":false,
                     "optional":true
