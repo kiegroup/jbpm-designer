@@ -12,6 +12,7 @@ import org.jboss.errai.common.client.api.Caller;
 import org.jboss.errai.common.client.api.RemoteCallback;
 import org.jbpm.designer.client.type.Bpmn2Type;
 import org.jbpm.designer.service.DesignerAssetService;
+import org.jbpm.designer.service.DesignerContent;
 import org.kie.workbench.common.widgets.client.resources.i18n.CommonConstants;
 import org.kie.workbench.common.widgets.metadata.client.KieEditor;
 import org.uberfire.backend.vfs.ObservablePath;
@@ -346,12 +347,12 @@ public class DesignerPresenter
                         @Override
                         public void callback(final Map<String, String> editorParameters) {
 
-                            assetService.call(new RemoteCallback<Overview>() {
+                            assetService.call(new RemoteCallback<DesignerContent>() {
                                 @Override
-                                public void callback(Overview overview) {
-                                    setup(editorParameters, editorID, overview);
+                                public void callback(DesignerContent content) {
+                                    setup(editorParameters, editorID, content.getOverview());
                                 }
-                            }).loadOverview(versionRecordManager.getCurrentPath());
+                            }).loadContent(versionRecordManager.getCurrentPath());
 
                         }
 
