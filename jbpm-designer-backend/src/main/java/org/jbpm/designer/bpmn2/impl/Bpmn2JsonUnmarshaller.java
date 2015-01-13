@@ -5436,8 +5436,10 @@ public class Bpmn2JsonUnmarshaller {
                 task.getDataInputAssociations().add(dia);
         	}
         }
-        
-        if(properties.get("skippable") != null && properties.get("skippable").length() > 0) {
+
+
+        String skippableStr = (properties.get("skippable") == null ? "true" : properties.get("skippable"));   // default to true if not set
+        if(skippableStr.length() > 0) {
         	if(task.getIoSpecification() == null) {
                 InputOutputSpecification iospec = Bpmn2Factory.eINSTANCE.createInputOutputSpecification();
                 task.setIoSpecification(iospec);
@@ -5472,7 +5474,7 @@ public class Bpmn2JsonUnmarshaller {
         	for(DataInputAssociation da : inputAssociations) {
         		if(da.getTargetRef().getId().equals(foundInput.getId())) {
         			foundSkippableAssociation = true;
-        			((FormalExpression) da.getAssignment().get(0).getFrom()).setBody(properties.get("skippable"));
+        			((FormalExpression) da.getAssignment().get(0).getFrom()).setBody( skippableStr );
         		}
         	}
         	
@@ -5482,7 +5484,7 @@ public class Bpmn2JsonUnmarshaller {
         		
         		Assignment a = Bpmn2Factory.eINSTANCE.createAssignment();
                 FormalExpression skippableFromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
-                skippableFromExpression.setBody(properties.get("skippable"));
+                skippableFromExpression.setBody( skippableStr );
                 
                 FormalExpression skippableToExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
                 skippableToExpression.setBody(foundInput.getId());
@@ -6004,7 +6006,7 @@ public class Bpmn2JsonUnmarshaller {
         		if(targetInput != null && targetInput.getName() != null) {
         			if(targetInput.getName().equals("GroupId") && (properties.get("groupid") == null  || properties.get("groupid").length() == 0)) {
         				incompleteAssociations.add(dia);
-        			} else if(targetInput.getName().equalsIgnoreCase("Skippable") && (properties.get("skippable") == null  || properties.get("skippable").length() == 0)) {
+        			} else if(targetInput.getName().equalsIgnoreCase("Skippable") && ( skippableStr == null || skippableStr.length() == 0) ) {
         				incompleteAssociations.add(dia);
         			} else if(targetInput.getName().equalsIgnoreCase("Comment") && (properties.get("comment") == null  || properties.get("comment").length() == 0)) {
         				incompleteAssociations.add(dia);
@@ -6040,7 +6042,7 @@ public class Bpmn2JsonUnmarshaller {
         	for(DataInput din : taskDataInputs) {
         		if(din.getName().equals("GroupId") && (properties.get("groupid") == null  || properties.get("groupid").length() == 0)) {
         			toRemoveDataInputs.add(din);
-    			} else if(din.getName().equalsIgnoreCase("Skippable") && (properties.get("skippable") == null  || properties.get("skippable").length() == 0)) {
+    			} else if(din.getName().equalsIgnoreCase("Skippable") && (skippableStr == null  || skippableStr.length() == 0)) {
     				toRemoveDataInputs.add(din);
     			} else if(din.getName().equalsIgnoreCase("Comment") && (properties.get("comment") == null  || properties.get("comment").length() == 0)) {
     				toRemoveDataInputs.add(din);

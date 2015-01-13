@@ -2778,7 +2778,7 @@
 					"id":"skippable",
 					"type":"Choice",
 					"title":"Skippable",
-					"value":"",
+					"value":"true",
 					"description":"Specifies whether the human task can be skipped",
 					"description_ja":"ヒューマンタスクをスキップできるかどうかを指定します",
 					"readonly":false,
