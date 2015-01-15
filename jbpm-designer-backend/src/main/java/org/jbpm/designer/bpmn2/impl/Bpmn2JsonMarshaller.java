@@ -1498,7 +1498,7 @@ public class Bpmn2JsonMarshaller {
             Iterator<FeatureMap.Entry> iter = task.getAnyAttribute().iterator();
             while(iter.hasNext()) {
                 FeatureMap.Entry entry = iter.next();
-                if(entry.getEStructuralFeature().getName().equals("taskname")) {
+                if(entry.getEStructuralFeature().getName().equals("taskName")) {
                     String tname = (String) entry.getValue();
                     if(tname != null && tname.length() > 0) {
                         properties.put("taskname", tname);
