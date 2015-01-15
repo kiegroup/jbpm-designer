@@ -1474,6 +1474,9 @@ public class Bpmn2JsonMarshaller {
     		}
     	}
 
+
+        // backwards compatibility with jbds editor
+        boolean foundTaskName = false;
         if(task.getIoSpecification() != null && task.getIoSpecification().getDataInputs() != null) {
             List<DataInput> taskDataInputs = task.getIoSpecification().getDataInputs();
             for(DataInput din : taskDataInputs) {
@@ -1482,9 +1485,24 @@ public class Bpmn2JsonMarshaller {
                     for(DataInputAssociation dia : taskDataInputAssociations) {
                         if(dia.getTargetRef() != null && dia.getTargetRef().getId().equals(din.getId())) {
                             properties.put("taskname", ((FormalExpression) dia.getAssignment().get(0).getFrom()).getBody());
+                            foundTaskName = true;
                         }
                     }
                     break;
+                }
+            }
+        }
+
+        if(!foundTaskName) {
+            // try the drools specific attribute set on the task
+            Iterator<FeatureMap.Entry> iter = task.getAnyAttribute().iterator();
+            while(iter.hasNext()) {
+                FeatureMap.Entry entry = iter.next();
+                if(entry.getEStructuralFeature().getName().equals("taskname")) {
+                    String tname = (String) entry.getValue();
+                    if(tname != null && tname.length() > 0) {
+                        properties.put("taskname", tname);
+                    }
                 }
             }
         }
