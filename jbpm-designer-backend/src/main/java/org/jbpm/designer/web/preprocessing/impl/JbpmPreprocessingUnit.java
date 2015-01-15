@@ -357,14 +357,9 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
                 boolean iconFound = false;
                 // Look for icon located relative to the asset
-                String relativeIcon;
-                if (icon.startsWith("/")) {
-                    relativeIcon = assetLocation + icon;
-                } else {
-                    relativeIcon = assetLocation + "/" + icon;
-                }
-                if (repository.assetExists(relativeIcon)) {
-                    icon = relativeIcon;
+                String absoluteIcon = createAbsoluteIconPath(assetLocation, icon);
+                if (repository.assetExists(absoluteIcon)) {
+                    icon = absoluteIcon;
                     iconFound = true;
                 }
 
@@ -716,6 +711,53 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         }
 
         return null;
+    }
+
+    public static String createAbsoluteIconPath(String assetPath, String iconPath) {
+        if (assetPath == null || assetPath.length() < 1) {
+            return iconPath;
+        }
+        if (iconPath == null || iconPath.length() < 1) {
+            return assetPath;
+        }
+
+        // Handle cases where iconPath doesn't start with ".."
+        String relativeIconPath = null;
+        if (iconPath.startsWith("/")) {
+            return iconPath;
+        } else if (!iconPath.startsWith("..")){
+            return assetPath + "/" + iconPath;
+        }
+
+        // Handle ".." once or more at start of iconPath
+        String separator = "/";
+        String[] assetFolders = assetPath.split(separator);
+        String[] iconFolders = iconPath.split(separator);
+
+        int toRemoveFromIconFolders = 0;
+        int toIncludeInAssetFolders = assetFolders.length;
+        for (int i = 0; i < iconFolders.length; i++)
+        {
+            if ("..".equals(iconFolders[i])) {
+                toRemoveFromIconFolders++;
+                toIncludeInAssetFolders--;
+            } else {
+                break;
+            }
+        }
+
+        StringBuilder sb = new StringBuilder(assetPath.length() + iconPath.length() + 1);
+        sb.append(separator);
+
+        for (int i = 1; i < toIncludeInAssetFolders; i++) {
+            sb.append(assetFolders[i]).append(separator);
+        }
+        for (int i = toRemoveFromIconFolders; i < iconFolders.length; i++){
+            sb.append(iconFolders[i]).append(separator);
+        }
+        sb.setLength(sb.length() - 1);
+
+        return sb.toString();
     }
 
     private class ThemeInfo {
