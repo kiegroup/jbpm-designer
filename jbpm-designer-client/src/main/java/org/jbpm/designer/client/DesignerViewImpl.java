@@ -3,7 +3,11 @@ package org.jbpm.designer.client;
 import java.util.Map;
 import javax.inject.Inject;
 
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.RequiresResize;
+import com.google.gwt.user.client.ui.Widget;
 import org.kie.workbench.common.widgets.metadata.client.KieEditorViewImpl;
+import org.uberfire.client.util.Layouts;
 
 public class DesignerViewImpl
         extends KieEditorViewImpl
@@ -64,5 +68,16 @@ public class DesignerViewImpl
         } else {
             return true;
         }
+    }
+
+    @Override
+    public void onResize() {
+        //Layouts.setToFillParent(this);
+        final Widget w = getParent();
+        final int width = w.getOffsetWidth();
+        final int height = w.getOffsetHeight();
+        this.setWidth( width + "px" );
+        this.setHeight( height + "px" );
+        ( (RequiresResize) designerWidget.getView() ).onResize();
     }
 }
