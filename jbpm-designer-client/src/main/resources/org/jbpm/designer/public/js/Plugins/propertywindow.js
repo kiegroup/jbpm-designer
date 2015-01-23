@@ -2999,6 +2999,8 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
                                     dataIndex: 'classname',
                                     editor: new Ext.form.ComboBox({
                                         id: 'customTypeCombo',
+                                        typeAhead: true,
+                                        anyMatch: true,
                                         valueField:'value',
                                         displayField:'name',
                                         labelStyle:'display:none',
