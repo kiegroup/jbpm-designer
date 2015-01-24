@@ -184,7 +184,7 @@ public class Bpmn2JsonUnmarshaller {
             addSimulation(def);
             revisitItemDefinitions(def);
             revisitProcessDoc(def);
-            //revisitDI(def);
+            revisitDI(def);
 
             // return def;
             _currentResource.getContents().add(def);
@@ -249,31 +249,71 @@ public class Bpmn2JsonUnmarshaller {
     }
 
     public void updateShapeBounds(Definitions def, BPMNPlane plane, BaseElement ele) {
-        List<RootElement> rootElements =  def.getRootElements();
-        for(RootElement root : rootElements) {
-            if(root instanceof Process) {
-                Process process = (Process) root;
-                List<FlowElement> flowElements = process.getFlowElements();
+        if(ele instanceof Lane) {
+            Lane nextLane = (Lane) ele;
+            Bounds laneBounds = getBoundsForShape(plane, nextLane);
+            updateShapeBoundsInLanes(plane, ele, nextLane, laneBounds.getX(), laneBounds.getY());
+        } else {
+            List<RootElement> rootElements =  def.getRootElements();
+            for(RootElement root : rootElements) {
+                if(root instanceof Process) {
+                    Process process = (Process) root;
+                    List<FlowElement> flowElements = process.getFlowElements();
 
-                boolean foundAsTopLevel = false;
-                for(FlowElement fe : flowElements) {
-                    if(fe.getId().equals(ele.getId())) {
-                        foundAsTopLevel = true;
-                        break;
-                    }
-                }
-
-                if(!foundAsTopLevel) {
+                    boolean foundAsTopLevel = false;
                     for(FlowElement fe : flowElements) {
-                        if(fe instanceof SubProcess) {
-                            // find the subprocess bounds
-                            Bounds subprocessBounds = getBoundsForShape(plane, fe);
-                            if(subprocessBounds != null) {
-                                updateShapeBoundsInSubprocess(plane, ele, (SubProcess) fe, subprocessBounds.getX(), subprocessBounds.getY());
+                        if(fe.getId().equals(ele.getId())) {
+                            foundAsTopLevel = true;
+                            break;
+                        }
+                    }
+
+                    if(!foundAsTopLevel) {
+                        for(FlowElement fe : flowElements) {
+                            if(fe instanceof SubProcess) {
+                                SubProcess sp = (SubProcess) fe;
+                                // process if this subprocess is not in a lane already. otherwise we already updated it
+                                if(sp.getLanes().size() < 1) {
+                                    // find the subprocess bounds
+                                    Bounds subprocessBounds = getBoundsForShape(plane, fe);
+                                    if(subprocessBounds != null) {
+                                        updateShapeBoundsInSubprocess(plane, ele, (SubProcess) fe, subprocessBounds.getX(), subprocessBounds.getY());
+                                    }
+                                }
                             }
                         }
                     }
                 }
+            }
+        }
+    }
+
+    public void updateShapeBoundsInLanes(BPMNPlane plane, BaseElement ele, Lane lane, float parentX, float parentY) {
+        for(FlowNode fn : lane.getFlowNodeRefs()) {
+                Bounds fnBounds = getBoundsForShape(plane, fn);
+                if(fnBounds != null) {
+                    fnBounds.setX(fnBounds.getX() + parentX);
+                    fnBounds.setY(fnBounds.getY() + parentY);
+                    // if flownode is a subprocess update it too
+                    if(fn instanceof SubProcess) {
+                        updateShapeBoundsInSubprocessInLanes(plane, ele, (SubProcess) fn, fnBounds.getX(), fnBounds.getY());
+                    } else if(fn instanceof Lane) {
+                        updateShapeBoundsInLanes(plane, ele, (Lane) fn, fnBounds.getX(), fnBounds.getY() );
+                    }
+            }
+        }
+    }
+
+    public void updateShapeBoundsInSubprocessInLanes(BPMNPlane plane, BaseElement ele, SubProcess sub, float parentX, float parentY) {
+        for(FlowElement subEle : sub.getFlowElements()) {
+            Bounds subEleBounds = getBoundsForShape(plane, subEle);
+            if(subEleBounds != null) {
+                subEleBounds.setX(subEleBounds.getX() + parentX);
+                subEleBounds.setY(subEleBounds.getY() + parentY);
+            }
+
+            if(subEle instanceof SubProcess) {
+                updateShapeBoundsInSubprocessInLanes(plane, ele, (SubProcess) subEle, subEleBounds.getX(), subEleBounds.getY());
             }
         }
     }
