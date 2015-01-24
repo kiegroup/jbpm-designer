@@ -45,7 +45,7 @@ import org.jbpm.designer.web.profile.IDiagramProfile;
 
 /**
  * @author Antoine Toulme
- * @author Tihomir Surdilovic
+ * @author  Surdilovic
  * 
  * a marshaller to transform BPMN 2.0 elements into JSON format.
  *
@@ -70,13 +70,13 @@ public class Bpmn2JsonMarshaller {
 	public static final String defaultSequenceflowColor = "#000000";
 
     private static final List<String> defaultTypesList = Arrays.asList("Object", "Boolean", "Float", "Integer", "List", "String");
-	
+
 	private Map<String, DiagramElement> _diagramElements = new HashMap<String, DiagramElement>();
 	private Map<String,Association> _diagramAssociations = new HashMap<String, Association>();
 	private Scenario _simulationScenario = null;
 	private static final Logger _logger = LoggerFactory.getLogger(Bpmn2JsonMarshaller.class);
 	private IDiagramProfile profile;
-	
+
 	public void setProfile(IDiagramProfile profile) {
 	    this.profile = profile;
 	}
@@ -101,17 +101,17 @@ public class Bpmn2JsonMarshaller {
                 	}
                 }
         	}
-        	
+
         }
         if(preProcessingData == null || preProcessingData.length() < 1) {
             preProcessingData = "ReadOnlyService";
         }
         marshallDefinitions(def, generator, preProcessingData);
         generator.close();
-        
+
         return baos.toString("UTF-8");
     }
-    
+
     private void linkSequenceFlows(List<FlowElement> flowElements) {
     	Map<String, FlowNode> nodes = new HashMap<String, FlowNode>();
     	for (FlowElement flowElement: flowElements) {
@@ -146,7 +146,7 @@ public class Bpmn2JsonMarshaller {
     		}
     	}
     }
-    
+
     protected void marshallDefinitions(Definitions def, JsonGenerator generator, String preProcessingData) throws JsonGenerationException, IOException {
         try{
         	generator.writeStartObject();
@@ -214,7 +214,7 @@ public class Bpmn2JsonMarshaller {
 	                    }
 	                    props.put("vardefs", propVal);
 	                }
-	                
+
 	                // packageName and version and adHoc are jbpm-specific extension attribute
 	                Iterator<FeatureMap.Entry> iter = ((Process) rootElement).getAnyAttribute().iterator();
 	                while(iter.hasNext()) {
@@ -222,16 +222,16 @@ public class Bpmn2JsonMarshaller {
 	                    if(entry.getEStructuralFeature().getName().equals("packageName")) {
 	                        props.put("package", entry.getValue());
 	                    }
-	                    
+
 	                    if(entry.getEStructuralFeature().getName().equals("version")) {
                             props.put("version", entry.getValue());
                         }
-	                    
+
 	                    if(entry.getEStructuralFeature().getName().equals("adHoc")) {
 	                    	props.put("adhocprocess", entry.getValue());
 	                    }
 	                }
-	                
+
 	                // process imports, custom description and globals extension elements
                     String allImports = "";
 	                if((rootElement).getExtensionValues() != null && (rootElement).getExtensionValues().size() > 0) {
@@ -240,7 +240,7 @@ public class Bpmn2JsonMarshaller {
 
 	                    for(ExtensionAttributeValue extattrval : rootElement.getExtensionValues()) {
 	                        FeatureMap extensionElements = extattrval.getValue();
-	                        
+
 	                        @SuppressWarnings("unchecked")
 	                        List<ImportType> importExtensions = (List<ImportType>) extensionElements
 	                                                             .get(DroolsPackage.Literals.DOCUMENT_ROOT__IMPORT, true);
@@ -250,12 +250,12 @@ public class Bpmn2JsonMarshaller {
 
                             List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
                                     .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
-	                    
+
 	                        for(ImportType importType : importExtensions) {
 	                            importsStr += importType.getName();
 	                            importsStr += "|default,";
 	                        }
-	                        
+
 	                        for(GlobalType globalType : globalExtensions) {
 	                            globalsStr += (globalType.getIdentifier() + ":" + globalType.getType());
 	                            globalsStr += ",";
@@ -308,13 +308,13 @@ public class Bpmn2JsonMarshaller {
                     // TODO
                 } else if (rootElement instanceof Escalation) {
                     // TODO
-                } else if (rootElement instanceof Collaboration) { 
-                	
+                } else if (rootElement instanceof Collaboration) {
+
                 } else {
                 	_logger.warn("Unknown root element " + rootElement + ". This element will not be parsed.");
 	            }
 	        }
-	        
+
 	        generator.writeObjectFieldStart("stencilset");
 	        generator.writeObjectField("url", this.profile.getStencilSetURL());
 	        generator.writeObjectField("namespace", this.profile.getStencilSetNamespaceURL());
@@ -327,19 +327,19 @@ public class Bpmn2JsonMarshaller {
         	_diagramElements.clear();
         }
     }
-    
-    
+
+
     /** protected void marshallMessage(Message message, Definitions def, JsonGenerator generator) throws JsonGenerationException, IOException {
         Map<String, Object> properties = new LinkedHashMap<String, Object>();
-        
+
         generator.writeStartObject();
         generator.writeObjectField("resourceId", message.getId());
-        
+
         properties.put("name", message.getName());
         if(message.getDocumentation() != null && message.getDocumentation().size() > 0) {
             properties.put("documentation", message.getDocumentation().get(0).getText());
         }
-        
+
         marshallProperties(properties, generator);
         generator.writeObjectFieldStart("stencil");
         generator.writeObjectField("id", "Message");
@@ -348,14 +348,14 @@ public class Bpmn2JsonMarshaller {
         generator.writeEndArray();
         generator.writeArrayFieldStart("outgoing");
         generator.writeEndArray();
-        
+
         generator.writeEndObject();
     } **/
 
     protected void marshallCallableElement(CallableElement callableElement, Definitions def, JsonGenerator generator) throws JsonGenerationException, IOException {
         generator.writeStartObject();
         generator.writeObjectField("resourceId", callableElement.getId());
-        
+
         if (callableElement instanceof Choreography) {
             marshallChoreography((Choreography) callableElement, generator);
         } else if (callableElement instanceof Conversation) {
@@ -389,7 +389,7 @@ public class Bpmn2JsonMarshaller {
     		throw new IllegalArgumentException("Could not find BPMNDI information");
     	}
         generator.writeArrayFieldStart("childShapes");
-        
+
         List<String> laneFlowElementsIds = new ArrayList<String>();
         for(LaneSet laneSet : process.getLaneSets()) {
         	for(Lane lane : laneSet.getLanes()) {
@@ -404,14 +404,14 @@ public class Bpmn2JsonMarshaller {
         		marshallFlowElement(flowElement, plane, generator, 0, 0, preProcessingData, def);
         	}
         }
-        
+
         for (Artifact artifact: process.getArtifacts()) {
         	marshallArtifact(artifact, plane, generator, 0, 0, preProcessingData, def);
         }
-        
+
         generator.writeEndArray();
     }
-    
+
     private void setCatchEventProperties(CatchEvent event, Map<String, Object> properties) {
         if(event.getOutputSet() != null) {
             List<DataOutput> dataOutputs = event.getOutputSet().getDataOutputRefs();
@@ -424,7 +424,7 @@ public class Bpmn2JsonMarshaller {
                 doutbuff.setLength(doutbuff.length() - 1);
             }
             properties.put("dataoutput", doutbuff.toString());
-        
+
             List<DataOutputAssociation> outputAssociations = event.getDataOutputAssociation();
             StringBuffer doutassociationbuff = new StringBuffer();
             for(DataOutputAssociation doa : outputAssociations) {
@@ -505,10 +505,10 @@ public class Bpmn2JsonMarshaller {
                     Activity act = ((CompensateEventDefinition) ed).getActivityRef();
                     properties.put("activityref", act.getName());
                 }
-            }  
+            }
         }
     }
-    
+
     private void setThrowEventProperties(ThrowEvent event, Map<String, Object> properties) {
         if(event.getInputSet() != null) {
             List<DataInput> dataInputs = event.getInputSet().getDataInputRefs();
@@ -521,7 +521,7 @@ public class Bpmn2JsonMarshaller {
                 dinbuff.setLength(dinbuff.length() - 1);
             }
             properties.put("datainput", dinbuff.toString());
-            
+
             List<DataInputAssociation> inputAssociations = event.getDataInputAssociation();
             StringBuffer dinassociationbuff = new StringBuffer();
             for(DataInputAssociation din : inputAssociations) {
@@ -601,11 +601,11 @@ public class Bpmn2JsonMarshaller {
                     Activity act = ((CompensateEventDefinition) ed).getActivityRef();
                     properties.put("activityref", act.getName());
                 }
-            }  
+            }
         }
     }
-    
-    private List<String> marshallLanes(Lane lane, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Definitions def) throws JsonGenerationException, IOException {
+
+    private List<String> marshallLanes(Lane lane, BPMNPlane plane, JsonGenerator generator, float xOffset, float yOffset, String preProcessingData, Definitions def) throws JsonGenerationException, IOException {
     	Bounds bounds = ((BPMNShape) findDiagramElement(plane, lane)).getBounds();
     	List<String> nodeRefIds = new ArrayList<String>();
     	if(bounds != null) {
@@ -617,7 +617,7 @@ public class Bpmn2JsonMarshaller {
 	    	} else {
 	    		laneProperties.put("name", "");
 	    	}
-	    	
+
 	    	Iterator<FeatureMap.Entry> iter = lane.getAnyAttribute().iterator();
 	    	boolean foundBgColor = false;
 	    	boolean foundBrColor = false;
@@ -649,19 +649,19 @@ public class Bpmn2JsonMarshaller {
 	        if(!foundBgColor) {
 	        	laneProperties.put("bgcolor", defaultBgColor_Swimlanes);
 	        }
-	        
+
 	        if(!foundBrColor) {
 	        	laneProperties.put("bordercolor", defaultBrColor);
 	        }
-	        
+
 	        if(!foundFontColor) {
 	        	laneProperties.put("fontcolor", defaultFontColor);
 	        }
-	        
+
 	        if(!foundSelectable) {
 	        	laneProperties.put("isselectable", "true");
 	        }
-	    	
+
 	    	marshallProperties(laneProperties, generator);
 	    	generator.writeObjectFieldStart("stencil");
 	    	generator.writeObjectField("id", "Lane");
@@ -669,8 +669,7 @@ public class Bpmn2JsonMarshaller {
 		    generator.writeArrayFieldStart("childShapes");
 		    for (FlowElement flowElement: lane.getFlowNodeRefs()) {
 		    	nodeRefIds.add(flowElement.getId());
-		    	// we dont want an offset here!
-		    	marshallFlowElement(flowElement, plane, generator, 0, 0, preProcessingData, def);
+		    	marshallFlowElement(flowElement, plane, generator, bounds.getX(), bounds.getY(), preProcessingData, def);
 		    }
 		    generator.writeEndArray();
 		    generator.writeArrayFieldStart("outgoing");
@@ -694,14 +693,14 @@ public class Bpmn2JsonMarshaller {
 		    	marshallFlowElement(flowElement, plane, generator, 0, 0, preProcessingData, def);
 		    }
     	}
-    	
+
     	return nodeRefIds;
     }
-    
-    protected void marshallFlowElement(FlowElement flowElement, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Definitions def) throws JsonGenerationException, IOException {
+
+    protected void marshallFlowElement(FlowElement flowElement, BPMNPlane plane, JsonGenerator generator, float xOffset, float yOffset, String preProcessingData, Definitions def) throws JsonGenerationException, IOException {
     	generator.writeStartObject();
     	generator.writeObjectField("resourceId", flowElement.getId());
-    	
+
     	Map<String, Object> flowElementProperties = new LinkedHashMap<String, Object>();
     	Iterator<FeatureMap.Entry> iter = flowElement.getAnyAttribute().iterator();
     	boolean foundBgColor = false;
@@ -768,7 +767,7 @@ public class Bpmn2JsonMarshaller {
         if(!foundFontColor) {
         	flowElementProperties.put("fontcolor", defaultFontColor);
         }
-        
+
         if(!foundSelectable) {
         	flowElementProperties.put("isselectable", "true");
         }
@@ -825,8 +824,8 @@ public class Bpmn2JsonMarshaller {
     	}
     	generator.writeEndObject();
     }
-    
-    protected void marshallStartEvent(StartEvent startEvent, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> properties) throws JsonGenerationException, IOException {
+
+    protected void marshallStartEvent(StartEvent startEvent, BPMNPlane plane, JsonGenerator generator, float xOffset, float yOffset, Map<String, Object> properties) throws JsonGenerationException, IOException {
         List<EventDefinition> eventDefinitions = startEvent.getEventDefinitions();
         properties.put("isinterrupting", startEvent.isIsInterrupting());
     	if (eventDefinitions == null || eventDefinitions.size() == 0) {
@@ -857,8 +856,8 @@ public class Bpmn2JsonMarshaller {
     		throw new UnsupportedOperationException("Multiple event definitions not supported for start event");
     	}
     }
-    
-    protected void marshallEndEvent(EndEvent endEvent, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> properties) throws JsonGenerationException, IOException {
+
+    protected void marshallEndEvent(EndEvent endEvent, BPMNPlane plane, JsonGenerator generator, float xOffset, float yOffset, Map<String, Object> properties) throws JsonGenerationException, IOException {
     	List<EventDefinition> eventDefinitions = endEvent.getEventDefinitions();
     	if (eventDefinitions == null || eventDefinitions.size() == 0) {
     		marshallNode(endEvent, properties, "EndNoneEvent", plane, generator, xOffset, yOffset);
@@ -885,8 +884,8 @@ public class Bpmn2JsonMarshaller {
     		throw new UnsupportedOperationException("Multiple event definitions not supported for end event");
     	}
     }
-    
-    protected void marshallIntermediateCatchEvent(IntermediateCatchEvent catchEvent, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> properties) throws JsonGenerationException, IOException {
+
+    protected void marshallIntermediateCatchEvent(IntermediateCatchEvent catchEvent, BPMNPlane plane, JsonGenerator generator, float xOffset, float yOffset, Map<String, Object> properties) throws JsonGenerationException, IOException {
     	List<EventDefinition> eventDefinitions = catchEvent.getEventDefinitions();
         // simulation properties
         if(_simulationScenario != null) {
@@ -943,7 +942,7 @@ public class Bpmn2JsonMarshaller {
                 marshallNode(catchEvent, properties, "IntermediateEscalationEvent", plane, generator, xOffset, yOffset);
             } else if(eventDefinition instanceof CompensateEventDefinition) {
                 marshallNode(catchEvent, properties, "IntermediateCompensationEventCatching", plane, generator, xOffset, yOffset);
-            } 
+            }
     		else {
     			throw new UnsupportedOperationException("Event definition not supported: " + eventDefinition);
     		}
@@ -951,8 +950,8 @@ public class Bpmn2JsonMarshaller {
     		throw new UnsupportedOperationException("Intermediate catch event does not have event definition.");
     	}
     }
-    
-    protected void marshallBoundaryEvent(BoundaryEvent boundaryEvent, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> catchEventProperties) throws JsonGenerationException, IOException {
+
+    protected void marshallBoundaryEvent(BoundaryEvent boundaryEvent, BPMNPlane plane, JsonGenerator generator, float xOffset, float yOffset, Map<String, Object> catchEventProperties) throws JsonGenerationException, IOException {
     	List<EventDefinition> eventDefinitions = boundaryEvent.getEventDefinitions();
     	if(boundaryEvent.isCancelActivity()) {
     		catchEventProperties.put("boundarycancelactivity", "true");
@@ -1025,8 +1024,8 @@ public class Bpmn2JsonMarshaller {
     		throw new UnsupportedOperationException("None or multiple event definitions not supported for boundary event");
     	}
     }
-    
-    protected void marshallIntermediateThrowEvent(IntermediateThrowEvent throwEvent, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> properties) throws JsonGenerationException, IOException {
+
+    protected void marshallIntermediateThrowEvent(IntermediateThrowEvent throwEvent, BPMNPlane plane, JsonGenerator generator, float xOffset, float yOffset, Map<String, Object> properties) throws JsonGenerationException, IOException {
     	List<EventDefinition> eventDefinitions = throwEvent.getEventDefinitions();
 
         // simulation properties
@@ -1088,26 +1087,26 @@ public class Bpmn2JsonMarshaller {
     		throw new UnsupportedOperationException("None or multiple event definitions not supported for intermediate throw event");
     	}
     }
-    
-    protected void marshallCallActivity(CallActivity callActivity, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
+
+    protected void marshallCallActivity(CallActivity callActivity, BPMNPlane plane, JsonGenerator generator, float xOffset, float yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
     	Map<String, Object> properties = new LinkedHashMap<String, Object>(flowElementProperties);
-    	
+
     	Iterator<FeatureMap.Entry> iter = callActivity.getAnyAttribute().iterator();
         while(iter.hasNext()) {
             FeatureMap.Entry entry = iter.next();
             if(entry.getEStructuralFeature().getName().equals("independent")) {
                 properties.put("independent", entry.getValue());
             }
-            
+
             if(entry.getEStructuralFeature().getName().equals("waitForCompletion")) {
                 properties.put("waitforcompletion", entry.getValue());
             }
         }
-        
+
         if(callActivity.getCalledElement() != null && callActivity.getCalledElement().length() > 0) {
         	properties.put("calledelement", callActivity.getCalledElement());
         }
-        
+
         // data inputs
         if(callActivity.getIoSpecification() != null) {
             List<InputSet> inputSetList = callActivity.getIoSpecification().getInputSets();
@@ -1129,7 +1128,7 @@ public class Bpmn2JsonMarshaller {
             }
             properties.put("datainputset", dataInBuffer.toString());
         }
-        
+
         // data outputs
         if(callActivity.getIoSpecification() != null) {
             List<OutputSet> outputSetList = callActivity.getIoSpecification().getOutputSets();
@@ -1149,14 +1148,14 @@ public class Bpmn2JsonMarshaller {
             }
             properties.put("dataoutputset", dataOutBuffer.toString());
         }
-        
+
         // assignments
         StringBuilder associationBuff = new StringBuilder();
         List<DataInputAssociation> inputAssociations = callActivity.getDataInputAssociations();
         List<DataOutputAssociation> outputAssociations = callActivity.getDataOutputAssociations();
         List<String> uniDirectionalAssociations = new ArrayList<String>();
         //List<String> biDirectionalAssociations = new ArrayList<String>();
-        
+
         for(DataInputAssociation datain : inputAssociations) {
             String lhsAssociation = "";
             if(datain.getSourceRef() != null && datain.getSourceRef().size() > 0) {
@@ -1166,29 +1165,29 @@ public class Bpmn2JsonMarshaller {
             		lhsAssociation = datain.getSourceRef().get(0).getId();
             	}
             }
-            
+
             String rhsAssociation = "";
             if(datain.getTargetRef() != null) {
                 rhsAssociation = ((DataInput) datain.getTargetRef()).getName();
             }
-            
+
             //boolean isBiDirectional = false;
             boolean isAssignment = false;
-            
+
             if(datain.getAssignment() != null && datain.getAssignment().size() > 0) {
                 isAssignment = true;
-            } 
+            }
 //            else {
 //                // check if this is a bi-directional association
 //                for(DataOutputAssociation dataout : outputAssociations) {
-//                    if(dataout.getTargetRef().getId().equals(lhsAssociation) && 
+//                    if(dataout.getTargetRef().getId().equals(lhsAssociation) &&
 //                       ((DataOutput) dataout.getSourceRef().get(0)).getName().equals(rhsAssociation)) {
 //                        isBiDirectional = true;
 //                        break;
 //                    }
 //                }
 //            }
-            
+
             if(isAssignment) {
             	// only know how to deal with formal expressions
             	if( datain.getAssignment().get(0).getFrom() instanceof FormalExpression) {
@@ -1200,12 +1199,12 @@ public class Bpmn2JsonMarshaller {
             		associationBuff.append(rhsAssociation).append("=").append(replacer);
                 	associationBuff.append(",");
             	}
-            } 
+            }
 //            else if(isBiDirectional) {
 //                associationBuff.append(lhsAssociation).append("<->").append(rhsAssociation);
 //                associationBuff.append(",");
 //                biDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
-//            } 
+//            }
             else {
                 if(lhsAssociation != null && lhsAssociation.length() > 0) {
                     associationBuff.append("[din]" + lhsAssociation).append("->").append(rhsAssociation);
@@ -1214,12 +1213,12 @@ public class Bpmn2JsonMarshaller {
                 }
             }
         }
-        
+
         for(DataOutputAssociation dataout : outputAssociations) {
-            if(dataout.getSourceRef().size() > 0) { 
+            if(dataout.getSourceRef().size() > 0) {
                 String lhsAssociation = ((DataOutput) dataout.getSourceRef().get(0)).getName();
                 String rhsAssociation = dataout.getTargetRef().getId();
-                
+
                 boolean wasBiDirectional = false;
                 // check if we already addressed this association as bidirectional
 //                for(String bda : biDirectionalAssociations) {
@@ -1229,11 +1228,11 @@ public class Bpmn2JsonMarshaller {
 //                        break;
 //                    }
 //                }
-                
+
                 if(dataout.getTransformation() != null && dataout.getTransformation().getBody() != null) {
                 	rhsAssociation = dataout.getTransformation().getBody().replaceAll("=", "||");
                 }
-                
+
                 if(!wasBiDirectional) {
                     if(lhsAssociation != null && lhsAssociation.length() > 0) {
                         associationBuff.append("[dout]" + lhsAssociation).append("->").append(rhsAssociation);
@@ -1242,34 +1241,34 @@ public class Bpmn2JsonMarshaller {
                 }
             }
         }
-        
+
         String assignmentString = associationBuff.toString();
         if(assignmentString.endsWith(",")) {
             assignmentString = assignmentString.substring(0, assignmentString.length() - 1);
         }
         properties.put("assignments", assignmentString);
-        
+
         // on-entry and on-exit actions
         if(callActivity.getExtensionValues() != null && callActivity.getExtensionValues().size() > 0) {
-            
+
             String onEntryStr = "";
             String onExitStr = "";
             for(ExtensionAttributeValue extattrval : callActivity.getExtensionValues()) {
-            
+
                 FeatureMap extensionElements = extattrval.getValue();
-        
+
                 @SuppressWarnings("unchecked")
                 List<OnEntryScriptType> onEntryExtensions = (List<OnEntryScriptType>) extensionElements
                                                      .get(DroolsPackage.Literals.DOCUMENT_ROOT__ON_ENTRY_SCRIPT, true);
-        
+
                 @SuppressWarnings("unchecked")
                 List<OnExitScriptType> onExitExtensions = (List<OnExitScriptType>) extensionElements
                                                   .get(DroolsPackage.Literals.DOCUMENT_ROOT__ON_EXIT_SCRIPT, true);
-            
+
                 for(OnEntryScriptType onEntryScript : onEntryExtensions) {
                     onEntryStr += onEntryScript.getScript();
                     onEntryStr += "|";
-                
+
                     if(onEntryScript.getScriptFormat() != null) {
                         String format = onEntryScript.getScriptFormat();
                         String formatToWrite = "";
@@ -1283,11 +1282,11 @@ public class Bpmn2JsonMarshaller {
                         properties.put("script_language", formatToWrite);
                     }
                 }
-                
+
                 for(OnExitScriptType onExitScript : onExitExtensions) {
                     onExitStr += onExitScript.getScript();
                     onExitStr += "|";
-                    
+
                     if(onExitScript.getScriptFormat() != null) {
                         String format = onExitScript.getScriptFormat();
                         String formatToWrite = "";
@@ -1368,11 +1367,11 @@ public class Bpmn2JsonMarshaller {
                 }
             }
         }
-    	
+
         marshallNode(callActivity, properties, "ReusableSubprocess", plane, generator, xOffset, yOffset);
     }
-    
-    protected void marshallTask(Task task, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Definitions def, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
+
+    protected void marshallTask(Task task, BPMNPlane plane, JsonGenerator generator, float xOffset, float yOffset, String preProcessingData, Definitions def, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
         Map<String, Object> properties = new LinkedHashMap<String, Object>(flowElementProperties);
     	String taskType = "None";
     	if (task instanceof BusinessRuleTask) {
@@ -1454,9 +1453,9 @@ public class Bpmn2JsonMarshaller {
             			//properties.put("currency", costParams.getUnitCost() == null ? "" : costParams.getUnitCost());
             			ResourceParameters resourceParams = eleType.getResourceParameters();
             			FloatingParameterType quantityVal = (FloatingParameterType) resourceParams.getQuantity().getParameterValue().get(0);
-            			properties.put("quantity", quantityVal.getValue()); 
+            			properties.put("quantity", quantityVal.getValue());
             			FloatingParameterType workingHoursVal = (FloatingParameterType) resourceParams.getAvailability().getParameterValue().get(0);
-            			properties.put("workinghours", workingHoursVal.getValue()); 
+            			properties.put("workinghours", workingHoursVal.getValue());
             		}
     			}
     		}
@@ -1506,7 +1505,7 @@ public class Bpmn2JsonMarshaller {
                 }
             }
         }
-        
+
         // check if we are dealing with a custom task
         if(isCustomElement((String) properties.get("taskname"), preProcessingData)) {
             properties.put("tasktype", properties.get("taskname"));
@@ -1568,7 +1567,7 @@ public class Bpmn2JsonMarshaller {
         } else {
             properties.put("multipleinstance", "false");
         }
-        
+
         // data inputs
         DataInput groupDataInput = null;
         DataInput skippableDataInput = null;
@@ -1635,7 +1634,7 @@ public class Bpmn2JsonMarshaller {
             }
             properties.put("datainputset", dataInBuffer.toString());
         }
-        
+
         // data outputs
         if(task.getIoSpecification() != null) {
             List<OutputSet> outputSetList = task.getIoSpecification().getOutputSets();
@@ -1657,14 +1656,14 @@ public class Bpmn2JsonMarshaller {
             }
             properties.put("dataoutputset", dataOutBuffer.toString());
         }
-        
+
         // assignments
         StringBuilder associationBuff = new StringBuilder();
         List<DataInputAssociation> inputAssociations = task.getDataInputAssociations();
         List<DataOutputAssociation> outputAssociations = task.getDataOutputAssociations();
         List<String> uniDirectionalAssociations = new ArrayList<String>();
         //List<String> biDirectionalAssociations = new ArrayList<String>();
-        
+
         for(DataInputAssociation datain : inputAssociations) {
 
             boolean proceed = true;
@@ -1880,34 +1879,34 @@ public class Bpmn2JsonMarshaller {
                 }
             }
         }
-        
+
         String assignmentString = associationBuff.toString();
         if(assignmentString.endsWith(",")) {
             assignmentString = assignmentString.substring(0, assignmentString.length() - 1);
         }
         properties.put("assignments", assignmentString);
-        
+
         // on-entry and on-exit actions
         if(task.getExtensionValues() != null && task.getExtensionValues().size() > 0) {
-            
+
             String onEntryStr = "";
             String onExitStr = "";
             for(ExtensionAttributeValue extattrval : task.getExtensionValues()) {
-            
+
                 FeatureMap extensionElements = extattrval.getValue();
-        
+
                 @SuppressWarnings("unchecked")
                 List<OnEntryScriptType> onEntryExtensions = (List<OnEntryScriptType>) extensionElements
                                                      .get(DroolsPackage.Literals.DOCUMENT_ROOT__ON_ENTRY_SCRIPT, true);
-        
+
                 @SuppressWarnings("unchecked")
                 List<OnExitScriptType> onExitExtensions = (List<OnExitScriptType>) extensionElements
                                                   .get(DroolsPackage.Literals.DOCUMENT_ROOT__ON_EXIT_SCRIPT, true);
-            
+
                 for(OnEntryScriptType onEntryScript : onEntryExtensions) {
                     onEntryStr += onEntryScript.getScript();
                     onEntryStr += "|";
-                
+
                     if(onEntryScript.getScriptFormat() != null) {
                         String format = onEntryScript.getScriptFormat();
                         String formatToWrite = "";
@@ -1921,11 +1920,11 @@ public class Bpmn2JsonMarshaller {
                         properties.put("script_language", formatToWrite);
                     }
                 }
-                
+
                 for(OnExitScriptType onExitScript : onExitExtensions) {
                     onExitStr += onExitScript.getScript();
                     onExitStr += "|";
-                    
+
                     if(onExitScript.getScriptFormat() != null) {
                         String format = onExitScript.getScriptFormat();
                         String formatToWrite = "";
@@ -1955,7 +1954,7 @@ public class Bpmn2JsonMarshaller {
                 properties.put("onexitactions", onExitStr);
             }
         }
-        
+
         // simulation properties
         if(_simulationScenario != null) {
         	for(ElementParameters eleType : _simulationScenario.getElementParameters()) {
@@ -2006,7 +2005,7 @@ public class Bpmn2JsonMarshaller {
         		}
         	}
         }
-        
+
         // marshall the node out
         if(isCustomElement((String) properties.get("taskname"), preProcessingData)) {
             marshallNode(task, properties, (String) properties.get("taskname"), plane, generator, xOffset, yOffset);
@@ -2014,12 +2013,12 @@ public class Bpmn2JsonMarshaller {
             marshallNode(task, properties, "Task", plane, generator, xOffset, yOffset);
         }
     }
-    
-    protected void marshallParallelGateway(ParallelGateway gateway, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
+
+    protected void marshallParallelGateway(ParallelGateway gateway, BPMNPlane plane, JsonGenerator generator, float xOffset, float yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
     	marshallNode(gateway, flowElementProperties, "ParallelGateway", plane, generator, xOffset, yOffset);
     }
-    
-    protected void marshallExclusiveGateway(ExclusiveGateway gateway, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
+
+    protected void marshallExclusiveGateway(ExclusiveGateway gateway, BPMNPlane plane, JsonGenerator generator, float xOffset, float yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
     	if(gateway.getDefault() != null) {
             SequenceFlow defsf = gateway.getDefault();
             String defGatewayStr = "";
@@ -2032,8 +2031,8 @@ public class Bpmn2JsonMarshaller {
     	}
     	marshallNode(gateway, flowElementProperties, "Exclusive_Databased_Gateway", plane, generator, xOffset, yOffset);
     }
-    
-    protected void marshallInclusiveGateway(InclusiveGateway gateway, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
+
+    protected void marshallInclusiveGateway(InclusiveGateway gateway, BPMNPlane plane, JsonGenerator generator, float xOffset, float yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
     	if(gateway.getDefault() != null) {
             SequenceFlow defsf = gateway.getDefault();
             String defGatewayStr = "";
@@ -2046,16 +2045,16 @@ public class Bpmn2JsonMarshaller {
     	}
     	marshallNode(gateway, flowElementProperties, "InclusiveGateway", plane, generator, xOffset, yOffset);
     }
-    
-    protected void marshallEventBasedGateway(EventBasedGateway gateway, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
+
+    protected void marshallEventBasedGateway(EventBasedGateway gateway, BPMNPlane plane, JsonGenerator generator, float xOffset, float yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
     	marshallNode(gateway, flowElementProperties, "EventbasedGateway", plane, generator, xOffset, yOffset);
     }
-    
-    protected void marshallComplexGateway(ComplexGateway gateway, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
+
+    protected void marshallComplexGateway(ComplexGateway gateway, BPMNPlane plane, JsonGenerator generator, float xOffset, float yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
     	marshallNode(gateway, flowElementProperties, "ComplexGateway", plane, generator, xOffset, yOffset);
     }
-    
-    protected void marshallNode(FlowNode node, Map<String, Object> properties, String stencil, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset) throws JsonGenerationException, IOException {
+
+    protected void marshallNode(FlowNode node, Map<String, Object> properties, String stencil, BPMNPlane plane, JsonGenerator generator, float xOffset, float yOffset) throws JsonGenerationException, IOException {
     	if (properties == null) {
     		properties = new LinkedHashMap<String, Object>();
     	}
@@ -2102,7 +2101,7 @@ public class Bpmn2JsonMarshaller {
         	}
         }
         generator.writeEndArray();
-        
+
         // boundary events have a docker
         if(node instanceof BoundaryEvent) {
         	// find the edge associated with this boundary event
@@ -2124,7 +2123,7 @@ public class Bpmn2JsonMarshaller {
         		}
         	}
         }
-        
+
         BPMNShape shape = (BPMNShape) findDiagramElement(plane, node);
         Bounds bounds = shape.getBounds();
         correctEventNodeSize(shape);
@@ -2139,7 +2138,7 @@ public class Bpmn2JsonMarshaller {
         generator.writeEndObject();
         generator.writeEndObject();
     }
-    
+
     private void correctEventNodeSize(BPMNShape shape) {
     	BaseElement element = shape.getBpmnElement();
 		if (element instanceof Event) {
@@ -2173,8 +2172,8 @@ public class Bpmn2JsonMarshaller {
 			}
     	}
     }
-    
-    protected void marshallDataObject(DataObject dataObject, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
+
+    protected void marshallDataObject(DataObject dataObject, BPMNPlane plane, JsonGenerator generator, float xOffset, float yOffset, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
     	Map<String, Object> properties = new LinkedHashMap<String, Object>(flowElementProperties);
         if(dataObject.getDocumentation() != null && dataObject.getDocumentation().size() > 0) {
             properties.put("documentation", dataObject.getDocumentation().get(0).getText());
@@ -2215,7 +2214,7 @@ public class Bpmn2JsonMarshaller {
         }
 
 		marshallProperties(properties, generator);
-	    
+
 		generator.writeObjectFieldStart("stencil");
 	    generator.writeObjectField("id", "DataObject");
 	    generator.writeEndObject();
@@ -2233,7 +2232,7 @@ public class Bpmn2JsonMarshaller {
         }
 
 	    generator.writeEndArray();
-	    
+
 	    Bounds bounds = ((BPMNShape) findDiagramElement(plane, dataObject)).getBounds();
 	    generator.writeObjectFieldStart("bounds");
 	    generator.writeObjectFieldStart("lowerRight");
@@ -2246,8 +2245,8 @@ public class Bpmn2JsonMarshaller {
 	    generator.writeEndObject();
 	    generator.writeEndObject();
 	}
-    
-    protected void marshallSubProcess(SubProcess subProcess, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Definitions def, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
+
+    protected void marshallSubProcess(SubProcess subProcess, BPMNPlane plane, JsonGenerator generator, float xOffset, float yOffset, String preProcessingData, Definitions def, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
     	Map<String, Object> properties = new LinkedHashMap<String, Object>(flowElementProperties);
 		if(subProcess.getName() != null) {
 			properties.put("name", unescapeXML(subProcess.getName()));
@@ -2290,7 +2289,7 @@ public class Bpmn2JsonMarshaller {
             }
             properties.put("datainputset", dataInBuffer.toString());
         }
-        
+
         // data outputs
         if(subProcess.getIoSpecification() != null) {
             List<OutputSet> outputSetList = subProcess.getIoSpecification().getOutputSets();
@@ -2310,14 +2309,14 @@ public class Bpmn2JsonMarshaller {
             }
             properties.put("dataoutputset", dataOutBuffer.toString());
         }
-        
+
         // assignments
         StringBuilder associationBuff = new StringBuilder();
         List<DataInputAssociation> inputAssociations = subProcess.getDataInputAssociations();
         List<DataOutputAssociation> outputAssociations = subProcess.getDataOutputAssociations();
         List<String> uniDirectionalAssociations = new ArrayList<String>();
         //List<String> biDirectionalAssociations = new ArrayList<String>();
-        
+
         for(DataInputAssociation datain : inputAssociations) {
             String lhsAssociation = "";
             if(datain.getSourceRef() != null && datain.getSourceRef().size() > 0) {
@@ -2327,29 +2326,29 @@ public class Bpmn2JsonMarshaller {
             		lhsAssociation = datain.getSourceRef().get(0).getId();
             	}
             }
-            
+
             String rhsAssociation = "";
             if(datain.getTargetRef() != null) {
                 rhsAssociation = ((DataInput) datain.getTargetRef()).getName();
             }
-            
+
             //boolean isBiDirectional = false;
             boolean isAssignment = false;
-            
+
             if(datain.getAssignment() != null && datain.getAssignment().size() > 0) {
                 isAssignment = true;
-            } 
+            }
 //            else {
 //                // check if this is a bi-directional association
 //                for(DataOutputAssociation dataout : outputAssociations) {
-//                    if(dataout.getTargetRef().getId().equals(lhsAssociation) && 
+//                    if(dataout.getTargetRef().getId().equals(lhsAssociation) &&
 //                       ((DataOutput) dataout.getSourceRef().get(0)).getName().equals(rhsAssociation)) {
 //                        isBiDirectional = true;
 //                        break;
 //                    }
 //                }
 //            }
-            
+
             if(isAssignment) {
             	// only know how to deal with formal expressions
             	if( datain.getAssignment().get(0).getFrom() instanceof FormalExpression) {
@@ -2361,12 +2360,12 @@ public class Bpmn2JsonMarshaller {
             		associationBuff.append("[din]" + rhsAssociation).append("=").append(replacer);
                 	associationBuff.append(",");
             	}
-            } 
+            }
 //            else if(isBiDirectional) {
 //                associationBuff.append(lhsAssociation).append("<->").append(rhsAssociation);
 //                associationBuff.append(",");
 //                biDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
-//            } 
+//            }
             else {
                 if(lhsAssociation != null && lhsAssociation.length() > 0) {
                     associationBuff.append("[din]" + lhsAssociation).append("->").append(rhsAssociation);
@@ -2375,12 +2374,12 @@ public class Bpmn2JsonMarshaller {
                 }
             }
         }
-        
+
         for(DataOutputAssociation dataout : outputAssociations) {
-            if(dataout.getSourceRef().size() > 0) { 
+            if(dataout.getSourceRef().size() > 0) {
                 String lhsAssociation = ((DataOutput) dataout.getSourceRef().get(0)).getName();
                 String rhsAssociation = dataout.getTargetRef().getId();
-                
+
                 boolean wasBiDirectional = false;
                 // check if we already addressed this association as bidirectional
 //                for(String bda : biDirectionalAssociations) {
@@ -2390,11 +2389,11 @@ public class Bpmn2JsonMarshaller {
 //                        break;
 //                    }
 //                }
-                
+
                 if(dataout.getTransformation() != null && dataout.getTransformation().getBody() != null) {
                 	rhsAssociation = dataout.getTransformation().getBody().replaceAll("=", "||");
                 }
-                
+
                 if(!wasBiDirectional) {
                     if(lhsAssociation != null && lhsAssociation.length() > 0) {
                         associationBuff.append("[dout]" + lhsAssociation).append("->").append(rhsAssociation);
@@ -2403,34 +2402,34 @@ public class Bpmn2JsonMarshaller {
                 }
             }
         }
-        
+
         String assignmentString = associationBuff.toString();
         if(assignmentString.endsWith(",")) {
             assignmentString = assignmentString.substring(0, assignmentString.length() - 1);
         }
         properties.put("assignments", assignmentString);
-        
+
         // on-entry and on-exit actions
         if(subProcess.getExtensionValues() != null && subProcess.getExtensionValues().size() > 0) {
-            
+
             String onEntryStr = "";
             String onExitStr = "";
             for(ExtensionAttributeValue extattrval : subProcess.getExtensionValues()) {
-            
+
                 FeatureMap extensionElements = extattrval.getValue();
-        
+
                 @SuppressWarnings("unchecked")
                 List<OnEntryScriptType> onEntryExtensions = (List<OnEntryScriptType>) extensionElements
                                                      .get(DroolsPackage.Literals.DOCUMENT_ROOT__ON_ENTRY_SCRIPT, true);
-        
+
                 @SuppressWarnings("unchecked")
                 List<OnExitScriptType> onExitExtensions = (List<OnExitScriptType>) extensionElements
                                                   .get(DroolsPackage.Literals.DOCUMENT_ROOT__ON_EXIT_SCRIPT, true);
-            
+
                 for(OnEntryScriptType onEntryScript : onEntryExtensions) {
                     onEntryStr += onEntryScript.getScript();
                     onEntryStr += "|";
-                
+
                     if(onEntryScript.getScriptFormat() != null) {
                         String format = onEntryScript.getScriptFormat();
                         String formatToWrite = "";
@@ -2444,11 +2443,11 @@ public class Bpmn2JsonMarshaller {
                         properties.put("script_language", formatToWrite);
                     }
                 }
-                
+
                 for(OnExitScriptType onExitScript : onExitExtensions) {
                     onExitStr += onExitScript.getScript();
                     onExitStr += "|";
-                    
+
                     if(onExitScript.getScriptFormat() != null) {
                         String format = onExitScript.getScriptFormat();
                         String formatToWrite = "";
@@ -2478,7 +2477,7 @@ public class Bpmn2JsonMarshaller {
                 properties.put("onexitactions", onExitStr);
             }
         }
-        
+
         // loop characteristics
         boolean haveValidLoopCharacteristics = false;
         if(subProcess.getLoopCharacteristics() != null && subProcess.getLoopCharacteristics() instanceof MultiInstanceLoopCharacteristics) {
@@ -2544,7 +2543,7 @@ public class Bpmn2JsonMarshaller {
                 }
             }
         }
-        
+
         // properties
         List<Property> processProperties = subProcess.getProperties();
         if(processProperties != null && processProperties.size() > 0) {
@@ -2613,7 +2612,7 @@ public class Bpmn2JsonMarshaller {
                 }
             }
         }
-		
+
 	    marshallProperties(properties, generator);
 	    generator.writeObjectFieldStart("stencil");
 	    if(subProcess instanceof AdHocSubProcess) {
@@ -2634,10 +2633,10 @@ public class Bpmn2JsonMarshaller {
 	    Bounds bounds = ((BPMNShape) findDiagramElement(plane, subProcess)).getBounds();
 	    for (FlowElement flowElement: subProcess.getFlowElements()) {
 	    	// dont want to set the offset
-	    	marshallFlowElement(flowElement, plane, generator, 0, 0, preProcessingData, def);
+	    	marshallFlowElement(flowElement, plane, generator, bounds.getX(), bounds.getY(), preProcessingData, def);
 	    }
 	    for (Artifact artifact: subProcess.getArtifacts()) {
-	    	marshallArtifact(artifact, plane, generator, 0, 0, preProcessingData, def);
+	    	marshallArtifact(artifact, plane, generator, bounds.getX(), bounds.getY(), preProcessingData, def);
 	    }
 	    generator.writeEndArray();
 	    generator.writeArrayFieldStart("outgoing");
@@ -2663,7 +2662,7 @@ public class Bpmn2JsonMarshaller {
         	}
         }
 	    generator.writeEndArray();
-	    
+
 	    generator.writeObjectFieldStart("bounds");
 	    generator.writeObjectFieldStart("lowerRight");
 	    generator.writeObjectField("x", bounds.getX() + bounds.getWidth() - xOffset);
@@ -2674,9 +2673,10 @@ public class Bpmn2JsonMarshaller {
 	    generator.writeObjectField("y", bounds.getY() - yOffset);
 	    generator.writeEndObject();
 	    generator.writeEndObject();
-	}
-    
-    protected void marshallSequenceFlow(SequenceFlow sequenceFlow, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset) throws JsonGenerationException, IOException {
+
+    }
+
+    protected void marshallSequenceFlow(SequenceFlow sequenceFlow, BPMNPlane plane, JsonGenerator generator, float xOffset, float yOffset) throws JsonGenerationException, IOException {
     	// dont marshal "dangling" sequence flow..better to just omit than fail
         if(sequenceFlow.getSourceRef() == null || sequenceFlow.getTargetRef() == null) {
             return;
@@ -2698,7 +2698,7 @@ public class Bpmn2JsonMarshaller {
         } else {
             properties.put("isimmediate", "false");
         }
-    	
+
     	Expression conditionExpression = sequenceFlow.getConditionExpression();
     	if (conditionExpression instanceof FormalExpression) {
     	    if(((FormalExpression) conditionExpression).getBody() != null) {
@@ -2718,7 +2718,7 @@ public class Bpmn2JsonMarshaller {
     	            cdStr = "mvel";
     	        }
     	        properties.put("conditionexpressionlanguage", cdStr);
-    	    } 
+    	    }
     	}
 
         boolean foundBgColor = false;
@@ -2767,19 +2767,19 @@ public class Bpmn2JsonMarshaller {
         if(!foundBgColor) {
         	properties.put("bgcolor", defaultSequenceflowColor);
         }
-        
+
         if(!foundBrColor) {
         	properties.put("bordercolor", defaultSequenceflowColor);
         }
-        
+
         if(!foundFontColor) {
         	properties.put("fontcolor", defaultSequenceflowColor);
         }
-        
+
         if(!foundSelectable) {
         	properties.put("isselectable", "true");
         }
-        
+
         // simulation properties
         if(_simulationScenario != null) {
         	List<ElementParameters> elementParams = _simulationScenario.getElementParameters();
@@ -2790,7 +2790,7 @@ public class Bpmn2JsonMarshaller {
         		}
         	}
         }
-    	
+
         marshallProperties(properties, generator);
         generator.writeObjectFieldStart("stencil");
         generator.writeObjectField("id", "SequenceFlow");
@@ -2803,7 +2803,7 @@ public class Bpmn2JsonMarshaller {
         generator.writeObjectField("resourceId", sequenceFlow.getTargetRef().getId());
         generator.writeEndObject();
         generator.writeEndArray();
-        
+
         Bounds sourceBounds = ((BPMNShape) findDiagramElement(plane, sequenceFlow.getSourceRef())).getBounds();
         Bounds targetBounds = ((BPMNShape) findDiagramElement(plane, sequenceFlow.getTargetRef())).getBounds();
         generator.writeArrayFieldStart("dockers");
@@ -2825,7 +2825,7 @@ public class Bpmn2JsonMarshaller {
         generator.writeEndObject();
         generator.writeEndArray();
     }
-    
+
     private DiagramElement findDiagramElement(BPMNPlane plane, BaseElement baseElement) {
     	DiagramElement result = _diagramElements.get(baseElement.getId());
     	if (result != null) {
@@ -2841,18 +2841,18 @@ public class Bpmn2JsonMarshaller {
     	_logger.info("Could not find BPMNDI information for " + baseElement);
     	return null;
     }
-    
+
     protected void marshallGlobalTask(GlobalTask globalTask, JsonGenerator generator) {
         if (globalTask instanceof GlobalBusinessRuleTask) {
-            
+
         } else if (globalTask instanceof GlobalManualTask) {
-            
+
         } else if (globalTask instanceof GlobalScriptTask) {
-            
+
         } else if (globalTask instanceof GlobalUserTask) {
-            
+
         } else {
-            
+
         }
     }
 
@@ -2867,7 +2867,7 @@ public class Bpmn2JsonMarshaller {
     protected void marshallChoreography(Choreography callableElement, JsonGenerator generator) {
         throw new UnsupportedOperationException("TODO"); //TODO!
     }
-    
+
     protected void marshallProperties(Map<String, Object> properties, JsonGenerator generator) throws JsonGenerationException, IOException {
         generator.writeObjectFieldStart("properties");
         for (Entry<String, Object> entry : properties.entrySet()) {
@@ -2875,8 +2875,8 @@ public class Bpmn2JsonMarshaller {
         }
         generator.writeEndObject();
     }
-    
-    protected void marshallArtifact(Artifact artifact, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Definitions def) throws IOException {
+
+    protected void marshallArtifact(Artifact artifact, BPMNPlane plane, JsonGenerator generator, float xOffset, float yOffset, String preProcessingData, Definitions def) throws IOException {
     	generator.writeStartObject();
     	generator.writeObjectField("resourceId", artifact.getId());
     	if (artifact instanceof Association) {
@@ -2888,8 +2888,8 @@ public class Bpmn2JsonMarshaller {
     	}
     	generator.writeEndObject();
     }
-    
-    protected void marshallAssociation(Association association, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Definitions def) throws JsonGenerationException, IOException {
+
+    protected void marshallAssociation(Association association, BPMNPlane plane, JsonGenerator generator, float xOffset, float yOffset, String preProcessingData, Definitions def) throws JsonGenerationException, IOException {
     	Map<String, Object> properties = new LinkedHashMap<String, Object>();
         Iterator<FeatureMap.Entry> iter = association.getAnyAttribute().iterator();
         boolean foundBrColor = false;
@@ -2909,7 +2909,7 @@ public class Bpmn2JsonMarshaller {
         if(association.getDocumentation() != null && association.getDocumentation().size() > 0) {
             properties.put("documentation", association.getDocumentation().get(0).getText());
         }
-        
+
         marshallProperties(properties, generator);
         generator.writeObjectFieldStart("stencil");
         if(association.getAssociationDirection().equals(AssociationDirection.ONE)) {
@@ -2927,7 +2927,7 @@ public class Bpmn2JsonMarshaller {
         generator.writeObjectField("resourceId", association.getTargetRef().getId());
         generator.writeEndObject();
         generator.writeEndArray();
-        
+
         Bounds sourceBounds = ((BPMNShape) findDiagramElement(plane, association.getSourceRef())).getBounds();
 
         Bounds targetBounds = null;
@@ -2972,14 +2972,14 @@ public class Bpmn2JsonMarshaller {
         }
     }
 
-    protected void marshallTextAnnotation(TextAnnotation textAnnotation, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Definitions def)  throws JsonGenerationException, IOException{
+    protected void marshallTextAnnotation(TextAnnotation textAnnotation, BPMNPlane plane, JsonGenerator generator, float xOffset, float yOffset, String preProcessingData, Definitions def)  throws JsonGenerationException, IOException{
     	Map<String, Object> properties = new LinkedHashMap<String, Object>();
     	properties.put("name", textAnnotation.getText());
         if(textAnnotation.getDocumentation() != null && textAnnotation.getDocumentation().size() > 0) {
             properties.put("documentation", textAnnotation.getDocumentation().get(0).getText());
         }
     	properties.put("artifacttype", "Annotation");
-    	
+
     	Iterator<FeatureMap.Entry> iter = textAnnotation.getAnyAttribute().iterator();
     	boolean foundBrColor = false;
     	boolean foundFontColor = false;
@@ -2998,23 +2998,23 @@ public class Bpmn2JsonMarshaller {
             	foundFontColor = true;
             }
         }
-        
+
         if(!foundBrColor) {
         	properties.put("bordercolor", defaultBrColor);
         }
-        
+
         if(!foundFontColor) {
         	properties.put("fontcolor", defaultFontColor);
         }
-    	
+
 	    marshallProperties(properties, generator);
-        
+
         generator.writeObjectFieldStart("stencil");
         generator.writeObjectField("id", "TextAnnotation");
         generator.writeEndObject();
         generator.writeArrayFieldStart("childShapes");
         generator.writeEndArray();
-    
+
     	generator.writeArrayFieldStart("outgoing");
     	if(findOutgoingAssociation(plane, textAnnotation) != null) {
     		generator.writeStartObject();
@@ -3022,7 +3022,7 @@ public class Bpmn2JsonMarshaller {
     		generator.writeEndObject();
     	}
     	generator.writeEndArray();
-    
+
     	Bounds bounds = ((BPMNShape) findDiagramElement(plane, textAnnotation)).getBounds();
     	generator.writeObjectFieldStart("bounds");
     	generator.writeObjectFieldStart("lowerRight");
@@ -3035,21 +3035,21 @@ public class Bpmn2JsonMarshaller {
     	generator.writeEndObject();
     	generator.writeEndObject();
     }
-    
-    protected void marshallGroup(Group group, BPMNPlane plane, JsonGenerator generator, int xOffset, int yOffset, String preProcessingData, Definitions def)  throws JsonGenerationException, IOException{
+
+    protected void marshallGroup(Group group, BPMNPlane plane, JsonGenerator generator, float xOffset, float yOffset, String preProcessingData, Definitions def)  throws JsonGenerationException, IOException{
     	Map<String, Object> properties = new LinkedHashMap<String, Object>();
     	if(group.getCategoryValueRef() != null && group.getCategoryValueRef().getValue() != null) {
     		properties.put("name", unescapeXML(group.getCategoryValueRef().getValue()));
     	}
-    	
+
 	    marshallProperties(properties, generator);
-        
+
         generator.writeObjectFieldStart("stencil");
         generator.writeObjectField("id", "Group");
         generator.writeEndObject();
         generator.writeArrayFieldStart("childShapes");
         generator.writeEndArray();
-    
+
     	generator.writeArrayFieldStart("outgoing");
     	if(findOutgoingAssociation(plane, group) != null) {
     		generator.writeStartObject();
@@ -3057,7 +3057,7 @@ public class Bpmn2JsonMarshaller {
     		generator.writeEndObject();
     	}
     	generator.writeEndArray();
-    
+
     	Bounds bounds = ((BPMNShape) findDiagramElement(plane, group)).getBounds();
     	generator.writeObjectFieldStart("bounds");
     	generator.writeObjectFieldStart("lowerRight");
@@ -3070,7 +3070,7 @@ public class Bpmn2JsonMarshaller {
     	generator.writeEndObject();
     	generator.writeEndObject();
     }
-    
+
     protected Association findOutgoingAssociation(BPMNPlane plane, BaseElement baseElement) {
     	Association result = _diagramAssociations.get(baseElement.getId());
     	if (result != null) {
@@ -3079,7 +3079,7 @@ public class Bpmn2JsonMarshaller {
         if (!(plane.getBpmnElement() instanceof Process)){
             throw new IllegalArgumentException("Don't know how to get associations from a non-Process Diagram");
         }
-        
+
         Process process = (Process) plane.getBpmnElement();
         for (Artifact artifact : process.getArtifacts()) {
             if (artifact instanceof Association){
@@ -3110,13 +3110,13 @@ public class Bpmn2JsonMarshaller {
         }
         return retList;
     }
-    
+
     protected void marshallStencil(String stencilId, JsonGenerator generator) throws JsonGenerationException, IOException {
         generator.writeObjectFieldStart("stencil");
         generator.writeObjectField("id", stencilId);
         generator.writeEndObject();
     }
-    
+
     private boolean isCustomElement(String taskType, String preProcessingData) {
         if(taskType != null && taskType.length() > 0 && preProcessingData != null && preProcessingData.length() > 0) {
             String[] preProcessingDataElements = preProcessingData.split( ",\\s*" );
