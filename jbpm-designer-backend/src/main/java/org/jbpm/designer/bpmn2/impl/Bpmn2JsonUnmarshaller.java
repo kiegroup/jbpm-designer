@@ -162,6 +162,8 @@ public class Bpmn2JsonUnmarshaller {
 
             // do the unmarshalling now:
             Definitions def = (Definitions) unmarshallItem(parser, preProcessingData);
+            def.setExporter("jBPM Designer");
+            def.setExporterVersion("6.2.0");
             revisitServiceTasks(def);
             revisitMessages(def);
             revisitCatchEvents(def);

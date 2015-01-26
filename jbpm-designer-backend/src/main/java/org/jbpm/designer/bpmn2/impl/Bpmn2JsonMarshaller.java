@@ -76,6 +76,7 @@ public class Bpmn2JsonMarshaller {
 	private Scenario _simulationScenario = null;
 	private static final Logger _logger = LoggerFactory.getLogger(Bpmn2JsonMarshaller.class);
 	private IDiagramProfile profile;
+    private boolean coordianteManipulation = true;
 
 	public void setProfile(IDiagramProfile profile) {
 	    this.profile = profile;
@@ -106,6 +107,16 @@ public class Bpmn2JsonMarshaller {
         if(preProcessingData == null || preProcessingData.length() < 1) {
             preProcessingData = "ReadOnlyService";
         }
+
+        // this is a temp way to determine if
+        // coordinate system changes are necessary
+        String bpmn2Exporter = def.getExporter();
+        String bpmn2ExporterVersion = def.getExporterVersion();
+        boolean haveExporter = bpmn2Exporter != null && bpmn2ExporterVersion != null;
+        if(_simulationScenario != null && !haveExporter ) {
+            coordianteManipulation = false;
+        }
+
         marshallDefinitions(def, generator, preProcessingData);
         generator.close();
 
@@ -669,7 +680,11 @@ public class Bpmn2JsonMarshaller {
 		    generator.writeArrayFieldStart("childShapes");
 		    for (FlowElement flowElement: lane.getFlowNodeRefs()) {
 		    	nodeRefIds.add(flowElement.getId());
-		    	marshallFlowElement(flowElement, plane, generator, bounds.getX(), bounds.getY(), preProcessingData, def);
+                if(coordianteManipulation) {
+                    marshallFlowElement(flowElement, plane, generator, bounds.getX(), bounds.getY(), preProcessingData, def);
+                } else {
+                    marshallFlowElement(flowElement, plane, generator, 0, 0, preProcessingData, def);
+                }
 		    }
 		    generator.writeEndArray();
 		    generator.writeArrayFieldStart("outgoing");
@@ -2632,11 +2647,18 @@ public class Bpmn2JsonMarshaller {
 	    generator.writeArrayFieldStart("childShapes");
 	    Bounds bounds = ((BPMNShape) findDiagramElement(plane, subProcess)).getBounds();
 	    for (FlowElement flowElement: subProcess.getFlowElements()) {
-	    	// dont want to set the offset
-	    	marshallFlowElement(flowElement, plane, generator, bounds.getX(), bounds.getY(), preProcessingData, def);
+            if(coordianteManipulation) {
+                marshallFlowElement(flowElement, plane, generator, bounds.getX(), bounds.getY(), preProcessingData, def);
+            } else {
+                marshallFlowElement(flowElement, plane, generator, 0, 0, preProcessingData, def);
+            }
 	    }
 	    for (Artifact artifact: subProcess.getArtifacts()) {
-	    	marshallArtifact(artifact, plane, generator, bounds.getX(), bounds.getY(), preProcessingData, def);
+            if(coordianteManipulation) {
+                marshallArtifact(artifact, plane, generator, bounds.getX(), bounds.getY(), preProcessingData, def);
+            } else {
+                marshallArtifact(artifact, plane, generator, 0, 0, preProcessingData, def);
+            }
 	    }
 	    generator.writeEndArray();
 	    generator.writeArrayFieldStart("outgoing");
