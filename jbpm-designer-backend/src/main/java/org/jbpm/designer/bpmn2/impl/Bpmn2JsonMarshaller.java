@@ -1559,8 +1559,10 @@ public class Bpmn2JsonMarshaller {
             if(taskmi.getInputDataItem() != null && taskmi.getInputDataItem().getItemSubjectRef() != null) {
                 List<DataInput> taskDataInputs = task.getIoSpecification().getDataInputs();
                 for(DataInput din: taskDataInputs) {
-                    if(din.getItemSubjectRef().getId().equals(taskmi.getInputDataItem().getItemSubjectRef().getId())) {
-                        properties.put("multipleinstancedatainput", din.getName());
+                    if(din != null && din.getItemSubjectRef() != null && taskmi.getInputDataItem() != null && taskmi.getInputDataItem().getItemSubjectRef() != null ) {
+                        if(din.getItemSubjectRef().getId().equals(taskmi.getInputDataItem().getItemSubjectRef().getId())) {
+                            properties.put("multipleinstancedatainput", din.getName());
+                        }
                     }
                 }
             }
@@ -1568,8 +1570,10 @@ public class Bpmn2JsonMarshaller {
             if(taskmi.getOutputDataItem() != null && taskmi.getOutputDataItem().getItemSubjectRef() != null) {
                 List<DataOutput> taskDataOutputs = task.getIoSpecification().getDataOutputs();
                 for(DataOutput dout : taskDataOutputs) {
-                    if(dout.getItemSubjectRef().getId().equals(taskmi.getOutputDataItem().getItemSubjectRef().getId())) {
-                        properties.put("multipleinstancedataoutput", dout.getName());
+                    if(dout != null && dout.getItemSubjectRef() != null && taskmi.getOutputDataItem() != null && taskmi.getOutputDataItem().getItemSubjectRef() != null) {
+                        if(dout.getItemSubjectRef().getId().equals(taskmi.getOutputDataItem().getItemSubjectRef().getId())) {
+                            properties.put("multipleinstancedataoutput", dout.getName());
+                        }
                     }
                 }
             }
@@ -1685,12 +1689,17 @@ public class Bpmn2JsonMarshaller {
             if(task.getLoopCharacteristics() != null) {
                 MultiInstanceLoopCharacteristics taskMultiLoop = (MultiInstanceLoopCharacteristics) task.getLoopCharacteristics();
                 // dont include associations that include mi loop data inputs
-                if(datain.getSourceRef().get(0).getId().equals(taskMultiLoop.getInputDataItem().getId())) {
-                    proceed = false;
+                if(taskMultiLoop.getInputDataItem() != null && taskMultiLoop.getInputDataItem().getId() != null) {
+                    if(datain.getSourceRef().get(0).getId().equals(taskMultiLoop.getInputDataItem().getId())) {
+                        proceed = false;
+                    }
                 }
+
                 // dont include associations that include loopDataInputRef as target
-                if(datain.getTargetRef().equals(taskMultiLoop.getLoopDataInputRef())) {
-                    proceed = false;
+                if(taskMultiLoop.getLoopDataInputRef() != null ) {
+                    if(datain.getTargetRef().equals(taskMultiLoop.getLoopDataInputRef())) {
+                        proceed = false;
+                    }
                 }
             }
 
@@ -1857,12 +1866,17 @@ public class Bpmn2JsonMarshaller {
             if(task.getLoopCharacteristics() != null) {
                 MultiInstanceLoopCharacteristics taskMultiLoop = (MultiInstanceLoopCharacteristics) task.getLoopCharacteristics();
                 // dont include associations that include mi loop data outputs
-                if(dataout.getTargetRef().getId().equals(taskMultiLoop.getOutputDataItem().getId())) {
-                    proceed = false;
+
+                if(taskMultiLoop.getOutputDataItem() != null && taskMultiLoop.getOutputDataItem().getId() != null)  {
+                    if(dataout.getTargetRef().getId().equals(taskMultiLoop.getOutputDataItem().getId())) {
+                        proceed = false;
+                    }
                 }
                 // dont include associations that include loopDataOutputRef as source
-                if(dataout.getSourceRef().get(0).equals(taskMultiLoop.getLoopDataOutputRef())) {
-                    proceed = false;
+                if(taskMultiLoop.getLoopDataOutputRef() != null) {
+                    if(dataout.getSourceRef().get(0).equals(taskMultiLoop.getLoopDataOutputRef())) {
+                        proceed = false;
+                    }
                 }
             }
 
