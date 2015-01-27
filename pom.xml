@@ -95,6 +95,7 @@
                   <include>**/Constants*.properties</include>
               </includes>
               <workDir>.</workDir>
+              <tempDir>.</tempDir>
           </configuration>
       </plugin>
     </plugins>
