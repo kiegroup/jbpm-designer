@@ -60,9 +60,6 @@ public class DesignerPresenter
     private PlaceManager placeManager;
 
     @Inject
-    private Event<NotificationEvent> notification;
-
-    @Inject
     private Caller<VFSService> vfsServices;
 
     @Inject
@@ -77,10 +74,6 @@ public class DesignerPresenter
     @Inject
     private Bpmn2Type resourceType;
 
-    @Inject
-    private DefaultFileNameValidator fileNameValidator;
-
-    private ObservablePath.OnConcurrentUpdateEvent concurrentUpdateSessionInfo = null;
     private DesignerView view;
 
     @Inject
