@@ -102,16 +102,21 @@ public class DefaultDesignerAssetService
                                   final String editorID,
                                   String hostInfo,
                                   PlaceRequest place ) {
-        try {
-            ioService.getFileSystem(URI.create(path.toURI()));
-        } catch(Exception e) {
-            logger.error("Unable to create file system: " + e.getMessage());
-            throw new FileSystemNotFoundException(e.getMessage());
-        }
         List<String> activeNodesList = new ArrayList<String>();
         String activeNodesParam = place.getParameter( "activeNodes", null );
 
         boolean readOnly = place.getParameter( "readOnly", null ) != null;
+
+        if(!readOnly) {
+            try {
+                ioService.getFileSystem(URI.create(path.toURI()));
+            } catch(Exception e) {
+                logger.error("Unable to create file system: " + e.getMessage());
+                throw new FileSystemNotFoundException(e.getMessage());
+            }
+        }
+
+
         String processId = place.getParameter( "processId", "" );
         String deploymentId = place.getParameter( "deploymentId", "" );
         String encodedProcessSource = "";
