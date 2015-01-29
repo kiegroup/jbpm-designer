@@ -7,6 +7,7 @@ import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.uberfire.java.nio.file.NoSuchFileException;
 
 import java.io.File;
 import java.util.Collection;
@@ -292,7 +293,7 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
     }
 
     @Test
-    public void testStoreSingleBinaryAsset() throws AssetNotFoundException{
+    public void testStoreSingleBinaryAsset() throws NoSuchFileException {
 
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
@@ -323,7 +324,7 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
     }
 
     @Test
-    public void testStoreSingleTextAsset() throws AssetNotFoundException{
+    public void testStoreSingleTextAsset() throws NoSuchFileException{
 
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
@@ -354,7 +355,7 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
     }
 
     @Test
-    public void testAssetExists() throws AssetNotFoundException{
+    public void testAssetExists() throws NoSuchFileException{
 
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
@@ -399,7 +400,7 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
     }
 
     @Test
-    public void testUpdateAsset() throws AssetNotFoundException {
+    public void testUpdateAsset() throws NoSuchFileException {
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
@@ -430,7 +431,7 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
     }
 
     @Test
-    public void testDeleteAsset() throws AssetNotFoundException {
+    public void testDeleteAsset() throws NoSuchFileException {
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
@@ -458,7 +459,7 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
     }
 
     @Test
-    public void testDeleteAssetFromPath() throws AssetNotFoundException {
+    public void testDeleteAssetFromPath() throws NoSuchFileException {
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
@@ -486,7 +487,7 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
     }
 
     @Test
-    public void testCopyAsset() throws AssetNotFoundException {
+    public void testCopyAsset() throws NoSuchFileException {
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
@@ -519,7 +520,7 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
     }
 
     @Test
-    public void testMoveAsset() throws AssetNotFoundException {
+    public void testMoveAsset() throws NoSuchFileException {
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
@@ -559,7 +560,7 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
     }
 
     @Test
-    public void testMoveAndRenameAsset() throws AssetNotFoundException {
+    public void testMoveAndRenameAsset() throws NoSuchFileException {
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
@@ -599,7 +600,7 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
     }
 
     @Test
-    public void testRenameAsset() throws AssetNotFoundException {
+    public void testRenameAsset() throws NoSuchFileException {
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
@@ -639,7 +640,7 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
     }
 
     @Test
-    public void testCopyDirectory() throws AssetNotFoundException {
+    public void testCopyDirectory() throws NoSuchFileException {
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
         Directory sourceDir = repository.createDirectory("/source");
@@ -677,7 +678,7 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
     }
 
     @Test
-    public void testMoveDirectory() throws AssetNotFoundException {
+    public void testMoveDirectory() throws NoSuchFileException {
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
         Directory sourceDir = repository.createDirectory("/source");
@@ -715,7 +716,7 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
     }
 
     @Test
-    public void testMoveEmptyDirectory() throws AssetNotFoundException {
+    public void testMoveEmptyDirectory() throws NoSuchFileException {
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
         Directory sourceDir = repository.createDirectory("/source");
@@ -743,7 +744,7 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
     }
 
     @Test
-    public void testCopyEmptyDirectory() throws AssetNotFoundException {
+    public void testCopyEmptyDirectory() throws NoSuchFileException {
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
         Directory sourceDir = repository.createDirectory("/source");

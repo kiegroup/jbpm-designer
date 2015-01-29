@@ -45,6 +45,7 @@ import org.uberfire.mvp.impl.PathPlaceRequest;
 import org.uberfire.util.URIUtil;
 import org.uberfire.workbench.events.NotificationEvent;
 import org.uberfire.workbench.model.menu.Menus;
+import org.jboss.errai.bus.client.api.messaging.Message;
 
 import static org.uberfire.ext.widgets.common.client.common.ConcurrentChangePopup.*;
 
@@ -353,11 +354,17 @@ public class DesignerPresenter
 
                     }, new CommandDrivenErrorCallback( view,
                                                        new CommandBuilder()
-                                                               .addNoSuchFileException( view,
-                                                                                        menus )
-                                                               .addFileSystemNotFoundException( view,
-                                                                                                menus )
-                                                               .build() ) ).getEditorParameters( versionRecordManager.getCurrentPath(),
+                                                               .addNoSuchFileException( view, menus )
+                                                               .addFileSystemNotFoundException( view, menus )
+                                                               .build() )
+                                       {
+                                           @Override
+                                           public boolean error( final Message message, final Throwable throwable ) {
+                                               placeManager.forceClosePlace( place );
+                                               return super.error( message, throwable );
+                                           }
+                                       }
+                    ).getEditorParameters( versionRecordManager.getCurrentPath(),
                                                                                                  editorID,
                                                                                                  url,
                                                                                                  place );

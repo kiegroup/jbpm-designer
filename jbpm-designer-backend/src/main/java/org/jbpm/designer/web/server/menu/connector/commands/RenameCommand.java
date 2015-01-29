@@ -2,8 +2,6 @@ package org.jbpm.designer.web.server.menu.connector.commands;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.jbpm.designer.repository.Asset;
-import org.jbpm.designer.repository.AssetNotFoundException;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.json.JSONObject;

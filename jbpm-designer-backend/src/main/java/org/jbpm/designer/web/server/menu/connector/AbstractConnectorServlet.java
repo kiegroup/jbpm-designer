@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
-import org.jbpm.designer.repository.AssetNotFoundException;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.web.profile.IDiagramProfile;
@@ -18,6 +17,7 @@ import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.designer.web.server.menu.connector.commands.*;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.uberfire.java.nio.file.NoSuchFileException;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -118,7 +118,7 @@ public abstract class AbstractConnectorServlet extends HttpServlet {
                     } else {
                         outputPlain(response, true, "<p><b>Process image not available.</p><p>You can generate the process image in the process editor.</b></p>", null);
                     }
-                } catch (AssetNotFoundException e) {
+                } catch (NoSuchFileException e) {
                     logger.warn("Error loading process image: " + e.getMessage());
                     outputPlain(response, true, "<p><b>Could not find process image.</p><p>You can generate the process image in the process editor.</b></p>", null);
                 }

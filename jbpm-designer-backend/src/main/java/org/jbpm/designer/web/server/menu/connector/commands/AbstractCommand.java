@@ -16,6 +16,7 @@ import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.uberfire.java.nio.file.NoSuchFileException;
 
 import java.io.ByteArrayOutputStream;
 import java.util.*;
@@ -87,7 +88,7 @@ public abstract class AbstractCommand {
                                 }
                             }
                         }
-                    } catch (AssetNotFoundException e) {
+                    } catch (NoSuchFileException e) {
                         logger.error("Unable to retrieve asset: " + target);
                     }
                 }
@@ -129,7 +130,7 @@ public abstract class AbstractCommand {
             Asset tobeRenamedAsset = null;
             try {
                 tobeRenamedAsset = repository.loadAssetFromPath(target);
-            } catch (AssetNotFoundException e) {
+            } catch (NoSuchFileException e) {
                 logger.error("Unable to retrieve asset: " + target);
             }
             if(tobeRenamedAsset != null) {

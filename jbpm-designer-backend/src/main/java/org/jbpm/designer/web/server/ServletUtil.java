@@ -4,15 +4,13 @@ import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.jbpm.designer.repository.Asset;
-import org.jbpm.designer.repository.AssetNotFoundException;
 import org.jbpm.designer.repository.Directory;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.filters.FilterByExtension;
 import org.jbpm.designer.repository.filters.FilterByFileName;
 import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.designer.web.profile.IDiagramProfileService;
-import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
 import org.jbpm.designer.web.profile.impl.RepositoryInfo;
+import org.uberfire.java.nio.file.NoSuchFileException;
 
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
@@ -62,7 +60,7 @@ public class ServletUtil {
 
         pkgassetinfo[0] = asset.getAssetLocation();
         pkgassetinfo[1] = asset.getName();
-        } catch (AssetNotFoundException e) {
+        } catch (NoSuchFileException e) {
             _logger.error("Asset " + uuid + " not found");
         }
 
