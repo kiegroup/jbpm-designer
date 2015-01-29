@@ -13,6 +13,7 @@ import org.guvnor.structure.repositories.Repository;
 import org.guvnor.structure.repositories.RepositoryService;
 import org.uberfire.io.IOService;
 import org.uberfire.java.nio.file.FileSystem;
+import org.uberfire.java.nio.file.FileSystemNotFoundException;
 import org.uberfire.java.nio.file.Path;
 
 @ApplicationScoped
@@ -59,7 +60,7 @@ public class RepositoryDescriptorProvider {
             }
         }
 
-        throw new IllegalStateException("Repository with alias " + repositoryAlias + " not found");
+        throw new FileSystemNotFoundException("Repository with alias " + repositoryAlias + " not found");
     }
 
     private RepositoryDescriptor buildAndRegister(Repository repository, String branchName) {

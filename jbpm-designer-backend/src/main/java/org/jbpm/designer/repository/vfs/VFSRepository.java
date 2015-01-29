@@ -18,7 +18,6 @@ import org.apache.commons.codec.binary.Base64;
 import org.jboss.errai.security.shared.api.identity.User;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
-import org.jbpm.designer.repository.AssetNotFoundException;
 import org.jbpm.designer.repository.Directory;
 import org.jbpm.designer.repository.Filter;
 import org.jbpm.designer.repository.Repository;
@@ -30,15 +29,7 @@ import org.jbpm.designer.util.Base64Backport;
 import org.uberfire.io.IOService;
 import org.uberfire.java.nio.IOException;
 import org.uberfire.java.nio.base.options.CommentedOption;
-import org.uberfire.java.nio.file.DirectoryStream;
-import org.uberfire.java.nio.file.FileAlreadyExistsException;
-import org.uberfire.java.nio.file.FileSystem;
-import org.uberfire.java.nio.file.FileVisitResult;
-import org.uberfire.java.nio.file.Files;
-import org.uberfire.java.nio.file.Path;
-import org.uberfire.java.nio.file.SimpleFileVisitor;
-import org.uberfire.java.nio.file.StandardCopyOption;
-import org.uberfire.java.nio.file.StandardOpenOption;
+import org.uberfire.java.nio.file.*;
 import org.uberfire.java.nio.file.attribute.BasicFileAttributes;
 
 @ApplicationScoped
@@ -312,7 +303,7 @@ public class VFSRepository implements Repository {
         return foundDirectories;
     }
 
-    public Asset loadAsset(String assetUniqueId) throws AssetNotFoundException {
+    public Asset loadAsset(String assetUniqueId) throws NoSuchFileException {
         String uniqueId = decodeUniqueId(assetUniqueId);
         Path assetPath = getFileSystem(uniqueId).provider().getPath(URI.create(uniqueId));
 
@@ -321,14 +312,14 @@ public class VFSRepository implements Repository {
         return asset;
     }
 
-    public Asset loadAssetFromPath(String location) throws AssetNotFoundException {
+    public Asset loadAssetFromPath(String location) throws NoSuchFileException {
         location = UriUtils.encode(location);
         Path path = descriptor.getFileSystem().provider().getPath(URI.create(descriptor.getStringRepositoryRoot() + location));
 
         if (ioService.exists(path)) {
             return loadAsset(path.toUri().toString());
         } else {
-            throw new AssetNotFoundException();
+            throw new NoSuchFileException();
         }
 
     }
@@ -365,7 +356,7 @@ public class VFSRepository implements Repository {
         return encodeUniqueId(filePath.toUri().toString());
     }
 
-    public String updateAsset(Asset asset, String commitMessage) throws AssetNotFoundException {
+    public String updateAsset(Asset asset, String commitMessage) throws NoSuchFileException {
         encodeAsset(asset);
         String uniqueId = decodeUniqueId(asset.getUniqueId());
         Path filePath = getFileSystem(uniqueId).provider().getPath(URI.create(uniqueId));
@@ -373,7 +364,7 @@ public class VFSRepository implements Repository {
             commitMessage = "Updated asset ";
         }
         if (!ioService.exists(filePath)) {
-            throw new AssetNotFoundException();
+            throw new NoSuchFileException();
         }
         CommentedOption commentedOption = new CommentedOption(getIdentity(), commitMessage);
         if(((AbstractAsset)asset).acceptBytes()) {

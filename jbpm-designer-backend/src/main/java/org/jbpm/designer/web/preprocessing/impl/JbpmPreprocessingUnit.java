@@ -25,7 +25,6 @@ import org.drools.core.process.core.impl.ParameterDefinitionImpl;
 import org.drools.core.util.MVELSafeHelper;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
-import org.jbpm.designer.repository.AssetNotFoundException;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.UriUtils;
 import org.jbpm.designer.repository.filters.FilterByExtension;
@@ -46,6 +45,7 @@ import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.VFSService;
 import org.uberfire.io.IOService;
 import org.uberfire.java.nio.file.FileSystem;
+import org.uberfire.java.nio.file.NoSuchFileException;
 
 /**
  * JbpmPreprocessingUnit - preprocessing unit for the jbpm profile
@@ -428,7 +428,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             try {
                 Asset assetWithContent = repository.loadAsset(widAsset.getUniqueId());
                 loadedAssets.add(assetWithContent);
-            } catch (AssetNotFoundException e) {
+            } catch (NoSuchFileException e) {
                 _logger.error("Asset " + widAsset.getName() + " not found");
             }
         }

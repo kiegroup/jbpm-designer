@@ -2,6 +2,7 @@ package org.jbpm.designer.repository.guvnor;
 
 import org.jbpm.designer.repository.*;
 import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.uberfire.java.nio.file.NoSuchFileException;
 
 import javax.enterprise.inject.Alternative;
 import java.util.Collection;
@@ -58,11 +59,11 @@ public class GuvnorRepository implements Repository {
         throw new UnsupportedOperationException();
     }
 
-    public Asset loadAsset(String assetUniqueId) throws AssetNotFoundException {
+    public Asset loadAsset(String assetUniqueId) throws NoSuchFileException {
         throw new UnsupportedOperationException();
     }
 
-    public Asset loadAssetFromPath(String path) throws AssetNotFoundException {
+    public Asset loadAssetFromPath(String path) throws NoSuchFileException {
         throw new UnsupportedOperationException();
     }
 
@@ -70,7 +71,7 @@ public class GuvnorRepository implements Repository {
         throw new UnsupportedOperationException();
     }
 
-    public String updateAsset(Asset asset, String commitMessage) throws AssetNotFoundException {
+    public String updateAsset(Asset asset, String commitMessage) throws NoSuchFileException {
         return null;
     }
 

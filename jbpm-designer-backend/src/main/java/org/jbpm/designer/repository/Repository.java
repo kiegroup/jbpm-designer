@@ -1,5 +1,7 @@
 package org.jbpm.designer.repository;
 
+import org.uberfire.java.nio.file.NoSuchFileException;
+
 import java.util.Collection;
 import java.util.Map;
 
@@ -99,17 +101,17 @@ public interface Repository {
      * Loads an asset given by the <code>assetUniqueId</code> including actual content of the asset.
      * @param assetUniqueId - unique identifier of the asset to load
      * @return return loaded asset including content
-     * @throws AssetNotFoundException - throws in case of asset given by id does not exist
+     * @throws NoSuchFileException - throws in case of asset given by id does not exist
      */
-    Asset loadAsset(String assetUniqueId) throws AssetNotFoundException;
+    Asset loadAsset(String assetUniqueId) throws NoSuchFileException;
 
     /**
      * Loads an asset given by the <code>path</code> including actual content of the asset.
      * @param path - complete path of the asset to load (relative to the repository root)
      * @return return loaded asset including content
-     * @throws AssetNotFoundException - throws in case of asset given by id does not exist
+     * @throws NoSuchFileException - throws in case of asset given by id does not exist
      */
-    Asset loadAssetFromPath(String path) throws AssetNotFoundException;
+    Asset loadAssetFromPath(String path) throws NoSuchFileException;
 
     /**
      * Stores given asset in the repository. <code>asset</code> need to have all meta data and content available
@@ -123,9 +125,9 @@ public interface Repository {
      * Updates content of the asset
      * @param asset - asset to be stored with new content in it, all other data (like name, location) should be same
      * @return - returns uniqueId of the asset
-     * @throws AssetNotFoundException - throws in case of asset given by id does not exist
+     * @throws NoSuchFileException - throws in case of asset given by id does not exist
      */
-    String updateAsset(Asset asset, String commitMessage) throws AssetNotFoundException;
+    String updateAsset(Asset asset, String commitMessage) throws NoSuchFileException;
 
     /**
      * Deletes asset from repository identified by <code>assetUniqueId</code> if exists

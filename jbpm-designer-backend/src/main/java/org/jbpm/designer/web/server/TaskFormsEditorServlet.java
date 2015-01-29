@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
-import org.jbpm.designer.repository.AssetNotFoundException;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.util.Base64Backport;
@@ -15,6 +14,7 @@ import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.formModeler.designer.integration.BPMNFormBuilderService;
 import org.json.JSONObject;
 import org.uberfire.backend.vfs.VFSService;
+import org.uberfire.java.nio.file.NoSuchFileException;
 import org.uberfire.rpc.SessionInfo;
 
 import javax.inject.Inject;
@@ -155,7 +155,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
              } else {
                  return formAsset.getAssetContent();
              }
-         } catch (AssetNotFoundException anfe) {
+         } catch (NoSuchFileException anfe) {
              try {
                  String formValue = "";
                  if(formType.equals(FORMMODELER_FILE_EXTENSION)) {

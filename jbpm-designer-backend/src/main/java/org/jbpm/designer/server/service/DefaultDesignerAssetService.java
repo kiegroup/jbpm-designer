@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.Socket;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +17,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpEntity;
@@ -46,6 +48,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.uberfire.backend.server.util.Paths;
 import org.uberfire.backend.vfs.Path;
+import org.uberfire.io.IOService;
+import org.uberfire.java.nio.file.FileSystemNotFoundException;
 import org.uberfire.mvp.PlaceRequest;
 import org.uberfire.rpc.SessionInfo;
 import org.uberfire.workbench.events.ResourceOpenedEvent;
@@ -69,6 +73,10 @@ public class DefaultDesignerAssetService
 
     @Inject
     private Event<ResourceOpenedEvent> resourceOpenedEvent;
+
+    @Inject
+    @Named("ioStrategy")
+    private IOService ioService;
    
     // socket buffer size in bytes: can be tuned for performance
     private final static int socketBufferSize = 8 * 1024;
@@ -94,6 +102,12 @@ public class DefaultDesignerAssetService
                                   final String editorID,
                                   String hostInfo,
                                   PlaceRequest place ) {
+        try {
+            ioService.getFileSystem(URI.create(path.toURI()));
+        } catch(Exception e) {
+            logger.error("Unable to create file system: " + e.getMessage());
+            throw new FileSystemNotFoundException(e.getMessage());
+        }
         List<String> activeNodesList = new ArrayList<String>();
         String activeNodesParam = place.getParameter( "activeNodes", null );
 
