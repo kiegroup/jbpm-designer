@@ -205,8 +205,10 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
             }
 
-            // sort work defs
-            Map<String, WorkDefinitionImpl> workDefinitionsTree = new TreeMap<String, WorkDefinitionImpl>(workDefinitions);
+            // sort against display name
+            WorkItemDisplayNameComparator wiComparator = new WorkItemDisplayNameComparator(workDefinitions);
+            Map<String, WorkDefinitionImpl> workDefinitionsTree = new TreeMap<String, WorkDefinitionImpl>(wiComparator);
+            workDefinitionsTree.putAll(workDefinitions);
 
             // set the out parameter
             for(Map.Entry<String, WorkDefinitionImpl> definition : workDefinitionsTree.entrySet()) {
@@ -824,6 +826,22 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         }
         public void setDescription(String description) {
             this.description = description;
+        }
+    }
+
+    public class WorkItemDisplayNameComparator implements Comparator<String> {
+        private Map<String, WorkDefinitionImpl> workMap;
+
+        public WorkItemDisplayNameComparator(Map<String, WorkDefinitionImpl> workMap) {
+            this.workMap = workMap;
+        }
+
+        public int compare(String a, String b) {
+            try {
+                return workMap.get(a).getDisplayName().compareTo(workMap.get(b).getDisplayName());
+            } catch(Exception e) {
+                return a.compareTo(b);
+            }
         }
     }
 }
