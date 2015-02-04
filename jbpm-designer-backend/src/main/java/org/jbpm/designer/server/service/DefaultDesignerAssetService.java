@@ -96,6 +96,10 @@ public class DefaultDesignerAssetService
     "   </bpmndi:BPMNDiagram> \n" +
     "</bpmn2:definitions>";
 
+    @Override
+    public DesignerContent loadContent(Path path) {
+        return super.loadContent(path);
+    }
 
     @Override
     public Map<String, String> getEditorParameters( final Path path,
