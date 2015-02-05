@@ -50,7 +50,7 @@ ORYX.Plugins.View = {
         this.facade.registerOnEvent(ORYX.CONFIG.VOICE_COMMAND_VIEW_SOURCE, this.showProcessBPMN.bind(this));
 
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DRAGDROP_END, this.refreshCanvasForIE.bind(this));
-        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_SHAPE_ADDED, this.refreshCanvasAfterShapeAddedForIE.bind(this));
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_SHAPE_ADDED, this.refreshCanvasForIE.bind(this));
 
         //Standard Values
         this.zoomLevel = 1.0;
@@ -2036,9 +2036,16 @@ ORYX.Plugins.View = {
         }
     },
 
-    refreshCanvasForIE : function() {
+    refreshCanvasForIE : function( options ) {
         if ( (Object.hasOwnProperty.call(window, "ActiveXObject") && !window.ActiveXObject) ||
             (navigator.appVersion.indexOf("MSIE 10") !== -1) ) {
+
+            var currectSelection;
+            if(options && options.shape) {
+                currectSelection = [ options.shape ];
+            } else {
+                currectSelection =  this.facade.getSelection();
+            }
 
             var currentJSON = ORYX.EDITOR.getSerializedJSON();
             this.facade.setSelection(this.facade.getCanvas().getChildShapes(true));
@@ -2049,36 +2056,11 @@ ORYX.Plugins.View = {
             this.facade.executeCommands([command]);
             this.facade.importJSON(currentJSON);
 
-            this.facade.setSelection(undefined);
+            this.facade.setSelection(currectSelection);
             this.facade.getCanvas().update();
             this.facade.updateSelection();
-
-        }
-    },
-
-    refreshCanvasAfterShapeAddedForIE: function() {
-        this.refreshCanvasForIE();
-        this.selectShapeAdded();
-    },
-
-    selectShapeAdded: function() {
-        var lastShape = this.getLastShapeAdded(this.facade.getCanvas().getChildShapes(true));
-        if (lastShape) {
-            this.facade.setSelection([lastShape]);
-            this.facade.getCanvas().update();
-            this.facade.updateSelection();
-        }
-    },
-
-    getLastShapeAdded: function(shapes)
-    {
-        // Returns the last shape that was added to the canvas
-        var matchingShapes = shapes.findAll(function(n){ return n instanceof ORYX.Core.Shape });
-        if (matchingShapes && matchingShapes.length && matchingShapes.length > 1) {
-            return matchingShapes[matchingShapes.length - 2];
         }
     }
-
 };
 
 ORYX.Plugins.View = Clazz.extend(ORYX.Plugins.View);

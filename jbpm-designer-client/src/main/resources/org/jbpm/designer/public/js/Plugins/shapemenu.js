@@ -824,9 +824,10 @@ ORYX.Plugins.ShapeMenuPlugin = {
 		}
 			
 		var command = new ORYX.Plugins.ShapeMenuPlugin.CreateCommand(Object.clone(option), this._currentReference, pos, this);
-		this.facade.executeCommands([command]);
+		var newShape = this.facade.executeCommands([command]);
         this.facade.raiseEvent({
-            type: ORYX.CONFIG.EVENT_SHAPE_ADDED
+            type: ORYX.CONFIG.EVENT_SHAPE_ADDED,
+            shape: newShape
         });
 		
 		// Inform about completed Drag 
@@ -867,10 +868,10 @@ ORYX.Plugins.ShapeMenuPlugin = {
 			
 			var command = new ORYX.Plugins.ShapeMenuPlugin.CreateCommand(option, undefined, undefined, this);
 		
-			this.facade.executeCommands([command]);
-
+			var newShape = this.facade.executeCommands([command]);
             this.facade.raiseEvent({
-                type: ORYX.CONFIG.EVENT_SHAPE_ADDED
+                type: ORYX.CONFIG.EVENT_SHAPE_ADDED,
+                shape: newShape
             });
 		}
 	},
@@ -1710,6 +1711,8 @@ ORYX.Plugins.ShapeMenuPlugin.CreateCommand = ORYX.Core.Command.extend({
 				this.plugin.doLayout(this.shape);
 			}
 		}
+
+        return this.shape;
 
 	},
 	rollback: function(){
