@@ -422,8 +422,13 @@ var DataManager = {
 			// add all attributes.
 			
 			attributes.each(function(attribute) {
-				result += ' ' + attribute.nodeName + '="' +
-					attribute.nodeValue + '"';});
+                var attrValue = attribute.nodeValue;
+                if (attrValue.indexOf('&') !== -1 || attrValue.indexOf('>') !== -1 || attrValue.indexOf('<') !== -1 || attrValue.indexOf('"') !== -1) {
+                    attrValue = Ext.util.Format.htmlEncode(attrValue);
+                }
+                result += ' ' + attribute.nodeName + '="' +
+                        attrValue + '"';
+            });
 			
 			// close if no children.
 			
