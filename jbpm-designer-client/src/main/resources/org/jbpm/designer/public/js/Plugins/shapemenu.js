@@ -1599,6 +1599,7 @@ ORYX.Plugins.ShapeMenuPlugin.CreateCommand = ORYX.Core.Command.extend({
 		var resume = false;
 		
 		if (this.shape) {
+            this.shape.properties["oryx-invisid"] = Math.random();
 			if (this.shape instanceof ORYX.Core.Node) {
 				this.parent.add(this.shape);
 				if (this.edge) {
@@ -1620,6 +1621,7 @@ ORYX.Plugins.ShapeMenuPlugin.CreateCommand = ORYX.Core.Command.extend({
 		}
 		else {
 			this.shape = this.plugin.facade.createShape(this.option);
+            this.shape.properties["oryx-invisid"] = Math.random();
 			this.edge = (!(this.shape instanceof ORYX.Core.Edge)) ? this.shape.getIncomingShapes().first() : undefined;
 		}
 		

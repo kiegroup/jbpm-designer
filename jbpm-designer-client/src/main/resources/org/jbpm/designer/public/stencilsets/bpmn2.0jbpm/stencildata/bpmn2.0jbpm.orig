@@ -56,7 +56,21 @@
 							"value":"false"
 						}
 					]
-				}
+				},
+				{
+                                        "id":"invisid",
+                                        "type":"Text",
+                                        "title":"invisid",
+                                        "value":"",
+                                        "description":"",
+                                        "description_ja":"",
+                                        "readonly":false,
+                                        "optional":true,
+                                        "length":"",
+                                        "wrapLines":true,
+					"hidden":true,
+                                        "visible":false
+                                }
  			]
  		},
  		{
