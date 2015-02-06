@@ -2040,13 +2040,6 @@ ORYX.Plugins.View = {
         if ( (Object.hasOwnProperty.call(window, "ActiveXObject") && !window.ActiveXObject) ||
             (navigator.appVersion.indexOf("MSIE 10") !== -1) ) {
 
-            var currectSelection;
-            if(options && options.shape) {
-                currectSelection = [ options.shape ];
-            } else {
-                currectSelection =  this.facade.getSelection();
-            }
-
             var currentJSON = ORYX.EDITOR.getSerializedJSON();
             this.facade.setSelection(this.facade.getCanvas().getChildShapes(true));
             var selection = this.facade.getSelection();
@@ -2056,10 +2049,37 @@ ORYX.Plugins.View = {
             this.facade.executeCommands([command]);
             this.facade.importJSON(currentJSON);
 
-            this.facade.setSelection(currectSelection);
+            var foundShape = false;
+            foundShape = this.findSelectedShape(options.shape, options);
+            if(foundShape) {
+                this.facade.setSelection([foundShape]);
+            }
+
             this.facade.getCanvas().update();
             this.facade.updateSelection();
+
         }
+    },
+
+    findSelectedShape: function(shape, options) {
+        var foundShape = false;
+        if(options && options.shape) {
+            ORYX.EDITOR._canvas.getChildren().each((function(child) {
+                if(child instanceof ORYX.Core.Node || child instanceof ORYX.Core.Edge) {
+                    if(options.shape.properties["oryx-invisid"] == child.properties["oryx-invisid"]) {
+                        foundShape = child;
+                    }
+                }
+                if(child.getChildren().size() > 0) {
+                    for (var i = 0; i < child.getChildren().size(); i++) {
+                        if(child.getChildren()[i] instanceof ORYX.Core.Node || child.getChildren()[i] instanceof ORYX.Core.Edge) {
+                            this.findSelectedShape(child.getChildren()[i], options);
+                        }
+                    }
+                }
+            }).bind(this));
+        }
+        return foundShape;
     }
 };
 
