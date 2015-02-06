@@ -12,6 +12,8 @@ import javax.inject.Named;
 
 import org.kie.workbench.common.services.refactoring.backend.server.query.response.ResponseBuilder;
 import org.kie.workbench.common.services.refactoring.backend.server.query.standard.FindRuleAttributesQuery;
+import org.kie.workbench.common.services.refactoring.model.index.terms.RuleAttributeIndexTerm;
+import org.kie.workbench.common.services.refactoring.model.index.terms.RuleAttributeValueIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.query.RefactoringPageRow;
 import org.kie.workbench.common.services.refactoring.model.query.RefactoringStringPageRow;
 import org.uberfire.backend.server.util.Paths;
@@ -109,7 +111,7 @@ public class FindRuleFlowNamesQuery extends FindRuleAttributesQuery {
                 return ruleFlowGroupNames;
             }
             for ( KProperty property : kObject.getProperties() ) {
-                if ( property.getName().equals( "rule_attribute:ruleflow-group:rule_attribute_value" ) ) {
+                if ( property.getName().equals(  RuleAttributeIndexTerm.TERM + ":" + "ruleflow-group" + ":" + RuleAttributeValueIndexTerm.TERM) ) {
                     if(ruleFlowGroupNames.containsKey(property.getValue().toString())) {
                         final Path path = Paths.convert(ioService.get(URI.create(kObject.getKey())));
                         ruleFlowGroupNames.get(property.getValue().toString()).add(path.getFileName() + "^^" + path.toURI());
