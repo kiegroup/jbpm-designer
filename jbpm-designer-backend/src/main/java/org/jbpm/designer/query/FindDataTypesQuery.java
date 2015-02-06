@@ -122,7 +122,7 @@ public class FindDataTypesQuery implements NamedQuery {
                 return dataTypeNames;
             }
             for ( KProperty property : kObject.getProperties() ) {
-                if ( property.getName().equals( "java_type_name" ) ) {
+                if ( property.getName().equals( "javaTypeName" ) ) {
                     if(!dataTypeNames.containsKey(property.getValue())) {
                         dataTypeNames.put(property.getValue().toString(), property.getValue().toString());
                     }
