@@ -2037,8 +2037,18 @@ ORYX.Plugins.View = {
     },
 
     refreshCanvasForIE : function( options ) {
-        if ( (Object.hasOwnProperty.call(window, "ActiveXObject") && !window.ActiveXObject) ||
+       if ( (Object.hasOwnProperty.call(window, "ActiveXObject") && !window.ActiveXObject) ||
             (navigator.appVersion.indexOf("MSIE 10") !== -1) ) {
+
+            // If there's no options.shape, set it with an invisid
+            if(!options.shape) {
+                var currentSelection = this.facade.getSelection();
+                if (currentSelection && currentSelection.length > 0 && currentSelection[0] instanceof ORYX.Core.Node) {
+                    var currentShape = currentSelection[0];
+                    currentShape.properties["oryx-invisid"] = Math.random();
+                    options.shape = currentShape;
+                }
+            }
 
             var currentJSON = ORYX.EDITOR.getSerializedJSON();
             this.facade.setSelection(this.facade.getCanvas().getChildShapes(true));
