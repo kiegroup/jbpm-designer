@@ -3314,7 +3314,70 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
  Ext.form.ComplexDataAssignmenField = Ext.extend(Ext.form.TriggerField,  {
     editable: false,
     readOnly: true,
-    /**
+
+     addParentVars : function(thisNode, varDataTitle, varData, variableDefsOnly, dataTypeMap, variableDefsOnlyVals) {
+         if(thisNode) {
+             if(thisNode._stencil._jsonStencil.id == "http://b3mn.org/stencilset/bpmn2.0#MultipleInstanceSubprocess"
+                 || thisNode._stencil._jsonStencil.id == "http://b3mn.org/stencilset/bpmn2.0#Subprocess"
+                 || thisNode._stencil._jsonStencil.id == "http://b3mn.org/stencilset/bpmn2.0#AdHocSubprocess") {
+
+                 var vardefsprop = thisNode.properties["oryx-vardefs"];
+                 if(vardefsprop && vardefsprop.length > 0) {
+                     var vardefspropParts = vardefsprop.split(",");
+                     for(var k=0; k < vardefspropParts.length; k++) {
+                         var nextPart = vardefspropParts[k];
+                         var innerVal = new Array();
+                         if(nextPart.indexOf(":") > 0) {
+                             var innerParts = nextPart.split(":");
+                             innerVal.push(innerParts[0]);
+                             innerVal.push(innerParts[0]);
+                             dataTypeMap[innerParts[0]] = innerParts[1];
+                             variableDefsOnlyVals.push(innerParts[0]);
+                         } else {
+                             innerVal.push(nextPart);
+                             innerVal.push(nextPart);
+                             dataTypeMap[nextPart] = "java.lang.String";
+                             variableDefsOnlyVals.push(nextPart);
+                         }
+                         varData.push(innerVal);
+                         variableDefsOnly.push(innerVal);
+                     }
+                 }
+
+                 if(thisNode._stencil._jsonStencil.id == "http://b3mn.org/stencilset/bpmn2.0#MultipleInstanceSubprocess") {
+                     var midatainputsprop = thisNode.properties["oryx-multipleinstancedatainput"];
+                     if(midatainputsprop && midatainputsprop.length > 0) {
+                         var innerVal = new Array();
+                         innerVal.push(midatainputsprop);
+                         innerVal.push(midatainputsprop);
+                         dataTypeMap[midatainputsprop] = "java.lang.String";
+                         variableDefsOnlyVals.push(innerVal);
+
+                         varData.push(innerVal);
+                         variableDefsOnly.push(innerVal);
+                     }
+
+
+                     var midataOutputsprop = thisNode.properties["oryx-multipleinstancedataoutput"];
+                     if(midataOutputsprop && midataOutputsprop.length > 0) {
+                         var innerVal = new Array();
+                         innerVal.push(midataOutputsprop);
+                         innerVal.push(midataOutputsprop);
+                         dataTypeMap[midataOutputsprop] = "java.lang.String";
+                         variableDefsOnlyVals.push(innerVal);
+
+                         varData.push(innerVal);
+                         variableDefsOnly.push(innerVal);
+                     }
+                 }
+             }
+             if(thisNode.parent) {
+                 this.addParentVars(thisNode.parent, varDataTitle, varData, variableDefsOnly, dataTypeMap, variableDefsOnlyVals);
+             }
+         }
+     },
+
+     /**
      * If the trigger was clicked a dialog has to be opened
      * to enter the values for the complex property.
      */
@@ -3346,6 +3409,7 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
         if(selection) {
             var selected = selection.first();
             if(selected && selected.parent) {
+
                 if(selected.parent._stencil._jsonStencil.id == "http://b3mn.org/stencilset/bpmn2.0#MultipleInstanceSubprocess"
                     || selected.parent._stencil._jsonStencil.id == "http://b3mn.org/stencilset/bpmn2.0#Subprocess"
                     || selected.parent._stencil._jsonStencil.id == "http://b3mn.org/stencilset/bpmn2.0#AdHocSubprocess") {
@@ -3355,57 +3419,9 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
                     varData.push(varDataTitle);
                     variableDefsOnly.push(varDataTitle);
                     addedTitle = true;
-
-                    var vardefsprop = selected.parent.properties["oryx-vardefs"];
-                    if(vardefsprop && vardefsprop.length > 0) {
-                        var vardefspropParts = vardefsprop.split(",");
-                        for(var k=0; k < vardefspropParts.length; k++) {
-                            var nextPart = vardefspropParts[k];
-                            var innerVal = new Array();
-                            if(nextPart.indexOf(":") > 0) {
-                                var innerParts = nextPart.split(":");
-                                innerVal.push(innerParts[0]);
-                                innerVal.push(innerParts[0]);
-                                dataTypeMap[innerParts[0]] = innerParts[1];
-                                variableDefsOnlyVals.push(innerParts[0]);
-                            } else {
-                                innerVal.push(nextPart);
-                                innerVal.push(nextPart);
-                                dataTypeMap[nextPart] = "java.lang.String";
-                                variableDefsOnlyVals.push(nextPart);
-                            }
-                            varData.push(innerVal);
-                            variableDefsOnly.push(innerVal);
-                        }
-                    }
-
-                    if(selected.parent._stencil._jsonStencil.id == "http://b3mn.org/stencilset/bpmn2.0#MultipleInstanceSubprocess") {
-                        var midatainputsprop = selected.parent.properties["oryx-multipleinstancedatainput"];
-                        if(midatainputsprop && midatainputsprop.length > 0) {
-                            var innerVal = new Array();
-                            innerVal.push(midatainputsprop);
-                            innerVal.push(midatainputsprop);
-                            dataTypeMap[midatainputsprop] = "java.lang.String";
-                            variableDefsOnlyVals.push(innerVal);
-
-                            varData.push(innerVal);
-                            variableDefsOnly.push(innerVal);
-                        }
-
-
-                        var midataOutputsprop = selected.parent.properties["oryx-multipleinstancedataoutput"];
-                        if(midataOutputsprop && midataOutputsprop.length > 0) {
-                            var innerVal = new Array();
-                            innerVal.push(midataOutputsprop);
-                            innerVal.push(midataOutputsprop);
-                            dataTypeMap[midataOutputsprop] = "java.lang.String";
-                            variableDefsOnlyVals.push(innerVal);
-
-                            varData.push(innerVal);
-                            variableDefsOnly.push(innerVal);
-                        }
-                    }
                 }
+
+                this.addParentVars(selected.parent, varDataTitle, varData, variableDefsOnly, dataTypeMap, variableDefsOnlyVals);
             }
         }
 
