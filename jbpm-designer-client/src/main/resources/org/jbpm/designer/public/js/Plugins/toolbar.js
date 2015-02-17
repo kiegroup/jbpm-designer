@@ -322,10 +322,11 @@ Ext.ux.SlicedToolbar = Ext.extend(Ext.Toolbar, {
         
         // Add prev button at the end
         if(slice > 0){
-            this.insertSlicingSeperator(slice, this.items.getCount()+1);
-            this.insertSlicingButton("prev", slice, this.items.getCount()+1);
+            // BZ1192460 - IE10 designer hangs on load - set index to -1 for append
+            this.insertSlicingSeperator(slice, -1);
+            this.insertSlicingButton("prev", slice, -1);
             var spacer = new Ext.Toolbar.Spacer();
-            this.insertSlicedHelperButton(spacer, slice, this.items.getCount()+1);
+            this.insertSlicedHelperButton(spacer, slice, -1);
             Ext.get(spacer.id).setWidth(this.iconStandardWidth);
         }
         
@@ -336,7 +337,12 @@ Ext.ux.SlicedToolbar = Ext.extend(Ext.Toolbar, {
     },
     
     insertSlicedButton: function(button, slice, index){
-        this.insertButton(index, button);
+        if (index == -1) {
+            this.addButton(button);
+        }
+        else {
+            this.insertButton(index, button);
+        }
         this.sliceMap[button.id] = slice;
     },
     
