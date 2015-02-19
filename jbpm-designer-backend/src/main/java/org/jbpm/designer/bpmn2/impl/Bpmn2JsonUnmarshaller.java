@@ -178,6 +178,7 @@ public class Bpmn2JsonUnmarshaller {
             reconnectFlows();
             revisitGateways(def);
             revisitCatchEventsConvertToBoundary(def);
+            revisitBoundaryEventsPositions(def);
             createDiagram(def);
             updateIDs(def);
             revisitDataObjects(def);
@@ -1532,6 +1533,102 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
 
+    private FlowElementsContainer findContainerForBoundaryEvent(FlowElementsContainer container, BoundaryEvent be) {
+        for(FlowElement flowElement : container.getFlowElements()) {
+            if(flowElement.getId().equals(be.getAttachedToRef().getId())) {
+                return container;
+            }
+
+            if(flowElement instanceof FlowElementsContainer) {
+                return findContainerForBoundaryEvent((FlowElementsContainer) flowElement, be);
+            }
+        }
+        return null;
+    }
+
+    private void revisitBoundaryEventsPositions(Definitions def) {
+        List<RootElement> rootElements =  def.getRootElements();
+        Map<BoundaryEvent, FlowElementsContainer> toAddBoundaryEvents = new HashMap<BoundaryEvent, FlowElementsContainer>();
+        Map<BoundaryEvent, FlowElementsContainer> toRemoveBoundaryEvents = new HashMap<BoundaryEvent, FlowElementsContainer>();
+        for(RootElement root : rootElements) {
+            if(root instanceof Process) {
+                Process process = (Process) root;
+                for(FlowElement fe : process.getFlowElements()) {
+                    if(fe instanceof BoundaryEvent) {
+                        BoundaryEvent be = (BoundaryEvent) fe;
+                        FlowElementsContainer container = findContainerForBoundaryEvent(process, be);
+                        if(container != null && !(container instanceof Process)) {
+                            toAddBoundaryEvents.put(be, container);
+                            toRemoveBoundaryEvents.put(be, process);
+                        }
+                    }
+                }
+            }
+        }
+
+        for(BoundaryEvent beEntry : toAddBoundaryEvents.keySet()) {
+            BoundaryEvent be = Bpmn2Factory.eINSTANCE.createBoundaryEvent();
+            if(beEntry != null && beEntry instanceof ErrorEventDefinition) {
+                be.setCancelActivity(true);
+            } else {
+                Iterator<FeatureMap.Entry> iter = beEntry.getAnyAttribute().iterator();
+                while(iter.hasNext()) {
+                    FeatureMap.Entry entry2 = iter.next();
+                    if(entry2.getEStructuralFeature().getName().equals("boundaryca")) {
+                        String boundaryceVal = (String) entry2.getValue();
+                        be.setCancelActivity(Boolean.parseBoolean(boundaryceVal));
+                    }
+                }
+            }
+
+            if(beEntry.getDataOutputs() != null) {
+                be.getDataOutputs().addAll(beEntry.getDataOutputs());
+            }
+            if(beEntry.getDataOutputAssociation() != null) {
+                be.getDataOutputAssociation().addAll(beEntry.getDataOutputAssociation());
+            }
+            if(beEntry.getOutputSet() != null) {
+                be.setOutputSet(beEntry.getOutputSet());
+            }
+            if(beEntry.getEventDefinitions() != null) {
+                be.getEventDefinitions().addAll(beEntry.getEventDefinitions());
+            }
+            if(beEntry.getEventDefinitionRefs() != null) {
+                be.getEventDefinitionRefs().addAll(beEntry.getEventDefinitionRefs());
+            }
+            if(beEntry.getProperties() != null) {
+                be.getProperties().addAll(beEntry.getProperties());
+            }
+            if(beEntry.getAnyAttribute() != null) {
+                be.getAnyAttribute().addAll(beEntry.getAnyAttribute());
+            }
+            if(beEntry.getOutgoing() != null) {
+                be.getOutgoing().addAll(beEntry.getOutgoing());
+            }
+            if(beEntry.getIncoming() != null) {
+                be.getIncoming().addAll(beEntry.getIncoming());
+            }
+            if(beEntry.getProperties() != null) {
+                be.getProperties().addAll(beEntry.getProperties());
+            }
+
+            be.setName(beEntry.getName());
+            be.setId(beEntry.getId());
+
+            be.setAttachedToRef(beEntry.getAttachedToRef());
+
+            toAddBoundaryEvents.get(beEntry).getFlowElements().add(be);
+            _outgoingFlows.put(be, _outgoingFlows.get(beEntry));
+        }
+
+        for(BoundaryEvent beEntry : toRemoveBoundaryEvents.keySet()) {
+            toRemoveBoundaryEvents.get(beEntry).getFlowElements().remove(beEntry);
+            _outgoingFlows.remove(beEntry);
+        }
+
+        reconnectFlows();
+
+    }
 
     private void revisitCatchEventsConvertToBoundary(Definitions def) {
     	List<CatchEvent> catchEventsToRemove = new ArrayList<CatchEvent>();
@@ -1540,13 +1637,15 @@ public class Bpmn2JsonUnmarshaller {
     	for(RootElement root : rootElements) {
     		if(root instanceof Process) {
                 Process process = (Process) root;
-                revisitCatchEVentsConvertToBoundaryExecute(process, catchEventsToRemove, boundaryEventsToAdd);
+                revisitCatchEVentsConvertToBoundaryExecute(process, null, catchEventsToRemove, boundaryEventsToAdd);
     		}
     	}
         reconnectFlows();
     }
 
-    private void revisitCatchEVentsConvertToBoundaryExecute(FlowElementsContainer container, List<CatchEvent> catchEventsToRemove, Map<BoundaryEvent, List<String>> boundaryEventsToAdd) {
+    private void revisitCatchEVentsConvertToBoundaryExecute(Process process, FlowElementsContainer subContainer,  List<CatchEvent> catchEventsToRemove, Map<BoundaryEvent, List<String>> boundaryEventsToAdd) {
+        FlowElementsContainer container = subContainer != null ? subContainer : process;
+
         List<FlowElement> flowElements =  container.getFlowElements();
         for(FlowElement fe : flowElements) {
             if(fe instanceof CatchEvent) {
@@ -1615,7 +1714,7 @@ public class Bpmn2JsonUnmarshaller {
                     }
                 }
             } else if(fe instanceof FlowElementsContainer) {
-                revisitCatchEVentsConvertToBoundaryExecute((FlowElementsContainer) fe, catchEventsToRemove, boundaryEventsToAdd);
+                revisitCatchEVentsConvertToBoundaryExecute(process, (FlowElementsContainer) fe, catchEventsToRemove, boundaryEventsToAdd);
             }
         }
         if(catchEventsToRemove.size() > 0) {
@@ -2470,7 +2569,7 @@ public class Bpmn2JsonUnmarshaller {
     private void createSubProcessDiagram(BPMNPlane plane, FlowElement flowElement, BpmnDiFactory factory) {
 		SubProcess sp = (SubProcess) flowElement;
 		for(FlowElement subProcessFlowElement : sp.getFlowElements()) {
-			if(subProcessFlowElement instanceof SubProcess) {
+             if(subProcessFlowElement instanceof SubProcess) {
 				Bounds spb = _bounds.get(subProcessFlowElement.getId());
 				if (spb != null) {
 					BPMNShape shape = factory.createBPMNShape();
@@ -2480,6 +2579,7 @@ public class Bpmn2JsonUnmarshaller {
 				}
 				createSubProcessDiagram(plane, subProcessFlowElement, factory);
 			} else if (subProcessFlowElement instanceof FlowNode) {
+
 				Bounds spb = _bounds.get(subProcessFlowElement.getId());
 				if (spb != null) {
 					BPMNShape shape = factory.createBPMNShape();
@@ -2487,6 +2587,24 @@ public class Bpmn2JsonUnmarshaller {
 					shape.setBounds(spb);
 					plane.getPlaneElement().add(shape);
 				}
+                if(subProcessFlowElement instanceof BoundaryEvent) {
+                    BPMNEdge edge = factory.createBPMNEdge();
+                    edge.setBpmnElement(subProcessFlowElement);
+                    List<Point> dockers = _dockers.get(subProcessFlowElement.getId());
+                    DcFactory dcFactory = DcFactory.eINSTANCE;
+                    Point addedDocker = dcFactory.createPoint();
+                    for (int i = 0; i < dockers.size(); i++) {
+                        edge.getWaypoint().add(dockers.get(i));
+                        if(i == 0) {
+                            addedDocker.setX(dockers.get(i).getX());
+                            addedDocker.setY(dockers.get(i).getY());
+                        }
+                    }
+                    if(dockers.size() == 1) {
+                        edge.getWaypoint().add(addedDocker);
+                    }
+                    plane.getPlaneElement().add(edge);
+                }
 			} else if (subProcessFlowElement instanceof SequenceFlow) {
 				SequenceFlow sequenceFlow = (SequenceFlow) subProcessFlowElement;
 				BPMNEdge edge = factory.createBPMNEdge();
