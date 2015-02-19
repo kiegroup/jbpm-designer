@@ -94,7 +94,8 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
             }
         });
 		var graphType;
-		var graphTypeChild;
+        var graphTypeChild;
+        var graphTypeChildren = [];
 		this.resultsjson = options.results;
 		var processSimInfo = jsonPath(options.results.evalJSON(), "$.processsim.*");
 		if(processSimInfo) {
@@ -127,7 +128,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
                 }});
 			graphType.appendChild(graphTypeChild);
 			graphList.appendChild(graphType);
-
+            graphTypeChildren.push(graphTypeChild);
 		}
 		var htSimInfo = jsonPath(options.results.evalJSON(), "$.htsim.*");
 		var taskSimInfo = jsonPath(options.results.evalJSON(), "$.tasksim.*");
@@ -156,6 +157,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
                         iconCls: window.SpriteUtils.toUniqueId(ORYX.BASE_FILE_PATH + 'images/simulation/activities/User.png'),
 						singleClickExpand:true});
 				    graphType.appendChild(graphTypeChild);
+                    graphTypeChildren.push(graphTypeChild);
 			}
 			for (var j = 0; j < taskSimInfo.length; j++) {
 				var nextTask = taskSimInfo[j];
@@ -174,6 +176,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 					singleClickExpand:true});
 			    
 			    graphType.appendChild(graphTypeChild);
+                graphTypeChildren.push(graphTypeChild);
 			}
 			graphList.appendChild(graphType);
 		}
@@ -204,11 +207,12 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 			            icon: ORYX.BASE_FILE_PATH + 'images/simulation/pathicon.png',
 						singleClickExpand:true});
 				    graphType.appendChild(graphTypeChild);
+                    graphTypeChildren.push(graphTypeChild);
 			}
 			graphList.appendChild(graphType);
 		}
-		
-		Ext.getCmp('simresultscharts').setRootNode(graphList);
+
+        Ext.getCmp('simresultscharts').setRootNode(graphList);
 		Ext.getCmp('simresultscharts').getRootNode().render();
         Ext.getCmp('simresultscharts').el.dom.style.height = '100%';
         Ext.getCmp('simresultscharts').el.dom.style.overflow = 'scroll';
@@ -219,8 +223,44 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 		var node = tp.getNodeById("pgraph:processaverages");
 	    node.select();
 	    this._showProcessGraphs("processaverages");
+
+        // BZ 1049506 IE mouse events in SimulationGraphs tree don't work, so use DragZone to
+        // make IE respond to onMouseUp
+        if ( (Object.hasOwnProperty.call(window, "ActiveXObject") && !window.ActiveXObject) ||
+                (navigator.appVersion.indexOf("MSIE 10") !== -1) ) {
+            this.createDragZoneForIE(graphList, graphTypeChildren);
+        }
 	},
-	findTaskType: function(taskid) {
+
+    createDragZoneForIE: function(graphList, nodes) {
+        // Create a Drag-Zone for Drag'n'Drop
+        var DragZone = new Ext.dd.DragZone(graphList.getUI().getEl(), {shadow: !Ext.isMac});
+        DragZone.onMouseUp = this.onMouseUpInDragZoneForIE.bind(this, DragZone);
+
+        for (i = 0; i < nodes.length; i++) {
+            var node = nodes[i];
+            var ui = node.getUI();
+            // Register the node on Drag and Drop
+            Ext.dd.Registry.register(ui.elNode, {
+                node: 		ui.node,
+                handles: 	[ui.elNode, ui.textNode], // Set the Handles
+                isHandle: 	false,
+                id:		node.id
+            });
+
+        }
+    },
+
+    onMouseUpInDragZoneForIE: function(e) {
+        if (e && e.dragData && e.dragData.id) {
+            //ORYX.Log.info("onMouseUpDragZoneForIE dragData is a " + e.dragData.id + "." );
+            var options = { value: { id : e.dragData.id}};
+            this.showGraph(options);
+        }
+    },
+
+
+    findTaskType: function(taskid) {
 		ORYX.EDITOR._canvas.getChildren().each((function(child) {
 			this.isTaskType(child, taskid);
 		}).bind(this));
