@@ -2120,15 +2120,16 @@ public class Bpmn2JsonMarshaller {
         	}
         }
         // and boundary events for activities
-        for(FlowElement fe : process.getFlowElements()) {
-        	if(fe instanceof BoundaryEvent) {
-        		if(((BoundaryEvent) fe).getAttachedToRef().getId().equals(node.getId())) {
-        			generator.writeStartObject();
-                    generator.writeObjectField("resourceId", fe.getId());
-                    generator.writeEndObject();
-        		}
-        	}
+        List<BoundaryEvent> boundaryEvents = new ArrayList<BoundaryEvent>();
+        findBoundaryEvents(process, boundaryEvents);
+        for(BoundaryEvent be : boundaryEvents) {
+            if(be.getAttachedToRef().getId().equals(node.getId())) {
+                generator.writeStartObject();
+                generator.writeObjectField("resourceId", be.getId());
+                generator.writeEndObject();
+            }
         }
+
         generator.writeEndArray();
 
         // boundary events have a docker
@@ -2688,15 +2689,16 @@ public class Bpmn2JsonMarshaller {
         }
 	    // subprocess boundary events
 	    Process process = (Process) plane.getBpmnElement();
-        for(FlowElement fe : process.getFlowElements()) {
-        	if(fe instanceof BoundaryEvent) {
-        		if(((BoundaryEvent) fe).getAttachedToRef().getId().equals(subProcess.getId())) {
-        			generator.writeStartObject();
-                    generator.writeObjectField("resourceId", fe.getId());
-                    generator.writeEndObject();
-        		}
-        	}
+        List<BoundaryEvent> boundaryEvents = new ArrayList<BoundaryEvent>();
+        findBoundaryEvents(process, boundaryEvents);
+        for(BoundaryEvent be : boundaryEvents) {
+            if(be.getAttachedToRef().getId().equals(subProcess.getId())) {
+                generator.writeStartObject();
+                generator.writeObjectField("resourceId", be.getId());
+                generator.writeEndObject();
+            }
         }
+
 	    generator.writeEndArray();
 
 	    generator.writeObjectFieldStart("bounds");
@@ -3218,6 +3220,18 @@ public class Bpmn2JsonMarshaller {
             return ret;
         } else {
             return "";
+        }
+    }
+
+    private void findBoundaryEvents(FlowElementsContainer flc, List<BoundaryEvent> boundaryList) {
+        for(FlowElement fl : flc.getFlowElements()) {
+            if(fl instanceof BoundaryEvent) {
+                boundaryList.add((BoundaryEvent) fl);
+            }
+
+            if(fl instanceof FlowElementsContainer) {
+                findBoundaryEvents((FlowElementsContainer) fl, boundaryList);
+            }
         }
     }
 }
