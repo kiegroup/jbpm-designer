@@ -265,6 +265,7 @@
                 <include>${project.build.directory}/classes/org/jbpm/designer/public/js/cmfold-min.js</include>
                 <include>${project.build.directory}/classes/org/jbpm/designer/public/js/notifications-min.js</include>
                 <include>${project.build.directory}/classes/org/jbpm/designer/public/js/sprite-utils-min.js</include>
+                <include>${project.build.directory}/classes/org/jbpm/designer/public/js/ie-utils-min.js</include>
               </includes>
               <output>${project.build.directory}/classes/org/jbpm/designer/public/js/compressed/designer-utils.js</output>
             </aggregation>
