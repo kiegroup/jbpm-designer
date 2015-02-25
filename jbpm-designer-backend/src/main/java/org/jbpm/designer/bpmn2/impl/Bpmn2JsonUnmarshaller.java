@@ -188,7 +188,6 @@ public class Bpmn2JsonUnmarshaller {
             addSimulation(def);
             revisitItemDefinitions(def);
             revisitProcessDoc(def);
-            revisitDIColors(def);
             revisitDI(def);
 
             // return def;
@@ -228,6 +227,8 @@ public class Bpmn2JsonUnmarshaller {
 
 
     public void revisitDI(Definitions def) {
+        revisitDIColors(def);
+
         BPMNPlane plane = def.getDiagrams().get(0).getPlane();
         List<DiagramElement> diagramElements = plane.getPlaneElement();
         for(DiagramElement dia : diagramElements) {
@@ -235,12 +236,19 @@ public class Bpmn2JsonUnmarshaller {
                 BPMNShape shape = (BPMNShape) dia;
                 updateShapeBounds(def, plane, shape.getBpmnElement());
             }
-            // TODO Edges
-            //else if(dia instanceof BPMNEdge) {
-                //BPMNEdge edge = (BPMNEdge) dia;
-                //updateEdgeBounds(def, plane, edge.getBpmnElement());
-            //}
+        }
 
+        revisitEdgeBoundsInLanes(def);
+    }
+
+    public void revisitEdgeBoundsInLanes(Definitions def) {
+        BPMNPlane plane = def.getDiagrams().get(0).getPlane();
+        List<DiagramElement> diagramElements = plane.getPlaneElement();
+        for(DiagramElement dia : diagramElements) {
+            if(dia instanceof BPMNEdge) {
+                BPMNEdge edge = (BPMNEdge) dia;
+                updateEdgeBoundsInLanes(def, plane, edge, edge.getBpmnElement());
+            }
         }
     }
 
@@ -357,6 +365,66 @@ public class Bpmn2JsonUnmarshaller {
             edge.getBpmnElement().getAnyAttribute().add(extensionEntryColor);
         } else {
             _logger.warn("Unable to find color information for shape: " + edge.getBpmnElement().getId());
+        }
+    }
+
+    public void updateEdgeBoundsInLanes(Definitions def, BPMNPlane plane, BPMNEdge edge, BaseElement ele) {
+        if(ele instanceof SequenceFlow) {
+            SequenceFlow sq = (SequenceFlow) ele;
+            List<RootElement> rootElements =  def.getRootElements();
+            for(RootElement root : rootElements) {
+                if(root instanceof Process) {
+                    Process process = (Process) root;
+                    if(sq.getSourceRef() != null && sq.getTargetRef() != null) {
+                        if(process.getLaneSets() != null && process.getLaneSets().size() > 0) {
+                            for(LaneSet ls : process.getLaneSets()) {
+                                for(Lane newLane : ls.getLanes()) {
+                                    List<FlowNode> laneFlowNodes = newLane.getFlowNodeRefs();
+                                    for(FlowNode newFlowNode : laneFlowNodes) {
+                                        if(newFlowNode.getId().equals(sq.getSourceRef().getId())) {
+                                            List<DiagramElement> diagramElements = plane.getPlaneElement();
+                                            for(DiagramElement dia : diagramElements) {
+                                                if(dia instanceof BPMNShape) {
+                                                    BPMNShape shape = (BPMNShape) dia;
+                                                    if(shape.getBpmnElement().getId().equals(sq.getSourceRef().getId())) {
+                                                        Bounds eleBounds = shape.getBounds();
+                                                        List<Point> edgePoints = edge.getWaypoint();
+                                                        if(edgePoints !=null && edgePoints.size() > 1) {
+                                                            if(eleBounds != null) {
+                                                                Point first = edgePoints.get(0);
+                                                                first.setX(first.getX() + eleBounds.getX());
+                                                                first.setY(first.getY() + eleBounds.getY());
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        } else if(newFlowNode.getId().equals(sq.getTargetRef().getId())) {
+                                            List<DiagramElement> diagramElements = plane.getPlaneElement();
+                                            for(DiagramElement dia : diagramElements) {
+                                                if(dia instanceof BPMNShape) {
+                                                    BPMNShape shape = (BPMNShape) dia;
+                                                    if(shape.getBpmnElement().getId().equals(sq.getTargetRef().getId())) {
+                                                        Bounds eleBounds = shape.getBounds();
+                                                        List<Point> edgePoints = edge.getWaypoint();
+                                                        if(edgePoints !=null && edgePoints.size() > 1) {
+                                                            if(eleBounds != null) {
+                                                                Point last = edgePoints.get(0);
+                                                                last.setX(last.getX() + eleBounds.getX());
+                                                                last.setY(last.getY() + eleBounds.getY());
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -1541,6 +1609,19 @@ public class Bpmn2JsonUnmarshaller {
 
             if(flowElement instanceof FlowElementsContainer) {
                 return findContainerForBoundaryEvent((FlowElementsContainer) flowElement, be);
+            }
+        }
+        return null;
+    }
+
+    private FlowElementsContainer findContanerForFlowElement(FlowElementsContainer container, FlowElement fl) {
+        for(FlowElement flowElement : container.getFlowElements()) {
+            if(flowElement.getId().equals(fl.getId())) {
+                return container;
+            }
+
+            if(flowElement instanceof FlowElementsContainer) {
+                return findContanerForFlowElement((FlowElementsContainer) flowElement, fl);
             }
         }
         return null;
