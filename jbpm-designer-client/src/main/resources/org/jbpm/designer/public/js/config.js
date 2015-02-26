@@ -253,6 +253,7 @@ ORYX.CONFIG.EVENT_DRAGDROP_END =			"dragdrop.end";
 ORYX.CONFIG.EVENT_RESIZE_START =			"resize.start";
 ORYX.CONFIG.EVENT_RESIZE_END =				"resize.end";
 ORYX.CONFIG.EVENT_DRAGDOCKER_DOCKED =		"dragDocker.docked";
+ORYX.CONFIG.EVENT_DRAGDOCKER_MOVE_FINISHED = "dragDocker.move.finished";
 ORYX.CONFIG.EVENT_HIGHLIGHT_SHOW =			"highlight.showHighlight";
 ORYX.CONFIG.EVENT_HIGHLIGHT_HIDE =			"highlight.hideHighlight";
 ORYX.CONFIG.EVENT_LOADING_ENABLE =			"loading.enable";
