@@ -218,6 +218,7 @@ public class EditorHandler extends HttpServlet {
 //        }
 
         String readOnly = request.getParameter("readonly");
+        String sessionId = request.getParameter( "sessionId" );
 
 
         if (profileName == null || profileName.length() < 1) {
@@ -299,6 +300,7 @@ public class EditorHandler extends HttpServlet {
         editorTemplate.add("editorprofile", profileName);
         editorTemplate.add("editoruuid", uuid);
         editorTemplate.add("editorid", editorID);
+        editorTemplate.add( "sessionid", sessionId);
         //editorTemplate.add("activenodes", activeNodes);
         //editorTemplate.add("completednodes", completedNodes);
         //editorTemplate.add("processsource", encodedProcessSource);

@@ -127,7 +127,7 @@ public interface Repository {
      * @return - returns uniqueId of the asset
      * @throws NoSuchFileException - throws in case of asset given by id does not exist
      */
-    String updateAsset(Asset asset, String commitMessage) throws NoSuchFileException;
+    String updateAsset(Asset asset, String commitMessage, String sessionId) throws NoSuchFileException;
 
     /**
      * Deletes asset from repository identified by <code>assetUniqueId</code> if exists
