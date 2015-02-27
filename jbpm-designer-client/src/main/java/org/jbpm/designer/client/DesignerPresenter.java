@@ -42,6 +42,7 @@ import org.uberfire.lifecycle.OnStartup;
 import org.uberfire.mvp.Command;
 import org.uberfire.mvp.PlaceRequest;
 import org.uberfire.mvp.impl.PathPlaceRequest;
+import org.uberfire.rpc.SessionInfo;
 import org.uberfire.util.URIUtil;
 import org.uberfire.workbench.events.NotificationEvent;
 import org.uberfire.workbench.model.menu.Menus;
@@ -59,6 +60,9 @@ public class DesignerPresenter
 
     @Inject
     private PlaceManager placeManager;
+
+    @Inject
+    SessionInfo sessionInfo;
 
     @Inject
     private Caller<VFSService> vfsServices;
@@ -407,6 +411,7 @@ public class DesignerPresenter
                 editorParameters.remove( "completednodes" );
             }
             editorParameters.put( "ts", Long.toString( System.currentTimeMillis() ) );
+            editorParameters.put( "sessionId", sessionInfo.getId() );
             view.setup( editorID, editorParameters );
         }
     }

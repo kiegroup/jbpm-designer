@@ -350,7 +350,8 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                     pp: ORYX.PREPROCESSING,
                     assetid: window.btoa(encodeURI(ORYX.UUID)),
                     assetcontenttransform: 'jsontobpmn2',
-                    commitmessage: commitMessage
+                    commitmessage: commitMessage,
+                    sessionid: ORYX.SESSION_ID
                 }
             });
         } else {

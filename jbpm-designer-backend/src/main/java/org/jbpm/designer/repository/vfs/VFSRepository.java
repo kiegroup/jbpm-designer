@@ -356,7 +356,7 @@ public class VFSRepository implements Repository {
         return encodeUniqueId(filePath.toUri().toString());
     }
 
-    public String updateAsset(Asset asset, String commitMessage) throws NoSuchFileException {
+    public String updateAsset(Asset asset, String commitMessage, String sessionId) throws NoSuchFileException {
         encodeAsset(asset);
         String uniqueId = decodeUniqueId(asset.getUniqueId());
         Path filePath = getFileSystem(uniqueId).provider().getPath(URI.create(uniqueId));
@@ -366,7 +366,7 @@ public class VFSRepository implements Repository {
         if (!ioService.exists(filePath)) {
             throw new NoSuchFileException();
         }
-        CommentedOption commentedOption = new CommentedOption(getIdentity(), commitMessage);
+        CommentedOption commentedOption = new CommentedOption(sessionId, getIdentity(), null, commitMessage, new Date());
         if(((AbstractAsset)asset).acceptBytes()) {
             ioService.write(filePath, ((Asset<byte[]>)asset).getAssetContent(), StandardOpenOption.TRUNCATE_EXISTING, commentedOption);
         } else {

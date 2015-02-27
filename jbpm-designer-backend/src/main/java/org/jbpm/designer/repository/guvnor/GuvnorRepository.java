@@ -71,7 +71,7 @@ public class GuvnorRepository implements Repository {
         throw new UnsupportedOperationException();
     }
 
-    public String updateAsset(Asset asset, String commitMessage) throws NoSuchFileException {
+    public String updateAsset(Asset asset, String commitMessage, String sessionId) throws NoSuchFileException {
         return null;
     }
 

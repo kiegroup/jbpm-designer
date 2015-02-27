@@ -11,6 +11,7 @@
         ORYX.EXTERNAL_HOST = "$externalhost$";
         ORYX.EXTERNAL_SUBDOMAIN = "$externalsubdomain$";
         ORYX.REPOSITORY_ID = "$repositoryid$";
+        ORYX.SESSION_ID = "$sessionid$";
 
         ORYX.UUID = "$editoruuid$";
         ORYX.PROFILE = "$editorprofile$";
