@@ -5564,29 +5564,52 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                             var ruleFlowInfo = keyValParts[1];
 
                             var ruleFlowInfoParts = ruleFlowInfo.split("<<");
+                            var finalRepository = "";
+                            var finalProject = "";
+                            var finalBranch = "";
+
                             for(var i = 0; i < ruleFlowInfoParts.length; i++) {
                                 var ruleFlowInfoInnerParts = ruleFlowInfoParts[i].split("^^");
                                 var ruleFlowInfoInnerArray = new Array();
                                 ruleFlowInfoInnerArray.push(ruleFlowInfoInnerParts[0]);
                                 ruleFlowInfoInnerArray.push(ruleFlowInfoInnerParts[1]);
                                 containedRulesComboInfo.push(ruleFlowInfoInnerArray);
+
+                                var firstInfoPart = ruleFlowInfoParts[i];
+                                // test1.drl^^default://master@jbpm-playground/Evaluation/src/main/resources/test1.drl
+                                var firstInfoPartParts = firstInfoPart.split("^^");
+                                var firstInfoPartPath = firstInfoPartParts[1];
+                                // default://master@jbpm-playground/Evaluation/src/main/resources/test1.drl
+                                var firstInfoPartPathParts = firstInfoPartPath.split("://");
+                                var finalInfo = firstInfoPartPathParts[1];
+                                // master@jbpm-playground/Evaluation/src/main/resources/test1.drl
+                                var finalInfoParts = finalInfo.split("@");
+
+                                if(finalBranch.indexOf(finalInfoParts[0]) < 0) {
+                                    finalBranch += finalInfoParts[0] + ",";
+                                }
+
+
+                                var finalPathParts = finalInfoParts[1];
+
+                                if(finalRepository.indexOf(finalPathParts.split("/")[0]) < 0) {
+                                    finalRepository += finalPathParts.split("/")[0] + ",";
+                                }
+
+                                if(finalProject.indexOf(finalPathParts.split("/")[1]) < 0) {
+                                    finalProject += finalPathParts.split("/")[1] + ",";
+                                }
+
                             }
-
-                            var firstInfoPart = ruleFlowInfoParts[0];
-                            // test1.drl^^default://master@jbpm-playground/Evaluation/src/main/resources/test1.drl
-                            var firstInfoPartParts = firstInfoPart.split("^^");
-                            var firstInfoPartPath = firstInfoPartParts[1];
-                            // default://master@jbpm-playground/Evaluation/src/main/resources/test1.drl
-                            var firstInfoPartPathParts = firstInfoPartPath.split("://");
-                            var finalInfo = firstInfoPartPathParts[1];
-                            // master@jbpm-playground/Evaluation/src/main/resources/test1.drl
-                            var finalInfoParts = finalInfo.split("@");
-
-                            var finalBranch = finalInfoParts[0];
-                            var finalPathParts = finalInfoParts[1];
-
-                            var finalRepository = finalPathParts.split("/")[0];
-                            var finalProject = finalPathParts.split("/")[1];
+                            if (finalRepository.endsWith(",")) {
+                                finalRepository = finalRepository.substr(0, finalRepository.length - 1);
+                            }
+                            if (finalProject.endsWith(",")) {
+                                finalProject = finalProject.substr(0, finalProject.length - 1);
+                            }
+                            if (finalBranch.endsWith(",")) {
+                                finalBranch = finalBranch.substr(0, finalBranch.length - 1);
+                            }
 
                             ruleflowgroupsdefs.add(new RuleFlowGroupDef({
                                 name: ruleFlowName,
@@ -5671,7 +5694,7 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                             },
                             {
                                 id: 'rfrepository',
-                                header: 'Repository',
+                                header: 'Repositories',
                                 width: 100,
                                 sortable: true,
                                 dataIndex: 'repo',
@@ -5679,7 +5702,7 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                             },
                             {
                                 id: 'rfproject',
-                                header: 'Project',
+                                header: 'Projects',
                                 width: 100,
                                 sortable: true,
                                 dataIndex: 'project',
@@ -5687,7 +5710,7 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                             },
                             {
                                 id: 'rfbranch',
-                                header: "Branch",
+                                header: "Branches",
                                 width: 100,
                                 sortable: true,
                                 dataIndex: "branch",
