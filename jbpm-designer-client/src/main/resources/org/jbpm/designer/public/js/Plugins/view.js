@@ -51,6 +51,7 @@ ORYX.Plugins.View = {
 
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DRAGDROP_END, this.refreshCanvasForIE.bind(this));
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_SHAPE_ADDED, this.refreshCanvasForIE.bind(this));
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DRAGDOCKER_MOVE_FINISHED, this.refreshCanvasForIE.bind(this));
 
         //Standard Values
         this.zoomLevel = 1.0;
@@ -2059,14 +2060,17 @@ ORYX.Plugins.View = {
             this.facade.executeCommands([command]);
             this.facade.importJSON(currentJSON);
 
-            var foundShape = false;
-            foundShape = this.findSelectedShape(options.shape, options);
-            if(foundShape) {
-                this.facade.setSelection([foundShape]);
-            }
+           var foundShape = false;
+           foundShape = this.findSelectedShape(options.shape, options);
+           if(foundShape) {
+               this.facade.setSelection([foundShape]);
+           }
+           else {
+               this.facade.setSelection([]);
+           }
 
-            this.facade.getCanvas().update();
-            this.facade.updateSelection();
+           //this.facade.getCanvas().update();
+           //this.facade.updateSelection();
 
         }
     },
