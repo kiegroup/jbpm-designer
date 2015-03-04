@@ -273,27 +273,31 @@ public class Bpmn2JsonUnmarshaller {
 
     public void updateEdgeBoundsInContainers(FlowElementsContainer container, SequenceFlow sq, BPMNPlane plane, BPMNEdge edge) {
         for(FlowElement fele : container.getFlowElements()) {
-            if(fele.getId().equals(sq.getSourceRef().getId())) {
-                Bounds sourceBounds = getShapeBoundsForFlowNode(sq.getSourceRef(), plane);
-                List<Point> edgePoints = edge.getWaypoint();
-                if(edgePoints !=null && edgePoints.size() > 1) {
-                    if(sourceBounds != null) {
-                        Point first = edgePoints.get(0);
-                        first.setX(first.getX() + sourceBounds.getX());
-                        first.setY(first.getY() + sourceBounds.getY());
+            // dont do this if its on process level
+            if(!(container instanceof Process)) {
+                if(fele.getId().equals(sq.getSourceRef().getId())) {
+                    Bounds sourceBounds = getShapeBoundsForFlowNode(sq.getSourceRef(), plane);
+                    List<Point> edgePoints = edge.getWaypoint();
+                    if(edgePoints !=null && edgePoints.size() > 1) {
+                        if(sourceBounds != null) {
+                            Point first = edgePoints.get(0);
+                            first.setX(first.getX() + sourceBounds.getX());
+                            first.setY(first.getY() + sourceBounds.getY());
+                        }
                     }
-                }
-            } else if(fele.getId().equals(sq.getTargetRef().getId())) {
-                Bounds targetBounds = getShapeBoundsForFlowNode(sq.getTargetRef(), plane);
-                List<Point> edgePoints = edge.getWaypoint();
-                if(edgePoints !=null && edgePoints.size() > 1) {
-                    if(targetBounds != null) {
-                        Point last = edgePoints.get(edgePoints.size() - 1);
-                        last.setX(last.getX() + targetBounds.getX());
-                        last.setY(last.getY() + targetBounds.getY());
+                } else if(fele.getId().equals(sq.getTargetRef().getId())) {
+                    Bounds targetBounds = getShapeBoundsForFlowNode(sq.getTargetRef(), plane);
+                    List<Point> edgePoints = edge.getWaypoint();
+                    if(edgePoints !=null && edgePoints.size() > 1) {
+                        if(targetBounds != null) {
+                            Point last = edgePoints.get(edgePoints.size() - 1);
+                            last.setX(last.getX() + targetBounds.getX());
+                            last.setY(last.getY() + targetBounds.getY());
+                        }
                     }
                 }
             }
+
             if(fele instanceof FlowElementsContainer) {
                 updateEdgeBoundsInContainers((FlowElementsContainer) fele, sq, plane, edge);
             }
