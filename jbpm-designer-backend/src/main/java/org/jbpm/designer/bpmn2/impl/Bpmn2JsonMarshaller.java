@@ -1690,7 +1690,7 @@ public class Bpmn2JsonMarshaller {
                 MultiInstanceLoopCharacteristics taskMultiLoop = (MultiInstanceLoopCharacteristics) task.getLoopCharacteristics();
                 // dont include associations that include mi loop data inputs
                 if(taskMultiLoop.getInputDataItem() != null && taskMultiLoop.getInputDataItem().getId() != null) {
-                    if(datain.getSourceRef().get(0).getId().equals(taskMultiLoop.getInputDataItem().getId())) {
+                    if(datain.getSourceRef() != null && datain.getSourceRef().size() > 0 && datain.getSourceRef().get(0).getId().equals(taskMultiLoop.getInputDataItem().getId())) {
                         proceed = false;
                     }
                 }

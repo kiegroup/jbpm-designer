@@ -635,9 +635,7 @@ public class Bpmn2JsonUnmarshaller {
 
                                                 DataInput miCollectionInputDI = Bpmn2Factory.eINSTANCE.createDataInput();
                                                 miCollectionInputDI.setName("miinputCollection");
-                                                ItemDefinition miCollectionInputDIItemDefinition = Bpmn2Factory.eINSTANCE.createItemDefinition();
-                                                miCollectionInputDIItemDefinition.setStructureRef("java.util.Collection");
-                                                def.getRootElements().add(miCollectionInputDIItemDefinition);
+                                                ItemDefinition miCollectionInputDIItemDefinition = this.getMessageItemDefinition(def.getRootElements(), prop.getId());
                                                 miCollectionInputDI.setItemSubjectRef(miCollectionInputDIItemDefinition);
 
                                                 task.getIoSpecification().getDataInputs().add(miCollectionInputDI);
@@ -671,9 +669,7 @@ public class Bpmn2JsonUnmarshaller {
 
                                                 DataOutput miCollectionOutputDI = Bpmn2Factory.eINSTANCE.createDataOutput();
                                                 miCollectionOutputDI.setName("mioutputCollection");
-                                                ItemDefinition miCollectionOutputDIItemDefinition = Bpmn2Factory.eINSTANCE.createItemDefinition();
-                                                miCollectionOutputDIItemDefinition.setStructureRef("java.util.Collection");
-                                                def.getRootElements().add(miCollectionOutputDIItemDefinition);
+                                                ItemDefinition miCollectionOutputDIItemDefinition = this.getMessageItemDefinition(def.getRootElements(), prop.getId());
                                                 miCollectionOutputDI.setItemSubjectRef(miCollectionOutputDIItemDefinition);
 
                                                 task.getIoSpecification().getDataOutputs().add(miCollectionOutputDI);
@@ -2678,16 +2674,26 @@ public class Bpmn2JsonUnmarshaller {
             def.getRootElements().add(id);
         }
     }
-    
+
     private boolean existsMessageItemDefinition(List<RootElement> rootElements, String id) {
-    	for(RootElement root : rootElements) {
-    		if(root instanceof ItemDefinition && root.getId().equals(id + "Type")) {
-    			return true;
-    		}
-    	}
-    	return false;
+        for(RootElement root : rootElements) {
+            if(root instanceof ItemDefinition && root.getId().equals(id + "Type")) {
+                return true;
+            }
+        }
+        return false;
     }
-        
+
+    private ItemDefinition getMessageItemDefinition(List<RootElement> rootElements, String id) {
+        String testId = "_" + id + "Item";
+        for(RootElement root : rootElements) {
+            if(root instanceof ItemDefinition && root.getId().equals(testId)) {
+                return (ItemDefinition) root;
+            }
+        }
+        return null;
+    }
+
     /**
      * Reconnect the sequence flows and the flow nodes.
      * Done after the initial pass so that we have all the target information.
