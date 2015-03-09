@@ -20,7 +20,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>jbpm-designer-utilities</groupId>
   <artifactId>svginline</artifactId>
-  <version>6.2.0-SNAPSHOT</version>
+  <version>6.2.1-SNAPSHOT</version>
   <name>jbpm-designer-utilities svginline</name>
   <description>jbpm-designer-utilities svginline</description>
   <properties>
