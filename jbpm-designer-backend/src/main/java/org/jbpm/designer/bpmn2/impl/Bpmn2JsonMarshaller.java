@@ -2663,7 +2663,7 @@ public class Bpmn2JsonMarshaller {
 	    Bounds bounds = ((BPMNShape) findDiagramElement(plane, subProcess)).getBounds();
 	    for (FlowElement flowElement: subProcess.getFlowElements()) {
             if(coordianteManipulation) {
-                marshallFlowElement(flowElement, plane, generator, bounds.getX() + xOffset, bounds.getY() + yOffset, preProcessingData, def);
+                marshallFlowElement(flowElement, plane, generator, bounds.getX(), bounds.getY(), preProcessingData, def);
             } else {
                 marshallFlowElement(flowElement, plane, generator, 0, 0, preProcessingData, def);
             }

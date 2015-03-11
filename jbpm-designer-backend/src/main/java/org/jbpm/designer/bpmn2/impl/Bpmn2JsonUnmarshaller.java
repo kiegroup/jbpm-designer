@@ -584,7 +584,7 @@ public class Bpmn2JsonUnmarshaller {
             for(FlowElement subEle : sub.getFlowElements()) {
                 if(subEle instanceof SubProcess) {
                     Bounds subEleBounds = getBoundsForShape(plane, subEle);
-                    updateShapeBoundsInSubprocess(plane, ele, (SubProcess) subEle, subEleBounds.getX() + parentX, subEleBounds.getY() + parentY);
+                    updateShapeBoundsInSubprocess(plane, ele, (SubProcess) subEle, subEleBounds.getX(), subEleBounds.getY());
                 }
             }
         }
