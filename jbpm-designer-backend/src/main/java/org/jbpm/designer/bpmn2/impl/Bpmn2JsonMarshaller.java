@@ -1312,7 +1312,7 @@ public class Bpmn2JsonMarshaller {
                         } else {
                             formatToWrite = "java";
                         }
-                        if(properties.get("script_language") != null) {
+                        if(properties.get("script_language") == null) {
                             properties.put("script_language", formatToWrite);
                         }
                     }
@@ -1964,7 +1964,7 @@ public class Bpmn2JsonMarshaller {
                         } else {
                             formatToWrite = "java";
                         }
-                        if(properties.get("script_language") != null) {
+                        if(properties.get("script_language") == null) {
                             properties.put("script_language", formatToWrite);
                         }
                     }
@@ -2488,7 +2488,7 @@ public class Bpmn2JsonMarshaller {
                         } else {
                             formatToWrite = "java";
                         }
-                        if(properties.get("script_language") != null) {
+                        if(properties.get("script_language") == null) {
                             properties.put("script_language", formatToWrite);
                         }
                     }
