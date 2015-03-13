@@ -533,21 +533,58 @@ public class Bpmn2JsonMarshaller {
             }
             properties.put("datainput", dinbuff.toString());
 
-            List<DataInputAssociation> inputAssociations = event.getDataInputAssociation();
-            StringBuffer dinassociationbuff = new StringBuffer();
-            for(DataInputAssociation din : inputAssociations) {
-                if(din.getSourceRef().get(0).getId() != null && din.getSourceRef().get(0).getId().length() > 0) {
-                    dinassociationbuff.append("[din]" + din.getSourceRef().get(0).getId());
-                    dinassociationbuff.append("->");
-                    dinassociationbuff.append( ((DataInput)din.getTargetRef()).getName());
-                    dinassociationbuff.append(",");
+            StringBuilder associationBuff = new StringBuilder();
+            List<String> uniDirectionalAssociations = new ArrayList<String>();
+            for(DataInputAssociation datain : event.getDataInputAssociation()) {
+                String lhsAssociation = "";
+                if(datain.getSourceRef() != null && datain.getSourceRef().size() > 0) {
+                    if(datain.getTransformation() != null && datain.getTransformation().getBody() != null) {
+                        lhsAssociation = datain.getTransformation().getBody();
+                    } else {
+                        lhsAssociation = datain.getSourceRef().get(0).getId();
+                    }
+                }
+
+                String rhsAssociation = "";
+                if(datain.getTargetRef() != null) {
+                    rhsAssociation = ((DataInput) datain.getTargetRef()).getName();
+                }
+
+                //boolean isBiDirectional = false;
+                boolean isAssignment = false;
+
+                if(datain.getAssignment() != null && datain.getAssignment().size() > 0) {
+                    isAssignment = true;
+                }
+
+                if(isAssignment) {
+                    // only know how to deal with formal expressions
+                    if( datain.getAssignment().get(0).getFrom() instanceof FormalExpression) {
+                        String associationValue = ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody();
+                        if(associationValue == null) {
+                            associationValue = "";
+                        }
+                        String replacer = associationValue.replaceAll(",", "##");
+                        associationBuff.append("[din]" + rhsAssociation).append("=").append(replacer);
+                        associationBuff.append(",");
+                    }
+                }
+                else {
+                    if(lhsAssociation != null && lhsAssociation.length() > 0) {
+                        associationBuff.append("[din]" + lhsAssociation).append("->").append(rhsAssociation);
+                        associationBuff.append(",");
+                        uniDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
+                    }
                 }
             }
-            if(dinassociationbuff.length() > 0) {
-                dinassociationbuff.setLength(dinassociationbuff.length() - 1);
+
+            String assignmentString = associationBuff.toString();
+            if(assignmentString.endsWith(",")) {
+                assignmentString = assignmentString.substring(0, assignmentString.length() - 1);
             }
-            properties.put("datainputassociations", dinassociationbuff.toString());
+            properties.put("datainputassociations", assignmentString);
         }
+
         // event definitions
         List<EventDefinition> eventdefs = event.getEventDefinitions();
         for(EventDefinition ed : eventdefs) {
