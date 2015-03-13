@@ -4074,7 +4074,7 @@ public class Bpmn2JsonUnmarshaller {
                 }
             }
         } catch (IndexOutOfBoundsException e) {
-            // TODO we dont want to barf here as test for example do not define event definitions in the bpmn2....
+            _logger.warn(e.getMessage());
         }
         // simulation
         if(properties.get("distributiontype") != null && properties.get("distributiontype").length() > 0) {
@@ -4140,57 +4140,108 @@ public class Bpmn2JsonUnmarshaller {
     }
 
     protected void applyThrowEventProperties(ThrowEvent event, Map<String, String> properties) {
-        if (properties.get("datainput") != null && !"".equals(properties.get("datainput"))) {
+        if(properties.get("datainput") != null && properties.get("datainput").trim().length() > 0) {
             String[] allDataInputs = properties.get("datainput").split( ",\\s*" );
             InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
             for(String dataInput : allDataInputs) {
-                String[] dinputParts = dataInput.split( ":\\s*" );
-                String fromPart = dinputParts[0];
-                if(fromPart.startsWith("[din]")) {
-                    fromPart = fromPart.substring(5, fromPart.length());
+                if(dataInput.trim().length() > 0) {
+                    DataInput nextInput = Bpmn2Factory.eINSTANCE.createDataInput();
+                    String[] dataInputParts = dataInput.split( ":\\s*" );
+                    if(dataInputParts.length == 2) {
+                        nextInput.setId(event.getId() + "_" + dataInputParts[0] + (dataInputParts[0].endsWith("InputX") ? "" : "InputX"));
+                        nextInput.setName(dataInputParts[0]);
+
+                        ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                        EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                                "http://www.jboss.org/drools", "dtype", false, false);
+                        SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
+                                dataInputParts[1]);
+                        nextInput.getAnyAttribute().add(extensionEntry);
+                    } else {
+                        nextInput.setId(event.getId() + "_" + dataInput + (dataInput.endsWith("InputX") ? "" : "InputX"));
+                        nextInput.setName(dataInput);
+
+                        ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                        EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                                "http://www.jboss.org/drools", "dtype", false, false);
+                        SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
+                                "Object");
+                        nextInput.getAnyAttribute().add(extensionEntry);
+                    }
+                    event.getDataInputs().add(nextInput);
+                    inset.getDataInputRefs().add(nextInput);
                 }
-
-                DataInput datain = Bpmn2Factory.eINSTANCE.createDataInput();
-                // we follow jbpm here to set the id
-                datain.setId(event.getId() + "_" + fromPart);
-                datain.setName(fromPart);
-                event.getDataInputs().add(datain);
-                // add to input set as well
-                inset.getDataInputRefs().add(datain);
-
             }
             event.setInputSet(inset);
         }
 
-        // data input associations
-        if (properties.get("datainputassociations") != null && !"".equals(properties.get("datainputassociations"))) {
-            String[] allAssociations = properties.get("datainputassociations").split( ",\\s*" );
-            for(String association : allAssociations) {
-                // data inputs are uni-directional
-                String[] associationParts = association.split( "->\\s*" );
-                String fromPart = associationParts[0];
-                if(fromPart.startsWith("[din]")) {
-                    fromPart = fromPart.substring(5, fromPart.length());
-                }
-                DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
+        if(properties.get("datainputassociations") != null && properties.get("datainputassociations").length() > 0) {
+            String[] allAssignments = properties.get("datainputassociations").split( ",\\s*" );
+            for(String assignment : allAssignments) {
+                if(assignment.contains("=")) {
+                    String[] assignmentParts = assignment.split( "=\\s*" );
+                    String fromPart = assignmentParts[0];
+                    if(fromPart.startsWith("[din]")) {
+                        fromPart = fromPart.substring(5, fromPart.length());
+                    }
+                    DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
 
-                // since we dont have the process vars defined yet..need to improvise
-                ItemAwareElement e = Bpmn2Factory.eINSTANCE.createItemAwareElement();
-                e.setId(fromPart);
-                dia.getSourceRef().add(e);
-
-                // for target ref we loop through already defined data inputs
-                List<DataInput> dataInputs = event.getDataInputs();
-                if(dataInputs != null) {
-                    for(DataInput di : dataInputs) {
-                        if(di.getId().equals(event.getId() + "_" + associationParts[1])) {
-                            dia.setTargetRef(di);
-                            break;
+                    if(event.getInputSet() != null) {
+                        List<DataInput> dataInputs = event.getInputSet().getDataInputRefs();
+                        for(DataInput di : dataInputs) {
+                            if(di.getId().equals(event.getId() + "_" + fromPart + (fromPart.endsWith("InputX") ? "" : "InputX"))) {
+                                dia.setTargetRef(di);
+                            }
                         }
                     }
-                }
 
-                event.getDataInputAssociation().add(dia);
+                    Assignment a = Bpmn2Factory.eINSTANCE.createAssignment();
+                    FormalExpression fromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                    if(assignmentParts.length > 1) {
+                        String replacer = assignmentParts[1].replaceAll("##", ",");
+                        replacer = replacer.replaceAll("\\|\\|", "=");
+                        fromExpression.setBody(wrapInCDATABlock(replacer));
+                    } else {
+                        fromExpression.setBody("");
+                    }
+                    FormalExpression toExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                    toExpression.setBody(dia.getTargetRef().getId());
+
+                    a.setFrom(fromExpression);
+                    a.setTo(toExpression);
+
+                    dia.getAssignment().add(a);
+                    event.getDataInputAssociation().add(dia);
+
+                } else if(assignment.contains("->")) {
+                    String[] assignmentParts = assignment.split( "->\\s*" );
+                    String fromPart = assignmentParts[0];
+                    boolean isDataInput = false;
+                    boolean isDataOutput = false;
+                    if(fromPart.startsWith("[din]")) {
+                        fromPart = fromPart.substring(5, fromPart.length());
+                        isDataInput = true;
+                    }
+
+                    if(isDataInput) {
+                        DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
+                        // association from process var to dataInput var
+                        ItemAwareElement ie = Bpmn2Factory.eINSTANCE.createItemAwareElement();
+                        ie.setId(fromPart);
+                        dia.getSourceRef().add(ie);
+
+                        List<DataInput> dataInputs = event.getInputSet().getDataInputRefs();
+                        for(DataInput di : dataInputs) {
+                            if(di.getId().equals(event.getId() + "_" + assignmentParts[1] + (assignmentParts[1].endsWith("InputX") ? "" : "InputX"))) {
+                                dia.setTargetRef(di);
+                                break;
+                            }
+                        }
+                        event.getDataInputAssociation().add(dia);
+                    }
+                } else {
+                    // TODO throw exception here?
+                }
             }
         }
 
@@ -4286,7 +4337,7 @@ public class Bpmn2JsonUnmarshaller {
                 }
             }
         } catch (IndexOutOfBoundsException e) {
-            // TODO we dont want to barf here as test for example do not define event definitions in the bpmn2....
+            _logger.warn(e.getMessage());
         }
 
         // simulation
