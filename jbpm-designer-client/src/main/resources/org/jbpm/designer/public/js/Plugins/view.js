@@ -2084,13 +2084,14 @@ ORYX.Plugins.View = {
                         foundShape = child;
                     }
                 }
-                if(child.getChildren().size() > 0) {
-                    for (var i = 0; i < child.getChildren().size(); i++) {
-                        if(child.getChildren()[i] instanceof ORYX.Core.Node || child.getChildren()[i] instanceof ORYX.Core.Edge) {
-                            this.findSelectedShape(child.getChildren()[i], options);
-                        }
-                    }
-                }
+ // BZ1203382: This next part should work, but results in an 'Out of stack space' error when you add nodes in sub-process or swimlane
+ //               if(child.getChildren().size() > 0) {
+ //                   for (var i = 0; i < child.getChildren().size(); i++) {
+ //                       if(child.getChildren()[i] instanceof ORYX.Core.Node || child.getChildren()[i] instanceof ORYX.Core.Edge) {
+ //                           this.findSelectedShape(child.getChildren()[i], options);
+ //                       }
+ //                   }
+ //               }
             }).bind(this));
         }
         return foundShape;
