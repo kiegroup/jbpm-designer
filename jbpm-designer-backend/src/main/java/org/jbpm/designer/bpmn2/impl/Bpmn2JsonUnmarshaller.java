@@ -2744,22 +2744,20 @@ public class Bpmn2JsonUnmarshaller {
 					plane.getPlaneElement().add(shape);
 				}
                 if(subProcessFlowElement instanceof BoundaryEvent) {
-                    BPMNEdge edge = factory.createBPMNEdge();
-                    edge.setBpmnElement(subProcessFlowElement);
                     List<Point> dockers = _dockers.get(subProcessFlowElement.getId());
-                    DcFactory dcFactory = DcFactory.eINSTANCE;
-                    Point addedDocker = dcFactory.createPoint();
+                    StringBuffer dockerBuff = new StringBuffer();
                     for (int i = 0; i < dockers.size(); i++) {
-                        edge.getWaypoint().add(dockers.get(i));
-                        if(i == 0) {
-                            addedDocker.setX(dockers.get(i).getX());
-                            addedDocker.setY(dockers.get(i).getY());
-                        }
+                        dockerBuff.append(dockers.get(i).getX());
+                        dockerBuff.append("^");
+                        dockerBuff.append(dockers.get(i).getY());
+                        dockerBuff.append("|");
                     }
-                    if(dockers.size() == 1) {
-                        edge.getWaypoint().add(addedDocker);
-                    }
-                    plane.getPlaneElement().add(edge);
+                    ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                    EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                            "http://www.jboss.org/drools", "dockerinfo", false, false);
+                    SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
+                            dockerBuff.toString());
+                    subProcessFlowElement.getAnyAttribute().add(extensionEntry);
                 }
 			} else if (subProcessFlowElement instanceof SequenceFlow) {
 				SequenceFlow sequenceFlow = (SequenceFlow) subProcessFlowElement;
@@ -2854,22 +2852,22 @@ public class Bpmn2JsonUnmarshaller {
         					shape.setBounds(b);
         					plane.getPlaneElement().add(shape);
         					if(flowElement instanceof BoundaryEvent) {
-        						BPMNEdge edge = factory.createBPMNEdge();
-        						edge.setBpmnElement(flowElement);
         						List<Point> dockers = _dockers.get(flowElement.getId());
         						DcFactory dcFactory = DcFactory.eINSTANCE;
-        						Point addedDocker = dcFactory.createPoint();
-    	    					for (int i = 0; i < dockers.size(); i++) {
-    	    						edge.getWaypoint().add(dockers.get(i));
-    	    						if(i == 0) {
-    	    							addedDocker.setX(dockers.get(i).getX());
-    	    							addedDocker.setY(dockers.get(i).getY());
-    	    						}
+                                StringBuffer dockerBuff = new StringBuffer();
+                                for (int i = 0; i < dockers.size(); i++) {
+                                    dockerBuff.append(dockers.get(i).getX());
+                                    dockerBuff.append("^");
+                                    dockerBuff.append(dockers.get(i).getY());
+                                    dockerBuff.append("|");
     	    					}
-    	    					if(dockers.size() == 1) {
-    	    						edge.getWaypoint().add(addedDocker);
-    	    					}
-    	    					plane.getPlaneElement().add(edge);
+                                ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                                EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                                        "http://www.jboss.org/drools", "dockerinfo", false, false);
+                                SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
+                                        dockerBuff.toString());
+                                flowElement.getAnyAttribute().add(extensionEntry);
+
         					}
         				}
         				// check if its a subprocess

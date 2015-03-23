@@ -2171,24 +2171,30 @@ public class Bpmn2JsonMarshaller {
 
         // boundary events have a docker
         if(node instanceof BoundaryEvent) {
-        	// find the edge associated with this boundary event
-        	for (DiagramElement element: plane.getPlaneElement()) {
-        		if(element instanceof BPMNEdge && ((BPMNEdge) element).getBpmnElement() == node) {
-        			List<Point> waypoints = ((BPMNEdge) element).getWaypoint();
-        			if(waypoints != null && waypoints.size() > 0) {
-                		// one per boundary event
-                		Point p = waypoints.get(0);
-                		if(p != null) {
-                			generator.writeArrayFieldStart("dockers");
-                            generator.writeStartObject();
-                            generator.writeObjectField("x", p.getX());
-                            generator.writeObjectField("y", p.getY());
-                            generator.writeEndObject();
-                            generator.writeEndArray();
-                		}
-                	}
-        		}
-        	}
+            Iterator<FeatureMap.Entry> iter = node.getAnyAttribute().iterator();
+            while(iter.hasNext()) {
+                FeatureMap.Entry entry = iter.next();
+                if(entry.getEStructuralFeature().getName().equals("dockerinfo")) {
+                    String dockerInfoStr = String.valueOf(entry.getValue());
+                    if(dockerInfoStr != null && dockerInfoStr.length() > 0) {
+                        if(dockerInfoStr.endsWith("|")) {
+                            dockerInfoStr = dockerInfoStr.substring(0, dockerInfoStr.length() - 1);
+                            String[] dockerInfoParts = dockerInfoStr.split("\\|");
+                            String infoPartsToUse = dockerInfoParts[0];
+                            String[] infoPartsToUseParts = infoPartsToUse.split("\\^");
+                            if(infoPartsToUseParts != null && infoPartsToUseParts.length > 0) {
+                                generator.writeArrayFieldStart("dockers");
+                                generator.writeStartObject();
+                                generator.writeObjectField("x", infoPartsToUseParts[0]);
+                                generator.writeObjectField("y", infoPartsToUseParts[1]);
+                                generator.writeEndObject();
+                                generator.writeEndArray();
+                            }
+                        }
+                    }
+                }
+
+            }
         }
 
         BPMNShape shape = (BPMNShape) findDiagramElement(plane, node);
