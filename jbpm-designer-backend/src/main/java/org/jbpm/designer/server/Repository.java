@@ -148,7 +148,7 @@ public class Repository {
 				 logger.error("GET to '{}' failed with status {}", urlString, statusCode );
 			}
 		} catch( Exception e ) {
-		    logger.error("GET to '{}' failed:" + e.getMessage(), e );
+		    logger.error("GET to '{}' failed: " + e.getMessage(), e );
 		}
 		return result;
 	}

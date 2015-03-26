@@ -93,7 +93,7 @@ public class ExpressionParserTest {
 
         while ((line = lineReader.readLine()) != null) {
 
-            logger.debug("line(" + lineReader.getLineNumber() + ") :" + line);
+            logger.debug("line(" + lineReader.getLineNumber() + "): " + line);
 
             ExpressionParser parser = new ExpressionParser(line);
 

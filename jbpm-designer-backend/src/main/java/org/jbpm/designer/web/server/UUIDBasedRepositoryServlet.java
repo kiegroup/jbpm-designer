@@ -137,7 +137,7 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
             try {
                 xml = _repository.toXML(json, profile, preProcessingParam);
             } catch(Exception e) {
-                _logger.error("Error transforming to XML : " + e.getMessage());
+                _logger.error("Error transforming to XML: " + e.getMessage());
             }
             StringWriter output = new StringWriter();
             output.write(xml);

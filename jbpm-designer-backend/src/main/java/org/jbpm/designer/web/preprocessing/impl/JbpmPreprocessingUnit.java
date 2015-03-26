@@ -301,7 +301,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 createAndWriteToFile(fileToWrite, workItemTemplate.render());
             }
         } catch (Exception e) {
-            _logger.error("Failed to setup workitem svg images : " + e.getMessage());
+            _logger.error("Failed to setup workitem svg images: " + e.getMessage());
         }
     }
 
@@ -327,7 +327,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 createAndWriteToFile(fileToWrite, workItemTemplate.render());
             }
         } catch (Exception e) {
-            _logger.error("Failed to setup workitem svg images : " + e.getMessage());
+            _logger.error("Failed to setup workitem svg images: " + e.getMessage());
         }
     }
 
@@ -642,9 +642,9 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         File f = new File(file);
         boolean success = f.delete();
         if (!success){
-            _logger.info("Unable to delete file :" + file);
+            _logger.info("Unable to delete file: " + file);
         } else {
-            _logger.info("Successfully deleted file :" + file);
+            _logger.info("Successfully deleted file: " + file);
         }
     }
 
@@ -652,9 +652,9 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         String fname = f.getAbsolutePath();
         boolean success = f.delete();
         if (!success){
-            _logger.info("Unable to delete file :" + fname);
+            _logger.info("Unable to delete file: " + fname);
         } else {
-            _logger.info("Successfully deleted file :" + fname);
+            _logger.info("Successfully deleted file: " + fname);
         }
     }
 
@@ -663,7 +663,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
         output.write(content);
         output.close();
-        _logger.info("Created file:" + file);
+        _logger.info("Created file: " + file);
     }
 
     public static byte[] getBytesFromFile(File file) throws IOException {
