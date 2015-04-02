@@ -3465,6 +3465,21 @@
 					"readonly":true,
 					"optional":true
 				$bclose$,
+				$if(workitemDefs.(k).customEditor)$
+					$workitemDefs.(k).parameters:{k1|
+						 $bopen$
+                                        	"id":"$k1.name$",
+                                        	"type":"String",
+                                        	"title":"$k1.name$",
+                                        	"value":"",
+                                        	"description":"",
+                                        	"description_ja":"",
+                                        	"readonly":false,
+                                        	"optional":true,
+						"customassignment":true
+                                		$bclose$,
+					}$
+                                $endif$ 
 				$bopen$
 					"id":"datainputset",
 					"type":"Datainput",
@@ -3474,6 +3489,12 @@
 					"description_ja":"InputSetは、データ入力の有効なセットを合わせて定義するDataInputエレメントのコレクションです。",
 					"readonly":false,
 					"optional":true
+					$if(workitemDefs.(k).customEditor)$
+					,
+					"hidden":true,
+                                        "visible":false
+					$endif$
+
 				$bclose$,  
 				$bopen$
 					"id":"dataoutputset",
@@ -3484,6 +3505,11 @@
 					"description_ja":"OutputSet は、アクティビティまたはイベントの出力としてまとめて生成されるDataOutputs要素のコレクションです。",
 					"readonly":false,
 					"optional":true
+					$if(workitemDefs.(k).customEditor)$
+					,
+					"hidden":true,
+                                        "visible":false
+					$endif$
 				$bclose$,
 				$bopen$
 					"id":"assignments",
@@ -3493,6 +3519,11 @@
 					"description":"",
 					"readonly":false,
 					"optional":true
+					 $if(workitemDefs.(k).customEditor)$
+					,
+					"hidden":true,
+                                        "visible":false
+                                        $endif$
 				$bclose$,
 				$bopen$
 					"id":"onEntryActions",

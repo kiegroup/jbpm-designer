@@ -391,7 +391,9 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
                 String iconEncoded = "data:image/png;base64," + javax.xml.bind.DatatypeConverter.printBase64Binary(iconAsset.getAssetContent());
                 workDefinition.setIconEncoded(URLEncoder.encode(iconEncoded, "UTF-8"));
-                workDefinition.setCustomEditor((String) workDefinitionMap.get("customEditor"));
+                if(workDefinitionMap.get("customEditor") != null) {
+                    workDefinition.setCustomEditor((String) workDefinitionMap.get("customEditor"));
+                }
                 Set<ParameterDefinition> parameters = new HashSet<ParameterDefinition>();
                 if(workDefinitionMap.get("parameters") != null) {
                     Map<String, DataType> parameterMap = (Map<String, DataType>) workDefinitionMap.get("parameters");

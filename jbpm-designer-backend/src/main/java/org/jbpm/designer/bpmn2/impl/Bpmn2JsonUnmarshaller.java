@@ -5457,7 +5457,12 @@ public class Bpmn2JsonUnmarshaller {
                         replacer = replacer.replaceAll("\\|\\|", "=");
                         fromExpression.setBody(wrapInCDATABlock(replacer));
                     } else {
-                        fromExpression.setBody("");
+                        // for custom workitem properties check individually for values
+                        if(properties.get(fromPart.toLowerCase()) != null && properties.get(fromPart.toLowerCase()).length() > 0) {
+                            fromExpression.setBody(properties.get(fromPart.toLowerCase()));
+                        } else {
+                            fromExpression.setBody("");
+                        }
                     }
                     FormalExpression toExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
                     toExpression.setBody(dia.getTargetRef().getId());

@@ -110,6 +110,7 @@ ORYX.Plugins.PropertyWindow = {
 		this.popularProperties = [];
 		this.simulationProperties = [];
         this.displayProperties = [];
+        this.customAssignmentsProperties = [];
 		this.properties = [];
 		
 		/* The currently selected shapes whos properties will shown */
@@ -559,6 +560,7 @@ ORYX.Plugins.PropertyWindow = {
 		this.properties = [];
 		this.popularProperties = [];
 		this.simulationProperties = [];
+        this.customAssignmentsProperties = [];
         this.displayProperties = [];
 		
 		if(this.shapeSelection.commonProperties) {
@@ -1365,6 +1367,10 @@ ORYX.Plugins.PropertyWindow = {
 							pair.setSimulation();
 						}
 
+                        if(pair.customassignment()) {
+                            pair.setCustomassignment();
+                        }
+
                         if(pair.display()) {
                             pair.setDisplay();
                         }
@@ -1373,7 +1379,17 @@ ORYX.Plugins.PropertyWindow = {
                             pair.setExtra();
                         }
 
-                        if(pair.extra()) {
+                        if(pair.customassignment()) {
+                            var propid = (ORYX.I18N.propertyNames[pair.id()] && ORYX.I18N.propertyNames[pair.id()].length > 0) ? ORYX.I18N.propertyNames[pair.id()] : name;
+                            this.properties.push(["Assignments",  propid, attribute, icons, {
+                                editor: editorGrid,
+                                propId: key,
+                                type: pair.type(),
+                                tooltip: (ORYX.I18N.propertyNames[pair.id()+"_desc"] && ORYX.I18N.propertyNames[pair.id()+"_desc"].length > 0) ? ORYX.I18N.propertyNames[pair.id()+"_desc"] : pair.description(),
+                                renderer: editorRenderer,
+                                labelProvider: this.getLabelProvider(pair)
+                            }]);
+                        } else if(pair.extra()) {
                             var propid = (ORYX.I18N.propertyNames[pair.id()] && ORYX.I18N.propertyNames[pair.id()].length > 0) ? ORYX.I18N.propertyNames[pair.id()] : name;
                             this.properties.push([ORYX.I18N.PropertyWindow.moreProps,  propid, attribute, icons, {
                                 editor: editorGrid,
@@ -1449,7 +1465,8 @@ ORYX.Plugins.PropertyWindow = {
 	setProperties: function() {
 		var partProps = this.popularProperties.concat(this.properties);
 		var partPropsOther = partProps.concat(this.simulationProperties);
-        var props = partPropsOther.concat(this.displayProperties);
+        var partPropThird = partPropsOther.concat(this.customAssignmentsProperties);
+        var props = partPropThird.concat(this.displayProperties);
 		this.dataSource.loadData(props);
 	}
 }

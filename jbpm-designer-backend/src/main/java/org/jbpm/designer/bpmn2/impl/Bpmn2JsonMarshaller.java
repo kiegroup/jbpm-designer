@@ -1797,6 +1797,8 @@ public class Bpmn2JsonMarshaller {
                             String replacer = associationValue.replaceAll(",", "##");
                             associationBuff.append("[din]" + rhsAssociation).append("=").append(replacer);
                             associationBuff.append(",");
+
+                            properties.put(rhsAssociation.toLowerCase(), associationValue);
                         }
 
                         if(rhsAssociation.equalsIgnoreCase("TaskName")) {
