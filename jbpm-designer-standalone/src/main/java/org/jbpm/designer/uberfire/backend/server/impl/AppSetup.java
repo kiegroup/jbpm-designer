@@ -19,7 +19,6 @@ import org.guvnor.structure.server.config.ConfigurationFactory;
 import org.guvnor.structure.server.config.ConfigurationService;
 import org.uberfire.commons.services.cdi.Startup;
 import org.uberfire.commons.services.cdi.StartupType;
-import org.uberfire.io.IOClusteredService;
 import org.uberfire.io.IOService;
 
 @ApplicationScoped
@@ -103,11 +102,6 @@ public class AppSetup {
             }
             if ( !globalSettingsDefined ) {
                 configurationService.addConfiguration( getGlobalConfiguration() );
-            }
-
-            // notify cluster service that bootstrap is completed to start synchronization
-            if ( ioService instanceof IOClusteredService ) {
-                ( (IOClusteredService) ioService ).start();
             }
         } catch ( Exception e ) {
             throw new RuntimeException( "Error when starting designer " + e.getMessage(), e );
