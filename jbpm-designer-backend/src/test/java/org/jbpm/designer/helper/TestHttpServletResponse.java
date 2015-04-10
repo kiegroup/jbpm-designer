@@ -1,12 +1,13 @@
 package org.jbpm.designer.helper;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collection;
 import java.util.Locale;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 public class TestHttpServletResponse  implements HttpServletResponse {
 
@@ -101,6 +102,26 @@ public class TestHttpServletResponse  implements HttpServletResponse {
 
     public void setStatus(int sc, String sm) {
         
+    }
+
+    @Override
+    public int getStatus() {
+        return 0;
+    }
+
+    @Override
+    public String getHeader( String name ) {
+        return null;
+    }
+
+    @Override
+    public Collection<String> getHeaders( String name ) {
+        return null;
+    }
+
+    @Override
+    public Collection<String> getHeaderNames() {
+        return null;
     }
 
     public String getCharacterEncoding() {
