@@ -4460,6 +4460,7 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
     editable: false,
     readOnly: true,
     dtype : "",
+    addCustomKPI : "",
     
     /**
      * If the trigger was clicked a dialog has to be opened
@@ -4482,6 +4483,17 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                 try {
                     if(response.responseText.length >= 0 && response.responseText != "false") {
                         var responseJson = Ext.decode(response.responseText);
+
+                        var customKPIData = new Array();
+                        var trueType = new Array();
+                        trueType.push("true");
+                        trueType.push("true");
+                        customKPIData.push(trueType);
+                        var falseType = new Array();
+                        falseType.push("false");
+                        falseType.push("false");
+                        customKPIData.push(falseType);
+
                         var customTypeData = new Array();
 
                         // set some predefined defaults
@@ -4537,6 +4549,8 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                             name: 'stype'
                         }, {
                             name: 'ctype'
+                        }, {
+                            name: 'kpi'
                         }]);
 
                         var vardefsProxy = new Ext.data.MemoryProxy({
@@ -4575,23 +4589,47 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                                         }
                                     }
                                     if(foundCustom == true) {
+                                        var ckpi = "false";
+                                        if(innerParts.length == 3) {
+                                            ckpi = innerParts[2];
+                                        }
                                         vardefs.add(new VarDef({
                                             name: innerParts[0],
                                             stype: innerParts[1],
-                                            ctype: ''
+                                            ctype: '',
+                                            kpi: ckpi
                                         }));
                                     } else {
-                                        vardefs.add(new VarDef({
-                                            name: innerParts[0],
-                                            stype: '',
-                                            ctype: innerParts[1]
-                                        }));
+                                        var ckpi = "false";
+                                        //check if innerparts[1] is kpi or not
+                                        if(innerParts[1] == "true" || innerParts[1] == "false") {
+                                            vardefs.add(new VarDef({
+                                                name: innerParts[0],
+                                                stype: '',
+                                                ctype: '',
+                                                kpi: innerParts[1]
+                                            }));
+                                        } else {
+                                            var ckpi = "false";
+
+                                            if(innerParts.length == 3) {
+                                                ckpi = innerParts[2];
+                                            }
+                                            vardefs.add(new VarDef({
+                                                name: innerParts[0],
+                                                stype: '',
+                                                ctype: innerParts[1],
+                                                kpi: ckpi
+                                            }));
+                                        }
+
                                     }
                                 } else {
                                     vardefs.add(new VarDef({
                                         name: nextPart,
                                         stype: '',
-                                        ctype: ''
+                                        ctype: '',
+                                        kpi: "false"
                                     }));
                                 }
                             }
@@ -4607,6 +4645,7 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                         Ext.form.VTypes["inputName"] = function(v){
                             return Ext.form.VTypes["inputNameVal"].test(v);
                         };
+
                         var grid = new Ext.grid.EditorGridPanel({
                             autoScroll: true,
                             autoHeight: true,
@@ -4658,6 +4697,39 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                                 dataIndex: 'ctype',
                                 editor: new Ext.form.TextField({ allowBlank: true }),
                                 renderer: Ext.util.Format.htmlEncode
+                            }, {
+                                id: 'kpi',
+                                header: "KPI",
+                                width: 100,
+                                dataIndex: 'kpi',
+                                disabled: (this.addCustomKPI == "true"),
+                                editor: new Ext.form.ComboBox({
+                                    typeAhead: true,
+                                    anyMatch: true,
+                                    id: 'kpiConbo',
+                                    valueField:'value',
+                                    displayField:'name',
+                                    labelStyle:'display:none',
+                                    submitValue : true,
+                                    typeAhead: true,
+                                    queryMode: 'local',
+                                    mode: 'local',
+
+                                    triggerAction: 'all',
+                                    selectOnFocus:true,
+                                    hideTrigger: false,
+                                    forceSelection: false,
+                                    selectOnFocus:true,
+                                    autoSelect:false,
+                                    editable: true,
+                                    store: new Ext.data.SimpleStore({
+                                        fields: [
+                                            'name',
+                                            'value'
+                                        ],
+                                        data: customKPIData
+                                    })
+                                })
                             }, itemDeleter]),
                             selModel: itemDeleter,
                             autoHeight: true,
@@ -4676,7 +4748,8 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                                         vardefs.add(new VarDef({
                                             name: '',
                                             stype: '',
-                                            ctype: ''
+                                            ctype: '',
+                                            kpi: 'false'
                                         }));
                                         grid.fireEvent('cellclick', grid, vardefs.getCount()-1, 1, null);
                                     }
@@ -4690,7 +4763,7 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                             autoCreate	: true,
                             title		: this.windowTitle,
                             height		: 300,
-                            width		: 600,
+                            width		: 700,
                             modal		: true,
                             collapsible	: false,
                             fixedcenter	: true,
@@ -4722,14 +4795,14 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                                         if(this.data['name'].length > 0) {
                                             if(this.data['stype'].length > 0) {
                                                 if(this.data['stype'] == "Object" && this.data['ctype'].length > 0) {
-                                                    outValue += this.data['name'] + ":" + this.data['ctype'] + ",";
+                                                    outValue += this.data['name'] + ":" + this.data['ctype'] + ":" + this.data['kpi'] + ",";
                                                 } else {
-                                                    outValue += this.data['name'] + ":" + this.data['stype'] + ",";
+                                                    outValue += this.data['name'] + ":" + this.data['stype'] + ":" + this.data['kpi'] +",";
                                                 }
                                             } else if(this.data['ctype'].length > 0) {
-                                                outValue += this.data['name'] + ":" + this.data['ctype'] + ",";
+                                                outValue += this.data['name'] + ":" + this.data['ctype'] + ":" + this.data['kpi'] +",";
                                             } else {
-                                                outValue += this.data['name'] + ",";
+                                                outValue += this.data['name'] + ":" + this.data['kpi'] +",";
                                             }
                                         }
                                     });
@@ -4798,7 +4871,8 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
 Ext.form.ComplexVardefField = Ext.extend(Ext.form.NameTypeEditor,  {
      windowTitle : ORYX.I18N.PropertyWindow.editorForVariableDefinitions,
      addButtonLabel : ORYX.I18N.PropertyWindow.addVariable,
-     dtype: ORYX.CONFIG.TYPE_DTYPE_VARDEF
+     dtype: ORYX.CONFIG.TYPE_DTYPE_VARDEF,
+     addCustomKPI : "true"
 });
 
 Ext.form.ComplexDataInputField = Ext.extend(Ext.form.NameTypeEditor,  {

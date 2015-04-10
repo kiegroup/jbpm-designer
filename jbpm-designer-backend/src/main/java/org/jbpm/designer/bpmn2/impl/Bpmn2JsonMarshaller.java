@@ -214,11 +214,30 @@ public class Bpmn2JsonMarshaller {
 	                    String propVal = "";
 	                    for(int i=0; i<processProperties.size(); i++) {
 	                        Property p = processProperties.get(i);
+                            String pKPI = "";
+                            if(p.getExtensionValues() != null && p.getExtensionValues().size() > 0) {
+                                for(ExtensionAttributeValue extattrval : p.getExtensionValues()) {
+                                    FeatureMap extensionElements = extattrval.getValue();
+
+                                    List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
+                                            .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
+
+                                    for(MetaDataType metaType : metadataExtensions) {
+                                        if(metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
+                                            pKPI = metaType.getMetaValue();
+                                        }
+                                    }
+                                }
+                            }
+
 	                        propVal += p.getId();
 	                        // check the structureRef value
 	                        if(p.getItemSubjectRef() != null && p.getItemSubjectRef().getStructureRef() != null) {
 	                            propVal += ":" + p.getItemSubjectRef().getStructureRef();
 	                        }
+                            if(pKPI.length() > 0) {
+                                propVal += ":" + pKPI;
+                            }
 	                        if(i != processProperties.size()-1) {
 	                            propVal += ",";
 	                        }
@@ -2625,10 +2644,30 @@ public class Bpmn2JsonMarshaller {
             String propVal = "";
             for(int i=0; i<processProperties.size(); i++) {
                 Property p = processProperties.get(i);
+
+                String pKPI = "";
+                if(p.getExtensionValues() != null && p.getExtensionValues().size() > 0) {
+                    for(ExtensionAttributeValue extattrval : p.getExtensionValues()) {
+                        FeatureMap extensionElements = extattrval.getValue();
+
+                        List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
+                                .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
+
+                        for(MetaDataType metaType : metadataExtensions) {
+                            if(metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
+                                pKPI = metaType.getMetaValue();
+                            }
+                        }
+                    }
+                }
+
                 propVal += p.getId();
                 // check the structureRef value
                 if(p.getItemSubjectRef() != null && p.getItemSubjectRef().getStructureRef() != null) {
                     propVal += ":" + p.getItemSubjectRef().getStructureRef();
+                }
+                if(pKPI.length() > 0) {
+                    propVal += ":" + pKPI;
                 }
                 if(i != processProperties.size()-1) {
                     propVal += ",";

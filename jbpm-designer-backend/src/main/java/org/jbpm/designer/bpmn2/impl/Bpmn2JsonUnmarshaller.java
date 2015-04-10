@@ -3101,7 +3101,41 @@ public class Bpmn2JsonUnmarshaller {
                                 String[] vardefParts = vardef.split( ":\\s*" );
                                 prop.setId(vardefParts[0]);
                                 itemdef.setId("_" + prop.getId() + "Item");
-                                itemdef.setStructureRef(vardefParts[1]);
+
+                                boolean haveKPI = false;
+                                String kpiValue = "";
+                                if(vardefParts.length == 3) {
+                                    itemdef.setStructureRef(vardefParts[1]);
+
+                                    if(vardefParts[2].equals("true")) {
+                                        haveKPI = true;
+                                        kpiValue = vardefParts[2];
+                                    }
+                                }
+                                if(vardefParts.length == 2) {
+                                    if(vardefParts[1].equals("true") || vardefParts[1].equals("false")) {
+                                        if(vardefParts[1].equals("true")) {
+                                            haveKPI = true;
+                                            kpiValue = vardefParts[1];
+                                        }
+                                    } else {
+                                        itemdef.setStructureRef(vardefParts[1]);
+                                    }
+                                }
+
+                                if(haveKPI) {
+                                    MetaDataType metadata = DroolsFactory.eINSTANCE.createMetaDataType();
+                                    metadata.setName("customKPI");
+                                    metadata.setMetaValue(wrapInCDATABlock(kpiValue));
+
+                                    if(prop.getExtensionValues() == null || prop.getExtensionValues().size() < 1) {
+                                        ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                                        prop.getExtensionValues().add(extensionElement);
+                                    }
+                                    FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                                            (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, metadata);
+                                    prop.getExtensionValues().get(0).getValue().add(extensionElementEntry);
+                                }
                             } else {
                                 prop.setId(vardef);
                                 itemdef.setId("_" + prop.getId() + "Item");
@@ -3209,12 +3243,46 @@ public class Bpmn2JsonUnmarshaller {
 	                                    Property prop = Bpmn2Factory.eINSTANCE.createProperty();
 	                                    ItemDefinition itemdef =  Bpmn2Factory.eINSTANCE.createItemDefinition();
 	                                    // check if we define a structure ref in the definition
-	                                    if(vardef.contains(":")) {
-	                                        String[] vardefParts = vardef.split( ":\\s*" );
-	                                        prop.setId(vardefParts[0]);
-	                                        itemdef.setId("_" + prop.getId() + "Item");
-	                                        itemdef.setStructureRef(vardefParts[1]);
-	                                    } else {
+                                        if(vardef.contains(":")) {
+                                            String[] vardefParts = vardef.split( ":\\s*" );
+                                            prop.setId(vardefParts[0]);
+                                            itemdef.setId("_" + prop.getId() + "Item");
+
+                                            boolean haveKPI = false;
+                                            String kpiValue = "";
+                                            if(vardefParts.length == 3) {
+                                                itemdef.setStructureRef(vardefParts[1]);
+
+                                                if(vardefParts[2].equals("true")) {
+                                                    haveKPI = true;
+                                                    kpiValue = vardefParts[2];
+                                                }
+                                            }
+                                            if(vardefParts.length == 2) {
+                                                if(vardefParts[1].equals("true") || vardefParts[1].equals("false")) {
+                                                    if(vardefParts[1].equals("true")) {
+                                                        haveKPI = true;
+                                                        kpiValue = vardefParts[1];
+                                                    }
+                                                } else {
+                                                    itemdef.setStructureRef(vardefParts[1]);
+                                                }
+                                            }
+
+                                            if(haveKPI) {
+                                                MetaDataType metadata = DroolsFactory.eINSTANCE.createMetaDataType();
+                                                metadata.setName("customKPI");
+                                                metadata.setMetaValue(wrapInCDATABlock(kpiValue));
+
+                                                if(prop.getExtensionValues() == null || prop.getExtensionValues().size() < 1) {
+                                                    ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                                                    prop.getExtensionValues().add(extensionElement);
+                                                }
+                                                FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                                                        (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, metadata);
+                                                prop.getExtensionValues().get(0).getValue().add(extensionElementEntry);
+                                            }
+                                        } else {
 	                                        prop.setId(vardef);
 	                                        itemdef.setId("_" + prop.getId() + "Item");
 	                                    }
@@ -3826,7 +3894,41 @@ public class Bpmn2JsonUnmarshaller {
                     String[] vardefParts = vardef.split( ":\\s*" );
                     prop.setId(vardefParts[0]);
                     itemdef.setId("_" + prop.getId() + "Item");
-                    itemdef.setStructureRef(vardefParts[1]);
+
+                    boolean haveKPI = false;
+                    String kpiValue = "";
+                    if(vardefParts.length == 3) {
+                        itemdef.setStructureRef(vardefParts[1]);
+
+                        if(vardefParts[2].equals("true")) {
+                            haveKPI = true;
+                            kpiValue = vardefParts[2];
+                        }
+                    }
+                    if(vardefParts.length == 2) {
+                        if(vardefParts[1].equals("true") || vardefParts[1].equals("false")) {
+                            if(vardefParts[1].equals("true")) {
+                                haveKPI = true;
+                                kpiValue = vardefParts[1];
+                            }
+                        } else {
+                            itemdef.setStructureRef(vardefParts[1]);
+                        }
+                    }
+
+                    if(haveKPI) {
+                        MetaDataType metadata = DroolsFactory.eINSTANCE.createMetaDataType();
+                        metadata.setName("customKPI");
+                        metadata.setMetaValue(wrapInCDATABlock(kpiValue));
+
+                        if(prop.getExtensionValues() == null || prop.getExtensionValues().size() < 1) {
+                            ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                            prop.getExtensionValues().add(extensionElement);
+                        }
+                        FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                                (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, metadata);
+                        prop.getExtensionValues().get(0).getValue().add(extensionElementEntry);
+                    }
                 } else {
                     prop.setId(vardef);
                     itemdef.setId("_" + prop.getId() + "Item");
