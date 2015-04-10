@@ -1,18 +1,17 @@
 package org.jbpm.designer.client.notification;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
+import javax.inject.Inject;
+
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import org.jboss.errai.ioc.client.container.SyncBeanManager;
 import org.jboss.errai.security.shared.api.identity.User;
 import org.jbpm.designer.notification.DesignerNotificationEvent;
-import org.uberfire.client.workbench.widgets.notifications.NotificationPopupView;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
-import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-
+import org.uberfire.client.views.bs2.notifications.NotificationPopupView;
 import org.uberfire.client.workbench.widgets.animations.LinearFadeOutAnimation;
 
 @ApplicationScoped

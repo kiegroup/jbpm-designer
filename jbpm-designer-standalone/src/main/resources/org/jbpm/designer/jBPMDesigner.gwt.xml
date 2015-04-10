@@ -9,6 +9,7 @@
 
   <!-- Uberfire dependencies -->
   <inherits name="org.uberfire.UberfireClientAll"/>
+  <inherits name="org.uberfire.client.views.Bootstrap2"/>
 
   <!-- Uberfire Extensions - Core Widgets -->
   <inherits name="org.uberfire.ext.widgets.core.UberfireWidgetsCore"/>
@@ -60,7 +61,5 @@
 
   <!-- Specify the paths for translatable code -->
   <source path='client'/>
-
-  <set-property name="gwt.logging.popupHandler" value="DISABLED"/>
 
 </module>
