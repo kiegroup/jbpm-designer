@@ -196,4 +196,12 @@
     </repository>
   </repositories>
 
+  <distributionManagement>
+    <repository>
+      <id>central</id>
+      <name>Repository for storing projects created with Web-BPM 2.x</name>
+      <url>http://10.10.31.71:8081/artifactory/webbpm-projects</url>
+    </repository>
+  </distributionManagement>
+
 </project>
