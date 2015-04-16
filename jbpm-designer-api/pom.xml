@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.jbpm</groupId>
     <artifactId>jbpm-designer</artifactId>
-    <version>6.1.0.Final</version>
+    <version>6.1.0.Final-Center</version>
   </parent>
 
   <artifactId>jbpm-designer-api</artifactId>
@@ -71,10 +71,12 @@
         <artifactId>maven-source-plugin</artifactId>
         <executions>
           <execution>
-            <goals>
-              <goal>jar</goal>
-              <goal>test-jar</goal>
-            </goals>
+            <id>jar</id>
+            <phase>none</phase>
+          </execution>
+          <execution>
+            <id>test-jar</id>
+            <phase>none</phase>
           </execution>
         </executions>
       </plugin>
