@@ -1,7 +1,7 @@
 package org.jbpm.designer.web.profile.impl;
 
 import bpsim.impl.BpsimFactoryImpl;
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.codehaus.jackson.JsonParseException;
 import org.eclipse.bpmn2.Bpmn2Package;
 import org.eclipse.bpmn2.Definitions;
@@ -221,7 +221,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
                 res = (JBPMBpmn2ResourceImpl) unmarshaller.unmarshall(jsonModel, preProcessingData);
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 res.save(outputStream, new HashMap<Object, Object>());
-                return StringEscapeUtils.unescapeHtml(outputStream.toString("UTF-8"));
+                return StringEscapeUtils.unescapeHtml4(outputStream.toString("UTF-8"));
             }
 
             public Definitions getDefinitions(String jsonModel,
