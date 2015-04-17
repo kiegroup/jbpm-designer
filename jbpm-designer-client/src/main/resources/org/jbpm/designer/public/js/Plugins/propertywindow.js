@@ -4795,14 +4795,30 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                                         if(this.data['name'].length > 0) {
                                             if(this.data['stype'].length > 0) {
                                                 if(this.data['stype'] == "Object" && this.data['ctype'].length > 0) {
-                                                    outValue += this.data['name'] + ":" + this.data['ctype'] + ":" + this.data['kpi'] + ",";
+                                                    outValue += this.data['name'] + ":" + this.data['ctype'];
+                                                    if(this.addCustomKPI == "true") {
+                                                        outValue +=  ":" + this.data['kpi'];
+                                                    }
+                                                    outValue += ",";
                                                 } else {
-                                                    outValue += this.data['name'] + ":" + this.data['stype'] + ":" + this.data['kpi'] +",";
+                                                    outValue += this.data['name'] + ":" + this.data['stype'];
+                                                    if(this.addCustomKPI == "true") {
+                                                        outValue +=  ":" + this.data['kpi'];
+                                                    }
+                                                    outValue += ",";
                                                 }
                                             } else if(this.data['ctype'].length > 0) {
-                                                outValue += this.data['name'] + ":" + this.data['ctype'] + ":" + this.data['kpi'] +",";
+                                                outValue += this.data['name'] + ":" + this.data['ctype'];
+                                                if(this.addCustomKPI == "true") {
+                                                    outValue +=  ":" + this.data['kpi'];
+                                                }
+                                                outValue += ",";
                                             } else {
-                                                outValue += this.data['name'] + ":" + this.data['kpi'] +",";
+                                                outValue += this.data['name'];
+                                                if(this.addCustomKPI == "true") {
+                                                    outValue +=  ":" + this.data['kpi'];
+                                                }
+                                                outValue += ",";
                                             }
                                         }
                                     });

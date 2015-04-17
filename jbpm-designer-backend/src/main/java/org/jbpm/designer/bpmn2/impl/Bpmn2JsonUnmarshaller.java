@@ -5884,7 +5884,7 @@ public class Bpmn2JsonUnmarshaller {
         	boolean foundGroupIdAssociation = false;
         	List<DataInputAssociation> inputAssociations = task.getDataInputAssociations();
         	for(DataInputAssociation da : inputAssociations) {
-        		if(da.getTargetRef().getId().equals(foundInput.getId())) {
+        		if(da.getTargetRef() != null && da.getTargetRef().getId().equals(foundInput.getId())) {
         			foundGroupIdAssociation = true;
         			((FormalExpression) da.getAssignment().get(0).getFrom()).setBody(wrapInCDATABlock(properties.get("groupid")));
         		}
@@ -5944,7 +5944,7 @@ public class Bpmn2JsonUnmarshaller {
         	boolean foundSkippableAssociation = false;
         	List<DataInputAssociation> inputAssociations = task.getDataInputAssociations();
         	for(DataInputAssociation da : inputAssociations) {
-        		if(da.getTargetRef().getId().equals(foundInput.getId())) {
+        		if(da.getTargetRef() != null && da.getTargetRef().getId().equals(foundInput.getId())) {
         			foundSkippableAssociation = true;
         			((FormalExpression) da.getAssignment().get(0).getFrom()).setBody( skippableStr );
         		}
@@ -6002,7 +6002,7 @@ public class Bpmn2JsonUnmarshaller {
         	boolean foundCommentAssociation = false;
         	List<DataInputAssociation> inputAssociations = task.getDataInputAssociations();
         	for(DataInputAssociation da : inputAssociations) {
-        		if(da.getTargetRef().getId().equals(foundInput.getId())) {
+        		if(da.getTargetRef() != null && da.getTargetRef().getId().equals(foundInput.getId())) {
         			foundCommentAssociation = true;
         			((FormalExpression) da.getAssignment().get(0).getFrom()).setBody(wrapInCDATABlock(properties.get("comment")));
         		}
@@ -6060,7 +6060,7 @@ public class Bpmn2JsonUnmarshaller {
         	boolean foundPriorityAssociation = false;
         	List<DataInputAssociation> inputAssociations = task.getDataInputAssociations();
         	for(DataInputAssociation da : inputAssociations) {
-        		if(da.getTargetRef().getId().equals(foundInput.getId())) {
+        		if(da.getTargetRef() != null && da.getTargetRef().getId().equals(foundInput.getId())) {
         			foundPriorityAssociation = true;
         			((FormalExpression) da.getAssignment().get(0).getFrom()).setBody(properties.get("priority"));
         		}
@@ -6120,7 +6120,7 @@ public class Bpmn2JsonUnmarshaller {
             boolean foundContentAssociation = false;
             List<DataInputAssociation> inputAssociations = task.getDataInputAssociations();
             for(DataInputAssociation da : inputAssociations) {
-                if(da.getTargetRef().getId().equals(foundInput.getId())) {
+                if(da.getTargetRef() != null && da.getTargetRef().getId().equals(foundInput.getId())) {
                     foundContentAssociation = true;
                     ((FormalExpression) da.getAssignment().get(0).getFrom()).setBody(wrapInCDATABlock(properties.get("content")));
                 }
@@ -6178,7 +6178,7 @@ public class Bpmn2JsonUnmarshaller {
             boolean foundLocaleAssociation = false;
             List<DataInputAssociation> inputAssociations = task.getDataInputAssociations();
             for(DataInputAssociation da : inputAssociations) {
-                if(da.getTargetRef().getId().equals(foundInput.getId())) {
+                if(da.getTargetRef() != null && da.getTargetRef().getId().equals(foundInput.getId())) {
                     foundLocaleAssociation = true;
                     ((FormalExpression) da.getAssignment().get(0).getFrom()).setBody(wrapInCDATABlock(properties.get("locale")));
                 }
@@ -6236,7 +6236,7 @@ public class Bpmn2JsonUnmarshaller {
             boolean foundCreatedByAssociation = false;
             List<DataInputAssociation> inputAssociations = task.getDataInputAssociations();
             for(DataInputAssociation da : inputAssociations) {
-                if(da.getTargetRef().getId().equals(foundInput.getId())) {
+                if(da.getTargetRef() != null && da.getTargetRef().getId().equals(foundInput.getId())) {
                     foundCreatedByAssociation = true;
                     ((FormalExpression) da.getAssignment().get(0).getFrom()).setBody(wrapInCDATABlock(properties.get("createdby")));
                 }
@@ -6317,11 +6317,11 @@ public class Bpmn2JsonUnmarshaller {
 
             List<DataInputAssociation> inputAssociations = task.getDataInputAssociations();
             for(DataInputAssociation da : inputAssociations) {
-                if(da.getTargetRef().getId().equals(foundNotCompletedDataInput.getId())) {
+                if(da.getTargetRef() != null && da.getTargetRef().getId().equals(foundNotCompletedDataInput.getId())) {
                     foundNotCompletedReassignmentAssociation = true;
                     ((FormalExpression) da.getAssignment().get(0).getFrom()).setBody(getReassignmentsAndNotificationsForType(properties.get("reassignment"), "not-completed"));
                 }
-                if(da.getTargetRef().getId().equals(foundNotStartedDataInput.getId())) {
+                if(da.getTargetRef() != null && da.getTargetRef().getId().equals(foundNotStartedDataInput.getId())) {
                     foundNotStartedReassignmentAssociation = true;
                     ((FormalExpression) da.getAssignment().get(0).getFrom()).setBody(getReassignmentsAndNotificationsForType(properties.get("reassignment"), "not-started"));
                 }
@@ -6421,11 +6421,11 @@ public class Bpmn2JsonUnmarshaller {
 
             List<DataInputAssociation> inputAssociations = task.getDataInputAssociations();
             for(DataInputAssociation da : inputAssociations) {
-                if(da.getTargetRef().getId().equals(foundNotCompletedDataInput.getId())) {
+                if(da.getTargetRef() != null && da.getTargetRef().getId().equals(foundNotCompletedDataInput.getId())) {
                     foundNotCompletedNotificationAssociation = true;
                     ((FormalExpression) da.getAssignment().get(0).getFrom()).setBody(getReassignmentsAndNotificationsForType(properties.get("notifications"), "not-completed"));
                 }
-                if(da.getTargetRef().getId().equals(foundNotStartedDataInput.getId())) {
+                if(da.getTargetRef() != null && da.getTargetRef().getId().equals(foundNotStartedDataInput.getId())) {
                     foundNotStartedNotificationAssociation = true;
                     ((FormalExpression) da.getAssignment().get(0).getFrom()).setBody(getReassignmentsAndNotificationsForType(properties.get("notifications"), "not-started"));
                 }
