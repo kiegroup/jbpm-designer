@@ -291,7 +291,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
                         if(din.getName() != null && din.getName().equals("TaskName")) {
                             List<DataInputAssociation> taskDataInputAssociations = ut.getDataInputAssociations();
                             for(DataInputAssociation dia : taskDataInputAssociations) {
-                                if(dia.getTargetRef().getId().equals(din.getId())) {
+                                if(dia.getTargetRef().getId() != null && (dia.getTargetRef().getId().equals(din.getId()))) {
                                     foundTaskName = true;
                                     taskName = ((FormalExpression) dia.getAssignment().get(0).getFrom()).getBody();
                                     if(isEmpty(taskName)) {
