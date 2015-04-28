@@ -364,6 +364,14 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>org.uberfire</groupId>
+      <artifactId>uberfire-widgets-service-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.uberfire</groupId>
+      <artifactId>uberfire-widgets-service-backend</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.kie.workbench.services</groupId>
       <artifactId>kie-wb-common-services-api</artifactId>
     </dependency>
@@ -487,6 +495,18 @@
     <dependency>
       <groupId>org.eclipse</groupId>
       <artifactId>org.eclipse.bpmn2</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.kie.uberfire</groupId>
+      <artifactId>i18n-taglib</artifactId>
+    </dependency>
+
+    <!-- hack to disable sisu annotation processing (that scans client side types) -->
+    <dependency>
+      <groupId>org.eclipse.sisu</groupId>
+      <artifactId>org.eclipse.sisu.inject</artifactId>
+      <scope>runtime</scope>
     </dependency>
   </dependencies>
 
@@ -635,8 +655,16 @@
             <fileset>
               <directory>${basedir}</directory>
               <includes>
-                <include>.errai/**</include>
-                <include>.vfsgit/**</include>
+                <include>src/main/webapp/org.jbpm.designer.jBPMDesigner/</include>
+                <include>src/main/webapp/formModeler/</include>
+                <include>src/main/webapp/WEB-INF/deploy/</include>
+                <include>src/main/webapp/WEB-INF/classes/</include>
+                <include>src/main/webapp/WEB-INF/lib/</include>
+                <include>src/main/webapp/WEB-INF/tlds/</include>
+                <include>**/gwt-unitCache/**</include>
+                <include>.errai/</include>
+                <include>.niogit/**</include>
+                <include>.index/**</include>
               </includes>
             </fileset>
           </filesets>
@@ -722,13 +750,6 @@
           <name>full</name>
         </property>
       </activation>
-      <dependencies>
-        <dependency>
-          <groupId>org.apache.ant</groupId>
-          <artifactId>ant</artifactId>
-          <scope>runtime</scope>
-        </dependency>
-      </dependencies>
       <build>
         <plugins>
           <plugin><!-- Keep in sync with soa profile -->
