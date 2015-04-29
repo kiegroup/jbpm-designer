@@ -1799,26 +1799,37 @@ public class Bpmn2JsonMarshaller {
                             associationValue = "";
                         }
 
-                        // don't include properties that have their independent input editors:
-                        if(!(rhsAssociation.equals("GroupId") ||
-                           rhsAssociation.equals("Skippable") ||
-                           rhsAssociation.equals("Comment") ||
-                           rhsAssociation.equals("Priority") ||
-                           rhsAssociation.equals("Content") ||
-                           rhsAssociation.equals("TaskName")  ||
-                           rhsAssociation.equals("Locale") ||
-                           rhsAssociation.equals("CreatedBy") ||
-                           rhsAssociation.equals("NotCompletedReassign") ||
-                           rhsAssociation.equals("NotStartedReassign") ||
-                           rhsAssociation.equals("NotCompletedNotify") ||
-                           rhsAssociation.equals("NotStartedNotify")
-                           )) {
-                            String replacer = associationValue.replaceAll(",", "##");
-                            associationBuff.append("[din]" + rhsAssociation).append("=").append(replacer);
-                            associationBuff.append(",");
+                        // don't include properties that have their independent input editors
+                        if(isCustomElement((String) properties.get("taskname"), preProcessingData)) {
+                            if(!(rhsAssociation.equals("TaskName"))) {
+                                String replacer = associationValue.replaceAll(",", "##");
+                                associationBuff.append("[din]" + rhsAssociation).append("=").append(replacer);
+                                associationBuff.append(",");
 
-                            properties.put(rhsAssociation.toLowerCase(), associationValue);
+                                properties.put(rhsAssociation.toLowerCase(), associationValue);
+                            }
+                        } else {
+                            if(!(rhsAssociation.equals("GroupId") ||
+                                    rhsAssociation.equals("Skippable") ||
+                                    rhsAssociation.equals("Comment") ||
+                                    rhsAssociation.equals("Priority") ||
+                                    rhsAssociation.equals("Content") ||
+                                    rhsAssociation.equals("TaskName")  ||
+                                    rhsAssociation.equals("Locale") ||
+                                    rhsAssociation.equals("CreatedBy") ||
+                                    rhsAssociation.equals("NotCompletedReassign") ||
+                                    rhsAssociation.equals("NotStartedReassign") ||
+                                    rhsAssociation.equals("NotCompletedNotify") ||
+                                    rhsAssociation.equals("NotStartedNotify")
+                            )) {
+                                String replacer = associationValue.replaceAll(",", "##");
+                                associationBuff.append("[din]" + rhsAssociation).append("=").append(replacer);
+                                associationBuff.append(",");
+
+                                properties.put(rhsAssociation.toLowerCase(), associationValue);
+                            }
                         }
+
 
                         if(rhsAssociation.equalsIgnoreCase("TaskName")) {
                             properties.put("taskname", associationValue);
