@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.uberfire.io.IOService;
 
 
 /**
@@ -30,6 +29,6 @@ import org.uberfire.io.IOService;
  *
  */
 public interface IDiagramPreprocessingUnit {
-    public void preprocess(HttpServletRequest request, HttpServletResponse response, IDiagramProfile profile, ServletContext serlvetContext, boolean readOnly, IOService ioService);
+    public void preprocess(HttpServletRequest request, HttpServletResponse response, IDiagramProfile profile, ServletContext serlvetContext, boolean readOnly);
     public String getOutData();
 }

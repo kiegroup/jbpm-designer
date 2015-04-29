@@ -8,8 +8,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import javax.enterprise.context.ApplicationScoped;
 import javax.servlet.ServletContext;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -35,7 +33,7 @@ import org.slf4j.LoggerFactory;
  * The implementation of the epn profile for Process Designer.
  * @author Tihomir Surdilovic
  */
-@ApplicationScoped
+//@ApplicationScoped
 public class EpnProfileImpl implements IDiagramProfile {
 
     private static Logger _logger = LoggerFactory.getLogger(EpnProfileImpl.class);

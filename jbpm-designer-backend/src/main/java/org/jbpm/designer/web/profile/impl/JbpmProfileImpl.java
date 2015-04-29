@@ -1,5 +1,13 @@
 package org.jbpm.designer.web.profile.impl;
 
+import java.io.*;
+import java.util.*;
+import javax.inject.Inject;
+import javax.servlet.ServletContext;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+
 import bpsim.impl.BpsimFactoryImpl;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.codehaus.jackson.JsonParseException;
@@ -18,9 +26,7 @@ import org.jbpm.designer.bpmn2.impl.Bpmn2JsonMarshaller;
 import org.jbpm.designer.bpmn2.impl.Bpmn2JsonUnmarshaller;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceFactoryImpl;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceImpl;
-import org.jbpm.designer.notification.DesignerNotificationEvent;
 import org.jbpm.designer.repository.Repository;
-import org.jbpm.designer.repository.UriUtils;
 import org.jbpm.designer.server.service.DefaultDesignerAssetService;
 import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.web.plugin.IDiagramPlugin;
@@ -28,26 +34,13 @@ import org.jbpm.designer.web.plugin.impl.PluginServiceImpl;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.uberfire.backend.vfs.Path;
-import org.uberfire.backend.vfs.VFSService;
-import org.uberfire.workbench.events.NotificationEvent;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-import javax.servlet.ServletContext;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-import java.io.*;
-import java.util.*;
 
 
 /**
  * The implementation of the jBPM profile for Process Designer.
  * @author Tihomir Surdilovic
  */
-@ApplicationScoped
+//@ApplicationScoped
 public class JbpmProfileImpl implements IDiagramProfile {
 
     private static Logger _logger = LoggerFactory.getLogger(JbpmProfileImpl.class);
@@ -63,11 +56,11 @@ public class JbpmProfileImpl implements IDiagramProfile {
     @Inject
     private Repository repository;
 
-    @Inject
-    private VFSService vfsServices;
+//    @Inject
+//    private VFSService vfsServices;
 
-    @Inject
-    private Event<DesignerNotificationEvent> notification;
+//    @Inject
+//    private Event<DesignerNotificationEvent> notification;
 
     public JbpmProfileImpl(ServletContext servletContext) {
         this(servletContext, true, false);
@@ -261,26 +254,26 @@ public class JbpmProfileImpl implements IDiagramProfile {
 
     @Override
     public String getRepositoryGlobalDir(String uuid) {
-        if(uuid != null) {
-            Path uuidPath = vfsServices.get(UriUtils.encode(uuid) );
-            String pathURI = uuidPath.toURI();
-
-            if(pathURI != "/") {
-                String[] pathParts = pathURI.split("/");
-                try {
-                    String pathProjectName = pathParts[3];
-                    if(pathProjectName.length() < 1) {
-                        return "/global";
-                    } else {
-                        return "/" + pathProjectName + "/global";
-                    }
-                } catch(Exception e) {
-                    return "/global";
-                }
-            }
-
-            return "/global";
-        }
+//        if(uuid != null) {
+//            Path uuidPath = vfsServices.get(UriUtils.encode(uuid) );
+//            String pathURI = uuidPath.toURI();
+//
+//            if(pathURI != "/") {
+//                String[] pathParts = pathURI.split("/");
+//                try {
+//                    String pathProjectName = pathParts[3];
+//                    if(pathProjectName.length() < 1) {
+//                        return "/global";
+//                    } else {
+//                        return "/" + pathProjectName + "/global";
+//                    }
+//                } catch(Exception e) {
+//                    return "/global";
+//                }
+//            }
+//
+//            return "/global";
+//        }
         return "/global";
     }
 
@@ -310,7 +303,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
                 for (Resource.Diagnostic error : resource.getErrors()) {
                     errorMessages += error.getMessage() + "\n";
                 }
-                notification.fire( new DesignerNotificationEvent( errorMessages, NotificationEvent.NotificationType.ERROR ) );
+//                notification.fire( new DesignerNotificationEvent( errorMessages, NotificationEvent.NotificationType.ERROR ) );
             }
 
             if(!resource.getWarnings().isEmpty()) {
@@ -318,7 +311,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
                 for(Resource.Diagnostic warning : resource.getWarnings()) {
                     warningMessages += warning.getMessage() + "\n";
                 }
-                notification.fire( new DesignerNotificationEvent( warningMessages, NotificationEvent.NotificationType.WARNING ) );
+//                notification.fire( new DesignerNotificationEvent( warningMessages, NotificationEvent.NotificationType.WARNING ) );
             }
 
             EList<Diagnostic> warnings = resource.getWarnings();
@@ -334,7 +327,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
             _logger.error(e.getMessage());
             String defaultProcessContent = DefaultDesignerAssetService.PROCESS_STUB.replaceAll( "\\$\\{processid\\}", "defaultprocessid" );
             String errorMessages = "Unable to load process content due to errors. Displaying default process instead. Check logs for error details.";
-            notification.fire( new DesignerNotificationEvent( errorMessages, NotificationEvent.NotificationType.ERROR ) );
+//            notification.fire( new DesignerNotificationEvent( errorMessages, NotificationEvent.NotificationType.ERROR ) );
             return getDefinitions(defaultProcessContent);
         }
     }

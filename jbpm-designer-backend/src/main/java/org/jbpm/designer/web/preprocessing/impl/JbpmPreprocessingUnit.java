@@ -1,23 +1,8 @@
 package org.jbpm.designer.web.preprocessing.impl;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
+import java.io.*;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -30,12 +15,7 @@ import org.drools.core.process.core.ParameterDefinition;
 import org.drools.core.process.core.datatype.DataType;
 import org.drools.core.process.core.impl.ParameterDefinitionImpl;
 import org.drools.core.util.MVELSafeHelper;
-import org.jbpm.designer.repository.Asset;
-import org.jbpm.designer.repository.AssetBuilderFactory;
-import org.jbpm.designer.repository.AssetNotFoundException;
-import org.jbpm.designer.repository.Repository;
-import org.jbpm.designer.repository.UriUtils;
-import org.jbpm.designer.repository.filters.FilterByExtension;
+import org.jbpm.designer.repository.*;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.util.Base64Backport;
 import org.jbpm.designer.util.ConfigurationProvider;
@@ -48,9 +28,6 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.stringtemplate.v4.ST;
-import org.uberfire.backend.vfs.Path;
-import org.uberfire.backend.vfs.VFSService;
-import org.uberfire.io.IOService;
 import sun.misc.BASE64Encoder;
 
 /**
@@ -91,16 +68,14 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     private String patternsData;
     private String sampleBpmn2;
     private String globalDir;
-    private VFSService vfsService;
     private boolean includeDataObjects;
 
-    public JbpmPreprocessingUnit(ServletContext servletContext, VFSService vfsService) {
-        this(servletContext, ConfigurationProvider.getInstance().getDesignerContext(), vfsService);
+    public JbpmPreprocessingUnit(ServletContext servletContext) {
+        this(servletContext, ConfigurationProvider.getInstance().getDesignerContext());
     }
 
-    public JbpmPreprocessingUnit(ServletContext servletContext, String designerPath, VFSService vfsService) {
+    public JbpmPreprocessingUnit(ServletContext servletContext, String designerPath) {
         this.designer_path = designerPath.substring(0, designerPath.length()-1);
-        this.vfsService = vfsService;
         stencilPath = servletContext.getRealPath(designer_path + "/" + STENCILSET_PATH);
         origStencilFilePath = stencilPath + "/bpmn2.0jbpm/stencildata/" + "bpmn2.0jbpm.orig";
         stencilFilePath = stencilPath + "/bpmn2.0jbpm/" + "bpmn2.0jbpm.json";
@@ -127,11 +102,8 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         return outData;
     }
 
-    public void preprocess(HttpServletRequest req, HttpServletResponse res, IDiagramProfile profile, ServletContext serlvetContext, boolean readOnly, IOService ioService) {
+    public void preprocess(HttpServletRequest req, HttpServletResponse res, IDiagramProfile profile, ServletContext serlvetContext, boolean readOnly) {
         try {
-            if(ioService != null) {
-                ioService.startBatch();
-            }
             if(readOnly) {
                 _logger.info("Performing preprocessing steps in readonly mode.");
                 ST workItemTemplate = new ST(readFile(origStencilFilePath), '$', '$');
@@ -278,9 +250,6 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         } catch ( final Exception e ) {
             _logger.error(e.getMessage());
         } finally {
-            if(ioService != null) {
-                ioService.endBatch();
-            }
         }
     }
 
@@ -590,25 +559,13 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                     e.printStackTrace();
                 }
             }
-            if(vfsService != null && createdUUID != null) {
-                Path newWidAssetPath = vfsService.get(UriUtils.encode(createdUUID));
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private Collection<Asset> findWorkitemInfoForUUID(String location, Repository repository) {
-        Collection<Asset> widAssets = repository.listAssets(location, new FilterByExtension(WORKITEM_DEFINITION_EXT){
-
-            @Override
-            public boolean accept(org.uberfire.java.nio.file.Path path)
-            {
-                boolean accept = super.accept(path);
-                return accept && ! path.getFileName().toString().startsWith("."); // JBPM-4215 fix: filter out hidden files of the same suffix but different format
-            }
-        });
-        return widAssets;
+        return Collections.emptyList();
     }
 
     private String readFile(String pathname) throws IOException {

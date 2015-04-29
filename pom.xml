@@ -11,7 +11,7 @@
   <groupId>org.jbpm</groupId>
   <artifactId>jbpm-designer</artifactId>
   <packaging>pom</packaging>
-  <version>6.1.0.Final-Center</version>
+  <version>6.1.0.Final</version>
 
   <name>jBPM Designer</name>
   <description>jBPM Designer - web-based BPMN2 modeller</description>
@@ -24,10 +24,10 @@
   </scm>
 
   <modules>
-    <module>jbpm-designer-api</module>
+    <!--<module>jbpm-designer-api</module>-->
     <module>jbpm-designer-client</module>
     <module>jbpm-designer-backend</module>
-    <module>jbpm-designer-standalone</module>
+    <!--<module>jbpm-designer-standalone</module>-->
   </modules>
 
   <properties>
@@ -153,9 +153,9 @@
                 </goals>
             </execution>
         </executions-->
-        <configuration>
-          <workDir>jbpm-designer-api/src/main/resources/org/jbpm/designer/resources/i18n/</workDir>
-        </configuration>
+        <!--<configuration>-->
+          <!--<workDir>jbpm-designer-api/src/main/resources/org/jbpm/designer/resources/i18n/</workDir>-->
+        <!--</configuration>-->
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

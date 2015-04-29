@@ -7,20 +7,20 @@
   <parent>
     <groupId>org.jbpm</groupId>
     <artifactId>jbpm-designer</artifactId>
-    <version>6.1.0.Final-Center</version>
+    <version>6.1.0.Final</version>
   </parent>
 
   <artifactId>jbpm-designer-backend</artifactId>
-  <packaging>jar</packaging>
+  <packaging>war</packaging>
 
   <name>jBPM Designer - Backend</name>
 
   <dependencies>
     <!-- jBPM Designer - Client -->
-    <dependency>
-      <groupId>org.jbpm</groupId>
-      <artifactId>jbpm-designer-api</artifactId>
-    </dependency>
+    <!--<dependency>-->
+    <!--<groupId>org.jbpm</groupId>-->
+    <!--<artifactId>jbpm-designer-api</artifactId>-->
+    <!--</dependency>-->
     <dependency>
       <groupId>org.jbpm</groupId>
       <artifactId>jbpm-designer-client</artifactId>
@@ -94,10 +94,10 @@
     </dependency>
 
     <!-- Form Modeler -->
-    <dependency>
-      <groupId>org.jbpm</groupId>
-      <artifactId>jbpm-form-modeler-bpmn-form-builder</artifactId>
-    </dependency>
+    <!--<dependency>-->
+    <!--<groupId>org.jbpm</groupId>-->
+    <!--<artifactId>jbpm-form-modeler-bpmn-form-builder</artifactId>-->
+    <!--</dependency>-->
 
     <!-- Google's closure-compiler -->
     <dependency>
@@ -415,24 +415,24 @@
       <scope>provided</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.kie</groupId>
-      <artifactId>kie-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.uberfire</groupId>
-      <artifactId>uberfire-backend-server</artifactId>
-    </dependency>
+    <!--<dependency>-->
+    <!--<groupId>org.kie</groupId>-->
+    <!--<artifactId>kie-api</artifactId>-->
+    <!--</dependency>-->
+    <!--<dependency>-->
+    <!--<groupId>org.uberfire</groupId>-->
+    <!--<artifactId>uberfire-backend-server</artifactId>-->
+    <!--</dependency>-->
     <dependency>
       <groupId>org.jboss.solder</groupId>
       <artifactId>solder-api</artifactId>
     </dependency>
 
     <!-- Common services -->
-    <dependency>
-      <groupId>org.kie.workbench.services</groupId>
-      <artifactId>kie-wb-common-services-backend</artifactId>
-    </dependency>
+    <!--<dependency>-->
+    <!--<groupId>org.kie.workbench.services</groupId>-->
+    <!--<artifactId>kie-wb-common-services-backend</artifactId>-->
+    <!--</dependency>-->
 
     <!-- Logging -->
     <dependency>
@@ -445,17 +445,17 @@
       <scope>test</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.uberfire</groupId>
-      <artifactId>uberfire-nio2-jgit</artifactId>
-      <scope>test</scope>
-    </dependency>
+    <!--<dependency>-->
+    <!--<groupId>org.uberfire</groupId>-->
+    <!--<artifactId>uberfire-nio2-jgit</artifactId>-->
+    <!--<scope>test</scope>-->
+    <!--</dependency>-->
 
-    <dependency>
-      <groupId>org.uberfire</groupId>
-      <artifactId>uberfire-nio2-fs</artifactId>
-      <scope>test</scope>
-    </dependency>
+    <!--<dependency>-->
+    <!--<groupId>org.uberfire</groupId>-->
+    <!--<artifactId>uberfire-nio2-fs</artifactId>-->
+    <!--<scope>test</scope>-->
+    <!--</dependency>-->
 
   </dependencies>
 
@@ -479,7 +479,7 @@
                   <version>${project.version}</version>
                   <type>jar</type>
                   <overWrite>false</overWrite>
-                  <outputDirectory>${project.basedir}/src/test/resources</outputDirectory>
+                  <outputDirectory>${project.basedir}/target</outputDirectory>
                   <includes>**/public/**</includes>
                 </artifactItem>
               </artifactItems>
@@ -487,15 +487,35 @@
           </execution>
         </executions>
       </plugin>
+      <!--<plugin>-->
+        <!--<artifactId>maven-clean-plugin</artifactId>-->
+        <!--<configuration>-->
+          <!--<filesets>-->
+            <!--<fileset>-->
+              <!--<directory>${project.basedir}/src/test/resources/org/jbpm/designer/public</directory>-->
+              <!--<followSymlinks>false</followSymlinks>-->
+            <!--</fileset>-->
+          <!--</filesets>-->
+        <!--</configuration>-->
+      <!--</plugin>-->
+
       <plugin>
-        <artifactId>maven-clean-plugin</artifactId>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
         <configuration>
-          <filesets>
-            <fileset>
-              <directory>${project.basedir}/src/test/resources/org/jbpm/designer/public</directory>
-              <followSymlinks>false</followSymlinks>
-            </fileset>
-          </filesets>
+          <warName>jbpm-designer</warName>
+          <webResources>
+            <resource>
+              <directory>${basedir}/src/main/webapp/WEB-INF</directory>
+              <filtering>true</filtering>
+              <targetPath>WEB-INF</targetPath>
+            </resource>
+            <resource>
+              <directory>${basedir}/target/org/jbpm/designer/public</directory>
+              <filtering>true</filtering>
+              <targetPath>/</targetPath>
+            </resource>
+          </webResources>
         </configuration>
       </plugin>
     </plugins>

@@ -15,15 +15,8 @@
  */
 package org.jbpm.designer.web.profile.impl;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.*;
-
-import javax.enterprise.context.ApplicationScoped;
 import javax.servlet.ServletContext;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -31,34 +24,33 @@ import javax.xml.stream.XMLStreamReader;
 
 import bpsim.impl.BpsimFactoryImpl;
 import org.codehaus.jackson.JsonParseException;
+import org.eclipse.bpmn2.Bpmn2Package;
 import org.eclipse.bpmn2.Definitions;
+import org.eclipse.bpmn2.DocumentRoot;
+import org.eclipse.bpmn2.util.Bpmn2ResourceFactoryImpl;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.jboss.drools.impl.DroolsFactoryImpl;
-import org.jbpm.designer.repository.Repository;
-import org.jbpm.designer.util.ConfigurationProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.eclipse.bpmn2.DocumentRoot;
-import org.eclipse.bpmn2.Bpmn2Package;
-import org.eclipse.bpmn2.util.Bpmn2ResourceFactoryImpl;
 import org.jbpm.designer.bpmn2.impl.Bpmn2JsonMarshaller;
 import org.jbpm.designer.bpmn2.impl.Bpmn2JsonUnmarshaller;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceImpl;
+import org.jbpm.designer.repository.Repository;
+import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.web.plugin.IDiagramPlugin;
 import org.jbpm.designer.web.plugin.impl.PluginServiceImpl;
 import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * The implementation of the default profile for Process Designer.
  * @author Antoine Toulme
  */
-@ApplicationScoped
+//@ApplicationScoped
 public class DefaultProfileImpl implements IDiagramProfile {
     
     private static Logger _logger = LoggerFactory.getLogger(DefaultProfileImpl.class);

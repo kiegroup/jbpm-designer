@@ -6,7 +6,7 @@
   <parent>
         <groupId>org.jbpm</groupId>
         <artifactId>jbpm-designer</artifactId>
-        <version>6.1.0.Final-Center</version>
+        <version>6.1.0.Final</version>
     </parent>
   <artifactId>jbpm-designer-distribution-wars</artifactId>
   <packaging>pom</packaging>
@@ -45,11 +45,11 @@
   </build>
 
   <dependencies>
-    <dependency>
-      <groupId>org.jbpm</groupId>
-      <artifactId>jbpm-designer-standalone</artifactId>
-      <type>war</type>
-    </dependency>
+    <!--<dependency>-->
+      <!--<groupId>org.jbpm</groupId>-->
+      <!--<artifactId>jbpm-designer-standalone</artifactId>-->
+      <!--<type>war</type>-->
+    <!--</dependency>-->
     <!-- External dependencies -->
     <dependency>
         <groupId>org.apache.ant</groupId>

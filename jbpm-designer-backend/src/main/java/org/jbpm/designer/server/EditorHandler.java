@@ -18,7 +18,6 @@ package org.jbpm.designer.server;
 import java.io.*;
 import java.util.*;
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -42,8 +41,6 @@ import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.stringtemplate.v4.ST;
-import org.uberfire.backend.vfs.VFSService;
-import org.uberfire.io.IOService;
 
 /**
  * Servlet to load plugin and Oryx stencilset
@@ -112,12 +109,12 @@ public class EditorHandler extends HttpServlet {
     @Inject
     private IDiagramProfileService _profileService = null;
 
-    @Inject
-    private VFSService vfsServices;
+//    @Inject
+//    private VFSService vfsServices;
 
-    @Inject
-    @Named("ioStrategy")
-    private IOService ioService;
+//    @Inject
+//    @Named("ioStrategy")
+//    private IOService ioService;
 
     /**
      * The pre-processing service, a global registry to get
@@ -146,7 +143,7 @@ public class EditorHandler extends HttpServlet {
         _pluginService = PluginServiceImpl.getInstance(
                 config.getServletContext());
         _preProcessingService = PreprocessingServiceImpl.INSTANCE;
-        _preProcessingService.init(config.getServletContext(), vfsServices);
+        _preProcessingService.init(config.getServletContext());
 
         _devMode = Boolean.parseBoolean(System.getProperty(DEV) == null ? config.getInitParameter(DEV) : System.getProperty(DEV));
         _preProcess = Boolean.parseBoolean(System.getProperty(PREPROCESS) == null ? config.getInitParameter(PREPROCESS) : System.getProperty(PREPROCESS));
@@ -227,7 +224,7 @@ public class EditorHandler extends HttpServlet {
                         "Performing diagram information pre-processing steps. ");
             }
             preprocessingUnit = _preProcessingService.findPreprocessingUnit(request, profile);
-            preprocessingUnit.preprocess(request, response, profile, getServletContext(), Boolean.parseBoolean(readOnly), ioService);
+            preprocessingUnit.preprocess(request, response, profile, getServletContext(), Boolean.parseBoolean(readOnly));
         }
 
         //output env javascript files
