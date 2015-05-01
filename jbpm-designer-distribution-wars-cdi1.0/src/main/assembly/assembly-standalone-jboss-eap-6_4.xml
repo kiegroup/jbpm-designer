@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+
+  <id>eap6.4</id>
+  <formats>
+    <format>war</format>
+  </formats>
+
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <dependencySets>
+    <dependencySet>
+      <includes>
+        <include>org.jboss.errai:errai-weld-integration:jar</include>
+      </includes>
+      <unpack>false</unpack>
+      <outputDirectory>WEB-INF/lib</outputDirectory>
+    </dependencySet>
+    <dependencySet>
+      <includes>
+        <include>org.jbpm:jbpm-designer-standalone:war</include>
+      </includes>
+      <outputDirectory>.</outputDirectory>
+      <unpack>true</unpack>
+      <unpackOptions>
+        <excludes>
+          <exclude>META-INF/jboss-all.xml</exclude>
+          <!-- Errai 1.1+ CDI Compat -->
+          <exclude>WEB-INF/lib/errai-weld-integration-*.jar</exclude>
+        </excludes>
+      </unpackOptions>
+    </dependencySet>
+  </dependencySets>
+
+</assembly>

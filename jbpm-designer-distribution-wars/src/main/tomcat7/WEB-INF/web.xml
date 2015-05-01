@@ -4,87 +4,47 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          version="2.5">
 
-  <distributable/>
-
   <display-name>jBPM Designer</display-name>
+
   <listener>
     <listener-class>org.jboss.weld.environment.servlet.Listener</listener-class>
   </listener>
+
   <!-- UF -->
   <filter>
-    <filter-name>UberFire Security Filter</filter-name>
-    <filter-class>
-      org.uberfire.security.server.UberFireSecurityFilter
-    </filter-class>
+    <filter-name>UI Security Filter</filter-name>
+
+    <filter-class>org.picketlink.authentication.web.AuthenticationFilter</filter-class>
+
     <init-param>
-      <param-name>org.uberfire.cookie.id</param-name>
-      <param-value>designer.standalone</param-value>
+      <param-name>authType</param-name>
+      <param-value>org.jboss.errai.security.server.FormAuthenticationScheme</param-value>
+    </init-param>
+    <init-param>
+      <param-name>form-login-page</param-name>
+      <param-value>/login.jsp</param-value>
+    </init-param>
+    <init-param>
+      <param-name>host-page</param-name>
+      <param-value>/designer.html</param-value>
+    </init-param>
+    <init-param>
+      <param-name>forceReAuthentication</param-name>
+      <param-value>true</param-value>
     </init-param>
   </filter>
 
   <filter-mapping>
-    <filter-name>UberFire Security Filter</filter-name>
+    <filter-name>UI Security Filter</filter-name>
+    <url-pattern>/designer.html</url-pattern>
+    <url-pattern>/uf_security_check</url-pattern>
     <url-pattern>*.erraiBus</url-pattern>
-    <url-pattern>/rest/*</url-pattern>
-    <url-pattern>/maven2/*</url-pattern>
     <url-pattern>/org.jbpm.designer.jBPMDesigner/*</url-pattern>
-    <url-pattern>/resourceList</url-pattern>
-    <url-pattern>/editor</url-pattern>
-    <url-pattern>/editor/*</url-pattern>
-    <url-pattern>/menuconnector/*</url-pattern>
-    <url-pattern>/menu/*</url-pattern>
-    <url-pattern>/uuidRepository</url-pattern>
-    <url-pattern>/transformer</url-pattern>
-    <url-pattern>/assetservice</url-pattern>
-    <url-pattern>/filestore</url-pattern>
-    <url-pattern>/dictionary</url-pattern>
-    <url-pattern>/themes</url-pattern>
-    <url-pattern>/customeditors </url-pattern>
-    <url-pattern>/simulation</url-pattern>
-    <url-pattern>/formwidget</url-pattern>
-    <url-pattern>/calledelement</url-pattern>
-    <url-pattern>/stencilpatterns</url-pattern>
-    <url-pattern>/jbpmservicerepo</url-pattern>
-    <url-pattern>/processdiff</url-pattern>
-    <url-pattern>/taskforms</url-pattern>
-    <url-pattern>/taskformseditor</url-pattern>
-    <url-pattern>/processinfo</url-pattern>
-    <url-pattern>/syntaxcheck</url-pattern>
-    <url-pattern>/plugins</url-pattern>
-    <url-pattern>/plugin</url-pattern>
-    <url-pattern>/plugin/*</url-pattern>
-    <url-pattern>/stencilset/*</url-pattern>
   </filter-mapping>
-
-  <!-- Designer Injection Filter -->
-  <filter>
-    <filter-name>Designer Injection Filter</filter-name>
-    <filter-class>org.jbpm.designer.filter.DesignerInjectionFilter</filter-class>
-  </filter>
-  <filter-mapping>
-    <filter-name>Designer Injection Filter</filter-name>
-    <url-pattern>*.html</url-pattern>
-  </filter-mapping>
-
-  <servlet>
-    <servlet-name>UberFireServlet</servlet-name>
-    <servlet-class>org.uberfire.server.UberfireServlet</servlet-class>
-
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>UberFireServlet</servlet-name>
-    <url-pattern>/org.jbpm.designer.jBPMDesigner/designer.html</url-pattern>
-  </servlet-mapping>
 
   <servlet>
     <servlet-name>ErraiServlet</servlet-name>
     <servlet-class>org.jboss.errai.bus.server.servlet.DefaultBlockingServlet</servlet-class>
-    <init-param>
-      <param-name>service-locator</param-name>
-      <param-value>org.jboss.errai.cdi.server.CDIServiceLocator</param-value>
-    </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
 
@@ -93,40 +53,9 @@
     <url-pattern>*.erraiBus</url-pattern>
   </servlet-mapping>
 
-  <resource-env-ref>
-    <description>Object factory for the CDI Bean Manager</description>
-    <resource-env-ref-name>BeanManager</resource-env-ref-name>
-    <resource-env-ref-type>javax.enterprise.inject.spi.BeanManager</resource-env-ref-type>
-  </resource-env-ref>
-
-  <resource-env-ref>
-    <description>Object factory for the Errai Service</description>
-    <resource-env-ref-name>ErraiService</resource-env-ref-name>
-    <resource-env-ref-type>org.jboss.errai.bus.server.service.ErraiService</resource-env-ref-type>
-  </resource-env-ref>
-
-  <context-param>
-    <param-name>errai.properties</param-name>
-    <param-value>/WEB-INF/errai.properties</param-value>
-  </context-param>
-
-  <context-param>
-    <param-name>login.config</param-name>
-    <param-value>/WEB-INF/login.config</param-value>
-  </context-param>
-
-  <context-param>
-    <param-name>users.properties</param-name>
-    <param-value>/WEB-INF/users.properties</param-value>
-  </context-param>
-
-  <context-param>
-    <param-name>org.jboss.seam.transaction.disableListener</param-name>
-    <param-value>true</param-value>
-  </context-param>
 
   <welcome-file-list>
-    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>login.jsp</welcome-file>
   </welcome-file-list>
   <!-- END UF -->
 
@@ -380,21 +309,17 @@ minutes. it is now 24 hours. -->
     <session-timeout>1440</session-timeout>
   </session-config>
 
-    <!-- start form-modeler component -->
-    <servlet>
-        <servlet-name>Controller</servlet-name>
-        <servlet-class>org.jbpm.formModeler.service.bb.mvc.controller.ControllerServlet</servlet-class>
-        <init-param>
-            <param-name>base.app.dir</param-name>
-            <param-value>${project.basedir}/target/${project.artifactId}-${project.version}</param-value>
-        </init-param>
-    </servlet>
+  <!-- start form-modeler component -->
+  <servlet>
+    <servlet-name>Controller</servlet-name>
+    <servlet-class>org.jbpm.formModeler.service.bb.mvc.controller.ControllerServlet</servlet-class>
+  </servlet>
 
-    <servlet-mapping>
-        <servlet-name>Controller</servlet-name>
-        <url-pattern>/org.jbpm.designer.jBPMDesigner/Controller</url-pattern>
-    </servlet-mapping>
-    <!-- end form-modeler component -->
+  <servlet-mapping>
+    <servlet-name>Controller</servlet-name>
+    <url-pattern>/org.jbpm.designer.jBPMDesigner/Controller</url-pattern>
+  </servlet-mapping>
+  <!-- end form-modeler component -->
   <!-- jBoss' default mapping is to "image/svg", which causes the client
 not to parse the SVG content as XML. However, the Oryx Editor client relies
 on that behaviour. The mimetype as per W3C specification must be "image/svg+xml".
@@ -416,4 +341,16 @@ See http://www.w3.org/TR/SVG/intro.html#MIMEType. -->
     <extension>ico</extension>
     <mime-type>image/x-icon</mime-type>
   </mime-mapping>
+
+  <resource-env-ref>
+    <description>Object factory for the CDI Bean Manager</description>
+    <resource-env-ref-name>BeanManager</resource-env-ref-name>
+    <resource-env-ref-type>javax.enterprise.inject.spi.BeanManager</resource-env-ref-type>
+  </resource-env-ref>
+
+  <resource-env-ref>
+    <description>Object factory for the Errai Service</description>
+    <resource-env-ref-name>ErraiService</resource-env-ref-name>
+    <resource-env-ref-type>org.jboss.errai.bus.server.service.ErraiService</resource-env-ref-type>
+  </resource-env-ref>
 </web-app>
