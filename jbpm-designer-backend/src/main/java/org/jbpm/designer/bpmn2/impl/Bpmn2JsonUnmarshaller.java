@@ -3581,6 +3581,21 @@ public class Bpmn2JsonUnmarshaller {
                 sp.getExtensionValues().get(0).getValue().add(extensionElementEntry);
             }
         }
+
+        // isAsync metadata
+        if(properties.get("isasync") != null && properties.get("isasync").length() > 0 && properties.get("isasync").equals("true")) {
+            MetaDataType metadata = DroolsFactory.eINSTANCE.createMetaDataType();
+            metadata.setName("customasync");
+            metadata.setMetaValue(wrapInCDATABlock(properties.get("isasync")));
+
+            if(sp.getExtensionValues() == null || sp.getExtensionValues().size() < 1) {
+                ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                sp.getExtensionValues().add(extensionElement);
+            }
+            FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                    (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, metadata);
+            sp.getExtensionValues().get(0).getValue().add(extensionElementEntry);
+        }
         
         // data input set
         if(properties.get("datainputset") != null && properties.get("datainputset").trim().length() > 0) {
@@ -5020,6 +5035,21 @@ public class Bpmn2JsonUnmarshaller {
     	if(properties.get("calledelement") != null && properties.get("calledelement").length() > 0) {
     		callActivity.setCalledElement(properties.get("calledelement"));
     	}
+
+        // isAsync metadata
+        if(properties.get("isasync") != null && properties.get("isasync").length() > 0 && properties.get("isasync").equals("true")) {
+            MetaDataType metadata = DroolsFactory.eINSTANCE.createMetaDataType();
+            metadata.setName("customasync");
+            metadata.setMetaValue(wrapInCDATABlock(properties.get("isasync")));
+
+            if(callActivity.getExtensionValues() == null || callActivity.getExtensionValues().size() < 1) {
+                ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                callActivity.getExtensionValues().add(extensionElement);
+            }
+            FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                    (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, metadata);
+            callActivity.getExtensionValues().get(0).getValue().add(extensionElementEntry);
+        }
     	
     	//callActivity data input set
         if(properties.get("datainputset") != null && properties.get("datainputset").trim().length() > 0) {
@@ -5415,6 +5445,21 @@ public class Bpmn2JsonUnmarshaller {
             SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
                     properties.get("lanes"));
             task.getAnyAttribute().add(extensionEntry);
+        }
+
+        // isAsync metadata
+        if(properties.get("isasync") != null && properties.get("isasync").length() > 0 && properties.get("isasync").equals("true")) {
+            MetaDataType metadata = DroolsFactory.eINSTANCE.createMetaDataType();
+            metadata.setName("customasync");
+            metadata.setMetaValue(wrapInCDATABlock(properties.get("isasync")));
+
+            if(task.getExtensionValues() == null || task.getExtensionValues().size() < 1) {
+                ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                task.getExtensionValues().add(extensionElement);
+            }
+            FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, metadata);
+            task.getExtensionValues().get(0).getValue().add(extensionElementEntry);
         }
         
         //process data input set

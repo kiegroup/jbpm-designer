@@ -1178,6 +1178,24 @@ public class Bpmn2JsonMarshaller {
         	properties.put("calledelement", callActivity.getCalledElement());
         }
 
+        // custom async
+        String customAsync = "false";
+        if(callActivity.getExtensionValues() != null && callActivity.getExtensionValues().size() > 0) {
+            for(ExtensionAttributeValue extattrval : callActivity.getExtensionValues()) {
+                FeatureMap extensionElements = extattrval.getValue();
+
+                List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
+                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
+
+                for(MetaDataType metaType : metadataExtensions) {
+                    if(metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
+                        customAsync = metaType.getMetaValue();
+                    }
+                }
+            }
+        }
+        properties.put("isasync", customAsync);
+
         // data inputs
         if(callActivity.getIoSpecification() != null) {
             List<InputSet> inputSetList = callActivity.getIoSpecification().getInputSets();
@@ -1543,6 +1561,24 @@ public class Bpmn2JsonMarshaller {
     			properties.put("messageref", rt.getMessageRef().getId());
     		}
     	}
+
+        // custom async
+        String customAsync = "false";
+        if(task.getExtensionValues() != null && task.getExtensionValues().size() > 0) {
+            for(ExtensionAttributeValue extattrval : task.getExtensionValues()) {
+                FeatureMap extensionElements = extattrval.getValue();
+
+                List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
+                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
+
+                for(MetaDataType metaType : metadataExtensions) {
+                    if(metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
+                        customAsync = metaType.getMetaValue();
+                    }
+                }
+            }
+        }
+        properties.put("isasync", customAsync);
 
 
         // backwards compatibility with jbds editor
@@ -2372,6 +2408,24 @@ public class Bpmn2JsonMarshaller {
 				properties.put("adhoccompletioncondition", ((FormalExpression) ahsp.getCompletionCondition()).getBody().replaceAll("\n", "\\\\n"));
 			}
 		}
+
+        // custom async
+        String customAsync = "false";
+        if(subProcess.getExtensionValues() != null && subProcess.getExtensionValues().size() > 0) {
+            for(ExtensionAttributeValue extattrval : subProcess.getExtensionValues()) {
+                FeatureMap extensionElements = extattrval.getValue();
+
+                List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
+                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
+
+                for(MetaDataType metaType : metadataExtensions) {
+                    if(metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
+                        customAsync = metaType.getMetaValue();
+                    }
+                }
+            }
+        }
+        properties.put("isasync", customAsync);
 
 		// data inputs
         if(subProcess.getIoSpecification() != null) {

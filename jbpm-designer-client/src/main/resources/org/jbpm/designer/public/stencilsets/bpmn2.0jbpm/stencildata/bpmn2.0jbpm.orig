@@ -2639,6 +2639,31 @@
 					"extra":true
 				},
 				{
+                    			"id":"isasync",
+                    			"type":"Choice",
+                    			"title":"Is Async",
+                    			"value":"false",
+                    			"default": "false",
+                    			"description":"Determines if activity should be executed asynchronously",
+                    			"description_ja":"",
+                    			"readonly":false,
+                    			"optional":true,
+					"fortasktypes":"None|Send|Receive|User|Manual|Service|Script|Business Rule",
+					"extra":true,
+                    			"items":[
+                        			{
+                            				"id":"c1",
+                            				"title":"true",
+                            				"value":"true"
+                        			},
+                        			{
+                            				"id":"c2",
+                            				"title":"false",
+                            				"value":"false"
+                        			}
+                    				]
+                		},
+				{
 					"id":"taskname",
 					"type":"String",
 					"title":"Task Name",
@@ -3545,6 +3570,30 @@
 					"readonly":false,
 					"optional":true
 				$bclose$,
+				$bopen$ 
+                                        "id":"isasync",
+                                        "type":"Choice",
+                                        "title":"Is Async",
+                                        "value":"false",
+                                        "default": "false",
+                                        "description":"Determines if activity should be executed asynchronously",
+                                        "description_ja":"",
+                                        "readonly":false,
+                                        "optional":true,
+                                        "extra":true,
+                                        "items":[
+                                                $bopen$
+                                                        "id":"c1",
+                                                        "title":"true",
+                                                        "value":"true"
+                                                $bclose$,
+                                                $bopen$
+                                                        "id":"c2",
+                                                        "title":"false",
+                                                        "value":"false"
+                                                $bclose$,
+                                                ]
+                                $bclose$,
 				$bopen$
 					"id":"script_language",
 					"type":"Choice",
@@ -3908,6 +3957,30 @@
 					"readonly":false,
 					"optional":true
 				},
+				 {
+                                        "id":"isasync",
+                                        "type":"Choice",
+                                        "title":"Is Async",
+                                        "value":"false",
+                                        "default": "false",
+                                        "description":"Determines if activity should be executed asynchronously",
+                                        "description_ja":"",
+                                        "readonly":false,
+                                        "optional":true,
+                                        "extra":true,
+                                        "items":[
+                                                {
+                                                        "id":"c1",
+                                                        "title":"true",
+                                                        "value":"true"
+                                                },
+                                                {
+                                                        "id":"c2",
+                                                        "title":"false",
+                                                        "value":"false"
+                                                }
+                                                ]
+                                },
 				{
 					"id":"independent",
 					"type":"Choice",
@@ -4373,6 +4446,30 @@
 					"hidden":true,
                                         "visible":false
 				},
+				 {
+                                        "id":"isasync",
+                                        "type":"Choice",
+                                        "title":"Is Async",
+                                        "value":"false",
+                                        "default": "false",
+                                        "description":"Determines if activity should be executed asynchronously",
+                                        "description_ja":"",
+                                        "readonly":false,
+                                        "optional":true,
+                                        "extra":true,
+                                        "items":[
+                                                {
+                                                        "id":"c1",
+                                                        "title":"true",
+                                                        "value":"true"
+                                                },
+                                                {
+                                                        "id":"c2",
+                                                        "title":"false",
+                                                        "value":"false"
+                                                }
+                                                ]
+                                },
 				{
         "id":"unitcost",
         "type":"Float",
@@ -4677,6 +4774,30 @@
 					"readonly":false,
 					"optional":true
 				},
+				 {
+                                        "id":"isasync",
+                                        "type":"Choice",
+                                        "title":"Is Async",
+                                        "value":"false",
+                                        "default": "false",
+                                        "description":"Determines if activity should be executed asynchronously",
+                                        "description_ja":"",
+                                        "readonly":false,
+                                        "optional":true,
+                                        "extra":true,
+                                        "items":[
+                                                {
+                                                        "id":"c1",
+                                                        "title":"true",
+                                                        "value":"true"
+                                                },
+                                                {
+                                                        "id":"c2",
+                                                        "title":"false",
+                                                        "value":"false"
+                                                }
+                                                ]
+                                },
 				{
 					"id":"script_language",
 					"type":"Choice",
@@ -5015,6 +5136,30 @@
 					"readonly":false,
 					"optional":true
 				},
+				 {
+                                        "id":"isasync",
+                                        "type":"Choice",
+                                        "title":"Is Async",
+                                        "value":"false",
+                                        "default": "false",
+                                        "description":"Determines if activity should be executed asynchronously",
+                                        "description_ja":"",
+                                        "readonly":false,
+                                        "optional":true,
+                                        "extra":true,
+                                        "items":[
+                                                {
+                                                        "id":"c1",
+                                                        "title":"true",
+                                                        "value":"true"
+                                                },
+                                                {
+                                                        "id":"c2",
+                                                        "title":"false",
+                                                        "value":"false"
+                                                }
+                                                ]
+                                },
 				{
 					"id":"script_language",
 					"type":"Choice",
@@ -5316,6 +5461,30 @@
 						}
 					]
 				},
+				 {
+                                        "id":"isasync",
+                                        "type":"Choice",
+                                        "title":"Is Async",
+                                        "value":"false",
+                                        "default": "false",
+                                        "description":"Determines if activity should be executed asynchronously",
+                                        "description_ja":"",
+                                        "readonly":false,
+                                        "optional":true,
+                                        "extra":true,
+                                        "items":[
+                                                {
+                                                        "id":"c1",
+                                                        "title":"true",
+                                                        "value":"true"
+                                                },
+                                                {
+                                                        "id":"c2",
+                                                        "title":"false",
+                                                        "value":"false"
+                                                }
+                                                ]
+                                },
 				{
         "id":"unitcost",
         "type":"Float",
