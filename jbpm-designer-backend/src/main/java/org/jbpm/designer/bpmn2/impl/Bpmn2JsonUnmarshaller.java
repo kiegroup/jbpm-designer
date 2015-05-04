@@ -3585,7 +3585,7 @@ public class Bpmn2JsonUnmarshaller {
         // isAsync metadata
         if(properties.get("isasync") != null && properties.get("isasync").length() > 0 && properties.get("isasync").equals("true")) {
             MetaDataType metadata = DroolsFactory.eINSTANCE.createMetaDataType();
-            metadata.setName("customasync");
+            metadata.setName("customAsync");
             metadata.setMetaValue(wrapInCDATABlock(properties.get("isasync")));
 
             if(sp.getExtensionValues() == null || sp.getExtensionValues().size() < 1) {
@@ -5039,7 +5039,7 @@ public class Bpmn2JsonUnmarshaller {
         // isAsync metadata
         if(properties.get("isasync") != null && properties.get("isasync").length() > 0 && properties.get("isasync").equals("true")) {
             MetaDataType metadata = DroolsFactory.eINSTANCE.createMetaDataType();
-            metadata.setName("customasync");
+            metadata.setName("customAsync");
             metadata.setMetaValue(wrapInCDATABlock(properties.get("isasync")));
 
             if(callActivity.getExtensionValues() == null || callActivity.getExtensionValues().size() < 1) {
@@ -5450,7 +5450,7 @@ public class Bpmn2JsonUnmarshaller {
         // isAsync metadata
         if(properties.get("isasync") != null && properties.get("isasync").length() > 0 && properties.get("isasync").equals("true")) {
             MetaDataType metadata = DroolsFactory.eINSTANCE.createMetaDataType();
-            metadata.setName("customasync");
+            metadata.setName("customAsync");
             metadata.setMetaValue(wrapInCDATABlock(properties.get("isasync")));
 
             if(task.getExtensionValues() == null || task.getExtensionValues().size() < 1) {
