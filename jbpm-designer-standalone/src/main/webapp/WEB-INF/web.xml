@@ -4,8 +4,6 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          version="2.5">
 
-  <distributable/>
-
   <display-name>jBPM Designer</display-name>
 
   <!-- UF -->
@@ -311,10 +309,6 @@ minutes. it is now 24 hours. -->
   <servlet>
     <servlet-name>Controller</servlet-name>
     <servlet-class>org.jbpm.formModeler.service.bb.mvc.controller.ControllerServlet</servlet-class>
-    <init-param>
-      <param-name>base.app.dir</param-name>
-      <param-value>${project.basedir}/target/${project.artifactId}-${project.version}</param-value>
-    </init-param>
   </servlet>
 
   <servlet-mapping>
