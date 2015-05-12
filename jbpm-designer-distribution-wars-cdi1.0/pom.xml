@@ -39,18 +39,18 @@
           </archive>
         </configuration>
       </plugin>
-      <!-- disable enforcer -->
-      <plugin>
-        <artifactId>maven-enforcer-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>no-managed-deps</id>
-            <phase>none</phase>
-          </execution>
-        </executions>
-      </plugin>
     </plugins>
   </build>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.jboss.errai</groupId>
+        <artifactId>errai-weld-integration</artifactId>
+        <version>${version.org.jboss.errai.cdi10-compatible}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
     <dependency>
@@ -62,7 +62,6 @@
     <dependency>
       <groupId>org.jboss.errai</groupId>
       <artifactId>errai-weld-integration</artifactId>
-      <version>3.0.4.Final</version>
     </dependency>
   </dependencies>
 
