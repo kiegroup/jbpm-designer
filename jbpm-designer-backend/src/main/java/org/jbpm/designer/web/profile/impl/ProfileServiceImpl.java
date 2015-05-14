@@ -33,10 +33,10 @@ import org.jbpm.designer.web.profile.IDiagramProfileService;
  */
 //@ApplicationScoped
 public class ProfileServiceImpl implements IDiagramProfileService {
-	
-//	public static ProfileServiceImpl INSTANCE = new ProfileServiceImpl();
 
-    private Map<String, IDiagramProfile> _registry = 
+    private static IDiagramProfileService INSTANCE = new ProfileServiceImpl();
+
+    private static Map<String, IDiagramProfile> _registry =
         new HashMap<String, IDiagramProfile>();
     private Set<IDiagramProfileFactory> _factories = 
         new HashSet<IDiagramProfileFactory>();
@@ -46,8 +46,11 @@ public class ProfileServiceImpl implements IDiagramProfileService {
 
 //    private Instance<IDiagramProfile> profiles;
 
-    public ProfileServiceImpl() {
+    private ProfileServiceImpl() {
+    }
 
+    public static IDiagramProfileService getInstance() {
+      return INSTANCE;
     }
 //    @Inject
 //    public ProfileServiceImpl(@Any Instance<IDiagramProfile> profiles) {

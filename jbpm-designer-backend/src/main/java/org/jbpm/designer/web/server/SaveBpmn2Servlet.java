@@ -2,17 +2,17 @@ package org.jbpm.designer.web.server;
 
 import java.io.File;
 import java.io.IOException;
-import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
+import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
+import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
 import org.jbpm.designer.web.repository.IUUIDBasedRepository;
 import org.jbpm.designer.web.repository.impl.UUIDBasedJbpmRepository;
 
@@ -24,8 +24,8 @@ public class SaveBpmn2Servlet extends HttpServlet {
 
   private IUUIDBasedRepository _repository;
 
-  @Inject
-  private IDiagramProfileService _profileService = null;
+//  @Inject
+  private static IDiagramProfileService _profileService = ProfileServiceImpl.getInstance();
 
   @Override
   public void init(ServletConfig config) throws ServletException {
@@ -46,8 +46,8 @@ public class SaveBpmn2Servlet extends HttpServlet {
       String json = req.getParameter("data");
       String preProcessingParam = req.getParameter("pp");
       String profileParam = req.getParameter("profile");
-      String procDefPath = req.getParameter("procDefPath");
-      File bpmnXml = new File(new String(Base64.decodeBase64(procDefPath), "UTF-8"));
+      String uuid = Utils.getUUID(req);
+      File bpmnXml = new File(uuid);
       IDiagramProfile profile = _profileService.findProfile(req, profileParam);
       String xml = _repository.toXML(json, profile, preProcessingParam);
       FileUtils.writeStringToFile(bpmnXml, xml);

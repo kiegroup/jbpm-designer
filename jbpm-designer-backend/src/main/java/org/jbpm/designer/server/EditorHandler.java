@@ -17,7 +17,6 @@ package org.jbpm.designer.server;
 
 import java.io.*;
 import java.util.*;
-import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -36,6 +35,7 @@ import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingUnit;
 import org.jbpm.designer.web.preprocessing.impl.PreprocessingServiceImpl;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
+import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
 import org.jbpm.designer.web.profile.impl.RepositoryInfo;
 import org.json.JSONArray;
 import org.slf4j.Logger;
@@ -106,8 +106,8 @@ public class EditorHandler extends HttpServlet {
      * The profile service, a global registry to get the
      * profiles.
      */
-    @Inject
-    private IDiagramProfileService _profileService = null;
+//    @Inject
+    private static IDiagramProfileService _profileService = ProfileServiceImpl.getInstance();
 
 //    @Inject
 //    private VFSService vfsServices;
@@ -181,9 +181,7 @@ public class EditorHandler extends HttpServlet {
         String studioApiUrl = request.getParameter("studioApiUrl");
         String studioClientUrl = request.getParameter("studioClientUrl");
         String token = request.getParameter("token");
-//        String uuid = Utils.getUUID(request);TODO
         String uuid = request.getParameter("uuid");
-
         String editorID = request.getParameter("editorid");
 
         // passed through via JSNI now

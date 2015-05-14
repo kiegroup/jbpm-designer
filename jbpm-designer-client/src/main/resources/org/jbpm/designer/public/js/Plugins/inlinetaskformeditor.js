@@ -17,42 +17,24 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
     },
 
   openFormDesigner: function(options) {
-    var processJSON = ORYX.EDITOR.getSerializedJSON();
-//    var fileName = ORYX.CONFIG.PROCESS_DEF_ID + ".xml";
-
-//    Ext.Ajax.request({
-//      url: window.location.protocol + '//' + ORYX.CONFIG.STUDIO_API_URL,
-//      method: 'GET',
-//      headers: {
-//        'X-Auth-Token': ORYX.CONFIG.TOKEN,
-//        'ProjectId': ORYX.CONFIG.PROJECT_ID
-//      },
-//      success: function(response) {
-//        if(response.responseText && response.responseText.length > 0) {
-
-          Ext.Ajax.request({
-            url: ORYX.PATH + "savebpmn",
-            method: 'POST',
-            success: function() {
-              window.parent.postMessage(options.taskId, ORYX.CONFIG.STUDIO_CLIENT_URL);
-            },
-            failure: function() {
-              Ext.Msg.minWidth = 400;
-              Ext.Msg.alert("Error save BPMN2 configuration");
-            },
-            params: {
-              profile: ORYX.PROFILE,
-              data: processJSON,
-              procDefPath: ORYX.UUID
-            }
-          });
-//        }
-//      }.bind(this),
-//      failure: function(){
-//        Ext.Msg.minWidth = 400;
-//        Ext.Msg.alert("Error save BPMN2 configuration");
-//      }
-//    });
+    //var processJSON = ORYX.EDITOR.getSerializedJSON();
+    //
+    //      Ext.Ajax.request({
+    //        url: ORYX.PATH + "savebpmn",
+    //        method: 'POST',
+    //        success: function() {
+    //          window.parent.postMessage(options.taskId, ORYX.CONFIG.STUDIO_CLIENT_URL);
+    //        },
+    //        failure: function() {
+    //          Ext.Msg.minWidth = 400;
+    //          Ext.Msg.alert("Error save BPMN2 configuration");
+    //        },
+    //        params: {
+    //          profile: ORYX.PROFILE,
+    //          data: processJSON,
+    //          procDefPath: ORYX.UUID
+    //        }
+    //      });
   },
 
     chooseFormEditor: function(options) {
@@ -116,7 +98,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                                 action: 'load',
                                 taskname: options.tn,
                                 profile: ORYX.PROFILE,
-                                uuid :  window.btoa(encodeURI(ORYX.UUID))
+                                uuid :  ORYX.UUID
                             }
                         });
                     } catch(e) {
@@ -141,7 +123,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                 params: {
                     action: 'getwidgets',
                     profile: ORYX.PROFILE,
-                    uuid:  window.btoa(encodeURI(ORYX.UUID))
+                    uuid:  ORYX.UUID
                 }
             });
         } else {
@@ -222,7 +204,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                                     action: 'getwidgetsource',
                                     profile: ORYX.PROFILE,
                                     widgetname: combo.getValue(),
-                                    uuid:  window.btoa(encodeURI(ORYX.UUID))
+                                    uuid:  ORYX.UUID
                                 }
                             });
                         } else {
@@ -357,7 +339,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                             action: 'save',
                             taskname: tn,
                             profile: ORYX.PROFILE,
-                            uuid :  window.btoa(encodeURI(ORYX.UUID)),
+                            uuid :  ORYX.UUID,
                             tfvalue: tosaveValue
                         }
                     });

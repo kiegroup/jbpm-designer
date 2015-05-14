@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,9 +20,11 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceFactoryImpl;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceImpl;
+import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
+import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
 
 /**
  * @author Golovlyev
@@ -31,21 +32,21 @@ import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 public class LoadBpmn2Servlet extends HttpServlet {
   private static final long serialVersionUID = -1095623166420186064L;
 
-  @Inject
-  private IDiagramProfileService _profileService = null;
+//  @Inject
+  private static IDiagramProfileService _profileService = ProfileServiceImpl.getInstance();
 
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     try {
       req.setCharacterEncoding("UTF-8");
-      String procDefPath = req.getParameter("procDefPath");
+      String uuid = Utils.getUUID(req);
       String profileParam = req.getParameter("profile");
       String pp = req.getParameter("pp");
 
       String convertServiceTasks = "true";//TODO
 
 
-      File file = new File(procDefPath);
+      File file = new File(uuid);
       String bpmnXmlStr = FileUtils.readFileToString(file);
 
       if (convertServiceTasks != null && convertServiceTasks.equals("true")) {

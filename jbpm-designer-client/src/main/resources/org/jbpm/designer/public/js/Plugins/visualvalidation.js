@@ -104,7 +104,7 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
                 data: processJSON,
                 profile: ORYX.PROFILE,
                 pp: ORYX.PREPROCESSING,
-                uuid:  window.btoa(encodeURI(ORYX.UUID))
+                uuid:  ORYX.UUID
             },
             onSuccess: function(request) {
                 this.allErrors = new Hash();

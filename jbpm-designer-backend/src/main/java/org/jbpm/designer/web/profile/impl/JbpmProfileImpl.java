@@ -2,7 +2,6 @@ package org.jbpm.designer.web.profile.impl;
 
 import java.io.*;
 import java.util.*;
-import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -27,6 +26,7 @@ import org.jbpm.designer.bpmn2.impl.Bpmn2JsonUnmarshaller;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceFactoryImpl;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceImpl;
 import org.jbpm.designer.repository.Repository;
+import org.jbpm.designer.repository.vfs.CGFSRepository;
 import org.jbpm.designer.server.service.DefaultDesignerAssetService;
 import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.web.plugin.IDiagramPlugin;
@@ -53,8 +53,8 @@ public class JbpmProfileImpl implements IDiagramProfile {
     private boolean initializeLocalPlugins;
     private String _storeSVGonSaveOption;
 
-    @Inject
-    private Repository repository;
+//    @Inject
+    private static Repository repository = CGFSRepository.getInstance();
 
 //    @Inject
 //    private VFSService vfsServices;

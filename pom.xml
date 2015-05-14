@@ -24,7 +24,7 @@
   </scm>
 
   <modules>
-    <!--<module>jbpm-designer-api</module>-->
+    <module>jbpm-designer-api</module>
     <module>jbpm-designer-client</module>
     <module>jbpm-designer-backend</module>
     <!--<module>jbpm-designer-standalone</module>-->
@@ -34,6 +34,16 @@
     <port>8888</port>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.kie.uberfire</groupId>
+        <artifactId>i18n-taglib</artifactId>
+        <version>6.3.0-SNAPSHOT</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
     <dependency>

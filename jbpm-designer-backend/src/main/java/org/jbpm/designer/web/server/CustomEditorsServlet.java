@@ -1,23 +1,23 @@
 package org.jbpm.designer.web.server;
 
-import org.jbpm.designer.expressioneditor.server.ExpressionEditorProcessor;
-import org.jbpm.designer.util.Utils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.jbpm.designer.repository.Asset;
-import org.jbpm.designer.repository.Repository;
-import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.designer.web.profile.IDiagramProfileService;
-
-import javax.inject.Inject;
+import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
+
+import org.jbpm.designer.expressioneditor.server.ExpressionEditorProcessor;
+import org.jbpm.designer.repository.Asset;
+import org.jbpm.designer.repository.Repository;
+import org.jbpm.designer.util.Utils;
+import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.jbpm.designer.web.profile.IDiagramProfileService;
+import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Sevlet for custom editors.
@@ -35,8 +35,7 @@ public class CustomEditorsServlet extends HttpServlet {
         this.profile = profile;
     }
 
-    @Inject
-    private IDiagramProfileService _profileService = null;
+    private static IDiagramProfileService _profileService = ProfileServiceImpl.getInstance();
 
 	@Override
     public void init(ServletConfig config) throws ServletException {

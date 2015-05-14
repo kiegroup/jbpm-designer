@@ -102,7 +102,7 @@ ORYX.Plugins.ShapeRepository = {
             },
             params: {
                 profile: ORYX.PROFILE,
-                uuid :  window.btoa(encodeURI(ORYX.UUID))
+                uuid :  ORYX.UUID
             }
         });
 

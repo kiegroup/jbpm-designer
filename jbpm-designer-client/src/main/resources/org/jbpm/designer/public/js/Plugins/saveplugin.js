@@ -236,17 +236,6 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
 
     saveToWorkspace: function () {
       var processJSON = ORYX.EDITOR.getSerializedJSON();
-//      var fileName = ORYX.CONFIG.PROCESS_DEF_ID + ".xml";
-
-//      Ext.Ajax.request({
-//        url: window.location.protocol + '//' + ORYX.CONFIG.STUDIO_API_URL,
-//        method: 'GET',
-//        headers: {
-//          'X-Auth-Token': ORYX.CONFIG.TOKEN,
-//          'ProjectId': ORYX.CONFIG.PROJECT_ID
-//        },
-//        success: function(response) {
-//          if(response.responseText && response.responseText.length > 0) {
 
             Ext.Ajax.request({
               url: ORYX.PATH + "savebpmn",
@@ -263,16 +252,9 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                 pp: ORYX.PREPROCESSING,
                 profile: ORYX.PROFILE,
                 data: processJSON,
-                procDefPath: ORYX.UUID
+                uuid: ORYX.UUID
               }
             });
-//          }
-//        }.bind(this),
-//        failure: function(){
-//          Ext.Msg.minWidth = 400;
-//          Ext.Msg.alert("Converting to BPMN2 Failed");
-//        }
-//      });
     },
 
     save : function(showCommit) {
@@ -351,7 +333,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                                         params: {
                                             fsvg: Base64.encode(formattedSvgDOM),
                                             rsvg: Base64.encode(rawSvgDOM),
-                                            uuid:  window.btoa(encodeURI(ORYX.UUID)),
+                                            uuid:  ORYX.UUID,
                                             profile: ORYX.PROFILE,
                                             transformto: 'svg',
                                             processid: processId
@@ -389,7 +371,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                     profile: ORYX.PROFILE,
                     assetcontent: ORYX.EDITOR.getSerializedJSON(),
                     pp: ORYX.PREPROCESSING,
-                    assetid: window.btoa(encodeURI(ORYX.UUID)),
+                    assetid: ORYX.UUID,
                     assetcontenttransform: 'jsontobpmn2',
                     commitmessage: commitMessage
                 }
@@ -410,7 +392,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
             var processJSON = ORYX.EDITOR.getSerializedJSON();
             var saveAjaxObj = new XMLHttpRequest;
             var saveURL = ORYX.PATH + "assetservice";
-            var saveParams  = "action=updateasset&profile=" + ORYX.PROFILE + "&pp=" + ORYX.PREPROCESSING + "&assetid=" + window.btoa(encodeURI(ORYX.UUID)) + "&assetcontenttransform=jsontobpmn2&assetcontent=" + encodeURIComponent(processJSON);
+            var saveParams  = "action=updateasset&profile=" + ORYX.PROFILE + "&pp=" + ORYX.PREPROCESSING + "&assetid=" + ORYX.UUID + "&assetcontenttransform=jsontobpmn2&assetcontent=" + encodeURIComponent(processJSON);
             saveAjaxObj.open("POST",saveURL,false);
             saveAjaxObj.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             saveAjaxObj.send(saveParams);

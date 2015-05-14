@@ -37,7 +37,7 @@ ORYX.CONFIG.UUID_URL = function(uuid, profile) {
       ORYX.PATH = "designer/";
   }
 
-  return ORYX.PATH + "uuidRepository?uuid="+ Base64.encode(encodeURI(uuid)) + "&profile=" + profile + "&pp=" + ORYX.PREPROCESSING + "&ts=" + new Date().getTime();
+  return ORYX.PATH + "uuidRepository?uuid="+ uuid + "&profile=" + profile + "&pp=" + ORYX.PREPROCESSING + "&ts=" + new Date().getTime();
 };
 
 ORYX.FULL_PERSPECTIVE = "http://b3mn.org/stencilset/bpmn2.0#";
@@ -65,7 +65,7 @@ ORYX.CONFIG.TRANSFORMER_URL = function(uuid, profile) {
    if (profile === undefined) {
       profile = ORYX.PROFILE;
    }
-   return ORYX.PATH + "transformer?uuid="+ window.btoa(encodeURI(uuid)) + "&profile=" + profile;
+   return ORYX.PATH + "transformer?uuid="+ uuid + "&profile=" + profile;
 };
 
 ORYX.CONFIG.TASKFORMS_URL = function(uuid, profile) {
@@ -75,7 +75,7 @@ ORYX.CONFIG.TASKFORMS_URL = function(uuid, profile) {
 	if (profile === undefined) {
 	   profile = ORYX.PROFILE;
 	}
-	return ORYX.PATH + "taskforms?uuid="+ window.btoa(encodeURI(uuid)) + "&profile=" + profile;
+	return ORYX.PATH + "taskforms?uuid="+ uuid + "&profile=" + profile;
 };
 ORYX.CONFIG.PROJECT_ID = "";
 ORYX.CONFIG.PROCESS_DEF_ID = "";

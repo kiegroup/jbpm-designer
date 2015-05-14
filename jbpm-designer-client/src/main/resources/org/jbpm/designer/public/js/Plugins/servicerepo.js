@@ -129,7 +129,7 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
                         params: {
                             action: 'install',
                             profile: ORYX.PROFILE,
-                            uuid :  window.btoa(encodeURI(ORYX.UUID)),
+                            uuid :  ORYX.UUID,
                             asset : aname,
                             category : acategory,
                             repourl : this.selectedrepourl
@@ -311,7 +311,7 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
             params: {
                 action: 'display',
                 profile: ORYX.PROFILE,
-                uuid :  window.btoa(encodeURI(ORYX.UUID)),
+                uuid :  ORYX.UUID,
                 repourl : serviceRepoURL
             }
         });

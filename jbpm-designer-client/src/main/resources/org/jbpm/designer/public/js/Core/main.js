@@ -214,12 +214,12 @@ ORYX.Editor = {
       this._finishedLoading();
     }.bind(this);
 
-//    var loadBpmnDiagram = function () {
-//      if (!loadPluginFinished || !loadContentFinished) {
-//        return
-//      }
-//      this._loadBpmnDiagram();
-//    }.bind(this);
+    var loadBpmnDiagram = function () {
+      if (!loadPluginFinished || !loadContentFinished) {
+        return
+      }
+      this._loadBpmnDiagram();
+    }.bind(this);
 
     // disable key events when Ext modal window is active
     ORYX.Editor.makeExtModalWindowKeysave(this._getPluginFacade());
@@ -228,8 +228,8 @@ ORYX.Editor = {
     window.setTimeout(function(){
       this.loadPlugins();
       loadPluginFinished = true;
-      initFinished();
-//      loadBpmnDiagram();
+      //initFinished();
+      loadBpmnDiagram();
     }.bind(this), 100);
 
     // LOAD the content of the current editor instance
@@ -237,28 +237,27 @@ ORYX.Editor = {
       this.loadSerialized(model);
       this.getCanvas().update();
       loadContentFinished = true;
-      initFinished();
-//      loadBpmnDiagram();
+      //initFinished();
+      loadBpmnDiagram();
     }.bind(this), 200);
   },
 
   _loadBpmnDiagram: function () {
-    Ext.Ajax.request({
-      url: window.location.protocol + '//' + ORYX.CONFIG.STUDIO_API_URL,
-      method: 'GET',
-      headers: {
-        'X-Auth-Token': ORYX.CONFIG.TOKEN,
-        'ProjectId': ORYX.CONFIG.PROJECT_ID
-      },
-      success: function (response) {
-        if (response.responseText && response.responseText.length > 0) {
+    //Ext.Ajax.request({
+    //  url: window.location.protocol + '//' + ORYX.CONFIG.STUDIO_API_URL,
+    //  method: 'GET',
+    //  headers: {
+    //    'X-Auth-Token': ORYX.CONFIG.TOKEN,
+    //    'ProjectId': ORYX.CONFIG.PROJECT_ID
+    //  },
+    //  success: function (response) {
+    //    if (response.responseText && response.responseText.length > 0) {
 
           var url = ORYX.PATH + "loadBpmnDiagram";
           new Ajax.Request(url, {
             method: 'POST',
             asynchronous: false,
             parameters: {
-              procDefPath: response.responseText,
               profile: ORYX.PROFILE,
               pp: ORYX.PREPROCESSING,
               uuid: ORYX.UUID
@@ -276,13 +275,13 @@ ORYX.Editor = {
             }).bind(this)
           });
 
-        }
-      }.bind(this),
-      failure: function () {
-        Ext.Msg.minWidth = 400;
-        Ext.Msg.alert('BPMN2 Diagram loading Failed');
-      }
-    });
+    //    }
+    //  }.bind(this),
+    //  failure: function () {
+    //    Ext.Msg.minWidth = 400;
+    //    Ext.Msg.alert('BPMN2 Diagram loading Failed');
+    //  }
+    //});
   },
 
   _finishedLoading: function() {

@@ -84,13 +84,13 @@ ORYX.Plugins.ShapeMenuPlugin = {
 			window.clearTimeout(this.timer);
 			this.timer = window.setTimeout(function(){
 
-                if(this.currentShapes && this.currentShapes.length==1){
-                  var data = [];
-                  data["taskId"]= this.currentShapes[0].resourceId;
-                  data["taskType"]= this.currentShapes[0].properties['oryx-tasktype'];
-                  data["taskName"]= this.currentShapes[0].properties['oryx-taskname'];
-                  window.parent.postMessage(data, ORYX.CONFIG.STUDIO_CLIENT_URL);
-                }
+                //if(this.currentShapes && this.currentShapes.length==1){
+                //  var data = [];
+                //  data["taskId"]= this.currentShapes[0].resourceId;
+                //  data["taskType"]= this.currentShapes[0].properties['oryx-tasktype'];
+                //  data["taskName"]= this.currentShapes[0].properties['oryx-taskname'];
+                //  window.parent.postMessage(data, ORYX.CONFIG.STUDIO_CLIENT_URL);
+                //}
 
 					// Close all Buttons
 				this.shapeMenu.closeAllButtons();

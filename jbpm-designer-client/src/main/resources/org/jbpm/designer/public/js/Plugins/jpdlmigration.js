@@ -136,7 +136,7 @@ ORYX.Plugins.JPDLMigration = Clazz.extend({
 									  'gpd'  : gpdString,
 									  'transformto' : 'jpdl2bpmn2',
 									  'profile' : ORYX.PROFILE,
-									  'uuid' :  window.btoa(encodeURI(ORYX.UUID))
+									  'uuid' :  ORYX.UUID
 									},
 									function( arg ) { this._loadJSON( arg );  dialog.hide(); }.bind(this),
 									function() { dialog.hide(); }.bind(this)
