@@ -71,7 +71,7 @@ public class CGFSRepository implements Repository {
   }
 
   @Override
-  public Asset loadAsset(String pathToAsset) throws AssetNotFoundException {
+  public Asset loadAsset(String pathToAsset) {
     TextAsset asset = new TextAsset();
     asset.setUniqueId(Base64.encodeBase64String(pathToAsset.getBytes()));
     asset.setAssetLocation(pathToAsset);
@@ -90,7 +90,7 @@ public class CGFSRepository implements Repository {
   }
 
   @Override
-  public Asset loadAssetFromPath(String path) throws AssetNotFoundException {
+  public Asset loadAssetFromPath(String path) {
     return null;  //TODO: implement this method
   }
 
@@ -100,7 +100,7 @@ public class CGFSRepository implements Repository {
   }
 
   @Override
-  public String updateAsset(Asset asset, String commitMessage) throws AssetNotFoundException {
+  public String updateAsset(Asset asset, String commitMessage) {
     return null;  //TODO: implement this method
   }
 

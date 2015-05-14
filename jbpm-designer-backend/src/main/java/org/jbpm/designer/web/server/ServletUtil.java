@@ -58,7 +58,7 @@ public class ServletUtil {
 
         pkgassetinfo[0] = asset.getAssetLocation();
         pkgassetinfo[1] = asset.getName();
-        } catch (NoSuchFileException e) {
+        } catch (Exception e) {
             _logger.error("Asset " + uuid + " not found");
         }
 

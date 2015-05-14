@@ -1,6 +1,4 @@
 package org.jbpm.designer.web.server;
-
-import org.uberfire.java.nio.file.NoSuchFileException;
 /**
  * 
  * Interaction with task forms for inline editor.

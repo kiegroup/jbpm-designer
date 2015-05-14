@@ -1,20 +1,18 @@
 package org.jbpm.designer.web.repository.impl;
 
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
 import bpsim.impl.BpsimPackageImpl;
-import org.jbpm.designer.server.service.DefaultDesignerAssetService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.jboss.drools.impl.DroolsPackageImpl;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.Repository;
+import org.jbpm.designer.server.service.DefaultDesignerAssetService;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.repository.IUUIDBasedRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class UUIDBasedJbpmRepository implements IUUIDBasedRepository {

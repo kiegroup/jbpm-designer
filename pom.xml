@@ -11,7 +11,7 @@
   <groupId>org.jbpm</groupId>
   <artifactId>jbpm-designer</artifactId>
   <packaging>pom</packaging>
-  <version>6.1.0.Final-Center.2</version>
+  <version>6.2.0.Final-Center</version>
 
   <name>jBPM Designer</name>
   <description>jBPM Designer - web-based BPMN2 modeller</description>
@@ -42,15 +42,19 @@
         <artifactId>i18n-taglib</artifactId>
         <version>6.3.0-SNAPSHOT</version>
       </dependency>
+      <dependency>
+        <groupId>org.jbpm</groupId>
+        <artifactId>jbpm-designer-api</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jbpm</groupId>
+        <artifactId>jbpm-designer-client</artifactId>
+        <version>${project.version}</version>
+        <scope>test</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
-
-  <dependencies>
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-    </dependency>
-  </dependencies>
 
   <build>
     <plugins>
@@ -79,17 +83,17 @@
 
       <!--Fix translations from Zanata for JS i18n -->
       <plugin>
-            <groupId>com.google.code.maven-replacer-plugin</groupId>
-            <artifactId>replacer</artifactId>
-            <configuration>
-                <includes>
-                    <include>**/DesignerEditor*.properties</include>
-                </includes>
-                <excludes>
-                    <exclude>**/ErraiApp.properties</exclude>
-                </excludes>
-            </configuration>
-        </plugin>
+        <groupId>com.google.code.maven-replacer-plugin</groupId>
+        <artifactId>replacer</artifactId>
+        <configuration>
+          <includes>
+            <include>**/DesignerEditor*.properties</include>
+          </includes>
+          <excludes>
+            <exclude>**/ErraiApp.properties</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
 
       <!-- Zanata - translations -->
       <plugin>
@@ -108,22 +112,14 @@
             </execution>
         </executions-->
         <configuration>
-              <includes>
-                  <include>**/DesignerEditorConstants*.properties</include>
-                  <include>**/DesignerConstants*.properties</include>
-                  <include>**/Constants*.properties</include>
-              </includes>
-              <workDir>.</workDir>
-              <tempDir>.</tempDir>
-          </configuration>
-            <id>jar</id>
-            <phase>none</phase>
-          </execution>
-          <execution>
-            <id>test-jar</id>
-            <phase>none</phase>
-          </execution>
-        </executions>
+          <includes>
+            <include>**/DesignerEditorConstants*.properties</include>
+            <include>**/DesignerConstants*.properties</include>
+            <include>**/Constants*.properties</include>
+          </includes>
+          <workDir>.</workDir>
+          <tempDir>.</tempDir>
+        </configuration>
       </plugin>
     </plugins>
   </build>

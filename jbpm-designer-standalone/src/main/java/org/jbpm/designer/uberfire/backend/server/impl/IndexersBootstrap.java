@@ -15,42 +15,30 @@
  */
 package org.jbpm.designer.uberfire.backend.server.impl;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Any;
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
-
-import org.uberfire.commons.services.cdi.Startup;
-import org.uberfire.commons.services.cdi.StartupType;
-
-@Startup(StartupType.EAGER)
-@ApplicationScoped
+//@Startup(StartupType.EAGER)
+//@ApplicationScoped
 public class IndexersBootstrap {
 
-    @Inject
-    @Any
-    private Instance<Indexer> indexers;
-
-    @PostConstruct
-    public void setup() {
-        for ( Indexer indexer : getIndexers() ) {
-            IndexersFactory.addIndexer( indexer );
-        }
-    }
-
-    private Set<Indexer> getIndexers() {
-        if ( indexers == null ) {
-            return Collections.emptySet();
-        }
-        final Set<Indexer> result = new HashSet<Indexer>();
-        for ( Indexer indexer : indexers ) {
-            result.add( indexer );
-        }
-        return result;
-    }
+//    @Inject
+//    @Any
+//    private Instance<Indexer> indexers;
+//
+//    @PostConstruct
+//    public void setup() {
+//        for ( Indexer indexer : getIndexers() ) {
+//            IndexersFactory.addIndexer( indexer );
+//        }
+//    }
+//
+//    private Set<Indexer> getIndexers() {
+//        if ( indexers == null ) {
+//            return Collections.emptySet();
+//        }
+//        final Set<Indexer> result = new HashSet<Indexer>();
+//        for ( Indexer indexer : indexers ) {
+//            result.add( indexer );
+//        }
+//        return result;
+//    }
 
 }

@@ -1,6 +1,4 @@
 package org.jbpm.designer.validation;
-
-import org.uberfire.ext.editor.commons.backend.validation.FileNameValidator;
 /**
  * Validator of BPMN2 process file names
  */

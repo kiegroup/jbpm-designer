@@ -16,81 +16,6 @@
   <name>jBPM Designer - Backend</name>
 
   <dependencies>
-
-    <!-- dependencies added because of new illegal transitive dependency check -->
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.lucene</groupId>
-      <artifactId>lucene-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.emf</groupId>
-      <artifactId>org.eclipse.emf.common</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.emf</groupId>
-      <artifactId>org.eclipse.emf.ecore</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.emf</groupId>
-      <artifactId>org.eclipse.emf.ecore.xmi</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.guvnor</groupId>
-      <artifactId>guvnor-structure-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.guvnor</groupId>
-      <artifactId>guvnor-structure-backend</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.jboss.errai</groupId>
-      <artifactId>errai-bus</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.jboss.errai</groupId>
-      <artifactId>errai-security-server</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.uberfire</groupId>
-      <artifactId>uberfire-metadata-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.workbench.services</groupId>
-      <artifactId>kie-wb-common-services-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.workbench.services</groupId>
-      <artifactId>kie-wb-common-refactoring-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.workbench.services</groupId>
-      <artifactId>kie-wb-common-refactoring-backend</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.uberfire</groupId>
-      <artifactId>uberfire-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.uberfire</groupId>
-      <artifactId>uberfire-backend-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.uberfire</groupId>
-      <artifactId>uberfire-io</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.uberfire</groupId>
-      <artifactId>uberfire-nio2-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.uberfire</groupId>
-      <artifactId>uberfire-nio2-model</artifactId>
-    </dependency>
-
     <!-- jBPM Designer - Client -->
     <dependency>
       <groupId>org.jbpm</groupId>
@@ -184,6 +109,12 @@
           <artifactId>ant</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+
+    <!-- bpmn2 libs -->
+    <dependency>
+      <groupId>org.eclipse</groupId>
+      <artifactId>org.eclipse.bpmn2</artifactId>
     </dependency>
 
     <!-- war libs -->
@@ -448,7 +379,6 @@
         </exclusion>
       </exclusions>
     </dependency>
-
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
@@ -463,11 +393,6 @@
         </exclusion>
       </exclusions>
     </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpcore</artifactId>
-    </dependency>
-
     <dependency>
       <groupId>commons-fileupload</groupId>
       <artifactId>commons-fileupload</artifactId>
@@ -499,8 +424,8 @@
     <!--<artifactId>uberfire-backend-server</artifactId>-->
     <!--</dependency>-->
     <dependency>
-      <groupId>org.uberfire</groupId>
-      <artifactId>uberfire-commons-editor-backend</artifactId>
+      <groupId>org.jboss.solder</groupId>
+      <artifactId>solder-api</artifactId>
     </dependency>
 
     <!-- Common services -->
@@ -538,8 +463,8 @@
     </dependency>
 
     <dependency>
-      <groupId>org.eclipse</groupId>
-      <artifactId>org.eclipse.bpmn2</artifactId>
+      <groupId>org.uberfire</groupId>
+      <artifactId>uberfire-nio2-model</artifactId>
     </dependency>
 
   </dependencies>
@@ -573,15 +498,15 @@
         </executions>
       </plugin>
       <!--<plugin>-->
-        <!--<artifactId>maven-clean-plugin</artifactId>-->
-        <!--<configuration>-->
-          <!--<filesets>-->
-            <!--<fileset>-->
-              <!--<directory>${project.basedir}/src/test/resources/org/jbpm/designer/public</directory>-->
-              <!--<followSymlinks>false</followSymlinks>-->
-            <!--</fileset>-->
-          <!--</filesets>-->
-        <!--</configuration>-->
+      <!--<artifactId>maven-clean-plugin</artifactId>-->
+      <!--<configuration>-->
+      <!--<filesets>-->
+      <!--<fileset>-->
+      <!--<directory>${project.basedir}/src/test/resources/org/jbpm/designer/public</directory>-->
+      <!--<followSymlinks>false</followSymlinks>-->
+      <!--</fileset>-->
+      <!--</filesets>-->
+      <!--</configuration>-->
       <!--</plugin>-->
 
       <plugin>

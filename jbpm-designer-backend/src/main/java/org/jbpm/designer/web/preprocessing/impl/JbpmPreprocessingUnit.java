@@ -15,9 +15,11 @@ import org.drools.core.process.core.ParameterDefinition;
 import org.drools.core.process.core.datatype.DataType;
 import org.drools.core.process.core.impl.ParameterDefinitionImpl;
 import org.drools.core.util.MVELSafeHelper;
-import org.jbpm.designer.repository.*;
+import org.jbpm.designer.repository.Asset;
+import org.jbpm.designer.repository.AssetBuilderFactory;
+import org.jbpm.designer.repository.Repository;
+import org.jbpm.designer.repository.UriUtils;
 import org.jbpm.designer.repository.impl.AssetBuilder;
-import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
 import org.jbpm.designer.util.Base64Backport;
 import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.util.Utils;
@@ -29,8 +31,6 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.stringtemplate.v4.ST;
-import org.uberfire.java.nio.file.FileSystem;
-import org.uberfire.java.nio.file.NoSuchFileException;
 
 /**
  * JbpmPreprocessingUnit - preprocessing unit for the jbpm profile
@@ -137,9 +137,9 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
                 return;
             }
-            if(ioService != null) {
-                ioService.startBatch(new FileSystem[]{ descriptor.getFileSystem() });
-            }
+//            if(ioService != null) {
+//                ioService.startBatch(new FileSystem[]{ descriptor.getFileSystem() });
+//            }
 
             Repository repository = profile.getRepository();
 
@@ -409,7 +409,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             try {
                 Asset assetWithContent = repository.loadAsset(widAsset.getUniqueId());
                 loadedAssets.add(assetWithContent);
-            } catch (NoSuchFileException e) {
+            } catch (Exception e) {
                 _logger.error("Asset " + widAsset.getName() + " not found");
             }
         }

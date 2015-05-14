@@ -1,7 +1,5 @@
 package org.jbpm.designer.repository;
 
-import org.uberfire.java.nio.file.NoSuchFileException;
-
 import java.util.Collection;
 import java.util.Map;
 
@@ -103,7 +101,7 @@ public interface Repository {
      * @return return loaded asset including content
      * @throws NoSuchFileException - throws in case of asset given by id does not exist
      */
-    Asset loadAsset(String assetUniqueId) throws NoSuchFileException;
+    Asset loadAsset(String assetUniqueId);
 
     /**
      * Loads an asset given by the <code>path</code> including actual content of the asset.
@@ -111,7 +109,7 @@ public interface Repository {
      * @return return loaded asset including content
      * @throws NoSuchFileException - throws in case of asset given by id does not exist
      */
-    Asset loadAssetFromPath(String path) throws NoSuchFileException;
+    Asset loadAssetFromPath(String path);
 
     /**
      * Stores given asset in the repository. <code>asset</code> need to have all meta data and content available
@@ -127,7 +125,7 @@ public interface Repository {
      * @return - returns uniqueId of the asset
      * @throws NoSuchFileException - throws in case of asset given by id does not exist
      */
-    String updateAsset(Asset asset, String commitMessage) throws NoSuchFileException;
+    String updateAsset(Asset asset, String commitMessage);
 
     /**
      * Deletes asset from repository identified by <code>assetUniqueId</code> if exists

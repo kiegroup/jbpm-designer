@@ -21,7 +21,6 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.jboss.drools.DroolsPackage;
 import org.jboss.drools.impl.DroolsFactoryImpl;
-import org.jboss.errai.security.shared.api.identity.User;
 import org.jbpm.designer.bpmn2.impl.Bpmn2JsonMarshaller;
 import org.jbpm.designer.bpmn2.impl.Bpmn2JsonUnmarshaller;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceFactoryImpl;
@@ -63,8 +62,8 @@ public class JbpmProfileImpl implements IDiagramProfile {
 //    @Inject
 //    private Event<DesignerNotificationEvent> notification;
 
-    @Inject
-    private User user;
+//    @Inject
+//    private User user;
 
     public JbpmProfileImpl(ServletContext servletContext) {
         this(servletContext, true, false);
@@ -306,7 +305,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
                 for (Resource.Diagnostic error : resource.getErrors()) {
                     errorMessages += error.getMessage() + "\n";
                 }
-                notification.fire( new DesignerNotificationEvent( errorMessages, NotificationEvent.NotificationType.ERROR, user.getIdentifier() ) );
+//                notification.fire( new DesignerNotificationEvent( errorMessages, NotificationEvent.NotificationType.ERROR, user.getIdentifier() ) );
             }
 
             if(!resource.getWarnings().isEmpty()) {
@@ -314,7 +313,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
                 for(Resource.Diagnostic warning : resource.getWarnings()) {
                     warningMessages += warning.getMessage() + "\n";
                 }
-                notification.fire( new DesignerNotificationEvent( warningMessages, NotificationEvent.NotificationType.WARNING, user.getIdentifier() ) );
+//                notification.fire( new DesignerNotificationEvent( warningMessages, NotificationEvent.NotificationType.WARNING, user.getIdentifier() ) );
             }
 
             EList<Diagnostic> warnings = resource.getWarnings();
@@ -359,7 +358,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
         try {
             String defaultProcessContent = DefaultDesignerAssetService.PROCESS_STUB.replaceAll( "\\$\\{processid\\}", "defaultprocessid" );
             String errorMessages = "Unable to load process content due to errors. Displaying default process instead. Check logs for error details.";
-            notification.fire( new DesignerNotificationEvent( errorMessages, NotificationEvent.NotificationType.ERROR, user.getIdentifier()) );
+//            notification.fire( new DesignerNotificationEvent( errorMessages, NotificationEvent.NotificationType.ERROR, user.getIdentifier()) );
             return getDefinitions(defaultProcessContent);
         } catch(Exception e) {
             _logger.error(e.getMessage());

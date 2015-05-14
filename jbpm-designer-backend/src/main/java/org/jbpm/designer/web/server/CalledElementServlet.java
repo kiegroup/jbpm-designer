@@ -2,7 +2,9 @@ package org.jbpm.designer.web.server;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,12 +22,6 @@ import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
 import org.json.JSONObject;
-import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueIndexTerm;
-import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueRuleAttributeIndexTerm;
-import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueRuleAttributeValueIndexTerm;
-import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueTypeIndexTerm;
-import org.kie.workbench.common.services.refactoring.model.query.RefactoringPageRow;
-import org.kie.workbench.common.services.refactoring.service.RefactoringQueryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,8 +37,8 @@ public class CalledElementServlet extends HttpServlet {
 
     private static IDiagramProfileService _profileService = ProfileServiceImpl.getInstance();
 
-    @Inject
-    private RefactoringQueryService queryService;
+//    @Inject
+//    private RefactoringQueryService queryService;
 	
 	@Override
     public void init(ServletConfig config) throws ServletException {
@@ -97,37 +93,37 @@ public class CalledElementServlet extends HttpServlet {
 	        resp.getWriter().write(retValue);
         } else if(action != null && action.equals("showruleflowgroups")) {
             //Query for RuleFlowGroups
-            final List<RefactoringPageRow> results = queryService.query("FindRuleFlowNamesQuery",
-                    new HashSet<ValueIndexTerm>() {{
-                        add(new ValueRuleAttributeIndexTerm("ruleflow-group"));
-                        add(new ValueRuleAttributeValueIndexTerm("*"));
-                    }},
-                    true);
-
-            final List<String> ruleFlowGroupNames = new ArrayList<String>();
-            for ( RefactoringPageRow row : results ) {
-                ruleFlowGroupNames.add( (String) row.getValue() );
-            }
-            Collections.sort( ruleFlowGroupNames );
-
-            resp.setCharacterEncoding("UTF-8");
-            resp.setContentType("application/json");
-            resp.getWriter().write(getRuleFlowGroupsInfoAsJSON(ruleFlowGroupNames).toString());
+//            final List<RefactoringPageRow> results = queryService.query("FindRuleFlowNamesQuery",
+//                    new HashSet<ValueIndexTerm>() {{
+//                        add(new ValueRuleAttributeIndexTerm("ruleflow-group"));
+//                        add(new ValueRuleAttributeValueIndexTerm("*"));
+//                    }},
+//                    true);
+//
+//            final List<String> ruleFlowGroupNames = new ArrayList<String>();
+//            for ( RefactoringPageRow row : results ) {
+//                ruleFlowGroupNames.add( (String) row.getValue() );
+//            }
+//            Collections.sort( ruleFlowGroupNames );
+//
+//            resp.setCharacterEncoding("UTF-8");
+//            resp.setContentType("application/json");
+//            resp.getWriter().write(getRuleFlowGroupsInfoAsJSON(ruleFlowGroupNames).toString());
 
         } else if(action != null && action.equals("showdatatypes")) {
-            final List<RefactoringPageRow> results2 = queryService.query("DesignerFindTypesQuery",
-                    new HashSet<ValueIndexTerm>() {{
-                        add(new ValueTypeIndexTerm("*"));
-                    }},
-                    true);
-            final List<String> dataTypeNames = new ArrayList<String>();
-            for ( RefactoringPageRow row : results2 ) {
-                dataTypeNames.add( (String) row.getValue() );
-            }
-            Collections.sort( dataTypeNames );
-            resp.setCharacterEncoding("UTF-8");
-            resp.setContentType("application/json");
-            resp.getWriter().write(getDataTypesInfoAsJSON(dataTypeNames).toString());
+//            final List<RefactoringPageRow> results2 = queryService.query("DesignerFindTypesQuery",
+//                    new HashSet<ValueIndexTerm>() {{
+//                        add(new ValueTypeIndexTerm("*"));
+//                    }},
+//                    true);
+//            final List<String> dataTypeNames = new ArrayList<String>();
+//            for ( RefactoringPageRow row : results2 ) {
+//                dataTypeNames.add( (String) row.getValue() );
+//            }
+//            Collections.sort( dataTypeNames );
+//            resp.setCharacterEncoding("UTF-8");
+//            resp.setContentType("application/json");
+//            resp.getWriter().write(getDataTypesInfoAsJSON(dataTypeNames).toString());
         } else {
 	        String retValue = "false";
 	        List<String> allPackageNames = ServletUtil.getPackageNamesFromRepository(profile);

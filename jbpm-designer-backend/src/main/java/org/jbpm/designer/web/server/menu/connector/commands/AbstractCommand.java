@@ -1,12 +1,13 @@
 package org.jbpm.designer.web.server.menu.connector.commands;
 
+import java.io.ByteArrayOutputStream;
+import java.util.*;
+
 import bpsim.impl.BpsimFactoryImpl;
 import org.apache.commons.fileupload.FileItemStream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.eclipse.bpmn2.Definitions;
-import org.eclipse.bpmn2.RootElement;
 import org.eclipse.bpmn2.Process;
+import org.eclipse.bpmn2.RootElement;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.designer.repository.*;
@@ -16,10 +17,8 @@ import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.uberfire.java.nio.file.NoSuchFileException;
-
-import java.io.ByteArrayOutputStream;
-import java.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class AbstractCommand {
     private static Logger logger = LoggerFactory.getLogger(AbstractCommand.class);
@@ -88,7 +87,7 @@ public abstract class AbstractCommand {
                                 }
                             }
                         }
-                    } catch (NoSuchFileException e) {
+                    } catch (Exception e) {
                         logger.error("Unable to retrieve asset: " + target);
                     }
                 }
@@ -130,7 +129,7 @@ public abstract class AbstractCommand {
             Asset tobeRenamedAsset = null;
             try {
                 tobeRenamedAsset = repository.loadAssetFromPath(target);
-            } catch (NoSuchFileException e) {
+            } catch (Exception e) {
                 logger.error("Unable to retrieve asset: " + target);
             }
             if(tobeRenamedAsset != null) {

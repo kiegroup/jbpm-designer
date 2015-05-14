@@ -116,7 +116,7 @@ public abstract class AbstractConnectorServlet extends HttpServlet {
                     } else {
                         outputPlain(response, true, "<p><b>Process image not available.</p><p>You can generate the process image in the process editor.</b></p>", null);
                     }
-                } catch (NoSuchFileException e) {
+                } catch (Exception e) {
                     logger.warn("Error loading process image: " + e.getMessage());
                     outputPlain(response, true, "<p><b>Could not find process image.</p><p>You can generate the process image in the process editor.</b></p>", null);
                 }

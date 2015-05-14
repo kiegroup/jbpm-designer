@@ -1,6 +1,5 @@
 package org.jbpm.designer.repository.guvnor;
 
-import org.uberfire.java.nio.file.NoSuchFileException;
 import java.util.Collection;
 
 import org.jbpm.designer.repository.*;
@@ -56,11 +55,11 @@ public class GuvnorRepository implements Repository {
         throw new UnsupportedOperationException();
     }
 
-    public Asset loadAsset(String assetUniqueId) throws NoSuchFileException {
+    public Asset loadAsset(String assetUniqueId) {
         throw new UnsupportedOperationException();
     }
 
-    public Asset loadAssetFromPath(String path) throws NoSuchFileException {
+    public Asset loadAssetFromPath(String path) {
         throw new UnsupportedOperationException();
     }
 
@@ -68,7 +67,7 @@ public class GuvnorRepository implements Repository {
         throw new UnsupportedOperationException();
     }
 
-    public String updateAsset(Asset asset, String commitMessage) throws NoSuchFileException {
+    public String updateAsset(Asset asset, String commitMessage) {
         return null;
     }
 

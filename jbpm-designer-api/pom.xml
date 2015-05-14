@@ -15,13 +15,16 @@
 
   <name>jBPM Designer- API</name>
 
-  <dependencies>
+  <!--<dependencies>-->
+    <!--<dependency>-->
+      <!--<groupId>org.guvnor</groupId>-->
+      <!--<artifactId>guvnor-services-api</artifactId>-->
+    <!--</dependency>-->
+
     <!--<dependency>-->
       <!--<groupId>org.uberfire</groupId>-->
       <!--<artifactId>uberfire-api</artifactId>-->
     <!--</dependency>-->
-
-    <dependency>
 
     <!-- Errai Core -->
     <!--<dependency>-->
@@ -29,11 +32,11 @@
       <!--<artifactId>errai-bus</artifactId>-->
     <!--</dependency>-->
     <!-- Errai Common -->
-    <dependency>
-      <groupId>org.jboss.errai</groupId>
-      <artifactId>errai-common</artifactId>
-    </dependency>
-  </dependencies>
+    <!--<dependency>-->
+      <!--<groupId>org.jboss.errai</groupId>-->
+      <!--<artifactId>errai-common</artifactId>-->
+    <!--</dependency>-->
+  <!--</dependencies>-->
 
   <build>
     <resources>
@@ -74,66 +77,79 @@
       </plugin>
 
       <plugin>
-            <groupId>com.google.code.maven-replacer-plugin</groupId>
-            <artifactId>replacer</artifactId>
-            <configuration>
-                <includes>
-                    <include>**/DesignerConstants.properties</include>
-                    <include>**/DesignerConstants_de.properties</include>
-                    <include>**/DesignerConstants_es.properties</include>
-                    <include>**/DesignerConstants_fr.properties</include>
-                    <include>**/DesignerConstants_ja.properties</include>
-                    <include>**/DesignerConstants_pt_BR.properties</include>
-                    <include>**/DesignerConstants_zh_CN.properties</include>
-                    <include>**/DesignerConstants_ru.properties</include>
-                </includes>
-                <excludes>
-                    <exclude>**/ErraiApp.properties</exclude>
-                </excludes>
-                <replacements>
-                    <replacement>
-                        <token>\\\\"</token>
-                        <value>"</value>
-                    </replacement>
-                    <replacement>
-                        <token>\\"</token>
-                        <value>"</value>
-                    </replacement>
-                    <replacement>
-                        <token>"</token>
-                        <value>\\\\"</value>
-                    </replacement>
-                    <replacement>
-                        <token>\\\\'</token>
-                        <value>'</value>
-                    </replacement>
-                    <replacement>
-                        <token>\\'</token>
-                        <value>'</value>
-                    </replacement>
-                    <replacement>
-                        <token>'</token>
-                        <value>\\\\'</value>
-                    </replacement>
-                    <replacement>
-                        <token>'</token>
-                        <value>\\'</value>
-                    </replacement>
-                    <replacement>
-                        <token>"</token>
-                        <value>\\"</value>
-                    </replacement>
-                    <replacement>
-                        <token>\\\\n</token>
-                        <value>\\n</value>
-                    </replacement>
-                    <replacement>
-                        <token>\\n</token>
-                        <value>\\\\n</value>
-                    </replacement>
-                </replacements>
-            </configuration>
-        </plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>jar</goal>
+              <goal>test-jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.google.code.maven-replacer-plugin</groupId>
+        <artifactId>replacer</artifactId>
+        <configuration>
+          <includes>
+            <include>**/DesignerConstants.properties</include>
+            <include>**/DesignerConstants_de.properties</include>
+            <include>**/DesignerConstants_es.properties</include>
+            <include>**/DesignerConstants_fr.properties</include>
+            <include>**/DesignerConstants_ja.properties</include>
+            <include>**/DesignerConstants_pt_BR.properties</include>
+            <include>**/DesignerConstants_zh_CN.properties</include>
+            <include>**/DesignerConstants_ru.properties</include>
+          </includes>
+          <excludes>
+            <exclude>**/ErraiApp.properties</exclude>
+          </excludes>
+          <replacements>
+            <replacement>
+              <token>\\\\"</token>
+              <value>"</value>
+            </replacement>
+            <replacement>
+              <token>\\"</token>
+              <value>"</value>
+            </replacement>
+            <replacement>
+              <token>"</token>
+              <value>\\\\"</value>
+            </replacement>
+            <replacement>
+              <token>\\\\'</token>
+              <value>'</value>
+            </replacement>
+            <replacement>
+              <token>\\'</token>
+              <value>'</value>
+            </replacement>
+            <replacement>
+              <token>'</token>
+              <value>\\\\'</value>
+            </replacement>
+            <replacement>
+              <token>'</token>
+              <value>\\'</value>
+            </replacement>
+            <replacement>
+              <token>"</token>
+              <value>\\"</value>
+            </replacement>
+            <replacement>
+              <token>\\\\n</token>
+              <value>\\n</value>
+            </replacement>
+            <replacement>
+              <token>\\n</token>
+              <value>\\\\n</value>
+            </replacement>
+          </replacements>
+        </configuration>
+      </plugin>
+
     </plugins>
 
   </build>

@@ -17,7 +17,6 @@ package org.jbpm.designer.server;
 
 import java.io.*;
 import java.util.*;
-import javax.enterprise.context.RequestScoped;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -27,7 +26,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import bpsim.impl.BpsimFactoryImpl;
 import org.jboss.drools.impl.DroolsFactoryImpl;
-import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
 import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.web.plugin.IDiagramPlugin;
 import org.jbpm.designer.web.plugin.IDiagramPluginService;
@@ -118,9 +116,9 @@ public class EditorHandler extends HttpServlet {
 //    @Named("ioStrategy")
 //    private IOService ioService;
 
-    @Inject
-    @RequestScoped
-    private RepositoryDescriptor descriptor;
+//    @Inject
+//    @RequestScoped
+//    private RepositoryDescriptor descriptor;
 
     /**
      * The pre-processing service, a global registry to get
