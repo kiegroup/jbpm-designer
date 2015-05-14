@@ -121,6 +121,21 @@
           <tempDir>.</tempDir>
         </configuration>
       </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>jar</id>
+            <phase>none</phase>
+          </execution>
+          <execution>
+            <id>test-jar</id>
+            <phase>none</phase>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 
