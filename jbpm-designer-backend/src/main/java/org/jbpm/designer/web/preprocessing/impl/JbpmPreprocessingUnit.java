@@ -1,14 +1,6 @@
 package org.jbpm.designer.web.preprocessing.impl;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
+import java.io.*;
 import java.net.URLEncoder;
 import java.util.*;
 import javax.servlet.ServletContext;
@@ -23,11 +15,7 @@ import org.drools.core.process.core.ParameterDefinition;
 import org.drools.core.process.core.datatype.DataType;
 import org.drools.core.process.core.impl.ParameterDefinitionImpl;
 import org.drools.core.util.MVELSafeHelper;
-import org.jbpm.designer.repository.Asset;
-import org.jbpm.designer.repository.AssetBuilderFactory;
-import org.jbpm.designer.repository.Repository;
-import org.jbpm.designer.repository.UriUtils;
-import org.jbpm.designer.repository.filters.FilterByExtension;
+import org.jbpm.designer.repository.*;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
 import org.jbpm.designer.util.Base64Backport;
@@ -41,9 +29,6 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.stringtemplate.v4.ST;
-import org.uberfire.backend.vfs.Path;
-import org.uberfire.backend.vfs.VFSService;
-import org.uberfire.io.IOService;
 import org.uberfire.java.nio.file.FileSystem;
 import org.uberfire.java.nio.file.NoSuchFileException;
 
@@ -85,16 +70,14 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     private String patternsData;
     private String sampleBpmn2;
     private String globalDir;
-    private VFSService vfsService;
     private boolean includeDataObjects;
 
-    public JbpmPreprocessingUnit(ServletContext servletContext, VFSService vfsService) {
-        this(servletContext, ConfigurationProvider.getInstance().getDesignerContext(), vfsService);
+    public JbpmPreprocessingUnit(ServletContext servletContext) {
+        this(servletContext, ConfigurationProvider.getInstance().getDesignerContext());
     }
 
-    public JbpmPreprocessingUnit(ServletContext servletContext, String designerPath, VFSService vfsService) {
+    public JbpmPreprocessingUnit(ServletContext servletContext, String designerPath) {
         this.designer_path = designerPath.substring(0, designerPath.length()-1);
-        this.vfsService = vfsService;
         stencilPath = servletContext.getRealPath(designer_path + "/" + STENCILSET_PATH);
         origStencilFilePath = stencilPath + "/bpmn2.0jbpm/stencildata/" + "bpmn2.0jbpm.orig";
         stencilFilePath = stencilPath + "/bpmn2.0jbpm/" + "bpmn2.0jbpm.json";
@@ -121,7 +104,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         return outData;
     }
 
-    public void preprocess(HttpServletRequest req, HttpServletResponse res, IDiagramProfile profile, ServletContext serlvetContext, boolean readOnly, IOService ioService, RepositoryDescriptor descriptor) {
+    public void preprocess(HttpServletRequest req, HttpServletResponse res, IDiagramProfile profile, ServletContext serlvetContext, boolean readOnly) {
         try {
 
             if(readOnly) {
@@ -164,9 +147,10 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             //createAssetIfNotExisting(repository, "/defaultPackage", "BPMN2-SampleProcess", "bpmn2", getBytesFromFile(new File(sampleBpmn2)));
 
             Asset<String> asset = repository.loadAsset(uuid);
-            this.globalDir = profile.getRepositoryGlobalDir( uuid );
+//            this.globalDir = profile.getRepositoryGlobalDir( uuid );TODO
+            this.globalDir = "/global";
             outData = "";
-            Map<String, ThemeInfo> themeData = setupThemes(req, repository, profile);
+            Map<String, ThemeInfo> themeData = setupThemes(req, repository, profile, serlvetContext);
             setupCustomEditors(repository, profile);
             setupFormWidgets(repository, profile);
             setupDefaultIcons(globalDir, repository);
@@ -278,12 +262,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         } catch ( final Exception e ) {
             _logger.error(e.getMessage());
         } finally {
-            try {
-                if(!readOnly && ioService != null) {
-                    ioService.endBatch();
-                }
-            } catch ( final Exception ignore ) {
-            }
+                
         }
     }
 
@@ -496,33 +475,33 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         }
     }
 
-    private Map<String, ThemeInfo> setupThemes(HttpServletRequest req, Repository repository, IDiagramProfile profile) {
+    private Map<String, ThemeInfo> setupThemes(HttpServletRequest req, Repository repository, IDiagramProfile profile, ServletContext serlvetContext) {
         Map<String, ThemeInfo> themeData = new HashMap<String, ThemeInfo>();
         Asset<String> themeAsset = null;
         try {
-            boolean themeExists = repository.assetExists(this.globalDir + "/" + THEME_NAME + THEME_EXT);
-            if (!themeExists) {
-                // create theme asset
-                AssetBuilder assetBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
-                assetBuilder.content(new String(getBytesFromFile(new File(themeInfo)), "UTF-8"))
-                        .location(this.globalDir)
-                        .name(THEME_NAME)
-                        .type("json")
-                        .version("1.0");
+//            boolean themeExists = repository.assetExists(this.globalDir + "/" + THEME_NAME + THEME_EXT);
+//            if (!themeExists) {
+//                // create theme asset
+//                AssetBuilder assetBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+//                assetBuilder.content(new String(getBytesFromFile(new File(themeInfo)), "UTF-8"))
+//                        .location(this.globalDir)
+//                        .name(THEME_NAME)
+//                        .type("json")
+//                        .version("1.0");
+//
+//                themeAsset = assetBuilder.getAsset();
+//
+//                repository.createAsset(themeAsset);
+//
+//            } else {
+//                themeAsset = repository.loadAssetFromPath(this.globalDir + "/" + THEME_NAME + THEME_EXT);
+//            }
+//
+//
+//            String themesStr = themeAsset.getAssetContent();
 
-                themeAsset = assetBuilder.getAsset();
 
-                repository.createAsset(themeAsset);
-
-            } else {
-                themeAsset = repository.loadAssetFromPath(this.globalDir + "/" + THEME_NAME + THEME_EXT);
-            }
-
-
-            String themesStr = themeAsset.getAssetContent();
-
-
-            JSONObject themesObject =  new JSONObject(themesStr);
+            JSONObject themesObject =  new JSONObject(FileUtils.readFileToString(new File(serlvetContext.getRealPath(ConfigurationProvider.getInstance().getDesignerContext() + "defaults/" + THEME_NAME+THEME_EXT))));
 
             // get the theme name from cookie if exists or default
             String themeName = DEFAULT_THEME_NAME;
@@ -601,25 +580,13 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                     e.printStackTrace();
                 }
             }
-            if(vfsService != null && createdUUID != null) {
-                Path newWidAssetPath = vfsService.get(UriUtils.encode(createdUUID));
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private Collection<Asset> findWorkitemInfoForUUID(String location, Repository repository) {
-        Collection<Asset> widAssets = repository.listAssets(location, new FilterByExtension(WORKITEM_DEFINITION_EXT){
-
-            @Override
-            public boolean accept(org.uberfire.java.nio.file.Path path)
-            {
-                boolean accept = super.accept(path);
-                return accept && ! path.getFileName().toString().startsWith("."); // JBPM-4215 fix: filter out hidden files of the same suffix but different format
-            }
-        });
-        return widAssets;
+        return Collections.emptyList();
     }
 
     private String readFile(String pathname) throws IOException {

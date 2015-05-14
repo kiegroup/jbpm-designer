@@ -1,36 +1,35 @@
 package org.jbpm.designer.web.server;
 
-import org.apache.commons.io.IOUtils;
-import org.jbpm.designer.util.Utils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.drools.core.util.ConfFileUtils;
-import org.jbpm.designer.repository.Asset;
-import org.jbpm.designer.repository.AssetBuilderFactory;
-import org.jbpm.designer.repository.Repository;
-import org.jbpm.designer.repository.impl.AssetBuilder;
-import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.designer.web.profile.IDiagramProfileService;
-import org.jbpm.process.workitem.WorkDefinitionImpl;
-import org.jbpm.process.workitem.WorkItemRepository;
-import org.json.JSONObject;
-
-import javax.inject.Inject;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.IOUtils;
+import org.drools.core.util.ConfFileUtils;
+import org.jbpm.designer.repository.Asset;
+import org.jbpm.designer.repository.AssetBuilderFactory;
+import org.jbpm.designer.repository.Repository;
+import org.jbpm.designer.repository.impl.AssetBuilder;
+import org.jbpm.designer.util.Utils;
+import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.jbpm.designer.web.profile.IDiagramProfileService;
+import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
+import org.jbpm.process.workitem.WorkDefinitionImpl;
+import org.jbpm.process.workitem.WorkItemRepository;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Servlet for interaction with the jbpm service repository.
@@ -49,8 +48,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
         this.profile = profile;
     }
 
-    @Inject
-    private IDiagramProfileService _profileService = null;
+    private static IDiagramProfileService _profileService = ProfileServiceImpl.getInstance();
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {

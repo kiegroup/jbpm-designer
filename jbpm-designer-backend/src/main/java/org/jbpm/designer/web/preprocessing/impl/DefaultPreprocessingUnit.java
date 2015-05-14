@@ -15,7 +15,6 @@
  */
 package org.jbpm.designer.web.preprocessing.impl;
 
-import javax.enterprise.event.Event;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,10 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
 import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingUnit;
 import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.uberfire.backend.vfs.VFSService;
-import org.uberfire.io.IOService;
-import org.uberfire.workbench.events.ResourceAddedEvent;
-import org.uberfire.workbench.events.ResourceUpdatedEvent;
 
 
 /**
@@ -35,12 +30,12 @@ import org.uberfire.workbench.events.ResourceUpdatedEvent;
  */
 public class DefaultPreprocessingUnit implements IDiagramPreprocessingUnit {
 
-    public DefaultPreprocessingUnit(ServletContext servletContext, VFSService vfsService) {
+    public DefaultPreprocessingUnit(ServletContext servletContext) {
         
     }
     
     public void preprocess(HttpServletRequest request,
-            HttpServletResponse response, IDiagramProfile profile, ServletContext servletContext, boolean readOnly, IOService ioService, RepositoryDescriptor descriptor) {
+            HttpServletResponse response, IDiagramProfile profile, ServletContext servletContext, boolean readOnly) {
         // nothing to do
     }
 

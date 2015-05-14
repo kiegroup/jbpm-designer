@@ -15,22 +15,9 @@
  */
 package org.jbpm.designer.server;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.WeakHashMap;
+import java.io.*;
+import java.util.*;
 import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -39,11 +26,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bpsim.impl.BpsimFactoryImpl;
-import org.apache.commons.codec.binary.Base64;
 import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
 import org.jbpm.designer.util.ConfigurationProvider;
-import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.plugin.IDiagramPlugin;
 import org.jbpm.designer.web.plugin.IDiagramPluginService;
 import org.jbpm.designer.web.plugin.impl.PluginServiceImpl;
@@ -52,13 +37,12 @@ import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingUnit;
 import org.jbpm.designer.web.preprocessing.impl.PreprocessingServiceImpl;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
+import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
 import org.jbpm.designer.web.profile.impl.RepositoryInfo;
 import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.stringtemplate.v4.ST;
-import org.uberfire.backend.vfs.VFSService;
-import org.uberfire.io.IOService;
 
 /**
  * Servlet to load plugin and Oryx stencilset
@@ -124,15 +108,15 @@ public class EditorHandler extends HttpServlet {
      * The profile service, a global registry to get the
      * profiles.
      */
-    @Inject
-    private IDiagramProfileService _profileService = null;
+//    @Inject
+    private static IDiagramProfileService _profileService = ProfileServiceImpl.getInstance();
 
-    @Inject
-    private VFSService vfsServices;
+//    @Inject
+//    private VFSService vfsServices;
 
-    @Inject
-    @Named("ioStrategy")
-    private IOService ioService;
+//    @Inject
+//    @Named("ioStrategy")
+//    private IOService ioService;
 
     @Inject
     @RequestScoped
@@ -165,7 +149,7 @@ public class EditorHandler extends HttpServlet {
         _pluginService = PluginServiceImpl.getInstance(
                 config.getServletContext());
         _preProcessingService = PreprocessingServiceImpl.INSTANCE;
-        _preProcessingService.init(config.getServletContext(), vfsServices);
+        _preProcessingService.init(config.getServletContext());
 
         _devMode = Boolean.parseBoolean(System.getProperty(DEV) == null ? config.getInitParameter(DEV) : System.getProperty(DEV));
         _preProcess = Boolean.parseBoolean(System.getProperty(PREPROCESS) == null ? config.getInitParameter(PREPROCESS) : System.getProperty(PREPROCESS));
@@ -198,8 +182,12 @@ public class EditorHandler extends HttpServlet {
                          HttpServletResponse response)
             throws ServletException, IOException {
         String profileName = request.getParameter("profile");
-        String uuid = Utils.getUUID(request);
-
+        String projectId = request.getParameter("projectId");
+        String procDefId = request.getParameter("procDefId");
+        String studioApiUrl = request.getParameter("studioApiUrl");
+        String studioClientUrl = request.getParameter("studioClientUrl");
+        String token = request.getParameter("token");
+        String uuid = request.getParameter("uuid");
         String editorID = request.getParameter("editorid");
 
         // passed through via JSNI now
@@ -240,7 +228,7 @@ public class EditorHandler extends HttpServlet {
                         "Performing diagram information pre-processing steps. ");
             }
             preprocessingUnit = _preProcessingService.findPreprocessingUnit(request, profile);
-            preprocessingUnit.preprocess(request, response, profile, getServletContext(), Boolean.parseBoolean(readOnly), ioService, descriptor);
+            preprocessingUnit.preprocess(request, response, profile, getServletContext(), Boolean.parseBoolean(readOnly));
         }
 
         //output env javascript files
@@ -308,6 +296,11 @@ public class EditorHandler extends HttpServlet {
         editorTemplate.add("title", profile.getTitle());
         editorTemplate.add("stencilset", profile.getStencilSet());
         editorTemplate.add("debug", _devMode);
+        editorTemplate.add("projectId", projectId);
+        editorTemplate.add("procDefId", procDefId);
+        editorTemplate.add("token", token);
+        editorTemplate.add("studioApiUrl", studioApiUrl);
+        editorTemplate.add("studioClientUrl", studioClientUrl);
         editorTemplate.add("preprocessing", preprocessingUnit == null ? "" : preprocessingUnit.getOutData());
         editorTemplate.add("externalprotocol", RepositoryInfo.getRepositoryProtocol(profile) == null ? "" : RepositoryInfo.getRepositoryProtocol(profile));
         editorTemplate.add("externalhost", RepositoryInfo.getRepositoryHost(profile));

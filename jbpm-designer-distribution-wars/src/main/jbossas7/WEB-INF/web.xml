@@ -232,6 +232,11 @@
             <param-value>bpmn2.0jbpm</param-value>
         </init-param>
     </servlet>
+    <servlet>
+        <display-name>LoadBpmn2</display-name>
+        <servlet-name>LoadBpmn2Servlet</servlet-name>
+        <servlet-class>org.jbpm.designer.web.server.LoadBpmn2Servlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ResourceList</servlet-name>
         <url-pattern>/resourceList</url-pattern>
@@ -335,6 +340,10 @@
     <servlet-mapping>
         <servlet-name>StencilSetServiceServlet</servlet-name>
         <url-pattern>/stencilset/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoadBpmn2Servlet</servlet-name>
+        <url-pattern>/loadBpmnDiagram</url-pattern>
     </servlet-mapping>
     <!-- the number within the session-timout element must be expressed in
 minutes. it is now 24 hours. -->

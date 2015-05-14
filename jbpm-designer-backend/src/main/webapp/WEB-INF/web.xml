@@ -1,131 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
+<web-app id="oryx" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
-
-  <!--
-  <distributable/>
-  -->
-
-  <display-name>jBPM Designer</display-name>
-
-  <!-- UF -->
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+  <display-name>Process Designer</display-name>
+  <!-- Pluggable filter -->
   <filter>
-    <filter-name>UberFire Security Filter</filter-name>
-    <filter-class>
-      org.uberfire.security.server.UberFireSecurityFilter
-    </filter-class>
-    <init-param>
-      <param-name>org.uberfire.cookie.id</param-name>
-      <param-value>designer.standalone</param-value>
-    </init-param>
-    <init-param>
-      <param-name>org.uberfire.auth.scheme</param-name>
-      <param-value>org.uberfire.security.server.auth.JACCAuthenticationScheme</param-value>
-    </init-param>
-    <init-param>
-      <param-name>org.uberfire.auth.rememberme</param-name>
-      <param-value>disabled</param-value>
-    </init-param>
-    <init-param>
-      <param-name>org.uberfire.auth.force.url</param-name>
-      <param-value>/org.jbpm.designer.jBPMDesigner/designer.html</param-value>
-    </init-param>
+    <filter-name>Pluggable Filter</filter-name>
+    <filter-class>org.jbpm.designer.web.filter.impl.PluggableFilter</filter-class>
   </filter>
-
   <filter-mapping>
-    <filter-name>UberFire Security Filter</filter-name>
-    <url-pattern>/org.jbpm.designer.jBPMDesigner/*</url-pattern>
-    <url-pattern>*.erraiBus</url-pattern>
-    <url-pattern>/resourceList</url-pattern>
-    <url-pattern>/editor</url-pattern>
-    <url-pattern>/editor/*</url-pattern>
-    <url-pattern>/menuconnector/*</url-pattern>
-    <url-pattern>/menu/*</url-pattern>
-    <url-pattern>/uuidRepository</url-pattern>
-    <url-pattern>/transformer</url-pattern>
-    <url-pattern>/assetservice</url-pattern>
-    <url-pattern>/filestore</url-pattern>
-    <url-pattern>/dictionary</url-pattern>
-    <url-pattern>/themes</url-pattern>
-    <url-pattern>/customeditors </url-pattern>
-    <url-pattern>/simulation</url-pattern>
-    <url-pattern>/formwidget</url-pattern>
-    <url-pattern>/calledelement</url-pattern>
-    <url-pattern>/stencilpatterns</url-pattern>
-    <url-pattern>/jbpmservicerepo</url-pattern>
-    <url-pattern>/processdiff</url-pattern>
-    <url-pattern>/taskforms</url-pattern>
-    <url-pattern>/taskformseditor</url-pattern>
-    <url-pattern>/processinfo</url-pattern>
-    <url-pattern>/syntaxcheck</url-pattern>
-    <url-pattern>/plugins</url-pattern>
-    <url-pattern>/plugin</url-pattern>
-    <url-pattern>/plugin/*</url-pattern>
-    <url-pattern>/stencilset/*</url-pattern>
+    <filter-name>Pluggable Filter</filter-name>
+    <url-pattern>/*</url-pattern>
   </filter-mapping>
-
-
-
   <servlet>
-    <servlet-name>UberFireServlet</servlet-name>
-    <servlet-class>org.uberfire.server.UberfireServlet</servlet-class>
-
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>UberFireServlet</servlet-name>
-    <url-pattern>/org.jbpm.designer.jBPMDesigner/designer.html</url-pattern>
-  </servlet-mapping>
-
-
-  <servlet>
-    <servlet-name>ErraiServlet</servlet-name>
-    <servlet-class>org.jboss.errai.bus.server.servlet.DefaultBlockingServlet</servlet-class>
+    <display-name>Default Servlet for Directory Listings</display-name>
+    <servlet-name>DirectoryListingServlet</servlet-name>
+    <!-- <servlet-class>org.eclipse.jetty.servlet.DefaultServlet</servlet-class>
+        For Tomcat -->
+    <servlet-class>org.apache.catalina.servlets.DefaultServlet</servlet-class>
     <init-param>
-      <param-name>service-locator</param-name>
-      <param-value>org.jboss.errai.cdi.server.CDIServiceLocator</param-value>
+      <param-name>debug</param-name>
+      <param-value>0</param-value>
+    </init-param>
+    <init-param>
+      <!-- <param-name>dirAllowed</param-name> for Tomcat -->
+      <param-name>listings</param-name>
+      <param-value>true</param-value>
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
-
-  <servlet-mapping>
-    <servlet-name>ErraiServlet</servlet-name>
-    <url-pattern>*.erraiBus</url-pattern>
-  </servlet-mapping>
-
-  <!--<listener>-->
-  <!--<listener-class>org.jboss.weld.environment.servlet.Listener</listener-class>-->
-  <!--</listener>-->
-
-  <resource-env-ref>
-    <description>Object factory for the CDI Bean Manager</description>
-    <resource-env-ref-name>BeanManager</resource-env-ref-name>
-    <resource-env-ref-type>javax.enterprise.inject.spi.BeanManager</resource-env-ref-type>
-  </resource-env-ref>
-
-  <context-param>
-    <param-name>errai.properties</param-name>
-    <param-value>/WEB-INF/errai.properties</param-value>
-  </context-param>
-
-  <context-param>
-    <param-name>login.config</param-name>
-    <param-value>/WEB-INF/login.config</param-value>
-  </context-param>
-
-  <context-param>
-    <param-name>users.properties</param-name>
-    <param-value>/WEB-INF/users.properties</param-value>
-  </context-param>
-
-  <welcome-file-list>
-    <welcome-file>index.jsp</welcome-file>
-  </welcome-file-list>
-  <!-- END UF -->
-
-  <!-- Designer -->
   <servlet>
     <display-name>Resource List</display-name>
     <servlet-name>ResourceList</servlet-name>
@@ -137,26 +40,20 @@
     <servlet-class>org.jbpm.designer.server.EditorHandler</servlet-class>
     <init-param>
       <param-name>designer.dev</param-name>
-      <param-value>true</param-value>
+      <param-value>false</param-value>
     </init-param>
     <init-param>
       <param-name>designer.preprocess</param-name>
       <param-value>true</param-value>
     </init-param>
     <init-param>
+      <param-name>designer.locale</param-name>
+      <param-value>en</param-value>
+    </init-param>
+    <init-param>
       <param-name>designer.skin</param-name>
       <param-value>default</param-value>
     </init-param>
-  </servlet>
-  <servlet>
-    <display-name>Menu Connector Servlet</display-name>
-    <servlet-name>MenuConnectorServlet</servlet-name>
-    <servlet-class>org.jbpm.designer.web.server.menu.MenuConnectorServlet</servlet-class>
-  </servlet>
-  <servlet>
-    <display-name>Menu Servlet</display-name>
-    <servlet-name>MenuServlet</servlet-name>
-    <servlet-class>org.jbpm.designer.web.server.menu.MenuServlet</servlet-class>
   </servlet>
   <servlet>
     <display-name>UUID Based Repository</display-name>
@@ -171,11 +68,6 @@
     <display-name>Transformer</display-name>
     <servlet-name>TransformerServlet</servlet-name>
     <servlet-class>org.jbpm.designer.web.server.TransformerServlet</servlet-class>
-  </servlet>
-  <servlet>
-    <display-name>AssetService</display-name>
-    <servlet-name>AssetServiceServlet</servlet-name>
-    <servlet-class>org.jbpm.designer.repository.servlet.AssetServiceServlet</servlet-class>
   </servlet>
   <servlet>
     <display-name>FileStore</display-name>
@@ -288,12 +180,8 @@
     <url-pattern>/editor/*</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>MenuConnectorServlet</servlet-name>
-    <url-pattern>/menuconnector/*</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>MenuServlet</servlet-name>
-    <url-pattern>/menu/*</url-pattern>
+    <servlet-name>DirectoryListingServlet</servlet-name>
+    <url-pattern>/generated-uis/</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>UUIDBasedRepositoryServlet</servlet-name>
@@ -302,10 +190,6 @@
   <servlet-mapping>
     <servlet-name>TransformerServlet</servlet-name>
     <url-pattern>/transformer</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>AssetServiceServlet</servlet-name>
-    <url-pattern>/assetservice</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>FileStoreServlet</servlet-name>
@@ -388,29 +272,14 @@
     <url-pattern>/savebpmn</url-pattern>
   </servlet-mapping>
   <!-- the number within the session-timout element must be expressed in
-minutes. it is now 24 hours. -->
+     minutes. it is now 24 hours. -->
   <session-config>
     <session-timeout>1440</session-timeout>
   </session-config>
-  <!-- start form-modeler component -->
-  <servlet>
-    <servlet-name>Controller</servlet-name>
-    <servlet-class>org.jbpm.formModeler.service.bb.mvc.controller.ControllerServlet</servlet-class>
-    <init-param>
-      <param-name>base.app.dir</param-name>
-      <param-value>${project.basedir}/target/${project.artifactId}-${project.version}</param-value>
-    </init-param>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>Controller</servlet-name>
-    <url-pattern>/org.jbpm.designer.jBPMDesigner/Controller</url-pattern>
-  </servlet-mapping>
-  <!-- end form-modeler component -->
   <!-- jBoss' default mapping is to "image/svg", which causes the client
-not to parse the SVG content as XML. However, the Oryx Editor client relies
-on that behaviour. The mimetype as per W3C specification must be "image/svg+xml".
-See http://www.w3.org/TR/SVG/intro.html#MIMEType. -->
+     not to parse the SVG content as XML. However, the Oryx Editor client relies
+     on that behaviour. The mimetype as per W3C specification must be "image/svg+xml".
+     See http://www.w3.org/TR/SVG/intro.html#MIMEType. -->
   <mime-mapping>
     <extension>svg</extension>
     <mime-type>image/svg+xml</mime-type>
@@ -428,84 +297,4 @@ See http://www.w3.org/TR/SVG/intro.html#MIMEType. -->
     <extension>ico</extension>
     <mime-type>image/x-icon</mime-type>
   </mime-mapping>
-
-  <!-- security settings -->
-
-  <security-constraint>
-    <web-resource-collection>
-      <web-resource-name>console</web-resource-name>
-      <url-pattern>/org.jbpm.designer.jBPMDesigner/*</url-pattern>
-      <url-pattern>*.erraiBus</url-pattern>
-    </web-resource-collection>
-    <auth-constraint>
-      <role-name>admin</role-name>
-      <role-name>analyst</role-name>
-      <role-name>developer</role-name>
-      <role-name>user</role-name>
-      <role-name>manager</role-name>
-    </auth-constraint>
-  </security-constraint>
-
-  <security-constraint>
-    <web-resource-collection>
-      <web-resource-name>formModeler</web-resource-name>
-      <url-pattern>/formModeler/*</url-pattern>
-    </web-resource-collection>
-    <auth-constraint>
-      <role-name>admin</role-name>
-      <role-name>analyst</role-name>
-      <role-name>developer</role-name>
-      <role-name>user</role-name>
-      <role-name>manager</role-name>
-    </auth-constraint>
-  </security-constraint>
-
-  <login-config>
-    <auth-method>FORM</auth-method>
-    <form-login-config>
-      <form-login-page>/login.jsp</form-login-page>
-      <form-error-page>/login.jsp?message=Login failed: Invalid UserName or Password</form-error-page>
-    </form-login-config>
-  </login-config>
-
-  <security-role>
-    <description>Administrator - Administrates the BPMS system. Has full access
-      rights to make any changes necessary. Also has the
-      ability to add and remove users from the system.
-    </description>
-    <role-name>admin</role-name>
-  </security-role>
-
-  <security-role>
-    <description>Analyst - Responsible for creating and designing processes
-      into the system. Creates process flows and handles
-      process change requests. Needs to test processes that
-      they create. Also creates forms and dashboards.
-    </description>
-    <role-name>analyst</role-name>
-  </security-role>
-
-  <security-role>
-    <description>Developer - Implements code required for process to work. Mostly uses
-      the JBDS connection to view processes, but may use the
-      web tool occasionally.
-    </description>
-    <role-name>developer</role-name>
-  </security-role>
-
-  <security-role>
-    <description>Business user - Daily user of the system to take actions on business tasks
-      that are required for the processes to continue forward. Works
-      primarily with the task lists.
-    </description>
-    <role-name>user</role-name>
-  </security-role>
-
-  <security-role>
-    <description>Manager/Viewer-only User - Viewer of the system that is interested in statistics
-      around the  business processes and their performance, business indicators, and other
-      reporting of the system and people who interact with the system.
-    </description>
-    <role-name>manager</role-name>
-  </security-role>
 </web-app>

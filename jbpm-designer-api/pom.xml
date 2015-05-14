@@ -16,21 +16,18 @@
   <name>jBPM Designer- API</name>
 
   <dependencies>
-    <dependency>
-      <groupId>org.guvnor</groupId>
-      <artifactId>guvnor-services-api</artifactId>
-    </dependency>
+    <!--<dependency>-->
+      <!--<groupId>org.uberfire</groupId>-->
+      <!--<artifactId>uberfire-api</artifactId>-->
+    <!--</dependency>-->
 
     <dependency>
-      <groupId>org.uberfire</groupId>
-      <artifactId>uberfire-api</artifactId>
-    </dependency>
 
     <!-- Errai Core -->
-    <dependency>
-      <groupId>org.jboss.errai</groupId>
-      <artifactId>errai-bus</artifactId>
-    </dependency>
+    <!--<dependency>-->
+      <!--<groupId>org.jboss.errai</groupId>-->
+      <!--<artifactId>errai-bus</artifactId>-->
+    <!--</dependency>-->
     <!-- Errai Common -->
     <dependency>
       <groupId>org.jboss.errai</groupId>
@@ -76,18 +73,6 @@
         </executions>
       </plugin>
 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <executions>
-          <execution>
-            <goals>
-              <goal>jar</goal>
-              <goal>test-jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
             <groupId>com.google.code.maven-replacer-plugin</groupId>
             <artifactId>replacer</artifactId>
@@ -149,7 +134,6 @@
                 </replacements>
             </configuration>
         </plugin>
-
     </plugins>
 
   </build>

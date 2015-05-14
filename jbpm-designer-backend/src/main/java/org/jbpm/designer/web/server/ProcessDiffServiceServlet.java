@@ -1,12 +1,9 @@
 package org.jbpm.designer.web.server;
 
 import java.io.IOException;
-import org.jbpm.designer.util.Utils;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,12 +13,14 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
 import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
+import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
 import org.jbpm.designer.web.profile.impl.RepositoryInfo;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -33,8 +32,7 @@ public class ProcessDiffServiceServlet extends HttpServlet {
 	private static final Logger _logger = LoggerFactory
 			.getLogger(ProcessDiffServiceServlet.class);
 
-    @Inject
-    private IDiagramProfileService _profileService = null;
+    private static IDiagramProfileService _profileService = ProfileServiceImpl.getInstance();
 
     @Override
 	public void init(ServletConfig config) throws ServletException {

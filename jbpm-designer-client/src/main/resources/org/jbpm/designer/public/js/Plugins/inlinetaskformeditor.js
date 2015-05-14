@@ -13,8 +13,29 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
 
     construct: function(facade){
         this.facade = facade;
-        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_TASKFORM_EDIT, this.chooseFormEditor.bind(this));
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_TASKFORM_EDIT, this.openFormDesigner.bind(this));
     },
+
+  openFormDesigner: function(options) {
+    //var processJSON = ORYX.EDITOR.getSerializedJSON();
+    //
+    //      Ext.Ajax.request({
+    //        url: ORYX.PATH + "savebpmn",
+    //        method: 'POST',
+    //        success: function() {
+    //          window.parent.postMessage(options.taskId, ORYX.CONFIG.STUDIO_CLIENT_URL);
+    //        },
+    //        failure: function() {
+    //          Ext.Msg.minWidth = 400;
+    //          Ext.Msg.alert("Error save BPMN2 configuration");
+    //        },
+    //        params: {
+    //          profile: ORYX.PROFILE,
+    //          data: processJSON,
+    //          procDefPath: ORYX.UUID
+    //        }
+    //      });
+  },
 
     chooseFormEditor: function(options) {
         Ext.Msg.show({
@@ -77,7 +98,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                                 action: 'load',
                                 taskname: options.tn,
                                 profile: ORYX.PROFILE,
-                                uuid :  window.btoa(encodeURI(ORYX.UUID))
+                                uuid :  ORYX.UUID
                             }
                         });
                     } catch(e) {
@@ -102,7 +123,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                 params: {
                     action: 'getwidgets',
                     profile: ORYX.PROFILE,
-                    uuid:  window.btoa(encodeURI(ORYX.UUID))
+                    uuid:  ORYX.UUID
                 }
             });
         } else {
@@ -183,7 +204,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                                     action: 'getwidgetsource',
                                     profile: ORYX.PROFILE,
                                     widgetname: combo.getValue(),
-                                    uuid:  window.btoa(encodeURI(ORYX.UUID))
+                                    uuid:  ORYX.UUID
                                 }
                             });
                         } else {
@@ -318,7 +339,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                             action: 'save',
                             taskname: tn,
                             profile: ORYX.PROFILE,
-                            uuid :  window.btoa(encodeURI(ORYX.UUID)),
+                            uuid :  ORYX.UUID,
                             tfvalue: tosaveValue
                         }
                     });

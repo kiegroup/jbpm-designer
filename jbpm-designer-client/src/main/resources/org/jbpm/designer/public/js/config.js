@@ -18,6 +18,8 @@ if(!ORYX) var ORYX = {};
 if(!ORYX.CONFIG) ORYX.CONFIG = {};
 
 ORYX.CONFIG.WEB_URL = "org.jbpm.designer.jBPMDesigner";
+ORYX.CONFIG.STUDIO_API_URL = "";
+ORYX.CONFIG.STUDIO_CLIENT_URL = "";
 
 
 
@@ -35,7 +37,7 @@ ORYX.CONFIG.UUID_URL = function(uuid, profile) {
       ORYX.PATH = "designer/";
   }
 
-  return ORYX.PATH + "uuidRepository?uuid="+ Base64.encode(encodeURI(uuid)) + "&profile=" + profile + "&pp=" + ORYX.PREPROCESSING + "&ts=" + new Date().getTime();
+  return ORYX.PATH + "uuidRepository?uuid="+ uuid + "&profile=" + profile + "&pp=" + ORYX.PREPROCESSING + "&ts=" + new Date().getTime();
 };
 
 ORYX.FULL_PERSPECTIVE = "http://b3mn.org/stencilset/bpmn2.0#";
@@ -63,7 +65,7 @@ ORYX.CONFIG.TRANSFORMER_URL = function(uuid, profile) {
    if (profile === undefined) {
       profile = ORYX.PROFILE;
    }
-   return ORYX.PATH + "transformer?uuid="+ window.btoa(encodeURI(uuid)) + "&profile=" + profile;
+   return ORYX.PATH + "transformer?uuid="+ uuid + "&profile=" + profile;
 };
 
 ORYX.CONFIG.TASKFORMS_URL = function(uuid, profile) {
@@ -73,8 +75,12 @@ ORYX.CONFIG.TASKFORMS_URL = function(uuid, profile) {
 	if (profile === undefined) {
 	   profile = ORYX.PROFILE;
 	}
-	return ORYX.PATH + "taskforms?uuid="+ window.btoa(encodeURI(uuid)) + "&profile=" + profile;
+	return ORYX.PATH + "taskforms?uuid="+ uuid + "&profile=" + profile;
 };
+ORYX.CONFIG.PROJECT_ID = "";
+ORYX.CONFIG.PROCESS_DEF_ID = "";
+ORYX.CONFIG.TOKEN = "";
+
 ORYX.CONFIG.UUID_AUTOSAVE_INTERVAL = 120000;
 ORYX.CONFIG.UUID_AUTOSAVE_DEFAULT = false;
 	
@@ -206,6 +212,7 @@ ORYX.CONFIG.TYPE_VISUALDATAASSIGNMENTS = "visualdataassignment";
 ORYX.CONFIG.TYPE_CALLEDELEMENT  =       "calledelement";
 ORYX.CONFIG.TYPE_CUSTOM =               "custom";
 ORYX.CONFIG.TYPE_REASSIGNMENT =         "reassignment";
+ORYX.CONFIG.TYPE_GROUPS_EDITOR =        "groupseditor";
 ORYX.CONFIG.TYPE_NOTIFICATIONS =        "notifications";
 ORYX.CONFIG.TYPE_DTYPE_VARDEF =         "vardef";
 ORYX.CONFIG.TYPE_DTYPE_DINPUT =         "dinput";

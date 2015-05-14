@@ -18,11 +18,8 @@ package org.jbpm.designer.web.server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -31,10 +28,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.jbpm.designer.util.Utils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
+import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
 import org.jbpm.designer.web.repository.IUUIDBasedRepository;
 import org.jbpm.designer.web.repository.IUUIDBasedRepositoryService;
 import org.jbpm.designer.web.repository.UUIDBasedEpnRepository;
@@ -42,6 +38,8 @@ import org.jbpm.designer.web.repository.impl.UUIDBasedFileRepository;
 import org.jbpm.designer.web.repository.impl.UUIDBasedJbpmRepository;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Antoine Toulme
@@ -54,8 +52,8 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
     
     private static final Logger _logger = LoggerFactory.getLogger(UUIDBasedRepositoryServlet.class);
 
-    @Inject
-    private IDiagramProfileService _profileService = null;
+//    @Inject
+    private static IDiagramProfileService _profileService = ProfileServiceImpl.getInstance();
     
     public static IUUIDBasedRepositoryService _factory = new IUUIDBasedRepositoryService() {
 
@@ -111,10 +109,11 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
         String preProcessingParam = req.getParameter("pp");
         if (uuid == null) {
             throw new ServletException("uuid parameter required");
-        }
+    }
         IDiagramProfile profile = _profileService.findProfile(req, req.getParameter("profile"));
 		try {
-			String response =  new String(_repository.load(req, uuid, profile, getServletContext()), Charset.forName("UTF-8"));
+//			String response =  new String(_repository.load(req, uuid, profile, getServletContext()), Charset.forName("UTF-8"));
+			String response =  "";
 			resp.getWriter().write(response);
 		} catch (Exception e) {
             e.printStackTrace();

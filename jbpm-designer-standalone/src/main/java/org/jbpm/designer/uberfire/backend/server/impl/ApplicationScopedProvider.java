@@ -24,7 +24,6 @@ import org.uberfire.io.impl.cluster.IOServiceClusterImpl;
 import org.uberfire.java.nio.base.version.VersionAttributeView;
 import org.uberfire.security.authz.AuthorizationManager;
 import org.uberfire.security.impl.authz.RuntimeAuthorizationManager;
-
 /**
  * This class should contain all ApplicationScoped producers
  * required by the application.

@@ -1,31 +1,30 @@
 package org.jbpm.designer.web.server.menu.connector;
 
+import java.io.*;
+import java.util.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
 import org.apache.commons.io.IOUtils;
-import org.jbpm.designer.util.Utils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.impl.AssetBuilder;
+import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
+import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
 import org.jbpm.designer.web.server.menu.connector.commands.*;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.uberfire.java.nio.file.NoSuchFileException;
-
-import javax.inject.Inject;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class AbstractConnectorServlet extends HttpServlet {
     private static Logger logger = LoggerFactory.getLogger(AbstractConnectorServlet.class);
@@ -35,8 +34,7 @@ public abstract class AbstractConnectorServlet extends HttpServlet {
     private List<ByteArrayOutputStream> listFileStreams;
     private boolean initialized = false;
 
-    @Inject
-    private IDiagramProfileService _profileService = null;
+    private static IDiagramProfileService _profileService = ProfileServiceImpl.getInstance();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -46,7 +46,7 @@
     <!-- plugins -->
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/compressed/designer-plugins.js" type="text/javascript"></script>
     <!-- dynamic properties -->
-    <script xmlns="http://www.w3.org/1999/xhtml" type="text/javascript" src="<%=request.getContextPath()%>/editor/?uuid=<%=request.getParameter("uuid")%>&profile=<%=request.getParameter("profile")%>&pp=<%=request.getParameter("pp")%>&editorid=<%=request.getParameter("editorid")%>&readonly=<%=request.getParameter("readonly")%>&ts=<%=request.getParameter("ts")%>"></script>
+    <script xmlns="http://www.w3.org/1999/xhtml" type="text/javascript" src="<%=request.getContextPath()%>/editor/?uuid=<%=request.getParameter("uuid")%>&profile=jbpm&pp=<%=request.getParameter("pp")%>&editorid=<%=request.getParameter("editorid")%>&readonly=false&ts=<%=request.getParameter("ts")%>&studioApiUrl=<%=request.getParameter("studioApiUrl")%>&token=<%=request.getParameter("token")%>&studioClientUrl=<%=request.getParameter("studioClientUrl")%>&procDefId=<%=request.getParameter("procDefId")%>&projectId=<%=request.getParameter("projectId")%>"></script>
 
 </head>
 <body style="overflow:hidden;" onload="startit();">
@@ -56,10 +56,10 @@
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/gestures/gesture.js" type="text/javascript"></script>
     -->
 
-    <script>
-        if(parent.document.getElementById(ORYX.EDITORID) && parent.document.getElementById(ORYX.EDITORID).parentNode && parent.document.getElementById(ORYX.EDITORID).parentNode.parentNode) {
-            parent.document.getElementById(ORYX.EDITORID).parentNode.parentNode.style.overflow = 'hidden';
-        }
-    </script>
+    <%--<script>--%>
+        <%--if(parent.document.getElementById(ORYX.EDITORID) && parent.document.getElementById(ORYX.EDITORID).parentNode && parent.document.getElementById(ORYX.EDITORID).parentNode.parentNode) {--%>
+            <%--parent.document.getElementById(ORYX.EDITORID).parentNode.parentNode.style.overflow = 'hidden';--%>
+        <%--}--%>
+    <%--</script>--%>
 </body>
 </html>

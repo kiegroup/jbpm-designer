@@ -17,23 +17,22 @@ package org.jbpm.designer.web.server;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-
-import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.jbpm.designer.util.Utils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.impl.AssetBuilder;
+import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
+import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** 
  * Dictionary Servlet.
@@ -54,8 +53,8 @@ public class DictionaryServlet extends HttpServlet {
         this.profile = profile;
     }
 
-    @Inject
-    private IDiagramProfileService _profileService = null;
+//    @Inject
+    private static IDiagramProfileService _profileService = ProfileServiceImpl.getInstance();
 
 	@Override
     public void init(ServletConfig config) throws ServletException {

@@ -1,11 +1,21 @@
 package org.jbpm.designer.web.server;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import bpsim.BPSimDataType;
 import bpsim.BpsimPackage;
 import bpsim.Scenario;
 import bpsim.impl.BpsimFactoryImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.drools.core.command.runtime.rule.InsertElementsCommand;
 import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.Process;
@@ -14,6 +24,7 @@ import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.designer.bpmn2.impl.Bpmn2JsonUnmarshaller;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
+import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
 import org.jbpm.simulation.*;
 import org.jbpm.simulation.converter.JSONPathFormatConverter;
 import org.jbpm.simulation.impl.WorkingMemorySimulationRepository;
@@ -22,19 +33,8 @@ import org.joda.time.DateTime;
 import org.joda.time.Interval;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import javax.inject.Inject;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Servlet for simulation actions.
@@ -52,8 +52,7 @@ public class SimulationServlet extends HttpServlet {
 	private Map<String, Integer> pathInfoMap = null;
 	private DateTime simTime = null;
 
-    @Inject
-    private IDiagramProfileService _profileService = null;
+    private static IDiagramProfileService _profileService = ProfileServiceImpl.getInstance();
 
 	@Override
     public void init(ServletConfig config) throws ServletException {

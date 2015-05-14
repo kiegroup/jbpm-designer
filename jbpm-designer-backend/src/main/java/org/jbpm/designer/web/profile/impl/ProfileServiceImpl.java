@@ -16,16 +16,9 @@
 package org.jbpm.designer.web.profile.impl;
 
 import java.util.*;
-
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Any;
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import org.jbpm.designer.repository.guvnor.GuvnorRepository;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileFactory;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
@@ -38,12 +31,12 @@ import org.jbpm.designer.web.profile.IDiagramProfileService;
  * @author Tihomir Surdilovic
  * 
  */
-@ApplicationScoped
+//@ApplicationScoped
 public class ProfileServiceImpl implements IDiagramProfileService {
-	
-//	public static ProfileServiceImpl INSTANCE = new ProfileServiceImpl();
 
-    private Map<String, IDiagramProfile> _registry = 
+    private static IDiagramProfileService INSTANCE = new ProfileServiceImpl();
+
+    private static Map<String, IDiagramProfile> _registry =
         new HashMap<String, IDiagramProfile>();
     private Set<IDiagramProfileFactory> _factories = 
         new HashSet<IDiagramProfileFactory>();
@@ -51,16 +44,19 @@ public class ProfileServiceImpl implements IDiagramProfileService {
 
 
 
-    private Instance<IDiagramProfile> profiles;
+//    private Instance<IDiagramProfile> profiles;
 
-    public ProfileServiceImpl() {
-
+    private ProfileServiceImpl() {
     }
-    @Inject
-    public ProfileServiceImpl(@Any Instance<IDiagramProfile> profiles) {
-        this.profiles = profiles;
 
+    public static IDiagramProfileService getInstance() {
+      return INSTANCE;
     }
+//    @Inject
+//    public ProfileServiceImpl(@Any Instance<IDiagramProfile> profiles) {
+//        this.profiles = profiles;
+//
+//    }
 
     /**
      * Initialize the service with a context
@@ -68,15 +64,15 @@ public class ProfileServiceImpl implements IDiagramProfileService {
      */
     public void init(ServletContext context) {
 //        _registry.put("default", new DefaultProfileImpl(context));
-//        _registry.put("jbpm", new JbpmProfileImpl(context));
+        _registry.put("jbpm", new JbpmProfileImpl(context));
 //        _registry.put("drools", new JbpmProfileImpl(context));
 //        _registry.put("epn", new EpnProfileImpl(context));
-        if (profiles != null) {
-            for (IDiagramProfile profile : profiles) {
-                profile.init(context);
-                _registry.put(profile.getName(), profile);
-            }
-        }
+//        if (profiles != null) {
+//            for (IDiagramProfile profile : profiles) {
+//                profile.init(context);
+//                _registry.put(profile.getName(), profile);
+//            }
+//        }
 
     }
     

@@ -22,13 +22,13 @@
       <artifactId>jbpm-designer-api</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>org.uberfire</groupId>
-      <artifactId>uberfire-workbench-client</artifactId>
-    </dependency>
+    <!--<dependency>-->
+      <!--<groupId>org.uberfire</groupId>-->
+      <!--<artifactId>uberfire-workbench-client</artifactId>-->
+    <!--</dependency>-->
 
-    <dependency>
-      <groupId>org.uberfire</groupId>
+    <!--<dependency>-->
+      <!--<groupId>org.uberfire</groupId>-->
       <artifactId>uberfire-commons-editor-api</artifactId>
     </dependency>
     <dependency>
@@ -38,9 +38,6 @@
 
     <dependency>
       <groupId>org.uberfire</groupId>
-      <artifactId>uberfire-workbench-processors</artifactId>
-      <scope>provided</scope>
-    </dependency>
 
     <dependency>
       <groupId>org.jboss.errai</groupId>
@@ -53,11 +50,11 @@
     </dependency>
 
     <!-- GWT and GWT Extensions -->
-    <dependency>
-      <groupId>com.google.gwt</groupId>
-      <artifactId>gwt-user</artifactId>
-      <scope>provided</scope>
-    </dependency>
+    <!--<dependency>-->
+      <!--<groupId>com.google.gwt</groupId>-->
+      <!--<artifactId>gwt-user</artifactId>-->
+      <!--<scope>provided</scope>-->
+    <!--</dependency>-->
 
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -65,25 +62,25 @@
     </dependency>
 
     <!-- Guvnor dependencies -->
-    <dependency>
-      <groupId>org.guvnor</groupId>
-      <artifactId>guvnor-project-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.guvnor</groupId>
-      <artifactId>guvnor-services-api</artifactId>
-    </dependency>
+    <!--<dependency>-->
+      <!--<groupId>org.guvnor</groupId>-->
+      <!--<artifactId>guvnor-project-api</artifactId>-->
+    <!--</dependency>-->
+    <!--<dependency>-->
+      <!--<groupId>org.guvnor</groupId>-->
+      <!--<artifactId>guvnor-services-api</artifactId>-->
+    <!--</dependency>-->
 
     <!-- KIE dependencies -->
-    <dependency>
-      <groupId>org.kie.workbench.widgets</groupId>
-      <artifactId>kie-wb-metadata-widget</artifactId>
-    </dependency>
+    <!--<dependency>-->
+      <!--<groupId>org.kie.workbench.widgets</groupId>-->
+      <!--<artifactId>kie-wb-metadata-widget</artifactId>-->
+    <!--</dependency>-->
 
-    <dependency>
-      <groupId>org.kie.workbench.widgets</groupId>
-      <artifactId>kie-wb-common-ui</artifactId>
-    </dependency>
+    <!--<dependency>-->
+      <!--<groupId>org.kie.workbench.widgets</groupId>-->
+      <!--<artifactId>kie-wb-common-ui</artifactId>-->
+    <!--</dependency>-->
   </dependencies>
 
   <build>
@@ -120,19 +117,6 @@
                 </resource>
               </resources>
             </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <executions>
-          <execution>
-            <goals>
-              <goal>jar</goal>
-              <goal>test-jar</goal>
-            </goals>
           </execution>
         </executions>
       </plugin>

@@ -11,6 +11,7 @@
   <groupId>org.jbpm</groupId>
   <artifactId>jbpm-designer</artifactId>
   <packaging>pom</packaging>
+  <version>6.1.0.Final-Center.2</version>
 
   <name>jBPM Designer</name>
   <description>jBPM Designer - web-based BPMN2 modeller</description>
@@ -24,14 +25,32 @@
 
   <modules>
     <module>jbpm-designer-api</module>
-    <module>jbpm-designer-backend</module>
     <module>jbpm-designer-client</module>
-    <module>jbpm-designer-standalone</module>
+    <module>jbpm-designer-backend</module>
+    <!--<module>jbpm-designer-standalone</module>-->
   </modules>
 
   <properties>
     <port>8888</port>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.kie.uberfire</groupId>
+        <artifactId>i18n-taglib</artifactId>
+        <version>6.3.0-SNAPSHOT</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+    </dependency>
+  </dependencies>
 
   <build>
     <plugins>
@@ -88,7 +107,7 @@
                 </goals>
             </execution>
         </executions-->
-          <configuration>
+        <configuration>
               <includes>
                   <include>**/DesignerEditorConstants*.properties</include>
                   <include>**/DesignerConstants*.properties</include>
@@ -97,6 +116,14 @@
               <workDir>.</workDir>
               <tempDir>.</tempDir>
           </configuration>
+            <id>jar</id>
+            <phase>none</phase>
+          </execution>
+          <execution>
+            <id>test-jar</id>
+            <phase>none</phase>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
@@ -137,5 +164,13 @@
       <url>https://repository.jboss.org/nexus/content/repositories/thirdparty-uploads/</url>
     </repository>
   </repositories>
+
+  <distributionManagement>
+    <repository>
+      <id>central</id>
+      <name>Repository for storing projects created with Web-BPM 2.x</name>
+      <url>http://10.10.31.71:8081/artifactory/libs-releases-local</url>
+    </repository>
+  </distributionManagement>
 
 </project>

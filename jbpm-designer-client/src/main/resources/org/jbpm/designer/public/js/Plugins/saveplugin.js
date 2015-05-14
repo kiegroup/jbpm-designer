@@ -160,17 +160,19 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
 
     saveWithMessage: function() {
         // check with presenter if we can save
-        var hasConcurrentUpdate = parent.designersignalassetupdate(ORYX.UUID);
-        if(hasConcurrentUpdate && hasConcurrentUpdate == true) {
+//        var hasConcurrentUpdate = parent.designersignalassetupdate(ORYX.UUID);
+//        if(hasConcurrentUpdate && hasConcurrentUpdate == true) {
             // let the gwt code handle this from here on....
-        } else {
-            this.save(true);
-        }
+//        } else {
+//            this.save(true);
+            this.saveToWorkspace();
+//        }
     },
 
     handleEventDoSave: function() {
         this.setUnsaved();
-        this.save(true);
+//        this.save(true);
+        this.saveToWorkspace();
     },
 
     handleEventCancelSave: function() {
@@ -230,6 +232,29 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         });
 
         ORYX.PROCESS_SAVED = false;
+    },
+
+    saveToWorkspace: function () {
+      var processJSON = ORYX.EDITOR.getSerializedJSON();
+
+            Ext.Ajax.request({
+              url: ORYX.PATH + "savebpmn",
+              method: 'POST',
+              success: function() {
+                Ext.Msg.minWidth = 400;
+                Ext.Msg.alert("Process Definition xml successfully saved");
+              },
+              failure: function() {
+                Ext.Msg.minWidth = 400;
+                Ext.Msg.alert("Converting to BPMN2 Failed");
+              },
+              params: {
+                pp: ORYX.PREPROCESSING,
+                profile: ORYX.PROFILE,
+                data: processJSON,
+                uuid: ORYX.UUID
+              }
+            });
     },
 
     save : function(showCommit) {
@@ -310,7 +335,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                                         params: {
                                             fsvg: Base64.encode(formattedSvgDOM),
                                             rsvg: Base64.encode(rawSvgDOM),
-                                            uuid:  window.btoa(encodeURI(ORYX.UUID)),
+                                            uuid:  ORYX.UUID,
                                             profile: ORYX.PROFILE,
                                             transformto: 'svg',
                                             processid: processId
@@ -348,7 +373,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                     profile: ORYX.PROFILE,
                     assetcontent: window.btoa(encodeURIComponent(ORYX.EDITOR.getSerializedJSON())),
                     pp: ORYX.PREPROCESSING,
-                    assetid: window.btoa(encodeURI(ORYX.UUID)),
+                    assetid: ORYX.UUID,
                     assetcontenttransform: 'jsontobpmn2',
                     commitmessage: commitMessage
                 }
@@ -369,7 +394,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
             var processJSON = ORYX.EDITOR.getSerializedJSON();
             var saveAjaxObj = new XMLHttpRequest;
             var saveURL = ORYX.PATH + "assetservice";
-            var saveParams  = "action=updateasset&profile=" + ORYX.PROFILE + "&pp=" + ORYX.PREPROCESSING + "&assetid=" + window.btoa(encodeURI(ORYX.UUID)) + "&assetcontenttransform=jsontobpmn2&assetcontent=" + window.btoa(encodeURIComponent(processJSON));
+            var saveParams  = "action=updateasset&profile=" + ORYX.PROFILE + "&pp=" + ORYX.PREPROCESSING + "&assetid=" + ORYX.UUID + "&assetcontenttransform=jsontobpmn2&assetcontent=" + window.btoa(encodeURIComponent(processJSON));
             saveAjaxObj.open("POST",saveURL,false);
             saveAjaxObj.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             saveAjaxObj.send(saveParams);
@@ -421,7 +446,8 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         ORYX.AUTOSAVE_ENABLED = true;
         this.facade.raiseEvent({type: ORYX.CONFIG.EVENT_STENCIL_SET_LOADED});
         this.vt = window.setInterval((function(){
-            this.save(false);
+//            this.save(false);
+            this.saveToWorkspace();
         }).bind(this), 30000);
         this.facade.raiseEvent({
             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
@@ -463,7 +489,8 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
             ORYX.I18N.Save.copyConfirm_msg,
             function(btn){
                 if (btn == 'yes') {
-                    this.save(true);
+//                    this.save(true);
+                    this.saveToWorkspace();
                     parent.designersignalassetcopy(ORYX.UUID);
                 } else {
                     parent.designersignalassetcopy(ORYX.UUID);
@@ -481,7 +508,8 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                 ORYX.I18N.Save.renameConfirm_msg,
                 function(btn){
                     if (btn == 'yes') {
-                        this.save(true);
+//                        this.save(true);
+                        this.saveToWorkspace();
                         parent.designersignalassetrename(ORYX.UUID);
                     } else {
                         parent.designersignalassetrename(ORYX.UUID);

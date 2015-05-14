@@ -1,9 +1,8 @@
 package org.jbpm.designer.web.server;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-
-import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -11,15 +10,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
+import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.util.Utils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.jbpm.designer.repository.Asset;
-import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
-import org.jbpm.designer.web.profile.impl.RepositoryInfo;
+import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Sevlet for color themes.
@@ -37,8 +36,8 @@ public class ThemeServlet extends HttpServlet {
 	private ServletConfig config;
 	private String themeInfo;
 
-    @Inject
-    private IDiagramProfileService _profileService = null;
+//    @Inject
+    private static IDiagramProfileService _profileService = ProfileServiceImpl.getInstance();
 	
 	@Override
     public void init(ServletConfig config) throws ServletException {
@@ -71,14 +70,12 @@ public class ThemeServlet extends HttpServlet {
 	}
 	
 	private String getThemeJson(IDiagramProfile profile, ServletContext servletContext, String uuid) {
-        Repository repository = profile.getRepository();
 
 		String retStr = "";
 
     	try {
-            Asset<String> themeAsset = repository.loadAssetFromPath(profile.getRepositoryGlobalDir( uuid ) + "/" + THEME_NAME+THEME_EXT);
 
-            retStr = themeAsset.getAssetContent();
+            retStr = FileUtils.readFileToString(new File(servletContext.getRealPath(ConfigurationProvider.getInstance().getDesignerContext() + "defaults/" + THEME_NAME+THEME_EXT)));
 
         } catch (Exception e) {
 			_logger.error("Error retriving color theme info: " + e.getMessage());
@@ -87,15 +84,12 @@ public class ThemeServlet extends HttpServlet {
 	}
 	
 	private String getThemeNames(IDiagramProfile profile, ServletContext servletContext, String uuid) {
-        Repository repository = profile.getRepository();
 
 		String themesStr = "";
     	
         try {
 
-            Asset<String> themeAsset = repository.loadAssetFromPath(profile.getRepositoryGlobalDir( uuid ) + "/" + THEME_NAME+THEME_EXT);
-
-            JSONObject themesObject =  new JSONObject(themeAsset.getAssetContent());
+            JSONObject themesObject =  new JSONObject(FileUtils.readFileToString(new File(servletContext.getRealPath(ConfigurationProvider.getInstance().getDesignerContext() + "defaults/" + THEME_NAME+THEME_EXT))));
             JSONObject themes = (JSONObject) themesObject.get("themes");
             for (int i = 0; i < themes.names().length(); i++) {
                 themesStr += themes.names().getString(i) + ",";

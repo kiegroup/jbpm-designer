@@ -1,17 +1,15 @@
 package org.jbpm.designer.helper;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletInputStream;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Map;
+import javax.servlet.*;
+import javax.servlet.http.*;
 
 public class TestHttpServletRequest implements HttpServletRequest {
 
@@ -121,7 +119,32 @@ public class TestHttpServletRequest implements HttpServletRequest {
         return false;
     }
 
-    public Object getAttribute(String name) {
+  @Override
+  public boolean authenticate(HttpServletResponse httpServletResponse) throws IOException, ServletException {
+    return false;  //TODO: implement this method
+  }
+
+  @Override
+  public void login(String s, String s1) throws ServletException {
+    //TODO: implement this method
+  }
+
+  @Override
+  public void logout() throws ServletException {
+    //TODO: implement this method
+  }
+
+  @Override
+  public Collection<Part> getParts() throws IOException, ServletException {
+    return null;  //TODO: implement this method
+  }
+
+  @Override
+  public Part getPart(String s) throws IOException, ServletException {
+    return null;  //TODO: implement this method
+  }
+
+  public Object getAttribute(String name) {
         return null;
     }
 
@@ -236,4 +259,39 @@ public class TestHttpServletRequest implements HttpServletRequest {
     public int getLocalPort() {
         return 0;
     }
+
+  @Override
+  public ServletContext getServletContext() {
+    return null;  //TODO: implement this method
+  }
+
+  @Override
+  public AsyncContext startAsync() throws IllegalStateException {
+    return null;  //TODO: implement this method
+  }
+
+  @Override
+  public AsyncContext startAsync(ServletRequest servletRequest, ServletResponse servletResponse) throws IllegalStateException {
+    return null;  //TODO: implement this method
+  }
+
+  @Override
+  public boolean isAsyncStarted() {
+    return false;  //TODO: implement this method
+  }
+
+  @Override
+  public boolean isAsyncSupported() {
+    return false;  //TODO: implement this method
+  }
+
+  @Override
+  public AsyncContext getAsyncContext() {
+    return null;  //TODO: implement this method
+  }
+
+  @Override
+  public DispatcherType getDispatcherType() {
+    return null;  //TODO: implement this method
+  }
 }

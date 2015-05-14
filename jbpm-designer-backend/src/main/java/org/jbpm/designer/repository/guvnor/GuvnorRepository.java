@@ -1,17 +1,14 @@
 package org.jbpm.designer.repository.guvnor;
 
-import org.jbpm.designer.repository.*;
-import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.uberfire.java.nio.file.NoSuchFileException;
-
-import javax.enterprise.inject.Alternative;
 import java.util.Collection;
-import java.util.Map;
+
+import org.jbpm.designer.repository.*;
 
 /**
  * Repository implementation that is using Guvnor as a storage
  */
-@Alternative
+//@Alternative
 public class GuvnorRepository implements Repository {
 
     public GuvnorRepository() {

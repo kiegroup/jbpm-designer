@@ -33,7 +33,23 @@ ORYX.Plugins.Edit = Clazz.extend({
         
         //this.facade.registerOnEvent(ORYX.CONFIG.EVENT_KEYDOWN, this.keyHandler.bind(this));
         if(ORYX.READONLY != true) {
-            this.facade.offer({
+         //   this.facade.offer({
+         //name: ORYX.I18N.Edit.save,
+         //description: ORYX.I18N.Edit.saveDesc,
+         //icon: ORYX.PATH + "images/disk.png",
+         //keyCodes: [{
+			//	metaKeys: [ORYX.CONFIG.META_KEY_META_CTRL],
+			//	keyCode: 85,
+			//	keyAction: ORYX.CONFIG.KEY_ACTION_DOWN
+			//}
+         //],
+         //functionality: this.callEdit.bind(this, this.save),
+         //group: ORYX.I18N.Edit.group,
+         //index: 1,
+         //minShape: 0
+         //});
+
+        this.facade.offer({
              name: ORYX.I18N.Edit.cut,
              description: ORYX.I18N.Edit.cutDesc,
              icon: ORYX.BASE_FILE_PATH + "images/cut.png",
@@ -280,6 +296,49 @@ ORYX.Plugins.Edit = Clazz.extend({
 
         if( will_update ) this.facade.updateSelection();
     },
+
+    //save: function () {
+    //  var processJSON = ORYX.EDITOR.getSerializedJSON();
+    //  var fileName = ORYX.CONFIG.PROCESS_DEF_ID + ".xml";
+    //
+    //  Ext.Ajax.request({
+    //    url: window.location.protocol + '//' + ORYX.CONFIG.STUDIO_API_URL,
+    //    method: 'GET',
+    //    headers: {
+    //      'X-Auth-Token': ORYX.CONFIG.TOKEN,
+    //      'ProjectId': ORYX.CONFIG.PROJECT_ID
+    //    },
+    //    success: function(response) {
+    //      if(response.responseText && response.responseText.length > 0) {
+    //
+    //        Ext.Ajax.request({
+    //          url: ORYX.PATH + "savebpmn",
+    //          method: 'POST',
+    //          success: function() {
+    //            Ext.Msg.minWidth = 400;
+    //            Ext.Msg.alert("Process Definition xml successfully saved");
+    //          },
+    //          failure: function() {
+    //            Ext.Msg.minWidth = 400;
+    //            Ext.Msg.alert("Converting to BPMN2 Failed");
+    //          },
+    //          params: {
+    //            pp: ORYX.PREPROCESSING,
+    //            profile: ORYX.PROFILE,
+    //            data: processJSON,
+    //            fileName: fileName,
+    //            procDefId: ORYX.CONFIG.PROCESS_DEF_ID,
+    //            procDefPath: response.responseText
+    //          }
+    //        });
+    //      }
+    //    }.bind(this),
+    //    failure: function(){
+    //      Ext.Msg.minWidth = 400;
+    //      Ext.Msg.alert("Converting to BPMN2 Failed");
+    //    }
+    //  });
+    //},
     
     /**
      * Performs the paste operation.

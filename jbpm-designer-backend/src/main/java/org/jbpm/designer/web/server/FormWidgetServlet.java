@@ -1,23 +1,23 @@
 package org.jbpm.designer.web.server;
 
-import org.jbpm.designer.util.Utils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.jbpm.designer.repository.Asset;
-import org.jbpm.designer.repository.Repository;
-import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.designer.web.profile.IDiagramProfileService;
-import org.json.JSONObject;
-
-import javax.inject.Inject;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
+import org.jbpm.designer.repository.Asset;
+import org.jbpm.designer.repository.Repository;
+import org.jbpm.designer.util.Utils;
+import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.jbpm.designer.web.profile.IDiagramProfileService;
+import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FormWidgetServlet extends HttpServlet {
 	private static final Logger _logger = LoggerFactory.getLogger(FormWidgetServlet.class);
@@ -28,8 +28,7 @@ public class FormWidgetServlet extends HttpServlet {
         this.profile = profile;
     }
 
-    @Inject
-    private IDiagramProfileService _profileService = null;
+    private static IDiagramProfileService _profileService = ProfileServiceImpl.getInstance();
 	
 	@Override
 	public void init(ServletConfig config) throws ServletException {

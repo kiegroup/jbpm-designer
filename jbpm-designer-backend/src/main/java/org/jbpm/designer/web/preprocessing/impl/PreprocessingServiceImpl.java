@@ -19,17 +19,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.enterprise.event.Event;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingService;
 import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingUnit;
 import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.uberfire.backend.vfs.VFSService;
-import org.uberfire.workbench.events.ResourceAddedEvent;
-import org.uberfire.workbench.events.ResourceUpdatedEvent;
 
 
 /**
@@ -54,9 +49,9 @@ public class PreprocessingServiceImpl implements IDiagramPreprocessingService {
         return preprocessingUnits.get(profile.getName());
     }
     
-    public void init(ServletContext context, VFSService vfsService) {
-        _registry.put("default", new DefaultPreprocessingUnit(context, vfsService));
-        _registry.put("jbpm", new JbpmPreprocessingUnit(context, vfsService));
+    public void init(ServletContext context) {
+        _registry.put("default", new DefaultPreprocessingUnit(context));
+        _registry.put("jbpm", new JbpmPreprocessingUnit(context));
     }
     
 }

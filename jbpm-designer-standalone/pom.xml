@@ -27,10 +27,10 @@
     </dependency>
 
     <!-- jBPM Designer -->
-    <dependency>
-      <groupId>org.jbpm</groupId>
-      <artifactId>jbpm-designer-api</artifactId>
-    </dependency>
+    <!--<dependency>-->
+      <!--<groupId>org.jbpm</groupId>-->
+      <!--<artifactId>jbpm-designer-api</artifactId>-->
+    <!--</dependency>-->
     <dependency>
       <groupId>org.jbpm</groupId>
       <artifactId>jbpm-designer-client</artifactId>
@@ -469,7 +469,7 @@
             <compileSourcesArtifact>org.uberfire:uberfire-backend-api</compileSourcesArtifact>
 
             <!-- designer -->
-            <compileSourcesArtifact>org.jbpm:jbpm-designer-api</compileSourcesArtifact>
+            <!--<compileSourcesArtifact>org.jbpm:jbpm-designer-api</compileSourcesArtifact>-->
             <compileSourcesArtifact>org.jbpm:jbpm-designer-client</compileSourcesArtifact>
 
             <compileSourcesArtifact>org.jbpm:jbpm-form-modeler-editor-api</compileSourcesArtifact>

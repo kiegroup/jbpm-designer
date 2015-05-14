@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -41,22 +40,9 @@ import org.apache.batik.transcoder.image.ImageTranscoder;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.fop.svg.PDFTranscoder;
-import org.eclipse.bpmn2.DataInputAssociation;
-import org.eclipse.bpmn2.Definitions;
-import org.eclipse.bpmn2.FlowElement;
-import org.eclipse.bpmn2.FlowElementsContainer;
-import org.eclipse.bpmn2.FlowNode;
-import org.eclipse.bpmn2.FormalExpression;
+import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.Process;
-import org.eclipse.bpmn2.RootElement;
-import org.eclipse.bpmn2.SequenceFlow;
-import org.eclipse.bpmn2.Task;
-import org.eclipse.bpmn2.UserTask;
-import org.eclipse.bpmn2.di.BPMNDiagram;
-import org.eclipse.bpmn2.di.BPMNEdge;
-import org.eclipse.bpmn2.di.BPMNPlane;
-import org.eclipse.bpmn2.di.BPMNShape;
-import org.eclipse.bpmn2.di.BpmnDiFactory;
+import org.eclipse.bpmn2.di.*;
 import org.eclipse.dd.dc.Bounds;
 import org.eclipse.dd.dc.DcFactory;
 import org.eclipse.dd.dc.Point;
@@ -75,6 +61,7 @@ import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
+import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
 import org.jbpm.migration.JbpmMigration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,8 +85,7 @@ public class TransformerServlet extends HttpServlet {
     private static final String RESPACTION_SHOWURL = "showurl";
     private static final String RESPACTION_SHOWEMBEDDABLE = "showembeddable";
 
-    @Inject
-    private IDiagramProfileService _profileService = null;
+    private static IDiagramProfileService _profileService = ProfileServiceImpl.getInstance();
 
     @Override
     public void init(ServletConfig config) throws ServletException {

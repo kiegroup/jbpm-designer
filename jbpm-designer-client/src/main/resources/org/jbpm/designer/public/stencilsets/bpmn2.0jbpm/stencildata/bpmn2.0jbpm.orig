@@ -2707,7 +2707,7 @@
 				},
 				{
 					"id":"groupid",
-					"type":"String",
+					"type":"Groupseditor",
 					"title":"Groups",
 					"value":"",
 					"description":"he group id that is responsible for executing the human task",

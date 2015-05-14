@@ -8,12 +8,6 @@ import javax.enterprise.inject.Produces;
 import javax.inject.Named;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.kie.workbench.common.screens.datamodeller.model.index.terms.FieldTypeIndexTerm;
-import org.kie.workbench.common.screens.datamodeller.model.index.terms.JavaTypeIndexTerm;
-import org.kie.workbench.common.screens.datamodeller.model.index.terms.JavaTypeInterfaceIndexTerm;
-import org.kie.workbench.common.screens.datamodeller.model.index.terms.JavaTypeNameIndexTerm;
-import org.kie.workbench.common.screens.datamodeller.model.index.terms.JavaTypeParentIndexTerm;
-import org.kie.workbench.common.services.refactoring.backend.server.indexing.FullyQualifiedClassNameAnalyzer;
 import org.kie.workbench.common.services.refactoring.backend.server.indexing.RuleAttributeNameAnalyzer;
 import org.kie.workbench.common.services.refactoring.model.index.terms.PackageNameIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.index.terms.ProjectRootPathIndexTerm;
@@ -51,7 +45,7 @@ public class LuceneConfigProducer {
     private Map<String, Analyzer> getAnalyzers() {
         return new HashMap<String, Analyzer>() {{
             put( RuleIndexTerm.TERM,
-                    new RuleAttributeNameAnalyzer( LUCENE_40 ) );
+                 new RuleAttributeNameAnalyzer( LUCENE_40 ) );
             put( RuleAttributeIndexTerm.TERM,
                     new RuleAttributeNameAnalyzer( LUCENE_40 ) );
             put( RuleAttributeValueIndexTerm.TERM,

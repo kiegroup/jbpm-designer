@@ -45,11 +45,11 @@
   </build>
 
   <dependencies>
-    <dependency>
-      <groupId>org.jbpm</groupId>
-      <artifactId>jbpm-designer-standalone</artifactId>
-      <type>war</type>
-    </dependency>
+    <!--<dependency>-->
+      <!--<groupId>org.jbpm</groupId>-->
+      <!--<artifactId>jbpm-designer-standalone</artifactId>-->
+      <!--<type>war</type>-->
+    <!--</dependency>-->
     <!-- External dependencies -->
     <dependency>
         <groupId>org.apache.ant</groupId>

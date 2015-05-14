@@ -46,4 +46,3 @@ public class DesignerNotificationEvent {
     public String toString() {
         return "DesignerNotificationEvent [notification=" + notification + ", type=" + type + ", userId=" + userId + "]";
     }
-}

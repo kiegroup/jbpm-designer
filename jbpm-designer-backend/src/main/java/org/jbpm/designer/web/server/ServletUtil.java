@@ -1,26 +1,24 @@
 package org.jbpm.designer.web.server;
 
-import org.apache.commons.codec.binary.Base64;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.jbpm.designer.repository.Asset;
-import org.jbpm.designer.repository.Directory;
-import org.jbpm.designer.repository.Repository;
-import org.jbpm.designer.repository.filters.FilterByExtension;
-import org.jbpm.designer.repository.filters.FilterByFileName;
-import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.designer.web.profile.impl.RepositoryInfo;
-import org.uberfire.java.nio.file.NoSuchFileException;
-
-import javax.inject.Inject;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+
+import org.apache.commons.codec.binary.Base64;
+import org.jbpm.designer.repository.Asset;
+import org.jbpm.designer.repository.Directory;
+import org.jbpm.designer.repository.Repository;
+import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.jbpm.designer.web.profile.impl.RepositoryInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Utility class for web servlets.
@@ -37,16 +35,16 @@ public class ServletUtil {
 	
 	public static List<String> getFormWidgetList(IDiagramProfile profile, Repository repository, String uuid) {
 		List<String> widgets = new ArrayList<String>();
-        try {
-            Collection<Asset> formWidgets = repository.listAssets(profile.getRepositoryGlobalDir( uuid ), new FilterByExtension("fw"));
-            for (Asset widget : formWidgets) {
-                widgets.add(widget.getName());
-            }
-
-        } catch (Exception e) {
-            // we dont want to barf..just log that error happened
-            _logger.error(e.getMessage());
-        }
+//        try {
+//            Collection<Asset> formWidgets = repository.listAssets(profile.getRepositoryGlobalDir( uuid ), new FilterByExtension("fw"));
+//            for (Asset widget : formWidgets) {
+//                widgets.add(widget.getName());
+//            }
+//
+//        } catch (Exception e) {
+//            // we dont want to barf..just log that error happened
+//            _logger.error(e.getMessage());
+//        }
 		return widgets;
 	}
 	
@@ -141,43 +139,45 @@ public class ServletUtil {
 	
 	public static List<String> getAllProcessesInPackage(String pkgName, IDiagramProfile profile) {
 
-        Repository repository = profile.getRepository();
-        Collection<Asset> processesAssets = repository.listAssetsRecursively(pkgName, new FilterByExtension(EXT_BPMN));
-        processesAssets.addAll(repository.listAssetsRecursively(pkgName, new FilterByExtension(EXT_BPMN2)));
+//        Repository repository = profile.getRepository();
+//        Collection<Asset> processesAssets = repository.listAssetsRecursively(pkgName, new FilterByExtension(EXT_BPMN));
+//        processesAssets.addAll(repository.listAssetsRecursively(pkgName, new FilterByExtension(EXT_BPMN2)));
 
 
         List<String> processes = new ArrayList<String>();
 
-        for (Asset processAsset : processesAssets) {
-            processes.add(processAsset.getUniqueId());
-        }
+//        for (Asset processAsset : processesAssets) {
+//            processes.add(processAsset.getUniqueId());
+//        }
         return processes;
     }
 	
 	public static String getProcessImageContent(String packageName, String processid, IDiagramProfile profile) {
 
-        Repository repository = profile.getRepository();
-
-        Collection<Asset> imageAssets = repository.listAssets(packageName, new FilterByFileName(processid + "-svg.svg"));
-        if (imageAssets != null && imageAssets.size() > 0) {
-            Asset image = imageAssets.iterator().next();
-            try {
-                Asset toGetAsset = profile.getRepository().loadAsset(image.getUniqueId());
-                return  Base64.encodeBase64String( ((String) toGetAsset.getAssetContent()).getBytes("UTF-8") );
-            } catch (Exception e) {
-                _logger.error(e.getMessage());
-                return "";
-            }
-        } else {
-            return "";
-        }
+//        Repository repository = profile.getRepository();
+//
+//        Collection<Asset> imageAssets = repository.listAssets(packageName, new FilterByFileName(processid + "-svg.svg"));
+//        if (imageAssets != null && imageAssets.size() > 0) {
+//            Asset image = imageAssets.iterator().next();
+//            try {
+//                Asset toGetAsset = profile.getRepository().loadAsset(image.getUniqueId());
+//                return  Base64.encodeBase64String( ((String) toGetAsset.getAssetContent()).getBytes("UTF-8") );
+//            } catch (Exception e) {
+//                _logger.error(e.getMessage());
+//                return "";
+//            }
+//        } else {
+//            return "";
+//        }
+          return "";
 	}
 
     public static Collection<Asset> findAssetsInRepository(String assetName, IDiagramProfile profile) {
 
         Repository repository = profile.getRepository();
 
-        return repository.listAssetsRecursively("/", new FilterByFileName(assetName));
+//        return repository.listAssetsRecursively("/", new FilterByFileName(assetName));
+      return Collections.emptyList();
     }
 	
 	public static Asset getProcessSourceContent(String uuid, IDiagramProfile profile) {

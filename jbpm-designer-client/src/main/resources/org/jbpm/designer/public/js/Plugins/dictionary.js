@@ -150,7 +150,7 @@ ORYX.Plugins.Dictionary = Clazz.extend({
             params: {
             	action: 'load',
             	profile: ORYX.PROFILE,
-            	uuid :  window.btoa(encodeURI(ORYX.UUID))
+            	uuid :  ORYX.UUID
             }
         });
 	},
@@ -420,7 +420,7 @@ ORYX.Plugins.Dictionary = Clazz.extend({
         	            params: {
         	            	action: 'save',
         	            	profile: ORYX.PROFILE,
-        	            	uuid :  window.btoa(encodeURI(ORYX.UUID)),
+        	            	uuid :  ORYX.UUID,
         	            	dvalue : jsonDataEncode
         	            }
         	        });

@@ -15,13 +15,9 @@
  */
 package org.jbpm.designer.client.resources;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.ClientBundle;
-import org.jbpm.designer.client.resources.images.DesignerEditorImageResources;
+public interface DesignerEditorResources /*extends ClientBundle*/ {
 
-public interface DesignerEditorResources extends ClientBundle {
-
-    public static final DesignerEditorResources INSTANCE = GWT.create(DesignerEditorResources.class );
-
-    DesignerEditorImageResources images();
+//    public static final DesignerEditorResources INSTANCE = GWT.create(DesignerEditorResources.class );
+//
+//    DesignerEditorImageResources images();
 }
