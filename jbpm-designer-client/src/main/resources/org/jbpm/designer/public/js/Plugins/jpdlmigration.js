@@ -8,7 +8,7 @@ ORYX.Plugins.JPDLMigration = Clazz.extend({
 	construct: function(facade){
 		this.facade = facade;
 
-        if(ORYX.READONLY != true) {
+        if(!(ORYX.READONLY == true || ORYX.VIEWLOCKED == true)) {
             this.facade.offer({
                 'name':ORYX.I18N.View.migratejPDL,
                 'functionality': this.migrateJPDL.bind(this),
@@ -20,7 +20,7 @@ ORYX.Plugins.JPDLMigration = Clazz.extend({
                 'minShape': 0,
                 'maxShape': 0,
                 'isEnabled': function(){
-                    return ORYX.READONLY != true;
+                    return !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
     //				profileParamName = "profile";
     //				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
     //				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";

@@ -22,7 +22,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
             //this.startStoring();
         }
 
-        if(ORYX.READONLY != true) {
+        if(!(ORYX.READONLY == true || ORYX.VIEWLOCKED == true)) {
             this.facade.offer({
                 'name': ORYX.I18N.LocalHistory.display,
                 'functionality': this.displayLocalHistory.bind(this),
@@ -34,7 +34,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
                 'minShape': 0,
                 'maxShape': 0,
                 'isEnabled': function(){
-                    return ORYX.LOCAL_HISTORY_ENABLED && ORYX.READONLY != true;
+                    return ORYX.LOCAL_HISTORY_ENABLED && !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
     //                profileParamName = "profile";
     //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
     //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
@@ -56,7 +56,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
                 'minShape': 0,
                 'maxShape': 0,
                 'isEnabled': function(){
-                    return ORYX.LOCAL_HISTORY_ENABLED && ORYX.READONLY != true;
+                    return ORYX.LOCAL_HISTORY_ENABLED && !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
     //                profileParamName = "profile";
     //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
     //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
@@ -78,7 +78,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
                 'minShape': 0,
                 'maxShape': 0,
                 'isEnabled': function(){
-                    return ORYX.LOCAL_HISTORY_ENABLED && ORYX.READONLY != true;
+                    return ORYX.LOCAL_HISTORY_ENABLED && !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
     //                profileParamName = "profile";
     //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
     //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
@@ -100,7 +100,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
                 'minShape': 0,
                 'maxShape': 0,
                 'isEnabled': function(){
-                    return !ORYX.LOCAL_HISTORY_ENABLED && ORYX.READONLY != true;
+                    return !ORYX.LOCAL_HISTORY_ENABLED && !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
     //                profileParamName = "profile";
     //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
     //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
@@ -122,7 +122,7 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
                 'minShape': 0,
                 'maxShape': 0,
                 'isEnabled': function(){
-                    return ORYX.LOCAL_HISTORY_ENABLED && ORYX.READONLY != true;
+                    return ORYX.LOCAL_HISTORY_ENABLED && !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
     //                profileParamName = "profile";
     //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
     //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";

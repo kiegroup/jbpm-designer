@@ -33,7 +33,7 @@ ORYX.Plugins.AddDocker = Clazz.extend({
 	construct: function(facade) {
 		this.facade = facade;
 
-        if(ORYX.READONLY != true) {
+        if(!(ORYX.READONLY == true || ORYX.VIEWLOCKED == true)) {
 		this.facade.offer({
 			'name':ORYX.I18N.AddDocker.add,
 			'functionality': this.enableAddDocker.bind(this),

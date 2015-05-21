@@ -11,7 +11,7 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
     construct: function(facade){
         this.facade = facade;
 
-        if(ORYX.READONLY != true) {
+        if(!(ORYX.READONLY == true || ORYX.VIEWLOCKED == true)) {
             this.facade.offer({
                 'name':ORYX.I18N.View.connectServiceRepo,
                 'functionality': this.jbpmServiceRepoConnect.bind(this),
@@ -22,7 +22,7 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
                 'minShape': 0,
                 'maxShape': 0,
                 'isEnabled': function(){
-                    return ORYX.READONLY != true;
+                    return !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
                 }.bind(this)
             });
         }

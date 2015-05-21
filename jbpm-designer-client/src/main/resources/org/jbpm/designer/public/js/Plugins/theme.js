@@ -18,7 +18,7 @@ ORYX.Plugins.Theme = Clazz.extend({
 	    if (ajaxObj.status == 200) {
 			var themeNamesArray = ajaxObj.responseText.split(",");
 			for (var i = 0; i < themeNamesArray.length; i++) {
-                if(ORYX.READONLY != true) {
+                if(!(ORYX.READONLY == true || ORYX.VIEWLOCKED == true)) {
                      this.facade.offer({
                         'name': themeNamesArray[i],
                         'functionality': this.applyTheme.bind(this, themeNamesArray[i]),
@@ -30,7 +30,7 @@ ORYX.Plugins.Theme = Clazz.extend({
                         'minShape': 0,
                         'maxShape': 0,
                         'isEnabled': function(){
-                               return ORYX.READONLY != true;
+                               return !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
     //	   					profileParamName = "profile";
     //	   					profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
     //	   					regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";

@@ -11,7 +11,7 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
         this.errorDisplayView;
         ORYX.IS_VALIDATING_PROCESS = false;
 
-        if(ORYX.READONLY != true) {
+        if(!(ORYX.READONLY == true || ORYX.VIEWLOCKED == true)) {
             this.facade.offer({
                 'name': ORYX.I18N.SyntaxChecker.startValidating,
                 'functionality': this.enableValidation.bind(this),
@@ -22,7 +22,7 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
                 'minShape': 0,
                 'maxShape': 0,
                 'isEnabled': function(){
-                    return !ORYX.IS_VALIDATING_PROCESS && ORYX.READONLY != true;
+                    return !ORYX.IS_VALIDATING_PROCESS && !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
                 }
             });
 
@@ -36,7 +36,7 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
                 'minShape': 0,
                 'maxShape': 0,
                 'isEnabled': function(){
-                    return ORYX.IS_VALIDATING_PROCESS && ORYX.READONLY != true;
+                    return ORYX.IS_VALIDATING_PROCESS && !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
                 }
             });
 
@@ -50,7 +50,7 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
                 'minShape': 0,
                 'maxShape': 0,
                 'isEnabled': function(){
-                    return ORYX.READONLY != true;
+                    return !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
                 }
             });
         }

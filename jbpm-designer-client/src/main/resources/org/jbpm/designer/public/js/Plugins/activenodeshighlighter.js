@@ -37,7 +37,7 @@ ORYX.Plugins.ActiveNodesHighlighter = Clazz.extend({
         }
 
         if(child instanceof ORYX.Core.Node || child instanceof ORYX.Core.Edge) {
-            if(ORYX.READONLY == true) {
+            if(ORYX.READONLY == true || ORYX.VIEWLOCKED == true) {
                 child.setSelectable(false);
                 child.setMovable(false);
                 child.setProperty("oryx-isselectable", "false");

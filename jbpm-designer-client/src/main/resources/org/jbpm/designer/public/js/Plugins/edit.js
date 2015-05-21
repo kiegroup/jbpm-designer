@@ -32,7 +32,7 @@ ORYX.Plugins.Edit = Clazz.extend({
         this.clipboard = new ORYX.Plugins.Edit.ClipBoard();
         
         //this.facade.registerOnEvent(ORYX.CONFIG.EVENT_KEYDOWN, this.keyHandler.bind(this));
-        if(ORYX.READONLY != true) {
+        if(!(ORYX.READONLY == true || ORYX.VIEWLOCKED == true)) {
             this.facade.offer({
              name: ORYX.I18N.Edit.cut,
              description: ORYX.I18N.Edit.cutDesc,

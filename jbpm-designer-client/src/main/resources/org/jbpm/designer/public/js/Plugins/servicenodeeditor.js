@@ -9,7 +9,7 @@ ORYX.Plugins.ServiceNodeEditor = Clazz.extend({
 		this.facade = facade;
 		this.initServiceNodes();
 
-        if(ORYX.READONLY != true) {
+        if(!(ORYX.READONLY == true || ORYX.VIEWLOCKED == true)) {
             this.facade.offer({
                 'name': 'Service Node Editor',
                 'functionality': this.showEditor.bind(this),
@@ -20,7 +20,7 @@ ORYX.Plugins.ServiceNodeEditor = Clazz.extend({
                 'minShape': 0,
                 'maxShape': 0,
                 'isEnabled': function(){
-                    return ORYX.READONLY != true;
+                    return !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
     //				profileParamName = "profile";
     //				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
     //				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";

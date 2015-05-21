@@ -68,6 +68,10 @@ public class DesignerWidgetPresenter {
         return view.getIsReadOnly( editorID );
     }
 
+    public boolean getIsViewLocked( String editorID ) {
+        return view.getIsViewLocked( editorID );
+    }
+
     public void setProcessSaved( String editorID ) {
         view.setProcessSaved( editorID );
 

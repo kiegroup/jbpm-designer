@@ -111,7 +111,7 @@ public class JbpmPreprocessingUnitVFSGitTest {
         params.put("uuid", uniqueId);
 
         // run preprocess
-        preprocessingUnitVFS.preprocess(new TestHttpServletRequest(params), null, new TestIDiagramProfile(repository), null, false, null, null);
+        preprocessingUnitVFS.preprocess(new TestHttpServletRequest(params), null, new TestIDiagramProfile(repository), null, false, false, null, null);
 
         // validate results
         Collection<Asset> globalAssets = repository.listAssets("/global");

@@ -121,7 +121,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         return outData;
     }
 
-    public void preprocess(HttpServletRequest req, HttpServletResponse res, IDiagramProfile profile, ServletContext serlvetContext, boolean readOnly, IOService ioService, RepositoryDescriptor descriptor) {
+    public void preprocess(HttpServletRequest req, HttpServletResponse res, IDiagramProfile profile, ServletContext serlvetContext, boolean readOnly, boolean viewLocked, IOService ioService, RepositoryDescriptor descriptor) {
         try {
 
             if(readOnly) {

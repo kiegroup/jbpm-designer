@@ -9,7 +9,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         this.facade = facade;
         this.vt;
 
-        if(ORYX.READONLY != true) {
+        if(!(ORYX.READONLY == true || ORYX.VIEWLOCKED == true)) {
             this.facade.offer({
                 'name': ORYX.I18N.Save.save,
                 'functionality': this.saveWithMessage.bind(this),
@@ -21,7 +21,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                 'minShape': 0,
                 'maxShape': 0,
                 'isEnabled': function(){
-                    return ORYX.REPOSITORY_ID != "guvnor" && ORYX.READONLY != true;
+                    return ORYX.REPOSITORY_ID != "guvnor" && !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
     //                profileParamName = "profile";
     //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
     //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
@@ -42,7 +42,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                 'minShape': 0,
                 'maxShape': 0,
                 'isEnabled': function(){
-                    return !ORYX.AUTOSAVE_ENABLED && ORYX.READONLY != true;
+                    return !ORYX.AUTOSAVE_ENABLED && !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
     //                profileParamName = "profile";
     //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
     //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
@@ -63,7 +63,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                 'minShape': 0,
                 'maxShape': 0,
                 'isEnabled': function(){
-                    return ORYX.AUTOSAVE_ENABLED && ORYX.READONLY != true;
+                    return ORYX.AUTOSAVE_ENABLED && !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
     //                profileParamName = "profile";
     //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
     //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
@@ -85,7 +85,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                 'minShape': 0,
                 'maxShape': 0,
                 'isEnabled': function(){
-                    return ORYX.REPOSITORY_ID != "guvnor" && ORYX.READONLY != true;
+                    return ORYX.REPOSITORY_ID != "guvnor" && !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
     //                profileParamName = "profile";
     //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
     //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
@@ -107,7 +107,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                 'minShape': 0,
                 'maxShape': 0,
                 'isEnabled': function(){
-                    return ORYX.REPOSITORY_ID != "guvnor" && ORYX.READONLY != true;
+                    return ORYX.REPOSITORY_ID != "guvnor" && !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
     //                profileParamName = "profile";
     //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
     //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
@@ -129,7 +129,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                 'minShape': 0,
                 'maxShape': 0,
                 'isEnabled': function(){
-                    return ORYX.REPOSITORY_ID != "guvnor" && ORYX.READONLY != true;
+                    return ORYX.REPOSITORY_ID != "guvnor" && !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
     //                profileParamName = "profile";
     //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
     //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";

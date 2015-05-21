@@ -105,7 +105,7 @@ ORYX.Plugins.Toolbar = Clazz.extend({
         // Map used to store all drop down buttons of current group
         var currentGroupsDropDownButton = {};
 
-        if(ORYX.READONLY != true) {
+        if(!(ORYX.READONLY == true || ORYX.VIEWLOCKED == true)) {
             if(('webkitSpeech' in document.createElement('input'))) {
                 var micfield = new Ext.form.TextField({
                     id: 'micinput'

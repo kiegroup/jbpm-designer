@@ -450,11 +450,20 @@ ORYX.Editor = {
             Ext.getCmp('maintabs').remove("simulationtab");
         }
 
+        if(ORYX.VIEWLOCKED == true) {
+            Ext.getCmp('maintabs').remove("simulationtab");
+        }
+
 		// DEFINITION OF THE VIEWPORT AREAS
         var eastWidth = ORYX.CONFIG.PANEL_LEFT_WIDTH || 400;
         if(ORYX.READONLY == true) {
             eastWidth = 10;
         }
+
+        if(ORYX.VIEWLOCKED == true) {
+            eastWidth = 10;
+        }
+
 		this.layout_regions = {
 				
 				// DEFINES TOP-AREA
@@ -515,7 +524,7 @@ ORYX.Editor = {
 		
 		// Hide every region except the center
 		for (region in this.layout_regions) {
-			if ( (region != "center" && region != "north") && ORYX.READONLY == true) {
+			if ( (region != "center" && region != "north") && (ORYX.READONLY == true || ORYX.VIEWLOCKED == true)) {
                 this.layout_regions[ region ].setVisible(false);
 			}
 		}
@@ -600,7 +609,7 @@ ORYX.Editor = {
 			// trigger doLayout() and show the pane
 			current_region.ownerCt.doLayout();
 
-            if(ORYX.READONLY == true && current_region.region != "center" ) {
+            if((ORYX.VIEWLOCKED == true || ORYX.READONLY == true) && current_region.region != "center" ) {
             } else {
                 current_region.show();
             }
@@ -2230,7 +2239,7 @@ ORYX.Editor.setMissingClasses = function() {
 }
 
 ORYX.Editor.checkIfSaved = function() {
-    if(ORYX.READONLY == true) {
+    if(ORYX.READONLY == true || ORYX.VIEWLOCKED == true) {
         return true;
     } else {
         return ORYX.PROCESS_SAVED;

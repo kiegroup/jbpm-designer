@@ -215,7 +215,7 @@ ORYX.Plugins.Paint = ORYX.Plugins.AbstractPlugin.extend({
             'minShape': 0,
             'maxShape': 0,
             'isEnabled': function(){
-                return ORYX.READONLY != true;
+                return !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
             }.bind(this)
         });
 

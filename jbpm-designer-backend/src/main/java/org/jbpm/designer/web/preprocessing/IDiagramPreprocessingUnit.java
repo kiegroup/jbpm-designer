@@ -31,6 +31,6 @@ import org.uberfire.io.IOService;
  *
  */
 public interface IDiagramPreprocessingUnit {
-    public void preprocess(HttpServletRequest request, HttpServletResponse response, IDiagramProfile profile, ServletContext serlvetContext, boolean readOnly, IOService ioService, RepositoryDescriptor descriptor);
+    public void preprocess(HttpServletRequest request, HttpServletResponse response, IDiagramProfile profile, ServletContext serlvetContext, boolean readOnly, boolean viewLocked, IOService ioService, RepositoryDescriptor descriptor);
     public String getOutData();
 }

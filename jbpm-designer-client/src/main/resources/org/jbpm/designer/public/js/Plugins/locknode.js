@@ -8,7 +8,7 @@ ORYX.Plugins.LockNode = Clazz.extend({
     construct: function(facade){
         this.facade = facade;
 
-        if(ORYX.READONLY != true) {
+        if(!(ORYX.READONLY == true || ORYX.VIEWLOCKED == true)) {
             this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LOADED, this.checkLocksOnLoad.bind(this));
             this.facade.offer({
                 'name': ORYX.I18N.lockNode.lock,
@@ -20,7 +20,7 @@ ORYX.Plugins.LockNode = Clazz.extend({
                 'minShape': 1,
                 'maxShape': 0,
                 'isEnabled': function(){
-                    return ORYX.READONLY != true;
+                    return !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
     //				profileParamName = "profile";
     //				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
     //				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
@@ -40,7 +40,7 @@ ORYX.Plugins.LockNode = Clazz.extend({
                 'minShape': 1,
                 'maxShape': 0,
                 'isEnabled': function(){
-                    return ORYX.READONLY != true;
+                    return !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
     //				profileParamName = "profile";
     //				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
     //				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";

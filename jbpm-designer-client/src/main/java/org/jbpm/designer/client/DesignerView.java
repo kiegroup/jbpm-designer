@@ -13,6 +13,8 @@ public interface DesignerView
 
     boolean getIsReadOnly();
 
+    boolean getIsViewLocked();
+
     void raiseEventSave();
 
     void raiseEventSaveCancel();

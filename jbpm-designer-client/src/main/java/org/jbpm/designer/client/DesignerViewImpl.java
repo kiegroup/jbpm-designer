@@ -30,6 +30,11 @@ public class DesignerViewImpl
     }
 
     @Override
+    public boolean getIsViewLocked() {
+        return designerWidget.getIsViewLocked(designerWidget.getEditorID());
+    }
+
+    @Override
     public void raiseEventSave() {
         designerWidget.raiseEventSave(designerWidget.getEditorID());
     }

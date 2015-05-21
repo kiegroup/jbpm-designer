@@ -218,7 +218,12 @@ public class EditorHandler extends HttpServlet {
 //        }
 
         String readOnly = request.getParameter("readonly");
+        String viewLocked = request.getParameter("viewlocked");
         String sessionId = request.getParameter( "sessionId" );
+
+        if(viewLocked == null || viewLocked.length() < 1) {
+            viewLocked = "false";
+        }
 
 
         if (profileName == null || profileName.length() < 1) {
@@ -241,7 +246,7 @@ public class EditorHandler extends HttpServlet {
                         "Performing diagram information pre-processing steps. ");
             }
             preprocessingUnit = _preProcessingService.findPreprocessingUnit(request, profile);
-            preprocessingUnit.preprocess(request, response, profile, getServletContext(), Boolean.parseBoolean(readOnly), ioService, descriptor);
+            preprocessingUnit.preprocess(request, response, profile, getServletContext(), Boolean.parseBoolean(readOnly), Boolean.parseBoolean(viewLocked), ioService, descriptor);
         }
 
         //output env javascript files
@@ -305,6 +310,7 @@ public class EditorHandler extends HttpServlet {
         //editorTemplate.add("completednodes", completedNodes);
         //editorTemplate.add("processsource", encodedProcessSource);
         editorTemplate.add("readonly", readOnly);
+        editorTemplate.add("viewlocked", viewLocked);
         editorTemplate.add("allscripts", scriptsArray.toString());
         editorTemplate.add("allplugins", pluginsArray.toString());
         editorTemplate.add("title", profile.getTitle());

@@ -40,7 +40,7 @@ public class DefaultPreprocessingUnit implements IDiagramPreprocessingUnit {
     }
     
     public void preprocess(HttpServletRequest request,
-            HttpServletResponse response, IDiagramProfile profile, ServletContext servletContext, boolean readOnly, IOService ioService, RepositoryDescriptor descriptor) {
+            HttpServletResponse response, IDiagramProfile profile, ServletContext servletContext, boolean readOnly, boolean viewLocked, IOService ioService, RepositoryDescriptor descriptor) {
         // nothing to do
     }
 

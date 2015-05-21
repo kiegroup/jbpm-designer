@@ -19,6 +19,7 @@
         ORYX.ACTIVENODES;
         ORYX.COMPLETEDNODES;
         ORYX.READONLY = $readonly$;
+        ORYX.VIEWLOCKED = $viewlocked$;
 
         ORYX.LOCAL_HISTORY_ENABLED = $localhistoryenabled$;
         ORYX.LOCAL_HISTORY_TIMEOUT = $localhistorytimeout$;
