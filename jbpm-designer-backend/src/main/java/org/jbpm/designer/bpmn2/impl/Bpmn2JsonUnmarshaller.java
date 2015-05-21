@@ -6071,6 +6071,64 @@ public class Bpmn2JsonUnmarshaller {
                 task.getDataInputAssociations().add(dia);
         	}
         }
+
+        if(properties.get("description") != null && properties.get("description").length() > 0) {
+            if(task.getIoSpecification() == null) {
+                InputOutputSpecification iospec = Bpmn2Factory.eINSTANCE.createInputOutputSpecification();
+                task.setIoSpecification(iospec);
+            }
+            List<DataInput> dataInputs = task.getIoSpecification().getDataInputs();
+            boolean foundDescriptionInput = false;
+            DataInput foundInput = null;
+            for(DataInput din : dataInputs) {
+                if(din.getName().equals("Description")) {
+                    foundDescriptionInput = true;
+                    foundInput = din;
+                    break;
+                }
+            }
+
+            if(!foundDescriptionInput) {
+                DataInput d = Bpmn2Factory.eINSTANCE.createDataInput();
+                d.setId(task.getId() + "_" + "Description" + "InputX");
+                d.setName("Description");
+                task.getIoSpecification().getDataInputs().add(d);
+                foundInput = d;
+
+                if(task.getIoSpecification().getInputSets() == null || task.getIoSpecification().getInputSets().size() < 1) {
+                    InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
+                    task.getIoSpecification().getInputSets().add(inset);
+                }
+                task.getIoSpecification().getInputSets().get(0).getDataInputRefs().add(d);
+            }
+
+            boolean foundDescriptionAssociation = false;
+            List<DataInputAssociation> inputAssociations = task.getDataInputAssociations();
+            for(DataInputAssociation da : inputAssociations) {
+                if(da.getTargetRef() != null && da.getTargetRef().getId().equals(foundInput.getId())) {
+                    foundDescriptionAssociation = true;
+                    ((FormalExpression) da.getAssignment().get(0).getFrom()).setBody(wrapInCDATABlock(properties.get("description")));
+                }
+            }
+
+            if(!foundDescriptionAssociation) {
+                DataInputAssociation dia = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
+                dia.setTargetRef(foundInput);
+
+                Assignment a = Bpmn2Factory.eINSTANCE.createAssignment();
+                FormalExpression descriptionFromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                descriptionFromExpression.setBody(wrapInCDATABlock(properties.get("description")));
+
+                FormalExpression descriptionToExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                descriptionToExpression.setBody(foundInput.getId());
+
+                a.setFrom(descriptionFromExpression);
+                a.setTo(descriptionToExpression);
+
+                dia.getAssignment().add(a);
+                task.getDataInputAssociations().add(dia);
+            }
+        }
         
         if(properties.get("priority") != null && properties.get("priority").length() > 0) {
         	if(task.getIoSpecification() == null) {
@@ -6527,7 +6585,9 @@ public class Bpmn2JsonUnmarshaller {
         				incompleteAssociations.add(dia);
         			} else if(targetInput.getName().equalsIgnoreCase("Comment") && (properties.get("comment") == null  || properties.get("comment").length() == 0)) {
         				incompleteAssociations.add(dia);
-        			} else if(targetInput.getName().equalsIgnoreCase("Priority") && (properties.get("priority") == null  || properties.get("priority").length() == 0)) {
+        			} else if(targetInput.getName().equalsIgnoreCase("Description") && (properties.get("description") == null  || properties.get("description").length() == 0)) {
+                        incompleteAssociations.add(dia);
+                    } else if(targetInput.getName().equalsIgnoreCase("Priority") && (properties.get("priority") == null  || properties.get("priority").length() == 0)) {
         				incompleteAssociations.add(dia);
         			} else if(targetInput.getName().equalsIgnoreCase("Content") && (properties.get("content") == null  || properties.get("content").length() == 0)) {
         				incompleteAssociations.add(dia);
@@ -6563,7 +6623,9 @@ public class Bpmn2JsonUnmarshaller {
     				toRemoveDataInputs.add(din);
     			} else if(din.getName().equalsIgnoreCase("Comment") && (properties.get("comment") == null  || properties.get("comment").length() == 0)) {
     				toRemoveDataInputs.add(din);
-    			} else if(din.getName().equalsIgnoreCase("Priority") && (properties.get("priority") == null  || properties.get("priority").length() == 0)) {
+    			} else if(din.getName().equalsIgnoreCase("Description") && (properties.get("description") == null  || properties.get("description").length() == 0)) {
+                    toRemoveDataInputs.add(din);
+                } else if(din.getName().equalsIgnoreCase("Priority") && (properties.get("priority") == null  || properties.get("priority").length() == 0)) {
     				toRemoveDataInputs.add(din);
     			} else if(din.getName().equalsIgnoreCase("Content") && (properties.get("content") == null  || properties.get("content").length() == 0)) {
     				toRemoveDataInputs.add(din);

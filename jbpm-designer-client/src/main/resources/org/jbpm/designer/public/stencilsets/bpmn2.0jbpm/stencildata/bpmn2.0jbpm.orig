@@ -2754,6 +2754,18 @@
 					"extra":true
 				},
 				{
+                                        "id":"description",
+                                        "type":"String",
+                                        "title":"Description",
+                                        "value":"",
+                                        "description":"Description",
+                                        "description_ja":"",
+                                        "readonly":false,
+                                        "optional":true,
+                                        "fortasktypes":"None|User",
+                                        "extra":true
+                                },
+				{
 					"id":"content",
 					"type":"String",
 					"title":"Content",

@@ -1683,6 +1683,7 @@ public class Bpmn2JsonMarshaller {
         DataInput groupDataInput = null;
         DataInput skippableDataInput = null;
         DataInput commentDataInput = null;
+        DataInput descriptionDataInput = null;
         DataInput contentDataInput = null;
         DataInput priorityDataInput = null;
         DataInput localeDataInput = null;
@@ -1713,6 +1714,9 @@ public class Bpmn2JsonMarshaller {
                     }
                     if(dataIn.getName() != null && dataIn.getName().equals("Comment")) {
                     	commentDataInput = dataIn;
+                    }
+                    if(dataIn.getName() != null && dataIn.getName().equals("Description ")) {
+                        descriptionDataInput = dataIn;
                     }
                     if(dataIn.getName() != null && dataIn.getName().equals("Content")) {
                     	contentDataInput = dataIn;
@@ -1848,6 +1852,7 @@ public class Bpmn2JsonMarshaller {
                             if(!(rhsAssociation.equals("GroupId") ||
                                     rhsAssociation.equals("Skippable") ||
                                     rhsAssociation.equals("Comment") ||
+                                    rhsAssociation.equals("Description ") ||
                                     rhsAssociation.equals("Priority") ||
                                     rhsAssociation.equals("Content") ||
                                     rhsAssociation.equals("TaskName")  ||
@@ -1885,6 +1890,11 @@ public class Bpmn2JsonMarshaller {
                                 ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
                                         ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(commentDataInput.getId())) {
                             properties.put("comment", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
+                        }
+                        if (descriptionDataInput != null && datain.getAssignment().get(0).getTo() != null &&
+                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
+                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(descriptionDataInput.getId())) {
+                            properties.put("description", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
                         }
                         if (priorityDataInput != null && datain.getAssignment().get(0).getTo() != null &&
                                 ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
