@@ -8,6 +8,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
     construct: function(facade){
         this.facade = facade;
         this.vt;
+        this.editorLocked = false;
 
         if(!(ORYX.READONLY == true || ORYX.VIEWLOCKED == true)) {
             this.facade.offer({
@@ -156,6 +157,14 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
 
     setUnsaved: function() {
         ORYX.PROCESS_SAVED = false;
+
+        // dont lock more than once
+        if(!this.editorLocked) {
+            if ( typeof parent.acquireLock === "function" ) {
+                parent.acquireLock();
+                this.editorLocked = true;
+            }
+        }
     },
 
     saveWithMessage: function() {

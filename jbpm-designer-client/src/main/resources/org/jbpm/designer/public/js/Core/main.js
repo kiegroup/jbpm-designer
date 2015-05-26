@@ -103,6 +103,22 @@ ORYX.Editor = {
 		if(config.model) {
 			model = config.model;
 		}
+
+        if ( (typeof parent.isLocked === "function") && (typeof parent.isLockedByCurrentUser === "function") ) {
+            var isEditorLocked = parent.isLocked();
+            var isEditorLockedByCurrentUser = parent.isLockedByCurrentUser();
+
+            if(!isEditorLocked) {
+                ORYX.VIEWLOCKED = false;
+            } else {
+                if(isEditorLocked && !isEditorLockedByCurrentUser) {
+                    ORYX.VIEWLOCKED = true;
+                } else if(isEditorLocked && isEditorLockedByCurrentUser) {
+                    ORYX.VIEWLOCKED = false;
+                }
+            }
+        }
+
         if(config.error) {
             try {
             var errorSourceArea = new Ext.form.TextArea({
@@ -252,7 +268,17 @@ ORYX.Editor = {
 		}
 		
 		// Raise Loaded Event
-		this.handleEvents( {type:ORYX.CONFIG.EVENT_LOADED} )
+		this.handleEvents( {type:ORYX.CONFIG.EVENT_LOADED} );
+
+        if(ORYX.VIEWLOCKED && ORYX.VIEWLOCKED == true) {
+            this.facade.raiseEvent({
+                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                ntype		: 'warning',
+                msg         : "Asset is locked by another user. Editor is running in read-only mode.",
+                title       : 'Asset Locked'
+
+            });
+        }
 		
 	},
 	

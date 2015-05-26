@@ -153,6 +153,10 @@ ORYX.Plugins.CanvasTitle = {
         var processId = jsonPath(processJSON.evalJSON(), "$.properties.id");
         var processVersion = jsonPath(processJSON.evalJSON(), "$.properties.version");
         var retValue = "";
+
+        if(ORYX.VIEWLOCKED && ORYX.VIEWLOCKED == true) {
+            retValue += "READ ONLY ";
+        }
         
         if(processName && processName != "") {
         	retValue += processName[0];
@@ -162,10 +166,9 @@ ORYX.Plugins.CanvasTitle = {
         	if(processId && processId != "" && processPackage && processPackage != "") {
         		retValue += " (" + processId[0] + ")";
         	}
-        	return retValue;
-        } else {
-        	return "";
         }
+
+        return retValue;
 	}
 };
 
