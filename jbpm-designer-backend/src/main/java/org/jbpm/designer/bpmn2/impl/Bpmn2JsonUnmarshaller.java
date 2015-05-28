@@ -4543,7 +4543,7 @@ public class Bpmn2JsonUnmarshaller {
         // signal scope metadata
         if(properties.get("signalscope") != null && properties.get("signalscope").length() > 0 && !properties.get("signalscope").equals("default")) {
             MetaDataType metadata = DroolsFactory.eINSTANCE.createMetaDataType();
-            metadata.setName("signalscope");
+            metadata.setName("customScope");
             metadata.setMetaValue(wrapInCDATABlock(properties.get("signalscope")));
 
             if(event.getExtensionValues() == null || event.getExtensionValues().size() < 1) {
