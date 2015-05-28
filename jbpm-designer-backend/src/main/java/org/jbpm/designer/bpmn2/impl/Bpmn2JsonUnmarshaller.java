@@ -4540,6 +4540,21 @@ public class Bpmn2JsonUnmarshaller {
             }
         }
 
+        // signal scope metadata
+        if(properties.get("signalscope") != null && properties.get("signalscope").length() > 0 && !properties.get("signalscope").equals("default")) {
+            MetaDataType metadata = DroolsFactory.eINSTANCE.createMetaDataType();
+            metadata.setName("signalscope");
+            metadata.setMetaValue(wrapInCDATABlock(properties.get("signalscope")));
+
+            if(event.getExtensionValues() == null || event.getExtensionValues().size() < 1) {
+                ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                event.getExtensionValues().add(extensionElement);
+            }
+            FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                    (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, metadata);
+            event.getExtensionValues().get(0).getValue().add(extensionElementEntry);
+        }
+
         try {
             EventDefinition ed = event.getEventDefinitions().get(0);
             if(ed instanceof TimerEventDefinition) {

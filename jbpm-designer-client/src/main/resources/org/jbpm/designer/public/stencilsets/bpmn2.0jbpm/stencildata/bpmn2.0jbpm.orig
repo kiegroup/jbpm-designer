@@ -8652,7 +8652,35 @@
 					"optional":true,
 					"refToView":"",
 					"length":""
-				}
+				},
+				{
+                                        "id":"signalscope",
+                                        "type":"Choice",
+                                        "title":"Signal Scope",
+                                        "value":"default",
+                                        "default": "default",
+                                        "description":"Defines the Signal Propagation Scope",
+                                        "description_ja":"",
+                                        "readonly":false,
+                                        "optional":true,
+                                        "items":[
+						{
+                                                        "id":"c1",
+                                                        "title":"Default",
+                                                        "value":"default"
+                                                },
+                                                {
+                                                        "id":"c2",
+                                                        "title":"Process Instance",
+                                                        "value":"processInstance"
+                                                },
+                                                {
+                                                        "id":"c3",
+                                                        "title":"Project",
+                                                        "value":"project"
+                                                }
+                                                ]
+                                }
 			]
 		},
 		{
@@ -9318,7 +9346,35 @@
 					"optional":true,
 					"refToView":"",
 					"length":""
-				}
+				},
+				{
+                                        "id":"signalscope",
+                                        "type":"Choice",
+                                        "title":"Signal Scope",
+                                        "value":"default",
+                                        "default": "default",
+                                        "description":"Defines the Signal Propagation Scope",
+                                        "description_ja":"",
+                                        "readonly":false,
+                                        "optional":true,
+                                        "items":[
+						{
+                                                        "id":"c1",
+                                                        "title":"Default",
+                                                        "value":"default"
+                                                },
+                                                {
+                                                        "id":"c2",
+                                                        "title":"Process Instance",
+                                                        "value":"processInstance"
+                                                },
+                                                {
+                                                        "id":"c3",
+                                                        "title":"Project",
+                                                        "value":"project"
+                                                }
+                                                ]
+                                }
 			]
 		},
 		{
