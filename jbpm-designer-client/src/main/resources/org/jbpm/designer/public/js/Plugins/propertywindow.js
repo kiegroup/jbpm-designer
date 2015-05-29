@@ -4646,6 +4646,7 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                             return Ext.form.VTypes["inputNameVal"].test(v);
                         };
 
+                        var cckpi = this.addCustomKPI;
                         var grid = new Ext.grid.EditorGridPanel({
                             autoScroll: true,
                             autoHeight: true,
@@ -4702,7 +4703,7 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                                 header: "KPI",
                                 width: 100,
                                 dataIndex: 'kpi',
-                                disabled: (this.addCustomKPI == "true"),
+                                disabled: (cckpi != "true"),
                                 editor: new Ext.form.ComboBox({
                                     typeAhead: true,
                                     anyMatch: true,
@@ -4714,7 +4715,7 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                                     typeAhead: true,
                                     queryMode: 'local',
                                     mode: 'local',
-
+                                    disabled: (cckpi != "true"),
                                     triggerAction: 'all',
                                     selectOnFocus:true,
                                     hideTrigger: false,
@@ -4791,31 +4792,32 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                                     var outValue = "";
                                     grid.stopEditing();
                                     grid.getView().refresh();
+                                    var ckpi = this.addCustomKPI;
                                     vardefs.data.each(function() {
                                         if(this.data['name'].length > 0) {
                                             if(this.data['stype'].length > 0) {
                                                 if(this.data['stype'] == "Object" && this.data['ctype'].length > 0) {
                                                     outValue += this.data['name'] + ":" + this.data['ctype'];
-                                                    if(this.addCustomKPI == "true") {
+                                                    if(ckpi == "true") {
                                                         outValue +=  ":" + this.data['kpi'];
                                                     }
                                                     outValue += ",";
                                                 } else {
                                                     outValue += this.data['name'] + ":" + this.data['stype'];
-                                                    if(this.addCustomKPI == "true") {
+                                                    if(ckpi == "true") {
                                                         outValue +=  ":" + this.data['kpi'];
                                                     }
                                                     outValue += ",";
                                                 }
                                             } else if(this.data['ctype'].length > 0) {
                                                 outValue += this.data['name'] + ":" + this.data['ctype'];
-                                                if(this.addCustomKPI == "true") {
+                                                if(ckpi == "true") {
                                                     outValue +=  ":" + this.data['kpi'];
                                                 }
                                                 outValue += ",";
                                             } else {
                                                 outValue += this.data['name'];
-                                                if(this.addCustomKPI == "true") {
+                                                if(ckpi == "true") {
                                                     outValue +=  ":" + this.data['kpi'];
                                                 }
                                                 outValue += ",";
