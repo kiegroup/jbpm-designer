@@ -158,11 +158,6 @@
     </init-param>
   </servlet>
   <servlet>
-    <display-name>LoadBpmn2</display-name>
-    <servlet-name>LoadBpmn2Servlet</servlet-name>
-    <servlet-class>org.jbpm.designer.web.server.LoadBpmn2Servlet</servlet-class>
-  </servlet>
-  <servlet>
     <display-name>SaveBpmn2</display-name>
     <servlet-name>SaveBpmn2Servlet</servlet-name>
     <servlet-class>org.jbpm.designer.web.server.SaveBpmn2Servlet</servlet-class>
@@ -262,10 +257,6 @@
   <servlet-mapping>
     <servlet-name>StencilSetServiceServlet</servlet-name>
     <url-pattern>/stencilset/*</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>LoadBpmn2Servlet</servlet-name>
-    <url-pattern>/loadBpmnDiagram</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>SaveBpmn2Servlet</servlet-name>

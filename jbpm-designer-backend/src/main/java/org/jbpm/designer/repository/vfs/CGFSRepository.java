@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.UUID;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
@@ -77,7 +78,7 @@ public class CGFSRepository implements Repository {
     asset.setAssetLocation(pathToAsset);
     asset.setCreationDate(new Date().toString());
     asset.setLastModificationDate(new Date().toString());
-    asset.setName(pathToAsset);
+    asset.setName(UUID.randomUUID().toString());
     asset.setOwner("");
 
     try {

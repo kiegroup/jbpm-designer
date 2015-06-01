@@ -18,6 +18,7 @@ package org.jbpm.designer.web.server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletConfig;
@@ -112,8 +113,8 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
     }
         IDiagramProfile profile = _profileService.findProfile(req, req.getParameter("profile"));
 		try {
-//			String response =  new String(_repository.load(req, uuid, profile, getServletContext()), Charset.forName("UTF-8"));
-			String response =  "";
+			String response =  new String(_repository.load(req, uuid, profile, getServletContext()), Charset.forName("UTF-8"));
+
 			resp.getWriter().write(response);
 		} catch (Exception e) {
             e.printStackTrace();
