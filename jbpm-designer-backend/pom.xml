@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.jbpm</groupId>
     <artifactId>jbpm-designer</artifactId>
-    <version>6.2.0.Final-Center</version>
+    <version>6.2.0.Final-Center.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>jbpm-designer-backend</artifactId>
