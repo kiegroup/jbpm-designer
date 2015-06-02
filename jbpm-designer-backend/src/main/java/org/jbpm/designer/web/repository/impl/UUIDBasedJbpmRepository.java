@@ -1,5 +1,6 @@
 package org.jbpm.designer.web.repository.impl;
 
+import java.util.UUID;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -47,7 +48,7 @@ public class UUIDBasedJbpmRepository implements IUUIDBasedRepository {
 
     private byte[] loadDefaultProcess(IDiagramProfile profile, String preProcessingParam) {
         try {
-            String defaultProcessContent = DefaultDesignerAssetService.PROCESS_STUB.replaceAll( "\\$\\{processid\\}", "defaultprocessid" );
+            String defaultProcessContent = DefaultDesignerAssetService.PROCESS_STUB.replaceAll( "\\$\\{processid\\}", UUID.randomUUID().toString() );
             String processjson = profile.createUnmarshaller().parseModel(defaultProcessContent, profile, preProcessingParam);
             return processjson.getBytes("UTF-8");
         } catch(Exception e) {
