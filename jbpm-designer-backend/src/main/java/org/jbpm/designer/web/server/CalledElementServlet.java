@@ -2,9 +2,7 @@ package org.jbpm.designer.web.server;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -100,15 +98,15 @@ public class CalledElementServlet extends HttpServlet {
 //                    }},
 //                    true);
 //
-//            final List<String> ruleFlowGroupNames = new ArrayList<String>();
+            final List<String> ruleFlowGroupNames = new ArrayList<String>();
 //            for ( RefactoringPageRow row : results ) {
 //                ruleFlowGroupNames.add( (String) row.getValue() );
 //            }
 //            Collections.sort( ruleFlowGroupNames );
 //
-//            resp.setCharacterEncoding("UTF-8");
-//            resp.setContentType("application/json");
-//            resp.getWriter().write(getRuleFlowGroupsInfoAsJSON(ruleFlowGroupNames).toString());
+            resp.setCharacterEncoding("UTF-8");
+            resp.setContentType("application/json");
+            resp.getWriter().write(getRuleFlowGroupsInfoAsJSON(ruleFlowGroupNames).toString());
 
         } else if(action != null && action.equals("showdatatypes")) {
 //            final List<RefactoringPageRow> results2 = queryService.query("DesignerFindTypesQuery",
@@ -116,14 +114,14 @@ public class CalledElementServlet extends HttpServlet {
 //                        add(new ValueTypeIndexTerm("*"));
 //                    }},
 //                    true);
-//            final List<String> dataTypeNames = new ArrayList<String>();
+            final List<String> dataTypeNames = new ArrayList<String>();
 //            for ( RefactoringPageRow row : results2 ) {
 //                dataTypeNames.add( (String) row.getValue() );
 //            }
-//            Collections.sort( dataTypeNames );
-//            resp.setCharacterEncoding("UTF-8");
-//            resp.setContentType("application/json");
-//            resp.getWriter().write(getDataTypesInfoAsJSON(dataTypeNames).toString());
+//            Collections.sort(dataTypeNames);
+            resp.setCharacterEncoding("UTF-8");
+            resp.setContentType("application/json");
+            resp.getWriter().write(getDataTypesInfoAsJSON(dataTypeNames).toString());
         } else {
 	        String retValue = "false";
 	        List<String> allPackageNames = ServletUtil.getPackageNamesFromRepository(profile);
