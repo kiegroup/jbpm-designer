@@ -18,8 +18,9 @@ if(!ORYX) var ORYX = {};
 if(!ORYX.CONFIG) ORYX.CONFIG = {};
 
 ORYX.CONFIG.WEB_URL = "org.jbpm.designer.jBPMDesigner";
-ORYX.CONFIG.STUDIO_API_URL = "";
-ORYX.CONFIG.STUDIO_CLIENT_URL = "";
+
+ORYX.CONFIG.CREATE_ROLES_FIELD = function (pair, dataSource, grid, index, facade) {
+};
 
 
 
@@ -77,9 +78,6 @@ ORYX.CONFIG.TASKFORMS_URL = function(uuid, profile) {
 	}
 	return ORYX.PATH + "taskforms?uuid="+ uuid + "&profile=" + profile;
 };
-ORYX.CONFIG.PROJECT_ID = "";
-ORYX.CONFIG.PROCESS_DEF_ID = "";
-ORYX.CONFIG.TOKEN = "";
 
 ORYX.CONFIG.UUID_AUTOSAVE_INTERVAL = 120000;
 ORYX.CONFIG.UUID_AUTOSAVE_DEFAULT = false;
