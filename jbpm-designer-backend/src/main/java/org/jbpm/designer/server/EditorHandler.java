@@ -135,7 +135,6 @@ public class EditorHandler extends HttpServlet {
     private IOService ioService;
 
     @Inject
-    @RequestScoped
     private RepositoryDescriptor descriptor;
 
     /**

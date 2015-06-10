@@ -38,7 +38,6 @@ public class VFSRepository implements Repository {
     private IOService ioService;
 
     @Inject
-    @RequestScoped
     private RepositoryDescriptor descriptor;
 
     @Inject
