@@ -3539,6 +3539,8 @@ public class Bpmn2JsonUnmarshaller {
                     scriptLanguage = "http://www.java.com/java";
                 } else if(properties.get("script_language").equals("mvel")) {
                     scriptLanguage = "http://www.mvel.org/2.0";
+                } else if(properties.get("script_language").equals("javascript")) {
+                    scriptLanguage = "http://www.javascript.com/javascript";
                 } else {
                     // default to java
                     scriptLanguage = "http://www.java.com/java";
@@ -3566,6 +3568,8 @@ public class Bpmn2JsonUnmarshaller {
                     scriptLanguage = "http://www.java.com/java";
                 } else if(properties.get("script_language").equals("mvel")) {
                     scriptLanguage = "http://www.mvel.org/2.0";
+                } else if(properties.get("script_language").equals("javascript")) {
+                    scriptLanguage = "http://www.javascript.com/javascript";
                 } else {
                     // default to java
                     scriptLanguage = "http://www.java.com/java";
@@ -4922,6 +4926,8 @@ public class Bpmn2JsonUnmarshaller {
                 scriptLanguage = "http://www.java.com/java";
             } else if(properties.get("script_language").equals("mvel")) {
                 scriptLanguage = "http://www.mvel.org/2.0";
+            } else if(properties.get("script_language").equals("javascript")) {
+                scriptLanguage = "http://www.javascript.com/javascript";
             } else {
                 // default to java
                 scriptLanguage = "http://www.java.com/java";
@@ -4954,6 +4960,8 @@ public class Bpmn2JsonUnmarshaller {
                 scriptLanguage = "http://www.java.com/java";
             } else if(properties.get("script_language").equals("mvel")) {
                 scriptLanguage = "http://www.mvel.org/2.0";
+            } else if(properties.get("script_language").equals("javascript")) {
+                scriptLanguage = "http://www.javascript.com/javascript";
             } else {
                 // default to java
                 scriptLanguage = "http://www.java.com/java";
@@ -5292,6 +5300,8 @@ public class Bpmn2JsonUnmarshaller {
                     scriptLanguage = "http://www.java.com/java";
                 } else if(properties.get("script_language").equals("mvel")) {
                     scriptLanguage = "http://www.mvel.org/2.0";
+                } else if(properties.get("script_language").equals("javascript")) {
+                    scriptLanguage = "http://www.javascript.com/javascript";
                 } else {
                     // default to java
                     scriptLanguage = "http://www.java.com/java";
@@ -5319,6 +5329,8 @@ public class Bpmn2JsonUnmarshaller {
                     scriptLanguage = "http://www.java.com/java";
                 } else if(properties.get("script_language").equals("mvel")) {
                     scriptLanguage = "http://www.mvel.org/2.0";
+                } else if(properties.get("script_language").equals("javascript")) {
+                    scriptLanguage = "http://www.javascript.com/javascript";
                 } else {
                     // default to java
                     scriptLanguage = "http://www.java.com/java";
@@ -5742,6 +5754,8 @@ public class Bpmn2JsonUnmarshaller {
                     scriptLanguage = "http://www.java.com/java";
                 } else if(properties.get("script_language").equals("mvel")) {
                     scriptLanguage = "http://www.mvel.org/2.0";
+                } else if(properties.get("script_language").equals("javascript")) {
+                    scriptLanguage = "http://www.javascript.com/javascript";
                 } else {
                     // default to java
                     scriptLanguage = "http://www.java.com/java";
@@ -5769,6 +5783,8 @@ public class Bpmn2JsonUnmarshaller {
                     scriptLanguage = "http://www.java.com/java";
                 } else if(properties.get("script_language").equals("mvel")) {
                     scriptLanguage = "http://www.mvel.org/2.0";
+                } else if(properties.get("script_language").equals("javascript")) {
+                    scriptLanguage = "http://www.javascript.com/javascript";
                 } else {
                     // default to java
                     scriptLanguage = "http://www.java.com/java";
@@ -5898,6 +5914,8 @@ public class Bpmn2JsonUnmarshaller {
                 scriptLanguage = "http://www.java.com/java";
             } else if(properties.get("script_language").equals("mvel")) {
                 scriptLanguage = "http://www.mvel.org/2.0";
+            } else if(properties.get("script_language").equals("javascript")) {
+                scriptLanguage = "http://www.javascript.com/javascript";
             } else {
                 // default to java
                 scriptLanguage = "http://www.java.com/java";
@@ -6787,6 +6805,8 @@ public class Bpmn2JsonUnmarshaller {
                     languageStr = "http://www.mvel.org/2.0";
                 } else if(properties.get("conditionexpressionlanguage").equals("java")) {
                     languageStr = "http://www.java.com/java";
+                } else if(properties.get("conditionexpressionlanguage").equals("javascript")) {
+                    languageStr = "http://www.javascript.com/javascript";
                 } else {
                     // default to mvel
                     languageStr = "http://www.mvel.org/2.0";

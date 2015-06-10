@@ -1585,7 +1585,12 @@
 							"value":"java"
 						},
 						{
-							"id": "c2",
+                                                        "id": "c2",
+                                                        "title":"javascript",
+                                                        "value":"javascript"
+                                                },
+						{
+							"id": "c3",
 							"title": "mvel",
 							"value": "mvel"
 						}
@@ -3622,7 +3627,12 @@
 							"value":"java"
 						$bclose$,
 						$bopen$
-							"id": "c2",
+                                                        "id": "c2",
+                                                        "title":"javascript",
+                                                        "value":"javascript"
+                                                $bclose$,
+						$bopen$
+							"id": "c3",
 							"title": "mvel",
 							"value": "mvel"
 						$bclose$
@@ -4053,7 +4063,12 @@
 							"value":"java"
 						},
 						{
-							"id": "c2",
+                                                        "id": "c2",
+                                                        "title":"javascript",
+                                                        "value":"javascript"
+                                                },
+						{
+							"id": "c3",
 							"title": "mvel",
 							"value": "mvel"
 						}
@@ -4430,7 +4445,12 @@
 							"value":"java"
 						},
 						{
-							"id": "c2",
+                                                        "id": "c2",
+                                                        "title":"javascript",
+                                                        "value":"javascript"
+                                                },
+						{
+							"id": "c3",
 							"title": "mvel",
 							"value": "mvel"
 						}
@@ -4826,7 +4846,12 @@
 							"value":"java"
 						},
 						{
-							"id": "c2",
+                                                        "id": "c2",
+                                                        "title":"javascript",
+                                                        "value":"javascript"
+                                                },
+						{
+							"id": "c3",
 							"title": "mvel",
 							"value": "mvel"
 						}
@@ -5188,7 +5213,12 @@
 							"value":"java"
 						},
 						{
-							"id": "c2",
+                                                        "id": "c2",
+                                                        "title":"javascript",
+                                                        "value":"javascript"
+                                                },
+						{
+							"id": "c3",
 							"title": "mvel",
 							"value": "mvel"
 						}
@@ -9543,13 +9573,18 @@
 							"title": "java",
 							"value": "java"
 						},
-                        {
-                            "id": "c1",
-                            "title": "mvel",
-                            "value": "mvel"
-                        },
 						{
-							"id": "c2",
+                                                        "id": "c2",
+                                                        "title":"javascript",
+                                                        "value":"javascript"
+                                                },
+                        			{
+                            				"id": "c3",
+                            				"title": "mvel",
+                            				"value": "mvel"
+                        			},
+						{
+							"id": "c4",
 							"title": "drools",
 							"value": "drools"
 						}    
