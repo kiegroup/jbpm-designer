@@ -637,3 +637,11 @@ These don't have a static icon
   background-image: url('../../images/sprites/palette-images-sprite.png');
   background-position: left -993px;
 }
+
+.images_dataio {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../../images/sprites/palette-images-sprite.png');
+  background-position: left -1009px;
+}
