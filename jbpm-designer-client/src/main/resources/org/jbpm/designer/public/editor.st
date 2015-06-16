@@ -6,11 +6,6 @@
             ORYX_LOGLEVEL = 4;
         }
 
-        ORYX.CONFIG.PROJECT_ID = "$projectId$";
-        ORYX.CONFIG.PROCESS_DEF_ID = "$procDefId$";
-        ORYX.CONFIG.STUDIO_API_URL = "$studioApiUrl$";
-        ORYX.CONFIG.TOKEN = "$token$";
-        ORYX.CONFIG.STUDIO_CLIENT_URL = "$studioClientUrl$";
         ORYX.PREPROCESSING = "$preprocessing$";
         ORYX.EXTERNAL_PROTOCOL = "$externalprotocol$";
         ORYX.EXTERNAL_HOST = "$externalhost$";
