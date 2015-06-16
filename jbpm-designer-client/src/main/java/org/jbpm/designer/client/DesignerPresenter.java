@@ -2,14 +2,17 @@ package org.jbpm.designer.client;
 
 import java.util.Map;
 import javax.enterprise.context.Dependent;
-import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.user.client.ui.IsWidget;
 import org.guvnor.common.services.shared.metadata.model.Overview;
 import org.jboss.errai.common.client.api.Caller;
 import org.jboss.errai.common.client.api.RemoteCallback;
+import org.jbpm.designer.client.popup.ActivityDataIOEditor;
+import org.jbpm.designer.client.shared.AssignmentData;
+import org.jbpm.designer.client.shared.Variable.VariableType;
 import org.jbpm.designer.client.type.Bpmn2Type;
 import org.jbpm.designer.service.DesignerAssetService;
 import org.jbpm.designer.service.DesignerContent;
@@ -31,7 +34,6 @@ import org.uberfire.ext.editor.commons.client.file.CommandWithFileNameAndCommitM
 import org.uberfire.ext.editor.commons.client.file.CopyPopup;
 import org.uberfire.ext.editor.commons.client.file.FileNameAndCommitMessage;
 import org.uberfire.ext.editor.commons.client.file.RenamePopup;
-import org.uberfire.ext.editor.commons.client.validation.DefaultFileNameValidator;
 import org.uberfire.ext.editor.commons.service.CopyService;
 import org.uberfire.ext.editor.commons.service.DeleteService;
 import org.uberfire.ext.editor.commons.service.RenameService;
@@ -78,6 +80,9 @@ public class DesignerPresenter
 
     @Inject
     private Bpmn2Type resourceType;
+
+    @Inject
+    private ActivityDataIOEditor activityDataIOEditor;
 
     private DesignerView view;
 
@@ -187,6 +192,13 @@ public class DesignerPresenter
         }
     }-*/;
 
+    private native void publishShowDataIOEditor( DesignerPresenter dp )/*-{
+        $wnd.designersignalshowdataioeditor = function (datainput, datainputset, dataoutput, dataoutputset, processvars, assignments, datatypes, jscallback) {
+            dp.@org.jbpm.designer.client.DesignerPresenter::showDataIOEditor(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;)(datainput, datainputset, dataoutput, dataoutputset, processvars, assignments, datatypes, jscallback);
+        }
+    }-*/;
+
+
     public void closePlace() {
         if ( view.getIsReadOnly() ) {
             placeManager.forceClosePlace( this.place );
@@ -211,8 +223,72 @@ public class DesignerPresenter
                                                        } );
                 popup.show();
             }
-        } ).get( URIUtil.encode( uri ) );
+        } ).get(URIUtil.encode(uri));
     }
+
+//    AssignmentData _assignmentData = new AssignmentData("inStr:String,inInt1:Integer,inCustom1:org.jdl.Custom,inStrConst:String,Skippable",
+//            "outStr1:String,outInt1:Integer,outCustom1:org.jdl.Custom",
+//            "str1:String,int1:Integer,custom1:org.jdl.Custom",
+//            "[din]str1->inStr,[din]int1->inInt1,[din]custom1->inCustom1,[din]inStrConst=TheString,[dout]outStr1->str1,[dout]outInt1->int1,[dout]outCustom1->custom1",
+//            "String:String, Integer:Integer, Boolean:Boolean, Float:Float, Object:Object");
+
+    public void showDataIOEditor(final String datainput, final String datainputset, final String dataoutput,
+            final String dataoutputset, final String processvars, final String assignments, final String datatypes, final JavaScriptObject jscallback) {
+        //Window.alert("DesignerPresenter.showDataIOEditor param assignmentdata = " + assignmentData);
+
+        //getDataIOEditorData("{ \"a\":\"hello\" }", jscallback);
+        final DesignerPresenter dp = this;
+        activityDataIOEditor.setCallback(
+                new ActivityDataIOEditor.GetDataCallback() {
+                    @Override
+                    public void getData(String data) {
+                        dp.getDataIOEditorData(data, jscallback);
+                    }
+                }
+        );
+
+        String inputvars = null;
+        boolean hasInputVars = false;
+        boolean isSingleInputVar = false;
+        if (datainput != null) {
+            inputvars = datainput;
+            hasInputVars = true;
+            isSingleInputVar = true;
+        }
+        if (datainputset != null) {
+            inputvars = datainputset;
+            hasInputVars = true;
+            isSingleInputVar = false;
+        }
+
+        String outputvars = null;
+        boolean hasOutputVars = false;
+        boolean isSingleOutputVar = false;
+        if (dataoutput != null) {
+            outputvars = dataoutput;
+            hasOutputVars = true;
+            isSingleOutputVar = true;
+        }
+        if (dataoutputset != null) {
+            outputvars = dataoutputset;
+            hasOutputVars = true;
+            isSingleOutputVar = false;
+        }
+
+        AssignmentData assignmentData = new AssignmentData(inputvars, outputvars, processvars, assignments, datatypes);
+        activityDataIOEditor.setInputAssignmentRows(assignmentData.getAssignmentRows(VariableType.INPUT));
+        activityDataIOEditor.setOutputAssignmentRows(assignmentData.getAssignmentRows(VariableType.OUTPUT));
+        activityDataIOEditor.setDataTypes(assignmentData.getDataTypes(), assignmentData.getDataTypeDisplayNames());
+        activityDataIOEditor.setProcessVariables(assignmentData.getProcessVariableNames());
+
+        activityDataIOEditor.configureWidgets(hasInputVars, isSingleInputVar, hasOutputVars, isSingleOutputVar);
+        activityDataIOEditor.show();
+    }
+
+    private native void getDataIOEditorData(String assignmentData, final JavaScriptObject jscallback)/*-{
+        jscallback(assignmentData);
+        //$wnd.alert("DesignerPresenter.getDataIOEditorData assignmentdata = " + assignmentData);
+    }-*/;
 
     public void assetRenameEvent( String uri ) {
         vfsServices.call( new RemoteCallback<Path>() {
@@ -337,6 +413,7 @@ public class DesignerPresenter
         this.publishSignalOnAssetUpdate( this );
         this.publishSignalOnAssetExpectConcurrentUpdate( this );
         this.publishClosePlace( this );
+        this.publishShowDataIOEditor(this);
 
         if ( versionRecordManager.getCurrentPath() != null ) {
             assetService.call( new RemoteCallback<String>() {

@@ -575,3 +575,10 @@ These don't have a static icon
     background-repeat: no-repeat;
     background-image: url(../../images/view.png);  /** sprite-ref: palette-images-sprite; */
 }
+
+.images_dataio {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+    background-image: url(../../images/dataio.png);  /** sprite-ref: palette-images-sprite; */
+}
