@@ -80,45 +80,55 @@ public class ActivityDataIOEditor extends BaseModal {
         List<String> acceptableValuesWithoutCustomValues = new ArrayList<String>();
         List<String> customValues = new ArrayList<String>();
 
-        void register(ValueListBox<String> listBox, List<String> acceptableValues,
-                boolean showCustomValues) {
-            if (acceptableValues != null) {
-                for (int i = 0; i < acceptableValues.size(); i++) {
-                    String value = acceptableValues.get(i);
-                    if (! acceptableValuesWithCustomValues.contains(value)) {
-                        acceptableValuesWithCustomValues.add(value);
-                    }
-                    else {
-                        // all new entries to be added are at the start
-                        break;
-                    }
-                }
-                for (int i = 0; i < acceptableValues.size(); i++) {
-                    String value = acceptableValues.get(i);
-                    if (! acceptableValuesWithoutCustomValues.contains(value)
-                            && ! value.endsWith("...")) {
-                        acceptableValuesWithoutCustomValues.add(value);
-                    }
-                    else {
-                        // all new entries to be added are at the start
-                        break;
-                    }
-                }
+        void update(ValueListBox<String> observer, boolean showCustomValues) {
+            if (showCustomValues) {
+                observer.setAcceptableValues(acceptableValuesWithCustomValues);
             }
-            update(listBox, showCustomValues);
+            else {
+                observer.setAcceptableValues(acceptableValuesWithoutCustomValues);
+            }
         }
 
-        void addValue(ValueListBox<String> listBox, String newValue, String newValuePrompt, String customValue,
+        void addValues(List<String> acceptableValues) {
+            clear();
+            if (acceptableValues != null) {
+                acceptableValuesWithCustomValues.addAll(acceptableValues);
+                for (int i = 0; i < acceptableValues.size(); i++) {
+                    String value = acceptableValues.get(i);
+                    if (!acceptableValuesWithoutCustomValues.contains(value)
+                            && !value.endsWith("...")) {
+                        acceptableValuesWithoutCustomValues.add(value);
+                    }
+                }
+            }
+        }
+
+        private void clear() {
+            acceptableValuesWithCustomValues.clear();
+            acceptableValuesWithCustomValues.addAll(customValues);
+            acceptableValuesWithoutCustomValues.clear();
+
+        }
+
+        void addValue(ValueListBox<String> listBox, String newValue, String newValuePrompt,
                 boolean showCustomValues) {
-            if (newValuePrompt != null && !acceptableValuesWithCustomValues.contains(newValuePrompt)) {
-                acceptableValuesWithCustomValues.add(0, newValuePrompt);
+            if (newValue != null) {
+                if (!acceptableValuesWithCustomValues.contains(newValue)) {
+                    acceptableValuesWithCustomValues.add(0, newValue);
+                }
+                if (!customValues.contains(newValue)) {
+                    customValues.add(newValue);
+                }
             }
-            if (newValue != null && !acceptableValuesWithCustomValues.contains(newValue)) {
-                acceptableValuesWithCustomValues.add(0, newValue);
+            if (newValuePrompt != null) {
+                if (!acceptableValuesWithCustomValues.contains(newValuePrompt)) {
+                    acceptableValuesWithCustomValues.add(0, newValuePrompt);
+                }
+                if (!customValues.contains(newValuePrompt)) {
+                    customValues.add(newValuePrompt);
+                }
             }
-            if (customValue != null && !customValues.contains(customValue)) {
-                customValues.add(customValue);
-            }
+
             update(listBox, showCustomValues);
         }
 
@@ -128,15 +138,6 @@ public class ActivityDataIOEditor extends BaseModal {
             }
             else {
                 return customValues.contains(value);
-            }
-        }
-
-        void update(ValueListBox<String> observer, boolean showCustomValues) {
-            if (showCustomValues) {
-                observer.setAcceptableValues(acceptableValuesWithCustomValues);
-            }
-            else {
-                observer.setAcceptableValues(acceptableValuesWithoutCustomValues);
             }
         }
     }
@@ -237,7 +238,7 @@ public class ActivityDataIOEditor extends BaseModal {
     public void setDataTypes(List<String> dataTypes, List<String> dataTypeDisplayNames) {
         this.dataTypes = dataTypes;
         this.dataTypeDisplayNames = dataTypeDisplayNames;
-
+        dataTypeListBoxValues.addValues(dataTypeDisplayNames);
         inputAssignmentsWidget.setDataTypes(dataTypeDisplayNames, dataTypeListBoxValues);
         outputAssignmentsWidget.setDataTypes(dataTypeDisplayNames, dataTypeListBoxValues);
     }
@@ -246,8 +247,8 @@ public class ActivityDataIOEditor extends BaseModal {
         List<String> inProcessVariables = new ArrayList<String>();
         inProcessVariables.add("Constant ...");
         inProcessVariables.addAll(processVariables);
+        processVarListBoxValues.addValues(inProcessVariables);
         inputAssignmentsWidget.setProcessVariables(inProcessVariables, processVarListBoxValues);
-
         outputAssignmentsWidget.setProcessVariables(processVariables, processVarListBoxValues);
     }
 }

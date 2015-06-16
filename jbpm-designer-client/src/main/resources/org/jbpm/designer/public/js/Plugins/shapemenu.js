@@ -602,12 +602,12 @@ ORYX.Plugins.ShapeMenuPlugin = {
 	},
 
 	getProcessVars : function(element) {
-		var vars = "** Variable Definitions **";
+		var vars = "** Variable Definitions **,";
 
 		if(element && element.parent) {
 			var parentvars = this.getParentVars(element.parent);
 			if (parentvars && parentvars.length > 0) {
-				vars = vars + parentvars;
+				vars = vars + parentvars + '******:******,';
 			}
 		}
 
@@ -617,7 +617,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
 		if(vardefs) {
 			vardefs.forEach(function(item){
 				if(item.length > 0) {
-					processvars = processvars + ',' + item;
+					processvars = processvars + item + ',';
 				}
 			});
 		}
@@ -636,19 +636,19 @@ ORYX.Plugins.ShapeMenuPlugin = {
 
 				var vardefsprop = thisNode.properties["oryx-vardefs"];
 				if(vardefsprop && vardefsprop.length > 0) {
-					parentvars = parentvars + ',' + vardefsprop;
+					parentvars = parentvars + this.sortVarsString(vardefsprop);
 				}
 
 				if(thisNode._stencil._jsonStencil.id == "http://b3mn.org/stencilset/bpmn2.0#MultipleInstanceSubprocess") {
 					var midatainputsprop = thisNode.properties["oryx-multipleinstancedatainput"];
 					if(midatainputsprop && midatainputsprop.length > 0) {
-						parentvars = parentvars + ',' + midatainputsprop;
+						parentvars = parentvars + this.sortVarsString(midatainputsprop);
 					}
 
 
 					var midataOutputsprop = thisNode.properties["oryx-multipleinstancedataoutput"];
 					if(midataOutputsprop && midataOutputsprop.length > 0) {
-						parentvars = parentvars + ',' + midataOutputsprop;
+						parentvars = parentvars + this.sortVarsString(midataOutputsprop);
 					}
 				}
 			}
@@ -660,6 +660,19 @@ ORYX.Plugins.ShapeMenuPlugin = {
 			}
 		}
 		return parentvars;
+	},
+
+	sortVarsString: function(varsString) {
+		if (!varsString || varsString.length < 1) {
+			return "";
+		}
+		var arrVars = varsString.split(",");
+		arrVars.sort();
+		var sortedVarString = "";
+		for (var i=0; i < arrVars.length; i++) {
+			sortedVarString = sortedVarString + arrVars[i] + ",";
+		}
+		return sortedVarString + ',';
 	},
 
 	onSelectionChanged: function(event) {

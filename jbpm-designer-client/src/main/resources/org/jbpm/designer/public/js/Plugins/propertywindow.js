@@ -4470,15 +4470,18 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
      * If the trigger was clicked a dialog has to be opened
      * to enter the values for the complex property.
      */
-    onTriggerClick : function(){
+    onTriggerClick : function() {
 
-        if(this.disabled){
-            return;
-        }
-		this.facade.raiseEvent({
-			type: ORYX.CONFIG.EVENT_DATAIOEDITOR_SHOW
-		});
-		return;
+		if (this.disabled) {
+			return;
+		}
+
+		if (this.dtype == ORYX.CONFIG.TYPE_DTYPE_DINPUT || this.dtype == ORYX.CONFIG.TYPE_DTYPE_DOUTPUT) {
+			this.facade.raiseEvent({
+				type: ORYX.CONFIG.EVENT_DATAIOEDITOR_SHOW
+			});
+			return;
+		}
 
         var processJSON = ORYX.EDITOR.getSerializedJSON();
         var processPackage = jsonPath(processJSON.evalJSON(), "$.properties.package");

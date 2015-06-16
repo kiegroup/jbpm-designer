@@ -234,7 +234,7 @@ public class AssignmentListItemWidget extends Composite implements HasModel<Assi
         }
         String promptWithValue = editPrompt + value + "...";
         boolean showCustomValues = mapListBoxToShowCustomValues.get(listBox);
-        getListBoxValues(listBox).addValue(listBox, value, promptWithValue, value, showCustomValues);
+        getListBoxValues(listBox).addValue(listBox, value, promptWithValue, showCustomValues);
     }
 
     protected void setModelValue(final TextBox textBox, String value) {
@@ -285,7 +285,7 @@ public class AssignmentListItemWidget extends Composite implements HasModel<Assi
     public void setDataTypes(List<String> dataTypes, ListBoxValues listBoxValues) {
         mapListBoxToValues.put(dataType, listBoxValues);
         mapListBoxToShowCustomValues.put(dataType, true);
-        listBoxValues.register(dataType, dataTypes, true);
+        listBoxValues.update(dataType, true);
         String cdt = assignment.getModel().getCustomDataType();
         if (cdt != null && !cdt.isEmpty()) {
             addValueToListBoxValues(dataType, cdt, EDIT_PROMPT, false);
@@ -299,7 +299,7 @@ public class AssignmentListItemWidget extends Composite implements HasModel<Assi
             showCustomValues = true;
         }
         mapListBoxToShowCustomValues.put(processVar, showCustomValues);
-        listBoxValues.register(processVar, processVariables, showCustomValues);
+        listBoxValues.update(processVar, showCustomValues);
         String con = assignment.getModel().getConstant();
         if (con != null && !con.isEmpty()) {
             addValueToListBoxValues(processVar, con, EDIT_PROMPT, true);
