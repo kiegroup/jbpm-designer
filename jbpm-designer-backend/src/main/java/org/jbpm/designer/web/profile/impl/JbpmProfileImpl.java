@@ -356,7 +356,12 @@ public class JbpmProfileImpl implements IDiagramProfile {
 
     private Definitions getDefaultDefinitions() {
         try {
-            String defaultProcessContent = DefaultDesignerAssetService.PROCESS_STUB.replaceAll( "\\$\\{processid\\}", UUID.randomUUID().toString() );
+            String processId = UUID.randomUUID().toString();
+            if (processId.substring(0,1).matches("\\d")) {
+                processId = "a" + processId;
+            }
+
+            String defaultProcessContent = DefaultDesignerAssetService.PROCESS_STUB.replaceAll( "\\$\\{processid\\}", processId);
             String errorMessages = "Unable to load process content due to errors. Displaying default process instead. Check logs for error details.";
 //            notification.fire( new DesignerNotificationEvent( errorMessages, NotificationEvent.NotificationType.ERROR, user.getIdentifier()) );
             return getDefinitions(defaultProcessContent);
