@@ -26,6 +26,7 @@
     <module>jbpm-designer-api</module>
     <module>jbpm-designer-backend</module>
     <module>jbpm-designer-client</module>
+    <module>jbpm-designer-utilities</module>
     <module>jbpm-designer-standalone</module>
     <module>jbpm-designer-distribution-wars</module>
     <module>jbpm-designer-distribution-wars-cdi1.0</module>

@@ -18,11 +18,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>jbpm-designer-utilities</groupId>
-  <artifactId>svginline</artifactId>
-  <version>6.3.0-SNAPSHOT</version>
-  <name>jbpm-designer-utilities svginline</name>
-  <description>jbpm-designer-utilities svginline</description>
+  <parent>
+    <groupId>org.jbpm</groupId>
+    <artifactId>jbpm-designer</artifactId>
+    <version>6.3.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>jbpm-designer-utilities</artifactId>
+  <name>jBPM Designer - Utilities</name>
+  <description>jBPM Designer - Utilities - svginline</description>
   <properties>
     <project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
   </properties>
@@ -56,19 +59,6 @@
       </plugins>
     </pluginManagement>
     <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.1</version>
-        <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.jboss.as.plugins</groupId>
-        <artifactId>jboss-as-maven-plugin</artifactId>
-        <version>7.5.Final</version>
-      </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
