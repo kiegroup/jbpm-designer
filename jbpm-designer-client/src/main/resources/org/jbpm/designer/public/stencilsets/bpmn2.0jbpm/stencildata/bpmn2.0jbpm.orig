@@ -2749,9 +2749,9 @@
 				{
 					"id":"comment",
 					"type":"String",
-					"title":"Comment",
+					"title":"Subject",
 					"value":"",
-					"description":"Comment",
+					"description":"Subject",
 					"description_ja":"コメント",
 					"readonly":false,
 					"optional":true,
