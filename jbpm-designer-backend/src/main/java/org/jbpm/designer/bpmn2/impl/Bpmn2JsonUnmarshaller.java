@@ -3532,7 +3532,7 @@ public class Bpmn2JsonUnmarshaller {
             String[] allActions = properties.get("onentryactions").split( "\\|\\s*" );
             for(String action : allActions) {
                 OnEntryScriptType onEntryScript = DroolsFactory.eINSTANCE.createOnEntryScriptType();
-                onEntryScript.setScript(wrapInCDATABlock(action));
+                onEntryScript.setScript(wrapInCDATABlock(replaceScriptEscapeAndNewLines(action)));
                 
                 String scriptLanguage;
                 if(properties.get("script_language").equals("java")) {
@@ -3561,7 +3561,7 @@ public class Bpmn2JsonUnmarshaller {
             String[] allActions = properties.get("onexitactions").split( "\\|\\s*" );
             for(String action : allActions) {
                 OnExitScriptType onExitScript = DroolsFactory.eINSTANCE.createOnExitScriptType();
-                onExitScript.setScript(wrapInCDATABlock(action));
+                onExitScript.setScript(wrapInCDATABlock(replaceScriptEscapeAndNewLines(action)));
                 
                 String scriptLanguage;
                 if(properties.get("script_language").equals("java")) {
@@ -5293,7 +5293,7 @@ public class Bpmn2JsonUnmarshaller {
             String[] allActions = properties.get("onentryactions").split( "\\|\\s*" );
             for(String action : allActions) {
                 OnEntryScriptType onEntryScript = DroolsFactory.eINSTANCE.createOnEntryScriptType();
-                onEntryScript.setScript(wrapInCDATABlock(action));
+                onEntryScript.setScript(wrapInCDATABlock(replaceScriptEscapeAndNewLines(action)));
                 
                 String scriptLanguage = "";
                 if(properties.get("script_language").equals("java")) {
@@ -5322,7 +5322,7 @@ public class Bpmn2JsonUnmarshaller {
             String[] allActions = properties.get("onexitactions").split( "\\|\\s*" );
             for(String action : allActions) {
                 OnExitScriptType onExitScript = DroolsFactory.eINSTANCE.createOnExitScriptType();
-                onExitScript.setScript(wrapInCDATABlock(action));
+                onExitScript.setScript(wrapInCDATABlock(replaceScriptEscapeAndNewLines(action)));
                 
                 String scriptLanguage = "";
                 if(properties.get("script_language").equals("java")) {
@@ -5747,7 +5747,7 @@ public class Bpmn2JsonUnmarshaller {
             String[] allActions = properties.get("onentryactions").split( "\\|\\s*" );
             for(String action : allActions) {
                 OnEntryScriptType onEntryScript = DroolsFactory.eINSTANCE.createOnEntryScriptType();
-                onEntryScript.setScript(wrapInCDATABlock(action));
+                onEntryScript.setScript(wrapInCDATABlock(replaceScriptEscapeAndNewLines(action)));
                 
                 String scriptLanguage = "";
                 if(properties.get("script_language").equals("java")) {
@@ -5776,7 +5776,7 @@ public class Bpmn2JsonUnmarshaller {
             String[] allActions = properties.get("onexitactions").split( "\\|\\s*" );
             for(String action : allActions) {
                 OnExitScriptType onExitScript = DroolsFactory.eINSTANCE.createOnExitScriptType();
-                onExitScript.setScript(wrapInCDATABlock(action));
+                onExitScript.setScript(wrapInCDATABlock(replaceScriptEscapeAndNewLines(action)));
                 
                 String scriptLanguage;
                 if(properties.get("script_language").equals("java")) {
@@ -6047,7 +6047,7 @@ public class Bpmn2JsonUnmarshaller {
         	}
         }
         
-        if(properties.get("comment") != null && properties.get("comment").length() > 0) {
+        if(properties.get("subject") != null && properties.get("subject").length() > 0) {
         	if(task.getIoSpecification() == null) {
                 InputOutputSpecification iospec = Bpmn2Factory.eINSTANCE.createInputOutputSpecification();
                 task.setIoSpecification(iospec);
@@ -6082,7 +6082,7 @@ public class Bpmn2JsonUnmarshaller {
         	for(DataInputAssociation da : inputAssociations) {
         		if(da.getTargetRef() != null && da.getTargetRef().getId().equals(foundInput.getId())) {
         			foundCommentAssociation = true;
-        			((FormalExpression) da.getAssignment().get(0).getFrom()).setBody(wrapInCDATABlock(properties.get("comment")));
+        			((FormalExpression) da.getAssignment().get(0).getFrom()).setBody(wrapInCDATABlock(properties.get("subject")));
         		}
         	}
         	
@@ -6092,7 +6092,7 @@ public class Bpmn2JsonUnmarshaller {
         		
         		Assignment a = Bpmn2Factory.eINSTANCE.createAssignment();
                 FormalExpression commentFromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
-                commentFromExpression.setBody(wrapInCDATABlock(properties.get("comment")));
+                commentFromExpression.setBody(wrapInCDATABlock(properties.get("subject")));
                 
                 FormalExpression commentToExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
                 commentToExpression.setBody(foundInput.getId());
@@ -6616,7 +6616,7 @@ public class Bpmn2JsonUnmarshaller {
         				incompleteAssociations.add(dia);
         			} else if(targetInput.getName().equalsIgnoreCase("Skippable") && ( skippableStr == null || skippableStr.length() == 0) ) {
         				incompleteAssociations.add(dia);
-        			} else if(targetInput.getName().equalsIgnoreCase("Comment") && (properties.get("comment") == null  || properties.get("comment").length() == 0)) {
+        			} else if(targetInput.getName().equalsIgnoreCase("Comment") && (properties.get("subject") == null  || properties.get("subject").length() == 0)) {
         				incompleteAssociations.add(dia);
         			} else if(targetInput.getName().equalsIgnoreCase("Description") && (properties.get("description") == null  || properties.get("description").length() == 0)) {
                         incompleteAssociations.add(dia);
@@ -6654,7 +6654,7 @@ public class Bpmn2JsonUnmarshaller {
         			toRemoveDataInputs.add(din);
     			} else if(din.getName().equalsIgnoreCase("Skippable") && (skippableStr == null  || skippableStr.length() == 0)) {
     				toRemoveDataInputs.add(din);
-    			} else if(din.getName().equalsIgnoreCase("Comment") && (properties.get("comment") == null  || properties.get("comment").length() == 0)) {
+    			} else if(din.getName().equalsIgnoreCase("Comment") && (properties.get("subject") == null  || properties.get("subject").length() == 0)) {
     				toRemoveDataInputs.add(din);
     			} else if(din.getName().equalsIgnoreCase("Description") && (properties.get("description") == null  || properties.get("description").length() == 0)) {
                     toRemoveDataInputs.add(din);

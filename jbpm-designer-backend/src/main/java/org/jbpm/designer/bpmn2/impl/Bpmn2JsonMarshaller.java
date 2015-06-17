@@ -1915,7 +1915,7 @@ public class Bpmn2JsonMarshaller {
                         if (commentDataInput != null && datain.getAssignment().get(0).getTo() != null &&
                                 ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
                                         ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(commentDataInput.getId())) {
-                            properties.put("comment", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
+                            properties.put("subject", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
                         }
                         if (descriptionDataInput != null && datain.getAssignment().get(0).getTo() != null &&
                                 ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
