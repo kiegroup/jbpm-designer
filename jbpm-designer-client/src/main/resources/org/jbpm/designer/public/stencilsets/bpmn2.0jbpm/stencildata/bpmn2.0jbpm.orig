@@ -2747,17 +2747,17 @@
 					"fortasktypes":"None|User"
 				},
 				{
-					"id":"comment",
-					"type":"String",
-					"title":"Subject",
-					"value":"",
-					"description":"Subject",
-					"description_ja":"コメント",
-					"readonly":false,
-					"optional":true,
-					"fortasktypes":"None|User",
-					"extra":true
-				},
+                                        "id":"subject",
+                                        "type":"Text",
+                                        "title":"Subject",
+                                        "value":"",
+                                        "description":"Subject",
+                                        "description_ja":"コメント",
+                                        "readonly":false,
+                                        "optional":true,
+                                        "fortasktypes":"None|User",
+                                        "extra":true
+                                },
 				{
                                         "id":"description",
                                         "type":"String",
