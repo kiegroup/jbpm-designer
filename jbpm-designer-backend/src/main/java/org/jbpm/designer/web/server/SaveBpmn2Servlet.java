@@ -1,7 +1,6 @@
 package org.jbpm.designer.web.server;
 
 import java.io.File;
-import java.io.IOException;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -24,23 +23,18 @@ public class SaveBpmn2Servlet extends HttpServlet {
 
   private IUUIDBasedRepository _repository;
 
-//  @Inject
+  //  @Inject
   private static IDiagramProfileService _profileService = ProfileServiceImpl.getInstance();
 
   @Override
   public void init(ServletConfig config) throws ServletException {
     super.init(config);
-    try {
-      _repository = new UUIDBasedJbpmRepository();
-      _repository.configure(this);
-    }
-    catch (Exception e) {
-      throw new ServletException(e);
-    }
+    _repository = new UUIDBasedJbpmRepository();
+    _repository.configure(this);
   }
 
   @Override
-  protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+  protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
     try {
       req.setCharacterEncoding("UTF-8");
       String json = req.getParameter("data");
@@ -52,8 +46,8 @@ public class SaveBpmn2Servlet extends HttpServlet {
       String xml = _repository.toXML(json, profile, preProcessingParam);
       FileUtils.writeStringToFile(bpmnXml, xml);
     }
-    catch (Exception ex) {
-      throw new ServletException();
+    catch (Exception e) {
+      throw new RuntimeException(e);
     }
   }
 }
