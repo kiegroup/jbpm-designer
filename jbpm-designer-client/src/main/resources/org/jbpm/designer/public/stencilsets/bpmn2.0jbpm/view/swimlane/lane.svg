@@ -23,7 +23,7 @@
 	<rect 
 		id="frame"
 		oryx:anchors="left top bottom"
-		x="0"
+		x="1"
 		y="1"
 		width="30"
 		height="248"
@@ -53,15 +53,15 @@
 	/-->
 	
     <text 
-		x="13"
+		x="50"
 		y="125" 
 		oryx:rotate="270" 
-		font-size="14" 
+		font-size="12"
 		id="text_name" 
 		oryx:align="middle center" 
 		oryx:anchors="left"
-		oryx:fittoelem="caption"
-		fill="black" 
+		oryx:fittoelem="frame"
+
 		stroke="black">
 	</text>
   </g>
