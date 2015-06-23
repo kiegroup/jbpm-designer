@@ -559,6 +559,7 @@ ORYX.I18N.ShapeMenuPlugin.clickDrag = '<i18n:message key="ORYX.I18N.ShapeMenuPlu
 ORYX.I18N.ShapeMenuPlugin.morphMsg = '<i18n:message key="ORYX.I18N.ShapeMenuPlugin.morphMsg">Morph shape</i18n:message>';
 ORYX.I18N.ShapeMenuPlugin.addTpProcessDic='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.addTpProcessDic">Add to Process Dictionary</i18n:message>';
 ORYX.I18N.ShapeMenuPlugin.viewSourceNode='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.viewSourceNode">View Node Source</i18n:message>';
+ORYX.I18N.ShapeMenuPlugin.dataIOEditor='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.dataIOEditor">Data I/O Editor</i18n:message>';
 ORYX.I18N.ShapeMenuPlugin.nameNotSpecified='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.nameNotSpecified">Name not specified.</i18n:message>';
 ORYX.I18N.ShapeMenuPlugin.unableToFindNodeSource='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.unableToFindNodeSource">Unable to find node source.</i18n:message>';
 ORYX.I18N.ShapeMenuPlugin.userTask='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.userTask">User Task</i18n:message>';
