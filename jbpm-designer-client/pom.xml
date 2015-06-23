@@ -315,6 +315,7 @@
                 <include>${project.build.directory}/classes/org/jbpm/designer/public/js/Plugins/shapeHighlighting-min.js</include>
                 <include>${project.build.directory}/classes/org/jbpm/designer/public/js/Plugins/edit-min.js</include>
                 <include>${project.build.directory}/classes/org/jbpm/designer/public/js/Plugins/keysMove-min.js</include>
+                <include>${project.build.directory}/classes/org/jbpm/designer/public/js/Plugins/selectssperspective-min.js</include>
                 <include>${project.build.directory}/classes/org/jbpm/designer/public/js/Plugins/visualvalidation-min.js</include>
                 <include>${project.build.directory}/classes/org/jbpm/designer/public/js/Plugins/regexTextEditor-min.js</include>
                 <include>${project.build.directory}/classes/org/jbpm/designer/public/js/Plugins/constraintExpressionEditor-min.js</include>

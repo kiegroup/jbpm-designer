@@ -18,8 +18,11 @@
    @namespace Oryx name space for plugins
    @name ORYX.Plugins
 */
- if(!ORYX.Plugins)
-	ORYX.Plugins = new Object();
+if (!ORYX.Plugins)
+    ORYX.Plugins = {};
+
+if (!ORYX.Config)
+    ORYX.Config = {};
 	
 
 /**
@@ -31,7 +34,7 @@
  * @param {Object} facade
  * 		The facade of the Editor
  */
-ORYX.Plugins.ContainerLayouter = {
+ORYX.Plugins.ContainerLayouter = Clazz.extend({
 
 	/**
 	 *	Constructor
@@ -39,10 +42,12 @@ ORYX.Plugins.ContainerLayouter = {
 	 */
 	construct: function(facade){
 		this.facade = facade;
-		this.facade.registerOnEvent('layout.container.minBounds', 
-									this.handleLayoutContainerMinBounds.bind(this));
-		this.facade.registerOnEvent('layout.container.dockers', 
-									this.handleLayoutContainerDockers.bind(this));
+
+        this.facade.registerOnEvent('layout.containers', this.handleLayoutContainerMinBounds.bind(this));
+//		this.facade.registerOnEvent('layout.container.minBounds',
+//									this.handleLayoutContainerMinBounds.bind(this));
+//		this.facade.registerOnEvent('layout.container.dockers',
+//									this.handleLayoutContainerDockers.bind(this));
 		
 		this.hashedContainers = new Hash();
 	},
@@ -71,6 +76,7 @@ ORYX.Plugins.ContainerLayouter = {
 	 * 		The layout event object
 	 */
 	handleLayoutContainerMinBounds: function(event) {
+        alert("handling layout for containers!");
 		var shape = event.shape;
 		var topOffset = event.topOffset;
 		var oldBounds = shape._oldBounds;
@@ -394,6 +400,4 @@ ORYX.Plugins.ContainerLayouter = {
 			return [];
 		}
 	}
-}
-
-ORYX.Plugins.ContainerLayouter = ORYX.Plugins.AbstractPlugin.extend(ORYX.Plugins.ContainerLayouter);
+});

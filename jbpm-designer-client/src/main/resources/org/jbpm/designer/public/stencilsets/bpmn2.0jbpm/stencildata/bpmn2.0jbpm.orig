@@ -10146,51 +10146,19 @@
 			},
 			{
 				"role" : "Lane",
-				"contains" : [
-                    "sequence_start",
-                    "sequence_end",
-                    "from_task_event",
-                    "to_task_event",
-                    "EventSubprocess",
-                    "TextAnnotation",
-                    "from_participant"
-                ]
+				"contains" : ["all"]
 			},
 			{
 				"role" : "Subprocess",
-				"contains" : [
-					"sequence_start",
-					"sequence_end",
-					"from_task_event",
-					"to_task_event",
-					"EventSubprocess",
-					"TextAnnotation",
-					"from_participant"
-				]
+				"contains" : ["all"]
 			},
 			{
 				"role" : "AdHocSubprocess",
-				"contains" : [
-					"sequence_start",
-					"sequence_end",
-					"from_task_event",
-					"to_task_event",
-					"EventSubprocess",
-					"TextAnnotation",
-					"from_participant"
-				]
+				"contains" : ["all"]
 			},
 			{
 				"role" : "MultipleInstanceSubprocess",
-				"contains" : [
-					"sequence_start",
-					"sequence_end",
-					"from_task_event",
-					"to_task_event",
-					"EventSubprocess",
-					"TextAnnotation",
-					"from_participant"
-				]
+				"contains" : ["all"]
 			},
 			{
 				"role" : "MessageContainer",
