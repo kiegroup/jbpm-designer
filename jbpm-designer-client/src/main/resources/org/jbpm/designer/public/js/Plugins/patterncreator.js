@@ -13,6 +13,7 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
         this.selectedRoots = [];
         this.selectedRootsCount;
         this.createdElementCount;
+        this.patternContainer;
 
         // TODO - finish pattern creation from selected nodes
 //        this.facade.offer({
@@ -42,6 +43,7 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
             this.selectedRoots = [];
             this.selectedRootsCount = 0;
             this.createdElementCount = 0;
+            this.patternContainer = undefined;
             for(var i=0; i<options.pdata.length; i++) {
                 var pattern = options.pdata[i];
                 if(pattern.id == options.pid) {
@@ -68,11 +70,13 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
                         var element = patternElements[j];
                         if(this.patternShapes[element.id] === undefined) {
                             this.createElement(element, options);
-                            this.createElementChildren(element, patternElements);
+                            this.createElementChildren(element, patternElements, options);
                         } else {
-                            this.createElementChildren(element, patternElements);
+                            this.createElementChildren(element, patternElements, options);
                         }
                     }
+
+                    this.updateParentContainer();
                 }
             }
             this.facade.setSelection([]);
@@ -86,6 +90,27 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
                 title       : ''
 
             });
+        }
+    },
+    updateParentContainer : function() {
+        if(!(this.patternContainer instanceof ORYX.Core.Canvas) ) {
+            var maxWidth    = 0;
+            var maxHeight   = 0;
+            var offset      = 100;
+
+            this.patternContainer.getChildShapes(false, function(shape){
+                var b = shape.bounds;
+                maxWidth    = Math.max( maxWidth, b.lowerRight().x + offset)
+                maxHeight   = Math.max( maxHeight, b.lowerRight().y + offset)
+            });
+
+            if( this.patternContainer.bounds.width() < maxWidth || this.patternContainer.bounds.height() < maxHeight ) {
+                var upl = this.patternContainer.bounds.upperLeft();
+                this.patternContainer.bounds.set(upl.x, upl.y, upl.x + maxWidth, upl.y + maxHeight);
+
+                this.patternContainer.update();
+                this.facade.getCanvas().update();
+            }
         }
     },
     getPatternRoots : function(patternElements) {
@@ -110,16 +135,35 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
         return undefined;
     },
     createElement : function(element, options) {
-        // shape.absoluteXY
-        // shape.absoluteCenterXY
+        var aParentShape;
+        var aShapes = this.facade.getCanvas().getAbstractShapesAtPosition( options.pos );
+        if(aShapes.length <= 0) {
+            aParentShape = ORYX.EDITOR._canvas;
+        }
+        if(aShapes.lenght == 1 && aShapes[0] instanceof ORYX.Core.Canvas) {
+            aParentShape = ORYX.EDITOR._canvas;
+        } else {
+            var parentCandidate = aShapes.reverse().find(function(candidate) {
+                return (candidate instanceof ORYX.Core.Canvas
+                    || candidate instanceof ORYX.Core.Node
+                    || candidate instanceof ORYX.Core.Edge);
+            });
+
+            aParentShape = parentCandidate;
+        }
+
+        if(!this.patternContainer || this.patternContainer === undefined) {
+            this.patternContainer = aParentShape;
+        }
+
         if(element.parent.length == 0 && this.selectedRoots.length > 0) {
             // substitute root element
-
             this.patternShapes[element.id] = this.selectedRoots[this.createdElementCount];
             this.patternPositions[element.id] = this.selectedRoots[this.createdElementCount].absoluteCenterXY();
             this.createdElementCount++;
             return;
         }
+
         var elementPosition = {x:0, y:0};
         if(this.patternPositions[element.id] === undefined) {
             elementPosition.x = options.pos.x;
@@ -135,7 +179,7 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
             namespace: element.namespace,
             connectingType: element.connectingType,
             position: elementPosition,
-            parent:ORYX.EDITOR._canvas
+            parent:aParentShape
         };
         this.patternShapes[element.id] = this.facade.createShape(elementOptions);
         this.patternPositions[element.id] = elementPosition;
@@ -144,13 +188,14 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
         this.facade.getCanvas().update();
 
     },
-    createElementChildren : function(element, patternElements) {
+    createElementChildren : function(element, patternElements, options) {
         var elementChildren = element.children;
         for(var k=0;k<elementChildren.length;k++) {
             var elementChild = elementChildren[k];
             if(this.patternShapes[elementChild] === undefined) {
                 var elementChildObject = this.findChildObject(elementChild, patternElements);
                 if(elementChildObject) {
+
                     var childPosition = {x:0, y:0};
                     childPosition.x = this.patternPositions[element.id].x;
                     childPosition.y = this.patternPositions[element.id].y;
@@ -162,7 +207,7 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
                         connectingType: elementChildObject.connectingType,
                         connectedShape: this.patternShapes[element.id],
                         position: childPosition,
-                        parent:ORYX.EDITOR._canvas
+                        parent:this.patternContainer
                     };
                     this.patternShapes[elementChildObject.id] = this.facade.createShape(elementChildOptions);
                     this.patternPositions[elementChildObject.id] = childPosition;

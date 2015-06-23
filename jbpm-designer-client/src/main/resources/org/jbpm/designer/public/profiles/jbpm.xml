@@ -23,7 +23,8 @@
         <plugin name="ORYX.Plugins.Edit"/>
         <plugin name="ORYX.Plugins.Undo"/>
         <plugin name="ORYX.Plugins.KeysMove"/>
-        <plugin name="ORYX.Plugins.Layouter.EdgeLayouter"/>
+        <!--<plugin name="ORYX.Plugins.Layouter.EdgeLayouter"/>-->
+        <!--<plugin name="ORYX.Plugins.ContainerLayouter" />-->
         <plugin name="ORYX.Plugins.VisualValidation"/>
         <plugin name="ORYX.Plugins.RegexTextEditor"/>
         <plugin name="ORYX.Plugins.ConstraintExpressionEditor"/>
