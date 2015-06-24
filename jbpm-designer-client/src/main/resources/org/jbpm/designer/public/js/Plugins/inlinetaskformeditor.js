@@ -49,7 +49,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                                 try {
                                     if(formType == "form") {
                                         var responseParts = response.responseText.split("|");
-                                        parent.designeropenintab(responseParts[0], responseParts[1]);
+                                        parent.designeropenintab(responseParts[0], encodeURI(responseParts[1]));
                                     } else {
                                         this._buildandshow(formType, options.tn, response.responseText, widgetJson);
                                     }
