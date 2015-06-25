@@ -863,7 +863,7 @@ ORYX.Plugins.View = {
                     });
                     win.show();
                 } catch(e) {
-                    this.facade.raiseEvent({
+                    ORYX.EDITOR._pluginFacade.raiseEvent({
                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                         ntype		: 'error',
                         msg          : ORYX.I18N.view.processPDFFail +': ' + e,
@@ -873,7 +873,7 @@ ORYX.Plugins.View = {
                 }
             }.createDelegate(this),
             failure: function(){
-                this.facade.raiseEvent({
+                ORYX.EDITOR._pluginFacade.raiseEvent({
                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                     ntype		: 'error',
                     msg         : ORYX.I18N.view.processPDFFail+'.',
@@ -930,7 +930,7 @@ ORYX.Plugins.View = {
                     });
                     win.show();
                 } catch(e) {
-                    this.facade.raiseEvent({
+                    ORYX.EDITOR._pluginFacade.raiseEvent({
                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                         ntype		: 'error',
                         msg         : ORYX.I18N.view.processImgFail+': ' + e,
@@ -940,7 +940,7 @@ ORYX.Plugins.View = {
                 }
             }.createDelegate(this),
             failure: function(){
-                this.facade.raiseEvent({
+                ORYX.EDITOR._pluginFacade.raiseEvent({
                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                     ntype		: 'error',
                     msg         : ORYX.I18N.view.processImgFail+'.',
