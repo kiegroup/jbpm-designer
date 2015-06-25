@@ -1,5 +1,3 @@
-package org.jbpm.designer.client.resources.i18n;
-
 /*
  * Copyright 2012 JBoss Inc
  *
@@ -15,6 +13,8 @@ package org.jbpm.designer.client.resources.i18n;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package org.jbpm.designer.client.resources.i18n;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.Messages;
