@@ -2240,6 +2240,26 @@ public class Bpmn2JsonMarshaller {
         } else {
         	properties.put("name", "");
         }
+        // overwrite name if elementname extension element is present
+        String elementName = null;
+        if(node.getExtensionValues() != null && node.getExtensionValues().size() > 0) {
+            for(ExtensionAttributeValue extattrval : node.getExtensionValues()) {
+                FeatureMap extensionElements = extattrval.getValue();
+
+                List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
+                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
+
+                for(MetaDataType metaType : metadataExtensions) {
+                    if(metaType.getName()!= null && metaType.getName().equals("elementname") && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
+                        elementName = metaType.getMetaValue();
+                    }
+                }
+            }
+        }
+        if(elementName != null) {
+            properties.put("name", elementName);
+        }
+
         marshallProperties(properties, generator);
         generator.writeObjectFieldStart("stencil");
         generator.writeObjectField("id", stencil);
@@ -2920,6 +2940,28 @@ public class Bpmn2JsonMarshaller {
     	} else {
     	    properties.put("name", "");
     	}
+        // overwrite name if elementname extension element is present
+        String elementName = null;
+        if(sequenceFlow.getExtensionValues() != null && sequenceFlow.getExtensionValues().size() > 0) {
+            for(ExtensionAttributeValue extattrval : sequenceFlow.getExtensionValues()) {
+                FeatureMap extensionElements = extattrval.getValue();
+
+                List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
+                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
+
+                for(MetaDataType metaType : metadataExtensions) {
+                    if(metaType.getName()!= null && metaType.getName().equals("elementname") && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
+                        elementName = metaType.getMetaValue();
+                    }
+                }
+            }
+        }
+        if(elementName != null) {
+            properties.put("name", elementName);
+        }
+
+
+
     	if(sequenceFlow.getDocumentation() != null && sequenceFlow.getDocumentation().size() > 0) {
             properties.put("documentation", sequenceFlow.getDocumentation().get(0).getText());
         }
