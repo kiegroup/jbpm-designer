@@ -594,10 +594,10 @@ ORYX.Plugins.PropertyWindow = {
 						case ORYX.CONFIG.TYPE_STRING:
 							// If the Text is MultiLine
 							if(pair.wrapLines()) {
-								// Set the Editor as TextArea
+								// Set the Editor as TextArea    tihomir
 								var editorTextArea = new Ext.form.TextArea({alignment: "tl-tl", allowBlank: pair.optional(),  msgTarget:'title', maxLength:pair.length()});
 								editorTextArea.on('keyup', function(textArea, event) {
-									this.editDirectly(key, textArea.getValue());
+									this.editDirectly(key, textArea.getValue().replace(/\\n/g,"\n"));
 								}.bind(this));								
 
 								editorGrid = new Ext.Editor(editorTextArea);
