@@ -1346,7 +1346,7 @@ ORYX.Plugins.View = {
      */
     showAsPDF : function() {
         var transformval = 'pdf';
-        var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false));
+        var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false, true));
         var rawSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getRootNode().cloneNode(true));
         var method ="post";
         var form = document.createElement("form");
@@ -1866,7 +1866,7 @@ ORYX.Plugins.View = {
      */
     showAsPNG : function() {
         var transformval = 'png';
-        var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false));
+        var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false, true));
         var rawSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getRootNode().cloneNode(true));
         var method ="post";
         var form = document.createElement("form");
