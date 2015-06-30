@@ -565,7 +565,7 @@ ORYX.Core.Canvas = ORYX.Core.AbstractShape.extend({
 	 * @param {Boolean} escapeText Use true, if you want to parse it with an XmlParser,
 	 * 					false, if you want to use the SVG document in browser on client side.
 	 */
-	getSVGRepresentation: function(escapeText) {
+	getSVGRepresentation: function(escapeText, reduceFontForExport) {
 		// Get the serialized svg image source
         var svgClone = this.getRootNode().cloneNode(true);
 		
@@ -638,6 +638,12 @@ ORYX.Core.Canvas = ORYX.Core.AbstractShape.extend({
 					elem.textContent = elem.textContent.escapeHTML();
 			});
 		}
+
+        if(reduceFontForExport) {
+            $A(svgClone.getElementsByTagNameNS(ORYX.CONFIG.NAMESPACE_SVG, 'text')).each(function(elem) {
+                elem.setAttributeNS(null, 'font-size', "8");
+            });
+        }
 		
 		// generating absolute urls for the pdf-exporter
 		$A(svgClone.getElementsByTagNameNS(ORYX.CONFIG.NAMESPACE_SVG, 'image')).each(function(elem) {
