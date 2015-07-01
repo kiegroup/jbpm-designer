@@ -1208,7 +1208,7 @@ public class Bpmn2JsonMarshaller {
                         .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
 
                 for(MetaDataType metaType : metadataExtensions) {
-                    if(metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
+                    if(metaType.getName() != null && metaType.getName().equals("customAsync") && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
                         customAsync = metaType.getMetaValue();
                     }
                 }
@@ -1598,7 +1598,7 @@ public class Bpmn2JsonMarshaller {
                         .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
 
                 for(MetaDataType metaType : metadataExtensions) {
-                    if(metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
+                    if(metaType.getName() != null && metaType.getName().equals("customAsync") && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
                         customAsync = metaType.getMetaValue();
                     }
                 }
