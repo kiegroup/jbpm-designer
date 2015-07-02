@@ -33,7 +33,7 @@
   <properties>
     <port>8888</port>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <webbpm-modules.version>1.1-SNAPSHOT</webbpm-modules.version>
+    <webbpm-modules.version>1.2-SNAPSHOT</webbpm-modules.version>
   </properties>
 
   <dependencyManagement>
