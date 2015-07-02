@@ -2,7 +2,7 @@ package org.jbpm.designer.client;
 
 import java.util.Map;
 import javax.enterprise.context.Dependent;
-import javax.enterprise.event.Event;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import com.google.gwt.core.client.GWT;
@@ -11,7 +11,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 import org.guvnor.common.services.shared.metadata.model.Overview;
 import org.jboss.errai.common.client.api.Caller;
 import org.jboss.errai.common.client.api.RemoteCallback;
+import org.jboss.errai.security.shared.api.identity.User;
 import org.jbpm.designer.client.type.Bpmn2Type;
+import org.jbpm.designer.notification.DesignerNotificationEvent;
 import org.jbpm.designer.service.DesignerAssetService;
 import org.jbpm.designer.service.DesignerContent;
 import org.kie.workbench.common.widgets.client.callbacks.CommandBuilder;
@@ -80,6 +82,9 @@ public class DesignerPresenter
     @Inject
     private Bpmn2Type resourceType;
 
+    @Inject
+    private User user;
+
     private DesignerView view;
 
     @Inject
@@ -127,6 +132,20 @@ public class DesignerPresenter
     public IsWidget getView() {
         return super.getWidget();
     }
+
+    public void notifyOpenInXMLEditor( @Observes final DesignerNotificationEvent event ) {
+        if (user.getIdentifier().equals(event.getUserId())) {
+            if(event.getNotification() != null && event.getNotification().equals("openinxmleditor")) {
+                view.askOpenInXMLEditor();
+            }
+        }
+    }
+
+    private native void publishOpenInXMLEditorTab( DesignerPresenter dp )/*-{
+        $wnd.designeropeninxmleditortab = function (uri) {
+            dp.@org.jbpm.designer.client.DesignerPresenter::openInXMLEditorTab(Ljava/lang/String;)(uri);
+        }
+    }-*/;
 
     private native void publishProcessSourcesInfo( String ps )/*-{
         $wnd.designerprocesssources = function () {
@@ -325,6 +344,19 @@ public class DesignerPresenter
         this.placeManager.goTo( placeRequestImpl );
     }
 
+    public void openInXMLEditorTab( String uri ) {
+        vfsServices.call( new RemoteCallback<Path>() {
+            @Override
+            public void callback( final Path mypath ) {
+                PlaceRequest placeRequestImpl = new PathPlaceRequest(
+                        mypath, "GuvnorTextEditor"
+                );
+                placeManager.forceClosePlace( place );
+                placeManager.goTo( placeRequestImpl );
+            }
+        } ).get( URIUtil.encode( uri ) );
+    }
+
     private void disableMenus() {
         // TODO no impl for this in designer yet
     }
@@ -333,6 +365,7 @@ public class DesignerPresenter
     protected void loadContent() {
 
         this.publishOpenInTab( this );
+        this.publishOpenInXMLEditorTab( this );
         this.publishSignalOnAssetDelete( this );
         this.publishSignalOnAssetCopy( this );
         this.publishSignalOnAssetRename( this );

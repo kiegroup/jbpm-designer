@@ -313,6 +313,7 @@ ORYX.CONFIG.EVENT_DO_SAVE = "designereventdosave";
 ORYX.CONFIG.EVENT_CANCEL_SAVE = "designereventcancelsave";
 ORYX.CONFIG.EVENT_DO_RELOAD = "designereventreloads";
 
+ORYX.CONFIG.EVENT_OPEN_XML_EDITOR = "designeropeninxmleditor";
 
 // voice commands
 ORYX.CONFIG.VOICE_COMMAND_GENERATE_FORMS = "voice.command.generate.forms";

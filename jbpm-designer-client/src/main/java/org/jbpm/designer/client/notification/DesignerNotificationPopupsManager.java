@@ -39,25 +39,27 @@ public class DesignerNotificationPopupsManager {
     public void addNotification( @Observes final DesignerNotificationEvent event ) {
         if (user.getIdentifier().equals(event.getUserId())) {
 
-            //Create a Notification pop-up. Because it is instantiated with CDI we need to manually destroy it when finished
-            final NotificationPopupView view = iocManager.lookupBean(NotificationPopupView.class).getInstance();
-            activeNotifications.add(view);
-            view.setPopupPosition(getMargin(),
-                    activeNotifications.size() * SPACING);
+            if(event.getNotification() != null && !event.getNotification().equals("openinxmleditor")) {
+                //Create a Notification pop-up. Because it is instantiated with CDI we need to manually destroy it when finished
+                final NotificationPopupView view = iocManager.lookupBean(NotificationPopupView.class).getInstance();
+                activeNotifications.add(view);
+                view.setPopupPosition(getMargin(),
+                        activeNotifications.size() * SPACING);
 
-            view.setNotification(event.getNotification());
-            view.setType(event.getType());
-            view.setNotificationWidth(getWidth() + "px");
-            view.show(new Command() {
+                view.setNotification(event.getNotification());
+                view.setType(event.getType());
+                view.setNotificationWidth(getWidth() + "px");
+                view.show(new Command() {
 
-                @Override
-                public void execute() {
-                    //The notification has been shown and can now be removed
-                    deactiveNotifications.add(view);
-                    remove();
-                }
+                    @Override
+                    public void execute() {
+                        //The notification has been shown and can now be removed
+                        deactiveNotifications.add(view);
+                        remove();
+                    }
 
-            });
+                });
+            }
         }
     }
 

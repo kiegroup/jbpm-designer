@@ -30,6 +30,11 @@ public class DesignerViewImpl
     }
 
     @Override
+    public void askOpenInXMLEditor() {
+        designerWidget.askOpenInXMLEditor(designerWidget.getEditorID());
+    }
+
+    @Override
     public boolean getIsViewLocked() {
         return designerWidget.getIsViewLocked(designerWidget.getEditorID());
     }

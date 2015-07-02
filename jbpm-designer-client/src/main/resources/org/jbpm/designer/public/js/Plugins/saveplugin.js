@@ -151,6 +151,8 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_CANCEL_SAVE, this.handleEventCancelSave.bind(this));
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DO_RELOAD, this.handleEventDoRealod.bind(this));
 
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LOADED, this.handleOpenXMLEditor.bind(this));
+
         window.onunload = this.unloadWindow.bind(this);
 
     },
@@ -189,6 +191,22 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
             msg         : ORYX.I18N.Save.saveCancelled,
             title       : ''
         });
+    },
+
+    handleOpenXMLEditor: function() {
+        if(ORYX.LOADING_ERRORS == true) {
+            Ext.MessageBox.confirm(
+                "Unable to open Process",
+                "Open Process Sources with the XML Editor?",
+                function(btn){
+                    if (btn == 'yes') {
+                        parent.designeropeninxmleditortab(ORYX.UUID);
+                    }
+                }.bind(this)
+            );
+        }
+        // reset ORYX.LOADING_ERRORS
+        ORYX.LOADING_ERRORS = false;
     },
 
     handleEventDoRealod: function() {

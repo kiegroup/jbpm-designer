@@ -25,4 +25,6 @@ public interface DesignerView
 
     void setProcessUnSaved();
 
+    void askOpenInXMLEditor();
+
 }

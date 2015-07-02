@@ -29,6 +29,7 @@
         ORYX.BASE_FILE_PATH = ORYX.CONFIG.ROOT_PATH + "/org.jbpm.designer.jBPMDesigner/";
 
         ORYX.PROCESS_SAVED = true;
+        ORYX.LOADING_ERRORS = false;
         ORYX.AUTOSAVE_ENABLED = false;
         ORYX.CONFIG.STORESVGONSAVE = "$storesvgonsave$";
         ORYX.PRESET_PERSPECTIVE = "$presetperspective$";

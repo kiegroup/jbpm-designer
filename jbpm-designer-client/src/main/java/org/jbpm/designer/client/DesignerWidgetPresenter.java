@@ -44,6 +44,10 @@ public class DesignerWidgetPresenter {
         return view.getEditorID();
     }
 
+    public void askOpenInXMLEditor( String editorID ) {
+        view.raiseAskOpenInXMLEditor( editorID );
+    }
+
     public boolean confirmClose() {
         return view.confirmClose();
     }
