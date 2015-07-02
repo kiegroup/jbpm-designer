@@ -32,6 +32,8 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.*;
 
+import org.apache.commons.codec.binary.Base64;
+
 /**
  * JbpmPreprocessingUnit - preprocessing unit for the jbpm profile
  *
@@ -676,7 +678,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
       }
       if (Base64Backport.isBase64(createdUUID)) {
-        byte[] decoded = Base64.getDecoder().decode(createdUUID);
+        byte[] decoded = Base64.decodeBase64(createdUUID);
         try {
           createdUUID = new String(decoded, "UTF-8");
         } catch (UnsupportedEncodingException e) {
