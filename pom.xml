@@ -180,18 +180,29 @@
       <name>JBoss ThirdParty Uploads</name>
       <url>https://repository.jboss.org/nexus/content/repositories/thirdparty-uploads/</url>
     </repository>
+    <repository>
+      <id>central</id>
+      <name>CG Repo</name>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <url>http://artifactory.center.cg/artifactory/all</url>
+    </repository>
   </repositories>
 
   <distributionManagement>
     <snapshotRepository>
       <id>snapshots</id>
       <name>Repository for storing projects created with Web-BPM 2.x</name>
-      <url>http://10.10.31.71:8081/artifactory/libs-snapshots-local</url>
+      <url>http://artifactory.center.cg/artifactory/libs-snapshots-local</url>
     </snapshotRepository>
     <repository>
       <id>central</id>
       <name>Repository for storing projects created with Web-BPM 2.x</name>
-      <url>http://10.10.31.71:8081/artifactory/libs-releases-local</url>
+      <url>http://artifactory.center.cg/artifactory/libs-releases-local</url>
     </repository>
   </distributionManagement>
 
