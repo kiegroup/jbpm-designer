@@ -120,70 +120,14 @@ ORYX.Editor = {
         }
 
         if(config.error) {
-            try {
-            var errorSourceArea = new Ext.form.TextArea({
-                id:"errorSourceTextArea",
-                fieldLabel:ORYX.I18N.main.errorDetails,
-                value:config.error,
-                autoScroll:true
-            });
-
-            var errorSourceAreaPanel = new Ext.Panel({
-                title:ORYX.I18N.main.details,
-                layout:'fit',
-                border:false,
-                items: [errorSourceArea],
-                collapsed : true,
-                listeners: {
-                    expand: function(p) {
-                        this.foldFunc = CodeMirror.newFoldFunction(CodeMirror.tagRangeFinder);
-                        var errorSourceEditor = CodeMirror.fromTextArea(document.getElementById("errorSourceTextArea"), {
-                            mode: "text",
-                            lineNumbers: true,
-                            lineWrapping: true,
-                            onGutterClick: this.foldFunc
-                        });
-                    }
-                }
-            });
-
-            var errorInfoPanel = new Ext.Panel({
-                title:ORYX.I18N.File.info,
-                layout:'table',
-                border:false,
-                bodyBorder:false,
-                hideBorders:true,
-                html: ORYX.I18N.main.errorOpening
-            });
-
-            var errorOutterPanel = new Ext.Panel({
-                layout:'accordion',
-                items: [ errorInfoPanel, errorSourceAreaPanel ]
-            });
-
-            var win = new Ext.Window({
-                width:600,
-                id:'processErrorSource',
-                height:550,
-                layout: 'fit',
-                title:ORYX.I18N.main.errorLoadingProc,
-                items: [errorOutterPanel],
-                buttons:[{
-                    text : ORYX.I18N.Save.close,
-                    handler:function(){
-                        win.close();
-                        win = null;
-                        cf = null;
-                    }.bind(this)
-                }]
-            });
-            win.show();
-
-        } catch(err) {
-            alert(err);
+            Ext.Msg.show({
+                title   : 'Unable to open Process',
+                msg     : "Process will be opened with XML Editor",
+                buttons: Ext.MessageBox.OK,
+                fn      : function(text,btn) { parent.designeropeninxmleditortab(ORYX.UUID); }
+                });
         }
-    }
-		
+
 		this.id = model.resourceId;
         if(!this.id) {
         	this.id = model.id;
