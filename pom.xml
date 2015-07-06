@@ -109,11 +109,6 @@
         <updatePolicy>daily</updatePolicy>
       </snapshots>
     </repository>
-    <repository>
-      <id>jboss-thirdparty-uploads</id>
-      <name>JBoss ThirdParty Uploads</name>
-      <url>https://repository.jboss.org/nexus/content/repositories/thirdparty-uploads/</url>
-    </repository>
   </repositories>
 
 </project>
