@@ -3403,6 +3403,10 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
         if(this.disabled){
             return undefined;
         }
+        this.facade.raiseEvent({
+            type: ORYX.CONFIG.EVENT_DATAIOEDITOR_SHOW
+        });
+        return;
 
         var newAssignmentType = "";
         var processJSON = ORYX.EDITOR.getSerializedJSON();
@@ -4469,6 +4473,12 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
     onTriggerClick : function(){
 
         if(this.disabled){
+            return;
+        }
+        if (this.dtype == ORYX.CONFIG.TYPE_DTYPE_DINPUT || this.dtype == ORYX.CONFIG.TYPE_DTYPE_DOUTPUT) {
+            this.facade.raiseEvent({
+                type: ORYX.CONFIG.EVENT_DATAIOEDITOR_SHOW
+            });
             return;
         }
 
