@@ -23,7 +23,39 @@ public interface DesignerEditorConstants extends
         Messages {
     DesignerEditorConstants INSTANCE = GWT.create(DesignerEditorConstants.class);
 
+    String Add();
+
     String businessProcess();
 
     String businessProcessResourceTypeDescription();
+
+    String Cancel();
+
+    String Constant();
+
+    String Custom();
+
+    String Data_Input_and_Assignment();
+
+    String Data_Inputs_and_Assignments();
+
+    String Data_Output_and_Assignment();
+
+    String Data_Outputs_and_Assignments();
+
+    String Data_IO();
+
+    String Edit();
+
+    String Enter_constant();
+
+    String Enter_type();
+
+    String Only_single_entry_allowed();
+
+    String Save();
+
+    String Source();
+
+    String Target();
 }
