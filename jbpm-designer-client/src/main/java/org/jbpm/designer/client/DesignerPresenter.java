@@ -21,7 +21,6 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.IsWidget;
 import org.guvnor.common.services.shared.metadata.model.Overview;
 import org.jboss.errai.common.client.api.Caller;
@@ -239,7 +238,7 @@ public class DesignerPresenter
                                                            public void execute( final FileNameAndCommitMessage details ) {
                                                                baseView.showLoading();
                                                                copyService.call( getCopySuccessCallback(),
-                                                                                 new HasBusyIndicatorDefaultErrorCallback( baseView ) ).copy( versionRecordManager.getCurrentPath(),
+                                                                                 new HasBusyIndicatorDefaultErrorCallback( baseView ) ).copy( mypath,
                                                                                                                                               details.getNewFileName(),
                                                                                                                                               details.getCommitMessage() );
                                                            }
@@ -260,7 +259,7 @@ public class DesignerPresenter
                                                                public void execute( final FileNameAndCommitMessage details ) {
                                                                    baseView.showLoading();
                                                                    renameService.call( getRenameSuccessCallback(),
-                                                                                       new HasBusyIndicatorDefaultErrorCallback( baseView ) ).rename( versionRecordManager.getCurrentPath(),
+                                                                                       new HasBusyIndicatorDefaultErrorCallback( baseView ) ).rename( mypath,
                                                                                                                                                       details.getNewFileName(),
                                                                                                                                                       details.getCommitMessage() );
                                                                }
