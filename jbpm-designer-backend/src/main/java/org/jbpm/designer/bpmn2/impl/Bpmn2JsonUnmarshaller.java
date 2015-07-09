@@ -4700,7 +4700,7 @@ public class Bpmn2JsonUnmarshaller {
 
     protected void applyGlobalTaskProperties(GlobalTask globalTask, Map<String, String> properties) {
         if(properties.get("name") != null) {
-            globalTask.setName(escapeXmlString(properties.get("name")));
+            globalTask.setName(escapeXmlString(properties.get("name")).replaceAll("\\r\\n|\\r|\\n", " "));
         } else {
             globalTask.setName("");
         }
@@ -5435,7 +5435,7 @@ public class Bpmn2JsonUnmarshaller {
 
     protected void applyTaskProperties(Task task, Map<String, String> properties, String preProcessingData) {
         if(properties.get("name") != null) {
-            task.setName(escapeXmlString(properties.get("name")));
+            task.setName(escapeXmlString(properties.get("name")).replaceAll("\\r\\n|\\r|\\n", " "));
         } else {
             task.setName("");
         }
@@ -6762,7 +6762,7 @@ public class Bpmn2JsonUnmarshaller {
     protected void applySequenceFlowProperties(SequenceFlow sequenceFlow, Map<String, String> properties) {
         // sequence flow name is options
         if(properties.get("name") != null && !"".equals(properties.get("name"))) {
-            sequenceFlow.setName(escapeXmlString(properties.get("name")));
+            sequenceFlow.setName(escapeXmlString(properties.get("name")).replaceAll("\\r\\n|\\r|\\n", " "));
 
             // add unescaped and untouched name value as extension eleent as well
             MetaDataType metadata = DroolsFactory.eINSTANCE.createMetaDataType();
