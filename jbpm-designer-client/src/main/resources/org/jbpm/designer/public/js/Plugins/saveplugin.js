@@ -392,7 +392,8 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
     },
 
     saveSync : function() {
-        if(!ORYX.PROCESS_SAVED) {
+        // the view-locked-by-current-user logic is already determined in main.js so here if viewlocekd is true we are sure its locked by some other user and not us
+        if(!ORYX.PROCESS_SAVED && ORYX.VIEWLOCKED != true) {
             // save process bpmn2 and svg
             var processJSON = ORYX.EDITOR.getSerializedJSON();
             var saveAjaxObj = new XMLHttpRequest;
@@ -519,10 +520,10 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         }
     },
 
+
     unloadWindow: function() {
         this.saveSync(false);
     },
-
     clearCanvas: function() {
         ORYX.EDITOR.getCanvas().nodes.each(function(node) {
             ORYX.EDITOR.deleteShape(node);
