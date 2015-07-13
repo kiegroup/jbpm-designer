@@ -2413,10 +2413,10 @@ public class Bpmn2JsonUnmarshaller {
                 // temp. removing support for mixed gateway direction (not supported by runtime yet)
 //                else if (incoming > 1 && outgoing > 1) {
 //                    gateway.setGatewayDirection(GatewayDirection.MIXED);
-//                } 
-//                else if (incoming == 1 && outgoing == 1) { 
+//                }
+//                else if (incoming == 1 && outgoing == 1) {
 //                    // this handles the 1:1 case of the diverging gateways
-//                } 
+//                }
                 else {
                     gateway.setGatewayDirection(GatewayDirection.UNSPECIFIED);
                 }
