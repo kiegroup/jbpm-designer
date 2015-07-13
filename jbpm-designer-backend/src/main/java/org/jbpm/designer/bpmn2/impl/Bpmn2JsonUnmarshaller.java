@@ -2320,25 +2320,35 @@ public class Bpmn2JsonUnmarshaller {
             }
             if(fe instanceof InclusiveGateway) {
             	Iterator<FeatureMap.Entry> iter = fe.getAnyAttribute().iterator();
-            	while(iter.hasNext()) {
+                InclusiveGateway ig = (InclusiveGateway) fe;
+                List<SequenceFlow> sqList = new ArrayList<SequenceFlow>();
+                if(ig.getIncoming() != null) {
+                    sqList.addAll(ig.getIncoming());
+                }
+                if(ig.getOutgoing() != null) {
+                    sqList.addAll(ig.getOutgoing());
+                }
+                while(iter.hasNext()) {
                     FeatureMap.Entry entry = iter.next();
                     if(entry.getEStructuralFeature().getName().equals("dg")) {
-                    	for(FlowElement feg : flowElements) {
+
+                    	for(SequenceFlow newFlow : sqList) {
                             String entryValue = (String) entry.getValue();
+                            String entryName = null;
                             String entryValueId = "";
                             String[] entryValueParts = entryValue.split(" : ");
                             if(entryValueParts.length == 1) {
                                 entryValueId = entryValueParts[0];
                             } else if(entryValueParts.length > 1) {
+                                entryName = entryValueParts[0];
                                 entryValueId = entryValueParts[1];
                             }
-                    		if(feg instanceof SequenceFlow && feg.getId().equals(entryValueId)) {
-                    			SequenceFlow sf = (SequenceFlow) feg;
-                    			((InclusiveGateway) fe).setDefault(sf);
-                    			if(sf.getConditionExpression() == null) {
+                    		if(newFlow.getId().equals(entryValueId) || ( newFlow.getName() != null && entryName != null && newFlow.getName().equals(entryName) )) {
+                                ig.setDefault(newFlow);
+                    			if(newFlow.getConditionExpression() == null) {
                     				FormalExpression  expr = Bpmn2Factory.eINSTANCE.createFormalExpression();
                     				expr.setBody("");
-                    				sf.setConditionExpression(expr);
+                                    newFlow.setConditionExpression(expr);
                     			}
                     		}
                     	}
@@ -2347,25 +2357,35 @@ public class Bpmn2JsonUnmarshaller {
             }
             if(fe instanceof ExclusiveGateway) {
             	Iterator<FeatureMap.Entry> iter = fe.getAnyAttribute().iterator();
+                ExclusiveGateway eg = (ExclusiveGateway) fe;
+                List<SequenceFlow> sqList = new ArrayList<SequenceFlow>();
+                if(eg.getIncoming() != null) {
+                    sqList.addAll(eg.getIncoming());
+                }
+                if(eg.getOutgoing() != null) {
+                    sqList.addAll(eg.getOutgoing());
+                }
+
             	while(iter.hasNext()) {
                     FeatureMap.Entry entry = iter.next();
                     if(entry.getEStructuralFeature().getName().equals("dg")) {
-                    	for(FlowElement feg : flowElements) {
+                        for(SequenceFlow newFlow : sqList) {
                             String entryValue = (String) entry.getValue();
+                            String entryName = null;
                             String entryValueId = "";
                             String[] entryValueParts = entryValue.split(" : ");
                             if(entryValueParts.length == 1) {
                                 entryValueId = entryValueParts[0];
                             } else if(entryValueParts.length > 1) {
+                                entryName = entryValueParts[0];
                                 entryValueId = entryValueParts[1];
                             }
-                    		if(feg instanceof SequenceFlow && feg.getId().equals(entryValueId)) {
-                    			SequenceFlow sf = (SequenceFlow) feg;
-                    			((ExclusiveGateway) fe).setDefault(sf);
-                    			if(sf.getConditionExpression() == null) {
+                    		if(newFlow.getId().equals(entryValueId) || ( newFlow.getName() != null && entryName != null && newFlow.getName().equals(entryName) ) ) {
+                                eg.setDefault(newFlow);
+                    			if(newFlow.getConditionExpression() == null) {
                     				FormalExpression  expr = Bpmn2Factory.eINSTANCE.createFormalExpression();
                     				expr.setBody("");
-                    				sf.setConditionExpression(expr);
+                                    newFlow.setConditionExpression(expr);
                     			}
                     		}
                     	}
