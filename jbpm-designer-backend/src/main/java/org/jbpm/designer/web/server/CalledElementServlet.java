@@ -52,22 +52,19 @@ public class CalledElementServlet extends HttpServlet {
         String processPackage = req.getParameter("ppackage");
         String processId = req.getParameter("pid");
         String action = req.getParameter("action");
-        
+        String resourcesPath = Utils.getEncodedParam(req, "resourcesPath");
+
         IDiagramProfile profile = _profileService.findProfile(req, profileName);
         if(action != null && action.equals("openprocessintab")) {
         	String retValue = "";
-        	List<String> allPackageNames = ServletUtil.getPackageNamesFromRepository(profile);
-        	if(allPackageNames != null && allPackageNames.size() > 0) {
-        		for(String packageName : allPackageNames) {
-        			List<String> allProcessesInPackage = ServletUtil.getAllProcessesInPackage(packageName, profile);
-        			if(allProcessesInPackage != null && allProcessesInPackage.size() > 0) {
-        				for(String p : allProcessesInPackage) {
+                          List<String> allProcesses = ServletUtil.getBpmnFilesPathInDir(resourcesPath);
+        			if(allProcesses != null && allProcesses.size() > 0) {
+        				for(String p : allProcesses) {
                 			Asset<String> processContent = ServletUtil.getProcessSourceContent(p, profile);
                 			Pattern idPattern = Pattern.compile("<\\S*process[^\"]+id=\"([^_\"]+)\"", Pattern.MULTILINE);
         		            Matcher idMatcher = idPattern.matcher(processContent.getAssetContent());
         		            if(idMatcher.find()) {
         		            	String pid = idMatcher.group(1);
-        		            	String pidcontent = ServletUtil.getProcessImageContent(packageName, pid, profile);
         		            	if(pid != null && pid.equals(processId)) {
                                     String uniqueId = processContent.getUniqueId();
                                     if (Base64Backport.isBase64(uniqueId)) {
@@ -84,8 +81,6 @@ public class CalledElementServlet extends HttpServlet {
         		            }
                 		}
         			}
-        		}
-        	}
         	resp.setCharacterEncoding("UTF-8");
 	        resp.setContentType("text/plain");
 	        resp.getWriter().write(retValue);
@@ -123,29 +118,23 @@ public class CalledElementServlet extends HttpServlet {
             resp.setContentType("application/json");
             resp.getWriter().write(getDataTypesInfoAsJSON(dataTypeNames).toString());
         } else {
-	        String retValue = "false";
-	        List<String> allPackageNames = ServletUtil.getPackageNamesFromRepository(profile);
+	        String retValue;
 	        Map<String, String> processInfo = new HashMap<String, String>();
-	        if(allPackageNames != null && allPackageNames.size() > 0) {
-	        	for(String packageName : allPackageNames) {
-	        		List<String> allProcessesInPackage = ServletUtil.getAllProcessesInPackage(packageName, profile);
-	        		if(allProcessesInPackage != null && allProcessesInPackage.size() > 0) {
-	    				for(String p : allProcessesInPackage) {
+	        		List<String> allProcesses = ServletUtil.getBpmnFilesPathInDir(resourcesPath);
+	        		if(allProcesses != null && allProcesses.size() > 0) {
+	    				for(String p : allProcesses) {
 	    					Asset<String> processContent = ServletUtil.getProcessSourceContent(p, profile);
 	    					Pattern idPattern = Pattern.compile("<\\S*process[^\"]+id=\"([^_\"]+)\"", Pattern.MULTILINE);
 	    		            Matcher idMatcher = idPattern.matcher(processContent.getAssetContent());
 	    		            if(idMatcher.find()) {
 	    		            	String pid = idMatcher.group(1);
-	    		            	String pidcontent = ServletUtil.getProcessImageContent(processContent.getAssetLocation(), pid, profile);
-	    		            	if(pid != null && !(packageName.equals(processPackage) && pid.equals(processId))) {
-	    		            		processInfo.put(pid+"|"+processContent.getAssetLocation(), pidcontent != null ? pidcontent : "");
+                                      if(pid != null && !pid.equals(processId)) {
+	    		            		processInfo.put(pid+"|"+processContent.getAssetLocation(), "");
 	    		            	}
 	    		            }
 	    				}
 
 	    			}
-	        	}
-	        }
             retValue = getProcessInfoAsJSON(processInfo).toString();
 			resp.setCharacterEncoding("UTF-8");
 	        resp.setContentType("application/json");

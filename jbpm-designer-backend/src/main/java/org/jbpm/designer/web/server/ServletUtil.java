@@ -1,11 +1,10 @@
 package org.jbpm.designer.web.server;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -15,6 +14,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.Directory;
 import org.jbpm.designer.repository.Repository;
+import org.jbpm.designer.repository.filters.FilterByExtension;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.impl.RepositoryInfo;
 import org.slf4j.Logger;
@@ -151,6 +151,22 @@ public class ServletUtil {
 //        }
         return processes;
     }
+
+        public static List<String> getBpmnFilesPathInDir(String dir) throws IOException {
+          Path path = Paths.get(dir);
+          final List<String> processes = new ArrayList<String>();
+          Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
+
+            public FileVisitResult visitFile(Path paths, BasicFileAttributes basicFileAttributes) {
+              if (new FilterByExtension(EXT_BPMN2).accept(paths)) {
+                processes.add(paths.toString());
+              }
+              return FileVisitResult.CONTINUE;
+            }
+
+          });
+          return processes;
+        }
 	
 	public static String getProcessImageContent(String packageName, String processid, IDiagramProfile profile) {
 

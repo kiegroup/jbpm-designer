@@ -1,6 +1,10 @@
 package org.jbpm.designer.repository.filters;
 
-public class FilterByExtension /*implements Filter<Path>*/ {
+import java.nio.file.Path;
+
+import org.jbpm.designer.repository.Filter;
+
+public class FilterByExtension implements Filter<Path> {
 
     private String extension;
 
@@ -8,7 +12,7 @@ public class FilterByExtension /*implements Filter<Path>*/ {
         this.extension = extension;
     }
 
-//    public boolean accept(Path path) {
-//        return path.getFileName().toString().endsWith(extension);
-//    }
+    public boolean accept(Path path) {
+        return path.getFileName().toString().endsWith(extension);
+    }
 }

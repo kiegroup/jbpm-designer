@@ -300,7 +300,8 @@ ORYX.Core.Shape = {
                             uuid :  ORYX.UUID,
                             ppackage: processPackage,
                             pid: prop,
-                            action: 'openprocessintab'
+                            action: 'openprocessintab',
+                            resourcesPath: ORYX.CONFIG.RESOURCES_PATH
                           }
                         });
                       } else {
@@ -357,7 +358,8 @@ ORYX.Core.Shape = {
                             uuid :  ORYX.UUID,
                             ppackage: processPackage,
                             pid: prop,
-                            action: 'openprocessintab'
+                            action: 'openprocessintab',
+                            resourcesPath: ORYX.CONFIG.RESOURCES_PATH
                           }
                         });
                       } else {

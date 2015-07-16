@@ -6009,7 +6009,7 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField,  {
         uuid : ORYX.UUID,
         ppackage: processPackage,
         pid: processId,
-        projectBaseDir: ORYX.CONFIG.PROJECT_BASE_DIR
+        resourcesPath: ORYX.CONFIG.RESOURCES_PATH
       }
     });
   }

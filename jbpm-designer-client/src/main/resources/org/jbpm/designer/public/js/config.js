@@ -22,7 +22,7 @@ ORYX.CONFIG.WEB_URL = "org.jbpm.designer.jBPMDesigner";
 ORYX.CONFIG.CREATE_ROLES_FIELD = function (pair, dataSource, grid, index, facade) {
 };
 
-ORYX.CONFIG.PROJECT_BASE_DIR = "";
+ORYX.CONFIG.RESOURCES_PATH = "";
 
 ORYX.CONFIG.MENU_INDEX = {"File" : 1, "Edit" : 2, "Undo": 3, "localstorage": 4, "Z-Order" : 5,  "Alignment": 6, "Grouping": 7, "lockunlockgroup": 8, "Docker" : 9, "colorpickergroup": 'AAA', "editprocessforms": 'BBB', 'sharegroup': 'CCC', "importgroup": 'DDD', "validationandsimulation": 'EEE', "servicerepogroup": 'FFF', "paintgroup": 'GGG', "fullscreengroup": 'HHH', "Help" : "ZZZZZZ"};
 
