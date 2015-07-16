@@ -204,7 +204,7 @@ public class DesignerPresenter
                                                            public void execute( final FileNameAndCommitMessage details ) {
                                                                baseView.showLoading();
                                                                copyService.call( getCopySuccessCallback(),
-                                                                                 new HasBusyIndicatorDefaultErrorCallback( baseView ) ).copy( mypath,
+                                                                                 new HasBusyIndicatorDefaultErrorCallback( baseView ) ).copy( versionRecordManager.getPathToLatest(),
                                                                                                                                               details.getNewFileName(),
                                                                                                                                               details.getCommitMessage() );
                                                            }
@@ -225,7 +225,7 @@ public class DesignerPresenter
                                                                public void execute( final FileNameAndCommitMessage details ) {
                                                                    baseView.showLoading();
                                                                    renameService.call( getRenameSuccessCallback(),
-                                                                                       new HasBusyIndicatorDefaultErrorCallback( baseView ) ).rename( mypath,
+                                                                                       new HasBusyIndicatorDefaultErrorCallback( baseView ) ).rename( versionRecordManager.getPathToLatest(),
                                                                                                                                                       details.getNewFileName(),
                                                                                                                                                       details.getCommitMessage() );
                                                                }
