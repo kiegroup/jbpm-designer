@@ -10,6 +10,8 @@
 
   <inherits name="org.jboss.errai.bus.ErraiBus"/>
   <inherits name="org.uberfire.UberfireWorkbench"/>
+  <inherits name="org.uberfire.ext.services.UberfireWidgetsServicesAPI"/>
+  <inherits name="org.uberfire.ext.widgets.common.UberfireWidgetsCommons"/>
   <inherits name="org.uberfire.client.views.Bootstrap2"/>
 
   <inherits name="org.uberfire.ext.editor.commons.UberfireCommonsEditorClient"/>

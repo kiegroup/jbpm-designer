@@ -8,6 +8,7 @@
 		<plugin name="ORYX.Plugins.PropertyWindow"/>
 		<plugin name="ORYX.Plugins.CanvasResize"/>
 		<plugin name="ORYX.Plugins.ShapeMenuPlugin"/>
+		<plugin name="ORYX.Plugins.DataIOEditorPlugin"/>
 		<plugin name="ORYX.Plugins.UUIDRepositorySave"/>
         <plugin name="ORYX.Plugins.UUIDRepositoryDummySave"/>
 		<plugin name="ORYX.Plugins.PluginLoader"/>

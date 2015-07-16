@@ -98,7 +98,10 @@ ORYX.Plugins.ShapeMenuPlugin = {
 				
 				// Show the source view button
 				this.showSourceViewButton();
-				
+
+				// Show the DataIOEditor button
+				this.showDataIOEditorButton(this.currentShapes);
+
 				// Show the Stencil Buttons
 				this.showStencilButtons(this.currentShapes);	
 				
@@ -247,18 +250,28 @@ ORYX.Plugins.ShapeMenuPlugin = {
 			group:			2,
 			msg:			ORYX.I18N.ShapeMenuPlugin.viewSourceNode
 		});
-		
+
+		var diobutton = new ORYX.Plugins.ShapeMenuButton({
+			callback:		this.showDataIOEditor.bind(this),
+			icon: 			ORYX.BASE_FILE_PATH + 'images/dataio.png',
+			align: 			ORYX.CONFIG.SHAPEMENU_TOP,
+			group:			3,
+			msg:			ORYX.I18N.ShapeMenuPlugin.editDataIO
+		});
+
 		this.shapeMenu.setNumberOfButtonsPerLevel(ORYX.CONFIG.SHAPEMENU_BOTTOM, 2);
 		//this.shapeMenu.setNumberOfButtonsPerLevel(ORYX.CONFIG.SHAPEMENU_TOP, 2)
 		this.shapeMenu.addButton(button);
 		this.shapeMenu.addButton(dbutton);
 		this.shapeMenu.addButton(utfbutton);
 		this.shapeMenu.addButton(swbutton);
+		this.shapeMenu.addButton(diobutton);
 		this.morphMenu.getEl().appendTo(button.node);
 		this.morphButton = button;
 		this.dictionaryButton = dbutton;
 		this.taskFormButton = utfbutton;
 		this.sourceViewButton = swbutton;
+		this.dataIOEditorButton = diobutton;
 	},
 	
 	showMorphMenu: function() {
@@ -374,7 +387,15 @@ ORYX.Plugins.ShapeMenuPlugin = {
             }
         });
 	},
-	
+
+	showDataIOEditor: function() {
+		this.facade.raiseEvent({
+			type: ORYX.CONFIG.EVENT_DATAIOEDITOR_SHOW,
+			element: this.currentShapes[0]
+		});
+	},
+
+
 	onSelectionChanged: function(event) {
 		var elements = event.elements;
 
@@ -414,7 +435,62 @@ ORYX.Plugins.ShapeMenuPlugin = {
 			this.sourceViewButton.prepareToShow();
 		}
 	},
-	
+
+	/**
+	 * Show button for editing Data I/O Variables and assignments
+	 *
+	 * @param elements
+	 */
+	showDataIOEditorButton : function(elements) {
+		if(elements.length != 1) return;
+
+		if (! this.hasDataIOProperty(elements[0])) {
+			return;
+		}
+
+		// reset group number
+		this.dataIOEditorButton.group = 3;
+		if(this.currentShapes && this.currentShapes[0] && this.currentShapes[0].properties && this.currentShapes[0].properties['oryx-tasktype'] &&
+				this.currentShapes[0].properties['oryx-tasktype'] == "User") {
+			this.dataIOEditorButton.prepareToShow();
+		} else {
+			this.dataIOEditorButton.group = this.dataIOEditorButton.group - 1;
+			this.dataIOEditorButton.prepareToShow();
+		}
+	},
+
+	/**
+	 * Tests whether an element has any properties related to Data I/O
+	 *
+	 * @param element
+	 * @returns {boolean}
+	 */
+	hasDataIOProperty: function(element) {
+		var stencil = element.getStencil();
+		var dataIOPropertyIds = ["oryx-assignments", "oryx-datainputassociations", "oryx-dataoutputassociations",
+			"oryx-datainput", "oryx-datainputset", "oryx-dataoutput", "oryx-dataoutputset"];
+		for (var i = 0; i < dataIOPropertyIds.length; i++) {
+			if (stencil.property(dataIOPropertyIds[i]) !== undefined) {
+				var property = stencil.property(dataIOPropertyIds[i]);
+				if((property.visible() && property.visible() == true) && property.hidden() != true) {
+					var tasktype = element.properties["oryx-tasktype"];
+					if(property.fortasktypes() && property.fortasktypes().length > 0) {
+						var tts = property.fortasktypes().split("|");
+						for(var i = 0; i < tts.size(); i++) {
+							if(tts[i] == tasktype) {
+								return true;
+							}
+						}
+					} else {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	},
+
+
 	/**
 	 * Show button for morphing the selected shape into another stencil
 	 */
