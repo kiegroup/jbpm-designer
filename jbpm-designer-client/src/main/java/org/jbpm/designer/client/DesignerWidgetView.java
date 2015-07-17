@@ -18,7 +18,7 @@ import org.uberfire.ext.widgets.common.client.common.BusyPopup;
 public class DesignerWidgetView
         extends Composite
         implements DesignerWidgetPresenter.View,
-                   RequiresResize {
+        RequiresResize {
 
     private Frame inlineFrame = new Frame();
     private String editorID = "";
@@ -120,6 +120,14 @@ public class DesignerWidgetView
         if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor && (typeof($wnd.document.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved) == "function")) {
             $wnd.document.getElementById(editorID).contentWindow.ORYX.EDITOR._pluginFacade.raiseEvent({
                 type: "designereventdosave"
+            });
+        }
+    }-*/;
+
+    public native void raiseEventCheckSave( String editorID ) /*-{
+        if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor && (typeof($wnd.document.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved) == "function")) {
+            $wnd.document.getElementById(editorID).contentWindow.ORYX.EDITOR._pluginFacade.raiseEvent({
+                type: "designereventdochecksave"
             });
         }
     }-*/;

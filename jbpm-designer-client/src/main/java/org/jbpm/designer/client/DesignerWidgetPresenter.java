@@ -56,6 +56,10 @@ public class DesignerWidgetPresenter {
         view.raiseEventSave( editorID );
     }
 
+    public void raiseEventCheckSave( final String editorID ) {
+        view.raiseEventCheckSave( editorID );
+    }
+
     public void raiseEventSaveCancel( String editorID ) {
         view.raiseEventSaveCancel( editorID );
     }

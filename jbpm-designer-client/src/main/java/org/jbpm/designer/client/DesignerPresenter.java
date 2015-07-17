@@ -6,6 +6,7 @@ import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.IsWidget;
 import org.guvnor.common.services.shared.metadata.model.Overview;
 import org.jboss.errai.common.client.api.Caller;
@@ -31,7 +32,6 @@ import org.uberfire.ext.editor.commons.client.file.CommandWithFileNameAndCommitM
 import org.uberfire.ext.editor.commons.client.file.CopyPopup;
 import org.uberfire.ext.editor.commons.client.file.FileNameAndCommitMessage;
 import org.uberfire.ext.editor.commons.client.file.RenamePopup;
-import org.uberfire.ext.editor.commons.client.validation.DefaultFileNameValidator;
 import org.uberfire.ext.editor.commons.service.CopyService;
 import org.uberfire.ext.editor.commons.service.DeleteService;
 import org.uberfire.ext.editor.commons.service.RenameService;
@@ -105,7 +105,20 @@ public class DesignerPresenter
     }
 
     protected void makeMenuBar() {
-        menus = menuBuilder.build();
+        menus = menuBuilder
+                .addSave(versionRecordManager.newSaveMenuItem(new Command() {
+                    @Override
+                    public void execute() {
+                        onSave();
+                    }
+                }))
+                .addCopy(versionRecordManager.getCurrentPath(),
+                        fileNameValidator)
+                .addRename(versionRecordManager.getPathToLatest(),
+                        fileNameValidator)
+                .addDelete(versionRecordManager.getPathToLatest())
+                .addNewTopLevelMenu(versionRecordManager.buildMenu())
+                .build();
     }
 
     @OnClose
@@ -194,9 +207,9 @@ public class DesignerPresenter
     }
 
     public void assetCopyEvent( String uri ) {
-        vfsServices.call( new RemoteCallback<Path>() {
+        vfsServices.call( new RemoteCallback<ObservablePath>() {
             @Override
-            public void callback( final Path mypath ) {
+            public void callback( final ObservablePath mypath ) {
                 final CopyPopup popup = new CopyPopup( mypath,
                                                        fileNameValidator,
                                                        new CommandWithFileNameAndCommitMessage() {
@@ -204,7 +217,7 @@ public class DesignerPresenter
                                                            public void execute( final FileNameAndCommitMessage details ) {
                                                                baseView.showLoading();
                                                                copyService.call( getCopySuccessCallback(),
-                                                                                 new HasBusyIndicatorDefaultErrorCallback( baseView ) ).copy( versionRecordManager.getPathToLatest(),
+                                                                                 new HasBusyIndicatorDefaultErrorCallback( baseView ) ).copy( mypath,
                                                                                                                                               details.getNewFileName(),
                                                                                                                                               details.getCommitMessage() );
                                                            }
@@ -215,9 +228,9 @@ public class DesignerPresenter
     }
 
     public void assetRenameEvent( String uri ) {
-        vfsServices.call( new RemoteCallback<Path>() {
+        vfsServices.call( new RemoteCallback<ObservablePath>() {
             @Override
-            public void callback( final Path mypath ) {
+            public void callback( final ObservablePath mypath ) {
                 final RenamePopup popup = new RenamePopup( mypath,
                                                            fileNameValidator,
                                                            new CommandWithFileNameAndCommitMessage() {
@@ -234,6 +247,10 @@ public class DesignerPresenter
                 popup.show();
             }
         } ).get( URIUtil.encode( uri ) );
+    }
+
+    private void refreshTitle() {
+        baseView.refreshTitle( getTitleText() );
     }
 
     public void assetDeleteEvent( String uri ) {
@@ -418,7 +435,7 @@ public class DesignerPresenter
     }
 
     protected void save() {
-        view.setProcessUnSaved();
+        view.raiseEventCheckSave();
     }
 
     public void reload() {

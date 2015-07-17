@@ -15,6 +15,8 @@ public interface DesignerView
 
     void raiseEventSave();
 
+    void raiseEventCheckSave();
+
     void raiseEventSaveCancel();
 
     void raiseEventReload();
