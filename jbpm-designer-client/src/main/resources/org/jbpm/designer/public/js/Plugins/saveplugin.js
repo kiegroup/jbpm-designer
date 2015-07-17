@@ -11,32 +11,33 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         this.editorLocked = false;
 
         if(!(ORYX.READONLY == true || ORYX.VIEWLOCKED == true)) {
-            this.facade.offer({
-                'name': ORYX.I18N.Save.save,
-                'functionality': this.saveWithMessage.bind(this),
-                'group': ORYX.I18N.Save.group,
-                'icon': ORYX.BASE_FILE_PATH + "images/disk.png",
-                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
-                'description': ORYX.I18N.Save.saveDesc,
-                'index': 1,
-                'minShape': 0,
-                'maxShape': 0,
-                'isEnabled': function(){
-                    return ORYX.REPOSITORY_ID != "guvnor" && !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
-    //                profileParamName = "profile";
-    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-    //                regexa = new RegExp( regexSa );
-    //                profileParams = regexa.exec( window.location.href );
-    //                profileParamValue = profileParams[1];
-    //                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
-                }.bind(this)
-            });
+//            this.facade.offer({
+//                'name': ORYX.I18N.Save.save,
+//                'functionality': this.saveWithMessage.bind(this),
+//                'group': ORYX.I18N.Save.group,
+//                'icon': ORYX.BASE_FILE_PATH + "images/disk.png",
+//                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
+//                'description': ORYX.I18N.Save.saveDesc,
+//                'index': 1,
+//                'minShape': 0,
+//                'maxShape': 0,
+//                'isEnabled': function(){
+//                    return ORYX.REPOSITORY_ID != "guvnor" && !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
+//    //                profileParamName = "profile";
+//    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//    //                regexa = new RegExp( regexSa );
+//    //                profileParams = regexa.exec( window.location.href );
+//    //                profileParamValue = profileParams[1];
+//    //                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
+//                }.bind(this)
+//            });
 
             this.facade.offer({
                 'name': ORYX.I18N.Save.enableAutosave,
                 'functionality': this.enableautosave.bind(this),
                 'group': ORYX.I18N.Save.group,
+                'icon': ORYX.BASE_FILE_PATH + "images/disk.png",
                 dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
                 'description': ORYX.I18N.Save.enableAutosave_desc,
                 'index': 2,
@@ -75,71 +76,71 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                 }.bind(this)
             });
 
-            this.facade.offer({
-                'name': ORYX.I18N.Save.copy,
-                'functionality': this.copyassetnotify.bind(this),
-                'group': ORYX.I18N.Save.group,
-                'icon': ORYX.BASE_FILE_PATH + "images/page_copy.png",
-                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
-                'description': ORYX.I18N.Save.copy_desc,
-                'index': 4,
-                'minShape': 0,
-                'maxShape': 0,
-                'isEnabled': function(){
-                    return ORYX.REPOSITORY_ID != "guvnor" && !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
-    //                profileParamName = "profile";
-    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-    //                regexa = new RegExp( regexSa );
-    //                profileParams = regexa.exec( window.location.href );
-    //                profileParamValue = profileParams[1];
-    //                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
-                }.bind(this)
-            });
+//            this.facade.offer({
+//                'name': ORYX.I18N.Save.copy,
+//                'functionality': this.copyassetnotify.bind(this),
+//                'group': ORYX.I18N.Save.group,
+//                'icon': ORYX.BASE_FILE_PATH + "images/page_copy.png",
+//                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
+//                'description': ORYX.I18N.Save.copy_desc,
+//                'index': 4,
+//                'minShape': 0,
+//                'maxShape': 0,
+//                'isEnabled': function(){
+//                    return ORYX.REPOSITORY_ID != "guvnor" && !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
+//    //                profileParamName = "profile";
+//    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//    //                regexa = new RegExp( regexSa );
+//    //                profileParams = regexa.exec( window.location.href );
+//    //                profileParamValue = profileParams[1];
+//    //                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
+//                }.bind(this)
+//            });
 
-            this.facade.offer({
-                'name': ORYX.I18N.Save.rename,
-                'functionality': this.renameassetnotify.bind(this),
-                'group': ORYX.I18N.Save.group,
-                'icon': ORYX.BASE_FILE_PATH + "images/rename.png",
-                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
-                'description': ORYX.I18N.Save.rename_desc,
-                'index': 5,
-                'minShape': 0,
-                'maxShape': 0,
-                'isEnabled': function(){
-                    return ORYX.REPOSITORY_ID != "guvnor" && !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
-    //                profileParamName = "profile";
-    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-    //                regexa = new RegExp( regexSa );
-    //                profileParams = regexa.exec( window.location.href );
-    //                profileParamValue = profileParams[1];
-    //                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
-                }.bind(this)
-            });
+//            this.facade.offer({
+//                'name': ORYX.I18N.Save.rename,
+//                'functionality': this.renameassetnotify.bind(this),
+//                'group': ORYX.I18N.Save.group,
+//                'icon': ORYX.BASE_FILE_PATH + "images/rename.png",
+//                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
+//                'description': ORYX.I18N.Save.rename_desc,
+//                'index': 5,
+//                'minShape': 0,
+//                'maxShape': 0,
+//                'isEnabled': function(){
+//                    return ORYX.REPOSITORY_ID != "guvnor" && !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
+//    //                profileParamName = "profile";
+//    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//    //                regexa = new RegExp( regexSa );
+//    //                profileParams = regexa.exec( window.location.href );
+//    //                profileParamValue = profileParams[1];
+//    //                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
+//                }.bind(this)
+//            });
 
-            this.facade.offer({
-                'name': ORYX.I18N.Save.delete_name,
-                'functionality': this.deleteassetnotify.bind(this),
-                'group': ORYX.I18N.Save.group,
-                'icon': ORYX.BASE_FILE_PATH + "images/delete2.gif",
-                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
-                'description': ORYX.I18N.Save.delete_desc,
-                'index': 6,
-                'minShape': 0,
-                'maxShape': 0,
-                'isEnabled': function(){
-                    return ORYX.REPOSITORY_ID != "guvnor" && !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
-    //                profileParamName = "profile";
-    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-    //                regexa = new RegExp( regexSa );
-    //                profileParams = regexa.exec( window.location.href );
-    //                profileParamValue = profileParams[1];
-    //                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
-                }.bind(this)
-            });
+//            this.facade.offer({
+//                'name': ORYX.I18N.Save.delete_name,
+//                'functionality': this.deleteassetnotify.bind(this),
+//                'group': ORYX.I18N.Save.group,
+//                'icon': ORYX.BASE_FILE_PATH + "images/delete2.gif",
+//                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
+//                'description': ORYX.I18N.Save.delete_desc,
+//                'index': 6,
+//                'minShape': 0,
+//                'maxShape': 0,
+//                'isEnabled': function(){
+//                    return ORYX.REPOSITORY_ID != "guvnor" && !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
+//    //                profileParamName = "profile";
+//    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//    //                regexa = new RegExp( regexSa );
+//    //                profileParams = regexa.exec( window.location.href );
+//    //                profileParamValue = profileParams[1];
+//    //                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
+//                }.bind(this)
+//            });
         }
 
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_MOUSEUP, this.setUnsaved.bind(this));
@@ -148,6 +149,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_UNDO_EXECUTE, this.setUnsaved.bind(this));
 
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DO_SAVE, this.handleEventDoSave.bind(this));
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DO_CHECKSAVE, this.handleEventDoCheckSave.bind(this));
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_CANCEL_SAVE, this.handleEventCancelSave.bind(this));
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DO_RELOAD, this.handleEventDoRealod.bind(this));
 
@@ -181,6 +183,10 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
 
     handleEventDoSave: function() {
         this.setUnsaved();
+        this.save(true);
+    },
+
+    handleEventDoCheckSave : function() {
         this.save(true);
     },
 

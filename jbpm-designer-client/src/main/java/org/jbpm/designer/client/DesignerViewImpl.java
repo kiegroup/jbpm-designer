@@ -60,6 +60,11 @@ public class DesignerViewImpl
     }
 
     @Override
+    public void raiseEventCheckSave() {
+        designerWidget.raiseEventCheckSave(designerWidget.getEditorID());
+    }
+
+    @Override
     public void raiseEventSaveCancel() {
         designerWidget.raiseEventSaveCancel(designerWidget.getEditorID());
     }

@@ -310,6 +310,7 @@ ORYX.CONFIG.EVENT_MODE_CHANGED = "mode.changed";
 ORYX.CONFIG.EVENT_PAINT_CANVAS_TOGGLED  = "canvas.toggled";
 // save-cancel-reload
 ORYX.CONFIG.EVENT_DO_SAVE = "designereventdosave";
+ORYX.CONFIG.EVENT_DO_CHECKSAVE = "designereventdochecksave";
 ORYX.CONFIG.EVENT_CANCEL_SAVE = "designereventcancelsave";
 ORYX.CONFIG.EVENT_DO_RELOAD = "designereventreloads";
 

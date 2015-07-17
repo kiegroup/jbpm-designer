@@ -146,6 +146,15 @@ public class DesignerWidgetView
     }-*/;
 
 
+    public native void raiseEventCheckSave( String editorID ) /*-{
+        if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor && (typeof($wnd.document.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved) == "function")) {
+            $wnd.document.getElementById(editorID).contentWindow.ORYX.EDITOR._pluginFacade.raiseEvent({
+                type: "designereventdochecksave"
+            });
+        }
+    }-*/;
+
+
     public native void raiseAskOpenInXMLEditor( String editorID ) /*-{
         if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor ) {
             $wnd.document.getElementById(editorID).contentWindow.ORYX.LOADING_ERRORS = true;
