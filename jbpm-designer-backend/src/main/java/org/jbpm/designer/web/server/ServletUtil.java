@@ -153,13 +153,13 @@ public class ServletUtil {
     }
 
         public static List<String> getBpmnFilesPathInDir(String dir) throws IOException {
-          Path path = Paths.get(dir);
+          final Path path = Paths.get(dir);
           final List<String> processes = new ArrayList<String>();
           Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
 
             public FileVisitResult visitFile(Path paths, BasicFileAttributes basicFileAttributes) {
               if (new FilterByExtension(EXT_BPMN2).accept(paths)) {
-                processes.add(paths.toString());
+                processes.add(paths.subpath(path.getNameCount(), paths.getNameCount()).toString());
               }
               return FileVisitResult.CONTINUE;
             }
