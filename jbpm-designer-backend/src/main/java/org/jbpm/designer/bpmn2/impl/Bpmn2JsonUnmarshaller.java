@@ -4246,21 +4246,33 @@ public class Bpmn2JsonUnmarshaller {
             String[] allDataOutputs = properties.get("dataoutput").split( ",\\s*" );
             OutputSet outSet = Bpmn2Factory.eINSTANCE.createOutputSet();
             for(String dataOutput : allDataOutputs) {
-            	String[] doutputParts = dataOutput.split( ":\\s*" );
+                if(dataOutput.trim().length() > 0) {
+                    DataOutput nextOutput = Bpmn2Factory.eINSTANCE.createDataOutput();
+                    String[] doutputParts = dataOutput.split( ":\\s*" );
+                    if(doutputParts.length == 2) {
+                        nextOutput.setId(event.getId() + "_" + doutputParts[0]);
+                        nextOutput.setName(doutputParts[0]);
 
-                String fromPart = doutputParts[0];
-                if(fromPart.startsWith("[dout]")) {
-                    fromPart = fromPart.substring(6, fromPart.length());
+                        ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                        EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                                "http://www.jboss.org/drools", "dtype", false, false);
+                        SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
+                                doutputParts[1]);
+                        nextOutput.getAnyAttribute().add(extensionEntry);
+                    } else {
+                        nextOutput.setId(event.getId() + "_" + dataOutput);
+                        nextOutput.setName(dataOutput);
+
+                        ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                        EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                                "http://www.jboss.org/drools", "dtype", false, false);
+                        SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
+                                "Object");
+                        nextOutput.getAnyAttribute().add(extensionEntry);
+                    }
+                    event.getDataOutputs().add(nextOutput);
+                    outSet.getDataOutputRefs().add(nextOutput);
                 }
-
-                DataOutput dataout = Bpmn2Factory.eINSTANCE.createDataOutput();
-                // we follow jbpm here to set the id
-                dataout.setId(event.getId() + "_" + fromPart);
-                dataout.setName(fromPart);
-                event.getDataOutputs().add(dataout);
-                // add to output set as well
-                outSet.getDataOutputRefs().add(dataout);
-                
             }
             event.setOutputSet(outSet);
         }

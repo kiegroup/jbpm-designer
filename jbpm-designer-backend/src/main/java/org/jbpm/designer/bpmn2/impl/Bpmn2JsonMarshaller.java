@@ -448,6 +448,19 @@ public class Bpmn2JsonMarshaller {
             StringBuffer doutbuff = new StringBuffer();
             for(DataOutput dout : dataOutputs) {
                 doutbuff.append(dout.getName());
+                if(dout.getAnyAttribute() != null && dout.getAnyAttribute().size() > 0) {
+                    Iterator<FeatureMap.Entry> iter = dout.getAnyAttribute().iterator();
+                    while(iter.hasNext()) {
+                        FeatureMap.Entry entry = iter.next();
+                        if(entry.getEStructuralFeature().getName().equals("dtype")) {
+                            String dtype = entry.getValue().toString();
+                            if (dtype != null && !dtype.isEmpty()) {
+                                doutbuff.append(":").append(dtype);
+                            }
+                            break;
+                        }
+                    }
+                }
                 doutbuff.append(",");
             }
             if(doutbuff.length() > 0) {
@@ -543,8 +556,22 @@ public class Bpmn2JsonMarshaller {
         if(event.getInputSet() != null) {
             List<DataInput> dataInputs = event.getInputSet().getDataInputRefs();
             StringBuffer dinbuff = new StringBuffer();
+
             for(DataInput din : dataInputs) {
                 dinbuff.append(din.getName());
+                if(din.getAnyAttribute() != null && din.getAnyAttribute().size() > 0) {
+                    Iterator<FeatureMap.Entry> iter = din.getAnyAttribute().iterator();
+                    while(iter.hasNext()) {
+                        FeatureMap.Entry entry = iter.next();
+                        if(entry.getEStructuralFeature().getName().equals("dtype")) {
+                            String dtype = entry.getValue().toString();
+                            if (dtype != null && !dtype.isEmpty()) {
+                                dinbuff.append(":").append(dtype);
+                            }
+                            break;
+                        }
+                    }
+                }
                 dinbuff.append(",");
             }
             if(dinbuff.length() > 0) {
