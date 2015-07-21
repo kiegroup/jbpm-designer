@@ -81,6 +81,11 @@ public class EditorHandler extends HttpServlet {
      */
     public static final String DEV = "designer.dev";
 
+    /**
+     * The designer USEOLDDATAASSIGNMENTS flag looked up from system properties.
+     */
+    public static final String USEOLDDATAASSIGNMENTS = "designer.useolddataassignments";
+
     public static final String PRESET_PERSPECTIVE = "org.jbpm.designer.perspective";
 
     /**
@@ -102,6 +107,11 @@ public class EditorHandler extends HttpServlet {
      * The designer dev mode setting.
      */
     private boolean _devMode;
+
+    /**
+     * The designer use old data assignments setting.
+     */
+    private boolean _useOldDataAssignments;
 
     /**
      * The designer preprocess mode setting.
@@ -167,6 +177,7 @@ public class EditorHandler extends HttpServlet {
         _preProcessingService.init(config.getServletContext(), vfsServices);
 
         _devMode = Boolean.parseBoolean(System.getProperty(DEV) == null ? config.getInitParameter(DEV) : System.getProperty(DEV));
+        _useOldDataAssignments = Boolean.parseBoolean(System.getProperty(USEOLDDATAASSIGNMENTS) == null ? config.getInitParameter(USEOLDDATAASSIGNMENTS) : System.getProperty(USEOLDDATAASSIGNMENTS));
         _preProcess = Boolean.parseBoolean(System.getProperty(PREPROCESS) == null ? config.getInitParameter(PREPROCESS) : System.getProperty(PREPROCESS));
         _skin = System.getProperty(SKIN) == null ? config.getInitParameter(SKIN) : System.getProperty(SKIN);
         _designerVersion = readDesignerVersion(config.getServletContext());
@@ -315,6 +326,7 @@ public class EditorHandler extends HttpServlet {
         editorTemplate.add("title", profile.getTitle());
         editorTemplate.add("stencilset", profile.getStencilSet());
         editorTemplate.add("debug", _devMode);
+        editorTemplate.add("useolddataassignments", _useOldDataAssignments);
         editorTemplate.add("preprocessing", preprocessingUnit == null ? "" : preprocessingUnit.getOutData());
         editorTemplate.add("externalprotocol", RepositoryInfo.getRepositoryProtocol(profile) == null ? "" : RepositoryInfo.getRepositoryProtocol(profile));
         editorTemplate.add("externalhost", RepositoryInfo.getRepositoryHost(profile));
