@@ -559,6 +559,7 @@ ORYX.I18N.ShapeMenuPlugin.clickDrag = '<i18n:message key="ORYX.I18N.ShapeMenuPlu
 ORYX.I18N.ShapeMenuPlugin.morphMsg = '<i18n:message key="ORYX.I18N.ShapeMenuPlugin.morphMsg">Morph shape</i18n:message>';
 ORYX.I18N.ShapeMenuPlugin.addTpProcessDic='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.addTpProcessDic">Add to Process Dictionary</i18n:message>';
 ORYX.I18N.ShapeMenuPlugin.viewSourceNode='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.viewSourceNode">View Node Source</i18n:message>';
+ORYX.I18N.ShapeMenuPlugin.editDataIO='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.editDataIO">Edit Data I/O</i18n:message>';
 ORYX.I18N.ShapeMenuPlugin.nameNotSpecified='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.nameNotSpecified">Name not specified.</i18n:message>';
 ORYX.I18N.ShapeMenuPlugin.unableToFindNodeSource='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.unableToFindNodeSource">Unable to find node source.</i18n:message>';
 ORYX.I18N.ShapeMenuPlugin.userTask='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.userTask">User Task</i18n:message>';
@@ -568,6 +569,10 @@ ORYX.I18N.ShapeMenuPlugin.manualTask='<i18n:message key="ORYX.I18N.ShapeMenuPlug
 ORYX.I18N.ShapeMenuPlugin.serviceTask='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.serviceTask">Service Task</i18n:message>';
 ORYX.I18N.ShapeMenuPlugin.businessRuleTask='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.businessRuleTask">Business Rule Task</i18n:message>';
 ORYX.I18N.ShapeMenuPlugin.scriptTask='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.scriptTask">Script Task</i18n:message>';
+
+if(!ORYX.I18N.DataIOEditorPlugin) ORYX.I18N.DataIOEditorPlugin = {};
+
+ORYX.I18N.DataIOEditorPlugin.VariableDefinitions='<i18n:message key="ORYX.I18N.DataIOEditorPlugin.VariableDefinitions">Variable Definitions</i18n:message>';
 
 if(!ORYX.I18N.SimplePnmlexport) ORYX.I18N.SimplePnmlexport = {};
 
