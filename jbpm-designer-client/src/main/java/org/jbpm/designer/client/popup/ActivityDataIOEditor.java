@@ -83,6 +83,24 @@ public class ActivityDataIOEditor extends BaseModal {
 
         void update(ValueListBox<String> listBox, boolean showCustomValues) {
             if (showCustomValues) {
+                String currentValue = listBox.getValue();
+                String currentEditValuePrompt = getEditValuePrompt();
+                String newEditValuePrompt = AssignmentListItemWidget.EDIT_PREFIX + currentValue + AssignmentListItemWidget.EDIT_SUFFIX;
+                if (isCustomValue(currentValue)) {
+                    if (newEditValuePrompt.equals(currentEditValuePrompt)) {
+                        // ok already
+                    }
+                    else if (currentEditValuePrompt != null) {
+                        acceptableValuesWithCustomValues.remove(currentEditValuePrompt);
+                        acceptableValuesWithCustomValues.add(0, newEditValuePrompt);
+                    }
+                    else {
+                        acceptableValuesWithCustomValues.add(0, newEditValuePrompt);
+                    }
+                }
+                else if (currentEditValuePrompt != null) {
+                    acceptableValuesWithCustomValues.remove(currentEditValuePrompt);
+                }
                 listBox.setAcceptableValues(acceptableValuesWithCustomValues);
             }
             else {
@@ -108,12 +126,31 @@ public class ActivityDataIOEditor extends BaseModal {
             acceptableValuesWithCustomValues.clear();
             acceptableValuesWithCustomValues.addAll(customValues);
             acceptableValuesWithoutCustomValues.clear();
-
         }
 
-        void addValue(ValueListBox<String> listBox, String newValue, String newValuePrompt,
-                boolean showCustomValues) {
-            if (newValue != null) {
+        private String getEditValuePrompt() {
+            if (acceptableValuesWithCustomValues.size() > 0) {
+                String value = acceptableValuesWithCustomValues.get(0);
+                if (value.startsWith(AssignmentListItemWidget.EDIT_PREFIX))
+                {
+                    return value;
+                }
+            }
+            return null;
+        }
+
+        void addValue(String newValue, String oldValue) {
+            if (oldValue != null && !oldValue.isEmpty())
+            {
+                if (acceptableValuesWithCustomValues.contains(oldValue)) {
+                    acceptableValuesWithCustomValues.remove(oldValue);
+                }
+                if (customValues.contains(oldValue)) {
+                    customValues.remove(oldValue);
+                }
+            }
+
+            if (newValue != null && !newValue.isEmpty()) {
                 if (!acceptableValuesWithCustomValues.contains(newValue)) {
                     acceptableValuesWithCustomValues.add(0, newValue);
                 }
@@ -121,16 +158,6 @@ public class ActivityDataIOEditor extends BaseModal {
                     customValues.add(newValue);
                 }
             }
-            if (newValuePrompt != null) {
-                if (!acceptableValuesWithCustomValues.contains(newValuePrompt)) {
-                    acceptableValuesWithCustomValues.add(0, newValuePrompt);
-                }
-                if (!customValues.contains(newValuePrompt)) {
-                    customValues.add(newValuePrompt);
-                }
-            }
-
-            update(listBox, showCustomValues);
         }
 
         boolean isCustomValue(String value) {
@@ -244,15 +271,15 @@ public class ActivityDataIOEditor extends BaseModal {
     }
 
     public void setDataTypes(List<String> dataTypes, List<String> dataTypeDisplayNames) {
-        this.dataTypes.clear();
-        this.dataTypeDisplayNames.clear();
+        this.dataTypes = dataTypes;
+        this.dataTypeDisplayNames = dataTypeDisplayNames;
 
-        this.dataTypes.add("");
-        this.dataTypes.addAll(dataTypes);
-        this.dataTypeDisplayNames.add("");
-        this.dataTypeDisplayNames.addAll(dataTypeDisplayNames);
+        List<String> displayDataTypes =  new ArrayList<String>();
+        displayDataTypes.add("");
+        displayDataTypes.add(AssignmentListItemWidget.CUSTOM_PROMPT);
+        displayDataTypes.addAll(dataTypeDisplayNames);
 
-        dataTypeListBoxValues.addValues(this.dataTypeDisplayNames);
+        dataTypeListBoxValues.addValues(displayDataTypes);
         inputAssignmentsWidget.setDataTypes(dataTypeListBoxValues);
         outputAssignmentsWidget.setDataTypes(dataTypeListBoxValues);
     }
@@ -260,7 +287,7 @@ public class ActivityDataIOEditor extends BaseModal {
     public void setProcessVariables(List<String> processVariables) {
         List<String> displayProcessVariables = new ArrayList<String>();
         displayProcessVariables.add("");
-        displayProcessVariables.add(DesignerEditorConstants.INSTANCE.Constant() + " ...");
+        displayProcessVariables.add(AssignmentListItemWidget.CONSTANT_PROMPT);
         displayProcessVariables.addAll(processVariables);
 
         processVarListBoxValues.addValues(displayProcessVariables);

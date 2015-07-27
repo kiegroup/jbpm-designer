@@ -48,6 +48,7 @@ public class ActivityDataIOEditorWidget extends Composite {
 
     private static Set<String> hiddenPropertyNames = new HashSet<String>();
     static {
+        hiddenPropertyNames.add("GroupId");
         hiddenPropertyNames.add("Skippable");
         hiddenPropertyNames.add("Comment");
         hiddenPropertyNames.add("Description");

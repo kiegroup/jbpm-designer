@@ -18,14 +18,12 @@ package org.jbpm.designer.client.popup;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import com.github.gwtbootstrap.client.ui.Button;
-import com.github.gwtbootstrap.client.ui.Icon;
 import com.github.gwtbootstrap.client.ui.TextBox;
 import com.github.gwtbootstrap.client.ui.ValueListBox;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
@@ -37,8 +35,6 @@ import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.text.shared.Renderer;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Composite;
 import org.jboss.errai.databinding.client.api.DataBinder;
 import org.jboss.errai.ui.client.widget.HasModel;
@@ -115,14 +111,17 @@ public class AssignmentListItemWidget extends Composite implements HasModel<Assi
     });
 
 
-    Map<ValueListBox<String>, ListBoxValues> mapListBoxToValues = new HashMap<ValueListBox<String>, ListBoxValues>();
+    Map<ValueListBox<String>, ListBoxValues> mapListBoxToListBoxValues = new HashMap<ValueListBox<String>, ListBoxValues>();
     Map<ValueListBox<String>, Boolean> mapListBoxToShowCustomValues = new HashMap<ValueListBox<String>, Boolean>();
+    Map<TextBox, String> mapTextBoxToCurrentValue = new HashMap<TextBox, String>();
 
-    public static final String EDIT_PROMPT = DesignerEditorConstants.INSTANCE.Edit() + " ";
-    public static final String CUSTOM_PROMPT = DesignerEditorConstants.INSTANCE.Custom() + " ...";
-    public static final String ENTER_TYPE_PROMPT = DesignerEditorConstants.INSTANCE.Enter_type() + " ...";
-    public static final String CONSTANT_PROMPT = DesignerEditorConstants.INSTANCE.Constant() + " ...";
-    public static final String ENTER_CONSTANT_PROMPT = DesignerEditorConstants.INSTANCE.Enter_constant() + " ...";
+    public static final String EDIT_PREFIX = DesignerEditorConstants.INSTANCE.Edit() + " ";
+    public static final String EDIT_SUFFIX = " ...";
+
+    public static final String CUSTOM_PROMPT = DesignerEditorConstants.INSTANCE.Custom() + EDIT_SUFFIX;
+    public static final String ENTER_TYPE_PROMPT = DesignerEditorConstants.INSTANCE.Enter_type() + EDIT_SUFFIX;
+    public static final String CONSTANT_PROMPT = DesignerEditorConstants.INSTANCE.Constant() + EDIT_SUFFIX;
+    public static final String ENTER_CONSTANT_PROMPT = DesignerEditorConstants.INSTANCE.Enter_constant() + EDIT_SUFFIX;
 
     @Inject
     @DataField
@@ -152,10 +151,9 @@ public class AssignmentListItemWidget extends Composite implements HasModel<Assi
      * @param bQuoteStringValues
      * @param customPrompt
      * @param placeholder
-     * @param editPrompt
      */
     private void initEditableListBox(final ValueListBox<String> listBox, final TextBox textBox, final boolean bQuoteStringValues,
-            final String customPrompt, final String placeholder, final String editPrompt) {
+            final String customPrompt, final String placeholder) {
         textBox.setVisible(false);
         textBox.setPlaceholder(placeholder);
         listBox.addValueChangeHandler(new ValueChangeHandler<String>() {
@@ -172,11 +170,11 @@ public class AssignmentListItemWidget extends Composite implements HasModel<Assi
                     // Not a valid value
                     setModelValue(listBox, "");
                     setModelValue(textBox, "");
-                } else if (newValue.startsWith(editPrompt)) {
-                    // "Edit..." selected, show textBox with appropriate value
-                    setModelValue(listBox, "");
-                    String quotedValue = newValue.substring(editPrompt.length(), newValue.length() - 3);
-                    setModelValue(textBox, AssignmentData.createUnquotedConstant(quotedValue));
+                 } else if (newValue.startsWith(EDIT_PREFIX)) {
+                    // "Edit <value> ..." selected, show textBox with appropriate value
+                    String quotedValue = getModelValue(listBox);
+                    String unquotedValue = AssignmentData.createUnquotedConstant(quotedValue);
+                    setModelValue(textBox, unquotedValue);
                     listBox.setVisible(false);
                     textBox.setVisible(true);
                     textBox.setFocus(true);
@@ -184,7 +182,8 @@ public class AssignmentListItemWidget extends Composite implements HasModel<Assi
                     // A Custom value has been selected
                     String textValue = newValue;
                     if (bQuoteStringValues) {
-                        textValue = AssignmentData.createUnquotedConstant(newValue);
+                        String unquotedValue = AssignmentData.createUnquotedConstant(newValue);
+                        textValue = unquotedValue;
                     }
                     setModelValue(listBox, newValue);
                     setModelValue(textBox, textValue);
@@ -193,16 +192,22 @@ public class AssignmentListItemWidget extends Composite implements HasModel<Assi
                     setModelValue(listBox, newValue);
                     setModelValue(textBox, "");
                 }
+                updateListBoxValues(listBox);
             }
         });
 
         listBox.addDomHandler(new FocusHandler() {
             @Override public void onFocus(FocusEvent focusEvent) {
-                // Update drop-down list values on listBox FocusEvent
-                boolean showCustomValues = mapListBoxToShowCustomValues.get(listBox);
-                getListBoxValues(listBox).update(listBox, showCustomValues);
+                updateListBoxValues(listBox);
             }
         }, FocusEvent.getType());
+
+
+        textBox.addFocusHandler(new FocusHandler() {
+            @Override public void onFocus(FocusEvent focusEvent) {
+                setCurrentTextValue(textBox, textBox.getValue());
+            }
+        });
 
         textBox.addBlurHandler(new BlurHandler() {
             @Override public void onBlur(BlurEvent blurEvent) {
@@ -213,7 +218,8 @@ public class AssignmentListItemWidget extends Composite implements HasModel<Assi
                         value = value.trim();
                     }
                     if (!value.isEmpty()) {
-                        addValueToListBoxValues(listBox, value, editPrompt, bQuoteStringValues);
+                        String oldValue = getCurrentTextValue(textBox);
+                        addValueToListBoxValues(listBox, value, oldValue, bQuoteStringValues);
                     }
                     if (bQuoteStringValues) {
                         value = AssignmentData.createQuotedConstant(value);
@@ -221,6 +227,7 @@ public class AssignmentListItemWidget extends Composite implements HasModel<Assi
                     // Set the value even if it's ""
                     setModelValue(textBox, value);
                     setModelValue(listBox, value);
+                    setCurrentTextValue(textBox, value);
                 }
                 textBox.setVisible(false);
                 listBox.setVisible(true);
@@ -228,18 +235,38 @@ public class AssignmentListItemWidget extends Composite implements HasModel<Assi
         });
     }
 
-    protected ListBoxValues getListBoxValues(final ValueListBox<String> listBox) {
-        return mapListBoxToValues.get(listBox);
+    protected void updateListBoxValues(ValueListBox<String> listBox) {
+        boolean showCustomValues = mapListBoxToShowCustomValues.get(listBox);
+        getListBoxValues(listBox).update(listBox, showCustomValues);
+
     }
 
-    protected void addValueToListBoxValues(final ValueListBox<String> listBox, String value, String editPrompt,
+    protected String getCurrentTextValue(TextBox textBox) {
+        String value = mapTextBoxToCurrentValue.get(textBox);
+        if (value == null) {
+            value = "";
+        }
+        return value;
+    }
+
+    protected void setCurrentTextValue(TextBox textBox, String value) {
+        if (value == null) {
+            value = "";
+        }
+        mapTextBoxToCurrentValue.put(textBox, value);
+    }
+
+    protected ListBoxValues getListBoxValues(final ValueListBox<String> listBox) {
+        return mapListBoxToListBoxValues.get(listBox);
+    }
+
+    protected void addValueToListBoxValues(final ValueListBox<String> listBox, String newValue, String oldValue,
             boolean bQuoteStringValues) {
         if (bQuoteStringValues) {
-            value = AssignmentData.createQuotedConstant(value);
+            newValue = AssignmentData.createQuotedConstant(newValue);
+            oldValue = AssignmentData.createQuotedConstant(oldValue);
         }
-        String promptWithValue = editPrompt + value + " ...";
-        boolean showCustomValues = mapListBoxToShowCustomValues.get(listBox);
-        getListBoxValues(listBox).addValue(listBox, value, promptWithValue, showCustomValues);
+        getListBoxValues(listBox).addValue(newValue, oldValue);
     }
 
     protected void setModelValue(final TextBox textBox, String value) {
@@ -262,13 +289,33 @@ public class AssignmentListItemWidget extends Composite implements HasModel<Assi
         }
     }
 
+    protected String getModelValue(final ValueListBox<String> listBox) {
+        if (listBox == dataType) {
+            String value = assignment.getModel().getCustomDataType();
+            if (value == null || value.isEmpty()) {
+                value = assignment.getModel().getDataType();
+            }
+            return value;
+        }
+        else if (listBox == processVar) {
+            String value = assignment.getModel().getConstant();
+            if (value == null || value.isEmpty()) {
+                value = assignment.getModel().getProcessVar();
+            }
+            return value;
+        }
+        else {
+            return "";
+        }
+    }
+
     @PostConstruct
     private void init() {
         // Configure dataType and customDataType controls
-        initEditableListBox(dataType, customDataType, false, CUSTOM_PROMPT, ENTER_TYPE_PROMPT, EDIT_PROMPT);
+        initEditableListBox(dataType, customDataType, false, CUSTOM_PROMPT, ENTER_TYPE_PROMPT);
 
         // Configure processVar and constant controls
-        initEditableListBox(processVar, constant, true, CONSTANT_PROMPT, ENTER_CONSTANT_PROMPT, EDIT_PROMPT);
+        initEditableListBox(processVar, constant, true, CONSTANT_PROMPT, ENTER_CONSTANT_PROMPT);
 
         // Configure name control
         name.addBlurHandler(new BlurHandler() {
@@ -299,26 +346,26 @@ public class AssignmentListItemWidget extends Composite implements HasModel<Assi
     }
 
     public void setDataTypes(ListBoxValues dataTypeListBoxValues) {
-        mapListBoxToValues.put(dataType, dataTypeListBoxValues);
+        mapTextBoxToCurrentValue.put(customDataType, "");
+        mapListBoxToListBoxValues.put(dataType, dataTypeListBoxValues);
         mapListBoxToShowCustomValues.put(dataType, true);
-        dataTypeListBoxValues.update(dataType, true);
         String cdt = assignment.getModel().getCustomDataType();
         if (cdt != null && !cdt.isEmpty()) {
-            addValueToListBoxValues(dataType, cdt, EDIT_PROMPT, false);
+            addValueToListBoxValues(dataType, cdt, "", false);
         }
     }
 
     public void setProcessVariables(ListBoxValues processVarListBoxValues) {
-        mapListBoxToValues.put(processVar, processVarListBoxValues);
+        mapTextBoxToCurrentValue.put(constant, "");
+        mapListBoxToListBoxValues.put(processVar, processVarListBoxValues);
         boolean showCustomValues = false;
         if (assignment.getModel().getVariableType() == VariableType.INPUT) {
             showCustomValues = true;
         }
         mapListBoxToShowCustomValues.put(processVar, showCustomValues);
-        processVarListBoxValues.update(processVar, showCustomValues);
         String con = assignment.getModel().getConstant();
         if (con != null && !con.isEmpty()) {
-            addValueToListBoxValues(processVar, con, EDIT_PROMPT, true);
+            addValueToListBoxValues(processVar, con, "", true);
         }
     }
 

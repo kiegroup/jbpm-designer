@@ -108,7 +108,7 @@ ORYX.Plugins.DataIOEditorPlugin = {
 
         var testTypes = ""; //"UserCommand [org.dummy.examples.cmd]:org.dummy.examples.cmd.UserCommand,User [org.dummy.examples.data]:org.dummy.examples.data.User,";
 
-        var datatypes = "Custom ...:Custom ..., String:String, Integer:Integer, Boolean:Boolean, Float:Float, Object:Object, ******:******," + testTypes + javaDataTypes;
+        var datatypes = "String:String, Integer:Integer, Boolean:Boolean, Float:Float, Object:Object, ******:******," + testTypes + javaDataTypes;
 
         var stencil = element.getStencil();
 
@@ -250,7 +250,7 @@ ORYX.Plugins.DataIOEditorPlugin = {
         if (element && element.parent) {
             var parentvars = this.getParentVars(element.parent);
             if (parentvars && parentvars.length > 0) {
-                vars = vars + parentvars + '******:******,';
+                vars = vars + parentvars; // + '******:******,';
             }
         }
 
