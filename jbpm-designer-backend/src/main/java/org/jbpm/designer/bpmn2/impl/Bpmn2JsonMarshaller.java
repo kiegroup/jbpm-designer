@@ -448,18 +448,9 @@ public class Bpmn2JsonMarshaller {
             StringBuffer doutbuff = new StringBuffer();
             for(DataOutput dout : dataOutputs) {
                 doutbuff.append(dout.getName());
-                if(dout.getAnyAttribute() != null && dout.getAnyAttribute().size() > 0) {
-                    Iterator<FeatureMap.Entry> iter = dout.getAnyAttribute().iterator();
-                    while(iter.hasNext()) {
-                        FeatureMap.Entry entry = iter.next();
-                        if(entry.getEStructuralFeature().getName().equals("dtype")) {
-                            String dtype = entry.getValue().toString();
-                            if (dtype != null && !dtype.isEmpty()) {
-                                doutbuff.append(":").append(dtype);
-                            }
-                            break;
-                        }
-                    }
+                String dtype = getAnyAttributeValue(dout, "dtype");
+                if (dtype != null && !dtype.isEmpty()) {
+                    doutbuff.append(":").append(dtype);
                 }
                 doutbuff.append(",");
             }
@@ -559,18 +550,9 @@ public class Bpmn2JsonMarshaller {
 
             for(DataInput din : dataInputs) {
                 dinbuff.append(din.getName());
-                if(din.getAnyAttribute() != null && din.getAnyAttribute().size() > 0) {
-                    Iterator<FeatureMap.Entry> iter = din.getAnyAttribute().iterator();
-                    while(iter.hasNext()) {
-                        FeatureMap.Entry entry = iter.next();
-                        if(entry.getEStructuralFeature().getName().equals("dtype")) {
-                            String dtype = entry.getValue().toString();
-                            if (dtype != null && !dtype.isEmpty()) {
-                                dinbuff.append(":").append(dtype);
-                            }
-                            break;
-                        }
-                    }
+                String dtype = getAnyAttributeValue(din, "dtype");
+                if (dtype != null && !dtype.isEmpty()) {
+                    dinbuff.append(":").append(dtype);
                 }
                 dinbuff.append(",");
             }
@@ -1757,6 +1739,13 @@ public class Bpmn2JsonMarshaller {
                         if(dataIn.getItemSubjectRef() != null && dataIn.getItemSubjectRef().getStructureRef() != null && dataIn.getItemSubjectRef().getStructureRef().length() > 0) {
                         	dataInBuffer.append(":").append(dataIn.getItemSubjectRef().getStructureRef());
                         }
+                        else if (task.eContainer() instanceof SubProcess) {
+                            // BZ1247105: for Inputs on Tasks inside sub-processes
+                            String dtype = getAnyAttributeValue(dataIn, "dtype");
+                            if (dtype != null && !dtype.isEmpty()) {
+                                dataInBuffer.append(":").append(dtype);
+                            }
+                        }
                         dataInBuffer.append(",");
                     }
                     if(dataIn.getName() != null && dataIn.getName().equals("GroupId")) {
@@ -1814,6 +1803,13 @@ public class Bpmn2JsonMarshaller {
                         dataOutBuffer.append(dataOut.getName());
                         if(dataOut.getItemSubjectRef() != null && dataOut.getItemSubjectRef().getStructureRef() != null && dataOut.getItemSubjectRef().getStructureRef().length() > 0) {
                             dataOutBuffer.append(":").append(dataOut.getItemSubjectRef().getStructureRef());
+                        }
+                        else if (task.eContainer() instanceof SubProcess) {
+                            // BZ1247105: for Outputs on Tasks inside sub-processes
+                            String dtype = getAnyAttributeValue(dataOut, "dtype");
+                            if (dtype != null && !dtype.isEmpty()) {
+                                dataOutBuffer.append(":").append(dtype);
+                            }
                         }
                         dataOutBuffer.append(",");
                     }
@@ -3497,5 +3493,21 @@ public class Bpmn2JsonMarshaller {
                 findBoundaryEvents((FlowElementsContainer) fl, boundaryList);
             }
         }
+    }
+
+    private String getAnyAttributeValue(BaseElement el, String attrName) {
+        if (el == null || attrName == null || attrName.isEmpty()) {
+            return null;
+        }
+        if(el.getAnyAttribute() != null && el.getAnyAttribute().size() > 0) {
+            Iterator<FeatureMap.Entry> iter = el.getAnyAttribute().iterator();
+            while(iter.hasNext()) {
+                FeatureMap.Entry entry = iter.next();
+                if(attrName.equals(entry.getEStructuralFeature().getName())) {
+                    return entry.getValue().toString();
+                }
+            }
+        }
+        return null;
     }
 }
