@@ -275,6 +275,7 @@ ORYX.Plugins.DataIOEditorPlugin = {
         if (thisNode) {
             if (thisNode._stencil._jsonStencil.id == "http://b3mn.org/stencilset/bpmn2.0#MultipleInstanceSubprocess"
                     || thisNode._stencil._jsonStencil.id == "http://b3mn.org/stencilset/bpmn2.0#Subprocess"
+                    || thisNode._stencil._jsonStencil.id == "http://b3mn.org/stencilset/bpmn2.0#EventSubprocess"
                     || thisNode._stencil._jsonStencil.id == "http://b3mn.org/stencilset/bpmn2.0#AdHocSubprocess") {
 
                 var vardefsprop = thisNode.properties["oryx-vardefs"];

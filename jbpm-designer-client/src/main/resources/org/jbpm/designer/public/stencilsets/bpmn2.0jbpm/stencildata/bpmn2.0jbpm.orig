@@ -5373,6 +5373,16 @@
 					"length":""
 				},
 				{
+					"id":"vardefs",
+					"type":"Vardef",
+					"title":"Variable Definitions",
+					"value":"",
+					"description":"Comma-separated variable definitions",
+					"description_ja":"カンマ区切りの変数定義",
+					"readonly":false,
+					"optional":true
+				},
+				{
 					"id":"bgcolor",
 					"type":"Color",
 					"title":"Background Color",
