@@ -161,11 +161,14 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
 
     setUnsaved: function() {
         ORYX.PROCESS_SAVED = false;
-
-        // dont lock more than once
-        if(!this.editorLocked) {
+        
+        ORYX.EDITOR.updateViewLockState();
+                        
+        if(!this.editorLocked) {            
             if ( typeof parent.acquireLock === "function" ) {
-                parent.acquireLock();
+                if (!parent.isLockedByCurrentUser()) {
+                    parent.acquireLock();   
+                }                
                 this.editorLocked = true;
             }
         }
@@ -398,7 +401,9 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
     },
 
     saveSync : function() {
-        // the view-locked-by-current-user logic is already determined in main.js so here if viewlocekd is true we are sure its locked by some other user and not us
+        ORYX.EDITOR.updateViewLockState();
+
+        // the view-locked-by-current-user logic is already determined by updateViewLockState so here if viewlocked is true we are sure its locked by some other user and not us
         if(!ORYX.PROCESS_SAVED && ORYX.VIEWLOCKED != true) {
             // save process bpmn2 and svg
             var processJSON = ORYX.EDITOR.getSerializedJSON();

@@ -104,20 +104,7 @@ ORYX.Editor = {
 			model = config.model;
 		}
 
-        if ( (typeof parent.isLocked === "function") && (typeof parent.isLockedByCurrentUser === "function") ) {
-            var isEditorLocked = parent.isLocked();
-            var isEditorLockedByCurrentUser = parent.isLockedByCurrentUser();
-
-            if(!isEditorLocked) {
-                ORYX.VIEWLOCKED = false;
-            } else {
-                if(isEditorLocked && !isEditorLockedByCurrentUser) {
-                    ORYX.VIEWLOCKED = true;
-                } else if(isEditorLocked && isEditorLockedByCurrentUser) {
-                    ORYX.VIEWLOCKED = false;
-                }
-            }
-        }
+        this.updateViewLockState();
 
         if(config.error) {
             Ext.Msg.show({
@@ -150,7 +137,6 @@ ORYX.Editor = {
 			var ssUrl = model.stencilset.url;
         	ORYX.Core.StencilSet.loadStencilSet(ssUrl, this.id);
 		}
-		
         
         //load the extensions
         if(!!ORYX.CONFIG.SSEXTS){
@@ -191,7 +177,33 @@ ORYX.Editor = {
 			initFinished();
 		}.bind(this), 200);
 	},
-	
+
+	updateViewLockState: function() {
+		if ( (typeof parent.isLocked === "function") && (typeof parent.isLockedByCurrentUser === "function") ) {
+            var isEditorLocked = parent.isLocked();
+            var isEditorLockedByCurrentUser = parent.isLockedByCurrentUser();
+            var isReadOnly = ORYX.READONLY || ORYX.VIEWLOCKED;
+
+            if(!isEditorLocked) {
+                ORYX.VIEWLOCKED = false;
+            } else {
+                if(isEditorLocked && !isEditorLockedByCurrentUser) {
+                    ORYX.VIEWLOCKED = true;
+                } else if(isEditorLocked && isEditorLockedByCurrentUser) {
+                    ORYX.VIEWLOCKED = false;
+                }
+            }
+            
+            // We're in read only mode, but got the lock, so let's reload to enter edit mode.
+            if (isReadOnly && !ORYX.VIEWLOCKED) {
+            	if (typeof parent.reload === "function") {
+            		ORYX.PROCESS_SAVED = true;
+            		parent.reload();
+            	}
+        	}
+        }        
+	},	
+
 	_finishedLoading: function() {
 		if(Ext.getCmp('oryx-loading-panel')){
 			Ext.getCmp('oryx-loading-panel').hide()
@@ -212,18 +224,7 @@ ORYX.Editor = {
 		}
 		
 		// Raise Loaded Event
-		this.handleEvents( {type:ORYX.CONFIG.EVENT_LOADED} );
-
-        if(ORYX.VIEWLOCKED && ORYX.VIEWLOCKED == true) {
-            this.facade.raiseEvent({
-                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                ntype		: 'warning',
-                msg         : "Asset is locked by another user. Editor is running in read-only mode.",
-                title       : 'Asset Locked'
-
-            });
-        }
-		
+		this.handleEvents( {type:ORYX.CONFIG.EVENT_LOADED} );        
 	},
 	
 	_initEventListener: function(){
