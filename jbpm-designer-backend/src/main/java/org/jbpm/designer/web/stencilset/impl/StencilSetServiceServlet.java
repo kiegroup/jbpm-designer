@@ -91,6 +91,10 @@ private static final Logger _logger = LoggerFactory.getLogger(StencilSetServiceS
                 path = applicationContext + "/stencilsets/bpmn2.0jbpm/bpmn2.0jbpm.json";
             }
 
+            if(path.indexOf("stencilset//stencilsets/bpmn2.0jbpm/bpmn2.0jbpm.json") >= 0) {
+                path = "/bpmn2.0jbpm.json";
+            }
+
             if(path.indexOf(applicationContext + "/stencilset/" + applicationContext + "/stencilsets/bpmn2.0/") >= 0) {
                 path = path.substring((applicationContext + "/stencilset/" + applicationContext + "/stencilsets/bpmn2.0/").length(), path.length());
             }

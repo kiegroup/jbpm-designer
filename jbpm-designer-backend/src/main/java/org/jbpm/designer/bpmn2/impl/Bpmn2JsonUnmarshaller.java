@@ -3509,21 +3509,6 @@ public class Bpmn2JsonUnmarshaller {
         } else if (baseElt instanceof Message) {
             // we do not support base-element messages from the json. They are created dynamically for events that use them.
         } else if (baseElt instanceof Lane) {
-            ((Lane) baseElt).setName(escapeXmlString(properties.get("name")));
-
-            // add unescaped and untouched name value as extension element as well
-            MetaDataType eleMetadata = DroolsFactory.eINSTANCE.createMetaDataType();
-            eleMetadata.setName("elementname");
-            eleMetadata.setMetaValue(wrapInCDATABlock(properties.get("name").replaceAll("\\\\n", "\n")));
-
-            if(((Lane) baseElt).getExtensionValues() == null || ((Lane) baseElt).getExtensionValues().size() < 1) {
-                ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
-                ((Lane) baseElt).getExtensionValues().add(extensionElement);
-            }
-            FeatureMap.Entry eleExtensionElementEntry = new SimpleFeatureMapEntry(
-                    (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, eleMetadata);
-            ((Lane) baseElt).getExtensionValues().get(0).getValue().add(eleExtensionElementEntry);
-
             for (BaseElement child : childElements) {
                 if (child instanceof FlowNode) {
                     ((Lane) baseElt).getFlowNodeRefs().add((FlowNode) child);
