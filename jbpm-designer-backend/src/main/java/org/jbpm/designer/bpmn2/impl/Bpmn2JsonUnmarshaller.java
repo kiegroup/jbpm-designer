@@ -2808,7 +2808,8 @@ public class Bpmn2JsonUnmarshaller {
         if (sp.getArtifacts() != null) {
             List<Association> incompleteAssociations = new ArrayList<Association>();
             for (Artifact artifact : sp.getArtifacts()) {
-                if (artifact instanceof TextAnnotation || artifact instanceof Group) {
+                //if (artifact instanceof TextAnnotation || artifact instanceof Group) {
+                if (artifact instanceof Group) {
                     Bounds ba = _bounds.get(artifact.getId());
                     if (ba != null) {
                         BPMNShape shape = factory.createBPMNShape();
@@ -2933,7 +2934,8 @@ public class Bpmn2JsonUnmarshaller {
                 if (process.getArtifacts() != null){
                     List<Association> incompleteAssociations = new ArrayList<Association>();
                     for (Artifact artifact : process.getArtifacts()) {
-                        if (artifact instanceof TextAnnotation || artifact instanceof Group) {
+                        //if (artifact instanceof TextAnnotation || artifact instanceof Group) {
+                        if (artifact instanceof Group) {
                         	Bounds b = _bounds.get(artifact.getId());
                         	if (b != null) {
                         		BPMNShape shape = factory.createBPMNShape();
@@ -3253,7 +3255,7 @@ public class Bpmn2JsonUnmarshaller {
 	                    if (child instanceof Task || child instanceof SequenceFlow 
 	                            || child instanceof Gateway || child instanceof Event 
 	                            || child instanceof Artifact || child instanceof DataObject || child instanceof SubProcess
-	                            || child instanceof Lane || child instanceof CallActivity) {
+	                            || child instanceof Lane || child instanceof CallActivity || child instanceof TextAnnotation) {
 	                        if (rootLevelProcess == null) {
 	                            rootLevelProcess = Bpmn2Factory.eINSTANCE.createProcess();
 	                            // set the properties and item definitions first
@@ -3349,7 +3351,9 @@ public class Bpmn2JsonUnmarshaller {
 	                        rootLevelProcess.getFlowElements().add((Gateway) child);
 	                    } else if (child instanceof Event) {
 	                        rootLevelProcess.getFlowElements().add((Event) child);
-	                    } else if (child instanceof Artifact) {
+	                    } else if (child instanceof TextAnnotation) {
+                            rootLevelProcess.getFlowElements().add((TextAnnotation) child);
+                        } else if (child instanceof Artifact) {
 	                        rootLevelProcess.getArtifacts().add((Artifact) child);
 	                    } else if (child instanceof DataObject) {
                             // bubble up data objects
@@ -4190,7 +4194,7 @@ public class Bpmn2JsonUnmarshaller {
                 _elementColors.get(ta.getId()).add("bordercolor:" + properties.get("bordercolor"));
             }
         }
-        
+
         if(properties.get("fontsize") != null && properties.get("fontsize").length() > 0) {
         	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
         	EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
@@ -4199,7 +4203,7 @@ public class Bpmn2JsonUnmarshaller {
         			properties.get("fontsize"));
         	ta.getAnyAttribute().add(extensionEntry);
         }
-        
+
         if(properties.get("fontcolor") != null && properties.get("fontcolor").length() > 0) {
             if(!(_elementColors.containsKey(ta.getId()))) {
                 List<String> colorsList = new ArrayList<String>();
