@@ -892,7 +892,9 @@ public class Bpmn2JsonMarshaller {
     		marshallBoundaryEvent((BoundaryEvent) flowElement, plane, generator, xOffset, yOffset, catchEventProperties);
     	} else if (flowElement instanceof Task) {
     		marshallTask((Task) flowElement, plane, generator, xOffset, yOffset, preProcessingData, def, flowElementProperties);
-    	} else if (flowElement instanceof SequenceFlow) {
+    	} else if (flowElement instanceof TextAnnotation) {
+            marshallTextAnnotation((TextAnnotation) flowElement, plane, generator, xOffset, yOffset, preProcessingData, def, flowElementProperties);
+        } else if (flowElement instanceof SequenceFlow) {
     		marshallSequenceFlow((SequenceFlow) flowElement, plane, generator, xOffset, yOffset);
     	} else if (flowElement instanceof ParallelGateway) {
     		marshallParallelGateway((ParallelGateway) flowElement, plane, generator, xOffset, yOffset, flowElementProperties);
@@ -2261,7 +2263,15 @@ public class Bpmn2JsonMarshaller {
         if(node.getName() != null) {
         	properties.put("name", unescapeXML(node.getName()));
         } else {
-        	properties.put("name", "");
+            if(node instanceof TextAnnotation) {
+                if( ((TextAnnotation) node).getText() != null) {
+                    properties.put("name", ((TextAnnotation) node).getText());
+                } else {
+                    properties.put("name", "");
+                }
+            } else {
+                properties.put("name", "");
+            }
         }
         // overwrite name if elementname extension element is present
         String elementName = null;
@@ -3179,8 +3189,6 @@ public class Bpmn2JsonMarshaller {
     	generator.writeObjectField("resourceId", artifact.getId());
     	if (artifact instanceof Association) {
     		marshallAssociation((Association)artifact, plane, generator, xOffset, yOffset, preProcessingData, def);
-    	} else if (artifact instanceof TextAnnotation) {
-    		marshallTextAnnotation((TextAnnotation) artifact, plane, generator, xOffset, yOffset, preProcessingData, def);
     	} else if (artifact instanceof Group) {
     		marshallGroup((Group) artifact, plane, generator, xOffset, yOffset, preProcessingData, def);
     	}
@@ -3270,68 +3278,13 @@ public class Bpmn2JsonMarshaller {
         }
     }
 
-    protected void marshallTextAnnotation(TextAnnotation textAnnotation, BPMNPlane plane, JsonGenerator generator, float xOffset, float yOffset, String preProcessingData, Definitions def)  throws JsonGenerationException, IOException{
-    	Map<String, Object> properties = new LinkedHashMap<String, Object>();
-    	properties.put("name", textAnnotation.getText());
+    protected void marshallTextAnnotation(TextAnnotation textAnnotation, BPMNPlane plane, JsonGenerator generator, float xOffset, float yOffset, String preProcessingData, Definitions def, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
+        flowElementProperties.put("name", textAnnotation.getText());
         if(textAnnotation.getDocumentation() != null && textAnnotation.getDocumentation().size() > 0) {
-            properties.put("documentation", textAnnotation.getDocumentation().get(0).getText());
+            flowElementProperties.put("documentation", textAnnotation.getDocumentation().get(0).getText());
         }
-    	properties.put("artifacttype", "Annotation");
-
-    	Iterator<FeatureMap.Entry> iter = textAnnotation.getAnyAttribute().iterator();
-    	boolean foundBrColor = false;
-    	boolean foundFontColor = false;
-        while(iter.hasNext()) {
-            FeatureMap.Entry entry = iter.next();
-            if(entry.getEStructuralFeature().getName().equals("border-color")) {
-            	properties.put("bordercolor", entry.getValue());
-            	foundBrColor = true;
-            }
-            if(entry.getEStructuralFeature().getName().equals("fontsize")) {
-            	properties.put("fontsize", entry.getValue());
-            	foundBrColor = true;
-            }
-            if(entry.getEStructuralFeature().getName().equals("color")) {
-            	properties.put("fontcolor", entry.getValue());
-            	foundFontColor = true;
-            }
-        }
-
-        if(!foundBrColor) {
-        	properties.put("bordercolor", defaultBrColor);
-        }
-
-        if(!foundFontColor) {
-        	properties.put("fontcolor", defaultFontColor);
-        }
-
-	    marshallProperties(properties, generator);
-
-        generator.writeObjectFieldStart("stencil");
-        generator.writeObjectField("id", "TextAnnotation");
-        generator.writeEndObject();
-        generator.writeArrayFieldStart("childShapes");
-        generator.writeEndArray();
-
-    	generator.writeArrayFieldStart("outgoing");
-    	if(findOutgoingAssociation(plane, textAnnotation) != null) {
-    		generator.writeStartObject();
-    		generator.writeObjectField("resourceId", findOutgoingAssociation(plane, textAnnotation).getId());
-    		generator.writeEndObject();
-    	}
-    	generator.writeEndArray();
-
-    	Bounds bounds = ((BPMNShape) findDiagramElement(plane, textAnnotation)).getBounds();
-    	generator.writeObjectFieldStart("bounds");
-    	generator.writeObjectFieldStart("lowerRight");
-    	generator.writeObjectField("x", bounds.getX() + bounds.getWidth() - xOffset);
-    	generator.writeObjectField("y", bounds.getY() + bounds.getHeight() - yOffset);
-    	generator.writeEndObject();
-    	generator.writeObjectFieldStart("upperLeft");
-    	generator.writeObjectField("x", bounds.getX() - xOffset);
-    	generator.writeObjectField("y", bounds.getY() - yOffset);
-    	generator.writeEndObject();
-    	generator.writeEndObject();
+        flowElementProperties.put("artifacttype", "Annotation");
+        marshallNode(textAnnotation, flowElementProperties, "TextAnnotation", plane, generator, xOffset, yOffset);
     }
 
     protected void marshallGroup(Group group, BPMNPlane plane, JsonGenerator generator, float xOffset, float yOffset, String preProcessingData, Definitions def)  throws JsonGenerationException, IOException{
