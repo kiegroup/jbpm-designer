@@ -3088,8 +3088,14 @@ public class Bpmn2JsonMarshaller {
         }
         if(targetBounds != null) {
             generator.writeStartObject();
-            generator.writeObjectField("x", targetBounds.getWidth() / 2);
-            generator.writeObjectField("y", targetBounds.getHeight() / 2);
+            // text annotations have to be treated specia
+            if(association.getTargetRef() instanceof TextAnnotation) {
+                generator.writeObjectField("x", 1);
+                generator.writeObjectField("y", targetBounds.getHeight() / 2);
+            } else {
+                generator.writeObjectField("x", targetBounds.getWidth() / 2);
+                generator.writeObjectField("y", targetBounds.getHeight() / 2);
+            }
             generator.writeEndObject();
             generator.writeEndArray();
         } else {
