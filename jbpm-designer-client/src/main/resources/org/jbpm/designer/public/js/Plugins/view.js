@@ -453,13 +453,35 @@ ORYX.Plugins.View = {
         });
 
         this.facade.offer({
+            'name': ORYX.I18N.view.downloadProcSVG,
+            'functionality': this.showAsSVG.bind(this),
+            'group': 'sharegroup',
+            'icon': ORYX.BASE_FILE_PATH + "images/share.png",
+            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.png",
+            'description': ORYX.I18N.view.downloadProcSVG_desc,
+            'index': 5,
+            'minShape': 0,
+            'maxShape': 0,
+            'isEnabled': function(){
+                return !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
+//				profileParamName = "profile";
+//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+//		        regexa = new RegExp( regexSa );
+//		        profileParams = regexa.exec( window.location.href );
+//		        profileParamValue = profileParams[1];
+//				return profileParamValue == "jbpm";
+            }.bind(this)
+        });
+
+        this.facade.offer({
             'name': ORYX.I18N.view.viewProcSources,
             'functionality': this.showProcessSources.bind(this),
             'group': 'sharegroup',
             'icon': ORYX.BASE_FILE_PATH + "images/share.png",
             dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.png",
             'description': ORYX.I18N.view.viewProcSources_desc,
-            'index': 5,
+            'index': 6,
             'minShape': 0,
             'maxShape': 0,
             'isEnabled': function(){
@@ -1338,6 +1360,59 @@ ORYX.Plugins.View = {
             buttons: Ext.MessageBox.OK,
             icon: Ext.MessageBox.ERROR
         });
+    },
+
+    showAsSVG : function() {
+        var processJSON = ORYX.EDITOR.getSerializedJSON();
+        var rawSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getRootNode().cloneNode(true));
+        var processName = jsonPath(processJSON.evalJSON(), "$.properties.processn");
+        var processPackage = jsonPath(processJSON.evalJSON(), "$.properties.package");
+        var processVersion = jsonPath(processJSON.evalJSON(), "$.properties.version");
+        var fileName = "";
+        if(processPackage && processPackage != "") {
+            fileName += processPackage;
+        }
+        if(processName && processName != "") {
+            if(fileName != "") {
+                fileName += ".";
+            }
+            fileName += processName;
+        }
+        if(processVersion && processVersion != "") {
+            if(fileName != "") {
+                fileName += ".";
+            }
+            fileName += "v" + processVersion;
+        }
+        if(fileName == "") {
+            fileName = "processsvg";
+        }
+        var method ="post";
+        var form = document.createElement("form");
+        form.setAttribute("name", "storetofileform");
+        form.setAttribute("method", method);
+        form.setAttribute("action", ORYX.PATH + "filestore");
+        form.setAttribute("target", "_blank");
+
+        var fnameInput = document.createElement("input");
+        fnameInput.setAttribute("type", "hidden");
+        fnameInput.setAttribute("name", "fname");
+        fnameInput.setAttribute("value", fileName);
+        form.appendChild(fnameInput);
+
+        var fextInput = document.createElement("input");
+        fextInput.setAttribute("type", "hidden");
+        fextInput.setAttribute("name", "fext");
+        fextInput.setAttribute("value", "svg");
+        form.appendChild(fextInput);
+
+        var fdataInput = document.createElement("input");
+        fdataInput.setAttribute("type", "hidden");
+        fdataInput.setAttribute("name", "data_encoded");
+        fdataInput.setAttribute("value", Base64.encode(rawSvgDOM));
+        form.appendChild(fdataInput);
+        document.body.appendChild(form);
+        form.submit();
     },
 
     /**

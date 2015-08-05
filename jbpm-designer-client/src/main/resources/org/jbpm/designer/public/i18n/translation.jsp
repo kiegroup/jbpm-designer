@@ -1265,6 +1265,8 @@ ORYX.I18N.view.downloadProcPDF='<i18n:message key="ORYX.I18N.view.downloadProcPD
 ORYX.I18N.view.downloadProcPDF_desc='<i18n:message key="ORYX.I18N.view.downloadProcPDF_desc">Download Process PDF</i18n:message>';
 ORYX.I18N.view.downloadProcPNG='<i18n:message key="ORYX.I18N.view.downloadProcPNG">Download Process PNG</i18n:message>';
 ORYX.I18N.view.downloadProcPNG_desc='<i18n:message key="ORYX.I18N.view.downloadProcPNG_desc">Download Process PNG</i18n:message>';
+ORYX.I18N.view.downloadProcSVG='<i18n:message key="ORYX.I18N.view.downloadProcSVG">Download Process SVG</i18n:message>';
+ORYX.I18N.view.downloadProcSVG_desc='<i18n:message key="ORYX.I18N.view.downloadProcSVG_desc">Download Process SVG</i18n:message>';
 ORYX.I18N.view.viewProcSources='<i18n:message key="ORYX.I18N.view.viewProcSources">View Process Sources</i18n:message>';
 ORYX.I18N.view.viewProcSources_desc='<i18n:message key="ORYX.I18N.view.viewProcSources_desc">View Process Sources</i18n:message>';
 ORYX.I18N.view.importFromBPMN2ErrorCheckLogs='<i18n:message key="ORYX.I18N.view.importFromBPMN2ErrorCheckLogs"><p>Check server logs for more details.</p></i18n:message>';

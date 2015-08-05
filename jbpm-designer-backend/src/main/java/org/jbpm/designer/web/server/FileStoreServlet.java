@@ -15,6 +15,8 @@
 
 package org.jbpm.designer.web.server;
 
+import org.apache.commons.codec.binary.Base64;
+
 import java.io.IOException;
 
 import javax.servlet.ServletConfig;
@@ -44,12 +46,21 @@ public class FileStoreServlet extends HttpServlet {
     	String fname = req.getParameter("fname");
     	String fext = req.getParameter("fext");
     	String data = req.getParameter("data");
-    	if(fext != null && fext.equals("bpmn2")) {
+        String dataEncoded = req.getParameter("data_encoded");
+
+        String retData;
+        if(dataEncoded != null && dataEncoded.length() > 0) {
+            retData = new String(Base64.decodeBase64(dataEncoded));
+        } else {
+            retData = data;
+        }
+
+    	if(fext != null && (fext.equals("bpmn2") || fext.equals("svg"))) {
     		try {
 				resp.setContentType("application/xml; charset=UTF-8");
 				resp.setHeader("Content-Disposition",
 				        "attachment; filename=\"" + fname + "." + fext + "\"");
-				resp.getWriter().write(data);
+				resp.getWriter().write(retData);
 			} catch (Exception e) {
 				resp.sendError(500, e.getMessage());
 			}
