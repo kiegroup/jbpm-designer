@@ -17,9 +17,7 @@ package org.jbpm.designer.client;
 
 import java.util.Iterator;
 import java.util.Map;
-import javax.annotation.PostConstruct;
 
-import com.github.gwtbootstrap.client.ui.Modal;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.i18n.client.LocaleInfo;
@@ -28,6 +26,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.Widget;
+import org.gwtbootstrap3.client.ui.Modal;
 import org.uberfire.ext.widgets.common.client.common.BusyPopup;
 
 public class DesignerWidgetView

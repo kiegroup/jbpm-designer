@@ -26,7 +26,7 @@ import com.google.gwt.user.client.Window;
 import org.jboss.errai.ioc.client.container.SyncBeanManager;
 import org.jboss.errai.security.shared.api.identity.User;
 import org.jbpm.designer.notification.DesignerNotificationEvent;
-import org.uberfire.client.views.bs2.notifications.NotificationPopupView;
+import org.uberfire.client.views.pfly.notifications.NotificationPopupView;
 import org.uberfire.client.workbench.widgets.animations.LinearFadeOutAnimation;
 
 @ApplicationScoped

@@ -25,12 +25,15 @@ import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
-import com.github.gwtbootstrap.client.ui.Button;
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.HeadingElement;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Composite;
+import org.gwtbootstrap3.client.ui.Button;
+import org.gwtbootstrap3.client.ui.constants.IconType;
 import org.jboss.errai.ui.client.widget.ListWidget;
 import org.jboss.errai.ui.client.widget.Table;
 import org.jboss.errai.ui.shared.api.annotations.DataField;
@@ -78,7 +81,7 @@ public class ActivityDataIOEditorWidget extends Composite {
     private final Element table = DOM.createTable();
 
     @DataField
-    private final Element tabletitle = DOM.createLabel();
+    private HeadingElement tabletitle = Document.get().createHElement( 3 );
 
     @DataField
     private final Element processvarorconstantth = DOM.createTH();
@@ -101,6 +104,7 @@ public class ActivityDataIOEditorWidget extends Composite {
     @PostConstruct
     public void init() {
         addVarButton.setText(DesignerEditorConstants.INSTANCE.Add());
+        addVarButton.setIcon( IconType.PLUS );
     }
 
     public void setIsSingleVar(boolean isSingleVar) {

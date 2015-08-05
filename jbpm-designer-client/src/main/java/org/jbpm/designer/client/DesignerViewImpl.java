@@ -18,11 +18,9 @@ package org.jbpm.designer.client;
 import java.util.Map;
 import javax.inject.Inject;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.Widget;
 import org.kie.workbench.common.widgets.metadata.client.KieEditorViewImpl;
-import org.uberfire.client.util.Layouts;
 
 public class DesignerViewImpl
         extends KieEditorViewImpl

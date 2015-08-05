@@ -3,13 +3,15 @@
     "http://google-web-toolkit.googlecode.com/svn/tags/2.5.0/distro-source/core/src/gwt-module.dtd">
 <module>
 
+  <inherits name="org.gwtbootstrap3.GwtBootstrap3NoTheme"/>
+
   <inherits name="org.jboss.errai.enterprise.CDI"/>
   <inherits name="org.jboss.errai.ui.UI"/>
   <inherits name="com.google.gwt.xml.XML"/>
 
   <!-- Uberfire dependencies -->
   <inherits name="org.uberfire.UberfireClientAll"/>
-  <inherits name="org.uberfire.client.views.Bootstrap2"/>
+  <inherits name="org.uberfire.client.views.PatternFly"/>
 
   <!-- Uberfire Extensions - Core Widgets -->
   <inherits name="org.uberfire.ext.widgets.core.UberfireWidgetsCore"/>

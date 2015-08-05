@@ -22,12 +22,19 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import com.github.gwtbootstrap.client.ui.Button;
-import com.github.gwtbootstrap.client.ui.ValueListBox;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
+import org.gwtbootstrap3.client.ui.Button;
+import org.gwtbootstrap3.client.ui.Column;
+import org.gwtbootstrap3.client.ui.Container;
+import org.gwtbootstrap3.client.ui.Row;
+import org.gwtbootstrap3.client.ui.ValueListBox;
+import org.gwtbootstrap3.client.ui.constants.ButtonType;
+import org.gwtbootstrap3.client.ui.constants.ColumnSize;
+import org.gwtbootstrap3.client.ui.constants.IconType;
+import org.gwtbootstrap3.client.ui.constants.Pull;
 import org.jboss.errai.marshalling.client.Marshalling;
 import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.jbpm.designer.client.shared.AssignmentData;
@@ -62,6 +69,11 @@ public class ActivityDataIOEditor extends BaseModal {
 
     private Button btnCancel;
 
+    private Container container = new Container();
+
+    private Row row = new Row();
+
+    private Column column = new Column( ColumnSize.MD_12 );
 
     public ActivityDataIOEditor() {
         super();
@@ -188,37 +200,52 @@ public class ActivityDataIOEditor extends BaseModal {
 
     @PostConstruct
     public void init() {
-        setTitle(DesignerEditorConstants.INSTANCE.Data_IO());
+        container.setFluid( true );
+        container.add( row );
+        row.add( column );
 
-        inputAssignmentsWidget.setVariableType(VariableType.INPUT);
-        this.add(inputAssignmentsWidget);
+        setTitle( DesignerEditorConstants.INSTANCE.Data_IO() );
 
-        outputAssignmentsWidget.setVariableType(VariableType.OUTPUT);
-        this.add(outputAssignmentsWidget);
+        inputAssignmentsWidget.setVariableType( VariableType.INPUT );
+        column.add( inputAssignmentsWidget );
 
-        btnSave = new Button(DesignerEditorConstants.INSTANCE.Save());
-        btnSave.addClickHandler(new ClickHandler() {
+        outputAssignmentsWidget.setVariableType( VariableType.OUTPUT );
+        column.add( outputAssignmentsWidget );
+
+        final Row btnRow = new Row();
+        btnRow.getElement().getStyle().setMarginTop( 10, Style.Unit.PX );
+        final Column btnColumn = new Column( ColumnSize.MD_12 );
+        btnRow.add( btnColumn );
+        btnSave = new Button( DesignerEditorConstants.INSTANCE.Save() );
+        btnSave.setType( ButtonType.PRIMARY );
+        btnSave.setIcon( IconType.SAVE );
+        btnSave.setPull( Pull.RIGHT );
+        btnSave.addClickHandler( new ClickHandler() {
             @Override
-            public void onClick(final ClickEvent event) {
-                if (callback != null) {
-                    AssignmentData data = new AssignmentData(inputAssignmentsWidget.getData(),
-                            outputAssignmentsWidget.getData(), dataTypes, dataTypeDisplayNames);
-                    String sData = Marshalling.toJSON(data);
-                    callback.getData(sData);
+            public void onClick( final ClickEvent event ) {
+                if ( callback != null ) {
+                    AssignmentData data = new AssignmentData( inputAssignmentsWidget.getData(),
+                            outputAssignmentsWidget.getData(), dataTypes, dataTypeDisplayNames );
+                    String sData = Marshalling.toJSON( data );
+                    callback.getData( sData );
                 }
                 hide();
             }
-        });
-        this.add(btnSave);
+        } );
+        btnColumn.add( btnSave );
 
-        btnCancel = new Button(DesignerEditorConstants.INSTANCE.Cancel());
-        btnCancel.addClickHandler(new ClickHandler() {
+        btnCancel = new Button( DesignerEditorConstants.INSTANCE.Cancel() );
+        btnCancel.setPull( Pull.RIGHT );
+        btnCancel.addClickHandler( new ClickHandler() {
             @Override
-            public void onClick(final ClickEvent event) {
+            public void onClick( final ClickEvent event ) {
                 hide();
             }
         });
-        this.add(btnCancel);
+        btnColumn.add( btnCancel );
+        container.add( btnRow );
+
+        setBody( container );
     }
 
     public void configureDialog(String taskName, boolean hasInputVars, boolean isSingleInputVar, boolean hasOutputVars, boolean isSingleOutputVar) {
@@ -250,22 +277,6 @@ public class ActivityDataIOEditor extends BaseModal {
         inputAssignmentsWidget.setIsSingleVar(this.isSingleInputVar);
         outputAssignmentsWidget.setIsSingleVar(this.isSingleOutputVar);
     }
-
-    @Override
-    public void onShow(Event e) {
-        double width = (double) Window.getClientWidth() * 0.6D;
-        this.setWidth(width + "px");
-        double maxHeight = (double) Window.getClientHeight() * 0.6D;
-        this.setMaxHeigth(maxHeight + "px");
-        double widgetWidth = width - 25;
-        if (inputAssignmentsWidget.isVisible()) {
-            inputAssignmentsWidget.setWidth(widgetWidth + "px");
-        }
-        if (outputAssignmentsWidget.isVisible()) {
-            outputAssignmentsWidget.setWidth(widgetWidth + "px");
-        }
-    }
-
 
     @Override
     public void onHide(Event e) {

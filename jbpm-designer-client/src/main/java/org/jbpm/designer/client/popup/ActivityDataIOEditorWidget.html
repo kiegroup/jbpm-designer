@@ -33,84 +33,64 @@
 </head>
 
 <body>
-<div id="widget"  class="container">
+<div id="widget">
 
-    <div class="well well-small">
+    <div>
 
-        <div>
-            <label style="font-weight:bold" data-field="tabletitle">
-
-            </label>
-            <button type="button" id="addVarButton"><!--Add--></button>
+        <div class="row">
+            <div class="col-md-12">
+                <button type="button" id="addVarButton" class="btn btn-default pull-right" style="margin-top: 20px;"></button>
+                <h3 data-field="tabletitle"></h3>
+            </div>
         </div>
-        <table class="table-bordered" data-field="table">
-            <thead>
-            <tr>
-                <th>
-                    Name
-                </th>
-                <th>
-                    Data Type
-                </th>
-                <th data-field="processvarorconstantth">
-                    Process Var or Constant
-                </th>
-            </tr>
-            </thead>
-            <tbody id="assignments">
-            <tr id="assignment" >
-                <td style="width: 10em; height: 1.3em; vertical-align: top;" >
-                    <input type="text" style="width: 10em; height: 1.3em;" data-field="name"/>
-                </td>
-               <td style="width: 10em; height: 1.3em; vertical-align: top;">
-                    <select data-field="dataType" style="width: 10em; height: 2.0em; vertical-align: top;">
-                        <option value="Integer">Integer</option>
-                        <option value="String">String</option>
-                    </select>
-                   <input type="text" style="width: 9.0em; height: 1.3em;" data-field="customDataType"/>
-                </td>
-                <td style="width: 10em; height: 1.3em; vertical-align: top;">
-                    <select data-field="processVar" style="width: 10em; height: 2.0em; vertical-align: top;">
-                        <option value="Var1">Var1</option>
-                        <option value="Var2">Var2</option>
-                    </select>
-                    <input type="text" style="width: 9.0em; height: 1.3em;" data-field="constant"/>
-                </td>
-                <td style="width: 1em; height: 1.3em;vertical-align: top;">
-                    <button type="button" style="width: 1em; height: 1.3em;vertical-align: top;"  data-field="deleteButton"></button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    inVar2
-                </td>
-                <td>
-                    String
-                </td>
-                <td>
-                    Var2
-                </td>
-                <td>
-                    <button type="button">x</button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    inVar3
-                </td>
-                <td>
-                    Integer
-                </td>
-                <td>
-                    Var3
-                </td>
-                <td>
-                    <button type="button">x</button>
-                </td>
-            </tr>
-             </tbody>
-        </table>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered" data-field="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Name
+                                </th>
+                                <th>
+                                    Data Type
+                                </th>
+                                <th data-field="processvarorconstantth">
+                                    Process Var or Constant
+                                </th>
+                                <th>
 
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="assignments">
+                            <tr id="assignment">
+                                <td>
+                                    <input type="text" class="form-control" data-field="name"/>
+                                </td>
+                                <td>
+                                    <select data-field="dataType" class="form-control">
+                                        <option value="Integer">Integer</option>
+                                        <option value="String">String</option>
+                                    </select>
+                                    <input type="text" class="form-control" data-field="customDataType"/>
+                                </td>
+                                <td>
+                                    <select data-field="processVar" class="form-control">
+                                        <option value="Var1">Var1</option>
+                                        <option value="Var2">Var2</option>
+                                    </select>
+                                    <input type="text" class="form-control" data-field="constant"/>
+                                </td>
+                                <td>
+                                    <button type="button" class="center-block btn btn-danger" data-field="deleteButton"></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </body>
