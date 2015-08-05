@@ -1,6 +1,9 @@
 package org.jbpm.designer.web.server;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,6 +17,8 @@ import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
 import org.jbpm.designer.web.repository.IUUIDBasedRepository;
 import org.jbpm.designer.web.repository.impl.UUIDBasedJbpmRepository;
+import org.jbpm.designer.web.server.exception.BpmnDesignerException;
+import org.jbpm.designer.web.server.exception.BpmnSaveException;
 
 /**
  * @author Golovlyev
@@ -34,20 +39,33 @@ public class SaveBpmn2Servlet extends HttpServlet {
   }
 
   @Override
-  protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+  protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
     try {
       req.setCharacterEncoding("UTF-8");
       String json = req.getParameter("data");
       String preProcessingParam = req.getParameter("pp");
       String profileParam = req.getParameter("profile");
       String uuid = Utils.getUUID(req);
-      File bpmnXml = new File(uuid);
+      File bpmnFile = new File(uuid);
       IDiagramProfile profile = _profileService.findProfile(req, profileParam);
       String xml = _repository.toXML(json, profile, preProcessingParam);
-      FileUtils.writeStringToFile(bpmnXml, xml);
+      if (bpmnFile.canWrite()) {
+        FileUtils.writeStringToFile(bpmnFile, xml);
+      } else {
+        throw new BpmnSaveException(getMessageBundle(req.getLocale()).getString("cant.write.bpmn.file"));
+      }
+    }
+    catch (BpmnDesignerException e) {
+      resp.setStatus(500);
+      resp.getWriter().write(e.getMessage());
     }
     catch (Exception e) {
-      throw new RuntimeException(e);
+      throw new RuntimeException(e.getMessage(), e);
     }
   }
+
+  private ResourceBundle getMessageBundle(Locale locale) {
+    return ResourceBundle.getBundle("messages", locale);
+  }
+
 }

@@ -242,11 +242,11 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
               method: 'POST',
               success: function() {
                 Ext.Msg.minWidth = 400;
-                Ext.Msg.alert("Process Definition xml successfully saved");
+                Ext.Msg.alert("Процесс успешно сохранен");
               },
-              failure: function() {
+              failure: function(response) {
                 Ext.Msg.minWidth = 400;
-                Ext.Msg.alert("Converting to BPMN2 Failed");
+                Ext.Msg.alert("Ошибка при сохранении процесса", response.responseText);
               },
               params: {
                 pp: ORYX.PREPROCESSING,
