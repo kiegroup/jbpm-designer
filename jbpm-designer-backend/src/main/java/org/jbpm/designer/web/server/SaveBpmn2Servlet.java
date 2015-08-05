@@ -2,7 +2,8 @@ package org.jbpm.designer.web.server;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Properties;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -26,7 +27,6 @@ public class SaveBpmn2Servlet extends HttpServlet {
   private static final long serialVersionUID = 3857121919916498228L;
 
   private IUUIDBasedRepository _repository;
-  private Properties messages;
 
   //  @Inject
   private static IDiagramProfileService _profileService = ProfileServiceImpl.getInstance();
@@ -36,13 +36,6 @@ public class SaveBpmn2Servlet extends HttpServlet {
     super.init(config);
     _repository = new UUIDBasedJbpmRepository();
     _repository.configure(this);
-    messages = new Properties();
-    try {
-      messages.load(this.getClass().getResourceAsStream("/messages.properties"));
-    }
-    catch (IOException e) {
-      throw new ServletException(e);
-    }
   }
 
   @Override
@@ -59,7 +52,7 @@ public class SaveBpmn2Servlet extends HttpServlet {
       if (bpmnFile.canWrite()) {
         FileUtils.writeStringToFile(bpmnFile, xml);
       } else {
-        throw new BpmnSaveException(messages.getProperty("cant.write.bpmn.file"));
+        throw new BpmnSaveException(getMessageBundle(req.getLocale()).getString("cant.write.bpmn.file"));
       }
     }
     catch (BpmnDesignerException e) {
@@ -70,4 +63,9 @@ public class SaveBpmn2Servlet extends HttpServlet {
       throw new RuntimeException(e.getMessage(), e);
     }
   }
+
+  private ResourceBundle getMessageBundle(Locale locale) {
+    return ResourceBundle.getBundle("messages", locale);
+  }
+
 }
