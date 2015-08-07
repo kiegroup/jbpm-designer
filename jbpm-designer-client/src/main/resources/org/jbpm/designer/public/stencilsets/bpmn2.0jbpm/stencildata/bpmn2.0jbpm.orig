@@ -3749,7 +3749,8 @@
                ],
                "roles" : [
                  "all",
-                 "fromtoall"
+                 "fromtoall",
+		 "wpattern",
                ],
                "properties": [
                ]
@@ -10161,19 +10162,55 @@
 			},
 			{
 				"role" : "Lane",
-				"contains" : ["all"]
+				"contains" : [
+                    			"sequence_start",
+                    			"sequence_end",
+                    			"from_task_event",
+                    			"to_task_event",
+                    			"EventSubprocess",
+                    			"TextAnnotation",
+                    			"from_participant",
+					"wpattern"
+                		]
 			},
 			{
 				"role" : "Subprocess",
-				"contains" : ["all"]
+				"contains" : [
+					"sequence_start",
+					"sequence_end",
+					"from_task_event",
+					"to_task_event",
+					"EventSubprocess",
+					"TextAnnotation",
+					"from_participant",
+					"wpattern"
+				]
 			},
 			{
 				"role" : "AdHocSubprocess",
-				"contains" : ["all"]
+				"contains" : [
+					"sequence_start",
+					"sequence_end",
+					"from_task_event",
+					"to_task_event",
+					"EventSubprocess",
+					"TextAnnotation",
+					"from_participant",
+					"wpattern"
+				]
 			},
 			{
 				"role" : "MultipleInstanceSubprocess",
-				"contains" : ["all"]
+				"contains" : [
+					"sequence_start",
+					"sequence_end",
+					"from_task_event",
+					"to_task_event",
+					"EventSubprocess",
+					"TextAnnotation",
+					"from_participant",
+					"wpattern"
+				]
 			},
 			{
 				"role" : "MessageContainer",
