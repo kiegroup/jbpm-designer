@@ -62,10 +62,9 @@ public class Assignment {
 
         if (processVariableName != null && !processVariableName.isEmpty()) {
             processVar = assignmentData.findProcessVariable(processVariableName);
-            // Didn't find processVar - add one
+            // Didn't find processVar
             if (processVar == null) {
-                processVar = new Variable(processVariableName, VariableType.PROCESS);
-                assignmentData.addVariable(processVar);
+                processVariableName = "";
             }
         }
 
