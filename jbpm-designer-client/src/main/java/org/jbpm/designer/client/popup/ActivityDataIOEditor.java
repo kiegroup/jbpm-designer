@@ -109,7 +109,7 @@ public class ActivityDataIOEditor extends BaseModal {
         }
 
         void addValues(List<String> acceptableValues) {
-            clearNonCustomValues();
+            clear();
             if (acceptableValues != null) {
                 acceptableValuesWithCustomValues.addAll(acceptableValues);
                 for (int i = 0; i < acceptableValues.size(); i++) {
@@ -122,9 +122,9 @@ public class ActivityDataIOEditor extends BaseModal {
             }
         }
 
-        private void clearNonCustomValues() {
+        private void clear() {
+            customValues.clear();
             acceptableValuesWithCustomValues.clear();
-            acceptableValuesWithCustomValues.addAll(customValues);
             acceptableValuesWithoutCustomValues.clear();
         }
 
