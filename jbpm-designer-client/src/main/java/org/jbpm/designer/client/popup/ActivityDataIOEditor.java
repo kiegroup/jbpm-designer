@@ -88,15 +88,22 @@ public class ActivityDataIOEditor extends BaseModal {
                 String newEditValuePrompt = AssignmentListItemWidget.EDIT_PREFIX + currentValue + AssignmentListItemWidget.EDIT_SUFFIX;
                 if (isCustomValue(currentValue)) {
                     if (newEditValuePrompt.equals(currentEditValuePrompt)) {
-                        // ok already
+                        return;
                     }
-                    else if (currentEditValuePrompt != null) {
+                    if (currentEditValuePrompt != null) {
                         acceptableValuesWithCustomValues.remove(currentEditValuePrompt);
-                        acceptableValuesWithCustomValues.add(0, newEditValuePrompt);
+                    }
+                    int editPromptIndex = acceptableValuesWithCustomValues.indexOf(currentValue);
+                    if (editPromptIndex > -1) {
+                        editPromptIndex++;
+                    }
+                    else if (acceptableValuesWithCustomValues.size() > 1) {
+                        editPromptIndex = 2;
                     }
                     else {
-                        acceptableValuesWithCustomValues.add(0, newEditValuePrompt);
+                        editPromptIndex = acceptableValuesWithCustomValues.size();
                     }
+                    acceptableValuesWithCustomValues.add(editPromptIndex, newEditValuePrompt);
                 }
                 else if (currentEditValuePrompt != null) {
                     acceptableValuesWithCustomValues.remove(currentEditValuePrompt);
@@ -130,10 +137,11 @@ public class ActivityDataIOEditor extends BaseModal {
 
         private String getEditValuePrompt() {
             if (acceptableValuesWithCustomValues.size() > 0) {
-                String value = acceptableValuesWithCustomValues.get(0);
-                if (value.startsWith(AssignmentListItemWidget.EDIT_PREFIX))
-                {
-                    return value;
+                for (int i = 0; i < acceptableValuesWithCustomValues.size(); i++) {
+                    String value = acceptableValuesWithCustomValues.get(i);
+                    if (value.startsWith(AssignmentListItemWidget.EDIT_PREFIX)) {
+                        return value;
+                    }
                 }
             }
             return null;
@@ -152,7 +160,12 @@ public class ActivityDataIOEditor extends BaseModal {
 
             if (newValue != null && !newValue.isEmpty()) {
                 if (!acceptableValuesWithCustomValues.contains(newValue)) {
-                    acceptableValuesWithCustomValues.add(0, newValue);
+                    int index = 1;
+                    if (acceptableValuesWithCustomValues.size() < 1)
+                    {
+                        index = acceptableValuesWithCustomValues.size();
+                    }
+                    acceptableValuesWithCustomValues.add(index, newValue);
                 }
                 if (!customValues.contains(newValue)) {
                     customValues.add(newValue);
