@@ -132,7 +132,7 @@ public class Diagram extends Shape {
     /**
      * Add an additional shape to the diagram
      * 
-     * @param shapes
+     * @param shape
      *            the shape to set
      */
     public boolean addShapes(Shape shape) {

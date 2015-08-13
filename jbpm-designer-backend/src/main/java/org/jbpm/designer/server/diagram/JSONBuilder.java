@@ -76,7 +76,6 @@ public class JSONBuilder {
      * Delivers the correct JSON Object for the stencilId
      * 
      * @param stencilId
-     * @return
      * @throws org.json.JSONException
      */
     private static JSONObject parseStencil(String stencilId) throws JSONException {
@@ -92,7 +91,6 @@ public class JSONBuilder {
      * Object
      * 
      * @param childShapes
-     * @return
      * @throws org.json.JSONException
      */
     private static JSONArray parseChildShapesRecursive(ArrayList<Shape> childShapes) throws JSONException {
@@ -126,7 +124,6 @@ public class JSONBuilder {
      * Delivers the correct JSON Object for the target
      * 
      * @param target
-     * @return
      * @throws org.json.JSONException
      */
     private static JSONObject parseTarget(Shape target) throws JSONException {
@@ -141,7 +138,6 @@ public class JSONBuilder {
      * Delivers the correct JSON Object for the dockers
      * 
      * @param dockers
-     * @return
      * @throws org.json.JSONException
      */
     private static JSONArray parseDockers(ArrayList<Point> dockers) throws JSONException {
@@ -167,7 +163,6 @@ public class JSONBuilder {
      * Delivers the correct JSON Object for outgoings
      * 
      * @param outgoings
-     * @return
      * @throws org.json.JSONException
      */
     private static JSONArray parseOutgoings(ArrayList<Shape> outgoings) throws JSONException {
@@ -191,7 +186,6 @@ public class JSONBuilder {
      * Delivers the correct JSON Object for properties
      * 
      * @param properties
-     * @return
      * @throws org.json.JSONException
      */
     private static JSONObject parseProperties(HashMap<String, String> properties) throws JSONException {
@@ -230,7 +224,6 @@ public class JSONBuilder {
      * Delivers the correct JSON Object for the Stencilset Extensions
      * 
      * @param extensions
-     * @return
      */
     private static JSONArray parseStencilSetExtensions(ArrayList<String> extensions) {
         if (extensions != null) {
@@ -249,7 +242,6 @@ public class JSONBuilder {
      * Delivers the correct JSON Object for the Stencilset
      * 
      * @param stencilSet
-     * @return
      * @throws org.json.JSONException
      */
     private static JSONObject parseStencilSet(StencilSet stencilSet) throws JSONException {
@@ -269,7 +261,6 @@ public class JSONBuilder {
      * Delivers the correct JSON Object for the Bounds
      * 
      * @param bounds
-     * @return
      * @throws org.json.JSONException
      */
     private static JSONObject parseBounds(Bounds bounds) throws JSONException {

@@ -36,7 +36,6 @@ public class JBPMBpmn2ResourceFactoryImpl extends ResourceFactoryImpl {
      * Creates an instance of the resource factory.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
      */
     public JBPMBpmn2ResourceFactoryImpl() {
         super();
@@ -46,7 +45,6 @@ public class JBPMBpmn2ResourceFactoryImpl extends ResourceFactoryImpl {
      * Creates an instance of the resource.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated NOT
      */
     @Override
     public Resource createResource(URI uri) {

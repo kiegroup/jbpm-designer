@@ -265,7 +265,7 @@ public class Shape implements Stencil, Bounded {
     /**
      * Adds a new shape to the outgoings
      * 
-     * @param outgoing
+     * @param out
      *            shape to append
      * @return true if add was successful
      */

@@ -28,7 +28,7 @@ public interface IDiagramPreferenceService {
     
     /**
      * Creates a IDiagramPreference object according to the request.
-     * @param the current request for the editor
+     * @param req current request for the editor
      * @return a preference object
      */
     public IDiagramPreference createPreference(HttpServletRequest req);
