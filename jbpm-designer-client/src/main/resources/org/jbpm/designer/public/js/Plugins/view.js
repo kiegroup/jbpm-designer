@@ -1813,10 +1813,17 @@ ORYX.Plugins.View = {
                         }
                     });
 
+                    var scrollNode 	= this.facade.getCanvas().getHTMLContainer().parentNode.parentNode;
+                    var visibleWidth = scrollNode.getWidth() - 30;
+                    var visibleHeight = scrollNode.getHeight() - 30;
+
+                    var winWidth = Math.min(600, visibleWidth * 2/3);
+                    var winHeight = Math.min(550, visibleHeight * 2/3);
+
                     var win = new Ext.Window({
-                        width:600,
+                        width:winWidth,
                         id:'processSources',
-                        height:550,
+                        height:winHeight,
                         layout: 'fit',
                         title: ORYX.I18N.view.processSources,
                         items: [sourcesPanel],
