@@ -23,6 +23,7 @@ import java.util.Map.Entry;
 
 import bpsim.*;
 import bpsim.impl.BpsimPackageImpl;
+import org.apache.commons.codec.binary.Base64;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonParser;
@@ -189,6 +190,7 @@ public class Bpmn2JsonUnmarshaller {
             revisitItemDefinitions(def);
             revisitProcessDoc(def);
             revisitDI(def);
+            revisitSignalRef(def);
 
             // return def;
             _currentResource.getContents().add(def);
@@ -1941,6 +1943,112 @@ public class Bpmn2JsonUnmarshaller {
     			setItemDefinitionsForActivitiesIoSpec((FlowElementsContainer) fe, def, toAddItemDefinitions);
             }
     	}
+    }
+
+    /**
+     * Updates the signal ref on catch and throw event definitions (including boundary)
+     * @param def Definitions
+     */
+    public void revisitSignalRef(Definitions def) {
+        revisitSignalIds(def);
+        List<RootElement> rootElements =  def.getRootElements();
+        for(RootElement root : rootElements) {
+            if(root instanceof Process) {
+                setSignalRefForCatchEvents((Process) root, def);
+                setSignalRefForThrowEvents((Process) root, def);
+                setSignalRefForBoundaryEvents((Process) root, def);
+            }
+        }
+    }
+
+    public void revisitSignalIds(Definitions def) {
+        List<RootElement> rootElements = def.getRootElements();
+        for(RootElement re : rootElements) {
+            if(re instanceof Signal) {
+                Signal signal = (Signal) re;
+                if(signal.getName() != null) {
+                    signal.setId("_" + new String( Base64.encodeBase64(signal.getName().getBytes()) ));
+                }
+            }
+        }
+    }
+
+    public void setSignalRefForCatchEvents(FlowElementsContainer container, Definitions def) {
+        List<FlowElement> flowElements =  container.getFlowElements();
+        for(FlowElement fe : flowElements) {
+            if(fe instanceof CatchEvent) {
+                if(((CatchEvent)fe).getEventDefinitions().size() > 0) {
+                    EventDefinition ed = ((CatchEvent)fe).getEventDefinitions().get(0);
+                    if (ed instanceof SignalEventDefinition) {
+                        SignalEventDefinition sed = (SignalEventDefinition) ed;
+                        if(sed.getSignalRef() != null) {
+                            Signal signal = findSignalWithName(sed.getSignalRef(), def);
+                            if(signal != null) {
+                                sed.setSignalRef(signal.getId());
+                            }
+                        }
+                    }
+                }
+            } else if(fe instanceof FlowElementsContainer) {
+                setSignalRefForCatchEvents((FlowElementsContainer) fe, def);
+            }
+        }
+    }
+
+    public void setSignalRefForThrowEvents(FlowElementsContainer container, Definitions def) {
+        List<FlowElement> flowElements =  container.getFlowElements();
+        for(FlowElement fe : flowElements) {
+            if(fe instanceof ThrowEvent) {
+                if(((ThrowEvent)fe).getEventDefinitions().size() > 0) {
+                    EventDefinition ed = ((ThrowEvent)fe).getEventDefinitions().get(0);
+                    if (ed instanceof SignalEventDefinition) {
+                        SignalEventDefinition sed = (SignalEventDefinition) ed;
+                        if(sed.getSignalRef() != null) {
+                            Signal signal = findSignalWithName(sed.getSignalRef(), def);
+                            if(signal != null) {
+                                sed.setSignalRef(signal.getId());
+                            }
+                        }
+                    }
+                }
+            } else if(fe instanceof FlowElementsContainer) {
+                setSignalRefForThrowEvents((FlowElementsContainer) fe, def);
+            }
+        }
+    }
+
+    public void setSignalRefForBoundaryEvents(FlowElementsContainer container, Definitions def) {
+        List<FlowElement> flowElements =  container.getFlowElements();
+        for(FlowElement fe : flowElements) {
+            if(fe instanceof BoundaryEvent) {
+                if(((BoundaryEvent)fe).getEventDefinitions().size() > 0) {
+                    EventDefinition ed = ((BoundaryEvent)fe).getEventDefinitions().get(0);
+                    if (ed instanceof SignalEventDefinition) {
+                        SignalEventDefinition sed = (SignalEventDefinition) ed;
+                        if(sed.getSignalRef() != null) {
+                            Signal signal = findSignalWithName(sed.getSignalRef(), def);
+                            if(signal != null) {
+                                sed.setSignalRef(signal.getId());
+                            }
+                        }
+                    }
+                }
+            } else if(fe instanceof FlowElementsContainer) {
+                setSignalRefForBoundaryEvents((FlowElementsContainer) fe, def);
+            }
+        }
+    }
+
+    public Signal findSignalWithName(String signalRef, Definitions def) {
+        List<RootElement> rootElements = def.getRootElements();
+        for(RootElement re : rootElements) {
+            if(re instanceof Signal) {
+                if(((Signal)re).getName().equals(signalRef)) {
+                    return (Signal) re;
+                }
+            }
+        }
+        return null;
     }
     
     /**
