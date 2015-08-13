@@ -1360,7 +1360,7 @@ public class Bpmn2JsonUnmarshaller {
                             boolean shouldAddSignal = true;
                             for(RootElement re : rootElements) {
                                 if(re instanceof Signal) {
-                                    if(re.getId().equals(signalRef)) {
+                                    if(((Signal)re).getName().equals(signalRef)) {
                                         shouldAddSignal = false;
                                         break;
                                     }
@@ -1369,7 +1369,7 @@ public class Bpmn2JsonUnmarshaller {
 
                             if(toAddSignals != null) {
                                 for(Signal s : toAddSignals) {
-                                    if(s.getId().equals(signalRef)) {
+                                    if(s.getName().equals(signalRef)) {
                                         shouldAddSignal = false;
                                         break;
                                     }
@@ -1378,7 +1378,6 @@ public class Bpmn2JsonUnmarshaller {
 
                             if(shouldAddSignal) {
                                 Signal signal = Bpmn2Factory.eINSTANCE.createSignal();
-                                signal.setId(signalRef);
                                 signal.setName(signalRef);
                                 toAddSignals.add(signal);
                             }
@@ -1523,7 +1522,7 @@ public class Bpmn2JsonUnmarshaller {
                             boolean shouldAddSignal = true;
                             for(RootElement re : rootElements) {
                                 if(re instanceof Signal) {
-                                    if(re.getId().equals(signalRef)) {
+                                    if(((Signal)re).getName().equals(signalRef)) {
                                         shouldAddSignal = false;
                                         break;
                                     }
@@ -1532,7 +1531,7 @@ public class Bpmn2JsonUnmarshaller {
 
                             if(toAddSignals != null) {
                                 for(Signal s : toAddSignals) {
-                                    if(s.getId().equals(signalRef)) {
+                                    if(s.getName().equals(signalRef)) {
                                         shouldAddSignal = false;
                                         break;
                                     }
@@ -1541,7 +1540,6 @@ public class Bpmn2JsonUnmarshaller {
 
                             if(shouldAddSignal) {
                                 Signal signal = Bpmn2Factory.eINSTANCE.createSignal();
-                                signal.setId(signalRef);
                                 signal.setName(signalRef);
                                 toAddSignals.add(signal);
                             }
@@ -1997,7 +1995,7 @@ public class Bpmn2JsonUnmarshaller {
                                     List<RootElement> rootElements = def.getRootElements();
                                     for(RootElement re : rootElements) {
                                         if(re instanceof Signal) {
-                                            if(re.getId().equals(signalRef)) {
+                                            if(((Signal)re).getName().equals(signalRef)) {
                                                 shouldAddSignal = false;
                                                 break;
                                             }
@@ -2006,7 +2004,7 @@ public class Bpmn2JsonUnmarshaller {
 
                                     if(toAddSignals != null) {
                                         for(Signal s : toAddSignals) {
-                                            if(s.getId().equals(signalRef)) {
+                                            if(s.getName().equals(signalRef)) {
                                                 shouldAddSignal = false;
                                                 break;
                                             }
@@ -2015,7 +2013,6 @@ public class Bpmn2JsonUnmarshaller {
 
                                     if(shouldAddSignal) {
                                         Signal signal = Bpmn2Factory.eINSTANCE.createSignal();
-                                        signal.setId(signalRef);
                                         signal.setName(signalRef);
                                         toAddSignals.add(signal);
                                     }
@@ -2147,7 +2144,7 @@ public class Bpmn2JsonUnmarshaller {
                             List<RootElement> rootElements = def.getRootElements();
                             for(RootElement re : rootElements) {
                                 if(re instanceof Signal) {
-                                    if(re.getId().equals(signalRef)) {
+                                    if(((Signal)re).getName().equals(signalRef)) {
                                         shouldAddSignal = false;
                                         break;
                                     }
@@ -2156,7 +2153,7 @@ public class Bpmn2JsonUnmarshaller {
 
                             if(toAddSignals != null) {
                                 for(Signal s : toAddSignals) {
-                                    if(s.getId().equals(signalRef)) {
+                                    if(s.getName().equals(signalRef)) {
                                         shouldAddSignal = false;
                                         break;
                                     }
@@ -2165,7 +2162,6 @@ public class Bpmn2JsonUnmarshaller {
 
                             if(shouldAddSignal) {
                                 Signal signal = Bpmn2Factory.eINSTANCE.createSignal();
-                                signal.setId(signalRef);
                                 signal.setName(signalRef);
                                 toAddSignals.add(signal);
                             }
