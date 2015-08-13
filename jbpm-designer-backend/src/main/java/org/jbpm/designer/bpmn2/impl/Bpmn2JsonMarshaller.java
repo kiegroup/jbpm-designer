@@ -442,7 +442,7 @@ public class Bpmn2JsonMarshaller {
         generator.writeEndArray();
     }
 
-    private void setCatchEventProperties(CatchEvent event, Map<String, Object> properties) {
+    private void setCatchEventProperties(CatchEvent event, Map<String, Object> properties, Definitions def) {
         if(event.getOutputSet() != null) {
             List<DataOutput> dataOutputs = event.getOutputSet().getDataOutputRefs();
             StringBuffer doutbuff = new StringBuffer();
@@ -494,7 +494,20 @@ public class Bpmn2JsonMarshaller {
                 }
             } else if( ed instanceof SignalEventDefinition) {
                 if(((SignalEventDefinition) ed).getSignalRef() != null) {
-                    properties.put("signalref", ((SignalEventDefinition) ed).getSignalRef());
+                    // find signal with the corresponding id
+                    boolean foundSignalRef = false;
+                    List<RootElement> rootElements = def.getRootElements();
+                    for(RootElement re : rootElements) {
+                        if(re instanceof Signal) {
+                            if(re.getId().equals(((SignalEventDefinition) ed).getSignalRef())) {
+                                properties.put("signalref", ((Signal)re).getName());
+                                foundSignalRef = true;
+                            }
+                        }
+                    }
+                    if(!foundSignalRef) {
+                        properties.put("signalref", "");
+                    }
                 } else {
                     properties.put("signalref", "");
                 }
@@ -543,7 +556,7 @@ public class Bpmn2JsonMarshaller {
         }
     }
 
-    private void setThrowEventProperties(ThrowEvent event, Map<String, Object> properties) {
+    private void setThrowEventProperties(ThrowEvent event, Map<String, Object> properties, Definitions def) {
         if(event.getInputSet() != null) {
             List<DataInput> dataInputs = event.getInputSet().getDataInputRefs();
             StringBuffer dinbuff = new StringBuffer();
@@ -652,7 +665,20 @@ public class Bpmn2JsonMarshaller {
                 }
             } else if( ed instanceof SignalEventDefinition) {
                 if(((SignalEventDefinition) ed).getSignalRef() != null) {
-                    properties.put("signalref", ((SignalEventDefinition) ed).getSignalRef());
+                    // find signal with the corresponding id
+                    boolean foundSignalRef = false;
+                    List<RootElement> rootElements = def.getRootElements();
+                    for(RootElement re : rootElements) {
+                        if(re instanceof Signal) {
+                            if(re.getId().equals(((SignalEventDefinition) ed).getSignalRef())) {
+                                properties.put("signalref", ((Signal)re).getName());
+                                foundSignalRef = true;
+                            }
+                        }
+                    }
+                    if(!foundSignalRef) {
+                        properties.put("signalref", "");
+                    }
                 } else {
                     properties.put("signalref", "");
                 }
@@ -875,10 +901,10 @@ public class Bpmn2JsonMarshaller {
         Map<String, Object> catchEventProperties = new LinkedHashMap<String, Object>(flowElementProperties);
     	Map<String, Object> throwEventProperties = new LinkedHashMap<String, Object>(flowElementProperties);
     	if(flowElement instanceof CatchEvent) {
-    	    setCatchEventProperties((CatchEvent) flowElement, catchEventProperties);
+    	    setCatchEventProperties((CatchEvent) flowElement, catchEventProperties, def);
     	}
     	if(flowElement instanceof ThrowEvent) {
-    	    setThrowEventProperties((ThrowEvent) flowElement, throwEventProperties);
+    	    setThrowEventProperties((ThrowEvent) flowElement, throwEventProperties, def);
     	}
     	if (flowElement instanceof StartEvent) {
     		marshallStartEvent((StartEvent) flowElement, plane, generator, xOffset, yOffset, catchEventProperties);
