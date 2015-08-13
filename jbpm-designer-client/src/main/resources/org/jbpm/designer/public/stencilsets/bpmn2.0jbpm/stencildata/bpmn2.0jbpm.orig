@@ -7614,7 +7614,7 @@
 				},
 				{
 					"id":"signalref",
-					"type":"String",
+					"type":"Expression",
 					"title":"SignalRef",
 					"value":"",
 					"description":"",
@@ -8393,7 +8393,7 @@
 				},
 				{
 					"id":"signalref",
-					"type":"String",
+					"type":"Expression",
 					"title":"SignalRef",
 					"value":"",
 					"description":"",
@@ -8690,7 +8690,7 @@
 				},
 				{
 					"id":"signalref",
-					"type":"String",
+					"type":"Expression",
 					"title":"SignalRef",
 					"value":"",
 					"description":"",
@@ -9384,7 +9384,7 @@
 				},
 				{
 					"id":"signalref",
-					"type":"String",
+					"type":"Expression",
 					"title":"SignalRef",
 					"value":"",
 					"description":"",
