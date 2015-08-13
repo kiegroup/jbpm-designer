@@ -25,9 +25,6 @@ import javax.servlet.ServletConfig;
  */
 public interface IUUIDBasedRepositoryService {
     
-    /**
-     * @return a repository object.
-     */
     public void init();
     public IUUIDBasedRepository createRepository();
     public IUUIDBasedRepository createRepository(ServletConfig config);

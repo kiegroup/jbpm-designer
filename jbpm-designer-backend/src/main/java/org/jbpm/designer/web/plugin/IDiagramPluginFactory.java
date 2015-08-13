@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 public interface IDiagramPluginFactory {
 
     /**
-     * @param the context: the current servlet request.
+     * @param request the current servlet request.
      * @return a set of created plugins.
      */
     public Set<IDiagramPlugin> getPlugins(HttpServletRequest request);

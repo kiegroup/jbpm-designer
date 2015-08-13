@@ -30,7 +30,6 @@ public interface Repository {
 
     /**
      * Returns name used to identify this repository.
-     * @return
      */
     public String getName();
 
@@ -73,7 +72,6 @@ public interface Repository {
      * NOTE: Directory should be always relative to the repository root
      * @param directory - directory to be deleted
      * @param failIfNotEmpty - indicates if delete operation should fail in case given directory is not empty
-     * @return
      */
     boolean deleteDirectory(String directory, boolean failIfNotEmpty);
 

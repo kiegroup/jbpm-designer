@@ -119,7 +119,6 @@ public class Repository {
 	 * Obtains the base URL from a HttpServletRequest
 	 * 
 	 * @param req HTTP request containing a request URL
-	 * @return
 	 */
 	public static String getBaseUrl(HttpServletRequest req) {
 		String baseUrl = req.getRequestURL().toString();
@@ -172,7 +171,6 @@ public class Repository {
 	 * 
 	 * @param modelId
 	 * @param modelData
-	 * @return
 	 */
 	public String generateERDF(
 			String modelId,
@@ -193,7 +191,6 @@ public class Repository {
 	 * @param modelId
 	 * @param modelData
 	 * @param stencilset Relative path to stencilset, e.g., /stencilsets/bpmn1.1/bpmn1.1.json
-	 * @return
 	 */
 	public String generateERDF(
 			String modelId,
@@ -217,7 +214,6 @@ public class Repository {
 	 * @param modelData
 	 * @param stencilset Relative path to stencilset, e.g., /stencilsets/bpmn1.1/bpmn1.1.json
 	 * @param modelType
-	 * @return
 	 */
 	public String generateERDF(
 			String modelId,
@@ -243,7 +239,6 @@ public class Repository {
 	 * @param stencilset Relative path to stencilset, e.g., /stencilsets/bpmn1.1/bpmn1.1.json
 	 * @param modelType
 	 * @param stencilSetExtensionUrls TODO
-	 * @return
 	 */
 	public String generateERDF(
 			String modelId,
@@ -271,7 +266,6 @@ public class Repository {
 	 * @param modelType
 	 * @param stencilSetExtensionUrls TODO
 	 * @param modelName TODO
-	 * @return
 	 */
 	public String generateERDF(
 			String modelId,
@@ -301,7 +295,6 @@ public class Repository {
 	 * @param stencilSetExtensionUrls TODO
 	 * @param modelName TODO
 	 * @param modelDescription TODO
-	 * @return
 	 */
 	public String generateERDF(
 			String modelId,

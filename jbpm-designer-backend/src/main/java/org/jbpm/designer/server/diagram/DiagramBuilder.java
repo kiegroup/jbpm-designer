@@ -326,7 +326,6 @@ public class DiagramBuilder {
      * 
      * @param id
      * @param shapes
-     * @return
      */
     private static Shape getShapeWithId(String id, ArrayList<Shape> shapes) {
         Shape result = new Shape(id);
