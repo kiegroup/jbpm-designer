@@ -291,8 +291,11 @@ Ext.ux.SlicedToolbar = Ext.extend(Ext.Toolbar, {
         this.sliceMap = {};
         var sliceWidth = 0;
         var toolbarWidth = this.getEl().getWidth();
+        var addedPrev = false;
+        var addedNext = false;
+        var itemIndex = -1;
 
-        this.items.getRange().each(function(item, index){
+        this.items.getRange().each(function(item, index) {
             //Remove all next and prev buttons
             if (item.helperItem) {
                 item.destroy();
@@ -302,12 +305,13 @@ Ext.ux.SlicedToolbar = Ext.extend(Ext.Toolbar, {
             var itemWidth = item.getEl().getWidth();
             
             if(sliceWidth + itemWidth + 5 * this.iconStandardWidth > toolbarWidth){
-                var itemIndex = this.items.indexOf(item);
-
+                itemIndex = this.items.indexOf(item);
                 this.insertSlicingButton("next", slice, itemIndex);
+                addedNext = true;
                 
                 if (slice !== 0) {
                     this.insertSlicingButton("prev", slice, itemIndex);
+                    addedPrev = true;
                 }
                 
                 this.insertSlicingSeperator(slice, itemIndex);
@@ -319,6 +323,19 @@ Ext.ux.SlicedToolbar = Ext.extend(Ext.Toolbar, {
             this.sliceMap[item.id] = slice;
             sliceWidth += itemWidth;
         }.bind(this));
+
+        if(!addedPrev) {
+            this.insertSlicingButton("prev", slice, itemIndex);
+        }
+
+        if(!addedNext) {
+            if(addedPrev) {
+                this.insertSlicingButton("next", slice, itemIndex+1);
+            } else {
+                this.insertSlicingButton("next", slice, itemIndex);
+            }
+        }
+
         
         // Add prev button at the end
         if(slice > 0){
