@@ -7066,6 +7066,17 @@
 					"display" : true
 				},
 				{
+					"id":"timedate",
+					"type":"Expression",
+					"title":"Time Date",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
+				},
+				{
 					"id":"timeduration",
 					"type":"Text",
 					"title":"Time Duration",
@@ -7816,6 +7827,17 @@
 					"fill":true,
 					"stroke":false,
 					"display" : true
+				},
+				{
+					"id":"timedate",
+					"type":"Expression",
+					"title":"Time Date",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":"",
+					"length":""
 				},
 				{
 					"id":"timeduration",

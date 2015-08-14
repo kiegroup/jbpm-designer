@@ -4424,11 +4424,11 @@ public class Bpmn2JsonUnmarshaller {
         try {
             EventDefinition ed = event.getEventDefinitions().get(0);
             if(ed instanceof TimerEventDefinition) {
-//                if(properties.get("timedate") != null && !"".equals(properties.get("timedate"))) {
-//                    FormalExpression timeDateExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
-//                    timeDateExpression.setBody(properties.get("timedate"));
-//                    ((TimerEventDefinition) event.getEventDefinitions().get(0)).setTimeDate(timeDateExpression);
-//                }
+                if(properties.get("timedate") != null && !"".equals(properties.get("timedate"))) {
+                    FormalExpression timeDateExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                    timeDateExpression.setBody(properties.get("timedate"));
+                    ((TimerEventDefinition) event.getEventDefinitions().get(0)).setTimeDate(timeDateExpression);
+                }
                 
                 if(properties.get("timeduration") != null && !"".equals(properties.get("timeduration"))) {
                     FormalExpression timeDurationExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
@@ -4701,11 +4701,11 @@ public class Bpmn2JsonUnmarshaller {
         try {
             EventDefinition ed = event.getEventDefinitions().get(0);
             if(ed instanceof TimerEventDefinition) {
-//                if(properties.get("timedate") != null && !"".equals(properties.get("timedate"))) {
-//                    FormalExpression timeDateExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
-//                    timeDateExpression.setBody(properties.get("timedate"));
-//                    ((TimerEventDefinition) event.getEventDefinitions().get(0)).setTimeDate(timeDateExpression);
-//                }
+                if(properties.get("timedate") != null && !"".equals(properties.get("timedate"))) {
+                    FormalExpression timeDateExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                    timeDateExpression.setBody(properties.get("timedate"));
+                    ((TimerEventDefinition) event.getEventDefinitions().get(0)).setTimeDate(timeDateExpression);
+                }
                 
                 if(properties.get("timeduration") != null && !"".equals(properties.get("timeduration"))) {
                     FormalExpression timeDurationExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
