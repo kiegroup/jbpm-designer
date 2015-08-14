@@ -23,7 +23,6 @@ import java.util.Map.Entry;
 
 import bpsim.*;
 import bpsim.impl.BpsimPackageImpl;
-import org.apache.commons.codec.binary.Base64;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonParser;
@@ -1967,7 +1966,7 @@ public class Bpmn2JsonUnmarshaller {
             if(re instanceof Signal) {
                 Signal signal = (Signal) re;
                 if(signal.getName() != null) {
-                    signal.setId("_" + new String( Base64.encodeBase64(signal.getName().getBytes()) ));
+                    signal.setId("_" + UUID.fromString(signal.getName()));
                 }
             }
         }
