@@ -3510,6 +3510,20 @@ public class Bpmn2JsonUnmarshaller {
             // we do not support base-element messages from the json. They are created dynamically for events that use them.
         } else if (baseElt instanceof Lane) {
         	((Lane) baseElt).setName(escapeXmlString(properties.get("name")));
+
+            // add unescaped and untouched name value as extension element as well
+            MetaDataType eleMetadata = DroolsFactory.eINSTANCE.createMetaDataType();
+            eleMetadata.setName("elementname");
+            eleMetadata.setMetaValue(wrapInCDATABlock(properties.get("name").replaceAll("\\\\n", "\n")));
+
+            if(((Lane) baseElt).getExtensionValues() == null || ((Lane) baseElt).getExtensionValues().size() < 1) {
+                ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                ((Lane) baseElt).getExtensionValues().add(extensionElement);
+            }
+            FeatureMap.Entry eleExtensionElementEntry = new SimpleFeatureMapEntry(
+                    (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, eleMetadata);
+            ((Lane) baseElt).getExtensionValues().get(0).getValue().add(eleExtensionElementEntry);
+
         	for (BaseElement child : childElements) {
         		if (child instanceof FlowNode) {
         			((Lane) baseElt).getFlowNodeRefs().add((FlowNode) child);
@@ -3651,6 +3665,19 @@ public class Bpmn2JsonUnmarshaller {
     protected void applySubProcessProperties(SubProcess sp, Map<String, String> properties) {
         if(properties.get("name") != null) {
             sp.setName(escapeXmlString(properties.get("name")));
+            // add unescaped and untouched name value as extension element as well
+            MetaDataType eleMetadata = DroolsFactory.eINSTANCE.createMetaDataType();
+            eleMetadata.setName("elementname");
+            eleMetadata.setMetaValue(wrapInCDATABlock(properties.get("name").replaceAll("\\\\n", "\n")));
+
+            if(sp.getExtensionValues() == null || sp.getExtensionValues().size() < 1) {
+                ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                sp.getExtensionValues().add(extensionElement);
+            }
+            FeatureMap.Entry eleExtensionElementEntry = new SimpleFeatureMapEntry(
+                    (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, eleMetadata);
+            sp.getExtensionValues().get(0).getValue().add(eleExtensionElementEntry);
+
         } else {
             sp.setName("");
         }
@@ -4181,6 +4208,20 @@ public class Bpmn2JsonUnmarshaller {
         ee.setId(properties.get("resourceId"));
         if(properties.get("name") != null) {
             ee.setName(escapeXmlString(properties.get("name")));
+
+            // add unescaped and untouched name value as extension element as well
+            MetaDataType eleMetadata = DroolsFactory.eINSTANCE.createMetaDataType();
+            eleMetadata.setName("elementname");
+            eleMetadata.setMetaValue(wrapInCDATABlock(properties.get("name").replaceAll("\\\\n", "\n")));
+
+            if(ee.getExtensionValues() == null || ee.getExtensionValues().size() < 1) {
+                ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                ee.getExtensionValues().add(extensionElement);
+            }
+            FeatureMap.Entry eleExtensionElementEntry = new SimpleFeatureMapEntry(
+                    (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, eleMetadata);
+            ee.getExtensionValues().get(0).getValue().add(eleExtensionElementEntry);
+
         } else {
             ee.setName("");
         }
@@ -4225,6 +4266,20 @@ public class Bpmn2JsonUnmarshaller {
     protected void applyStartEventProperties(StartEvent se, Map<String, String> properties) {
         if(properties.get("name") != null) {
             se.setName(escapeXmlString(properties.get("name")));
+
+            // add unescaped and untouched name value as extension element as well
+            MetaDataType eleMetadata = DroolsFactory.eINSTANCE.createMetaDataType();
+            eleMetadata.setName("elementname");
+            eleMetadata.setMetaValue(wrapInCDATABlock(properties.get("name").replaceAll("\\\\n", "\n")));
+
+            if(se.getExtensionValues() == null || se.getExtensionValues().size() < 1) {
+                ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                se.getExtensionValues().add(extensionElement);
+            }
+            FeatureMap.Entry eleExtensionElementEntry = new SimpleFeatureMapEntry(
+                    (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, eleMetadata);
+            se.getExtensionValues().get(0).getValue().add(eleExtensionElementEntry);
+
         } else {
             se.setName("");
         }
@@ -4235,6 +4290,19 @@ public class Bpmn2JsonUnmarshaller {
         if(properties.get("name") != null) {
             msg.setName(escapeXmlString(properties.get("name")));
             msg.setId(properties.get("name") + "Message");
+
+            // add unescaped and untouched name value as extension element as well
+            MetaDataType eleMetadata = DroolsFactory.eINSTANCE.createMetaDataType();
+            eleMetadata.setName("elementname");
+            eleMetadata.setMetaValue(wrapInCDATABlock(properties.get("name").replaceAll("\\\\n", "\n")));
+
+            if(msg.getExtensionValues() == null || msg.getExtensionValues().size() < 1) {
+                ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                msg.getExtensionValues().add(extensionElement);
+            }
+            FeatureMap.Entry eleExtensionElementEntry = new SimpleFeatureMapEntry(
+                    (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, eleMetadata);
+            msg.getExtensionValues().get(0).getValue().add(eleExtensionElementEntry);
         } else {
             msg.setName("");
             msg.setId("Message");
@@ -4244,6 +4312,19 @@ public class Bpmn2JsonUnmarshaller {
     protected void applyDataStoreProperties(DataStore da, Map<String, String> properties) {
         if(properties.get("name") != null) {
             da.setName(escapeXmlString(properties.get("name")));
+
+            // add unescaped and untouched name value as extension element as well
+            MetaDataType eleMetadata = DroolsFactory.eINSTANCE.createMetaDataType();
+            eleMetadata.setName("elementname");
+            eleMetadata.setMetaValue(wrapInCDATABlock(properties.get("name").replaceAll("\\\\n", "\n")));
+
+            if(da.getExtensionValues() == null || da.getExtensionValues().size() < 1) {
+                ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                da.getExtensionValues().add(extensionElement);
+            }
+            FeatureMap.Entry eleExtensionElementEntry = new SimpleFeatureMapEntry(
+                    (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, eleMetadata);
+            da.getExtensionValues().get(0).getValue().add(eleExtensionElementEntry);
         } else {
             da.setName("");
         }
@@ -4252,6 +4333,19 @@ public class Bpmn2JsonUnmarshaller {
     protected void applyDataObjectProperties(DataObject da, Map<String, String> properties) {
         if(properties.get("name") != null && properties.get("name").length() > 0) {
             da.setName(escapeXmlString(properties.get("name")));
+
+            // add unescaped and untouched name value as extension element as well
+            MetaDataType eleMetadata = DroolsFactory.eINSTANCE.createMetaDataType();
+            eleMetadata.setName("elementname");
+            eleMetadata.setMetaValue(wrapInCDATABlock(properties.get("name").replaceAll("\\\\n", "\n")));
+
+            if(da.getExtensionValues() == null || da.getExtensionValues().size() < 1) {
+                ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                da.getExtensionValues().add(extensionElement);
+            }
+            FeatureMap.Entry eleExtensionElementEntry = new SimpleFeatureMapEntry(
+                    (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, eleMetadata);
+            da.getExtensionValues().get(0).getValue().add(eleExtensionElementEntry);
         } else {
             // we need a name, use id instead
             da.setName(da.getId());
@@ -4282,6 +4376,19 @@ public class Bpmn2JsonUnmarshaller {
     protected void applyTextAnnotationProperties(TextAnnotation ta, Map<String, String> properties) {
         if(properties.get("name") != null) {
             ta.setText(properties.get("name"));
+
+            // add unescaped and untouched name value as extension element as well
+            MetaDataType eleMetadata = DroolsFactory.eINSTANCE.createMetaDataType();
+            eleMetadata.setName("elementname");
+            eleMetadata.setMetaValue(wrapInCDATABlock(properties.get("name").replaceAll("\\\\n", "\n")));
+
+            if(ta.getExtensionValues() == null || ta.getExtensionValues().size() < 1) {
+                ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                ta.getExtensionValues().add(extensionElement);
+            }
+            FeatureMap.Entry eleExtensionElementEntry = new SimpleFeatureMapEntry(
+                    (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, eleMetadata);
+            ta.getExtensionValues().get(0).getValue().add(eleExtensionElementEntry);
         } else {
             ta.setText("");
         }
@@ -4332,6 +4439,19 @@ public class Bpmn2JsonUnmarshaller {
     protected void applyEventProperties(Event event, Map<String, String> properties) {
         if(properties.get("name") != null) {
             event.setName(escapeXmlString(properties.get("name")));
+
+            // add unescaped and untouched name value as extension element as well
+            MetaDataType eleMetadata = DroolsFactory.eINSTANCE.createMetaDataType();
+            eleMetadata.setName("elementname");
+            eleMetadata.setMetaValue(wrapInCDATABlock(properties.get("name").replaceAll("\\\\n", "\n")));
+
+            if(event.getExtensionValues() == null || event.getExtensionValues().size() < 1) {
+                ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                event.getExtensionValues().add(extensionElement);
+            }
+            FeatureMap.Entry eleExtensionElementEntry = new SimpleFeatureMapEntry(
+                    (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, eleMetadata);
+            event.getExtensionValues().get(0).getValue().add(eleExtensionElementEntry);
         } else {
             event.setName("");
         }
@@ -5057,12 +5177,6 @@ public class Bpmn2JsonUnmarshaller {
     }
 
     protected void applyBusinessRuleTaskProperties(BusinessRuleTask task, Map<String, String> properties) {
-        if(properties.get("name") != null) {
-            task.setName(escapeXmlString(properties.get("name")));
-        } else {
-            task.setName("");
-        }
-
         if(properties.get("ruleflowgroup") != null &&  properties.get("ruleflowgroup").length() > 0) {
             // add droolsjbpm-specific attribute "ruleFlowGroup"
             ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
@@ -5095,12 +5209,6 @@ public class Bpmn2JsonUnmarshaller {
     }
     
     protected void applyScriptTaskProperties(ScriptTask scriptTask, Map<String, String> properties) {
-        if(properties.get("name") != null) {
-            scriptTask.setName(escapeXmlString(properties.get("name")));
-        } else {
-            scriptTask.setName("");
-        }
-
         if(properties.get("script") != null && properties.get("script").length() > 0) {
             //String scriptStr = properties.get("script").replaceAll("\\\\n", "\n");
             String scriptStr = replaceScriptEscapeAndNewLines(properties.get("script"));
@@ -5178,6 +5286,19 @@ public class Bpmn2JsonUnmarshaller {
     protected void applyLaneProperties(Lane lane, Map<String, String> properties) {
         if(properties.get("name") != null) {
             lane.setName(escapeXmlString(properties.get("name")));
+
+            // add unescaped and untouched name value as extension element as well
+            MetaDataType eleMetadata = DroolsFactory.eINSTANCE.createMetaDataType();
+            eleMetadata.setName("elementname");
+            eleMetadata.setMetaValue(wrapInCDATABlock(properties.get("name").replaceAll("\\\\n", "\n")));
+
+            if(lane.getExtensionValues() == null || lane.getExtensionValues().size() < 1) {
+                ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                lane.getExtensionValues().add(extensionElement);
+            }
+            FeatureMap.Entry eleExtensionElementEntry = new SimpleFeatureMapEntry(
+                    (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, eleMetadata);
+            lane.getExtensionValues().get(0).getValue().add(eleExtensionElementEntry);
         } else {
             lane.setName("");
         }
@@ -5186,6 +5307,19 @@ public class Bpmn2JsonUnmarshaller {
     protected void applyCallActivityProperties(CallActivity callActivity, Map<String, String> properties) {
     	if(properties.get("name") != null) {
     		callActivity.setName(escapeXmlString(properties.get("name")));
+
+            // add unescaped and untouched name value as extension element as well
+            MetaDataType eleMetadata = DroolsFactory.eINSTANCE.createMetaDataType();
+            eleMetadata.setName("elementname");
+            eleMetadata.setMetaValue(wrapInCDATABlock(properties.get("name").replaceAll("\\\\n", "\n")));
+
+            if(callActivity.getExtensionValues() == null || callActivity.getExtensionValues().size() < 1) {
+                ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                callActivity.getExtensionValues().add(extensionElement);
+            }
+            FeatureMap.Entry eleExtensionElementEntry = new SimpleFeatureMapEntry(
+                    (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, eleMetadata);
+            callActivity.getExtensionValues().get(0).getValue().add(eleExtensionElementEntry);
         } else {
         	callActivity.setName("");
         }
@@ -6885,9 +7019,24 @@ public class Bpmn2JsonUnmarshaller {
     protected void applyGatewayProperties(Gateway gateway, Map<String, String> properties) {
         if(properties.get("name") != null && properties.get("name").length() > 0) {
             gateway.setName(escapeXmlString(properties.get("name")));
+
+            // add unescaped and untouched name value as extension element as well
+            MetaDataType eleMetadata = DroolsFactory.eINSTANCE.createMetaDataType();
+            eleMetadata.setName("elementname");
+            eleMetadata.setMetaValue(wrapInCDATABlock(properties.get("name").replaceAll("\\\\n", "\n")));
+
+            if(gateway.getExtensionValues() == null || gateway.getExtensionValues().size() < 1) {
+                ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                gateway.getExtensionValues().add(extensionElement);
+            }
+            FeatureMap.Entry eleExtensionElementEntry = new SimpleFeatureMapEntry(
+                    (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, eleMetadata);
+            gateway.getExtensionValues().get(0).getValue().add(eleExtensionElementEntry);
+
         } else {
             gateway.setName("");
         }
+
         if(properties.get("defaultgate") != null && (gateway instanceof InclusiveGateway || gateway instanceof ExclusiveGateway) ) {
         	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
             EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(

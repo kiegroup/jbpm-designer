@@ -223,7 +223,7 @@ public class Bpmn2JsonMarshaller {
                                             .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
 
                                     for(MetaDataType metaType : metadataExtensions) {
-                                        if(metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
+                                        if(metaType.getName() != null && metaType.getName().equals("customKPI") && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
                                             pKPI = metaType.getMetaValue();
                                         }
                                     }
@@ -636,7 +636,7 @@ public class Bpmn2JsonMarshaller {
                         .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
 
                 for(MetaDataType metaType : metadataExtensions) {
-                    if(metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
+                    if(metaType.getName() != null && metaType.getName().equals("customScope") && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
                         signalScope = metaType.getMetaValue();
                     }
                 }
@@ -739,6 +739,26 @@ public class Bpmn2JsonMarshaller {
 	    	} else {
 	    		laneProperties.put("name", "");
 	    	}
+
+            // overwrite name if elementname extension element is present
+            String elementName = null;
+            if(lane.getExtensionValues() != null && lane.getExtensionValues().size() > 0) {
+                for(ExtensionAttributeValue extattrval : lane.getExtensionValues()) {
+                    FeatureMap extensionElements = extattrval.getValue();
+
+                    List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
+                            .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
+
+                    for(MetaDataType metaType : metadataExtensions) {
+                        if(metaType.getName()!= null && metaType.getName().equals("elementname") && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
+                            elementName = metaType.getMetaValue();
+                        }
+                    }
+                }
+            }
+            if(elementName != null) {
+                laneProperties.put("name", elementName);
+            }
 
 	    	Iterator<FeatureMap.Entry> iter = lane.getAnyAttribute().iterator();
 	    	boolean foundBgColor = false;
@@ -2444,6 +2464,27 @@ public class Bpmn2JsonMarshaller {
             // we need a name, use id instead
     		properties.put("name", dataObject.getId());
     	}
+
+        // overwrite name if elementname extension element is present
+        String elementName = null;
+        if(dataObject.getExtensionValues() != null && dataObject.getExtensionValues().size() > 0) {
+            for(ExtensionAttributeValue extattrval : dataObject.getExtensionValues()) {
+                FeatureMap extensionElements = extattrval.getValue();
+
+                List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
+                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
+
+                for(MetaDataType metaType : metadataExtensions) {
+                    if(metaType.getName()!= null && metaType.getName().equals("elementname") && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
+                        elementName = metaType.getMetaValue();
+                    }
+                }
+            }
+        }
+        if(elementName != null) {
+            properties.put("name", elementName);
+        }
+
 		if(dataObject.getItemSubjectRef().getStructureRef() != null && dataObject.getItemSubjectRef().getStructureRef().length() > 0) {
             if(defaultTypesList.contains(dataObject.getItemSubjectRef().getStructureRef())) {
 			    properties.put("standardtype", dataObject.getItemSubjectRef().getStructureRef());
@@ -2513,6 +2554,27 @@ public class Bpmn2JsonMarshaller {
 		} else {
 			properties.put("name", "");
 		}
+
+        // overwrite name if elementname extension element is present
+        String elementName = null;
+        if(subProcess.getExtensionValues() != null && subProcess.getExtensionValues().size() > 0) {
+            for(ExtensionAttributeValue extattrval : subProcess.getExtensionValues()) {
+                FeatureMap extensionElements = extattrval.getValue();
+
+                List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
+                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
+
+                for(MetaDataType metaType : metadataExtensions) {
+                    if(metaType.getName()!= null && metaType.getName().equals("elementname") && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
+                        elementName = metaType.getMetaValue();
+                    }
+                }
+            }
+        }
+        if(elementName != null) {
+            properties.put("name", elementName);
+        }
+
 		if(subProcess instanceof AdHocSubProcess) {
 			AdHocSubProcess ahsp = (AdHocSubProcess) subProcess;
 			if(ahsp.getOrdering().equals(AdHocOrdering.PARALLEL)) {
@@ -2538,7 +2600,7 @@ public class Bpmn2JsonMarshaller {
                         .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
 
                 for(MetaDataType metaType : metadataExtensions) {
-                    if(metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
+                    if(metaType.getName() != null && metaType.getName().equals("customAsync") && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
                         customAsync = metaType.getMetaValue();
                     }
                 }
@@ -2842,7 +2904,7 @@ public class Bpmn2JsonMarshaller {
                                 .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
 
                         for(MetaDataType metaType : metadataExtensions) {
-                            if(metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
+                            if(metaType.getName() != null && metaType.getName().equals("customKPI") && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
                                 pKPI = metaType.getMetaValue();
                             }
                         }
@@ -3312,6 +3374,26 @@ public class Bpmn2JsonMarshaller {
 
     protected void marshallTextAnnotation(TextAnnotation textAnnotation, BPMNPlane plane, JsonGenerator generator, float xOffset, float yOffset, String preProcessingData, Definitions def, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
         flowElementProperties.put("name", textAnnotation.getText());
+        // overwrite name if elementname extension element is present
+        String elementName = null;
+        if(textAnnotation.getExtensionValues() != null && textAnnotation.getExtensionValues().size() > 0) {
+            for(ExtensionAttributeValue extattrval : textAnnotation.getExtensionValues()) {
+                FeatureMap extensionElements = extattrval.getValue();
+
+                List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
+                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
+
+                for(MetaDataType metaType : metadataExtensions) {
+                    if(metaType.getName()!= null && metaType.getName().equals("elementname") && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
+                        elementName = metaType.getMetaValue();
+                    }
+                }
+            }
+        }
+        if(elementName != null) {
+            flowElementProperties.put("name", elementName);
+        }
+
         if(textAnnotation.getDocumentation() != null && textAnnotation.getDocumentation().size() > 0) {
             flowElementProperties.put("documentation", textAnnotation.getDocumentation().get(0).getText());
         }
