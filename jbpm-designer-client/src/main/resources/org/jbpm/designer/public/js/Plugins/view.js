@@ -52,6 +52,7 @@ ORYX.Plugins.View = {
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DRAGDROP_END, this.refreshCanvasForIE.bind(this));
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_SHAPE_ADDED, this.refreshCanvasForIE.bind(this));
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DRAGDOCKER_MOVE_FINISHED, this.refreshCanvasForIE.bind(this));
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_RESIZE_END, this.refreshCanvasForIE.bind(this));
 
         //Standard Values
         this.zoomLevel = 1.0;
