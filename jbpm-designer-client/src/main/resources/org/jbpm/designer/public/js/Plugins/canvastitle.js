@@ -90,7 +90,19 @@ ORYX.Plugins.CanvasTitle = {
 		
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LOADED, this.showTitle.bind(this));
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_PROPWINDOW_PROP_CHANGED, this.updateTitle.bind(this));
+
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_RESIZE_START,  this.hideTitle.bind(this));
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_RESIZE_END,  this.showTitle.bind(this));
+
 	},
+
+    hideTitle: function() {
+        this.facade.raiseEvent({
+            type: 	ORYX.CONFIG.EVENT_OVERLAY_HIDE,
+            id: 	this.titleID
+        });
+    },
+
 	showTitle : function() {
 		this.titleNode.textContent = this._getTitleFromJSON();
 		

@@ -84,6 +84,9 @@ ORYX.Plugins.DragDropResize = ORYX.Plugins.AbstractPlugin.extend({
 		// For the Drag and Drop
 		// Register on MouseDown-Event on a Shape
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_MOUSEDOWN, this.handleMouseDown.bind(this));
+
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_RESIZE_START,  this.hideAllLabelsForCurrent.bind(this));
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_RESIZE_END,  this.showAllLabelsForCurrent.bind(this));
 	},
 
 	/**
@@ -528,7 +531,7 @@ ORYX.Plugins.DragDropResize = ORYX.Plugins.AbstractPlugin.extend({
 	onResize: function(bounds) {
 		// If the selection bounds not initialized, return
 		if(!this.dragBounds) {return}
-		
+
 		this.dragBounds = bounds;
 		this.isResizing = true;
 
@@ -577,6 +580,7 @@ ORYX.Plugins.DragDropResize = ORYX.Plugins.AbstractPlugin.extend({
 				update:function(offset){
 					this.shape.getLabels().each(function(label) {
 						label.changed();
+                        label.show();
 					});
 					
 					var allEdges = [].concat(this.shape.getIncomingShapes())
@@ -618,7 +622,6 @@ ORYX.Plugins.DragDropResize = ORYX.Plugins.AbstractPlugin.extend({
 	 *
 	 */
 	beforeDrag: function(){
-
 		var undockEdgeCommand = ORYX.Core.Command.extend({
 			construct: function(moveShapes){
 				this.dockers = moveShapes.collect(function(shape){ return shape instanceof ORYX.Core.Controls.Docker ? {docker:shape, dockedShape:shape.getDockedShape(), refPoint:shape.referencePoint} : undefined }).compact();
@@ -641,6 +644,28 @@ ORYX.Plugins.DragDropResize = ORYX.Plugins.AbstractPlugin.extend({
 		this._undockedEdgesCommand.execute();	
 		
 	},
+
+    hideAllLabelsForCurrent : function() {
+        ORYX.EDITOR._canvas.getChildren().each((function(child) {
+            this.applyHideLabels(child);
+        }).bind(this));
+    },
+    applyHideLabels : function(shape) {
+        if(shape instanceof ORYX.Core.Node || shape instanceof ORYX.Core.Edge) {
+            shape.getLabels().each(function(label) {
+                label.hide();
+                label.update();
+            });
+        }
+
+        if(shape.getChildren().size() > 0) {
+            for (var i = 0; i < shape.getChildren().size(); i++) {
+                if(shape.getChildren()[i] instanceof ORYX.Core.Node || shape.getChildren()[i] instanceof ORYX.Core.Edge) {
+                    this.applyHideLabels(shape.getChildren()[i]);
+                }
+            }
+        }
+    },
 
 	hideAllLabels: function(shape) {
 			
@@ -673,6 +698,30 @@ ORYX.Plugins.DragDropResize = ORYX.Plugins.AbstractPlugin.extend({
 	afterDrag: function(){
 				
 	},
+
+    showAllLabelsForCurrent : function() {
+        // clear all possible selections
+        document.getSelection().removeAllRanges();
+        ORYX.EDITOR._canvas.getChildren().each((function(child) {
+            this.applyShowLabels(child);
+        }).bind(this));
+    },
+    applyShowLabels : function(shape) {
+        if(shape instanceof ORYX.Core.Node || shape instanceof ORYX.Core.Edge) {
+            shape.getLabels().each(function(label) {
+                label.show();
+                label.update();
+            });
+        }
+
+        if(shape.getChildren().size() > 0) {
+            for (var i = 0; i < shape.getChildren().size(); i++) {
+                if(shape.getChildren()[i] instanceof ORYX.Core.Node || shape.getChildren()[i] instanceof ORYX.Core.Edge) {
+                    this.applyShowLabels(shape.getChildren()[i]);
+                }
+            }
+        }
+    },
 
 	/**
 	 * Show all Labels at these shape
