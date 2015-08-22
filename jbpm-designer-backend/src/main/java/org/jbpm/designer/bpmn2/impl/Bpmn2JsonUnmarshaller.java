@@ -3514,8 +3514,6 @@ public class Bpmn2JsonUnmarshaller {
         } else if (baseElt instanceof Message) {
             // we do not support base-element messages from the json. They are created dynamically for events that use them.
         } else if (baseElt instanceof Lane) {
-
-            .
             for (BaseElement child : childElements) {
         		if (child instanceof FlowNode) {
         			((Lane) baseElt).getFlowNodeRefs().add((FlowNode) child);
