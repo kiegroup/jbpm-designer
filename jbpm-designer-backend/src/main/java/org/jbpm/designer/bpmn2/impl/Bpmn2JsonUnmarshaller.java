@@ -3654,7 +3654,7 @@ public class Bpmn2JsonUnmarshaller {
     
     protected void applySubProcessProperties(SubProcess sp, Map<String, String> properties) {
         if(properties.get("name") != null) {
-            sp.setName(escapeXmlString(properties.get("name")));
+            sp.setName(escapeXmlString(properties.get("name")).replaceAll("\\r\\n|\\r|\\n", " "));
             // add unescaped and untouched name value as extension element as well
             MetaDataType eleMetadata = DroolsFactory.eINSTANCE.createMetaDataType();
             eleMetadata.setName("elementname");
@@ -4197,7 +4197,7 @@ public class Bpmn2JsonUnmarshaller {
     protected void applyEndEventProperties(EndEvent ee, Map<String, String> properties) {
         ee.setId(properties.get("resourceId"));
         if(properties.get("name") != null) {
-            ee.setName(escapeXmlString(properties.get("name")));
+            ee.setName(escapeXmlString(properties.get("name")).replaceAll("\\r\\n|\\r|\\n", " "));
 
             // add unescaped and untouched name value as extension element as well
             MetaDataType eleMetadata = DroolsFactory.eINSTANCE.createMetaDataType();
@@ -4255,7 +4255,7 @@ public class Bpmn2JsonUnmarshaller {
     
     protected void applyStartEventProperties(StartEvent se, Map<String, String> properties) {
         if(properties.get("name") != null) {
-            se.setName(escapeXmlString(properties.get("name")));
+            se.setName(escapeXmlString(properties.get("name")).replaceAll("\\r\\n|\\r|\\n", " "));
 
             // add unescaped and untouched name value as extension element as well
             MetaDataType eleMetadata = DroolsFactory.eINSTANCE.createMetaDataType();
@@ -4278,7 +4278,7 @@ public class Bpmn2JsonUnmarshaller {
     
     protected void applyMessageProperties(Message msg, Map<String, String> properties) {
         if(properties.get("name") != null) {
-            msg.setName(escapeXmlString(properties.get("name")));
+            msg.setName(escapeXmlString(properties.get("name")).replaceAll("\\r\\n|\\r|\\n", " "));
             msg.setId(properties.get("name") + "Message");
 
             // add unescaped and untouched name value as extension element as well
@@ -4301,7 +4301,7 @@ public class Bpmn2JsonUnmarshaller {
 
     protected void applyDataStoreProperties(DataStore da, Map<String, String> properties) {
         if(properties.get("name") != null) {
-            da.setName(escapeXmlString(properties.get("name")));
+            da.setName(escapeXmlString(properties.get("name")).replaceAll("\\r\\n|\\r|\\n", " "));
 
             // add unescaped and untouched name value as extension element as well
             MetaDataType eleMetadata = DroolsFactory.eINSTANCE.createMetaDataType();
@@ -4322,7 +4322,7 @@ public class Bpmn2JsonUnmarshaller {
 
     protected void applyDataObjectProperties(DataObject da, Map<String, String> properties) {
         if(properties.get("name") != null && properties.get("name").length() > 0) {
-            da.setName(escapeXmlString(properties.get("name")));
+            da.setName(escapeXmlString(properties.get("name")).replaceAll("\\r\\n|\\r|\\n", " "));
 
             // add unescaped and untouched name value as extension element as well
             MetaDataType eleMetadata = DroolsFactory.eINSTANCE.createMetaDataType();
@@ -4365,7 +4365,7 @@ public class Bpmn2JsonUnmarshaller {
 
     protected void applyTextAnnotationProperties(TextAnnotation ta, Map<String, String> properties) {
         if(properties.get("name") != null) {
-            ta.setText(properties.get("name"));
+            ta.setText(escapeXmlString(properties.get("name")).replaceAll("\\r\\n|\\r|\\n", " "));
 
             // add unescaped and untouched name value as extension element as well
             MetaDataType eleMetadata = DroolsFactory.eINSTANCE.createMetaDataType();
@@ -4428,7 +4428,7 @@ public class Bpmn2JsonUnmarshaller {
 
     protected void applyEventProperties(Event event, Map<String, String> properties) {
         if(properties.get("name") != null) {
-            event.setName(escapeXmlString(properties.get("name")));
+            event.setName(escapeXmlString(properties.get("name")).replaceAll("\\r\\n|\\r|\\n", " "));
 
             // add unescaped and untouched name value as extension element as well
             MetaDataType eleMetadata = DroolsFactory.eINSTANCE.createMetaDataType();
@@ -5275,7 +5275,7 @@ public class Bpmn2JsonUnmarshaller {
 
     protected void applyLaneProperties(Lane lane, Map<String, String> properties) {
         if(properties.get("name") != null) {
-            lane.setName(escapeXmlString(properties.get("name")));
+            lane.setName(escapeXmlString(properties.get("name")).replaceAll("\\r\\n|\\r|\\n", " "));
 
             // add unescaped and untouched name value as extension element as well
             MetaDataType eleMetadata = DroolsFactory.eINSTANCE.createMetaDataType();
@@ -5296,7 +5296,7 @@ public class Bpmn2JsonUnmarshaller {
     
     protected void applyCallActivityProperties(CallActivity callActivity, Map<String, String> properties) {
     	if(properties.get("name") != null) {
-    		callActivity.setName(escapeXmlString(properties.get("name")));
+    		callActivity.setName(escapeXmlString(properties.get("name")).replaceAll("\\r\\n|\\r|\\n", " "));
 
             // add unescaped and untouched name value as extension element as well
             MetaDataType eleMetadata = DroolsFactory.eINSTANCE.createMetaDataType();
@@ -7008,7 +7008,7 @@ public class Bpmn2JsonUnmarshaller {
     
     protected void applyGatewayProperties(Gateway gateway, Map<String, String> properties) {
         if(properties.get("name") != null && properties.get("name").length() > 0) {
-            gateway.setName(escapeXmlString(properties.get("name")));
+            gateway.setName(escapeXmlString(properties.get("name")).replaceAll("\\r\\n|\\r|\\n", " "));
 
             // add unescaped and untouched name value as extension element as well
             MetaDataType eleMetadata = DroolsFactory.eINSTANCE.createMetaDataType();
