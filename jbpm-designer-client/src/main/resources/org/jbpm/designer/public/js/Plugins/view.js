@@ -2139,9 +2139,10 @@ ORYX.Plugins.View = {
             var selection = this.facade.getSelection();
             var clipboard = new ORYX.Plugins.Edit.ClipBoard();
             clipboard.refresh(selection, this.getAllShapesToConsider(selection, true));
-            var command = new ORYX.Plugins.Edit.DeleteCommand(clipboard , this.facade);
-            this.facade.executeCommands([command]);
-            this.facade.importJSON(currentJSON);
+            var deleteCommand = new ORYX.Plugins.Edit.DeleteCommand(clipboard , this.facade);
+            var importJSONCommand = this.facade.importJSON(currentJSON, false, true);
+
+           this.facade.executeCommands([deleteCommand, importJSONCommand]);
 
            var foundShape = false;
            foundShape = this.findSelectedShape(options.shape, options);

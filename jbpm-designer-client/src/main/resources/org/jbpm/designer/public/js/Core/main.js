@@ -1019,10 +1019,11 @@ ORYX.Editor = {
 	/**
 	* Imports shapes in JSON as expected by {@link ORYX.Editor#loadSerialized}
 	* @param {Object|String} jsonObject The (serialized) json object to be imported
-	* @param {boolean } [noSelectionAfterImport=false] Set to true if no shapes should be selected after import
+	 * @param {boolean } [noSelectionAfterImport=false] Set to true if no shapes should be selected after import
+	 * @param {boolean } [returnCommandsWithoutExecute=false] Set to true if commands for importJSON should be returned without being executed
 	* @throws {SyntaxError} If the serialized json object contains syntax errors
 	*/
-	importJSON: function(jsonObject, noSelectionAfterImport) {
+	importJSON: function(jsonObject, noSelectionAfterImport, returnCommandsWithoutExecute) {
 		try {
 			jsonObject = this.renewResourceIds(jsonObject);
 		} catch(error){
@@ -1128,7 +1129,10 @@ ORYX.Editor = {
 											this.loadSerialized.bind(this),
 											noSelectionAfterImport,
 											this._getPluginFacade());
-			
+
+			if (returnCommandsWithoutExecute != undefined && returnCommandsWithoutExecute == true) {
+				return command;
+			}
 			this.executeCommands([command]);	
 			
 			return command.shapes.clone();
