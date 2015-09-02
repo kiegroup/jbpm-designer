@@ -17,6 +17,7 @@ package org.jbpm.designer.bpmn2.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.Map.Entry;
@@ -1966,7 +1967,11 @@ public class Bpmn2JsonUnmarshaller {
             if(re instanceof Signal) {
                 Signal signal = (Signal) re;
                 if(signal.getName() != null) {
-                    signal.setId("_" + UUID.fromString(signal.getName()));
+                    try {
+                        signal.setId("_" + UUID.nameUUIDFromBytes(signal.getName().getBytes("UTF-8")));
+                    } catch(UnsupportedEncodingException e) {
+                        signal.setId("_" + UUID.nameUUIDFromBytes(signal.getName().getBytes()));
+                    }
                 }
             }
         }
