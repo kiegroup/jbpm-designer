@@ -767,11 +767,11 @@ public class Bpmn2JsonMarshaller {
 	    	boolean foundSelectable = false;
 	        while(iter.hasNext()) {
 	            FeatureMap.Entry entry = iter.next();
-	            if(entry.getEStructuralFeature().getName().equals("background-color")) {
+	            if(entry.getEStructuralFeature().getName().equals("background-color") || entry.getEStructuralFeature().getName().equals("bgcolor")) {
 	            	laneProperties.put("bgcolor", entry.getValue());
 	            	foundBgColor = true;
 	            }
-	            if(entry.getEStructuralFeature().getName().equals("border-color")) {
+	            if(entry.getEStructuralFeature().getName().equals("border-color") || entry.getEStructuralFeature().getName().equals("bordercolor")) {
 	            	laneProperties.put("bordercolor", entry.getValue());
 	            	foundBrColor = true;
 	            }
@@ -779,7 +779,7 @@ public class Bpmn2JsonMarshaller {
 	            	laneProperties.put("fontsize", entry.getValue());
 	            	foundBrColor = true;
 	            }
-	            if(entry.getEStructuralFeature().getName().equals("color")) {
+	            if(entry.getEStructuralFeature().getName().equals("color") || entry.getEStructuralFeature().getName().equals("fontcolor")) {
 	            	laneProperties.put("fontcolor", entry.getValue());
 	            	foundFontColor = true;
 	            }
@@ -855,11 +855,11 @@ public class Bpmn2JsonMarshaller {
     	boolean foundSelectable = false;
         while(iter.hasNext()) {
             FeatureMap.Entry entry = iter.next();
-            if(entry.getEStructuralFeature().getName().equals("background-color")) {
+            if(entry.getEStructuralFeature().getName().equals("background-color") || entry.getEStructuralFeature().getName().equals("bgcolor")) {
             	flowElementProperties.put("bgcolor", entry.getValue());
             	foundBgColor = true;
             }
-            if(entry.getEStructuralFeature().getName().equals("border-color")) {
+            if(entry.getEStructuralFeature().getName().equals("border-color") || entry.getEStructuralFeature().getName().equals("bordercolor")) {
             	flowElementProperties.put("bordercolor", entry.getValue());
             	foundBrColor = true;
             }
@@ -867,7 +867,7 @@ public class Bpmn2JsonMarshaller {
             	flowElementProperties.put("fontsize", entry.getValue());
             	foundBrColor = true;
             }
-            if(entry.getEStructuralFeature().getName().equals("color")) {
+            if(entry.getEStructuralFeature().getName().equals("color") || entry.getEStructuralFeature().getName().equals("fontcolor")) {
             	flowElementProperties.put("fontcolor", entry.getValue());
             	foundFontColor = true;
             }
@@ -3139,11 +3139,11 @@ public class Bpmn2JsonMarshaller {
                     }
                 }
             }
-            if(entry.getEStructuralFeature().getName().equals("background-color")) {
+            if(entry.getEStructuralFeature().getName().equals("background-color") || entry.getEStructuralFeature().getName().equals("bgcolor")) {
             	properties.put("bgcolor", entry.getValue());
             	foundBgColor = true;
             }
-            if(entry.getEStructuralFeature().getName().equals("border-color")) {
+            if(entry.getEStructuralFeature().getName().equals("border-color") || entry.getEStructuralFeature().getName().equals("bordercolor")) {
             	properties.put("bordercolor", entry.getValue());
             	foundBrColor = true;
             }
@@ -3151,7 +3151,7 @@ public class Bpmn2JsonMarshaller {
             	properties.put("fontsize", entry.getValue());
             	foundBrColor = true;
             }
-            if(entry.getEStructuralFeature().getName().equals("color")) {
+            if(entry.getEStructuralFeature().getName().equals("color") || entry.getEStructuralFeature().getName().equals("fontcolor")) {
             	properties.put("fontcolor", entry.getValue());
             	foundFontColor = true;
             }
