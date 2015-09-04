@@ -1435,7 +1435,7 @@ ORYX.Core.Command.Move = ORYX.Core.Command.extend({
 		this.plugin		= plugin;
 		this.doLayout = doLayout;
 		// Defines the old/new parents for the particular shape
-		this.newParents	= moveShapes.collect(function(shape){ return shape.parent });
+        this.newParents	= moveShapes.collect(function(shape){ return parent || shape.parent });
 		this.oldParents	= moveShapes.collect(function(shape){ return shape.parent });
 		this.dockedNodes= moveShapes.findAll(function(shape){ return shape instanceof ORYX.Core.Node && shape.dockers.length == 1}).collect(function(shape){ return {docker:shape.dockers[0], dockedShape:shape.dockers[0].getDockedShape(), refPoint:shape.dockers[0].referencePoint} });
 	},			
