@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.WeakHashMap;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletConfig;
@@ -39,7 +38,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bpsim.impl.BpsimFactoryImpl;
-import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
 import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
 import org.jbpm.designer.util.ConfigurationProvider;
@@ -424,9 +423,10 @@ public class EditorHandler extends HttpServlet {
      */
     private static String readDesignerVersion(ServletContext context) {
         String retStr = "";
+        BufferedReader br = null;
         try {
             InputStream inputStream = context.getResourceAsStream("/META-INF/MANIFEST.MF");
-            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+            br = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
             String line;
             while ((line = br.readLine()) != null) {
                 if (line.startsWith(BUNDLE_VERSION)) {
@@ -437,6 +437,10 @@ public class EditorHandler extends HttpServlet {
             inputStream.close();
         } catch (Exception e) {
             _logger.error(e.getMessage(), e);
+        } finally {
+            if (br != null) {
+                IOUtils.closeQuietly(br);
+            }
         }
         return retStr;
     }

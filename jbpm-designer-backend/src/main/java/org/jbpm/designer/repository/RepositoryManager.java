@@ -40,10 +40,9 @@ public class RepositoryManager {
     }
 
     public Repository unregisterRepository(String repositoryId) {
-
         Repository repository = this.availableRepositories.get(repositoryId);
 
-        this.availableRepositories.remove(repository);
+        this.availableRepositories.remove(repositoryId);
 
         return repository;
     }

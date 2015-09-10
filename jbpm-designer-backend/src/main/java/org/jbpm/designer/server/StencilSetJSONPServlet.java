@@ -80,7 +80,7 @@ public class StencilSetJSONPServlet extends HttpServlet {
 				
 			} else { // standard stencil set requested (specified by path)
 				
-				resource.replace("..", ""); // don't allow to leave stencilset dir
+				resource = resource.replace("..", ""); // don't allow to leave stencilset dir
 				
 				if(resource.startsWith("/"))
 					resource = resource.substring(1);
