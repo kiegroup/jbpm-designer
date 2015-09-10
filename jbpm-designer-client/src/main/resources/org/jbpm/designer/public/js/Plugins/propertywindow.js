@@ -5447,7 +5447,7 @@ Ext.form.ConditionExpressionEditorField = Ext.extend(Ext.form.TriggerField,  {
                     var actionParams = [];
                     currentInputs.forEach(function(index) {
                         var value = panel.getComponent(index).getValue();
-                        if (value == null || value == "") return false;
+                        if (value === undefined) return false;
                         actionParams.push(value)
                     });
                     if (actionParams.length != currentInputs.length) return false;
@@ -5460,7 +5460,6 @@ Ext.form.ConditionExpressionEditorField = Ext.extend(Ext.form.TriggerField,  {
 
             function generateScriptParams() {
                 var varValue = varsCombo.getValue();
-
                 if (!varValue || !checkCurrentInputRecord()) {
                     return null;
                 }
@@ -5476,6 +5475,7 @@ Ext.form.ConditionExpressionEditorField = Ext.extend(Ext.form.TriggerField,  {
                         });
                     }
                 }
+
                 var param =  {
                     operator: "AND",
                     conditions: [{
