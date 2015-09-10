@@ -1639,6 +1639,11 @@ ORYX.Editor = {
 			newShapeObject.alignDockers();
 		}
 
+		this._getPluginFacade().raiseEvent({
+			type 		: ORYX.CONFIG.EVENT_SHAPE_CREATED,
+			value		: newShapeObject
+		});
+
 		return newShapeObject;
 	},
 	
@@ -1671,10 +1676,10 @@ ORYX.Editor = {
 			docker.setDockedShape(undefined);
 		});
                 
-                this._getPluginFacade().raiseEvent({
-                    type 		: ORYX.CONFIG.EVENT_SHAPE_DELETED, 
-                    value		: shape
-                });
+		this._getPluginFacade().raiseEvent({
+			type 		: ORYX.CONFIG.EVENT_SHAPE_DELETED,
+			value		: shape
+		});
 	},
 	
 	/**

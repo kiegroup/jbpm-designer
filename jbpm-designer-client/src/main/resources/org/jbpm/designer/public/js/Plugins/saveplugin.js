@@ -143,10 +143,16 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
 //            });
         }
 
-        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_MOUSEUP, this.setUnsaved.bind(this));
+        // all events on which we set the process as unsaved
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_PROPWINDOW_PROP_CHANGED, this.setUnsaved.bind(this));
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_UNDO_ROLLBACK, this.setUnsaved.bind(this));
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_UNDO_EXECUTE, this.setUnsaved.bind(this));
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DRAGDROP_END, this.setUnsaved.bind(this));
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_RESIZE_END, this.setUnsaved.bind(this));
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_SHAPE_ADDED, this.setUnsaved.bind(this));
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_SHAPE_CREATED, this.setUnsaved.bind(this));
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_SHAPE_DELETED, this.setUnsaved.bind(this));
+
 
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DO_SAVE, this.handleEventDoSave.bind(this));
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DO_CHECKSAVE, this.handleEventDoCheckSave.bind(this));
