@@ -3526,10 +3526,10 @@
                                         	"description_ja":"",
                                         	"readonly":false,
                                         	"optional":true,
-						"customassignment":true
-                                		$bclose$,
+											"customassignment":true
+                          $bclose$,
 					}$
-                                $endif$ 
+                    $endif$
 				$bopen$
 					"id":"datainputset",
 					"type":"Datainput",
@@ -3538,9 +3538,12 @@
 					"description":"An InputSet is a collection of DataInput elements that together define a valid set of data inputs.",
 					"description_ja":"InputSetは、データ入力の有効なセットを合わせて定義するDataInputエレメントのコレクションです。",
 					"readonly":false,
-					"optional":true,
-					"hidden":true,
+					"optional":true
+					$if(workitemDefs.(k).customEditor)$
+                    ,
+                    "hidden":true,
                     "visible":false
+                    $endif$
 				$bclose$,  
 				$bopen$
 					"id":"dataoutputset",
@@ -3550,9 +3553,12 @@
 					"description":"An OutputSet is a collection of DataOutputs elements that together may be produced as output from an Activity or Event.",
 					"description_ja":"OutputSet は、アクティビティまたはイベントの出力としてまとめて生成されるDataOutputs要素のコレクションです。",
 					"readonly":false,
-					"optional":true,
-					"hidden":true,
+					"optional":true
+					$if(workitemDefs.(k).customEditor)$
+                    ,
+                    "hidden":true,
                     "visible":false
+                    $endif$
 				$bclose$,
 				$bopen$
 					"id":"assignments",
@@ -3565,8 +3571,8 @@
 					 $if(workitemDefs.(k).customEditor)$
 					,
 					"hidden":true,
-                                        "visible":false
-                                        $endif$
+                    "visible":false
+                     $endif$
 				$bclose$,
 				$bopen$
 					"id":"onEntryActions",
@@ -3609,7 +3615,7 @@
                                                         "id":"c2",
                                                         "title":"false",
                                                         "value":"false"
-                                                $bclose$,
+                                                $bclose$
                                                 ]
                                 $bclose$,
 				$bopen$
@@ -3750,7 +3756,7 @@
                "roles" : [
                  "all",
                  "fromtoall",
-		 "wpattern",
+		 		"wpattern"
                ],
                "properties": [
                ]
