@@ -286,6 +286,7 @@ ORYX.CONFIG.EVENT_DRAG_TRACKER_DRAG =       "dragTracker.drag";
 ORYX.CONFIG.EVENT_DRAG_TRACKER_RESIZE =     "dragTracker.resize";
 ORYX.CONFIG.EVENT_DROP_SHAPE =				"drop.shape";
 ORYX.CONFIG.EVENT_SHAPE_DELETED =				"shape.deleted";
+ORYX.CONFIG.EVENT_SHAPE_CREATED =             "shape.created";
 ORYX.CONFIG.EVENT_SHAPE_ADDED =				"shape.added";
 ORYX.CONFIG.EVENT_FACADE_SELECTION_DELETION_REQUEST =				"facade_selection.deletion.request";
 ORYX.CONFIG.EVENT_NODEXML_SHOW = "nodexml.show";
