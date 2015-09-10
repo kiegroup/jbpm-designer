@@ -315,7 +315,7 @@ public abstract class AbstractCommand {
 
     public Map<String, Object> getTree(IDiagramProfile profile, String path, boolean tree) throws Exception {
         String qname = "";
-        if(path != "/") {
+        if(!"/".equals(path)) {
             String[] pathParts = path.split("/");
             qname = pathParts[pathParts.length - 1];
         } else {

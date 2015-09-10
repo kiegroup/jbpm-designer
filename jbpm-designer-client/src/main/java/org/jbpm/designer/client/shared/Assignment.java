@@ -141,12 +141,10 @@ public class Assignment {
             if (other.variable != null) {
                 return false;
             }
-        }
-        else if (variable != variable) {
+        } else if (variable != other.variable) {
             return false;
         }
         return true;
-        
     }
 
     /**
