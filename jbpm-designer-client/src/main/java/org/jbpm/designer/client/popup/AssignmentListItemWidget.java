@@ -32,6 +32,8 @@ import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.text.shared.Renderer;
@@ -327,6 +329,23 @@ public class AssignmentListItemWidget extends Composite implements HasModel<Assi
             }
         });
 
+        name.addKeyDownHandler(new KeyDownHandler() {
+            @Override public void onKeyDown(KeyDownEvent event) {
+                int iChar = event.getNativeKeyCode();
+                if (iChar == ' ') {
+                    event.preventDefault();
+                }
+            }
+        });
+
+        customDataType.addKeyDownHandler(new KeyDownHandler() {
+            @Override public void onKeyDown(KeyDownEvent event) {
+                int iChar = event.getNativeKeyCode();
+                if (iChar == ' ') {
+                    event.preventDefault();
+                }
+            }
+        });
     }
 
     @PreDestroy
