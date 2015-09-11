@@ -16,6 +16,7 @@
 
 package org.jbpm.designer.client.shared;
 
+import com.google.gwt.http.client.URL;
 import org.jbpm.designer.client.shared.Variable.VariableType;
 
 public class Assignment {
@@ -160,7 +161,7 @@ public class Assignment {
         StringBuilder sb = new StringBuilder();
         if (getVariableType() == VariableType.INPUT) {
             if (getConstant() != null && !getConstant().isEmpty()) {
-                sb.append(INPUT_ASSIGNMENT_PREFIX).append(getName()).append(ASSIGNMENT_OPERATOR_TOCONSTANT).append(getConstant());
+                sb.append(INPUT_ASSIGNMENT_PREFIX).append(getName()).append(ASSIGNMENT_OPERATOR_TOCONSTANT).append(URL.encodeQueryString(getConstant()));
             }
             else if (getProcessVarName() != null && !getProcessVarName().isEmpty()) {
                 sb.append(INPUT_ASSIGNMENT_PREFIX).append(getProcessVarName()).append(ASSIGNMENT_OPERATOR_TOVARIABLE).append(getName());
@@ -219,7 +220,7 @@ public class Assignment {
         else if (sAssignment.contains(ASSIGNMENT_OPERATOR_TOCONSTANT)) {
             int i = sAssignment.indexOf(ASSIGNMENT_OPERATOR_TOCONSTANT);
             variableName = sAssignment.substring(0, i);
-            constant = sAssignment.substring(i + ASSIGNMENT_OPERATOR_TOCONSTANT.length());
+            constant = URL.decodeQueryString(sAssignment.substring(i + ASSIGNMENT_OPERATOR_TOCONSTANT.length()));
         }
 
         // Create the new assignment
