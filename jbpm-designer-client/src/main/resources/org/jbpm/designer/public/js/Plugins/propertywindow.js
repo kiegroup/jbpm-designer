@@ -1065,6 +1065,19 @@ ORYX.Plugins.PropertyWindow = {
 							editorGrid = new Ext.Editor(cf);
 							break;
 
+						case ORYX.CONFIG.TYPE_ENCODED_TEXT:
+
+							var cf = new Ext.form.ComplexEncodedTextField({
+								allowBlank: pair.optional(),
+								dataSource:this.dataSource,
+								grid:this.grid,
+								row:index,
+								facade:this.facade
+							});
+							cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1,field:cf});
+							editorGrid = new Ext.Editor(cf);
+							break;
+
 						case ORYX.CONFIG.TYPE_VARDEF:
 							var cf = new Ext.form.ComplexVardefField({
 								allowBlank: pair.optional(),
@@ -2056,6 +2069,89 @@ Ext.form.ComplexTextField = Ext.extend(Ext.form.TriggerField,  {
 		this.grid.stopEditing();
 		grid.focus( false, 100 );
 		
+	}
+});
+
+Ext.form.ComplexEncodedTextField = Ext.extend(Ext.form.TriggerField,  {
+
+	//defaultAutoCreate : {tag: "textarea", rows:1, style:"height:16px;overflow:hidden;" },
+	editable: false,
+	readOnly: true,
+
+	/**
+	 * If the trigger was clicked a dialog has to be opened
+	 * to enter the values for the complex property.
+	 */
+	onTriggerClick : function(){
+
+		if(this.disabled){
+			return;
+		}
+
+		var grid = new Ext.form.TextArea({
+			anchor		: '100% 100%',
+			value		: Ext.util.Format.htmlEncode(this.value),
+			listeners	: {
+				focus: function(){
+					this.facade.disableEvent(ORYX.CONFIG.EVENT_KEYDOWN);
+				}.bind(this)
+			}
+		})
+
+
+		// Basic Dialog
+		var dialog = new Ext.Window({
+			layout		: 'anchor',
+			autoCreate	: true,
+			title		: ORYX.I18N.PropertyWindow.text,
+			height		: 500,
+			width		: 500,
+			modal		: true,
+			collapsible	: false,
+			fixedcenter	: true,
+			shadow		: true,
+			proxyDrag	: true,
+			keys:[{
+				key	: 27,
+				fn	: function(){
+					dialog.hide()
+				}.bind(this)
+			}],
+			items		:[grid],
+			listeners	:{
+				hide: function(){
+					this.fireEvent('dialogClosed', this.value);
+					//this.focus.defer(10, this);
+					dialog.destroy();
+				}.bind(this)
+			},
+			buttons		: [{
+				text: ORYX.I18N.PropertyWindow.ok,
+				handler: function(){
+					// store dialog input
+					var value = Ext.util.Format.htmlEncode(grid.getValue());
+					this.setValue(value);
+
+					this.dataSource.getAt(this.row).set('value', value)
+					this.dataSource.commitChanges()
+
+					dialog.hide()
+				}.bind(this)
+			}, {
+				text: ORYX.I18N.PropertyWindow.cancel,
+				handler: function(){
+					this.setValue(Ext.util.Format.htmlEncode(this.value));
+					dialog.hide()
+				}.bind(this)
+			}]
+		});
+
+		dialog.show();
+		grid.render();
+
+		this.grid.stopEditing();
+		grid.focus( false, 100 );
+
 	}
 });
 

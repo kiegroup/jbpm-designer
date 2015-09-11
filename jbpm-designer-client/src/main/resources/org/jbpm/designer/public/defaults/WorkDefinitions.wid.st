@@ -11,8 +11,7 @@ import org.drools.core.process.core.datatype.impl.type.ObjectDataType;
       "Body" : new StringDataType()
     ],
     "displayName" : "Email",
-    "icon" : "defaultemailicon.gif",
-    "customEditor" : "true"
+    "icon" : "defaultemailicon.gif"
   ],
 
   [
@@ -21,8 +20,7 @@ import org.drools.core.process.core.datatype.impl.type.ObjectDataType;
       "Message" : new StringDataType()
     ],
     "displayName" : "Log",
-    "icon" : "defaultlogicon.gif",
-    "customEditor" : "true"
+    "icon" : "defaultlogicon.gif"
   ],
 
   [
@@ -40,8 +38,7 @@ import org.drools.core.process.core.datatype.impl.type.ObjectDataType;
         "Result" : new ObjectDataType(),
     ],
     "displayName" : "WS",
-    "icon" : "defaultservicenodeicon.png",
-    "customEditor" : "true"
+    "icon" : "defaultservicenodeicon.png"
   ],
 
   [
@@ -58,8 +55,7 @@ import org.drools.core.process.core.datatype.impl.type.ObjectDataType;
         "Result" : new ObjectDataType(),
     ],
     "displayName" : "REST",
-    "icon" : "defaultservicenodeicon.png",
-    "customEditor" : "true"
+    "icon" : "defaultservicenodeicon.png"
   ]
 
 ]

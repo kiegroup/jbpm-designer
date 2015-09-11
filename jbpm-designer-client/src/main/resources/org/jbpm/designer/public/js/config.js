@@ -192,6 +192,7 @@ ORYX.CONFIG.TYPE_URL =					"url";
 ORYX.CONFIG.TYPE_DIAGRAM_LINK =			"diagramlink";
 ORYX.CONFIG.TYPE_COMPLEX =				"complex";
 ORYX.CONFIG.TYPE_TEXT =					"text";
+ORYX.CONFIG.TYPE_ENCODED_TEXT =         "encodedtext";
 ORYX.CONFIG.TYPE_VARDEF =               "vardef";
 ORYX.CONFIG.TYPE_EXPRESSION =           "expression";
 ORYX.CONFIG.TYPE_ACTION =               "action";

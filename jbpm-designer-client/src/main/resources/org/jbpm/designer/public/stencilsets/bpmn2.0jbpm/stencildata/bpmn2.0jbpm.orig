@@ -3519,7 +3519,7 @@
 					$workitemDefs.(k).parameters:{k1|
 						 $bopen$
                                         	"id":"$k1.name$",
-                                        	"type":"String",
+                                        	"type":"Encodedtext",
                                         	"title":"$k1.name$",
                                         	"value":"",
                                         	"description":"",
