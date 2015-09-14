@@ -2090,7 +2090,7 @@ Ext.form.ComplexEncodedTextField = Ext.extend(Ext.form.TriggerField,  {
 
 		var grid = new Ext.form.TextArea({
 			anchor		: '100% 100%',
-			value		: Ext.util.Format.htmlEncode(this.value),
+			value		: Ext.util.Format.htmlDecode(this.value),
 			listeners	: {
 				focus: function(){
 					this.facade.disableEvent(ORYX.CONFIG.EVENT_KEYDOWN);
