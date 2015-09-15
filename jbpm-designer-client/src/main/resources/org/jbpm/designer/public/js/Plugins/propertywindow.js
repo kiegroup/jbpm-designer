@@ -792,8 +792,6 @@ ORYX.Plugins.PropertyWindow = {
                                     doAlertOnProp = value.needsprop();
                                 }
 
-                                // add first blank for reset possiblity
-                                options.push(["", "", ""]);
                                 // evaluate each value expression
                                 var processJSON = ORYX.EDITOR.getSerializedJSON();
                                 var expressionresults = jsonPath(processJSON.evalJSON(), value.value());
@@ -880,8 +878,6 @@ ORYX.Plugins.PropertyWindow = {
                                 var shapeid = shape.resourceId;
                                 var processJSON = ORYX.EDITOR.getSerializedJSON();
 
-                                // add blank for reset possiblity
-                                options.push(["", "", ""]);
                                 var childshapes = jsonPath(processJSON.evalJSON(), "$.childShapes.*");
                                 for(var i=0;i<childshapes.length;i++){
                                     var csobj = childshapes[i];
@@ -938,8 +934,6 @@ ORYX.Plugins.PropertyWindow = {
                                 var shapeid = shape.resourceId;
                                 var processJSON = ORYX.EDITOR.getSerializedJSON();
 
-                                // add blank for reset possiblity
-                                options.push(["", "", ""]);
                                 var childshapes = jsonPath(processJSON.evalJSON(), "$.childShapes.*");
                                 for(var i=0;i<childshapes.length;i++){
                                     var csobj = childshapes[i];
@@ -952,7 +946,9 @@ ORYX.Plugins.PropertyWindow = {
                                                 var innerParts = nextPart.split(":");
                                                 options.push(["", innerParts[0], innerParts[0]]);
                                             } else {
-                                                options.push(["", nextPart, nextPart]);
+												if(nextPart.length > 0) {
+													options.push(["", nextPart, nextPart]);
+												}
                                             }
                                         }
                                     }
