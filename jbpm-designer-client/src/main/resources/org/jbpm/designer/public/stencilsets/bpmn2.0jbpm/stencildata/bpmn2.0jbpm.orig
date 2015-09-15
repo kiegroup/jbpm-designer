@@ -4393,7 +4393,7 @@
                 },
                 {
                     "id":"multipleinstancedatainput",
-                    "type":"String",
+                    "type":"Dynamicdatainput",
                     "title":"MI data input",
                     "value":"",
                     "description":"Sets a data input for MI.",
@@ -4403,7 +4403,7 @@
                 },
                 {
                     "id":"multipleinstancedataoutput",
-                    "type":"String",
+                    "type":"Dynamicdatoutput",
                     "title":"MI data output",
                     "value":"",
                     "description":"Sets a data output for MI.",
