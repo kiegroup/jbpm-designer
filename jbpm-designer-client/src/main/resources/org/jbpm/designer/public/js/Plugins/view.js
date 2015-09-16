@@ -1407,6 +1407,32 @@ ORYX.Plugins.View = {
         fextInput.setAttribute("value", "svg");
         form.appendChild(fextInput);
 
+        var fstoreInRepoInput = document.createElement("input");
+        fstoreInRepoInput.setAttribute("type", "hidden");
+        fstoreInRepoInput.setAttribute("name", "storeinrepo");
+        fstoreInRepoInput.setAttribute("value", "true");
+        form.appendChild(fstoreInRepoInput);
+
+        var hfUUID = document.createElement("input");
+        hfUUID.setAttribute("type", "hidden");
+        hfUUID.setAttribute("name", "uuid");
+        hfUUID.setAttribute("value", ORYX.UUID);
+        form.appendChild(hfUUID);
+
+        var hfPROFILE = document.createElement("input");
+        hfPROFILE.setAttribute("type", "hidden");
+        hfPROFILE.setAttribute("name", "profile");
+        hfPROFILE.setAttribute("value", ORYX.PROFILE);
+        form.appendChild(hfPROFILE);
+
+        var processJSON = ORYX.EDITOR.getSerializedJSON();
+        var processId = jsonPath(processJSON.evalJSON(), "$.properties.id");
+        var hfPROCESSID = document.createElement("input");
+        hfPROCESSID.setAttribute("type", "hidden");
+        hfPROCESSID.setAttribute("name", "processid");
+        hfPROCESSID.setAttribute("value", processId);
+        form.appendChild(hfPROCESSID);
+
         var fdataInput = document.createElement("input");
         fdataInput.setAttribute("type", "hidden");
         fdataInput.setAttribute("name", "data_encoded");
