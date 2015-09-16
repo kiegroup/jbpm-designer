@@ -2379,9 +2379,11 @@ public class Bpmn2JsonMarshaller {
         // boundary events have a docker
         if(node instanceof BoundaryEvent) {
             Iterator<FeatureMap.Entry> iter = node.getAnyAttribute().iterator();
+            boolean foundDockerInfo = false;
             while(iter.hasNext()) {
                 FeatureMap.Entry entry = iter.next();
                 if(entry.getEStructuralFeature().getName().equals("dockerinfo")) {
+                    foundDockerInfo = true;
                     String dockerInfoStr = String.valueOf(entry.getValue());
                     if(dockerInfoStr != null && dockerInfoStr.length() > 0) {
                         if(dockerInfoStr.endsWith("|")) {
@@ -2400,8 +2402,30 @@ public class Bpmn2JsonMarshaller {
                         }
                     }
                 }
-
             }
+
+            // backwards compatibility to older versions -- BZ 1196259
+            if(!foundDockerInfo) {
+                // find the edge associated with this boundary event
+                for (DiagramElement element: plane.getPlaneElement()) {
+                    if(element instanceof BPMNEdge && ((BPMNEdge) element).getBpmnElement() == node) {
+                            List<Point> waypoints = ((BPMNEdge) element).getWaypoint();
+                            if(waypoints != null && waypoints.size() > 0) {
+                                    // one per boundary event
+                                            Point p = waypoints.get(0);
+                                    if(p != null) {
+                                        generator.writeArrayFieldStart("dockers");
+                                        generator.writeStartObject();
+                                        generator.writeObjectField("x", p.getX());
+                                        generator.writeObjectField("y", p.getY());
+                                        generator.writeEndObject();
+                                            generator.writeEndArray();
+                                        }
+                                }
+                        }
+                }
+            }
+
         }
 
         BPMNShape shape = (BPMNShape) findDiagramElement(plane, node);
