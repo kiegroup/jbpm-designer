@@ -23,6 +23,7 @@ import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
 import org.uberfire.io.IOService;
 import org.uberfire.io.impl.IOServiceDotFileImpl;
 import org.uberfire.java.nio.file.FileSystem;
+import org.uberfire.java.nio.file.FileSystemAlreadyExistsException;
 import org.uberfire.java.nio.file.Path;
 
 public class VFSFileSystemProducer {
@@ -32,15 +33,17 @@ public class VFSFileSystemProducer {
     public RepositoryDescriptor produceFileSystem( final Map<String, String> env ) {
         URI repositoryRoot = URI.create( env.get( "repository.root" ) );
 
-        FileSystem fileSystem = ioService.getFileSystem( repositoryRoot );
-
-        if ( fileSystem == null ) {
-
+        FileSystem fileSystem;
+        // this is a hack to avoid ERROR messages coming from UF when trying to get non-existing file system
+        // there seems to be no way to ask the IOService if the file system exists
+        try {
             fileSystem = ioService.newFileSystem( repositoryRoot, env );
+        } catch ( FileSystemAlreadyExistsException e ) {
+            fileSystem = ioService.getFileSystem( repositoryRoot );
         }
 
         // fetch file system changes - mainly for remote based file systems
-        String fetchCommand = (String) env.get( "fetch.cmd" );
+        String fetchCommand = env.get( "fetch.cmd" );
         if ( fetchCommand != null ) {
             fileSystem = ioService.getFileSystem( URI.create( env.get( "repository.root" ) + fetchCommand ) );
         }
