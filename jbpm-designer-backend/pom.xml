@@ -183,6 +183,10 @@
           <groupId>org.apache.ant</groupId>
           <artifactId>ant</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>com.google.code.findbug</groupId>
+          <artifactId>jsr305</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
 
@@ -288,6 +292,10 @@
       <groupId>org.apache.xmlgraphics</groupId>
       <artifactId>fop</artifactId>
       <exclusions>
+        <exclusion>
+          <groupId>org.apache.avalon.framewor</groupId>
+          <artifactId>avalon-framework-api</artifactId>
+        </exclusion>
         <exclusion>
           <groupId>org.apache.xmlgraphics</groupId>
           <artifactId>batik-svg-dom</artifactId>
