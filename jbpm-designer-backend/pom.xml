@@ -184,7 +184,7 @@
           <artifactId>ant</artifactId>
         </exclusion>
         <exclusion>
-          <groupId>com.google.code.findbug</groupId>
+          <groupId>com.google.code.findbugs</groupId>
           <artifactId>jsr305</artifactId>
         </exclusion>
       </exclusions>
@@ -293,7 +293,7 @@
       <artifactId>fop</artifactId>
       <exclusions>
         <exclusion>
-          <groupId>org.apache.avalon.framewor</groupId>
+          <groupId>org.apache.avalon.framework</groupId>
           <artifactId>avalon-framework-api</artifactId>
         </exclusion>
         <exclusion>
