@@ -26,3 +26,11 @@ if ((typeof Range !== "undefined") && !Range.prototype.createContextualFragment)
         return frag;
     };
 }
+
+// BZ1130465 - Designer cannot save BP's in IE9 due to missing function window.btoa
+if (!window.btoa) {
+    window.btoa = function(input) { return Base64.encode(input); };
+}
+if (!window.atob) {
+    window.atob = function(input) { return Base64.decode(input); };
+}
