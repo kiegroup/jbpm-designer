@@ -86,7 +86,7 @@ public class CalledElementServlet extends HttpServlet {
         			if(allProcessesInPackage != null && allProcessesInPackage.size() > 0) {
         				for(String p : allProcessesInPackage) {
                 			Asset<String> processContent = ServletUtil.getProcessSourceContent(p, profile);
-                			Pattern idPattern = Pattern.compile("<\\S*process[^\"]+id=\"([^_\"]+)\"", Pattern.MULTILINE);
+                			Pattern idPattern = Pattern.compile("<\\S*process[^\"]+id=\"([^\"]+)\"", Pattern.MULTILINE);
         		            Matcher idMatcher = idPattern.matcher(processContent.getAssetContent());
         		            if(idMatcher.find()) {
         		            	String pid = idMatcher.group(1);
@@ -155,7 +155,7 @@ public class CalledElementServlet extends HttpServlet {
 	        		if(allProcessesInPackage != null && allProcessesInPackage.size() > 0) {
 	    				for(String p : allProcessesInPackage) {
 	    					Asset<String> processContent = ServletUtil.getProcessSourceContent(p, profile);
-	    					Pattern idPattern = Pattern.compile("<\\S*process[^\"]+id=\"([^_\"]+)\"", Pattern.MULTILINE);
+	    					Pattern idPattern = Pattern.compile("<\\S*process[^\"]+id=\"([^\"]+)\"", Pattern.MULTILINE);
 	    		            Matcher idMatcher = idPattern.matcher(processContent.getAssetContent());
 	    		            if(idMatcher.find()) {
 	    		            	String pid = idMatcher.group(1);
