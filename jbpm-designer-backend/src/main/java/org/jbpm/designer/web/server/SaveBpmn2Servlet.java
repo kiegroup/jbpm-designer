@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.FileUtils;
 import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
@@ -50,8 +49,9 @@ public class SaveBpmn2Servlet extends HttpServlet {
       IDiagramProfile profile = _profileService.findProfile(req, profileParam);
       String xml = _repository.toXML(json, profile, preProcessingParam);
       if (bpmnFile.canWrite()) {
-        FileUtils.writeStringToFile(bpmnFile, xml);
-      } else {
+        FileUtil.lockedWrite(xml, bpmnFile);
+      }
+      else {
         throw new BpmnSaveException(getMessageBundle(req.getLocale()).getString("cant.write.bpmn.file"));
       }
     }
