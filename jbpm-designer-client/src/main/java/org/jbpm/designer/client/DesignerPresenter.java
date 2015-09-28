@@ -22,7 +22,6 @@ import javax.inject.Inject;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.IsWidget;
 import org.guvnor.common.services.shared.metadata.model.Overview;
 import org.jboss.errai.common.client.api.Caller;
@@ -53,6 +52,7 @@ import org.uberfire.ext.editor.commons.client.file.CommandWithFileNameAndCommitM
 import org.uberfire.ext.editor.commons.client.file.CopyPopup;
 import org.uberfire.ext.editor.commons.client.file.FileNameAndCommitMessage;
 import org.uberfire.ext.editor.commons.client.file.RenamePopup;
+import org.uberfire.ext.editor.commons.client.history.event.VersionSelectedEvent;
 import org.uberfire.ext.editor.commons.service.CopyService;
 import org.uberfire.ext.editor.commons.service.DeleteService;
 import org.uberfire.ext.editor.commons.service.RenameService;
@@ -117,8 +117,7 @@ public class DesignerPresenter
     @OnStartup
     public void onStartup( final ObservablePath path,
                            final PlaceRequest place ) {
-        super.init( path, place, resourceType );
-
+        super.init(path, place, resourceType);
     }
 
     @OnMayClose
@@ -136,6 +135,7 @@ public class DesignerPresenter
                 .addSave(versionRecordManager.newSaveMenuItem(new Command() {
                     @Override
                     public void execute() {
+                        concurrentUpdateSessionInfo = null;
                         onSave();
                     }
                 }))
@@ -229,15 +229,15 @@ public class DesignerPresenter
         }
     }-*/;
 
-    private native void publishSignalOnAssetExpectConcurrentUpdate( DesignerPresenter dp )/*-{
-        $wnd.designersignalexpectconcurrentupdate = function () {
-            return true;
-        }
-    }-*/;
-
     private native void publishClosePlace( DesignerPresenter dp )/*-{
         $wnd.designersignalcloseplace = function () {
             dp.@org.jbpm.designer.client.DesignerPresenter::closePlace()();
+        }
+    }-*/;
+
+    private native void publishIsLatest( DesignerPresenter dp )/*-{
+        $wnd.designerIsLatest = function () {
+            return dp.@org.jbpm.designer.client.DesignerPresenter::isLatest()();
         }
     }-*/;
 
@@ -247,6 +247,10 @@ public class DesignerPresenter
         }
     }-*/;
 
+
+    public boolean isLatest() {
+        return versionRecordManager.isCurrentLatest();
+    }
 
     public void closePlace() {
         if ( view.getIsReadOnly() ) {
@@ -358,11 +362,11 @@ public class DesignerPresenter
 
                 popup.show();
             }
-        } ).get( URIUtil.encode( uri ) );
+        } ).get(URIUtil.encode(uri));
     }
 
     private void refreshTitle() {
-        baseView.refreshTitle( getTitleText() );
+        baseView.refreshTitle(getTitleText());
     }
 
     public void assetDeleteEvent( String uri ) {
@@ -374,7 +378,7 @@ public class DesignerPresenter
                                                                                                    "" );
 
             }
-        } ).get( URIUtil.encode( uri ) );
+        } ).get(URIUtil.encode(uri));
     }
 
     public boolean assetUpdatedEvent() {
@@ -413,8 +417,8 @@ public class DesignerPresenter
 
             @Override
             public void callback( final Void response ) {
-                notification.fire( new NotificationEvent( CommonConstants.INSTANCE.ItemDeletedSuccessfully() ) );
-                placeManager.forceClosePlace( new PathPlaceRequest( path ) );
+                notification.fire(new NotificationEvent(CommonConstants.INSTANCE.ItemDeletedSuccessfully()));
+                placeManager.forceClosePlace(new PathPlaceRequest(path));
             }
         };
     }
@@ -424,7 +428,7 @@ public class DesignerPresenter
             @Override
             public void callback( final Path path ) {
                 baseView.hideBusyIndicator();
-                notification.fire( new NotificationEvent( CommonConstants.INSTANCE.ItemCopiedSuccessfully() ) );
+                notification.fire(new NotificationEvent(CommonConstants.INSTANCE.ItemCopiedSuccessfully()));
             }
         };
     }
@@ -436,7 +440,7 @@ public class DesignerPresenter
             public void callback( final Path path ) {
                 baseView.hideBusyIndicator();
                 notification.fire( new NotificationEvent( CommonConstants.INSTANCE.ItemRenamedSuccessfully() ) );
-                placeManager.forceClosePlace( place );
+                placeManager.forceClosePlace(place);
                 placeManager.goTo(path);
             }
         };
@@ -450,7 +454,7 @@ public class DesignerPresenter
 
         placeRequestImpl.addParameter( "uuid", uri );
         placeRequestImpl.addParameter( "profile", "jbpm" );
-        this.placeManager.goTo( placeRequestImpl );
+        this.placeManager.goTo(placeRequestImpl);
     }
 
     public void openInXMLEditorTab( String uri ) {
@@ -463,7 +467,7 @@ public class DesignerPresenter
                 placeManager.forceClosePlace( place );
                 placeManager.goTo( placeRequestImpl );
             }
-        } ).get( URIUtil.encode( uri ) );
+        } ).get(URIUtil.encode(uri));
     }
 
     private void disableMenus() {
@@ -472,16 +476,15 @@ public class DesignerPresenter
 
     @Override
     protected void loadContent() {
-
         this.publishOpenInTab( this );
         this.publishOpenInXMLEditorTab(this );
         this.publishSignalOnAssetDelete(this );
         this.publishSignalOnAssetCopy(this );
         this.publishSignalOnAssetRename(this );
         this.publishSignalOnAssetUpdate(this );
-        this.publishSignalOnAssetExpectConcurrentUpdate(this );
         this.publishClosePlace(this );
         this.publishShowDataIOEditor(this);
+        this.publishIsLatest(this);
 
         if ( versionRecordManager.getCurrentPath() != null ) {
             assetService.call( new RemoteCallback<String>() {
@@ -520,6 +523,7 @@ public class DesignerPresenter
                 }
             } ).getEditorID();
         }
+
     }
 
     private void setup( Map<String, String> editorParameters,
@@ -557,12 +561,13 @@ public class DesignerPresenter
             }
             editorParameters.put( "ts", Long.toString( System.currentTimeMillis() ) );
             editorParameters.put( "sessionId", sessionInfo.getId() );
-            view.setup( editorID, editorParameters );
+            view.setup(editorID, editorParameters);
         }
     }
 
     protected void save() {
-        view.raiseEventCheckSave();
+        ObservablePath latestPath = versionRecordManager.getPathToLatest();
+        view.raiseEventCheckSave(latestPath.toURI());
     }
 
     public void reload() {

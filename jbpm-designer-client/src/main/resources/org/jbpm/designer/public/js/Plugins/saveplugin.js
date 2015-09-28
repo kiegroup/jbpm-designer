@@ -195,8 +195,8 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         this.save(true);
     },
 
-    handleEventDoCheckSave : function() {
-        this.save(true);
+    handleEventDoCheckSave : function(options) {
+        this.save(true, options.pathuri);
     },
 
     handleEventCancelSave: function() {
@@ -274,9 +274,18 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         ORYX.PROCESS_SAVED = false;
     },
 
-    save : function(showCommit) {
+    save : function(showCommit, pathuri) {
+        var isLatest = parent.designerIsLatest();
+        if(!isLatest) {
+            ORYX.PROCESS_SAVED = false;
+        }
         if(!ORYX.PROCESS_SAVED) {
             // save process bpmn2 and svg
+            var usePathURI = "";
+            if(pathuri) {
+                usePathURI = pathuri;
+            }
+
             var commitMessage = "";
             if(showCommit && showCommit == true) {
                 commitMessage = prompt("Save this item", "Check in comment");
@@ -290,8 +299,6 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                     return;
                 }
             }
-
-            parent.designersignalexpectconcurrentupdate(ORYX.UUID);
 
             Ext.Ajax.request({
                 url: ORYX.PATH + 'assetservice',
@@ -393,7 +400,8 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                     assetid: window.btoa(encodeURI(ORYX.UUID)),
                     assetcontenttransform: 'jsontobpmn2',
                     commitmessage: commitMessage,
-                    sessionid: ORYX.SESSION_ID
+                    sessionid: ORYX.SESSION_ID,
+                    latestpath: usePathURI
                 }
             });
         } else {
