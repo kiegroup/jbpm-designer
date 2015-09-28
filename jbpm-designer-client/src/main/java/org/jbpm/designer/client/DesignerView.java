@@ -15,7 +15,7 @@ public interface DesignerView
 
     void raiseEventSave();
 
-    void raiseEventCheckSave();
+    void raiseEventCheckSave(String pathURI);
 
     void raiseEventSaveCancel();
 

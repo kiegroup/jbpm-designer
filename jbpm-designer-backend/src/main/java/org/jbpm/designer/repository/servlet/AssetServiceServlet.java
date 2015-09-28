@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+
 import java.util.Collection;
 
 /**
@@ -70,6 +71,7 @@ public class AssetServiceServlet extends HttpServlet {
         String loadoption = req.getParameter("loadoption");
         String commitMessage = req.getParameter("commitmessage");
         String sessionId = req.getParameter( "sessionid" );
+        String pathURI = req.getParameter("latestpath");
         JSONObject returnObj = new JSONObject();
         JSONArray errorsArray = new JSONArray();
 
@@ -103,13 +105,18 @@ public class AssetServiceServlet extends HttpServlet {
                     if(assetContentTransform != null && assetContentTransform.equals(TRANSFORMATION_JSON_TO_BPMN2)) {
                             assetContent = profile.createMarshaller().parseModel(assetContent, preprocessingData);
                     }
+                    Asset<String> currentAsset = null;
+                    if(pathURI != null && pathURI.length() > 0) {
+                        currentAsset = repository.loadAsset(pathURI);
+                    } else {
+                        currentAsset = repository.loadAsset(assetId);
+                    }
 
-                    Asset<String> currentAsset = repository.loadAsset(assetId);
                     AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(currentAsset);
                     builder.content(assetContent);
                     String id = repository.updateAsset(builder.getAsset(), commitMessage, sessionId);
 
-                    if(id == null) {
+                      if(id == null) {
                         _logger.error("Unable to store asset: " + assetLocation);
                         addError(errorsArray, "Unable to store asset: " + assetLocation);
                     }

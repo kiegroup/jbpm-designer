@@ -26,7 +26,7 @@ public class DesignerWidgetView
 
     public DesignerWidgetView() {
         setupInlineFrame();
-        initWidget( inlineFrame );
+        initWidget(inlineFrame);
     }
 
     private void setupInlineFrame() {
@@ -39,8 +39,8 @@ public class DesignerWidgetView
         inlineFrame.getElement().getStyle().setOverflowX( Style.Overflow.AUTO );
         inlineFrame.getElement().getStyle().setOverflowY( Style.Overflow.AUTO );
         inlineFrame.getElement().getStyle().setOverflow( Style.Overflow.AUTO );
-        inlineFrame.getElement().getStyle().setWidth( 100, Style.Unit.PCT );
-        inlineFrame.getElement().getStyle().setHeight( 680, Style.Unit.PX );
+        inlineFrame.getElement().getStyle().setWidth(100, Style.Unit.PCT);
+        inlineFrame.getElement().getStyle().setHeight(680, Style.Unit.PX);
     }
 
     @Override
@@ -124,10 +124,11 @@ public class DesignerWidgetView
         }
     }-*/;
 
-    public native void raiseEventCheckSave( String editorID ) /*-{
+    public native void raiseEventCheckSave( String editorID, String pathURI ) /*-{
         if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor && (typeof($wnd.document.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved) == "function")) {
             $wnd.document.getElementById(editorID).contentWindow.ORYX.EDITOR._pluginFacade.raiseEvent({
-                type: "designereventdochecksave"
+                type: "designereventdochecksave",
+                pathuri: pathURI
             });
         }
     }-*/;

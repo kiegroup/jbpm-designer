@@ -4,6 +4,7 @@ import java.util.Map;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.IsWidget;
 import org.uberfire.ext.widgets.common.client.common.HasBusyIndicator;
 
@@ -56,8 +57,8 @@ public class DesignerWidgetPresenter {
         view.raiseEventSave( editorID );
     }
 
-    public void raiseEventCheckSave( final String editorID ) {
-        view.raiseEventCheckSave( editorID );
+    public void raiseEventCheckSave( final String editorID , String pathURI) {
+        view.raiseEventCheckSave( editorID, pathURI );
     }
 
     public void raiseEventSaveCancel( String editorID ) {
