@@ -1434,13 +1434,33 @@ ORYX.Core.Command.Move = ORYX.Core.Command.extend({
 		this.newLocation = newLocation;
 		this.plugin		= plugin;
 		this.doLayout = doLayout;
+		this.newParents = [];
 		// Defines the old/new parents for the particular shape
-        this.newParents	= moveShapes.collect(function(shape){ return parent || shape.parent });
+		for(var i=0; i<moveShapes.length ;i++) {
+			var value = moveShapes[i];
+			if(value.parent instanceof ORYX.Core.Canvas) {
+				this.newParents[i] = parent || value.parent;
+			} else {
+				if(value.parent == parent) {
+					this.newParents[i] = parent || value.parent;
+				} else {
+					if(moveShapes.length == 1) {
+						this.newParents[i] = parent || value.parent;
+					} else {
+						if(parent && parent instanceof ORYX.Core.Canvas) {
+							this.newParents[i] = parent;
+						} else {
+							this.newParents[i] = value.parent;
+						}
+					}
+				}
+			}
+		}
 		this.oldParents	= moveShapes.collect(function(shape){ return shape.parent });
 		this.dockedNodes= moveShapes.findAll(function(shape){ return shape instanceof ORYX.Core.Node && shape.dockers.length == 1}).collect(function(shape){ return {docker:shape.dockers[0], dockedShape:shape.dockers[0].getDockedShape(), refPoint:shape.dockers[0].referencePoint} });
 	},			
 	execute: function(){
-		this.dockAllShapes()				
+		this.dockAllShapes();
 		// Moves by the offset
 		this.move( this.offset, this.newLocation, this.doLayout);
 		// Addes to the new parents
