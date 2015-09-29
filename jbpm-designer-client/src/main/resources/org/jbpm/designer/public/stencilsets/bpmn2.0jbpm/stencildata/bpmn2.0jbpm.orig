@@ -2717,11 +2717,11 @@
 					"fortasktypes":"None|User"
 				},
 				{
-					"id":"comment",
-					"type":"String",
-					"title":"Comment",
+					"id":"subject",
+					"type":"Text",
+					"title":"Subject",
 					"value":"",
-					"description":"Comment",
+					"description":"Subject",
 					"description_ja":"コメント",
 					"readonly":false,
 					"optional":true,
