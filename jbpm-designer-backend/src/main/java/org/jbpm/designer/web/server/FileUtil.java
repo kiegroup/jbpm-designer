@@ -1,15 +1,10 @@
 package org.jbpm.designer.web.server;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.channels.OverlappingFileLockException;
-
-import org.apache.commons.io.FileUtils;
 
 /**
  * @author Tim Urmancheev
@@ -26,15 +21,19 @@ public final class FileUtil {
       FileChannel channel = randomAccessFile.getChannel();
       FileLock lock = tryLock(channel);
 
+      PrintWriter writer = null;
       try {
         randomAccessFile.setLength(0);
         OutputStream out = Channels.newOutputStream(channel);
 
-        FileUtils.writeStringToFile(file, content);
-
-        out.flush();
+        writer = new PrintWriter(new IgnoreCloseOutputStream(out));
+        writer.write(content);
+        writer.flush();
       }
       finally {
+        if (writer != null) {
+          writer.close();
+        }
         lock.release();
       }
     }
@@ -68,6 +67,26 @@ public final class FileUtil {
     }
     catch (OverlappingFileLockException ex) {
       return null;
+    }
+  }
+
+  static private class IgnoreCloseOutputStream extends BufferedOutputStream {
+
+    /**
+     * Creates an output stream filter built on top of the specified
+     * underlying output stream.
+     *
+     * @param out the underlying output stream to be assigned to
+     *            the field <tt>this.out</tt> for later use, or
+     *            <code>null</code> if this instance is to be
+     *            created without an underlying stream.
+     */
+    public IgnoreCloseOutputStream(OutputStream out) {
+      super(out);
+    }
+
+    @Override
+    public void close() throws IOException {
     }
   }
 }
