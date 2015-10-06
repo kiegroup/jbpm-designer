@@ -348,16 +348,13 @@ ORYX.Plugins.PropertyWindow = {
 		// Execute the command
 		this.facade.executeCommands([command]);
 
-
-		// extended by Kerstin (start)
-//
 		this.facade.raiseEvent({
-			type 		: ORYX.CONFIG.EVENT_PROPWINDOW_PROP_CHANGED, 
-			elements	: selectedElements,
-			key			: key,
-			value		: option.value
-		});
-		// extended by Kerstin (end)
+			type: ORYX.CONFIG.EVENT_PROPWINDOW_PROP_CHANGED,
+			elements: selectedElements,
+			key: key,
+			value: option.value
+			});
+
 	},
 	
 	// Changes made in the property window will be shown directly
@@ -371,16 +368,16 @@ ORYX.Plugins.PropertyWindow = {
 		
 		/* Propagate changed properties */
 		var selectedElements = this.shapeSelection.shapes;
-		
+
 		this.facade.raiseEvent({
-			type 		: ORYX.CONFIG.EVENT_PROPWINDOW_PROP_CHANGED, 
+			type 		: ORYX.CONFIG.EVENT_PROPWINDOW_PROP_CHANGED,
 			elements	: selectedElements,
 			key			: key,
 			value		: value
 		});
 
 		this.facade.getCanvas().update();
-		
+
 	},
 	
 	// if a field becomes invalid after editing the shape must be restored to the old value
@@ -403,7 +400,7 @@ ORYX.Plugins.PropertyWindow = {
 			record:this.scope.grid.getStore().getAt(row), 
 			//value:this.scope.grid.getStore().getAt(this.row).get("value")
 			value: data
-		})
+		});
 		// reopen the text field of the complex list field again
 		this.scope.grid.startEditing(row, this.col);
 	},
@@ -596,7 +593,7 @@ ORYX.Plugins.PropertyWindow = {
 						case ORYX.CONFIG.TYPE_STRING:
 							// If the Text is MultiLine
 							if(pair.wrapLines()) {
-								// Set the Editor as TextArea    tihomir
+								// Set the Editor as TextArea
 								var editorTextArea = new Ext.form.TextArea({alignment: "tl-tl", allowBlank: pair.optional(),  msgTarget:'title', maxLength:pair.length()});
 								editorTextArea.on('keyup', function(textArea, event) {
 									this.editDirectly(key, textArea.getValue().replace(/\\n/g,"\n"));
@@ -1955,12 +1952,12 @@ Ext.extend(Ext.form.ComplexListField, Ext.form.TriggerField,  {
 	                    this.grid.stopEditing();	
 						// store dialog input
 						this.data = this.buildValue();
-						this.dialog.hide()
+						this.dialog.hide();
 	                }.bind(this)
 	            }, {
 	                text: ORYX.I18N.PropertyWindow.cancel,
 	                handler: function(){
-	                	this.dialog.hide()
+	                	this.dialog.destroy();
 	                }.bind(this)
 	            }]
 			});		
@@ -2048,13 +2045,12 @@ Ext.form.ComplexTextField = Ext.extend(Ext.form.TriggerField,  {
 					this.dataSource.getAt(this.row).set('value', value)
 					this.dataSource.commitChanges()
 
-					dialog.hide()
+					dialog.hide();
                 }.bind(this)
             }, {
                 text: ORYX.I18N.PropertyWindow.cancel,
                 handler: function(){
-					this.setValue(this.value);
-                	dialog.hide()
+                	dialog.destroy();
                 }.bind(this)
             }]
 		});		
@@ -2131,13 +2127,12 @@ Ext.form.ComplexEncodedTextField = Ext.extend(Ext.form.TriggerField,  {
 					this.dataSource.getAt(this.row).set('value', value)
 					this.dataSource.commitChanges()
 
-					dialog.hide()
+					dialog.hide();
 				}.bind(this)
 			}, {
 				text: ORYX.I18N.PropertyWindow.cancel,
 				handler: function(){
-					this.setValue(Ext.util.Format.htmlEncode(this.value));
-					dialog.hide()
+					dialog.destroy();
 				}.bind(this)
 			}]
 		});
@@ -2215,8 +2210,7 @@ Ext.form.ComplexCustomField = Ext.extend(Ext.form.TriggerField,  {
     	   			            }, {
     	   			                text: ORYX.I18N.PropertyWindow.cancel,
     	   			                handler: function(){
-    	   								this.setValue(this.value);
-    	   			                	dialog.hide()
+    	   			                	dialog.destroy();
     	   			                }.bind(this)
     	   			            }]
     	   					});		
@@ -2628,8 +2622,7 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
             }, {
                 text: ORYX.I18N.PropertyWindow.cancel,
                 handler: function(){
-                    this.setValue(this.value);
-                    dialog.hide()
+                    dialog.destroy();
                 }.bind(this)
             }]
         });
@@ -2878,8 +2871,7 @@ Ext.form.ComplexReassignmentField = Ext.extend(Ext.form.TriggerField,  {
             }, {
                 text: ORYX.I18N.PropertyWindow.cancel,
                 handler: function(){
-                    this.setValue(this.value);
-                    dialog.hide()
+                    dialog.destroy();
                 }.bind(this)
             }]
         });
@@ -3225,13 +3217,12 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
                                     this.dataSource.getAt(this.row).set('value', outValue)
                                     this.dataSource.commitChanges()
 
-                                    dialog.hide()
+                                    dialog.hide();
                                 }.bind(this)
                             }, {
                                 text: ORYX.I18N.PropertyWindow.cancel,
                                 handler: function(){
-                                    this.setValue(this.value);
-                                    dialog.hide()
+                                    dialog.destroy();
                                 }.bind(this)
                             }]
                         });
@@ -3400,13 +3391,12 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
 					this.dataSource.getAt(this.row).set('value', outValue)
 					this.dataSource.commitChanges()
 
-					dialog.hide()
+					dialog.hide();
                 }.bind(this)
             }, {
                 text: ORYX.I18N.PropertyWindow.cancel,
                 handler: function(){
-					this.setValue(this.value);
-                	dialog.hide()
+                	dialog.destroy();
                 }.bind(this)
             }]
 		});		
@@ -4535,8 +4525,7 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
             }, {
                 text: ORYX.I18N.PropertyWindow.cancel,
                 handler: function(){
-					this.setValue(this.value);
-                	dialog.hide();
+                	dialog.destroy();
                 }.bind(this)
             }]
 		});		
@@ -4946,8 +4935,7 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                             }, {
                                 text: ORYX.I18N.PropertyWindow.cancel,
                                 handler: function(){
-                                    this.setValue(this.value);
-                                    dialog.hide()
+                                    dialog.destroy();
                                 }.bind(this)
                             }]
                         });
@@ -5668,8 +5656,7 @@ Ext.form.ConditionExpressionEditorField = Ext.extend(Ext.form.TriggerField,  {
             }, {
                 text: ORYX.I18N.PropertyWindow.cancel,
                 handler: function(){
-                    this.setValue(this.value);
-                    dialog.hide()
+                    dialog.destroy();
                 }.bind(this)
             }]
         });
@@ -6014,8 +6001,7 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                             }, {
                                 text: ORYX.I18N.PropertyWindow.cancel,
                                 handler: function(){
-                                    this.setValue(this.value);
-                                    dialog.hide();
+                                    dialog.destroy();
                                 }.bind(this)
                             }]
                         });
@@ -6242,8 +6228,7 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField,  {
     		                }, {
     		                    text: ORYX.I18N.PropertyWindow.cancel,
     		                    handler: function(){
-    		    					this.setValue(this.value);
-    		                    	dialog.hide()
+    		                    	dialog.destroy();
     		                    }.bind(this)
     		                }]
     		    		});		
@@ -6375,8 +6360,7 @@ Ext.form.ComplexVisualDataAssignmentField = Ext.extend(Ext.form.TriggerField,  {
             }, {
                 text: ORYX.I18N.PropertyWindow.cancel,
                 handler: function(){
-                    this.setValue(this.value);
-                    dialog.hide()
+                    dialog.destroy();
                 }.bind(this)
             }]
         });
