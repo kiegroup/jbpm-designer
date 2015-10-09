@@ -135,7 +135,6 @@ public class DesignerPresenter
                 .addSave(versionRecordManager.newSaveMenuItem(new Command() {
                     @Override
                     public void execute() {
-                        concurrentUpdateSessionInfo = null;
                         onSave();
                     }
                 }))
