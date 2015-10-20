@@ -28,7 +28,8 @@ import javax.inject.Named;
 
 import org.apache.lucene.search.Query;
 import org.kie.workbench.common.services.refactoring.backend.server.query.NamedQuery;
-import org.kie.workbench.common.services.refactoring.backend.server.query.QueryBuilder;
+import org.kie.workbench.common.services.refactoring.backend.server.query.builder.BasicQueryBuilder;
+import org.kie.workbench.common.services.refactoring.backend.server.query.builder.QueryBuilder;
 import org.kie.workbench.common.services.refactoring.backend.server.query.response.ResponseBuilder;
 import org.kie.workbench.common.services.refactoring.model.index.terms.IndexTerm;
 import org.kie.workbench.common.services.refactoring.model.index.terms.TypeIndexTerm;
@@ -73,7 +74,7 @@ public class FindDataTypesQuery implements NamedQuery {
             throw new IllegalArgumentException( "Required term has not been provided. Require '" + TypeIndexTerm.TERM + "'." );
         }
 
-        final QueryBuilder builder = new QueryBuilder();
+        final QueryBuilder builder = new BasicQueryBuilder();
         if ( useWildcards ) {
             builder.useWildcards();
         }
