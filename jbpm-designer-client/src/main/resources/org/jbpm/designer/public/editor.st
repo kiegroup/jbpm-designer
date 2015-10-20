@@ -12,6 +12,7 @@
         ORYX.EXTERNAL_SUBDOMAIN = "$externalsubdomain$";
         ORYX.REPOSITORY_ID = "$repositoryid$";
         ORYX.SESSION_ID = "$sessionid$";
+        ORYX.INSTANCE_VIEW_MODE = $instanceviewmode$;
 
         ORYX.UUID = "$editoruuid$";
         ORYX.PROFILE = "$editorprofile$";

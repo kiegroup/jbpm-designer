@@ -179,29 +179,31 @@ ORYX.Editor = {
 	},
 
 	updateViewLockState: function() {
-		if ( (typeof parent.isLocked === "function") && (typeof parent.isLockedByCurrentUser === "function") ) {
-            var isEditorLocked = parent.isLocked();
-            var isEditorLockedByCurrentUser = parent.isLockedByCurrentUser();
-            var isReadOnly = ORYX.READONLY || ORYX.VIEWLOCKED;
+		if(ORYX.INSTANCE_VIEW_MODE != true) {
+			if ( (typeof parent.isLocked === "function") && (typeof parent.isLockedByCurrentUser === "function") ) {
+				var isEditorLocked = parent.isLocked();
+				var isEditorLockedByCurrentUser = parent.isLockedByCurrentUser();
+				var isReadOnly = ORYX.READONLY || ORYX.VIEWLOCKED;
 
-            if(!isEditorLocked) {
-                ORYX.VIEWLOCKED = false;
-            } else {
-                if(isEditorLocked && !isEditorLockedByCurrentUser) {
-                    ORYX.VIEWLOCKED = true;
-                } else if(isEditorLocked && isEditorLockedByCurrentUser) {
-                    ORYX.VIEWLOCKED = false;
-                }
-            }
-            
-            // We're in read only mode, but got the lock, so let's reload to enter edit mode.
-            if (isReadOnly && !ORYX.VIEWLOCKED) {
-            	if (typeof parent.reload === "function") {
-            		ORYX.PROCESS_SAVED = true;
-            		parent.reload();
-            	}
-        	}
-        }        
+				if(!isEditorLocked) {
+					ORYX.VIEWLOCKED = false;
+				} else {
+					if(isEditorLocked && !isEditorLockedByCurrentUser) {
+						ORYX.VIEWLOCKED = true;
+					} else if(isEditorLocked && isEditorLockedByCurrentUser) {
+						ORYX.VIEWLOCKED = false;
+					}
+				}
+
+				// We're in read only mode, but got the lock, so let's reload to enter edit mode.
+				if (isReadOnly && !ORYX.VIEWLOCKED) {
+					if (typeof parent.reload === "function") {
+						ORYX.PROCESS_SAVED = true;
+						parent.reload();
+					}
+				}
+			}
+		}
 	},	
 
 	_finishedLoading: function() {
