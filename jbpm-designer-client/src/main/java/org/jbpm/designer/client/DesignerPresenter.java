@@ -241,8 +241,8 @@ public class DesignerPresenter
     }-*/;
 
     private native void publishShowDataIOEditor( DesignerPresenter dp )/*-{
-        $wnd.designersignalshowdataioeditor = function (taskname, datainput, datainputset, dataoutput, dataoutputset, processvars, assignments, datatypes, jscallback) {
-            dp.@org.jbpm.designer.client.DesignerPresenter::showDataIOEditor(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;)(taskname, datainput, datainputset, dataoutput, dataoutputset, processvars, assignments, datatypes, jscallback);
+        $wnd.designersignalshowdataioeditor = function (taskname, datainput, datainputset, dataoutput, dataoutputset, processvars, assignments, datatypes, disallowedpropertynames, jscallback) {
+            dp.@org.jbpm.designer.client.DesignerPresenter::showDataIOEditor(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;)(taskname, datainput, datainputset, dataoutput, dataoutputset, processvars, assignments, datatypes, disallowedpropertynames, jscallback);
         }
     }-*/;
 
@@ -285,7 +285,8 @@ public class DesignerPresenter
 //            "String:String, Integer:Integer, Boolean:Boolean, Float:Float, Object:Object");
 
     public void showDataIOEditor(final String taskName, final String datainput, final String datainputset, final String dataoutput,
-            final String dataoutputset, final String processvars, final String assignments, final String datatypes, final JavaScriptObject jscallback) {
+            final String dataoutputset, final String processvars, final String assignments, final String datatypes,
+            final String disallowedpropertynames, final JavaScriptObject jscallback) {
 
         //getDataIOEditorData("{ \"a\":\"hello\" }", jscallback);
         final DesignerPresenter dp = this;
@@ -326,7 +327,8 @@ public class DesignerPresenter
             isSingleOutputVar = false;
         }
 
-        AssignmentData assignmentData = new AssignmentData(inputvars, outputvars, processvars, assignments, datatypes);
+        AssignmentData assignmentData = new AssignmentData(inputvars, outputvars, processvars, assignments, datatypes, disallowedpropertynames);
+        activityDataIOEditor.setDisallowedPropertyNames(assignmentData.getDisallowedPropertyNames());
         activityDataIOEditor.setInputAssignmentRows(assignmentData.getAssignmentRows(VariableType.INPUT));
         activityDataIOEditor.setOutputAssignmentRows(assignmentData.getAssignmentRows(VariableType.OUTPUT));
         activityDataIOEditor.setDataTypes(assignmentData.getDataTypes(), assignmentData.getDataTypeDisplayNames());

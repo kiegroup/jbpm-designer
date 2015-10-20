@@ -147,7 +147,9 @@ ORYX.Plugins.DataIOEditorPlugin = {
 
         var processvars = this.getProcessVars(element);
 
-        parent.designersignalshowdataioeditor(taskname, datainput, datainputset, dataoutput, dataoutputset, processvars, assignments, datatypes,
+        var disallowedPropertyNames = this.getDisallowedPropertyNames(element);
+
+        parent.designersignalshowdataioeditor(taskname, datainput, datainputset, dataoutput, dataoutputset, processvars, assignments, datatypes, disallowedPropertyNames,
                 function (data) {
                     //window.alert("passed back to dataioeditor: " + data);
                     var obj = JSON.parse(data);
@@ -192,6 +194,15 @@ ORYX.Plugins.DataIOEditorPlugin = {
 
                 }.bind(this)
         );
+    },
+
+    getDisallowedPropertyNames : function (element) {
+        if (element.properties['oryx-tasktype'] !== undefined && element.properties['oryx-tasktype'] == "User") {
+            return "GroupId,Skippable,Comment,Description,Priority,Content,TaskName,Locale,CreatedBy,NotCompletedReassign,NotStartedReassign,NotCompletedNotify,NotStartedNotify";
+        }
+        else {
+            return "";
+        }
     },
 
     setElementProperties: function (element, newProperties, oldProperties) {
