@@ -21,7 +21,7 @@ import java.util.Set;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
-import com.github.gwtbootstrap.client.ui.TextBox;
+import org.gwtbootstrap3.client.ui.TextBox;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
