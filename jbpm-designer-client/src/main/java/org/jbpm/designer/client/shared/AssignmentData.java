@@ -47,18 +47,21 @@ public class AssignmentData {
     private Map<String, String> mapDisplayNameToDataType = new HashMap<String, String>();
     private Map<String, String> mapDataTypeToDisplayName = new HashMap<String, String>();
 
+    private List<String> disallowedPropertyNames = new ArrayList<String>();
+
     public AssignmentData() {
 
     }
 
     public AssignmentData(String sInputVariables, String sOutputVariables, String sProcessVariables,
-            String sAssignments, String sDataTypes) {
+            String sAssignments, String sDataTypes, String sDisallowedPropertyNames) {
         // setDataTypes before variables because these determine whether variable datatypes are custom or not
         setDataTypes(sDataTypes);
         setProcessVariables(sProcessVariables);
         setInputVariables(sInputVariables, dataTypes);
         setOutputVariables(sOutputVariables, dataTypes);
         setAssignments(sAssignments);
+        setDisallowedPropertyNames(sDisallowedPropertyNames);
     }
 
     /**
@@ -292,6 +295,25 @@ public class AssignmentData {
         }
     }
 
+    public List<String> getDisallowedPropertyNames() {
+        return disallowedPropertyNames;
+    }
+
+    protected void setDisallowedPropertyNames(String disallowedPropertyNames) {
+        this.disallowedPropertyNames.clear();
+
+        if (disallowedPropertyNames != null && !disallowedPropertyNames.isEmpty()) {
+            String[] hps = disallowedPropertyNames.split(",");
+            for (String hp : hps) {
+                hp = hp.trim();
+                if (!hp.isEmpty()) {
+                    this.disallowedPropertyNames.add(hp);
+                }
+            }
+        }
+    }
+
+
     public Variable findProcessVariable(String processVarName) {
         if (processVarName == null || processVarName.isEmpty()) {
             return null;
@@ -375,6 +397,15 @@ public class AssignmentData {
         return sb.toString();
     }
 
+    public String getDisallowedPropertyNamesString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < disallowedPropertyNames.size(); i++) {
+            sb.append(disallowedPropertyNames.get(i)).append(',');
+        }
+        sb.setLength(sb.length() - 1);
+        return sb.toString();
+    }
+
     public List<String> getProcessVariableNames() {
         List<String> processVarNames = new ArrayList<String>();
         for (Variable processVar : processVariables) {
@@ -427,7 +458,8 @@ public class AssignmentData {
         sb.append("\"outputVariables\":\"").append(getOutputVariablesString()).append("\"").append(",\n");
         sb.append("\"processVariables\":\"").append(getProcessVariablesString()).append("\"").append(",\n");
         sb.append("\"assignments\":\"").append(getAssignmentsString()).append("\"").append(",\n");
-        sb.append("\"dataTypes\":\"").append(getDataTypesString()).append("\"");
+        sb.append("\"dataTypes\":\"").append(getDataTypesString()).append("\"").append(",\n");
+        sb.append("\"disallowedPropertyNames\":\"").append(getDisallowedPropertyNamesString()).append("\"");
 
         return sb.toString();
     }

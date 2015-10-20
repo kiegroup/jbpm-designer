@@ -58,4 +58,6 @@ public interface DesignerEditorConstants extends
     String Source();
 
     String Target();
+
+    String This_input_should_be_entered_as_a_property_for_the_task();
 }

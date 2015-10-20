@@ -46,29 +46,15 @@ import org.uberfire.workbench.events.NotificationEvent;
 @Templated("ActivityDataIOEditorWidget.html#widget" )
 public class ActivityDataIOEditorWidget extends Composite {
 
-    private static Set<String> hiddenPropertyNames = new HashSet<String>();
-    static {
-        hiddenPropertyNames.add("GroupId");
-        hiddenPropertyNames.add("Skippable");
-        hiddenPropertyNames.add("Comment");
-        hiddenPropertyNames.add("Description");
-        hiddenPropertyNames.add("Priority");
-        hiddenPropertyNames.add("Content");
-        hiddenPropertyNames.add("TaskName");
-        hiddenPropertyNames.add("Locale");
-        hiddenPropertyNames.add("CreatedBy");
-        hiddenPropertyNames.add("NotCompletedReassign");
-        hiddenPropertyNames.add("NotStartedReassign");
-        hiddenPropertyNames.add("NotCompletedNotify");
-        hiddenPropertyNames.add("NotStartedNotify");
-    }
-
     ListBoxValues dataTypeListBoxValues;
     ListBoxValues processVarListBoxValues;
 
     private VariableType variableType = VariableType.INPUT;
 
     boolean isSingleVar = false;
+
+    private Set<String> disallowedNames = new HashSet<String>();
+    private String disallowedNameErrorMessage;
 
     @Inject
     @DataField
@@ -152,6 +138,7 @@ public class ActivityDataIOEditorWidget extends Composite {
         AssignmentListItemWidget widget = assignments.getWidget(assignments.getValue().size() - 1);
         widget.setDataTypes(dataTypeListBoxValues);
         widget.setProcessVariables(processVarListBoxValues);
+        widget.setDisallowedNames(disallowedNames, disallowedNameErrorMessage);
         widget.setParentWidget(this);
     }
 
@@ -166,11 +153,15 @@ public class ActivityDataIOEditorWidget extends Composite {
     public void setData(List<AssignmentRow> assignmentRows) {
         // Hide the properties which shouldn't be shown
         hiddenPropertyRows.clear();
-        for (int i = assignmentRows.size() - 1; i >= 0; i--) {
-            AssignmentRow row = assignmentRows.get(i);
-            if (row.getName() != null && !row.getName().isEmpty() && hiddenPropertyNames.contains(row.getName())) {
-                assignmentRows.remove(i);
-                hiddenPropertyRows.add(0, row);
+        if (disallowedNames != null && !disallowedNames.isEmpty()) {
+            for (int i = assignmentRows.size() - 1; i >= 0; i--) {
+                AssignmentRow row = assignmentRows.get(i);
+                if (row.getName() != null && !row.getName().isEmpty()) {
+                    if (disallowedNames.contains(row.getName().toLowerCase())) {
+                        assignmentRows.remove(i);
+                        hiddenPropertyRows.add(0, row);
+                    }
+                }
             }
         }
 
@@ -185,6 +176,7 @@ public class ActivityDataIOEditorWidget extends Composite {
 
         for (int i = 0; i < assignmentRows.size(); i++) {
             assignments.getWidget(i).setParentWidget(this);
+            assignments.getWidget(i).setDisallowedNames(disallowedNames, disallowedNameErrorMessage);
         }
     }
 
@@ -217,4 +209,12 @@ public class ActivityDataIOEditorWidget extends Composite {
         }
     }
 
+    public void setDisallowedNames(Set<String> disallowedNames, String disallowedNameErrorMessage) {
+        this.disallowedNames = disallowedNames;
+        this.disallowedNameErrorMessage = disallowedNameErrorMessage;
+
+        for (int i = 0; i < assignments.getValue().size(); i++) {
+            assignments.getWidget(i).setDisallowedNames(disallowedNames, disallowedNameErrorMessage);
+        }
+    }
 }

@@ -37,7 +37,8 @@ public class AssignmentDataMarshaller
         String processVars = obj.get("processVars").isString().stringValue();
         String assignments = obj.get("assignments").isString().stringValue();
         String dataTypes = obj.get("dataTypes").isString().stringValue();
-        return new AssignmentData(dataInputSet, dataOutputSet, processVars, assignments, dataTypes);
+        String disallowedPropertyNames = obj.get("disallowedPropertyNames").isString().stringValue();
+        return new AssignmentData(dataInputSet, dataOutputSet, processVars, assignments, dataTypes, disallowedPropertyNames);
     }
 
     public String doNotNullMarshall(AssignmentData o, MarshallingSession ctx) {
@@ -48,7 +49,8 @@ public class AssignmentDataMarshaller
                 "\"" + "outputVariables" + "\":\"" + o.getOutputVariablesString() + "\"," +
                 "\"" + "processVariables" + "\":\"" + o.getProcessVariablesString() + "\"," +
                 "\"" + "assignments" + "\":\"" + o.getAssignmentsString() + "\"," +
-                "\"" + "dataTypes" + "\":\"" + o.getDataTypesString() + "\"}";
+                "\"" + "dataTypes" + "\":\"" + o.getDataTypesString() + "\"," +
+                "\"" + "disallowedPropertyNames" + "\":\"" + o.getDisallowedPropertyNamesString() + "\"}";
     }
 
     @Override public AssignmentData[] getEmptyArray() {

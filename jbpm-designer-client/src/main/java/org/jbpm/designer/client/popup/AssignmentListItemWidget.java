@@ -19,6 +19,7 @@ package org.jbpm.designer.client.popup;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
@@ -50,6 +51,7 @@ import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.jbpm.designer.client.shared.AssignmentData;
 import org.jbpm.designer.client.shared.AssignmentRow;
 import org.jbpm.designer.client.shared.Variable.VariableType;
+import org.jbpm.designer.client.util.ValidatingTextBox;
 
 /**
  * A templated widget that will be used to display a row in a table of
@@ -76,7 +78,7 @@ public class AssignmentListItemWidget extends Composite implements HasModel<Assi
     @Inject
     @Bound
     @DataField
-    private TextBox name;
+    private ValidatingTextBox name;
 
     @DataField
     private ValueListBox<String> dataType = new ValueListBox<String>(new Renderer<String>() {
@@ -319,16 +321,6 @@ public class AssignmentListItemWidget extends Composite implements HasModel<Assi
         // Configure processVar and constant controls
         initEditableListBox(processVar, constant, true, CONSTANT_PROMPT, ENTER_CONSTANT_PROMPT);
 
-        // Configure name control
-        name.addBlurHandler(new BlurHandler() {
-            @Override public void onBlur(BlurEvent blurEvent) {
-                String value = name.getValue();
-                if (value != null) {
-                    name.setValue(value.trim());
-                }
-            }
-        });
-
         name.addKeyDownHandler(new KeyDownHandler() {
             @Override public void onKeyDown(KeyDownEvent event) {
                 int iChar = event.getNativeKeyCode();
@@ -386,6 +378,10 @@ public class AssignmentListItemWidget extends Composite implements HasModel<Assi
         if (con != null && !con.isEmpty()) {
             addValueToListBoxValues(processVar, con, "", true);
         }
+    }
+
+    public void setDisallowedNames(Set<String> disallowedNames, String disallowedNameErrorMessage) {
+        name.setInvalidValues(disallowedNames, false, disallowedNameErrorMessage);
     }
 
     @EventHandler("deleteButton")

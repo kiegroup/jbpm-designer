@@ -17,7 +17,9 @@
 package org.jbpm.designer.client.popup;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
@@ -295,6 +297,16 @@ public class ActivityDataIOEditor extends BaseModal {
         dataTypeListBoxValues.addValues(displayDataTypes);
         inputAssignmentsWidget.setDataTypes(dataTypeListBoxValues);
         outputAssignmentsWidget.setDataTypes(dataTypeListBoxValues);
+    }
+
+    public void setDisallowedPropertyNames(List<String> disallowedPropertyNames) {
+        Set<String> propertyNames = new HashSet<String>();
+        if (disallowedPropertyNames != null) {
+            for (String name : disallowedPropertyNames) {
+                propertyNames.add(name.toLowerCase());
+            }
+        }
+        inputAssignmentsWidget.setDisallowedNames(propertyNames, DesignerEditorConstants.INSTANCE.This_input_should_be_entered_as_a_property_for_the_task());
     }
 
     public void setProcessVariables(List<String> processVariables) {
