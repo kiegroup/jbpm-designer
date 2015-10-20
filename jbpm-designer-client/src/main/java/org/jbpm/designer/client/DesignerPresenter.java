@@ -286,7 +286,6 @@ public class DesignerPresenter
 
     public void showDataIOEditor(final String taskName, final String datainput, final String datainputset, final String dataoutput,
             final String dataoutputset, final String processvars, final String assignments, final String datatypes, final JavaScriptObject jscallback) {
-        //Window.alert("DesignerPresenter.showDataIOEditor param assignmentdata = " + assignmentData);
 
         //getDataIOEditorData("{ \"a\":\"hello\" }", jscallback);
         final DesignerPresenter dp = this;
@@ -540,7 +539,8 @@ public class DesignerPresenter
                 if ( processSources != null && processSources.length() > 0 ) {
                     publishProcessSourcesInfo( editorParameters.get( "processsource" ) );
                 }
-                editorParameters.remove( "processsource" );
+                editorParameters.remove("processsource");
+                editorParameters.put("instanceviewmode", "true");
             }
 
             if ( editorParameters.containsKey( "activenodes" ) ) {

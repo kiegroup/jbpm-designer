@@ -230,6 +230,7 @@ public class EditorHandler extends HttpServlet {
         String readOnly = request.getParameter("readonly");
         String viewLocked = request.getParameter("viewlocked");
         String sessionId = request.getParameter( "sessionId" );
+        String instanceViewMode = request.getParameter("instanceviewmode");
 
         if(viewLocked == null || viewLocked.length() < 1) {
             viewLocked = "false";
@@ -315,7 +316,8 @@ public class EditorHandler extends HttpServlet {
         editorTemplate.add("editorprofile", profileName);
         editorTemplate.add("editoruuid", uuid);
         editorTemplate.add("editorid", editorID);
-        editorTemplate.add( "sessionid", sessionId);
+        editorTemplate.add("sessionid", sessionId);
+        editorTemplate.add("instanceviewmode", instanceViewMode != null ? "true" : "false");
         //editorTemplate.add("activenodes", activeNodes);
         //editorTemplate.add("completednodes", completedNodes);
         //editorTemplate.add("processsource", encodedProcessSource);

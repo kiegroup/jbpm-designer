@@ -87,6 +87,7 @@ public class DesignerPopUpPresenter extends Composite implements RequiresResize 
                                         publishProcessSourcesInfo( editorParameters.get( "processsource" ) );
                                     }
                                     editorParameters.remove( "processsource" );
+                                    editorParameters.put("instanceviewmode", "true");
                                 }
 
                                 if ( editorParameters.containsKey( "activenodes" ) ) {
