@@ -15,55 +15,18 @@
  */
 package org.jbpm.designer.test.bpmn2;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
-
-import java.io.File;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Collections;
-import java.util.List;
-
-import org.eclipse.bpmn2.Association;
-import org.eclipse.bpmn2.AssociationDirection;
-import org.eclipse.bpmn2.CancelEventDefinition;
-import org.eclipse.bpmn2.CatchEvent;
-import org.eclipse.bpmn2.CompensateEventDefinition;
-import org.eclipse.bpmn2.ConditionalEventDefinition;
-import org.eclipse.bpmn2.DataObject;
-import org.eclipse.bpmn2.DataStore;
-import org.eclipse.bpmn2.Definitions;
-import org.eclipse.bpmn2.DocumentRoot;
-import org.eclipse.bpmn2.EndEvent;
-import org.eclipse.bpmn2.ErrorEventDefinition;
-import org.eclipse.bpmn2.EscalationEventDefinition;
-import org.eclipse.bpmn2.EventBasedGateway;
-import org.eclipse.bpmn2.ExclusiveGateway;
-import org.eclipse.bpmn2.GlobalBusinessRuleTask;
-import org.eclipse.bpmn2.GlobalManualTask;
-import org.eclipse.bpmn2.GlobalScriptTask;
-import org.eclipse.bpmn2.GlobalTask;
-import org.eclipse.bpmn2.GlobalUserTask;
-import org.eclipse.bpmn2.Group;
-import org.eclipse.bpmn2.InclusiveGateway;
-import org.eclipse.bpmn2.Lane;
-import org.eclipse.bpmn2.LinkEventDefinition;
-import org.eclipse.bpmn2.Message;
-import org.eclipse.bpmn2.MessageEventDefinition;
-import org.eclipse.bpmn2.ParallelGateway;
+import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.Process;
-import org.eclipse.bpmn2.ProcessType;
-import org.eclipse.bpmn2.RootElement;
-import org.eclipse.bpmn2.SequenceFlow;
-import org.eclipse.bpmn2.SignalEventDefinition;
-import org.eclipse.bpmn2.StartEvent;
-import org.eclipse.bpmn2.Task;
-import org.eclipse.bpmn2.TerminateEventDefinition;
-import org.eclipse.bpmn2.TextAnnotation;
-import org.eclipse.bpmn2.ThrowEvent;
-import org.eclipse.bpmn2.TimerEventDefinition;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.jbpm.designer.bpmn2.impl.Bpmn2JsonUnmarshaller;
 import org.junit.Test;
+
+import java.io.File;
+import java.net.URL;
+import java.util.Collections;
+
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 
 /**
  * @author Antoine Toulme
@@ -81,7 +44,7 @@ public class Bpmn2UnmarshallingTestCase {
     public void testSimpleDefinitionsUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("empty.json"), "").getContents().get(0));
-        assertEquals("<![CDATA[my doc]]>", definitions.getDocumentation().iterator().next().getText());
+        assertEquals("<![CDATA[my doc]]>", definitions.getRootElements().get(0).getDocumentation().iterator().next().getText());
         assertEquals("http://www.w3.org/1999/XPath", definitions.getExpressionLanguage());
         assertEquals("http://www.omg.org/bpmn20", definitions.getTargetNamespace());
         assertEquals("http://www.w3.org/2001/XMLSchema", definitions.getTypeLanguage());
@@ -370,8 +333,8 @@ public class Bpmn2UnmarshallingTestCase {
         Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("textAnnotation.json"), "").getContents().get(0));
         assertTrue(definitions.getRootElements().size() == 1);
         Process process = getRootProcess(definitions);
-        assertTrue(process.getArtifacts().iterator().next() instanceof TextAnnotation);
-        TextAnnotation ta = (TextAnnotation) process.getArtifacts().iterator().next();
+        assertTrue(process.getFlowElements().iterator().next() instanceof TextAnnotation);
+        TextAnnotation ta = (TextAnnotation) process.getFlowElements().iterator().next();
         assertEquals("text annotation", ta.getText());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
@@ -724,8 +687,8 @@ public class Bpmn2UnmarshallingTestCase {
         Process process = getRootProcess(definitions);
         Task g = (Task) process.getFlowElements().get(0);
         assertEquals("task", g.getName());
-        TextAnnotation textA = (TextAnnotation) process.getArtifacts().get(0);
-        Association association = (Association) process.getArtifacts().get(1);
+        TextAnnotation textA = (TextAnnotation) process.getFlowElements().get(1);
+        Association association = (Association) process.getArtifacts().get(0);
         assertEquals(g, association.getSourceRef());
         assertEquals(textA, association.getTargetRef());
         assertEquals(AssociationDirection.NONE, association.getAssociationDirection());
@@ -739,8 +702,8 @@ public class Bpmn2UnmarshallingTestCase {
         Process process = getRootProcess(definitions);
         Task g = (Task) process.getFlowElements().get(0);
         assertEquals("task", g.getName());
-        TextAnnotation textA = (TextAnnotation) process.getArtifacts().get(0);
-        Association association = (Association) process.getArtifacts().get(1);
+        TextAnnotation textA = (TextAnnotation) process.getFlowElements().get(1);
+        Association association = (Association) process.getArtifacts().get(0);
         assertEquals(g, association.getSourceRef());
         assertEquals(textA, association.getTargetRef());
         assertEquals(AssociationDirection.ONE, association.getAssociationDirection());
@@ -754,14 +717,270 @@ public class Bpmn2UnmarshallingTestCase {
         Process process = getRootProcess(definitions);
         Task g = (Task) process.getFlowElements().get(0);
         assertEquals("task", g.getName());
-        TextAnnotation textA = (TextAnnotation) process.getArtifacts().get(0);
-        Association association = (Association) process.getArtifacts().get(1);
+        TextAnnotation textA = (TextAnnotation) process.getFlowElements().get(1);
+        Association association = (Association) process.getArtifacts().get(0);
         assertEquals(g, association.getSourceRef());
         assertEquals(textA, association.getTargetRef());
         assertEquals(AssociationDirection.BOTH, association.getAssociationDirection());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
+    @Test
+    public void testColoredElementUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("coloredProcess.json"), "").getContents().get(0));
+        Process process = getRootProcess(definitions);
+        StartEvent start = (StartEvent) process.getFlowElements().get(0);
+
+        assertEquals("colored_start", start.getName());
+        assertEquals("background-color", start.getAnyAttribute().get(1).getEStructuralFeature().getName());
+        assertEquals("#000000", start.getAnyAttribute().get(1).getValue());
+
+        assertEquals("border-color", start.getAnyAttribute().get(2).getEStructuralFeature().getName());
+        assertEquals("#FFFFFF", start.getAnyAttribute().get(2).getValue());
+
+        assertEquals("color", start.getAnyAttribute().get(3).getEStructuralFeature().getName());
+        assertEquals("#FF0000", start.getAnyAttribute().get(3).getValue());
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+
+    @Test
+    public void testAdHocProcessUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("adHocProcess.json"), "").getContents().get(0));
+        Process process = getRootProcess(definitions);
+
+        assertEquals("adHoc", process.getAnyAttribute().get(0).getEStructuralFeature().getName());
+        assertEquals("true", process.getAnyAttribute().get(0).getValue());
+
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+
+    @Test
+    public void testProcessAttributesUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("complexSubprocess.json"), "").getContents().get(0));
+        Process process = getRootProcess(definitions);
+        assertEquals("1.0", process.getAnyAttribute().getValue(1));      //version
+        assertEquals("org.jbpm", process.getAnyAttribute().getValue(0)); //package
+        assertEquals("<![CDATA[doc for process]]>", process.getDocumentation().get(0).getText()); //documentation
+        assertTrue(process.getExtensionValues().get(0).getValue().get(0).toString().contains("com.sample.MyClass"));
+        assertTrue(process.isIsExecutable());
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+
+    @Test
+    public void testNamedSubProcessUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("complexSubprocess.json"), "").getContents().get(0));
+        Process process = getRootProcess(definitions);
+        SubProcess subProcess = (SubProcess) process.getFlowElements().get(1);
+        assertEquals("NamedSubProcess", subProcess.getName());
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+
+    @Test
+    public void testEntryExitActionsSubProcessUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("complexSubprocess.json"), "").getContents().get(0));
+        Process process = getRootProcess(definitions);
+        SubProcess subProcess = (SubProcess) process.getFlowElements().get(1);
+
+        assertTrue(subProcess.getExtensionValues().get(0).getValue().get(1).toString().contains("onEntryScript"));
+        assertTrue(subProcess.getExtensionValues().get(0).getValue().get(1).toString().contains("System.out.println(\"subprocess entry point\")"));
+
+        assertTrue(subProcess.getExtensionValues().get(0).getValue().get(2).toString().contains("onExitScript"));
+        assertTrue(subProcess.getExtensionValues().get(0).getValue().get(2).toString().contains("System.out.println(\"subprocess exit point\")"));
+
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+
+    @Test
+    public void testAssignmentsUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("inputOutput.json"), "").getContents().get(0));
+        Process process = getRootProcess(definitions);
+        UserTask task = (UserTask) process.getFlowElements().get(1);
+
+        assertTrue(task.getDataInputAssociations().get(0).getSourceRef().get(0).getId().contains("variableA"));
+        assertTrue(task.getDataInputAssociations().get(0).getTargetRef().getItemSubjectRef().getId().contains("innerA"));
+
+        assertTrue(task.getDataInputAssociations().get(1).getAssignment().get(0).getFrom().toString().contains("constantA"));
+        assertTrue(task.getDataInputAssociations().get(1).getTargetRef().getId().contains("innerConstant"));
+
+        assertTrue(task.getDataOutputAssociations().get(0).getTargetRef().getId().contains("variableB"));
+        assertTrue(task.getDataOutputAssociations().get(0).getSourceRef().get(0).getId().contains("innerB"));
+
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+
+    @Test
+    public void testRuleFlowGroupUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("ruleFlowGroup.json"), "").getContents().get(0));
+        Process process = getRootProcess(definitions);
+        BusinessRuleTask task = (BusinessRuleTask) process.getFlowElements().get(1);
+
+        assertEquals("ruleFlowGroup", task.getAnyAttribute().get(1).getEStructuralFeature().getName());
+        assertEquals("rfGroup", task.getAnyAttribute().get(1).getValue());
+
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+
+    @Test
+    public void testServiceTaskUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("serviceTaskJava.json"), "").getContents().get(0));
+        Process process = getRootProcess(definitions);
+        ServiceTask task = (ServiceTask) process.getFlowElements().get(1);
+
+        assertEquals("serviceimplementation", task.getAnyAttribute().get(1).getEStructuralFeature().getName());
+        assertEquals("Java", task.getAnyAttribute().get(1).getValue());
+
+        assertEquals("serviceoperation", task.getAnyAttribute().get(2).getEStructuralFeature().getName());
+        assertEquals("equals", task.getAnyAttribute().get(2).getValue());
+
+        assertEquals("serviceinterface", task.getAnyAttribute().get(3).getEStructuralFeature().getName());
+        assertEquals("java.lang.String", task.getAnyAttribute().get(3).getValue());
+
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+
+    @Test
+    public void testSendTaskUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("sendTask.json"), "").getContents().get(0));
+        Process process = getRootProcess(definitions);
+        SendTask task = (SendTask) process.getFlowElements().get(1);
+
+        assertEquals("customMsg", task.getMessageRef().getId());
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+
+    @Test
+    public void testCallActivityUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("callActivity.json"), "").getContents().get(0));
+        Process process = getRootProcess(definitions);
+        CallActivity activity = (CallActivity) process.getFlowElements().get(1);
+
+        assertEquals("activity", activity.getName());
+
+        assertEquals("independent", activity.getAnyAttribute().get(1).getEStructuralFeature().getName());
+        assertEquals("true", activity.getAnyAttribute().get(1).getValue());
+
+        assertEquals("waitForCompletion", activity.getAnyAttribute().get(2).getEStructuralFeature().getName());
+        assertEquals("true", activity.getAnyAttribute().get(2).getValue());
+
+        assertEquals("variableXYZ", activity.getDataInputAssociations().get(0).getSourceRef().get(0).getId());
+        assertTrue(activity.getDataInputAssociations().get(0).getTargetRef().getId().contains("innerInput"));
+
+        assertTrue(activity.getDataOutputAssociations().get(0).getTargetRef().getId().contains("variableXYZ"));
+        assertTrue(activity.getDataOutputAssociations().get(0).getSourceRef().get(0).getId().contains("innerOut"));
+
+        assertTrue(activity.getExtensionValues().get(0).getValue().get(1).toString().contains("onEntryScript"));
+        assertTrue(activity.getExtensionValues().get(0).getValue().get(1).toString().contains("System.out.println(\"entry\")"));
+
+        assertTrue(activity.getExtensionValues().get(0).getValue().get(2).toString().contains("onExitScript"));
+        assertTrue(activity.getExtensionValues().get(0).getValue().get(2).toString().contains("System.out.println(\"exit\")"));
+
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+
+    @Test
+    public void testComplexUserTaskUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("userTaskAsync.json"), "").getContents().get(0));
+        Process process = getRootProcess(definitions);
+        UserTask task = (UserTask) process.getFlowElements().get(1);
+
+        assertTrue(task.getExtensionValues().get(0).getValue().get(0).toString().contains("customAsync"));
+        assertTrue(task.getExtensionValues().get(0).getValue().get(0).toString().contains("<![CDATA[true]]>"));
+
+        assertTrue(task.getExtensionValues().get(0).getValue().get(1).toString().contains("onEntryScript"));
+        assertTrue(task.getExtensionValues().get(0).getValue().get(1).toString().contains("System.out.println(\"entry\")"));
+
+        assertTrue(task.getExtensionValues().get(0).getValue().get(2).toString().contains("onExitScript"));
+        assertTrue(task.getExtensionValues().get(0).getValue().get(2).toString().contains("System.out.println(\"exit\")"));
+
+        assertTrue(task.getDataInputAssociations().get(0).getTargetRef().getId().contains("TaskName"));
+        assertTrue(task.getDataInputAssociations().get(0).getAssignment().get(0).getFrom().toString().contains("johnTask"));
+
+        assertTrue(task.getDataInputAssociations().get(2).getTargetRef().getId().contains("GroupId"));
+        assertTrue(task.getDataInputAssociations().get(2).getAssignment().get(0).getFrom().toString().contains("default"));
+
+        assertTrue(task.getDataInputAssociations().get(1).getSourceRef().get(0).getId().contains("xyz"));
+        assertTrue(task.getDataInputAssociations().get(1).getTargetRef().getId().contains("utInput"));
+
+        assertTrue(task.getDataOutputAssociations().get(0).getTargetRef().getId().contains("xyz"));
+        assertTrue(task.getDataOutputAssociations().get(0).getSourceRef().get(0).getId().contains("utOutput"));
+
+        assertEquals("john", task.getResources().get(0).getName());
+
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+
+    @Test
+    public void testDefaultgateUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("exclusiveGateway.json"), "").getContents().get(0));
+        Process process = getRootProcess(definitions);
+        ExclusiveGateway gateway = (ExclusiveGateway) process.getFlowElements().get(1);
+
+        assertEquals("xorGateway", gateway.getName());
+        assertEquals("_DEA1AF88-4DF7-4BFE-8C10-7AC33A28DAD0", gateway.getDefault().getId());
+
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+
+    @Test
+    public void testErrorReferenceUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("errorReference.json"), "").getContents().get(0));
+        Process process = getRootProcess(definitions);
+        ErrorEventDefinition error = (ErrorEventDefinition) ((EndEvent) process.getFlowElements().get(2)).getEventDefinitions().get(0);
+
+        assertEquals("java.lang.RuntimeException", error.getErrorRef().getErrorCode());
+
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+
+    @Test
+    public void testEscalationReferenceUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("escalationReference.json"), "").getContents().get(0));
+        Process process = getRootProcess(definitions);
+        EscalationEventDefinition esc = (EscalationEventDefinition) ((EndEvent) process.getFlowElements().get(2)).getEventDefinitions().get(0);
+
+        assertEquals("customEscalation", esc.getEscalationRef().getEscalationCode());
+
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+
+    @Test
+    public void testMessageReferenceUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("messageReference.json"), "").getContents().get(0));
+        Process process = getRootProcess(definitions);
+        MessageEventDefinition msg = (MessageEventDefinition) ((EndEvent) process.getFlowElements().get(2)).getEventDefinitions().get(0);
+
+        assertEquals("helloMsg", msg.getMessageRef().getId());
+
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+
+    @Test
+    public void testCompensationReferenceUnmarshalling() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("compensationReference.json"), "").getContents().get(0));
+        Process process = getRootProcess(definitions);
+        CompensateEventDefinition comp = (CompensateEventDefinition) ((EndEvent) process.getFlowElements().get(8)).getEventDefinitions().get(0);
+
+        assertEquals("task", comp.getActivityRef().getName());
+
+        definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+
     /* Disabling test as no support for child lanes yet
     @Test
     public void testDoubleLaneUnmarshalling() throws Exception {
