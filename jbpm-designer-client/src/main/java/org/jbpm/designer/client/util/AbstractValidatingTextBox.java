@@ -17,27 +17,24 @@ package org.jbpm.designer.client.util;
 
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import com.github.gwtbootstrap.client.ui.TextBox;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.uberfire.workbench.events.NotificationEvent;
 
-public class ValidatingTextBox extends TextBox {
-
-    Set<String> invalidValues;
-    boolean isCaseSensitive = false;
-    String invalidValueErrorMessage;
+public abstract class AbstractValidatingTextBox extends TextBox {
 
     @Inject
     private Event<NotificationEvent> notification;
 
-    public ValidatingTextBox() {
+    public AbstractValidatingTextBox() {
         super();
         setup();
     }
@@ -45,71 +42,65 @@ public class ValidatingTextBox extends TextBox {
     protected void setup() {
         final TextBox me = this;
 
+        //Validate value as it is entered
+        this.addKeyPressHandler( new KeyPressHandler() {
+
+            public void onKeyPress( KeyPressEvent event ) {
+
+                // Permit navigation
+                int keyCode = event.getNativeEvent().getKeyCode();
+                if (event.isControlKeyDown()) {
+                    return;
+                }
+                if (!event.isShiftKeyDown()) {
+                    if (keyCode == KeyCodes.KEY_BACKSPACE
+                            || keyCode == KeyCodes.KEY_DELETE
+                            || keyCode == KeyCodes.KEY_LEFT
+                            || keyCode == KeyCodes.KEY_RIGHT
+                            || keyCode == KeyCodes.KEY_TAB
+                            || keyCode == KeyCodes.KEY_HOME
+                            || keyCode == KeyCodes.KEY_END ) {
+                        return;
+                    }
+                }
+
+                // Get new value and validate
+                int charCode = event.getCharCode();
+                String oldValue = me.getValue();
+                String newValue = oldValue.substring(0, me.getCursorPos());
+                newValue = newValue + ((char) charCode);
+                newValue = newValue + oldValue.substring(me.getCursorPos() + me.getSelectionLength());
+                if (isValidValue(newValue, false) != null ) {
+                    event.preventDefault();
+                }
+            }
+        } );
+
         //Add validation when loses focus (for when values are pasted in by user)
         this.addBlurHandler(new BlurHandler() {
 
             @Override
             public void onBlur(BlurEvent event) {
                 String value = me.getText();
-                String validValue = "";
-                if (value != null) {
-                    validValue = value.trim();
-                }
-                String validationError = isValidValue(validValue);
+                String validationError = isValidValue(value, true);
                 if (validationError != null) {
                     notification.fire(new NotificationEvent(validationError, NotificationEvent.NotificationType.ERROR));
-                    validValue = makeValidValue(value);
+                    String validValue = makeValidValue(value);
                     me.setValue(validValue);
+                    ValueChangeEvent.fire(AbstractValidatingTextBox.this, validValue);
                  }
-                else if (! validValue.equals(value)){
-                    me.setValue(validValue);
-                }
             }
-
         });
-    }
-
-    /**
-     * Sets the invalid values for the TextBox
-     *
-     * @param invalidValues
-     * @param isCaseSensitive
-     * @param invalidValueErrorMessage
-     */
-    public void setInvalidValues(Set<String> invalidValues, boolean isCaseSensitive, String invalidValueErrorMessage) {
-        if (isCaseSensitive) {
-            this.invalidValues = invalidValues;
-        }
-        else {
-            this.invalidValues = new HashSet<String>();
-            for (String value : invalidValues) {
-                this.invalidValues.add(value.toLowerCase());
-            }
-        }
-        this.isCaseSensitive = isCaseSensitive;
-        this.invalidValueErrorMessage = invalidValueErrorMessage;
     }
 
     /**
      * Tests whether a value is valid
      *
      * @param value
+     * @param isOnFocusLost
      * @return an error message to be reported
      */
-    public String isValidValue(String value) {
-        if (value == null || value.isEmpty()) {
-            return null;
-        }
-        if (!isCaseSensitive) {
-            value = value.toLowerCase();
-        }
-        if (invalidValues != null && invalidValues.contains(value)) {
-            return invalidValueErrorMessage;
-        }
-        else {
-            return null;
-        }
-    }
+    public abstract String isValidValue(final String value, final boolean isOnFocusLost);
 
     /**
      * If validation fails (e.g. as a result of a user pasting a value) when the
@@ -118,8 +109,6 @@ public class ValidatingTextBox extends TextBox {
      * @param value Current value
      * @return A valid value
      */
-    protected String makeValidValue(String value) {
-        return "";
-    }
+    protected abstract String makeValidValue(final String value);
 
 }
