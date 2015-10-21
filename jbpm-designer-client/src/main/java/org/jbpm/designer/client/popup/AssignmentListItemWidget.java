@@ -51,7 +51,7 @@ import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.jbpm.designer.client.shared.AssignmentData;
 import org.jbpm.designer.client.shared.AssignmentRow;
 import org.jbpm.designer.client.shared.Variable.VariableType;
-import org.jbpm.designer.client.util.ValidatingTextBox;
+import org.jbpm.designer.client.util.DataIOEditorNameTextBox;
 
 /**
  * A templated widget that will be used to display a row in a table of
@@ -78,7 +78,7 @@ public class AssignmentListItemWidget extends Composite implements HasModel<Assi
     @Inject
     @Bound
     @DataField
-    private ValidatingTextBox name;
+    private DataIOEditorNameTextBox name;
 
     @DataField
     private ValueListBox<String> dataType = new ValueListBox<String>(new Renderer<String>() {
@@ -321,14 +321,7 @@ public class AssignmentListItemWidget extends Composite implements HasModel<Assi
         // Configure processVar and constant controls
         initEditableListBox(processVar, constant, true, CONSTANT_PROMPT, ENTER_CONSTANT_PROMPT);
 
-        name.addKeyDownHandler(new KeyDownHandler() {
-            @Override public void onKeyDown(KeyDownEvent event) {
-                int iChar = event.getNativeKeyCode();
-                if (iChar == ' ') {
-                    event.preventDefault();
-                }
-            }
-        });
+        name.setRegExp("^[a-zA-Z0-9\\-\\.\\_]*$", DesignerEditorConstants.INSTANCE.Removed_invalid_characters_in_name());
 
         customDataType.addKeyDownHandler(new KeyDownHandler() {
             @Override public void onKeyDown(KeyDownEvent event) {
