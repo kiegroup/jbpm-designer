@@ -883,16 +883,18 @@ ORYX.Plugins.PropertyWindow = {
                                     var csobj = childshapes[i];
                                     if(csobj.resourceId == shapeid) {
                                         var datainputs = csobj.properties.datainputset;
-                                        var datainParts = datainputs.split(",");
-                                        for(var j=0; j < datainParts.length; j++) {
-                                            var nextPart = datainParts[j];
-                                            if(nextPart.indexOf(":") > 0) {
-                                                var innerParts = nextPart.split(":");
-                                                options.push(["", innerParts[0], innerParts[0]]);
-                                            } else {
-                                                options.push(["", nextPart, nextPart]);
-                                            }
-                                        }
+										if(datainputs !== undefined) {
+											var datainParts = datainputs.split(",");
+											for(var j=0; j < datainParts.length; j++) {
+												var nextPart = datainParts[j];
+												if(nextPart.indexOf(":") > 0) {
+													var innerParts = nextPart.split(":");
+													options.push(["", innerParts[0], innerParts[0]]);
+												} else {
+													options.push(["", nextPart, nextPart]);
+												}
+											}
+										}
                                     }
                                 }
                             }
@@ -939,18 +941,20 @@ ORYX.Plugins.PropertyWindow = {
                                     var csobj = childshapes[i];
                                     if(csobj.resourceId == shapeid) {
                                         var dataoutputs = csobj.properties.dataoutputset;
-                                        var dataoutParts = dataoutputs.split(",");
-                                        for(var k=0; k < dataoutParts.length; k++) {
-                                            var nextPart = dataoutParts[k];
-                                            if(nextPart.indexOf(":") > 0) {
-                                                var innerParts = nextPart.split(":");
-                                                options.push(["", innerParts[0], innerParts[0]]);
-                                            } else {
-												if(nextPart.length > 0) {
-													options.push(["", nextPart, nextPart]);
+										if(dataoutputs !== undefined) {
+											var dataoutParts = dataoutputs.split(",");
+											for(var k=0; k < dataoutParts.length; k++) {
+												var nextPart = dataoutParts[k];
+												if(nextPart.indexOf(":") > 0) {
+													var innerParts = nextPart.split(":");
+													options.push(["", innerParts[0], innerParts[0]]);
+												} else {
+													if(nextPart.length > 0) {
+														options.push(["", nextPart, nextPart]);
+													}
 												}
-                                            }
-                                        }
+											}
+										}
                                     }
                                 }
                             }
