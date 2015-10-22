@@ -1448,7 +1448,11 @@ ORYX.Core.Command.Move = ORYX.Core.Command.extend({
 						this.newParents[i] = parent || value.parent;
 					} else {
 						if(parent && parent instanceof ORYX.Core.Canvas) {
-							this.newParents[i] = parent;
+							if(value.parent == parent) {
+								this.newParents[i] = parent;
+							} else {
+								this.newParents[i] = value.parent;
+							}
 						} else {
 							this.newParents[i] = value.parent;
 						}
