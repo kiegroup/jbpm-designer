@@ -605,7 +605,7 @@ public class Bpmn2JsonMarshaller {
                         if(associationValue == null) {
                             associationValue = "";
                         }
-                        String replacer = associationValue.replaceAll(",", "##");
+                        String replacer = encodeAssociationValue(associationValue);
                         associationBuff.append("[din]" + rhsAssociation).append("=").append(replacer);
                         associationBuff.append(",");
                     }
@@ -1361,7 +1361,7 @@ public class Bpmn2JsonMarshaller {
             		if(associationValue == null) {
             			associationValue = "";
             		}
-            		String replacer = associationValue.replaceAll(",", "##");
+            		String replacer = encodeAssociationValue(associationValue);
             		associationBuff.append(rhsAssociation).append("=").append(replacer);
                 	associationBuff.append(",");
             	}
@@ -1396,7 +1396,7 @@ public class Bpmn2JsonMarshaller {
 //                }
 
                 if(dataout.getTransformation() != null && dataout.getTransformation().getBody() != null) {
-                	rhsAssociation = dataout.getTransformation().getBody().replaceAll("=", "||");
+                	rhsAssociation = encodeAssociationValue(dataout.getTransformation().getBody());
                 }
 
                 if(!wasBiDirectional) {
@@ -1939,7 +1939,7 @@ public class Bpmn2JsonMarshaller {
                         // don't include properties that have their independent input editors
                         if(isCustomElement((String) properties.get("taskname"), preProcessingData)) {
                             if(!(rhsAssociation.equals("TaskName"))) {
-                                String replacer = associationValue.replaceAll(",", "##");
+                                String replacer = encodeAssociationValue(associationValue);
                                 associationBuff.append("[din]" + rhsAssociation).append("=").append(replacer);
                                 associationBuff.append(",");
 
@@ -1960,7 +1960,7 @@ public class Bpmn2JsonMarshaller {
                                     rhsAssociation.equals("NotCompletedNotify") ||
                                     rhsAssociation.equals("NotStartedNotify")
                             )) {
-                                String replacer = associationValue.replaceAll(",", "##");
+                                String replacer = encodeAssociationValue(associationValue);
                                 associationBuff.append("[din]" + rhsAssociation).append("=").append(replacer);
                                 associationBuff.append(",");
 
@@ -2108,7 +2108,7 @@ public class Bpmn2JsonMarshaller {
     //                }
 
                     if(dataout.getTransformation() != null && dataout.getTransformation().getBody() != null) {
-                        rhsAssociation = dataout.getTransformation().getBody().replaceAll("=", "||");
+                        rhsAssociation = encodeAssociationValue(dataout.getTransformation().getBody());
                     }
 
                     if(!wasBiDirectional) {
@@ -2720,7 +2720,7 @@ public class Bpmn2JsonMarshaller {
             		if(associationValue == null) {
             			associationValue = "";
             		}
-            		String replacer = associationValue.replaceAll(",", "##");
+            		String replacer = encodeAssociationValue(associationValue);
             		associationBuff.append("[din]" + rhsAssociation).append("=").append(replacer);
                 	associationBuff.append(",");
             	}
@@ -2755,7 +2755,7 @@ public class Bpmn2JsonMarshaller {
 //                }
 
                 if(dataout.getTransformation() != null && dataout.getTransformation().getBody() != null) {
-                	rhsAssociation = dataout.getTransformation().getBody().replaceAll("=", "||");
+                	rhsAssociation = encodeAssociationValue(dataout.getTransformation().getBody());
                 }
 
                 if(!wasBiDirectional) {
@@ -3600,5 +3600,12 @@ public class Bpmn2JsonMarshaller {
             }
         }
         return null;
+    }
+
+    private String encodeAssociationValue(String s) {
+        if (s == null || s.isEmpty()) {
+            return s;
+        }
+        return s.replaceAll("=", "||").replaceAll(",", "##");
     }
 }

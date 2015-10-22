@@ -3863,8 +3863,7 @@ public class Bpmn2JsonUnmarshaller {
                     Assignment a = Bpmn2Factory.eINSTANCE.createAssignment();
                     FormalExpression fromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
                     if(assignmentParts.length > 1) {
-                    	String replacer = assignmentParts[1].replaceAll("##", ",");
-                        replacer = replacer.replaceAll("\\|\\|", "=");
+                    	String replacer = decodeAssociationValue(assignmentParts[1]);
                         fromExpression.setBody(wrapInCDATABlock(replacer));
                     } else {
                         fromExpression.setBody("");
@@ -4746,8 +4745,7 @@ public class Bpmn2JsonUnmarshaller {
                     Assignment a = Bpmn2Factory.eINSTANCE.createAssignment();
                     FormalExpression fromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
                     if(assignmentParts.length > 1) {
-                        String replacer = assignmentParts[1].replaceAll("##", ",");
-                        replacer = replacer.replaceAll("\\|\\|", "=");
+                        String replacer = decodeAssociationValue(assignmentParts[1]);
                         fromExpression.setBody(wrapInCDATABlock(replacer));
                     } else {
                         fromExpression.setBody("");
@@ -5470,8 +5468,7 @@ public class Bpmn2JsonUnmarshaller {
                     Assignment a = Bpmn2Factory.eINSTANCE.createAssignment();
                     FormalExpression fromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
                     if(assignmentParts.length > 1) {
-                    	String replacer = assignmentParts[1].replaceAll("##", ",");
-                        replacer = replacer.replaceAll("\\|\\|", "=");
+                    	String replacer = decodeAssociationValue(assignmentParts[1]);
                         fromExpression.setBody(wrapInCDATABlock(replacer));
                     } else {
                         fromExpression.setBody("");
@@ -5918,8 +5915,7 @@ public class Bpmn2JsonUnmarshaller {
                     Assignment a = Bpmn2Factory.eINSTANCE.createAssignment();
                     FormalExpression fromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
                     if(assignmentParts.length > 1) {
-                    	String replacer = assignmentParts[1].replaceAll("##", ",");
-                        replacer = replacer.replaceAll("\\|\\|", "=");
+                    	String replacer = decodeAssociationValue(assignmentParts[1]);
                         fromExpression.setBody(wrapInCDATABlock(replacer));
                     } else {
                         // for custom workitem properties check individually for values
@@ -7312,6 +7308,13 @@ public class Bpmn2JsonUnmarshaller {
             }
         }
         return result.toString();
+    }
+
+    private String decodeAssociationValue(String s) {
+        if (s == null || s.isEmpty()) {
+            return s;
+        }
+        return s.replaceAll("\\|\\|", "=").replaceAll("##", ",");
     }
 
 }
