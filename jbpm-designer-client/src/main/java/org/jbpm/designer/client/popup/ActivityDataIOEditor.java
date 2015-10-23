@@ -193,9 +193,11 @@ public class ActivityDataIOEditor extends BaseModal {
         setTitle(DesignerEditorConstants.INSTANCE.Data_IO());
 
         inputAssignmentsWidget.setVariableType(VariableType.INPUT);
+        inputAssignmentsWidget.setAllowDuplicateNames(false, DesignerEditorConstants.INSTANCE.A_Data_Input_with_this_name_already_exists());
         this.add(inputAssignmentsWidget);
 
         outputAssignmentsWidget.setVariableType(VariableType.OUTPUT);
+        outputAssignmentsWidget.setAllowDuplicateNames(true, "");
         this.add(outputAssignmentsWidget);
 
         btnSave = new Button(DesignerEditorConstants.INSTANCE.Save());

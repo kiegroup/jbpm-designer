@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import com.github.gwtbootstrap.client.ui.Button;
@@ -52,6 +53,7 @@ import org.jbpm.designer.client.shared.AssignmentData;
 import org.jbpm.designer.client.shared.AssignmentRow;
 import org.jbpm.designer.client.shared.Variable.VariableType;
 import org.jbpm.designer.client.util.DataIOEditorNameTextBox;
+import org.uberfire.workbench.events.NotificationEvent;
 
 /**
  * A templated widget that will be used to display a row in a table of
@@ -79,6 +81,9 @@ public class AssignmentListItemWidget extends Composite implements HasModel<Assi
     @Bound
     @DataField
     private DataIOEditorNameTextBox name;
+
+    private boolean allowDuplicateNames = true;
+    private String duplicateNameErrorMessage = "";
 
     @DataField
     private ValueListBox<String> dataType = new ValueListBox<String>(new Renderer<String>() {
@@ -114,6 +119,8 @@ public class AssignmentListItemWidget extends Composite implements HasModel<Assi
         }
     });
 
+    @Inject
+    private Event<NotificationEvent> notification;
 
     Map<ValueListBox<String>, ListBoxValues> mapListBoxToListBoxValues = new HashMap<ValueListBox<String>, ListBoxValues>();
     Map<ValueListBox<String>, Boolean> mapListBoxToShowCustomValues = new HashMap<ValueListBox<String>, Boolean>();
@@ -321,7 +328,7 @@ public class AssignmentListItemWidget extends Composite implements HasModel<Assi
         // Configure processVar and constant controls
         initEditableListBox(processVar, constant, true, CONSTANT_PROMPT, ENTER_CONSTANT_PROMPT);
 
-        name.setRegExp("^[a-zA-Z0-9\\-\\.\\_]*$", DesignerEditorConstants.INSTANCE.Removed_invalid_characters_in_name());
+        name.setRegExp("^[a-zA-Z0-9\\-\\.\\_]*$", DesignerEditorConstants.INSTANCE.Removed_invalid_characters_from_name());
 
         customDataType.addKeyDownHandler(new KeyDownHandler() {
             @Override public void onKeyDown(KeyDownEvent event) {
@@ -331,6 +338,21 @@ public class AssignmentListItemWidget extends Composite implements HasModel<Assi
                 }
             }
         });
+
+        name.addBlurHandler(new BlurHandler() {
+            @Override
+            public void onBlur(BlurEvent event) {
+                if (!allowDuplicateNames) {
+                    String value = name.getText();
+                    if (isDuplicateName(value)) {
+                        notification.fire(new NotificationEvent(duplicateNameErrorMessage, NotificationEvent.NotificationType.ERROR));
+                        name.setValue("");
+                        ValueChangeEvent.fire(name, "");
+                    }
+                }
+            }
+        });
+
     }
 
     @PreDestroy
@@ -377,11 +399,19 @@ public class AssignmentListItemWidget extends Composite implements HasModel<Assi
         name.setInvalidValues(disallowedNames, false, disallowedNameErrorMessage);
     }
 
+    public void setAllowDuplicateNames(boolean allowDuplicateNames, String duplicateNameErrorMessage) {
+        this.allowDuplicateNames = allowDuplicateNames;
+        this.duplicateNameErrorMessage = duplicateNameErrorMessage;
+    }
+
     @EventHandler("deleteButton")
     public void handleDeleteButton(ClickEvent e) {
         parentWidget.removeAssignment(assignment.getModel());
     }
 
+    public boolean isDuplicateName(String name) {
+        return parentWidget.isDuplicateName(name);
+    }
 
     /**
      * Updates the display of this row according to the state of the

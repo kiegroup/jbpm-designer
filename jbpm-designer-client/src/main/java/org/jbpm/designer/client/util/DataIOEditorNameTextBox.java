@@ -27,8 +27,7 @@ public class DataIOEditorNameTextBox extends AbstractValidatingTextBox {
     boolean isCaseSensitive = false;
     String invalidValueErrorMessage = null;
 
-
-    protected String invalidCharactersInNameErrorMessage = DesignerEditorConstants.INSTANCE.Removed_invalid_characters_in_name();
+    protected String invalidCharactersInNameErrorMessage = DesignerEditorConstants.INSTANCE.Removed_invalid_characters_from_name();
 
     // Pattern for valid value
     protected  RegExp regExp = null;
