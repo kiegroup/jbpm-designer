@@ -56,6 +56,9 @@ public class ActivityDataIOEditorWidget extends Composite {
 
     boolean isSingleVar = false;
 
+    private boolean allowDuplicateNames = true;
+    private String duplicateNameErrorMessage = "";
+
     private Set<String> disallowedNames = new HashSet<String>();
     private String disallowedNameErrorMessage;
 
@@ -119,6 +122,11 @@ public class ActivityDataIOEditorWidget extends Composite {
         this.variableType = variableType;
     }
 
+    public void setAllowDuplicateNames(boolean allowDuplicateNames, String duplicateNameErrorMessage) {
+        this.allowDuplicateNames = allowDuplicateNames;
+        this.duplicateNameErrorMessage = duplicateNameErrorMessage;
+    }
+
     @EventHandler("addVarButton")
     public void handleAddVarButton(ClickEvent e) {
         if (isSingleVar && assignments.getValue().size() > 0) {
@@ -143,6 +151,7 @@ public class ActivityDataIOEditorWidget extends Composite {
         widget.setDataTypes(dataTypeListBoxValues);
         widget.setProcessVariables(processVarListBoxValues);
         widget.setDisallowedNames(disallowedNames, disallowedNameErrorMessage);
+        widget.setAllowDuplicateNames(allowDuplicateNames, duplicateNameErrorMessage);
         widget.setParentWidget(this);
     }
 
@@ -181,6 +190,7 @@ public class ActivityDataIOEditorWidget extends Composite {
         for (int i = 0; i < assignmentRows.size(); i++) {
             assignments.getWidget(i).setParentWidget(this);
             assignments.getWidget(i).setDisallowedNames(disallowedNames, disallowedNameErrorMessage);
+            assignments.getWidget(i).setAllowDuplicateNames(allowDuplicateNames, duplicateNameErrorMessage);
         }
     }
 
@@ -220,5 +230,30 @@ public class ActivityDataIOEditorWidget extends Composite {
         for (int i = 0; i < assignments.getValue().size(); i++) {
             assignments.getWidget(i).setDisallowedNames(disallowedNames, disallowedNameErrorMessage);
         }
+    }
+
+    /**
+     * Tests whether a Row name occurs more than once in the list of rows
+     *
+     * @param name
+     * @return
+     */
+    public boolean isDuplicateName(String name) {
+        if (name == null || name.isEmpty()) {
+            return false;
+        }
+        List<AssignmentRow> as = assignments.getValue();
+        if (as != null && !as.isEmpty()) {
+            int nameCount = 0;
+            for (AssignmentRow row : as) {
+                if (name.equals(row.getName())) {
+                    nameCount++;
+                    if (nameCount > 1) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }

@@ -61,5 +61,7 @@ public interface DesignerEditorConstants extends
 
     String This_input_should_be_entered_as_a_property_for_the_task();
 
-    String Removed_invalid_characters_in_name();
+    String Removed_invalid_characters_from_name();
+
+    String A_Data_Input_with_this_name_already_exists();
 }
