@@ -128,11 +128,19 @@ ORYX.Plugins.AddDocker = Clazz.extend({
                 if (this.addEnabled) {
                         this.docker = this.edge.addDocker(this.pos, this.docker);
 						this.index = this.edge.dockers.indexOf(this.docker);
+                        this.facade.raiseEvent({
+                            type: ORYX.CONFIG.EVENT_DOCKER_EVENT,
+                            etype: "created"
+                        });
                 }
                 else if (this.deleteEnabled) {
 					this.index = this.edge.dockers.indexOf(this.docker);
                     this.pos = this.docker.bounds.center();
                     this.edge.removeDocker(this.docker);
+                    this.facade.raiseEvent({
+                        type: ORYX.CONFIG.EVENT_DOCKER_EVENT,
+                        etype: "deleted"
+                    });
                 }
                 
                 this.facade.getCanvas().update();
