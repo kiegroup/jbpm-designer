@@ -4195,26 +4195,7 @@ public class Bpmn2JsonUnmarshaller {
 
     protected void applyEndEventProperties(EndEvent ee, Map<String, String> properties) {
         ee.setId(properties.get("resourceId"));
-        if(properties.get("name") != null) {
-            ee.setName(escapeXmlString(properties.get("name")).replaceAll("\\r\\n|\\r|\\n", " "));
 
-            // add unescaped and untouched name value as extension element as well
-            MetaDataType eleMetadata = DroolsFactory.eINSTANCE.createMetaDataType();
-            eleMetadata.setName("elementname");
-            eleMetadata.setMetaValue(wrapInCDATABlock(properties.get("name").replaceAll("\\\\n", "\n")));
-
-            if(ee.getExtensionValues() == null || ee.getExtensionValues().size() < 1) {
-                ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
-                ee.getExtensionValues().add(extensionElement);
-            }
-            FeatureMap.Entry eleExtensionElementEntry = new SimpleFeatureMapEntry(
-                    (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, eleMetadata);
-            ee.getExtensionValues().get(0).getValue().add(eleExtensionElementEntry);
-
-        } else {
-            ee.setName("");
-        }
-        
 //        List<EventDefinition> definitions = ee.getEventDefinitions();
 //            if (definitions != null && !definitions.isEmpty()){
 //                EventDefinition ed = definitions.get(0);
@@ -4253,25 +4234,6 @@ public class Bpmn2JsonUnmarshaller {
     }
     
     protected void applyStartEventProperties(StartEvent se, Map<String, String> properties) {
-        if(properties.get("name") != null) {
-            se.setName(escapeXmlString(properties.get("name")).replaceAll("\\r\\n|\\r|\\n", " "));
-
-            // add unescaped and untouched name value as extension element as well
-            MetaDataType eleMetadata = DroolsFactory.eINSTANCE.createMetaDataType();
-            eleMetadata.setName("elementname");
-            eleMetadata.setMetaValue(wrapInCDATABlock(properties.get("name").replaceAll("\\\\n", "\n")));
-
-            if(se.getExtensionValues() == null || se.getExtensionValues().size() < 1) {
-                ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
-                se.getExtensionValues().add(extensionElement);
-            }
-            FeatureMap.Entry eleExtensionElementEntry = new SimpleFeatureMapEntry(
-                    (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, eleMetadata);
-            se.getExtensionValues().get(0).getValue().add(eleExtensionElementEntry);
-
-        } else {
-            se.setName("");
-        }
         se.setIsInterrupting(Boolean.parseBoolean(properties.get("isinterrupting")));
     }
     
