@@ -42,6 +42,7 @@ import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.jbpm.designer.client.shared.AssignmentData;
 import org.jbpm.designer.client.shared.AssignmentRow;
 import org.jbpm.designer.client.shared.Variable.VariableType;
+import org.jbpm.designer.client.util.ListBoxValues;
 import org.uberfire.ext.widgets.common.client.common.popups.BaseModal;
 
 @Dependent
@@ -83,122 +84,27 @@ public class ActivityDataIOEditor extends BaseModal {
 
     private List<String> dataTypes = new ArrayList<String>();
     private List<String> dataTypeDisplayNames = new ArrayList<String>();
+    private AssignmentData assignmentData;
 
-    /**
-     * Class containing a list of values for a ValueListBox<String>.
-     * This is used by the ListBoxes in the dialog to keep their drop-down lists
-     * up to date with updated with new values (CustomDataTypes / Constants) as
-     * the user adds them.
-     */
-    class ListBoxValues {
-        List<String> acceptableValuesWithCustomValues = new ArrayList<String>();
-        List<String> acceptableValuesWithoutCustomValues = new ArrayList<String>();
-        List<String> customValues = new ArrayList<String>();
 
-        void update(ValueListBox<String> listBox, boolean showCustomValues) {
-            if (showCustomValues) {
-                String currentValue = listBox.getValue();
-                String currentEditValuePrompt = getEditValuePrompt();
-                String newEditValuePrompt = AssignmentListItemWidget.EDIT_PREFIX + currentValue + AssignmentListItemWidget.EDIT_SUFFIX;
-                if (isCustomValue(currentValue)) {
-                    if (newEditValuePrompt.equals(currentEditValuePrompt)) {
-                        return;
-                    }
-                    if (currentEditValuePrompt != null) {
-                        acceptableValuesWithCustomValues.remove(currentEditValuePrompt);
-                    }
-                    int editPromptIndex = acceptableValuesWithCustomValues.indexOf(currentValue);
-                    if (editPromptIndex > -1) {
-                        editPromptIndex++;
-                    }
-                    else if (acceptableValuesWithCustomValues.size() > 1) {
-                        editPromptIndex = 2;
+    ListBoxValues dataTypeListBoxValues = new ListBoxValues(AssignmentListItemWidget.CUSTOM_PROMPT, DesignerEditorConstants.INSTANCE.Edit() + " ",
+            new ListBoxValues.ValueTester() {
+                public String getNonCustomValueForUserString(String userValue) {
+                    if (assignmentData != null) {
+                        return assignmentData.getDataTypeDisplayNameForUserString(userValue);
                     }
                     else {
-                        editPromptIndex = acceptableValuesWithCustomValues.size();
-                    }
-                    acceptableValuesWithCustomValues.add(editPromptIndex, newEditValuePrompt);
-                }
-                else if (currentEditValuePrompt != null) {
-                    acceptableValuesWithCustomValues.remove(currentEditValuePrompt);
-                }
-                listBox.setAcceptableValues(acceptableValuesWithCustomValues);
-            }
-            else {
-                listBox.setAcceptableValues(acceptableValuesWithoutCustomValues);
-            }
-        }
-
-        void addValues(List<String> acceptableValues) {
-            clear();
-            if (acceptableValues != null) {
-                acceptableValuesWithCustomValues.addAll(acceptableValues);
-                for (int i = 0; i < acceptableValues.size(); i++) {
-                    String value = acceptableValues.get(i);
-                    if (!acceptableValuesWithoutCustomValues.contains(value)
-                            && !value.endsWith("...")) {
-                        acceptableValuesWithoutCustomValues.add(value);
+                        return null;
                     }
                 }
-            }
-        }
+            });
 
-        private void clear() {
-            customValues.clear();
-            acceptableValuesWithCustomValues.clear();
-            acceptableValuesWithoutCustomValues.clear();
-        }
-
-        private String getEditValuePrompt() {
-            if (acceptableValuesWithCustomValues.size() > 0) {
-                for (int i = 0; i < acceptableValuesWithCustomValues.size(); i++) {
-                    String value = acceptableValuesWithCustomValues.get(i);
-                    if (value.startsWith(AssignmentListItemWidget.EDIT_PREFIX)) {
-                        return value;
-                    }
+    ListBoxValues processVarListBoxValues = new ListBoxValues(AssignmentListItemWidget.CONSTANT_PROMPT, DesignerEditorConstants.INSTANCE.Edit() + " ",
+            new ListBoxValues.ValueTester() {
+                public String getNonCustomValueForUserString(String userValue) {
+                    return null;
                 }
-            }
-            return null;
-        }
-
-        void addValue(String newValue, String oldValue) {
-            if (oldValue != null && !oldValue.isEmpty())
-            {
-                if (acceptableValuesWithCustomValues.contains(oldValue)) {
-                    acceptableValuesWithCustomValues.remove(oldValue);
-                }
-                if (customValues.contains(oldValue)) {
-                    customValues.remove(oldValue);
-                }
-            }
-
-            if (newValue != null && !newValue.isEmpty()) {
-                if (!acceptableValuesWithCustomValues.contains(newValue)) {
-                    int index = 1;
-                    if (acceptableValuesWithCustomValues.size() < 1)
-                    {
-                        index = acceptableValuesWithCustomValues.size();
-                    }
-                    acceptableValuesWithCustomValues.add(index, newValue);
-                }
-                if (!customValues.contains(newValue)) {
-                    customValues.add(newValue);
-                }
-            }
-        }
-
-        boolean isCustomValue(String value) {
-            if (value == null || value.isEmpty()) {
-                return false;
-            }
-            else {
-                return customValues.contains(value);
-            }
-        }
-    }
-
-    ListBoxValues dataTypeListBoxValues = new ListBoxValues();
-    ListBoxValues processVarListBoxValues = new ListBoxValues();
+            });
 
     @PostConstruct
     public void init() {
@@ -298,13 +204,15 @@ public class ActivityDataIOEditor extends BaseModal {
         outputAssignmentsWidget.setData(outputAssignmentRows);
     }
 
+    public void setAssignmentData(AssignmentData assignmentData) {
+        this.assignmentData = assignmentData;
+    }
+
     public void setDataTypes(List<String> dataTypes, List<String> dataTypeDisplayNames) {
         this.dataTypes = dataTypes;
         this.dataTypeDisplayNames = dataTypeDisplayNames;
 
         List<String> displayDataTypes =  new ArrayList<String>();
-        displayDataTypes.add("");
-        displayDataTypes.add(AssignmentListItemWidget.CUSTOM_PROMPT);
         displayDataTypes.addAll(dataTypeDisplayNames);
 
         dataTypeListBoxValues.addValues(displayDataTypes);
@@ -324,8 +232,6 @@ public class ActivityDataIOEditor extends BaseModal {
 
     public void setProcessVariables(List<String> processVariables) {
         List<String> displayProcessVariables = new ArrayList<String>();
-        displayProcessVariables.add("");
-        displayProcessVariables.add(AssignmentListItemWidget.CONSTANT_PROMPT);
         displayProcessVariables.addAll(processVariables);
 
         processVarListBoxValues.addValues(displayProcessVariables);
