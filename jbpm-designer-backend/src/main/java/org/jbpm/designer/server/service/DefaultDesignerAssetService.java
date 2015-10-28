@@ -53,6 +53,7 @@ import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.UriUtils;
 import org.jbpm.designer.repository.impl.AssetBuilder;
+import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
 import org.jbpm.designer.service.BPMN2DataServices;
 import org.jbpm.designer.service.DesignerAssetService;
 import org.jbpm.designer.service.DesignerContent;
@@ -64,6 +65,7 @@ import org.slf4j.LoggerFactory;
 import org.uberfire.backend.server.util.Paths;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.io.IOService;
+import org.uberfire.java.nio.file.FileSystem;
 import org.uberfire.java.nio.file.FileSystemNotFoundException;
 import org.uberfire.mvp.PlaceRequest;
 import org.uberfire.rpc.SessionInfo;
@@ -92,9 +94,15 @@ public class DefaultDesignerAssetService
     @Inject
     @Named("ioStrategy")
     private IOService ioService;
+
+    @Inject
+    private RepositoryDescriptor descriptor;
    
     // socket buffer size in bytes: can be tuned for performance
     private final static int socketBufferSize = 8 * 1024;
+
+    private static final Logger _logger =
+            LoggerFactory.getLogger(DefaultDesignerAssetService.class);
 
     public static final String PROCESS_STUB = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \n" +
     "<bpmn2:definitions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.omg.org/bpmn20\" xmlns:bpmn2=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\" xmlns:bpsim=\"http://www.bpsim.org/schemas/1.0\" xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\" xmlns:drools=\"http://www.jboss.org/drools\" \n" +
@@ -201,8 +209,8 @@ public class DefaultDesignerAssetService
     @Override
     public Path createProcess( final Path context,
                                final String fileName ) {
-        final Path path = Paths.convert( Paths.convert( context ).resolve( fileName ) );
 
+        final Path path = Paths.convert( Paths.convert( context ).resolve( fileName ) );
         String location = Paths.convert( path ).getParent().toString();
         String name = path.getFileName();
         String processId = buildProcessId( location, name );

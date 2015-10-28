@@ -4493,96 +4493,98 @@ public class Bpmn2JsonUnmarshaller {
         }
         
         try {
-            EventDefinition ed = event.getEventDefinitions().get(0);
-            if(ed instanceof TimerEventDefinition) {
-                if(properties.get("timedate") != null && !"".equals(properties.get("timedate"))) {
-                    FormalExpression timeDateExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
-                    timeDateExpression.setBody(properties.get("timedate"));
-                    ((TimerEventDefinition) event.getEventDefinitions().get(0)).setTimeDate(timeDateExpression);
-                }
-                
-                if(properties.get("timeduration") != null && !"".equals(properties.get("timeduration"))) {
-                    FormalExpression timeDurationExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
-                    timeDurationExpression.setBody(properties.get("timeduration"));
-                    ((TimerEventDefinition) event.getEventDefinitions().get(0)).setTimeDuration(timeDurationExpression);
-                }
-                
-                if(properties.get("timecycle") != null && !"".equals(properties.get("timecycle"))) {
-                    FormalExpression timeCycleExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
-                    timeCycleExpression.setBody(properties.get("timecycle"));
-                    if(properties.get("timecyclelanguage") != null && properties.get("timecyclelanguage").length() > 0) {
-                    	timeCycleExpression.setLanguage(properties.get("timecyclelanguage"));
+            if(event.getEventDefinitions() != null && event.getEventDefinitions().size() > 0) {
+                EventDefinition ed = event.getEventDefinitions().get(0);
+                if (ed instanceof TimerEventDefinition) {
+                    if (properties.get("timedate") != null && !"".equals(properties.get("timedate"))) {
+                        FormalExpression timeDateExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                        timeDateExpression.setBody(properties.get("timedate"));
+                        ((TimerEventDefinition) event.getEventDefinitions().get(0)).setTimeDate(timeDateExpression);
                     }
-                    ((TimerEventDefinition) event.getEventDefinitions().get(0)).setTimeCycle(timeCycleExpression);
-                }
-            } else if (ed instanceof SignalEventDefinition) {
-                if(properties.get("signalref") != null && !"".equals(properties.get("signalref"))) {
-                	((SignalEventDefinition) ed).setSignalRef(properties.get("signalref"));
+
+                    if (properties.get("timeduration") != null && !"".equals(properties.get("timeduration"))) {
+                        FormalExpression timeDurationExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                        timeDurationExpression.setBody(properties.get("timeduration"));
+                        ((TimerEventDefinition) event.getEventDefinitions().get(0)).setTimeDuration(timeDurationExpression);
+                    }
+
+                    if (properties.get("timecycle") != null && !"".equals(properties.get("timecycle"))) {
+                        FormalExpression timeCycleExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                        timeCycleExpression.setBody(properties.get("timecycle"));
+                        if (properties.get("timecyclelanguage") != null && properties.get("timecyclelanguage").length() > 0) {
+                            timeCycleExpression.setLanguage(properties.get("timecyclelanguage"));
+                        }
+                        ((TimerEventDefinition) event.getEventDefinitions().get(0)).setTimeCycle(timeCycleExpression);
+                    }
+                } else if (ed instanceof SignalEventDefinition) {
+                    if (properties.get("signalref") != null && !"".equals(properties.get("signalref"))) {
+                        ((SignalEventDefinition) ed).setSignalRef(properties.get("signalref"));
 //                    ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
 //                    EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
 //                                "http://www.jboss.org/drools", "signalrefname", false, false);
 //                    EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
 //                        properties.get("signalref"));
 //                    ((SignalEventDefinition) event.getEventDefinitions().get(0)).getAnyAttribute().add(extensionEntry);
-                }
-            } else if(ed instanceof ErrorEventDefinition) {
-                if(properties.get("errorref") != null && !"".equals(properties.get("errorref"))) {
-                    ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
-                    EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
-                                "http://www.jboss.org/drools", "erefname", false, false);
-                    SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
-                        properties.get("errorref"));
-                    ((ErrorEventDefinition) event.getEventDefinitions().get(0)).getAnyAttribute().add(extensionEntry);
-                }
-            } else if(ed instanceof ConditionalEventDefinition) {
-                FormalExpression  conditionExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
-                if(properties.get("conditionlanguage") != null && !"".equals(properties.get("conditionlanguage"))) {
-                    // currently supporting drools and mvel
-                    String languageStr;
-                    if(properties.get("conditionlanguage").equals("drools")) {
-                        languageStr = "http://www.jboss.org/drools/rule";
-                    } else if(properties.get("conditionlanguage").equals("mvel")) {
-                        languageStr = "http://www.mvel.org/2.0";
-                    } else {
-                        // default to drools
-                        languageStr = "http://www.jboss.org/drools/rule";
                     }
-                    conditionExpression.setLanguage(languageStr);
-                }
-                if(properties.get("conditionexpression") != null && !"".equals(properties.get("conditionexpression"))) {
-                    String scriptStr = properties.get("conditionexpression").replaceAll("\\\\n", "\n");
-                    conditionExpression.setBody(wrapInCDATABlock(scriptStr));
-                }
-                ((ConditionalEventDefinition) event.getEventDefinitions().get(0)).setCondition(conditionExpression);
-            } else if(ed instanceof EscalationEventDefinition) {
-                if(properties.get("escalationcode") != null && !"".equals(properties.get("escalationcode"))) {
-                    ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
-                    EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                } else if (ed instanceof ErrorEventDefinition) {
+                    if (properties.get("errorref") != null && !"".equals(properties.get("errorref"))) {
+                        ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                        EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                                "http://www.jboss.org/drools", "erefname", false, false);
+                        SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
+                                properties.get("errorref"));
+                        ((ErrorEventDefinition) event.getEventDefinitions().get(0)).getAnyAttribute().add(extensionEntry);
+                    }
+                } else if (ed instanceof ConditionalEventDefinition) {
+                    FormalExpression conditionExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+                    if (properties.get("conditionlanguage") != null && !"".equals(properties.get("conditionlanguage"))) {
+                        // currently supporting drools and mvel
+                        String languageStr;
+                        if (properties.get("conditionlanguage").equals("drools")) {
+                            languageStr = "http://www.jboss.org/drools/rule";
+                        } else if (properties.get("conditionlanguage").equals("mvel")) {
+                            languageStr = "http://www.mvel.org/2.0";
+                        } else {
+                            // default to drools
+                            languageStr = "http://www.jboss.org/drools/rule";
+                        }
+                        conditionExpression.setLanguage(languageStr);
+                    }
+                    if (properties.get("conditionexpression") != null && !"".equals(properties.get("conditionexpression"))) {
+                        String scriptStr = properties.get("conditionexpression").replaceAll("\\\\n", "\n");
+                        conditionExpression.setBody(wrapInCDATABlock(scriptStr));
+                    }
+                    ((ConditionalEventDefinition) event.getEventDefinitions().get(0)).setCondition(conditionExpression);
+                } else if (ed instanceof EscalationEventDefinition) {
+                    if (properties.get("escalationcode") != null && !"".equals(properties.get("escalationcode"))) {
+                        ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                        EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
                                 "http://www.jboss.org/drools", "esccode", false, false);
-                    SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
-                        properties.get("escalationcode"));
-                    ((EscalationEventDefinition) event.getEventDefinitions().get(0)).getAnyAttribute().add(extensionEntry);
-                }
-            } else if(ed instanceof MessageEventDefinition) {
-                if(properties.get("messageref") != null && !"".equals(properties.get("messageref"))) {
-                    ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
-                    EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                        SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
+                                properties.get("escalationcode"));
+                        ((EscalationEventDefinition) event.getEventDefinitions().get(0)).getAnyAttribute().add(extensionEntry);
+                    }
+                } else if (ed instanceof MessageEventDefinition) {
+                    if (properties.get("messageref") != null && !"".equals(properties.get("messageref"))) {
+                        ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                        EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
                                 "http://www.jboss.org/drools", "msgref", false, false);
-                    SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
-                        properties.get("messageref"));
-                    ((MessageEventDefinition) event.getEventDefinitions().get(0)).getAnyAttribute().add(extensionEntry);
-                }
-            } else if(ed instanceof CompensateEventDefinition) {
-                if(properties.get("activityref") != null && !"".equals(properties.get("activityref"))) {
-                    ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
-                    EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                        SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
+                                properties.get("messageref"));
+                        ((MessageEventDefinition) event.getEventDefinitions().get(0)).getAnyAttribute().add(extensionEntry);
+                    }
+                } else if (ed instanceof CompensateEventDefinition) {
+                    if (properties.get("activityref") != null && !"".equals(properties.get("activityref"))) {
+                        ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                        EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
                                 "http://www.jboss.org/drools", "actrefname", false, false);
-                    SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
-                        properties.get("activityref"));
-                    ((CompensateEventDefinition) event.getEventDefinitions().get(0)).getAnyAttribute().add(extensionEntry);
+                        SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
+                                properties.get("activityref"));
+                        ((CompensateEventDefinition) event.getEventDefinitions().get(0)).getAnyAttribute().add(extensionEntry);
+                    }
                 }
             }
-        } catch (IndexOutOfBoundsException e) {
+        } catch (Exception e) {
             _logger.warn(e.getMessage());
         }
         // simulation

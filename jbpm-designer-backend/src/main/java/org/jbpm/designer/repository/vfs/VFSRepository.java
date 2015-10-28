@@ -26,10 +26,13 @@ import java.util.Iterator;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Event;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.codec.binary.Base64;
+import org.guvnor.common.services.project.events.NewProjectEvent;
 import org.jboss.errai.security.shared.api.identity.User;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
@@ -46,6 +49,7 @@ import org.uberfire.java.nio.IOException;
 import org.uberfire.java.nio.base.options.CommentedOption;
 import org.uberfire.java.nio.file.*;
 import org.uberfire.java.nio.file.attribute.BasicFileAttributes;
+import org.kie.workbench.common.services.shared.project.KieProject;
 
 @ApplicationScoped
 public class VFSRepository implements Repository {
@@ -563,5 +567,154 @@ public class VFSRepository implements Repository {
         } else {
             return "admin";
         }
+    }
+
+    public void createGlobalDirOnNewProject( @Observes NewProjectEvent newProjectEvent ) {
+        // create the global dir before the asset is created (upon new project creation)
+        KieProject project = (KieProject) newProjectEvent.getProject();
+        String projectPath = org.uberfire.backend.server.util.Paths.convert( project.getRootPath() ).toUri().toString();
+        String separator = org.uberfire.backend.server.util.Paths.convert(project.getRootPath()).getFileSystem().getSeparator();
+        String globalDirPath = projectPath + separator + "global";
+        String resourcesDirPath = projectPath + separator + "src" + separator + "main" + separator + "resources";
+        Path globalDirVFSPath = ioService.get( URI.create( globalDirPath ) );
+
+        ioService.startBatch(new FileSystem[]{ioService.getFileSystem(URI.create(globalDirPath))});
+
+        ioService.createDirectory(globalDirVFSPath);
+
+        // dummy form templates
+        ioService.write(ioService.get( URI.create(globalDirPath + separator + "backboneformsinclude.fw") ), "");
+        ioService.write(ioService.get( URI.create(globalDirPath + separator + "backbonejsinclude.fw") ), "");
+        ioService.write(ioService.get( URI.create(globalDirPath + separator + "cancelbutton.fw") ), "");
+        ioService.write(ioService.get( URI.create(globalDirPath + separator + "checkbox.fw") ), "");
+        ioService.write(ioService.get( URI.create(globalDirPath + separator + "div.fw") ), "");
+        ioService.write(ioService.get( URI.create(globalDirPath + separator + "dropdownmenu.fw") ), "");
+        ioService.write(ioService.get( URI.create(globalDirPath + separator + "fieldset.fw") ), "");
+        ioService.write(ioService.get( URI.create(globalDirPath + separator + "form.fw") ), "");
+        ioService.write(ioService.get( URI.create(globalDirPath + separator + "handlebarsinclude.fw") ), "");
+        ioService.write(ioService.get( URI.create(globalDirPath + separator + "htmlbasepage.fw") ), "");
+        ioService.write(ioService.get( URI.create(globalDirPath + separator + "image.fw") ), "");
+        ioService.write(ioService.get( URI.create(globalDirPath + separator + "jqueryinclude.fw") ), "");
+        ioService.write(ioService.get( URI.create(globalDirPath + separator + "jquerymobileinclude.fw") ), "");
+        ioService.write(ioService.get( URI.create(globalDirPath + separator + "link.fw") ), "");
+        ioService.write(ioService.get( URI.create(globalDirPath + separator + "mobilebasepage.fw") ), "");
+        ioService.write(ioService.get( URI.create(globalDirPath + separator + "orderedlist.fw") ), "");
+        ioService.write(ioService.get( URI.create(globalDirPath + separator + "passwordfield.fw") ), "");
+        ioService.write(ioService.get( URI.create(globalDirPath + separator + "radiobutton.fw") ), "");
+        ioService.write(ioService.get( URI.create(globalDirPath + separator + "script.fw") ), "");
+        ioService.write(ioService.get( URI.create(globalDirPath + separator + "submitbutton.fw") ), "");
+        ioService.write(ioService.get( URI.create(globalDirPath + separator + "table.fw") ), "");
+        ioService.write(ioService.get( URI.create(globalDirPath + separator + "textarea.fw") ), "");
+        ioService.write(ioService.get( URI.create(globalDirPath + separator + "textfield.fw") ), "");
+        ioService.write(ioService.get( URI.create(globalDirPath + separator + "themes.fw") ), "");
+        ioService.write(ioService.get( URI.create(globalDirPath + separator + "unorderedlist.fw") ), "");
+
+        // custom editors default
+        ioService.write(ioService.get( URI.create(globalDirPath + separator + "customeditors.json") ), "{ \"editors\":{\n" +
+                "            \"Actors\" : \"/designer/customeditors/sampleactorseditor.html\"\n" +
+                "        }}");
+
+        // default color themes
+        ioService.write(ioService.get( URI.create(globalDirPath + separator + "themes.json") ), "{ \"themes\":{\n" +
+                "        \"jBPM\":{\n" +
+                "           \"Start Events\" : \"#9acd32|#000000|#000000\",\n" +
+                "           \"Catching Intermediate Events\" : \"#f5deb3|#a0522d|#000000\",\n" +
+                "           \"Throwing Intermediate Events\" : \"#8cabff|#008cec|#000000\",\n" +
+                "           \"End Events\" : \"#ff6347|#000000|#000000\",\n" +
+                "           \"Gateways\" : \"#f0e68c|#a67f00|#000000\",\n" +
+                "           \"Tasks\" : \"#fafad2|#000000|#000000\",\n" +
+                "           \"Subprocesses\" : \"#fafad2|#000000|#000000\",\n" +
+                "           \"Service Tasks\" : \"#fafad2|#000000|#000000\",\n" +
+                "           \"Data Objects\" : \"#C0C0C0|#000000|#000000\",\n" +
+                "           \"Swimlanes\" : \"#ffffff|#000000|#000000\",\n" +
+                "           \"Artifacts\" : \"#ffffff|#000000|#000000\",\n" +
+                "           \"Connecting Objects\" : \"#000000|#000000|#000000\"\n" +
+                "        },\n" +
+                "        \"HighContrast\":{\n" +
+                "           \"Start Events\" : \"#d2b29f|#000000|#000000\",\n" +
+                "           \"Catching Intermediate Events\" : \"#ffd3a6|#a37e25|#000000\",\n" +
+                "           \"Throwing Intermediate Events\" : \"#adbaf2|#000099|#000000\",\n" +
+                "           \"End Events\" : \"#ffc4d1|#000000|#000000\",\n" +
+                "           \"Gateways\" : \"#ccaea0|#330600|#000000\",\n" +
+                "           \"Tasks\" : \"#f3df8c|#000000|#000000\",\n" +
+                "           \"Subprocesses\" : \"#fafad2|#000000|#000000\",\n" +
+                "           \"Service Tasks\" : \"#f3df8c|#000000|#000000\",\n" +
+                "           \"Data Objects\" : \"#C0C0C0|#000000|#000000\",\n" +
+                "           \"Swimlanes\" : \"#ffffff|#000000|#000000\",\n" +
+                "           \"Artifacts\" : \"#ffffff|#000000|#000000\",\n" +
+                "           \"Connecting Objects\" : \"#000000|#000000|#000000\"\n" +
+                "        }\n" +
+                "   }\n" +
+                "}\n");
+
+        // default images
+        ioService.write(ioService.get( URI.create(globalDirPath + separator + "defaultemailicon.gif") ), DatatypeConverter.parseBase64Binary("R0lGODlhEAAQANUAAChilmd9qW2DrXeMtJiYkZuajqGeiqZrEKehh6m30qyjhK1yErCmgbOpfrZ8FLmter2EFr+wd8HG2ca0ceDq9+Ps+Ojv+Ovx+fL1+vb4+/j5/Pvll/vusPvyufz62/797wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkAACAALAAAAAAQABAAAAaAQJBwSCwaJ8ikclLUOJ9QJtEpqVolGekQAsl4v16tEPKBYKpnCSYC4ro/ZYx8/oB47vi7GcDHPBwdgYKBHA4DAgEXDQsbjY6NCxd8ABcMIAeYmI0HFp2eCkUHGwcVCQmlpwihpBUVFK2vBkWtprWmFbJEFK+7rrsUBUUEw8TFBUEAOw=="));
+        ioService.write(ioService.get( URI.create(globalDirPath + separator + "defaultlogicon.gif") ), DatatypeConverter.parseBase64Binary("R0lGODlhEAAQAMQAAG+Fr3CFr3yRuIOSsYaUroidwIuWrI+ZqJGlx5WdpZugoKGknaeomK6slLKvkL21idSyaNq9fN3o+ODIj+Ps+evx+vP2+/f4+/n6/AAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkAABkALAAAAAAQABAAAAVlYCaOZEk+aIqa4oO9MPSwLvxGsvlcwYUglwluRnJYjkiko9SwBCy/guDZKDEq2GyWUVpUApXotLIoKSjodFpRSlACFDGAkigdJHg8Gn8oGSQBEnISBiUEeYh4BCUDjY6PAyySIyEAOw=="));
+        ioService.write(ioService.get( URI.create(globalDirPath + separator + "defaultservicenodeicon.png") ), DatatypeConverter.parseBase64Binary("iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAAC7mlDQ1BJQ0MgUHJvZmlsZQAAeAGFVM9rE0EU/jZuqdAiCFprDrJ4kCJJWatoRdQ2/RFiawzbH7ZFkGQzSdZuNuvuJrWliOTi0SreRe2hB/+AHnrwZC9KhVpFKN6rKGKhFy3xzW5MtqXqwM5+8943731vdt8ADXLSNPWABOQNx1KiEWlsfEJq/IgAjqIJQTQlVdvsTiQGQYNz+Xvn2HoPgVtWw3v7d7J3rZrStpoHhP1A4Eea2Sqw7xdxClkSAog836Epx3QI3+PY8uyPOU55eMG1Dys9xFkifEA1Lc5/TbhTzSXTQINIOJT1cVI+nNeLlNcdB2luZsbIEL1PkKa7zO6rYqGcTvYOkL2d9H5Os94+wiHCCxmtP0a4jZ71jNU/4mHhpObEhj0cGDX0+GAVtxqp+DXCFF8QTSeiVHHZLg3xmK79VvJKgnCQOMpkYYBzWkhP10xu+LqHBX0m1xOv4ndWUeF5jxNn3tTd70XaAq8wDh0MGgyaDUhQEEUEYZiwUECGPBoxNLJyPyOrBhuTezJ1JGq7dGJEsUF7Ntw9t1Gk3Tz+KCJxlEO1CJL8Qf4qr8lP5Xn5y1yw2Fb3lK2bmrry4DvF5Zm5Gh7X08jjc01efJXUdpNXR5aseXq8muwaP+xXlzHmgjWPxHOw+/EtX5XMlymMFMXjVfPqS4R1WjE3359sfzs94i7PLrXWc62JizdWm5dn/WpI++6qvJPmVflPXvXx/GfNxGPiKTEmdornIYmXxS7xkthLqwviYG3HCJ2VhinSbZH6JNVgYJq89S9dP1t4vUZ/DPVRlBnM0lSJ93/CKmQ0nbkOb/qP28f8F+T3iuefKAIvbODImbptU3HvEKFlpW5zrgIXv9F98LZua6N+OPwEWDyrFq1SNZ8gvAEcdod6HugpmNOWls05Uocsn5O66cpiUsxQ20NSUtcl12VLFrOZVWLpdtiZ0x1uHKE5QvfEp0plk/qv8RGw/bBS+fmsUtl+ThrWgZf6b8C8/UXAeIuJAAAACXBIWXMAAAsTAAALEwEAmpwYAAADrUlEQVQ4EYVUfUxTVxT/3de+wqNUJDgU+ZRiC+goKyIZy5wSSBB04WMMZ1yiy5Y4kpksWxwxRCdmxLk/JCQzS8yYMVsym6HDwDAoYHHgClhb+QhlRUQYwVrBFUof7ePdvdfMfbCYndx7cz/y+52T3zn3gFKK500TNSnSys4Yn/f+7J7BKvuw8FaMvf/hFnhdBsepjSYqkubakz1mgf8tz9oz8erhI23pqyAgMtuftqZpsu9o+7WpkuvNzsAE6yfwhOnALHLxRCOuj/I55qGiudEpyr05ic0VB4xnJJxbxirlhRDCfvfNwDFeraoSXESzTrMRx8uKkJbGw3aHImAEw4yHpl34vhV0CVgMYaquTFhQuinnaBAvR1L1Y2tWoMd/yfcEWhKqpq/vjiX5uQFMzjzC6JCI+BcJNvti0e0jaL0zTYX5JcLF0DGmK6z0K9PukaAmBwtTImyzTr8z1oM9RfFkh/YpZmdL4Oh6E+o1DfDerAB1v4WClwgKs1LJyJAHA233hbc/To2SIwmSGJdDIc77cbC8GPk5AhYHD2P4bhIqd9Rjb/ExxOU2wB7pha/7a+wMDcM7BwrBcX7ySoaK/Yukrn76hFvF6fl+Hva2GSyFD+GNffvBL+iBwDLS+TTEoRL3xs/Cqb6LFa0A9gmnb//8wQmZRGkorzeOiUIy7/EynCSzixOxNLMHOksmBiiPl3tlZxKRsgy/csOYGxERsgiY6QJjsd1O1pX3GpmafbH240ey+zK1ap9Pymp0QIEktCBEdRk5lAMU8uAwEnIZ4UIL4gJKBESCjGS1T8bVKJLswWr102kDimptv9jcdO7xPdpxUU8t56Lo6O1qKtYP0NHeanpDOptHo6l12kbPn3fTrZW1Nirh5OwGhWVvUZrOqPDlpVZc71EicVsjNuQp0Gk9jeGnp9A5eBqbNC8gXrwC6wCLCx0/weVXUXvXihDURF46m8d+3xmnVz2KWMFVxyRlkUC2b2vHukgX5jcIiFyuQnJBTNBBt/Sekh1GtGM61nR1cs6wK+Hvsv+20fpZeDTzQe/YuOZGnxfv5RdLlcxjmaFQSP4ys0NxTooUa8NRsEW7EP5YbKg4ZKyRg/jX33E2Wj9p6n9YWu1y+LeyfhANpxu87+UMERrRHvA5NrMqvLY+RbVre8IP+w9l1Ul4j0zynzZQ9lFH4mD3VIYsWl3nzabUki+mTn76szmw8CDPYnbmvft+S5YEY5+1geAH/udh9d5kMilQdvZ/+8kfxh8EsHymFKsAAAAASUVORK5CYII="));
+
+        // default workitem
+        ioService.write(ioService.get( URI.create(resourcesDirPath + separator + "WorkDefinitions.wid") ), "import org.drools.core.process.core.datatype.impl.type.StringDataType;\n" +
+                "import org.drools.core.process.core.datatype.impl.type.ObjectDataType;\n" +
+                "\n" +
+                "[\n" +
+                "  [\n" +
+                "    \"name\" : \"Email\",\n" +
+                "    \"parameters\" : [\n" +
+                "      \"From\" : new StringDataType(),\n" +
+                "      \"To\" : new StringDataType(),\n" +
+                "      \"Subject\" : new StringDataType(),\n" +
+                "      \"Body\" : new StringDataType()\n" +
+                "    ],\n" +
+                "    \"displayName\" : \"Email\",\n" +
+                "    \"icon\" : \"defaultemailicon.gif\"\n" +
+                "  ],\n" +
+                "\n" +
+                "  [\n" +
+                "    \"name\" : \"Log\",\n" +
+                "    \"parameters\" : [\n" +
+                "      \"Message\" : new StringDataType()\n" +
+                "    ],\n" +
+                "    \"displayName\" : \"Log\",\n" +
+                "    \"icon\" : \"defaultlogicon.gif\"\n" +
+                "  ],\n" +
+                "\n" +
+                "  [\n" +
+                "    \"name\" : \"WebService\",\n" +
+                "    \"parameters\" : [\n" +
+                "        \"Url\" : new StringDataType(),\n" +
+                "         \"Namespace\" : new StringDataType(),\n" +
+                "         \"Interface\" : new StringDataType(),\n" +
+                "         \"Operation\" : new StringDataType(),\n" +
+                "         \"Parameter\" : new StringDataType(),\n" +
+                "         \"Endpoint\" : new StringDataType(),\n" +
+                "         \"Mode\" : new StringDataType()\n" +
+                "    ],\n" +
+                "    \"results\" : [\n" +
+                "        \"Result\" : new ObjectDataType(),\n" +
+                "    ],\n" +
+                "    \"displayName\" : \"WS\",\n" +
+                "    \"icon\" : \"defaultservicenodeicon.png\"\n" +
+                "  ],\n" +
+                "\n" +
+                "  [\n" +
+                "    \"name\" : \"Rest\",\n" +
+                "    \"parameters\" : [\n" +
+                "        \"Url\" : new StringDataType(),\n" +
+                "        \"Method\" : new StringDataType(),\n" +
+                "        \"ConnectTimeout\" : new StringDataType(),\n" +
+                "        \"ReadTimeout\" : new StringDataType(),\n" +
+                "        \"Username\" : new StringDataType(),\n" +
+                "        \"Password\" : new StringDataType()\n" +
+                "    ],\n" +
+                "    \"results\" : [\n" +
+                "        \"Result\" : new ObjectDataType(),\n" +
+                "    ],\n" +
+                "    \"displayName\" : \"REST\",\n" +
+                "    \"icon\" : \"defaultservicenodeicon.png\"\n" +
+                "  ]\n" +
+                "\n" +
+                "]\n");
+
+        ioService.endBatch();
     }
 }
