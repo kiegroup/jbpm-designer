@@ -169,6 +169,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
                 return;
             }
+
             if(ioService != null) {
                 ioService.startBatch(new FileSystem[]{ descriptor.getFileSystem() });
             }
@@ -290,14 +291,17 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             // create and parse the view svg to include config data
             createAndParseViewSVG(workDefinitionsTree, repository);
 
-        } catch ( final Exception e ) {
+        } catch ( Exception e ) {
+            _logger.error(e.getMessage());
+        } catch ( Throwable e) {
             _logger.error(e.getMessage());
         } finally {
             try {
                 if(!readOnly && ioService != null) {
                     ioService.endBatch();
                 }
-            } catch ( final Exception ignore ) {
+            } catch ( Exception ee ) {
+                _logger.debug("Error ending batch: " + ee.getMessage());
             }
         }
     }
