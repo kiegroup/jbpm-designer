@@ -46,6 +46,7 @@ public class AssignmentData {
     private List<String> dataTypeDisplayNames = new ArrayList<String>();
     private Map<String, String> mapDisplayNameToDataType = new HashMap<String, String>();
     private Map<String, String> mapDataTypeToDisplayName = new HashMap<String, String>();
+    private Map<String, String> mapSimpleDataTypeToDisplayName = new HashMap<String, String>();
 
     private List<String> disallowedPropertyNames = new ArrayList<String>();
 
@@ -247,14 +248,16 @@ public class AssignmentData {
         this.dataTypeDisplayNames.clear();
         mapDisplayNameToDataType.clear();
         mapDataTypeToDisplayName.clear();
+        mapSimpleDataTypeToDisplayName.clear();
 
         if (dataTypes != null && !dataTypes.isEmpty()) {
             String[] dts = dataTypes.split(",");
             for (String dt : dts) {
                 dt = dt.trim();
-                if (!dt.isEmpty()) {
+                if (!dt.isEmpty() && !dt.startsWith("*")) {
                     String dtName = "";
                     String dtDisplayName = "";
+                    String dtSimpleType = "";
                     if (dt.contains(":")) {
                         dtDisplayName = dt.substring(0, dt.indexOf(':')).trim();
                         dtName = dt.substring(dt.indexOf(':') + 1).trim();
@@ -263,11 +266,20 @@ public class AssignmentData {
                         dtDisplayName = dt.trim();
                         dtName = dt.trim();
                     }
+                    if (dtDisplayName.indexOf(' ') > 0) {
+                        dtSimpleType = dtDisplayName.substring(0, dtDisplayName.indexOf(' '));
+                    }
+                    else {
+                        dtSimpleType = dtDisplayName;
+                    }
                     if (!dtName.isEmpty()) {
                         this.dataTypeDisplayNames.add(dtDisplayName);
                         this.dataTypes.add(dtName);
                         mapDisplayNameToDataType.put(dtDisplayName, dtName);
                         mapDataTypeToDisplayName.put(dtName, dtDisplayName);
+                    }
+                    if (!dtSimpleType.isEmpty()){
+                        mapSimpleDataTypeToDisplayName.put(dtSimpleType, dtDisplayName);
                     }
                 }
             }
@@ -279,6 +291,7 @@ public class AssignmentData {
         this.dataTypeDisplayNames.clear();
         mapDisplayNameToDataType.clear();
         mapDataTypeToDisplayName.clear();
+        mapSimpleDataTypeToDisplayName.clear();
 
         this.dataTypes = dataTypes;
         this.dataTypeDisplayNames = dataTypeDisplayNames;
@@ -384,6 +397,17 @@ public class AssignmentData {
         else {
             return dataType;
         }
+    }
+
+    public String getDataTypeDisplayNameForUserString(String userValue) {
+        if (mapDataTypeToDisplayName.containsKey(userValue)) {
+            return mapDataTypeToDisplayName.get(userValue);
+        }
+        else if (mapSimpleDataTypeToDisplayName.containsKey(userValue)) {
+            return mapSimpleDataTypeToDisplayName.get(userValue);
+        }
+
+        return null;
     }
 
     public String getDataTypesString() {

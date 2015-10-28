@@ -39,7 +39,7 @@ import org.jboss.errai.ui.client.widget.Table;
 import org.jboss.errai.ui.shared.api.annotations.DataField;
 import org.jboss.errai.ui.shared.api.annotations.EventHandler;
 import org.jboss.errai.ui.shared.api.annotations.Templated;
-import org.jbpm.designer.client.popup.ActivityDataIOEditor.ListBoxValues;
+import org.jbpm.designer.client.util.ListBoxValues;
 import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.jbpm.designer.client.shared.AssignmentRow;
 import org.jbpm.designer.client.shared.Variable.VariableType;
