@@ -20,30 +20,37 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.net.URLDecoder;
 
+import org.jbpm.designer.client.shared.util.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.*;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+
+
 import static org.junit.Assert.*;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(StringUtils.class)
 public class AssignmentTest {
 
-    AssignmentData ad;
+    AssignmentData ad = Mockito.mock(AssignmentData.class);
 
     @Before
     public void setUp() {
-        // AssignmentData.urlEncodeConstant and urlDecodeConstant have to be mocked
-        // because they use GWT class com.google.gwt.http.client.URL
-        ad = Mockito.mock(AssignmentData.class);
-        Mockito.when(ad.urlEncodeConstant(Mockito.anyString())).thenAnswer(new Answer<Object>() {
+        PowerMockito.mockStatic(StringUtils.class);
+        PowerMockito.when(StringUtils.urlEncode(Mockito.anyString())).thenAnswer(new Answer<Object>() {
             @Override
             public String answer(InvocationOnMock invocation) throws Throwable {
                 Object[] args = invocation.getArguments();
                 return urlEncode((String) args[0]);
             }
         });
-        Mockito.when(ad.urlDecodeConstant(Mockito.anyString())).thenAnswer(new Answer<Object>() {
+        PowerMockito.when(StringUtils.urlDecode(Mockito.anyString())).thenAnswer(new Answer<Object>() {
             @Override
             public String answer(InvocationOnMock invocation) throws Throwable {
                 Object[] args = invocation.getArguments();
@@ -51,6 +58,7 @@ public class AssignmentTest {
             }
         });
     }
+
 
     /**
      * Uses mock implementation of urlEncodeConstant and urlDecodeConstant
@@ -71,7 +79,7 @@ public class AssignmentTest {
     public void serializeDeserialize(AssignmentData ad, Assignment assignment, String constant) {
         assignment.setConstant(constant);
 
-        String s = assignment.toString(ad);
+        String s = assignment.toString();
         Assignment newA = Assignment.deserialize(ad, s);
         String deserializedConstant = newA.getConstant();
 
@@ -108,7 +116,7 @@ public class AssignmentTest {
             String bpmn2EncodedConstant) {
         assignment.setConstant(constant);
 
-        String s = assignment.toString(ad);
+        String s = assignment.toString();
         // replace the mocked encoded constant with the one that would occur at runtime
         s = s.replace(bpmn2EncodedConstant, jsonEncodedConstant);
         Assignment newA = Assignment.deserialize(ad, s);
@@ -118,7 +126,7 @@ public class AssignmentTest {
     }
 
     /**
-     * Implementation of urlEncode for mock AssignmentData
+     * Implementation of urlEncode for PowerMocked StringUtils
      *
      * @param s
      * @return
@@ -137,7 +145,7 @@ public class AssignmentTest {
     }
 
     /**
-     * Implementation of urlDecode for mock AssignmentData
+     * Implementation of urlDecode for PowerMocked StringUtils
      *
      * @param s
      * @return

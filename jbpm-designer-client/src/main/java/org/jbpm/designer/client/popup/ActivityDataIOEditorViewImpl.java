@@ -182,7 +182,7 @@ public class ActivityDataIOEditorViewImpl extends BaseModal implements ActivityD
         List<String> displayDataTypes =  new ArrayList<String>();
         displayDataTypes.addAll(dataTypeDisplayNames);
 
-        ListBoxValues dataTypeListBoxValues = new ListBoxValues(AssignmentListItemWidget.CUSTOM_PROMPT, DesignerEditorConstants.INSTANCE.Edit() + " ", presenter.dataTypesTester());
+        ListBoxValues dataTypeListBoxValues = new ListBoxValues(AssignmentListItemWidgetView.CUSTOM_PROMPT, DesignerEditorConstants.INSTANCE.Edit() + " ", presenter.dataTypesTester());
 
         dataTypeListBoxValues.addValues(displayDataTypes);
         inputAssignmentsWidget.setDataTypes(dataTypeListBoxValues);
@@ -193,7 +193,7 @@ public class ActivityDataIOEditorViewImpl extends BaseModal implements ActivityD
         List<String> displayDataTypes =  new ArrayList<String>();
         displayDataTypes.addAll(dataTypeDisplayNames);
 
-        ListBoxValues dataTypeListBoxValues = new ListBoxValues(AssignmentListItemWidget.CUSTOM_PROMPT, DesignerEditorConstants.INSTANCE.Edit() + " ", presenter.dataTypesTester());
+        ListBoxValues dataTypeListBoxValues = new ListBoxValues(AssignmentListItemWidgetView.CUSTOM_PROMPT, DesignerEditorConstants.INSTANCE.Edit() + " ", presenter.dataTypesTester());
 
         dataTypeListBoxValues.addValues(displayDataTypes);
         outputAssignmentsWidget.setDataTypes(dataTypeListBoxValues);
@@ -204,7 +204,7 @@ public class ActivityDataIOEditorViewImpl extends BaseModal implements ActivityD
         List<String> displayProcessVariables = new ArrayList<String>();
         displayProcessVariables.addAll(processVariables);
 
-        ListBoxValues processVarListBoxValues = new ListBoxValues(AssignmentListItemWidget.CONSTANT_PROMPT, DesignerEditorConstants.INSTANCE.Edit() + " ", presenter.processVarTester());
+        ListBoxValues processVarListBoxValues = new ListBoxValues(AssignmentListItemWidgetView.CONSTANT_PROMPT, DesignerEditorConstants.INSTANCE.Edit() + " ", presenter.processVarTester());
 
         processVarListBoxValues.addValues(displayProcessVariables);
         inputAssignmentsWidget.setProcessVariables(processVarListBoxValues);
@@ -215,7 +215,7 @@ public class ActivityDataIOEditorViewImpl extends BaseModal implements ActivityD
         List<String> displayProcessVariables = new ArrayList<String>();
         displayProcessVariables.addAll(processVariables);
 
-        ListBoxValues processVarListBoxValues = new ListBoxValues(AssignmentListItemWidget.CONSTANT_PROMPT, DesignerEditorConstants.INSTANCE.Edit() + " ", presenter.processVarTester());
+        ListBoxValues processVarListBoxValues = new ListBoxValues(AssignmentListItemWidgetView.CONSTANT_PROMPT, DesignerEditorConstants.INSTANCE.Edit() + " ", presenter.processVarTester());
 
         processVarListBoxValues.addValues(displayProcessVariables);
         outputAssignmentsWidget.setProcessVariables(processVarListBoxValues);

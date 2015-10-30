@@ -97,6 +97,10 @@ public class ActivityDataIOEditorWidget implements ActivityDataIOEditorWidgetVie
         this.duplicateNameErrorMessage = duplicateNameErrorMessage;
     }
 
+    private boolean getShowConstants() {
+        return (this.variableType == VariableType.INPUT) ? true : false;
+    }
+
     private void addAssignment() {
         List<AssignmentRow> as = view.getAssignmentRows();
         if (as.isEmpty()) {
@@ -107,9 +111,11 @@ public class ActivityDataIOEditorWidget implements ActivityDataIOEditorWidgetVie
         newAssignment.setVariableType(variableType);
         as.add(newAssignment);
 
-        AssignmentListItemWidget widget = view.getAssignmentWidget(view.getAssignmentsCount() - 1);
+        AssignmentListItemWidgetView widget = view.getAssignmentWidget(view.getAssignmentsCount() - 1);
         widget.setDataTypes(dataTypeListBoxValues);
         widget.setProcessVariables(processVarListBoxValues);
+        widget.setShowConstants(getShowConstants());
+
         widget.setDisallowedNames(disallowedNames, disallowedNameErrorMessage);
         widget.setAllowDuplicateNames(allowDuplicateNames, duplicateNameErrorMessage);
         widget.setParentWidget(this);
@@ -179,7 +185,9 @@ public class ActivityDataIOEditorWidget implements ActivityDataIOEditorWidgetVie
     public void setProcessVariables(ListBoxValues processVarListBoxValues) {
         this.processVarListBoxValues = processVarListBoxValues;
         for (int i = 0; i < view.getAssignmentsCount(); i++) {
-            view.getAssignmentWidget(i).setProcessVariables(processVarListBoxValues);
+            AssignmentListItemWidgetView widget = view.getAssignmentWidget(i);
+            widget.setProcessVariables(processVarListBoxValues);
+            widget.setShowConstants(getShowConstants());
         }
     }
 

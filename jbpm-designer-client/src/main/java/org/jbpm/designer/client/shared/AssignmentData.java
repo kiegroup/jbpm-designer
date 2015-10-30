@@ -22,9 +22,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gwt.http.client.URL;
 import org.jboss.errai.common.client.api.annotations.Portable;
 import org.jbpm.designer.client.shared.Variable.VariableType;
+import org.jbpm.designer.client.shared.util.StringUtils;
 
 /**
  *
@@ -104,7 +104,7 @@ public class AssignmentData {
         String constant = assignmentRow.getConstant();
         if (constant != null && !constant.isEmpty()) {
             processVarName = null;
-            constant = AssignmentData.createUnquotedConstant(constant);
+            constant = StringUtils.createUnquotedConstant(constant);
         }
         else {
             processVarName = assignmentRow.getProcessVar();
@@ -487,49 +487,6 @@ public class AssignmentData {
         sb.append("\"disallowedPropertyNames\":\"").append(getDisallowedPropertyNamesString()).append("\"");
 
         return sb.toString();
-    }
-
-    public static String createQuotedConstant(String str) {
-        if (str == null || str.isEmpty()) {
-            return str;
-        }
-        try
-        {
-            Double.parseDouble(str);
-        }
-        catch(NumberFormatException nfe)
-        {
-            return "\"" + str + "\"";
-        }
-        return str;
-    }
-
-    public static String createUnquotedConstant(String str) {
-        if (str == null || str.isEmpty()) {
-            return str;
-        }
-        if (str.startsWith("\"")) {
-            str = str.substring(1);
-        }
-        if (str.endsWith("\"")) {
-            str = str.substring(0, str.length() - 1);
-        }
-        return str;
-    }
-
-    protected String urlEncodeConstant(String s) {
-        if (s == null || s.isEmpty()) {
-            return s;
-        }
-
-        return URL.encodeQueryString(s);
-    }
-
-    protected String urlDecodeConstant(String s) {
-        if (s == null || s.isEmpty()) {
-            return s;
-        }
-        return URL.decodeQueryString(s);
     }
 
 }
