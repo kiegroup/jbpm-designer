@@ -35,7 +35,6 @@ import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.bpmn2.xml.BPMNDISemanticModule;
 import org.jbpm.bpmn2.xml.BPMNSemanticModule;
 import org.jbpm.compiler.xml.XmlProcessReader;
-import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.process.core.validation.ProcessValidationError;
 import org.jbpm.ruleflow.core.validation.RuleFlowProcessValidator;
@@ -57,15 +56,11 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 	private String preprocessingData;
 	private IDiagramProfile profile;
 	private String defaultResourceId = "processerrors";
-	private String uuid;
-    private Repository repository;
 	
-	public BPMN2SyntaxChecker(String json, String preprocessingData, IDiagramProfile profile, String uuid) {
+	public BPMN2SyntaxChecker(String json, String preprocessingData, IDiagramProfile profile) {
 		this.json = json;
 		this.preprocessingData = preprocessingData;
 		this.profile = profile;
-		this.uuid = uuid;
-        this.repository = profile.getRepository();
 	}
 	
 	public void checkSyntax() {

@@ -25,7 +25,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.jbpm.designer.bpmn2.validation.BPMN2SyntaxChecker;
-import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 
@@ -53,10 +52,9 @@ public class SyntaxCheckerServlet extends HttpServlet {
 		String json = req.getParameter("data");
         String profileName = req.getParameter("profile");
         String preprocessingData = req.getParameter("pp");
-        String uuid = Utils.getUUID(req);
         IDiagramProfile profile = _profileService.findProfile(req, profileName);
 
-        BPMN2SyntaxChecker checker = new BPMN2SyntaxChecker(json, preprocessingData, profile, uuid);
+        BPMN2SyntaxChecker checker = new BPMN2SyntaxChecker(json, preprocessingData, profile);
 		checker.checkSyntax();
 		resp.setCharacterEncoding("UTF-8");
         resp.setContentType("application/json");
