@@ -64,7 +64,7 @@ public class ActivityDataIOEditorWidgetViewImpl extends Composite implements Act
     @Inject
     @DataField
     @Table(root="tbody")
-    private ListWidget<AssignmentRow, AssignmentListItemWidget> assignments;
+    private ListWidget<AssignmentRow, AssignmentListItemWidgetViewImpl> assignments;
 
     @Inject
     private Event<NotificationEvent> notification;
@@ -137,7 +137,7 @@ public class ActivityDataIOEditorWidgetViewImpl extends Composite implements Act
     }
 
     @Override
-    public AssignmentListItemWidget getAssignmentWidget(int index) {
+    public AssignmentListItemWidgetView getAssignmentWidget(int index) {
         return assignments.getWidget(index);
     }
 

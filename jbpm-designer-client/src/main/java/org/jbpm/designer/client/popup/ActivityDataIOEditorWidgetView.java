@@ -52,7 +52,7 @@ public interface ActivityDataIOEditorWidgetView {
 
     List<AssignmentRow> getAssignmentRows();
 
-    AssignmentListItemWidget getAssignmentWidget(int index);
+    AssignmentListItemWidgetView getAssignmentWidget(int index);
 
     void setVisible(boolean visible);
 }

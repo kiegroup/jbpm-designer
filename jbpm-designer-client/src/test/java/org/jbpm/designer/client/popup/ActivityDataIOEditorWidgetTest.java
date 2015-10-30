@@ -16,6 +16,11 @@
 
 package org.jbpm.designer.client.popup;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import com.google.gwtmockito.GwtMockitoTestRunner;
 import org.jbpm.designer.client.shared.AssignmentRow;
 import org.jbpm.designer.client.shared.Variable;
@@ -26,11 +31,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -48,13 +48,13 @@ public class ActivityDataIOEditorWidgetTest {
     private AssignmentRow assignmentRowThree;
 
     @Mock
-    private AssignmentListItemWidget assignWidgetOne;
+    private AssignmentListItemWidgetViewImpl assignWidgetOne;
 
     @Mock
-    private AssignmentListItemWidget assignWidgetTwo;
+    private AssignmentListItemWidgetViewImpl assignWidgetTwo;
 
     @Mock
-    private AssignmentListItemWidget assignWidgetThree;
+    private AssignmentListItemWidgetViewImpl assignWidgetThree;
 
     @Mock
     private ActivityDataIOEditorWidgetView view;

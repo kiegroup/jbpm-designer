@@ -17,6 +17,7 @@
 package org.jbpm.designer.client.shared;
 
 import org.jbpm.designer.client.shared.Variable.VariableType;
+import org.jbpm.designer.client.shared.util.StringUtils;
 
 public class Assignment {
 
@@ -155,15 +156,11 @@ public class Assignment {
      */
     @Override
     public String toString() {
-        return toString(new AssignmentData());
-    }
-
-    public String toString(AssignmentData assignmentData) {
         StringBuilder sb = new StringBuilder();
         if (getVariableType() == VariableType.INPUT) {
             if (getConstant() != null && !getConstant().isEmpty()) {
                 sb.append(INPUT_ASSIGNMENT_PREFIX).append(getName()).append(ASSIGNMENT_OPERATOR_TOCONSTANT).append(
-                        assignmentData.urlEncodeConstant(getConstant()));
+                        StringUtils.urlEncode(getConstant()));
             }
             else if (getProcessVarName() != null && !getProcessVarName().isEmpty()) {
                 sb.append(INPUT_ASSIGNMENT_PREFIX).append(getProcessVarName()).append(ASSIGNMENT_OPERATOR_TOVARIABLE).append(getName());
@@ -222,7 +219,7 @@ public class Assignment {
         else if (sAssignment.contains(ASSIGNMENT_OPERATOR_TOCONSTANT)) {
             int i = sAssignment.indexOf(ASSIGNMENT_OPERATOR_TOCONSTANT);
             variableName = sAssignment.substring(0, i);
-            constant = assignmentData.urlDecodeConstant(sAssignment.substring(i + ASSIGNMENT_OPERATOR_TOCONSTANT.length()));
+            constant = StringUtils.urlDecode(sAssignment.substring(i + ASSIGNMENT_OPERATOR_TOCONSTANT.length()));
         }
 
         // Create the new assignment
