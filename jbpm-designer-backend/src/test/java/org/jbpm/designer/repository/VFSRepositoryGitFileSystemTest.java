@@ -15,21 +15,31 @@
 
 package org.jbpm.designer.repository;
 
+import org.apache.commons.codec.binary.Base64;
+import org.guvnor.common.services.project.events.NewProjectEvent;
 import org.jbpm.designer.repository.filters.FilterByExtension;
 import org.jbpm.designer.repository.filters.FilterByFileName;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
 import org.jbpm.designer.repository.vfs.VFSRepository;
+import org.jbpm.designer.util.Base64Backport;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.junit.*;
+import org.kie.workbench.common.services.shared.project.KieProject;
+import org.uberfire.backend.server.util.Paths;
+import org.uberfire.java.nio.file.FileAlreadyExistsException;
 import org.uberfire.java.nio.file.NoSuchFileException;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class VFSRepositoryGitFileSystemTest {
 
@@ -290,7 +300,7 @@ public class VFSRepositoryGitFileSystemTest {
         assertEquals("BPMN2-ScriptTask", asset.getName());
         assertEquals("BPMN2-ScriptTask.bpmn2", asset.getFullName());
         assertEquals("/processes", asset.getAssetLocation());
-        assertFalse(asset.getAssetContent()==null);
+        assertNotNull(asset.getAssetContent());
         System.out.print(asset.getUniqueId());
     }
 
@@ -751,7 +761,7 @@ public class VFSRepositoryGitFileSystemTest {
         ((VFSRepository)repository).setDescriptor(descriptor);
         Directory sourceDir = repository.createDirectory("/source");
 
-        boolean directoryExists = repository.directoryExists(sourceDir.getLocation()+sourceDir.getName());
+        boolean directoryExists = repository.directoryExists(sourceDir.getLocation() + sourceDir.getName());
         assertTrue(directoryExists);
         Collection<Asset> foundAsset = repository.listAssets("/source", new FilterByExtension("bpmn2"));
 
@@ -772,4 +782,55 @@ public class VFSRepositoryGitFileSystemTest {
         assertNotNull(foundAsset);
         assertEquals(0, foundAsset.size());
     }
+
+    @Test
+    public void testCreateGlobalDirOnNewProject() throws FileAlreadyExistsException {
+        VFSRepository repository = new VFSRepository(producer.getIoService());
+        repository.setDescriptor(descriptor);
+
+        Directory testProjectDir = repository.createDirectory("/mytestproject");
+
+        final KieProject mockProject = mock(KieProject.class);
+        when( mockProject.getRootPath() ).thenReturn(Paths.convert( producer.getIoService().get( URI.create( decodeUniqueId(testProjectDir.getUniqueId()) ) ) ) );
+
+        NewProjectEvent event = mock(NewProjectEvent.class);
+        when(event.getProject()).thenReturn(mockProject);
+
+        repository.createGlobalDirOnNewProject(event);
+
+        boolean globalDirectoryExists = repository.directoryExists("/mytestproject/global");
+        assertTrue(globalDirectoryExists);
+
+        Collection<Asset> foundFormTemplates = repository.listAssets("/mytestproject/global", new FilterByExtension("fw"));
+        assertNotNull(foundFormTemplates);
+        assertEquals(25, foundFormTemplates.size());
+
+        // call again to try to trigger FileAlreadyExistsException
+        repository.createGlobalDirOnNewProject(event);
+
+        boolean globalDirectoryStillExists = repository.directoryExists("/mytestproject/global");
+        assertTrue(globalDirectoryStillExists);
+
+        // no new files or copies were added
+        Collection<Asset> foundFormTemplatesAfterSecondCall = repository.listAssets("/mytestproject/global", new FilterByExtension("fw"));
+        assertNotNull(foundFormTemplatesAfterSecondCall);
+        assertEquals(25, foundFormTemplatesAfterSecondCall.size());
+
+    }
+
+    private String decodeUniqueId(String uniqueId) {
+        if (Base64Backport.isBase64(uniqueId)) {
+            byte[] decoded = Base64.decodeBase64(uniqueId);
+            try {
+                String uri = new String(decoded, "UTF-8");
+
+                return UriUtils.encode(uri);
+            } catch (UnsupportedEncodingException e) {
+
+            }
+        }
+
+        return UriUtils.encode(uniqueId);
+    }
+
 }
