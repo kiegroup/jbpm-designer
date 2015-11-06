@@ -16,38 +16,24 @@
 
 package org.jbpm.designer.client.popup;
 
+import com.google.gwt.user.client.ui.Widget;
+import org.jbpm.designer.client.shared.AssignmentRow;
+import org.jbpm.designer.client.shared.Variable.VariableType;
+import org.jbpm.designer.client.util.ListBoxValues;
+
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.Dependent;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.HeadingElement;
-import com.google.gwt.dom.client.Style;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.ui.Composite;
-import org.gwtbootstrap3.client.ui.Button;
-import org.gwtbootstrap3.client.ui.constants.IconType;
-import org.jboss.errai.ui.client.widget.ListWidget;
-import org.jboss.errai.ui.client.widget.Table;
-import org.jboss.errai.ui.shared.api.annotations.DataField;
-import org.jboss.errai.ui.shared.api.annotations.EventHandler;
-import org.jboss.errai.ui.shared.api.annotations.Templated;
-import org.jbpm.designer.client.util.ListBoxValues;
-import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
-import org.jbpm.designer.client.shared.AssignmentRow;
-import org.jbpm.designer.client.shared.Variable.VariableType;
-import org.uberfire.workbench.events.NotificationEvent;
 
 @Dependent
-@Templated("ActivityDataIOEditorWidget.html#widget" )
-public class ActivityDataIOEditorWidget extends Composite {
+public class ActivityDataIOEditorWidget implements ActivityDataIOEditorWidgetView.Presenter {
+
+    @Inject
+    private ActivityDataIOEditorWidgetView view;
 
     ListBoxValues dataTypeListBoxValues;
     ListBoxValues processVarListBoxValues;
@@ -60,60 +46,44 @@ public class ActivityDataIOEditorWidget extends Composite {
     private String duplicateNameErrorMessage = "";
 
     private Set<String> disallowedNames = new HashSet<String>();
-    private String disallowedNameErrorMessage;
-
-    @Inject
-    @DataField
-    private Button addVarButton;
-
-    @DataField
-    private final Element table = DOM.createTable();
-
-    @DataField
-    private HeadingElement tabletitle = Document.get().createHElement( 3 );
-
-    @DataField
-    private final Element processvarorconstantth = DOM.createTH();
-
-    /**
-     * The list of assignments that currently exist.
-     */
-    @Inject
-    @DataField
-    @Table(root="tbody")
-    private ListWidget<AssignmentRow, AssignmentListItemWidget> assignments;
+    private String disallowedNameErrorMessage = "";
 
     // List of rows that won't be shown in the UI
     List<AssignmentRow> hiddenPropertyRows = new ArrayList<AssignmentRow>();
 
-    @Inject
-    private Event<NotificationEvent> notification;
-
-
     @PostConstruct
     public void init() {
-        addVarButton.setText(DesignerEditorConstants.INSTANCE.Add());
-        addVarButton.setIcon( IconType.PLUS );
+        view.init(this);
+    }
+
+    @Override
+    public void handleAddClick() {
+        if (isSingleVar && view.getAssignmentRows().size() > 0) {
+            view.showOnlySingleEntryAllowed();
+        }
+        else {
+            addAssignment();
+        }
     }
 
     public void setIsSingleVar(boolean isSingleVar) {
         this.isSingleVar = isSingleVar;
         if (variableType.equals(VariableType.INPUT)) {
-            processvarorconstantth.setInnerText(DesignerEditorConstants.INSTANCE.Source());
+            view.setProcessVarAsSource();
             if (isSingleVar) {
-                tabletitle.setInnerText(DesignerEditorConstants.INSTANCE.Data_Input_and_Assignment());
+                view.setTableTitleInputSingle();
             }
             else {
-                tabletitle.setInnerText(DesignerEditorConstants.INSTANCE.Data_Inputs_and_Assignments());
+                view.setTableTitleInputMultiple();
             }
         }
         else {
-            processvarorconstantth.setInnerText(DesignerEditorConstants.INSTANCE.Target());
+            view.setProcessVarAsTarget();
             if (isSingleVar) {
-                tabletitle.setInnerText(DesignerEditorConstants.INSTANCE.Data_Output_and_Assignment());
+                view.setTableTitleOutputSingle();
             }
             else {
-                tabletitle.setInnerText(DesignerEditorConstants.INSTANCE.Data_Outputs_and_Assignments());
+                view.setTableTitleOutputMultiple();
             }
         }
     }
@@ -127,27 +97,17 @@ public class ActivityDataIOEditorWidget extends Composite {
         this.duplicateNameErrorMessage = duplicateNameErrorMessage;
     }
 
-    @EventHandler("addVarButton")
-    public void handleAddVarButton(ClickEvent e) {
-        if (isSingleVar && assignments.getValue().size() > 0) {
-            notification.fire(new NotificationEvent(DesignerEditorConstants.INSTANCE.Only_single_entry_allowed(), NotificationEvent.NotificationType.ERROR));
-        }
-        else {
-            addAssignment();
-        }
-    }
-
-    public void addAssignment() {
-        List<AssignmentRow> as = assignments.getValue();
+    private void addAssignment() {
+        List<AssignmentRow> as = view.getAssignmentRows();
         if (as.isEmpty()) {
-            table.getStyle().setDisplay(Style.Display.TABLE);
+            view.setTableDisplayStyle();
         }
 
         AssignmentRow newAssignment = new AssignmentRow();
         newAssignment.setVariableType(variableType);
         as.add(newAssignment);
 
-        AssignmentListItemWidget widget = assignments.getWidget(assignments.getValue().size() - 1);
+        AssignmentListItemWidget widget = view.getAssignmentWidget(view.getAssignmentsCount() - 1);
         widget.setDataTypes(dataTypeListBoxValues);
         widget.setProcessVariables(processVarListBoxValues);
         widget.setDisallowedNames(disallowedNames, disallowedNameErrorMessage);
@@ -156,10 +116,10 @@ public class ActivityDataIOEditorWidget extends Composite {
     }
 
     public void removeAssignment(AssignmentRow assignmentRow) {
-        assignments.getValue().remove(assignmentRow);
+        view.getAssignmentRows().remove(assignmentRow);
 
-        if (assignments.getValue().isEmpty()) {
-            table.getStyle().setDisplay(Style.Display.NONE);
+        if (view.getAssignmentRows().isEmpty()) {
+            view.setNoneDisplayStyle();
         }
     }
 
@@ -179,25 +139,25 @@ public class ActivityDataIOEditorWidget extends Composite {
         }
 
         if (assignmentRows.isEmpty()) {
-            table.getStyle().setDisplay(Style.Display.NONE);
+            view.setNoneDisplayStyle();
         }
         else {
-            table.getStyle().setDisplay(Style.Display.TABLE);
+            view.setTableDisplayStyle();
         }
 
-        assignments.setValue(assignmentRows);
+        view.setAssignmentRows(assignmentRows);
 
         for (int i = 0; i < assignmentRows.size(); i++) {
-            assignments.getWidget(i).setParentWidget(this);
-            assignments.getWidget(i).setDisallowedNames(disallowedNames, disallowedNameErrorMessage);
-            assignments.getWidget(i).setAllowDuplicateNames(allowDuplicateNames, duplicateNameErrorMessage);
+            view.getAssignmentWidget(i).setParentWidget(this);
+            view.getAssignmentWidget(i).setDisallowedNames(disallowedNames, disallowedNameErrorMessage);
+            view.getAssignmentWidget(i).setAllowDuplicateNames(allowDuplicateNames, duplicateNameErrorMessage);
         }
     }
 
     public List<AssignmentRow> getData() {
         List<AssignmentRow> rows = new ArrayList<AssignmentRow>();
-        if (!assignments.getValue().isEmpty()) {
-            rows.addAll(assignments.getValue());
+        if (!view.getAssignmentRows().isEmpty()) {
+            rows.addAll(view.getAssignmentRows());
         }
         if (!hiddenPropertyRows.isEmpty()) {
             rows.addAll(hiddenPropertyRows);
@@ -211,15 +171,15 @@ public class ActivityDataIOEditorWidget extends Composite {
 
     public void setDataTypes(ListBoxValues dataTypeListBoxValues) {
         this.dataTypeListBoxValues = dataTypeListBoxValues;
-        for (int i = 0; i < assignments.getValue().size(); i++) {
-            assignments.getWidget(i).setDataTypes(dataTypeListBoxValues);
+        for (int i = 0; i < view.getAssignmentsCount(); i++) {
+            view.getAssignmentWidget(i).setDataTypes(dataTypeListBoxValues);
         }
     }
 
     public void setProcessVariables(ListBoxValues processVarListBoxValues) {
         this.processVarListBoxValues = processVarListBoxValues;
-        for (int i = 0; i < assignments.getValue().size(); i++) {
-            assignments.getWidget(i).setProcessVariables(processVarListBoxValues);
+        for (int i = 0; i < view.getAssignmentsCount(); i++) {
+            view.getAssignmentWidget(i).setProcessVariables(processVarListBoxValues);
         }
     }
 
@@ -227,8 +187,8 @@ public class ActivityDataIOEditorWidget extends Composite {
         this.disallowedNames = disallowedNames;
         this.disallowedNameErrorMessage = disallowedNameErrorMessage;
 
-        for (int i = 0; i < assignments.getValue().size(); i++) {
-            assignments.getWidget(i).setDisallowedNames(disallowedNames, disallowedNameErrorMessage);
+        for (int i = 0; i < view.getAssignmentsCount(); i++) {
+            view.getAssignmentWidget(i).setDisallowedNames(disallowedNames, disallowedNameErrorMessage);
         }
     }
 
@@ -242,11 +202,11 @@ public class ActivityDataIOEditorWidget extends Composite {
         if (name == null || name.isEmpty()) {
             return false;
         }
-        List<AssignmentRow> as = assignments.getValue();
+        List<AssignmentRow> as = view.getAssignmentRows();
         if (as != null && !as.isEmpty()) {
             int nameCount = 0;
             for (AssignmentRow row : as) {
-                if (name.equals(row.getName())) {
+                if (name.compareTo(row.getName()) == 0) {
                     nameCount++;
                     if (nameCount > 1) {
                         return true;
@@ -255,5 +215,13 @@ public class ActivityDataIOEditorWidget extends Composite {
             }
         }
         return false;
+    }
+
+    public void setIsVisible(boolean visible) {
+        view.setVisible(visible);
+    }
+
+    public Widget getWidget(){
+        return (Widget) view;
     }
 }

@@ -28,6 +28,7 @@ import org.jboss.errai.common.client.api.Caller;
 import org.jboss.errai.common.client.api.RemoteCallback;
 import org.jbpm.designer.client.popup.ActivityDataIOEditor;
 import org.jbpm.designer.client.shared.AssignmentData;
+import org.jbpm.designer.client.shared.Variable;
 import org.jbpm.designer.client.shared.Variable.VariableType;
 import org.jboss.errai.security.shared.api.identity.User;
 import org.jbpm.designer.client.type.Bpmn2Type;
@@ -330,8 +331,8 @@ public class DesignerPresenter
         AssignmentData assignmentData = new AssignmentData(inputvars, outputvars, processvars, assignments, datatypes, disallowedpropertynames);
         activityDataIOEditor.setAssignmentData(assignmentData);
         activityDataIOEditor.setDisallowedPropertyNames(assignmentData.getDisallowedPropertyNames());
-        activityDataIOEditor.setInputAssignmentRows(assignmentData.getAssignmentRows(VariableType.INPUT));
-        activityDataIOEditor.setOutputAssignmentRows(assignmentData.getAssignmentRows(VariableType.OUTPUT));
+        activityDataIOEditor.setInputAssignmentRows(assignmentData.getAssignmentRows(Variable.VariableType.INPUT));
+        activityDataIOEditor.setOutputAssignmentRows(assignmentData.getAssignmentRows(Variable.VariableType.OUTPUT));
         activityDataIOEditor.setDataTypes(assignmentData.getDataTypes(), assignmentData.getDataTypeDisplayNames());
         activityDataIOEditor.setProcessVariables(assignmentData.getProcessVariableNames());
 
