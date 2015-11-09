@@ -179,7 +179,7 @@ public class AssignmentListItemWidget extends Composite implements HasModel<Assi
                     // Not a valid value
                     setModelValue(listBox, "");
                     setModelValue(textBox, "");
-                 } else if (newValue.startsWith(getListBoxValues(listBox).getEditPrefix())) {
+                } else if (newValue.startsWith(getListBoxValues(listBox).getEditPrefix())) {
                     // "Edit <value> ..." selected, show textBox with appropriate value
                     String quotedValue = getModelValue(listBox);
                     String unquotedValue = AssignmentData.createUnquotedConstant(quotedValue);
@@ -196,7 +196,7 @@ public class AssignmentListItemWidget extends Composite implements HasModel<Assi
                     }
                     setModelValue(listBox, newValue);
                     setModelValue(textBox, textValue);
-                } else if (newValue != null) {
+                } else {
                     // A non-custom value has been selected
                     setModelValue(listBox, newValue);
                     setModelValue(textBox, "");

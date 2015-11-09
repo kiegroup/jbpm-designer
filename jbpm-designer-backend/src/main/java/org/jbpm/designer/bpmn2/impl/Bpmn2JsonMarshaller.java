@@ -575,7 +575,6 @@ public class Bpmn2JsonMarshaller {
             properties.put("datainput", dinbuff.toString());
 
             StringBuilder associationBuff = new StringBuilder();
-            List<String> uniDirectionalAssociations = new ArrayList<String>();
             for(DataInputAssociation datain : event.getDataInputAssociation()) {
                 String lhsAssociation = "";
                 if(datain.getSourceRef() != null && datain.getSourceRef().size() > 0) {
@@ -614,7 +613,6 @@ public class Bpmn2JsonMarshaller {
                     if(lhsAssociation != null && lhsAssociation.length() > 0) {
                         associationBuff.append("[din]" + lhsAssociation).append("->").append(rhsAssociation);
                         associationBuff.append(",");
-                        uniDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
                     }
                 }
             }
@@ -1319,7 +1317,6 @@ public class Bpmn2JsonMarshaller {
         StringBuilder associationBuff = new StringBuilder();
         List<DataInputAssociation> inputAssociations = callActivity.getDataInputAssociations();
         List<DataOutputAssociation> outputAssociations = callActivity.getDataOutputAssociations();
-        List<String> uniDirectionalAssociations = new ArrayList<String>();
         //List<String> biDirectionalAssociations = new ArrayList<String>();
 
         for(DataInputAssociation datain : inputAssociations) {
@@ -1375,7 +1372,6 @@ public class Bpmn2JsonMarshaller {
                 if(lhsAssociation != null && lhsAssociation.length() > 0) {
                     associationBuff.append("[din]" + lhsAssociation).append("->").append(rhsAssociation);
                     associationBuff.append(",");
-                    uniDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
                 }
             }
         }
@@ -2678,7 +2674,6 @@ public class Bpmn2JsonMarshaller {
         StringBuilder associationBuff = new StringBuilder();
         List<DataInputAssociation> inputAssociations = subProcess.getDataInputAssociations();
         List<DataOutputAssociation> outputAssociations = subProcess.getDataOutputAssociations();
-        List<String> uniDirectionalAssociations = new ArrayList<String>();
         //List<String> biDirectionalAssociations = new ArrayList<String>();
 
         for(DataInputAssociation datain : inputAssociations) {
@@ -2734,7 +2729,6 @@ public class Bpmn2JsonMarshaller {
                 if(lhsAssociation != null && lhsAssociation.length() > 0) {
                     associationBuff.append("[din]" + lhsAssociation).append("->").append(rhsAssociation);
                     associationBuff.append(",");
-                    uniDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
                 }
             }
         }

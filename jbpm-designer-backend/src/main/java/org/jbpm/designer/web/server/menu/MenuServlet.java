@@ -73,7 +73,6 @@ public class MenuServlet extends HttpServlet {
                     "No profile with the name " + profileName +
                             " was registered");
         }
-        Repository repo = profile.getRepository();
         XMLOutputter outputter = new XMLOutputter();
         Format format = Format.getPrettyFormat();
         format.setExpandEmptyElements(true);

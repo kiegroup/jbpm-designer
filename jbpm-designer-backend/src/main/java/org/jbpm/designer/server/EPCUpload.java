@@ -63,22 +63,22 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 public class EPCUpload extends HttpServlet {
 
 	private static final long serialVersionUID = 316274845723034029L;
-	
+
 //	private static Configuration config = null;
-	
+
     /**
      * The POST request.
      */
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException {
-    	
-    	
+
+
     	// No isMultipartContent => Error
     	final boolean isMultipartContent = ServletFileUpload.isMultipartContent(req);
     	if (!isMultipartContent){
     		printError(res, "No Multipart Content transmitted.");
 			return ;
     	}
-    	
+
     	// Get the uploaded file
     	final FileItemFactory factory = new DiskFileItemFactory();
     	final ServletFileUpload servletFileUpload = new ServletFileUpload(factory);
@@ -95,7 +95,7 @@ public class EPCUpload extends HttpServlet {
 	   		return;
     	} 
     	final FileItem fileItem = (FileItem)items.get(0);
-    		
+
     	// Get filename and content (needed to distinguish between EPML and AML)
     	final String fileName = fileItem.getName();
     	String content = fileItem.getString();
@@ -109,7 +109,7 @@ public class EPCUpload extends HttpServlet {
     		handleException(res, e); 
     		return;
     	}
-	   		
+
     	// epml2eRDF XSLT source
     	final String xsltFilename = getServletContext().getRealPath("/xslt/EPML2eRDF.xslt");
 //    	final String xsltFilename = System.getProperty("catalina.home") + "/webapps/oryx/xslt/EPML2eRDF.xslt";
@@ -128,7 +128,7 @@ public class EPCUpload extends HttpServlet {
     		printError(res, "No EPML or AML file uploaded.");
     		return ;
     	}
-    		
+
     	// Get the result string
     	String resultString = null;
     	try {
@@ -143,7 +143,7 @@ public class EPCUpload extends HttpServlet {
 
     	if (resultString != null){
     		try {
-    			
+
     			printResponse( res, resultString );
 
     		} catch (Exception e){
@@ -152,45 +152,43 @@ public class EPCUpload extends HttpServlet {
     		}
     	}
     }
-    
+
     private void printResponse(HttpServletResponse res, String text){
     	if (res != null){
- 
+
         	// Get the PrintWriter
         	res.setContentType("text/plain");
-        	
-        	PrintWriter out = null;
+
         	try {
-        	    out = res.getWriter();
+                PrintWriter out;
+                out = res.getWriter();
+				out.print(text);
         	} catch (IOException e) {
         	    e.printStackTrace();
         	}
-        	
-    		out.print(text);
     	}
     }
-    
-    
+
+
     private void printError(HttpServletResponse res, String err){
     	if (res != null){
- 
+
         	// Get the PrintWriter
         	res.setContentType("text/html");
-        	
-        	PrintWriter out = null;
+
         	try {
-        	    out = res.getWriter();
+                PrintWriter out;
+                out = res.getWriter();
+                out.print("{success:false, content:'"+err+"'}");
         	} catch (IOException e) {
         	    e.printStackTrace();
         	}
-        	
-    		out.print("{success:false, content:'"+err+"'}");
     	}
     }
-    
+
 	private void handleException(HttpServletResponse res, Exception e) {
 		e.printStackTrace();
 		printError(res, e.getLocalizedMessage());
 	}
-    
+
 }
