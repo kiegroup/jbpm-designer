@@ -463,7 +463,7 @@ public class Bpmn2JsonMarshaller {
             StringBuffer doutassociationbuff = new StringBuffer();
             for(DataOutputAssociation doa : outputAssociations) {
                 String doaName = ((DataOutput)doa.getSourceRef().get(0)).getName();
-                if(doaName != null && doaName.length() > 0) {
+                if(doaName != null && doaName.length() > 0 && doa.getTargetRef() != null) {
                     doutassociationbuff.append("[dout]" + ((DataOutput)doa.getSourceRef().get(0)).getName());
                     doutassociationbuff.append("->");
                     doutassociationbuff.append(doa.getTargetRef().getId());
@@ -1383,7 +1383,10 @@ public class Bpmn2JsonMarshaller {
         for(DataOutputAssociation dataout : outputAssociations) {
             if(dataout.getSourceRef().size() > 0) {
                 String lhsAssociation = ((DataOutput) dataout.getSourceRef().get(0)).getName();
-                String rhsAssociation = dataout.getTargetRef().getId();
+                String rhsAssociation = null;
+                if (dataout.getTargetRef() != null) {
+                    rhsAssociation = dataout.getTargetRef().getId();
+                }
 
                 boolean wasBiDirectional = false;
                 // check if we already addressed this association as bidirectional
@@ -1399,7 +1402,7 @@ public class Bpmn2JsonMarshaller {
                 	rhsAssociation = encodeAssociationValue(dataout.getTransformation().getBody());
                 }
 
-                if(!wasBiDirectional) {
+                if(rhsAssociation != null && !wasBiDirectional) {
                     if(lhsAssociation != null && lhsAssociation.length() > 0) {
                         associationBuff.append("[dout]" + lhsAssociation).append("->").append(rhsAssociation);
                         associationBuff.append(",");
@@ -1672,7 +1675,7 @@ public class Bpmn2JsonMarshaller {
                 if(din.getName() != null && din.getName().equals("TaskName")) {
                     List<DataInputAssociation> taskDataInputAssociations = task.getDataInputAssociations();
                     for(DataInputAssociation dia : taskDataInputAssociations) {
-                        if(dia.getTargetRef() != null && dia.getTargetRef().getId().equals(din.getId())) {
+                        if(dia.getTargetRef() != null && dia.getTargetRef() != null && dia.getTargetRef().getId().equals(din.getId())) {
                             properties.put("taskname", ((FormalExpression) dia.getAssignment().get(0).getFrom()).getBody());
                             foundTaskName = true;
                         }
@@ -1723,7 +1726,7 @@ public class Bpmn2JsonMarshaller {
 
                 List<DataOutputAssociation> taskOutputAssociations = task.getDataOutputAssociations();
                 for(DataOutputAssociation dout : taskOutputAssociations) {
-                    if(dout.getSourceRef().get(0).equals(iedataoutput)) {
+                    if(dout.getSourceRef().get(0).equals(iedataoutput) && dout.getTargetRef() != null) {
                         properties.put("multipleinstancecollectionoutput", dout.getTargetRef().getId());
                         break;
                     }
@@ -2079,7 +2082,7 @@ public class Bpmn2JsonMarshaller {
                 MultiInstanceLoopCharacteristics taskMultiLoop = (MultiInstanceLoopCharacteristics) task.getLoopCharacteristics();
                 // dont include associations that include mi loop data outputs
 
-                if(taskMultiLoop.getOutputDataItem() != null && taskMultiLoop.getOutputDataItem().getId() != null)  {
+                if(taskMultiLoop.getOutputDataItem() != null && taskMultiLoop.getOutputDataItem().getId() != null && dataout.getTargetRef() != null)  {
                     if(dataout.getTargetRef().getId().equals(taskMultiLoop.getOutputDataItem().getId())) {
                         proceed = false;
                     }
@@ -2093,9 +2096,12 @@ public class Bpmn2JsonMarshaller {
             }
 
             if(proceed) {
-                if(dataout.getSourceRef().size() > 0) {
+                if(dataout.getSourceRef().size() > 0 && dataout.getTargetRef() != null) {
                     String lhsAssociation = ((DataOutput) dataout.getSourceRef().get(0)).getName();
-                    String rhsAssociation = dataout.getTargetRef().getId();
+                    String rhsAssociation = null;
+                    if (dataout.getTargetRef() != null) {
+                        rhsAssociation = dataout.getTargetRef().getId();
+                    }
 
                     boolean wasBiDirectional = false;
                     // check if we already addressed this association as bidirectional
@@ -2111,7 +2117,7 @@ public class Bpmn2JsonMarshaller {
                         rhsAssociation = encodeAssociationValue(dataout.getTransformation().getBody());
                     }
 
-                    if(!wasBiDirectional) {
+                    if(rhsAssociation != null && !wasBiDirectional) {
                         if(lhsAssociation != null && lhsAssociation.length() > 0) {
                             associationBuff.append("[dout]" + lhsAssociation).append("->").append(rhsAssociation);
                             associationBuff.append(",");
@@ -2742,7 +2748,10 @@ public class Bpmn2JsonMarshaller {
         for(DataOutputAssociation dataout : outputAssociations) {
             if(dataout.getSourceRef().size() > 0) {
                 String lhsAssociation = ((DataOutput) dataout.getSourceRef().get(0)).getName();
-                String rhsAssociation = dataout.getTargetRef().getId();
+                String rhsAssociation = null;
+                if (dataout.getTargetRef() != null) {
+                    rhsAssociation = dataout.getTargetRef().getId();
+                }
 
                 boolean wasBiDirectional = false;
                 // check if we already addressed this association as bidirectional
@@ -2758,7 +2767,7 @@ public class Bpmn2JsonMarshaller {
                 	rhsAssociation = encodeAssociationValue(dataout.getTransformation().getBody());
                 }
 
-                if(!wasBiDirectional) {
+                if(rhsAssociation != null && !wasBiDirectional) {
                     if(lhsAssociation != null && lhsAssociation.length() > 0) {
                         associationBuff.append("[dout]" + lhsAssociation).append("->").append(rhsAssociation);
                         associationBuff.append(",");
@@ -2868,7 +2877,7 @@ public class Bpmn2JsonMarshaller {
 
                 List<DataOutputAssociation> taskOutputAssociations = subProcess.getDataOutputAssociations();
                 for(DataOutputAssociation dout : taskOutputAssociations) {
-                    if(dout.getSourceRef().get(0).equals(iedataoutput)) {
+                    if(dout.getSourceRef().get(0).equals(iedataoutput) && dout.getTargetRef() != null) {
                         properties.put("multipleinstancecollectionoutput", dout.getTargetRef().getId());
                         break;
                     }
