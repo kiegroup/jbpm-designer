@@ -15,26 +15,35 @@
 
 package org.jbpm.designer.web.server.menu.connector.commands;
 
+import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import bpsim.impl.BpsimFactoryImpl;
 import org.apache.commons.fileupload.FileItemStream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.eclipse.bpmn2.Definitions;
-import org.eclipse.bpmn2.RootElement;
 import org.eclipse.bpmn2.Process;
+import org.eclipse.bpmn2.RootElement;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.jboss.drools.impl.DroolsFactoryImpl;
-import org.jbpm.designer.repository.*;
+import org.jbpm.designer.repository.Asset;
+import org.jbpm.designer.repository.AssetBuilderFactory;
+import org.jbpm.designer.repository.AssetTypeMapper;
+import org.jbpm.designer.repository.Directory;
+import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.uberfire.java.nio.file.NoSuchFileException;
-
-import java.io.ByteArrayOutputStream;
-import java.util.*;
 
 public abstract class AbstractCommand {
     private static Logger logger = LoggerFactory.getLogger(AbstractCommand.class);
@@ -411,7 +420,7 @@ public abstract class AbstractCommand {
         info.put("rm",  true);
         info.put("url", asset.getAssetType() + "|" + asset.getUniqueId());
 
-        if(asset.getAssetType().equals("bpmn") | asset.getAssetType().equals("bpmn2")) {
+        if(asset.getAssetType().equals("bpmn") || asset.getAssetType().equals("bpmn2")) {
             try {
                 info.put("processlocation", asset.getAssetLocation());
                 Asset ab = profile.getRepository().loadAssetFromPath(asset.getAssetLocation() + "/" + asset.getFullName());

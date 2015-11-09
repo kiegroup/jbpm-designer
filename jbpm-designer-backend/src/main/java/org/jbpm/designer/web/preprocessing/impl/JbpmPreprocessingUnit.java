@@ -272,7 +272,6 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
             // default the process id to packagename.processName
             String processIdString = packageNameStr + processName;
-            if(processIdString.startsWith("."));
             if(processIdString.startsWith(".")) {
                 processIdString = processIdString.substring(1, processIdString.length());
             }
