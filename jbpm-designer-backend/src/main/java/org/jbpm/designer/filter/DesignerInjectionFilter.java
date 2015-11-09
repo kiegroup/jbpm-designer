@@ -91,7 +91,7 @@ public class DesignerInjectionFilter implements Filter {
             switch (ruleToApply.getInsertAt()) {
                 case InsertAt.HEAD_BEGIN:
                     if (!headBeginInserted) {
-                        if (tagsToInsert != "") {
+                        if (tagsToInsert.equals("")) {
                             tagsToInsert = "<head>\n" + tagsToInsert
                                     + headBeginMarker;
                             modResponse = findAndReplace(tagsToInsert, modResponse,
@@ -99,7 +99,7 @@ public class DesignerInjectionFilter implements Filter {
                             headBeginInserted = true;
                         }
                     } else {
-                        if (tagsToInsert != "") {
+                        if (tagsToInsert.equals("")) {
                             tagsToInsert = tagsToInsert + headBeginMarker;
                             modResponse = findAndReplace(tagsToInsert, modResponse,
                                     headBeginMarker);
@@ -108,7 +108,7 @@ public class DesignerInjectionFilter implements Filter {
                     break;
 
                 case InsertAt.HEAD_END:
-                    if (tagsToInsert != "") {
+                    if (tagsToInsert.equals("")) {
                         tagsToInsert += "</head>";
                         modResponse = findAndReplace(tagsToInsert, modResponse,
                                 "</head>");
@@ -117,7 +117,7 @@ public class DesignerInjectionFilter implements Filter {
 
                 case InsertAt.BODY_BEGIN:
                     if (!bodyBeginInserted) {
-                        if (tagsToInsert != "") {
+                        if (tagsToInsert.equals("")) {
                             Pattern p = Pattern.compile("<body[^>]*>",
                                     Pattern.CASE_INSENSITIVE | Pattern.MULTILINE
                                             | Pattern.DOTALL);
@@ -139,7 +139,7 @@ public class DesignerInjectionFilter implements Filter {
                             bodyBeginInserted = true;
                         }
                     } else {
-                        if (tagsToInsert != "") {
+                        if (tagsToInsert.equals("")) {
                             tagsToInsert = tagsToInsert + bodyBeginMarker;
                             modResponse = findAndReplace(tagsToInsert, modResponse,
                                     bodyBeginMarker);
@@ -148,7 +148,7 @@ public class DesignerInjectionFilter implements Filter {
                     break;
 
                 case InsertAt.BODY_END:
-                    if (tagsToInsert != "") {
+                    if (tagsToInsert.equals("")) {
                         tagsToInsert += "\n</body>";
                         modResponse = findAndReplace(tagsToInsert, modResponse,
                                 "</body>");

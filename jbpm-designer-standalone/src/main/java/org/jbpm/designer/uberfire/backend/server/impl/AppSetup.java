@@ -46,8 +46,8 @@ public class AppSetup {
     private static final String JBPM_URL = "https://github.com/guvnorngtestuser1/jbpm-console-ng-playground-kjar.git";
 //    private static final String GUVNOR_URL = "https://github.com/guvnorngtestuser1/guvnorng-playground.git";
 
-    private final String userName = "guvnorngtestuser1";
-    private final String password = "test1234";
+    private final static String userName = "guvnorngtestuser1";
+    private final static String password = "test1234";
 
     private static final String GLOBAL_SETTINGS = "settings";
 

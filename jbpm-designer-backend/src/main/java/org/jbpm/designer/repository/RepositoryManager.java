@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class RepositoryManager {
 
-    private static RepositoryManager instance;
+    private static volatile RepositoryManager instance;
 
     private Map<String, Repository> availableRepositories = new ConcurrentHashMap<String, Repository>();
 
@@ -47,7 +47,7 @@ public class RepositoryManager {
         return repository;
     }
 
-    public static RepositoryManager getInstance() {
+    public synchronized static RepositoryManager getInstance() {
         if (instance == null) {
             instance = new RepositoryManager();
         }
