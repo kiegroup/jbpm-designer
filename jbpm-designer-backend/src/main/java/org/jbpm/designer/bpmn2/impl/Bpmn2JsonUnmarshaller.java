@@ -1988,7 +1988,7 @@ public class Bpmn2JsonUnmarshaller {
                         if(sed.getSignalRef() != null) {
                             Signal signal = findSignalWithName(sed.getSignalRef(), def);
                             if(signal != null) {
-                                sed.setSignalRef(signal.getId());
+                                sed.setSignalRef(signal.getName());
                             }
                         }
                     }
