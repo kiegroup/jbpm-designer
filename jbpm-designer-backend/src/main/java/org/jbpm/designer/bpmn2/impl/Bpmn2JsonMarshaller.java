@@ -499,7 +499,7 @@ public class Bpmn2JsonMarshaller {
                     List<RootElement> rootElements = def.getRootElements();
                     for(RootElement re : rootElements) {
                         if(re instanceof Signal) {
-                            if(re.getId().equals(((SignalEventDefinition) ed).getSignalRef())) {
+                            if(((Signal) re).getName().equals(((SignalEventDefinition) ed).getSignalRef())) {
                                 properties.put("signalref", ((Signal)re).getName());
                                 foundSignalRef = true;
                             }
