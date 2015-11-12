@@ -183,7 +183,7 @@ ORYX.Editor = {
 			if ( (typeof parent.isLocked === "function") && (typeof parent.isLockedByCurrentUser === "function") ) {
 				var isEditorLocked = parent.isLocked();
 				var isEditorLockedByCurrentUser = parent.isLockedByCurrentUser();
-				var isReadOnly = ORYX.READONLY || ORYX.VIEWLOCKED;
+				var isReadOnly = ( ORYX.READONLY == true ) || ( ORYX.VIEWLOCKED == true );
 
 				if(!isEditorLocked) {
 					ORYX.VIEWLOCKED = false;
