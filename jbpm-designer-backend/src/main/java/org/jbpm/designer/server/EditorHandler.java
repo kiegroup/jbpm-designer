@@ -200,11 +200,13 @@ public class EditorHandler extends HttpServlet {
     }
 
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
     }
 
-    protected void doGet(HttpServletRequest request,
+    @Override
+    public void doGet(HttpServletRequest request,
                          HttpServletResponse response)
             throws ServletException, IOException {
         String profileName = request.getParameter("profile");
@@ -230,7 +232,6 @@ public class EditorHandler extends HttpServlet {
         String readOnly = request.getParameter("readonly");
         String viewLocked = request.getParameter("viewlocked");
         String sessionId = request.getParameter( "sessionId" );
-        String instanceViewMode = request.getParameter("instanceviewmode");
 
         if(viewLocked == null || viewLocked.length() < 1) {
             viewLocked = "false";
@@ -317,7 +318,7 @@ public class EditorHandler extends HttpServlet {
         editorTemplate.add("editoruuid", uuid);
         editorTemplate.add("editorid", editorID);
         editorTemplate.add("sessionid", sessionId);
-        editorTemplate.add("instanceviewmode", instanceViewMode != null ? "true" : "false");
+        editorTemplate.add("instanceviewmode", getInstanceViewMode(request));
         //editorTemplate.add("activenodes", activeNodes);
         //editorTemplate.add("completednodes", completedNodes);
         //editorTemplate.add("processsource", encodedProcessSource);
@@ -439,6 +440,11 @@ public class EditorHandler extends HttpServlet {
             _logger.error(e.getMessage(), e);
         }
         return retStr;
+    }
+
+    public String getInstanceViewMode(HttpServletRequest request) {
+        String instanceViewMode = request.getParameter("instanceviewmode");
+        return ( instanceViewMode != null && instanceViewMode.equals("true") ) ? "true" : "false";
     }
 
 

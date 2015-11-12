@@ -1435,31 +1435,64 @@ ORYX.Core.Command.Move = ORYX.Core.Command.extend({
 		this.plugin		= plugin;
 		this.doLayout = doLayout;
 		this.newParents = [];
+
+		var xcontainermove = true;
+		var xcontainerparent;
+		var xcontainervalueparent;
+		if(moveShapes.length == 1) {
+			xcontainermove = false;
+		} else {
+			for(var k=0; k<moveShapes.length; k++) {
+				var value = moveShapes[k];
+				if(k == 0) {
+					xcontainerparent = parent;
+					xcontainervalueparent = value.parent;
+				} else {
+					if(!(parent === xcontainerparent && value.parent === xcontainervalueparent)) {
+						xcontainermove = false;
+					}
+				}
+			}
+		}
+
 		// Defines the old/new parents for the particular shape
-		for(var i=0; i<moveShapes.length ;i++) {
+		for(var i=0; i<moveShapes.length;i++) {
 			var value = moveShapes[i];
 			if(value.parent instanceof ORYX.Core.Canvas) {
 				this.newParents[i] = parent || value.parent;
 			} else {
-				if(value.parent == parent) {
+				if(value.parent === parent) {
 					this.newParents[i] = parent || value.parent;
 				} else {
 					if(moveShapes.length == 1) {
 						this.newParents[i] = parent || value.parent;
 					} else {
 						if(parent && parent instanceof ORYX.Core.Canvas) {
-							if(value.parent == parent) {
+							if(value.parent === parent) {
 								this.newParents[i] = parent;
 							} else {
-								this.newParents[i] = value.parent;
+								if(!(value.parent instanceof ORYX.Core.Canvas)) {
+									this.newParents[i] = parent;
+								} else {
+									this.newParents[i] = value.parent;
+								}
 							}
 						} else {
-							this.newParents[i] = value.parent;
+							if(xcontainermove) {
+								this.newParents[i] = parent || value.parent;
+							} else {
+								if(value.parent !== parent) {
+									this.newParents[i] = value.parent;
+								} else {
+									this.newParents[i] = parent || value.parent;
+								}
+							}
 						}
 					}
 				}
 			}
 		}
+		
 		this.oldParents	= moveShapes.collect(function(shape){ return shape.parent });
 		this.dockedNodes= moveShapes.findAll(function(shape){ return shape instanceof ORYX.Core.Node && shape.dockers.length == 1}).collect(function(shape){ return {docker:shape.dockers[0], dockedShape:shape.dockers[0].getDockedShape(), refPoint:shape.dockers[0].referencePoint} });
 	},			
