@@ -55,8 +55,6 @@ public class ListBoxValuesTest {
         processVarValues.addCustomValue("\"jkl\"", "\"reason\"");
         processVarValues.update("\"jkl\"");
 
-        System.out.println(processVarValues.toString());
-
         String[] acceptableValuesWithoutCustomValues = {
                 "** Variable Definitions **",
                 "employee",
@@ -114,8 +112,6 @@ public class ListBoxValuesTest {
         dataTypeValues.update(nonCustomValue);
         dataTypeValues.addCustomValue("com.test.HisType", "");
         dataTypeValues.update("com.test.HisType");
-
-        System.out.println(dataTypeValues.toString());
 
         String[] acceptableValuesWithoutCustomValues = {
                 "String",

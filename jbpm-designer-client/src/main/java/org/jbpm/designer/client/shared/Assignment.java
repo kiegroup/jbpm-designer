@@ -155,11 +155,15 @@ public class Assignment {
      */
     @Override
     public String toString() {
+        return toString(new AssignmentData());
+    }
+
+    public String toString(AssignmentData assignmentData) {
         StringBuilder sb = new StringBuilder();
         if (getVariableType() == VariableType.INPUT) {
             if (getConstant() != null && !getConstant().isEmpty()) {
                 sb.append(INPUT_ASSIGNMENT_PREFIX).append(getName()).append(ASSIGNMENT_OPERATOR_TOCONSTANT).append(
-                        Assignment.encodeConstant(getConstant()));
+                        assignmentData.urlEncodeConstant(getConstant()));
             }
             else if (getProcessVarName() != null && !getProcessVarName().isEmpty()) {
                 sb.append(INPUT_ASSIGNMENT_PREFIX).append(getProcessVarName()).append(ASSIGNMENT_OPERATOR_TOVARIABLE).append(getName());
@@ -218,30 +222,11 @@ public class Assignment {
         else if (sAssignment.contains(ASSIGNMENT_OPERATOR_TOCONSTANT)) {
             int i = sAssignment.indexOf(ASSIGNMENT_OPERATOR_TOCONSTANT);
             variableName = sAssignment.substring(0, i);
-            constant = Assignment.decodeConstant(sAssignment.substring(i + ASSIGNMENT_OPERATOR_TOCONSTANT.length()));
+            constant = assignmentData.urlDecodeConstant(sAssignment.substring(i + ASSIGNMENT_OPERATOR_TOCONSTANT.length()));
         }
 
         // Create the new assignment
         return new Assignment(assignmentData, variableName, assignmentType, processVariableName, constant);
     }
 
-    protected static String encodeConstant(String s) {
-        if (s == null || s.isEmpty()) {
-            return s;
-        }
-        s = s.replaceAll("=", "||");
-        s = s.replaceAll(",", "##");
-
-        return s;
-    }
-
-    protected static String decodeConstant(String s) {
-        if (s == null || s.isEmpty()) {
-            return s;
-        }
-        s = s.replaceAll("\\|\\|", "=");
-        s = s.replaceAll("##", ",");
-
-        return s;
-    }
 }

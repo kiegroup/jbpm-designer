@@ -18,6 +18,7 @@ package org.jbpm.designer.bpmn2.impl;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.Map.Entry;
@@ -7278,7 +7279,12 @@ public class Bpmn2JsonUnmarshaller {
         if (s == null || s.isEmpty()) {
             return s;
         }
-        return s.replaceAll("\\|\\|", "=").replaceAll("##", ",");
+        try {
+            return URLDecoder.decode(s, "UTF-8");
+        }
+        catch (UnsupportedEncodingException e) {
+            return s;
+        }
     }
 
 }
