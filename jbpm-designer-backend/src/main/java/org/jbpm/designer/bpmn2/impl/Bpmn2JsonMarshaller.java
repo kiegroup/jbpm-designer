@@ -17,6 +17,8 @@ package org.jbpm.designer.bpmn2.impl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -3600,6 +3602,10 @@ public class Bpmn2JsonMarshaller {
         if (s == null || s.isEmpty()) {
             return s;
         }
-        return s.replaceAll("=", "||").replaceAll(",", "##");
+        try {
+            return URLEncoder.encode(s, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            return s;
+        }
     }
 }

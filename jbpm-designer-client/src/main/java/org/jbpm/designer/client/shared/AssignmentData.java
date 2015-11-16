@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.http.client.URL;
 import org.jboss.errai.common.client.api.annotations.Portable;
 import org.jbpm.designer.client.shared.Variable.VariableType;
 
@@ -514,6 +515,21 @@ public class AssignmentData {
             str = str.substring(0, str.length() - 1);
         }
         return str;
+    }
+
+    protected String urlEncodeConstant(String s) {
+        if (s == null || s.isEmpty()) {
+            return s;
+        }
+
+        return URL.encodeQueryString(s);
+    }
+
+    protected String urlDecodeConstant(String s) {
+        if (s == null || s.isEmpty()) {
+            return s;
+        }
+        return URL.decodeQueryString(s);
     }
 
 }
