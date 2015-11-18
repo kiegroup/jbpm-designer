@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.apache.commons.io.IOUtils;
+
 public class ConfigurationProvider {
 
     public static final String CONFIG_FILE = "/designer.configuration";
@@ -28,13 +30,16 @@ public class ConfigurationProvider {
     private static ConfigurationProvider instance;
 
     private ConfigurationProvider() {
+        InputStream input = null;
         try {
-            InputStream input = this.getClass().getResourceAsStream(CONFIG_FILE);
+            input = this.getClass().getResourceAsStream(CONFIG_FILE);
             if (input != null) {
                 configurationProps.load(input);
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            IOUtils.closeQuietly(input);
         }
     }
 
