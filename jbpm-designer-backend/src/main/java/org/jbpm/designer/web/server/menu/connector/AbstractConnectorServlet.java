@@ -15,32 +15,47 @@
 
 package org.jbpm.designer.web.server.menu.connector;
 
-import org.apache.commons.fileupload.FileItemIterator;
-import org.apache.commons.fileupload.FileItemStream;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.fileupload.util.Streams;
-import org.apache.commons.io.IOUtils;
-import org.jbpm.designer.util.Utils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.jbpm.designer.repository.Asset;
-import org.jbpm.designer.repository.AssetBuilderFactory;
-import org.jbpm.designer.repository.Repository;
-import org.jbpm.designer.repository.impl.AssetBuilder;
-import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.designer.web.profile.IDiagramProfileService;
-import org.jbpm.designer.web.server.menu.connector.commands.*;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.uberfire.java.nio.file.NoSuchFileException;
-
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.util.*;
+
+import org.apache.commons.fileupload.FileItemIterator;
+import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.fileupload.util.Streams;
+import org.apache.commons.io.IOUtils;
+import org.jbpm.designer.repository.Asset;
+import org.jbpm.designer.repository.AssetBuilderFactory;
+import org.jbpm.designer.repository.Repository;
+import org.jbpm.designer.repository.impl.AssetBuilder;
+import org.jbpm.designer.util.Utils;
+import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.jbpm.designer.web.profile.IDiagramProfileService;
+import org.jbpm.designer.web.server.menu.connector.commands.MakeDirCommand;
+import org.jbpm.designer.web.server.menu.connector.commands.MakeFileCommand;
+import org.jbpm.designer.web.server.menu.connector.commands.OpenCommand;
+import org.jbpm.designer.web.server.menu.connector.commands.PasteCommand;
+import org.jbpm.designer.web.server.menu.connector.commands.RemoveAssetCommand;
+import org.jbpm.designer.web.server.menu.connector.commands.RenameCommand;
+import org.jbpm.designer.web.server.menu.connector.commands.UploadCommand;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.uberfire.java.nio.file.NoSuchFileException;
 
 public abstract class AbstractConnectorServlet extends HttpServlet {
     private static Logger logger = LoggerFactory.getLogger(AbstractConnectorServlet.class);
@@ -286,29 +301,30 @@ public abstract class AbstractConnectorServlet extends HttpServlet {
     }
 
     public static byte[] getBytesFromFile(File file) throws IOException {
+        if (file == null || file.length() > Integer.MAX_VALUE) {
+            return null; // File is null or too large
+        }
+
         InputStream is = null;
-        is = new FileInputStream(file);
         long length = file.length();
+        byte[] bytes = null;
+        try {
+            is = new FileInputStream(file);
+            bytes = new byte[(int) length];
 
-        if (length > Integer.MAX_VALUE) {
-            is.close();
-            return null; // File is too large
+            int offset = 0;
+            int numRead = 0;
+            while (offset < bytes.length
+                    && (numRead = is.read(bytes, offset, bytes.length - offset)) >= 0) {
+                offset += numRead;
+            }
+
+            if (offset < bytes.length) {
+                throw new IOException("Could not completely read file " + file.getName());
+            }
+        } finally {
+            IOUtils.closeQuietly(is);
         }
-
-        byte[] bytes = new byte[(int) length];
-
-        int offset = 0;
-        int numRead = 0;
-        while (offset < bytes.length
-                && (numRead = is.read(bytes, offset, bytes.length - offset)) >= 0) {
-            offset += numRead;
-        }
-
-        if (offset < bytes.length) {
-            is.close();
-            throw new IOException("Could not completely read file " + file.getName());
-        }
-        is.close();
         return bytes;
     }
 }
