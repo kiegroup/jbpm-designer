@@ -44,4 +44,6 @@ public interface DesignerView
 
     void askOpenInXMLEditor();
 
+    void raiseEventUpdateLock();
+
 }
