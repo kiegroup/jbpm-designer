@@ -15,26 +15,37 @@
 
 package org.jbpm.designer.stencilset;
 
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 
+import org.apache.commons.io.IOUtils;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ImporterTopLevel;
-import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Beautifier {
 
-    private String getScriptFromFile(String filename) throws IOException {
+    private static final Logger logger = LoggerFactory.getLogger(Beautifier.class);
 
-        // read the file contents into a byte array.
-        FileInputStream fis = new FileInputStream(filename);
-        int x = fis.available();
-        byte b[] = new byte[x];
-        fis.read(b);
+    protected static String getScriptFromFile(String filename) throws IOException {
+        if (filename == null) {
+            return null;
+        }
+
+        FileInputStream fis = null;
+        byte[] b = null;
+
+        try {
+            // read the file contents into a byte array.
+            fis = new FileInputStream(filename);
+            int x = fis.available();
+            b = new byte[x];
+            fis.read(b);
+        } finally {
+            IOUtils.closeQuietly(fis);
+        }
 
         // create the stencilset string
         return new String(b);
@@ -48,11 +59,10 @@ public class Beautifier {
 
         // assertions and beautifier instantiation.
         assert (args.length != 0);
-        Beautifier beautifier = new Beautifier();
 
         // get the stencil set and beautifier scripts.
-        String stencilsetScript = "set = " + beautifier.getScriptFromFile(args[0]);
-        String beautifierScript = beautifier.getScriptFromFile(ClassLoader.getSystemResource("org/oryxeditor/stencilset/beautifier.js").getFile());
+        String stencilsetScript = "set = " + getScriptFromFile(args[0]);
+        String beautifierScript = getScriptFromFile(ClassLoader.getSystemResource("org/oryxeditor/stencilset/beautifier.js").getFile());
 
         // java script runtime initialization
         Context cx = Context.enter();
