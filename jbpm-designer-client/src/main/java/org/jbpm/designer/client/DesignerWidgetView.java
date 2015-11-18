@@ -60,8 +60,8 @@ public class DesignerWidgetView
     @Override
     public void setEditorID( final String editorID ) {
         this.editorID = editorID;
-        inlineFrame.getElement().setId( editorID );
-        inlineFrame.getElement().setAttribute( "name", editorID );
+        inlineFrame.getElement().setId(editorID);
+        inlineFrame.getElement().setAttribute("name", editorID);
     }
 
     @Override
@@ -154,7 +154,6 @@ public class DesignerWidgetView
         }
     }-*/;
 
-
     public native void raiseAskOpenInXMLEditor( String editorID ) /*-{
         if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor ) {
             $wnd.document.getElementById(editorID).contentWindow.ORYX.LOADING_ERRORS = true;
@@ -165,6 +164,14 @@ public class DesignerWidgetView
         if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor && (typeof($wnd.document.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved) == "function")) {
             $wnd.document.getElementById(editorID).contentWindow.ORYX.EDITOR._pluginFacade.raiseEvent({
                 type: "designereventcancelsave"
+            });
+        }
+    }-*/;
+
+    public native void raiseEventUpdateLock( String editorID ) /*-{
+        if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor && (typeof($wnd.document.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved) == "function")) {
+            $wnd.document.getElementById(editorID).contentWindow.ORYX.EDITOR._pluginFacade.raiseEvent({
+                type: "designerupdatelock"
             });
         }
     }-*/;

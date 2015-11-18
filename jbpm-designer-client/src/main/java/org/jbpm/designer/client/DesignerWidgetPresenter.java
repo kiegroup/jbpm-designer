@@ -69,19 +69,19 @@ public class DesignerWidgetPresenter {
     }
 
     public void raiseEventReload(final String editorID) {
-        view.raiseEventReload( editorID );
+        view.raiseEventReload(editorID);
     }
 
     public void raiseEventSave( final String editorID ) {
-        view.raiseEventSave( editorID );
+        view.raiseEventSave(editorID);
     }
 
     public void raiseEventCheckSave( final String editorID , String pathURI) {
-        view.raiseEventCheckSave( editorID, pathURI );
+        view.raiseEventCheckSave(editorID, pathURI);
     }
 
     public void raiseEventSaveCancel( String editorID ) {
-        view.raiseEventSaveCancel( editorID );
+        view.raiseEventSaveCancel(editorID);
     }
 
     public void setProcessUnSaved( String editorID ) {
@@ -89,7 +89,7 @@ public class DesignerWidgetPresenter {
     }
 
     public boolean getIsReadOnly( String editorID ) {
-        return view.getIsReadOnly( editorID );
+        return view.getIsReadOnly(editorID);
     }
 
     public boolean getIsViewLocked( String editorID ) {
@@ -97,8 +97,12 @@ public class DesignerWidgetPresenter {
     }
 
     public void setProcessSaved( String editorID ) {
-        view.setProcessSaved( editorID );
+        view.setProcessSaved(editorID);
 
+    }
+
+    public void raiseEventUpdateLock( String editorID) {
+        view.raiseEventUpdateLock(editorID);
     }
 
     public boolean canSaveDesignerModel( String editorID ) {
