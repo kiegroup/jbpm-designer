@@ -161,8 +161,20 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
 
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LOADED, this.handleOpenXMLEditor.bind(this));
 
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_UPDATE_LOCK, this.handleEventUpdateLock.bind(this));
+
         window.onunload = this.unloadWindow.bind(this);
 
+    },
+
+    handleEventUpdateLock: function() {
+        if ( typeof parent.acquireLock === "function" ) {
+            if (this.editorLocked && !parent.isLockedByCurrentUser()) {
+                this.editorLocked = false;
+            } else if (!this.editorLocked && !parent.isLocked()) {
+                ORYX.EDITOR.updateViewLockState();
+            }
+        }
     },
 
     setUnsaved: function() {

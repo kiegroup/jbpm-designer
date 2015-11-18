@@ -315,6 +315,7 @@ ORYX.CONFIG.EVENT_DO_SAVE = "designereventdosave";
 ORYX.CONFIG.EVENT_DO_CHECKSAVE = "designereventdochecksave";
 ORYX.CONFIG.EVENT_CANCEL_SAVE = "designereventcancelsave";
 ORYX.CONFIG.EVENT_DO_RELOAD = "designereventreloads";
+ORYX.CONFIG.EVENT_UPDATE_LOCK = "designerupdatelock";
 
 ORYX.CONFIG.EVENT_OPEN_XML_EDITOR = "designeropeninxmleditor";
 
