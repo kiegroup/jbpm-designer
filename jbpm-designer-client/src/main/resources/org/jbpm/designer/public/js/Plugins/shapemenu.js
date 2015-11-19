@@ -968,6 +968,10 @@ ORYX.Plugins.ShapeMenuPlugin = {
                 type: ORYX.CONFIG.EVENT_LOADED,
                 elements: [shape]
             });
+
+			this.facade.raiseEvent({
+				type: ORYX.CONFIG.EVENT_UPDATE_TASK_TYPE
+			});
         }
     },
 	
