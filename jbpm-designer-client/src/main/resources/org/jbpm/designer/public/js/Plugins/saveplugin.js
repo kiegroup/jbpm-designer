@@ -152,6 +152,8 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_SHAPE_ADDED, this.setUnsaved.bind(this));
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_SHAPE_CREATED, this.setUnsaved.bind(this));
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_SHAPE_DELETED, this.setUnsaved.bind(this));
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_UPDATE_TASK_TYPE, this.setUnsaved.bind(this));
+
 
 
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DO_SAVE, this.handleEventDoSave.bind(this));
