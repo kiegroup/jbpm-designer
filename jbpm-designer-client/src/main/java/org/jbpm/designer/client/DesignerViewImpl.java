@@ -60,11 +60,6 @@ public class DesignerViewImpl
     }
 
     @Override
-    public void raiseEventUpdateLock() {
-        designerWidget.raiseEventUpdateLock( designerWidget.getEditorID() );
-    }
-
-    @Override
     public void raiseEventCheckSave(String pathURI) {
         designerWidget.raiseEventCheckSave(designerWidget.getEditorID(), pathURI);
     }

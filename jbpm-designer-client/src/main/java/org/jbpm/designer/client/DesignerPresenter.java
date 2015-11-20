@@ -48,11 +48,11 @@ import org.uberfire.client.annotations.WorkbenchPartTitle;
 import org.uberfire.client.annotations.WorkbenchPartTitleDecoration;
 import org.uberfire.client.annotations.WorkbenchPartView;
 import org.uberfire.client.mvp.PlaceManager;
-import org.uberfire.client.mvp.UpdatedLockStatusEvent;
 import org.uberfire.ext.editor.commons.client.file.CommandWithFileNameAndCommitMessage;
 import org.uberfire.ext.editor.commons.client.file.CopyPopup;
 import org.uberfire.ext.editor.commons.client.file.FileNameAndCommitMessage;
 import org.uberfire.ext.editor.commons.client.file.RenamePopup;
+import org.uberfire.ext.editor.commons.client.history.event.VersionSelectedEvent;
 import org.uberfire.ext.editor.commons.service.CopyService;
 import org.uberfire.ext.editor.commons.service.DeleteService;
 import org.uberfire.ext.editor.commons.service.RenameService;
@@ -172,10 +172,6 @@ public class DesignerPresenter
                 view.askOpenInXMLEditor();
             }
         }
-    }
-
-    public void onLockChange( @Observes UpdatedLockStatusEvent updateLockEvent) {
-        view.raiseEventUpdateLock();
     }
 
     private native void publishOpenInXMLEditorTab( DesignerPresenter dp )/*-{
