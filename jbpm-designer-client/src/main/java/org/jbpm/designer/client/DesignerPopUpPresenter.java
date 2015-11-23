@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RequiresResize;
 import org.jboss.errai.common.client.api.Caller;
 import org.jboss.errai.common.client.api.RemoteCallback;
+import org.jbpm.designer.client.parameters.DesignerEditorParametersPublisher;
 import org.jbpm.designer.service.DesignerAssetService;
 import org.uberfire.client.annotations.WorkbenchPartTitle;
 import org.uberfire.client.annotations.WorkbenchPartView;
@@ -45,6 +46,9 @@ public class DesignerPopUpPresenter extends Composite implements RequiresResize 
 
     @Inject
     private Caller<DesignerAssetService> assetService;
+
+    @Inject
+    private DesignerEditorParametersPublisher designerEditorParametersPublisher;
 
     protected boolean isReadOnly;
 
@@ -80,33 +84,7 @@ public class DesignerPopUpPresenter extends Composite implements RequiresResize 
                                 if ( editorParameters.containsKey( "readonly" ) ) {
                                     isReadOnly = Boolean.valueOf( editorParameters.get( "readonly" ) );
                                 }
-                                if ( editorParameters.containsKey( "processsource" ) ) {
-                                    String processSources = editorParameters.get( "processsource" );
-                                    if ( processSources != null && processSources.length() > 0 ) {
-                                        publishProcessSourcesInfo( editorParameters.get( "processsource" ) );
-                                        editorParameters.put("instanceviewmode", "true");
-                                    } else {
-                                        editorParameters.put("instanceviewmode", "false");
-                                    }
-                                    editorParameters.remove( "processsource" );
-                                }
-
-                                if ( editorParameters.containsKey( "activenodes" ) ) {
-                                    String activeNodes = editorParameters.get( "activenodes" );
-                                    if ( activeNodes != null && activeNodes.length() > 0 ) {
-                                        publishActiveNodesInfo( editorParameters.get( "activenodes" ) );
-                                    }
-                                    editorParameters.remove( "activenodes" );
-                                }
-
-                                if ( editorParameters.containsKey( "completednodes" ) ) {
-                                    String activeNodes = editorParameters.get( "completednodes" );
-                                    if ( activeNodes != null && activeNodes.length() > 0 ) {
-                                        publishCompletedNodesInfo( editorParameters.get( "completednodes" ) );
-                                    }
-                                    editorParameters.remove( "completednodes" );
-                                }
-                                editorParameters.put( "ts", Long.toString( System.currentTimeMillis() ) );
+                                designerEditorParametersPublisher.publish(editorParameters);
                                 designerWidget.setup( editorID, editorParameters );
                             }
                         }
@@ -126,24 +104,6 @@ public class DesignerPopUpPresenter extends Composite implements RequiresResize 
     public IsWidget getView() {
         return container;
     }
-
-    private native void publishProcessSourcesInfo( String ps )/*-{
-        $wnd.designerprocesssources = function () {
-            return ps;
-        }
-    }-*/;
-
-    private native void publishActiveNodesInfo( String an )/*-{
-        $wnd.designeractivenodes = function () {
-            return an;
-        }
-    }-*/;
-
-    private native void publishCompletedNodesInfo( String cn )/*-{
-        $wnd.designercompletednodes = function () {
-            return cn;
-        }
-    }-*/;
 
     @Override
     public void onResize() {
