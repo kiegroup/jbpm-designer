@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import org.guvnor.common.services.shared.metadata.model.Overview;
 import org.jboss.errai.common.client.api.Caller;
 import org.jboss.errai.common.client.api.RemoteCallback;
+import org.jbpm.designer.client.parameters.DesignerEditorParametersPublisher;
 import org.jbpm.designer.client.popup.ActivityDataIOEditor;
 import org.jbpm.designer.client.shared.AssignmentData;
 import org.jbpm.designer.client.shared.Variable;
@@ -63,7 +64,6 @@ import org.uberfire.lifecycle.OnStartup;
 import org.uberfire.mvp.Command;
 import org.uberfire.mvp.PlaceRequest;
 import org.uberfire.mvp.impl.PathPlaceRequest;
-import org.uberfire.rpc.SessionInfo;
 import org.uberfire.util.URIUtil;
 import org.uberfire.workbench.events.NotificationEvent;
 import org.uberfire.workbench.model.menu.Menus;
@@ -81,9 +81,6 @@ public class DesignerPresenter
 
     @Inject
     private PlaceManager placeManager;
-
-    @Inject
-    SessionInfo sessionInfo;
 
     @Inject
     private Caller<VFSService> vfsServices;
@@ -105,6 +102,9 @@ public class DesignerPresenter
 
     @Inject
     private ActivityDataIOEditor activityDataIOEditor;
+
+    @Inject
+    private DesignerEditorParametersPublisher designerEditorParametersPublisher;
 
     private DesignerView view;
 
@@ -181,24 +181,6 @@ public class DesignerPresenter
     private native void publishOpenInXMLEditorTab( DesignerPresenter dp )/*-{
         $wnd.designeropeninxmleditortab = function (uri) {
             dp.@org.jbpm.designer.client.DesignerPresenter::openInXMLEditorTab(Ljava/lang/String;)(uri);
-        }
-    }-*/;
-
-    private native void publishProcessSourcesInfo( String ps )/*-{
-        $wnd.designerprocesssources = function () {
-            return ps;
-        }
-    }-*/;
-
-    private native void publishActiveNodesInfo( String an )/*-{
-        $wnd.designeractivenodes = function () {
-            return an;
-        }
-    }-*/;
-
-    private native void publishCompletedNodesInfo( String cn )/*-{
-        $wnd.designercompletednodes = function () {
-            return cn;
         }
     }-*/;
 
@@ -541,34 +523,9 @@ public class DesignerPresenter
             if ( editorParameters.containsKey( "readonly" ) ) {
                 isReadOnly = Boolean.valueOf( editorParameters.get( "readonly" ) );
             }
-            if ( editorParameters.containsKey( "processsource" ) ) {
-                String processSources = editorParameters.get( "processsource" );
-                if ( processSources != null && processSources.length() > 0 ) {
-                    publishProcessSourcesInfo( editorParameters.get( "processsource" ) );
-                    editorParameters.put("instanceviewmode", "true");
-                } else {
-                    editorParameters.put("instanceviewmode", "false");
-                }
-                editorParameters.remove("processsource");
-            }
+            
+            designerEditorParametersPublisher.publish(editorParameters);
 
-            if ( editorParameters.containsKey( "activenodes" ) ) {
-                String activeNodes = editorParameters.get( "activenodes" );
-                if ( activeNodes != null && activeNodes.length() > 0 ) {
-                    publishActiveNodesInfo( editorParameters.get( "activenodes" ) );
-                }
-                editorParameters.remove( "activenodes" );
-            }
-
-            if ( editorParameters.containsKey( "completednodes" ) ) {
-                String activeNodes = editorParameters.get( "completednodes" );
-                if ( activeNodes != null && activeNodes.length() > 0 ) {
-                    publishCompletedNodesInfo( editorParameters.get( "completednodes" ) );
-                }
-                editorParameters.remove( "completednodes" );
-            }
-            editorParameters.put( "ts", Long.toString( System.currentTimeMillis() ) );
-            editorParameters.put( "sessionId", sessionInfo.getId() );
             view.setup(editorID, editorParameters);
         }
     }
