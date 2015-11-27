@@ -19,7 +19,6 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import com.google.gwt.user.client.ui.RequiresResize;
-import com.google.gwt.user.client.ui.Widget;
 import org.kie.workbench.common.widgets.metadata.client.KieEditorViewImpl;
 
 public class DesignerViewImpl
@@ -59,7 +58,7 @@ public class DesignerViewImpl
 
     @Override
     public void raiseEventUpdateLock() {
-        designerWidget.raiseEventUpdateLock( designerWidget.getEditorID() );
+        designerWidget.raiseEventUpdateLock(designerWidget.getEditorID());
     }
 
     @Override
@@ -105,12 +104,19 @@ public class DesignerViewImpl
 
     @Override
     public void onResize() {
-        //Layouts.setToFillParent(this);
-        final Widget w = getParent();
-        final int width = w.getOffsetWidth();
-        final int height = w.getOffsetHeight();
-        this.setWidth( width + "px" );
-        this.setHeight( height + "px" );
+
+        int height = getParent().getOffsetHeight();
+        int width = getParent().getOffsetWidth();
+
+        setPixelSize( width, height );
+
+        this.setWidth(width + "px");
+        this.setHeight( Math.max(0, height - 50) + "px");
+
         ( (RequiresResize) designerWidget.getView() ).onResize();
+    }
+
+    public void setDesignerWidget(DesignerWidgetPresenter widgetPresenter) {
+        this.designerWidget = widgetPresenter;
     }
 }

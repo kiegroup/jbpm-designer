@@ -25,7 +25,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.RequiresResize;
-import com.google.gwt.user.client.ui.Widget;
 import org.gwtbootstrap3.client.ui.Modal;
 import org.uberfire.ext.widgets.common.client.common.BusyPopup;
 
@@ -186,11 +185,13 @@ public class DesignerWidgetView
 
     @Override
     public void onResize() {
-        final Widget w = getParent();
-        final int width = w.getOffsetWidth();
-        final int height = w.getOffsetHeight();
-        inlineFrame.setWidth( width + "px" );
-        inlineFrame.setHeight( height + "px" );
+        int height = getParent().getOffsetHeight();
+        int width = getParent().getOffsetWidth();
+
+        setPixelSize(width,height);
+
+        inlineFrame.setWidth( "100%" );
+        inlineFrame.setHeight( Math.max(0, (height - 50)) + "px" );
     }
 
     public void setSize( final int width,
