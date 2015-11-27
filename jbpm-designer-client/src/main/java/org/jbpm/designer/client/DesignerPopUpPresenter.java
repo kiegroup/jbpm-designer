@@ -25,7 +25,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RequiresResize;
-import com.google.gwt.user.client.ui.Widget;
 import org.jboss.errai.common.client.api.Caller;
 import org.jboss.errai.common.client.api.RemoteCallback;
 import org.jbpm.designer.service.DesignerAssetService;
@@ -61,7 +60,7 @@ public class DesignerPopUpPresenter extends Composite implements RequiresResize 
 
     @OnOpen
     public void onOpen() {
-        designerWidget.setSize( 1000, 600 );
+        designerWidget.setSize(1000, 600);
     }
 
     @OnStartup
@@ -148,11 +147,16 @@ public class DesignerPopUpPresenter extends Composite implements RequiresResize 
 
     @Override
     public void onResize() {
-        Widget parent = container.getParent();
-        final int width = parent.getOffsetWidth();
-        final int height = parent.getOffsetHeight();
-        container.setWidth( width + "px" );
-        container.setHeight( height + "px" );
+
+        int height = getContainer().getParent().getOffsetHeight();
+        int width = getContainer().getParent().getOffsetWidth();
+
+        getContainer().setWidth(width + "px");
+        getContainer().setHeight( height + "px");
+    }
+
+    public FlowPanel getContainer() {
+        return this.container;
     }
 
 }
