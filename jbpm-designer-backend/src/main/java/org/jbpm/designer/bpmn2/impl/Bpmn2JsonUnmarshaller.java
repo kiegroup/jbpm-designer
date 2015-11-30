@@ -1714,9 +1714,9 @@ public class Bpmn2JsonUnmarshaller {
 
         for(BoundaryEvent beEntry : toAddBoundaryEvents.keySet()) {
             BoundaryEvent be = Bpmn2Factory.eINSTANCE.createBoundaryEvent();
-            if(beEntry != null && beEntry instanceof ErrorEventDefinition) {
+            if(beEntry instanceof ErrorEventDefinition) {
                 be.setCancelActivity(true);
-            } else {
+            } else if (beEntry != null) {
                 Iterator<FeatureMap.Entry> iter = beEntry.getAnyAttribute().iterator();
                 while(iter.hasNext()) {
                     FeatureMap.Entry entry2 = iter.next();
