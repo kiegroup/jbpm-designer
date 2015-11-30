@@ -1479,8 +1479,8 @@ ORYX.I18N.propertyNames['bgcolor'] = '<i18n:message key="ORYX.I18N.propertyNames
 ORYX.I18N.propertyNames['bgcolor_desc'] = '<i18n:message key="ORYX.I18N.propertyNames_BGCOLOR_bgColor_desc">Background Color</i18n:message>';
 ORYX.I18N.propertyNames['bordercolor'] = '<i18n:message key="ORYX.I18N.propertyNames_BGCOLOR_borderColor">Border Color</i18n:message>';
 ORYX.I18N.propertyNames['bordercolor_desc'] = '<i18n:message key="ORYX.I18N.propertyNames_BGCOLOR_borderColor_desc">Border Color</i18n:message>';
-ORYX.I18N.propertyNames['fontcolor'] = '<i18n:message key="ORYX.I18N.propertyNames_BGCOLOR_fontcolor">Font color</i18n:message>';
-ORYX.I18N.propertyNames['fontcolor_desc'] = '<i18n:message key="ORYX.I18N.propertyNames_BGCOLOR_fontcolor_desc">Font color</i18n:message>';
+ORYX.I18N.propertyNames['fontcolor'] = '<i18n:message key="ORYX.I18N.propertyNames_BGCOLOR_fontcolor">Font Color</i18n:message>';
+ORYX.I18N.propertyNames['fontcolor_desc'] = '<i18n:message key="ORYX.I18N.propertyNames_BGCOLOR_fontcolor_desc">Font Color</i18n:message>';
 ORYX.I18N.propertyNames['fontsize'] = '<i18n:message key="ORYX.I18N.propertyNames_BGCOLOR_fontsize">Font Size</i18n:message>';
 ORYX.I18N.propertyNames['fontsize_desc'] = '<i18n:message key="ORYX.I18N.propertyNames_BGCOLOR_fontsize_desc">Font Size</i18n:message>';
 
