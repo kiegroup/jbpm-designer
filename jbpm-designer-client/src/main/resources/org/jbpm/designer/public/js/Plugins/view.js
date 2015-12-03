@@ -1922,7 +1922,11 @@ ORYX.Plugins.View = {
                     var winWidth = Math.min(600, visibleWidth * 2/3);
                     var winHeight = Math.min(550, visibleHeight * 2/3);
 
-                    var win = new Ext.Window({
+                    if(this.sourcewin != null && this.sourcewin !== undefined) {
+                        this.sourcewin.destroy();
+                    }
+
+                    this.sourcewin = new Ext.Window({
                         width:winWidth,
                         id:'processSources',
                         height:winHeight,
@@ -1931,9 +1935,14 @@ ORYX.Plugins.View = {
                         items: [sourcesPanel],
                         tbar: [
                             dlBPMN2Button
-                        ]
+                        ],
+                        listeners:{
+                            hide: function(){
+                                this.sourcewin.destroy();
+                            }.bind(this)
+                        }
                     });
-                    win.show();
+                    this.sourcewin.show();
                     this.bpmn2FoldFunc = CodeMirror.newFoldFunction(CodeMirror.tagRangeFinder);
                     var bpmn2SourceEditor = CodeMirror.fromTextArea(document.getElementById("bpmnSourceTextArea"), {
                         mode: "application/xml",
