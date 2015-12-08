@@ -17,23 +17,26 @@
 package org.jbpm.designer.client.popup;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.regexp.shared.RegExp;
 import com.google.gwtmockito.GwtMockitoTestRunner;
+import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.TextBox;
 import org.gwtbootstrap3.client.ui.ValueListBox;
+import org.gwtbootstrap3.client.ui.constants.IconType;
+import org.jboss.errai.databinding.client.api.DataBinder;
 import org.jbpm.designer.client.shared.AssignmentRow;
+import org.jbpm.designer.client.shared.Variable;
 import org.jbpm.designer.client.util.ComboBox;
-import org.jbpm.designer.client.util.ComboBoxViewImpl;
+import org.jbpm.designer.client.util.DataIOEditorNameTextBox;
 import org.jbpm.designer.client.util.ListBoxValues;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.Spy;
+import org.mockito.*;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 /**
@@ -59,6 +62,18 @@ public class AssignmentListItemWidgetTest {
 
     @Mock ComboBox processVarComboBox;
 
+    @Mock
+    DataIOEditorNameTextBox name;
+
+    @Mock
+    Button deleteButton;
+
+    @Mock
+    DataBinder<AssignmentRow> assignment;
+
+    @Captor
+    ArgumentCaptor<String> regExpCaptor;
+
     //@Spy  // - cannot make Spy because of GWT error
     //@InjectMocks // - cannot InjectMocks because of GWT error
     private AssignmentListItemWidgetViewImpl widget;
@@ -73,9 +88,10 @@ public class AssignmentListItemWidgetTest {
         widget.processVar = processVar;
         widget.constant = constant;
         widget.dataTypeComboBox = dataTypeComboBox;
-        //widget.dataTypeComboBox.init(widget, dataType, customDataType, false, null, null);
+        widget.name = name;
+        widget.deleteButton = deleteButton;
         widget.processVarComboBox = processVarComboBox;
-        //widget.processVarComboBox.init(widget, processVar, constant, true, null, null);
+        widget.assignment = assignment;
 
         Mockito.doCallRealMethod().when(widget).setTextBoxModelValue(any(TextBox.class), anyString());
         Mockito.doCallRealMethod().when(widget).setListBoxModelValue(any(ValueListBox.class), anyString());
@@ -90,6 +106,8 @@ public class AssignmentListItemWidgetTest {
         Mockito.doCallRealMethod().when(widget).getProcessVar();
         Mockito.doCallRealMethod().when(widget).setDataTypes(any(ListBoxValues.class));
         Mockito.doCallRealMethod().when(widget).setProcessVariables(any(ListBoxValues.class));
+        Mockito.doCallRealMethod().when(widget).init();
+        Mockito.doCallRealMethod().when(widget).setModel(any(AssignmentRow.class));
         when(widget.getModel()).thenReturn(assignmentRow);
 
     }
@@ -98,6 +116,75 @@ public class AssignmentListItemWidgetTest {
     public void testInitWidget() {
         widget.init();
         verify(widget, times(1)).init();
+
+        verify(dataTypeComboBox, times(1)).init(widget, dataType, customDataType, false,
+                AssignmentListItemWidgetView.CUSTOM_PROMPT, AssignmentListItemWidgetView.ENTER_TYPE_PROMPT);
+        verify(processVarComboBox, times(1)).init(widget, processVar, constant, true,
+                AssignmentListItemWidgetView.CONSTANT_PROMPT, AssignmentListItemWidgetView.ENTER_CONSTANT_PROMPT);
+
+        verify(name, times(1)).setRegExp(regExpCaptor.capture(), anyString(), anyString());
+        RegExp regExp = RegExp.compile(regExpCaptor.getValue());
+        assertEquals(false, regExp.test("a 1"));
+        assertEquals(false, regExp.test("a@1"));
+        assertEquals(true, regExp.test("a1"));
+
+        verify(customDataType, times(1)).addKeyDownHandler(any(KeyDownHandler.class));
+        verify(name, times(1)).addBlurHandler(any(BlurHandler.class));
+    }
+
+    @Test
+    public void testSetTextBoxModelValue() {
+        widget.setTextBoxModelValue(customDataType, "abc");
+        verify(widget, times(1)).setCustomDataType("abc");
+
+        widget.setTextBoxModelValue(constant, "abc");
+        verify(widget, times(1)).setConstant("abc");
+    }
+
+    @Test
+    public void testSetListBoxModelValue() {
+        widget.setListBoxModelValue(dataType, "abc");
+        verify(widget, times(1)).setDataType("abc");
+
+        widget.setListBoxModelValue(processVar, "abc");
+        verify(widget, times(1)).setProcessVar("abc");
+    }
+
+    @Test
+    public void testSetModelInput() {
+        when(widget.getVariableType()).thenReturn(Variable.VariableType.INPUT);
+        widget.setModel(new AssignmentRow());
+
+        verify(deleteButton).setIcon(IconType.TRASH);
+        verify(constant, never()).setVisible(anyBoolean());
+        verify(widget).getCustomDataType();
+        verify(widget).getDataType();
+        verify(widget).getConstant();
+        verify(widget).getProcessVar();
+    }
+
+    @Test
+    public void testSetModelOutput() {
+        when(widget.getVariableType()).thenReturn(Variable.VariableType.OUTPUT);
+        widget.setModel(new AssignmentRow());
+
+        verify(deleteButton).setIcon(IconType.TRASH);
+        verify(constant).setVisible(false);
+        verify(widget).getCustomDataType();
+        verify(widget).getDataType();
+        verify(widget).getConstant();
+        verify(widget).getProcessVar();
+    }
+
+    @Test
+    public void testQuotedConstant() {
+        AssignmentRow row = new AssignmentRow();
+        row.setConstant("abc");
+        when(widget.getModel()).thenReturn(row);
+        widget.setModel(row);
+
+        verify(constant).setValue("\"abc\"");
+        verify(processVar).setValue("\"abc\"");
     }
 
     @Test

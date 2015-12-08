@@ -75,7 +75,7 @@ public class AssignmentListItemWidgetViewImpl extends Composite implements Assig
     @Inject
     @Bound
     @DataField
-    private DataIOEditorNameTextBox name;
+    protected DataIOEditorNameTextBox name;
 
     private boolean allowDuplicateNames = true;
     private String duplicateNameErrorMessage = "";
@@ -129,7 +129,7 @@ public class AssignmentListItemWidgetViewImpl extends Composite implements Assig
 
     @Inject
     @DataField
-    private Button deleteButton;
+    protected Button deleteButton;
 
     /**
      * Widget the current assignment is in.
@@ -194,7 +194,9 @@ public class AssignmentListItemWidgetViewImpl extends Composite implements Assig
                 AssignmentListItemWidgetView.CONSTANT_PROMPT,
                 AssignmentListItemWidgetView.ENTER_CONSTANT_PROMPT);
 
-        name.setRegExp("^[a-zA-Z0-9\\-\\.\\_]*$", DesignerEditorConstants.INSTANCE.Removed_invalid_characters_from_name());
+        name.setRegExp("^[a-zA-Z0-9\\-\\.\\_]*$",
+                DesignerEditorConstants.INSTANCE.Removed_invalid_characters_from_name(),
+                DesignerEditorConstants.INSTANCE.Invalid_character_in_name());
 
         customDataType.addKeyDownHandler(new KeyDownHandler() {
             @Override public void onKeyDown(KeyDownEvent event) {

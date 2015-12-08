@@ -51,6 +51,8 @@ public interface DesignerEditorConstants extends
 
     String Enter_type();
 
+    String Invalid_character_in_name();
+
     String Only_single_entry_allowed();
 
     String Save();
