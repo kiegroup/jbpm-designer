@@ -15,8 +15,6 @@
  */
 package org.jbpm.designer.client.util;
 
-import java.util.HashSet;
-import java.util.Set;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
@@ -43,12 +41,12 @@ public abstract class AbstractValidatingTextBox extends TextBox {
         final TextBox me = this;
 
         //Validate value as it is entered
-        this.addKeyPressHandler( new KeyPressHandler() {
+        this.addKeyPressHandler(new KeyPressHandler() {
 
-            public void onKeyPress( KeyPressEvent event ) {
+            public void onKeyPress(KeyPressEvent event) {
 
                 // Permit navigation
-                int keyCode = event.getNativeEvent().getKeyCode();
+                int keyCode = getKeyCodeFromKeyPressEvent(event);
                 if (event.isControlKeyDown()) {
                     return;
                 }
@@ -59,7 +57,7 @@ public abstract class AbstractValidatingTextBox extends TextBox {
                             || keyCode == KeyCodes.KEY_RIGHT
                             || keyCode == KeyCodes.KEY_TAB
                             || keyCode == KeyCodes.KEY_HOME
-                            || keyCode == KeyCodes.KEY_END ) {
+                            || keyCode == KeyCodes.KEY_END) {
                         return;
                     }
                 }
@@ -70,11 +68,13 @@ public abstract class AbstractValidatingTextBox extends TextBox {
                 String newValue = oldValue.substring(0, me.getCursorPos());
                 newValue = newValue + ((char) charCode);
                 newValue = newValue + oldValue.substring(me.getCursorPos() + me.getSelectionLength());
-                if (isValidValue(newValue, false) != null ) {
+                String validationError = isValidValue(newValue, false);
+                if (validationError != null) {
                     event.preventDefault();
+                    fireValidationError(validationError);
                 }
             }
-        } );
+        });
 
         //Add validation when loses focus (for when values are pasted in by user)
         this.addBlurHandler(new BlurHandler() {
@@ -84,11 +84,11 @@ public abstract class AbstractValidatingTextBox extends TextBox {
                 String value = me.getText();
                 String validationError = isValidValue(value, true);
                 if (validationError != null) {
-                    notification.fire(new NotificationEvent(validationError, NotificationEvent.NotificationType.ERROR));
+                    fireValidationError(validationError);
                     String validValue = makeValidValue(value);
                     me.setValue(validValue);
                     ValueChangeEvent.fire(AbstractValidatingTextBox.this, validValue);
-                 }
+                }
             }
         });
     }
@@ -111,4 +111,11 @@ public abstract class AbstractValidatingTextBox extends TextBox {
      */
     protected abstract String makeValidValue(final String value);
 
+    protected void fireValidationError(String validationError) {
+        notification.fire(new NotificationEvent(validationError, NotificationEvent.NotificationType.ERROR));
+    }
+
+    protected int getKeyCodeFromKeyPressEvent(KeyPressEvent event) {
+        return event.getNativeEvent().getKeyCode();
+    }
 }

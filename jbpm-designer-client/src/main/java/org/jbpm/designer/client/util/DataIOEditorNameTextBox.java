@@ -27,7 +27,8 @@ public class DataIOEditorNameTextBox extends AbstractValidatingTextBox {
     boolean isCaseSensitive = false;
     String invalidValueErrorMessage = null;
 
-    protected String invalidCharactersInNameErrorMessage = DesignerEditorConstants.INSTANCE.Removed_invalid_characters_from_name();
+    protected String invalidCharacterTypedMessage;
+    protected String invalidCharactersInNameErrorMessage;
 
     // Pattern for valid value
     protected  RegExp regExp = null;
@@ -63,9 +64,11 @@ public class DataIOEditorNameTextBox extends AbstractValidatingTextBox {
      * @param pattern
      * @param invalidCharactersInNameErrorMessage
      */
-    public void setRegExp(final String pattern, final String invalidCharactersInNameErrorMessage) {
+    public void setRegExp(final String pattern, final String invalidCharactersInNameErrorMessage,
+                          final String invalidCharacterTypedMessage) {
         regExp = RegExp.compile(pattern);
         this.invalidCharactersInNameErrorMessage = invalidCharactersInNameErrorMessage;
+        this.invalidCharacterTypedMessage = invalidCharacterTypedMessage;
     }
 
     @Override
@@ -83,7 +86,8 @@ public class DataIOEditorNameTextBox extends AbstractValidatingTextBox {
             boolean isValid = this.regExp.test(value);
             if (!isValid) {
                 String invalidChars = getInvalidCharsInName(value);
-                return invalidCharactersInNameErrorMessage + ": " + invalidChars;
+                return (isOnFocusLost ? invalidCharactersInNameErrorMessage : invalidCharacterTypedMessage)
+                        + ": " + invalidChars;
             }
         }
 
