@@ -41,7 +41,7 @@ public class DesignerNotificationPopupsManager {
     //When true we are in the process of removing a notification message
     private boolean removing = false;
 
-    private final int SPACING = 48;
+    private final static int SPACING = 48;
 
     private List<NotificationPopupView> activeNotifications = new ArrayList<NotificationPopupView>();
     private List<NotificationPopupView> deactiveNotifications = new ArrayList<NotificationPopupView>();

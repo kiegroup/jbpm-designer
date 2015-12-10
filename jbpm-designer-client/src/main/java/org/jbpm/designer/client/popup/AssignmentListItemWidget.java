@@ -198,7 +198,7 @@ public class AssignmentListItemWidget extends Composite implements HasModel<Assi
                     }
                     setModelValue(listBox, newValue);
                     setModelValue(textBox, textValue);
-                } else if (newValue != null) {
+                } else {
                     // A non-custom value has been selected
                     setModelValue(listBox, newValue);
                     setModelValue(textBox, "");

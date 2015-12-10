@@ -42,10 +42,8 @@ public class AlternativesRenderer extends HttpServlet {
 
     protected void doPost(HttpServletRequest req, HttpServletResponse res) {
 
-	String resource = req.getParameter("resource");
 	String data = req.getParameter("data");
-	String format = req.getParameter("format");
-	
+
 	try {
 		data = new String(data.getBytes("UTF-8"));
 	} catch (UnsupportedEncodingException e1) {

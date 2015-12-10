@@ -19,8 +19,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.enterprise.event.Event;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,8 +26,6 @@ import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingService;
 import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingUnit;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.uberfire.backend.vfs.VFSService;
-import org.uberfire.workbench.events.ResourceAddedEvent;
-import org.uberfire.workbench.events.ResourceUpdatedEvent;
 
 
 /**
@@ -38,25 +34,25 @@ import org.uberfire.workbench.events.ResourceUpdatedEvent;
  */
 public class PreprocessingServiceImpl implements IDiagramPreprocessingService {
 
-    public static PreprocessingServiceImpl INSTANCE = new PreprocessingServiceImpl();
+    public final static PreprocessingServiceImpl INSTANCE = new PreprocessingServiceImpl();
     private Map<String, IDiagramPreprocessingUnit> _registry = new HashMap<String, IDiagramPreprocessingUnit>();
-    
-    
+
+
     public Collection<IDiagramPreprocessingUnit> getRegisteredPreprocessingUnits(
             HttpServletRequest request) {
         Map<String, IDiagramPreprocessingUnit> preprocessingUnits = new HashMap<String, IDiagramPreprocessingUnit>(_registry);
         return new ArrayList<IDiagramPreprocessingUnit>(preprocessingUnits.values());
     }
-    
+
     public IDiagramPreprocessingUnit findPreprocessingUnit(
             HttpServletRequest request, IDiagramProfile profile) {
         Map<String, IDiagramPreprocessingUnit> preprocessingUnits = new HashMap<String, IDiagramPreprocessingUnit>(_registry);
         return preprocessingUnits.get(profile.getName());
     }
-    
+
     public void init(ServletContext context, VFSService vfsService) {
         _registry.put("default", new DefaultPreprocessingUnit(context, vfsService));
         _registry.put("jbpm", new JbpmPreprocessingUnit(context, vfsService));
     }
-    
+
 }

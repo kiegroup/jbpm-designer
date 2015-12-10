@@ -74,7 +74,7 @@ public class DesignerInjectionFilter implements Filter {
         fc = null;
     }
 
-    private String processContent(StringBuffer buffer, InjectionRules rulesToApply) {
+    protected static String processContent(StringBuffer buffer, InjectionRules rulesToApply) {
         String strResponse = buffer.toString();
 
         String tagsToInsert = "";
@@ -88,78 +88,69 @@ public class DesignerInjectionFilter implements Filter {
         while (rulesToApplyIter.hasNext()) {
             InjectionRule ruleToApply = rulesToApplyIter.next();
             tagsToInsert = ruleToApply.toString();
+            if (tagsToInsert.equals("")) {
+                continue;
+            }
             switch (ruleToApply.getInsertAt()) {
                 case InsertAt.HEAD_BEGIN:
                     if (!headBeginInserted) {
-                        if (tagsToInsert != "") {
-                            tagsToInsert = "<head>\n" + tagsToInsert
-                                    + headBeginMarker;
-                            modResponse = findAndReplace(tagsToInsert, modResponse,
-                                    "<head>");
-                            headBeginInserted = true;
-                        }
+                        tagsToInsert = "<head>\n" + tagsToInsert
+                                + headBeginMarker;
+                        modResponse = findAndReplace(tagsToInsert, modResponse,
+                                "<head>");
+                        headBeginInserted = true;
                     } else {
-                        if (tagsToInsert != "") {
-                            tagsToInsert = tagsToInsert + headBeginMarker;
-                            modResponse = findAndReplace(tagsToInsert, modResponse,
-                                    headBeginMarker);
-                        }
+                        tagsToInsert = tagsToInsert + headBeginMarker;
+                        modResponse = findAndReplace(tagsToInsert, modResponse,
+                                headBeginMarker);
                     }
                     break;
 
                 case InsertAt.HEAD_END:
-                    if (tagsToInsert != "") {
-                        tagsToInsert += "</head>";
-                        modResponse = findAndReplace(tagsToInsert, modResponse,
-                                "</head>");
-                    }
+                    tagsToInsert += "</head>";
+                    modResponse = findAndReplace(tagsToInsert, modResponse,
+                            "</head>");
                     break;
 
                 case InsertAt.BODY_BEGIN:
                     if (!bodyBeginInserted) {
-                        if (tagsToInsert != "") {
-                            Pattern p = Pattern.compile("<body[^>]*>",
-                                    Pattern.CASE_INSENSITIVE | Pattern.MULTILINE
-                                            | Pattern.DOTALL);
-                            Matcher m = p.matcher(modResponse);
-                            StringBuffer sb = new StringBuffer();
-                            do {
-                                if (!m.find())
-                                    break;
-                                String origBody = m.group();
-                                if (origBody == null)
-                                    continue;
-                                m.appendReplacement(sb, origBody.replaceAll("\\$",
-                                        "\\\\\\$")
-                                        + "\n" + tagsToInsert + bodyBeginMarker);
+                        Pattern p = Pattern.compile("<body[^>]*>",
+                                Pattern.CASE_INSENSITIVE | Pattern.MULTILINE
+                                        | Pattern.DOTALL);
+                        Matcher m = p.matcher(modResponse);
+                        StringBuffer sb = new StringBuffer();
+                        do {
+                            if (!m.find())
                                 break;
-                            } while (true);
-                            m.appendTail(sb);
-                            modResponse = sb.toString();
-                            bodyBeginInserted = true;
-                        }
+                            String origBody = m.group();
+                            if (origBody == null)
+                                continue;
+                            m.appendReplacement(sb, origBody.replaceAll("\\$",
+                                    "\\\\\\$")
+                                    + "\n" + tagsToInsert + bodyBeginMarker);
+                            break;
+                        } while (true);
+                        m.appendTail(sb);
+                        modResponse = sb.toString();
+                        bodyBeginInserted = true;
                     } else {
-                        if (tagsToInsert != "") {
-                            tagsToInsert = tagsToInsert + bodyBeginMarker;
-                            modResponse = findAndReplace(tagsToInsert, modResponse,
-                                    bodyBeginMarker);
-                        }
+                        tagsToInsert = tagsToInsert + bodyBeginMarker;
+                        modResponse = findAndReplace(tagsToInsert, modResponse,
+                                bodyBeginMarker);
                     }
                     break;
 
                 case InsertAt.BODY_END:
-                    if (tagsToInsert != "") {
-                        tagsToInsert += "\n</body>";
-                        modResponse = findAndReplace(tagsToInsert, modResponse,
-                                "</body>");
-                    }
+                    tagsToInsert += "\n</body>";
+                    modResponse = findAndReplace(tagsToInsert, modResponse,
+                            "</body>");
                     break;
             }
         }
         return modResponse;
     }
 
-    private String findAndReplace(String tagsToInsert, String modResponse,
+    protected static String findAndReplace(String tagsToInsert, String modResponse,
                                   String strPattern) {
         Pattern p = Pattern.compile(strPattern, Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(modResponse);

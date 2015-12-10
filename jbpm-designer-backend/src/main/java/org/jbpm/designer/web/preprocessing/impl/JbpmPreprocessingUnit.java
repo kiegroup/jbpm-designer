@@ -25,7 +25,16 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.URLEncoder;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
+import java.util.TreeMap;
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -272,7 +281,6 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
             // default the process id to packagename.processName
             String processIdString = packageNameStr + processName;
-            if(processIdString.startsWith("."));
             if(processIdString.startsWith(".")) {
                 processIdString = processIdString.substring(1, processIdString.length());
             }
@@ -646,17 +654,23 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         return widAssets;
     }
 
-    private String readFile(String pathname) throws IOException {
+    protected static String readFile(String pathname) throws IOException {
+        if (pathname == null) {
+            return null;
+        }
+
         StringBuilder fileContents = new StringBuilder();
-        Scanner scanner = new Scanner(new File(pathname), "UTF-8");
         String lineSeparator = System.getProperty("line.separator");
+
+        Scanner scanner = null;
         try {
+            scanner = new Scanner(new File(pathname), "UTF-8");
             while(scanner.hasNextLine()) {
                 fileContents.append(scanner.nextLine() + lineSeparator);
             }
             return fileContents.toString();
         } finally {
-            scanner.close();
+            IOUtils.closeQuietly(scanner);
         }
     }
 
@@ -682,36 +696,40 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
     private void createAndWriteToFile(String file, String content) throws Exception {
         Writer output = null;
-        output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
-        output.write(content);
-        output.close();
-        _logger.info("Created file: " + file);
+        try {
+            output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
+            output.write(content);
+            _logger.info("Created file: " + file);
+        } finally {
+            IOUtils.closeQuietly(output);
+        }
     }
 
-    public static byte[] getBytesFromFile(File file) throws IOException {
-        InputStream is = null;
-        is = new FileInputStream(file);
+    protected static byte[] getBytesFromFile(File file) throws IOException {
+        if (file == null || file.length() > Integer.MAX_VALUE) {
+            return null; // File is null or too large
+        }
+
         long length = file.length();
+        byte[] bytes;
+        InputStream is = null;
+        try {
+            is = new FileInputStream(file);
+            bytes = new byte[(int) length];
 
-        if (length > Integer.MAX_VALUE) {
-            is.close();
-            return null; // File is too large
+            int offset = 0;
+            int numRead = 0;
+            while (offset < bytes.length
+                    && (numRead = is.read(bytes, offset, bytes.length - offset)) >= 0) {
+                offset += numRead;
+            }
+
+            if (offset < bytes.length) {
+                throw new IOException("Could not completely read file " + file.getName());
+            }
+        } finally {
+            IOUtils.closeQuietly(is);
         }
-
-        byte[] bytes = new byte[(int) length];
-
-        int offset = 0;
-        int numRead = 0;
-        while (offset < bytes.length
-                && (numRead = is.read(bytes, offset, bytes.length - offset)) >= 0) {
-            offset += numRead;
-        }
-
-        if (offset < bytes.length) {
-            is.close();
-            throw new IOException("Could not completely read file " + file.getName());
-        }
-        is.close();
         return bytes;
     }
 
@@ -748,7 +766,6 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         }
 
         // Handle cases where iconPath doesn't start with ".."
-        String relativeIconPath = null;
         if (iconPath.startsWith("/")) {
             return iconPath;
         } else if (!iconPath.startsWith("..")){

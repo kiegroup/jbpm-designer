@@ -15,41 +15,68 @@
 
 package org.jbpm.designer.web.server;
 
-import bpsim.BPSimDataType;
-import bpsim.BpsimPackage;
-import bpsim.Scenario;
-import bpsim.impl.BpsimFactoryImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.drools.core.command.runtime.rule.InsertElementsCommand;
-import org.eclipse.bpmn2.*;
-import org.eclipse.bpmn2.Process;
-import org.eclipse.emf.ecore.util.FeatureMap;
-import org.jboss.drools.impl.DroolsFactoryImpl;
-import org.jbpm.designer.bpmn2.impl.Bpmn2JsonUnmarshaller;
-import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.designer.web.profile.IDiagramProfileService;
-import org.jbpm.simulation.*;
-import org.jbpm.simulation.converter.JSONPathFormatConverter;
-import org.jbpm.simulation.impl.WorkingMemorySimulationRepository;
-import org.jbpm.simulation.impl.events.*;
-import org.joda.time.DateTime;
-import org.joda.time.Interval;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+
+import bpsim.BPSimDataType;
+import bpsim.BpsimPackage;
+import bpsim.Scenario;
+import bpsim.impl.BpsimFactoryImpl;
+import org.drools.core.command.runtime.rule.InsertElementsCommand;
+import org.eclipse.bpmn2.Definitions;
+import org.eclipse.bpmn2.ExtensionAttributeValue;
+import org.eclipse.bpmn2.FlowElement;
+import org.eclipse.bpmn2.FlowElementsContainer;
+import org.eclipse.bpmn2.Process;
+import org.eclipse.bpmn2.Relationship;
+import org.eclipse.bpmn2.RootElement;
+import org.eclipse.bpmn2.SubProcess;
+import org.eclipse.emf.ecore.util.FeatureMap;
+import org.jboss.drools.impl.DroolsFactoryImpl;
+import org.jbpm.designer.bpmn2.impl.Bpmn2JsonUnmarshaller;
+import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.jbpm.designer.web.profile.IDiagramProfileService;
+import org.jbpm.simulation.AggregatedSimulationEvent;
+import org.jbpm.simulation.PathFinder;
+import org.jbpm.simulation.PathFinderFactory;
+import org.jbpm.simulation.SimulationEvent;
+import org.jbpm.simulation.SimulationInfo;
+import org.jbpm.simulation.SimulationRepository;
+import org.jbpm.simulation.SimulationRunner;
+import org.jbpm.simulation.converter.JSONPathFormatConverter;
+import org.jbpm.simulation.impl.WorkingMemorySimulationRepository;
+import org.jbpm.simulation.impl.events.ActivitySimulationEvent;
+import org.jbpm.simulation.impl.events.AggregatedActivitySimulationEvent;
+import org.jbpm.simulation.impl.events.AggregatedProcessSimulationEvent;
+import org.jbpm.simulation.impl.events.EndSimulationEvent;
+import org.jbpm.simulation.impl.events.GatewaySimulationEvent;
+import org.jbpm.simulation.impl.events.GenericSimulationEvent;
+import org.jbpm.simulation.impl.events.HTAggregatedSimulationEvent;
+import org.jbpm.simulation.impl.events.HumanTaskActivitySimulationEvent;
+import org.jbpm.simulation.impl.events.StartSimulationEvent;
+import org.joda.time.DateTime;
+import org.joda.time.Interval;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Servlet for simulation actions.
@@ -243,7 +270,7 @@ public class SimulationServlet extends HttpServlet {
 						this.pathInfoMap = event.getPathNumberOfInstances();
 					} else if(aggEvent instanceof HTAggregatedSimulationEvent) {
 						HTAggregatedSimulationEvent event = (HTAggregatedSimulationEvent) aggEvent;
-						numInstanceData.put(event.getActivityName(), new Long(event.getNumberOfInstances()).doubleValue());
+						numInstanceData.put(event.getActivityName(), (double) event.getNumberOfInstances());
 						JSONObject allValues = new JSONObject();
 						JSONObject resourceValues = new JSONObject();
 						JSONObject costValues = new JSONObject();

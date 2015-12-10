@@ -108,7 +108,6 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("application/json");
         String uuid = Utils.getUUID(req);
-        String preProcessingParam = req.getParameter("pp");
         if (uuid == null) {
             throw new ServletException("uuid parameter required");
         }
@@ -179,7 +178,6 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
                 String json = (String) jsonObject.get("data");
                 String svg = (String) jsonObject.get("svg");
                 String uuid = (String) jsonObject.get("uuid");
-                String profileName = (String) jsonObject.get("profile");
                 boolean autosave = jsonObject.getBoolean("savetype");
             
                 IDiagramProfile profile = _profileService.findProfile(req, req.getParameter("profile"));

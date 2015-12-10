@@ -41,7 +41,6 @@ public class RemoveAssetCommand extends AbstractCommand {
 
     public JSONObject execute() throws Exception {
         String current = (String) requestParams.get("current");
-        String target = (String) requestParams.get("target");
         String tree = (String) requestParams.get("tree");
         List<String> targets = (List<String>) requestParams.get("targets[]");
 
