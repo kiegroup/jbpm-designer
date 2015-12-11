@@ -13,23 +13,67 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jbpm.designer.test.bpmn2;
+package org.jbpm.designer.bpmn2.impl;
+
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.fail;
+import static org.junit.Assert.assertFalse;
 
 import java.io.File;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.bpmn2.*;
+import org.codehaus.jackson.JsonFactory;
+import org.codehaus.jackson.JsonParser;
+import org.eclipse.bpmn2.Association;
+import org.eclipse.bpmn2.AssociationDirection;
+import org.eclipse.bpmn2.BoundaryEvent;
+import org.eclipse.bpmn2.CancelEventDefinition;
+import org.eclipse.bpmn2.CatchEvent;
+import org.eclipse.bpmn2.CompensateEventDefinition;
+import org.eclipse.bpmn2.ConditionalEventDefinition;
+import org.eclipse.bpmn2.DataObject;
+import org.eclipse.bpmn2.DataStore;
+import org.eclipse.bpmn2.Definitions;
+import org.eclipse.bpmn2.EndEvent;
+import org.eclipse.bpmn2.ErrorEventDefinition;
+import org.eclipse.bpmn2.EscalationEventDefinition;
+import org.eclipse.bpmn2.EventBasedGateway;
+import org.eclipse.bpmn2.EventDefinition;
+import org.eclipse.bpmn2.ExclusiveGateway;
+import org.eclipse.bpmn2.ExtensionAttributeValue;
+import org.eclipse.bpmn2.FlowElement;
+import org.eclipse.bpmn2.FlowElementsContainer;
+import org.eclipse.bpmn2.GlobalBusinessRuleTask;
+import org.eclipse.bpmn2.GlobalManualTask;
+import org.eclipse.bpmn2.GlobalScriptTask;
+import org.eclipse.bpmn2.GlobalTask;
+import org.eclipse.bpmn2.GlobalUserTask;
+import org.eclipse.bpmn2.InclusiveGateway;
+import org.eclipse.bpmn2.Lane;
+import org.eclipse.bpmn2.LinkEventDefinition;
+import org.eclipse.bpmn2.Message;
+import org.eclipse.bpmn2.MessageEventDefinition;
+import org.eclipse.bpmn2.ParallelGateway;
 import org.eclipse.bpmn2.Process;
+import org.eclipse.bpmn2.ProcessType;
+import org.eclipse.bpmn2.RootElement;
+import org.eclipse.bpmn2.SequenceFlow;
+import org.eclipse.bpmn2.SignalEventDefinition;
+import org.eclipse.bpmn2.StartEvent;
+import org.eclipse.bpmn2.SubProcess;
+import org.eclipse.bpmn2.Task;
+import org.eclipse.bpmn2.TerminateEventDefinition;
+import org.eclipse.bpmn2.TextAnnotation;
+import org.eclipse.bpmn2.ThrowEvent;
+import org.eclipse.bpmn2.TimerEventDefinition;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.jboss.drools.DroolsPackage;
 import org.jboss.drools.MetaDataType;
-import org.jbpm.designer.bpmn2.impl.Bpmn2JsonUnmarshaller;
 import org.junit.Test;
-
-import static junit.framework.Assert.*;
 
 /**
  * @author Antoine Toulme
@@ -37,12 +81,12 @@ import static junit.framework.Assert.*;
  * A series of tests to check the unmarshalling of json to bpmn2.
  */
 public class Bpmn2UnmarshallingTestCase {
-    
+
     private static File getTestJsonFile(String filename) {
         URL fileURL = Bpmn2UnmarshallingTestCase.class.getResource(filename);
         return new File(fileURL.getFile());
     }
-    
+
     @Test
     public void testSimpleDefinitionsUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -54,7 +98,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(definitions.getRootElements().size() == 1);
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     //@Test
     // removing until we start supporting global tasks
     public void testSimpleGlobalTaskUnmarshalling() throws Exception {
@@ -67,7 +111,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("my task doc", task.getDocumentation().iterator().next().getText());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     //@Test
     // removing until we start supporting global tasks
     public void testTwoGlobalTasksUnmarshalling() throws Exception {
@@ -83,7 +127,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("my task doc too", task2.getDocumentation().iterator().next().getText());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testPoolUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -96,7 +140,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(process.isIsClosed());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testLaneUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -110,7 +154,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("my first lane", l.getName());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testSequenceFlowUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -128,7 +172,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals(task2, flow.getTargetRef());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     //@Test
     // removing until we start supporting global tasks
     public void testScriptTaskUnmarshalling() throws Exception {
@@ -141,7 +185,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("bash", task.getScriptLanguage());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     //@Test
     // removing until we start supporting global tasks
     public void testUserTaskUnmarshalling() throws Exception {
@@ -152,7 +196,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("ask user", task.getName());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     //@Test
     // removing until we start supporting global tasks
     public void testBusinessRuleTaskUnmarshalling() throws Exception {
@@ -163,7 +207,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("call business rule", task.getName());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     //@Test
     // removing until we start supporting global tasks
     public void testManualTaskUnmarshalling() throws Exception {
@@ -174,7 +218,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("pull a lever", task.getName());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testGatewayUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -185,7 +229,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("xor gateway", g.getName());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testParallelGatewayUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -196,7 +240,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("parallel gateway", g.getName());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testEventBasedGatewayUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -207,7 +251,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("event-based gateway", g.getName());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testInclusiveGatewayUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -218,7 +262,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("inclusive gateway", g.getName());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testStartEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -229,7 +273,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("start event", g.getName());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testStartMessageEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -242,7 +286,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(g.getEventDefinitions().iterator().next() instanceof MessageEventDefinition);
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testStartEscalationEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -255,7 +299,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(g.getEventDefinitions().iterator().next() instanceof EscalationEventDefinition);
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testStartCompensationEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -268,7 +312,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(g.getEventDefinitions().iterator().next() instanceof CompensateEventDefinition);
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testStartMultipleEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -280,7 +324,7 @@ public class Bpmn2UnmarshallingTestCase {
         //TODO multiple event definitions ???
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testStartParallelMultipleEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -292,7 +336,7 @@ public class Bpmn2UnmarshallingTestCase {
         //TODO multiple event definitions ???
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testStartSignalEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -305,7 +349,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(g.getEventDefinitions().iterator().next() instanceof SignalEventDefinition);
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testStartTimerEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -318,9 +362,9 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(g.getEventDefinitions().iterator().next() instanceof TimerEventDefinition);
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     /**@Test
-     * this test needs to be revised (the json) 
+     * this test needs to be revised (the json)
     public void testGroupUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("group.json"), "").getContents().get(0));
@@ -329,7 +373,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(process.getArtifacts().iterator().next() instanceof Group);
         definitions.eResource().save(System.out, Collections.emptyMap());
     }**/
-    
+
     @Test
     public void testTextAnnotationUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -341,7 +385,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("text annotation", ta.getText());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testDataObjectUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -353,7 +397,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("data object", da.getName());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testDataStoreUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -364,7 +408,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("data store", da.getName());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testMessageUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -375,7 +419,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("message", msg.getName());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testEndEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -386,7 +430,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("end event", g.getName());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testEndMessageEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -398,7 +442,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(g.getEventDefinitions().iterator().next() instanceof MessageEventDefinition);
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testEndEscalationEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -410,7 +454,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(g.getEventDefinitions().iterator().next() instanceof EscalationEventDefinition);
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testEndErrorEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -422,7 +466,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(g.getEventDefinitions().iterator().next() instanceof ErrorEventDefinition);
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testEndSignalEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -434,7 +478,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(g.getEventDefinitions().iterator().next() instanceof SignalEventDefinition);
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testEndTerminateEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -446,7 +490,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(g.getEventDefinitions().iterator().next() instanceof TerminateEventDefinition);
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testEndMultipleEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -457,7 +501,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("end multiple event", g.getName());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testEndCompensationEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -469,19 +513,19 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(g.getEventDefinitions().iterator().next() instanceof CompensateEventDefinition);
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testSimpleChainUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("startEvent-task-endEvent.json"), "").getContents().get(0));
         assertTrue(definitions.getRootElements().size() == 1);
-        Process process = getRootProcess(definitions); 
+        Process process = getRootProcess(definitions);
         assertTrue(process.getFlowElements().size() == 5);
         assertTrue(process.getLaneSets().size() == 1);
         assertTrue(process.getLaneSets().get(0).getLanes().size() == 1);
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testIntermediateCatchMessageEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -493,7 +537,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(g.getEventDefinitions().iterator().next() instanceof MessageEventDefinition);
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testIntermediateCatchTimerEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -505,7 +549,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(g.getEventDefinitions().iterator().next() instanceof TimerEventDefinition);
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testIntermediateCatchEscalationEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -517,7 +561,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(g.getEventDefinitions().iterator().next() instanceof EscalationEventDefinition);
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testIntermediateCatchConditionalEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -529,7 +573,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(g.getEventDefinitions().iterator().next() instanceof ConditionalEventDefinition);
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testIntermediateCatchLinkEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -541,7 +585,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(g.getEventDefinitions().iterator().next() instanceof LinkEventDefinition);
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testIntermediateCatchErrorEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -553,7 +597,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(g.getEventDefinitions().iterator().next() instanceof ErrorEventDefinition);
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testIntermediateCatchCancelEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -565,7 +609,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(g.getEventDefinitions().iterator().next() instanceof CancelEventDefinition);
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testIntermediateCatchCompensationEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -577,7 +621,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(g.getEventDefinitions().iterator().next() instanceof CompensateEventDefinition);
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testIntermediateCatchMultipleEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -588,7 +632,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("catch multiple event", g.getName());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testIntermediateCatchParallelMultipleEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -599,7 +643,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("catch parallel multiple event", g.getName());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testIntermediateThrowEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -610,7 +654,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("throw event", g.getName());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testIntermediateThrowMessageEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -622,7 +666,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(g.getEventDefinitions().iterator().next() instanceof MessageEventDefinition);
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testIntermediateThrowEscalationEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -634,7 +678,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(g.getEventDefinitions().iterator().next() instanceof EscalationEventDefinition);
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testIntermediateThrowLinkEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -646,7 +690,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(g.getEventDefinitions().iterator().next() instanceof LinkEventDefinition);
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testIntermediateThrowCompensationUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -658,7 +702,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(g.getEventDefinitions().iterator().next() instanceof CompensateEventDefinition);
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testIntermediateThrowSignalUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -670,7 +714,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(g.getEventDefinitions().iterator().next() instanceof SignalEventDefinition);
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testIntermediateThrowMultipleUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -681,7 +725,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("throw multiple event", g.getName());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testAssociationUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -697,7 +741,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals(AssociationDirection.NONE, association.getAssociationDirection());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testAssociationUnidirectionalUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -712,7 +756,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals(AssociationDirection.ONE, association.getAssociationDirection());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
-    
+
     @Test
     public void testAssociationBidirectionalUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -759,6 +803,38 @@ public class Bpmn2UnmarshallingTestCase {
     }
 
     @Test
+    public void testFindContainerForBoundaryEvent() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        JsonParser parser = new JsonFactory().createJsonParser(getTestJsonFile("boundaryEventsContainers.json"));
+        parser.nextToken();
+        Definitions definitions = ((Definitions) unmarshaller.unmarshallItem(parser, ""));
+        unmarshaller.revisitCatchEvents(definitions);
+        unmarshaller.revisitCatchEventsConvertToBoundary(definitions);
+
+        Process process = getRootProcess(definitions);
+
+        for(FlowElement element : process.getFlowElements()) {
+            if (element instanceof BoundaryEvent) {
+                BoundaryEvent be = (BoundaryEvent) element;
+                if ("Timer1".equals(element.getName())) {
+                    SubProcess sp = (SubProcess) unmarshaller.findContainerForBoundaryEvent(process, be);
+                    assertEquals("Subprocess1", sp.getName());
+                }
+
+                if ("Timer2".equals(element.getName())) {
+                    SubProcess sp = (SubProcess) unmarshaller.findContainerForBoundaryEvent(process, be);
+                    assertEquals("Subprocess2", sp.getName());
+                }
+
+                if ("Timer3".equals(element.getName())) {
+                    Process sp = (Process) unmarshaller.findContainerForBoundaryEvent(process, be);
+                    assertEquals("DemoProcess", sp.getName());
+                }
+            }
+        }
+    }
+
+    @Test
     public void testCompensationThrowingEvent() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("intermediateCompensationEventThrowing.json"), "").getContents().get(0));
@@ -772,9 +848,135 @@ public class Bpmn2UnmarshallingTestCase {
         CompensateEventDefinition ced = (CompensateEventDefinition) ed;
         assertNotNull(ced.getActivityRef());
         assertEquals("User Task", ced.getActivityRef().getName());
-
     }
-    
+
+    @Test
+    public void testRevisitBoundaryEventsPositions() throws Exception {
+        final String SUBTIMER_NAME = "SubTimer";
+        final String SUBPROCESSMESSAGE_NAME = "SubProcessMessage";
+        final String OUTTIMER_NAME = "OutTimer";
+        final String DURING_INITIALIZATION = "during initialization";
+        final String AFTER_REVISION = "after revision";
+
+        List<String> initialBoundaryEventOutgointIds = null;
+        List<String> finalBoundaryEventOutgointIds = null;
+
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        JsonParser parser = new JsonFactory().createJsonParser(getTestJsonFile("boundaryEvents.json"));
+        parser.nextToken();
+        Definitions definitions = ((Definitions) unmarshaller.unmarshallItem(parser, ""));
+        unmarshaller.revisitCatchEvents(definitions);
+        unmarshaller.revisitCatchEventsConvertToBoundary(definitions);
+
+        // Validate initial state
+        for (RootElement root : definitions.getRootElements()) {
+            if(!(root instanceof Process)) {
+                continue;
+            }
+
+            Process process = (Process) root;
+            assertThatElementPresent(true, DURING_INITIALIZATION, process, SUBTIMER_NAME);
+            assertThatElementPresent(true, DURING_INITIALIZATION, process, SUBPROCESSMESSAGE_NAME);
+            assertThatElementPresent(true, DURING_INITIALIZATION, process, OUTTIMER_NAME);
+
+            for(FlowElement flow : ((Process) root).getFlowElements()) {
+                if (SUBTIMER_NAME.equals(flow.getName())) {
+                    initialBoundaryEventOutgointIds = unmarshaller.getOutgoingFlowsMap().get(flow);
+                }
+
+                if ("Subprocess".equals(flow.getName())) {
+                    SubProcess subProcess = (SubProcess) flow;
+                    assertThatElementPresent(false, DURING_INITIALIZATION, subProcess, SUBTIMER_NAME);
+                    assertThatElementPresent(false, DURING_INITIALIZATION, subProcess, SUBPROCESSMESSAGE_NAME);
+                    assertThatElementPresent(false, DURING_INITIALIZATION, subProcess, OUTTIMER_NAME);
+                }
+            }
+        }
+
+        unmarshaller.revisitBoundaryEventsPositions(definitions);
+
+        // Validate final state
+        for (RootElement root : definitions.getRootElements()) {
+            if(!(root instanceof Process)) {
+                continue;
+            }
+
+            Process process = (Process) root;
+            assertThatElementPresent(false, AFTER_REVISION, process, SUBTIMER_NAME);
+            assertThatElementPresent(true, AFTER_REVISION, process, SUBPROCESSMESSAGE_NAME);
+            assertThatElementPresent(true, AFTER_REVISION, process, OUTTIMER_NAME);
+
+            for(FlowElement flow : ((Process) root).getFlowElements()) {
+                if (!"Subprocess".equals(flow.getName())) {
+                    continue;
+                }
+
+                SubProcess subProcess = (SubProcess) flow;
+                assertThatElementPresent(true, AFTER_REVISION, subProcess, SUBTIMER_NAME);
+                assertThatElementPresent(false, AFTER_REVISION, subProcess, SUBPROCESSMESSAGE_NAME);
+                assertThatElementPresent(false, AFTER_REVISION, subProcess, OUTTIMER_NAME);
+
+                for (FlowElement subFlow : subProcess.getFlowElements()) {
+                    if (SUBTIMER_NAME.equals(subFlow.getName())) {
+                        finalBoundaryEventOutgointIds = unmarshaller.getOutgoingFlowsMap().get(subFlow);
+                    }
+                }
+            }
+        }
+
+        initialBoundaryEventOutgointIds.equals(finalBoundaryEventOutgointIds);
+
+        // Test2
+        unmarshaller = new Bpmn2JsonUnmarshaller();
+        parser = new JsonFactory().createJsonParser(getTestJsonFile("boundaryEventsContainers.json"));
+        parser.nextToken();
+        definitions = ((Definitions) unmarshaller.unmarshallItem(parser, ""));
+        unmarshaller.revisitCatchEvents(definitions);
+        unmarshaller.revisitCatchEventsConvertToBoundary(definitions);
+
+        Process process = getRootProcess(definitions);
+        assertThatElementPresent(true, "", process, "Timer3");
+        assertThatElementPresent(true, "", process, "Timer1");
+        assertThatElementPresent(true, "", process, "Timer2");
+
+        unmarshaller.revisitBoundaryEventsPositions(definitions);
+
+        assertThatElementPresent(true, "", process, "Timer3");
+        assertThatElementPresent(false, "", process, "Timer1");
+        assertThatElementPresent(false, "", process, "Timer2");
+
+        for(FlowElement flow : process.getFlowElements()) {
+            if ("Subprocess1".equals(flow.getName())) {
+                assertThatElementPresent(true, "", (SubProcess) flow, "Timer1");
+            }
+
+            if ("Subprocess2".equals(flow.getName())) {
+                assertThatElementPresent(true, "", (SubProcess) flow, "Timer2");
+            }
+        }
+    }
+
+    private void assertThatElementPresent(boolean expected, String when, FlowElementsContainer where, String which) {
+        if (expected) {
+            assertTrue(which + " NOT found in " + where.toString() +  " " + when + " but EXPECTED",
+                    isContainerContainFlowElementByName(where, which)
+            );
+        } else {
+            assertFalse(which + " FOUND in " + where.toString() + " " + when + " but NOT expected",
+                    isContainerContainFlowElementByName(where, which)
+            );
+        }
+    }
+
+    private boolean isContainerContainFlowElementByName(FlowElementsContainer container, String elementName) {
+        for (FlowElement findingSubTimer : container.getFlowElements()) {
+            if (elementName.equals(findingSubTimer.getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /* Disabling test as no support for child lanes yet
     @Test
     public void testDoubleLaneUnmarshalling() throws Exception {
@@ -792,7 +994,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals(g, secondLane.getFlowNodeRefs().get(0));
         definitions.eResource().save(System.out, Collections.emptyMap());
     }*/
-    
+
     /* Disabling test that doesn't pass.
     @Test
     public void testUserTaskDataPassing() throws Exception {
@@ -810,7 +1012,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals(g, secondLane.getFlowNodeRefs().get(0));
         definitions.eResource().save(System.out, Collections.emptyMap());
     }*/
-    
+
     private Process getRootProcess(Definitions def) {
         for(RootElement nextRootElement : def.getRootElements()) {
             if(nextRootElement instanceof Process) {
@@ -819,5 +1021,5 @@ public class Bpmn2UnmarshallingTestCase {
         }
         return null;
     }
-    
+
 }
