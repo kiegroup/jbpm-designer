@@ -237,21 +237,6 @@
 		{
 			"name":"boundaryevent",
 			"properties":[
-				{
-					"id":"boundarycancelactivity",
-					"type":"Boolean",
-					"title":"CancelActivity",
-					"value":false,
-					"description":"Denotes whether the activity should be cancelled or not, i.e., whether the boundary catch event acts as an error or an escalation. If the activity is not cancelled, multiple instances of that handler can run concurrently.",
-					"description_ja":"アクティビティをキャンセルするかどうか、つまり、Boundaryキャッチイベントがエラーになるかエスカレーションになるかを示します。 アクティビティがキャンセルされない場合、そのハンドラの複数のインスタンスを同時に実行できます。",
-					"readonly":false,
-					"optional":true,
-					"inverseBoolean":false,
-					"refToView": [
-                                                "frame",
-                                                "frame2"
-                                        ]                                               
-				},
                 {
                     "id":"min",
                     "type":"Float",
@@ -7672,6 +7657,33 @@
 			],
 			"properties": [
 				{
+					"id":"boundarycancelactivity",
+					"type":"Choice",
+					"title":"Cancel Activity",
+					"value":"true",
+					"description":"Denotes whether the activity should be cancelled or not, i.e., whether the boundary catch event acts as an error or an escalation. If the activity is not cancelled, multiple instances of that handler can run concurrently.",
+					"description_ja":"アクティビティをキャンセルするかどうか、つまり、Boundaryキャッチイベントがエラーになるかエスカレーションになるかを示します。アクティビティがキャンセルされない場合、そのハンドラの複数のインスタンスを同時に実行できます。",
+					"readonly":false,
+					"optional":true,
+					"items": [
+									{
+										"id": "c1",
+										"title": "true",
+										"value": "true",
+										"refToView": [
+														"frame2",
+														"frame3"
+													 ]
+                                    },
+									{
+										"id": "c2",
+										"title":"false",
+										"value":"false",
+										"refToView":"frame"
+									}
+							]
+				},
+				{
 					"id":"bgcolor",
 					"type":"Color",
 					"title":"Background Color",
@@ -7772,6 +7784,33 @@
 				"IntermediateEventOnActivityBoundary"
 			],
 			"properties": [
+			{
+				"id":"boundarycancelactivity",
+				"type":"Choice",
+				"title":"Cancel Activity",
+				"value":"true",
+				"description":"Denotes whether the activity should be cancelled or not, i.e., whether the boundary catch event acts as an error or an escalation. If the activity is not cancelled, multiple instances of that handler can run concurrently.",
+				"description_ja":"アクティビティをキャンセルするかどうか、つまり、Boundaryキャッチイベントがエラーになるかエスカレーションになるかを示します。アクティビティがキャンセルされない場合、そのハンドラの複数のインスタンスを同時に実行できます。",
+				"readonly":false,
+				"optional":true,
+				"items": [
+								{
+									"id": "c1",
+									"title": "true",
+									"value": "true",
+									"refToView": [
+													"frame2",
+													"frame3"
+												 ]
+                                },
+								{
+									"id": "c2",
+									"title":"false",
+									"value":"false",
+									"refToView":"frame"
+								}
+						]
+				},
 				{
 					"id":"bgcolor",
 					"type":"Color",
@@ -7943,6 +7982,33 @@
 			],
 			"properties": [
 				{
+					"id":"boundarycancelactivity",
+					"type":"Choice",
+					"title":"Cancel Activity",
+					"value":"true",
+					"description":"Denotes whether the activity should be cancelled or not, i.e., whether the boundary catch event acts as an error or an escalation. If the activity is not cancelled, multiple instances of that handler can run concurrently.",
+					"description_ja":"アクティビティをキャンセルするかどうか、つまり、Boundaryキャッチイベントがエラーになるかエスカレーションになるかを示します。アクティビティがキャンセルされない場合、そのハンドラの複数のインスタンスを同時に実行できます。",
+					"readonly":false,
+					"optional":true,
+					"items": [
+									{
+										"id": "c1",
+										"title": "true",
+										"value": "true",
+										"refToView": [
+														"frame2",
+														"frame3"
+													 ]
+                                    },
+									{
+										"id": "c2",
+										"title":"false",
+										"value":"false",
+										"refToView":"frame"
+									}
+							]
+				},
+				{
 					"id":"bgcolor",
 					"type":"Color",
 					"title":"Background Color",
@@ -8045,6 +8111,33 @@
 				"IntermediateEventOnActivityBoundary"
 			],
 			"properties": [
+				{
+					"id":"boundarycancelactivity",
+					"type":"Choice",
+					"title":"Cancel Activity",
+					"value":"true",
+					"description":"Denotes whether the activity should be cancelled or not, i.e., whether the boundary catch event acts as an error or an escalation. If the activity is not cancelled, multiple instances of that handler can run concurrently.",
+					"description_ja":"アクティビティをキャンセルするかどうか、つまり、Boundaryキャッチイベントがエラーになるかエスカレーションになるかを示します。アクティビティがキャンセルされない場合、そのハンドラの複数のインスタンスを同時に実行できます。",
+					"readonly":false,
+					"optional":true,
+					"items": [
+									{
+										"id": "c1",
+										"title": "true",
+										"value": "true",
+										"refToView": [
+														"frame2",
+														"frame3"
+													 ]
+                                    },
+									{
+										"id": "c2",
+										"title":"false",
+										"value":"false",
+										"refToView":"frame"
+									}
+							]
+				},
 				{
 					"id":"bgcolor",
 					"type":"Color",
@@ -8167,6 +8260,30 @@
 			],
 			"properties": [
 				{
+					"id":"boundarycancelactivity",
+					"type":"Choice",
+					"title":"Cancel Activity",
+					"value":"true",
+					"description":"Denotes whether the activity should be cancelled or not, i.e., whether the boundary catch event acts as an error or an escalation. If the activity is not cancelled, multiple instances of that handler can run concurrently.",
+					"description_ja":"アクティビティをキャンセルするかどうか、つまり、Boundaryキャッチイベントがエラーになるかエスカレーションになるかを示します。アクティビティがキャンセルされない場合、そのハンドラの複数のインスタンスを同時に実行できます。",
+					"readonly":true,
+					"optional":true,
+					"hidden":true,
+                    "visible":false,
+					"items": [
+									{
+											"id": "c1",
+											"title":"true",
+											"value":"true"
+									},
+									{
+											"id": "c2",
+											"title": "false",
+											"value": "false"
+									}
+							]
+				},
+				{
 					"id":"bgcolor",
 					"type":"Color",
 					"title":"Background Color",
@@ -8266,6 +8383,30 @@
 			],
 			"properties": [
 				{
+					"id":"boundarycancelactivity",
+					"type":"Choice",
+					"title":"Cancel Activity",
+					"value":"true",
+					"description":"Denotes whether the activity should be cancelled or not, i.e., whether the boundary catch event acts as an error or an escalation. If the activity is not cancelled, multiple instances of that handler can run concurrently.",
+					"description_ja":"アクティビティをキャンセルするかどうか、つまり、Boundaryキャッチイベントがエラーになるかエスカレーションになるかを示します。アクティビティがキャンセルされない場合、そのハンドラの複数のインスタンスを同時に実行できます。",
+					"readonly":true,
+					"optional":true,
+					"hidden":true,
+					"visible":false,
+					"items": [
+									{
+											"id": "c1",
+											"title":"true",
+											"value":"true"
+									},
+									{
+											"id": "c2",
+											"title": "false",
+											"value": "false"
+									}
+							]
+				},
+				{
 					"id":"bgcolor",
 					"type":"Color",
 					"title":"Background Color",
@@ -8357,6 +8498,33 @@
 				"IntermediateEventOnActivityBoundary"
 			],
 			"properties": [
+				{
+					"id":"boundarycancelactivity",
+					"type":"Choice",
+					"title":"Cancel Activity",
+					"value":"true",
+					"description":"Denotes whether the activity should be cancelled or not, i.e., whether the boundary catch event acts as an error or an escalation. If the activity is not cancelled, multiple instances of that handler can run concurrently.",
+					"description_ja":"アクティビティをキャンセルするかどうか、つまり、Boundaryキャッチイベントがエラーになるかエスカレーションになるかを示します。アクティビティがキャンセルされない場合、そのハンドラの複数のインスタンスを同時に実行できます。",
+					"readonly":false,
+					"optional":true,
+					"items": [
+									{
+										"id": "c1",
+										"title": "true",
+										"value": "true",
+										"refToView": [
+														"frame2",
+														"frame3"
+													 ]
+									},
+									{
+										"id": "c2",
+										"title":"false",
+										"value":"false",
+										"refToView":"frame"
+									}
+							]
+				},
 				{
 					"id":"bgcolor",
 					"type":"Color",
