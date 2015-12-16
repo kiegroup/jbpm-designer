@@ -1915,21 +1915,15 @@ ORYX.Plugins.View = {
                         }
                     });
 
-                    var scrollNode 	= this.facade.getCanvas().getHTMLContainer().parentNode.parentNode;
-                    var visibleWidth = scrollNode.getWidth() - 30;
-                    var visibleHeight = scrollNode.getHeight() - 30;
-
-                    var winWidth = Math.min(600, visibleWidth * 2/3);
-                    var winHeight = Math.min(550, visibleHeight * 2/3);
-
+                    var dialogSize = ORYX.Utils.getDialogSize(550, 600);
                     if(this.sourcewin != null && this.sourcewin !== undefined) {
                         this.sourcewin.destroy();
                     }
 
                     this.sourcewin = new Ext.Window({
-                        width:winWidth,
                         id:'processSources',
-                        height:winHeight,
+                        height:dialogSize.height,
+                        width:dialogSize.width,
                         layout: 'fit',
                         title: ORYX.I18N.view.processSources,
                         items: [sourcesPanel],

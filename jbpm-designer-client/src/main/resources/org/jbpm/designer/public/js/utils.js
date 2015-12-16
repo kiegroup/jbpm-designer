@@ -36,5 +36,15 @@ ORYX.Utils = {
 				stop.setAttributeNS(null, "stop-color", col);
 			})
 		}
-	}
+	},
+
+    getDialogSize : function (defaultHeight, defaultWidth) {
+        var docHeight = document.documentElement.clientHeight;
+        var docWidth = document.documentElement.clientWidth;
+        var winHeight = Math.min(defaultHeight, docHeight * 2/3);
+        var winWidth = Math.min(defaultWidth, docWidth * 2/3);
+        var dialogSize = {height: winHeight, width: winWidth};
+        return dialogSize;
+    }
+
 }

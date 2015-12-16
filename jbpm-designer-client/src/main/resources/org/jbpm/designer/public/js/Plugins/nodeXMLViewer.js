@@ -23,24 +23,26 @@ ORYX.Plugins.NodeXMLViewer = Clazz.extend({
    	            value:options.nodesource,
    	            autoScroll:true
    	            });
-			
+
+			var dialogSize = ORYX.Utils.getDialogSize(550, 600);
+
 			var nextWINID = Ext.id();
-			this.win = new Ext.Window({
-   				width:600,
+			var win = new Ext.Window({
+				height:dialogSize.height,
+   				width:dialogSize.width,
    				id: nextWINID,
-   				height:550,
    				layout: 'fit',
    				title:ORYX.I18N.lockNode.nodeSource,
    				items: [cf],
    				buttons		: [{
 					text : ORYX.I18N.Save.close,
 					handler:function(){
-						this.win.hide();
+						win.destroy();
 						this.sourceEditor = undefined;
 					}.bind(this)
 				}]
    				});
-			this.win.show();
+			win.show();
 			this.foldFunc = CodeMirror.newFoldFunction(CodeMirror.tagRangeFinder);
    			this.sourceEditor = CodeMirror.fromTextArea(document.getElementById(nextTAID), {
    			  mode: "application/xml",
