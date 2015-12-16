@@ -2014,12 +2014,13 @@ Ext.form.ComplexTextField = Ext.extend(Ext.form.TriggerField,  {
 		
 		
 		// Basic Dialog
+		var dialogSize = ORYX.Utils.getDialogSize(500, 500);
 		var dialog = new Ext.Window({ 
 			layout		: 'anchor',
 			autoCreate	: true, 
-			title		: ORYX.I18N.PropertyWindow.text, 
-			height		: 500, 
-			width		: 500, 
+			title		: ORYX.I18N.PropertyWindow.text,
+			width		: dialogSize.width,
+			height		: dialogSize.height,
 			modal		: true,
 			collapsible	: false,
 			fixedcenter	: true, 
@@ -2096,12 +2097,13 @@ Ext.form.ComplexEncodedTextField = Ext.extend(Ext.form.TriggerField,  {
 
 
 		// Basic Dialog
+		var dialogSize = ORYX.Utils.getDialogSize(500, 500);
 		var dialog = new Ext.Window({
 			layout		: 'anchor',
 			autoCreate	: true,
 			title		: ORYX.I18N.PropertyWindow.text,
-			height		: 500,
-			width		: 500,
+			width		: dialog.width,
+			height		: dialog.height,
 			modal		: true,
 			collapsible	: false,
 			fixedcenter	: true,
@@ -2167,12 +2169,13 @@ Ext.form.ComplexCustomField = Ext.extend(Ext.form.TriggerField,  {
     	   				var customEditorsJSON = response.responseText.evalJSON();
     	   				var customEditorsObj = customEditorsJSON["editors"];
     	   				if(customEditorsObj[this.title]) {
-    	   					var dialog = new Ext.Window({ 
+							var dialogSize = ORYX.Utils.getDialogSize(300, 450);
+							var dialog = new Ext.Window({
     	   						layout		: 'anchor',
     	   						autoCreate	: true, 
     	   						title		: ORYX.I18N.PropertyWindow.customEditorFor+' ' + this.title,
-    	   						height		: 300, 
-    	   						width		: 450, 
+    	   						height		: dialogSize.height,
+    	   						width		: dialogSize.width,
     	   						modal		: true,
     	   						collapsible	: false,
     	   						fixedcenter	: true, 
@@ -2400,10 +2403,12 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
         notCompletedTYpe.push("not-completed");
         typeData.push(notCompletedTYpe);
 
-        var gridId = Ext.id();
+		var dialogSize = ORYX.Utils.getDialogSize(350, 900);
+		var colWidth = (dialogSize.width - 80) / 8;
+
+		var gridId = Ext.id();
         var itemDeleter = new Extensive.grid.ItemDeleter();
-        var bodyEditor = new Ext.form.TextArea({ id: 'notificationsbodyeditor', width: 150, height: 650, allowBlank: true, disableKeyFilter:true, grow: true});
-        var grid = new Ext.grid.EditorGridPanel({
+		var grid = new Ext.grid.EditorGridPanel({
             autoScroll: true,
             autoHeight: true,
             store: notifications,
@@ -2413,7 +2418,7 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
             {
                 id: 'type',
                 header: ORYX.I18N.PropertyWindow.type,
-                width: 100,
+                width: colWidth,
                 dataIndex: 'type',
                 editor: new Ext.form.ComboBox({
                     id: 'typeCombo',
@@ -2442,15 +2447,15 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
             {
                 id: 'expires',
                 header: ORYX.I18N.PropertyWindow.expiresAt,
-                width: 100,
+                width: colWidth,
                 dataIndex: 'expires',
-                editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \#\{\}\-\.\_]*$/i }),
+                editor: new Ext.form.TextField({allowBlank: true, regex: /^[a-z0-9 \#\{\}\-\.\_]*$/i }),
                 renderer: Ext.util.Format.htmlEncode
             },
             {
                 id: 'from',
                 header: ORYX.I18N.PropertyWindow.from,
-                width: 100,
+                width: colWidth,
                 dataIndex: 'from',
                 editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \#\{\}\-\.\_\,]*$/i }),
                 renderer: Ext.util.Format.htmlEncode
@@ -2458,7 +2463,7 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
             {
                 id: 'tousers',
                 header: ORYX.I18N.PropertyWindow.toUsers,
-                width: 100,
+                width: colWidth,
                 dataIndex: 'tousers',
                 editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \#\{\}\-\.\_\,]*$/i }),
                 renderer: Ext.util.Format.htmlEncode
@@ -2466,7 +2471,7 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
             {
                 id: 'togroups',
                 header: ORYX.I18N.PropertyWindow.toGroups,
-                width: 100,
+                width: colWidth,
                 dataIndex: 'togroups',
                 editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \#\{\}\-\.\_\,]*$/i }),
                 renderer: Ext.util.Format.htmlEncode
@@ -2474,7 +2479,7 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
             {
                 id: 'replyto',
                 header: ORYX.I18N.PropertyWindow.replyTo,
-                width: 100,
+                width: colWidth,
                 dataIndex: 'replyto',
                 editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \#\{\}\-\.\_\,]*$/i }),
                 renderer: Ext.util.Format.htmlEncode
@@ -2482,7 +2487,7 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
             {
                 id: 'subject',
                 header: ORYX.I18N.PropertyWindow.subject,
-                width: 100,
+                width: colWidth,
                 dataIndex: 'subject',
                 editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \#\{\}\-\.\_\,]*$/i }),
                 renderer: Ext.util.Format.htmlEncode
@@ -2490,11 +2495,10 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
             {
                 id: 'body',
                 header: ORYX.I18N.PropertyWindow.body,
-                width: 100,
-                height: 650,
+                width: colWidth,
                 dataIndex: 'body',
                 //editor: new Ext.grid.GridEditor(new Ext.form.TextArea(), {autoSize: 'full', })},
-                editor: new Ext.form.TextArea({ width: 150, height: 650, allowBlank: true, disableKeyFilter:true, grow: true}),
+                editor: new Ext.form.TextArea({allowBlank: true, disableKeyFilter:true, grow: true}),
                 renderer: Ext.util.Format.htmlEncode
             }, itemDeleter]),
             selModel: itemDeleter,
@@ -2521,63 +2525,56 @@ Ext.form.ComplexNotificationsField = Ext.extend(Ext.form.TriggerField,  {
             {
                 beforeedit: function(evt)
                 {
-                    if(evt.column != 8)
-                        return true;
+                    if(evt.column != 8) {
+						return true;
+					}
 
-                    var existingWindow = Ext.get("notificationsBodyEditorWindow");
-                    if(!existingWindow) {
-                        var win = new Ext.Window
-                            ({
-                                id: 'notificationsBodyEditorWindow',
-                                modal		: true,
-                                collapsible	: false,
-                                fixedcenter	: true,
-                                shadow		: true,
-                                proxyDrag	: true,
-                                autoScroll  : true,
-                                autoWidth   :  true,
-                                autoHeight  : true,
-                                bodyBorder  : false,
-                                closable    :   true,
-                                resizable   :  true,
-                                items:
-                                    [{
-                                        xtype:      'panel',
-                                        html:       "<p class='instructions'>"+ORYX.I18N.PropertyWindow.addNotificationInstructions+"</p>"
-                                    },
-                                        {
-                                            xtype:      'textarea',
-                                            id:         'notificationbodyinput',
-                                            width:      350,
-                                            height:     300,
-                                            modal:      true,
-                                            value:      evt.value
-                                        }],
-                                bbar:
-                                    [{
-                                        text: ORYX.I18N.PropertyWindow.ok,
-                                        handler: function()
-                                        {
-                                            evt.record.set('body', Ext.get('notificationbodyinput').getValue());
-                                            win.close();
-                                        }
-                                    }]
-                            });
-                        win.show();
-                        return false;
-                    } else {
-                        return false;
-                    }
-                }
+					var grid = new Ext.form.TextArea({
+						anchor: '100% 100%',
+						value: evt.value
+					});
+
+					var bodyTextDialogSize = ORYX.Utils.getDialogSize(300, 350);
+					var win = new Ext.Window({
+						id: 'notificationsBodyEditorWindow',
+						layout: 'anchor',
+						autoCreate: true,
+						title: ORYX.I18N.PropertyWindow.addNotificationInstructions,
+						height: bodyTextDialogSize.height,
+						width: bodyTextDialogSize.width,
+						modal: true,
+						collapsible: false,
+						fixedcenter: true,
+						shadow: true,
+						proxyDrag: true,
+						items: [grid],
+						buttons: [{
+							text: ORYX.I18N.PropertyWindow.ok,
+							handler: function() {
+								// store dialog input
+								var value = grid.getValue();
+								evt.record.set('body', value);
+								win.destroy();
+							}.bind(this)
+						}, {
+							text: ORYX.I18N.PropertyWindow.cancel,
+							handler: function() {
+								win.destroy();
+							}.bind(this)
+						}]
+					});
+					win.show();
+					return false;
+				}.bind(this)
             }
         });
 
-        var dialog = new Ext.Window({
+		var dialog = new Ext.Window({
             layout		: 'anchor',
             autoCreate	: true,
             title		: ORYX.I18N.PropertyWindow.editorForNotifications,
-            height		: 350,
-            width		: 900,
+            height		: dialogSize.height,
+            width		: dialogSize.width,
             modal		: true,
             collapsible	: false,
             fixedcenter	: true,
@@ -2743,6 +2740,8 @@ Ext.form.ComplexReassignmentField = Ext.extend(Ext.form.TriggerField,  {
 
         var gridId = Ext.id();
         var itemDeleter = new Extensive.grid.ItemDeleter();
+		var dialogSize = ORYX.Utils.getDialogSize(350, 700);
+		var colWidth = (dialogSize.width - 80) / 4;
         var grid = new Ext.grid.EditorGridPanel({
             autoScroll: true,
             autoHeight: true,
@@ -2752,7 +2751,7 @@ Ext.form.ComplexReassignmentField = Ext.extend(Ext.form.TriggerField,  {
             cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
                 id: 'users',
                 header: ORYX.I18N.PropertyWindow.users,
-                width: 150,
+                width: colWidth,
                 dataIndex: 'users',
                 editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \#\{\}\-\.\_\,]*$/i }),
                 renderer: Ext.util.Format.htmlEncode
@@ -2760,7 +2759,7 @@ Ext.form.ComplexReassignmentField = Ext.extend(Ext.form.TriggerField,  {
             {
                 id: 'groups',
                 header: ORYX.I18N.PropertyWindow.groups,
-                width: 150,
+                width: colWidth,
                 dataIndex: 'groups',
                 editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \#\{\}\-\.\_\,]*$/i }),
                 renderer: Ext.util.Format.htmlEncode
@@ -2768,7 +2767,7 @@ Ext.form.ComplexReassignmentField = Ext.extend(Ext.form.TriggerField,  {
             {
                 id: 'expires',
                 header: ORYX.I18N.PropertyWindow.expiresAt,
-                width: 150,
+                width: colWidth,
                 dataIndex: 'expires',
                 editor: new Ext.form.TextField({ allowBlank: true, regex: /^[a-z0-9 \#\{\}\-\.\_]*$/i }),
                 renderer: Ext.util.Format.htmlEncode
@@ -2776,7 +2775,7 @@ Ext.form.ComplexReassignmentField = Ext.extend(Ext.form.TriggerField,  {
             {
                 id: 'type',
                 header: ORYX.I18N.PropertyWindow.type,
-                width: 150,
+                width: colWidth,
                 dataIndex: 'type',
                 editor: new Ext.form.ComboBox({
                     id: 'typeCombo',
@@ -2823,8 +2822,8 @@ Ext.form.ComplexReassignmentField = Ext.extend(Ext.form.TriggerField,  {
             layout		: 'anchor',
             autoCreate	: true,
             title		: ORYX.I18N.PropertyWindow.editorForReassignment,
-            height		: 350,
-            width		: 700,
+            height		: dialogSize.height,
+            width		: dialogSize.width,
             modal		: true,
             collapsible	: false,
             fixedcenter	: true,
@@ -3058,7 +3057,9 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
                         wsdlType.push("wsdl");
                         impordata.push(wsdlType);
 
-                        var gridId = Ext.id();
+						var dialogSize = ORYX.Utils.getDialogSize(400, 900);
+						var colWidth = (dialogSize.width - 80) / 5;
+						var gridId = Ext.id();
                         var grid = new Ext.grid.EditorGridPanel({
                             autoScroll: true,
                             autoHeight: true,
@@ -3069,7 +3070,7 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
                                 {
                                     id: 'imptype',
                                     header: ORYX.I18N.PropertyWindow.importType,
-                                    width: 100,
+                                    width: colWidth,
                                     dataIndex: 'type',
                                     editor: new Ext.form.ComboBox({
                                         id: 'importTypeCombo',
@@ -3100,7 +3101,7 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
                                 {
                                     id: 'classname',
                                     header: "Defined Class Name",
-                                    width: 180,
+                                    width: colWidth,
                                     dataIndex: 'classname',
                                     editor: new Ext.form.ComboBox({
                                         id: 'customTypeCombo',
@@ -3131,21 +3132,21 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
                                 {
                                     id: 'customclassname',
                                     header: "Custom Class Name",
-                                    width: 180,
+                                    width: colWidth,
                                     dataIndex: 'customclassname',
                                     editor: new Ext.form.TextField({ allowBlank: true })
                                 },
                                 {
                                     id: 'wsdllocation',
                                     header: ORYX.I18N.PropertyWindow.wsdlLocation,
-                                    width: 180,
+                                    width: colWidth,
                                     dataIndex: 'wsdllocation',
                                     editor: new Ext.form.TextField({ allowBlank: true })
                                 },
                                 {
                                     id: 'wsdlnamespace',
                                     header: ORYX.I18N.PropertyWindow.wsdlNamespace,
-                                    width: 180,
+                                    width: colWidth,
                                     dataIndex: 'wsdlnamespace',
                                     editor: new Ext.form.TextField({ allowBlank: true })
                                 },
@@ -3172,8 +3173,8 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
                             layout		: 'anchor',
                             autoCreate	: true,
                             title		: ORYX.I18N.PropertyWindow.editorForImports,
-                            height		: 400,
-                            width		: 900,
+                            height		: dialogSize.height,
+                            width		: dialogSize.width,
                             modal		: true,
                             collapsible	: false,
                             fixedcenter	: true,
@@ -3321,8 +3322,10 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
     	}
     	
     	var itemDeleter = new Extensive.grid.ItemDeleter();
-    	
+
     	var gridId = Ext.id();
+		var dialogSize = ORYX.Utils.getDialogSize(300, 450);
+		var colWidth = dialogSize.width - 80;
     	var grid = new Ext.grid.EditorGridPanel({
             autoScroll: true,
             autoHeight: true,
@@ -3332,7 +3335,7 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
             cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
             	id: 'action',
                 header: ORYX.I18N.PropertyWindow.action,
-                width: 360,
+                width: colWidth,
                 dataIndex: 'action',
                 editor: new Ext.form.TextField({ allowBlank: true })
             },itemDeleter]),
@@ -3354,8 +3357,8 @@ Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {
 			layout		: 'anchor',
 			autoCreate	: true, 
 			title		: ORYX.I18N.PropertyWindow.editorForActions,
-			height		: 300, 
-			width		: 450, 
+			height		: dialogSize.height,
+			width		: dialogSize.width,
 			modal		: true,
 			collapsible	: false,
 			fixedcenter	: true, 
@@ -4741,6 +4744,8 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
 
                         var itemDeleter = new Extensive.grid.ItemDeleter();
                         itemDeleter.setDType(this.dtype);
+						var dialogSize = ORYX.Utils.getDialogSize(300, 700);
+						var smallColWidth = (dialogSize.width - 80) / 7;
 
                         var gridId = Ext.id();
                         Ext.form.VTypes["inputNameVal"] = /^[a-z0-9\-\.\_]*$/i;
@@ -4759,14 +4764,14 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                             cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
                                 id: 'name',
                                 header: ORYX.I18N.PropertyWindow.name,
-                                width: 100,
+                                width: smallColWidth * 2,
                                 dataIndex: 'name',
                                 editor: new Ext.form.TextField({ allowBlank: true, vtype: 'inputName', regex: /^[a-z0-9\-\.\_]*$/i }),
                                 renderer: Ext.util.Format.htmlEncode
                             }, {
                                 id: 'stype',
                                 header: "Defined Types",
-                                width: 200,
+                                width: smallColWidth * 2,
                                 dataIndex: 'stype',
                                 editor: new Ext.form.ComboBox({
                                     typeAhead: true,
@@ -4797,14 +4802,14 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                             }, {
                                 id: 'ctype',
                                 header: ORYX.I18N.PropertyWindow.customType,
-                                width: 200,
+                                width: smallColWidth * 2,
                                 dataIndex: 'ctype',
                                 editor: new Ext.form.TextField({ allowBlank: true }),
                                 renderer: Ext.util.Format.htmlEncode
                             }, {
                                 id: 'kpi',
                                 header: "KPI",
-                                width: 100,
+                                width: smallColWidth,
                                 dataIndex: 'kpi',
                                 disabled: (cckpi != "true"),
                                 editor: new Ext.form.ComboBox({
@@ -4866,8 +4871,8 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                             layout		: 'anchor',
                             autoCreate	: true,
                             title		: this.windowTitle,
-                            height		: 300,
-                            width		: 700,
+                            height		: dialogSize.height,
+                            width		: dialogSize.width,
                             modal		: true,
                             collapsible	: false,
                             fixedcenter	: true,
@@ -5617,11 +5622,12 @@ Ext.form.ConditionExpressionEditorField = Ext.extend(Ext.form.TriggerField,  {
             }
         }
 
+		var dialogSize = ORYX.Utils.getDialogSize(430, 680);
         var dialog = new Ext.Window({
             layout		: 'anchor',
             autoCreate	: true,
-            height		: 430,
-            width		: 680,
+            height		: dialogSize.height,
+            width		: dialogSize.width,
             modal		: true,
             collapsible	: false,
             fixedcenter	: true,
@@ -5832,7 +5838,9 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                         }
                         ruleflowgroupsdefs.commitChanges();
 
-                        var gridId = Ext.id();
+						var dialogSize = ORYX.Utils.getDialogSize(350, 760);
+						var smallColWidth = (dialogSize.width - 80) / 7;
+						var gridId = Ext.id();
                         var grid = new Ext.grid.EditorGridPanel({
                             autoScroll: true,
                             autoHeight: true,
@@ -5843,7 +5851,7 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                             {
                                 id: 'rfgname',
                                 header: 'RuleFlow Group Name',
-                                width: 200,
+                                width: smallColWidth * 2,
                                 sortable: true,
                                 dataIndex: 'name',
                                 editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
@@ -5851,7 +5859,7 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                             {
                                 id: 'rfrulenames',
                                 header: 'Rules',
-                                width: 200,
+                                width: smallColWidth * 2,
                                 sortable: false,
                                 renderer: function(value, metaData, record, rowIndex, colIndex, store) {
 
@@ -5905,7 +5913,7 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                             {
                                 id: 'rfrepository',
                                 header: 'Repositories',
-                                width: 100,
+                                width: smallColWidth,
                                 sortable: true,
                                 dataIndex: 'repo',
                                 editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
@@ -5913,7 +5921,7 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                             {
                                 id: 'rfproject',
                                 header: 'Projects',
-                                width: 100,
+                                width: smallColWidth,
                                 sortable: true,
                                 dataIndex: 'project',
                                 editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
@@ -5921,7 +5929,7 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                             {
                                 id: 'rfbranch',
                                 header: "Branches",
-                                width: 100,
+                                width: smallColWidth,
                                 sortable: true,
                                 dataIndex: "branch",
                                 editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
@@ -5962,8 +5970,8 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                             layout		: 'anchor',
                             autoCreate	: true,
                             title		: 'Editor for RuleFlow Groups',
-                            height		: 350,
-                            width		: 760,
+                            height		: dialogSize.height,
+                            width		: dialogSize.width,
                             modal		: true,
                             collapsible	: false,
                             fixedcenter	: true,
@@ -6116,8 +6124,10 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField,  {
                             }));
     		            }
     		            calldefs.commitChanges();
-    		            
-    		            var gridId = Ext.id();
+
+						var dialogSize = ORYX.Utils.getDialogSize(350, 690);
+						var colWidth = (dialogSize.width - 30) / 3;
+						var gridId = Ext.id();
     		        	var grid = new Ext.grid.EditorGridPanel({
                             autoScroll: true,
                             autoHeight: true,
@@ -6127,19 +6137,19 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField,  {
     		                cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
     		                	id: 'pid',
     		                    header: ORYX.I18N.PropertyWindow.processId,
-    		                    width: 200,
+    		                    width: colWidth,
     		                    dataIndex: 'name',
     		                    editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
     		                }, {
     		                	id: 'pkgn',
     		                    header: ORYX.I18N.PropertyWindow.packageName,
-    		                    width: 200,
+    		                    width: colWidth,
     		                    dataIndex: 'pkgname',
     		                    editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
     		                },{
     		                	id: 'pim',
     		                    header: ORYX.I18N.LocalHistory.headertxt.ProcessImage,
-    		                    width: 250,
+    		                    width: colWidth,
     		                    dataIndex: 'imgsrc',
     		                    renderer: function(val) {
     		                    	if(val && val.length > 0) {
@@ -6180,13 +6190,13 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField,  {
     		        	        columnWidth: 1.0
     		        	    }
     		        	});
-    		        	
-    		        	var dialog = new Ext.Window({ 
+
+						var dialog = new Ext.Window({
     		    			layout		: 'anchor',
     		    			autoCreate	: true, 
     		    			title		: ORYX.I18N.PropertyWindow.editorForCalledEvents,
-    		    			height		: 350, 
-    		    			width		: 680, 
+    		    			height		: dialogSize.height,
+    		    			width		: dialogSize.width,
     		    			modal		: true,
     		    			collapsible	: false,
     		    			fixedcenter	: true, 
