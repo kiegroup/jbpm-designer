@@ -79,46 +79,48 @@ ORYX.Plugins.ShapeMenuPlugin = {
 	},
 
 	showShapeMenu: function( dontGenerateNew ) {
-		if( !dontGenerateNew || this.resetElements ){
-			
-			window.clearTimeout(this.timer);
-			this.timer = window.setTimeout(function(){
-				
+		if(!(ORYX.READONLY == true || ORYX.VIEWLOCKED == true)) {
+			if (!dontGenerateNew || this.resetElements) {
+
+				window.clearTimeout(this.timer);
+				this.timer = window.setTimeout(function () {
+
 					// Close all Buttons
-				this.shapeMenu.closeAllButtons();
-		
-				// Show the Morph Button
-				this.showMorphButton(this.currentShapes);
-				
-				// Show the dictionary Button
-				this.showDictionaryButton();
-				
-				// Show the forms Button
-				this.showTaskFormButton();
-				
-				// Show the source view button
-				this.showSourceViewButton();
+					this.shapeMenu.closeAllButtons();
 
-				// Show the DataIOEditor button
-				this.showDataIOEditorButton(this.currentShapes);
+					// Show the Morph Button
+					this.showMorphButton(this.currentShapes);
 
-				// Show the Stencil Buttons
-				this.showStencilButtons(this.currentShapes);	
-				
+					// Show the dictionary Button
+					this.showDictionaryButton();
+
+					// Show the forms Button
+					this.showTaskFormButton();
+
+					// Show the source view button
+					this.showSourceViewButton();
+
+					// Show the DataIOEditor button
+					this.showDataIOEditorButton(this.currentShapes);
+
+					// Show the Stencil Buttons
+					this.showStencilButtons(this.currentShapes);
+
+					// Show the ShapeMenu
+					this.shapeMenu.show(this.currentShapes);
+
+					this.resetElements = false;
+				}.bind(this), 300)
+
+			} else {
+
+				window.clearTimeout(this.timer);
+				this.timer = null;
+
 				// Show the ShapeMenu
 				this.shapeMenu.show(this.currentShapes);
-				
-				this.resetElements = false;
-			}.bind(this), 300)
-			
-		} else {
-			
-			window.clearTimeout(this.timer);
-			this.timer = null;
-			
-			// Show the ShapeMenu
-			this.shapeMenu.show(this.currentShapes);
-			
+
+			}
 		}
 	},
 
