@@ -15,55 +15,21 @@
  */
 package org.jbpm.designer.test.bpmn2;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
-
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.bpmn2.Association;
-import org.eclipse.bpmn2.AssociationDirection;
-import org.eclipse.bpmn2.CancelEventDefinition;
-import org.eclipse.bpmn2.CatchEvent;
-import org.eclipse.bpmn2.CompensateEventDefinition;
-import org.eclipse.bpmn2.ConditionalEventDefinition;
-import org.eclipse.bpmn2.DataObject;
-import org.eclipse.bpmn2.DataStore;
-import org.eclipse.bpmn2.Definitions;
-import org.eclipse.bpmn2.DocumentRoot;
-import org.eclipse.bpmn2.EndEvent;
-import org.eclipse.bpmn2.ErrorEventDefinition;
-import org.eclipse.bpmn2.EscalationEventDefinition;
-import org.eclipse.bpmn2.EventBasedGateway;
-import org.eclipse.bpmn2.ExclusiveGateway;
-import org.eclipse.bpmn2.GlobalBusinessRuleTask;
-import org.eclipse.bpmn2.GlobalManualTask;
-import org.eclipse.bpmn2.GlobalScriptTask;
-import org.eclipse.bpmn2.GlobalTask;
-import org.eclipse.bpmn2.GlobalUserTask;
-import org.eclipse.bpmn2.Group;
-import org.eclipse.bpmn2.InclusiveGateway;
-import org.eclipse.bpmn2.Lane;
-import org.eclipse.bpmn2.LinkEventDefinition;
-import org.eclipse.bpmn2.Message;
-import org.eclipse.bpmn2.MessageEventDefinition;
-import org.eclipse.bpmn2.ParallelGateway;
+import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.Process;
-import org.eclipse.bpmn2.ProcessType;
-import org.eclipse.bpmn2.RootElement;
-import org.eclipse.bpmn2.SequenceFlow;
-import org.eclipse.bpmn2.SignalEventDefinition;
-import org.eclipse.bpmn2.StartEvent;
-import org.eclipse.bpmn2.Task;
-import org.eclipse.bpmn2.TerminateEventDefinition;
-import org.eclipse.bpmn2.TextAnnotation;
-import org.eclipse.bpmn2.ThrowEvent;
-import org.eclipse.bpmn2.TimerEventDefinition;
+import org.eclipse.emf.ecore.util.FeatureMap;
+import org.jboss.drools.DroolsPackage;
+import org.jboss.drools.MetaDataType;
 import org.jbpm.designer.bpmn2.impl.Bpmn2JsonUnmarshaller;
 import org.junit.Test;
+
+import static junit.framework.Assert.*;
 
 /**
  * @author Antoine Toulme
@@ -760,6 +726,36 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals(textA, association.getTargetRef());
         assertEquals(AssociationDirection.BOTH, association.getAssociationDirection());
         definitions.eResource().save(System.out, Collections.emptyMap());
+    }
+
+    @Test
+    public void testBoundaryEventMultiLineName() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("boundaryEventMultiLineName.json"), "").getContents().get(0));
+        Process process = getRootProcess(definitions);
+        Boolean foundElementNameExtensionValue = false;
+        BoundaryEvent event = (BoundaryEvent) process.getFlowElements().get(1);
+        if(event.getExtensionValues() != null && event.getExtensionValues().size() > 0) {
+            for(ExtensionAttributeValue extattrval : event.getExtensionValues()) {
+                FeatureMap extensionElements = extattrval.getValue();
+
+                List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
+                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
+
+                assertNotNull(metadataExtensions);
+                assertTrue(metadataExtensions.size() == 1);
+
+                for(MetaDataType metaType : metadataExtensions) {
+                    if(metaType.getName()!= null && metaType.getName().equals("elementname") && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
+                        assertNotNull(metaType.getMetaValue());
+                        foundElementNameExtensionValue = true;
+                    }
+                }
+            }
+            assertTrue(foundElementNameExtensionValue);
+        } else {
+            fail("Boundary event has no extension element");
+        }
     }
     
     /* Disabling test as no support for child lanes yet

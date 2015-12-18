@@ -1850,8 +1850,37 @@ public class Bpmn2JsonUnmarshaller {
                             }
 
                             be.setName(ce.getName());
-                            be.setId(ce.getId());
 
+                            String ceElementName = null;
+                            if(ce.getExtensionValues() != null && ce.getExtensionValues().size() > 0) {
+                                for(ExtensionAttributeValue extattrval : ce.getExtensionValues()) {
+                                    FeatureMap extensionElements = extattrval.getValue();
+
+                                    List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
+                                            .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
+
+                                    for(MetaDataType metaType : metadataExtensions) {
+                                        if(metaType.getName()!= null && metaType.getName().equals("elementname") && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
+                                            ceElementName = metaType.getMetaValue();
+                                        }
+                                    }
+                                }
+                            }
+                            if(ceElementName != null) {
+                                MetaDataType eleMetadata = DroolsFactory.eINSTANCE.createMetaDataType();
+                                eleMetadata.setName("elementname");
+                                eleMetadata.setMetaValue(ceElementName);
+
+                                if (be.getExtensionValues() == null || be.getExtensionValues().size() < 1) {
+                                    ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                                    be.getExtensionValues().add(extensionElement);
+                                }
+                                FeatureMap.Entry eleExtensionElementEntry = new SimpleFeatureMapEntry(
+                                        (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, eleMetadata);
+                                be.getExtensionValues().get(0).getValue().add(eleExtensionElementEntry);
+                            }
+
+                            be.setId(ce.getId());
                             be.setAttachedToRef(((Activity)entry.getKey()));
                             ((Activity)entry.getKey()).getBoundaryEventRefs().add(be);
                             catchEventsToRemove.add(ce);
