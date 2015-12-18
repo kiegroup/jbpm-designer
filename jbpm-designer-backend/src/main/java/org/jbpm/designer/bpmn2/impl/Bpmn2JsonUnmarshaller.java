@@ -1668,14 +1668,17 @@ public class Bpmn2JsonUnmarshaller {
         }
     }
 
-    private FlowElementsContainer findContainerForBoundaryEvent(FlowElementsContainer container, BoundaryEvent be) {
+    protected FlowElementsContainer findContainerForBoundaryEvent(FlowElementsContainer container, BoundaryEvent be) {
         for(FlowElement flowElement : container.getFlowElements()) {
             if(flowElement.getId().equals(be.getAttachedToRef().getId())) {
                 return container;
             }
 
             if(flowElement instanceof FlowElementsContainer) {
-                return findContainerForBoundaryEvent((FlowElementsContainer) flowElement, be);
+                FlowElementsContainer result = findContainerForBoundaryEvent((FlowElementsContainer) flowElement, be);
+                if (result != null) {
+                    return result;
+                }
             }
         }
         return null;
@@ -1695,8 +1698,7 @@ public class Bpmn2JsonUnmarshaller {
     }
 
     protected void revisitBoundaryEventsPositions(Definitions def) {
-        List<RootElement> rootElements = def.getRootElements();
-        for(RootElement root : rootElements) {
+        for(RootElement root : def.getRootElements()) {
             if(root instanceof Process) {
                 Process process = (Process) root;
                 List<BoundaryEvent> toRemove = new ArrayList();
