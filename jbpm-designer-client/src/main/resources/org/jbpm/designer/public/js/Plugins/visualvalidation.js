@@ -217,6 +217,8 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
 
 
             if(foundErrorsForNode) {
+                var dialogSize = ORYX.Utils.getDialogSize(300, 700);
+                var singleColWidth = (dialogSize.width - 50) / 7;
                 var grid = new Ext.grid.EditorGridPanel({
                     autoScroll: true,
                     autoHeight: true,
@@ -226,7 +228,7 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
                         {
                             id: 'type',
                             header: ORYX.I18N.SyntaxChecker.header_IssueType,
-                            width: 100,
+                            width: singleColWidth,
                             dataIndex: 'type',
                             sortable  : true,
                             editor: new Ext.form.TextField({ allowBlank: true, vtype: 'inputName', regex: /^[a-z0-9 \-\.\_]*$/i }),
@@ -235,7 +237,7 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
                         {
                             id: 'name',
                             header: ORYX.I18N.SyntaxChecker.header_Description,
-                            width: 500,
+                            width: singleColWidth * 5,
                             dataIndex: 'name',
                             sortable  : true,
                             editor: new Ext.form.TextField({ allowBlank: true, vtype: 'inputName', regex: /^[a-z0-9 \-\.\_]*$/i }),
@@ -244,7 +246,7 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
                         {
                             id: 'shapeid',
                             header: ORYX.I18N.SyntaxChecker.header_ShapeId,
-                            width: 100,
+                            width: singleColWidth,
                             dataIndex: 'shapeid',
                             sortable  : true,
                             editor: new Ext.form.TextField({ allowBlank: true, vtype: 'inputName', regex: /^[a-z0-9 \-\.\_]*$/i }),
@@ -260,8 +262,8 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
                     layout		: 'anchor',
                     autoCreate	: true,
                     title		: ORYX.I18N.SyntaxChecker.suggestions,
-                    height		: 300,
-                    width		: 700,
+                    height		: dialogSize.height,
+                    width		: dialogSize.width,
                     modal		: true,
                     collapsible	: false,
                     fixedcenter	: true,
