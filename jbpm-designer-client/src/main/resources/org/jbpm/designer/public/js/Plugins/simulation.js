@@ -198,7 +198,9 @@ ORYX.Plugins.Simulation = Clazz.extend({
     	   		    		cindex++;
     	   		    	}
     	   		    	processpathsStore.commitChanges();
-    		            
+
+						var dialogSize = ORYX.Utils.getDialogSize(200, 330);
+						var smallColWidth = (dialogSize.width - 80) / 5;
     		            var gridId = Ext.id();
     		        	var grid = new Ext.grid.EditorGridPanel({
     		                store: processpathsStore,
@@ -207,7 +209,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
     		                cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
     		                	id: 'display',
     		                    header: ORYX.I18N.View.sim.dispColor,
-    		                    width: 90,
+    		                    width: smallColWidth * 2,
     		                    dataIndex: 'display',
     		                    renderer: function(val) {
 		                    	  if(val) { 
@@ -219,7 +221,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
     		                }, {
     		                	id: 'numele',
     		                    header: ORYX.I18N.View.sim.numElements,
-    		                    width: 130,
+    		                    width: smallColWidth * 3,
     		                    dataIndex: 'numele',
     		                    renderer: function(val) {
   		                    	  if(val) { 
@@ -234,7 +236,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
     		        	
     	   				var processPathsPanel = new Ext.Panel({
     		        		id: 'processPathsPanel',
-    		        		title: '<center>' + ORYX.I18N.View.sim.select + wintitle + ORYX.I18N.View.sim.display + '</center>',
+    		        		title: '<center>' + ORYX.I18N.View.sim.select + wintitle + ' ' + ORYX.I18N.View.sim.display + '</center>',
     		        		layout:'column',
     		        		items:[
     		        		       grid
@@ -252,8 +254,8 @@ ORYX.Plugins.Simulation = Clazz.extend({
     		    			layout		: 'anchor',
     		    			autoCreate	: true, 
     		    			title		: wintitle, 
-    		    			height		: 200, 
-    		    			width		: 300, 
+    		    			height		: dialogSize.height,
+    		    			width		: dialogSize.width,
     		    			modal		: true,
     		    			collapsible	: false,
     		    			fixedcenter	: true, 
@@ -437,9 +439,13 @@ ORYX.Plugins.Simulation = Clazz.extend({
 		}
 	},
 	runSimulation : function() {
+		var dialogSize = ORYX.Utils.getDialogSize(300, 350);
+		var labelWidth = dialogSize.width / 2;
+		var fieldWidth = dialogSize.width / 3;
+
 		var simform = new Ext.form.FormPanel({
 			baseCls: 		'x-plain',
-	        labelWidth: 	150,
+	        labelWidth: 	labelWidth,
 	        defaultType: 	'numberfield',
 	        items: [{
 	        	fieldLabel: ORYX.I18N.View.sim.numInstances,
@@ -447,7 +453,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
 	            allowBlank:false,
 	            allowDecimals:false,
 	            minValue:1,
-	            width: 120
+	            width: fieldWidth
 	        },
 	        {
 	        	fieldLabel: ORYX.I18N.View.sim.interval,
@@ -455,7 +461,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
 	            allowBlank:false,
 	            allowDecimals:false,
 	            minValue:1,
-	            width: 120
+	            width: fieldWidth
 	        },
 	        {
                 xtype: 'combo',
@@ -476,20 +482,19 @@ ORYX.Plugins.Simulation = Clazz.extend({
                 value: "minutes",
                 triggerAction: 'all',
                 fieldLabel: ORYX.I18N.View.sim.intervalUnits,
-                width: 120
+                width: fieldWidth
             }
 	        ]
 	    });
-		
-		
-		var dialog = new Ext.Window({ 
+
+		var dialog = new Ext.Window({
 			autoCreate: true, 
 			layout: 	'fit',
 			plain:		true,
 			bodyStyle: 	'padding:5px;',
 			title: 		ORYX.I18N.View.sim.runSim,
-			height: 	300,
-			width:		350,
+			height: 	dialogSize.height,
+			width:		dialogSize.width,
 			modal:		true,
 			fixedcenter:true, 
 			shadow:		true, 

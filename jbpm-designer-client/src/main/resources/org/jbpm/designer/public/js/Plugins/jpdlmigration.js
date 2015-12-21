@@ -37,6 +37,10 @@ ORYX.Plugins.JPDLMigration = Clazz.extend({
 		this._showImportDialog();
 	},
 	_showImportDialog: function( successCallback ) {
+		var dialogSize = ORYX.Utils.getDialogSize(450, 500);
+		var panelHeight = Math.max(50, (dialogSize.height - 150) / 2);
+		var panelWidth = dialogSize.width - 50;
+
 	    var form = new Ext.form.FormPanel({
 		baseCls: 		'x-plain',
 	        labelWidth: 	50,
@@ -60,8 +64,8 @@ ORYX.Plugins.JPDLMigration = Clazz.extend({
 	            hideLabel: true,
 	            name: 'msg',
 		        grow: false,
-				width: 450,
-				height: 200
+				width: panelWidth,
+				height: panelHeight
 	        }
 	        ]
 	    });
@@ -89,8 +93,8 @@ ORYX.Plugins.JPDLMigration = Clazz.extend({
 	            hideLabel: true,
 	            name: 'msg',
 		        grow: false,
-                width: 450,
-                height: 200
+                width: panelWidth,
+                height: panelHeight
 	        }
 	        ]
 	    });
@@ -103,8 +107,8 @@ ORYX.Plugins.JPDLMigration = Clazz.extend({
 			plain:		true,
 			bodyStyle: 	'padding:5px;',
 			title: 		ORYX.I18N.jPDLSupport.impJPDL, 
-			height: 	450, 
-			width:		500,
+			height: 	dialogSize.height,
+			width:		dialogSize.width,
 			modal:		true,
 			fixedcenter:true, 
 			shadow:		true, 

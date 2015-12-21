@@ -553,14 +553,15 @@ ORYX.Plugins.View = {
             }]
         });
         // Create the panel
+        var dialogSize = ORYX.Utils.getDialogSize(350, 500);
         var dialog = new Ext.Window({
             autoCreate: true,
             layout: 	'fit',
             plain:		true,
             bodyStyle: 	'padding:5px;',
             title: 		ORYX.I18N.FromBPMN2Support.impBPMN2,
-            height: 	350,
-            width:		500,
+            height: 	dialogSize.height,
+            width:		dialogSize.width,
             modal:		true,
             fixedcenter:true,
             shadow:		true,
@@ -699,14 +700,15 @@ ORYX.Plugins.View = {
             }]
         });
         // Create the panel
+        var dialogSize = ORYX.Utils.getDialogSize(350, 500);
         var dialog = new Ext.Window({
             autoCreate: true,
             layout: 	'fit',
             plain:		true,
             bodyStyle: 	'padding:5px;',
             title: 		ORYX.I18N.FromJSONSupport.impBPMN2,
-            height: 	350,
-            width:		500,
+            height: 	dialogSize.height,
+            width:		dialogSize.width,
             modal:		true,
             fixedcenter:true,
             shadow:		true,
@@ -867,18 +869,19 @@ ORYX.Plugins.View = {
             method: 'POST',
             success: function(request){
                 try {
+                    var dialogSize = ORYX.Utils.getDialogSize(250, 400);
                     var cf = new Ext.form.TextArea({
                         id:"sharedPDFArea",
                         fieldLabel:ORYX.I18N.view.processImgPDF,
-                        width:400,
-                        height:250,
+                        width:dialogSize.width,
+                        height:dialogSize.height,
                         value:request.responseText
                     });
 
                     var win = new Ext.Window({
-                        width:400,
+                        width:dialogSize.width,
                         id:'sharedPDFURL',
-                        height:250,
+                        height:dialogSize.height,
                         autoScroll:true,
                         layout: 'fit',
                         title: ORYX.I18N.view.processPDFurl,
@@ -934,18 +937,19 @@ ORYX.Plugins.View = {
             method: 'POST',
             success: function(request){
                 try {
+                    var dialogSize = ORYX.Utils.getDialogSize(250, 400);
                     var cf = new Ext.form.TextArea({
                         id:"sharedImageArea",
                         fieldLabel:ORYX.I18N.view.processImgUrl,
-                        width:400,
-                        height:250,
+                        width:dialogSize.width,
+                        height:dialogSize.height,
                         value:request.responseText
                     });
 
                     var win = new Ext.Window({
-                        width:400,
+                        width:dialogSize.width,
                         id:'sharedImageURL',
-                        height:250,
+                        height:dialogSize.height,
                         layout: 'fit',
                         autoScroll:true,
                         title:ORYX.I18N.view.processImgUrl,

@@ -155,7 +155,14 @@ ORYX.Plugins.Dictionary = Clazz.extend({
         });
 	},
 	showDictionary : function() {
-    	var itemDeleter = new Extensive.grid.ItemDeleter();
+		var dialogSize = ORYX.Utils.getDialogSize(400, 700);
+		var gridProportion = 0.5;
+		var extractionPanelProportion = 0.5;
+		var gridWidth = dialogSize.width * gridProportion;
+		var itemDeleterWidth = 70;
+		var gridColWidth = (gridWidth - itemDeleterWidth) / 3;
+
+		var itemDeleter = new Extensive.grid.ItemDeleter();
     	var gridId = Ext.id();
 //    	var dictionaryPaging = new Ext.PagingToolbar({
 //    	    pageSize: 10,
@@ -173,19 +180,19 @@ ORYX.Plugins.Dictionary = Clazz.extend({
             cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
             	id: 'name',
                 header: ORYX.I18N.Dictionary.header_name,
-                width: 100,
+                width: gridColWidth,
                 dataIndex: 'name',
                 editor: new Ext.form.TextField({ allowBlank: false })
             }, {
             	id: 'aliases',
                 header: ORYX.I18N.Dictionary.headerAliases,
-                width: 100,
+                width: gridColWidth,
                 dataIndex: 'aliases',
                 editor: new Ext.form.TextField({ allowBlank: true })
             }, {
             	id: 'description',
                 header: ORYX.I18N.Dictionary.headerDesc,
-                width: 100,
+                width: gridColWidth,
                 dataIndex: 'description',
                 editor: new Ext.form.TextField({ allowBlank: true })
             }, 
@@ -242,7 +249,7 @@ ORYX.Plugins.Dictionary = Clazz.extend({
 	            fieldLabel: ORYX.I18N.Dictionary.select,
 	            name: 		'subject',
 				inputType : 'file',
-				style : 	'margin-bottom:10px;display:block;width:100px',
+				style : 	'margin-bottom:10px;display:block;width:150px',
 				itemCls :	'ext_specific_window_overflow'
 	        }
 	        ]
@@ -273,10 +280,10 @@ ORYX.Plugins.Dictionary = Clazz.extend({
     		},
     	    items: [
     	            {
-    	              columnWidth: .3,
+    	              columnWidth: .5,
     	              items: extractImportFormFromDocs
     	            },{
-    	              columnWidth: .7,
+    	              columnWidth: .5,
     	              items: extractImportFormFromDocsWrapper
     	            }
     	          ]
@@ -336,23 +343,23 @@ ORYX.Plugins.Dictionary = Clazz.extend({
     	var dictionaryOutterPanel = new Ext.Panel({
     		header: false,
     	    layout:'column',
-    	    items: [
+			items: [
     	            {
-    	              columnWidth: .4,
+    	              columnWidth: gridProportion,
     	              items: grid
     	            },{
-    	              columnWidth: .6,
+    	              columnWidth: extractionPanelProportion,
     	              items: extractionPanel
     	            }
     	          ]
     	});
 
         var dialog = new Ext.Window({
-			layout		: 'fit',
+			layout		: 'anchor',
 			autoCreate	: true, 
 			title		: ORYX.I18N.Dictionary.procDicEditor,
-			height		: 400,
-			width		: 700,
+			height		: dialogSize.height,
+			width		: dialogSize.width,
 			modal		: true,
 			collapsible	: false,
 			fixedcenter	: true, 

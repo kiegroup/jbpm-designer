@@ -36,6 +36,7 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
             html: '<br/><br/><br/><br/><center>'+ORYX.I18N.View.noServiceSpecified+'</center>'
         });
 
+        var dialogSize = ORYX.Utils.getDialogSize(440, 600);
         var connectToRepo = new Ext.Button({
             text: ORYX.I18N.View.connect,
             handler: function(){
@@ -48,11 +49,12 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
                 }
 
                 this._createCookie("designerservicerepos", tosaveVal, 365);
-                this._updateRepoDialog(Ext.getCmp('serviceurlfield').getRawValue());
+                this._updateRepoDialog(Ext.getCmp('serviceurlfield').getRawValue(), dialogSize.width);
                 this.selectedrepourl = Ext.getCmp('serviceurlfield').getRawValue();
             }.bind(this)
         });
 
+        var getRepoComboWidth = dialogSize.width / 2;
         this.repoDialog = new Ext.Window({
             autoCreate: true,
             autoScroll:true,
@@ -60,8 +62,8 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
             plain:		true,
             bodyStyle: 	'padding:5px;',
             title: 		ORYX.I18N.View.connectServiceRepoDataTitle,
-            height: 	440,
-            width:		600,
+            height: 	dialogSize.height,
+            width:		dialogSize.width,
             modal:		true,
             fixedcenter:true,
             shadow:		true,
@@ -69,7 +71,7 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
             resizable:	true,
             items: 		[this.repoContent],
             tbar: [
-                this._getRepoCombo(),
+                this._getRepoCombo(getRepoComboWidth),
                 connectToRepo
             ],
             buttons:[{
@@ -165,7 +167,7 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
 
 
     },
-    _getRepoCombo : function() {
+    _getRepoCombo : function(comboWidth) {
         var repoLocationData = new Array();
         var repoLocationStore = new Ext.data.SimpleStore({
             fields: [
@@ -223,14 +225,14 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
             value: "",
             triggerAction: 'all',
             fieldLabel: 'Location',
-            width: 300,
+            width: comboWidth,
             store: repoLocationStore
         });
 
         return repoUrlCombo;
     },
 
-    _updateRepoDialog : function(serviceRepoURL) {
+    _updateRepoDialog : function(serviceRepoURL, dialogWidth) {
         this.facade.raiseEvent({
             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
             ntype		: 'info',
@@ -271,7 +273,7 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
                             });
                         }
                     } else {
-                        this._showJbpmServiceInfo(request.responseText, serviceRepoURL);
+                        this._showJbpmServiceInfo(request.responseText, serviceRepoURL, dialogWidth);
                     }
                 } catch(e) {
                     if(this.repoDialog) {
@@ -316,7 +318,7 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
             }
         });
     },
-    _showJbpmServiceInfo : function(jsonString, serviceRepoURL) {
+    _showJbpmServiceInfo : function(jsonString, serviceRepoURL, dialogWidth) {
         var jsonObj = jsonString.evalJSON();
 
         var myData = [];
@@ -339,6 +341,7 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
             data : myData
         });
 
+        var singleColWidth = dialogWidth / 19;
         var gridId = Ext.id();
         this.mygrid = new Ext.grid.EditorGridPanel({
             autoScroll: true,
@@ -348,35 +351,35 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
             stripeRows: true,
             cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(),
                 {
-                    id: 'icon', header: ORYX.I18N.View.headerIcon, width: 50, sortable: true, dataIndex: 'icon', renderer: this._renderIcon
+                    id: 'icon', header: ORYX.I18N.View.headerIcon, width: singleColWidth, sortable: true, dataIndex: 'icon', renderer: this._renderIcon
                 },
                 {
                     id: 'displayName',
-                    header: ORYX.I18N.View.headerName, width: 100, sortable: true, dataIndex: 'displayName',
+                    header: ORYX.I18N.View.headerName, width: singleColWidth * 2, sortable: true, dataIndex: 'displayName',
                     editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
                 },
                 {
                     id: 'explanation',
-                    header: ORYX.I18N.View.headerExplanation, width: 100, sortable: true, dataIndex: 'explanation',
+                    header: ORYX.I18N.View.headerExplanation, width: singleColWidth * 2, sortable: true, dataIndex: 'explanation',
                     editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
                 },
                 {
                     id: 'documentation',
-                    header: ORYX.I18N.View.headerDocumentation, width: 100, sortable: true, dataIndex: 'documentation', renderer: this._renderDocs
+                    header: ORYX.I18N.View.headerDocumentation, width: singleColWidth * 2, sortable: true, dataIndex: 'documentation', renderer: this._renderDocs
                 },
                 {
                     id: 'inputparams',
-                    header: ORYX.I18N.View.headerInput, width: 200, sortable: true, dataIndex: 'inputparams',
+                    header: ORYX.I18N.View.headerInput, width: singleColWidth * 4, sortable: true, dataIndex: 'inputparams',
                     editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
                 },
                 {
                     id: 'results',
-                    header: ORYX.I18N.View.headerResults, width: 200, sortable: true, dataIndex: 'results',
+                    header: ORYX.I18N.View.headerResults, width: singleColWidth * 4, sortable: true, dataIndex: 'results',
                     editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
                 },
                 {
                     id: 'category',
-                    header: ORYX.I18N.View.headerCategory, width: 100, sortable: true, dataIndex: 'category',
+                    header: ORYX.I18N.View.headerCategory, width: singleColWidth * 2, sortable: true, dataIndex: 'category',
                     editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
                 }
             ])
