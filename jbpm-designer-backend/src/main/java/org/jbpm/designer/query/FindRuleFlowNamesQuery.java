@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -18,30 +18,38 @@ package org.jbpm.designer.query;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.lucene.search.Query;
+import org.kie.workbench.common.services.refactoring.backend.server.query.NamedQuery;
 import org.kie.workbench.common.services.refactoring.backend.server.query.response.ResponseBuilder;
-import org.kie.workbench.common.services.refactoring.backend.server.query.standard.FindRuleAttributesQuery;
-import org.kie.workbench.common.services.refactoring.model.index.terms.RuleAttributeIndexTerm;
-import org.kie.workbench.common.services.refactoring.model.index.terms.RuleAttributeValueIndexTerm;
+import org.kie.workbench.common.services.refactoring.backend.server.query.standard.AbstractFindQuery;
+import org.kie.workbench.common.services.refactoring.model.index.terms.SharedPartIndexTerm;
+import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueIndexTerm;
+import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValuePartReferenceIndexTerm;
+import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueProjectNameIndexTerm;
+import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueBranchNameIndexTerm;
+import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueSharedPartIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.query.RefactoringPageRow;
 import org.kie.workbench.common.services.refactoring.model.query.RefactoringStringPageRow;
+import org.kie.workbench.common.services.refactoring.service.PartType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.uberfire.backend.server.util.Paths;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.ext.metadata.model.KObject;
 import org.uberfire.ext.metadata.model.KProperty;
 import org.uberfire.io.IOService;
 import org.uberfire.paging.PageResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
-public class FindRuleFlowNamesQuery extends FindRuleAttributesQuery {
+public class FindRuleFlowNamesQuery extends AbstractFindQuery implements NamedQuery {
 
     private static final Logger logger = LoggerFactory.getLogger(FindRuleFlowNamesQuery.class);
 
@@ -49,11 +57,13 @@ public class FindRuleFlowNamesQuery extends FindRuleAttributesQuery {
     @Named("ioStrategy")
     private IOService ioService;
 
-    private RuleFlorNamesResponseBuilder responseBuilder = new RuleFlorNamesResponseBuilder();
+    private RuleFlowNamesResponseBuilder responseBuilder = new RuleFlowNamesResponseBuilder();
+
+    public static final String NAME = FindRuleFlowNamesQuery.class.getSimpleName();
 
     @Override
     public String getName() {
-        return "FindRuleFlowNamesQuery";
+        return NAME;
     }
 
     @Override
@@ -62,7 +72,35 @@ public class FindRuleFlowNamesQuery extends FindRuleAttributesQuery {
         return responseBuilder;
     }
 
-    private static class RuleFlorNamesResponseBuilder implements ResponseBuilder {
+    /* (non-Javadoc)
+     * @see org.kie.workbench.common.services.refactoring.backend.server.query.IndexQuery#toQuery(java.util.Set)
+     */
+    @Override
+    public Query toQuery(Set<ValueIndexTerm> terms) {
+        return buildFromSingleTerm(terms);
+    }
+
+    private static final ValueSharedPartIndexTerm ruleFlowTerm = new ValueSharedPartIndexTerm("not-used", PartType.RULEFLOW_GROUP);
+
+    /* (non-Javadoc)
+     * @see org.kie.workbench.common.services.refactoring.backend.server.query.NamedQuery#validateTerms(java.util.Set)
+     */
+    @Override
+    public void validateTerms(Set<ValueIndexTerm> queryTerms) throws IllegalArgumentException {
+        checkNotNullAndNotEmpty(queryTerms);
+
+        checkInvalidAndRequiredTerms(queryTerms,
+                NAME,
+                new String [] {
+                        null, null,  // not required
+                        ruleFlowTerm.getTerm()
+                        },
+                (t) -> (t instanceof ValueProjectNameIndexTerm),
+                (t) -> (t instanceof ValueBranchNameIndexTerm),
+                (t) -> (t.getTerm().equals(ruleFlowTerm.getTerm())));
+    }
+
+    private static class RuleFlowNamesResponseBuilder implements ResponseBuilder {
         private IOService ioService;
 
         public void setIOService(IOService ioService) {
@@ -126,7 +164,7 @@ public class FindRuleFlowNamesQuery extends FindRuleAttributesQuery {
                 return ruleFlowGroupNames;
             }
             for ( KProperty property : kObject.getProperties() ) {
-                if ( property.getName().equals(  RuleAttributeIndexTerm.TERM + ":" + "ruleflow-group" + ":" + RuleAttributeValueIndexTerm.TERM) ) {
+                if ( property.getName().equals(  SharedPartIndexTerm.TERM + ":" + PartType.RULEFLOW_GROUP.toString() ) ) {
                     if(ruleFlowGroupNames.containsKey(property.getValue().toString())) {
                         final Path path = Paths.convert(ioService.get(URI.create(kObject.getKey())));
                         ruleFlowGroupNames.get(property.getValue().toString()).add(path.getFileName() + "^^" + path.toURI());
