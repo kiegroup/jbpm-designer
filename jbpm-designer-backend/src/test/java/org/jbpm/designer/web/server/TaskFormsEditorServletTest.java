@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
+import org.jbpm.designer.expressioneditor.ExpressionParserTest;
 import org.jbpm.designer.helper.TestHttpServletRequest;
 import org.jbpm.designer.helper.TestHttpServletResponse;
 import org.jbpm.designer.helper.TestServletConfig;
@@ -36,11 +37,15 @@ import org.jbpm.designer.repository.vfs.VFSRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class TaskFormsEditorServletTest  extends RepositoryBaseTest {
+
+    Logger logger = LoggerFactory.getLogger(TaskFormsEditorServletTest.class);
 
     @Before
     public void setup() {
@@ -130,7 +135,7 @@ public class TaskFormsEditorServletTest  extends RepositoryBaseTest {
         taskFormsEditorServlet.doPost(new TestHttpServletRequest(params), response);
 
         String formData =      new String(response.getContent());
-        System.out.println(formData);
+        logger.debug(formData);
         assertEquals("this is simple task content", formData);
     }
 

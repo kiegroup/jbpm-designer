@@ -138,11 +138,11 @@ public class ExpressionParserTest {
         ExpressionParser parser = new ExpressionParser(script);
         ConditionExpression actualExpression = parser.parse();
 
-        System.out.println(actualExpression.getOperator());
+        logger.debug(actualExpression.getOperator());
         for (Condition condition : actualExpression.getConditions()) {
-            System.out.println("condition: " + condition.getFunction());
+            logger.debug("condition: " + condition.getFunction());
             for (String param : condition.getParameters()) {
-                System.out.println("\""+param+"\"");
+                logger.debug("\""+param+"\"");
             }
         }
 

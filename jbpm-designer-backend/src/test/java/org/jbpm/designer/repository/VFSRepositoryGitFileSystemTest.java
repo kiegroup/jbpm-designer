@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -17,6 +17,7 @@ package org.jbpm.designer.repository;
 
 import org.apache.commons.codec.binary.Base64;
 import org.guvnor.common.services.project.events.NewProjectEvent;
+import org.jbpm.designer.expressioneditor.ExpressionParserTest;
 import org.jbpm.designer.repository.filters.FilterByExtension;
 import org.jbpm.designer.repository.filters.FilterByFileName;
 import org.jbpm.designer.repository.impl.AssetBuilder;
@@ -25,6 +26,8 @@ import org.jbpm.designer.repository.vfs.VFSRepository;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.junit.*;
 import org.kie.workbench.common.services.shared.project.KieProject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.uberfire.backend.server.util.Paths;
 import org.uberfire.java.nio.file.FileAlreadyExistsException;
 import org.uberfire.java.nio.file.NoSuchFileException;
@@ -42,6 +45,8 @@ import static org.mockito.Mockito.when;
 
 public class VFSRepositoryGitFileSystemTest {
 
+    Logger logger = LoggerFactory.getLogger(VFSRepositoryGitFileSystemTest.class);
+
     // TODO change it to generic independent path
     private static final String REPOSITORY_ROOT = "designer-playground";
     private static final String VFS_REPOSITORY_ROOT = "git://" + REPOSITORY_ROOT;
@@ -55,7 +60,7 @@ public class VFSRepositoryGitFileSystemTest {
     private static Map<String, String> env = new HashMap<String, String>();
 
     private static int counter = 0;
-    
+
     private RepositoryDescriptor descriptor;
     private VFSFileSystemProducer producer;
 
@@ -395,7 +400,7 @@ public class VFSRepositoryGitFileSystemTest {
         Collection<Asset> assets = repository.listAssets("/");
         assertNotNull(assets);
         for (Asset aset : assets) {
-            System.out.println(aset.getAssetLocation() + " " + aset.getFullName());
+            logger.debug(aset.getAssetLocation() + " " + aset.getFullName());
         }
         assertEquals(0, assets.size());
 
