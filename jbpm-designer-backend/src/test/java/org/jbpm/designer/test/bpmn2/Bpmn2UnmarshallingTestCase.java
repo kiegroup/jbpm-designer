@@ -757,6 +757,23 @@ public class Bpmn2UnmarshallingTestCase {
             fail("Boundary event has no extension element");
         }
     }
+
+    @Test
+    public void testCompensationThrowingEvent() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("intermediateCompensationEventThrowing.json"), "").getContents().get(0));
+        Process process = getRootProcess(definitions);
+        ThrowEvent compensationThrowEvent = (ThrowEvent) process.getFlowElements().get(2);
+        assertEquals("Compensate", compensationThrowEvent.getName());
+        assertNotNull(compensationThrowEvent.getEventDefinitions());
+        assertEquals(1, compensationThrowEvent.getEventDefinitions().size());
+        EventDefinition ed = compensationThrowEvent.getEventDefinitions().get(0);
+        assertTrue(ed instanceof CompensateEventDefinition);
+        CompensateEventDefinition ced = (CompensateEventDefinition) ed;
+        assertNotNull(ced.getActivityRef());
+        assertEquals("User Task", ced.getActivityRef().getName());
+
+    }
     
     /* Disabling test as no support for child lanes yet
     @Test

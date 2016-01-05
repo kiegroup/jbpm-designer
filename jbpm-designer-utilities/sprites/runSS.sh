@@ -1,5 +1,5 @@
 #!/bin/sh
-SMART_SPRITES_LOCATION=/home/jeremy/Installs/Java/SmartSprites/smartsprites-0.2.10
+SMART_SPRITES_LOCATION=/Users/tihomirsurdilovic/Downloads/smartsprites-0.2.11
 
 # Validate SMART_SPRITES_LOCATION
 if [ -d $SMART_SPRITES_LOCATION ];
