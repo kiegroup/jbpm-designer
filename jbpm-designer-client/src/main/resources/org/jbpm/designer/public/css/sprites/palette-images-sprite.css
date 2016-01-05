@@ -363,13 +363,22 @@
   background-position: left -560px;
 }
 
+.stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_throwing_compensation,
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_throwing_compensation {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../../images/sprites/palette-images-sprite.png');
+  background-position: left -576px;
+}
+
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_throwing_signal,
 .x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_throwing_signal {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
   background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -576px;
+  background-position: left -592px;
 }
 
 /* Gateways group */
@@ -380,7 +389,7 @@
     height: 16px;
     background-repeat: no-repeat;
   background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -592px;
+  background-position: left -608px;
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_gateway_eventbased,
@@ -389,7 +398,7 @@
     height: 16px;
     background-repeat: no-repeat;
   background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -608px;
+  background-position: left -624px;
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_gateway_parallel,
@@ -398,7 +407,7 @@
     height: 16px;
     background-repeat: no-repeat;
   background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -624px;
+  background-position: left -640px;
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_gateway_inclusive,
@@ -407,7 +416,7 @@
     height: 16px;
     background-repeat: no-repeat;
   background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -640px;
+  background-position: left -656px;
 }
 
 /* Service Tasks group */
@@ -423,7 +432,7 @@ These don't have a static icon
     height: 16px;
     background-repeat: no-repeat;
   background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -656px;
+  background-position: left -672px;
 }
 
 /* Swimlanes group */
@@ -434,7 +443,7 @@ These don't have a static icon
     height: 16px;
     background-repeat: no-repeat;
   background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -672px;
+  background-position: left -688px;
 }
 
 /* Artifacts group */
@@ -445,7 +454,7 @@ These don't have a static icon
     height: 16px;
     background-repeat: no-repeat;
   background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -688px;
+  background-position: left -704px;
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_artifact_text_annotation,
@@ -454,7 +463,7 @@ These don't have a static icon
     height: 16px;
     background-repeat: no-repeat;
   background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -704px;
+  background-position: left -720px;
 }
 
 /* Workflow Patterns group */
@@ -465,7 +474,7 @@ These don't have a static icon
     height: 16px;
     background-repeat: no-repeat;
   background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -720px;
+  background-position: left -736px;
 }
 
 
@@ -481,7 +490,7 @@ These don't have a static icon
     height: 16px;
     background-repeat: no-repeat;
   background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -736px;
+  background-position: left -752px;
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_activity_list_mi_parallel,
@@ -490,7 +499,7 @@ These don't have a static icon
     height: 16px;
     background-repeat: no-repeat;
   background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -752px;
+  background-position: left -768px;
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_activity_list_mi_sequential,
@@ -499,7 +508,7 @@ These don't have a static icon
     height: 16px;
     background-repeat: no-repeat;
   background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -768px;
+  background-position: left -784px;
 }
 
 /* task - not in palette */
@@ -513,7 +522,7 @@ These don't have a static icon
     height: 16px;
     background-repeat: no-repeat;
   background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -784px;
+  background-position: left -800px;
 }
 
 /* Event type - not in palette */
@@ -524,7 +533,7 @@ These don't have a static icon
     height: 16px;
     background-repeat: no-repeat;
   background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -800px;
+  background-position: left -816px;
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_gateway_list_eventbased_parallel,
@@ -533,7 +542,7 @@ These don't have a static icon
     height: 16px;
     background-repeat: no-repeat;
   background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -816px;
+  background-position: left -832px;
 }
 
 /* dataobject/list - not in palette */
@@ -544,7 +553,7 @@ These don't have a static icon
     height: 16px;
     background-repeat: no-repeat;
   background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -832px;
+  background-position: left -848px;
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_dataobject_list_output,
@@ -553,7 +562,7 @@ These don't have a static icon
     height: 16px;
     background-repeat: no-repeat;
   background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -848px;
+  background-position: left -864px;
 }
 
 /* connector - not in palette */
@@ -564,7 +573,7 @@ These don't have a static icon
     height: 16px;
     background-repeat: no-repeat;
   background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -864px;
+  background-position: left -880px;
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_connector_list_type_expression,
@@ -573,7 +582,7 @@ These don't have a static icon
     height: 16px;
     background-repeat: no-repeat;
   background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -880px;
+  background-position: left -896px;
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_connector_list_type_default,
@@ -582,7 +591,7 @@ These don't have a static icon
     height: 16px;
     background-repeat: no-repeat;
   background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -896px;
+  background-position: left -912px;
 }
 
 /* Connecting objects (edges) - not in palette */
@@ -593,7 +602,7 @@ These don't have a static icon
     height: 16px;
     background-repeat: no-repeat;
   background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -912px;
+  background-position: left -928px;
 }
 
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_connector_association_unidirectional,
@@ -602,7 +611,7 @@ These don't have a static icon
     height: 16px;
     background-repeat: no-repeat;
   background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -928px;
+  background-position: left -944px;
 }
 
 /* Morph menu images */
@@ -611,7 +620,7 @@ These don't have a static icon
     height: 16px;
     background-repeat: no-repeat;
   background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -944px;
+  background-position: left -960px;
 }
 
 .images_dictionary {
@@ -619,7 +628,7 @@ These don't have a static icon
     height: 17px;
     background-repeat: no-repeat;
   background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -960px;
+  background-position: left -976px;
 }
 
 .images_processforms {
@@ -627,7 +636,7 @@ These don't have a static icon
     height: 16px;
     background-repeat: no-repeat;
   background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -977px;
+  background-position: left -993px;
 }
 
 .images_view {
@@ -635,13 +644,13 @@ These don't have a static icon
     height: 16px;
     background-repeat: no-repeat;
   background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -993px;
+  background-position: left -1009px;
 }
 
 .images_dataio {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
-    background-image: url('../../images/sprites/palette-images-sprite.png');
-    background-position: left -1009px;
+  background-image: url('../../images/sprites/palette-images-sprite.png');
+  background-position: left -1025px;
 }
