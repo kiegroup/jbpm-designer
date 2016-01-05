@@ -801,7 +801,9 @@ ORYX.Plugins.PropertyWindow = {
                                                     var valueParts = expressionparts[j].split(":");
                                                     options.push([value.icon(), valueParts[0], valueParts[0]]);
                                                 } else {
-                                                    options.push([value.icon(), expressionparts[j], expressionparts[j]]);
+													if(expressionparts[j].trim().length > 0) {
+														options.push([value.icon(), expressionparts[j], expressionparts[j]]);
+													}
                                                 }
                                             }
                                         }
