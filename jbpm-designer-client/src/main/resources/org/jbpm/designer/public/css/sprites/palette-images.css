@@ -328,6 +328,14 @@
     background-image: url(../../stencilsets/bpmn2.0jbpm/icons/throwing/escalation.png);  /** sprite-ref: palette-images-sprite; */
 }
 
+.stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_throwing_compensation,
+.x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_throwing_compensation {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+    background-image: url(../../stencilsets/bpmn2.0jbpm/icons/throwing/compensation.png);  /** sprite-ref: palette-images-sprite; */
+}
+
 .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_throwing_signal,
 .x-tree-node-leaf .stencilsets_bpmn2_0jbpm_bpmn2_0jbpm_json_icons_throwing_signal {
     width: 16px;
