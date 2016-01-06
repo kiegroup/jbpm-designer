@@ -126,6 +126,10 @@ public class TransformerServlet extends HttpServlet {
         String sourceEnc = req.getParameter("enc");
         String convertServiceTasks = req.getParameter("convertservicetasks");
 
+        if (transformto == null || transformto.isEmpty()) {
+            _logger.error("Invalid request: missing \"transformto\" parameter. You may need to increase max-post-size for the server's http connector.");
+        }
+
         String formattedSvg = ( formattedSvgEncoded == null ? "" : new String(Base64.decodeBase64(formattedSvgEncoded), "UTF-8") );
         //formattedSvg = URLDecoder.decode(formattedSvg, "UTF-8");
         String rawSvg = ( rawSvgEncoded == null ? "" : new String(Base64.decodeBase64(rawSvgEncoded), "UTF-8") );
