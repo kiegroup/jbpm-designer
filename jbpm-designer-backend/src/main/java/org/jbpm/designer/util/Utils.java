@@ -8,7 +8,8 @@ import org.apache.commons.codec.binary.Base64;
 public class Utils {
 
     public static String getUUID(HttpServletRequest request) {
-        return getEncodedParam(request, "uuid").replace("\\", "\\\\");
+        String uuid = getEncodedParam(request, "uuid");
+        return uuid != null ? uuid.replace("\\", "\\\\") : null;
     }
 
     public static String getEncodedParam(HttpServletRequest request, String paramName) {
