@@ -11,7 +11,7 @@
   <groupId>org.jbpm</groupId>
   <artifactId>jbpm-designer</artifactId>
   <packaging>pom</packaging>
-  <version>6.2.0.Final-Center.13</version>
+  <version>6.2.0.Final-Center.14</version>
 
   <name>jBPM Designer</name>
   <description>jBPM Designer - web-based BPMN2 modeller</description>
@@ -33,7 +33,7 @@
   <properties>
     <port>8888</port>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <webbpm-modules.version>1.2-SNAPSHOT</webbpm-modules.version>
+    <webbpm-modules.version>1.37</webbpm-modules.version>
   </properties>
 
   <dependencyManagement>
