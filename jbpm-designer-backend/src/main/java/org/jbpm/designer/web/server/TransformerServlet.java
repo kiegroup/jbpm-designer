@@ -98,6 +98,12 @@ public class TransformerServlet extends HttpServlet {
     private static final String RESPACTION_SHOWURL = "showurl";
     private static final String RESPACTION_SHOWEMBEDDABLE = "showembeddable";
 
+    private IDiagramProfile profile;
+    // For unit testing purpose only
+    public void setProfile(IDiagramProfile profile) {
+        this.profile = profile;
+    }
+
     @Inject
     private IDiagramProfileService _profileService = null;
 
@@ -111,7 +117,6 @@ public class TransformerServlet extends HttpServlet {
             throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         String formattedSvgEncoded = req.getParameter("fsvg");
-        String rawSvgEncoded = req.getParameter("rsvg");
         String uuid = Utils.getUUID(req);
         String profileName = req.getParameter("profile");
         String transformto = req.getParameter("transformto");
@@ -127,14 +132,14 @@ public class TransformerServlet extends HttpServlet {
         String convertServiceTasks = req.getParameter("convertservicetasks");
 
         String formattedSvg = ( formattedSvgEncoded == null ? "" : new String(Base64.decodeBase64(formattedSvgEncoded), "UTF-8") );
-        //formattedSvg = URLDecoder.decode(formattedSvg, "UTF-8");
-        String rawSvg = ( rawSvgEncoded == null ? "" : new String(Base64.decodeBase64(rawSvgEncoded), "UTF-8") );
-        //rawSvg = URLDecoder.decode(rawSvg, "UTF-8");
 
         if(sourceEnc != null && sourceEnc.equals("true")) {
             bpmn2in = new String(Base64.decodeBase64(bpmn2in), "UTF-8");
         }
-        IDiagramProfile profile = _profileService.findProfile(req, profileName);
+
+        if (profile == null) {
+            profile = _profileService.findProfile(req, profileName);
+        }
 
         DroolsFactoryImpl.init();
         BpsimFactoryImpl.init();
@@ -154,7 +159,7 @@ public class TransformerServlet extends HttpServlet {
 
                     resp.getWriter().write("<object data=\"data:application/pdf;base64," + Base64.encodeBase64(bout.toByteArray()) +  "\" type=\"application/pdf\"></object>");
                 } else {
-                    storeInRepository(uuid, rawSvg, transformto, processid, repository);
+                    storeInRepository(uuid, formattedSvg, transformto, processid, repository);
 
                     resp.setContentType("application/pdf");
                     if (processid != null) {
@@ -186,7 +191,7 @@ public class TransformerServlet extends HttpServlet {
                     resp.setContentType("text/plain");
                     resp.getWriter().write("<img src=\"data:image/png;base64," + Base64.encodeBase64(bout.toByteArray()) + "\">");
                 } else {
-                    storeInRepository(uuid, rawSvg, transformto, processid, repository);
+                    storeInRepository(uuid, formattedSvg, transformto, processid, repository);
                     resp.setContentType("image/png");
                     if (processid != null) {
                         resp.setHeader("Content-Disposition", "attachment; filename=\"" + processid + ".png\"");
@@ -206,7 +211,7 @@ public class TransformerServlet extends HttpServlet {
                 resp.sendError(500, e.getMessage());
             }
         } else if (transformto != null && transformto.equals(TO_SVG)) {
-            storeInRepository(uuid, rawSvg, transformto, processid, repository);
+            storeInRepository(uuid, formattedSvg, transformto, processid, repository);
         } else if (transformto != null && transformto.equals(JPDL_TO_BPMN2)) {
             try {
                 String bpmn2 = JbpmMigration.transform(jpdl);
@@ -513,7 +518,7 @@ public class TransformerServlet extends HttpServlet {
         }
     }
 
-    private void storeInRepository(String uuid, String rawSvg, String transformto, String processid, Repository repository) {
+    private void storeInRepository(String uuid, String svg, String transformto, String processid, Repository repository) {
         try {
             if(processid != null) {
                 Asset<byte[]> processAsset = repository.loadAsset(uuid);
@@ -544,14 +549,14 @@ public class TransformerServlet extends HttpServlet {
                 if (transformto.equals(TO_PDF)) {
                     PDFTranscoder t = new PDFTranscoder();
                     TranscoderInput input = new TranscoderInput(new StringReader(
-                            rawSvg));
+                            svg));
                     TranscoderOutput output = new TranscoderOutput(outputStream);
                     t.transcode(input, output);
                 } else if (transformto.equals(TO_PNG)) {
                     PNGTranscoder t = new PNGTranscoder();
                     t.addTranscodingHint(ImageTranscoder.KEY_MEDIA, "screen");
                     TranscoderInput input = new TranscoderInput(new StringReader(
-                            rawSvg));
+                            svg));
                     TranscoderOutput output = new TranscoderOutput(outputStream);
                     try {
                         t.transcode(input, output);
@@ -561,7 +566,7 @@ public class TransformerServlet extends HttpServlet {
                     }
                 } else if(transformto.equals(TO_SVG)) {
                     OutputStreamWriter outStreamWriter = new OutputStreamWriter(outputStream);
-                    outStreamWriter.write(rawSvg);
+                    outStreamWriter.write(svg);
                     outStreamWriter.close();
                 }
                 AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
