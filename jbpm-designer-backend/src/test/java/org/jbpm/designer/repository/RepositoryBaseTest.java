@@ -16,6 +16,7 @@
 package org.jbpm.designer.repository;
 
 import java.io.File;
+import java.util.HashMap;
 
 import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
@@ -38,5 +39,23 @@ public class RepositoryBaseTest {
             file.delete();
         }
     }
-    
+
+    public void setup() {
+        new File(REPOSITORY_ROOT).mkdir();
+        profile = new JbpmProfileImpl();
+        producer = new VFSFileSystemProducer();
+        HashMap<String, String> env = new HashMap<String, String>();
+        env.put("repository.root", VFS_REPOSITORY_ROOT);
+        env.put("repository.globaldir", "/global");
+        descriptor = producer.produceFileSystem(env);
+    }
+
+    public void teardown() {
+        File repo = new File(REPOSITORY_ROOT);
+        if(repo.exists()) {
+            deleteFiles(repo);
+        }
+        repo.delete();
+    }
+
 }
