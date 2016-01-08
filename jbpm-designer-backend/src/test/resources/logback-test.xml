@@ -7,11 +7,14 @@
       <pattern>%d [%t] %-5p %m%n</pattern>
     </encoder>
   </appender>
+  <appender name="listAppender" class="ch.qos.logback.core.read.ListAppender">
+  </appender>
 
   <logger name="org.kie" level="info" />
   <logger name="org.jbpm" level="info" />
 
   <root level="error">
     <appender-ref ref="consoleAppender" />
+    <appender-ref ref="listAppender" />
   </root>
 </configuration>
