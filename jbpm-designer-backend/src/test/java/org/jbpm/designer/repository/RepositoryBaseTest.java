@@ -18,7 +18,9 @@ package org.jbpm.designer.repository;
 import java.io.File;
 import java.util.HashMap;
 
+import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
+import org.jbpm.designer.repository.vfs.VFSRepository;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 
 public class RepositoryBaseTest {
@@ -56,6 +58,22 @@ public class RepositoryBaseTest {
             deleteFiles(repo);
         }
         repo.delete();
+    }
+
+    public Repository createRepository() {
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
+        profile.setRepository(repository);
+        return repository;
+    }
+
+    public String createAsset(Repository repository, String location, String name, String fileType, String bpContent) {
+        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+        builder.content(bpContent)
+                .type(fileType)
+                .name(name)
+                .location(location);
+        return repository.createAsset(builder.getAsset());
     }
 
 }

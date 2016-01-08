@@ -16,34 +16,46 @@
 
 package org.jbpm.designer.web.server;
 
-import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
+import ch.qos.logback.classic.spi.LoggingEvent;
+import ch.qos.logback.core.read.ListAppender;
+import org.apache.commons.codec.binary.Base64;
 import org.jbpm.designer.helper.TestHttpServletRequest;
 import org.jbpm.designer.helper.TestHttpServletResponse;
-import org.jbpm.designer.helper.TestServletConfig;
-import org.jbpm.designer.helper.TestServletContext;
 import org.jbpm.designer.repository.Asset;
-import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.RepositoryBaseTest;
-import org.jbpm.designer.repository.VFSFileSystemProducer;
 import org.jbpm.designer.repository.filters.FilterByExtension;
-import org.jbpm.designer.repository.impl.AssetBuilder;
-import org.jbpm.designer.repository.vfs.VFSRepository;
-import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.LoggerFactory;
 
 import static org.junit.Assert.*;
 
 public class TransformerServletTest  extends RepositoryBaseTest {
 
-    private static final String formattedSVGEncoded = "PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOm9yeXg9Imh0dHA6Ly9vcnl4LWVkaXRvci5vcmciIGlkPSJfNURCNkVCREYtNzBDNy00RTJFLTk0MTAtNUFCNTZDMDI4NDYwIiB3aWR0aD0iMTk3LjI4MTI1IiBoZWlnaHQ9IjIzNS45MjE4NzUiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4bWxuczpzdmc9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcy8+PGcgc3Ryb2tlPSJub25lIiBmb250LWZhbWlseT0iVmVyZGFuYSwgc2Fucy1zZXJpZiIgZm9udC1zaXplLWFkanVzdD0ibm9uZSIgZm9udC1zdHlsZT0ibm9ybWFsIiBmb250LXZhcmlhbnQ9Im5vcm1hbCIgZm9udC13ZWlnaHQ9Im5vcm1hbCIgbGluZS1oZWlndGg9Im5vcm1hbCIgZm9udC1zaXplPSIxMiI+PGcgY2xhc3M9InN0ZW5jaWxzIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxNSwgMTUuOTIxODc1KSI+PGcgY2xhc3M9Im1lIi8+PGcgY2xhc3M9ImNoaWxkcmVuIj48ZyBpZD0iXzI0OUIzMzgwLTQzMzAtNDQwRi1CRTRGLTc5NzcxRjRDQURDMSIgYnBtbjJub2RlaWQ9InByb2Nlc3NTdGFydEV2ZW50Ij48ZyBjbGFzcz0ic3RlbmNpbHMiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEyMCwgMTY1KSI+PGcgY2xhc3M9Im1lIj48ZyBwb2ludGVyLWV2ZW50cz0iZmlsbCIgaWQ9Il8yNDlCMzM4MC00MzMwLTQ0MEYtQkU0Ri03OTc3MUY0Q0FEQzEiPiAgICAgICAgPGRlZnMgaWQ9Il8yNDlCMzM4MC00MzMwLTQ0MEYtQkU0Ri03OTc3MUY0Q0FEQzFfXzI0OUIzMzgwLTQzMzAtNDQwRi1CRTRGLTc5NzcxRjRDQURDMV81Ij4gCQk8cmFkaWFsR3JhZGllbnQgaWQ9Il8yNDlCMzM4MC00MzMwLTQ0MEYtQkU0Ri03OTc3MUY0Q0FEQzFiYWNrZ3JvdW5kIiBjeD0iMTAlIiBjeT0iMTAlIiByPSIxMDAlIiBmeD0iMTAlIiBmeT0iMTAlIj4gCQkJPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIxIiBpZD0iXzI0OUIzMzgwLTQzMzAtNDQwRi1CRTRGLTc5NzcxRjRDQURDMV9fMjQ5QjMzODAtNDMzMC00NDBGLUJFNEYtNzk3NzFGNENBREMxXzYiLz4gCQkJPHN0b3AgaWQ9Il8yNDlCMzM4MC00MzMwLTQ0MEYtQkU0Ri03OTc3MUY0Q0FEQzFmaWxsX2VsIiBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM5YWNkMzIiIHN0b3Atb3BhY2l0eT0iMSIvPiAJCTwvcmFkaWFsR3JhZGllbnQ+IAk8L2RlZnM+IAkgICAgIDxjaXJjbGUgaWQ9Il8yNDlCMzM4MC00MzMwLTQ0MEYtQkU0Ri03OTc3MUY0Q0FEQzFiZ19mcmFtZSIgY3g9IjE1IiBjeT0iMTUiIHI9IjE1IiBzdHJva2U9IiMwMDAwMDAiIGZpbGw9InVybCgjXzI0OUIzMzgwLTQzMzAtNDQwRi1CRTRGLTc5NzcxRjRDQURDMWJhY2tncm91bmQpIHdoaXRlIiBzdHJva2Utd2lkdGg9IjEiIHN0eWxlPSJzdHJva2UtZGFzaGFycmF5OiA1LjUsIDMiLz4gICAgICA8Y2lyY2xlIGlkPSJfMjQ5QjMzODAtNDMzMC00NDBGLUJFNEYtNzk3NzFGNENBREMxZnJhbWUiIGN4PSIxNSIgY3k9IjE1IiByPSIxNSIgc3Ryb2tlPSIjMDAwMDAwIiBmaWxsPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIGRpc3BsYXk9ImluaGVyaXQiLz4gIAk8dGV4dCBmb250LXNpemU9IjgiIGlkPSJfMjQ5QjMzODAtNDMzMC00NDBGLUJFNEYtNzk3NzFGNENBREMxdGV4dF9uYW1lIiB4PSIxNSIgeT0iMzIiIG9yeXg6YWxpZ249InRvcCBjZW50ZXIiIHN0cm9rZT0iYmxhY2siIHN0cm9rZS13aWR0aD0iMHB0IiBsZXR0ZXItc3BhY2luZz0iLTAuMDFweCIgZmlsbD0iIzAwMDAwMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgdHJhbnNmb3JtPSJyb3RhdGUoMCAxNSAzMikiIHZpc2liaWxpdHk9ImluaGVyaXQiIG9yeXg6Zm9udFNpemU9IjExIi8+ICAgPC9nPjwvZz48ZyBjbGFzcz0iY2hpbGRyZW4iIHN0eWxlPSJvdmVyZmxvdzpoaWRkZW4iLz48ZyBjbGFzcz0iZWRnZSIvPjwvZz48ZyBjbGFzcz0iY29udHJvbHMiPjxnIGNsYXNzPSJkb2NrZXJzIi8+PGcgY2xhc3M9Im1hZ25ldHMiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEyMCwgMTY1KSI+PGcgcG9pbnRlci1ldmVudHM9ImFsbCIgZGlzcGxheT0ibm9uZSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNywgNykiPjxjaXJjbGUgY3g9IjgiIGN5PSI4IiByPSI0IiBzdHJva2U9Im5vbmUiIGZpbGw9InJlZCIgZmlsbC1vcGFjaXR5PSIwLjMiLz48L2c+PC9nPjwvZz48L2c+PC9nPjxnIGNsYXNzPSJlZGdlIi8+PHRleHQgaWQ9Il8zRkFDMEJCQy00OTI4LTRBQUEtQTMxNC05NDFERTZDNERDNjgiIHN0eWxlPSJzdHJva2Utd2lkdGg6MTtmaWxsOnJnYigxNzcsMTk0LDIxNCk7Zm9udC1mYW1pbHk6YXJpYWw7Zm9udC13ZWlnaHQ6Ym9sZCIgZm9udC1zaXplPSI4IiBvbmNsaWNrPSJPUllYLlBsdWdpbnMuQ2FudmFzVGl0bGUub3BlblRleHR1YWxBbmFseXNpcygpIiBvbm1vdXNlb3Zlcj0iT1JZWC5QbHVnaW5zLkNhbnZhc1RpdGxlLmFkZFRvb2xUaXAoJ18zRkFDMEJCQy00OTI4LTRBQUEtQTMxNC05NDFERTZDNERDNjgnKSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTAsIDIwKSI+YnAxIHYuMS4wIChFdmFsdWF0aW9uLmJwMSk8L3RleHQ+PC9nPjwvZz48L3N2Zz4=";
+    private static final String BP_CONTENT = "test process";
+    private static final String BPMN2_FILE_TYPE = "bpmn2";
+    private static final String BP_NAME = "bp1";
+    private static final String JBPM_PROFILE_NAME = "jbpm";
+    private static final String LOCATION = "/global";
 
+    private static final String FORMATTED_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:oryx=\"http://oryx-editor.org\" id=\"_A3F7A04F-E2E8-43FD-964F-F700B3D42348\" width=\"197.28125\" height=\"235.921875\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:svg=\"http://www.w3.org/2000/svg\"><defs/><g stroke=\"none\" font-family=\"Verdana, sans-serif\" font-size-adjust=\"none\" font-style=\"normal\" font-variant=\"normal\" font-weight=\"normal\" line-heigth=\"normal\" font-size=\"12\"><g class=\"stencils\" transform=\"translate(15, 15.921875)\"><g class=\"me\"/><g class=\"children\"><g id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8\" bpmn2nodeid=\"processStartEvent\"><g class=\"stencils\" transform=\"translate(120, 165)\"><g class=\"me\"><g pointer-events=\"fill\" id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8\">        <defs id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8__D1450722-93B9-4CD1-9CFB-0FC82DE31DF8_5\"> 		<radialGradient id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8background\" cx=\"10%\" cy=\"10%\" r=\"100%\" fx=\"10%\" fy=\"10%\"> 			<stop offset=\"0%\" stop-color=\"#ffffff\" stop-opacity=\"1\" id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8__D1450722-93B9-4CD1-9CFB-0FC82DE31DF8_6\"/> 			<stop id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8fill_el\" offset=\"100%\" stop-color=\"#9acd32\" stop-opacity=\"1\"/> 		</radialGradient> 	</defs> 	     <circle id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8bg_frame\" cx=\"15\" cy=\"15\" r=\"15\" stroke=\"#000000\" fill=\"url(#_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8background) white\" stroke-width=\"1\" style=\"stroke-dasharray: 5.5, 3\"/>      <circle id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8frame\" cx=\"15\" cy=\"15\" r=\"15\" stroke=\"#000000\" fill=\"none\" stroke-width=\"1\" display=\"inherit\"/>  	<text font-size=\"8\" id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8text_name\" x=\"15\" y=\"32\" oryx:align=\"top center\" stroke=\"black\" stroke-width=\"0pt\" letter-spacing=\"-0.01px\" fill=\"#000000\" text-anchor=\"middle\" transform=\"rotate(0 15 32)\" visibility=\"inherit\" oryx:fontSize=\"11\"/>   </g></g><g class=\"children\" style=\"overflow:hidden\"/><g class=\"edge\"/></g><g class=\"controls\"><g class=\"dockers\"/><g class=\"magnets\" transform=\"translate(120, 165)\"><g pointer-events=\"all\" display=\"none\" transform=\"translate(7, 7)\"><circle cx=\"8\" cy=\"8\" r=\"4\" stroke=\"none\" fill=\"red\" fill-opacity=\"0.3\"/></g></g></g></g></g><g class=\"edge\"/><text id=\"_3260CEE5-4A05-4F4B-91A1-A3CE143D86E0\" style=\"stroke-width:1;fill:rgb(177,194,214);font-family:arial;font-weight:bold\" font-size=\"8\" onclick=\"ORYX.Plugins.CanvasTitle.openTextualAnalysis()\" onmouseover=\"ORYX.Plugins.CanvasTitle.addToolTip('_3260CEE5-4A05-4F4B-91A1-A3CE143D86E0')\" transform=\"translate(10, 20)\">bp1 v.1.0 (Evaluation.bp1)</text></g></g></svg>";
+    private static String FORMATTED_SVG_ENCODED;
+
+    {
+        try {
+            FORMATTED_SVG_ENCODED = new String(Base64.encodeBase64(FORMATTED_SVG.getBytes("UTF-8")));
+        } catch (UnsupportedEncodingException e) {
+        }
+    }
 
     @Before
     public void setup() {
@@ -57,26 +69,20 @@ public class TransformerServletTest  extends RepositoryBaseTest {
 
     @Test
     public void testTransformToPng() throws Exception {
-        Repository repository = new VFSRepository(producer.getIoService());
-        ((VFSRepository)repository).setDescriptor(descriptor);
-        profile.setRepository(repository);
-        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
-        builder.content("test process")
-                .type("bpmn2")
-                .name("bp1")
-                .location("/global");
-        String id = repository.createAsset(builder.getAsset());
+        Repository repository = createRepository();
+        String id = createAsset(repository, LOCATION, BP_NAME, BPMN2_FILE_TYPE, BP_CONTENT);
 
         TransformerServlet transformerServlet = new TransformerServlet();
         transformerServlet.setProfile(profile);
 
         // setup parameters
+        String targetType = "png";
         Map<String, String> params = new HashMap<String, String>();
-        params.put("fsvg", formattedSVGEncoded);
-                params.put("uuid", id);
-        params.put("profile", "jbpm");
-        params.put("transformto", "png");
-        params.put("processid", "bp1");
+        params.put("fsvg", FORMATTED_SVG_ENCODED);
+        params.put("uuid", id);
+        params.put("profile", JBPM_PROFILE_NAME);
+        params.put("transformto", targetType);
+        params.put("processid", BP_NAME);
 
         TestHttpServletResponse response = new  TestHttpServletResponse();
         transformerServlet.doPost(new TestHttpServletRequest(params), response);
@@ -86,7 +92,7 @@ public class TransformerServletTest  extends RepositoryBaseTest {
         String responseText = new String(response.getContent());
         assertNotNull(responseText);
 
-        Collection<Asset> assets = repository.listAssets("/global", new FilterByExtension("png"));
+        Collection<Asset> assets = repository.listAssets(LOCATION, new FilterByExtension(targetType));
         Asset<String> asset = repository.loadAsset(assets.iterator().next().getUniqueId());
         assertNotNull(asset);
         assertNotNull(asset.getAssetContent());
@@ -94,26 +100,20 @@ public class TransformerServletTest  extends RepositoryBaseTest {
 
     @Test
     public void testTransformToPdf() throws Exception {
-        Repository repository = new VFSRepository(producer.getIoService());
-        ((VFSRepository)repository).setDescriptor(descriptor);
-        profile.setRepository(repository);
-        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
-        builder.content("test process")
-                .type("bpmn2")
-                .name("bp1")
-                .location("/global");
-        String id = repository.createAsset(builder.getAsset());
+        Repository repository = createRepository();
+        String id = createAsset(repository, LOCATION, BP_NAME, BPMN2_FILE_TYPE, BP_CONTENT);
 
         TransformerServlet transformerServlet = new TransformerServlet();
         transformerServlet.setProfile(profile);
 
         // setup parameters
+        String targetType = "pdf";
         Map<String, String> params = new HashMap<String, String>();
-        params.put("fsvg", formattedSVGEncoded);
+        params.put("fsvg", FORMATTED_SVG_ENCODED);
         params.put("uuid", id);
-        params.put("profile", "jbpm");
-        params.put("transformto", "pdf");
-        params.put("processid", "bp1");
+        params.put("profile", JBPM_PROFILE_NAME);
+        params.put("transformto", targetType);
+        params.put("processid", BP_NAME);
 
         TestHttpServletResponse response = new  TestHttpServletResponse();
         transformerServlet.doPost(new TestHttpServletRequest(params), response);
@@ -123,11 +123,58 @@ public class TransformerServletTest  extends RepositoryBaseTest {
         String responseText = new String(response.getContent());
         assertNotNull(responseText);
 
-        Collection<Asset> assets = repository.listAssets("/global", new FilterByExtension("pdf"));
+        Collection<Asset> assets = repository.listAssets(LOCATION, new FilterByExtension(targetType));
         Asset<String> asset = repository.loadAsset(assets.iterator().next().getUniqueId());
         assertNotNull(asset);
         assertNotNull(asset.getAssetContent());
     }
 
+    @Test
+    public void testStoreInRepository() throws Exception
+    {
+        Repository repository = createRepository();
+
+        // Get the logger's listAppender so we can check the log at the end
+        ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
+        ListAppender listAppender = (ListAppender) root.getAppender("listAppender");
+
+        String bpName = "mytestbp1";
+        String id = createAsset(repository, LOCATION, bpName, BPMN2_FILE_TYPE, BP_CONTENT);
+
+        TransformerServlet transformerServlet = new TransformerServlet();
+        transformerServlet.setProfile(profile);
+
+        String targetType = "png";
+        transformerServlet.storeInRepository(id, FORMATTED_SVG, targetType, bpName, repository);
+
+        Collection<Asset> assets = repository.listAssets(LOCATION, new FilterByExtension(targetType));
+        assertEquals(1, assets.size());
+        Asset<String> asset = repository.loadAsset(assets.iterator().next().getUniqueId());
+        assertNotNull(asset);
+        assertNotNull(asset.getAssetContent());
+
+        transformerServlet.storeInRepository(id, FORMATTED_SVG, targetType, bpName, repository);
+
+        // Test no FileAlreadyExistsException errors were logged after the 2nd call to storeInRepository
+        List logList = listAppender.list;
+        assertNotNull(logList);
+        Iterator itLogList = logList.iterator();
+        while (itLogList.hasNext()) {
+            Object oLoggingEvent = itLogList.next();
+            if (oLoggingEvent instanceof LoggingEvent) {
+                LoggingEvent loggingEvent = (LoggingEvent) oLoggingEvent;
+                String message = loggingEvent.getMessage();
+                if (message != null) {
+                    assertFalse(message.contains("FileAlreadyExistsException") && message.contains(bpName));
+                }
+            }
+        }
+
+        assets = repository.listAssets(LOCATION, new FilterByExtension(targetType));
+        assertEquals(1, assets.size());
+        asset = repository.loadAsset(assets.iterator().next().getUniqueId());
+        assertNotNull(asset);
+        assertNotNull(asset.getAssetContent());
+    }
 
 }

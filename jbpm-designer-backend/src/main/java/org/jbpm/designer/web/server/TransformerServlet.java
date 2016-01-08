@@ -16,6 +16,7 @@
 package org.jbpm.designer.web.server;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
@@ -518,7 +519,8 @@ public class TransformerServlet extends HttpServlet {
         }
     }
 
-    private void storeInRepository(String uuid, String svg, String transformto, String processid, Repository repository) {
+    protected void storeInRepository(String uuid, String svg, String transformto, String processid, Repository repository) {
+        String assetFullName = "";
         try {
             if(processid != null) {
                 Asset<byte[]> processAsset = repository.loadAsset(uuid);
@@ -540,9 +542,9 @@ public class TransformerServlet extends HttpServlet {
                 if(processid.startsWith(".")) {
                     processid = processid.substring(1, processid.length());
                 }
-                String assetFullName = processid + assetExt + assetFileExt;
+                assetFullName = processid + assetExt + assetFileExt;
 
-                repository.deleteAssetFromPath(processAsset.getAssetLocation() + assetFullName);
+                repository.deleteAssetFromPath(processAsset.getAssetLocation() + File.separator +  assetFullName);
 
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
@@ -582,8 +584,13 @@ public class TransformerServlet extends HttpServlet {
                 repository.createAsset(resourceAsset);
             }
         } catch (Exception e) {
-            // we dont want to barf..just log that error happened
-            _logger.error(e.getMessage());
+            // just log that error happened
+            if (e.getMessage() != null) {
+                _logger.error(e.getMessage());
+            }
+            else {
+                _logger.error(e.getClass().toString() + " " + assetFullName);
+            }
             e.printStackTrace();
         }
     }
