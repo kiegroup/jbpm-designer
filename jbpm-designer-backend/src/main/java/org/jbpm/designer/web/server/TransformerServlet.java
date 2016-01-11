@@ -158,7 +158,7 @@ public class TransformerServlet extends HttpServlet {
                     resp.setCharacterEncoding("UTF-8");
                     resp.setContentType("text/plain");
 
-                    resp.getWriter().write("<object data=\"data:application/pdf;base64," + Base64.encodeBase64(bout.toByteArray()) +  "\" type=\"application/pdf\"></object>");
+                    resp.getWriter().write("<object data=\"data:application/pdf;base64," + Base64.encodeBase64String(bout.toByteArray()) +  "\" type=\"application/pdf\"></object>");
                 } else {
                     storeInRepository(uuid, formattedSvg, transformto, processid, repository);
 
@@ -190,7 +190,7 @@ public class TransformerServlet extends HttpServlet {
                     t.transcode(input, output);
                     resp.setCharacterEncoding("UTF-8");
                     resp.setContentType("text/plain");
-                    resp.getWriter().write("<img src=\"data:image/png;base64," + Base64.encodeBase64(bout.toByteArray()) + "\">");
+                    resp.getWriter().write("<img src=\"data:image/png;base64," + Base64.encodeBase64String(bout.toByteArray()) + "\">");
                 } else {
                     storeInRepository(uuid, formattedSvg, transformto, processid, repository);
                     resp.setContentType("image/png");
