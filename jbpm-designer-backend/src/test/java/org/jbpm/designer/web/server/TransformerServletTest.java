@@ -130,6 +130,69 @@ public class TransformerServletTest  extends RepositoryBaseTest {
     }
 
     @Test
+    public void testSharePng() throws Exception {
+        Repository repository = createRepository();
+        String id = createAsset(repository, LOCATION, BP_NAME, BPMN2_FILE_TYPE, BP_CONTENT);
+
+        TransformerServlet transformerServlet = new TransformerServlet();
+        transformerServlet.setProfile(profile);
+
+        // setup parameters
+        String targetType = "png";
+        String respAction = "showurl";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("fsvg", FORMATTED_SVG_ENCODED);
+        params.put("uuid", id);
+        params.put("profile", JBPM_PROFILE_NAME);
+        params.put("transformto", targetType);
+        params.put("respaction", respAction);
+        params.put("processid", BP_NAME);
+
+        TestHttpServletResponse response = new  TestHttpServletResponse();
+        transformerServlet.doPost(new TestHttpServletRequest(params), response);
+
+        int responseStatus = response.getStatus();
+        assertEquals(0, responseStatus);
+        String responseText = new String(response.getContent());
+        assertNotNull(responseText);
+
+        assertTrue(responseText.startsWith("<img"));
+        assertTrue(responseText.endsWith("\">"));
+        assertTrue(responseText.length() > 1000);
+    }
+
+    @Test
+    public void testSharePdf() throws Exception {
+        Repository repository = createRepository();
+        String id = createAsset(repository, LOCATION, BP_NAME, BPMN2_FILE_TYPE, BP_CONTENT);
+
+        TransformerServlet transformerServlet = new TransformerServlet();
+        transformerServlet.setProfile(profile);
+
+        // setup parameters
+        String targetType = "pdf";
+        String respAction = "showurl";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("fsvg", FORMATTED_SVG_ENCODED);
+        params.put("uuid", id);
+        params.put("profile", JBPM_PROFILE_NAME);
+        params.put("transformto", targetType);
+        params.put("respaction", respAction);
+        params.put("processid", BP_NAME);
+
+        TestHttpServletResponse response = new  TestHttpServletResponse();
+        transformerServlet.doPost(new TestHttpServletRequest(params), response);
+
+        int responseStatus = response.getStatus();
+        assertEquals(0, responseStatus);
+        String responseText = new String(response.getContent());
+        assertNotNull(responseText);
+        assertTrue(responseText.startsWith("<object"));
+        assertTrue(responseText.endsWith("</object>"));
+        assertTrue(responseText.length() > 1000);
+    }
+
+    @Test
     public void testStoreInRepository() throws Exception
     {
         Repository repository = createRepository();
