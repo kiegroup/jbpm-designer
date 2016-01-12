@@ -38,7 +38,7 @@ import org.uberfire.mvp.PlaceRequest;
 import org.uberfire.mvp.impl.PathPlaceRequest;
 
 @Dependent
-@WorkbenchPopup(identifier = "jbpm.designer.popup")
+@WorkbenchPopup(identifier = "jbpm.designer.popup", size = WorkbenchPopup.WorkbenchPopupSize.LARGE)
 public class DesignerPopUpPresenter extends Composite implements RequiresResize {
 
     @Inject
@@ -57,8 +57,6 @@ public class DesignerPopUpPresenter extends Composite implements RequiresResize 
     @PostConstruct
     public void init() {
         container.clear();
-
-        container.setSize( "1000px", ( 600 - 51 ) + "px" );
         container.add( designerWidget.getView() );
     }
 
