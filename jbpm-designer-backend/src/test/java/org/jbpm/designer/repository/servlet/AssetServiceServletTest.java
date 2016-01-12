@@ -198,8 +198,7 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
         assetServiceServlet.doPost(new TestHttpServletRequest(params), response);
 
         String jsonResponse = new String(response.getContent());
-        assertNotNull(jsonResponse);
-        assertTrue(jsonResponse.indexOf("\"answer\":\"true\"") != -1);
+        assertJsonContains(jsonResponse, "\"answer\":\"true\"");
     }
 
     @Test
@@ -225,8 +224,7 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
         assetServiceServlet.doPost(new TestHttpServletRequest(params), response);
 
         String jsonResponse = new String(response.getContent());
-        assertNotNull(jsonResponse);
-        assertTrue(jsonResponse.indexOf("\"answer\":\"false\"") != -1);
+        assertJsonContains(jsonResponse, "\"answer\":\"false\"");
     }
 
     @Test
@@ -315,8 +313,7 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
         assetServiceServlet.doPost(new TestHttpServletRequest(params), response);
 
         String jsonResponse = new String(response.getContent());
-        assertNotNull(jsonResponse);
-        assertTrue(jsonResponse.indexOf("\"answer\":\"true\"") != -1);
+        assertJsonContains(jsonResponse, "\"answer\":\"true\"");
     }
 
     @Test
@@ -343,8 +340,8 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
         assetServiceServlet.doPost(new TestHttpServletRequest(params), response);
 
         String jsonResponse = new String(response.getContent());
-        assertNotNull(jsonResponse);
-        assertTrue(jsonResponse.indexOf("\"answer\":\"false\"") != -1);
+
+        assertJsonContains(jsonResponse, "\"answer\":\"false\"");
     }
 
     @Test
@@ -370,9 +367,7 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
         assetServiceServlet.doPost(new TestHttpServletRequest(params), response);
 
         String jsonResponse = new String(response.getContent());
-        assertNotNull(jsonResponse);
-        System.out.println(jsonResponse);
-        assertTrue(jsonResponse.indexOf("\"answer\":[{\"name\":\"defaultPackage\"}]") != -1);
+        assertJsonContains(jsonResponse, "\"answer\":[{\"name\":\"defaultPackage\"}]");
     }
 
     @Test
@@ -406,9 +401,13 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
 
         String jsonResponse = new String(response.getContent());
         assertNotNull(jsonResponse);
-        assertTrue(jsonResponse.indexOf("\"location\":\"/defaultPackage\",\"description\":\"\",\"name\":\"testprocess\",\"owner\":\"\",\"type\":\"bpmn2\",\"fullname\":\"testprocess.bpmn2\"") != -1);
+        assertJsonContains(jsonResponse, "\"location\":\"/defaultPackage\"");
+        assertJsonContains(jsonResponse, "\"description\":\"\"");
+        assertJsonContains(jsonResponse, "\"name\":\"testprocess\"");
+        assertJsonContains(jsonResponse, "\"owner\":\"\"");
+        assertJsonContains(jsonResponse, "\"type\":\"bpmn2\"");
+        assertJsonContains(jsonResponse, "\"fullname\":\"testprocess.bpmn2\"");
     }
-
 
     @Test
     public void testGetAssetSourceById() throws Exception {
@@ -474,7 +473,6 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
         assetServiceServlet.doPost(new TestHttpServletRequest(params), response);
 
         String jsonResponse = new String(response.getContent());
-        assertNotNull(jsonResponse);
         assertEquals(jsonResponse, "custom editors content");
     }
 
@@ -508,8 +506,12 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
         assetServiceServlet.doPost(new TestHttpServletRequest(params), response);
 
         String jsonResponse = new String(response.getContent());
-        assertNotNull(jsonResponse);
-        assertTrue(jsonResponse.indexOf("\"location\":\"/defaultPackage\",\"description\":\"\",\"name\":\"testprocess\",\"owner\":\"\",\"type\":\"bpmn2\",\"fullname\":\"testprocess.bpmn2\"") != -1);
+        assertJsonContains(jsonResponse, "\"location\":\"/defaultPackage\"");
+        assertJsonContains(jsonResponse, "\"description\":\"\"");
+        assertJsonContains(jsonResponse, "\"name\":\"testprocess\"");
+        assertJsonContains(jsonResponse, "\"owner\":\"\"");
+        assertJsonContains(jsonResponse, "\"type\":\"bpmn2\"");
+        assertJsonContains(jsonResponse, "\"fullname\":\"testprocess.bpmn2\"");
     }
 
     @Test
@@ -542,7 +544,16 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
         assetServiceServlet.doPost(new TestHttpServletRequest(params), response);
 
         String jsonResponse = new String(response.getContent());
-        assertNotNull(jsonResponse);
-        assertTrue(jsonResponse.indexOf("\"location\":\"/defaultPackage\",\"description\":\"\",\"name\":\"testprocess\",\"owner\":\"\",\"type\":\"bpmn2\",\"fullname\":\"testprocess.bpmn2\"") != -1);
+        assertJsonContains(jsonResponse, "\"location\":\"/defaultPackage\"");
+        assertJsonContains(jsonResponse, "\"description\":\"\"");
+        assertJsonContains(jsonResponse, "\"name\":\"testprocess\"");
+        assertJsonContains(jsonResponse, "\"owner\":\"\"");
+        assertJsonContains(jsonResponse, "\"type\":\"bpmn2\"");
+        assertJsonContains(jsonResponse, "\"fullname\":\"testprocess.bpmn2\"");
+    }
+
+    private void assertJsonContains(String json, String expected) {
+        assertNotNull("No JSON string specified!", json);
+        assertTrue("Expected substring '" + expected + "' not found in JSON string '" + json + "'!", json.contains(expected));
     }
 }
