@@ -540,7 +540,16 @@ ORYX.Plugins.PropertyWindow = {
 		if(event.subSelection){
 			this.shapeSelection.shapes = [event.subSelection];
 		}
-		
+
+		if (this.shapeSelection.shapes.length == 1){
+			if (ORYX.USEOLDDATAASSIGNMENTS == false) {
+				var element = this.shapeSelection.shapes[0];
+				if (ORYX.DataIOEditorUtils.hasDataIOProperty(element)) {
+					ORYX.DataIOEditorUtils.setAssignmentsViewProperty(element);
+				}
+			}
+		}
+
 		this.setPropertyWindowTitle();
 		this.identifyCommonProperties();
 		this.setCommonPropertiesValues();

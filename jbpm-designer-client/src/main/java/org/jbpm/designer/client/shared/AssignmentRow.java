@@ -107,6 +107,23 @@ public class AssignmentRow {
         this.constant = constant;
     }
 
+    public boolean isComplete() {
+        if (name == null || name.isEmpty()) {
+            return false;
+        }
+        else if ((dataType == null || dataType.isEmpty())
+                && (customDataType == null || customDataType.isEmpty())) {
+            return false;
+        }
+        else if ((processVar == null || processVar.isEmpty())
+                && (constant == null || constant.isEmpty())) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)

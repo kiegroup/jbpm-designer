@@ -446,7 +446,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
 	showDataIOEditorButton : function(elements) {
 		if(elements.length != 1) return;
 
-		if (! this.hasDataIOProperty(elements[0])) {
+		if (! ORYX.DataIOEditorUtils.hasDataIOProperty(elements[0])) {
 			return;
 		}
 
@@ -459,37 +459,6 @@ ORYX.Plugins.ShapeMenuPlugin = {
 			this.dataIOEditorButton.group = this.dataIOEditorButton.group - 1;
 			this.dataIOEditorButton.prepareToShow();
 		}
-	},
-
-	/**
-	 * Tests whether an element has any properties related to Data I/O
-	 *
-	 * @param element
-	 * @returns {boolean}
-	 */
-	hasDataIOProperty: function(element) {
-		var stencil = element.getStencil();
-		var dataIOPropertyIds = ["oryx-assignments", "oryx-datainputassociations", "oryx-dataoutputassociations",
-			"oryx-datainput", "oryx-datainputset", "oryx-dataoutput", "oryx-dataoutputset"];
-		for (var i = 0; i < dataIOPropertyIds.length; i++) {
-			if (stencil.property(dataIOPropertyIds[i]) !== undefined) {
-				var property = stencil.property(dataIOPropertyIds[i]);
-				if((property.visible() && property.visible() == true) && property.hidden() != true) {
-					var tasktype = element.properties["oryx-tasktype"];
-					if(property.fortasktypes() && property.fortasktypes().length > 0) {
-						var tts = property.fortasktypes().split("|");
-						for(var i = 0; i < tts.size(); i++) {
-							if(tts[i] == tasktype) {
-								return true;
-							}
-						}
-					} else {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
 	},
 
 

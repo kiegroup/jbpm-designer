@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jboss.errai.common.client.api.annotations.Portable;
+import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.jbpm.designer.client.shared.Variable.VariableType;
 import org.jbpm.designer.client.shared.util.StringUtils;
 
@@ -51,6 +52,8 @@ public class AssignmentData {
 
     private List<String> disallowedPropertyNames = new ArrayList<String>();
 
+    private String variableCountsString = "";
+
     public AssignmentData() {
 
     }
@@ -64,6 +67,11 @@ public class AssignmentData {
         setOutputVariables(sOutputVariables);
         setAssignments(sAssignments);
         setDisallowedPropertyNames(sDisallowedPropertyNames);
+    }
+
+    public AssignmentData(String sInputVariables, String sOutputVariables, String sProcessVariables,
+            String sAssignments, String sDisallowedPropertyNames) {
+        this(sInputVariables, sOutputVariables, sProcessVariables, sAssignments, null, sDisallowedPropertyNames);
     }
 
     /**
@@ -459,6 +467,95 @@ public class AssignmentData {
         return rows;
     }
 
+    public void setVariableCountsString(String variableCountsString) {
+        this.variableCountsString = variableCountsString;
+    }
+
+    public void setVariableCountsString(boolean hasInputVars, boolean isSingleInputVar, boolean hasOutputVars, boolean isSingleOutputVar) {
+        StringBuilder sb = new StringBuilder();
+        if (hasInputVars) {
+            List<AssignmentRow> inputAssignments = getAssignmentRows(Variable.VariableType.INPUT);
+            inputAssignments = removeDisallowedInputAssignmentRows(inputAssignments);
+            if (inputAssignments == null || inputAssignments.isEmpty())
+            {
+                if (isSingleInputVar) {
+                    sb.append(DesignerEditorConstants.INSTANCE.No_Data_Input());
+                }
+                else {
+                    sb.append("0 " + DesignerEditorConstants.INSTANCE.Data_Inputs());
+                }
+            }
+            else if (inputAssignments.size() == 1) {
+                sb.append("1 " + DesignerEditorConstants.INSTANCE.Data_Input());
+            }
+            else if (inputAssignments.size() > 1) {
+                sb.append(inputAssignments.size() + " "  + DesignerEditorConstants.INSTANCE.Data_Inputs());
+            }
+
+        }
+
+        if (hasOutputVars) {
+            if (sb.length() > 0) {
+                sb.append(", ");
+            }
+            List<AssignmentRow> outputAssignments = getAssignmentRows(Variable.VariableType.OUTPUT);
+            if (outputAssignments == null || outputAssignments.isEmpty())
+            {
+                if (isSingleOutputVar) {
+                    sb.append(DesignerEditorConstants.INSTANCE.No_Data_Output());
+                }
+                else {
+                    sb.append("0 " + DesignerEditorConstants.INSTANCE.Data_Outputs());
+                }
+            }
+            else if (outputAssignments.size() == 1) {
+                sb.append("1 " + DesignerEditorConstants.INSTANCE.Data_Output());
+            }
+            else if (outputAssignments.size() > 1) {
+                sb.append(outputAssignments.size() + " "  + DesignerEditorConstants.INSTANCE.Data_Outputs());
+            }
+        }
+
+        variableCountsString = sb.toString();
+    }
+
+    public String getVariableCountsString() {
+        return variableCountsString;
+    }
+
+    public String getVariableCountsString(boolean hasInputVars, boolean isSingleInputVar, boolean hasOutputVars, boolean isSingleOutputVar) {
+        setVariableCountsString(hasInputVars, isSingleInputVar, hasOutputVars, isSingleOutputVar);
+        return getVariableCountsString();
+    }
+
+    List<AssignmentRow> removeDisallowedInputAssignmentRows(List<AssignmentRow> inputAssignments) {
+        if (inputAssignments == null) {
+            return null;
+        }
+        List<AssignmentRow> allowedRows = new ArrayList<AssignmentRow>();
+        for (AssignmentRow inputAssignment: inputAssignments) {
+            String name = inputAssignment.getName();
+            if (name != null && !name.isEmpty()) {
+                if (!isDisallowedPropertyName(name)) {
+                    allowedRows.add(inputAssignment);
+                }
+            }
+        }
+        return allowedRows;
+    }
+
+
+    private boolean isDisallowedPropertyName(String name) {
+        if (disallowedPropertyNames != null) {
+            for (String disallowedPropertyName : disallowedPropertyNames) {
+                if (disallowedPropertyName.equalsIgnoreCase(name)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -487,6 +584,8 @@ public class AssignmentData {
             return false;
         if (getAssignments() != null ? !getAssignments().equals(that.getAssignments()) : that.getAssignments() != null)
             return false;
+        if (getVariableCountsString() != null ? !getVariableCountsString().equals(that.getVariableCountsString()) : that.getVariableCountsString() != null)
+            return false;
         if (getDataTypes() != null ? !getDataTypes().equals(that.getDataTypes()) : that.getDataTypes() != null)
             return false;
         if (getDataTypeDisplayNames() != null ? !getDataTypeDisplayNames().equals(that.getDataTypeDisplayNames()) : that.getDataTypeDisplayNames() != null)
@@ -501,6 +600,7 @@ public class AssignmentData {
         result = 31 * result + (getOutputVariables() != null ? getOutputVariables().hashCode() : 0);
         result = 31 * result + (getProcessVariables() != null ? getProcessVariables().hashCode() : 0);
         result = 31 * result + (getAssignments() != null ? getAssignments().hashCode() : 0);
+        result = 31 * result + (getVariableCountsString() != null ? getVariableCountsString().hashCode() : 0);
         result = 31 * result + (getDataTypes() != null ? getDataTypes().hashCode() : 0);
         result = 31 * result + (getDataTypeDisplayNames() != null ? getDataTypeDisplayNames().hashCode() : 0);
         result = 31 * result + (getDisallowedPropertyNames() != null ? getDisallowedPropertyNames().hashCode() : 0);

@@ -36,6 +36,7 @@ public class AssignmentDataMarshaller
     public static final String ASSIGNMENTS = "assignments";
     public static final String DATA_TYPES = "dataTypes";
     public static final String DISALLOWED_PROPERTY_NAMES = "disallowedPropertyNames";
+    public static final String VARIABLE_COUNTS_STRING = "variablecountsstring";
 
     public AssignmentData doNotNullDemarshall(EJValue o, MarshallingSession ctx) {
         EJObject obj = o.isObject();
@@ -43,9 +44,12 @@ public class AssignmentDataMarshaller
         String outputVariables = obj.get(OUTPUT_VARIABLES).isString().stringValue();
         String processVariables = obj.get(PROCESS_VARIABLES).isString().stringValue();
         String assignments = obj.get(ASSIGNMENTS).isString().stringValue();
+        String varCounts = obj.get(VARIABLE_COUNTS_STRING).isString().stringValue();
         String dataTypes = obj.get(DATA_TYPES).isString().stringValue();
         String disallowedPropertyNames = obj.get(DISALLOWED_PROPERTY_NAMES).isString().stringValue();
-        return new AssignmentData(inputVariables, outputVariables, processVariables, assignments, dataTypes, disallowedPropertyNames);
+        AssignmentData data = new AssignmentData(inputVariables, outputVariables, processVariables, assignments, dataTypes, disallowedPropertyNames);
+        data.setVariableCountsString(varCounts);
+        return data;
     }
 
     public String doNotNullMarshall(AssignmentData o, MarshallingSession ctx) {
@@ -56,6 +60,7 @@ public class AssignmentDataMarshaller
                 "\"" + OUTPUT_VARIABLES + "\":\"" + o.getOutputVariablesString() + "\"," +
                 "\"" + PROCESS_VARIABLES + "\":\"" + o.getProcessVariablesString() + "\"," +
                 "\"" + ASSIGNMENTS + "\":\"" + o.getAssignmentsString() + "\"," +
+                "\"" + VARIABLE_COUNTS_STRING + "\":\"" + o.getVariableCountsString() + "\"," +
                 "\"" + DATA_TYPES + "\":\"" + o.getDataTypesString() + "\"," +
                 "\"" + DISALLOWED_PROPERTY_NAMES + "\":\"" + o.getDisallowedPropertyNamesString() + "\"}";
     }
