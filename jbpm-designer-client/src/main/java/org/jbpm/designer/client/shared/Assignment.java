@@ -52,7 +52,7 @@ public class Assignment {
         this.constant = constant;
     }
 
-    public Assignment(AssignmentData assignmentData, String variableName, VariableType variableType, String processVariableName,
+    public Assignment(AssignmentData assignmentData, String variableName, VariableType variableType, String processVarName,
             String constant) {
         this.assignmentData = assignmentData;
         variable = assignmentData.findVariable(variableName, variableType);
@@ -61,14 +61,7 @@ public class Assignment {
             assignmentData.addVariable(variable);
         }
 
-        if (processVariableName != null && !processVariableName.isEmpty()) {
-            processVar = assignmentData.findProcessVariable(processVariableName);
-            // Didn't find processVar
-            if (processVar == null) {
-                processVariableName = "";
-            }
-        }
-
+        processVar = assignmentData.findProcessVariable(processVarName);
         this.constant = constant;
     }
 
@@ -123,10 +116,6 @@ public class Assignment {
 
     public void setConstant(String constant) {
         this.constant = constant;
-    }
-
-    public AssignmentData getAssignmentData() {
-        return assignmentData;
     }
 
     @Override

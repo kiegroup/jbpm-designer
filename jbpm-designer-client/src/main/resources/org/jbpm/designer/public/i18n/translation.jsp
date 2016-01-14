@@ -1527,8 +1527,8 @@ ORYX.I18N.propertyNames['datainputset'] = '<i18n:message key="ORYX.I18N.property
 ORYX.I18N.propertyNames['datainputset_desc'] = '<i18n:message key="ORYX.I18N.propertyNames_datainputset_desc">An InputSet is a collection of DataInput elements that together define a valid set of data inputs.</i18n:message>';
 ORYX.I18N.propertyNames['dataoutputset'] = '<i18n:message key="ORYX.I18N.propertyNames_dataoutputset">DataOutputSet</i18n:message>';
 ORYX.I18N.propertyNames['dataoutputset_desc'] = '<i18n:message key="ORYX.I18N.propertyNames_dataoutputset_desc">An OutputSet is a collection of DataOutputs elements that together may be produced as output from an Activity or Event.</i18n:message>';
-ORYX.I18N.propertyNames['assignments'] = '<i18n:message key="ORYX.I18N.propertyNames_assignments">Assignments</i18n:message>';
-ORYX.I18N.propertyNames['assignments_desc'] = '<i18n:message key="ORYX.I18N.propertyNames_assignments_desc">Assignments</i18n:message>';
+ORYX.I18N.propertyNames['assignmentsview'] = '<i18n:message key="ORYX.I18N.propertyNames_assignments">Assignments</i18n:message>';
+ORYX.I18N.propertyNames['assignmentsview_desc'] = '<i18n:message key="ORYX.I18N.propertyNames_assignments_desc">Assignments</i18n:message>';
 ORYX.I18N.propertyNames['onEntryActions'] = '<i18n:message key="ORYX.I18N.propertyNames_onEntryActions">On Entry Actions</i18n:message>';
 ORYX.I18N.propertyNames['onEntryActions_desc'] = '<i18n:message key="ORYX.I18N.propertyNames_onEntryActions_desc">On Entry Actions</i18n:message>';
 ORYX.I18N.propertyNames['onExitActions'] = '<i18n:message key="ORYX.I18N.propertyNames_onExitActions">On Exit Actions</i18n:message>';

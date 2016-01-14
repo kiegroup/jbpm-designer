@@ -145,9 +145,9 @@ ORYX.Plugins.DataIOEditorPlugin = {
             assignments = element.properties['oryx-dataoutputassociations'];
         }
 
-        var processvars = this.getProcessVars(element);
+        var processvars = ORYX.DataIOEditorUtils.getProcessVars(element);
 
-        var disallowedPropertyNames = this.getDisallowedPropertyNames(element);
+        var disallowedPropertyNames = ORYX.DataIOEditorUtils.getDisallowedPropertyNames(element);
 
         parent.designersignalshowdataioeditor(taskname, datainput, datainputset, dataoutput, dataoutputset, processvars, assignments, datatypes, disallowedPropertyNames,
                 function (data) {
@@ -190,19 +190,22 @@ ORYX.Plugins.DataIOEditorPlugin = {
                         oldProperties['oryx-dataoutputassociations'] = element.properties['oryx-dataoutputassociations'];
                     }
 
+                    if (stencil.property('oryx-assignments') !== undefined) {
+                        newProperties['oryx-assignmentsview'] = obj['variablecountsstring'];
+                        oldProperties['oryx-assignmentsview'] = element.properties['oryx-assignmentsview'];
+                    }
+                    else if (stencil.property('oryx-datainputassociations') !== undefined) {
+                        newProperties['oryx-datainputassociationsview'] = obj['variablecountsstring'];
+                        oldProperties['oryx-datainputassociationsview'] = element.properties['oryx-datainputassociationsview'];
+                    }
+                    else if (stencil.property('oryx-dataoutputassociations') !== undefined) {
+                        newProperties['oryx-dataoutputassociationsview'] = obj['variablecountsstring'];
+                        oldProperties['oryx-dataoutputassociationsview'] = element.properties['oryx-dataoutputassociationsview'];
+                    }
                     this.setElementProperties(element, newProperties, oldProperties);
 
                 }.bind(this)
         );
-    },
-
-    getDisallowedPropertyNames : function (element) {
-        if (element.properties['oryx-tasktype'] !== undefined && element.properties['oryx-tasktype'] == "User") {
-            return "GroupId,Skippable,Comment,Description,Priority,Content,TaskName,Locale,CreatedBy,NotCompletedReassign,NotStartedReassign,NotCompletedNotify,NotStartedNotify";
-        }
-        else {
-            return "";
-        }
     },
 
     setElementProperties: function (element, newProperties, oldProperties) {
@@ -253,6 +256,51 @@ ORYX.Plugins.DataIOEditorPlugin = {
             });
         }.bind(this));
 
+    }
+
+}
+
+ORYX.Plugins.DataIOEditorPlugin = ORYX.Plugins.AbstractPlugin.extend(ORYX.Plugins.DataIOEditorPlugin);
+
+ORYX.DataIOEditorUtils = {
+    /**
+     * Tests whether an element has any properties related to Data I/O
+     *
+     * @param element
+     * @returns {boolean}
+     */
+    hasDataIOProperty: function(element) {
+        var stencil = element.getStencil();
+        var dataIOPropertyIds = ["oryx-assignmentsview", "oryx-datainputassociationsview", "oryx-dataoutputassociationsview",
+            "oryx-datainput", "oryx-datainputset", "oryx-dataoutput", "oryx-dataoutputset"];
+        for (var i = 0; i < dataIOPropertyIds.length; i++) {
+            if (stencil.property(dataIOPropertyIds[i]) !== undefined) {
+                var property = stencil.property(dataIOPropertyIds[i]);
+                if((property.visible() && property.visible() == true) && property.hidden() != true) {
+                    var tasktype = element.properties["oryx-tasktype"];
+                    if(property.fortasktypes() && property.fortasktypes().length > 0) {
+                        var tts = property.fortasktypes().split("|");
+                        for(var i = 0; i < tts.size(); i++) {
+                            if(tts[i] == tasktype) {
+                                return true;
+                            }
+                        }
+                    } else {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    },
+
+    getDisallowedPropertyNames : function (element) {
+        if (element.properties['oryx-tasktype'] !== undefined && element.properties['oryx-tasktype'] == "User") {
+            return "GroupId,Skippable,Comment,Description,Priority,Content,TaskName,Locale,CreatedBy,NotCompletedReassign,NotStartedReassign,NotCompletedNotify,NotStartedNotify";
+        }
+        else {
+            return "";
+        }
     },
 
     getProcessVars: function (element) {
@@ -327,7 +375,56 @@ ORYX.Plugins.DataIOEditorPlugin = {
             sortedVarString = sortedVarString + arrVars[i] + ",";
         }
         return sortedVarString + ',';
+    },
+
+    setAssignmentsViewProperty: function (element) {
+        var stencil = element.getStencil();
+
+        var datainput = undefined;
+        if (stencil.property('oryx-datainput') !== undefined) {
+            datainput = element.properties['oryx-datainput'];
+        }
+        var datainputset = undefined;
+        if (stencil.property('oryx-datainputset') !== undefined) {
+            datainputset = element.properties['oryx-datainputset'];
+        }
+
+        var dataoutput = undefined;
+        if (stencil.property('oryx-dataoutput') !== undefined) {
+            dataoutput = element.properties['oryx-dataoutput'];
+        }
+        var dataoutputset = undefined;
+        if (stencil.property('oryx-dataoutputset') !== undefined) {
+            dataoutputset = element.properties['oryx-dataoutputset'];
+        }
+
+        var assignments = undefined;
+        if (stencil.property('oryx-assignments') !== undefined) {
+            assignments = element.properties['oryx-assignments'];
+        }
+        else if (stencil.property('oryx-datainputassociations') !== undefined) {
+            assignments = element.properties['oryx-datainputassociations'];
+        }
+        else if (stencil.property('oryx-dataoutputassociations') !== undefined) {
+            assignments = element.properties['oryx-dataoutputassociations'];
+        }
+
+        var processvars = this.getProcessVars(element);
+
+        var disallowedPropertyNames = this.getDisallowedPropertyNames(element);
+
+        var assignmentsViewProperty = parent.designersignalgetassignmentsviewproperty(datainput, datainputset, dataoutput, dataoutputset, processvars, assignments, disallowedPropertyNames);
+        if (assignmentsViewProperty && assignmentsViewProperty.length > 0) {
+            if (stencil.property('oryx-assignmentsview') !== undefined) {
+                element.setProperty('oryx-assignmentsview', assignmentsViewProperty);
+            }
+            else if (stencil.property('oryx-datainputassociationsview') !== undefined) {
+                element.setProperty('oryx-datainputassociationsview', assignmentsViewProperty);
+            }
+            else if (stencil.property('oryx-dataoutputassociationsview') !== undefined) {
+                element.setProperty('oryx-dataoutputassociationsview', assignmentsViewProperty);
+            }
+        }
+
     }
 }
-
-ORYX.Plugins.DataIOEditorPlugin = ORYX.Plugins.AbstractPlugin.extend(ORYX.Plugins.DataIOEditorPlugin);

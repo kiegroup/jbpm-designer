@@ -33,6 +33,11 @@ import java.util.Set;
 @Dependent
 public class ActivityDataIOEditor implements ActivityDataIOEditorView.Presenter {
 
+    private boolean hasInputVars;
+    private boolean isSingleInputVar;
+    private boolean hasOutputVars;
+    private boolean isSingleOutputVar;
+
     /**
      * Callback interface which should be implemented by callers to retrieve the
      * edited Assignments data.
@@ -66,6 +71,7 @@ public class ActivityDataIOEditor implements ActivityDataIOEditorView.Presenter 
         if ( callback != null ) {
             AssignmentData data = new AssignmentData( view.getInputAssignmentData(),
                     view.getOutputAssignmentData(), dataTypes, dataTypeDisplayNames );
+            data.setVariableCountsString(hasInputVars, isSingleInputVar, hasOutputVars, isSingleOutputVar);
             String sData = Marshalling.toJSON(data);
             callback.getData( sData );
         }
@@ -90,6 +96,11 @@ public class ActivityDataIOEditor implements ActivityDataIOEditorView.Presenter 
     }
 
     public void configureDialog(String taskName, boolean hasInputVars, boolean isSingleInputVar, boolean hasOutputVars, boolean isSingleOutputVar) {
+        this.hasInputVars = hasInputVars;
+        this.isSingleInputVar = isSingleInputVar;
+        this.hasOutputVars = hasOutputVars;
+        this.isSingleOutputVar = isSingleOutputVar;
+
         if (taskName != null && !taskName.isEmpty()) {
             view.setCustomViewTitle(taskName);
         }
