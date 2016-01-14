@@ -234,6 +234,12 @@ public class DesignerPresenter
         }
     }-*/;
 
+    private native void publishGetAssignmentsViewProperty( DesignerPresenter dp )/*-{
+        $wnd.designersignalgetassignmentsviewproperty = function (datainput, datainputset, dataoutput, dataoutputset, processvars, assignments, disallowedpropertynames) {
+            return dp.@org.jbpm.designer.client.DesignerPresenter::GetAssignmentsViewProperty(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(datainput, datainputset, dataoutput, dataoutputset, processvars, assignments, disallowedpropertynames);
+        }
+    }-*/;
+
     public boolean isLatest() {
         return versionRecordManager.isCurrentLatest();
     }
@@ -336,6 +342,7 @@ public class DesignerPresenter
         }
 
         AssignmentData assignmentData = new AssignmentData( inputvars, outputvars, processvars, assignments, datatypes, disallowedpropertynames );
+        assignmentData.setVariableCountsString(hasInputVars, isSingleInputVar, hasOutputVars, isSingleOutputVar);
         activityDataIOEditor.setAssignmentData( assignmentData );
         activityDataIOEditor.setDisallowedPropertyNames( assignmentData.getDisallowedPropertyNames() );
         activityDataIOEditor.setInputAssignmentRows( assignmentData.getAssignmentRows( Variable.VariableType.INPUT ) );
@@ -352,6 +359,42 @@ public class DesignerPresenter
         jscallback(assignmentData);
         //$wnd.alert("DesignerPresenter.getDataIOEditorData assignmentdata = " + assignmentData);
     }-*/;
+
+    public String GetAssignmentsViewProperty(String datainput, String datainputset, String dataoutput, String dataoutputset,
+            String processvars, String assignments, String disallowedpropertynames) {
+        String inputvars = null;
+        boolean hasInputVars = false;
+        boolean isSingleInputVar = false;
+        if (datainput != null) {
+            inputvars = datainput;
+            hasInputVars = true;
+            isSingleInputVar = true;
+        }
+        if (datainputset != null) {
+            inputvars = datainputset;
+            hasInputVars = true;
+            isSingleInputVar = false;
+        }
+
+        String outputvars = null;
+        boolean hasOutputVars = false;
+        boolean isSingleOutputVar = false;
+        if (dataoutput != null) {
+            outputvars = dataoutput;
+            hasOutputVars = true;
+            isSingleOutputVar = true;
+        }
+        if (dataoutputset != null) {
+            outputvars = dataoutputset;
+            hasOutputVars = true;
+            isSingleOutputVar = false;
+        }
+
+        AssignmentData assignmentData = new AssignmentData(inputvars, outputvars, processvars, assignments, disallowedpropertynames);
+        return assignmentData.getVariableCountsString(hasInputVars, isSingleInputVar, hasOutputVars, isSingleOutputVar);
+    }
+
+
 
     public void assetRenameEvent( String uri ) {
         vfsServices.call( new RemoteCallback<ObservablePath>() {
@@ -503,14 +546,15 @@ public class DesignerPresenter
     @Override
     protected void loadContent() {
         this.publishOpenInTab( this );
-        this.publishOpenInXMLEditorTab( this );
-        this.publishSignalOnAssetDelete( this );
-        this.publishSignalOnAssetCopy( this );
-        this.publishSignalOnAssetRename( this );
-        this.publishSignalOnAssetUpdate( this );
-        this.publishClosePlace( this );
-        this.publishShowDataIOEditor( this );
-        this.publishIsLatest( this );
+        this.publishOpenInXMLEditorTab(this );
+        this.publishSignalOnAssetDelete(this );
+        this.publishSignalOnAssetCopy(this );
+        this.publishSignalOnAssetRename(this );
+        this.publishSignalOnAssetUpdate(this );
+        this.publishClosePlace(this );
+        this.publishShowDataIOEditor(this);
+        this.publishGetAssignmentsViewProperty(this);
+        this.publishIsLatest(this);
 
         if ( versionRecordManager.getCurrentPath() != null ) {
             assetService.call( new RemoteCallback<String>() {

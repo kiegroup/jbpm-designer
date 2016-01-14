@@ -16,18 +16,12 @@
 
 package org.jbpm.designer.client.shared;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.net.URLDecoder;
-
 import org.jbpm.designer.client.shared.util.StringUtils;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.*;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -36,29 +30,19 @@ import static org.junit.Assert.*;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(StringUtils.class)
-public class AssignmentTest {
+public class AssignmentTest extends AssignmentBaseTest {
 
     AssignmentData ad = Mockito.mock(AssignmentData.class);
 
     @Before
-    public void setUp() {
-        PowerMockito.mockStatic(StringUtils.class);
-        PowerMockito.when(StringUtils.urlEncode(Mockito.anyString())).thenAnswer(new Answer<Object>() {
-            @Override
-            public String answer(InvocationOnMock invocation) throws Throwable {
-                Object[] args = invocation.getArguments();
-                return urlEncode((String) args[0]);
-            }
-        });
-        PowerMockito.when(StringUtils.urlDecode(Mockito.anyString())).thenAnswer(new Answer<Object>() {
-            @Override
-            public String answer(InvocationOnMock invocation) throws Throwable {
-                Object[] args = invocation.getArguments();
-                return urlDecode((String) args[0]);
-            }
-        });
+    public void setUp() throws Exception {
+        super.setUp();
     }
 
+    @After
+    public void tearDown() {
+        super.tearDown();
+    }
 
     /**
      * Uses mock implementation of urlEncodeConstant and urlDecodeConstant
@@ -125,40 +109,4 @@ public class AssignmentTest {
         assertEquals(constant, deserializedConstant);
     }
 
-    /**
-     * Implementation of urlEncode for PowerMocked StringUtils
-     *
-     * @param s
-     * @return
-     */
-    public String urlEncode(String s) {
-        if (s == null || s.isEmpty()) {
-            return s;
-        }
-
-        try {
-            return URLEncoder.encode(s, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            return s;
-        }
-
-    }
-
-    /**
-     * Implementation of urlDecode for PowerMocked StringUtils
-     *
-     * @param s
-     * @return
-     */
-    public String urlDecode(String s) {
-        if (s == null || s.isEmpty()) {
-            return s;
-        }
-        try {
-            return URLDecoder.decode(s, "UTF-8");
-        }
-        catch (UnsupportedEncodingException e) {
-            return s;
-        }
-    }
 }
