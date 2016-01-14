@@ -35,11 +35,19 @@ public interface DesignerEditorConstants extends
 
     String Custom();
 
+    String Data_Input();
+
+    String Data_Inputs();
+
     String Data_Input_and_Assignment();
 
     String Data_Inputs_and_Assignments();
 
     String Data_Output_and_Assignment();
+
+    String Data_Output();
+
+    String Data_Outputs();
 
     String Data_Outputs_and_Assignments();
 
@@ -52,6 +60,10 @@ public interface DesignerEditorConstants extends
     String Enter_type();
 
     String Invalid_character_in_name();
+
+    String No_Data_Input();
+
+    String No_Data_Output();
 
     String Only_single_entry_allowed();
 

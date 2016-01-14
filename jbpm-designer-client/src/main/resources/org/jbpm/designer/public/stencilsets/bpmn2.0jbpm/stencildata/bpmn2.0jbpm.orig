@@ -325,6 +325,20 @@
 				{
 					"id":"dataoutputassociations",
 					"type":"Dataassignment",
+					"title":"DataOutputAssociationsValue",
+					"value":"",
+					"description":"The Data Associations of the catch Event.",
+					"description_ja":"キャッチイベントのデータ関連。",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true,
+					"hidden":true,
+                    "visible":false
+				},
+				{
+					"id":"dataoutputassociationsview",
+					"type":"Dataassignment",
 					"title":"DataOutputAssociations",
 					"value":"",
 					"description":"The Data Associations of the catch Event.",
@@ -462,6 +476,20 @@
 				},
 				{
 					"id":"datainputassociations",
+					"type":"Dataassignment",
+					"title":"DataInputAssociationsValue",
+					"value":"",
+					"description":"The Data Associations of the throw Event.",
+					"description_ja":"スローイベントのデータ関連。",
+					"readonly":false,
+					"optional":true,
+					"length":"",
+					"wrapLines":true,
+					"hidden":true,
+                    "visible":false
+				},
+				{
+					"id":"datainputassociationsview",
 					"type":"Dataassignment",
 					"title":"DataInputAssociations",
 					"value":"",
@@ -922,6 +950,18 @@
 				},
 				{
 					"id":"assignments",
+					"type":"Dataassignment",
+					"title":"AssignmentsValue",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"fortasktypes":"None|Send|Receive|User|Manual|Service|Business Rule",
+					"hidden":true,
+					"visible":false
+                },
+				{
+					"id":"assignmentsview",
 					"type":"Dataassignment",
 					"title":"Assignments",
 					"value":"",
@@ -3556,16 +3596,27 @@
 				$bopen$
 					"id":"assignments",
 					"type":"Dataassignment",
-					"title":"Assignments",
+					"title":"AssignmentsValue",
 					"value":"$workitemDefs.(k).parameters:{k1| $k1.name$}; separator="=,"$=",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"hidden":true,
+					"visible":false
+				$bclose$,
+				$bopen$
+					"id":"assignmentsview",
+					"type":"Dataassignment",
+					"title":"Assignments",
+					"value":"",
 					"description":"",
 					"readonly":false,
 					"optional":true
 					 $if(workitemDefs.(k).customEditor)$
 					,
 					"hidden":true,
-                    "visible":false
-                     $endif$
+					"visible":false
+					$endif$
 				$bclose$,
 				$bopen$
 					"id":"onEntryActions",
@@ -3810,6 +3861,17 @@
                 },
                 {
                     "id":"assignments",
+                    "type":"Dataassignment",
+                    "title":"AssignmentsValue",
+                    "value":"",
+                    "description":"",
+                    "readonly":false,
+                    "optional":true,
+                    "hidden":true,
+                    "visible":false
+                },
+				{
+                    "id":"assignmentsview",
                     "type":"Dataassignment",
                     "title":"Assignments",
                     "value":"",

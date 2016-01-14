@@ -49,6 +49,7 @@ public class AssignmentDataMarshaller
                 "\"" + "outputVariables" + "\":\"" + o.getOutputVariablesString() + "\"," +
                 "\"" + "processVariables" + "\":\"" + o.getProcessVariablesString() + "\"," +
                 "\"" + "assignments" + "\":\"" + o.getAssignmentsString() + "\"," +
+                "\"" + "variablecountsstring" + "\":\"" + o.getVariableCountsString() + "\"," +
                 "\"" + "dataTypes" + "\":\"" + o.getDataTypesString() + "\"," +
                 "\"" + "disallowedPropertyNames" + "\":\"" + o.getDisallowedPropertyNamesString() + "\"}";
     }
