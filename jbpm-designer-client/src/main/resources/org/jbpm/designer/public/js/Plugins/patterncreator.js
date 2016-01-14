@@ -183,7 +183,7 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
         };
         this.patternShapes[element.id] = this.facade.createShape(elementOptions);
         this.patternPositions[element.id] = elementPosition;
-        //this.patternShapes[element.id].setProperty("oryx-name", element.name);
+        this.setElementProperties(element);
         this.patternShapes[element.id].refresh();
         this.facade.getCanvas().update();
 
@@ -211,7 +211,7 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
                     };
                     this.patternShapes[elementChildObject.id] = this.facade.createShape(elementChildOptions);
                     this.patternPositions[elementChildObject.id] = childPosition;
-                    //this.patternShapes[elementChildObject.id].setProperty("oryx-name", elementChildObject.name);
+                    this.setElementProperties(elementChildObject);
                     this.patternShapes[elementChildObject.id].refresh();
                     this.facade.getCanvas().update();
                 }
@@ -307,6 +307,14 @@ ORYX.Plugins.PatternCreator = Clazz.extend({
                 title       : ''
 
             });
+        }
+    },
+    setElementProperties : function(element) {
+        if(element.properties) {
+            var props = element.properties;
+            for(var nextProp in props) {
+                this.patternShapes[element.id].setProperty("oryx-" + nextProp, props[nextProp]);
+            }
         }
     },
     findParentShapes : function(selection) {
