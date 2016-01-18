@@ -24,13 +24,14 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.user.client.ui.IsWidget;
 import org.guvnor.common.services.shared.metadata.model.Overview;
+import org.jboss.errai.bus.client.api.messaging.Message;
 import org.jboss.errai.common.client.api.Caller;
 import org.jboss.errai.common.client.api.RemoteCallback;
+import org.jboss.errai.security.shared.api.identity.User;
 import org.jbpm.designer.client.parameters.DesignerEditorParametersPublisher;
 import org.jbpm.designer.client.popup.ActivityDataIOEditor;
 import org.jbpm.designer.client.shared.AssignmentData;
 import org.jbpm.designer.client.shared.Variable;
-import org.jboss.errai.security.shared.api.identity.User;
 import org.jbpm.designer.client.type.Bpmn2Type;
 import org.jbpm.designer.notification.DesignerNotificationEvent;
 import org.jbpm.designer.service.DesignerAssetService;
@@ -52,8 +53,10 @@ import org.uberfire.client.mvp.PlaceManager;
 import org.uberfire.client.mvp.UpdatedLockStatusEvent;
 import org.uberfire.ext.editor.commons.client.file.CommandWithFileNameAndCommitMessage;
 import org.uberfire.ext.editor.commons.client.file.CopyPopup;
+import org.uberfire.ext.editor.commons.client.file.CopyPopupView;
 import org.uberfire.ext.editor.commons.client.file.FileNameAndCommitMessage;
 import org.uberfire.ext.editor.commons.client.file.RenamePopup;
+import org.uberfire.ext.editor.commons.client.file.RenamePopupView;
 import org.uberfire.ext.editor.commons.service.CopyService;
 import org.uberfire.ext.editor.commons.service.DeleteService;
 import org.uberfire.ext.editor.commons.service.RenameService;
@@ -67,7 +70,6 @@ import org.uberfire.mvp.impl.PathPlaceRequest;
 import org.uberfire.util.URIUtil;
 import org.uberfire.workbench.events.NotificationEvent;
 import org.uberfire.workbench.model.menu.Menus;
-import org.jboss.errai.bus.client.api.messaging.Message;
 
 import static org.uberfire.ext.widgets.common.client.common.ConcurrentChangePopup.*;
 
@@ -117,7 +119,7 @@ public class DesignerPresenter
     @OnStartup
     public void onStartup( final ObservablePath path,
                            final PlaceRequest place ) {
-        super.init(path, place, resourceType);
+        super.init( path, place, resourceType );
     }
 
     @OnMayClose
@@ -132,18 +134,18 @@ public class DesignerPresenter
 
     protected void makeMenuBar() {
         menus = menuBuilder
-                .addSave(versionRecordManager.newSaveMenuItem(new Command() {
+                .addSave( versionRecordManager.newSaveMenuItem( new Command() {
                     @Override
                     public void execute() {
                         onSave();
                     }
-                }))
-                .addCopy(versionRecordManager.getCurrentPath(),
-                        fileNameValidator)
-                .addRename(versionRecordManager.getPathToLatest(),
-                        fileNameValidator)
-                .addDelete(versionRecordManager.getPathToLatest())
-                .addNewTopLevelMenu(versionRecordManager.buildMenu())
+                } ) )
+                .addCopy( versionRecordManager.getCurrentPath(),
+                          fileNameValidator )
+                .addRename( versionRecordManager.getPathToLatest(),
+                            fileNameValidator )
+                .addDelete( versionRecordManager.getPathToLatest() )
+                .addNewTopLevelMenu( versionRecordManager.buildMenu() )
                 .build();
     }
 
@@ -167,14 +169,14 @@ public class DesignerPresenter
     }
 
     public void notifyOpenInXMLEditor( @Observes final DesignerNotificationEvent event ) {
-        if (user.getIdentifier().equals(event.getUserId())) {
-            if(event.getNotification() != null && event.getNotification().equals("openinxmleditor")) {
+        if ( user.getIdentifier().equals( event.getUserId() ) ) {
+            if ( event.getNotification() != null && event.getNotification().equals( "openinxmleditor" ) ) {
                 view.askOpenInXMLEditor();
             }
         }
     }
 
-    public void onLockChange( @Observes UpdatedLockStatusEvent updateLockEvent) {
+    public void onLockChange( @Observes UpdatedLockStatusEvent updateLockEvent ) {
         view.raiseEventUpdateLock();
     }
 
@@ -232,7 +234,6 @@ public class DesignerPresenter
         }
     }-*/;
 
-
     public boolean isLatest() {
         return versionRecordManager.isCurrentLatest();
     }
@@ -247,21 +248,35 @@ public class DesignerPresenter
         vfsServices.call( new RemoteCallback<ObservablePath>() {
             @Override
             public void callback( final ObservablePath mypath ) {
+                final CopyPopupView copyPopupView = CopyPopup.getDefaultView();
                 final CopyPopup popup = new CopyPopup( mypath,
                                                        fileNameValidator,
                                                        new CommandWithFileNameAndCommitMessage() {
                                                            @Override
                                                            public void execute( final FileNameAndCommitMessage details ) {
                                                                baseView.showLoading();
-                                                               copyService.call( getCopySuccessCallback(),
-                                                                                 new HasBusyIndicatorDefaultErrorCallback( baseView ) ).copy( mypath,
-                                                                                                                                              details.getNewFileName(),
-                                                                                                                                              details.getCommitMessage() );
+                                                               copyService.call( getCopySuccessCallback( copyPopupView ),
+                                                                                 getCopyErrorCallback( copyPopupView ) ).copy( mypath,
+                                                                                                                               details.getNewFileName(),
+                                                                                                                               details.getCommitMessage() );
                                                            }
-                                                       } );
+                                                       },
+                                                       copyPopupView );
                 popup.show();
             }
         } ).get( URIUtil.encode( uri ) );
+    }
+
+    private HasBusyIndicatorDefaultErrorCallback getCopyErrorCallback( final CopyPopupView copyPopupView ) {
+        return new HasBusyIndicatorDefaultErrorCallback( baseView ) {
+
+            @Override
+            public boolean error( final Message message,
+                                  final Throwable throwable ) {
+                copyPopupView.hide();
+                return super.error( message, throwable );
+            }
+        };
     }
 
 //    AssignmentData _assignmentData = new AssignmentData("inStr:String,inInt1:Integer,inCustom1:org.jdl.Custom,inStrConst:String,Skippable",
@@ -270,30 +285,37 @@ public class DesignerPresenter
 //            "[din]str1->inStr,[din]int1->inInt1,[din]custom1->inCustom1,[din]inStrConst=TheString,[dout]outStr1->str1,[dout]outInt1->int1,[dout]outCustom1->custom1",
 //            "String:String, Integer:Integer, Boolean:Boolean, Float:Float, Object:Object");
 
-    public void showDataIOEditor(final String taskName, final String datainput, final String datainputset, final String dataoutput,
-            final String dataoutputset, final String processvars, final String assignments, final String datatypes,
-            final String disallowedpropertynames, final JavaScriptObject jscallback) {
+    public void showDataIOEditor( final String taskName,
+                                  final String datainput,
+                                  final String datainputset,
+                                  final String dataoutput,
+                                  final String dataoutputset,
+                                  final String processvars,
+                                  final String assignments,
+                                  final String datatypes,
+                                  final String disallowedpropertynames,
+                                  final JavaScriptObject jscallback ) {
 
         //getDataIOEditorData("{ \"a\":\"hello\" }", jscallback);
         final DesignerPresenter dp = this;
         activityDataIOEditor.setCallback(
                 new ActivityDataIOEditor.GetDataCallback() {
                     @Override
-                    public void getData(String data) {
-                        dp.getDataIOEditorData(data, jscallback);
+                    public void getData( String data ) {
+                        dp.getDataIOEditorData( data, jscallback );
                     }
                 }
-        );
+                                        );
 
         String inputvars = null;
         boolean hasInputVars = false;
         boolean isSingleInputVar = false;
-        if (datainput != null) {
+        if ( datainput != null ) {
             inputvars = datainput;
             hasInputVars = true;
             isSingleInputVar = true;
         }
-        if (datainputset != null) {
+        if ( datainputset != null ) {
             inputvars = datainputset;
             hasInputVars = true;
             isSingleInputVar = false;
@@ -302,30 +324,31 @@ public class DesignerPresenter
         String outputvars = null;
         boolean hasOutputVars = false;
         boolean isSingleOutputVar = false;
-        if (dataoutput != null) {
+        if ( dataoutput != null ) {
             outputvars = dataoutput;
             hasOutputVars = true;
             isSingleOutputVar = true;
         }
-        if (dataoutputset != null) {
+        if ( dataoutputset != null ) {
             outputvars = dataoutputset;
             hasOutputVars = true;
             isSingleOutputVar = false;
         }
 
-        AssignmentData assignmentData = new AssignmentData(inputvars, outputvars, processvars, assignments, datatypes, disallowedpropertynames);
-        activityDataIOEditor.setAssignmentData(assignmentData);
-        activityDataIOEditor.setDisallowedPropertyNames(assignmentData.getDisallowedPropertyNames());
-        activityDataIOEditor.setInputAssignmentRows(assignmentData.getAssignmentRows(Variable.VariableType.INPUT));
-        activityDataIOEditor.setOutputAssignmentRows(assignmentData.getAssignmentRows(Variable.VariableType.OUTPUT));
-        activityDataIOEditor.setDataTypes(assignmentData.getDataTypes(), assignmentData.getDataTypeDisplayNames());
-        activityDataIOEditor.setProcessVariables(assignmentData.getProcessVariableNames());
+        AssignmentData assignmentData = new AssignmentData( inputvars, outputvars, processvars, assignments, datatypes, disallowedpropertynames );
+        activityDataIOEditor.setAssignmentData( assignmentData );
+        activityDataIOEditor.setDisallowedPropertyNames( assignmentData.getDisallowedPropertyNames() );
+        activityDataIOEditor.setInputAssignmentRows( assignmentData.getAssignmentRows( Variable.VariableType.INPUT ) );
+        activityDataIOEditor.setOutputAssignmentRows( assignmentData.getAssignmentRows( Variable.VariableType.OUTPUT ) );
+        activityDataIOEditor.setDataTypes( assignmentData.getDataTypes(), assignmentData.getDataTypeDisplayNames() );
+        activityDataIOEditor.setProcessVariables( assignmentData.getProcessVariableNames() );
 
-        activityDataIOEditor.configureDialog(taskName, hasInputVars, isSingleInputVar, hasOutputVars, isSingleOutputVar);
+        activityDataIOEditor.configureDialog( taskName, hasInputVars, isSingleInputVar, hasOutputVars, isSingleOutputVar );
         activityDataIOEditor.show();
     }
 
-    private native void getDataIOEditorData(String assignmentData, final JavaScriptObject jscallback)/*-{
+    private native void getDataIOEditorData( String assignmentData,
+                                             final JavaScriptObject jscallback )/*-{
         jscallback(assignmentData);
         //$wnd.alert("DesignerPresenter.getDataIOEditorData assignmentdata = " + assignmentData);
     }-*/;
@@ -334,26 +357,40 @@ public class DesignerPresenter
         vfsServices.call( new RemoteCallback<ObservablePath>() {
             @Override
             public void callback( final ObservablePath mypath ) {
+                final RenamePopupView renamePopupView = RenamePopup.getDefaultView();
                 final RenamePopup popup = new RenamePopup( mypath,
                                                            fileNameValidator,
                                                            new CommandWithFileNameAndCommitMessage() {
                                                                @Override
                                                                public void execute( final FileNameAndCommitMessage details ) {
                                                                    baseView.showLoading();
-                                                                   renameService.call( getRenameSuccessCallback(),
-                                                                                       new HasBusyIndicatorDefaultErrorCallback( baseView ) ).rename( versionRecordManager.getPathToLatest(),
-                                                                                                                                                      details.getNewFileName(),
-                                                                                                                                                      details.getCommitMessage() );
+                                                                   renameService.call( getRenameSuccessCallback( renamePopupView ),
+                                                                                       getRenameErrorCallback( renamePopupView ) ).rename( versionRecordManager.getPathToLatest(),
+                                                                                                                                           details.getNewFileName(),
+                                                                                                                                           details.getCommitMessage() );
                                                                }
-                                                           } );
+                                                           },
+                                                           renamePopupView );
 
                 popup.show();
             }
-        } ).get(URIUtil.encode(uri));
+        } ).get( URIUtil.encode( uri ) );
+    }
+
+    private HasBusyIndicatorDefaultErrorCallback getRenameErrorCallback( final RenamePopupView renamePopupView ) {
+        return new HasBusyIndicatorDefaultErrorCallback( baseView ) {
+
+            @Override
+            public boolean error( final Message message,
+                                  final Throwable throwable ) {
+                renamePopupView.hide();
+                return super.error( message, throwable );
+            }
+        };
     }
 
     private void refreshTitle() {
-        baseView.refreshTitle(getTitleText());
+        baseView.refreshTitle( getTitleText() );
     }
 
     public void assetDeleteEvent( String uri ) {
@@ -365,7 +402,7 @@ public class DesignerPresenter
                                                                                                    "" );
 
             }
-        } ).get(URIUtil.encode(uri));
+        } ).get( URIUtil.encode( uri ) );
     }
 
     public boolean assetUpdatedEvent() {
@@ -404,31 +441,33 @@ public class DesignerPresenter
 
             @Override
             public void callback( final Void response ) {
-                notification.fire(new NotificationEvent(CommonConstants.INSTANCE.ItemDeletedSuccessfully()));
-                placeManager.forceClosePlace(new PathPlaceRequest(path));
+                notification.fire( new NotificationEvent( CommonConstants.INSTANCE.ItemDeletedSuccessfully() ) );
+                placeManager.forceClosePlace( new PathPlaceRequest( path ) );
             }
         };
     }
 
-    private RemoteCallback<Path> getCopySuccessCallback() {
+    private RemoteCallback<Path> getCopySuccessCallback( final CopyPopupView copyPopupView ) {
         return new RemoteCallback<Path>() {
             @Override
             public void callback( final Path path ) {
+                copyPopupView.hide();
                 baseView.hideBusyIndicator();
-                notification.fire(new NotificationEvent(CommonConstants.INSTANCE.ItemCopiedSuccessfully()));
+                notification.fire( new NotificationEvent( CommonConstants.INSTANCE.ItemCopiedSuccessfully() ) );
             }
         };
     }
 
-    private RemoteCallback<Path> getRenameSuccessCallback() {
+    private RemoteCallback<Path> getRenameSuccessCallback( final RenamePopupView renamePopupView ) {
         return new RemoteCallback<Path>() {
 
             @Override
             public void callback( final Path path ) {
+                renamePopupView.hide();
                 baseView.hideBusyIndicator();
                 notification.fire( new NotificationEvent( CommonConstants.INSTANCE.ItemRenamedSuccessfully() ) );
-                placeManager.forceClosePlace(place);
-                placeManager.goTo(path);
+                placeManager.forceClosePlace( place );
+                placeManager.goTo( path );
             }
         };
     }
@@ -441,7 +480,7 @@ public class DesignerPresenter
 
         placeRequestImpl.addParameter( "uuid", uri );
         placeRequestImpl.addParameter( "profile", "jbpm" );
-        this.placeManager.goTo(placeRequestImpl);
+        this.placeManager.goTo( placeRequestImpl );
     }
 
     public void openInXMLEditorTab( String uri ) {
@@ -454,7 +493,7 @@ public class DesignerPresenter
                 placeManager.forceClosePlace( place );
                 placeManager.goTo( placeRequestImpl );
             }
-        } ).get(URIUtil.encode(uri));
+        } ).get( URIUtil.encode( uri ) );
     }
 
     private void disableMenus() {
@@ -464,14 +503,14 @@ public class DesignerPresenter
     @Override
     protected void loadContent() {
         this.publishOpenInTab( this );
-        this.publishOpenInXMLEditorTab(this );
-        this.publishSignalOnAssetDelete(this );
-        this.publishSignalOnAssetCopy(this );
-        this.publishSignalOnAssetRename(this );
-        this.publishSignalOnAssetUpdate(this );
-        this.publishClosePlace(this );
-        this.publishShowDataIOEditor(this);
-        this.publishIsLatest(this);
+        this.publishOpenInXMLEditorTab( this );
+        this.publishSignalOnAssetDelete( this );
+        this.publishSignalOnAssetCopy( this );
+        this.publishSignalOnAssetRename( this );
+        this.publishSignalOnAssetUpdate( this );
+        this.publishClosePlace( this );
+        this.publishShowDataIOEditor( this );
+        this.publishIsLatest( this );
 
         if ( versionRecordManager.getCurrentPath() != null ) {
             assetService.call( new RemoteCallback<String>() {
@@ -479,34 +518,34 @@ public class DesignerPresenter
                 public void callback( final String editorID ) {
                     String url = GWT.getHostPageBaseURL().replaceFirst( "/" + GWT.getModuleName() + "/", "" );
                     assetService.call( new RemoteCallback<Map<String, String>>() {
-                        @Override
-                        public void callback( final Map<String, String> editorParameters ) {
-
-                            assetService.call( new RemoteCallback<DesignerContent>() {
-                                @Override
-                                public void callback( DesignerContent content ) {
-                                    setup( editorParameters, editorID, content.getOverview() );
-                                }
-                            } ).loadContent( versionRecordManager.getCurrentPath() );
-
-                        }
-
-                    }, new CommandDrivenErrorCallback( view,
-                                                       new CommandBuilder()
-                                                               .addNoSuchFileException( view, menus )
-                                                               .addFileSystemNotFoundException( view, menus )
-                                                               .build() )
-                                       {
                                            @Override
-                                           public boolean error( final Message message, final Throwable throwable ) {
+                                           public void callback( final Map<String, String> editorParameters ) {
+
+                                               assetService.call( new RemoteCallback<DesignerContent>() {
+                                                   @Override
+                                                   public void callback( DesignerContent content ) {
+                                                       setup( editorParameters, editorID, content.getOverview() );
+                                                   }
+                                               } ).loadContent( versionRecordManager.getCurrentPath() );
+
+                                           }
+
+                                       }, new CommandDrivenErrorCallback( view,
+                                                                          new CommandBuilder()
+                                                                                  .addNoSuchFileException( view, menus )
+                                                                                  .addFileSystemNotFoundException( view, menus )
+                                                                                  .build() ) {
+                                           @Override
+                                           public boolean error( final Message message,
+                                                                 final Throwable throwable ) {
                                                placeManager.forceClosePlace( place );
                                                return super.error( message, throwable );
                                            }
                                        }
-                    ).getEditorParameters( versionRecordManager.getCurrentPath(),
-                                                                                                 editorID,
-                                                                                                 url,
-                                                                                                 place );
+                                     ).getEditorParameters( versionRecordManager.getCurrentPath(),
+                                                            editorID,
+                                                            url,
+                                                            place );
                 }
             } ).getEditorID();
         }
@@ -523,16 +562,16 @@ public class DesignerPresenter
             if ( editorParameters.containsKey( "readonly" ) ) {
                 isReadOnly = Boolean.valueOf( editorParameters.get( "readonly" ) );
             }
-            
-            designerEditorParametersPublisher.publish(editorParameters);
 
-            view.setup(editorID, editorParameters);
+            designerEditorParametersPublisher.publish( editorParameters );
+
+            view.setup( editorID, editorParameters );
         }
     }
 
     protected void save() {
         ObservablePath latestPath = versionRecordManager.getPathToLatest();
-        view.raiseEventCheckSave(latestPath.toURI());
+        view.raiseEventCheckSave( latestPath.toURI() );
     }
 
     public void reload() {
