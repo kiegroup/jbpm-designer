@@ -52,6 +52,7 @@ import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.UriUtils;
 import org.jbpm.designer.repository.filters.FilterByExtension;
+import org.jbpm.designer.repository.filters.FilterByFileName;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
 import org.jbpm.designer.util.Base64Backport;
@@ -83,6 +84,8 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     public static final String WORKITEM_DEFINITION_EXT = "wid";
     public static final String THEME_NAME = "themes";
     public static final String THEME_EXT = ".json";
+    public static final String PATTERNS_NAME = "patterns";
+    public static final String PATTERNS_EXT = ".json";
     public static final String DEFAULT_THEME_NAME = "jBPM";
     public static final String CUSTOMEDITORS_NAME = "customeditors";
     public static final String PROCESSDICTIONARY_NAME = "processdictionary";
@@ -195,6 +198,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             setupCustomEditors(repository, profile);
             setupFormWidgets(repository, profile);
             setupDefaultIcons(globalDir, repository);
+            setupDefaultWorkflowPatterns(globalDir, repository);
 
             // figure out which package our uuid belongs in and get back the list of configs
             Collection<Asset> workitemConfigInfo = findWorkitemInfoForUUID(asset.getAssetLocation(), repository);
@@ -241,7 +245,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             }
             // parse the profile json to include config data
             // parse patterns data
-            JSONArray patternsArray = new JSONArray(readFile(patternsData));
+            JSONArray patternsArray = new JSONArray(findWorkflowPatterns(repository).getAssetContent());
             Map<String, PatternInfo> patternInfoMap = new HashMap<String, PatternInfo>();
             for(int i=0; i < patternsArray.length(); i++) {
                 JSONObject patternObj = patternsArray.getJSONObject(i);
@@ -609,6 +613,15 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
     }
 
+    private void setupDefaultWorkflowPatterns(String location, Repository repository) {
+        try {
+            createAssetIfNotExisting(repository, location, "patterns", "json",
+                    getBytesFromFile(new File(patternsData)));
+        } catch (Exception e) {
+            _logger.error(e.getMessage());
+        }
+    }
+
     private void setupDefaultWorkitemConfigs(String location, Repository repository) {
         try {
             location = UriUtils.encode(location);
@@ -652,6 +665,10 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             }
         });
         return widAssets;
+    }
+
+    private Asset<String> findWorkflowPatterns(Repository repository) {
+        return repository.loadAssetFromPath(this.globalDir + "/" + PATTERNS_NAME + PATTERNS_EXT);
     }
 
     protected static String readFile(String pathname) throws IOException {
