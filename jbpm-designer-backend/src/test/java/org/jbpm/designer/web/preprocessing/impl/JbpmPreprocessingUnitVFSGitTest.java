@@ -131,7 +131,7 @@ public class JbpmPreprocessingUnitVFSGitTest {
         // validate results
         Collection<Asset> globalAssets = repository.listAssets("/global");
         assertNotNull(globalAssets);
-        assertEquals(30, globalAssets.size());
+        assertEquals(31, globalAssets.size());
         repository.assetExists("/global/backboneformsinclude.fw");
         repository.assetExists("/global/backbonejsinclude.fw");
         repository.assetExists("/global/cancelbutton.fw");
@@ -161,6 +161,7 @@ public class JbpmPreprocessingUnitVFSGitTest {
         repository.assetExists("/global/defaultemailicon.gif");
         repository.assetExists("/global/defaultlogicon.gif");
         repository.assetExists("/global/defaultservicenodeicon.png");
+        repository.assetExists("/global/patterns.json");
         repository.assetExists("/global/.gitignore");
 
         Collection<Asset> defaultStuff = repository.listAssets("/myprocesses");

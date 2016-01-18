@@ -15,11 +15,18 @@
 
 package org.jbpm.designer.web.server;
 
+import org.jbpm.designer.repository.Asset;
+import org.jbpm.designer.repository.Repository;
+import org.jbpm.designer.util.Utils;
+import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.jbpm.designer.util.ConfigurationProvider;
 
+import javax.inject.Inject;
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -38,7 +45,17 @@ import java.util.Scanner;
 public class StencilPatternsServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final Logger _logger = LoggerFactory.getLogger(StencilPatternsServlet.class);
-    private static final String designer_path = ConfigurationProvider.getInstance().getDesignerContext();
+    public static final String PATTERNS_NAME = "patterns";
+
+
+    private IDiagramProfile profile;
+    // this is here just for unit testing purpose
+    public void setProfile(IDiagramProfile profile) {
+        this.profile = profile;
+    }
+
+    @Inject
+    private IDiagramProfileService _profileService = null;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -49,33 +66,33 @@ public class StencilPatternsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         // for now just return the patterns data json
-        try {
-            String patternsDataPath = getServletContext().getRealPath(designer_path + "defaults/patterns.json");
+        String profileName = req.getParameter("profile");
+        String uuid = Utils.getUUID(req);
 
-            PrintWriter pw = resp.getWriter();
-            resp.setContentType("text/json");
-            resp.setCharacterEncoding("UTF-8");
-            pw.write(readFile(patternsDataPath));
-        } catch (IOException e) {
-            _logger.error(e.getMessage());
-            PrintWriter pw = resp.getWriter();
-            resp.setContentType("text/json");
-            resp.setCharacterEncoding("UTF-8");
-            pw.write("");
+        if (profile == null) {
+            profile = _profileService.findProfile(req, profileName);
         }
+        String patternsJSON = getWorkflowPatternJSON(profile, uuid);
+        PrintWriter pw = resp.getWriter();
+        resp.setContentType("text/json");
+        resp.setCharacterEncoding("UTF-8");
+        pw.write(patternsJSON);
     }
 
-    private String readFile(String pathname) throws IOException {
-        StringBuilder fileContents = new StringBuilder();
-        Scanner scanner = new Scanner(new File(pathname), "UTF-8");
-        String lineSeparator = System.getProperty("line.separator");
+    private String getWorkflowPatternJSON(IDiagramProfile profile, String uuid) {
+
+        String retStr = "";
+        Repository repository = profile.getRepository();
         try {
-            while(scanner.hasNextLine()) {
-                fileContents.append(scanner.nextLine() + lineSeparator);
-            }
-            return fileContents.toString();
-        } finally {
-            scanner.close();
+            Asset<String> patternAsset = repository.loadAssetFromPath(profile.getRepositoryGlobalDir( uuid ) + "/" + PATTERNS_NAME + ".json");
+
+            retStr = patternAsset.getAssetContent();
+
+        } catch (Exception e) {
+            _logger.error("Error retriving patterns info: " + e.getMessage());
         }
+
+        return retStr;
     }
+
 }

@@ -791,7 +791,7 @@ public class VFSRepositoryGitFileSystemTest {
         Directory testProjectDir = repository.createDirectory("/mytestproject");
 
         final KieProject mockProject = mock(KieProject.class);
-        when( mockProject.getRootPath() ).thenReturn(Paths.convert( producer.getIoService().get( URI.create( decodeUniqueId(testProjectDir.getUniqueId()) ) ) ) );
+        when( mockProject.getRootPath() ).thenReturn(Paths.convert(producer.getIoService().get(URI.create(decodeUniqueId(testProjectDir.getUniqueId())))));
 
         NewProjectEvent event = mock(NewProjectEvent.class);
         when(event.getProject()).thenReturn(mockProject);
@@ -805,6 +805,10 @@ public class VFSRepositoryGitFileSystemTest {
         assertNotNull(foundFormTemplates);
         assertEquals(25, foundFormTemplates.size());
 
+        Collection<Asset> foundJSONAssets = repository.listAssets("/mytestproject/global", new FilterByExtension("json"));
+        assertNotNull(foundJSONAssets);
+        assertEquals(3, foundJSONAssets.size());
+
         // call again to try to trigger FileAlreadyExistsException
         repository.createGlobalDirOnNewProject(event);
 
@@ -815,6 +819,10 @@ public class VFSRepositoryGitFileSystemTest {
         Collection<Asset> foundFormTemplatesAfterSecondCall = repository.listAssets("/mytestproject/global", new FilterByExtension("fw"));
         assertNotNull(foundFormTemplatesAfterSecondCall);
         assertEquals(25, foundFormTemplatesAfterSecondCall.size());
+
+        Collection<Asset> foundJSONAssetsAfterSecondCall = repository.listAssets("/mytestproject/global", new FilterByExtension("json"));
+        assertNotNull(foundJSONAssetsAfterSecondCall);
+        assertEquals(3, foundJSONAssetsAfterSecondCall.size());
 
     }
 
