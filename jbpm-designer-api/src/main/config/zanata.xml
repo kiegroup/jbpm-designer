@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<config xmlns="http://zanata.org/namespace/config/">
+  <url>https://translate.jboss.org/</url>
+  <project>jbpm-designer</project>
+  <project-version>6.4.0</project-version>
+  <project-type>properties</project-type>
+
+  <locales>
+      <locale map-from="zh_CN">zh-Hans</locale>
+      <locale map-from="zh-TW">zh-Hant</locale>
+      <locale>pt-BR</locale>
+      <locale>de</locale>
+      <locale>ru</locale>
+      <locale>es</locale>
+      <locale>ja</locale>
+      <locale>fr</locale>
+  </locales>
+
+</config>
