@@ -222,7 +222,7 @@
 
     <dependency>
       <groupId>org.jboss.errai</groupId>
-      <artifactId>errai-weld-integration</artifactId>
+      <artifactId>errai-cdi-server</artifactId>
     </dependency>
 
     <dependency>
@@ -650,7 +650,7 @@
         <artifactId>gwt-maven-plugin</artifactId>
         <configuration>
           <deploy>${project.build.directory}/gwt-symbols-deploy</deploy>
-          <extraJvmArgs>-Xmx2048m -XX:MaxPermSize=256m -Xms1024m -XX:PermSize=128m -Xss1M -XX:CompileThreshold=7000 -Derrai.jboss.home=${errai.jboss.home} -Derrai.marshalling.server.classOutput=${project.build.outputDirectory}</extraJvmArgs>
+          <extraJvmArgs>-Xmx2048m -Xms1024m -Xss1M -XX:CompileThreshold=7000 -Derrai.jboss.home=${errai.jboss.home} -Derrai.marshalling.server.classOutput=${project.build.outputDirectory}</extraJvmArgs>
           <module>org.jbpm.designer.FastCompiledjBPMDesigner</module>
           <logLevel>INFO</logLevel>
           <noServer>false</noServer>
@@ -892,7 +892,7 @@
               <!-- Build all GWT permutations and optimize them -->
               <module>org.jbpm.designer.jBPMDesigner</module>
               <draftCompile>false</draftCompile>
-              <extraJvmArgs>-Xms512m -Xmx1024m -XX:PermSize=128m -XX:MaxPermSize=256m -Xss1M</extraJvmArgs>
+              <extraJvmArgs>-Xms512m -Xmx1024m -Xss1M</extraJvmArgs>
             </configuration>
           </plugin>
         </plugins>
