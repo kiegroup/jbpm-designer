@@ -10,3 +10,6 @@ Eclipse, Netbeans and IntelliJ files
 .DS_Store
 
 /bin
+
+# Created by Zanata
+/org.jbpm
