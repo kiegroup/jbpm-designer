@@ -861,7 +861,7 @@ ORYX.Plugins.View = {
             title       : ''
 
         });
-        var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false));
+        var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(true, true));
 
         Ext.Ajax.request({
             url: ORYX.PATH + "transformer",
@@ -927,7 +927,7 @@ ORYX.Plugins.View = {
             title       : ''
 
         });
-        var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false));
+        var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(true, true));
 
         Ext.Ajax.request({
             url: ORYX.PATH + "transformer",
@@ -1365,7 +1365,7 @@ ORYX.Plugins.View = {
 
     showAsSVG : function() {
         var processJSON = ORYX.EDITOR.getSerializedJSON();
-        var rawSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getRootNode().cloneNode(true));
+        var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(true));
         var processName = jsonPath(processJSON.evalJSON(), "$.properties.processn");
         var processPackage = jsonPath(processJSON.evalJSON(), "$.properties.package");
         var processVersion = jsonPath(processJSON.evalJSON(), "$.properties.version");
@@ -1436,7 +1436,7 @@ ORYX.Plugins.View = {
         var fdataInput = document.createElement("input");
         fdataInput.setAttribute("type", "hidden");
         fdataInput.setAttribute("name", "data_encoded");
-        fdataInput.setAttribute("value", Base64.encode(rawSvgDOM));
+        fdataInput.setAttribute("value", Base64.encode(formattedSvgDOM));
         form.appendChild(fdataInput);
         document.body.appendChild(form);
         form.submit();
@@ -1448,7 +1448,7 @@ ORYX.Plugins.View = {
      */
     showAsPDF : function() {
         var transformval = 'pdf';
-        var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false, true));
+        var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(true, true));
         var method ="post";
         var form = document.createElement("form");
         form.setAttribute("name", "transformerform");
@@ -1496,7 +1496,7 @@ ORYX.Plugins.View = {
      * Displays the process SVG sources (formatted)
      */
     showProcessSVG : function() {
-        var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false));
+        var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(true));
         var cf = new Ext.form.TextArea({
             id:"svgSourceTextArea",
             fieldLabel:ORYX.I18N.view.processSVGSource,
@@ -1729,7 +1729,7 @@ ORYX.Plugins.View = {
     showProcessSources : function() {
         var processJSON = ORYX.EDITOR.getSerializedJSON();
         var processERDF = ORYX.EDITOR.getERDF();
-        var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false));
+        var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(true));
 
         Ext.Ajax.request({
             url: ORYX.PATH + "uuidRepository",
@@ -1971,7 +1971,7 @@ ORYX.Plugins.View = {
      */
     showAsPNG : function() {
         var transformval = 'png';
-        var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false, true));
+        var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(true, true));
         var method ="post";
         var form = document.createElement("form");
         form.setAttribute("name", "transformerform");
