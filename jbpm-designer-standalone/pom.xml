@@ -892,7 +892,7 @@
               <!-- Build all GWT permutations and optimize them -->
               <module>org.jbpm.designer.jBPMDesigner</module>
               <draftCompile>false</draftCompile>
-              <extraJvmArgs>-Xms512m -Xmx1024m -Xss1M</extraJvmArgs>
+              <extraJvmArgs>-Xms1g -Xmx2g -Xss1M</extraJvmArgs>
             </configuration>
           </plugin>
         </plugins>
