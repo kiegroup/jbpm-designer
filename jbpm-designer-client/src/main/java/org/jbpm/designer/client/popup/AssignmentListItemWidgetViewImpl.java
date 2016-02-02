@@ -121,7 +121,7 @@ public class AssignmentListItemWidgetViewImpl extends Composite implements Assig
     ComboBox processVarComboBox;
 
     @Inject
-    private Event<NotificationEvent> notification;
+    protected Event<NotificationEvent> notification;
 
     @Inject
     @DataField
