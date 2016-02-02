@@ -204,7 +204,7 @@ public class ActivityDataIOEditorTest {
 
     @Test
     public void testInputAssignmentsRows() {
-        AssignmentRow row = mock(AssignmentRow.class);
+        AssignmentRow row = new AssignmentRow("varName", null, null, null, "varName", null);
         List<AssignmentRow> rows = new ArrayList<AssignmentRow>();
         rows.add(row);
 
@@ -212,11 +212,13 @@ public class ActivityDataIOEditorTest {
         verify(ioEditorView).setInputAssignmentRows(listAssignmentCaptor.capture());
         assertEquals(1, listAssignmentCaptor.getValue().size());
         assertEquals(rows.get(0), listAssignmentCaptor.getValue().get(0));
+        assertEquals("varName", listAssignmentCaptor.getValue().get(0).getName());
+        assertEquals("varName", listAssignmentCaptor.getValue().get(0).getProcessVar());
     }
 
     @Test
     public void testOutputAssignmentsRows() {
-        AssignmentRow row = mock(AssignmentRow.class);
+        AssignmentRow row = new AssignmentRow("varName", null, null, null, "varName", null);
         List<AssignmentRow> rows = new ArrayList<AssignmentRow>();
         rows.add(row);
 
@@ -224,6 +226,8 @@ public class ActivityDataIOEditorTest {
         verify(ioEditorView).setOutputAssignmentRows(listAssignmentCaptor.capture());
         assertEquals(1, listAssignmentCaptor.getValue().size());
         assertEquals(rows.get(0), listAssignmentCaptor.getValue().get(0));
+        assertEquals("varName", listAssignmentCaptor.getValue().get(0).getName());
+        assertEquals("varName", listAssignmentCaptor.getValue().get(0).getProcessVar());
     }
 
     @Test
