@@ -47,7 +47,7 @@ public class ActivityDataIOEditorWidgetViewImpl extends Composite implements Act
 
     @Inject
     @DataField
-    private Button addVarButton;
+    protected Button addVarButton;
 
     @DataField
     private final Element table = DOM.createTable();
@@ -64,7 +64,7 @@ public class ActivityDataIOEditorWidgetViewImpl extends Composite implements Act
     @Inject
     @DataField
     @Table(root="tbody")
-    private ListWidget<AssignmentRow, AssignmentListItemWidgetViewImpl> assignments;
+    protected ListWidget<AssignmentRow, AssignmentListItemWidgetViewImpl> assignments;
 
     @Inject
     private Event<NotificationEvent> notification;
