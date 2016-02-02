@@ -46,10 +46,10 @@ public class ActivityDataIOEditorViewImpl extends BaseModal implements ActivityD
     private Presenter presenter;
 
     @Inject
-    private ActivityDataIOEditorWidget inputAssignmentsWidget;
+    protected ActivityDataIOEditorWidget inputAssignmentsWidget;
 
     @Inject
-    private ActivityDataIOEditorWidget outputAssignmentsWidget;
+    protected ActivityDataIOEditorWidget outputAssignmentsWidget;
 
     private Button btnSave;
 
