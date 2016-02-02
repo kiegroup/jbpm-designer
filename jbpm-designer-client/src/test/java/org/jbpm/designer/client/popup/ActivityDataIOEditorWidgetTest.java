@@ -28,9 +28,7 @@ import org.jbpm.designer.client.util.ListBoxValues;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Spy;
+import org.mockito.*;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -38,14 +36,11 @@ import static org.mockito.Mockito.*;
 @RunWith(GwtMockitoTestRunner.class)
 public class ActivityDataIOEditorWidgetTest {
 
-    @Mock
-    private AssignmentRow assignmentRowOne;
+    private AssignmentRow assignmentRowOne = new AssignmentRow("aBc", null, null, null, "aBc", "AbC");
 
-    @Mock
-    private AssignmentRow assignmentRowTwo;
+    private AssignmentRow assignmentRowTwo = new AssignmentRow("aBc", null, null, null, "aBc", "abc");
 
-    @Mock
-    private AssignmentRow assignmentRowThree;
+    private AssignmentRow assignmentRowThree = new AssignmentRow("def", null, null, null, "def", null);
 
     @Mock
     private AssignmentListItemWidgetViewImpl assignWidgetOne;
@@ -59,6 +54,9 @@ public class ActivityDataIOEditorWidgetTest {
     @Mock
     private ActivityDataIOEditorWidgetView view;
 
+    @Captor
+    private ArgumentCaptor<List<AssignmentRow>> captor;
+
     @Spy
     @InjectMocks
     private ActivityDataIOEditorWidget widget = new ActivityDataIOEditorWidget();
@@ -67,10 +65,6 @@ public class ActivityDataIOEditorWidgetTest {
 
     @Before
     public void initTestCase() {
-        when(assignmentRowOne.getName()).thenReturn("aBc");
-        when(assignmentRowTwo.getName()).thenReturn("aBc");
-        when(assignmentRowThree.getName()).thenReturn("def");
-
         rows = new ArrayList<AssignmentRow>();
         rows.add(assignmentRowOne);
         rows.add(assignmentRowTwo);
@@ -196,7 +190,8 @@ public class ActivityDataIOEditorWidgetTest {
         widget.setData(rows);
 
         verify(view).setNoneDisplayStyle();
-        verify(view).setAssignmentRows(rows);
+        verify(view).setAssignmentRows(captor.capture());
+        assertEquals(0, captor.getValue().size());
 
         verify(view, never()).getAssignmentWidget(anyInt());
     }
@@ -206,7 +201,11 @@ public class ActivityDataIOEditorWidgetTest {
         widget.setData(rows);
 
         verify(view).setTableDisplayStyle();
-        verify(view).setAssignmentRows(rows);
+        verify(view).setAssignmentRows(captor.capture());
+        assertEquals(3, captor.getValue().size());
+        assertTrue(captor.getValue().contains(assignmentRowOne));
+        assertTrue(captor.getValue().contains(assignmentRowTwo));
+        assertTrue(captor.getValue().contains(assignmentRowThree));
 
         verify(view, times(3)).getAssignmentWidget(0);
         verify(view, times(3)).getAssignmentWidget(1);
@@ -236,7 +235,12 @@ public class ActivityDataIOEditorWidgetTest {
         widget.setData(rows);
 
         verify(view).setTableDisplayStyle();
-        verify(view).setAssignmentRows(rows);
+        verify(view).setAssignmentRows(captor.capture());
+
+        assertEquals(1, captor.getValue().size());
+        assertEquals(assignmentRowThree, captor.getValue().get(0));
+        assertEquals("def", captor.getValue().get(0).getName());
+        assertEquals("def", captor.getValue().get(0).getProcessVar());
 
         verify(view, times(4)).getAssignmentWidget(0); //setData:3 + setDisallowed:1
         verify(view).getAssignmentWidget(1);
