@@ -16,6 +16,9 @@
 
 package org.jbpm.designer.client.popup;
 
+import org.jboss.errai.marshalling.client.api.MarshallingSession;
+import org.jbpm.designer.client.shared.AssignmentData;
+import org.jbpm.designer.client.shared.AssignmentDataMarshaller;
 import org.jbpm.designer.client.shared.AssignmentRow;
 import org.jbpm.designer.client.shared.Variable;
 import org.junit.Test;
@@ -50,7 +53,12 @@ public class ActivityDataIOEditorTest {
 
     @Spy
     @InjectMocks
-    private ActivityDataIOEditor ioEditor = new ActivityDataIOEditor();
+    private ActivityDataIOEditor ioEditor = new ActivityDataIOEditor() {
+        @Override
+        protected String marshallToJson(AssignmentData data) {
+            return new AssignmentDataMarshaller().doNotNullMarshall(data, mock(MarshallingSession.class));
+        }
+    };
 
     @Test
     public void testInitIoEditor() {
@@ -60,7 +68,7 @@ public class ActivityDataIOEditorTest {
 
     @Test
     public void testSaveClickCallback() {
-        AssignmentRow row = new AssignmentRow("name", Variable.VariableType.INPUT, "String", "Object", "var", "constant");
+        AssignmentRow row = new AssignmentRow("name", Variable.VariableType.INPUT, "String", "Object", "var", null);
 
         List<AssignmentRow> input = new ArrayList<AssignmentRow>();
         input.add(row);
@@ -80,20 +88,13 @@ public class ActivityDataIOEditorTest {
         ActivityDataIOEditor.GetDataCallback mockCallback = mock(ActivityDataIOEditor.GetDataCallback.class);
         ioEditor.setCallback(mockCallback);
 
-        try {
-            ioEditor.handleSaveClick();
-        }catch (NullPointerException e) {
-            //NPE because of Marshaling.toJSON(data);
-        }
+        ioEditor.handleSaveClick();
 
         verify(ioEditorView).getInputAssignmentData();
         verify(ioEditorView).getOutputAssignmentData();
 
-        // not executed because of NPE above
-        // verify(ioEditorView).hideView();
-
-         // not executed because of NPE above
-         // verify((ioEditor.callback)).getData(anyString());
+        verify(ioEditorView).hideView();
+        verify((ioEditor.callback)).getData(anyString());
     }
 
     @Test
@@ -204,30 +205,35 @@ public class ActivityDataIOEditorTest {
 
     @Test
     public void testInputAssignmentsRows() {
-        AssignmentRow row = new AssignmentRow("varName", null, null, null, "varName", null);
-        List<AssignmentRow> rows = new ArrayList<AssignmentRow>();
-        rows.add(row);
-
+        List<AssignmentRow> rows = getAssignmentsWithSameNames();
         ioEditor.setInputAssignmentRows(rows);
         verify(ioEditorView).setInputAssignmentRows(listAssignmentCaptor.capture());
-        assertEquals(1, listAssignmentCaptor.getValue().size());
-        assertEquals(rows.get(0), listAssignmentCaptor.getValue().get(0));
-        assertEquals("varName", listAssignmentCaptor.getValue().get(0).getName());
-        assertEquals("varName", listAssignmentCaptor.getValue().get(0).getProcessVar());
+        checkAssignmentsWithSameNames(rows);
     }
 
     @Test
     public void testOutputAssignmentsRows() {
-        AssignmentRow row = new AssignmentRow("varName", null, null, null, "varName", null);
-        List<AssignmentRow> rows = new ArrayList<AssignmentRow>();
-        rows.add(row);
-
+        List<AssignmentRow> rows = getAssignmentsWithSameNames();
         ioEditor.setOutputAssignmentRows(rows);
         verify(ioEditorView).setOutputAssignmentRows(listAssignmentCaptor.capture());
-        assertEquals(1, listAssignmentCaptor.getValue().size());
-        assertEquals(rows.get(0), listAssignmentCaptor.getValue().get(0));
+        checkAssignmentsWithSameNames(rows);
+    }
+
+    private List<AssignmentRow> getAssignmentsWithSameNames() {
+        List<AssignmentRow> rows = new ArrayList<AssignmentRow>();
+        rows.add(new AssignmentRow("varName", null, null, null, "varName", null));
+        rows.add(new AssignmentRow("varName2", null, null, null, "varName2", null));
+        return rows;
+    }
+
+    private void checkAssignmentsWithSameNames(List<AssignmentRow> assignments) {
+        assertEquals(2, listAssignmentCaptor.getValue().size());
+        assertEquals(assignments.get(0), listAssignmentCaptor.getValue().get(0));
         assertEquals("varName", listAssignmentCaptor.getValue().get(0).getName());
         assertEquals("varName", listAssignmentCaptor.getValue().get(0).getProcessVar());
+        assertEquals(assignments.get(1), listAssignmentCaptor.getValue().get(1));
+        assertEquals("varName2", listAssignmentCaptor.getValue().get(1).getName());
+        assertEquals("varName2", listAssignmentCaptor.getValue().get(1).getProcessVar());
     }
 
     @Test

@@ -72,10 +72,14 @@ public class ActivityDataIOEditor implements ActivityDataIOEditorView.Presenter 
             AssignmentData data = new AssignmentData( view.getInputAssignmentData(),
                     view.getOutputAssignmentData(), dataTypes, dataTypeDisplayNames );
             data.setVariableCountsString(hasInputVars, isSingleInputVar, hasOutputVars, isSingleOutputVar);
-            String sData = Marshalling.toJSON(data);
+            String sData = marshallToJson(data);
             callback.getData( sData );
         }
         view.hideView();
+    }
+
+    protected String marshallToJson(AssignmentData data) {
+        return Marshalling.toJSON(data);
     }
 
     @Override

@@ -342,6 +342,7 @@ public class DesignerPresenter
         }
 
         AssignmentData assignmentData = new AssignmentData( inputvars, outputvars, processvars, assignments, datatypes, disallowedpropertynames );
+        assignmentData.setVariableCountsString(hasInputVars, isSingleInputVar, hasOutputVars, isSingleOutputVar);
         activityDataIOEditor.setAssignmentData( assignmentData );
         activityDataIOEditor.setDisallowedPropertyNames( assignmentData.getDisallowedPropertyNames() );
         activityDataIOEditor.setInputAssignmentRows( assignmentData.getAssignmentRows( Variable.VariableType.INPUT ) );
