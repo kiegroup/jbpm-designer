@@ -136,4 +136,28 @@ public class Variable {
     public static Variable deserialize(String s, VariableType variableType) {
         return deserialize(s, variableType, null);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Variable)) return false;
+
+        Variable variable = (Variable) o;
+
+        if (getVariableType() != variable.getVariableType()) return false;
+        if (getName() != null ? !getName().equals(variable.getName()) : variable.getName() != null) return false;
+        if (getDataType() != null ? !getDataType().equals(variable.getDataType()) : variable.getDataType() != null)
+            return false;
+        return getCustomDataType() != null ? getCustomDataType().equals(variable.getCustomDataType()) : variable.getCustomDataType() == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getVariableType() != null ? getVariableType().hashCode() : 0;
+        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+        result = 31 * result + (getDataType() != null ? getDataType().hashCode() : 0);
+        result = 31 * result + (getCustomDataType() != null ? getCustomDataType().hashCode() : 0);
+        return result;
+    }
 }

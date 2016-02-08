@@ -119,22 +119,25 @@ public class Assignment {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Assignment)) return false;
+
+        Assignment that = (Assignment) o;
+
+        if (getVariable() != null ? !getVariable().equals(that.getVariable()) : that.getVariable() != null)
             return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Assignment other = (Assignment) obj;
-        if (variable == null) {
-            if (other.variable != null) {
-                return false;
-            }
-        } else if (variable != other.variable) {
-            return false;
-        }
-        return true;
+        if (processVar != null ? !processVar.equals(that.processVar) : that.processVar != null) return false;
+        return getConstant() != null ? getConstant().equals(that.getConstant()) : that.getConstant() == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getVariable() != null ? getVariable().hashCode() : 0;
+        result = 31 * result + (processVar != null ? processVar.hashCode() : 0);
+        result = 31 * result + (getConstant() != null ? getConstant().hashCode() : 0);
+        return result;
     }
 
     /**

@@ -58,16 +58,15 @@ public class ActivityDataIOEditorViewImplTest {
         doCallRealMethod().when(view).setInputAssignmentRows(any(List.class));
         doCallRealMethod().when(view).setOutputAssignmentRows(any(List.class));
 
-        AssignmentRow row = new AssignmentRow("varName", null, null, null, "varName", null);
         rows = new ArrayList<AssignmentRow>();
-        rows.add(row);
+        rows.add(new AssignmentRow("varName", null, null, null, "varName", null));
+        rows.add(new AssignmentRow("varName2", null, null, null, "varName2", null));
     }
 
     @Test
     public void testInputAssignmentsRowsSameSourceAndTargetName() {
         view.setInputAssignmentRows(rows);
         verify(inputAssignmentsWidget, times(1)).setData(listAssignmentCaptor.capture());
-        assertEquals(1, listAssignmentCaptor.getValue().size());
         verify(outputAssignmentsWidget, never()).setData(any(List.class));
         verifyForSameSourceAndTargetName();
     }
@@ -81,10 +80,13 @@ public class ActivityDataIOEditorViewImplTest {
     }
 
     private void verifyForSameSourceAndTargetName() {
-        assertEquals(1, listAssignmentCaptor.getValue().size());
+        assertEquals(2, listAssignmentCaptor.getValue().size());
         assertEquals(rows.get(0), listAssignmentCaptor.getValue().get(0));
         assertEquals("varName", listAssignmentCaptor.getValue().get(0).getName());
         assertEquals("varName", listAssignmentCaptor.getValue().get(0).getProcessVar());
+        assertEquals(rows.get(1), listAssignmentCaptor.getValue().get(1));
+        assertEquals("varName2", listAssignmentCaptor.getValue().get(1).getName());
+        assertEquals("varName2", listAssignmentCaptor.getValue().get(1).getProcessVar());
     }
 
 }
