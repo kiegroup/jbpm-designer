@@ -60,8 +60,8 @@ public class AssignmentData {
         // setDataTypes before variables because these determine whether variable datatypes are custom or not
         setDataTypes(sDataTypes);
         setProcessVariables(sProcessVariables);
-        setInputVariables(sInputVariables, dataTypes);
-        setOutputVariables(sOutputVariables, dataTypes);
+        setInputVariables(sInputVariables);
+        setOutputVariables(sOutputVariables);
         setAssignments(sAssignments);
         setDisallowedPropertyNames(sDisallowedPropertyNames);
     }
@@ -109,9 +109,15 @@ public class AssignmentData {
         else {
             processVarName = assignmentRow.getProcessVar();
             if (processVarName != null && !processVarName.isEmpty()) {
-                Variable processVar = new Variable(processVarName, VariableType.PROCESS,
-                        assignmentRow.getDataType(), assignmentRow.getCustomDataType());
-                processVariables.add(processVar);
+                HashSet<String> processVarsNames = new HashSet<String>();
+                for(Variable var : processVariables) {
+                     processVarsNames.add(var.getName());
+                }
+                if(!processVarsNames.contains(processVarName)) {
+                    Variable processVar = new Variable(processVarName, VariableType.PROCESS,
+                            assignmentRow.getDataType(), assignmentRow.getCustomDataType());
+                    processVariables.add(processVar);
+                }
             }
         }
         if ((constant == null || constant.isEmpty()) && (processVarName == null || processVarName.isEmpty()))
@@ -129,15 +135,10 @@ public class AssignmentData {
     }
 
     public String getInputVariablesString() {
-        StringBuilder sb = new StringBuilder();
-        for (Variable var : inputVariables) {
-            sb.append(var.toString()).append(',');
-        }
-        sb.setLength(sb.length() - 1);
-        return sb.toString();
+        return getStringForList(inputVariables);
     }
 
-    public void setInputVariables(String sInputVariables, List<String> dataTypes) {
+    public void setInputVariables(String sInputVariables) {
         inputVariables.clear();
         if (sInputVariables != null && !sInputVariables.isEmpty()) {
             String[] inputs = sInputVariables.split(",");
@@ -157,15 +158,10 @@ public class AssignmentData {
     }
 
     public String getOutputVariablesString() {
-        StringBuilder sb = new StringBuilder();
-        for (Variable var : outputVariables) {
-            sb.append(var.toString()).append(',');
-        }
-        sb.setLength(sb.length() - 1);
-        return sb.toString();
+        return getStringForList(outputVariables);
     }
 
-    public void setOutputVariables(String sOutputVariables, List<String> dataTypes) {
+    public void setOutputVariables(String sOutputVariables) {
         outputVariables.clear();
         if (sOutputVariables != null && !sOutputVariables.isEmpty()) {
             String[] outputs = sOutputVariables.split(",");
@@ -185,12 +181,7 @@ public class AssignmentData {
     }
 
     public String getProcessVariablesString() {
-        StringBuilder sb = new StringBuilder();
-        for (Variable var : processVariables) {
-            sb.append(var.toString()).append(',');
-        }
-        sb.setLength(sb.length() - 1);
-        return sb.toString();
+        return getStringForList(processVariables);
     }
 
     public void setProcessVariables(String sProcessVariables) {
@@ -200,7 +191,7 @@ public class AssignmentData {
             String[] processVars = sProcessVariables.split(",");
             for (String processVar : processVars) {
                 if (!processVar.isEmpty()) {
-                    Variable var = Variable.deserialize(processVar, Variable.VariableType.PROCESS);
+                    Variable var = Variable.deserialize(processVar, Variable.VariableType.PROCESS, dataTypes);
                     if (var != null && var.getName() != null && !var.getName().isEmpty()) {
                         if (!procVarNames.contains(var.getName())) {
                             procVarNames.add(var.getName());
@@ -217,12 +208,7 @@ public class AssignmentData {
     }
 
     public String getAssignmentsString() {
-        StringBuilder sb = new StringBuilder();
-        for (Assignment a : assignments) {
-            sb.append(a.toString()).append(',');
-        }
-        sb.setLength(sb.length() - 1);
-        return sb.toString();
+        return getStringForList(assignments);
     }
 
     public void setAssignments(String sAssignments) {
@@ -418,17 +404,14 @@ public class AssignmentData {
             String dataType = dataTypes.get(i);
             sb.append(dataTypeDisplayName).append(':').append(dataType).append(',');
         }
-        sb.setLength(sb.length() - 1);
+        if(sb.length() > 0) {
+            sb.setLength(sb.length() - 1);
+        }
         return sb.toString();
     }
 
     public String getDisallowedPropertyNamesString() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < disallowedPropertyNames.size(); i++) {
-            sb.append(disallowedPropertyNames.get(i)).append(',');
-        }
-        sb.setLength(sb.length() - 1);
-        return sb.toString();
+        return getStringForList(disallowedPropertyNames);
     }
 
     public List<String> getProcessVariableNames() {
@@ -489,4 +472,49 @@ public class AssignmentData {
         return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AssignmentData)) return false;
+
+        AssignmentData that = (AssignmentData) o;
+
+        if (getInputVariables() != null ? !getInputVariables().equals(that.getInputVariables()) : that.getInputVariables() != null)
+            return false;
+        if (getOutputVariables() != null ? !getOutputVariables().equals(that.getOutputVariables()) : that.getOutputVariables() != null)
+            return false;
+        if (getProcessVariables() != null ? !getProcessVariables().equals(that.getProcessVariables()) : that.getProcessVariables() != null)
+            return false;
+        if (getAssignments() != null ? !getAssignments().equals(that.getAssignments()) : that.getAssignments() != null)
+            return false;
+        if (getDataTypes() != null ? !getDataTypes().equals(that.getDataTypes()) : that.getDataTypes() != null)
+            return false;
+        if (getDataTypeDisplayNames() != null ? !getDataTypeDisplayNames().equals(that.getDataTypeDisplayNames()) : that.getDataTypeDisplayNames() != null)
+            return false;
+        return getDisallowedPropertyNames() != null ? getDisallowedPropertyNames().equals(that.getDisallowedPropertyNames()) : that.getDisallowedPropertyNames() == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getInputVariables() != null ? getInputVariables().hashCode() : 0;
+        result = 31 * result + (getOutputVariables() != null ? getOutputVariables().hashCode() : 0);
+        result = 31 * result + (getProcessVariables() != null ? getProcessVariables().hashCode() : 0);
+        result = 31 * result + (getAssignments() != null ? getAssignments().hashCode() : 0);
+        result = 31 * result + (getDataTypes() != null ? getDataTypes().hashCode() : 0);
+        result = 31 * result + (getDataTypeDisplayNames() != null ? getDataTypeDisplayNames().hashCode() : 0);
+        result = 31 * result + (getDisallowedPropertyNames() != null ? getDisallowedPropertyNames().hashCode() : 0);
+        return result;
+    }
+
+    private String getStringForList(List<? extends Object> objects) {
+        StringBuilder sb = new StringBuilder();
+        for (Object o : objects) {
+            sb.append(o.toString()).append(',');
+        }
+        if(sb.length() > 0) {
+            sb.setLength(sb.length() - 1);
+        }
+        return sb.toString();
+    }
 }

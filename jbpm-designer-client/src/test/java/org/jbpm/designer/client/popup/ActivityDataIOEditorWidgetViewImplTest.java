@@ -66,9 +66,9 @@ public class ActivityDataIOEditorWidgetViewImplTest {
         doCallRealMethod().when(view).init(any(ActivityDataIOEditorWidgetView.Presenter.class));
         doCallRealMethod().when(view).handleAddVarButton(any(ClickEvent.class));
 
-        AssignmentRow row = new AssignmentRow("varName", null, null, null, "varName", null);
         rows = new ArrayList<AssignmentRow>();
-        rows.add(row);
+        rows.add(new AssignmentRow("varName", null, null, null, "varName", null));
+        rows.add(new AssignmentRow("varName2", null, null, null, "varName2", null));
     }
 
     @Test
@@ -90,8 +90,10 @@ public class ActivityDataIOEditorWidgetViewImplTest {
     public void testAssignmentsRowsSameSourceAndTarget() {
         view.setAssignmentRows(rows);
         verify(assignments, times(1)).setValue(captor.capture());
-        assertEquals(1, captor.getValue().size());
+        assertEquals(2, captor.getValue().size());
         assertEquals("varName", captor.getValue().get(0).getName());
         assertEquals("varName", captor.getValue().get(0).getProcessVar());
+        assertEquals("varName2", captor.getValue().get(1).getName());
+        assertEquals("varName2", captor.getValue().get(1).getProcessVar());
     }
 }
