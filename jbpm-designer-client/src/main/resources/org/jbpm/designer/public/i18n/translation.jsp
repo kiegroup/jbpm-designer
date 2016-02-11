@@ -570,6 +570,42 @@ ORYX.I18N.ShapeMenuPlugin.serviceTask='<i18n:message key="ORYX.I18N.ShapeMenuPlu
 ORYX.I18N.ShapeMenuPlugin.businessRuleTask='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.businessRuleTask">Business Rule Task</i18n:message>';
 ORYX.I18N.ShapeMenuPlugin.scriptTask='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.scriptTask">Script Task</i18n:message>';
 
+ORYX.I18N.ShapeMenuPlugin.ReusableSubprocess='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.ReusableSubprocess">Reusable</i18n:message>';
+ORYX.I18N.ShapeMenuPlugin.MultipleInstanceSubprocess='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.MultipleInstanceSubprocess">Multiple instances</i18n:message>';
+ORYX.I18N.ShapeMenuPlugin.Subprocess='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.Subprocess">Embedded</i18n:message>';
+ORYX.I18N.ShapeMenuPlugin.AdHocSubprocess='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.AdHocSubprocess">Ad-Hoc</i18n:message>';
+
+ORYX.I18N.ShapeMenuPlugin.Exclusive_Databased_Gateway='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.Exclusive_Databased_Gateway">Data-based Exclusive (XOR)</i18n:message>';
+ORYX.I18N.ShapeMenuPlugin.EventbasedGateway='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.EventbasedGateway">Event-based</i18n:message>';
+ORYX.I18N.ShapeMenuPlugin.ParallelGateway='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.ParallelGateway">Parallel</i18n:message>';
+ORYX.I18N.ShapeMenuPlugin.InclusiveGateway='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.InclusiveGateway">Inclusive</i18n:message>';
+
+ORYX.I18N.ShapeMenuPlugin.TextAnnotation='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.TextAnnotation">Text Annotation</i18n:message>';
+
+ORYX.I18N.ShapeMenuPlugin.DataObject='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.DataObject">Data Object</i18n:message>';
+
+ORYX.I18N.ShapeMenuPlugin.StartNoneEvent='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.StartNoneEvent">None</i18n:message>';
+ORYX.I18N.ShapeMenuPlugin.StartMessageEvent='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.StartMessageEvent">Message</i18n:message>';
+ORYX.I18N.ShapeMenuPlugin.StartTimerEvent='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.StartTimerEvent">Timer</i18n:message>';
+ORYX.I18N.ShapeMenuPlugin.StartEscalationEvent='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.StartEscalationEvent">Escalation</i18n:message>';
+ORYX.I18N.ShapeMenuPlugin.StartConditionalEvent='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.StartConditionalEvent">Conditional</i18n:message>';
+ORYX.I18N.ShapeMenuPlugin.StartErrorEvent='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.StartErrorEvent">Error</i18n:message>';
+ORYX.I18N.ShapeMenuPlugin.StartCompensationEvent='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.StartCompensationEvent">Compensation</i18n:message>';
+ORYX.I18N.ShapeMenuPlugin.StartSignalEvent='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.StartSignalEvent">Signal</i18n:message>';
+
+ORYX.I18N.ShapeMenuPlugin.EndNoneEvent='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.EndNoneEvent">None</i18n:message>';
+ORYX.I18N.ShapeMenuPlugin.EndMessageEvent='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.EndMessageEvent">Message</i18n:message>';
+ORYX.I18N.ShapeMenuPlugin.EndEscalationEvent='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.EndEscalationEvent">Escalation</i18n:message>';
+ORYX.I18N.ShapeMenuPlugin.EndErrorEvent='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.EndErrorEvent">Error</i18n:message>';
+ORYX.I18N.ShapeMenuPlugin.EndCancelEvent='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.EndCancelEvent">Cancel</i18n:message>';
+ORYX.I18N.ShapeMenuPlugin.EndCompensationEvent='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.EndCompensationEvent">Compensation</i18n:message>';
+ORYX.I18N.ShapeMenuPlugin.EndSignalEvent='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.EndSignalEvent">Signal</i18n:message>';
+ORYX.I18N.ShapeMenuPlugin.EndTerminateEvent='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.EndTerminateEvent">Terminate</i18n:message>';
+
+ORYX.I18N.ShapeMenuPlugin.SequenceFlow='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.SequenceFlow">Sequence Flow</i18n:message>';
+ORYX.I18N.ShapeMenuPlugin.Association_Undirected='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.Association_Undirected">Association (undirected)</i18n:message>';
+ORYX.I18N.ShapeMenuPlugin.Association_Unidirectional='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.Association_Unidirectional">Association (unidirectional)</i18n:message>';
+
 if(!ORYX.I18N.DataIOEditorPlugin) ORYX.I18N.DataIOEditorPlugin = {};
 
 ORYX.I18N.DataIOEditorPlugin.VariableDefinitions='<i18n:message key="ORYX.I18N.DataIOEditorPlugin.VariableDefinitions">Variable Definitions</i18n:message>';
