@@ -572,7 +572,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
 		possibleMorphs.each((function(morph) {
             if(!(elements[0].properties["oryx-nomorph"] && elements[0].properties["oryx-nomorph"] == "true")) {
                 var menuItem = new Ext.menu.Item({
-                    text: morph.title(),
+                    text: this.getMorphText(morph),
                     iconCls : window.SpriteUtils.toUniqueId('stencilsets/bpmn2.0jbpm/icons/activity/list/type.script.png'),
                     disabled: morph.id()==elements[0].getStencil().id(),
                     disabledClass: ORYX.CONFIG.MORPHITEM_DISABLED,
@@ -584,6 +584,19 @@ ORYX.Plugins.ShapeMenuPlugin = {
 
 		this.morphButton.prepareToShow();
 		
+	},
+
+	getMorphText: function(morph) {
+		if (morph.id() !== undefined) {
+			var id = morph.id();
+			if (id.startsWith(morph.namespace())) {
+				id = id.substring(morph.namespace().length, id.length);
+				if (ORYX.I18N.ShapeMenuPlugin[id] !== undefined) {
+					return ORYX.I18N.ShapeMenuPlugin[id];
+				}
+			}
+		}
+		return morph.title();
 	},
 
 	/**
