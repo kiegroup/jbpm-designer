@@ -66,4 +66,6 @@ public interface DesignerEditorConstants extends
     String Removed_invalid_characters_from_name();
 
     String A_Data_Input_with_this_name_already_exists();
+
+    String ProcessModel();
 }
