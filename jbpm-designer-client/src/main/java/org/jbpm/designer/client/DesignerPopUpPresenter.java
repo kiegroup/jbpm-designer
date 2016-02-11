@@ -28,6 +28,7 @@ import com.google.gwt.user.client.ui.RequiresResize;
 import org.jboss.errai.common.client.api.Caller;
 import org.jboss.errai.common.client.api.RemoteCallback;
 import org.jbpm.designer.client.parameters.DesignerEditorParametersPublisher;
+import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.jbpm.designer.service.DesignerAssetService;
 import org.uberfire.client.annotations.WorkbenchPartTitle;
 import org.uberfire.client.annotations.WorkbenchPartView;
@@ -95,7 +96,7 @@ public class DesignerPopUpPresenter extends Composite implements RequiresResize 
 
     @WorkbenchPartTitle
     public String getName() {
-        return "Process Model";
+        return DesignerEditorConstants.INSTANCE.ProcessModel();
     }
 
     @WorkbenchPartView

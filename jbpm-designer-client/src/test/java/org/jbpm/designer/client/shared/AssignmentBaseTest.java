@@ -136,6 +136,7 @@ public class AssignmentBaseTest {
         public String This_input_should_be_entered_as_a_property_for_the_task() {return "This Input should be entered as a property for the task";}
         public String Removed_invalid_characters_from_name() {return "Removed invalid characters from name";}
         public String A_Data_Input_with_this_name_already_exists() {return "A Data Input with this name already exists";}
+        public String ProcessModel() {return "Process Model";}
     }
 
 }
