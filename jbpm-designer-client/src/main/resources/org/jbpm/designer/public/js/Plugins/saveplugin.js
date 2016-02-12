@@ -156,6 +156,18 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
 
     setUnsaved: function() {
         ORYX.PROCESS_SAVED = false;
+        this.facade.raiseEvent({
+            type 		: ORYX.CONFIG.EVENT_PROCESS_CHANGED,
+            ntype		: 'info'
+        });
+    },
+
+    setSaved: function() {
+        ORYX.PROCESS_SAVED = true;
+        this.facade.raiseEvent({
+            type 		: ORYX.CONFIG.EVENT_PROCESS_SAVED,
+            ntype		: 'info'
+        });
     },
 
     saveWithMessage: function() {
@@ -243,7 +255,8 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
               success: function() {
                 Ext.Msg.minWidth = 400;
                 Ext.Msg.alert("Процесс успешно сохранен");
-              },
+                this.setSaved();
+              }.bind(this),
               failure: function(response) {
                 Ext.Msg.minWidth = 400;
                 Ext.Msg.alert("Ошибка при сохранении процесса", response.responseText);

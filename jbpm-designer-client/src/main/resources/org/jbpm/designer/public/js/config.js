@@ -316,6 +316,8 @@ ORYX.CONFIG.EVENT_PAINT_CANVAS_TOGGLED  = "canvas.toggled";
 ORYX.CONFIG.EVENT_DO_SAVE = "designereventdosave";
 ORYX.CONFIG.EVENT_CANCEL_SAVE = "designereventcancelsave";
 ORYX.CONFIG.EVENT_DO_RELOAD = "designereventreloads";
+ORYX.CONFIG.EVENT_PROCESS_SAVED = "designereventprocesssaved";
+ORYX.CONFIG.EVENT_PROCESS_CHANGED = "designereventprocesschanged";
 
 
 // voice commands
