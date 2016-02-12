@@ -672,6 +672,7 @@ ORYX.I18N.View.infogroup = '<i18n:message key="ORYX.I18N.View.infogroup">info</i
 if(!ORYX.I18N.View.tabs) ORYX.I18N.View.tabs = {};
 ORYX.I18N.View.tabs.modelling = '<i18n:message key="ORYX.I18N.View.tabs.modelling">Process Modelling</i18n:message>';
 ORYX.I18N.View.tabs.simResults = '<i18n:message key="ORYX.I18N.View.tabs.simResults">Simulation Results</i18n:message>';
+ORYX.I18N.View.tabs.processDoc = '<i18n:message key="ORYX.I18N.View.tabs.processDoc">Process Documentation</i18n:message>';
 
 if(!ORYX.I18N.View.sim) ORYX.I18N.View.sim = {};
 ORYX.I18N.View.sim.processPaths = '<i18n:message key="ORYX.I18N.View.sim.processPaths">Display Process Paths</i18n:message>';
