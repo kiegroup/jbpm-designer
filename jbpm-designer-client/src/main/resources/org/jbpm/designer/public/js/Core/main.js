@@ -383,6 +383,46 @@ ORYX.Editor = {
 		        items: [this.simResultsContentPanel]
 		    }]
 		});
+
+		this.processDocContentPanel = new Ext.Panel({
+			id: "processdoccontent",
+			autoScroll: true,
+			autoheight: true,
+			border: false,
+			items	: [{
+				xtype : "component",
+				id    : 'processdocframe',
+				anchor: '100%',
+				autoScroll: true,
+				autoEl : {
+					tag : "iframe",
+					src : ORYX.BASE_FILE_PATH + 'processdoc/default.jsp',
+					width: "100%",
+					height: "500",
+					frameborder: "0",
+					scrolling: "auto"
+				}
+			}]
+		});
+
+		this.processDocPanelLayout = new Ext.Panel({
+			width: "100%",
+			autoscroll: true,
+			//sheight: 1000,
+			//autoheight: true,
+			layout: 'border',
+			items: [{
+				xtype:'panel',
+				region: 'center',
+				layout	: 'fit',
+				anchor:'100%',
+				border: false,
+				autoscroll: true,
+				autoheight: true,
+				margins: '5 5 0 0',
+				items: [this.processDocContentPanel]
+			}]
+		});
 		
 		var tabs_config = {
 				id : 'maintabs',
@@ -399,6 +439,7 @@ ORYX.Editor = {
 	             	tabchange: function(tabpanel, tab) {
 	            		this.centerContentTabPannel.doLayout();
 	            		this.simResultsContentPanelLayout.doLayout();
+						this.processDocPanelLayout.doLayout();
 	            		tabpanel.doLayout();
 	             	}.bind(this)
 	            },
@@ -414,17 +455,26 @@ ORYX.Editor = {
                     id: 'simulationtab',
 	                autoScroll   : false,
 	                items	: [this.simResultsContentPanelLayout]
-		        }
+		        },
+				{
+					layout: "fit",
+					title: ORYX.I18N.View.tabs.processDoc,
+					id: 'processdoctab',
+					autoScroll   : false,
+					items	: [this.processDocPanelLayout]
+				}
 		        ]
 			};
 		this.centerContentTabPannel = new Ext.TabPanel(tabs_config);
 
         if(ORYX.READONLY == true) {
             Ext.getCmp('maintabs').remove("simulationtab");
+			Ext.getCmp('maintabs').remove("processdoctab");
         }
 
         if(ORYX.VIEWLOCKED == true) {
             Ext.getCmp('maintabs').remove("simulationtab");
+			Ext.getCmp('maintabs').remove("processdoctab");
         }
 
 		// DEFINITION OF THE VIEWPORT AREAS
