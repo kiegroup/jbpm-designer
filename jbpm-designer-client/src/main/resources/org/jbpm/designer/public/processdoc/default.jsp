@@ -25,22 +25,44 @@
         var ctx = "<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/";
         Swag.registerHelpers(Handlebars);
     </script>
+    <style>
+        .printonly {display: none;}
+        @media print {
+            .noprint{
+                display: none !important;
+            }
+            .printonly {
+                display: block;
+            }
+        }
+        .pidiv {
+            width: 520px;
+            height: 350px;
+            border: thin solid black;
+            overflow: scroll;
+        }
+
+        .pprintdiv {
+            width: 1000px;
+            height: 1000px;
+        }
+    </style>
 </head>
 <body data-spy="scroll" data-target="#toc" onload="setTimeout(showProcessDocs,2000)" class="cards-pf">
 <div class="container">
     <div class="row">
-        <div id="pagenav" class="col-sm-3">
+        <div id="pagenav" class="col-sm-3 noprint">
             <nav id="toc" data-spy="affix" data-toggle="toc"></nav>
         </div>
         <div class="col-sm-9">
-            <p><div id="pagebuttons" class="well" align="right">
+            <p><div id="pagebuttons" class="well noprint" align="right">
                 <button type="button" class="btn btn-default btn-sm" onclick="createPDF()">PDF</button>&nbsp;&nbsp;
                 <button type="buton" class="btn btn-default btn-sm" onclick="window.print();">Print</button>
             </div></p>
 
             <p><h1 class="page-header" id="process-documentation">Process Documentation</h1></p>
 
-            <h2 id="overview"><span class="badge badge-inverse">1</span> Process Overview</h2>
+            <h2 id="overview"><span class="badge badge-inverse">1.0</span> Process Overview</h2>
             <p> <h3 id="process-info"><span class="badge badge-inverse">1.1</span> General</h3></p>
             <p id='processinfocontent'></p>
             <p><h3 id="process-titals"><span class="badge badge-inverse">1.2</span> Data Totals</h3></p>
@@ -57,6 +79,12 @@
             <p id="processelementtotals"></p>
             <p><h3 id="elemen-info"><span class="badge badge-inverse">2.2</span> Elements</h3></p>
             <p id="processelementdetails"></p>
+
+            <p><h2 id="process-image"><span class="badge badge-inverse">3.0</span> Process Image</h2></p>
+            <p>
+                <div class="col-sm-9 pidiv noprint" id="processimagedisplay"></div>
+                <div class="col-sm-9 pprintdiv printonly" id="processimageprintdisplay"></div>
+            </p>
 
         </div>
     </div>
@@ -209,6 +237,8 @@
         processDataTotals['processdatatotals'].push({"name":"Imports","count":showProcessImports(processJSON)});
         showProcessTotals(processDataTotals, processJSON);
         showProcessElementsInfo(processJSON);
+
+        showProcessImage();
 
     }
 
@@ -408,8 +438,44 @@
         };
         pdf.addHTML(document.body, options, function()
         {
-            pdf.save("processdocumentation.pdf");
+            pdf.save(getDocPDFName() + "Documentation.pdf");
         });
+    }
+
+    function getDocPDFName() {
+        var assetName = parent.ORYX.UUID.split("/").pop();
+        return assetName.split(".")[0];
+    }
+
+    function showProcessImage() {
+
+        var mySVG = parent.DataManager.serialize(parent.ORYX.EDITOR.getCanvas().getSVGRepresentation(true, true));
+        var mySrc = 'data:image/svg+xml;base64,'+window.btoa(mySVG);
+
+        var source = new Image();
+        source.src = mySrc;
+
+        var myCanvas = document.createElement('canvas');
+        myCanvas.width = 2000;
+        myCanvas.height = 2000;
+        document.getElementById('processimagedisplay').appendChild(myCanvas);
+
+        var myPrintCanvas = document.createElement('canvas');
+        myPrintCanvas.width = 2000;
+        myPrintCanvas.height = 2000;
+        document.getElementById('processimageprintdisplay').appendChild(myPrintCanvas);
+
+        var myCanvasContext = myCanvas.getContext('2d');
+        var myCanvasPrintContext = myPrintCanvas.getContext('2d');
+
+        var source = new Image();
+        source.src = mySrc;
+        source.width = '2000';
+        source.height = '2000';
+        source.onload = function(){
+            myCanvasContext.drawImage(source,0,0);
+            myCanvasPrintContext.drawImage(source,0,0);
+        }
     }
 </script>
 </body>
