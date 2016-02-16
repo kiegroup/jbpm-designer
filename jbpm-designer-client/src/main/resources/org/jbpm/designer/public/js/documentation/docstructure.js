@@ -5,7 +5,7 @@ var elementDataInfo = {
         "dispname": "User Task",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/activity/task.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/swimlane/process.participant.png",
-        "properties": "name,documentation,datainputset,dataoutputset,assignments,isasync,taskname,actors,groupid,subject,description,skippable"
+        "properties": "name,documentation,datainputset,dataoutputset,assignments,isasync,taskname,actors,groupid,subject,description,skippable,content,createdby,locale,multipleinstance,notifications,priority,reassignment"
     },
     "SendTask": {
         "group": "Tasks",
@@ -13,7 +13,7 @@ var elementDataInfo = {
         "dispname": "Send Task",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/activity/task.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/activity/task.png",
-        "properties": "name,documentation,datainputset,dataoutputset,assignments,isasync,taskname,messageref,description,skippable"
+        "properties": "name,documentation,datainputset,dataoutputset,assignments,isasync,taskname,messageref,description,skippable,multipleinstance"
     },
     "ReceiveTask": {
         "group": "Tasks",
@@ -21,7 +21,7 @@ var elementDataInfo = {
         "dispname": "Receive Task",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/activity/task.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/activity/task.png",
-        "properties": "name,documentation,datainputset,dataoutputset,assignments,isasync,taskname,messageref,description,skippable"
+        "properties": "name,documentation,datainputset,dataoutputset,assignments,isasync,messageref"
     },
     "ManualTask": {
         "group": "Tasks",
@@ -29,7 +29,7 @@ var elementDataInfo = {
         "dispname": "Manual Task",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/activity/task.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/activity/task.png",
-        "properties": "name,documentation,isasync,taskname,description,skippable"
+        "properties": "name,documentation,isasync,skippable,datainputset,dataoutputset,assignments,multipleinstance,"
     },
     "ServiceTask": {
         "group": "Tasks",
@@ -37,7 +37,7 @@ var elementDataInfo = {
         "dispname": "Service Task",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/activity/task.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/activity/task.png",
-        "properties": "name,documentation,isasync,taskname,description,skippable,serviceoperation,serviceinterface,serviceimplementation"
+        "properties": "name,documentation,isasync,skippable,serviceoperation,serviceinterface,serviceimplementation,datainputset,dataoutputset,assignments,multipleinstance"
     },
     "BusinessRuleTask": {
         "group": "Tasks",
@@ -45,7 +45,7 @@ var elementDataInfo = {
         "dispname": "Business Rule Task",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/activity/task.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/activity/task.png",
-        "properties": "name,documentation,isasync,taskname,description,skippable,ruleflowgroup"
+        "properties": "name,documentation,isasync,ruleflowgroup,datainputset,dataoutputset,assignments"
     },
     "ScriptTask": {
         "group": "Tasks",
@@ -53,7 +53,7 @@ var elementDataInfo = {
         "dispname": "Script Task",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/activity/task.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/activity/task.png",
-        "properties": "name,documentation,isasync,taskname,description,skippable,script,script_language"
+        "properties": "name,documentation,isasync,script,script_language"
     },
     "Task": {
         "group": "Tasks",
@@ -69,7 +69,7 @@ var elementDataInfo = {
         "dispname": "Work Item",
         "groupicon": "images/servicenode.png",
         "icon": "images/servicenode.png",
-        "properties": "name,documentation,datainputset,dataoutputset,assignments,isasync,taskname,description,skippable"
+        "properties": "name,documentation,datainputset,dataoutputset,assignments,isasync,taskname,description"
     },
     "ReusableSubprocess": {
         "group": "Subprocesses",
@@ -77,7 +77,7 @@ var elementDataInfo = {
         "dispname": "Reusable Subprocess",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/activity/subprocess.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/activity/subprocess.png",
-        "properties": "name,documentation,calledelement,datainputset,dataoutputset,assignments,independent"
+        "properties": "name,documentation,calledelement,datainputset,dataoutputset,assignments,independent,isasync,waitforcompletion"
     },
     "MultipleInstanceSubprocess": {
         "group": "Subprocesses",
@@ -85,7 +85,7 @@ var elementDataInfo = {
         "dispname": "Multiple Instance Subprocess",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/activity/subprocess.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/activity/subprocess.png",
-        "properties": "name,documentation,multipleinstancecollectioninput,multipleinstancecollectionoutput,multipleinstancedatainput,multipleinstancedataoutput,multipleinstancecompletioncondition"
+        "properties": "name,documentation,multipleinstancecollectioninput,multipleinstancecollectionoutput,multipleinstancedatainput,multipleinstancedataoutput,multipleinstancecompletioncondition,vardefs,isasync"
     },
 
     "Subprocess": {
@@ -94,7 +94,7 @@ var elementDataInfo = {
         "dispname": "Embedded Subprocess",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/activity/subprocess.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/activity/subprocess.png",
-        "properties": "name,documentation,datainputset,dataoutputset,assignments,vardefs"
+        "properties": "name,documentation,vardefs,isasync"
     },
     "AdHocSubprocess": {
         "group": "Subprocesses",
@@ -102,7 +102,7 @@ var elementDataInfo = {
         "dispname": "Ad-Hoc Subprocess",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/activity/subprocess.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/activity/subprocess.png",
-        "properties": "name,documentation,adhocordering,adhoccompletioncondition,adhoccancelremaininginstances,vardefs"
+        "properties": "name,documentation,adhocordering,adhoccompletioncondition,adhoccancelremaininginstances,vardefs,isasync"
     },
     "EventSubprocess": {
         "group": "Subprocesses",
@@ -110,7 +110,7 @@ var elementDataInfo = {
         "dispname": "Event Subprocess",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/activity/subprocess.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/activity/event.subprocess.png",
-        "properties": "name,documentation,vardefs"
+        "properties": "name,documentation,vardefs,isasync"
     },
     "Exclusive_Databased_Gateway": {
         "group": "Gateways",
@@ -126,7 +126,7 @@ var elementDataInfo = {
         "dispname": "Event-Based Gateway",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/gateway/parallel.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/gateway/eventbased.png",
-        "properties": "name,documentation"
+        "properties": "name,documentation,eventtype"
     },
     "ParallelGateway": {
         "group": "Gateways",
@@ -182,7 +182,7 @@ var elementDataInfo = {
         "dispname": "Start Event",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/startevent/none.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/startevent/none.png",
-        "properties": "name,documentation,dataoutput"
+        "properties": "name,documentation,dataoutput,dataoutputassociations,isinterrupting"
     },
     "StartMessageEvent": {
         "group": "StartEvents",
@@ -190,7 +190,7 @@ var elementDataInfo = {
         "dispname": "Message Start Event",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/startevent/none.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/startevent/message.png",
-        "properties": "name,documentation,dataoutput,messageref"
+        "properties": "name,documentation,dataoutput,dataoutputassociations,messageref,isinterrupting"
     },
     "StartTimerEvent": {
         "group": "StartEvents",
@@ -198,7 +198,7 @@ var elementDataInfo = {
         "dispname": "Timer Start Event",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/startevent/none.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/startevent/timer.png",
-        "properties": "name,documentation,dataoutput,timedate,timeduration,timecycle,timecyclelanguage"
+        "properties": "name,documentation,dataoutput,dataoutputassociations,timedate,timeduration,timecycle,timecyclelanguage,isinterrupting"
     },
     "StartEscalationEvent": {
         "group": "StartEvents",
@@ -206,7 +206,7 @@ var elementDataInfo = {
         "dispname": "Escalation Start Event",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/startevent/none.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/startevent/escalation.png",
-        "properties": "name,documentation,dataoutput,escalationcode"
+        "properties": "name,documentation,dataoutput,dataoutputassociations,escalationcode,isinterrupting"
     },
     "StartConditionalEvent": {
         "group": "StartEvents",
@@ -214,7 +214,7 @@ var elementDataInfo = {
         "dispname": "Conditional Start Event",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/startevent/none.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/startevent/conditional.png",
-        "properties": "name,documentation,dataoutput,conditionlanguage,conditionexpression"
+        "properties": "name,documentation,dataoutput,dataoutputassociations,conditionlanguage,conditionexpression,isinterrupting"
     },
     "StartErrorEvent": {
         "group": "StartEvents",
@@ -222,7 +222,7 @@ var elementDataInfo = {
         "dispname": "Error Start Event",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/startevent/none.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/startevent/error.png",
-        "properties": "name,documentation,dataoutput,errorref"
+        "properties": "name,documentation,dataoutput,dataoutputassociations,errorref,isinterrupting"
     },
     "StartCompensationEvent": {
         "group": "StartEvents",
@@ -230,7 +230,7 @@ var elementDataInfo = {
         "dispname": "Compensation Start Event",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/startevent/none.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/startevent/compensation.png",
-        "properties": "name,documentation,dataoutput"
+        "properties": "name,documentation,dataoutput,dataoutputassociations,isinterrupting"
     },
     "StartSignalEvent": {
         "group": "StartEvents",
@@ -238,7 +238,7 @@ var elementDataInfo = {
         "dispname": "Signal Start Event",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/startevent/none.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/startevent/signal.png",
-        "properties": "name,documentation,dataoutput,signalref"
+        "properties": "name,documentation,dataoutput,dataoutputassociations,signalref,isinterrupting"
     },
     "IntermediateMessageEventCatching": {
         "group": "CatchingEvents",
@@ -246,7 +246,7 @@ var elementDataInfo = {
         "dispname": "Catching Message Event",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/catching/signal.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/catching/message.png",
-        "properties": "name,documentation,messageref"
+        "properties": "name,documentation,messageref,dataoutput,dataoutputassociations,boundarycancelactivity"
     },
     "IntermediateTimerEvent": {
         "group": "CatchingEvents",
@@ -254,7 +254,7 @@ var elementDataInfo = {
         "dispname": "Catching Timer Event",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/catching/signal.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/catching/timer.png",
-        "properties": "name,documentation,timedate,timeduration,timecycle,timecyclelanguage"
+        "properties": "name,documentation,timedate,timeduration,timecycle,timecyclelanguage,boundarycancelactivity"
     },
     "IntermediateEscalationEvent": {
         "group": "CatchingEvents",
@@ -262,7 +262,7 @@ var elementDataInfo = {
         "dispname": "Catching Escalation Event",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/catching/signal.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/catching/escalation.png",
-        "properties": "name,documentation,escalationcode"
+        "properties": "name,documentation,escalationcode,dataoutput,dataoutputassociations,boundarycancelactivity"
     },
     "IntermediateConditionalEvent": {
         "group": "CatchingEvents",
@@ -270,7 +270,7 @@ var elementDataInfo = {
         "dispname": "Catching Conditional Event",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/catching/signal.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/catching/conditional.png",
-        "properties": "name,documentation,conditionlanguage,conditionexpression"
+        "properties": "name,documentation,conditionlanguage,conditionexpression,dataoutput,dataoutputassociations,boundarycancelactivity"
     },
     "IntermediateErrorEvent": {
         "group": "CatchingEvents",
@@ -278,7 +278,7 @@ var elementDataInfo = {
         "dispname": "Catching Error Event",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/catching/signal.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/catching/error.png",
-        "properties": "name,documentation,errorref"
+        "properties": "name,documentation,errorref,dataoutput,dataoutputassociations,boundarycancelactivity"
     },
     "IntermediateCompensationEventCatching": {
         "group": "CatchingEvents",
@@ -286,7 +286,7 @@ var elementDataInfo = {
         "dispname": "Catching Compensation Event",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/catching/signal.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/catching/compensation.png",
-        "properties": "name,documentation"
+        "properties": "name,documentation,dataoutput,dataoutputassociations,boundarycancelactivity"
     },
     "IntermediateSignalEventCatching": {
         "group": "CatchingEvents",
@@ -294,7 +294,7 @@ var elementDataInfo = {
         "dispname": "Catching Signal Event",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/catching/signal.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/catching/signal.png",
-        "properties": "name,documentation,signalref"
+        "properties": "name,documentation,signalref,signalscope,dataoutput,dataoutputassociations,boundarycancelactivity"
     },
     "IntermediateMessageEventThrowing": {
         "group": "ThrowingEvents",
@@ -302,7 +302,7 @@ var elementDataInfo = {
         "dispname": "Throwing Message Event",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/throwing/none.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/throwing/message.png",
-        "properties": "name,documentation,messageref"
+        "properties": "name,documentation,datainput,datainputassociations,messageref"
     },
     "IntermediateEscalationEventThrowing": {
         "group": "ThrowingEvents",
@@ -310,7 +310,7 @@ var elementDataInfo = {
         "dispname": "Throwing Escalation Event",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/throwing/none.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/throwing/escalation.png",
-        "properties": "name,documentation,escalationcode"
+        "properties": "name,documentation,datainput,datainputassociations,escalationcode"
     },
     "IntermediateCompensationEventThrowing": {
         "group": "ThrowingEvents",
@@ -318,7 +318,7 @@ var elementDataInfo = {
         "dispname": "Throwing Compensation Event",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/throwing/none.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/throwing/compensation.png",
-        "properties": "name,documentation"
+        "properties": "name,documentation,datainput,datainputassociations,activityref"
     },
     "IntermediateSignalEventThrowing": {
         "group": "ThrowingEvents",
@@ -326,7 +326,7 @@ var elementDataInfo = {
         "dispname": "Throwing Signal Event",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/throwing/none.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/throwing/signal.png",
-        "properties": "name,documentation,signalref"
+        "properties": "name,documentation,datainput,datainputassociations,signalref,signalscope"
     },
     "EndNoneEvent": {
         "group": "EndEvents",
@@ -334,7 +334,7 @@ var elementDataInfo = {
         "dispname": "End Event",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/endevent/none.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/endevent/none.png",
-        "properties": "name,documentation,datainput"
+        "properties": "name,documentation,datainput,datainputassociations"
     },
     "EndMessageEvent": {
         "group": "EndEvents",
@@ -342,7 +342,7 @@ var elementDataInfo = {
         "dispname": "Message End Event",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/endevent/none.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/endevent/message.png",
-        "properties": "name,documentation,datainput,messageref"
+        "properties": "name,documentation,datainput,datainputassociations,messageref"
     },
     "EndEscalationEvent": {
         "group": "EndEvents",
@@ -350,7 +350,7 @@ var elementDataInfo = {
         "dispname": "Escalation End Event",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/endevent/none.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/endevent/escalation.png",
-        "properties": "name,documentation,datainput,escalationcode"
+        "properties": "name,documentation,datainput,datainputassociations,escalationcode"
     },
     "EndErrorEvent": {
         "group": "EndEvents",
@@ -358,7 +358,7 @@ var elementDataInfo = {
         "dispname": "Error End Event",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/endevent/none.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/endevent/error.png",
-        "properties": "name,documentation,datainput,errorref"
+        "properties": "name,documentation,datainput,datainputassociations,errorref"
     },
     "EndCancelEvent": {
         "group": "EndEvents",
@@ -366,7 +366,7 @@ var elementDataInfo = {
         "dispname": "Cancel End Event",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/endevent/none.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/endevent/cancel.png",
-        "properties": "name,documentation,datainput"
+        "properties": "name,documentation,datainput,datainputassociations"
     },
     "EndCompensationEvent": {
         "group": "EndEvents",
@@ -374,7 +374,7 @@ var elementDataInfo = {
         "dispname": "Compensation End Event",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/endevent/none.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/endevent/compensation.png",
-        "properties": "name,documentation,datainput"
+        "properties": "name,documentation,datainput,datainputassociations,activityref"
     },
     "EndSignalEvent": {
         "group": "EndEvents",
@@ -382,7 +382,7 @@ var elementDataInfo = {
         "dispname": "Signal End Event",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/endevent/none.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/endevent/signal.png",
-        "properties": "name,documentation,datainput,signalref"
+        "properties": "name,documentation,datainput,datainputassociations,signalref,signalscope"
     },
     "EndTerminateEvent": {
         "group": "EndEvents",
@@ -390,7 +390,7 @@ var elementDataInfo = {
         "dispname": "Terminate End Event",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/endevent/none.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/endevent/terminate.png",
-        "properties": "name,documentation,datainput"
+        "properties": "name,documentation,datainput,datainputassociations"
     },
     "SequenceFlow": {
         "group": "ConnectingObjects",
@@ -436,7 +436,18 @@ var propertyNameMappings = {
     "dataoutputassociationsview": "Data Output Associations Count",
     "datainputassociationsview": "Data Input Associations Count",
     "datainputset": "Data Inputs",
-    "dataoutputset": "Data Outputs"
+    "dataoutputset": "Data Outputs",
+    "activityref": "Activity Ref",
+    "signalref": "Signal Ref",
+    "signalscope": "Signal Scope",
+    "dataoutput": "Data Input",
+    "dataoutputassociations": "Data Output Associations",
+    "datainputassociations": "Data Input Associations",
+    "boundarycancelactivity": "Cancel Activity",
+    "isinterrupting": "Is Interrupting",
+    "waitforcompletion" : "Wait for completion",
+    "eventtype": "Event Type",
+    "groupid": "Groups"
 
 };
 
@@ -546,6 +557,12 @@ function addElement(element, myElementGroups) {
 }
 
 function parsePropertyValue(propname, propvalue) {
+    if(propvalue === undefined) {
+        return "";
+    }
+    if(typeof propvalue === 'boolean') {
+        propvalue = propvalue.toString();
+    }
     if(propname == "datainputset" || propname == "dataoutputset" || propname == "datainput" || propname == "dataoutput" || propname == "vardefs") {
         var retVal = "";
         var propParts = propvalue.trim().split(",");
@@ -553,19 +570,19 @@ function parsePropertyValue(propname, propvalue) {
             var nextPart = propParts[i];
             if(nextPart.indexOf(":") > 0) {
                 var innerParts = nextPart.split(":");
-                retVal += innerParts[0] +"(" + innerParts[1] + "), ";
+                retVal += innerParts[0] +"(" + innerParts[1] + ")\n";
             } else {
                 if(nextPart.trim().length > 0) {
-                    retVal += nextPart + "(no defined type), ";
+                    retVal += nextPart + "(no defined type)\n";
                 }
             }
         }
         if(retVal.length > 0) {
-            return retVal.substring(0, retVal.length - 2);
+            return retVal.substring(0, retVal.length - 1);
         } else {
             return propvalue;
         }
-    } else if(propname == "assignments") {
+    } else if(propname == "assignments" || propname == "dataoutputassociations" || propname == "datainputassociations") {
         var retVal = "";
 
         var valueParts = propvalue.trim().split(",");
@@ -579,14 +596,14 @@ function parsePropertyValue(propname, propvalue) {
                     var escapedp = innerParts.join('=').replace(/\#\#/g , ",");
                     escapedp = escapedp.replace(/\|\|/g , "=");
 
-                    retVal += "(Data Input) " + fromPart + " is given value " + escapedp + ", ";
+                    retVal += "(Data Input) " + fromPart + " is given value " + escapedp + "\n";
                 } else if(innerParts[0].startsWith("[dout]")) {
                     var fromPart = innerParts[0].slice(6, innerParts[0].length);
                     innerParts.shift(); // removes the first item from the array
                     var escapedp = innerParts.join('=').replace(/\#\#/g , ",");
                     escapedp = escapedp.replace(/\|\|/g , "=");
 
-                    retVal += "(Data Output) " + fromPart + " is given value " + escapedp + ", ";
+                    retVal += "(Data Output) " + fromPart + " is given value " + escapedp + "\n";
                 } else {
                     // for custom tasks we need to deal with no definition
                     var fromPart = innerParts[0];
@@ -594,7 +611,7 @@ function parsePropertyValue(propname, propvalue) {
                     var escapedp = innerParts.join('=').replace(/\#\#/g , ",");
                     escapedp = escapedp.replace(/\|\|/g , "=");
 
-                    retVal += "(Data Input) " + fromPart + " is given value " + escapedp + ", ";
+                    retVal += "(Data Input) " + fromPart + " is given value " + escapedp + "\n";
                 }
             } else if(nextPart.indexOf("->") > 0) {
                 var innerParts = nextPart.split("->");
@@ -602,11 +619,11 @@ function parsePropertyValue(propname, propvalue) {
                 if(innerParts[0].startsWith("[din]")) {
                     var fromPart = innerParts[0].slice(5, innerParts[0].length);
 
-                    retVal += "(Data Input) " + fromPart + " is mapped to " + innerParts[1] + ", ";
+                    retVal += "(Data Input) " + fromPart + " is mapped to " + innerParts[1] + "\n";
                 } else if(innerParts[0].startsWith("[dout]")) {
                     var fromPart = innerParts[0].slice(6, innerParts[0].length);
 
-                    retVal += "(Data Output) " + fromPart + " is mapped to " + innerParts[1] + ", ";
+                    retVal += "(Data Output) " + fromPart + " is mapped to " + innerParts[1] + "\n";
                 }
             } else {
                 // default to equality
@@ -614,16 +631,12 @@ function parsePropertyValue(propname, propvalue) {
                     var innerParts = nextPart.split("=");
                     var fromPart = innerParts[0].slice(5, innerParts[0].length);
                     var inType = innerParts[0].startsWith("[din]") ? "(Data Input) " : "(Data Output) ";
-                    retVal += inType + fromPart + "is given value , ";
+                    retVal += inType + fromPart + "is given value\n";
                 }
             }
         }
 
-        if(retVal.length > 0) {
-            return retVal.substring(0, retVal.length - 2);
-        } else {
-            return propvalue;
-        }
+        return retVal;
     } else {
         return propvalue;
     }
