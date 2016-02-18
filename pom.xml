@@ -33,7 +33,6 @@
   </modules>
 
   <properties>
-    <jdk.min.version>1.7.0</jdk.min.version>
     <port>8888</port>
   </properties>
 
