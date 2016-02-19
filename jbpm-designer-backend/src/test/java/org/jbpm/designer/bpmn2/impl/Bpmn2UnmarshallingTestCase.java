@@ -977,6 +977,23 @@ public class Bpmn2UnmarshallingTestCase {
         return false;
     }
 
+    @Test
+    public void testWorkItemHandlerNoParams() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("workItemHandlerNoParams.json"), "Email,HelloWorkItemHandler,Log,Rest,WebService").getContents().get(0));
+        assertTrue(definitions.getRootElements().size() == 1);
+        Process process = getRootProcess(definitions);
+        assertTrue(process.getFlowElements().get(0) instanceof StartEvent);
+        StartEvent startEvent = (StartEvent) process.getFlowElements().get(0);
+        assertEquals("TheStart", startEvent.getName());
+        Task task = (Task) process.getFlowElements().get(1);
+        assertEquals("HelloWorldService", task.getName());
+        SequenceFlow flow = (SequenceFlow) process.getFlowElements().get(2);
+        assertEquals("flow1", flow.getName());
+        assertEquals(startEvent, flow.getSourceRef());
+        assertEquals(task, flow.getTargetRef());
+    }
+
     /* Disabling test as no support for child lanes yet
     @Test
     public void testDoubleLaneUnmarshalling() throws Exception {
