@@ -1,0 +1,310 @@
+{
+  "resourceId": "_tkMXwNcaEeWafILjzKXdSQ",
+  "properties": {
+    "name": "",
+    "namespaces": "",
+    "expressionlanguage": "http:\/\/www.mvel.org\/2.0",
+    "executable": "true",
+    "package": "org.jbpm",
+    "vardefs": "",
+    "customdescription": "",
+    "adhocprocess": "false",
+    "imports": "",
+    "globals": "",
+    "id": "TestWIH4.TestHello",
+    "version": "1.0",
+    "timeunit": "min",
+    "currency": "",
+    "targetnamespace": "http:\/\/www.omg.org\/bpmn20",
+    "typelanguage": "http:\/\/www.java.com\/javaTypes",
+    "processn": "TestHello",
+    "documentation": ""
+  },
+  "stencil": {
+    "id": "BPMNDiagram"
+  },
+  "childShapes": [
+    {
+      "resourceId": "processStartEvent",
+      "properties": {
+        "name": "TheStart",
+        "documentation": "",
+        "isselectable": "true",
+        "invisid": "",
+        "dataoutputassociations": "",
+        "dataoutput": "",
+        "min": "5",
+        "max": "10",
+        "standarddeviation": "1",
+        "mean": "0",
+        "distributiontype": "uniform",
+        "probability": "100",
+        "isinterrupting": "true",
+        "bgcolor": "#9acd32",
+        "bordercolor": "#000000",
+        "fontcolor": "#000000",
+        "fontsize": "",
+        "origbgcolor": "#9acd32",
+        "origbordercolor": "#000000"
+      },
+      "stencil": {
+        "id": "StartNoneEvent"
+      },
+      "childShapes": [
+
+      ],
+      "outgoing": [
+        {
+          "resourceId": "_9142F7F9-E12F-4A94-93CD-42C1E1E73820"
+        }
+      ],
+      "bounds": {
+        "lowerRight": {
+          "x": 150,
+          "y": 195
+        },
+        "upperLeft": {
+          "x": 120,
+          "y": 165
+        }
+      },
+      "dockers": [
+
+      ]
+    },
+    {
+      "resourceId": "_F3CC2DB8-0168-4155-A202-27593E3BD8D7",
+      "properties": {
+        "bgcolor": "#fafad2",
+        "bordercolor": "#000000",
+        "fontcolor": "#000000",
+        "fontsize": "",
+        "isforcompensation": "",
+        "origbgcolor": "#fafad2",
+        "origbordercolor": "#000000",
+        "tasktype": "HelloWorkItemHandler",
+        "multipleinstance": "false",
+        "multipleinstancecollectioninput": "",
+        "multipleinstancecollectionoutput": "",
+        "multipleinstancedatainput": "",
+        "multipleinstancedataoutput": "",
+        "multipleinstancecompletioncondition": "",
+        "isselectable": "true",
+        "name": "HelloWorldService",
+        "documentation": "",
+        "taskname": "HelloWorkItemHandler",
+        "datainputset": "",
+        "dataoutputset": "",
+        "assignments": "",
+        "onentryactions": "",
+        "onexitactions": "",
+        "isasync": "false",
+        "script_language": "java",
+        "min": "5.0",
+        "max": "10.0",
+        "standarddeviation": "1",
+        "mean": "0",
+        "distributiontype": "uniform",
+        "unitcost": "0.0"
+      },
+      "stencil": {
+        "id": "HelloWorkItemHandler"
+      },
+      "childShapes": [
+
+      ],
+      "outgoing": [
+        {
+          "resourceId": "_FBBDFC37-1283-4C5F-9C99-9DFA09BBF00B"
+        }
+      ],
+      "bounds": {
+        "lowerRight": {
+          "x": 415,
+          "y": 201
+        },
+        "upperLeft": {
+          "x": 315,
+          "y": 121
+        }
+      },
+      "dockers": [
+
+      ]
+    },
+    {
+      "resourceId": "_9142F7F9-E12F-4A94-93CD-42C1E1E73820",
+      "properties": {
+        "name": "flow1",
+        "documentation": "",
+        "isselectable": "true",
+        "invisid": "",
+        "conditiontype": "None",
+        "conditionexpression": "",
+        "conditionexpressionlanguage": "java",
+        "priority": "",
+        "probability": "100.0",
+        "isimmediate": "false",
+        "showdiamondmarker": "",
+        "bgcolor": "#000000",
+        "origbgcolor": "#000000",
+        "bordercolor": "#000000",
+        "origbordercolor": "#000000",
+        "fontcolor": "#000000",
+        "fontsize": ""
+      },
+      "stencil": {
+        "id": "SequenceFlow"
+      },
+      "childShapes": [
+
+      ],
+      "outgoing": [
+        {
+          "resourceId": "_F3CC2DB8-0168-4155-A202-27593E3BD8D7"
+        }
+      ],
+      "bounds": {
+        "lowerRight": {
+          "x": 314.5893322334,
+          "y": 178.73017173885
+        },
+        "upperLeft": {
+          "x": 150.3716052666,
+          "y": 165.16435951115
+        }
+      },
+      "dockers": [
+        {
+          "x": 15,
+          "y": 15
+        },
+        {
+          "x": 50,
+          "y": 40
+        }
+      ],
+      "target": {
+        "resourceId": "_F3CC2DB8-0168-4155-A202-27593E3BD8D7"
+      }
+    },
+    {
+      "resourceId": "_41459687-F7EE-4E90-AA76-61F3BCFC08BD",
+      "properties": {
+        "name": "TheEnd",
+        "documentation": "",
+        "isselectable": "true",
+        "invisid": "",
+        "eventdefinitions": "",
+        "datainputassociations": "",
+        "datainput": "",
+        "min": "5",
+        "max": "10",
+        "standarddeviation": "1",
+        "mean": "0",
+        "distributiontype": "uniform",
+        "bgcolor": "#ff6347",
+        "bordercolor": "#000000",
+        "fontcolor": "#000000",
+        "fontsize": "",
+        "origbgcolor": "#ff6347",
+        "origbordercolor": "#000000"
+      },
+      "stencil": {
+        "id": "EndNoneEvent"
+      },
+      "childShapes": [
+
+      ],
+      "outgoing": [
+
+      ],
+      "bounds": {
+        "lowerRight": {
+          "x": 688,
+          "y": 175
+        },
+        "upperLeft": {
+          "x": 660,
+          "y": 147
+        }
+      },
+      "dockers": [
+
+      ]
+    },
+    {
+      "resourceId": "_FBBDFC37-1283-4C5F-9C99-9DFA09BBF00B",
+      "properties": {
+        "name": "flow2",
+        "documentation": "",
+        "isselectable": "true",
+        "invisid": "",
+        "conditiontype": "None",
+        "conditionexpression": "",
+        "conditionexpressionlanguage": "java",
+        "priority": "",
+        "probability": "100.0",
+        "isimmediate": "false",
+        "showdiamondmarker": "",
+        "bgcolor": "#000000",
+        "origbgcolor": "#000000",
+        "bordercolor": "#000000",
+        "origbordercolor": "#000000",
+        "fontcolor": "#000000",
+        "fontsize": ""
+      },
+      "stencil": {
+        "id": "SequenceFlow"
+      },
+      "childShapes": [
+
+      ],
+      "outgoing": [
+        {
+          "resourceId": "_41459687-F7EE-4E90-AA76-61F3BCFC08BD"
+        }
+      ],
+      "bounds": {
+        "lowerRight": {
+          "x": 659.72265625,
+          "y": 162
+        },
+        "upperLeft": {
+          "x": 415.48828125,
+          "y": 160
+        }
+      },
+      "dockers": [
+        {
+          "x": 50,
+          "y": 40
+        },
+        {
+          "x": 14,
+          "y": 14
+        }
+      ],
+      "target": {
+        "resourceId": "_41459687-F7EE-4E90-AA76-61F3BCFC08BD"
+      }
+    }
+  ],
+  "bounds": {
+    "lowerRight": {
+      "x": 3000,
+      "y": 2000
+    },
+    "upperLeft": {
+      "x": 0,
+      "y": 0
+    }
+  },
+  "stencilset": {
+    "url": "\/org.kie.workbench.KIEWebapp\/stencilsets\/bpmn2.0jbpm\/bpmn2.0jbpm.json",
+    "namespace": "http:\/\/b3mn.org\/stencilset\/bpmn2.0#"
+  },
+  "ssextensions": [
+
+  ]
+}
