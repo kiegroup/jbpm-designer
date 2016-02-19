@@ -3557,7 +3557,11 @@
 					"id":"assignments",
 					"type":"Dataassignment",
 					"title":"Assignments",
-					"value":"$workitemDefs.(k).parameters:{k1| $k1.name$}; separator="=,"$=",
+					$if(workitemDefs.(k).parameters)$
+						"value":"$workitemDefs.(k).parameters:{k1| $k1.name$}; separator="=,"$=",
+					$else$
+						"value":"",
+					$endif$
 					"description":"",
 					"readonly":false,
 					"optional":true
