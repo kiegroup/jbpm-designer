@@ -979,4 +979,35 @@ public class Bpmn2UnmarshallingTestCase {
         return null;
     }
 
+    @Test
+    public void testDocumentationPropertyForBoundaryEvents() throws Exception {
+        final String DOCUMENTATION_VALUE = "<![CDATA[Cancel task on timeout.]]>";
+        final String BOUNDARY_EVENT_NAME = "CancelOnTimer";
+
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        JsonParser parser = new JsonFactory().createJsonParser(getTestJsonFile("boundaryEventsDocumentation.json"));
+        parser.nextToken();
+        Definitions definitions = ((Definitions) unmarshaller.unmarshallItem(parser, ""));
+        unmarshaller.revisitCatchEvents(definitions);
+        unmarshaller.revisitCatchEventsConvertToBoundary(definitions);
+        unmarshaller.revisitBoundaryEventsPositions(definitions);
+
+        boolean documentationChecked = false;
+        for (RootElement root : definitions.getRootElements()) {
+            if (!(root instanceof Process)) {
+                continue;
+            }
+
+            for (FlowElement flow : ((Process) root).getFlowElements()) {
+                if (BOUNDARY_EVENT_NAME.equals(flow.getName())) {
+                    assertTrue(BOUNDARY_EVENT_NAME + " have no documentation.", flow.getDocumentation().size() > 0);
+                    assertEquals(DOCUMENTATION_VALUE, flow.getDocumentation().get(0).getText());
+                    documentationChecked = true;
+                    break;
+                }
+            }
+        }
+
+        assertTrue("Boundary Event '" + BOUNDARY_EVENT_NAME + "' is not found in the process.", documentationChecked);
+    }
 }
