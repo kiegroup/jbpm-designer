@@ -1727,8 +1727,12 @@ public class Bpmn2JsonUnmarshaller {
     }
 
     private BoundaryEvent copyBoundaryEvent(BoundaryEvent beEntry) {
+        EventDefinition ed = null;
+        if(beEntry.getEventDefinitions() != null && beEntry.getEventDefinitions().size() > 0) {
+            ed = beEntry.getEventDefinitions().get(0);
+        }
         BoundaryEvent be = Bpmn2Factory.eINSTANCE.createBoundaryEvent();
-        if(beEntry instanceof ErrorEventDefinition) {
+        if(ed instanceof ErrorEventDefinition) {
             be.setCancelActivity(true);
         } else {
             Iterator<FeatureMap.Entry> iter = beEntry.getAnyAttribute().iterator();
@@ -1769,6 +1773,7 @@ public class Bpmn2JsonUnmarshaller {
             be.getIncoming().addAll(beEntry.getIncoming());
         }
 
+        be.getDocumentation().addAll(beEntry.getDocumentation());
         be.setName(beEntry.getName());
         be.setId(beEntry.getId());
 
@@ -1778,15 +1783,15 @@ public class Bpmn2JsonUnmarshaller {
     }
 
     protected void revisitCatchEventsConvertToBoundary(Definitions def) {
-    	List<CatchEvent> catchEventsToRemove = new ArrayList<CatchEvent>();
-    	Map<BoundaryEvent, List<String>> boundaryEventsToAdd = new HashMap<BoundaryEvent, List<String>>();
-    	List<RootElement> rootElements =  def.getRootElements();
-    	for(RootElement root : rootElements) {
-    		if(root instanceof Process) {
+        List<CatchEvent> catchEventsToRemove = new ArrayList<>();
+        Map<BoundaryEvent, List<String>> boundaryEventsToAdd = new HashMap<>();
+        List<RootElement> rootElements =  def.getRootElements();
+        for(RootElement root : rootElements) {
+            if(root instanceof Process) {
                 Process process = (Process) root;
                 revisitCatchEVentsConvertToBoundaryExecute(process, null, catchEventsToRemove, boundaryEventsToAdd);
-    		}
-    	}
+            }
+        }
         reconnectFlows();
     }
 
@@ -1796,15 +1801,15 @@ public class Bpmn2JsonUnmarshaller {
         List<FlowElement> flowElements =  container.getFlowElements();
         for(FlowElement fe : flowElements) {
             if(fe instanceof CatchEvent) {
-                CatchEvent ce = (CatchEvent) fe;
-                EventDefinition ed = null;
-                if(ce.getEventDefinitions() != null && ce.getEventDefinitions().size() > 0) {
-                    ed = ce.getEventDefinitions().get(0);
-                }
                 // check if we have an outgoing connection to this catch event from an activity
                 for(Entry<Object, List<String>> entry : _outgoingFlows.entrySet()) {
                     for (String flowId : entry.getValue()) {
-                        if (entry.getKey() instanceof Activity && flowId.equals(ce.getId())) {
+                        if (entry.getKey() instanceof Activity && flowId.equals(fe.getId())) {
+                            CatchEvent ce = (CatchEvent) fe;
+                            EventDefinition ed = null;
+                            if(ce.getEventDefinitions() != null && ce.getEventDefinitions().size() > 0) {
+                                ed = ce.getEventDefinitions().get(0);
+                            }
                             BoundaryEvent be = Bpmn2Factory.eINSTANCE.createBoundaryEvent();
                             if(ed != null && ed instanceof ErrorEventDefinition) {
                                 be.setCancelActivity(true);
@@ -1850,6 +1855,7 @@ public class Bpmn2JsonUnmarshaller {
                                 be.getProperties().addAll(ce.getProperties());
                             }
 
+                            be.getDocumentation().addAll(ce.getDocumentation());
                             be.setName(ce.getName());
 
                             String ceElementName = null;
@@ -1909,6 +1915,7 @@ public class Bpmn2JsonUnmarshaller {
             }
         }
     }
+
 
     public void revisitAssociationsIoSpec(Definitions def) {
     	List<RootElement> rootElements =  def.getRootElements();
