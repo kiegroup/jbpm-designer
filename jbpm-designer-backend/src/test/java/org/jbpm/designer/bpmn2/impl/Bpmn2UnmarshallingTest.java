@@ -15,10 +15,7 @@
  */
 package org.jbpm.designer.bpmn2.impl;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.fail;
+import static junit.framework.Assert.*;
 import static org.junit.Assert.assertFalse;
 
 import java.io.File;
@@ -28,48 +25,8 @@ import java.util.List;
 
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParser;
-import org.eclipse.bpmn2.Association;
-import org.eclipse.bpmn2.AssociationDirection;
-import org.eclipse.bpmn2.BoundaryEvent;
-import org.eclipse.bpmn2.CancelEventDefinition;
-import org.eclipse.bpmn2.CatchEvent;
-import org.eclipse.bpmn2.CompensateEventDefinition;
-import org.eclipse.bpmn2.ConditionalEventDefinition;
-import org.eclipse.bpmn2.DataObject;
-import org.eclipse.bpmn2.DataStore;
-import org.eclipse.bpmn2.Definitions;
-import org.eclipse.bpmn2.EndEvent;
-import org.eclipse.bpmn2.ErrorEventDefinition;
-import org.eclipse.bpmn2.EscalationEventDefinition;
-import org.eclipse.bpmn2.EventBasedGateway;
-import org.eclipse.bpmn2.EventDefinition;
-import org.eclipse.bpmn2.ExclusiveGateway;
-import org.eclipse.bpmn2.ExtensionAttributeValue;
-import org.eclipse.bpmn2.FlowElement;
-import org.eclipse.bpmn2.FlowElementsContainer;
-import org.eclipse.bpmn2.GlobalBusinessRuleTask;
-import org.eclipse.bpmn2.GlobalManualTask;
-import org.eclipse.bpmn2.GlobalScriptTask;
-import org.eclipse.bpmn2.GlobalTask;
-import org.eclipse.bpmn2.GlobalUserTask;
-import org.eclipse.bpmn2.InclusiveGateway;
-import org.eclipse.bpmn2.Lane;
-import org.eclipse.bpmn2.LinkEventDefinition;
-import org.eclipse.bpmn2.Message;
-import org.eclipse.bpmn2.MessageEventDefinition;
-import org.eclipse.bpmn2.ParallelGateway;
+import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.Process;
-import org.eclipse.bpmn2.ProcessType;
-import org.eclipse.bpmn2.RootElement;
-import org.eclipse.bpmn2.SequenceFlow;
-import org.eclipse.bpmn2.SignalEventDefinition;
-import org.eclipse.bpmn2.StartEvent;
-import org.eclipse.bpmn2.SubProcess;
-import org.eclipse.bpmn2.Task;
-import org.eclipse.bpmn2.TerminateEventDefinition;
-import org.eclipse.bpmn2.TextAnnotation;
-import org.eclipse.bpmn2.ThrowEvent;
-import org.eclipse.bpmn2.TimerEventDefinition;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.jboss.drools.DroolsPackage;
 import org.jboss.drools.MetaDataType;
@@ -80,10 +37,10 @@ import org.junit.Test;
  *
  * A series of tests to check the unmarshalling of json to bpmn2.
  */
-public class Bpmn2UnmarshallingTestCase {
+public class Bpmn2UnmarshallingTest {
 
     private static File getTestJsonFile(String filename) {
-        URL fileURL = Bpmn2UnmarshallingTestCase.class.getResource(filename);
+        URL fileURL = Bpmn2UnmarshallingTest.class.getResource(filename);
         return new File(fileURL.getFile());
     }
 
@@ -91,7 +48,7 @@ public class Bpmn2UnmarshallingTestCase {
     public void testSimpleDefinitionsUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("empty.json"), "").getContents().get(0));
-        assertEquals("<![CDATA[my doc]]>", definitions.getDocumentation().iterator().next().getText());
+        assertEquals("<![CDATA[my doc]]>", definitions.getRootElements().get(0).getDocumentation().iterator().next().getText());
         assertEquals("http://www.w3.org/1999/XPath", definitions.getExpressionLanguage());
         assertEquals("http://www.omg.org/bpmn20", definitions.getTargetNamespace());
         assertEquals("http://www.w3.org/2001/XMLSchema", definitions.getTypeLanguage());
@@ -380,8 +337,8 @@ public class Bpmn2UnmarshallingTestCase {
         Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("textAnnotation.json"), "").getContents().get(0));
         assertTrue(definitions.getRootElements().size() == 1);
         Process process = getRootProcess(definitions);
-        assertTrue(process.getArtifacts().iterator().next() instanceof TextAnnotation);
-        TextAnnotation ta = (TextAnnotation) process.getArtifacts().iterator().next();
+        assertTrue(process.getFlowElements().iterator().next() instanceof TextAnnotation);
+        TextAnnotation ta = (TextAnnotation) process.getFlowElements().iterator().next();
         assertEquals("text annotation", ta.getText());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
@@ -395,28 +352,6 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(process.getFlowElements().iterator().next() instanceof DataObject);
         DataObject da = (DataObject) process.getFlowElements().iterator().next();
         assertEquals("data object", da.getName());
-        definitions.eResource().save(System.out, Collections.emptyMap());
-    }
-
-    @Test
-    public void testDataStoreUnmarshalling() throws Exception {
-        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
-        Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("dataStore.json"), "").getContents().get(0));
-        assertTrue(definitions.getRootElements().size() == 1);
-        assertTrue(definitions.getRootElements().iterator().next() instanceof DataStore);
-        DataStore da = (DataStore) definitions.getRootElements().iterator().next();
-        assertEquals("data store", da.getName());
-        definitions.eResource().save(System.out, Collections.emptyMap());
-    }
-
-    @Test
-    public void testMessageUnmarshalling() throws Exception {
-        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
-        Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("message.json"), "").getContents().get(0));
-        assertTrue(definitions.getRootElements().size() == 2);
-        assertTrue(definitions.getRootElements().iterator().next() instanceof Message);
-        Message msg = (Message) definitions.getRootElements().iterator().next();
-        assertEquals("message", msg.getName());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
 
@@ -734,8 +669,8 @@ public class Bpmn2UnmarshallingTestCase {
         Process process = getRootProcess(definitions);
         Task g = (Task) process.getFlowElements().get(0);
         assertEquals("task", g.getName());
-        TextAnnotation textA = (TextAnnotation) process.getArtifacts().get(0);
-        Association association = (Association) process.getArtifacts().get(1);
+        TextAnnotation textA = (TextAnnotation) process.getFlowElements().get(1);
+        Association association = (Association) process.getArtifacts().get(0);
         assertEquals(g, association.getSourceRef());
         assertEquals(textA, association.getTargetRef());
         assertEquals(AssociationDirection.NONE, association.getAssociationDirection());
@@ -749,8 +684,8 @@ public class Bpmn2UnmarshallingTestCase {
         Process process = getRootProcess(definitions);
         Task g = (Task) process.getFlowElements().get(0);
         assertEquals("task", g.getName());
-        TextAnnotation textA = (TextAnnotation) process.getArtifacts().get(0);
-        Association association = (Association) process.getArtifacts().get(1);
+        TextAnnotation textA = (TextAnnotation) process.getFlowElements().get(1);
+        Association association = (Association) process.getArtifacts().get(0);
         assertEquals(g, association.getSourceRef());
         assertEquals(textA, association.getTargetRef());
         assertEquals(AssociationDirection.ONE, association.getAssociationDirection());
@@ -764,8 +699,8 @@ public class Bpmn2UnmarshallingTestCase {
         Process process = getRootProcess(definitions);
         Task g = (Task) process.getFlowElements().get(0);
         assertEquals("task", g.getName());
-        TextAnnotation textA = (TextAnnotation) process.getArtifacts().get(0);
-        Association association = (Association) process.getArtifacts().get(1);
+        TextAnnotation textA = (TextAnnotation) process.getFlowElements().get(1);
+        Association association = (Association) process.getArtifacts().get(0);
         assertEquals(g, association.getSourceRef());
         assertEquals(textA, association.getTargetRef());
         assertEquals(AssociationDirection.BOTH, association.getAssociationDirection());
