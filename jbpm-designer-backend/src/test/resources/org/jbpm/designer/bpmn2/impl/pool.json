@@ -21,13 +21,12 @@
     "childShapes": [{
         "resourceId": "oryx_B4F97D75-9CC1-42F7-9CA5-3FC08F8EFF87",
         "properties": {
-            "name": "pool",
             "documentation": "",
             "auditing": "",
             "monitoring": "",
             "multiinstance": "",
             "boundaryvisible": true,
-            "processname": "",
+            "processn": "pool",
             "status": "None",
             "adhoc": "",
             "adhocordering": "Parallel",
