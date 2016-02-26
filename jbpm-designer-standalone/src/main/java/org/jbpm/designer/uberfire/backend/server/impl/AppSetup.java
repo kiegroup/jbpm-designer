@@ -27,6 +27,8 @@ import javax.inject.Named;
 import org.guvnor.structure.organizationalunit.OrganizationalUnit;
 import org.guvnor.structure.organizationalunit.OrganizationalUnitService;
 import org.guvnor.structure.repositories.Repository;
+import org.guvnor.structure.repositories.RepositoryEnvironmentConfiguration;
+import org.guvnor.structure.repositories.RepositoryEnvironmentConfigurations;
 import org.guvnor.structure.repositories.RepositoryService;
 import org.guvnor.structure.server.config.ConfigGroup;
 import org.guvnor.structure.server.config.ConfigType;
@@ -72,13 +74,15 @@ public class AppSetup {
         try {
             Repository jbpmRepo = repositoryService.getRepository( JBPM_REPO_PLAYGROUND );
             if ( jbpmRepo == null ) {
+
+                final RepositoryEnvironmentConfigurations configurations = new RepositoryEnvironmentConfigurations();
+                configurations.setOrigin( JBPM_URL );
+                configurations.setUserName( userName );
+                configurations.setPassword( password );
+
                 jbpmRepo = repositoryService.createRepository( "git",
                                                                JBPM_REPO_PLAYGROUND,
-                                                               new HashMap<String, Object>() {{
-                                                                   put( "origin", JBPM_URL );
-                                                                   put( "username", userName );
-                                                                   put( "crypt:password", password );
-                                                               }} );
+                                                               configurations );
             }
 
             // TODO in case repo is not defined in system repository so we add default
