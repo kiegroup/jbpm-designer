@@ -320,16 +320,17 @@ public class Bpmn2UnmarshallingTest {
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
 
-    /**@Test
-     * this test needs to be revised (the json)
+    @Test
     public void testGroupUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("group.json"), "").getContents().get(0));
-        assertTrue(definitions.getRootElements().size() == 1);
+        assertTrue(definitions.getRootElements().size() == 2);
         Process process = getRootProcess(definitions);
-        assertTrue(process.getArtifacts().iterator().next() instanceof Group);
+        Group group = (Group) process.getArtifacts().iterator().next();
+        assertEquals("Group name is wrong.", group.getCategoryValueRef().getValue(), "group");
+        assertEquals(group.getDocumentation().get(0).getText(), "<![CDATA[group documentation]]>");
         definitions.eResource().save(System.out, Collections.emptyMap());
-    }**/
+    }
 
     @Test
     public void testTextAnnotationUnmarshalling() throws Exception {
