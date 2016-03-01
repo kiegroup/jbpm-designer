@@ -3422,10 +3422,14 @@ public class Bpmn2JsonMarshaller {
     }
 
     protected void marshallGroup(Group group, BPMNPlane plane, JsonGenerator generator, float xOffset, float yOffset, String preProcessingData, Definitions def)  throws JsonGenerationException, IOException{
-    	Map<String, Object> properties = new LinkedHashMap<String, Object>();
+    	Map<String, Object> properties = new LinkedHashMap<>();
     	if(group.getCategoryValueRef() != null && group.getCategoryValueRef().getValue() != null) {
     		properties.put("name", unescapeXML(group.getCategoryValueRef().getValue()));
     	}
+        Documentation doc = getDocumentation(group);
+        if(doc != null) {
+            properties.put("documentation", doc.getText());
+        }
 
 	    marshallProperties(properties, generator);
 
@@ -3454,6 +3458,14 @@ public class Bpmn2JsonMarshaller {
     	generator.writeObjectField("y", bounds.getY() - yOffset);
     	generator.writeEndObject();
     	generator.writeEndObject();
+    }
+
+    private Documentation getDocumentation(BaseElement element) {
+        if (element.getDocumentation() != null && element.getDocumentation().size() > 0) {
+            return element.getDocumentation().get(0);
+        } else {
+            return null;
+        }
     }
 
     protected Association findOutgoingAssociation(BPMNPlane plane, BaseElement baseElement) {
