@@ -4102,7 +4102,8 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 		var layout				=	parent;
 		var navigation			=	{nextBtn:"", prevBtn:"", nextDate:"", prevDate:"", nextTitle:"", prevTitle:""};
 		var timer;
-		
+		var title				=   "Process Execution Times";
+
 		// CONFIG
 		if(typeof VMM.Timeline != 'undefined') {
 			config	= 	VMM.Timeline.Config;
@@ -4137,7 +4138,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 		/* PUBLIC VARS
 		================================================== */
 		this.ver = "0.6";
-		
+
 		config.slider.width		=	config.width;
 		config.slider.height	=	config.height;
 		
@@ -4220,6 +4221,12 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 			goToSlide(n);
 			displayDataForEvent(n, data[current_slide].activityid);
 		};
+
+		this.setTitle = function(s) {
+			if (s !== undefined) {
+				title = s;
+			}
+		}
 		
 		/* ON EVENT
 		================================================== */
@@ -4726,7 +4733,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 			$slider = VMM.getElement("div.slider");
 			$slider_mask = VMM.appendAndGetElement($slider, "<div>", "slider-container-mask");
 			var ccontent = "<center><div class='outterchart'> \
-						    <h6>Process Execution Times</h6> \
+						    <h6>" + title + "</h6> \
 							<p id='chartcontent'> \
 					        <svg id='chart' style='height:290px;width:400px'></svg> \
 							</p> \
@@ -6269,7 +6276,8 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 				VMM.bindEvent("div.navigation", onTimeNavLoaded, "LOADED");
 				VMM.bindEvent("div.slider", onSlideUpdate, "UPDATE");
 				VMM.bindEvent("div.navigation", onMarkerUpdate, "UPDATE");
-			
+
+				slider.setTitle(data.sliderTitle);
 				slider.init(_dates);
 				timenav.init(_dates, data.era);
 			

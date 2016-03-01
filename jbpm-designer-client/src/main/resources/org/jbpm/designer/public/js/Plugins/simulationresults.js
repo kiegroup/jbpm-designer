@@ -305,7 +305,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 
         var processJSON = ORYX.EDITOR.getSerializedJSON();
         var simTimeUnit = jsonPath(processJSON.evalJSON(), "$.properties.timeunit");
-        ORYX.EDITOR.simulationChartTimeUnit = simTimeUnit;
+        ORYX.EDITOR.simulationChartTimeUnit = this.getSimTimeUnit(simTimeUnit);
 		ORYX.EDITOR.simulationChartData = jsonObj;
 		ORYX.EDITOR.simulationEventData = jsonSimObjWrapper;
 		ORYX.EDITOR.simulationEventAggregationData = jsonEventAggregationsObj;
@@ -327,7 +327,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 				innerWrapper[0] = inner;
                 var processJSON = ORYX.EDITOR.getSerializedJSON();
                 var simTimeUnit = jsonPath(processJSON.evalJSON(), "$.properties.timeunit");
-                ORYX.EDITOR.simulationChartTimeUnit = simTimeUnit;
+                ORYX.EDITOR.simulationChartTimeUnit = this.getSimTimeUnit(simTimeUnit);
 				ORYX.EDITOR.simulationChartData = innerWrapper;
 				ORYX.EDITOR.simulationEventData = innerWrapper[0].timeline;
 				ORYX.EDITOR.simulationChartTitle = ORYX.I18N.View.sim.resultsTitlesTaskSimResults;
@@ -344,7 +344,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 			if(inner.id == nodeid) {
                 var processJSON = ORYX.EDITOR.getSerializedJSON();
                 var simTimeUnit = jsonPath(processJSON.evalJSON(), "$.properties.timeunit");
-                ORYX.EDITOR.simulationChartTimeUnit = simTimeUnit;
+                ORYX.EDITOR.simulationChartTimeUnit = this.getSimTimeUnit(simTimeUnit);
 				ORYX.EDITOR.simulationChartData = inner;
 				ORYX.EDITOR.simulationEventData = inner.timeline;
 				ORYX.EDITOR.simulationChartTitle = ORYX.I18N.View.sim.resultsTitlesHumanTaskSimResults;
@@ -358,7 +358,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 		var pathobj = jsonPath(jsonstr.evalJSON(), "$.pathsim.*");
         var processJSON = ORYX.EDITOR.getSerializedJSON();
         var simTimeUnit = jsonPath(processJSON.evalJSON(), "$.properties.timeunit");
-        ORYX.EDITOR.simulationChartTimeUnit = simTimeUnit;
+        ORYX.EDITOR.simulationChartTimeUnit = this.getSimTimeUnit(simTimeUnit);
 		ORYX.EDITOR.simulationChartTitle = ORYX.I18N.View.sim.resultsTitlesPathExecutionInfo + " (" + pathid + ")";
 		ORYX.EDITOR.simulationPathData = pathobj;
 		ORYX.EDITOR.simulationPathId = pathid;
@@ -495,6 +495,14 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
     getDisplayColor : function(cindex) {
         var colors = ["#3399FF", "#FFCC33", "#FF99FF", "#6666CC", "#CCCCCC", "#66FF00", "#FFCCFF", "#0099CC", "#CC66FF", "#FFFF00", "#993300", "#0000CC", "#3300FF","#990000","#33CC00"];
         return colors[cindex];
+    },
+	getSimTimeUnit : function (timeUnit) {
+	    if (ORYX.I18N.View.sim.chartsTimeUnits[timeUnit] !== undefined) {
+		     return ORYX.I18N.View.sim.chartsTimeUnits[timeUnit];
+	    }
+	    else {
+		    return timeUnit;
+	    }
     }
-	
+
 });
