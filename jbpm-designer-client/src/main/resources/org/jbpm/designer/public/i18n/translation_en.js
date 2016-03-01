@@ -558,11 +558,25 @@ ORYX.I18N.View.sim.resultsTitlesPathExecutionInfo = "Path Execution Info";
 ORYX.I18N.View.sim.chartsExecutionTimes = "Execution Times";
 ORYX.I18N.View.sim.chartsActivityInstances = "Activity Instances";
 ORYX.I18N.View.sim.chartsTotalCost = "Total Cost";
+ORYX.I18N.View.sim.chartsTotalCostCurrency = "USD";
 ORYX.I18N.View.sim.chartsTotalResourceUtilization = "Total Resource Utilization";
 ORYX.I18N.View.sim.chartsResourceUtilization = "Resource Utilization";
 ORYX.I18N.View.sim.chartsResourceCost = "Resource Cost";
 ORYX.I18N.View.sim.chartsPathImage = "Path Image";
 ORYX.I18N.View.sim.chartsPathInstanceExecution = "Path Instance Execution";
+ORYX.I18N.View.sim.chartsMax = "Max";
+ORYX.I18N.View.sim.chartsMin = "Min";
+ORYX.I18N.View.sim.chartsAverage = "Average";
+ORYX.I18N.View.sim.chartsProcessExecutionTimesDuringSimulation = "Process execution times during Simulation";
+ORYX.I18N.View.sim.chartsSimulationTime = "Simulation Time";
+ORYX.I18N.View.sim.timelineProcessExecutionTimes = "Process Execution Times";
+ORYX.I18N.View.sim.BarChart = "Bar Chart";
+ORYX.I18N.View.sim.HorizontalBarChart = "Horizontal Bar Chart";
+ORYX.I18N.View.sim.PieChart = "Pie Chart";
+ORYX.I18N.View.sim.Table = "Table";
+ORYX.I18N.View.sim.Timeline = "Timeline";
+ORYX.I18N.View.sim.LineChart = "Line Chart";
+
 
 if(!ORYX.I18N.XFormsSerialization) ORYX.I18N.XFormsSerialization = {};
 

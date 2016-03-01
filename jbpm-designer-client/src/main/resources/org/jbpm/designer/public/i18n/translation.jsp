@@ -746,14 +746,38 @@ ORYX.I18N.View.sim.resultsTitlesTaskSimResults = '<i18n:message key="ORYX.I18N.V
 ORYX.I18N.View.sim.resultsTitlesHumanTaskSimResults = '<i18n:message key="ORYX.I18N.View.sim.resultsTitlesHumanTaskSimResults">Human Task Simulation Results</i18n:message>';
 ORYX.I18N.View.sim.resultsTitlesPathExecutionInfo = '<i18n:message key="ORYX.I18N.View.sim.resultsTitlesPathExecutionInfo">Path Execution Info</i18n:message>';
 ORYX.I18N.View.sim.chartsExecutionTimes = '<i18n:message key="ORYX.I18N.View.sim.chartsExecutionTimes">Execution Times</i18n:message>';
+ORYX.I18N.View.sim.chartsExecutionTimesTime = '<i18n:message key="ORYX.I18N.View.sim.chartsExecutionTimesTime">Time</i18n:message>';
 ORYX.I18N.View.sim.chartsActivityInstances = '<i18n:message key="ORYX.I18N.View.sim.chartsActivityInstances">Activity Instances</i18n:message>';
+ORYX.I18N.View.sim.chartsActivityInstancesInstances = '<i18n:message key="ORYX.I18N.View.sim.chartsActivityInstancesInstances">Instances</i18n:message>';
 ORYX.I18N.View.sim.chartsTotalCost = '<i18n:message key="ORYX.I18N.View.sim.chartsTotalCost">Total Cost</i18n:message>';
+ORYX.I18N.View.sim.chartsTotalCostCost = '<i18n:message key="ORYX.I18N.View.sim.chartsTotalCostCost">Cost</i18n:message>';
+ORYX.I18N.View.sim.chartsTotalCostCurrency = '<i18n:message key="ORYX.I18N.View.sim.chartsTotalCostCurrency">USD</i18n:message>';
 ORYX.I18N.View.sim.chartsTotalResourceUtilization = '<i18n:message key="ORYX.I18N.View.sim.chartsTotalResourceUtilization">Total Resource Utilization</i18n:message>';
+ORYX.I18N.View.sim.chartsTotalResourceUtilizationPercentages = '<i18n:message key="ORYX.I18N.View.sim.chartsTotalResourceUtilizationPercentages">Percentages</i18n:message>';
 ORYX.I18N.View.sim.chartsResourceUtilization = '<i18n:message key="ORYX.I18N.View.sim.chartsResourceUtilization">Resource Utilization</i18n:message>';
 ORYX.I18N.View.sim.chartsResourceCost = '<i18n:message key="ORYX.I18N.View.sim.chartsResourceCost">Resource Cost</i18n:message>';
 ORYX.I18N.View.sim.chartsPathImage = '<i18n:message key="ORYX.I18N.View.sim.chartsPathImage">Path Image</i18n:message>';
 ORYX.I18N.View.sim.chartsPathInstanceExecution = '<i18n:message key="ORYX.I18N.View.sim.chartsPathInstanceExecution">Path Instance Execution</i18n:message>';
+ORYX.I18N.View.sim.chartsMax = '<i18n:message key="ORYX.I18N.View.sim.chartsMax">Max</i18n:message>';
+ORYX.I18N.View.sim.chartsMin = '<i18n:message key="ORYX.I18N.View.sim.chartsMin">Min</i18n:message>';
+ORYX.I18N.View.sim.chartsAverage = '<i18n:message key="ORYX.I18N.View.sim.chartsAverage">Average</i18n:message>';
+ORYX.I18N.View.sim.chartsProcessExecutionTimesDuringSimulation = '<i18n:message key="ORYX.I18N.View.sim.chartsProcessExecutionTimesDuringSimulation">Process execution times during Simulation</i18n:message>';
+ORYX.I18N.View.sim.chartsSimulationTime = '<i18n:message key="ORYX.I18N.View.sim.chartsSimulationTime">Simulation Time</i18n:message>';
+ORYX.I18N.View.sim.timelineProcessExecutionTimes = '<i18n:message key="ORYX.I18N.View.sim.timelineProcessExecutionTimes">Process Execution Times</i18n:message>';
+ORYX.I18N.View.sim.BarChart = '<i18n:message key="ORYX.I18N.View.sim.BarChart">Bar Chart</i18n:message>';
+ORYX.I18N.View.sim.HorizontalBarChart = '<i18n:message key="ORYX.I18N.View.sim.HorizontalBarChart">Horizontal Bar Chart</i18n:message>';
+ORYX.I18N.View.sim.PieChart = '<i18n:message key="ORYX.I18N.View.sim.PieChart">Pie Chart</i18n:message>';
+ORYX.I18N.View.sim.Table = '<i18n:message key="ORYX.I18N.View.sim.Table">Table</i18n:message>';
+ORYX.I18N.View.sim.Timeline = '<i18n:message key="ORYX.I18N.View.sim.Timeline">Timeline</i18n:message>';
+ORYX.I18N.View.sim.LineChart = '<i18n:message key="ORYX.I18N.View.sim.LineChart">Line Chart</i18n:message>';
 
+if(!ORYX.I18N.View.sim.chartsTimeUnits) ORYX.I18N.View.sim.chartsTimeUnits = {};
+ORYX.I18N.View.sim.chartsTimeUnits['ms'] = '<i18n:message key="ORYX.I18N.View.sim.chartsTimeUnits_ms">ms</i18n:message>';
+ORYX.I18N.View.sim.chartsTimeUnits['s'] = '<i18n:message key="ORYX.I18N.View.sim.chartsTimeUnits_s">s</i18n:message>';
+ORYX.I18N.View.sim.chartsTimeUnits['min'] = '<i18n:message key="ORYX.I18N.View.sim.chartsTimeUnits_min">min</i18n:message>';
+ORYX.I18N.View.sim.chartsTimeUnits['hour'] = '<i18n:message key="ORYX.I18N.View.sim.chartsTimeUnits_hour">hour</i18n:message>';
+ORYX.I18N.View.sim.chartsTimeUnits['day'] = '<i18n:message key="ORYX.I18N.View.sim.chartsTimeUnits_day">day</i18n:message>';
+ORYX.I18N.View.sim.chartsTimeUnits['year'] = '<i18n:message key="ORYX.I18N.View.sim.chartsTimeUnits_year">year</i18n:message>';
 
 if(!ORYX.I18N.XFormsSerialization) ORYX.I18N.XFormsSerialization = {};
 
