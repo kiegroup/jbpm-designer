@@ -51,7 +51,7 @@
 					return d.value
 				}).staggerLabels(true)
 				.tooltips(true).showValues(true);
-				chart.yAxis.axisLabel('Time (' + parent.ORYX.EDITOR.simulationChartTimeUnit + ')')
+				chart.yAxis.axisLabel('Time (' + parent.parent.ORYX.EDITOR.simulationChartTimeUnit + ')')
 	
 				d3.select('#chart').datum(datawrapper).transition().duration(500)
 						.call(chart);
@@ -99,6 +99,7 @@
 		displayDataForEvent(currentEventNum, currentEventId);
 	}
 	var timeline = new VMM.Timeline;
+	data.timeline.sliderTitle = parent.parent.ORYX.I18N.View.sim.timelineProcessExecutionTimes;
 	timeline.init(data);
 </script>
 </body>
