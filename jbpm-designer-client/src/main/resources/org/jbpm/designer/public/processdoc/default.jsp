@@ -87,13 +87,6 @@
             <p><h3 id="elemen-info"><span class="badge badge-inverse">2.2</span> Elements</h3></p>
             <p id="processelementdetails"></p>
 
-            <div class="row" id="processimgdiv">
-            <p><h2><span class="badge badge-inverse">3.0</span> Process Image</h2></p>
-            <p>
-                <div class="col-sm-9 pidiv noprint" id="processimagedisplay"></div>
-            </p>
-            </div>
-
         </div>
     </div>
     <div class="row printonly">
@@ -238,7 +231,6 @@
         processDataTotals['processdatatotals'].push({"name":"Imports","count":showProcessImports(processJSON)});
         showProcessTotals(processDataTotals, processJSON);
         showProcessElementsInfo(processJSON);
-        showProcessImage();
     }
 
     function showProcessElementsInfo(processJSON) {
@@ -435,54 +427,6 @@
         });
     }
 
-    function createPDF() {
-        $("#processimagedisplay").hide();
-        var l = { orientation: 'p', unit: 'pt', format: 'a3', compress: true, fontSize: 8, lineHeight: 1, autoSize: false, printHeaders: true };
-        var doc = new jsPDF(l);
-
-        doc.addHTML(document.body, {format:'png',pagesplit: true}, function() {
-            doc.save(getDocPDFName() + "Documentation.pdf");
-            $("#processimagedisplay").show();
-        });
-    }
-
-    function getDocPDFName() {
-        var assetName = parent.ORYX.UUID.split("/").pop();
-        return assetName.split(".")[0];
-    }
-
-    function showProcessImage() {
-        document.getElementById('processimagedisplay').innerHTML = '';
-        document.getElementById('processimageprintdisplay').innerHTML = '';
-
-        var mySVG = parent.DataManager.serialize(parent.ORYX.EDITOR.getCanvas().getSVGRepresentation(true, true));
-        var mySrc = 'data:image/svg+xml;base64,'+window.btoa(mySVG);
-
-        var source = new Image();
-        source.src = mySrc;
-
-        var myCanvas = document.createElement('canvas');
-        myCanvas.width = 2000;
-        myCanvas.height = 2000;
-        document.getElementById('processimagedisplay').appendChild(myCanvas);
-
-        var myPrintCanvas = document.createElement('canvas');
-        myPrintCanvas.width = 2000;
-        myPrintCanvas.height = 2000;
-        document.getElementById('processimageprintdisplay').appendChild(myPrintCanvas);
-
-        var myCanvasContext = myCanvas.getContext('2d');
-        var myCanvasPrintContext = myPrintCanvas.getContext('2d');
-
-        var source = new Image();
-        source.src = mySrc;
-        source.width = '2000';
-        source.height = '2000';
-        source.onload = function(){
-            myCanvasContext.drawImage(source,0,0);
-            myCanvasPrintContext.drawImage(source,0,0);
-        }
-    }
 </script>
 </body>
 </html>
