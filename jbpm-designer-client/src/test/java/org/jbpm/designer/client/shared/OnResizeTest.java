@@ -15,7 +15,11 @@
  */
 package org.jbpm.designer.client.shared;
 
+import com.google.common.collect.Iterables;
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwtmockito.GwtMock;
 import com.google.gwtmockito.GwtMockitoTestRunner;
@@ -23,19 +27,18 @@ import org.jbpm.designer.client.DesignerPopUpPresenter;
 import org.jbpm.designer.client.DesignerViewImpl;
 import org.jbpm.designer.client.DesignerWidgetPresenter;
 import org.jbpm.designer.client.DesignerWidgetView;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
 import org.mockito.Spy;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 @RunWith(GwtMockitoTestRunner.class)
 public class OnResizeTest {
 
-    @Spy
     private DesignerWidgetView designerWidgetView;
 
     @Spy
@@ -48,10 +51,21 @@ public class OnResizeTest {
     Widget parentWidget;
 
     @GwtMock
+    Frame inlineFrame;
+
+    @GwtMock
     FlowPanel parentContaner;
 
     @GwtMock
     DesignerWidgetPresenter designerWidgetPresenter;
+
+    @Before
+    public void setup() {
+        final Element element = mock(Element.class);
+        when(inlineFrame.getElement()).thenReturn(element);
+        when(element.getStyle()).thenReturn(mock(Style.class));
+        designerWidgetView = spy(new DesignerWidgetView());
+    }
 
     @Test
     public void testDesignerWidgetViewOnResize() {
@@ -61,13 +75,19 @@ public class OnResizeTest {
 
         ArgumentCaptor<Integer> pixelSizeCaptorWidth = ArgumentCaptor.forClass(Integer.class);
         ArgumentCaptor<Integer> pixelSizeCaptorHeight = ArgumentCaptor.forClass(Integer.class);
+        ArgumentCaptor<String> captorHeight = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> captorWidth = ArgumentCaptor.forClass(String.class);
 
         designerWidgetView.onResize();
 
-        Mockito.verify(designerWidgetView, Mockito.times(1)).setPixelSize(pixelSizeCaptorWidth.capture(), pixelSizeCaptorHeight.capture());
+        verify(designerWidgetView).setPixelSize(pixelSizeCaptorWidth.capture(), pixelSizeCaptorHeight.capture());
+        verify(inlineFrame, times(2)).setHeight(captorHeight.capture());
+        verify(inlineFrame, times(2)).setWidth(captorWidth.capture());
 
         assertEquals(100, (int) pixelSizeCaptorWidth.getValue());
         assertEquals(100, (int) pixelSizeCaptorHeight.getValue());
+        assertEquals("95px", Iterables.getLast(captorHeight.getAllValues()));
+        assertEquals("100%", Iterables.getLast(captorWidth.getAllValues()));
     }
 
     @Test
@@ -83,8 +103,8 @@ public class OnResizeTest {
 
         designerPopupPresenter.onResize();
 
-        Mockito.verify(parentContaner, Mockito.times(1)).setWidth(pixelSizeCaptorWidth.capture());
-        Mockito.verify(parentContaner, Mockito.times(1)).setHeight(pixelSizeCaptorHeight.capture());
+        verify(parentContaner).setWidth(pixelSizeCaptorWidth.capture());
+        verify(parentContaner).setHeight(pixelSizeCaptorHeight.capture());
 
         assertEquals("100px", pixelSizeCaptorWidth.getValue());
         assertEquals("100px", pixelSizeCaptorHeight.getValue());
@@ -98,7 +118,8 @@ public class OnResizeTest {
 
         ArgumentCaptor<Integer> pixelSizeCaptorWidth = ArgumentCaptor.forClass(Integer.class);
         ArgumentCaptor<Integer> pixelSizeCaptorHeight = ArgumentCaptor.forClass(Integer.class);
-
+        ArgumentCaptor<String> captorHeight = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> captorWidth = ArgumentCaptor.forClass(String.class);
 
         when(designerWidgetPresenter.getView()).thenReturn(designerWidgetView);
 
@@ -106,11 +127,15 @@ public class OnResizeTest {
 
         designerViewImpl.onResize();
 
-        Mockito.verify(designerViewImpl, Mockito.times(1)).setPixelSize(pixelSizeCaptorWidth.capture(), pixelSizeCaptorHeight.capture());
+        verify(designerViewImpl).setPixelSize(pixelSizeCaptorWidth.capture(), pixelSizeCaptorHeight.capture());
+        verify(designerViewImpl).setHeight(captorHeight.capture());
+        verify(designerViewImpl).setWidth(captorWidth.capture());
 
         assertEquals(100, (int) pixelSizeCaptorWidth.getValue());
         assertEquals(100, (int) pixelSizeCaptorHeight.getValue());
-        
-        Mockito.verify(designerWidgetView, Mockito.times(1)).setPixelSize(Mockito.anyInt(), Mockito.anyInt());
+        assertEquals("95px", captorHeight.getValue());
+        assertEquals("100px", captorWidth.getValue());
+
+        verify(designerWidgetView).setPixelSize(anyInt(), anyInt());
     }
 }
