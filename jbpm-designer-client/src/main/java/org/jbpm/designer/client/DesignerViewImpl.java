@@ -111,7 +111,7 @@ public class DesignerViewImpl
         setPixelSize( width, height );
 
         this.setWidth(width + "px");
-        this.setHeight( Math.max(0, height - 50) + "px");
+        this.setHeight( Math.max(0, height - 5) + "px");
 
         ( (RequiresResize) designerWidget.getView() ).onResize();
     }

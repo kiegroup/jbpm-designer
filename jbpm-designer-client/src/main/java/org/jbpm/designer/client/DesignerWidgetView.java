@@ -33,7 +33,7 @@ public class DesignerWidgetView
         implements DesignerWidgetPresenter.View,
                    RequiresResize {
 
-    private Frame inlineFrame = new Frame();
+    private Frame inlineFrame = GWT.create(Frame.class);
     private String editorID = "";
     private Map<String, String> editorParameters;
 
@@ -191,7 +191,7 @@ public class DesignerWidgetView
         setPixelSize(width,height);
 
         inlineFrame.setWidth( "100%" );
-        inlineFrame.setHeight( Math.max(0, (height - 50)) + "px" );
+        inlineFrame.setHeight( Math.max(0, height - 5) + "px" );
     }
 
     public void setSize( final int width,
