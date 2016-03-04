@@ -16,19 +16,12 @@
 
 package org.jbpm.designer.client.shared;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.net.URLDecoder;
-
 import org.jbpm.designer.client.shared.util.StringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.*;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
