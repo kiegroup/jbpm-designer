@@ -37,7 +37,14 @@ public class AssignmentBaseTest {
         // Prevent runtime GWT.create() error at DesignerEditorConstants.INSTANCE
         GWTMockUtilities.disarm();
         // MockDesignerEditorConstants replaces DesignerEditorConstants.INSTANCE
-        setFinalStaticField(DesignerEditorConstants.class.getDeclaredField("INSTANCE"), new MockDesignerEditorConstants());
+        final Answer answer = new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                return invocation.getMethod().getName();
+            }
+        };
+        final DesignerEditorConstants designerEditorConstants = PowerMockito.mock(DesignerEditorConstants.class, answer);
+        setFinalStaticField(DesignerEditorConstants.class.getDeclaredField("INSTANCE"), designerEditorConstants);
 
         // Mock StringUtils URL Encoding methods
         PowerMockito.mockStatic(StringUtils.class);
@@ -105,38 +112,6 @@ public class AssignmentBaseTest {
         modifiersField.setAccessible(true);
         modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
         field.set(null, newValue);
-    }
-
-    private class MockDesignerEditorConstants implements DesignerEditorConstants {
-        public String Add() {return "Add";}
-        public String businessProcess() {return "Business Process";}
-        public String businessProcessResourceTypeDescription() {return "Business Process";}
-        public String Cancel() {return "Cancel";}
-        public String Constant() {return "Constant";}
-        public String Custom() {return "Custom";}
-        public String Data_Input() {return "data input";}
-        public String Data_Inputs() {return "data inputs";}
-        public String Data_Input_and_Assignment() {return "Data Input and Assignment";}
-        public String Data_Inputs_and_Assignments() {return "Data Inputs and Assignments";}
-        public String Data_Output() {return "data output";}
-        public String Data_Outputs() {return "data outputs";}
-        public String Data_Output_and_Assignment() {return "Data Output and Assignment";}
-        public String Data_Outputs_and_Assignments() {return "Data Outputs and Assignments";}
-        public String Data_IO() {return "Data I/O";}
-        public String Edit() {return "Edit";}
-        public String Enter_constant() {return "Enter constant";}
-        public String Enter_type() {return "Enter type";}
-        public String Invalid_character_in_name() {return "Invalid character in name";}
-        public String No_Data_Input() {return "no data input";}
-        public String No_Data_Output() {return "no data output";}
-        public String Only_single_entry_allowed() {return "Only single entry allowed";}
-        public String Save() {return "Save";}
-        public String Source() {return "Source";}
-        public String Target() {return "Target";}
-        public String This_input_should_be_entered_as_a_property_for_the_task() {return "This Input should be entered as a property for the task";}
-        public String Removed_invalid_characters_from_name() {return "Removed invalid characters from name";}
-        public String A_Data_Input_with_this_name_already_exists() {return "A Data Input with this name already exists";}
-        public String ProcessModel() {return "Process Model";}
     }
 
 }

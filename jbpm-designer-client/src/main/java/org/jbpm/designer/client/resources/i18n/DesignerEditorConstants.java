@@ -80,4 +80,6 @@ public interface DesignerEditorConstants extends
     String A_Data_Input_with_this_name_already_exists();
 
     String ProcessModel();
+
+    String ConfirmCloseBusinessProcessEditor();
 }

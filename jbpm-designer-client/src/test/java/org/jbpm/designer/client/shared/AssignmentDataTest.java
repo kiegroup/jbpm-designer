@@ -16,18 +16,11 @@
 
 package org.jbpm.designer.client.shared;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-
-import com.google.gwt.i18n.client.Messages;
-import com.google.gwt.junit.GWTMockUtilities;
-import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.jbpm.designer.client.shared.util.StringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.*;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -40,7 +33,6 @@ public class AssignmentDataTest extends AssignmentBaseTest {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-
     }
 
     @After
@@ -59,7 +51,7 @@ public class AssignmentDataTest extends AssignmentBaseTest {
                 "GroupId,Skippable,Comment,Description,Priority,Content,TaskName,Locale,CreatedBy,NotCompletedReassign,NotStartedReassign,NotCompletedNotify,NotStartedNotify");
 
         assignmentData.setVariableCountsString(true, true, false, false);
-        assertEquals("1 data input", assignmentData.getVariableCountsString());
+        assertEquals("1 Data_Input", assignmentData.getVariableCountsString());
     }
 
     @Test
@@ -73,7 +65,7 @@ public class AssignmentDataTest extends AssignmentBaseTest {
                 "GroupId,Skippable,Comment,Description,Priority,Content,TaskName,Locale,CreatedBy,NotCompletedReassign,NotStartedReassign,NotCompletedNotify,NotStartedNotify");
 
         assignmentData.setVariableCountsString(true, true, false, false);
-        assertEquals("no data input", assignmentData.getVariableCountsString());
+        assertEquals("No_Data_Input", assignmentData.getVariableCountsString());
     }
 
     @Test
@@ -87,7 +79,7 @@ public class AssignmentDataTest extends AssignmentBaseTest {
                 "GroupId,Skippable,Comment,Description,Priority,Content,TaskName,Locale,CreatedBy,NotCompletedReassign,NotStartedReassign,NotCompletedNotify,NotStartedNotify");
 
         assignmentData.setVariableCountsString(false, false, true, true);
-        assertEquals("1 data output", assignmentData.getVariableCountsString());
+        assertEquals("1 Data_Output", assignmentData.getVariableCountsString());
     }
 
     @Test
@@ -101,7 +93,7 @@ public class AssignmentDataTest extends AssignmentBaseTest {
                 "GroupId,Skippable,Comment,Description,Priority,Content,TaskName,Locale,CreatedBy,NotCompletedReassign,NotStartedReassign,NotCompletedNotify,NotStartedNotify");
 
         assignmentData.setVariableCountsString(false, false, true, true);
-        assertEquals("no data output", assignmentData.getVariableCountsString());
+        assertEquals("No_Data_Output", assignmentData.getVariableCountsString());
     }
 
     @Test
@@ -115,7 +107,7 @@ public class AssignmentDataTest extends AssignmentBaseTest {
                 "GroupId,Skippable,Comment,Description,Priority,Content,TaskName,Locale,CreatedBy,NotCompletedReassign,NotStartedReassign,NotCompletedNotify,NotStartedNotify");
 
         assignmentData.setVariableCountsString(true, false, true, false);
-        assertEquals("0 data inputs, 0 data outputs", assignmentData.getVariableCountsString());
+        assertEquals("0 Data_Inputs, 0 Data_Outputs", assignmentData.getVariableCountsString());
     }
 
 
@@ -130,7 +122,7 @@ public class AssignmentDataTest extends AssignmentBaseTest {
                 "GroupId,Skippable,Comment,Description,Priority,Content,TaskName,Locale,CreatedBy,NotCompletedReassign,NotStartedReassign,NotCompletedNotify,NotStartedNotify");
 
         assignmentData.setVariableCountsString(true, false, true, false);
-        assertEquals("1 data input, 1 data output", assignmentData.getVariableCountsString());
+        assertEquals("1 Data_Input, 1 Data_Output", assignmentData.getVariableCountsString());
     }
 
     @Test
@@ -144,7 +136,7 @@ public class AssignmentDataTest extends AssignmentBaseTest {
                 "GroupId,Skippable,Comment,Description,Priority,Content,TaskName,Locale,CreatedBy,NotCompletedReassign,NotStartedReassign,NotCompletedNotify,NotStartedNotify");
 
         assignmentData.setVariableCountsString(true, false, true, false);
-        assertEquals("4 data inputs, 3 data outputs", assignmentData.getVariableCountsString());
+        assertEquals("4 Data_Inputs, 3 Data_Outputs", assignmentData.getVariableCountsString());
     }
 
     @Test
@@ -158,7 +150,7 @@ public class AssignmentDataTest extends AssignmentBaseTest {
                 "GroupId,Skippable,Comment,Description,Priority,Content,TaskName,Locale,CreatedBy,NotCompletedReassign,NotStartedReassign,NotCompletedNotify,NotStartedNotify");
 
         assignmentData.setVariableCountsString(true, false, true, false);
-        assertEquals("0 data inputs, 3 data outputs", assignmentData.getVariableCountsString());
+        assertEquals("0 Data_Inputs, 3 Data_Outputs", assignmentData.getVariableCountsString());
     }
 
 }
