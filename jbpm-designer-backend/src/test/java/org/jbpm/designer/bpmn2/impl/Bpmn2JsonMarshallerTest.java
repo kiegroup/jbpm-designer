@@ -46,6 +46,28 @@ public class Bpmn2JsonMarshallerTest {
         assertEquals("Swimlane has wrong documentation.", "Some documentation for swimlane.", getDocumentationFor(swimlane));
     }
 
+    @Test
+    public void testSendTaskDataInputs() throws Exception {
+        String[] variableNames = {"Comment", "Content", "CreatedBy", "GroupId", "Locale",
+                "NotCompletedNotify", "NotCompletedReassign", "NotStartedNotify", "NotStartedReassign",
+                "Priority", "Skippable", "TaskName", "MyDataInput1", "MyDataInput2"};
+
+        JSONObject process = loadProcessFrom("nonusertaskdatainputs.bpmn2");
+        JSONObject sendtask = getChildByName(process, "MySendTask");
+        JSONObject properties = sendtask.getJSONObject("properties");
+        String datainputset = properties.getString("datainputset");
+        for (String variableName : variableNames) {
+            String dataInput = variableName + ":String";
+            assertTrue("Variable \"" + variableName + "\" not found in datainputset", datainputset.contains(dataInput));
+        }
+
+        String assignments = properties.getString("assignments");
+        for (String variableName : variableNames) {
+            String assignment = "[din]" + variableName + "=a" + variableName;
+            assertTrue("Assignment \"" + assignment + "\" not found in assignments", assignments.contains(assignment));
+        }
+    }
+
     private JSONObject loadProcessFrom(String fileName) throws Exception {
         URL fileURL = Bpmn2JsonMarshallerTest.class.getResource(fileName);
         String definition = new String(Files.readAllBytes(Paths.get(fileURL.toURI())));
