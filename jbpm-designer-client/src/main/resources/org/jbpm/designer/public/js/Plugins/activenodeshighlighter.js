@@ -16,21 +16,25 @@ ORYX.Plugins.ActiveNodesHighlighter = Clazz.extend({
         }).bind(this));
     },
     applyHighlightingToChild: function(child) {
-        if(ORYX.ACTIVENODES) {
-            for(var i=0;i<ORYX.ACTIVENODES.length;i++) {
-                if(child instanceof ORYX.Core.Node || child instanceof ORYX.Core.Edge) {
-                    if(ORYX.ACTIVENODES[i] == child.resourceId) {
-                        child.setProperty("oryx-bordercolor", "#FF0000");
-                    }
-                }
-            }
-        }
         if(ORYX.COMPLETEDNODES) {
             for(var i=0;i<ORYX.COMPLETEDNODES.length;i++) {
                 if(child instanceof ORYX.Core.Node || child instanceof ORYX.Core.Edge) {
                     if(ORYX.COMPLETEDNODES[i] == child.resourceId) {
                         child.setProperty("oryx-bordercolor", "#A8A8A8");
                         child.setProperty("oryx-bgcolor", "#CDCDCD");
+                    }
+                }
+            }
+        }
+
+        if(ORYX.ACTIVENODES) {
+            for(var i=0;i<ORYX.ACTIVENODES.length;i++) {
+                if(child instanceof ORYX.Core.Node || child instanceof ORYX.Core.Edge) {
+                    if(ORYX.ACTIVENODES[i] == child.resourceId) {
+                        child.setProperty("oryx-bordercolor", "#FF0000");
+                        // in case of looping current active node can have been completed before
+                        // soo reset background color from grey
+                        child.setProperty("oryx-bgcolor", child.properties["oryx-origbgcolor"]);
                     }
                 }
             }
