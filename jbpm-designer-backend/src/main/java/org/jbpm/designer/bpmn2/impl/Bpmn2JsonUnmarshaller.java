@@ -5731,6 +5731,14 @@ public class Bpmn2JsonUnmarshaller {
             taskNameDataInput.setId(task.getId() + "_TaskNameInputX");
             taskNameDataInput.setName("TaskName");
 
+            // Make the DataInput a String
+            ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+            EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                    "http://www.jboss.org/drools", "dtype", false, false);
+            SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
+                    "String");
+            taskNameDataInput.getAnyAttribute().add(extensionEntry);
+
             if(task.getIoSpecification() == null) {
                 InputOutputSpecification iospec = Bpmn2Factory.eINSTANCE.createInputOutputSpecification();
                 task.setIoSpecification(iospec);
@@ -5790,7 +5798,10 @@ public class Bpmn2JsonUnmarshaller {
 	                DataInput nextInput = Bpmn2Factory.eINSTANCE.createDataInput();
 	                String[] dataInputParts = dataInput.split( ":\\s*" );
 	                if(dataInputParts.length == 2) {
-	                	nextInput.setId(task.getId() + "_" + dataInputParts[0] + (dataInputParts[0].endsWith("InputX") ? "" : "InputX"));
+	                	if ("TaskName".equals(dataInputParts[0]) && taskNameDataInput != null) {
+                            break;
+                        }
+                        nextInput.setId(task.getId() + "_" + dataInputParts[0] + (dataInputParts[0].endsWith("InputX") ? "" : "InputX"));
 	                	nextInput.setName(dataInputParts[0]);
 
 	                	ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
@@ -5800,6 +5811,9 @@ public class Bpmn2JsonUnmarshaller {
 	                    		dataInputParts[1]);
 	                    nextInput.getAnyAttribute().add(extensionEntry);
 	                } else {
+                        if ("TaskName".equals(dataInput) && taskNameDataInput != null) {
+                            break;
+                        }
 	                	nextInput.setId(task.getId() + "_" + dataInput + (dataInput.endsWith("InputX") ? "" : "InputX"));
 	                	nextInput.setName(dataInput);
 

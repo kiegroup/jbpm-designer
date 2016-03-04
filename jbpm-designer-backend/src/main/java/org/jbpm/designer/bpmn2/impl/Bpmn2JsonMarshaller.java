@@ -1668,13 +1668,15 @@ public class Bpmn2JsonMarshaller {
 
         // backwards compatibility with jbds editor
         boolean foundTaskName = false;
-        if(task.getIoSpecification() != null && task.getIoSpecification().getDataInputs() != null) {
+        if(task instanceof UserTask && task.getIoSpecification() != null && task.getIoSpecification().getDataInputs() != null) {
             List<DataInput> taskDataInputs = task.getIoSpecification().getDataInputs();
             for(DataInput din : taskDataInputs) {
                 if(din.getName() != null && din.getName().equals("TaskName")) {
                     List<DataInputAssociation> taskDataInputAssociations = task.getDataInputAssociations();
                     for(DataInputAssociation dia : taskDataInputAssociations) {
-                        if(dia.getTargetRef() != null && dia.getTargetRef().getId().equals(din.getId())) {
+                        if(dia.getTargetRef() != null && dia.getTargetRef().getId().equals(din.getId()) &&
+                                dia.getAssignment() != null && !dia.getAssignment().isEmpty() &&
+                                dia.getAssignment().get(0).getFrom() != null) {
                             properties.put("taskname", ((FormalExpression) dia.getAssignment().get(0).getFrom()).getBody());
                             foundTaskName = true;
                         }
@@ -1784,8 +1786,11 @@ public class Bpmn2JsonMarshaller {
                 List<DataInput> dataInputList =  inset.getDataInputRefs();
                 for(DataInput dataIn : dataInputList) {
                     // dont add "TaskName" as that is added manually
-                    if(dataIn.getName() != null && !dataIn.getName().equals("TaskName") && !dataIn.getName().equals("miinputCollection")) {
-                        dataInBuffer.append(dataIn.getName());
+                    String dataInName = dataIn.getName();
+                    if(dataInName != null &&
+                            !(dataInName.equals("TaskName") && (task instanceof UserTask)) &&
+                            !dataInName.equals("miinputCollection")) {
+                        dataInBuffer.append(dataInName);
                         if(dataIn.getItemSubjectRef() != null && dataIn.getItemSubjectRef().getStructureRef() != null && dataIn.getItemSubjectRef().getStructureRef().length() > 0) {
                         	dataInBuffer.append(":").append(dataIn.getItemSubjectRef().getStructureRef());
                         }
@@ -1798,41 +1803,44 @@ public class Bpmn2JsonMarshaller {
                         }
                         dataInBuffer.append(",");
                     }
-                    if(dataIn.getName() != null && dataIn.getName().equals("GroupId")) {
-                    	groupDataInput = dataIn;
-                    }
-                    if(dataIn.getName() != null && dataIn.getName().equals("Skippable")) {
-                    	skippableDataInput = dataIn;
-                    }
-                    if(dataIn.getName() != null && dataIn.getName().equals("Comment")) {
-                    	commentDataInput = dataIn;
-                    }
-                    if(dataIn.getName() != null && dataIn.getName().equals("Description ")) {
-                        descriptionDataInput = dataIn;
-                    }
-                    if(dataIn.getName() != null && dataIn.getName().equals("Content")) {
-                    	contentDataInput = dataIn;
-                    }
-                    if(dataIn.getName() != null && dataIn.getName().equals("Priority")) {
-                    	priorityDataInput = dataIn;
-                    }
-                    if(dataIn.getName() != null && dataIn.getName().equals("Locale")) {
-                        localeDataInput = dataIn;
-                    }
-                    if(dataIn.getName() != null && dataIn.getName().equals("CreatedBy")) {
-                        createdByDataInput = dataIn;
-                    }
-                    if(dataIn.getName() != null && dataIn.getName().equals("NotCompletedReassign")) {
-                        notCompletedReassignInput = dataIn;
-                    }
-                    if(dataIn.getName() != null && dataIn.getName().equals("NotStartedReassign")) {
-                        notStartedReassignInput = dataIn;
-                    }
-                    if(dataIn.getName() != null && dataIn.getName().equals("NotCompletedNotify")) {
-                        notCompletedNotificationInput = dataIn;
-                    }
-                    if(dataIn.getName() != null && dataIn.getName().equals("NotStartedNotify")) {
-                        notStartedNotificationInput = dataIn;
+
+                    if (task instanceof UserTask && dataInName != null) {
+                        if (dataInName.equals("GroupId")) {
+                            groupDataInput = dataIn;
+                        }
+                        else if (dataInName.equals("Skippable")) {
+                            skippableDataInput = dataIn;
+                        }
+                        else if (dataInName.equals("Comment")) {
+                            commentDataInput = dataIn;
+                        }
+                        else if (dataInName.equals("Description")) {
+                            descriptionDataInput = dataIn;
+                        }
+                        else if (dataInName.equals("Content")) {
+                            contentDataInput = dataIn;
+                        }
+                        else if (dataInName.equals("Priority")) {
+                            priorityDataInput = dataIn;
+                        }
+                        else if (dataInName.equals("Locale")) {
+                            localeDataInput = dataIn;
+                        }
+                        else if (dataInName.equals("CreatedBy")) {
+                            createdByDataInput = dataIn;
+                        }
+                        else if (dataInName.equals("NotCompletedReassign")) {
+                            notCompletedReassignInput = dataIn;
+                        }
+                        else if (dataInName.equals("NotStartedReassign")) {
+                            notStartedReassignInput = dataIn;
+                        }
+                        else if (dataInName.equals("NotCompletedNotify")) {
+                            notCompletedNotificationInput = dataIn;
+                        }
+                        else if (dataInName.equals("NotStartedNotify")) {
+                            notStartedNotificationInput = dataIn;
+                        }
                     }
                 }
             }
@@ -1948,10 +1956,11 @@ public class Bpmn2JsonMarshaller {
                                 properties.put(rhsAssociation.toLowerCase(), associationValue);
                             }
                         } else {
-                            if(!(rhsAssociation.equals("GroupId") ||
+                            if(!(task instanceof UserTask) ||
+                                  !(rhsAssociation.equals("GroupId") ||
                                     rhsAssociation.equals("Skippable") ||
                                     rhsAssociation.equals("Comment") ||
-                                    rhsAssociation.equals("Description ") ||
+                                    rhsAssociation.equals("Description") ||
                                     rhsAssociation.equals("Priority") ||
                                     rhsAssociation.equals("Content") ||
                                     rhsAssociation.equals("TaskName")  ||
@@ -1975,65 +1984,39 @@ public class Bpmn2JsonMarshaller {
                             properties.put("taskname", associationValue);
                         }
 
-                        if (groupDataInput != null && datain.getAssignment().get(0).getTo() != null &&
+                        if (task instanceof UserTask && datain.getAssignment().get(0).getTo() != null &&
                                 ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
-                                        ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(groupDataInput.getId())) {
-                            properties.put("groupid", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody() == null ? "" : ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
-                        }
-                        if (skippableDataInput != null && datain.getAssignment().get(0).getTo() != null &&
-                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
-                                        ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(skippableDataInput.getId())) {
-                            properties.put("skippable", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
-                        }
-                        if (commentDataInput != null && datain.getAssignment().get(0).getTo() != null &&
-                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
-                                        ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(commentDataInput.getId())) {
-                            properties.put("subject", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
-                        }
-                        if (descriptionDataInput != null && datain.getAssignment().get(0).getTo() != null &&
-                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
-                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(descriptionDataInput.getId())) {
-                            properties.put("description", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
-                        }
-                        if (priorityDataInput != null && datain.getAssignment().get(0).getTo() != null &&
-                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
-                                        ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(priorityDataInput.getId())) {
-                            properties.put("priority", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody() == null ? "" : ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
-                        }
-                        if (contentDataInput != null && datain.getAssignment().get(0).getTo() != null &&
-                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
-                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(contentDataInput.getId())) {
-                            properties.put("content", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
-                        }
-                        if (localeDataInput != null && datain.getAssignment().get(0).getTo() != null &&
-                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
-                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(localeDataInput.getId())) {
-                            properties.put("locale", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
-                        }
-                        if (createdByDataInput != null && datain.getAssignment().get(0).getTo() != null &&
-                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
-                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(createdByDataInput.getId())) {
-                             properties.put("createdby", ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody());
-                        }
-                        if (notCompletedReassignInput != null && datain.getAssignment().get(0).getTo() != null &&
-                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
-                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(notCompletedReassignInput.getId())) {
-                            properties.put("tmpreassignmentnotcompleted", updateReassignmentAndNotificationInput( ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody(), "not-completed" ));
-                        }
-                        if (notStartedReassignInput != null && datain.getAssignment().get(0).getTo() != null &&
-                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
-                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(notStartedReassignInput.getId())) {
-                            properties.put("tmpreassignmentnotstarted", updateReassignmentAndNotificationInput( ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody(), "not-started" ));
-                        }
-                        if (notCompletedNotificationInput != null && datain.getAssignment().get(0).getTo() != null &&
-                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
-                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(notCompletedNotificationInput.getId())) {
-                            properties.put("tmpnotificationnotcompleted", updateReassignmentAndNotificationInput( ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody(), "not-completed" ));
-                        }
-                        if (notStartedNotificationInput != null && datain.getAssignment().get(0).getTo() != null &&
-                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody() != null &&
-                                ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody().equals(notStartedNotificationInput.getId())) {
-                            properties.put("tmpnotificationnotstarted", updateReassignmentAndNotificationInput( ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody(), "not-started" ));
+                                 datain.getAssignment().get(0).getFrom() != null
+                                ) {
+                            String toBody = ((FormalExpression) datain.getAssignment().get(0).getTo()).getBody();
+                            String fromBody = ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody();
+                            if (toBody != null) {
+                                if (groupDataInput != null && toBody.equals(groupDataInput.getId())) {
+                                    properties.put("groupid", fromBody == null ? "" : fromBody);
+                                } else if (skippableDataInput != null && toBody.equals(skippableDataInput.getId())) {
+                                    properties.put("skippable", fromBody);
+                                } else if (commentDataInput != null && toBody.equals(commentDataInput.getId())) {
+                                    properties.put("subject", fromBody);
+                                } else if (descriptionDataInput != null && toBody.equals(descriptionDataInput.getId())) {
+                                    properties.put("description", fromBody);
+                                } else if (priorityDataInput != null && toBody.equals(priorityDataInput.getId())) {
+                                    properties.put("priority", fromBody == null ? "" : fromBody);
+                                } else if (contentDataInput != null && toBody.equals(contentDataInput.getId())) {
+                                    properties.put("content", fromBody);
+                                } else if (localeDataInput != null && toBody.equals(localeDataInput.getId())) {
+                                    properties.put("locale", fromBody);
+                                } else if (createdByDataInput != null && toBody.equals(createdByDataInput.getId())) {
+                                    properties.put("createdby", fromBody);
+                                } else if (notCompletedReassignInput != null && toBody.equals(notCompletedReassignInput.getId())) {
+                                    properties.put("tmpreassignmentnotcompleted", updateReassignmentAndNotificationInput(fromBody, "not-completed"));
+                                } else if (notStartedReassignInput != null && toBody.equals(notStartedReassignInput.getId())) {
+                                    properties.put("tmpreassignmentnotstarted", updateReassignmentAndNotificationInput(fromBody, "not-started"));
+                                } else if (notCompletedNotificationInput != null && toBody.equals(notCompletedNotificationInput.getId())) {
+                                    properties.put("tmpnotificationnotcompleted", updateReassignmentAndNotificationInput(fromBody, "not-completed"));
+                                } else if (notStartedNotificationInput != null && toBody.equals(notStartedNotificationInput.getId())) {
+                                    properties.put("tmpnotificationnotstarted", updateReassignmentAndNotificationInput(fromBody, "not-started"));
+                                }
+                            }
                         }
                     }
                 }
