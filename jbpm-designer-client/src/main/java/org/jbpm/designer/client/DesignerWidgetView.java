@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.RequiresResize;
 import org.gwtbootstrap3.client.ui.Modal;
+import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.uberfire.ext.widgets.common.client.common.BusyPopup;
 
 public class DesignerWidgetView
@@ -36,6 +37,7 @@ public class DesignerWidgetView
     private Frame inlineFrame = GWT.create(Frame.class);
     private String editorID = "";
     private Map<String, String> editorParameters;
+    private DesignerEditorConstants constants = DesignerEditorConstants.INSTANCE;
 
     public DesignerWidgetView() {
         setupInlineFrame();
@@ -101,7 +103,7 @@ public class DesignerWidgetView
 
     @Override
     public boolean confirmClose() {
-        return Window.confirm( "Business Process may contain unsaved changes. Are you sure you would like to close the editor?" );
+        return Window.confirm( constants.ConfirmCloseBusinessProcessEditor() );
     }
 
     public native void setProcessSaved( String editorID ) /*-{
