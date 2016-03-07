@@ -759,6 +759,10 @@ public class Bpmn2JsonMarshaller {
             if(elementName != null) {
                 laneProperties.put("name", elementName);
             }
+            Documentation doc = getDocumentation(lane);
+            if(doc != null) {
+                laneProperties.put("documentation", doc.getText());
+            }
 
 	    	Iterator<FeatureMap.Entry> iter = lane.getAnyAttribute().iterator();
 	    	boolean foundBgColor = false;
