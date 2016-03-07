@@ -25,14 +25,14 @@ import javax.inject.Named;
 import org.guvnor.common.services.backend.metadata.attribute.OtherMetaView;
 import org.jboss.errai.security.shared.api.identity.User;
 import org.jboss.errai.security.shared.service.AuthenticationService;
-import org.uberfire.ext.metadata.backend.lucene.LuceneConfig;
-import org.uberfire.ext.metadata.io.IOSearchIndex;
-import org.uberfire.ext.metadata.io.IOServiceIndexedImpl;
 import org.uberfire.backend.server.IOWatchServiceNonDotImpl;
 import org.uberfire.commons.cluster.ClusterServiceFactory;
 import org.uberfire.commons.services.cdi.Startup;
 import org.uberfire.commons.services.cdi.StartupType;
-import org.uberfire.io.IOSearchService;
+import org.uberfire.ext.metadata.backend.lucene.LuceneConfig;
+import org.uberfire.ext.metadata.io.IOSearchServiceImpl;
+import org.uberfire.ext.metadata.io.IOServiceIndexedImpl;
+import org.uberfire.ext.metadata.search.IOSearchService;
 import org.uberfire.io.IOService;
 import org.uberfire.io.attribute.DublinCoreView;
 import org.uberfire.io.impl.cluster.IOServiceClusterImpl;
@@ -81,8 +81,8 @@ public class ApplicationScopedProvider {
                                                   clusterServiceFactory,
                                                   false );
         }
-        this.ioSearchService = new IOSearchIndex( config.getSearchIndex(),
-                                                  ioService );
+        this.ioSearchService = new IOSearchServiceImpl( config.getSearchIndex(),
+                                                        ioService );
     }
 
     @Produces
