@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.omg.org/bpmn20" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/1.0" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:drools="http://www.jboss.org/drools" id="_TsSHQORPEeW_37iGSkwYtw" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd http://www.jboss.org/drools drools.xsd http://www.bpsim.org/schemas/1.0 bpsim.xsd" exporter="jBPM Designer" exporterVersion="6.2.0" targetNamespace="http://www.omg.org/bpmn20">
+  <bpmn2:category id="_TsSHQ-RPEeW_37iGSkwYtw" name="default">
+    <bpmn2:categoryValue id="_TsSHQeRPEeW_37iGSkwYtw" value="group"/>
+  </bpmn2:category>
+  <bpmn2:process id="designer.empty" drools:packageName="org.jbpm" name="empty" isExecutable="true">
+    <bpmn2:group id="_429CE36B-AA80-46E1-A389-61E0789F4B25" drools:selectable="true" drools:categoryval="group" color:background-color="" color:border-color="#000000" color:color="#000000" categoryValueRef="_TsSHQeRPEeW_37iGSkwYtw">
+      <bpmn2:documentation id="_TsSHQuRPEeW_37iGSkwYtw"><![CDATA[group documentation]]></bpmn2:documentation>
+    </bpmn2:group>
+  </bpmn2:process>
+  <bpmndi:BPMNDiagram id="_TsSHRORPEeW_37iGSkwYtw">
+    <bpmndi:BPMNPlane id="_TsSHReRPEeW_37iGSkwYtw" bpmnElement="designer.empty">
+      <bpmndi:BPMNShape id="_TsSHRuRPEeW_37iGSkwYtw" bpmnElement="_429CE36B-AA80-46E1-A389-61E0789F4B25">
+        <dc:Bounds height="90.0" width="120.0" x="199.0" y="111.0"/>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmn2:relationship id="_TsSuUORPEeW_37iGSkwYtw" type="BPSimData">
+    <bpmn2:extensionElements>
+      <bpsim:BPSimData>
+        <bpsim:Scenario xsi:type="bpsim:Scenario" id="default" name="Simulationscenario">
+          <bpsim:ScenarioParameters xsi:type="bpsim:ScenarioParameters" baseTimeUnit="min"/>
+        </bpsim:Scenario>
+      </bpsim:BPSimData>
+    </bpmn2:extensionElements>
+    <bpmn2:source>_TsSHQORPEeW_37iGSkwYtw</bpmn2:source>
+    <bpmn2:target>_TsSHQORPEeW_37iGSkwYtw</bpmn2:target>
+  </bpmn2:relationship>
+</bpmn2:definitions>
