@@ -1028,4 +1028,14 @@ public class Bpmn2UnmarshallingTestCase {
 
         assertTrue("Boundary Event '" + BOUNDARY_EVENT_NAME + "' is not found in the process.", documentationChecked);
     }
+
+    @Test
+    public void testDocumentationForSwimlane() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("swimlane.json"), "").getContents().get(0));
+        Process process = getRootProcess(definitions);
+        Lane lane = process.getLaneSets().get(0).getLanes().get(0);
+        assertEquals("Swimlane name is wrong.", lane.getName(), "Documented Swimlane");
+        assertEquals("<![CDATA[Some documentation for swimlane.]]>", lane.getDocumentation().get(0).getText());
+    }
 }

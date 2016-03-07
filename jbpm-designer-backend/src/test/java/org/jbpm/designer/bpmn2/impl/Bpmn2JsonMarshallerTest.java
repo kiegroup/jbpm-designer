@@ -21,23 +21,32 @@ public class Bpmn2JsonMarshallerTest {
 
     @Test
     public void testGroupMarshalling() throws Exception {
-        JSONObject process = getProcessFrom("group.bpmn2");
+        JSONObject process = loadProcessFrom("group.bpmn2");
         JSONObject group = getChildByName(process, "group");
 
         assertNotNull("Group with name 'group' not found in process.", group);
-        assertEquals("Group has wrong documentation.", getDocumentationFor(group), "group documentation");
+        assertEquals("Group has wrong documentation.", "group documentation", getDocumentationFor(group));
     }
 
     @Test
     public void testBoundaryEventDocumentation() throws Exception {
-        JSONObject process = getProcessFrom("boundaryEventsDocumentation.bpmn2");
+        JSONObject process = loadProcessFrom("boundaryEventsDocumentation.bpmn2");
         JSONObject boundaryEvent = getChildByName(process, "CancelOnTimer");
 
         assertNotNull("BoundaryEvent with name 'CancelOnTimer' not found in process.", boundaryEvent);
-        assertEquals("BoundaryEvent has wrong documentation.", getDocumentationFor(boundaryEvent), "Cancel task on timeout.");
+        assertEquals("BoundaryEvent has wrong documentation.", "Cancel task on timeout.", getDocumentationFor(boundaryEvent));
     }
 
-    private JSONObject getProcessFrom(String fileName) throws Exception {
+    @Test
+    public void testSwimlaneDocumentation() throws Exception {
+        JSONObject process = loadProcessFrom("swimlane.bpmn2");
+        JSONObject swimlane = getChildByName(process, "Documented Swimlane");
+
+        assertNotNull("Swimlane with name 'Documented Swimlane' not found in process.", swimlane);
+        assertEquals("Swimlane has wrong documentation.", "Some documentation for swimlane.", getDocumentationFor(swimlane));
+    }
+
+    private JSONObject loadProcessFrom(String fileName) throws Exception {
         URL fileURL = Bpmn2JsonMarshallerTest.class.getResource(fileName);
         String definition = new String(Files.readAllBytes(Paths.get(fileURL.toURI())));
 
