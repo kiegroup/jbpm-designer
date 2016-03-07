@@ -1,60 +1,74 @@
 package org.jbpm.designer.bpmn2.impl;
 
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
 
-import java.io.File;
-import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
-import org.eclipse.bpmn2.Definitions;
-import org.eclipse.bpmn2.Group;
-import org.eclipse.bpmn2.Process;
-import org.eclipse.bpmn2.RootElement;
-import org.jbpm.designer.test.bpmn2.Bpmn2UnmarshallingTestCase;
+import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.impl.DefaultProfileImpl;
-import org.junit.Before;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.Test;
 
 public class Bpmn2JsonMarshallerTest {
 
-    Bpmn2JsonMarshaller marshaller = null;
-    Bpmn2JsonUnmarshaller unmarshaller = null;
+    DefaultProfileImpl profile = new DefaultProfileImpl();
+    // It is by design (Unmarshaller = marshaller)
+    IDiagramProfile.IDiagramUnmarshaller marshaller = profile.createUnmarshaller();
 
-    @Before
-    public void testSetUp() {
-        unmarshaller = new Bpmn2JsonUnmarshaller();
+    @Test
+    public void testGroupMarshalling() throws Exception {
+        JSONObject process = getProcessFrom("group.bpmn2");
+        JSONObject group = getChildByName(process, "group");
 
-        marshaller = new Bpmn2JsonMarshaller();
-        marshaller.setProfile(new DefaultProfileImpl());
+        assertNotNull("Group with name 'group' not found in process.", group);
+        assertEquals("Group has wrong documentation.", getDocumentationFor(group), "group documentation");
     }
 
     @Test
-    public void testGroupMarshalling() throws IOException {
-        String json = marshaller.marshall(getDefinitionFor("group.json"), "");
+    public void testBoundaryEventDocumentation() throws Exception {
+        JSONObject process = getProcessFrom("boundaryEventsDocumentation.bpmn2");
+        JSONObject boundaryEvent = getChildByName(process, "CancelOnTimer");
 
-        Definitions definitions  = (Definitions) unmarshaller.unmarshall(json, "").getContents().get(0);
-
-        Process process = getProcessFrom(definitions);
-        Group group = (Group) process.getArtifacts().get(0);
-        assertEquals("Group name is wrong.", group.getCategoryValueRef().getValue(), "group");
-        assertEquals("Group have no documentation.", group.getDocumentation().size(), 1);
-        // Unmarshalling is not prepared for two times calling.
-        assertEquals("<![CDATA[<![CDATA[group documentation]]>]]>", group.getDocumentation().get(0).getText());
+        assertNotNull("BoundaryEvent with name 'CancelOnTimer' not found in process.", boundaryEvent);
+        assertEquals("BoundaryEvent has wrong documentation.", getDocumentationFor(boundaryEvent), "Cancel task on timeout.");
     }
 
-    private static Definitions getDefinitionFor(String filename) throws IOException {
-        URL fileURL = Bpmn2UnmarshallingTestCase.class.getResource(filename);
-        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
-        return (Definitions) unmarshaller.unmarshall(new File(fileURL.getFile()), "").getContents().get(0);
+    private JSONObject getProcessFrom(String fileName) throws Exception {
+        URL fileURL = Bpmn2JsonMarshallerTest.class.getResource(fileName);
+        String definition = new String(Files.readAllBytes(Paths.get(fileURL.toURI())));
+
+        String jsonString = marshaller.parseModel(definition, profile, "");
+
+        JSONObject process = new JSONObject(jsonString);
+        if ("BPMNDiagram".equals(process.getJSONObject("stencil").getString("id"))) {
+            return process;
+        }
+
+        throw new IllegalArgumentException("File " + fileName + " is not a valid BPMN2 process JSON");
     }
 
-    private static Process getProcessFrom(Definitions definitions) {
-        for(RootElement root: definitions.getRootElements()) {
-            if (root instanceof Process) {
-                return (Process) root;
+    private static JSONObject getChildByName(JSONObject parent, String name) throws JSONException {
+        JSONArray children = parent.getJSONArray("childShapes");
+        for (int i = 0; i < children.length(); i++) {
+            JSONObject child = children.getJSONObject(i);
+
+            if (name.equals(getPropertyValue(child, "name"))) {
+                return child;
             }
         }
 
         return null;
+    }
+
+    private static String getDocumentationFor(JSONObject bpmnElement) throws JSONException {
+        return getPropertyValue(bpmnElement, "documentation");
+    }
+
+    private static String getPropertyValue(JSONObject bpmnElement, String propertyName) throws JSONException {
+        return bpmnElement.getJSONObject("properties").getString(propertyName);
     }
 }
