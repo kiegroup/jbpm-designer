@@ -917,7 +917,7 @@ public class Bpmn2UnmarshallingTest {
     public void testWorkItemHandlerNoParams() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("workItemHandlerNoParams.json"), "Email,HelloWorkItemHandler,Log,Rest,WebService").getContents().get(0));
-        assertTrue(definitions.getRootElements().size() == 1);
+        assertTrue(definitions.getRootElements().size() >= 1);
         Process process = getRootProcess(definitions);
         assertTrue(process.getFlowElements().get(0) instanceof StartEvent);
         StartEvent startEvent = (StartEvent) process.getFlowElements().get(0);
