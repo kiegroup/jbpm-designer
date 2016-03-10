@@ -65,7 +65,6 @@ import org.slf4j.LoggerFactory;
 import org.uberfire.backend.server.util.Paths;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.io.IOService;
-import org.uberfire.java.nio.file.FileSystem;
 import org.uberfire.java.nio.file.FileSystemNotFoundException;
 import org.uberfire.mvp.PlaceRequest;
 import org.uberfire.rpc.SessionInfo;
@@ -195,8 +194,10 @@ public class DefaultDesignerAssetService
         editorParamsMap.put("completednodes", completedNodesArray.toString());
         editorParamsMap.put("processsource", encodedProcessSource);
 
-        //Signal opening to interested parties
-        resourceOpenedEvent.fire(new ResourceOpenedEvent( path, sessionInfo ));
+        //Signal opening to interested parties if we are not in readonly mode
+        if(!readOnly) {
+            resourceOpenedEvent.fire(new ResourceOpenedEvent( path, sessionInfo ));
+        }
 
         return editorParamsMap;
     }
