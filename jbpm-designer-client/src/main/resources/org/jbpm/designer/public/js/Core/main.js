@@ -437,6 +437,9 @@ ORYX.Editor = {
 		        deferredRender : false,
 		        listeners: {
 	             	tabchange: function(tabpanel, tab) {
+						if (tab.id == 'processdoctab') {
+							document.getElementById('processdocframe').contentWindow.showProcessDocs();
+						}
 	            		this.centerContentTabPannel.doLayout();
 	            		this.simResultsContentPanelLayout.doLayout();
 						this.processDocPanelLayout.doLayout();
