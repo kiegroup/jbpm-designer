@@ -54,7 +54,7 @@
         }
     </style>
 </head>
-<body data-spy="scroll" data-target="#toc" onload="setTimeout(showProcessDocs,2000)" class="cards-pf">
+<body data-spy="scroll" data-target="#toc" class="cards-pf">
 <div class="container" id="pagecontainer">
     <div class="row">
         <div id="pagenav" class="col-sm-3 noprint">
