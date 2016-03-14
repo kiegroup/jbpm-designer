@@ -195,8 +195,6 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
             }
         }
 
-        // update process docs to reflect changes
-        document.getElementById("processdocframe").contentWindow.showProcessDocs();
     },
 
     saveWithMessage: function() {
