@@ -861,7 +861,10 @@ ORYX.Plugins.View = {
             title       : ''
 
         });
-        var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(true, true));
+        var svg = ORYX.EDITOR.getCanvas().getSVGRepresentation(true, true);
+        var formattedSvgDOM = DataManager.serialize(svg);
+        var svgHeight = svg.getAttributeNS(null, 'height');
+        var svgWidth = svg.getAttributeNS(null, 'width');
 
         Ext.Ajax.request({
             url: ORYX.PATH + "transformer",
@@ -910,6 +913,8 @@ ORYX.Plugins.View = {
                 profile: ORYX.PROFILE,
                 uuid :  window.btoa(encodeURI(ORYX.UUID)),
                 fsvg : Base64.encode(formattedSvgDOM),
+                svgheight: svgHeight,
+                svgwidth: svgWidth,
                 transformto : "pdf",
                 respaction : "showurl"
             }

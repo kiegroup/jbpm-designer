@@ -35,6 +35,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
 import bpsim.impl.BpsimFactoryImpl;
+import org.apache.batik.transcoder.SVGAbstractTranscoder;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
@@ -99,6 +100,11 @@ public class TransformerServlet extends HttpServlet {
     private static final String RESPACTION_SHOWURL = "showurl";
     private static final String RESPACTION_SHOWEMBEDDABLE = "showembeddable";
 
+    private static final String SVG_WIDTH_PARAM = "svgwidth";
+    private static final String SVG_HEIGHT_PARAM = "svgheight";
+    private static final float DEFAULT_PDF_WIDTH = (float) 750.0;
+    private static final float DEFAULT_PDF_HEIGHT = (float) 500.0;
+
     private IDiagramProfile profile;
     // For unit testing purpose only
     public void setProfile(IDiagramProfile profile) {
@@ -152,13 +158,18 @@ public class TransformerServlet extends HttpServlet {
                 if(respaction != null && respaction.equals(RESPACTION_SHOWURL)) {
                     ByteArrayOutputStream bout = new ByteArrayOutputStream();
                     PDFTranscoder t = new PDFTranscoder();
+                    float widthHint = getFloatParam(req, SVG_WIDTH_PARAM, DEFAULT_PDF_WIDTH);
+                    float heightHint = getFloatParam(req, SVG_HEIGHT_PARAM, DEFAULT_PDF_HEIGHT);
+                    String objStyle = "style=\"width:" + widthHint + "px;height:" + heightHint + "px;\"";
+                    t.addTranscodingHint(SVGAbstractTranscoder.KEY_WIDTH, widthHint);
+                    t.addTranscodingHint(SVGAbstractTranscoder.KEY_HEIGHT, heightHint);
                     TranscoderInput input = new TranscoderInput(new StringReader(formattedSvg));
                     TranscoderOutput output = new TranscoderOutput(bout);
                     t.transcode(input, output);
                     resp.setCharacterEncoding("UTF-8");
                     resp.setContentType("text/plain");
 
-                    resp.getWriter().write("<object data=\"data:application/pdf;base64," + Base64.encodeBase64String(bout.toByteArray()) +  "\" type=\"application/pdf\"></object>");
+                    resp.getWriter().write("<object type=\"application/pdf\" " + objStyle +  " data=\"data:application/pdf;base64," + Base64.encodeBase64String(bout.toByteArray()) +  "\"></object>");
                 } else {
                     storeInRepository(uuid, formattedSvg, transformto, processid, repository);
 
@@ -605,5 +616,18 @@ public class TransformerServlet extends HttpServlet {
             _logger.error(e.getMessage());
             return "";
         }
+    }
+
+    private float getFloatParam(final HttpServletRequest req, final String paramName, final float defaultValue) {
+        float value = defaultValue;
+        String paramValue = req.getParameter(paramName);
+        if (paramValue != null && !paramValue.isEmpty()) {
+            try {
+                value = Float.parseFloat(paramValue);
+            } catch (NumberFormatException nfe) {
+                value = defaultValue;
+            }
+        }
+        return value;
     }
 }
