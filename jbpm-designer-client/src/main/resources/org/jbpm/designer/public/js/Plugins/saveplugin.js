@@ -8,6 +8,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
     construct: function(facade){
         this.facade = facade;
         this.vt;
+        this.savedProcessJson = ORYX.EDITOR.getSerializedJSON();
 
         if(ORYX.READONLY != true) {
             this.facade.offer({
@@ -146,6 +147,8 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_UNDO_ROLLBACK, this.setUnsaved.bind(this));
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_UNDO_EXECUTE, this.setUnsaved.bind(this));
 
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LOADED, this.onLoaded.bind(this));
+
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DO_SAVE, this.handleEventDoSave.bind(this));
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_CANCEL_SAVE, this.handleEventCancelSave.bind(this));
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DO_RELOAD, this.handleEventDoRealod.bind(this));
@@ -154,16 +157,21 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
 
     },
 
+    onLoaded: function() {
+        this.savedProcessJson = ORYX.EDITOR.getSerializedJSON();
+    },
+
     setUnsaved: function() {
-        ORYX.PROCESS_SAVED = false;
+        ORYX.PROCESS_SAVED = this.savedProcessJson == ORYX.EDITOR.getSerializedJSON();
         this.facade.raiseEvent({
-            type 		: ORYX.CONFIG.EVENT_PROCESS_CHANGED,
-            ntype		: 'info'
+            type: ORYX.CONFIG.EVENT_PROCESS_CHANGED,
+            noChangesComparedToSaved: ORYX.PROCESS_SAVED
         });
     },
 
     setSaved: function() {
         ORYX.PROCESS_SAVED = true;
+        this.savedProcessJson = ORYX.EDITOR.getSerializedJSON();
         this.facade.raiseEvent({
             type 		: ORYX.CONFIG.EVENT_PROCESS_SAVED,
             ntype		: 'info'
