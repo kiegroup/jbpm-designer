@@ -46,6 +46,8 @@ public class TransformerServletTest  extends RepositoryBaseTest {
     private static final String BP_NAME = "bp1";
     private static final String JBPM_PROFILE_NAME = "jbpm";
     private static final String LOCATION = "/global";
+    private static final String SVG_WIDTH = "197.28";
+    private static final String SVG_HEIGHT = "235.92";
 
     private static final String FORMATTED_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:oryx=\"http://oryx-editor.org\" id=\"_A3F7A04F-E2E8-43FD-964F-F700B3D42348\" width=\"197.28125\" height=\"235.921875\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:svg=\"http://www.w3.org/2000/svg\"><defs/><g stroke=\"none\" font-family=\"Verdana, sans-serif\" font-size-adjust=\"none\" font-style=\"normal\" font-variant=\"normal\" font-weight=\"normal\" line-heigth=\"normal\" font-size=\"12\"><g class=\"stencils\" transform=\"translate(15, 15.921875)\"><g class=\"me\"/><g class=\"children\"><g id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8\" bpmn2nodeid=\"processStartEvent\"><g class=\"stencils\" transform=\"translate(120, 165)\"><g class=\"me\"><g pointer-events=\"fill\" id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8\">        <defs id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8__D1450722-93B9-4CD1-9CFB-0FC82DE31DF8_5\"> 		<radialGradient id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8background\" cx=\"10%\" cy=\"10%\" r=\"100%\" fx=\"10%\" fy=\"10%\"> 			<stop offset=\"0%\" stop-color=\"#ffffff\" stop-opacity=\"1\" id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8__D1450722-93B9-4CD1-9CFB-0FC82DE31DF8_6\"/> 			<stop id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8fill_el\" offset=\"100%\" stop-color=\"#9acd32\" stop-opacity=\"1\"/> 		</radialGradient> 	</defs> 	     <circle id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8bg_frame\" cx=\"15\" cy=\"15\" r=\"15\" stroke=\"#000000\" fill=\"url(#_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8background) white\" stroke-width=\"1\" style=\"stroke-dasharray: 5.5, 3\"/>      <circle id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8frame\" cx=\"15\" cy=\"15\" r=\"15\" stroke=\"#000000\" fill=\"none\" stroke-width=\"1\" display=\"inherit\"/>  	<text font-size=\"8\" id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8text_name\" x=\"15\" y=\"32\" oryx:align=\"top center\" stroke=\"black\" stroke-width=\"0pt\" letter-spacing=\"-0.01px\" fill=\"#000000\" text-anchor=\"middle\" transform=\"rotate(0 15 32)\" visibility=\"inherit\" oryx:fontSize=\"11\"/>   </g></g><g class=\"children\" style=\"overflow:hidden\"/><g class=\"edge\"/></g><g class=\"controls\"><g class=\"dockers\"/><g class=\"magnets\" transform=\"translate(120, 165)\"><g pointer-events=\"all\" display=\"none\" transform=\"translate(7, 7)\"><circle cx=\"8\" cy=\"8\" r=\"4\" stroke=\"none\" fill=\"red\" fill-opacity=\"0.3\"/></g></g></g></g></g><g class=\"edge\"/><text id=\"_3260CEE5-4A05-4F4B-91A1-A3CE143D86E0\" style=\"stroke-width:1;fill:rgb(177,194,214);font-family:arial;font-weight:bold\" font-size=\"8\" onclick=\"ORYX.Plugins.CanvasTitle.openTextualAnalysis()\" onmouseover=\"ORYX.Plugins.CanvasTitle.addToolTip('_3260CEE5-4A05-4F4B-91A1-A3CE143D86E0')\" transform=\"translate(10, 20)\">bp1 v.1.0 (Evaluation.bp1)</text></g></g></svg>";
     private static String FORMATTED_SVG_ENCODED;
@@ -179,7 +181,8 @@ public class TransformerServletTest  extends RepositoryBaseTest {
         params.put("transformto", targetType);
         params.put("respaction", respAction);
         params.put("processid", BP_NAME);
-
+        params.put("svgwidth", SVG_WIDTH);
+        params.put("svgheight", SVG_HEIGHT);
         TestHttpServletResponse response = new  TestHttpServletResponse();
         transformerServlet.doPost(new TestHttpServletRequest(params), response);
 
@@ -188,6 +191,7 @@ public class TransformerServletTest  extends RepositoryBaseTest {
         String responseText = new String(response.getContent());
         assertNotNull(responseText);
         assertTrue(responseText.startsWith("<object"));
+        assertTrue(responseText.contains("style=\"width:197.28px;height:235.92px;\""));
         assertTrue(responseText.endsWith("</object>"));
         assertTrue(responseText.length() > 1000);
     }
