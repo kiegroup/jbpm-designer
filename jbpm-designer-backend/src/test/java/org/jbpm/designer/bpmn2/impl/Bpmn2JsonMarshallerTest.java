@@ -5,7 +5,8 @@ import static org.junit.Assert.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
+import bpsim.impl.BpsimPackageImpl;
+import org.jboss.drools.impl.DroolsPackageImpl;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.impl.DefaultProfileImpl;
 import org.json.JSONArray;
@@ -14,6 +15,17 @@ import org.json.JSONObject;
 import org.junit.Test;
 
 public class Bpmn2JsonMarshallerTest {
+
+    public static final String COST_PER_TIME_UNIT = "unitcost";
+    public static final String PROCESSING_TIME_MAX = "max";
+    public static final String PROCESSING_TIME_MIN = "min";
+    public static final String PROCESSING_TIME_MEAN = "mean";
+    public static final String PROBABILITY = "probability";
+    public static final String WORKING_HOURS = "workinghours";
+    public static final String QUANTITY = "quantity";
+    public static final String STANDARD_DEVIATION = "standarddeviation";
+    public static final String DISTRIBUTION_TYPE = "distributiontype";
+
 
     DefaultProfileImpl profile = new DefaultProfileImpl();
     // It is by design (Unmarshaller = marshaller)
@@ -99,10 +111,119 @@ public class Bpmn2JsonMarshallerTest {
         }
     }
 
+    @Test
+    public void testSimulationStartEvent() throws Exception {
+        JSONObject process = loadProcessFrom("simulationProcess.bpmn2");
+        JSONObject startEvent = getChildByName(process, "StartEvent");
+        JSONObject properties = startEvent.getJSONObject("properties");
+        assertEquals(99, properties.getInt(PROBABILITY));
+        assertEquals(5, properties.getInt(PROCESSING_TIME_MAX));
+        assertEquals(4, properties.getInt(PROCESSING_TIME_MIN));
+        assertEquals("uniform", properties.getString(DISTRIBUTION_TYPE));
+    }
+
+    @Test
+    public void testSimulationUserTask() throws Exception {
+        JSONObject process = loadProcessFrom("simulationProcess.bpmn2");
+        JSONObject userTask = getChildByName(process, "UserTask");
+        JSONObject properties = userTask.getJSONObject("properties");
+        assertEquals(8, properties.getInt(COST_PER_TIME_UNIT));
+        assertEquals(7, properties.getInt(PROCESSING_TIME_MAX));
+        assertEquals(3, properties.getInt(PROCESSING_TIME_MIN));
+        assertEquals(5, properties.getInt(WORKING_HOURS));
+        assertEquals(2, properties.getInt(QUANTITY));
+        assertEquals("uniform", properties.getString(DISTRIBUTION_TYPE));
+    }
+
+    @Test
+    public void testSimulationGatewayProbability() throws Exception {
+        JSONObject process = loadProcessFrom("simulationProcess.bpmn2");
+        JSONObject lowSequence = getChildByName(process, "LowProbability");
+        JSONObject highSequence = getChildByName(process, "HighProbability");
+        JSONObject lowProperties = lowSequence.getJSONObject("properties");
+        assertEquals(30, lowProperties.getInt("probability"));
+        JSONObject highProperties = highSequence.getJSONObject("properties");
+        assertEquals(70, highProperties.getInt("probability"));
+    }
+
+    @Test
+    public void testSimulationThrowEvent() throws Exception {
+        JSONObject process = loadProcessFrom("simulationProcess.bpmn2");
+        JSONObject throwEvent = getChildByName(process, "ThrowEvent");
+        JSONObject properties = throwEvent.getJSONObject("properties");
+        assertEquals(3, properties.getInt(PROCESSING_TIME_MEAN));
+        assertEquals("poisson", properties.getString(DISTRIBUTION_TYPE));
+    }
+
+    @Test
+    public void testSimulationCallActivity() throws Exception {
+        JSONObject process = loadProcessFrom("simulationProcess.bpmn2");
+        JSONObject callActivity = getChildByName(process, "CallActivity");
+        JSONObject properties = callActivity.getJSONObject("properties");
+        assertEquals(3, properties.getInt(COST_PER_TIME_UNIT));
+        assertEquals(2, properties.getInt(PROCESSING_TIME_MEAN));
+        assertEquals(1, properties.getInt(STANDARD_DEVIATION));
+        assertEquals("normal", properties.getString(DISTRIBUTION_TYPE));
+    }
+
+    @Test
+    public void testSimulationEndEvent() throws Exception {
+        JSONObject process = loadProcessFrom("simulationProcess.bpmn2");
+        JSONObject endEvent = getChildByName(process, "EndEvent");
+        JSONObject properties = endEvent.getJSONObject("properties");
+        assertEquals(9, properties.getInt(PROCESSING_TIME_MAX));
+        assertEquals(8, properties.getInt(PROCESSING_TIME_MIN));
+        assertEquals("uniform", properties.getString(DISTRIBUTION_TYPE));
+    }
+
+    @Test
+    public void testSimulationSubProcess() throws Exception {
+        JSONObject process = loadProcessFrom("simulationProcess.bpmn2");
+        JSONObject subProcess = getChildByName(process, "SubProcess");
+        JSONObject properties = subProcess.getJSONObject("properties");
+        assertEquals(12, properties.getInt(COST_PER_TIME_UNIT));
+        assertEquals(6, properties.getInt(PROCESSING_TIME_MAX));
+        assertEquals(2, properties.getInt(PROCESSING_TIME_MIN));
+        assertEquals("uniform", properties.getString(DISTRIBUTION_TYPE));
+    }
+
+    @Test
+    public void testSimulationSubService() throws Exception {
+        JSONObject process = loadProcessFrom("simulationProcess.bpmn2");
+        JSONObject serviceTask = getChildByName(getChildByName(process, "SubProcess"), "SubService");
+        JSONObject properties = serviceTask.getJSONObject("properties");
+        assertEquals(14, properties.getInt(COST_PER_TIME_UNIT));
+        assertEquals(7, properties.getInt(PROCESSING_TIME_MEAN));
+        assertEquals("poisson", properties.getString(DISTRIBUTION_TYPE));
+    }
+
+    @Test
+    public void testSimulationBoundaryEvent() throws Exception {
+        JSONObject process = loadProcessFrom("simulationProcess.bpmn2");
+        JSONObject boundaryEvent = getChildByName(process, "BoundaryEvent");
+        JSONObject properties = boundaryEvent.getJSONObject("properties");
+        assertEquals(13, properties.getInt(PROCESSING_TIME_MAX));
+        assertEquals(4, properties.getInt(PROCESSING_TIME_MIN));
+        assertEquals(85, properties.getInt(PROBABILITY));
+        assertEquals("uniform", properties.getString(DISTRIBUTION_TYPE));
+    }
+
+    @Test
+    public void testSimulationCancelEvent() throws Exception {
+        JSONObject process = loadProcessFrom("simulationProcess.bpmn2");
+        JSONObject cancelEvent = getChildByName(process, "CancelEvent");
+        JSONObject properties = cancelEvent.getJSONObject("properties");
+        assertEquals(15, properties.getInt(PROCESSING_TIME_MAX));
+        assertEquals(6, properties.getInt(PROCESSING_TIME_MIN));
+        assertEquals("uniform", properties.getString(DISTRIBUTION_TYPE));
+    }
+
     private JSONObject loadProcessFrom(String fileName) throws Exception {
         URL fileURL = Bpmn2JsonMarshallerTest.class.getResource(fileName);
         String definition = new String(Files.readAllBytes(Paths.get(fileURL.toURI())));
 
+        DroolsPackageImpl.init();
+        BpsimPackageImpl.init();
         String jsonString = marshaller.parseModel(definition, profile, "Email,HelloWorkItemHandler,Log,Rest,WebService");
 
         JSONObject process = new JSONObject(jsonString);
