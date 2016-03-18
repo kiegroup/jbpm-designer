@@ -55,7 +55,6 @@ import org.jbpm.designer.repository.filters.FilterByExtension;
 import org.jbpm.designer.repository.filters.FilterByFileName;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
-import org.jbpm.designer.util.Base64Backport;
 import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingUnit;
@@ -638,7 +637,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
 
             }
-            if (Base64Backport.isBase64(createdUUID)) {
+            if (Base64.isBase64(createdUUID)) {
                 byte[] decoded = Base64.decodeBase64(createdUUID);
                 try {
                     createdUUID = new String(decoded, "UTF-8");
