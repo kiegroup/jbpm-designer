@@ -23,7 +23,7 @@ public class JbpmPreprocessingUnitCommonTest {
     @Test
     public void testReadFile() throws IOException {
         String result = JbpmPreprocessingUnit.readFile(FILE_NAME);
-        assertEquals(FILE_CONTENT + System.lineSeparator(), result);
+        assertEquals(FILE_CONTENT + System.getProperty("line.separator"), result);
     }
 
     @Test
