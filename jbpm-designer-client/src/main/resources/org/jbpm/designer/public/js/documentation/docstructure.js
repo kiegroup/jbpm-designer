@@ -604,14 +604,14 @@ function parsePropertyValue(propname, propvalue) {
                     var escapedp = innerParts.join('=').replace(/\#\#/g , ",");
                     escapedp = escapedp.replace(/\|\|/g , "=");
 
-                    retVal += "(Data Input) " + fromPart + " is given value " + escapedp + "\n";
+                    retVal += "(Data Input) " + fromPart + " is given value " + decodeURIComponent(escapedp.replace(/\+/g, ' ')) + "\n";
                 } else if(innerParts[0].startsWith("[dout]")) {
                     var fromPart = innerParts[0].slice(6, innerParts[0].length);
                     innerParts.shift(); // removes the first item from the array
                     var escapedp = innerParts.join('=').replace(/\#\#/g , ",");
                     escapedp = escapedp.replace(/\|\|/g , "=");
 
-                    retVal += "(Data Output) " + fromPart + " is given value " + escapedp + "\n";
+                    retVal += "(Data Output) " + fromPart + " is given value " + decodeURIComponent(escapedp.replace(/\+/g, ' ')) + "\n";
                 } else {
                     // for custom tasks we need to deal with no definition
                     var fromPart = innerParts[0];
@@ -619,7 +619,7 @@ function parsePropertyValue(propname, propvalue) {
                     var escapedp = innerParts.join('=').replace(/\#\#/g , ",");
                     escapedp = escapedp.replace(/\|\|/g , "=");
 
-                    retVal += "(Data Input) " + fromPart + " is given value " + escapedp + "\n";
+                    retVal += "(Data Input) " + fromPart + " is given value " + decodeURIComponent(escapedp.replace(/\+/g, ' ')) + "\n";
                 }
             } else if(nextPart.indexOf("->") > 0) {
                 var innerParts = nextPart.split("->");
