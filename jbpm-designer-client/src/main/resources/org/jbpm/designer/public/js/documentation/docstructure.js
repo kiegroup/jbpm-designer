@@ -645,6 +645,8 @@ function parsePropertyValue(propname, propvalue) {
         }
 
         return retVal;
+    } else if(propname == "script") {
+        return propvalue.replace(/\\\\n/g,"<br />").replace(/\\n/g,"<br />").replace(/\\\\t/g,"  ").replace(/\\t/g,"  ").split("\n").join("<br />");
     } else {
         return propvalue;
     }
