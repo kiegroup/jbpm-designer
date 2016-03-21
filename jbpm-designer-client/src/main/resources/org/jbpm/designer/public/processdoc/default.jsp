@@ -87,6 +87,11 @@
             <p><h3 id="elemen-info"><span class="badge badge-inverse">2.2</span> Elements</h3></p>
             <p id="processelementdetails"></p>
 
+            <div class="noprint" id="processimgdiv">
+                <h2 id="process-image"><span class="badge badge-inverse">3.0</span> Process Image</h2>
+                <iframe id="processimageframe" width="450" height="300"></iframe>
+            </div>
+
         </div>
     </div>
     <div class="row printonly">
@@ -231,6 +236,8 @@
         processDataTotals['processdatatotals'].push({"name":"Imports","count":showProcessImports(processJSON)});
         showProcessTotals(processDataTotals, processJSON);
         showProcessElementsInfo(processJSON);
+        showProcessImage();
+
     }
 
     function showProcessElementsInfo(processJSON) {
@@ -410,6 +417,15 @@
             $("#processimportcontent").html("No Process Imports present");;
         }
         return pcount-1;
+    }
+
+    function showProcessImage() {
+        var processSVG = parent.ORYX.EDITOR.getCanvas().getSVGRepresentation(false, false);
+        processSVG.setAttributeNS(null, 'width', parent.ORYX.CONFIG.MAXIMUM_SIZE);
+        processSVG.setAttributeNS(null, 'height', parent.ORYX.CONFIG.MAXIMUM_SIZE);
+
+        $("#processimageframe").contents().find("body").html('');
+        $("#processimageframe").contents().find("body").html(processSVG);
     }
 
     function createDocsPNG() {
