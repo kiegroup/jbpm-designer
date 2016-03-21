@@ -645,6 +645,8 @@ function parsePropertyValue(propname, propvalue) {
         }
 
         return retVal;
+    } else if(propname == "script") {
+        return formatScript(propvalue);
     } else {
         return propvalue;
     }
@@ -657,4 +659,53 @@ function presentPropertyName(rawprop) {
         // default just campitalize first letter
         return rawprop.charAt(0).toUpperCase() + rawprop.slice(1);
     }
+}
+
+function formatScript(str) {
+    var result = new String("");
+    var c = '\0';
+    var prevC = '\0';
+    var atEscape = false;
+    for (i = 0; i < str.length; i++) {
+        prevC = c;
+        c = str.charAt(i);
+        // set atEscape flag
+        if (c === '\\') {
+            // deal with 2nd '\\' char
+            if (atEscape) {
+                result = result + c;
+                atEscape = false;
+                // set c to '\0' so that prevC doesn't match '\\'
+                // the next time round
+                c = '\0';
+            }
+            else {
+                atEscape = true;
+            }
+        }
+        else if (atEscape) {
+            if (c === 'n') {
+                result = result + "<br />";
+            }
+            else if (c === 't') {
+                result = result + "&nbsp;&nbsp;&nbsp;&nbsp";
+            }
+            else {
+                result = result + c;
+            }
+        }
+        else if (c === ' ') {
+            result = result + "&nbsp;";
+        }
+        else {
+            result = result + c;
+        }
+        // unset atEscape flag if required
+        if (prevC === '\\') {
+            if (atEscape) {
+                atEscape = false;
+            }
+        }
+    }
+    return result;
 }
