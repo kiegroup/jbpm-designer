@@ -3532,7 +3532,7 @@
 					"value":"$workitemDefs.(k).explanationText$", 
 					"description":"This attribute is used to annotate the BPMN element, such as descriptions and other documentation.",
 					"description_ja":"この属性は、説明やドキュメントなど、BPMN要素の注釈に使用されます。",
-					"readonly":true,
+					"readonly":false,
 					"optional":true,
 					"length":"",
 					"wrapLines":true,
