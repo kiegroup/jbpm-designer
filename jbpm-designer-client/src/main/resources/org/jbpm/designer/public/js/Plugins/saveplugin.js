@@ -142,7 +142,9 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
             });
         }
 
-        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_MOUSEUP, this.setUnsaved.bind(this));
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_MOUSEUP, function () {
+            setTimeout(this.setUnsaved.bind(this), 0)
+        }.bind(this));
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_PROPWINDOW_PROP_CHANGED, this.setUnsaved.bind(this));
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_UNDO_ROLLBACK, this.setUnsaved.bind(this));
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_UNDO_EXECUTE, this.setUnsaved.bind(this));
