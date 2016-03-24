@@ -641,7 +641,12 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
         return false;
     }
 
-    private boolean isCompensatingFlowNodeInSubprocess(FlowNode node, SubProcess subProcess ) {
+    public boolean isCompensatingFlowNodeInSubprocess(FlowNode node, SubProcess subProcess ) {
+		//text annotations are flow elements now not artifacts so omit them
+		if(node instanceof TextAnnotation) {
+			return true;
+		}
+
         for(Artifact artifact : subProcess.getArtifacts()) {
             if (artifact instanceof Association){
                 Association association = (Association) artifact;
@@ -654,7 +659,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
         return false;
     }
 
-    private boolean isCompensatingFlowNodeInProcess(FlowNode node, Process process ) {
+	public boolean isCompensatingFlowNodeInProcess(FlowNode node, Process process ) {
         for(Artifact artifact : process.getArtifacts()) {
             if (artifact instanceof Association){
                 Association association = (Association) artifact;
