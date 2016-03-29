@@ -20,10 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -35,6 +32,8 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
 import bpsim.impl.BpsimFactoryImpl;
+import org.allcolor.yahp.converter.CYaHPConverter;
+import org.allcolor.yahp.converter.IHtmlToPdfTransformer;
 import org.apache.batik.transcoder.SVGAbstractTranscoder;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
@@ -97,6 +96,7 @@ public class TransformerServlet extends HttpServlet {
     private static final String JPDL_TO_BPMN2 = "jpdl2bpmn2";
     private static final String BPMN2_TO_JSON = "bpmn2json";
     private static final String JSON_TO_BPMN2 = "json2bpmn2";
+    private static final String HTML_TO_PDF = "html2pdf";
     private static final String RESPACTION_SHOWURL = "showurl";
     private static final String RESPACTION_SHOWEMBEDDABLE = "showembeddable";
 
@@ -137,8 +137,12 @@ public class TransformerServlet extends HttpServlet {
         String processid = req.getParameter("processid");
         String sourceEnc = req.getParameter("enc");
         String convertServiceTasks = req.getParameter("convertservicetasks");
+        String htmlSourceEnc = req.getParameter("htmlenc");
+        String headerStr = req.getParameter("headerstr");
 
         String formattedSvg = ( formattedSvgEncoded == null ? "" : new String(Base64.decodeBase64(formattedSvgEncoded), "UTF-8") );
+
+        String htmlSource = ( htmlSourceEnc == null ? "" : new String(Base64.decodeBase64(htmlSourceEnc), "UTF-8") );
 
         if(sourceEnc != null && sourceEnc.equals("true")) {
             bpmn2in = new String(Base64.decodeBase64(bpmn2in), "UTF-8");
@@ -314,7 +318,34 @@ public class TransformerServlet extends HttpServlet {
                 resp.setContentType("application/xml");
                 resp.getWriter().print("");
             }
+        } else if (transformto != null && transformto.equals(HTML_TO_PDF)) {
+            try {
+                CYaHPConverter converter = new CYaHPConverter();
+                Map properties = new HashMap();
+                List headerFooterList = new ArrayList();
 
+                headerFooterList.add(new IHtmlToPdfTransformer.CHeaderFooter(
+                        "<table width=\"100%\"><tbody><tr><td align=\"left\">"+
+                                headerStr + "</td><td align=\"right\">Page <pagenumber>/<"+
+                                "pagecount></td></tr></tbody></table>",
+                        IHtmlToPdfTransformer.CHeaderFooter.HEADER));
+
+                properties.put(IHtmlToPdfTransformer.PDF_RENDERER_CLASS,
+                        IHtmlToPdfTransformer.FLYINGSAUCER_PDF_RENDERER);
+
+                resp.setContentType("application/pdf");
+                if (processid != null) {
+                    resp.setHeader("Content-Disposition",
+                            "attachment; filename=\"" + processid + ".pdf\"");
+                } else {
+                    resp.setHeader("Content-Disposition",
+                            "attachment; filename=\"" + uuid + ".pdf\"");
+                }
+
+                converter.convertToPdf(htmlSource, IHtmlToPdfTransformer.A4P, headerFooterList, "file:///temp/html/", resp.getOutputStream(), properties);
+            } catch (IHtmlToPdfTransformer.CConvertException e) {
+                resp.sendError(500, e.getMessage());
+            }
         }
     }
 
