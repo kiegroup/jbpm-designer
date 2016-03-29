@@ -709,3 +709,59 @@ function formatScript(str) {
     }
     return result;
 }
+
+function showAsPDF() {
+    var transformval = 'html2pdf';
+    $("table").attr("border", "1");
+    var htmlEncoded = parent.Base64.encode(document.documentElement.outerHTML);
+    $("table").attr("border", "0");
+    var method ="post";
+    var form = document.createElement("form");
+    form.setAttribute("name", "transformerform");
+    form.setAttribute("method", method);
+    form.setAttribute("action", parent.ORYX.CONFIG.TRANSFORMER_URL());
+    form.setAttribute("target", "_blank");
+
+    var hfFSVG = document.createElement("input");
+    hfFSVG.setAttribute("type", "hidden");
+    hfFSVG.setAttribute("name", "htmlenc");
+    hfFSVG.setAttribute("value", htmlEncoded);
+    form.appendChild(hfFSVG);
+
+    var hfUUID = document.createElement("input");
+    hfUUID.setAttribute("type", "hidden");
+    hfUUID.setAttribute("name", "uuid");
+    hfUUID.setAttribute("value", parent.ORYX.UUID);
+    form.appendChild(hfUUID);
+
+    var hfPROFILE = document.createElement("input");
+    hfPROFILE.setAttribute("type", "hidden");
+    hfPROFILE.setAttribute("name", "profile");
+    hfPROFILE.setAttribute("value", parent.ORYX.PROFILE);
+    form.appendChild(hfPROFILE);
+
+    var hfTRANSFORMTO = document.createElement("input");
+    hfTRANSFORMTO.setAttribute("type", "hidden");
+    hfTRANSFORMTO.setAttribute("name", "transformto");
+    hfTRANSFORMTO.setAttribute("value", transformval);
+    form.appendChild(hfTRANSFORMTO);
+
+    var processJSON = parent.ORYX.EDITOR.getSerializedJSON();
+    var processId = jsonPath(JSON.parse(processJSON), "$.properties.id");
+    var hfPROCESSID = document.createElement("input");
+    hfPROCESSID.setAttribute("type", "hidden");
+    hfPROCESSID.setAttribute("name", "processid");
+    hfPROCESSID.setAttribute("value", processId);
+    form.appendChild(hfPROCESSID);
+
+    var headerStr = "<b>Process ID:</b> " + processId + " <b>Package:</b> " + jsonPath(JSON.parse(processJSON), "$.properties.package") + " <b>Version:</b> " + jsonPath(JSON.parse(processJSON), "$.properties.version");
+    var hfHEADERSTR = document.createElement("input");
+    hfHEADERSTR.setAttribute("type", "hidden");
+    hfHEADERSTR.setAttribute("name", "headerstr");
+    hfHEADERSTR.setAttribute("value", headerStr);
+    form.appendChild(hfHEADERSTR);
+
+    document.body.appendChild(form);
+
+    form.submit();
+}

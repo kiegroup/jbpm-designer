@@ -63,7 +63,7 @@
         <div class="col-sm-9">
             <p><div id="pagebuttons" class="well noprint" align="right">
                 <button type="button" class="btn btn-default btn-sm" onclick="createDocsPNG()">Doc PNG</button>&nbsp;&nbsp;
-                <%--<button type="button" class="btn btn-default btn-sm" onclick="createPDF()">PDF</button>&nbsp;&nbsp;--%>
+                <button type="button" class="btn btn-default btn-sm" onclick="showAsPDF()">PDF</button>&nbsp;&nbsp;
                 <button type="buton" class="btn btn-default btn-sm" onclick="window.print();">Print</button>
             </div></p>
 
@@ -111,7 +111,7 @@
                 {{#each this}}
                     <div class="panel panel-default">
                         <div class="panel-heading"><img src="{{icon}}"> <b>Name:</b> {{nodename}} <b>Type:</b> {{dispname}}</div>
-                        <table class="table table-inverse">
+                        <table class="table table-inverse" id="edtable">
                             <thead>
                             <tr>
                                 <th>Property Name</th>
@@ -162,7 +162,7 @@
 </script>
 
 <script id="processinfotemplate" type="text/x-handlebars-template">
-<table class="table table-inverse">
+<table class="table table-inverse" id="pitable">
     <tbody>
     {{#processinfos}}
     <tr>
@@ -175,7 +175,7 @@
 </script>
 
 <script id="processvarsglobalstemplate" type="text/x-handlebars-template">
-    <table class="table table-inverse">
+    <table class="table table-inverse" id="pvgtable">
         <thead>
         <tr>
             <th>#</th>
@@ -198,7 +198,7 @@
 </script>
 
 <script id="processimportstemplate" type="text/x-handlebars-template">
-    <table class="table table-inverse">
+    <table class="table table-inverse" id="pimtable">
         <thead>
         <tr>
             <th>#</th>

@@ -502,6 +502,40 @@
       <artifactId>kie-wb-common-services-backend</artifactId>
     </dependency>
 
+    <!-- yahp pdf -->
+    <dependency>
+      <groupId>org.allcolor</groupId>
+      <artifactId>org.allcolor.yahp</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.allcolor</groupId>
+      <artifactId>org.allcolor.yahp.internal</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.allcolor</groupId>
+      <artifactId>org.allcolor.yahp.renderer</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.allcolor</groupId>
+      <artifactId>org.allcolor.yahp.itext</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.allcolor</groupId>
+      <artifactId>org.allcolor.yahp.jaxen</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.allcolor</groupId>
+      <artifactId>org.allcolor.yahp.jtidy</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.allcolor</groupId>
+      <artifactId>org.allcolor.yahp.shani</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.allcolor</groupId>
+      <artifactId>org.allcolor.yahp.xmlapis</artifactId>
+    </dependency>
+
     <!-- Logging -->
     <dependency>
       <groupId>org.slf4j</groupId>
