@@ -28,7 +28,7 @@ public class Utils {
 
     public static String getEncodedParam(HttpServletRequest request, String paramName) {
         String uniqueId = request.getParameter(paramName);
-        if (uniqueId != null && Base64Backport.isBase64(uniqueId)) {
+        if (uniqueId != null && Base64.isBase64(uniqueId)) {
             byte[] decoded = Base64.decodeBase64(uniqueId);
             try {
                 uniqueId = new String(decoded, "UTF-8");

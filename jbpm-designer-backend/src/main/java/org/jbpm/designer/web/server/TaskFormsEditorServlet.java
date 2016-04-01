@@ -23,7 +23,6 @@ import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.impl.AssetBuilder;
-import org.jbpm.designer.util.Base64Backport;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.formModeler.designer.integration.BPMNFormBuilderService;
@@ -137,7 +136,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
         Asset newFormAsset =  repository.loadAssetFromPath(packageName + "/" + taskName + TASKFORM_NAME_EXTENSION + "." + formType);
 
         String uniqueId = newFormAsset.getUniqueId();
-        if (Base64Backport.isBase64(uniqueId)) {
+        if (Base64.isBase64(uniqueId)) {
             byte[] decoded = Base64.decodeBase64(uniqueId);
             try {
                 uniqueId =  new String(decoded, "UTF-8");
@@ -158,7 +157,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
 
              if(formType.equals(FORMMODELER_FILE_EXTENSION)) {
                  String uniqueId = formAsset.getUniqueId();
-                 if (Base64Backport.isBase64(uniqueId)) {
+                 if (Base64.isBase64(uniqueId)) {
                      byte[] decoded = Base64.decodeBase64(uniqueId);
                      try {
                          uniqueId =  new String(decoded, "UTF-8");
@@ -187,7 +186,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
                  Asset<String> newFormAsset = repository.loadAssetFromPath(packageName + "/" + taskName + TASKFORM_NAME_EXTENSION + "." + formType);
 
                  String uniqueId = newFormAsset.getUniqueId();
-                 if (Base64Backport.isBase64(uniqueId)) {
+                 if (Base64.isBase64(uniqueId)) {
                      byte[] decoded = Base64.decodeBase64(uniqueId);
                      try {
                          uniqueId =  new String(decoded, "UTF-8");
