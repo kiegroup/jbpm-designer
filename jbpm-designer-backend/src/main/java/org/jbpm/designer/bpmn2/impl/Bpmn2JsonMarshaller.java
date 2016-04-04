@@ -1701,7 +1701,8 @@ public class Bpmn2JsonMarshaller {
         }
 
         // check if we are dealing with a custom task
-        if(isCustomElement((String) properties.get("taskname"), preProcessingData)) {
+        boolean isCustomElement = isCustomElement((String) properties.get("taskname"), preProcessingData);
+        if(isCustomElement) {
             properties.put("tasktype", properties.get("taskname"));
         } else {
             properties.put("tasktype", taskType);
@@ -1788,7 +1789,7 @@ public class Bpmn2JsonMarshaller {
                     // dont add "TaskName" as that is added manually
                     String dataInName = dataIn.getName();
                     if(dataInName != null &&
-                            !(dataInName.equals("TaskName") && (task instanceof UserTask)) &&
+                            !(dataInName.equals("TaskName") && ((task instanceof UserTask) || isCustomElement)) &&
                             !dataInName.equals("miinputCollection")) {
                         dataInBuffer.append(dataInName);
                         if(dataIn.getItemSubjectRef() != null && dataIn.getItemSubjectRef().getStructureRef() != null && dataIn.getItemSubjectRef().getStructureRef().length() > 0) {
