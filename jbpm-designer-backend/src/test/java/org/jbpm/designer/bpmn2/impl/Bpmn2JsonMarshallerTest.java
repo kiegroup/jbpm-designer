@@ -68,11 +68,42 @@ public class Bpmn2JsonMarshallerTest {
         }
     }
 
+    @Test
+    public void testCustomTaskTaskName() throws Exception {
+        String[] existingVariableNames = {"Message", "DataInput1"};
+
+        String[] nonExistingVariableNames = {"TaskName"};
+
+        JSONObject process = loadProcessFrom("customtasktaskname.bpmn2");
+        JSONObject logtask = getChildByName(process, "Log");
+        JSONObject properties = logtask.getJSONObject("properties");
+        String datainputset = properties.getString("datainputset");
+        String assignments = properties.getString("assignments");
+
+        for (String variableName : existingVariableNames) {
+            String dataInput = variableName + ":String";
+            assertTrue("Variable \"" + variableName + "\" not found in datainputset", datainputset.contains(dataInput));
+        }
+        for (String variableName : existingVariableNames) {
+            String assignment = "[din]" + variableName + "=";
+            assertTrue("Assignment \"" + assignment + "\" not found in assignments", assignments.contains(assignment));
+        }
+
+        for (String variableName : nonExistingVariableNames) {
+            String dataInput = variableName + ":String";
+            assertFalse("Variable \"" + variableName + "\" found in datainputset", datainputset.contains(dataInput));
+        }
+        for (String variableName : nonExistingVariableNames) {
+            String assignment = "[din]" + variableName + "=";
+            assertFalse("Assignment \"" + assignment + "\" found in assignments", assignments.contains(assignment));
+        }
+    }
+
     private JSONObject loadProcessFrom(String fileName) throws Exception {
         URL fileURL = Bpmn2JsonMarshallerTest.class.getResource(fileName);
         String definition = new String(Files.readAllBytes(Paths.get(fileURL.toURI())));
 
-        String jsonString = marshaller.parseModel(definition, profile, "");
+        String jsonString = marshaller.parseModel(definition, profile, "Email,HelloWorkItemHandler,Log,Rest,WebService");
 
         JSONObject process = new JSONObject(jsonString);
         if ("BPMNDiagram".equals(process.getJSONObject("stencil").getString("id"))) {
