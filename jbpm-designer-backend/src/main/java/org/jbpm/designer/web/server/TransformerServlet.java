@@ -201,7 +201,13 @@ public class TransformerServlet extends HttpServlet {
                     t.transcode(input, output);
                     resp.setCharacterEncoding("UTF-8");
                     resp.setContentType("text/plain");
-                    resp.getWriter().write("<img src=\"data:image/png;base64," + Base64.encodeBase64String(bout.toByteArray()) + "\">");
+                    if(req.getParameter(SVG_WIDTH_PARAM) != null && req.getParameter(SVG_HEIGHT_PARAM) != null) {
+                        int widthHint = (int) getFloatParam(req, SVG_WIDTH_PARAM, DEFAULT_PDF_WIDTH);
+                        int heightHint = (int) getFloatParam(req, SVG_HEIGHT_PARAM, DEFAULT_PDF_HEIGHT);
+                        resp.getWriter().write("<img width=\"" + widthHint + "\" height=\"" + heightHint + "\" src=\"data:image/png;base64," + Base64.encodeBase64String(bout.toByteArray()) + "\">");
+                    } else {
+                        resp.getWriter().write("<img src=\"data:image/png;base64," + Base64.encodeBase64String(bout.toByteArray()) + "\">");
+                    }
                 } else {
                     storeInRepository(uuid, formattedSvg, transformto, processid, repository);
                     resp.setContentType("image/png");
