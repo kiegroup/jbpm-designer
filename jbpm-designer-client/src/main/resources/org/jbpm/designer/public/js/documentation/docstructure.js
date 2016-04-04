@@ -661,6 +661,74 @@ function presentPropertyName(rawprop) {
     }
 }
 
+function displayProcessImg() {
+    var svg = parent.ORYX.EDITOR.getCanvas().getSVGRepresentation(true, true);
+    var formattedSvgDOM = parent.DataManager.serialize(svg);
+    var svgHeight = svg.getAttributeNS(null, 'height');
+    var svgWidth = svg.getAttributeNS(null, 'width');
+
+    var isIE = Object.hasOwnProperty.call(window, "ActiveXObject");
+    var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+
+    if(isChrome || isIE) {
+        // remove the non-chrome div display
+        var nonChromeDiv = document.getElementById("processimgdivdisplay");
+        if(nonChromeDiv) {
+            nonChromeDiv.parentNode.removeChild(nonChromeDiv);
+        }
+
+        var chromeIeSVG = parent.ORYX.EDITOR.getCanvas().getSVGRepresentation(false, false);
+        chromeIeSVG.setAttributeNS(null, 'width', parent.ORYX.CONFIG.MAXIMUM_SIZE);
+        chromeIeSVG.setAttributeNS(null, 'height', parent.ORYX.CONFIG.MAXIMUM_SIZE);
+
+        $("#processimgdivdisplayframe").contents().find("body").html('');
+        $("#processimgdivdisplayframe").contents().find("body").html(chromeIeSVG);
+    } else {
+        // remove the frame used for chrome
+        var chromeFrame = document.getElementById("processimgdivdisplayframe");
+        if(chromeFrame) {
+            chromeFrame.parentNode.removeChild(chromeFrame);
+        }
+
+        parent.Ext.Ajax.request({
+            url: parent.ORYX.PATH + "transformer",
+            method: 'POST',
+            success: function(request){
+                try {
+                    document.getElementById("processimgdivdisplay").innerHTML = "";
+                    document.getElementById("processimgdivdisplay").innerHTML = request.responseText;
+                } catch(e) {
+                    parent.ORYX.EDITOR._pluginFacade.raiseEvent({
+                        type 		: parent.ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                        ntype		: 'error',
+                        msg         : parent.ORYX.I18N.view.processImgFail+': ' + e,
+                        title       : ''
+
+                    });
+                }
+            },
+            failure: function(){
+                parent.ORYX.EDITOR._pluginFacade.raiseEvent({
+                    type 		: parent.ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'error',
+                    msg         : parent.ORYX.I18N.view.processImgFail+'.',
+                    title       : ''
+
+                });
+            },
+            params: {
+                profile: parent.ORYX.PROFILE,
+                uuid :  window.btoa(encodeURI(parent.ORYX.UUID)),
+                fsvg : parent.Base64.encode(formattedSvgDOM),
+                transformto : "png",
+                respaction : "showurl",
+                svgheight: svgHeight,
+                svgwidth: svgWidth
+            }
+        });
+    }
+}
+
 function formatScript(str) {
     var result = new String("");
     var c = '\0';
