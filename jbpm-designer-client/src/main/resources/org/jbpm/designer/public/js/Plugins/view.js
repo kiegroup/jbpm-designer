@@ -932,7 +932,11 @@ ORYX.Plugins.View = {
             title       : ''
 
         });
-        var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(true, true));
+
+        var svg = ORYX.EDITOR.getCanvas().getSVGRepresentation(true, true);
+        var formattedSvgDOM = DataManager.serialize(svg);
+        var svgHeight = svg.getAttributeNS(null, 'height');
+        var svgWidth = svg.getAttributeNS(null, 'width');
 
         Ext.Ajax.request({
             url: ORYX.PATH + "transformer",
@@ -982,7 +986,9 @@ ORYX.Plugins.View = {
                 uuid :  window.btoa(encodeURI(ORYX.UUID)),
                 fsvg : Base64.encode(formattedSvgDOM),
                 transformto : "png",
-                respaction : "showurl"
+                respaction : "showurl",
+                svgheight: svgHeight,
+                svgwidth: svgWidth
             }
         });
     },
