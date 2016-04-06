@@ -63,29 +63,31 @@
         <div class="col-sm-9">
             <p><div id="pagebuttons" class="well noprint" align="right">
                 <button type="button" class="btn btn-default btn-sm" onclick="createDocsPNG()">Doc PNG</button>&nbsp;&nbsp;
-                <%--<button type="button" class="btn btn-default btn-sm" onclick="createPDF()">PDF</button>&nbsp;&nbsp;--%>
+                <button type="button" class="btn btn-default btn-sm" onclick="showAsPDF()">PDF</button>&nbsp;&nbsp;
                 <button type="buton" class="btn btn-default btn-sm" onclick="window.print();">Print</button>
             </div></p>
 
-            <p><h1 class="page-header" id="process-documentation">Process Documentation</h1></p>
+            <div id="pagecontainercore">
+                <p><h1 class="page-header" id="process-documentation">Process Documentation</h1></p>
 
-            <h2 id="overview"><span class="badge badge-inverse">1.0</span> Process Overview</h2>
-            <p> <h3 id="process-info"><span class="badge badge-inverse">1.1</span> General</h3></p>
-            <p id='processinfocontent'></p>
-            <p><h3 id="process-titals"><span class="badge badge-inverse">1.2</span> Data Totals</h3></p>
-            <p id="processdatatotals"></p>
-            <p><h3 id="process-vars"><span class="badge badge-inverse">1.3</span> Variables</h3></p>
-            <p id='processvarcontent'></p>
-            <p><h3 id="process-globals"><span class="badge badge-inverse">1.4</span> Globals</h3></p>
-            <p id='processglobalcontent'></p>
-            <p><h3 id="process-imports"><span class="badge badge-inverse">1.5</span> Imports</h3></p>
-            <p id='processimportcontent'></p>
+                <h2 id="overview"><span class="badge badge-inverse">1.0</span> Process Overview</h2>
+                <p> <h3 id="process-info"><span class="badge badge-inverse">1.1</span> General</h3></p>
+                <p id='processinfocontent'></p>
+                <p><h3 id="process-titals"><span class="badge badge-inverse">1.2</span> Data Totals</h3></p>
+                <p id="processdatatotals"></p>
+                <p><h3 id="process-vars"><span class="badge badge-inverse">1.3</span> Variables</h3></p>
+                <p id='processvarcontent'></p>
+                <p><h3 id="process-globals"><span class="badge badge-inverse">1.4</span> Globals</h3></p>
+                <p id='processglobalcontent'></p>
+                <p><h3 id="process-imports"><span class="badge badge-inverse">1.5</span> Imports</h3></p>
+                <p id='processimportcontent'></p>
 
-            <h2 id="element-details"><span class="badge badge-inverse">2.0</span> Element Details</h2>
-            <p><h3 id="element-totals"><span class="badge badge-inverse">2.1</span> Totals</h3></p>
-            <p id="processelementtotals"></p>
-            <p><h3 id="elemen-info"><span class="badge badge-inverse">2.2</span> Elements</h3></p>
-            <p id="processelementdetails"></p>
+                <h2 id="element-details"><span class="badge badge-inverse">2.0</span> Element Details</h2>
+                <p><h3 id="element-totals"><span class="badge badge-inverse">2.1</span> Totals</h3></p>
+                <p id="processelementtotals"></p>
+                <p><h3 id="elemen-info"><span class="badge badge-inverse">2.2</span> Elements</h3></p>
+                <p id="processelementdetails"></p>
+                </div>
 
             <div class="noprint" id="processimgdiv">
                 <h2 id="process-image"><span class="badge badge-inverse">3.0</span> Process Image</h2>

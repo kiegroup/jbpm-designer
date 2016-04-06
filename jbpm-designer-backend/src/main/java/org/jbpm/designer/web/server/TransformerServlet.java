@@ -35,6 +35,14 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
 import bpsim.impl.BpsimFactoryImpl;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.html.simpleparser.HTMLTagProcessor;
+import com.itextpdf.text.html.simpleparser.HTMLTagProcessors;
+import com.itextpdf.text.html.simpleparser.HTMLWorker;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.tool.xml.XMLWorkerHelper;
 import org.apache.batik.transcoder.SVGAbstractTranscoder;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
@@ -97,6 +105,7 @@ public class TransformerServlet extends HttpServlet {
     private static final String JPDL_TO_BPMN2 = "jpdl2bpmn2";
     private static final String BPMN2_TO_JSON = "bpmn2json";
     private static final String JSON_TO_BPMN2 = "json2bpmn2";
+    private static final String HTML_TO_PDF = "html2pdf";
     private static final String RESPACTION_SHOWURL = "showurl";
     private static final String RESPACTION_SHOWEMBEDDABLE = "showembeddable";
 
@@ -137,8 +146,11 @@ public class TransformerServlet extends HttpServlet {
         String processid = req.getParameter("processid");
         String sourceEnc = req.getParameter("enc");
         String convertServiceTasks = req.getParameter("convertservicetasks");
+        String htmlSourceEnc = req.getParameter("htmlenc");
 
         String formattedSvg = ( formattedSvgEncoded == null ? "" : new String(Base64.decodeBase64(formattedSvgEncoded), "UTF-8") );
+
+        String htmlSource = ( htmlSourceEnc == null ? "" : new String(Base64.decodeBase64(htmlSourceEnc), "UTF-8") );
 
         if(sourceEnc != null && sourceEnc.equals("true")) {
             bpmn2in = new String(Base64.decodeBase64(bpmn2in), "UTF-8");
@@ -321,6 +333,77 @@ public class TransformerServlet extends HttpServlet {
                 resp.getWriter().print("");
             }
 
+        } else if (transformto != null && transformto.equals(HTML_TO_PDF)) {
+            try {
+                resp.setContentType("application/pdf");
+                if (processid != null) {
+                    resp.setHeader("Content-Disposition",
+                            "attachment; filename=\"" + processid + ".pdf\"");
+                } else {
+                    resp.setHeader("Content-Disposition",
+                            "attachment; filename=\"" + uuid + ".pdf\"");
+                }
+
+                Document pdfDoc = new Document(PageSize.A4);
+                PdfWriter pdfWriter = PdfWriter.getInstance(pdfDoc, resp.getOutputStream());
+                pdfDoc.open();
+                pdfDoc.addCreator("jBPM Designer");
+                pdfDoc.addSubject("Business Process Documentation");
+                pdfDoc.addCreationDate();
+                pdfDoc.addTitle("Process Documentation");
+
+                HTMLWorker htmlWorker = new HTMLWorker(pdfDoc);
+
+                final HTMLTagProcessor SCRIPT = new HTMLTagProcessor() {
+                    public void startElement(HTMLWorker worker, String tag, Map<String, String> attrs) {
+                    }
+
+                    public void endElement(HTMLWorker worker, String tag) {
+                    }
+                };
+
+                Map<String, HTMLTagProcessor> supportedTags = new HashMap<String, HTMLTagProcessor>();
+                supportedTags.put("a", HTMLTagProcessors.A);
+                supportedTags.put("b", HTMLTagProcessors.EM_STRONG_STRIKE_SUP_SUP);
+                supportedTags.put("body", HTMLTagProcessors.DIV);
+                supportedTags.put("br", HTMLTagProcessors.BR);
+                supportedTags.put("div", HTMLTagProcessors.DIV);
+                supportedTags.put("em", HTMLTagProcessors.EM_STRONG_STRIKE_SUP_SUP);
+                supportedTags.put("font", HTMLTagProcessors.SPAN);
+                supportedTags.put("h1", HTMLTagProcessors.H);
+                supportedTags.put("h2", HTMLTagProcessors.H);
+                supportedTags.put("h3", HTMLTagProcessors.H);
+                supportedTags.put("h4", HTMLTagProcessors.H);
+                supportedTags.put("h5", HTMLTagProcessors.H);
+                supportedTags.put("h6", HTMLTagProcessors.H);
+                supportedTags.put("hr", HTMLTagProcessors.HR);
+                supportedTags.put("i", HTMLTagProcessors.EM_STRONG_STRIKE_SUP_SUP);
+                //supportedTags.put("img", HTMLTagProcessors.IMG);
+                supportedTags.put("li", HTMLTagProcessors.LI);
+                supportedTags.put("ol", HTMLTagProcessors.UL_OL);
+                supportedTags.put("p", HTMLTagProcessors.DIV);
+                supportedTags.put("pre", HTMLTagProcessors.PRE);
+                supportedTags.put("s", HTMLTagProcessors.EM_STRONG_STRIKE_SUP_SUP);
+                supportedTags.put("span", HTMLTagProcessors.SPAN);
+                supportedTags.put("strike", HTMLTagProcessors.EM_STRONG_STRIKE_SUP_SUP);
+                supportedTags.put("strong", HTMLTagProcessors.EM_STRONG_STRIKE_SUP_SUP);
+                supportedTags.put("sub", HTMLTagProcessors.EM_STRONG_STRIKE_SUP_SUP);
+                supportedTags.put("sup", HTMLTagProcessors.EM_STRONG_STRIKE_SUP_SUP);
+                supportedTags.put("table", HTMLTagProcessors.TABLE);
+                supportedTags.put("td", HTMLTagProcessors.TD);
+                supportedTags.put("th", HTMLTagProcessors.TD);
+                supportedTags.put("tr", HTMLTagProcessors.TR);
+                supportedTags.put("u", HTMLTagProcessors.EM_STRONG_STRIKE_SUP_SUP);
+                supportedTags.put("ul", HTMLTagProcessors.UL_OL);
+                supportedTags.put("script", SCRIPT);
+
+                htmlWorker.setSupportedTags(supportedTags);
+
+                htmlWorker.parse(new StringReader(htmlSource));
+                pdfDoc.close();
+            } catch(DocumentException e) {
+                resp.sendError(500, e.getMessage());
+            }
         }
     }
 

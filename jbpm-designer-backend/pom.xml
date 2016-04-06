@@ -530,6 +530,15 @@
       <artifactId>org.eclipse.bpmn2</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>com.itextpdf</groupId>
+      <artifactId>itextpdf</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.itextpdf.tool</groupId>
+      <artifactId>xmlworker</artifactId>
+    </dependency>
+
   </dependencies>
 
   <build>
