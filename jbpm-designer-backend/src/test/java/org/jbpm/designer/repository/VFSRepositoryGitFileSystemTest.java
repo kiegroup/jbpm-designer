@@ -22,7 +22,6 @@ import org.jbpm.designer.repository.filters.FilterByFileName;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
 import org.jbpm.designer.repository.vfs.VFSRepository;
-import org.jbpm.designer.util.Base64Backport;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.junit.*;
 import org.kie.workbench.common.services.shared.project.KieProject;
@@ -827,7 +826,7 @@ public class VFSRepositoryGitFileSystemTest {
     }
 
     private String decodeUniqueId(String uniqueId) {
-        if (Base64Backport.isBase64(uniqueId)) {
+        if (Base64.isBase64(uniqueId)) {
             byte[] decoded = Base64.decodeBase64(uniqueId);
             try {
                 String uri = new String(decoded, "UTF-8");
