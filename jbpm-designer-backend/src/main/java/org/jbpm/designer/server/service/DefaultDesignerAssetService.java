@@ -46,6 +46,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.util.EntityUtils;
+import org.guvnor.common.services.shared.metadata.model.Metadata;
 import org.guvnor.common.services.shared.metadata.model.Overview;
 import org.jboss.errai.bus.server.annotations.Service;
 import org.jbpm.designer.repository.Asset;
@@ -317,6 +318,12 @@ public class DefaultDesignerAssetService
         name = name.substring( 0, name.lastIndexOf( "." ) );
         name = Utils.toBPMNIdentifier(name);
         return location + "." + name;
+    }
+
+    @Override
+    public void updateMetadata( final Path resource, final Metadata metadata ) {
+        ioService.setAttributes( Paths.convert( resource ),
+                metadataService.setUpAttributes( resource, metadata ) );
     }
 
     @Override
