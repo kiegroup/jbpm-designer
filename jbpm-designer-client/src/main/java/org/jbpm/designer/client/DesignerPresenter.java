@@ -110,6 +110,8 @@ public class DesignerPresenter
 
     private DesignerView view;
 
+    private Overview overview;
+
     @Inject
     public DesignerPresenter( final DesignerView view ) {
         super( view );
@@ -599,6 +601,9 @@ public class DesignerPresenter
     private void setup( Map<String, String> editorParameters,
                         String editorID,
                         Overview overview ) {
+
+        this.overview = overview;
+
         if ( editorParameters != null ) {
 
             resetEditorPages( overview );
@@ -614,8 +619,14 @@ public class DesignerPresenter
     }
 
     protected void save() {
-        ObservablePath latestPath = versionRecordManager.getPathToLatest();
-        view.raiseEventCheckSave( latestPath.toURI() );
+        final ObservablePath latestPath = versionRecordManager.getPathToLatest();
+
+        assetService.call( new RemoteCallback<Void>() {
+            @Override
+            public void callback( final Void aVoid ) {
+                view.raiseEventCheckSave( latestPath.toURI() );
+            }
+        } ).updateMetadata(latestPath, overview.getMetadata());
     }
 
     public void reload() {
