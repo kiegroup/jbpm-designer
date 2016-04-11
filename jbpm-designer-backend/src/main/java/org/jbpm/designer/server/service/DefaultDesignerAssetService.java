@@ -15,12 +15,8 @@
 
 package org.jbpm.designer.server.service;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.Socket;
 import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -35,17 +31,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.http.HttpEntity;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.DefaultBHttpClientConnection;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.util.EntityUtils;
 import org.guvnor.common.services.shared.metadata.model.Metadata;
 import org.guvnor.common.services.shared.metadata.model.Overview;
 import org.jboss.errai.bus.server.annotations.Service;
@@ -225,82 +210,6 @@ public class DefaultDesignerAssetService
 
         repository.createAsset( processAsset );
         return path;
-    }
-
-    private String getEditorResponse( String urlpath,
-                                      String encProcessSrc ) {
-        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-    
-        // convert string to url in order to get host and port
-        URL url;
-        try { 
-            url = new URL(urlpath);
-        } catch( MalformedURLException murle ) { 
-            logger.error( "Incorrect URL: " + murle.getMessage(), murle );
-            return null;
-        }
-       
-        // configure socket to ignore local addresses (this constructur instead of full constructor)
-        Socket socket;
-        try {
-            socket = new Socket(url.getHost(), url.getPort());
-        DefaultBHttpClientConnection conn = new DefaultBHttpClientConnection(socketBufferSize);
-        conn.bind(socket);
-        } catch( Exception  e ) {
-            e.printStackTrace();
-        }
-      
-        // TODO: tiho, if it's possible to do preemptive basic authentication here (which it is?, I think?), please let me know. 
-        // Then you can do everything in one request, which will improve performance.. :) -- mriet
-       
-        // setup form authentication
-        List<NameValuePair> formParams = new ArrayList<NameValuePair>(2);
-        formParams.add(new BasicNameValuePair("j_username", "admin"));
-        formParams.add(new BasicNameValuePair("j_password", "admin"));
-        UrlEncodedFormEntity formEntity;
-        try {
-            formEntity = new UrlEncodedFormEntity(formParams);
-        } catch( UnsupportedEncodingException uee ) {
-            logger.error("Could not encode authentication parameters into request body", uee);
-            return null;
-        }
-       
-        // do form authentication
-        HttpPost authMethod = new HttpPost(urlpath);
-        authMethod.setEntity(formEntity);
-        try {
-            httpClient.execute(authMethod);
-        } catch (IOException ioe) {
-            logger.error("Could not initialize form-based authentication", ioe);
-            return null;
-        } finally {
-            authMethod.releaseConnection();
-        }
-       
-        // create post method and add query parameter
-        HttpPost theMethod = new HttpPost( urlpath );
-        BasicHttpParams params = new BasicHttpParams();
-        params.setParameter( "processsource", encProcessSrc );
-        theMethod.setParams(params);
-        
-        // execute post method and return response content
-        try {
-            // post
-            CloseableHttpResponse response = httpClient.execute( theMethod );
-            
-            // extract content
-            HttpEntity respEntity = response.getEntity();
-            String responseBody = null;
-            if( respEntity != null ) { 
-                responseBody = EntityUtils.toString(respEntity);
-            }
-            return responseBody;
-        } catch ( Exception e ) {
-            logger.error("Could not do POST method and retrieve content: " + e.getMessage(), e);
-            return null;
-        } finally {
-            theMethod.releaseConnection();
-        }
     }
 
     private String buildProcessId( String location,
