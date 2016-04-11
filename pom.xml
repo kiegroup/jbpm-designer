@@ -29,7 +29,6 @@
     <module>jbpm-designer-utilities</module>
     <module>jbpm-designer-standalone</module>
     <module>jbpm-designer-distribution-wars</module>
-    <module>jbpm-designer-distribution-wars-cdi1.0</module>
   </modules>
 
   <properties>
