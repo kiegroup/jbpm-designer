@@ -531,14 +531,9 @@
     </dependency>
 
     <dependency>
-      <groupId>com.itextpdf</groupId>
-      <artifactId>itextpdf</artifactId>
+      <groupId>com.lowagie</groupId>
+      <artifactId>itext</artifactId>
     </dependency>
-    <dependency>
-      <groupId>com.itextpdf.tool</groupId>
-      <artifactId>xmlworker</artifactId>
-    </dependency>
-
   </dependencies>
 
   <build>
