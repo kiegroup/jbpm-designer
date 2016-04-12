@@ -531,12 +531,18 @@
     </dependency>
 
     <dependency>
-      <groupId>com.itextpdf</groupId>
-      <artifactId>itextpdf</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.itextpdf.tool</groupId>
-      <artifactId>xmlworker</artifactId>
+      <groupId>com.lowagie</groupId>
+      <artifactId>itext</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>bouncycastle</groupId>
+          <artifactId>bcmail-jdk14</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>bouncycastle</groupId>
+          <artifactId>bcprov-jdk14</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
   </dependencies>
