@@ -20,10 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -35,14 +32,11 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
 import bpsim.impl.BpsimFactoryImpl;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.html.simpleparser.HTMLTagProcessor;
-import com.itextpdf.text.html.simpleparser.HTMLTagProcessors;
-import com.itextpdf.text.html.simpleparser.HTMLWorker;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.tool.xml.XMLWorkerHelper;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.html.simpleparser.HTMLWorker;
+import com.lowagie.text.pdf.PdfWriter;
 import org.apache.batik.transcoder.SVGAbstractTranscoder;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
@@ -113,6 +107,14 @@ public class TransformerServlet extends HttpServlet {
     private static final String SVG_HEIGHT_PARAM = "svgheight";
     private static final float DEFAULT_PDF_WIDTH = (float) 750.0;
     private static final float DEFAULT_PDF_HEIGHT = (float) 500.0;
+
+    static {
+        StringTokenizer html2pdfTagsSupported = new StringTokenizer("ol ul li a pre font span br p div body table td th tr i b u sub sup em strong s strike h1 h2 h3 h4 h5 h6");
+        HTMLWorker.tagsSupported.clear();
+        while(html2pdfTagsSupported.hasMoreTokens()) {
+            HTMLWorker.tagsSupported.put(html2pdfTagsSupported.nextToken(), null);
+        }
+    }
 
     private IDiagramProfile profile;
     // For unit testing purpose only
@@ -353,52 +355,6 @@ public class TransformerServlet extends HttpServlet {
                 pdfDoc.addTitle("Process Documentation");
 
                 HTMLWorker htmlWorker = new HTMLWorker(pdfDoc);
-
-                final HTMLTagProcessor SCRIPT = new HTMLTagProcessor() {
-                    public void startElement(HTMLWorker worker, String tag, Map<String, String> attrs) {
-                    }
-
-                    public void endElement(HTMLWorker worker, String tag) {
-                    }
-                };
-
-                Map<String, HTMLTagProcessor> supportedTags = new HashMap<String, HTMLTagProcessor>();
-                supportedTags.put("a", HTMLTagProcessors.A);
-                supportedTags.put("b", HTMLTagProcessors.EM_STRONG_STRIKE_SUP_SUP);
-                supportedTags.put("body", HTMLTagProcessors.DIV);
-                supportedTags.put("br", HTMLTagProcessors.BR);
-                supportedTags.put("div", HTMLTagProcessors.DIV);
-                supportedTags.put("em", HTMLTagProcessors.EM_STRONG_STRIKE_SUP_SUP);
-                supportedTags.put("font", HTMLTagProcessors.SPAN);
-                supportedTags.put("h1", HTMLTagProcessors.H);
-                supportedTags.put("h2", HTMLTagProcessors.H);
-                supportedTags.put("h3", HTMLTagProcessors.H);
-                supportedTags.put("h4", HTMLTagProcessors.H);
-                supportedTags.put("h5", HTMLTagProcessors.H);
-                supportedTags.put("h6", HTMLTagProcessors.H);
-                supportedTags.put("hr", HTMLTagProcessors.HR);
-                supportedTags.put("i", HTMLTagProcessors.EM_STRONG_STRIKE_SUP_SUP);
-                //supportedTags.put("img", HTMLTagProcessors.IMG);
-                supportedTags.put("li", HTMLTagProcessors.LI);
-                supportedTags.put("ol", HTMLTagProcessors.UL_OL);
-                supportedTags.put("p", HTMLTagProcessors.DIV);
-                supportedTags.put("pre", HTMLTagProcessors.PRE);
-                supportedTags.put("s", HTMLTagProcessors.EM_STRONG_STRIKE_SUP_SUP);
-                supportedTags.put("span", HTMLTagProcessors.SPAN);
-                supportedTags.put("strike", HTMLTagProcessors.EM_STRONG_STRIKE_SUP_SUP);
-                supportedTags.put("strong", HTMLTagProcessors.EM_STRONG_STRIKE_SUP_SUP);
-                supportedTags.put("sub", HTMLTagProcessors.EM_STRONG_STRIKE_SUP_SUP);
-                supportedTags.put("sup", HTMLTagProcessors.EM_STRONG_STRIKE_SUP_SUP);
-                supportedTags.put("table", HTMLTagProcessors.TABLE);
-                supportedTags.put("td", HTMLTagProcessors.TD);
-                supportedTags.put("th", HTMLTagProcessors.TD);
-                supportedTags.put("tr", HTMLTagProcessors.TR);
-                supportedTags.put("u", HTMLTagProcessors.EM_STRONG_STRIKE_SUP_SUP);
-                supportedTags.put("ul", HTMLTagProcessors.UL_OL);
-                supportedTags.put("script", SCRIPT);
-
-                htmlWorker.setSupportedTags(supportedTags);
-
                 htmlWorker.parse(new StringReader(htmlSource));
                 pdfDoc.close();
             } catch(DocumentException e) {
