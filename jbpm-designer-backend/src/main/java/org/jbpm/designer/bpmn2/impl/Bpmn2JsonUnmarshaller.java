@@ -235,8 +235,8 @@ public class Bpmn2JsonUnmarshaller {
 
         BPMNPlane plane = def.getDiagrams().get(0).getPlane();
         List<DiagramElement> diagramElements = plane.getPlaneElement();
-        for(DiagramElement dia : diagramElements) {
-            if(dia instanceof BPMNShape) {
+        for (DiagramElement dia : diagramElements) {
+            if (dia instanceof BPMNShape) {
                 BPMNShape shape = (BPMNShape) dia;
                 updateShapeBounds(def, plane, shape.getBpmnElement());
             }
@@ -244,20 +244,6 @@ public class Bpmn2JsonUnmarshaller {
 
         revisitEdgeBoundsInLanes(def);
         revisitEdgeBoundsInContainers(def);
-    }
-
-
-    public Bounds getShapeBoundsForFlowNode(FlowNode fn, BPMNPlane plane) {
-        List<DiagramElement> diagramElements = plane.getPlaneElement();
-        for(DiagramElement dia : diagramElements) {
-            if(dia instanceof BPMNShape) {
-                BPMNShape shape = (BPMNShape) dia;
-                if(shape.getBpmnElement().getId().equals(fn.getId())) {
-                    return shape.getBounds();
-                }
-            }
-        }
-        return null;
     }
 
     public void revisitEdgeBoundsInContainers(Definitions def) {
@@ -286,7 +272,7 @@ public class Bpmn2JsonUnmarshaller {
             // dont do this if its on process level
             if(!(container instanceof Process)) {
                 if(fele.getId().equals(sq.getSourceRef().getId())) {
-                    Bounds sourceBounds = getShapeBoundsForFlowNode(sq.getSourceRef(), plane);
+                    Bounds sourceBounds = getBoundsForShape(plane, sq.getSourceRef());
                     List<Point> edgePoints = edge.getWaypoint();
                     if(edgePoints !=null && edgePoints.size() > 1) {
                         if(sourceBounds != null) {
@@ -296,7 +282,7 @@ public class Bpmn2JsonUnmarshaller {
                         }
                     }
                 } else if(fele.getId().equals(sq.getTargetRef().getId())) {
-                    Bounds targetBounds = getShapeBoundsForFlowNode(sq.getTargetRef(), plane);
+                    Bounds targetBounds = getBoundsForShape(plane, sq.getTargetRef());
                     List<Point> edgePoints = edge.getWaypoint();
                     if(edgePoints !=null && edgePoints.size() > 1) {
                         if(targetBounds != null) {
