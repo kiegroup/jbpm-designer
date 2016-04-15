@@ -176,7 +176,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
             if (this.editorLocked && !parent.isLockedByCurrentUser()) {
                 this.editorLocked = false;
             } else if (!this.editorLocked && !parent.isLocked()) {
-                ORYX.EDITOR.updateViewLockState();
+                ORYX.EDITOR.updateViewLockState(true);
             }
         }
     },
@@ -184,7 +184,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
     setUnsaved: function() {
         ORYX.PROCESS_SAVED = false;
         
-        ORYX.EDITOR.updateViewLockState();
+        ORYX.EDITOR.updateViewLockState(true);
                         
         if(!this.editorLocked) {            
             if ( typeof parent.acquireLock === "function" ) {
@@ -432,7 +432,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
     },
 
     saveSync : function() {
-        ORYX.EDITOR.updateViewLockState();
+        ORYX.EDITOR.updateViewLockState(false);
 
         // the view-locked-by-current-user logic is already determined by updateViewLockState so here if viewlocked is true we are sure its locked by some other user and not us
         if(!ORYX.PROCESS_SAVED && ORYX.VIEWLOCKED != true) {
@@ -564,7 +564,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
 
 
     unloadWindow: function() {
-        this.saveSync(false);
+        this.saveSync();
     },
     clearCanvas: function() {
         ORYX.EDITOR.getCanvas().nodes.each(function(node) {
