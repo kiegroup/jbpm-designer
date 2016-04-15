@@ -104,7 +104,7 @@ ORYX.Editor = {
 			model = config.model;
 		}
 
-        this.updateViewLockState();
+        this.updateViewLockState(false);
 
         if(config.error) {
             Ext.Msg.show({
@@ -178,7 +178,7 @@ ORYX.Editor = {
 		}.bind(this), 200);
 	},
 
-	updateViewLockState: function() {
+	updateViewLockState: function(canReload) {
 		if(ORYX.INSTANCE_VIEW_MODE != true) {
 			if ( (typeof parent.isLocked === "function") && (typeof parent.isLockedByCurrentUser === "function") ) {
 				var isEditorLocked = parent.isLocked();
@@ -196,7 +196,7 @@ ORYX.Editor = {
 				}
 
 				// We're in read only mode, but got the lock, so let's reload to enter edit mode.
-				if (isReadOnly && !ORYX.VIEWLOCKED) {
+				if (isReadOnly && !ORYX.VIEWLOCKED && canReload) {
 					if (typeof parent.reload === "function") {
 						ORYX.PROCESS_SAVED = true;
 						parent.reload();
