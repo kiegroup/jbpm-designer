@@ -53,6 +53,8 @@ public interface DesignerEditorConstants extends
 
     String Data_IO();
 
+    String Data_Type();
+
     String Edit();
 
     String Enter_constant();
@@ -60,6 +62,8 @@ public interface DesignerEditorConstants extends
     String Enter_type();
 
     String Invalid_character_in_name();
+
+    String Name();
 
     String No_Data_Input();
 

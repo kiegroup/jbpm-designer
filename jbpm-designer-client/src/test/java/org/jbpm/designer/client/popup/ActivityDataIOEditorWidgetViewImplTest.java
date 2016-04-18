@@ -16,6 +16,7 @@
 
 package org.jbpm.designer.client.popup;
 
+import com.google.gwt.user.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwtmockito.GwtMock;
 import com.google.gwtmockito.GwtMockitoTestRunner;
@@ -46,6 +47,12 @@ public class ActivityDataIOEditorWidgetViewImplTest {
     @GwtMock
     private Button button;
 
+    @Mock
+    private Element nameth;
+
+    @Mock
+    private Element datatypeth;
+
     @GwtMock
     private ListWidget<AssignmentRow, AssignmentListItemWidgetViewImpl> assignments;
 
@@ -61,6 +68,8 @@ public class ActivityDataIOEditorWidgetViewImplTest {
     public void setUp() {
         view.assignments = assignments;
         view.addVarButton = button;
+        view.nameth = nameth;
+        view.datatypeth = datatypeth;
 
         doCallRealMethod().when(view).setAssignmentRows(any(List.class));
         doCallRealMethod().when(view).init(any(ActivityDataIOEditorWidgetView.Presenter.class));
@@ -75,8 +84,11 @@ public class ActivityDataIOEditorWidgetViewImplTest {
     public void testInit() {
         view.init(presenter);
 
-        verify(button, timeout(1)).setText(DesignerEditorConstants.INSTANCE.Add());
-        verify(button, timeout(1)).setIcon(IconType.PLUS);
+        verify(button, times(1)).setText(DesignerEditorConstants.INSTANCE.Add());
+        verify(button, times(1)).setIcon(IconType.PLUS);
+        verify(nameth, times(1)).setInnerText(DesignerEditorConstants.INSTANCE.Name());
+        verify(datatypeth, times(1)).setInnerText(DesignerEditorConstants.INSTANCE.Data_Type());
+
     }
 
     @Test
