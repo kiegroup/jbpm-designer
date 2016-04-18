@@ -58,6 +58,12 @@ public class ActivityDataIOEditorWidgetViewImpl extends Composite implements Act
     private HeadingElement tabletitle = Document.get().createHElement(3);
 
     @DataField
+    protected Element nameth = DOM.createTH();
+
+    @DataField
+    protected Element datatypeth = DOM.createTH();
+
+    @DataField
     private final Element processvarorconstantth = DOM.createTH();
 
     /**
@@ -76,6 +82,8 @@ public class ActivityDataIOEditorWidgetViewImpl extends Composite implements Act
         this.presenter = presenter;
         addVarButton.setText(DesignerEditorConstants.INSTANCE.Add());
         addVarButton.setIcon(IconType.PLUS);
+        nameth.setInnerText(DesignerEditorConstants.INSTANCE.Name());
+        datatypeth.setInnerText(DesignerEditorConstants.INSTANCE.Data_Type());
     }
 
     @Override
