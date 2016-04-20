@@ -49,7 +49,8 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
     public static final String BPMN2_TYPE = "BPMN2";
     public static final String SIMULATION_TYPE = "Simulation";
     public static final String PROCESS_TYPE = "Process";
-    private static final Logger _logger = LoggerFactory.getLogger(BPMN2SyntaxChecker.class);
+	private static final Logger _logger = LoggerFactory.getLogger(BPMN2SyntaxChecker.class);
+
 
 	protected Map<String, List<ValidationSyntaxError>> errors = new HashMap<String, List<ValidationSyntaxError>>();
 	private String json;
@@ -96,7 +97,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
                             foundPackageName = true;
                             pname = (String) entry.getValue();
                             if(isEmpty(pname)) {
-                                addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE,  "Process has no package name."));
+                                addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE, SyntaxCheckerErrors.PROCESS_HAS_NO_PACKAGE_NAME));
                             }
                             if(!isValidPackageName(pname)) {
                                 addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE,  "Package name contains invalid characters."));
@@ -104,7 +105,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
                         }
                     }
                     if(!foundPackageName) {
-                        addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE,  "Process has no package name."));
+                        addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE, SyntaxCheckerErrors.PROCESS_HAS_NO_PACKAGE_NAME));
                     }
 
                     if(isEmpty(process.getName())) {
@@ -178,14 +179,14 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 				if(se.getOutgoing() == null || se.getOutgoing().size() < 1) {
                     if(container instanceof Process) {
                         if(!isAdHocProcess(process)) {
-                            addError(se, new ValidationSyntaxError(se, BPMN2_TYPE,  "Start node has no outgoing connections"));
+                            addError(se, new ValidationSyntaxError(se, BPMN2_TYPE, SyntaxCheckerErrors.START_NODE_NO_OUTGOING_CONNECTIONS));
                         }
                     } else if(container instanceof SubProcess) {
                         if(!(container instanceof AdHocSubProcess)) {
-                            addError(se, new ValidationSyntaxError(se, BPMN2_TYPE,  "Start node has no outgoing connections"));
+                            addError(se, new ValidationSyntaxError(se, BPMN2_TYPE, SyntaxCheckerErrors.START_NODE_NO_OUTGOING_CONNECTIONS));
                         }
                     } else {
-                        addError(se, new ValidationSyntaxError(se, BPMN2_TYPE,  "Start node has no outgoing connections"));
+                        addError(se, new ValidationSyntaxError(se, BPMN2_TYPE, SyntaxCheckerErrors.START_NODE_NO_OUTGOING_CONNECTIONS));
                     }
 				}
 			} else if (fe instanceof EndEvent) {
@@ -193,14 +194,14 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 				if(ee.getIncoming() == null || ee.getIncoming().size() < 1) {
                     if(container instanceof Process) {
                         if(!isAdHocProcess(process)) {
-                            addError(ee, new ValidationSyntaxError(ee, BPMN2_TYPE,  "End node has no incoming connections"));
+                            addError(ee, new ValidationSyntaxError(ee, BPMN2_TYPE, SyntaxCheckerErrors.END_NODE_NO_INCOMING_CONNECTIONS));
                         }
                     } else if(container instanceof SubProcess) {
                         if(!(container instanceof AdHocSubProcess)) {
-                            addError(ee, new ValidationSyntaxError(ee, BPMN2_TYPE,  "End node has no incoming connections"));
+                            addError(ee, new ValidationSyntaxError(ee, BPMN2_TYPE, SyntaxCheckerErrors.END_NODE_NO_INCOMING_CONNECTIONS));
                         }
                     } else {
-                        addError(ee, new ValidationSyntaxError(ee, BPMN2_TYPE,  "End node has no incoming connections"));
+                        addError(ee, new ValidationSyntaxError(ee, BPMN2_TYPE, SyntaxCheckerErrors.END_NODE_NO_INCOMING_CONNECTIONS));
                     }
 				}
 			} else {
@@ -210,17 +211,17 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
                         if(container instanceof Process) {
                             if(!isAdHocProcess(process)) {
                                 if(!isCompensatingFlowNodeInProcess(fn, (Process) container)) {
-                                    addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no outgoing connections"));
+                                    addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, SyntaxCheckerErrors.NODE_NO_OUTGOING_CONNECTIONS));
                                 }
                             }
                         } else if(container instanceof SubProcess) {
                             if(!(container instanceof AdHocSubProcess)) {
                                 if(!isCompensatingFlowNodeInSubprocess(fn, (SubProcess) container)) {
-                                    addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no outgoing connections"));
+                                    addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, SyntaxCheckerErrors.NODE_NO_OUTGOING_CONNECTIONS));
                                 }
                             }
                         } else {
-                            addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no outgoing connections"));
+                            addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, SyntaxCheckerErrors.NODE_NO_OUTGOING_CONNECTIONS));
                         }
     				}
                     if(!(fn instanceof BoundaryEvent)) {
@@ -228,17 +229,17 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
                             if(container instanceof Process) {
                                 if(!isAdHocProcess(process) && !(fn instanceof EventSubprocess)) {
                                     if(!isCompensatingFlowNodeInProcess(fn, (Process) container)) {
-                                        addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no incoming connections"));
+                                        addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, SyntaxCheckerErrors.NODE_NO_INCOMING_CONNECTIONS));
                                     }
                                 }
                             } else if(container instanceof SubProcess) {
                                 if(!(container instanceof AdHocSubProcess)) {
                                     if(!isCompensatingFlowNodeInSubprocess(fn, (SubProcess) container)) {
-                                        addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no incoming connections"));
+                                        addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, SyntaxCheckerErrors.NODE_NO_INCOMING_CONNECTIONS));
                                     }
                                 }
                             } else {
-                                addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no incoming connections"));
+                                addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, SyntaxCheckerErrors.NODE_NO_INCOMING_CONNECTIONS));
                             }
                         }
                     }
@@ -255,12 +256,12 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 	                	foundRuleflowGroup = true;
 	                	String ruleflowGroup = (String) entry.getValue();
 	                	if(isEmpty(ruleflowGroup)) {
-	                		addError(bt, new ValidationSyntaxError(bt, BPMN2_TYPE, "Business Rule Task has no ruleflow-group."));
+	                		addError(bt, new ValidationSyntaxError(bt, BPMN2_TYPE, SyntaxCheckerErrors.BUSINESS_RULE_TASK_NO_RULEFLOW_GROUP));
 	                	}
 	                }
 	            }
 	            if(!foundRuleflowGroup) {
-	            	addError(bt, new ValidationSyntaxError(bt, BPMN2_TYPE, "Business Rule Task has no ruleflow-group."));
+	            	addError(bt, new ValidationSyntaxError(bt, BPMN2_TYPE, SyntaxCheckerErrors.BUSINESS_RULE_TASK_NO_RULEFLOW_GROUP));
 	            }
 			}
 			
@@ -291,9 +292,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 			if(fe instanceof UserTask) {
 				UserTask ut = (UserTask) fe;
 				String taskName = null;
-				Iterator<FeatureMap.Entry> utiter = ut.getAnyAttribute().iterator();
 				boolean foundTaskName = false;
-
 
                 if(ut.getIoSpecification() != null && ut.getIoSpecification().getDataInputs() != null) {
                     List<DataInput> taskDataInputs = ut.getIoSpecification().getDataInputs();
@@ -305,7 +304,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
                                     foundTaskName = true;
                                     taskName = ((FormalExpression) dia.getAssignment().get(0).getFrom()).getBody();
                                     if(isEmpty(taskName)) {
-                                        addError(ut, new ValidationSyntaxError(ut, BPMN2_TYPE, "User Task has no task name."));
+                                        addError(ut, new ValidationSyntaxError(ut, BPMN2_TYPE, SyntaxCheckerErrors.USER_TASK_HAS_NO_TASK_NAME));
                                     }
                                 }
                             }
@@ -314,7 +313,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
                     }
                 }
 		        if(!foundTaskName) {
-		        	addError(ut, new ValidationSyntaxError(ut, BPMN2_TYPE, "User Task has no task name."));
+		        	addError(ut, new ValidationSyntaxError(ut, BPMN2_TYPE, SyntaxCheckerErrors.USER_TASK_HAS_NO_TASK_NAME));
 		        }
 		        
 		        // simulation validation
@@ -505,12 +504,12 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
                     if(outgoingFlows != null && outgoingFlows.size() > 0) {
                         for(SequenceFlow flow : outgoingFlows) {
                             if(flow.getConditionExpression() == null) {
-                                addError(flow, new ValidationSyntaxError(flow, BPMN2_TYPE, "Sequence flow has no condition expression defined."));
+                                addError(flow, new ValidationSyntaxError(flow, BPMN2_TYPE, SyntaxCheckerErrors.SEQUENCE_FLOW_NO_CONDITION_EXPRESSION_DEFINED));
                             } else {
                                 if(flow.getConditionExpression() instanceof FormalExpression) {
                                     FormalExpression formalExp = (FormalExpression) flow.getConditionExpression();
                                     if(formalExp.getBody() == null && formalExp.getBody().length() < 1) {
-                                        addError(flow, new ValidationSyntaxError(flow, BPMN2_TYPE, "Sequence flow has no condition expression defined."));
+                                        addError(flow, new ValidationSyntaxError(flow, BPMN2_TYPE, SyntaxCheckerErrors.SEQUENCE_FLOW_NO_CONDITION_EXPRESSION_DEFINED));
                                     }
                                 } else {
                                     addError(flow, new ValidationSyntaxError(flow, BPMN2_TYPE, "Invalid condition expression on sequence flow."));
