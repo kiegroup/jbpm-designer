@@ -27,6 +27,10 @@ import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParser;
 import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.Process;
+import org.eclipse.bpmn2.di.BPMNEdge;
+import org.eclipse.bpmn2.di.BPMNPlane;
+import org.eclipse.dd.dc.Point;
+import org.eclipse.dd.di.DiagramElement;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.jboss.drools.DroolsPackage;
 import org.jboss.drools.MetaDataType;
@@ -1015,5 +1019,26 @@ public class Bpmn2UnmarshallingTest {
         Lane lane = process.getLaneSets().get(0).getLanes().get(0);
         assertEquals("Swimlane name is wrong.", lane.getName(), "Documented Swimlane");
         assertEquals("<![CDATA[Some documentation for swimlane.]]>", lane.getDocumentation().get(0).getText());
+    }
+
+    @Test
+    public void testSequenceFlowPointsInsideLane() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("sequenceFlowPointsInsideLane.json"), "").getContents().get(0));
+        BPMNPlane plane = definitions.getDiagrams().get(0).getPlane();
+        List<DiagramElement> diagramElements = plane.getPlaneElement();
+        for(DiagramElement dia : diagramElements) {
+            if (dia instanceof BPMNEdge) {
+                BPMNEdge edge = (BPMNEdge) dia;
+                List<Point> wayPoints = edge.getWaypoint();
+                assertNotNull(wayPoints);
+                assertEquals(wayPoints.size(), 2);
+                assertEquals(wayPoints.get(0).getX(), new Float(252.0));
+                assertEquals(wayPoints.get(0).getY(), new Float(220.0));
+
+                assertEquals(wayPoints.get(1).getX(), new Float(357.0));
+                assertEquals(wayPoints.get(1).getY(), new Float(220.0));
+            }
+        }
     }
 }
