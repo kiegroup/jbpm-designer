@@ -1548,7 +1548,7 @@ ORYX.Core.Command.Move = ORYX.Core.Command.extend({
 				})
 				
 				// Update all Dockers of Child shapes
-				/*var childShapesNodes = value.getChildShapes(true).findAll(function(shape){ return shape instanceof ORYX.Core.Node });							
+				var childShapesNodes = value.getChildShapes(true).findAll(function(shape){ return shape instanceof ORYX.Core.Node });
 				var childDockedShapes = childShapesNodes.collect(function(shape){ return shape.getAllDockedShapes() }).flatten().uniq();							
 				var childDockedEdge = childDockedShapes.findAll(function(shape){ return shape instanceof ORYX.Core.Edge });							
 				childDockedEdge = childDockedEdge.findAll(function(shape){ return shape.getAllDockedShapes().all(function(dsh){ return childShapesNodes.include(dsh) }) });							
@@ -1557,10 +1557,10 @@ ORYX.Core.Command.Move = ORYX.Core.Command.extend({
 				for (var j = 0; j < childDockedDockers.length; j++) {
 					var docker = childDockedDockers[j];
 					if (!docker.getDockedShape() && !this.moveShapes.include(docker)) {
-						//docker.bounds.moveBy(offset);
-						//docker.update();
+						docker.bounds.moveBy(offset);
+						docker.update();
 					}
-				}*/
+				}
 				
 				
 				var allEdges = [].concat(value.getIncomingShapes())
