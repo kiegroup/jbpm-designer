@@ -18,11 +18,49 @@ package org.jbpm.designer.bpmn2.validation;
 import org.eclipse.bpmn2.Bpmn2Factory;
 import org.eclipse.bpmn2.SubProcess;
 import org.eclipse.bpmn2.TextAnnotation;
+import org.jbpm.designer.bpmn2.utils.Bpmn2Loader;
+import org.json.JSONObject;
 import org.junit.Test;
 
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class BPMN2SyntaxCheckerTest {
+
+    private Bpmn2Loader loader = new Bpmn2Loader(BPMN2SyntaxCheckerTest.class);
+
+    private Map<String, List<BPMN2SyntaxChecker.ValidationSyntaxError>> errors;
+
+    @Test
+    public void testUserTaskWithTaskName() throws Exception {
+        loader.loadProcessFromXml("userTaskWithTaskName.bpmn2");
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        syntaxChecker.checkSyntax();
+        assertFalse(syntaxChecker.errorsFound());
+        errors  = syntaxChecker.getErrors();
+        assertEquals(0, errors.size());
+    }
+
+    @Test
+    public void testUserTaskWithoutTaskName() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("userTaskWithoutTaskName.bpmn2");
+        JSONObject userTask = loader.getChildByName(process, "User Task");
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        syntaxChecker.checkSyntax();
+        assertTrue(syntaxChecker.errorsFound());
+        errors  = syntaxChecker.getErrors();
+        assertEquals(1, errors.size());
+        String userTaskId = userTask.getString("resourceId");
+        assertTrue(errors.keySet().contains(userTaskId));
+        assertEquals(1, errors.get(userTaskId).size());
+        assertEquals(SyntaxCheckerErrors.USER_TASK_HAS_NO_TASK_NAME, errors.get(userTaskId).get(0).getError());
+    }
 
     @Test
     public void testIsCompensatingFlowNodeInSubprocessForTextAnnotation() throws Exception {
