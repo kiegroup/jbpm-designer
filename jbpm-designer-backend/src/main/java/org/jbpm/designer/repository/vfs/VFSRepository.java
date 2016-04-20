@@ -210,7 +210,7 @@ public class VFSRepository implements Repository {
                                 fileSystem.getSeparator() + sourcePath.relativize(currentFile)));
                         createIfNotExists(destinationPath);
 
-                        fileSystem.provider().copy(currentFile, destinationPath, null);
+                        fileSystem.provider().copy(currentFile, destinationPath, StandardCopyOption.REPLACE_EXISTING);
                     }
                     return FileVisitResult.CONTINUE;
                 }
@@ -239,7 +239,12 @@ public class VFSRepository implements Repository {
             if (name == null) {
                 name = sourcePath.getFileName().toString();
             }
-            final String destinationPathRoot = descriptor.getStringRepositoryRoot() + location + fileSystem.getSeparator() + name;
+
+            String destinationFolder = descriptor.getStringRepositoryRoot() + location;
+            if (!destinationFolder.endsWith(fileSystem.getSeparator())) {
+                destinationFolder = destinationFolder + fileSystem.getSeparator();
+            }
+            final String destinationPathRoot = destinationFolder + name;
 
             Files.walkFileTree(sourcePath, new SimpleFileVisitor<Path>() {
                 @Override

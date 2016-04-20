@@ -39,12 +39,19 @@ public class TestServletContext implements ServletContext {
 
     private Repository repository;
 
+    private String basePath = null;
+
     public TestServletContext() {
 
     }
 
     public TestServletContext(Repository repository) {
         this.repository = repository;
+    }
+
+    public TestServletContext(Repository repository, String basePath) {
+        this.repository = repository;
+        this.basePath = basePath;
     }
 
     public String getContextPath() {
@@ -122,7 +129,12 @@ public class TestServletContext implements ServletContext {
     }
 
     public String getRealPath(String path) {
-        return "src/test/resources/org/jbpm/designer/public" + path;
+        if (basePath != null) {
+            return basePath + path;
+        }
+        else {
+            return "src/test/resources/org/jbpm/designer/public" + path;
+        }
     }
 
     public String getServerInfo() {

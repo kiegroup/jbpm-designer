@@ -552,7 +552,6 @@ public class VFSRepositoryGitFileSystemTest {
 
     }
 
-    @Ignore// git based vfs does not yet support move
     @Test
     public void testMoveAsset() throws NoSuchFileException {
         Repository repository = new VFSRepository(producer.getIoService());
@@ -593,7 +592,6 @@ public class VFSRepositoryGitFileSystemTest {
         assertFalse(sourceAssetExists);
     }
 
-    @Ignore// git based vfs does not yet support move
     @Test
     public void testMoveAndRenameAsset() throws NoSuchFileException {
         Repository repository = new VFSRepository(producer.getIoService());
@@ -634,7 +632,6 @@ public class VFSRepositoryGitFileSystemTest {
         assertFalse(sourceAssetExists);
     }
 
-    @Ignore// git based vfs does not yet support move
     @Test
     public void testRenameAsset() throws NoSuchFileException {
         Repository repository = new VFSRepository(producer.getIoService());
@@ -675,8 +672,7 @@ public class VFSRepositoryGitFileSystemTest {
         assertFalse(sourceAssetExists);
     }
 
-    // disabling this test for now
-    // @Test
+    @Test
     public void testCopyDirectory() throws NoSuchFileException {
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
@@ -714,7 +710,6 @@ public class VFSRepositoryGitFileSystemTest {
 
     }
 
-    @Ignore// git based vfs does not yet support move
     @Test
     public void testMoveDirectory() throws NoSuchFileException {
         Repository repository = new VFSRepository(producer.getIoService());
@@ -753,7 +748,6 @@ public class VFSRepositoryGitFileSystemTest {
 
     }
 
-    @Ignore// git based vfs does not yet support move
     @Test
     public void testMoveEmptyDirectory() throws NoSuchFileException {
         Repository repository = new VFSRepository(producer.getIoService());
