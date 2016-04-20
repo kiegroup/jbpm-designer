@@ -15,6 +15,18 @@
 
 package org.jbpm.designer.web.server;
 
+import java.io.File;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.jbpm.designer.helper.TestHttpServletRequest;
 import org.jbpm.designer.helper.TestHttpServletResponse;
 import org.jbpm.designer.helper.TestServletConfig;
@@ -23,24 +35,40 @@ import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.RepositoryBaseTest;
+import org.jbpm.designer.repository.VFSFileSystemProducer;
 import org.jbpm.designer.repository.filters.FilterByExtension;
 import org.jbpm.designer.repository.impl.AssetBuilder;
-import org.jbpm.designer.repository.VFSFileSystemProducer;
 import org.jbpm.designer.repository.vfs.VFSRepository;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
+import org.jbpm.formModeler.designer.integration.BPMNFormBuilderService;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
+import org.uberfire.backend.vfs.Path;
+import org.uberfire.backend.vfs.PathFactory;
+import org.uberfire.backend.vfs.VFSService;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
+@RunWith(MockitoJUnitRunner.class)
 public class TaskFormsServletTest  extends RepositoryBaseTest {
+
+    @Mock
+    private VFSService vfsServices;
+
+    @Mock
+    BPMNFormBuilderService formModelerService;
+
+    @InjectMocks
+    TaskFormsServlet taskFormsServlet = new TaskFormsServlet();
 
     @Before
     public void setup() {
@@ -51,6 +79,15 @@ public class TaskFormsServletTest  extends RepositoryBaseTest {
         env.put("repository.root", VFS_REPOSITORY_ROOT);
         env.put("repository.globaldir", "/global");
         descriptor = producer.produceFileSystem(env);
+
+        when(vfsServices.get(any())).thenAnswer(new Answer<Path>() {
+            @Override
+            public Path answer(InvocationOnMock invocation) throws Throwable {
+                Object[] args = invocation.getArguments();
+                return PathFactory.newPath((String) args[0], (String) args[0]);
+            }
+        });
+
     }
 
     @After
@@ -62,9 +99,9 @@ public class TaskFormsServletTest  extends RepositoryBaseTest {
         repo.delete();
     }
 
-    @Ignore
     @Test
     public void testTaskFormServlet() throws Exception {
+        when(formModelerService.buildFormXML(any(), any(), any(), any(), any())).thenReturn("dummyform");
 
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
@@ -78,14 +115,13 @@ public class TaskFormsServletTest  extends RepositoryBaseTest {
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
         params.put("uuid", uniqueId);
-        params.put("json", readFile("src/test/resources/BPMN2-DefaultProcess.json"));
+        params.put("json", readFile("BPMN2-DefaultProcess.json"));
         params.put("profile", "jbpm");
         params.put("ppdata", null);
 
-        TaskFormsServlet taskFormsServlet = new TaskFormsServlet();
         taskFormsServlet.setProfile(profile);
 
-        taskFormsServlet.init(new TestServletConfig(new TestServletContext(repository)));
+        taskFormsServlet.init(new TestServletConfig(new TestServletContext(repository, "org/jbpm/designer/public")));
 
         taskFormsServlet.doPost(new TestHttpServletRequest(params), new TestHttpServletResponse());
 
@@ -99,9 +135,9 @@ public class TaskFormsServletTest  extends RepositoryBaseTest {
         assertNotNull(form.getAssetContent());
     }
 
-    @Ignore
     @Test
     public void testTaskFormServletWithUserTask() throws Exception {
+        when(formModelerService.buildFormXML(any(), any(), any(), any(), any())).thenReturn("dummyform");
 
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
@@ -115,21 +151,21 @@ public class TaskFormsServletTest  extends RepositoryBaseTest {
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
         params.put("uuid", uniqueId);
-        params.put("json", readFile("src/test/resources/BPMN2-UserTask.json"));
+        params.put("json", readFile("BPMN2-UserTask.json"));
         params.put("profile", "jbpm");
         params.put("ppdata", null);
 
-        TaskFormsServlet taskFormsServlet = new TaskFormsServlet();
         taskFormsServlet.setProfile(profile);
 
-        taskFormsServlet.init(new TestServletConfig(new TestServletContext(repository)));
+        taskFormsServlet.init(new TestServletConfig(new TestServletContext(repository, "org/jbpm/designer/public")));
 
         taskFormsServlet.doPost(new TestHttpServletRequest(params), new TestHttpServletResponse());
 
         Collection<Asset> forms = repository.listAssets("/defaultPackage", new FilterByExtension("ftl"));
         assertNotNull(forms);
         assertEquals(2, forms.size());
-        Iterator<Asset> assets = forms.iterator();
+        List<Asset> arrForms = sortAssets(forms);
+        Iterator<Asset> assets = arrForms.iterator();
         Asset asset1 = assets.next();
         assertEquals("evaluate-taskform", asset1.getName());
         assertEquals("/defaultPackage", asset1.getAssetLocation());
@@ -144,17 +180,27 @@ public class TaskFormsServletTest  extends RepositoryBaseTest {
         assertNotNull(form2.getAssetContent());
     }
 
-    private String readFile(String pathname) throws IOException {
-        StringBuilder fileContents = new StringBuilder();
-        Scanner scanner = new Scanner(new File(pathname), "UTF-8");
-        String lineSeparator = System.getProperty("line.separator");
-        try {
-            while(scanner.hasNextLine()) {
-                fileContents.append(scanner.nextLine() + lineSeparator);
+    private String readFile(String fileName) throws Exception {
+        URL fileURL = TaskFormsServletTest.class.getResource(fileName);
+        return new String(Files.readAllBytes(Paths.get(fileURL.toURI())));
+    }
+
+    private List<Asset> sortAssets(Collection<Asset> assets) {
+        ArrayList<Asset> arrAssets = new ArrayList<Asset>(assets);
+        arrAssets.sort(new Comparator<Asset>() {
+            @Override
+            public int compare(Asset a1, Asset a2) {
+                if (a1.getName() == null ) {
+                    return -1;
+                }
+                else if (a2.getName() == null ) {
+                    return 1;
+                }
+                else {
+                    return (a1.getName().compareTo(a2.getName()));
+                }
             }
-            return fileContents.toString();
-        } finally {
-            scanner.close();
-        }
+        });
+        return arrAssets;
     }
 }
