@@ -2,10 +2,10 @@ package org.jbpm.designer.bpmn2.impl;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
+import org.apache.commons.io.FileUtils;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.impl.DefaultProfileImpl;
 import org.json.JSONArray;
@@ -101,7 +101,7 @@ public class Bpmn2JsonMarshallerTest {
 
     private JSONObject loadProcessFrom(String fileName) throws Exception {
         URL fileURL = Bpmn2JsonMarshallerTest.class.getResource(fileName);
-        String definition = new String(Files.readAllBytes(Paths.get(fileURL.toURI())));
+        String definition = FileUtils.readFileToString(new File(fileURL.toURI()));
 
         String jsonString = marshaller.parseModel(definition, profile, "Email,HelloWorkItemHandler,Log,Rest,WebService");
 
