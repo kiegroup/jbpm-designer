@@ -36,7 +36,7 @@ public class TestServletConfig implements ServletConfig {
     }
 
     public String getInitParameter(String name) {
-        return null;  
+        return servletContext.getInitParameter(name);
     }
 
     public Enumeration getInitParameterNames() {

@@ -85,6 +85,8 @@ public class EditorHandler extends HttpServlet {
      */
     public static final String USEOLDDATAASSIGNMENTS = "designer.useolddataassignments";
 
+    public static final String SHOW_PDF_DOC = "designer.showpdfdoc";
+
     public static final String PRESET_PERSPECTIVE = "org.jbpm.designer.perspective";
 
     /**
@@ -111,6 +113,11 @@ public class EditorHandler extends HttpServlet {
      * The designer use old data assignments setting.
      */
     private boolean _useOldDataAssignments;
+
+    /**
+     * Show / Hide PDF Documentation display option
+     */
+    private boolean showPDFDoc;
 
     /**
      * The designer preprocess mode setting.
@@ -180,7 +187,7 @@ public class EditorHandler extends HttpServlet {
         _preProcess = Boolean.parseBoolean(System.getProperty(PREPROCESS) == null ? config.getInitParameter(PREPROCESS) : System.getProperty(PREPROCESS));
         _skin = System.getProperty(SKIN) == null ? config.getInitParameter(SKIN) : System.getProperty(SKIN);
         _designerVersion = readDesignerVersion(config.getServletContext());
-
+        showPDFDoc = doShowPDFDoc(config);
 
         String editor_file = config.
                 getServletContext().getRealPath(designer_path + "editor.st");
@@ -338,6 +345,7 @@ public class EditorHandler extends HttpServlet {
         editorTemplate.add("localhistoryenabled", profile.getLocalHistoryEnabled());
         editorTemplate.add("localhistorytimeout", profile.getLocalHistoryTimeout());
         editorTemplate.add("designerversion", _designerVersion);
+        editorTemplate.add("showpdfdoc", showPDFDoc);
         editorTemplate.add("storesvgonsave", profile.getStoreSVGonSaveOption());
         editorTemplate.add("defaultSkin", designer_path + "css/theme-default.css");
         editorTemplate.add("presetperspective", System.getProperty(PRESET_PERSPECTIVE) == null ? "" : System.getProperty(PRESET_PERSPECTIVE));
@@ -464,5 +472,9 @@ public class EditorHandler extends HttpServlet {
         } finally {
             scanner.close();
         }
+    }
+
+    public boolean doShowPDFDoc(ServletConfig config) {
+        return Boolean.parseBoolean(System.getProperty(SHOW_PDF_DOC) == null ? config.getInitParameter(SHOW_PDF_DOC) : System.getProperty(SHOW_PDF_DOC));
     }
 }
