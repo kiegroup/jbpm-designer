@@ -62,9 +62,9 @@
         </div>
         <div class="col-sm-9">
             <p><div id="pagebuttons" class="well noprint" align="right">
-                <button type="button" class="btn btn-default btn-sm" onclick="createDocsPNG()">Doc PNG</button>&nbsp;&nbsp;
-                <button type="button" class="btn btn-default btn-sm" onclick="showAsPDF()">PDF</button>&nbsp;&nbsp;
-                <button type="buton" class="btn btn-default btn-sm" onclick="window.print();">Print</button>
+                <button type="button" id="docspngbutton" class="btn btn-default btn-sm" onclick="createDocsPNG()">Doc PNG</button>&nbsp;&nbsp;
+                <button type="button" id="docspdfbutton" class="btn btn-default btn-sm" onclick="showAsPDF()">PDF</button>&nbsp;&nbsp;
+                <button type="button" id="docsprintbutton" class="btn btn-default btn-sm" onclick="window.print();">Print</button>
             </div></p>
 
             <div id="pagecontainercore">
@@ -228,6 +228,13 @@
 
 <script>
     function showProcessDocs() {
+        // show or hide pdf doc generation button
+        if(parent.ORYX.SHOWPDFDOC && parent.ORYX.SHOWPDFDOC == true) {
+            $("#docspdfbutton").show();
+        } else {
+            $("#docspdfbutton").hide();
+        }
+
         var processJSON = parent.ORYX.EDITOR.getSerializedJSON();
         var processDataTotals = {
             "processdatatotals":[

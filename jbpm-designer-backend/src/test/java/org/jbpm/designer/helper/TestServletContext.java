@@ -30,10 +30,7 @@ import javax.servlet.descriptor.JspConfigDescriptor;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Enumeration;
-import java.util.EventListener;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class TestServletContext implements ServletContext {
 
@@ -44,6 +41,8 @@ public class TestServletContext implements ServletContext {
     public TestServletContext() {
 
     }
+
+    Map<String, String> initParameters = new HashMap<String, String>();
 
     public TestServletContext(Repository repository) {
         this.repository = repository;
@@ -142,7 +141,7 @@ public class TestServletContext implements ServletContext {
     }
 
     public String getInitParameter(String name) {
-        return null;
+        return initParameters.get(name);
     }
 
     public Enumeration getInitParameterNames() {
@@ -152,7 +151,8 @@ public class TestServletContext implements ServletContext {
     @Override
     public boolean setInitParameter( String name,
                                      String value ) {
-        return false;
+        initParameters.put(name, value);
+        return true;
     }
 
     public Object getAttribute(String name) {
