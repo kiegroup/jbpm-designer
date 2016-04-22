@@ -99,9 +99,8 @@ public class ComboBox implements ComboBoxView.ComboBoxPresenter {
             setTextBoxValue("");
         } else if (newValue.startsWith(listBoxValues.getEditPrefix())) {
             // "Edit <value> ..." selected, show textBox with appropriate value
-            String quotedValue = view.getModelValue();
-            String unquotedValue = StringUtils.createUnquotedConstant(quotedValue);
-            setTextBoxValue(unquotedValue);
+            String value = view.getModelValue();
+            setTextBoxValue(value);
             view.setListBoxVisible(false);
             view.setTextBoxVisible(true);
             view.setTextBoxFocus(true);
@@ -109,8 +108,7 @@ public class ComboBox implements ComboBoxView.ComboBoxPresenter {
             // A Custom value has been selected
             String textValue = newValue;
             if (quoteStringValues) {
-                String unquotedValue = StringUtils.createUnquotedConstant(newValue);
-                textValue = unquotedValue;
+                textValue = StringUtils.createUnquotedConstant(newValue);
             }
             setListBoxValue(newValue);
             setTextBoxValue(textValue);
@@ -137,12 +135,12 @@ public class ComboBox implements ComboBoxView.ComboBoxPresenter {
                 } else {
                     String oldValue = currentTextValue;
                     addCustomValueToListBoxValues(newValue, oldValue);
+                    setTextBoxValue(newValue);
+                    currentTextValue = newValue;
                     if (quoteStringValues) {
                         newValue = StringUtils.createQuotedConstant(newValue);
                     }
-                    setTextBoxValue(newValue);
                     setListBoxValue(newValue);
-                    currentTextValue = newValue;
                 }
             } else {
                 // Set the value even if it's ""

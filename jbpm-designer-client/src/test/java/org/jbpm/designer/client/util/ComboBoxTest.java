@@ -169,7 +169,38 @@ public class ComboBoxTest {
         verify(view).setListBoxModelValue(quotedConstant);
         verify(view).setTextBoxValue(constant);
         verify(view).setTextBoxModelValue(constant);
+    }
 
+    @Test
+    public void testListBoxValueChanged_CustomValueQString1() {
+        comboBox.init(modelPresenter, listBox, textBox, processVarQuoteStringValues,
+                processVarConstantPrompt, processVarConstantPlaceholder);
+        String constant = "\"hello\"";
+        String quotedConstant = StringUtils.createQuotedConstant(constant);
+        when(listBoxValues.isCustomValue(quotedConstant)).thenReturn(true);
+
+        comboBox.listBoxValueChanged(quotedConstant);
+
+        verify(view).setListBoxValue(quotedConstant);
+        verify(view).setListBoxModelValue(quotedConstant);
+        verify(view).setTextBoxValue(constant);
+        verify(view).setTextBoxModelValue(constant);
+    }
+
+    @Test
+    public void testListBoxValueChanged_CustomValueQString2() {
+        comboBox.init(modelPresenter, listBox, textBox, processVarQuoteStringValues,
+                processVarConstantPrompt, processVarConstantPlaceholder);
+        String constant = "greeting={\"hello\"}";
+        String quotedConstant = StringUtils.createQuotedConstant(constant);
+        when(listBoxValues.isCustomValue(quotedConstant)).thenReturn(true);
+
+        comboBox.listBoxValueChanged(quotedConstant);
+
+        verify(view).setListBoxValue(quotedConstant);
+        verify(view).setListBoxModelValue(quotedConstant);
+        verify(view).setTextBoxValue(constant);
+        verify(view).setTextBoxModelValue(constant);
     }
 
     @Test
@@ -263,8 +294,8 @@ public class ComboBoxTest {
         verify(comboBox).addCustomValueToListBoxValues(value, "");
         verify(view).setListBoxValue(quotedValue);
         verify(view).setListBoxModelValue(quotedValue);
-        verify(view).setTextBoxValue(quotedValue);
-        verify(view).setTextBoxModelValue(quotedValue);
+        verify(view).setTextBoxValue(value);
+        verify(view).setTextBoxModelValue(value);
         verify(view).setTextBoxVisible(false);
         verify(view).setListBoxVisible(true);
     }
