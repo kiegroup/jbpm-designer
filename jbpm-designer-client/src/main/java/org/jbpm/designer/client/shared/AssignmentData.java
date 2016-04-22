@@ -112,7 +112,6 @@ public class AssignmentData {
         String constant = assignmentRow.getConstant();
         if (constant != null && !constant.isEmpty()) {
             processVarName = null;
-            constant = StringUtils.createUnquotedConstant(constant);
         }
         else {
             processVarName = assignmentRow.getProcessVar();
