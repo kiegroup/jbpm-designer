@@ -1,7 +1,6 @@
 package org.jbpm.designer.bpmn2.validation;
 
 public class SyntaxCheckerErrors {
-
     public static final String AN_EDGE_MUST_HAVE_A_SOURCE_NODE = "An Edge must have a source node.";
     public static final String AN_EDGE_MUST_HAVE_A_TARGET_NODE = "An Edge must have a target node.";
     public static final String AT_LEAST_ONE_OUTGOING_PROBABILITY_VALUE_100 = "At least one outgoing connection should have probability equal to 100.";
@@ -61,5 +60,4 @@ public class SyntaxCheckerErrors {
     public static final String processVariableContainsWhiteSpaces(String variableId) {
         return "Process variable \"" + variableId + "\" contains white spaces.";
     }
-
 }
