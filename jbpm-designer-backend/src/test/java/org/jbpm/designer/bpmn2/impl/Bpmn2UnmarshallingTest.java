@@ -927,4 +927,19 @@ public class Bpmn2UnmarshallingTest {
         }
     }
 
+    @Test
+    public void testCallActivity() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("callActivity.json");
+        Process process = getRootProcess(definitions);
+        CallActivity callActivity = null;
+        for (FlowElement flowElement : process.getFlowElements()) {
+            if (flowElement instanceof CallActivity) {
+                callActivity = (CallActivity) flowElement;
+                break;
+            }
+        }
+        assertNotNull(callActivity);
+        assertEquals("callActivity", callActivity.getName());
+        assertEquals("abc.noCalledElementCallActivity", callActivity.getCalledElement());
+    }
 }

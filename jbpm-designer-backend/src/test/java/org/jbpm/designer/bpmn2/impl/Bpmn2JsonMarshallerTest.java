@@ -215,4 +215,21 @@ public class Bpmn2JsonMarshallerTest {
         JSONObject properties = userTask.getJSONObject("properties");
         assertEquals("taskForSomebody", properties.getString("taskname"));
     }
+
+    @Test
+    public void testCallActivity() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("callActivity.bpmn2", BPMN2SyntaxCheckerTest.class);
+        JSONObject callActivity = loader.getChildByName(process, "callActivity");
+        JSONObject properties = callActivity.getJSONObject("properties");
+        assertEquals("abc.noCalledElementCallActivity", properties.getString("calledelement"));
+    }
+
+    @Test
+    public void testNoCalledElementCallActivity() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("noCalledElementCallActivity.bpmn2", BPMN2SyntaxCheckerTest.class);
+        JSONObject callActivity = loader.getChildByName(process, "callActivity");
+        JSONObject properties = callActivity.getJSONObject("properties");
+        assertFalse(properties.has("calledelement"));
+    }
+
 }
