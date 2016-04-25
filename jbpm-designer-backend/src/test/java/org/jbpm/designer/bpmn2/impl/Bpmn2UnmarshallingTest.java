@@ -25,6 +25,10 @@ import java.util.List;
 
 import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.Process;
+import org.eclipse.bpmn2.di.BPMNEdge;
+import org.eclipse.bpmn2.di.BPMNPlane;
+import org.eclipse.dd.dc.Point;
+import org.eclipse.dd.di.DiagramElement;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.jboss.drools.DroolsPackage;
 import org.jboss.drools.MetaDataType;
@@ -902,4 +906,25 @@ public class Bpmn2UnmarshallingTest {
         assertTrue(foundTaskName);
         assertTrue(foundGroupId);
     }
+
+    @Test
+    public void testSequenceFlowPointsInsideLane() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("sequenceFlowPointsInsideLane.json");
+        BPMNPlane plane = definitions.getDiagrams().get(0).getPlane();
+        List<DiagramElement> diagramElements = plane.getPlaneElement();
+        for(DiagramElement dia : diagramElements) {
+            if (dia instanceof BPMNEdge) {
+                BPMNEdge edge = (BPMNEdge) dia;
+                List<Point> wayPoints = edge.getWaypoint();
+                assertNotNull(wayPoints);
+                assertEquals(wayPoints.size(), 2);
+                assertEquals(Float.valueOf(wayPoints.get(0).getX()), new Float(252.0));
+                assertEquals(Float.valueOf(wayPoints.get(0).getY()), new Float(220.0));
+
+                assertEquals(Float.valueOf(wayPoints.get(1).getX()), new Float(357.0));
+                assertEquals(Float.valueOf(wayPoints.get(1).getY()), new Float(220.0));
+            }
+        }
+    }
+
 }
