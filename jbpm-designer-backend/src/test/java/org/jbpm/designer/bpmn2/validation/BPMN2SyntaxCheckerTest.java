@@ -25,6 +25,119 @@ import static org.junit.Assert.assertTrue;
 public class BPMN2SyntaxCheckerTest {
 
     @Test
+    public void testNoCalledElementCallActivity() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("noCalledElementCallActivity.bpmn2");
+        JSONObject callActivity = loader.getChildByName(process, "callActivity");
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        syntaxChecker.checkSyntax();
+        assertTrue(syntaxChecker.errorsFound());
+        errors  = syntaxChecker.getErrors();
+        assertEquals(1, errors.size());
+        String callActivityId = callActivity.getString("resourceId");
+        assertTrue(errors.keySet().contains(callActivityId));
+        assertEquals(1, errors.get(callActivityId).size());
+        assertEquals(SyntaxCheckerErrors.NO_CALLED_ELEMENT_SPECIFIED, errors.get(callActivityId).get(0).getError());
+    }
+
+    @Test
+    public void testCallActivity() throws Exception {
+        loader.loadProcessFromXml("callActivity.bpmn2");
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        syntaxChecker.checkSyntax();
+        assertFalse(syntaxChecker.errorsFound());
+        errors  = syntaxChecker.getErrors();
+        assertEquals(0, errors.size());
+    }
+
+    @Test
+    public void testInclusiveGatewayWithDefaultSimulationPath() throws Exception {
+        loader.loadProcessFromXml("inclusiveGatewayWithDefaultSimulationPath.bpmn2");
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        syntaxChecker.checkSyntax();
+        assertFalse(syntaxChecker.errorsFound());
+        errors  = syntaxChecker.getErrors();
+        assertEquals(0, errors.size());
+    }
+
+    @Test
+    public void testInclusiveGatewayWithoutDefaultSimulationPath() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("inclusiveGatewayWithoutDefaultSimulationPath.bpmn2");
+        JSONObject gateway = loader.getChildByName(process, "inclusiveGateway");
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        syntaxChecker.checkSyntax();
+        assertTrue(syntaxChecker.errorsFound());
+        errors  = syntaxChecker.getErrors();
+        assertEquals(1, errors.size());
+        String gatewayId = gateway.getString("resourceId");
+        assertEquals(SyntaxCheckerErrors.AT_LEAST_ONE_OUTGOING_PROBABILITY_VALUE_100, errors.get(gatewayId).get(0).getError());
+    }
+
+    @Test
+    public void testEventGatewayProperProbabilities() throws Exception {
+        loader.loadProcessFromXml("eventGatewayProperProbabilities.bpmn2");
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        syntaxChecker.checkSyntax();
+        assertFalse(syntaxChecker.errorsFound());
+        errors  = syntaxChecker.getErrors();
+        assertEquals(0, errors.size());
+    }
+
+    @Test
+    public void testEventGatewayInproperProbabilities() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("eventGatewayInproperProbabilities.bpmn2");
+        JSONObject gateway = loader.getChildByName(process, "eventGateway");
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        syntaxChecker.checkSyntax();
+        assertTrue(syntaxChecker.errorsFound());
+        errors  = syntaxChecker.getErrors();
+        assertEquals(1, errors.size());
+        String gatewayId = gateway.getString("resourceId");
+        assertEquals(SyntaxCheckerErrors.THE_SUM_OF_PROBABILITIES_MUST_BE_EQUAL_100, errors.get(gatewayId).get(0).getError());
+    }
+
+    @Test
+    public void testExclusiveGatewayProperProbabilities() throws Exception {
+        loader.loadProcessFromXml("exclusiveGatewayProperProbabilities.bpmn2");
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        syntaxChecker.checkSyntax();
+        assertFalse(syntaxChecker.errorsFound());
+        errors  = syntaxChecker.getErrors();
+        assertEquals(0, errors.size());
+    }
+
+    @Test
+    public void testExclusiveGatewayInproperProbabilities() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("exclusiveGatewayInproperProbabilities.bpmn2");
+        JSONObject gateway = loader.getChildByName(process, "exclusiveGateway");
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        syntaxChecker.checkSyntax();
+        assertTrue(syntaxChecker.errorsFound());
+        errors  = syntaxChecker.getErrors();
+        assertEquals(1, errors.size());
+        String gatewayId = gateway.getString("resourceId");
+        assertEquals(SyntaxCheckerErrors.THE_SUM_OF_PROBABILITIES_MUST_BE_EQUAL_100, errors.get(gatewayId).get(0).getError());
+    }
+
+    @Test
+    public void testParallelGatewayProbabilities() throws Exception {
+        loader.loadProcessFromXml("parallelGatewayProbabilities.bpmn2");
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        syntaxChecker.checkSyntax();
+        assertFalse(syntaxChecker.errorsFound());
+        errors  = syntaxChecker.getErrors();
+        assertEquals(0, errors.size());
+    }
+
+    @Test
     public void testIsCompensatingFlowNodeInSubprocessForTextAnnotation() throws Exception {
         BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker("", "", null);
 

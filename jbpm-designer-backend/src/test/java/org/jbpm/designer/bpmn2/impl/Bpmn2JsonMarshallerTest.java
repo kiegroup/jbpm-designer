@@ -6,6 +6,7 @@ import java.io.File;
 import java.net.URL;
 
 import org.apache.commons.io.FileUtils;
+import org.jbpm.designer.bpmn2.validation.BPMN2SyntaxCheckerTest;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.impl.DefaultProfileImpl;
 import org.json.JSONArray;
@@ -133,4 +134,21 @@ public class Bpmn2JsonMarshallerTest {
     private static String getPropertyValue(JSONObject bpmnElement, String propertyName) throws JSONException {
         return bpmnElement.getJSONObject("properties").getString(propertyName);
     }
+
+    @Test
+    public void testCallActivity() throws Exception {
+        JSONObject process = loader.loadProcessFrom("callActivity.bpmn2", BPMN2SyntaxCheckerTest.class);
+        JSONObject callActivity = loader.getChildByName(process, "callActivity");
+        JSONObject properties = callActivity.getJSONObject("properties");
+        assertEquals("abc.noCalledElementCallActivity", properties.getString("calledelement"));
+    }
+
+    @Test
+    public void testNoCalledElementCallActivity() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("noCalledElementCallActivity.bpmn2", BPMN2SyntaxCheckerTest.class);
+        JSONObject callActivity = loader.getChildByName(process, "callActivity");
+        JSONObject properties = callActivity.getJSONObject("properties");
+        assertFalse(properties.has("calledelement"));
+    }
+
 }

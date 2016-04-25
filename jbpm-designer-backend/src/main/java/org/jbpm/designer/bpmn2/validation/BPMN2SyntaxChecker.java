@@ -174,402 +174,419 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 		
 		for(FlowElement fe : container.getFlowElements()) {
 			if(fe instanceof StartEvent) {
-				StartEvent se = (StartEvent) fe;
-				if(se.getOutgoing() == null || se.getOutgoing().size() < 1) {
-                    if(container instanceof Process) {
-                        if(!isAdHocProcess(process)) {
-                            addError(se, new ValidationSyntaxError(se, BPMN2_TYPE,  "Start node has no outgoing connections"));
-                        }
-                    } else if(container instanceof SubProcess) {
-                        if(!(container instanceof AdHocSubProcess)) {
-                            addError(se, new ValidationSyntaxError(se, BPMN2_TYPE,  "Start node has no outgoing connections"));
-                        }
-                    } else {
-                        addError(se, new ValidationSyntaxError(se, BPMN2_TYPE,  "Start node has no outgoing connections"));
-                    }
-				}
+				checkStartEvent((StartEvent)fe, container, process);
 			} else if (fe instanceof EndEvent) {
-				EndEvent ee = (EndEvent) fe;
-				if(ee.getIncoming() == null || ee.getIncoming().size() < 1) {
-                    if(container instanceof Process) {
-                        if(!isAdHocProcess(process)) {
-                            addError(ee, new ValidationSyntaxError(ee, BPMN2_TYPE,  "End node has no incoming connections"));
-                        }
-                    } else if(container instanceof SubProcess) {
-                        if(!(container instanceof AdHocSubProcess)) {
-                            addError(ee, new ValidationSyntaxError(ee, BPMN2_TYPE,  "End node has no incoming connections"));
-                        }
-                    } else {
-                        addError(ee, new ValidationSyntaxError(ee, BPMN2_TYPE,  "End node has no incoming connections"));
-                    }
-				}
+				checkEndEvent((EndEvent) fe, container, process);
 			} else {
 				if(fe instanceof FlowNode) {
-					FlowNode fn = (FlowNode) fe;
-					if((fn.getOutgoing() == null || fn.getOutgoing().size() < 1) && !isAdHocProcess(process) && !(fn instanceof BoundaryEvent) && !(fn instanceof EventSubprocess)) {
-                        if(container instanceof Process) {
-                            if(!isAdHocProcess(process)) {
-                                if(!isCompensatingFlowNodeInProcess(fn, (Process) container)) {
-                                    addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no outgoing connections"));
-                                }
-                            }
-                        } else if(container instanceof SubProcess) {
-                            if(!(container instanceof AdHocSubProcess)) {
-                                if(!isCompensatingFlowNodeInSubprocess(fn, (SubProcess) container)) {
-                                    addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no outgoing connections"));
-                                }
-                            }
-                        } else {
-                            addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no outgoing connections"));
-                        }
-    				}
-                    if(!(fn instanceof BoundaryEvent)) {
-                        if((fn.getIncoming() == null || fn.getIncoming().size() < 1) && !isAdHocProcess(process)) {
-                            if(container instanceof Process) {
-                                if(!isAdHocProcess(process) && !(fn instanceof EventSubprocess)) {
-                                    if(!isCompensatingFlowNodeInProcess(fn, (Process) container)) {
-                                        addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no incoming connections"));
-                                    }
-                                }
-                            } else if(container instanceof SubProcess) {
-                                if(!(container instanceof AdHocSubProcess)) {
-                                    if(!isCompensatingFlowNodeInSubprocess(fn, (SubProcess) container)) {
-                                        addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no incoming connections"));
-                                    }
-                                }
-                            } else {
-                                addError(fn, new ValidationSyntaxError(fn, BPMN2_TYPE, "Node has no incoming connections"));
-                            }
-                        }
-                    }
+					checkFlowNode((FlowNode) fe, container, process);
 				}
 			}
 			
 			if(fe instanceof BusinessRuleTask) {
-				BusinessRuleTask bt = (BusinessRuleTask) fe;
-				Iterator<FeatureMap.Entry> biter = bt.getAnyAttribute().iterator();
-				boolean foundRuleflowGroup = false;
-	            while(biter.hasNext()) {
-	                FeatureMap.Entry entry = biter.next();
-	                if(entry.getEStructuralFeature().getName().equals("ruleFlowGroup")) {
-	                	foundRuleflowGroup = true;
-	                	String ruleflowGroup = (String) entry.getValue();
-	                	if(isEmpty(ruleflowGroup)) {
-	                		addError(bt, new ValidationSyntaxError(bt, BPMN2_TYPE, "Business Rule Task has no ruleflow-group."));
-	                	}
-	                }
-	            }
-	            if(!foundRuleflowGroup) {
-	            	addError(bt, new ValidationSyntaxError(bt, BPMN2_TYPE, "Business Rule Task has no ruleflow-group."));
-	            }
+				checkBusinessRuleTask((BusinessRuleTask) fe);
 			}
 			
 			if(fe instanceof ScriptTask) {
-				ScriptTask st = (ScriptTask) fe;
-				if(isEmpty(st.getScript())) {
-					addError(st, new ValidationSyntaxError(st, BPMN2_TYPE, "Script Task has no script."));
-				}
-				if(isEmpty(st.getScriptFormat())) {
-					addError(st, new ValidationSyntaxError(st, BPMN2_TYPE, "Script Task has no script format."));
-				}
+				checkScriptTask((ScriptTask) fe);
 			}
 			
 			if(fe instanceof SendTask) {
-				SendTask st = (SendTask) fe;
-				if(st.getMessageRef() == null) {
-					addError(st, new ValidationSyntaxError(st, BPMN2_TYPE, "Send Task has no message."));
-				}
+				checkSendTask((SendTask) fe);
 			}
 
             if(fe instanceof ServiceTask) {
-                ServiceTask st = (ServiceTask) fe;
-                if(st.getOperationRef() == null) {
-                    addError(st, new ValidationSyntaxError(st, BPMN2_TYPE, "Service Task has no operation."));
-                }
+                checkServiceTask((ServiceTask) fe);
             }
 			
 			if(fe instanceof UserTask) {
-				UserTask ut = (UserTask) fe;
-				String taskName = null;
-				Iterator<FeatureMap.Entry> utiter = ut.getAnyAttribute().iterator();
-				boolean foundTaskName = false;
-
-
-                if(ut.getIoSpecification() != null && ut.getIoSpecification().getDataInputs() != null) {
-                    List<DataInput> taskDataInputs = ut.getIoSpecification().getDataInputs();
-                    for(DataInput din : taskDataInputs) {
-                        if(din.getName() != null && din.getName().equals("TaskName")) {
-                            List<DataInputAssociation> taskDataInputAssociations = ut.getDataInputAssociations();
-                            for(DataInputAssociation dia : taskDataInputAssociations) {
-                                if(dia.getTargetRef().getId() != null && (dia.getTargetRef().getId().equals(din.getId()))) {
-                                    foundTaskName = true;
-                                    taskName = ((FormalExpression) dia.getAssignment().get(0).getFrom()).getBody();
-                                    if(isEmpty(taskName)) {
-                                        addError(ut, new ValidationSyntaxError(ut, BPMN2_TYPE, "User Task has no task name."));
-                                    }
-                                }
-                            }
-                            break;
-                        }
-                    }
-                }
-		        if(!foundTaskName) {
-		        	addError(ut, new ValidationSyntaxError(ut, BPMN2_TYPE, "User Task has no task name."));
-		        }
-		        
-		        // simulation validation
-		        if(defaultScenario != null && defaultScenario.getElementParameters() != null) {
-		        	for(ElementParameters eleType : defaultScenario.getElementParameters()) {
-		        		if(eleType.getElementRef().equals(ut.getId())) {
-		        			if(eleType.getResourceParameters() != null) {
-	        					ResourceParameters resourceParams = eleType.getResourceParameters();
-	        					if(resourceParams.getQuantity() != null) {
-	        						FloatingParameterType quantityVal = (FloatingParameterType) resourceParams.getQuantity().getParameterValue().get(0);
-	        						double val = quantityVal.getValue();
-	        						if(val < 0) {
-	        							addError(ut, new ValidationSyntaxError(ut, SIMULATION_TYPE, "Staff Availability value must be positive."));
-	        						}
-	        					}
-	        				}
-		        		}
-		        	}
-		        }
+				checkUserTask((UserTask) fe, defaultScenario);
 		    }
 			
 			if(fe instanceof Task) {
-				Task ta = (Task) fe;
-				
-				// simulation validation
-				if(defaultScenario != null && defaultScenario.getElementParameters() != null) {
-					for(ElementParameters eleType : defaultScenario.getElementParameters()) {
-						if(eleType.getElementRef().equals(ta.getId())) {
-	        				if(eleType.getCostParameters() != null) {
-	        					CostParameters costParams = eleType.getCostParameters();
-	        					if(costParams.getUnitCost() != null) {
-	        						FloatingParameterType unitCostVal = (FloatingParameterType) costParams.getUnitCost().getParameterValue().get(0);
-	        						Double val = unitCostVal.getValue();
-	        						if(val.doubleValue() < 0) {
-	        							addError(ta, new ValidationSyntaxError(ta, SIMULATION_TYPE, "Cost per Time Unit value must be positive."));
-	        						}
-	        					}
-	        				}
-	        				if(eleType.getResourceParameters() != null) {
-	        					ResourceParameters resourceParams = eleType.getResourceParameters();
-	        					if(resourceParams.getQuantity() != null) {
-	        						FloatingParameterType workingHoursVal = (FloatingParameterType) resourceParams.getQuantity().getParameterValue().get(0);
-	        						if(workingHoursVal.getValue() < 0) {
-	        							addError(ta, new ValidationSyntaxError(ta, SIMULATION_TYPE, "Working Hours value must be positive."));
-	        						}
-	        					}
-	        				}
-	        			}
-					}
-				}
+				checkTask((Task) fe, defaultScenario);
 			}
 			
 			if(fe instanceof CatchEvent) {
-				CatchEvent event = (CatchEvent) fe;
-				List<EventDefinition> eventdefs = event.getEventDefinitions();
-				for(EventDefinition ed : eventdefs) {
-    				if(ed instanceof TimerEventDefinition) {
-    	                TimerEventDefinition ted = (TimerEventDefinition) ed;
-                        if(ted.getTimeDate() != null && ted.getTimeDuration() != null && ted.getTimeCycle() != null) {
-                            addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, "Catch Even has timeDate and timeDuration and timeCycle defined."));
-                        } else if(ted.getTimeDate() != null && ted.getTimeDuration() != null) {
-                            addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, "Catch Even has both timeDate and timeDuration defined."));
-                        } else if(ted.getTimeDate() != null && ted.getTimeCycle() != null) {
-                            addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, "Catch Even has both timeDate and timeCycle defined."));
-                        } else if(ted.getTimeDuration() != null && ted.getTimeCycle() != null) {
-                            addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, "Catch Even has both timeduration and timecycle defined."));
-                        }
-
-                        if(ted.getTimeDate() == null && ted.getTimeDuration() == null && ted.getTimeCycle() == null) {
-                            addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, "Catch Even has no timeDate or timeDuration or timeCycle defined."));
-                        }
-    	            } else if( ed instanceof SignalEventDefinition) {
-    	                if(((SignalEventDefinition) ed).getSignalRef() == null) {
-    	                	addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, "Catch Event has no signalref."));
-    	                }
-    	            } else if( ed instanceof ErrorEventDefinition) {
-    	                if(((ErrorEventDefinition) ed).getErrorRef() == null || ((ErrorEventDefinition) ed).getErrorRef().getErrorCode() == null) {
-    	                	addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, "Catch Event has no errorref."));
-    	                }
-    	            } else if( ed instanceof ConditionalEventDefinition ) {
-    	                FormalExpression conditionalExp = (FormalExpression) ((ConditionalEventDefinition) ed).getCondition();
-    	                if(conditionalExp.getBody() == null) {
-    	                	addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, "Catch Event has no conditionexpression."));
-    	                }
-    	            } else if( ed instanceof EscalationEventDefinition ) {
-    	                if(((EscalationEventDefinition) ed).getEscalationRef() == null) {
-    	                	addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, "Catch Event has no escalationref."));
-    	                }
-    	            } else if( ed instanceof MessageEventDefinition) {
-    	                if(((MessageEventDefinition) ed).getMessageRef() == null) {
-    	                    addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, "Catch Event has no messageref."));
-    	                }
-    	            }
-				}
+				checkCatchEvent((CatchEvent) fe);
 			}
 			
 			if(fe instanceof ThrowEvent) {
-				ThrowEvent event = (ThrowEvent) fe;
-				List<EventDefinition> eventdefs = event.getEventDefinitions();
-		        for(EventDefinition ed : eventdefs) {
-		            if(ed instanceof TimerEventDefinition) {
-                        TimerEventDefinition ted = (TimerEventDefinition) ed;
-                        if(ted.getTimeDate() != null && ted.getTimeDuration() != null && ted.getTimeCycle() != null) {
-                            addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, "Catch Even has timeDate and timeDuration and timeCycle defined."));
-                        } else if(ted.getTimeDate() != null && ted.getTimeDuration() != null) {
-                            addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, "Catch Even has both timeDate and timeDuration defined."));
-                        } else if(ted.getTimeDate() != null && ted.getTimeCycle() != null) {
-                            addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, "Catch Even has both timeDate and timeCycle defined."));
-                        } else if(ted.getTimeDuration() != null && ted.getTimeCycle() != null) {
-                            addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, "Catch Even has both timeduration and timecycle defined."));
-                        }
-
-                        if(ted.getTimeDate() == null && ted.getTimeDuration() == null && ted.getTimeCycle() == null) {
-                            addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, "Catch Even has no timeDate or timeDuration or timeCycle defined."));
-                        }
-		            } else if( ed instanceof SignalEventDefinition) {
-		                if(((SignalEventDefinition) ed).getSignalRef() == null) {
-		                	addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, "Throw Event has no signalref."));
-		                }
-		            } else if( ed instanceof ErrorEventDefinition) {
-		                if(((ErrorEventDefinition) ed).getErrorRef() == null || ((ErrorEventDefinition) ed).getErrorRef().getErrorCode() == null) {
-		                	addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, "Throw Event has no errorref."));
-		                }
-		            } else if( ed instanceof ConditionalEventDefinition ) {
-		                FormalExpression conditionalExp = (FormalExpression) ((ConditionalEventDefinition) ed).getCondition();
-		                if(conditionalExp.getBody() == null) {
-		                	addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, "Throw Event has no conditional expression."));
-		                }
-		            } else if( ed instanceof EscalationEventDefinition ) {
-		                if(((EscalationEventDefinition) ed).getEscalationRef() == null) {
-		                	addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, "Throw Event has no conditional escalationref."));
-		                }
-		            } else if( ed instanceof MessageEventDefinition) {
-		                if(((MessageEventDefinition) ed).getMessageRef() == null) {
-		                	addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, "Throw Event has no conditional messageref."));
-		                }
-		            }  else if( ed instanceof CompensateEventDefinition) {
-		                if(((CompensateEventDefinition) ed).getActivityRef() == null) {
-		                	addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, "Throw Event has no conditional activityref."));
-		                }
-		            }  
-		        }
+				checkThrowEvent((ThrowEvent) fe);
 			}
 			
 			if(fe instanceof SequenceFlow) {
-				SequenceFlow sf = (SequenceFlow) fe;
-				if(sf.getSourceRef() == null) {
-					addError((SequenceFlow) fe, new ValidationSyntaxError(fe, BPMN2_TYPE, "An Edge must have a source node."));
-				}
-				if(sf.getTargetRef() == null) {
-					addError((SequenceFlow) fe, new ValidationSyntaxError(fe, BPMN2_TYPE, "An Edge must have a target node."));
-				}
+				checkSequenceFlow((SequenceFlow)fe);
 			}
 			
 			if(fe instanceof Gateway) {
-				Gateway gw = (Gateway) fe;
-				if(gw.getGatewayDirection() == null || gw.getGatewayDirection().getValue() == GatewayDirection.UNSPECIFIED.getValue()) {
-					addError((Gateway) fe, new ValidationSyntaxError(fe, BPMN2_TYPE, "Gateway does not specify a valid direction."));
-				}
-				if(gw instanceof ExclusiveGateway) {
-					if(gw.getGatewayDirection().getValue() != GatewayDirection.DIVERGING.getValue() && gw.getGatewayDirection().getValue() != GatewayDirection.CONVERGING.getValue()) {
-						addError(fe, new ValidationSyntaxError(fe, BPMN2_TYPE, "Invalid Gateway direction for Exclusing Gateway. It should be 'Converging' or 'Diverging'."));
-					}
-				}
-				if(gw instanceof EventBasedGateway) {
-					if(gw.getGatewayDirection().getValue() != GatewayDirection.DIVERGING.getValue()) {
-						addError(fe, new ValidationSyntaxError(fe, BPMN2_TYPE, "Invalid Gateway direction for EventBased Gateway. It should be 'Diverging'."));
-					}
-				}
-				if(gw instanceof ParallelGateway) {
-					if(gw.getGatewayDirection().getValue() != GatewayDirection.DIVERGING.getValue() && gw.getGatewayDirection().getValue() != GatewayDirection.CONVERGING.getValue()) {
-						addError(fe, new ValidationSyntaxError(fe, BPMN2_TYPE, "Invalid Gateway direction for Parallel Gateway. It should be 'Converging' or 'Diverging'."));
-					}
-				}
-//				if(gw instanceof InclusiveGateway) {
-//					if(gw.getGatewayDirection().getValue() != GatewayDirection.DIVERGING.getValue()) {
-//						addError(fe, new ValidationSyntaxError(fe, BPMN2_TYPE, "Invalid Gateway direction for Inclusive Gateway. It should be 'Diverging'."));
-//					}
-//				}
-				if(gw instanceof ComplexGateway) {
-					if(gw.getGatewayDirection().getValue() != GatewayDirection.DIVERGING.getValue() && gw.getGatewayDirection().getValue() != GatewayDirection.CONVERGING.getValue()) {
-						addError(fe, new ValidationSyntaxError(fe, BPMN2_TYPE, "Invalid Gateway direction for Complex Gateway. It should be 'Converging' or 'Diverging'."));
-					}
-				}
-
-                if( (gw instanceof ExclusiveGateway || gw instanceof InclusiveGateway) && (gw.getGatewayDirection().getValue() == GatewayDirection.DIVERGING.getValue())) {
-                    List<SequenceFlow> outgoingFlows = gw.getOutgoing();
-                    if(outgoingFlows != null && outgoingFlows.size() > 0) {
-                        for(SequenceFlow flow : outgoingFlows) {
-                            if(flow.getConditionExpression() == null) {
-                                addError(flow, new ValidationSyntaxError(flow, BPMN2_TYPE, "Sequence flow has no condition expression defined."));
-                            } else {
-                                if(flow.getConditionExpression() instanceof FormalExpression) {
-                                    FormalExpression formalExp = (FormalExpression) flow.getConditionExpression();
-                                    if(formalExp.getBody() == null && formalExp.getBody().length() < 1) {
-                                        addError(flow, new ValidationSyntaxError(flow, BPMN2_TYPE, "Sequence flow has no condition expression defined."));
-                                    }
-                                } else {
-                                    addError(flow, new ValidationSyntaxError(flow, BPMN2_TYPE, "Invalid condition expression on sequence flow."));
-                                }
-                            }
-                        }
-                    }
-                }
-
-				// simulation validation
-				if(!(gw instanceof ParallelGateway)) {
-					List<SequenceFlow> outgoingGwSequenceFlows = gw.getOutgoing();
-					if(outgoingGwSequenceFlows != null && outgoingGwSequenceFlows.size() > 0) {
-						double sum = 0;
-						for(SequenceFlow sf : outgoingGwSequenceFlows) {
-					        	if(defaultScenario.getElementParameters() != null) {
-					        		for(ElementParameters eleType : defaultScenario.getElementParameters()) {
-					        			if(eleType.getElementRef().equals(sf.getId())) {
-					        				if(eleType.getControlParameters() != null && eleType.getControlParameters().getProbability() != null) {
-					        					FloatingParameterType valType = (FloatingParameterType) eleType.getControlParameters().getProbability().getParameterValue().get(0);
-				                    			if(valType.getValue() < 0) {
-				                    				addError(sf, new ValidationSyntaxError(sf, SIMULATION_TYPE, "Probability value must be positive."));
-				                    			} else {
-				                    				sum += valType.getValue();
-				                    			}
-					        				} else {
-					        					addError(sf, new ValidationSyntaxError(sf, SIMULATION_TYPE, "Sequence Flow has no probability defined."));
-					        				}
-					        			}
-					        		}
-					        	}
-						}
-						if(sum != 100) {
-							addError(gw, new ValidationSyntaxError(gw, SIMULATION_TYPE, "The sum of probability values of all outgoing Sequence Flows must be equal 100."));
-						}
-					}
-				}
+				checkGateway((Gateway) fe, defaultScenario);
 			}
 			
 			if(fe instanceof CallActivity) {
-				CallActivity ca = (CallActivity) fe;
-				if(ca.getCalledElement() == null || ca.getCalledElement().length() < 1) {
-					addError((CallActivity) fe, new ValidationSyntaxError(fe, BPMN2_TYPE, "Reusable Subprocess has no called element specified."));
-				}
+				checkCallActivity((CallActivity) fe);
 			}
 			
 			if(fe instanceof DataObject) {
-				DataObject dao = (DataObject) fe;
-				if(dao.getName() == null || dao.getName().length() < 1) {
-					addError((DataObject) fe, new ValidationSyntaxError(fe, BPMN2_TYPE, "Data Object has no name defined."));
-				} else {
-					if(containsWhiteSpace(dao.getName())) {
-						addError((DataObject) fe, new ValidationSyntaxError(fe, BPMN2_TYPE, "Data Object name contains white spaces."));
-					}
-				}
+				checkDataObject((DataObject) fe);
 			}
 			
 			if(fe instanceof SubProcess) {
 				checkFlowElements((SubProcess) fe, process, defaultScenario);
+			}
+		}
+	}
+
+	private void checkStartEvent(StartEvent startEvent, FlowElementsContainer container, Process process) {
+
+		if(startEvent.getOutgoing() == null || startEvent.getOutgoing().isEmpty()) {
+			if(container instanceof Process) {
+				if(!isAdHocProcess(process)) {
+					addError(startEvent, new ValidationSyntaxError(startEvent, BPMN2_TYPE, SyntaxCheckerErrors.START_NODE_NO_OUTGOING_CONNECTIONS));
+				}
+			} else if(container instanceof SubProcess) {
+				if(!(container instanceof AdHocSubProcess)) {
+					addError(startEvent, new ValidationSyntaxError(startEvent, BPMN2_TYPE, SyntaxCheckerErrors.START_NODE_NO_OUTGOING_CONNECTIONS));
+				}
+			} else {
+				addError(startEvent, new ValidationSyntaxError(startEvent, BPMN2_TYPE, SyntaxCheckerErrors.START_NODE_NO_OUTGOING_CONNECTIONS));
+			}
+		}
+	}
+
+	private void checkEndEvent(EndEvent endEvent, FlowElementsContainer container, Process process) {
+
+		if(endEvent.getIncoming() == null || endEvent.getIncoming().isEmpty()) {
+			if(container instanceof Process) {
+				if(!isAdHocProcess(process)) {
+					addError(endEvent, new ValidationSyntaxError(endEvent, BPMN2_TYPE, SyntaxCheckerErrors.END_NODE_NO_INCOMING_CONNECTIONS));
+				}
+			} else if(container instanceof SubProcess) {
+				if(!(container instanceof AdHocSubProcess)) {
+					addError(endEvent, new ValidationSyntaxError(endEvent, BPMN2_TYPE, SyntaxCheckerErrors.END_NODE_NO_INCOMING_CONNECTIONS));
+				}
+			} else {
+				addError(endEvent, new ValidationSyntaxError(endEvent, BPMN2_TYPE, SyntaxCheckerErrors.END_NODE_NO_INCOMING_CONNECTIONS));
+			}
+		}
+	}
+
+	private void checkFlowNode(FlowNode flowNode, FlowElementsContainer container, Process process) {
+		if((flowNode.getOutgoing() == null || flowNode.getOutgoing().isEmpty()) && !isAdHocProcess(process) && !(flowNode instanceof BoundaryEvent) && !(flowNode instanceof EventSubprocess)) {
+			if(container instanceof Process) {
+				if(!isAdHocProcess(process)) {
+					if(!isCompensatingFlowNodeInProcess(flowNode, (Process) container)) {
+						addError(flowNode, new ValidationSyntaxError(flowNode, BPMN2_TYPE, SyntaxCheckerErrors.NODE_NO_OUTGOING_CONNECTIONS));
+					}
+				}
+			} else if(container instanceof SubProcess) {
+				if(!(container instanceof AdHocSubProcess)) {
+					if(!isCompensatingFlowNodeInSubprocess(flowNode, (SubProcess) container)) {
+						addError(flowNode, new ValidationSyntaxError(flowNode, BPMN2_TYPE, SyntaxCheckerErrors.NODE_NO_OUTGOING_CONNECTIONS));
+					}
+				}
+			} else {
+				addError(flowNode, new ValidationSyntaxError(flowNode, BPMN2_TYPE, SyntaxCheckerErrors.NODE_NO_OUTGOING_CONNECTIONS));
+			}
+		}
+		if(!(flowNode instanceof BoundaryEvent)) {
+			if((flowNode.getIncoming() == null || flowNode.getIncoming().isEmpty()) && !isAdHocProcess(process)) {
+				if(container instanceof Process) {
+					if(!isAdHocProcess(process) && !(flowNode instanceof EventSubprocess)) {
+						if(!isCompensatingFlowNodeInProcess(flowNode, (Process) container)) {
+							addError(flowNode, new ValidationSyntaxError(flowNode, BPMN2_TYPE, SyntaxCheckerErrors.NODE_NO_INCOMING_CONNECTIONS));
+						}
+					}
+				} else if(container instanceof SubProcess) {
+					if(!(container instanceof AdHocSubProcess)) {
+						if(!isCompensatingFlowNodeInSubprocess(flowNode, (SubProcess) container)) {
+							addError(flowNode, new ValidationSyntaxError(flowNode, BPMN2_TYPE, SyntaxCheckerErrors.NODE_NO_INCOMING_CONNECTIONS));
+						}
+					}
+				} else {
+					addError(flowNode, new ValidationSyntaxError(flowNode, BPMN2_TYPE, SyntaxCheckerErrors.NODE_NO_INCOMING_CONNECTIONS));
+				}
+			}
+		}
+	}
+
+	private void checkBusinessRuleTask(BusinessRuleTask businessRuleTask) {
+		Iterator<FeatureMap.Entry> biter = businessRuleTask.getAnyAttribute().iterator();
+		boolean foundRuleflowGroup = false;
+		while(biter.hasNext()) {
+			FeatureMap.Entry entry = biter.next();
+			if(entry.getEStructuralFeature().getName().equals("ruleFlowGroup")) {
+				foundRuleflowGroup = true;
+				String ruleflowGroup = (String) entry.getValue();
+				if(isEmpty(ruleflowGroup)) {
+					addError(businessRuleTask, new ValidationSyntaxError(businessRuleTask, BPMN2_TYPE, SyntaxCheckerErrors.BUSINESS_RULE_TASK_NO_RULEFLOW_GROUP));
+				}
+			}
+		}
+		if(!foundRuleflowGroup) {
+			addError(businessRuleTask, new ValidationSyntaxError(businessRuleTask, BPMN2_TYPE, SyntaxCheckerErrors.BUSINESS_RULE_TASK_NO_RULEFLOW_GROUP));
+		}
+	}
+
+	private void checkScriptTask(ScriptTask scriptTask) {
+		if(isEmpty(scriptTask.getScript())) {
+			addError(scriptTask, new ValidationSyntaxError(scriptTask, BPMN2_TYPE, "Script Task has no script."));
+		}
+		if(isEmpty(scriptTask.getScriptFormat())) {
+			addError(scriptTask, new ValidationSyntaxError(scriptTask, BPMN2_TYPE, "Script Task has no script format."));
+		}
+	}
+
+	private void checkSendTask(SendTask sendTask) {
+		if(sendTask.getMessageRef() == null) {
+			addError(sendTask, new ValidationSyntaxError(sendTask, BPMN2_TYPE, "Send Task has no message."));
+		}
+	}
+
+	private void checkServiceTask(ServiceTask serviceTask) {
+
+		if(serviceTask.getOperationRef() == null) {
+			addError(serviceTask, new ValidationSyntaxError(serviceTask, BPMN2_TYPE, "Service Task has no operation."));
+		}
+	}
+
+	private void checkUserTask(UserTask userTask, Scenario defaultScenario) {
+
+		String taskName = null;
+		boolean foundTaskName = false;
+
+		if(userTask.getIoSpecification() != null && userTask.getIoSpecification().getDataInputs() != null) {
+			List<DataInput> taskDataInputs = userTask.getIoSpecification().getDataInputs();
+			for(DataInput din : taskDataInputs) {
+				if(din.getName() != null && din.getName().equals("TaskName")) {
+					List<DataInputAssociation> taskDataInputAssociations = userTask.getDataInputAssociations();
+					for(DataInputAssociation dia : taskDataInputAssociations) {
+						if(dia.getTargetRef().getId() != null && (dia.getTargetRef().getId().equals(din.getId()))) {
+							foundTaskName = true;
+							taskName = ((FormalExpression) dia.getAssignment().get(0).getFrom()).getBody();
+							if(isEmpty(taskName)) {
+								addError(userTask, new ValidationSyntaxError(userTask, BPMN2_TYPE, SyntaxCheckerErrors.USER_TASK_HAS_NO_TASK_NAME));
+							}
+						}
+					}
+					break;
+				}
+			}
+		}
+		if(!foundTaskName) {
+			addError(userTask, new ValidationSyntaxError(userTask, BPMN2_TYPE, SyntaxCheckerErrors.USER_TASK_HAS_NO_TASK_NAME));
+		}
+
+		// simulation validation
+		for(ElementParameters eleType : getElementParameters(defaultScenario, userTask)) {
+			if(eleType.getResourceParameters() != null) {
+				ResourceParameters resourceParams = eleType.getResourceParameters();
+				if(resourceParams.getQuantity() != null) {
+					FloatingParameterType quantityVal = (FloatingParameterType) resourceParams.getQuantity().getParameterValue().get(0);
+					double val = quantityVal.getValue();
+					if(val < 0) {
+						addError(userTask, new ValidationSyntaxError(userTask, SIMULATION_TYPE, SyntaxCheckerErrors.STAFF_AVAILABILITY_MUST_BE_POSITIVE));
+					}
+				}
+			}
+		}
+	}
+
+	private void checkTask(Task task, Scenario defaultScenario) {
+		// simulation validation
+		for(ElementParameters eleType : getElementParameters(defaultScenario, task)) {
+			if (eleType.getCostParameters() != null) {
+				CostParameters costParams = eleType.getCostParameters();
+				if (costParams.getUnitCost() != null) {
+					FloatingParameterType unitCostVal = (FloatingParameterType) costParams.getUnitCost().getParameterValue().get(0);
+					Double val = unitCostVal.getValue();
+					if (val.doubleValue() < 0) {
+						addError(task, new ValidationSyntaxError(task, SIMULATION_TYPE, SyntaxCheckerErrors.COST_PER_TIME_UNIT_MUST_BE_POSITIVE));
+					}
+				}
+			}
+			if (eleType.getResourceParameters() != null) {
+				ResourceParameters resourceParams = eleType.getResourceParameters();
+				if (resourceParams.getQuantity() != null) {
+					FloatingParameterType workingHoursVal = (FloatingParameterType) resourceParams.getQuantity().getParameterValue().get(0);
+					if (workingHoursVal.getValue() < 0) {
+						addError(task, new ValidationSyntaxError(task, SIMULATION_TYPE, SyntaxCheckerErrors.WORKING_HOURS_MUST_BE_POSITIVE));
+					}
+				}
+			}
+		}
+	}
+
+	private void checkCatchEvent(CatchEvent catchEvent) {
+
+		List<EventDefinition> eventdefs = catchEvent.getEventDefinitions();
+		for(EventDefinition ed : eventdefs) {
+			checkEventDefinition(catchEvent, ed, "Catch");
+		}
+	}
+
+	private void checkThrowEvent(ThrowEvent throwEvent) {
+
+		List<EventDefinition> eventdefs = throwEvent.getEventDefinitions();
+		for(EventDefinition ed : eventdefs) {
+			checkEventDefinition(throwEvent, ed, "Throw");
+		}
+	}
+
+	private void checkEventDefinition(Event event, EventDefinition eventDefinition, String errorPrefix) {
+		if(eventDefinition instanceof TimerEventDefinition) {
+			TimerEventDefinition ted = (TimerEventDefinition) eventDefinition;
+			if(ted.getTimeDate() != null && ted.getTimeDuration() != null && ted.getTimeCycle() != null) {
+				addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, errorPrefix + " Event has timeDate and timeDuration and timeCycle defined."));
+			} else if(ted.getTimeDate() != null && ted.getTimeDuration() != null) {
+				addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, errorPrefix + " Event has both timeDate and timeDuration defined."));
+			} else if(ted.getTimeDate() != null && ted.getTimeCycle() != null) {
+				addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, errorPrefix + " Event has both timeDate and timeCycle defined."));
+			} else if(ted.getTimeDuration() != null && ted.getTimeCycle() != null) {
+				addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, errorPrefix + " Event has both timeduration and timecycle defined."));
+			}
+
+			if(ted.getTimeDate() == null && ted.getTimeDuration() == null && ted.getTimeCycle() == null) {
+				addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, errorPrefix + " Event has no timeDate or timeDuration or timeCycle defined."));
+			}
+		} else if( eventDefinition instanceof SignalEventDefinition) {
+			if(((SignalEventDefinition) eventDefinition).getSignalRef() == null) {
+				addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, errorPrefix + " Event has no signalref."));
+			}
+		} else if( eventDefinition instanceof ErrorEventDefinition) {
+			if(((ErrorEventDefinition) eventDefinition).getErrorRef() == null || ((ErrorEventDefinition) eventDefinition).getErrorRef().getErrorCode() == null) {
+				addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, errorPrefix + " Event has no errorref."));
+			}
+		} else if( eventDefinition instanceof ConditionalEventDefinition ) {
+			FormalExpression conditionalExp = (FormalExpression) ((ConditionalEventDefinition) eventDefinition).getCondition();
+			if(conditionalExp.getBody() == null) {
+				addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, errorPrefix + " Event has no condition expression."));
+			}
+		} else if( eventDefinition instanceof EscalationEventDefinition ) {
+			if(((EscalationEventDefinition) eventDefinition).getEscalationRef() == null) {
+				addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, errorPrefix + " Event has no escalationref."));
+			}
+		} else if( eventDefinition instanceof MessageEventDefinition) {
+			if(((MessageEventDefinition) eventDefinition).getMessageRef() == null) {
+				addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, errorPrefix + " Event has no messageref."));
+			}
+		}  else if( eventDefinition instanceof CompensateEventDefinition) {
+			if(((CompensateEventDefinition) eventDefinition).getActivityRef() == null) {
+				addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, errorPrefix + " Event has no activityref."));
+			}
+		}
+	}
+
+	private void checkGateway(Gateway gateway, Scenario defaultScenario) {
+
+		if(gateway.getGatewayDirection() == null || gateway.getGatewayDirection().getValue() == GatewayDirection.UNSPECIFIED.getValue()) {
+			addError(gateway, new ValidationSyntaxError(gateway, BPMN2_TYPE, "Gateway does not specify a valid direction."));
+		}
+		if(gateway instanceof ExclusiveGateway) {
+			if(gateway.getGatewayDirection().getValue() != GatewayDirection.DIVERGING.getValue() && gateway.getGatewayDirection().getValue() != GatewayDirection.CONVERGING.getValue()) {
+				addError(gateway, new ValidationSyntaxError(gateway, BPMN2_TYPE, "Invalid Gateway direction for Exclusing Gateway. It should be 'Converging' or 'Diverging'."));
+			}
+		}
+		if(gateway instanceof EventBasedGateway) {
+			if(gateway.getGatewayDirection().getValue() != GatewayDirection.DIVERGING.getValue()) {
+				addError(gateway, new ValidationSyntaxError(gateway, BPMN2_TYPE, "Invalid Gateway direction for EventBased Gateway. It should be 'Diverging'."));
+			}
+		}
+		if(gateway instanceof ParallelGateway) {
+			if(gateway.getGatewayDirection().getValue() != GatewayDirection.DIVERGING.getValue() && gateway.getGatewayDirection().getValue() != GatewayDirection.CONVERGING.getValue()) {
+				addError(gateway, new ValidationSyntaxError(gateway, BPMN2_TYPE, "Invalid Gateway direction for Parallel Gateway. It should be 'Converging' or 'Diverging'."));
+			}
+		}
+		if(gateway instanceof InclusiveGateway) {
+			if(gateway.getGatewayDirection().getValue() != GatewayDirection.DIVERGING.getValue()) {
+				addError(gateway, new ValidationSyntaxError(gateway, BPMN2_TYPE, "Invalid Gateway direction for Inclusive Gateway. It should be 'Diverging'."));
+			}
+		}
+		if(gateway instanceof ComplexGateway) {
+			if(gateway.getGatewayDirection().getValue() != GatewayDirection.DIVERGING.getValue() && gateway.getGatewayDirection().getValue() != GatewayDirection.CONVERGING.getValue()) {
+				addError(gateway, new ValidationSyntaxError(gateway, BPMN2_TYPE, "Invalid Gateway direction for Complex Gateway. It should be 'Converging' or 'Diverging'."));
+			}
+		}
+
+		if( (gateway instanceof ExclusiveGateway || gateway instanceof InclusiveGateway) && (gateway.getGatewayDirection().getValue() == GatewayDirection.DIVERGING.getValue())) {
+			List<SequenceFlow> outgoingFlows = gateway.getOutgoing();
+			if(outgoingFlows != null && outgoingFlows.size() > 0) {
+				for(SequenceFlow flow : outgoingFlows) {
+					if(flow.getConditionExpression() == null) {
+						addError(flow, new ValidationSyntaxError(flow, BPMN2_TYPE, SyntaxCheckerErrors.SEQUENCE_FLOW_NO_CONDITION_EXPRESSION_DEFINED));
+					} else {
+						if(flow.getConditionExpression() instanceof FormalExpression) {
+							FormalExpression formalExp = (FormalExpression) flow.getConditionExpression();
+							if(formalExp.getBody() == null && formalExp.getBody().isEmpty()) {
+								addError(flow, new ValidationSyntaxError(flow, BPMN2_TYPE, SyntaxCheckerErrors.SEQUENCE_FLOW_NO_CONDITION_EXPRESSION_DEFINED));
+							}
+						} else {
+							addError(flow, new ValidationSyntaxError(flow, BPMN2_TYPE, "Invalid condition expression on sequence flow."));
+						}
+					}
+				}
+			}
+		}
+
+		// simulation validation
+		List<SequenceFlow> outgoingGwSequenceFlows = gateway.getOutgoing();
+		if(outgoingGwSequenceFlows != null && outgoingGwSequenceFlows.size() > 0) {
+			double probabilitySum = 0;
+			boolean defaultOutgoingFlow = false;
+			for(SequenceFlow sf : outgoingGwSequenceFlows) {
+				for(ElementParameters eleType : getElementParameters(defaultScenario, sf)) {
+					if (eleType.getControlParameters() != null && eleType.getControlParameters().getProbability() != null) {
+						FloatingParameterType valType = (FloatingParameterType) eleType.getControlParameters().getProbability().getParameterValue().get(0);
+						if (valType.getValue() < 0) {
+							addError(sf, new ValidationSyntaxError(sf, SIMULATION_TYPE, SyntaxCheckerErrors.PROBABILITY_MUST_BE_POSITIVE));
+						} else {
+							if (valType.getValue() == 100) {
+								defaultOutgoingFlow = true;
+							}
+							probabilitySum += valType.getValue();
+						}
+					} else {
+						addError(sf, new ValidationSyntaxError(sf, SIMULATION_TYPE, SyntaxCheckerErrors.SEQUENCE_FLOW_NO_PROBABILITY_DEFINED));
+					}
+				}
+
+			}
+			if(!(gateway instanceof ParallelGateway)) {
+				if(gateway instanceof InclusiveGateway) {
+					if(!defaultOutgoingFlow) {
+						addError(gateway, new ValidationSyntaxError(gateway, SIMULATION_TYPE, SyntaxCheckerErrors.AT_LEAST_ONE_OUTGOING_PROBABILITY_VALUE_100));
+					}
+				} else {
+					if (probabilitySum != 100) {
+						addError(gateway, new ValidationSyntaxError(gateway, SIMULATION_TYPE, SyntaxCheckerErrors.THE_SUM_OF_PROBABILITIES_MUST_BE_EQUAL_100));
+					}
+				}
+			}
+		}
+	}
+
+	private void checkSequenceFlow(SequenceFlow sequenceFlow) {
+		if(sequenceFlow.getSourceRef() == null) {
+			addError(sequenceFlow, new ValidationSyntaxError(sequenceFlow, BPMN2_TYPE, "An Edge must have a source node."));
+		}
+		if(sequenceFlow.getTargetRef() == null) {
+			addError(sequenceFlow, new ValidationSyntaxError(sequenceFlow, BPMN2_TYPE, "An Edge must have a target node."));
+		}
+	}
+
+	private void checkCallActivity(CallActivity callActivity) {
+
+		if(callActivity.getCalledElement() == null || callActivity.getCalledElement().isEmpty()) {
+			addError(callActivity, new ValidationSyntaxError(callActivity, BPMN2_TYPE, SyntaxCheckerErrors.NO_CALLED_ELEMENT_SPECIFIED));
+		}
+	}
+
+	private void checkDataObject(DataObject dataObject) {
+		if(dataObject.getName() == null || dataObject.getName().isEmpty()) {
+			addError(dataObject, new ValidationSyntaxError(dataObject, BPMN2_TYPE, "Data Object has no name defined."));
+		} else {
+			if(containsWhiteSpace(dataObject.getName())) {
+				addError(dataObject, new ValidationSyntaxError(dataObject, BPMN2_TYPE, "Data Object name contains white spaces."));
 			}
 		}
 	}
@@ -706,6 +723,18 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
         }
     	return null;
     }
+
+	private List<ElementParameters> getElementParameters(Scenario scenario, BaseElement element) {
+		List<ElementParameters> elementParameters = new ArrayList<ElementParameters>();
+		if(scenario != null && scenario.getElementParameters() != null) {
+			for(ElementParameters eleType : scenario.getElementParameters()) {
+				if(eleType.getElementRef().equals(element.getId())) {
+					elementParameters.add(eleType);
+				}
+			}
+		}
+		return elementParameters;
+	}
 
     public class ValidationSyntaxError {
         private BaseElement element;
