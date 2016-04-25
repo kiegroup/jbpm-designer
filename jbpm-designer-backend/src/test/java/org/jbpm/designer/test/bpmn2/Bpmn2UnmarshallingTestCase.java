@@ -22,9 +22,14 @@ import static junit.framework.Assert.assertTrue;
 import java.io.File;
 import java.net.URL;
 import java.util.Collections;
+import java.util.List;
 
 import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.Process;
+import org.eclipse.bpmn2.di.BPMNEdge;
+import org.eclipse.bpmn2.di.BPMNPlane;
+import org.eclipse.dd.dc.Point;
+import org.eclipse.dd.di.DiagramElement;
 import org.jbpm.designer.bpmn2.impl.Bpmn2JsonUnmarshaller;
 import org.junit.Test;
 
@@ -740,6 +745,27 @@ public class Bpmn2UnmarshallingTestCase {
         assertNotNull(ced.getActivityRef());
         assertEquals("User Task", ced.getActivityRef().getName());
 
+    }
+
+    @Test
+    public void testSequenceFlowPointsInsideLane() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("sequenceFlowPointsInsideLane.json"), "").getContents().get(0));
+        BPMNPlane plane = definitions.getDiagrams().get(0).getPlane();
+        List<DiagramElement> diagramElements = plane.getPlaneElement();
+        for(DiagramElement dia : diagramElements) {
+            if (dia instanceof BPMNEdge) {
+                BPMNEdge edge = (BPMNEdge) dia;
+                List<Point> wayPoints = edge.getWaypoint();
+                assertNotNull(wayPoints);
+                assertEquals(wayPoints.size(), 2);
+                assertEquals(wayPoints.get(0).getX(), new Float(252.0));
+                assertEquals(wayPoints.get(0).getY(), new Float(220.0));
+
+                assertEquals(wayPoints.get(1).getX(), new Float(357.0));
+                assertEquals(wayPoints.get(1).getY(), new Float(220.0));
+            }
+        }
     }
     
     /* Disabling test as no support for child lanes yet
