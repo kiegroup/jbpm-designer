@@ -246,6 +246,19 @@ public class Bpmn2JsonUnmarshaller {
         revisitEdgeBoundsInContainers(def);
     }
 
+    public BPMNShape getBPMNShapeForElement(BaseElement be, BPMNPlane plane) {
+        List<DiagramElement> diagramElements = plane.getPlaneElement();
+        for(DiagramElement dia : diagramElements) {
+            if(dia instanceof BPMNShape) {
+                BPMNShape shape = (BPMNShape) dia;
+                if(shape.getBpmnElement().getId().equals(be.getId())) {
+                    return shape;
+                }
+            }
+        }
+        return null;
+    }
+
     public void revisitEdgeBoundsInContainers(Definitions def) {
         BPMNPlane plane = def.getDiagrams().get(0).getPlane();
         List<DiagramElement> diagramElements = plane.getPlaneElement();
@@ -261,6 +274,13 @@ public class Bpmn2JsonUnmarshaller {
                             updateEdgeBoundsInContainers(process, sq, plane, edge);
                         }
                     }
+                    // update the source and target on BPMNEdge
+                    if(sq.getSourceRef() != null) {
+                        edge.setSourceElement(getBPMNShapeForElement(sq.getSourceRef(), plane));
+                    }
+                    if(sq.getTargetRef() != null) {
+                        edge.setTargetElement(getBPMNShapeForElement(sq.getTargetRef(), plane));
+                    }
                 }
 
             }
@@ -272,23 +292,23 @@ public class Bpmn2JsonUnmarshaller {
             // dont do this if its on process level
             if(!(container instanceof Process)) {
                 if(fele.getId().equals(sq.getSourceRef().getId())) {
-                    Bounds sourceBounds = getBoundsForShape(plane, sq.getSourceRef());
+                    Bounds sourceBounds = getBoundsForElement(sq.getSourceRef(), plane);
                     List<Point> edgePoints = edge.getWaypoint();
                     if(edgePoints !=null && edgePoints.size() > 1) {
                         if(sourceBounds != null) {
                             Point first = edgePoints.get(0);
-                            first.setX(first.getX() + sourceBounds.getX());
-                            first.setY(first.getY() + sourceBounds.getY());
+                            first.setX(first.getX() + getBoundsForElement(container, plane).getX() + (sourceBounds.getWidth() / 2));
+                            first.setY(first.getY() + getBoundsForElement(container, plane).getY());
                         }
                     }
                 } else if(fele.getId().equals(sq.getTargetRef().getId())) {
-                    Bounds targetBounds = getBoundsForShape(plane, sq.getTargetRef());
+                    Bounds targetBounds = getBoundsForElement(sq.getTargetRef(), plane);
                     List<Point> edgePoints = edge.getWaypoint();
                     if(edgePoints !=null && edgePoints.size() > 1) {
                         if(targetBounds != null) {
                             Point last = edgePoints.get(edgePoints.size() - 1);
-                            last.setX(last.getX() + targetBounds.getX());
-                            last.setY(last.getY() + targetBounds.getY());
+                            last.setX(last.getX() + getBoundsForElement(container, plane).getX() - (targetBounds.getWidth() / 2));
+                            last.setY(last.getY() + getBoundsForElement(container, plane).getY());
                         }
                     }
                 }
@@ -430,6 +450,13 @@ public class Bpmn2JsonUnmarshaller {
     public void updateEdgeBoundsInLanes(Definitions def, BPMNPlane plane, BPMNEdge edge, BaseElement ele) {
         if(ele instanceof SequenceFlow) {
             SequenceFlow sq = (SequenceFlow) ele;
+            // update the source and target on BPMNEdge
+            if(sq.getSourceRef() != null) {
+                edge.setSourceElement(getBPMNShapeForElement(sq.getSourceRef(), plane));
+            }
+            if(sq.getTargetRef() != null) {
+                edge.setTargetElement(getBPMNShapeForElement(sq.getTargetRef(), plane));
+            }
             List<RootElement> rootElements =  def.getRootElements();
             for(RootElement root : rootElements) {
                 if(root instanceof Process) {
@@ -439,6 +466,7 @@ public class Bpmn2JsonUnmarshaller {
                             for(LaneSet ls : process.getLaneSets()) {
                                 for(Lane newLane : ls.getLanes()) {
                                     List<FlowNode> laneFlowNodes = newLane.getFlowNodeRefs();
+                                    Bounds laneBounds = getBoundsForElement(newLane, plane);
                                     for(FlowNode newFlowNode : laneFlowNodes) {
                                         if(newFlowNode.getId().equals(sq.getSourceRef().getId())) {
                                             List<DiagramElement> diagramElements = plane.getPlaneElement();
@@ -451,8 +479,8 @@ public class Bpmn2JsonUnmarshaller {
                                                         if(edgePoints !=null && edgePoints.size() > 1) {
                                                             if(eleBounds != null) {
                                                                 Point first = edgePoints.get(0);
-                                                                first.setX(first.getX() + eleBounds.getX());
-                                                                first.setY(first.getY() + eleBounds.getY());
+                                                                first.setX(first.getX() + laneBounds.getX() + (eleBounds.getWidth() / 2) );
+                                                                first.setY(first.getY() + laneBounds.getY() );
                                                             }
                                                         }
                                                     }
@@ -469,8 +497,8 @@ public class Bpmn2JsonUnmarshaller {
                                                         if(edgePoints !=null && edgePoints.size() > 1) {
                                                             if(eleBounds != null) {
                                                                 Point last = edgePoints.get(edgePoints.size() - 1);
-                                                                last.setX(last.getX() + eleBounds.getX());
-                                                                last.setY(last.getY() + eleBounds.getY());
+                                                                last.setX(last.getX() + laneBounds.getX() - eleBounds.getWidth() );
+                                                                last.setY(last.getY() + laneBounds.getY());
                                                             }
                                                         }
                                                     }
@@ -490,7 +518,7 @@ public class Bpmn2JsonUnmarshaller {
     public void updateShapeBounds(Definitions def, BPMNPlane plane, BaseElement ele) {
         if(ele instanceof Lane) {
             Lane nextLane = (Lane) ele;
-            Bounds laneBounds = getBoundsForShape(plane, nextLane);
+            Bounds laneBounds = getBoundsForElement(nextLane, plane);
             updateShapeBoundsInLanes(plane, ele, nextLane, laneBounds.getX(), laneBounds.getY());
         } else {
             List<RootElement> rootElements =  def.getRootElements();
@@ -514,7 +542,7 @@ public class Bpmn2JsonUnmarshaller {
                                 // process if this subprocess is not in a lane already. otherwise we already updated it
                                 if(sp.getLanes().size() < 1) {
                                     // find the subprocess bounds
-                                    Bounds subprocessBounds = getBoundsForShape(plane, fe);
+                                    Bounds subprocessBounds = getBoundsForElement(fe, plane);
                                     if(subprocessBounds != null) {
                                         updateShapeBoundsInSubprocess(plane, ele, (SubProcess) fe, subprocessBounds.getX(), subprocessBounds.getY());
                                     }
@@ -529,7 +557,7 @@ public class Bpmn2JsonUnmarshaller {
 
     public void updateShapeBoundsInLanes(BPMNPlane plane, BaseElement ele, Lane lane, float parentX, float parentY) {
         for(FlowNode fn : lane.getFlowNodeRefs()) {
-                Bounds fnBounds = getBoundsForShape(plane, fn);
+                Bounds fnBounds = getBoundsForElement(fn, plane);
                 if(fnBounds != null) {
                     fnBounds.setX(fnBounds.getX() + parentX);
                     fnBounds.setY(fnBounds.getY() + parentY);
@@ -545,7 +573,7 @@ public class Bpmn2JsonUnmarshaller {
 
     public void updateShapeBoundsInSubprocessInLanes(BPMNPlane plane, BaseElement ele, SubProcess sub, float parentX, float parentY) {
         for(FlowElement subEle : sub.getFlowElements()) {
-            Bounds subEleBounds = getBoundsForShape(plane, subEle);
+            Bounds subEleBounds = getBoundsForElement(subEle, plane);
             if(subEleBounds != null) {
                 subEleBounds.setX(subEleBounds.getX() + parentX);
                 subEleBounds.setY(subEleBounds.getY() + parentY);
@@ -562,7 +590,7 @@ public class Bpmn2JsonUnmarshaller {
         for(FlowElement subEle : sub.getFlowElements()) {
             if(subEle.getId().equals(ele.getId())) {
                 foundInSubprocess = true;
-                Bounds subEleBounds = getBoundsForShape(plane, subEle);
+                Bounds subEleBounds = getBoundsForElement(subEle, plane);
                 if(subEleBounds != null) {
                     subEleBounds.setX(subEleBounds.getX() + parentX);
                     subEleBounds.setY(subEleBounds.getY() + parentY);
@@ -573,24 +601,20 @@ public class Bpmn2JsonUnmarshaller {
         if(!foundInSubprocess) {
             for(FlowElement subEle : sub.getFlowElements()) {
                 if(subEle instanceof SubProcess) {
-                    Bounds subEleBounds = getBoundsForShape(plane, subEle);
+                    Bounds subEleBounds = getBoundsForElement(subEle, plane);
                     updateShapeBoundsInSubprocess(plane, ele, (SubProcess) subEle, subEleBounds.getX(), subEleBounds.getY());
                 }
             }
         }
     }
 
-    private Bounds getBoundsForShape(BPMNPlane plane, BaseElement ele) {
-        List<DiagramElement> diagramElements = plane.getPlaneElement();
-        for(DiagramElement dia : diagramElements) {
-            if(dia instanceof BPMNShape) {
-                BPMNShape shape = (BPMNShape) dia;
-                if(shape.getBpmnElement().getId().equals(ele.getId())) {
-                    return shape.getBounds();
-                }
-            }
+    private Bounds getBoundsForElement(BaseElement ele, BPMNPlane plane) {
+        BPMNShape elementShape = getBPMNShapeForElement(ele, plane);
+        if(elementShape != null) {
+            return elementShape.getBounds();
+        } else {
+            return null;
         }
-        return null;
     }
 
     public void revisitMultiInstanceTasks(Definitions def) {
