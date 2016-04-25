@@ -2,11 +2,10 @@ package org.jbpm.designer.bpmn2.impl;
 
 import static org.junit.Assert.*;
 
+import org.jbpm.designer.bpmn2.validation.BPMN2SyntaxCheckerTest;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.impl.DefaultProfileImpl;
-
 import org.jbpm.designer.bpmn2.utils.Bpmn2Loader;
-import org.jbpm.designer.bpmn2.validation.BPMN2SyntaxCheckerTest;
 
 import org.json.JSONObject;
 import org.junit.Test;
@@ -252,4 +251,21 @@ public class Bpmn2JsonMarshallerTest {
         assertTrue(datainputset.contains("innerConstant:String"));
         assertTrue(dataoutputset.contains("innerOutput:Integer"));
     }
+
+    @Test
+    public void testCallActivity() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("callActivity.bpmn2", BPMN2SyntaxCheckerTest.class);
+        JSONObject callActivity = loader.getChildByName(process, "callActivity");
+        JSONObject properties = callActivity.getJSONObject("properties");
+        assertEquals("abc.noCalledElementCallActivity", properties.getString("calledelement"));
+    }
+
+    @Test
+    public void testNoCalledElementCallActivity() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("noCalledElementCallActivity.bpmn2", BPMN2SyntaxCheckerTest.class);
+        JSONObject callActivity = loader.getChildByName(process, "callActivity");
+        JSONObject properties = callActivity.getJSONObject("properties");
+        assertFalse(properties.has("calledelement"));
+    }
+
 }
