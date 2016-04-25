@@ -245,13 +245,26 @@ public class Bpmn2JsonUnmarshaller {
     }
 
 
-    public Bounds getShapeBoundsForFlowNode(FlowNode fn, BPMNPlane plane) {
+    public Bounds getShapeBoundsForElement(BaseElement fn, BPMNPlane plane) {
         List<DiagramElement> diagramElements = plane.getPlaneElement();
         for(DiagramElement dia : diagramElements) {
             if(dia instanceof BPMNShape) {
                 BPMNShape shape = (BPMNShape) dia;
                 if(shape.getBpmnElement().getId().equals(fn.getId())) {
                     return shape.getBounds();
+                }
+            }
+        }
+        return null;
+    }
+
+    public BPMNShape getBPMNShapeForElement(BaseElement fn, BPMNPlane plane) {
+        List<DiagramElement> diagramElements = plane.getPlaneElement();
+        for(DiagramElement dia : diagramElements) {
+            if(dia instanceof BPMNShape) {
+                BPMNShape shape = (BPMNShape) dia;
+                if(shape.getBpmnElement().getId().equals(fn.getId())) {
+                    return shape;
                 }
             }
         }
@@ -273,6 +286,13 @@ public class Bpmn2JsonUnmarshaller {
                             updateEdgeBoundsInContainers(process, sq, plane, edge);
                         }
                     }
+                    // update the source and target on BPMNEdge
+                    if(sq.getSourceRef() != null) {
+                        edge.setSourceElement(getBPMNShapeForElement(sq.getSourceRef(), plane));
+                    }
+                    if(sq.getTargetRef() != null) {
+                        edge.setTargetElement(getBPMNShapeForElement(sq.getTargetRef(), plane));
+                    }
                 }
 
             }
@@ -284,23 +304,23 @@ public class Bpmn2JsonUnmarshaller {
             // dont do this if its on process level
             if(!(container instanceof Process)) {
                 if(fele.getId().equals(sq.getSourceRef().getId())) {
-                    Bounds sourceBounds = getShapeBoundsForFlowNode(sq.getSourceRef(), plane);
+                    Bounds sourceBounds = getShapeBoundsForElement(sq.getSourceRef(), plane);
                     List<Point> edgePoints = edge.getWaypoint();
                     if(edgePoints !=null && edgePoints.size() > 1) {
                         if(sourceBounds != null) {
                             Point first = edgePoints.get(0);
-                            first.setX(first.getX() + sourceBounds.getX());
-                            first.setY(first.getY() + sourceBounds.getY());
+                            first.setX(first.getX() + getShapeBoundsForElement(container, plane).getX() + (sourceBounds.getWidth() / 2));
+                            first.setY(first.getY() + getShapeBoundsForElement(container, plane).getY());
                         }
                     }
                 } else if(fele.getId().equals(sq.getTargetRef().getId())) {
-                    Bounds targetBounds = getShapeBoundsForFlowNode(sq.getTargetRef(), plane);
+                    Bounds targetBounds = getShapeBoundsForElement(sq.getTargetRef(), plane);
                     List<Point> edgePoints = edge.getWaypoint();
                     if(edgePoints !=null && edgePoints.size() > 1) {
                         if(targetBounds != null) {
                             Point last = edgePoints.get(edgePoints.size() - 1);
-                            last.setX(last.getX() + targetBounds.getX());
-                            last.setY(last.getY() + targetBounds.getY());
+                            last.setX(last.getX() + getShapeBoundsForElement(container, plane).getX() - (targetBounds.getWidth() / 2));
+                            last.setY(last.getY() + getShapeBoundsForElement(container, plane).getY());
                         }
                     }
                 }
@@ -442,6 +462,15 @@ public class Bpmn2JsonUnmarshaller {
     public void updateEdgeBoundsInLanes(Definitions def, BPMNPlane plane, BPMNEdge edge, BaseElement ele) {
         if(ele instanceof SequenceFlow) {
             SequenceFlow sq = (SequenceFlow) ele;
+
+            // update the source and target on BPMNEdge
+            if(sq.getSourceRef() != null) {
+                edge.setSourceElement(getBPMNShapeForElement(sq.getSourceRef(), plane));
+            }
+            if(sq.getTargetRef() != null) {
+                edge.setTargetElement(getBPMNShapeForElement(sq.getTargetRef(), plane));
+            }
+
             List<RootElement> rootElements =  def.getRootElements();
             for(RootElement root : rootElements) {
                 if(root instanceof Process) {
@@ -451,6 +480,7 @@ public class Bpmn2JsonUnmarshaller {
                             for(LaneSet ls : process.getLaneSets()) {
                                 for(Lane newLane : ls.getLanes()) {
                                     List<FlowNode> laneFlowNodes = newLane.getFlowNodeRefs();
+                                    Bounds laneBounds = getShapeBoundsForElement(newLane, plane);
                                     for(FlowNode newFlowNode : laneFlowNodes) {
                                         if(newFlowNode.getId().equals(sq.getSourceRef().getId())) {
                                             List<DiagramElement> diagramElements = plane.getPlaneElement();
@@ -463,8 +493,8 @@ public class Bpmn2JsonUnmarshaller {
                                                         if(edgePoints !=null && edgePoints.size() > 1) {
                                                             if(eleBounds != null) {
                                                                 Point first = edgePoints.get(0);
-                                                                first.setX(first.getX() + eleBounds.getX());
-                                                                first.setY(first.getY() + eleBounds.getY());
+                                                                first.setX(first.getX() + laneBounds.getX() + (eleBounds.getWidth() / 2) );
+                                                                first.setY(first.getY() + laneBounds.getY() );
                                                             }
                                                         }
                                                     }
@@ -481,8 +511,8 @@ public class Bpmn2JsonUnmarshaller {
                                                         if(edgePoints !=null && edgePoints.size() > 1) {
                                                             if(eleBounds != null) {
                                                                 Point last = edgePoints.get(edgePoints.size() - 1);
-                                                                last.setX(last.getX() + eleBounds.getX());
-                                                                last.setY(last.getY() + eleBounds.getY());
+                                                                last.setX(last.getX() + laneBounds.getX() - eleBounds.getWidth() );
+                                                                last.setY(last.getY() + laneBounds.getY());
                                                             }
                                                         }
                                                     }
@@ -2853,66 +2883,66 @@ public class Bpmn2JsonUnmarshaller {
     private void createSubProcessDiagram(BPMNPlane plane, FlowElement flowElement, BpmnDiFactory factory) {
 		SubProcess sp = (SubProcess) flowElement;
 		for(FlowElement subProcessFlowElement : sp.getFlowElements()) {
-             if(subProcessFlowElement instanceof SubProcess) {
-				Bounds spb = _bounds.get(subProcessFlowElement.getId());
-				if (spb != null) {
-					BPMNShape shape = factory.createBPMNShape();
-					shape.setBpmnElement(subProcessFlowElement);
-					shape.setBounds(spb);
-					plane.getPlaneElement().add(shape);
-				}
-				createSubProcessDiagram(plane, subProcessFlowElement, factory);
-			} else if (subProcessFlowElement instanceof FlowNode) {
-
-				Bounds spb = _bounds.get(subProcessFlowElement.getId());
-				if (spb != null) {
-					BPMNShape shape = factory.createBPMNShape();
-					shape.setBpmnElement(subProcessFlowElement);
-					shape.setBounds(spb);
-					plane.getPlaneElement().add(shape);
-				}
-                if(subProcessFlowElement instanceof BoundaryEvent) {
-                    List<Point> dockers = _dockers.get(subProcessFlowElement.getId());
-                    StringBuffer dockerBuff = new StringBuffer();
-                    for (int i = 0; i < dockers.size(); i++) {
-                        dockerBuff.append(dockers.get(i).getX());
-                        dockerBuff.append("^");
-                        dockerBuff.append(dockers.get(i).getY());
-                        dockerBuff.append("|");
-                    }
-                    ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
-                    EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
-                            "http://www.jboss.org/drools", "dockerinfo", false, false);
-                    SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
-                            dockerBuff.toString());
-                    subProcessFlowElement.getAnyAttribute().add(extensionEntry);
+            if(subProcessFlowElement instanceof SubProcess) {
+                Bounds spb = _bounds.get(subProcessFlowElement.getId());
+                if (spb != null) {
+                    BPMNShape shape = factory.createBPMNShape();
+                    shape.setBpmnElement(subProcessFlowElement);
+                    shape.setBounds(spb);
+                    plane.getPlaneElement().add(shape);
                 }
-			} else if (subProcessFlowElement instanceof SequenceFlow) {
-				SequenceFlow sequenceFlow = (SequenceFlow) subProcessFlowElement;
-				BPMNEdge edge = factory.createBPMNEdge();
-				edge.setBpmnElement(subProcessFlowElement);
-				DcFactory dcFactory = DcFactory.eINSTANCE;
-				Point point = dcFactory.createPoint();
-				if(sequenceFlow.getSourceRef() != null) {
-					Bounds sourceBounds = _bounds.get(sequenceFlow.getSourceRef().getId());
-					point.setX(sourceBounds.getX() + (sourceBounds.getWidth()/2));
-					point.setY(sourceBounds.getY() + (sourceBounds.getHeight()/2));
-				}
-				edge.getWaypoint().add(point);
-				List<Point> dockers = _dockers.get(sequenceFlow.getId());
-				for (int i = 1; i < dockers.size() - 1; i++) {
-					edge.getWaypoint().add(dockers.get(i));
-				}
-				point = dcFactory.createPoint();
-				if(sequenceFlow.getTargetRef() != null) {
-					Bounds targetBounds = _bounds.get(sequenceFlow.getTargetRef().getId());
-					point.setX(targetBounds.getX() + (targetBounds.getWidth()/2));
-					point.setY(targetBounds.getY() + (targetBounds.getHeight()/2));
-				}
-				edge.getWaypoint().add(point);
-				plane.getPlaneElement().add(edge);
-			}
-		}
+                createSubProcessDiagram(plane, subProcessFlowElement, factory);
+            } else if (subProcessFlowElement instanceof FlowNode) {
+                Bounds spb = _bounds.get(subProcessFlowElement.getId());
+                if (spb != null) {
+                    BPMNShape shape = factory.createBPMNShape();
+                    shape.setBpmnElement(subProcessFlowElement);
+                    shape.setBounds(spb);
+                    plane.getPlaneElement().add(shape);
+                }
+                 if(subProcessFlowElement instanceof BoundaryEvent) {
+                     List<Point> dockers = _dockers.get(subProcessFlowElement.getId());
+                     StringBuffer dockerBuff = new StringBuffer();
+                     for (int i = 0; i < dockers.size(); i++) {
+                         dockerBuff.append(dockers.get(i).getX());
+                         dockerBuff.append("^");
+                         dockerBuff.append(dockers.get(i).getY());
+                         dockerBuff.append("|");
+                     }
+                     ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
+                     EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                             "http://www.jboss.org/drools", "dockerinfo", false, false);
+                     SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(extensionAttribute,
+                             dockerBuff.toString());
+                     subProcessFlowElement.getAnyAttribute().add(extensionEntry);
+                 }
+             } else if (subProcessFlowElement instanceof SequenceFlow) {
+                 SequenceFlow sequenceFlow = (SequenceFlow) subProcessFlowElement;
+                 BPMNEdge edge = factory.createBPMNEdge();
+                 edge.setBpmnElement(subProcessFlowElement);
+                 SequenceFlow sq = (SequenceFlow)subProcessFlowElement;
+                 DcFactory dcFactory = DcFactory.eINSTANCE;
+                 Point point = dcFactory.createPoint();
+                 if(sequenceFlow.getSourceRef() != null) {
+                     Bounds sourceBounds = _bounds.get(sequenceFlow.getSourceRef().getId());
+                     point.setX(sourceBounds.getX() + (sourceBounds.getWidth()/2));
+                     point.setY(sourceBounds.getY() + (sourceBounds.getHeight()/2));
+                 }
+                 edge.getWaypoint().add(point);
+                 List<Point> dockers = _dockers.get(sequenceFlow.getId());
+                 for (int i = 1; i < dockers.size() - 1; i++) {
+                     edge.getWaypoint().add(dockers.get(i));
+                 }
+                 point = dcFactory.createPoint();
+                 if(sequenceFlow.getTargetRef() != null) {
+                     Bounds targetBounds = _bounds.get(sequenceFlow.getTargetRef().getId());
+                     point.setX(targetBounds.getX() + (targetBounds.getWidth()/2));
+                     point.setY(targetBounds.getY() + (targetBounds.getHeight()/2));
+                 }
+                 edge.getWaypoint().add(point);
+                 plane.getPlaneElement().add(edge);
+             }
+        }
         if (sp.getArtifacts() != null) {
             List<Association> incompleteAssociations = new ArrayList<Association>();
             for (Artifact artifact : sp.getArtifacts()) {
