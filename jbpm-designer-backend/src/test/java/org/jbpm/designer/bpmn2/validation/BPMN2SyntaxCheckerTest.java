@@ -111,7 +111,23 @@ public class BPMN2SyntaxCheckerTest {
         errors  = syntaxChecker.getErrors();
         assertEquals(1, errors.size());
         String gatewayId = gateway.getString("resourceId");
+        assertEquals(1, errors.get(gatewayId).size());
         assertEquals(SyntaxCheckerErrors.AT_LEAST_ONE_OUTGOING_PROBABILITY_VALUE_100, errors.get(gatewayId).get(0).getError());
+    }
+
+    @Test
+    public void testInclusiveGatewayInvalidDefaultGate() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("inclusiveGatewayInvalidDefaultGate.bpmn2");
+        JSONObject gateway = loader.getChildByName(process, "inclusiveGateway");
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        syntaxChecker.checkSyntax();
+        assertTrue(syntaxChecker.errorsFound());
+        errors  = syntaxChecker.getErrors();
+        assertEquals(1, errors.size());
+        String gatewayId = gateway.getString("resourceId");
+        assertEquals(1, errors.get(gatewayId).size());
+        assertEquals(SyntaxCheckerErrors.NOT_VALID_DEFAULT_GATE, errors.get(gatewayId).get(0).getError());
     }
 
     @Test
@@ -136,6 +152,7 @@ public class BPMN2SyntaxCheckerTest {
         errors  = syntaxChecker.getErrors();
         assertEquals(1, errors.size());
         String gatewayId = gateway.getString("resourceId");
+        assertEquals(1, errors.get(gatewayId).size());
         assertEquals(SyntaxCheckerErrors.THE_SUM_OF_PROBABILITIES_MUST_BE_EQUAL_100, errors.get(gatewayId).get(0).getError());
     }
 
@@ -161,7 +178,23 @@ public class BPMN2SyntaxCheckerTest {
         errors  = syntaxChecker.getErrors();
         assertEquals(1, errors.size());
         String gatewayId = gateway.getString("resourceId");
+        assertEquals(1, errors.get(gatewayId).size());
         assertEquals(SyntaxCheckerErrors.THE_SUM_OF_PROBABILITIES_MUST_BE_EQUAL_100, errors.get(gatewayId).get(0).getError());
+    }
+
+    @Test
+    public void testExclusiveGatewayInvalidDefaultGate() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("exclusiveGatewayInvalidDefaultGate.bpmn2");
+        JSONObject gateway = loader.getChildByName(process, "exclusiveGateway");
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        syntaxChecker.checkSyntax();
+        assertTrue(syntaxChecker.errorsFound());
+        errors  = syntaxChecker.getErrors();
+        assertEquals(1, errors.size());
+        String gatewayId = gateway.getString("resourceId");
+        assertEquals(1, errors.get(gatewayId).size());
+        assertEquals(SyntaxCheckerErrors.NOT_VALID_DEFAULT_GATE, errors.get(gatewayId).get(0).getError());
     }
 
     @Test
