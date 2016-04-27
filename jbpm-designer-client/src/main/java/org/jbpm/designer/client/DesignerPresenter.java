@@ -598,7 +598,7 @@ public class DesignerPresenter
 
     }
 
-    private void setup( Map<String, String> editorParameters,
+    protected void setup( Map<String, String> editorParameters,
                         String editorID,
                         Overview overview ) {
 
@@ -608,9 +608,7 @@ public class DesignerPresenter
 
             resetEditorPages( overview );
 
-            if ( editorParameters.containsKey( "readonly" ) ) {
-                isReadOnly = Boolean.valueOf( editorParameters.get( "readonly" ) );
-            }
+            editorParameters.put("readonly", Boolean.toString(isReadOnly));
 
             designerEditorParametersPublisher.publish( editorParameters );
 
