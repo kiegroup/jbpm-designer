@@ -35,6 +35,7 @@ public class SyntaxCheckerErrors {
     public static final String IT_SHOULD_BE_DIVERGING = " It should be 'Diverging'.";
     public static final String NODE_NO_INCOMING_CONNECTIONS = "Node has no incoming connections";
     public static final String NODE_NO_OUTGOING_CONNECTIONS = "Node has no outgoing connections";
+    public static final String NOT_VALID_DEFAULT_GATE = "Default gate must be one of outgoing flows.";
     public static final String PACKAGE_NAME_CONTAINS_INVALID_CHARACTERS = "Package name contains invalid characters.";
     public static final String PARALLEL_GATEWAY = "Parallel Gateway.";
     public static final String PROBABILITY_VALUE_MUST_BE_POSITIVE = "Probability value must be positive.";
