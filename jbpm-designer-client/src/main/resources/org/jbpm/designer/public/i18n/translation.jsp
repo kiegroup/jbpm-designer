@@ -427,7 +427,7 @@ ORYX.I18N.Grouping.grouping = '<i18n:message key="ORYX.I18N.Grouping.grouping">G
 ORYX.I18N.Grouping.group = '<i18n:message key="ORYX.I18N.Grouping.group">Group</i18n:message>';
 ORYX.I18N.Grouping.groupDesc = '<i18n:message key="ORYX.I18N.Grouping.groupDesc">Groups all selected shapes</i18n:message>';
 ORYX.I18N.Grouping.ungroup = '<i18n:message key="ORYX.I18N.Grouping.ungroup">Ungroup</i18n:message>';
-ORYX.I18N.Grouping.ungroupDesc = '<i18n:message key="ORYX.I18N.Grouping.ungroupDesc">Deletes the group of all selected Shapes</i18n:message>';
+ORYX.I18N.Grouping.ungroupDesc = '<i18n:message key="ORYX.I18N.Grouping.ungroupDesc">Deletes the group of all selected shapes</i18n:message>';
 
 if(!ORYX.I18N.IBPMN2BPMN) ORYX.I18N.IBPMN2BPMN = {};
 

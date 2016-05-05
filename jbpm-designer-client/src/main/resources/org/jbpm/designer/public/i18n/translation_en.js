@@ -372,7 +372,7 @@ ORYX.I18N.Grouping.grouping = "Grouping";
 ORYX.I18N.Grouping.group = "Group";
 ORYX.I18N.Grouping.groupDesc = "Groups all selected shapes";
 ORYX.I18N.Grouping.ungroup = "Ungroup";
-ORYX.I18N.Grouping.ungroupDesc = "Deletes the group of all selected Shapes";
+ORYX.I18N.Grouping.ungroupDesc = "Deletes the group of all selected shapes";
 
 if(!ORYX.I18N.IBPMN2BPMN) ORYX.I18N.IBPMN2BPMN = {};
 
