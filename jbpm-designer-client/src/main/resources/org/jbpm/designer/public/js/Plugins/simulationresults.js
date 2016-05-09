@@ -196,9 +196,10 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
                 }});
 			for (var i = 0; i < pathSimInfo.length; i++) {
 				var nextPath = pathSimInfo[i];
+				var nextPathLabel = nextPath.id.replace('Path', ORYX.I18N.View.sim.resultsPath);
 					graphTypeChild = new Ext.tree.TreeNode({
 						id:"pathgraph:" + nextPath.id,
-						text:"Path " + (i+1) + " (" + nextPath.id + ")", 			
+						text:ORYX.I18N.View.sim.resultsPath + " " + (i+1) + " (" + nextPathLabel + ")",
 						allowDrag:false,
 			    		allowDrop:false,           
 			            expanded: true,

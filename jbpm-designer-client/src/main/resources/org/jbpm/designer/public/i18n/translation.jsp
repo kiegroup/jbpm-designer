@@ -738,6 +738,8 @@ ORYX.I18N.View.sim.resultsSimStartTime = '<i18n:message key="ORYX.I18N.View.sim.
 ORYX.I18N.View.sim.resultsSimEndTime = '<i18n:message key="ORYX.I18N.View.sim.resultsSimEndTime">Simulation end: </i18n:message>';
 ORYX.I18N.View.sim.resultsNumOfExecutions = '<i18n:message key="ORYX.I18N.View.sim.resultsNumOfExecutions">Num. of Executions: </i18n:message>';
 ORYX.I18N.View.sim.resultsInterval = '<i18n:message key="ORYX.I18N.View.sim.resultsInterval">Interval </i18n:message>';
+ORYX.I18N.View.sim.resultsPath = '<i18n:message key="ORYX.I18N.View.sim.resultsPath">Path</i18n:message>';
+ORYX.I18N.View.sim.resultsOtherPaths = '<i18n:message key="ORYX.I18N.View.sim.resultsOtherPaths">Other Paths</i18n:message>';
 ORYX.I18N.View.sim.resultsGroupProcess = '<i18n:message key="ORYX.I18N.View.sim.resultsGroupProcess">Process</i18n:message>';
 ORYX.I18N.View.sim.resultsGroupProcessElements = '<i18n:message key="ORYX.I18N.View.sim.resultsGroupProcessElements">Process Elements</i18n:message>';
 ORYX.I18N.View.sim.resultsGroupProcessPaths = '<i18n:message key="ORYX.I18N.View.sim.resultsGroupProcessPaths">Paths</i18n:message>';
@@ -763,6 +765,10 @@ ORYX.I18N.View.sim.chartsMin = '<i18n:message key="ORYX.I18N.View.sim.chartsMin"
 ORYX.I18N.View.sim.chartsAverage = '<i18n:message key="ORYX.I18N.View.sim.chartsAverage">Average</i18n:message>';
 ORYX.I18N.View.sim.chartsProcessExecutionTimesDuringSimulation = '<i18n:message key="ORYX.I18N.View.sim.chartsProcessExecutionTimesDuringSimulation">Process execution times during Simulation</i18n:message>';
 ORYX.I18N.View.sim.chartsSimulationTime = '<i18n:message key="ORYX.I18N.View.sim.chartsSimulationTime">Simulation Time</i18n:message>';
+ORYX.I18N.View.sim.chartsMaxExecutionTime = '<i18n:message key="ORYX.I18N.View.sim.chartsMaxExecutionTime">Max Execution Time</i18n:message>';
+ORYX.I18N.View.sim.chartsMinExecutionTime = '<i18n:message key="ORYX.I18N.View.sim.chartsMinExecutionTime">Min Execution Time</i18n:message>';
+ORYX.I18N.View.sim.chartsAvgExecutionTime = '<i18n:message key="ORYX.I18N.View.sim.chartsAvgExecutionTime">Avg Execution Time</i18n:message>';
+ORYX.I18N.View.sim.chartsProcessAverages = '<i18n:message key="ORYX.I18N.View.sim.chartsProcessAverages">Process Averages</i18n:message>';
 ORYX.I18N.View.sim.timelineProcessExecutionTimes = '<i18n:message key="ORYX.I18N.View.sim.timelineProcessExecutionTimes">Process Execution Times</i18n:message>';
 ORYX.I18N.View.sim.BarChart = '<i18n:message key="ORYX.I18N.View.sim.BarChart">Bar Chart</i18n:message>';
 ORYX.I18N.View.sim.HorizontalBarChart = '<i18n:message key="ORYX.I18N.View.sim.HorizontalBarChart">Horizontal Bar Chart</i18n:message>';
@@ -770,6 +776,7 @@ ORYX.I18N.View.sim.PieChart = '<i18n:message key="ORYX.I18N.View.sim.PieChart">P
 ORYX.I18N.View.sim.Table = '<i18n:message key="ORYX.I18N.View.sim.Table">Table</i18n:message>';
 ORYX.I18N.View.sim.Timeline = '<i18n:message key="ORYX.I18N.View.sim.Timeline">Timeline</i18n:message>';
 ORYX.I18N.View.sim.LineChart = '<i18n:message key="ORYX.I18N.View.sim.LineChart">Line Chart</i18n:message>';
+ORYX.I18N.View.sim.NoDataAvailable = '<i18n:message key="ORYX.I18N.View.sim.NoDataAvailable">No Data Available.</i18n:message>';
 
 if(!ORYX.I18N.View.sim.chartsTimeUnits) ORYX.I18N.View.sim.chartsTimeUnits = {};
 ORYX.I18N.View.sim.chartsTimeUnits['ms'] = '<i18n:message key="ORYX.I18N.View.sim.chartsTimeUnits_ms">ms</i18n:message>';
