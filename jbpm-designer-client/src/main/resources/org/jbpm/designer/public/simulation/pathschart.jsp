@@ -87,13 +87,14 @@ function clearChart() {
 			for (var i = 0; i < pathData.length; i++) {
 				var nextData = pathData[i];
 				if(nextData.id == pathid) {
+					var nextPathLabel = nextData.id.replace('Path', parent.ORYX.I18N.View.sim.resultsPath);
 					var inc1 = {
 				               "value":nextData.numinstances,
-				               "label": nextData.id 
+				               "label": nextPathLabel
 				              };
 					var inc2 = {
 				               	"value": nextData.totalinstances - nextData.numinstances,
-				               	"label":"Other Paths"
+				               	"label":parent.ORYX.I18N.View.sim.resultsOtherPaths
 				               };
 					toshowData[0].values[0] = inc1;
 					toshowData[0].values[1] = inc2;

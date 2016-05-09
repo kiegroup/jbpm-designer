@@ -166,7 +166,20 @@ function getEventAggregationData() {
 }
 function showBarChart() {
     var chartData = parent.ORYX.EDITOR.simulationChartData;
+    if(chartData && chartData.length > 0) {
+        var cData = chartData[0];
+        cData.key = parent.ORYX.I18N.View.sim.chartsProcessAverages;
+        if (cData.values && cData.values.length == 3) {
+            cData.values[0].label = parent.ORYX.I18N.View.sim.chartsMaxExecutionTime;
+            cData.values[1].label = parent.ORYX.I18N.View.sim.chartsMinExecutionTime;
+            cData.values[2].label = parent.ORYX.I18N.View.sim.chartsAvgExecutionTime;
+        }
+    }
     var instanceData = parent.ORYX.EDITOR.simulationInstancesData;
+    if(instanceData && instanceData.length > 0) {
+        var iData = instanceData[0];
+        iData.key = parent.ORYX.I18N.View.sim.chartsActivityInstances;
+    }
     nv.addGraph(function() {
         var chart = nv.models.discreteBarChart().x(function(d) {
             return d.label
@@ -174,7 +187,7 @@ function showBarChart() {
                     return d.value
                 }).staggerLabels(true)
                 .tooltips(true).showValues(true);
-        chart.yAxis.axisLabel(parent.ORYX.I18N.View.sim.chartsExecutionTimesTime + ' (' + parent.ORYX.EDITOR.simulationChartTimeUnit + ')')
+        chart.yAxis.axisLabel(parent.ORYX.I18N.View.sim.chartsExecutionTimesTime + ' (' + parent.ORYX.EDITOR.simulationChartTimeUnit + ')');
 
         d3.select('#chart1').datum(chartData).transition().duration(500)
                 .call(chart);
@@ -191,13 +204,13 @@ function showBarChart() {
                     return d.value
                 }).staggerLabels(true)
                 .tooltips(true).showValues(true);
-        chart2.yAxis.axisLabel(parent.ORYX.I18N.View.sim.chartsActivityInstancesInstances + ' (#)')
+        chart2.yAxis.axisLabel(parent.ORYX.I18N.View.sim.chartsActivityInstancesInstances + ' (#)');
 
         d3.select('#chart2').datum(instanceData).transition().duration(500)
                 .call(chart2);
 
         nv.utils.windowResize(chart2.update);
-
+        updateChartIfNoData("chart2");
         return chart2;
     });
 
@@ -241,7 +254,7 @@ function showBarChart() {
                         return d.value
                     }).staggerLabels(true)
                     .tooltips(true).showValues(true);
-            chart3.yAxis.axisLabel(parent.ORYX.I18N.View.sim.chartsTotalCostCost + ' (' + parent.ORYX.I18N.View.sim.chartsTotalCostCurrency + ')')
+            chart3.yAxis.axisLabel(parent.ORYX.I18N.View.sim.chartsTotalCostCost + ' (' + parent.ORYX.I18N.View.sim.chartsTotalCostCurrency + ')');
 
             d3.select('#chart3').datum(costData).transition().duration(500)
                     .call(chart3);
@@ -304,7 +317,7 @@ function showBarChart() {
                         return d.value
                     }).staggerLabels(true)
                     .tooltips(true).showValues(true);
-            chart4.yAxis.axisLabel(parent.ORYX.I18N.View.sim.chartsTotalResourceUtilizationPercentages + ' (%)')
+            chart4.yAxis.axisLabel(parent.ORYX.I18N.View.sim.chartsTotalResourceUtilizationPercentages + ' (%)');
 
             d3.select('#chart4').datum(resourceData).transition().duration(500)
                     .call(chart4);
@@ -365,6 +378,7 @@ function showHBarChart() {
 
         nv.utils.windowResize(chart2.update);
 
+        updateChartIfNoData("chart2");
         return chart2;
     });
 
@@ -654,7 +668,7 @@ function showPieChart() {
                     .height(height);
 
             d3.select("#chart4")
-                    .datum(htResourceData)
+                    .datum(resourceData)
                     .transition().duration(500)
                     .attr('width', width)
                     .attr('height', height)
@@ -831,6 +845,13 @@ function showTimeline() {
 				";
 
     document.getElementById('outterchart').innerHTML = cont;
+}
+
+function updateChartIfNoData(chartid) {
+    var chartEl = document.getElementById(chartid);
+    if (chartEl.firstChild.innerHTML === "No Data Available.") {
+        chartEl.firstChild.innerHTML = parent.ORYX.I18N.View.sim.NoDataAvailable;
+    }
 }
 
 // document.getElementById('iframeid').contentWindow.myFunc();

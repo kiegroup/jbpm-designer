@@ -50,7 +50,6 @@ import org.eclipse.bpmn2.RootElement;
 import org.eclipse.bpmn2.SubProcess;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.jboss.drools.impl.DroolsFactoryImpl;
-import org.jbpm.designer.backend.i18n.Constants;
 import org.jbpm.designer.bpmn2.impl.Bpmn2JsonUnmarshaller;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
@@ -95,11 +94,17 @@ public class SimulationServlet extends HttpServlet {
 	private Map<String, Integer> pathInfoMap = null;
 	private DateTime simTime = null;
 
+	private static final String MAX = "Max";
+	private static final String MIN = "Min";
+	private static final String AVERAGE = "Average";
+	private static final String MAX_EXECUTION_TIME = "Max Execution Time";
+	private static final String MIN_EXECUTION_TIME = "Min Execution Time";
+	private static final String AVG_EXECUTION_TIME = "Avg Execution Time";
+	private static final String ACTIVITY_INSTANCES = "Activity Instances";
+	private static final String PROCESS_AVERAGES = "Process Averages";
+
     @Inject
     private IDiagramProfileService _profileService = null;
-
-	@Inject
-	private Constants constants;
 
 	@Override
     public void init(ServletConfig config) throws ServletException {
@@ -252,18 +257,18 @@ public class SimulationServlet extends HttpServlet {
 					if(aggEvent instanceof AggregatedProcessSimulationEvent) {
 						AggregatedProcessSimulationEvent event = (AggregatedProcessSimulationEvent) aggEvent;
 						JSONObject processSimKeys = new JSONObject();
-						processSimKeys.put("key", constants.ProcessAverages());
+						processSimKeys.put("key", PROCESS_AVERAGES);
 						processSimKeys.put("id", event.getProcessId());
 						processSimKeys.put("name", event.getProcessName());
 						JSONArray processSimValues = new JSONArray();
 						JSONObject obj1 = new JSONObject();
-						obj1.put("label", constants.MaxExecutionTime());
+						obj1.put("label", MAX_EXECUTION_TIME);
 						obj1.put("value", adjustToBaseTimeUnit(event.getMaxExecutionTime(), baseTimeUnit));
 						JSONObject obj2 = new JSONObject();
-						obj2.put("label", constants.MinExecutionTime());
+						obj2.put("label", MIN_EXECUTION_TIME);
 						obj2.put("value", adjustToBaseTimeUnit(event.getMinExecutionTime(), baseTimeUnit));
 						JSONObject obj3 = new JSONObject();
-						obj3.put("label", constants.AvgExecutionTime());
+						obj3.put("label", AVG_EXECUTION_TIME);
 						obj3.put("value", adjustToBaseTimeUnit(event.getAvgExecutionTime(), baseTimeUnit));
 						processSimValues.put(obj1);
 						processSimValues.put(obj2);
@@ -285,13 +290,13 @@ public class SimulationServlet extends HttpServlet {
 
 						JSONArray innerExecutionValues = new JSONArray();
 						JSONObject obj1 = new JSONObject();
-						obj1.put("label", constants.Max());
+						obj1.put("label", MAX);
 						obj1.put("value", adjustToBaseTimeUnit(event.getMaxExecutionTime(), baseTimeUnit));
 						JSONObject obj2 = new JSONObject();
-						obj2.put("label", constants.Min());
+						obj2.put("label", MIN);
 						obj2.put("value", adjustToBaseTimeUnit(event.getMinExecutionTime(), baseTimeUnit));
 						JSONObject obj3 = new JSONObject();
-						obj3.put("label", constants.Average());
+						obj3.put("label", AVERAGE);
 						obj3.put("value", adjustToBaseTimeUnit(event.getAvgExecutionTime(), baseTimeUnit));
 						innerExecutionValues.put(obj1);
 						innerExecutionValues.put(obj2);
@@ -303,13 +308,13 @@ public class SimulationServlet extends HttpServlet {
 
 						JSONArray innerExecutionValues2 = new JSONArray();
 						JSONObject obj4 = new JSONObject();
-						obj4.put("label", constants.Max());
+						obj4.put("label", MAX);
 						obj4.put("value", adjustToBaseTimeUnit(event.getMaxWaitTime(), baseTimeUnit));
 						JSONObject obj5 = new JSONObject();
-						obj5.put("label", constants.Min());
+						obj5.put("label", MIN);
 						obj5.put("value", adjustToBaseTimeUnit(event.getMinWaitTime(), baseTimeUnit));
 						JSONObject obj6 = new JSONObject();
-						obj6.put("label", constants.Average());
+						obj6.put("label", AVERAGE);
 						obj6.put("value", adjustToBaseTimeUnit(event.getAvgWaitTime(), baseTimeUnit));
 						innerExecutionValues2.put(obj4);
 						innerExecutionValues2.put(obj5);
@@ -330,13 +335,13 @@ public class SimulationServlet extends HttpServlet {
 						resourceValues.put("name", event.getActivityName());
 						JSONArray htSimValues2 = new JSONArray();
 						JSONObject obj7 = new JSONObject();
-						obj7.put("label", constants.Max());
+						obj7.put("label", MAX);
 						obj7.put("value", adjustDouble(event.getMaxResourceUtilization()));
 						JSONObject obj8 = new JSONObject();
-						obj8.put("label", constants.Min());
+						obj8.put("label", MIN);
 						obj8.put("value", adjustDouble(event.getMinResourceUtilization()));
 						JSONObject obj9 = new JSONObject();
-						obj9.put("label", constants.Average());
+						obj9.put("label", AVERAGE);
 						obj9.put("value", adjustDouble(event.getAvgResourceUtilization()));
 						htSimValues2.put(obj7);
 						htSimValues2.put(obj8);
@@ -350,13 +355,13 @@ public class SimulationServlet extends HttpServlet {
 						costValues.put("name", event.getActivityName());
 						JSONArray htSimValues3 = new JSONArray();
 						JSONObject obj10 = new JSONObject();
-						obj10.put("label", constants.Max());
+						obj10.put("label", MAX);
 						obj10.put("value", adjustDouble(event.getMaxResourceCost()));
 						JSONObject obj11 = new JSONObject();
-						obj11.put("label", constants.Min());
+						obj11.put("label", MIN);
 						obj11.put("value", adjustDouble(event.getMinResourceCost()));
 						JSONObject obj12 = new JSONObject();
-						obj12.put("label", constants.Average());
+						obj12.put("label", AVERAGE);
 						obj12.put("value", adjustDouble(event.getAvgResourceCost()));
 						htSimValues3.put(obj10);
 						htSimValues3.put(obj11);
@@ -382,13 +387,13 @@ public class SimulationServlet extends HttpServlet {
 						taskSimKeys.put("name", event.getActivityName());
 						JSONArray taskSimValues = new JSONArray();
 						JSONObject obj1 = new JSONObject();
-						obj1.put("label", constants.MaxExecutionTime());
+						obj1.put("label", MAX_EXECUTION_TIME);
 						obj1.put("value", adjustToBaseTimeUnit(event.getMaxExecutionTime(), baseTimeUnit));
 						JSONObject obj2 = new JSONObject();
-						obj2.put("label", constants.MinExecutionTime());
+						obj2.put("label", MIN_EXECUTION_TIME);
 						obj2.put("value", adjustToBaseTimeUnit(event.getMinExecutionTime(), baseTimeUnit));
 						JSONObject obj3 = new JSONObject();
-						obj3.put("label", constants.AvgExecutionTime());
+						obj3.put("label", AVG_EXECUTION_TIME);
 						obj3.put("value", adjustToBaseTimeUnit(event.getAvgExecutionTime(), baseTimeUnit));
 						taskSimValues.put(obj1);
 						taskSimValues.put(obj2);
@@ -404,9 +409,9 @@ public class SimulationServlet extends HttpServlet {
 				}
 
 				JSONObject numInstancesSimKeys = new JSONObject();
-				numInstancesSimKeys.put("key", constants.ActivityInstances());
-				numInstancesSimKeys.put("id", "Activity Instances");
-				numInstancesSimKeys.put("name", "Activity Instances");
+				numInstancesSimKeys.put("key", ACTIVITY_INSTANCES);
+				numInstancesSimKeys.put("id", ACTIVITY_INSTANCES);
+				numInstancesSimKeys.put("name", ACTIVITY_INSTANCES);
 				JSONArray numInstancesValues = new JSONArray();
 				Iterator<String> iter = numInstanceData.keySet().iterator();
 				while(iter.hasNext()) {
@@ -433,20 +438,20 @@ public class SimulationServlet extends HttpServlet {
 					AggregatedProcessSimulationEvent aggProcessEve = (AggregatedProcessSimulationEvent) (((GenericSimulationEvent) simEve).getAggregatedEvent());
                     if(aggProcessEve != null) {
                         JSONObject eventProcessSimKeys = new JSONObject();
-                        eventProcessSimKeys.put("key", constants.ProcessAverages());
+                        eventProcessSimKeys.put("key", PROCESS_AVERAGES);
                         eventProcessSimKeys.put("id", aggProcessEve.getProcessId());
                         eventProcessSimKeys.put("name", aggProcessEve.getProcessName());
                         eventProcessSimKeys.put("timesincestart", this.eventAggregationsTimes.get(c));
                         eventProcessSimKeys.put("timeunit", intervalUnit);
                         JSONArray eventProcessSimValues = new JSONArray();
                         JSONObject obj1 = new JSONObject();
-                        obj1.put("label", constants.MaxExecutionTime());
+                        obj1.put("label", MAX_EXECUTION_TIME);
                         obj1.put("value", adjustToBaseTimeUnit(aggProcessEve.getMaxExecutionTime(), baseTimeUnit));
                         JSONObject obj2 = new JSONObject();
-                        obj2.put("label", constants.MinExecutionTime());
+                        obj2.put("label", MIN_EXECUTION_TIME);
                         obj2.put("value", adjustToBaseTimeUnit(aggProcessEve.getMinExecutionTime(), baseTimeUnit));
                         JSONObject obj3 = new JSONObject();
-                        obj3.put("label", constants.AvgExecutionTime());
+                        obj3.put("label", AVG_EXECUTION_TIME);
                         obj3.put("value", adjustToBaseTimeUnit(aggProcessEve.getAvgExecutionTime(), baseTimeUnit));
                         eventProcessSimValues.put(obj1);
                         eventProcessSimValues.put(obj2);

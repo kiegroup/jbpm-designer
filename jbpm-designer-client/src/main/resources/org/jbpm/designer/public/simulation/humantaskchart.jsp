@@ -124,7 +124,7 @@ function clearChart() {
 				 	 .showControls(false);
 				chart.yAxis
 				.tickFormat(d3.format(',.2f'));
-				chart.yAxis.axisLabel('Time (' + parent.ORYX.EDITOR.simulationChartTimeUnit + ')')
+				chart.yAxis.axisLabel(parent.ORYX.I18N.View.sim.chartsExecutionTimesTime + ' (' + parent.ORYX.EDITOR.simulationChartTimeUnit + ')')
 				d3.select('#chart1')
 				.datum(chartData.timevalues)
 				.transition().duration(500)
