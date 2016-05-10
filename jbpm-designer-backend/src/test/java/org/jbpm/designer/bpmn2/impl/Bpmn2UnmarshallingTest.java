@@ -20,6 +20,7 @@ import static org.junit.Assert.*;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -30,9 +31,12 @@ import org.eclipse.bpmn2.di.BPMNEdge;
 import org.eclipse.bpmn2.di.BPMNPlane;
 import org.eclipse.dd.dc.Point;
 import org.eclipse.dd.di.DiagramElement;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.jboss.drools.DroolsPackage;
 import org.jboss.drools.MetaDataType;
+import org.jboss.drools.OnEntryScriptType;
+import org.jboss.drools.OnExitScriptType;
 import org.jbpm.designer.bpmn2.utils.Bpmn2Loader;
 import org.junit.Test;
 
@@ -125,16 +129,23 @@ public class Bpmn2UnmarshallingTest {
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
 
-    //@Test
-    // removing until we start supporting global tasks
+    @Test
     public void testScriptTaskUnmarshalling() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("scriptTask.json");
         assertTrue(definitions.getRootElements().size() == 1);
-        GlobalScriptTask task = (GlobalScriptTask) definitions.getRootElements().get(0);
-        assertEquals("my script", task.getName());
-        assertEquals("git status | grep modified | awk '{print $3}' | xargs echo | xargs git add", task.getScript());
-        assertEquals("bash", task.getScriptLanguage());
-        definitions.eResource().save(System.out, Collections.emptyMap());
+        Process process = getRootProcess(definitions);
+        FlowElement element = getFlowElement(process.getFlowElements(), "scriptTask");
+        if(element == null || !(element instanceof ScriptTask)) {
+            fail("Script task not found");
+        }
+        ScriptTask scriptTask = (ScriptTask) element;
+        assertEquals("<![CDATA[System.out.println(\"xyz\");]]>", scriptTask.getScript());
+        assertEquals("http://www.java.com/java", scriptTask.getScriptFormat());
+        assertEquals("<![CDATA[Prints something to output]]>", scriptTask.getDocumentation().get(0).getText());
+        assertEquals("<![CDATA[scriptTask]]>", getMetaDataValue(scriptTask.getExtensionValues(), "elementname"));
+        assertEquals("<![CDATA[true]]>", getMetaDataValue(scriptTask.getExtensionValues(), "customAsync"));
+        assertEquals("<![CDATA[System.out.println(\"entry\");]]>", getOnEntryScript(scriptTask.getExtensionValues()));
+        assertEquals("<![CDATA[System.out.println(\"exit\");]]>", getOnExitScript(scriptTask.getExtensionValues()));
     }
 
     //@Test
@@ -647,29 +658,8 @@ public class Bpmn2UnmarshallingTest {
     public void testBoundaryEventMultiLineName() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("boundaryEventMultiLineName.json");
         Process process = getRootProcess(definitions);
-        Boolean foundElementNameExtensionValue = false;
         BoundaryEvent event = (BoundaryEvent) process.getFlowElements().get(1);
-        if(event.getExtensionValues() != null && event.getExtensionValues().size() > 0) {
-            for(ExtensionAttributeValue extattrval : event.getExtensionValues()) {
-                FeatureMap extensionElements = extattrval.getValue();
-
-                List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
-                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
-
-                assertNotNull(metadataExtensions);
-                assertTrue(metadataExtensions.size() == 1);
-
-                for(MetaDataType metaType : metadataExtensions) {
-                    if(metaType.getName()!= null && metaType.getName().equals("elementname") && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
-                        assertNotNull(metaType.getMetaValue());
-                        foundElementNameExtensionValue = true;
-                    }
-                }
-            }
-            assertTrue(foundElementNameExtensionValue);
-        } else {
-            fail("Boundary event has no extension element");
-        }
+        assertEquals("<![CDATA[my\nmessage]]>", getMetaDataValue(event.getExtensionValues(), "elementname"));
     }
 
     @Test
@@ -985,4 +975,48 @@ public class Bpmn2UnmarshallingTest {
         assertNull(serviceInterface);
         assertNull(serviceOperation);
     }
+
+    private FlowElement getFlowElement(List<FlowElement> elements, String name) {
+        for(FlowElement element : elements) {
+            if (name.compareTo(element.getName()) == 0) {
+                return  element;
+            }
+        }
+        return null;
+    }
+
+    private String getMetaDataValue(List<ExtensionAttributeValue> extensionValues, String metaDataName) {
+        for(MetaDataType type : this.<MetaDataType>extractFeature(extensionValues, DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA)) {
+            if(type.getName() != null && type.getName().equals(metaDataName)) {
+                return type.getMetaValue();
+            }
+        }
+        return null;
+    }
+
+    private String getOnEntryScript(List<ExtensionAttributeValue> extensionValues) {
+        for(OnEntryScriptType type : this.<OnEntryScriptType>extractFeature(extensionValues, DroolsPackage.Literals.DOCUMENT_ROOT__ON_ENTRY_SCRIPT)) {
+            return type.getScript();
+        }
+        return null;
+    }
+
+    private String getOnExitScript(List<ExtensionAttributeValue> extensionValues) {
+        for(OnExitScriptType type : this.<OnExitScriptType>extractFeature(extensionValues, DroolsPackage.Literals.DOCUMENT_ROOT__ON_EXIT_SCRIPT)) {
+            return type.getScript();
+        }
+        return null;
+    }
+
+    private <T> List<T> extractFeature(List<ExtensionAttributeValue> extensionValues, EStructuralFeature feature) {
+        List<T> result = new ArrayList<T>();
+        if(extensionValues != null) {
+            for (ExtensionAttributeValue extattrval : extensionValues) {
+                FeatureMap extensionElements = extattrval.getValue();
+                result.addAll((List<T>) extensionElements.get(feature, true));
+            }
+        }
+        return result;
+    }
 }
+

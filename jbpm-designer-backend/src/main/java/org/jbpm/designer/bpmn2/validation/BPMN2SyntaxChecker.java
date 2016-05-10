@@ -331,10 +331,10 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 
 	private void checkScriptTask(ScriptTask scriptTask) {
 		if(isEmpty(scriptTask.getScript())) {
-			addError(scriptTask, new ValidationSyntaxError(scriptTask, BPMN2_TYPE, "Script Task has no script."));
+			addError(scriptTask, new ValidationSyntaxError(scriptTask, BPMN2_TYPE, SyntaxCheckerErrors.SCRIPT_TASK_NO_SCRIPT));
 		}
 		if(isEmpty(scriptTask.getScriptFormat())) {
-			addError(scriptTask, new ValidationSyntaxError(scriptTask, BPMN2_TYPE, "Script Task has no script format."));
+			addError(scriptTask, new ValidationSyntaxError(scriptTask, BPMN2_TYPE, SyntaxCheckerErrors.SCRIPT_TASK_NO_SCRIPT_FORMAT));
 		}
 	}
 
