@@ -36,6 +36,8 @@ import org.jboss.drools.DroolsPackage;
 import org.jboss.drools.MetaDataType;
 
 import org.jbpm.designer.bpmn2.impl.Bpmn2JsonUnmarshaller;
+import org.jboss.drools.OnEntryScriptType;
+import org.jboss.drools.OnExitScriptType;
 import org.jbpm.designer.bpmn2.utils.Bpmn2Loader;
 
 import org.junit.Test;
@@ -118,16 +120,23 @@ public class Bpmn2UnmarshallingTestCase {
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
 
-    //@Test
-    // removing until we start supporting global tasks
+    @Test
     public void testScriptTaskUnmarshalling() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("scriptTask.json");
         assertTrue(definitions.getRootElements().size() == 1);
-        GlobalScriptTask task = (GlobalScriptTask) definitions.getRootElements().get(0);
-        assertEquals("my script", task.getName());
-        assertEquals("git status | grep modified | awk '{print $3}' | xargs echo | xargs git add", task.getScript());
-        assertEquals("bash", task.getScriptLanguage());
-        definitions.eResource().save(System.out, Collections.emptyMap());
+        Process process = getRootProcess(definitions);
+        FlowElement element = getFlowElement(process.getFlowElements(), "scriptTask");
+        if(element == null || !(element instanceof ScriptTask)) {
+            fail("Script task not found");
+        }
+        ScriptTask scriptTask = (ScriptTask) element;
+        assertEquals("<![CDATA[System.out.println(\"xyz\");]]>", scriptTask.getScript());
+        assertEquals("http://www.java.com/java", scriptTask.getScriptFormat());
+        assertEquals("<![CDATA[Prints something to output]]>", scriptTask.getDocumentation().get(0).getText());
+        assertEquals("<![CDATA[scriptTask]]>", getMetaDataValue(scriptTask.getExtensionValues(), "elementname"));
+        assertEquals("<![CDATA[true]]>", getMetaDataValue(scriptTask.getExtensionValues(), "customAsync"));
+        assertEquals("<![CDATA[System.out.println(\"entry\");]]>", getOnEntryScript(scriptTask.getExtensionValues()));
+        assertEquals("<![CDATA[System.out.println(\"exit\");]]>", getOnExitScript(scriptTask.getExtensionValues()));
     }
 
     //@Test
@@ -642,29 +651,9 @@ public class Bpmn2UnmarshallingTestCase {
     public void testBoundaryEventMultiLineName() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("boundaryEventMultiLineName.json");
         Process process = getRootProcess(definitions);
-        Boolean foundElementNameExtensionValue = false;
         BoundaryEvent event = (BoundaryEvent) process.getFlowElements().get(1);
-        if (event.getExtensionValues() != null && event.getExtensionValues().size() > 0) {
-            for (ExtensionAttributeValue extattrval : event.getExtensionValues()) {
-                FeatureMap extensionElements = extattrval.getValue();
+        assertEquals("<![CDATA[my\nmessage]]>", getMetaDataValue(event.getExtensionValues(), "elementname"));
 
-                List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
-                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
-
-                assertNotNull(metadataExtensions);
-                assertTrue(metadataExtensions.size() == 1);
-
-                for (MetaDataType metaType : metadataExtensions) {
-                    if (metaType.getName() != null && metaType.getName().equals("elementname") && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
-                        assertNotNull(metaType.getMetaValue());
-                        foundElementNameExtensionValue = true;
-                    }
-                }
-            }
-            assertTrue(foundElementNameExtensionValue);
-        } else {
-            fail("Boundary event has no extension element");
-        }
     }
 
     @Test
@@ -1172,5 +1161,19 @@ public class Bpmn2UnmarshallingTestCase {
         }
 
         fail(attributeName + " with value: " + attributeValue + " was not found");
+    }
+
+    private String getOnEntryScript(List<ExtensionAttributeValue> extensionValues) {
+        for(OnEntryScriptType type : this.<OnEntryScriptType>extractFeature(extensionValues, DroolsPackage.Literals.DOCUMENT_ROOT__ON_ENTRY_SCRIPT)) {
+            return type.getScript();
+        }
+        return null;
+    }
+
+    private String getOnExitScript(List<ExtensionAttributeValue> extensionValues) {
+        for(OnExitScriptType type : this.<OnExitScriptType>extractFeature(extensionValues, DroolsPackage.Literals.DOCUMENT_ROOT__ON_EXIT_SCRIPT)) {
+            return type.getScript();
+        }
+        return null;
     }
 }
