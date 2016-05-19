@@ -304,6 +304,7 @@ ORYX.CONFIG.EVENT_SIMULATION_SHOW_ANNOTATED_PROCESS = "simulation.showannotatedp
 ORYX.CONFIG.EVENT_NOTIFICATION_SHOW = "notification.show";
 ORYX.CONFIG.EVENT_DEF_DELETED = "notification.def.deleted";
 ORYX.CONFIG.EVENT_UPDATE_TASK_TYPE = "updatetaskevent";
+ORYX.CONFIG.EVENT_PASTE_END = "paste.end";
 
 // paint
 ORYX.CONFIG.EVENT_PAINT_NEWSHAPE = "paint.newshape";

@@ -23,6 +23,16 @@
  **/
 if (!ORYX.Plugins) 
     ORYX.Plugins = new Object();
+if (typeof(Storage) !== "undefined") {
+    Storage.prototype.setObject = function(key, value) {
+        this.setItem(key, Ext.encode(value));
+    }
+
+    Storage.prototype.getObject = function(key) {
+        var value = this.getItem(key);
+        return Ext.decode(value);
+    }
+}
 
 ORYX.Plugins.Edit = Clazz.extend({
     
@@ -278,21 +288,37 @@ ORYX.Plugins.Edit = Clazz.extend({
         
         this.clipboard.refresh(selection, this.getAllShapesToConsider(selection), this.facade.getCanvas().getStencil().stencilSet().namespace(), useNoOffset);
 
+        this.editPaste(true);
+
         if( will_update ) this.facade.updateSelection();
     },
     
     /**
      * Performs the paste operation.
      */
-    editPaste: function(){
+    editPaste: function(storeCanvas){
         // Create a new canvas with childShapes 
-		//and stencilset namespace to be JSON Import conform
-		var canvas = {
-            childShapes: this.clipboard.shapesAsJson,
-			stencilset:{
-				namespace:this.clipboard.SSnamespace
-			}
+        //and stencilset namespace to be JSON Import conform
+
+        if (typeof(Storage) !== "undefined") {
+            if (this.clipboard.shapesAsJson.length <= 0 && localStorage.getObject("designerclipboard") != null) {
+                this.facade.importJSON(localStorage.getObject("designerclipboard"));
+
+                this.facade.raiseEvent({
+                    type: ORYX.CONFIG.EVENT_PASTE_END
+                });
+
+                return;
+            }
         }
+
+        var canvas = {
+            childShapes: this.clipboard.shapesAsJson,
+            stencilset:{
+                namespace:this.clipboard.SSnamespace
+            }
+        };
+
         // Apply json helper to iterate over json object
         Ext.apply(canvas, ORYX.Core.AbstractShape.JSONHelper);
         
@@ -419,7 +445,18 @@ ORYX.Plugins.Edit = Clazz.extend({
         }.bind(this), false, true);
 
         this.clipboard.useOffset = true;
-        this.facade.importJSON(canvas);
+
+        if(storeCanvas && storeCanvas == true) {
+            if (typeof(Storage) !== "undefined") {
+                localStorage.setObject("designerclipboard", canvas);
+            }
+        } else {
+            this.facade.importJSON(canvas);
+
+            this.facade.raiseEvent({
+                type: ORYX.CONFIG.EVENT_PASTE_END
+            });
+        }
     },
     
     /**
@@ -445,7 +482,16 @@ ORYX.Plugins.Edit.ClipBoard = Clazz.extend({
 		this.useOffset=true;
     },
     isOccupied: function(){
-        return this.shapesAsJson.length > 0;
+        if(this.shapesAsJson.length > 0) {
+            return true;
+        } else {
+            if (typeof(Storage) !== "undefined") {
+                if(localStorage.getObject("designerclipboard") != null) {
+                    return true;
+                }
+            }
+           return false;
+        }
     },
     refresh: function(selection, shapes, namespace, useNoOffset){
         this.selection = selection;
