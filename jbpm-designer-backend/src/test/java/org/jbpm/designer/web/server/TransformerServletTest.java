@@ -16,24 +16,19 @@
 
 package org.jbpm.designer.web.server;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.jbpm.designer.helper.TestHttpServletRequest;
 import org.jbpm.designer.helper.TestHttpServletResponse;
-import org.jbpm.designer.helper.TestServletConfig;
-import org.jbpm.designer.helper.TestServletContext;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
-import org.jbpm.designer.repository.RepositoryBaseTest;
-import org.jbpm.designer.repository.VFSFileSystemProducer;
+import org.jbpm.designer.repository.vfs.RepositoryBaseTest;
 import org.jbpm.designer.repository.filters.FilterByExtension;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.repository.vfs.VFSRepository;
-import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

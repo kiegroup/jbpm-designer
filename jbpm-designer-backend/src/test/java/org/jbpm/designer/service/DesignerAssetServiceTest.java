@@ -1,7 +1,7 @@
 package org.jbpm.designer.service;
 
-import org.jbpm.designer.repository.RepositoryBaseTest;
-import org.jbpm.designer.repository.VFSFileSystemProducer;
+import org.jbpm.designer.repository.vfs.RepositoryBaseTest;
+import org.jbpm.designer.repository.vfs.VFSFileSystemProducer;
 import org.jbpm.designer.server.service.DefaultDesignerAssetService;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.junit.After;
@@ -22,7 +22,6 @@ import javax.enterprise.event.Event;
 import org.uberfire.mocks.EventSourceMock;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;

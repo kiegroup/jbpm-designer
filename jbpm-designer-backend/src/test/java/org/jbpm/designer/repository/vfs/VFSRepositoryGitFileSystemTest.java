@@ -1,75 +1,133 @@
 /*
- * Copyright 2015 JBoss Inc
+ * Copyright 2016 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-*/
+ */
 
-package org.jbpm.designer.repository;
+package org.jbpm.designer.repository.vfs;
 
+import org.guvnor.common.services.project.events.NewProjectEvent;
+import org.jbpm.designer.repository.Asset;
+import org.jbpm.designer.repository.AssetBuilderFactory;
+import org.jbpm.designer.repository.Directory;
+import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.filters.FilterByExtension;
+import org.jbpm.designer.repository.filters.FilterByFileName;
 import org.jbpm.designer.repository.impl.AssetBuilder;
-import org.jbpm.designer.repository.vfs.VFSRepository;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
+import org.kie.workbench.common.services.shared.project.KieProject;
+import org.uberfire.backend.server.util.Paths;
+import org.uberfire.java.nio.file.FileAlreadyExistsException;
 import org.uberfire.java.nio.file.NoSuchFileException;
 
 import java.io.File;
+import java.net.URI;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
-public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
+public class VFSRepositoryGitFileSystemTest {
+
+    // TODO change it to generic independent path
+    private static final String REPOSITORY_ROOT = "designer-playground";
+    private static final String VFS_REPOSITORY_ROOT = "git://" + REPOSITORY_ROOT;
+    private static final String USERNAME = "guvnorngtestuser1";
+    private static final String PASSWORD = "test1234";
+    private static final String ORIGIN_URL      = "https://github.com/mswiderski/designer-playground.git";
+    private static final String FETCH_COMMAND = "?fetch";
+    private JbpmProfileImpl profile;
+
+    private static String gitLocalClone = System.getProperty("java.io.tmpdir") + File.separator + "git-repo";
+    private static Map<String, String> env = new HashMap<String, String>();
+
+    private static int counter = 0;
+    
+    private RepositoryDescriptor descriptor;
+    private VFSFileSystemProducer producer;
+
+    @BeforeClass
+    public static void prepare() {
+
+        env.put( "username", USERNAME );
+        env.put( "password", PASSWORD );
+        env.put( "origin", ORIGIN_URL );
+        env.put( "fetch.cmd", FETCH_COMMAND );
+        System.setProperty("org.kie.nio.git.dir", gitLocalClone);
+
+    }
+
+    @AfterClass
+    public static void cleanup() {
+        System.clearProperty("org.kie.nio.git.dir");
+    }
 
     @Before
     public void setup() {
-        new File(REPOSITORY_ROOT).mkdir();
         profile = new JbpmProfileImpl();
-
         producer = new VFSFileSystemProducer();
-        HashMap<String, String> env = new HashMap<String, String>();
-        env.put("repository.root", VFS_REPOSITORY_ROOT);
+        env.put("repository.root", VFS_REPOSITORY_ROOT + counter);
         env.put("repository.globaldir", "/global");
         descriptor = producer.produceFileSystem(env);
     }
 
+    private void deleteFiles(File directory) {
+        for (File file : directory.listFiles()) {
+            if (file.isDirectory()) {
+                deleteFiles(file);
+            }
+            file.delete();
+        }
+    }
+
     @After
     public void teardown() {
-        File repo = new File(REPOSITORY_ROOT);
+        File repo = new File(gitLocalClone);
         if(repo.exists()) {
             deleteFiles(repo);
         }
         repo.delete();
+        repo = new File(".niogit");
+        if(repo.exists()) {
+            deleteFiles(repo);
+        }
+        repo.delete();
+        counter++;
     }
-    
+
     @Test
-    public void testCreateDefaultVFSRepository() {
+    public void testListDirectories() {
 
-
-        Repository repository = new VFSRepository(producer.getIoService());        
+        Repository repository = new VFSRepository( producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
-        boolean rootFolderExists = repository.directoryExists("/");
+        boolean rootFolderExists = repository.directoryExists("/processes");
         assertTrue(rootFolderExists);
 
-        Collection<Directory> directories = repository.listDirectories("/");
+        Collection<Directory> directories = repository.listDirectories( "/" );
         assertNotNull(directories);
-        assertEquals(0, directories.size());
+        assertEquals(3, directories.size());
+
+        directories = repository.listDirectories("/processes");
+        assertNotNull(directories);
+        assertEquals(1, directories.size());
     }
 
     @Test
     public void testCreateDirectory() {
+
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
         boolean rootFolderExists = repository.directoryExists("/test");
@@ -101,7 +159,7 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
         rootFolderExists = repository.directoryExists("/test");
         assertTrue(rootFolderExists);
 
-        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
+        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder( Asset.AssetType.Byte );
         builder.content("simple content".getBytes())
                 .type("png")
                 .name("test")
@@ -113,38 +171,6 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
         boolean assetPathShouldNotExists = repository.directoryExists("/test/test.png");
         assertFalse(assetPathShouldNotExists);
-    }
-
-    @Test
-    public void testListDirectories() {
-        Repository repository = new VFSRepository(producer.getIoService());
-        ((VFSRepository)repository).setDescriptor(descriptor);
-        boolean rootFolderExists = repository.directoryExists("/test");
-        assertFalse(rootFolderExists);
-
-        Directory directoryId = repository.createDirectory("/test");
-        assertNotNull(directoryId);
-        directoryId = repository.createDirectory("/test2");
-        assertNotNull(directoryId);
-        directoryId = repository.createDirectory("/test3/nested");
-        assertNotNull(directoryId);
-
-        rootFolderExists = repository.directoryExists("/test");
-        assertTrue(rootFolderExists);
-
-        rootFolderExists = repository.directoryExists("/test2");
-        assertTrue(rootFolderExists);
-
-        rootFolderExists = repository.directoryExists("/test3");
-        assertTrue(rootFolderExists);
-
-        Collection<Directory> directories = repository.listDirectories("/");
-        assertNotNull(directories);
-        assertEquals(3, directories.size());
-
-        directories = repository.listDirectories("/test3");
-        assertNotNull(directories);
-        assertEquals(1, directories.size());
     }
 
     @Test
@@ -197,21 +223,10 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
-        boolean rootFolderExists = repository.directoryExists("/");
+        boolean rootFolderExists = repository.directoryExists("/processes");
         assertTrue(rootFolderExists);
 
-        Collection<Asset> assets = repository.listAssets("/");
-        assertNotNull(assets);
-        assertEquals(0, assets.size());
-
-        try {
-            new File(REPOSITORY_ROOT + "/" + "test.txt").createNewFile();
-            new File(REPOSITORY_ROOT + "/" + "test.png").createNewFile();
-        } catch (Exception e) {
-
-        }
-
-        assets = repository.listAssets("/");
+        Collection<Asset> assets = repository.listAssets("/processes");
         assertNotNull(assets);
         assertEquals(2, assets.size());
     }
@@ -221,28 +236,18 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
-        boolean rootFolderExists = repository.directoryExists("/");
+        boolean rootFolderExists = repository.directoryExists("/processes");
         assertTrue(rootFolderExists);
 
-        Collection<Asset> assets = repository.listAssets("/");
+        Collection<Asset> assets = repository.listAssets("/processes");
         assertNotNull(assets);
-        assertEquals(0, assets.size());
-
-        try {
-            new File(REPOSITORY_ROOT + "/" + "test.txt").createNewFile();
-        } catch (Exception e) {
-
-        }
-
-        assets = repository.listAssets("/");
-        assertNotNull(assets);
-        assertEquals(1, assets.size());
+        assertEquals(2, assets.size());
         Asset<String> asset = assets.iterator().next();
 
-        assertEquals("txt", asset.getAssetType());
-        assertEquals("test.txt", asset.getFullName());
-        assertEquals("test", asset.getName());
-        assertEquals("/", asset.getAssetLocation());
+        assertEquals("bpmn2", asset.getAssetType());
+        assertEquals("BPMN2-ScriptTask.bpmn2", asset.getFullName());
+        assertEquals("BPMN2-ScriptTask", asset.getName());
+        assertEquals("/processes", asset.getAssetLocation());
     }
 
     @Test
@@ -250,29 +255,18 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
-        boolean rootFolderExists = repository.directoryExists("/");
+        boolean rootFolderExists = repository.directoryExists("/images");
         assertTrue(rootFolderExists);
 
-        Collection<Asset> assets = repository.listAssets("/");
-        assertNotNull(assets);
-        assertEquals(0, assets.size());
-
-        try {
-            new File(REPOSITORY_ROOT + "/" + "test.png").createNewFile();
-        } catch (Exception e) {
-
-        }
-
-        assets = repository.listAssets("/");
+        Collection<Asset> assets = repository.listAssets("/images");
         assertNotNull(assets);
         assertEquals(1, assets.size());
-
-        Asset<byte[]> asset = assets.iterator().next();
+        Asset<String> asset = assets.iterator().next();
 
         assertEquals("png", asset.getAssetType());
-        assertEquals("test.png", asset.getFullName());
-        assertEquals("test", asset.getName());
-        assertEquals("/", asset.getAssetLocation());
+        assertEquals("release-process.png", asset.getFullName());
+        assertEquals("release-process", asset.getName());
+        assertEquals("/images", asset.getAssetLocation());
     }
 
     @Test
@@ -280,41 +274,40 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
-        boolean rootFolderExists = repository.directoryExists("/");
+        boolean rootFolderExists = repository.directoryExists("/processes/nested");
         assertTrue(rootFolderExists);
 
-        Directory directoryId = repository.createDirectory("/test/nested");
-        assertNotNull(directoryId);
-
-        Collection<Asset> assets = repository.listAssets("/test/nested");
-        assertNotNull(assets);
-        assertEquals(0, assets.size());
-
-        try {
-            new File(REPOSITORY_ROOT + "/test/nested/" + "test.txt").createNewFile();
-        } catch (Exception e) {
-
-        }
-
-        assets = repository.listAssets("/test/nested");
+        Collection<Asset> assets = repository.listAssets("/processes/nested");
         assertNotNull(assets);
         assertEquals(1, assets.size());
         Asset<String> asset = assets.iterator().next();
 
-        assertEquals("txt", asset.getAssetType());
-        assertEquals("test", asset.getName());
-        assertEquals("test.txt", asset.getFullName());
-        assertEquals("/test/nested", asset.getAssetLocation());
+        assertEquals("bpmn2", asset.getAssetType());
+        assertEquals("BPMN2-UserTask.bpmn2", asset.getFullName());
+        assertEquals("BPMN2-UserTask", asset.getName());
+        assertEquals("/processes/nested", asset.getAssetLocation());
     }
 
     @Test
-    public void testStoreSingleBinaryAsset() throws NoSuchFileException {
+    public void testLoadAssetFromPath() throws NoSuchFileException {
 
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
-        boolean rootFolderExists = repository.directoryExists("/");
-        assertTrue(rootFolderExists);
+        Asset<String> asset = repository.loadAssetFromPath("/processes/BPMN2-ScriptTask.bpmn2");
 
+        assertEquals("bpmn2", asset.getAssetType());
+        assertEquals("BPMN2-ScriptTask", asset.getName());
+        assertEquals("BPMN2-ScriptTask.bpmn2", asset.getFullName());
+        assertEquals("/processes", asset.getAssetLocation());
+        assertNotNull(asset.getAssetContent());
+        System.out.print(asset.getUniqueId());
+    }
+
+    @Test
+    public void testStoreSingleBinaryAsset() throws NoSuchFileException{
+
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
         Collection<Asset> assets = repository.listAssets("/");
         assertNotNull(assets);
         assertEquals(0, assets.size());
@@ -339,13 +332,38 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
     }
 
     @Test
+    public void testStoreSingleBinaryAssetSpaceInName() throws NoSuchFileException{
+
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
+        Collection<Asset> assets = repository.listAssets("/");
+        assertNotNull(assets);
+        assertEquals(0, assets.size());
+
+        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
+        builder.content("simple content".getBytes())
+                .type("png")
+                .name("test asset")
+                .location("/");
+
+        String id = repository.createAsset(builder.getAsset());
+
+        assertNotNull(id);
+
+        Asset<byte[]> asset = repository.loadAsset(id);
+
+        assertEquals("png", asset.getAssetType());
+        assertEquals("test asset", asset.getName());
+        assertEquals("test asset.png", asset.getFullName());
+        assertEquals("/", asset.getAssetLocation());
+        assertFalse(asset.getAssetContent().length == 0);
+    }
+
+    @Test
     public void testStoreSingleTextAsset() throws NoSuchFileException{
 
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
-        boolean rootFolderExists = repository.directoryExists("/");
-        assertTrue(rootFolderExists);
-
         Collection<Asset> assets = repository.listAssets("/");
         assertNotNull(assets);
         assertEquals(0, assets.size());
@@ -374,12 +392,11 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
-
-        boolean rootFolderExists = repository.directoryExists("/");
-        assertTrue(rootFolderExists);
-
         Collection<Asset> assets = repository.listAssets("/");
         assertNotNull(assets);
+        for (Asset aset : assets) {
+            System.out.println(aset.getAssetLocation() + " " + aset.getFullName());
+        }
         assertEquals(0, assets.size());
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
@@ -411,7 +428,7 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
         Collection<Asset> foundAsset = repository.listAssetsRecursively("/", new FilterByExtension("bpmn2"));
 
         assertNotNull(foundAsset);
-        assertEquals(1, foundAsset.size());
+        assertEquals(4, foundAsset.size());
     }
 
     @Test
@@ -435,7 +452,7 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
         id = repository.updateAsset(builder.getAsset(), "", "");
 
-        foundAsset = repository.listAssetsRecursively("/", new FilterByExtension("bpmn2"));
+        foundAsset = repository.listAssetsRecursively("/", new FilterByFileName("process.bpmn2"));
 
         assertNotNull(foundAsset);
         assertEquals(1, foundAsset.size());
@@ -501,6 +518,7 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
     }
 
+
     @Test
     public void testCopyAsset() throws NoSuchFileException {
         Repository repository = new VFSRepository(producer.getIoService());
@@ -534,6 +552,7 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
     }
 
+    @Ignore// git based vfs does not yet support move
     @Test
     public void testMoveAsset() throws NoSuchFileException {
         Repository repository = new VFSRepository(producer.getIoService());
@@ -574,6 +593,7 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
         assertFalse(sourceAssetExists);
     }
 
+    @Ignore// git based vfs does not yet support move
     @Test
     public void testMoveAndRenameAsset() throws NoSuchFileException {
         Repository repository = new VFSRepository(producer.getIoService());
@@ -614,6 +634,7 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
         assertFalse(sourceAssetExists);
     }
 
+    @Ignore// git based vfs does not yet support move
     @Test
     public void testRenameAsset() throws NoSuchFileException {
         Repository repository = new VFSRepository(producer.getIoService());
@@ -654,7 +675,8 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
         assertFalse(sourceAssetExists);
     }
 
-    @Test
+    // disabling this test for now
+    // @Test
     public void testCopyDirectory() throws NoSuchFileException {
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
@@ -692,6 +714,7 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
     }
 
+    @Ignore// git based vfs does not yet support move
     @Test
     public void testMoveDirectory() throws NoSuchFileException {
         Repository repository = new VFSRepository(producer.getIoService());
@@ -730,6 +753,7 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
     }
 
+    @Ignore// git based vfs does not yet support move
     @Test
     public void testMoveEmptyDirectory() throws NoSuchFileException {
         Repository repository = new VFSRepository(producer.getIoService());
@@ -759,30 +783,45 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
     }
 
     @Test
-    public void testCopyEmptyDirectory() throws NoSuchFileException {
-        Repository repository = new VFSRepository(producer.getIoService());
-        ((VFSRepository)repository).setDescriptor(descriptor);
-        Directory sourceDir = repository.createDirectory("/source");
+    public void testCreateGlobalDirOnNewProject() throws FileAlreadyExistsException {
+        VFSRepository repository = new VFSRepository(producer.getIoService());
+        repository.setDescriptor(descriptor);
 
-        boolean directoryExists = repository.directoryExists(sourceDir.getLocation()+sourceDir.getName());
-        assertTrue(directoryExists);
-        Collection<Asset> foundAsset = repository.listAssets("/source", new FilterByExtension("bpmn2"));
+        Directory testProjectDir = repository.createDirectory("/mytestproject");
 
-        assertNotNull(foundAsset);
-        assertEquals(0, foundAsset.size());
+        final KieProject mockProject = mock( KieProject.class );
+        when( mockProject.getRootPath() ).thenReturn( Paths.convert( producer.getIoService().get( URI.create( repository.decodeUniqueId( testProjectDir.getUniqueId() ) ) ) ) );
 
+        NewProjectEvent event = mock( NewProjectEvent.class );
+        when(event.getProject()).thenReturn(mockProject);
 
-        boolean copied = repository.copyDirectory("/source", "/target");
-        assertTrue(copied);
+        repository.createGlobalDirOnNewProject(event);
 
-        boolean movedDirectoryExists = repository.directoryExists("/source");
-        assertTrue(movedDirectoryExists);
-        movedDirectoryExists = repository.directoryExists("/target");
-        assertTrue(movedDirectoryExists);
+        boolean globalDirectoryExists = repository.directoryExists("/mytestproject/global");
+        assertTrue(globalDirectoryExists);
 
-        foundAsset = repository.listAssets("/target", new FilterByExtension("bpmn2"));
+        Collection<Asset> foundFormTemplates = repository.listAssets("/mytestproject/global", new FilterByExtension("fw"));
+        assertNotNull(foundFormTemplates);
+        assertEquals(25, foundFormTemplates.size());
 
-        assertNotNull(foundAsset);
-        assertEquals(0, foundAsset.size());
+        Collection<Asset> foundJSONAssets = repository.listAssets("/mytestproject/global", new FilterByExtension("json"));
+        assertNotNull(foundJSONAssets);
+        assertEquals(2, foundJSONAssets.size());
+
+        // call again to try to trigger FileAlreadyExistsException
+        repository.createGlobalDirOnNewProject(event);
+
+        boolean globalDirectoryStillExists = repository.directoryExists("/mytestproject/global");
+        assertTrue(globalDirectoryStillExists);
+
+        // no new files or copies were added
+        Collection<Asset> foundFormTemplatesAfterSecondCall = repository.listAssets("/mytestproject/global", new FilterByExtension("fw"));
+        assertNotNull(foundFormTemplatesAfterSecondCall);
+        assertEquals(25, foundFormTemplatesAfterSecondCall.size());
+
+        Collection<Asset> foundJSONAssetsAfterSecondCall = repository.listAssets("/mytestproject/global", new FilterByExtension("json"));
+        assertNotNull(foundJSONAssetsAfterSecondCall);
+        assertEquals(2, foundJSONAssetsAfterSecondCall.size());
+
     }
 }
