@@ -34,6 +34,7 @@
   <inherits name="org.kie.workbench.common.screens.explorer.KieWorkbenchProjectExplorerClient"/>
   <inherits name="org.kie.workbench.common.screens.projecteditor.KieWorkbenchCommonProjectEditorClient"/>
   <inherits name="org.kie.workbench.common.screens.projectimportsscreen.KieWorkbenchCommonProjectImportsScreenClient"/>
+  <inherits name="org.kie.workbench.common.workbench.KieDefaultWorkbenchClient"/>
 
   <inherits name="org.kie.workbench.common.services.datamodeller.DataModellerCore" />
   <inherits name="org.kie.workbench.common.screens.datamodeller.KieWorkbenchDatamodellerClient"/>
