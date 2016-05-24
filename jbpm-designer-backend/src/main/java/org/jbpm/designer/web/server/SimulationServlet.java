@@ -39,6 +39,7 @@ import bpsim.BPSimDataType;
 import bpsim.BpsimPackage;
 import bpsim.Scenario;
 import bpsim.impl.BpsimFactoryImpl;
+import org.apache.commons.codec.binary.Base64;
 import org.drools.core.command.runtime.rule.InsertElementsCommand;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.ExtensionAttributeValue;
@@ -51,6 +52,8 @@ import org.eclipse.bpmn2.SubProcess;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.designer.bpmn2.impl.Bpmn2JsonUnmarshaller;
+import org.jbpm.designer.repository.UriUtils;
+import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.simulation.AggregatedSimulationEvent;
@@ -86,8 +89,8 @@ import org.slf4j.LoggerFactory;
 public class SimulationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger _logger = LoggerFactory.getLogger(SimulationServlet.class);
-	private static final String ACTION_GETPATHINFO = "getpathinfo";
-	private static final String ACTION_RUNSIMULATION = "runsimulation";
+	protected static final String ACTION_GETPATHINFO = "getpathinfo";
+	protected static final String ACTION_RUNSIMULATION = "runsimulation";
 	private ServletConfig config;
 	private List<SimulationEvent> eventAggregations = new ArrayList<SimulationEvent>();
 	private List<Long> eventAggregationsTimes = new ArrayList<Long>();
@@ -106,6 +109,12 @@ public class SimulationServlet extends HttpServlet {
     @Inject
     private IDiagramProfileService _profileService = null;
 
+	private IDiagramProfile profile;
+
+	public void setProfile(IDiagramProfile profile) {
+		this.profile = profile;
+	}
+
 	@Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -117,7 +126,7 @@ public class SimulationServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 		String profileName = req.getParameter("profile");
-		String json = req.getParameter("json");
+		String json =  UriUtils.decode(Utils.getEncodedParam(req, "json"));
 		String action = req.getParameter("action");
 		String preprocessingData = req.getParameter("ppdata");
 		String selectionId = req.getParameter("sel");
@@ -125,7 +134,9 @@ public class SimulationServlet extends HttpServlet {
 		String interval = req.getParameter("interval");
 		String intervalUnit = req.getParameter("intervalunit");
 
-		IDiagramProfile profile = _profileService.findProfile(req, profileName);
+		if (profile == null) {
+			profile = _profileService.findProfile(req, profileName);
+		}
 
         if(action != null && action.equals(ACTION_GETPATHINFO)) {
         	DroolsFactoryImpl.init();
@@ -481,7 +492,7 @@ public class SimulationServlet extends HttpServlet {
                 PrintWriter pw = resp.getWriter();
 	    		resp.setContentType("text/json");
 	    		resp.setCharacterEncoding("UTF-8");
-	    		pw.write(parentJSON.toString());
+	    		pw.write(Base64.encodeBase64String(UriUtils.encode(parentJSON.toString()).getBytes("UTF-8")));
 
 			} catch (Exception e) {
                 _logger.error("Error during simulation", e);

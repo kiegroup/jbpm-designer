@@ -117,7 +117,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
 	            params: {
 	            	action: 'getpathinfo',
 	            	profile: ORYX.PROFILE,
-	            	json: ORYX.EDITOR.getSerializedJSON(),
+	            	json: window.btoa(encodeURIComponent(ORYX.EDITOR.getSerializedJSON())),
 	            	ppdata: ORYX.PREPROCESSING,
 	            	sel: ""
 	            }
@@ -335,7 +335,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
             params: {
             	action: 'getpathinfo',
             	profile: ORYX.PROFILE,
-            	json: ORYX.EDITOR.getSerializedJSON(),
+            	json: window.btoa(encodeURIComponent(ORYX.EDITOR.getSerializedJSON())),
             	ppdata: ORYX.PREPROCESSING,
             	sel: selectedId
             }
@@ -526,7 +526,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
 				    	   			if(response.responseText && response.responseText.length > 0 && response.status == 200) {
 				    	   				this.facade.raiseEvent({
 				    	   		            type: ORYX.CONFIG.EVENT_SIMULATION_SHOW_RESULTS,
-				    	   		            results: response.responseText
+				    	   		            results: decodeURIComponent(window.atob(response.responseText))
 				    	   		        });
 				    	   			} else {
                                            this.facade.raiseEvent({
@@ -559,7 +559,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
 				            params: {
 				            	action: 'runsimulation',
 				            	profile: ORYX.PROFILE,
-				            	json: ORYX.EDITOR.getSerializedJSON(),
+				            	json: window.btoa(encodeURIComponent(ORYX.EDITOR.getSerializedJSON())),
 				            	ppdata: ORYX.PREPROCESSING,
 				            	numinstances: instancesInput,
 				            	interval: intervalInput,
