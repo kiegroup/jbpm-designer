@@ -563,7 +563,8 @@ ORYX.Plugins.Simulation = Clazz.extend({
 				            	ppdata: ORYX.PREPROCESSING,
 				            	numinstances: instancesInput,
 				            	interval: intervalInput,
-				            	intervalunit: intervalUnit
+				            	intervalunit: intervalUnit,
+								language: ORYX.I18N.Language
 				            }
 				        });
 					}.bind(this)

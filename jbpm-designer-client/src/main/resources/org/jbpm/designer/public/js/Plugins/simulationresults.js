@@ -78,7 +78,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
                           </tr> \
                           <tr> \
                           <td><span style="font-size: 10px"><b>' + ORYX.I18N.View.sim.resultsInterval + '</b></span></td> \
-                          <td><span style="font-size: 10px">' + simInfo[0].interval  + '</span></td> \
+                          <td><span style="font-size: 10px">' + this.translateInterval(simInfo[0].interval)  + '</span></td> \
                           </tr> \
                           </table>';
         if(simInfo) {
@@ -504,6 +504,26 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 	    else {
 		    return timeUnit;
 	    }
-    }
+    },
+	translateInterval: function(interval) {
+		if (interval) {
+			var iSpace = interval.indexOf(' ');
+			if (iSpace > 0) {
+				var value = interval.substring(0, iSpace);
+				var units = interval.substring(iSpace + 1);
+				units = this.getIntervalTimeUnit(units);
+				return value + ' ' + units;
+			}
+		}
+		return interval;
+	},
+	getIntervalTimeUnit : function (timeUnit) {
+		if (ORYX.I18N.propertyNamesValue[timeUnit] !== undefined) {
+			return ORYX.I18N.propertyNamesValue[timeUnit];
+		}
+		else {
+			return timeUnit;
+		}
+	}
 
 });

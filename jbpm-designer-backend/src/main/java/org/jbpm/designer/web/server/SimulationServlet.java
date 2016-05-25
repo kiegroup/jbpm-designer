@@ -27,6 +27,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
@@ -133,6 +134,9 @@ public class SimulationServlet extends HttpServlet {
 		String numInstances = req.getParameter("numinstances");
 		String interval = req.getParameter("interval");
 		String intervalUnit = req.getParameter("intervalunit");
+		String language = req.getParameter("language");
+		String simTestStartTime = req.getParameter("simteststarttime");
+		String simTestEndTime = req.getParameter("simtestendtime");
 
 		if (profile == null) {
 			profile = _profileService.findProfile(req, profileName);
@@ -255,9 +259,17 @@ public class SimulationServlet extends HttpServlet {
                 simInfoKeys.put("id", simInfo.getProcessId() == null ? "" : simInfo.getProcessId());
                 simInfoKeys.put("name", simInfo.getProcessName() == null? "" : simInfo.getProcessName());
                 simInfoKeys.put("executions", simInfo.getNumberOfExecutions());
-                SimpleDateFormat infoDateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
-                String simStartStr = infoDateFormat.format(new Date(simInfo.getStartTime()));
-                String simEndStr = infoDateFormat.format(new Date(simInfo.getEndTime()));
+                SimpleDateFormat infoDateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss", getLocale(language));
+                long startTime = simInfo.getStartTime();
+                if (simTestStartTime != null && simTestStartTime.length() > 0) {
+                    startTime = Long.parseLong(simTestStartTime);
+                }
+                long endTime = simInfo.getEndTime();
+                if (simTestEndTime != null && simTestEndTime.length() > 0) {
+                    endTime = Long.parseLong(simTestEndTime);
+                }
+                String simStartStr = infoDateFormat.format(new Date(startTime));
+                String simEndStr = infoDateFormat.format(new Date(endTime));
                 simInfoKeys.put("starttime", simStartStr);
                 simInfoKeys.put("endtime", simEndStr);
                 simInfoKeys.put("version", simInfo.getProcessVersion() == null? "" : simInfo.getProcessVersion());
@@ -732,6 +744,23 @@ public class SimulationServlet extends HttpServlet {
             retVal = interval + " milliseconds";
         }
         return retVal;
+    }
+
+    private Locale getLocale(String language) {
+        if (language != null && language.length() > 0) {
+            int iUnderscore = language.indexOf('_');
+            if (iUnderscore > 0) {
+                String lang = language.substring(0, iUnderscore);
+                String region = language.substring(iUnderscore + 1).toUpperCase();
+                return new Locale(lang, region);
+            }
+            else {
+                return new Locale(language);
+            }
+        }
+        else {
+            return Locale.getDefault();
+        }
     }
 }
 
