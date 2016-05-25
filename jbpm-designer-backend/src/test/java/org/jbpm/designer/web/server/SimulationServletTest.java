@@ -99,6 +99,43 @@ public class SimulationServletTest {
         assertTrue(responseText.contains("paths"));
     }
 
+    @Test
+    public void testLocalizedStartEndTime() throws Exception {
+
+        SimulationServlet simulationServlet = new SimulationServlet();
+        simulationServlet.setProfile(new JbpmProfileImpl());
+
+        // Request json is encoded
+        String rawJson = readFile("BPSim_i18nNames.json");
+        String encodedJson = Base64.encodeBase64String(UriUtils.encode(rawJson.toString()).getBytes("UTF-8"));
+
+        // setup parameters
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("json", encodedJson);
+        params.put("action", SimulationServlet.ACTION_RUNSIMULATION);
+        params.put("language", "ru_RU");
+        params.put("ppdata", "Email,Log,Rest,WebService");
+        params.put("numinstances", "10");
+        params.put("interval", "5");
+        params.put("intervalUnit", "minutes");
+        params.put("simteststarttime", "1464083491796");
+        params.put("simtestendtime", "1465776165148");
+
+        TestHttpServletResponse response = new TestHttpServletResponse();
+        simulationServlet.doPost(new TestHttpServletRequest(params), response);
+
+        int responseStatus = response.getStatus();
+        assertEquals(0, responseStatus);
+
+        // Response json is encoded
+        String encodedResponseText = new String(response.getContent());
+        assertNotNull(encodedResponseText);
+        String responseText = UriUtils.decode(new String(Base64.decodeBase64(encodedResponseText), "UTF-8"));
+        assertNotNull(responseText);
+        assertTrue(responseText.contains("мая"));
+        assertTrue(responseText.contains("июн"));
+    }
+
     private String readFile(String fileName) throws Exception {
         URL fileURL = SimulationServletTest.class.getResource(fileName);
         return new String(Files.readAllBytes(Paths.get(fileURL.toURI())));
