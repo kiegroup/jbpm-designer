@@ -19,11 +19,15 @@ package org.jbpm.designer.client.shared;
 import org.jboss.errai.marshalling.client.api.MarshallingSession;
 import org.jboss.errai.marshalling.client.api.json.EJValue;
 import org.jboss.errai.marshalling.server.JSONStreamDecoder;
+import org.jbpm.designer.client.shared.util.StringUtils;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
@@ -31,8 +35,9 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-@RunWith(MockitoJUnitRunner.class)
-public class AssignmentDataMarshallerTest {
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({StringUtils.class})
+public class AssignmentDataMarshallerTest extends AssignmentBaseTest{
 
     private AssignmentDataMarshaller marshaller;
 
@@ -46,6 +51,8 @@ public class AssignmentDataMarshallerTest {
 
     @Before
     public void setUp() throws Exception {
+        super.setUp();
+
         marshaller = new AssignmentDataMarshaller();
         inputs = new ArrayList<AssignmentRow>();
         outputs = new ArrayList<AssignmentRow>();
@@ -56,6 +63,11 @@ public class AssignmentDataMarshallerTest {
         dataTypesDisplayNames.add("String");
         dataTypes.add("Integer");
         dataTypesDisplayNames.add("Integer");
+    }
+
+    @After
+    public void tearDown() {
+        super.tearDown();
     }
 
     @Test
@@ -111,23 +123,25 @@ public class AssignmentDataMarshallerTest {
         marshallAndDemarshall();
     }
 
-    /**
-     * Not able to test non null constant
-     * StringUtils.urlEncode("xyz") is using internally js native methods
-     */
     @Test
     public void testConstant() {
-        inputs.add(new AssignmentRow("name", Variable.VariableType.INPUT, "String", null, null, null));
+        inputs.add(new AssignmentRow("name", Variable.VariableType.INPUT, "String", null, null, "hello"));
+        inputs.add(new AssignmentRow("name", Variable.VariableType.INPUT, "String", null, null, "value={\"true\"}"));
+        inputs.add(new AssignmentRow("name", Variable.VariableType.INPUT, "String", null, null, "\"abcdef\""));
+        inputs.add(new AssignmentRow("name", Variable.VariableType.INPUT, "String", null, null, "\"abc\"def\"ghi\""));
+        inputs.add(new AssignmentRow("name", Variable.VariableType.INPUT, "String", null, null, "123"));
+        inputs.add(new AssignmentRow("name", Variable.VariableType.INPUT, "String", null, null, "123.456"));
         marshallAndDemarshall();
     }
 
-    /**
-     * Not able to test non null constant
-     * StringUtils.urlEncode("xyz") is using internally js native methods
-     */
     @Test
     public void testConstantCustom() {
-        inputs.add(new AssignmentRow("name", Variable.VariableType.INPUT, null, "customStringType", null, null));
+        inputs.add(new AssignmentRow("name", Variable.VariableType.INPUT, null, "customStringType", null, "hello"));
+        inputs.add(new AssignmentRow("name", Variable.VariableType.INPUT, null, "customStringType", null, "value={\"true\"}"));
+        inputs.add(new AssignmentRow("name", Variable.VariableType.INPUT, null, "customStringType", null, "\"abcdef"));
+        inputs.add(new AssignmentRow("name", Variable.VariableType.INPUT, null, "customStringType", null, "\"abc\"def\"ghi\""));
+        inputs.add(new AssignmentRow("name", Variable.VariableType.INPUT, null, "customStringType", null, "123"));
+        inputs.add(new AssignmentRow("name", Variable.VariableType.INPUT, null, "customStringType", null, "123.456"));
         marshallAndDemarshall();
     }
 

@@ -58,6 +58,10 @@ public class AssignmentTest extends AssignmentBaseTest {
         serializeDeserialize(ad, a, "a|=b=|c:a[=b=[c:a]=b=]c");
         serializeDeserialize(ad, a, "C:\\home\\joe bloggs\\test\\stuff.txt");
         serializeDeserialize(ad, a, "a bb  ");
+        serializeDeserialize(ad, a, "123");
+        serializeDeserialize(ad, a, "123.456  ");
+        serializeDeserialize(ad, a, "\"hello\"");
+        serializeDeserialize(ad, a, "greeting={\"hello\"}");
     }
 
     public void serializeDeserialize(AssignmentData ad, Assignment assignment, String constant) {

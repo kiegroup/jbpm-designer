@@ -285,7 +285,7 @@ public class ComboBoxAllTest {
         assertEquals(textBox.isVisible(), false);
 
         String listBoxValue = this.quoteStringValues ? StringUtils.createQuotedConstant(value) : value;
-        verify(modelPresenter).setTextBoxModelValue(textBox, listBoxValue);
+        verify(modelPresenter).setTextBoxModelValue(textBox, value);
         assertEquals(comboBox.getValue(), listBoxValue);
     }
 
