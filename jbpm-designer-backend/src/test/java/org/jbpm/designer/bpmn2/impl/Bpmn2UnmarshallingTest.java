@@ -21,6 +21,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.bpmn2.*;
@@ -209,7 +210,6 @@ public class Bpmn2UnmarshallingTest {
     @Test
     public void testStartMessageEventUnmarshalling() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("startMessageEvent.json");
-        assertTrue(definitions.getRootElements().size() == 3);
         Process process = getRootProcess(definitions);
         StartEvent g = (StartEvent) process.getFlowElements().get(0);
         assertEquals("start message event", g.getName());
@@ -421,7 +421,6 @@ public class Bpmn2UnmarshallingTest {
     @Test
     public void testIntermediateCatchMessageEventUnmarshalling() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("intermediateCatchMessageEvent.json");
-        assertTrue(definitions.getRootElements().size() == 3);
         Process process = getRootProcess(definitions);
         CatchEvent g = (CatchEvent) process.getFlowElements().get(0);
         assertEquals("catch message event", g.getName());
@@ -941,5 +940,49 @@ public class Bpmn2UnmarshallingTest {
         assertNotNull(callActivity);
         assertEquals("callActivity", callActivity.getName());
         assertEquals("abc.noCalledElementCallActivity", callActivity.getCalledElement());
+    }
+
+    @Test
+    public void testDefaultMessageRefForStartMessageEvent() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("defaultMessageStartEvent.json");
+        Process process = getRootProcess(definitions);
+        assertTrue(process.getFlowElements().get(0) instanceof StartEvent);
+        StartEvent startEvent = (StartEvent) process.getFlowElements().get(0);
+
+        assertTrue(startEvent.getEventDefinitions().size() == 1);
+        assertTrue(startEvent.getEventDefinitions().iterator().next() instanceof MessageEventDefinition);
+
+        MessageEventDefinition messageEventDef = (MessageEventDefinition) startEvent.getEventDefinitions().iterator().next();
+
+        assertNull(messageEventDef.getMessageRef());
+    }
+
+    @Test
+    public void testDefaultInterfaceForServiceTask() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("defaultServiceTask.json");
+        Process process = getRootProcess(definitions);
+        assertTrue(process.getFlowElements().get(0) instanceof ServiceTask);
+        ServiceTask serviceTask = (ServiceTask) process.getFlowElements().get(0);
+        String serviceImplementation = null;
+        String serviceInterface = null;
+        String serviceOperation = null;
+
+        Iterator<FeatureMap.Entry> iter = serviceTask.getAnyAttribute().iterator();
+        while (iter.hasNext()) {
+            FeatureMap.Entry entry = iter.next();
+            if (entry.getEStructuralFeature().getName().equals("serviceimplementation")) {
+                serviceImplementation = (String) entry.getValue();
+            }
+            if (entry.getEStructuralFeature().getName().equals("serviceoperation")) {
+                serviceOperation = (String) entry.getValue();
+            }
+            if (entry.getEStructuralFeature().getName().equals("serviceinterface")) {
+                serviceInterface = (String) entry.getValue();
+            }
+        }
+
+        assertEquals(serviceImplementation, "Java");
+        assertNull(serviceInterface);
+        assertNull(serviceOperation);
     }
 }

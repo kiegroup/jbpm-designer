@@ -2235,27 +2235,28 @@ public class Bpmn2JsonUnmarshaller {
                                             idefId = (String) entry.getValue() + "Type";
                                         }
                                 }
-
-                                ItemDefinition idef = _itemDefinitions.get(idefId);
-                                if (idef == null){
-                                    idef = Bpmn2Factory.eINSTANCE
+                                if(msgId != null && idefId != null) {
+                                    ItemDefinition idef = _itemDefinitions.get(idefId);
+                                    if (idef == null){
+                                        idef = Bpmn2Factory.eINSTANCE
                                                 .createItemDefinition();
-                                    idef.setId(idefId);
-                                    _itemDefinitions.put(idefId, idef);
+                                        idef.setId(idefId);
+                                        _itemDefinitions.put(idefId, idef);
+                                    }
+
+                                    Message msg = _messages.get(msgId);
+                                    if (msg == null){
+                                        msg = Bpmn2Factory.eINSTANCE.createMessage();
+                                        msg.setId(msgId);
+                                        msg.setItemRef(idef);
+                                        _messages.put(msgId, msg);
+                                    }
+
+
+                                    toAddMessages.add(msg);
+                                    toAddItemDefinitions.add(idef);
+                                    ((MessageEventDefinition) ed).setMessageRef(msg);
                                 }
-
-                                Message msg = _messages.get(msgId);
-                                if (msg == null){
-                                    msg = Bpmn2Factory.eINSTANCE.createMessage();
-                                    msg.setId(msgId);
-                                    msg.setItemRef(idef);
-                                    _messages.put(msgId, msg);
-                                }
-
-
-                                toAddMessages.add(msg);
-                                toAddItemDefinitions.add(idef);
-                                ((MessageEventDefinition) ed).setMessageRef(msg);
                             } else if(ed instanceof CompensateEventDefinition) {
                                 Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute().iterator();
                                 while(iter.hasNext()) {
@@ -4285,7 +4286,7 @@ public class Bpmn2JsonUnmarshaller {
     }
 
     protected void applyMessageProperties(Message msg, Map<String, String> properties) {
-        if(properties.get("name") != null) {
+        if(properties.get("name") != null && properties.get("name").length() > 0) {
             msg.setName(escapeXmlString(properties.get("name")).replaceAll("\\r\\n|\\r|\\n", " "));
             msg.setId(properties.get("name") + "Message");
 
@@ -5231,7 +5232,7 @@ public class Bpmn2JsonUnmarshaller {
     }
 
     public void applyServiceTaskProperties(ServiceTask serviceTask,  Map<String, String> properties) {
-        if(properties.get("serviceimplementation") != null) {
+        if(properties.get("serviceimplementation") != null && properties.get("serviceimplementation").length() > 0) {
             serviceTask.setImplementation(properties.get("serviceimplementation"));
             ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
             EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
@@ -5240,7 +5241,7 @@ public class Bpmn2JsonUnmarshaller {
                     properties.get("serviceimplementation"));
             serviceTask.getAnyAttribute().add(extensionEntry);
         }
-        if(properties.get("serviceoperation") != null) {
+        if(properties.get("serviceoperation") != null && properties.get("serviceoperation").length() > 0) {
             ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
             EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
                     "http://www.jboss.org/drools", "serviceoperation", false, false);
@@ -5248,7 +5249,7 @@ public class Bpmn2JsonUnmarshaller {
                     properties.get("serviceoperation"));
             serviceTask.getAnyAttribute().add(extensionEntry);
         }
-        if(properties.get("serviceinterface") != null) {
+        if(properties.get("serviceinterface") != null && properties.get("serviceinterface").length() > 0) {
             ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
             EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
                     "http://www.jboss.org/drools", "serviceinterface", false, false);
