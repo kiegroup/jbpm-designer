@@ -18,8 +18,8 @@ package org.jbpm.designer.editorhandler;
 
 import org.jbpm.designer.helper.TestHttpServletRequest;
 import org.jbpm.designer.repository.Repository;
-import org.jbpm.designer.repository.RepositoryBaseTest;
-import org.jbpm.designer.repository.VFSFileSystemProducer;
+import org.jbpm.designer.repository.vfs.RepositoryBaseTest;
+import org.jbpm.designer.repository.vfs.VFSFileSystemProducer;
 import org.jbpm.designer.repository.vfs.VFSRepository;
 import org.jbpm.designer.server.EditorHandler;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;

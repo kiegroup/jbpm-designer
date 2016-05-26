@@ -21,7 +21,8 @@ import org.jbpm.designer.helper.TestServletConfig;
 import org.jbpm.designer.helper.TestServletContext;
 import org.jbpm.designer.repository.*;
 import org.jbpm.designer.repository.impl.AssetBuilder;
-import org.jbpm.designer.repository.VFSFileSystemProducer;
+import org.jbpm.designer.repository.vfs.RepositoryBaseTest;
+import org.jbpm.designer.repository.vfs.VFSFileSystemProducer;
 import org.jbpm.designer.repository.vfs.VFSRepository;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.junit.After;
@@ -404,9 +405,7 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
         TestHttpServletResponse response = new  TestHttpServletResponse();
         assetServiceServlet.doPost(new TestHttpServletRequest(params), response);
 
-        String jsonResponse = new String(response.getContent());
-        assertNotNull(jsonResponse);
-        assertTrue(jsonResponse.indexOf("\"location\":\"/defaultPackage\",\"description\":\"\",\"name\":\"testprocess\",\"owner\":\"\",\"type\":\"bpmn2\",\"fullname\":\"testprocess.bpmn2\"") != -1);
+        assertResponse( response );
     }
 
 
@@ -507,9 +506,7 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
         TestHttpServletResponse response = new  TestHttpServletResponse();
         assetServiceServlet.doPost(new TestHttpServletRequest(params), response);
 
-        String jsonResponse = new String(response.getContent());
-        assertNotNull(jsonResponse);
-        assertTrue(jsonResponse.indexOf("\"location\":\"/defaultPackage\",\"description\":\"\",\"name\":\"testprocess\",\"owner\":\"\",\"type\":\"bpmn2\",\"fullname\":\"testprocess.bpmn2\"") != -1);
+        assertResponse( response );
     }
 
     @Test
@@ -541,8 +538,18 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
         TestHttpServletResponse response = new  TestHttpServletResponse();
         assetServiceServlet.doPost(new TestHttpServletRequest(params), response);
 
+        assertResponse( response );
+    }
+
+    private void assertResponse( final TestHttpServletResponse response ) {
         String jsonResponse = new String(response.getContent());
+
         assertNotNull(jsonResponse);
-        assertTrue(jsonResponse.indexOf("\"location\":\"/defaultPackage\",\"description\":\"\",\"name\":\"testprocess\",\"owner\":\"\",\"type\":\"bpmn2\",\"fullname\":\"testprocess.bpmn2\"") != -1);
+        assertTrue(jsonResponse.contains("\"location\":\"/defaultPackage\""));
+        assertTrue(jsonResponse.contains("\"description\":\"\""));
+        assertTrue(jsonResponse.contains("\"name\":\"testprocess\""));
+        assertTrue(jsonResponse.contains("\"owner\":\"\""));
+        assertTrue(jsonResponse.contains("\"type\":\"bpmn2\""));
+        assertTrue(jsonResponse.contains("\"fullname\":\"testprocess.bpmn2\""));
     }
 }
